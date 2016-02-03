@@ -164,12 +164,19 @@ tinyMCE.init({
 [% END %]
 
 [% IF ( delete_confirm ) %]
-    <form action="[% action %]" method="post">
-<fieldset><legend>Confirm deletion of [% branchname %] ([% branchcode %])?</legend><input type="hidden" name="op" value="delete_confirmed" />
+    <div class="dialog alert">
+      <form action="[% action %]" method="post">
+        <h3>Are you sure you want to delete [% branchname %] ([% branchcode %])?</h3>
+
+        <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="branchcode" value="[% branchcode |html %]" />
         <input type="hidden" name="branchname" value="[% branchname |html %]">
-        <fieldset class="action"><input type="submit" value="Delete Library" /> <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a></fieldset>
-</fieldset></form>
+        <input type="submit" class="approve" value="Yes, delete" />
+      </form>
+      <form action="/cgi-bin/koha/admin/branches.pl" method="get">
+        <input type="submit" class="deny" value="No, do not delete"/>
+      </form>
+    </div>
 [% END %]
 
 [% IF ( else ) %]
