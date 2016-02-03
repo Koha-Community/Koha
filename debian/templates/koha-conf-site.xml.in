@@ -284,6 +284,11 @@ __END_SRU_PUBLICSERVER__
  <use_zebra_facets>1</use_zebra_facets>
  <queryparser_config>/etc/koha/searchengine/queryparser.yaml</queryparser_config>
  <log4perl_conf>__KOHA_CONF_DIR__/log4perl.conf</log4perl_conf>
+ <!-- Uncomment/edit next setting if you want to adjust zebra log levels.
+      Default is: none,fatal,warn.
+      You can also include: debug,log,malloc,all,request.
+      Use a comma-separated list of levels to include. -->
+ <!-- <zebra_loglevels>none,fatal,warn</zebra_loglevels> -->
 
 <!-- true type font mapping accoding to type from $font_types in C4/Creators/Lib.pm -->
  <ttf>
