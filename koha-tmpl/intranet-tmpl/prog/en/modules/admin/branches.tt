@@ -202,18 +202,18 @@ tinyMCE.init({
 [% END %]
 
 [% IF op == 'delete_confirm' and not ( items_count or patrons_count )%]
-    <form action="/cgi-bin/koha/admin/branches.pl" method="post">
-        <fieldset>
-            <legend>Confirm deletion of [% library.branchname %] ([% library.branchcode %])?</legend>
+    <div class="dialog alert">
+        <form action="/cgi-bin/koha/admin/branches.pl" method="post">
+            <h3>Are you sure you want to delete [% library.branchname %] ([% library.branchcode %])?</h3>
             <input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="branchcode" value="[% library.branchcode |html %]" />
             <input type="hidden" name="branchname" value="[% library.branchname |html %]">
-            <fieldset class="action">
-                <input type="submit" value="Delete Library" />
-                <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a>
-            </fieldset>
-        </fieldset>
-    </form>
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+        </form>
+        <form action="/cgi-bin/koha/admin/branches.pl" method="get">
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        </form>
+    </div>
 [% END %]
 
 [% IF op == 'list' %]
