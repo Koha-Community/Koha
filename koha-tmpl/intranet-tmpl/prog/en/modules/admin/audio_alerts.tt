@@ -157,7 +157,7 @@ function EditAlert( elt, id, precedence, selector, sound ) {
                                     </td>
                                     <td>[% a.selector %]</td>
                                     <td>[% a.sound %]</td>
-                                    <td><a class="btn btn-small" onclick="EditAlert( this, '[% a.id %]','[% a.precedence %]', '[% a.selector %]', '[% a.sound %]' )" ><i class="icon-pencil"></i> Edit</a></td>
+                                    <td><a class="btn btn-small" onclick="EditAlert( this, '[% a.id %]','[% a.precedence %]', '[% a.selector | replace( "'", "\\'" ) | html %]', '[% a.sound %]' )" ><i class="icon-pencil"></i> Edit</a></td>
                                 </tr>
                             [% END %]
                         </tbody>
