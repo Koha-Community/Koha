@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 BEGIN {
     # find Koha's Perl modules
@@ -26,7 +25,6 @@ BEGIN {
     use FindBin;
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
-
 
 use C4::Context;
 use C4::Members;
@@ -43,13 +41,14 @@ juv2adult.pl - convert juvenile/child patrons from juvenile patron category and 
 juv2adult.pl [ -b=<branchcode> -f=<categorycode> -t=<categorycode> ]
 
  Options:
-   --help					brief help message
-   --man					full documentation
-   -v						verbose mode
-   -n						take no action, display only
-   -b	<branchname>	only deal with patrons from this library/branch
-   -f	<categorycode>	change patron category from this category
-   -t	<categorycode>	change patron category to this category
+   --help   brief help message
+   --man    full documentation
+   -v       verbose mode
+   -n       take no action, display only
+   -b       <branchname>	only deal with patrons from this library/branch
+   -f       <categorycode>	change patron category from this category
+   -t       <categorycode>	change patron category to this category
+
 =head1 OPTIONS
 
 =over 8
@@ -101,136 +100,180 @@ C<juv2adult.pl> -f=<categorycode> -t=<categorycode> -v -n - Processes all branch
 # These variables are set by command line options.
 # They are initially set to default values.
 
-
-my $help    = 0;
-my $man     = 0;
-my $verbose = 0;
+my $help     = 0;
+my $man      = 0;
+my $verbose  = 0;
 my $noaction = 0;
 my $mybranch;
 my $fromcat;
 my $tocat;
 
 GetOptions(
-    'help|?'         => \$help,
-    'man'            => \$man,
-    'v'              => \$verbose,
-    'n'				 => \$noaction,
-    'f=s'	     => \$fromcat,
-    't=s'	     => \$tocat,
-    'b=s'      => \$mybranch,
+    'help|?' => \$help,
+    'man'    => \$man,
+    'v'      => \$verbose,
+    'n'      => \$noaction,
+    'f=s'    => \$fromcat,
+    't=s'    => \$tocat,
+    'b=s'    => \$mybranch,
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
 
-if(not $fromcat && $tocat) { #make sure we've specified the info we need.
-	print "please specify -help for usage tips.\n";
-		exit;
+if ( not $fromcat && $tocat ) {    #make sure we've specified the info we need.
+    print "please specify -help for usage tips.\n";
+    exit;
 }
 
 cronlogaction();
 
-my $dbh=C4::Context->dbh;
+my $dbh = C4::Context->dbh;
+
 #get today's date, format it and subtract upperagelimit
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-$year +=1900;
-$mon +=1; if ($mon < 10) {$mon = "0".$mon;}
-if ($mday < 10) {$mday = "0".$mday;}
+my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) =
+  localtime(time);
+$year += 1900;
+$mon  += 1;
+if ( $mon < 10 )  { $mon  = "0" . $mon; }
+if ( $mday < 10 ) { $mday = "0" . $mday; }
+
 # get the upperagelimit from the category to be transitioned from
-my $query=qq|SELECT upperagelimit from categories where categorycode =?|;
-my $sth=$dbh->prepare( $query );
-$sth->execute( $fromcat )
-   or die "Couldn't execute statement: " . $sth->errstr;
+my $query = qq|SELECT upperagelimit from categories where categorycode =?|;
+my $sth   = $dbh->prepare($query);
+$sth->execute($fromcat)
+  or die "Couldn't execute statement: " . $sth->errstr;
 my $agelimit = $sth->fetchrow_array();
 if ( not $agelimit ) {
+    die "No patron category $fromcat. Please try again. \n";
+}
 
-	die "No patron category $fromcat. Please try again. \n";
-}
-$query=qq|SELECT categorycode from categories where categorycode=?|;
-$sth=$dbh->prepare( $query );
-$sth->execute( $tocat )
-	or die "Couldn't execute statement: " . $sth->errstr;
+$query = qq|SELECT categorycode from categories where categorycode=?|;
+$sth   = $dbh->prepare($query);
+$sth->execute($tocat)
+  or die "Couldn't execute statement: " . $sth->errstr;
 my $tocatage = $sth->fetchrow_array();
-if ( not $tocatage ){
-	die "No patron category $tocat. Please try again. \n";
+if ( not $tocatage ) {
+    die "No patron category $tocat. Please try again. \n";
 }
-$sth->finish(  );
-$year -=$agelimit;
+
+$year -= $agelimit;
 
 $verbose and print "The age limit for category $fromcat is $agelimit\n";
 
 my $itsyourbirthday = "$year-$mon-$mday";
 
+if ( not $noaction ) {
+    if ($mybranch) {    #yep, we received a specific branch to work on.
+        $verbose and print "Looking for patrons of $mybranch to update from $fromcat to $tocat that were born before $itsyourbirthday\n";
+        my $query = qq|
+            UPDATE borrowers
+            SET guarantorid ='0',
+                categorycode = ?
+            WHERE dateofbirth <= ?
+              AND dateofbirth != '0000-00-00'
+              AND branchcode = ?
+              AND categorycode IN (
+                SELECT categorycode
+                FROM categories
+                WHERE category_type = 'C'
+                  AND categorycode = ?
+              )|;
+        my $sth = $dbh->prepare($query);
+        my $res = $sth->execute( $tocat, $itsyourbirthday, $mybranch, $fromcat )
+          or die "can't execute";
 
-if ( not $noaction) {
-	if ( $mybranch ) { #yep, we received a specific branch to work on.
-		$verbose and print "Looking for patrons of $mybranch to update from $fromcat to $tocat that were born before $itsyourbirthday\n";
-		my $query=qq|UPDATE borrowers
-		   SET guarantorid ='0',
-		    categorycode =?
-		   WHERE dateofbirth<=?
-		   AND dateofbirth!='0000-00-00'
-		   AND branchcode=?
-		   AND categorycode IN (select categorycode from categories where category_type='C' and categorycode=?)|;
-		my $sth=$dbh->prepare($query);
-		my $res = $sth->execute( $tocat, $itsyourbirthday, $mybranch, $fromcat ) or die "can't execute";
-		if ($res eq '0E0') { print "No patrons updated\n";
-		} else { print "Updated $res patrons\n"; }
-	} else { # branch was not supplied, processing all branches
-		$verbose and print "Looking in all branches for patrons to update from $fromcat to $tocat that were born before $itsyourbirthday\n";
-			my $query=qq|UPDATE borrowers
-			   SET guarantorid ='0',
-			    categorycode =?
-			   WHERE dateofbirth<=?
-			   AND dateofbirth!='0000-00-00'
-			   AND categorycode IN (select categorycode from categories where category_type='C' and categorycode=?)|;
-			my $sth=$dbh->prepare($query);
-			my $res = $sth->execute( $tocat, $itsyourbirthday, $fromcat ) or die "can't execute";
-			if ($res eq '0E0') { print "No patrons updated\n";
-			} else { print "Updated $res patrons\n"; }
-	}
-} else {
-	my $birthday;
-	if ( $mybranch ) {
-		$verbose and print "Displaying patrons that would be updated from $fromcat to $tocat from $mybranch\n";
-		my $query=qq|SELECT firstname,
-		 surname,
-		 cardnumber,
-		 dateofbirth
-		FROM borrowers
-		WHERE dateofbirth<=?
-		AND dateofbirth!='0000-00-00'
-		AND branchcode=?
-		AND categorycode IN (select categorycode from categories where category_type='C' and categorycode=?)|;
-		my $sth=$dbh->prepare( $query );
-		$sth->execute( $itsyourbirthday, $mybranch, $fromcat )
-		   or die "Couldn't execute statement: " . $sth->errstr;
-		while ( my @res = $sth->fetchrow_array()) {
-	            my $firstname = $res[0];
-	            my $surname = $res[1];
-	            my $barcode = $res[2];
-	            $birthday = $res[3];
-	            print "$firstname $surname $barcode $birthday\n";
-	          }
-	} else {
-		$verbose and print "Displaying patrons that would be updated from $fromcat to $tocat.\n";
-		my $query=qq|SELECT firstname,
-		 surname,
-		 cardnumber,
-		 dateofbirth
-		FROM borrowers
-		WHERE dateofbirth<=?
-		AND dateofbirth!='0000-00-00'
-		AND categorycode IN (select categorycode from categories where category_type='C' and categorycode=?)|;
-		my $sth=$dbh->prepare( $query );
-		$sth->execute( $itsyourbirthday, $fromcat )
-		   or die "Couldn't execute statement: " . $sth->errstr;
-		while ( my @res = $sth->fetchrow_array()) {
-	            my $firstname = $res[0];
-	            my $surname = $res[1];
-	            my $barcode = $res[2];
-	            $birthday = $res[3];
-	            print "$firstname $surname $barcode $birthday\n";
-	          }
-	}
-	$sth->finish(  );
+        if ( $res eq '0E0' ) {
+            print "No patrons updated\n";
+        }
+        else {
+            print "Updated $res patrons\n";
+        }
+    }
+    else {    # branch was not supplied, processing all branches
+        $verbose and print "Looking in all branches for patrons to update from $fromcat to $tocat that were born before $itsyourbirthday\n";
+        my $query = qq|
+            UPDATE borrowers
+            SET guarantorid = '0',
+                categorycode = ?
+            WHERE dateofbirth <= ?
+              AND dateofbirth!='0000-00-00'
+              AND categorycode IN (
+                SELECT categorycode
+                FROM categories
+                WHERE category_type = 'C'
+                  AND categorycode = ?
+              )|;
+        my $sth = $dbh->prepare($query);
+        my $res = $sth->execute( $tocat, $itsyourbirthday, $fromcat )
+          or die "can't execute";
+
+        if ( $res eq '0E0' ) {
+            print "No patrons updated\n";
+        }
+        else {
+            print "Updated $res patrons\n";
+        }
+    }
+}
+else {
+    my $birthday;
+    if ($mybranch) {
+        $verbose and print "Displaying patrons that would be updated from $fromcat to $tocat from $mybranch\n";
+        my $query = qq|
+            SELECT firstname,
+                   surname,
+                   cardnumber,
+                   dateofbirth
+            FROM borrowers
+            WHERE dateofbirth <= ?
+              AND dateofbirth != '0000-00-00'
+              AND branchcode = ?
+              AND categorycode IN (
+                SELECT categorycode
+                FROM categories
+                WHERE category_type = 'C'
+                  AND categorycode = ?
+              )
+        |;
+        my $sth = $dbh->prepare($query);
+        $sth->execute( $itsyourbirthday, $mybranch, $fromcat )
+          or die "Couldn't execute statement: " . $sth->errstr;
+
+        while ( my @res = $sth->fetchrow_array() ) {
+            my $firstname = $res[0];
+            my $surname   = $res[1];
+            my $barcode   = $res[2];
+            $birthday = $res[3];
+            print "$firstname $surname $barcode $birthday\n";
+        }
+    }
+    else {
+        $verbose and print "Displaying patrons that would be updated from $fromcat to $tocat.\n";
+        my $query = qq|
+            SELECT firstname,
+                   surname,
+                   cardnumber,
+                   dateofbirth
+            FROM borrowers
+            WHERE dateofbirth <= ?
+              AND dateofbirth != '0000-00-00'
+              AND categorycode IN (
+                SELECT categorycode
+                FROM categories
+                WHERE category_type = 'C'
+                  AND categorycode = ?
+              )
+        |;
+        my $sth = $dbh->prepare($query);
+        $sth->execute( $itsyourbirthday, $fromcat )
+          or die "Couldn't execute statement: " . $sth->errstr;
+
+        while ( my @res = $sth->fetchrow_array() ) {
+            my $firstname = $res[0];
+            my $surname   = $res[1];
+            my $barcode   = $res[2];
+            $birthday = $res[3];
+            print "$firstname $surname $barcode $birthday\n";
+        }
+    }
 }
