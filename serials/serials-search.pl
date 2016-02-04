@@ -31,7 +31,6 @@ this script is the search page for serials
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;
-use C4::Branch;
 use C4::Context;
 use C4::Koha qw( GetAuthorisedValues );
 use C4::Output;
@@ -131,19 +130,6 @@ for my $sub ( @subscriptions ) {
     }
 }
 
-my $branches = GetBranches();
-my @branches_loop;
-foreach (sort keys %$branches){
-    my $selected = 0;
-    $selected = 1 if( defined $branch and $branch eq $_ );
-    push @branches_loop, {
-        branchcode  => $_,
-        branchname  => $branches->{$_}->{'branchname'},
-        selected    => $selected,
-    };
-}
-
-
 $template->param(
     openedsubscriptions => \@openedsubscriptions,
     closedsubscriptions => \@closedsubscriptions,
@@ -157,7 +143,6 @@ $template->param(
     branch_filter => $branch,
     location_filter => $location,
     expiration_date_filter => $expiration_date_dt,
-    branches_loop => \@branches_loop,
     done_searched => $searched,
     routing       => $routing,
     additional_field_filters => $additional_field_filters,

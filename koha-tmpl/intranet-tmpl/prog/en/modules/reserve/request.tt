@@ -16,10 +16,10 @@
 <script type="text/javascript">
     // <![CDATA[
 var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
-var patron_homebranch = "[% borrower_branchname |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+var patron_homebranch = "[% Branches.GetName( borrower_branchcode ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
 var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo IN bibitemloo.itemloop %][% IF ( itemloo.override ) %]
     [% itemloo.itemnumber %]: {
-        homebranch: "[% itemloo.homebranchname |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+        homebranch: "[% Branches.GetName( itemloo.homebranch ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
         holdallowed: [% itemloo.holdallowed %]
     },
 [% END %][% END %][% END %]
@@ -537,10 +537,10 @@ function checkMultiHold() {
                         [% itemloo.barcode %]
                     </td>
                     <td>
-                        [% itemloo.homebranchname %]
+                        [% Branches.GetName( itemloo.homebranch ) %]
                     </td>
                     <td>
-                        [% itemloo.holdingbranchname %]
+                        [% Branches.GetName( itemloo.holdingbranch ) %]
                     </td>
                     <td>
                         [% itemloo.itemcallnumber %]
@@ -559,8 +559,8 @@ function checkMultiHold() {
                 [% ELSE %]
                     <span title="0000-00-00">
                         [% IF ( itemloo.transfertwhen ) %]
-                            In transit from [% itemloo.transfertfrom %],
-                            to [% itemloo.transfertto %], since [% itemloo.transfertwhen %]
+                            In transit from [% Branches.GetName( itemloo.transfertfrom ) %],
+                            to [% Branches.GetName( itemloo.transfertto ) %], since [% itemloo.transfertwhen %]
                         [% END %]
                     </span>
                 [% END %]
@@ -578,7 +578,7 @@ function checkMultiHold() {
                             Can't be cancelled when item is in transit
                     [% ELSE %]
                     [% IF ( itemloo.waitingdate ) %]Waiting[% ELSE %]On hold[% END %]
-                    [% IF ( itemloo.canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedForBorrowernumber %]">[% itemloo.ReservedForFirstname %] [% itemloo.ReservedForSurname %]</a>[% END %] [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %] [% itemloo.ExpectedAtLibrary %]
+                    [% IF ( itemloo.canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedForBorrowernumber %]">[% itemloo.ReservedForFirstname %] [% itemloo.ReservedForSurname %]</a>[% END %] [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %] [% Branches.GetName( itemloo.ExpectedAtLibrary ) %]
                     since
                     [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate | $KohaDates %][% ELSE %][% IF ( itemloo.reservedate ) %][% itemloo.reservedate %][% END %][% END %]. <a class="info" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber %]&amp;CancelBorrowerNumber=[% itemloo.ReservedForBorrowernumber %]&amp;CancelItemnumber=[% itemloo.itemnumber %]"  onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);">Cancel hold</a>
 

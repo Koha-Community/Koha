@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Auth;
-use C4::Branch qw( GetBranches );
 use C4::Output;
 use C4::Members;
 
@@ -45,9 +44,6 @@ my $op = $input->param('op') || '';
 
 my $referer = $input->referer();
 
-my $onlymine = C4::Branch::onlymine;
-my $branches = C4::Branch::GetBranches( $onlymine );
-
 my $patron_categories = Koha::Patron::Categories->search_limited;
 $template->param(
     view => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",
@@ -56,7 +52,6 @@ $template->param(
     selection_type => 'select',
     alphabet        => ( C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' ),
     categories      => $patron_categories,
-    branches        => [ map { { branchcode => $_->{branchcode}, branchname => $_->{branchname} } } values %$branches ],
     aaSorting       => 1,
 );
 output_html_with_http_headers( $input, $cookie, $template->output );

@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Transfer collection</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -37,13 +38,7 @@
                                     <li>
                                         <label for="toBranch">Choose your library:</label>
                                         <select id="toBranch" name="toBranch">
-                                            [% FOREACH branchoptionloo IN branchoptionloop %]
-                                                [% IF ( branchoptionloo.selected ) %]
-                                                    <option value="[% branchoptionloo.code %]" selected="selected">[% branchoptionloo.name %]</option>
-                                                [% ELSE %]
-                                                    <option value="[% branchoptionloo.code %]">[% branchoptionloo.name %]</option>
-                                                [% END %]
-                                            [% END %]
+                                            [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1 ) %]
                                         </select>
                                     </li>
                                 </ol>

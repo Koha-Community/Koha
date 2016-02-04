@@ -11,12 +11,12 @@ END %]
     [% FOREACH branch IN branches %]
         <div class="branchgriditem">
             [% IF branch.selected || (selectall == 1) %]
-                <input id="branch_[% branch.value %]" class="branch_select" type="checkbox" name="branch" value="[% branch.value %]" checked="checked" />
+                <input id="branch_[% branch.branchcode %]" class="branch_select" type="checkbox" name="branch" value="[% branch.branchcode %]" checked="checked" />
             [% ELSE %]
-                <input id="branch_[% branch.value %]" class="branch_select" type="checkbox" name="branch" value="[% branch.value %]" />
+                <input id="branch_[% branch.branchcode %]" class="branch-select" type="checkbox" name="branch" value="[% branch.branchcode %]" />
             [% END %]
 
-            <label for="branch_[% branch.value %]">[% branch.branchname %]</label>
+            <label for="branch_[% branch.branchcode %]">[% branch.branchname %]</label>
         </div>
         [% IF loop.count() % 4 == 0 && !loop.last() %]
             </div>

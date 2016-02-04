@@ -45,7 +45,6 @@ use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use C4::Members::Messaging;
-use C4::Branch; # GetBranches
 use C4::Koha;   # FIXME : is it still useful ?
 use C4::RotatingCollections;
 use Koha::DateUtils;
@@ -83,7 +82,6 @@ if ( $query->param('print_slip') ) {
 
 #####################
 #Global vars
-my $branches = GetBranches();
 my $printers = GetPrinters();
 my $userenv = C4::Context->userenv;
 my $userenv_branch = $userenv->{'branch'} // '';
@@ -401,7 +399,6 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
     );
 
     my $reserve    = $messages->{'ResFound'};
-    my $branchname = $branches->{ $reserve->{'branchcode'} }->{'branchname'};
     my $borr = C4::Members::GetMember( borrowernumber => $reserve->{'borrowernumber'} );
     my $name = $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
     $template->param(
@@ -427,7 +424,6 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
 #
 if ( $messages->{'ResFound'}) {
     my $reserve    = $messages->{'ResFound'};
-    my $branchname = $branches->{ $reserve->{'branchcode'} }->{'branchname'};
     my $borr = C4::Members::GetMember( borrowernumber => $reserve->{'borrowernumber'} );
     my $holdmsgpreferences =  C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $reserve->{'borrowernumber'}, message_name   => 'Hold_Filled' } );
     if ( $reserve->{'ResFound'} eq "Waiting" or $reserve->{'ResFound'} eq "Reserved" ) {
@@ -447,8 +443,6 @@ if ( $messages->{'ResFound'}) {
         # same params for Waiting or Reserved
         $template->param(
             found          => 1,
-            currentbranch  => $branches->{$userenv_branch}->{'branchname'},
-            destbranchname => $branches->{ $reserve->{'branchcode'} }->{'branchname'},
             name           => $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'},
             borfirstname   => $borr->{'firstname'},
             borsurname     => $borr->{'surname'},
@@ -485,7 +479,7 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'NotIssued' ) {
         $err{notissued} = 1;
         $err{msg} = '';
-        $err{msg} = $branches->{ $messages->{'IsPermanent'} }->{'branchname'} if $messages->{'IsPermanent'};
+        $err{msg} = $messages->{'IsPermanent'} if $messages->{'IsPermanent'};
     }
     elsif ( $code eq 'LocalUse' ) {
         $err{localuse} = 1;
@@ -512,8 +506,7 @@ foreach my $code ( keys %$messages ) {
     elsif ( ( $code eq 'IsPermanent' ) && ( not $messages->{'ResFound'} ) ) {
         if ( $messages->{'IsPermanent'} ne $userenv_branch ) {
             $err{ispermanent} = 1;
-            $err{msg}         =
-              $branches->{ $messages->{'IsPermanent'} }->{'branchname'};
+            $err{msg}         = $messages->{'IsPermanent'};
         }
     }
     elsif ( $code eq 'WrongTransfer' ) {
@@ -617,18 +610,9 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
     }
     push @riloop, \%ri;
 }
-my ($genbrname, $genprname);
-if (my $b = $branches->{$userenv_branch}) {
-    $genbrname = $b->{'branchname'};
-}
-if (my $p = $printers->{$printer}) {
-    $genprname = $p->{'printername'};
-}
+
 $template->param(
     riloop         => \@riloop,
-    genbrname      => $genbrname,
-    genprname      => $genprname,
-    branchname     => $genbrname,
     printer        => $printer,
     errmsgloop     => \@errmsgloop,
     exemptfine     => $exemptfine,

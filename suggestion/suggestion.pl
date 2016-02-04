@@ -25,7 +25,6 @@ use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Suggestions;
 use C4::Koha; #GetItemTypes
-use C4::Branch;
 use C4::Budgets;
 use C4::Search;
 use C4::Members;
@@ -61,7 +60,7 @@ sub GetCriteriumDesc{
         }
         return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     }
-    return Koha::Libraries->find($criteriumvalue)->branchname;
+    return Koha::Libraries->find($criteriumvalue)->branchname
         if $displayby =~ /branchcode/;
     return GetAuthorisedValueByCode('SUGGEST_FORMAT', $criteriumvalue) || "Unknown" if ($displayby =~/itemtype/);
     if ($displayby =~/suggestedby/||$displayby =~/managedby/||$displayby =~/acceptedby/){
@@ -299,31 +298,11 @@ if(defined($returnsuggested) and $returnsuggested ne "noone")
     print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=".$returnsuggested."#suggestions");
 }
 
-####################
-## Initializing selection lists
+my $branchfilter = ($displayby ne "branchcode") ? $input->param('branchcode') : C4::Context->userenv->{'branch'};
 
-#branch display management
-my $branchfilter = ($displayby ne "branchcode") ? $input->param('branchcode') : '';
-my $onlymine =
-     C4::Context->preference('IndependentBranches')
-  && C4::Context->userenv
-  && !C4::Context->IsSuperLibrarian()
-  && C4::Context->userenv->{branch};
-my $branches = GetBranches($onlymine);
-my @branchloop;
-
-foreach my $thisbranch ( sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches ) {
-    my %row = (
-        value      => $thisbranch,
-        branchname => $branches->{$thisbranch}->{'branchname'},
-        selected   => ($branchfilter and $branches->{$thisbranch}->{'branchcode'} eq $branchfilter ) || ( $$suggestion_ref{'branchcode'} and $branches->{$thisbranch}->{'branchcode'} eq $$suggestion_ref{'branchcode'} )
-    );
-    push @branchloop, \%row;
-}
-$branchfilter=C4::Context->userenv->{'branch'} if ($onlymine && !$branchfilter);
-
-$template->param( branchloop => \@branchloop,
-                branchfilter => $branchfilter);
+$template->param(
+    branchfilter => $branchfilter,
+);
 
 $template->param( returnsuggestedby => $returnsuggestedby );
 

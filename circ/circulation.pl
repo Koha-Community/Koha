@@ -30,7 +30,6 @@ use DateTime::Duration;
 use C4::Output;
 use C4::Print;
 use C4::Auth qw/:DEFAULT get_session haspermission/;
-use C4::Branch; # GetBranches
 use C4::Koha;   # GetPrinter
 use C4::Circulation;
 use C4::Utils::DataTables::Members;

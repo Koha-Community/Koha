@@ -21,12 +21,12 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Auth;
-use C4::Branch;
 use C4::Context;
 use C4::Koha;
 use C4::Output;
 
 use Koha::AuthorisedValues;
+use Koha::Libraries;
 
 my $input = new CGI;
 my $id          = $input->param('id');
@@ -56,15 +56,14 @@ if ($op eq 'add_form') {
         $category = $input->param('category');
     }
 
-    my $branches = GetBranches;
+    my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
     my @branches_loop;
-
-    foreach my $branchcode ( sort { uc($branches->{$a}->{branchname}) cmp uc($branches->{$b}->{branchname}) } keys %$branches ) {
-        my $selected = ( grep {$_ eq $branchcode} @$selected_branches ) ? 1 : 0;
+    foreach my $branch ( @$branches ) {
+        my $selected = ( grep {$_ eq $branch->{branchcode}} @$selected_branches ) ? 1 : 0;
         push @branches_loop, {
-            branchcode => $branchcode,
-            branchname => $branches->{$branchcode}->{branchname},
-            selected => $selected,
+            branchcode => $branch->{branchcode},
+            branchname => $branch->{branchname},
+            selected   => $selected,
         };
     }
 

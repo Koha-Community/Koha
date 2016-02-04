@@ -149,7 +149,6 @@ use C4::Koha;
 use C4::Members qw(GetMember);
 use URI::Escape;
 use POSIX qw(ceil floor);
-use C4::Branch; # GetBranches
 use C4::Search::History;
 
 use Koha::LibraryCategories;
@@ -216,7 +215,10 @@ if($cgi->cookie("intranet_bib_list")){
 # load the branches
 my $categories = Koha::LibraryCategories->search( { categorytype => 'searchdomain' }, { order_by => [ 'categorytype', 'categorycode' ] } );
 
-$template->param(searchdomainloop => $categories);
+$template->param(
+    selected_branchcode => ( C4::Context->IsSuperLibrarian ? C4::Context->userenv : '' ),
+    searchdomainloop => $categories
+);
 
 # load the Type stuff
 my $itemtypes = GetItemTypes;

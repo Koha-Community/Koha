@@ -139,7 +139,7 @@ $(document).ready(function(){
         </li><li>
         <label for="branchloop">Library: </label><select id="branchloop" name="branchcode" style="width:12em;">
             <option value="">All libraries</option>
-            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
         </select>
         </li>
         [% IF (authorised_values) %]

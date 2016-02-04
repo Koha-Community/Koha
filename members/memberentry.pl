@@ -37,7 +37,6 @@ use C4::Members::AttributeTypes;
 use C4::Koha;
 use C4::Log;
 use C4::Letters;
-use C4::Branch; # GetBranches
 use C4::Form::MessagingPreferences;
 use Koha::Patron::Debarments;
 use Koha::Cities;

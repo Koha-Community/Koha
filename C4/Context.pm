@@ -1030,6 +1030,12 @@ sub interface {
     return $context->{interface} // 'opac';
 }
 
+# always returns a string for OK comparison via "eq" or "ne"
+sub mybranch {
+    C4::Context->userenv           or return '';
+    return C4::Context->userenv->{branch} || '';
+}
+
 1;
 __END__
 

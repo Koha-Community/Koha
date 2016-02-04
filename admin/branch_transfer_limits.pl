@@ -26,7 +26,6 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Koha;
-use C4::Branch; 
 use C4::Circulation qw{ IsBranchTransferAllowed DeleteBranchTransferLimits CreateBranchTransferLimit };
 
 my $input = new CGI;
@@ -49,18 +48,6 @@ else
 {
 	$branchcode = $input->param('branchcode');
 }
-
-# Getting the branches for user selection
-my $branches = GetBranches();
-my @branch_loop;
-for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    my %row =(value => $thisbranch,
-              branchname => $branches->{$thisbranch}->{'branchname'},
-              selected => $thisbranch eq $branchcode ? 1 : 0,
-             );
-    push @branch_loop, \%row;
-}
-
 
 # Set the template language for the correct limit type using $limitType
 my $limitType = C4::Context->preference("BranchTransferLimitsType") || "ccode";
@@ -132,7 +119,6 @@ foreach my $code ( @codes ) {
 $template->param(
 		branchcount => $branchcount,
 		codes_loop => \@codes_loop,
-		branch_loop => \@branch_loop,
 		branchcode_loop => \@branchcode_loop,
 		branchcode => $branchcode,
         limitType => $limitType,

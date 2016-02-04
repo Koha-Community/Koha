@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE Branches %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Invoices</title>
@@ -262,7 +263,7 @@ $(document).ready(function() {
                 <li>Publication year: [% publicationyear %]</li>
               [% END %]
               [% IF ( branch ) %]
-                <li>Library: [% branchname %]</li>
+                <li>Library: [% Branches.GetName( branch ) %]</li>
               [% END %]
             </ul>
           </p>
@@ -348,13 +349,8 @@ $(document).ready(function() {
             <label for="branch">Library:</label>
             <select id="branch" name="branch">
               <option value="">All</option>
-              [% FOREACH branch IN branches_loop %]
-                [% IF ( branch.selected ) %]
-                  <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname %]</option>
-                [% ELSE %]
-                  <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
-                [% END %]
-              [% END %]
+              [%# FIXME Should not we filter the libraries %]
+              [% PROCESS options_for_libraries libraries => Branches.all( selected => branch, unfiltered => 1 ) %]
             </select>
           </li>
         </ol>

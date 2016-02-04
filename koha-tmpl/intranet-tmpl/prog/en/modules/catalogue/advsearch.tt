@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Advanced search</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -252,7 +253,8 @@
 <fieldset id="select-libs">
         <p><label for="branchloop">Individual libraries:</label><select name="limit" id="branchloop" onchange='if(this.value != ""){document.getElementById("categoryloop").disabled=true;} else {document.getElementById("categoryloop").disabled=false;}'>
         <option value="">All libraries</option>
-        [% PROCESS options_for_libraries libraries => Branches.all() %]
+        [%# FIXME Should not we filter the libraries displayed? %]
+        [% PROCESS options_for_libraries libraries => Branches.all( selected => selected_branchcode, unfiltered => 1 ) %]
         </select></p>
     <!-- <input type="hidden" name="limit" value="branch: MAIN" /> -->
         [% IF ( searchdomainloop ) %]

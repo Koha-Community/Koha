@@ -142,7 +142,7 @@
 			<td>
                 <select name="Filter"  size="1" id="branch">
                 <option value=""></option>
-                [% FOREACH l IN Branches.all() %]
+                [% FOREACH l IN Branches.all( unfiltered => 1 ) %]
                     <option value="[% l.branchcode %]">[% l.branchcode %] - [% l.branchname || 'UNKNOWN' %]</option>
                 [% END %]
                 </select>

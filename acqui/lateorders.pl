@@ -52,7 +52,6 @@ use C4::Output;
 use C4::Context;
 use C4::Acquisition;
 use C4::Letters;
-use C4::Branch; # GetBranches
 use Koha::DateUtils;
 
 my $input = new CGI;

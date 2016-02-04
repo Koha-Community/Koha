@@ -28,7 +28,6 @@ script to place reserves/requests
 
 use Modern::Perl;
 
-use C4::Branch;
 use CGI qw ( -utf8 );
 use List::MoreUtils qw/uniq/;
 use Date::Calc qw/Date_to_Days/;
@@ -63,8 +62,6 @@ my $multihold = $input->param('multi_hold');
 $template->param(multi_hold => $multihold);
 my $showallitems = $input->param('showallitems');
 
-# get Branches and Itemtypes
-my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
 
 # Select borrowers infos
@@ -364,13 +361,12 @@ foreach my $biblionumber (@biblionumbers) {
 
             $item->{itypename} = $itemtypes->{ $item->{itype} }{description};
             $item->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $item->{itype} }{imageurl} );
-            $item->{homebranchname} = $branches->{ $item->{homebranch} }{branchname};
+            $item->{homebranch} = $item->{homebranch};
 
             # if the holdingbranch is different than the homebranch, we show the
             # holdingbranch of the document too
             if ( $item->{homebranch} ne $item->{holdingbranch} ) {
-                $item->{holdingbranchname} =
-                  $branches->{ $item->{holdingbranch} }{branchname};
+                $item->{holdingbranch} = $item->{holdingbranch};
             }
 
 		if($item->{biblionumber} ne $biblionumber){
@@ -396,7 +392,7 @@ foreach my $biblionumber (@biblionumbers) {
                 $item->{ReservedForBorrowernumber}     = $reservedfor;
                 $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
                 $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
-                $item->{ExpectedAtLibrary}     = $branches->{$expectedAt}{branchname};
+                $item->{ExpectedAtLibrary}     = $expectedAt;
                 $item->{waitingdate} = $wait;
             }
 
@@ -428,9 +424,8 @@ foreach my $biblionumber (@biblionumbers) {
 
             if ( defined $transfertwhen && $transfertwhen ne '' ) {
                 $item->{transfertwhen} = output_pref({ dt => dt_from_string( $transfertwhen ), dateonly => 1 });
-                $item->{transfertfrom} =
-                  $branches->{$transfertfrom}{branchname};
-                $item->{transfertto} = $branches->{$transfertto}{branchname};
+                $item->{transfertfrom} = $transfertfrom;
+                $item->{transfertto} = $transfertto;
                 $item->{nocancel} = 1;
             }
 
@@ -609,10 +604,7 @@ foreach my $biblionumber (@biblionumbers) {
                      C4::Search::enabled_staff_search_views,
                     );
     if (defined $borrowerinfo && exists $borrowerinfo->{'branchcode'}) {
-        $template->param(
-                     borrower_branchname => $branches->{$borrowerinfo->{'branchcode'}}->{'branchname'},
-                     borrower_branchcode => $borrowerinfo->{'branchcode'},
-        );
+        $template->param( borrower_branchcode => $borrowerinfo->{'branchcode'},);
     }
 
     $biblioloopiter{biblionumber} = $biblionumber;

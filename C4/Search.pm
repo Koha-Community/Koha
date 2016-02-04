@@ -28,7 +28,6 @@ use C4::Search::PazPar2;
 use XML::Simple;
 use C4::Members qw(GetHideLostItemsPreference);
 use C4::XSLT;
-use C4::Branch;
 use C4::Reserves;    # GetReserveStatus
 use C4::Debug;
 use C4::Charset;
@@ -856,6 +855,8 @@ sub pazGetRecords {
         $results_per_page, $offset,       $expanded_facet, $branches,
         $query_type,       $scan
     ) = @_;
+
+    $branches ||= { map { $_->branchcode => $_->branchname } Koha::Libraries->search };
 
     my $paz = C4::Search::PazPar2->new(C4::Context->config('pazpar2url'));
     $paz->init();
@@ -1843,14 +1844,8 @@ sub searchResults {
     }
 
     #Build branchnames hash
-    #find branchname
-    #get branch information.....
-    my %branches;
-    my $bsth =$dbh->prepare("SELECT branchcode,branchname FROM branches"); # FIXME : use C4::Branch::GetBranches
-    $bsth->execute();
-    while ( my $bdata = $bsth->fetchrow_hashref ) {
-        $branches{ $bdata->{'branchcode'} } = $bdata->{'branchname'};
-    }
+    my %branches = map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' });
+
 # FIXME - We build an authorised values hash here, using the default framework
 # though it is possible to have different authvals for different fws.
 

@@ -31,12 +31,13 @@ use C4::Context;
 use MARC::Record;
 use C4::Log;
 use C4::Koha;
-use C4::Branch;
 use C4::ClassSource;
 use C4::ImportBatch;
 use C4::Charset;
 use Koha::BiblioFrameworks;
 use Koha::DateUtils;
+
+use Koha::Libraries;
 
 use Date::Calc qw(Today);
 use MARC::File::USMARC;
@@ -173,18 +174,11 @@ sub build_authorized_values_list {
 
     #---- branch
     if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-        #Use GetBranches($onlymine)
-        my $onlymine =
-             C4::Context->preference('IndependentBranches')
-          && C4::Context->userenv
-          && !C4::Context->IsSuperLibrarian()
-          && C4::Context->userenv->{branch};
-        my $branches = GetBranches($onlymine);
-        foreach my $thisbranch ( sort keys %$branches ) {
-            push @authorised_values, $thisbranch;
-            $authorised_lib{$thisbranch} = $branches->{$thisbranch}->{'branchname'};
+        my $libraries = Koha::Libraries->search_filtered({}, {order_by => ['branchname']});
+        while ( my $l = $libraries->next ) {
+            push @authorised_values, $l->branchcode;;
+            $authorised_lib{$l->branchcode} = $l->branchname;
         }
-
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
         push @authorised_values, ""

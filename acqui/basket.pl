@@ -28,13 +28,13 @@ use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Acquisition;
 use C4::Budgets;
-use C4::Branch;
 use C4::Contract;
 use C4::Debug;
 use C4::Biblio;
 use C4::Members qw/GetMember/;  #needed for permissions checking for changing basketgroup of a basket
 use C4::Items;
 use C4::Suggestions;
+use Koha::Libraries;
 use Date::Calc qw/Add_Delta_Days/;
 use Koha::Database;
 use Koha::EDI qw( create_edi_order get_edifact_ean );
@@ -236,6 +236,7 @@ elsif ( $op eq 'ediorder' ) {
                 exit 1;
             }
         }
+
         if (!defined $basket->{branch} or $basket->{branch} eq $userenv->{branch}) {
             push @branches_loop, {
                 branchcode => $userenv->{branch},
@@ -245,20 +246,17 @@ elsif ( $op eq 'ediorder' ) {
         }
     } else {
         # get branches
-        my $branches = C4::Branch::GetBranches;
-        my @branchcodes = sort {
-            $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname}
-        } keys %$branches;
-        foreach my $branch (@branchcodes) {
+        my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
+        foreach my $branch (@$branches) {
             my $selected = 0;
             if (defined $basket->{branch}) {
-                $selected = 1 if $branch eq $basket->{branch};
+                $selected = 1 if $branch->{branchcode} eq $basket->{branch};
             } else {
-                $selected = 1 if $branch eq C4::Context->userenv->{branch};
+                $selected = 1 if $branch->{branchcode} eq C4::Context->userenv->{branch};
             }
             push @branches_loop, {
-                branchcode => $branch,
-                branchname => $branches->{$branch}->{branchname},
+                branchcode => $branch->{branchcode},
+                branchname => $branch->{branchname},
                 selected => $selected
             };
         }

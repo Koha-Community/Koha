@@ -57,13 +57,12 @@ if ($end_dt){
 }
 
 if($allbranches) {
-	my $branch;
-	my @branchcodes = split(/\|/, $input->param('branchCodes')); 
-	foreach $branch (@branchcodes) {
-		add_holiday($newoperation, $branch, $weekday, $day, $month, $year, $title, $description);
-	}
+    my $libraries = Koha::Libraries->search;
+    while ( my $library = $libraries->next ) {
+        add_holiday($newoperation, $library->branchcode, $weekday, $day, $month, $year, $title, $description);
+    }
 } else {
-	add_holiday($newoperation, $branchcode, $weekday, $day, $month, $year, $title, $description);
+    add_holiday($newoperation, $branchcode, $weekday, $day, $month, $year, $title, $description);
 }
 
 print $input->redirect("/cgi-bin/koha/tools/holidays.pl?branch=$originalbranchcode&calendardate=$calendardate");

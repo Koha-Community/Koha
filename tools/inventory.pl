@@ -32,7 +32,6 @@ use C4::Output;
 use C4::Biblio;
 use C4::Items;
 use C4::Koha;
-use C4::Branch; # GetBranches
 use C4::Circulation;
 use C4::Reports::Guided;    #_get_column_defs
 use C4::Charset;

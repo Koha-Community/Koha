@@ -26,7 +26,6 @@ use JSON;
 
 use C4::Auth;
 use C4::Context;
-use C4::Branch;
 use C4::ItemCirculationAlertPreference;
 use C4::Output;
 
@@ -51,28 +50,13 @@ sub show {
         }
     );
 
-    my $br       = GetBranches;
     my $branch   = $input->param('branch') || '*';
-    my @branches = (
-        {
-            branchcode => '*',
-            branchname => 'Default',
-        },
-        sort { $a->{branchname} cmp $b->{branchname} } values %$br,
-    );
-    for (@branches) {
-        $_->{selected} = "selected" if ($branch eq $_->{branchcode});
-    }
-    my $branch_name = exists($br->{$branch}) && $br->{$branch}->{branchname};
-
     my @categories = Koha::Patron::Categories->search_limited;
     my @item_types = Koha::ItemTypes->search;
     my $grid_checkout = $preferences->grid({ branchcode => $branch, notification => 'CHECKOUT' });
     my $grid_checkin  = $preferences->grid({ branchcode => $branch, notification => 'CHECKIN' });
 
     $template->param(branch             => $branch);
-    $template->param(branch_name        => $branch_name || 'Default');
-    $template->param(branches           => \@branches);
     $template->param(categories         => \@categories);
     $template->param(item_types         => \@item_types);
     $template->param(grid_checkout      => $grid_checkout);

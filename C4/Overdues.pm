@@ -36,6 +36,7 @@ use C4::Debug;
 use Koha::DateUtils;
 use Koha::Account::Line;
 use Koha::Account::Lines;
+use Koha::Libraries;
 
 use vars qw(@ISA @EXPORT);
 
@@ -788,8 +789,7 @@ sub GetBranchcodesWithOverdueRules {
     |);
     if ( $branchcodes->[0] eq '' ) {
         # If a default rule exists, all branches should be returned
-        my $availbranches = C4::Branch::GetBranches();
-        return keys %$availbranches;
+        return map { $_->branchcode } Koha::Libraries->search({}, { order_by => 'branchname' });
     }
     return @$branchcodes;
 }

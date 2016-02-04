@@ -25,8 +25,9 @@ use C4::Output;
 use C4::Auth;
 use C4::Koha;
 use C4::Debug;
-use C4::Branch; # GetBranches
 use C4::HoldsQueue qw(TransportCostMatrix UpdateTransportCostMatrix);
+
+use Koha::Libraries;
 
 use Data::Dumper;
 
@@ -50,11 +51,7 @@ unless ($update) {
     $have_matrix = keys %$cost_matrix if $cost_matrix;
 }
 
-my $branches = GetBranches();
-my @branchloop = map { code => $_,
-                       name => $branches->{$_}->{'branchname'} },
-                 sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} }
-                 keys %$branches;
+my @branchloop = map { code => $_->branchcode, name => $_->branchname }, Koha::Libraries->search({}, { order_by => 'branchname' });
 my (@branchfromloop, @errors);
 foreach my $branchfrom ( @branchloop ) {
     my $fromcode = $branchfrom->{code};

@@ -69,7 +69,6 @@ use C4::Auth;
 use C4::Output;
 use C4::Budgets qw/ GetBudget GetBudgetHierarchy CanUserUseBudget GetBudgetPeriods /;
 use C4::Members;
-use C4::Branch;    # GetBranches
 use C4::Items;
 use C4::Biblio;
 use C4::Suggestions;

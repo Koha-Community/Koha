@@ -23,13 +23,13 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth;
-use C4::Branch;
 use C4::Output;
 use C4::Form::MessagingPreferences;
 use Koha::Patrons;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Patron::Categories;
+use Koha::Libraries;
 
 my $input         = new CGI;
 my $searchfield   = $input->param('description') // q||;
@@ -55,13 +55,13 @@ if ( $op eq 'add_form' ) {
         $selected_branches = $category->branch_limitations;
     }
 
-    my $branches = GetBranches;
+    my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
     my @branches_loop;
-    foreach my $branchcode ( sort { uc( $branches->{$a}->{branchname} ) cmp uc( $branches->{$b}->{branchname} ) } keys %$branches ) {
-        my $selected = ( grep { $_ eq $branchcode } @$selected_branches ) ? 1 : 0;
+    foreach my $branch ( @$branches ) {
+        my $selected = ( grep { $_ eq $branch->{branchcode} } @$selected_branches ) ? 1 : 0;
         push @branches_loop,
-          { branchcode => $branchcode,
-            branchname => $branches->{$branchcode}->{branchname},
+          { branchcode => $branch->{branchcode},
+            branchname => $branch->{branchname},
             selected   => $selected,
           };
     }

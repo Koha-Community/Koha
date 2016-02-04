@@ -58,15 +58,9 @@
 <h1>Library [% branchcode %] - [% Branches.GetName( branchcode ) %] Checkin and transfer policy</h1>
     <form method="get" action="/cgi-bin/koha/admin/branch_transfer_limits.pl" id="selectlibrary">
         <label for="branchselect">Select a library :</label>
-            <select name="branchcode" id="branchselect">
-		[% FOREACH branch_loo IN branch_loop %]
-			[% IF ( branch_loo.selected ) %]
-                <option value="[% branch_loo.value %]" selected="selected">[% branch_loo.branchname %]</option>
-            [% ELSE %]
-                <option value="[% branch_loo.value %]">[% branch_loo.branchname %]</option>
-            [% END %]
-		[% END %]
-            </select>
+        <select name="branchcode" id="branchselect">
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1 ) %]
+        </select>
     </form>
 
 <p class="help">Check the boxes for the libraries you accept to checkin items from.</p>

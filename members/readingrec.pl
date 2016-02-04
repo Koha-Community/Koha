@@ -28,7 +28,6 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Members;
-use C4::Branch qw(GetBranches);
 use List::MoreUtils qw/any uniq/;
 use Koha::DateUtils;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
@@ -73,8 +72,6 @@ if ( $borrowernumber eq C4::Context->preference('AnonymousPatron') ){
 } else {
     $issues = GetAllIssues($borrowernumber,$order,$limit);
 }
-
-my $branches = GetBranches();
 
 #   barcode export
 if ( $op eq 'export_barcodes' ) {
@@ -128,7 +125,6 @@ $template->param(
     privacy           => $data->{'privacy'},
     categoryname      => $data->{description},
     is_child          => ( $data->{category_type} eq 'C' ),
-    branchname        => $branches->{ $data->{branchcode} }->{branchname},
     loop_reading      => $issues,
     activeBorrowerRelationship =>
       ( C4::Context->preference('borrowerRelationship') ne '' ),

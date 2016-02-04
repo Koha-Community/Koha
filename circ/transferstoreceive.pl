@@ -23,7 +23,6 @@ use warnings;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output;
-use C4::Branch;     # GetBranches
 use C4::Auth;
 use Koha::DateUtils;
 use C4::Biblio;
@@ -37,6 +36,7 @@ use Date::Calc qw(
 
 use C4::Koha;
 use C4::Reserves;
+use Koha::Libraries;
 
 my $input = new CGI;
 my $itemnumber = $input->param('itemnumber');
@@ -56,18 +56,18 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $default = C4::Context->userenv->{'branch'};
 
 # get the all the branches for reference
-my $branches = GetBranches();
+my $libraries = Koha::Libraries->search({}, { order_by => 'branchname' });
 my @branchesloop;
 my $latetransfers;
-foreach my $br ( keys %$branches ) {
+while ( my $library = $libraries->next ) {
     my @transferloop;
     my %branchloop;
     my @gettransfers =
-      GetTransfersFromTo( $branches->{$br}->{'branchcode'}, $default );
+      GetTransfersFromTo( $library->branchcode, $default );
 
     if (@gettransfers) {
-        $branchloop{'branchname'} = $branches->{$br}->{'branchname'};
-        $branchloop{'branchcode'} = $branches->{$br}->{'branchcode'};
+        $branchloop{'branchname'} = $library->branchname;
+        $branchloop{'branchcode'} = $library->branchcode;
         foreach my $num (@gettransfers) {
             my %getransf;
 

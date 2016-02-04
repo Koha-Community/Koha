@@ -23,7 +23,6 @@ use List::MoreUtils qw/uniq/;
 
 use C4::Auth;
 use C4::Context;
-use C4::Branch; # GetBranches
 use C4::Koha;
 use Koha::DateUtils;
 use C4::Acquisition;
@@ -32,6 +31,7 @@ use C4::Reports;
 use C4::Circulation;
 use C4::Members::AttributeTypes;
 
+use Koha::Libraries;
 use Koha::Patron::Categories;
 
 use Date::Calc qw(
@@ -228,9 +228,10 @@ sub calculate {
         }
     }
 
+    my @branchcodes = map { $_->branchcode } Koha::Libraries->search;
 	($status  ) and push @loopfilter,{crit=>"Status",  filter=>$status  };
 	($activity) and push @loopfilter,{crit=>"Activity",filter=>$activity};
-	push @loopfilter,{debug=>1, crit=>"Branches",filter=>join(" ", sort keys %$branches)};
+    push @loopfilter,{debug=>1, crit=>"Branches",filter=>join(" ", sort @branchcodes)};
 	push @loopfilter,{debug=>1, crit=>"(line, column)", filter=>"($line,$column)"};
 # year of activity
 	my ( $period_year, $period_month, $period_day )=Add_Delta_YM( Today(),-$period, 0);

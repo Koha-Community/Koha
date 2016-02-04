@@ -37,8 +37,8 @@ not use an API to fetch items that populates item.datedue.
 
 [% IF ( item.transfertwhen ) %]
     [% SET itemavailable = 0 %]
-    <span class="item-status intransit">In transit from [% item.transfertfrom %]
-    to [% item.transfertto %] since [% item.transfertwhen | $KohaDates %]</span>
+    <span class="item-status intransit">In transit from [% Branches.GetName( item.transfertfrom ) %]
+    to [% Branches.GetName( item.transfertto ) %] since [% item.transfertwhen | $KohaDates %]</span>
 [% END %]
 
 [% IF ( item.waiting ) %]

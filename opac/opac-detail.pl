@@ -205,7 +205,6 @@ if ($session->param('busc')) {
         my ($arrParamsBusc, $offset, $results_per_page) = @_;
 
         my $expanded_facet = $arrParamsBusc->{'expand'};
-        my $branches = GetBranches();
         my $itemtypes = GetItemTypes;
         my @servers;
         @servers = @{$arrParamsBusc->{'server'}} if $arrParamsBusc->{'server'};
@@ -217,7 +216,7 @@ if ($session->param('busc')) {
         $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
         my ($error, $results_hashref, $facets);
         eval {
-            ($error, $results_hashref, $facets) = getRecords($arrParamsBusc->{'query'},$arrParamsBusc->{'simple_query'},\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$itemtypes,$arrParamsBusc->{'query_type'},$arrParamsBusc->{'scan'});
+            ($error, $results_hashref, $facets) = getRecords($arrParamsBusc->{'query'},$arrParamsBusc->{'simple_query'},\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,undef,$itemtypes,$arrParamsBusc->{'query_type'},$arrParamsBusc->{'scan'});
         };
         my $hits;
         my @newresults;
@@ -497,7 +496,6 @@ if ($hideitems) {
     @items = @all_items;
 }
 
-my $branches = GetBranches();
 my $branch = '';
 if (C4::Context->userenv){
     $branch = C4::Context->userenv->{branch};
@@ -508,19 +506,19 @@ if ( C4::Context->preference('HighlightOwnItemsOnOPAC') ) {
         ||
         C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'OpacURLBranch'
     ) {
-        my $branchname;
+        my $branchcode;
         if ( C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'PatronBranch' ) {
-            $branchname = $branches->{$branch}->{'branchname'};
+            $branchcode = $branch;
         }
         elsif (  C4::Context->preference('HighlightOwnItemsOnOPACWhich') eq 'OpacURLBranch' ) {
-            $branchname = $branches->{ $ENV{'BRANCHCODE'} }->{'branchname'};
+            $branchcode = $ENV{'BRANCHCODE'};
         }
 
         my @our_items;
         my @other_items;
 
         foreach my $item ( @items ) {
-           if ( $item->{'branchname'} eq $branchname ) {
+           if ( $item->{branchcode} eq $branchcode ) {
                $item->{'this_branch'} = 1;
                push( @our_items, $item );
            } else {
@@ -680,8 +678,8 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
      my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
      if ( defined( $transfertwhen ) && $transfertwhen ne '' ) {
         $itm->{transfertwhen} = $transfertwhen;
-        $itm->{transfertfrom} = $branches->{$transfertfrom}{branchname};
-        $itm->{transfertto}   = $branches->{$transfertto}{branchname};
+        $itm->{transfertfrom} = $transfertfrom;
+        $itm->{transfertto}   = $transfertto;
      }
     
     if (    C4::Context->preference('OPACAcquisitionDetails')

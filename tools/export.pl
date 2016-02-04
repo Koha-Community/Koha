@@ -21,7 +21,6 @@ use CGI qw ( -utf8 );
 use MARC::File::XML;
 use List::MoreUtils qw(uniq);
 use C4::Auth;
-use C4::Branch;             # GetBranches
 use C4::Koha;               # GetItemTypes
 use C4::Output;
 
@@ -31,6 +30,7 @@ use Koha::CsvProfiles;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Exporter::Record;
+use Koha::Libraries;
 
 my $query = new CGI;
 
@@ -68,31 +68,25 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 );
 
 my @branch = $query->multi_param("branch");
-my $only_my_branch;
-# Limit to local branch if IndependentBranches and not superlibrarian
-if (
-    (
-          C4::Context->preference('IndependentBranches')
-        && C4::Context->userenv
-        && !C4::Context->IsSuperLibrarian()
-        && C4::Context->userenv->{branch}
-    )
-    # Limit result to local branch strip_nonlocal_items
-    or $query->param('strip_nonlocal_items')
-) {
-    $only_my_branch = 1;
-    @branch = ( C4::Context->userenv->{'branch'} );
-}
-
-my %branchmap = map { $_ => 1 } @branch; # for quick lookups
 
 if ( $op eq "export" ) {
 
     my $export_remove_fields = $query->param("export_remove_fields") || q||;
     my @biblionumbers      = $query->multi_param("biblionumbers");
     my @itemnumbers        = $query->multi_param("itemnumbers");
+    my $strip_nonlocal_items =  $query->param('strip_nonlocal_items');
     my @sql_params;
     my $sql_query;
+
+    my $libraries = $strip_nonlocal_items
+        ? [ Koha::Libraries->find(C4::Context->userenv->{branch})->unblessed ]
+        : Koha::Libraries->search_filtered->unblessed;
+    my @branchcodes;
+    for my $branchcode ( @branch ) {
+        if ( grep { $_->{branchcode} eq $branchcode } @$libraries ) {
+            push @branchcodes, $branchcode;
+        }
+    }
 
     if ( $record_type eq 'bibs' or $record_type eq 'auths' ) {
         # No need to retrieve the record_ids if we already get them
@@ -140,7 +134,7 @@ if ( $op eq "export" ) {
                             }
                         )
                         : (),
-                    ( @branch ? ( 'items.homebranch' => { in => \@branch } ) : () ),
+                    ( @branchcodes ? ( 'items.homebranch' => { in => \@branchcodes } ) : () ),
                     ( $itemtype
                         ?
                           C4::Context->preference('item-level_itypes')
@@ -274,22 +268,13 @@ else {
         );
         push @itemtypesloop, \%row;
     }
-    my $branches = GetBranches($only_my_branch);
-    my @branchloop;
-    for my $thisbranch (
-        sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} }
-        keys %{$branches}
-      )
-    {
-        push @branchloop,
-          {
-            value      => $thisbranch,
-            selected   => %branchmap ? $branchmap{$thisbranch} : 1,
-            branchname => $branches->{$thisbranch}->{'branchname'},
-          };
-    }
 
     my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypecode'] } );
+
+    my $libraries = Koha::Libraries->search_filtered({}, { order_by => ['branchname'] })->unblessed;
+    for my $library ( @$libraries ) {
+        $library->{selected} = 1 if grep { $library->{branchcode} eq $_ } @branch;
+    }
 
     if (   $flags->{superlibrarian}
         && C4::Context->config('backup_db_via_tools')
@@ -312,7 +297,7 @@ else {
     }
 
     $template->param(
-        branchloop               => \@branchloop,
+        libraries                => $libraries,
         itemtypeloop             => \@itemtypesloop,
         authority_types          => $authority_types,
         export_remove_fields     => C4::Context->preference("ExportRemoveFields"),

@@ -33,7 +33,6 @@ use C4::Output;
 use C4::Biblio;
 use C4::Items;
 use C4::Letters;
-use C4::Branch; # GetBranches
 use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Database;

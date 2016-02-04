@@ -25,12 +25,12 @@ use CGI qw ( -utf8 );
 use List::MoreUtils qw/uniq/;
 
 use C4::Auth;
-use C4::Branch;
 use C4::Context;
 use C4::Output;
 use C4::Koha;
 use C4::Members::AttributeTypes;
 
+use Koha::Libraries;
 use Koha::Patron::Categories;
 
 my $script_name = "/cgi-bin/koha/admin/patron-attr-types.pl";
@@ -84,7 +84,7 @@ exit 0;
 sub add_attribute_type_form {
     my $template = shift;
 
-    my $branches = GetBranches;
+    my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
     my @branches_loop;
     foreach my $branch (sort keys %$branches) {
         push @branches_loop, {
@@ -252,14 +252,14 @@ sub edit_attribute_type_form {
     $template->param(classes_val_loop => GetAuthorisedValues( 'PA_CLASS' ));
 
 
-    my $branches = GetBranches;
+    my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
     my @branches_loop;
     my $selected_branches = $attr_type->branches;
-    foreach my $branch (sort keys %$branches) {
-        my $selected = ( grep {$$_{branchcode} eq $branch} @$selected_branches ) ? 1 : 0;
+    foreach my $branch (@$branches) {
+        my $selected = ( grep {$_->{branchcode} eq $branch->{branchcode}} @$selected_branches ) ? 1 : 0;
         push @branches_loop, {
-            branchcode => $branches->{$branch}{branchcode},
-            branchname => $branches->{$branch}{branchname},
+            branchcode => $branch->{branchcode},
+            branchname => $branch->{branchname},
             selected => $selected,
         };
     }

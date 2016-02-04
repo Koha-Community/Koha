@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Export data</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -92,7 +93,7 @@ $(document).ready(function() {
         <li>
             <label>Library: </label>
             [% INCLUDE 'branch-selector.inc'
-                branches = branchloop %]
+                branches = libraries %]
         </li>
     </ol>
 

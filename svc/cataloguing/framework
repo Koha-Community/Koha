@@ -3,12 +3,12 @@
 use Modern::Perl '2009';
 
 use CGI;
-use C4::Branch;
 use C4::ClassSource;
 use C4::Context;
 use C4::Biblio;
 use C4::Service;
 use Koha::Database;
+use Koha::Libraries;
 
 my ( $query, $response ) = C4::Service->init( editcatalogue => 'edit_catalogue' );
 
@@ -29,12 +29,8 @@ foreach my $tag ( sort keys %$tagslib ) {
 my $schema = Koha::Database->new->schema;
 my $authorised_values = {};
 
+my $branches = { map { $_->branchcode => $_->branchname } Koha::Libraries->search_filtered };
 $authorised_values->{branches} = [];
-my $onlymine=C4::Context->preference('IndependentBranches') &&
-        C4::Context->userenv &&
-        C4::Context->userenv->{flags} % 2 == 0 &&
-        C4::Context->userenv->{branch};
-my $branches = GetBranches($onlymine);
 foreach my $thisbranch ( sort keys %$branches ) {
     push @{ $authorised_values->{branches} }, { value => $thisbranch, lib => $branches->{$thisbranch}->{'branchname'} };
 }

@@ -39,7 +39,6 @@ use C4::Koha;
 use C4::Budgets;
 use C4::Acquisition;
 use C4::Suggestions;    # GetSuggestion
-use C4::Branch;         # GetBranches
 use C4::Members;
 
 use Koha::Number::Price;

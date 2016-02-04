@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -41,7 +42,7 @@
                                     [% END %]
                                     [% IF ( branch ) %]
                                     at
-                                    [% branch %]
+                                    [% Branches.GetName( branch ) %]
                                     [% END %]
                                     [% IF ( timeLimit != 999 ) %]
                                     in the past [% timeLimit |html %] months

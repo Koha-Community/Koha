@@ -20,7 +20,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Koha;
 use C4::Biblio;
-use C4::Branch;
 use C4::Items;
 use C4::Circulation;
 use C4::Auth;
@@ -98,7 +97,6 @@ foreach my $biblionumber ( @bibs ) {
         $dat->{'even'} = 1;
     }
 
-my $branches = GetBranches();
     for my $itm (@items) {
         if ($itm->{'location'}){
             $itm->{'location_opac'} = $shelflocations->{$itm->{'location'} };
@@ -106,8 +104,8 @@ my $branches = GetBranches();
         my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
         if ( defined( $transfertwhen ) && $transfertwhen ne '' ) {
              $itm->{transfertwhen} = $transfertwhen;
-             $itm->{transfertfrom} = $branches->{$transfertfrom}{branchname};
-             $itm->{transfertto}   = $branches->{$transfertto}{branchname};
+             $itm->{transfertfrom} = $transfertfrom;
+             $itm->{transfertto}   = $transfertto;
         }
     }
     $num++;

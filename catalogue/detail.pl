@@ -28,7 +28,6 @@ use C4::Output;
 use C4::Biblio;
 use C4::Items;
 use C4::Circulation;
-use C4::Branch;
 use C4::Reserves;
 use C4::Members; # to use GetMember
 use C4::Serials;
@@ -127,7 +126,6 @@ my $marchostsarray  = GetMarcHosts($record,$marcflavour);
 my $subtitle         = GetRecordValue('subtitle', $record, $fw);
 
 # Get Branches, Itemtypes and Locations
-my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
 my $dbh = C4::Context->dbh;
 
@@ -258,7 +256,7 @@ foreach my $item (@items) {
         $item->{ReservedForBorrowernumber}     = $reservedfor;
         $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
         $item->{ReservedForFirstname}   = $ItemBorrowerReserveInfo->{'firstname'};
-        $item->{ExpectedAtLibrary}      = $branches->{$expectedAt}{branchname};
+        $item->{ExpectedAtLibrary}      = $expectedAt;
         $item->{Reservedcardnumber}             = $ItemBorrowerReserveInfo->{'cardnumber'};
         # Check waiting status
         $item->{waitingdate} = $wait;
@@ -269,8 +267,8 @@ foreach my $item (@items) {
     my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($item->{itemnumber});
     if ( defined( $transfertwhen ) && ( $transfertwhen ne '' ) ) {
         $item->{transfertwhen} = $transfertwhen;
-        $item->{transfertfrom} = $branches->{$transfertfrom}{branchname};
-        $item->{transfertto}   = $branches->{$transfertto}{branchname};
+        $item->{transfertfrom} = $transfertfrom;
+        $item->{transfertto}   = $transfertto;
         $item->{nocancel} = 1;
     }
 

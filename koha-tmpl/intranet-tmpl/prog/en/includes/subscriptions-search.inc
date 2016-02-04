@@ -30,13 +30,8 @@
                 <label for="branch">Library:</label>
                 <select id="branch" name="branch_filter">
                   <option value="">All</option>
-                  [% FOREACH branch IN branches_loop %]
-                    [% IF (branch.selected) %]
-                      <option selected="branch.selected" value="[% branch.branchcode %]">[% branch.branchname %]</option>
-                    [% ELSE %]
-                      <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
-                    [% END %]
-                  [% END %]
+                  [%# FIXME Should not we filter the libraries? %]
+                  [% PROCESS options_for_libraries libraries => Branches.all( selected => branch_filter, unfiltered => 1 ) %]
                 </select>
               </li>
             </ol>

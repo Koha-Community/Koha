@@ -301,9 +301,9 @@ $(document).ready(function () {
                     [% END %]
 
                     [% IF ( transfertodo ) %]
-                        <h4><strong>Transfer to:</strong> [% destbranchname %]</h4>
+                        <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) %]</h4>
                     [% ELSE %]
-                        <h4><strong>Hold at</strong> [% destbranchname %]</h4>
+                        <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) %]</h4>
                     [% END %]
 
                     [% FOREACH inputloo IN inputloop %]
@@ -361,10 +361,10 @@ $(document).ready(function () {
 [% IF ( debarred ) %]<li class="error">Patron is RESTRICTED</li>[% END %]
 [% IF ( gonenoaddress ) %]<li class="error">Patron's address is in doubt</li>[% END %]
                     </ul>
-		[% IF ( transfertodo ) %]
-            <h4><strong>Transfer to:</strong> [% destbranchname %]</h4>
-		[% ELSE %]
-		<h4><strong>Hold at</strong> [% destbranchname %]</h4>
+        [% IF ( transfertodo ) %]
+            <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) %]</h4>
+        [% ELSE %]
+            <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) %]</h4>
         [% END %]
 
         <form method="post" action="returns.pl" class="confirm">
@@ -514,9 +514,9 @@ $(document).ready(function () {
                         [% END %]
 
                     [% IF ( transfertodo ) %]
-                        <h4><strong>Transfer to:</strong> [% destbranchname %]</h4>
+                        <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) %]</h4>
                     [% ELSE %]
-                        <h4><strong>Hold at</strong> [% destbranchname %]</h4>
+                        <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) %]</h4>
                     [% END %]
 
                     <input type="hidden" name="print_slip" value="0" />
@@ -594,7 +594,7 @@ $(document).ready(function () {
                         <p class="problem">No item with barcode: [% errmsgloo.msg | html %]</p>
                     [% END %]
                     [% IF ( errmsgloo.ispermanent ) %]
-                        <p class="problem">Please return item to: [% errmsgloo.msg %]</p>
+                        <p class="problem">Please return item to: [% Branches.GetName( errmsgloo.msg ) %]</p>
                     [% END %]
                     [% IF ( errmsgloo.notissued ) %]
                         <p class="problem">Not checked out.</p>

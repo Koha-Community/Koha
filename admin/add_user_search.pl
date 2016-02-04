@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Auth;
-use C4::Branch qw( GetBranches );
 use C4::Output;
 use C4::Members;
 
@@ -53,9 +52,6 @@ my $search_patrons_with_acq_perm_only =
     ( $referer =~ m|admin/aqbudgets.pl| )
         ? 1 : 0;
 
-my $onlymine = C4::Branch::onlymine;
-my $branches = C4::Branch::GetBranches( $onlymine );
-
 my $patron_categories = Koha::Patron::Categories->search_limited;
 $template->param(
     patrons_with_acq_perm_only => $search_patrons_with_acq_perm_only,
@@ -65,7 +61,6 @@ $template->param(
     selection_type => $selection_type,
     alphabet        => ( C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' ),
     categories      => $patron_categories,
-    branches        => [ map { { branchcode => $_->{branchcode}, branchname => $_->{branchname} } } values %$branches ],
     aaSorting       => 1,
 );
 output_html_with_http_headers( $input, $cookie, $template->output );

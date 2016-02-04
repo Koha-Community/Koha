@@ -25,6 +25,7 @@ use base qw( Template::Plugin );
 
 use C4::Koha;
 use C4::Context;
+use Koha::Libraries;
 
 sub GetName {
     my ( $self, $branchcode ) = @_;
@@ -61,21 +62,11 @@ sub OnlyMine {
 sub all {
     my ( $self, $params ) = @_;
     my $selected = $params->{selected};
-    my $dbh = C4::Context->dbh;
-    my @params;
-    my $query = q|
-        SELECT branchcode, branchname
-        FROM branches
-    |;
-    if (    C4::Context->preference('IndependentBranches')
-        and C4::Context->userenv
-        && !C4::Context->IsSuperLibrarian()
-        and C4::Context->userenv->{branch} )
-    {
-        $query .= q| WHERE branchcode = ? |;
-        push @params, C4::Context->userenv->{branch};
-    }
-    my $libraries = $dbh->selectall_arrayref( $query, { Slice => {} }, @params );
+    my $unfiltered = $params->{unfiltered} || 0;
+
+    my $libraries = $unfiltered
+      ? Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed
+      : Koha::Libraries->search_filtered( {}, { order_by => ['branchname'] } )->unblessed;
 
     for my $l ( @$libraries ) {
         if (       $selected and $l->{branchcode} eq $selected

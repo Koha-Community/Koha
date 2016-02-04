@@ -559,12 +559,10 @@ $(document).ready(function() {
                                         [% UNLESS ( Independentbranches ) %]
                                             <option value="">None</option>
                                         [% END %]
-                                        [% FOREACH branchloo IN branchloop %]
-                                            [% IF ( branchloo.selected ) %]
-                                                <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-                                            [% ELSE %]
-                                                <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
-                                            [% END %]
+                                        [% IF CAN_user_serials_superserials %]
+                                            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1 ) %]
+                                        [% ELSE %]
+                                            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
                                         [% END %]
                                     </select> (select a library)
                                 </li>

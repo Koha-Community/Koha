@@ -22,7 +22,6 @@ use strict;
 use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Auth qw/:DEFAULT/;
-use C4::Branch; # GetBranches
 use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Context;
@@ -41,8 +40,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
         flagsrequired   => { circulate => 'circulate_remaining_permissions' },
     }
 );
-
-my $branches = GetBranches();
 
 my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;

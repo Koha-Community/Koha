@@ -49,7 +49,6 @@ if ( ! C4::Context->preference('OpacTopissue') ) {
     exit;
 }
 
-my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
 
 my ($template, $borrowernumber, $cookie) = get_template_and_user(
@@ -95,7 +94,7 @@ my @results = GetTopIssues($params);
 
 $template->param(
     limit => $limit,
-    branch => $branches->{$branch}->{branchname},
+    branch => $branch,
     timeLimit => $timeLimit,
     results => \@results,
 );

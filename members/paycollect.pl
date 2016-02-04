@@ -28,7 +28,6 @@ use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Accounts;
 use C4::Koha;
-use C4::Branch;
 use Koha::Patron::Images;
 
 use Koha::Patron::Categories;

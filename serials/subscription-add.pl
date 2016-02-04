@@ -26,7 +26,6 @@ use C4::Auth;
 use C4::Acquisition;
 use C4::Output;
 use C4::Context;
-use C4::Branch; # GetBranches
 use C4::Serials;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
@@ -126,29 +125,10 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
 
 }
 
-my $onlymine =
-     C4::Context->preference('IndependentBranches')
-  && C4::Context->userenv
-  && !C4::Context->IsSuperLibrarian
-  && (
-    not C4::Auth::haspermission( C4::Context->userenv->{id}, { serials => 'superserials' } )
-  )
-  && C4::Context->userenv->{branch};
-my $branches = GetBranches($onlymine);
-my $branchloop;
-for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %{$branches}) {
-    my $selected = 0;
-    $selected = 1 if (defined($subs) && $thisbranch eq $subs->{'branchcode'});
-    push @{$branchloop}, {
-        value => $thisbranch,
-        selected => $selected,
-        branchname => $branches->{$thisbranch}->{'branchname'},
-    };
-}
-
 my $locations_loop = GetAuthorisedValues("LOC");
 
-$template->param(branchloop => $branchloop,
+$template->param(
+    branchcode => $subs->{branchcode},
     locations_loop=>$locations_loop,
 );
 

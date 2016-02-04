@@ -46,7 +46,6 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use C4::Branch; # GetBranches
 use C4::Letters;
 use C4::Members::Attributes;
 

@@ -29,7 +29,6 @@ use C4::Reserves;
 use C4::Biblio;
 use C4::Items;
 use C4::Auth qw/:DEFAULT get_session/;
-use C4::Branch; # GetBranches
 use C4::Koha;
 use C4::Members;
 
@@ -60,8 +59,6 @@ my ($template, $user, $cookie) = get_template_and_user(
         flagsrequired   => { circulate => "circulate_remaining_permissions" },
     }
 );
-
-my $branches = GetBranches;
 
 my $messages;
 my $found;
@@ -131,8 +128,7 @@ if ($barcode) {
         $item{'ccode'}                 = $iteminformation->{'ccode'};
         $item{'itemcallnumber'}        = $iteminformation->{'itemcallnumber'};
         $item{'location'}              = GetKohaAuthorisedValueLib("LOC",$iteminformation->{'location'});
-        $item{'frbrname'}              = $branches->{$frbranchcd}->{'branchname'};
-        $item{'tobrname'}              = $branches->{$tobranchcd}->{'branchname'};
+        $item{'tobrname'}              = $tobranchcd;
 #         }
         $item{counter}  = 0;
         $item{barcode}  = $barcode;
@@ -164,8 +160,7 @@ foreach ( $query->param ) {
     $item{'ccode'}                 = $iteminformation->{'ccode'};
     $item{'itemcallnumber'}        = $iteminformation->{'itemcallnumber'};
     $item{'location'}              = GetKohaAuthorisedValueLib("LOC",$iteminformation->{'location'});
-    $item{'frbrname'}              = $branches->{$frbcd}->{'branchname'};
-    $item{'tobrname'}              = $branches->{$tobcd}->{'branchname'};
+    $item{'tobrname'}              = $tobcd;
     push( @trsfitemloop, \%item );
 }
 
@@ -196,16 +191,16 @@ foreach my $code ( keys %$messages ) {
             $err{errbadcode} = 1;
         }
         elsif ( $code eq "NotAllowed" ) {
-            warn "NotAllowed: $messages->{'NotAllowed'} to  " . $branches->{ $messages->{'NotAllowed'} }->{'branchname'};
+            warn "NotAllowed: $messages->{'NotAllowed'} to branchcode " . $messages->{'NotAllowed'};
             # Do we really want a error log message here? --atz
             $err{errnotallowed} =  1;
             my ( $tbr, $typecode ) = split( /::/,  $messages->{'NotAllowed'} );
-            $err{tbr}      = $branches->{ $tbr }->{'branchname'};
+            $err{tbr}      = $tbr;
             $err{code}     = $typecode;
         }
         elsif ( $code eq 'IsPermanent' ) {
             $err{errispermanent} = 1;
-            $err{msg} = $branches->{ $messages->{'IsPermanent'} }->{'branchname'};
+            $err{msg} = $messages->{'IsPermanent'};
         }
         elsif ( $code eq 'WasReturned' ) {
             $err{errwasreturned} = 1;

@@ -1078,7 +1078,7 @@ sub checkauth {
                         $branchcode = $query->param('branch');
                         $branchname = Koha::Libraries->find($branchcode)->branchname;
                     }
-                    my $branches = C4::Branch::GetBranches();
+                    my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search };
                     if ( C4::Context->boolean_preference('IndependentBranches') && C4::Context->boolean_preference('Autolocation') ) {
 
                         # we have to check they are coming from the right ip range
@@ -1528,7 +1528,7 @@ sub check_api_auth {
                     $branchcode = $query->param('branch');
                     $branchname = Koha::Libraries->find($branchcode)->branchname;
                 }
-                my $branches = C4::Branch::GetBranches();
+                my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search };
                 foreach my $br ( keys %$branches ) {
 
                     #     now we work with the treatment of ip

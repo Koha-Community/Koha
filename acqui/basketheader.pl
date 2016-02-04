@@ -50,7 +50,6 @@ use warnings;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth;
-use C4::Branch;
 use C4::Output;
 use C4::Acquisition qw/GetBasket NewBasket ModBasketHeader/;
 use C4::Contract qw/GetContracts/;
@@ -72,7 +71,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 #parameters:
 my $booksellerid = $input->param('booksellerid');
 my $basketno = $input->param('basketno');
-my $branches = GetBranches;
 my $basket;
 my $op = $input ->param('op');
 my $is_an_edit= $input ->param('is_an_edit');

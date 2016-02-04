@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; 
     [% IF ( nopermission ) %]Access denied[% END %]
@@ -57,7 +58,7 @@
 <p><label for="branch">Library:</label>
     <select name="branch" id="branch" class="input" tabindex="3">
     <option value="">My library</option>
-    [% FOREACH l IN Branches.all() %]
+    [% FOREACH l IN Branches.all( unfiltered => 1 ) %]
         <option value="[% l.branchcode %]">[% l.branchname %]</option>
     [% END %]
     </select>

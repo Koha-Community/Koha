@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Funds[% IF op == 'add_form' %] &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name %]'[% END %][% ELSE %]Add fund [% END %][% END %]</title>
@@ -522,7 +523,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     <label for="budget_branchcode">Library: </label>
     <select name="budget_branchcode" id="budget_branchcode">
         <option value=""></option>
-        [% PROCESS options_for_libraries libraries => branchloop_select %]
+        [% PROCESS options_for_libraries libraries => Branches.all( selected => budget_branchcode, unfiltered => 1 ) %]
     </select>
     </li>
 
@@ -653,7 +654,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
             <label for="filter_budgetbranch2">Library: </label>
             <select name="filter_budgetbranch" id="filter_budgetbranch2" style="width:10em;">
                 <option value=""></option>
-                [% PROCESS options_for_libraries libraries => branchloop_select %]
+                [% PROCESS options_for_libraries libraries => Branches.all( selected => budget_branchcode, unfiltered => 1 ) %]
             </select>
         </li>
         <li class="radio">

@@ -33,7 +33,6 @@ use C4::Accounts;
 use C4::ItemCirculationAlertPreference;
 use C4::Message;
 use C4::Debug;
-use C4::Branch; # GetBranches
 use C4::Log; # logaction
 use C4::Koha qw(
     GetAuthorisedValueByCode
@@ -310,7 +309,6 @@ sub transferbook {
     my ( $tbr, $barcode, $ignoreRs ) = @_;
     my $messages;
     my $dotransfer      = 1;
-    my $branches        = GetBranches();
     my $itemnumber = GetItemnumberFromBarcode( $barcode );
     my $issue      = GetItemIssue($itemnumber);
     my $biblio = GetBiblioFromItemNumber($itemnumber);
@@ -339,7 +337,10 @@ sub transferbook {
     }
 
     # if is permanent...
-    if ( $hbr && $branches->{$hbr}->{'PE'} ) {
+    # FIXME Is this still used by someone?
+    # See other FIXME in AddReturn
+    my $library = Koha::Libraries->find($hbr);
+    if ( $library and $library->get_categories->search({'me.categorycode' => 'PE'})->count ) {
         $messages->{'IsPermanent'} = $hbr;
         $dotransfer = 0;
     }
@@ -1899,8 +1900,10 @@ sub AddReturn {
     # check if the book is in a permanent collection....
     # FIXME -- This 'PE' attribute is largely undocumented.  afaict, there's no user interface that reflects this functionality.
     if ( $returnbranch ) {
-        my $branches = GetBranches();    # a potentially expensive call for a non-feature.
-        $branches->{$returnbranch}->{PE} and $messages->{'IsPermanent'} = $returnbranch;
+        my $library = Koha::Libraries->find($returnbranch);
+        if ( $library and $library->get_categories->search({'me.categorycode' => 'PE'})->count ) {
+            $messages->{'IsPermanent'} = $returnbranch;
+        }
     }
 
     # check if the return is allowed at this branch

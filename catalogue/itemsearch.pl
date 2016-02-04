@@ -25,11 +25,11 @@ use C4::Auth;
 use C4::Output;
 use C4::Items;
 use C4::Biblio;
-use C4::Branch;
 use C4::Koha;
 
 use Koha::Item::Search::Field qw(GetItemSearchFields);
 use Koha::ItemTypes;
+use Koha::Libraries;
 
 my $cgi = new CGI;
 my %params = $cgi->Vars;
@@ -247,14 +247,7 @@ if (scalar keys %params > 0) {
 if ($format eq 'html') {
     # Retrieve data required for the form.
 
-    my $branches = GetBranches();
-    my @branches;
-    foreach my $branchcode ( sort { uc($branches->{$a}->{branchname}) cmp uc($branches->{$b}->{branchname}) } keys %$branches) {
-        push @branches, {
-            value => $branchcode,
-            label => $branches->{$branchcode}->{branchname},
-        };
-    }
+    my @branches = map { value => $_->branchcode => label => $_->branchname }, Koha::Libraries->search( {}, { order_by => 'branchname' } );
     my @locations;
     foreach my $location (@$location_values) {
         push @locations, {

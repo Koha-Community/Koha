@@ -143,7 +143,7 @@ $(document).ready(function() {
         Select a library :
             <select name="branch" id="branch" style="width:20em;">
                 <option value="*">All libraries</option>
-                [% PROCESS options_for_libraries libraries => Branches.all( selected => current_branch ) %]
+                [% PROCESS options_for_libraries libraries => Branches.all( selected => current_branch, unfiltered => 1 ) %]
             </select>
         </form>
         [% IF ( definedbranch ) %]
@@ -151,9 +151,7 @@ $(document).ready(function() {
                 <label for="tobranch"><strong>Clone these rules to:</strong></label>
                 <input type="hidden" name="frombranch" value="[% current_branch %]" />
                 <select name="tobranch" id="tobranch">
-                    [% FOREACH l IN Branches.all() %]
-                        <option value="[% l.value %]">[% l.branchname %]</option>
-                    [% END %]
+                    [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1 ) %]
                 </select>
                 <input type="submit" value="Clone" />
             </form>

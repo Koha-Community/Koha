@@ -4,7 +4,7 @@ use Modern::Perl;
 use Test::More tests => 16;
 
 use C4::Context;
-use C4::Branch;
+use Koha::Libraries;
 use_ok('C4::Overdues');
 can_ok('C4::Overdues', 'GetOverdueMessageTransportTypes');
 can_ok('C4::Overdues', 'GetBranchcodesWithOverdueRules');
@@ -83,8 +83,7 @@ $dbh->do(q|
         ( '', '', 1, 'LETTER_CODE1', 1, 5, 'LETTER_CODE2', 1, 10, 'LETTER_CODE3', 1 )
 |);
 
-my $all_branches = C4::Branch::GetBranches;
-my @branchcodes = keys %$all_branches;
+my @branchcodes = map { $_->branchcode } Koha::Libraries->search;
 
 my @overdue_branches = C4::Overdues::GetBranchcodesWithOverdueRules();
 is_deeply( [ sort @overdue_branches ], [ sort @branchcodes ], 'If a default rule exists, all branches should be returned' );

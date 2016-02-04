@@ -23,7 +23,6 @@ use warnings;
 use C4::Members;
 use C4::Items;
 use C4::Circulation;
-use C4::Branch;
 use C4::Accounts;
 use C4::Biblio;
 use C4::Reserves qw(AddReserve GetReservesFromBiblionumber GetReservesFromBorrowernumber CanBookBeReserved CanItemBeReserved IsAvailableForItemLevelRequest);
@@ -630,8 +629,7 @@ sub HoldTitle {
     # Pickup branch management
     if ( $cgi->param('pickup_location') ) {
         $branch = $cgi->param('pickup_location');
-        my $branches = GetBranches;
-        return { code => 'LocationNotFound' } unless $$branches{$branch};
+        return { code => 'LocationNotFound' } unless Koha::Libraries->find($branch);
     } else { # if the request provide no branch, use the borrower's branch
         $branch = $$borrower{branchcode};
     }
@@ -708,8 +706,7 @@ sub HoldItem {
     my $branch;
     if ( $cgi->param('pickup_location') ) {
         $branch = $cgi->param('pickup_location');
-        my $branches = GetBranches();
-        return { code => 'LocationNotFound' } unless $$branches{$branch};
+        return { code => 'LocationNotFound' } unless Koha::Libraries->find($branch);
     } else { # if the request provide no branch, use the borrower's branch
         $branch = $$borrower{branchcode};
     }

@@ -111,7 +111,7 @@
                                   <li>No Item with barcode: [% errmsgloo.msg | html %]</li>
                               [% END %]
                               [% IF ( errmsgloo.errispermanent ) %]
-                                  <li>Please return item to home library: [% errmsgloo.msg %]</li>
+                                  <li>Please return item to home library: [% Branches.GetName( errmsgloo.msg ) %]</li>
                               [% END %]
                               [% IF ( errmsgloo.errnotallowed ) %]
                                   <li>Transfer is not allowed for:
@@ -121,7 +121,7 @@
                                           [% ELSE %]
                                               <li>Collection code: <b>[% AuthorisedValues.GetByCode( 'CCODE', errmsgloo.code ) %]</b></li>
                                           [% END %]
-                                          <li>Destination library: <b>[% errmsgloo.tbr %]</b></li>
+                                          <li>Destination library: <b>[% Branches.GetName( errmsgloo.tbr ) %]</b></li>
                                       </ol>
                                   </li>
                               [% END %]
@@ -187,7 +187,7 @@
                     <td class="tf-itemcallnumber">[% trsfitemloo.itemcallnumber %]</td>
                     <td class="tf-itemtype">[% ItemTypes.GetDescription( trsfitemloo.itemtype ) %]</td>
                     <td class="tf-ccode">[% AuthorisedValues.GetByCode( 'CCODE', trsfitemloo.ccode ) %]</td>
-                    <td class="tf-destination">[% trsfitemloo.tobrname %]</td>
+                    <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrname ) %]</td>
                 </tr>
             [% END %]
         </table>

@@ -23,9 +23,9 @@ use strict;
 use warnings;
 
 use C4::Biblio;
-use C4::Branch;
 use C4::Context;
 use C4::Koha;
+use Koha::Libraries;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK);
 
@@ -117,7 +117,6 @@ sub GetNearbyItems {
         if $gap <= $num_each_side;
 
     my $dbh         = C4::Context->dbh;
-    my $branches = GetBranches();
 
     my $sth_get_item_details = $dbh->prepare("SELECT cn_sort,homebranch,location,ccode from items where itemnumber=?");
     $sth_get_item_details->execute($itemnumber);
@@ -129,7 +128,7 @@ sub GetNearbyItems {
     if (C4::Context->preference('ShelfBrowserUsesHomeBranch') && 
     	defined($item_details_result->{'homebranch'})) {
         $start_homebranch->{code} = $item_details_result->{'homebranch'};
-        $start_homebranch->{description} = $branches->{$item_details_result->{'homebranch'}}{branchname};
+        $start_homebranch->{description} = Koha::Libraries->find($item_details_result->{'homebranch'})->branchname;
     }
     if (C4::Context->preference('ShelfBrowserUsesLocation') && 
     	defined($item_details_result->{'location'})) {

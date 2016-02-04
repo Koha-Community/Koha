@@ -21,7 +21,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Acquisition;
 use C4::Auth;
-use C4::Branch;
 use C4::Context;
 use C4::Output;
 use C4::Serials;
@@ -76,18 +75,6 @@ foreach my $sub (@subscriptions) {
     }
 }
 
-my $branches = GetBranches();
-my @branches_loop;
-foreach (sort keys %$branches){
-    my $selected = 0;
-    $selected = 1 if defined $branch && $branch eq $_;
-    push @branches_loop, {
-        branchcode  => $_,
-        branchname  => $branches->{$_}->{branchname},
-        selected    => $selected,
-    };
-}
-
 $template->param(
     subs_loop        => \@subscriptions,
     title_filter     => $title,
@@ -96,7 +83,6 @@ $template->param(
     publisher_filter => $publisher,
     supplier_filter  => $supplier,
     branch_filter    => $branch,
-    branches_loop    => \@branches_loop,
     done_searched    => $searched,
     routing          => $routing,
     booksellerid     => $booksellerid,

@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patron search</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -194,11 +195,12 @@ function filterByFirstLetterSurname(letter) {
                     <li>
                         <label for="branchcode_filter">Library:</label>
                         <select id="branchcode_filter">
-                            [% IF branches.size != 1 %]
+                            [% SET libraries = Branches.all() %]
+                            [% IF libraries.size != 1 %]
                                 <option value="">Any</option>
                             [% END %]
-                            [% FOREACH branch IN branches %]
-                                <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                            [% FOREACH l IN libraries %]
+                                <option value="[% l.branchcode %]">[% l.branchname %]</option>
                             [% END %]
                         </select>
                     </li>

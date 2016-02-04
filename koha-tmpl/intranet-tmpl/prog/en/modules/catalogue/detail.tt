@@ -675,7 +675,7 @@ function verify_images() {
                                 : due [% item.datedue %]
                             </span>
                         [% ELSIF ( item.transfertwhen ) %]
-                            <span class="intransit">In transit from [% item.transfertfrom %] to [% item.transfertto %] since [% item.transfertwhen | $KohaDates %]</span>
+                            <span class="intransit">In transit from [% Branches.GetName( item.transfertfrom ) %] to [% Branches.GetName( item.transfertto ) %] since [% item.transfertwhen | $KohaDates %]</span>
                         [% END %]
 
                         [% IF ( item.itemlost ) %]
@@ -715,9 +715,9 @@ function verify_images() {
 
                         [% IF ( item.reservedate ) %]
                             [% IF ( item.waitingdate ) %]
-                                Waiting at [% item.ExpectedAtLibrary %] since [% item.waitingdate | $KohaDates %].
+                                Waiting at [% Branches.GetName( item.ExpectedAtLibrary ) %] since [% item.waitingdate | $KohaDates %].
                             [% ELSE %]
-                                Item-level hold (placed [% item.reservedate | $KohaDates %]) for delivery at [% item.ExpectedAtLibrary %].
+                                Item-level hold (placed [% item.reservedate | $KohaDates %]) for delivery at [% Branches.GetName( item.ExpectedAtLibrary ) %].
                             [% END %]
                             [% IF ( canreservefromotherbranches ) %]
                                 Hold for: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.ReservedForBorrowernumber %]">

@@ -28,7 +28,6 @@ BEGIN {
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
 		&GetBranch
-		&GetBranches
 	);
     @EXPORT_OK = qw( &onlymine );
 }
@@ -47,75 +46,7 @@ The functions in this module deal with branches.
 
 =head1 FUNCTIONS
 
-=head2 GetBranches
-
-  $branches = &GetBranches();
-
-Returns informations about ALL branches, IndependentBranches Insensitive.
-
-Create a branch selector with the following code.
-
-=head3 in PERL SCRIPT
-
-    my $branches = GetBranches;
-    my @branchloop;
-    foreach my $thisbranch (sort keys %$branches) {
-        my $selected = 1 if $thisbranch eq $branch;
-        my %row =(value => $thisbranch,
-                    selected => $selected,
-                    branchname => $branches->{$thisbranch}->{branchname},
-                );
-        push @branchloop, \%row;
-    }
-
-=head3 in TEMPLATE
-
-    <select name="branch" id="branch">
-        <option value=""></option>
-            [% FOREACH branchloo IN branchloop %]
-                [% IF ( branchloo.selected ) %]
-                    <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
-                [% ELSE %]
-                    <option value="[% branchloo.value %]" >[% branchloo.branchname %]</option>
-                [% END %]
-            [% END %]
-    </select>
-
 =cut
-
-sub GetBranches {
-    my ($onlymine) = @_;
-
-    # returns a reference to a hash of references to ALL branches...
-    my %branches;
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    my $query = "SELECT * FROM branches";
-    my @bind_parameters;
-    if ( $onlymine && C4::Context->userenv && C4::Context->userenv->{branch} ) {
-        $query .= ' WHERE branchcode = ? ';
-        push @bind_parameters, C4::Context->userenv->{branch};
-    }
-    $query .= " ORDER BY branchname";
-    $sth = $dbh->prepare($query);
-    $sth->execute(@bind_parameters);
-
-    my $relations_sth =
-      $dbh->prepare("SELECT branchcode,categorycode FROM branchrelations");
-    $relations_sth->execute();
-    my %relations;
-    while ( my $rel = $relations_sth->fetchrow_hashref ) {
-        push @{ $relations{ $rel->{branchcode} } }, $rel->{categorycode};
-    }
-
-    while ( my $branch = $sth->fetchrow_hashref ) {
-        foreach my $cat ( @{ $relations{ $branch->{branchcode} } } ) {
-            $branch->{category}{$cat} = 1;
-        }
-        $branches{ $branch->{'branchcode'} } = $branch;
-    }
-    return ( \%branches );
-}
 
 sub onlymine {
     return

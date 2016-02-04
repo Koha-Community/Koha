@@ -1337,6 +1337,7 @@ sub GetItemsInfo {
            COALESCE( localization.translation, itemtypes.description ) AS translated_description,
            itemtypes.notforloan as notforloan_per_itemtype,
            holding.branchurl,
+           holding.branchcode,
            holding.branchname,
            holding.opac_info as holding_branch_opac_info,
            home.opac_info as home_branch_opac_info

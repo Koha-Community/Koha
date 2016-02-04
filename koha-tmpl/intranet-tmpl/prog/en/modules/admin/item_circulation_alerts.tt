@@ -1,3 +1,4 @@
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Item circulation alerts</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -103,13 +104,8 @@ $(function(){
 <h2>Select a library:</h2>
 <form id="branch_selector" method="get" action="/cgi-bin/koha/admin/item_circulation_alerts.pl">
 <select id="branch" name="branch">
-[% FOREACH branche IN branches %]
-[% IF ( branche.selected ) %]
-<option value="[% branche.branchcode %]" selected="selected">[% branche.branchname %]</option>
-[% ELSE %]
-<option value="[% branche.branchcode %]">[% branche.branchname %]</option>
-[% END %]
-[% END %]
+    <option value="*">Default</option>
+    [% PROCESS options_for_libraries libraries => Branches.all( selected => branch, unfiltered => 1 ) %]
 </select>
 <input type="submit" name="pick" value="Pick" />
 </form>
@@ -141,7 +137,7 @@ $(function(){
 </div>
 </div>
 
-<h2>Circulation alerts for [% branch_name %]</h2>
+<h2>Circulation alerts for [% Branches.GetName( branch ) || 'Default' %]</h2>
 <p>Click on the grid to toggle the settings.</p>
 
 <div id="alerttabs" class="toptabs">

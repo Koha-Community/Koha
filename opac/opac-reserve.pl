@@ -30,7 +30,6 @@ use C4::Items;
 use C4::Output;
 use C4::Context;
 use C4::Members;
-use C4::Branch; # GetBranches
 use C4::Overdues;
 use C4::Debug;
 use Koha::DateUtils;
@@ -88,8 +87,7 @@ if ( $borr->{'BlockExpiredPatronOpacActions'} ) {
 if ($borr->{reservefee} > 0){
     $template->param( RESERVE_CHARGE => sprintf("%.2f",$borr->{reservefee}));
 }
-# get branches and itemtypes
-my $branches = GetBranches();
+
 my $itemTypes = GetItemTypes();
 
 # There are two ways of calling this script, with a single biblio num
@@ -124,7 +122,6 @@ if (($#biblionumbers < 0) && (! $query->param('place_reserve'))) {
 
 # pass the pickup branch along....
 my $branch = $query->param('branch') || $borr->{'branchcode'} || C4::Context->userenv->{branch} || '' ;
-($branches->{$branch}) or $branch = "";     # Confirm branch is real
 $template->param( branch => $branch );
 
 # Is the person allowed to choose their branch
@@ -423,7 +420,7 @@ foreach my $biblioNum (@biblionumbers) {
 
         $itemLoopIter->{itemnumber} = $itemNum;
         $itemLoopIter->{barcode} = $itemInfo->{barcode};
-        $itemLoopIter->{homeBranchName} = $branches->{$itemInfo->{homebranch}}{branchname};
+        $itemLoopIter->{homeBranchName} = $itemInfo->{homebranch};
         $itemLoopIter->{callNumber} = $itemInfo->{itemcallnumber};
         $itemLoopIter->{enumchron} = $itemInfo->{enumchron};
         $itemLoopIter->{copynumber} = $itemInfo->{copynumber};
@@ -436,8 +433,7 @@ foreach my $biblioNum (@biblionumbers) {
         # If the holdingbranch is different than the homebranch, we show the
         # holdingbranch of the document too.
         if ( $itemInfo->{homebranch} ne $itemInfo->{holdingbranch} ) {
-            $itemLoopIter->{holdingBranchName} =
-              $branches->{ $itemInfo->{holdingbranch} }{branchname};
+            $itemLoopIter->{holdingBranchName} = $itemInfo->{holdingbranch};
         }
 
         # If the item is currently on loan, we display its return date and
@@ -492,9 +488,8 @@ foreach my $biblioNum (@biblionumbers) {
           GetTransfers($itemNum);
         if ( $transfertwhen && ($transfertwhen ne '') ) {
             $itemLoopIter->{transfertwhen} = output_pref({ dt => dt_from_string($transfertwhen), dateonly => 1 });
-            $itemLoopIter->{transfertfrom} =
-              $branches->{$transfertfrom}{branchname};
-            $itemLoopIter->{transfertto} = $branches->{$transfertto}{branchname};
+            $itemLoopIter->{transfertfrom} = $transfertfrom;
+            $itemLoopIter->{transfertto} = $transfertto;
             $itemLoopIter->{nocancel} = 1;
         }
 

@@ -344,8 +344,8 @@
 
                                                                     <td class="barcode">[% itemLoo.barcode %]</td>
                                                                     [% UNLESS ( singleBranchMode ) %]
-                                                                        <td class="homebranch">[% itemLoo.homeBranchName %]</td>
-                                                                        <td class="holdingbranch">[% itemLoo.holdingBranchName %]</td>
+                                                                        <td class="homebranch">[% Branches.GetName( itemLoo.homeBranchName ) %]</td>
+                                                                        <td class="holdingbranch">[% Branches.GetName( itemLoo.holdingBranchName ) %]</td>
                                                                     [% END %]
                                                                     <td class="call_no">[% itemLoo.callNumber %]</td>
                                                                     [% IF ( itemdata_enumchron ) %]
@@ -355,7 +355,7 @@
                                                                         [% IF ( itemLoo.dateDue ) %]
                                                                             <span class="checkedout">Due [% itemLoo.dateDue %]</span>
                                                                         [% ELSIF ( itemLoo.transfertwhen ) %]
-                                                                            <span class="intransit">In transit from [% itemLoo.transfertfrom %] to [% itemLoo.transfertto %] since [% itemLoo.transfertwhen %]</span>
+                                                                            <span class="intransit">In transit from [% Branches.GetName( itemLoo.transfertfrom ) %] to [% Branches.GetName( itemLoo.transfertto ) %] since [% itemLoo.transfertwhen %]</span>
                                                                         [% END %]
 
                                                                         [% IF ( itemLoo.message ) %]

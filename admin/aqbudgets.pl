@@ -26,7 +26,6 @@ use List::Util qw/min/;
 
 use Koha::Database;
 use C4::Auth qw/get_user_subpermissions/;
-use C4::Branch; # GetBranches
 use C4::Auth;
 use C4::Acquisition;
 use C4::Budgets;
@@ -141,18 +140,6 @@ if ($op eq 'add_form') {
     }
     $budget_parent = GetBudget($budget_parent_id);
 
-    # build branches select
-    my $branches = GetBranches;
-    my @branchloop_select;
-    foreach my $thisbranch ( sort keys %$branches ) {
-        my %row = (
-            value      => $thisbranch,
-            branchname => $branches->{$thisbranch}->{'branchname'},
-        );
-        $row{selected} = 1 if $budget and $thisbranch eq $budget->{'budget_branchcode'};
-        push @branchloop_select, \%row;
-    }
-
     # populates the YUI planning button
     my $categories = GetAuthorisedValueCategories();
     my @auth_cats_loop1 = ();
@@ -200,7 +187,6 @@ if ($op eq 'add_form') {
         budget_has_children => BudgetHasChildren( $budget->{budget_id} ),
         budget_parent_id    		  => $budget_parent->{'budget_id'},
         budget_parent_name    		  => $budget_parent->{'budget_name'},
-        branchloop_select         => \@branchloop_select,
 		%$period,
 		%$budget,
     );
@@ -258,7 +244,6 @@ if ($op eq 'add_form') {
 }
 
 if ( $op eq 'list' ) {
-    my $branches = GetBranches();
     $template->param(
         budget_id => $budget_id,
         %$period,

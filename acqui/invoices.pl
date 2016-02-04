@@ -34,7 +34,6 @@ use C4::Auth;
 use C4::Output;
 
 use C4::Acquisition qw/GetInvoices/;
-use C4::Branch qw/GetBranches/;
 use C4::Budgets;
 use Koha::DateUtils;
 
@@ -107,24 +106,6 @@ foreach (@suppliers) {
       };
 }
 
-# Build branches list
-my $branches      = GetBranches();
-my $branches_loop = [];
-my $branchname;
-foreach ( sort keys %$branches ) {
-    my $selected = 0;
-    if ( $branch && $branch eq $_ ) {
-        $selected   = 1;
-        $branchname = $branches->{$_}->{'branchname'};
-    }
-    push @{$branches_loop},
-      {
-        branchcode => $_,
-        branchname => $branches->{$_}->{branchname},
-        selected   => $selected,
-      };
-}
-
 my $budgets = GetBudgets();
 my @budgets_loop;
 foreach my $budget (@$budgets) {
@@ -149,9 +130,7 @@ $template->param(
     publisher       => $publisher,
     publicationyear => $publicationyear,
     branch          => $branch,
-    branchname      => $branchname,
     suppliers_loop  => $suppliers_loop,
-    branches_loop   => $branches_loop,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

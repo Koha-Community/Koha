@@ -24,7 +24,6 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 
-use C4::Branch; # GetBranches
 use C4::Calendar;
 use Koha::DateUtils;
 
@@ -51,9 +50,6 @@ my $keydate = output_pref( { dt => $calendarinput_dt, dateonly => 1, dateformat 
 $keydate =~ s/-/\//g;
 
 my $branch= $input->param('branch') || C4::Context->userenv->{'branch'};
-
-# branches calculated - put branch codes in a single string so they can be passed in a form
-my $branchcodes = join '|', keys %{$branches};
 
 # Get all the holidays
 
@@ -130,7 +126,6 @@ $template->param(
     DAY_MONTH_HOLIDAYS_LOOP  => \@day_month_holidays,
     calendardate             => $calendardate,
     keydate                  => $keydate,
-    branchcodes              => $branchcodes,
     branch                   => $branch,
 );
 

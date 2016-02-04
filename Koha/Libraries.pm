@@ -21,8 +21,9 @@ use Modern::Perl;
 
 use Carp;
 
-use Koha::Database;
+use C4::Context;
 
+use Koha::Database;
 use Koha::Library;
 
 use base qw(Koha::Objects);
@@ -36,6 +37,24 @@ Koha::Libraries - Koha Library Object set class
 =head2 Class Methods
 
 =cut
+
+=head3 search_filtered
+
+=cut
+
+sub search_filtered {
+    my ( $self, $params, $attributes ) = @_;
+
+    if (    C4::Context->preference('IndependentBranches')
+        and C4::Context->userenv
+        and not C4::Context->IsSuperLibrarian()
+        and C4::Context->userenv->{branch}
+    ) {
+        $params->{branchcode} = C4::Context->userenv->{branch};
+    }
+
+    return $self->SUPER::search( $params, $attributes );
+}
 
 =head3 type
 

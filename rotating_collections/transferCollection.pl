@@ -22,7 +22,6 @@ use C4::Output;
 use C4::Auth;
 use C4::Context;
 use C4::RotatingCollections;
-use C4::Branch;
 
 use CGI qw ( -utf8 );
 
@@ -60,17 +59,6 @@ if ($toBranch) {
     }
 }
 
-## Set up the toBranch select options
-my $branches = GetBranches();
-my @branchoptionloop;
-foreach my $br ( keys %$branches ) {
-    my %branch;
-    $branch{code} = $br;
-    $branch{name} = $branches->{$br}->{'branchname'};
-    push( @branchoptionloop, \%branch );
-}
-@branchoptionloop = sort {$a->{name} cmp $b->{name}} @branchoptionloop;
-
 ## Get data about collection
 my ( $colTitle, $colDesc, $colBranchcode );
 ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection($colId);
@@ -79,7 +67,6 @@ $template->param(
     colTitle         => $colTitle,
     colDesc          => $colDesc,
     colBranchcode    => $colBranchcode,
-    branchoptionloop => \@branchoptionloop
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

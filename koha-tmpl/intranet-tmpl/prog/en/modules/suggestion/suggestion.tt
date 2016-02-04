@@ -421,8 +421,12 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
     <fieldset class="rows"> <legend>Acquisition information</legend><ol>
         <li><label for="branchcode">Library:</label>
             <select name="branchcode" id="branchcode">
-                <option value="">Any</option>[% FOREACH branchloo IN branchloop %]
-                [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %][% END %]
+                <option value="">Any</option>
+                [% IF branchfilter %]
+                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter ) %]
+                [% ELSE %]
+                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
+                [% END %]
             </select>
         </li>
         <li><label for="budgetid">Fund:</label>
@@ -787,9 +791,12 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                     </select></li>
                     <li><label for="branchcode">Library:</label>
                     <select name="branchcode" id="branchcode">
-                        <option value="__ANY__">Any</option>[% FOREACH branchloo IN branchloop %]
-                            [% IF ( branchloo.selected ) %] <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %] <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
-                            [% END %]
+                        <option value="__ANY__">Any</option>
+                        [% IF branchfilter %]
+                            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter ) %]
+                        [% ELSE %]
+                            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
+                        [% END %]
                     </select></li><li><input type="submit" value="Go" /></li></ol>
                 </fieldset>
     </div>
