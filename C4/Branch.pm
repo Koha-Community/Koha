@@ -29,9 +29,8 @@ BEGIN {
 	@EXPORT = qw(
 		&GetBranch
 		&GetBranches
-		&mybranch
 	);
-    @EXPORT_OK = qw( &onlymine &mybranch );
+    @EXPORT_OK = qw( &onlymine );
 }
 
 =head1 NAME
@@ -124,12 +123,6 @@ sub onlymine {
       && C4::Context->userenv
       && !C4::Context->IsSuperLibrarian()
       && C4::Context->userenv->{branch};
-}
-
-# always returns a string for OK comparison via "eq" or "ne"
-sub mybranch {
-    C4::Context->userenv           or return '';
-    return C4::Context->userenv->{branch} || '';
 }
 
 =head2 GetBranch

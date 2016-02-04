@@ -38,7 +38,6 @@ can_ok(
     'C4::Branch', qw(
       GetBranch
       GetBranches
-      mybranch
       )
 );
 
@@ -193,8 +192,5 @@ is_deeply( $b2info->get_categories->count, 1, 'BRB has the category CAT1' );
 
 Koha::LibraryCategory->new($cat2)->store;
 is( Koha::LibraryCategories->search->count, $count_cat + 3, "Two categories added" );
-
-#TODO later: test mybranchine and onlymine
-# Actually we cannot mock C4::Context->userenv in unit tests
 
 $schema->storage->txn_rollback;

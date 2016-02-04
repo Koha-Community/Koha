@@ -170,7 +170,7 @@ System Pref options.
 #
 sub barcodedecode {
     my ($barcode, $filter) = @_;
-    my $branch = C4::Branch::mybranch();
+    my $branch = C4::Context::mybranch();
     $filter = C4::Context->preference('itemBarcodeInputFilter') unless $filter;
     $filter or return $barcode;     # ensure filter is defined, else return untouched barcode
 	if ($filter eq 'whitespace') {
@@ -3141,7 +3141,7 @@ sub GetIssuingCharges {
     if ( my $item_data = $sth->fetchrow_hashref ) {
         $item_type = $item_data->{itemtype};
         $charge    = $item_data->{rentalcharge};
-        my $branch = C4::Branch::mybranch();
+        my $branch = C4::Context::mybranch();
         my $discount_query = q|SELECT rentaldiscount,
             issuingrules.itemtype, issuingrules.branchcode
             FROM borrowers

@@ -55,10 +55,10 @@ my $type=$input->param('type');
 my $branch = $input->param('branch');
 unless ( $branch ) {
     if ( C4::Context->preference('DefaultToLoggedInLibraryCircRules') ) {
-        $branch = Koha::Libraries->search->count() == 1 ? undef : C4::Branch::mybranch();
+        $branch = Koha::Libraries->search->count() == 1 ? undef : C4::Context::mybranch();
     }
     else {
-        $branch = C4::Branch::onlymine() ? ( C4::Branch::mybranch() || '*' ) : '*';
+        $branch = C4::Branch::onlymine() ? ( C4::Context::mybranch() || '*' ) : '*';
     }
 }
 $branch = '*' if $branch eq 'NO_LIBRARY_SET';

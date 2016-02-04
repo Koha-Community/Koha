@@ -41,9 +41,9 @@ my ($template, $loggedinuser, $cookie)
 
 my $dbh = C4::Context->dbh;
 my $branchcode;
-if((!defined($input->param('branchcode'))) & mybranch() ne '')
+if((!defined($input->param('branchcode'))) & C4::Context::mybranch() ne '')
 {
-	$branchcode = mybranch();
+    $branchcode = C4::Context::mybranch();
 }
 else
 {

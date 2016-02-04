@@ -358,7 +358,7 @@ sub default_display {
 
     unless ( defined $branchcode ) {
         if ( C4::Context->preference('DefaultToLoggedInLibraryNoticesSlips') ) {
-            $branchcode = C4::Branch::mybranch();
+            $branchcode = C4::Context::mybranch();
         }
     }
 

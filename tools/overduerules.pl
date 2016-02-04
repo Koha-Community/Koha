@@ -74,7 +74,7 @@ my $type = $input->param('type');
 my $branch = $input->param('branch');
 $branch =
     defined $branch                                                    ? $branch
-  : C4::Context->preference('DefaultToLoggedInLibraryOverdueTriggers') ? C4::Branch::mybranch()
+  : C4::Context->preference('DefaultToLoggedInLibraryOverdueTriggers') ? C4::Context::mybranch()
   : Koha::Libraries->search->count() == 1                              ? undef
   :                                                                      undef;
 $branch ||= q{};
