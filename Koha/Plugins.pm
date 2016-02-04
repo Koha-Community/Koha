@@ -63,6 +63,8 @@ sub GetPlugins {
 
     foreach my $plugin_class (@plugin_classes) {
         if ( can_load( modules => { $plugin_class => undef } ) ) {
+            next unless $plugin_class->isa('Koha::Plugins::Base');
+
             my $plugin = $plugin_class->new({ enable_plugins => $self->{'enable_plugins'} });
 
             if ($method) {
