@@ -27,7 +27,7 @@ $(document).ready(function() {
     };
     $('#holdst thead input').on('change keyup keydown', filterColumn);
 
-    var columns_settings = [% ColumnsSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json') %];
+    var columns_settings = [% ColumnsSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json').raw %];
     var holdst = KohaTable("#holdst", {
         "aaSorting": [[ 3, "asc" ]],
         "aoColumns": [
