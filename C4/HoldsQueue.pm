@@ -388,6 +388,60 @@ sub MapItemsToHoldRequests {
 
     # figure out which item-level requests can be filled
     my $num_items_remaining = scalar(@$available_items);
+
+    # Look for Local Holds Priority matches first
+    if ( C4::Context->preference('LocalHoldsPriority') ) {
+        my $LocalHoldsPriorityPatronControl =
+          C4::Context->preference('LocalHoldsPriorityPatronControl');
+        my $LocalHoldsPriorityItemControl =
+          C4::Context->preference('LocalHoldsPriorityItemControl');
+
+        foreach my $request (@$hold_requests) {
+            last if $num_items_remaining == 0;
+
+            my $local_hold_match;
+            foreach my $item (@$available_items) {
+                next
+                  if ( !$item->{holdallowed} )
+                  || ( $item->{holdallowed} == 1
+                    && $item->{homebranch} ne $request->{borrowerbranch} );
+
+                my $local_holds_priority_item_branchcode =
+                  $item->{$LocalHoldsPriorityItemControl};
+
+                my $local_holds_priority_patron_branchcode =
+                  ( $LocalHoldsPriorityPatronControl eq 'PickupLibrary' )
+                  ? $request->{branchcode}
+                  : ( $LocalHoldsPriorityPatronControl eq 'HomeLibrary' )
+                  ? $request->{borrowerbranch}
+                  : undef;
+
+                $local_hold_match =
+                  $local_holds_priority_item_branchcode eq
+                  $local_holds_priority_patron_branchcode;
+
+                if ($local_hold_match) {
+                    if ( exists $items_by_itemnumber{ $item->{itemnumber} }
+                        and not exists $allocated_items{ $item->{itemnumber} } )
+                    {
+                        $item_map{ $item->{itemnumber} } = {
+                            borrowernumber => $request->{borrowernumber},
+                            biblionumber   => $request->{biblionumber},
+                            holdingbranch  => $item->{holdingbranch},
+                            pickup_branch  => $request->{branchcode}
+                              || $request->{borrowerbranch},
+                            item_level   => 0,
+                            reservedate  => $request->{reservedate},
+                            reservenotes => $request->{reservenotes},
+                        };
+                        $allocated_items{ $item->{itemnumber} }++;
+                        $num_items_remaining--;
+                    }
+                }
+            }
+        }
+    }
+
     foreach my $request (@$hold_requests) {
         last if $num_items_remaining == 0;
 

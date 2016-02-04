@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 38;
+use Test::More tests => 42;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -62,6 +62,7 @@ my $itemtype = $builder->build({ source => 'Itemtype', value => { notforloan => 
 #Set up the stage
 # Sysprefs and cost matrix
 C4::Context->set_preference('HoldsQueueSkipClosed', 0);
+C4::Context->set_preference('LocalHoldsPriority', 0);
 $dbh->do("UPDATE systempreferences SET value = ? WHERE variable = 'StaticHoldsQueueWeight'", undef,
          join( ',', @other_branches, $borrower_branchcode, $least_cost_branch_code));
 $dbh->do("UPDATE systempreferences SET value = '0' WHERE variable = 'RandomizeHoldsQueueWeight'");
@@ -331,6 +332,85 @@ C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( scalar( @$holds_queue ), 2, "Holds not filled with items from closed libraries" );
 C4::Context->set_preference( 'HoldsQueueSkipClosed', 0 );
+
+## Test LocalHoldsPriority
+C4::Context->set_preference('LocalHoldsPriority', 1);
+
+$dbh->do("DELETE FROM default_circ_rules");
+$dbh->do("INSERT INTO default_circ_rules ( holdallowed ) VALUES ( 2 )");
+$dbh->do("DELETE FROM issues");
+
+# Test homebranch = patron branch
+C4::Context->set_preference('LocalHoldsPriorityPatronControl', 'HomeLibrary');
+C4::Context->set_preference('LocalHoldsPriorityItemControl', 'homebranch');
+C4::Context->clear_syspref_cache();
+$dbh->do("DELETE FROM reserves");
+$sth->execute( $borrower1->{borrowernumber}, $biblionumber, $branchcodes[0], 1 );
+$sth->execute( $borrower2->{borrowernumber}, $biblionumber, $branchcodes[0], 2 );
+$sth->execute( $borrower3->{borrowernumber}, $biblionumber, $branchcodes[0], 3 );
+
+$dbh->do("DELETE FROM items");
+# barcode, homebranch, holdingbranch, itemtype
+$items_insert_sth->execute( $barcode + 4, $branchcodes[2], $branchcodes[0] );
+
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
+is( $holds_queue->[0]->{cardnumber}, $borrower3->{cardnumber}, "Holds queue giving priority to patron who's home library matches item's home library");
+
+# Test holdingbranch = patron branch
+C4::Context->set_preference('LocalHoldsPriorityPatronControl', 'HomeLibrary');
+C4::Context->set_preference('LocalHoldsPriorityItemControl', 'holdingbranch');
+C4::Context->clear_syspref_cache();
+$dbh->do("DELETE FROM reserves");
+$sth->execute( $borrower1->{borrowernumber}, $biblionumber, $branchcodes[0], 1 );
+$sth->execute( $borrower2->{borrowernumber}, $biblionumber, $branchcodes[0], 2 );
+$sth->execute( $borrower3->{borrowernumber}, $biblionumber, $branchcodes[0], 3 );
+
+$dbh->do("DELETE FROM items");
+# barcode, homebranch, holdingbranch, itemtype
+$items_insert_sth->execute( $barcode + 4, $branchcodes[0], $branchcodes[2] );
+
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
+is( $holds_queue->[0]->{cardnumber}, $borrower3->{cardnumber}, "Holds queue giving priority to patron who's home library matches item's holding library");
+
+# Test holdingbranch = pickup branch
+C4::Context->set_preference('LocalHoldsPriorityPatronControl', 'PickupLibrary');
+C4::Context->set_preference('LocalHoldsPriorityItemControl', 'holdingbranch');
+C4::Context->clear_syspref_cache();
+$dbh->do("DELETE FROM reserves");
+$sth->execute( $borrower1->{borrowernumber}, $biblionumber, $branchcodes[0], 1 );
+$sth->execute( $borrower2->{borrowernumber}, $biblionumber, $branchcodes[0], 2 );
+$sth->execute( $borrower3->{borrowernumber}, $biblionumber, $branchcodes[2], 3 );
+
+$dbh->do("DELETE FROM items");
+# barcode, homebranch, holdingbranch, itemtype
+$items_insert_sth->execute( $barcode + 4, $branchcodes[0], $branchcodes[2] );
+
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
+is( $holds_queue->[0]->{cardnumber}, $borrower3->{cardnumber}, "Holds queue giving priority to patron who's home library matches item's holding library");
+
+# Test homebranch = pickup branch
+C4::Context->set_preference('LocalHoldsPriorityPatronControl', 'PickupLibrary');
+C4::Context->set_preference('LocalHoldsPriorityItemControl', 'homebranch');
+C4::Context->clear_syspref_cache();
+$dbh->do("DELETE FROM reserves");
+$sth->execute( $borrower1->{borrowernumber}, $biblionumber, $branchcodes[0], 1 );
+$sth->execute( $borrower2->{borrowernumber}, $biblionumber, $branchcodes[0], 2 );
+$sth->execute( $borrower3->{borrowernumber}, $biblionumber, $branchcodes[2], 3 );
+
+$dbh->do("DELETE FROM items");
+# barcode, homebranch, holdingbranch, itemtype
+$items_insert_sth->execute( $barcode + 4, $branchcodes[2], $branchcodes[0] );
+
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
+is( $holds_queue->[0]->{cardnumber}, $borrower3->{cardnumber}, "Holds queue giving priority to patron who's home library matches item's holding library");
+
+C4::Context->set_preference('LocalHoldsPriority', 0);
+## End testing of LocalHoldsPriority
+
 
 # Bug 14297
 $itemtype = $builder->build({ source => 'Itemtype', value => { notforloan => 0 } })->{itemtype};
