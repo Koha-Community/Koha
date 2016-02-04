@@ -130,7 +130,6 @@ if(not $fromcat && $tocat) { #make sure we've specified the info we need.
 cronlogaction();
 
 my $dbh=C4::Context->dbh;
-my @branches = C4::Branch::GetBranches();
 #get today's date, format it and subtract upperagelimit
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 $year +=1900;
@@ -178,7 +177,6 @@ if ( not $noaction) {
 		} else { print "Updated $res patrons\n"; }
 	} else { # branch was not supplied, processing all branches
 		$verbose and print "Looking in all branches for patrons to update from $fromcat to $tocat that were born before $itsyourbirthday\n";
-		foreach my $branchcode (@branches) {
 			my $query=qq|UPDATE borrowers
 			   SET guarantorid ='0',
 			    categorycode =?
@@ -189,7 +187,6 @@ if ( not $noaction) {
 			my $res = $sth->execute( $tocat, $itsyourbirthday, $fromcat ) or die "can't execute";
 			if ($res eq '0E0') { print "No patrons updated\n";
 			} else { print "Updated $res patrons\n"; }
-	}
 	}
 } else {
 	my $birthday;
