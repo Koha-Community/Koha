@@ -67,8 +67,7 @@ our $borrower = GetMember( borrowernumber => $borrowernumber );
 our $user = $input->remote_user;
 $user ||= q{};
 
-my $branches = GetBranches();
-our $branch = GetBranch( $input, $branches );
+our $branch = C4::Context->userenv->{'branch'};
 
 my $writeoff_item = $input->param('confirm_writeoff');
 my $paycollect    = $input->param('paycollect');
