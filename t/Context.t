@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use DBI;
-use Test::More tests => 24;
+use Test::More tests => 26;
 use Test::MockModule;
 
 BEGIN {
@@ -49,13 +49,16 @@ is(C4::Context::db_scheme2dbi(),        'mysql', 'ask for nothing, get mysql');
 # C4::Context::interface
 my $lastwarn;
 local $SIG{__WARN__} = sub { $lastwarn = $_[0] };
-is(C4::Context->interface, 'opac');
-is(C4::Context->interface('foobar'), 'opac');
-like($lastwarn, qr/invalid interface : 'foobar'/);
-is(C4::Context->interface, 'opac');
-is(C4::Context->interface('intranet'), 'intranet');
-is(C4::Context->interface, 'intranet');
-is(C4::Context->interface('foobar'), 'intranet');
-is(C4::Context->interface, 'intranet');
-is(C4::Context->interface('OPAC'), 'opac');
-is(C4::Context->interface, 'opac');
+is(C4::Context->interface, 'opac','interface defaults to opac');
+is(C4::Context->interface('foobar'), 'opac', 'interface foobar');
+like($lastwarn, qr/invalid interface : 'foobar'/, 'interface warn on foobar');
+is(C4::Context->interface, 'opac', 'interface still opac');
+is(C4::Context->interface('intranet'), 'intranet', 'interface intranet');
+is(C4::Context->interface, 'intranet', 'interface still intranet');
+is(C4::Context->interface('foobar'), 'intranet', 'interface foobar again');
+is(C4::Context->interface, 'intranet', 'interface still intranet');
+is(C4::Context->interface('OPAC'), 'opac', 'interface OPAC uc');
+is(C4::Context->interface, 'opac', 'interface still opac');
+#Bug 14751
+is( C4::Context->interface( 'SiP' ), 'sip', 'interface SiP' );
+is( C4::Context->interface( 'COMMANDLINE' ), 'commandline', 'interface commandline uc' );
