@@ -216,11 +216,13 @@
          The preferred tag is saved in the fav variable and passed to a
          helper named-template -->
         <!-- Amended  to show all 264 fields (filtered by ind1=3 if ind1=3 is present in the record)  -->
+        <xsl:param name="show_url"/>
         <xsl:choose>
             <xsl:when test="marc:datafield[@tag=264 and @ind1=3]">
                 <xsl:for-each select="marc:datafield[@tag=264 and @ind1=3]">
                     <xsl:call-template name="showRDAtag264helper">
                         <xsl:with-param name="field" select="."/>
+                        <xsl:with-param name="url" select="$show_url"/>
                     </xsl:call-template>
                 </xsl:for-each>
             </xsl:when>
@@ -228,6 +230,7 @@
                 <xsl:for-each select="marc:datafield[@tag=264]">
                     <xsl:call-template name="showRDAtag264helper">
                         <xsl:with-param name="field" select="."/>
+                        <xsl:with-param name="url" select="$show_url"/>
                     </xsl:call-template>
                 </xsl:for-each>
             </xsl:otherwise>
@@ -235,6 +238,7 @@
     </xsl:template>
     <xsl:template name="showRDAtag264helper">
         <xsl:param name="field"/>
+        <xsl:param name="url"/>
         <xsl:variable name="ind2" select="$field/@ind2"/>
         <span class="results_summary">
             <xsl:choose>
@@ -254,9 +258,41 @@
                     <span class="label">Copyright date: </span>
                 </xsl:when>
             </xsl:choose>
-            <xsl:call-template name="subfieldSelect">
-                <xsl:with-param name="codes">abc</xsl:with-param>
+
+            <xsl:if test="$field/marc:subfield[@code='a']">
+                <xsl:call-template name="subfieldSelect">
+                    <xsl:with-param name="codes">a</xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
+            <xsl:text> </xsl:text>
+
+            <xsl:choose>
+                <xsl:when test="$url='1'">
+                    <xsl:if test="$field/marc:subfield[@code='b']">
+                         <a href="/cgi-bin/koha/opac-search.pl?q=Provider:{$field/marc:subfield[@code='b']}">
+                         <xsl:call-template name="subfieldSelect">
+                             <xsl:with-param name="codes">b</xsl:with-param>
+                         </xsl:call-template>
+                         </a>
+                    </xsl:if>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:if test="$field/marc:subfield[@code='b']">
+                        <xsl:call-template name="subfieldSelect">
+                            <xsl:with-param name="codes">b</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:if>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text> </xsl:text>
+            <xsl:call-template name="chopPunctuation">
+                <xsl:with-param name="chopString">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">c</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:with-param>
             </xsl:call-template>
+
         </span>
     </xsl:template>
 </xsl:stylesheet>
