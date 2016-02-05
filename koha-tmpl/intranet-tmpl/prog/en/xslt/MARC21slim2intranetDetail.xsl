@@ -314,7 +314,9 @@
         <!-- Publisher info and RDA related info from tags 260, 264 -->
         <xsl:choose>
             <xsl:when test="marc:datafield[@tag=264]">
-                <xsl:call-template name="showRDAtag264"/>
+                <xsl:call-template name="showRDAtag264">
+                   <xsl:with-param name="show_url">1</xsl:with-param>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when test="marc:datafield[@tag=260]">
                 <span class="results_summary publisher"><span class="label">Publisher: </span>
@@ -326,7 +328,7 @@
                         </xsl:if>
                         <xsl:text> </xsl:text>
                         <xsl:if test="marc:subfield[@code='b']">
-                        <a href="/cgi-bin/koha/catalogue/search.pl?q=pb:{marc:subfield[@code='b']}">
+                        <a href="/cgi-bin/koha/catalogue/search.pl?q=Provider:{marc:subfield[@code='b']}">
                             <xsl:call-template name="subfieldSelect">
                                 <xsl:with-param name="codes">b</xsl:with-param>
                             </xsl:call-template>
