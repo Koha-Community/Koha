@@ -61,7 +61,8 @@
                                 [% IF field == "emailpro" %]<li>Contact information: <a href="#borrower_emailpro">secondary email address</a></li>[% END %]
                                 [% IF field == "B_email" %]<li>Alternate address information: <a href="#borrower_B_email">email address</a></li>[% END %]
                                 [% IF field == "password_match" %]<li>Passwords do not match! <a href="#password">password</a></li>[% END %]
-                                [% IF field == "password_invalid" %]<li>Password does not meet minium requirements! <a href="#password">password</a></li>[% END %]
+                                [% IF field == "password_invalid" %]<li>Password does not meet minimum requirements! <a href="#password">password</a></li>[% END %]
+                                [% IF field == "password_spaces" %]<li>Password contains leading and/or trailing spaces! <a href="#password">password</a></li>[% END %]
                             [% END %]
                         </ul>
                         Please correct the errors and resubmit.

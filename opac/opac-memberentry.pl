@@ -326,6 +326,9 @@ sub CheckForInvalidFields {
     if ( $borrower->{'password'}  && $minpw && (length($borrower->{'password'}) < $minpw) ) {
        push(@invalidFields, "password_invalid");
     }
+    if ( $borrower->{'password'} ) {
+       push(@invalidFields, "password_spaces") if ($borrower->{'password'} =~ /^\s/ or $borrower->{'password'} =~ /\s$/);
+    }
 
     return \@invalidFields;
 }
