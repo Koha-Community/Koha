@@ -651,7 +651,8 @@ sub get_matches {
             else {
                 my $phr = C4::Context->preference('AggressiveMatchOnISBN') ? ',phr' : q{};
                 $query = join( " or ",
-                    map { "$matchpoint->{'index'}$phr=$_" } @source_keys );
+                    map { "$matchpoint->{'index'}$phr=\"$_\"" } @source_keys );
+                    #NOTE: double-quote the values so you don't get a "Embedded truncation not supported" error when a term has a ? in it.
             }
 
             require C4::Search;
@@ -807,7 +808,7 @@ sub _get_match_keys {
             } else {
                 foreach my $subfield ($field->subfields()) {
                     if (exists $component->{'subfields'}->{$subfield->[0]}) {
-                        $string .= " " . $subfield->[1];
+                        $string .= " " . $subfield->[1]; #FIXME: It would be better to create an array and join with a space later...
                     }
                 }
 			}
