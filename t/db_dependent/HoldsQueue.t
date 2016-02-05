@@ -11,7 +11,6 @@ use Modern::Perl;
 use Test::More tests => 38;
 use Data::Dumper;
 
-use C4::Branch;
 use C4::Calendar;
 use C4::Context;
 use C4::Members;

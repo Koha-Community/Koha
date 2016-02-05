@@ -28,7 +28,6 @@ use C4::Koha;
 use C4::Output;
 use C4::Log;
 use C4::Items;
-use C4::Branch;
 use C4::Debug;
 use C4::Search;    # enabled_staff_search_views
 use Koha::Patron::Images;

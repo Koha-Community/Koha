@@ -25,7 +25,6 @@ use C4::Output;
 use C4::Auth;
 use C4::Koha;
 use C4::Debug;
-use C4::Branch;
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::IssuingRule;

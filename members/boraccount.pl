@@ -29,7 +29,6 @@ use C4::Auth;
 use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Members;
-use C4::Branch;
 use C4::Accounts;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patron::Images;

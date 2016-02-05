@@ -43,7 +43,6 @@ use C4::Boolean;
 use C4::Letters;
 use C4::Koha;
 use C4::XSLT;
-use C4::Branch;
 use Koha::DateUtils;
 use Koha::Caches;
 use Koha::Cache::Memory::Lite;

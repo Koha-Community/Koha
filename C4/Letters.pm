@@ -31,7 +31,6 @@ use Module::Load::Conditional qw(can_load);
 use C4::Koha qw(GetAuthorisedValueByCode);
 use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
-use C4::Branch;
 use C4::Log;
 use C4::SMS;
 use C4::Debug;

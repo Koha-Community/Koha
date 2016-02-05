@@ -4,7 +4,6 @@ use Modern::Perl;
 use C4::Biblio;
 use C4::Context;
 use C4::Items;
-use C4::Branch;
 use C4::Circulation;
 use Koha::Database;
 use Koha::DateUtils;

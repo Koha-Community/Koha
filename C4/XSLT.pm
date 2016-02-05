@@ -24,7 +24,6 @@ package C4::XSLT;
 use Modern::Perl;
 
 use C4::Context;
-use C4::Branch;
 use C4::Items;
 use C4::Koha;
 use C4::Biblio;

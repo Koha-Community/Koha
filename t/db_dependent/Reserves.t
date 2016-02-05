@@ -24,7 +24,6 @@ use Test::Warn;
 use MARC::Record;
 use DateTime::Duration;
 
-use C4::Branch;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;

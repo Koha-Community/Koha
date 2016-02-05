@@ -24,7 +24,6 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 use C4::Context;
-use C4::Branch; # Can be removed?
 use Koha::Caches;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Libraries;

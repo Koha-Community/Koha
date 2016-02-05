@@ -26,7 +26,6 @@ use C4::Context;
 use C4::Output;
 use C4::Log;
 use C4::Debug;
-use C4::Branch;
 use C4::Members;
 use Koha::Patron::Discharge;
 use Koha::DateUtils;

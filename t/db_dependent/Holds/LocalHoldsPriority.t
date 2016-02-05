@@ -4,7 +4,6 @@ use Modern::Perl;
 
 use t::lib::Mocks;
 use C4::Context;
-use C4::Branch;
 
 use Test::More tests => 6;
 use MARC::Record;

@@ -25,7 +25,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Acquisition qw( SearchOrders );
 use C4::Auth qw(:DEFAULT get_session);
-use C4::Branch;
 use C4::Koha;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;

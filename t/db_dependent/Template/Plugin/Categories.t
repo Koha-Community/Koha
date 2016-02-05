@@ -3,7 +3,6 @@ use Modern::Perl;
 use Test::More tests => 5;
 
 use C4::Context;
-use C4::Branch;
 use Koha::Template::Plugin::Categories;
 
 my $dbh = C4::Context->dbh;

@@ -23,7 +23,6 @@ use DateTime::TimeZone;
 
 use t::lib::TestBuilder;
 use C4::Context;
-use C4::Branch;
 use Koha::Database;
 use Koha::DateUtils;
 

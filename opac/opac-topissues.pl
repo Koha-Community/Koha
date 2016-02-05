@@ -29,7 +29,6 @@ use C4::Languages;
 use C4::Search;
 use C4::Output;
 use C4::Koha;
-use C4::Branch;
 use C4::Circulation;
 use Date::Manip;
 

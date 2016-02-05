@@ -26,7 +26,6 @@ use CGI qw ( -utf8 );
 use HTML::Entities;
 use C4::Biblio;
 use C4::Items;
-use C4::Branch;
 use C4::Acquisition;
 use C4::Output;
 use C4::Auth;

@@ -20,7 +20,6 @@ use Modern::Perl;
 use DateTime;
 use t::lib::Mocks;
 use C4::Biblio;
-use C4::Branch;
 use C4::Items;
 use C4::Members;
 use C4::Reserves;

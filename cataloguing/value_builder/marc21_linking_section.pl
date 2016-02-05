@@ -31,7 +31,6 @@ use C4::Output;
 use C4::Biblio;
 use C4::Koha;
 use MARC::Record;
-use C4::Branch;
 
 use Koha::ItemTypes;
 

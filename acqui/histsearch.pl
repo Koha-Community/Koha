@@ -56,7 +56,6 @@ use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Acquisition;
 use C4::Debug;
-use C4::Branch;
 use C4::Koha;
 use Koha::DateUtils;
 

@@ -33,7 +33,6 @@ use C4::Biblio;
 use C4::Items;
 use C4::Serials;
 use URI::Escape;
-use C4::Branch;
 use Koha::Libraries;
 
 my $query = new CGI;

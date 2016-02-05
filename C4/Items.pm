@@ -739,7 +739,6 @@ item that has a given branch code.
 
 sub CheckItemPreSave {
     my $item_ref = shift;
-    require C4::Branch;
 
     my %errors = ();
 

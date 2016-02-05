@@ -29,7 +29,6 @@ use C4::Auth;
 use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Members;
-use C4::Branch;
 use C4::Accounts;
 use Koha::DateUtils;
 use Koha::Patron::Images;

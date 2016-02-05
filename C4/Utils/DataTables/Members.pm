@@ -1,7 +1,6 @@
 package C4::Utils::DataTables::Members;
 
 use Modern::Perl;
-use C4::Branch qw/onlymine/;
 use C4::Context;
 use C4::Members qw/GetMemberIssuesAndFines/;
 use C4::Utils::DataTables;
