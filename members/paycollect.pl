@@ -48,8 +48,7 @@ my $borrowernumber = $input->param('borrowernumber');
 my $borrower       = GetMember( borrowernumber => $borrowernumber );
 my $user           = $input->remote_user;
 
-# get account details
-my $branch = GetBranch( $input, GetBranches() );
+my $branch         = C4::Context->userenv->{'branch'};
 
 my ( $total_due, $accts, $numaccts ) = GetMemberAccountRecords($borrowernumber);
 my $total_paid = $input->param('paid');
