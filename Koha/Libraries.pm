@@ -45,11 +45,7 @@ Koha::Libraries - Koha Library Object set class
 sub search_filtered {
     my ( $self, $params, $attributes ) = @_;
 
-    if (    C4::Context->preference('IndependentBranches')
-        and C4::Context->userenv
-        and not C4::Context->IsSuperLibrarian()
-        and C4::Context->userenv->{branch}
-    ) {
+    if ( C4::Context::only_my_library ) {
         $params->{branchcode} = C4::Context->userenv->{branch};
     }
 

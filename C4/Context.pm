@@ -1035,6 +1035,15 @@ sub mybranch {
     C4::Context->userenv           or return '';
     return C4::Context->userenv->{branch} || '';
 }
+sub only_my_library {
+    return
+         C4::Context->preference('IndependentBranches')
+      && C4::Context->userenv
+      && !C4::Context->IsSuperLibrarian()
+      && C4::Context->userenv->{branch};
+}
+
+
 
 1;
 __END__

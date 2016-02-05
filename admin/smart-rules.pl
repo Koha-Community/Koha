@@ -58,7 +58,7 @@ unless ( $branch ) {
         $branch = Koha::Libraries->search->count() == 1 ? undef : C4::Context::mybranch();
     }
     else {
-        $branch = C4::Branch::onlymine() ? ( C4::Context::mybranch() || '*' ) : '*';
+        $branch = C4::Context::only_my_library() ? ( C4::Context::mybranch() || '*' ) : '*';
     }
 }
 $branch = '*' if $branch eq 'NO_LIBRARY_SET';

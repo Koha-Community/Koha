@@ -48,14 +48,6 @@ The functions in this module deal with branches.
 
 =cut
 
-sub onlymine {
-    return
-         C4::Context->preference('IndependentBranches')
-      && C4::Context->userenv
-      && !C4::Context->IsSuperLibrarian()
-      && C4::Context->userenv->{branch};
-}
-
 =head2 GetBranch
 
 $branch = GetBranch( $query, $branches );

@@ -25,7 +25,7 @@ sub search {
 
     # If branches are independent and user is not superlibrarian
     # The search has to be only on the user branch
-    if ( C4::Branch::onlymine ) {
+    if ( C4::Context::only_my_library ) {
         my $userenv = C4::Context->userenv;
         $branchcode = $userenv->{'branch'};
 

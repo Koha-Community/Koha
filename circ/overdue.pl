@@ -89,13 +89,6 @@ while (my ($itemtype, $description) =$req->fetchrow) {
         itemtypename => $description,
     };
 }
-my $onlymine =
-     C4::Context->preference('IndependentBranches')
-  && C4::Context->userenv
-  && !C4::Context->IsSuperLibrarian()
-  && C4::Context->userenv->{branch};
-
-$branchfilter = C4::Context->userenv->{'branch'} if ($onlymine && !$branchfilter);
 
 # Filtering by Patron Attributes
 #  @patron_attr_filter_loop        is non empty if there are any patron attribute filters
