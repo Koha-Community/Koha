@@ -50,7 +50,7 @@ if ( C4::Branch::onlymine ) {
     my $userenv = C4::Context->userenv;
     my $library = Koha::Libraries->find( $userenv->{'branch'} );
     push @branchloop, {
-        value => $library->branchcode,
+        value => $library->id,
         branchcode => $library->branchcode,
         branchname => $library->branchname,
         selected => 1

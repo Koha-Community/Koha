@@ -2955,7 +2955,7 @@ sub NotifyOrderUsers {
         my $letter = C4::Letters::GetPreparedLetter(
             module      => 'acquisition',
             letter_code => 'ACQ_NOTIF_ON_RECEIV',
-            branchcode  => $library->branchcode,
+            branchcode  => $library->{branchcode},
             tables      => {
                 'branches'    => $library,
                 'borrowers'   => $borrower,
