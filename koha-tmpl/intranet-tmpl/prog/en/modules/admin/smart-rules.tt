@@ -248,7 +248,14 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                                 [% END %]
                             </td>
 							<td>[% rule.reservesallowed %]</td>
-                                                        <td>[% IF rule.onshelfholds %]Yes[% ELSE %]No[% END %]</td>
+                                                        <td>
+                                                            [% IF rule.onshelfholds == 1 %]
+                                                                If one unavailable
+                                                            [% ELSIF rule.onshelfholds == 2 %]
+                                                                If all unavailable
+                                                            [% ELSE %]
+                                                                No
+                                                            [% END %]</td>
                                                         <td>[% IF rule.opacitemholds == 'F'%]Force[% ELSIF rule.opacitemholds == 'Y'%]Allow[% ELSE %]Don't allow[% END %]</td>
 							<td>[% rule.rentaldiscount %]</td>
                             <td><a href="#" class="editrule">Edit</a></td>
@@ -318,7 +325,8 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     <td>
                         <select name="onshelfholds" id="onshelfholds">
                             <option value="0" selected>No</option>
-                            <option value="1">Yes</option>
+                            <option value="1">If one unavailable</option>
+                            <option value="2">If all unavailable</option>
                         </select>
                     </td>
                     <td>

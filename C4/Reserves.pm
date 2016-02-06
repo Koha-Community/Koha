@@ -41,6 +41,8 @@ use Koha::Database;
 use Koha::Hold;
 use Koha::Holds;
 use Koha::Libraries;
+use Koha::Items;
+use Koha::ItemTypes;
 
 use List::MoreUtils qw( firstidx any );
 use Carp;
@@ -1498,8 +1500,30 @@ sub IsAvailableForItemLevelRequest {
         $item->{withdrawn}        ||
         ($item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems'));
 
+    my $on_shelf_holds = _OnShelfHoldsAllowed($itype,$borrower->{categorycode},$item->{holdingbranch});
 
-    return 1 if _OnShelfHoldsAllowed($itype,$borrower->{categorycode},$item->{holdingbranch});
+    if ( $on_shelf_holds == 1 ) {
+        return 1;
+    } elsif ( $on_shelf_holds == 2 ) {
+        my @items =
+          Koha::Items->search( { biblionumber => $item->{biblionumber} } );
+
+        my $any_available = 0;
+
+        foreach my $i (@items) {
+            $any_available = 1
+              unless $i->itemlost
+              || $i->{notforloan} > 0
+              || $i->withdrawn
+              || $i->onloan
+              || GetReserveStatus( $i->id ) eq "Waiting"
+              || ( $i->damaged
+                && !C4::Context->preference('AllowHoldsOnDamagedItems') )
+              || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan;
+        }
+
+        return $any_available ? 0 : 1;
+    }
 
     return $item->{onloan} || GetReserveStatus($item->{itemnumber}) eq "Waiting";
 }
