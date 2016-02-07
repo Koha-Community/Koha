@@ -588,6 +588,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         $ri{itemtitle}           = $biblio->{'title'};
         $ri{itemauthor}          = $biblio->{'author'};
         $ri{itemcallnumber}      = $biblio->{'itemcallnumber'};
+        $ri{dateaccessioned}     = output_pref({ dt=>dt_from_string( $item->{dateaccessioned}, 'sql' ), dateonly => 1});
         $ri{itemtype}            = $biblio->{'itemtype'};
         $ri{itemnote}            = $biblio->{'itemnotes'};
         $ri{itemnotes_nonpublic} = $item->{'itemnotes_nonpublic'};
