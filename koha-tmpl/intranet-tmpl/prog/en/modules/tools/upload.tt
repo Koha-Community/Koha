@@ -182,7 +182,9 @@
                 <a href="" onclick="Choose('[% record.hashvalue %]'); return false;">Choose</a>&nbsp;
             [% END %]
             <a href="" onclick="SubmitMe( 'download', [% record.id %] ); return false;">Download</a>&nbsp;
-            <a href="" onclick="DeleteEntry( [% record.id %] ); return false;">Delete</a>
+            [% IF record.owner == owner || CAN_user_tools_upload_manage %]
+                <a href="" onclick="DeleteEntry( [% record.id %] ); return false;">Delete</a>
+            [% END %]
         </td>
    </tr>
    [% END %]
@@ -334,7 +336,6 @@ $(document).ready(function() {
     <div class="yui-b">
 
 <h1>Upload</h1>
-
 <div class="dialog alert" id="myalerts" style="display:none;"></div>
 
 [% PROCESS submitter %]
@@ -356,6 +357,12 @@ $(document).ready(function() {
 
 </div>
 </div>
-</div>
 
+[% IF !plugin %]
+    <div class="yui-b noprint">
+        [% INCLUDE 'tools-menu.inc' %]
+    </div>
+[% END %]
+
+</div>
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -170,7 +170,7 @@ sub get {
     my ( @rv, $res);
     foreach my $r ( @$temp ) {
         undef $res;
-        foreach( qw[id hashvalue filesize uploadcategorycode public permanent] ) {
+        foreach( qw[id hashvalue filesize uploadcategorycode public permanent owner] ) {
             $res->{$_} = $r->{$_};
         }
         $res->{name} = $r->{filename};
@@ -366,7 +366,7 @@ sub _lookup {
     my ( $self, $params ) = @_;
     my $dbh = C4::Context->dbh;
     my $sql = q|
-SELECT id,hashvalue,filename,dir,filesize,uploadcategorycode,public,permanent
+SELECT id,hashvalue,filename,dir,filesize,uploadcategorycode,public,permanent,owner
 FROM uploaded_files
     |;
     my @pars;

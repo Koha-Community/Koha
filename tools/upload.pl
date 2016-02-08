@@ -38,13 +38,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { editcatalogue => '*' },
+        flagsrequired   => { tools => 'upload_general_files' },
     }
 );
 
 $template->param(
-    plugin => $plugin,
-    index  => $index,
+    index      => $index,
+    owner      => $loggedinuser,
+    plugin     => $plugin,
 );
 
 my $upar = $plugin ? { public => 1 } : {};
@@ -54,6 +55,7 @@ if ( $op eq 'new' ) {
         uploadcategories => Koha::Upload->getCategories,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
+
 } elsif ( $op eq 'search' ) {
     my $h = $id ? { id => $id } : { term => $term };
     my @uploads = Koha::Upload->new($upar)->get($h);
@@ -63,8 +65,8 @@ if ( $op eq 'new' ) {
         uploads => \@uploads,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
-} elsif ( $op eq 'delete' ) {
 
+} elsif ( $op eq 'delete' ) {
     # delete only takes the id parameter
     my $upl = Koha::Upload->new($upar);
     my ($fn) = $upl->delete( { id => $id } );
@@ -79,6 +81,7 @@ if ( $op eq 'new' ) {
         uploadcategories => $upl->getCategories,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
+
 } elsif ( $op eq 'download' ) {
     my $upl = Koha::Upload->new($upar);
     my $rec = $upl->get( { id => $id, filehandle => 1 } );
