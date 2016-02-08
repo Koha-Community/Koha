@@ -461,7 +461,7 @@ $sth2->execute($language, $branch);
 
 while (my $row = $sth2->fetchrow_hashref) {
     $row->{'current_branch'} ||= $row->{'branchcode'};
-    $row->{translated_description} ||= $row->{translated_description};
+    $row->{humanitemtype} ||= $row->{itemtype};
     $row->{default_translated_description} = 1 if $row->{humanitemtype} eq '*';
     $row->{'humancategorycode'} ||= $row->{'categorycode'};
     $row->{'default_humancategorycode'} = 1 if $row->{'humancategorycode'} eq '*';
