@@ -69,8 +69,8 @@ sub all {
       : Koha::Libraries->search_filtered( {}, { order_by => ['branchname'] } )->unblessed;
 
     for my $l ( @$libraries ) {
-        if (       $selected and $l->{branchcode} eq $selected
-            or not $selected and C4::Context->userenv and $l->{branchcode} eq C4::Context->userenv->{branch}
+        if (       defined $selected and $l->{branchcode} eq $selected
+            or not defined $selected and C4::Context->userenv and $l->{branchcode} eq C4::Context->userenv->{branch}
         ) {
             $l->{selected} = 1;
         }

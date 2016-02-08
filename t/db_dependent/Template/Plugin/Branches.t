@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use C4::Context;
 use Koha::Database;
@@ -71,6 +71,8 @@ is( grep ( { $_->{branchcode} eq 'ANOTHERLIB' and not exists $_->{selected} } @$
 $libraries = $plugin->all( { selected => 'ANOTHERLIB' } );
 is( grep ( { $_->{branchcode} eq 'MYLIBRARY'  and not exists $_->{selected} } @$libraries ), 1, 'With selected parameter, my library should not be preselected' );
 is( grep ( { $_->{branchcode} eq 'ANOTHERLIB' and $_->{selected} == 1 } @$libraries ),       1, 'With selected parameter, other library should be preselected' );
+$libraries = $plugin->all( { selected => '' } );
+is( grep ( { exists $_->{selected} } @$libraries ), 0, 'With selected parameter set to an empty string, no library should be preselected' );
 
 C4::Context->set_preference( 'IndependentBranches', 1 );
 $libraries = $plugin->all();
