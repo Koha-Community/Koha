@@ -1,25 +1,47 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 14;
 
 use C4::Context;
-use Koha::Library;
-use Koha::Libraries;
-use Koha::Template::Plugin::Branches;
+use Koha::Database;
 
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+use t::lib::TestBuilder;
 
-for my $i ( 1 .. 5 ) {
-    Koha::Library->new(
-{
-        branchcode     => "test_br_$i",
-        branchname     => "test_br_$i",
+BEGIN {
+    use_ok('Koha::Template::Plugin::Branches');
 }
-    )->store;
-}
-my $library = Koha::Libraries->search->next->unblessed;
+
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
+my $library = $builder->build({
+    source => 'Branch',
+    value => {
+        branchcode => 'MYLIBRARY',
+    }
+});
+my $another_library = $builder->build({
+    source => 'Branch',
+    value => {
+        branchcode => 'ANOTHERLIB',
+    }
+});
 
 my $plugin = Koha::Template::Plugin::Branches->new();
 ok($plugin, "initialized Branches plugin");
@@ -35,20 +57,23 @@ is($name, '', 'received empty string as name of NULL/undefined library code');
 
 $library = $plugin->GetLoggedInBranchcode();
 is($library, '', 'no active library if there is no active user session');
+
 C4::Context->_new_userenv('DUMMY_SESSION_ID');
 C4::Context->set_userenv(123, 'userid', 'usercnum', 'First name', 'Surname', 'MYLIBRARY', 'My Library', 0);
 $library = $plugin->GetLoggedInBranchcode();
 is($library, 'MYLIBRARY', 'GetLoggedInBranchcode() returns active library');
 
-my $branches = $plugin->all;
-my $test_branches = [ grep { $_->{branchcode} =~ m|^test_br_| } @$branches ];
-is( scalar( @$test_branches ), 5, 'Plugin Branches should return the branches' );
-my $selected_branches = [ grep { $_->{selected} } @$branches ];
-is( scalar( @$selected_branches ), 0, 'Plugin Branches should not select a branch if not needed' );
+C4::Context->set_preference( 'IndependentBranches', 0 );
+my $libraries = $plugin->all();
+ok( scalar(@$libraries) > 1, 'If IndependentBranches is not set, all libraries should be returned' );
+is( grep ( { $_->{branchcode} eq 'MYLIBRARY'  and $_->{selected} == 1 } @$libraries ),       1, 'Without selected parameter, my library should be preselected' );
+is( grep ( { $_->{branchcode} eq 'ANOTHERLIB' and not exists $_->{selected} } @$libraries ), 1, 'Without selected parameter, other library should not be preselected' );
+$libraries = $plugin->all( { selected => 'ANOTHERLIB' } );
+is( grep ( { $_->{branchcode} eq 'MYLIBRARY'  and not exists $_->{selected} } @$libraries ), 1, 'With selected parameter, my library should not be preselected' );
+is( grep ( { $_->{branchcode} eq 'ANOTHERLIB' and $_->{selected} == 1 } @$libraries ),       1, 'With selected parameter, other library should be preselected' );
 
-$branches = $plugin->all({selected => 'test_br_3'});
-$test_branches = [ grep { $_->{branchcode} =~ m|^test_br_| } @$branches ];
-is( scalar( @$test_branches ), 5, 'Plugin Branches should return the branches if selected passed' );
-$selected_branches = [ grep { $_->{selected} } @$branches ];
-is( scalar( @$selected_branches ), 1, 'Plugin Branches should return only 1 selected if passed' );
-is( $selected_branches->[0]->{branchcode}, 'test_br_3', 'Plugin Branches should select the good one' );
+C4::Context->set_preference( 'IndependentBranches', 1 );
+$libraries = $plugin->all();
+is( scalar(@$libraries), 1, 'If IndependentBranches is set, only 1 library should be returned' );
+$libraries = $plugin->all( { unfiltered => 1 } );
+ok( scalar(@$libraries) > 1, 'If IndependentBranches is set, all libraries should be returned if the unfiltered flag is set' );
