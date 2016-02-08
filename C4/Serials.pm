@@ -1175,8 +1175,7 @@ sub ModSerialStatus {
     }
 
     # create new expected entry if needed (ie : was "expected" and has changed)
-    # BUG 12748: Check if there are no other expected issues.
-    my $otherIssueExpected = scalar findSerialByStatus(EXPECTED, $subscriptionid);
+    my $otherIssueExpected = scalar findSerialsByStatus(EXPECTED, $subscriptionid);
     if ( !$otherIssueExpected && $oldstatus == EXPECTED && $status != EXPECTED ) {
         my $subscription = GetSubscription($subscriptionid);
         my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscription->{numberpattern});
@@ -2699,7 +2698,7 @@ sub _can_do_on_subscription {
     return 0;
 }
 
-=head2 findSerialByStatus
+=head2 findSerialsByStatus
 
     @serials = findSerialByStatus($status, $subscriptionid);
 
@@ -2707,7 +2706,7 @@ sub _can_do_on_subscription {
 
 =cut
 
-sub findSerialByStatus{
+sub findSerialsByStatus{
     my($status, $subscriptionid) = @_;
     my $dbh = C4::Context->dbh;
     my $query = q| SELECT * from serial
