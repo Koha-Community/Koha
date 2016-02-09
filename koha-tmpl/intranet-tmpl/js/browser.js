@@ -111,7 +111,7 @@ KOHA.browser = function (searchid, biblionumber) {
                         ev.preventDefault();
                         browseRecords(1);
                     });
-                    $('a[href*="biblionumber="]').click(function (ev) {
+                    $('a[href*="biblionumber="]').not('a[target="_blank"]').click(function (ev) {
                         ev.preventDefault();
                         window.location = $(this).attr('href') + '&searchid=' + me.searchid;
                     });
