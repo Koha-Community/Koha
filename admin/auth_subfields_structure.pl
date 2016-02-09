@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use C4::Output;
 use C4::Auth;
 use CGI qw ( -utf8 );
@@ -52,7 +51,7 @@ my $input        = new CGI;
 my $tagfield     = $input->param('tagfield');
 my $tagsubfield  = $input->param('tagsubfield');
 my $authtypecode = $input->param('authtypecode');
-my $offset       = $input->param('offset');
+my $offset       = $input->param('offset') || 0;
 my $op           = $input->param('op') || '';
 my $script_name  = "/cgi-bin/koha/admin/auth_subfields_structure.pl";
 
@@ -84,8 +83,6 @@ my $dbh = C4::Context->dbh;
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
-	my $data;
-	my $more_subfields = $input->param("more_subfields")+1;
 	# builds kohafield tables
 	my @kohafields;
 	push @kohafields, "";
@@ -130,133 +127,58 @@ if ($op eq 'add_form') {
 	$sth->execute($tagfield,$authtypecode);
 	my @loop_data = ();
 	my $i=0;
-	while ($data =$sth->fetchrow_hashref) {
+    while ( my $data = $sth->fetchrow_hashref ) {
+        my %row_data;    # get a fresh hash for the row data
+        $row_data{defaultvalue}      = $data->{defaultvalue};
+        $row_data{tab}               = $data->{tab};
+        $row_data{ohidden}           = $data->{'hidden'};
+        $row_data{tagsubfield}       = $data->{'tagsubfield'};
+        $row_data{liblibrarian}      = $data->{'liblibrarian'};
+        $row_data{libopac}           = $data->{'libopac'};
+        $row_data{seealso}           = $data->{'seealso'};
+        $row_data{kohafields}        = \@kohafields;
+        $row_data{kohafield}         = $data->{'kohafield'};
+        $row_data{authorised_values} = $authorised_values;
+        $row_data{authorised_value}  = $data->{'authorised_value'};
+        $row_data{frameworkcodes}    = \@authtypes;
+        $row_data{frameworkcode}     = $data->{'frameworkcode'};
+        $row_data{value_builders}    = \@value_builder;
+        $row_data{value_builder}     = $data->{'value_builder'};
+        $row_data{repeatable}        = $data->{repeatable};
+        $row_data{mandatory}         = $data->{mandatory};
+        $row_data{hidden}            = $data->{hidden};
+        $row_data{isurl}             = $data->{isurl};
+        $row_data{row}               = $i;
+        push( @loop_data, \%row_data );
+        $i++;
+    }
 
-		my %row_data;  # get a fresh hash for the row data
-        $row_data{defaultvalue} = $data->{defaultvalue};
-        $row_data{tab} = {
-                    id      => "tab$i",
-                    default => $data->{'tab'},
-                    };
-        $row_data{ohidden} = {
-                    id      => "ohidden$i",
-                    default => $data->{'hidden'}
-                    };
-		$row_data{tagsubfieldinput} = "<input type=\"hidden\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" id=\"tagsubfield\" />";
-		$row_data{tagsubfield} = $data->{'tagsubfield'};
-		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
-		$row_data{libopac} = CGI::escapeHTML($data->{'libopac'});
-		$row_data{seealso} = CGI::escapeHTML($data->{'seealso'});
-        $row_data{kohafield} = {
-                    id      => "kohafield$i",
-                    values  => \@kohafields,
-                    default => "$data->{'kohafield'}",
-                    };
-        $row_data{authorised_value} = {
-                    id      => "authorised_value$i",
-                    values  => $authorised_values,
-                    default => $data->{'authorised_value'},
-        };
-        $row_data{frameworkcode} = {
-                    id      => "frameworkcode$i",
-                    values  => \@authtypes,
-                    default => $data->{'frameworkcode'},
-        };
-        $row_data{value_builder} = {
-                    id      => "value_builder$i",
-                    values  => \@value_builder,
-                    default => $data->{'value_builder'},
-        };
-		
-		$row_data{repeatable} = CGI::checkbox(-name=>"repeatable$i",
-	-checked => $data->{'repeatable'}?'checked':'',
-	-value => 1,
-	-label => '',
-	-id => "repeatable$i");
-		$row_data{mandatory} = CGI::checkbox(-name => "mandatory$i",
-	-checked => $data->{'mandatory'}?'checked':'',
-	-value => 1,
-	-label => '',
-	-id => "mandatory$i");
-		$row_data{hidden} = CGI::escapeHTML($data->{hidden}) ;
-		$row_data{isurl} = CGI::checkbox( -name => "isurl$i",
-			-id => "isurl$i",
-			-checked => $data->{'isurl'}?'checked':'',
-			-value => 1,
-			-label => '');
-		$row_data{row} = $i;
-		push(@loop_data, \%row_data);
-		$i++;
-	}
-	# add more_subfields empty lines for add if needed
-	for (my $i=1;$i<=$more_subfields;$i++) {
-		my %row_data;  # get a fresh hash for the row data
-        $row_data{'new_subfield'} = 1;
-        $row_data{tab} = {
-                    id      => "tab$i",
-                    default => $data->{'tab'},
-                    };
-        $row_data{ohidden} = {
-                    id      => "ohidden$i",
-                    default => $data->{'hidden'}
-                    };
+    # Add a new row for the "New" tab
+    my %row_data;    # get a fresh hash for the row data
+    $row_data{'new_subfield'} = 1;
+    $row_data{tab} = -1; # ignore
+    $row_data{ohidden} = 0; # show all
+    $row_data{tagsubfield}      = "";
+    $row_data{liblibrarian}     = "";
+    $row_data{libopac}          = "";
+    $row_data{seealso}          = "";
+    $row_data{hidden}           = "000";
+    $row_data{repeatable}       = 0;
+    $row_data{mandatory}        = 0;
+    $row_data{isurl}            = 0;
+    $row_data{kohafields} = \@kohafields,
+    $row_data{authorised_values} = $authorised_values;
+    $row_data{frameworkcodes} = \@authtypes;
+    $row_data{value_builders} = \@value_builder;
+    $row_data{row} = $i;
+    push( @loop_data, \%row_data );
 
-		$row_data{tagsubfieldinput} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" />";
-                $row_data{tagsubfieldinput} = 
-                        "<label><input type=\"text\" name=\"tagsubfield\" value=\""
-                        . $data->{'tagsubfield'}
-                        . "\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" /></label>";
-		$row_data{tagsubfield} = $data->{'tagsubfield'};
-		$row_data{liblibrarian} = "";
-		$row_data{libopac} = "";
-		$row_data{seealso} = "";
-		$row_data{hidden} = "000";
-		$row_data{repeatable} = CGI::checkbox( -name=> 'repeatable',
-				-id => "repeatable$i",
-				-checked => '',
-				-value => 1,
-				-label => '');
-		$row_data{mandatory} = CGI::checkbox( -name=> 'mandatory',
-			-id => "mandatory$i",
-			-checked => '',
-			-value => 1,
-			-label => '');
-		$row_data{isurl} = CGI::checkbox(-name => 'isurl',
-			-id => "isurl$i",
-			-checked => '',
-			-value => 1,
-			-label => '');
-        $row_data{kohafield} = {
-                    id      => "kohafield$i",
-                    values  => \@kohafields,
-                    default => "",
-                    };
-        $row_data{authorised_value} = {
-                    id      => "authorised_value",
-                    values  => $authorised_values,
-                    default => "",
-        };
-        $row_data{frameworkcode} = {
-                    id      => "frameworkcode",
-                    values  => \@authtypes,
-                    default => $data->{'frameworkcode'},
-        };
-        $row_data{value_builder} = {
-                    id      => "value_builder",
-                    values  => \@value_builder,
-                    default => $data->{'value_builder'},
-        };
-
-		$row_data{row} = $i;
-		push(@loop_data, \%row_data);
-	}
 	$template->param('use_heading_flags_p' => 1);
 	$template->param('heading_edit_subfields_p' => 1);
 	$template->param(action => "Edit subfields",
 							tagfield => $tagfield,
 							tagfieldinput => "<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\" />",
 							loop => \@loop_data,
-							more_subfields => $more_subfields,
 							more_tag => $tagfield);
 
 												# END $OP eq ADD_FORM
@@ -276,9 +198,7 @@ if ($op eq 'add_form') {
 	my @kohafield		= ''.$input->param('kohafield');
 	my @tab				= $input->param('tab');
 	my @seealso		= $input->param('seealso');
-	my @ohidden		= $input->param('ohidden');
-	#my @ihidden		= $input->param('ihidden');
-	#my @ehidden		= $input->param('ehidden');
+    my @ohidden             = $input->param('ohidden');
 	my @authorised_values	= $input->param('authorised_value');
 	my $authtypecode	= $input->param('authtypecode');
 	my @frameworkcodes	= $input->param('frameworkcode');
@@ -299,11 +219,10 @@ if ($op eq 'add_form') {
 		my $frameworkcode		=$frameworkcodes[$i];
 		my $value_builder=$value_builder[$i];
         my $defaultvalue = $defaultvalue[$i];
-		#my $hidden = $ohidden[$i].$ihidden[$i].$ehidden[$i]; #collate from 3 hiddens;
 		my $hidden = $ohidden[$i]; #collate from 3 hiddens;
 		my $isurl = $input->param("isurl$i")?1:0;
 		if ($liblibrarian) {
-			unless (C4::Context->config('demo') eq 1) {
+			unless (C4::Context->config('demo') or C4::Context->config('demo') eq 1) {
 				if (auth_subfield_structure_exists($authtypecode, $tagfield, $tagsubfield)) {
 					$sth_update->execute(
 						$authtypecode,
@@ -372,7 +291,7 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	unless (C4::Context->config('demo') eq 1) {
+	unless (C4::Context->config('demo') or C4::Context->config('demo') eq 1) {
 		my $sth=$dbh->prepare("delete from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
 		$sth->execute($tagfield,$tagsubfield,$authtypecode);
 	}

@@ -46,9 +46,9 @@
    <ul>
         [% FOREACH loo IN loop %]
             [% IF ( loo.new_subfield ) %]
-                <li><a href="#sub[% loo.urisubfieldcode %]field" title="[% loo.liblibrarian %]">New</a></li>
+                <li><a href="#sub[% loo.urisubfieldcode %]field" title="[% loo.liblibrarian | html_entity %]">New</a></li>
             [% ELSE %]
-                <li><a href="#sub[% loo.urisubfieldcode %]field" title="[% loo.liblibrarian %]">
+                <li><a href="#sub[% loo.urisubfieldcode %]field" title="[% loo.liblibrarian | html_entity %]">
                     [% loo.subfieldcode %]
                </a></li>
             [% END %]
@@ -67,25 +67,39 @@
                 		[% ELSE %]
                 		<li><label for="tagsubfield[% loo.row %]">Subfield code:</label> <input type="text" id="tagsubfield[% loo.row %]" name="tagsubfield" value="[% loo.subfieldcode %]" /></li>
                 		[% END %]
-                		<li><label for="liblibrarian[% loo.row %]">Text for librarian: </label><input id="liblibrarian[% loo.row %]" type="text" name="liblibrarian" value="[% loo.liblibrarian %]" size="40" maxlength="80" /></li>
-                		<li><label for="libopac[% loo.row %]">Text for OPAC: </label><input type="text" id="libopac[% loo.row %]" name="libopac" value="[% loo.libopac %]" size="40" maxlength="80" /></li>
-                		<li><label for="repeatable[% loo.row %]">Repeatable: </label>[% loo.repeatable %]</li>
-                		<li><label for="mandatory[% loo.row %]">Mandatory: </label>[% loo.mandatory %]</li>
+                        <li><label for="liblibrarian[% loo.row %]">Text for librarian: </label><input id="liblibrarian[% loo.row %]" type="text" name="liblibrarian" value="[% loo.liblibrarian | html_entity %]" size="40" maxlength="80" /></li>
+                        <li><label for="libopac[% loo.row %]">Text for OPAC: </label><input type="text" id="libopac[% loo.row %]" name="libopac" value="[% loo.libopac | html_entity %]" size="40" maxlength="80" /></li>
+                        <li>
+                            <label for="repeatable[% loo.row %]">Repeatable: </label>
+                            [% IF loo.repeatable %]
+                                <input type="checkbox" id="repeatable[% loo.row %]" name="repeatable[% loo.row %]" checked="checked" value="1" />
+                            [% ELSE %]
+                                <input type="checkbox" id="repeatable[% loo.row %]" name="repeatable[% loo.row %]" value="1" />
+                            [% END %]
+                        </li>
+                        <li>
+                            <label for="mandatory[% loo.row %]">Mandatory: </label>
+                            [% IF loo.mandatory %]
+                                <input type="checkbox" id="mandatory[% loo.row %]" name="mandatory[% loo.row %]" checked="checked" value="1" />
+                            [% ELSE %]
+                                <input type="checkbox" id="mandatory[% loo.row %]" name="mandatory[% loo.row %]" value="1" />
+                            [% END %]
+                        </li>
                         <li><label for="tab[% loo.row %]">Managed in tab: </label>
-                            <select name="tab" tabindex="" size="1" id="[% loo.tab.id %]">
-                            [%- IF ( loo.tab.default ==  -1 ) -%]
+                            <select name="tab" tabindex="" size="1" id="tab[% loo.row %]">
+                            [%- IF ( loo.tab ==  -1 ) -%]
                                 <option value="-1" selected="selected">ignore</option>
                             [%- ELSE -%]
                                 <option value="-1">ignore</option>
                             [%- END -%]
                             [%- FOREACH t IN [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] -%]
-                                [%- IF ( loo.tab.default ==  t ) -%]
+                                [%- IF ( loo.tab ==  t ) -%]
                                 <option value="[%- t -%]" selected="selected">[%- t -%]</option>
                                 [%- ELSE -%]
                                 <option value="[%- t -%]">[%- t -%]</option>
                                 [%- END -%]
                             [%- END -%]
-                            [%- IF ( loo.tab.default ==  10 ) -%]
+                            [%- IF ( loo.tab ==  10 ) -%]
                                 <option value="10" selected="selected">items (10)</option>
                             [%- ELSE -%]
                                 <option value="10">items (10)</option>
@@ -117,13 +131,21 @@
                     <input type="checkbox" id="hidden_flagged_[% loo.row %]" name="flagged_[% loo.row %]"/>
                     <label for="hidden_flagged_[% loo.row %]" style="float: none;">Flagged</label>
                 </li>
-                <li><label for="isurl[% loo.row %]">Is a URL:</label>[% loo.isurl %] (if checked, it means that the subfield is a URL and can be clicked)</li>
+                <li>
+                    <label for="isurl[% loo.row %]">Is a URL:</label>
+                    [% IF loo.isurl %]
+                        <input type="checkbox" id="isurl[% loo.row %]" name="isurl[% loo.row %]" checked="checked" value="1" />
+                    [% ELSE %]
+                        <input type="checkbox" id="isurl[% loo.row %]" name="isurl[% loo.row %]" value="1" />
+                    [% END %]
+                    (if checked, it means that the subfield is a URL and can be clicked)
+                </li>
                 <li><label for="link[% loo.row %]">Link:</label><input type="text" id="link[% loo.row %]" name="link" value="[% loo.link %]" size="10" maxlength="80" /> (e.g., Title or Local-Number) <span class="error"><em>NOTE: If you change this value you must ask your administrator to run misc/batchRebuildBiblioTables.pl.</em></span></li>
                 <li>
                     <label for="kohafield[% loo.row %]">Koha link:</label>
-                    <select name="kohafield" id="[% loo.kohafield.id %]" size="1">
-                    [% FOREACH value IN loo.kohafield.values %]
-                      [% IF ( value == loo.kohafield.default ) %]
+                    <select name="kohafield" id="kohafield[% loo.row %]" size="1">
+                    [% FOREACH value IN loo.kohafields %]
+                      [% IF ( value == loo.kohafield ) %]
                         <option value="[% value %]" selected="selected">[% value %]</option>
                       [% ELSE %]
                         <option value="[% value %]">[% value %]</option>
@@ -140,9 +162,9 @@
                     	<ol>
                             <li>
                                 <label for="authorised_value[% loo.row %]">Authorized value:</label>
-                                <select name="authorised_value" id="[% loo.authorised_value.id %]" size="1">
-                                [% FOREACH value IN loo.authorised_value.values %]
-                                    [% IF ( value == loo.authorised_value.default ) %]
+                                <select name="authorised_value" id="authorised_value[% loo.row %]" size="1">
+                                [% FOREACH value IN loo.authorised_values %]
+                                    [% IF ( value == loo.authorised_value ) %]
                                     <option value="[% value %]" selected="selected">[% value %]</option>
                                     [% ELSE %]
                                     <option value="[% value %]">[% value %]</option>
@@ -152,9 +174,9 @@
                             </li>
                             <li>
                                 <label for="authtypecode[% loo.row %]">Thesaurus:</label>
-                                <select name="authtypecode" id="[% loo.authtypes.id %]" size="1">
-                                [% FOREACH value IN loo.authtypes.values %]
-                                    [% IF ( value == loo.authtypes.default ) %]
+                                <select name="authtypecode" id="authtypecode[% loo.row %]" size="1">
+                                [% FOREACH value IN loo.authtypes %]
+                                    [% IF ( value == loo.authtypecode ) %]
                                     <option value="[% value %]" selected="selected">[% value %]</option>
                                     [% ELSE %]
                                     <option value="[% value %]">[% value %]</option>
@@ -164,9 +186,9 @@
                             </li>
                             <li>
                                 <label for="value_builder[% loo.row %]">Plugin:</label>
-                                <select name="value_builder" id="[% loo.value_builder.id %]" size="1">
-                                [% FOREACH value IN loo.value_builder.values %]
-                                    [% IF ( value == loo.value_builder.default ) %]
+                                <select name="value_builder" id="value_builder[% loo.row %]" size="1">
+                                [% FOREACH value IN loo.value_builders %]
+                                    [% IF ( value == loo.value_builder ) %]
                                     <option value="[% value %]" selected="selected">[% value %]</option>
                                     [% ELSE %]
                                     <option value="[% value %]">[% value %]</option>
@@ -191,7 +213,7 @@
     <div class="dialog alert">
         <h3>Confirm deletion of subfield [% tagsubfield %]?</h3>
         <p>Subfield: [% tagsubfield %]</p>
-        <p>Description: [% liblibrarian %]</p>
+        <p>Description: [% liblibrarian | html_entity %]</p>
 
         <form action="[% delete_link %]" method="post"><input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="searchfield" value="[% searchfield %]" />
@@ -241,9 +263,9 @@
     <td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield %]&amp;frameworkcode=[% frameworkcode %]#sub[% loo.tagsubfield %]field">[% loo.tagsubfield %]</a></td>
     <td>
         [% IF ( loo.subfield_ignored ) %]
-            <i>[% loo.liblibrarian %]</i>
+            <i>[% loo.liblibrarian | html_entity %]</i>
         [% ELSE %]
-            [% loo.liblibrarian %]
+            [% loo.liblibrarian | html_entity %]
         [% END %]
     </td>
     <td>
