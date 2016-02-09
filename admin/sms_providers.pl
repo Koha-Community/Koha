@@ -26,11 +26,13 @@ use C4::Auth;
 use C4::Output;
 
 use Koha::SMS::Provider;
+use Koha::SMS::Providers;
 
 my $cgi = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/sms_providers.tt",
+    {
+        template_name   => "admin/sms_providers.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,
@@ -46,13 +48,23 @@ my $domain = $cgi->param('domain');
 
 if ( $op eq 'add_update' ) {
     if ( $name && $domain ) {
-        Koha::SMS::Provider->new( { id => $id, name => $name, domain => $domain } )->store();
+        if ($id) {
+            my $provider = Koha::SMS::Providers->find($id);
+            $provider->set( { name => $name, domain => $domain } )->store()
+              if $provider;
+        }
+        else {
+            Koha::SMS::Provider->new( { name => $name, domain => $domain } )
+              ->store();
+        }
     }
-} elsif ( $op eq 'delete' ) {
-    Koha::SMS::Provider->find($id)->delete();
+}
+elsif ( $op eq 'delete' ) {
+    my $provider = Koha::SMS::Providers->find($id);
+    $provider->delete() if $provider;
 }
 
-my @providers = Koha::SMS::Provider->all();
+my @providers = Koha::SMS::Providers->search();
 
 $template->param( providers => \@providers );
 

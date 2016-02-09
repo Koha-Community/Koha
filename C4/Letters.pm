@@ -31,7 +31,7 @@ use C4::Log;
 use C4::SMS;
 use C4::Debug;
 use Koha::DateUtils;
-use Koha::SMS::Provider;
+use Koha::SMS::Providers;
 
 use Date::Calc qw( Add_Delta_Days );
 use Encode;
@@ -987,7 +987,7 @@ sub SendQueuedMessages {
         elsif ( lc( $message->{'message_transport_type'} ) eq 'sms' ) {
             if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
                 my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
-                my $sms_provider = Koha::SMS::Provider->find( $member->{'sms_provider_id'} );
+                my $sms_provider = Koha::SMS::Providers->find( $member->{'sms_provider_id'} );
                 $message->{to_address} .= '@' . $sms_provider->domain();
                 _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
             } else {

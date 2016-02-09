@@ -31,6 +31,7 @@ use C4::Members;
 use C4::Members::Messaging;
 use C4::Branch;
 use C4::Form::MessagingPreferences;
+use Koha::SMS::Providers;
 
 my $query = CGI->new();
 
@@ -70,7 +71,7 @@ $template->param( BORROWER_INFO         => $borrower,
                   TalkingTechItivaPhone        =>  C4::Context->preference("TalkingTechItivaPhoneNotification") );
 
 if ( C4::Context->preference("SMSSendDriver") eq 'Email' ) {
-    my @providers = Koha::SMS::Provider->all();
+    my @providers = Koha::SMS::Providers->search();
     $template->param( sms_providers => \@providers, sms_provider_id => $borrower->{'sms_provider_id'} );
 }
 

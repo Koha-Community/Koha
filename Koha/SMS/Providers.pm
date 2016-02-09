@@ -1,4 +1,4 @@
-package Koha::SMS::Provider;
+package Koha::SMS::Providers;
 
 # Copyright ByWater Solutions 2016
 #
@@ -21,12 +21,13 @@ use Modern::Perl;
 
 use Carp;
 
-use base qw(Koha::Object);
+use Koha::SMS::Provider;
+
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Biblio - Koha Biblio Object class
-Koha::SMS::Provider - Koha SMS Provider object class
+Koha::SMS::Providers - Koha SMS Provider object set class
 
 =head1 API
 
@@ -40,6 +41,14 @@ Koha::SMS::Provider - Koha SMS Provider object class
 
 sub type {
     return 'SmsProvider';
+}
+
+=head3 object_class
+
+=cut
+
+sub object_class {
+    return 'Koha::SMS::Provider';
 }
 
 =head1 AUTHOR
