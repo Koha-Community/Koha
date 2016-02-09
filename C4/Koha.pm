@@ -39,7 +39,6 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&slashifyDate
 		&subfield_is_koha_internal_p
 		&GetPrinters &GetPrinter
 		&GetItemTypes &getitemtypeinfo
@@ -96,23 +95,6 @@ Koha.pm provides many functions for Koha scripts.
 =head1 FUNCTIONS
 
 =cut
-
-=head2 slashifyDate
-
-  $slash_date = &slashifyDate($dash_date);
-
-Takes a string of the form "DD-MM-YYYY" (or anything separated by
-dashes), converts it to the form "YYYY/MM/DD", and returns the result.
-
-=cut
-
-sub slashifyDate {
-
-    # accepts a date of the form xx-xx-xx[xx] and returns it in the
-    # form xx/xx/xx[xx]
-    my @dateOut = split( '-', shift );
-    return ("$dateOut[2]/$dateOut[1]/$dateOut[0]");
-}
 
 # FIXME.. this should be moved to a MARC-specific module
 sub subfield_is_koha_internal_p {

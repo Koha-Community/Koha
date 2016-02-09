@@ -25,7 +25,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 34;
+        plan tests => 33;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -63,17 +63,10 @@ is ( IsAuthorisedValueCategory('LOC'), 1, 'LOC is a valid authorized value categ
 is ( IsAuthorisedValueCategory('something'), 0, 'something is not a valid authorized value category');
 is ( IsAuthorisedValueCategory('RELTERMS'), 1, 'RELTERMS is a valid authorized value category');
 
-#
-# test that &slashifyDate returns correct (non-US) date
-#
-my $date = "01/01/2002";
-my $newdate = &slashifyDate("2002-01-01");
 my $isbn13 = "9780330356473";
 my $isbn13D = "978-0-330-35647-3";
 my $isbn10 = "033035647X";
 my $isbn10D = "0-330-35647-X";
-
-ok($date eq $newdate, 'slashifyDate');
 
 my $undef = undef;
 is(xml_escape($undef), '', 'xml_escape() returns empty string on undef input');
