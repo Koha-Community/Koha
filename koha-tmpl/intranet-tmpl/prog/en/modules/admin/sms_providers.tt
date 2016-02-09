@@ -16,7 +16,7 @@ function edit_provider( id ) {
     $("#name").val( $("#name_" + id).text() );
     $("#domain").val( $("#domain_" + id).text() );
 
-    $("#name_" + id).parent().addClass("warn");
+    $("#name_" + id).parent().children().addClass("highlighted-row");
 
     $("#submit_save").hide();
     $("#submit_update").show();
@@ -29,7 +29,7 @@ function cancel_edit() {
     $("#name").val("");
     $("#domain").val("");
 
-    $("tr").removeClass("warn");
+    $("tr").children().removeClass("highlighted-row");
 
     $("#submit_update").hide();
     $("#submit_save").show();
