@@ -22,20 +22,16 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 
-
-
 my $query = new CGI;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/admin-home.tt",
-			     query => $query,
-			     type => "intranet",
-			     authnotrequired => 0,
-                 flagsrequired => {parameters => '*'},
-			     debug => 1,
-			     });
-
-$template->param(
-    SMSSendDriver => C4::Context->preference('SMSSendDriver'),
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "admin/admin-home.tt",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { parameters => '*' },
+        debug           => 1,
+    }
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
