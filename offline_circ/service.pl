@@ -24,6 +24,8 @@ use warnings;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Circulation;
+use Koha::DateUtils;
+use DateTime::TimeZone;
 
 my $cgi = CGI->new;
 
@@ -46,6 +48,11 @@ if ($status eq 'ok') { # if authentication is ok
     my $cardnumber = $cgi->param('cardnumber') || '';
     $cardnumber =~ s/^\s+//;
     $cardnumber =~ s/\s+$//;
+
+    # KOCT send UTC timestamp, it should be converted to local timezone
+    my $dt = dt_from_string($timestamp, 'iso', DateTime::TimeZone->new(name => 'UTC'));
+    $dt->set_time_zone(C4::Context->tz);
+    $timestamp = $dt->ymd('-') . ' ' . $dt->hms(':');
 
     if ( $cgi->param('pending') eq 'true' ) { # if the 'pending' flag is true, we store the operation in the db instead of directly processing them
         $result = AddOfflineOperation(
