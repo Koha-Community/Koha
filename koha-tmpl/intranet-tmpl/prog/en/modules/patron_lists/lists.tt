@@ -11,7 +11,7 @@
         $('#patron-lists-table').dataTable($.extend(true, {}, dataTablesDefaults, {
             "autoWidth": false,
             "aoColumnDefs": [
-                { "aTargets": [ -1, -2, -3, -4 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
             ],
             "sPaginationType": "four_button"
         } ));
@@ -38,14 +38,13 @@
             <a class="btn btn-small" href="add-modify.pl"><i class="fa fa-plus"></i> New patron list</a>
         </div>
 
+        [% IF ( lists ) %]
+
         <table id="patron-lists-table">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Patrons in list</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
                     <th>&nbsp;</th>
                 </tr>
             </thead>
@@ -56,29 +55,25 @@
                         <td>[% l.name %]</td>
                         <td>[% l.patron_list_patrons_rs.count || 0 %]</td>
                         <td>
-                            <a class="btn btn-mini" href="list.pl?patron_list_id=[% l.patron_list_id %]">
-                                <i class="fa fa-plus-sign"></i> Add patrons <i class="fa fa-user"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <a class="btn btn-mini" href="add-modify.pl?patron_list_id=[% l.patron_list_id %]">
-                                <i class="fa fa-edit"></i> Edit
-                            </a>
-                        </td>
-                        <td>
-                            <a class="btn btn-mini" href="delete.pl?patron_list_id=[% l.patron_list_id %]" onclick='return ConfirmDelete("[% l.name | html %]")'>
-                                <i class="fa fa-trash"></i> Delete
-                            </a>
-                        </td>
-                        <td>
-                            <a class="btn btn-mini" href="#" onclick='GB_showCenter(_("Print patron cards from list"), "/cgi-bin/koha/patroncards/print.pl?patronlist_id=[% l.patron_list_id %]", 400, 800);return false;'>
-                                <i class="icon-print"></i> Print patron cards
-                            </a>
+                            <div class="dropdown">
+                                <a class="btn btn-mini dropdown-toggle" id="listactions[% l.patron_list_id %]" role="button" data-toggle="dropdown" href="#">
+                                   Actions <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="listactions[% l.patron_list_id %]">
+                                    <li><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id %]"><i class="fa fa-user"></i> Add patrons</a></li>
+                                    <li><a href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id %]"><i class="fa fa-edit"></i> Edit</a></li>
+                                    <li><a href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id %]" onclick='return ConfirmDelete("[% l.name %]")'><i class="fa fa-trash"></i> Delete</a></li>
+                                    <li><a href="#" onclick='GB_showCenter(_("Print patron cards from list"), "/cgi-bin/koha/patroncards/print.pl?patronlist_id=[% l.patron_list_id %]", 400, 800);return false;'><i class="icon-print"></i> Print patron cards</a></li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                 [% END %]
             </tbody>
         </table>
+        [% ELSE %]
+           <div class="dialog message">There are no patron lists.</div>
+        [% END %]
     </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
