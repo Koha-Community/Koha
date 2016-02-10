@@ -34,6 +34,7 @@ use C4::Output;
 use C4::Koha;
 use C4::Search;
 
+use Koha::BiblioFrameworks;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 
@@ -56,17 +57,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-
-# get framework list
-my $frameworks = getframeworks;
-my @frameworkcodeloop;
-foreach my $thisframeworkcode ( sort { uc($frameworks->{$a}->{'frameworktext'}) cmp uc($frameworks->{$b}->{'frameworktext'}) } keys %{$frameworks} ) {
-    push @frameworkcodeloop, {
-        value         => $thisframeworkcode,
-        frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-    };
-}
-
 
 # Searching the catalog.
 if ($query) {
@@ -143,8 +133,9 @@ for my $resultsbr (@resultsbr) {
     };
 }
 
+my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
 $template->param(
-    frameworkcodeloop => \@frameworkcodeloop,
+    frameworks        => $frameworks,
     breeding_count    => $countbr,
     breeding_loop     => $breeding_loop,
     z3950_search_params => C4::Search::z3950_search_args($query),

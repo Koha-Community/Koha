@@ -37,6 +37,7 @@ use C4::Reports::Guided;    #_get_column_defs
 use C4::Charset;
 use Koha::DateUtils;
 use Koha::AuthorisedValues;
+use Koha::BiblioFrameworks;
 use List::MoreUtils qw( none );
 
 
@@ -67,11 +68,11 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my @authorised_value_list;
 my $authorisedvalue_categories = '';
 
-my $frameworks = getframeworks();
-$frameworks->{''} = {frameworkcode => ''}; # Add the default framework
+my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] })->unblessed;
+unshift @$frameworks, { frameworkcode => '' };
 
-for my $fwk (keys %$frameworks){
-  my $fwkcode = $frameworks->{$fwk}->{'frameworkcode'};
+for my $fwk ( @$frameworks ){
+  my $fwkcode = $fwk->{frameworkcode};
   my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fwkcode, kohafield => 'items.location', authorised_value => { not => undef } });
   my $authcode = $mss->count ? $mss->next->authorised_value : undef;
     if ($authcode && $authorisedvalue_categories!~/\b$authcode\W/){

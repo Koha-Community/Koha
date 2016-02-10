@@ -39,6 +39,8 @@ use Koha::DateUtils;
 
 use Koha::Libraries;
 
+use Koha::BiblioFrameworks;
+
 use Date::Calc qw(Today);
 use MARC::File::USMARC;
 use MARC::File::XML;
@@ -744,9 +746,11 @@ if ($frameworkcode eq 'FA'){
     exit;
 }
 
-my $frameworkcodeloop = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
-$template->param( frameworkcodeloop => $frameworkcodeloop ,
-	breedingid => $breedingid );
+my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
+$template->param(
+    frameworks => $frameworks,
+    breedingid => $breedingid,
+);
 
 # ++ Global
 $tagslib         = &GetMarcStructure( 1, $frameworkcode );

@@ -59,6 +59,7 @@ use C4::Acquisition;
 use C4::Members; # to use GetMember
 use C4::Serials;    #uses getsubscriptionsfrombiblionumber GetSubscriptionsFromBiblionumber
 use C4::Search;		# enabled_staff_search_views
+use Koha::BiblioFrameworks;
 
 use List::MoreUtils qw( uniq );
 
@@ -115,21 +116,11 @@ my $itemcount = GetItemsCount($biblionumber);
 $template->param( count => $itemcount,
 					bibliotitle => $biblio->{title}, );
 
-# Getting the list of all frameworks
-# get framework list
-my $frameworks = getframeworks;
-my @frameworkcodeloop;
-foreach my $thisframeworkcode ( keys %$frameworks ) {
-    my %row = (
-        value         => $thisframeworkcode,
-        frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-    );
-    if ($frameworkcode eq $thisframeworkcode){
-        $row{'selected'}= 1;
-        }
-    push @frameworkcodeloop, \%row;
-}
-$template->param( frameworkcodeloop => \@frameworkcodeloop, );
+my $frameworks = Koha::BiblioFrameworks->search( {}, { order_by => ['frameworktext'] } );
+$template->param(
+    frameworks    => $frameworks,
+    frameworkcode => $frameworkcode,
+);
 # fill arrays
 my @loop_data = ();
 

@@ -28,6 +28,7 @@ use C4::Output;
 use C4::Context;
 
 use Koha::Caches;
+use Koha::BiblioFrameworks;
 
 # retrieve parameters
 my $input = new CGI;
@@ -58,16 +59,7 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-# get framework list
-my $frameworks = getframeworks();
-my @frameworkloop;
-foreach my $thisframeworkcode (keys %$frameworks) {
-	push @frameworkloop, {
-        value => $thisframeworkcode,
-        selected => ($thisframeworkcode eq $frameworkcode) ? 1 : 0,
-        frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-    };
-}
+my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
 
 # check that framework is defined in marc_tag_structure
 my $sth=$dbh->prepare("select count(*) from marc_tag_structure where frameworkcode=?");
@@ -83,12 +75,13 @@ unless ($frameworkexist) {
 		$op = "framework_create";
 	}
 }
+
 $template->param(
-    frameworkloop => \@frameworkloop,
+    frameworks    => $frameworks,
     frameworkcode => $frameworkcode,
     frameworktext => $frameworkinfo->{frameworktext},
     script_name   => $script_name,
-    ($op||'else') => 1,
+    ( $op || 'else' ) => 1,
 );
 
 

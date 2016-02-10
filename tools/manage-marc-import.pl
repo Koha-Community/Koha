@@ -36,6 +36,7 @@ use C4::ImportBatch;
 use C4::Matcher;
 use C4::BackgroundJob;
 use C4::Labels::Batch;
+use Koha::BiblioFrameworks;
 
 my $script_name = "/cgi-bin/koha/tools/manage-marc-import.pl";
 
@@ -62,15 +63,8 @@ my %cookies = parse CGI::Cookie($cookie);
 our $sessionID = $cookies{'CGISESSID'}->value;
 our $dbh = C4::Context->dbh;
 
-# Frameworks selection loop
-{
-    my $frameworks = getframeworks;
-    my $arrayref = [];
-    while ( my ($key, $value) = each %$frameworks ) {
-        push @$arrayref, { value => $key, label => $value->{frameworktext} };
-    }
-    $template->param( frameworks => $arrayref );
-}
+my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
+$template->param( frameworks => $frameworks );
 
 if ($op eq "create_labels") {
 	#create a batch of labels, then lose $op & $import_batch_id so we get back to import batch list.

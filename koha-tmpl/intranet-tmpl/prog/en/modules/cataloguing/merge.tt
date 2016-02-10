@@ -219,23 +219,15 @@ $(document).ready(function(){
             </li>
         [% END %]
 
-        [% IF frameworkselect.size %]
             <li>
                 <label for="frameworkcode">Using framework:</label>
                 <select name="frameworkcode" id="frameworkcode">
                     <option value="">Default</option>
-                    [% FOREACH frameworkcode IN frameworkselect %]
-                        [% IF ( frameworkcode.selected ) %]
-                            <option value="[% frameworkcode.value %]" selected="selected">
-                        [% ELSE %]
-                            <option value="[% frameworkcode.value %]">
-                        [% END %]
-                            [% frameworkcode.frameworktext %]
-                        </option>
+                    [% FOREACH framework IN frameworks %]
+                        <option value="[% framework.frameworkcode %]">[% framework.frameworktext %]</option>
                     [% END %]
                 </select>
             </li>
-        [% END %]
     </ol>
 
     [% FOREACH record IN records %]

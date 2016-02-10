@@ -63,8 +63,12 @@ function Changefwk(FwkList) {
 
     <p><b>With framework : <select name="Frameworks" id="Frameworks">
                             <option value="">Default</option>
-                            [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
-                            [% IF ( frameworkcodeloo.selected ) %]<option value="[% frameworkcodeloo.value %]" selected="selected">[% frameworkcodeloo.frameworktext %]</option>[% ELSE %]<option value="[% frameworkcodeloo.value %]">[% frameworkcodeloo.frameworktext %]</option>[% END %]
+                            [% FOREACH framework IN frameworks %]
+                                [% IF framework.frameworkcode == frameworkcode %]
+                                    <option value="[% framework.frameworkcode %]" selected="selected">[% framework.frameworktext %]</option>
+                                [% ELSE %]
+                                    <option value="[% framework.frameworkcode %]">[% framework.frameworktext %]</option>
+                                [% END %]
                             [% END %]
             </select> </b></p>
 [% IF ( ocoins ) %]

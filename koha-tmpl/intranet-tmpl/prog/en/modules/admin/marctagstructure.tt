@@ -168,11 +168,11 @@ $(document).ready(function() {
 <label for="frameworkcode"><strong>In framework:</strong> </label>
         <select id="frameworkcode" name="frameworkcode">
             <option value="">Default</option>
-            [% FOREACH frameworkloo IN frameworkloop %]
-            [% IF ( frameworkloo.selected ) %]
-                <option value="[% frameworkloo.value %]" selected="selected">[% frameworkloo.frameworktext %]</option>
+            [% FOREACH framework IN frameworks %]
+            [% IF framework.frameworkcode == frameworkcode %]
+                <option value="[% framework.frameworkcode %]" selected="selected">[% framework.frameworktext %]</option>
                 [% ELSE %]
-                <option value="[% frameworkloo.value %]">[% frameworkloo.frameworktext %]</option>
+                <option value="[% framework.frameworkcode %]">[% framework.frameworktext %]</option>
                 [% END %]
             [% END %]
         </select>

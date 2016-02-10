@@ -100,8 +100,8 @@
             <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New record <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=">Default framework</a></li>
-                [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
-                <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=[% frameworkcodeloo.value %]">[% frameworkcodeloo.frameworktext %]</a></li>
+                [% FOREACH framework IN frameworks %]
+                    <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=[% framework.frameworkcode %]">[% framework.frameworktext %]</a></li>
                 [% END %]
             </ul>
         </div>
@@ -112,8 +112,8 @@
             </button>
             <ul class="dropdown-menu">
                 <li id="" class="z3950searchFw"><a href="#">Default framework</a></li>
-                [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
-                <li id="[% frameworkcodeloo.value %]" class="z3950searchFw"><a href="#">[% frameworkcodeloo.frameworktext %]</a></li>
+                [% FOREACH framework IN frameworks %]
+                <li id="[% framework.frameworkcode %]" class="z3950searchFw"><a href="#">[% framework.frameworktext %]</a></li>
                 [% END %]
             </ul>
         </div>

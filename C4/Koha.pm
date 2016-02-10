@@ -43,7 +43,7 @@ BEGIN {
 		&GetPrinters &GetPrinter
 		&GetItemTypes &getitemtypeinfo
                 &GetItemTypesCategorized &GetItemTypesByCategory
-		&getframeworks &getframeworkinfo
+        &getframeworkinfo
 		&getallthemes
 		&getFacets
 		&getnbpages
@@ -225,61 +225,6 @@ sub GetItemTypesByCategory {
     my $query = qq|SELECT itemtype FROM itemtypes WHERE searchcategory=?|;
     my $tmp=$dbh->selectcol_arrayref($query,undef,$category);
     return @$tmp;
-}
-
-=head2 getframework
-
-  $frameworks = &getframework();
-
-Returns information about existing frameworks
-
-build a HTML select with the following code :
-
-=head3 in PERL SCRIPT
-
-  my $frameworks = getframeworks();
-  my @frameworkloop;
-  foreach my $thisframework (keys %$frameworks) {
-    my $selected = 1 if $thisframework eq $frameworkcode;
-    my %row =(
-                value       => $thisframework,
-                selected    => $selected,
-                description => $frameworks->{$thisframework}->{'frameworktext'},
-            );
-    push @frameworksloop, \%row;
-  }
-  $template->param(frameworkloop => \@frameworksloop);
-
-=head3 in TEMPLATE
-
-  <form action="[% script_name %] method=post>
-    <select name="frameworkcode">
-        <option value="">Default</option>
-        [% FOREACH framework IN frameworkloop %]
-        [% IF ( framework.selected ) %]
-        <option value="[% framework.value %]" selected="selected">[% framework.description %]</option>
-        [% ELSE %]
-        <option value="[% framework.value %]">[% framework.description %]</option>
-        [% END %]
-        [% END %]
-    </select>
-    <input type=text name=searchfield value="[% searchfield %]">
-    <input type="submit" value="OK" class="button">
-  </form>
-
-=cut
-
-sub getframeworks {
-
-    # returns a reference to a hash of references to branches...
-    my %itemtypes;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select * from biblio_framework");
-    $sth->execute;
-    while ( my $IT = $sth->fetchrow_hashref ) {
-        $itemtypes{ $IT->{'frameworkcode'} } = $IT;
-    }
-    return ( \%itemtypes );
 }
 
 =head2 getframeworkinfo

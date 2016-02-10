@@ -25,26 +25,26 @@ $(document).ready(function() {
 		<div class="yui-b">
             <h2>Keyword to MARC mapping</h2>
 			[% UNLESS ( fields ) %]
-			<div class="dialog message"><p>There are no mappings for the [% IF ( frameworktext ) %]<em>[% frameworktext %]</em>[% ELSE %]default[% END %] framework. </p></div>
+            <div class="dialog message"><p>There are no mappings for the [% IF framework.frameworktext %]<em>[% framework.frameworktext %]</em>[% ELSE %]default[% END %] framework. </p></div>
 			[% END %]
 			<form method="get" action="/cgi-bin/koha/admin/fieldmapping.pl" id="selectframework">
 				<label for="framework">Framework:</label>
-				<select name="framework" id="framework" style="width:20em;">
-					<option value="">Default</option>
-				[% FOREACH frameworkloo IN frameworkloop %]
-					[% IF ( frameworkloo.selected ) %]
-					<option selected="selected" value="[% frameworkloo.value %]">[% frameworkloo.frameworktext %]</option>
-					[% ELSE %]
-					<option value="[% frameworkloo.value %]">[% frameworkloo.frameworktext %]</option>
-					[% END %]
-				[% END %]
-				</select>
+                <select name="framework" id="framework" style="width:20em;">
+                    <option value="">Default</option>
+                [% FOREACH f IN frameworks %]
+                    [% IF f.frameworkcode == framework.frameworkcode %]
+                    <option selected="selected" value="[% f.frameworkcode %]">[% f.frameworktext %]</option>
+                    [% ELSE %]
+                    <option value="[% f.frameworkcode %]">[% f.frameworktext %]</option>
+                    [% END %]
+                [% END %]
+                </select>
 			<input type="submit" value="Go" />
 			</form>
 
 
 			<form method="post" action="" id="addfield">
-				<input type="hidden" name="framework" value="[% framework %]" />
+                <input type="hidden" name="framework" value="[% framework.frameworkcode %]" />
 				<fieldset class="rows">
 				<legend>Add a mapping</legend>
 				<ol>
@@ -59,7 +59,7 @@ $(document).ready(function() {
 			</form>
 
 				[% IF ( fields ) %]<table>
-								<caption>Mappings for the [% IF ( frameworktext ) %]<em>[% frameworktext %]</em>[% ELSE %]default[% END %] framework</caption>
+                    <caption>Mappings for the [% IF framework.frameworktext %]<em>[% framework.frameworktext %]</em>[% ELSE %]default[% END %] framework</caption>
 									<tr>
 										<th>Field</th>
                                         <th>MARC field</th>

@@ -30,10 +30,10 @@ use C4::Breeding;
 use C4::Koha;
 
 use Koha::Acquisition::Bookseller;
+use Koha::BiblioFrameworks;
 
 my $input           = new CGI;
 my $biblionumber    = $input->param('biblionumber')||0;
-my $frameworkcode   = $input->param('frameworkcode')||'';
 my $title           = $input->param('title');
 my $author          = $input->param('author');
 my $isbn            = $input->param('isbn');
@@ -50,18 +50,7 @@ my $page            = $input->param('current_page') || 1;
 $page               = $input->param('goto_page') if $input->param('changepage_goto');
 
 # get framework list
-my $frameworks = getframeworks;
-my @frameworkcodeloop;
-foreach my $thisframeworkcode ( keys %$frameworks ) {
-    my %row = (
-        value         => $thisframeworkcode,
-        frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-    );
-    if ( $row{'value'} eq $frameworkcode){
-        $row{'active'} = 'true';
-    }
-    push @frameworkcodeloop, \%row;
-}
+my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
 
 my $vendor = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
 
@@ -74,8 +63,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 $template->param(
-        frameworkcode => $frameworkcode,
-        frameworkcodeloop => \@frameworkcodeloop,
+        frameworks   => $frameworks,
         booksellerid => $booksellerid,
         basketno     => $basketno,
         name         => $vendor->{'name'},

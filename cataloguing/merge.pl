@@ -29,6 +29,8 @@ use C4::Serials;
 use C4::Koha;
 use C4::Reserves qw/MergeHolds/;
 use C4::Acquisition qw/ModOrder GetOrdersByBiblionumber/;
+
+use Koha::BiblioFrameworks;
 use Koha::MetadataRecord;
 
 my $input = new CGI;
@@ -245,18 +247,8 @@ if ($merge) {
             records => \@records,
         );
 
-        my $frameworks = getframeworks;
-        my @frameworkselect;
-        foreach my $thisframeworkcode ( keys %$frameworks ) {
-            my %row = (
-                value         => $thisframeworkcode,
-                frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-            );
-            push @frameworkselect, \%row;
-        }
-        $template->param(
-            frameworkselect => \@frameworkselect,
-        );
+        my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
+        $template->param( frameworks => $frameworks );
     }
 }
 

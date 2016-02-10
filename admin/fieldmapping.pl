@@ -24,10 +24,11 @@ use C4::Biblio;
 use C4::Koha;
 use C4::Output;
 
+use Koha::BiblioFrameworks;
+
 my $query = new CGI;
 
-my $framework = $query->param('framework') || "";
-
+my $frameworkcode = $query->param('framework') || "";
 my $field         = $query->param('fieldname');
 my $fieldcode     = $query->param('marcfield');
 my $subfieldcode  = $query->param('marcsubfield');
@@ -43,42 +44,25 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-# get framework list
-my $frameworks = getframeworks();
-my @frameworkloop;
-my $selected;
-my $frameworktext;
-foreach my $thisframeworkcode (keys %$frameworks) {
-	 if ($thisframeworkcode eq $framework){
-		 $selected = 1;
-		 $frameworktext = $frameworks->{$thisframeworkcode}->{'frameworktext'};
-     } else {
-		$selected = 0;
-     }
-	my %row =(value => $thisframeworkcode,
-				selected => $selected,
-				frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-			);
-	push @frameworkloop, \%row;
-}
-
 if($op eq "delete" and $id){
     DeleteFieldMapping($id);
-    print $query->redirect("/cgi-bin/koha/admin/fieldmapping.pl?framework=".$framework);
+    print $query->redirect("/cgi-bin/koha/admin/fieldmapping.pl?framework=".$frameworkcode);
     exit;
 }
 
 # insert operation
 if($field and $fieldcode){
-    SetFieldMapping($framework, $field, $fieldcode, $subfieldcode);
+    SetFieldMapping($frameworkcode, $field, $fieldcode, $subfieldcode);
 }
 
-my $fieldloop = GetFieldMapping($framework);
+my $fieldloop = GetFieldMapping($frameworkcode);
 
-$template->param( frameworkloop => \@frameworkloop, 
-                  framework     => $framework,
-                  frameworktext => $frameworktext,
-                  fields        => $fieldloop,
-                );
+my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
+my $framework  = $frameworks->search( { frameworkcode => $frameworkcode } )->next;
+$template->param(
+    frameworks => $frameworks,
+    framework  => $framework,
+    fields     => $fieldloop,
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;

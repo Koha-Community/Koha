@@ -74,12 +74,8 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
              <li><label for="frameworkcode" >Select MARC framework:</label>
              <select id="frameworkcode" name="frameworkcode" >
              <option value="">Default</option>
-                 [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
-                    [% IF ( frameworkcodeloo.active ) %]
-                        <option value="[% frameworkcodeloo.value %]" selected="selected" >[% frameworkcodeloo.frameworktext %]</option>
-                    [% ELSE %]
-                        <option value="[% frameworkcodeloo.value %]" >[% frameworkcodeloo.frameworktext %]</option>
-                    [% END %]
+                 [% FOREACH framework IN frameworks %]
+                    <option value="[% framework.frameworkcode %]" >[% framework.frameworktext %]</option>
                  [% END %]
               </select>
               </li>
