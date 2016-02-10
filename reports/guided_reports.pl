@@ -33,6 +33,7 @@ use C4::Koha qw/IsAuthorisedValueCategory GetFrameworksLoop/;
 use C4::Context;
 use C4::Log;
 use Koha::DateUtils qw/dt_from_string output_pref/;
+use Koha::AuthorisedValue;
 
 =head1 NAME
 
@@ -998,12 +999,21 @@ sub create_non_existing_group_and_subgroup {
         my $report_groups = C4::Reports::Guided::get_report_groups;
         if (not exists $report_groups->{$group}) {
             my $groupdesc = $input->param('groupdesc') // $group;
-            C4::Koha::AddAuthorisedValue('REPORT_GROUP', $group, $groupdesc);
+            Koha::AuthorisedValue->new({
+                category => 'REPORT_GROUP',
+                authorised_value => $group,
+                lib => $groupdesc,
+            })->store;
         }
         if (defined $subgroup and $subgroup ne '') {
             if (not exists $report_groups->{$group}->{subgroups}->{$subgroup}) {
                 my $subgroupdesc = $input->param('subgroupdesc') // $subgroup;
-                C4::Koha::AddAuthorisedValue('REPORT_SUBGROUP', $subgroup, $subgroupdesc, $group);
+                Koha::AuthorisedValue->new({
+                    category => 'REPORT_SUBGROUP',
+                    authorised_value => $subgroup,
+                    lib => $subgroupdesc,
+                    lib_opac => $group,
+                })->store;
             }
         }
     }
