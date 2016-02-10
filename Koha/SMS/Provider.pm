@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use Carp;
 
+use Koha::Borrowers;
+
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -33,6 +35,20 @@ Koha::SMS::Provider - Koha SMS Provider object class
 =head2 Class Methods
 
 =cut
+
+=head3 patrons_using
+
+my $count = $provider->patrons_using()
+
+Gives the number of patrons using this provider
+
+=cut
+
+sub patrons_using {
+    my ( $self ) = @_;
+
+    return Koha::Borrowers->search( { sms_provider_id => $self->id } )->count();
+}
 
 =head3 type
 
