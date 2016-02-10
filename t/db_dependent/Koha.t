@@ -21,7 +21,7 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 subtest 'Authorized Values Tests' => sub {
-    plan tests => 8;
+    plan tests => 7;
 
     my $data = {
         category            => 'CATEGORY',
@@ -39,10 +39,9 @@ subtest 'Authorized Values Tests' => sub {
 
 # Tests
     SKIP: {
-        skip "INSERT failed", 5 unless $insert_success;
+        skip "INSERT failed", 4 unless $insert_success;
 
         is ( GetAuthorisedValueByCode($data->{category}, $data->{authorised_value}), $data->{lib}, "GetAuthorisedValueByCode" );
-        is ( GetKohaImageurlFromAuthorisedValues($data->{category}, $data->{lib}), $data->{imageurl}, "GetKohaImageurlFromAuthorisedValues" );
 
         my $sortdet=C4::Members::GetSortDetails("lost", "3");
         is ($sortdet, "Lost and Paid For", "lost and paid works");

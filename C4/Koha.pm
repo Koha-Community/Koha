@@ -65,7 +65,6 @@ BEGIN {
     &GetKohaAuthorisedValuesMapping
     &GetKohaAuthorisedValueLib
     &GetAuthorisedValueByCode
-    &GetKohaImageurlFromAuthorisedValues
 		&GetAuthValCode
         &AddAuthorisedValue
 		&GetNormalizedUPC
@@ -1075,25 +1074,6 @@ sub displayServers {
           };
     }
     return \@primaryserverloop;
-}
-
-
-=head2 GetKohaImageurlFromAuthorisedValues
-
-$authhorised_value = GetKohaImageurlFromAuthorisedValues( $category, $authvalcode );
-
-Return the first url of the authorised value image represented by $lib.
-
-=cut
-
-sub GetKohaImageurlFromAuthorisedValues {
-    my ( $category, $lib ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT imageurl FROM authorised_values WHERE category=? AND lib =?");
-    $sth->execute( $category, $lib );
-    while ( my $data = $sth->fetchrow_hashref ) {
-        return $data->{'imageurl'};
-    }
 }
 
 =head2 GetAuthValCode
