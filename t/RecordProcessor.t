@@ -79,7 +79,7 @@ ok(!$@, 'Destroyed processor successfully');
 
 subtest "new() tests" => sub {
 
-    plan tests => 13;
+    plan tests => 14;
 
     my $processor;
 
@@ -103,11 +103,18 @@ subtest "new() tests" => sub {
     is( ref($processor->filters->[1]), 'Koha::Filter::MARC::EmbedSeeFromHeadings', 'Correct second filter initialized' );
 
     # Create a processor with both valid and invalid filters.
-    $processor = new Koha::RecordProcessor({ filters => [ 'Null', 'Dummy' ] });
+    # use hash reference for regression testing
+    my $parameters = {
+        filters => [ 'Null', 'Dummy' ],
+        options => { 'test' => 'true' }
+    };
+    $processor = new Koha::RecordProcessor($parameters);
     is( ref($processor), 'Koha::RecordProcessor', 'Processor created' );
     is( scalar @{ $processor->filters }, 1, 'Invalid filter skipped' );
     is( ref($processor->filters->[0]), 'Koha::Filter::MARC::Null', 'Correct filter initialized' );
 
+    my $filter_params = $processor->filters->[0]->params;
+    is_deeply( $filter_params, $parameters, 'Initialization parameters' );
 };
 
 done_testing();
