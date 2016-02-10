@@ -3,10 +3,10 @@
 # This is to test C4/Koha
 # It requires a working Koha database with the sample data
 
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Context;
 use Koha::DateUtils qw(dt_from_string);
+use Koha::AuthorisedValue;
 
 use Test::More tests => 10;
 use DateTime::Format::MySQL;
@@ -33,8 +33,15 @@ subtest 'Authorized Values Tests' => sub {
 
 
 # Insert an entry into authorised_value table
-    my $insert_success = AddAuthorisedValue($data->{category}, $data->{authorised_value}, $data->{lib}, $data->{lib_opac}, $data->{imageurl});
-    ok($insert_success, "Insert data in database");
+    my $insert_success = Koha::AuthorisedValue->new(
+        {   category         => $data->{category},
+            authorised_value => $data->{authorised_value},
+            lib              => $data->{lib},
+            lib_opac         => $data->{lib_opac},
+            imageurl         => $data->{imageurl}
+        }
+    )->store;
+    ok( $insert_success, "Insert data in database" );
 
 
 # Tests
@@ -63,11 +70,34 @@ subtest 'Authorized Values Tests' => sub {
     SKIP: {
         eval { require Test::Deep; import Test::Deep; };
         skip "Test::Deep required to run the GetAuthorisedValues() tests.", 2 if $@;
-        AddAuthorisedValue('BUG10656', 'ZZZ', 'Z_STAFF', 'A_PUBLIC', '');
-        AddAuthorisedValue('BUG10656', 'AAA', 'A_STAFF', 'Z_PUBLIC', '');
+        Koha::AuthorisedValue->new(
+            {   category         => 'BUG10656',
+                authorised_value => 'ZZZ',
+                lib              => 'Z_STAFF',
+                lib_opac         => 'A_PUBLIC',
+                imageurl         => ''
+            }
+        )->store;
+        Koha::AuthorisedValue->new(
+            {   category         => 'BUG10656',
+                authorised_value => 'AAA',
+                lib              => 'A_STAFF',
+                lib_opac         => 'Z_PUBLIC',
+                imageurl         => ''
+            }
+        )->store;
+
         # the next one sets lib_opac to NULL; in that case, the staff
         # display value is meant to be used.
-        AddAuthorisedValue('BUG10656', 'DDD', 'D_STAFF', undef, '');
+        Koha::AuthorisedValue->new(
+            {   category         => 'BUG10656',
+                authorised_value => 'DDD',
+                lib              => 'D_STAFF',
+                lib_opac         => undef,
+                imageurl         => ''
+            }
+        )->store;
+
         my $authvals = GetAuthorisedValues('BUG10656');
         cmp_deeply(
             $authvals,
@@ -300,7 +330,12 @@ subtest 'GetFrameworksLoop() tests' => sub {
 subtest 'GetItemTypesByCategory GetItemTypesCategorized test' => sub{
     plan tests => 7;
 
-    my $insertGroup = AddAuthorisedValue('ITEMTYPECAT', 'Qwertyware');
+    my $insertGroup = Koha::AuthorisedValue->new(
+        {   category         => 'ITEMTYPECAT',
+            authorised_value => 'Quertyware',
+        }
+    )->store;
+
     ok($insertGroup, "Create group Qwertyware");
 
     my $query = "INSERT into itemtypes (itemtype, description, searchcategory, hideinopac) values (?,?,?,?)";
@@ -318,7 +353,12 @@ subtest 'GetItemTypesByCategory GetItemTypesCategorized test' => sub{
     is_deeply(\@results,\@expected,'GetItemTypesByCategory: valid category returns itemtypes');
 
     # add more data since GetItemTypesCategorized's search is more subtle
-    $insertGroup = AddAuthorisedValue('ITEMTYPECAT', 'Veryheavybook');
+    $insertGroup = Koha::AuthorisedValue->new(
+        {   category         => 'ITEMTYPECAT',
+            authorised_value => 'Varyheavybook',
+        }
+    )->store;
+
     $insertSth->execute('BKghjklo4', 'Another hidden book', 'Veryheavybook', 1);
 
     my $hrCat = GetItemTypesCategorized();

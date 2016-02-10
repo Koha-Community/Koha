@@ -65,7 +65,6 @@ BEGIN {
     &GetKohaAuthorisedValueLib
     &GetAuthorisedValueByCode
 		&GetAuthValCode
-        &AddAuthorisedValue
 		&GetNormalizedUPC
 		&GetNormalizedISBN
 		&GetNormalizedEAN
@@ -1393,26 +1392,6 @@ sub GetKohaAuthorisedValueLib {
   my $data = $sth->fetchrow_hashref;
   $value = ($opac && $$data{'lib_opac'}) ? $$data{'lib_opac'} : $$data{'lib'};
   return $value;
-}
-
-=head2 AddAuthorisedValue
-
-    AddAuthorisedValue($category, $authorised_value, $lib, $lib_opac, $imageurl);
-
-Create a new authorised value.
-
-=cut
-
-sub AddAuthorisedValue {
-    my ($category, $authorised_value, $lib, $lib_opac, $imageurl) = @_;
-
-    my $dbh = C4::Context->dbh;
-    my $query = qq{
-        INSERT INTO authorised_values (category, authorised_value, lib, lib_opac, imageurl)
-        VALUES (?,?,?,?,?)
-    };
-    my $sth = $dbh->prepare($query);
-    $sth->execute($category, $authorised_value, $lib, $lib_opac, $imageurl);
 }
 
 =head2 display_marc_indicators
