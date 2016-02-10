@@ -30,7 +30,8 @@ use C4::Items;
 use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
 use C4::Acquisition qw(GetOrdersByBiblionumber);
-use C4::Koha qw( GetFrameworksLoop );
+
+use Koha::BiblioFrameworks;
 
 my $query        = new CGI;
 my $dbh          = C4::Context->dbh;
@@ -82,8 +83,11 @@ my $itemcount = GetItemsCount($biblionumber);
 $template->param( count => $itemcount,
 					bibliotitle => $biblio->{title}, );
 
-#Getting framework loop
-$template->param(frameworkloop => GetFrameworksLoop( $frameworkcode ) );
+my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
+$template->param(
+    frameworks    => $frameworks,
+    frameworkcode => $frameworkcode,
+);
 
 my @marc_data;
 my $prevlabel = '';

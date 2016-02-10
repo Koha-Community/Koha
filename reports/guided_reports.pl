@@ -28,13 +28,13 @@ use C4::Reports::Guided;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Debug;
-use C4::Koha qw/GetFrameworksLoop/;
 use C4::Context;
 use Koha::Caches;
 use C4::Log;
 use Koha::DateUtils qw/dt_from_string output_pref/;
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValues;
+use Koha::BiblioFrameworks;
 use Koha::Libraries;
 use Koha::Patron::Categories;
 
@@ -686,13 +686,13 @@ elsif ($phase eq 'Run this report'){
                         }
                     }
                     elsif ( $authorised_value eq "biblio_framework" ) {
-                        my $frameworks = GetFrameworksLoop();
+                        my @frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
                         my $default_source = '';
                         push @authorised_values,$default_source;
                         $authorised_lib{$default_source} = 'Default';
-                        foreach my $framework (@$frameworks) {
-                            push @authorised_values, $framework->{value};
-                            $authorised_lib{$framework->{value}} = $framework->{description};
+                        foreach my $framework (@frameworks) {
+                            push @authorised_values, $framework->frameworkcode;
+                            $authorised_lib{$framework->frameworkcode} = $framework->frameworktext;
                         }
                     }
                     elsif ( $authorised_value eq "cn_source" ) {

@@ -239,49 +239,6 @@ subtest 'ISBN tests' => sub {
 
 };
 
-subtest 'GetFrameworksLoop() tests' => sub {
-    plan tests => 6;
-
-    $dbh->do("DELETE FROM biblio_framework");
-
-    my $frameworksloop = GetFrameworksLoop();
-    is ( scalar(@$frameworksloop), 0, 'No frameworks' );
-
-    $dbh->do("INSERT INTO biblio_framework ( frameworkcode, frameworktext ) VALUES ( 'A', 'Third framework'  )");
-    $dbh->do("INSERT INTO biblio_framework ( frameworkcode, frameworktext ) VALUES ( 'B', 'Second framework' )");
-    $dbh->do("INSERT INTO biblio_framework ( frameworkcode, frameworktext ) VALUES ( 'C', 'First framework'  )");
-
-    $frameworksloop = GetFrameworksLoop();
-    is ( scalar(@$frameworksloop), 3, 'All frameworks' );
-    is ( scalar ( grep { defined $_->{'selected'} } @$frameworksloop ), 0, 'None selected' );
-
-    $frameworksloop = GetFrameworksLoop( 'B' );
-    is ( scalar ( grep { defined $_->{'selected'} } @$frameworksloop ), 1, 'One selected' );
-    my @descriptions = map { $_->{'description'} } @$frameworksloop;
-    is ( $descriptions[0], 'First framework', 'Ordered result' );
-    cmp_deeply(
-        $frameworksloop,
-        [
-            {
-                'value' => 'C',
-                'description' => 'First framework',
-                'selected' => undef,
-            },
-            {
-                'value' => 'B',
-                'description' => 'Second framework',
-                'selected' => 1,                # selected
-            },
-            {
-                'value' => 'A',
-                'description' => 'Third framework',
-                'selected' => undef,
-            }
-        ],
-        'Full check, sorted by description with selected val (Bug 12675)'
-    );
-};
-
 subtest 'GetItemTypesByCategory GetItemTypesCategorized test' => sub{
     plan tests => 7;
 

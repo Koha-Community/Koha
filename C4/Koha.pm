@@ -44,7 +44,6 @@ BEGIN {
 		&GetItemTypes &getitemtypeinfo
                 &GetItemTypesCategorized &GetItemTypesByCategory
 		&getframeworks &getframeworkinfo
-        &GetFrameworksLoop
 		&getallthemes
 		&getFacets
 		&getnbpages
@@ -281,55 +280,6 @@ sub getframeworks {
         $itemtypes{ $IT->{'frameworkcode'} } = $IT;
     }
     return ( \%itemtypes );
-}
-
-=head2 GetFrameworksLoop
-
-  $frameworks = GetFrameworksLoop( $frameworkcode );
-
-Returns the loop suggested on getframework(), but ordered by framework description.
-
-build a HTML select with the following code :
-
-=head3 in PERL SCRIPT
-
-  $template->param( frameworkloop => GetFrameworksLoop( $frameworkcode ) );
-
-=head3 in TEMPLATE
-
-  Same as getframework()
-
-  <form action="[% script_name %] method=post>
-    <select name="frameworkcode">
-        <option value="">Default</option>
-        [% FOREACH framework IN frameworkloop %]
-        [% IF ( framework.selected ) %]
-        <option value="[% framework.value %]" selected="selected">[% framework.description %]</option>
-        [% ELSE %]
-        <option value="[% framework.value %]">[% framework.description %]</option>
-        [% END %]
-        [% END %]
-    </select>
-    <input type=text name=searchfield value="[% searchfield %]">
-    <input type="submit" value="OK" class="button">
-  </form>
-
-=cut
-
-sub GetFrameworksLoop {
-    my $frameworkcode = shift;
-    my $frameworks = getframeworks();
-    my @frameworkloop;
-    foreach my $thisframework (sort { uc($frameworks->{$a}->{'frameworktext'}) cmp uc($frameworks->{$b}->{'frameworktext'}) } keys %$frameworks) {
-        my $selected = ( $thisframework eq $frameworkcode ) ? 1 : undef;
-        my %row = (
-                value       => $thisframework,
-                selected    => $selected,
-                description => $frameworks->{$thisframework}->{'frameworktext'},
-            );
-        push @frameworkloop, \%row;
-  }
-  return \@frameworkloop;
 }
 
 =head2 getframeworkinfo
