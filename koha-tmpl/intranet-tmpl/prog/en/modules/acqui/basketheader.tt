@@ -127,6 +127,11 @@
                 [% END %]
             </ol>
         </fieldset>
+
+        [% IF available_additional_fields %]
+            [% INCLUDE 'additional-fields-entry.inc' available=available_additional_fields values=additional_field_values %]
+        [% END %]
+
         <fieldset class="action">
             <input type="hidden" name="op" value="add_validate" />
             <input type="submit" value="Save" />

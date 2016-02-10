@@ -56,6 +56,7 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Debug;
 use C4::Koha;
+use Koha::AdditionalField;
 use Koha::DateUtils;
 
 my $input = new CGI;
@@ -97,6 +98,12 @@ unless ( $input->param('from') ) {
 }
 $filters->{from_placed_on} = output_pref( { dt => $from_placed_on, dateformat => 'iso', dateonly => 1 } ),
 $filters->{to_placed_on} = output_pref( { dt => $to_placed_on, dateformat => 'iso', dateonly => 1 } ),
+$filters->{additional_fields} = Koha::AdditionalField->get_filters_from_query({
+    tablename => 'aqbasket',
+    query => $input,
+} );
+
+$template->param( available_additional_fields => scalar Koha::AdditionalField->all( { tablename => 'aqbasket', searchable => 1 } ) );
 
 my $order_loop;
 # If we're supplied any value then we do a search. Otherwise we don't.

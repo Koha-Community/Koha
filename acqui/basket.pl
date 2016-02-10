@@ -43,6 +43,8 @@ use Koha::EDI qw( create_edi_order get_edifact_ean );
 use Koha::CsvProfiles;
 use Koha::Patrons;
 
+use Koha::AdditionalField;
+
 =head1 NAME
 
 basket.pl
@@ -430,6 +432,11 @@ if ( $op eq 'list' ) {
         has_budgets          => $has_budgets,
         duplinbatch          => $duplinbatch,
         csv_profiles         => [ Koha::CsvProfiles->search({ type => 'sql', used_for => 'export_basket' }) ],
+        available_additional_fields => Koha::AdditionalField->all( { tablename => 'aqbasket' } ),
+        additional_field_values => Koha::AdditionalField->fetch_all_values( {
+            tablename => 'aqbasket',
+            record_id => $basketno,
+        } )->{$basketno},
     );
 }
 

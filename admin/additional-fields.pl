@@ -27,16 +27,17 @@ my $input = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "serials/add_fields.tt",
+        template_name   => "admin/additional-fields.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { serials => '*' },
+        flagsrequired   => { parameters => 1 },
         debug           => 1,
     }
 );
 
-my $op = $input->param('op') // 'list';
+my $tablename = $input->param('tablename');
+my $op = $input->param('op') // ( $tablename ? 'list' : 'list_tables' );
 my $field_id = $input->param('field_id');
 my @messages;
 
@@ -65,7 +66,7 @@ if ( $op eq 'add' ) {
         my $inserted = 0;
         eval {
             my $af = Koha::AdditionalField->new({
-                tablename => 'subscription',
+                tablename => $tablename,
                 name => $name,
                 authorised_value_category => $authorised_value_category,
                 marcfield => $marcfield,
@@ -106,18 +107,21 @@ if ( $op eq 'add_form' ) {
         $field = Koha::AdditionalField->new( { id => $field_id } )->fetch;
     }
 
+    $tablename = $field->{tablename};
+
     $template->param(
         field => $field,
     );
 }
 
 if ( $op eq 'list' ) {
-    my $fields = Koha::AdditionalField->all( { tablename => 'subscription' } );
+    my $fields = Koha::AdditionalField->all( { tablename => $tablename } );
     $template->param( fields => $fields );
 }
 
 $template->param(
     op => $op,
+    tablename => $tablename,
     messages => \@messages,
 );
 

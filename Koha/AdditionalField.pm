@@ -265,6 +265,63 @@ sub get_matching_record_ids {
     ]
 }
 
+sub update_fields_from_query {
+    my ( $class, $args ) = @_;
+    die "BAD CALL: Don't use update_fields_from_query as an instance method"
+        if ref $class and UNIVERSAL::can($class,'can');
+
+    my $query = $args->{query};
+    my $additional_fields = Koha::AdditionalField->all( { tablename => $args->{tablename} } );
+    for my $field ( @$additional_fields ) {
+        my $af = Koha::AdditionalField->new({ id => $field->{id} })->fetch;
+        if ( $af->{marcfield} ) {
+            my ( $field, $subfield ) = split /\$/, $af->{marcfield};
+            $af->{values} = undef;
+            if ( $args->{marc_record} and $field and $subfield ) {
+                my $value = $args->{marc_record}->subfield( $field, $subfield );
+                $af->{values} = {
+                    $args->{record_id} => $value
+                };
+            }
+        } else {
+            $af->{values} = {
+                $args->{record_id} => $query->param( 'additional_field_' . $field->{id} )
+            } if defined $query->param( 'additional_field_' . $field->{id} );
+        }
+        $af->insert_values;
+    }
+}
+
+sub get_filters_from_query {
+    my ( $class, $args ) = @_;
+    die "BAD CALL: Don't use get_filters_from_query as an instance method"
+        if ref $class and UNIVERSAL::can($class,'can');
+
+    my $query = $args->{query};
+    my $additional_fields = Koha::AdditionalField->all( { tablename => $args->{tablename}, searchable => 1 } );
+    my @additional_field_filters;
+    for my $field ( @$additional_fields ) {
+        my $filter_value = $query->param( 'additional_field_' . $field->{id} );
+        if ( defined $filter_value and $filter_value ne q|| ) {
+            push @additional_field_filters, {
+                name => $field->{name},
+                value => $filter_value,
+                authorised_value_category => $field->{authorised_value_category},
+            };
+        }
+    }
+
+    return \@additional_field_filters;
+}
+
+sub get_filters_as_values {
+    my ( $class, $filters ) = @_;
+    die "BAD CALL: Don't use get_filters_as_values as an instance method"
+        if ref $class and UNIVERSAL::can($class,'can');
+
+    return { map { $_->{name} => $_->{value} } @$filters };
+}
+
 1;
 
 __END__
@@ -413,6 +470,47 @@ This is a static method.
             fields => $fields
         }
     );
+
+=head2 update_fields_from_query
+
+Updates fields based on user input (best paired with additional-fields-entry.pl) and optionally a MARC record.
+
+This is a static method.
+
+    Koha::AdditionalField->update_fields_from_query( {
+        tablename => 'aqbasket',
+        input => $input,
+        record_id => $basketno,
+        marc_record => GetBiblio( $biblionumber ),
+    } );
+
+=head2 get_filters_from_query
+
+Extracts a list of search filters from user input, to be used with C<get_matching_record_ids> and
+C<get_filters_as_values>.
+
+This is a static method.
+
+    my $filters = Koha::AdditionalField->get_filters_from_query( {
+        tablename => 'aqbasket',
+        input => $input,
+    } );
+
+=head2 get_filters_as_values
+
+Transforms the result of C<get_filters_from_query> into a hashref of C<name> => C<value>, so
+user-entered filters can be redisplayed.
+
+    $template->param(
+        additional_field_values => Koha::AdditionalField->get_filters_as_values(
+            $filters
+        ),
+    );
+
+    [% INCLUDE 'additional-field-entry.inc'
+        values=additional_field_values
+        available=available_additional_fields
+    %]
 
 =head1 AUTHOR
 

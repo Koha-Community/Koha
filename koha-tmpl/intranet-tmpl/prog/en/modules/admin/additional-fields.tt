@@ -1,0 +1,198 @@
+[% USE Asset %]
+[% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo;
+    [% SWITCH op %]
+        [% CASE 'add_form' %][% IF field %]Modify additional field '[% field.name %]'[% ELSE %]Add additional field[% END %]
+        [% CASE %]Manage additional fields
+    [% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css('css/datatables.css') %]
+</head>
+
+<body id="ser_add_fields" class="ser">
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+        [% SWITCH op %]
+            [% CASE 'add_form' %]<a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a> &rsaquo; [% IF field %]Modify field '[% field.name %]'[% ELSE %]Add field[% END %]
+            [% CASE 'list' %]<a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a> &rsaquo; Modify fields for '[% tablename %]'
+            [% CASE %]Manage additional fields
+        [% END %]
+    </div>
+
+    <div id="doc3" class="yui-t2">
+    <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+    [% IF op == 'list' %]
+        <div id="toolbar" class="btn-toolbar">
+            <a class="btn btn-default btn-sm" id="newfields" href="?op=add_form&amp;tablename=[% tablename %]"><i class="fa fa-plus"></i> Create field</a>
+        </div>
+    [% END %]
+
+    [% IF messages %]
+        [% FOR message IN messages %]
+            [% IF message.code == 'insert' %]
+                [% IF message.number > 0 %]
+                    <div class="dialog message">The field has been inserted</div>
+                [% ELSE %]
+                    <div class="dialog alert">The field could not be inserted. Perhaps the name already exists?</div>
+                [% END %]
+            [% ELSIF message.code == 'update' %]
+                [% IF message.number > 0 %]
+                    <div class="dialog message">The field has been updated</div>
+                [% ELSE %]
+                    <div class="dialog alert">The field could not be updated. Perhaps the name already exists?</div>
+                [% END %]
+            [% ELSIF message.code == 'delete' %]
+                [% IF message.number > 0 %]
+                    <div class="dialog message">The field has been deleted</div>
+                [% ELSE %]
+                    <div class="dialog alert">The field could not be deleted. Check the log for errors.</div>
+                [% END %]
+            [% END %]
+        [% END %]
+    [% END %]
+
+    [% IF op == 'list_tables' %]
+        <h3>Additional fields</h3>
+        <p>Select a table:</p>
+        [% BLOCK table_option %]
+            <li><a href="?tablename=[% value %]">[% content %] (<tt>[% value %]</tt>)</a></li>
+        [% END %]
+        <ul>
+            [% WRAPPER table_option value="aqbasket" %]Order baskets[% END %]
+            [% WRAPPER table_option value="subscription" %]Subscriptions[% END %]
+        </ul>
+    [% ELSIF op == 'list' %]
+        <h3>Additional fields for '[% tablename %]'</h3>
+        [% IF fields %]
+            <table id="fieldst">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Authorised value category</th>
+                        <th>MARC field</th>
+                        <th>Searchable</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    [% FOR field IN fields %]
+                        <tr>
+                            <td>[% field.name %]</td>
+                            <td>[% field.authorised_value_category %]</td>
+                            <td>[% field.marcfield %]</td>
+                            <td>
+                                [% IF field.searchable %]Yes[% ELSE %]No[% END %]
+                            </td>
+                            <td class="actions">
+                                <a class="btn btn-default btn-xs" href="?op=add_form&amp;field_id=[% field.id %]"><i class="fa fa-pencil"></i> Edit</a>
+                                <a class="confirmdelete btn btn-default btn-xs" href="?op=delete&amp;field_id=[% field.id %]"><i class="fa fa-trash"></i> Delete</a>
+                            </td>
+                        </tr>
+                    [% END %]
+                </tbody>
+            </table>
+        [% ELSE %]
+            [% IF tablename %]There are no additional fields defined for this table.[% END %]
+        [% END %]
+    [% ELSIF op == 'add_form' %]
+        [% IF field %]
+            <h3>Modify field</h3>
+        [% ELSE %]
+            <h3>Add field</h3>
+        [% END %]
+        <form action="" name="add_form" id="add_field" method="post">
+            <fieldset class="rows">
+                <ol>
+                    <li>
+                        <label for="name" class="required">Name: </label>
+                        <input type="text" name="name" id="name" value="[% field.name | html %]" class="required" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="av">Authorised value category: </label>
+                        <select name="authorised_value_category">
+                            <option value="">None</option>
+                            [% PROCESS options_for_authorised_value_categories
+                                authorised_value_categories = AuthorisedValues.GetCategories({
+                                    selected => field.authorised_value_category
+                                })
+                            %]
+                        </select>
+                    </li>
+                    <li>
+                        <label for="marcfield">MARC field: </label>
+                        <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield %]" />
+                    </li>
+                    <li>
+                        <label for="searchable">Searchable: </label>
+                        [% IF field.searchable %]
+                            <input type="checkbox" name="searchable" id="searchable" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" name="searchable" id="searchable" />
+                        [% END %]
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset class="action">
+                [% IF field %]
+                    <input type="hidden" name="field_id" value="[% field.id %]" />
+                [% END %]
+                <input type="hidden" name="tablename" value="[% tablename %]" />
+                <input type="hidden" name="op" value="add" />
+                <input type="submit" value="Save" />
+                <a href="?tablename=[% tablename %]" class="cancel">Cancel</a>
+            </fieldset>
+        </form>
+    [% END %]
+
+    </div>
+    </div>
+
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE "datatables.inc" %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#selecttable').find(":submit").hide();
+            $('#selecttable select').change(function() {
+                $('#selecttable').submit();
+            });
+
+            $("#fieldst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                'bAutoWidth': false,
+                'sDom': 't<"bottom pager"ilpf>',
+                'sPaginationType': 'four_button',
+                'aLengthMenu': [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                'iDisplayLength': 20,
+                'aaSorting': [[ 0, "asc" ]],
+            }));
+
+            $(".confirmdelete").click(function(){
+                return confirm(_("Are you sure you want to delete this field?"));
+            });
+
+            $("#add_field").on('submit', function(){
+                if ( $("#marcfield").val().length > 0
+                    && $("select[name='authorised_value_category']" ).val().length > 0 ) {
+                    alert("You cannot select an authorised value category and a marcfield");
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

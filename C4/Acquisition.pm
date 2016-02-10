@@ -2280,6 +2280,7 @@ sub GetHistory {
     my $search_children_too = $params{search_children_too} || 0;
     my $created_by = $params{created_by} || [];
     my $ordernumbers = $params{ordernumbers} || [];
+    my $additional_fields = $params{additional_fields} // [];
 
     my @order_loop;
     my $total_qty         = 0;
@@ -2443,6 +2444,16 @@ sub GetHistory {
     if ( @$ordernumbers ) {
         $query .= ' AND (aqorders.ordernumber IN ( ' . join (',', ('?') x @$ordernumbers ) . '))';
         push @query_params, @$ordernumbers;
+    if ( @$additional_fields ) {
+        my $matching_record_ids_for_additional_fields = Koha::AdditionalField->get_matching_record_ids( {
+            fields => $additional_fields,
+            tablename => 'aqbasket',
+            exact_match => 0,
+        } );
+        return [] unless @$matching_record_ids_for_additional_fields;
+
+        # No parameterization because record IDs come directly from DB
+        $query .= ' AND aqbasket.basketno IN ( ' . join( ',', @$matching_record_ids_for_additional_fields ) . ' )';
     }
 
     if ( C4::Context->preference("IndependentBranches") ) {
