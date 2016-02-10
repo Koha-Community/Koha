@@ -4,11 +4,14 @@
 [% USE Borrowers %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
+[% USE ColumnsSettings %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Check in [% title |html %]</title>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
-
+[% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
 [% INCLUDE 'timepicker.inc' %]
@@ -24,6 +27,14 @@ $(document).ready(function () {
     [% IF print_slip %]
         Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber %]&amp;biblionumber=[% biblionumber %]');
     [% END %]
+
+    var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'checkedintable', 'json' ) %]
+    var returns_table = KohaTable("#checkedintable", {
+            "bFilter":false,
+            "bPaginate":false,
+            "bInfo":false,
+            "bSort":false
+            }, columns_settings);
 
     $("#return_date_override").datetimepicker({
         onClose: function(dateText, inst) { $("#barcode").focus(); },
@@ -589,7 +600,7 @@ $(document).ready(function () {
 [% IF ( riloop ) %]
     <h2>Checked-in items</h2>
     <table id="checkedintable">
-    <tr><th class="ci-duedate">Due date</th><th class="ci-title">Title</th><th class="ci-author">Author</th><th class="ci-barcode">Barcode</th><th class="ci-homelibrary">Home library</th><th class="ci-holdinglibrary">Holding library</th><th class="ci-shelvinglocation">Shelving location</th><th class="ci-callnumber">Call number</th><th class="ci-dateaccessioned">Date acquired</th><th class="ci-type">Type</th><th class="ci-patron">Patron</th><th class="ci-note">Note</th></tr>
+    <thead><th class="ci-duedate">Due date</th><th class="ci-title">Title</th><th class="ci-author">Author</th><th class="ci-barcode">Barcode</th><th class="ci-homelibrary">Home library</th><th class="ci-holdinglibrary">Holding library</th><th class="ci-shelvinglocation">Shelving location</th><th class="ci-callnumber">Call number</th><th class="ci-dateaccessioned">Date acquired</th><th class="ci-type">Type</th><th class="ci-patron">Patron</th><th class="ci-note">Note</th></thead>
 
         [% FOREACH riloo IN riloop %]
             <tr>
