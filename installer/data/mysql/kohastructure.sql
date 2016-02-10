@@ -277,8 +277,8 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   KEY `othernames_idx` (`othernames`(255)),
   KEY `sms_provider_id` (`sms_provider_id`),
   CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`),
-  CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
-  CONSTRAINT `borrowers_ibfk_3` FOREIGN KEY (`sms_provider_id`) REFERENCES `sms_providers` (`id`)
+  CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`),
+  CONSTRAINT `borrowers_ibfk_3` FOREIGN KEY (`sms_provider_id`) REFERENCES `sms_providers` (`id`) ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -914,10 +914,12 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `altcontactcountry` text default NULL, -- the country for the alternate contact for the patron/borrower
   `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
   `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SNS turned on)
+  `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
   `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history  KEY `borrowernumber` (`borrowernumber`),
   `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's checkouts
   KEY borrowernumber (borrowernumber),
-  KEY `cardnumber` (`cardnumber`)
+  KEY `cardnumber` (`cardnumber`),
+  KEY `sms_provider_id` (`sms_provider_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

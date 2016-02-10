@@ -8,5 +8,7 @@ CREATE TABLE  sms_providers (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE borrowers ADD sms_provider_id INT( 11 ) NULL DEFAULT NULL AFTER smsalertnumber;
+ALTER TABLE borrowers ADD FOREIGN KEY ( sms_provider_id ) REFERENCES sms_providers ( id ) ON UPDATE CASCADE ON DELETE SET NULL;
 
-ALTER TABLE borrowers ADD FOREIGN KEY ( sms_provider_id ) REFERENCES sms_providers ( id );
+ALTER TABLE deletedborrowers ADD sms_provider_id INT( 11 ) NULL DEFAULT NULL AFTER smsalertnumber;
+ALTER TABLE deletedborrowers ADD FOREIGN KEY ( sms_provider_id ) REFERENCES sms_providers ( id ) ON UPDATE CASCADE ON DELETE SET NULL;
