@@ -25,7 +25,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 34;
+        plan tests => 31;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -38,15 +38,11 @@ use Test::DBIx::Class {
     connect_info => ['dbi:SQLite:dbname=:memory:','',''],
     connect_opts => { name_sep => '.', quote_char => '`', },
     fixture_class => '::Populate',
-}, 'AuthorisedValue', 'Branch' ;
+}, 'Branch' ;
 
 sub fixtures {
-    my ( $av, $libraries ) = @_;
+    my ( $libraries ) = @_;
     fixtures_ok [
-        AuthorisedValue => [
-            [ 'category', 'authorised_value' ],
-            @$av,
-        ],
         Branch => [
             ['branchcode', 'branchname'],
             @$libraries,
@@ -57,18 +53,10 @@ sub fixtures {
 my $db = Test::MockModule->new('Koha::Database');
 $db->mock( _new_schema => sub { return Schema(); } );
 
-my $authorised_values = [
-    ['LOC', 'LOC'],
-    ['RELTERMS', 'RELTERMS'],
-];
 my $libraries = [
     ['XXX_test', 'my branchname XXX'],
 ];
-fixtures($authorised_values, $libraries);
-
-is ( IsAuthorisedValueCategory('LOC'), 1, 'LOC is a valid authorized value category');
-is ( IsAuthorisedValueCategory('something'), 0, 'something is not a valid authorized value category');
-is ( IsAuthorisedValueCategory('RELTERMS'), 1, 'RELTERMS is a valid authorized value category');
+fixtures($libraries);
 
 my $isbn13 = "9780330356473";
 my $isbn13D = "978-0-330-35647-3";
@@ -139,7 +127,7 @@ subtest 'getFacets() tests' => sub {
         ['YYY_test', 'my branchname YYY'],
         ['ZZZ_test', 'my branchname XXX'],
     ];
-    fixtures($authorised_values, $libraries);
+    fixtures($libraries);
     is ( Koha::Libraries->search->count, 3, 'There should be only more than 1 library (singleBranchMode off)' );
 
     $facets = C4::Koha::getFacets();

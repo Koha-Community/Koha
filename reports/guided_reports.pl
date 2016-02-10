@@ -29,11 +29,12 @@ use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Debug;
 use C4::Branch; # XXX subfield_is_koha_internal_p
-use C4::Koha qw/IsAuthorisedValueCategory GetFrameworksLoop/;
+use C4::Koha qw/GetFrameworksLoop/;
 use C4::Context;
 use C4::Log;
 use Koha::DateUtils qw/dt_from_string output_pref/;
 use Koha::AuthorisedValue;
+use Koha::AuthorisedValues;
 
 =head1 NAME
 
@@ -706,7 +707,7 @@ elsif ($phase eq 'Run this report'){
                         #---- "true" authorised value
                     }
                     else {
-                        if ( IsAuthorisedValueCategory($authorised_value) ) {
+                        if ( Koha::AuthorisedValues->search({ category => $authorised_value })->count ) {
                             my $query = '
                             SELECT authorised_value,lib
                             FROM authorised_values

@@ -3,33 +3,16 @@
 use Modern::Perl;
 
 use Test::More tests => 13;
-use Test::MockModule;
 
-use t::lib::Mocks;
+use Koha::Database;
 
 use_ok('C4::Reports::Guided');
 
-my $context = new Test::MockModule('C4::Context');
-my $koha = new Test::MockModule('C4::Koha');
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
-BEGIN {
-    t::lib::Mocks::mock_dbh;
-}
-
-sub MockedIsAuthorisedValueCategory {
-    my $authorised_value = shift;
-
-    if ( $authorised_value eq 'LOC' ) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-$koha->mock(
-    'IsAuthorisedValueCategory',
-    \&MockedIsAuthorisedValueCategory
-);
+$_->delete for Koha::AuthorisedValues->search({ category => 'XXX' });
+Koha::AuthorisedValue->new({category => 'LOC'})->store;
 
 {   # GetReservedAuthorisedValues tests
     # This one will catch new reserved words not added

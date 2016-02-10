@@ -34,6 +34,8 @@ use C4::Debug;
 # use Data::Dumper;
 use C4::Log;
 
+use Koha::AuthorisedValues;
+
 BEGIN {
     # set the version for version checking
     $VERSION = 3.07.00.049;
@@ -932,7 +934,7 @@ sub IsAuthorisedValueValid {
     my $reserved_authorised_values = GetReservedAuthorisedValues();
 
     if ( exists $reserved_authorised_values->{$authorised_value} ||
-         C4::Koha::IsAuthorisedValueCategory($authorised_value)   ) {
+         Koha::AuthorisedValues->search({ category => $authorised_value })->count ) {
         return 1;
     }
 

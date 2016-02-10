@@ -56,7 +56,6 @@ BEGIN {
 		&getitemtypeimagelocation
 		&GetAuthorisedValues
 		&GetAuthorisedValueCategories
-                &IsAuthorisedValueCategory
 		&GetKohaAuthorisedValues
 		&GetKohaAuthorisedValuesFromField
     &GetKohaAuthorisedValuesMapping
@@ -1116,28 +1115,6 @@ sub GetAuthorisedValueCategories {
         push @results, $category;
     }
     return \@results;
-}
-
-=head2 IsAuthorisedValueCategory
-
-    $is_auth_val_category = IsAuthorisedValueCategory($category);
-
-Returns whether a given category name is a valid one
-
-=cut
-
-sub IsAuthorisedValueCategory {
-    my $category = shift;
-    my $query = '
-        SELECT category
-        FROM authorised_values
-        WHERE category=?
-        LIMIT 1
-    ';
-    my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute($category);
-    $sth->fetchrow ? return 1
-                   : return 0;
 }
 
 =head2 GetAuthorisedValueByCode
