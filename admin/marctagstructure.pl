@@ -35,8 +35,6 @@ my $input = new CGI;
 my $frameworkcode         = $input->param('frameworkcode')         || ''; # set to select framework
 my $existingframeworkcode = $input->param('existingframeworkcode') || '';
 my $searchfield           = $input->param('searchfield') || 0;
-# set when we have to create a new framework (in frameworkcode) by copying an old one (in existingframeworkcode)
-my $frameworkinfo = getframeworkinfo($frameworkcode);
 $searchfield=~ s/\,//g;
 
 my $offset    = $input->param('offset') || 0;
@@ -76,10 +74,10 @@ unless ($frameworkexist) {
 	}
 }
 
+my $framework = $frameworks->search({ frameworkcode => $frameworkcode })->next;
 $template->param(
     frameworks    => $frameworks,
-    frameworkcode => $frameworkcode,
-    frameworktext => $frameworkinfo->{frameworktext},
+    framework     => $framework,
     script_name   => $script_name,
     ( $op || 'else' ) => 1,
 );
@@ -209,7 +207,6 @@ if ($op eq 'add_form') {
 	}
 	$template->param(existingframeworkloop => \@existingframeworkloop,
 					frameworkcode => $frameworkcode,
-# 					FRtext => $frameworkinfo->{frameworktext},
 					);
 ################## DEFAULT ##################################
 } else { # DEFAULT

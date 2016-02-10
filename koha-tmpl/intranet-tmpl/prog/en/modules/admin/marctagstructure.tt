@@ -38,15 +38,15 @@ $(document).ready(function() {
 &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
 &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
 [% IF ( add_form ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% frameworktext %] ([% frameworkcode %])</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode %]">[% framework.frameworktext %] ([% framework.frameworkcode %])</a>
 &rsaquo; [% action %] [% searchfield %]
 [% ELSIF ( else ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% IF ( frameworkcode ) %][% frameworktext %] ([% frameworkcode %])[% ELSE %]Default MARC framework[% END %]</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode %]">[% IF framework %][% framework.frameworktext %] ([% framework.frameworkcode %])[% ELSE %]Default MARC framework[% END %]</a>
 [% ELSIF ( delete_confirm ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% frameworktext %] ([% frameworkcode %])</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode %]">[% framwork.frameworktext %] ([% framework.frameworkcode %])</a>
 &rsaquo; Confirm deletion of tag '[% searchfield %]'
 [% ELSIF ( delete_confirmed ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% frameworktext %] ([% frameworkcode %])</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode %]">[% framework.frameworktext %] ([% framework.frameworkcode %])</a>
 &rsaquo; Data deleted
 [% END %]
 </div>
@@ -58,17 +58,17 @@ $(document).ready(function() {
 
 [% IF ( else ) %]
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-small" id="addtag" href="/cgi-bin/koha/admin/marctagstructure.pl?op=add_form&amp;frameworkcode=[% frameworkcode %]"><i class="fa fa-plus"></i> New tag</a>
+    <a class="btn btn-small" id="addtag" href="/cgi-bin/koha/admin/marctagstructure.pl?op=add_form&amp;frameworkcode=[% framework.frameworkcode %]"><i class="fa fa-plus"></i> New tag</a>
 </div>[% END %]
 
-<h1>MARC Framework for [% IF ( frameworkcode ) %][% frameworktext %] ([% frameworkcode %])[% ELSE %]default MARC framework[% END %]</h1>
+<h1>MARC Framework for [% IF framework %][% framework.frameworktext %] ([% framework.frameworkcode %])[% ELSE %]default MARC framework[% END %]</h1>
 
 [% IF ( add_form ) %]
 
     <form action="[% script_name %]" name="Aform" method="post" class="validated">
 	
       <fieldset class="rows"><legend>[% IF ( use_heading_flags_p ) %][% IF ( heading_modify_tag_p ) %]Modify tag <input type="hidden" name="modif" value="1" />[% searchfield %][% END %][% IF ( heading_add_tag_p ) %]Add tag[% END %][% ELSE %][% action %][% END %]</legend>  <input type="hidden" name="op" value="add_validate" />
-	<input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+    <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode %]" />
 
         <ol>
             <li>
@@ -112,7 +112,7 @@ $(document).ready(function() {
 </ol></fieldset> 
     <fieldset class="action">
         <input type="submit" value="Save changes" />
-        <a class="cancel" href="[% script_name %]?frameworkcode=[% frameworkcode %]">Cancel</a>
+        <a class="cancel" href="[% script_name %]?frameworkcode=[% framework.frameworkcode %]">Cancel</a>
     </fieldset>
     </form>
 [% END %]
@@ -126,10 +126,10 @@ $(document).ready(function() {
         <form action="[% script_name %]" method="post">
             <input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="searchfield" value="[% searchfield %]" />
-            <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+            <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode %]" />
             <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this tag</button>
         </form>
-        <form action="[% script_name %]" method="get"><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+        <form action="[% script_name %]" method="get"><input type="hidden" name="frameworkcode" value="[% framework.frameworkcode %]" />
             <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
         </form>
     </div>
@@ -138,7 +138,7 @@ $(document).ready(function() {
 [% IF ( delete_confirmed ) %]
 
     <div class="dialog message"><h3>Tag deleted</h3>
-    <form action="[% script_name %]" method="post"><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+    <form action="[% script_name %]" method="post"><input type="hidden" name="frameworkcode" value="[% framework.frameworkcode %]" />
         <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
     </form></div>
 [% END %]
@@ -146,8 +146,8 @@ $(document).ready(function() {
 
     <form action="[% script_name %]" method="post">
         <input type="hidden" name="op" value="framework_create_confirm" />
-        <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
-        Create framework for [% frameworkcode %] ([% frameworktext %]) using
+        <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode %]" />
+        Create framework for [% frameworkcode %] ([% framework.frameworktext %]) using
         <select name="existingframeworkcode">
             <option value="">Default</option>
         [% FOREACH existingframeworkloo IN existingframeworkloop %]
@@ -168,11 +168,11 @@ $(document).ready(function() {
 <label for="frameworkcode"><strong>In framework:</strong> </label>
         <select id="frameworkcode" name="frameworkcode">
             <option value="">Default</option>
-            [% FOREACH framework IN frameworks %]
-            [% IF framework.frameworkcode == frameworkcode %]
-                <option value="[% framework.frameworkcode %]" selected="selected">[% framework.frameworktext %]</option>
+            [% FOREACH f IN frameworks %]
+            [% IF f.frameworkcode == framework.frameworkcode %]
+                <option value="[% f.frameworkcode %]" selected="selected">[% f.frameworktext %]</option>
                 [% ELSE %]
-                <option value="[% framework.frameworkcode %]">[% framework.frameworktext %]</option>
+                <option value="[% f.frameworkcode %]">[% f.frameworktext %]</option>
                 [% END %]
             [% END %]
         </select>

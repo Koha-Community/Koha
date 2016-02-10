@@ -47,6 +47,7 @@ use Koha::Patron;
 use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::DateUtils;
 use Koha::Database;
+use Koha::BiblioFrameworks;
 use Koha::Patron::Messages;
 use Koha::Patron::Images;
 use Koha::SearchEngine;
@@ -580,7 +581,7 @@ my $patron_messages = Koha::Patron::Messages->search(
 );
 
 my $fast_cataloging = 0;
-if (defined getframeworkinfo('FA')) {
+if ( Koha::BiblioFrameworks->find('FA') ) {
     $fast_cataloging = 1 
 }
 

@@ -40,13 +40,12 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&GetPrinters &GetPrinter
-		&GetItemTypes &getitemtypeinfo
+        &GetPrinters &GetPrinter
+        &GetItemTypes &getitemtypeinfo
                 &GetItemTypesCategorized &GetItemTypesByCategory
-        &getframeworkinfo
-		&getallthemes
-		&getFacets
-		&getnbpages
+        &getallthemes
+        &getFacets
+        &getnbpages
 		&get_infos_of
 		&get_notforloan_label_of
 		&getitemtypeimagedir
@@ -225,24 +224,6 @@ sub GetItemTypesByCategory {
     my $query = qq|SELECT itemtype FROM itemtypes WHERE searchcategory=?|;
     my $tmp=$dbh->selectcol_arrayref($query,undef,$category);
     return @$tmp;
-}
-
-=head2 getframeworkinfo
-
-  $frameworkinfo = &getframeworkinfo($frameworkcode);
-
-Returns information about an frameworkcode.
-
-=cut
-
-sub getframeworkinfo {
-    my ($frameworkcode) = @_;
-    my $dbh             = C4::Context->dbh;
-    my $sth             =
-      $dbh->prepare("select * from biblio_framework where frameworkcode=?");
-    $sth->execute($frameworkcode);
-    my $res = $sth->fetchrow_hashref;
-    return $res;
 }
 
 =head2 getitemtypeinfo

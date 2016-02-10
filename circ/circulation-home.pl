@@ -16,13 +16,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 # 
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-use C4::Koha;
+use Koha::BiblioFrameworks;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user(
@@ -36,8 +35,7 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user(
 );
 
 # Checking if there is a Fast Cataloging Framework
-my $fa = getframeworkinfo('FA');
-$template->param( fast_cataloging => 1 ) if (defined $fa);
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
 
 # Checking if the transfer page needs to be displayed
 $template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
