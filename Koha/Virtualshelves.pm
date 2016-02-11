@@ -114,7 +114,7 @@ sub get_some_shelves {
         {
             join => [ 'virtualshelfshares' ],
             group_by => 'shelfnumber',
-            order_by => 'lastmodified desc',
+            order_by => { -desc => 'lastmodified' },
         }
     );
 }
