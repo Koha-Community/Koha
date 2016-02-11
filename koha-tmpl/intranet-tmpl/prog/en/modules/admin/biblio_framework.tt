@@ -135,13 +135,24 @@
 
 [% IF ( delete_confirm ) %]
 <div class="dialog alert">
-    <h3>Delete framework for [% frameworktext %] ([% frameworkcode %])?</h3>
     [% IF ( total ) %]
-       <p><strong>This framework is used [% total %] times</strong>.</p>
+        <h3>This framework cannot be deleted</h3>
+        <p><strong><span class="ex">[% frameworktext %] ([% frameworkcode %])</span></strong></p>
+        <p><strong>This framework is used [% total %] times</strong>.</p>
+        <form action="/cgi-bin/koha/admin/biblio_framework.pl" method="get">
+            <input type="submit" value="Return to frameworks" />
+        </form>
+    [% ELSE %]
+        <h3>Delete framework for [% frameworktext %] ([% frameworkcode %])?</h3>
+        <form class="inline" action="[% script_name %]" method="post">
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+            <input type="submit" class="approve" value="Yes, delete this framework!" />
+        </form>
+        <form class="inline" action="[% script_name %]" method="get">
+            <input type="submit" class="deny" value="No, do not delete!" />
+        </form>
     [% END %]
-    <form class="inline" action="[% script_name %]" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" /><input type="submit" class="approve" value="Yes, delete this framework!" />
-    </form>
-    <form class="inline" action="[% script_name %]" method="get"><input type="submit" class="deny" value="No, do not delete!" /></form>
 </div>
 [% END %]
 
