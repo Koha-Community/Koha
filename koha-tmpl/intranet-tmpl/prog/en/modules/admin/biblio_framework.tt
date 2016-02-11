@@ -175,18 +175,24 @@
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h3>Delete framework for [% framework.frameworktext %] ([% framework.frameworkcode %])?</h3>
         [% IF biblios_use_this_framework %]
-           <p><strong>This framework is used [% biblios_use_this_framework %] times</strong>.</p>
+            <h3>This framework cannot be deleted</h3>
+            <p><strong><span class="ex">[% framework.frameworktext %] ([% framework.frameworkcode %])</span></strong></p>
+            <p>The framework is used [% biblios_use_this_framework %] times.</p>
+            <form action="/cgi-bin/koha/admin/biblio_framework.pl" method="get">
+                <button type="submit"><i class="fa fa-fw fa-arrow-left"></i> Return to frameworks</button>
+            </form>
+        [% ELSE %]
+            <h3>Delete framework for [% framework.frameworktext %] ([% framework.frameworkcode %])?</h3>
+            <form class="inline" action="/cgi-bin/koha/admin/biblio_framework.pl" method="post">
+                <input type="hidden" name="op" value="delete_confirmed" />
+                <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode %]" />
+                <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this framework</button>
+            </form>
+            <form class="inline" action="/cgi-bin/koha/admin/biblio_framework.pl" method="get">
+                <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+            </form>
         [% END %]
-        <form class="inline" action="/cgi-bin/koha/admin/biblio_framework.pl" method="post">
-            <input type="hidden" name="op" value="delete_confirmed" />
-            <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode %]" />
-            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this framework</button>
-        </form>
-        <form class="inline" action="/cgi-bin/koha/admin/biblio_framework.pl" method="get">
-            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
-        </form>
     </div>
 [% END %]
 
