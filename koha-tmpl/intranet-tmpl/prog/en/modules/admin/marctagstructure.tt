@@ -114,16 +114,20 @@ $(document).ready(function() {
 
 
 [% IF ( delete_confirm ) %]
-
-<div class="dialog alert"><h3>Confirm deletion of tag <span class="ex">'[% searchfield %]'</span>?</h3>
-    <p>Tag: [% searchfield %]</p>
-    <p>Description: [% liblibrarian %]</p>
-    <form action="[% script_name %]" method="post">
-	<input type="hidden" name="op" value="delete_confirmed" />
-	<input type="hidden" name="searchfield" value="[% searchfield %]" /><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
-    <input type="submit" class="approve" value="Yes, delete this tag" /></form>
-	
-    <form action="[% script_name %]" method="get"><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" /><input type="submit" value="No, do not delete" class="deny" /></form></div>
+    <div class="dialog alert">
+        <h3>Confirm deletion of tag <span class="ex">'[% searchfield %]'</span>?</h3>
+        <p>Tag: [% searchfield %]</p>
+        <p>Description: [% liblibrarian %]</p>
+        <form action="[% script_name %]" method="post">
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="searchfield" value="[% searchfield %]" />
+            <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this tag</button>
+        </form>
+        <form action="[% script_name %]" method="get"><input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        </form>
+    </div>
 [% END %]
 
 [% IF ( delete_confirmed ) %]

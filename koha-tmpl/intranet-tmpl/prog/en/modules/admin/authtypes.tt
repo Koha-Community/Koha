@@ -127,10 +127,10 @@
             <form action="/cgi-bin/koha/admin/authtypes.pl" method="post">
                 <input type="hidden" name="op" value="delete_confirmed" />
                 <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode %]" />
-                <fieldset class="action"><input type="submit" class="approve" value="Yes, delete" /></fieldset>
+                <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
             </form>
             <form action="/cgi-bin/koha/admin/authtypes.pl" method="get">
-                <input type="submit" class="deny" value="No, do not delete" />
+                <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
             </form>
         [% END %]
     </div>

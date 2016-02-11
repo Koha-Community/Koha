@@ -106,7 +106,7 @@
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h3>Delete City "[% city.city_name %]?"</h3>
+        <h3>Delete city "[% city.city_name %]?"</h3>
         <table>
             <tr><th>City id</th>
                 <td>[% city.cityid %]</td>
@@ -127,10 +127,10 @@
         <form action="/cgi-bin/koha/admin/cities.pl" method="post">
             <input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="cityid" value="[% city.cityid %]" />
-            <input type="submit" class="approve" value="Yes, delete" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
         </form>
         <form action="/cgi-bin/koha/admin/cities.pl" method="get">
-            <input type="submit" class="deny" value="No, do not Delete" />
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]

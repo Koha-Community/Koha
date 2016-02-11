@@ -411,11 +411,10 @@
     <form action="[% script_name %]" method="post">
         <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
-        <input type="submit" class="approve" value="Delete" />
+        <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
     </form>
-
     <form action="[% script_name %]" method="post">
-        <input type="submit" class="deny" value="Cancel" />
+        <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
     </form>
 
     </div>

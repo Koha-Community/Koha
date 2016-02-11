@@ -188,29 +188,31 @@ function CheckRuleForm(f) {
 [% END %]
 
 [% IF ( delete_class_source_form ) %]
-<div class="dialog alert"><h3>Confirm deletion of classification source <span class="ex">'[% class_source %]'</span>?</h3>
-    <form action="[% script_name %]" name="Aform" method="post">
-      <input type="hidden" name="op" value="[% confirm_op %]" />
-      <input type="hidden" name="class_source" value="[% class_source %]" />
-      <input type="submit" value="Delete classification source" class="approve" />
-    </form>
-    <form action="[% script_name %]" method="get">
-        <input type="submit" value="No, do not delete" class="deny" />
-    </form>
-</div>
+    <div class="dialog alert">
+        <h3>Confirm deletion of classification source <span class="ex">'[% class_source %]'</span>?</h3>
+        <form action="[% script_name %]" name="Aform" method="post">
+            <input type="hidden" name="op" value="[% confirm_op %]" />
+            <input type="hidden" name="class_source" value="[% class_source %]" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete classification source</button>
+        </form>
+        <form action="[% script_name %]" method="get">
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        </form>
+    </div>
 [% END %]
 
 [% IF ( delete_sort_rule_form ) %]
-<div class="dialog alert"><h3>Confirm deletion of filing rule <span class="ex">'[% sort_rule %]'</span>?</h3>
-    <form action="[% script_name %]" name="Aform" method="post">
-        <input type="hidden" name="op" value="[% confirm_op %]" />
-        <input type="hidden" name="sort_rule" value="[% sort_rule %]" />
-        <input type="submit" value="Delete filing rule" class="approve" />
-    </form>
-    <form action="[% script_name %]" method="get">
-        <input type="submit" value="No, do not delete" class="deny" />
-    </form>
-</div>
+    <div class="dialog alert">
+        <h3>Confirm deletion of filing rule <span class="ex">'[% sort_rule %]'</span>?</h3>
+        <form action="[% script_name %]" name="Aform" method="post">
+            <input type="hidden" name="op" value="[% confirm_op %]" />
+            <input type="hidden" name="sort_rule" value="[% sort_rule %]" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete filing rule</button>
+        </form>
+        <form action="[% script_name %]" method="get">
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        </form>
+    </div>
 [% END %]
 
 [% IF ( delete_sort_rule_impossible ) %]

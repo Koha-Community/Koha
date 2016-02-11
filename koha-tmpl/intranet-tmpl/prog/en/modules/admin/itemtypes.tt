@@ -302,7 +302,7 @@ Item types administration
 [% END %]
 
 [% IF op == 'delete_confirm' %]
-    <div class="dialog message">
+    <div class="dialog alert">
         <h3>Delete item type '[% itemtype.itemtype %]'?</h3>
         <table>
             <tr>
@@ -322,9 +322,11 @@ Item types administration
         </table>
         <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post">
             <input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="itemtype" value="[% itemtype.itemtype %]" />
-            <input type="submit" class="approve" value="Delete this Item Type" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this item type</button>
         </form>
-        <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post"><input type="submit" class="deny" value="Do Not Delete" /></form>
+        <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post">
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        </form>
     </div>
 [% END %]
 

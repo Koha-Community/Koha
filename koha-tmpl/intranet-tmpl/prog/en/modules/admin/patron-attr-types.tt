@@ -249,14 +249,17 @@ function CheckAttributeTypeForm(f) {
 [% END %]
 
 [% IF ( delete_attribute_type_form ) %]
-<div class="dialog alert"><h3>Confirm deletion of patron attribute type <span class="ex">'[% code |html %]' ([% description %])</span>?</h3>
-<form action="[% script_name %]" name="Aform" method="post">
-  <input type="hidden" name="op" value="[% confirm_op %]" />
-  <input type="hidden" name="code" value="[% code |html %]" />
-    <input type="submit" value="Delete patron attribute type" class="approve" /></form>
-	<form action="[% script_name %]" method="get">
-    <input type="submit" value="No, do not delete" class="deny" />
-</form></div>
+    <div class="dialog alert">
+        <h3>Confirm deletion of patron attribute type <span class="ex">'[% code |html %]' ([% description %])</span>?</h3>
+        <form action="[% script_name %]" name="Aform" method="post">
+            <input type="hidden" name="op" value="[% confirm_op %]" />
+            <input type="hidden" name="code" value="[% code |html %]" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete patron attribute type</button>
+        </form>
+        <form action="[% script_name %]" method="get">
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        </form>
+    </div>
 [% END %]
 
 [% IF ( display_list ) %]

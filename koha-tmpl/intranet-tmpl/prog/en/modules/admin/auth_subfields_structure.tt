@@ -217,22 +217,28 @@ function displayMoreConstraint(numlayer){
 
 [% IF ( delete_confirm ) %]
 
-    <div class="dialog alert"><h3>Delete subfield <span class="ex">'[% tagsubfield %]'?</span></h3>
-    <form action="[% delete_link %]" method="post"><input type="hidden" name="op" value="delete_confirmed" />
-    <table><tr><th scope="row">Subfield:</th> <td>[% tagsubfield %]</td></tr>
-    <tr><th scope="row">Description:</th> <td>[% liblibrarian %]</td></tr></table>
-        <input type="hidden" name="searchfield" value="[% searchfield %]" />
-        <input type="hidden" name="tagfield" value="[% tagfield | html%]" />
-        <input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
-        <input type="hidden" name="authtypecode" value="[% authtypecode | html%]" />
-        <input type="submit" class="approve" value="Yes, delete this subfield" />
+    <div class="dialog alert">
+        <h3>Delete subfield <span class="ex">'[% tagsubfield %]'?</span></h3>
+        <form action="[% delete_link %]" method="post">
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <table>
+                <tr><th scope="row">Subfield:</th> <td>[% tagsubfield %]</td></tr>
+                <tr><th scope="row">Description:</th> <td>[% liblibrarian %]</td></tr>
+            </table>
+            <input type="hidden" name="searchfield" value="[% searchfield %]" />
+            <input type="hidden" name="tagfield" value="[% tagfield%]" />
+            <input type="hidden" name="tagsubfield" value="[% tagsubfield | html %]" />
+            <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this subfield</button>
         </form>
+
+
         <form action="[% delete_link %]" method="get">
-         <input type="hidden" name="searchfield" value="[% searchfield %]" />
-        <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
-        <input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
-        <input type="hidden" name="authtypecode" value="[% authtypecode |html%]" />
-        <input type="submit" class="deny" value="No, do not delete" />
+            <input type="hidden" name="searchfield" value="[% searchfield %]" />
+            <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
+            <input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
+            <input type="hidden" name="authtypecode" value="[% authtypecode |html %]" />
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
         </form>
     </form></div>
 [% END %]
