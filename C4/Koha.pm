@@ -45,7 +45,6 @@ BEGIN {
 		&GetItemTypes &getitemtypeinfo
                 &GetItemTypesCategorized &GetItemTypesByCategory
 		&GetSupportName &GetSupportList
-		&get_itemtypeinfos_of
 		&getframeworks &getframeworkinfo
         &GetFrameworksLoop
 		&getallthemes
@@ -336,22 +335,6 @@ sub GetItemTypesByCategory {
     my $query = qq|SELECT itemtype FROM itemtypes WHERE searchcategory=?|;
     my $tmp=$dbh->selectcol_arrayref($query,undef,$category);
     return @$tmp;
-}
-
-sub get_itemtypeinfos_of {
-    my @itemtypes = @_;
-
-    my $placeholders = join( ', ', map { '?' } @itemtypes );
-    my $query = <<"END_SQL";
-SELECT itemtype,
-       description,
-       imageurl,
-       notforloan
-  FROM itemtypes
-  WHERE itemtype IN ( $placeholders )
-END_SQL
-
-    return get_infos_of( $query, 'itemtype', undef, \@itemtypes );
 }
 
 =head2 getframework
