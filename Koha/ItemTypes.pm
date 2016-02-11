@@ -39,7 +39,7 @@ Koha::ItemTypes - Koha ItemType Object set class
 
 =cut
 
-sub type {
+sub _type {
     return 'Itemtype';
 }
 

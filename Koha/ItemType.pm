@@ -83,7 +83,7 @@ sub translated_descriptions {
 
 =cut
 
-sub type {
+sub _type {
     return 'Itemtype';
 }
 

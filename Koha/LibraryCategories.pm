@@ -41,7 +41,7 @@ Koha::LibraryCategories - Koha Library Category Object set class
 
 =cut
 
-sub type {
+sub _type {
     return 'Branchcategory';
 }
 

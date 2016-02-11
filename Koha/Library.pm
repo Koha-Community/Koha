@@ -58,7 +58,7 @@ sub add_to_categories {
 
 =cut
 
-sub type {
+sub _type {
     return 'Branch';
 }
 
