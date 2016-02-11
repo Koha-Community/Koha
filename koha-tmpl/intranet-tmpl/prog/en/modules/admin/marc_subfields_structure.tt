@@ -188,25 +188,29 @@
 
 [% IF ( delete_confirm ) %]
 
-<h3>Confirm deletion of subfield [% tagsubfield %]?</h3>
-    <p>Subfield: [% tagsubfield %]</p>
-    <p>Description: [% liblibrarian %]</p>
+    <div class="dialog alert">
+        <h3>Confirm deletion of subfield [% tagsubfield %]?</h3>
+        <p>Subfield: [% tagsubfield %]</p>
+        <p>Description: [% liblibrarian %]</p>
 
-            <form action="[% delete_link %]" method="post"><input type="hidden" name="op" value="delete_confirmed" />
-                <input type="hidden" name="searchfield" value="[% searchfield %]" />
-                <input type="hidden" name="tagfield" value="[% tagfield  | html %]" />
-				<input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
-				<input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
-				<input type="submit" value="Yes, delete this subfield" />
-            </form>
-			
-			<form action="[% script_name %]" method="post">
-			<input type="hidden" name="searchfield" value="[% searchfield %]" />
-                        <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
-			<input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
-			<input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
-			<input type="submit" value="No, do not delete" />
-            </form>
+        <form action="[% delete_link %]" method="post"><input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="searchfield" value="[% searchfield %]" />
+            <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
+            <input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
+            <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this subfield</button>
+        </form>
+
+
+        <form action="[% script_name %]" method="post">
+            <input type="hidden" name="searchfield" value="[% searchfield %]" />
+            <input type="hidden" name="tagfield" value="[% tagfield | html%]" />
+            <input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
+            <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        </form>
+    </div>
+
 [% END %]
 
 [% IF ( delete_confirmed ) %]
