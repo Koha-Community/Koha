@@ -146,10 +146,10 @@ $(document).ready(function () {
 
 [% IF ( collectionItemNeedsTransferred ) %]
  <div id="rotating-collection" class="dialog message">
-        <h3>Please transfer item to: [% collectionBranch %]</h3>
+        <h3>Please transfer item to: [% collectionBranchName %]</h3>
             <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
             <p>This item is part of a rotating collection.</p>
-            <p><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;">Print slip</a></p>
+            <p><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% collectionBranch %]&amp;op=slip'); return true;">Print slip</a></p>
 </div>
 [% END %]
 

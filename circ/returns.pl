@@ -249,6 +249,7 @@ if ($canceltransfer){
 }
 
 # actually return book and prepare item table.....
+my $returnbranch;
 if ($barcode) {
     $barcode =~ s/^\s*|\s*$//g; # remove leading/trailing whitespace
     $barcode = barcodedecode($barcode) if C4::Context->preference('itemBarcodeInputFilter');
@@ -275,7 +276,7 @@ if ($barcode) {
 
     # make sure return branch respects home branch circulation rules, default to homebranch
     my $hbr = GetBranchItemRule($biblio->{'homebranch'}, $itemtype ? $itemtype->itemtype : undef )->{'returnbranch'} || "homebranch";
-    my $returnbranch = $biblio->{$hbr} ;
+    $returnbranch = $biblio->{$hbr};
 
     my $materials = $biblio->{'materials'};
     my $avcode = GetAuthValCode('items.materials');
@@ -641,11 +642,12 @@ $itemnumber = GetItemnumberFromBarcode( $barcode );
 if ( $itemnumber ) {
    my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
     $holdingBranch //= '';
-    $collectionBranch //= '';
+    $collectionBranch //= $returnbranch;
     if ( ! ( $holdingBranch eq $collectionBranch ) ) {
         $template->param(
           collectionItemNeedsTransferred => 1,
-          collectionBranch => GetBranchName($collectionBranch),
+          collectionBranchName => GetBranchName($collectionBranch),
+          collectionBranch => $collectionBranch,
           itemnumber => $itemnumber,
         );
     }
