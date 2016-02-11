@@ -36,8 +36,15 @@ function cancel_edit() {
 
 }
 
-function delete_provider( id ) {
-    if ( confirm( _("Are you sure you want to delete ") + $("#name_" + id).html() + _("?") ) ) {
+function delete_provider( id, users ) {
+    var c;
+    if ( users ) {
+        c = confirm( _("Are you sure you want to delete %s? %s patron(s) are using it!").format( $("#name_" + id).html(), users ) );
+    } else {
+        c = confirm( _("Are you sure you want to delete %s?").format( $("#name_" + id).html() ) );
+    }
+
+    if ( c ) {
         $("#op").val('delete');
         $("#id").val( id );
         $("#sms_form").submit();
@@ -79,7 +86,7 @@ function delete_provider( id ) {
                                 </td>
                                 <td>
                                     [% IF p.patrons_using %]
-                                        <a class="btn btn-danger" href="#" id="delete_[% p.id %]" class="delete" onclick="delete_provider( [% p.id %] );">
+                                        <a class="btn btn-danger" href="#" id="delete_[% p.id %]" class="delete" onclick="delete_provider( [% p.id %], [% p.patrons_using %] );">
                                             <span style="color:white"><i class="fa fa-trash"></i> Delete</span>
                                         </a>
                                     [% ELSE %]
