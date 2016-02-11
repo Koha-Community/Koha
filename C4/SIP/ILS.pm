@@ -126,48 +126,57 @@ sub offline_ok {
 # the response.
 #
 sub checkout {
-    my ($self, $patron_id, $item_id, $sc_renew, $fee_ack) = @_;
-    my ($patron, $item, $circ);
+    my ( $self, $patron_id, $item_id, $sc_renew, $fee_ack ) = @_;
+    my ( $patron, $item, $circ );
 
     $circ = C4::SIP::ILS::Transaction::Checkout->new();
+
     # BEGIN TRANSACTION
-    $circ->patron($patron = C4::SIP::ILS::Patron->new( $patron_id));
-    $circ->item($item = C4::SIP::ILS::Item->new( $item_id));
+    $circ->patron( $patron = C4::SIP::ILS::Patron->new($patron_id) );
+    $circ->item( $item     = C4::SIP::ILS::Item->new($item_id) );
     if ($fee_ack) {
         $circ->fee_ack($fee_ack);
     }
 
-    if (!$patron) {
-		$circ->screen_msg("Invalid Patron");
-    } elsif (!$patron->charge_ok) {
-		$circ->screen_msg("Patron Blocked");
-    } elsif (!$item) {
-		$circ->screen_msg("Invalid Item");
-    # holds checked inside do_checkout
-    # } elsif ($item->hold_queue && @{$item->hold_queue} && ! $item->barcode_is_borrowernumber($patron_id, $item->hold_queue->[0]->{borrowernumber})) {
-	#	$circ->screen_msg("Item on Hold for Another User");
-    } elsif ($item->{patron} && !_ci_cardnumber_cmp($item->{patron},$patron_id)) {
-		$circ->screen_msg("Item checked out to another patron");
-    } else {
-		$circ->do_checkout();
-		if ($circ->ok){
-			$debug and warn "circ is ok";
-			# If the item is already associated with this patron, then
-			# we're renewing it.
-			$circ->renew_ok($item->{patron} && _ci_cardnumber_cmp($item->{patron}, $patron_id));
-		
-			$item->{patron} = $patron_id;
-			$item->{due_date} = $circ->{due};
-			push(@{$patron->{items}}, $item_id);
-			$circ->desensitize(!$item->magnetic_media);
-
-			syslog("LOG_DEBUG", "ILS::Checkout: patron %s has checked out %s",
-				$patron_id, join(', ', @{$patron->{items}}));
-		}
-		else {
-			syslog("LOG_ERR", "ILS::Checkout Issue failed");
-		}
+    if ( !$patron ) {
+        $circ->screen_msg("Invalid Patron");
     }
+    elsif ( !$patron->charge_ok ) {
+        $circ->screen_msg("Patron Blocked");
+    }
+    elsif ( !$item ) {
+        $circ->screen_msg("Invalid Item");
+    }
+    elsif ( $item->{patron}
+        && !_ci_cardnumber_cmp( $item->{patron}, $patron_id ) )
+    {
+        $circ->screen_msg("Item checked out to another patron");
+    }
+    else {
+        $circ->do_checkout();
+        if ( $circ->ok ) {
+            $debug and warn "circ is ok";
+
+            # If the item is already associated with this patron, then
+            # we're renewing it.
+            $circ->renew_ok( $item->{patron}
+                  && _ci_cardnumber_cmp( $item->{patron}, $patron_id ) );
+
+            $item->{patron}   = $patron_id;
+            $item->{due_date} = $circ->{due};
+            push( @{ $patron->{items} }, $item_id );
+            $circ->desensitize( !$item->magnetic_media );
+
+            syslog(
+                "LOG_DEBUG", "ILS::Checkout: patron %s has checked out %s",
+                $patron_id, join( ', ', @{ $patron->{items} } )
+            );
+        }
+        else {
+            syslog( "LOG_ERR", "ILS::Checkout Issue failed" );
+        }
+    }
+
     # END TRANSACTION
 
     return $circ;
