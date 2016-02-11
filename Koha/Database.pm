@@ -79,6 +79,7 @@ sub _new_schema {
             RaiseError => $ENV{DEBUG} ? 1 : 0,
             PrintError => 1,
             unsafe => 1,
+            quote_names => 1,
             on_connect_do => [
                 $encoding_query || (),
                 $tz_query || (),
