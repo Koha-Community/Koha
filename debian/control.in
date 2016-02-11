@@ -17,7 +17,7 @@ Package: koha-common
 Architecture: all
 Depends: ${misc:Depends}, ${koha:Depends},
  apache2,
- apache2-mpm-itk,
+ apache2-mpm-itk | libapache2-mpm-itk,
  at,
  cron-daemon,
  daemon,
@@ -65,7 +65,7 @@ Description: integrated (physical) library management system
 Package: koha-deps
 Depends: ${misc:Depends},
  apache2,
- apache2-mpm-itk,
+ apache2-mpm-itk | libapache2-mpm-itk,
  at,
  cron-daemon,
  daemon,
