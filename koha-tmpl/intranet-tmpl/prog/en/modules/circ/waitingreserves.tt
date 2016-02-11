@@ -90,7 +90,7 @@
                 <tr>
                     <td><span title="[% reserveloo.waitingdate %]">[% reserveloo.waitingdate | $KohaDates %]</span></td>
                     <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
-                        [% reserveloo.title %] [% FOREACH subtitl IN reserveloo.subtitle %] [% subtitl.subfield %][% END %]
+                        [% reserveloo.title |html %] [% FOREACH subtitl IN reserveloo.subtitle %] [% subtitl.subfield %][% END %]
                         </a>
                             [% UNLESS ( item_level_itypes ) %][% IF ( reserveloo.itemtype ) %]&nbsp; (<b>[% reserveloo.itemtype %]</b>)[% END %][% END %]
                             <br />Barcode: [% reserveloo.barcode %]
@@ -151,7 +151,7 @@
                <tbody>[% FOREACH overloo IN overloop %]
                     <tr>
                         <td><p><span title="[% overloo.waitingdate %]">[% overloo.waitingdate | $KohaDates %]</span></p></td>
-                        <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overloo.biblionumber %][% overloo.title %]
+                        <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overloo.biblionumber %][% overloo.title |html %]
                             [% FOREACH subtitl IN overloo.subtitle %] [% subtitl.subfield %][% END %]
                         </a>
                             [% UNLESS ( item_level_itypes ) %][% IF ( overloo.itemtype ) %]&nbsp; (<b>[% overloo.itemtype %]</b>)[% END %][% END %]

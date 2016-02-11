@@ -8,7 +8,7 @@
             [% IF ( intranetbookbag ) %]
             <li><a href="#" id="cartmenulink">Cart<span id="basketcount"></span></a></li>
             [% END %]
-            [% IntranetNav.raw %]
+            [% IntranetNav %]
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
                 <ul class="dropdown-menu">

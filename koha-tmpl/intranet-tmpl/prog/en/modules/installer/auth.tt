@@ -31,7 +31,7 @@
 <!-- login prompt time-->
 <form action="/cgi-bin/koha/installer/install.pl" method="post" name="mainform" id="mainform">
 [% FOREACH INPUT IN INPUTS %]
-    <input type="hidden" name="[% INPUT.name %]" value="[% INPUT.value %]" />
+    <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
 [% END %]
 <h3>Welcome to the Koha web installer</h3>
 <p>Before we begin, please verify you have the correct credentials to continue. Please log in

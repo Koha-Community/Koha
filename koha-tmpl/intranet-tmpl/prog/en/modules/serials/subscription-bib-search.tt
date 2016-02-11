@@ -26,7 +26,7 @@
                 <option value="">All</option>
                 [%- FOREACH itemtypeloo IN itemtypeloop %]
                 <option value="[% itemtypeloo.code %]">
-                    [% itemtypeloo.description %]
+                    [% itemtypeloo.description |html %]
                 </option>
                 [%- END %]
             </select>
@@ -38,7 +38,7 @@
                 <option value="">All</option>
                 [%- FOREACH ccodeloo IN ccodeloop %]
                 <option value="[% ccodeloo.code %]">
-                    [% ccodeloo.description %]
+                    [% ccodeloo.description |html %]
                 </option>
                 [%- END %]
             </select>

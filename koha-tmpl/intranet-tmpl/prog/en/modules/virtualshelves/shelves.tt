@@ -3,7 +3,7 @@
 [% SET PRIVATE = 1 %]
 [% SET PUBLIC = 2 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; [% IF op == 'view' %]Lists &rsaquo; Contents of [% shelf.shelfname %][% ELSE %]Lists[% END %][% IF op == 'add_form' %] &rsaquo; Create new list[% END %][% IF op == 'edit_form' %] &rsaquo; Edit list [% shelf.shelfname %][% END %]</title>
+<title>Koha &rsaquo; [% IF op == 'view' %]Lists &rsaquo; Contents of [% shelf.shelfname | html %][% ELSE %]Lists[% END %][% IF op == 'add_form' %] &rsaquo; Create new list[% END %][% IF op == 'edit_form' %] &rsaquo; Edit list [% shelf.shelfname | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
@@ -138,7 +138,7 @@ $(document).ready(function(){
             [% SET number_of_private_shelves = 0 %]
             [% FOREACH s IN add_to_some_private_shelves %]
                 [% IF shelfnumber != s.shelfnumber %]
-                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname %]<\/option>";
+                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
                     [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
                     [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
                 [% END %]
@@ -150,7 +150,7 @@ $(document).ready(function(){
             [% SET number_of_public_shelves = 0 %]
             [% FOREACH s IN add_to_some_public_shelves %]
                 [% IF shelfnumber != s.shelfnumber %]
-                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname %]<\/option>";
+                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
                     [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
                     [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
                 [% END %]
@@ -310,7 +310,7 @@ function placeHold () {
         [% END %]
     [% END %]
 
-[% IF op == 'view' %]&rsaquo; Contents of <i>[% shelf.shelfname %]</i>[% END %][% IF op == 'add_form' %] &rsaquo; Create new list[% END %][% IF op == 'edit_form' %] &rsaquo; Edit list <i>[% shelf.shelfname %]</i>[% END %]</div>
+[% IF op == 'view' %]&rsaquo; Contents of <i>[% shelf.shelfname | html %]</i>[% END %][% IF op == 'add_form' %] &rsaquo; Create new list[% END %][% IF op == 'edit_form' %] &rsaquo; Edit list <i>[% shelf.shelfname | html %]</i>[% END %]</div>
 
 <div id="doc3" class="yui-t2">
 <div id="bd">
@@ -371,7 +371,7 @@ function placeHold () {
    <div class="yui-g">
     [% IF itemsloop %]
 
-    <h3>Contents of <i>[% shelf.shelfname %]</i></h3>
+    <h3>Contents of <i>[% shelf.shelfname | html %]</i></h3>
     <div class="pages">[% pagination_bar %]</div>
     <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="listform" method="post" class="checkboxed">
         <input type="hidden" name="op" value="remove_biblios" />
@@ -453,7 +453,7 @@ function placeHold () {
                     [% itemsloo.XSLTBloc %]
                 [% ELSE %]
                     [% INCLUDE 'biblio-default-view.inc' biblionumber = itemsloo.biblionumber %]
-                    [% itemsloo.title %][% FOREACH subtitl IN itemsloo.subtitle %] [% subtitl.subfield %][% END %]</a>
+                    [% itemsloo.title |html %][% FOREACH subtitl IN itemsloo.subtitle %] [% subtitl.subfield %][% END %]</a>
                 [% END %]
                     <p class="hold">
                         [% IF ( itemsloo.notforloan ) %]
@@ -490,7 +490,7 @@ function placeHold () {
 			</tr>
 		[% END %]<!-- /itemsloop -->
     </table>
-    <div class="pages">[% pagination_bar.raw %]</div>
+    <div class="pages">[% pagination_bar %]</div>
 </form>
 
 	[% END %]
@@ -501,7 +501,7 @@ function placeHold () {
 <div class="yui-g">
 <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
  <fieldset class="brief noprint">
-    <legend>Add an item to <i>[% shelf.shelfname %]</i></legend>
+    <legend>Add an item to <i>[% shelf.shelfname | html %]</i></legend>
         <ol>
             <li>
                 <label for="barcode">Barcode:</label>
@@ -527,14 +527,14 @@ function placeHold () {
             <legend>Create a new list</legend>
             <input type="hidden" name="op" value="add" />
         [% ELSE %]
-            <legend>Edit list <i>[% shelf.shelfname %]</i></legend>
+            <legend>Edit list <i>[% shelf.shelfname | html %]</i></legend>
             <input type="hidden" name="op" value="edit" />
         [% END %]
         <input type="hidden" name="referer" value="[% referer %]" />
         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
         <ol>
             <li>
-                <label for="shelfname" class="required">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="[% shelf.shelfname %]" required="required" class="required" />
+                <label for="shelfname" class="required">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="[% shelf.shelfname |html %]" required="required" class="required" />
             <span class="required">Required</span>
             </li>
             <li>

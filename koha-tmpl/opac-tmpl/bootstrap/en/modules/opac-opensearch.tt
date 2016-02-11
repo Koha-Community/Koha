@@ -2,10 +2,10 @@
 [% USE Koha %]
 [% IF ( opensearchdescription ) %]
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-   <ShortName>[% LibraryName %] Search</ShortName>
-   <Description>Search the [% LibraryName %]</Description>
-   <Tags>koha opac [% LibraryName %]</Tags>
-   <Contact>[% KohaAdminEmailAddress %]</Contact>
+   <ShortName>[% LibraryName |html %] Search</ShortName>
+   <Description>Search the [% LibraryName |html %]</Description>
+   <Tags>koha opac [% LibraryName |html %]</Tags>
+   <Contact>[% KohaAdminEmailAddress |html %]</Contact>
    <Url type="application/rss+xml"
         template="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?q={searchTerms}&amp;pw={startPage?}&amp;format=rss2"/>
 </OpenSearchDescription>
@@ -18,23 +18,23 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/"
       xmlns:atom="http://www.w3.org/2005/Atom">
    <channel>
-     <title><![CDATA[[% LibraryName %] Search [% IF ( query_desc ) %]for '[% query_desc %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc %]'[% END %]]]></title>
-     <link>[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]&amp;format=rss2</link>
-     <atom:link rel="self" type="application/rss+xml" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]&amp;sort_by=[% sort_by %]&amp;format=rss2"/>
-     <description><![CDATA[ Search results [% IF ( query_desc ) %]for '[% query_desc %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc %]'[% END %] at [% LibraryName %]]]></description>
+     <title><![CDATA[[% LibraryName |html %] Search [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc |html %]'[% END %]]]></title>
+     <link>[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2</link>
+     <atom:link rel="self" type="application/rss+xml" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;sort_by=[% sort_by |html %]&amp;format=rss2"/>
+     <description><![CDATA[ Search results [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc |html %]'[% END %] at [% LibraryName |html %]]]></description>
      <opensearch:totalResults>[% total %]</opensearch:totalResults>
      <opensearch:startIndex>[% offset %]</opensearch:startIndex>
      [% IF ( results_per_page ) %]
-       <opensearch:itemsPerPage>[% results_per_page%]</opensearch:itemsPerPage>
+       <opensearch:itemsPerPage>[% results_per_page |html%]</opensearch:itemsPerPage>
      [% ELSE %]
        <opensearch:itemsPerPage>20</opensearch:itemsPerPage>
      [% END %]
 	 [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
-     <atom:link rel="search" type="application/opensearchdescription+xml" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% SEARCH_RESULT.query_cgi %][% SEARCH_RESULT.limit_cgi %]&amp;sort_by=[% SEARCH_RESULT.sort_by %]&amp;format=opensearchdescription"/>
+     <atom:link rel="search" type="application/opensearchdescription+xml" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% SEARCH_RESULT.query_cgi |html %][% SEARCH_RESULT.limit_cgi |html %]&amp;sort_by=[% SEARCH_RESULT.sort_by |html %]&amp;format=opensearchdescription"/>
      <opensearch:Query role="request" searchTerms="[% SEARCH_RESULT.query_desc |url %][% SEARCH_RESULT.limit_desc |url %]" startPage="[% SEARCH_RESULT.page %]" />
      <item>
-       <title>[% SEARCH_RESULT.title %] [% FOREACH subtitl IN SEARCH_RESULT.subtitle %], [% subtitl.subfield %][% END %]</title>
-       <dc:identifier>ISBN [% SEARCH_RESULT.isbn %]</dc:identifier>
+       <title>[% SEARCH_RESULT.title |html %] [% FOREACH subtitl IN SEARCH_RESULT.subtitle %], [% subtitl.subfield |html %][% END %]</title>
+       <dc:identifier>ISBN [% SEARCH_RESULT.isbn |html %]</dc:identifier>
        <link>[% IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) %][% OPACBaseURL %]/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %][% ELSE %][% IF ( SEARCH_RESULT.BiblioDefaultViewisbd ) %][% OPACBaseURL %]/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %][% ELSE %][% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %][% END %][% END %]</link>
        <description><![CDATA[
 [% IF ( OPACAmazonCoverImages ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %]
@@ -44,14 +44,14 @@
 [% END %][% END %][% END %]
 
 [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
-[% IF ( BakerTaylorEnabled ) %][% IF bt_id %]<a href="https://[% BakerTaylorBookstoreURL %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL %][% bt_id %]" /></a>[% END %][% END %]
-        <p>[% IF ( SEARCH_RESULT.author ) %]By [% SEARCH_RESULT.author %]. [% END %]
-        [% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place %] [% END %][% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode %][% END %][% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear %]
-                    [% ELSE %][% IF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate %][% END %][% END %]
-                        [% IF ( SEARCH_RESULT.pages ) %]. [% SEARCH_RESULT.pages %][% END %]
-                        [% IF ( SEARCH_RESULT.notes ) %], [% SEARCH_RESULT.notes %][% END %]
-                        [% IF ( SEARCH_RESULT.size ) %] [% SEARCH_RESULT.size %]. [% END %]
-                        [% IF ( SEARCH_RESULT.isbn ) %] [% SEARCH_RESULT.isbn %][% END %]
+[% IF ( BakerTaylorEnabled ) %][% IF bt_id %]<a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>[% END %][% END %]
+	   <p>[% IF ( SEARCH_RESULT.author ) %]By [% SEARCH_RESULT.author |html %]. [% END %]
+	   [% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place |html %] [% END %][% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode |html %][% END %][% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear |html %]
+                    [% ELSE %][% IF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate |html %][% END %][% END %]
+                        [% IF ( SEARCH_RESULT.pages ) %]. [% SEARCH_RESULT.pages |html %][% END %]
+                        [% IF ( SEARCH_RESULT.notes ) %], [% SEARCH_RESULT.notes |html %][% END %]
+                        [% IF ( SEARCH_RESULT.size ) %] [% SEARCH_RESULT.size |html %]. [% END %]
+                        [% IF ( SEARCH_RESULT.isbn ) %] [% SEARCH_RESULT.isbn |html %][% END %]
        </p>
 [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
 <p><a href="[% OPACBaseURL %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Place Hold on <i>[% SEARCH_RESULT.title %]</i></a></p>
@@ -67,12 +67,12 @@
 [% IF ( atom ) %]
 <feed xmlns="http://www.w3.org/2005/Atom"
        xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
-   <id>[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]&amp;format=atom</id>
-   <title>[% LibraryName %] Search [% IF ( query_desc ) %]for '[% query_desc %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc %]'[% END %]</title>
-    <link href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]&amp;format=rss2"/>
+   <id>[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=atom</id>
+   <title>[% LibraryName |html %] Search [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc |html %]'[% END %]</title>
+    <link href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2"/>
    <updated>[% timestamp %]</updated>
    <author>
-     <name>[% LibraryName %]</name>
+     <name>[% LibraryName |html %]</name>
    </author>
    <!-- <id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</id> -->
    <opensearch:totalResults>[% total %]</opensearch:totalResults>
@@ -82,7 +82,7 @@
    [% ELSE %]
      <opensearch:itemsPerPage>20</opensearch:itemsPerPage>
    [% END %]
-   <opensearch:Query role="request" searchTerms="[% query_desc %] [% limit_desc %]" startPage="[% page %]" />
+   <opensearch:Query role="request" searchTerms="[% query_desc |html %] [% limit_desc |html %]" startPage="[% page |html %]" />
    <link rel="alternate" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]pw=[% page %]&amp;format=atom" type="application/atom+xml"/>
    <link rel="self" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]&amp;format=atom" type="application/atom+xml"/>
    <link rel="first" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi %][% limit_cgi %]pw=1&amp;format=atom" type="application/atom+xml"/>
@@ -93,7 +93,7 @@
 
    [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
    <entry>
-     <title>[% SEARCH_RESULT.title %]</title>
+     <title>[% SEARCH_RESULT.title |html %]</title>
      <link href="[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]"/>
      <!-- <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id> -->
      <updated>[% SEARCH_RESULT.timestamp %]</updated>

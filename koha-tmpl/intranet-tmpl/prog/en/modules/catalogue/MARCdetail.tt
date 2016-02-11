@@ -38,7 +38,7 @@ function Changefwk(FwkList) {
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    MARC Details for <i>[% bibliotitle %]</i>
+    MARC Details for <i>[% bibliotitle |html %]</i>
   [% END %]
 </div>
 
@@ -53,7 +53,7 @@ function Changefwk(FwkList) {
 [% INCLUDE 'cat-toolbar.inc' %]
 
 [% UNLESS ( popup ) %]
-    <h1>MARC biblio : [% biblionumber %]  ( [% bibliotitle %] )</h1>
+    <h1>MARC biblio : [% biblionumber %]  ( [% bibliotitle |html %] )</h1>
 
 
 [% END %]
@@ -90,10 +90,10 @@ function Changefwk(FwkList) {
                     <span class="subfield-label">&nbsp;
                     [% UNLESS ( subfiel.hide_marc ) %]<span class="subfield-code">[% subfiel.marc_subfield %]</span>[% END %]
                     <span class="desc" title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
-                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value %]</a>[% ELSE %][% subfiel.marc_value %][% END %]
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
                     [% IF ( subfiel.link ) %]
                         <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
-                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value %]" alt="Search on [% subfiel.marc_value %]" />
+                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
                         </a>
                     [% END %]
                     [% IF ( subfiel.authority ) %]
@@ -174,7 +174,7 @@ function Changefwk(FwkList) {
                 [% FOREACH item IN item_loop %]
                     <tr>
                         [% FOREACH sf_code IN item_subfield_codes %]
-                            <td>[% item.$sf_code.raw %]</td>
+                            <td>[% item.$sf_code %]</td>
                         [% END %]
                     </tr>
                 [% END %]

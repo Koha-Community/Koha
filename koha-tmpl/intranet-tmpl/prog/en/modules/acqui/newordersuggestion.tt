@@ -53,7 +53,7 @@
             <tr>
                 <td>[% suggestions_loo.managedby %]</td>
                 <td>
-                    <p>[% suggestions_loo.title %] - [% suggestions_loo.author %]</p>
+                    <p>[% suggestions_loo.title |html %] - [% suggestions_loo.author %]</p>
                     <p>
                         [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate %] [% END %]
                         [% IF ( suggestions_loo.volumedesc ) %]volume: <i>[% suggestions_loo.volumedesc %]</i> [% END %]

@@ -571,7 +571,7 @@ canned reports and writing custom SQL reports.</p>
             <td>
                 <select name="[% criteri.name %]_value">
                 [% FOREACH value IN criteri.values %]
-                <option value="[% value.availablevalues %]">[% IF ( value.default ) %]Default[% ELSE %][% value.display_value %][% END %]</option>
+                <option value="[% value.availablevalues %]">[% IF ( value.default ) %]Default[% ELSE %][% value.display_value |html %][% END %]</option>
                 [% END %]
                 </select>
             </td>
@@ -668,7 +668,7 @@ canned reports and writing custom SQL reports.</p>
 <h1>Confirm custom report</h1>
 <p>Your report will be generated with the following SQL statement.</p>
 <p> 
-[% sql %]
+[% sql |html %]
 </p>
 
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
@@ -684,7 +684,7 @@ canned reports and writing custom SQL reports.</p>
 
 [% IF ( save ) %]
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" class="validated">
-<input type="hidden" name="sql" value="[% sql %]" />
+<input type="hidden" name="sql" value="[% sql |html %]" />
 <input type="hidden" name="type" value="[% type %]" />
 <input type="hidden" name="area" value="[% area %]" />
 <input type="hidden" name="public" value="[% public %]" />
@@ -801,7 +801,7 @@ canned reports and writing custom SQL reports.</p>
 <h1>[% name %]</h1>
 [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
 [% IF ( unlimited_total ) %]<p>Total number of rows matching the (unlimited) query is [% unlimited_total %].</p>[% END %]
-<pre id="sql_output">[% sql %]</pre>
+<pre id="sql_output">[% sql |html %]</pre>
 
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
     <input type="hidden" name="phase" value="Run this report"/>
@@ -826,7 +826,7 @@ canned reports and writing custom SQL reports.</p>
     <input type="submit" value="Update" />
 </form>
 
-<div class="pages">[% pagination_bar.raw %]</div>
+<div class="pages">[% pagination_bar %]</div>
 [% UNLESS ( errors ) %]
 <table>
 <tr>[% FOREACH header_ro IN header_row %]<th>[% header_ro.cell %]</th>[% END %]</tr>
@@ -844,7 +844,7 @@ canned reports and writing custom SQL reports.</p>
 <option value="tab">Tab separated text</option>
 <option value="ods">Open Document Spreadsheet</option>
 </select>
-<input type="hidden" name="sql" value="[% sql %]" />
+<input type="hidden" name="sql" value="[% sql |html %]" />
 <input type="hidden" name="phase" value="Export" />
 <input type="submit" name="submit" value="Download" /></fieldset>
 <input type="hidden" name="reportname" value="[% name %]" />

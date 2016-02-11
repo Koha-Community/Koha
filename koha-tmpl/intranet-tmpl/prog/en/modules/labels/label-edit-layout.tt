@@ -132,7 +132,7 @@
                                             [% END %]
                                            <li> <fieldset id="layout_string" class="brief">
                                                 <label for="format_string">Data fields</label>
-                                                <input type="text" name="format_string" id="format_string" size="80" value="[% format_string %]" />
+                                                <input type="text" name="format_string" id="format_string" size="80" value="[% format_string |html %]" />
                                                 <div class="hint">
                                                     <p>Enter a comma separated list of fields to print.  You may include any <em>Koha field</em> or MARC subfield.</p>
                                                     <p>See online help for advanced options</p>
@@ -185,7 +185,7 @@
                                 </li>
                                 <li>
                                     <label for="font_size">Font size: </label>
-                                    <input type="text" name="font_size" id="font_size" size="2" value="[% font_size %]" />
+                                    <input type="text" name="font_size" id="font_size" size="2" value="[% font_size |html %]" />
                                 </li>
                                 <li>
                                     <label for="oblique_title">Oblique title: </label>

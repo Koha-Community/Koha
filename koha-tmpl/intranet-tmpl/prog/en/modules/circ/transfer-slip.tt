@@ -16,7 +16,7 @@ window.close();
 <h3>Transfer to [% branchname %]</h3>
 
 <h3>ITEM</h3>
- <h4>[% biblio.title %]</h4>
+ <h4>[% biblio.title |html %]</h4>
  <h5>[% biblio.author %] </h5>
  <ul>
     [% IF ( item.barcode ) %]<li>[% item.barcode %]</li>[% END %]

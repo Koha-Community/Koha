@@ -45,7 +45,7 @@ var relatives_borrowernumbers = new Array();
 var MSG_ADD_MESSAGE = _("Add a new message");
 var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 
-columns_settings = [% ColumnsSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ).raw %]
+columns_settings = [% ColumnsSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) %]
 
 $(document).ready(function() {
     $('#finesholdsissues').tabs({
@@ -180,7 +180,7 @@ function validate1(date) {
                [% END %]
 
                [% IF ( debarredcomment ) %]
-                   with the explanation: <i>[% debarredcomment.raw | html_line_break %]</i>
+                   with the explanation: <i>[% debarredcomment | html_line_break %]</i>
                [% END %]
                 <a href="#reldebarments" onclick="$('#debarments-tab-link').click()">View restrictions</a>
             </li>
@@ -199,11 +199,10 @@ function validate1(date) {
      [% UNLESS ( I ) %][% IF ( othernames ) %]&ldquo;[% othernames %]&rdquo;[% END %]
 
     <div class = "address">
-        [% SWITCH Koha.Preference( 'AddressFormat' ) %]
-            [% CASE 'de' %]
-                [% INCLUDE 'member-display-address-style-de.inc' %]
-            [% CASE # us %]
-                [% INCLUDE 'member-display-address-style-us.inc' %]
+        [% IF Koha.Preference( 'AddressFormat' ) %]
+            [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+        [% ELSE %]
+            [% INCLUDE 'member-display-address-style-us.inc' %]
         [% END %]
     </div>
 		    

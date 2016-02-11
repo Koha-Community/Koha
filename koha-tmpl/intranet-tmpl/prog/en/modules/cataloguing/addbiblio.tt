@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title %] (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</title>
+<title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title |html %] (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
 <script type="text/javascript" src="[% themelang %]/js/cataloging.js"></script>
@@ -253,7 +253,7 @@ function AreMandatoriesNotOk(){
     		[% FOREACH subfield_loo IN innerloo.subfield_loop %]
     			[% IF ( subfield_loo.mandatory ) %]mandatories.push("[% subfield_loo.id %]");
                    	tab.push("[% BIG_LOO.number %]");
-                    label.push("[% subfield_loo.marc_lib.raw %]");
+                   	label.push("[% subfield_loo.marc_lib %]");
                 [% END %]
             [% END %]
         [% END %]
@@ -401,7 +401,7 @@ function Changefwk(FwkList) {
 
 [% INCLUDE 'header.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; [% IF ( biblionumber ) %]Editing <em>[% title %]</em> (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; [% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</div>
 
 <div id="doc" class="yui-t7">
 
@@ -410,7 +410,7 @@ function Changefwk(FwkList) {
         <div class="yui-g">
 
 <h1>
-[% IF ( biblionumber ) %]Editing <em>[% title %]</em> (Record number [% biblionumber %])
+[% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record number [% biblionumber %])
 [% ELSE %]Add MARC record [% IF (circborrowernumber) %]<em>(fast cataloging)</em>[% END %]
 [% END %]
 </h1>
@@ -445,7 +445,7 @@ function Changefwk(FwkList) {
 [% IF ( done ) %]
     <script type="text/javascript">
         opener.document.forms['f'].biblionumber.value=[% biblionumber %];
-        opener.document.forms['f'].title.value='[% title %]';
+        opener.document.forms['f'].title.value='[% title |html %]';
         window.close();
     </script>
 [% ELSE %]
@@ -619,7 +619,7 @@ function Changefwk(FwkList) {
                         <img class="buttonUp" src="[% interface %]/[% theme %]/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
                     [% END %]
                         <input type="text"
-                            title="[% subfield_loo.marc_lib.raw %]"
+                            title="[% subfield_loo.marc_lib %]"
                             style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
                             name="tag_[% subfield_loo.tag %]_code_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]"
                             value="[% subfield_loo.subfield %]"
@@ -631,7 +631,7 @@ function Changefwk(FwkList) {
 
                 [% UNLESS advancedMARCEditor %]
                     [% IF ( subfield_loo.mandatory ) %]<span class="subfield subfield_mandatory">[% ELSE %]<span class="subfield">[% END %]
-                        [% subfield_loo.marc_lib.raw %]
+                        [% subfield_loo.marc_lib %]
                         [% IF ( subfield_loo.mandatory ) %]<span class="mandatory_marker" title="This field is mandatory">*</span>[% END %]
                     </span>
                     </label>
@@ -656,7 +656,7 @@ function Changefwk(FwkList) {
                             <a href="#" id="buttonDot_[% mv.id %]" class="buttonDot tag_editor framework_plugin" tabindex="1" title="Tag editor">Tag editor</a>
                         [% END %]
                     </span>
-                    [% mv.javascript.raw %]
+                    [% mv.javascript %]
                 [% ELSIF ( mv.type == 'hidden' ) %]
                     <input tabindex="1" type="hidden" id="[%- mv.id -%]" name="[%- mv.name -%]" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
                 [% ELSIF ( mv.type == 'textarea' ) %]

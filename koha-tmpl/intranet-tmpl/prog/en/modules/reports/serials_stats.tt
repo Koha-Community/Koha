@@ -52,7 +52,7 @@
 			<tr>
 				[% FOREACH data IN datas %]
                     <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% data.aqbooksellerid %]">[% data.name %]</a></td>
-                    <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% data.subscriptionid %]">[% data.title %]</a></td>
+                    <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% data.subscriptionid %]">[% data.title |html %]</a></td>
 					<td>[% data.subscriptionid %]</td>
                     <td>[% Branches.GetName( data.branchcode ) %]</td>
 					<td>[% data.callnumber %]</td>

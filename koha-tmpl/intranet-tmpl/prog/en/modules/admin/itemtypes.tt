@@ -139,7 +139,7 @@ Item types administration
                 [% END %]
                 <li>
                     <label for="description" class="required">Description: </label>
-                    <input type="text" id="description" name="description" size="48" value="[% itemtype.description %]" required="required" /> <span class="required">Required</span>
+                    <input type="text" id="description" name="description" size="48" value="[% itemtype.description |html %]" required="required" /> <span class="required">Required</span>
                     <a href="/cgi-bin/koha/admin/localization.pl?entity=itemtypes&code=[% itemtype.itemtype %]" title="Translate item type [% itemtype.itemtype %]" rel="gb_page_center[600,500]"><i class="icon-edit"></i> Translate into other languages</a>
                 </li>
                 <li>
@@ -347,7 +347,7 @@ Item types administration
             <tr>
            [% UNLESS Koha.Preference('noItemTypeImages') %] <td>[% IF itemtype.image_location %]<img src="[% itemtype.image_location %]" alt="" />[% ELSE %]&nbsp;[% END %]</td>[% END %]
             <td>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype %]">
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype |html %]">
                 [% itemtype.itemtype %]
               </a>
             </td>
@@ -376,8 +376,8 @@ Item types administration
             </td>
             <td>[% itemtype.checkinmsg | html_line_break %]</td>
             <td>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype %]">Edit</a>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype %]">Delete</a>
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype |html %]">Edit</a>
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype |html %]">Delete</a>
             </td>
           </tr>
           [% END %]

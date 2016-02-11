@@ -126,9 +126,9 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                     <li><label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="" /></li>
                     <li><label for="nameany">Name (any): </label> <input type="text" id="nameany" name="nameany" value="" /></li>
                     <li><label for="authorany">Author (any): </label> <input type="text" id="authorany" name="authorany" value="" /></li>
-                    <li><label for="authorpersonal">Author (personal): </label> <input type="text" id="authorpersonal" name="authorpersonal" value="[% authorpersonal %]" /></li>
-                    <li><label for="authorcorp">Author (corporate): </label> <input type="text" id="authorcorp" name="authorcorp" value="[% authorcorp %]" /></li>
-                    <li><label for="authormeetingcon">Author (meeting/conference): </label> <input type="text" id="authormeetingcon" name="authormeetingcon" value="[% authormeetingcon %]" /></li>
+                    <li><label for="authorpersonal">Author (personal): </label> <input type="text" id="authorpersonal" name="authorpersonal" value="[% authorpersonal | html %]" /></li>
+                    <li><label for="authorcorp">Author (corporate): </label> <input type="text" id="authorcorp" name="authorcorp" value="[% authorcorp | html %]" /></li>
+                    <li><label for="authormeetingcon">Author (meeting/conference): </label> <input type="text" id="authormeetingcon" name="authormeetingcon" value="[% authormeetingcon | html %]" /></li>
                 </ol>
                 </fieldset>
             </div>
@@ -137,8 +137,8 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                 <ol>
                     <li><label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
                     <li><label for="subjectsubdiv">Subject sub-division: </label> <input type="text" id="subjectsubdiv" name="subjectsubdiv" value="" /></li>
-                    <li><label for="title">Title (any): </label> <input type="text" id="title"  name="title" value="[% title %]" /></li>
-                    <li><label for="uniformtitle">Title (uniform): </label> <input type="text" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle %]" /></li>
+                    <li><label for="title">Title (any): </label> <input type="text" id="title"  name="title" value="[% title | html %]" /></li>
+                    <li><label for="uniformtitle">Title (uniform): </label> <input type="text" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle | html %]" /></li>
                 </ol>
                 <p><a id="resetZ3950Search" href="#">Clear search form</a></p>
                 </fieldset>

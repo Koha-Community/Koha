@@ -126,7 +126,7 @@
         <ol>
           <li>
             <label for="name" class="required">Name: </label>
-            <input type="text" name="name" id="name" value="[% field.name %]" />
+            <input type="text" name="name" id="name" value="[% field.name | html %]" />
           </li>
           <li>
             <label for="av">Authorised value category: </label>
@@ -143,7 +143,7 @@
           </li>
           <li>
             <label for="marcfield">Marc field: </label>
-            <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield %]" />
+            <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield| html %]" />
           </li>
           <li>
             <label for="searchable">Searchable: </label>

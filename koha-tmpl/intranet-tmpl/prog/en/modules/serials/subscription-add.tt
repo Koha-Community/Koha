@@ -1,7 +1,7 @@
 [% USE KohaDates %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; [% IF ( modify ) %][% bibliotitle %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</title>
+<title>Koha &rsaquo; Serials &rsaquo; [% IF ( modify ) %][% bibliotitle |html %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <style type="text/css">
@@ -468,12 +468,12 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; [% IF ( modify ) %]<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% bibliotitle %]</i></a> &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; [% IF ( modify ) %]<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% bibliotitle |html %]</i></a> &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</div>
 
 <div id="doc3" class="yui-t7">
     <div id="bd">
         <div class="yui-g">
-            <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
+            <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle |html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
             <form method="post" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated" onsubmit="return Check_page2();" >
                 [% IF ( modify ) %]
                     <input type="hidden" name="op" value="modsubscription" />

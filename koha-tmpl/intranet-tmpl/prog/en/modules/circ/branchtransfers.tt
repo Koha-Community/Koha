@@ -187,7 +187,7 @@
             </tr>
             [% FOREACH trsfitemloo IN trsfitemloop %]
                 <tr>
-                    <td class="tf-title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% trsfitemloo.biblionumber %]">[% trsfitemloo.title %]</a></td>
+                    <td class="tf-title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% trsfitemloo.biblionumber %]">[% trsfitemloo.title |html %]</a></td>
                     <td class="tf-author">[% trsfitemloo.author %]</td>
                     <td class="tf-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% trsfitemloo.biblionumber %]&amp;itemnumber=[% trsfitemloo.itemnumber %]#item[% trsfitemloo.itemnumber %]">[% trsfitemloo.barcode %]</a></td>
                     <td class="tf-location">[% trsfitemloo.location %]</td>

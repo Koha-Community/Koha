@@ -77,8 +77,8 @@ $(document).ready(function() {
                     <span class="required">Required</span>
                 [% END %]
             </li>
-    <li><label for="liblibrarian">Label for lib: </label><input type="text" id="liblibrarian" name="liblibrarian" value="[% liblibrarian %]" size="40" maxlength="100" /></li>
-    <li><label for="libopac">Label for opac: </label><input type="text" id="libopac" name="libopac" value="[% libopac %]" size="40" maxlength="100" /></li>
+    <li><label for="liblibrarian">Label for lib: </label><input type="text" id="liblibrarian" name="liblibrarian" value="[% liblibrarian |html %]" size="40" maxlength="100" /></li>
+    <li><label for="libopac">Label for opac: </label><input type="text" id="libopac" name="libopac" value="[% libopac |html %]" size="40" maxlength="100" /></li>
     <li><label for="repeatable">Repeatable: </label>
         [% IF ( repeatable ) %]
             <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked" />

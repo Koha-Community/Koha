@@ -68,7 +68,7 @@
                                                     <tr>
                                                         <td><input type="checkbox" name="id" value="[% s.id %]" /></td>
                                                         <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
-                                                        <td><a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html |url %][% limit_cgi |html | url %]&amp;[% s.query_cgi %]&amp;count=[% countrss %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a> <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi %]">[% s.query_desc %]</a></td>
+                                                        <td><a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html |url %][% limit_cgi |html | url %]&amp;[% s.query_cgi |html %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a> <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
                                                         <td>[% s.total %]</td>
                                                     </tr>
                                                 [% END %]
@@ -108,7 +108,7 @@
                                                 <tr>
                                                     <td><input type="checkbox" name="id" value="[% s.id %]" /></td>
                                                     <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
-                                                    <td><a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html |url %][% limit_cgi |html | url %]&amp;[% s.query_cgi %]&amp;count=[% countrss %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a> <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi %]">[% s.query_desc %]</a></td>
+                                                    <td><a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html |url %][% limit_cgi |html | url %]&amp;[% s.query_cgi |html %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a> <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
                                                     <td>[% s.total %]</td>
                                                 </tr>
                                             [% END %]
@@ -153,7 +153,7 @@
                                                     <tr>
                                                         <td><input type="checkbox" name="id" value="[% s.id %]" /></td>
                                                         <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
-                                                        <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi %]">[% s.query_desc %]</a></td>
+                                                        <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
                                                         <td>[% s.total %]</td>
                                                     </tr>
                                                 [% END %]
@@ -190,7 +190,7 @@
                                                     <tr>
                                                         <td><input type="checkbox" name="id" value="[% s.id %]" /></td>
                                                         <td><span title="[% s.time %]">[% s.time |$KohaDates with_hours => 1 %]</span></td>
-                                                        <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi %]">[% s.query_desc %]</a></td>
+                                                        <td><a href="/cgi-bin/koha/opac-authorities-home.pl?[% s.query_cgi |html %]">[% s.query_desc |html %]</a></td>
                                                         <td>[% s.total %]</td>
                                                     </tr>
                                                 [% END %]

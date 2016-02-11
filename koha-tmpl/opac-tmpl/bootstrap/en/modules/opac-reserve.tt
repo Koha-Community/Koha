@@ -142,7 +142,7 @@
                                             [% END # / bibitemloo.holdable %]
 
                                             <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% bibitemloo.biblionumber %]">
-                                                [% bibitemloo.title %]
+                                                [% bibitemloo.title |html %]
                                                 [% IF ( bibitemloo.subtitle ) %]
                                                     [% FOREACH subtitl IN bibitemloo.subtitle %]
                                                         [% subtitl.subfield %]

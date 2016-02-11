@@ -25,7 +25,7 @@
     }
 
     $(document).ready(function() {
-        columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ).raw %]
+        columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ) %]
         var issuest = KohaTable("#currencies-table", {
             "sDom": 'C<"clearfix">t',
             "aaSorting": [],
@@ -191,8 +191,8 @@
           <tr>
             <td>[% loo.currency %]</td>
             <td>[% loo.rate %]</td>
-            <td>[% loo.symbol %]</td>
-            <td>[% loo.isocode %]</td>
+            <td>[% loo.symbol |html %]</td>
+            <td>[% loo.isocode |html %]</td>
             <td><span title="[% loo.timestamp %]">[% loo.timestamp | $KohaDates %]</span></td>
             <td style="color:green;">[% IF ( loo.active ) %]✓[% END %]</td>
             <td>

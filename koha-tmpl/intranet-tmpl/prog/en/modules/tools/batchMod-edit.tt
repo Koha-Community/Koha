@@ -132,7 +132,7 @@ $(document).ready(function(){
                   <td>&nbsp;</td>
                 [% END %]
                 <td><label for="row[% item_loo.itemnumber %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber %]">[% item_loo.title %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author %][% END %]</label></td>
-                [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field %]</td>
+                [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field |html %]</td> 
         [% END %] </tr>
             [% END %]
       </tbody>
@@ -174,7 +174,7 @@ $(document).ready(function(){
               <label for="tag_[% ite.tag %]_subfield_[% ite.subfield %]_[% ite.random %]">
               [% END %]
               [% ite.subfield %] -
-          [% ite.marc_lib.raw %]
+          [% ite.marc_lib %]
          </label>
                 [% UNLESS ( ite.mandatory ) %]<input type="checkbox" id="row[% ite.tag %][% ite.subfield %][% ite.random %]" title="Check to delete subfield [% ite.subfield %]" name="disable_input" value="[% ite.subfield %]" />[% ELSE %]<span class="required">Required</span>[% END %]
 
@@ -199,7 +199,7 @@ $(document).ready(function(){
                     [% ELSE %]
                         <a href="#" id="buttonDot_[% mv.id %]" class="buttonDot" title="Tag editor">...</a>
                     [% END %]
-                    [% mv.javascript.raw %]
+                    [% mv.javascript %]
                 [% ELSIF ( mv.type == 'text' ) %]
                     <input type="text" tabindex="1" id="[%- mv.id -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value -%]" />
                 [% ELSIF ( mv.type == 'hidden' ) %]

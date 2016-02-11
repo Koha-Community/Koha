@@ -80,11 +80,11 @@
                 [% END %]
                 <li>
                     <label for="city_name" class="required">City: </label>
-                    <input type="text" name="city_name" id="city_name" size="80" maxlength="100" value="[% city.city_name %]" required="required" class="required" /> <span class="required">Required</span>
+                    <input type="text" name="city_name" id="city_name" size="80" maxlength="100" value="[% city.city_name |html %]" required="required" class="required" /> <span class="required">Required</span>
                 </li>
                 <li>
                     <label for="city_state">State: </label>
-                    <input type="text" name="city_state" id="city_state" size="80" maxlength="100" value="[% city.city_state %]" />
+                    <input type="text" name="city_state" id="city_state" size="80" maxlength="100" value="[% city.city_state |html %]" />
                 </li>
                 <li>
                     <label for="city_zipcode" class="required">ZIP/Postal code: </label>
@@ -92,7 +92,7 @@
                 </li>
                 <li>
                     <label for="city_country">Country: </label>
-                    <input type="text" name="city_country" id="city_country" size="80" maxlength="100" value="[% city.city_country %]" />
+                    <input type="text" name="city_country" id="city_country" size="80" maxlength="100" value="[% city.city_country |html %]" />
                 </li>
             </ol>
         </fieldset>

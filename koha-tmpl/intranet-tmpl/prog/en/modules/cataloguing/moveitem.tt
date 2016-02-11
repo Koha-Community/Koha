@@ -1,11 +1,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Attach an item to [% bibliotitle %]</title>
+<title>Attach an item to [% bibliotitle |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="catalog_moveitem" class="catalog">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Attach an item to <i>[% bibliotitle %][% IF ( itemsloo.subtitle ) %][% itemsloo.subtitle %][% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Attach an item to <i>[% bibliotitle |html %][% IF ( itemsloo.subtitle ) %][% itemsloo.subtitle %][% END %]</i></div>
 <div id="doc" class="yui-t7">
 
 [% BLOCK actions %]
@@ -52,7 +52,7 @@
 
 	[% ELSE %]
 	    [% IF ( success ) %]
-            <div class="dialog message">The item has successfully been attached to [% INCLUDE 'biblio-default-view.inc' %]<i>[% bibliotitle %]</i></a>.
+			<div class="dialog message">The item has successfully been attached to [% INCLUDE 'biblio-default-view.inc' %]<i>[% bibliotitle |html %]</i></a>.
 			<p>
 			[% INCLUDE actions %]
 		                <input type="submit" class="approve" value="OK" />
@@ -79,7 +79,7 @@
 	    [% END %]
 
 		[% IF ( missingbarcode ) %]
-        <h3>Attach an item[% IF ( bibliotitle ) %] to <i>[% bibliotitle %]</i>[% END %]</h3>
+		<h3>Attach an item[% IF ( bibliotitle ) %] to <i>[% bibliotitle |html %]</i>[% END %]</h3>
 	    <fieldset id="barcode_fieldset">
 		<label for="barcode">Enter the barcode of the item to attach:</label>
 		    <p class="hint">The item you select will be moved to the target record.</p>

@@ -50,7 +50,7 @@
             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% review.biblionumber %]">[% review.bibliotitle %]</a>
         </td>
         <td>
-            [% review.review %]
+            [% review.review |html %]
         </td>
         <td>
             [% IF ( status ) %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=unapprove&amp;reviewid=[% review.reviewid %]">Unapprove</a>[% ELSE %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&amp;reviewid=[% review.reviewid %]">Approve</a>[% END %] |
@@ -59,7 +59,7 @@
     </tr>
     [% END %]</tbody>
 </table>
- <div class="pages">[% pagination_bar.raw %]</div>
+ <div class="pages">[% pagination_bar %]</div>
 [% ELSE %]
 [% IF ( status ) %]<p><b>No comments have been approved.</b></p>[% ELSE %]<p><b>No comments to moderate.</b></p>[% END %]
 [% END %]

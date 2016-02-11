@@ -8,7 +8,7 @@
         </a>
         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetmenu_[% block_budget_id %]">
               <li>
-                  <a href="[% script_name %]?op=add_form&amp;budget_period_id=[% block_budget_id %]"><i class="fa fa-pencil"></i> Edit</a>
+                  <a href="[% script_name %]?op=add_form&amp;budget_period_id=[% block_budget_id |html %]"><i class="fa fa-pencil"></i> Edit</a>
               </li>
               <li>
                   <a href="[% script_name %]?op=delete_confirm&amp;budget_period_id=[% block_budget_id %]"><i class="fa fa-remove"></i> Delete</a>
@@ -574,7 +574,7 @@
       [% ELSE %]
         No active budgets
       [% END %]
-      <div class="paginationBar">[% active_pagination_bar.raw %]</div>
+      <div class="paginationBar">[% active_pagination_bar %]</div>
     </div>
     <div id="inactive">
       [% IF ( period_inactive_loop ) %]
@@ -607,7 +607,7 @@
       [% ELSE %]
         No inactive budgets
       [% END %]
-      <div class="pages">[% inactive_pagination_bar.raw %]</div>
+      <div class="pages">[% inactive_pagination_bar %]</div>
     </div>
   </div>
 [% END %]

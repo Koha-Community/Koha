@@ -51,7 +51,7 @@
                                     Discharge
                             [% END %]
                         </td>
-                        <td>[% d.comment.raw %]</td>
+                        <td>[% d.comment %]</td>
                         <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
                         [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                             <td>

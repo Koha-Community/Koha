@@ -36,7 +36,7 @@
 <div id="bd">
   <div id="yui-main">
     <div class="yui-b">
-      <h2>Files for invoice: [% invoicenumber %]</h2>
+      <h2>Files for invoice: [% invoicenumber | html %]</h2>
       <p><b>Vendor: </b><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% suppliername %]</a></p>
       <br />
       [% IF errors %]
@@ -62,9 +62,9 @@
               <tbody>
                 [% FOREACH f IN files %]
                   <tr>
-                      <td><a href="?invoiceid=[% invoiceid %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id %]">[% f.file_name %]</a></td>
-                      <td>[% f.file_type %]</td>
-                      <td>[% f.file_description %]</td>
+                      <td><a href="?invoiceid=[% invoiceid %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id %]">[% f.file_name | html %]</a></td>
+                      <td>[% f.file_type | html %]</td>
+                      <td>[% f.file_description | html %]</td>
                       <td class="title-string">
                         <span title="[% f.date_uploaded %]">[% f.date_uploaded | $KohaDates %]</span>
                       </td>

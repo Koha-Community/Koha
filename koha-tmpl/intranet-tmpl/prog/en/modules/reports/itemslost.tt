@@ -9,7 +9,7 @@
 <script type='text/javascript'>
 //<![CDATA[
     $(document).ready(function() {
-        var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ).raw %];
+        var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) %];
         var lostitems_table = KohaTable("#lostitems-table", {
             "sDom": 'C<"clearfix">t',
             "aaSorting": [],
@@ -72,7 +72,7 @@
                 [% FOREACH itemsloo IN itemsloop %]
                     <tr>
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber %]" title="[% itemsloo.itemnotes %]">[% itemsloo.title %]</a>
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber %]" title="[% itemsloo.itemnotes %]">[% itemsloo.title |html %]</a>
                         </td>
                         <td>[% itemsloo.author %]</td>
                         <td>[% itemsloo.lib %]</td>

@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Comments on [% title %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Comments on [% title |html %]</title>
 <style type="text/css">
   #custom-doc { width:37.08em;*width:36.16em;min-width:485px; margin:1em auto; text-align:left; }
 </style>
@@ -36,11 +36,11 @@
                             </div>
                         [% END # / ERRORs %]
 
-                        <h1>Comments on <i>[% title %] [% subtitle %]</i></h1>
-                        [% IF ( author ) %]<h3>[% author %]</h3>[% END %]
+                        <h1>Comments on <i>[% title |html %] [% subtitle %]</i></h1>
+                        [% IF ( author ) %]<h3>[% author |html %]</h3>[% END %]
                         <form id="reviewf" action="/cgi-bin/koha/opac-review.pl[% IF ( cgi_debug ) %]?debug=1[% END %]" method="post">
-                            <input type="hidden" name="biblionumber" value="[% biblionumber%]" />
-                            [% IF ( reviewid ) %]<input type="hidden" name="reviewid" value="[% reviewid%]" />[% END %]
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html%]" />
+                            [% IF ( reviewid ) %]<input type="hidden" name="reviewid" value="[% reviewid | html%]" />[% END %]
                             <fieldset>
                                 <textarea id="review" name="review" cols="60" rows="8">[% review %]</textarea>
                             </fieldset>

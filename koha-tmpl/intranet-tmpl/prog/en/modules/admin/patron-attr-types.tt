@@ -8,7 +8,7 @@
   [% END %]
 [% END %]
 [% IF ( delete_attribute_type_form ) %]
-  &rsaquo; Confirm deletion of patron attribute type &quot;[% code %]&quot;
+  &rsaquo; Confirm deletion of patron attribute type &quot;[% code |html %]&quot;
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -62,7 +62,7 @@ function CheckAttributeTypeForm(f) {
   [% END %]
 [% END %]
 [% IF ( delete_attribute_type_form ) %]
-  &rsaquo; Confirm deletion of patron attribute type &quot;[% code %]&quot;
+  &rsaquo; Confirm deletion of patron attribute type &quot;[% code |html %]&quot;
 [% END %]
 </div>
 
@@ -94,8 +94,8 @@ function CheckAttributeTypeForm(f) {
       <li>
           [% IF ( edit_attribute_type ) %]
 		  <span class="label">Patron attribute type code: </span>
-            <input type="hidden" name="code" value="[% code %]" />
-            [% code %]
+            <input type="hidden" name="code" value="[% code |html %]" />
+            [% code |html %]
           [% ELSE %]
 		  <label for="code">Patron attribute type code: </label>
             <input type="text" id="code" name="code"  size="10" maxlength="10" />
@@ -103,7 +103,7 @@ function CheckAttributeTypeForm(f) {
        </li>
        <li><label for="description">Description: </label>
            <input type="text" id="description" name="description" size="50" maxlength="250" 
-                  value="[% description %]" />
+                  value="[% description |html %]" />
        </li>
        <li><label for="repeatable">Repeatable: </label>
             [% IF ( repeatable_checked ) %]
@@ -249,10 +249,10 @@ function CheckAttributeTypeForm(f) {
 [% END %]
 
 [% IF ( delete_attribute_type_form ) %]
-<div class="dialog alert"><h3>Confirm deletion of patron attribute type <span class="ex">'[% code %]' ([% description %])</span>?</h3>
+<div class="dialog alert"><h3>Confirm deletion of patron attribute type <span class="ex">'[% code |html %]' ([% description %])</span>?</h3>
 <form action="[% script_name %]" name="Aform" method="post">
   <input type="hidden" name="op" value="[% confirm_op %]" />
-  <input type="hidden" name="code" value="[% code %]" />
+  <input type="hidden" name="code" value="[% code |html %]" />
     <input type="submit" value="Delete patron attribute type" class="approve" /></form>
 	<form action="[% script_name %]" method="get">
     <input type="submit" value="No, do not delete" class="deny" />
@@ -300,7 +300,7 @@ function CheckAttributeTypeForm(f) {
       <tbody>
         [% FOREACH item IN attribute.items %]
           <tr>
-            <td>[% item.code %]</td>
+            <td>[% item.code |html %]</td>
             <td>[% item.description %]</td>
             <td>
                 [% IF item.branches.size > 0 %]
@@ -320,8 +320,8 @@ function CheckAttributeTypeForm(f) {
                 [% END %]
             </td>
             <td>
-              <a href="[% item.script_name %]?op=edit_attribute_type&amp;code=[% item.code %]">Edit</a>
-              <a href="[% item.script_name %]?op=delete_attribute_type&amp;code=[% item.code %]">Delete</a>
+              <a href="[% item.script_name %]?op=edit_attribute_type&amp;code=[% item.code |html %]">Edit</a>
+              <a href="[% item.script_name %]?op=delete_attribute_type&amp;code=[% item.code |html %]">Delete</a>
             </td>
           </tr>
         [% END %]
@@ -332,7 +332,7 @@ function CheckAttributeTypeForm(f) {
   <p>There are no saved patron attribute types.</p>
 [% END %]
 
-<div class="pages">[% pagination_bar.raw %]</div>
+<div class="pages">[% pagination_bar %]</div>
 
 [% END %]
  

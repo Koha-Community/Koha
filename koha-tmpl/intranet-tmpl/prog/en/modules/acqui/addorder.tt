@@ -15,7 +15,7 @@
         <form action="/cgi-bin/koha/acqui/addorder.pl" method="post">
           [% FOREACH var IN vars_loop %]
             [% FOREACH val IN var.values %]
-              <input type="hidden" name="[% var.name %]" value="[% val %]" />
+              <input type="hidden" name="[% var.name %]" value="[% val |html %]" />
             [% END %]
           [% END %]
           <input type="hidden" name="confirm_budget_exceeding" value="1" />

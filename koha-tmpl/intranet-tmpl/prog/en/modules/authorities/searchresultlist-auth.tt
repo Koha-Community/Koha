@@ -75,7 +75,7 @@ function doauth(authid, index, repet)
                         <td>
                           [% IF resul.summary && resul.summary.authorized && resul.summary.authorized.size > 1 %]
                             [% FOREACH authorized IN resul.summary.authorized %]
-                            <a href="javascript:doauth('[% resul.authid %]', '[% index %]', '[% loop.count %]')" title="[% authorized.heading %]">[% loop.count %]</a>
+                            <a href="javascript:doauth('[% resul.authid %]', '[% index %]', '[% loop.count %]')" title="[% authorized.heading | html %]">[% loop.count %]</a>
                             [% END %]
                           [% ELSE %]
                             <a href="javascript:doauth('[% resul.authid %]', '[% index %]', '')">choose</a>

@@ -6,7 +6,7 @@
 [% USE AuthorisedValues %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Circulation &rsaquo; Check in [% title %]</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Check in [% title |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 [% INCLUDE 'calendar.inc' %]
@@ -135,7 +135,7 @@ $(document).ready(function () {
 [% IF ( collectionItemNeedsTransferred ) %]
  <div id="rotating-collection" class="dialog message">
         <h3>Please transfer item to: [% collectionBranch %]</h3>
-            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode %]: [% title %]</a></p>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
             <p>This item is part of a rotating collection.</p>
 </div>
 [% END %]
@@ -170,7 +170,7 @@ $(document).ready(function () {
 
 [% IF ( wrongbranch ) %]
     <div class="dialog alert"><h3>Cannot check in</h3>
-        <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode %]: [% title %]</a></p>
+        <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
         </p><strong>NOT CHECKED IN</strong></p>
         <p>This item must be checked in at following library: <strong>[% Branches.GetName( rightbranch ) %]</strong></p>
     </div>
@@ -180,7 +180,7 @@ $(document).ready(function () {
     <div id="return2" class="dialog message">
         <!-- WrongTransfer -->
         <h3>Please return item to: [% Branches.GetName( TransferWaitingAt ) %]</h3>
-            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode %]: [% title %]</a></p>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
         <ul><li><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% homebranch %]&amp;op=slip'); return true;">Print transfer slip</a></li><li><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1">Cancel transfer</a></li></ul>
 [% IF ( wborcnum ) %]<h5>Hold for:</h5>
         <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
@@ -215,7 +215,7 @@ $(document).ready(function () {
 
     <div id="hold-found1" class="dialog message audio-alert-action">
         <h3>Hold found (item is already waiting)</h3>
-        <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode %]: [% title %]</a></p>
+        <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
         [% IF ( reservenotes ) %]<h4>Notes: [% reservenotes %]</h4>[% END %]
         <h4>Hold for:</h4>
 			<ul>
@@ -264,7 +264,7 @@ $(document).ready(function () {
 		<!-- diffbranch -->
         <div id="transfer-needed" class="dialog message audio-alert-action">
             <h3>Hold needing transfer found</h3>
-                <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode %]: [% title %]</a></p>
+                <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
                 <h4>Hold for: </h4>
                     <ul>
                         <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %])</li>
@@ -309,7 +309,7 @@ $(document).ready(function () {
     <!-- transfer: item with no reservation, must be returned according to home library circulation rules -->
         <div id="return1" class="dialog message audio-alert-action">
             <h3>Please return item to: [% Branches.GetName( returnbranch ) %]</h3>
-            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode %]: [% title %]</a></p>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
             <ul><li><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;">Print slip</a> )</li></ul>
         </div>
     [% END %]
@@ -344,7 +344,7 @@ $(document).ready(function () {
 	<!-- diffbranch -->
         <h3 class="audio-alert-action">Item consigned:</h3>
         <table>
-        <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title %]</a></caption>
+        <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title |html %]</a></caption>
         <tr>
             <th>Hold for:</th>
             <td>[% name %]</td>
@@ -373,7 +373,7 @@ $(document).ready(function () {
 
     <div id="hold-found2" class="dialog message audio-alert-action">
       <h3>Hold found</h3>
-          <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode %]: [% title %]</a></p>
+          <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
         [% IF ( reservenotes ) %]<h4>Notes: [% reservenotes %]</h4>[% END %]
         <h5>Hold for:</h5>
 		<ul>
@@ -426,7 +426,7 @@ $(document).ready(function () {
     <div class="dialog alert audio-alert-warning">
         <h3>Check in message</h3>
         [% IF itembiblionumber %]
-            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode %]: [% title %]</a></p>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
         [% END %]
         [% FOREACH errmsgloo IN errmsgloop %]
                     [% IF ( errmsgloo.NotForLoanStatusUpdated ) %]
@@ -602,7 +602,7 @@ $(document).ready(function () {
                 [% END %]
             </td>
             <td class="ci-title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% riloo.itembiblionumber %]">
-                    [% riloo.itemtitle %]</a></td>
+                    [% riloo.itemtitle |html %]</a></td>
             <td class="ci-author">[% riloo.itemauthor %]</td>
             <td class="ci-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% riloo.itembiblionumber %]&amp;itemnumber=[% riloo.itemnumber %]#item[% riloo.itemnumber %]">[% riloo.barcode %]</a></td>
             <td class="ci-homelibrary">[% Branches.GetName( riloo.homebranch ) %]</td>

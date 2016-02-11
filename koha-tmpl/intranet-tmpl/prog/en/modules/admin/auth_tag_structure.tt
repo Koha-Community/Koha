@@ -96,8 +96,8 @@
                     </li>
                 [% END %]
 
-        <li><label for="liblibrarian">Text for librarians: </label><input type="text" name="liblibrarian" id="liblibrarian" value="[% liblibrarian %]" size="40" maxlength="100" /></li>
-        <li><label for="libopac">Text for opac: </label><input type="text" name="libopac" id="libopac" value="[% libopac %]" size="40" maxlength="100" /></li>
+        <li><label for="liblibrarian">Text for librarians: </label><input type="text" name="liblibrarian" id="liblibrarian" value="[% liblibrarian |html %]" size="40" maxlength="100" /></li>
+        <li><label for="libopac">Text for opac: </label><input type="text" name="libopac" id="libopac" value="[% libopac |html %]" size="40" maxlength="100" /></li>
         <li><label for="repeatable">Repeatable: </label>
             [% IF ( repeatable ) %]
                 <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked" />

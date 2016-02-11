@@ -8,8 +8,8 @@
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/lib/bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/lib/jquery/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/sco.css" />
-[% IF ( OPACUserCSS ) %]<style type="text/css">[% OPACUserCSS.raw %]</style>[% END %]
-[% IF ( SCOUserCSS ) %]<style type="text/css">[% SCOUserCSS.raw %]</style>[% END %]
+[% IF ( OPACUserCSS ) %]<style type="text/css">[% OPACUserCSS %]</style>[% END %]
+[% IF ( SCOUserCSS ) %]<style type="text/css">[% SCOUserCSS %]</style>[% END %]
 <!--[if lt IE 9]>
     <script src="[% interface %]/[% theme %]/lib/respond.min.js"></script>
 <![endif]-->
@@ -37,7 +37,7 @@
                             <h3>Item cannot be checked out.</h3>
                             <p>Sorry, this item cannot be checked out at this station.</p>
                             [% IF ( title ) %]
-                                <p>Title: <em>[% title %]</em> </p>
+                                <p>Title: <em>[% title |html %]</em> </p>
                             [% END %]
 
                             <p>
@@ -231,9 +231,9 @@
                                                 <td>[% ISSUE.issuedate %]</td>
                                                 <td>
                                                     [% UNLESS ( noitemlinks ) %]
-                                                        <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber %]">[% ISSUE.title %]</a>
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber %]">[% ISSUE.title |html %]</a>
                                                     [% ELSE %]
-                                                        <strong>[% ISSUE.title %]</strong>
+                                                        <strong>[% ISSUE.title |html %]</strong>
                                                     [% END %]
                                                     <span class="item-details">[% ISSUE.author %]</span>
                                                     ([% ISSUE.barcode %])
@@ -302,7 +302,7 @@
                                         [% END # / IF authbylogin %]
 
                                         [% FOREACH INPUT IN INPUTS %]
-                                            <input type="hidden" name="[% INPUT.name %]" value="[% INPUT.value %]">
+                                            <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]">
                                         [% END %]
                                         <input type="hidden" name="op" value="login" />
                                     </fieldset>
@@ -381,5 +381,5 @@
     //]]>
     </script>
 
-    [% IF ( SCOUserJS ) %]<script type="text/javascript">[% SCOUserJS.raw %]</script>[% END %]
+    [% IF ( SCOUserJS ) %]<script type="text/javascript">[% SCOUserJS %]</script>[% END %]
 [% END %]

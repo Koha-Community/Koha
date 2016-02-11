@@ -233,9 +233,9 @@ $(document).ready(function() {
         <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li>
                <div class="subfield_line" style="[% iteminformatio.hidden %]" id="subfield[% item.serialid %][% item.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
                 [% IF (iteminformatio.mandatory) %]
-                    <label class="required">[% iteminformatio.subfield %] - [% iteminformatio.marc_lib.raw %]</label>
+                    <label class="required">[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
                 [% ELSE %]
-                    <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib.raw %]</label>
+                    <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
                 [% END %]
                 [% IF ( iteminformatio.marc_value.type == 'select' ) %]
                   <select name="field_value" size="1">
@@ -248,7 +248,7 @@ $(document).ready(function() {
                   [% END %]
                   </select>
                 [% ELSE %]
-                [% iteminformatio.marc_value.raw %]
+                [% iteminformatio.marc_value %]
                 [% END %]
                 <input type="hidden" name="itemid" value="[% item.itemid %]" />
                 <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
@@ -379,9 +379,9 @@ $(document).ready(function() {
         <ol>[% FOREACH iteminformatio IN newserialloo.iteminformation %]<li>
                <div class="subfield_line" style="[% iteminformatio.hidden %]" id="subfield[% newserialloo.serialid %][% newserialloo.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
                 [% IF (iteminformatio.mandatory) %]
-                    <label class="required">[% iteminformatio.subfield %] - [% iteminformatio.marc_lib.raw %]</label>
+                    <label class="required">[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
                 [% ELSE %]
-                    <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib.raw %]</label>
+                    <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
                 [% END %]
                 [% IF ( iteminformatio.marc_value.type == 'select' ) %]
                   <select name="field_value" size="1">
@@ -394,7 +394,7 @@ $(document).ready(function() {
                   [% END %]
                   </select>
                 [% ELSE %]
-                [% iteminformatio.marc_value.raw %]
+                [% iteminformatio.marc_value %]
                 [% END %]
                 <input type="hidden" name="itemid" value="[% newserialloo.itemid %]" />
                 <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />

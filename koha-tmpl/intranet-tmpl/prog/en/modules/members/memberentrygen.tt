@@ -299,7 +299,7 @@
                 <label for="btitle">
             [% END %]
             Salutation: </label>
-            [% borrotitlepopup.raw %]
+            [% borrotitlepopup %]
             [% IF ( mandatorytitle ) %]<span class="required">Required</span>[% END %]
             </li>
 		[% END %]
@@ -510,12 +510,11 @@
 
 [% END %]
 [% UNLESS noaddress && noaddress2 && nocity && nostate && nozipcode && nocountry %]
-    [% SWITCH Koha.Preference( 'AddressFormat' ) %]
-        [% CASE 'de' %]
-            [% INCLUDE 'member-main-address-style-de.inc' %]
-        [% CASE # us %]
-            [% INCLUDE 'member-main-address-style-us.inc' %]
-     [% END %]
+    [% IF Koha.Preference( 'AddressFormat' ) %]
+        [% INCLUDE "member-main-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+    [% ELSE %]
+        [% INCLUDE 'member-main-address-style-us.inc' %]
+    [% END %]
 [% END # nostreet && nocity etc group%]
 
 [% UNLESS nophone && nophonepro && nomobile && noemail && noemailpro && nofax %]
@@ -604,23 +603,20 @@
 [% IF ( step_6 ) %]
 
     [% UNLESS noB_address && noB_address2 && noB_city && noB_zipcode && noB_state && noB_country &&nocontactnote && noB_phone && noB_email %]
-    [% SWITCH Koha.Preference( 'AddressFormat' ) %]
-        [% CASE 'de' %]
-            [% INCLUDE 'member-alt-address-style-de.inc' %]
-        [% CASE # us %]
+        [% IF Koha.Preference( 'AddressFormat' ) %]
+            [% INCLUDE "member-alt-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+        [% ELSE %]
             [% INCLUDE 'member-alt-address-style-us.inc' %]
-     [% END %]
-
+        [% END %]
     [% END # UNLESS noB_address && noB_city && noB_state && noB_phone && noB_email %]
 [% END %]
 [% IF ( step_2 ) %]
     [% UNLESS noaltcontactsurname && noaltcontactfirstname && noaltcontactaddress1 && noaltcontactaddress2 && noaltcontactaddress3 && noaltcontactstate && noaltcontactzipcode && noaltcontactcountry && noaltcontactphone %]
-    [% SWITCH Koha.Preference( 'AddressFormat' ) %]
-        [% CASE 'de' %]
-            [% INCLUDE 'member-alt-contact-style-de.inc' %]
-        [% CASE # us %]
+        [% IF Koha.Preference( 'AddressFormat' ) %]
+            [% INCLUDE "member-alt-contact-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+        [% ELSE %]
             [% INCLUDE 'member-alt-contact-style-us.inc' %]
-     [% END %]
+        [% END %]
     [% END # UNLESS noaltcontactsurname && noaltcontactfirstname etc %]
 
 [% END %]
@@ -980,7 +976,7 @@
                             [% FOREACH d IN debarments %]
                                 <tr>
                                     <td>[% d.type %]</td>
-                                    <td>[% d.comment.raw %]</td>
+                                    <td>[% d.comment %]</td>
                                     <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
                                     [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                                       <td>
@@ -1029,7 +1025,7 @@
             [% FOREACH patron_attribute IN pa_loo.items %]
                 <li data-category_code="[% patron_attribute.category_code %]">
                     <label for="[% patron_attribute.form_id %]">[% patron_attribute.description %]: </label>
-                        <input type="hidden" id="[% patron_attribute.form_id %]_code" name="[% patron_attribute.form_id %]_code" value="[% patron_attribute.code %]" />
+                        <input type="hidden" id="[% patron_attribute.form_id %]_code" name="[% patron_attribute.form_id %]_code" value="[% patron_attribute.code |html %]" />
                         [% IF ( patron_attribute.use_dropdown ) %]
                             <select id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">
                                 <option value=""></option>

@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; Details for [% biblio.title %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo; Details for [% biblio.title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( LocalCoverImages == 1 ) %]
 <script type="text/JavaScript">
@@ -50,7 +50,7 @@ img.thumbnail {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Images for <i>[% biblio.title %]  [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Images for <i>[% biblio.title |html %]  [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</i></div>
 
 <div id="doc3" class="yui-t1">
 
@@ -61,7 +61,7 @@ img.thumbnail {
 
 [% INCLUDE 'cat-toolbar.inc' %]
 
-<h3>Images for <i>[% biblio.title %]</i></h3>
+<h3>Images for <i>[% biblio.title |html %]</i></h3>
 <h4>[% biblio.author %]</h4>
 
 [% IF ( LocalCoverImages == 1 ) %]

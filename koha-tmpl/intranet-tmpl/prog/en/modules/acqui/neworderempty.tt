@@ -309,10 +309,10 @@ $(document).ready(function()
         <ol><li>
             [% IF ( biblionumber ) %]
             <span class="label">Title</span>
-                <input type="hidden" name="title" value="[% title %]" /> <span class="title">[% title %]</span>
+                <input type="hidden" name="title" value="[% title |html %]" /> <span class="title">[% title |html %]</span>
             [% ELSE %]
             <label for="entertitle" class="required">Title: </label>
-                <input type="text" id="entertitle" size="50" name="title" value="[% title %]" class="focus" />
+                <input type="text" id="entertitle" size="50" name="title" value="[% title |html %]" class="focus" />
                 <span class="required">Required</span>
             [% END %]
         </li>

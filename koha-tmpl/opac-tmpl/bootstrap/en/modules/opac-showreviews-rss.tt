@@ -8,7 +8,7 @@
      <lastBuildDate>[% timestamp %]</lastBuildDate>
 	 [% FOREACH review IN reviews %]
      <item>
-       <title>New comment on [% review.title %] [% FOREACH subtitl IN review.subtitle %], [% subtitl.subfield %][% END %]</title>
+       <title>New comment on [% review.title |html %] [% FOREACH subtitl IN review.subtitle %], [% subtitl.subfield |html %][% END %]</title>
        <link>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]#comments</link>
        <description><![CDATA[
 [% IF ( OPACAmazonCoverImages ) %][% IF ( review.normalized_isbn ) %]<img src="https://images-na.ssl-images-amazon.com/images/P/[% review.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %]
@@ -19,15 +19,15 @@
 [% END %][% END %][% END %][% END %]
 
 [% bt_id = ( review.normalized_upc || review.normalized_isbn ) %]
-[% IF ( BakerTaylorEnabled && bt_id ) %]<a href="https://[% BakerTaylorBookstoreURL %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL %][% bt_id %]" /></a>[% END %]
-        [% IF ( review.author ) %]<p>By [% review.author %].</p> [% END %]
-        <p>[% IF ( review.place ) %][% review.place %] [% END %][% IF ( review.publishercode ) %][% review.publishercode %][% END %][% IF ( review.publicationyear ) %] [% review.publicationyear %]
-                    [% ELSE %][% IF ( review.copyrightdate ) %] [% review.copyrightdate %][% END %][% END %]
-                        [% IF ( review.pages ) %]. [% review.pages %][% END %]
-                        [% IF ( review.notes ) %], [% review.notes %][% END %]
-                        [% IF ( review.size ) %] [% review.size %]. [% END %]
-                        [% IF ( review.isbn ) %] [% review.isbn %][% END %] </p>
-<p>[% IF ( review.borrowernumber && ShowReviewer ) %][% review.firstname %] [% review.surname %] commented[% ELSE %]Comment[% END %] on [% review.datereviewed | $KohaDates %]: [% review.review %]</p>
+[% IF ( BakerTaylorEnabled && bt_id ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>[% END %]
+	   [% IF ( review.author ) %]<p>By [% review.author |html %].</p> [% END %]
+	   <p>[% IF ( review.place ) %][% review.place |html %] [% END %][% IF ( review.publishercode ) %][% review.publishercode |html %][% END %][% IF ( review.publicationyear ) %] [% review.publicationyear |html %]
+                    [% ELSE %][% IF ( review.copyrightdate ) %] [% review.copyrightdate |html %][% END %][% END %]
+                        [% IF ( review.pages ) %]. [% review.pages |html %][% END %]
+                        [% IF ( review.notes ) %], [% review.notes |html %][% END %]
+                        [% IF ( review.size ) %] [% review.size |html %]. [% END %]
+                        [% IF ( review.isbn ) %] [% review.isbn |html %][% END %] </p>
+<p>[% IF ( review.borrowernumber && ShowReviewer ) %][% review.firstname %] [% review.surname %] commented[% ELSE %]Comment[% END %] on [% review.datereviewed | $KohaDates %]: [% review.review |html %]</p>
 						]]></description>
        <guid>[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]&amp;reviewid=[% review.reviewid %]</guid>
        <pubDate>[% review.timestamp %]</pubDate>

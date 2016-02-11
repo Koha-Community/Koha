@@ -5,7 +5,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div id="opaccredits" class="noprint">
-                        [% opaccredits.raw %]
+                        [% opaccredits %]
                     </div>
                 </div>
             </div>
@@ -241,7 +241,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         signinLink.onclick = function(evt) {
             // Requests a signed identity assertion from the user.
             navigator.id.request({
-                siteName: "[% LibraryName %]",
+                siteName: "[% LibraryName | html %]",
                 returnTo: '/cgi-bin/koha/opac-user.pl',
                 oncancel: function() { alert('user refuses to share identity.'); }
                 });
@@ -270,7 +270,7 @@ $(document).ready(function() {
 [% IF ( OPACUserJS ) %]
     <script type="text/javascript">
         //<![CDATA[
-        [% OPACUserJS.raw %]
+        [% OPACUserJS %]
         //]]>
     </script>
 [% END %]

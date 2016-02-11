@@ -2,7 +2,7 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% UNLESS ( multi_hold ) %]
-    <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on [% title %]</title>
+    <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on [% title |html %]</title>
 [% ELSE %]
     <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Confirm holds</title>
 [% END %]
@@ -211,7 +211,7 @@ function checkMultiHold() {
 [% INCLUDE 'circ-search.inc' %]
 
 [% UNLESS ( multi_hold ) %]
-    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">[% title %]</a> &rsaquo; Place a hold on [% title %]</div>
+    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">[% title |html %]</a> &rsaquo; Place a hold on [% title |html %]</div>
 [% ELSE %]
     <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; Confirm holds</div>
 [% END %]
@@ -243,7 +243,7 @@ function checkMultiHold() {
   [% END %]
 
   [% UNLESS ( multi_hold ) %]
-    <h1>Place a hold on [% INCLUDE 'biblio-default-view.inc' %][% title %]</a></h1>
+    <h1>Place a hold on [% INCLUDE 'biblio-default-view.inc' %][% title |html %]</a></h1>
   [% ELSE %]
     <h1>Confirm holds</h1>
   [% END %]
@@ -371,12 +371,12 @@ function checkMultiHold() {
             <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
             <input type="hidden" name="request" value="any"/>
             [% FOREACH biblioloo IN biblioloop %]
-              <input type="hidden" name="title_[% biblioloo.biblionumber %]" value="[% biblioloo.title %]"/>
+              <input type="hidden" name="title_[% biblioloo.biblionumber %]" value="[% biblioloo.title |html %]"/>
               <input type="hidden" name="rank_[% biblioloo.biblionumber %]" value="[% biblioloo.rank %]"/>
             [% END %]
         [% ELSE %]
             <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-            <input type="hidden" name="title" value="[% title %]" />
+            <input type="hidden" name="title" value="[% title |html %]" />
             <input type="hidden" name="rank-request" value="[% fixedRank %]" />
         [% END %]
 
@@ -582,7 +582,7 @@ function checkMultiHold() {
         [% END %]
           <td>
             <ul>
-              <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]">[% biblioloo.title %]</a></li>
+              <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]">[% biblioloo.title |html %]</a></li>
               [% IF ( biblioloo.publicationyear ) %]
                 <li><span class="label">Publication year:</span> [% biblioloo.publicationyear %]</li>
               [% END %]
@@ -661,7 +661,7 @@ function checkMultiHold() {
     [% IF ( biblioloo.reserveloop ) %]
     <table>
       [% IF ( multi_hold ) %]
-          <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]">[% biblioloo.title %]</a></caption>
+          <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]">[% biblioloo.title |html %]</a></caption>
       [% END %]
       <tr>
         [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]

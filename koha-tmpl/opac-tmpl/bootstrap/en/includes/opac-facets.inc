@@ -39,10 +39,10 @@
                                   [% IF facet.active %]
                                     [% SET local_url = url _ "&amp;nolimit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
                                     <span class="facet-label">[% facet.facet_label_value %]</span>
-                                    [<a href="[% local_url %]" title="Remove facet [% facet.facet_link_value %]">x</a>]
+                                    [<a href="[% local_url %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
                                   [% ELSE %]
                                     [% SET local_url = url _ "&amp;limit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
-                                    <span class="facet-label"><a href="[% local_url %]" title="[% facet.facet_title_value %]">[% facet.facet_label_value %]</a></span>
+                                    <span class="facet-label"><a href="[% local_url %]" title="[% facet.facet_title_value |html %]">[% facet.facet_label_value %]</a></span>
                                     [% IF ( displayFacetCount ) %]
                                       <span class="facet-count"> ([% facet.facet_count %])</span>
                                     [% END %]
@@ -63,7 +63,7 @@
 
     [% IF ( OPACResultsSidebar ) %]
         <div id="opacresultssidebar">
-            [% OPACResultsSidebar.raw %]
+            [% OPACResultsSidebar %]
         </div>
     [% END %]
 [% END # / IF opacfacets && facets_loop %]

@@ -31,7 +31,7 @@
                                         [% END %]
                                         <label for="rec_[% record.recordid %]_[% subfield.subkey %]"><span class="subfield">[% subfield.subtag %]</span> / [% subfield.value %]</label>
                                         <input type="hidden" name="tag_[% field.tag %]_code_[% subfield.subtag %]_[% field.key %]_[% subfield.subkey %]" value="[% subfield.subtag %]" />
-                                        <input type="hidden" name="tag_[% field.tag %]_subfield_[% subfield.subtag %]_[% subfield.key %]_[% subfield.subkey %]" value="[% subfield.value %]" />
+                                        <input type="hidden" name="tag_[% field.tag %]_subfield_[% subfield.subtag %]_[% subfield.key %]_[% subfield.subkey %]" value="[% subfield.value |html%]" />
                                     </li>
                                 [% END %]
                             </ul>

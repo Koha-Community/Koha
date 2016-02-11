@@ -2,8 +2,8 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Patron categories &rsaquo; [% IF op == 'add_form' %][% IF ( categorycode ) %]Modify category '[% categorycode %]'[% ELSE %]New category[% END %][% END %]
-[% IF op == 'delete_confirm' %][% IF ( patrons_in_category > 0 ) %]Cannot delete: category [% categorycode %] in use[% ELSE %]Confirm deletion of category '[% categorycode %]'[% END %][% END %]
+<title>Koha &rsaquo; Administration &rsaquo; Patron categories &rsaquo; [% IF op == 'add_form' %][% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
+[% IF op == 'delete_confirm' %][% IF ( patrons_in_category > 0 ) %]Cannot delete: category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
@@ -107,8 +107,8 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patrons-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF op == 'add_form' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; [% IF ( categorycode ) %]Modify category '[% categorycode %]'[% ELSE %]New category[% END %][% END %]
-[% IF op == 'delete_confirm' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; [% IF ( patrons_in_category > 0 ) %]Cannot delete: Category [% categorycode %] in use[% ELSE %]Confirm deletion of category '[% categorycode %]'[% END %][% END %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF op == 'add_form' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; [% IF ( categorycode ) %]Modify category '[% categorycode |html %]'[% ELSE %]New category[% END %][% END %]
+[% IF op == 'delete_confirm' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; [% IF ( patrons_in_category > 0 ) %]Cannot delete: Category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
 [% IF op == 'delete_confirmed' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; Category deleted[% END %]
 [% IF op == 'list' %]Patron categories[% END %]</div>
 
@@ -145,7 +145,7 @@
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="checked" value="0" />
         [% IF category %]
-            <h1>Modify category [% categorycode %]</h1>
+            <h1>Modify category [% categorycode |html %]</h1>
         [% ELSE %]
             <h1>New category</h1>
         [% END %]
@@ -153,8 +153,8 @@
             <ol>
                 [% IF category %]
                     <li>
-                        <span class="label">Category code: </span>[% categorycode %]
-                        <input type="hidden" name="categorycode" value="[% category.categorycode %]" /><input type="hidden" name="is_a_modif" value="1" />
+                        <span class="label">Category code: </span>[% categorycode |html %]
+                        <input type="hidden" name="categorycode" value="[% category.categorycode |html %]" /><input type="hidden" name="is_a_modif" value="1" />
                     </li>
                 [% ELSE %]
                     <li>
@@ -165,7 +165,7 @@
                 [% END %]
                 <li>
                     <label for="description" class="required">Description: </label>
-                    <input type="text" name="description" id="description" size="40" maxlength="80" value="[% category.description %]" />
+                    <input type="text" name="description" id="description" size="40" maxlength="80" value="[% category.description |html %]" />
                     <span class="required">Required</span>
                 </li>
                 <li>
@@ -316,9 +316,9 @@
         <fieldset>
             <legend>
                 [% IF patrons_in_category > 0 %]
-                    Category [% categorycode %] is in use.  Deletion not possible!
+                    Category [% categorycode |html %] is in use.  Deletion not possible!
                 [% ELSE %]
-                    Confirm deletion of category [% categorycode %]
+                    Confirm deletion of category [% categorycode |html %]
                 [% END %]
             </legend>
 
@@ -328,8 +328,8 @@
                 </div>
             [% END %]
             <table>
-                <tr><th scope="row">Category code: </th><td>[% category.categorycode %]</td></tr>
-                <tr><th scope="row">Description: </th><td>[% category.description %]</td></tr>
+                <tr><th scope="row">Category code: </th><td>[% category.categorycode |html %]</td></tr>
+                <tr><th scope="row">Description: </th><td>[% category.description |html %]</td></tr>
                 <tr><th scope="row">Enrollment period: </th>
                     <td>
                         [% IF category.enrolmentperiod %]
@@ -364,7 +364,7 @@
                     <input type="submit" value="OK" />
                 [% ELSE %]
                     <input type="hidden" name="op" value="delete_confirmed" />
-                    <input type="hidden" name="categorycode" value="[% categorycode %]" />
+                    <input type="hidden" name="categorycode" value="[% categorycode |html %]" />
                     <input type="submit" value="Delete this category" />
                     <a class="cancel" href="/cgi-bin/koha/admin/categories.pl">Cancel</a>
                 [% END %]
@@ -409,9 +409,9 @@
             <tbody>
                 [% FOREACH category IN categories %]
                     <tr>
-                        <td>[% category.categorycode %]</td>
+                        <td>[% category.categorycode |html %]</td>
                         <td>
-                            <a href="/cgi-bin/koha/admin/categories.pl?op=add_form&amp;categorycode=[% category.categorycode |uri %]">[% category.description %]</a>
+                            <a href="/cgi-bin/koha/admin/categories.pl?op=add_form&amp;categorycode=[% category.categorycode |uri %]">[% category.description |html %]</a>
                         </td>
                         <td>
                             [% SWITCH category.category_type %]

@@ -264,29 +264,29 @@ $(document).ready(function(){
               </td>
             [% END %]
             <td>
-            [% result.barcode %]
+            [% result.barcode | html %]
             </td>
             <td>
                 [% Branches.GetName( result.homebranch ) %]
-                [% result.location %] [% IF ( result.itemcallnumber ) %][[% result.itemcallnumber %]][% ELSE %][% END %]
+                [% result.location | html %] [% IF ( result.itemcallnumber ) %][[% result.itemcallnumber | html %]][% ELSE %][% END %]
             </td>
             <td>
-            <p><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% result.biblionumber %]" class="openWin">[% result.title %]</a></p><p>[% result.author %]</p>
+            <p><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% result.biblionumber %]" class="openWin">[% result.title | html %]</a></p><p>[% result.author | html %]</p>
             </td>
             <td>
-            [% result.notforloan %]
+            [% result.notforloan | html %]
             </td>
             <td>
-            [% result.itemlost %]
+            [% result.itemlost | html %]
             </td>
             <td>
-            [% result.damaged %]
+            [% result.damaged | html %]
             </td>
             <td>
-            [% result.withdrawn %]
+            [% result.withdrawn | html %]
             </td>
             <td>
-            [% result.datelastseen | $KohaDates %]
+            [% result.datelastseen | $KohaDates | html %]
             </td>
             <td>
             [% IF result.problem == 'wrongplace' %]

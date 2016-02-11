@@ -31,7 +31,7 @@
                                 <ul>
                                     [% FOREACH bor_messages_loo IN bor_messages_loop %]
                                         <li>
-                                        <strong>[% bor_messages_loo.message.raw %]</strong><br>
+                                        <strong>[% bor_messages_loo.message %]</strong><br>
                                         &nbsp;&nbsp;&nbsp;<i>Written on [% bor_messages_loo.message_date | $KohaDates %] by [% bor_messages_loo.branchname %]</i>
                                         </li>
                                     [% END %]
@@ -89,7 +89,7 @@
                         <div class="alert">
                             <ul>
                                 [% IF ( userdebarred ) %]
-                                    <li id="userdebarred"><strong>Please note:</strong> Your account has been frozen[% IF ( BORROWER_INFO.userdebarreddate ) %] until <span id="userdebarred_date">[% BORROWER_INFO.userdebarreddate | $KohaDates %]</span>[% END %][% IF ( BORROWER_INFO.debarredcomment ) %] with the comment <span id="userdebarred_comment">"[% BORROWER_INFO.debarredcomment.raw %]"</span>[% END %]. Usually the reason for freezing an account is old overdues or damage fees. If <a href="/cgi-bin/koha/opac-account.pl">your account page</a> shows your account to be clear, please contact the library.</li>
+                                    <li id="userdebarred"><strong>Please note:</strong> Your account has been frozen[% IF ( BORROWER_INFO.userdebarreddate ) %] until <span id="userdebarred_date">[% BORROWER_INFO.userdebarreddate | $KohaDates %]</span>[% END %][% IF ( BORROWER_INFO.debarredcomment ) %] with the comment <span id="userdebarred_comment">"[% BORROWER_INFO.debarredcomment %]"</span>[% END %]. Usually the reason for freezing an account is old overdues or damage fees. If <a href="/cgi-bin/koha/opac-account.pl">your account page</a> shows your account to be clear, please contact the library.</li>
                                 [% END %]
                                 [% IF ( BORROWER_INFO.gonenoaddress ) %]
                                     <li id="gonenoaddress"><strong>Please note:</strong> According to our records, we don't have up-to-date [% UNLESS OPACPatronDetails %]<a href="/cgi-bin/koha/opac-memberentry.pl">contact information</a>[% ELSE %]contact information[% END %] on file.  Please contact the library[% IF OPACPatronDetails %] or use the <a href="/cgi-bin/koha/opac-memberentry.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)[% END %].</li>
@@ -104,7 +104,8 @@
                         </div>
                     [% END # / IF patron_flagged %]
 
-                    [% IF OPACMySummaryNote %][% Koha.Preference('OPACMySummaryNote').raw %][% END %]
+                    [% SET OPACMySummaryNote = Koha.Preference('OPACMySummaryNote') %]
+                    [% IF OPACMySummaryNote %][% OPACMySummaryNote %][% END %]
 
                     <div id="opac-user-views" class="toptabs">
                         <ul>
@@ -173,7 +174,7 @@
                                                     [% IF ( BakerTaylorEnabled ) %]
                                                         [% bt_id = ( ISSUE.normalized_upc || ISSUE.normalized_isbn ) %]
                                                         [% IF ( bt_id ) %]
-                                                            <a href="https://[% BakerTaylorBookstoreURL %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL %][% bt_id %]" /></a>
+                                                            <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
                                                         [% ELSE %]
                                                             <span class="no-image">No cover image available</span><!-- BakerTaylor needs normalized_upc or normalized_isbn! -->
                                                         [% END %]
@@ -190,7 +191,7 @@
                                                 </td>[% END # / IF JacketImages %]
 
                                                 <td class="title">
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield %][% END %]</a>
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title |html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield %][% END %]</a>
                                                     <span class="item-details">[% ISSUE.author %]</span>
                                                 </td>
                                                 [% IF ( ISSUE.overdue ) %]
@@ -260,7 +261,7 @@
                                                     </td>
                                                 [% END %]
                                                 [% IF ( OPACMySummaryHTML ) %]
-                                                    <td class="links">[% ISSUE.MySummaryHTML.raw %]</td>
+                                                    <td class="links">[% ISSUE.MySummaryHTML %]</td>
                                                 [% END %]
                                             </tr>
                                         [% END # /FOREACH ISSUES %]
@@ -423,7 +424,7 @@
                                                     [% IF ( BakerTaylorEnabled ) %]
                                                         [% bt_id = ( OVERDUE.normalized_upc || OVERDUE.normalized_isbn ) %]
                                                         [% IF ( bt_id ) %]
-                                                            <a href="https://[% BakerTaylorBookstoreURL %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL %][% bt_id %]" /></a>
+                                                            <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
                                                         [% ELSE %]
                                                             <span class="no-image">No cover image available</span><!-- BakerTaylor needs normalized_upc or normalized_isbn! -->
                                                         [% END %]
@@ -440,7 +441,7 @@
                                                 [% END # /IF jacketcell %]
 
                                                 <td>
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber %]">[% OVERDUE.title %] [% FOREACH subtitl IN OVERDUE.subtitle %] [% subtitl.subfield %][% END %]
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber %]">[% OVERDUE.title |html %] [% FOREACH subtitl IN OVERDUE.subtitle %] [% subtitl.subfield %][% END %]
                                                     </a>
                                                     <span class="item-details">[% OVERDUE.author %]</span></td>
 

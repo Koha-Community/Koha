@@ -27,7 +27,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div id="opacheader">
-                    [% opacheader.raw %]
+                    [% opacheader %]
                 </div>
             </div>
         </div>

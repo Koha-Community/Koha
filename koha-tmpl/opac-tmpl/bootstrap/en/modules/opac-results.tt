@@ -5,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( searchdesc ) %]
-    Results of search [% IF ( query_desc ) %]for '[% query_desc%]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc %]'[% END %]
+    Results of search [% IF ( query_desc ) %]for '[% query_desc | html%]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
 [% ELSE %]
     You did not specify any search criteria.
 [% END %]</title>
@@ -16,7 +16,7 @@
     [% END %]
 [% END %]
 
-<link rel="alternate" type="application/rss+xml" title="[% LibraryName %] Search RSS feed" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi | url %][% limit_cgi |uri %]&amp;count=[% countrss |uri %]&amp;sort_by=acqdate_dsc&amp;format=rss2" />
+<link rel="alternate" type="application/rss+xml" title="[% LibraryName |html %] Search RSS feed" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi | url %][% limit_cgi |uri %]&amp;count=[% countrss |uri %]&amp;sort_by=acqdate_dsc&amp;format=rss2" />
 </head>
 
 [% INCLUDE 'bodytag.inc' bodyid='results' bodyclass='scrollto' %]
@@ -27,7 +27,7 @@
             <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
             <li>
                 [% IF ( searchdesc ) %]
-                    <a href="#">Results of search [% IF ( query_desc ) %]for '[% query_desc%]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc %]'[% END %]</a>
+                    <a href="#">Results of search [% IF ( query_desc ) %]for '[% query_desc | html%]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]</a>
                 [% ELSE %]
                     <a href="#">You did not specify any search criteria</a>
                 [% END %]
@@ -53,7 +53,7 @@
                         [% END %]
                         [% IF ( OPACNoResultsFound ) %]
                             <div id="noresultsfound">
-                                [% OPACNoResultsFound.raw %]
+                                [% OPACNoResultsFound %]
                             </div>
                         [% END %]
                     </div> <!-- / .span12 -->
@@ -77,7 +77,7 @@
 
                 [% IF ( searchdesc ) %]
                     <p id="numresults">
-                    [% IF ( total ) %]<strong>Your search returned [% total %] results.</strong>
+                    [% IF ( total ) %]<strong>Your search returned [% total |html %] results.</strong>
                         [% IF ( related ) %]
                             (related searches:
                                 [% FOREACH relate IN related %]
@@ -85,7 +85,7 @@
                                 [% END %]
                             ).
                         [% END %]
-                        <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi | url %][% limit_cgi |html | url %]&amp;count=[% countrss %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a>
+                        <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi | url %][% limit_cgi |html | url %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a>
                     [% END # / IF total %]
                     </p>
                 [% END # / IF searchdesc %]
@@ -128,10 +128,10 @@
                             <form action="/cgi-bin/koha/opac-search.pl" method="get" name="bookbag_form" id="bookbag_form" class="checkboxed">
                                 [% IF ( searchdesc ) %]
                                     [% FOREACH QUERY_INPUT IN QUERY_INPUTS %]
-                                        <input type="hidden" name="[% QUERY_INPUT.input_name %]" value="[% QUERY_INPUT.input_value %]"/>
+                                        <input type="hidden" name="[% QUERY_INPUT.input_name |html %]" value="[% QUERY_INPUT.input_value |html %]"/>
                                     [% END %]
                                     [% FOREACH LIMIT_INPUT IN LIMIT_INPUTS %]
-                                        <input type="hidden" name="[% LIMIT_INPUT.input_name %]" value="[% LIMIT_INPUT.input_value %]"/>
+                                        <input type="hidden" name="[% LIMIT_INPUT.input_name |html %]" value="[% LIMIT_INPUT.input_value |html %]"/>
                                     [% END %]
                                 [% END # IF /searchdesc %]
 
@@ -286,7 +286,7 @@
                                                         [% IF ( BakerTaylorEnabled && !BakerTaylorBookstoreURL ) %]
                                                             [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
                                                             [% IF ( bt_id ) %]
-                                                                <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL %][% bt_id %]" />
+                                                                <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" />
                                                             [% ELSE %]
                                                                 <span class="no-image">No cover image available</span>
                                                             [% END %]
@@ -296,8 +296,8 @@
                                                     [% IF ( BakerTaylorEnabled && BakerTaylorBookstoreURL ) %]
                                                         [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
                                                         [% IF ( bt_id ) %]
-                                                            <a href="https://[% BakerTaylorBookstoreURL %][% bt_id %]">
-                                                                <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL %][% bt_id %]" />
+                                                            <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]">
+                                                                <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" />
                                                             </a>
                                                         [% ELSE %]
                                                             <span class="no-image">No cover image available</span>
@@ -321,7 +321,7 @@
                                                 [% END %]
 
                                                 [% IF ( OPACXSLTResultsDisplay ) %]
-                                                    [% SEARCH_RESULT.XSLTResultsRecord.raw %]
+                                                    [% SEARCH_RESULT.XSLTResultsRecord %]
                                                 [% ELSE %]
                                                     [% IF ( BiblioDefaultViewmarc ) %]
                                                         <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]" title="View details for this title">
@@ -334,13 +334,13 @@
                                                     [% END %]
 
                                                     [% IF ( SEARCH_RESULT.title ) %]
-                                                        [% SEARCH_RESULT.title %]
+                                                        [% SEARCH_RESULT.title |html %]
                                                     [% ELSE %]
                                                         No title
                                                     [% END %]
 
                                                     [% FOREACH subtitl IN SEARCH_RESULT.subtitle %]
-                                                        , [% subtitl.subfield %]
+                                                        , [% subtitl.subfield|html %]
                                                     [% END %]</a>
 
                                                     [% IF ( SEARCH_RESULT.author ) %]
@@ -352,7 +352,7 @@
                                                     <span class="results_summary publisher">
                                                         <span class="label">Publication:</span>
                                                             [% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place %] [% END %]
-                                                            [% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode %][% END %]
+                                                            [% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode|html %][% END %]
                                                             [% IF ( SEARCH_RESULT.publicationyear ) %]
                                                                 [% SEARCH_RESULT.publicationyear %]
                                                             [% ELSE %]
@@ -361,7 +361,7 @@
                                                                 [% END %]
                                                             [% END %]
                                                             [% IF ( SEARCH_RESULT.pages ) %]. [% SEARCH_RESULT.pages %][% END %]
-                                                            [% IF ( SEARCH_RESULT.notes ) %], [% SEARCH_RESULT.notes %][% END %]
+                                                            [% IF ( SEARCH_RESULT.notes ) %], [% SEARCH_RESULT.notes|html %][% END %]
                                                             [% IF ( SEARCH_RESULT.size ) %] [% SEARCH_RESULT.size %][% END %]
                                                             [% IF ( SEARCH_RESULT.timestamp ) %] <i>(modified on [% SEARCH_RESULT.timestamp %])</i>[% END %]
                                                     </span>
@@ -751,7 +751,7 @@ $(document).ready(function(){
             [% SET number_of_private_shelves = 0 %]
             [% FOREACH s IN add_to_some_private_shelves %]
                 [% IF shelfnumber != s.shelfnumber %]
-                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname %]<\/option>";
+                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
                     [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
                     [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
                 [% END %]
@@ -763,7 +763,7 @@ $(document).ready(function(){
             [% SET number_of_public_shelves = 0 %]
             [% FOREACH s IN add_to_some_public_shelves %]
                 [% IF shelfnumber != s.shelfnumber %]
-                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname %]<\/option>";
+                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
                     [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
                     [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
                 [% END %]
@@ -861,8 +861,8 @@ $(document).ready(function(){
 [% END %]
 
 [% IF ( query_desc ) %]
-    var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') %]";
-    var querystring = "[% querystring |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') %]";
+    var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
+    var querystring = "[% querystring |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
     [% IF ( OpacHighlightedWords ) %]
         q_array = query_desc.split(" ");
         // ensure that we don't have "" at the end of the array, which can

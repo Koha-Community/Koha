@@ -53,7 +53,7 @@
             <option value="is">is exactly</option>
             [% END %]
         </select>
-        <input id="value_mainentry" type="text" name="value" value="[% value%]" class="head-searchbox" />
+        <input id="value_mainentry" type="text" name="value" value="[% value | html%]" class="head-searchbox" />
         <select name="orderby">
             [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
@@ -109,7 +109,7 @@
             <option value="is">is exactly</option>
             [% END %]
         </select>
-        <input id="value_mainentry" type="text" name="value" value="[% value %]" class="head-searchbox" />
+        <input id="value_mainentry" type="text" name="value" value="[% value | html%]" class="head-searchbox" />
         <select name="orderby">
             [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
@@ -163,7 +163,7 @@
             <option value="is">is exactly</option>
             [% END %]
         </select>
-        <input id="value_matchheading" type="text" name="value" value="[% value %]" class="head-searchbox" />
+        <input id="value_matchheading" type="text" name="value" value="[% value | html %]" class="head-searchbox" />
         <select name="orderby">
             [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
@@ -219,7 +219,7 @@
             <option value="is">is exactly</option>
             [% END %]
         </select>
-        <input id="value_anywhere" type="text" name="value" value="[% value %]" class="head-searchbox" />
+        <input id="value_anywhere" type="text" name="value" value="[% value | html %]" class="head-searchbox" />
         <select name="orderby">
             [% IF ( orderby == 'HeadingAsc' ) %]
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>

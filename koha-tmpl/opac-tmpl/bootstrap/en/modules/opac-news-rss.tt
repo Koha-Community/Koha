@@ -7,9 +7,9 @@
       <description></description>
       [% FOREACH newsitem IN koha_news %]
       <item>
-        <title>[% newsitem.title %]</title>
-        <description>[% newsitem.new.raw %]</description>
-        <guid>[% OPACBaseURL %]/cgi-bin/koha/opac-main.pl#newsitem[% newsitem.idnew %]</guid>
+        <title>[% newsitem.title |html %]</title>
+        <description>[% newsitem.new |html %]</description>
+        <guid>[% OPACBaseURL %]/cgi-bin/koha/opac-main.pl#newsitem[% newsitem.idnew |html %]</guid>
       </item>
       [% END %]
    </channel>

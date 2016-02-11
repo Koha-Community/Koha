@@ -308,9 +308,9 @@
                                 [% FOREACH iteminformatio IN item.iteminformation %]<li style="[% iteminformatio.hidden %];">
                                     <div class="subfield_line" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
                                         [% IF (iteminformatio.mandatory) %]
-                                            <label class="required">[% iteminformatio.subfield %] - [% iteminformatio.marc_lib.raw %]</label>
+                                            <label class="required">[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
                                         [% ELSE %]
-                                            <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib.raw %]</label>
+                                            <label>[% iteminformatio.subfield %] - [% iteminformatio.marc_lib %]</label>
                                         [% END %]
 
                                         [% IF ( iteminformatio.marc_value.type == 'select' ) %]

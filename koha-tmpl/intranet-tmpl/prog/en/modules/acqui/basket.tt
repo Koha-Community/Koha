@@ -3,7 +3,7 @@
 [% USE AuthorisedValues %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname %] ([% basketno %]) for [% name %]</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</title>
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
@@ -145,7 +145,7 @@
 [% INCLUDE 'acquisitions-search.inc' %]
 
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a> &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname %] ([% basketno %]) for [% name %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a> &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -228,7 +228,7 @@
                     <p><strong>The following records could not be deleted:</strong></p>
                     <ul>
                     [% FOREACH cannotdelbiblio IN cannotdelbiblios %]
-                        <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cannotdelbiblio.biblionumber %]">[% cannotdelbiblio.title %]</a> by [% cannotdelbiblio.author %]:
+                        <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cannotdelbiblio.biblionumber %]">[% cannotdelbiblio.title |html %]</a> by [% cannotdelbiblio.author %]:
                             <ul>
                             [% IF (cannotdelbiblio.itemcount) %]<li>[% cannotdelbiblio.itemcount %] item(s) attached.</li>[% END %]
                             [% IF (cannotdelbiblio.subscriptions) %]<li>[% cannotdelbiblio.subscriptions %] subscription(s) attached.</li>[% END %]
@@ -244,7 +244,7 @@
             <META HTTP-EQUIV=Refresh CONTENT="0; url=booksellers.pl">
             [% END %]
         [% ELSE %]
-        <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname %] ([% basketno %]) for <a href="supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a></h1>
+        <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno %]) for <a href="supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a></h1>
         [% IF ( basketno ) %]
             <div id="acqui_basket_summary" class="yui-g">
                 <div class="rows">
@@ -454,7 +454,7 @@
                             <p>
                                 [% IF ( books_loo.order_received ) %] (rcvd)[% END %]
                                 [% IF books_loo.title %]
-                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber %]">[% books_loo.title %]</a>[% IF books_loo.author %] by [% books_loo.author %][% END %]
+                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber %]">[% books_loo.title |html %]</a>[% IF books_loo.author %] by [% books_loo.author %][% END %]
                                 [% ELSE %]
                                     <em>Deleted bibliographic record, can't find title</em><br />
                                 [% END %]
@@ -471,12 +471,12 @@
                                 [% END %]
                             </p>
                                 [% IF ( books_loo.order_internalnote ) %]
-                                    <p class="ordernote"><strong>Internal note: </strong>[% books_loo.order_internalnote %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=internal">Change internal note</a>]</p>
+                                    <p class="ordernote"><strong>Internal note: </strong>[% books_loo.order_internalnote|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=internal">Change internal note</a>]</p>
                                 [% ELSE %]
                                     [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=internal">Add internal note</a>]
                                 [% END %]
                                 [% IF ( books_loo.order_vendornote ) %]
-                                    <p class="ordernote"><strong>Vendor note: </strong>[% books_loo.order_vendornote %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=vendor">Change vendor note</a>]</p>
+                                    <p class="ordernote"><strong>Vendor note: </strong>[% books_loo.order_vendornote|html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=vendor">Change vendor note</a>]</p>
                                 [% ELSE %]
                                     [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber %]&type=vendor">Add vendor note</a>]
                                 [% END %]
@@ -578,7 +578,7 @@
                       <p>
                         [% IF ( order.order_received ) %] (rcvd)[% END %]
                         [% IF (order.title) %]
-                          [% order.title %][% IF order.author %] by [% order.author %][% END %]
+                          [% order.title |html %][% IF order.author %] by [% order.author %][% END %]
                         [% ELSE %]
                           <em>Deleted bibliographic record, can't find title</em>
                         [% END %]
@@ -646,7 +646,7 @@
         <div id="closebasket_needsconfirmation" class="dialog alert">
 
         <form action="/cgi-bin/koha/acqui/basket.pl" class="confirm">
-            <h1>Are you sure you want to close basket [% basketname %]?</h1>
+            <h1>Are you sure you want to close basket [% basketname|html %]?</h1>
             [% IF ( CAN_user_acquisition_group_manage ) %]
             <p>
             <label for="createbasketgroup">Attach this basket to a new basket group with the same name</label>

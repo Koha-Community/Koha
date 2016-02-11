@@ -148,7 +148,7 @@ $(document).ready(function() {
     });
 
     // Apply DataTables on the results table
-    var columns_settings = [% ColumnsSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ).raw %];
+    var columns_settings = [% ColumnsSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) %];
     dtMemberResults = KohaTable("#memberresultst", {
         'bServerSide': true,
         'sAjaxSource': "/cgi-bin/koha/svc/members/search",

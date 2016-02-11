@@ -5,7 +5,6 @@ use warnings;
 use Carp;
 use CGI qw ( -utf8 );
 use List::MoreUtils qw/ any uniq /;
-use Template::Stash::AutoEscaping;
 
 # Copyright 2009 Chris Cormack and The Koha Dev Team
 #
@@ -70,7 +69,6 @@ sub new {
             COMPILE_DIR => $use_template_cache ? C4::Context->config('template_cache_dir') : '',
             INCLUDE_PATH => \@includes,
             FILTERS => {},
-            STASH => Template::Stash::AutoEscaping->new,
             ENCODING => 'UTF-8',
         }
     ) or die Template->error();

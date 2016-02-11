@@ -106,7 +106,7 @@
                                                 [% IF BakerTaylorEnabled %]
                                                     [% bt_id = ( issue.normalized_upc || issue.normalized_isbn ) %]
                                                     [% IF ( bt_id ) %]
-                                                       <a href="https://[% BakerTaylorBookstoreURL %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL %][% bt_id %]" /></a>
+                                                       <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
                                                     [% ELSE %]
                                                        <span class="no-image">No cover image available</span>
                                                     [% END %]
@@ -122,11 +122,11 @@
                                                 </td>
                                                 <td>
                                                 [% IF  issue.BiblioDefaultViewmarc %]
-                                                     <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title %] [% IF  issue.subtitle  %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+                                                     <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF  issue.subtitle  %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
                                                 [% ELSIF issue.BiblioDefaultViewisbd %]
-                                                     <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+                                                     <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
                                                 [% ELSE %]
-                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title |html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
                                                 [% END %]
                                                 <span class="item-details">[% issue.author %]</span>
                                                 </td>
@@ -151,7 +151,7 @@
                                                     [% END %]
                                                 </td>
                                                 [% IF OPACMySummaryHTML %]
-                                                    <td>[% issue.MySummaryHTML.raw %]</td>
+                                                    <td>[% issue.MySummaryHTML %]</td>
                                                 [% END %]
                                                 </tr>
                                             [% END # / FOREACH issue %]

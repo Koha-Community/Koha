@@ -39,7 +39,7 @@
             <tr>
                 <th>[% mainloo.line %] / [% mainloo.column %]</th>
                 [% FOREACH loopco IN mainloo.loopcol %]
-                    <th>[% loopco.coltitle_display %]</th>
+                    <th>[% loopco.coltitle_display |html %]</th>
                 [% END %]
                 <th>TOTAL</th>
                 </tr>
@@ -49,7 +49,7 @@
                     [% ELSE %]
                     <tr class="highlight">
                     [% END %]
-                        <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" %]</td>
+                        <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" |html %]</td>
                     [% FOREACH loopcel IN loopro.loopcell %]
 						<td>[% loopcel.value %]</td>
                     [% END %]

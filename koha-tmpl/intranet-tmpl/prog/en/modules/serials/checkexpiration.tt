@@ -112,7 +112,7 @@
                 [% subscriptions_loo.issn %]
             </td>
             <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptions_loo.subscriptionid |url %]">[% IF ( subscriptions_loo.title ) %]
-                    [% subscriptions_loo.title %]
+                    [% subscriptions_loo.title |html %]
                 [% ELSE %]
                     |
                 [% END %]

@@ -119,7 +119,7 @@
         [% END %]                
         <fieldset class="rows">
         <ol>
-        <li><label for="name">Server name: </label><input type="text" name="servername" id="servername" size="65" maxlength="100" onblur="toUC(this)" value="[% server.servername %]"/></li>
+        <li><label for="name">Server name: </label><input type="text" name="servername" id="servername" size="65" maxlength="100" onblur="toUC(this)" value="[% server.servername | html %]"/></li>
 
         <li><label for="host" class="required">Hostname: </label> <input type="text" name="host" id="host" size="30" value="[% server.host %]" required="required" /> <span class="required">Required</span>
             [% IF (server.servertype||type) == 'sru' %]
