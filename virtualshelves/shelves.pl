@@ -195,6 +195,7 @@ if ( $op eq 'view' ) {
         if ( $shelf->can_be_viewed( $loggedinuser ) ) {
             my $sortfield = $query->param('sortfield') || $shelf->sortfield || 'title';    # Passed in sorting overrides default sorting
             my $direction = $query->param('direction') || 'asc';
+            $direction = 'asc' if $direction ne 'asc' and $direction ne 'desc';
             my ( $rows, $page );
             unless ( $query->param('print') ) {
                 $rows = C4::Context->preference('numSearchResults') || 20;
@@ -208,7 +209,7 @@ if ( $op eq 'view' ) {
                     prefetch => [ { 'biblionumber' => { 'biblioitems' => 'items' } } ],
                     page     => $page,
                     rows     => $rows,
-                    order_by => "$order_by $direction",
+                    order_by => { "-$direction" => $order_by },
                 }
             );
 
