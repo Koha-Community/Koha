@@ -28,6 +28,7 @@ use C4::Output;
 use C4::Context;
 
 use Koha::Caches;
+use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 
 # retrieve parameters
@@ -94,13 +95,6 @@ if ($op eq 'add_form') {
 		$data=$sth->fetchrow_hashref;
 	}
 
-    my @authorised_values = @{C4::Koha::GetAuthorisedValueCategories()};    # function returns array ref, dereferencing
-    unshift @authorised_values, "";                                         # put empty value first
-    my $authorised_value = {
-        values  => \@authorised_values,
-        default => $data->{'authorised_value'},
-    };
-
 	if ($searchfield) {
         $template->param(searchfield => $searchfield);
 		$template->param(action => "Modify tag");
@@ -114,7 +108,7 @@ if ($op eq 'add_form') {
 			libopac => $data->{'libopac'},
             repeatable => $data->{'repeatable'},
             mandatory => $data->{'mandatory'},
-			authorised_value => $authorised_value,
+            authorised_value => $data->{authorised_value},
 			frameworkcode => $frameworkcode,
     );  # FIXME: move checkboxes to presentation layer
 													# END $OP eq ADD_FORM

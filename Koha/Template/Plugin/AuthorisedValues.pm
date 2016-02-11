@@ -22,6 +22,7 @@ use Template::Plugin;
 use base qw( Template::Plugin );
 
 use C4::Koha;
+use Koha::AuthorisedValues;
 
 sub GetByCode {
     my ( $self, $category, $code, $opac ) = @_;
@@ -41,6 +42,20 @@ sub Get {
 sub GetAuthValueDropbox {
     my ( $self, $category, $default ) = @_;
     return C4::Koha::GetAuthvalueDropbox($category, $default);
+}
+
+sub GetCategories {
+    my ( $self, $params ) = @_;
+    my $selected = $params->{selected};
+    my @categories = Koha::AuthorisedValues->new->categories;
+    return [
+        map {
+            {
+                category => $_,
+                ( ( $selected and $selected eq $_ ) ? ( selected => 1 ) : () ),
+            }
+        } @categories
+    ];
 }
 
 1;

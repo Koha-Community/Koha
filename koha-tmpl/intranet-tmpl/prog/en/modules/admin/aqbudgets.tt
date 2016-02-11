@@ -1,3 +1,4 @@
+[% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -594,34 +595,14 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     <label  style="white-space: nowrap;" for="authorised_value_category1">Statistic 1 done on: </label>
         <select name="sort1_authcat" id="authorised_value_category1">
             <option value=""></option>
-            [% FOREACH authorised_value_categories IN authorised_value_categories1 %]
-                [% IF ( authorised_value_categories.selected ) %]
-                    <option value="[% authorised_value_categories.category %]" selected="selected">
-                        [% authorised_value_categories.category %]
-                    </option>
-                [% ELSE %]
-                    <option value="[% authorised_value_categories.category %]">
-                        [% authorised_value_categories.category %]
-                    </option>
-                [% END %]
-            [% END %]
+            [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => sort1_authcat ) %]
         </select>
     </li>
     <li>
     <label  style="white-space: nowrap;" for="authorised_value_category2">Statistic 2 done on: </label>
         <select name="sort2_authcat" id="authorised_value_category2">
             <option value=""></option>
-            [% FOREACH authorised_value_categories IN authorised_value_categories2 %]
-                [% IF ( authorised_value_categories.selected ) %]
-                    <option value="[% authorised_value_categories.category %]" selected="selected">
-                        [% authorised_value_categories.category %]
-                    </option>
-                [% ELSE %]
-                    <option value="[% authorised_value_categories.category %]">
-                        [% authorised_value_categories.category %]
-                    </option>
-                [% END %]
-            [% END %]
+            [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => sort2_authcat ) %]
         </select>
     </li>
     </ol>

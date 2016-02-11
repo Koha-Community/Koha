@@ -140,24 +140,11 @@ if ($op eq 'add_form') {
     }
     $budget_parent = GetBudget($budget_parent_id);
 
-    # populates the YUI planning button
-    my $categories = GetAuthorisedValueCategories();
-    my @auth_cats_loop1 = ();
-    foreach my $category (@$categories) {
-        my $entry = { category => $category,
-                        selected => ( $budget and $budget->{sort1_authcat} eq $category ? 1 : 0 ),
-                    };
-        push @auth_cats_loop1, $entry;
-    }
-    my @auth_cats_loop2 = ();
-    foreach my $category (@$categories) {
-        my $entry = { category => $category,
-                        selected => ( $budget and $budget->{sort2_authcat} eq $category ? 1 : 0 ),
-                    };
-        push @auth_cats_loop2, $entry;
-    }
-    $template->param(authorised_value_categories1 => \@auth_cats_loop1);
-    $template->param(authorised_value_categories2 => \@auth_cats_loop2);
+    # populates the planning button
+    $template->param(
+        sort1_auth => $budget->{sort1_authcat},
+        sort2_auth => $budget->{sort2_authcat},
+    );
 
     if($budget->{'budget_permission'}){
         my $budget_permission = "budget_perm_".$budget->{'budget_permission'};

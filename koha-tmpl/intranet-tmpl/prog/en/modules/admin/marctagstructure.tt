@@ -1,3 +1,4 @@
+[% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo;
 [% IF ( add_form ) %]MARC frameworks &rsaquo; [% action %] [% searchfield %][% END %]
@@ -100,13 +101,8 @@ $(document).ready(function() {
     </li>
     <li><label for="authorised_value">Authorized value: </label>
         <select name="authorised_value" id="authorised_value" size="1">
-        [% FOREACH value IN authorised_value.values %]
-        [% IF ( value == authorised_value.default ) %]
-            <option value="[% value %]" selected="selected">[% value %]</option>
-        [% ELSE %]
-            <option value="[% value %]">[% value %]</option>
-        [% END %]
-        [% END %]
+            <option value=""></option>
+            [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => authorised_value ) %]
         </select>
         (if you select a value here, the indicators will be limited to the authorized value list)</li>
 </ol></fieldset> 

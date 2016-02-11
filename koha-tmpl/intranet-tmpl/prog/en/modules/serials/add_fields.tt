@@ -1,3 +1,4 @@
+[% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Manage new fields for subscriptions
   [% IF op == "list" %] &rsaquo; List of fields
@@ -136,13 +137,7 @@
             <label for="av">Authorised value category: </label>
             <select name="authorised_value_category">
               <option value="">None</option>
-              [% FOR category IN categories %]
-                [% IF field.authorised_value_category == category %]
-                  <option value="[% category %]" selected="selected">[% category %]</option>
-                [% ELSE %]
-                  <option value="[% category %]">[% category %]</option>
-                [% END %]
-              [% END %]
+              [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => field.authorised_value_category ) %]
             </select>
           </li>
           <li>

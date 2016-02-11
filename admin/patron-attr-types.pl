@@ -101,7 +101,6 @@ sub add_attribute_type_form {
         categories => $patron_categories,
         branches_loop => \@branches_loop,
     );
-    authorised_value_category_list($template);
     $template->param(classes_val_loop => GetAuthorisedValues( 'PA_CLASS'));
 }
 
@@ -132,8 +131,8 @@ sub error_add_attribute_type_form {
     $template->param(
         attribute_type_form => 1,
         confirm_op => 'add_attribute_type_confirmed',
+        authorised_value_category => $input->param('authorised_value_category'),
     );
-    authorised_value_category_list($template, $input->param('authorised_value_category'));
 }
 
 sub add_update_attribute_type {
@@ -249,9 +248,8 @@ sub edit_attribute_type_form {
     if ($attr_type->display_checkout()) {
         $template->param(display_checkout_checked => 'checked="checked"');
     }
-    authorised_value_category_list($template, $attr_type->authorised_value_category());
+    $template->param( authorised_value_category => $attr_type->authorised_value_category() );
     $template->param(classes_val_loop => GetAuthorisedValues( 'PA_CLASS' ));
-
 
     my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
     my @branches_loop;
@@ -310,18 +308,4 @@ sub patron_attribute_type_list {
     }
     $template->param(available_attribute_types => \@attributes_loop);
     $template->param(display_list => 1);
-}
-
-sub authorised_value_category_list {
-    my $template = shift;
-    my $selected = @_ ? shift : '';
-
-    my $categories = GetAuthorisedValueCategories();
-    my @list = ();
-    foreach my $category (@$categories) {
-        my $entry = { category => $category };
-        $entry->{selected} = 1 if $category eq $selected;
-        push @list, $entry;
-    }
-    $template->param(authorised_value_categories => \@list);
 }

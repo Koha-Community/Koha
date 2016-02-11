@@ -101,7 +101,6 @@ if ( $op eq 'delete' ) {
 }
 
 if ( $op eq 'add_form' ) {
-    my $categories = C4::Koha::GetAuthorisedValueCategories();
     my $field;
     if ( $field_id ) {
         $field = Koha::AdditionalField->new( { id => $field_id } )->fetch;
@@ -109,7 +108,6 @@ if ( $op eq 'add_form' ) {
 
     $template->param(
         field => $field,
-        categories => $categories,
     );
 }
 

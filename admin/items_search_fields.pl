@@ -21,7 +21,6 @@ use CGI;
 
 use C4::Auth;
 use C4::Output;
-use C4::Koha;
 
 use Koha::Item::Search::Field qw(AddItemSearchField GetItemSearchFields DelItemSearchField);
 
@@ -71,11 +70,9 @@ if ($op eq 'add') {
 }
 
 my @fields = GetItemSearchFields();
-my $authorised_values_categories = C4::Koha::GetAuthorisedValueCategories();
 
 $template->param(
     fields => \@fields,
-    authorised_values_categories => $authorised_values_categories,
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

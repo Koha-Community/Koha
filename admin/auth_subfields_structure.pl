@@ -25,6 +25,7 @@ use C4::Context;
 use C4::Koha;
 
 use Koha::Authority::Types;
+use Koha::AuthorisedValues;
 
 use List::MoreUtils qw( uniq );
 
@@ -92,11 +93,11 @@ if ($op eq 'add_form') {
 		push @kohafields, "auth_header.".$field;
 	}
 	
-        # build authorised value list
-        my $authorised_values = C4::Koha::GetAuthorisedValueCategories;
-        unshift @$authorised_values, '';
-        push @$authorised_values, 'branches';
-        push @$authorised_values, 'itemtypes';
+        # build authorised value category list
+        my @authorised_value_categories = Koha::AuthorisedValues->new->categories;
+        unshift @authorised_value_categories, '';
+        push @authorised_value_categories, 'branches';
+        push @authorised_value_categories, 'itemtypes';
 
         # build thesaurus categories list
         my @authtypes = uniq( "", map { $_->authtypecode } Koha::Authority::Types->search );
@@ -138,7 +139,7 @@ if ($op eq 'add_form') {
         $row_data{seealso}           = $data->{'seealso'};
         $row_data{kohafields}        = \@kohafields;
         $row_data{kohafield}         = $data->{'kohafield'};
-        $row_data{authorised_values} = $authorised_values;
+        $row_data{authorised_values} = \@authorised_value_categories;
         $row_data{authorised_value}  = $data->{'authorised_value'};
         $row_data{frameworkcodes}    = \@authtypes;
         $row_data{frameworkcode}     = $data->{'frameworkcode'};
@@ -167,7 +168,7 @@ if ($op eq 'add_form') {
     $row_data{mandatory}        = 0;
     $row_data{isurl}            = 0;
     $row_data{kohafields} = \@kohafields,
-    $row_data{authorised_values} = $authorised_values;
+    $row_data{authorised_values} = \@authorised_value_categories;
     $row_data{frameworkcodes} = \@authtypes;
     $row_data{value_builders} = \@value_builder;
     $row_data{row} = $i;
@@ -199,7 +200,7 @@ if ($op eq 'add_form') {
 	my @tab				= $input->multi_param('tab');
 	my @seealso		= $input->multi_param('seealso');
     my @ohidden             = $input->multi_param('ohidden');
-	my @authorised_values	= $input->multi_param('authorised_value');
+    my @authorised_value_categories = $input->multi_param('authorised_value');
 	my $authtypecode	= $input->param('authtypecode');
 	my @frameworkcodes	= $input->multi_param('frameworkcode');
 	my @value_builder	=$input->multi_param('value_builder');
@@ -215,7 +216,7 @@ if ($op eq 'add_form') {
 		my $kohafield		=$kohafield[$i];
 		my $tab				=$tab[$i];
 		my $seealso				=$seealso[$i];
-		my $authorised_value		=$authorised_values[$i];
+        my $authorised_value = $authorised_value_categories[$i];
 		my $frameworkcode		=$frameworkcodes[$i];
 		my $value_builder=$value_builder[$i];
         my $defaultvalue = $defaultvalue[$i];

@@ -50,13 +50,7 @@
     <label for="authorised_values_category">Authorised values category: </label>
     <select id="authorised_values_category" name="authorised_values_category">
       <option value="">- None -</option>
-      [% FOREACH category IN authorised_values_categories %]
-        [% IF field && field.authorised_values_category == category %]
-          <option value="[% category %]" selected="selected">[% category %]</option>
-        [% ELSE %]
-          <option value="[% category %]">[% category %]</option>
-        [% END %]
-      [% END %]
+      [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => field.authorised_values_category ) %]
     </select>
   </li>
 </ol>
