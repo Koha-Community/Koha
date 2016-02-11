@@ -243,6 +243,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('NewItemsDefaultLocation','','','If set, all new items will have a location of the given Location Code ( Authorized Value type LOC )',''),
 ('NewsAuthorDisplay','none','none|opac|staff|both','Display the author name for news items.','Choice'),
 ('noissuescharge','5','','Define maximum amount withstanding before check outs are blocked','Integer'),
+('NoIssuesChargeGuarantees','','','Define maximum amount withstanding before check outs are blocked','Integer'),
 ('noItemTypeImages','0',NULL,'If ON, disables item-type images','YesNo'),
 ('NoLoginInstructions', '', '60|10', 'Instructions to display on the OPAC login form when a patron is not logged in', 'Textarea'),
 ('NorwegianPatronDBEnable','0',NULL,'Enable communication with the Norwegian national patron database.', 'YesNo'),

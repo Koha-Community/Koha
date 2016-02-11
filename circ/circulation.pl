@@ -499,6 +499,14 @@ foreach my $flag ( sort keys %$flags ) {
                 charges_is_blocker => 1
             );
         }
+        elsif ( $flag eq 'CHARGES_GUARANTEES' ) {
+            $template->param(
+                charges_guarantees    => 'true',
+                chargesmsg_guarantees => $flags->{'CHARGES_GUARANTEES'}->{'message'},
+                chargesamount_guarantees => $flags->{'CHARGES_GUARANTEES'}->{'amount'},
+                charges_guarantees_is_blocker => 1
+            );
+        }
         elsif ( $flag eq 'CREDITS' ) {
             $template->param(
                 credits    => 'true',
@@ -513,6 +521,13 @@ foreach my $flag ( sort keys %$flags ) {
                 charges    => 'true',
                 chargesmsg => $flags->{'CHARGES'}->{'message'},
                 chargesamount => $flags->{'CHARGES'}->{'amount'},
+            );
+        }
+        elsif ( $flag eq 'CHARGES_GUARANTEES' ) {
+            $template->param(
+                charges_guarantees    => 'true',
+                chargesmsg_guarantees => $flags->{'CHARGES_GUARANTEES'}->{'message'},
+                chargesamount_guarantees => $flags->{'CHARGES_GUARANTEES'}->{'amount'},
             );
         }
         elsif ( $flag eq 'CREDITS' ) {

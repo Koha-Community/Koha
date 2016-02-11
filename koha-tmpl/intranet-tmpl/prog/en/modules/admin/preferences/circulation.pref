@@ -304,6 +304,11 @@ Circulation:
               class: integer
             - '[% local_currency %] in fines.'
         -
+            - Prevent a patron from checking out if the patron has guarantees owing in total more than
+            - pref: NoIssuesChargeGuarantees
+              class: integer
+            - '[% local_currency %] in fines.'
+        -
             - pref: RentalsInNoissuesCharge
               choices:
                   yes: Include

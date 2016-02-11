@@ -24,6 +24,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
 use String::Random qw( random_string );
+use Scalar::Util qw( looks_like_number );
 use Date::Calc qw/Today Add_Delta_YM check_date Date_to_Days/;
 use C4::Log; # logaction
 use C4::Overdues;
@@ -326,6 +327,28 @@ sub patronflags {
         $flaginfo{'amount'}  = sprintf "%.02f", $balance;
         $flags{'CREDITS'} = \%flaginfo;
     }
+
+    # Check the debt of the guarntees of this patron
+    my $no_issues_charge_guarantees = C4::Context->preference("NoIssuesChargeGuarantees");
+    $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
+    if ( defined $no_issues_charge_guarantees ) {
+        my $p = Koha::Patrons->find( $patroninformation->{borrowernumber} );
+        my @guarantees = $p->guarantees();
+        my $guarantees_non_issues_charges;
+        foreach my $g ( @guarantees ) {
+            my ( $b, $n, $o ) = C4::Members::GetMemberAccountBalance( $g->id );
+            $guarantees_non_issues_charges += $n;
+        }
+
+        if ( $guarantees_non_issues_charges > $no_issues_charge_guarantees ) {
+            my %flaginfo;
+            $flaginfo{'message'} = sprintf 'patron guarantees owe %.02f', $guarantees_non_issues_charges;
+            $flaginfo{'amount'}  = sprintf "%.02f", $guarantees_non_issues_charges;
+            $flaginfo{'noissues'} = 1 unless C4::Context->preference("allowfineoverride");
+            $flags{'CHARGES_GUARANTEES'} = \%flaginfo;
+        }
+    }
+
     if (   $patroninformation->{'gonenoaddress'}
         && $patroninformation->{'gonenoaddress'} == 1 )
     {

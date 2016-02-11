@@ -55,6 +55,7 @@ use Koha::Libraries;
 use Koha::Holds;
 use Carp;
 use List::MoreUtils qw( uniq );
+use Scalar::Util qw( looks_like_number );
 use Date::Calc qw(
   Today
   Today_and_Now
@@ -844,9 +845,32 @@ sub CanBookBeIssued {
     # DEBTS
     my ($balance, $non_issue_charges, $other_charges) =
       C4::Members::GetMemberAccountBalance( $borrower->{'borrowernumber'} );
+
     my $amountlimit = C4::Context->preference("noissuescharge");
     my $allowfineoverride = C4::Context->preference("AllowFineOverride");
     my $allfinesneedoverride = C4::Context->preference("AllFinesNeedOverride");
+
+    # Check the debt of this patrons guarantees
+    my $no_issues_charge_guarantees = C4::Context->preference("NoIssuesChargeGuarantees");
+    $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
+    if ( defined $no_issues_charge_guarantees ) {
+        my $p = Koha::Patrons->find( $borrower->{borrowernumber} );
+        my @guarantees = $p->guarantees();
+        my $guarantees_non_issues_charges;
+        foreach my $g ( @guarantees ) {
+            my ( $b, $n, $o ) = C4::Members::GetMemberAccountBalance( $g->id );
+            $guarantees_non_issues_charges += $n;
+        }
+
+        if ( $guarantees_non_issues_charges > $no_issues_charge_guarantees && !$inprocess && !$allowfineoverride) {
+            $issuingimpossible{DEBT_GUARANTEES} = sprintf( "%.2f", $guarantees_non_issues_charges );
+        } elsif ( $guarantees_non_issues_charges > $no_issues_charge_guarantees && !$inprocess && $allowfineoverride) {
+            $needsconfirmation{DEBT_GUARANTEES} = sprintf( "%.2f", $guarantees_non_issues_charges );
+        } elsif ( $allfinesneedoverride && $guarantees_non_issues_charges > 0 && $guarantees_non_issues_charges <= $no_issues_charge_guarantees && !$inprocess ) {
+            $needsconfirmation{DEBT_GUARANTEES} = sprintf( "%.2f", $guarantees_non_issues_charges );
+        }
+    }
+
     if ( C4::Context->preference("IssuingInProcess") ) {
         if ( $non_issue_charges > $amountlimit && !$inprocess && !$allowfineoverride) {
             $issuingimpossible{DEBT} = sprintf( "%.2f", $non_issue_charges );
@@ -865,6 +889,7 @@ sub CanBookBeIssued {
             $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issue_charges );
         }
     }
+
     if ($balance > 0 && $other_charges > 0) {
         $alerts{OTHER_CHARGES} = sprintf( "%.2f", $other_charges );
     }
