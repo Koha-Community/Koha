@@ -68,11 +68,11 @@ sub delete {
     return $self->SUPER::delete($self);
 }
 
-=head3 type
+=head3 _type
 
 =cut
 
-sub type {
+sub _type {
     return 'Message';
 }
 

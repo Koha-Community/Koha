@@ -35,11 +35,11 @@ Koha::Patron::Messages - Koha Message Object set class
 
 =cut
 
-=head3 type
+=head3 _type
 
 =cut
 
-sub type {
+sub _type {
     return 'Message';
 }
 
