@@ -215,15 +215,17 @@ sub GetLogs {
     my $datefrom = shift;
     my $dateto   = shift;
     my $user     = shift;
-    my $modules   = shift;
+    my $modules  = shift;
     my $action   = shift;
     my $object   = shift;
     my $info     = shift;
-   
+
     my $iso_datefrom = $datefrom ? output_pref({ dt => dt_from_string( $datefrom ), dateformat => 'iso', dateonly => 1 }) : undef;
     my $iso_dateto = $dateto ? output_pref({ dt => dt_from_string( $dateto ), dateformat => 'iso', dateonly => 1 }) : undef;
 
-    my $dbh = C4::Context->dbh;
+    $user ||= q{};
+
+    my $dbh   = C4::Context->dbh;
     my $query = "
         SELECT *
         FROM   action_logs
@@ -231,35 +233,40 @@ sub GetLogs {
     ";
 
     my @parameters;
-    $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= \"".$iso_datefrom."\" " if $iso_datefrom;   #fix me - mysql specific
-    $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') <= \"".$iso_dateto."\" " if $iso_dateto;
-    if($user ne "") {
-    	$query .= " AND user = ? ";
-    	push(@parameters,$user);
+    $query .=
+      " AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= \"" . $iso_datefrom . "\" "
+      if $iso_datefrom;    #fix me - mysql specific
+    $query .=
+      " AND DATE_FORMAT(timestamp, '%Y-%m-%d') <= \"" . $iso_dateto . "\" "
+      if $iso_dateto;
+    if ( $user ne q{} ) {
+        $query .= " AND user = ? ";
+        push( @parameters, $user );
     }
-    if($modules && scalar(@$modules)) {
-    	$query .= " AND module IN (".join(",",map {"?"} @$modules).") ";
-	push(@parameters,@$modules);
+    if ( $modules && scalar(@$modules) ) {
+        $query .=
+          " AND module IN (" . join( ",", map { "?" } @$modules ) . ") ";
+        push( @parameters, @$modules );
     }
-    if($action && scalar(@$action)) {
-    	$query .= " AND action IN (".join(",",map {"?"} @$action).") ";
-	push(@parameters,@$action);
+    if ( $action && scalar(@$action) ) {
+        $query .= " AND action IN (" . join( ",", map { "?" } @$action ) . ") ";
+        push( @parameters, @$action );
     }
-    if($object) {
-    	$query .= " AND object = ? ";
-	push(@parameters,$object);
+    if ($object) {
+        $query .= " AND object = ? ";
+        push( @parameters, $object );
     }
-    if($info) {
-    	$query .= " AND info LIKE ? ";
-	push(@parameters,"%".$info."%");
+    if ($info) {
+        $query .= " AND info LIKE ? ";
+        push( @parameters, "%" . $info . "%" );
     }
-   
+
     my $sth = $dbh->prepare($query);
     $sth->execute(@parameters);
-    
+
     my @logs;
-    while( my $row = $sth->fetchrow_hashref ) {
-        push @logs , $row;
+    while ( my $row = $sth->fetchrow_hashref ) {
+        push @logs, $row;
     }
     return \@logs;
 }
