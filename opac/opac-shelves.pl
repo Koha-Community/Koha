@@ -90,11 +90,11 @@ if ( $op eq 'add_form' ) {
             push @messages, { type => 'error', code => 'error_on_insert' };
         } else {
             push @messages, { type => 'message', code => 'success_on_insert' };
-            $op = $referer;
+            $op = 'view';
         }
     } else {
         push @messages, { type => 'error', code => 'unauthorized_on_insert' };
-        $op = $referer;
+        $op = 'list';
     }
 } elsif ( $op eq 'edit' ) {
     $shelfnumber = $query->param('shelfnumber');
