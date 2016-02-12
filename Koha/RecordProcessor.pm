@@ -103,13 +103,14 @@ sub new {
                         :   $param->{filters};
     my @filters = ( );
 
-    foreach my $filter (@{ $req_filters }) {
-        next unless $filter;
-        my $filter_module = $filter =~ m/:/ ? $filter : "Koha::Filter::${schema}::${filter}";
+    foreach my $filter_name (@{ $req_filters }) {
+        next unless $filter_name;
+        # Fully qualify the module name.
+        my $filter_module = $filter_name =~ m/:/ ? $filter_name : "Koha::Filter::${schema}::${filter_name}";
         if (can_load( modules => { $filter_module => undef } )) {
-            my $object = $filter_module->new();
-            $filter_module->initialize($param);
-            push @filters, $object;
+            my $filter = $filter_module->new();
+            $filter->initialize($param);
+            push @filters, $filter;
         }
     }
 
