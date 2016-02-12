@@ -10724,6 +10724,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.20.08.002";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE `authorised_values` SET `lib`='Non-fiction' WHERE `lib`='Non Fiction';
+    });
+
+    print "Upgrade to $DBversion done (Bug 15411 - Change Non Fiction to Non-fiction in authorised_values)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
