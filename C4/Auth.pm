@@ -398,7 +398,7 @@ sub get_template_and_user {
         $template->param( dateformat => C4::Context->preference('dateformat') );
     }
 
-    $template->param(auth_forwarded_hash => $in->{'query'}->param('auth_forwarded_hash'));
+    $template->param(auth_forwarded_hash => scalar $in->{'query'}->param('auth_forwarded_hash'));
 
     # these template parameters are set the same regardless of $in->{'type'}
 
