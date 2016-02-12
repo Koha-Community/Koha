@@ -76,6 +76,15 @@ BEGIN {
 		if ($ENV{KOHA_BACKTRACES}) {
 			$main::SIG{__DIE__} = \&CGI::Carp::confess;
 		}
+
+        # Redefine multi_param if cgi version is < 4.08
+        # Remove the "CGI::param called in list context" warning in this case
+        if (!defined($CGI::VERSION) || $CGI::VERSION < 4.08) {
+            no warnings 'redefine';
+            *CGI::multi_param = \&CGI::param;
+            use warnings 'redefine';
+            $CGI::LIST_CONTEXT_WARN = 0;
+        }
     }  	# else there is no browser to send fatals to!
 
     # Check if there are memcached servers set
