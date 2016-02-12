@@ -72,13 +72,13 @@ if ( $op eq 'add_form' ) {
     if ( $loggedinuser ) {
         eval {
             $shelf = Koha::Virtualshelf->new(
-                {   shelfname          => $query->param('shelfname'),
-                    sortfield          => $query->param('sortfield'),
-                    category           => $query->param('category') || 1,
-                    allow_add          => $query->param('allow_add'),
-                    allow_delete_own   => $query->param('allow_delete_own'),
-                    allow_delete_other => $query->param('allow_delete_other'),
-                    owner              => $loggedinuser,
+                {   shelfname          => scalar $query->param('shelfname'),
+                    sortfield          => scalar $query->param('sortfield'),
+                    category           => scalar $query->param('category') || 1,
+                    allow_add          => scalar $query->param('allow_add'),
+                    allow_delete_own   => scalar $query->param('allow_delete_own'),
+                    allow_delete_other => scalar $query->param('allow_delete_other'),
+                    owner              => scalar $loggedinuser,
                 }
             );
             $shelf->store;
