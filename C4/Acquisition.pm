@@ -33,7 +33,7 @@ use Koha::Acquisition::Bookseller;
 use Koha::Number::Price;
 use Koha::Libraries;
 
-use C4::Koha qw( subfield_is_koha_internal_p );
+use C4::Koha;
 
 use MARC::Field;
 use MARC::Record;
@@ -2996,7 +2996,7 @@ sub FillWithDefaultValues {
             next unless $tag;
             next if $tag == $itemfield;
             for my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
-                next if ( subfield_is_koha_internal_p($subfield) );
+                next unless ref $tagslib->{$tag}{$subfield}; # Not a valid subfield (mandatory, tab, lib)
                 my $defaultvalue = $tagslib->{$tag}{$subfield}{defaultvalue};
                 if ( defined $defaultvalue and $defaultvalue ne '' ) {
                     my @fields = $record->field($tag);

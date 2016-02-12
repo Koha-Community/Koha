@@ -21,8 +21,12 @@ $biblio_module->mock(
         {
             # default value for an existing field
             '245' => {
-                c => { defaultvalue => $default_author },
-            },
+                c          => { defaultvalue => $default_author },
+                mandatory  => 0,
+                repeatable => 0,
+                tab        => 0,
+                lib        => 'a lib',
+              },
 
             # default for a nonexisting field
             '099' => {

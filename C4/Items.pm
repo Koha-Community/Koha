@@ -2943,7 +2943,7 @@ sub PrepareItemrecordDisplay {
             # loop through each subfield
             my $cntsubf;
             foreach my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
-                next if ( subfield_is_koha_internal_p($subfield) );
+                next unless ref $tagslib->{$tag}{$subfield}; # Not a valid subfield (mandatory, tab, lib)
                 next if ( $tagslib->{$tag}->{$subfield}->{'tab'} ne "10" );
                 my %subfield_data;
                 $subfield_data{tag}           = $tag;

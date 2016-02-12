@@ -28,8 +28,8 @@ use C4::Biblio;
 use C4::Items;
 use C4::Context;
 use C4::Circulation;
-use C4::Koha; # XXX subfield_is_koha_internal_p
-use C4::Branch; # XXX subfield_is_koha_internal_p
+use C4::Koha;
+use C4::Branch;
 use C4::ClassSource;
 use Koha::DateUtils;
 use List::MoreUtils qw/any/;
@@ -606,7 +606,7 @@ if ($op eq "additem") {
         my $tag = $field->{_tag};
         foreach my $subfield ($field->subfields()){
             my $subfieldtag = $subfield->[0];
-            if (subfield_is_koha_internal_p($subfieldtag) || $tagslib->{$tag}->{$subfieldtag}->{'tab'} ne "10"
+            if ($tagslib->{$tag}->{$subfieldtag}->{'tab'} ne "10"
             ||  abs($tagslib->{$tag}->{$subfieldtag}->{hidden})>4 ){
                 my $fieldItem = $itemrecord->field($tag);
                 $itemrecord->delete_field($fieldItem);
@@ -871,7 +871,6 @@ if($itemrecord){
             my $value       = $subfield->[1];
             my $subfieldlib = $tagslib->{$tag}->{$subfieldtag};
 
-            next if subfield_is_koha_internal_p($subfieldtag);
             next if ($tagslib->{$tag}->{$subfieldtag}->{'tab'} ne "10");
 
             my $subfield_data = generate_subfield_form($tag, $subfieldtag, $value, $tagslib, $subfieldlib, $branches, $biblionumber, $temp, \@loop_data, $i, $restrictededition);
@@ -891,7 +890,7 @@ $itemrecord = $cookieitemrecord if ($prefillitem and not $justaddeditem and $op 
 # We generate form, and fill with values if defined
 foreach my $tag ( keys %{$tagslib}){
     foreach my $subtag (keys %{$tagslib->{$tag}}){
-        next if subfield_is_koha_internal_p($subtag);
+        next unless ref $tagslib->{$tag}{$subtag}; # Not a valid subfield (mandatory, tab, lib)
         next if ($tagslib->{$tag}->{$subtag}->{'tab'} ne "10");
         next if any { /^$tag$subtag$/ }  @fields;
 

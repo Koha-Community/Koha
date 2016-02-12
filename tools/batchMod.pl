@@ -27,8 +27,8 @@ use C4::Biblio;
 use C4::Items;
 use C4::Circulation;
 use C4::Context;
-use C4::Koha; # XXX subfield_is_koha_internal_p
-use C4::Branch; # XXX subfield_is_koha_internal_p
+use C4::Koha;
+use C4::Branch;
 use C4::BackgroundJob;
 use C4::ClassSource;
 use C4::Debug;
@@ -308,7 +308,7 @@ my @subfieldsToAllow = split(/ /, $subfieldsToAllowForBatchmod);
 foreach my $tag (sort keys %{$tagslib}) {
     # loop through each subfield
     foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
-     	next if subfield_is_koha_internal_p($subfield);
+        next unless ref $tagslib->{$tag}{$subfield}; # Not a valid subfield (mandatory, tab, lib)
         next if (not $allowAllSubfields and $restrictededition && !grep { $tag . '$' . $subfield eq $_ } @subfieldsToAllow );
     	next if ($tagslib->{$tag}->{$subfield}->{'tab'} ne "10");
         # barcode and stocknumber are not meant to be batch-modified

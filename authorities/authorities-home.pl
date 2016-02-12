@@ -29,7 +29,7 @@ use C4::Auth;
 use C4::Output;
 use C4::AuthoritiesMarc;
 use C4::Acquisition;
-use C4::Koha;    # XXX subfield_is_koha_internal_p
+use C4::Koha;
 use C4::Biblio;
 use C4::Search::History;
 

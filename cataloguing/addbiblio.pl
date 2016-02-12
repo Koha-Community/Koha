@@ -30,8 +30,8 @@ use C4::AuthoritiesMarc;
 use C4::Context;
 use MARC::Record;
 use C4::Log;
-use C4::Koha;    # XXX subfield_is_koha_internal_p
-use C4::Branch;    # XXX subfield_is_koha_internal_p
+use C4::Koha;
+use C4::Branch;
 use C4::ClassSource;
 use C4::ImportBatch;
 use C4::Charset;

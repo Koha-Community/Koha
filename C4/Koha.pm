@@ -39,7 +39,6 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&subfield_is_koha_internal_p
 		&GetPrinters &GetPrinter
 		&GetItemTypes &getitemtypeinfo
                 &GetItemTypesCategorized &GetItemTypesByCategory
@@ -93,17 +92,6 @@ Koha.pm provides many functions for Koha scripts.
 =head1 FUNCTIONS
 
 =cut
-
-# FIXME.. this should be moved to a MARC-specific module
-sub subfield_is_koha_internal_p {
-    my ($subfield) = @_;
-
-    # We could match on 'lib' and 'tab' (and 'mandatory', & more to come!)
-    # But real MARC subfields are always single-character
-    # so it really is safer just to check the length
-
-    return length $subfield != 1;
-}
 
 =head2 GetSupportName
 
