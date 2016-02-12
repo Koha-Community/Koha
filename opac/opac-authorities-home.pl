@@ -47,12 +47,13 @@ my $resultsperpage;
 my $authority_types = Koha::Authority::Types->search({}, { order_by => ['authtypetext']});
 
 if ( $op eq "do_search" ) {
-    my @marclist = ($query->param('marclist'));
-    my @and_or = ($query->param('and_or'));
-    my @excluding = ($query->param('excluding'),);
-    my @operator = ($query->param('operator'));
+    my @marclist = $query->multi_param('marclist');
+    my @and_or = $query->multi_param('and_or');
+    my @excluding = $query->multi_param('excluding');
+    my @operator = $query->multi_param('operator');
     my $orderby = $query->param('orderby');
-    my @value = ($query->param('value') || "",);
+    my @value = $query->multi_param('value');
+    $value[0] ||= q||;
 
     $resultsperpage = $query->param('resultsperpage');
     $resultsperpage = 20 if ( !defined $resultsperpage );
