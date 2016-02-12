@@ -98,7 +98,7 @@ sub initialize {
     my $self = shift;
     my $params = shift;
 
-    #$self->params = $params;
+    $self->params($params);
 
     return $self;
 }
