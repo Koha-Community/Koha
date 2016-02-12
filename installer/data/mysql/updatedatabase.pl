@@ -11713,6 +11713,16 @@ remove_tree( $tmp ) if -d $tmp;
 
 }
 
+$DBversion = "3.23.00.018";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE systempreferences SET value="0" where type="YesNo" and value="";
+    });
+
+    print "Upgrade to $DBversion done (Bug 15446 - Fix systempreferences rows where type=YesNo and value='')\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
