@@ -52,7 +52,13 @@ sub _new_schema {
 
     # we are letting C4::Context->dbh not set the RaiseError handle attribute
     # for now for compatbility purposes
-    my $schema = Koha::Schema->connect( sub { C4::Context->dbh }, { unsafe => 1 } );
+    my $schema = Koha::Schema->connect(
+        sub { C4::Context->dbh },
+        {
+            unsafe => 1,
+            quote_names => 1,
+        }
+    );
     return $schema;
 }
 
