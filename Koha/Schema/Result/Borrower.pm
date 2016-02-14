@@ -1053,8 +1053,8 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "RESTRICT",
-    on_update     => "RESTRICT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
   },
 );
 
@@ -1204,8 +1204,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-12-31 16:48:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dd1tdtsFTruFwsmCZU6ogQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-02-14 12:46:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bI6qJYw+ulTUwA7XMCkkRw
 
 __PACKAGE__->belongs_to(
     "guarantor",

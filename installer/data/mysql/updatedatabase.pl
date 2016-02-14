@@ -11733,6 +11733,36 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.020";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        CREATE TABLE  sms_providers (
+           id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+           name VARCHAR( 255 ) NOT NULL ,
+           domain VARCHAR( 255 ) NOT NULL ,
+           UNIQUE (
+               name
+           )
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    });
+
+    $dbh->do(q{
+        ALTER TABLE borrowers ADD sms_provider_id INT( 11 ) NULL DEFAULT NULL AFTER smsalertnumber;
+    });
+    $dbh->do(q{
+        ALTER TABLE borrowers ADD FOREIGN KEY ( sms_provider_id ) REFERENCES sms_providers ( id ) ON UPDATE CASCADE ON DELETE SET NULL;
+    });
+    $dbh->do(q{
+        ALTER TABLE deletedborrowers ADD sms_provider_id INT( 11 ) NULL DEFAULT NULL AFTER smsalertnumber;
+    });
+    $dbh->do(q{
+        ALTER TABLE deletedborrowers ADD FOREIGN KEY ( sms_provider_id ) REFERENCES sms_providers ( id ) ON UPDATE CASCADE ON DELETE SET NULL;
+    });
+
+    print "Upgrade to $DBversion done (Bug 9021 - Add SMS via email as an alternative to SMS services via SMS::Send drivers)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.

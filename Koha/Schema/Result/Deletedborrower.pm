@@ -387,6 +387,11 @@ __PACKAGE__->table("deletedborrowers");
   is_nullable: 1
   size: 50
 
+=head2 sms_provider_id
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 privacy
 
   data_type: 'integer'
@@ -550,6 +555,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "smsalertnumber",
   { data_type => "varchar", is_nullable => 1, size => 50 },
+  "sms_provider_id",
+  { data_type => "integer", is_nullable => 1 },
   "privacy",
   { data_type => "integer", default_value => 1, is_nullable => 0 },
   "privacy_guarantor_checkouts",
@@ -557,8 +564,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-06 12:00:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aNmdXpOz+XN5abM67sl8uA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-02-14 12:46:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UvGAnZ1qOwgtmLpbG8ukow
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
