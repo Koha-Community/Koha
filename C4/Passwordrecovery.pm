@@ -103,7 +103,7 @@ sub GetValidLinkInfo {
 =cut
 
 sub SendPasswordRecoveryEmail {
-    my $borrower  = shift;    # Koha::Borrower
+    my $borrower  = shift;    # Koha::Patron
     my $userEmail = shift;    #to_address (the one specified in the request)
     my $update    = shift;
 

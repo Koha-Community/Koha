@@ -11,7 +11,7 @@ use C4::Context;
 use C4::Passwordrecovery
   qw(SendPasswordRecoveryEmail ValidateBorrowernumber GetValidLinkInfo CompletePasswordRecovery);
 use Koha::AuthUtils qw(hash_password);
-use Koha::Borrowers;
+use Koha::Patrons;
 my $query = new CGI;
 use HTML::Entities;
 
@@ -58,10 +58,10 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
 
     # Find the borrower by his userid or email
     if ($username) {
-        $search_results = [ Koha::Borrowers->search( { userid => $username } ) ];
+        $search_results = [ Koha::Patrons->search( { userid => $username } ) ];
     }
     elsif ($email) {
-        $search_results = [ Koha::Borrowers->search( { -or => { email => $email, emailpro => $email, B_email  => $email } } ) ];
+        $search_results = [ Koha::Patrons->search( { -or => { email => $email, emailpro => $email, B_email  => $email } } ) ];
     }
     if ( not $search_results || scalar @$search_results > 1 ) {
         $hasError           = 1;

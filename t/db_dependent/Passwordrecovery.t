@@ -20,7 +20,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Letters;
 use Koha::Database;
-use Koha::Borrowers;
+use Koha::Patrons;
 
 use Test::More tests => 16;
 
@@ -134,7 +134,7 @@ ok( C4::Passwordrecovery::CompletePasswordRecovery($uuid2) == 0, "[CompletePassw
 # C4::Passwordrecovery::SendPasswordRecoveryEmail #
 ###################################################
 
-my $borrower = shift [ Koha::Borrowers->search( { userid => $userid1 } ) ];
+my $borrower = shift [ Koha::Patrons->search( { userid => $userid1 } ) ];
 ok( C4::Passwordrecovery::SendPasswordRecoveryEmail($borrower, $email1, 0) == 1, "[SendPasswordRecoveryEmail] Returns 1 on success" );
 my $letters = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber1, limit => 99 } );
 ok( scalar @$letters == 1, "[SendPasswordRecoveryEmail] There is a letter in the queue for our borrower");
