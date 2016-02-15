@@ -746,6 +746,9 @@ sub AddMember {
       : $patron_category->default_privacy() eq 'never'   ? 2
       : $patron_category->default_privacy() eq 'forever' ? 0
       :                                                    undef;
+
+    $data{'privacy_guarantor_checkouts'} = 0 unless defined( $data{'privacy_guarantor_checkouts'} );
+
     # Make a copy of the plain text password for later use
     my $plain_text_password = $data{'password'};
 
@@ -753,8 +756,9 @@ sub AddMember {
     $data{'password'} = ($data{'password'})? hash_password($data{'password'}) : '!';
 
     # we don't want invalid dates in the db (mysql has a bad habit of inserting 0000-00-00
-    $data{'dateofbirth'} = undef if( not $data{'dateofbirth'} );
-    $data{'debarred'} = undef if ( not $data{'debarred'} );
+    $data{'dateofbirth'}     = undef if ( not $data{'dateofbirth'} );
+    $data{'debarred'}        = undef if ( not $data{'debarred'} );
+    $data{'sms_provider_id'} = undef if ( not $data{'sms_provider_id'} );
 
     # get only the columns of Borrower
     my @columns = $schema->source('Borrower')->columns;
