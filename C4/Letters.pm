@@ -1120,7 +1120,7 @@ sub GetMessage {
   Updates the message to 'pending' status so that
   it will be resent later on.
 
-  returns 1 on success, 0 on failure
+  returns 1 on success, 0 on failure, undef if no message was found
 
 =cut
 
@@ -1130,13 +1130,18 @@ sub ResendMessage {
 
     my $message = GetMessage( $message_id );
     return unless $message;
+    my $rv = 0;
     if ( $message->{status} ne 'pending' ) {
-        return ((C4::Letters::_set_message_status( {
-                    message_id => $message_id,
-                    status => 'pending',
-             } ) > 0) ? 1:0);
+        $rv = C4::Letters::_set_message_status({
+            message_id => $message_id,
+            status => 'pending',
+        });
+        $rv = $rv > 0? 1: 0;
+        # Clear destination email address to force address update
+        _update_message_to_address( $message_id, undef ) if $rv &&
+            $message->{message_transport_type} eq 'email';
     }
-    return 0;
+    return $rv;
 }
 
 =head2 _add_attachements
