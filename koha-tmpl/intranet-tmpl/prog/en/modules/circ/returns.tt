@@ -181,7 +181,7 @@ $(document).ready(function () {
         <!-- WrongTransfer -->
         <h3>Please return item to: [% Branches.GetName( TransferWaitingAt ) %]</h3>
             <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
-        <ul><li><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% homebranch %]&amp;op=slip'); return true;">Print transfer slip</a></li><li><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1">Cancel transfer</a></li></ul>
+        <button type="submit" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% homebranch %]&amp;op=slip'); return true;"><i class="fa fa-print"></i> Print transfer slip</button><button type="submit" onclick="window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1'"><i class="fa fa-times"></i> Cancel transfer</button>
 [% IF ( wborcnum ) %]<h5>Hold for:</h5>
         <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
             [% borsurname %], [% borfirstname %]</a> ([% borcnum %])</li>
@@ -196,11 +196,11 @@ $(document).ready(function () {
             <input type="hidden" name="WT-itemNumber" value="[% WrongTransferItem %]" />
             <input type="hidden" name="WT-waitingAt" value="[% TransferWaitingAt %]" />
             <input type="hidden" name="WT-From" value="[% wtransfertFrom %]" />
-            <input type="submit" class="approve" value="Confirm" />
+            <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm</button>
             <input type="hidden" name="print_slip" value="0" />
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-            <input type="submit" value="Print slip and confirm" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();" />
+            <button type="submit" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();"><i class="fa fa-print"></i> Print slip and confirm</button>
         <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
         <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember %]" />
     </form>
@@ -233,11 +233,10 @@ $(document).ready(function () {
 		<h4><strong>Hold at</strong> [% destbranchname %]</h4>
         [% END %]
         <form method="post" action="returns.pl" class="confirm">
-
-            <input type="submit" class="approve" value="Confirm" />
+            <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm</button>
 
             <input type="hidden" name="cancel_reserve" value="0" />
-            <input type="submit" class="deny" value="Cancel hold" onclick="this.form.cancel_reserve.value = 1; this.form.submit();" />
+            <button type="submit" class="deny" onclick="this.form.cancel_reserve.value = 1; this.form.submit();"><i class="fa fa-times"></i> Cancel</button>
 
             <input type="hidden" name="print_slip" value="0" />
             <input type="submit" value="Print and confirm" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();" />
@@ -284,11 +283,11 @@ $(document).ready(function () {
         [% END %]
 
         <form method="post" action="returns.pl" class="confirm">
-            <input type="submit" class="approve" value="Confirm" />
+            <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm</button>
             <input type="hidden" name="print_slip" value="0" />
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
-            <input type="submit" value="Print slip and confirm" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();" />
+            <button type="submit" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();"><i class="fa fa-print"></i> Print slip and continue</button>
             [% FOREACH inputloo IN inputloop %]
                 <input type="hidden" name="ri-[% inputloo.counter %]" value="[% inputloo.barcode %]" />
                 <input type="hidden" name="dd-[% inputloo.counter %]" value="[% inputloo.duedate %]" />
@@ -321,10 +320,10 @@ $(document).ready(function () {
     Transfer now?<br />
     <form method="post" action="returns.pl" name="mainform" id="mainform">
     [% IF itemnumber %]
-        <input type="submit" name="dotransfer" value="Yes, Print slip" class="print" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;" />
+        <button type="submit" name="dotransfer" class="print" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;"><i class="fa fa-print"></i> Yes, print slip</button>
     [% END %]
-	<input type="submit" name="dotransfer" value="Yes" class="submit" />
-	<input type="submit" name="notransfer" value="No" class="submit" />
+	<button type="submit" name="dotransfer" class="submit"><i class="fa fa-check"></i> Yes</button>
+	<button type="submit" name="notransfer" class="submit"><i class="fa fa-times"></i> No</button>
     <input type="hidden" name="tobranch" value="[% returnbranch %]" />
 	<input type="hidden" name="transferitem" value="[% itemnumber %]" />
         <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
@@ -397,13 +396,13 @@ $(document).ready(function () {
         <form method="post" action="returns.pl" class="confirm">
             <input type="hidden" name="print_slip" value="0" />
             [% IF ( transfertodo ) %]
-                <input type="submit" class="approve" value="Confirm hold and transfer" />
-                <input type="submit" value="Print slip, transfer, and confirm" class="print" onclick="this.form.print_slip.value = 1; this.form.submit()" />
+                <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm hold and transfer</button>
+                <button type="submit" class="print" onclick="this.form.print_slip.value = 1; this.form.submit()"><i class="fa fa-print></i> Print slip, transfer, and confirm</button>
             [% ELSE %]
-                <input type="submit" class="approve" value="Confirm hold" />
-                <input type="submit" value="Print slip and confirm" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();" />
+                <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm hold</button>
+                <button type="submit" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();"><i class="fa fa-print"></i> Print slip and confirm</button>
             [% END %]
-                <input type="submit" class="deny" value="Ignore" onclick="$('.dialog:visible').hide('slow'); $('#barcode').focus(); return false;" />
+                <button type="submit" class="deny" onclick="$('.dialog:visible').hide('slow'); $('#barcode').focus(); return false;"><i class="fa fa-times"></i> Ignore</button>
             [% FOREACH inputloo IN inputloop %]
 	<input type="hidden" name="ri-[% inputloo.counter %]" value="[% inputloo.barcode %]" />
 	<input type="hidden" name="dd-[% inputloo.counter %]" value="[% inputloo.duedate %]" />

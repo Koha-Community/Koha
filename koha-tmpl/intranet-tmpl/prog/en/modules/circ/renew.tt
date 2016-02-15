@@ -49,7 +49,7 @@
                                     <form method="post" action="/cgi-bin/koha/circ/renew.pl">
                                         <input type="hidden" name="barcode" value="[% item.barcode %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
-                                        <input type="submit" class="approve" value="Override limit and renew" />
+                                        <button type="submit" class="approve"><i class="fa fa-check"></i> Override limit and renew</button>
                                     </form>
                                 [% END %]
 
@@ -61,7 +61,7 @@
                                     <form method="post" action="/cgi-bin/koha/circ/renew.pl">
                                         <input type="hidden" name="barcode" value="[% item.barcode %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
-                                        <input type="submit" class="approve" value="Override and renew" />
+                                        <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
                                     </form>
                                 [% END %]
 
@@ -73,7 +73,7 @@
                                     <form method="post" action="/cgi-bin/koha/circ/renew.pl">
                                         <input type="hidden" name="barcode" value="[% item.barcode %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
-                                        <input type="submit" class="approve" value="Override and renew" />
+                                        <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
                                     </form>
                                 [% END %]
 
@@ -85,7 +85,7 @@
                                     <form method="post" action="/cgi-bin/koha/circ/renew.pl">
                                         <input type="hidden" name="barcode" value="[% item.barcode %]"/>
                                         <input type="hidden" name="override_limit" value="1" />
-                                        <input type="submit" class="approve" value="Override limit and renew" />
+                                        <button type="submit" class="approve"><i class="fa fa-check"></i> Override limit and renew</button>
                                     </form>
                                 [% END %]
 
@@ -97,7 +97,7 @@
                                     <input type="hidden" name="barcode" value="[% item.barcode %]"/>
                                     <input type="hidden" name="override_limit" value="1" />
                                     <input type="hidden" name="override_holds" value="1" />
-                                    <input type="submit" class="approve" value="Override and renew" />
+                                    <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
                                 </form>
 
                             [% ELSIF error == "patron_restricted" %]
@@ -111,7 +111,7 @@
                             [% END %]
 
                                 <form method="get" action="/cgi-bin/koha/circ/renew.pl">
-                                    <input type="submit" class="deny" value="Ignore and continue" />
+                                    <button type="submit" class="deny"><i class="fa fa-times"></i> Ignore and continue</button>
                                 </form>
                     </div>
                 [% END %]

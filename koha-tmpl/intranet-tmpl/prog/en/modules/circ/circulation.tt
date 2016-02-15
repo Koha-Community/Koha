@@ -363,9 +363,9 @@ $(document).ready(function() {
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
     <input type="hidden" name="branch" value="[% branch %]" />
     [% IF ( RENEW_ISSUE ) %]
-    <input type="submit" class="approve" value="Yes, renew (Y)" accesskey="y" />
+    <button type="submit" class="approve" accesskey="y"><i class="fa fa-check"></i> Yes, renew (Y)</button>
     [% ELSE %]
-    <input type="submit" class="approve" value="Yes, check out (Y)" accesskey="y" />
+    <button type="submit" class="approve" accesskey="y"><i class="fa fa-check"></i> Yes, check out (Y)</button>
     [% END %]
     <input type="hidden" name="onsite_checkout" value="[% onsite_checkout %]" />
 </form>
@@ -377,7 +377,7 @@ $(document).ready(function() {
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
-    <input class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip');this.form.submit();" value="Don't check out and print slip (P)">
+    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
 </form>
 [% END %]
 
@@ -387,7 +387,7 @@ $(document).ready(function() {
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
-    <input class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip');this.form.submit();" value="Don't check out and print slip (P)">
+    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
 </form>
 [% END %]
 
@@ -399,18 +399,18 @@ $(document).ready(function() {
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
     [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
         [% IF ( RENEW_ISSUE ) %]
-        <input type="submit" class="deny" value="No, don't renew (N)" accesskey="n" />
+        <button type="submit" class="deny" accesskey="n"><i class="fa fa-times"></i> No, don't renew (N)</button>
         [% ELSE %]
-        <input type="submit" class="deny" value="No, don't check out (N)" accesskey="n" />
+        <button type="submit" class="deny" accesskey="n"><i class="fa fa-times"></i> No, don't check out (N)</button>
         [% END %]
     [% ELSE %]
-        <input type="submit" class="deny" value="Continue" />
+        <button type="submit" class="deny"><i class="fa fa-times></i> Continue</button>
     [% END %]
 </form>
 
 [% IF ( RESERVED || ISSUED_TO_ANOTHER ) && (CAN_user_reserveforothers_place_holds ) %]
     [% UNLESS flagged && noissues %]
-        <div class="circ-checkoutplacehold"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber %]&borrowernumber=[% borrowernumber %]">Click here to place a hold for [% INCLUDE 'patron-title.inc' %]</a></div>
+        <button type="submit" onclick="window.location.href='/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber %]&borrowernumber=[% borrowernumber %]'"><i class="fa fa-times-circle"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title.inc' %]</button>
     [% END %]
 [% END %]
 </div></div>
@@ -451,7 +451,7 @@ $(document).ready(function() {
                         <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
                         <input type="hidden" name="branch" value="[% branch %]" />
                         <input type="hidden" name="barcode" value="[% book.barcode %]" />
-                        <input type="submit" name="x" value="Check out [% book.barcode %]: [% book.title %]" />
+                        <button type="submit" name="x"><i class="fa fa-check"></i> Check out [% book.barcode %]: [% book.title %]</button>
                     </form>
                 [% END %]
             [% ELSE %]
