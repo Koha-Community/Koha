@@ -890,7 +890,6 @@ for (my $i=0;$i<@servers;$i++) {
             if ($nohits and $nohits=~/{QUERY_KW}/){
                 # extracting keywords in case of relaunching search
                 (my $query_kw=$query_desc)=~s/ and|or / /g;
-                $query_kw = Encode::decode_utf8($query_kw);
                 my @query_kw=($query_kw=~ /([-\w]+\b)(?:[^,:]|$)/g);
                 $query_kw=join('+',@query_kw);
                 $nohits=~s/{QUERY_KW}/$query_kw/g;
