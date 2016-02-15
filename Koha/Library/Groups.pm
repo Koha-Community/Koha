@@ -49,7 +49,7 @@ sub get_root_groups {
 
 =cut
 
-sub type {
+sub _type {
     return 'LibraryGroup';
 }
 

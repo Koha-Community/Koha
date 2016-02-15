@@ -108,7 +108,7 @@ sub store {
 
 =cut
 
-sub type {
+sub _type {
     return 'LibraryGroup';
 }
 
