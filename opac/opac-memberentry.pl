@@ -258,7 +258,7 @@ sub GetHiddenFields {
       C4::Context->preference( "PatronSelfModificationBorrowerUnwantedField" ) :
       C4::Context->preference( "PatronSelfRegistrationBorrowerUnwantedField" );
 
-    my @fields = split( /\|/, $BorrowerUnwantedField );
+    my @fields = split( /\|/, $BorrowerUnwantedField || q|| );
     foreach (@fields) {
         next unless m/\w/o;
         #Don't hide mandatory fields
