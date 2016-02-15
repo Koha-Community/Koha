@@ -35,11 +35,11 @@ Koha::SMS::Providers - Koha SMS Provider object set class
 
 =cut
 
-=head3 type
+=head3 _type
 
 =cut
 
-sub type {
+sub _type {
     return 'SmsProvider';
 }
 

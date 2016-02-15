@@ -50,11 +50,11 @@ sub patrons_using {
     return Koha::Borrowers->search( { sms_provider_id => $self->id } )->count();
 }
 
-=head3 type
+=head3 _type
 
 =cut
 
-sub type {
+sub _type {
     return 'SmsProvider';
 }
 
