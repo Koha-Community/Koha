@@ -47,24 +47,6 @@ Review.pm provides many routines for manipulating reviews.
 
 =head1 FUNCTIONS
 
-=head2 savereview
-
-  savereview($biblionumber,$borrowernumber, $review);
-
-Save a review in the 'reviews' database
-
-=cut
-
-sub savereview {
-    my ( $biblionumber, $borrowernumber, $review ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "INSERT INTO reviews (borrowernumber,biblionumber,
-  review,approved,datereviewed) VALUES
-  (?,?,?,0,now())";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $biblionumber, $review );
-}
-
 =head2 numberofreviewsbybiblionumber
 
   my $count=numberofreviewsbybiblionumber($biblionumber);

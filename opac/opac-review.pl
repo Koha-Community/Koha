@@ -22,11 +22,11 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Koha;
 use C4::Output;
-use C4::Review;
 use C4::Biblio;
 use C4::Scrubber;
 use C4::Debug;
 use Koha::DateUtils;
+use Koha::Review;
 use Koha::Reviews;
 
 my $query        = new CGI;
@@ -69,9 +69,14 @@ if (defined $review) {
                         datereviewed  => dt_from_string
                     }
                 )->store;
-			} else {
-    			savereview($biblionumber, $borrowernumber, $clean);
-			}
+            } else {
+                Koha::Review->new(
+                    {   biblionumber   => $biblionumber,
+                        borrowernumber => $borrowernumber,
+                        review         => $clean,
+                    }
+                )->store;
+            }
 			unless (@errors){ $template->param(WINDOW_CLOSE=>1); }
 		}
 	}
