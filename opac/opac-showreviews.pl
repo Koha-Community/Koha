@@ -30,6 +30,7 @@ use C4::Review;
 use C4::Biblio;
 use C4::Members qw/GetMemberDetails/;
 use Koha::DateUtils;
+use Koha::Reviews;
 use POSIX qw(ceil strftime);
 
 my $template_name;
@@ -38,8 +39,7 @@ my $format = $query->param("format") || '';
 my $count = C4::Context->preference('OPACnumSearchResults') || 20;
 my $results_per_page = $query->param('count') || $count;
 my $offset = $query->param('offset') || 0;
-my $page = $query->param('page') || 1;
-$offset = ($page-1)*$results_per_page if $page>1;
+my $page = $offset / $results_per_page + 1;
 
 if ($format eq "rss") {
     $template_name = "opac-showreviews-rss.tt";
@@ -76,7 +76,14 @@ if ( C4::Context->preference('ShowReviewer') and C4::Context->preference('ShowRe
     }
 }
 
-my $reviews = getallreviews(1,$offset,$results_per_page);
+my $reviews = Koha::Reviews->search(
+    { approved => 1 },
+    {
+        rows => $results_per_page,
+        page => $page,
+        order_by => { -desc => 'datereviewed' },
+    }
+)->unblessed;
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $hits = numberofreviews(1);
 my $i = 0;
