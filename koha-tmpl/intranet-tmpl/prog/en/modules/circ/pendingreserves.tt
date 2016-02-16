@@ -28,9 +28,10 @@ $(document).ready(function() {
     for ( j=0 ; j<cD.length ; j++ ) {
         var split_array = cD[j].split(/<br>/gi);
         for ( k=0 ; k<split_array.length ; k++ ){
-            var check_array = $.inArray(split_array[k], new_array);
+            var str = $.trim(split_array[k].replace(/[\n\r]/g, ''));
+            var check_array = $.inArray(str, new_array);
             if (check_array == -1) {
-                new_array.push(split_array[k]);
+                new_array.push(str);
             }
         }
     }
@@ -50,9 +51,6 @@ $(document).ready(function() {
       $(this).html( createSelect( holdst.fnGetColumnData(4) ) );
       $('select', this).change( function () {
           var filter_value = $(this).val();
-          if(filter_value){
-                filter_value = "(^|>)"+filter_value+"($|<)";
-          }
           holdst.fnFilter( filter_value, 4, true );
       } );
   } );
