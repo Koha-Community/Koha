@@ -27,7 +27,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
-    @EXPORT = qw(getreview savereview updatereview numberofreviews numberofreviewsbybiblionumber);
+    @EXPORT = qw(savereview updatereview numberofreviews numberofreviewsbybiblionumber);
 }
 
 =head1 NAME
@@ -38,7 +38,6 @@ C4::Review - Perl Module containing routines for dealing with reviews of items
 
   use C4::Review;
 
-  my $review=getreview($biblionumber,$borrowernumber);
   savereview($biblionumber,$borrowernumber,$review);
   updatereview($biblionumber,$borrowernumber,$review);
   my $count=numberofreviews($status);
@@ -49,23 +48,6 @@ C4::Review - Perl Module containing routines for dealing with reviews of items
 Review.pm provides many routines for manipulating reviews.
 
 =head1 FUNCTIONS
-
-=head2 getreview
-
-  $review = getreview($biblionumber,$borrowernumber);
-
-Takes a borrowernumber and a biblionumber and returns the review of that biblio
-
-=cut
-
-sub getreview {
-    my ( $biblionumber, $borrowernumber ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "SELECT * FROM reviews WHERE biblionumber=? and borrowernumber=?";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute( $biblionumber, $borrowernumber );
-    return $sth->fetchrow_hashref();
-}
 
 =head2 savereview
 

@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Koha;
@@ -27,6 +26,7 @@ use C4::Review;
 use C4::Biblio;
 use C4::Scrubber;
 use C4::Debug;
+use Koha::Reviews;
 
 my $query        = new CGI;
 my $biblionumber = $query->param('biblionumber');
@@ -43,7 +43,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 # FIXME: need to allow user to delete their own comment(s)
 
 my $biblio = GetBiblioData($biblionumber);
-my $savedreview = getreview($biblionumber,$borrowernumber);
+# FIXME biblionumber, borrowernumber should be a unique key of reviews
+my $savedreview = Koha::Reviews->search({ biblionumber => $biblionumber, borrowernumber => $borrowernumber })->next;
 my ($clean, @errors);
 if (defined $review) {
 	if ($review !~ /\S/) {
@@ -70,10 +71,12 @@ if (defined $review) {
 }
 (@errors   ) and $template->param(   ERRORS=>\@errors);
 ($cgi_debug) and $template->param(cgi_debug=>1       );
+$review = $clean;
+$review ||= $savedreview->review if $savedreview;
 $template->param(
     'biblionumber'   => $biblionumber,
     'borrowernumber' => $borrowernumber,
-    'review'         => $clean || $savedreview->{'review'},
+    'review'         => $review,
 	'reviewid'       => scalar $query->param('reviewid') || 0,
     'title'          => $biblio->{'title'},
 );
