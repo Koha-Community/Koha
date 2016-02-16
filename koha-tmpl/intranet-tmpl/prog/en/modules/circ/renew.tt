@@ -39,7 +39,7 @@
 
                             [% ELSIF error == "no_checkout" %]
 
-                                <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]">[% item.biblio.title %] [% item.biblioitem.subtitle %]</a> ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber %]&amp;biblionumber=[% item.biblionumber %]&amp;bi=[% item.biblioitemnumber %]#item[% item.itemnumber %]">[% item.barcode %]</a> ) is not checked out to a patron.</p>
+                                <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]">[% item.biblio.title %] [% item.biblioitem.subtitle %]</a> ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber %]&amp;biblionumber=[% item.biblionumber %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber %]#item[% item.itemnumber %]">[% item.barcode %]</a> ) is not checked out to a patron.</p>
 
                             [% ELSIF error == "too_many" %]
 
@@ -121,7 +121,7 @@
                         <h3>Item renewed:</h3>
                         <p>
                             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]">[% item.biblio.title %] [% item.biblioitem.subtitle %]</a>
-                            ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber %]&amp;biblionumber=[% item.biblionumber %]&amp;bi=[% item.biblioitemnumber %]#item[% item.itemnumber %]">[% item.barcode %]</a> )
+                            ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber %]&amp;biblionumber=[% item.biblionumber %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber %]#item[% item.itemnumber %]">[% item.barcode %]</a> )
                             renewed for
                             [% borrower.firstname %] [% borrower.surname %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]"> [% borrower.cardnumber %] </a> )
                             now due on [% date_due | $KohaDates %]
