@@ -9,6 +9,17 @@
 	$("#image").click(function(){
 		$("#cardnum").show();
 	});
+    $( "#upload_form" ).validate({
+        rules: {
+            cardnumber: {
+                required: {
+                    depends: function(element) {
+                        return $("#image").is(":checked");
+                    }
+                }
+            }
+        }
+    });
 });
 </script>
 </head>
@@ -104,23 +115,31 @@
                     [% END %]
                 </div>
                 [% END %]
-	        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
-	            <fieldset class="brief">
-			 <div class="hint"><b>NOTE:</b> Only PNG, GIF, JPEG, XPM formats are supported.</div>
+            <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data" id="upload_form">
+                <fieldset class="rows">
+                    <p><b>NOTE:</b> Only PNG, GIF, JPEG, XPM formats are supported.</p>
                         <ol class="radio">
-                            <li class="radio">
-                                <label for="zipfile"><input type="radio" id="zipfile" name="filetype" value="zip" checked="checked" /> zip file</label></li>
-                                <li>
-                                <label for="image">
-								[% IF ( filetype == 'image' ) %]<input type="radio" id="image" name="filetype" value="image" checked="checked" />[% ELSE %]<input type="radio" id="image" name="filetype" value="image" />[% END %]
-								 image file</label>
-	                <ol>
                             <li>
-                                <label for="uploadfile">Select the file to upload: </label><input type="file" id="uploadfile" name="uploadfile" />
-                                [% IF ( filetype == 'image' ) %]<span id="cardnum">[% ELSE %]<span id="cardnum" style="display: none">[% END %]<label for="cardnumber">Enter patron cardnumber: </label><input type="text" id="cardnumber" name="cardnumber" value="[% cardnumber %]" size="15" /></span>
+                                <label for="zipfile"><input type="radio" id="zipfile" name="filetype" value="zip" checked="checked" /> Zip file</label></li>
+                            <li>
+                                <label for="image">
+                                [% IF ( filetype == 'image' ) %]<input type="radio" id="image" name="filetype" value="image" checked="checked" />[% ELSE %]<input type="radio" id="image" name="filetype" value="image" />[% END %] Image file</label>
                             </li>
-    	                </ol>
-					</li></ol>
+                            [% IF ( filetype == 'image' ) %]
+                                <li id="cardnum">
+                            [% ELSE %]
+                                <li id="cardnum" style="display: none">
+                            [% END %]
+                                <label for="cardnumber" class="required">Enter patron cardnumber: </label>
+                                <input type="text" id="cardnumber" name="cardnumber" value="[% cardnumber %]" size="15" />
+                                <span class="required">Required</span>
+                            </li>
+                            <li class="required">
+                                <label for="uploadfile">Select the file to upload: </label>
+                                <input type="file" id="uploadfile" name="uploadfile" class="required" required="required" />
+                                <span class="required">Required</span>
+                            </li>
+                        </ol>
 	            </fieldset>
                     <fieldset class="action">
                         <input type="hidden" name="op" value="Upload" />
