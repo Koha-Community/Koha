@@ -50,11 +50,11 @@ use C4::Biblio;
 use C4::Items;
 use C4::Reserves;
 use C4::Acquisition;
-use C4::Review;
 use C4::Serials;    # uses getsubscriptionfrom biblionumber
 use C4::Koha;
 use C4::Members;    # GetMember
 use Koha::RecordProcessor;
+
 
 my $query = CGI->new();
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -177,24 +177,12 @@ for my $itm (@items) {
       unless $allow_onshelf_holds;
 }
 
-my $reviews = getreviews( $biblionumber, 1 );
-foreach ( @$reviews ) {
-    my $borrower_number_review = $_->{borrowernumber};
-    my $borrowerData           = GetMember('borrowernumber' =>$borrower_number_review);
-    # setting some borrower info into this hash
-    $_->{title}     = $borrowerData->{'title'};
-    $_->{surname}   = $borrowerData->{'surname'};
-    $_->{firstname} = $borrowerData->{'firstname'};
-}
-
-
 $template->param(
     RequestOnOpac       => C4::Context->preference("RequestOnOpac"),
     AllowOnShelfHolds   => $allow_onshelf_holds,
     norequests   => $norequests,
     ISBD         => $res,
     biblionumber => $biblionumber,
-    reviews             => $reviews,
 );
 
 #Search for title in links

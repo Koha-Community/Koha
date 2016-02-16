@@ -51,6 +51,7 @@ use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use Koha::RecordProcessor;
 use Koha::Virtualshelves;
 use Koha::Ratings;
+use Koha::Reviews;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -801,39 +802,45 @@ $template->param(
     ocoins => GetCOinSBiblio($record),
 );
 
-my $libravatar_enabled = 0;
-if ( C4::Context->preference('ShowReviewer') and C4::Context->preference('ShowReviewerPhoto')) {
-    eval {
-        require Libravatar::URL;
-        Libravatar::URL->import();
-    };
-    if (!$@ ) {
-        $libravatar_enabled = 1;
+my ( $loggedincommenter, $reviews );
+if ( C4::Context->preference('reviewson') ) {
+    $reviews = Koha::Reviews->search(
+        {
+            biblionumber => $biblionumber,
+            -or => { approved => 1, borrowernumber => $borrowernumber }
+        },
+        {
+            order_by => { -desc => 'datereviewed' }
+        }
+    )->unblessed;
+    my $libravatar_enabled = 0;
+    if ( C4::Context->preference('ShowReviewer') and C4::Context->preference('ShowReviewerPhoto') ) {
+        eval {
+            require Libravatar::URL;
+            Libravatar::URL->import();
+        };
+        if ( !$@ ) {
+            $libravatar_enabled = 1;
+        }
     }
-}
+    for my $review (@$reviews) {
+        my $borrowerData = GetMember( 'borrowernumber' => $review->{borrowernumber} );
 
-my $reviews = getreviews( $biblionumber, 1 );
-my $loggedincommenter;
+        # setting some borrower info into this hash
+        $review->{title}     = $borrowerData->{'title'};
+        $review->{surname}   = $borrowerData->{'surname'};
+        $review->{firstname} = $borrowerData->{'firstname'};
+        if ( $libravatar_enabled and $borrowerData->{'email'} ) {
+            $review->{avatarurl} = libravatar_url( email => $borrowerData->{'email'}, https => $ENV{HTTPS} );
+        }
+        $review->{userid}     = $borrowerData->{'userid'};
+        $review->{cardnumber} = $borrowerData->{'cardnumber'};
 
-
-
-
-foreach ( @$reviews ) {
-    my $borrowerData   = GetMember('borrowernumber' => $_->{borrowernumber});
-    # setting some borrower info into this hash
-    $_->{title}     = $borrowerData->{'title'};
-    $_->{surname}   = $borrowerData->{'surname'};
-    $_->{firstname} = $borrowerData->{'firstname'};
-    if ($libravatar_enabled and $borrowerData->{'email'}) {
-        $_->{avatarurl} = libravatar_url(email => $borrowerData->{'email'}, https => $ENV{HTTPS});
+        if ( $borrowerData->{'borrowernumber'} eq $borrowernumber ) {
+            $review->{your_comment} = 1;
+            $loggedincommenter = 1;
+        }
     }
-    $_->{userid}    = $borrowerData->{'userid'};
-    $_->{cardnumber}    = $borrowerData->{'cardnumber'};
-
-    if ($borrowerData->{'borrowernumber'} eq $borrowernumber) {
-		$_->{your_comment} = 1;
-		$loggedincommenter = 1;
-	}
 }
 
 if ( C4::Context->preference("OPACISBD") ) {

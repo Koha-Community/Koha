@@ -61,41 +61,8 @@
 <script type="text/javascript">
     //<![CDATA[
          $(document).ready(function() {
-            var inject_old = function(comment) {
-                [% IF ( reviewid ) %]
-                [% IF ( cgi_debug ) %]alert(_("injecting OLD comment: ")+comment);[% END %]
-                parent.opener.$('#c[% reviewid %] p').prev("small").prev("h5").html(_("Your edited comment (preview, pending approval)"));
-                parent.opener.$('#c[% reviewid %] p').html(comment);
-                parent.opener.$('#c[% reviewid %] p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber | uri %]&amp;reviewid=[% reviewid | uri%]\');\">"+_("Edit")+"<\/a>");
-                [% END %]
-                return 1;
-            };
-            var inject_new = function(comment) {
-                [% IF ( cgi_debug ) %]alert(_("injecting NEW comment: ") +comment);[% END %]
-                parent.opener.$('#newcomment').attr("class","yours");
-                parent.opener.$('#newcomment').html(
-                    "<h5>" + _("Your comment (preview, pending approval)") + "<\/h5>" +
-                    "<p>"+comment+"<\/p>" +
-                    "<a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber |uri%]\');\">"+_("Edit")+"<\/a><\/p>"
-                );
-                parent.opener.$("#addcomment").prev("p").remove();
-                parent.opener.$("#addcomment").remove();
-            };
-            [% IF ( clean_review ) %]
-                var clean_review = "[% clean_review |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";        // TMPL var must not contain " quotes.
-                [% IF ( reviewid ) %]
-                inject_old(clean_review);
-                [% ELSE %]
-                inject_new(clean_review);
-                [% END %]
-            [% END %]
-            [% IF ( WINDOW_CLOSE ) %]
-                [% IF ( ERRORS ) %]
-                    // flash this page, then close.  Change warning in template if you change this value.
-                    setTimeout("window.close()",5000);
-                [% ELSE %]
-                    window.close();
-                [% END %]
+            [% IF WINDOW_CLOSE %]
+                window.close();
             [% END %]
         });
     //]]>

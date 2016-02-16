@@ -28,7 +28,7 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(getreview savereview updatereview numberofreviews numberofreviewsbybiblionumber
-      getreviews getallreviews approvereview unapprovereview deletereview);
+      getallreviews approvereview unapprovereview deletereview);
 }
 
 =head1 NAME
@@ -44,7 +44,6 @@ C4::Review - Perl Module containing routines for dealing with reviews of items
   updatereview($biblionumber,$borrowernumber,$review);
   my $count=numberofreviews($status);
   my $count=numberofreviewsbybiblionumber($biblionumber);
-  my $reviews=getreviews($biblionumber, $status);
   my $reviews=getallreviews($status, [$offset], [$row_count]);
 
 =head1 DESCRIPTION
@@ -138,24 +137,6 @@ sub numberofreviewsbybiblionumber {
     my $sth            = $dbh->prepare($query);
     $sth->execute( $biblionumber, 1 );
     return $sth->fetchrow;
-}
-
-=head2 getreviews
-
-  my $reviews=getreviews($biblionumber, $status);
-
-Return all reviews where in the 'reviews' database :
-'biblionumber' = $biblionumber and 'approved' = $status
-
-=cut
-
-sub getreviews {
-    my ( $biblionumber, $approved ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "SELECT * FROM reviews WHERE biblionumber=? and approved=? order by datereviewed desc";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute( $biblionumber, $approved );
-    return $sth->fetchall_arrayref( {} );
 }
 
 =head2 getallreviews

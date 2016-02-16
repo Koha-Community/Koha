@@ -882,12 +882,16 @@
                             <div id="newcomment"></div>
                                 [% IF ( reviews ) %]
                                     [% FOREACH review IN reviews %]
-                                        [% IF ( review.your_comment ) %]
+                                        [% IF review.borrowernumber == borrowernumber %]
                                             <div class="commentline yours" id="c[% review.reviewid %]">
                                                 [% IF ( review.avatarurl ) %]
                                                     <img class="avatar" src="[% review.avatarurl %]" height="80" width="80" alt="" />
                                                 [% END %]
-                                                <h5>Your comment</h5>
+                                                [% IF review.approved %]
+                                                    <h5>Your comment</h5>
+                                                [% ELSE %]
+                                                    <h5>Your comment (preview, pending approval)</h5>
+                                                [% END %]
                                                 <small>[% review.datereviewed | $KohaDates %]</small>
                                                 <p>
                                                     [% FILTER html_break %]
@@ -924,7 +928,7 @@
                                                   [% END %]
                                                 </p>
                                             </div> <!-- / .commentline -->
-                                        [% END # / IF review.your_comment %]
+                                        [% END %]
                                     [% END # / FOREACH reviews %]
                                 [% ELSE %]
                                     <p>There are no comments for this item.</p>
@@ -933,7 +937,7 @@
                                 [% IF ( loggedinusername ) %]
                                     [% UNLESS ( loggedincommenter ) %]
                                        <div id="addcomment"> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber %]'); return false;">
-                                            Post or edit your comments on this item.
+                                            Post your comments on this item.
                                         </a></div>
                                     [% END %]
                                 [% ELSE %]
