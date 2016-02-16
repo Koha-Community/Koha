@@ -1933,7 +1933,7 @@ CREATE TABLE `reviews` ( -- patron opac comments
   `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table defining which patron left this comment
   `biblionumber` int(11) default NULL, -- foreign key from the biblio table defining which bibliographic record this comment is for
   `review` text, -- the body of the comment
-  `approved` tinyint(4) default NULL, -- whether this comment has been approved by a librarian (1 for yes, 0 for no)
+  `approved` tinyint(4) default 0, -- whether this comment has been approved by a librarian (1 for yes, 0 for no)
   `datereviewed` datetime default NULL, -- the date the comment was left
   PRIMARY KEY  (`reviewid`),
   CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
