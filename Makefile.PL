@@ -286,7 +286,7 @@ my $target_map = {
   './Koha.pm'                   => 'PERL_MODULE_DIR',
   './koha-tmpl/intranet-tmpl'   => {target => 'INTRANET_TMPL_DIR', trimdir => -1},
   './koha-tmpl/opac-tmpl'       => {target => 'OPAC_TMPL_DIR', trimdir => -1},
-  './kohaversion.pl'            => 'INTRANET_CGI_DIR', 
+  './kohaversion.pl'            => 'INTRANET_CGI_DIR',
   './labels'                    => 'INTRANET_CGI_DIR',
   './mainpage.pl'               => 'INTRANET_CGI_DIR',
   './Makefile.PL'               => 'NONE',
@@ -1087,7 +1087,8 @@ Memcached namespace?);
       $config{'MEMCACHED_NAMESPACE'} = _get_value('MEMCACHED_NAMESPACE', $msg, $defaults->{'MEMCACHED_NAMESPACE'}, $valid_values, $install_log_values);
   }
 
-  $msg = q(Path to DejaVu fonts?);
+  $msg = q(
+Path to DejaVu fonts?);
   $config{'FONT_DIR'} = _get_value('FONT_DIR', $msg, $defaults->{'FONT_DIR'}, $valid_values, $install_log_values);
 
 
