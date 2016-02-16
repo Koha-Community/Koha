@@ -2,6 +2,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Rotating collections</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
     $(document).ready(function(){
         $(".confirmdelete").click(function(){
@@ -13,6 +15,13 @@
                 return false;
             }
         });
+        $('#rotating-collections-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+            "autoWidth": false,
+            "aoColumnDefs": [
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+            ],
+            "sPaginationType": "four_button"
+        } ));
     });
 </script>
 </head>
@@ -32,28 +41,36 @@
                 <h1>Rotating collections</h1>
                 <div>
                     [% IF ( collectionsLoop ) %]
-                        <table>
-                            <tr>
-                                <th>Title</th>
-                                <th>Description</th>
-                                <th>Current location</th>
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
-                            </tr>
-
+                        <table id="rotating-collections-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Current location</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                             [% FOREACH collectionsLoo IN collectionsLoop %]
                                 <tr>
                                     <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId %]">[% collectionsLoo.colTitle %]</a></td>
                                     <td>[% collectionsLoo.colDesc %]</td>
                                     <td>[% Branches.GetName( collectionsLoo.colBranchcode ) %]</td>
-                                    <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId %]">Add or remove items</a></td>
-                                    <td><a href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId %]">Transfer</a></td>
-                                    <td><a href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=edit&amp;colId=[% collectionsLoo.colId %]">Edit</a></td>
-                                    <td><a class="confirmdelete" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=delete&amp;colId=[% collectionsLoo.colId %]">Delete</a></td>
+                                    <td>
+                                    <div class="dropdown">
+                                        <a class="btn btn-mini" dropdown-toggle" id="collectionsactions[% collectionsLoo.colId %]" role="button" data-toggle="dropdown" href="#">
+                                        Actions <b class="caret"></b></a>
+                                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="collectionsactions[% collectionsLoo.colId %]">
+                                            <li><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId %]"><i class="fa fa-plus"></i> Add or remove items</a></li>
+                                            <li><a href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId %]"><i class="fa fa-exchange"></i> Transfer</a></li>
+                                            <li><a href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=edit&amp;colId=[% collectionsLoo.colId %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                                            <li><a class="confirmdelete" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=delete&amp;colId=[% collectionsLoo.colId %]"><i class="fa fa-trash"></i> Delete</a></li>
+                                        </ul>
+                                    </div>
+                                    </td>
                                 </tr>
                             [% END %]
+                            </tbody>
                         </table>
                     [% ELSE %]
                         <div class="dialog message">There are no collections currently defined.</div>
