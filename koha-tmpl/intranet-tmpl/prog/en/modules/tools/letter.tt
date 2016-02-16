@@ -465,11 +465,11 @@ $(document).ready(function() {
             <input type="hidden" name="branchcode" value="[% letter.branchcode %]" />
             <input type="hidden" name="code" value="[% letter.code %]" />
             <input type="hidden" name="module" value="[% letter.module %]" />
-            <input type="submit" value="Yes, delete" class="approve" />
+            <button type="submit" class="approve"><i class="fa fa-check"></i> Yes, delete</button>
         </form>
 
         <form action="[% action %]" method="get">
-            <input type="submit" value="No, do not delete" class="deny" />
+            <button type="submit" class="deny"><i class="fa fa-times"></i> No, do not delete</button>
         </form>
     </div>
 [% END %]
