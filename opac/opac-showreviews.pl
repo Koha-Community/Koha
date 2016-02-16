@@ -26,7 +26,6 @@ use C4::Auth;
 use C4::Koha;
 use C4::Output;
 use C4::Circulation;
-use C4::Review;
 use C4::Biblio;
 use C4::Members qw/GetMemberDetails/;
 use Koha::DateUtils;

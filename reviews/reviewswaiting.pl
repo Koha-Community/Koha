@@ -21,7 +21,6 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-use C4::Review;
 use C4::Members;
 use C4::Biblio;
 use Koha::Reviews;
