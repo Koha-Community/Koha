@@ -51,7 +51,7 @@ sub challenge {
 
     # See if the given session is timed out
     if (isSessionExpired($session)) {
-        Koha::Exception::clearUserEnvironment($session, {});
+        Koha::Auth::clearUserEnvironment($session, {});
         Koha::Exception::LoginFailed->throw(error => "Session expired, please login again.");
     }
     # Check if we still access using the same IP than when the session was initialized.
@@ -60,7 +60,7 @@ sub challenge {
         my $sameIpFound = grep {$session->param('ip') eq $_} @$originIps;
 
         unless ($sameIpFound) {
-            Koha::Exception::clearUserEnvironment($session, {});
+            Koha::Auth::clearUserEnvironment($session, {});
             Koha::Exception::LoginFailed->throw(error => "Session's client address changed, please login again.");
         }
     }
