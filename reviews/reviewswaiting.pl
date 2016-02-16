@@ -43,7 +43,7 @@ my $status   = $query->param('status') || 0;
 my $reviewid = $query->param('reviewid');
 my $page     = $query->param('page') || 1;
 my $count    = C4::Context->preference('numSearchResults') || 20;
-my $total    = numberofreviews($status);
+my $total    = Koha::Reviews->search({ approved => $status })->count;
 
 if ( $op eq 'approve' ) {
     my $review = Koha::Reviews->find( $reviewid );

@@ -15,14 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
-use C4::Review qw/numberofreviews/;
 use C4::Tags qw/get_count_by_tag_status/;
+use Koha::Reviews;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -36,7 +35,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $pendingcomments = numberofreviews(0);
+my $pendingcomments = Koha::Reviews->search({ approved => 0 })->count;
 my $pendingtags = get_count_by_tag_status(0);
 
 $template->param(

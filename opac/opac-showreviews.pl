@@ -85,7 +85,7 @@ my $reviews = Koha::Reviews->search(
     }
 )->unblessed;
 my $marcflavour      = C4::Context->preference("marcflavour");
-my $hits = numberofreviews(1);
+my $hits = Koha::Reviews->search({ approved => 1 })->count;
 my $i = 0;
 my $latest_comment_date;
 for my $result (@$reviews){
