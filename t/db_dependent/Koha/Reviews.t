@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 7;
 
 use Koha::Review;
 use Koha::Reviews;
@@ -36,6 +36,7 @@ my $patron_2 = $builder->build({ source => 'Borrower' });
 my $biblio_1 = $builder->build({ source => 'Biblio' });
 my $biblio_2 = $builder->build({ source => 'Biblio' });
 my $nb_of_reviews = Koha::Reviews->search->count;
+my $nb_of_approved_reviews = Koha::Reviews->search({ approved => 1 })->count;
 my $new_review_1_1 = Koha::Review->new({
     borrowernumber => $patron_1->{borrowernumber},
     biblionumber => $biblio_1->{biblionumber},
@@ -54,6 +55,12 @@ my $new_review_2_1 = Koha::Review->new({
 
 like( $new_review_1_1->reviewid, qr|^\d+$|, 'Adding a new review should have set the reviewid');
 is( Koha::Reviews->search->count, $nb_of_reviews + 3, 'The 3 reviews should have been added' );
+
+is( Koha::Reviews->search({approved => 1})->count, $nb_of_approved_reviews, 'There should not be new approved reviews' );
+$new_review_1_1->approve;
+is( Koha::Reviews->search({approved => 1})->count, $nb_of_approved_reviews + 1, 'There should be 1 new approved review' );
+$new_review_1_1->unapprove;
+is( Koha::Reviews->search({approved => 1})->count, $nb_of_approved_reviews, 'There should not be any new approved review anymore' );
 
 my $retrieved_review_1_1 = Koha::Reviews->find( $new_review_1_1->reviewid );
 is( $retrieved_review_1_1->review, $new_review_1_1->review, 'Find a review by id should return the correct review' );

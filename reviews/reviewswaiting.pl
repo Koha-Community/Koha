@@ -46,10 +46,12 @@ my $count    = C4::Context->preference('numSearchResults') || 20;
 my $total    = numberofreviews($status);
 
 if ( $op eq 'approve' ) {
-    approvereview($reviewid);
+    my $review = Koha::Reviews->find( $reviewid );
+    $review->approve if $review;
 }
 elsif ( $op eq 'unapprove' ) {
-    unapprovereview($reviewid);
+    my $review = Koha::Reviews->find( $reviewid );
+    $review->unapprove if $review;
 }
 elsif ( $op eq 'delete' ) {
     deletereview($reviewid);

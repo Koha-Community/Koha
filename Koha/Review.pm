@@ -33,6 +33,32 @@ Koha::Review - Koha Review Object class
 
 =cut
 
+=head3 approve
+
+    $review->approve
+
+Approve a review
+
+=cut
+
+sub approve {
+    my ( $self ) = @_;
+    $self->approved(1)->store;
+}
+
+=head3 unapprove
+
+    $review->unapprove
+
+Unapprove a review
+
+=cut
+
+sub unapprove {
+    my ( $self ) = @_;
+    $self->approved(0)->store;
+}
+
 =head3 type
 
 =cut
