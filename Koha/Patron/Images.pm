@@ -35,11 +35,11 @@ Koha::Patron::Images - Koha Patron Image Object set class
 
 =cut
 
-=head3 type
+=head3 _type
 
 =cut
 
-sub type {
+sub _type {
     return 'Patronimage';
 }
 

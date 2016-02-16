@@ -33,11 +33,11 @@ Koha::Patron;;Image - Koha Patron;;Image Object class
 
 =cut
 
-=head3 type
+=head3 _type
 
 =cut
 
-sub type {
+sub _type {
     return 'Patronimage';
 }
 
