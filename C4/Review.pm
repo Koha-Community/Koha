@@ -27,7 +27,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
-    @EXPORT = qw(savereview updatereview numberofreviewsbybiblionumber);
+    @EXPORT = qw(savereview numberofreviewsbybiblionumber);
 }
 
 =head1 NAME
@@ -39,7 +39,6 @@ C4::Review - Perl Module containing routines for dealing with reviews of items
   use C4::Review;
 
   savereview($biblionumber,$borrowernumber,$review);
-  updatereview($biblionumber,$borrowernumber,$review);
   my $count=numberofreviewsbybiblionumber($biblionumber);
 
 =head1 DESCRIPTION
@@ -64,22 +63,6 @@ sub savereview {
   (?,?,?,0,now())";
     my $sth = $dbh->prepare($query);
     $sth->execute( $borrowernumber, $biblionumber, $review );
-}
-
-=head2 updatereview
-
-  updateview($biblionumber,$borrowernumber, $review);
-
-Update the review description in the 'reviews' database
-
-=cut
-
-sub updatereview {
-    my ( $biblionumber, $borrowernumber, $review ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "UPDATE reviews SET review=?,datereviewed=now(),approved=0  WHERE borrowernumber=? and biblionumber=?";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute( $review, $borrowernumber, $biblionumber );
 }
 
 =head2 numberofreviewsbybiblionumber

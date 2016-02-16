@@ -26,6 +26,7 @@ use C4::Review;
 use C4::Biblio;
 use C4::Scrubber;
 use C4::Debug;
+use Koha::DateUtils;
 use Koha::Reviews;
 
 my $query        = new CGI;
@@ -60,8 +61,14 @@ if (defined $review) {
 			my $js_ok_review = $clean;
 			$js_ok_review =~ s/"/&quot;/g;	# probably redundant w/ TMPL ESCAPE=JS
 			$template->param(clean_review=>$js_ok_review);
-			if ($savedreview) {
-    			updatereview($biblionumber, $borrowernumber, $clean);
+            if ($savedreview) {
+                $savedreview->set(
+                    {
+                        review        => $clean,
+                        approved      => 0,
+                        datereviewed  => dt_from_string
+                    }
+                )->store;
 			} else {
     			savereview($biblionumber, $borrowernumber, $clean);
 			}
