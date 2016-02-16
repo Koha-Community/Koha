@@ -144,21 +144,33 @@ sub getSessionCookie {
     };
     my $cookieOk;
 
-    if (blessed($controller) && $controller->isa('CGI')) {
-        $cookie->{HttpOnly} = 1;
-        $cookieOk = $controller->cookie( $cookie );
+    if (blessed($controller)) {
+        if ($controller->isa('CGI')) {
+            $cookie->{HttpOnly} = 1;
+            $cookieOk = $controller->cookie( $cookie );
+        }
+        elsif ($controller->isa('Mojolicious::Controller')) {
+            my $cooksreq = $controller->req->cookies;
+            my $cooksres = $controller->res->cookies;
+            foreach my $c (@{$controller->res->cookies}) {
+
+                if ($c->name eq 'CGISESSID') {
+                    $c->value($cookie->{value});
+                    $cookieOk = $c;
+                }
+            }
+        }
     }
-    elsif (blessed($controller) && $controller->isa('Mojolicious::Controller')) {
+    #No auth cookie, so we must make one :)
+    unless ($cookieOk) {
         $controller->res->cookies($cookie);
-        foreach my $c (@{$controller->res->cookies}) {
+        my $cooks = $controller->res->cookies();
+        foreach my $c (@$cooks) {
             if ($c->name eq 'CGISESSID') {
                 $cookieOk = $c;
                 last;
             }
         }
-    }
-    unless ($cookieOk) {
-        Koha::Exception::UnknownProgramState->throw(error => __PACKAGE__."::getSessionCookie():> Unable to get a proper cookie?");
     }
     return $cookieOk;
 }

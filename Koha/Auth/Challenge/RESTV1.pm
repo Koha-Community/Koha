@@ -27,6 +27,7 @@ use base qw(Koha::Auth::Challenge);
 
 use Koha::Exception::LoginFailed;
 use Koha::Exception::BadParameter;
+use Koha::Exception::Parse;
 
 =head challenge
 
@@ -92,6 +93,10 @@ sub challenge {
     eval {
         $req_dt = DateTime::Format::HTTP->parse_datetime( $headers->{'X-Koha-Date'} ); #Returns DateTime
     };
+    if (not($req_dt) || $@) {
+        Koha::Exception::BadParameter->throw(error => "X-Koha-Date HTTP-header [".$headers->{'X-Koha-Date'}."] is not well formed. It needs to be of RFC 1123 -date format, eg. 'X-Koha-Date: Wed, 09 Feb 1994 22:23:32 +0200'");
+    }
+
     my $authorizationHeader = $headers->{'Authorization'};
     my ($req_username, $req_signature);
     if ($authorizationHeader =~ /^Koha (\S+?):(\w+)$/) {
@@ -100,9 +105,6 @@ sub challenge {
     }
     else {
         Koha::Exception::BadParameter->throw(error => "Authorization HTTP-header is not well formed. It needs to be of format 'Authorization: Koha userid:signature'");
-    }
-    unless ($req_dt) {
-        Koha::Exception::BadParameter->throw(error => "X-Koha-Date HTTP-header is not well formed. It needs to be of RFC 1123 -date format, eg. 'X-Koha-Date: Wed, 09 Feb 1994 22:23:32 +0200'");
     }
 
     my $borrower = Koha::Patrons->cast($req_username);
@@ -124,12 +126,13 @@ sub challenge {
     }
 
     unless ($matchingApiKey) {
-        Koha::Exception::LoginFailed->throw(error => "API key authentication failed");
+        Koha::Exception::LoginFailed->throw(error => "API key authentication failed.");
     }
 
-    unless ($matchingApiKey->last_request_time < $req_dt->epoch()) {
-        Koha::Exception::BadParameter->throw(error => "X-Koha-Date HTTP-header is stale, expected later date than '".DateTime::Format::HTTP->format_datetime($req_dt)."'");
-    }
+    #Checking for message replay abuses or change control using ETAG shouldn't be done here, since we need to make valid request more often than every second.
+    #unless ($matchingApiKey->last_request_time < $req_dt->epoch()) {
+    #    Koha::Exception::BadParameter->throw(error => "X-Koha-Date HTTP-header is stale, expected later date than '".DateTime::Format::HTTP->format_datetime($req_dt)."'");
+    #}
 
     $matchingApiKey->set({last_request_time => $req_dt->epoch()});
     $matchingApiKey->store();
@@ -141,7 +144,14 @@ sub makeSignature {
     my ($method, $userid, $headerXKohaDate, $apiKey) = @_;
 
     my $message = join(' ', uc($method), $userid, $headerXKohaDate);
-    return Digest::SHA::hmac_sha256_hex($message, $apiKey->api_key);
+    my $digest = Digest::SHA::hmac_sha256_hex($message, $apiKey->api_key);
+
+    if ($ENV{KOHA_REST_API_DEBUG} > 2) {
+        my @cc = caller(1);
+        print "\n".$cc[3]."\nMAKESIGNATURE $method, $userid, $headerXKohaDate, ".$apiKey->api_key.", DIGEST $digest\n";
+    }
+
+    return $digest;
 }
 
 =head prepareAuthenticationHeaders

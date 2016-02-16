@@ -38,7 +38,7 @@ use Koha::Libraries;
 #Define the headers, POST-parameters and cookies extracted from the various web-frameworks'
 # request-objects and passed to the authentication system as normalized values.
 our @authenticationHeaders = ('X-Koha-Date', 'Authorization');
-our @authenticationPOSTparams = ('password', 'userid', 'PT', 'branch', 'logout.x', 'koha_login_context');
+our @authenticationPOSTparams = ('password', 'userid', 'cardnumber', 'PT', 'branch', 'logout.x', 'koha_login_context');
 our @authenticationCookies = ('CGISESSID'); #Really we should have only one of these.
 
 =head authenticate
@@ -70,23 +70,23 @@ sub authenticate {
     try {
         #0. Logout
         if ($rae->{postParams}->{'logout.x'}) {
-            clearUserEnvironment($rae, $authParams);
+            clearUserEnvironment($rae->{cookies}->{CGISESSID}, $authParams);
             Koha::Exception::Logout->throw(error => "User logged out. Please redirect me!");
         }
         #1. Check for password authentication, including LDAP.
-        elsif ($rae->{postParams}->{koha_login_context} && $rae->{postParams}->{userid} && $rae->{postParams}->{password}) {
+        if (not($borrower) && $rae->{postParams}->{koha_login_context} && ($rae->{postParams}->{userid} || $rae->{postParams}->{cardnumber}) && $rae->{postParams}->{password}) {
             $borrower = Koha::Auth::Route::Password::challenge($rae, $permissions, $authParams);
         }
         #2. Check for REST's signature-based authentication.
         #elsif ($rae->{headers}->{'Authorization'} && $rae->{headers}->{'Authorization'} =~ /Koha/) {
-        elsif ($rae->{headers}->{'Authorization'}) {
+        if (not($borrower) && $rae->{headers}->{'Authorization'}) {
             $borrower = Koha::Auth::Route::RESTV1::challenge($rae, $permissions, $authParams);
         }
         #3. Check for the cookie. If cookies go stale, they block all subsequent authentication methods, so keep it down on this list.
-        elsif ($rae->{cookies}->{CGISESSID}) {
+        if (not($borrower) && $rae->{cookies}->{CGISESSID}) {
             $borrower = Koha::Auth::Route::Cookie::challenge($rae, $permissions, $authParams);
         }
-        else { #HTTP CAS ticket or shibboleth or Persona not implemented
+        if (not($borrower)) { #HTTP CAS ticket or shibboleth or Persona not implemented
             #We don't know how to authenticate, or there is no authentication attempt.
             Koha::Exception::LoginFailed->throw(error => "Koha doesn't understand your authentication protocol.");
         }
@@ -111,6 +111,11 @@ sub authenticate {
 
     my $session = setUserEnvironment($controller, $rae, $borrower, $authParams);
     my $cookie = Koha::Auth::RequestNormalizer::getSessionCookie($controller, $session);
+
+    if ($ENV{KOHA_REST_API_DEBUG} > 2) {
+        my @cc = caller(0);
+        print "\n".$cc[3]."\nSESSIONID ".$session->id().", FIRSTNAME ".$session->param('firstname')."\n";
+    }
 
     return ($borrower, $cookie);
 }
@@ -159,6 +164,14 @@ sub setUserEnvironment {
     my ($controller, $rae, $borrower, $authParams) = @_;
 
     my $session = C4::Auth::get_session( $rae->{cookies}->{CGISESSID} || '' );
+    if ($rae->{postParams} && $rae->{postParams}->{koha_login_context} && $rae->{postParams}->{koha_login_context} eq 'REST' &&
+          (not($session->param('koha_login_context')) || $session->param('koha_login_context') ne 'REST') #Make sure we dont create new Sessions for users who want to login many times in a row.
+       ) {
+        #We are logging in a user using the REST API, so we need to create a new session context outside of the usual CGISESSID-cookie
+        $session = C4::Auth::get_session();
+        $session->param( 'koha_login_context', $rae->{postParams}->{koha_login_context} );
+    }
+
     C4::Context->_new_userenv( $session->id );
 
     _determineUserBranch($rae, $borrower, $authParams, $session);
@@ -170,8 +183,11 @@ sub setUserEnvironment {
     $session->param( 'firstname',    $borrower->firstname );
     $session->param( 'surname',      $borrower->surname );
     $session->param( 'emailaddress', $borrower->email );
-    $session->param( 'ip',           $session->remote_addr() );
+    #originIps contain all the IP's this request has been proxied through.
+    #Get the last value. This is in line with how the CGI-layer deals with IP-based authentication.
+    $session->param( 'ip',           $rae->{originIps}->[ -1 ] );
     $session->param( 'lasttime',     time() );
+    $session->flush(); #CGI::Session recommends to flush since auto-flush is not guaranteed.
 
     #Finally configure the userenv.
     C4::Context->set_userenv(
@@ -217,15 +233,26 @@ sub _determineUserBranch {
 
 =head clearUserEnvironment
 
-Removes all active authentications
+Removes the active authentication
+
 =cut
 
 sub clearUserEnvironment {
-    my ($rae, $authParams) = @_;
+    my ($sessionid, $authParams) = @_;
 
-    my $session = C4::Auth::get_session( $rae->{cookies}->{CGISESSID} );
+    my $session;
+    unless (blessed($sessionid)) {
+        $session = C4::Auth::get_session( $sessionid );
+    }
+    else {
+        $session = $sessionid;
+    }
+
+    if (C4::Context->userenv()) {
+        C4::Context::_unset_userenv( $session->id );
+    }
     $session->delete();
-    $session->flush;
-    #Do we need to unset this if it has never been set? C4::Context::_unset_userenv( $rae->{cookies}->{CGISESSID} );
+    $session->flush();
 }
+
 1;

@@ -38,7 +38,7 @@ sub challenge {
     Koha::Auth::Challenge::OPACMaintenance::challenge() if $routeParams->{inOPAC};
     Koha::Auth::Challenge::Version::challenge();
     Koha::Auth::Challenge::IndependentBranchesAutolocation::challenge($routeParams->{branch});
-    my $borrower = Koha::Auth::Challenge::Password::challenge($rae->{postParams}->{userid}, $rae->{postParams}->{password});
+    my $borrower = Koha::Auth::Challenge::Password::challenge($rae->{postParams}->{userid} || $rae->{postParams}->{cardnumber}, $rae->{postParams}->{password});
     Koha::Auth::Challenge::Permission::challenge($borrower, $permissionsRequired) if $permissionsRequired;
     return $borrower;
 }
