@@ -27,8 +27,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
-    @EXPORT = qw(getreview savereview updatereview numberofreviews numberofreviewsbybiblionumber
-      deletereview);
+    @EXPORT = qw(getreview savereview updatereview numberofreviews numberofreviewsbybiblionumber);
 }
 
 =head1 NAME
@@ -136,23 +135,6 @@ sub numberofreviewsbybiblionumber {
     my $sth            = $dbh->prepare($query);
     $sth->execute( $biblionumber, 1 );
     return $sth->fetchrow;
-}
-
-=head2 deletereview
-
-  deletereview($reviewid);
-
-Takes a reviewid and deletes it
-
-=cut
-
-sub deletereview {
-    my ($reviewid) = @_;
-    my $dbh        = C4::Context->dbh();
-    my $query      = "DELETE FROM reviews
-               WHERE reviewid=?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($reviewid);
 }
 
 1;

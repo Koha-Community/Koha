@@ -54,7 +54,8 @@ elsif ( $op eq 'unapprove' ) {
     $review->unapprove if $review;
 }
 elsif ( $op eq 'delete' ) {
-    deletereview($reviewid);
+    my $review = Koha::Reviews->find( $reviewid );
+    $review->delete if $review;
 }
 
 my $reviews = Koha::Reviews->search(
