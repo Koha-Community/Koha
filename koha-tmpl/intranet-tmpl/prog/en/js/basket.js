@@ -50,7 +50,7 @@ function readCookie(name, wd) {
             for(var i=0;i < cookie_parts.length;i++) {
 	            var c = cookie_parts[i];
                     while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		    if(c.indexOf(str_name) == 0) return c.substring(str_name.length,c.length);
+                if(c.indexOf(str_name) === 0) return c.substring(str_name.length,c.length);
             }
     return null;
 }
@@ -82,7 +82,7 @@ function openBasket() {
         var optWin = "status=yes,scrollbars=yes,resizable=yes,toolbar=no,location=yes,height="+iH+",width="+iW;
         var loc = CGIBIN + "basket/basket.pl?" + strCookie;
         var basket = open(loc, "basket", optWin);
-        if (window.focus) {basket.focus()}
+        if (window.focus) { basket.focus(); }
     }
     else {
         showCartUpdate(MSG_BASKET_EMPTY);
@@ -207,7 +207,7 @@ function showCartUpdate(msg){
 	// set body of popup window
 	$("#cartDetails").html(msg);
 	showCart();
-	setTimeout("hideCart()",2000);	
+    setTimeout(hideCart,2000);
 }
 
 function showListsUpdate(msg){
@@ -216,7 +216,7 @@ function showListsUpdate(msg){
 }
 
 function selRecord(num, status) {
-    var str = document.myform.records.value
+    var str = document.myform.records.value;
     if (status){
         str += num+"/";
     }
@@ -240,7 +240,7 @@ function delSelRecords() {
             while (!end){
                 s = str.indexOf("/");
                 if (s>0){
-                    num = str.substring(0, s)
+                    num = str.substring(0, s);
                     str = delRecord(num,str);
                     str2 = delRecord(num,str2);
                 } else {
@@ -248,7 +248,7 @@ function delSelRecords() {
                 }
             }
 
-            if (str2.length == 0) { // equivalent to emptying the basket
+            if (str2.length === 0) { // equivalent to emptying the basket
                 var rep = false;
                 rep = confirm(MSG_CONFIRM_DEL_BASKET);
                 if (rep) {
@@ -267,7 +267,7 @@ function delSelRecords() {
 
     if (recordsSel) {
         var strCookie = "";
-        var valCookie = readCookie(nameCookie, 1);
+        valCookie = readCookie(nameCookie, 1);
         strCookie = nameParam + "=" + valCookie;
         var arrayRecords = valCookie.split("/");
         updateBasket(arrayRecords.length-1,top.opener);
@@ -302,7 +302,7 @@ function delRecord (n, s) {
 
 
 function delBasket(context,rep) {
-    if (rep == undefined){
+    if (rep === undefined){
         rep = confirm(MSG_CONFIRM_DEL_BASKET);
     }
     if (rep) {
@@ -406,14 +406,14 @@ function addSelToShelf() {
 ///  vShelfAdd()  builds url string for multiple-biblio adds.
 
 function vShelfAdd(biblist) {
-        bibs = new Array();
+        bibs = [];
         if(biblist.length > 0) {
                 for (var i=0; i < biblist.length; i++) {
                         if (biblist[i].checked) {
                                 bibs.push("biblionumber=" +  biblist[i].value);
                         }
                 }
-        if (bibs.length == 0) { showListsUpdate(MSG_NO_RECORD_SELECTED); }
+        if (bibs.length === 0) { showListsUpdate(MSG_NO_RECORD_SELECTED); }
             return bibs.join("&");
         } else {
             if (biblist.checked) {
@@ -429,7 +429,7 @@ function showCart(){
         if( scrolld > top ){
             top = scrolld + 15;
         }
-		var left = position.left
+        var left = position.left;
 		$("#cartDetails").css("position","absolute").css("top",top);
 		$("#cartDetails").css("position","absolute").css("left",left);
 		$("#cartDetails").fadeIn("fast");
