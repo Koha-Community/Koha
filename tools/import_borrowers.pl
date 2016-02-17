@@ -253,6 +253,13 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             next;
         }
 
+        # generate a proper login if none provided
+        if ( $borrower{userid} eq '' || !Check_Userid( $borrower{userid} ) ) {
+            push @errors, { duplicate_userid => 1, userid => $borrower{userid} };
+            $invalid++;
+            next LINE;
+        }
+
 
         if ($borrowernumber) {
             # borrower exists

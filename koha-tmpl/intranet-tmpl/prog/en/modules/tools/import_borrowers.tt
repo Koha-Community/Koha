@@ -90,6 +90,11 @@
                 [% IF ERROR.borrowernumber %] (for patron with borrowernumber [% ERROR.borrowernumber %])[% END %]
             </li>
         [% END %]
+        [% IF ERROR.duplicate_userid %]
+            <li class="line_error">
+                Userid [% ERROR.userid %] is already used by another patron or is empty.
+            </li>
+        [% END %]
     [% END %]
     </ul>
     </div>
