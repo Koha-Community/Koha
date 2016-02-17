@@ -4,7 +4,7 @@ if ( KOHA === undefined ) var KOHA = {};
 function _(s) { return s; } // dummy function for gettext
 
 // http://stackoverflow.com/questions/1038746/equivalent-of-string-format-in-jquery/5341855#5341855
-String.prototype.format = function() { return formatstr(this, arguments) }
+String.prototype.format = function() { return formatstr(this, arguments); };
 function formatstr(str, col) {
     col = typeof col === 'object' ? col : Array.prototype.slice.call(arguments, 1);
     var idx = 0;
@@ -13,7 +13,7 @@ function formatstr(str, col) {
         if (m == "%s") { return col[idx++]; }
         return col[n];
     });
-};
+}
 
 
 // http://stackoverflow.com/questions/14859281/select-tab-by-name-in-jquery-ui-1-10-0/16550804#16550804
@@ -97,11 +97,12 @@ function openWindow(link,name,width,height) {
     name = (typeof name == "undefined")?'popup':name;
     width = (typeof width == "undefined")?'600':width;
     height = (typeof height == "undefined")?'400':height;
+    var newwin;
     //IE <= 9 can't handle a "name" with whitespace
     try {
-        var newin=window.open(link,name,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
+        newin=window.open(link,name,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
     } catch(e) {
-        var newin=window.open(link,null,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
+        newin=window.open(link,null,'width='+width+',height='+height+',resizable=yes,toolbar=false,scrollbars=yes,top');
     }
 }
 
@@ -123,7 +124,7 @@ function confirmDelete(message) {
 }
 
 function playSound( sound ) {
-    if ( ! ( sound.indexOf('http://') == 0 || sound.indexOf('https://') == 0  ) ) {
+    if ( ! ( sound.indexOf('http://') === 0 || sound.indexOf('https://') === 0  ) ) {
         sound = AUDIO_ALERT_PATH + sound;
     }
     document.getElementById("audio-alert").innerHTML = '<audio src="' + sound + '" autoplay="autoplay" autobuffer="autobuffer"></audio>';
