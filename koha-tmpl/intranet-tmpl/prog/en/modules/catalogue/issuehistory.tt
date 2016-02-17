@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Checkout history for [% title |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -62,7 +63,7 @@ $(document).ready(function() {
                         &nbsp;
                     [% END %]</td>
                 <td>[% IF ( issue.branchcode ) %]
-                        [% issue.branchcode %]
+                        [% Branches.GetName( issue.branchcode ) %]
                     [% ELSE %]
                         &nbsp;
                     [% END %]</td>
