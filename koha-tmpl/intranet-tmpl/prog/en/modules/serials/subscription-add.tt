@@ -451,7 +451,7 @@ $(document).ready(function() {
 
     var node;
     [% FOREACH field IN dont_export_field_loop %]
-        node = $("#[% field.fieldid %]");
+        node = $("[name='[% field.fieldid %]']");
         if ( $(node).is('input') || $(node).is('textarea') ) {
             $(node).val("");
         } else if ( $(node).is('select') ) {
