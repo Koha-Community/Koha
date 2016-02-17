@@ -10,84 +10,14 @@
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
-/* Import/Export from/to spreadsheet */
-
-    var importing = false;
-
-    $(document).ready(function() {
-        $("#table_biblio_frameworks").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                { "aTargets": [ 0, 1 ], "sType": "natural" },
-            ],
-            "bSort": true,
-            "sPaginationType": "four_button"
-        }));
-
-        $("body").css("cursor", "auto");
-        $('.import_export_options').hide();
-        $('a.import_export_fw').click(function() {
-            if (!importing) {
-                $('.import_export_options').hide();
-                $(this).next().show('slide');
-            }
-            return false;
-        });
-        $('.import_export_close').click(function() {
-            if (!importing) {
-                $('.import_export_options').fadeOut('fast');
-                $("body").css("cursor", "auto");
-                return false;
-            }
-        });
-        $('.input_import').val("");
-
-        var matches = new RegExp("\\?error_import_export=(.+)$").exec(window.location.search);
-        if (matches && matches.length > 1) {
-            alert(_("Error importing the framework %s").format(decodeURIComponent(matches[1])));
-        }
-
-        $('input.input_import').change( function() {
-            var filename = $(this).val();
-            if ( ! /(?:\.csv|\.ods|\.xml)$/.test(filename)) {
-                $(this).css("background-color","yellow");
-                alert(_("Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file."));
-                $(this).val("");
-                $(this).css("background-color","white");
-            }
-        });
-        $('form.form_export').submit(function() {
-            $('.modal').modal("hide");
-            return true;
-        });
-        $('form.form_import').submit(function() {
-            var id = $(this).attr('id');
-            var obj = $('#' + id + ' input:file');
-            if (/(?:\.csv|\.ods|\.xml)$/.test(obj.val())) {
-                if (confirm(_("Do you really want to import the framework fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup"))) {
-                    var frameworkcode = $('#' + id + ' input:hidden[name=frameworkcode]').val();
-                    $('#importing_' + frameworkcode).find("span").html(_("Importing to framework: %s. Importing from file: %s").format("<strong>" + frameworkcode + "</strong>", "<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>"));
-                    if (navigator.userAgent.toLowerCase().indexOf('msie') != -1) {
-                        var timestamp = new Date().getTime();
-                        $('#importing_' + frameworkcode).find("img").attr('src', '[% interface %]/[% theme %]/img/loading-small.gif' + '?' +timestamp);
-                    }
-                    $('#importing_' + frameworkcode).css('display', 'block');
-                    if (navigator.userAgent.toLowerCase().indexOf('firefox') == -1) $("body").css("cursor", "progress");
-                    importing = true;
-                    $(".modal-footer,.closebtn").hide();
-                    return true;
-                } else
-                    return false;
-            }
-            obj.css("background-color","yellow");
-            alert(_("Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file."));
-            obj.val("");
-            obj.css("background-color","white");
-            return false;
-        });
-    });
-
+    /* Set some variable needed in biblio_framework.js */
+    var MSG_IMPORT_ERROR = _("Error importing the framework");
+    var MSG_SELECT_FILE_FORMAT = _("Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file.");
+    var MSG_OVERWRITE_WARNING = _("Do you really want to import the framework fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup");
+    var MSG_IMPORTING_TO_FRAMEWORK = _("Importing to framework: %s. Importing from file: %s.");
+    var template_path = "[% interface %]/[% theme %]";
 </script>
+<script type="text/javascript" src="[% themelang %]/js/biblio_framework.js"></script>
 
 </head>
 <body id="admin_biblio_framework" class="admin">
