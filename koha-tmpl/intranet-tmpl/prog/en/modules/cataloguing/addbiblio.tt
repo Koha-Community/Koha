@@ -26,46 +26,42 @@
           $('#addbibliotabs').selectTabByID("#[% tab %]");
         [% END %]
 
-		/* check cookie to hide/show marcdocs*/
-		if($.cookie("marcdocs_[% borrowernumber %]") == 'false'){
-			hideMARCdocLinks();
-            $("#marcDocsSelect").removeAttr('checked');
-		} else {
-			/* reset cookie expire date */
-			$.cookie("marcdocs_[% borrowernumber %]",'true',
-						{ path: "/", expires: 365 });
-		}
         $('#toolbar').fixFloat();
+
+        /* check cookie to hide/show marcdocs*/
+        if($.cookie("marcdocs_[% borrowernumber %]") == 'hide'){
+            toggleMARCdocLinks(false);
+        } else {
+            toggleMARCdocLinks(true);
+        }
+
         $("#marcDocsSelect").click(function(){
-            if($(this).attr("checked")){
-                showMARCdocLinks();
+            if($.cookie("marcdocs_[% borrowernumber %]") == 'hide'){
+                toggleMARCdocLinks(true);
             } else {
-                hideMARCdocLinks();
+                toggleMARCdocLinks(false);
             }
         });
 
         /* check cookie to hide/show marc tags*/
         var marctags_cookie = $.cookie("marctags_[% borrowernumber %]");
-        if( marctags_cookie == 'false'){
-            hideMARCTagLinks();
-            $("#marcTagsSelect").removeAttr('checked');
-        } else if( marctags_cookie == 'true'){
-            showMARCTagLinks();
-            $("#marcTagsSelect").attr('checked', 'checked');
+        if( marctags_cookie == 'hide'){
+            toggleMARCTagLinks(false);
+        } else if( marctags_cookie == 'show'){
+            toggleMARCTagLinks(true)
         } else {
             [% UNLESS Koha.Preference("hide_marc") %]
-                showMARCTagLinks();
-                $("#marcTagsSelect").attr('checked', 'checked');
+                toggleMARCTagLinks(true)
             [% ELSE %]
-                hideMARCTagLinks();
-                $("#marcTagsSelect").removeAttr('checked');
+                toggleMARCTagLinks(false);
             [% END %]
         }
+
         $("#marcTagsSelect").click(function(){
-            if($(this).attr("checked")){
-                showMARCTagLinks();
+            if( $.cookie("marctags_[% borrowernumber %]") == 'hide'){
+                toggleMARCTagLinks(true)
             } else {
-                hideMARCTagLinks();
+                toggleMARCTagLinks(false);
             }
         });
 
@@ -84,7 +80,7 @@
             $(".btn-group").removeClass("open");
             onOption();
             return false;
-        })
+        });
 
         $("#saveandview").click(function(){
             $(".btn-group").removeClass("open");
@@ -123,7 +119,11 @@
 
             return false;
         } );
-
+        $(".change-framework").on("click", function(){
+            var frameworkcode = $(this).data("frameworkcode");
+            $("#frameworkcode").val( frameworkcode );
+            Changefwk( frameworkcode );
+        });
     });
 
 function redirect(dest){
@@ -199,41 +199,32 @@ function _UNIMARCFieldDoc(field) {
 /*
  * Functions to hide/show marc docs and tags links
  */
-function hideMARCdocLinks() {
-	$(".marcdocs").hide();
-	$.cookie("marcdocs_[% borrowernumber %]",'false', { path: "/", expires: 365 });
+
+function toggleMARCdocLinks(flag){
+    if( flag === true ){
+        $(".marcdocs").show();
+        $.cookie("marcdocs_[% borrowernumber %]",'show', { path: "/", expires: 365 });
+        $("#marcDocsSelect i").addClass('fa-check-square-o').removeClass('fa-square-o');
+    } else {
+        $(".marcdocs").hide();
+        $.cookie("marcdocs_[% borrowernumber %]",'hide', { path: "/", expires: 365 });
+        $("#marcDocsSelect i").removeClass('fa-check-square-o').addClass('fa-square-o');
+    }
 }
 
-function showMARCdocLinks() {
-	$(".marcdocs").show();
-	$.cookie("marcdocs_[% borrowernumber %]",'true', { path: "/", expires: 365 });
+function toggleMARCTagLinks(flag){
+    if( flag === true ){
+        $(".tagnum").show();
+        $(".subfieldcode").show();
+        $.cookie("marctags_[% borrowernumber %]",'show', { path: "/", expires: 365 });
+        $("#marcTagsSelect i").addClass('fa-check-square-o').removeClass('fa-square-o');
+    } else {
+        $(".tagnum").hide();
+        $(".subfieldcode").hide();
+        $.cookie("marctags_[% borrowernumber %]",'hide', { path: "/", expires: 365 });
+        $("#marcTagsSelect i").removeClass('fa-check-square-o').addClass('fa-square-o');
+    }
 }
-
-function hideMARCTagLinks() {
-    $(".tagnum").hide();
-    $(".subfieldcode").hide();
-    $.cookie("marctags_[% borrowernumber %]",'false', { path: "/", expires: 365 });
-}
-function showMARCTagLinks() {
-    $(".tagnum").show();
-    $(".subfieldcode").show();
-    $.cookie("marctags_[% borrowernumber %]",'true', { path: "/", expires: 365 });
-}
-        [% IF hide_marc %]
-            var hide = false;
-        [% ELSE %]
-            var hide = true;
-        [% END %]
-        $("#show_tags").change( function(){
-            if ( $(this).is(':checked') ) {
-                $(".tagnum").show();
-                $(".subfieldcode").show();
-            } else {
-            }
-        } );
-        $("#show_tags").attr("checked", !hide)
-        $("#show_tags").change();
-
 
 /**
  * check if mandatory subfields are written
@@ -415,13 +406,6 @@ function Changefwk(FwkList) {
 [% END %]
 </h1>
 
-[% IF marcflavour != 'NORMARC' AND NOT advancedMARCEditor %]
-<div>
-  <label><input type="checkbox" name="marcDocsSelect" id="marcDocsSelect" checked="true" /> Show MARC tag documentation links</label>
-  <label><input type="checkbox" name="marcTagsSelect" id="marcTagsSelect" style="margin-left: 5px;" /> Show tags</label>
-</div>
-[% END %]
-
 [% UNLESS ( number ) %]
     <!-- show duplicate warning on tab 0 only -->
         [% IF ( duplicatebiblionumber ) %]
@@ -481,9 +465,48 @@ function Changefwk(FwkList) {
 
     [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
         <div class="btn-group"><a class="btn btn-small" href="#" id="z3950search"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>
-        [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 %]
-            <div class="btn-group"><a href="#" id="switcheditor" class="btn btn-small">Switch to advanced editor</a></div>
-        [% END %]
+    [% END %]
+
+    <div class="btn-group">
+        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> Settings <span class="caret"></span></button>
+        <ul id="settings-menu" class="dropdown-menu">
+            [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 %]
+                <li><a href="#" id="switcheditor">Switch to advanced editor</a></li>
+            [% END %]
+            [% IF marcflavour != 'NORMARC' AND NOT advancedMARCEditor %]
+                <li>
+                    <a href="#" id="marcDocsSelect"><i class="fa fa-check-square-o"></i> Show MARC tag documentation links</a>
+                <li>
+                    <a href="#" id="marcTagsSelect"><i class="fa fa-check-square-o"></i> Show tags</a>
+                </li>
+            [% END %]
+            <li class="divider"></li>
+            <li class="nav-header">Change framework</li>
+            <li>
+                <a href="#" class="change-framework" data-frameworkcode="">
+                    [% IF ( frameworkcode ) %]
+                       <i class="fa fa-fw">&nbsp;</i>
+                    [% ELSE %]
+                        <i class="fa fa-fw fa-check"></i>
+                    [% END %]
+                    Default
+                </a>
+            </li>
+            [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
+                <li>
+                    <a href="#" class="change-framework" data-frameworkcode="[% frameworkcodeloo.value %]">
+                        [% IF ( frameworkcodeloo.selected ) %]
+                            <i class="fa fa-fw fa-check"></i>
+                        [% ELSE %]
+                            <i class="fa fa-fw">&nbsp;</i>
+                        [% END %]
+                        [% frameworkcodeloo.frameworktext %]
+                    </a>
+                </li>
+            [% END %]
+        </ul>
+    </div>
+    [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
         [% IF (biblionumber) %]
             [% IF ( BiblioDefaultViewmarc ) %]
                 <div class="btn-group">
@@ -506,28 +529,13 @@ function Changefwk(FwkList) {
             <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>
         [% END %]
     [% END %]
-    <div class="btn-group">
-        <label for="Frameworks">Change framework: </label>
-            <select name="frameworkcode" id="Frameworks" onchange="Changefwk(this);">
-                <option value="Default">Default</option>
-                [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
-                    [% IF ( frameworkcodeloo.selected ) %]
-                        <option value="[% frameworkcodeloo.value %]" selected="selected">
-                    [% ELSE %]
-                        <option value="[% frameworkcodeloo.value %]">
-                    [% END %]
-                       [% frameworkcodeloo.frameworktext %]
-                       </option>
-                [% END %]
-            </select>
-        </div>
 </div>
 
 [% IF ( popup ) %]
         <input type="hidden" name="mode" value="popup" />
 [% END %]
         <input type="hidden" name="op" value="addbiblio" />
-        <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+        <input type="hidden" id="frameworkcode" name="frameworkcode" value="[% frameworkcode %]" />
         <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
         <input type="hidden" name="breedingid" value="[% breedingid %]" />
         <input type="hidden" name="changed_framework" value="" />
