@@ -77,7 +77,7 @@ sub GetModificationTemplates {
   warn("C4::MarcModificationTemplates::GetModificationTemplates( $template_id )") if DEBUG;
 
   my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare("SELECT * FROM marc_modification_templates");
+  my $sth = $dbh->prepare("SELECT * FROM marc_modification_templates ORDER BY name");
   $sth->execute();
 
   my @templates;
