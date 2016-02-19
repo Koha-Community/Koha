@@ -26,20 +26,33 @@ use C4::Biblio;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Ris;
+use Koha::RecordProcessor;
 
-my $query = new CGI;
+my $query = CGI->new;
 my $op=$query->param("op")||''; #op=export is currently the only use
 my $format=$query->param("format")||'utf8';
 my $biblionumber = $query->param("bib")||0;
 $biblionumber = int($biblionumber);
-my ($marc, $error)= ('','');
+my $error = q{};
 
-$marc = GetMarcBiblio($biblionumber, 1) if $biblionumber;
-if(!$marc) {
+my $marc_unfiltered;
+$marc_unfiltered = GetMarcBiblio($biblionumber, 1) if $biblionumber;
+if(!$marc_unfiltered) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
-elsif ($format =~ /endnote/) {
+
+# ASSERT: There is a biblionumber, because GetMarcBiblio returned something.
+
+my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
+my $marc_filtered    = $marc_unfiltered->clone();
+my $marc             = $record_processor->process($marc_filtered);
+
+my $marc_noitems_unfiltered = GetMarcBiblio($biblionumber);
+my $marc_noitems_filtered   = $marc_noitems_unfiltered->clone();
+my $marc_noitems            = $record_processor->process($marc_noitems_filtered);
+
+if ($format =~ /endnote/) {
     $marc = marc2endnote($marc);
     $format = 'endnote';
 }
@@ -56,11 +69,12 @@ elsif ($format =~ /ris/) {
     $format = 'ris';
 }
 elsif ($format =~ /bibtex/) {
-    $marc = marc2bibtex(C4::Biblio::GetMarcBiblio($biblionumber),$biblionumber);
+    $marc = marc2bibtex($marc_noitems,$biblionumber);
     $format = 'bibtex';
 }
 elsif ($format =~ /dc$/) {
-    $marc = marc2dcxml(undef, undef, $biblionumber, $format);
+    # TODO: Dublin Core leaks fields marked hidden by framework.
+    $marc = marc2dcxml($marc, undef, $biblionumber, $format);
     $format = "dublin-core.xml";
 }
 elsif ($format =~ /marc8/) {

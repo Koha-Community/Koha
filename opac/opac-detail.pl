@@ -50,7 +50,7 @@ use C4::Images;
 use Koha::DateUtils;
 use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
-
+use Koha::RecordProcessor;
 use Koha::Virtualshelves;
 
 BEGIN {
@@ -84,11 +84,14 @@ if (scalar @all_items >= 1) {
     }
 }
 
-my $record       = GetMarcBiblio($biblionumber);
-if ( ! $record ) {
+my $record_unfiltered = GetMarcBiblio($biblionumber);
+if ( ! $record_unfiltered ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
     exit;
 }
+my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
+my $record_filtered  = $record_unfiltered->clone();
+my $record           = $record_processor->process($record_filtered);
 
 # redirect if opacsuppression is enabled and biblio is suppressed
 if (C4::Context->preference('OpacSuppression')) {
@@ -524,6 +527,11 @@ if ( C4::Context->preference('HighlightOwnItemsOnOPAC') ) {
 }
 
 my $dat = &GetBiblioData($biblionumber);
+my $HideMARC = $record_processor->filters->[0]->should_hide_marc(
+    {
+        frameworkcode => $dat->{'frameworkcode'},
+        interface     => 'opac',
+    } );
 
 my $itemtypes = GetItemTypes();
 # imageurl:
@@ -762,7 +770,9 @@ if (C4::Context->preference("AlternateHoldingsField") && scalar @items == 0) {
         );
 }
 
+# FIXME: The template uses this hash directly. Need to filter.
 foreach ( keys %{$dat} ) {
+    next if ( $HideMARC->{$_} );
     $template->param( "$_" => defined $dat->{$_} ? $dat->{$_} : '' );
 }
 

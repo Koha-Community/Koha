@@ -54,6 +54,7 @@ use C4::Review;
 use C4::Serials;    # uses getsubscriptionfrom biblionumber
 use C4::Koha;
 use C4::Members;    # GetMember
+use Koha::RecordProcessor;
 
 my $query = CGI->new();
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -91,11 +92,15 @@ if (scalar @items >= 1) {
     }
 }
 
-my $record = GetMarcBiblio($biblionumber);
-if ( ! $record ) {
+my $record_unfiltered = GetMarcBiblio($biblionumber);
+if ( ! $record_unfiltered ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
+my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
+my $record_filtered  = $record_unfiltered->clone();
+my $record           = $record_processor->process($record_filtered);
+
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
@@ -112,7 +117,7 @@ $template->param(
     normalized_ean => $ean,
     normalized_oclc => $oclc,
     normalized_isbn => $isbn,
-	content_identifier_exists => $content_identifier_exists,
+    content_identifier_exists => $content_identifier_exists,
 );
 
 #coping with subscriptions
