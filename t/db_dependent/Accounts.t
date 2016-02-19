@@ -24,6 +24,9 @@ use Test::Warn;
 
 use t::lib::TestBuilder;
 
+use Koha::Account::Lines;
+use Koha::Account::Line;
+
 BEGIN {
     use_ok('C4::Accounts');
     use_ok('Koha::Object');
@@ -150,19 +153,15 @@ subtest "recordpayment() tests" => sub {
     $borrower->branchcode( $branchcode );
     $borrower->store;
 
-    my $sth = $dbh->prepare(
-        "INSERT INTO accountlines (
-            borrowernumber,
-            amountoutstanding )
-        VALUES ( ?, ? )"
-    );
-    $sth->execute($borrower->borrowernumber, '100');
-    $sth->execute($borrower->borrowernumber, '200');
+    my $line1 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 100 })->store();
+    my $line2 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 200 })->store();
+    $line1->_result->discard_changes;
+    $line2->_result->discard_changes;
 
     $sth = $dbh->prepare("SELECT count(*) FROM accountlines");
     $sth->execute;
     my $count = $sth->fetchrow_array;
-    is ($count, 2, 'There is 2 lines as expected');
+    is($count, 2, 'There is 2 lines as expected');
 
     # Testing recordpayment -------------------------
     # There is $100 in the account
@@ -172,7 +171,7 @@ subtest "recordpayment() tests" => sub {
     for my $line ( @$amountoutstanding ) {
         $amountleft += $line;
     }
-    ok($amountleft == 300, 'The account has 300$ as expected' );
+    is($amountleft, 300, 'The account has 300$ as expected' );
 
     # We make a $20 payment
     my $borrowernumber = $borrower->borrowernumber;
@@ -187,7 +186,7 @@ subtest "recordpayment() tests" => sub {
     for my $line ( @$amountoutstanding ) {
         $amountleft += $line;
     }
-    ok($amountleft == 280, 'The account has $280 as expected' );
+    is($amountleft, 280, 'The account has $280 as expected' );
     # Is the payment note well registered
     $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
     $sth->execute($borrower->borrowernumber);
@@ -205,7 +204,7 @@ subtest "recordpayment() tests" => sub {
     for my $line ( @$amountoutstanding ) {
         $amountleft += $line;
     }
-    ok($amountleft == 310, 'The account has $310 as expected' );
+    is($amountleft, 310, 'The account has $310 as expected' );
     # Is the payment note well registered
     $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
     $sth->execute($borrower->borrowernumber);
@@ -223,7 +222,7 @@ subtest "recordpayment() tests" => sub {
     for my $line ( @$amountoutstanding ) {
         $amountleft += $line;
     }
-    ok($amountleft == 160, 'The account has $160 as expected' );
+    is($amountleft, 160, 'The account has $160 as expected' );
     # Is the payment note well registered
     $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
     $sth->execute($borrower->borrowernumber);
@@ -241,7 +240,7 @@ subtest "recordpayment() tests" => sub {
     for my $line ( @$amountoutstanding ) {
         $amountleft += $line;
     }
-    ok($amountleft == -40, 'The account has -$40 as expected, (credit situation)' );
+    is($amountleft, -40, 'The account has -$40 as expected, (credit situation)' );
     # Is the payment note well registered
     $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
     $sth->execute($borrower->borrowernumber);

@@ -25,6 +25,7 @@ use C4::Stats;
 use C4::Members;
 use C4::Circulation qw(ReturnLostItem);
 use C4::Log qw(logaction);
+use Koha::Account;
 
 use Data::Dumper qw(Dumper);
 
@@ -89,96 +90,9 @@ sub recordpayment {
 
     #here we update the account lines
     my ( $borrowernumber, $data, $sip_paytype, $payment_note ) = @_;
-    my $dbh        = C4::Context->dbh;
-    my $newamtos   = 0;
-    my $accdata    = "";
-    my $branch     = C4::Context->userenv->{'branch'};
-    my $amountleft = $data;
-    my $manager_id = 0;
-    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
 
-    $payment_note //= "";
-
-    # begin transaction
-    my $nextaccntno = getnextacctno($borrowernumber);
-
-    # get lines with outstanding amounts to offset
-    my $sth = $dbh->prepare(
-        "SELECT * FROM accountlines
-  WHERE (borrowernumber = ?) AND (amountoutstanding<>0)
-  ORDER BY date"
-    );
-    $sth->execute($borrowernumber);
-
-    # offset transactions
-    my @ids;
-    while ( ( $accdata = $sth->fetchrow_hashref ) and ( $amountleft > 0 ) ) {
-        if ( $accdata->{'amountoutstanding'} < $amountleft ) {
-            $newamtos = 0;
-            $amountleft -= $accdata->{'amountoutstanding'};
-        }
-        else {
-            $newamtos   = $accdata->{'amountoutstanding'} - $amountleft;
-            $amountleft = 0;
-        }
-        my $thisacct = $accdata->{accountlines_id};
-        my $usth     = $dbh->prepare(
-            "UPDATE accountlines SET amountoutstanding= ?
-     WHERE (accountlines_id = ?)"
-        );
-        $usth->execute( $newamtos, $thisacct );
-
-        if ( C4::Context->preference("FinesLog") ) {
-            $accdata->{'amountoutstanding_new'} = $newamtos;
-            logaction("FINES", 'MODIFY', $borrowernumber, Dumper({
-                action                => 'fee_payment',
-                borrowernumber        => $accdata->{'borrowernumber'},
-                old_amountoutstanding => $accdata->{'amountoutstanding'},
-                new_amountoutstanding => $newamtos,
-                amount_paid           => $accdata->{'amountoutstanding'} - $newamtos,
-                accountlines_id       => $accdata->{'accountlines_id'},
-                accountno             => $accdata->{'accountno'},
-                manager_id            => $manager_id,
-                note                  => $payment_note,
-            }));
-            push( @ids, $accdata->{'accountlines_id'} );
-        }
-    }
-
-    # create new line
-    my $usth = $dbh->prepare(
-        "INSERT INTO accountlines
-  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id, note)
-  VALUES (?,?,now(),?,'',?,?,?,?)"
-    );
-
-    my $paytype = "Pay";
-    $paytype .= $sip_paytype if defined $sip_paytype;
-    $usth->execute( $borrowernumber, $nextaccntno, 0 - $data, $paytype, 0 - $amountleft, $manager_id, $payment_note );
-    $usth->finish;
-
-    UpdateStats({
-                branch => $branch,
-                type =>'payment',
-                amount => $data,
-                borrowernumber => $borrowernumber,
-                accountno => $nextaccntno }
-    );
-
-    if ( C4::Context->preference("FinesLog") ) {
-        $accdata->{'amountoutstanding_new'} = $newamtos;
-        logaction("FINES", 'CREATE',$borrowernumber,Dumper({
-            action            => 'create_payment',
-            borrowernumber    => $borrowernumber,
-            accountno         => $nextaccntno,
-            amount            => $data * -1,
-            amountoutstanding => $amountleft * -1,
-            accounttype       => 'Pay',
-            accountlines_paid => \@ids,
-            manager_id        => $manager_id,
-        }));
-    }
-
+    return Koha::Account->new( { patron_id => $borrowernumber } )
+      ->pay( { amount => $data, sip => $sip_paytype, note => $payment_note } );
 }
 
 =head2 makepayment
