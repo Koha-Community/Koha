@@ -4,14 +4,21 @@
 [% INCLUDE 'calendar.inc' %]
 <style type="text/css">fieldset.rows table { clear: none; margin: 0;}</style>
 <script type="text/javascript">
-var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this dictionary definition? This cannot be undone.");
+    var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this dictionary definition? This cannot be undone.");
 
-$(document).ready(function(){
-    $("#delete").on("click",function(){
-        return confirmDelete(MSG_CONFIRM_DELETE);
+    $(document).ready(function() {
+        $("#delete").on("click",function(){
+            return confirmDelete(MSG_CONFIRM_DELETE);
+        });
+
+        $("#date_range").change(function(){
+            $("input#from").parents('li').show();
+        });
+        $("#all_dates").change(function(){
+            $("input#from").parents('li').hide();
+        });
+        $("#all_dates").click().change();
     });
-});
-
 </script>
 </head>
 <body id="rep_dictionary" class="rep">
