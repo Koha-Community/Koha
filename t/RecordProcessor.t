@@ -21,86 +21,117 @@ use Modern::Perl;
 
 use File::Spec;
 use MARC::Record;
-
+use English qw( -no_match_vars );
 use Test::More;
 
 BEGIN {
-        use_ok('Koha::RecordProcessor');
+    use_ok('Koha::RecordProcessor');
 }
 
-my $isbn = '0590353403';
-my $title = 'Foundation';
-my $marc_record=MARC::Record->new;
-my $field = MARC::Field->new('020','','','a' => $isbn);
+my $isbn        = '0590353403';
+my $title       = 'Foundation';
+my $marc_record = MARC::Record->new;
+my $field       = MARC::Field->new( '020', q{}, q{}, 'a' => $isbn );
 $marc_record->append_fields($field);
-$field = MARC::Field->new('245','','','a' => $title);
+$field = MARC::Field->new( '245', q{}, q{}, 'a' => $title );
 $marc_record->append_fields($field);
-
 
 my $filterdir = File::Spec->rel2abs('Koha/Filter') . '/MARC';
 
-opendir(my $dh, $filterdir);
-my @installed_filters = map { ( /\.pm$/ && -f "$filterdir/$_" && s/\.pm$// ) ? "Koha::Filters::MARC::$_" : () } readdir($dh);
+my $dh;
+opendir $dh, $filterdir;
+my @installed_filters;
+my @directory_entries = readdir $dh;
+foreach my $entry (@directory_entries) {
+    if ( $entry =~ /[.]pm$/xsm && -f "$filterdir/$entry" ) {
+        my $filter_name = $entry;
+        $filter_name =~ s/[.]pm$//xsm;
+        push @installed_filters, $filter_name;
+    }
+}
+closedir $dh;
 my @available_filters = Koha::RecordProcessor::AvailableFilters();
 
 foreach my $filter (@installed_filters) {
-    ok(grep($filter, @available_filters), "Found filter $filter");
+    ok( grep { /${filter}/xsm } @available_filters, "Found filter $filter" );
 }
 
-my $marc_filters = grep (/MARC/, @available_filters);
-is(scalar Koha::RecordProcessor::AvailableFilters('MARC'), $marc_filters, 'Retrieved list of MARC filters');
+my $marc_filters = grep { /MARC/sm } @available_filters;
+is( scalar Koha::RecordProcessor::AvailableFilters('MARC'),
+    $marc_filters, 'Retrieved list of MARC filters' );
 
-my $processor = Koha::RecordProcessor->new( { filters => ( 'ABCD::EFGH::IJKL' ) } );
+my $processor =
+  Koha::RecordProcessor->new( { filters => ('ABCD::EFGH::IJKL') } );
 
-is(ref($processor), 'Koha::RecordProcessor', 'Created record processor with invalid filter');
+is( ref($processor), 'Koha::RecordProcessor',
+    'Created record processor with invalid filter' );
 
-is($processor->process($marc_record), $marc_record, 'Process record with empty processor');
+is( $processor->process($marc_record),
+    $marc_record, 'Process record with empty processor' );
 
-$processor = Koha::RecordProcessor->new( { filters => ( 'Null' ) } );
-is(ref($processor->filters->[0]), 'Koha::Filter::MARC::Null', 'Created record processor with implicitly scoped Null filter');
+$processor = Koha::RecordProcessor->new( { filters => ('Null') } );
+is( ref( $processor->filters->[0] ),
+    'Koha::Filter::MARC::Null',
+    'Created record processor with implicitly scoped Null filter' );
 
-$processor = Koha::RecordProcessor->new( { filters => ( 'Koha::Filter::MARC::Null' ) } );
-is(ref($processor->filters->[0]), 'Koha::Filter::MARC::Null', 'Created record processor with explicitly scoped Null filter');
+$processor =
+  Koha::RecordProcessor->new( { filters => ('Koha::Filter::MARC::Null') } );
+is( ref( $processor->filters->[0] ),
+    'Koha::Filter::MARC::Null',
+    'Created record processor with explicitly scoped Null filter' );
 
-is($processor->process($marc_record), $marc_record, 'Process record');
+is( $processor->process($marc_record), $marc_record, 'Process record' );
 
 $processor->bind($marc_record);
 
-is($processor->record, $marc_record, 'Bound record to processor');
+is( $processor->record, $marc_record, 'Bound record to processor' );
 
-is($processor->process(), $marc_record, 'Filter bound record');
+is( $processor->process(), $marc_record, 'Filter bound record' );
 
-eval {
-    $processor = Koha::RecordProcessor->new( { filters => ( 'Koha::Filter::MARC::Null' ) } );
+my $destroy_test = eval {
+    $processor =
+      Koha::RecordProcessor->new( { filters => ('Koha::Filter::MARC::Null') } );
     undef $processor;
+    return 1;
 };
 
-ok(!$@, 'Destroyed processor successfully');
+ok( !$EVAL_ERROR && $destroy_test == 1, 'Destroyed processor successfully' );
 
-subtest "new() tests" => sub {
+subtest 'new() tests' => sub {
 
     plan tests => 14;
 
-    my $processor;
+    my $record_processor;
 
     # Create a processor with a valid filter
-    $processor = new Koha::RecordProcessor({ filters => 'Null' });
-    is( ref($processor), 'Koha::RecordProcessor', 'Processor created' );
-    is( scalar @{ $processor->filters }, 1, 'One filter initialized' );
-    is( ref($processor->filters->[0]), 'Koha::Filter::MARC::Null', 'Correct filter initialized' );
+    $record_processor = Koha::RecordProcessor->new( { filters => 'Null' } );
+    is( ref($record_processor), 'Koha::RecordProcessor', 'Processor created' );
+    is( scalar @{ $record_processor->filters }, 1, 'One filter initialized' );
+    is( ref( $record_processor->filters->[0] ),
+        'Koha::Filter::MARC::Null', 'Correct filter initialized' );
 
     # Create a processor with an invalid filter
-    $processor = new Koha::RecordProcessor({ filters => 'Dummy' });
-    is( ref($processor), 'Koha::RecordProcessor', 'Processor created' );
-    is( scalar @{ $processor->filters }, 0, 'No filter initialized' );
-    is( ref($processor->filters->[0]), '', 'Make sure no filter initialized' );
+    $record_processor = Koha::RecordProcessor->new( { filters => 'Dummy' } );
+    is( ref($record_processor), 'Koha::RecordProcessor', 'Processor created' );
+    is( scalar @{ $record_processor->filters }, 0, 'No filter initialized' );
+    is( ref( $record_processor->filters->[0] ),
+        q{}, 'Make sure no filter initialized' );
 
     # Create a processor with two valid filters
-    $processor = new Koha::RecordProcessor({ filters => [ 'Null', 'EmbedSeeFromHeadings' ] });
-    is( ref($processor), 'Koha::RecordProcessor', 'Processor created' );
-    is( scalar @{ $processor->filters }, 2, 'Two filters initialized' );
-    is( ref($processor->filters->[0]), 'Koha::Filter::MARC::Null', 'Correct first filter initialized' );
-    is( ref($processor->filters->[1]), 'Koha::Filter::MARC::EmbedSeeFromHeadings', 'Correct second filter initialized' );
+    $record_processor = Koha::RecordProcessor->new(
+        { filters => [ 'Null', 'EmbedSeeFromHeadings' ] } );
+    is( ref($record_processor), 'Koha::RecordProcessor', 'Processor created' );
+    is( scalar @{ $record_processor->filters }, 2, 'Two filters initialized' );
+    is(
+        ref( $record_processor->filters->[0] ),
+        'Koha::Filter::MARC::Null',
+        'Correct first filter initialized'
+    );
+    is(
+        ref( $record_processor->filters->[1] ),
+        'Koha::Filter::MARC::EmbedSeeFromHeadings',
+        'Correct second filter initialized'
+    );
 
     # Create a processor with both valid and invalid filters.
     # use hash reference for regression testing
@@ -108,12 +139,13 @@ subtest "new() tests" => sub {
         filters => [ 'Null', 'Dummy' ],
         options => { 'test' => 'true' }
     };
-    $processor = new Koha::RecordProcessor($parameters);
-    is( ref($processor), 'Koha::RecordProcessor', 'Processor created' );
-    is( scalar @{ $processor->filters }, 1, 'Invalid filter skipped' );
-    is( ref($processor->filters->[0]), 'Koha::Filter::MARC::Null', 'Correct filter initialized' );
+    $record_processor = Koha::RecordProcessor->new($parameters);
+    is( ref($record_processor), 'Koha::RecordProcessor', 'Processor created' );
+    is( scalar @{ $record_processor->filters }, 1, 'Invalid filter skipped' );
+    is( ref( $record_processor->filters->[0] ),
+        'Koha::Filter::MARC::Null', 'Correct filter initialized' );
 
-    my $filter_params = $processor->filters->[0]->params;
+    my $filter_params = $record_processor->filters->[0]->params;
     is_deeply( $filter_params, $parameters, 'Initialization parameters' );
 };
 
