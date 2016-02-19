@@ -192,17 +192,17 @@ sub AUTOLOAD {
 }
 
 sub check_password {
-    my ($self, $pwd) = @_;
+    my ( $self, $pwd ) = @_;
 
-    defined $pwd or return 0;                  # you gotta give me something (at least ''), or no deal
+    defined $pwd
+      or return 0;    # you gotta give me something (at least ''), or no deal
 
-    if ($pwd eq q{}) {
-        return 1;
-    }
+    return 1
+      if $pwd eq q{};    # if the record has a NULL password, accept '' as match
 
     my $dbh = C4::Context->dbh;
     my $ret = 0;
-    ($ret) = checkpw($dbh, $self->{userid}, $pwd);
+    ($ret) = checkpw( $dbh, $self->{userid}, $pwd );
     return $ret;
 }
 
