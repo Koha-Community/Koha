@@ -1,0 +1,252 @@
+package Koha::Filter::MARC::ViewPolicy;
+
+# Copyright 2015 Mark Tompsett
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+=head1 NAME
+
+Koha::Filter::MARC::ViewPolicy - this filters a MARC record.
+
+=head1 VERSION
+
+version 1.0
+
+=head1 SYNOPSIS
+
+my $processor = Koha::RecordProcessor->new( { filters => ('ViewPolicy') } );
+
+=head1 DESCRIPTION
+
+Filter to remove fields based on the 'Advance constraints'
+settings found when editing a particular subfield definition of
+a MARC bibliographic framework found under the Koha administration
+menu.
+
+=cut
+
+use Modern::Perl;
+use Carp;
+use C4::Biblio;
+
+use base qw(Koha::RecordProcessor::Base);
+our $NAME    = 'MARC_ViewPolicy';
+our $VERSION = '3.23'; # Master version I hope it gets in.
+
+=head1 SUBROUTINES/METHODS
+
+=head2 filter
+
+    my $processor = Koha::RecordProcessor->new( { filters => ('ViewPolicy') } );
+...
+    my $newrecord = $processor->filter($record);
+    my $newrecords = $processor->filter(\@records);
+
+This returns a filtered copy of the record based on the Advanced constraints
+visibility settings.
+
+=cut
+
+sub filter {
+    my $self    = shift;
+    my $precord = shift;
+    my @records;
+
+    if ( !$precord ) {
+        return $precord;
+    }
+
+    if ( ref($precord) eq 'ARRAY' ) {
+        @records = @{$precord};
+    }
+    else {
+        push @records, $precord;
+    }
+
+    my @results;
+    foreach my $current_record (@records) {
+        my $result        = $current_record->clone();
+        my $interface     = $self->{options}->{interface} // 'opac';
+        my $frameworkcode = $self->{options}->{frameworkcode} // q{};
+        my $display       = _should_display_on_interface();
+
+        my $marcsubfieldstructure = GetMarcStructure( 0, $frameworkcode );
+
+        #if ($marcsubfieldstructure->{'000'}->{'@'}->{hidden}>0) {
+        # LDR field is excluded from $current_record->fields().
+        # if we hide it here, the MARCXML->MARC::Record->MARCXML
+        # transformation blows up.
+        #}
+        foreach my $field ( $result->fields() ) {
+            _filter_field(
+                {
+                    field                 => $field,
+                    marcsubfieldstructure => $marcsubfieldstructure,
+                    display               => $display,
+                    interface             => $interface,
+                    result                => $result
+                }
+            );
+        }
+        push @results, $result;
+    }
+
+    if ( scalar @results == 1 ) {
+        return $results[0];
+    }
+    else {
+        return \@results;
+    }
+}
+
+sub _filter_field {
+    my ($parameter) = @_;
+
+    my $field                 = $parameter->{field};
+    my $marcsubfieldstructure = $parameter->{marcsubfieldstructure};
+    my $display               = $parameter->{display};
+    my $interface             = $parameter->{interface};
+    my $result                = $parameter->{result};
+
+    my $tag = $field->tag();
+    if ( $tag >= 10 ) {
+        foreach my $subpairs ( $field->subfields() ) {
+            my ( $subtag, $value ) = @{$subpairs};
+
+            # visibility is a "level" (-7 to +7), default to 0
+            my $visibility =
+              $marcsubfieldstructure->{$tag}->{$subtag}->{hidden};
+            $visibility //= 0;
+            my $hidden;
+            if ( $display->{$interface}->{$visibility} ) {
+                $hidden = 0;
+            }
+            else {
+                # deleting last subfield doesn't delete field, so
+                # this detects that case to delete the field.
+                if ( scalar $field->subfields() <= 1 ) {
+                    $result->delete_fields($field);
+                }
+                else {
+                    $field->delete_subfield( code => $subtag );
+                }
+            }
+        }
+    }
+
+    # tags less than 10 don't have subfields, use @ trick.
+    else {
+        # visibility is a "level" (-7 to +7), default to 0
+        my $visibility = $marcsubfieldstructure->{$tag}->{q{@}}->{hidden};
+        $visibility //= 0;
+        my $hidden;
+        if ( $display->{$interface}->{$visibility} ) {
+            $hidden = 0;
+        }
+        else {
+            $hidden = 1;
+            $result->delete_fields($field);
+        }
+    }
+    return;
+}
+
+sub initialize {
+    my $self  = shift;
+    my $param = shift;
+
+    my $options = $param->{options};
+    $self->{options} = $options;
+    $self->Koha::RecordProcessor::Base::initialize($param);
+    return;
+}
+
+sub _should_display_on_interface {
+    my $display = {
+        opac => {
+            0  => 1,
+            -1 => 1,
+            -2 => 1,
+            -3 => 1,
+            -4 => 1,
+            -5 => 1,
+            -6 => 1,
+            -7 => 1,
+        },
+        intranet => {
+            -6 => 1,
+            -5 => 1,
+            -1 => 1,
+            0  => 1,
+            1  => 1,
+            4  => 1,
+            6  => 1,
+            7  => 1,
+        },
+    };
+    return $display;
+}
+
+=head1 DIAGNOSTICS
+
+ $ prove -v t/RecordProcessor.t
+ $ prove -v t/db_dependent/RecordProcessor_ViewPolicy.t
+
+=head1 CONFIGURATION AND ENVIRONMENT
+
+Install Koha. This filter will be used appropriately by the OPAC or Staff client.
+
+=head1 INCOMPATIBILITIES
+
+This is designed for MARC::Record filtering currently. It will not handle MARC::MARCXML.
+
+=head1 DEPENDENCIES
+
+The following Perl libraries are required: Modern::Perl and Carp.
+The following Koha libraries are required: C4::Biblio, Koha::RecordProcessor, and Koha::RecordProcessor::Base.
+These should all be installed if the koha-common package is installed or Koha is otherwise installed.
+
+=head1 BUGS AND LIMITATIONS
+
+This is the initial version. Please feel free to report bugs
+at http://bugs.koha-community.org/.
+
+=head1 AUTHOR
+
+Mark Tompsett
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2015 Mark Tompsett
+
+This file is part of Koha.
+
+Koha is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+Koha is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+=cut
+
+1;
