@@ -1058,6 +1058,7 @@ sub get_versions {
         $versions{mysqlVersion}  = `mysql -V`;
         $versions{apacheVersion} = `httpd -v`;
         $versions{apacheVersion} = `httpd2 -v`            unless  $versions{apacheVersion} ;
+        $versions{apacheVersion} = (`apache2ctl -v`)[0]   unless  $versions{apacheVersion} ;
         $versions{apacheVersion} = `apache2 -v`           unless  $versions{apacheVersion} ;
         $versions{apacheVersion} = `/usr/sbin/apache2 -v` unless  $versions{apacheVersion} ;
     }
