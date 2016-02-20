@@ -1,0 +1,58 @@
+$(document).ready(function() {
+    $('#submit_update').hide();
+    $("#name").focus();
+    $("#sms_add_form").hide();
+    $("#new_provider").on("click",function(){
+        add_provider();
+    });
+});
+
+function clear_form(){
+    $("#id,#name,#domain").val("");
+}
+
+function add_provider(){
+    clear_form();
+    $(".dialog").hide();
+    $("legend").text( LABEL_SMS_ADD_PROVIDER );
+    $("#toolbar,#submit_update,#providerst").hide();
+    $("#sms_add_form,#submit_save").show();
+    $("#name").focus();
+}
+
+function edit_provider( id ) {
+    clear_form();
+    $("legend").text( LABEL_SMS_EDIT_PROVIDER.format( $("#name_" + id).text() ) );
+    $("#sms_add_form,#submit_update").show();
+
+    $("#id").val( id );
+    $("#name").val( $("#name_" + id).text() );
+    $("#domain").val( $("#domain_" + id).text() );
+
+    $("#toolbar,#submit_save,#providerst").hide();
+
+    $("#name").focus();
+}
+
+
+function cancel_edit() {
+    clear_form();
+    $(".dialog").show();
+    $("#sms_add_form,#submit_update").hide();
+    $("#toolbar,#submit_save,#providerst").show();
+}
+
+function delete_provider( id, users ) {
+    var c;
+    if ( users ) {
+        c = confirm( MSG_SMS_PATRONS_USING.format( $("#name_" + id).html(), users ) );
+    } else {
+        c = confirm( MSG_SMS_DELETE_CONFIRM.format( $("#name_" + id).html() ) );
+    }
+
+    if ( c ) {
+        $("#op").val('delete');
+        $("#id").val( id );
+        $("#sms_form").submit();
+    }
+}
