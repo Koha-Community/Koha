@@ -49,7 +49,6 @@ use Koha::Database;
 
 use Date::Calc qw(
   Today
-  Add_Delta_YM
   Add_Delta_Days
   Date_to_Days
 );
