@@ -2526,6 +2526,11 @@ sub _ZOOM_event_loop {
     }
 }
 
+sub reindexZebraChanges {
+    my $output = `$ENV{KOHA_PATH}/misc/migration_tools/rebuild_zebra.pl -b -a -r`;
+    return $output;
+}
+
 =head2 new_record_from_zebra
 
 Given raw data from a searchengine result set, return a MARC::Record object
