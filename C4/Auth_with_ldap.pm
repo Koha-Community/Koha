@@ -223,7 +223,7 @@ sub checkpw_ldap {
                 warn "ERROR_extended_unique_id_failed $attr->{code} $attr->{value}";
             }
         }
-        C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, \@unique_attr);
+        C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, \@unique_attr, 'no_branch_limit');
     }
 return(1, $cardnumber, $userid);
 }
