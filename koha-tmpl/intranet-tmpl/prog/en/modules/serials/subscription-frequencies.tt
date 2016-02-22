@@ -106,11 +106,11 @@ $(document).ready(function() {
           <fieldset class="rows">
             <ol>
               <li>
-                <label for="description">Description:</label>
-                <input type="text" id="description" name="description" value="[% description %]" />
+                <label class="required" for="description">Description: </label>
+                <input type="text" id="description" name="description" value="[% description %]" class="required" required="required" /> <span class="required">Required</span>
               </li>
               <li>
-                <label for="unit">Unit</label>
+                <label for="unit">Unit: </label>
                 <select id="unit" name="unit">
                   <option value="">None</option>
                   [% FOREACH unit IN units_loop %]
@@ -126,7 +126,7 @@ $(document).ready(function() {
               </li>
               <li><span class="hint">Note: one of the two following fields must be equal to 1</span></li>
               <li>
-                <label for="issuesperunit">Issues per unit</label>
+                <label for="issuesperunit">Issues per unit: </label>
                 [% IF (new) %]
                   <input type="text" id="issuesperunit" name="issuesperunit" value="1" size="3" />
                 [% ELSE %]
@@ -134,7 +134,7 @@ $(document).ready(function() {
                 [% END %]
               </li>
               <li>
-                <label for="unitsperissue">Units per issue</label>
+                <label for="unitsperissue">Units per issue: </label>
                 [% IF (new) %]
                   <input type="text" id="unitsperissue" name="unitsperissue" value="1" size="3" />
                 [% ELSE %]
@@ -142,17 +142,22 @@ $(document).ready(function() {
                 [% END %]
               </li>
               <li>
-                <label for="displayorder">Display order</label>
+                <label for="displayorder">Display order: </label>
                 <input type="text" id="displayorder" name="displayorder" value="[% displayorder %]" size="3" />
               </li>
             </ol>
           </fieldset>
           <fieldset class="action">
             <input type="submit" value="Save" />
-            <input type="button" value="Cancel" onclick="window.location='/cgi-bin/koha/serials/subscription-frequencies.pl'" />
+            <a href="/cgi-bin/koha/serials/subscription-frequencies.pl" class="cancel">Cancel</a>
           </fieldset>
         </form>
       [% ELSE %]
+
+        <div id="toolbar" class="btn-toolbar">
+            <a class="btn btn-small" id="newfrequency" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=new"><i class="fa fa-plus"></i> New frequency</a>
+        </div>
+
         <h1>Frequencies</h1>
         [% IF still_used %]
             <div class="dialog">
@@ -180,7 +185,6 @@ $(document).ready(function() {
                 </form>
             </div>
         [% END %]
-        <a href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=new">New frequency</a>
 
         [% IF (frequencies_loop.size) %]
           <table id="frequenciest">
