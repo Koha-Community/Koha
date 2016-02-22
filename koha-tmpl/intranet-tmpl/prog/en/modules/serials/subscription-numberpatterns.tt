@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; Number patterns</title>
+<title>Koha &rsaquo; Serials &rsaquo; Numbering patterns</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
@@ -79,7 +79,7 @@ function show_blocking_subs() {
       [% IF (new or modify) %]
         <div class="yui-g">
           [% IF (new) %]
-            <h1>New number pattern</h1>
+            <h1>New numbering pattern</h1>
             [% IF (error_existing_numberpattern) %]
               <div class="dialog">
                 <p>A pattern with this name already exists.</p>
@@ -163,7 +163,7 @@ function show_blocking_subs() {
                   </tr>
                   <tr>
                     [% BLOCK numbering_select %]
-                      <select id="[% name %]" name="[% name %]" />
+                      <select id="[% name %]" name="[% name %]">
                         <option value=""></option>
                         [% IF (value == "dayname") %]
                             <option selected="selected" value="dayname">Name of day</option>
@@ -193,7 +193,7 @@ function show_blocking_subs() {
             <fieldset class="action">
               <input type="submit" value="Save" />
               <input type="reset" value="Reset" />
-              <input type="button" value="Cancel" onclick="window.location = '/cgi-bin/koha/serials/subscription-numberpatterns.pl';" />
+              <a class="cancel" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">Cancel</a>
             </fieldset>
           </form>
         </div>
@@ -203,7 +203,7 @@ function show_blocking_subs() {
               <legend>Test prediction pattern</legend>
               <ol>
                 <li>
-                  <label for="frequency">Frequency:</label>
+                  <label for="frequency">Frequency: </label>
                   <select id="frequency">
                     [% FOREACH frequency IN frequencies_loop %]
                       <option value="[% frequency.id %]">[% frequency.description %]</option>
@@ -211,7 +211,7 @@ function show_blocking_subs() {
                   </select>
                 </li>
                 <li>
-                  <label for="firstacquidate">First issue publication date</label>
+                  <label for="firstacquidate">First issue publication date: </label>
                   <input type="text" id="firstacquidate" class="datepicker" size="10" />
                 </li>
                 <li>
@@ -224,7 +224,7 @@ function show_blocking_subs() {
                   <input type="text" id="sublength" size="3" />
                 </li>
                 <li>
-                  <label for="locale">Locale:</label>
+                  <label for="locale">Locale: </label>
                   <select id="locale" name="locale">
                       <option value=""></option>
                       [% FOREACH locale IN locales %]
@@ -266,7 +266,7 @@ function show_blocking_subs() {
           </form>
         </div>
       [% ELSE %]
-        <h1>Number patterns</h1>
+        <h1>Numbering patterns</h1>
         [% IF still_used %]
             <div class="dialog">
                 <p>
@@ -293,7 +293,11 @@ function show_blocking_subs() {
                 </form>
             </div>
         [% END %]
-        <a href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=new">New numbering pattern</a>
+
+        <div id="toolbar" class="btn-toolbar">
+            <a class="btn btn-small" id="newnumberpattern" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=new"><i class="fa fa-plus"></i> New numbering pattern</a>
+        </div>
+
         [% IF (numberpatterns_loop.size) %]
           <table id="numberpatternst">
             <thead>
@@ -321,7 +325,7 @@ function show_blocking_subs() {
             </tbody>
           </table>
         [% ELSE %]
-          <p>There is no existing patterns.</p>
+          <p>There are no existing numbering patterns.</p>
         [% END %]
       [% END %]
     </div>
