@@ -11763,6 +11763,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+    $DBversion = "3.23.00.021";
+    if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+    INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('ShowAllCheckins', '0', '', 'Show all checkins', 'YesNo');
+    });
+
+    print "Upgrade to $DBversion done (Bug 15736 - Add a preference to control whether all items should be shown in checked-in items list)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
