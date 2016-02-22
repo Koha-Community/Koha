@@ -27,7 +27,9 @@ use C4::Context;
 use C4::Output;
 
 BEGIN {
-    push @INC, C4::Context->config("pluginsdir");
+    my $pluginsdir = C4::Context->config("pluginsdir");
+    my @pluginsdir = ref($pluginsdir) eq 'ARRAY' ? @$pluginsdir : $pluginsdir;
+    push( @INC, @pluginsdir );
     pop @INC if $INC[-1] eq '.';
 }
 

@@ -26,8 +26,10 @@ use Module::Load::Conditional qw(can_load);
 use C4::Context;
 
 BEGIN {
-    push @INC, C4::Context->config("pluginsdir");
-     pop @INC if $INC[-1] eq '.' ;
+    my $pluginsdir = C4::Context->config("pluginsdir");
+    my @pluginsdir = ref($pluginsdir) eq 'ARRAY' ? @$pluginsdir : $pluginsdir;
+    push( @INC, @pluginsdir );
+    pop @INC if $INC[-1] eq '.' ;
 }
 
 =head1 NAME
@@ -83,8 +85,14 @@ sub delete {
     return unless ( C4::Context->config("enable_plugins") || $args->{'enable_plugins'} );
 
     my $plugin_class = $args->{'class'};
-    my $plugin_dir   = C4::Context->config("pluginsdir");
-    my $plugin_path  = "$plugin_dir/" . join( '/', split( '::', $args->{'class'} ) );
+
+    my $plugin_path = $plugin_class;
+    $plugin_path =~ s/::/\//g;  # Take class name, transform :: to / to get path
+    $plugin_path =~ s/$/.pm/;   # Add .pm to the end
+    require $plugin_path;   # Require the plugin to have it's path listed in INC
+    $plugin_path =
+      $INC{$plugin_path};   # Get the full true path to the plugin from INC
+    $plugin_path =~ s/.pm//;    # Remove the .pm from the end
 
     Koha::Plugins::Handler->run({
         class          => $plugin_class,

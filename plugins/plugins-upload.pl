@@ -56,6 +56,7 @@ my %errors;
 if ($plugins_enabled) {
     if ( ( $op eq 'Upload' ) && $uploadfile ) {
         my $plugins_dir = C4::Context->config("pluginsdir");
+        $plugins_dir = ref($plugins_dir) eq 'ARRAY' ? $plugins_dir->[0] : $plugins_dir;
 
         my $dirname = File::Temp::tempdir( CLEANUP => 1 );
         $debug and warn "dirname = $dirname";
