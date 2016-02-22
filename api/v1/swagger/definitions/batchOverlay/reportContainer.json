@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../x-primitives.json#/batchOverlayReportContainerId"
+    },
+    "borrowernumber": {
+      "type": "integer",
+      "description": "Borrower who executed this batch overlay action"
+    },
+    "timestamp": {
+      "description": "When the batch overlay action was executed",
+      "type": "string",
+      "format": "date-time"
+    },
+    "reportsCount": {
+      "type": "integer",
+      "description": "How many reports does this report container contain"
+    },
+    "errorsCount": {
+      "type": "integer",
+      "description": "How many errors does this report container contain"
+    }
+  }
+}

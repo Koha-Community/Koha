@@ -100,4 +100,19 @@ sub default_exception_handling {
     }
 }
 
+sub hateoas {
+    my ($c, $responseBody, @refAndUrls) = @_;
+
+    my @links;
+    for(my $i=0 ; $i<scalar(@refAndUrls) ; $i+=2) {
+        my $ref  = $refAndUrls[$i];
+        my $href = $refAndUrls[$i+1];
+        push(@links, {ref => ''.$ref,
+                      href => ''.$c->url_for($href),
+                     }
+        );
+    }
+    $responseBody->{links} = \@links;
+}
+
 1;

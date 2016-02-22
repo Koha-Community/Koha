@@ -1,13 +1,14 @@
 #!/usr/bin/perl
 #
-# Copyright 2006 Katipo Communications.
-# Parts Copyright 2009 Foundations Bible College.
+# Copyright 2014 Open source freedom fighters
+# Copyright 2015 Vaara-kirjastot
+# Copyright 2016 KohaSuomi
 #
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -19,15 +20,19 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
-use utf8;
-use vars qw($debug);
 
 use CGI;
 use CGI::Cookie;
+binmode STDOUT, ":encoding(UTF-8)";
+
+use JSON;
 
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
 use C4::BatchOverlay;
+use C4::BatchOverlay::ReportManager;
+use C4::BatchOverlay::RuleManager;
+use C4::BatchOverlay::LowlyFinder;
 use C4::Search qw(SimpleSearch);
 use C4::Biblio qw(GetMarcFromKohaField);
 use Data::Dumper;
@@ -35,7 +40,7 @@ use Data::Dumper;
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "cataloguing/batchOverlay.tmpl",
+        template_name   => "cataloguing/batchOverlay.tt",
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,
@@ -48,13 +53,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $codesString = $cgi->param('codesString'); #Could be anything, like EAN, barcode, ISSN, ISBN, ISMN
 $template->param( codesString => $codesString );
 my $operation = $cgi->param('op');
-my $skipLocalBiblios = $cgi->param('skipLocalBiblios');
-
-$template->param(
-    serverloop   => _getRemoteSearchTargets()
-);
-
-my (@localSearchErrors, @ambiguousSearchTerms);
+my $showAllExceptions = $cgi->param('showAllExceptions');
+$template->param( showAllExceptions => $showAllExceptions ) if $showAllExceptions;
 
 if ( $operation eq 'encodingLevelReport' ) {
     my $encodingLevel = $cgi->param('encodingLevel');
@@ -64,7 +64,7 @@ if ( $operation eq 'encodingLevelReport' ) {
     $encodingSearchLimit = 5000 unless $encodingSearchLimit;
     $template->param( encodingLevelLimit => $encodingSearchLimit );
 
-    my ($biblioResults, $resultSetSize) = C4::BatchOverlay::searchByEncodingLevel( $encodingLevel, \@localSearchErrors, $encodingSearchLimit );
+    my ($biblioResults, $resultSetSize) = C4::BatchOverlay::LowlyFinder::searchByEncodingLevel( $encodingLevel, $encodingSearchLimit );
     $template->param( biblioResults => $biblioResults );
     $template->param( biblioResultsSize => $resultSetSize );
 }
@@ -74,48 +74,27 @@ elsif ($codesString && $operation eq 'overlay') {
 
     #Get the codes to overlay!
     my $codes = [split( /\n/, $codesString )];
+    my $batchOverlayer = C4::BatchOverlay->new();
+    my $reportContainer = $batchOverlayer->overlay($codes);
 
-    #Remove duplicate codes, because Zebra doesn't do real time indexing and then we get double import of component parts and parents get merged twice.
-    my %codes; my @duplicateSearchTerms;
-    for(my $i=0 ; $i<@$codes ; $i++){
-        #Sanitate the codes! Always sanitate input!! Mon dieu!
-        $codes->[$i] =~ s/^\s*//; #Trim codes from whitespace.
-        $codes->[$i] =~ s/\s*$//; #Otherwise very hard to debug!?!!?!?!?
-        unless ($codes{ $codes->[$i] }){ $codes{ $codes->[$i] } = 1; }
-        else { push @duplicateSearchTerms, $codes->[$i]; }
-    }
-    if (scalar(@duplicateSearchTerms)) {
-        $codes = [keys %codes];
-        $template->param('duplicateSearchTerms' => \@duplicateSearchTerms);
-    }
+    $template->param( reportContainerId => $reportContainer->getId() ); #Preload the report for us.
+}
+elsif ($operation eq 'test') {
+    my $ruleManager = C4::BatchOverlay::RuleManager->new();
+    my $remoteTargetStatuses = $ruleManager->testRemoteTargetConnections();
+    my $dryRunStatuses = $ruleManager->testDryRun();
 
-    if( not($skipLocalBiblios) ) {
-        C4::BatchOverlay::searchLocalRecords( $codes, \@biblioNumbers, \@localSearchErrors, \@ambiguousSearchTerms );
-    }
-
-    unless  (@ambiguousSearchTerms || @localSearchErrors) {
-        my ($reportElements, $batchOverlayErrorBuilder);
-        ($reportElements, $batchOverlayErrorBuilder) = C4::BatchOverlay::batchOverlayBiblios( \@biblioNumbers ) if not($skipLocalBiblios);
-        ($reportElements, $batchOverlayErrorBuilder) = C4::BatchOverlay::batchImportBiblios( $codes ) if $skipLocalBiblios;
-        my $reports = C4::BatchOverlay::generateReport( $reportElements, 'asHtml' );
-
-        $template->param('reports' => $reports);
-        $template->param('batchOverlayErrors' => \@{$batchOverlayErrorBuilder->{errors}});
-    }
-
-    $template->param('ambiguousSearchTerms' => \@ambiguousSearchTerms);
-    $template->param('localSearchErrors' => \@localSearchErrors);
+    my $statuses = {
+        remoteTargetStatuses => $remoteTargetStatuses,
+        dryRunStatuses       => $dryRunStatuses,
+    };
+    print $cgi->header( -type => 'text/json', -charset => 'UTF-8' );
+    print JSON::to_json($statuses);
+    exit 0;
 }
 
-output_html_with_http_headers $cgi, undef, $template->output;
+$template->param(
+    reportContainers => C4::BatchOverlay::ReportManager->getReportContainers(),
+);
 
-=head _getRemoteSearchTargets
-WARNING!! Duplicate code from cataloguing/z3950_search.pl since no module for getting these Z-targets exists in v3.16.
-=cut
-sub _getRemoteSearchTargets {
-    my $dbh = C4::Context->dbh();
-    my $sth = $dbh->prepare("SELECT id,host,name,checked FROM z3950servers WHERE recordtype <> 'authority' ORDER BY rank, name");
-    $sth->execute();
-    my $remoteSearchtargetLoop = $sth->fetchall_arrayref( {} );
-    return $remoteSearchtargetLoop;
-}
+output_html_with_http_headers $cgi, $cookie, $template->output;

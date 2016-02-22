@@ -1,10 +1,15 @@
-    [% INCLUDE 'doc-head-open.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Cataloguing &rsaquo; Batch Overlay</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    [% INCLUDE 'greybox.inc' %]
+    <script src="/js/jquery-2.2.1.min.js"></script>
+    <script src="/js/jquery.dataTables-1.10.11.min.js"></script>
+    <script src="/js/jquery-ui-1.11.4.min.js"></script>
+    <script src="/js/jquery.validate-1.15.0.min.js"></script>
 
+    <link rel="stylesheet" href="/css/jquery.dataTables-1.10.11.min.css">
+    <link rel="stylesheet" href="/css/jquery-ui-1.11.4/jquery-ui-1.11.4.min.css">
 </head>
-<body id="labels_label-batch-overlay" class="cataloguing batchOverlay" onload="dofocus();">
+<body>
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
     <div id="breadcrumbs">
@@ -12,83 +17,70 @@
         <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a> &rsaquo;
         Batch Overlay
     </div>
+
+    <h4 class="hint">&nbsp;&nbsp;See "Help" for usage instructions!</h4>
+
+    <div id="statusesContainer"></div>
+    <div id="showAllExceptionsContainer">
+        <input type="checkbox" name="showAllExceptions" value="1"[% IF showAllExceptions %] checked="checked"[% END %]/>
+        <label for="showAllExceptions">Show all exceptions</label>
+    </div>
+
+    <div id="toptabs">
+        <ul>
+            <li class="ui-tabs-active">
+                <a href="#reports">Reports</a>
+            </li>
+            <li>
+                <a href="#manualOverlaying">Manual overlaying</a>
+            </li>
+        </ul>
+        <div id="reports">
+            [% INCLUDE reportsView %]
+        </div>
+        <div id="manualOverlaying">
+            [% INCLUDE manualOverlayingTool %]
+        </div>
+    </div>
+
+
+
+[% #***********************************# REPORTS VIEW #***********************************# %]
+[% BLOCK reportsView %]
+    <table id="reportsTable">
+        <thead>
+            <td>Id</td>
+            <td>User</td>
+            <td>Timestamp</td>
+            <td>Reports</td>
+            <td>Errors</td>
+            <td>Operations</td>
+        </thead>
+        [% FOREACH rc IN reportContainers %]
+            <tr id="reportContainer-[% rc.getId() %]">
+                <td>[% rc.getId() %]</td>
+                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% rc.getBorrower().borrowernumber %]">[% rc.getBorrower().cardnumber %]</a></td>
+                <td>[% rc.getTimestampLocalized() %]</td>
+                <td>[% rc.getReportsCount() %]</td>
+                <td>[% rc.getErrorsCount() %]</td>
+                <td>
+<!--NOT IMPLEMENTED                    <a class="btn btn-small deleteReportContainer"><i class="icon-remove-sign"></i></a>-->
+                    <a class="btn btn-small showReportContainer"><i class="icon-search"></i></a>
+                </td>
+            </tr>
+        [% END %]
+    </table>
+
+[% END %]
+[% #***********************************# END OF REPORTS VIEW #***********************************# %]
+
+
+
+[% #***********************************# MANUAL OVERLAYING TOOL #***********************************# %]
+[% BLOCK manualOverlayingTool %]
     <div id="doc3" class="yui-t2">
         <div id="bd">
             <div class="yui-gb">
-                [% IF batchOverlayErrors %]
-                    <div class="alert">
-                        <b>The following errors were detected when trying to find the requested MARC-records from external sources.</b>
-                        [% FOREACH error IN batchOverlayErrors %]
-                            [% IF error.errcode == 'UNKNOWN_BATCHOVERLAY_RULE' %]<br />
-                                For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. Couldn't find the batch overlay rule with name [% error.term %].
-                            [% END %]
-                            [% IF error.errcode == 'UNKNOWN_MATCHER' %]<br />
-                                Couldn't find the merging matcher or a component part matcher with ids' [% error.term %]. Extremely unsafe to proceed, thus halting.
-                            [% END %]
-                            [% IF error.errcode == 'UNKNOWN_REMOTE_ID' %]<br />
-                                For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. Couldn't find the correct bibliographic record source based on the field 003 [% error.term %].
-                            [% END %]
-                            [% IF error.errcode == 'REMOTE_SEARCH_TOOMANY' %]<br />
-                                [% IF error.biblionumber %]For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. [% END %]Too many [% error.remotename %] search results for this search! [% error.term %]
-                            [% END %]
-                            [% IF error.errcode == 'REMOTE_SEARCH_NOTFOUND' %]<br />
-                                [% IF error.biblionumber %]For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. [% END %]No [% error.remotename %] search results for this search! [% error.term %]
-                            [% END %]
-                            [% IF error.errcode == 'BAD_ENCODING' %]<br />
-                                For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. Bad encoding [% error.term %], should be UTF-8!
-                            [% END %]
-                        [% END %]
-                    </div>
-                [% END %]
-                [% IF duplicateSearchTerms %]
-                    <div class="alert">
-                        The following searches were given atleast twice. Extra searches are automatically removed.
-                        <br />
-                        <b>
-                        [% FOREACH term IN duplicateSearchTerms %]
-                            [% term %]<br />
-                        [% END %]
-                        </b>
-                        <br />
-                        This means that you probably accidentally entered the same biblio twice.
-                    </div>
-                [% END %]
-                [% IF ambiguousSearchTerms %]
-                    <div class="alert">
-                        The following codes returned more than one biblio to overlay.
-                        <br />
-                        <b>
-                        [% FOREACH term IN ambiguousSearchTerms %]
-                            [% term %]<br />
-                        [% END %]
-                        </b>
-                        <br />
-                        Please specify your search code by adding more search terms to narrow it down, or maybe the same biblio is duplicated in your database?
-                    </div>
-                [% END %]
-                [% IF localSearchErrors %]
-                    <div class="alert">
-                        The following search terms returned no results.
-                        <br />
-                        <b>
-                        [% FOREACH error IN localSearchErrors %]
-                            [% IF error.searcherror %][% error.searcherror %][% END %]<br />
-                        [% END %]
-                        </b>
-                        <br />
-                        Try another standard number, or simply use the title, author, publication date and/or some identifying information. Separate search elements with spaces.<br />
-                    </div>
-                [% END %]
-                [% IF reports %]
-                    [% FOREACH report IN reports %]
-                    <div class="report">
-                        <h3>+ [% report.header %][% IF report.similarity %] ([% report.similarity %])[% END %]</h3><br />
-                        <pre class="report_content [% IF report.similarity && report.similarity < 0.3 %]report_hidden[% END %]"><code>[% report.diff FILTER html %]</code></pre>
-                    </div>
-                    [% END %]
-                [% END %]
-
-                <h4 class="hint">&nbsp;&nbsp;See "Help" for usage instructions!</h4>
                 <div class="yui-u first" id="collect-batch-overlay">
 
                     <form name="overlay_by_code" action="/cgi-bin/koha/cataloguing/batchOverlay.pl" method="post" id="asfasfasf">
@@ -96,37 +88,16 @@
                         <fieldset class="rows">
                             <legend>Overlay by search term(s):</legend>
                             <ol><li>
+                                <label for="codesString">
                                     <p class="hint">One search term per line.<br/>
                                     Search term should be the EAN, ISSN, ISBN, ISMN, Koha biblionumber or Koha barcode, but it can be anything searchable.</p>
                                 </label>
-                                <textarea rows="25" id="codes" name="codesString" tabindex="1" class="focus">[% codesString %]</textarea>
-                                <label for="skipLocalBiblios">Skip local biblios checking: </label>
-                                <input type="checkbox" name="skipLocalBiblios" value="1" style="vertical-align: bottom;"/><br/>
-                                <span class="hint">
-                                    Check this to disable local catalog searches and search directly from the remote repositories. WARNING! This feature doesn't do any deduplication checks and can easily bring duplicate records to the local catalog. One can use the deduplicator to find duplicates.
-                                </span>
+                                <textarea rows="5" id="codes" name="codesString" tabindex="1" class="focus">[% codesString %]</textarea>
 
                                 <br /> <input type="submit" value="Overlay us!">
                             </li></ol>
                         </fieldset>
                     </form>
-
-<!--INACTIVE SINCE WAITING FOR ENABLING THE z3950 REMOTE TARGET SEARCHING IN BATCHOVERLAY<div>
-    <h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select all</a></span><span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></span></h2>
-    [% FOREACH serverloo IN serverloop %]
-        <p>
-            [% IF ( serverloo.checked ) %]
-                <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" checked="checked" />
-            [% ELSE %]
-                <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" />
-            [% END %]
-            <label for="z3950_[% serverloo.id %]">[% serverloo.name %]</label>
-
-        </p>
-    [% END %]
-</div>
-<fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel close" href="#">Cancel</a></fieldset>
--->
                 </div>
                 <div class="yui-u middle">
                     <form name="encodingLevelReportForm" action="/cgi-bin/koha/cataloguing/batchOverlay.pl" method="get" id="ffasdafas">
@@ -176,27 +147,54 @@
                 </div>
 
 
-            </div>
-        </div>
+            </div> [% #<div class="yui-gb"> %]
+        </div> [% #<div id="bd"> %]
+    </div> [% #<div id="doc3" class="yui-t2"> %]
+[% END %]
+[% #***********************************# END OF MANUAL OVERLAYING TOOL #***********************************# %]
 
-<script type="text/javascript">
-    $(".report > h3").click(function() {$(this).siblings(".report_content").toggle()});
-    $(".report > h3").siblings(".report_hidden").toggle();
-    $(".toggler").click(function() {$(this).siblings().toggle()});
-    $(".toggler").siblings().toggle();
-
-    function importResult( button ) {
-        var stdId = $(button).val();
-        var codesText = $("#codes").val();
-        codesText = codesText + stdId + "\n";
-        $("#codes").val( codesText );
-    }
+[%# signals for the javascript layer%]
+<script>
+var justExecutedReportContainerId = ("[% reportContainerId %]" != "") ? "[% reportContainerId %]" : null;
+var encodingLevelSearchPerfromed = ("[% biblioResults %]") ? 1 : null;
 </script>
+<script src="[% themelang %]/js/Cataloguing/BatchOverlay.js"></script>
 <style type="text/css">
     div.report:nth-child(odd) {background-color: #EEEEEE;}
     .yui-u.middle {width : 66%;}
     fieldset.rows label {float: none;}
     #codes {width: 100%;}
+
+    #diff tbody tr td {
+        padding: 0px;
+    }
+    div.reportRow {background-color: #EEEEEE;}
+    .reportRow {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border: 2px solid rgb(170, 213, 233);
+        padding: 5px;
+        border-radius: 5px;
+    }
+    .reportRow a {
+        color: #004d99;
+        text-decoration: initial;
+    }
+
+    #statusesContainer {
+        float: right;
+        padding-right: 10px;
+    }
+    .rtc-ok {
+        width: 10px;
+        height: 10px;
+        display: inline-block;
+        border-radius: 5px;
+        background-color: green;
+    }
+    .rtc-server {
+        font-weight: bold;
+    }
 </style>
 
     [% INCLUDE 'intranet-bottom.inc' %]

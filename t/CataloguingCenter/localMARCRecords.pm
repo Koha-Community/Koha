@@ -1,4 +1,4 @@
-package misc::devel::testCluster::testContexts::batchOverlayContext;
+package t::CataloguingCenter::localMARCRecords;
 #
 # Copyright 2016 KohaSuomi
 #
@@ -19,36 +19,17 @@ package misc::devel::testCluster::testContexts::batchOverlayContext;
 
 use Modern::Perl;
 
-use MARC::Record;
-use MARC::File::XML;
-use C4::Biblio;
+use t::lib::TestObjects::BiblioFactory;
 
 =head IN THIS FILE
 
-Here we create some fully catalogued records to play with from remote systems, like BatchOverlay via Z39.50 from other Koha-installations.
+Here we create some fully catalogued records to play with
 
 =cut
 
-sub prepareContext {
-    print "\n--Creating test records to overlay local minirecords with, using the BatchOverlay-feature\n";
-    my (@records);
-
-    createBoringBunch(\@records);
-    createCallNumberIdentifierBunch(\@records);
-    createComponentPartBunch(\@records);
-
-    for (my $i=0 ; $i<@records ; $i++) {
-        my $record = $records[$i];
-        $record = MARC::Record::new_from_xml( $record, "utf8", 'marc21' );
-        C4::Biblio::UpsertBiblio($record, '');
-        print "-- --Record '$i' upserted\n";
-    }
-
-} #EO prepareContext()
-
-sub createBoringBunch {
-    my ($records) = @_;
-    my $record;
+sub create {
+    my ($testContext) = @_;
+    my ($record, @records);
 
     #This record has primary language of 'fin'
     $record = <<RECORD;
@@ -88,7 +69,7 @@ sub createBoringBunch {
   </datafield>
 </record>
 RECORD
-    push(@$records, $record);
+    push(@records, {record => $record});
 
     $record = <<RECORD;
 <record>
@@ -124,7 +105,7 @@ RECORD
   </datafield>
 </record>
 RECORD
-    push(@$records, $record);
+    push(@records, {record => $record});
 
     $record = <<RECORD;
 <record>
@@ -138,28 +119,35 @@ RECORD
     <subfield code="q">NID.</subfield>
     <subfield code="c">7.74 EUR</subfield>
   </datafield>
-  <datafield tag="041" ind1="0" ind2=" ">
-    <subfield code="a">fin</subfield>
-  </datafield>
-  <datafield tag="084" ind1=" " ind2=" ">
-    <subfield code="a">82.2</subfield>
-    <subfield code="2">ykl</subfield>
-  </datafield>
-  <datafield tag="100" ind1="1" ind2=" ">
-    <subfield code="a">LUOSTARINEN, AKI.</subfield>
-  </datafield>
   <datafield tag="245" ind1="1" ind2="0">
     <subfield code="a">TYRANNIT VOIVAT HYVIN :</subfield>
     <subfield code="b">RUNOJA /</subfield>
     <subfield code="c">AKI LUOSTARINEN.</subfield>
   </datafield>
-  <datafield tag="942" ind1=" " ind2=" ">
-    <subfield code="c">BK</subfield>
-    <subfield code="1">2002-11-30 00:00:00</subfield>
+</record>
+RECORD
+    push(@records, {record => $record});
+
+    $record = <<RECORD;
+<record>
+  <leader>00618cam a22002294a 4500</leader>
+  <controlfield tag="001">21937</controlfield>
+  <controlfield tag="003">OUTI</controlfield>
+  <controlfield tag="005">20150216234350.0</controlfield>
+  <controlfield tag="008">820317s1981    fi |||||||||| ||||p|fin|c</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">9510108304</subfield>
+    <subfield code="q">NID.</subfield>
+    <subfield code="c">7.74 EUR</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+    <subfield code="a">TYRANNIT VOIVAT PAREMMIN :</subfield>
+    <subfield code="b">RUNOJA /</subfield>
+    <subfield code="c">AKI LUOSTARINEN.</subfield>
   </datafield>
 </record>
 RECORD
-    push(@$records, $record);
+    push(@records, {record => $record});
 
     $record = <<RECORD;
 <record>
@@ -190,31 +178,103 @@ RECORD
   </datafield>
 </record>
 RECORD
-    push(@$records, $record);
-}
+    push(@records, {record => $record});
 
-sub createCallNumberIdentifierBunch {
-    my ($records) = @_;
-    my $record;
+    return t::lib::TestObjects::BiblioFactory->createTestGroup(\@records, undef, $testContext);
+} #EO prepareContext()
+
+
+
+sub createCNI_and_isbn {
+    my ($testContext) = @_;
+    my ($record, @records);
+
+    $record = <<RECORD;
+<record>
+  <leader>01324cam a22003494a 4500</leader>
+  <controlfield tag="001">13371337</controlfield>
+  <controlfield tag="003">CNI-TEST</controlfield>
+  <controlfield tag="008">130619s2013    fi ||||j|dd   ||||0|fin|c</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">-just-a-unique-id-</subfield>
+  </datafield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">thiz-isbn-doeznt-match</subfield>
+    <subfield code="1">Used to to test multi-ISBN record searching</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="0">
+    <subfield code="a">Tuhat sanaa ruotsiksi</subfield>
+  </datafield>
+</record>
+RECORD
+    push(@records, {record => $record});
 
     $record = <<RECORD;
 <record>
   <leader>00510cam a22002054a 4500</leader>
-  <controlfield tag="001">13371337</controlfield>
-  <controlfield tag="003">CNI-TEST</controlfield>
-  <controlfield tag="005">20150216235917.0</controlfield>
+  <controlfield tag="001">this-must-not-match</controlfield>
+  <controlfield tag="003">KYYTI</controlfield>
   <controlfield tag="008">       1988    xxk|||||||||| ||||1|eng|c</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">0233982213</subfield>
+    <subfield code="1">Matches testCluster -> batchOverlayContext.pm</subfield>
+  </datafield>
   <datafield tag="245" ind1="1" ind2="4">
-    <subfield code="a">Control-number Z39.50 matching regression</subfield>
+    <subfield code="a">THE TOIVOMUS PUU</subfield>
   </datafield>
 </record>
 RECORD
-    push(@$records, $record);
-}
+    push(@records, {record => $record});
 
-sub createComponentPartBunch {
-    my ($records) = @_;
-    my $record;
+    return t::lib::TestObjects::BiblioFactory->createTestGroup(\@records, undef, $testContext);
+} #EO prepareContext()
+
+
+
+sub create_isbn_strangers {
+    my ($testContext) = @_;
+    my ($record, @records);
+
+    $record = <<RECORD;
+<record>
+  <leader>00510cam a22002054a 4500</leader>
+  <controlfield tag="001">this-must-not-match</controlfield>
+  <controlfield tag="003">KYYTI</controlfield>
+  <controlfield tag="008">       1988    xxk|||||||||| ||||1|eng|c</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">i-dont-exist-in-remote-1111</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+    <subfield code="a">THE TOIVOMUS PUU</subfield>
+  </datafield>
+</record>
+RECORD
+    push(@records, {record => $record});
+
+    $record = <<RECORD;
+<record>
+  <leader>00510cam a22002054a 4500</leader>
+  <controlfield tag="001">this-must-not-match</controlfield>
+  <controlfield tag="003">KYYTI</controlfield>
+  <controlfield tag="008">       1988    xxk|||||||||| ||||1|eng|c</controlfield>
+  <datafield tag="020" ind1=" " ind2=" ">
+    <subfield code="a">i-dont-exist-in-remote-2222</subfield>
+  </datafield>
+  <datafield tag="245" ind1="1" ind2="4">
+    <subfield code="a">THE TOIVOMUS PUU 2</subfield>
+  </datafield>
+</record>
+RECORD
+    push(@records, {record => $record});
+
+    return t::lib::TestObjects::BiblioFactory->createTestGroup(\@records, undef, $testContext);
+} #EO prepareContext()
+
+
+
+sub create_host_record {
+    my ($testContext) = @_;
+    my ($record, @records);
 
     $record = <<RECORD;
 <record>
@@ -223,71 +283,52 @@ sub createComponentPartBunch {
   <controlfield tag="003">HOST-RECORD</controlfield>
   <controlfield tag="008">       1988    xxk|||||||||| ||||1|eng|c</controlfield>
   <datafield tag="020" ind1=" " ind2=" ">
-    <subfield code="a">host-record</subfield>
+    <subfield code="a">host-record-isbn</subfield>
   </datafield>
   <datafield tag="245" ind1="1" ind2="4">
-    <subfield code="a">Host record</subfield>
+    <subfield code="a">Host recordzzz</subfield>
+  </datafield>
+  <datafield tag="942" ind1=" " ind2=" ">
+    <subfield code="c">BK</subfield>
+  </datafield>
+  <datafield tag="999" ind1=" " ind2=" ">
+    <subfield code="b">BOOKS</subfield>
   </datafield>
 </record>
 RECORD
-    push(@$records, $record);
+    push(@records, {record => $record});
 
-    $record = <<RECORD;
+    return t::lib::TestObjects::BiblioFactory->createTestGroup(\@records, undef, $testContext);
+} #EO prepareContext()
+
+
+
+sub create_lowlyRecords {
+    my ($testContext) = @_;
+    my ($record, @records);
+
+    #We use 0 instead of '#' because otherwise Zebra throws "" CCL parsing error (10014) Single character mask not supported ZOOM for query: rcn='lowly-#-0' and cni='lowlyRecordTest' at C4/Search.pm line 276. ""
+    #We don't need '#' here, only the lowly catalogued levels
+    my @encLevels = ('0', '1', '2', '3', '4', '5', '5', '5', '6', '6', '6', '7', '7', '7', '8', '8', '8', 'u', 'u', 'u', 'z', 'z', 'z');
+    for (my $i=0 ; $i<scalar(@encLevels) ; $i++) {
+        my $encLevel = $encLevels[$i];
+        $record = <<RECORD;
 <record>
-  <leader>00510cam a22002054a 4500</leader>
-  <controlfield tag="001">component-part-11</controlfield>
-  <controlfield tag="003">HOST-RECORD</controlfield>
+  <leader>00000cam a2200000${encLevel}c 4500</leader>
+  <controlfield tag="001">lowly-${encLevel}-$i</controlfield>
+  <controlfield tag="003">lowlyRecordTest</controlfield>
   <controlfield tag="008">       1988    xxk|||||||||| ||||1|eng|c</controlfield>
   <datafield tag="020" ind1=" " ind2=" ">
-    <subfield code="a">component-part-11</subfield>
+    <subfield code="a">lowly-${encLevel}-$i</subfield>
   </datafield>
   <datafield tag="245" ind1="1" ind2="4">
-    <subfield code="a">Component part 11</subfield>
-  </datafield>
-  <datafield tag="773" ind1=" " ind2=" ">
-    <subfield code="w">host-record</subfield>
+    <subfield code="a">lowly-${encLevel}-$i</subfield>
   </datafield>
 </record>
 RECORD
-    push(@$records, $record);
-
-    $record = <<RECORD;
-<record>
-  <leader>00510cam a22002054a 4500</leader>
-  <controlfield tag="001">component-part-22</controlfield>
-  <controlfield tag="003">HOST-RECORD</controlfield>
-  <controlfield tag="008">       1988    xxk|||||||||| ||||1|eng|c</controlfield>
-  <datafield tag="020" ind1=" " ind2=" ">
-    <subfield code="a">component-part-22</subfield>
-  </datafield>
-  <datafield tag="245" ind1="1" ind2="4">
-    <subfield code="a">Component part 22</subfield>
-  </datafield>
-  <datafield tag="773" ind1=" " ind2=" ">
-    <subfield code="w">host-record</subfield>
-  </datafield>
-</record>
-RECORD
-    push(@$records, $record);
-
-    $record = <<RECORD;
-<record>
-  <leader>00510cam a22002054a 4500</leader>
-  <controlfield tag="001">component-part-33</controlfield>
-  <controlfield tag="003">HOST-RECORD</controlfield>
-  <controlfield tag="008">       1988    xxk|||||||||| ||||1|eng|c</controlfield>
-  <datafield tag="020" ind1=" " ind2=" ">
-    <subfield code="a">component-part-33</subfield>
-  </datafield>
-  <datafield tag="245" ind1="1" ind2="4">
-    <subfield code="a">Component part 33</subfield>
-  </datafield>
-  <datafield tag="773" ind1=" " ind2=" ">
-    <subfield code="w">host-record</subfield>
-  </datafield>
-</record>
-RECORD
-    push(@$records, $record);
-}
+        push(@records, {record => $record});
+    }
+    return t::lib::TestObjects::BiblioFactory->createTestGroup(\@records, undef, $testContext);
+} #EO prepareContext()
 
 1;

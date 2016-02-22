@@ -15,6 +15,7 @@ INSERT INTO permissions (module, code, description) VALUES
    ( 'permissions',     'set_permissions', 'Set user permissions'),
    ( 'reserveforothers','place_holds', 'Place holds for patrons'),
    ( 'reserveforothers','modify_holds_priority', 'Modify holds priority'),
+   ( 'editcatalogue',   'add_catalogue', 'Allow adding a new bibliographic record from the REST API.'),
    ( 'editcatalogue',   'edit_catalogue', 'Edit catalog (Modify bibliographic/holdings data)'),
    ( 'editcatalogue',   'delete_catalogue', 'Allow deleting bibliographic records'),
    ( 'editcatalogue',   'fast_cataloging', 'Fast cataloging'),

@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../x-primitives.json#/batchOverlayReportId"
+    },
+    "batchOverlayReportContainerId": {
+      "$ref": "../../x-primitives.json#/batchOverlayReportContainerId"
+    },
+    "biblionumber": {
+      "type": ["integer", "null"],
+      "description": "Local biblionumber of the original record being overlayed"
+    },
+    "timestamp": {
+      "description": "When this batch overlay operation was executed",
+      "type": "string",
+      "format": "date-time"
+    },
+    "operation": {
+      "description": "name of the batch overlay operation",
+      "type": "string"
+    },
+    "ruleName": {
+      "description": "name of the overlaying rule used, found from syspref 'BatchOverlayRules'",
+      "type": ["string", "null"]
+    },
+    "diff": {
+      "description": "a JSON serialized diff of the overlayed record changes or a error description",
+      "type": "string"
+    },
+    "headers": {
+      "description": "Descriptions of the records used in the overlaying action, in the same order as presented in the diff.",
+      "type": "array",
+      "items": {"$ref": "../../definitions/batchOverlay/header.json"}
+    }
+  }
+}

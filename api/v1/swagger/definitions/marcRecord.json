@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "description": "Representation of a MARCXML object with some important internal data elements. Parameter 'marcxml' MUST contain fields 001 and 003.",
+  "properties": {
+    "marcxml": {
+      "$ref": "../x-primitives.json#/marcxml"
+    },
+    "biblionumber": {
+      "$ref": "../x-primitives.json#/biblionumber"
+    },
+    "links": {
+      "$ref": "../definitions/hateoas.json#/links"
+    }
+  },
+  "required": ["marcxml"]
+}

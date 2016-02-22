@@ -1,12 +1,13 @@
 package C4::BatchOverlay;
 
 # Copyright (C) 2014 The Anonymous
+# Copyright (C) 2016 KohaSuomi
 #
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 3 of the License, or (at your option) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -18,644 +19,647 @@ package C4::BatchOverlay;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
+use YAML::XS;
+use Scalar::Util qw(blessed);
+use Try::Tiny;
+use Koha::Logger;
 
+=head getting rid of these, but dont know which are needed :(
 use MARC::Field;
 use MARC::Record;
-
-use C4::Context;
-use C4::BatchOverlay::BatchOverlayRule;
-use C4::BatchOverlay::BatchOverlayErrors;
-
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
-BEGIN {
-    # set the version for version checking
-    $VERSION = 3.07.00.049;
-    require Exporter;
-    @ISA    = qw(Exporter);
-    @EXPORT = qw(
-        batchOverlayBiblios
-        overlayBiblio
-        generateReport
-    );
-}
 use Text::Diff;
 
-use C4::Biblio;
+
 use C4::Context;
+
 use C4::Breeding;
-use C4::ImportBatch;
 use C4::Matcher;
+=cut
 
-my $batchOverlayrulesCache = {};
+use C4::ImportBatch;
+use C4::Biblio;
 
-sub batchOverlayBiblios {
-    my ($biblionumbers, $mergeMatcher, $componentMatcher) = @_;
+use C4::BatchOverlay::LowlyFinder;
+use C4::BatchOverlay::ErrorBuilder;
+use C4::BatchOverlay::ReportContainer;
+use C4::BatchOverlay::RuleManager;
+use C4::BatchOverlay::SearchAlgorithms;
+use Koha::Deduplicator;
 
-    my $reports = [];
-    my $errorsBuilder = C4::BatchOverlay::BatchOverlayErrors->new();
-    foreach my $biblionumber (@$biblionumbers) {
-        my ($report, $errorsBuilder) = overlayBiblio( undef, $biblionumber, $mergeMatcher, $componentMatcher, $reports, $errorsBuilder );
-    }
+use Koha::Exception;
+use Koha::Exception::BatchOverlay::LocalSearchAmbiguous;
+use Koha::Exception::BatchOverlay::LocalSearch;
+use Koha::Exception::BatchOverlay::LocalSearchNoResults;
+use Koha::Exception::BatchOverlay::DuplicateSearchTerm;
+use Koha::Exception::BatchOverlay::UnknownMatcher;
+use Koha::Exception::BatchOverlay::UnknownRemoteTarget;
+use Koha::Exception::BatchOverlay::RemoteSearchAmbiguous;
+use Koha::Exception::BatchOverlay::RemoteSearchFailed;
+use Koha::Exception::BatchOverlay::RemoteSearchNoResults;
+use Koha::Exception::BatchOverlay::NoBreedinRecord;
+use Koha::Exception::BadParameter;
+use Koha::Exception::Parse;
+use Koha::Exception::DB;
+use Koha::Exception::FeatureUnavailable;
+use Koha::Exception::BadEncoding;
+use Koha::Exception::UnknownProgramState;
 
-    return ($reports, $errorsBuilder);
-}
-sub batchImportBiblios {
-    my ($searchTermsBatch, $mergeMatcher, $componentMatcher) = @_;
 
-    my $reports = [];
-    my $errorsBuilder = C4::BatchOverlay::BatchOverlayErrors->new();
-    foreach my $searchTerm (@$searchTermsBatch) {
-        my ($report, $errorsBuilder) = overlayBiblio( $searchTerm, undef, $mergeMatcher, $componentMatcher, $reports, $errorsBuilder );
-    }
+my $logger = Koha::Logger->new({category => __PACKAGE__});
 
-    return ($reports, $errorsBuilder);
-}
+=head new
 
-#Returns $report-hash that is printable using C4::BatchOverlay::generateReport(); and a $error-string.
-sub overlayBiblio {
-    my ($searchTerm, $oldBiblionumber, $mergeMatcher, $componentMatcher, $reports, $errorsBuilder) = @_;
+    my $batchOverlayer = C4::BatchOverlayer->new();
 
-    my $commit = 1; #Should we write the modifications to DB?
-    my $ok = 0; #a temporary boolean for sharing
-    $errorsBuilder = C4::BatchOverlay::BatchOverlayErrors->new() unless $errorsBuilder;
-    my @z3950targets;
+=cut
 
-    my $marcflavour = C4::Context->preference('marcflavour');
-    $reports = [] unless $reports; #Collect merging, importing, etc reports here HASHes. keys( oldRecordXML, newRecordXML, mergedRecordXML, operation )
+sub new {
+    my ($class, $self) = @_;
+    $self = {} unless(ref($self) eq 'HASH');
+    bless($self, $class);
 
-    # 1 # Firstly, get Biblio to be merged. # 1 #
-    my $oldBiblio = C4::Biblio::GetBiblio( $oldBiblionumber ) if $oldBiblionumber;
-    my $oldRecord = C4::Biblio::GetMarcBiblio( $oldBiblionumber ) if $oldBiblionumber;
-    $errorsBuilder->setActiveBiblio($oldBiblio, $oldRecord);
+    $self->setErrorBuilder( C4::BatchOverlay::ErrorBuilder->new() );
+    $self->setReportContainer( C4::BatchOverlay::ReportContainer->new() );
+    $self->setRuleManager( C4::BatchOverlay::RuleManager->new() );
 
-    my $newRecord;
-
-    #Overlay these records from BTJ if there is a semi-intelligent field 003.
-    #Currently BTJ is our only cataloguing record vendor but we could extend to Melinda.
-    my $f003 = 'BTJ'; #Default to BTJ if nothing else available
-    eval { $f003 = $oldRecord->field('003')->data(); }; #Not all records for some reason have 003 ? We dont want to crash Koha because of that.
-    my ($overlayRule) = _selectMatcherRule($f003, $errorsBuilder);
-    if (not( ref $overlayRule eq 'C4::BatchOverlay::BatchOverlayRule' )) {
-        return;
-    }
-    $mergeMatcher = $overlayRule->{mergeMatcher} unless $mergeMatcher;
-    $componentMatcher = $overlayRule->{componentMatcher} unless $componentMatcher;
-
-    ## Decide the external target to use ##
-    my ($type, $id) = $overlayRule->getSource();
-    push @z3950targets, $id;
-
-    $newRecord = _fetchFromRemote($searchTerm, $oldBiblio, $oldRecord, \@z3950targets, $overlayRule->{remoteName}, $errorsBuilder);
-
-    if ($oldRecord && $newRecord) {
-        # 4 # Merge records with given merging rules # 4 #
-        my $mergedRecord = $newRecord->clone(); #Preserve newRecord unchanged for reporting purposes.
-        $mergeMatcher->overlayRecord($oldRecord, $mergedRecord); #Makes modifications directly to the $mergedRecord-object
-
-        ### Build a biblio-record and save it ###
-        $ok = C4::Biblio::ModBiblio($mergedRecord, $oldBiblionumber, $oldBiblio->{frameworkcode}) if $commit;
-        if ($ok || not($commit)) {
-            push (@$reports, {oldRecordXML => $oldRecord->as_xml_record($marcflavour),
-                             newRecordXML => $newRecord->as_xml_record($marcflavour),
-                             mergedRecordXML => $mergedRecord->as_xml_record($marcflavour),
-                             operation => 'parent record merging :'.$mergedRecord->author().' - '.$mergedRecord->title().' ('.$oldBiblionumber.')',
-                             });
-            #All is ok and that is kewlö!
-        }
-        else {
-            push (@$reports, {oldRecordXML => $oldRecord->as_xml_record($marcflavour),
-                             newRecordXML => $newRecord->as_xml_record($marcflavour),
-                             mergedRecordXML => $mergedRecord->as_xml_record($marcflavour),
-                             operation => '!FAILED!: parent record merging :'.$mergedRecord->author().' - '.$mergedRecord->title().' ('.$oldBiblionumber.')',
-                             });
-        }
-
-        _importChildBiblios( $mergedRecord, $oldBiblio, $componentMatcher, \@z3950targets, $commit, $reports, $errorsBuilder );
-    }
-    elsif ($searchTerm && $newRecord) {
-        ### Build a biblio-record and save it ###
-        my ($biblionumber, $biblioitemnumber) = C4::Biblio::AddBiblio($newRecord, '') if $commit;
-        my $newBiblio = C4::Biblio::GetBiblio( $biblionumber ) if $commit;
-
-        if ($biblionumber || not($commit)) {
-            push (@$reports, {oldRecordXML => '',
-                             newRecordXML => $newRecord->as_xml_record($marcflavour),
-                             mergedRecordXML => '',
-                             operation => 'importing a new record :'.$newRecord->author().' - '.$newRecord->title().' ('.$biblionumber.')',
-                             });
-            #All is ok and that is kewlö!
-        }
-        else {
-            push (@$reports, {oldRecordXML => '',
-                             newRecordXML => $newRecord->as_xml_record($marcflavour),
-                             mergedRecordXML => '',
-                             operation => '!FAILED!: importing a new record :'.$newRecord->author().' - '.$newRecord->title().' ('.$biblionumber.')',
-                             });
-        }
-
-        _importChildBiblios( $newRecord, $newBiblio, $componentMatcher, \@z3950targets, $commit, $reports, $errorsBuilder );
-    }
-    return ($reports, $errorsBuilder);
+    return $self;
 }
 
-sub _fetchFromRemote {
-    my ($searchTerm, $oldBiblio, $oldRecord, $z3950targets, $remoteName, $errorsBuilder) = @_;
-
-    ##Decide the search terms to use
-    #my $title = getTitle($oldRecord, $oldBiblio);
-    #my $author = getAuthor($oldRecord, $oldBiblio);
-    my $stdid;
-    if ($oldRecord) {
-        $stdid = getEAN($oldRecord, $oldBiblio); #Standard ID
-        $stdid = getISBN($oldRecord, $oldBiblio) unless $stdid;
-        $stdid = getISSN($oldRecord, $oldBiblio) unless $stdid;
+sub setErrorBuilder {
+    my ($self, $errorBuilder ) = @_;
+    unless (blessed($errorBuilder) && $errorBuilder->isa('C4::BatchOverlay::ErrorBuilder')) {
+        my @cc = caller(0);
+        Koha::Exception::BadParameter->throw(error => $cc[3]."($errorBuilder):> Param \$errorBuilder is not of proper class");
     }
-    if ($searchTerm) {
-        $stdid = $searchTerm;
+    $self->{errorBuilder} = $errorBuilder;
+}
+sub getErrorBuilder {
+    return shift->{errorBuilder};
+}
+
+=head addError
+
+Populates the error with environment descriptions if they are missing
+and passes the error to the ErrorBuilder.
+
+=cut
+
+sub addError {
+    my ($self, $error, $operationName) = @_;
+    unless (blessed($error)) {
+        my @cc1 = caller(1);
+        Koha::Exception::BadParameter->throw(error => $cc1[3]." is adding an error, but the param \$error '$error' is not a Exception::Class derivative");
     }
 
-    # 2 # Secondly, look for fully catalogued Records from z39.50-targets. # 2 #
-    ##Basic EAN-based search
-    my $pars = {
-            id => $z3950targets,
-            stdid => $stdid,
-    };
-    my $searchResults = _z3950Wrapper($pars, $oldRecord, $oldBiblio, $errorsBuilder, $remoteName);
-
-    unless ($searchResults) { #Lets try again with a different search term
-        ##Basic EAN-based search with 0 removed
-        $stdid =~ s/^\s*0//; #Remove first 0
-        my $pars = {
-                id => $z3950targets,
-                stdid => $stdid,
+    #Set the Record this error was about
+    unless ($error->{records}) {
+        eval {
+            $error->{records} = [$self->getActiveRecord()];
         };
-        $searchResults = _z3950Wrapper($pars, $oldRecord, $oldBiblio, $errorsBuilder, $remoteName);
-
-        $errorsBuilder->popLastError(); #Remove the last error pushed in _z3950Wrapper, otherwise we get multiple "not found via Z3950" for each search retry
-    }
-
-    if ($searchResults) {
-        ##Find the correct record amidst several candidates!
-        my $parentBreedingResult = $searchResults->[0];
-        my ($newRecord, $newRecordEncoding) = MARCfindbreeding( $parentBreedingResult->{breedingid} );
-        return 0 if not($newRecord) || $newRecord < 0; #Couldn't find anything with Z-search
-
-        # 3 # Thirdly, enforce charsets # 3 #
-        if ($newRecordEncoding ne 'UTF-8') {
-            $errorsBuilder->addBAD_ECODINGerror($oldRecord, $oldBiblio, $newRecordEncoding, $remoteName);
+        if ($@) {
+            $error->{records} = [];
         }
-
-        return $newRecord;
     }
-    return 0;
+    my $activeRecord = $error->{records}->[0] if @{$error->{records}} > 0;
+    $error->{overlayRule} = $self->getRule($activeRecord) if (not($error->{overlayRule}) && $activeRecord);
+    $error->{searchTerm} = $self->getActiveSearchTerm().'('. ($error->{searchTerm} || '') .')';
+    $error->{operation} = $operationName unless ($error->{operation});
+
+    my $report = $self->getErrorBuilder()->addError($error);
+    $self->addReport($report);
+}
+
+=head setActiveRecord
+
+Sets the active record so when stuff that needs reporting happens, we know for which record they are.
+
+=cut
+
+sub setActiveRecord {
+    my ($self, $record) = @_;
+    $self->{activeRecord} = $record;
+}
+sub clearActiveRecord {
+    shift->{activeRecord} = undef;
+}
+sub getActiveRecord {
+    my ($self) = @_;
+
+    unless($self->{activeRecord}) {
+        my @cc1 = caller(1);
+        Koha::Exception::UnknownProgramState->throw(error => $cc1[3]." needs to know the active record, but '".__PACKAGE__."' doesn't have a active record set");
+    }
+    return $self->{activeRecord};
+}
+
+=head setActiveSearchTerm
+
+Is used to mark thrown Exceptions with the currently active search term.
+eg. the term we used to find the record currently being overlayed.
+
+@param {MARC::Record or a search String}
+
+=cut
+
+sub setActiveSearchTerm {
+    my ($self, $overlayable) = @_;
+    my $term;
+    if (blessed($overlayable) && $overlayable->isa('MARC::Record')) {
+        $term = C4::Biblio::GetMarcBiblionumber($overlayable);
+    }
+    else {
+        $term = $overlayable;
+    }
+    $self->{activeSearchTerm} = $term;
+}
+sub getActiveSearchTerm {
+    return shift->{activeSearchTerm} || '';
+}
+sub setReportContainer {
+    my ($self, $builder ) = @_;
+    unless (blessed($builder) && $builder->isa('C4::BatchOverlay::ReportContainer')) {
+        my @cc = caller(0);
+        Koha::Exception::BadParameter->throw(error => $cc[3]."($builder):> Param \$builder is not of proper class");
+    }
+    $self->{reportBuilder} = $builder;
+}
+sub getReportContainer {
+    return shift->{reportBuilder};
+}
+sub addReport {
+    my ($self, $report) = @_;
+    $self->getReportContainer()->addReport($report);
+}
+sub getReports {
+    return shift->getReportContainer()->getReports();
+}
+sub setRuleManager {
+    my ($self, $ruleManager) = @_;
+    $self->{ruleManager} = $ruleManager;
+}
+sub getRuleManager {
+    return shift->{ruleManager};
+}
+sub getRule {
+    my ($self, $localRecord) = @_;
+    return $self->getRuleManager()->getRule($localRecord);
+}
+
+=head isDryRun
+
+Checks the overlaying rules if we are in dry-run mode or should we commit changes to DB
+@RETURNS Boolean true, if not committing changes.
+
+=cut
+
+sub isDryRun {
+    my ($self) = @_;
+    return $self->getRule( $self->getActiveRecord )->isDryRun();
+}
+
+=head overlay
+
+    my $reportContainer =  $batchOverlayer->overlay([$searchTerms]);
+
+Looks for local biblios with the given search terms.
+Then overlays the found local biblios from remote search target using the overlaying rules defined in syspref 'BatchOverlayRules'
+@PARAM1 ArrayRef of search strings, must be unique identifiers for the given biblio, eg. items.barcode or isbn, ean, ...
+@PARAM2 ArrayRef of MARC::Records
+@RETURNS C4::BatchOverlay::ReportContainer->object containing a report of the overlaying action.
+
+=cut
+
+sub overlay {
+    my ($self, $searchTerms, $records) = @_;
+    $self->setReportContainer( C4::BatchOverlay::ReportContainer->new() ); #Clear the report container if overlaying multiple times.
+    $searchTerms = $self->_sanitateSearchTermsArray($searchTerms) if $searchTerms;
+    my $operationName = 'overlay record';
+
+    my @overlayables;
+    push(@overlayables, @$searchTerms) if ref $searchTerms eq 'ARRAY';
+    push(@overlayables, @$records) if ref $records eq 'ARRAY';
+    foreach my $overlayable (@overlayables) {
+        $self->setActiveSearchTerm($overlayable); #This is needed to make reporting errors easier.
+        $self->clearActiveRecord(); #Errors might happen before a new active record is found
+        try {
+            # 1 # Firstly, get Biblio to be merged. # 1 #
+            my $localBiblionumber = (blessed($overlayable) && $overlayable->isa('MARC::Record')) ? C4::Biblio::GetMarcBiblionumber($overlayable) : $self->searchLocalRecord($overlayable);
+            my $localBiblio = C4::Biblio::GetBiblio( $localBiblionumber ) if $localBiblionumber;
+            my $localRecord = C4::Biblio::GetMarcBiblio( $localBiblionumber ) if $localBiblionumber;
+            unless ($localBiblio && $localRecord) {
+                Koha::Exception::BatchOverlay::LocalSearchNoResults->throw(error => "Searching with '".$self->getActiveSearchTerm()."' found a result from search index, but nothing from the DB");
+            }
+            $self->setActiveRecord($localRecord);
+
+            # 2 # Secondly, look for fully catalogued Records from z39.50-targets. # 2 #
+            my $newRecord = $self->fetchRecordFromRemoteTarget($localBiblio, $localRecord);
+
+            # 3 # Merge records with given merging rules # 3 #
+            my $mergedRecord = $self->_mergeMARCData($localRecord, $newRecord, $self->getRule($localRecord)->getMergeMatcher());
+
+            ### Mod the old biblio-record ###
+            #Yikes, no way of knowing if the operation succeeded or not.
+            C4::Biblio::ModBiblio($mergedRecord, $localBiblionumber, $localBiblio->{frameworkcode}) unless $self->isDryRun();
+            #Add a report of the merge
+            $self->addReport(
+                {   localRecord => $localRecord,
+                    newRecord => $newRecord,
+                    mergedRecord => $mergedRecord,
+                    operation => $operationName,
+                    timestamp => DateTime->now( time_zone => C4::Context->tz() ),
+                    overlayRule => $self->getRule($localRecord),
+                }
+            );
+
+            $self->overlayComponentParts($mergedRecord, $localBiblio->{frameworkcode});
+        } catch {
+            unless(blessed($_) && $_->can('rethrow')) {
+                #Save the report to DB before dying to know the real reason of death
+                $self->addError( Koha::Exception->newFromDie($_) , $operationName);
+                $self->getReportContainer()->persist();
+                die $_;
+            }
+            if ($_->isa('Koha::Exception::BatchOverlay::LocalSearch') ||
+                $_->isa('Koha::Exception::BatchOverlay::LocalSearchAmbiguous') ||
+                $_->isa('Koha::Exception::BatchOverlay::LocalSearchNoResults') ||
+                $_->isa('Koha::Exception::BatchOverlay::RemoteSearchNoResults') ||
+                $_->isa('Koha::Exception::BatchOverlay::RemoteSearchFailed') ||
+                $_->isa('Koha::Exception::BatchOverlay::RemoteSearchAmbiguous') ||
+                $_->isa('Koha::Exception::BatchOverlay::NoBreedinRecord') ||
+                $_->isa('Koha::Exception::Parse') ||
+                $_->isa('Koha::Exception::Marc') ||
+                $_->isa('Koha::Exception::BadEncoding')
+                ) {
+                $self->addError( $_ , $operationName);
+            }
+            else {
+                #Save the report to DB before dying to know the real reason of death
+                $self->addError( $_ , $operationName);
+                $self->getReportContainer()->persist();
+                $_->rethrow();
+            }
+        }
+    }
+
+    #Save the report to DB and return the reportContainer
+    return $self->getReportContainer()->persist();
+}
+
+=head searchLocalRecord
+
+    $batchOverlayer->searchLocalRecord( $search );
+
+Uses the $search to make a SimpleSearch. The idea is to transform any barcode on the
+physical item to a biblio match for the BatchOverlay-mechanism. This makes overlaying records super easy for the user.
+@PARAM1 String, a SimpleSearch CQL query. can be just a plain string, like EAN-code or ISBN or barcode of an Item.
+@RETURNS Integer, biblionumber of the local record matching the search.
+@THROWS Koha::Exception::BatchOverlay::AmbiguousSearchTerm,
+                                if there are multiple results for the SimpleSearch. Notify the user that the $search-words
+                                needs more details to provide only one result.
+@THROWS Koha::Exception::BatchOverlay::LocalSearch,
+                                if an error happened when doing the search
+@THROWS Koha::Exception::LocalSearchNoResults, if there are no search results
+@THROWS Koha::Exception::Parse, if the biblionumber couldn't be extracted from the result XML
+
+=cut
+
+sub searchLocalRecord {
+    my ( $self, $search ) = @_;
+
+    #Find the biblios by the given code! There should be only 1!
+    my ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $search );
+#    unless ($resultSetSize) { #EAN is a bitch and often in our catalog we have an extra 0.
+#        $search = '0'.$search;
+#        ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $search );
+#    }
+    if ($resultSetSize && $resultSetSize == 1 && !$error) {
+        my $bn = _getBiblionumberFromXML($results->[0]);
+        return $bn if defined($bn);
+        Koha::Exception::Parse->throw(error => "Couldn't extract the biblionumber from search result using search '$search'");
+    }
+    elsif ($resultSetSize && $resultSetSize > 1) { #Wow, an ambiguous search term, which result do we choose!!
+        Koha::Exception::BatchOverlay::LocalSearchAmbiguous->throw(error => "Given local search '$search' matches '$resultSetSize' records.");
+    }
+    elsif ($error) {
+        Koha::Exception::BatchOverlay::LocalSearch->throw(error => "Local search '$search', fails with error '$error'");
+    }
+    else {
+        Koha::Exception::BatchOverlay::LocalSearchNoResults->throw(error => "Local search '$search' produced no results");
+    }
+    return undef;
+}
+
+=head fetchRecordFromRemoteTarget
+
+    my $record = $batchOverlayer->fetchRecordFromRemoteTarget($localBiblio, $localRecord);
+
+Fetches a matching record from the remote search target using the matching rules defined in the configuration syspref.
+Can perform a multitiered search, where different search rules are tried if none of the previous
+ones match, depending on the configuration.
+
+@PARAM1 HASHref of a koha.biblio-table row
+@PARAM2 MARC::Record of the @PARAM2
+@THROWS a lot of different Koha::Exception::BatchOverlay::*
+
+=cut
+
+sub fetchRecordFromRemoteTarget {
+    my ($self, $localBiblio, $localRecord) = @_;
+    my $overlayRule = $self->getRule($localRecord);
+
+    my ($searchResult, $exceptions) = $self->_trySearchAlgorithms($overlayRule->getSearchAlgorithms(), $overlayRule->getRemoteTarget(), $localRecord);
+
+    unless ($searchResult) {
+        $self->_handleErrorStack($exceptions);
+    }
+
+    if ($searchResult) {
+        $self->_castSearchResultToRecord($searchResult, $overlayRule);
+    }
+}
+
+sub _castSearchResultToRecord {
+    my ($self, $searchResult, $overlayRule) = @_;
+
+    ##Find the correct record amidst several candidates!
+    my ($newRecord, $newRecordEncoding) = MARCfindbreeding( $searchResult->{breedingid} );
+
+    unless ($newRecord) {
+        my @cc = caller(0);
+        Koha::Exception::BatchOverlay::NoBreedinRecord->throw(error => $cc[3]."():> No breeding record found with breeding_id '".$searchResult->{breedingid}."'.");
+    }
+
+    # 3 # Thirdly, enforce charsets # 3 #
+    if ($newRecordEncoding ne 'UTF-8') {
+        my @cc = caller(0);
+        Koha::Exception::BadEncoding->throw(error => $cc[3]."():> Encoding '$newRecordEncoding' for breeding record is not 'UTF-8'");
+    }
+
+    $self->_sanitateRemoteRecord($newRecord, $overlayRule);
+    $newRecord->{breedingid} = $searchResult->{breedingid};
+    return $newRecord;
+}
+
+=head _trySearchAlgorithms
+
+    my ($searchResult, $exceptions) = C4::BatchOverlay->_trySearchAlgorithms();
+
+Executes all the search algorithms and collects any exceptions for the given record.
+
+@PARAM1 ARRAYref, search algorithms
+@PARAM2 HASHref, z3950 server HASH-object
+@PARAM3 MARC::Record, the local record to match against remote
+@RETURNS List, HASHref of a breeding record
+               ARRAYref of Exception-objects or plain die-exceptions
+
+=cut
+
+sub _trySearchAlgorithms {
+    my ($class, $searchAlgorithms, $z3950server, $localRecord) = @_;
+    my $searchResult;
+    my @exceptions; #Collect exceptions from multiple search attempts here and if no search produces results, throw them all
+    for(my $i=0 ; $i<scalar(@$searchAlgorithms) ; $i++) {
+        my $alg = $searchAlgorithms->[$i];
+        try {
+            $searchResult = C4::BatchOverlay::SearchAlgorithms::dispatch($alg, $z3950server, $localRecord);
+        } catch {
+            push(@exceptions, $_);
+        };
+        last if $searchResult;
+    }
+    return ($searchResult, \@exceptions);
+}
+
+=head _sanitateRemoteRecord
+
+If the remote record has the same system controlfields set as in Koha, remove them
+to avoid unnecessary complications with getting confused with remote biblionumbers
+conflicting with ours, or having remote holdings records.
+
+=cut
+
+sub _sanitateRemoteRecord {
+    my ($self, $record, $overlayRule) = @_;
+
+    my $rfd = $overlayRule->getRemoteFieldsDropped();
+    foreach my $field (@$rfd) {
+        my @fields = $record->field($field);
+        $record->delete_fields(@fields);
+    }
+}
+
+sub _mergeMARCData {
+    my ($class, $fromRecord, $toRecord, $mergeMatcher) = @_;
+
+    my $mergedRecord = $toRecord->clone(); #Preserve newRecord unchanged for reporting purposes.
+    $mergeMatcher->overlayRecord($fromRecord, $mergedRecord); #Makes modifications directly to the $mergedRecord-object
+
+    return $mergedRecord;
 }
 
 =head
-@param1 $z3950 search parameters HASH for C4::Breeding::Z3950Search
-@param2 MARC::Record to overlay, used for error logging
-@param3 C4::BatchOverlay::BatchOverlayErrors-object to gather errors
-@param4 The plain text name of the remote target, eg. BTJ z39.50
+
+    my $searchTerms = C4::BatchOverlay::_sanitateSearchTermsArray(\@searchTerms);
+
+Remove duplicate codes, because Zebra doesn't do real time indexing and then we get double import of component parts and parents get merged twice.
+Appends duplicate search term errors to ErrorBuilder if detected.
+@PARAM1 ARRAYRef of SimpleSearch search sentences
+
+@THROWS Koha::Exception::BadParameter if parameters are not proper ARRAYRefs.
 =cut
-sub _z3950Wrapper {
-    my ($searchParameters, $oldRecord, $oldBiblio, $errorsBuilder, $remoteName) = @_;
 
-    my $z3950results = {};
+sub _sanitateSearchTermsArray {
+    my ($self, $searchTerms) = @_;
+    my %searchTerms;
 
-    Z3950Search($searchParameters, $z3950results, 'getAll');
-    my $searchResults = $z3950results->{breeding_loop};
-
-    if (@$searchResults == 1) {
-        return $searchResults;
-    }
-    elsif (@$searchResults > 1) {
-        $errorsBuilder->addREMOTE_SEARCH_TOOMANYerror($searchParameters, $remoteName, $oldRecord, $oldBiblio);
-    }
-    else {
-        $errorsBuilder->addREMOTE_SEARCH_NOTFOUNDerror($searchParameters, $remoteName, $oldRecord, $oldBiblio);
+    unless (ref($searchTerms) eq 'ARRAY' && scalar(@$searchTerms) > 0) {
+        my @cc = caller(3);
+        Koha::Exception::BadParameter->throw(error => $cc[3]."()> \$searchTerms is not an ARRAYRef or is empty");
     }
 
-    return 0;
+    for(my $i=0 ; $i<@$searchTerms ; $i++){
+        #Sanitate the codes! Always sanitate input!! Mon dieu!
+        $searchTerms->[$i] =~ s/^\s*//; #Trim codes from whitespace.
+        $searchTerms->[$i] =~ s/\s*$//; #Otherwise very hard to debug!?!!?!?!?
+
+        unless ($searchTerms{ $searchTerms->[$i] }){
+            $searchTerms{ $searchTerms->[$i] } = 1;
+        }
+        else {
+            $self->addError(Koha::Exception::BatchOverlay::DuplicateSearchTerm->new(error => "Duplicate search term '".$searchTerms->[$i]."'",
+                                                                                    searchTerm => $searchTerms->[$i]),
+                            'sanitate search terms');
+        }
+    }
+
+    $searchTerms = [sort keys %searchTerms];
+
+    return $searchTerms;
 }
 
-#Doesn't check again to prevent doubly importing the component parent. This is expected to be dealt with in the Z39.50-server.
-#Currently the kohacatalogs-z3950 server uses the Local-number index just for component child linking.
-sub _importChildBiblios {
-    my ($parentRecord, $parentBiblio, $matcher, $z3950targets, $commit, $reports, $errorsBuilder) = @_;
+=head _handleErrorStack
 
-    my $marcflavour = C4::Context->preference('marcflavour');
+Some operations work on a batch of values and collect exceptions into a stack.
+This function passes the exceptions to be reportized, and rethrows the last exception,
+to notify exception handlers that an error happened with the batch operation.
 
-    ### Find linking component parts ###
-    my $controlNumber = '';
-    my $controlNumberIdentifier = '';
-    eval { $controlNumber = $parentRecord->field('001')->data(); };
-    eval { $controlNumberIdentifier = $parentRecord->field('003')->data(); }; #Not all records for some reason have 001/003 ? We dont want to crash Koha because of that.
-    my $pars = {
-    #        biblionumber => $oldBiblionumber,
-    #        page => $page,
-            id => $z3950targets,
-    #        isbn => $isbn,
-    #        issn => $issn,
-    #        title => $title,
-    #        author => $author,
-    #        dewey => $dewey,
-    #        subject => $subject,
-    #        lccall => $lccall,
-            controlnumber => $controlNumber,
-    #        stdid => $stdid,
-    #        srchany => $srchany,
-    };
-    my $z3950results = {};
-    Z3950Search($pars, $z3950results, 'getAll');
+=cut
 
+sub _handleErrorStack {
+    my ($self, $exceptions) = @_;
+    unless (@$exceptions) {
+        my $activeRecord = { eval $self->getActiveRecord() };
+        my @cc = caller(0);
+        Koha::Exception::UnknownProgramState->throw(error => $cc[3]."():> No result, but no exception either for record ".
+                                                                C4::Biblio::GetMarcTitle($activeRecord).' - '.C4::Biblio::GetMarcAuthor($activeRecord).' - '.C4::Biblio::GetMarcStdids($activeRecord).
+                                                                ". This is very strange and shouldn't happen",
+                                                    marcRecord => $activeRecord);
+    }
+    #Publish all but the last exception, finally throw the last one to end this fetchRecordFromRemoteTarget-operation as failed.
+    for (my $i=0 ; $i<scalar(@$exceptions)-1 ; $i++) {
+        my $e = $exceptions->[$i];
+        $self->addError($e);
+    }
+    $exceptions->[-1]->rethrow() if blessed($exceptions->[-1]) && $exceptions->[-1]->can('rethrow');
+    die $exceptions->[-1];
+}
 
-    ### Touch component parts gently!
+=head overlayComponentParts
 
+    $batchOverlayer->overlayComponentParts($parentRecord, $frameworkcode);
 
-    my $searchResults = $z3950results->{breeding_loop};
-    #Unreversing the reversal because something changed in the BTJ's end?? Initially BTJ sent their component parts in a reverse order.
-    #    for ( my $i=scalar(@$searchResults)-1 ; $i>=0 ; $i--) { #Reverse the array, because component parts end up in reverse order to Koha.
-    for ( my $i=0 ; $i<scalar(@$searchResults) ; $i++) { #Reverse the array, because component parts end up in reverse order to Koha.
-        my $componentBreedingResult = $searchResults->[$i];
-        my ($componentRecord, $componentEncoding) = MARCfindbreeding( $componentBreedingResult->{breedingid} );
+Searches the remote for component parts for the given record.
+If component parts are found, tries to deduplicate them against existing records using the
+'componentPartMatcher'.
+If duplicates are found, uses the 'componentPartMergeMatcher' to overlay existing component parts.
 
-        if ($componentEncoding ne 'UTF-8') {
-            push @$errorsBuilder, "Bad encoding $componentEncoding";
+=cut
+
+sub overlayComponentParts {
+    my ($self, $parentRecord, $biblioFrameworkcode) = @_;
+    my $overlayRule = $self->getRule($parentRecord);
+    my $operationName = 'fiddling component parts';
+    $self->setActiveRecord($parentRecord);
+
+    try {
+        my ($searchResults, $exceptions) = $self->_trySearchAlgorithms(['Component_part_773w_003'], $overlayRule->getRemoteTarget(), $parentRecord);
+
+        unless ($searchResults) {
+            $self->_handleErrorStack($exceptions);
         }
 
-        my @matches = $matcher->get_matches( $componentRecord, 5 );
-        unless (@matches) { #We don't want to add the component part if a match exists!
-
+        for ( my $i=0 ; $i<scalar(@$searchResults) ; $i++) {
+            my $componentRecord = $self->_castSearchResultToRecord($searchResults->[$i], $overlayRule);
             _populateComponentPartFieldsFromParent($componentRecord, $parentRecord);
-            my ($componentBiblionumber, $componentBiblioitemnumber) = ('',''); #Prevent undef errors when concatenating.
-            ($componentBiblionumber, $componentBiblioitemnumber) = C4::Biblio::AddBiblio( $componentRecord, $parentBiblio->{frameworkcode} ) if $commit;
-            if (($componentBiblionumber && $componentBiblioitemnumber) || not($commit)) {
-                push (@$reports, {oldRecordXML => undef,
-                             newRecordXML => $componentRecord->as_xml_record($marcflavour),
-                             mergedRecordXML => undef,
-                             operation => 'component record addition :'.$componentRecord->author().' - '.$componentRecord->title().' ('.$componentBiblionumber.') for ('.$parentBiblio->{biblionumber}.')',
-                             });
-                #All is ok and that is kewlö!
+            my ($localRecord, $newRecord, $mergedRecord) = $self->_deduplicateComponentPart($componentRecord, $overlayRule, $biblioFrameworkcode);
+            if ($localRecord && $newRecord && $mergedRecord) {
+                $operationName = "overlaying component part";
             }
             else {
-                push (@$reports, {oldRecordXML => undef,
-                             newRecordXML => $componentRecord->as_xml_record($marcflavour),
-                             mergedRecordXML => undef,
-                             operation => '!FAILED!: component record addition :'.$componentRecord->author().' - '.$componentRecord->title().' ('.$componentBiblionumber.') for ('.$parentBiblio->{biblionumber}.')',
-                             });
+                $operationName = "new component part";
             }
+
+            #Add a report of the merge
+            my %rep = (
+                operation => $operationName,
+                timestamp => DateTime->now( time_zone => C4::Context->tz() ),
+                overlayRule => $overlayRule,
+            );
+            $rep{mergedRecord} = $mergedRecord if $mergedRecord;
+            $rep{localRecord} = $localRecord if $localRecord;
+            $rep{newRecord} = $newRecord if $newRecord;
+
+            $self->addReport( \%rep );
+        }
+    } catch {
+        unless(blessed($_) && $_->can('rethrow')) {
+            my $e = Koha::Exception->newFromDie($_);
+            $e->{operation} = $operationName;
+            $e->throw();
+        }
+        if ($_->isa('Koha::Exception::BatchOverlay::RemoteSearchNoResults')) {
+            ##We ignore this kind of exceptions. Not every record must have component
+            ##parts and as such it would be cumbersome to return exceptions for every try.
+        }
+        elsif ($_->isa('Koha::Exception::BatchOverlay::RemoteSearchFailed') ||
+            $_->isa('Koha::Exception::BatchOverlay::RemoteSearchAmbiguous') ||
+            $_->isa('Koha::Exception::BatchOverlay::NoBreedinRecord') ||
+            $_->isa('Koha::Exception::Parse') ||
+            $_->isa('Koha::Exception::BadEncoding') ||
+            $_->isa('Koha::Exception::Deduplicator::TooManyMatches')
+            ) {
+            $self->addError( $_, $operationName );
         }
         else {
-            push (@$reports, {oldRecordXML => undef,
-                             newRecordXML => $componentRecord->as_xml_record($marcflavour),
-                             mergedRecordXML => undef,
-                             operation => 'component record already present :'.$componentRecord->author().' - '.$componentRecord->title().' using matcher '.$matcher->code(),
-                             });
+            $_->{operation} = $operationName;
+            $_->rethrow();
         }
-    }
+    };
 }
 
-sub generateReport {
-    my $reports = shift;
-    my $asHtml = shift;
+=head _deduplicateComponentPart
 
-    my $colWidth = 80;
-    my $blank = "";
+At this point the found remote component part has not yet been persisted to DB and is not available from the search index.
+Look for matches from the local index, if we have more than one, deduplicate them, if we have more than 3, throw an error to protect against destruction.
+Then overlay the remaining component part with the new remote component part.
 
+@RETURNS (MARC::Record, MARC::Record, MARC::Record), The local record, new component part from remote, and the merged record.
+@THROWS Koha::Exception::Deduplicator::TooManyMatches from Koha::Deduplicator if there are more than 2 matches of the same component part in the local index.
+                    We never should have so many deduplicate component parts and there more certainly is a problem with the matching configuration.
 
-    my (@reportBuilder);
-    foreach my $r (@$reports) {
+=cut
 
-        if ($asHtml) {
-            $r->{operation} =~ s|\((\d+)\)|<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=$1&frameworkcode=&op=" target="_blank">\($1\)</a>|g;
-        }
+sub _deduplicateComponentPart {
+    my ($class, $componentRecord, $overlayRule, $biblioFramework) = @_;
 
-        _modifyReportRecord($r);
+    my $matches = Koha::Deduplicator->getMatches($overlayRule->getComponentPartMatcher(),
+                                                 $componentRecord, 4, 2);
 
-        my $diff;
-        $diff = Text::Diff::diff( \$r->{oldRecordXML} , \$r->{mergedRecordXML} , {STYLE => 'Text::Diff::Table', FILENAME_A => 'OLD RECORD', FILENAME_B => 'MERGED RECORD'}) if ($r->{oldRecordXML} && $r->{mergedRecordXML});
-        $diff = Text::Diff::diff( \$r->{newRecordXML} , \$blank , {STYLE => 'Text::Diff::Table', FILENAME_A => 'NEW RECORD', FILENAME_B => ''}) if (not($diff) && $r->{newRecordXML});
+    my $lastMatchStanding;
+    $lastMatchStanding = Koha::Deduplicator->mergeMatches($matches) if (scalar(@$matches) > 1); #Deduplicate multiple results
+    $lastMatchStanding = $matches->[0] if( not($lastMatchStanding) && @$matches); #If nothing to deduplicate take the only existing record in local index
 
-        my $similarity; my $similarityString = '';
-        if ($r->{operation} =~ /^parent record merging/) { #Component parts are 200% different than the "no record" they are compared to :)
-            $similarity = _checkSimilarityWarning( $diff  ,  \$r->{oldRecordXML}  ,  \$r->{mergedRecordXML} );
-            $similarityString = " ($similarity) ";
-        }
+    if ($lastMatchStanding) {
+        my $lastRecordStanding = $lastMatchStanding->{target_record};
+        my $mergedRecord = $class->_mergeMARCData($lastRecordStanding, $componentRecord, $overlayRule->getComponentPartMergeMatcher());
 
-        my $header;
-        $header = "### ".$r->{operation}." ###" if $asHtml;
-        $header = '##########################################################'."\n### ".$r->{operation}." ###".$similarityString."\n".'##########################################################'."\n" unless $asHtml;
-
-        if ($asHtml) {
-            $r->{diff} = $diff;
-            $r->{similarity} = $similarity if $similarity;
-            $r->{header} = $header;
-        }
-        else {
-            push @reportBuilder, $header;
-            push @reportBuilder, $diff;
-        }
-
-    }
-
-    return $reports if $asHtml;
-    return join "\n", @reportBuilder unless $asHtml;
-}
-#Do some minor xml formatting to better display the records in tabular view.
-sub _modifyReportRecord {
-    my $report = shift;
-
-    $report->{oldRecordXML} =~ s|^(\s+)xsi:schemaLocation="http://www.loc.gov/MARC21/slim.+?$|$1xsi:schemaLocation="http://www.loc.gov/MARC21/slim|sgm if $report->{oldRecordXML};
-    $report->{newRecordXML} =~ s|^(\s+)xsi:schemaLocation="http://www.loc.gov/MARC21/slim.+?$|$1xsi:schemaLocation="http://www.loc.gov/MARC21/slim|sgm if $report->{newRecordXML};
-    $report->{mergedRecordXML} =~ s|^(\s+)xsi:schemaLocation="http://www.loc.gov/MARC21/slim.+?$|$1xsi:schemaLocation="http://www.loc.gov/MARC21/slim|sgm if $report->{mergedRecordXML};
-}
-sub _checkSimilarityWarning {
-    my @diff = split "\n", $_[0];
-    my @a = ${$_[1]} =~ /\n/g;
-    my @b = ${$_[2]} =~ /\n/g;
-    my $totalRows = scalar(@a) + scalar(@b);
-
-    my $leftDiff = 0;
-    my $rightDiff = 0;
-    foreach my $diff (@diff) {
-        if ($diff =~ /^([|*][ 0-9]+\|.*?)\s+([|*][ 0-9]+\|.*?)\s+[|*]$/) {
-            if ($1 && $1 =~ /^\*/) {
-                $leftDiff++;
-            }
-            if ($2 && $2 =~ /^\*/) {
-                $rightDiff++;
-            }
-        }
-    }
-
-    my $similarityRating = (  ($leftDiff+$rightDiff) / $totalRows  ); #0 is exactly the same record. 0.5 means half of the rows in both records have changed.
-    return $similarityRating;
-}
-
-
-sub _selectMatcherRule {
-    my ($f003, $errorsBuilder) = (@_);
-
-    my $overlayRule; #Go get the rule!
-
-    if ($f003 && $f003 =~ /MELINDA/i) {
-        $f003 = 'MELINDA';
-    }
-    elsif ($f003 && $f003 =~ /BTJ/i || $f003 =~ /KIVA/i || $f003 =~ /.+/) {
-        $f003 = 'BTJ';
+        ### Mod the old biblio-record ###
+        #Yikes, no way of knowing if the operation succeeded or not.
+        C4::Biblio::ModBiblio($mergedRecord, $lastMatchStanding->{record_id}, $biblioFramework) unless $overlayRule->isDryRun();
+        return ($lastRecordStanding, $componentRecord, $mergedRecord);
     }
     else {
-        $errorsBuilder->addUNKNOWN_REMOTE_IDerror($f003);
+        #Add the new component part to DB. Then fetch the persisted record with Koha-specific fields set.
+        my ($componentBiblionumber, $componentBiblioitemnumber) = C4::Biblio::AddBiblio( $componentRecord, $biblioFramework ) unless $overlayRule->isDryRun();
+        $componentRecord = C4::Biblio::GetMarcBiblio($componentBiblionumber, undef) if ($componentBiblionumber && not($overlayRule->isDryRun()));
+        if (not($componentRecord) && not($overlayRule->isDryRun())) {
+            my @cc = caller(0);
+            Koha::Exception::DB->throw(error => $cc[3]."():> Couldn't get the component part MARC::Record from DB?! I just put it there! For component record '".C4::Biblio::GetMarcTitle($componentRecord).C4::Biblio::GetMarcAuthor($componentRecord)."'.");
+        }
+        return (undef, $componentRecord, undef);
     }
-
-    unless ($batchOverlayrulesCache->{$f003}) {
-        $overlayRule = C4::BatchOverlay::BatchOverlayRule->getBatchOverlayRule(undef,$f003);
-        $batchOverlayrulesCache->{$f003} = $overlayRule if $overlayRule;
-    }
-    else {
-        $overlayRule = $batchOverlayrulesCache->{$f003};
-    }
-
-    unless ($overlayRule) {
-        $errorsBuilder->addUNKNOWN_BATCHOVERLAY_RULEerror($f003);
-        return;
-    }
-
-    ##Decide the Matcher-object to use
-    $overlayRule->{mergeMatcher} = C4::Matcher->fetch( $overlayRule->{matcher_id} );
-    $overlayRule->{componentMatcher} = C4::Matcher->fetch( $overlayRule->{component_matcher_id} );
-    my ($type, $id) = $overlayRule->getSource();
-    $overlayRule->{remoteName} = _getRemoteSourceName($id);
-
-    if (not($overlayRule->{mergeMatcher}) || not($overlayRule->{componentMatcher}) ) {
-        $errorsBuilder->addUNKNOWN_MATCHERerror($overlayRule);
-    }
-
-    return $overlayRule;
-}
-
-sub _getRemoteSourceName {
-    my $id = shift;
-    my $dbh = C4::Context->dbh();
-    my $sth = $dbh->prepare("SELECT id,host,name,checked FROM z3950servers WHERE id = ?");
-    $sth->execute($id);
-    my $remoteSearchtarget = $sth->fetchrow_hashref();
-    return $remoteSearchtarget->{name};
 }
 
 sub _populateComponentPartFieldsFromParent {
     my ($componentRecord, $parentRecord) = @_;
 
-    ##Set the parents #952c to the component part.
-    my $parent_f942c = $parentRecord->subfield('942','c');
-    my $child_f942c = $componentRecord->subfield('942','c');
-    my $child_f942 = $componentRecord->field('942');
+    C4::Biblio::SetMarcKohaDefaultItemType($componentRecord,
+                                           C4::Biblio::GetMarcKohaDefaultItemType($parentRecord));
 
-    if ($child_f942c) {
-        my $child_f942 = $componentRecord->field('942');
-        $child_f942->update( 'a' => $parent_f942c);
-    }
-    else {
-        my $new_f942 = MARC::Field->new( '942', '', '', 'c' => $parent_f942c);
-        $componentRecord->append_fields( $new_f942 );
-    }
+    C4::Biblio::SetMarcKohaFramework($componentRecord,
+                                           C4::Biblio::GetMarcKohaFramework($parentRecord));
 }
 
-sub getTitle {
-    my ($record, $biblio) = @_;
-    my $title = $biblio->{title};
-    $title = $biblio->{unititle} unless $title;
-    return $title;
-}
-sub getAuthor {
-    my ($record, $biblio) = @_;
-    my $author = $biblio->{author};
-
-    unless ($author) {
-        $author = $record->subfield('100','a');
-        $author = $record->subfield('110','a') unless $author;
-    }
-    return $author;
-}
-sub getEAN {
-    my ($record, $biblio) = @_;
-    my $ean = $record->subfield('024','a');
-    return $ean;
-}
-sub getISBN {
-    my ($record, $biblio) = @_;
-    my $isbn = $record->subfield('020','a');
-    return $isbn;
-}
-sub getISSN {
-    my ($record, $biblio) = @_;
-    my $issn = $record->subfield('022','a');
-    return $issn;
-}
-
-=head searchLocalRecords
-
-    my (@searches, @biblioNumbers, @localSearchErrors, @ambiguousSearchTerms);
-    C4::BatchOverlay::searchLocalRecords( \@searches, \@biblioNumbers, \@localSearchErrors, \@ambiguousSearchTerms );
-
-    #We got the biblionumbers the local searches match and no errors! Yay!
-    assert(    scalar(@biblioNumbers) > 0 && scalar(@localSearchErrors) == 0 && scalar(@ambiguousSearchTerms) == 0    );
-
-Uses the @searches-array to make a SimpleSearch for each element from our own catalog. The idea is to transform any barcode on the
-physical item to a biblio match for the BatchOverlay-mechanism. This makes overlaying records super easy for the user.
-If there is only one search result, then pushes the biblionumber of the result to the @biblioNumbers-array.
-If there are multiple results for the SimpleSearch, then push the $search-words to @ambiguousSearchTerms-array to notify the user
-  that the $search-words needs more details to provide only one result.
-If there are no results or an error hapened, push the message + $error to @localSearchErrors.
-
-@RETURNS Nothing. All values are pushed to the given arrays.
-=cut
-
-sub searchLocalRecords {
-    my ( $searches, $biblioNumbers, $localSearchErrors, $ambiguousSearchTerms ) = @_;
-
-    for(my $i=0 ; $i<@$searches ; $i++){
-        my $search = $searches->[$i];
-        next() unless $search;
-
-        #Find the biblios by the given code! There should be only 1!
-        my ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $search );
-        unless ($resultSetSize) { #EAN is a bitch and often in our catalog we have an extra 0.
-            $search = '0'.$search;
-            ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $search );
-        }
-        if ($resultSetSize && $resultSetSize == 1 && !$error) {
-            foreach my $result (@$results) {
-                push @$biblioNumbers, _getBiblionumberFromXML($result);
-            }
-        }
-        elsif ($resultSetSize && $resultSetSize > 1) { #Wow, an ambiguous search term, which result do we choose!!
-            push @$ambiguousSearchTerms, $search;
-        }
-        else {
-            my $msg = $error ? "$search : $error" : $search; #Prevent undef concatenation error
-            push @$localSearchErrors, {searcherror => $msg};
-        }
-    }
-}
-
-=head searchByEncodingLevel
-
-    my ($searchResultBiblios, $resultSetSize) = C4::BatchOverlay::searchByEncodingLevel($encodingLevel, $searchErrors, $limit);
-    $searchResultBiblios->[1]->{marc}->subfield('021','a');
-    assert(    $searchResultBiblios->[1]->{stdId} =~ /^\d+$/    ); #Get the standard identifier. Either 020a or 024a or 028a.
-    assert(    $searchResultBiblios->[1]->{title} =~ /^\S+$/    ); #Get the title.
-
-Makes a 'Enc-level=?' -search using the @PARAM1 and returns a pre-processed list of slim biblio objects having the
-given encoding level from MARC21 leader position 17.
-
-The returning slim biblio has the following keys:
-  title, author, stdId, marc, biblionumber
-
-@PARAM1 Char, a single character to look from MARC21 leader, location 17.
-@PARAM2 Array of Strings, All found errors are collected here.
-@PARAM3 Integer, OPTIONAL, Limit of how many results to return. With encoding level 8 we have hundreds of thousands of results :)
-@RETURNS1 Array of Hashes, All found slim biblios and a reference to a MARC::Record.
-@RETURNS2 Integer, The sum of results found.
-=cut
-
-sub searchByEncodingLevel {
-    my ($encodingLevel, $searchErrors, $limit) = (@_);
-
-    require MARC::Record;
-
-    my ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( 'Enc-level='.$encodingLevel, undef, $limit );
-    unless ($resultSetSize) {
-        push @$searchErrors, {searcherror => 'Nothing found using '.$encodingLevel};
-    }
-    if ($resultSetSize && !$error) {
-        for (my $i=0 ; $i<scalar(@$results) ; $i++) {
-            my $record = MARC::Record->new_from_xml( $results->[$i], 'utf8', C4::Context->preference("marcflavour") );
-            $results->[$i] = _buildSlimBiblio( undef, undef, $record );
-        }
-    }
-    else {
-        my $msg = $error ? "$encodingLevel : $error" : $encodingLevel; #Prevent undef concatenation error
-        push @$searchErrors, {searcherror => $msg};
-    }
-    return ($results, $resultSetSize) if $resultSetSize;
-    return (undef, undef);
-}
-
-=head _buildSlimBiblio
-
-This is just a method of producing a template-digestable representation of a MARC::Record, because the cpan implementation
-and the koha.biblios-table don't store the often needed values.
+=head2 batchOverlay
 
 =cut
 
-sub _buildSlimBiblio {
-    my ($biblionumber, $biblio, $marc) = @_;
+sub batchOverlay {
+    my ($self, $params) = @_;
+    my $lowlyFinder = C4::BatchOverlay::LowlyFinder->new($params);
 
-    if (not($marc)) {
-        warn "batchOverlay.pl::_buildSlimBiblio(), No MARC::Record for bn:$biblionumber";
-        return $biblio;
-    }
-    unless ($biblionumber) {
-        my ( $tagid_biblionumber, $subfieldid_biblionumber ) = GetMarcFromKohaField( "biblio.biblionumber" );
-        $biblionumber = $marc->subfield( $tagid_biblionumber, $subfieldid_biblionumber );
-    }
-    unless ($biblionumber) {
-        warn 'batchOverlay.pl::_buildSlimBiblio(), No Biblionumber for record '.$marc->title().' - '.$marc->author();
-        return $biblio;
-    }
-
-    if ($biblio) {
-        $biblio->{biblionumber} = $biblionumber;
-    }
-    else {
-        $biblio = {biblionumber => $biblionumber};
-    }
-
-    $biblio->{marc} = $marc;
-
-    my $title = $marc->subfield('245','a');
-    my $titleField;
-    my @titles;
-    if ($title) {
-        $titleField = '245';
-    }
-    else {
-        $titleField = '240';
-        $title = $marc->subfield('240','a');
-    }
-    my $enumeration = $marc->subfield( $titleField ,'n');
-    my $partName = $marc->subfield( $titleField ,'p');
-    my $publicationYear = $marc->subfield( '260' ,'c');
-    push @titles, $title if $title;
-    push @titles, $enumeration if $enumeration;
-    push @titles, $partName if $partName;
-    push @titles, $publicationYear if $publicationYear;
-
-    my $author = $marc->subfield('100','a');
-    $author = $marc->subfield('110','a') unless $author;
-
-    $biblio->{author} = $author;
-    $biblio->{title} = join(' ', @titles);
-    my $stdId = $marc->subfield('020','a');
-    $stdId = $marc->subfield('024','a') unless $stdId;
-    $stdId = $marc->subfield('028','a') unless $stdId;
-    $biblio->{stdId} = $stdId;
-
-    return $biblio;
-}
-
-sub _getBiblionumberFromXML {
-    my $marcxml = shift;
-
-    my ( $tagid_biblionumber, $subfieldid_biblionumber ) = GetMarcFromKohaField( "biblio.biblionumber" );
-
-    #Get the biblionumber!
-    if ($marcxml =~ /<(data|control)field tag="$tagid_biblionumber".*?>(.*?)<\/(data|control)field>/s) {
-        my $fieldStr = $2;
-        if ($fieldStr =~ /<subfield code="$subfieldid_biblionumber">(.*?)<\/subfield>/) {
-            return $1;
-        }
+    while (my $records = $lowlyFinder->nextLowlyCataloguedRecords()) {
+        $self->overlay(undef, $records);
     }
 }
 
@@ -677,7 +681,7 @@ sub MARCfindbreeding {
     # remove the - in isbn, koha store isbn without any -
     if ($marc) {
         my $record = MARC::Record->new_from_usmarc($marc);
-        my ($isbnfield,$isbnsubfield) = GetMarcFromKohaField('biblioitems.isbn','');
+        my ($isbnfield,$isbnsubfield) = C4::Biblio::GetMarcFromKohaField('biblioitems.isbn','');
         if ( $record->field($isbnfield) ) {
             foreach my $field ( $record->field($isbnfield) ) {
                 foreach my $subfield ( $field->subfield($isbnsubfield) ) {
@@ -709,7 +713,7 @@ sub MARCfindbreeding {
             if (    C4::Context->preference("z3950NormalizeAuthor")
                 and C4::Context->preference("z3950AuthorAuthFields") )
             {
-                my ( $tag, $subfield ) = GetMarcFromKohaField("biblio.author", '');
+                my ( $tag, $subfield ) = C4::Biblio::GetMarcFromKohaField("biblio.author", '');
 
 #                 my $summary = C4::Context->preference("z3950authortemplate");
                 my $auth_fields =
@@ -765,6 +769,20 @@ sub MARCfindbreeding {
         }
     }
     return -1;
+}
+
+sub _getBiblionumberFromXML {
+    my $marcxml = shift;
+
+    my ( $tagid_biblionumber, $subfieldid_biblionumber ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber" );
+
+    #Get the biblionumber!
+    if ($marcxml =~ /<(data|control)field tag="$tagid_biblionumber".*?>(.*?)<\/(data|control)field>/s) {
+        my $fieldStr = $2;
+        if ($fieldStr =~ /<subfield code="$subfieldid_biblionumber">(.*?)<\/subfield>/) {
+            return $1;
+        }
+    }
 }
 
 return 1;

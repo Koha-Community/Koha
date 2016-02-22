@@ -1,0 +1,72 @@
+{
+  "/reports/batchOverlays": {
+    "get": {
+      "x-mojo-to": "Reports::BatchOverlays#list_report_containers",
+      "operationId": "listReportContainers",
+      "tags": ["reports", "batch overlay"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "The list of batch overlay report containers",
+          "schema": {
+            "type": "array",
+            "items": {"$ref": "../definitions/batchOverlay/reportContainer.json"}
+          }
+        },
+        "404": {
+          "description": "No batch overlay report containers available, yet.",
+          "schema": { "$ref": "../definitions/error.json" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/reports/batchOverlays/{reportContainerId}/reports": {
+    "get": {
+      "x-mojo-to": "Reports::BatchOverlays#list_reports",
+      "operationId": "listReports",
+      "tags": ["reports", "batch overlay"],
+      "parameters": [
+        { "$ref": "../parameters.json#/batchOverlayReportContainerIdPathParam" },
+        { "$ref": "../parameters.json#/showAllExceptionsGetParam" }
+      ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "The list of reports contained within the given report container",
+          "schema": {
+            "type": "array",
+            "items": {"$ref": "../definitions/batchOverlay/report.json"}
+          }
+        },
+        "404": {
+          "description": "No batch overlay reports found.",
+          "schema": { "$ref": "../definitions/error.json" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}

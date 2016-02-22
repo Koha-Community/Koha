@@ -1,0 +1,188 @@
+{
+  "/records": {
+    "post": {
+      "x-mojo-to": "Records#add_record",
+      "x-koha-authorization": {
+        "permissions": {
+          "editcatalogue": "add_catalogue"
+        }
+      },
+      "operationId": "addRecord",
+      "tags": ["records"],
+      "summary": "Adds the given MARCXML-record",
+      "description": "This is to add a new biblio from a MARCXML record. If you want to operate on primitive bibliographic data, use the /biblios -endpoint instead",
+      "produces": [
+        "applications/json"
+      ],
+      "parameters": [
+        { "$ref": "../parameters.json#/marcPostParam" }
+      ],
+      "responses": {
+        "200": {
+          "description": "Adding the Record succeeded.",
+          "schema": {
+            "$ref": "../definitions/marcRecord.json"
+          }
+        },
+        "400": {
+          "description": "Client did something bad. Encoding was not utf8, or MARCXML was not valid",
+          "schema": {
+            "$ref": "../definitions/error.json"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/records/{biblionumber}": {
+    "get": {
+      "x-mojo-to": "Records#get_record",
+      "x-koha-authorization": {
+        "permissions": {
+          "editcatalogue": "1"
+        }
+      },
+      "operationId": "getRecord",
+      "tags": ["records"],
+      "summary": "Gets the given MARCXML-record",
+      "description": "This is to get a MARCXML record for a biblio. If you want to operate on primitive bibliographic data, use the /biblios -endpoint instead",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        { "$ref": "../parameters.json#/biblionumberPathParam" }
+      ],
+      "responses": {
+        "200": {
+          "description": "Getting the Record succeeded.",
+          "schema": {
+            "$ref": "../definitions/marcRecord.json"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "$ref": "../definitions/error.json"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "No such biblionumber in the database",
+          "schema": {
+            "$ref": "../definitions/error.json"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "delete": {
+      "x-mojo-to": "Records#delete_record",
+      "x-koha-authorization": {
+        "permissions": {
+          "editcatalogue": "delete_catalogue"
+        }
+      },
+      "operationId": "deleteRecord",
+      "tags": ["records"],
+      "summary": "Deletes the given Bibliographic Record",
+      "description": "Can fail if there are dependecies to the Biblio. This is a duplicate of DELETE /biblios/{biblionumber} and behaves the same.",
+      "produces": [
+        ""
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/biblionumberPathParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Deleting the Record succeeded.",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "400": {
+          "description": "Cannot delete the Bibliographic Record due to constraints. A constraint can be for example the presence of dependant Items.",
+          "schema": {
+            "$ref": "../definitions/error.json"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "No such Bibliographic record found",
+          "schema": {
+            "$ref": "../definitions/error.json"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}

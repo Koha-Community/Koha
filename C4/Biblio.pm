@@ -4384,11 +4384,11 @@ sub _getComponentParts {
     my ($error, $componentPartRecordXMLs, $resultSetSize);
     if ($parentsField001 && $parentsField003) {
         require C4::Search; #For some reason importing this to C4::Biblio's namespace makes other modules unable to import these functions into their namespace.
-        ($error, $componentPartRecordXMLs, $resultSetSize) = C4::Search::SimpleSearch("rcn=$parentsField001 and cni=$parentsField003");
+        ($error, $componentPartRecordXMLs, $resultSetSize) = C4::Search::SimpleSearch("rcn='$parentsField001' and cni='$parentsField003'");
     }
     elsif ($parentsField001) {
         require C4::Search; #For some reason importing this to C4::Biblio's namespace makes other modules unable to import these functions into their namespace.
-        ($error, $componentPartRecordXMLs, $resultSetSize) = C4::Search::SimpleSearch("rcn=$parentsField001");
+        ($error, $componentPartRecordXMLs, $resultSetSize) = C4::Search::SimpleSearch("rcn='$parentsField001'");
     }
     else {
         warn "Record with no field 001 or 003 found! This is an outrage!" unless $parentrecord;

@@ -1,60 +1,242 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>Cataloging</h1>
+<h1>Batch overlay</h1>
 
 <p>
-    <h4>A short introduction to batch overlaying</h4>
+    <h4>An introduction to batch overlaying</h4>
     <span>
         <p>This tools helps you to overlay large amounts of items quickly with the fully catalogued counterpart.</p>
         <p>Simply read barcodes into the large white text area on the left. The barcode can be anything in the item you are holding,
-            but it must be present in the MARC-record. Each row represents a separate overlaying action so separate barcodes with new lines.
-            Actually this should happen automatically when you read a barcode.</p>
+            but it must be present in the MARC-record. Each row represents a separate overlaying action so separate barcodes, each on their own row.
+            Actually this should happen automatically when you read a barcode with the barcode reader.</p>
         <p>Click "Overlay us!" to start the overlaying process.</p>
-        <p>A report is generated and possible errors are shown on the top of the page. You can click the report titles to open and close
-            the verbose MARCXML difference display. On the right side of the report title you can find a difference-score. The bigger the number,
-            the larger the difference between the old bibliographic record and the new merged record. This is a good indication of how much
-            the record changed during merging. You can also directly open a MARC-editing view by clicking the report title biblionumbers.</p>
+        <p>A report is generated listing all the actions taken, the resulting overlay operations and any detected errors.</p>
         <b>A permission "tools => stage_marc_import" is needed to use this tool.</b>
     </span>
+    <h4>Reading the batch overlay report</h4>
+    <p>
+        There are two kinds of reports, errors and actions.<br/>
+        Errors/exceptions are explained later in this help.<br/>
+        Actions show the comparison view of the included bibliographic records. Each column always shows the overlayed record in different stages of the operation.
+        <ol>
+            <li>the leftmost column is the original record in the local database</li>
+            <li>the center column is the record found from the remote repository</li>
+            <li>the rightmost column is the result of the overlaying action which is now stored to the local database</li>
+        </ol>
+        The comparison view of the overlay operation lists all subfields and indicators that have changed in any of the three compared records.<br/>
+        You can also directly open the detailed view by clicking the report title biblionumbers.
+    </p>
     <h4>Using the "Encoding level" -report</h4>
     <p>
         The "Encoding level" -report is used to find records still pending fully catalogued record overlay. The recommended levels are something
         less than 4. The acquisition records are of level 8 and the fully catalogued records are of level 4. The limit-input can be used to limit
         the returned results to make the report run faster. On large result sets the report might timeout the connection and fail.
     </p>
-</p>
-<p>
-    <h4>Typical error scenarios</h4>
-    <ul>
-        <li>The record you are looking for doesn't exist in the Koha database (or you get too many results), try using a different query
-            and test the results using basic keyword searching.</li>
-        <li>You have found the record from your Koha database, but not from the external repository. Try an alternate way of accessing the
-            repository (eg. z39.50 search) and searching with title + author.</li>
-        <li>The standard identifier (EAN,ISBN,ISSN,...) is not correct. This is hard to fix, as the issue can be in our Koha database
-            our in the external repository. Verify the standard identifier in our catalogue or try finding the record using title/author search.</li>
-    </ul>
+    <h4>Simple diagnostics</h4>
+    <p>
+        Over the main view tabs, floating on the right are remote search target diagnostics. They show if the configured remote targets are available.
+        If there are still problems with the overlaying, those issues probably arise from miscatalogued records, misconfigurations or bugs.
+    </p>
+    <h4>Show all exceptions</h4>
+    <p>
+        By default, some exceptions are hidden from the report using the 'excludeExceptions' system preference directive. You can display all exceptions
+        by checking the 'show all exceptions'-checkbox and displaying a new report.
+    </p>
 </p>
 <p>
     <h4>How this all actually works?</h4>
     <ol>
         <li>Each line in the text box represents a basic keyword query, it is actually equivalent to searching straight from the search toolbar.
             The point of these searches is to find the correct bibliographic records from the Koha database for automatic overlaying.</li>
-        <li>These searches should return only one result per row (query). From this result the cataloguing source(external repository)
-            is decided based on the value in the field 003. Also the overlaying matcher and the possible component part matcher are decided
-            based on preconfigured BatchOverlayRules.</li>
-        <li>Then a search is performed on the external repository. Query is performed usually (in this order) EAN, ISBN or ISSN until a
-            matching MARC record is found. If no record is found (or too many are found), then the cataloguer needs to take action to find
-            the proper cataloguing resource.</li>
-        <li>The parent record overlaying is based on the preselected Matcher, which defines the (sub)fields to preserve from the old record.
-            The Matcher can be easily configured from <a href="/cgi-bin/koha/admin/matching-rules.pl" target="_blank">here</a> if you have
-            proper permissions.</li>
-        <li>After the parent record is overlayed, a new search for component parts begins. We search for records containing the same field 003
-            as the parent and which have the parents field 001 as their subfield 77Xw value, from the parent's external repository. These are
-            confirmed component parts and are selected for importing.</li>
+        <li>These searches must return only one result per row (query).</li>
+        <li>Then a search is performed on the external repository using subfield data from the found local record. Different searching strategies/algorithms
+            are tried in the order defined in the 'searchAlgorithms' syspref parameter. If any one of them matches, the search is a success.
+            If no record is found (or too many are found), errors from all the search algorithms are reported and the cataloguer needs to take action to fix
+            the blockade.</li>
+        <li>The local record overlaying is based on the configured Matcher, which defines the (sub)fields to preserve from the old record.
+            The Matcher can be configured from <a href="/cgi-bin/koha/admin/matching-rules.pl" target="_blank">Record matching rules</a> if you have
+            proper permissions. See the matcher 'MRGE_XMPLE' for available overlaying operations.</li>
+        <li>After the parent record is overlayed, a new search for component parts begins. The search algorithm 'Component_part_773w_003' is always used.</li>
         <li>Another Matcher, component part Matcher makes sure that the selected component part records don't already exists in the database
             and thus are not imported twice (which could make a real mess).</li>
-        <li>Finally a report is generated about the actions taken and for easy verification of correctness.</li>
+        <li>If there are local component parts which match the remote component part, the matcher configured in 'componentPartMergeMatcherCode' is used
+            to automerge them to the new component part</li>
+        <li>Finally a report is persisted about the actions taken and for easy verification of correctness.</li>
     </ol>
+</p>
+<p>
+    <h3>Dealing with errors</h3>
+    <p>
+        The batch overlay feature is very complicated and there are gazillion things that could go wrong. However batch overlay tries to catch most of them
+        and deal with them gracefully.
+        Predicting all of them is practically impossible and they need to be dealt with on a case-by-case basis.
+        The prepared for errors are listed in "Typical error scenarios", but all caught errors follow a similar pattern.
+    </p>
+    <h4>Error report</h4>
+    <p>
+        The error report consists of the following elements:
+        <ul>
+            <li>Overlay operation executed, in [brackets], see "Overlay operations" for more info.</li>
+            <li>Link to the local record, eg. "biblio:1115"</li>
+            <li>The overlaying rule applied to the overlayed record record, eg. "default"</li>
+            <li>The overlaying action report id, eg. "id:20"</li>
+            <li>Plain text summary of the overlayed record, eg. "Record: TYRANNIT VOIVAT HYVIN :, 9510108340"</li>
+            <li>Error type, eg. "Koha::Exception::BatchOverlay::LocalSearchNoResults"</li>
+            <li>Error description, eg. "Local search 'this-doesnt-exist' produced no results"</li>
+            <li>Search algorithm used, if available, eg. "search algorithm: null"</li>
+            <li>Search term used, eg. "search term: 911N0021233".<br/>
+                Search term can have a suffix as well, to display more information about the exact search term used
+                for the search operation. This can happen for example with records having repetitions of standard identifiers.</li>
+        </ul>
+    </p>
+    <h4>Overlay operations</h4>
+    <p>
+        There are a handful of different operations that can happen dependent on the type of the record being overlayed.
+        <ul>
+            <li>[overlay record], this is the basic operation when the record doesn't have component parts</li>
+            <li>[fiddling component parts], this means that operation was working with component parts, but possibly couldn't complete the action</li>
+            <li>[overlaying component part], an existing component part was found for the given record and was overlayed</li>
+            <li>[new component part], a new component part was added</li>
+        </ul>
+    </p>
+    <h4>Typical error scenarios</h4>
+    <ul>
+        <li><em>Koha::Exception::BatchOverlay::LocalSearchNoResults</em><br/>
+            The record you are looking for doesn't exist in the Koha database, try using a different query and test the results using basic keyword searching.</li>
+        <li><em>Koha::Exception::BatchOverlay::LocalSearchAmbiguous</em><br/>
+            The search term/barcode you inputted to the text area returned multiple results from our local search index. This probably means that there
+            are duplicate records in the local database and the duplicates need to be deduplicated first. Try making a basic keyword search using the ambiguous
+            search term to see all the records returned by it, and either change your search term, fix error in records or deduplicate if the records are the same.</li>
+        <li><em>Koha::Exception::BatchOverlay::LocalSearch</em><br/>
+            Something is wrong with the local search index. Notify your friendly administrator.</li>
+        <li><em>Koha::Exception::BatchOverlay::DuplicateSearchTerm</em><br/>
+            The same search term was given many times. Duplicates are automatically removed and batch overlaying continues normally.
+            Find out what caused the same search term to be given many times.</li>
+        <li><em>Koha::Exception::BatchOverlay::UnknownMatcher</em><br/>
+            The requested "Record matching rule" doesn't exist in your Koha's defined <a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a>
+            Fix the syspref <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=batchoverlay">BatchOverlayRules</a> or the missing record
+            matching rule</li>
+        <li><em>Koha::Exception::BatchOverlay::UnknownRemoteTarget</em><br/>
+            The requested Z39.50 repository doesn't exist in your Koha's defined <a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a>.
+            Fix the syspref <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=batchoverlay">BatchOverlayRules</a> or the missing
+            Z39.50 server.</li>
+        <li><em>Koha::Exception::BatchOverlay::RemoteSearchAmbiguous</em><br/>
+            One of the defined search algorithms found more than one search result from the remote bibliographic record repository.
+            You must fix your search algorithm, or find out if you have possible duplicate records in the remote repository.</li>
+        <li><em>Koha::Exception::BatchOverlay::RemoteSearchFailed</em><br/>
+            Connection to the remote repository could not be established or it died during searching. Notify your friendly administrator.</li>
+        <li><em>Koha::Exception::BatchOverlay::RemoteSearchNoResults</em><br/>
+            Remote repository has no records that match the given search algorithm's search terms.</li>
+        <li><em>Koha::Exception::BatchOverlay::Marc</em><br/>
+            There is something wrong with a MARC-record. This needs to be manually fixed to the local database or to the remote target.</li>
+        <li><em>Koha::Exception::FeatureUnavailable</em><br/>
+            There is something wrong with the batch overlay feature's configuration syspref</li>
+        <li><em>Koha::Exception::BadEncoding</em><br/>
+            The remote record's character encoding is not utf8. This could cause diacritics to fail.</li>
+        <li><em>Koha::Exception::Deduplicator::TooManyMatches</em><br/>
+            There is a safety limit preventing automatic deduplication of local records. This currently works for component parts only and you need
+            to notify your friendly administrator to find out why we have many duplicate component parts locally.</li>
+        <li><em>Koha::Exception</em><br/>
+            Overlay action for the given record crashed for an unknown reason. Contact your friendly system administrator.</li>
+    </ul>
+</p>
+<p>
+    <h4>Configuring the feature</h4>
+    Example YAML configuration for syspref <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=batchoverlay">BatchOverlayRules</a>
+<pre>
+---
+default:
+    remoteTargetCode: CATALOGUING_CENTER
+    mergeMatcherCode: MERGER
+    componentPartMergeMatcherCode: MERGER
+    componentPartMatcherCode: COM_PART
+    remoteFieldsDropped: [biblio.biblionumber, 952]
+    diffExcludedFields: [999, items.barcode]
+    searchAlgorithms: [Control_number_identifier, Standard_identifier]
+    dryRun: 0
+
+_excludeExceptions: [RemoteSearchNoResults DuplicateSearchTerm]
+
+</pre>
+    <p>
+        <h5>Values explained</h5>
+        <ul>
+            <li>
+                'ruleset' <span class="hint">#Name of a different ruleset to use to overlay a remote record. This is always checked on a record-by-record basis.</span>
+            </li>
+            <ul>
+                <li>
+                    'remoteTargetCode' <span class="hint">#Z39.50 server code from where the overlayed biblios are looked from. Max length 20 characters.</span>
+                </li>
+                <li>
+                    'mergeMatcherCode' <span class="hint">#The name of a matcher whose merging rules are used to overlay local record from remote</span>
+                </li>
+                <li>
+                    'componentPartMergeMatcherCode' <span class="hint">#The name of the matcher whose merging rules are used to overlay possible duplicate local component part with the incoming component part</span>
+                </li>
+                <li>
+                    'componentPartMatcherCode' <span class="hint">#The name of the matcher which is used to find if the remote component part already exists locally</span>
+                    <p>
+                        Recommended example matcher config:<br/>
+                        local search index 'Control-number'<br/>
+                        required match check, 003 matches 003
+                    </p>
+                </li>
+                <li>
+                    'remoteFieldsDropped' <span class="hint">#Remote fields that are always dropped no matter what. Useful to make sure we dont get conflicting system data fields from remote targets.</span>
+                </li>
+                <li>
+                    'diffExcludedFields' <span class="hint">#These fields are excluded from the comparison. Useful since Koha stores system data fields and item fields in the record so they would clutter up the diff report badly.</span>
+                </li>
+                <li>
+                    'searchAlgorithms' <span class="hint">#The order of different searching algorithms to try. These algorithm must be defined in C4::BatchOverlay::SearchAlgorithms</span>
+                    <p>
+                        Available algorithms (atleast):
+                        <ul>
+                            <li>Control_number_identifier</li>
+                            <li>Standard_identifier</li>
+                        </ul>
+                        Recommended default is:<br/>
+                        &nbsp;&nbsp;[Control_number_identifier Standard_identifier]
+                    </p>
+                </li>
+                <li>
+                    'dryRun' <span class="hint">#If dry-run is active, no changes are written to the DB. This way one can safely test new configuration options.</span>
+                </li>
+                <li>
+                    'excludeExceptions' <span class="hint">#These exceptions are not shown by default when viewing reports. This is useful to filter out meaningless exceptions which are too numerous normally.</span>
+                </li>
+            </ul>
+        </ul>
+        All matchers have a maximum name length of 10 characters.
+    </p>
+</p>
+<p>
+    <h4>Available search algorithms</h4>
+    <p>
+        Not all records have a standard identifier (ISBN, EAN, ...) and other strong matching fields must be used. Search algorithms let the user define different matching rules to use to find matching records from the remote search targets.
+    </p>
+    <h5>Control_number_identifier</h5>
+    <p>
+        Makes a simple 001 and 003 match against the remote search target.
+    </p>
+    <h5>Standard_identifier</h5>
+    <p>
+        Matches using ISBN (020$a), EAN (024$a) or ISSN (022$a), whichever is introduced first.
+        Takes into account multiple same standard identifiers and tries to look with all of them, in the order they are introduced.
+    </p>
+    <h5>Component_part_773w_003</h5>
+    <p>
+        Matches the following local fields against remote search targets. 001 -> 773$w and 003 -> 003.
+        This is only used to find component parts for a given component record.
+    </p>
+</p>
+<p>
+    <h4>Scheduling automatic batch overlaying</h4>
+    <p>
+        cronjob misc/cronjobs/batchOverlay.pl should run nightly to check all local records with a low cataloguing level, if more fully catalogued
+        counterparts are present in one of the configured remote bibliographic record repositories.
+    </p>
 </p>
 
 [% INCLUDE 'help-bottom.inc' %]

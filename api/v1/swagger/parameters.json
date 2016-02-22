@@ -2,6 +2,9 @@
   "accountlinesIdPathParam": {
     "$ref": "parameters/accountline.json#/accountlinesIdPathParam"
   },
+  "batchOverlayReportContainerIdPathParam": {
+    "$ref": "parameters/batchoverlay.json#/batchOverlayReportContainerIdPathParam"
+  },
   "biblionumbersQueryParam": {
     "$ref": "parameters/biblio.json#/biblionumbersQueryParam"
   },
@@ -38,6 +41,13 @@
   "itemnumbersQueryParam": {
     "$ref": "parameters/item.json#/itemnumbersQueryParam"
   },
+  "marcPostParam": {
+    "name": "marcxml",
+    "in": "formData",
+    "description": "MARCXML serialized into a form variable. Swagger2-spec forbids sending pure XML objects in the body so we work around the limitation",
+    "required": true,
+    "type": "string"
+  },
   "message_idPathParam": {
     "$ref": "parameters/notice.json#/message_idPathParam"
   },
@@ -67,6 +77,13 @@
   },
   "sheet_versionPathParam": {
     "$ref": "parameters/label.json#/sheet_versionPathParam"
+  },
+  "showAllExceptionsGetParam": {
+    "name": "showAllExceptions",
+    "in": "query",
+    "description": "Show all exception categories or default to showing only the most important ones.",
+    "required": false,
+    "type": "boolean"
   },
   "listnamePathParam": {
     "$ref": "parameters/list.json#/listnamePathParam"

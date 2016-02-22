@@ -136,7 +136,7 @@ sub Z3950Search {
     my ($pars, $template, $getAll)= @_;
 
     my @id= @{$pars->{id}};
-    my $page= $pars->{page};
+    my $page= $pars->{page} || 1;
     my $biblionumber= $pars->{biblionumber};
 
     my $show_next       = 0;
@@ -274,6 +274,9 @@ sub _build_query {
         controlnumber => '@attr 1=12 "#term" ',
         srchany => '@attr 1=1016 "#term" ',
         stdid   => '@attr 1=1007 "#term" ',
+        controlNumber => '@attr 1=9001 "#term"',
+        recordControlNumber => '@attr 1=1045 "#term"',
+        controlNumberIdentifier => '@attr 1=1097 "#term"',
     };
 
     my $zquery='';
@@ -440,6 +443,52 @@ sub _translate_query { #SRU query adjusted per server cf. srufields column
     }
     $q=~s/\[\w+\]=/$any/g; # remove remaining fields (not found in field list)
     return $q;
+}
+
+=head translateZOOMErrors
+
+    my $errconn = C4::Breeding::translateZOOMError($errconn);
+
+@PARAM1  ArrayRef of ZOOM error HashRefs, HashRefs include keys:
+                                            server => "server.you.tried.to.reach.com",
+                                            error  => 10000 || 10007
+@RETURNS @PARAM1 with a injected clear text descriptions (in "description"-key) to the ZOOM error HashRefs.
+@THROWS what translateZOOMError() throws
+
+=cut
+
+sub translateZOOMErrors {
+    my ($errconns) = @_;
+
+    foreach my $err (@$errconns) {
+        my $desc = C4::Breeding::translateZOOMError( $err->{error} );
+        $err->{description} = $desc.' to '.$err->{server};
+    }
+    return $errconns;
+}
+
+=head translateZOOMError
+
+    my $description = C4::Breeding::translateZOOMError($errorCode);
+
+@PARAM1 Int, ZOOM error code like 10007
+@RETURNS String, clear text error description
+@THROWS Koha::Exception::BadParameter if the given error code is not known.
+
+=cut
+
+sub translateZOOMError {
+    my ($code) = @_;
+    if ($code == 10000) {
+        return 'Connection failed';
+    }
+    elsif ($code == 10007) {
+        return 'Connection timeout';
+    }
+    else {
+        my @cc = caller(0);
+        Koha::Exception::BadParameter->throw(error => $cc[3]."():> \$error number '$code' is unmapped.");
+    }
 }
 
 =head2 ImportBreedingAuth

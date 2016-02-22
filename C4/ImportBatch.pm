@@ -977,6 +977,21 @@ sub DeleteBatch {
     $sth->execute( $batch_id );
 }
 
+sub DeleteImportBatch {
+    my ($file_name) = @_;
+    my $dbh=C4::Context->dbh;
+    my ($sth, $sql);
+
+    eval {
+        $sth=$dbh->prepare("DELETE FROM import_batches WHERE file_name = ?");
+        $sth->execute($file_name);
+    };
+    if ($@ || $sth->err) {
+        my @cc = caller(0);
+        Koha::Exception::DB->throw(error => $cc[3].'():>'.($@ || $sth->errstr));
+    }
+}
+
 =head2 DeleteImportBatches
 
     C4::ImportBatch::DeleteImportBatches( $olderThanDt );

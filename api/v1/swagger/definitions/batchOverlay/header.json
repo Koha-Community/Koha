@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../x-primitives.json#/identifier"
+    },
+    "batchOverlayReportId": {
+      "$ref": "../../x-primitives.json#/batchOverlayReportId"
+    },
+    "biblionumber": {
+      "type": ["integer", "null"],
+      "description": "Local biblionumber, if available"
+    },
+    "breedingid": {
+      "type": ["integer", "null"],
+      "description": "Local breedingid of the temporary import store, if available"
+    },
+    "title": {
+      "description": "Title of the record",
+      "type": "string"
+    },
+    "stdid": {
+      "description": "Standard identifier of the record. One of ISBN, EAN, ISSN, ISMN, or other standard.",
+      "type": "string"
+    }
+  }
+}
