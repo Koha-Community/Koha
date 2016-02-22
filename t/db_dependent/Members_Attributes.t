@@ -23,8 +23,9 @@ use C4::Context;
 use C4::Members;
 use C4::Members::AttributeTypes;
 use Koha::Database;
+use t::lib::TestBuilder;
 
-use Test::More tests => 60;
+use Test::More tests => 57;
 
 use t::lib::TestBuilder;
 
@@ -40,27 +41,28 @@ $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM borrowers|);
 $dbh->do(q|DELETE FROM borrower_attributes|);
 $dbh->do(q|DELETE FROM borrower_attribute_types|);
-
 my $library = $builder->build({
     source => 'Branch',
 });
-my $borrowernumber = AddMember(
-    firstname =>  'my firstname',
-    surname => 'my surname',
-    categorycode => 'S',
-    branchcode => $library->{branchcode},
-);
 
+my $patron = $builder->build(
+    {   source => 'Borrower',
+        value  => {
+            firstname    => 'my firstname',
+            surname      => 'my surname',
+            categorycode => 'S',
+            branchcode => $library->{branchcode},
+        }
+    }
+);
+C4::Context->_new_userenv('DUMMY SESSION');
+C4::Context->set_userenv(123, 'userid', 'usercnum', 'First name', 'Surname', $library->{branchcode}, 'My Library', 0);
+my $borrowernumber = $patron->{borrowernumber};
 
 my $attribute_type1 = C4::Members::AttributeTypes->new('my code1', 'my description1');
 $attribute_type1->unique_id(1);
-my $attribute_type2 = C4::Members::AttributeTypes->new('my code2', 'my description2');
-$attribute_type2->opac_display(1);
-$attribute_type2->staff_searchable(1);
-
 my $attribute_types = C4::Members::Attributes::GetAttributes();
 is( @$attribute_types, 0, 'GetAttributes returns the correct number of attribute types' );
-
 $attribute_type1->store();
 $attribute_types = C4::Members::Attributes::GetAttributes();
 is( @$attribute_types, 1, 'GetAttributes returns the correct number of attribute types' );
@@ -68,6 +70,9 @@ is( $attribute_types->[0], $attribute_type1->code(), 'GetAttributes returns the 
 $attribute_types = C4::Members::Attributes::GetAttributes(1);
 is( @$attribute_types, 0, 'GetAttributes returns the correct number of attribute types with the filter opac_only' );
 
+my $attribute_type2 = C4::Members::AttributeTypes->new('my code2', 'my description2');
+$attribute_type2->opac_display(1);
+$attribute_type2->staff_searchable(1);
 $attribute_type2->store();
 $attribute_types = C4::Members::Attributes::GetAttributes();
 is( @$attribute_types, 2, 'GetAttributes returns the correct number of attribute types' );
@@ -75,6 +80,10 @@ is( $attribute_types->[1], $attribute_type2->code(), 'GetAttributes returns the 
 $attribute_types = C4::Members::Attributes::GetAttributes(1);
 is( @$attribute_types, 1, 'GetAttributes returns the correct number of attribute types with the filter opac_only' );
 
+my $new_library = $builder->build( { source => 'Branch' } );
+my $attribute_type_limited = C4::Members::AttributeTypes->new('my code3', 'my description3');
+$attribute_type_limited->branches([ $new_library->{branchcode} ]);
+$attribute_type_limited->store;
 
 my $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes();
 is( @$borrower_attributes, 0, 'GetBorrowerAttributes without the borrower number returns an empty array' );
@@ -91,6 +100,10 @@ my $attributes = [
         value => 'my attribute2',
         code => $attribute_type2->code(),
         password => 'my password2',
+    },
+    {
+        value => 'my attribute limited',
+        code => $attribute_type_limited->code(),
     }
 ];
 
@@ -107,7 +120,7 @@ is( $set_borrower_attributes, 1, 'SetBorrowerAttributes returns the success code
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes();
 is( @$borrower_attributes, 0, 'GetBorrowerAttributes without the borrower number returns an empty array' );
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 2, 'GetBorrowerAttributes returns the correct number of borrower attributes' );
+is( @$borrower_attributes, 3, 'GetBorrowerAttributes returns the correct number of borrower attributes' );
 is( $borrower_attributes->[0]->{code}, $attributes->[0]->{code}, 'SetBorrowerAttributes stores the correct code correctly' );
 is( $borrower_attributes->[0]->{description}, $attribute_type1->description(), 'SetBorrowerAttributes stores the field description correctly' );
 is( $borrower_attributes->[0]->{value}, $attributes->[0]->{value}, 'SetBorrowerAttributes stores the field value correctly' );
@@ -116,14 +129,28 @@ is( $borrower_attributes->[1]->{code}, $attributes->[1]->{code}, 'SetBorrowerAtt
 is( $borrower_attributes->[1]->{description}, $attribute_type2->description(), 'SetBorrowerAttributes stores the field description correctly' );
 is( $borrower_attributes->[1]->{value}, $attributes->[1]->{value}, 'SetBorrowerAttributes stores the field value correctly' );
 is( $borrower_attributes->[1]->{password}, $attributes->[1]->{password}, 'SetBorrowerAttributes stores the field password correctly' );
+$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
+is( @$borrower_attributes, 3, 'GetBorrowerAttributes returns the correct number of borrower attributes' );
 
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber, 1);
-is( @$borrower_attributes, 1, 'GetBorrowerAttributes returns the correct number of borrower attributes with the filter opac_only' );
-is( $borrower_attributes->[0]->{code}, $attributes->[1]->{code}, 'GetBorrowerAttributes returns the correct code' );
-is( $borrower_attributes->[0]->{description}, $attribute_type2->description(), 'GetBorrowerAttributes returns the correct description' );
-is( $borrower_attributes->[0]->{value}, $attributes->[1]->{value}, 'GetBorrowerAttributes returns the correct value' );
-is( $borrower_attributes->[0]->{password}, $attributes->[1]->{password}, 'GetBorrowerAttributes returns the correct password' );
+$attributes = [
+    {
+        value => 'my attribute1',
+        code => $attribute_type1->code(),
+        password => 'my password1',
+    },
+    {
+        value => 'my attribute2',
+        code => $attribute_type2->code(),
+        password => 'my password2',
+    }
+];
+C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $attributes);
+$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
+is( @$borrower_attributes, 3, 'SetBorrowerAttributes should not have removed the attributes limited to another branch' );
 
+# TODO This is not implemented yet
+#$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber, undef, 'branch_limited');
+#is( @$borrower_attributes, 2, 'GetBorrowerAttributes returns the correct number of borrower attributes filtered on library' );
 
 my $attribute_value = C4::Members::Attributes::GetBorrowerAttributeValue();
 is( $attribute_value, undef, 'GetBorrowerAttributeValue without arguments returns undef' );
@@ -147,7 +174,7 @@ my $attribute = {
 };
 C4::Members::Attributes::UpdateBorrowerAttribute($borrowernumber, $attribute);
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 2, 'UpdateBorrowerAttribute does not change the number of borrower attributes' );
+is( @$borrower_attributes, 3, 'UpdateBorrowerAttribute does not change the number of borrower attributes' );
 is( $borrower_attributes->[0]->{code}, $attribute->{code}, 'UpdateBorrowerAttribute updates the field code correctly' );
 is( $borrower_attributes->[0]->{description}, $attribute_type1->description(), 'UpdateBorrowerAttribute updates the field description correctly' );
 is( $borrower_attributes->[0]->{value}, $attribute->{attribute}, 'UpdateBorrowerAttribute updates the field value correctly' );
@@ -185,17 +212,17 @@ for my $attr( split(' ', $attributes->[1]->{value}) ) {
 
 C4::Members::Attributes::DeleteBorrowerAttribute();
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 2, 'DeleteBorrowerAttribute without arguments deletes nothing' );
+is( @$borrower_attributes, 3, 'DeleteBorrowerAttribute without arguments deletes nothing' );
 C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber);
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 2, 'DeleteBorrowerAttribute without the attribute deletes nothing' );
+is( @$borrower_attributes, 3, 'DeleteBorrowerAttribute without the attribute deletes nothing' );
 C4::Members::Attributes::DeleteBorrowerAttribute(undef, $attribute);
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 2, 'DeleteBorrowerAttribute with a undef borrower number deletes nothing' );
+is( @$borrower_attributes, 3, 'DeleteBorrowerAttribute with a undef borrower number deletes nothing' );
 
 C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber, $attribute);
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 1, 'DeleteBorrowerAttribute deletes a borrower attribute' );
+is( @$borrower_attributes, 2, 'DeleteBorrowerAttribute deletes a borrower attribute' );
 is( $borrower_attributes->[0]->{code}, $attributes->[1]->{code}, 'DeleteBorrowerAttribute deletes the correct entry');
 is( $borrower_attributes->[0]->{description}, $attribute_type2->description(), 'DeleteBorrowerAttribute deletes the correct entry');
 is( $borrower_attributes->[0]->{value}, $attributes->[1]->{value}, 'DeleteBorrowerAttribute deletes the correct entry');
@@ -203,4 +230,4 @@ is( $borrower_attributes->[0]->{password}, $attributes->[1]->{password}, 'Delete
 
 C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber, $attributes->[1]);
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 0, 'DeleteBorrowerAttribute deletes a borrower attribute' );
+is( @$borrower_attributes, 1, 'DeleteBorrowerAttribute deletes a borrower attribute' );

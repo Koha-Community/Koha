@@ -140,7 +140,7 @@ if ( $op && $op eq 'search' ) {
         # Add extended patron attributes
         SetBorrowerAttributes($borrowernumber, [
             { code => 'fnr', value => $cgi->param('fnr_hash') },
-        ] );
+        ], 'no_branch_limit' );
         # Override the default sync data created by AddMember
         my $borrowersync = Koha::Database->new->schema->resultset('BorrowerSync')->find({
             'synctype'       => 'norwegianpatrondb',
