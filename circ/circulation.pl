@@ -673,6 +673,7 @@ $template->param(
     todaysdate                => output_pref( { dt => dt_from_string()->set(hour => 23)->set(minute => 59), dateformat => 'sql' } ),
     modifications             => Koha::Patron::Modifications->GetModifications({ borrowernumber => $borrowernumber }),
     override_high_holds       => $override_high_holds,
+    nopermission              => $query->param('nopermission'),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
