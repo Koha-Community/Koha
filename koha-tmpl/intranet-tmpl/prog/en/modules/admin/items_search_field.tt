@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-  <title>Koha &rsaquo; Administration &rsaquo; Items search fields</title>
+  <title>Koha &rsaquo; Administration &rsaquo; Item search fields</title>
   [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="admin_itemssearchfields" class="admin">
@@ -8,7 +8,7 @@
   <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
-    <a href="/cgi-bin/koha/admin/items_search_fields.pl">Items search fields</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a> &rsaquo;
     [% field.name %]
   </div>
 
@@ -16,21 +16,21 @@
     <div id="bd">
       <div id="yui-main">
         <div class="yui-b">
-          <h1>Items search field: [% field.label %]</h1>
+          <h1>Item search field: [% field.label %]</h1>
 
-          <form action="" method="POST">
+          <form action="/cgi-bin/koha/admin/items_search_field.pl" method="POST" class="validated">
             <fieldset class="rows">
               <legend>Edit field</legend>
               [% INCLUDE 'admin-items-search-field-form.inc' field=field %]
               <div>
                 <input type="hidden" name="op" value="mod" />
               </div>
-              <fieldset class="action">
-                <input type="submit" value="Update" />
-              </fieldset>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" value="Submit" />
+                <a class="cancel" href="/cgi-bin/koha/admin/items_search_fields.pl">Cancel</a>
             </fieldset>
           </form>
-          <a href="/cgi-bin/koha/admin/items_search_fields.pl">Return to items search fields overview page</a>
         </div>
       </div>
       <div class="yui-b">

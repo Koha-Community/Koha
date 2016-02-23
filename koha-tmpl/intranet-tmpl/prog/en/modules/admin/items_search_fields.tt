@@ -1,6 +1,10 @@
 [% INCLUDE 'doc-head-open.inc' %]
-  <title>Koha &rsaquo; Administration &rsaquo; Items search fields</title>
+  <title>Koha &rsaquo; Administration &rsaquo; Item search fields</title>
   [% INCLUDE 'doc-head-close.inc' %]
+  <script type="text/javascript">
+      var MSG_ITEM_SEARCH_DELETE_CONFIRM = _("Are you sure you want to delete this field?");
+  </script>
+  <script type="text/javascript" src="[% themelang %]/js/item_search_fields.js"></script>
 </head>
 <body id="admin_itemssearchfields" class="admin">
   [% INCLUDE 'header.inc' %]
@@ -8,83 +12,96 @@
   <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
-    Items search fields
+    Item search fields
   </div>
 
   <div id="doc3" class="yui-t2">
     <div id="bd">
       <div id="yui-main">
         <div class="yui-b">
+
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-small" id="new_search_field" href="/cgi-bin/koha/admin/items_search_fields.pl"><i class="fa fa-plus"></i> New search field</a>
+    </div>
+
           [% IF field_added %]
-            <div class="dialog">
+            <div class="dialog message">
               Field successfully added: [% field_added.label %]
             </div>
           [% ELSIF field_not_added %]
-            <div class="alert">
-              <p>Failed to add field. Please check if the field name doesn't already exist.</p>
+            <div class="dialog alert">
+              <p>Failed to add field. Please make sure the field name doesn't already exist.</p>
               <p>Check logs for more details.</p>
             </div>
           [% ELSIF field_deleted %]
-            <div class="dialog">
+            <div class="dialog message">
               Field successfully deleted.
             </div>
           [% ELSIF field_not_deleted %]
-            <div class="alert">
+            <div class="dialog alert">
               <p>Failed to delete field.</p>
               <p>Check logs for more details.</p>
             </div>
           [% ELSIF field_updated %]
-            <div class="dialog">
+            <div class="dialog message">
               Field successfully updated: [% field_updated.label %]
             </div>
           [% ELSIF field_not_updated %]
-            <div class="alert">
+            <div class="dialog alert">
               <p>Failed to update field.</p>
               <p>Check logs for more details.</p>
             </div>
           [% END %]
-          <h1>Items search fields</h1>
           [% IF fields.size %]
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Label</th>
-                  <th>MARC field</th>
-                  <th>MARC subfield</th>
-                  <th>Authorised values category</th>
-                  <th>Operations</th>
-                </tr>
-              </thead>
-              <tbody>
-                [% FOREACH field IN fields %]
-                  <tr>
-                    <td>[% field.name %]</td>
-                    <td>[% field.label %]</td>
-                    <td>[% field.tagfield %]</td>
-                    <td>[% field.tagsubfield %]</td>
-                    <td>[% field.authorised_values_category %]</td>
-                    <td>
-                      <a href="/cgi-bin/koha/admin/items_search_field.pl?name=[% field.name %]" title="Edit [% field.name %] field">Edit</a>
-                      <a href="/cgi-bin/koha/admin/items_search_fields.pl?op=del&name=[% field.name %]" title="Delete [% field.name %] field">Delete</a>
-                    </td>
-                  </tr>
-                [% END %]
-              </tbody>
-            </table>
+              <div id="search_fields_list">
+                  <h2>Item search fields</h2>
+
+                  <table id="search_fields_table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Label</th>
+                        <th>MARC field</th>
+                        <th>MARC subfield</th>
+                        <th>Authorised values category</th>
+                        <th>Operations</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      [% FOREACH field IN fields %]
+                        <tr>
+                          <td>[% field.name %]</td>
+                          <td>[% field.label %]</td>
+                          <td>[% field.tagfield %]</td>
+                          <td>[% field.tagsubfield %]</td>
+                          <td>[% field.authorised_values_category %]</td>
+                          <td>
+                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/items_search_field.pl?name=[% field.name %]" title="Edit [% field.name %] field"><i class="fa fa-pencil"></i> Edit</a>
+                            <a class="field-delete btn btn-mini" href="/cgi-bin/koha/admin/items_search_fields.pl?op=del&name=[% field.name %]"><i class="fa fa-remove"></i> Delete</a>
+                          </td>
+                        </tr>
+                      [% END %]
+                    </tbody>
+                  </table>
+              </div>
+          [% ELSE %]
+              <div class="dialog message">
+                  There are no item search fields defined.
+              </div>
           [% END %]
-          <form action="" method="POST">
+
+          <form id="add_field_form" action="/cgi-bin/koha/admin/items_search_fields.pl" method="POST" class="validated">
             <fieldset class="rows">
               <legend>Add a new field</legend>
               [% INCLUDE 'admin-items-search-field-form.inc' field=undef %]
-              <div>
-                <input type="hidden" name="op" value="add" />
-              </div>
-              <fieldset class="action">
-                <input type="submit" value="Add this field" />
-              </fieldset>
+              <input type="hidden" name="op" value="add" />
+            </fieldset>
+            <fieldset class="action">
+              <input type="submit" value="Submit" />
+              <a href="#" class="cancel">Cancel</a>
             </fieldset>
           </form>
+
         </div>
       </div>
       <div class="yui-b">
