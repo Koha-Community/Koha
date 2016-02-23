@@ -142,9 +142,8 @@ function Check(ff) {
                 </form>
             [% END %]
             [% IF ( delete_confirm ) %]
-                <form action="[% script_name %]" method="post">
-                    <fieldset>
-                        <legend>Confirm deletion of contract [% contractnumber %]</legend>
+                    <div class="dialog alert">
+                        <h3>Confirm deletion of contract <i>[% contractname %]</i></h3>
                         <table>
                             <tr><th scope="row">Contract number:</th><td>[% contractnumber %]</td></tr>
                             <tr><th scope="row">Contract name:</th><td>[% contractname %]</td></tr>
@@ -153,15 +152,18 @@ function Check(ff) {
                             <tr><th scope="row">Contract end date:</th><td>[% contractenddate | $KohaDates %]</td></tr>
                             <tr><th scope="row">Vendor:</th><td>[% booksellername %]</td></tr>
                         </table>
-                        <fieldset class="action">
+                        <form action="[% script_name %]" method="post">
                             <input type="hidden" name="op" value="delete_confirmed" />
                             <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
                             <input type="hidden" name="contractnumber" value="[% contractnumber %]" />
-                            <input type="submit" value="Delete this contract" />
-                            <a class="cancel" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid %]&amp;contractnumber=[% contractnumber %]">Cancel</a>
-                        </fieldset>
-                    </fieldset>
-                </form>
+                            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete contract</button>
+                        </form>
+                        <form action="/cgi-bin/koha/admin/aqcontract.pl" method="get">
+                            <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+                            <input type="hidden" name="contractnumber" value="[% contractnumber %]" />
+                            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+                        </form>
+                    </div>
             [% END %]
             [% IF ( delete_confirmed ) %]
                 <h3>Contract deleted</h3>
