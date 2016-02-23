@@ -41,6 +41,7 @@ use Koha::Borrower::Discharge;
 use Koha::DateUtils;
 
 my $input = new CGI;
+
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user({
     template_name   => 'members/discharge.tt',
     query           => $input,
@@ -49,7 +50,13 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user({
     flagsrequired   => { 'borrowers' => '*' },
 });
 
-my $borrowernumber;
+my $borrowernumber = $input->param('borrowernumber');
+
+unless ( C4::Context->preference('useDischarge') ) {
+   print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber&nopermission=1");
+   exit;
+}
+
 my $data;
 if ( $input->param('borrowernumber') ) {
     $borrowernumber = $input->param('borrowernumber');

@@ -23,6 +23,9 @@
             <div class="span10">
                 <div id="discharge" class="maincontainer">
                     <h1>Discharge</h1>
+                    [% IF not(Koha.Preference("useDischarge")) %]
+                        Discharges have not been enabled. Please contact the library.
+                    [% ELSE %]
                     [% FOR message IN messages %]
                         <div class="dialog [% message.type %]">
                         [% IF message.code == "unable_to_generate_pdf" %]
@@ -45,6 +48,7 @@
                         <p>This document certifies that you have returned all borrowed items. It is sometimes asked during a file transfer from a school to another. The discharge is sent by us to your school. You will also find it available on your reader account.</p>
                         <p><strong>Warning</strong>: This request is only valid if you are in good standing with the library. Once the application is made, you can not borrow library materials.</p>
                         <a href="/cgi-bin/koha/opac-discharge.pl?op=request">Ask for a discharge</a>
+                    [% END %]
                     [% END %]
                 </div> <!-- / #discharge -->
             </div> <!-- / .span10 -->
