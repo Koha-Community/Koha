@@ -85,6 +85,3 @@
         });
     </script>
 [% END %]
-
-<!-- For keeping the text when navigating the search tabs -->
-[% INCLUDE 'searchbox-keep-text.inc' %]
