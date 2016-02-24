@@ -35,7 +35,6 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&recordpayment
 		&makepayment
 		&manualinvoice
 		&getnextacctno
@@ -67,33 +66,6 @@ including looking up and modifying the amount of money owed by a
 patron.
 
 =head1 FUNCTIONS
-
-=head2 recordpayment
-
-  &recordpayment($borrowernumber, $payment, $sip_paytype, $note);
-
-Record payment by a patron. C<$borrowernumber> is the patron's
-borrower number. C<$payment> is a floating-point number, giving the
-amount that was paid. C<$sip_paytype> is an optional flag to indicate this
-payment was made over a SIP2 interface, rather than the staff client. The
-value passed is the SIP2 payment type value (message 37, characters 21-22)
-
-Amounts owed are paid off oldest first. That is, if the patron has a
-$1 fine from Feb. 1, another $1 fine from Mar. 1, and makes a payment
-of $1.50, then the oldest fine will be paid off in full, and $0.50
-will be credited to the next one.
-
-=cut
-
-#'
-sub recordpayment {
-
-    #here we update the account lines
-    my ( $borrowernumber, $data, $sip_paytype, $payment_note ) = @_;
-
-    return Koha::Account->new( { patron_id => $borrowernumber } )
-      ->pay( { amount => $data, sip => $sip_paytype, note => $payment_note } );
-}
 
 =head2 makepayment
 
