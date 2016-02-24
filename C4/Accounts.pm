@@ -44,7 +44,6 @@ BEGIN {
 		&getrefunds
 		&chargelostitem
 		&ReversePayment
-        &makepartialpayment
         &recordpayment_selectaccts
         &WriteOffFee
         &purge_zero_balance_fees
@@ -418,28 +417,6 @@ sub recordpayment_selectaccts {
             note   => $note,
         }
       );
-}
-
-# makepayment needs to be fixed to handle partials till then this separate subroutine
-# fills in
-sub makepartialpayment {
-    my ( $accountlines_id, $borrowernumber, $accountno, $amount, $user, $branch, $payment_note ) = @_;
-
-    my $line = Koha::Account::Lines->find( $accountlines_id );
-
-    return Koha::Account->new(
-        {
-            patron_id => $borrowernumber,
-        }
-      )->pay(
-        {
-            amount => $amount,
-            lines  => [ $line ],
-            note   => $payment_note,
-            library_id => $branch,
-        }
-      );
-
 }
 
 =head2 WriteOffFee
