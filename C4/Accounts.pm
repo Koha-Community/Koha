@@ -44,7 +44,6 @@ BEGIN {
 		&getrefunds
 		&chargelostitem
 		&ReversePayment
-        &recordpayment_selectaccts
         &WriteOffFee
         &purge_zero_balance_fees
 	);
@@ -376,47 +375,6 @@ sub ReversePayment {
 
     }
 
-}
-
-=head2 recordpayment_selectaccts
-
-  recordpayment_selectaccts($borrowernumber, $payment,$accts);
-
-Record payment by a patron. C<$borrowernumber> is the patron's
-borrower number. C<$payment> is a floating-point number, giving the
-amount that was paid. C<$accts> is an array ref to a list of
-accountnos which the payment can be recorded against
-
-Amounts owed are paid off oldest first. That is, if the patron has a
-$1 fine from Feb. 1, another $1 fine from Mar. 1, and makes a payment
-of $1.50, then the oldest fine will be paid off in full, and $0.50
-will be credited to the next one.
-
-=cut
-
-sub recordpayment_selectaccts {
-    my ( $borrowernumber, $amount, $accts, $note ) = @_;
-
-    my @lines = Koha::Account::Lines->search(
-        {
-            borrowernumber    => $borrowernumber,
-            amountoutstanding => { '<>' => 0 },
-            accountno         => { 'IN' => $accts },
-        },
-        { order_by => 'date' }
-    );
-
-    return Koha::Account->new(
-        {
-            patron_id => $borrowernumber,
-        }
-      )->pay(
-        {
-            amount => $amount,
-            lines  => \@lines,
-            note   => $note,
-        }
-      );
 }
 
 =head2 WriteOffFee

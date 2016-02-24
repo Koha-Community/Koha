@@ -143,8 +143,29 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                 }
                 my @acc = split /,/, $select;
                 my $note = $input->param('selected_accts_notes');
-                recordpayment_selectaccts( $borrowernumber, $total_paid, \@acc, $note );
-            } else {
+
+                my @lines = Koha::Account::Lines->search(
+                    {
+                        borrowernumber    => $borrowernumber,
+                        amountoutstanding => { '<>' => 0 },
+                        accountno         => { 'IN' => \@acc },
+                    },
+                    { order_by => 'date' }
+                );
+
+                return Koha::Account->new(
+                    {
+                        patron_id => $borrowernumber,
+                    }
+                  )->pay(
+                    {
+                        amount => $total_paid,
+                        lines  => \@lines,
+                        note   => $note,
+                    }
+                  );
+            }
+            else {
                 my $note = $input->param('selected_accts_notes');
                 Koha::Account->new( { patron_id => $borrowernumber } )
                   ->pay( { amount => $total_paid, note => $note } );
