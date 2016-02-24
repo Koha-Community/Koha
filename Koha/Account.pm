@@ -54,6 +54,7 @@ Koha::Account->new( { patron_id => $borrowernumber } )->pay(
         note       => $note,
         accountlines_id => $accountlines_id,
         library_id => $branchcode,
+        lines      => $lines, # Arrayref of Koha::Account::Line objects to pay
     }
 );
 
@@ -65,8 +66,8 @@ sub pay {
     my $amount          = $params->{amount};
     my $sip             = $params->{sip};
     my $note            = $params->{note} || q{};
-    my $accountlines_id = $params->{accountlines_id};
     my $library_id      = $params->{library_id};
+    my $lines           = $params->{lines},
 
     my $userenv = C4::Context->userenv;
 
@@ -89,18 +90,18 @@ sub pay {
     $balance_remaining ||= 0;
 
     # We were passed a specific line to pay
-    if ( $accountlines_id ) {
-        my $fine = Koha::Account::Lines->find( $accountlines_id );
-
-        # If accountline id is passed but no amount, we pay that line in full
-        $amount = $fine->amountoutstanding unless defined($amount);
+    foreach my $fine ( @$lines ) {
+        my $amount_to_pay =
+            $fine->amountoutstanding > $balance_remaining
+          ? $balance_remaining
+          : $fine->amountoutstanding;
 
         my $old_amountoutstanding = $fine->amountoutstanding;
-        my $new_amountoutstanding = $old_amountoutstanding - $amount;
-        $fine->amountoutstanding( $new_amountoutstanding )->store();
-        $balance_remaining = $balance_remaining - $amount;
+        my $new_amountoutstanding = $old_amountoutstanding - $amount_to_pay;
+        $fine->amountoutstanding($new_amountoutstanding)->store();
+        $balance_remaining = $balance_remaining - $amount_to_pay;
 
-        if ( $fine->accounttype eq 'Rep' || $fine->accounttype eq 'L' )
+        if ( $fine->accounttype && ( $fine->accounttype eq 'Rep' || $fine->accounttype eq 'L' ) )
         {
             C4::Circulation::ReturnLostItem( $self->{patron_id}, $fine->itemnumber );
         }

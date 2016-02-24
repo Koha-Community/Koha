@@ -88,8 +88,10 @@ was made.
 sub makepayment {
     my ( $accountlines_id, $borrowernumber, $accountno, $amount, $user, $branch, $payment_note ) = @_;
 
+    my $line = Koha::Account::Lines->find( $accountlines_id );
+
     return Koha::Account->new( { patron_id => $borrowernumber } )
-      ->pay( { accountlines_id => $accountlines_id, amount => $amount, library_id => $branch, note => $payment_note } );
+      ->pay( { lines => [ $line ], amount => $amount, library_id => $branch, note => $payment_note } );
 }
 
 =head2 getnextacctno
@@ -396,89 +398,26 @@ will be credited to the next one.
 sub recordpayment_selectaccts {
     my ( $borrowernumber, $amount, $accts, $note ) = @_;
 
-    my $dbh        = C4::Context->dbh;
-    my $newamtos   = 0;
-    my $accdata    = q{};
-    my $branch     = C4::Context->userenv->{branch};
-    my $amountleft = $amount;
-    my $manager_id = 0;
-    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
-    my $sql = 'SELECT * FROM accountlines WHERE (borrowernumber = ?) ' .
-    'AND (amountoutstanding<>0) ';
-    if (@{$accts} ) {
-        $sql .= ' AND accountlines_id IN ( ' .  join ',', @{$accts};
-        $sql .= ' ) ';
-    }
-    $sql .= ' ORDER BY date';
-    # begin transaction
-    my $nextaccntno = getnextacctno($borrowernumber);
-
-    # get lines with outstanding amounts to offset
-    my $rows = $dbh->selectall_arrayref($sql, { Slice => {} }, $borrowernumber);
-
-    # offset transactions
-    my $sth     = $dbh->prepare('UPDATE accountlines SET amountoutstanding= ? ' .
-        'WHERE accountlines_id=?');
-
-    my @ids;
-    for my $accdata ( @{$rows} ) {
-        if ($amountleft == 0) {
-            last;
-        }
-        if ( $accdata->{amountoutstanding} < $amountleft ) {
-            $newamtos = 0;
-            $amountleft -= $accdata->{amountoutstanding};
-        }
-        else {
-            $newamtos   = $accdata->{amountoutstanding} - $amountleft;
-            $amountleft = 0;
-        }
-        my $thisacct = $accdata->{accountlines_id};
-        $sth->execute( $newamtos, $thisacct );
-
-        if ( C4::Context->preference("FinesLog") ) {
-            logaction("FINES", 'MODIFY', $borrowernumber, Dumper({
-                action                => 'fee_payment',
-                borrowernumber        => $borrowernumber,
-                old_amountoutstanding => $accdata->{'amountoutstanding'},
-                new_amountoutstanding => $newamtos,
-                amount_paid           => $accdata->{'amountoutstanding'} - $newamtos,
-                accountlines_id       => $accdata->{'accountlines_id'},
-                accountno             => $accdata->{'accountno'},
-                manager_id            => $manager_id,
-            }));
-            push( @ids, $accdata->{'accountlines_id'} );
-        }
-
-    }
-
-    # create new line
-    $sql = 'INSERT INTO accountlines ' .
-    '(borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding,manager_id,note) ' .
-    q|VALUES (?,?,now(),?,'','Pay',?,?,?)|;
-    $dbh->do($sql,{},$borrowernumber, $nextaccntno, 0 - $amount, 0 - $amountleft, $manager_id, $note );
-    UpdateStats({
-                branch => $branch,
-                type => 'payment',
-                amount => $amount,
-                borrowernumber => $borrowernumber,
-                accountno => $nextaccntno}
+    my @lines = Koha::Account::Lines->search(
+        {
+            borrowernumber    => $borrowernumber,
+            amountoutstanding => { '<>' => 0 },
+            accountno         => { 'IN' => $accts },
+        },
+        { order_by => 'date' }
     );
 
-    if ( C4::Context->preference("FinesLog") ) {
-        logaction("FINES", 'CREATE',$borrowernumber,Dumper({
-            action            => 'create_payment',
-            borrowernumber    => $borrowernumber,
-            accountno         => $nextaccntno,
-            amount            => 0 - $amount,
-            amountoutstanding => 0 - $amountleft,
-            accounttype       => 'Pay',
-            accountlines_paid => \@ids,
-            manager_id        => $manager_id,
-        }));
-    }
-
-    return;
+    return Koha::Account->new(
+        {
+            patron_id => $borrowernumber,
+        }
+      )->pay(
+        {
+            amount => $amount,
+            lines  => \@lines,
+            note   => $note
+        }
+      );
 }
 
 # makepayment needs to be fixed to handle partials till then this separate subroutine
