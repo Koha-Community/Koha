@@ -11807,6 +11807,16 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 15517 - Tables borrowers and deletedborrowers differ again)\n";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.23.00.025";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+    DROP TABLE nozebra;
+});
+
+    print "Upgrade to $DBversion done (Bug 15526 - Drop nozebra database table)\n";
+    SetVersion($DBversion);
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
