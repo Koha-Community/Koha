@@ -38,8 +38,8 @@ BEGIN {
 
 sub db_max ($;$) {
 	my $self = shift;
-	my $query = "SELECT max(substring_index(barcode,'-',-1)) AS chunk,barcode FROM items WHERE barcode LIKE ? GROUP BY barcode";
-		# FIXME: unreasonably expensive query on large datasets
+	my $query = "SELECT substring_index(barcode,'-',-1) AS chunk,barcode FROM items WHERE barcode LIKE ? ORDER BY chunk DESC LIMIT 1";
+		# FIXME: unreasonably expensive query on large datasets (I think removal of group by does this?)
 	my $sth = C4::Context->dbh->prepare($query);
 	my ($iso);
 	if (@_) {
