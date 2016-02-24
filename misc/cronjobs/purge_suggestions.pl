@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use utf8;
 
 BEGIN {
@@ -35,11 +34,11 @@ use C4::Suggestions;
 use C4::Log;
 use C4::Context;
 
-my ($help, $days);
+my ( $help, $days );
 
 GetOptions(
-    'help|?'         => \$help,
-    'days=s'         => \$days,
+    'help|?' => \$help,
+    'days=s' => \$days,
 );
 
 my $usage = << 'ENDUSAGE';
@@ -49,34 +48,34 @@ Parameters:
 -days TTT to define the age of suggestions to delete
 
 Example:
-$PERL5LIB/misc/cronjobs/purge_suggestions.pl -days 30
 ENDUSAGE
+$usage .= $0 . " -days 30\n";
 
 # If this script is called without the 'days' parameter, we use the system preferences value instead.
-if ( ! defined($days) and not $help) {
-    my $purge_sugg_days = C4::Context->preference('PurgeSuggestionsOlderThan') || '';
-    if($purge_sugg_days ne '' and $purge_sugg_days >= 0) {
+if ( !defined($days) && !$help ) {
+    my $purge_sugg_days =
+      C4::Context->preference('PurgeSuggestionsOlderThan') || q{};
+    if ( $purge_sugg_days ne q{} and $purge_sugg_days >= 0 ) {
         $days = $purge_sugg_days;
     }
 }
+
 # If this script is called with the 'help' parameter, we show up the help message and we leave the script without doing anything.
 if ($help) {
     print $usage;
     exit;
 }
 
-if(defined($days) && $days > 0 && $days ne ''){
+if ( defined($days) && $days ne q{} && $days > 0 ) {
     cronlogaction();
     DelSuggestionsOlderThan($days);
 }
-
-elsif(defined($days) && $days == 0) {
-    print << 'ERROR';
-    This script is not executed with 0 days. Aborted.
-ERROR
+elsif (!defined($days)){
+    print $usage;
+}
+elsif ( $days == 0 ) {
+    warn "This script is not executed with 0 days. Aborted.\n";
 }
 else {
-    print << 'ERROR';
-    This script requires a positive number of days. Aborted.
-ERROR
+    warn "This script requires a positive number of days. Aborted.\n";
 }
