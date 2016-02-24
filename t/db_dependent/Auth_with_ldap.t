@@ -20,6 +20,7 @@ use Modern::Perl;
 use Test::More tests => 4;
 use Test::MockModule;
 use Test::MockObject;
+use t::lib::TestBuilder;
 use Test::Warn;
 
 use C4::Context;
@@ -28,6 +29,8 @@ my $dbh = C4::Context->dbh;
 # Start transaction
 $dbh->{ AutoCommit } = 0;
 $dbh->{ RaiseError } = 1;
+
+my $builder = t::lib::TestBuilder->new();
 
 # Variables controlling LDAP server config
 my $update         = 0;
@@ -61,6 +64,32 @@ $ldap->mock( 'new',  sub {
     }
 });
 
+my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
+my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
+my $attrType = $builder->build({
+    source => 'BorrowerAttributeType',
+    value => {
+        category_code => $categorycode
+    }
+});
+
+my $borrower = $builder->build({
+    source => 'Borrower',
+    value => {
+        userid => 'hola',
+        branchcode   => $branchcode,
+        categorycode => $categorycode
+    }
+});
+
+$builder->build({
+    source => 'BorrowerAttribute',
+    value => {
+        borrowernumber => $borrower->{borrowernumber},
+        code => $attrType->{code},
+        attribute => 'FOO'
+    }
+});
 
 # C4::Auth_with_ldap needs several stuff set first ^^^
 use_ok( 'C4::Auth_with_ldap' );
@@ -84,7 +113,7 @@ subtest "checkpw_ldap tests" => sub {
 
     subtest "auth_by_bind = 1 tests" => sub {
 
-        plan tests => 7;
+        plan tests => 8;
 
         $auth_by_bind          = 1;
 
@@ -105,8 +134,23 @@ subtest "checkpw_ldap tests" => sub {
         $anonymous_bind        = 1;
         $desired_bind_result   = 'success';
         $desired_search_result = 'success';
-        $desired_count_result  = 0; # user auth problem
+        $desired_count_result  = 1;
         $non_anonymous_bind_result = 'success';
+        $update = 1;
+        reload_ldap_module();
+
+        my $auth = new Test::MockModule('C4::Auth_with_ldap');
+        $auth->mock( 'update_local', sub {
+                return $borrower->{cardnumber};
+        });
+
+        C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola', password => 'hey');
+        ok(@{ C4::Members::Attributes::GetBorrowerAttributes($borrower->{borrowernumber}) }, 'Extended attributes are not deleted');
+        $auth->unmock('update_local');
+
+        $update = 0;
+        $desired_count_result = 0; # user auth problem
+        C4::Members::DelMember($borrower->{borrowernumber});
         reload_ldap_module();
         is ( C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola', password => 'hey' ),
             0, "checkpw_ldap returns 0 if user lookup returns 0");

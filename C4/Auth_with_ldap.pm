@@ -206,25 +206,19 @@ sub checkpw_ldap {
         return 0;   # B2, D2
     }
     if (C4::Context->preference('ExtendedPatronAttributes') && $borrowernumber && ($config{update} ||$config{replicate})) {
-        my @extended_patron_attributes;
         foreach my $attribute_type ( C4::Members::AttributeTypes::GetAttributeTypes() ) {
             my $code = $attribute_type->{code};
-            if ( exists($borrower{$code}) && $borrower{$code} !~ m/^\s*$/ ) { # skip empty values
-                push @extended_patron_attributes, { code => $code, value => $borrower{$code} };
+            unless (exists($borrower{$code}) && $borrower{$code} !~ m/^\s*$/ ) {
+                next;
             }
-        }
-        #Check before add
-        my @unique_attr;
-        foreach my $attr ( @extended_patron_attributes ) {
-            if (C4::Members::Attributes::CheckUniqueness($attr->{code}, $attr->{value}, $borrowernumber)) {
-                push @unique_attr, $attr;
+            if (C4::Members::Attributes::CheckUniqueness($code, $borrower{$code}, $borrowernumber)) {
+                C4::Members::Attributes::UpdateBorrowerAttribute($borrowernumber, {code => $code, value => $borrower{$code}});
             } else {
-                warn "ERROR_extended_unique_id_failed $attr->{code} $attr->{value}";
+                warn "ERROR_extended_unique_id_failed $code $borrower{$code}";
             }
         }
-        C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, \@unique_attr, 'no_branch_limit');
     }
-return(1, $cardnumber, $userid);
+    return(1, $cardnumber, $userid);
 }
 
 # Pass LDAP entry object and local cardnumber (userid).
