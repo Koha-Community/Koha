@@ -415,7 +415,7 @@ sub recordpayment_selectaccts {
         {
             amount => $amount,
             lines  => \@lines,
-            note   => $note
+            note   => $note,
         }
       );
 }
@@ -424,67 +424,22 @@ sub recordpayment_selectaccts {
 # fills in
 sub makepartialpayment {
     my ( $accountlines_id, $borrowernumber, $accountno, $amount, $user, $branch, $payment_note ) = @_;
-    my $manager_id = 0;
-    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
-    if (!$amount || $amount < 0) {
-        return;
-    }
-    $payment_note //= "";
-    my $dbh = C4::Context->dbh;
 
-    my $nextaccntno = getnextacctno($borrowernumber);
-    my $newamtos    = 0;
+    my $line = Koha::Account::Lines->find( $accountlines_id );
 
-    my $data = $dbh->selectrow_hashref(
-        'SELECT * FROM accountlines WHERE  accountlines_id=?',undef,$accountlines_id);
-    my $new_outstanding = $data->{amountoutstanding} - $amount;
+    return Koha::Account->new(
+        {
+            patron_id => $borrowernumber,
+        }
+      )->pay(
+        {
+            amount => $amount,
+            lines  => [ $line ],
+            note   => $payment_note,
+            library_id => $branch,
+        }
+      );
 
-    my $update = 'UPDATE  accountlines SET amountoutstanding = ?  WHERE   accountlines_id = ? ';
-    $dbh->do( $update, undef, $new_outstanding, $accountlines_id);
-
-    if ( C4::Context->preference("FinesLog") ) {
-        logaction("FINES", 'MODIFY', $borrowernumber, Dumper({
-            action                => 'fee_payment',
-            borrowernumber        => $borrowernumber,
-            old_amountoutstanding => $data->{'amountoutstanding'},
-            new_amountoutstanding => $new_outstanding,
-            amount_paid           => $data->{'amountoutstanding'} - $new_outstanding,
-            accountlines_id       => $data->{'accountlines_id'},
-            accountno             => $data->{'accountno'},
-            manager_id            => $manager_id,
-        }));
-    }
-
-    # create new line
-    my $insert = 'INSERT INTO accountlines (borrowernumber, accountno, date, amount, '
-    .  'description, accounttype, amountoutstanding, itemnumber, manager_id, note) '
-    . ' VALUES (?, ?, now(), ?, ?, ?, 0, ?, ?, ?)';
-
-    $dbh->do(  $insert, undef, $borrowernumber, $nextaccntno, -$amount,
-        '', 'Pay', $data->{'itemnumber'}, $manager_id, $payment_note);
-
-    UpdateStats({
-        branch => $branch,
-        type   => 'payment',
-        amount => $amount,
-        borrowernumber => $borrowernumber,
-        accountno => $accountno
-    });
-
-    if ( C4::Context->preference("FinesLog") ) {
-        logaction("FINES", 'CREATE',$borrowernumber,Dumper({
-            action            => 'create_payment',
-            borrowernumber    => $user,
-            accountno         => $nextaccntno,
-            amount            => 0 - $amount,
-            accounttype       => 'Pay',
-            itemnumber        => $data->{'itemnumber'},
-            accountlines_paid => [ $data->{'accountlines_id'} ],
-            manager_id        => $manager_id,
-        }));
-    }
-
-    return;
 }
 
 =head2 WriteOffFee
