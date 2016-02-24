@@ -44,6 +44,7 @@ use C4::RotatingCollections qw(GetCollectionItemBranches);
 use Algorithm::CheckDigits;
 
 use Data::Dumper;
+use Koha::Account;
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Items;
@@ -3835,10 +3836,10 @@ sub ProcessOfflineIssue {
 sub ProcessOfflinePayment {
     my $operation = shift;
 
-    my $borrower = C4::Members::GetMemberDetails( undef, $operation->{cardnumber} ); # Get borrower from operation cardnumber
+    my $patron = Koha::Borrowers->find( { cardnumber => $operation->{cardnumber} });
     my $amount = $operation->{amount};
 
-    recordpayment( $borrower->{borrowernumber}, $amount );
+    Koha::Account->new( { patron_id => $patron->id } )->pay( { amount => $amount } );
 
     return "Success."
 }
