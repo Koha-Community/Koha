@@ -47,14 +47,26 @@ sub new {
 
 This method allows payments to be made against feees
 
+Koha::Account->new( { patron_id => $borrowernumber } )->pay(
+    {
+        amount     => $amount,
+        sip        => $sipmode,
+        note       => $note,
+        id         => $accountlines_id,
+        library_id => $branchcode,
+    }
+);
+
 =cut
 
 sub pay {
     my ( $self, $params ) = @_;
 
-    my $amount = $params->{amount};
-    my $sip    = $params->{sip};
-    my $note   = $params->{note} || q{};
+    my $amount          = $params->{amount};
+    my $sip             = $params->{sip};
+    my $note            = $params->{note} || q{};
+    my $accountlines_id = $params->{accountlines_id};
+    my $library_id      = $params->{library_id};
 
     my $userenv = C4::Context->userenv;
 
@@ -71,15 +83,61 @@ sub pay {
 
     my $manager_id = $userenv ? $userenv->{number} : 0;
 
-    my @outstanding_fines = Koha::Account::Lines->search(
+    my @fines_paid; # List of account lines paid on with this payment
+
+    my $balance_remaining = $amount; # Set it now so we can adjust the amount if necessary
+    $balance_remaining ||= 0;
+
+    # We were passed a specific line to pay
+    if ( $accountlines_id ) {
+        my $fine = Koha::Account::Lines->find( $accountlines_id );
+
+        # If accountline id is passed but no amount, we pay that line in full
+        $amount = $fine->amountoutstanding unless defined($amount);
+
+        my $old_amountoutstanding = $fine->amountoutstanding;
+        my $new_amountoutstanding = $old_amountoutstanding - $amount;
+        $fine->amountoutstanding( $new_amountoutstanding )->store();
+        $balance_remaining = $balance_remaining - $amount;
+
+        if ( $fine->accounttype eq 'Rep' || $fine->accounttype eq 'L' )
+        {
+            C4::Circulation::ReturnLostItem( $self->{patron_id}, $fine->itemnumber );
+        }
+
+        if ( C4::Context->preference("FinesLog") ) {
+            logaction(
+                "FINES", 'MODIFY',
+                $self->{patron_id},
+                Dumper(
+                    {
+                        action                => 'fee_payment',
+                        borrowernumber        => $fine->borrowernumber,
+                        old_amountoutstanding => $old_amountoutstanding,
+                        new_amountoutstanding => 0,
+                        amount_paid           => $old_amountoutstanding,
+                        accountlines_id       => $fine->id,
+                        accountno             => $fine->accountno,
+                        manager_id            => $manager_id,
+                        note                  => $note,
+                    }
+                )
+            );
+            push( @fines_paid, $fine->id );
+        }
+    }
+
+    # Were not passed a specific line to pay, or the payment was for more
+    # than the what was owed on the given line. In that case pay down other
+    # lines with remaining balance.
+    my @outstanding_fines;
+    @outstanding_fines = Koha::Account::Lines->search(
         {
             borrowernumber    => $self->{patron_id},
             amountoutstanding => { '>' => 0 },
         }
-    );
+    ) if $balance_remaining > 0;
 
-    my $balance_remaining = $amount;
-    my @fines_paid;
     foreach my $fine (@outstanding_fines) {
         my $amount_to_pay =
             $fine->amountoutstanding > $balance_remaining
@@ -131,10 +189,11 @@ sub pay {
         }
     )->store();
 
-    my $branch = $userenv ? $userenv->{'branch'} : undef;
+    $library_id ||= $userenv ? $userenv->{'branch'} : undef;
+
     UpdateStats(
         {
-            branch         => $branch,
+            branch         => $library_id,
             type           => 'payment',
             amount         => $amount,
             borrowernumber => $self->{patron_id},
@@ -160,6 +219,8 @@ sub pay {
             )
         );
     }
+
+    return $payment->id;
 }
 
 1;

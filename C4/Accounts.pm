@@ -86,96 +86,10 @@ was made.
 # FIXME - I'm not at all sure about the above, because I don't
 # understand what the acct* tables in the Koha database are for.
 sub makepayment {
-
-    #here we update both the accountoffsets and the account lines
-    #updated to check, if they are paying off a lost item, we return the item
-    # from their card, and put a note on the item record
     my ( $accountlines_id, $borrowernumber, $accountno, $amount, $user, $branch, $payment_note ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $manager_id = 0;
-    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv; 
 
-    # begin transaction
-    my $nextaccntno = getnextacctno($borrowernumber);
-    my $newamtos    = 0;
-    my $sth         = $dbh->prepare("SELECT * FROM accountlines WHERE accountlines_id=?");
-    $sth->execute( $accountlines_id );
-    my $data = $sth->fetchrow_hashref;
-
-    my $payment;
-    if ( $data->{'accounttype'} eq "Pay" ){
-        my $udp = 		
-            $dbh->prepare(
-                "UPDATE accountlines
-                    SET amountoutstanding = 0
-                    WHERE accountlines_id = ?
-                "
-            );
-        $udp->execute($accountlines_id);
-    }else{
-        my $udp = 		
-            $dbh->prepare(
-                "UPDATE accountlines
-                    SET amountoutstanding = 0
-                    WHERE accountlines_id = ?
-                "
-            );
-        $udp->execute($accountlines_id);
-
-         # create new line
-        my $payment = 0 - $amount;
-        $payment_note //= "";
-        
-        my $ins = 
-            $dbh->prepare( 
-                "INSERT 
-                    INTO accountlines (borrowernumber, accountno, date, amount, itemnumber, description, accounttype, amountoutstanding, manager_id, note)
-                    VALUES ( ?, ?, now(), ?, ?, '', 'Pay', 0, ?, ?)"
-            );
-        $ins->execute($borrowernumber, $nextaccntno, $payment, $data->{'itemnumber'}, $manager_id, $payment_note);
-    }
-
-    if ( C4::Context->preference("FinesLog") ) {
-        logaction("FINES", 'MODIFY', $borrowernumber, Dumper({
-            action                => 'fee_payment',
-            borrowernumber        => $borrowernumber,
-            old_amountoutstanding => $data->{'amountoutstanding'},
-            new_amountoutstanding => 0,
-            amount_paid           => $data->{'amountoutstanding'},
-            accountlines_id       => $data->{'accountlines_id'},
-            accountno             => $data->{'accountno'},
-            manager_id            => $manager_id,
-        }));
-
-
-        logaction("FINES", 'CREATE',$borrowernumber,Dumper({
-            action            => 'create_payment',
-            borrowernumber    => $borrowernumber,
-            accountno         => $nextaccntno,
-            amount            => $payment,
-            amountoutstanding => 0,,
-            accounttype       => 'Pay',
-            accountlines_paid => [$data->{'accountlines_id'}],
-            manager_id        => $manager_id,
-        }));
-    }
-
-    UpdateStats({
-        branch => $branch,
-        type   => 'payment',
-        amount => $amount,
-        borrowernumber => $borrowernumber,
-        accountno => $accountno
-    });
-
-    #check to see what accounttype
-    if ( $data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L' ) {
-        C4::Circulation::ReturnLostItem( $borrowernumber, $data->{'itemnumber'} );
-    }
-    my $sthr = $dbh->prepare("SELECT max(accountlines_id) AS lastinsertid FROM accountlines");
-    $sthr->execute();
-    my $datalastinsertid = $sthr->fetchrow_hashref;
-    return $datalastinsertid->{'lastinsertid'};
+    return Koha::Account->new( { patron_id => $borrowernumber } )
+      ->pay( { accountlines_id => $accountlines_id, amount => $amount, library_id => $branch, note => $payment_note } );
 }
 
 =head2 getnextacctno
