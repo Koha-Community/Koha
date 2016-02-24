@@ -17,8 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 73;
+use Test::More tests => 74;
 use Test::Warn;
+use Test::MockModule;
+use t::lib::TestBuilder;
+
+use Koha::Database;
 
 $| = 1;
 
@@ -27,6 +31,61 @@ BEGIN {
     use lib $FindBin::Bin;
     use_ok('C4::Barcodes');
 }
+
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
+my $builder = t::lib::TestBuilder->new;
+
+my $dbh = C4::Context->dbh;
+
+subtest 'Test generation of annual barcodes from DB values' => sub {
+
+    plan tests => 4;
+
+    $builder->clear( { source => 'Issue' } );
+    $builder->clear( { source => 'Item' } );
+
+    my $barcodeobj;
+
+    warning_like { $barcodeobj = C4::Barcodes->new('annual'); } [ qr/No max barcode (.*) found\.  Using initial value\./ ], "(annual) Expected complaint regarding no max barcode found";
+
+    my $barcodevalue = $barcodeobj->value();
+
+    my $item_1 = $builder->build({
+        source => 'Item',
+        value => {
+            barcode => $barcodevalue
+        }
+    });
+
+    is($barcodevalue,$barcodeobj->db_max(), "(annual) First barcode saved to db is equal to db_max" );
+
+    #This is just setting the value ahead an arbitrary amount before adding a second barcode to db
+    $barcodevalue = $barcodeobj->next_value();
+    $barcodevalue = $barcodeobj->next_value($barcodevalue);
+    $barcodevalue = $barcodeobj->next_value($barcodevalue);
+    $barcodevalue = $barcodeobj->next_value($barcodevalue);
+    $barcodevalue = $barcodeobj->next_value($barcodevalue);
+
+    my $item_2 = $builder->build({
+        source => 'Item',
+        value => {
+            barcode => $barcodevalue
+        }
+    });
+
+    $barcodeobj = C4::Barcodes->new('annual');
+
+    is($barcodevalue,$barcodeobj->db_max(), '(annual) db_max should equal the greatest barcode in the db when more than 1 present');
+    ok($barcodeobj->value() gt $barcodevalue, '(annual) new barcode object should be created with value greater and last value inserted into db');
+
+    $schema->storage->txn_rollback;
+};
+
+
+$builder->clear( { source => 'Issue' } );
+$builder->clear( { source => 'Item' } );
 
 my %thash = (
     incremental => [],
