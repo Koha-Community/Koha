@@ -29,6 +29,7 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Accounts;
 use C4::Koha;
 use Koha::Patron::Images;
+use Koha::Account;
 
 use Koha::Patron::Categories;
 
@@ -129,10 +130,9 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                 recordpayment_selectaccts( $borrowernumber, $total_paid, \@acc, $note );
             } else {
                 my $note = $input->param('selected_accts_notes');
-                recordpayment( $borrowernumber, $total_paid, '', $note );
+                Koha::Account->new( { patron_id => $borrowernumber } )
+                  ->pay( { amount => $total_paid, note => $note } );
             }
-
-# recordpayment does not return success or failure so lets redisplay the boraccount
 
             print $input->redirect(
 "/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber"
