@@ -11788,9 +11788,9 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.23.00.023";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-    INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
-VALUES('OpenLibrarySearch','0','If Yes Open Library search results will show in OPAC',NULL,'YesNo');
-});
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES('OpenLibrarySearch','0','If Yes Open Library search results will show in OPAC',NULL,'YesNo');
+    });
 
     print "Upgrade to $DBversion done (Bug 6624 - Allow Koha to use the new read API from OpenLibrary)\n";
     SetVersion($DBversion);
@@ -11799,11 +11799,13 @@ VALUES('OpenLibrarySearch','0','If Yes Open Library search results will show in 
 $DBversion = "3.23.00.024";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-    ALTER TABLE deletedborrowers MODIFY COLUMN userid VARCHAR(75) DEFAULT NULL;
-});
+        ALTER TABLE deletedborrowers MODIFY COLUMN userid VARCHAR(75) DEFAULT NULL;
+    });
+
     $dbh->do(q{
-    ALTER TABLE deletedborrowers MODIFY COLUMN password VARCHAR(60) DEFAULT NULL;
-});
+        ALTER TABLE deletedborrowers MODIFY COLUMN password VARCHAR(60) DEFAULT NULL;
+    });
+
     print "Upgrade to $DBversion done (Bug 15517 - Tables borrowers and deletedborrowers differ again)\n";
     SetVersion($DBversion);
 }
@@ -11811,8 +11813,8 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.23.00.025";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-    DROP TABLE nozebra;
-});
+        DROP TABLE IF EXISTS nozebra;
+    });
 
     print "Upgrade to $DBversion done (Bug 15526 - Drop nozebra database table)\n";
     SetVersion($DBversion);
@@ -11821,8 +11823,8 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.23.00.026";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-    UPDATE systempreferences SET value = CONCAT_WS('|', IF(value='', NULL, value), "password") WHERE variable="PatronSelfRegistrationBorrowerUnwantedField" AND value NOT LIKE "%password%";
-});
+        UPDATE systempreferences SET value = CONCAT_WS('|', IF(value='', NULL, value), "password") WHERE variable="PatronSelfRegistrationBorrowerUnwantedField" AND value NOT LIKE "%password%";
+    });
 
     print "Upgrade to $DBversion done (Bug 15343 - Allow patrons to choose their own password on self registration)\n";
     SetVersion($DBversion);
