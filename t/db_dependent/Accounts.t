@@ -24,6 +24,7 @@ use Test::Warn;
 
 use t::lib::TestBuilder;
 
+use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Line;
 
@@ -36,7 +37,6 @@ BEGIN {
 
 can_ok( 'C4::Accounts',
     qw(
-        makepayment
         getnextacctno
         chargelostitem
         manualinvoice
@@ -303,7 +303,7 @@ subtest "Koha::Account::pay particular line tests" => sub {
     is( $line4->amountoutstanding, "4.000000", "Line 4 was not paid" );
 };
 
-subtest "makepayment() tests" => sub {
+subtest "More Koha::Account::pay tests" => sub {
 
     plan tests => 6;
 
@@ -330,13 +330,10 @@ subtest "makepayment() tests" => sub {
 
     is( $rs->count(), 1, 'Accountline created' );
 
+    my $account = Koha::Account->new( { patron_id => $borrowernumber } );
+    my $line = Koha::Account::Lines->find( $accountline->{ accountlines_id } );
     # make the full payment
-    makepayment(
-        $accountline->{ accountlines_id }, $borrowernumber,
-        $accountline->{ accountno },       $amount,
-        $borrowernumber, $branch, 'A payment note' );
-
-    # TODO: someone should write actual tests for makepayment()
+    $account->pay({ lines => [$line], amount => $amount, library_id => $branch, note => 'A payment note' });
 
     my $stat = $schema->resultset('Statistic')->search({
         branch  => $branch,
