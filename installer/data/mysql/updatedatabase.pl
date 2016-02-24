@@ -11816,6 +11816,7 @@ if ( CheckVersion($DBversion) ) {
 
     print "Upgrade to $DBversion done (Bug 15526 - Drop nozebra database table)\n";
     SetVersion($DBversion);
+}
 
 $DBversion = "3.23.00.026";
 if ( CheckVersion($DBversion) ) {
@@ -11825,6 +11826,7 @@ if ( CheckVersion($DBversion) ) {
 
     print "Upgrade to $DBversion done (Bug 15343 - Allow patrons to choose their own password on self registration)\n";
     SetVersion($DBversion);
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
