@@ -1,6 +1,6 @@
 // These default options are for translation but can be used
 // for any other datatables settings
-// MSG_DT_* variables comes from datatables-strings.inc
+// MSG_DT_* variables comes from datatables.inc
 // To use it, write:
 //  $("#table_id").dataTable($.extend(true, {}, dataTableDefaults, {
 //      // other settings
