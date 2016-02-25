@@ -15,9 +15,6 @@
 [% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'datatables-strings.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery-ui-timepicker-addon.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
@@ -26,14 +23,12 @@ $(document).ready(function() {
         } else if ($('#checkoutrenew').length) {
             $('#checkoutrenew').focus();
         }
-        $("#issuest").dataTable($.extend(true, {}, dataTablesDefaults, {
+        $("#checkout_infos").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": 't',
             "aaSorting": [],
             "aoColumnDefs": [
-                { "aTargets": [ -1, -2[% IF ( exports_enabled ) %], -3[% END %] ], "bSortable": false, "bSearchable": false }
-            ],
-            "aoColumns": [
-                { "sType": "title-string" },{ "sType": "html" },null,{ "sType": "title-string" },null,null,null,null,null,null[% IF ( exports_enabled ) %],null[% END %]
+                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
             ],
             "bPaginate": false
         }));
@@ -62,9 +57,9 @@ $(document).ready(function() {
 [% END %]
 
 [% IF NOT batch_allowed %]
-  <div class="dialog message">You are not allowed to use batch checkout for this patron</div>
+  <div class="dialog alert">You are not allowed to use batch checkout for this patron</div>
 [% ELSIF noissues and not checkout_infos %]
-  <div class="dialog message">
+  <div class="dialog alert">
     Cannot check out!
     [% IF charges_is_blocker %]
       Checkouts are <span class="circ-hlt">BLOCKED</span> because fine balance is <span class="circ-hlt">OVER THE LIMIT</span>.
@@ -73,7 +68,7 @@ $(document).ready(function() {
 [% ELSIF NOT checkout_infos %]
   <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl">
     <fieldset id="circ_circulation_issue">
-      <label for="barcode">Issuing items to [% INCLUDE 'patron-title.inc' %]</label>
+      <label for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
       <fieldset class="rows">
         <legend>Use a file</legend>
         <ol>
@@ -101,19 +96,19 @@ $(document).ready(function() {
 
 [% ELSE %]
   [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
-    <h3>Batch checkout confirmation [% IF borrowernumber %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] [% END %]</h1>
+    <h3>Batch checkout confirmation [% IF borrowernumber %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] [% END %]</h3>
     <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
   [% ELSE %]
-    <h3>Batch checkout information [% IF borrowernumber %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] [% END %]</h1>
+    <h3>Batch checkout information [% IF borrowernumber %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] [% END %]</h3>
   [% END %]
     <table id="checkout_infos">
       <thead>
         <tr>
           [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
-            <th></th>
+            <th class="NoSort"></th>
           [% END %]
           <th>Barcode</th>
-          <th>Title</th>
+          <th class="anti-the">Title</th>
           <th>Information</th>
         </tr>
       </thead>
@@ -133,53 +128,53 @@ $(document).ready(function() {
             </td>
             <td>
               [% IF checkout_info.NEEDSCONFIRMATION %]
-                <p class="warn">
+                <ul class="fa-ul warn">
                   [% IF checkout_info.AGE_RESTRICTION %]
-                    Age restriction [% checkout_info.AGE_RESTRICTION %]
+                      <li><i class="fa fa-li fa-warning"></i>Age restriction [% checkout_info.AGE_RESTRICTION %].</li>
                   [% END %]
                   [% IF checkout_info.RENEW_ISSUE %]
-                    This item is currently checked out to this patron. Renew?
+                      <li><i class="fa fa-li fa-warning"></i>This item is currently checked out to this patron. Renew?</li>
                   [% END %]
                   [% IF checkout_info.RESERVE_WAITING %]
-                    This item has been waiting for another patron.
+                      <li><i class="fa fa-li fa-warning"></i>This item is waiting for another patron.</li>
                   [% END %]
                   [% IF checkout_info.RESERVED %]
-                    This item has been on hold for another patron.
+                      <li><i class="fa fa-li fa-warning"></i>This item is on hold for another patron.</li>
                   [% END %]
                   [% IF checkout_info.ISSUED_TO_ANOTHER %]
-                    This item is checked out to another patron.
+                      <li><i class="fa fa-li fa-warning"></i>This item is checked out to another patron.
                     [% IF CAN_user_circulate_force_checkout %]
                       Check in and check out?
-                    [% END %]
+                      [% END %]</li>
                   [% END %]
                   [% IF checkout_info.TOO_MANY %]
-                    Too many checked out.
+                      <li><i class="fa fa-li fa-warning"></i>Too many checked out.</li>
                   [% END %]
                   [% IF checkout_info.BORRNOTSAMEBRANCH %]
-                    This patron is from a different library ([% checkout_info.BORRNOTSAMEBRANCH %])</li>
+                      <li><i class="fa fa-li fa-warning"></i>This patron is from a different library ([% checkout_info.BORRNOTSAMEBRANCH %]).</li>
                   [% END %]
                   [% IF checkout_ino.PATRON_CANT %]
-                    This patron can't check out this item per library circulation policy.
+                      <li><i class="fa fa-li fa-warning"></i>This patron can't check out this item per library circulation policy.</li>
                   [% END %]
                   [% IF checkout_info.NOT_FOR_LOAN_FORCING %]
                     [% IF checkout_info.itemtype_notforloan %]
-                      Item type is normally not for loan.
+                        <li><i class="fa fa-li fa-warning"></i>Item type is normally not for loan.</li>
                     [% ELSIF checkout_info.item_notforloan %]
                       [% item_notforloan_lib = AuthorisedValues.GetByCode( authvalcode_notforloan, checkout_info.item_notforloan, 0 ) %]
-                      Item is normally not for loan [% IF item_notforloan_lib %]([% item_notforloan_lib %])[% END %].
+                        <li><i class="fa fa-li fa-warning"></i>Item is normally not for loan [% IF item_notforloan_lib %]([% item_notforloan_lib %])[% END %].</li>
                     [% END %]
                   [% END %]
                   [% IF checkout_info.USERBLOCKEDOVERDUE %]
-                    Patron has [% checkout_info.USERBLOCKEDOVERDUE %] overdue item(s).
+                      <li><i class="fa fa-li fa-warning"></i>Patron has [% checkout_info.USERBLOCKEDOVERDUE %] overdue item(s).</li>
                   [% END %]
                   [% IF checkout_info.ITEM_LOST %]
-                    This item has been lost with a status of "[% checkout_info.ITEM_LOST %]".
+                      <li><i class="fa fa-li fa-warning"></i>This item has been lost with a status of "[% checkout_info.ITEM_LOST %]."</li>
                   [% END %]
                   [% IF checkout_info.HIGHHOLDS %]
-                    High demand item. Loan period shortened to [% checkout_info.HIGHHOLDS.duration %] days (due [% checkout_info.HIGHHOLDS.returndate %]).
+                      <li><i class="fa fa-li fa-warning"></i>High demand item. Loan period shortened to [% checkout_info.HIGHHOLDS.duration %] days (due [% checkout_info.HIGHHOLDS.returndate %]).</li>
                   [% END %]
                   [% IF checkout_info.HIGHHOLDS %] <!-- FIXME -->
-                      <script language="JavaScript" type="text/javascript">
+                      <script type="text/javascript">
                           $(document).ready(function() {
                               $("input[name=duedatespec]:hidden").val('[% checkout_info.HIGHHOLDS.returndate %]');
                           });
@@ -188,77 +183,77 @@ $(document).ready(function() {
 
                   [% IF NOT checkout_info.IMPOSSIBLE && ( CAN_user_circulate_force_checkout or checkout_info.HIGHHOLDS ) %]
                       [% IF checkout_info.RESERVED || checkout_info.RESERVE_WAITING %] <!-- arbitrary choice, revert the reserve is not possible-->
-                        <p>This item is on hold for another patron. The hold will be overridden, but not cancelled.</p>
+                        <li><i class="fa fa-li fa-warning"></i>This item is on hold for another patron. The hold will be overridden, but not cancelled.</li>
                       [% END %]
                   [% END %]
-                </p>
+                </ul>
               [% END %]
 
 
               [% IF checkout_info.alert.ITEM_LOST || checkout_info.alert.OTHER_CHARGES %]
-                <p class="info">
+                <ul class="info">
                   [% IF checkout_info.alert.ITEM_LOST %]
-                    This item has been lost with a status of "[% checkout_info.alert.ITEM_LOST %]".
+                      <li>This item has been lost with a status of "[% checkout_info.alert.ITEM_LOST %]."</li>
                   [% END %]
                   [% IF checkout_info.alert.OTHER_CHARGES %]
-                    The patron has unpaid charges for holds, rentals etc of [% checkout_info.alert.OTHER_CHARGES %].
+                      <li>The patron has unpaid charges for holds, rentals etc of [% checkout_info.alert.OTHER_CHARGES %].</li>
                   [% END %]
-                </p>
+                </ul>
               [% END %]
 
 
               [% IF checkout_info.IMPOSSIBLE %]
-                <p class="error">
+                <ul class="fa-ul error">
                   [% IF checkout_info.STATS  %]
-                    Local use recorded
+                      <li><i class="fa fa-li fa-exclamation"></i>Local use recorded.</li>
                   [% END %]
 
                   [% IF checkout_info.NOT_FOR_LOAN %]
                     [% IF checkout_info.itemtype_notforloan %]
-                      Item type not for loan.
+                       <li><i class="fa fa-li fa-exclamation"></i>Item type not for loan.</li>
                     [% ELSIF checkout_info.item_notforloan %]
                       [% item_notforloan_lib = AuthorisedValues.GetByCode( checkout_info.authvalcode_notforloan, checkout_info.item_notforloan, 0 ) %]
-                      Item not for loan [% IF checkout_info.item_notforloan_lib %]([% checkout_info.item_notforloan_lib %])[% END %].
+                        <li><i class="fa fa-li fa-exclamation"></i>Item not for loan [% IF checkout_info.item_notforloan_lib %]([% checkout_info.item_notforloan_lib %])[% END %].</li>
                     [% END %]
                   [% END %]
                   [% IF checkout_info.WTHDRAWN %]
-                    Item has been withdrawn
+                      <li><i class="fa fa-li fa-exclamation"></i>Item has been withdrawn.</li>
                   [% END %]
                   [% IF checkout_info.RESTRICTED %]
-                    Item is restricted
+                      <li><i class="fa fa-li fa-exclamation"></i>Item is restricted.</li>
                   [% END %]
                   [% IF checkout_info.GNA %]
-                    Patron's address is in doubt
+                      <li><i class="fa fa-li fa-exclamation"></i>Patron's address is in doubt.</li>
                   [% END %]
                   [% IF checkout_info.CARD_LOST %]
-                    Patron's card is lost
+                      <li><i class="fa fa-li fa-exclamation"></i>Patron's card is lost.</li>
                   [% END %]
                   [% IF checkout_info.DEBARRED %]
-                    Patron is restricted
+                      <li><i class="fa fa-li fa-exclamation"></i>Patron is restricted.</li>
                   [% END %]
                   [% IF checkout_info.NO_MORE_RENEWALS %]
-                    No more renewals possible
+                      <li><i class="fa fa-li fa-exclamation"></i>No more renewals possible.</li>
                   [% END %]
                   [% IF checkout_info.EXPIRED %]
-                    Patron's card is expired
+                      <li><i class="fa fa-li fa-exclamation"></i>Patron's card is expired.</li>
                   [% END %]
                   [% IF checkout_info.ITEMNOTSAMEBRANCH %]
-                    This item belongs to [% Branches.GetName( checkout_info.itemhomebranch ) %] and cannot be checked out from this location.
+                      <li><i class="fa fa-li fa-exclamation"></i>This item belongs to [% Branches.GetName( checkout_info.itemhomebranch ) %] and cannot be checked out from this location.</li>
                   [% END %]
                   [% IF checkout_info.USERBLOCKEDREMAINING %]
-                    Patron has had overdue items and is blocked for [% checkout_info.USERBLOCKEDREMAINING %] day(s).
+                      <li><i class="fa fa-li fa-exclamation"></i>Patron has had overdue items and is blocked for [% checkout_info.USERBLOCKEDREMAINING %] day(s).</li>
                   [% END %]
                   [% IF checkout_info.USERBLOCKEDOVERDUE %]
-                      Checkouts are BLOCKED because patron has overdue items
+                      <li><i class="fa fa-li fa-exclamation"></i>Checkouts are BLOCKED because patron has overdue items.</li>
                   [% END %]
                   [% IF checkout_info.TOO_MANY %]
-                    Too many checked out.
+                      <li><i class="fa fa-li fa-exclamation"></i>Too many checked out.</li>
                   [% END %]
                   [% IF checkout_info.UNKNOWN_BARCODE %]
-                    <li>The barcode was not found [% checkout_info.barcode |html %]
+                      <li><i class="fa fa-li fa-exclamation"></i>The barcode was not found [% checkout_info.barcode |html %].</li>
                   [% END %]
                   [% IF checkout_info.DEBT %]
-                    The patron has a debt of [% checkout_info.DEBT %] <!-- Need debt_confirmed -->
+                      <li><i class="fa fa-li fa-exclamation"></i>The patron has a debt of [% checkout_info.DEBT %].</li> <!-- Need debt_confirmed -->
                   [% END %]
                 </p>
               [% END %]
@@ -269,13 +264,15 @@ $(document).ready(function() {
     </table>
 
     [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
-      <h3>Please confirm checkout</h3>
+        <fieldset>
+            <legend>Please confirm checkout</legend>
       <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
       <input type="hidden" name="issueconfirmed" value="1" />
       <input type="hidden" name="debt_confirmed" value="1" />
       <input type="hidden" name="branch" value="[% branch %]" />
       <input type="hidden" name="batch" value="1" />
       <input type="submit" id="checkoutrenew" class="approve" value="Checkout or renew" />
+        </fieldset>
     </form>
     [% END %]
 
