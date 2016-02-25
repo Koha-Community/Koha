@@ -21,15 +21,12 @@ use Template::Plugin;
 use base qw( Template::Plugin );
 
 use C4::Category;
-use Koha::Database;
+use Koha::Patron::Categories;
 
 sub GetName {
     my ( $self, $categorycode ) = @_;
 
-    my $schema = Koha::Database->new->schema;
-    return $schema->resultset( 'Category' )->search( {
-        categorycode => $categorycode,
-    } )->get_column( 'description' )->next // '';
+    return Koha::Patron::Categories->find( $categorycode )->description;
 }
 
 sub all {

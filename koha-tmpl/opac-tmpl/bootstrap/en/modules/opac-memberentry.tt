@@ -128,10 +128,10 @@
                                     Library card number:
                                     </label>
                                     [% IF borrower %]
+                                        [% borrower.cardnumber %]
+                                    [% ELSE %]
                                         <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" value="[% borrower.cardnumber %]" />
                                         [% IF mandatory.defined('cardnumber') %]<span class="required">Required</span>[% END %]
-                                    [% ELSE %]
-                                        [% borrower.cardnumber %]
                                     [% END %]
                                 </li>
                                 [% END %]
@@ -170,6 +170,8 @@
                                         Category:</label>
 
                                         [% IF borrower %]
+                                            [% Categories.GetName( borrower.categorycode ) %]
+                                        [% ELSE %]
                                             <select id="borrower_categorycode" name="borrower_categorycode">
                                                 [% FOREACH c IN Categories.all() %]
                                                     [% IF c.categorycode == Koha.Preference('PatronSelfRegistrationDefaultCategory') %]
@@ -179,8 +181,6 @@
                                                     [% END %]
                                                 [% END %]
                                             </select>
-                                        [% ELSE %]
-                                            [% Categories.GetName( borrower.categorycode ) %]
                                         [% END %]
                                     </li>
                                 [% END %]
