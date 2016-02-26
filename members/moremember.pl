@@ -197,6 +197,11 @@ else {
 		foreach (qw(borrowernumber cardnumber firstname surname)) {        
 			  $template->param("guarantor$_" => $guarantor->{$_});
         }
+    } elsif ($data->{contactname} || $data->{contactfirstname}) {
+        $template->param(
+            guarantorfirstname => $data->{contactfirstname},
+            guarantorsurname => $data->{contactname},
+        );
     }
 	if ($category_type eq 'C'){
 		$template->param('C' => 1);
