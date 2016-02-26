@@ -131,8 +131,7 @@ $(document).ready(function() {
       </thead>
       <tbody>
       [% FOREACH lateorder IN lateorders %]
-        [% UNLESS ( loop.odd ) %]<tr class="highlight">
-        [% ELSE %]<tr>[% END %]
+        <tr>
             <td>
                 <input type="checkbox" value="[% lateorder.ordernumber %]" data-booksellerid="[% lateorder.supplierid %]" name="ordernumber">
             </td>

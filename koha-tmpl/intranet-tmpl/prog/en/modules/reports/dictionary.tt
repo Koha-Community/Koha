@@ -71,11 +71,7 @@
 		<th>&nbsp;</th>
 		</tr>
 		[% FOREACH definition IN definitions %]
-			[% UNLESS ( loop.odd ) %]
-				<tr class="highlight" valign="top">
-			[% ELSE %]
-				<tr valign="top">
-			[% END %]
+        <tr>
 			<td>[% definition.name %]</td>
 			<td>[% definition.description %]</td>
 			<td>[% definition.areaname %]</td>

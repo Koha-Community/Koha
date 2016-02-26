@@ -116,7 +116,7 @@ $(document).ready(function() {
   <th>Renew</th>
 </tr>
 [% FOREACH subscription IN subscriptions %]
-    [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+    <tr>
         <td><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]"># [% subscription.subscriptionid %]</a> </td>
         <td>[% subscription.frequency.description %]</td>
         <td>[% subscription.numberpattern.label %]</td>
@@ -222,7 +222,7 @@ $(document).ready(function() {
           </thead>
           <tbody>
       [% FOREACH serial IN year.serials %]
-    [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+        <tr>
             [% IF ( CAN_user_serials_receive_serials ) %]
                 <td>
                   [% UNLESS CAN_user_serials_receive_serials %]

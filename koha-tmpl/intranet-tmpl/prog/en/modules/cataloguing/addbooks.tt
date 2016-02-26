@@ -142,11 +142,7 @@
             [% IF ( CAN_user_editcatalogue_edit_items ) %]<th>&nbsp;</th>[% END %]
         </tr>
     [% FOREACH resultsloo IN resultsloop %]
-        [% IF ( loop.even ) %]
-            <tr class="highlight">
-        [% ELSE %]
-            <tr>
-        [% END %]
+        <tr>
             <td><input type="checkbox" class="selection" id="bib[% resultsloo.biblionumber %]" name="biblionumber" value="[% resultsloo.biblionumber %]" /></td>
             <td>
                 <p>
@@ -231,11 +227,7 @@
                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<th>&nbsp;</th>[% END %]
             </tr>
             [% FOREACH breeding_loo IN breeding_loop %]
-            [% IF ( loop.odd ) %]
                <tr>
-            [% ELSE %]
-               <tr class="highlight">
-            [% END %]
                 <td>[% breeding_loo.title |html %]
                 [% breeding_loo.author %]</td>
                 <td>[% breeding_loo.isbn %]</td>

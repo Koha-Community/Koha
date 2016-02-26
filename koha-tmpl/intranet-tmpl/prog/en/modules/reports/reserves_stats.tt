@@ -118,11 +118,7 @@
                 <th>TOTAL</th>
                 </tr>
                 [% FOREACH loopro IN mainloo.looprow %]
-                    [% IF ( loop.odd ) %]
                     <tr>
-                    [% ELSE %]
-                    <tr class="highlight">
-                    [% END %]
                         <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" |html %]</td>
                     [% FOREACH loopcel IN loopro.loopcell %]
 						<td align="center">
@@ -168,7 +164,7 @@
 				<input type="checkbox" name="filter_reservestatus_or_5" value="5" /> Cancelled
 				</td>
              </tr>
-             <tr class="highlight">
+             <tr>
                 <td>Hold Date</td>
                 <td><input type="radio" name="Line" value="reservedate" /></td>
                 <td><input type="radio" name="Column" value="reservedate" /></td>
@@ -220,7 +216,7 @@
                </select>
              </td> 
         </tr>
-        <tr class="highlight">
+        <tr>
             <td>Item type</td>
             <td><input type="radio" name="Line" value="items.itype" /></td>
             <td><input type="radio" name="Column" value="items.itype" /></td>
@@ -244,7 +240,7 @@
                </select>
              </td> 
         </tr>
-        <tr class="highlight">
+        <tr>
             <td>Holding library</td>
             <td><input type="radio" name="Line" value="items.holdingbranch" /></td>
             <td><input type="radio" name="Column" value="items.holdingbranch" /></td>
@@ -268,7 +264,7 @@
                </select>
              </td> 
         </tr>
-        <tr class="highlight">
+        <tr>
             <td>Collection</td>
             <td><input type="radio" name="Line"   value="items.ccode" /></td>
             <td><input type="radio" name="Column" value="items.ccode" /></td>
@@ -292,7 +288,7 @@
                </select>
             </td> 
         </tr>
-        <tr class="highlight">
+        <tr>
             <td>Item call number</td>
             <td></td>
             <td></td>
@@ -312,7 +308,7 @@
         </tr>
         [% END %]
         [% IF ( hassort2 ) %]
-        <tr class="highlight"><td>Patron sort 2</td>
+        <tr><td>Patron sort 2</td>
             <td><input type="radio" name="Line" value="borrowers.sort2" /></td>
             <td><input type="radio" name="Column" value="borrowers.sort2" /></td>
            	<td><select name="filter_borrowers.sort2" id="sort2">

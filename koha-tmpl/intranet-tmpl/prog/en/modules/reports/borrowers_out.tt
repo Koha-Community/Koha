@@ -40,11 +40,7 @@ $(document).ready(function(){
                 [% END %]
             </tr>
                 [% FOREACH loopro IN mainloo.looprow %]
-		[% UNLESS ( loop.odd ) %]
-                    <tr class="highlight">
-		[% ELSE %]
-		    <tr>
-		[% END %]
+            <tr>
                         <td>[% loopro.rowtitle %]</td>
                         [% FOREACH loopcel IN loopro.loopcell %]
                         <td>[% IF ( loopcel.value ) %][% loopcel.value %][% END %]

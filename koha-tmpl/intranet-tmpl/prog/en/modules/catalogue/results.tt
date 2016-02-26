@@ -440,7 +440,7 @@ var holdForPatron = function () {
                     <th>Count</th>
                 </tr>
                 [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
-                    [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
+                    <tr>
                         <td>
                             <a href="/cgi-bin/koha/catalogue/search.pl?idx=[% SEARCH_RESULT.scan_index_to_use %]&amp;q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title %]&quot;">[% SEARCH_RESULT.title |html %]</a>
                         </td>
@@ -474,7 +474,7 @@ var holdForPatron = function () {
                         <!-- Actual Search Results -->
                         [% SET MaxSearchResultsItemsPerRecordStatusCheck = Koha.Preference('MaxSearchResultsItemsPerRecordStatusCheck') %]
                         [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
-                         [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
+                            <tr>
                             [% IF ( AmazonCoverImages || LocalCoverImages ) %]
                                 <td>
                                     [% IF ( LocalCoverImages) %]

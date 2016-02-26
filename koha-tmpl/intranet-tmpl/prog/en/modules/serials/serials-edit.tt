@@ -116,11 +116,7 @@ $(document).ready(function() {
 		<th>Notes</th>
 	</tr>
 [% FOREACH serialslis IN serialslist %]
-    [% UNLESS ( loop.odd ) %]
-    <tr class="highlight">
-    [% ELSE %]
     <tr>
-    [% END %]
         <td>
             <input type="hidden" name="serialid" value="[% serialslis.serialid %]" />
             <input type="hidden" name="biblionumber" value="[% serialslis.biblionumber %]" />

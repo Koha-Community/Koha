@@ -285,11 +285,7 @@ function CheckRuleForm(f) {
     <th>Actions</th>
   </tr>
   [% FOREACH class_sort_rule IN class_sort_rules %]
-  [% IF ( loop.odd ) %]
   <tr>
-  [% ELSE %]
-  <tr class="highlight">
-  [% END %]
     <td>[% class_sort_rule.rule %]</td>
     <td>[% class_sort_rule.description %]</td>
     <td>[% class_sort_rule.sort_routine %]</td>

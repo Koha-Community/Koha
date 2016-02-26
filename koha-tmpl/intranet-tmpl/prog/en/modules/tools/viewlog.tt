@@ -171,7 +171,7 @@
                             </thead>
                             <tbody>
                             [% FOREACH loopro IN looprow %]
-                                [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+                                <tr>
                                     <td>[% loopro.timestamp %]</td>
                                     <td>
                                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.user %]" title="display detail for this librarian."> [% IF ( loopro.userfirstname ) || ( loopro.usersurname ) %][% loopro.userfirstname %] [% loopro.usersurname %] ([% loopro.user %]) [% ELSE %][% loopro.user %][% END %]</a>

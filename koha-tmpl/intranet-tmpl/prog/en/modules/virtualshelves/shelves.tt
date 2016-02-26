@@ -435,11 +435,7 @@ function placeHold () {
                  </th>
             </tr>
         [% FOREACH itemsloo IN itemsloop %]
-            [% UNLESS ( loop.odd ) %]
-                <tr class="highlight">
-            [% ELSE %]
                 <tr>
-            [% END %]
             [% IF itemsloop %]
                 <td>
                     <input type="checkbox" class="selection" value="[% itemsloo.biblionumber %]" name="biblionumber" />

@@ -44,11 +44,7 @@
                 <th>TOTAL</th>
                 </tr>
                 [% FOREACH loopro IN mainloo.looprow %]
-                    [% IF ( loop.odd ) %]
                     <tr>
-                    [% ELSE %]
-                    <tr class="highlight">
-                    [% END %]
                         <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" |html %]</td>
                     [% FOREACH loopcel IN loopro.loopcell %]
 						<td>[% loopcel.value %]</td>
@@ -88,7 +84,7 @@
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                     </td>
                 </tr>
-                <tr class="highlight"> 
+            <tr>
                 <td><label for="PeriodTypeSel">Type:</label><select name="PeriodTypeSel" id="PeriodTypeSel">
                     <option value ="issue">Checkout</option>
                     <option value ="renew">Renewal</option>
@@ -142,7 +138,7 @@
                </select>
              </td> 
         </tr>
-        <tr class="highlight">
+        <tr>
             <td>Item type</td>
             <td><input type="radio" name="Line" value="itemtype" /></td>
             <td><input type="radio" name="Column" value="itemtype" /></td>
@@ -166,7 +162,7 @@
                </select>
              </td> 
         </tr>
-        <tr class="highlight">
+        <tr>
             <td>Collection</td>
             <td><input type="radio" name="Line"   value="items.ccode" /></td>
             <td><input type="radio" name="Column" value="items.ccode" /></td>
@@ -190,7 +186,7 @@
                </select>
             </td> 
         </tr>
-        <tr class="highlight">
+        <tr>
             <td>Item call number</td>
             <td></td>
             <td></td>
@@ -210,7 +206,7 @@
         </tr>
         [% END %]
         [% IF ( hassort2 ) %]
-        <tr class="highlight"><td>Patron sort 2</td>
+        <tr><td>Patron sort 2</td>
             <td><input type="radio" name="Line" value="borrowers.sort2" /></td>
             <td><input type="radio" name="Column" value="borrowers.sort2" /></td>
            	<td><select name="Filter" id="sort2">

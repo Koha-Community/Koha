@@ -683,7 +683,7 @@ function checkMultiHold() {
     [% IF SuspendHoldsIntranet %]<th>&nbsp;</th><!-- Suspend Holds Column Header -->[% END %]
       </tr>
   [% FOREACH reserveloo IN biblioloo.reserveloop %]
-  [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+        <tr>
         <td>
           <input type="hidden" name="reserve_id" value="[% reserveloo.reserve_id %]" />
           <input type="hidden" name="borrowernumber" value="[% reserveloo.borrowernumber %]" />

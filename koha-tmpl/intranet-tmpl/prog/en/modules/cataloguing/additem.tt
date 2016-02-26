@@ -157,9 +157,9 @@ function confirm_deletion() {
                 [% FOREACH item_loo IN item_loop %]
                     [% IF ( item_loo.itemnumber == itemnumber) %]
                         [% IF item_loo.nomod %]
-                           <tr id="row[% item_loo.itemnumber %]" class="active highlight">
+                           <tr id="row[% item_loo.itemnumber %]" class="active">
                         [% ELSE %]
-                            <tr id="row[% item_loo.itemnumber %]" class="active editable highlight">
+                            <tr id="row[% item_loo.itemnumber %]" class="active editable">
                         [% END %]
                     [% ELSE %]
                         [% IF item_loo.nomod %]

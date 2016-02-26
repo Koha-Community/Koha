@@ -26,7 +26,7 @@
 		<th>Subject headings</th>
 	</tr>
 [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
-	[% IF ( SEARCH_RESULT.even ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+    <tr>
 		<td>
 			<a href="/cgi-bin/koha/search.pl?type=[% IF ( SEARCH_RESULT.opac ) %]opac[% ELSE %]intra[% END %]&amp;subjectitems=[% SEARCH_RESULT.subject2 |html %]">[% SEARCH_RESULT.subject %]</a>
 		</td>

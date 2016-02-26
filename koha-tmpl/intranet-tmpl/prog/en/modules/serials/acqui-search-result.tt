@@ -27,11 +27,7 @@ function GetIt(aqbooksellerid,name)
 		<th>Select</th>
 	</tr>
 	[% FOREACH loop_supplier IN loop_suppliers %]
-        [% UNLESS ( loop.odd ) %]
-        <tr class="highlight">
-        [% ELSE %]
         <tr>
-        [% END %]
 			<td>[% loop_supplier.name %]</td>
 			<td><a href="#" onclick="GetIt([% loop_supplier.aqbooksellerid %],$(this).parent().prev().text())">Choose</a></td>
 		</tr>
