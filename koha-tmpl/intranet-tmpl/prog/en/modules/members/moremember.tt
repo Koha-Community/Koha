@@ -246,7 +246,11 @@ function validate1(date) {
     [% ELSIF guarantor %]
         <li>
             <span class="label">Guarantor:</span>
-            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber %]">[% guarantor.firstname %] [% guarantor.surname %]</a>
+            [% IF guarantor.borrowernumber %]
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber %]">[% guarantor.firstname %] [% guarantor.surname %]</a>
+            [% ELSE %]
+                [% guarantor.firstname %] [% guarantor.surname %]
+            [% END %]
         </li>
     [% END %]
 </ol>
