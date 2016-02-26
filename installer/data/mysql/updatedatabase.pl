@@ -11870,12 +11870,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.23.00.XXX";
+$DBversion = "3.23.00.030";
 if(CheckVersion($DBversion)) {
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
         VALUES ('OpacMaintenanceNotice','','','A user-defined block of HTML to appear on screen when OpacMaintenace is enabled','Textarea')
     });
+
     print "Upgrade to $DBversion done (Bug 15311: Let libraries set text to display when OpacMaintenance = on)\n";
     SetVersion($DBversion);
 }
