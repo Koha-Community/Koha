@@ -11855,6 +11855,21 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.029";
+if ( CheckVersion($DBversion) ) {
+
+    # move marc21_field_003.pl 040c and 040d to marc21_orgcode.pl
+    $dbh->do(q{
+        update marc_subfield_structure set value_builder='marc21_orgcode.pl' where value_builder IN ( 'marc21_field_003.pl', 'marc21_field_040c.pl', 'marc21_field_040d.pl' );
+    });
+    $dbh->do(q{
+        update auth_subfield_structure set value_builder='marc21_orgcode.pl' where value_builder IN ( 'marc21_field_003.pl', 'marc21_field_040c.pl', 'marc21_field_040d.pl' );
+    });
+
+    print "Upgrade to $DBversion done (Bug 14199 - Unify all organization code plugins)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
