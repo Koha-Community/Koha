@@ -446,7 +446,11 @@
                 </tfoot>
                 <tbody>
                 [% FOREACH books_loo IN books_loop %]
-                    [% IF ( books_loo.order_received ) %]<tr class="disabled">[% ELSE %][% IF ( books_loo.toggle ) %]<tr class="highlight">[% ELSE %]<tr>[% END %][% END %]
+                    [% IF ( books_loo.order_received ) %]
+                        <tr class="disabled">
+                    [% ELSE %]
+                        <tr>
+                    [% END %]
                         <td>
                             [% books_loo.ordernumber %]
                         </td>

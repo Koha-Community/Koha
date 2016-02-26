@@ -74,11 +74,7 @@ function searchauthority() {
     [% END %]
     </tr>
 [% FOREACH resul IN result %]
-    [% UNLESS ( loop.odd ) %]
-    <tr data-authid="[% resul.authid %]" class="highlight">
-    [% ELSE %]
     <tr data-authid="[% resul.authid %]">
-    [% END %]
       <td>[% PROCESS authresult summary=resul.summary %]</td>
       <td><a href="detail.pl?authid=[% resul.authid %]">Details</a></td>
   [% UNLESS ( resul.isEDITORS ) %]

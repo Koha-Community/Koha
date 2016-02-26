@@ -505,7 +505,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
     </thead>
         <tbody>
             [% FOREACH suggestions_loo IN suggestion.suggestions_loop %]
-            [% IF ( suggestions_loo.even ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+                <tr>
                 <td>
                     <input type="checkbox" name="edit_field" value="[% suggestions_loo.suggestionid %]" />
                 </td>

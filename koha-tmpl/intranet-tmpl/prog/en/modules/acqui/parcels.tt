@@ -98,11 +98,7 @@
     <tbody>
     <!-- Actual Search Results -->
     [% FOREACH searchresult IN searchresults %]
-        [% UNLESS ( loop.odd ) %]
-        <tr class="highlight">
-        [% ELSE %]
         <tr>
-        [% END %]
             <td>
                 [% searchresult.number %]
             </td>

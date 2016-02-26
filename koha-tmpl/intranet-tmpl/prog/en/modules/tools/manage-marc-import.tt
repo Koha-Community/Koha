@@ -10,9 +10,9 @@
         <tr>
             <td />
             [% IF ( record.record_type == 'biblio' ) %]
-                <td class="highlight" colspan="5">Matches biblio [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record_lis.match_id %]">[% record_lis.match_citation %]</a></td>
+                <td colspan="5">Matches biblio [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record_lis.match_id %]">[% record_lis.match_citation %]</a></td>
             [% ELSIF ( record.record_type == 'auth' ) %]
-                <td class="highlight" colspan="5">Matches authority [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record_lis.match_id %]">[% record_lis.match_citation %]</a> |
+                <td colspan="5">Matches authority [% record_lis.match_id %] (score = [% record_lis.match_score %]): <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% record_lis.match_id %]">[% record_lis.match_citation %]</a> |
         <a href="/cgi-bin/koha/authorities/merge.pl?mergereference=breeding&authid=[% record_lis.match_id %]&authid=[% record_lis.import_record_id %]">Merge</a>
                 </td>
             [% END %]
@@ -20,7 +20,7 @@
     [% ELSIF ( record.record_type == 'auth') %]
         <tr data-authid="[% record_lis.import_record_id %]">
             <td />
-            <td class="highlight" colspan="4"><a href="#" class="merge_auth">Search for a record to merge in a new window</a></td>
+            <td  colspan="4"><a href="#" class="merge_auth">Search for a record to merge in a new window</a></td>
         </tr>
     [% END %]
 [% END %]
@@ -423,7 +423,7 @@ Page
     <th>Action</th>
   </tr>
   [% FOREACH batch_lis IN batch_list %]
-  [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+    <tr>
     <td>[% batch_lis.import_batch_id %]</td>
     <td><a href="[% batch_lis.script_name %]?import_batch_id=[% batch_lis.import_batch_id %]">[% batch_lis.file_name %]</a></td>
     <td>[% batch_lis.comments %]</td>

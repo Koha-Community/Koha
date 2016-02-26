@@ -369,7 +369,7 @@ function delete_contact(ev) {
                   </thead>
                   <tbody>
                     [% FOREACH contract IN contracts %]
-                        [% IF ( loop.even ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+                        <tr>
                         <td>
                             <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]">[% contract.contractname %]</a>
                         </td>

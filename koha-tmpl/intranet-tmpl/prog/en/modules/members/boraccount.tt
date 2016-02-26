@@ -75,7 +75,7 @@ $(document).ready(function() {
 	<!-- FIXME: Shouldn't hardcode dollar signs, since Euro or Pound might be needed -->
   [% FOREACH account IN accounts %]
 
-   [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
+   <tr>
    <td><span title="[% account.date %]">[% account.date |$KohaDates %]</span></td>
       <td>
         [% SWITCH account.accounttype %]

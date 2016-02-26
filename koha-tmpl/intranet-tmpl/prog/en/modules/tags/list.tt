@@ -47,11 +47,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         </tr></thead>
 
         [% FOREACH title IN titles %]
-            [% IF ( title.even ) %]
-                <tr class="highlight">
-            [% ELSE %]
-                <tr>
-            [% END %]
+            <tr>
             <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = title.biblionumber %][% title.title |html %][% FOREACH subtitl IN title.subtitle %] [% subtitl.subfield %][% END %]</a>
             [% title.author %]
             <p>[% IF ( title.publishercode ) %]- [% title.publishercode|html %]

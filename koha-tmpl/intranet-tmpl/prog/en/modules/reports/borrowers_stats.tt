@@ -40,8 +40,7 @@
 				<th>TOTAL</th>
 			</tr>
 				[% FOREACH loopro IN mainloo.looprow %]
-                    [% UNLESS ( loop.odd ) %]<tr class="highlight">
-                    [% ELSE %]<tr>[% END %]
+                    <tr>
 						<td>[% IF ( loopro.rowtitle_display ) %][% loopro.rowtitle_display %][% ELSE %][% loopro.rowtitle %][% END %]
 						</td>
 						[% FOREACH loopcel IN loopro.loopcell %]
@@ -74,7 +73,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="highlight">
+            <tr>
 			<td>Patron category</td>
 			<td><input type="radio" name="Line" value="categorycode" /></td>
 			<td><input type="radio" name="Column" value="categorycode" /></td>
@@ -91,7 +90,7 @@
 			<td colspan="2"></td>
 			<td ><select name="status"><option value=""> </option><option value="debarred">restricted</option><option value="gonenoadress">gone no address</option><option value="lost">lost</option></select></td>
 			</tr>
-			<tr class="highlight">
+            <tr>
 			<td>Patron activity</td>
 			<td colspan="2"><select name="period" id="period">
 			<option value="1">1</option>
@@ -134,7 +133,7 @@
 			<td>&nbsp;</td>
 			</tr>
 
-			<tr class="highlight">
+            <tr>
 			<td>Library</td>
 			<td><input type="radio" name="Line"   value="branchcode" /></td>
 			<td><input type="radio" name="Column" value="branchcode" /></td>
@@ -168,7 +167,7 @@
                 </td>
             </tr>
 			[% IF ( SORT1_LOOP ) %]
-				<tr class="highlight">
+                <tr>
 				<td>Sort1</td>
 				<td><input type="radio" name="Line" value="sort1" /></td>
 				<td><input type="radio" name="Column" value="sort1" /></td>
@@ -185,8 +184,7 @@
                 <input type="hidden" name="Filter" />
 			[% END %]
 			[% IF ( SORT2_LOOP ) %]
-                [% UNLESS ( SORT1_LOOP ) %]<tr class="highlight">
-                [% ELSE %]<tr>[% END %]
+                <tr>
 				<td>Sort2</td>
 				<td><input type="radio" name="Line" value="sort2" /></td>
 				<td><input type="radio" name="Column" value="sort2" /></td>
