@@ -11845,6 +11845,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.028";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) SELECT 'PatronSelfModificationBorrowerUnwantedField',value,NULL,'Name the fields you don\'t want to display when a patron is editing their information via the OPAC.','free' FROM systempreferences WHERE variable = 'PatronSelfRegistrationBorrowerUnwantedField';
+    });
+
+    print "Upgrade to $DBversion done (Bug 14658 - Split PatronSelfRegistrationBorrowerUnwantedField into two preferences for creating and editing)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
