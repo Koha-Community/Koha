@@ -1,0 +1,2 @@
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('IntranetReportsHomeHTML', '', 'Show the following HTML in a div on the bottom of the reports home page', NULL, 'Free');
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('IntranetCirculationHomeHTML', '', 'Show the following HTML in a div on the bottom of the reports home page', NULL, 'Free');

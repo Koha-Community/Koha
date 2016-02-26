@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -69,6 +70,10 @@
 	</ul></div>
 </div>
 
+
 </div>
+    <div class="yui-g" id="intranet-reports-home-html">
+        [% Koha.Preference('IntranetReportsHomeHTML') %]
+    </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
