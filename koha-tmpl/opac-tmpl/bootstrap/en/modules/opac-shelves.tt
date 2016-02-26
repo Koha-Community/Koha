@@ -301,7 +301,7 @@
 
                                                             [% IF ( OPACAmazonCoverImages ) %]
                                                                 [% IF ( itemsloo.normalized_isbn ) %]
-                                                                    <span title="[% SEARCH_RESULT.biblionumber %]" id="amazon-thumbnail[% loop.count %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% itemsloo.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" /></span>
+                                                                    <span title="[% itemsloo.biblionumber %]" id="amazon-thumbnail[% loop.count %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% itemsloo.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" /></span>
                                                                 [% ELSE %]
                                                                     <span class="no-image">No cover image available</span>
                                                                 [% END %]
@@ -309,9 +309,9 @@
 
                                                             [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
                                                                 [% IF ( using_https ) %]
-                                                                    <span title="[% SEARCH_RESULT.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" /></span>
+                                                                    <span title="[% itemsloo.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" /></span>
                                                                 [% ELSE %]
-                                                                    <span title="[% SEARCH_RESULT.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="http://www.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" /></span>
+                                                                    <span title="[% itemsloo.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="http://www.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" /></span>
                                                                 [% END %]
                                                             [% END %]
 
@@ -322,6 +322,16 @@
                                                                     <span class="no-image">No cover image available</span>
                                                                 [% END %]
                                                             [% END %]
+
+                                                            [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
+                                                                [% coce_id = itemsloo.normalized_ean || itemsloo.normalized_isbn %]
+                                                                [% IF ( coce_id ) %]
+                                                                    <span title="[% itemsloo.biblionumber |url %]" class="[% coce_id %]" id="coce-thumbnail[% loop.count %]"></span>
+                                                                [% ELSE %]
+                                                                    <span class="no-image">No cover image available</span>
+                                                                [% END %]
+                                                            [% END %]
+
 
                                                             [% IF OpenLibraryCovers %]
                                                                 [% IF itemsloo.normalized_isbn %]
@@ -928,6 +938,10 @@ $(function() {
     [% IF OpenLibraryCovers %]KOHA.OpenLibrary.GetCoverFromIsbn();[% END %]
     [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
     [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
+    [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
+        KOHA.coce.getURL('[% Koha.Preference('CoceHost') %]', '[% Koha.Preference('CoceProviders') %]');
+    [% END %]
+
     $('#sort-submit').hide();
 
     [% IF print %]
