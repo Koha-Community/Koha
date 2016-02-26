@@ -32,6 +32,7 @@ use C4::Biblio;
 use C4::Circulation;
 use C4::Reserves;
 use Koha::XSLT_Handler;
+use Koha::Libraries;
 
 use Encode;
 
@@ -212,6 +213,12 @@ sub XSLTParse4Display {
         next unless defined($sp);
         $sysxml .= "<syspref name=\"$syspref\">$sp</syspref>\n";
     }
+
+    # singleBranchMode was a system preference, but no longer is
+    # we can retain it here for compatibility
+    my $singleBranchMode = Koha::Libraries->search->count == 1;
+    $sysxml .= "<syspref name=\"singleBranchMode\">$singleBranchMode</syspref>\n";
+
     $sysxml .= "</sysprefs>\n";
     $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml\<\/record\>/;
     if ($fixamps) { # We need to correct the HTML entities that Zebra outputs
