@@ -1,28 +1,24 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Patron lists &rsaquo; New list</title>
+<title>Koha &rsaquo; Tools &rsaquo; Patron lists &rsaquo;
+    [% IF list.patron_list_id %]
+        Modify patron list
+    [% ELSE %]
+        New patron list
+    [% END %]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-
-function CheckForm() {
-  if ( !$("#list-name").val() ) {
-    alert( _("Name is a required field!")  );
-    return false;
-  }
-
-  return true;
-}
-
-//]]>
-</script>
-
 </head>
 
 <body id="patlist_add_modify" class="pat patlist">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="lists.pl">Patron lists</a> &rsaquo; Add / modify list</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="lists.pl">Patron lists</a> &rsaquo;
+    [% IF list.patron_list_id %]
+        Modify patron list
+    [% ELSE %]
+        New patron list
+    [% END %]
+</div>
 
 
 <div class="yui-t7">
@@ -35,7 +31,7 @@ function CheckForm() {
             [% END %]
         </h1>
 
-        <form method="post" onsubmit="return CheckForm()">
+        <form method="post" action="/cgi-bin/koha/patron_lists/add-modify.pl" class="validated">
             <fieldset class="rows">
 
                 <legend>
@@ -48,8 +44,8 @@ function CheckForm() {
 
                 <ol>
                     <li>
-                        <label class="required" for="name">Name:</label>
-                        <input id="list-name" name="name" type="text" value="[% list.name %]" />
+                        <label class="required" for="list-name">Name:</label>
+                        <input id="list-name" name="name" type="text" class="required" required="required" value="[% list.name %]" />
                     </li>
 
                     <li>
@@ -59,10 +55,12 @@ function CheckForm() {
 
             </fieldset>
 
-            <input type="hidden" name="patron_list_id" value="[% list.patron_list_id %]" />
-            <input type="submit" class="btn" value="Save" />
-            <a href="lists.pl" class="cancel">Cancel</a>
+            <fieldset class="action">
+                <input type="hidden" name="patron_list_id" value="[% list.patron_list_id %]" />
+                <input type="submit" value="Save" />
+                <a href="lists.pl" class="cancel">Cancel</a>
+            </fieldset>
         </form>
     </div>
-</div>
+
 [% INCLUDE 'intranet-bottom.inc' %]

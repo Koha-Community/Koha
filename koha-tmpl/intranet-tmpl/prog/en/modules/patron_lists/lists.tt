@@ -32,11 +32,16 @@
 
 <div class="yui-t7">
     <div class="yui-main">
+
+        <div id="toolbar" class="btn-toolbar">
+            <div class="btn-group">
+                <a class="btn btn-small" href="add-modify.pl"><i class="fa fa-plus"></i> New patron list</a>
+            </div>
+        </div>
+
         <h1>Your patron lists</h1>
 
-        <div class="btn-group">
-            <a class="btn btn-small" href="add-modify.pl"><i class="fa fa-plus"></i> New patron list</a>
-        </div>
+        [% IF ( lists ) %]
 
         <table id="patron-lists-table">
             <thead>
@@ -73,6 +78,9 @@
                 [% END %]
             </tbody>
         </table>
+
+        [% END %]
+
     </div>
-</div>
+
 [% INCLUDE 'intranet-bottom.inc' %]
