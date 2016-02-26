@@ -28,7 +28,7 @@
             <div class="span12">
                 <div id="opac-maintenance-message">
                     [% IF Koha.Preference( 'OpacMaintenanceNotice' ) %]
-                        [% Koha.Preference( 'OpacMaintenanceNotice' ).raw %]
+                        [% Koha.Preference( 'OpacMaintenanceNotice' ) %]
                     [% ELSE %]
                         <h2>System Maintenance</h2>
                           <p>The [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog is offline for system maintenance. We'll be back soon! If you have any questions, please contact the <a href="mailto:[% KohaAdminEmailAddress %]">site administrator</a></p>
