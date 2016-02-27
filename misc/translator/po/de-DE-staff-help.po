@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: German Koha Translation\n"
-"POT-Creation-Date: 2016-01-18 18:14-0300\n"
-"PO-Revision-Date: 2016-01-26 14:24+0000\n"
-"Last-Translator: Katrin <katrin.fischer@bsz-bw.de>\n"
+"POT-Creation-Date: 2016-02-14 14:12-0300\n"
+"PO-Revision-Date: 2016-02-19 11:18+0000\n"
+"Last-Translator: Marc <veron@veron.ch>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1453818298.000000\n"
+"X-POOTLE-MTIME: 1455880726.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -966,6 +966,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "(online)."
 msgstr "(online)."
@@ -2997,6 +2998,11 @@ msgstr ""
 "Benutzerdatensätzen nur Werte aus der Liste der normierten Werte ausgewählt "
 "werden. "
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid "AutomaticItemReturn"
+msgstr "AutomaticItemReturn"
+
 #: intranet-tmpl/prog/en/modules/help/reports/issues_avg_stats.tt:3
 #, c-format
 msgid "Average loan time"
@@ -3228,10 +3234,10 @@ msgid ""
 "clicking that will open up the item's history which will look slightly "
 "different from the bibliographic record's history page."
 msgstr ""
-"Unter der Rubrik 'Ausleihhistorie' befindet sich ein Link zu "
-"'Ausleihhistorie des Exemplars anzeigen'. Wenn Sie diesen anklicken, werden "
-"die Ausleihhistorie des Exemplars geöffnet. Diese sieht etwas anders aus, "
-"als die titelbezogene Ausleihhistorie."
+"Unter der Rubrik 'Ausleihverlauf' befindet sich ein Link zu 'Ausleihverlauf "
+"des Exemplars anzeigen'. Wenn Sie diesen anklicken, wird der Ausleihverlauf "
+"des Exemplars geöffnet. Dieser sieht etwas anders aus, als der titelbezogene "
+"Ausleihverlauf."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:29
 #, c-format
@@ -3546,6 +3552,14 @@ msgstr "Katalogisierung:"
 msgid "Change Patron Password"
 msgstr "Benutzerpasswort ändern"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:21
+#, c-format
+msgid ""
+"Change the current location of the items in that collection to the library "
+"it is to be transferred to"
+msgstr ""
+"Aktuellen Standort der Exemplare auf Zielbibliothek des Transfers setzen"
+
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:7
 #, c-format
 msgid "Charging Fines/Fees"
@@ -3805,7 +3819,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:3
 #, c-format
 msgid "Checkout History"
-msgstr "Ausleihhistorie"
+msgstr "Ausleihverlauf"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:124
 #, c-format
@@ -4238,7 +4252,7 @@ msgstr "Ausleihe"
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:34
 #, c-format
 msgid "Circulation History"
-msgstr "Ausleihhistorie"
+msgstr "Ausleihverlauf"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:145
 #, c-format
@@ -5333,8 +5347,8 @@ msgid ""
 "Delete old borrowers and anonymize circulation/reading history (deletes "
 "borrower reading history)"
 msgstr ""
-"Inaktive Benutzer löschen und Ausleih- und Lesehistorien anonymisieren "
-"(löscht Benutzerausleihhistorie)"
+"Inaktive Benutzer löschen und Ausleih- und Leseverlauf anonymisieren (löscht "
+"Benutzer-Ausleihverlauf)"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:523
 #, c-format
@@ -5549,9 +5563,9 @@ msgid ""
 "own circulation history page. To see this, click on the 'Items' tab to the "
 "left of the record you are viewing."
 msgstr ""
-"Jeder bibliographische Datensatz verfügt über eine Ausleihhistorie (mit oder "
+"Jeder bibliographische Datensatz verfügt über einen Ausleihverlauf (mit oder "
 "ohne Benutzerinformationen, abhängig von Ihren Einstellungen), zusätzlich "
-"hat jedes Exemplar seine eigene Seite zur Ausleihhistorie. Um diese "
+"hat jedes Exemplar seine eigene Seite zum Ausleihverlauf. Um diese "
 "anzuzeigen, klicken Sie auf auf den Reiter 'Exemplare' links neben dem "
 "Datensatz, den sie gerade ansehen."
 
@@ -7099,6 +7113,17 @@ msgstr ""
 "möchten. Wenn Sie mehr oder weniger als zwei Datensätze auswählen, erhalten "
 "Sie eine Fehlermeldung."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:27
+#, c-format
+msgid ""
+"From the main Rotating Collections page, click on Transfer next to the title "
+"of the collection you wish to transfer; choose the library you wish to "
+"transfer the collection to and click \"Transfer collection\"."
+msgstr ""
+"Auf der Seite \"Rotationsbestände\" klicken Sie auf \"Transfer\" neben dem "
+"entsprechenden Titel, wählen Sie die Zielbibliothek und klicken Sie auf \""
+"Sammlung verlagern\"."
+
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:13
 #, c-format
 msgid ""
@@ -7840,6 +7865,19 @@ msgid "If a record you want to delete can't be deleted it will be highlighted."
 msgstr ""
 "Wenn ein Datensatz, den Sie löschen möchten, nicht gelöscht werden kann, "
 "wird er hervorgehoben."
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:33
+#, c-format
+msgid ""
+"If an item in a rotating collection is checked in at a library other than "
+"the one it is supposed to be transferred to, a notification will appear "
+"notifying library staff that the item is part of a rotating collection, also "
+"letting them know where the item needs to be sent."
+msgstr ""
+"Wenn ein Exemplar bei einer anderen Bibliothek als dem aktuellen Standort "
+"der Sammlung zurückgegeben wird, erscheint ein entsprechender Hinweis mit "
+"der Aufforderung, das Exemplar an die aktuelle Standortbibliothek der "
+"Sammlung zu senden."
 
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:11
 #, c-format
@@ -9946,6 +9984,12 @@ msgstr ""
 "Wichtig: Meinten Sie? ist aktuell nur im OPAC verfügbar. Die Intranet-"
 "Optionen sind für zukünftige Entwicklungen aber bereits angelegt."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, c-format
+msgid "Important:"
+msgstr "Wichtig:"
+
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:108
 #, c-format
 msgid ""
@@ -10628,6 +10672,18 @@ msgstr ""
 "Um Reklamationen für vermisste oder verspätete Hefte zu erzeugen, müssen Sie "
 "Lieferanten erfassen."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, c-format
+msgid ""
+"In order to complete the transfer process, the library receiving the "
+"rotating collection should check in all items from the collection as they "
+"receive them. This will clear the transfer so that the items are no longer "
+"shown as being \"in transit\"."
+msgstr ""
+"Um den Transfer abzuschliessen, muss die Zielbibliothek beim Empfang der "
+"Sammlung für alle Exemplare eine \"Rückgabe\" ausführen. Dies wird den "
+"Status \"Unterwegs\" zurücksetzen."
+
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:24
 #, c-format
 msgid ""
@@ -10888,6 +10944,18 @@ msgstr ""
 "Datum ablaufen. Von hier können Sie dann mit einem Klick entscheiden, ob das "
 "Abonnement verlänegert werden soll."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:22
+#, c-format
+msgid ""
+"Initiate a transfer from its original current location/holding library to "
+"the current location/holding library it is to be rotated to. When a library "
+"receives a collection they will need to check in the items to complete the "
+"transfer."
+msgstr ""
+"Einen Transfer von der Standort- zur Zielbibliothek auslösen. Wenn eine "
+"Bibliothek eine Sammlung empfängt muss sie für alle Exemplare eine \""
+"Rückgabe\" ausführen um den Transfer abzuschliessen."
+
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:3
 #, c-format
 msgid "Inventory/Stocktaking"
@@ -10993,7 +11061,7 @@ msgstr "Exemplarsuche"
 #: intranet-tmpl/prog/en/modules/help/catalogue/moredetail.tt:15
 #, c-format
 msgid "Item Specific Circulation History"
-msgstr "Exemplarbezogene Ausleihhistorie"
+msgstr "Exemplarbezogener Ausleihverlauf"
 
 #: intranet-tmpl/prog/en/modules/help/admin/itemtypes.tt:3
 #, c-format
@@ -13450,6 +13518,17 @@ msgstr ""
 msgid "Or you can just have no image associated with the item type"
 msgstr "Sie können auch keine Grafik mit dem Medientyp verknüpfen"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:28
+#, c-format
+msgid ""
+"Or, from the \"add or remove items\" page for a collection, you can click "
+"the Transfer button, choose the library you wish to transfer the collection "
+"to and click \"Transfer Collection\"."
+msgstr ""
+"Sie können auch auf der Seite \"Exemplar(e) hinzufügen/löschen\" die "
+"Schaltfläche \"Transfer\" benutzen, die Zielbibliothek auswählen und auf \""
+"Sammlung verlagern\" klicken."
+
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersuggestion.tt:3
 #, c-format
 msgid "Order from Purchase Suggestion"
@@ -13652,7 +13731,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/readingrec.tt:3
 #, c-format
 msgid "Patron circulation history"
-msgstr "Benutzerausleihhistorie"
+msgstr "Benutzer-Ausleihverlauf"
 
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:3
 #, c-format
@@ -14352,6 +14431,32 @@ msgstr ""
 "dass die Abgleichregel korrekt gearbeitet hat und die Datensätze so "
 "importiert werden, wie Sie dies möchten"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:3
+#, c-format
+msgid "Rotating Collections"
+msgstr "Rotationsbestände"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:5
+#, c-format
+msgid ""
+"Rotating Collections is a tool for managing collections of materials that "
+"frequently get shifted from library to library. It adds the ability to store "
+"not only an item's home library and current location, but also information "
+"about where it is supposed to be transferred to next to ensure that all "
+"items in the collection are sent to the correct library. When an item in a "
+"rotating collection is checked in, library staff are notified that the item "
+"is part of a rotating collection and which branch it should be sent to if it "
+"is not at the correct one."
+msgstr ""
+"Mit \"Rotationsbestände\" können Sammlungen verwaltet werden, die oft "
+"zwischen Bibliotheken ausgetauscht werden. Nicht nur die Heimatbibliothek "
+"und die Standortbibliothek einer Sammlung werden verwaltet, sondern auch "
+"Informationen über einen auszuführenden Transfer. Damit wird sichergestellt, "
+"dass alle Exemplare zur Zielbibliothek gelangen. Wenn ein zu einer "
+"entsprechenden Sammlung gehörendes Exemplar zurückgegeben wird, erscheint "
+"eine Mitteilung mit der Aufforderung, dieses an den neuen Standort der "
+"Sammlung zu senden."
+
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:347
 #, c-format
 msgid "Routing"
@@ -14651,7 +14756,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/readingrec.tt:11
 #, c-format
 msgid "See the full documentation for Circulation History in the "
-msgstr "Die vollständige Hilfe zur Ausleihhistorie finden Sie im "
+msgstr "Die vollständige Hilfe zum Ausleihverlauf finden Sie im "
 
 #: intranet-tmpl/prog/en/modules/help/reports/issues_stats.tt:22
 #, c-format
@@ -14786,7 +14891,7 @@ msgstr "Die vollständige Hilfe für Rechnungen finden Sie im "
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:9
 #, c-format
 msgid "See the full documentation for Item Checkout History in the "
-msgstr "Die vollständige Hilfe zur Exemplarausleihhistorie finden Sie im "
+msgstr "Die vollständige Hilfe zum Exemplar-Ausleihverlauf finden Sie im "
 
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #, c-format
@@ -15040,6 +15145,11 @@ msgstr "Die vollständige Hilfe für Verlängerungen finden Sie im "
 #, c-format
 msgid "See the full documentation for Reports in the "
 msgstr "Die vollständige Hilfe zu den Reports finden Sie im "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
+#, c-format
+msgid "See the full documentation for Rotating Collections in the "
+msgstr "Die vollständige Hilfe zu den Rotationsbeständen finden Sie im "
 
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #, c-format
@@ -16084,6 +16194,7 @@ msgstr "Text für Bibliothekare "
 
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:11
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:12
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
 #, c-format
 msgid "The "
 msgstr "Die "
@@ -16885,11 +16996,11 @@ msgid ""
 "the library cannot keep this information this tab will only show currently "
 "checked out items."
 msgstr ""
-"Der Reiter mit der Ausleihhistorie wird angezeigt, wenn Sie es in der "
-"Einstellung intranetreadinghistory erlaubt haben. Wenn Sie die "
-"Systemeinstellung OPACPrivacy auf 'Erlauben' gestellt haben und der Benutzer "
-"entschieden hat, dass die Bibliothek diese Information nicht speichern darf, "
-"zeigt dieser Reiter lediglich aktuell entliehene Medien an."
+"Der Reiter \"Ausleihverlauf\" wird angezeigt, wenn Sie es in der Einstellung "
+"intranetreadinghistory erlaubt haben. Wenn Sie die Systemeinstellung "
+"OPACPrivacy auf 'Erlauben' gestellt haben und der Benutzer entschieden hat, "
+"dass die Bibliothek diese Information nicht speichern darf, zeigt dieser "
+"Reiter lediglich aktuell entliehene Medien an."
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:11
 #, c-format
@@ -18526,10 +18637,10 @@ msgid ""
 "patrons who checked the items out) or bulk delete patrons (remove them from "
 "the system completely)."
 msgstr ""
-"Mit diesem Werkzeug können Sie Benutzerausleihhistorien anonymisieren (dies "
-"bedeutet, dass die Exemplarausleihhistorie erhalten bleibt, aber die "
-"Verknüpfung zum Benutzer gelöscht wird) oder Benutzerdaten löschen (komplett "
-"aus dem System entfernen)."
+"Mit diesem Werkzeug können Sie den Ausleihverlauf von Benutzern "
+"anonymisieren (dies bedeutet, dass der Exemplar-Ausleihverlauf erhalten "
+"bleibt, aber die Verknüpfung zum Benutzer gelöscht wird) oder Benutzerdaten "
+"löschen (komplett aus dem System entfernen)."
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:17
 #, c-format
@@ -19191,6 +19302,19 @@ msgstr ""
 "durch \"Aktuelles Template kopieren\" ein bestehendes Template als "
 "Ausgangspunkt nehmen."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:11
+#, c-format
+msgid ""
+"To add items to a collection, click \"Add or remove items\" next to the "
+"collection's name in the list of collections. Under \"Add or remove items\" "
+"scan or type in the barcode of the item you wish to add to the collection, "
+"and hit Enter or click Submit if necessary."
+msgstr ""
+"Um Exemplare einer Sammlung hinzuzufügen, klicken Sie beim Namen der "
+"Sammlung auf \"Exemplar hinzufügen/löschen\". Auf der Folgeseite können Sie "
+"die Barcodes der Sammlung scannen bzw. eintippen und wenn notwendig mit der "
+"Eingabetaste oder der Schaltfläche \"Bestätigen\" speichern."
+
 #: intranet-tmpl/prog/en/modules/help/tools/koha-news.tt:7
 #, c-format
 msgid ""
@@ -19321,6 +19445,20 @@ msgstr "Über 'Neue Benutzerliste' können Sie eine neue Benutzerliste anlegen"
 #, c-format
 msgid "To create a new matching rule:"
 msgstr "Um eine neue Abgleichregel anzulegen:"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:10
+#, c-format
+msgid ""
+"To create a new rotating collection, click the \"New Collection\" button, "
+"fill in the Title and Description, and click Submit. Once submitted you'll "
+"see \"Collection Name added successfully\"; click \"Return to rotating "
+"collections home\" to return to the main Rotating Collections management "
+"page (or click Rotating Collections in the sidebar)."
+msgstr ""
+"Um eine neue Sammlung zu erstellen, klicken Sie auf die Schaltfläche \"Neue "
+"Sammlung\", erfassen Titel und Beschreibung und klicken auf \"Bestätigen\". "
+"Sie erhalten eine Erfolgsmeldung, von der aus Sie wieder zur Verwaltung der "
+"Rotationsbestände gelangen."
 
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:15
 #, c-format
@@ -19825,6 +19963,26 @@ msgstr ""
 "Um ein Tag von einem Titel zu entfernen, verwenden Sie die Schaltfläche 'Tag "
 "löschen' rechts neben dem Titel."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:12
+#, c-format
+msgid ""
+"To remove an item from a collection, either click Remove next to the item's "
+"barcode in the list of items within the collection or check the \"Remove "
+"item from collection\" box next to the Barcode text box under \"Add or "
+"remove items\", and scan or type in the barcode, clicking Submit or hitting "
+"Enter if necessary. Note: The \"Remove item from collection\" checkbox will "
+"remain checked as long as you are on the \"Add or remove items\" page, "
+"unless you uncheck it, to facilitate quickly removing a number of items at a "
+"time by scanning their barcodes."
+msgstr ""
+"Um ein Exemplar aus einer Sammlung zu löschen, können Sie entweder in der "
+"Liste den Link \"Entfernen\" anklicken oder neben der Barcode-Eingabe ein "
+"Häckchen bei \"Exemplar aus der Sammlung entfernen\" setzen und den Barcodes "
+"scannen bzw. eintippen und wenn notwendig mit der Eingabetaste oder der "
+"entsprechenden Schaltfläche bestätigen. Hinweis: Für die effiziente "
+"Entfernung von mehreren Exemplaren bleibt das Häckchen gesetzt so lange Sie "
+"sich auf dieser Seite befinden."
+
 #: intranet-tmpl/prog/en/modules/help/circ/renew.tt:7
 #, c-format
 msgid ""
@@ -20087,6 +20245,11 @@ msgstr ""
 "den Werkzeugen, werden in anderen Bibliothekssystemen bei Reports "
 "aufgelistet."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:17
+#, c-format
+msgid "Transfer a Rotating Collection"
+msgstr "Eine Sammlung transferieren"
+
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:11
 #, c-format
 msgid ""
@@ -20096,6 +20259,11 @@ msgstr ""
 "Transportregeln werden auf Grund der Sammlungscodes oder Medientypcodes "
 "festgelegt, die Sie in der Adminstrationsseite für Normwerte angewendet "
 "haben."
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:19
+#, c-format
+msgid "Transferring a collection will:"
+msgstr "Der Transfer einer Sammlung löst Folgendes aus:"
 
 #: intranet-tmpl/prog/en/modules/help/circ/branchtransfers.tt:3
 #, c-format
@@ -21684,6 +21852,11 @@ msgstr ""
 msgid "You can set up record matching rules through the administration area "
 msgstr "Sie können Abgleichregeln im Bereich Administration konfigurieren"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:25
+#, c-format
+msgid "You can transfer a collection in one of two ways:"
+msgstr "Es gibt zwei Methoden um Sammlungen zu transferieren:"
+
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:13
 #, c-format
 msgid "You can upload a file of these numbers or"
@@ -23222,6 +23395,7 @@ msgstr "Verwaltung "
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "manual"
 msgstr "Handbuch"
@@ -23475,6 +23649,17 @@ msgstr "Superlibrarian "
 #, c-format
 msgid "superserials "
 msgstr "superserials "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid ""
+"system preference must be set to \"Don't automatically transfer items to "
+"their home library when they are returned\" for Rotating Collections to "
+"function properly."
+msgstr ""
+" Systemeinstellung für ein korrektes Funktionieren: \"Kein automatischer "
+"Rücktransport von Exemplaren in ihre Heimatbibliothek, die in einer anderen "
+"Bibliothek zurückgegeben werden.\""
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:96
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:42

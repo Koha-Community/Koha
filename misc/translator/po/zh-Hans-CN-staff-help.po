@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
-"POT-Creation-Date: 2016-01-18 19:02-0300\n"
+"POT-Creation-Date: 2016-02-14 17:25-0300\n"
 "PO-Revision-Date: 2015-11-26 22:40+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -850,6 +850,7 @@ msgstr "( ! 表示 '不可见' 或在折叠时为 '不可收叠')"
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "(online)."
 msgstr "(联机)。"
@@ -2646,6 +2647,11 @@ msgid ""
 msgstr ""
 "容许值范围；选择其中之一，读者纪录键入页面将允许从容许值清单中选择一个值。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid "AutomaticItemReturn"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/reports/issues_avg_stats.tt:3
 #, c-format
 msgid "Average loan time"
@@ -3120,6 +3126,13 @@ msgstr "编目"
 #, c-format
 msgid "Change Patron Password"
 msgstr "更改读者口令"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:21
+#, c-format
+msgid ""
+"Change the current location of the items in that collection to the library "
+"it is to be transferred to"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:7
 #, c-format
@@ -6186,6 +6199,14 @@ msgid ""
 "than or fewer than 2, you will be presented with an error"
 msgstr "从虚拟书架里选择两个要合并的馆藏。若超过 2 个，则出现错误消息"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:27
+#, c-format
+msgid ""
+"From the main Rotating Collections page, click on Transfer next to the title "
+"of the collection you wish to transfer; choose the library you wish to "
+"transfer the collection to and click \"Transfer collection\"."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:13
 #, c-format
 msgid ""
@@ -6814,6 +6835,15 @@ msgstr ""
 #, c-format
 msgid "If a record you want to delete can't be deleted it will be highlighted."
 msgstr "将提示不能借出的馆藏。"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:33
+#, c-format
+msgid ""
+"If an item in a rotating collection is checked in at a library other than "
+"the one it is supposed to be transferred to, a notification will appear "
+"notifying library staff that the item is part of a rotating collection, also "
+"letting them know where the item needs to be sent."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:11
 #, c-format
@@ -8511,6 +8541,12 @@ msgid ""
 "options are here for future development."
 msgstr "你的意思是重要吗？当前祗有在 OPAC 的作品。内部网络选项为未来发展。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, fuzzy, c-format
+msgid "Important:"
+msgstr "重要 "
+
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:108
 #, c-format
 msgid ""
@@ -9075,6 +9111,15 @@ msgid ""
 "information"
 msgstr "需键入供应商信息，才能发出催缺信息"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, c-format
+msgid ""
+"In order to complete the transfer process, the library receiving the "
+"rotating collection should check in all items from the collection as they "
+"receive them. This will clear the transfer so that the items are no longer "
+"shown as being \"in transit\"."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:24
 #, c-format
 msgid ""
@@ -9287,6 +9332,15 @@ msgid ""
 msgstr ""
 "可从结果里看到所有在键入日期前将终止的订购。从此可选择查看订购详情或更新内"
 "容。"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:22
+#, c-format
+msgid ""
+"Initiate a transfer from its original current location/holding library to "
+"the current location/holding library it is to be rotated to. When a library "
+"receives a collection they will need to check in the items to complete the "
+"transfer."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:3
 #, c-format
@@ -11490,6 +11544,14 @@ msgstr "打开读者做为使用的基础(做为复制之用)"
 msgid "Or you can just have no image associated with the item type"
 msgstr "或您可没有图示连结至馆藏类型"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:28
+#, c-format
+msgid ""
+"Or, from the \"add or remove items\" page for a collection, you can click "
+"the Transfer button, choose the library you wish to transfer the collection "
+"to and click \"Transfer Collection\"."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersuggestion.tt:3
 #, c-format
 msgid "Order from Purchase Suggestion"
@@ -12326,6 +12388,24 @@ msgid ""
 "matching rule worked and that the records appear as you expect them to"
 msgstr "完成输入前，先审核您的摘要，确试匹配规则运作运利，如预期显示纪录"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:3
+#, fuzzy, c-format
+msgid "Rotating Collections"
+msgstr "期刊馆藏"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:5
+#, c-format
+msgid ""
+"Rotating Collections is a tool for managing collections of materials that "
+"frequently get shifted from library to library. It adds the ability to store "
+"not only an item's home library and current location, but also information "
+"about where it is supposed to be transferred to next to ensure that all "
+"items in the collection are sent to the correct library. When an item in a "
+"rotating collection is checked in, library staff are notified that the item "
+"is part of a rotating collection and which branch it should be sent to if it "
+"is not at the correct one."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:347
 #, c-format
 msgid "Routing"
@@ -12985,6 +13065,11 @@ msgstr "见续订的完整文件 "
 #, c-format
 msgid "See the full documentation for Reports in the "
 msgstr "见报表的完整文件 "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
+#, fuzzy, c-format
+msgid "See the full documentation for Rotating Collections in the "
+msgstr "见传阅清单的完整文件 "
 
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #, c-format
@@ -13926,6 +14011,7 @@ msgstr "给馆员的文字 "
 
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:11
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:12
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
 #, c-format
 msgid "The "
 msgstr "这个 "
@@ -16494,6 +16580,15 @@ msgid ""
 "with."
 msgstr "完全新增或按 '复制既有模板' 盒。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:11
+#, c-format
+msgid ""
+"To add items to a collection, click \"Add or remove items\" next to the "
+"collection's name in the list of collections. Under \"Add or remove items\" "
+"scan or type in the barcode of the item you wish to add to the collection, "
+"and hit Enter or click Submit if necessary."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/koha-news.tt:7
 #, c-format
 msgid ""
@@ -16602,6 +16697,16 @@ msgstr "点选 '新增读者清单' 钮，就能新增读者清单"
 #, c-format
 msgid "To create a new matching rule:"
 msgstr "新增匹配规则："
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:10
+#, c-format
+msgid ""
+"To create a new rotating collection, click the \"New Collection\" button, "
+"fill in the Title and Description, and click Submit. Once submitted you'll "
+"see \"Collection Name added successfully\"; click \"Return to rotating "
+"collections home\" to return to the main Rotating Collections management "
+"page (or click Rotating Collections in the sidebar)."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:15
 #, c-format
@@ -17009,6 +17114,19 @@ msgid ""
 "to the right of the title."
 msgstr "点选题名右方的 '删除标签' 钮，就能删除该题名的标签。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:12
+#, c-format
+msgid ""
+"To remove an item from a collection, either click Remove next to the item's "
+"barcode in the list of items within the collection or check the \"Remove "
+"item from collection\" box next to the Barcode text box under \"Add or "
+"remove items\", and scan or type in the barcode, clicking Submit or hitting "
+"Enter if necessary. Note: The \"Remove item from collection\" checkbox will "
+"remain checked as long as you are on the \"Add or remove items\" page, "
+"unless you uncheck it, to facilitate quickly removing a number of items at a "
+"time by scanning their barcodes."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/circ/renew.tt:7
 #, c-format
 msgid ""
@@ -17224,12 +17342,22 @@ msgstr ""
 "Koha 的工具都是执行特定工作之用。其它的图书馆管理系统常把这些工具当成 '报"
 "表'。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:17
+#, c-format
+msgid "Transfer a Rotating Collection"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:11
 #, c-format
 msgid ""
 "Transfer limits are set based on the collections codes you have applied via "
 "the Authorized Value administration area."
 msgstr "馆藏代码的转移限制根据管理块的容许值而定。"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:19
+#, c-format
+msgid "Transferring a collection will:"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/circ/branchtransfers.tt:3
 #, c-format
@@ -18555,6 +18683,11 @@ msgstr "在noissuescharge 系统首选里设置禁止借出的数量"
 #, c-format
 msgid "You can set up record matching rules through the administration area "
 msgstr "从管理块可设置纪录匹配规则 "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:25
+#, c-format
+msgid "You can transfer a collection in one of two ways:"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:13
 #, c-format
@@ -19964,6 +20097,7 @@ msgstr "管理 "
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "manual"
 msgstr "手册"
@@ -20209,6 +20343,14 @@ msgstr "超级图书馆员 "
 #, c-format
 msgid "superserials "
 msgstr "superserials "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid ""
+"system preference must be set to \"Don't automatically transfer items to "
+"their home library when they are returned\" for Rotating Collections to "
+"function properly."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:96
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:42

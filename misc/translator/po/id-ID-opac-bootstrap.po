@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-01-18 18:30-0300\n"
+"POT-Creation-Date: 2016-02-14 14:59-0300\n"
 "PO-Revision-Date: 2013-12-24 04:05+0000\n"
 "Last-Translator: Andi <andi@opensuse-id.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +50,7 @@ msgstr "%s %s %s%s%s%s %s %s%s %s "
 #. %7$s:  FOREACH subtitl IN itemsloo.subtitle 
 #. %8$s:  subtitl.subfield|html 
 #. %9$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:358
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:361
 #, fuzzy, c-format
 msgid "%s %s %s %s %s No title %s %s %s %s "
 msgstr "%s %s %s%s%sTidak ada judul%s %s %s%s "
@@ -94,7 +94,7 @@ msgstr "%s %s %s %s %s "
 #. %13$s:  END 
 #. %14$s:  ELSE 
 #. %15$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:399
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:402
 #, fuzzy, c-format
 msgid ""
 "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
@@ -231,6 +231,13 @@ msgstr "%s %s %s%s%sTidak ada judul%s %s %s%s "
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:126
 #, c-format
 msgid "%s %s (not approved) %s "
+msgstr ""
+
+#. %1$s:  END 
+#. %2$s:  IF debarred_date && debarred_date != '9999-12-31' 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:43
+#, c-format
+msgid "%s %s End date: "
 msgstr ""
 
 #. %1$s:  END 
@@ -473,7 +480,7 @@ msgstr ""
 #. %4$s:  END 
 #. %5$s:  ELSE 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:667
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:670
 #, fuzzy, c-format
 msgid "%s %sShared%sPrivate%s %s Public %s "
 msgstr "%sPrivasi%s %sPublik%s "
@@ -1009,7 +1016,7 @@ msgstr "%s Ekstraksi video"
 #. %12$s:  itemLoo.reservedate 
 #. %13$s:  END 
 #. %14$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:344
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
 #, fuzzy, c-format
 msgid ""
 "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
@@ -1157,7 +1164,7 @@ msgstr "%s biblios"
 #. For the first occurrence,
 #. %1$s:  IF ( review.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:371
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:374
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:348
 #, c-format
 msgid "%s by "
@@ -1269,7 +1276,7 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:666
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:669
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr "%s%s %sbarang%sbarang-barang%s%sKosong%s"
@@ -1724,7 +1731,7 @@ msgstr "%s %s%s%sKoha daring%s katalog &rsaquo; Riwayat pencarian anda %s "
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:4
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:5
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Placing a hold"
 msgstr ""
@@ -1903,7 +1910,7 @@ msgstr ""
 #. %1$s:  IF ( bibitemloo.author ) 
 #. %2$s:  bibitemloo.author 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:151
 #, fuzzy, c-format
 msgid "%s, by %s%s "
 msgstr "%s, oleh %s%s %s %s "
@@ -2093,6 +2100,14 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:282
 #, c-format
 msgid "%sThis record has no items.%s "
+msgstr ""
+
+#. %1$s:  IF ( Koha.Preference('OPACPatronDetails') ) 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:28
+#, c-format
+msgid "%sUpdate your contact information%sGo to your contact information%s"
 msgstr ""
 
 #. %1$s:  IF ( ISSUE.charges ) 
@@ -2822,6 +2837,15 @@ msgstr "(Opsional, bawaan 0)"
 msgid "(Optional, default 1)"
 msgstr "(Opsional, bawaan 1)"
 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:29
+#, fuzzy, c-format
+msgid ""
+"(Please note: there may be a delay in restoring your account if you submit "
+"online.)"
+msgstr ""
+"penundaan akan terjadi pada pengembalian akun anda jika anda melakukanya "
+"daring)"
+
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:113
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:115
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:195
@@ -2867,7 +2891,7 @@ msgstr "(Gunakan OPAC sebagai penggantinya)"
 msgid "(Use SRU instead)"
 msgstr "(Gunakan SRU sebagai penggantinya)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:451
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:454
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:427
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:521
@@ -2911,47 +2935,23 @@ msgstr "(Pencarian yang berkaitan: %s%s%s)"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:21
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:471
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:473
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:476
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:537
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:539
 #, c-format
 msgid "(remove)"
 msgstr "(hapus)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:87
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:101
 #, c-format
 msgid ", none of these items can be placed on hold. "
 msgstr ", Tidak ada satupun barang-barang ini dapat dipesan-pinjam. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:24
-#, c-format
-msgid ", you cannot place holds because the library doesn't have up-to-date "
-msgstr ""
-", anda tidak dapat melakukan pesan-pinjam karena perpustakaan tidak "
-"mempunyai data yang mutakhir "
-
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
-#, c-format
-msgid ", you cannot place holds because your account has been frozen."
-msgstr ""
-", anda tidak dapat melakukan pesan-pinjam karena akun anda telah dibekukan."
-
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:31
-#, c-format
-msgid ""
-", you cannot place holds because your library card has been marked as lost "
-"or stolen."
-msgstr ""
-", anda tidak dapat melakukan pesan-pinjam karena kartu perpustakaan anda "
-"telah ditandai hilang atau dicuri."
-
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:23
 #, fuzzy, c-format
-msgid ", you cannot place holds because your library card has expired."
-msgstr ""
-", anda tidak dapat melakukan pesan-pinjam karena kartu perpustakaan anda "
-"telah ditandai hilang atau dicuri."
+msgid ", you cannot place holds."
+msgstr "Mohon maaf, anda tidak dapat memesan lebih dari %s pinjaman. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:101
 #, fuzzy, c-format
@@ -2969,7 +2969,7 @@ msgid "- You must enter a Title"
 msgstr "- Anda harus memasukkan sebuah Judul"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 msgid "- You must enter a list name"
 msgstr "- Anda harus memasukkan sebuah nama lis"
 
@@ -3102,7 +3102,7 @@ msgstr ""
 msgid "A confirmation email will be sent shortly to the email address "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:276
 #, fuzzy, c-format
 msgid "A specific item"
 msgstr "Sebuah salinan khusus "
@@ -3129,6 +3129,13 @@ msgstr "Akses ditolak"
 msgid "According to our records, we don't have up-to-date %s"
 msgstr "Berdasarkan catatan kami, kami tidak memiliki %s terkini"
 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:26
+#, fuzzy, c-format
+msgid ""
+"According to our records, we don't have up-to-date contact information. "
+"Please contact the library. "
+msgstr "Berdasarkan catatan kami, kami tidak memiliki %s terkini"
+
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:69
 #, c-format
 msgid "Acquired in the last:"
@@ -3147,8 +3154,8 @@ msgid "Acquisition date: Oldest to newest"
 msgstr "Tanggal pemindahan kepemilikan: Terlama ke paling baru"
 
 #. INPUT type=submit name=tagsel_button
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:270
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:450
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:453
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:426
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:171
@@ -3168,7 +3175,7 @@ msgstr "Tambah %s barang ke %s"
 msgid "Add another field"
 msgstr "Tambah bidang lain"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:446
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:449
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:516
 #, fuzzy, c-format
 msgid "Add tag"
@@ -3195,7 +3202,7 @@ msgstr "Tambah ke sebuah lis"
 msgid "Add to a new list:"
 msgstr "Tambah ke sebuah lis baru:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:473
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:476
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:539
 #, c-format
 msgid "Add to cart"
@@ -3434,7 +3441,7 @@ msgid "Are you sure you want to delete selected search history entries?"
 msgstr "Apakah anda yakin ingin menghapus jejak hasil pencarian anda?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 msgid "Are you sure you want to delete this list?"
 msgstr "Apakah anda yakin ingin menghapus daftar ini?"
 
@@ -3454,18 +3461,18 @@ msgid "Are you sure you want to remove the selected items?"
 msgstr "Apakah anda yakin ingin menghapus barang yang dipilih?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 msgid "Are you sure you want to remove these items from the list?"
 msgstr "Apakah anda yakin ingin menghapus barang-barang berikut dari daftar?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 #, fuzzy
 msgid "Are you sure you want to remove this item from the list?"
 msgstr "Apakah anda yakin ingin menghapus barang-barang berikut dari daftar?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 #, fuzzy
 msgid "Are you sure you want to remove this share?"
 msgstr "Apakah anda yakin ingin menghapus daftar ini?"
@@ -3487,8 +3494,8 @@ msgstr "Apakah anda yakin ingin membatalkan pemesanan pinjam ini?"
 msgid "As owner of a list you cannot accept an invitation for sharing it."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:239
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:241
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:242
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:244
 #, c-format
 msgid "Ascending"
 msgstr ""
@@ -3547,10 +3554,10 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:176
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:178
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:78
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:213
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:215
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:565
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:567
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:218
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:63
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:245
 #, c-format
@@ -3697,7 +3704,7 @@ msgstr "Kembali ke hasil"
 msgid "Back to the results search list"
 msgstr "Kembali ke lis hasill pencarian"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:280
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:294
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:91
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:139
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:386
@@ -3836,12 +3843,12 @@ msgstr "No. panggil"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:199
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:203
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:205
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:285
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:225
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:227
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:575
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:577
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:228
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:230
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:578
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:580
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1175
@@ -3880,9 +3887,9 @@ msgstr "Nomor panggil"
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:40
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:271
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:611
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:613
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:274
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:614
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:616
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
@@ -3931,7 +3938,7 @@ msgstr ""
 "Membatalkan sebuah pemesanan pinjam yang sudah aktif untuk sebuah patron"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:314
 msgid "Cannot be put on hold"
 msgstr "Tidak bisa disimpan di pemesanan pinjam"
 
@@ -3962,7 +3969,7 @@ msgstr ""
 msgid "Catalogs"
 msgstr "Katalog"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:583
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:81
 #, c-format
 msgid "Category:"
@@ -4075,7 +4082,7 @@ msgstr "Hapus"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:36
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:49
@@ -4089,7 +4096,7 @@ msgstr "Hapus semua"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:195
 #, c-format
 msgid "Clear date"
@@ -4259,7 +4266,7 @@ msgstr "Komentar dalam "
 #. %1$s:  USER_INFO.firstname 
 #. %2$s:  USER_INFO.surname 
 #. %3$s:  USER_INFO.cardnumber 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:109
 #, fuzzy, c-format
 msgid "Confirm holds for:%s %s (%s)"
 msgstr "Konfrimasi pemesanan pinjam untuk: %s %s %s (%s) %s "
@@ -4285,7 +4292,7 @@ msgstr "Konten"
 msgid "Content Cafe"
 msgstr "Kafe konten"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:656
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:659
 #, c-format
 msgid "Contents"
 msgstr "Konten"
@@ -4295,7 +4302,7 @@ msgstr "Konten"
 msgid "Contents of "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:276
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:290
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
 #, c-format
@@ -4307,8 +4314,8 @@ msgstr ""
 msgid "Copyright"
 msgstr "Hak Cipta"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:231
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:233
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:234
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:236
 #, fuzzy, c-format
 msgid "Copyright date"
 msgstr "Tanggal Hak Cipta:"
@@ -4372,7 +4379,7 @@ msgstr ""
 msgid "Cover image"
 msgstr "Gambar Jilid"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:543
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:546
 #, c-format
 msgid "Create a new list"
 msgstr "Buat sebuah lis baru"
@@ -4529,7 +4536,7 @@ msgstr ""
 msgid "Default"
 msgstr "Baku"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:213
 #, fuzzy, c-format
 msgid "Default sorting"
 msgstr "Baku"
@@ -4555,7 +4562,7 @@ msgstr ""
 "memungkinkan: "
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:690
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:693
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:92
@@ -4568,8 +4575,8 @@ msgid "Delete"
 msgstr "Hapus"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:508
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:511
 msgid "Delete list"
 msgstr "Hapus lis"
 
@@ -4579,7 +4586,7 @@ msgid "Delete selected"
 msgstr ""
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:534
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:537
 msgid "Delete this list"
 msgstr "Hapus lis tersebut"
 
@@ -4603,8 +4610,8 @@ msgstr ""
 msgid "Dept."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:245
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:247
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:248
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:250
 #, c-format
 msgid "Descending"
 msgstr ""
@@ -4753,30 +4760,30 @@ msgid "Due"
 msgstr "Yang harus dibayar"
 
 #. %1$s:  itemLoo.dateDue 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:330
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:344
 #, c-format
 msgid "Due %s"
 msgstr "Yang harus dibayar %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:77
-#, c-format
-msgid "ERROR: Internal error: incomplete hold request."
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:86
+#, fuzzy, c-format
+msgid "ERROR: Internal error: incomplete hold request. "
 msgstr ""
 "KESALAHAN: Kesalahan internal: permintaan pesan pinjam yang tidak lengkap."
 
 #. %1$s:  bad_biblionumber 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:56
-#, c-format
-msgid "ERROR: No biblio record found for biblionumber %s."
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:62
+#, fuzzy, c-format
+msgid "ERROR: No record found for record id %s. "
 msgstr "KESALAHAN: Tidak ditemukan catatan perpustakaan untuk biblionumber %s."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:73
-#, c-format
-msgid "ERROR: No biblionumber received."
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:80
+#, fuzzy, c-format
+msgid "ERROR: No record id specified. "
 msgstr "KESALAHAN: Tidak ada biblionumber yang diterima."
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:681
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:684
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:910
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:61
 #, c-format
@@ -4784,8 +4791,8 @@ msgid "Edit"
 msgstr "Sunting"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:182
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:501
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:183
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:504
 msgid "Edit list"
 msgstr "Sunting lis"
 
@@ -4794,7 +4801,7 @@ msgstr "Sunting lis"
 msgid "Edit list "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:546
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:549
 #, fuzzy, c-format
 msgid "Editing "
 msgstr "Edisi: "
@@ -4920,13 +4927,14 @@ msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
-msgid "Error! Illegal parameter"
-msgstr "Kesalahan! Parameter tidak sah"
+#, fuzzy
+msgid "Error! Adding tags failed at"
+msgstr "Kesalahan! Operasi add_tag gagal pada"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
-msgid "Error! The add_tag operation failed on"
-msgstr "Kesalahan! Operasi add_tag gagal pada"
+msgid "Error! Illegal parameter"
+msgstr "Kesalahan! Parameter tidak sah"
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:30
 #, c-format
@@ -5017,7 +5025,7 @@ msgid "Excerpt provided by Syndetics"
 msgstr "Kutipan yang disediakan oleh Syndetics"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
 #, fuzzy
 msgid "Expecting a specific item selection."
 msgstr "Mengharapkan sebuah pilihan salinan tertentu."
@@ -5169,7 +5177,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 msgid "Form not submitted because of the following problem(s)"
 msgstr "Formulir tidak dikirim karena ada masalah berikut"
@@ -5340,6 +5348,11 @@ msgstr "Jalan"
 msgid "Go to detail"
 msgstr "Perincian kontak"
 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:45
+#, fuzzy, c-format
+msgid "Go to your account page"
+msgstr "laman akun anda"
+
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:786
 #, c-format
 msgid "GoToBibliographicRequestPage "
@@ -5408,7 +5421,7 @@ msgid "Hi,"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
 #, fuzzy
 msgid "Hide options"
 msgstr "[Pilihan lebih banyak]"
@@ -5436,17 +5449,17 @@ msgstr "Tanggal pesan pinjam"
 msgid "Hold date:"
 msgstr "Tanggal pesan pinjam"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:232
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:246
 #, fuzzy, c-format
 msgid "Hold not needed after:"
 msgstr "Pesan pinjam tidak diperlukan setelah"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:240
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:254
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "Catatan pesan pinjam:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:225
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:239
 #, c-format
 msgid "Hold starts on date:"
 msgstr ""
@@ -5475,7 +5488,7 @@ msgstr "%s Dari perpustakaan manapun"
 msgid "Holdings"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:399
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:402
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:682
 #, c-format
 msgid "Holdings:"
@@ -5502,7 +5515,7 @@ msgstr "Menunggu pesan pinjam"
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:14
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:15
 #: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:10
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:12
@@ -5557,7 +5570,7 @@ msgstr ""
 msgid "Home libraries"
 msgstr "%s Dari perpustakaan rumah "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:282
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:296
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1171
 #, c-format
 msgid "Home library"
@@ -5662,7 +5675,7 @@ msgstr ""
 msgid "Identity"
 msgstr "Perincian identitas"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:32
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:36
 #, c-format
 msgid ""
 "If this is an error, please take your card to the circulation desk at your "
@@ -5781,14 +5794,14 @@ msgstr ""
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:44
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:332
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:346
 #, c-format
 msgid "In transit from %s to %s since %s"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:21
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:471
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:537
 #, c-format
 msgid "In your cart"
@@ -5804,7 +5817,7 @@ msgstr "Diindeks di:"
 msgid "Indexes"
 msgstr "Index"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:289
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:303
 #, c-format
 msgid "Information"
 msgstr "Informasi"
@@ -5871,7 +5884,7 @@ msgid "Item lost"
 msgstr "Pesan pinjam"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:71
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:278
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:292
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:385
@@ -5888,7 +5901,7 @@ msgstr "Jenis barang"
 msgid "Item type:"
 msgstr "Jenis barang:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:166
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:180
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:327
 #, c-format
 msgid "Item type: "
@@ -6040,7 +6053,7 @@ msgstr "Cetak ukuran besar"
 msgid "Last"
 msgstr "Terakhir"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:283
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:297
 #, c-format
 msgid "Last location"
 msgstr "Lokasi terakhir"
@@ -6161,7 +6174,7 @@ msgstr "Nama lis"
 msgid "List deleted."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:655
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:658
 #, c-format
 msgid "List name"
 msgstr "Nama lis"
@@ -6172,7 +6185,7 @@ msgstr "Nama lis"
 msgid "List name:"
 msgstr "Nama lis:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:554
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:557
 #, c-format
 msgid "List name: "
 msgstr "Nama lis: "
@@ -6190,7 +6203,7 @@ msgstr "Lis barang ini tampil di: "
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:620
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:623
 #, c-format
 msgid "Lists"
 msgstr "Lis"
@@ -6200,7 +6213,7 @@ msgstr "Lis"
 msgid "Loading"
 msgstr "Memuat"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:735
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:738
 #, c-format
 msgid "Loading "
 msgstr ""
@@ -6252,8 +6265,8 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:328
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:152
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:647
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:722
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:650
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:725
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:84
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:73
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:294
@@ -6261,7 +6274,7 @@ msgstr ""
 msgid "Log in"
 msgstr "Log masuk"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:457
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:460
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:433
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:527
 #, c-format
@@ -6618,8 +6631,8 @@ msgstr "Komentar baru pada %s %s, %s%s"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:70
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:494
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:644
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:497
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:647
 #, c-format
 msgid "New list"
 msgstr "Lis baru"
@@ -6640,8 +6653,8 @@ msgstr "Saran pembelian baru"
 msgid "New search"
 msgstr "[Pencarian baru]"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:268
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:448
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:271
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:451
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:424
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:518
 #, c-format
@@ -6684,7 +6697,7 @@ msgstr "Berikutnya &gt;&gt;"
 msgid "Next &raquo;"
 msgstr "Berikutnya &raquo;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:254
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:268
 #, fuzzy, c-format
 msgid "Next available item"
 msgstr "Barang tidak tersedia"
@@ -6695,7 +6708,7 @@ msgstr "Barang tidak tersedia"
 msgid "No"
 msgstr "Tidak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:149
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:163
 #, c-format
 msgid "No available items."
 msgstr "Barang tidak tersedia"
@@ -6721,10 +6734,10 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:120
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:145
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:310
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:326
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:334
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:344
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:313
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:329
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:337
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:347
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:179
@@ -6803,7 +6816,7 @@ msgstr "Tidak ada barang fisik untuk catatan ini"
 msgid "No private lists"
 msgstr "Tidak ada lis privasi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:715
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:718
 #, c-format
 msgid "No private lists."
 msgstr "Tidak ada lis privasi."
@@ -6813,7 +6826,7 @@ msgstr "Tidak ada lis privasi."
 msgid "No public lists"
 msgstr "Tidak ada lis publik"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:713
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:716
 #, c-format
 msgid "No public lists."
 msgstr "Tidak ada lis publik"
@@ -6907,12 +6920,12 @@ msgid "Not for loan %s"
 msgstr "Tidak untuk dipinjam (%s)"
 
 #. %1$s:  itemLoo.notforloanvalue 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:340
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:354
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Tidak untuk dipinjam (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:366
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:380
 #, c-format
 msgid "Not on hold"
 msgstr "Tidak dalam pemesanan"
@@ -7075,21 +7088,17 @@ msgstr ""
 msgid "Number"
 msgstr "Nomor"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:182
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:196
 #, c-format
 msgid "Number of holds: "
 msgstr ""
 
+#. For the first occurrence,
 #. %1$s:  count 
+#: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:47
 #, c-format
 msgid "Number of records used in: %s"
-msgstr ""
-
-#. %1$s:  count 
-#: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:49
-#, c-format
-msgid "Number of records used in:: %s"
 msgstr ""
 
 #. INPUT type=submit
@@ -7285,35 +7294,35 @@ msgstr "Perpustakaan yang dituju"
 msgid "Pick up location"
 msgstr "Lokasi yang dituju"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:205
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:565
 #, fuzzy, c-format
 msgid "Pick up location:"
 msgstr "Lokasi yang dituju"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
 #, fuzzy
 msgid "Place a hold on"
 msgstr "Pesan pinjam"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:126
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:140
 #, fuzzy, c-format
 msgid "Place a hold on "
 msgstr "Pesan pinjam"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
 #, fuzzy
 msgid "Place a hold on: "
 msgstr "Pesan pinjam"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:381
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:395
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:231
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:434
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:437
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:440
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:509
@@ -7333,7 +7342,7 @@ msgstr "Ditempatkan di"
 msgid "Places"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:15
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:16
 #, fuzzy, c-format
 msgid "Placing a hold"
 msgstr "Pesan pinjam"
@@ -7383,16 +7392,6 @@ msgstr "Mohon konfirmasi peminjaman:"
 msgid "Please confirm your registration"
 msgstr ". Mohon hubungi perpustakaan untuk informasi lebih lanjut."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:81
-#, fuzzy, c-format
-msgid "Please contact your librarian if you wish to renew your card."
-msgstr "Mohon hubungi pustakawan anda, atau gunakan: "
-
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:25
-#, c-format
-msgid "Please contact your librarian, or use the "
-msgstr "Mohon hubungi pustakawan anda, atau gunakan: "
-
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:64
 #, c-format
 msgid "Please correct the errors and resubmit. "
@@ -7434,7 +7433,6 @@ msgstr ""
 "MARC yang dapat diimpor ke perangkat lunak bibliografi personal seperi "
 "EndNote, Reference Manager atau ProCite."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:25
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:72
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
@@ -7555,8 +7553,8 @@ msgstr "Prioritas"
 msgid "Priority:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:588
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:589
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:83
 #, c-format
 msgid "Private"
@@ -7583,8 +7581,8 @@ msgstr "Memroses..."
 msgid "Programmed texts"
 msgstr "Teks terprogram"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:593
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:594
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:596
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:85
 #, c-format
 msgid "Public"
@@ -7593,8 +7591,8 @@ msgstr "Publik"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:41
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:631
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:634
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:636
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:19
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:41
 #, c-format
@@ -7629,7 +7627,7 @@ msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Tanggal Penerbitan/Hak Cipta: Terlama ke paling baru"
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:380
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:383
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:357
 #, c-format
 msgid "Publication:"
@@ -7830,17 +7828,17 @@ msgid "Remove field"
 msgstr "Kode bidang"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 msgid "Remove from list"
 msgstr "Hapus dari lis"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:466
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:469
 #, fuzzy, c-format
 msgid "Remove from this list"
 msgstr "Hapus dari lis"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:527
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:530
 msgid "Remove selected items"
 msgstr "Hapus barang yang dipilih"
 
@@ -7854,8 +7852,8 @@ msgid "Remove selected searches"
 msgstr "%s(patron yang dihapus)%s "
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:199
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:702
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:202
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:705
 #, fuzzy
 msgid "Remove share"
 msgstr "Kode bidang"
@@ -7949,7 +7947,7 @@ msgid "Required"
 msgstr ""
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:251
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:254
 #, fuzzy
 msgid "Resort list"
 msgstr "Cetak lis"
@@ -8122,7 +8120,7 @@ msgid "Saturday"
 msgstr ""
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:612
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:67
@@ -8140,7 +8138,7 @@ msgstr "Simpan catatan: "
 msgid "Save to Lists"
 msgstr "Simpan ke Lis"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:462
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:465
 #, c-format
 msgid "Save to another list"
 msgstr "Simpan ke list yang lain"
@@ -8217,7 +8215,7 @@ msgstr "Cari judul ini di:"
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:377
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:351
 msgid "Search for works by this author"
 msgstr "Cari pekerjaan oleh penulis ini"
@@ -8283,7 +8281,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:109
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:342
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:345
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:177
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:421
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:95
@@ -8328,14 +8326,14 @@ msgstr ""
 msgid "Select a list"
 msgstr "Pilih sebuah lis"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:274
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:288
 #, fuzzy, c-format
 msgid "Select a specific item:"
 msgstr "Pilih sebuah salinan tertentu:"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:48
@@ -8372,8 +8370,8 @@ msgstr "Pilih judul ke:"
 msgid "Select the term(s) to search"
 msgstr "Pilih judul ke:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:259
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
@@ -8477,7 +8475,7 @@ msgstr "Sesi telah hilang"
 msgid "Settings updated"
 msgstr "Pengaturan telah dimutakhirkan"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:694
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
 #, c-format
 msgid "Share"
@@ -8498,7 +8496,7 @@ msgstr ""
 msgid "Share by email"
 msgstr "Membagi lewat surel"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:192
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:194
 #, fuzzy, c-format
 msgid "Share list"
 msgstr "Lis "
@@ -8561,8 +8559,8 @@ msgstr "Tampilkan semua barang"
 msgid "Show more"
 msgstr "Tampilkan lebih lanjut"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:218
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:232
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
 #, fuzzy, c-format
 msgid "Show more options"
 msgstr "[Pilihan lebih banyak]"
@@ -8641,17 +8639,14 @@ msgid ""
 "them. These are: %s"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:24
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:31
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:81
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:87
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:23
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:101
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:172
 #, c-format
 msgid "Sorry"
 msgstr "Mohon maaf"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:106
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:120
 #, fuzzy, c-format
 msgid "Sorry,"
 msgstr "Mohon maaf"
@@ -8722,21 +8717,13 @@ msgstr ""
 "Mohon maaf, pos peminjaman mandiri ini kehilangan otentikasi. Mohon hubungi "
 "adminstrator untuk menyelesaikan masalah ini."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:143
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:157
 #, fuzzy, c-format
 msgid "Sorry, you are too young to reserve this material."
 msgstr "Apakah anda yakin ingin menghapus daftar ini?"
 
-#. %1$s:  too_much_oweing 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:44
-#, c-format
-msgid "Sorry, you cannot place holds because you owe %s. "
-msgstr ""
-"Mohon maaf, anda tidak dapat melakukan pemesanan peminjaman karena anda "
-"masih berhutang %s. "
-
 #. %1$s:  too_many_reserves 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:56
 #, c-format
 msgid "Sorry, you cannot place more than %s holds. "
 msgstr "Mohon maaf, anda tidak dapat memesan lebih dari %s pinjaman. "
@@ -8758,12 +8745,12 @@ msgstr "Mohon maaf, sesi anda telah habis. Mohon log masuk kembali."
 msgid "Sort by:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:208
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:211
 #, c-format
 msgid "Sort by: "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:557
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:560
 #, c-format
 msgid "Sort this list by: "
 msgstr "Urut lis ini berdasarkan: "
@@ -9060,7 +9047,7 @@ msgstr "TOC"
 msgid "Table of contents provided by Syndetics"
 msgstr "Daftar isi yang disediakan oleh Syndetics"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:265
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:268
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:166
 #, c-format
@@ -9082,7 +9069,7 @@ msgstr "Awan tag"
 msgid "Tag status here."
 msgstr "Tag status di sini."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:453
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:456
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:429
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:523
@@ -9112,7 +9099,7 @@ msgstr "Tag-tag yang ditambahkan: "
 msgid "Tags from this library:"
 msgstr "Tag-tag dari perpustakaan ini:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:419
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:422
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:465
 #, c-format
 msgid "Tags:"
@@ -9344,7 +9331,7 @@ msgstr "Barang ini telah ditambahkan ke troli anda"
 msgid "The item is already in your cart"
 msgstr "Barang ini sudah ada di troli anda"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:597
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:600
 #, c-format
 msgid ""
 "The library has disabled the ability for patrons to create new public lists. "
@@ -9423,7 +9410,7 @@ msgid "There are no pending purchase suggestions."
 msgstr "Tidak ada saran pembelian yang ditunda."
 
 #. %1$s:  RESERVE_CHARGE 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:99
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:113
 #, c-format
 msgid "There is a charge of %s for placing this hold "
 msgstr "Ada biaya %s untuk memesan pinjaman ini "
@@ -9566,7 +9553,7 @@ msgid "This list does not exist."
 msgstr "Judul ini tidak dapat diminta"
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:514
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:517
 #, fuzzy, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
@@ -9601,18 +9588,18 @@ msgstr "Catatan ini mempunyai banyak barang fisik. "
 msgid "This subscription is closed."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:152
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:166
 #, fuzzy, c-format
 msgid "This title cannot be requested because it's already in your possession."
 msgstr "Judul ini tidak dapat diminta"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:154
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:168
 #, c-format
 msgid "This title cannot be requested."
 msgstr "Judul ini tidak dapat diminta"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
 msgid ""
 "This title consists of multiple volumes/parts. Please indicate which part "
 "you need. Clicking on specific item information may be helpful."
@@ -9641,10 +9628,10 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:70
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:219
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:221
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:560
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:562
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:222
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:224
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:563
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:565
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
@@ -9768,7 +9755,7 @@ msgid "Tweet"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:68
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:657
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:660
 #, c-format
 msgid "Type"
 msgstr "Jenis"
@@ -9814,7 +9801,7 @@ msgstr "# %s"
 msgid "Unable to add one or more tags."
 msgstr "Tidak dapat menambah satu atau lebih tag."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:336
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:350
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Tidak tersedia (musnah atau hilang)"
@@ -9874,11 +9861,11 @@ msgstr "Digunakan untuk/lihat dari:"
 msgid "Username:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:39
-#, c-format
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:45
+#, fuzzy, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
-"If "
+"If shows your account to be clear, please contact the library."
 msgstr ""
 "Biasanya alasan pembekuan sebuah akun adalah karena akun tersebut sudah "
 "jatuh tempo atau ada biaya kerusakan yang belum dibayar. Jika "
@@ -9912,9 +9899,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:353
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:356
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:358
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:359
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:361
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:331
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:334
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:336
@@ -9938,7 +9925,7 @@ msgstr "Lihat di Amazon.com"
 msgid "View your search history"
 msgstr "Lihat riwayat pencarian anda"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:301
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
 #, c-format
 msgid "Vol info"
@@ -10037,7 +10024,7 @@ msgstr "Dengan judul yang telah dipilih "
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 msgid "With selected titles: "
@@ -10060,8 +10047,8 @@ msgstr ""
 msgid "Written on %s by %s"
 msgstr "Ditulis pada %s oleh %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:572
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:573
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:575
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:246
 #, c-format
 msgid "Year"
@@ -10238,7 +10225,7 @@ msgstr ""
 msgid "You have a credit of:"
 msgstr "Anda memiliki sebuah piutang:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:146
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:160
 #, c-format
 msgid "You have already requested this title."
 msgstr "Anda sudah meminta judul ini."
@@ -10275,6 +10262,12 @@ msgid ""
 "following credentials:"
 msgstr ""
 
+#. %1$s:  too_much_oweing | $Price 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:50
+#, fuzzy, c-format
+msgid "You have unpaid fines. Amount: %s. "
+msgstr "Anda tidak memiliki denda atau biaya"
+
 #: opac-tmpl/bootstrap/en/modules/errors/404.tt:32
 #, c-format
 msgid ""
@@ -10304,12 +10297,12 @@ msgstr "Anda harus log masuk untuk membuat atau menambahkan ke lis"
 msgid "You must be logged in to create or add to lists"
 msgstr "Anda harus log masuk untuk membuat atau menambahkan ke lis"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:67
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:74
 #, c-format
 msgid "You must select a library for pickup. "
 msgstr "Anda harus memilih sebuah perpustakaan untuk mengambilnya. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:61
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:68
 #, c-format
 msgid "You must select at least one item. "
 msgstr "Anda harus memilih paling sedikit satu barang, "
@@ -10351,6 +10344,12 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
 #, c-format
 msgid "Your account has been frozen%s until "
+msgstr "Akun anda telah dibekukan%s hingga "
+
+#. %1$s:  IF debarred_comment 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:41
+#, fuzzy, c-format
+msgid "Your account has been frozen. %s Comment: "
 msgstr "Akun anda telah dibekukan%s hingga "
 
 #. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
@@ -10472,6 +10471,13 @@ msgstr "Komentar anda yang diubah (tinjau, tunda penerimaan)"
 msgid "Your fines and charges"
 msgstr "Denda dan biaya"
 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:34
+#, fuzzy, c-format
+msgid "Your library card has been marked as lost or stolen."
+msgstr ""
+", anda tidak dapat melakukan pesan-pinjam karena kartu perpustakaan anda "
+"telah ditandai hilang atau dicuri."
+
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
 #, c-format
 msgid ""
@@ -10480,6 +10486,13 @@ msgid ""
 msgstr ""
 "Kartu perpustakaan anda telah ditandai hilang atau dicuri. Jika ini adalah "
 "sebuah galat, mohon hubungi perpustakaan."
+
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:92
+#, fuzzy, c-format
+msgid ""
+"Your library card has expired. Please contact your librarian if you wish to "
+"renew your card. "
+msgstr "Mohon hubungi pustakawan anda, atau gunakan: "
 
 #. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:1
@@ -10490,8 +10503,8 @@ msgstr "Lis anda: %s "
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:625
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:627
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:628
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:17
 #, c-format
 msgid "Your lists"
@@ -10544,7 +10557,7 @@ msgstr "Kata sandi anda harus memiliki setidaknya %s karakter."
 msgid "Your personal details"
 msgstr "perincian personal saya"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:189
 #, fuzzy, c-format
 msgid "Your priority: "
 msgstr "Catatan pesan pinjam: "
@@ -10711,14 +10724,14 @@ msgstr "dan"
 msgid "anyone else to add entries."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:28
-#, c-format
-msgid "anyone to remove his own contributed entries."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:36
 #, c-format
 msgid "anyone to remove other contributed entries."
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:28
+#, c-format
+msgid "anyone to remove their own contributed entries."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:103
@@ -10817,7 +10830,6 @@ msgstr "ubah kata sandi saya"
 msgid "click here to login"
 msgstr "klik di sini untuk log masuk"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:24
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
 #, c-format
 msgid "contact information"
@@ -11095,12 +11107,6 @@ msgstr ""
 msgid "not"
 msgstr "bukan"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:24
-#, c-format
-msgid "on file."
-msgstr "di berkas."
-
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:25
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
 #, c-format
 msgid "online update form"
@@ -11215,7 +11221,7 @@ msgstr "return_type"
 msgid "schema"
 msgstr "skema"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:517
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
 #, c-format
 msgid "search"
 msgstr "pencarian"
@@ -11249,13 +11255,6 @@ msgstr "show_holds"
 #, c-format
 msgid "show_loans"
 msgstr "show_loans"
-
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:39
-#, c-format
-msgid "shows your account to be clear, please consult a librarian."
-msgstr ""
-"menunjukkan akun anda harus jelas, mohon berkonsultasi dengan seorang "
-"pustakawan."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
 #, c-format
@@ -11322,7 +11321,7 @@ msgid "system item identifier"
 msgstr "pengidentifikasi barang sistem"
 
 #. INPUT type=submit name=tagsel_button
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:270
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:273
 msgid "tagsel_button"
 msgstr "tagsel_button"
 
@@ -11379,13 +11378,6 @@ msgstr ""
 "pengidentifikasi patron khusus di ILS; pengidentifikasi yang sama "
 "dikembalikan oleh LookupPatron atau AuthenticatePatron"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:25
-#, c-format
-msgid "there may be a delay in restoring your account if you submit online)"
-msgstr ""
-"penundaan akan terjadi pada pengembalian akun anda jika anda melakukanya "
-"daring)"
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
 #, c-format
@@ -11394,8 +11386,8 @@ msgstr ""
 "penundaan akan terjadi pada pengembalian akun anda jika anda melakukanya "
 "daring)%s."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:647
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:722
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:650
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:725
 #, c-format
 msgid "to create new lists."
 msgstr "untuk membuat lis baru."
@@ -11405,7 +11397,6 @@ msgstr "untuk membuat lis baru."
 msgid "to post a comment."
 msgstr "untuk mengirim sebuah komentar"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:25
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
 #, c-format
 msgid "to submit current information ("
@@ -11521,14 +11512,13 @@ msgid "you"
 msgstr "anda"
 
 #. %1$s:  new_reserves_allowed 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:106
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:120
 #, c-format
 msgid ""
 "you can only place %s more holds. Please uncheck the checkboxes for the "
 "items you wish to not place holds on. "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
 #, c-format
 msgid "your account page"

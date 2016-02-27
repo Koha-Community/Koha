@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
-"POT-Creation-Date: 2016-01-18 19:04-0300\n"
-"PO-Revision-Date: 2016-01-27 01:12+0000\n"
+"POT-Creation-Date: 2016-02-14 17:28-0300\n"
+"PO-Revision-Date: 2016-02-15 08:36+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1453857124.000000\n"
+"X-POOTLE-MTIME: 1455525413.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -412,7 +412,7 @@ msgid ""
 "'Numbering pattern' will help you determine how the numbers are printed for "
 "each issue. Patterns entered here are saved and editable at any time by "
 "visiting 'Manage numbering patterns' "
-msgstr "'編碼模式' 協助您決定列印期號的方式。進入 '管理編碼模式' 隨時可編修它"
+msgstr "'編碼模式' 協助您決定列印期號的方式。進入 '管理編碼模式' 隨時可編修它 "
 
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:22
 #, c-format
@@ -850,6 +850,7 @@ msgstr "( ! 表示 '不可見' 或在折疊時為 '不可收疊')"
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "(online)."
 msgstr "(線上)。"
@@ -2037,7 +2038,9 @@ msgid ""
 "After filling in this data click the 'Test prediction pattern' button to see "
 "what issues the system will generate, if there are irregularities you can "
 "choose which issues don't exist from the list presented."
-msgstr "填入資料後按 '測試預期模式' 鈕檢視系統產生的卷期，若出現不規則卷期可從清單選擇不存在的卷期。"
+msgstr ""
+"填入資料後按 '測試預期模式' 鈕檢視系統產生的卷期，若出現不規則卷期可從清單選"
+"擇不存在的卷期。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:26
 #: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:42
@@ -2646,6 +2649,11 @@ msgid ""
 msgstr ""
 "容許值範圍；選擇其中之一，讀者紀錄鍵入頁面將允許從容許值清單中選擇一個值。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid "AutomaticItemReturn"
+msgstr "AutomaticItemReturn"
+
 #: intranet-tmpl/prog/en/modules/help/reports/issues_avg_stats.tt:3
 #, c-format
 msgid "Average loan time"
@@ -2915,11 +2923,11 @@ msgid "Borrower number: "
 msgstr "讀者證號碼："
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Both the 'Source' and the 'Text' fields must be filled in in order to save "
 "the new quote."
-msgstr "鍵入資料以儲存新的引句。"
+msgstr "必須在 '來源' 與 '內文' 欄位鍵入資料才能儲存新的引句。"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:491
 #, c-format
@@ -3120,6 +3128,13 @@ msgstr "編目"
 #, c-format
 msgid "Change Patron Password"
 msgstr "變更讀者密碼"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:21
+#, c-format
+msgid ""
+"Change the current location of the items in that collection to the library "
+"it is to be transferred to"
+msgstr "變更即將轉移的館藏至新的館藏地"
 
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:7
 #, c-format
@@ -3326,12 +3341,14 @@ msgstr ""
 "等讀者資訊。"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:25
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Checking the 'Manual history' box will allow you to enter serials outside "
 "the prediction pattern once the subscription is saved by going to the "
 "'Planning' tab on the subscription detail page."
-msgstr "勾選 '人工紀錄' 盒，將允許您鍵入預期模式外的期刊。"
+msgstr ""
+"從訂閱詳情頁面的 '計畫' 分頁儲存訂閱後，再勾選 '人工紀錄' 盒將允許您鍵入預期"
+"模式外的期刊。"
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:3
 #, c-format
@@ -5872,6 +5889,8 @@ msgid ""
 "you need to set up \"inner counter = 0\" But if it's \"vol. 4, no. 2, iss. "
 "797\", the inner counter should be \"1\"."
 msgstr ""
+"例如：若收到的第一期是 \"vol. 4, no. 1, iss. 796\"，您需設定為 \"inner "
+"counter = 0\" 若是 \"vol. 4, no. 2, iss. 797\"，則內部計數器應為 \"1\"。"
 
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:5
 #, c-format
@@ -6185,6 +6204,14 @@ msgid ""
 "From the list, check the two items you want to merge. If you choose more "
 "than or fewer than 2, you will be presented with an error"
 msgstr "從虛擬書架裡選取兩個要合併的館藏。若超過 2 個，則出現錯誤訊息"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:27
+#, c-format
+msgid ""
+"From the main Rotating Collections page, click on Transfer next to the title "
+"of the collection you wish to transfer; choose the library you wish to "
+"transfer the collection to and click \"Transfer collection\"."
+msgstr "於巡迴書庫首頁，按欲轉移館藏題名旁的轉移；再選擇轉移的圖書館並按 \"轉移館藏\" 鈕。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:13
 #, c-format
@@ -6814,6 +6841,15 @@ msgstr ""
 #, c-format
 msgid "If a record you want to delete can't be deleted it will be highlighted."
 msgstr "將提示不能借出的館藏。"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:33
+#, c-format
+msgid ""
+"If an item in a rotating collection is checked in at a library other than "
+"the one it is supposed to be transferred to, a notification will appear "
+"notifying library staff that the item is part of a rotating collection, also "
+"letting them know where the item needs to be sent."
+msgstr "若巡迴書庫的館藏被還入非巡迴書庫的圖書館，將出現提示訊息，並警示圖書館員將該館藏送至適當的地方。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:11
 #, c-format
@@ -8511,6 +8547,12 @@ msgid ""
 "options are here for future development."
 msgstr "你的意思是重要嗎？目前祗有在 OPAC 的作品。內部網路選項為未來發展。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, c-format
+msgid "Important:"
+msgstr "重要："
+
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:108
 #, c-format
 msgid ""
@@ -8657,14 +8699,14 @@ msgid ""
 msgstr "重要：不能清除必備欄位的值。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:59
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Important: If this field is left blank then Koha will not put a limit on the "
 "fines this item will accrue. A maximum fine amount can be set using the "
 "MaxFine system preference."
 msgstr ""
-"重要：若此欄位左側空白，則Koha不會置入任何罰款限制。罰款上限規定在"
-"MaxFinesystem偏好。"
+"重要：若此欄位空白則 Koha 不會置入任何罰款。罰款上限規定在 MaxFinesystem 偏"
+"好。"
 
 #: intranet-tmpl/prog/en/modules/help/circ/branchoverdues.tt:9
 #, c-format
@@ -9075,6 +9117,15 @@ msgid ""
 "information"
 msgstr "需鍵入供應商資訊，才能發出催缺資訊"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, c-format
+msgid ""
+"In order to complete the transfer process, the library receiving the "
+"rotating collection should check in all items from the collection as they "
+"receive them. This will clear the transfer so that the items are no longer "
+"shown as being \"in transit\"."
+msgstr "為了完成轉移程序，應先還入至巡迴書庫的圖書館。甚狀態就不會是 \"轉移中\"。"
+
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:24
 #, c-format
 msgid ""
@@ -9082,6 +9133,8 @@ msgid ""
 "answer 'When there is an irregular issue', if the numbers are always "
 "sequential you'll want to pick 'Keep issue number'"
 msgstr ""
+"在訂閱時回答 '出現不規則刊期時間' 有助於處理的方式，若經常連續出現您可以點選 "
+"'保持刊期編號'"
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:60
 #, c-format
@@ -9287,6 +9340,15 @@ msgid ""
 msgstr ""
 "可從結果裡看到所有在鍵入日期前將終止的訂購。從此可選擇檢視訂購詳情或更新內"
 "容。"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:22
+#, c-format
+msgid ""
+"Initiate a transfer from its original current location/holding library to "
+"the current location/holding library it is to be rotated to. When a library "
+"receives a collection they will need to check in the items to complete the "
+"transfer."
+msgstr "啟動轉移程序從原位置/儲存圖書館至現在位置/儲存圖書館。收到館藏後應先還入才算完成轉移。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:3
 #, c-format
@@ -10114,9 +10176,9 @@ msgid "Manage Koha system settings (Administration panel)"
 msgstr "管理 Koha 系統設定 (管理面板)"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Manage Labels"
-msgstr "管理照片"
+msgstr "管理標籤"
 
 #: intranet-tmpl/prog/en/modules/help/tools/manage-marc-import.tt:3
 #, c-format
@@ -10542,11 +10604,11 @@ msgstr ""
 "Tech或其他的服務)、列印與簡訊(必須設SMSSendDriver偏好)。"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Next you can choose whether a new item is created when receiving an issue "
 "(if you barcode issues you'll want to create an item at this time)"
-msgstr "簽收期刊後，接著選擇新增館藏"
+msgstr "接著選擇是否新增館藏 (新的條碼表示新的館藏)"
 
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:26
 #, c-format
@@ -10653,7 +10715,7 @@ msgid "Note:"
 msgstr "說明："
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
-#, fuzzy, c-format
+#, c-format
 msgid "Note: "
 msgstr "說明："
 
@@ -10893,7 +10955,7 @@ msgstr "在此分頁可看到並編輯此讀者所屬的傳閱清單。"
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:88
 #, c-format
 msgid "Once a 'Numbering pattern' is chosen the number formula will appear. "
-msgstr ""
+msgstr "選定 '編碼模式' 後即出現編碼公式。"
 
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:17
 #, c-format
@@ -10984,7 +11046,7 @@ msgstr "選定引句後，再勾選 '刪除引句' 鍵。"
 msgid ""
 "Once that data is filled in you can click 'Next' to enter the prediction "
 "pattern information. "
-msgstr ""
+msgstr "填好資料後按 '下一步' 進入預測模式資訊。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:21
 #, c-format
@@ -11488,6 +11550,14 @@ msgstr "開啟讀者做為使用的基礎(做為複製之用)"
 #, c-format
 msgid "Or you can just have no image associated with the item type"
 msgstr "或您可沒有圖示連結至館藏類型"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:28
+#, c-format
+msgid ""
+"Or, from the \"add or remove items\" page for a collection, you can click "
+"the Transfer button, choose the library you wish to transfer the collection "
+"to and click \"Transfer Collection\"."
+msgstr "或，從書庫的 \"新增或移除館藏\" 頁面，您可按轉移鈕，選擇欲轉移至的書庫再按 \"轉移書庫\" 鈕。"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersuggestion.tt:3
 #, c-format
@@ -12325,6 +12395,26 @@ msgid ""
 "matching rule worked and that the records appear as you expect them to"
 msgstr "完成匯入前，先審核您的摘要，確試匹配規則運作運利，如預期顯示紀錄"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:3
+#, c-format
+msgid "Rotating Collections"
+msgstr "巡迴書庫"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:5
+#, c-format
+msgid ""
+"Rotating Collections is a tool for managing collections of materials that "
+"frequently get shifted from library to library. It adds the ability to store "
+"not only an item's home library and current location, but also information "
+"about where it is supposed to be transferred to next to ensure that all "
+"items in the collection are sent to the correct library. When an item in a "
+"rotating collection is checked in, library staff are notified that the item "
+"is part of a rotating collection and which branch it should be sent to if it "
+"is not at the correct one."
+msgstr ""
+"巡迴書庫是用來管理在各圖書館移動的館藏。不祗處理館藏所屬圖書館與當前位置，而且還能夠顯示應該轉移至下個位置的資訊以確保所有的館藏都送至正確的圖書館。巡迴書"
+"庫的館藏還入其他圖書館後，將提示該館藏屬於巡迴書庫及該送至的下個圖書館。"
+
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:347
 #, c-format
 msgid "Routing"
@@ -12984,6 +13074,11 @@ msgstr "見續訂的完整文件 "
 #, c-format
 msgid "See the full documentation for Reports in the "
 msgstr "見報表的完整文件 "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
+#, c-format
+msgid "See the full documentation for Rotating Collections in the "
+msgstr "見巡迴書庫的完整文件 "
 
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #, c-format
@@ -13925,6 +14020,7 @@ msgstr "給館員的文字 "
 
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:11
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:12
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
 #, c-format
 msgid "The "
 msgstr "這個 "
@@ -13943,7 +14039,7 @@ msgstr ""
 msgid ""
 "The 'Begins with' number is the number of the issue you're holding in your "
 "hand."
-msgstr ""
+msgstr "此 '開始號碼' 是在館的期刊編號。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:16
 #, c-format
@@ -13984,7 +14080,7 @@ msgid ""
 msgstr "此 '罰款寬限期' 是館藏逾期後的一段時間，過了這段時間，才開始收取罰款。"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:43
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The 'Grace period' is the number of days before an issue is automatically "
 "moved from 'Expected' status to 'Waiting' and how many days before an issue "
@@ -13998,7 +14094,7 @@ msgstr ""
 msgid ""
 "The 'Inner counter' is used to tell Koha where the \"receiving cycle\" "
 "starts "
-msgstr ""
+msgstr "此 '內部計數器' 係告知 Koha 啟動 \"簽收週期\" "
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:47
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:13
@@ -14052,6 +14148,8 @@ msgid ""
 "season. For example, if you have a German serial, you can use the German "
 "locale option to display days, etc. in German."
 msgstr ""
+"顯示日、月或季時此 'Locale' 選項就有用。例如：館藏德國的期刊，就可以選用德國"
+"的選項。"
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:41
 #, c-format
@@ -14082,6 +14180,7 @@ msgid ""
 "The 'Patron notification' option lets you pick a notice to send to patrons "
 "who subscribe to updates on this serial via the OPAC. "
 msgstr ""
+"讀者經由 OPAC 更新對此期刊的訂閱後您可經由 '讀者通知' 選項挑選送出的讀者。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:15
 #, c-format
@@ -15352,12 +15451,12 @@ msgid "There are several messages that can appear when checking items in:"
 msgstr "還入館藏時出現若干訊息："
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There are several pre-defined options for the 'Frequency' of publication all "
 "of which are visible alongside your own custom frequencies by visiting "
 "'Manage frequencies' "
-msgstr "出版 '刊期' 有幾個預設的選項 "
+msgstr "進入 '刊期管理' 客製化預設的 '刊期' "
 
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:7
 #, c-format
@@ -16491,6 +16590,16 @@ msgid ""
 "with."
 msgstr "完全新增或按 '複製既有模板' 盒。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:11
+#, c-format
+msgid ""
+"To add items to a collection, click \"Add or remove items\" next to the "
+"collection's name in the list of collections. Under \"Add or remove items\" "
+"scan or type in the barcode of the item you wish to add to the collection, "
+"and hit Enter or click Submit if necessary."
+msgstr ""
+"新增館藏入書庫，按書庫名稱旁的 \"新增或移除館藏\" 鈕。在 \"新增或移除館藏\" 鈕下掃瞄或鍵入館藏條碼，再按 Enter 就能新增該館藏入書庫。"
+
 #: intranet-tmpl/prog/en/modules/help/tools/koha-news.tt:7
 #, c-format
 msgid ""
@@ -16599,6 +16708,18 @@ msgstr "點選 '新增讀者清單' 鈕，就能新增讀者清單"
 #, c-format
 msgid "To create a new matching rule:"
 msgstr "新增匹配規則："
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:10
+#, c-format
+msgid ""
+"To create a new rotating collection, click the \"New Collection\" button, "
+"fill in the Title and Description, and click Submit. Once submitted you'll "
+"see \"Collection Name added successfully\"; click \"Return to rotating "
+"collections home\" to return to the main Rotating Collections management "
+"page (or click Rotating Collections in the sidebar)."
+msgstr ""
+"新增巡迴書庫時，按 \"新增書庫\" 鈕，鍵入名稱與說明，再按送出鈕。畫面出現 \"成功新增書庫名稱\"；按 \"回到巡迴書庫首頁\" "
+"就回到巡迴書庫館理頁面 (或按側面的巡迴書庫連結)。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:15
 #, c-format
@@ -17006,6 +17127,22 @@ msgid ""
 "to the right of the title."
 msgstr "點選題名右方的 '移除標籤' 鈕，就能移除該題名的標籤。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:12
+#, c-format
+msgid ""
+"To remove an item from a collection, either click Remove next to the item's "
+"barcode in the list of items within the collection or check the \"Remove "
+"item from collection\" box next to the Barcode text box under \"Add or "
+"remove items\", and scan or type in the barcode, clicking Submit or hitting "
+"Enter if necessary. Note: The \"Remove item from collection\" checkbox will "
+"remain checked as long as you are on the \"Add or remove items\" page, "
+"unless you uncheck it, to facilitate quickly removing a number of items at a "
+"time by scanning their barcodes."
+msgstr ""
+"多種方式可從巡迴書庫移除館藏，從巡迴書庫館藏清單按該館藏條碼旁的移除字樣或在 \"新增或移除館藏\" 下按條碼字樣旁的 \"從書庫移除館藏\" "
+"盒，然後掃瞄或鍵入條碼，按送出即可。說明：為了掃瞄條碼快速移除多筆館藏，必須再次勾選 \"新增或移除館藏\" 頁面的 \"從書庫移除館藏\" "
+"勾選盒以移除它，否則永遠都是在勾選狀態。"
+
 #: intranet-tmpl/prog/en/modules/help/circ/renew.tt:7
 #, c-format
 msgid ""
@@ -17221,12 +17358,22 @@ msgstr ""
 "Koha 的工具都是執行特定工作之用。其他的圖書館管理系統常把這些工具當成 '報"
 "表'。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:17
+#, c-format
+msgid "Transfer a Rotating Collection"
+msgstr "轉移巡迴書庫"
+
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:11
 #, c-format
 msgid ""
 "Transfer limits are set based on the collections codes you have applied via "
 "the Authorized Value administration area."
 msgstr "館藏代碼的轉移限制根據管理區塊的容許值而定。"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:19
+#, c-format
+msgid "Transferring a collection will:"
+msgstr "轉移巡迴書庫將："
 
 #: intranet-tmpl/prog/en/modules/help/circ/branchtransfers.tt:3
 #, c-format
@@ -18552,6 +18699,11 @@ msgstr "在noissuescharge 系統偏好裡設定禁止借出的數量"
 #, c-format
 msgid "You can set up record matching rules through the administration area "
 msgstr "從管理區塊可設定紀錄匹配規則 "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:25
+#, c-format
+msgid "You can transfer a collection in one of two ways:"
+msgstr "可以用以下的方法之一轉移巡迴書庫："
 
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:13
 #, c-format
@@ -19960,6 +20112,7 @@ msgstr "管理 "
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "manual"
 msgstr "手冊"
@@ -20205,6 +20358,14 @@ msgstr "超級圖書館員 "
 #, c-format
 msgid "superserials "
 msgstr "superserials "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid ""
+"system preference must be set to \"Don't automatically transfer items to "
+"their home library when they are returned\" for Rotating Collections to "
+"function properly."
+msgstr "必須將系統偏好設為 \"館藏還入後不自動移轉至所屬圖書館\" 巡迴書庫才能順利運。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:96
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:42

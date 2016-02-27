@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOHA 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-18 18:52-0300\n"
-"PO-Revision-Date: 2016-01-18 19:05+0200\n"
+"POT-Creation-Date: 2016-02-14 16:35-0300\n"
+"PO-Revision-Date: 2016-02-20 17:40+0200\n"
 "Last-Translator: Paul <paul.vilhan@gmail.com>\n"
 "Language-Team: Paul Vilhan\n"
 "Language: sk\n"
@@ -947,6 +947,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "(online)."
 msgstr "(online)."
@@ -2919,6 +2920,11 @@ msgstr ""
 "Kategória povolených hodnôt; ak je jedna vybratá, stránka zápisu záznamu o "
 "čitateľovi dovolí iba hodnoty vybrané zo zoznamu povolených hodnôt. "
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid "AutomaticItemReturn"
+msgstr "AutomaticItemReturn"
+
 #: intranet-tmpl/prog/en/modules/help/reports/issues_avg_stats.tt:3
 #, c-format
 msgid "Average loan time"
@@ -3441,6 +3447,15 @@ msgstr "Katalogizácia:"
 #, c-format
 msgid "Change Patron Password"
 msgstr "Zmeniť heslo čitateľa"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:21
+#, c-format
+msgid ""
+"Change the current location of the items in that collection to the library "
+"it is to be transferred to"
+msgstr ""
+"Zmeňte súčasné umiestnenie exemplárov v tejto zbierke do knižnice, do ktorej "
+"sa má presunúť"
 
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:7
 #, c-format
@@ -6895,6 +6910,17 @@ msgstr ""
 "V zozname zaškrtnite dva exempláre, ktoré chcete zlúčiť. Ak zvolíte viac "
 "alebo menej ako 2, zobrazí sa Vám chyba"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:27
+#, c-format
+msgid ""
+"From the main Rotating Collections page, click on Transfer next to the title "
+"of the collection you wish to transfer; choose the library you wish to "
+"transfer the collection to and click \"Transfer collection\"."
+msgstr ""
+"Z hlavnej stránky Cirkulujúcich Zbierok, kliknite na Presunúť vedľa názvu "
+"zbierky, ktorú chcete presunúť; zvoľte knižnicu, do ktorej chcete zbierku "
+"presunúť a kliknite na \"Presunúť zbierku\"."
+
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:13
 #, c-format
 msgid ""
@@ -7613,6 +7639,19 @@ msgstr ""
 #, c-format
 msgid "If a record you want to delete can't be deleted it will be highlighted."
 msgstr "Ak záznam, ktorý chcete odstrániť nemožno odstrániť, bude zvýraznený."
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:33
+#, c-format
+msgid ""
+"If an item in a rotating collection is checked in at a library other than "
+"the one it is supposed to be transferred to, a notification will appear "
+"notifying library staff that the item is part of a rotating collection, also "
+"letting them know where the item needs to be sent."
+msgstr ""
+"Ak sa exemplár v cirkulujúcej zbierke vráti do inej než predpokladanej "
+"knižnice, objaví sa poznámka upozorňujúca zamestnancov knižnice na to, že "
+"exemplár je súčasťou cirkulujúcej zbierky, a tiež im oznamuje, kam má byť "
+"exemplár zaslaný."
 
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:11
 #, c-format
@@ -8919,7 +8958,7 @@ msgid ""
 "If you have the SpecifyReturnDate preference set to 'Allow' you will be able "
 "to arbitrarily set the return date from below the check in box."
 msgstr ""
-"Ak máte SpecifyReturnDate nastavené na 'Povoliť', budete môcť ľubuvoľne "
+"Ak máte SpecifyReturnDate nastavené na 'Povoliť', budete môcť ľubovoľne "
 "nastavovať termín návratu pod políčkom návratu."
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:58
@@ -9645,6 +9684,12 @@ msgstr ""
 "Dôležité: Máte na mysli? funguje zatiaľ iba v OPACu. Možnosti pre Intranet "
 "sú už vo vývoji."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, c-format
+msgid "Important:"
+msgstr "Dôležité:"
+
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:108
 #, c-format
 msgid ""
@@ -10303,6 +10348,18 @@ msgstr ""
 "Pre reklamáciu chýbajúceho alebo oneskoreného čísla musíte zadať informáciu "
 "o predajcovi"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, c-format
+msgid ""
+"In order to complete the transfer process, the library receiving the "
+"rotating collection should check in all items from the collection as they "
+"receive them. This will clear the transfer so that the items are no longer "
+"shown as being \"in transit\"."
+msgstr ""
+"Na dokončenie procesu presunu by mala knižnica prijímajúca cirkulujúcu "
+"zbierku vrátiť všetky exempláre zo zbierky, pretože ich prijímajú. Týmto sa "
+"vyčistí presun, takže exempláre sa už nezobrazujú ako \"na ceste\"."
+
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:24
 #, c-format
 msgid ""
@@ -10556,6 +10613,18 @@ msgstr ""
 "Vo Vašich výsledkoch uvidíte všetky predplatné, ktoré vypršia pred daným "
 "dátumom. Tu si môžete zvoliť ďalší náhľad na predplatné alebo ho obnoviť "
 "jedným kliknutím."
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:22
+#, c-format
+msgid ""
+"Initiate a transfer from its original current location/holding library to "
+"the current location/holding library it is to be rotated to. When a library "
+"receives a collection they will need to check in the items to complete the "
+"transfer."
+msgstr ""
+"Začnite presun z pôvodnej súčasnej lokácie/aktuálnej knižnice do súčasnej "
+"lokácie/aktuálnej knižnice, do ktorej sa má cirkulovať. Keď knižnica prijíma "
+"zbierku, mali by v nej vrátiť exempláre, aby sa dokončil presun."
 
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:3
 #, c-format
@@ -13039,6 +13108,17 @@ msgstr ""
 msgid "Or you can just have no image associated with the item type"
 msgstr "Alebo nemusíte mať k typu obrázka pridružený žiaden obrázok"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:28
+#, c-format
+msgid ""
+"Or, from the \"add or remove items\" page for a collection, you can click "
+"the Transfer button, choose the library you wish to transfer the collection "
+"to and click \"Transfer Collection\"."
+msgstr ""
+"Alebo, zo stránky \"pridať alebo odobrať exempláre\" pre zbierku, môžete "
+"kliknúť na tlačidlo Presun, zvoliť knižnicu, do ktorej chcete presunúť "
+"zbierku a kliknúť na \"Presunúť zbierku\"."
+
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersuggestion.tt:3
 #, c-format
 msgid "Order from Purchase Suggestion"
@@ -13930,6 +14010,32 @@ msgstr ""
 "Prezrite svoj súhrn pred dokončením importu, aby ste sa uistili, že Vaše "
 "pravidlo zhody fungovalo a že záznamy vyzerajú tak, ako ste to očakávali"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:3
+#, c-format
+msgid "Rotating Collections"
+msgstr "Cirkulujúce zbierky"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:5
+#, c-format
+msgid ""
+"Rotating Collections is a tool for managing collections of materials that "
+"frequently get shifted from library to library. It adds the ability to store "
+"not only an item's home library and current location, but also information "
+"about where it is supposed to be transferred to next to ensure that all "
+"items in the collection are sent to the correct library. When an item in a "
+"rotating collection is checked in, library staff are notified that the item "
+"is part of a rotating collection and which branch it should be sent to if it "
+"is not at the correct one."
+msgstr ""
+"Cirkulujúce zbierky sú nástroj pre správu zbierok materiálov, ktoré sa často "
+"presúvajú medzi knižnicami. Pridáva schopnosť ukladať nielen domácu a "
+"aktuálnu knižnicu exemplára, ale aj informáciu o predpokladanom mieste, kam "
+"sa má ďalej presunúť, čím sa zabezpečí, že všetky exempláre v zbierke sa "
+"posielajú do správnej knižnice. Keď exemplár v cirkulujúcej zbierke sa "
+"vráti, zamestnanci knižnice sú upovedomení, že exemplár je súčasťou "
+"cirkulujúcej knižnice a do ktorej pobočky by mal byť poslaný, ak to nie je "
+"správna knižnica."
+
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:347
 #, c-format
 msgid "Routing"
@@ -14605,6 +14711,11 @@ msgstr "Pozrite si kompletnú dokumentáciu o predlžovaní v "
 #, c-format
 msgid "See the full documentation for Reports in the "
 msgstr "Pozrite si kompletnú dokumentáciu o výkazoch v "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
+#, c-format
+msgid "See the full documentation for Rotating Collections in the "
+msgstr "Pozrite si kompletnú dokumentáciu o Cirkulujúcich zbierkach v "
 
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #, c-format
@@ -15615,6 +15726,7 @@ msgstr "Text pre knihovníka "
 
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:11
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:12
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
 #, c-format
 msgid "The "
 msgstr " "
@@ -18594,6 +18706,20 @@ msgstr ""
 "políčko 'Duplikovať aktuálnu šablónu' pre vytvorenie kópie jestvujúce "
 "šablóny, s ktorou začnete."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:11
+#, c-format
+msgid ""
+"To add items to a collection, click \"Add or remove items\" next to the "
+"collection's name in the list of collections. Under \"Add or remove items\" "
+"scan or type in the barcode of the item you wish to add to the collection, "
+"and hit Enter or click Submit if necessary."
+msgstr ""
+"Pre pridanie exemplárov do zbierky, kliknite na \"Pridať alebo odobrať "
+"exempláre\" vedľa názvu zbierky v zozname zbierok. Pod \"Pridať alebo "
+"odobrať exempláre\" zoskenujte alebo vpíšte čiarový kód exemplára, ktorý "
+"chcete pridať do zbierky a stlačte Enter alebo kliknite na Odoslať podľa "
+"potreby."
+
 #: intranet-tmpl/prog/en/modules/help/tools/koha-news.tt:7
 #, c-format
 msgid ""
@@ -18722,6 +18848,21 @@ msgstr ""
 #, c-format
 msgid "To create a new matching rule:"
 msgstr "Vytvoriť nové pravidlo zhody:"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:10
+#, c-format
+msgid ""
+"To create a new rotating collection, click the \"New Collection\" button, "
+"fill in the Title and Description, and click Submit. Once submitted you'll "
+"see \"Collection Name added successfully\"; click \"Return to rotating "
+"collections home\" to return to the main Rotating Collections management "
+"page (or click Rotating Collections in the sidebar)."
+msgstr ""
+"Pre vytvorenie novej cirkulujúcej zbierky, kliknite na tlačidlo \"Nová "
+"zbierka\", vyplňte Názov a Popis a kliknite na Odoslať. Potom sa zobrazí "
+"hlásenie \"Názov zbierky bol úspešne pridaný\"; kliknite na \"Vrátiť sa do "
+"cirkulujúcich zbierok\" a vráťte sa na stránku správy Cirkulujúcich zbierok ("
+"alebo kliknite na Cirkulujúce zbierky na bočnej lište)."
 
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:15
 #, c-format
@@ -19212,6 +19353,27 @@ msgstr ""
 "Pre odstránenie menovky zo špecifického titulu, jednoducho klinite na "
 "tladičlo 'Odobrať menovku' napravo od titulu."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:12
+#, c-format
+msgid ""
+"To remove an item from a collection, either click Remove next to the item's "
+"barcode in the list of items within the collection or check the \"Remove "
+"item from collection\" box next to the Barcode text box under \"Add or "
+"remove items\", and scan or type in the barcode, clicking Submit or hitting "
+"Enter if necessary. Note: The \"Remove item from collection\" checkbox will "
+"remain checked as long as you are on the \"Add or remove items\" page, "
+"unless you uncheck it, to facilitate quickly removing a number of items at a "
+"time by scanning their barcodes."
+msgstr ""
+"Pre odobratie exemplára zo zbierky, kliknite buď na Odobrať vedľa čiarového "
+"kódu v zozname exemplárov v rámci zbierky alebo zaškrtnite políčko \"Odobrať "
+"exemplár zo zbierky\" vedľa čiarového kódu pod \"Pridať alebo odobrať "
+"exempláre\", a zoskenujte alebo vpíšte čiarový kód, kliknite na Odoslať "
+"alebo stlačte Enter podľa potreby. Poznámka: Políčko \"Odobrať exemplár zo "
+"zbierky\" zostane zaškrtnuté, kým zostanete na stránke \"Pridať alebo "
+"odobrať exempláre\", pokiaľ ho neodznačíte, aby ste uľahčili rýchle "
+"odobratie viacerých exemplárov naraz zoskenovaním ich čiarových kódov."
+
 #: intranet-tmpl/prog/en/modules/help/circ/renew.tt:7
 #, c-format
 msgid ""
@@ -19467,6 +19629,11 @@ msgstr ""
 "vymenované pod nástrojmi v Kohe radia pod 'Výkazy' v iných knižničných "
 "systémoch."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:17
+#, c-format
+msgid "Transfer a Rotating Collection"
+msgstr "Presunúť cirkulujúcu zbierku"
+
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:11
 #, c-format
 msgid ""
@@ -19475,6 +19642,11 @@ msgid ""
 msgstr ""
 "Obmedzenia presunov sú založené na kódoch zbierok, ktoré ste použili v "
 "oblasti administrácie povolených hodnôt."
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:19
+#, c-format
+msgid "Transferring a collection will:"
+msgstr "Presun zbierky bude:"
 
 #: intranet-tmpl/prog/en/modules/help/circ/branchtransfers.tt:3
 #, c-format
@@ -21026,6 +21198,11 @@ msgstr ""
 msgid "You can set up record matching rules through the administration area "
 msgstr "Môžete nastaviť pravidlá zhody záznamov v oblasti administrácie "
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:25
+#, c-format
+msgid "You can transfer a collection in one of two ways:"
+msgstr "Zbierku môžete presunúť jedným z dvoch spôsobov:"
+
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:13
 #, c-format
 msgid "You can upload a file of these numbers or"
@@ -22548,6 +22725,7 @@ msgstr "spracovanie "
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "manual"
 msgstr "manuáli"
@@ -22801,6 +22979,17 @@ msgstr "hlavný knihovník "
 #, c-format
 msgid "superserials "
 msgstr "superperiodiká "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid ""
+"system preference must be set to \"Don't automatically transfer items to "
+"their home library when they are returned\" for Rotating Collections to "
+"function properly."
+msgstr ""
+"systémové nastavenie musí byť nastavené na \"Nepresúvať exempláre "
+"automaticky do ich domovskej knižnice pri ich návrate\" pre Cirkulujúce "
+"zbierky, aby fungovalo správne."
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:96
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:42

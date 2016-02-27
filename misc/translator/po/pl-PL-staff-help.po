@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2016-01-18 18:45-0300\n"
-"PO-Revision-Date: 2015-10-20 20:25+0000\n"
+"POT-Creation-Date: 2016-02-14 16:08-0300\n"
+"PO-Revision-Date: 2016-02-26 22:22+0000\n"
 "Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1445372728.000000\n"
+"X-POOTLE-MTIME: 1456525357.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -216,7 +216,7 @@ msgstr ""
 "katalogowania i pracy z egzemplarzami)."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "'Call Number' is for your item's call number or call number prefix"
 msgstr "'Sygnatura' - identyfikator egzemplarza"
 
@@ -383,7 +383,7 @@ msgstr ""
 "bibliotekarza"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:27
-#, fuzzy, c-format
+#, c-format
 msgid "'Library' is the branch that owns this subscription. "
 msgstr "'Biblioteka' - wybór biblioteki, która jest właścicielem prenumeraty. "
 
@@ -451,14 +451,15 @@ msgstr ""
 "wartości do raportu"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:80
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'Numbering pattern' will help you determine how the numbers are printed for "
 "each issue. Patterns entered here are saved and editable at any time by "
 "visiting 'Manage numbering patterns' "
 msgstr ""
 "'Wzór numerowania' - określa liczbę numerów w prenumeracie dla każdego "
-"egzemplarza "
+"egzemplarza. Każdy wzór może być modyfikowany w 'Zarządzaniu wzorem "
+"numerowania' "
 
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:22
 #, c-format
@@ -939,6 +940,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "(online)."
 msgstr "(online)."
@@ -1000,6 +1002,9 @@ msgid ""
 "sound will be triggered when a checkout for a patron is not possible (such "
 "as the barcode not being found). "
 msgstr ""
+". Na przykład, jeśli użyjesz selektora \"#circ_impossible\", twój wybrany "
+"dźwięk będzie uruchamiany kiedy wypożyczenie dla użytkownika będzie "
+"niemożliwe (w przypadku braku kodu kreskowego). "
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:35
 #, c-format
@@ -1960,9 +1965,9 @@ msgid "Adding a group"
 msgstr "Dodawanie grupy"
 
 #: intranet-tmpl/prog/en/modules/help/admin/audio_alerts.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "Adding a new alert"
-msgstr "Dodawanie nowego budżetu"
+msgstr "Dodawanie nowego alertu"
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:13
 #, c-format
@@ -2192,6 +2197,10 @@ msgid ""
 "what issues the system will generate, if there are irregularities you can "
 "choose which issues don't exist from the list presented."
 msgstr ""
+"Po wypełnieniu danych, kliknij 'Sprawdź poprawność wzoru numerowania'. "
+"Zobaczysz jak system będzie generował nowe numery. Jeśli w prenumeracie "
+"znajduje się jakaś nieregularność, możesz wybrać na liście, które numery nie "
+"będą generowane."
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:26
 #: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:42
@@ -2786,7 +2795,7 @@ msgstr ""
 msgid ""
 "At this point, you can preview your sound by clicking the \"Play sound\" "
 "button"
-msgstr ""
+msgstr "Możesz sprawdzić dźwięk klikając \"Odtwórz dźwięk\"."
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:7
 #, c-format
@@ -2801,7 +2810,7 @@ msgstr "Odbiorca"
 #: intranet-tmpl/prog/en/modules/help/admin/audio_alerts.tt:3
 #, c-format
 msgid "Audio alerts"
-msgstr ""
+msgstr "Alerty dźwiękowe"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:69
 #, c-format
@@ -2886,6 +2895,11 @@ msgstr ""
 "Jeśli wybierzesz kategorię wartości dopuszczonej, wejściowa strona rekordu "
 "użytkownika będzie pozwalała na wybór wartości tylko z zatwierdzonej listy "
 "wartości. "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid "AutomaticItemReturn"
+msgstr "AutomaticItemReturn"
 
 #: intranet-tmpl/prog/en/modules/help/reports/issues_avg_stats.tt:3
 #, c-format
@@ -3190,11 +3204,12 @@ msgid "Borrower number: "
 msgstr "Numer użytkownika: "
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Both the 'Source' and the 'Text' fields must be filled in in order to save "
 "the new quote."
-msgstr "musi być wypełnione, by zapisać nowy cytat."
+msgstr ""
+"Obydwa pola: 'Źródło' i 'Tekst' muszą być wypełnione, by zapisać nowy cytat."
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:491
 #, c-format
@@ -3415,6 +3430,14 @@ msgstr "Katalogowanie:"
 msgid "Change Patron Password"
 msgstr "Zmień hasło użytkownika"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:21
+#, c-format
+msgid ""
+"Change the current location of the items in that collection to the library "
+"it is to be transferred to"
+msgstr ""
+"Zmień bieżącą lokalizację egzemplarzy w kolekcji biblioteki, by przekazać do"
+
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:7
 #, c-format
 msgid "Charging Fines/Fees"
@@ -3538,7 +3561,8 @@ msgid ""
 "Check the box for 'Mark the original budget as inactive' if the original "
 "budget should no longer be used."
 msgstr ""
-"Zaznacz 'Oznacz budżet jako nieaktywny' jeśli nie potrzebujesz już budżetu."
+"Zaznacz 'Oznacz powielany budżet jako nieaktywny' jeśli zamykasz poprzedni "
+"budżet."
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:59
 #, c-format
@@ -3650,7 +3674,7 @@ msgstr ""
 "informacje o należnościach i wypożyczeniach."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:25
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Checking the 'Manual history' box will allow you to enter serials outside "
 "the prediction pattern once the subscription is saved by going to the "
@@ -4215,9 +4239,9 @@ msgstr ""
 "Kliknij przycisk 'Zapłać' obok należności, którą chcesz zapłacić w całości"
 
 #: intranet-tmpl/prog/en/modules/help/admin/audio_alerts.tt:18
-#, fuzzy, c-format
+#, c-format
 msgid "Click \"Save alert\" and your done!"
-msgstr "Po zakończeniu kliknij 'Zapisz'"
+msgstr "Po zakończeniu kliknij 'Zapisz alert' i gotowe!"
 
 #: intranet-tmpl/prog/en/modules/help/members/pay.tt:43
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:43
@@ -5150,9 +5174,9 @@ msgid "Deleting Item Types"
 msgstr "Usuwanie typów dokumentu"
 
 #: intranet-tmpl/prog/en/modules/help/admin/audio_alerts.tt:27
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting alerts"
-msgstr "Usuwanie pozycji"
+msgstr "Usuwanie alertów"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:67
 #, c-format
@@ -5630,6 +5654,8 @@ msgid ""
 "Enter a selector in the \"selector\" input, you can see documentation on "
 "jQuery selectors "
 msgstr ""
+"Wybierz selektor w okienku \"selektor\", zobacz dokumentację dla selektorów "
+"jQuery "
 
 #: intranet-tmpl/prog/en/modules/help/admin/audio_alerts.tt:16
 #, c-format
@@ -5638,6 +5664,9 @@ msgid ""
 "using the pulldown selector, or you can enter a full URL to a sound file on "
 "another server."
 msgstr ""
+"Wprowadź dźwięk, który ma być odtwarzany. Możesz wybrać dźwięk wbudowany w "
+"Koha za pomocą selektora lub wprowadzić pełny adres URL pliku dźwiękowego z "
+"innego serwera."
 
 #: intranet-tmpl/prog/en/modules/help/members/pay.tt:36
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:36
@@ -6809,6 +6838,14 @@ msgstr ""
 "Z listy, wybierz dwie pozycje do scalenia. Jeśli wybierzesz więcej lub mniej "
 "niż dwa, wyświetli się błąd"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:27
+#, c-format
+msgid ""
+"From the main Rotating Collections page, click on Transfer next to the title "
+"of the collection you wish to transfer; choose the library you wish to "
+"transfer the collection to and click \"Transfer collection\"."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:13
 #, c-format
 msgid ""
@@ -7528,6 +7565,15 @@ msgid "If a record you want to delete can't be deleted it will be highlighted."
 msgstr ""
 "Jeśli rekord, który chcesz usunąć nie może zostać usunięty zostanie on "
 "podświetlony."
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:33
+#, c-format
+msgid ""
+"If an item in a rotating collection is checked in at a library other than "
+"the one it is supposed to be transferred to, a notification will appear "
+"notifying library staff that the item is part of a rotating collection, also "
+"letting them know where the item needs to be sent."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:11
 #, c-format
@@ -9561,6 +9607,12 @@ msgstr ""
 "Ważne: 'Czy chodziło o...?' obecnie działa tylko w OPAC. Opcja intranetowa "
 "będzie dopiero rozwijana."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, fuzzy, c-format
+msgid "Important:"
+msgstr "Ważne "
+
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:108
 #, c-format
 msgid ""
@@ -10217,6 +10269,15 @@ msgstr ""
 "Przy składaniu reklamacji zagubionych lub opóźnionych numerów czasopism "
 "niezbędne jest podanie informacji teleadresowych (e-mail) dostawcy."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, c-format
+msgid ""
+"In order to complete the transfer process, the library receiving the "
+"rotating collection should check in all items from the collection as they "
+"receive them. This will clear the transfer so that the items are no longer "
+"shown as being \"in transit\"."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:24
 #, c-format
 msgid ""
@@ -10468,6 +10529,15 @@ msgstr ""
 "W wynikach wyświetlą się wszystkie subskrypcje, które wygasają przed datą, "
 "którą wprowadziłeś. W tym miejscu możesz wyświetlić kolejne subskrypcje lub "
 "odnowić jednym kliknięciem."
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:22
+#, c-format
+msgid ""
+"Initiate a transfer from its original current location/holding library to "
+"the current location/holding library it is to be rotated to. When a library "
+"receives a collection they will need to check in the items to complete the "
+"transfer."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:3
 #, c-format
@@ -11263,7 +11333,7 @@ msgstr "Lokalne Użycie:"
 #: intranet-tmpl/prog/en/modules/help/admin/audio_alerts.tt:12
 #, c-format
 msgid "Locate the \"Add new alert\" form."
-msgstr ""
+msgstr "Otwórz formularz \"Dodaj nowy alert\"."
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:26
 #, c-format
@@ -12928,6 +12998,14 @@ msgstr "Otwórz konto użytkownika, z którego chcesz powielić dane"
 msgid "Or you can just have no image associated with the item type"
 msgstr "Jeśli nie chcesz, nie musisz ustawiać zdjęć/ikon dla typów dokumentów."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:28
+#, c-format
+msgid ""
+"Or, from the \"add or remove items\" page for a collection, you can click "
+"the Transfer button, choose the library you wish to transfer the collection "
+"to and click \"Transfer Collection\"."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersuggestion.tt:3
 #, c-format
 msgid "Order from Purchase Suggestion"
@@ -13828,6 +13906,24 @@ msgstr ""
 "sprawdź podsumowanie, zanim zakończysz import, by mieć pewność, że reguły "
 "dopasowania zadziałały i pojawiły się rekordy, których się spodziewałeś;"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:3
+#, fuzzy, c-format
+msgid "Rotating Collections"
+msgstr "Kolekcja czasopism"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:5
+#, c-format
+msgid ""
+"Rotating Collections is a tool for managing collections of materials that "
+"frequently get shifted from library to library. It adds the ability to store "
+"not only an item's home library and current location, but also information "
+"about where it is supposed to be transferred to next to ensure that all "
+"items in the collection are sent to the correct library. When an item in a "
+"rotating collection is checked in, library staff are notified that the item "
+"is part of a rotating collection and which branch it should be sent to if it "
+"is not at the correct one."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:347
 #, c-format
 msgid "Routing"
@@ -14495,6 +14591,11 @@ msgstr "Zobacz instrukcje dla Prolongaty w "
 msgid "See the full documentation for Reports in the "
 msgstr "Zobacz instrukcję dla Raportów w "
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
+#, fuzzy, c-format
+msgid "See the full documentation for Rotating Collections in the "
+msgstr "Zobacz instrukcję dla List obiegu w "
+
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #, c-format
 msgid "See the full documentation for Routing Lists in the "
@@ -15078,14 +15179,15 @@ msgstr "Pole sortowania 2 "
 #: intranet-tmpl/prog/en/modules/help/admin/audio_alerts.tt:21
 #, c-format
 msgid "Sound precedence"
-msgstr ""
+msgstr "Ustawienia dźwięku"
 
+# brak tłumaczenia drugiego zdania
 #: intranet-tmpl/prog/en/modules/help/admin/audio_alerts.tt:23
 #, c-format
 msgid ""
 "Sounds will be played in order from top to bottom. That is, the first select "
 "that finds a match will have its sound played."
-msgstr ""
+msgstr "Dźwięki będą odtwarzane w kolejności od góry do dołu."
 
 #: intranet-tmpl/prog/en/modules/help/admin/classsources.tt:5
 #, c-format
@@ -15489,6 +15591,7 @@ msgstr "Tekst dla bibliotekarza "
 
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:11
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:12
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
 #, c-format
 msgid "The "
 msgstr " "
@@ -17729,12 +17832,15 @@ msgstr ""
 msgid "This section can be expanded"
 msgstr "Sekcja może zawierać więcej opcji"
 
+# tłumaczenie niepewne
 #: intranet-tmpl/prog/en/modules/help/admin/audio_alerts.tt:5
 #, c-format
 msgid ""
 "This section of Koha lets you specify a given sound to play when a given "
 "jQuery selector is matched."
 msgstr ""
+"Ta sekcja Koha pozwala wskazać dźwięki do odtwarzania, kiedy dany selektor "
+"jQuery jest dopasowany."
 
 #: intranet-tmpl/prog/en/modules/help/about.tt:5
 #, c-format
@@ -18471,6 +18577,15 @@ msgstr ""
 "'Powiel bieżący szablon', by utworzyć kopię istniejącego szablonu i "
 "wprowadzić na nim niezbędne zmiany."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:11
+#, c-format
+msgid ""
+"To add items to a collection, click \"Add or remove items\" next to the "
+"collection's name in the list of collections. Under \"Add or remove items\" "
+"scan or type in the barcode of the item you wish to add to the collection, "
+"and hit Enter or click Submit if necessary."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/koha-news.tt:7
 #, c-format
 msgid ""
@@ -18535,6 +18650,8 @@ msgid ""
 "To change the precedence of a given alert, use the four arrows to move it "
 "up, down, or to the top or bottom of the list."
 msgstr ""
+"Jeśli chcesz zmienić kolejność wprowadzonych alertów, użyj strzałek góra - "
+"dół, by umieścić alert na początku lub na końcu listy."
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:16
 #, c-format
@@ -18593,6 +18710,16 @@ msgstr "Jeśli chcesz utworzyć nową listę użytkowników, kliknij 'Nowa lista
 msgid "To create a new matching rule:"
 msgstr "Jeśli chcesz stworzyć nową regułę dopasowania, to:"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:10
+#, c-format
+msgid ""
+"To create a new rotating collection, click the \"New Collection\" button, "
+"fill in the Title and Description, and click Submit. Once submitted you'll "
+"see \"Collection Name added successfully\"; click \"Return to rotating "
+"collections home\" to return to the main Rotating Collections management "
+"page (or click Rotating Collections in the sidebar)."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:15
 #, c-format
 msgid ""
@@ -18638,6 +18765,9 @@ msgid ""
 "to delete, then click the \"Delete selected alerts\" button and confirm you "
 "want to delete those alerts. %s "
 msgstr ""
+"Jeśli chcesz usunąć jeden lub więcej alertów, zaznacz wybrane alerty, a "
+"następnie kliknij \"Usuń zaznaczone alerty\" i potwierdź usunięcie alertów. %"
+"s "
 
 #: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:17
 #, c-format
@@ -19077,6 +19207,19 @@ msgstr ""
 "Jeśli chcesz usunąć tag z konkretnego tytułu, kliknij 'Usuń tag' po prawej "
 "stronie tytułu."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:12
+#, c-format
+msgid ""
+"To remove an item from a collection, either click Remove next to the item's "
+"barcode in the list of items within the collection or check the \"Remove "
+"item from collection\" box next to the Barcode text box under \"Add or "
+"remove items\", and scan or type in the barcode, clicking Submit or hitting "
+"Enter if necessary. Note: The \"Remove item from collection\" checkbox will "
+"remain checked as long as you are on the \"Add or remove items\" page, "
+"unless you uncheck it, to facilitate quickly removing a number of items at a "
+"time by scanning their barcodes."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/circ/renew.tt:7
 #, c-format
 msgid ""
@@ -19326,6 +19469,11 @@ msgid ""
 "management systems."
 msgstr "Narzędzia w Koha umożliwiają dokonywanie różnych działań w modułach."
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:17
+#, c-format
+msgid "Transfer a Rotating Collection"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:11
 #, c-format
 msgid ""
@@ -19335,6 +19483,11 @@ msgstr ""
 "Limit transferów oparty jest domyślnie o kody kolekcji, które zostały "
 "wprowadzone jako 'Dopuszczone Wartości' w module Administracja "
 "(Administracja>Dopuszczone wartości)."
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:19
+#, c-format
+msgid "Transferring a collection will:"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/circ/branchtransfers.tt:3
 #, c-format
@@ -20881,6 +21034,11 @@ msgstr ""
 msgid "You can set up record matching rules through the administration area "
 msgstr "Możesz ustawić reguły dopasowania rekordów w module administratora "
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:25
+#, c-format
+msgid "You can transfer a collection in one of two ways:"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:13
 #, c-format
 msgid "You can upload a file of these numbers or"
@@ -22391,6 +22549,7 @@ msgstr "zarządzanie "
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "manual"
 msgstr "podręczniku"
@@ -22649,6 +22808,14 @@ msgstr "superlibrarian "
 #, c-format
 msgid "superserials "
 msgstr "superserials "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid ""
+"system preference must be set to \"Don't automatically transfer items to "
+"their home library when they are returned\" for Rotating Collections to "
+"function properly."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:96
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:42
