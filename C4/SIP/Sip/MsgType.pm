@@ -969,10 +969,12 @@ sub handle_patron_info {
         #   charged items limit
 
         $resp .= add_field( FID_VALID_PATRON, 'Y' );
+        my $password_rc;
         if ( defined($patron_pwd) ) {
 
             # If patron password was provided, report whether it was right or not.
-            $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $patron->check_password($patron_pwd) ) );
+            $password_rc = $patron->check_password($patron_pwd);
+            $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $password_rc ) );
         }
 
         $resp .= maybe_add( FID_CURRENCY, $patron->currency );
@@ -1000,10 +1002,14 @@ sub handle_patron_info {
         # Custom protocol extension to report patron internet privileges
         $resp .= maybe_add( FID_INET_PROFILE, $patron->inet_privileges );
 
-        $resp .= maybe_add( FID_SCREEN_MSG, $patron->screen_msg,   $server );
-        $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode}, $server )
-          if ( $server->{account}->{send_patron_home_library_in_af} );
-
+        my $msg = $patron->screen_msg;
+        if( defined( $patron_pwd ) && !$password_rc ) {
+            $msg .= ' -- ' . INVALID_PW;
+        }
+        if ( $server->{account}->{send_patron_home_library_in_af} ) {
+            $msg .= ' -- ' . $patron->{branchcode};
+        }
+        $resp .= maybe_add( FID_SCREEN_MSG, $msg, $server );
         $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line );
     } else {
 
@@ -1022,6 +1028,7 @@ sub handle_patron_info {
         if ( $protocol_version >= 2 ) {
             $resp .= add_field( FID_VALID_PATRON, 'N' );
         }
+        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD );
     }
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
