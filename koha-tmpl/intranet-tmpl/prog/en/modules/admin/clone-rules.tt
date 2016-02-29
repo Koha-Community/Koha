@@ -1,19 +1,19 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Issuing rules &rsaquo; Clone issuing rules</title>
+<title>Koha &rsaquo; Administration &rsaquo; Circulation and fine rules &rsaquo; Clone circulation and fine rules</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="admin_clone-rules" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/smart-rules.pl">Issuing rules</a> &rsaquo; Clone issuing rules</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/smart-rules.pl">Circulation and fine rules</a> &rsaquo; Clone circulation and fine rules</div>
 
 <div id="doc3" class="yui-t1">
 
 <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
-    <h2>Cloning issuing rules
+    <h2>Cloning circulation and fine rules
         [% IF ( frombranchname || tobranchname ) %]
             [% IF ( frombranchname ) %] from "[% frombranchname %]"[% END %]
 	    [% IF ( tobranchname ) %] to "[% tobranchname %]"[% END %]
@@ -22,14 +22,14 @@
 
     [% IF ( result ) %]
 	[% IF ( error ) %]
-	    <div class="dialog alert">Cloning of issuing rules failed!</div>
+        <div class="dialog alert">Cloning of circulation and fine rules failed!</div>
 	[% ELSE %]
 	    <div class="dialog message"><p>The rules have been cloned.</p></div>
 	[% END %]
-    <a href="/cgi-bin/koha/admin/smart-rules.pl">Return to issuing rules</a>
+    <a href="/cgi-bin/koha/admin/smart-rules.pl">Return to circulation and fine rules</a>
     [% ELSE %]
 
-	<p class="help">Use carefully! If the destination library already has issuing rules, they will be deleted without warning!</p>
+    <p class="help">Use carefully! If the destination library already has circulation and fine rules, they will be deleted without warning!</p>
 	<form action="/cgi-bin/koha/admin/clone-rules.pl" method="post">
 	    [% UNLESS ( frombranch ) %]
 	    <fieldset>
@@ -67,6 +67,7 @@
 	    </fieldset>
 	[% END %]
 	<input type="submit" value="Submit" />
+    <a href="/cgi-bin/koha/admin/smart-rules.pl" class="cancel">Cancel</a>
 	</form>
 
     [% END %]
