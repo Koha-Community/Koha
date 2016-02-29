@@ -130,7 +130,7 @@ $dbh->{RaiseError} = 1;
     }
     ( $template, $loggedinuser, $cookies ) = get_template_and_user(
         {
-            template_name   => 'errors/500.tt',
+            template_name   => 'errors/errorpage.tt',
             query           => $query,
             type            => "intranet",
             authnotrequired => 1,
@@ -138,7 +138,7 @@ $dbh->{RaiseError} = 1;
         }
     );
     my $file_exists = ( -f $template->{filename} ) ? 1 : 0;
-    is ( $file_exists, 1, 'The file errors/500.tt should be accessible (contains integers)' );
+    is ( $file_exists, 1, 'The file errors/errorpage.tt should be accessible (contains integers)' );
 }
 
 # Check that there is always an OPACBaseURL set.
