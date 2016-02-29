@@ -17,56 +17,8 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-
-function CheckSourceForm(f) {
-    var _alertString="";
-    var alertString2;
-    if (f.class_source.value.length==0) {
-        _alertString += "\n- " + _("Classification source code missing");
-    }
-    if (f.sort_rule.value.length==0) {
-        _alertString += "\n- " + _("Filing rule code missing");
-    }
-    if (f.description.value.length==0) {
-        _alertString += "\n- " + _("Description missing");
-    }
-    if (_alertString.length==0) {
-        document.Aform.submit();
-    } else {
-        alertString2  = _("Form not submitted because of the following problem(s)");
-        alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += _alertString;
-        alert(alertString2);
-    }
-}
-
-function CheckRuleForm(f) {
-    var _alertString="";
-    var alertString2;
-    if (f.sort_rule.value.length==0) {
-        _alertString += "\n- " + _("Filing rule code missing");
-    }
-    if (f.description.value.length==0) {
-        _alertString += "\n- " + _("Description missing");
-    }
-    if (f.sort_routine.value.length==0) {
-        _alertString += "\n- " + _("Sort routine missing");
-    }
-    if (_alertString.length==0) {
-        document.Aform.submit();
-    } else {
-        alertString2  = _("Form not submitted because of the following problem(s)");
-        alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += _alertString;
-        alert(alertString2);
-    }
-}
-//]]>
-</script>
 </head>
+
 <body id="admin_classsources" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -101,7 +53,7 @@ function CheckRuleForm(f) {
   [% ELSE %]
 <h2>Add classification source</h2>
   [% END %]
-<form action="[% script_name %]" name="Aform" method="post">
+<form action="[% script_name %]" name="Aform" class="validated" method="post">
   <input type="hidden" name="op" value="[% confirm_op %]" />
   <fieldset class="rows">
     <ol>
@@ -111,20 +63,21 @@ function CheckRuleForm(f) {
             <input type="hidden" name="class_source" value="[% class_source %]" />
             [% class_source %]
           [% ELSE %]
-		  <label for="class_source">Classification source code: </label>
-            <input type="text" id="class_source" name="class_source"  size="10" maxlength="10" />
+              <label class="required" for="class_source">Classification source code: </label>
+              <input class="required" required="required" type="text" id="class_source" name="class_source"  size="10" maxlength="10" />
+              <span class="required">Required</span>
           [% END %]
        </li>
-       <li><label for="description">Description: </label>
-           <input type="text" id="description" name="description" size="50" maxlength="250" 
-                  value="[% description |html %]" />
+       <li><label class="required" for="description">Description: </label>
+           <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% description |html %]" />
+           <span class="required">Required</span>
        </li>
        <li><label for="used">Source in use?</label>
            [% IF ( used ) %]<input type="checkbox" id="used" name="used" value="used" checked="checked" />[% ELSE %]
 		  <input type="checkbox" id="used" name="used" value="used" />[% END %]
        </li>
-       <li><label for="sort_rule">Filing rule: </label>
-           <select id="sort_rule" name="sort_rule">
+       <li><label class="required" for="sort_rule">Filing rule: </label>
+           <select class="required" required="required" id="sort_rule" name="sort_rule">
            [% FOREACH rules_dropdow IN rules_dropdown %]
              [% IF ( rules_dropdow.selected ) %]
              <option value="[% rules_dropdow.rule %]" selected="selected">[% rules_dropdow.description %] ([% rules_dropdow.rule %])</option>
@@ -133,11 +86,12 @@ function CheckRuleForm(f) {
              [% END %]
            [% END %]
            </select>
+           <span class="required">Required</span>
        </li>    
     </ol>
   </fieldset>
   <fieldset class="action">
-    <input type="button" value="Save" onclick="CheckSourceForm(this.form)" />
+    <input type="submit" value="Save" />
     <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
   </fieldset>
 </form>
@@ -149,7 +103,7 @@ function CheckRuleForm(f) {
   [% ELSE %]
 <h2>Add filing rule</h2>
   [% END %]
-<form action="[% script_name %]" name="Aform" method="post">
+<form action="[% script_name %]" name="Aform" class="validated" method="post">
   <input type="hidden" name="op" value="[% confirm_op %]" />
   <fieldset class="rows">
     <ol>
@@ -159,16 +113,17 @@ function CheckRuleForm(f) {
             <input type="hidden" name="sort_rule" value="[% sort_rule %]" />
             [% sort_rule %]
           [% ELSE %]
-		  <label for="sort_rule">Filing rule code: </label>
-            <input type="text" id="sort_rule" name="sort_rule"  size="10" maxlength="10" />
+              <label for="sort_rule" class="required">Filing rule code: </label>
+              <input class="required" required="required" type="text" id="sort_rule" name="sort_rule"  size="10" maxlength="10" />
+              <span class="required">Required</span>
           [% END %]
        </li>
-       <li><label for="description">Description: </label>
-           <input type="text" id="description" name="description" size="50" maxlength="250" 
-                  value="[% description |html %]" />
+       <li><label for="description" class="required">Description: </label>
+           <input class="required" required="required" type="text" id="description" name="description" size="50" maxlength="250" value="[% description |html %]" />
+           <span class="required">Required</span>
        </li>
-       <li><label for="sort_routine">Filing routine: </label>
-           <select id="sort_routine" name="sort_routine">
+       <li><label for="sort_routine" class="required">Filing routine: </label>
+           <select class="required" required="required" id="sort_routine" name="sort_routine">
            [% FOREACH routines_dropdow IN routines_dropdown %]
              [% IF ( routines_dropdow.selected ) %]
              <option value="[% routines_dropdow.routine %]" selected="selected">[% routines_dropdow.routine %]</option>
@@ -177,11 +132,12 @@ function CheckRuleForm(f) {
              [% END %]
            [% END %]
            </select>
+           <span class="required">Required</span>
        </li>
     </ol>
   </fieldset>
     <fieldset class="action">
-        <input type="button" value="Save" onclick="CheckRuleForm(this.form)" />
+        <input type="submit" value="Save" />
         <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
     </fieldset>
 </form>
