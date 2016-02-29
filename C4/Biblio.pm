@@ -92,6 +92,7 @@ BEGIN {
 
       &GetAuthorisedValueDesc
       &GetMarcStructure
+      &IsMarcStructureInternal
       &GetMarcFromKohaField
       &GetMarcSubfieldStructureFromKohaField
       &GetFrameworkCode
@@ -1080,6 +1081,27 @@ sub GetBiblioItemInfosOf {
 }
 
 =head1 FUNCTIONS FOR HANDLING MARC MANAGEMENT
+
+=head2 IsMarcStructureInternal
+
+    my $tagslib = C4::Biblio::GetMarcStructure();
+    for my $tag ( sort keys %$tagslib ) {
+        next unless $tag;
+        for my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
+            next if IsMarcStructureInternal($tagslib->{$tag}{$subfield});
+        }
+        # Process subfield
+    }
+
+GetMarcStructure creates keys (lib, tab, mandatory, repeatable) for a display purpose.
+These different values should not be processed as valid subfields.
+
+=cut
+
+sub IsMarcStructureInternal {
+    my ( $subfield ) = @_;
+    return ref $subfield ? 0 : 1;
+}
 
 =head2 GetMarcStructure
 

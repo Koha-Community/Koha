@@ -308,7 +308,7 @@ my @subfieldsToAllow = split(/ /, $subfieldsToAllowForBatchmod);
 foreach my $tag (sort keys %{$tagslib}) {
     # loop through each subfield
     foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
-        next unless ref $tagslib->{$tag}{$subfield}; # Not a valid subfield (mandatory, tab, lib)
+        next if IsMarcStructureInternal( $tagslib->{$tag}{$subfield} );
         next if (not $allowAllSubfields and $restrictededition && !grep { $tag . '$' . $subfield eq $_ } @subfieldsToAllow );
     	next if ($tagslib->{$tag}->{$subfield}->{'tab'} ne "10");
         # barcode and stocknumber are not meant to be batch-modified

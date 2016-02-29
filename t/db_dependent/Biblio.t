@@ -17,9 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 
+use List::MoreUtils qw( uniq );
 use MARC::Record;
 use t::lib::Mocks qw( mock_preference );
 
@@ -321,6 +322,25 @@ subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
     # foo.bar does not exist so this should return undef
     $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('foo.bar', '');
     is($marc_subfield_structure, undef, "invalid kohafield returns undef");
+};
+
+subtest 'IsMarcStructureInternal' => sub {
+    plan tests => 6;
+    my $tagslib = GetMarcStructure();
+    my @internals;
+    for my $tag ( sort keys %$tagslib ) {
+        next unless $tag;
+        for my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
+            push @internals, $subfield if IsMarcStructureInternal($tagslib->{$tag}{$subfield});
+        }
+    }
+    @internals = uniq @internals;
+    is( scalar(@internals), 4, '');
+    is( grep( /^lib$/, @internals ), 1, '' );
+    is( grep( /^tab$/, @internals ), 1, '' );
+    is( grep( /^mandatory$/, @internals ), 1, '' );
+    is( grep( /^repeatable$/, @internals ), 1, '' );
+    is( grep( /^a$/, @internals ), 0, '' );
 };
 
 1;

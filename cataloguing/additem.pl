@@ -890,7 +890,7 @@ $itemrecord = $cookieitemrecord if ($prefillitem and not $justaddeditem and $op 
 # We generate form, and fill with values if defined
 foreach my $tag ( keys %{$tagslib}){
     foreach my $subtag (keys %{$tagslib->{$tag}}){
-        next unless ref $tagslib->{$tag}{$subtag}; # Not a valid subfield (mandatory, tab, lib)
+        next if IsMarcStructureInternal($tagslib->{$tag}{$subtag});
         next if ($tagslib->{$tag}->{$subtag}->{'tab'} ne "10");
         next if any { /^$tag$subtag$/ }  @fields;
 

@@ -2996,7 +2996,7 @@ sub FillWithDefaultValues {
             next unless $tag;
             next if $tag == $itemfield;
             for my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
-                next unless ref $tagslib->{$tag}{$subfield}; # Not a valid subfield (mandatory, tab, lib)
+                next if IsMarcStructureInternal($tagslib->{$tag}{$subfield});
                 my $defaultvalue = $tagslib->{$tag}{$subfield}{defaultvalue};
                 if ( defined $defaultvalue and $defaultvalue ne '' ) {
                     my @fields = $record->field($tag);
