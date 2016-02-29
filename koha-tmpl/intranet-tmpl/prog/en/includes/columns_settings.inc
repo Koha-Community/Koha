@@ -1,9 +1,5 @@
 [% USE ColumnsSettings %]
 
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/buttons.dataTables.min.css" />
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/buttons.colVis.min.js"></script>
-
 <script type="text/javascript">
 function KohaTable(selector, dt_parameters, columns_settings) {
     var id = 0;
