@@ -178,7 +178,7 @@ if ( $op eq "export" ) {
         @record_ids = uniq @record_ids;
         if ( @record_ids and my $filefh = $query->upload("id_list_file") ) {
             my @filter_record_ids = <$filefh>;
-            @filter_record_ids = map { my $id = $_; $id =~ s/[\r\n]*$// } @filter_record_ids;
+            @filter_record_ids = map { my $id = $_; $id =~ s/[\r\n]*$//; $id } @filter_record_ids;
             # intersection
             my %record_ids = map { $_ => 1 } @record_ids;
             @record_ids = grep $record_ids{$_}, @filter_record_ids;
