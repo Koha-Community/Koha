@@ -26,6 +26,7 @@ function KohaTable(selector, dt_parameters, columns_settings) {
         {
             extend: 'colvis',
             columns: included_ids,
+            text: _('Column visibility'),
         }
     ];
     var table = $(selector).dataTable($.extend(true, {}, dataTablesDefaults, dt_parameters));
