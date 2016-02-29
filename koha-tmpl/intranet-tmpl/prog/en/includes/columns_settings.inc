@@ -21,7 +21,10 @@ function KohaTable(selector, dt_parameters, columns_settings) {
         }
         id++;
     });
-    dt_parameters[ "oColVis" ] = { "aiExclude": excluded_ids };
+    dt_parameters[ "oColVis" ] = {
+        "aiExclude": excluded_ids,
+        "buttonText": _("Column visibility")
+    };
     var table = $(selector).dataTable($.extend(true, {}, dataTablesDefaults, dt_parameters));
 
     $(hidden_ids).each(function(index, value) {
