@@ -37,7 +37,7 @@ Koha::Account::Lines - Koha accountline Object class
 
 =cut
 
-sub type {
+sub _type {
     return 'Accountline';
 }
 

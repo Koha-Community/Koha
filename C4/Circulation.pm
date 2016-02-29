@@ -674,6 +674,7 @@ C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
 =item C<$duedates> is a DateTime object.
 
 =item C<$inprocess> boolean switch
+
 =item C<$ignore_reserves> boolean switch
 
 =back

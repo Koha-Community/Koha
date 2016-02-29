@@ -40,7 +40,7 @@ Koha::Account::Lines - Koha Account Line Object set class
 
 =cut
 
-sub type {
+sub _type {
     return 'Accountline';
 }
 
