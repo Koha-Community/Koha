@@ -80,7 +80,11 @@ function searchauthority() {
       <td><a href="detail.pl?authid=[% resul.authid %]">Details</a></td>
     [% UNLESS ( resul.isEDITORS ) %]
       <td>
-        <a href="../catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% resul.authid %]" class="button">[% resul.used %] records(s)</a>
+      [% IF resul.used > 0 %]
+          <a href="../catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% resul.authid %]" class="button">[% resul.used %] record(s)</a>
+      [% ELSE %]
+          0 records
+      [% END %]
       </td>
     [% END %]
     [% IF ( CAN_user_editauthorities ) %]
