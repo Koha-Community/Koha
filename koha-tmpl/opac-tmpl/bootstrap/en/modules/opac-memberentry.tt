@@ -118,7 +118,7 @@
 
                         <legend id="library_legend">Library</legend>
                             <ol>
-                                [% UNLESS hidden.defined('cardnumber') || Koha.Preference('autoMemberNum') %]
+                                [% UNLESS hidden.defined('cardnumber') || ( !borrower && Koha.Preference('autoMemberNum') ) %]
                                 <li>
                                     [% IF mandatory.defined('cardnumber') %]
                                         <label for="borrower_cardnumber" class="required">
