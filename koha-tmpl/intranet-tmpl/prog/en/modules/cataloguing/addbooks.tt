@@ -137,12 +137,9 @@
             <th>&nbsp;</th>
             <th>Title</th>
             <th>Location</th>
-            <th>Preview</th>
-            [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<th>&nbsp;</th>[% ELSE %][% END %]
-            [% IF ( CAN_user_editcatalogue_edit_items ) %]<th>&nbsp;</th>[% END %]
+            <th>&nbsp;</th>
         </tr>
-    [% FOREACH resultsloo IN resultsloop %]
-        <tr>
+      [% FOREACH resultsloo IN resultsloop %]
             <td><input type="checkbox" class="selection" id="bib[% resultsloo.biblionumber %]" name="biblionumber" value="[% resultsloo.biblionumber %]" /></td>
             <td>
                 <p>
@@ -195,10 +192,19 @@
                         [% IF ( resultsloo.notforloancount ) %] Not for loan ([% resultsloo.notforloancount %])[% END %]
                     </span>
                 </td>
-                    <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% resultsloo.biblionumber %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% resultsloo.biblionumber %]" class="previewData">Card</a>
+                <td>
+                  <div class="dropdown">
+                    <a class="btn btn-mini dropdown-toggle" id="cataloguesearchactions[% resultsloo.biblionumber %]" role="button" data-toggle="dropdown" href="#">
+                      Actions <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% resultsloo.biblionumber %]">
+                      <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% resultsloo.biblionumber %]" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
+                      <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% resultsloo.biblionumber %]" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
+                      [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% resultsloo.biblionumber %]"><i class="fa fa-pencil"></i> Edit biblio</a></li>[% END %]
+                      [% IF ( CAN_user_editcatalogue_edit_items ) %]<li><a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% resultsloo.biblionumber %]"><i class="fa fa-plus"></i> Add/Edit items</a></li>[% END %]
+                    </ul>
+                  </div>
                 </td>
-                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% resultsloo.biblionumber %]">Edit biblio</a></td>[% END %]
-                [% IF ( CAN_user_editcatalogue_edit_items ) %]<td><a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% resultsloo.biblionumber %]">Add/Edit items</a></td>[% END %]
             </tr>
     [% END %]
     </table>
@@ -223,8 +229,7 @@
                 <th>Date</th>
                 <th>Edition</th>
                 <th>Coming from</th>
-                <th>Preview</th>
-                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<th>&nbsp;</th>[% END %]
+                <th>&nbsp;</th>
             </tr>
             [% FOREACH breeding_loo IN breeding_loop %]
                <tr>
@@ -234,12 +239,21 @@
                 <td>[% breeding_loo.copyrightdate %]</td>
                 <td>[% breeding_loo.edition %]</td>
                 <td>[% breeding_loo.file %]</td>
-                <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id %]" class="previewData">Card</a>
-                    </td>
-                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<td>
-                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id %]">Add biblio</a>
-                </td>[% END %]
-            </tr>
+                <td>
+                  <div class="dropdown">
+                    <a class="btn btn-mini dropdown-toggle" id="reservoirsearchactions[% breeding_loo.id %]" role="button" data-toggle="dropdown" href="#">
+                      Actions <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reservoirsearchactions[% breeding_loo.id %]">
+                      <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id %]" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
+                      <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id %]" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
+                      [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id %]"><i class="fa fa-plus"></i> Add biblio</a></li>
+                      [% END %]
+                    </ul>
+                  </div>
+               </td>
+               </tr>
             [% END %]
         </table>
     [% ELSE %]
