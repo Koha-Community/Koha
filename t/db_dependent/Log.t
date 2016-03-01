@@ -4,9 +4,8 @@
 # This Koha test module is a stub!  
 # Add more tests here!!!
 
-use strict;
-use warnings;
-use Test::More tests => 7;
+use Modern::Perl;
+use Test::More tests => 8;
 
 use C4::Context;
 use Koha::DateUtils;
@@ -76,5 +75,21 @@ t::lib::Mocks::mock_preference('CronjobLog',1);
 cronlogaction();
 $cronJobCount = $dbh->selectrow_array("SELECT COUNT(*) FROM action_logs WHERE module='CRONJOBS';",{});
 is($cronJobCount,1,"Cronjob logged as expected.");
+
+subtest "GetLogs should return all logs if dates are not set" => sub {
+    plan tests => 2;
+    my $today = dt_from_string->add(minutes => -1);
+    my $yesterday = dt_from_string->add( days => -1 );
+    $dbh->do(q|
+        INSERT INTO action_logs (timestamp, user, module, action, object, info)
+        VALUES
+        (?, 42, 'CATALOGUING', 'MODIFY', 4242, 'Record 42 has been modified by patron 4242 yesterday'),
+        (?, 43, 'CATALOGUING', 'MODIFY', 4242, 'Record 43 has been modified by patron 4242 today')
+    |, undef, output_pref({dt =>$yesterday, dateformat => 'iso'}), output_pref({dt => $today, dateformat => 'iso'}));
+    my $logs = GetLogs( undef, undef, undef, ['CATALOGUING'], ['MODIFY'], 4242 );
+    is( scalar(@$logs), 2, 'GetLogs should return all logs regardless the dates' );
+    $logs = GetLogs( output_pref($today), undef, undef, ['CATALOGUING'], ['MODIFY'], 4242 );
+    is( scalar(@$logs), 1, 'GetLogs should return the logs for today' );
+};
 
 $dbh->rollback();

@@ -220,8 +220,8 @@ sub GetLogs {
     my $object   = shift;
     my $info     = shift;
    
-    my $iso_datefrom = output_pref({ dt => dt_from_string( $datefrom ), dateformat => 'iso', dateonly => 1 });
-    my $iso_dateto = output_pref({ dt => dt_from_string( $dateto ), dateformat => 'iso', dateonly => 1 });
+    my $iso_datefrom = $datefrom ? output_pref({ dt => dt_from_string( $datefrom ), dateformat => 'iso', dateonly => 1 }) : undef;
+    my $iso_dateto = $dateto ? output_pref({ dt => dt_from_string( $dateto ), dateformat => 'iso', dateonly => 1 }) : undef;
 
     my $dbh = C4::Context->dbh;
     my $query = "
