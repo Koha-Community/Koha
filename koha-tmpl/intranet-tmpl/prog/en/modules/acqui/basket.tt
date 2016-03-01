@@ -649,7 +649,7 @@
 [% IF ( confirm_close ) %]
         <div id="closebasket_needsconfirmation" class="dialog alert">
 
-        <form action="/cgi-bin/koha/acqui/basket.pl" class="confirm">
+        <form action="/cgi-bin/koha/acqui/basket.pl">
             <h1>Are you sure you want to close basket [% basketname|html %]?</h1>
             [% IF ( CAN_user_acquisition_group_manage ) %]
             <p>
@@ -662,8 +662,11 @@
             <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
             <input type="hidden" name="confirm" value="1" />
             <input type="hidden" name="basketgroupname" value="[% basketgroupname %]" />
-            <input type="submit" class="approve" value="Yes, close (Y)" accesskey="y" />
-            <input type="submit" class="deny" value="No, don't close (N)" accesskey="n" onclick="javascript:window.location='/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]';return false;" />
+            <button type="submit" class="approve" accesskey="y"><i class="fa fa-fw fa-check"></i> Yes, close (Y)</button>
+        </form>
+        <form action="/cgi-bin/koha/acqui/basket.pl" method="get">
+            <input type="hidden" name="basketno" value="[% basketno %]" />
+            <button type="submit" class="deny" accesskey="n"><i class="fa fa-fw fa-remove"></i> No, don't close (N)</button>
         </form>
         </div>
     [% END %]
