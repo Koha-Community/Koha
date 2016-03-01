@@ -620,7 +620,7 @@ $(document).ready(function () {
             <td class="ci-holdinglibrary">[% Branches.GetName( riloo.holdingbranch ) %]</td>
             <td class="ci-shelvinglocation">[% riloo.location %]</td>
             <td class="ci-callnumber">[% riloo.itemcallnumber %]</td>
-            <td class="ci-dateaccessioned">[% riloo.dateaccessioned %]</td>
+            <td class="ci-dateaccessioned">[% riloo.dateaccessioned | $KohaDates %]</td>
             <td class="ci-type">[% ItemTypes.GetDescription( riloo.itemtype ) %] [% AuthorisedValues.GetByCode('CCODE', riloo.ccode) %]</td>
             <td class="ci-patron">[% IF ( riloo.duedate ) %]
                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% riloo.borrowernumber %]">
