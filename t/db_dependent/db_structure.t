@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 409;
+use Test::More tests => 412;
 use Koha::Database;
 
 my @modules = (
