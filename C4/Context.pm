@@ -1056,9 +1056,9 @@ sub get_versions {
     {
         no warnings qw(exec); # suppress warnings if unable to find a program in $PATH
         $versions{mysqlVersion}  = `mysql -V`;
-        $versions{apacheVersion} = `httpd -v`;
+        $versions{apacheVersion} = (`apache2ctl -v`)[0];
+        $versions{apacheVersion} = `httpd -v`             unless  $versions{apacheVersion} ;
         $versions{apacheVersion} = `httpd2 -v`            unless  $versions{apacheVersion} ;
-        $versions{apacheVersion} = (`apache2ctl -v`)[0]   unless  $versions{apacheVersion} ;
         $versions{apacheVersion} = `apache2 -v`           unless  $versions{apacheVersion} ;
         $versions{apacheVersion} = `/usr/sbin/apache2 -v` unless  $versions{apacheVersion} ;
     }
