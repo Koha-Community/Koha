@@ -8,7 +8,7 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisition</a> &rsaquo; Cancel order</div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
 
 <div id="bd">
   <div id="yui-main">
@@ -34,8 +34,8 @@
           [% IF (del_biblio) %]
             <input type="hidden" value="1" name="del_biblio" />
           [% END %]
-          <input type="submit" class="approve" value="Yes, cancel" accesskey="y" />
-          <input type="submit" class="deny" value="No, don't cancel" accesskey="n" onclick="window.location='[% referrer %]';return false;" />
+          <button type="submit" class="approve" accesskey="y"><i class="fa fa-fw fa-check"></i> Yes, cancel (Y)</button>
+          <button class="deny" accesskey="n" onclick="window.location='[% referrer %]';return false;"><i class="fa fa-fw fa-remove"></i> No, don't cancel (N)</button>
         </div>
       </form>
       [% ELSE %]
