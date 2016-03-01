@@ -28,12 +28,13 @@ $(document).ready(function () {
         Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber %]&amp;biblionumber=[% biblionumber %]');
     [% END %]
 
-    var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'checkedintable', 'json' ) %]
+    var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) %]
     var returns_table = KohaTable("#checkedintable", {
             "bFilter":false,
             "bPaginate":false,
             "bInfo":false,
-            "bSort":false
+            "bSort":false,
+            "dom": 'B<"clearfix">t',
             }, columns_settings);
 
     $("#return_date_override").datetimepicker({
@@ -600,7 +601,7 @@ $(document).ready(function () {
 [% IF ( riloop ) %]
     <h2>Checked-in items</h2>
     <table id="checkedintable">
-    <thead><th class="ci-duedate">Due date</th><th class="ci-title">Title</th><th class="ci-author">Author</th><th class="ci-barcode">Barcode</th><th class="ci-homelibrary">Home library</th><th class="ci-holdinglibrary">Holding library</th><th class="ci-shelvinglocation">Shelving location</th><th class="ci-callnumber">Call number</th><th class="ci-dateaccessioned">Date acquired</th><th class="ci-type">Type</th><th class="ci-patron">Patron</th><th class="ci-note">Note</th></thead>
+    <thead><tr><th class="ci-duedate">Due date</th><th class="ci-title">Title</th><th class="ci-author">Author</th><th class="ci-barcode">Barcode</th><th class="ci-homelibrary">Home library</th><th class="ci-holdinglibrary">Holding library</th><th class="ci-shelvinglocation">Shelving location</th><th class="ci-callnumber">Call number</th><th class="ci-dateaccessioned">Date acquired</th><th class="ci-type">Type</th><th class="ci-patron">Patron</th><th class="ci-note">Note</th></tr></thead>
 
         [% FOREACH riloo IN riloop %]
             <tr>
