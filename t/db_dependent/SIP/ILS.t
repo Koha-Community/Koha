@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+# Tests for C4::SIP::ILS
+# Please help to extend them!
+
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -26,16 +29,15 @@ BEGIN {
 my $class = 'C4::SIP::ILS';
 my $institution = { id => 'CPL', };
 
-my $ils = $class->new($institution);
+my $ils = $class->new( $institution );
 
 isa_ok( $ils, $class );
 
 # Check all methods required for interface are there
-# NB the mon_block routines are not here but Sip.pm thinks it can call them
-my @methods = (
-    qw( find_patron find_item checkout_ok checkin_ok offline_ok status_update_ok
-      offline_ok checkout checkin end_patron_session pay_fee add_hold cancel_hold
-      alter_hold renew renew_all)
+my @methods = qw(
+    find_patron find_item checkout_ok checkin_ok offline_ok status_update_ok
+    offline_ok checkout checkin end_patron_session pay_fee add_hold cancel_hold
+    alter_hold renew renew_all
 );
 
 can_ok( $ils, @methods );
