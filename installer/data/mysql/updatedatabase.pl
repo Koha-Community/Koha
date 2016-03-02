@@ -11942,7 +11942,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.21.00.XXX";
+$DBversion = "3.23.00.034";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(q{
         ALTER TABLE `items` ADD `new` VARCHAR(32) NULL AFTER `stocknumber`;
