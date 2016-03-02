@@ -216,12 +216,12 @@ function CheckRuleForm(f) {
 [% END %]
 
 [% IF ( delete_sort_rule_impossible ) %]
-<div class="dialog message"><h3>Cannot delete filing rule <span class="ex">'[% sort_rule %]'</span></h3>
+<div class="dialog alert"><h3>Cannot delete filing rule <span class="ex">'[% sort_rule %]'</span></h3>
     <p>The filing rule [% sort_rule %] is used by at least one classification source.  Please
     remove it from all classification source definitions before trying again.
     </p>
     <form action="[% script_name %]" method="get">
-        <input type="submit" value="OK" class="approve" />
+          <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
     </form>
 </div>
 [% END %]
