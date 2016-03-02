@@ -129,7 +129,7 @@
         <h3>Cannot delete currency <span class="ex">'[% currency.currency %]'</span></h3>
         <p>This currency is used by [% nb_of_orders %] orders. Deletion not possible</p>
         <form action="/cgi-bin/koha/admin/currency.pl" method="post">
-            <input type="submit" value="OK" class="approve" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
         </form>
     </div>
     [% ELSE %]
@@ -146,10 +146,10 @@
         <form action="/cgi-bin/koha/admin/currency.pl" method="post">
             <input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="currency_code" value="[% currency.currency_code %]" />
-            <input type="submit" class="approve" value="Delete this currency" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete this currency</button>
         </form>
         <form action="/cgi-bin/koha/admin/currency.pl" method="post">
-            <input type="submit" class="deny" value="No, do not delete" />
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
         </form>
     </div>
     [% END %]
