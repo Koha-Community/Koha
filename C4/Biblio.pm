@@ -3685,7 +3685,7 @@ sub prepare_host_field {
         if ( $field = $host->field('205') ) {
             my $s = $field->as_string();
             if ($s) {
-                $sfd{a} = $s;
+                $sfd{e} = $s;
             }
         }
         #URL
