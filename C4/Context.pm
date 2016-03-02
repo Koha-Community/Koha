@@ -656,6 +656,21 @@ sub _new_Zconn {
     return $Zconn;
 }
 
+=head2 flushZconns
+
+Destroys all Zebra connections flushing their caches.
+
+=cut
+
+sub flushZconns {
+	my @ZconnKeys = keys%{$context->{"Zconn"}} if ref($context->{"Zconn"}) eq 'HASH';
+	foreach my $key (@ZconnKeys) {
+		my $Zc = $context->{"Zconn"}->{$key};
+        $Zc->destroy();
+		delete $context->{"Zconn"}->{$key};
+    }
+}
+
 # _new_dbh
 # Internal helper function (not a method!). This creates a new
 # database connection from the data given in the current context, and
