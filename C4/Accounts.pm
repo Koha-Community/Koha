@@ -28,7 +28,7 @@ use C4::Log qw(logaction);
 
 use Data::Dumper qw(Dumper);
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 BEGIN {
 	# set the version for version checking

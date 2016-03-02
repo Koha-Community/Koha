@@ -17,7 +17,7 @@ package C4::Calendar;
 
 use strict;
 use warnings;
-use vars qw($VERSION @EXPORT);
+use vars qw(@EXPORT);
 
 use Carp;
 use Date::Calc qw( Date_to_Days Today);

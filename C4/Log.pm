@@ -27,7 +27,7 @@ use warnings;
 use C4::Context;
 use Koha::DateUtils;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 BEGIN {
     # set the version for version checking

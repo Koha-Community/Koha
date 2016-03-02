@@ -20,7 +20,7 @@ package Koha::Misc::Files;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use vars qw($VERSION);
+use vars qw();
 $VERSION = '0.25';
 
 use C4::Context;

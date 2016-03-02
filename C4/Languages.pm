@@ -26,7 +26,7 @@ use Carp;
 use CGI;
 use List::MoreUtils qw( any );
 use C4::Context;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
 eval {
     if (C4::Context->ismemcached) {

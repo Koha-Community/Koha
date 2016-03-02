@@ -40,7 +40,7 @@ use List::MoreUtils qw/ any /;
 use Encode qw( encode is_utf8);
 
 # use utf8;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout $shib $shib_login);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout $shib $shib_login);
 
 BEGIN {
     sub psgi_env { any { /^psgi\./ } keys %ENV }

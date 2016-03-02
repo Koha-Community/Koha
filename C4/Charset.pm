@@ -26,7 +26,7 @@ use C4::Debug;
 use Unicode::Normalize;
 use Encode qw( decode encode is_utf8 );
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
     # set the version for version checking

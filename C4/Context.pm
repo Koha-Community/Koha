@@ -18,7 +18,7 @@ package C4::Context;
 
 use strict;
 use warnings;
-use vars qw($VERSION $AUTOLOAD $context @context_stack $servers $memcached $ismemcached);
+use vars qw($AUTOLOAD $context @context_stack $servers $memcached $ismemcached);
 BEGIN {
 	if ($ENV{'HTTP_USER_AGENT'})	{
 		require CGI::Carp;

@@ -37,7 +37,7 @@ use URI::Escape;
 use Business::ISBN;
 use MARC::Record;
 use MARC::Field;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
 # set the version for version checking
 BEGIN {

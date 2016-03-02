@@ -24,7 +24,7 @@ use DateTime;
 use C4::Context;
 use Koha::SimpleMARC;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 use constant DEBUG => 0;
 

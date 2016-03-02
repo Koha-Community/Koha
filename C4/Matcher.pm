@@ -23,7 +23,7 @@ use warnings;
 use C4::Context;
 use MARC::Record;
 
-use vars qw($VERSION);
+use vars qw();
 
 BEGIN {
 	# set the version for version checking

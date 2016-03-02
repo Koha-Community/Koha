@@ -37,7 +37,7 @@ use warnings;
 
 use C4::Context;
 
-use vars qw( $VERSION );
+use vars qw( );
 
 BEGIN {
     $VERSION = 3.07.00.049;

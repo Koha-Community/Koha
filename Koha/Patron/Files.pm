@@ -19,7 +19,7 @@ package Koha::Patron::Files;
 
 use Modern::Perl;
 
-use vars qw($VERSION);
+use vars qw();
 
 use C4::Context;
 use C4::Output;

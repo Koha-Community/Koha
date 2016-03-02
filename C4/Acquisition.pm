@@ -41,7 +41,7 @@ use MARC::Record;
 use Time::localtime;
 use HTML::Entities;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 BEGIN {
     # set the version for version checking

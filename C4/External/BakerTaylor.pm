@@ -27,7 +27,7 @@ use C4::Debug;
 use strict;
 use warnings;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use vars qw($user $pass $agent $image_url $link_url);
 
 BEGIN {

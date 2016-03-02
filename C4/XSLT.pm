@@ -36,7 +36,7 @@ use Koha::Libraries;
 
 use Encode;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 my $engine; #XSLT Handler object
 my %authval_per_framework;

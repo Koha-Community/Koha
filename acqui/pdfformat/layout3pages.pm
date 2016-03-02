@@ -22,7 +22,7 @@
 
 #you can use any PDF::API2 module, all you need to do is return the stringifyed pdf object from the printpdf sub.
 package pdfformat::layout3pages;
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 use MIME::Base64;
 use List::MoreUtils qw/uniq/;
 use strict;

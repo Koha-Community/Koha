@@ -64,7 +64,7 @@ use Date::Calc qw(
   Day_of_Week
   Add_Delta_Days
 );
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
 	require Exporter;

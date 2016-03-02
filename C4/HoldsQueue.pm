@@ -35,7 +35,7 @@ use List::Util qw(shuffle);
 use List::MoreUtils qw(any);
 use Data::Dumper;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 BEGIN {
     $VERSION = 3.03;
     require Exporter;

@@ -27,7 +27,7 @@ use C4::Debug;
 
 use Koha::DateUtils qw( output_pref dt_from_string );
 
-use vars qw($VERSION @ISA);
+use vars qw(@ISA);
 use vars qw($debug $cgi_debug);	# from C4::Debug, of course
 use vars qw($width);
 

@@ -30,7 +30,7 @@ use Koha::MetadataRecord::Authority;
 use Koha::Authorities;
 use Koha::Authority::Types;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 BEGIN {
 	# set the version for version checking

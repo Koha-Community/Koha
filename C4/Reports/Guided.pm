@@ -21,7 +21,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Carp;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
 use C4::Templates qw/themelanguage/;
 use C4::Koha;

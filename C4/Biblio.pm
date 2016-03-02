@@ -42,7 +42,7 @@ use Koha::Cache;
 use Koha::Authority::Types;
 use Koha::Acquisition::Currencies;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 BEGIN {
     $VERSION = 3.07.00.049;

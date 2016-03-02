@@ -21,7 +21,7 @@ use strict;
 use warnings;
 use C4::Context;
 
-use vars qw($VERSION);
+use vars qw();
 
 BEGIN {
     # set the version for version checking

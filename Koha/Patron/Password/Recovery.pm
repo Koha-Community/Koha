@@ -21,7 +21,7 @@ use Modern::Perl;
 use C4::Context;
 use Crypt::Eksblowfish::Bcrypt qw(en_base64);
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 BEGIN {
     # set the version for version checking

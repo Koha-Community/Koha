@@ -21,7 +21,7 @@ use C4::Auth qw(&check_api_auth);
 
 use UNIVERSAL::can;
 
-use vars qw(@ISA $VERSION @EXPORT_OK);
+use vars qw(@ISA @EXPORT_OK);
 
 use constant INVALID_CARD => 'Invalid cardnumber';
 use constant INVALID_PW   => 'Invalid password';

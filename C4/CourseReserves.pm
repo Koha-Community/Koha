@@ -24,7 +24,7 @@ use C4::Items qw(GetItem ModItem);
 use C4::Biblio qw(GetBiblioFromItemNumber);
 use C4::Circulation qw(GetOpenIssue);
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG @FIELDS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG @FIELDS);
 
 BEGIN {
     require Exporter;

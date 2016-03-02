@@ -23,7 +23,7 @@ package C4::Csv;
 #use warnings; FIXME - Bug 2505
 
 use C4::Context;
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 # set the version for version checking
 $VERSION = 3.07.00.049;

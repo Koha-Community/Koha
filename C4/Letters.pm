@@ -39,7 +39,7 @@ use Carp;
 use Koha::Email;
 use Koha::DateUtils qw( format_sqldatetime );
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
     require Exporter;

@@ -33,7 +33,7 @@ use List::MoreUtils qw( any );
 use Net::LDAP;
 use Net::LDAP::Filter;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
 BEGIN {
 	require Exporter;

@@ -45,7 +45,7 @@ use Koha::Libraries;
 use List::MoreUtils qw( firstidx any );
 use Carp;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 =head1 NAME
 

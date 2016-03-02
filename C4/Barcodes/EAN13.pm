@@ -26,7 +26,7 @@ use C4::Debug;
 use Algorithm::CheckDigits;
 use Carp;
 
-use vars qw($VERSION @ISA);
+use vars qw(@ISA);
 use vars qw($debug $cgi_debug);	# from C4::Debug, of course
 
 BEGIN {

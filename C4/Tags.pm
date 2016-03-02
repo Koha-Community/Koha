@@ -29,7 +29,7 @@ use C4::Debug;
 use constant TAG_FIELDS => qw(tag_id borrowernumber biblionumber term language date_created);
 use constant TAG_SELECT => "SELECT " . join(',', TAG_FIELDS) . "\n FROM   tags_all\n";
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 our $ext_dict;
 
 BEGIN {

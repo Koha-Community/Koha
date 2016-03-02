@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Exporter;
-use vars qw(@ISA $VERSION @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 use Data::Dumper;
 

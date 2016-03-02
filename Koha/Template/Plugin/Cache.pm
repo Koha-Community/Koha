@@ -19,7 +19,7 @@ package Koha::Template::Plugin::Cache;
 
 use strict;
 use warnings;
-use vars qw( $VERSION );
+use vars qw( );
 use base qw( Template::Plugin );
 use Template::Plugin;
 use C4::Context;

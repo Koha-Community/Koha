@@ -22,7 +22,7 @@ use warnings;
 
 use C4::Context;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 BEGIN {
 

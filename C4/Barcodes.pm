@@ -29,7 +29,7 @@ use C4::Barcodes::annual;
 use C4::Barcodes::incremental;
 use C4::Barcodes::EAN13;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use vars qw($debug $cgi_debug);	# from C4::Debug, of course
 use vars qw($max $prefformat);
 

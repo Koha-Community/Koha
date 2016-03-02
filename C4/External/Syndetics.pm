@@ -26,7 +26,7 @@ use HTTP::Request::Common;
 use strict;
 use warnings;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 BEGIN {
     require Exporter;

@@ -24,7 +24,7 @@ use Text::CSV;      # Don't be tempted to use Text::CSV::Unicode -- even in bina
 use C4::Context;
 use C4::Members::AttributeTypes;
 
-use vars qw($VERSION @ISA @EXPORT_OK @EXPORT %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT_OK @EXPORT %EXPORT_TAGS);
 our ($csv, $AttributeTypes);
 
 BEGIN {

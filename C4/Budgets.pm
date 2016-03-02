@@ -22,7 +22,7 @@ use strict;
 use C4::Context;
 use Koha::Database;
 use C4::Debug;
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 BEGIN {
 	# set the version for version checking

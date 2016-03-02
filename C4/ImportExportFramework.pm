@@ -28,7 +28,7 @@ use C4::Context;
 use C4::Debug;
 
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
     $VERSION = 3.07.00.049;    # set version for version checking

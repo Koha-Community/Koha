@@ -37,7 +37,7 @@ use Koha::DateUtils;
 use Koha::Account::Line;
 use Koha::Account::Lines;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 BEGIN {
     # set the version for version checking

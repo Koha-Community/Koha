@@ -22,7 +22,7 @@ use Modern::Perl;
 use C4::Context;
 use Koha::DateUtils;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw(@ISA @EXPORT);
 
 BEGIN { 
     $VERSION = 3.07.00.049;    # set the version for version checking

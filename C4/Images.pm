@@ -25,7 +25,7 @@ use 5.010;
 use C4::Context;
 use GD;
 
-use vars qw($debug $noimage $VERSION @ISA @EXPORT);
+use vars qw($debug $noimage @ISA @EXPORT);
 
 BEGIN {
 

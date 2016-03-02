@@ -36,7 +36,7 @@ use Koha::Serial;
 use Koha::Subscriptions;
 use Koha::Subscription::Histories;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # Define statuses
 use constant {

@@ -25,7 +25,7 @@ use Koha::Database;
 use Carp;
 use CGI;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
 BEGIN {
     require Exporter;

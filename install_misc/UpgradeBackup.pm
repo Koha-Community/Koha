@@ -26,7 +26,7 @@ use File::Find;
 use File::Spec;
 use Exporter;
 
-use vars qw(@ISA @EXPORT $VERSION);
+use vars qw(@ISA @EXPORT );
 
 @ISA = ('Exporter');
 @EXPORT = ('backup_changed_files');

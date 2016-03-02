@@ -28,7 +28,7 @@ use HTTP::Request::Common;
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
 	require Exporter;

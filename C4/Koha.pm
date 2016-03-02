@@ -32,7 +32,7 @@ use DateTime::Format::MySQL;
 use Business::ISBN;
 use autouse 'Data::cselectall_arrayref' => qw(Dumper);
 use DBI qw(:sql_types);
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK $DEBUG);
+use vars qw(@ISA @EXPORT @EXPORT_OK $DEBUG);
 
 BEGIN {
     $VERSION = 3.07.00.049;
