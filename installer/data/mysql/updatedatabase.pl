@@ -11892,6 +11892,42 @@ if(CheckVersion($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.032";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+   -- Add issue_id to accountlines table
+    ALTER TABLE accountlines ADD issue_id INT(11) NULL DEFAULT NULL AFTER accountlines_id;
+    });
+
+## Close out any accruing fines with no current issue
+    $dbh->do(q{
+    UPDATE accountlines LEFT JOIN issues USING ( itemnumber, borrowernumber ) SET accounttype = 'F' WHERE accounttype = 'FU' and issues.issue_id IS NULL;
+    });
+
+## Close out any extra not really accruing fines, keep only the latest accring fine
+    $dbh->do(q{
+    UPDATE accountlines a1
+    LEFT JOIN (SELECT MAX(accountlines_id) AS keeper,
+                      borrowernumber,
+                      itemnumber
+               FROM   accountlines
+               WHERE  accounttype = 'FU'
+               GROUP BY borrowernumber, itemnumber
+              ) a2 USING ( borrowernumber, itemnumber )
+    SET    a1.accounttype = 'F'
+    WHERE  a1.accounttype = 'FU'
+    AND  a1.accountlines_id != a2.keeper;
+    });
+
+## Update the unclosed fines to add the current issue_id to them
+    $dbh->do(q{
+    UPDATE accountlines LEFT JOIN issues USING ( itemnumber ) SET accountlines.issue_id = issues.issue_id WHERE accounttype = 'FU'; 
+    });
+
+    print "Upgrade to $DBversion done (Bug 15675 - Add issue_id column to accountlines and use it for updating fines)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
