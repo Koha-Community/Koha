@@ -21,11 +21,11 @@
 [% END %]
 
 [% BLOCK fail %]
-                                <input type="submit" class="approve" value="OK" />
+        <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
                                 <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
                         </form>
                                 <form method="get" action="/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber %]">
-                                <input type="submit" class="new" value="Try again with a different barcode"/>
+        <button type="submit" class="new"><i class="fa fa-fw fa-plus"></i> Try again with a different barcode</button>
                                 <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
                         </form>
 [% END %]
@@ -55,11 +55,11 @@
 			<div class="dialog message">The item has successfully been attached to [% INCLUDE 'biblio-default-view.inc' %]<i>[% bibliotitle |html %]</i></a>.
 			<p>
 			[% INCLUDE actions %]
-		                <input type="submit" class="approve" value="OK" />
+                    <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
                                 <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
                         </form>
                                 <form method="get" action="/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber %]"/>
-                                <input type="submit" class="new" value="Attach another item"/>
+                    <button type="submit" class="new"><i class="fa fa-fw fa-plus"></i> Attach another item</button>
                                 <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
                         </form>
 	                </p>
