@@ -467,7 +467,6 @@ sub build_patron_status {
 
 sub handle_patron_status {
     my ( $self, $server ) = @_;
-    warn "handle_patron_status server: " . Dumper( \$server );
     my $ils = $server->{ils};
     my $patron;
     my $resp    = (PATRON_STATUS_RESP);
@@ -475,9 +474,6 @@ sub handle_patron_status {
     my ( $lang, $date ) = @{ $self->{fixed_fields} };
     my $fields = $self->{fields};
 
-    #warn Dumper($fields);
-    #warn FID_INST_ID;
-    #warn $fields->{(FID_INST_ID)};
     $ils->check_inst_id( $fields->{ (FID_INST_ID) }, "handle_patron_status" );
     $patron = $ils->find_patron( $fields->{ (FID_PATRON_ID) } );
     $resp = build_patron_status( $patron, $lang, $fields, $server );
