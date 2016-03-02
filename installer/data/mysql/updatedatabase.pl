@@ -11928,6 +11928,20 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.033";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+    UPDATE systempreferences SET value = CONCAT_WS('|', IF(value = '', NULL, value), 'cardnumber') WHERE variable = 'PatronSelfRegistrationBorrowerUnwantedField' AND value NOT LIKE '%cardnumber%';
+    });
+
+    $dbh->do(q{
+    UPDATE systempreferences SET value = CONCAT_WS('|', IF(value = '', NULL, value), 'categorycode') WHERE variable = 'PatronSelfRegistrationBorrowerUnwantedField' AND value NOT LIKE '%categorycode%';
+    });
+
+    print "Upgrade to $DBversion done (Bug 14659 - Allow patrons to enter card number and patron category on OPAC registration page)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
