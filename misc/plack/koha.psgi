@@ -12,7 +12,6 @@ use CGI qw(-utf8 ); # we will loose -utf8 under plack
     *CGI::new = sub {
         my $q = $old_new->( @_ );
         $CGI::PARAM_UTF8 = 1;
-        C4::Context->clear_syspref_cache();
         return $q;
     };
 }
