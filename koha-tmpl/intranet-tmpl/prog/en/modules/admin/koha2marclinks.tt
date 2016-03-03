@@ -4,7 +4,17 @@
 [% IF ( else ) %]Koha to MARC mapping [% tagfield %][% END %]</title>
 
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    $('#tablename').change(function() {
+            $('#koha2marc').submit();
+    });
+});
+//]]>
+</script>
 </head>
+
 <body id="admin_koha2marclinks" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -70,7 +80,7 @@
 [% IF ( else ) %]
 
 <h1>Koha to MARC mapping [% tagfield %]</h1>
-<form action="[% script_name %]" method="post">
+<form action="[% script_name %]" method="post" id="koha2marc">
 <p>
     <select name="tablename" id="tablename" size="1">
     [% FOREACH value IN tablename.values %]
@@ -81,7 +91,6 @@
         [% END %]
     [% END %]
     </select>
-    <input type="submit" value="OK" />
 </p>
 </form>
 <table>
