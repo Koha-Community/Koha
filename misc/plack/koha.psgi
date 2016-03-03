@@ -51,8 +51,6 @@ use C4::Tags; # FIXME
 use Devel::Size 0.77; # 0.71 doesn't work for Koha
 my $watch_capture_regex = '(C4|Koha)';
 
-C4::Context->disable_syspref_cache;
-
 sub watch_for_size {
 	my @watch =
 	map { s/^.*$watch_capture_regex/$1/; s/\//::/g; s/\.pm$//; $_ } # fix paths
