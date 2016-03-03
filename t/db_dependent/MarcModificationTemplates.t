@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 94;
+use Test::More tests => 95;
 
 use Koha::SimpleMARC;
 
@@ -335,6 +335,16 @@ is_deeply( \@fields_245a, [
         'The art of computer programming',
         'Bad title'
     ], 'delete field has been deleted the right field"' );
+
+subtest 'GetModificationTemplates' => sub {
+    plan tests => 1;
+    $dbh->do(q|DELETE FROM marc_modification_templates|);
+    AddModificationTemplate("zzz");
+    AddModificationTemplate("aaa");
+    AddModificationTemplate("mmm");
+    my @templates = GetModificationTemplates();
+    is_deeply( [map{$_->{name}} @templates], ['aaa', 'mmm', 'zzz'] );
+};
 
 sub new_record {
     my $record = MARC::Record->new;
