@@ -19,12 +19,6 @@
 //<![CDATA[
 actTotal = "";
 
-function isNull(f,noalert) {
-    if (f.value.length > 0) {
-        return false;
-    }
-    return true;
-}
 
 $(document).ready(function() {
     // http://jqueryui.com/demos/datepicker/#date-range
@@ -87,28 +81,20 @@ $(document).ready(function() {
     <h1>Cash register statistics</h1>
     <form method="post" action="/cgi-bin/koha/reports/cash_register_stats.pl" id="frmCashRegister">
         <fieldset class="rows">
-        <legend>Cash register statistics [% beginDate | $KohaDates %] to [% endDate | $KohaDates %]</legend>
-        <table>
-            <thead>
-                <tr>
-                    <th>Interval</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <label for="filter_date_begin">From</label>
-                        <input type="text" size="10" id="filter_date_begin" name="filter_date_begin" value="[% beginDate | $KohaDates %]" />
-                        <label for="filter_date_end">To</label>
-                        <input type="text" size="10" id="filter_date_end" name="filter_date_end" value="[% endDate | $KohaDates %]" />
-                    </td>
-                </tr>
-            </tbody>
-        </table><br />
-        </fieldset>
-
-        <fieldset class="rows">
+            <legend>Cash register statistics [% beginDate | $KohaDates %] to [% endDate | $KohaDates %]</legend>
             <ol>
+                <br>
+                <li>
+                    <label for="filter_date_begin">From: </label>
+                    <input type="text" size="10" id="filter_date_begin" name="filter_date_begin" value="[% beginDate | $KohaDates %]" class="datepickerfrom" />
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                </li>
+                <li>
+                    <label for="filter_date_end">To: </label>
+                    <input type="text" size="10" id="filter_date_end" name="filter_date_end" value="[% endDate | $KohaDates %]" class="datepickerto" />
+                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                </li>
+
                 <li>
                     <label for="">Transaction type:</label>
                     <select name="transaction_type" id="transaction_type">
@@ -223,16 +209,6 @@ $(document).ready(function() {
                     <label for="outputfile">To a file:</label>
                     <input type="radio" name="output" value="file" id="outputfile" />
                     <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
-                    <label class="inline" for="sep">Delimiter: </label>
-                    <select name="sep" id="sep" size="1">
-                        [% FOREACH value IN CGIsepChoice.values.sort() %]
-                           [% IF ( value == CGIsepChoice.default ) %]
-                               <option value="[% value %]" selected="selected">[% value %]</option>
-                           [% ELSE %]
-                              <option value="[% value %]">[% value %]</option>
-                           [% END %]
-                        [% END %]
-                    </select>
 
                 </li>
             </ol>

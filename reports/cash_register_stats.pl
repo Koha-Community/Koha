@@ -25,15 +25,15 @@ use C4::Circulation;
 use DateTime;
 use Koha::DateUtils;
 use C4::Budgets qw/GetCurrency GetCurrencies/;
+use Text::CSV::Encoded;
 #use Data::Dumper;
 #use Smart::Comments;
 
 my $input            = new CGI;
 my $dbh              = C4::Context->dbh;
-my $fullreportname   = "reports/cash_register_stats.tt";
 
 my ($template, $borrowernumber, $cookie) = get_template_and_user({
-    template_name => $fullreportname,
+    template_name => "reports/cash_register_stats.tt",
     query => $input,
     type => "intranet",
     authnotrequired => 0,
@@ -46,8 +46,6 @@ my $output           = $input->param("output");
 my $basename         = $input->param("basename");
 my $transaction_type = $input->param("transaction_type") || 'ACT';
 my $manager_branchcode       = $input->param("branch") || C4::Context->userenv->{'branch'};
-our $sep = $input->param("sep") // ',';
-$sep = "\t" if ($sep eq 'tabulation');
 
 $template->param(
     do_it => $do_it,
@@ -57,14 +55,12 @@ $template->param(
 #Initialize date pickers to today
 my $fromDate = dt_from_string;
 my $toDate   = dt_from_string;
-### fromdate today: $fromDate
 
 my $query_manualinv = "SELECT id, authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'";
 my $sth_manualinv = $dbh->prepare($query_manualinv) or die "Unable to prepare query" . $dbh->errstr;
 $sth_manualinv->execute() or die "Unable to execute query " . $sth_manualinv->errstr;
 my $manualinv_types = $sth_manualinv->fetchall_arrayref({});
 
-### $manualinv_types
 
 if ($do_it) {
 
@@ -92,7 +88,6 @@ if ($do_it) {
         $whereBranchCode = "AND m.branchcode = '$manager_branchcode'";
     }
 
-    ### $transaction_type;
 
     my $query = "
     SELECT round(amount,2) AS amount, description,
@@ -121,7 +116,6 @@ if ($do_it) {
         #if ((abs($row->{amount}) - $row->{amountoutstanding}) > 0) {
             $row->{amount} = sprintf("%.2f", abs ($row->{amount}));
             $row->{date} = dt_from_string($row->{date}, 'sql');
-            ### date : $row->{date}
 
             push (@loopresult, $row);
             if($transaction_type eq 'ACT' && ($row->{accounttype} !~ /^C$|^CR$|^LR$|^Pay$/)){
@@ -148,49 +142,71 @@ if ($do_it) {
         );
     } else{
         binmode STDOUT, ':encoding(UTF-8)';
-        print $input->header(
-            -type => 'application/vnd.sun.xml.calc',
-            -encoding => 'utf-8',
-            -name => "$basename.csv",
-            -attachment => "$basename.csv"
-        );
-
-        print "Manager name".$sep;
-        print "Borrower cardnumber".$sep;
-        print "Borrower name".$sep;
-        print "Branch".$sep;
-        print "Transaction date".$sep;
-        print "Transaction type".$sep;
-        print "Amount".$sep;
-        print "Biblio title".$sep;
-        print "Barcode".$sep;
-        print "Document type"."\n";
-
-        foreach my $item (@loopresult){
-            print $item->{mfirstname}. ' ' . $item->{msurname} . $sep;
-            print $item->{cardnumber}.$sep;
-            print $item->{bfirstname}. ' ' . $item->{bsurname} . $sep;
-            print $item->{branchname}.$sep;
-            print $item->{date}.$sep;
-            print $item->{accounttype}.$sep;
-            print $item->{amount}.$sep;
-            print $item->{title}.$sep;
-            print $item->{barcode}.$sep;
-            print $item->{itype}."\n";
+        my $q_errors;
+        my $format = 'csv';
+        my $reportname = $input->param('basename');
+        my $reportfilename = $reportname ? "$reportname.$format" : "reportresults.$format" ;
+        #my $reportfilename = "$reportname.html" ;
+        my $delimiter = C4::Context->preference('delimiter') || ',';
+        my ( $type, $content );
+        if ( $format eq 'csv' ) {
+            my $type = 'application/csv';
+            my $csv = Text::CSV::Encoded->new({ encoding_out => 'UTF-8', sep_char => $delimiter});
+            $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
+            my @headers = ();
+            push @headers, "mfirstname",
+			            "cardnumber",
+			            "bfirstname",
+			            "branchname",
+			            "date",
+			            "accounttype",
+			            "amount",
+			            "title",
+			            "barcode",
+			            "itype";
+            if ($csv->combine(@headers)) {
+                $content .= Encode::decode('UTF-8', $csv->string()) . "\n";
+            } else {
+                push @$q_errors, { combine => 'HEADER ROW: ' . $csv->error_diag() } ;
+            }
+            foreach my $row (@loopresult) {
+				my @rowValues = ();
+                push @rowValues, $row->{mfirstname},
+                        $row->{cardnumber},
+						$row->{bfirstname},
+						$row->{branchname},
+						$row->{date},
+						$row->{accounttype},
+						$row->{amount},
+						$row->{title},
+						$row->{barcode};
+						$row->{itype};
+                if ($csv->combine(@rowValues)) {
+                    $content .= $csv->string() . "\n";
+                } else {
+                    push @$q_errors, { combine => $csv->error_diag() } ;
+                }
+            }
         }
+        print $input->header(
+            -type => $type,
+            -attachment=> $reportfilename
+        );
+        print $content;
 
-        print $sep x 6;
+        print $delimiter x 6;
         print $grantotal."\n";
+        foreach my $err (@$q_errors) {
+            print "# ERROR: " . (map {$_ . ": " . $err->{$_}} keys %$err) . "\n";
+        }   # here we print all the non-fatal errors at the end.  Not super smooth, but better than nothing.
         exit(1);
     }
 
 }
 
-### fromdate final: $fromDate
-### toDate final: $toDate
 $template->param(
-    beginDate        => dt_from_string($fromDate),
-    endDate          => dt_from_string($toDate),
+    beginDate        => $fromDate,
+    endDate          => $toDate,
     transaction_type => $transaction_type,
     branchloop       => C4::Branch::GetBranchesLoop($manager_branchcode),
     manualinv_types  => $manualinv_types,
