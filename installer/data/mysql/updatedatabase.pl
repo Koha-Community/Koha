@@ -11959,7 +11959,17 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('HTML5MediaYouTube',0,'Embed|Don\'t embed','YouTube links as videos','YesNo');
     });
-    print "Upgrade to $DBversion done (Bug 11023: Adds field 'new' in items and deleteditems tabl      es)\n";
+    print "Upgrade to $DBversion done (Bug 14168 - enhance streaming cataloging to include youtube)\n";
+
+    SetVersion($DBversion);
+    }
+
+$DBversion = "3.23.00.036";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+    INSERT INTO systempreferences (variable,value,explanation,type) VALUES ('HoldsQueueSkipClosed', '0', 'If enabled, any libraries that are closed when the holds queue is built will be ignored for the purpose of filling holds.', 'YesNo');
+    });
+    print "Upgrade to $DBversion done (Bug 12803 - Add ability to skip closed libraries when generating the holds queue)\n";
     SetVersion($DBversion);
     }
 
