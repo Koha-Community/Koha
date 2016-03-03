@@ -112,9 +112,7 @@ sub output {
         C4::Context->preference('opaclayoutstylesheet');
 
     # add variables set via param to $vars for processing
-    for my $k ( keys %{ $self->{VARS} } ) {
-        $vars->{$k} = $self->{VARS}->{$k};
-    }
+    $vars = { %$vars, %{ $self->{VARS} } };
 
     my $data;
     binmode( STDOUT, ":utf8" );
