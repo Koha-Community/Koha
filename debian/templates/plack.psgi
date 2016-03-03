@@ -48,8 +48,6 @@ use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
     };
 }
 
-C4::Context->disable_syspref_cache();
-
 my $intranet = Plack::App::CGIBin->new(
     root => '/usr/share/koha/intranet/cgi-bin'
 );
