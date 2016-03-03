@@ -11954,6 +11954,14 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.035";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('HTML5MediaYouTube',0,'Embed|Don\'t embed','YouTube links as videos','YesNo');
+    });
+    print "Upgrade to $DBversion done (Bug 11023: Adds field 'new' in items and deleteditems tabl      es)\n";
+    SetVersion($DBversion);
+    }
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
