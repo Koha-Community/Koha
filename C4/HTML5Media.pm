@@ -23,7 +23,6 @@ use warnings;
 use C4::Context;
 use MARC::Field;
 use Koha::Upload;
-use WWW::YouTube::Download qw(playback_url);
 
 =head1 HTML5Media
 
@@ -101,6 +100,8 @@ sub gethtml5media {
             $HTML5Media{srcblock} = $HTML5Media_field->subfield('u');
             if (grep /youtube/, $HTML5Media_field->subfield('u') ) { # TODO is there an official YT URL shortener? Can we use that too?
                 if ($HTML5MediaYouTube == 1) {
+                    require WWW::YouTube::Download;
+                    import  WWW::YouTube::Download qw(playback_url);
                     my $youtube           = WWW::YouTube::Download->new;
                     $HTML5Media{srcblock} = $youtube->playback_url(
                         $HTML5Media_field->subfield('u'), {
