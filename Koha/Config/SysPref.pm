@@ -23,6 +23,8 @@ use Carp;
 
 use Koha::Database;
 
+use C4::Log;
+
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -34,6 +36,36 @@ Koha::Config::SysPref - Koha System Preference Object class
 =head2 Class Methods
 
 =cut
+
+=head3 store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    my $action = $self->in_storage ? 'MODIFY' : 'ADD';
+
+    C4::Log::logaction( 'SYSTEMPREFERENCE', $action, undef, $self->variable . ' | ' . $self->value );
+
+    return $self->SUPER::store($self);
+}
+
+=head3 delete
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    my $variable = $self->variable;
+    my $value    = $self->value;
+    my $deleted  = $self->SUPER::delete($self);
+
+    C4::Log::logaction( 'SYSTEMPREFERENCE', 'DELETE', undef, " $variable | $value" );
+
+    return $deleted;
+}
 
 =head3 type
 

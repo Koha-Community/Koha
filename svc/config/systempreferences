@@ -64,7 +64,6 @@ sub set_preference {
     unless ( C4::Context->config('demo') ) {
         my $value = join( ',', $query->param( 'value' ) );
         C4::Context->set_preference( $preference, $value );
-        logaction( 'SYSTEMPREFERENCE', 'MODIFY', undef, $preference . " | " . $value );
     }
 
     C4::Service->return_success( $response );
@@ -98,7 +97,6 @@ sub set_preferences {
             my $value = join( ',', $query->param( $param ) );
 
             C4::Context->set_preference( $pref, $value );
-            logaction( 'SYSTEMPREFERENCE', 'MODIFY', undef, $pref . " | " . $value );
         }
     }
 

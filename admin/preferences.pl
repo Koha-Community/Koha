@@ -314,7 +314,6 @@ if ( $op eq 'save' ) {
             my $value = join( ',', $input->param( $param ) );
 
             C4::Context->set_preference( $pref, $value );
-            logaction( 'SYSTEMPREFERENCE', 'MODIFY', undef, $pref . " | " . $value );
         }
     }
 
