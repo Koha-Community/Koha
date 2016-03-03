@@ -11973,6 +11973,29 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
     }
 
+$DBversion = "3.23.00.037";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+## Add the new currency.archived column
+    $dbh->do(q{
+    ALTER TABLE currency ADD column archived tinyint(1) DEFAULT 0;
+    });
+## Set currency=NULL if empty (just in case)
+    $dbh->do(q{
+    UPDATE aqorders SET currency=NULL WHERE currency="";
+    });
+## Insert the missing currency and mark them as archived before adding the FK
+    $dbh->do(q{
+    INSERT INTO currency(currency, archived) SELECT distinct currency, 1 FROM aqorders WHERE currency NOT IN (SELECT currency FROM currency);
+    });
+## And finally add the FK
+    $dbh->do(q{
+    ALTER TABLE aqorders ADD FOREIGN KEY (currency) REFERENCES currency(currency) ON DELETE SET NULL ON UPDATE SET null;
+    });
+
+    print "Upgrade to $DBversion done (Bug 15084 - Move the currency related code to Koha::Acquisition::Currenc[y|ies])\n";
+    SetVersion($DBversion);
+    }
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
