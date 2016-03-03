@@ -44,11 +44,11 @@ sub get_active {
     return $self->SUPER::search( { active => 1 } )->next;
 }
 
-=head3 type
+=head3 _type
 
 =cut
 
-sub type {
+sub _type {
     return 'Currency';
 }
 

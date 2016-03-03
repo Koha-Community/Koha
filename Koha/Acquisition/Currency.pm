@@ -53,11 +53,11 @@ sub store {
     return $result;
 }
 
-=head3 type
+=head3 _type
 
 =cut
 
-sub type {
+sub _type {
     return 'Currency';
 }
 
