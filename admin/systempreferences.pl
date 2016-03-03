@@ -50,7 +50,6 @@ use C4::Context;
 use C4::Koha;
 use C4::Languages qw(getTranslatedLanguages);
 use C4::ClassSource;
-use C4::Log;
 use C4::Output;
 use YAML::Syck qw( Dump LoadFile );
 
@@ -276,24 +275,8 @@ if ( $op eq 'update_and_reedit' ) {
             );    # we show only the TMPL_VAR names $op
         }
     }
-    my $dbh   = C4::Context->dbh;
-    my $query = "select * from systempreferences where variable=?";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute( $input->param('variable') );
-    if ( $sth->rows ) {
-        unless ( C4::Context->config('demo') ) {
-            my $sth = $dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
-            $sth->execute( $value, $input->param('explanation'), $input->param('variable'), $input->param('preftype'), $input->param('prefoptions') );
-            logaction( 'SYSTEMPREFERENCE', 'MODIFY', undef, $input->param('variable') . " | " . $value );
-        }
-    } else {
-        unless ( C4::Context->config('demo') ) {
-            my $sth = $dbh->prepare("insert into systempreferences (variable,value,explanation) values (?,?,?,?,?)");
-            $sth->execute( $input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions') );
-            logaction( 'SYSTEMPREFERENCE', 'ADD', undef, $input->param('variable') . " | " . $input->param('value') );
-        }
-    }
-
+    my $variable = $input->param('variable');
+    C4::Context->set_preference($variable, $value) unless C4::Context->config('demo');
 }
 
 ################## ADD_FORM ##################################
@@ -322,12 +305,13 @@ if ( $op eq 'add_form' ) {
 ################## ADD_VALIDATE ##################################
     # called by add_form, used to insert/modify data in DB
 } elsif ( $op eq 'add_validate' ) {
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select * from systempreferences where variable=?");
-    $sth->execute( $input->param('variable') );
-
     # to handle multiple values
     my $value;
+
+    my $variable = $input->param('variable');
+    my $expl     = $input->param('explanation');
+    my $type     = $input->param('preftype');
+    my $options  = $input->param('prefoptions');
 
     # handle multiple value strings (separated by ',')
     my $params = $input->Vars;
@@ -345,49 +329,30 @@ if ( $op eq 'add_form' ) {
         }
     }
 
-    if ( $input->param('preftype') eq 'Upload' ) {
+    if ( $type eq 'Upload' ) {
         my $lgtfh = $input->upload('value');
         $value = join '', <$lgtfh>;
         $value = encode_base64($value);
     }
 
-    if ( $sth->rows ) {
-        unless ( C4::Context->config('demo') ) {
-            my $sth = $dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
-            $sth->execute( $value, $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'), $input->param('variable') );
-            logaction( 'SYSTEMPREFERENCE', 'MODIFY', undef, $input->param('variable') . " | " . $value );
-        }
-    } else {
-        unless ( C4::Context->config('demo') ) {
-            my $sth = $dbh->prepare("insert into systempreferences (variable,value,explanation,type,options) values (?,?,?,?,?)");
-            $sth->execute( $input->param('variable'), $value, $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions') );
-            logaction( 'SYSTEMPREFERENCE', 'ADD', undef, $input->param('variable') . " | " . $value );
-        }
-    }
+    C4::Context->set_preference( $variable, $value, $expl, $type, $options )
+        unless C4::Context->config('demo');
     print $input->redirect("/cgi-bin/koha/admin/systempreferences.pl?tab=");
     exit;
 ################## DELETE_CONFIRM ##################################
     # called by default form, used to confirm deletion of data in DB
 } elsif ( $op eq 'delete_confirm' ) {
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select variable,value,explanation,type,options from systempreferences where variable=?");
-    $sth->execute($searchfield);
-    my $data = $sth->fetchrow_hashref;
+    my $value = C4::Context->preference($searchfield);
     $template->param(
         searchfield => $searchfield,
-        Tvalue      => $data->{'value'},
+        Tvalue      => $value,
     );
 
     # END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
     # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ( $op eq 'delete_confirmed' ) {
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("delete from systempreferences where variable=?");
-    $sth->execute($searchfield);
-    my $logstring = $searchfield . " | " . $Tvalue;
-    logaction( 'SYSTEMPREFERENCE', 'DELETE', undef, $logstring );
-
+    C4::Context->delete_preference($searchfield);
     # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else {    # DEFAULT

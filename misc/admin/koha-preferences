@@ -82,7 +82,6 @@ sub _set_preference {
     _debug( "Setting $preference to $value" );
 
     C4::Context->set_preference( $preference, $value );
-    logaction( 'SYSTEMPREFERENCE', 'MODIFY', undef, $preference . " | " . $value );
 }
 
 sub GetPreferences {

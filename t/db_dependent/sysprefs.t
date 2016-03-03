@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::More tests => 8;
 use C4::Context;
 
 # Start transaction
@@ -48,3 +48,16 @@ is( C4::Context->preference('IDoNotExist'), undef, 'Get a non-existent system pr
 
 C4::Context->set_preference( 'IDoNotExist', 'NonExistent' );
 is( C4::Context->preference('IDoNotExist'), 'NonExistent', 'Test creation of non-existent system preference' );
+
+C4::Context->set_preference('testpreference', 'abc');
+C4::Context->delete_preference('testpreference');
+is(C4::Context->preference('testpreference'), undef, 'deleting preferences');
+
+C4::Context->set_preference('testpreference', 'def');
+# Delete from the database, it should still be in cache
+$dbh->do("DELETE FROM systempreferences WHERE variable='testpreference'");
+is(C4::Context->preference('testpreference'), 'def', 'caching preferences');
+C4::Context->clear_syspref_cache();
+is(C4::Context->preference('testpreference'), undef, 'clearing preference cache');
+
+$dbh->rollback;

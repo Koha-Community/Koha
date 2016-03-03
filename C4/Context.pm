@@ -100,6 +100,7 @@ BEGIN {
 use Encode;
 use ZOOM;
 use XML::Simple;
+use Koha::Cache;
 use POSIX ();
 use DateTime::TimeZone;
 use Module::Load::Conditional qw(can_load);
@@ -108,6 +109,7 @@ use Carp;
 use C4::Boolean;
 use C4::Debug;
 use Koha;
+use Koha::Config::SysPref;
 use Koha::Config::SysPrefs;
 
 =head1 NAME
@@ -505,19 +507,18 @@ with this method.
 
 =cut
 
-# FIXME: running this under mod_perl will require a means of
-# flushing the caching mechanism.
-
-my %sysprefs;
+my $syspref_cache = Koha::Cache->get_instance();
 my $use_syspref_cache = 1;
-
 sub preference {
     my $self = shift;
     my $var  = shift;    # The system preference to return
 
-    if ($use_syspref_cache && exists $sysprefs{lc $var}) {
-        return $sysprefs{lc $var};
-    }
+    $var = lc $var;
+
+    my $cached_var = $use_syspref_cache
+        ? $syspref_cache->get_from_cache("syspref_$var")
+        : undef;
+    return $cached_var if defined $cached_var;
 
     my $dbh  = C4::Context->dbh or return 0;
 
@@ -530,7 +531,7 @@ sub preference {
         $value = $syspref ? $syspref->value() : undef;
     }
 
-    $sysprefs{lc $var} = $value;
+    $syspref_cache->set_in_cache("syspref_$var", $value) if $use_syspref_cache;
     return $value;
 }
 
@@ -553,6 +554,8 @@ default behavior.
 sub enable_syspref_cache {
     my ($self) = @_;
     $use_syspref_cache = 1;
+    # We need to clear the cache to have it up-to-date
+    $self->clear_syspref_cache();
 }
 
 =head2 disable_syspref_cache
@@ -581,43 +584,79 @@ will not be seen by this process.
 =cut
 
 sub clear_syspref_cache {
-    %sysprefs = ();
+    $syspref_cache->flush_all if $use_syspref_cache;
 }
 
 =head2 set_preference
 
-  C4::Context->set_preference( $variable, $value );
+  C4::Context->set_preference( $variable, $value, [ $explanation, $type, $options ] );
 
 This updates a preference's value both in the systempreferences table and in
-the sysprefs cache.
+the sysprefs cache. If the optional parameters are provided, then the query
+becomes a create. It won't update the parameters (except value) for an existing
+preference.
 
 =cut
 
 sub set_preference {
-    my $self = shift;
-    my $var = lc(shift);
-    my $value = shift;
+    my ( $self, $variable, $value, $explanation, $type, $options ) = @_;
 
-    my $syspref = Koha::Config::SysPrefs->find( $var );
-    my $type = $syspref ? $syspref->type() : undef;
+    $variable = lc $variable;
 
-    $value = 0 if ( $type && $type eq 'YesNo' && $value eq '' );
+    my $syspref = Koha::Config::SysPrefs->find($variable);
+    $type =
+        $type    ? $type
+      : $syspref ? $syspref->type
+      :            undef;
 
     # force explicit protocol on OPACBaseURL
-    if ($var eq 'opacbaseurl' && substr($value,0,4) !~ /http/) {
+    if ( $variable eq 'opacbaseurl' && substr( $value, 0, 4 ) !~ /http/ ) {
         $value = 'http://' . $value;
     }
 
     if ($syspref) {
-        $syspref = $syspref->set( { value => $value } )->store();
-    }
-    else {
-        $syspref = Koha::Config::SysPref->new( { variable => $var, value => $value } )->store();
+        $syspref->set(
+            {   ( defined $value ? ( value       => $value )       : () ),
+                ( $explanation   ? ( explanation => $explanation ) : () ),
+                ( $type          ? ( type        => $type )        : () ),
+                ( $options       ? ( options     => $options )     : () ),
+            }
+        )->store;
+    } else {
+        $syspref = Koha::Config::SysPref->new(
+            {   variable    => $variable,
+                value       => $value,
+                explanation => $explanation || undef,
+                type        => $type,
+                options     => $options || undef,
+            }
+        )->store();
     }
 
-    if ($syspref) {
-        $sysprefs{$var} = $value;
+    $syspref_cache->set_in_cache( "syspref_$variable", $value )
+      if $use_syspref_cache;
+
+    return $syspref;
+}
+
+=head2 delete_preference
+
+    C4::Context->delete_preference( $variable );
+
+This deletes a system preference from the database. Returns a true value on
+success. Failure means there was an issue with the database, not that there
+was no syspref of the name.
+
+=cut
+
+sub delete_preference {
+    my ( $self, $var ) = @_;
+
+    if ( Koha::Config::SysPrefs->find( $var )->delete ) {
+        $syspref_cache->clear_from_cache("syspref_$var") if $use_syspref_cache;
+        return 1;
     }
+    return 0;
 }
 
 =head2 Zconn
