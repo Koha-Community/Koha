@@ -26,7 +26,6 @@ use C4::Context;
 use C4::Debug;
 
 BEGIN {
-    use version; our $VERSION = qv('3.07.00.049');
     use base qw(Exporter);
     our @EXPORT = qw(unpack_UTF8
                      text_alignment

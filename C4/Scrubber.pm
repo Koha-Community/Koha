@@ -27,7 +27,6 @@ use HTML::Scrubber;
 use C4::Context;
 use C4::Debug;
 
-our $VERSION = v3.07.00.049;
 
 
 my %scrubbertypes = (

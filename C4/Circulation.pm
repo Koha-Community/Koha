@@ -68,7 +68,6 @@ use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
 	require Exporter;
-    $VERSION = 3.07.00.049;	# for version checking
 	@ISA    = qw(Exporter);
 
 	# FIXME subs that should probably be elsewhere

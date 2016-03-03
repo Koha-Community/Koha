@@ -29,7 +29,6 @@ use C4::Creators::PDF qw(StrWidth);
 use C4::Patroncards::Lib qw(unpack_UTF8 text_alignment leading box get_borrower_attributes);
 
 BEGIN {
-    use version; our $VERSION = qv('3.07.00.049');
 }
 
 sub new {

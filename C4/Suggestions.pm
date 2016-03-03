@@ -32,7 +32,6 @@ use Koha::DateUtils;
 use List::MoreUtils qw(any);
 use base qw(Exporter);
 
-our $VERSION = 3.07.00.049;
 our @EXPORT  = qw(
   ConnectSuggestionAndBiblio
   CountSuggestion

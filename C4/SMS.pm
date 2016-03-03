@@ -40,7 +40,6 @@ use C4::Context;
 use vars qw( );
 
 BEGIN {
-    $VERSION = 3.07.00.049;
 }
 
 =head1 METHODS

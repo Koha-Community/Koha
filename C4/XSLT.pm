@@ -45,7 +45,6 @@ my %authval_per_framework;
 
 BEGIN {
     require Exporter;
-    $VERSION = 3.07.00.049;
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &XSLTParse4Display

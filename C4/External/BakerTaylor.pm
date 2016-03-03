@@ -32,7 +32,6 @@ use vars qw($user $pass $agent $image_url $link_url);
 
 BEGIN {
 	require Exporter;
-    $VERSION = 3.07.00.049;
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw(&availability &content_cafe &image_url &link_url &http_jacket_link);
 	%EXPORT_TAGS = (all=>\@EXPORT_OK);

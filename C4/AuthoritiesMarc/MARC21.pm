@@ -20,7 +20,6 @@ package C4::AuthoritiesMarc::MARC21;
 use strict;
 #use warnings; FIXME - Bug 2505
 use MARC::Record;
-our $VERSION = 3.07.00.049;
 
 =head1 NAME
 

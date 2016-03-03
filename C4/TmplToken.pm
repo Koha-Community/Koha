@@ -32,7 +32,6 @@ This is a class representing a token scanned from an HTML::Template .tmpl file.
 
 =cut
 
-our $VERSION = 3.07.00.049;
 
 
 sub new {

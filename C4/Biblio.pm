@@ -45,7 +45,6 @@ use Koha::Acquisition::Currencies;
 use vars qw(@ISA @EXPORT);
 
 BEGIN {
-    $VERSION = 3.07.00.049;
 
     require Exporter;
     @ISA = qw( Exporter );

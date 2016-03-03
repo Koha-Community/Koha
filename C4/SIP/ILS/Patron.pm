@@ -24,7 +24,6 @@ use C4::Branch qw(GetBranchName);
 use C4::Items qw( GetBarcodeFromItemnumber GetItemnumbersForBiblio);
 use C4::Auth qw(checkpw);
 
-our $VERSION = 3.07.00.049;
 
 our $kp;    # koha patron
 

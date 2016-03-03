@@ -30,7 +30,6 @@ use vars qw(@ISA @EXPORT );
 
 @ISA = ('Exporter');
 @EXPORT = ('backup_changed_files');
-$VERSION = '3.00';
 
 =head1 NAME
 

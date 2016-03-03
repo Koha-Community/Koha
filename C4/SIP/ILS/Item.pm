@@ -23,7 +23,6 @@ use C4::Members;
 use C4::Reserves;
 use Koha::Database;
 
-our $VERSION = 3.07.00.049;
 
 =encoding UTF-8
 

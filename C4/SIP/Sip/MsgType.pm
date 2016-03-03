@@ -27,7 +27,6 @@ use constant INVALID_CARD => 'Invalid cardnumber';
 use constant INVALID_PW   => 'Invalid password';
 
 BEGIN {
-    $VERSION   = 3.07.00.049;
     @ISA       = qw(Exporter);
     @EXPORT_OK = qw(handle login_core);
 }

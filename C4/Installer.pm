@@ -21,7 +21,6 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 use Encode qw( encode is_utf8 );
-our $VERSION = 3.07.00.049;
 use C4::Context;
 use C4::Installer::PerlModules;
 use DBI;

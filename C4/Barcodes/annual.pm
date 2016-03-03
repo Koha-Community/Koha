@@ -32,7 +32,6 @@ use vars qw($debug $cgi_debug);	# from C4::Debug, of course
 use vars qw($width);
 
 BEGIN {
-    $VERSION = 3.07.00.049;
     @ISA = qw(C4::Barcodes);
 	$width = 4;
 }

@@ -29,7 +29,6 @@ use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
 BEGIN {
     require Exporter;
-    $VERSION = 3.03;           # set the version for version checking
     $debug   = $ENV{DEBUG};
     @ISA     = qw(Exporter);
     @EXPORT =

@@ -25,7 +25,6 @@ use Koha::DateUtils;
 use vars qw(@ISA @EXPORT);
 
 BEGIN { 
-    $VERSION = 3.07.00.049;    # set the version for version checking
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &GetNewsToDisplay

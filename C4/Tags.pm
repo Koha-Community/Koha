@@ -33,7 +33,6 @@ use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 our $ext_dict;
 
 BEGIN {
-    $VERSION = 3.07.00.049;
 	@ISA = qw(Exporter);
     @EXPORT_OK = qw(
       &get_tag &get_tags &get_tag_rows

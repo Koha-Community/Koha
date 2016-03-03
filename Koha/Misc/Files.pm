@@ -21,7 +21,6 @@ package Koha::Misc::Files;
 
 use Modern::Perl;
 use vars qw();
-$VERSION = '0.25';
 
 use C4::Context;
 use C4::Output;

@@ -18,7 +18,6 @@ package C4::Creators;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 BEGIN {
-    use version; our $VERSION = qv('3.07.00.049');
     use vars qw(@EXPORT @ISA);
     @ISA = qw(Exporter);
     our @EXPORT = qw(get_all_templates

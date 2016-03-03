@@ -26,7 +26,6 @@ our @EXPORT = qw(
   field_equals
 );
 
-our $VERSION = '0.01';
 
 our $debug = 0;
 

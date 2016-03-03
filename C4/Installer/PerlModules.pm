@@ -7,7 +7,6 @@ use File::Spec;
 
 use C4::Installer::PerlDependencies;
 
-use version; our $VERSION = qv('3.07.00.049');
 
 our $PERL_DEPS = $C4::Installer::PerlDependencies::PERL_DEPS;
 

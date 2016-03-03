@@ -37,7 +37,6 @@ use Data::Dumper;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 BEGIN {
-    $VERSION = 3.03;
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(

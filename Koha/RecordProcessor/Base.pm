@@ -66,7 +66,6 @@ use base qw(Class::Accessor);
 __PACKAGE__->mk_ro_accessors(qw( name version ));
 __PACKAGE__->mk_accessors(qw( params ));
 our $NAME = 'Base';
-our $VERSION = '1.0';
 
 
 =head2 new

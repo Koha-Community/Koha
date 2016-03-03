@@ -38,7 +38,6 @@ The predefined constants are
 
 ###############################################################################
 
-$VERSION = 3.07.00.049;
 
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(

@@ -37,7 +37,6 @@ use Carp;
 
 use base qw(Koha::RecordProcessor::Base);
 our $NAME = 'Null';
-our $VERSION = '1.0';
 
 =head2 filter
 

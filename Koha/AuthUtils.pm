@@ -24,7 +24,6 @@ use Fcntl qw/O_RDONLY/; # O_RDONLY is used in generate_salt
 
 use base 'Exporter';
 
-our $VERSION = '1.01';
 our @EXPORT_OK   = qw(hash_password);
 
 =head1 NAME

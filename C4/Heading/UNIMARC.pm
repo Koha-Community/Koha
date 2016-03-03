@@ -24,7 +24,6 @@ use MARC::Record;
 use MARC::Field;
 use C4::Context;
 
-our $VERSION = 3.07.00.049;
 
 =head1 NAME
 

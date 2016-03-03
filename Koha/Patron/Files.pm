@@ -28,7 +28,6 @@ use C4::Debug;
 BEGIN {
 
     # set the version for version checking
-    $VERSION = 0.01;
 }
 
 =head1 NAME

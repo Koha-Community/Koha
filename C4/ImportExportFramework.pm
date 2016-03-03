@@ -31,7 +31,6 @@ use C4::Debug;
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
-    $VERSION = 3.07.00.049;    # set version for version checking
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(

@@ -26,7 +26,6 @@ use base qw( Exporter );
 use C4::Bookseller::Contact;
 
 # set the version for version checking
-our $VERSION   = 3.07.00.049;
 our @EXPORT_OK = qw(
   GetBooksellersWithLateOrders
   ModBookseller

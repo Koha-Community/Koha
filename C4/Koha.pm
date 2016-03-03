@@ -35,7 +35,6 @@ use DBI qw(:sql_types);
 use vars qw(@ISA @EXPORT @EXPORT_OK $DEBUG);
 
 BEGIN {
-    $VERSION = 3.07.00.049;
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(

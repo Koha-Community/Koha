@@ -41,7 +41,6 @@ use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
 # set the version for version checking
 BEGIN {
-    $VERSION = 3.07.00.049;
     $DEBUG = ($ENV{DEBUG}) ? 1 : 0;
 }
 

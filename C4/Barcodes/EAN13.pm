@@ -30,7 +30,6 @@ use vars qw(@ISA);
 use vars qw($debug $cgi_debug);	# from C4::Debug, of course
 
 BEGIN {
-    $VERSION = 0.01;
     @ISA = qw(C4::Barcodes);
 }
 

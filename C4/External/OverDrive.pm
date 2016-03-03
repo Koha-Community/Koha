@@ -30,7 +30,6 @@ use LWP::UserAgent;
 
 BEGIN {
     require Exporter;
-    our $VERSION = 3.07.00.049;
     our @ISA = qw( Exporter ) ;
     our @EXPORT = qw(
         IsOverDriveEnabled

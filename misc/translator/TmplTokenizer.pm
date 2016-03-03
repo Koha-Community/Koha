@@ -24,7 +24,6 @@ A wrapper for the functionality found in TTParser to allow an easier transition 
 
 ###############################################################################
 
-$VERSION = 0.02;
 
 @ISA = qw(Exporter);
 @EXPORT_OK = qw();

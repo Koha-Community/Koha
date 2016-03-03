@@ -29,7 +29,6 @@ use vars qw(@ISA @EXPORT);
 use constant DEBUG => 0;
 
 BEGIN {
-    $VERSION = 1.00;    # set the version for version checking
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &GetModificationTemplates

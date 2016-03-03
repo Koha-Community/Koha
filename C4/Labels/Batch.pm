@@ -8,7 +8,6 @@ use base qw(C4::Creators::Batch);
 use autouse 'Data::Dumper' => qw(Dumper);
 
 BEGIN {
-    use version; our $VERSION = qv('3.07.00.049');
 }
 
 __PACKAGE__ =~ m/^C4::(.+)::.+$/;

@@ -19,7 +19,6 @@ use C4::SIP::Sip::Checksum qw(checksum);
 use vars qw(@ISA @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
-    $VERSION = 3.07.00.049;
 	@ISA = qw(Exporter);
 
 	@EXPORT_OK = qw(y_or_n timestamp add_field maybe_add add_count

@@ -25,7 +25,6 @@ use parent qw(C4::SIP::ILS::Transaction);
 
 
 our $debug   = 0;
-our $VERSION = 3.07.00.049;
 
 my %fields = ();
 

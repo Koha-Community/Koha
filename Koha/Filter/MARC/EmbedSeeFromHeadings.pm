@@ -38,7 +38,6 @@ use C4::Biblio qw/GetMarcFromKohaField/;
 
 use base qw(Koha::RecordProcessor::Base);
 our $NAME = 'EmbedSeeFromHeadings';
-our $VERSION = '1.0';
 
 =head2 filter
 
