@@ -668,10 +668,10 @@ END_SQL
 
                 my $print_sent = 0; # A print notice is not yet sent for this patron
                 for my $mtt ( @message_transport_types ) {
-
+                    my $effective_mtt = $mtt;
                     if ( ($mtt eq 'email' and not scalar @emails_to_use) or ($mtt eq 'sms' and not $data->{smsalertnumber}) ) {
                         # email or sms is requested but not exist, do a print.
-                        $mtt = 'print';
+                        $effective_mtt = 'print';
                     }
                     my $letter = parse_overdues_letter(
                         {   letter_code     => $overdue_rules->{"letter$i"},
@@ -683,7 +683,7 @@ END_SQL
                                                 'items.content' => $titles,
                                                 'count'         => $itemcount,
                                                },
-                            message_transport_type => $mtt,
+                            message_transport_type => $effective_mtt,
                         }
                     );
                     unless ($letter) {
@@ -743,19 +743,19 @@ END_SQL
                                 }
                               );
                         }
-                        unless ( $mtt eq 'print' and $print_sent == 1 ) {
+                        unless ( $effective_mtt eq 'print' and $print_sent == 1 ) {
                             # Just sent a print if not already done.
                             C4::Letters::EnqueueLetter(
                                 {   letter                 => $letter,
                                     borrowernumber         => $borrowernumber,
-                                    message_transport_type => $mtt,
+                                    message_transport_type => $effective_mtt,
                                     from_address           => $admin_email_address,
                                     to_address             => join(',', @emails_to_use),
                                 }
                             );
                             # A print notice should be sent only once per overdue level.
                             # Without this check, a print could be sent twice or more if the library checks sms and email and print and the patron has no email or sms number.
-                            $print_sent = 1 if $mtt eq 'print';
+                            $print_sent = 1 if $effective_mtt eq 'print';
                         }
                     }
                 }
