@@ -61,6 +61,9 @@ $(document).ready(function() {
             $("#issuesperunit").val(1);
         }
     });
+    $(".delete_frequency").on("click",function(){
+        return confirmDelete();
+    });
 });
 //]]>
 </script>
@@ -208,7 +211,7 @@ $(document).ready(function() {
                   <td>[% frequency.displayorder %]</td>
                   <td>
                     <a href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=modify&frequencyid=[% frequency.id %]">Modify</a> |
-                    <a href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=del&frequencyid=[% frequency.id %]">Delete</a>
+                    <a class="delete_frequency" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=del&frequencyid=[% frequency.id %]">Delete</a>
                   </td>
                 </tr>
               [% END %]
