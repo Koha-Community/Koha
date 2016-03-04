@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Koha::DateUtils;
 use DateTime::Duration;
+use t::lib::Mocks;
 use C4::Biblio;
 use C4::Members;
 use C4::Circulation;
@@ -373,12 +374,12 @@ my $itemnumber;
     $biblionumber
 );
 
-C4::Context->set_preference( 'UpdateNotForLoanStatusOnCheckin', q{} );
+t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', q{} );
 AddReturn( 'barcode_3', $samplebranch1->{branchcode} );
 my $item = GetItem( $itemnumber );
 ok( $item->{notforloan} eq 1, 'UpdateNotForLoanStatusOnCheckin does not modify value when not enabled' );
 
-C4::Context->set_preference( 'UpdateNotForLoanStatusOnCheckin', '1: 9' );
+t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', '1: 9' );
 AddReturn( 'barcode_3', $samplebranch1->{branchcode} );
 $item = GetItem( $itemnumber );
 ok( $item->{notforloan} eq 9, q{UpdateNotForLoanStatusOnCheckin updates notforloan value from 1 to 9 with setting "1: 9"} );

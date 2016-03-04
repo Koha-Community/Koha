@@ -24,9 +24,10 @@ the default search class from the QueryParser object
 
 =cut
 
+use t::lib::Mocks;
 use C4::Context;
 
-C4::Context->set_preference("UseQueryParser","1");
+t::lib::Mocks::mock_preference("UseQueryParser","1");
 
 my $QParser = C4::Context->queryparser();
 my $default_search_class = $QParser->default_search_class();

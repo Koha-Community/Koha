@@ -20,9 +20,10 @@ use Modern::Perl;
 use Test::More tests => 7;
 
 use File::Basename;
+use t::lib::Mocks;
 use C4::Context;
 
-C4::Context->set_preference( "UseQueryParser", 1 );
+t::lib::Mocks::mock_preference( "UseQueryParser", 1 );
 my $QParser = C4::Context->queryparser();
 
 # Check initialization correctly parsed the config file

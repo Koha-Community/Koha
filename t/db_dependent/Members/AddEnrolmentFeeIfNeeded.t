@@ -5,6 +5,7 @@ use C4::Context;
 use C4::Members;
 use Koha::Database;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->schema;
@@ -52,7 +53,7 @@ $borrower_data{borrowernumber} = $borrowernumber;
 my ( $total ) = C4::Members::GetMemberAccountRecords( $borrowernumber );
 is( $total, $enrolmentfee_K, "New kid pay $enrolmentfee_K" );
 
-C4::Context->set_preference( 'FeeOnChangePatronCategory', 0 );
+t::lib::Mocks::mock_preference( 'FeeOnChangePatronCategory', 0 );
 $borrower_data{categorycode} = 'J';
 C4::Members::ModMember( %borrower_data );
 ( $total ) = C4::Members::GetMemberAccountRecords( $borrowernumber );
@@ -60,7 +61,7 @@ is( $total, $enrolmentfee_K , "Kid growing and become a juvenile, but shouldn't 
 
 $borrower_data{categorycode} = 'K';
 C4::Members::ModMember( %borrower_data );
-C4::Context->set_preference( 'FeeOnChangePatronCategory', 1 );
+t::lib::Mocks::mock_preference( 'FeeOnChangePatronCategory', 1 );
 
 $borrower_data{categorycode} = 'J';
 C4::Members::ModMember( %borrower_data );

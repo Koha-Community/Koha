@@ -5,6 +5,7 @@ use Modern::Perl;
 use Test::More tests => 13;
 use MARC::Record;
 
+use t::lib::Mocks;
 use C4::Context;
 
 BEGIN {
@@ -16,7 +17,7 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
-C4::Context->set_preference( "BibtexExportAdditionalFields", q{} );
+t::lib::Mocks::mock_preference( "BibtexExportAdditionalFields", q{} );
 
 my @marcarray=marc2marc;
 is ($marcarray[0],"Feature not yet implemented\n","error works");
@@ -115,7 +116,7 @@ my $test6xml=qq(\@book{testID,
 
 is ($bibtex, $test6xml, "testing bibtex");
 
-C4::Context->set_preference( "BibtexExportAdditionalFields", "'\@': 260\$b\ntest: 260\$b" );
+t::lib::Mocks::mock_preference( "BibtexExportAdditionalFields", "'\@': 260\$b\ntest: 260\$b" );
 $bibtex = marc2bibtex( $marc, 'testID' );
 my $test7xml = qq(\@Scholastic{testID,
 \tauthor = {Rowling, J.K.},
@@ -126,7 +127,7 @@ my $test7xml = qq(\@Scholastic{testID,
 }
 );
 is( $bibtex, $test7xml, "testing bibtex" );
-C4::Context->set_preference( "BibtexExportAdditionalFields", q{} );
+t::lib::Mocks::mock_preference( "BibtexExportAdditionalFields", q{} );
 
 $marc->append_fields(MARC::Field->new(
     '264', '3', '1', b => 'Reprints', c => '2011'

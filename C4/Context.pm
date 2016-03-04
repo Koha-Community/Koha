@@ -606,6 +606,8 @@ sub set_preference {
       : $syspref ? $syspref->type
       :            undef;
 
+    $value = 0 if ( $type && $type eq 'YesNo' && $value eq '' );
+
     # force explicit protocol on OPACBaseURL
     if ( $variable eq 'opacbaseurl' && substr( $value, 0, 4 ) !~ /http/ ) {
         $value = 'http://' . $value;

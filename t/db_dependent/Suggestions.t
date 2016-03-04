@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 
+use t::lib::Mocks;
 use C4::Context;
 use C4::Members;
 use C4::Letters;
@@ -344,11 +345,11 @@ is( @$suggestions, 1, 'DelSuggestion deletes one suggestion' );
 is( $suggestions->[0]->{title}, $del_suggestion->{title}, 'DelSuggestion deletes the correct suggestion' );
 
 ## Bug 11466, making sure GetSupportList() returns itemtypes, even if AdvancedSearchTypes has multiple values
-C4::Context->set_preference("AdvancedSearchTypes", 'itemtypes|loc|ccode');
+t::lib::Mocks::mock_preference("AdvancedSearchTypes", 'itemtypes|loc|ccode');
 my $itemtypes1 = C4::Koha::GetSupportList();
 is(@$itemtypes1, 8, "Purchase suggestion itemtypes collected, multiple AdvancedSearchTypes");
 
-C4::Context->set_preference("AdvancedSearchTypes", 'itemtypes');
+t::lib::Mocks::mock_preference("AdvancedSearchTypes", 'itemtypes');
 my $itemtypes2 = C4::Koha::GetSupportList();
 is(@$itemtypes2, 8, "Purchase suggestion itemtypes collected, default AdvancedSearchTypes");
 

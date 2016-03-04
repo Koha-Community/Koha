@@ -10,6 +10,7 @@ use Test::More tests => 16;
 use List::Util qw(first);
 use Data::Dumper;
 use Test::Warn;
+use t::lib::Mocks;
 
 BEGIN {
     use_ok('C4::Languages');
@@ -27,7 +28,7 @@ is(C4::Languages::accept_language(),undef, 'test that accept_languages returns u
 
 ok(C4::Languages::getAllLanguages(), 'test get all languages');
 
-C4::Context->set_preference('AdvancedSearchLanguages', '');
+t::lib::Mocks::mock_preference('AdvancedSearchLanguages', '');
 my $all_languages = C4::Languages::getAllLanguages('eng');
 ok(@$all_languages > 10, 'retrieved a bunch of languges');
 
@@ -37,7 +38,7 @@ is_deeply($languages, $all_languages, 'getLanguages() and getAllLanguages() retu
 $languages = C4::Languages::getLanguages('eng', 1);
 is_deeply($languages, $all_languages, 'getLanguages() and getAllLanguages() with filtering selected but AdvancedSearchLanguages blank return the same list');
 
-C4::Context->set_preference('AdvancedSearchLanguages', 'ita|eng');
+t::lib::Mocks::mock_preference('AdvancedSearchLanguages', 'ita|eng');
 $languages = C4::Languages::getLanguages('eng', 1);
 is(scalar(@$languages), 2, 'getLanguages() filtering using AdvancedSearchLanguages works');
 

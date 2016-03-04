@@ -334,10 +334,10 @@ $reserve3 = GetReserve( $reserveid3 );
 is( $reserve3->{priority}, 1, "After ModReserve, the 3rd reserve becomes the first on the waiting list" );
 
 ModItem({ damaged => 1 }, $item_bibnum, $itemnumber);
-C4::Context->set_preference( 'AllowHoldsOnDamagedItems', 1 );
+t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 1 );
 ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'OK', "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
 ok( defined( ( CheckReserves($itemnumber) )[1] ), "Hold can be trapped for damaged item with AllowHoldsOnDamagedItems enabled" );
-C4::Context->set_preference( 'AllowHoldsOnDamagedItems', 0 );
+t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 0 );
 ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'damaged', "Patron cannot reserve damaged item with AllowHoldsOnDamagedItems disabled" );
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for damaged item with AllowHoldsOnDamagedItems disabled" );
 
@@ -409,8 +409,8 @@ is(CanItemBeReserved($borrowernumbers[0], $itemnumber), 'OK',
 
 
 # Test CancelExpiredReserves
-C4::Context->set_preference('ExpireReservesMaxPickUpDelay', 1);
-C4::Context->set_preference('ReservesMaxPickUpDelay', 1);
+t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelay', 1);
+t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 1);
 
 my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) = localtime(time);
 $year += 1900;
@@ -427,11 +427,11 @@ $calendar->insert_single_holiday(
 );
 $reserve_id = $reserve->{reserve_id};
 $dbh->do("UPDATE reserves SET waitingdate = DATE_SUB( NOW(), INTERVAL 5 DAY ), found = 'W', priority = 0 WHERE reserve_id = ?", undef, $reserve_id );
-C4::Context->set_preference('ExpireReservesOnHolidays', 0);
+t::lib::Mocks::mock_preference('ExpireReservesOnHolidays', 0);
 CancelExpiredReserves();
 my $count = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE reserve_id = ?", undef, $reserve_id );
 is( $count, 1, "Waiting reserve beyond max pickup delay *not* canceled on holiday" );
-C4::Context->set_preference('ExpireReservesOnHolidays', 1);
+t::lib::Mocks::mock_preference('ExpireReservesOnHolidays', 1);
 CancelExpiredReserves();
 $count = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE reserve_id = ?", undef, $reserve_id );
 is( $count, 0, "Waiting reserve beyond max pickup delay canceled on holiday" );

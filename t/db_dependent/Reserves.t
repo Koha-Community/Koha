@@ -129,21 +129,21 @@ is($status, "Reserved", "CheckReserves Test 2");
 is($status, "Reserved", "CheckReserves Test 3");
 
 my $ReservesControlBranch = C4::Context->preference('ReservesControlBranch');
-C4::Context->set_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
+t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
 ok(
     'ItemHomeLib' eq GetReservesControlBranch(
         { homebranch => 'ItemHomeLib' },
         { branchcode => 'PatronHomeLib' }
     ), "GetReservesControlBranch returns item home branch when set to ItemHomeLibrary"
 );
-C4::Context->set_preference( 'ReservesControlBranch', 'PatronLibrary' );
+t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
 ok(
     'PatronHomeLib' eq GetReservesControlBranch(
         { homebranch => 'ItemHomeLib' },
         { branchcode => 'PatronHomeLib' }
     ), "GetReservesControlBranch returns patron home branch when set to PatronLibrary"
 );
-C4::Context->set_preference( 'ReservesControlBranch', $ReservesControlBranch );
+t::lib::Mocks::mock_preference( 'ReservesControlBranch', $ReservesControlBranch );
 
 ###
 ### Regression test for bug 10272
@@ -266,7 +266,7 @@ AddReserve('CPL',  $requesters{'CPL'}, $bibnum2,
            $title,      $checkitem, $found);
 
 # Ensure that the item's home library controls hold policy lookup
-C4::Context->set_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
+t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
 
 my $messages;
 # Return the CPL item at FPL.  The hold that should be triggered is
@@ -282,7 +282,7 @@ is( $messages->{ResFound}->{borrowernumber},
 # and RPL imposes no restrictions on whose holds its items can fill.
 
 # Ensure that the preference 'LocalHoldsPriority' is not set (Bug 15244):
-C4::Context->set_preference( 'LocalHoldsPriority', '' );
+t::lib::Mocks::mock_preference( 'LocalHoldsPriority', '' );
 
 (undef, $messages, undef, undef) = AddReturn('bug10272_FPL', 'FPL');
 is( $messages->{ResFound}->{borrowernumber},
@@ -325,7 +325,7 @@ is( $status, 'Reserved', 'CheckReserves also returns reserve with lookahead');
 
 # Test 9761b: Add a reserve with future date, CheckReserve should not return it
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
-C4::Context->set_preference('AllowHoldDateInFuture', 1);
+t::lib::Mocks::mock_preference('AllowHoldDateInFuture', 1);
 $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 4));
 $resdate=output_pref($resdate);
@@ -345,13 +345,13 @@ is( $status, 'Reserved', 'CheckReserves returns future reserve with sufficient l
 # Test 9761d: Check ResFound message of AddReturn for future hold
 # Note that AddReturn is in Circulation.pm, but this test really pertains to reserves; AddReturn uses the ConfirmFutureHolds pref when calling CheckReserves
 # In this test we do not need an issued item; it is just a 'checkin'
-C4::Context->set_preference('ConfirmFutureHolds', 0);
+t::lib::Mocks::mock_preference('ConfirmFutureHolds', 0);
 (my $doreturn, $messages)= AddReturn('97531','CPL');
 is($messages->{ResFound}//'', '', 'AddReturn does not care about future reserve when ConfirmFutureHolds is off');
-C4::Context->set_preference('ConfirmFutureHolds', 3);
+t::lib::Mocks::mock_preference('ConfirmFutureHolds', 3);
 ($doreturn, $messages)= AddReturn('97531','CPL');
 is(exists $messages->{ResFound}?1:0, 0, 'AddReturn ignores future reserve beyond ConfirmFutureHolds days');
-C4::Context->set_preference('ConfirmFutureHolds', 7);
+t::lib::Mocks::mock_preference('ConfirmFutureHolds', 7);
 ($doreturn, $messages)= AddReturn('97531','CPL');
 is(exists $messages->{ResFound}?1:0, 1, 'AddReturn considers future reserve within ConfirmFutureHolds days');
 
@@ -382,8 +382,8 @@ ok(defined($letter), 'can successfully generate hold slip (bug 10949)');
 # Tests for bug 9788: Does GetReservesFromItemnumber return a future wait?
 # 9788a: GetReservesFromItemnumber does not return future next available hold
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
-C4::Context->set_preference('ConfirmFutureHolds', 2);
-C4::Context->set_preference('AllowHoldDateInFuture', 1);
+t::lib::Mocks::mock_preference('ConfirmFutureHolds', 2);
+t::lib::Mocks::mock_preference('AllowHoldDateInFuture', 1);
 $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 2));
 $resdate=output_pref($resdate);
@@ -435,7 +435,7 @@ AddReserve('CPL',  $requesters{'CPL2'}, $bibnum,
 $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 2, 'CalculatePriority should now return priority 2');
 #add another future hold
-C4::Context->set_preference('AllowHoldDateInFuture', 1);
+t::lib::Mocks::mock_preference('AllowHoldDateInFuture', 1);
 $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 1));
 AddReserve('CPL',  $requesters{'CPL3'}, $bibnum,
@@ -503,7 +503,7 @@ is($cancancel, 0, 'Reserve in waiting status cant be canceled');
 ####### Testing Bug 13113 - Prevent juvenile/children from reserving ageRestricted material >>>
        ####
 
-C4::Context->set_preference( 'AgeRestrictionMarker', 'FSK|PEGI|Age|K' );
+t::lib::Mocks::mock_preference( 'AgeRestrictionMarker', 'FSK|PEGI|Age|K' );
 
 #Reserving an not-agerestricted Biblio by a Borrower with no dateofbirth is tested previously.
 
@@ -632,8 +632,8 @@ is( int( $bz14464_fines ), 42, 'Bug 14464 - Fine applied after cancelling reserv
 # tests for MoveReserve in relation to ConfirmFutureHolds (BZ 14526)
 #   hold from A pos 1, today, no fut holds: MoveReserve should fill it
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
-C4::Context->set_preference('ConfirmFutureHolds', 0);
-C4::Context->set_preference('AllowHoldDateInFuture', 1);
+t::lib::Mocks::mock_preference('ConfirmFutureHolds', 0);
+t::lib::Mocks::mock_preference('AllowHoldDateInFuture', 1);
 AddReserve('CPL',  $borrowernumber, $item_bibnum,
     $bibitems,  1, undef, $expdate, $notes, $title, $checkitem, '');
 MoveReserve( $itemnumber, $borrowernumber );
@@ -656,7 +656,7 @@ MoveReserve( $itemnumber, $borrowernumber );
 is( $status, 'Reserved', 'MoveReserve did not fill future hold');
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
 #   hold from A pos 1, tomorrow, fut holds=2: MoveReserve should fill it
-C4::Context->set_preference('ConfirmFutureHolds', 2);
+t::lib::Mocks::mock_preference('ConfirmFutureHolds', 2);
 AddReserve('CPL',  $borrowernumber, $item_bibnum,
     $bibitems,  1, $resdate, $expdate, $notes, $title, $checkitem, '');
 MoveReserve( $itemnumber, $borrowernumber );

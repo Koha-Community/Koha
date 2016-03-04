@@ -11,6 +11,7 @@ use C4::Biblio;
 use C4::XISBN;
 use C4::Context;
 use C4::Search;
+use t::lib::Mocks;
 use Test::MockModule;
 
 BEGIN {
@@ -54,8 +55,8 @@ is( $trial->{biblionumber},
     $biblionumber1, "Gets biblionumber like the previous test." );
 
 ## Test ThingISBN
-$context->set_preference( 'ThingISBN', 1 );
-$context->set_preference( 'XISBN', 0 );
+t::lib::Mocks::mock_preference( 'ThingISBN', 1 );
+t::lib::Mocks::mock_preference( 'XISBN', 0 );
 
 my $results_thingisbn;
 eval { $results_thingisbn = C4::XISBN::get_xisbns($isbn1); };
@@ -68,8 +69,8 @@ SKIP: {
 }
 
 ## Test XISBN
-$context->set_preference( 'ThingISBN', 0 );
-$context->set_preference( 'XISBN', 1 );
+t::lib::Mocks::mock_preference( 'ThingISBN', 0 );
+t::lib::Mocks::mock_preference( 'XISBN', 1 );
 
 my $results_xisbn;
 eval { $results_xisbn = C4::XISBN::get_xisbns($isbn1); };
