@@ -459,7 +459,7 @@ sub build_patron_status {
         ( $protocol_version >= 2 )
           and $resp .= add_field( FID_VALID_PATRON, 'N' );
 
-        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD );
+        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD, $server );
     }
 
     $resp .= add_field( FID_INST_ID, $fields->{ (FID_INST_ID) } );
@@ -1028,7 +1028,7 @@ sub handle_patron_info {
         if ( $protocol_version >= 2 ) {
             $resp .= add_field( FID_VALID_PATRON, 'N' );
         }
-        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD );
+        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD, $server );
     }
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
