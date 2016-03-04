@@ -3,6 +3,10 @@
 # This file is part of Koha.
 #
 # Copyright 2015 Mark Tompsett
+#                - Initial commit, perlcritic clean-up, and
+#                  debugging
+# Copyright 2016 Tomas Cohen Arazi
+#                - Expansion of test cases to be comprehensive
 #
 # Koha is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -25,49 +29,60 @@ use List::MoreUtils qw/any/;
 use MARC::Record;
 use MARC::Field;
 use C4::Context;
+use Koha::Cache qw/flush_all/;
 use Koha::Database;
+use English qw/-no_match_vars/;
+
+$OUTPUT_AUTOFLUSH = 1;
 
 BEGIN {
     use_ok('Koha::RecordProcessor');
 }
 
-my $dbh = C4::Context->dbh;
-
-my $database = Koha::Database->new();
-my $schema   = $database->schema();
-$dbh->{RaiseError} = 1;
-
-my @valid_hidden_values = (
-    '-7', '-6', '-5', '-4', '-3', '-2', '-1', '0',
-     '1',  '2',  '3',  '4',  '5',  '6',  '7', '8'
-);
-
-my $hidden = {
-    opac     => [  '1',  '2',  '3',  '4', '5', '6', '7', '8' ],
-    intranet => [ '-7', '-4', '-3', '-2', '2', '3', '5', '8' ]
-};
-
 sub run_hiding_tests {
 
     my $interface = shift;
 
-    # foreach my $hidden_value ( @{ $hidden->{ $interface } } ) {
-    foreach my $hidden_value ( @valid_hidden_values ) {
+    # TODO: -8 is Flagged, which doesn't seem used.
+    # -9 and +9 are supposedly valid future values
+    # according to older documentation in 3.10.x
+    my @valid_hidden_values =
+      ( -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8 );
+
+    my $hidden = {
+        'opac'     => [ -8, 1,  2,  3,  4,  5, 6, 7, 8 ],
+        'intranet' => [ -8, -7, -4, -3, -2, 2, 3, 5, 8 ]
+    };
+
+    my $dbh = C4::Context->dbh;
+
+    my $database = Koha::Database->new();
+    my $schema   = $database->schema();
+    $dbh->{RaiseError} = 1;
+
+    #$ENV{'DEBUG'} = '1'; # Turn on debugging.
+
+    foreach my $hidden_value (@valid_hidden_values) {
 
         $schema->storage->txn_begin();
 
-        my $sth = $dbh->prepare("
-            UPDATE marc_subfield_structure SET hidden=?
-            WHERE tagfield='020' OR
-                  tagfield='008';
-        ");
-        $sth->execute( $hidden_value );
+        my $update_sql =
+            q{UPDATE marc_subfield_structure SET hidden=? }
+          . q{WHERE tagfield='020' OR }
+          . q{      tagfield='008';};
+        my $sth = $dbh->prepare($update_sql);
+        $sth->execute($hidden_value);
 
-        my $processor = Koha::RecordProcessor->new({
-            schema  => 'MARC',
-            filters => ( 'ViewPolicy' ),
-            options => { interface => $interface }
-        });
+        my $cache = Koha::Cache->get_instance();
+        $cache->flush_all();    # easy way to ensure DB is queried again.
+
+        my $processor = Koha::RecordProcessor->new(
+            {
+                schema  => 'MARC',
+                filters => ('ViewPolicy'),
+                options => { interface => $interface }
+            }
+        );
 
         is(
             ref( $processor->filters->[0] ),
@@ -76,74 +91,88 @@ sub run_hiding_tests {
         );
 
         # Create a fresh record
-        my $record = create_marc_record();
+        my $sample_record     = create_marc_record();
+        my $unfiltered_record = $sample_record->clone();
+
         # Apply filters
-        my $filtered_record = $processor->process( $record );
+        my $filtered_record = $processor->process($sample_record);
+
         # Data fields
+        if ( any { $_ == $hidden_value } @{ $hidden->{$interface} } ) {
 
-        if ( any { $_ eq $hidden_value } @{ $hidden->{ $interface } }) {
             # Subfield and controlfield are set to be hidden
-
-            is( $filtered_record->field('020'), undef,
+            is( $filtered_record->field('020'),
+                undef,
                 "Data field has been deleted because of hidden=$hidden_value" );
-            is( $record->field('020'), undef,
-                "Data field has been deleted in the original record because of hidden=$hidden_value" );
+            isnt( $unfiltered_record->field('020'), undef,
+"Data field has been deleted in the original record because of hidden=$hidden_value"
+            );
+
             # Control fields have a different behaviour in code
             is( $filtered_record->field('008'), undef,
-                "Control field has been deleted because of hidden=$hidden_value" );
-            is( $record->field('008'), undef,
-                "Control field has been deleted in the original record because of hidden=$hidden_value" );
+                "Control field has been deleted because of hidden=$hidden_value"
+            );
+            isnt( $unfiltered_record->field('008'), undef,
+"Control field has been deleted in the original record because of hidden=$hidden_value"
+            );
 
-        } else {
+            ok( $filtered_record && $unfiltered_record, 'Records exist' );
 
+        }
+        else {
             isnt( $filtered_record->field('020'), undef,
-                "Data field hasn't been deleted because of hidden=$hidden_value" );
-            isnt( $record->field('020'), undef,
-                "Data field hasn't been deleted in the original record because of hidden=$hidden_value" );
+                "Data field hasn't been deleted because of hidden=$hidden_value"
+            );
+            isnt( $unfiltered_record->field('020'), undef,
+"Data field hasn't been deleted in the original record because of hidden=$hidden_value"
+            );
+
             # Control fields have a different behaviour in code
             isnt( $filtered_record->field('008'), undef,
-                "Control field hasn't been deleted because of hidden=$hidden_value" );
-            isnt( $record->field('008'), undef,
-                "Control field hasn't been deleted in the original record because of hidden=$hidden_value" );
-        }
+"Control field hasn't been deleted because of hidden=$hidden_value"
+            );
+            isnt( $unfiltered_record->field('008'), undef,
+"Control field hasn't been deleted in the original record because of hidden=$hidden_value"
+            );
 
-        is_deeply( $filtered_record, $record,
-            "Records are the same" );
+            is_deeply( $filtered_record, $unfiltered_record,
+                'Records are the same' );
+        }
 
         $schema->storage->txn_rollback();
     }
+    return;
 }
 
 sub create_marc_record {
 
-    my $isbn   = '0590353403';
-    my $title  = 'Foundation';
-    my $record = MARC::Record->new;
-    my @fields = (
-        MARC::Field->new( '003', 'AR-CdUBM'),
-        MARC::Field->new( '008', '######suuuu####ag_||||__||||_0||_|_uuu|d'),
-        MARC::Field->new( '020', q{}, q{}, 'a' => $isbn  ),
-        MARC::Field->new( '245', q{}, q{}, 'a' => $title )
+    my $isbn        = '0590353403';
+    my $title       = 'Foundation';
+    my $marc_record = MARC::Record->new;
+    my @fields      = (
+        MARC::Field->new( '003', 'AR-CdUBM' ),
+        MARC::Field->new( '008', '######suuuu####ag_||||__||||_0||_|_uuu|d' ),
+        MARC::Field->new( '020', q{}, q{}, 'a' => $isbn ),
+        MARC::Field->new( '245', q{}, q{}, 'a' => $title ),
     );
 
-    $record->insert_fields_ordered( @fields );
+    $marc_record->insert_fields_ordered(@fields);
 
-    return $record;
+    return $marc_record;
 }
 
 subtest 'Koha::Filter::MARC::ViewPolicy opac tests' => sub {
 
-    plan tests => 96;
+    plan tests => 102;
 
     run_hiding_tests('opac');
 };
 
 subtest 'Koha::Filter::MARC::ViewPolicy intranet tests' => sub {
 
-    plan tests => 96;
+    plan tests => 102;
 
     run_hiding_tests('intranet');
 };
-
 
 1;

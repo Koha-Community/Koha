@@ -44,7 +44,9 @@ use C4::Biblio;
 
 use base qw(Koha::RecordProcessor::Base);
 our $NAME    = 'MARC_ViewPolicy';
-our $VERSION = '3.23'; # Master version I hope it gets in.
+our $VERSION = '3.23';              # Master version I hope it gets in.
+
+use constant FIRST_NONCONTROL_TAG => 10;    # tags < 10 are control tags.
 
 =head1 SUBROUTINES/METHODS
 
@@ -81,7 +83,7 @@ sub filter {
         my $result        = $current_record->clone();
         my $interface     = $self->{options}->{interface} // 'opac';
         my $frameworkcode = $self->{options}->{frameworkcode} // q{};
-        my $display       = _should_display_on_interface();
+        my $hide          = _should_hide_on_interface();
 
         my $marcsubfieldstructure = GetMarcStructure( 0, $frameworkcode );
 
@@ -95,7 +97,7 @@ sub filter {
                 {
                     field                 => $field,
                     marcsubfieldstructure => $marcsubfieldstructure,
-                    display               => $display,
+                    hide                  => $hide,
                     interface             => $interface,
                     result                => $result
                 }
@@ -117,24 +119,22 @@ sub _filter_field {
 
     my $field                 = $parameter->{field};
     my $marcsubfieldstructure = $parameter->{marcsubfieldstructure};
-    my $display               = $parameter->{display};
+    my $hide                  = $parameter->{hide};
     my $interface             = $parameter->{interface};
     my $result                = $parameter->{result};
 
     my $tag = $field->tag();
-    if ( $tag >= 10 ) {
+    if ( $tag >= FIRST_NONCONTROL_TAG ) {
         foreach my $subpairs ( $field->subfields() ) {
             my ( $subtag, $value ) = @{$subpairs};
 
-            # visibility is a "level" (-7 to +7), default to 0
+            # visibility is a "level" (-9 to +9), default to 0
+            # -8 is flagged, and 9/-9 are not implemented.
             my $visibility =
               $marcsubfieldstructure->{$tag}->{$subtag}->{hidden};
             $visibility //= 0;
-            my $hidden;
-            if ( $display->{$interface}->{$visibility} ) {
-                $hidden = 0;
-            }
-            else {
+            if ( $hide->{$interface}->{$visibility} ) {
+
                 # deleting last subfield doesn't delete field, so
                 # this detects that case to delete the field.
                 if ( scalar $field->subfields() <= 1 ) {
@@ -147,19 +147,16 @@ sub _filter_field {
         }
     }
 
-    # tags less than 10 don't have subfields, use @ trick.
+    # control tags don't have subfields, use @ trick.
     else {
-        # visibility is a "level" (-7 to +7), default to 0
+        # visibility is a "level" (-9 to +9), default to 0
+        # -8 is flagged, and 9/-9 are not implemented.
         my $visibility = $marcsubfieldstructure->{$tag}->{q{@}}->{hidden};
         $visibility //= 0;
-        my $hidden;
-        if ( $display->{$interface}->{$visibility} ) {
-            $hidden = 0;
-        }
-        else {
-            $hidden = 1;
+        if ( $hide->{$interface}->{$visibility} ) {
             $result->delete_fields($field);
         }
+
     }
     return;
 }
@@ -174,36 +171,62 @@ sub initialize {
     return;
 }
 
-sub _should_display_on_interface {
-    my $display = {
+# Copied and modified from 3.10.x help file
+# marc_subfields_structure.hidden
+# allows you to select from 19 possible visibility conditions, 17 of which are implemented. They are the following:
+# -9 => Future use
+# -8 => Flag
+# -7 => OPAC !Intranet !Editor Collapsed
+# -6 => OPAC Intranet !Editor !Collapsed
+# -5 => OPAC Intranet !Editor Collapsed
+# -4 => OPAC !Intranet !Editor !Collapsed
+# -3 => OPAC !Intranet Editor Collapsed
+# -2 => OPAC !Intranet Editor !Collapsed
+# -1 => OPAC Intranet Editor Collapsed
+# 0 => OPAC Intranet Editor !Collapsed
+# 1 => !OPAC Intranet Editor Collapsed
+# 2 => !OPAC !Intranet Editor !Collapsed
+# 3 => !OPAC !Intranet Editor Collapsed
+# 4 => !OPAC Intranet Editor !Collapsed
+# 5 => !OPAC !Intranet !Editor Collapsed
+# 6 => !OPAC Intranet !Editor !Collapsed
+# 7 => !OPAC Intranet !Editor Collapsed
+# 8 => !OPAC !Intranet !Editor !Collapsed
+# 9 => Future use
+# ( ! means 'not visible' or in the case of Collapsed 'not Collapsed')
+
+sub _should_hide_on_interface {
+    my $hide = {
         opac => {
-            0  => 1,
-            -1 => 1,
-            -2 => 1,
-            -3 => 1,
-            -4 => 1,
-            -5 => 1,
-            -6 => 1,
-            -7 => 1,
+            '-8' => 1,
+            '1'  => 1,
+            '2'  => 1,
+            '3'  => 1,
+            '4'  => 1,
+            '5'  => 1,
+            '6'  => 1,
+            '7'  => 1,
+            '8'  => 1,
         },
         intranet => {
-            -6 => 1,
-            -5 => 1,
-            -1 => 1,
-            0  => 1,
-            1  => 1,
-            4  => 1,
-            6  => 1,
-            7  => 1,
+            '-8' => 1,
+            '-7' => 1,
+            '-4' => 1,
+            '-3' => 1,
+            '-2' => 1,
+            '2'  => 1,
+            '3'  => 1,
+            '5'  => 1,
+            '8'  => 1,
         },
     };
-    return $display;
+    return $hide;
 }
 
 =head1 DIAGNOSTICS
 
  $ prove -v t/RecordProcessor.t
- $ prove -v t/db_dependent/RecordProcessor_ViewPolicy.t
+ $ prove -v t/db_dependent/Filter_MARC_ViewPolicy.t
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
