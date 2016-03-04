@@ -273,6 +273,13 @@ __PACKAGE__->table("items");
   is_nullable: 1
   size: 32
 
+=head2 new
+
+  accessor: undef
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 32
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -380,6 +387,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "stocknumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
+  "new",
+  { accessor => undef, data_type => "varchar", is_nullable => 1, size => 32 },
 );
 
 =head1 PRIMARY KEY
@@ -631,8 +640,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-06 12:00:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3M6BvB4ATsBXgQCkFKuI3A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-04 19:32:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rhW0Ddhh2hLoV//7nonLCA
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 

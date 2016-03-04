@@ -33,7 +33,7 @@ __PACKAGE__->table("tags_all");
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 biblionumber
 
@@ -64,7 +64,7 @@ __PACKAGE__->add_columns(
   "tag_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "borrowernumber",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "biblionumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "term",
@@ -120,12 +120,17 @@ __PACKAGE__->belongs_to(
   "borrowernumber",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xhJn9d2lS8crFWog28ENnw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-04 19:32:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gyjzwAoUL27c/7NqM8+RaA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

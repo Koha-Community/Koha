@@ -293,7 +293,7 @@ __PACKAGE__->table("deletedborrowers");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 30
+  size: 60
 
 =head2 flags
 
@@ -304,7 +304,7 @@ __PACKAGE__->table("deletedborrowers");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 30
+  size: 75
 
 =head2 opacnote
 
@@ -522,11 +522,11 @@ __PACKAGE__->add_columns(
   "sex",
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "password",
-  { data_type => "varchar", is_nullable => 1, size => 30 },
+  { data_type => "varchar", is_nullable => 1, size => 60 },
   "flags",
   { data_type => "integer", is_nullable => 1 },
   "userid",
-  { data_type => "varchar", is_nullable => 1, size => 30 },
+  { data_type => "varchar", is_nullable => 1, size => 75 },
   "opacnote",
   { data_type => "mediumtext", is_nullable => 1 },
   "contactnote",
@@ -564,8 +564,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-02-14 12:46:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UvGAnZ1qOwgtmLpbG8ukow
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-04 19:32:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UqTaMlpDnOWlhfQyF5EjHA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
