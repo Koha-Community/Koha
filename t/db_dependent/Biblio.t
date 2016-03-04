@@ -335,12 +335,12 @@ subtest 'IsMarcStructureInternal' => sub {
         }
     }
     @internals = uniq @internals;
-    is( scalar(@internals), 4, '');
-    is( grep( /^lib$/, @internals ), 1, '' );
-    is( grep( /^tab$/, @internals ), 1, '' );
-    is( grep( /^mandatory$/, @internals ), 1, '' );
-    is( grep( /^repeatable$/, @internals ), 1, '' );
-    is( grep( /^a$/, @internals ), 0, '' );
+    is( scalar(@internals), 4, 'expect four internals');
+    is( grep( /^lib$/, @internals ), 1, 'check lib' );
+    is( grep( /^tab$/, @internals ), 1, 'check tab' );
+    is( grep( /^mandatory$/, @internals ), 1, 'check mandatory' );
+    is( grep( /^repeatable$/, @internals ), 1, 'check repeatable' );
+    is( grep( /^a$/, @internals ), 0, 'no subfield a' );
 };
 
 1;
