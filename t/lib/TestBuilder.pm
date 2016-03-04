@@ -4,68 +4,6 @@ use Modern::Perl;
 use Koha::Database;
 use String::Random;
 
-
-my $gen_type = {
-    tinyint   => \&_gen_int,
-    smallint  => \&_gen_int,
-    mediumint => \&_gen_int,
-    integer   => \&_gen_int,
-    bigint    => \&_gen_int,
-
-    float            => \&_gen_real,
-    decimal          => \&_gen_real,
-    double_precision => \&_gen_real,
-
-    timestamp => \&_gen_date,
-    datetime  => \&_gen_date,
-    date      => \&_gen_date,
-
-    char       => \&_gen_text,
-    varchar    => \&_gen_text,
-    tinytext   => \&_gen_text,
-    text       => \&_gen_text,
-    mediumtext => \&_gen_text,
-    longtext   => \&_gen_text,
-
-    set  => \&_gen_set_enum,
-    enum => \&_gen_set_enum,
-
-    tinyblob   => \&_gen_blob,
-    mediumblob => \&_gen_blob,
-    blob       => \&_gen_blob,
-    longblob   => \&_gen_blob,
-};
-
-our $default_value = {
-    UserPermission => {
-        borrowernumber => {
-            surname => 'my surname',
-            address => 'my adress',
-            city    => 'my city',
-            branchcode => {
-                branchcode => 'cB',
-                branchname => 'my branchname',
-            },
-            categorycode => {
-                categorycode    => 'cC',
-                hidelostitems   => 0,
-                category_type   => 'A',
-                default_privacy => 'default',
-            },
-            privacy => 1,
-        },
-        module_bit => {
-            module_bit => {
-                bit => '10',
-            },
-            code => 'my code',
-        },
-        code => undef,
-    },
-};
-$default_value->{UserPermission}->{code} = $default_value->{UserPermission}->{module_bit};
-
-
 sub new {
     my ($class) = @_;
     my $self = {};
@@ -74,6 +12,7 @@ sub new {
     $self->schema( Koha::Database->new()->schema );
     $self->schema->storage->sql_maker->quote_char('`');
 
+    $self->{gen_type} = _gen_type();
     return $self;
 }
 
@@ -86,151 +25,201 @@ sub schema {
     return $self->{schema};
 }
 
-sub clear {
-    my ($self, $params) = @_;
-    my $source = $self->schema->resultset( $params->{source} );
-    return $source->delete_all();
+# sub clear has been obsoleted; use delete_all from the schema resultset
+
+sub delete {
+    my ( $self, $params ) = @_;
+    my $source = $params->{source} || return;
+    my @recs = ref( $params->{records} ) eq 'ARRAY'?
+        @{$params->{records}}: ( $params->{records} // () );
+    # tables without PK are not supported
+    my @pk = $self->schema->source( $source )->primary_columns;
+    return if !@pk;
+    my $rv = 0;
+    foreach my $rec ( @recs ) {
+    # delete only works when you supply full primary key values
+    # $cond does not include searches for undef (not allowed in PK)
+        my $cond = { map { defined $rec->{$_}? ($_, $rec->{$_}): (); } @pk };
+        next if keys %$cond < @pk;
+        $self->schema->resultset( $source )->search( $cond )->delete;
+        # we clear the pk columns in the supplied hash
+        # this indirectly signals at least an attempt to delete
+        map { delete $rec->{$_}; } @pk;
+        $rv++;
+    }
+    return $rv;
 }
 
 sub build {
+# build returns a hash of column values for a created record, or undef
+# build does NOT update a record, or pass back values of an existing record
     my ($self, $params) = @_;
     my $source  = $params->{source} || return;
     my $value   = $params->{value};
-    my $only_fk = $params->{only_fk} || 0;
 
     my $col_values = $self->_buildColumnValues({
         source  => $source,
         value   => $value,
     });
+    return if !$col_values; # did not meet unique constraints?
 
-    my $data;
+    # loop thru all fk and create linked records if needed
+    # fills remaining entries in $col_values
     my $foreign_keys = $self->_getForeignKeys( { source => $source } );
     for my $fk ( @$foreign_keys ) {
-        my $fk_value;
-        my $col_name = $fk->{keys}->[0]->{col_name};
-        if( ref( $col_values->{$col_name} ) eq 'HASH' ) {
-            $fk_value = $col_values->{$col_name};
-        }
-        elsif( defined( $col_values->{$col_name} ) ) {
-            next;
-        }
-
-        my $fk_row = $self->build({
-            source => $fk->{source},
-            value  => $fk_value,
-        });
-
+        # skip when FK points to itself: e.g. borrowers:guarantorid
+        next if $fk->{source} eq $source;
         my $keys = $fk->{keys};
-        for my $key( @$keys )  {
-            $col_values->{ $key->{col_name} } = $fk_row->{ $key->{col_fk_name} };
-            $data->{ $key->{col_name} } = $fk_row;
+        my $tbl = $fk->{source};
+        my $res = $self->_create_links( $tbl, $keys, $col_values, $value );
+        return if !$res; # failed: no need to go further
+        foreach( keys %$res ) { # save new values
+            $col_values->{$_} = $res->{$_};
         }
     }
 
-    my $new_row;
-    if( $only_fk ) {
-        $new_row = $col_values;
+    # store this record and return hashref
+    return $self->_storeColumnValues({
+        source => $source,
+        values => $col_values,
+    });
+}
+
+# ------------------------------------------------------------------------------
+# Internal helper routines
+
+sub _create_links {
+# returns undef for failure to create linked records
+# otherwise returns hashref containing new column values for parent record
+    my ( $self, $linked_tbl, $keys, $col_values, $value ) = @_;
+
+    my $fk_value = {};
+    my ( $cnt_scalar, $cnt_null ) = ( 0, 0 );
+
+    # First, collect all values for creating a linked record (if needed)
+    foreach my $fk ( @$keys ) {
+        my ( $col, $destcol ) = ( $fk->{col_name}, $fk->{col_fk_name} );
+        if( ref( $value->{$col} ) eq 'HASH' ) {
+            # add all keys from the FK hash
+            $fk_value = { %{ $value->{$col} }, %$fk_value };
+        }
+        if( exists $col_values->{$col} ) {
+            # add specific value (this does not necessarily exclude some
+            # values from the hash in the preceding if)
+            $fk_value->{ $destcol } = $col_values->{ $col };
+            $cnt_scalar++;
+            $cnt_null++ if !defined( $col_values->{$col} );
+        }
     }
-    else {
-        $new_row = $self->_storeColumnValues({
-            source => $source,
-            values => $col_values,
-        });
+
+    # If we saw all FK columns, first run the following checks
+    if( $cnt_scalar == @$keys ) {
+        # if one or more fk cols are null, the FK constraint will not be forced
+        return {} if $cnt_null > 0;
+        # does the record exist already?
+        return {} if $self->schema->resultset($linked_tbl)->find( $fk_value );
     }
-    $new_row->{_fk} = $data if( defined( $data ) );
-    return $new_row;
+    # create record with a recursive build call
+    my $row = $self->build({ source => $linked_tbl, value => $fk_value });
+    return if !$row; # failure
+
+    # Finally, only return the new values
+    my $rv = {};
+    foreach my $fk ( @$keys ) {
+        my ( $col, $destcol ) = ( $fk->{col_name}, $fk->{col_fk_name} );
+        next if exists $col_values->{ $col };
+        $rv->{ $col } = $row->{ $destcol };
+    }
+    return $rv; # success
 }
 
 sub _formatSource {
     my ($params) = @_;
-    my $source = $params->{source};
+    my $source = $params->{source} || return;
     $source =~ s|(\w+)$|$1|;
     return $source;
 }
 
 sub _buildColumnValues {
     my ($self, $params) = @_;
-    my $source = _formatSource( { source => $params->{source} } );
+    my $source = _formatSource( $params ) || return;
     my $original_value = $params->{value};
 
-    my $col_values;
+    my $col_values = {};
     my @columns = $self->schema->source($source)->columns;
     my %unique_constraints = $self->schema->source($source)->unique_constraints();
 
-    my $build_value = 1;
+    my $build_value = 3;
+    # we try max three times if there are unique constraints
     BUILD_VALUE: while ( $build_value ) {
         # generate random values for all columns
         for my $col_name( @columns ) {
-            my $col_value = $self->_buildColumnValue({
+            my $valref = $self->_buildColumnValue({
                 source      => $source,
                 column_name => $col_name,
                 value       => $original_value,
             });
-            $col_values->{$col_name} = $col_value if( defined( $col_value ) );
+            return if !$valref; # failure
+            if( @$valref ) { # could be empty
+                # there will be only one value, but it could be undef
+                $col_values->{$col_name} = $valref->[0];
+            }
         }
-        $build_value = 0;
 
-        # If default values are set, maybe the data exist in the DB
-        # But no need to wait for another value
-        # FIXME this can be wrong if a default value is defined for a field
-        # which is not a constraint and that the generated value for the
-        # constraint already exists.
-        last BUILD_VALUE if exists( $default_value->{$source} );
-
-        # If there is no original value given and unique constraints exist,
-        # check if the generated values do not exist yet.
-        if ( not defined $original_value and scalar keys %unique_constraints > 0 ) {
-
-            # verify the data would respect each unique constraint
-            CONSTRAINTS: foreach my $constraint (keys %unique_constraints) {
+        # verify the data would respect each unique constraint
+        # note that this is INCOMPLETE since not all col_values are filled
+        CONSTRAINTS: foreach my $constraint (keys %unique_constraints) {
 
                 my $condition;
                 my $constraint_columns = $unique_constraints{$constraint};
                 # loop through all constraint columns and build the condition
                 foreach my $constraint_column ( @$constraint_columns ) {
                     # build the filter
+                    # if one column does not exist or is undef, skip it
+                    # an insert with a null will not trigger the constraint
+                    next CONSTRAINTS
+                        if !exists $col_values->{ $constraint_column } ||
+                        !defined $col_values->{ $constraint_column };
                     $condition->{ $constraint_column } =
                             $col_values->{ $constraint_column };
                 }
-
                 my $count = $self->schema
                                  ->resultset( $source )
                                  ->search( $condition )
                                  ->count();
                 if ( $count > 0 ) {
                     # no point checking more stuff, exit the loop
-                    $build_value = 1;
-                    last CONSTRAINTS;
+                    $build_value--;
+                    next BUILD_VALUE;
                 }
-            }
         }
+        last; # you passed all tests
     }
-    return $col_values;
+    return $col_values if $build_value > 0;
+
+    # if you get here, we have a problem
+    warn "Violation of unique constraint in $source";
+    return;
 }
 
-# Returns [ {
-#   rel_name => $rel_name,
-#   source => $table_name,
-#   keys => [ {
-#       col_name => $col_name,
-#       col_fk_name => $col_fk_name,
-#   }, ... ]
-# }, ... ]
 sub _getForeignKeys {
+
+# Returns the following arrayref
+#   [ [ source => name, keys => [ col_name => A, col_fk_name => B ] ], ... ]
+# The array gives source name and keys for each FK constraint
+
     my ($self, $params) = @_;
     my $source = $self->schema->source( $params->{source} );
 
-    my @foreign_keys = ();
+    my ( @foreign_keys, $check_dupl );
     my @relationships = $source->relationships;
     for my $rel_name( @relationships ) {
         my $rel_info = $source->relationship_info($rel_name);
         if( $rel_info->{attrs}->{is_foreign_key_constraint} ) {
-            my $rel = {
-                rel_name => $rel_name,
-                source   => $rel_info->{source},
-            };
+            $rel_info->{source} =~ s/^.*:://g;
+            my $rel = { source => $rel_info->{source} };
 
-            my @keys = ();
+            my @keys;
             while( my ($col_fk_name, $col_name) = each(%{$rel_info->{cond}}) ) {
                 $col_name    =~ s|self.(\w+)|$1|;
                 $col_fk_name =~ s|foreign.(\w+)|$1|;
@@ -239,8 +228,13 @@ sub _getForeignKeys {
                     col_fk_name => $col_fk_name,
                 };
             }
+            # check if the combination table and keys is unique
+            # so skip double belongs_to relations (as in Biblioitem)
+            my $tag = $rel->{source}. ':'.
+                join ',', sort map { $_->{col_name} } @keys;
+            next if $check_dupl->{$tag};
+            $check_dupl->{$tag} = 1;
             $rel->{keys} = \@keys;
-
             push @foreign_keys, $rel;
         }
     }
@@ -251,45 +245,106 @@ sub _storeColumnValues {
     my ($self, $params) = @_;
     my $source      = $params->{source};
     my $col_values  = $params->{values};
-
-    my $new_row;
-    eval {
-        $new_row = $self->schema->resultset($source)->update_or_create($col_values);
-    };
-    die "$source - $@\n" if ($@);
-
-    eval {
-        $new_row = { $new_row->get_columns };
-    };
-    warn "$source - $@\n" if ($@);
-    return $new_row;
+    my $new_row = $self->schema->resultset( $source )->create( $col_values );
+    return $new_row? { $new_row->get_columns }: {};
 }
 
 sub _buildColumnValue {
+# returns an arrayref if all goes well
+# an empty arrayref typically means: auto_incr column or fk column
+# undef means failure
     my ($self, $params) = @_;
     my $source    = $params->{source};
     my $value     = $params->{value};
     my $col_name  = $params->{column_name};
+
     my $col_info  = $self->schema->source($source)->column_info($col_name);
 
-    my $col_value;
-    if( exists( $value->{$col_name} ) ) {
-        $col_value = $value->{$col_name};
+    my $retvalue = [];
+    if( $col_info->{is_auto_increment} ) {
+        if( exists $value->{$col_name} ) {
+            warn "Value not allowed for auto_incr $col_name in $source";
+            return;
+        }
+        # otherwise: no need to assign a value
+    } elsif( $col_info->{is_foreign_key} || _should_be_fk($source,$col_name) ) {
+        if( exists $value->{$col_name} ) {
+            if( !defined $value->{$col_name} && !$col_info->{is_nullable} ) {
+                # This explicit undef is not allowed
+                warn "Null value for $col_name in $source not allowed";
+                return;
+            }
+            if( ref( $value->{$col_name} ) ne 'HASH' ) {
+                push @$retvalue, $value->{$col_name};
+            }
+            # sub build will handle a passed hash value later on
+        }
+    } elsif( ref( $value->{$col_name} ) eq 'HASH' ) {
+        # this is not allowed for a column that is not a FK
+        warn "Hash not allowed for $col_name in $source";
+        return;
+    } elsif( exists $value->{$col_name} ) {
+        if( !defined $value->{$col_name} && !$col_info->{is_nullable} ) {
+            # This explicit undef is not allowed
+            warn "Null value for $col_name in $source not allowed";
+            return;
+        }
+        push @$retvalue, $value->{$col_name};
+    } else {
+        my $data_type = $col_info->{data_type};
+        $data_type =~ s| |_|;
+        if( my $hdlr = $self->{gen_type}->{$data_type} ) {
+            push @$retvalue, &$hdlr( $self, { info => $col_info } );
+        } else {
+            warn "Unknown type $data_type for $col_name in $source";
+            return;
+        }
     }
-    elsif( exists $default_value->{$source} and exists $default_value->{$source}->{$col_name} ) {
-        $col_value = $default_value->{$source}->{$col_name};
-    }
-    elsif( not $col_info->{default_value} and not $col_info->{is_auto_increment} and not $col_info->{is_foreign_key} ) {
-        eval {
-            my $data_type = $col_info->{data_type};
-            $data_type =~ s| |_|;
-            $col_value = $gen_type->{$data_type}->( $self, { info => $col_info } );
-        };
-        die "The type $col_info->{data_type} is not defined\n" if ($@);
-    }
-    return $col_value;
+    return $retvalue;
 }
 
+sub _should_be_fk {
+# This sub is only needed for inconsistencies in the schema
+# A column is not marked as FK, but a belongs_to relation is defined
+    my ( $source, $column ) = @_;
+    my $inconsistencies = {
+        'Item.biblionumber' => 1, #FIXME: Please remove me when I become FK
+    };
+    return $inconsistencies->{ "$source.$column" };
+}
+
+sub _gen_type {
+    return {
+        tinyint   => \&_gen_int,
+        smallint  => \&_gen_int,
+        mediumint => \&_gen_int,
+        integer   => \&_gen_int,
+        bigint    => \&_gen_int,
+
+        float            => \&_gen_real,
+        decimal          => \&_gen_real,
+        double_precision => \&_gen_real,
+
+        timestamp => \&_gen_date,
+        datetime  => \&_gen_date,
+        date      => \&_gen_date,
+
+        char       => \&_gen_text,
+        varchar    => \&_gen_text,
+        tinytext   => \&_gen_text,
+        text       => \&_gen_text,
+        mediumtext => \&_gen_text,
+        longtext   => \&_gen_text,
+
+        set  => \&_gen_set_enum,
+        enum => \&_gen_set_enum,
+
+        tinyblob   => \&_gen_blob,
+        mediumblob => \&_gen_blob,
+        blob       => \&_gen_blob,
+        longblob   => \&_gen_blob,
+    };
+};
 
 sub _gen_int {
     my ($self, $params) = @_;
@@ -356,71 +411,84 @@ sub _gen_blob {
 
 =head1 NAME
 
-t::lib::TestBuilder.pm - Koha module to simplify the writing of tests
+t::lib::TestBuilder.pm - Koha module to create test records
 
 =head1 SYNOPSIS
 
     use t::lib::TestBuilder;
+    my $builder = t::lib::TestBuilder->new;
 
-Koha module to insert the foreign keys automatically for the tests
+    # The following call creates a patron, linked to branch CPL.
+    # Surname is provided, other columns are randomly generated.
+    # Branch CPL is created if it does not exist.
+    my $patron = $builder->build({
+        source => 'Borrower',
+        value  => { surname => 'Jansen', branchcode => 'CPL' },
+    });
 
 =head1 DESCRIPTION
 
-This module allows to insert automatically an entry in the database. All the database changes are wrapped in a transaction.
-The foreign keys are created according to the DBIx::Class schema.
-The taken values are the values by default if it is possible or randomly generated.
+This module automatically creates database records for you.
+If needed, records for foreign keys are created too.
+Values will be randomly generated if not passed to TestBuilder.
+Note that you should wrap these actions in a transaction yourself.
 
-=head1 FUNCTIONS
+=head1 METHODS
 
 =head2 new
 
-    $builder = t::lib::TestBuilder->new()
+    my $builder = t::lib::TestBuilder->new;
 
-Constructor - Begins a transaction and returns the object TestBuilder
+    Constructor - Returns the object TestBuilder
 
 =head2 schema
 
-    $schema = $builder->schema
+    my $schema = $builder->schema;
 
-Getter - Returns the schema of DBIx::Class
+    Getter - Returns the schema of DBIx::Class
 
-=head2 clear
+=head2 delete
 
-    $builder->clear({ source => $source_name })
+    $builder->delete({
+        source => $source,
+        records => $patron, # OR: records => [ $patron, ... ],
+    });
 
-=over
-
-=item C<$source_name> is the name of the source in the DBIx::Class schema (required)
-
-=back
-
-Clears all the data of this source (database table)
+    Delete individual records, created by builder.
+    Returns the number of delete attempts, or undef.
 
 =head2 build
 
-    $builder->build({
-        source  => $source_name,
-        value   => $value,
-        only_fk => $only_fk,
-    })
+    $builder->build({ source  => $source_name, value => $value });
 
-=over
+    Create a test record in the table, represented by $source_name.
+    The name is required and must conform to the DBIx::Class schema.
+    Values may be specified by the optional $value hashref. Will be
+    randomized otherwise.
+    If needed, TestBuilder creates linked records for foreign keys.
+    Returns the values of the new record as a hashref, or undef if
+    the record could not be created.
 
-=item C<$source_name> is the name of the source in the DBIx::Class schema (required)
+    Note that build also supports recursive hash references inside the
+    value hash for foreign key columns, like:
+        value => {
+            column1 => 'some_value',
+            fk_col2 => {
+                columnA => 'another_value',
+            }
+        }
+    The hash for fk_col2 here means: create a linked record with build
+    where columnA has this value. In case of a composite FK the hashes
+    are merged.
 
-=item C<$value> is the values for the entry (optional)
-
-=item C<$only_fk> is a boolean to indicate if only the foreign keys are created (optional)
-
-=back
-
-Inserts an entry in the database by instanciating all the foreign keys.
-The values can be specified, the values which are not given are default values if they exists or generated randomly.
-Returns the values of the entry as a hashref with an extra key : _fk which contains all the values of the generated foreign keys.
+    Realize that passing primary key values to build may result in undef
+    if a record with that primary key already exists.
 
 =head1 AUTHOR
 
 Yohann Dufour <yohann.dufour@biblibre.com>
+
+Koha Development Team
 
 =head1 COPYRIGHT
 
