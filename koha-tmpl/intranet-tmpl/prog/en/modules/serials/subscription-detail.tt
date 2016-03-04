@@ -50,7 +50,7 @@ $(document).ready(function() {
     [% END %]
     [% IF ( NEEDSCONFIRMATION ) %]
     <div id="circ_needsconfirmation" class="dialog alert">
-			<h3>Please Confirm Subscription deletion</h3>
+        <h3>Please confirm subscription deletion</h3>
 
 			<ul>
 			[% IF ( NOTEXPIRED ) %] <li>The subscription has not expired yet</li> [% END %] 
@@ -61,11 +61,11 @@ $(document).ready(function() {
 			<input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
 			<input type="hidden" name="issueconfirmed" value="1" />
 			<input type="hidden" name="op" value="del" />
-            <input type="submit" class="approve" value="Yes, delete (Y)" accesskey="y" />
+            <button type="submit" class="approve" accesskey="y"><i class="fa fa-fw fa-check"></i> Yes, delete (Y)</button>
 			</form>
 			<form method="get" action="/cgi-bin/koha/serials/subscription-detail.pl">
 			<input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
-            <input type="submit" class="deny" value="No, don't delete (N)" accesskey="n" />
+            <button type="submit" class="deny" accesskey="n"><i class="fa fa-fw fa-remove"></i> No, don't delete (N)</button>
 			</form>
 
 	</div>
