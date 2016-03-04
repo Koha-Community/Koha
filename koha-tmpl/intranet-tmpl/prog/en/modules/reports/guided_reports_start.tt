@@ -702,54 +702,40 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 [% IF ( warn_authval_problem ) %]
-     <form action='/cgi-bin/koha/reports/guided_reports.pl'>
+    <div class="dialog alert">
+        <h3>Errors found when processing parameters for report: [% name %]</h3>
+        [% FOREACH problematic_authval IN problematic_authvals %]
+            <p>
+            <strong>[% problematic_authval.name %]:</strong> The authorized value category (<strong>[% problematic_authval.authval %]</strong>)
+                you selected does not exist.
+            </p>
+        [% END %]
+        <!-- Save Anyway Form -->
+        <form action='/cgi-bin/koha/reports/guided_reports.pl'>
         <!--Every parameter the user issued is provided as a hidden field for recovery-->
-        <input type='hidden' name='id' value='[% id %]' />
-        <input type='hidden' name='sql' value='[% sql %]' />
-        <input type='hidden' name='reportname' value='[% reportname %]' />
-        <input type='hidden' name='group' value='[% group %]' />
-        <input type='hidden' name='subgroup' value='[% subgroup %]' />
-        <input type='hidden' name='notes' value='[% notes %]' />
-        <input type='hidden' name='cache_expiry' value='[% cache_expiry %]' />
-        <input type='hidden' name='cache_expiry_units' value='[% cache_expiry_units %]' />
-        <input type='hidden' name='public' value='[% public %]' />
-
-        <div class="dialog alert">
-            <h3>Errors found when processing parameters for report: [% name %]</h3>
-            [% FOREACH problematic_authval IN problematic_authvals %]
-                <p>
-                <strong>[% problematic_authval.name %]:</strong> The authorized value category (<strong>[% problematic_authval.authval %]</strong>)
-                    you selected does not exist.
-                </p>
-            [% END %]
-            <!-- Save Anyway Form -->
-            <form action='/cgi-bin/koha/reports/guided_reports.pl'>
-            <!--Every parameter the user issued is provided as a hidden field for recovery-->
-                <input type='hidden' name='id' value='[% id %]' />
-                <input type='hidden' name='sql' value='[% sql %]' />
-                <input type='hidden' name='reportname' value='[% reportname %]' />
-                <input type='hidden' name='group' value='[% group %]' />
-                <input type='hidden' name='subgroup' value='[% subgroup %]' />
-                <input type='hidden' name='notes' value='[% notes %]' />
-                <input type='hidden' name='cache_expiry' value='[% cache_expiry %]' />
-                <input type='hidden' name='cache_expiry_units' value='[% cache_expiry_units %]' />
-                <input type='hidden' name='public' value='[% public %]' />
-            [% IF ( phase_update) %]
-                <input type='hidden' name='phase' value='Update SQL' />
-                <input type="submit" name="save_anyway" class="approve" value="Save anyway" />
-            [% ELSIF ( phase_save) %]
-                <input type='hidden' name='area' value='[% area %]' />
-                <input type='hidden' name='phase' value='Save Report' />
-                <input type="submit" name="save_anyway" class="approve" value="Save anyway" />
-            [% END %]
-            </form>
-            <!-- Go back to editing -->
-            <form action='/cgi-bin/koha/reports/guided_reports.pl'>
-                <input type="button" name='back' class="deny" value="Edit SQL"
-                                    onclick="javascript:history.back()" />
-            </form>
-        </div>
-    </form>
+            <input type='hidden' name='id' value='[% id %]' />
+            <input type='hidden' name='sql' value='[% sql %]' />
+            <input type='hidden' name='reportname' value='[% reportname %]' />
+            <input type='hidden' name='group' value='[% group %]' />
+            <input type='hidden' name='subgroup' value='[% subgroup %]' />
+            <input type='hidden' name='notes' value='[% notes %]' />
+            <input type='hidden' name='cache_expiry' value='[% cache_expiry %]' />
+            <input type='hidden' name='cache_expiry_units' value='[% cache_expiry_units %]' />
+            <input type='hidden' name='public' value='[% public %]' />
+        [% IF ( phase_update) %]
+            <input type='hidden' name='phase' value='Update SQL' />
+            <button type="submit" name="save_anyway" value="Save anyway" class="approve"><i class="fa fa-fw fa-check"></i> Save anyway</button>
+        [% ELSIF ( phase_save) %]
+            <input type='hidden' name='area' value='[% area %]' />
+            <input type='hidden' name='phase' value='Save Report' />
+            <button type="submit" name="save_anyway" value="Save anyway" class="approve"><i class="fa fa-fw fa-check"></i> Save anyway</button>
+        [% END %]
+        </form>
+        <!-- Go back to editing -->
+        <form action='/cgi-bin/koha/reports/guided_reports.pl'>
+            <button type="button" class="new" onclick="history.back()"><i class="fa fa-fw fa-pencil"></i> Edit SQL</button>
+        </form>
+    </div>
 [% END %]
 
 [% IF ( enter_params ) %]
