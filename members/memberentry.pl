@@ -86,6 +86,7 @@ my $cardnumber     = $input->param('cardnumber');
 my $check_member   = $input->param('check_member');
 my $nodouble       = $input->param('nodouble');
 my $duplicate      = $input->param('duplicate');
+my $quickadd       = $input->param('quickadd');
 $nodouble = 1 if ($op eq 'modify' or $op eq 'duplicate');    # FIXME hack to represent fact that if we're
                                      # modifying an existing patron, it ipso facto
                                      # isn't a duplicate.  Marking FIXME because this
@@ -144,6 +145,7 @@ foreach (@field_check) {
 	$template->param( "no$_" => 1);
 }
 $template->param( "add" => 1 ) if ( $op eq 'add' );
+$template->param( "quickadd" => 1 ) if ( $quickadd );
 $template->param( "duplicate" => 1 ) if ( $op eq 'duplicate' );
 $template->param( "checked" => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
 ( $borrower_data = GetMember( 'borrowernumber' => $borrowernumber ) ) if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' );

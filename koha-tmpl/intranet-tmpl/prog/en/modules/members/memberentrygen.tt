@@ -33,6 +33,44 @@ $(document).ready(function() {
 	[% END %]
 });
 
+$(document).ready(function() {
+
+    var toggle_quick_add = $(".toggle_quick_add");
+    $(toggle_quick_add).click(function(e){
+        toggle_quick_add.toggle();
+        e.preventDefault();
+        var toggle_to = '';
+        var toggle_from = '';
+        if( $("#entryform:visible").length ) {
+            toggle_to = "#quick_add_form label";
+            toggle_from = "#entryform label";
+        } else {
+            toggle_to="#entryform label";
+            toggle_from = "#quick_add_form label";
+        }
+        $(toggle_from).each(function() {
+            var input_label = $(this).attr('for');
+            if ( input_label == 'sex-male' || input_label == 'sex-none' || input_label == 'sex-female' ) {
+            $(toggle_to+"[for='"+input_label+"']").next().prop('checked', $(this).next().prop('checked') );
+            return;
+            }
+            if( $(this).next().val() != '' ) { $(toggle_to+"[for='"+input_label+"']").next().val(  $(this).next().val() );}
+        });
+
+        $(".toggler").toggle();
+    });
+
+    $(".save_quick_add").click(function(){
+        $("#quick_add_form").validate();
+        if( $("#quick_add_form").valid()){
+            $('.toggle_quick_add').click();
+            $('#entryform button[name="save"]').click();
+        }
+        else {return false;}
+    });
+
+});
+
         var MSG_SEPARATOR = _("Separator must be / in field %s");
         var MSG_INCORRECT_DAY = _("Invalid day entered in field %s");
         var MSG_INCORRECT_MONTH = _("Invalid month entered in field %s");
@@ -59,12 +97,12 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo;
 [% IF (firstname || surname ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]</a>  &rsaquo;[% END %]
 <strong>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron ([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</strong>
 </div>
 [% IF ( opadd ) %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
-   
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
@@ -85,7 +123,12 @@ $(document).ready(function() {
 
 	[% UNLESS ( no_add ) %]
     <h1>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</h1>
-  
+
+    [% IF quickadd && opadd && !check_member %]
+        <a href="#" class="toggle_quick_add"><i class="fa fa-plus-square"></i> Show full form</a>
+        <a href="#" class="toggle_quick_add" style="display:none"><i class="fa fa-minus-square"></i> Show brief form</a>
+    [% END %]
+
 	[% IF ( check_member ) %]
 			<div class="dialog alert">
 				<h3>Duplicate patron record?</h3>
@@ -118,12 +161,12 @@ $(document).ready(function() {
                 <li id="ERROR_cardnumber">Cardnumber length is incorrect.</li>
             [% END %]
 			[% IF ( ERROR_age_limitations ) %]
-				<li id="ERROR_age_limitations">Patron's age is incorrect for their category.  
+            <li id="ERROR_age_limitations">Patron's age is incorrect for their category.
                     Ages allowed are [% age_low %]-[% age_high %].</li>
 			[% END %]
 			[% IF ( ERROR_branch ) %]
 				<li id="ERROR_branch">Library is invalid.</li>
-			[% END %]   
+            [% END %]
 			[% IF ( ERROR_dateofbirth ) %]
 				<li id="ERROR_dateofbirth">Date of birth is invalid.</li>
 			[% END %]
@@ -156,7 +199,7 @@ $(document).ready(function() {
 	[% END %]
 
 
-[% UNLESS ( check_member ) %]<form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off">
+[% UNLESS ( check_member ) %]<form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off" class="toggler" >
 <input type="hidden" name="nodouble"  value="[% nodouble %]" /> [% END %]
 <!--    field always hidden in different form (1,2,3) -->
 <input type="hidden" name="BorrowerMandatoryField" value="[% BorrowerMandatoryField %]" />
@@ -430,7 +473,7 @@ $(document).ready(function() {
     <legend id="contact_lgd">Contact</legend><ol>
         [% UNLESS nophone %]
       <li>
-      [% IF ( mandatoryphone ) %] 
+      [% IF ( mandatoryphone ) %]
       <label for="phone" class="required">
       [% ELSE %]
       <label for="phone">
@@ -480,7 +523,7 @@ $(document).ready(function() {
         [% END %]
         [% UNLESS noemailpro %]
     <li>
-      [% IF ( mandatoryemailpro ) %] 
+      [% IF ( mandatoryemailpro ) %]
       <label for="emailpro" class="required">
       [% ELSE %]
       <label for="emailpro">
@@ -693,7 +736,7 @@ $(document).ready(function() {
 				<label for="opacnote" class="required">
 			[% ELSE %]
 				<label for="opacnote">
-			[% END %]	
+            [% END %]
 			OPAC note: </label>
             <textarea id="opacnote" name="opacnote" cols="55" rows="5">[% UNLESS opduplicate %][% opacnote %][% END %]</textarea>
 			<div class="hint">This message appears on this patron's user page in the OPAC</div>
@@ -702,7 +745,7 @@ $(document).ready(function() {
         [% END %]
         [% UNLESS noborrowernotes %]
 		<li>
-			[% IF ( mandatoryborrowernotes ) %]	
+            [% IF ( mandatoryborrowernotes ) %]
 				<label for="borrowernotes" class="required">
 			[% ELSE %]
 				<label for="borrowernotes">
@@ -1044,7 +1087,38 @@ $(document).ready(function() {
 [% END %] [% END %]
 
 </form>
-  
+
+[% IF quickadd && opadd  && !check_member %]
+    <form id="quick_add_form" class="toggler">
+        <fieldset class="rows quick_add"><legend>Quick add</legend>
+            <ol id="quick_add_list">
+            </ol>
+        </fieldset>
+
+        <fieldset class="action">
+            <input type="button" class="save_quick_add"  value="Save" />
+           <a class="cancel" href="/cgi-bin/koha/members/member.pl">Cancel</a>
+        </fieldset>
+
+    </form>
+    <script>
+        $(document).ready(function () {
+            $("#entryform").hide();
+            [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') %]
+            var qaddfields = "[% FOREACH field IN q_add_f.unique %][% field %] [% END %]";
+            $("#entryform label").each(function () {
+                var input_label = $(this).attr('for');
+                if ( input_label == 'sex-female' ) { input_label='sex'; }
+                else if ( input_label == 'btitle' ) { input_label='title'; }
+                if( qaddfields.indexOf( input_label ) != -1 || $(this).attr('class') == 'required' ){
+                $(this).parent().clone().appendTo("#quick_add_list");
+                if( input_label == 'password') $("#entryform label[for='password2']").parent().clone().appendTo("#quick_add_list");
+                }
+             });
+            $("#quick_add_form").show();
+        });
+    </script>
+[% END %]
 </div>
 </div>
 

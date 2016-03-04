@@ -1,0 +1,1 @@
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('PatronQuickAddFields', '', 'A list of fields separated by "|" to be displayed along with mandatory fields in the patron quick add form if chosen at patron entry', NULL, 'Free');

@@ -383,6 +383,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('PatronSelfRegistrationVerifyByEmail','0',NULL,'If enabled, any patron attempting to register themselves via the OPAC will be required to verify themselves via email to activate his or her account.','YesNo'),
 ('PatronsPerPage','20','20','Number of Patrons Per Page displayed by default','Integer'),
 ('EnablePayPalOpacPayments',  '0', NULL ,  'Enables the ability to pay fees and fines from  the OPAC via PayPal',  'YesNo' ),
+('PatronQuickAddFields',  '', NULL ,  'A list of fields separated by "|" to be displayed along with mandatory fields in the patron quick add form if chosen at patron entry',  'Free' ),
 ('PayPalChargeDescription',  'Koha fee payment', NULL ,  'This preference defines what the user will see the charge listed as in PayPal',  'Free'),
 ('PayPalPwd',  '', NULL ,  'Your PayPal API password',  'Free'),
 ('PayPalSandboxMode',  '1', NULL ,  'If enabled, the system will use PayPal''s sandbox server for testing, rather than the production server.',  'YesNo'),
