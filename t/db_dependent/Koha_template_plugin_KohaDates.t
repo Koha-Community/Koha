@@ -5,6 +5,7 @@ use C4::Context;
 use Koha::DateUtils;
 use Test::More tests => 7;
 use Test::MockModule;
+use t::lib::Mocks;
 
 BEGIN {
         use_ok('Koha::Template::Plugin::KohaDates');
@@ -18,20 +19,20 @@ my $context = C4::Context->new();
 my $filter = Koha::Template::Plugin::KohaDates->new();
 ok ($filter, "new()");
 
-$context->set_preference( "dateformat", 'iso' );
+t::lib::Mocks::mock_preference( "dateformat", 'iso' );
 $context->clear_syspref_cache();
 
 my $filtered_date = $filter->filter($date);
 is ($filtered_date,$date, "iso conversion") or diag ("iso conversion fails");
 
 #$filter = Koha::Template::Plugin::KohaDates->new();
-$context->set_preference( "dateformat", 'us' );
+t::lib::Mocks::mock_preference( "dateformat", 'us' );
 $context->clear_syspref_cache();
 
 $filtered_date = $filter->filter($date);
 is ($filtered_date,'05/21/1973', "us conversion") or diag ("us conversion fails $filtered_date");
 
-$context->set_preference( "dateformat", 'metric' );
+t::lib::Mocks::mock_preference( "dateformat", 'metric' );
 $context->clear_syspref_cache();
 
 $filtered_date = $filter->filter($date);

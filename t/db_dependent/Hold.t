@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 
+use t::lib::Mocks;
 use C4::Context;
 use Koha::Database;
 
@@ -32,13 +33,13 @@ $dbh->{RaiseError} = 1;
 
 my $hold = Koha::Hold->new({ found => 'W', waitingdate => '2000-01-01'});
 
-C4::Context->set_preference( 'ReservesMaxPickUpDelay', '' );
+t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay', '' );
 my $dt = $hold->waiting_expires_on();
-is( $dt, undef, "Koha::Hold->waiting_expires_on returns undef if ReservesMaxPickUpDelay is not set");
+is( $dt, undef, "Koha::Hold->waiting_expires_on returns undef if ReservesMaxPickUpDelay is not set" );
 
 is( $hold->is_waiting, 1, 'The hold is waiting' );
 
-C4::Context->set_preference( 'ReservesMaxPickUpDelay', '5' );
+t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay', '5' );
 $dt = $hold->waiting_expires_on();
 is( $dt->ymd, "2000-01-06", "Koha::Hold->waiting_expires_on returns DateTime of waitingdate + ReservesMaxPickUpDelay if set");
 

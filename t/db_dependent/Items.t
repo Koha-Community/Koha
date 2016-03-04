@@ -50,7 +50,7 @@ subtest 'General Add, Get and Del tests' => sub {
     });
 
     # Create a biblio instance for testing
-    C4::Context->set_preference('marcflavour', 'MARC21');
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my ($bibnum, $bibitemnum) = get_biblio();
 
     # Add an item.
@@ -111,7 +111,7 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     });
 
     # Create a new biblio
-    C4::Context->set_preference('marcflavour', 'MARC21');
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my ($biblionumber, $biblioitemnumber) = get_biblio();
 
     # Add two items
@@ -136,19 +136,19 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     push @items, GetItem( $item2_itemnumber );
 
     # Empty OpacHiddenItems
-    C4::Context->set_preference('OpacHiddenItems','');
+    t::lib::Mocks::mock_preference('OpacHiddenItems','');
     ok( !defined( GetHiddenItemnumbers( @items ) ),
         "Hidden items list undef if OpacHiddenItems empty");
 
     # Blank spaces
-    C4::Context->set_preference('OpacHiddenItems','  ');
+    t::lib::Mocks::mock_preference('OpacHiddenItems','  ');
     ok( scalar GetHiddenItemnumbers( @items ) == 0,
         "Hidden items list empty if OpacHiddenItems only contains blanks");
 
     # One variable / value
     $opachiddenitems = "
         withdrawn: [1]";
-    C4::Context->set_preference( 'OpacHiddenItems', $opachiddenitems );
+    t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
     @hidden = GetHiddenItemnumbers( @items );
     ok( scalar @hidden == 1, "Only one hidden item");
     is( $hidden[0], $item1_itemnumber, "withdrawn=1 is hidden");
@@ -156,7 +156,7 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     # One variable, two values
     $opachiddenitems = "
         withdrawn: [1,0]";
-    C4::Context->set_preference( 'OpacHiddenItems', $opachiddenitems );
+    t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
     @hidden = GetHiddenItemnumbers( @items );
     ok( scalar @hidden == 2, "Two items hidden");
     is_deeply( \@hidden, \@itemnumbers, "withdrawn=1 and withdrawn=0 hidden");
@@ -166,7 +166,7 @@ subtest 'GetHiddenItemnumbers tests' => sub {
         withdrawn: [1]
         homebranch: [$library2->{branchcode}]
     ";
-    C4::Context->set_preference( 'OpacHiddenItems', $opachiddenitems );
+    t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
     @hidden = GetHiddenItemnumbers( @items );
     ok( scalar @hidden == 2, "Two items hidden");
     is_deeply( \@hidden, \@itemnumbers, "withdrawn=1 and homebranch library2 hidden");
@@ -244,10 +244,10 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
     my @bi = $biblio->biblioitems();
     my ( $item ) = $bi[0]->items();
 
-    C4::Context->set_preference( 'item-level_itypes', 0 );
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
     ok( $item->effective_itemtype() eq 'BIB_LEVEL', '$item->itemtype() returns biblioitem.itemtype when item-level_itypes is disabled' );
 
-    C4::Context->set_preference( 'item-level_itypes', 1 );
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
     ok( $item->effective_itemtype() eq 'ITEM_LEVEL', '$item->itemtype() returns items.itype when item-level_itypes is enabled' );
 
     # If itemtype is not defined and item-level_level item types are set
@@ -280,7 +280,7 @@ subtest 'SearchItems test' => sub {
         source => 'Branch',
     });
 
-    C4::Context->set_preference('marcflavour', 'MARC21');
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my $cpl_items_before = SearchItemsByField( 'homebranch', $library1->{branchcode});
 
     my ($biblionumber) = get_biblio();
@@ -444,7 +444,7 @@ subtest 'Koha::Item(s) tests' => sub {
     });
 
     # Create a biblio and item for testing
-    C4::Context->set_preference('marcflavour', 'MARC21');
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my ($bibnum, $bibitemnum) = get_biblio();
     my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library1->{branchcode}, holdingbranch => $library2->{branchcode} } , $bibnum);
 

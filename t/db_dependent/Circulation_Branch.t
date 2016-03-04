@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
+use t::lib::Mocks;
 use C4::Biblio;
 use C4::Members;
 use C4::Branch;
@@ -317,7 +318,7 @@ is_deeply(
 );
 
 # Test return policies
-C4::Context->set_preference('AutomaticItemReturn','0');
+t::lib::Mocks::mock_preference('AutomaticItemReturn','0');
 
 # item1 returned at branch2 should trigger transfer to homebranch
 $query =

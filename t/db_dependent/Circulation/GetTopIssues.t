@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 14;
 use Test::MockModule;
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Context;
@@ -46,7 +47,7 @@ my $c4_context = Test::MockModule->new('C4::Context');
 $c4_context->mock('userenv', sub {
     { branch => $branch_1->{ branchcode } }
 });
-C4::Context->set_preference('item-level_itypes', '0');
+t::lib::Mocks::mock_preference('item-level_itypes', '0');
 
 my $biblionumber = create_biblio('Test 1', $itemtype);
 AddItem({

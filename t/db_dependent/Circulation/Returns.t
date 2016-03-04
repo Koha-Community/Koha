@@ -1,6 +1,7 @@
 use Modern::Perl;
 use Test::More tests => 2;
 
+use t::lib::Mocks;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Items;
@@ -38,7 +39,7 @@ my ( undef, undef, $itemnumber ) = AddItem(
 
 my $item;
 
-C4::Context->set_preference( "InProcessingToShelvingCart", 1 );
+t::lib::Mocks::mock_preference( "InProcessingToShelvingCart", 1 );
 AddReturn( 'i_dont_exist', $library->{branchcode} );
 $item = GetItem($itemnumber);
 is( $item->{location}, 'CART', "InProcessingToShelvingCart functions as intended" );
@@ -46,7 +47,7 @@ is( $item->{location}, 'CART', "InProcessingToShelvingCart functions as intended
 $item->{location} = 'PROC';
 ModItem( $item, undef, $itemnumber );
 
-C4::Context->set_preference( "InProcessingToShelvingCart", 0 );
+t::lib::Mocks::mock_preference( "InProcessingToShelvingCart", 0 );
 AddReturn( 'i_dont_exist', $library->{branchcode} );
 $item = GetItem($itemnumber);
 is( $item->{location}, 'TEST', "InProcessingToShelvingCart functions as intended" );

@@ -9,6 +9,7 @@ use Test::Warn;
 use C4::Context;
 use Koha::DateUtils;
 use DateTime::Duration;
+use t::lib::Mocks;
 use C4::Acquisition;
 use C4::Serials;
 use C4::Budgets;
@@ -656,7 +657,7 @@ $module->mock(
     }
 );
 
-C4::Context->set_preference('IndependentBranches', 0);
+t::lib::Mocks::mock_preference('IndependentBranches', 0);
 @subscriptions = SearchSubscriptions({expiration_date => '2013-12-31'});
 is(
     scalar(grep { !$_->{cannotdisplay} } @subscriptions ),
@@ -664,7 +665,7 @@ is(
     'ordinary user can see all subscriptions with IndependentBranches off'
 );
 
-C4::Context->set_preference('IndependentBranches', 1);
+t::lib::Mocks::mock_preference('IndependentBranches', 1);
 @subscriptions = SearchSubscriptions({expiration_date => '2013-12-31'});
 is(
     scalar(grep { !$_->{cannotdisplay} } @subscriptions ),
