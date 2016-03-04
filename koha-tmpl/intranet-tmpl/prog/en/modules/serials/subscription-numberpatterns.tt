@@ -91,14 +91,14 @@ $(document).ready(function(){
           [% IF (new) %]
             <h1>New numbering pattern</h1>
             [% IF (error_existing_numberpattern) %]
-              <div class="dialog">
+              <div class="dialog alert">
                 <p>A pattern with this name already exists.</p>
               </div>
             [% END %]
           [% ELSE %]
             <h1>Modify pattern: [% label %]</h1>
             [% IF (error_existing_numberpattern) %]
-              <div class="dialog">
+              <div class="dialog alert">
                 <p>Another pattern with this name already exists.</p>
               </div>
             [% END %]
@@ -278,7 +278,7 @@ $(document).ready(function(){
       [% ELSE %]
         <h1>Numbering patterns</h1>
         [% IF still_used %]
-            <div class="dialog">
+            <div class="dialog alert">
                 <p>
                     This pattern is still used by [% subscriptions.size %]
                     subscription(s). Do you still want to delete it?
@@ -292,14 +292,14 @@ $(document).ready(function(){
                     [% END %]
                 </ul>
 
-                <form action="" method="get">
+                <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="get">
                     <input type="hidden" name="op" value="del" />
                     <input type="hidden" name="confirm" value="1" />
                     <input type="hidden" name="id" value="[% id %]" />
-                    <input type="submit" class="approve" value="Yes, delete" />
+                    <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
                 </form>
-                <form action="" method="get">
-                    <input type="submit" class="deny" value="No, don't delete" />
+                <form action="/cgi-bin/koha/serials/subscription-numberpatterns.pl" method="get">
+                    <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
                 </form>
             </div>
         [% END %]
