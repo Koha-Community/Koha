@@ -42,7 +42,7 @@ $(document).ready(function() {
 
         alertString +="-------------------------------------------------------------------\n\n";
 
-        if ( !$('#filter_date_begin').val() || !$('#filter_date_end').val()){
+        if ( !$('#from').val() || !$('#to').val()){
             isFormValid = false;
             alertString += "\n- " + _("Dates cannot be empty");
         }
