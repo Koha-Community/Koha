@@ -652,15 +652,16 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+use C4::Context;
 sub effective_itemtype {
     my ( $self ) = @_;
 
-    my $pref = $self->result_source->schema->resultset('Systempreference')->find('item-level_itypes');
-    if ( $pref->value() && $self->itype() ) {
+    my $pref = C4::Context->preference('item-level_itypes');
+    if ( $pref && $self->itype() ) {
         return $self->itype();
     } else {
         warn "item-level_itypes set but no itemtype set for item ($self->itemnumber)"
-          if $pref->value();
+          if $pref;
         return $self->biblioitemnumber()->itemtype();
     }
 }

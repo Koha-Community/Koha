@@ -245,10 +245,10 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
     my ( $item ) = $bi[0]->items();
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
-    ok( $item->effective_itemtype() eq 'BIB_LEVEL', '$item->itemtype() returns biblioitem.itemtype when item-level_itypes is disabled' );
+    is( $item->effective_itemtype(), 'BIB_LEVEL', '$item->itemtype() returns biblioitem.itemtype when item-level_itypes is disabled' );
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
-    ok( $item->effective_itemtype() eq 'ITEM_LEVEL', '$item->itemtype() returns items.itype when item-level_itypes is enabled' );
+    is( $item->effective_itemtype(), 'ITEM_LEVEL', '$item->itemtype() returns items.itype when item-level_itypes is enabled' );
 
     # If itemtype is not defined and item-level_level item types are set
     # fallback to biblio-level itemtype (Bug 14651) and warn
