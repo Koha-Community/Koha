@@ -14,7 +14,7 @@
     $(document).ready(function() {
         $("#authtypes").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
-                { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
             ],
             "sPaginationType": "four_button"
         }));
@@ -151,8 +151,6 @@
             <th>Summary</th>
             <th>Auth field copied</th>
             <th>&nbsp;</th>
-            <th>Edit</th>
-            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -162,9 +160,17 @@
                 <td>[% authority_type.authtypetext %]</td>
                 <td>[% authority_type.summary %]</td>
                 <td>[% authority_type.auth_tag_to_report %]</td>
-                <td><a href="auth_tag_structure.pl?authtypecode=[% authority_type.authtypecode %]" class="button parameters" >MARC structure</a></td>
-                <td><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode |html %]">Edit</a></td>
-                <td><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode |html %]">Delete</a></td>
+                <td>
+                  <div class="dropdown">
+                    <a class="btn btn-mini dropdown-toggle" id="authtypeactions[% authority_type.authtypecode %]" role="button" data-toggle="dropdown" href="#">
+                      Actions <b class="caret"></b></a>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authtypeactions[% authority_type.authtypecode %]">
+                      <li><a href="auth_tag_structure.pl?authtypecode=[% authority_type.authtypecode %]" class="button parameters"><i class="fa fa-eye"></i> MARC structure</a></li>
+                      <li><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode |html %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                      <li><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode |html %]"><i class="fa fa-trash"></i> Delete</a></li>
+                    </ul>
+                  </div>
+                </td>
             </tr>
         [% END %]
         <tbody>
