@@ -404,13 +404,13 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
                    Actions <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetactions[% budget.budget_id %]_[% budget.budget_period_id %]">
-                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]" >Edit</a></li>
+                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]"><i class="fa fa-pencil"></i> Edit</a></li>
                     [% IF budget.budget_has_children %]
-                        <li class="disabled"><a href="#" class="deletefund-disabled" data-toggle="tooltip" data-placement="left" title="This fund has children">Delete</a></li>
+                        <li class="disabled"><a href="#" class="deletefund-disabled" data-toggle="tooltip" data-placement="left" title="This fund has children"><i class="fa fa-trash"></i> Delete</a></li>
                     [% ELSE %]
-                        <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]">Delete</a></li>
+                        <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]"><i class="fa fa-trash"></i> Delete</a></li>
                     [% END %]
-                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]">Add child fund</a></li>
+                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id %]&amp;budget_period_id=[% budget.budget_period_id %]"><i class="fa fa-plus"></i> Add child fund</a></li>
                 </ul>
             </div>
         </td>
