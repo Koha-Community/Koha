@@ -17,7 +17,7 @@
     $(document).ready(function() {
         $("#table_biblio_frameworks").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
-                { "aTargets": [ -1, -2, -3, -4, -5 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 { "aTargets": [ 0, 1 ], "sType": "natural" },
             ],
             "bSort": true,
@@ -205,71 +205,66 @@
         <th>Code</th>
         <th>Description</th>
         <th>&nbsp;</th>
-        <th>Edit</th>
-        <th>Delete</th>
-        <th title="Export framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods)">Export</th>
-        <th title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods)">Import</th>
     </tr>
     </thead>
     <tbody>
     <tr>
         <td>&nbsp;</td>
         <td>Default framework</td>
-        <td><a href="marctagstructure.pl?frameworkcode=">MARC structure</a></td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
         <td>
-
-            <!-- Button to trigger modal -->
-            <a href="#" data-toggle="modal" data-target="#exportModal_default">Export</a>
-            <!-- Modal -->
+          <div class="dropdown">
+            <a class="btn btn-mini dropdown-toggle" id="frameworkactions[% loo.frameworkcode %]" role="button" data-toggle="dropdown" href="#">
+              Actions <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="frameworkactions[% loo.frameworkcode %]">
+              <li><a href="marctagstructure.pl?frameworkcode="><i class="fa fa-eye"></i> MARC structure</a></li>
+              <!-- Trigger modal -->
+              <li><a href="#" data-toggle="modal" data-target="#exportModal_default" title="Export framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods)"><i class="fa fa-upload"></i> Export</a></li>
+              <!-- Trigger modal -->
+              <li><a href="#" data-toggle="modal" data-target="#importModal_[% framework.frameworkcode %][% frameworks.count %]" title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods)"><i class="fa fa-download"></i> Import</a></li>
+            </ul>
+            <!-- Modal to export default framework -->
             <div class="modal hide" id="exportModal_default" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_default" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="exportLabelexportModal_default">Export default framework</h3>
+              <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="exportLabelexportModal_default">Export default framework</h3>
+              </div>
+              <form action="import_export_framework.pl" name="form_defaul" method="get" target="_blank"  class="form_export">
+                <div class="modal-body">
+                  <fieldset>
+                    <input type="hidden" name="frameworkcode" value="" />
+                    <p><label for="csv_type_export_default"><input type="radio" name="type_export_default" value="csv" id="csv_type_export_default" checked="checked" /> Export to CSV spreadsheet</label></p>
+                    <p><label for="xml_type_export_default"><input type="radio" name="type_export_default" value="excel" id="xml_type_export_default" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
+                    <p><label for="ods_type_export_default"><input type="radio" name="type_export_default" value="ods" id="ods_type_export_default" /> Export to OpenDocument spreadsheet format</label></p>
+                  </fieldset>
                 </div>
-                <form action="import_export_framework.pl" name="form_defaul" method="get" target="_blank"  class="form_export">
-                    <div class="modal-body">
-                        <fieldset>
-                            <input type="hidden" name="frameworkcode" value="" />
-                            <p><label for="csv_type_export_default"><input type="radio" name="type_export_defaul" value="csv" id="csv_type_export_default" checked="checked" /> Export to CSV spreadsheet</label></p>
-                            <p><label for="xml_type_export_default"><input type="radio" name="type_export_default" value="excel" id="xml_type_export_default" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
-                            <p><label for="ods_type_export_default"><input type="radio" name="type_export_default" value="ods" id="ods_type_export_default" /> Export to OpenDocument spreadsheet format</label></p>
-
-                        </fieldset>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn">Export</button>
-                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                    </div>
-                </form>
+                <div class="modal-footer">
+                  <button type="submit" class="btn">Export</button>
+                  <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                </div>
+              </form>
             </div>
 
-        </td>
-        <td>
-
-            <!-- Button to trigger modal -->
-            <a href="#" data-toggle="modal" data-target="#importModal_[% framework.frameworkcode %][% frameworks.count %]">Import</a>
-            <!-- Modal -->
+            <!-- Modal to import default framework -->
             <div class="modal hide" id="importModal_[% framework.frameworkcode %][% frameworks.count %]" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_default[% frameworks.count %]" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="importLabelexportModal_[% framework.frameworkcode %][% frameworks.count %]">Import default framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h3>
+              <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="importLabelexportModal_[% framework.frameworkcode %][% frameworks.count %]">Import default framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h>
+              </div>
+              <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_default" id="form_i_default" method="post" enctype="multipart/form-data" class="form_import">
+                <div class="modal-body">
+                  <input type="hidden" name="frameworkcode" value="default" />
+                  <input type="hidden" name="action" value="import" />
+                  <p><label for="file_import_default">Upload file:</label> <input type="file" name="file_import_default" id="file_import_default" class="input_import" /></p>
+                    <div id="importing_default" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /><span class="importing_msg"></span></div>
                 </div>
-                <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_default" id="form_i_default" method="post" enctype="multipart/form-data" class="form_import">
-                    <div class="modal-body">
-                            <input type="hidden" name="frameworkcode" value="default" />
-                            <input type="hidden" name="action" value="import" />
-                            <p><label for="file_import_default">Upload file:</label> <input type="file" name="file_import_default" id="file_import_default" class="input_import" /></p>
-                            <div id="importing_default" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /><span class="importing_msg"></span></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn">Import</button>
-                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Close</button>
-                    </div>
-                </form>
+                <div class="modal-footer">
+                  <button type="submit" class="btn">Import</button>
+                  <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Close</button>
+                </div>
+              </form>
             </div>
-
+          </div>
         </td>
     </tr>
 
@@ -277,61 +272,65 @@
         <tr>
             <td>[% loo.frameworkcode %]</td>
             <td>[% loo.frameworktext %]</td>
-            <td><a href="marctagstructure.pl?frameworkcode=[% loo.frameworkcode %]" >MARC structure</a></td>
-            <td><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode |html %]">Edit</a></td>
-            <td><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=delete_confirm&amp;frameworkcode=[% loo.frameworkcode |html %]">Delete</a></td>
             <td>
-
-                <!-- Button to trigger modal -->
-                <a href="#" data-toggle="modal" data-target="#exportModal_[% loo.frameworkcode %][% loop.count %]">Export</a>
-                <!-- Modal -->
+              <div class="dropdown">
+                <a class="btn btn-mini dropdown-toggle" id="frameworkactions[% loo.frameworkcode %]" role="button" data-toggle="dropdown" href="#">
+                  Actions <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="frameworkactions[% loo.frameworkcode %]">
+                  <li><a href="marctagstructure.pl?frameworkcode=[% loo.frameworkcode %]"><i class="fa fa-eye"></i> MARC structure</a></li>
+                  <li><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode |html %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                  <li><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=delete_confirm&amp;frameworkcode=[% loo.frameworkcode |html %]"><i class="fa fa-trash"></i> Delete</a></li>
+                  <!-- Trigger modal -->
+                  <li><a href="#" data-toggle="modal" data-target="#exportModal_[% loo.frameworkcode %][% loop.count %]" title="Export framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods)"><i class="fa fa-upload"></i> Export</a></li>
+                  <!-- Trigger modal -->
+                  <li><a href="#" data-toggle="modal" data-target="#importModal_[% loo.frameworkcode %][% loop.count %]" title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods)"><i class="fa fa-download"></i> Import</a></li>
+                </ul>
+                <!-- Modal to export other framework -->
                 <div class="modal hide" id="exportModal_[% loo.frameworkcode %][% loop.count %]" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_[% loo.frameworkcode %][% loop.count %]" aria-hidden="true">
-                    <div class="modal-header">
-                        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="exportLabelexportModal_[% loo.frameworkcode %][% loop.count %]">Export [% loo.frameworktext %] framework</h3>
+                  <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="exportLabelexportModal_[% loo.frameworkcode %][% loop.count %]">Export [% loo.frameworktext %] framework</h3>
+                  </div>
+                  <form action="import_export_framework.pl" name="form_[% loo.frameworkcode %]" method="get" target="_blank"  class="form_export">
+                    <div class="modal-body">
+                      <fieldset>
+                        <input type="hidden" name="frameworkcode" value="[% loo.frameworkcode %]" />
+                        <p><label for="csv_type_export_[% loo.frameworkcode %][% loop.count %]"><input type="radio" name="type_export_[% loo.frameworkcode %]" value="csv" id="csv_type_export_[% loo.frameworkcode %][% loop.count %]" checked="checked" /> Export to CSV spreadsheet</label></p>
+                        <p><label for="xml_type_export_[% loo.frameworkcode %][% loop.count %]"><input type="radio" name="type_export_[% loo.frameworkcode %]" value="excel" id="xml_type_export_[% loo.frameworkcode %][% loop.count %]" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
+                        <p><label for="ods_type_export_[% loo.frameworkcode %][% loop.count %]"><input type="radio" name="type_export_[% loo.frameworkcode %]" value="ods" id="ods_type_export_[% loo.frameworkcode %][% loop.count %]" /> Export to OpenDocument spreadsheet format</label></p>
+                      </fieldset>
                     </div>
-                    <form action="import_export_framework.pl" name="form_[% loo.frameworkcode %]" method="get" target="_blank"  class="form_export">
-                        <div class="modal-body">
-                            <fieldset>
-                                <input type="hidden" name="frameworkcode" value="[% loo.frameworkcode %]" />
-                                <p><label for="csv_type_export_[% loo.frameworkcode %][% loop.count %]"><input type="radio" name="type_export_[% loo.frameworkcode %]" value="csv" id="csv_type_export_[% loo.frameworkcode %][% loop.count %]" checked="checked" /> Export to CSV spreadsheet</label></p>
-                                <p><label for="xml_type_export_[% loo.frameworkcode %][% loop.count %]"><input type="radio" name="type_export_[% loo.frameworkcode %]" value="excel" id="xml_type_export_[% loo.frameworkcode %][% loop.count %]" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
-                                <p><label for="ods_type_export_[% loo.frameworkcode %][% loop.count %]"><input type="radio" name="type_export_[% loo.frameworkcode %]" value="ods" id="ods_type_export_[% loo.frameworkcode %][% loop.count %]" /> Export to OpenDocument spreadsheet format</label></p>
-
-                            </fieldset>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn">Export</button>
-                            <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        </div>
-                    </form>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn">Export</button>
+                      <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    </div>
+                  </form>
                 </div>
-            </td>
-            <td>
 
-                <!-- Button to trigger modal -->
-                <a href="#" data-toggle="modal" data-target="#importModal_[% loo.frameworkcode %][% loop.count %]">Import</a>
-                <!-- Modal -->
+                <!-- Modal to import other framework -->
                 <div class="modal hide" id="importModal_[% loo.frameworkcode %][% loop.count %]" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_[% loo.frameworkcode %][% loop.count %]" aria-hidden="true">
-                    <div class="modal-header">
-                        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="importLabelexportModal_[% loo.frameworkcode %][% loop.count %]">Import [% loo.frameworkcode %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h3>
+                  <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="importLabelexportModal_[% loo.frameworkcode %][% loop.count %]">Import [% loo.frameworkcode %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h3>
+                  </div>
+                  <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_[% loo.frameworkcode %]" id="form_i_[% loo.frameworkcode %]" method="post" enctype="multipart/form-data" class="form_import">
+                    <div class="modal-body">
+                      <input type="hidden" name="frameworkcode" value="[% loo.frameworkcode %]" />
+                      <input type="hidden" name="action" value="import" />
+                      <p><label for="file_import_[% loo.frameworkcode %]">Upload file:</label> <input type="file" name="file_import_[% loo.frameworkcode %]" id="file_import_[% loo.frameworkcode %]" class="input_import" /></p>
+                      <div id="importing_[% loo.frameworkcode %]" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /><span class="importing_msg"></span></div>
                     </div>
-                    <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_[% loo.frameworkcode %]" id="form_i_[% loo.frameworkcode %]" method="post" enctype="multipart/form-data" class="form_import">
-                        <div class="modal-body">
-                                <input type="hidden" name="frameworkcode" value="[% loo.frameworkcode %]" />
-                                <input type="hidden" name="action" value="import" />
-                                <p><label for="file_import_[% loo.frameworkcode %]">Upload file:</label> <input type="file" name="file_import_[% loo.frameworkcode %]" id="file_import_[% loo.frameworkcode %]" class="input_import" /></p>
-                                <div id="importing_[% loo.frameworkcode %]" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /><span class="importing_msg"></span></div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn">Import</button>
-                            <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Close</button>
-                        </div>
-                    </form>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn">Import</button>
+                      <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Close</button>
+                    </div>
+                  </form>
                 </div>
-        </td>
+              </div>
+            </td>
         </tr>
+
     [% END %]
 </table>
 
