@@ -83,6 +83,16 @@ push @query_params, output_pref({ dt => $startdate, dateformat => 'iso' }) ;
 $sqldatewhere .= " AND reservedate <= ?";
 push @query_params, output_pref({ dt => $enddate, dateformat => 'iso' });
 
+my $include_aqorders_qty =
+  C4::Context->preference('AcqCreateItem') eq 'receiving'
+  ? '+ COALESCE(aqorders.quantity, 0) - COALESCE(aqorders.quantityreceived, 0)'
+  : q{};
+
+my $include_aqorders_qty_join =
+  C4::Context->preference('AcqCreateItem') eq 'receiving'
+  ? 'LEFT JOIN aqorders ON reserves.biblionumber=aqorders.biblionumber'
+  : q{};
+
 my $nfl_comparison = $include_ordered ? '<=' : '=';
 my $strsth =
 "SELECT reservedate,
@@ -107,10 +117,11 @@ my $strsth =
         biblio.title,
         biblio.author,
         count(DISTINCT reserves.borrowernumber) as reservecount, 
-        count(DISTINCT items.itemnumber) as itemcount 
+        count(DISTINCT items.itemnumber) $include_aqorders_qty as itemcount
  FROM  reserves
  LEFT JOIN items ON items.biblionumber=reserves.biblionumber 
  LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
+ $include_aqorders_qty_join
  WHERE
  notforloan $nfl_comparison 0 AND damaged = 0 AND itemlost = 0 AND withdrawn = 0
  $sqldatewhere
