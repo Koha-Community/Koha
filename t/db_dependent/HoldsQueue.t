@@ -19,7 +19,6 @@ use C4::ItemType;
 use C4::Members;
 use Koha::Database;
 
-use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 BEGIN {
@@ -68,8 +67,9 @@ my $itemtype = $for_loan[0]->{itemtype};
 
 #Set up the stage
 # Sysprefs and cost matrix
-t::lib::Mocks::mock_preference('StaticHoldsQueueWeight', join( ',', @other_branches, $borrower_branchcode, $least_cost_branch_code));
-t::lib::Mocks::mock_preference('RandomizeHoldsQueueWeight', 0);
+$dbh->do("UPDATE systempreferences SET value = ? WHERE variable = 'StaticHoldsQueueWeight'", undef,
+         join( ',', @other_branches, $borrower_branchcode, $least_cost_branch_code));
+$dbh->do("UPDATE systempreferences SET value = '0' WHERE variable = 'RandomizeHoldsQueueWeight'");
 
 $dbh->do("DELETE FROM transport_cost");
 my $transport_cost_insert_sth = $dbh->prepare("insert into transport_cost (frombranch, tobranch, cost) values (?, ?, ?)");
@@ -115,13 +115,14 @@ AddReserve ( $borrower_branchcode, $borrowernumber, $biblionumber, $bibitems,  $
 $dbh->do("UPDATE reserves SET reservedate = DATE_SUB( reservedate, INTERVAL 1 DAY )");
 
 # Tests
+my $use_cost_matrix_sth = $dbh->prepare("UPDATE systempreferences SET value = ? WHERE variable = 'UseTransportCostMatrix'");
 my $test_sth = $dbh->prepare("SELECT * FROM hold_fill_targets
                               JOIN tmp_holdsqueue USING (borrowernumber, biblionumber, itemnumber)
                               JOIN items USING (itemnumber)
                               WHERE borrowernumber = $borrowernumber");
 
 # We have a book available homed in borrower branch, no point fiddling with AutomaticItemReturn
-t::lib::Mocks::mock_preference('AutomaticItemReturn', 0);
+C4::Context->set_preference('AutomaticItemReturn', 0);
 test_queue ('take from homebranch',  0, $borrower_branchcode, $borrower_branchcode);
 test_queue ('take from homebranch',  1, $borrower_branchcode, $borrower_branchcode);
 
@@ -130,14 +131,14 @@ $dbh->do("DELETE FROM hold_fill_targets");
 $dbh->do("DELETE FROM issues WHERE itemnumber IN (SELECT itemnumber FROM items WHERE homebranch = '$borrower_branchcode' AND holdingbranch = '$borrower_branchcode')");
 $dbh->do("DELETE FROM items WHERE homebranch = '$borrower_branchcode' AND holdingbranch = '$borrower_branchcode'");
 # test_queue will flush
-t::lib::Mocks::mock_preference('AutomaticItemReturn', 1);
+C4::Context->set_preference('AutomaticItemReturn', 1);
 # Not sure how to make this test more difficult - holding branch does not matter
 
 $dbh->do("DELETE FROM tmp_holdsqueue");
 $dbh->do("DELETE FROM hold_fill_targets");
 $dbh->do("DELETE FROM issues WHERE itemnumber IN (SELECT itemnumber FROM items WHERE homebranch = '$borrower_branchcode')");
 $dbh->do("DELETE FROM items WHERE homebranch = '$borrower_branchcode'");
-t::lib::Mocks::mock_preference('AutomaticItemReturn', 0);
+C4::Context->set_preference('AutomaticItemReturn', 0);
 # We have a book available held in borrower branch
 test_queue ('take from holdingbranch', 0, $borrower_branchcode, $borrower_branchcode);
 test_queue ('take from holdingbranch', 1, $borrower_branchcode, $borrower_branchcode);
@@ -176,7 +177,7 @@ $dbh->do("DELETE FROM default_branch_circ_rules");
 $dbh->do("DELETE FROM default_branch_item_rules");
 $dbh->do("DELETE FROM default_circ_rules");
 
-t::lib::Mocks::mock_preference('UseTransportCostMatrix', 0);
+C4::Context->set_preference('UseTransportCostMatrix', 0);
 
 ( $itemtype ) = @{ $dbh->selectrow_arrayref("SELECT itemtype FROM itemtypes LIMIT 1") };
 
@@ -354,8 +355,9 @@ $dbh->do("
     ( '$library_A', '$itemtype', 2, 'homebranch' ), ( '$library_B', '$itemtype', 1, 'homebranch' );
 ");
 
-t::lib::Mocks::mock_preference('StaticHoldsQueueWeight', join( ',', $library_B, $library_A, $library_C ) );
-t::lib::Mocks::mock_preference('RandomizeHoldsQueueWeight', 0 );
+$dbh->do( "UPDATE systempreferences SET value = ? WHERE variable = 'StaticHoldsQueueWeight'",
+    undef, join( ',', $library_B, $library_A, $library_C ) );
+$dbh->do( "UPDATE systempreferences SET value = 0 WHERE variable = 'RandomizeHoldsQueueWeight'" );
 
 my $reserve_id = AddReserve ( $library_C, $borrowernumber, $biblionumber, '', 1 );
 C4::HoldsQueue::CreateQueue();
@@ -381,7 +383,7 @@ $dbh->do("DELETE FROM default_branch_item_rules");
 $dbh->do("DELETE FROM default_circ_rules");
 $dbh->do("DELETE FROM branch_item_rules");
 
-t::lib::Mocks::mock_preference("UseTransportCostMatrix",1);
+C4::Context->set_preference("UseTransportCostMatrix",1);
 
 my $tc_rs = $schema->resultset('TransportCost');
 $tc_rs->create({ frombranch => $library_A, tobranch => $library_B, cost => 0, disable_transfer => 1 });
@@ -421,7 +423,8 @@ sub test_queue {
 
     $test_name = "$test_name (".($use_cost_matrix ? "" : "don't ")."use cost matrix)";
 
-    t::lib::Mocks::mock_preference('UseTransportCostMatrix', $use_cost_matrix);
+    $use_cost_matrix_sth->execute($use_cost_matrix);
+    C4::Context->clear_syspref_cache();
     C4::HoldsQueue::CreateQueue();
 
     my $results = $dbh->selectall_arrayref($test_sth, { Slice => {} }); # should be only one
