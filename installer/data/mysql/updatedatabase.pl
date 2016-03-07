@@ -11996,6 +11996,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
     }
 
+$DBversion = "3.23.00.038";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+    INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('decreaseLoanHighHoldsControl', 'static', 'static|dynamic', "Chooses between static and dynamic high holds checking", 'Choice'), ('decreaseLoanHighHoldsIgnoreStatuses', '', 'damaged|itemlost|notforloan|withdrawn', "Ignore items with these statuses for dynamic high holds checking", 'Choice');
+    });
+    print "Upgrade to $DBversion done (Bug 14694 - Make decreaseloanHighHolds more flexible)\n";
+    SetVersion($DBversion);
+    }
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
