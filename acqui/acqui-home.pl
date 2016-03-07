@@ -38,6 +38,7 @@ use C4::Members;
 use C4::Branch;
 use C4::Debug;
 use C4::Suggestions;
+use Koha::Acquisition::Currencies;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -129,10 +130,10 @@ $template->param(
     suggestions_count   => $suggestions_count,
 );
 
-my $cur = GetCurrency();
+my $cur = Koha::Acquisition::Currencies->get_active;
 if ( $cur ) {
     $template->param(
-        currency => $cur->{currency},
+        currency => $cur->currency,
     );
 }
 

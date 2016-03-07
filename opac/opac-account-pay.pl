@@ -30,7 +30,7 @@ use URI;
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-use C4::Budgets qw(GetCurrency);
+use Koha::Acquisition::Currencies;
 use Koha::Database;
 
 my $cgi = new CGI;
@@ -58,7 +58,7 @@ my $amount_to_pay =
   ->get_column('amountoutstanding')->sum();
 $amount_to_pay = sprintf( "%.2f", $amount_to_pay );
 
-my $active_currency = GetCurrency();
+my $active_currency = Koha::Acquisition::Currencies->get_active;
 
 my $error = 0;
 if ( $payment_method eq 'paypal' ) {
@@ -94,7 +94,7 @@ if ( $payment_method eq 'paypal' ) {
         'BRANDNAME'                             => C4::Context->preference('LibraryName'),
         'CANCELURL'                             => $cancel_url->as_string(),
         'RETURNURL'                             => $return_url->as_string(),
-        'PAYMENTREQUEST_0_CURRENCYCODE'         => $active_currency->{currency},
+        'PAYMENTREQUEST_0_CURRENCYCODE'         => $active_currency->currency,
         'PAYMENTREQUEST_0_AMT'                  => $amount_to_pay,
         'PAYMENTREQUEST_0_PAYMENTACTION'        => 'Sale',
         'PAYMENTREQUEST_0_ALLOWEDPAYMENTMETHOD' => 'InstantPaymentOnly',
