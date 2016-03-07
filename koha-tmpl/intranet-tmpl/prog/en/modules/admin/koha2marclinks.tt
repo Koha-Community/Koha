@@ -7,8 +7,11 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
+    [% IF tablename.default == 'biblio' %]
+        $("#tablename option:first").attr('selected','selected');
+    [% END %]
     $('#tablename').change(function() {
-            $('#koha2marc').submit();
+        $('#koha2marc').submit();
     });
 });
 //]]>
