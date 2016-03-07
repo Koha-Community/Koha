@@ -19,7 +19,6 @@ use Koha::Database;
 use Koha::DateUtils;
 use Koha::ItemType;
 
-use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use Koha::ItemTypes;
@@ -68,9 +67,10 @@ $itemtype or BAIL_OUT("No adequate itemtype"); #FIXME Should be $itemtype = $ite
 
 #Set up the stage
 # Sysprefs and cost matrix
-t::lib::Mocks::mock_preference('HoldsQueueSkipClosed', 0);
-t::lib::Mocks::mock_preference('StaticHoldsQueueWeight', join( ',', @other_branches, $borrower_branchcode, $least_cost_branch_code));
-t::lib::Mocks::mock_preference('RandomizeHoldsQueueWeight', 0);
+C4::Context->set_preference('HoldsQueueSkipClosed', 0);
+$dbh->do("UPDATE systempreferences SET value = ? WHERE variable = 'StaticHoldsQueueWeight'", undef,
+         join( ',', @other_branches, $borrower_branchcode, $least_cost_branch_code));
+$dbh->do("UPDATE systempreferences SET value = '0' WHERE variable = 'RandomizeHoldsQueueWeight'");
 
 $dbh->do("DELETE FROM transport_cost");
 my $transport_cost_insert_sth = $dbh->prepare("insert into transport_cost (frombranch, tobranch, cost) values (?, ?, ?)");
@@ -116,13 +116,14 @@ AddReserve ( $borrower_branchcode, $borrowernumber, $biblionumber, $bibitems,  $
 $dbh->do("UPDATE reserves SET reservedate = DATE_SUB( reservedate, INTERVAL 1 DAY )");
 
 # Tests
+my $use_cost_matrix_sth = $dbh->prepare("UPDATE systempreferences SET value = ? WHERE variable = 'UseTransportCostMatrix'");
 my $test_sth = $dbh->prepare("SELECT * FROM hold_fill_targets
                               JOIN tmp_holdsqueue USING (borrowernumber, biblionumber, itemnumber)
                               JOIN items USING (itemnumber)
                               WHERE borrowernumber = $borrowernumber");
 
 # We have a book available homed in borrower branch, no point fiddling with AutomaticItemReturn
-t::lib::Mocks::mock_preference('AutomaticItemReturn', 0);
+C4::Context->set_preference('AutomaticItemReturn', 0);
 test_queue ('take from homebranch',  0, $borrower_branchcode, $borrower_branchcode);
 test_queue ('take from homebranch',  1, $borrower_branchcode, $borrower_branchcode);
 
@@ -131,14 +132,14 @@ $dbh->do("DELETE FROM hold_fill_targets");
 $dbh->do("DELETE FROM issues WHERE itemnumber IN (SELECT itemnumber FROM items WHERE homebranch = '$borrower_branchcode' AND holdingbranch = '$borrower_branchcode')");
 $dbh->do("DELETE FROM items WHERE homebranch = '$borrower_branchcode' AND holdingbranch = '$borrower_branchcode'");
 # test_queue will flush
-t::lib::Mocks::mock_preference('AutomaticItemReturn', 1);
+C4::Context->set_preference('AutomaticItemReturn', 1);
 # Not sure how to make this test more difficult - holding branch does not matter
 
 $dbh->do("DELETE FROM tmp_holdsqueue");
 $dbh->do("DELETE FROM hold_fill_targets");
 $dbh->do("DELETE FROM issues WHERE itemnumber IN (SELECT itemnumber FROM items WHERE homebranch = '$borrower_branchcode')");
 $dbh->do("DELETE FROM items WHERE homebranch = '$borrower_branchcode'");
-t::lib::Mocks::mock_preference('AutomaticItemReturn', 0);
+C4::Context->set_preference('AutomaticItemReturn', 0);
 # We have a book available held in borrower branch
 test_queue ('take from holdingbranch', 0, $borrower_branchcode, $borrower_branchcode);
 test_queue ('take from holdingbranch', 1, $borrower_branchcode, $borrower_branchcode);
@@ -177,7 +178,7 @@ $dbh->do("DELETE FROM default_branch_circ_rules");
 $dbh->do("DELETE FROM default_branch_item_rules");
 $dbh->do("DELETE FROM default_circ_rules");
 
-t::lib::Mocks::mock_preference('UseTransportCostMatrix', 0);
+C4::Context->set_preference('UseTransportCostMatrix', 0);
 
 $itemtype = Koha::ItemTypes->search->next->itemtype;
 
@@ -306,7 +307,7 @@ is( $holds_queue->[1]->{cardnumber}, $borrower2->{cardnumber}, "Holds queue fill
 # 1 of which is coming from MPL. Let's enable HoldsQueueSkipClosed
 # and make today a holiday for MPL. When we run it again we should only
 # have 1 row in the holds queue
-t::lib::Mocks::mock_preference('HoldsQueueSkipClosed', 1);
+C4::Context->set_preference('HoldsQueueSkipClosed', 1);
 my $today = dt_from_string();
 C4::Calendar->new( branchcode => $branchcodes[0] )->insert_single_holiday(
     day         => $today->day(),
@@ -321,7 +322,7 @@ is( Koha::Calendar->new( branchcode => $branchcodes[0] )->is_holiday( $today ), 
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( scalar( @$holds_queue ), 1, "Holds not filled with items from closed libraries" );
-t::lib::Mocks::mock_preference('HoldsQueueSkipClosed', 0);
+C4::Context->set_preference('HoldsQueueSkipClosed', 0);
 
 $dbh->do("DELETE FROM default_circ_rules");
 $dbh->do("INSERT INTO default_circ_rules ( holdallowed ) VALUES ( 2 )");
@@ -334,11 +335,11 @@ is( @$holds_queue, 3, "Holds queue filling correct number for holds for default 
 # one of which is coming from MPL. Let's enable HoldsQueueSkipClosed
 # and use our previously created holiday for MPL
 # When we run it again we should only have 2 rows in the holds queue
-t::lib::Mocks::mock_preference( 'HoldsQueueSkipClosed', 1 );
+C4::Context->set_preference( 'HoldsQueueSkipClosed', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( scalar( @$holds_queue ), 2, "Holds not filled with items from closed libraries" );
-t::lib::Mocks::mock_preference( 'HoldsQueueSkipClosed', 0 );
+C4::Context->set_preference( 'HoldsQueueSkipClosed', 0 );
 
 # Bug 14297
 $itemtype = Koha::ItemTypes->search->next->itemtype;
@@ -387,8 +388,9 @@ $dbh->do("
     ( '$library_A', '$itemtype', 2, 'homebranch' ), ( '$library_B', '$itemtype', 1, 'homebranch' );
 ");
 
-t::lib::Mocks::mock_preference('StaticHoldsQueueWeight', join( ',', $library_B, $library_A, $library_C ) );
-t::lib::Mocks::mock_preference('RandomizeHoldsQueueWeight', 0 );
+$dbh->do( "UPDATE systempreferences SET value = ? WHERE variable = 'StaticHoldsQueueWeight'",
+    undef, join( ',', $library_B, $library_A, $library_C ) );
+$dbh->do( "UPDATE systempreferences SET value = 0 WHERE variable = 'RandomizeHoldsQueueWeight'" );
 
 my $reserve_id = AddReserve ( $library_C, $borrowernumber, $biblionumber, '', 1 );
 C4::HoldsQueue::CreateQueue();
@@ -414,7 +416,7 @@ $dbh->do("DELETE FROM default_branch_item_rules");
 $dbh->do("DELETE FROM default_circ_rules");
 $dbh->do("DELETE FROM branch_item_rules");
 
-t::lib::Mocks::mock_preference("UseTransportCostMatrix",1);
+C4::Context->set_preference("UseTransportCostMatrix",1);
 
 my $tc_rs = $schema->resultset('TransportCost');
 $tc_rs->create({ frombranch => $library_A, tobranch => $library_B, cost => 0, disable_transfer => 1 });
@@ -454,7 +456,8 @@ sub test_queue {
 
     $test_name = "$test_name (".($use_cost_matrix ? "" : "don't ")."use cost matrix)";
 
-    t::lib::Mocks::mock_preference('UseTransportCostMatrix', $use_cost_matrix);
+    $use_cost_matrix_sth->execute($use_cost_matrix);
+    C4::Context->clear_syspref_cache();
     C4::HoldsQueue::CreateQueue();
 
     my $results = $dbh->selectall_arrayref($test_sth, { Slice => {} }); # should be only one
