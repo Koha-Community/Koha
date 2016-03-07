@@ -146,7 +146,7 @@
         Searching: [% searchfield %]
     [% END %]
 
-    [% IF cities %]
+    [% IF cities.count %]
         <table id="table_cities">
             <thead>
                 <th>City ID</th>
@@ -172,7 +172,9 @@
             </tbody>
         </table>
     [% ELSE %]
-        There is no city defined. <a href="/cgi-bin/koha/admin/cities.pl?op=add_form">Create a new city</a>.
+        <div class="dialog message">
+            There are no cities defined. <a href="/cgi-bin/koha/admin/cities.pl?op=add_form">Create a new city</a>.
+        </div>
     [% END %]
 [% END %]
 
