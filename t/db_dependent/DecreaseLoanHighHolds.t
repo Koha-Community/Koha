@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use C4::Circulation;
 use Koha::Database;
-use Koha::Borrower;
+use Koha::Patron;
 use Koha::Biblio;
 use Koha::Item;
 use Koha::Holds;
@@ -51,7 +51,7 @@ is( C4::Context->userenv->{branch}, $library->{branchcode}, 'userenv set' );
 
 my @patrons;
 for my $i ( 1 .. 20 ) {
-    my $patron = Koha::Borrower->new(
+    my $patron = Koha::Patron->new(
         { cardnumber => $i, firstname => 'Kyle', surname => 'Hall', categorycode => $category->{categorycode}, branchcode => $library->{branchcode} } )
       ->store();
     push( @patrons, $patron );
