@@ -266,13 +266,23 @@ $(document).ready(function() {
 });
 </script>
 [% PROCESS jsinclude %]
-
-[% IF ( OPACUserJS ) %]
-    <script type="text/javascript">
-        //<![CDATA[
-        [% OPACUserJS %]
-        //]]>
-    </script>
+[% IF SCO_login %]
+    [% SET SCOUserJS = Koha.Preference('SCOUserJS') %]
+    [% IF ( SCOUserJS ) %]
+        <script type="text/javascript">
+            //<![CDATA[
+            [% SCOUserJS %]
+            //]]>
+        </script>
+    [% END %]
+[% ELSE %]
+    [% IF ( OPACUserJS ) %]
+        <script type="text/javascript">
+            //<![CDATA[
+            [% OPACUserJS %]
+            //]]>
+        </script>
+    [% END %]
 [% END %]
 </body>
 </html>

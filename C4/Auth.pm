@@ -1249,6 +1249,7 @@ sub checkauth {
         opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
     );
 
+    $template->param( SCO_login => 1 ) if ( $query->param('sco_user_login') );
     $template->param( OpacPublic => C4::Context->preference("OpacPublic") );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 

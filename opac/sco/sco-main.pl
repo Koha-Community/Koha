@@ -64,6 +64,7 @@ if (C4::Context->preference('AutoSelfCheckAllowed'))
     $query->param(-name=>'password',-values=>[$AutoSelfCheckPass]);
     $query->param(-name=>'koha_login_context',-values=>['sco']);
 }
+$query->param(-name=>'sco_user_login',-values=>[1]);
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
     template_name   => "sco/sco-main.tt",
     authnotrequired => 0,

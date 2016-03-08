@@ -29,6 +29,9 @@
                             <div class="alert">
                                 <h3>Access denied</h3>
                                 <p>Sorry, the system doesn't think you have permission to access this page. </p>
+                                [% IF SCO_login %]
+                                    <p><a href="/cgi-bin/koha/sco/sco-main.pl?logout.x=1">Logout</a> and try again with a different user</p>
+                                [% END %]
                             </div>
                         [% END %]
 
@@ -149,7 +152,11 @@
                               <p>If you do not have a Google account, but do have a local account, you can still log in: </p>
                                 [% END %]
 
-                            <form action="/cgi-bin/koha/opac-user.pl" name="auth" id="auth" method="post">
+                            [% IF SCO_login %]
+                                <form action="/cgi-bin/koha/sco/sco-main.pl" name="auth" id="auth" method="post">
+                            [% ELSE %]
+                                <form action="/cgi-bin/koha/opac-user.pl" name="auth" id="auth" method="post">
+                            [% END %]
                                 <input type="hidden" name="koha_login_context" value="opac" />
                                 <fieldset class="brief">
                                     [% FOREACH INPUT IN INPUTS %]
