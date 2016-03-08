@@ -1062,7 +1062,7 @@ sub GetMemberAccountRecords {
         }
         $acctlines[$numlines] = $data;
         $numlines++;
-        $total += int(1000 * $data->{'amountoutstanding'}); # convert float to integer to avoid round-off errors
+        $total += sprintf "%.0f", 1000*$data->{amountoutstanding}; # convert float to integer to avoid round-off errors
     }
     $total /= 1000;
     return ( $total, \@acctlines,$numlines);
