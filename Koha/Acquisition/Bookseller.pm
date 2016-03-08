@@ -31,8 +31,6 @@ sub fetch {
 sub search {
     my ( $class, $params ) = @_;
 
-    croak "Cannot search on other fields than aqbooksellers.name" if $params and grep { $_ !~ /^name$/ } keys %$params;
-
     my $schema = Koha::Database->new->schema;
 
     my $search_params;

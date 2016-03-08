@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 
+use Koha::Acquisition::Bookseller;
 use Koha::Acquisition::Currency;
 use Koha::Acquisition::Currencies;
 
@@ -94,9 +95,11 @@ if ( $op eq 'add_form' ) {
     # TODO rewrite the following when Koha::Acquisition::Orders will use Koha::Objects
     my $schema = Koha::Database->schema;
     my $nb_of_orders = $schema->resultset('Aqorder')->search( { currency => $currency->currency } )->count;
+    my $nb_of_vendors = Koha::Acquisition::Bookseller->search( { -or => { listprice => $currency->currency, invoiceprice => $currency->currency } });
     $template->param(
         currency     => $currency,
         nb_of_orders => $nb_of_orders,
+        nb_of_vendors => $nb_of_vendors,
     );
 } elsif ( $op eq 'delete_confirmed' ) {
     my $currency = Koha::Acquisition::Currencies->find($currency_code);
