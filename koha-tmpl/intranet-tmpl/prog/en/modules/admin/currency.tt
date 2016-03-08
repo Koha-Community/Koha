@@ -65,6 +65,29 @@
 </div>
 [% END %]
 
+[% FOR m IN messages %]
+    <div class="dialog [% m.type %]">
+        [% SWITCH m.code %]
+        [% CASE 'error_on_update' %]
+            An error occurred when updating this currency. Perhaps it already exists.
+        [% CASE 'error_on_insert' %]
+            An error occurred when adding this currency. The currency code might already exist.
+        [% CASE 'error_on_delete' %]
+            An error occurred when deleting this currency. Check the logs.
+        [% CASE 'success_on_update' %]
+            Currency updated successfully.
+        [% CASE 'success_on_insert' %]
+            Currency added successfully.
+        [% CASE 'success_on_delete' %]
+            Currency deleted successfully.
+        [% CASE %]
+            [% m.code %]
+        [% END %]
+    </div>
+[% END %]
+
+
+
 [% IF op == 'add_form' %]
 
 <form action="/cgi-bin/koha/admin/currency.pl" name="Aform" method="post" class="validated">
