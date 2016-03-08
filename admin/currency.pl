@@ -98,7 +98,7 @@ if ( $op eq 'add_form' ) {
         currency     => $currency,
         nb_of_orders => $nb_of_orders,
     );
-} elsif ( $op eq 'delete' ) {
+} elsif ( $op eq 'delete_confirmed' ) {
     my $currency = Koha::Acquisition::Currencies->find($currency_code);
     my $deleted = eval { $currency->delete; };
 
