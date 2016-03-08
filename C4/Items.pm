@@ -473,7 +473,7 @@ sub _build_default_values_for_mod_marc {
         location                 => undef,
         permanent_location       => undef,
         materials                => undef,
-        new                      => undef,
+        new_status               => undef,
         notforloan               => 0,
         # paidfor => undef, # commented, see bug 12817
         price                    => undef,
@@ -2200,7 +2200,7 @@ sub _koha_new_item {
             more_subfields_xml  = ?,
             copynumber          = ?,
             stocknumber         = ?,
-            new                 = ?
+            new_status          = ?
           ";
     my $sth = $dbh->prepare($query);
     my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
@@ -2244,7 +2244,7 @@ sub _koha_new_item {
             $item->{'more_subfields_xml'},
             $item->{'copynumber'},
             $item->{'stocknumber'},
-            $item->{'new'},
+            $item->{'new_status'},
     );
 
     my $itemnumber;

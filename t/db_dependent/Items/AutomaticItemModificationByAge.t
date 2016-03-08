@@ -18,13 +18,13 @@ $dbh->{RaiseError} = 1;
 
 $dbh->do(q|
     DELETE FROM marc_subfield_structure
-    WHERE kohafield = 'items.new' OR kohafield = 'items.stocknumber'
+    WHERE kohafield = 'items.new_status' OR kohafield = 'items.stocknumber'
 |);
 
 my $new_tagfield = 'i';
 $dbh->do(qq|
     INSERT INTO marc_subfield_structure(tagfield, tagsubfield, kohafield, frameworkcode)
-    VALUES ( 952, '$new_tagfield', 'items.new', '' )
+    VALUES ( 952, '$new_tagfield', 'items.new_status', '' )
 |);
 
 my $record = MARC::Record->new();
@@ -39,20 +39,20 @@ my ($item_bibnum, $item_bibitemnum, $itemnumber) = C4::Items::AddItem(
     {
         homebranch => 'CPL',
         holdingbranch => 'CPL',
-        new => 'new_value',
+        new_status => 'new_value',
         ccode => 'FIC',
     },
     $biblionumber
 );
 
 my $item = C4::Items::GetItem( $itemnumber );
-is ( $item->{new}, 'new_value', q|AddItem insert the 'new' field| );
+is ( $item->{new_status}, 'new_value', q|AddItem insert the 'new_status' field| );
 
 my ( $tagfield, undef ) = GetMarcFromKohaField('items.itemnumber', '');
 my $marc_item = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
 is( $marc_item->subfield($tagfield, $new_tagfield), 'new_value', q|Koha mapping is correct|);
 
-# Update the items.new field if items.ccode eq 'FIC' => should be updated
+# Update the items.new_status field if items.ccode eq 'FIC' => should be updated
 my @rules = (
     {
         conditions => [
@@ -63,7 +63,7 @@ my @rules = (
         ],
         substitutions => [
             {
-                field => 'items.new',
+                field => 'items.new_status',
                 value => 'updated_value',
              },
         ],
@@ -74,11 +74,11 @@ my @rules = (
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 
 my $modified_item = C4::Items::GetItem( $itemnumber );
-is( $modified_item->{new}, 'updated_value', q|ToggleNewStatus: The new value is updated|);
+is( $modified_item->{new_status}, 'updated_value', q|ToggleNewStatus: The new_status value is updated|);
 $marc_item = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
-is( $marc_item->subfield($tagfield, $new_tagfield), 'updated_value', q|ToggleNewStatus: The new value is updated| );
+is( $marc_item->subfield($tagfield, $new_tagfield), 'updated_value', q|ToggleNewStatus: The new_status value is updated| );
 
-# Update the items.new field if items.ccode eq 'DONT_EXIST' => should not be updated
+# Update the items.new_status field if items.ccode eq 'DONT_EXIST' => should not be updated
 @rules = (
     {
         conditions => [
@@ -89,7 +89,7 @@ is( $marc_item->subfield($tagfield, $new_tagfield), 'updated_value', q|ToggleNew
         ],
         substitutions => [
             {
-                field => 'items.new',
+                field => 'items.new_status',
                 value => 'new_updated_value',
              },
         ],
@@ -100,9 +100,9 @@ is( $marc_item->subfield($tagfield, $new_tagfield), 'updated_value', q|ToggleNew
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 
 $modified_item = C4::Items::GetItem( $itemnumber );
-is( $modified_item->{new}, 'updated_value', q|ToggleNewStatus: The new value is not updated|);
+is( $modified_item->{new_status}, 'updated_value', q|ToggleNewStatus: The new_status value is not updated|);
 $marc_item = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
-is( $marc_item->subfield($tagfield, $new_tagfield), 'updated_value', q|ToggleNewStatus: The new value is not updated| );
+is( $marc_item->subfield($tagfield, $new_tagfield), 'updated_value', q|ToggleNewStatus: The new_status value is not updated| );
 
 # Play with age
 $item = C4::Items::GetItem( $itemnumber );
@@ -122,7 +122,7 @@ $item = C4::Items::GetItem( $itemnumber );
         ],
         substitutions => [
             {
-                field => 'items.new',
+                field => 'items.new_status',
                 value => 'new_updated_value',
              },
         ],
@@ -131,25 +131,25 @@ $item = C4::Items::GetItem( $itemnumber );
 );
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 $modified_item = C4::Items::GetItem( $itemnumber );
-is( $modified_item->{new}, 'updated_value', q|ToggleNewStatus: Age = 10 : The new value is not updated|);
+is( $modified_item->{new_status}, 'updated_value', q|ToggleNewStatus: Age = 10 : The new_status value is not updated|);
 
 $rules[0]->{age} = 5;
 $rules[0]->{substitutions}[0]{value} = 'new_updated_value5';
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 $modified_item = C4::Items::GetItem( $itemnumber );
-is( $modified_item->{new}, 'new_updated_value5', q|ToggleNewStatus: Age = 5 : The new value is updated|);
+is( $modified_item->{new_status}, 'new_updated_value5', q|ToggleNewStatus: Age = 5 : The new_status value is updated|);
 
 $rules[0]->{age} = '';
 $rules[0]->{substitutions}[0]{value} = 'new_updated_value_empty_string';
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 $modified_item = C4::Items::GetItem( $itemnumber );
-is( $modified_item->{new}, 'new_updated_value_empty_string', q|ToggleNewStatus: Age = '' : The new value is updated|);
+is( $modified_item->{new_status}, 'new_updated_value_empty_string', q|ToggleNewStatus: Age = '' : The new_status value is updated|);
 
 $rules[0]->{age} = undef;
 $rules[0]->{substitutions}[0]{value} = 'new_updated_value_undef';
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 $modified_item = C4::Items::GetItem( $itemnumber );
-is( $modified_item->{new}, 'new_updated_value_undef', q|ToggleNewStatus: Age = undef : The new value is updated|);
+is( $modified_item->{new_status}, 'new_updated_value_undef', q|ToggleNewStatus: Age = undef : The new_status value is updated|);
 
 # Field deletion
 @rules = (
@@ -162,7 +162,7 @@ is( $modified_item->{new}, 'new_updated_value_undef', q|ToggleNewStatus: Age = u
         ],
         substitutions => [
             {
-                field => 'items.new',
+                field => 'items.new_status',
                 value => '',
              },
         ],
@@ -173,9 +173,9 @@ is( $modified_item->{new}, 'new_updated_value_undef', q|ToggleNewStatus: Age = u
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 
 $modified_item = C4::Items::GetItem( $itemnumber );
-is( $modified_item->{new}, '', q|ToggleNewStatus: The new value is empty|);
+is( $modified_item->{new_status}, '', q|ToggleNewStatus: The new_status value is empty|);
 $marc_item = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
-is( $marc_item->subfield($tagfield, $new_tagfield), undef, q|ToggleNewStatus: The new field is removed from the item marc| );
+is( $marc_item->subfield($tagfield, $new_tagfield), undef, q|ToggleNewStatus: The new_status field is removed from the item marc| );
 
 # conditions multiple
 @rules = (
@@ -192,7 +192,7 @@ is( $marc_item->subfield($tagfield, $new_tagfield), undef, q|ToggleNewStatus: Th
         ],
         substitutions => [
             {
-                field => 'items.new',
+                field => 'items.new_status',
                 value => 'new_value',
              },
         ],
@@ -203,7 +203,7 @@ is( $marc_item->subfield($tagfield, $new_tagfield), undef, q|ToggleNewStatus: Th
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 
 $modified_item = C4::Items::GetItem( $itemnumber );
-is( $modified_item->{new}, 'new_value', q|ToggleNewStatus: conditions multiple: all match, the new value is updated|);
+is( $modified_item->{new_status}, 'new_value', q|ToggleNewStatus: conditions multiple: all match, the new_status value is updated|);
 
 @rules = (
     {
@@ -219,7 +219,7 @@ is( $modified_item->{new}, 'new_value', q|ToggleNewStatus: conditions multiple: 
         ],
         substitutions => [
             {
-                field => 'items.new',
+                field => 'items.new_status',
                 value => 'new_updated_value',
              },
         ],
@@ -230,7 +230,7 @@ is( $modified_item->{new}, 'new_value', q|ToggleNewStatus: conditions multiple: 
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 
 $modified_item = C4::Items::GetItem( $itemnumber );
-is( $modified_item->{new}, 'new_value', q|ToggleNewStatus: conditions multiple: at least 1 condition does not match, the new value is not updated|);
+is( $modified_item->{new_status}, 'new_value', q|ToggleNewStatus: conditions multiple: at least 1 condition does not match, the new_status value is not updated|);
 
 @rules = (
     {
@@ -246,7 +246,7 @@ is( $modified_item->{new}, 'new_value', q|ToggleNewStatus: conditions multiple: 
         ],
         substitutions => [
             {
-                field => 'items.new',
+                field => 'items.new_status',
                 value => 'new_updated_value',
              },
         ],
@@ -257,7 +257,7 @@ is( $modified_item->{new}, 'new_value', q|ToggleNewStatus: conditions multiple: 
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 
 $modified_item = C4::Items::GetItem( $itemnumber );
-is( $modified_item->{new}, 'new_updated_value', q|ToggleNewStatus: conditions multiple: the 2 conditions match, the new value is updated|);
+is( $modified_item->{new_status}, 'new_updated_value', q|ToggleNewStatus: conditions multiple: the 2 conditions match, the new_status value is updated|);
 
 @rules = (
     {
@@ -269,7 +269,7 @@ is( $modified_item->{new}, 'new_updated_value', q|ToggleNewStatus: conditions mu
         ],
         substitutions => [
             {
-                field => 'items.new',
+                field => 'items.new_status',
                 value => 'another_new_updated_value',
              },
         ],
@@ -280,4 +280,4 @@ is( $modified_item->{new}, 'new_updated_value', q|ToggleNewStatus: conditions mu
 C4::Items::ToggleNewStatus( { rules => \@rules } );
 
 $modified_item = C4::Items::GetItem( $itemnumber );
-is( $modified_item->{new}, 'another_new_updated_value', q|ToggleNewStatus: conditions on biblioitems|);
+is( $modified_item->{new_status}, 'another_new_updated_value', q|ToggleNewStatus: conditions on biblioitems|);
