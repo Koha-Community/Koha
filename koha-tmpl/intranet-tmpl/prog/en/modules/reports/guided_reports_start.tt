@@ -378,14 +378,19 @@ canned reports and writing custom SQL reports.</p>
     [% IF ( CAN_user_reports_create_reports ) %]
     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
     <input type="hidden" name="phase" value="Build new" />
-    <input type="submit" class="edit" value="Build a new report" accesskey="y" />
+        <button type="submit" class="new"><i class="fa fa-plus"></i> New guided report</button>
+    </form>
+
+    <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
+        <input type="hidden" name="phase" value="Create report from SQL" />
+        <button type="submit" class="new"><i class="fa fa-plus"></i> New SQL report</button>
     </form>
 
     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
     <input type="hidden" name="phase" value="Use saved" />
     <input type="hidden" name="filter_set" value="1" />
     <input type="hidden" name="filter_keyword" value="" />
-    <input type="submit" class="deny" value="Cancel filter" accesskey="n" />
+        <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> Cancel filter</button>
     </form>
 
     [% END %]
@@ -1031,7 +1036,7 @@ Sub report:<select name="subreport">
   </fieldset>
   <fieldset class="action">
     <input type="submit" value="Apply filter" />
-    <a id="resetReportsFilter" href="?phase=Use saved&clear_filters=1">Clear</a>
+    <a id="resetReportsFilter" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved&clear_filters=1">Clear</a>
   </fieldset>
 </form>
 </div>
