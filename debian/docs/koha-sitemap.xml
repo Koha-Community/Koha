@@ -1,0 +1,92 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-sitemap</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha community</orgname>
+  <uri>http://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-sitemap">
+
+  <refmeta>
+    <refentrytitle>koha-sitemap</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-sitemap</refname>
+    <refpurpose>Manage sitemaps for Koha instances.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-sitemap</command>
+      <arg choice="req" rep="norepeat">
+        <option>--enable</option>|
+        <option>--disable</option>|
+        <option>--generate</option>|
+        <option>--help</option>|<option>-h</option>
+        |<option>--quiet</option>|<option>-q</option>
+      </arg>
+      <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1><title>Options</title>
+
+  <variablelist>
+
+    <varlistentry>
+      <term><option>--enable</option></term>
+      <listitem>
+        <para>Enable sitemap generation for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--disable</option></term>
+      <listitem>
+        <para>Disable sitemap generation for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--generate</option></term>
+      <listitem>
+        <para>Generate sitemap for the desired Koha instances.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--quiet|-q</option></term>
+      <listitem>
+        <para>Make the script quiet about non existent instance names or missing directories. Useful when calling <command>koha-sitemap</command> from another scripts.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--help|-h</option></term>
+      <listitem>
+        <para>Show usage information.</para>
+      </listitem>
+    </varlistentry>
+
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Description</title>
+    <para>The <command>koha-sitemap</command> script lets you manage your Koha instances sitemaps.</para>
+  </refsect1>
+
+  <refsect1><title>See also</title>
+  <simplelist type="inline">
+    <member><command>/etc/default/koha-common</command></member>
+  </simplelist>
+  </refsect1>
+
+</refentry>
+
+</article>

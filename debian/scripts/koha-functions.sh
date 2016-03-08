@@ -146,6 +146,17 @@ is_sip_enabled()
     fi
 }
 
+is_sitemap_enabled()
+{
+    local instancename=$1
+
+    if [ -e /var/lib/koha/$instancename/sitemap.enabled ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 is_zebra_running()
 {
     local instancename=$1

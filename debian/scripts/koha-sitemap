@@ -1,0 +1,208 @@
+#!/bin/bash
+#
+# Copyright 2016 Theke Solutions
+#
+# This file is part of Koha.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+. /lib/lsb/init-functions
+
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
+
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
+usage()
+{
+    local scriptname=$(basename $0)
+
+    cat <<EOF
+$scriptname
+
+This script lets you manage sitemaps for your Koha instances.
+
+Usage:
+$scriptname --enable|--disable instancename1 [instancename2]
+$scriptname --generate instancename1 [instancename2]
+$scriptname -h|--help
+
+    --enable              Enable sitemap generation for the specified instances
+    --disable             Disable sitemap generation for the specified instances
+    --generate            (Re)generate stiemap for the specified instances
+    --quiet|-q            Make the script quiet about non existent instance names
+                          (useful for calling from another scripts).
+    --help|-h             Display this help message
+
+EOF
+}
+
+enable_sitemap()
+{
+    local instance=$1
+    local libdir="/var/lib/koha"
+
+    if is_sitemap_enabled $instance; then
+        [ "$quiet" = "no" ] && \
+            warn "Sitemap already enabled for ${instance}"
+    else
+
+        sudo -u "$instance-koha" \
+            touch $libdir/$instance/sitemap.enabled
+
+        [ "$quiet" = "no" ] && \
+            warn "Sitemap enabled for ${instance}"
+    fi
+}
+
+disable_sitemap()
+{
+    local instance=$1
+    local libdir="/var/lib/koha"
+
+    if is_sitemap_enabled $instance; then
+        sudo -u "$instance-koha" \
+            rm -f $libdir/$instance/sitemap.enabled
+        [ "$quiet" = "no" ] && \
+            warn "Sitemap disabled for ${instance}"
+    else
+        [ "$quiet" = "no" ] && \
+            warn "Sitemap already disabled for ${instance}"
+    fi
+}
+
+generate_sitemap()
+{
+    local instance=$1
+    local sitemapdir="/var/lib/koha/$instance/sitemap"
+
+    if ! is_sitemap_enabled $instance; then
+        [ "$quiet" = "no" ] && \
+            warn "Sitemap not enabled for ${instance}."
+    else
+        if [ ! -d "$sitemapdir" ]; then
+            # Need to create directory
+            [ "$quiet" = "no" ] && \
+                warn "Sitemap directory for ${instance} doesn't exist. Creating."
+            sudo -u "$instance-koha" \
+                mkdir -p "$sitemapdir"
+        fi
+
+        if sudo -u "$instance-koha" -H \
+            env PERL5LIB=/usr/share/koha/lib \
+            KOHA_CONF="/etc/koha/sites/$instance/koha-conf.xml" \
+            /usr/share/koha/bin/cronjobs/sitemap.pl \
+                --dir $sitemapdir ; then
+            return 0
+        else
+            return 1
+        fi
+    fi
+}
+
+check_env_and_warn()
+{
+    local apache_version_ok="no"
+
+    if /usr/sbin/apache2ctl -v | grep -q -v "Server version: Apache/2.4"; then
+        [ "$quiet" = "no" ] && \
+            cat 1>&2 <<EOM
+WARNING: the shipped Apache configuration requires version 2.4.x and you don't have that.
+         Sitemap files will be generated, but refer to the docs to make them publicly available.
+EOM
+    fi
+}
+
+set_action()
+{
+    if [ "$op" = "" ]; then
+        op=$1
+    else
+        die "Error: only one action can be specified."
+    fi
+}
+
+op=""
+quiet="no"
+
+# Read command line parameters
+while [ $# -gt 0 ]; do
+
+    case "$1" in
+        -h|--help)
+            usage ; exit 0 ;;
+        -q|--quiet)
+            quiet="yes"
+            shift ;;
+        --enable)
+            set_action "enable"
+            shift ;;
+        --disable)
+            set_action "disable"
+            shift ;;
+        --generate)
+            set_action "generate"
+            shift ;;
+        -*)
+            die "Error: invalid option switch ($1)" ;;
+        *)
+            # We expect the remaining stuff are the instance names
+            break ;;
+    esac
+
+done
+
+if [ $# -gt 0 ]; then
+    # We have at least one instance name
+    for name in "$@"; do
+
+        if is_instance $name; then
+
+            case $op in
+                "generate")
+                    generate_sitemap $name
+                    ;;
+                "enable")
+                    enable_sitemap $name
+                    ;;
+                "disable")
+                    disable_sitemap $name
+                    ;;
+                *)
+                    usage
+                    ;;
+            esac
+
+        else
+            if [ "$quiet" = "no" ]; then
+                warn "Error: Invalid instance name $name"
+            fi
+        fi
+
+    done
+else
+    if [ "$quiet" = "no" ]; then
+        warn "Error: you must provide at least one instance name"
+    fi
+fi
+
+exit 0
