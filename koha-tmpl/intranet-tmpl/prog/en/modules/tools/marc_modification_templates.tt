@@ -11,7 +11,8 @@
     var MSG_MMT_SOURCE_FIELD = _("The source field should be filled.");
     var MSG_MMT_EVERY = _("Every");
     var MSG_MMT_ALL = _("All");
-    var MSG_MMT_CONFIRM_DEL_TEMPLATE= _("Are you sure you wish to delete this template?");
+    var MSG_MMT_CONFIRM_DEL_TEMPLATE = _("Are you sure you wish to delete this template?");
+    var MSG_MMT_CONFIRM_DEL_TEMPLATE_ACTION = _("Are you sure you wish to delete this template action?");
     var MSG_MMT_EDIT_ACTION = _("Edit action %s");
     var MSG_MMT_UPDATE_ACTION = _("Update action");
     //]]>
@@ -162,7 +163,7 @@
                                                     "[% ActionsLoo.conditional_regex |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
                                                     "[% ActionsLoo.description |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
                                                 );updateAllEvery();'>Edit</a></td>
-                                <td><a href="marc_modification_templates.pl?template_id=[% ActionsLoo.template_id %]&op=delete_action&mmta_id=[% ActionsLoo.mmta_id %]">Delete</a></td>
+                                <td><a href="marc_modification_templates.pl?template_id=[% ActionsLoo.template_id %]&op=delete_action&mmta_id=[% ActionsLoo.mmta_id %]" onclick="return confirmDeleteAction();">Delete</a></td>
                             </tr>
                         [% END %]
                     </table>

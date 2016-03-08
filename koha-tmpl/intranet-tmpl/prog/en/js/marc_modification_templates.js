@@ -185,9 +185,12 @@ function clearFormElements(divId) {
 
 }
 
+function confirmDeleteAction() {
+    return confirm( MSG_MMT_CONFIRM_DEL_TEMPLATE_ACTION );
+}
+
 function confirmDelete() {
-    var agree = confirm( MSG_MMT_CONFIRM_DEL_TEMPLATE );
-    return agree;
+    return confirm( MSG_MMT_CONFIRM_DEL_TEMPLATE );
 }
 
 var modaction_legend_innerhtml;
