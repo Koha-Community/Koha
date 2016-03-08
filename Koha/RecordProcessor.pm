@@ -152,14 +152,12 @@ sub process {
 
     return unless defined $record;
 
-    my $newrecord = $record;
-
     foreach my $filterobj (@{$self->filters}) {
         next unless $filterobj;
-        $newrecord = $filterobj->filter($newrecord);
+        $filterobj->filter($record);
     }
 
-    return $newrecord;
+    return $record;
 }
 
 sub DESTROY {

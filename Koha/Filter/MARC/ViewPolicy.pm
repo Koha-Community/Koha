@@ -78,9 +78,8 @@ sub filter {
         push @records, $precord;
     }
 
-    my @results;
     foreach my $current_record (@records) {
-        my $result        = $current_record->clone();
+        my $result        = $current_record;
         my $interface     = $self->{options}->{interface} // 'opac';
         my $frameworkcode = $self->{options}->{frameworkcode} // q{};
         my $hide          = _should_hide_on_interface();
@@ -103,15 +102,8 @@ sub filter {
                 }
             );
         }
-        push @results, $result;
     }
-
-    if ( scalar @results == 1 ) {
-        return $results[0];
-    }
-    else {
-        return \@results;
-    }
+    return;
 }
 
 sub _filter_field {
