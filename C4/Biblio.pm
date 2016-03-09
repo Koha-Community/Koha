@@ -1925,7 +1925,7 @@ sub GetMarcSubjects {
         push @marcsubjects, {
             MARCSUBJECT_SUBFIELDS_LOOP => \@subfields_loop,
             authoritylink => $authoritylink,
-        };
+        } if $authoritylink || @subfields_loop;
 
     }
     return \@marcsubjects;
