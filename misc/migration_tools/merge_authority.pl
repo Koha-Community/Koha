@@ -55,8 +55,11 @@ $|=1; # flushes output
 my $authfrom = GetAuthority($mergefrom);
 my $authto = GetAuthority($mergeto);
 
-my $authtypecodefrom = $mergefrom->authtypecode;
-my $authtypecodeto   = $mergeto->authtypecode;
+die "Authority $mergefrom does not exist" unless $authfrom;
+die "Authority $mergeto does not exist"   unless $authto;
+
+my $authtypecodefrom = Koha::Authorities->find($mergefrom)->authtypecode;
+my $authtypecodeto = Koha::Authorities->find($mergeto)->authtypecode;
 
 unless ($noconfirm || $batch) {
     print "************\n";
