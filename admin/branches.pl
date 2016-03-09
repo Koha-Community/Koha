@@ -194,7 +194,7 @@ if ( $op eq 'add_form' ) {
     $op = 'list';
 } elsif ( $op eq 'delete_confirm_category' ) {
     my $category = Koha::LibraryCategories->find($categorycode);
-    if ( my $libraries_count = scalar( $category->libraries ) ) {
+    if ( my $libraries_count = $category->libraries->count ) {
         push @messages,
           { type => 'error',
             code => 'cannot_delete_category',
