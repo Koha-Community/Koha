@@ -188,7 +188,7 @@ __PACKAGE__->table("suggestions");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 3
+  size: 10
 
 =head2 price
 
@@ -273,7 +273,7 @@ __PACKAGE__->add_columns(
   "quantity",
   { data_type => "smallint", is_nullable => 1 },
   "currency",
-  { data_type => "varchar", is_nullable => 1, size => 3 },
+  { data_type => "varchar", is_nullable => 1, size => 10 },
   "price",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "total",
@@ -315,8 +315,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-13 11:06:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zXNCczGjuuyoojx85UcQig
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-09 15:14:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FlZsyhm/ugCqtMJ+HoYOkw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

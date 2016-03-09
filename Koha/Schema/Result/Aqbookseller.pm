@@ -75,7 +75,7 @@ __PACKAGE__->table("aqbooksellers");
   data_type: 'varchar'
   default_value: (empty string)
   is_nullable: 0
-  size: 3
+  size: 10
 
 =head2 booksellerfax
 
@@ -187,7 +187,7 @@ __PACKAGE__->add_columns(
   "othersupplier",
   { data_type => "mediumtext", is_nullable => 1 },
   "currency",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 3 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "booksellerfax",
   { data_type => "mediumtext", is_nullable => 1 },
   "notes",
@@ -352,8 +352,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-26 11:53:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kz1tuPJihENyV6OyCwyX/A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-09 15:14:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JPswQh/s5S4nZnUzMckLnw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -49,8 +49,9 @@ __PACKAGE__->table("aqorders");
 =head2 currency
 
   data_type: 'varchar'
+  is_foreign_key: 1
   is_nullable: 1
-  size: 3
+  size: 10
 
 =head2 listprice
 
@@ -239,7 +240,7 @@ __PACKAGE__->add_columns(
   "quantity",
   { data_type => "smallint", is_nullable => 1 },
   "currency",
-  { data_type => "varchar", is_nullable => 1, size => 3 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "listprice",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "datereceived",
@@ -441,6 +442,26 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 currency
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Currency>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "currency",
+  "Koha::Schema::Result::Currency",
+  { currency => "currency" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "SET NULL",
+  },
+);
+
 =head2 invoiceid
 
 Type: belongs_to
@@ -492,8 +513,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-05-14 11:27:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BCa/SxerJ+zEh8Pg9Jdkaw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-09 15:14:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:somjoqKl7W2FYfhmgw4LQQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
