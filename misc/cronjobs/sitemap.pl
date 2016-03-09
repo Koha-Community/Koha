@@ -49,7 +49,6 @@ unless ($url) {
         say "OPACBaseURL syspref isn't defined. You can use --url parameter.";
         exit;
     }
-    $url = 'http://' . $url;
 }
 $url =~ s/\/*$//g;
 
