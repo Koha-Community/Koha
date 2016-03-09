@@ -12007,6 +12007,21 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.039";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+
+    $dbh->do(q{
+    ALTER TABLE suggestions
+    MODIFY COLUMN currency varchar(10) default NULL;
+    });
+    $dbh->do(q{
+    ALTER TABLE aqbooksellers
+    MODIFY COLUMN currency varchar(10) default NULL;
+    });
+    print "Upgrade to $DBversion done (Bug 15084 - Move the currency related code to Koha::Acquisition::Currenc[y|ies])\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
