@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 74;
+use Test::More tests => 76;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -440,5 +440,13 @@ sub testAgeAccessors {
 
     $member->{dateofbirth} = $original_dateofbirth; #It is polite to revert made changes in the unit tests.
 } #sub testAgeAccessors
+
+# regression test for bug 16009
+my $patron;
+eval {
+    my $patron = GetMember(cardnumber => undef);
+};
+is($@, '', 'Bug 16009: GetMember(cardnumber => undef) works');
+is($patron, undef, 'Bug 16009: GetMember(cardnumber => undef) returns undef');
 
 1;
