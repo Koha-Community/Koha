@@ -58,7 +58,7 @@ if ($op eq "add_source") {
                      $rule_code);
     $display_lists = 1;
 } elsif ($op eq "delete_source") {
-    delete_class_source_form($template);
+    delete_class_source_form($template, $source_code);
 } elsif ($op eq "delete_source_confirmed") {
     delete_class_source($template, $source_code);
     $display_lists = 1;
@@ -146,7 +146,7 @@ sub edit_class_source {
 
 
 sub delete_class_source_form {
-    my ($template) = @_;
+    my ($template, $source_code) = @_;
     $template->param(
         delete_class_source_form => 1,
         confirm_op   => "delete_source_confirmed",
