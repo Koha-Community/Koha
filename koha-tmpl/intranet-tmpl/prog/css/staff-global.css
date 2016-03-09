@@ -781,86 +781,6 @@ fieldset.rows .inputnote {
     visibility:visible; /* you propably don't need to change this one */
     display:block;
 }
-#new_course a, #newbiblio a, #addchild a, #newentry a, #newshelf a, #newmenuc .first-child, #newsupplier .first-child, #newlabel a, #newtemplate a, #newlabelbatch a, #newpatroncardbatch a, #newprofile a, #newsubscription a, #newdictionary a, #newbasket a, #newrootbudget-button, #budgets_menuc .first-child {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-new.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-#changepassword a {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-password.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-#manageorders a {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-orders.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-
-#savemenuc .first-child, #addbiblio .first-child {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-save.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-#editpatron a,
-#editreport a,
-#editmenuc .first-child,
-#editshelf a,
-#edit a,
-#editsupplier a,
-#managelabel a,
-#managetemplate a,
-#managelabelbatch a,
-#manageprofile a,
-#periods_menuc .first-child {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-edit.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-#duplicate a {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-duplicate.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-#receive a {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-receive.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-#renew a {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-renew.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-#deletebiblio button, #deletebiblio a, #deletepatron a, #deleteshelf .first-child, #delete a {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-delete.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-#z3950search .first-child {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-search.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
 
 #z3950searcht table {
 	/* doesn't have desired effect in catalogue/results.tmpl - I'll leave this here for now but there do seem to be casscading CSS errors in this and other CSS fiels - RICKW 20081118 */
@@ -881,37 +801,6 @@ fieldset.rows .inputnote {
 #z3950_search_targets_auth {
     height:     348px;
     overflow-y: auto;
-}
-
-#printbiblio button, #printbiblio a, #printmenuc .first-child {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-print.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-#addtoshelf button, #addtoshelf a {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-add-to-shelf.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-#placehold a,
-#placehold button,
-#holdfor .first-child {
-	padding-left : 34px;
-    background-image: url("../img/toolbar-hold.gif");
-	background-position : center left;
-	background-repeat : no-repeat;
-}
-
-#placeholdc #yui-gen13 { border-top : 1px solid #CCCCCC; margin-top : .3em; }
-
-#holdfor .first-child { padding-left : 17px; }
-
-#editmenuc .first-child, #deleteshelf .first-child,#newmenuc .first-child, #addbiblio .first-child, #z3950search .first-child, #printmenuc .first-child, #newsupplier .first-child, #savemenuc .first-child, #budgets_menuc .first-child, #periods_menuc .first-child {
-	padding-left : 15px;
 }
 
 .error {
@@ -1124,31 +1013,8 @@ div.first fieldset {
 	background : #FFF none;
  }
 
-.dialog input.save {
-    background: #fff url(../img/toolbar-save.gif) no-repeat 4px center;
-	color:black;
-	padding: .4em .4em .4em 34px;
-}
-
-.dialog input.edit {
-    background: #fff url(../img/toolbar-edit.gif) no-repeat 4px center;
-	color:black;
-	max-width : 13em;
-	padding: .4em .4em .4em 34px;
-	white-space: normal;
-}
-
-.dialog input.new {
-    background: #fff url(../img/toolbar-new.gif) no-repeat 4px center;
-	color:black;
-	max-width : 13em;
-	padding: .4em .4em .4em 34px;
-	white-space: normal;
-}
-
-.dialog input.print {
-    background : #FFF url(../img/print-confirm.gif) no-repeat 4px center;
-	padding : .4em .4em .4em 25px;	
+td input.approve {
+	background-color : #FFC;
 }
 
 .dialog input:hover {
@@ -1211,16 +1077,6 @@ div.alert strong {
 
 .new i.fa {
     color: #425FAF;
-}
-
-a.clear-field {
-    background: transparent url("../img/clear-field.png") center left no-repeat;
-    padding-left : 16px;
-}
-
-a.clone-field {
-    background: transparent url("../img/clone-field.png") center left no-repeat;
-    padding-left : 20px;
 }
 
 a.document {
@@ -2445,18 +2301,6 @@ button,
     margin-top : .6em;
 }
 
-.icon-hold {
-    background-position:-24px -166px;
-}
-
-.icon-copy {
-    background-position:-3px -166px;
-}
-
-.icon-merge {
-    background-position:-48px -166px;
-}
-
 #toolbar .btn,
 #toolbar .dropdown-menu,
 .btn-toolbar .btn,
@@ -2473,8 +2317,7 @@ a.btn:visited{
 a.dropdown-toggle {
     white-space: nowrap;
 }
-[class^="icon-"],[class*=" icon-"]{background-image:url("../img/glyphicons-halflings-koha.png");}
-.icon-white,.nav-tabs>.active>a>[class^="icon-"],.nav-tabs>.active>a>[class*=" icon-"],.nav-pills>.active>a>[class^="icon-"],.nav-pills>.active>a>[class*=" icon-"],.nav-list>.active>a>[class^="icon-"],.nav-list>.active>a>[class*=" icon-"],.navbar-inverse .nav>.active>a>[class^="icon-"],.navbar-inverse .nav>.active>a>[class*=" icon-"],.dropdown-menu>li>a:hover>[class^="icon-"],.dropdown-menu>li>a:hover>[class*=" icon-"],.dropdown-menu>.active>a>[class^="icon-"],.dropdown-menu>.active>a>[class*=" icon-"]{background-image:url("../img/glyphicons-halflings-white-koha.png");}
+
 a.disabled {
     color : #999999;
 }
