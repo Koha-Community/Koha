@@ -72,7 +72,8 @@ $sitemaper->run();
 =head1 SYNOPSIS
 
   sitemap.pl --verbose
-  sitemap.pl --noshort --url /home/koha/mylibrary/www
+  sitemap.pl --noshort --dir /home/koha/mylibrary/www
+  sitemap.pl --url opac.myDNSname.org
 
 =head1 DESCRIPTION
 
