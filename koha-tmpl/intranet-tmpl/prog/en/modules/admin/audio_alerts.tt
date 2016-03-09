@@ -38,7 +38,7 @@
                             <li>
                                 <label for="sound" class="required">Sound: </label>
                                 <input id="sound" name="sound" type="text" class="required input-large" placeholder="sound" />
-                                <button id="play-sound" class="btn btn-mini disabled"><i class="icon-play"></i> Play sound</button>
+                                <button id="play-sound" class="btn btn-mini disabled"><i class="fa fa-play"></i> Play sound</button>
                                  <span class="required">Required</span>
                             </li>
                             <li>
@@ -111,14 +111,14 @@
                                     </td>
                                     <td>[% a.selector %]</td>
                                     <td>[% a.sound %]</td>
-                                    <td><a class="btn btn-small" onclick="EditAlert( this, '[% a.id %]','[% a.precedence %]', '[% a.selector | replace( "'", "\\'" ) | html %]', '[% a.sound %]' )" ><i class="icon-pencil"></i> Edit</a></td>
+                                    <td><a class="btn btn-small" onclick="EditAlert( this, '[% a.id %]','[% a.precedence %]', '[% a.selector | replace( "'", "\\'" ) | html %]', '[% a.sound %]' )" ><i class="fa fa-pencil"></i> Edit</a></td>
                                 </tr>
                             [% END %]
                         </tbody>
                     </table>
 
                     <p>
-                        <button id="delete-alerts" type="submit" class="btn disabled"><i class="icon-trash"></i> Delete selected alerts</button>
+                        <button id="delete-alerts" type="submit" class="btn disabled"><i class="fa fa-trash"></i> Delete selected alerts</button>
                     </p>
                 </form>
             </div>
