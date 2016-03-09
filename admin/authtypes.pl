@@ -44,7 +44,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 if ( $op eq 'add_form' ) {
     my $authority_type;
-    if ($authtypecode) {
+    if (defined $authtypecode) {
         $authority_type = Koha::Authority::Types->find($authtypecode);
     }
 
