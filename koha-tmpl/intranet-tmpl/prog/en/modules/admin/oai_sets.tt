@@ -16,6 +16,16 @@ function delDescField(minusButton) {
     var li = $(minusButton).parent('li');
     $(li).remove();
 }
+
+function confirmDelete() {
+  return confirm(_("Are you sure you want to delete this OAI set?"));
+}
+
+$(document).ready(function() {
+    $(".delete_oai_set").on("click",function(){
+        return confirmDelete();
+    });
+});
 //]]>
 </script>
 </head>
@@ -104,7 +114,7 @@ function delDescField(minusButton) {
                             <td>
                                 <a href="/cgi-bin/koha/admin/oai_sets.pl?op=mod&amp;id=[% set.id %]">Modify</a>
                                 |
-                                <a href="/cgi-bin/koha/admin/oai_sets.pl?op=del&amp;id=[% set.id %]">Delete</a>
+                                <a class="delete_oai_set" href="/cgi-bin/koha/admin/oai_sets.pl?op=del&amp;id=[% set.id %]">Delete</a>
                                 |
                                 <a href="/cgi-bin/koha/admin/oai_set_mappings.pl?id=[% set.id %]">Define mappings</a>
                             </td>
