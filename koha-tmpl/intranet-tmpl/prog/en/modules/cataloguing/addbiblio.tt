@@ -410,17 +410,17 @@ function Changefwk(FwkList) {
     <!-- show duplicate warning on tab 0 only -->
         [% IF ( duplicatebiblionumber ) %]
                     <div class="dialog alert">
-                        <h4>Duplicate record suspected</h4>
-                        <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber %]" onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;">[% duplicatetitle %]</a>?</p>
+                        <h3>Duplicate record suspected</h3>
+                        <p>Is this a duplicate of <a class="popup" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber %]" onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;">[% duplicatetitle %]</a> ?</p>
                         [% IF ( CAN_user_editcatalogue_edit_items ) %]<form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
                                                     <input type="hidden" name="biblionumber" value="[% duplicatebiblionumber %]" />
-                                                    <input type="submit" class="edit" value="Yes: Edit existing items" />
+                                                    <button type="submit" class="new"><i class="fa fa-fw fa-pencil"></i> Yes, edit existing items</button>
                                                 </form>[% ELSE %]<form action="/cgi-bin/koha/catalogue/detail.pl" method="get">
                                                     <input type="hidden" name="biblionumber" value="[% duplicatebiblionumber %]" />
                                                     <input type="submit" value="Yes: View existing items" />
                                                 </form>[% END %]
                         <form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="get">
-                        [% IF ( CAN_user_editcatalogue_edit_items ) %]<input type="button" class="save" onclick="confirmnotdup('items'); return false;" value="No: Save as new record" />[% ELSE %]<input type="button" class="save" onclick="confirmnotdup('view'); return false;" value="No: Save as new record" />[% END %]
+                            [% IF ( CAN_user_editcatalogue_edit_items ) %]<button type="submit" class="new" onclick="confirmnotdup('items'); return false;"><i class="fa fa-fw fa-save"></i> No, save as new record</button>[% ELSE %]<button type="submit" class="new" onclick="confirmnotdup('view'); return false;"><i class="fa fa-fw fa-save"></i> No, save as new record</button>[% END %]
                         </form>
                     </div>
         [% END %]
