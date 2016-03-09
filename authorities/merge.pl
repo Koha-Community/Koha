@@ -58,21 +58,16 @@ if ($merge) {
     $record->leader( GetAuthority($recordid1)->leader() );
 
     # Modifying the reference record
+    # This triggers a merge for the biblios attached to $recordid1
     ModAuthority( $recordid1, $record, $typecode );
 
-    # Deleting the other record
-    if ( scalar(@errors) == 0 ) {
+    # Now merge for biblios attached to $recordid2
+    # We ignore dontmerge now, since recordid2 is deleted
+    my $MARCfrom = GetAuthority( $recordid2 );
+    merge( $recordid2, $MARCfrom, $recordid1, $record );
 
-        my $error;
-        if ($input->param('mergereference') eq 'breeding') {
-            require C4::ImportBatch;
-            C4::ImportBatch::SetImportRecordStatus( $recordid2, 'imported' );
-        } else {
-            C4::AuthoritiesMarc::merge( $recordid2, GetAuthority($recordid2), $recordid1, $record );
-            $error = (DelAuthority($recordid2) == 0);
-        }
-        push @errors, $error if ($error);
-    }
+    # Deleting the other record
+    DelAuthority( $recordid2 );
 
     # Parameters
     $template->param(
