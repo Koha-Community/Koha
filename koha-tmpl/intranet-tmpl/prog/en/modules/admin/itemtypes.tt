@@ -141,7 +141,7 @@ Item types administration
                     <label for="description" class="required">Description: </label>
                     <input type="text" id="description" name="description" size="48" value="[% itemtype.description |html %]" required="required" /> <span class="required">Required</span>
                     [% IF can_be_translated %]
-                        <a href="/cgi-bin/koha/admin/localization.pl?entity=itemtypes&code=[% itemtype.itemtype %]" title="Translate item type [% itemtype.itemtype %]" rel="gb_page_center[600,500]"><i class="icon-edit"></i> Translate into other languages</a>
+                        <a href="/cgi-bin/koha/admin/localization.pl?entity=itemtypes&code=[% itemtype.itemtype %]" title="Translate item type [% itemtype.itemtype %]" rel="gb_page_center[600,500]"><i class="fa fa-pencil"></i> Translate into other languages</a>
                     [% END %]
                 </li>
                 <li>
