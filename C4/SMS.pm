@@ -38,8 +38,6 @@ use warnings;
 use C4::Context;
 
 
-BEGIN {
-}
 
 =head1 METHODS
 

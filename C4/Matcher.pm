@@ -24,8 +24,6 @@ use C4::Context;
 use MARC::Record;
 
 
-BEGIN {
-}
 
 =head1 NAME
 

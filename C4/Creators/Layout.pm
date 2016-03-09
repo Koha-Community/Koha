@@ -9,8 +9,6 @@ use C4::Context;
 use C4::Debug;
 use C4::Creators::PDF;
 
-BEGIN {
-}
 
 # FIXME: Consider this style parameter verification instead...
 #  my %param = @_;

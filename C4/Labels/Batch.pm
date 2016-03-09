@@ -7,8 +7,6 @@ use base qw(C4::Creators::Batch);
 
 use autouse 'Data::Dumper' => qw(Dumper);
 
-BEGIN {
-}
 
 __PACKAGE__ =~ m/^C4::(.+)::.+$/;
 my $me = $1;

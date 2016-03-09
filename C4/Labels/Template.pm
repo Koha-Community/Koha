@@ -7,8 +7,6 @@ use base qw(C4::Creators::Template);
 
 use autouse 'Data::Dumper' => qw(Dumper);
 
-BEGIN {
-}
 
 use constant TEMPLATE_TABLE => 'creator_templates';
 

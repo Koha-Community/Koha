@@ -9,8 +9,6 @@ use C4::Context;
 use C4::Debug;
 use C4::Creators::Lib qw(get_unit_values);
 
-BEGIN {
-}
 
 sub _check_params {
     my $given_params = {};

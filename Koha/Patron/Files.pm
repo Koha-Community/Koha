@@ -24,9 +24,6 @@ use C4::Context;
 use C4::Output;
 use C4::Debug;
 
-BEGIN {
-
-}
 
 =head1 NAME
 

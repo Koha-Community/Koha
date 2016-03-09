@@ -24,8 +24,6 @@ use PDF::Reuse::Barcode;
 use File::Temp;
 use List::Util qw/first/;
 
-BEGIN {
-}
 
 sub _InitVars {
     my $self = shift;

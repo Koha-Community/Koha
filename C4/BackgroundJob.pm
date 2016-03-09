@@ -25,8 +25,6 @@ use C4::Auth qw/get_session/;
 use Digest::MD5;
 
 
-BEGIN {
-}
 
 =head1 NAME
 

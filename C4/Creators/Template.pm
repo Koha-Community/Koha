@@ -10,8 +10,6 @@ use C4::Debug;
 use C4::Creators::Profile;
 use C4::Creators::Lib qw(get_unit_values);
 
-BEGIN {
-}
 
 sub _check_params {
     shift if $_[0] =~ m/::/; # this seems a bit hackish

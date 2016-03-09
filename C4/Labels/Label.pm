@@ -14,8 +14,6 @@ use C4::Context;
 use C4::Debug;
 use C4::Biblio;
 
-BEGIN {
-}
 
 my $possible_decimal = qr/\d{3,}(?:\.\d+)?/; # at least three digits for a DDCN
 
