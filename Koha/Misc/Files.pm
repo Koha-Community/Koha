@@ -20,7 +20,6 @@ package Koha::Misc::Files;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use vars qw();
 
 use C4::Context;
 use C4::Output;

@@ -20,7 +20,6 @@ package C4::ClassSortRoutine::Dewey;
 use strict;
 use warnings;
 
-use vars qw();
 
 
 =head1 NAME 

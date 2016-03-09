@@ -23,7 +23,6 @@ use warnings;
 use C4::Context;
 use MARC::Record;
 
-use vars qw();
 
 BEGIN {
 }

@@ -21,7 +21,6 @@ use strict;
 use warnings;
 use C4::Context;
 
-use vars qw();
 
 BEGIN {
 }

@@ -24,7 +24,6 @@ use C4::Context;
 use C4::Auth qw/get_session/;
 use Digest::MD5;
 
-use vars qw();
 
 BEGIN {
 }

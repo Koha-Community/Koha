@@ -22,7 +22,6 @@ use strict;
 use warnings;
 use Library::CallNumber::LC;
 
-use vars qw();
 
 
 =head1 NAME 
