@@ -74,7 +74,7 @@ $(document).ready(function() {
 	   [% IF ( action_add_category ) %]New category[% END %]
 	</h1>
 
-    [% IF ( action_modify ) %]<div class="note"><strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.</div>[% END %]
+    [% IF ( action_modify ) %]<div class="note"><i class="fa fa-exclamation"></i> <strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.</div>[% END %]
 
  <form action="/cgi-bin/koha/admin/authorised_values.pl" name="Aform" method="post">
     <input type="hidden" name="op" value="add" />
@@ -167,7 +167,7 @@ $(document).ready(function() {
 </div>
 
 <h1>Authorized values</h1>
-<div class="note"><strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.</div>
+<div class="note"><i class="fa fa-exclamation"></i> <strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.</div>
 
 [% FOR m IN messages %]
     <div class="dialog [% m.type %]">
