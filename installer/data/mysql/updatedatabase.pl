@@ -11987,6 +11987,8 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(q{
     INSERT INTO currency(currency, archived) SELECT distinct currency, 1 FROM aqorders WHERE currency NOT IN (SELECT currency FROM currency);
     });
+## Correct the field length in aqorders before adding FK too
+    $dbh->do(q{ ALTER TABLE aqorders MODIFY COLUMN currency varchar(10) default NULL; });
 ## And finally add the FK
     $dbh->do(q{
     ALTER TABLE aqorders ADD FOREIGN KEY (currency) REFERENCES currency(currency) ON DELETE SET NULL ON UPDATE SET null;
@@ -11994,7 +11996,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
     print "Upgrade to $DBversion done (Bug 15084 - Move the currency related code to Koha::Acquisition::Currenc[y|ies])\n";
     SetVersion($DBversion);
-    }
+}
 
 $DBversion = "3.23.00.038";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
@@ -12003,7 +12005,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     });
     print "Upgrade to $DBversion done (Bug 14694 - Make decreaseloanHighHolds more flexible)\n";
     SetVersion($DBversion);
-    }
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068

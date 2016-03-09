@@ -2232,7 +2232,7 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
    collectiontitle text default NULL, -- collection name for the suggested item
    itemtype VARCHAR(30) default NULL, -- suggested item type 
    quantity SMALLINT(6) default NULL, -- suggested quantity to be purchased
-   currency VARCHAR(3) default NULL, -- suggested currency for the suggested price
+   currency VARCHAR(10) default NULL, -- suggested currency for the suggested price
    price DECIMAL(28,6) default NULL, -- suggested price
    total DECIMAL(28,6) default NULL, -- suggested total cost (price*quantity updated for currency)
   PRIMARY KEY  (`suggestionid`),
@@ -2921,7 +2921,7 @@ CREATE TABLE `aqbooksellers` ( -- information about the vendors listed in acquis
   `phone` varchar(30) default NULL, -- vendor phone number
   `accountnumber` mediumtext, -- unused in Koha
   `othersupplier` mediumtext,  -- unused in Koha
-  `currency` varchar(3) NOT NULL default '', -- unused in Koha
+  `currency` varchar(10) NOT NULL default '', -- unused in Koha
   `booksellerfax` mediumtext, -- vendor fax number
   `notes` mediumtext, -- order notes
   `bookselleremail` mediumtext, -- vendor email
@@ -3080,7 +3080,7 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `biblionumber` int(11) default NULL, -- links the order to the biblio being ordered (biblio.biblionumber)
   `entrydate` date default NULL, -- the date the bib was added to the basket
   `quantity` smallint(6) default NULL, -- the quantity ordered
-  `currency` varchar(3) default NULL, -- the currency used for the purchase
+  `currency` varchar(10) default NULL, -- the currency used for the purchase
   `listprice` decimal(28,6) default NULL, -- the vendor price for this line item
   `datereceived` date default NULL, -- the date this order was received
   invoiceid int(11) default NULL, -- id of invoice
