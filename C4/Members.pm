@@ -435,7 +435,7 @@ sub GetMember {
     }
     $debug && warn $select, " ",values %information;
     my $sth = $dbh->prepare("$select");
-    $sth->execute(map{$information{$_}} keys %information);
+    $sth->execute(@values);
     my $data = $sth->fetchall_arrayref({});
     #FIXME interface to this routine now allows generation of a result set
     #so whole array should be returned but bowhere in the current code expects this
