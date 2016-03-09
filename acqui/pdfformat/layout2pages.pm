@@ -34,8 +34,7 @@ use Koha::Libraries;
 
 BEGIN {
          use Exporter   ();
-         our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
-	# set the version for version checking
+         our (@ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(printpdf);
 }

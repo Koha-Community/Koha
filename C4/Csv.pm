@@ -25,7 +25,6 @@ package C4::Csv;
 use C4::Context;
 use vars qw(@ISA @EXPORT);
 
-# set the version for version checking
 
 @ISA = qw(Exporter);
 

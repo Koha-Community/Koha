@@ -25,7 +25,6 @@ use Koha::LibraryCategories;
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
-	# set the version for version checking
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
 		&GetBranchName

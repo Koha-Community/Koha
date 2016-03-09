@@ -35,7 +35,6 @@ use Data::Dumper;
 
 use vars qw(@ISA @EXPORT);
 
-# set the version for version checking
 
 =head1 NAME
 

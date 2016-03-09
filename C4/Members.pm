@@ -41,7 +41,7 @@ use Text::Unaccent qw( unac_string );
 use Koha::AuthUtils qw(hash_password);
 use Koha::Database;
 
-our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
+our (@ISA,@EXPORT,@EXPORT_OK,$debug);
 
 use Module::Load::Conditional qw( can_load );
 if ( ! can_load( modules => { 'Koha::NorwegianPatronDB' => undef } ) ) {

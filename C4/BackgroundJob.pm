@@ -27,7 +27,6 @@ use Digest::MD5;
 use vars qw();
 
 BEGIN {
-	# set the version for version checking
 }
 
 =head1 NAME

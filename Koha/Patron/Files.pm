@@ -27,7 +27,6 @@ use C4::Debug;
 
 BEGIN {
 
-    # set the version for version checking
 }
 
 =head1 NAME

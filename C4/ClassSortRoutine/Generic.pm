@@ -22,7 +22,6 @@ use warnings;
 
 use vars qw();
 
-# set the version for version checking
 
 =head1 NAME 
 

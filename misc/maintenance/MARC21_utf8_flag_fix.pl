@@ -30,14 +30,11 @@ use C4::Charset;
 use C4::Context;
 use C4::Debug;
 
-use vars qw($VERSION);
-
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
     eval { require "$FindBin::Bin/../kohalib.pl" };
-    $VERSION = 0.02;
 }
 
 our $debug;

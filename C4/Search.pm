@@ -39,7 +39,6 @@ use MARC::Record;
 use MARC::Field;
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
-# set the version for version checking
 BEGIN {
     $DEBUG = ($ENV{DEBUG}) ? 1 : 0;
 }

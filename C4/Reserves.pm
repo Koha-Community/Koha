@@ -91,7 +91,6 @@ This modules provides somes functions to deal with reservations.
 =cut
 
 BEGIN {
-    # set the version for version checking
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT = qw(

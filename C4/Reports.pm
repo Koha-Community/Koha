@@ -26,7 +26,6 @@ use C4::Context;
 use C4::Debug;
 
 BEGIN {
-    # set the version for version checking
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT = qw(

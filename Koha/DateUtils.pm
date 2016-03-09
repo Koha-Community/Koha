@@ -22,7 +22,6 @@ use C4::Context;
 use Carp;
 
 use base 'Exporter';
-use version; our $VERSION = qv('1.0.0');
 
 our @EXPORT = (
     qw( dt_from_string output_pref format_sqldatetime )

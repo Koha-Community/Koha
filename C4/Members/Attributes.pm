@@ -28,7 +28,6 @@ use vars qw(@ISA @EXPORT_OK @EXPORT %EXPORT_TAGS);
 our ($csv, $AttributeTypes);
 
 BEGIN {
-    # set the version for version checking
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(GetBorrowerAttributes GetBorrowerAttributeValue CheckUniqueness SetBorrowerAttributes
                     DeleteBorrowerAttribute UpdateBorrowerAttribute

@@ -61,7 +61,6 @@ use Convert::BaseN;
 use DateTime;
 
 use base 'Exporter';
-use version; our $VERSION = qv('1.0.0');
 
 our %EXPORT_TAGS = ( all => [qw(
         NLCheckSysprefs

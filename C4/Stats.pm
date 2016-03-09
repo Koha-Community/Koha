@@ -29,7 +29,6 @@ use vars qw(@ISA @EXPORT);
 our $debug;
 
 BEGIN {
-	# set the version for version checking
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
 		&UpdateStats

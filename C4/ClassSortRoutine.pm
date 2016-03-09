@@ -26,7 +26,6 @@ use C4::Context;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-# set the version for version checking
 
 =head1 NAME 
 

@@ -16,9 +16,8 @@ use C4::Items;
 use C4::Debug;
 use Data::Dumper;
 
-use vars qw($debug $dbh $VERSION);
+use vars qw($debug $dbh);
 $dbh = C4::Context->dbh;
-$VERSION = "1.00";
 
 sub get_counts() {
 	my $query = q(

@@ -29,7 +29,6 @@ use vars qw($debug $noimage @ISA @EXPORT);
 
 BEGIN {
 
-    # set the version for version checking
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(

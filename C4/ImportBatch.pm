@@ -33,7 +33,6 @@ use Koha::Logger;
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
-	# set the version for version checking
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(

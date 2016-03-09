@@ -37,7 +37,6 @@ use C4::Log;
 use Koha::AuthorisedValues;
 
 BEGIN {
-    # set the version for version checking
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(

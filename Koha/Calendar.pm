@@ -381,10 +381,6 @@ __END__
 
 Koha::Calendar - Object containing a branches calendar
 
-=head1 VERSION
-
-This documentation refers to Koha::Calendar version 0.0.1
-
 =head1 SYNOPSIS
 
   use Koha::Calendar

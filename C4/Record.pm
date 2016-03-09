@@ -41,7 +41,6 @@ use Carp;
 
 use vars qw(@ISA @EXPORT);
 
-# set the version for version checking
 
 @ISA = qw(Exporter);
 

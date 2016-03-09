@@ -31,7 +31,6 @@ use Data::Dumper qw(Dumper);
 use vars qw(@ISA @EXPORT);
 
 BEGIN {
-	# set the version for version checking
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(

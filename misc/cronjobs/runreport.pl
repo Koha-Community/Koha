@@ -35,14 +35,11 @@ use CGI qw ( -utf8 );
 use Carp;
 use Encode;
 
-use vars qw($VERSION);
-
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
     eval { require "$FindBin::Bin/../kohalib.pl" };
-    $VERSION = 0.22;
 }
 
 =head1 NAME

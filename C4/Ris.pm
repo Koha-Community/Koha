@@ -67,7 +67,6 @@ use vars qw(@ISA @EXPORT);
 use C4::Biblio qw(GetMarcSubfieldStructureFromKohaField);
 use Koha::SimpleMARC qw(read_field);
 
-# set the version for version checking
 
 @ISA = qw(Exporter);
 

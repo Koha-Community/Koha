@@ -24,7 +24,6 @@ use C4::Context;
 use vars qw();
 
 BEGIN {
-    # set the version for version checking
 }
 
 =head1 NAME

@@ -24,7 +24,6 @@ use Crypt::Eksblowfish::Bcrypt qw(en_base64);
 use vars qw(@ISA @EXPORT);
 
 BEGIN {
-    # set the version for version checking
     require Exporter;
     @ISA = qw(Exporter);
     push @EXPORT, qw(
