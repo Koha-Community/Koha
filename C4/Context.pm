@@ -505,6 +505,7 @@ with this method.
 =cut
 
 my $syspref_cache = Koha::Cache->get_instance();
+my %syspref_L1_cache;
 my $use_syspref_cache = 1;
 sub preference {
     my $self = shift;
@@ -512,12 +513,15 @@ sub preference {
 
     $var = lc $var;
 
+    # Return the value if the var has already been accessed
+    if ($use_syspref_cache && exists $syspref_L1_cache{$var}) {
+        return $syspref_L1_cache{$var};
+    }
+
     my $cached_var = $use_syspref_cache
         ? $syspref_cache->get_from_cache("syspref_$var")
         : undef;
     return $cached_var if defined $cached_var;
-
-    my $dbh  = C4::Context->dbh or return 0;
 
     my $value;
     if ( defined $ENV{"OVERRIDE_SYSPREF_$var"} ) {
@@ -528,7 +532,10 @@ sub preference {
         $value = $syspref ? $syspref->value() : undef;
     }
 
-    $syspref_cache->set_in_cache("syspref_$var", $value) if $use_syspref_cache;
+    if ( $use_syspref_cache ) {
+        $syspref_cache->set_in_cache("syspref_$var", $value);
+        $syspref_L1_cache{$var} = $value;
+    }
     return $value;
 }
 
@@ -581,7 +588,13 @@ will not be seen by this process.
 =cut
 
 sub clear_syspref_cache {
-    $syspref_cache->flush_all if $use_syspref_cache;
+    return unless $use_syspref_cache;
+    $syspref_cache->flush_all;
+    clear_syspref_L1_cache()
+}
+
+sub clear_syspref_L1_cache {
+    %syspref_L1_cache = ();
 }
 
 =head2 set_preference
@@ -632,8 +645,10 @@ sub set_preference {
         )->store();
     }
 
-    $syspref_cache->set_in_cache( "syspref_$variable", $value )
-      if $use_syspref_cache;
+    if ( $use_syspref_cache ) {
+        $syspref_cache->set_in_cache( "syspref_$variable", $value );
+        $syspref_L1_cache{$variable} = $value;
+    }
 
     return $syspref;
 }
@@ -652,7 +667,11 @@ sub delete_preference {
     my ( $self, $var ) = @_;
 
     if ( Koha::Config::SysPrefs->find( $var )->delete ) {
-        $syspref_cache->clear_from_cache("syspref_$var") if $use_syspref_cache;
+        if ( $use_syspref_cache ) {
+            $syspref_cache->clear_from_cache("syspref_$var");
+            delete $syspref_L1_cache{$var};
+        }
+
         return 1;
     }
     return 0;
