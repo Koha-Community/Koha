@@ -51,27 +51,6 @@ if ( $op eq 'ean_form' ) {
         }
     );
     $template->param( branches => \@branches );
-    $template->param(
-        code_qualifiers => [
-            {
-                code        => '14',
-                description => 'EAN International',
-            },
-            {
-                code        => '31B',
-                description => 'US SAN Agency',
-            },
-            {
-                code        => '91',
-                description => 'Assigned by supplier',
-            },
-            {
-                code        => '92',
-                description => 'Assigned by buyer',
-            },
-        ]
-    );
-
 }
 elsif ( $op eq 'delete_confirm' ) {
     show_ean();
@@ -99,6 +78,27 @@ else {
     $template->param( display => 1 );
     $template->param( eans    => \@eans );
 }
+
+$template->param(
+    code_qualifiers => [
+        {
+            code        => '14',
+            description => 'EAN International',
+        },
+        {
+            code        => '31B',
+            description => 'US SAN Agency',
+        },
+        {
+            code        => '91',
+            description => 'Assigned by supplier',
+        },
+        {
+            code        => '92',
+            description => 'Assigned by buyer',
+        },
+    ]
+);
 
 output_html_with_http_headers( $input, $cookie, $template->output );
 

@@ -51,27 +51,6 @@ if ( $op eq 'acct_form' ) {
         }
     );
     $template->param( vendors => \@vendors );
-    $template->param(
-        code_qualifiers => [
-            {
-                code        => '14',
-                description => 'EAN International',
-            },
-            {
-                code        => '31B',
-                description => 'US SAN Agency',
-            },
-            {
-                code        => '91',
-                description => 'Assigned by supplier',
-            },
-            {
-                code        => '92',
-                description => 'Assigned by buyer',
-            },
-        ]
-    );
-
 }
 elsif ( $op eq 'delete_confirm' ) {
     show_account();
@@ -128,6 +107,27 @@ else {
     );
     $template->param( ediaccounts => \@ediaccounts );
 }
+
+$template->param(
+    code_qualifiers => [
+        {
+            code        => '14',
+            description => 'EAN International',
+        },
+        {
+            code        => '31B',
+            description => 'US SAN Agency',
+        },
+        {
+            code        => '91',
+            description => 'Assigned by supplier',
+        },
+        {
+            code        => '92',
+            description => 'Assigned by buyer',
+        },
+    ]
+);
 
 output_html_with_http_headers( $input, $cookie, $template->output );
 

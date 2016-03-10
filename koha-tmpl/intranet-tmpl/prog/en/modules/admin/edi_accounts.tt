@@ -127,11 +127,11 @@
      [% FOREACH qualifier IN code_qualifiers %]
         [% IF qualifier.code == account.id_code_qualifier %]
            <option value="[% qualifier.code %]" selected="selected">
-               [% qualifier.description %]
+               [% qualifier.description %] ([% qualifier.code %])
            </option>
         [% ELSE %]
            <option value="[% qualifier.code %]">
-              [% qualifier.description %]
+              [% qualifier.description %] ([% qualifier.code %])
            </option>
         [% END %]
      [% END %]
@@ -174,7 +174,7 @@
 [% END %]
   </li>
   <li>
-     <label for="auto_orders">Automatic ordring (Quotes generate orders without staff intervention): </label>
+     <label for="auto_orders">Automatic ordering (Quotes generate orders without staff intervention): </label>
 [% IF account.auto_orders %]
      <input type="checkbox" name="auto_orders" id="auto_orders" value="[% account.auto_orders %]" checked />
 [% ELSE %]
@@ -233,8 +233,8 @@
        <th>Password</th>
        <th>Download Directory</th>
        <th>Upload Directory</th>
-       <th>id_code_type</th>
-       <th>id_code</th>
+       <th>Qualifier</th>
+       <th>SAN</th>
        <th>Quotes</th>
        <th>Orders</th>
        <th>Invoices</th>
@@ -252,10 +252,17 @@
       <td>[% account.transport %]</td>
       <td>[% account.host %]</td>
       <td>[% account.username %]</td>
-      <td>[% IF account.password %]xxxxx[% END %]</td>
+      <td>[% IF account.password %]*****[% END %]</td>
       <td>[% account.download_directory %]</td>
       <td>[% account.upload_directory %]</td>
-      <td>[% account.id_code_qualifier %]</td>
+      <td>
+         [% FOREACH qualifier IN code_qualifiers %]
+            [% IF qualifier.code == account.id_code_qualifier %]
+                   [% qualifier.description %]
+            [% END %]
+         [% END %]
+         ([% account.id_code_qualifier %])
+     </td>
       <td>[% account.san %]</td>
       [% IF account.quotes_enabled %]
          <td>Y</td>
