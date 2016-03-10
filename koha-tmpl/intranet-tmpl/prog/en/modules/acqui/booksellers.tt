@@ -105,7 +105,7 @@ $(document).ready(function() {
                                     <th class="title-string">Date</th>
                                     <th>Basket group</th>
                                     <th class="title-string">Closed</th>
-                                    <th>&nbsp;</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -155,10 +155,10 @@ $(document).ready(function() {
                                             [% END %]
                                         </td>
                                         <td>
-                                            <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">View</a>
+                                            <a class="btn btn-mini" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]"><i class="fa fa-eye"></i> View</a>
 
                                             [% IF not basket.closedate and supplier.active %]
-                                               | <a id="addtoBasketLabel[% basket.basketno %]" href="#addtoBasket[% basket.basketno %]" role="button" data-toggle="modal">Add to basket</a>
+                                                <a class="btn btn-mini" id="addtoBasketLabel[% basket.basketno %]" href="#addtoBasket[% basket.basketno %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a>
                                                 <!-- Modal -->
                                                 <div id="addtoBasket[% basket.basketno %]" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno %]" aria-hidden="true" data-basketno="[% basket.basketname %]">
                                                     <div class="modal-body">
