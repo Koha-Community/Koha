@@ -85,7 +85,7 @@
             var li_node = $("li.attributes:last");
             var li_clone = $(li_node).clone();
             if ( $(li_clone).find("a.delete").length == 0 ) {
-                $(li_clone).append('<a href="#" title="Delete" class="delete clear-field" onclick="del_attributes(this);return false;">Delete</a>');
+                $(li_clone).append('<a href="#" title="Delete" class="delete" onclick="del_attributes(this);return false;"><i class="fa fa-fw fa-trash"></i> Delete</a>');
             }
             $(li_clone).find('select[name="patron_attributes"]').change(function() {
                 updateAttrValues(this);
@@ -338,7 +338,7 @@
                                             [% END %]
                                             [% IF ( field.type == 'date' ) %]
                                                 <input type="text" name="[% field.name %]" id="[% field.name %]" value="" size="10" maxlength="10" readonly="readonly" class="datepicker" />
-                                                <a href="#" class="clear-field" onclick="clearDate('[% field.name %]');return false;">Clear</a>
+                                                <a href="#" onclick="clearDate('[% field.name %]');return false;"><i class="fa fa-fw fa-trash"></i> Clear</a>
                                             [% END %]
                                             [% IF field.mandatory %]
                                                 <span class="required">Required fields cannot be cleared</span>
@@ -356,7 +356,7 @@
                                                 </label>
                                                 <input type="checkbox" title="check to delete this field" name="disable_input" value="attr0_value" />
                                                 <span class="patron_attributes_value"></span>
-                                                <a href="#" class="clone-field" title="Add an attribute" onclick="add_attributes(); return false;">New</a>
+                                                <a href="#" title="Add an attribute" onclick="add_attributes(); return false;"><i class="fa fa-fw fa-plus"></i> New</a>
                                                 <span class="information_category hint" style="width:25%;float:right;"></span>
                                             </li>
                                         [% END %]

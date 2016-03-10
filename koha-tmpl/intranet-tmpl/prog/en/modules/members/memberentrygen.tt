@@ -1064,9 +1064,9 @@ function select_user(borrowernumber, borrower) {
                             (<label class="yesno" for="[% patron_attribute.form_id %]_password">Password:</label> <input type="password" maxlength="64" value="[% patron_attribute.password %]"
                                    id="[% patron_attribute.form_id %]_password" name="[% patron_attribute.form_id %]_password" />)
                         [% END %]
-                        <a href="#" class="clear-field" onclick="clear_entry(this); return false;">Clear</a>
+                        <a href="#" onclick="clear_entry(this); return false;"><i class="fa fa-fw fa-trash"></i> Clear</a>
                         [% IF ( patron_attribute.repeatable ) %]
-                        <a href="#" class="clone-field" onclick="clone_entry(this); return false;">New</a>
+                        <a href="#" onclick="clone_entry(this); return false;"><i class="fa fa-fw fa-plus"></i> New</a>
                         [% END %]
                 </li>
             [% END %]
