@@ -258,8 +258,8 @@ function CheckRuleForm(f) {
     <td>[% IF ( class_source.used ) %]Yes[% ELSE %]No[% END %]</td>
     <td>[% class_source.sortrule %]</td>
     <td>
-      <a href="[% class_source.script_name %]?op=edit_source&amp;class_source=[% class_source.code |html %]">Edit</a>
-      <a href="[% class_source.script_name %]?op=delete_source&amp;class_source=[% class_source.code |html %]">Delete</a>
+      <a class="btn btn-mini" href="[% class_source.script_name %]?op=edit_source&amp;class_source=[% class_source.code |html %]"><i class="fa fa-pencil"></i> Edit</a>
+      <a class="btn btn-mini" href="[% class_source.script_name %]?op=delete_source&amp;class_source=[% class_source.code |html %]"><i class="fa fa-trash"></i> Delete</a>
     </td>
   </tr>
   [% END %]
@@ -290,8 +290,8 @@ function CheckRuleForm(f) {
     <td>[% class_sort_rule.description %]</td>
     <td>[% class_sort_rule.sort_routine %]</td>
     <td>
-      <a href="[% class_sort_rule.script_name %]?op=edit_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]">Edit</a>
-      <a href="[% class_sort_rule.script_name %]?op=delete_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]">Delete</a>
+      <a class="btn btn-mini" href="[% class_sort_rule.script_name %]?op=edit_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]"><i class="fa fa-pencil"></i> Edit</a>
+      <a class="btn btn-mini" href="[% class_sort_rule.script_name %]?op=delete_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]"><i class="fa fa-trash"></i> Delete</a>
     </td>
   </tr>
   [% END %]
