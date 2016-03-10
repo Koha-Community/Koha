@@ -361,7 +361,7 @@ var holdForPatron = function () {
                         </ul>
                     </div>
                 [% ELSE %]
-                    <div id="placeholdc" class="btn-group"><a class="btn btn-mini placehold" href="#"><i class="fa fa-sticky-note-o""></i> Place hold</a></div>
+                    <div id="placeholdc" class="btn-group"><a class="btn btn-mini placehold" href="#"><i class="fa fa-sticky-note-o"></i> Place hold</a></div>
                 [% END %]
                 [% END %]
 
@@ -371,7 +371,7 @@ var holdForPatron = function () {
     [% ELSE %]
         <div id="searchheader">
 			<form method="post" name="fz3950" class="fz3950bigrpad">
-				<span id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="PopupZ3950(); return false;" /></span>
+                <button class="btn" type="button" id="z3950submit"><i class="fa fa-search"></i> Z39.50/SRU search</button>
 			</form>
             <h3>No results found</h3>
         [% IF ( searchdesc ) %]
