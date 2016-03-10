@@ -574,8 +574,8 @@ function CheckRuleForm(f) {
     <td>[% available_matching_rule.code %]</td>
     <td>[% available_matching_rule.description %]</td>
     <td>
-      <a href="[% available_matching_rule.script_name %]?op=edit_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id |html %]">Edit</a>
-      <a href="[% available_matching_rule.script_name %]?op=delete_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id |html %]">Delete</a>
+      <a class="btn btn-mini" href="[% available_matching_rule.script_name %]?op=edit_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id |html %]"><i class="fa fa-pencil"></i> Edit</a>
+      <a class="btn btn-mini" href="[% available_matching_rule.script_name %]?op=delete_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id |html %]"><i class="fa fa-trash"></i> Delete</a>
     </td>
   </tr>
   [% END %]
