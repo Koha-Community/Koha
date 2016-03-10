@@ -10,22 +10,27 @@ use C4::UsageStats;
 use C4::Log;
 use POSIX qw(strftime);
 
-my ( $help, $verbose, $force );
+my ( $help, $verbose, $force, $quiet );
 GetOptions(
     'h|help'    => \$help,
     'v|verbose' => \$verbose,
     'f|force'   => \$force,
+    'q|quiet'   => \$quiet,
 ) || pod2usage(1);
 
 if ($help) {
     pod2usage(1);
+    exit;
 }
 
 unless ( C4::Context->preference('UsageStats') ) {
+    $quiet && exit;
     pod2usage(
 q|
 The UsageStats system preference is not set.
 If your library wants to share their usage statistics with the Koha community, you have to switch on this system preference
+
+Setting the quiet flag will silence this message.
 |
     );
     exit 1;
@@ -52,7 +57,7 @@ share_usage_with_koha_community.pl - Share your library's usage with the Koha co
 
 =head1 SYNOPSIS
 
-share_usage_with_koha_community.pl [-h|--help] [-v|--verbose]
+share_usage_with_koha_community.pl [-h|--help] [-v|--verbose] [-f|--force] [-q|--quiet]
 
 If the UsageStats system preference is set, you can launch this script to share your usage data
 anonymously with the Koha community.
@@ -83,11 +88,15 @@ Print a brief help message
 
 =item B<-v|--verbose>
 
-Verbose mode.
+Verbose mode
 
 =item B<-f|--force>
 
-Force the update.
+Force the update
+
+=item B<-q|--quiet>
+
+Do not emit "The UsageStats system preference is not set" message
 
 =back
 
