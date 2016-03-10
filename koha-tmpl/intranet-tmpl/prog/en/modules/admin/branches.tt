@@ -19,7 +19,7 @@
     $(document).ready(function() {
         $("#branchest").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumnDefs": [
-                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
             ],
             "iDisplayLength": 10,
             "sPaginationType": "four_button"
@@ -227,8 +227,7 @@ tinyMCE.init({
                     <th>Address</th>
                     <th>Properties</th>
                     <th>IP</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -270,10 +269,8 @@ tinyMCE.init({
                         </td>
                         <td>[% library.branchip %]</td>
                         <td>
-                            <a href="/cgi-bin/koha/admin/branches.pl?op=add_form&amp;branchcode=[% library.branchcode %]">Edit</a>
-                        </td>
-                        <td>
-                            <a href="/cgi-bin/koha/admin/branches.pl?op=delete_confirm&amp;branchcode=[% library.branchcode %]">Delete</a>
+                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?op=add_form&amp;branchcode=[% library.branchcode %]"><i class="fa fa-pencil"></i> Edit</a>
+                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?op=delete_confirm&amp;branchcode=[% library.branchcode %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 [% END %]
@@ -293,8 +290,7 @@ tinyMCE.init({
                             <th>Name</th>
                             <th>Code</th>
                             <th>Description</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -304,10 +300,8 @@ tinyMCE.init({
                                 <td>[% category.categorycode %]</td>
                                 <td>[% category.codedescription %]</td>
                                 <td>
-                                  <a href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=add_form_category">Edit</a>
-                                </td>
-                                <td>
-                                    <a href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=delete_confirm_category">Delete</a>
+                                  <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=add_form_category"><i class="fa fa-pencil"></i> Edit</a>
+                                  <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=delete_confirm_category"><i class="fa fa-trash"></i> Delete</a>
                                 </td>
                             </tr>
                         [% END %]
