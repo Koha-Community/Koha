@@ -1887,7 +1887,7 @@ sub searchResults {
     my $xslsyspref = $interface . "XSLTResultsDisplay";
     my $xslfile = C4::Context->preference($xslsyspref);
     my $lang = C4::Languages::getlanguage();
-    my ($sysxml) = C4::XSLT::_get_xslt_sysprefs();
+    my $sysxml = C4::XSLT::get_xslt_sysprefs();
 
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
@@ -2218,7 +2218,7 @@ sub searchResults {
         # XSLT processing of some stuff
         # we fetched the sysprefs already before the loop through all retrieved record!
         if (!$scan && $xslfile) {
-            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $xslsyspref, 1, \@hiddenitems, $sysxml, $xslfile);
+            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $xslsyspref, 1, \@hiddenitems, $sysxml, $xslfile, $lang);
         # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
         }
 

@@ -160,7 +160,7 @@ sub _get_best_default_xslt_filename {
     return $xslfilename;
 }
 
-sub _get_xslt_sysprefs {
+sub get_xslt_sysprefs {
     my $sysxml = "<sysprefs>\n";
     foreach my $syspref ( qw/ hidelostitems OPACURLOpenInNewWindow
                               DisplayOPACiconsXSLT URLLinkText viewISBD
@@ -188,11 +188,14 @@ sub _get_xslt_sysprefs {
 
 sub XSLTParse4Display {
     my ( $biblionumber, $orig_record, $xslsyspref, $fixamps, $hidden_items, $sysxml, $xslfilename, $lang ) = @_;
-    #my $xslfilename = C4::Context->preference($xslsyspref);
+
+    $sysxml ||= C4::Context->preference($xslsyspref);
+    $xslfilename ||= C4::Context->preference($xslsyspref);
+    $lang ||= C4::Languages::getlanguage();
+
     if ( $xslfilename =~ /^\s*"?default"?\s*$/i ) {
         my $htdocs;
         my $theme;
-        # my $lang = C4::Languages::getlanguage();
         my $xslfile;
         if ($xslsyspref eq "XSLTDetailsDisplay") {
             $htdocs  = C4::Context->config('intrahtdocs');
@@ -219,7 +222,6 @@ sub XSLTParse4Display {
     }
 
     if ( $xslfilename =~ m/\{langcode\}/ ) {
-        my $lang = C4::Languages::getlanguage();
         $xslfilename =~ s/\{langcode\}/$lang/;
     }
 
