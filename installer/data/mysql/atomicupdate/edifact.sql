@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS vendor_edi_accounts (
   KEY shipmentbudget (shipment_budget),
   CONSTRAINT vfk_vendor_id FOREIGN KEY ( vendor_id ) REFERENCES aqbooksellers ( id ),
   CONSTRAINT vfk_shipment_budget FOREIGN KEY ( shipment_budget ) REFERENCES aqbudgets ( budget_id )
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Hold the actual edifact messages with links to associated baskets
 CREATE TABLE IF NOT EXISTS edifact_messages (
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS edifact_messages (
   CONSTRAINT emfk_vendor FOREIGN KEY ( vendor_id ) REFERENCES aqbooksellers ( id ),
   CONSTRAINT emfk_edi_acct FOREIGN KEY ( edi_acct ) REFERENCES vendor_edi_accounts ( id ),
   CONSTRAINT emfk_basketno FOREIGN KEY ( basketno ) REFERENCES aqbasket ( basketno )
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- invoices link back to the edifact message it was generated from
 ALTER TABLE aqinvoices ADD COLUMN message_id INT(11) REFERENCES edifact_messages( id );
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS edifact_ean (
   ean varchar(15) NOT NULL,
   id_code_qualifier VARCHAR(3) NOT NULL DEFAULT '14',
   CONSTRAINT efk_branchcode FOREIGN KEY ( branchcode ) REFERENCES branches ( branchcode )
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Syspref budget to hold shipping costs
 INSERT INTO systempreferences (variable, explanation, type) VALUES('EDIInvoicesShippingBudget','The budget code used to allocate shipping charges to when processing EDI Invoice messages',  'free');
