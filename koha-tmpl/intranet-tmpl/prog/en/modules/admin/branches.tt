@@ -337,7 +337,8 @@ tinyMCE.init({
                         [% category.categorycode %]
                     [% ELSE %]
                         <label for="categorycode">Category code:</label>
-                        <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" />
+                        <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" class="required" required="required" />
+                        <span class="required">Required</span>
                     [% END %]
                 </li>
                 <li>
