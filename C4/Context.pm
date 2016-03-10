@@ -513,18 +513,12 @@ with this method.
 =cut
 
 my $syspref_cache = Koha::Cache->get_instance();
-my %syspref_L1_cache;
 my $use_syspref_cache = 1;
 sub preference {
     my $self = shift;
     my $var  = shift;    # The system preference to return
 
     $var = lc $var;
-
-    # Return the value if the var has already been accessed
-    if ($use_syspref_cache && exists $syspref_L1_cache{$var}) {
-        return $syspref_L1_cache{$var};
-    }
 
     my $cached_var = $use_syspref_cache
         ? $syspref_cache->get_from_cache("syspref_$var")
@@ -542,7 +536,6 @@ sub preference {
 
     if ( $use_syspref_cache ) {
         $syspref_cache->set_in_cache("syspref_$var", $value);
-        $syspref_L1_cache{$var} = $value;
     }
     return $value;
 }
@@ -598,11 +591,6 @@ will not be seen by this process.
 sub clear_syspref_cache {
     return unless $use_syspref_cache;
     $syspref_cache->flush_all;
-    clear_syspref_L1_cache()
-}
-
-sub clear_syspref_L1_cache {
-    %syspref_L1_cache = ();
 }
 
 =head2 set_preference
@@ -655,7 +643,6 @@ sub set_preference {
 
     if ( $use_syspref_cache ) {
         $syspref_cache->set_in_cache( "syspref_$variable", $value );
-        $syspref_L1_cache{$variable} = $value;
     }
 
     return $syspref;
@@ -677,7 +664,6 @@ sub delete_preference {
     if ( Koha::Config::SysPrefs->find( $var )->delete ) {
         if ( $use_syspref_cache ) {
             $syspref_cache->clear_from_cache("syspref_$var");
-            delete $syspref_L1_cache{$var};
         }
 
         return 1;

@@ -46,6 +46,8 @@ use base qw(Class::Accessor);
 __PACKAGE__->mk_ro_accessors(
     qw( cache memcached_cache fastmmap_cache memory_cache ));
 
+our %L1_cache;
+
 =head2 get_instance
 
     my $cache = Koha::Cache->get_instance();
@@ -277,6 +279,10 @@ sub set_in_cache {
     my $expiry = $options->{expiry};
     $expiry //= $self->{timeout};
     my $set_sub = $self->{ref($self->{$cache}) . "_set"};
+
+    # Set in L1 cache
+    $L1_cache{ $key } = $value;
+
     # We consider an expiry of 0 to be inifinite
     if ( $expiry ) {
         return $set_sub
@@ -305,6 +311,10 @@ sub get_from_cache {
     croak "No key" unless $key;
     $ENV{DEBUG} && carp "get_from_cache for $key";
     return unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
+
+    # Return L1 cache value if exists
+    return $L1_cache{$key} if exists $L1_cache{$key};
+
     my $get_sub = $self->{ref($self->{$cache}) . "_get"};
     return $get_sub ? $get_sub->($key) : $self->{$cache}->get($key);
 }
@@ -323,6 +333,10 @@ sub clear_from_cache {
     $cache ||= 'cache';
     croak "No key" unless $key;
     return unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
+
+    # Clear from L1 cache
+    delete $L1_cache{$key};
+
     return $self->{$cache}->delete($key)
       if ( ref( $self->{$cache} ) =~ m'^Cache::Memcached' );
     return $self->{$cache}->remove($key);
@@ -340,9 +354,17 @@ sub flush_all {
     my ( $self, $cache ) = shift;
     $cache ||= 'cache';
     return unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
+
+    $self->flush_L1_cache();
+
     return $self->{$cache}->flush_all()
       if ( ref( $self->{$cache} ) =~ m'^Cache::Memcached' );
     return $self->{$cache}->clear();
+}
+
+sub flush_L1_cache {
+    my( $self ) = @_;
+    %L1_cache = ();
 }
 
 =head1 TIED INTERFACE
