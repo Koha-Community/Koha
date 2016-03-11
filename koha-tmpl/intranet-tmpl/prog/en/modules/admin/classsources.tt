@@ -247,8 +247,8 @@ function CheckRuleForm(f) {
   <tr>
     <th>Code</th>
     <th>Description</th>
-    <th>In Use</th>
-    <th>Filing Rule</th>
+    <th>In use</th>
+    <th>Filing rule</th>
     <th>Actions</th>
   </tr>
   [% FOREACH class_source IN class_sources %]
@@ -257,7 +257,7 @@ function CheckRuleForm(f) {
     <td>[% class_source.description %]</td>
     <td>[% IF ( class_source.used ) %]Yes[% ELSE %]No[% END %]</td>
     <td>[% class_source.sortrule %]</td>
-    <td>
+    <td class="actions">
       <a class="btn btn-mini" href="[% class_source.script_name %]?op=edit_source&amp;class_source=[% class_source.code |html %]"><i class="fa fa-pencil"></i> Edit</a>
       <a class="btn btn-mini" href="[% class_source.script_name %]?op=delete_source&amp;class_source=[% class_source.code |html %]"><i class="fa fa-trash"></i> Delete</a>
     </td>
@@ -289,7 +289,7 @@ function CheckRuleForm(f) {
     <td>[% class_sort_rule.rule %]</td>
     <td>[% class_sort_rule.description %]</td>
     <td>[% class_sort_rule.sort_routine %]</td>
-    <td>
+    <td class="actions">
       <a class="btn btn-mini" href="[% class_sort_rule.script_name %]?op=edit_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]"><i class="fa fa-pencil"></i> Edit</a>
       <a class="btn btn-mini" href="[% class_sort_rule.script_name %]?op=delete_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]"><i class="fa fa-trash"></i> Delete</a>
     </td>
