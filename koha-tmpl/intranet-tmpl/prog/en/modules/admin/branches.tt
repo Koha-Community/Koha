@@ -268,7 +268,7 @@ tinyMCE.init({
                             [% END %]
                         </td>
                         <td>[% library.branchip %]</td>
-                        <td>
+                        <td class="actions">
                             <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?op=add_form&amp;branchcode=[% library.branchcode %]"><i class="fa fa-pencil"></i> Edit</a>
                             <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?op=delete_confirm&amp;branchcode=[% library.branchcode %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
@@ -299,7 +299,7 @@ tinyMCE.init({
                                 <td>[% category.categoryname %]</td>
                                 <td>[% category.categorycode %]</td>
                                 <td>[% category.codedescription %]</td>
-                                <td>
+                                <td class="actions">
                                   <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=add_form_category"><i class="fa fa-pencil"></i> Edit</a>
                                   <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=delete_confirm_category"><i class="fa fa-trash"></i> Delete</a>
                                 </td>
