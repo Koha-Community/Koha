@@ -1,23 +1,23 @@
 -- Holds details for vendors supplying goods by EDI
 CREATE TABLE IF NOT EXISTS vendor_edi_accounts (
-  id int(11) NOT NULL auto_increment,
-  description text NOT NULL,
-  host varchar(40),
-  username varchar(40),
-  password varchar(40),
-  last_activity date,
-  vendor_id int(11) references aqbooksellers( id ),
-  download_directory text,
-  upload_directory text,
-  san varchar(20),
-  id_code_qualifier varchar(3) default '14',
-  transport varchar(6) default 'FTP',
-  quotes_enabled tinyint(1) not null default 0,
-  invoices_enabled tinyint(1) not null default 0,
-  orders_enabled tinyint(1) not null default 0,
-  responses_enabled tinyint(1) not null default 0,
-  auto_orders tinyint(1) not null default 0,
-  shipment_budget integer(11) references aqbudgets( budget_id ),
+  id INT(11) NOT NULL auto_increment,
+  description TEXT NOT NULL,
+  host VARCHAR(40),
+  username VARCHAR(40),
+  password VARCHAR(40),
+  last_activity DATE,
+  vendor_id INT(11) REFERENCES aqbooksellers( id ),
+  download_directory TEXT,
+  upload_directory TEXT,
+  san VARCHAR(20),
+  id_code_qualifier VARCHAR(3) default '14',
+  transport VARCHAR(6) default 'FTP',
+  quotes_enabled TINYINT(1) not null default 0,
+  invoices_enabled TINYINT(1) not null default 0,
+  orders_enabled TINYINT(1) not null default 0,
+  responses_enabled TINYINT(1) not null default 0,
+  auto_orders TINYINT(1) not null default 0,
+  shipment_budget INTEGER(11) REFERENCES aqbudgets( budget_id ),
   PRIMARY KEY  (id),
   KEY vendorid (vendor_id),
   KEY shipmentbudget (shipment_budget),
@@ -27,16 +27,16 @@ CREATE TABLE IF NOT EXISTS vendor_edi_accounts (
 
 -- Hold the actual edifact messages with links to associated baskets
 CREATE TABLE IF NOT EXISTS edifact_messages (
-  id int(11) NOT NULL auto_increment,
-  message_type varchar(10) NOT NULL,
-  transfer_date date,
-  vendor_id int(11) references aqbooksellers( id ),
-  edi_acct  integer references vendor_edi_accounts( id ),
-  status text,
-  basketno int(11) REFERENCES aqbasket( basketno),
-  raw_msg mediumtext,
-  filename text,
-  deleted boolean not null default 0,
+  id INT(11) NOT NULL auto_increment,
+  message_type VARCHAR(10) NOT NULL,
+  transfer_date DATE,
+  vendor_id INT(11) REFERENCES aqbooksellers( id ),
+  edi_acct  INTEGER REFERENCES vendor_edi_accounts( id ),
+  status TEXT,
+  basketno INT(11) REFERENCES aqbasket( basketno),
+  raw_msg MEDIUMTEXT,
+  filename TEXT,
+  deleted BOOLEAN NOT NULL DEFAULT 0,
   PRIMARY KEY  (id),
   KEY vendorid ( vendor_id),
   KEY ediacct (edi_acct),
@@ -54,19 +54,20 @@ ALTER TABLE aqinvoices ADD CONSTRAINT edifact_msg_fk FOREIGN KEY ( message_id ) 
 
 -- Hold the supplier ids from quotes for ordering
 -- although this is an EAN-13 article number the standard says 35 characters ???
-ALTER TABLE aqorders ADD COLUMN line_item_id varchar(35);
+ALTER TABLE aqorders ADD COLUMN line_item_id VARCHAR(35);
 
 -- The suppliers unique reference usually a quotation line number ('QLI')
 -- Otherwise Suppliers unique orderline reference ('SLI')
-ALTER TABLE aqorders ADD COLUMN suppliers_reference_number varchar(35);
-ALTER TABLE aqorders ADD COLUMN suppliers_reference_qualifier varchar(3);
+ALTER TABLE aqorders ADD COLUMN suppliers_reference_number VARCHAR(35);
+ALTER TABLE aqorders ADD COLUMN suppliers_reference_qualifier VARCHAR(3);
 ALTER TABLE aqorders ADD COLUMN suppliers_report text;
 
 -- hold the EAN/SAN used in ordering
 CREATE TABLE IF NOT EXISTS edifact_ean (
-  ee_id integer(11) unsigned not null auto_increment primary key,
+  ee_id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  description VARCHAR(128) NULL DEFAULT NULL,
   branchcode VARCHAR(10) NOT NULL REFERENCES branches (branchcode),
-  ean varchar(15) NOT NULL,
+  ean VARCHAR(15) NOT NULL,
   id_code_qualifier VARCHAR(3) NOT NULL DEFAULT '14',
   CONSTRAINT efk_branchcode FOREIGN KEY ( branchcode ) REFERENCES branches ( branchcode )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

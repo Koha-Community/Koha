@@ -52,8 +52,8 @@
 <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" name="Eanform" method="post">
   <input type="hidden" name="op" value="save" />
   [% IF ean %]
-      <input type="hidden" name="oldbranchcode" value="[% branchcode %]" />
-      <input type="hidden" name="oldean" value="[% ean %]" />
+      <input type="hidden" name="oldbranchcode" value="[% ean.branch.branchcode %]" />
+      <input type="hidden" name="oldean" value="[% ean.ean %]" />
   [% END %]
 
   <fieldset class="rows">
@@ -79,8 +79,12 @@
               </select>
           </li>
           <li>
+             <label for="description">Description: </label>
+             <input type="text" name="description" id="description" size="30" maxlength="64" value="[% ean.description %]" />
+          </li>
+          <li>
              <label for="ean">EAN: </label>
-             <input type="text" name="ean" id="ean`" size="20" maxlength="90" value="[% ean.ean %]" />
+             <input type="text" name="ean" id="ean" size="20" maxlength="90" value="[% ean.ean %]" />
           </li>
           <li>
              <label for="id_code_qualifier">Qualifier: </label>
@@ -128,6 +132,7 @@
     <table>
         <tr>
             <th>Library</th>
+            <th>Description</th>
             <th>EAN</th>
             <th>Qualifier</th>
             <th>Actions</th>
@@ -135,6 +140,7 @@
         [% FOREACH ean IN eans %]
             [% IF loop.even %]<tr>[% ELSE %]<tr class="highlight">[% END %]
                 <td>[% ean.branch.branchname %]</td>
+                <td>[% ean.description %]</td>
                 <td>[% ean.ean %]</td>
                 <td>
                  [% FOREACH qualifier IN code_qualifiers %]

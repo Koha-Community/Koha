@@ -26,9 +26,14 @@ __PACKAGE__->table("edifact_ean");
 =head2 ee_id
 
   data_type: 'integer'
-  extra: {unsigned => 1}
   is_auto_increment: 1
   is_nullable: 0
+
+=head2 description
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 128
 
 =head2 branchcode
 
@@ -54,12 +59,9 @@ __PACKAGE__->table("edifact_ean");
 
 __PACKAGE__->add_columns(
   "ee_id",
-  {
-    data_type => "integer",
-    extra => { unsigned => 1 },
-    is_auto_increment => 1,
-    is_nullable => 0,
-  },
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+  "description",
+  { data_type => "varchar", is_nullable => 1, size => 128 },
   "branchcode",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 10 },
   "ean",
@@ -98,8 +100,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-06-12 10:22:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WWcMBSXeuzgCPqM0KMxfBg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-11 12:04:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wziFbge4g2Ek1lc8Anto+Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

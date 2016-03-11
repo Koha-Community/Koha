@@ -118,6 +118,7 @@ sub addsubmit {
     my $new_ean = $schema->resultset('EdifactEan')->new(
         {
             branchcode        => $input->param('branchcode'),
+            description       => $input->param('description'),
             ean               => $input->param('ean'),
             id_code_qualifier => $input->param('id_code_qualifier'),
         }
@@ -127,6 +128,7 @@ sub addsubmit {
 }
 
 sub editsubmit {
+    warn "DESC: " . $input->param('description');
     $schema->resultset('EdifactEan')->search(
         {
             branchcode => $input->param('oldbranchcode'),
@@ -135,6 +137,7 @@ sub editsubmit {
       )->update_all(
         {
             branchcode        => $input->param('branchcode'),
+            description       => $input->param('description'),
             ean               => $input->param('ean'),
             id_code_qualifier => $input->param('id_code_qualifier'),
         }
