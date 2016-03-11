@@ -42,7 +42,13 @@ sub store {
     my $result;
     $self->_result->result_source->schema->txn_do( sub {
         if ( $self->active ) {
-            my @currencies = Koha::Acquisition::Currencies->search;
+            # Remove the active flag from all other active currencies
+            my @currencies = Koha::Acquisition::Currencies->search(
+                {
+                    currency => { '!=' => $self->currency },
+                    active => 1,
+                }
+            );
             for my $currency ( @currencies ) {
                 $currency->active(0);
                 $currency->store;
