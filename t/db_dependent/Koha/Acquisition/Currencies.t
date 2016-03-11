@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Koha::Database;
 use Koha::Acquisition::Currency;
 use Koha::Acquisition::Currencies;
@@ -55,6 +55,10 @@ my $new_currency_2 = Koha::Acquisition::Currency->new({
 is( Koha::Acquisition::Currencies->search->count, $nb_of_currencies + 2, 'The 2 currencies should have been added' );
 my $retrieved_currency_2 = Koha::Acquisition::Currencies->find( $new_currency_2->currency );
 is( $retrieved_currency_2->active, 1, 'Active should have been set to 1' );
+
+$retrieved_currency_2->store;
+$retrieved_currency_2 = Koha::Acquisition::Currencies->find( $new_currency_2->currency );
+is( $retrieved_currency_2->active, 1, 'Editing the existing active currency should not remove its active flag' );
 
 my $active_currency = Koha::Acquisition::Currencies->get_active;
 is ( $active_currency->currency, $retrieved_currency_2->currency, 'The active currency should be the last one marked as active' );
