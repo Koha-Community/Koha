@@ -80,7 +80,7 @@ subtest 'guarantees' => sub {
 subtest 'siblings' => sub {
     plan tests => 7;
     my $siblings = $new_patron_1->siblings;
-    is( ref($siblings), 'Koha::Patrons', 'Koha::Patron->siblings should not crashed if the patron has not guarantor' );
+    is( $siblings, undef, 'Koha::Patron->siblings should not crashed if the patron has no guarantor' );
     my $guarantee_1 = $builder->build( { source => 'Borrower', value => { guarantorid => $new_patron_1->borrowernumber } } );
     my $retrieved_guarantee_1 = Koha::Patrons->find($guarantee_1);
     $siblings = $retrieved_guarantee_1->siblings;
