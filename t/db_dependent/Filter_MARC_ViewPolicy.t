@@ -29,15 +29,19 @@ use List::MoreUtils qw/any/;
 use MARC::Record;
 use MARC::Field;
 use C4::Context;
+use C4::Biblio;
 use Koha::Cache qw/flush_all/;
 use Koha::Database;
-use English qw/-no_match_vars/;
-
-$OUTPUT_AUTOFLUSH = 1;
 
 BEGIN {
     use_ok('Koha::RecordProcessor');
 }
+
+my $dbh = C4::Context->dbh;
+
+my $database = Koha::Database->new();
+my $schema   = $database->schema();
+$dbh->{RaiseError} = 1;
 
 sub run_hiding_tests {
 
@@ -54,23 +58,17 @@ sub run_hiding_tests {
         'intranet' => [ -8, -7, -4, -3, -2, 2, 3, 5, 8 ]
     };
 
-    my $dbh = C4::Context->dbh;
-
-    my $database = Koha::Database->new();
-    my $schema   = $database->schema();
-    $dbh->{RaiseError} = 1;
-
-    #$ENV{'DEBUG'} = '1'; # Turn on debugging.
-
+    my ( $isbn_field, $isbn_subfield ) =
+      GetMarcFromKohaField( 'biblioitems.isbn', q{} );
+    my $update_sql =
+        q{UPDATE marc_subfield_structure SET hidden=? }
+      . q{WHERE tagfield='}
+      . $isbn_field
+      . q{' OR }
+      . q{      tagfield='008';};
+    my $sth = $dbh->prepare($update_sql);
     foreach my $hidden_value (@valid_hidden_values) {
 
-        $schema->storage->txn_begin();
-
-        my $update_sql =
-            q{UPDATE marc_subfield_structure SET hidden=? }
-          . q{WHERE tagfield='020' OR }
-          . q{      tagfield='008';};
-        my $sth = $dbh->prepare($update_sql);
         $sth->execute($hidden_value);
 
         my $cache = Koha::Cache->get_instance();
@@ -139,21 +137,24 @@ sub run_hiding_tests {
                 'Records are the same' );
         }
 
-        $schema->storage->txn_rollback();
     }
     return;
 }
 
 sub create_marc_record {
 
+    my ( $title_field, $title_subfield ) =
+      GetMarcFromKohaField( 'biblio.title', q{} );
+    my ( $isbn_field, $isbn_subfield ) =
+      GetMarcFromKohaField( 'biblioitems.isbn', q{} );
     my $isbn        = '0590353403';
     my $title       = 'Foundation';
     my $marc_record = MARC::Record->new;
     my @fields      = (
         MARC::Field->new( '003', 'AR-CdUBM' ),
         MARC::Field->new( '008', '######suuuu####ag_||||__||||_0||_|_uuu|d' ),
-        MARC::Field->new( '020', q{}, q{}, 'a' => $isbn ),
-        MARC::Field->new( '245', q{}, q{}, 'a' => $title ),
+        MARC::Field->new( $isbn_field,  q{}, q{}, $isbn_subfield  => $isbn ),
+        MARC::Field->new( $title_field, q{}, q{}, $title_subfield => $title ),
     );
 
     $marc_record->insert_fields_ordered(@fields);
@@ -165,14 +166,18 @@ subtest 'Koha::Filter::MARC::ViewPolicy opac tests' => sub {
 
     plan tests => 102;
 
+    $schema->storage->txn_begin();
     run_hiding_tests('opac');
+    $schema->storage->txn_rollback();
 };
 
 subtest 'Koha::Filter::MARC::ViewPolicy intranet tests' => sub {
 
     plan tests => 102;
 
+    $schema->storage->txn_begin();
     run_hiding_tests('intranet');
+    $schema->storage->txn_rollback();
 };
 
 1;
