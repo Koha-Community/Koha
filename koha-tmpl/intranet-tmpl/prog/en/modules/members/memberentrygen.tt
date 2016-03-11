@@ -691,7 +691,26 @@ $(document).ready(function() {
             [% END %]
         </li>
     [% END %]
-	</ol>
+    [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
+      <li><label for="checkprevcheckout">Check for previous checkouts: </label>
+        <select name="checkprevcheckout" id="checkprevcheckout">
+        [% IF ( checkprevcheckout == 'yes' ) %]
+          <option value="yes" selected="selected">Yes if settings allow it</option>
+          <option value="no">No if settings allow it</option>
+          <option value="inherit">Inherit from settings</option>
+        [% ELSIF ( checkprevcheckout == 'no' ) %]
+          <option value="yes">Yes if settings allow it</option>
+          <option value="no" selected="selected">No if settings allow it</option>
+          <option value="inherit">Inherit from settings</option>
+        [% ELSE %]
+          <option value="yes">Yes if settings allow it</option>
+          <option value="no">No if settings allow it</option>
+          <option value="inherit" selected="selected">Inherit from settings</option>
+        [% END %]
+        </select>
+       </li>
+     [% END %]
+   </ol>
   </fieldset>
     [% UNLESS nodateenrolled &&  noopacnote && noborrowernotes %]
 	<fieldset class="rows" id="memberentry_subscription">

@@ -1,6 +1,7 @@
 package Koha::Patron;
 
 # Copyright ByWater Solutions 2014
+# Copyright PTFS Europe 2016
 #
 # This file is part of Koha.
 #
@@ -21,9 +22,13 @@ use Modern::Perl;
 
 use Carp;
 
+use C4::Context;
 use Koha::Database;
-use Koha::Patrons;
+use Koha::Issues;
+use Koha::OldIssues;
+use Koha::Patron::Categories;
 use Koha::Patron::Images;
+use Koha::Patrons;
 
 use base qw(Koha::Object);
 
@@ -95,6 +100,74 @@ sub siblings {
     );
 }
 
+=head3 wantsCheckPrevCheckout
+
+    $wantsCheckPrevCheckout = $patron->wantsCheckPrevCheckout;
+
+Return 1 if Koha needs to perform PrevIssue checking, else 0.
+
+=cut
+
+sub wantsCheckPrevCheckout {
+    my ( $self ) = @_;
+    my $syspref = C4::Context->preference("checkPrevCheckout");
+
+    # Simple cases
+    ## Hard syspref trumps all
+    return 1 if ($syspref eq 'hardyes');
+    return 0 if ($syspref eq 'hardno');
+    ## Now, patron pref trumps all
+    return 1 if ($self->checkprevcheckout eq 'yes');
+    return 0 if ($self->checkprevcheckout eq 'no');
+
+    # More complex: patron inherits -> determine category preference
+    my $checkPrevCheckoutByCat = Koha::Patron::Categories
+        ->find($self->categorycode)->checkprevcheckout;
+    return 1 if ($checkPrevCheckoutByCat eq 'yes');
+    return 0 if ($checkPrevCheckoutByCat eq 'no');
+
+    # Finally: category preference is inherit, default to 0
+    if ($syspref eq 'softyes') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+=head3 doCheckPrevCheckout
+
+    $checkPrevCheckout = $patron->doCheckPrevCheckout($item);
+
+Return 1 if the bib associated with $ITEM has previously been checked out to
+$PATRON, 0 otherwise.
+
+=cut
+
+sub doCheckPrevCheckout {
+    my ( $self, $item ) = @_;
+
+    # Find all items for bib and extract item numbers.
+    my @items = Koha::Items->search({biblionumber => $item->{biblionumber}});
+    my @item_nos;
+    foreach my $item (@items) {
+        push @item_nos, $item->itemnumber;
+    }
+
+    # Create (old)issues search criteria
+    my $criteria = {
+        borrowernumber => $self->borrowernumber,
+        itemnumber => \@item_nos,
+    };
+
+    # Check current issues table
+    my $issues = Koha::Issues->search($criteria);
+    return 1 if $issues->count; # 0 || N
+
+    # Check old issues table
+    my $old_issues = Koha::OldIssues->search($criteria);
+    return $old_issues->count;  # 0 || N
+}
+
 =head3 type
 
 =cut
@@ -106,6 +179,7 @@ sub _type {
 =head1 AUTHOR
 
 Kyle M Hall <kyle@bywatersolutions.com>
+Alex Sassmannshausen <alex.sassmannshausen@ptfs-europe.com>
 
 =cut
 

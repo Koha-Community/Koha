@@ -44,6 +44,15 @@ Patrons:
            class: multi
          - (separate multiple choices with |)
      -
+         - pref: CheckPrevCheckout
+           default: no
+           choices:
+               hardyes: "Do"
+               softyes: "Unless overridden, do"
+               softno: "Unless overridden, do not"
+               hardno: "Do not"
+         - " check borrower checkout history to see if the current item has been checked out before."
+     -
          - pref: checkdigit
            choices:
                none: "Don't"

@@ -189,6 +189,28 @@
                         Choose whether patrons of this category be blocked from public catalog actions such as renewing and placing holds when their cards have expired.
                     </span>
                 </li>
+                [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' )  %]
+                  <li><label for="checkprevcheckout">Check for previous checkouts: </label>
+                      <select name="checkprevcheckout" id="checkprevcheckout">
+                          [% IF category.checkprevcheckout == 'yes' %]
+                          <option value="yes" selected="selected">Yes and try to override system preferences</option>
+                          <option value="no">No and try to override system preferences</option>
+                          <option value="inherit">Inherit from system preferences</option>
+                          [% ELSIF category.checkprevcheckout == 'no' %]
+                          <option value="yes">Yes and try to override system preferences</option>
+                          <option value="no" selected="selected">No and try to override system preferences</option>
+                          <option value="inherit">Inherit from system preferences</option>
+                          [% ELSE %]
+                          <option value="yes">Yes and try to override system preferences</option>
+                          <option value="no">No and try to override system preferences</option>
+                          <option value="inherit" selected="selected">Inherit from system preferences</option>
+                          [% END %]
+                      </select>
+                      <span>
+                          Choose whether patrons of this category by default are reminded if they try to borrow an item they borrowed before.
+                      </span>
+                  </li>
+                [% END %]
                 <li>
                     <label for="default_privacy">Default privacy: </label>
                     <select id="default_privacy" name="default_privacy">
@@ -261,6 +283,22 @@
                 <tr><th scope="row">Receives overdue notices: </th><td>[% IF category. overduenoticerequired %]Yes[% ELSE %]No[% END %]</td></tr>
                 <tr><th scope="row">Lost items in staff client</th><td>[% IF category.hidelostitems %]Hidden by default[% ELSE %]Shown[% END %]</td></tr>
                 <tr><th scope="row">Hold fee: </th><td>[% category.reservefee | $Price %]</td></tr>
+
+                [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
+                  <tr>
+                      <th scope="row">Check previous checkouts: </th>
+                      <td>
+                          [% SWITCH category.checkprevcheckout %]
+                          [% CASE 'yes' %]
+                              Yes
+                          [% CASE 'no' %]
+                              No
+                          [% CASE 'inherit' %]
+                              Inherit
+                          [% END %]
+                      </td>
+                  </tr>
+                [% END %]
                 <tr>
                     <th scope="row">Default privacy: </th>
                     <td>
@@ -317,6 +355,9 @@
                     <th scope="col">Messaging</th>
                     [% END %]
                     <th scope="col">Branches limitations</th>
+                    [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
+                    <th scope="col">Check previous checkout?</th>
+                    [% END %]
                     <th scope="col">Default privacy</th>
                     <th scope="col">Actions</th>
                 </tr>
@@ -393,6 +434,18 @@
                                 No limitation
                             [% END %]
                         </td>
+                        [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
+                          <td>
+                              [% SWITCH category.checkprevcheckout %]
+                              [% CASE 'yes' %]
+                              Yes
+                              [% CASE 'no' %]
+                              No
+                              [% CASE 'inherit' %]
+                              Inherit
+                              [% END %]
+                          </td>
+                        [% END %]
                         <td>
                             [% SWITCH category.default_privacy %]
                             [% CASE 'default' %]
