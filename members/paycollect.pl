@@ -140,7 +140,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
     $total_paid = '0.00';    #TODO not right with pay_individual
 }
 
-borrower_add_additional_fields($borrower);
+borrower_add_additional_fields($borrower, $template);
 
 $template->param(%$borrower);
 
@@ -156,7 +156,7 @@ $template->param(
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub borrower_add_additional_fields {
-    my $b_ref = shift;
+    my ( $b_ref, $template ) = @_;
 
 # some borrower info is not returned in the standard call despite being assumed
 # in a number of templates. It should not be the business of this script but in lieu of
@@ -175,11 +175,11 @@ sub borrower_add_additional_fields {
         $b_ref->{adultborrower} = 1;
     }
 
-    my ($picture, $dberror) = GetPatronImage($borrower->{'borrowernumber'});
+    my ($picture, $dberror) = GetPatronImage($b_ref->{'borrowernumber'});
     $template->param( picture => 1 ) if $picture;
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
-        $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);
+        $b_ref->{extendedattributes} = GetBorrowerAttributes($b_ref->{borrowernumber});
     }
 
     my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
