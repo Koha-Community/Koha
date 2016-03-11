@@ -12,7 +12,7 @@ $(document).ready(function() {
     $("#lettert:has(tbody tr)").dataTable($.extend(true, {}, dataTablesDefaults, {
         "sDom": 't',
         "aoColumnDefs": [
-            { "aTargets": [ -1,-2, -3 ], "bSortable": false, "bSearchable": false }
+            { "bSortable": false, "bSearchable": false, 'aTargets': [ 'nosort' ] }
         ],
         "bPaginate": false
     }));
@@ -199,8 +199,8 @@ $(document).ready(function() {
                 <th>Module</th>
                 <th>Code</th>
                 <th>Name</th>
-                <th>Copy notice</th>
-                <th>Actions</th>
+                <th class="nosort">Copy notice</th>
+                <th class="nosort">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -211,7 +211,7 @@ $(document).ready(function() {
                   <td>[% lette.module %]</td>
                   <td>[% lette.code %]</td>
                   <td>[% lette.name %]</td>
-                  <td style="white-space: nowrap">
+                  <td class="actions">
                     [% IF !independant_branch || !lette.branchcode %]
                       <form method="post" action="/cgi-bin/koha/tools/letter.pl">
                         <input type="hidden" name="op" value="copy_form" />
@@ -227,7 +227,7 @@ $(document).ready(function() {
                       </form>
                     [% END %]
                   </td>
-                  <td style="white-space: nowrap">
+                  <td class="actions">
                     [% IF can_edit %]
                       <a class="btn btn-mini" href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;branchcode=[% lette.branchcode %]&amp;module=[% lette.module %]&amp;code=[% lette.code %]"><i class="fa fa-pencil"></i> Edit</a>
                     [% END %]
