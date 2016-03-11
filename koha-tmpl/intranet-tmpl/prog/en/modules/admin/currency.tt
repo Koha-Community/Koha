@@ -190,7 +190,7 @@
             <td><span title="[% currency.timestamp %]">[% currency.timestamp | $KohaDates %]</span></td>
             <td style="color:green;">[% IF currency.active %]✓[% END %]</td>
             <td>[% IF currency.archived %]Yes[% END %]</td>
-            <td>
+            <td class="actions">
               <a class="btn btn-mini" href="/cgi-bin/koha/admin/currency.pl?op=add_form&amp;currency_code=[% currency.currency %]"><i class="fa fa-pencil"></i> Edit</a>
               <a class="btn btn-mini" href="/cgi-bin/koha/admin/currency.pl?op=delete_confirm&amp;currency_code=[% currency.currency %]"><i class="fa fa-trash"></i> Delete</a>
             </td>
