@@ -127,7 +127,7 @@ sub interchange_header {
 
     # syntax identifier
     my $hdr =
-      'UNB+UNOC:3';    # controling agency character set syntax version number
+      'UNB+UNOC:3';    # controlling agency character set syntax version number
                        # Interchange Sender
     $hdr .= _interchange_sr_identifier( $self->{sender}->ean,
         $self->{sender}->id_code_qualifier );    # interchange sender
@@ -714,7 +714,8 @@ Make handling of GIR segments more customizable
 
 =head2 trailing_service_segments
 
-   Include the service segments occuring at the end of the message
+   Include the service segments occurring at the end of the message
+
 =head2 interchange_control_reference
 
    Returns the unique interchange control reference as a 14 digit number

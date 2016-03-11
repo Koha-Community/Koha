@@ -346,12 +346,12 @@ sub receipt_items {
         }
         push @{ $branch_map{$b} }, $item;
     }
-    my $gir_occurence = 0;
-    while ( $gir_occurence < $quantity ) {
-        my $branch = $inv_line->girfield( 'branch', $gir_occurence );
+    my $gir_occurrence = 0;
+    while ( $gir_occurrence < $quantity ) {
+        my $branch = $inv_line->girfield( 'branch', $gir_occurrence );
         my $item = shift @{ $branch_map{$branch} };
         if ($item) {
-            my $barcode = $inv_line->girfield( 'barcode', $gir_occurence );
+            my $barcode = $inv_line->girfield( 'barcode', $gir_occurrence );
             if ( $barcode && !$item->barcode ) {
                 my $rs = $schema->resultset('Item')->search(
                     {
@@ -373,7 +373,7 @@ sub receipt_items {
         else {
             $logger->warn("Unmatched item at branch:$branch");
         }
-        ++$gir_occurence;
+        ++$gir_occurrence;
     }
     return;
 
@@ -657,20 +657,20 @@ sub quote_item {
     }
 
     if ( $order_quantity == 1 && $item->quantity > 1 ) {
-        my $occurence = 1;    # occ zero already added
-        while ( $occurence < $item->quantity ) {
+        my $occurrence = 1;    # occ zero already added
+        while ( $occurrence < $item->quantity ) {
 
             # check budget code
             $budget = _get_budget( $schema,
-                $item->girfield( 'fund_allocation', $occurence ) );
+                $item->girfield( 'fund_allocation', $occurrence ) );
 
             if ( !$budget ) {
                 my $bad_budget =
-                  $item->girfield( 'fund_allocation', $occurence );
+                  $item->girfield( 'fund_allocation', $occurrence );
                 carp 'Skipping line with no budget info';
                 $logger->trace(
                     "girfield skipped for invalid budget:$bad_budget");
-                ++$occurence;    ## lets look at the next one not this one again
+                ++$occurrence;    ## lets look at the next one not this one again
                 next;
             }
 
@@ -703,16 +703,16 @@ sub quote_item {
                     }
                     my $new_item = {
                         itype =>
-                          $item->girfield( 'stock_category', $occurence ),
+                          $item->girfield( 'stock_category', $occurrence ),
                         location =>
-                          $item->girfield( 'collection_code', $occurence ),
+                          $item->girfield( 'collection_code', $occurrence ),
                         itemcallnumber =>
-                          $item->girfield( 'shelfmark', $occurence )
-                          || $item->girfield( 'classification', $occurence )
+                          $item->girfield( 'shelfmark', $occurrence )
+                          || $item->girfield( 'classification', $occurrence )
                           || title_level_class($item),
                         holdingbranch =>
-                          $item->girfield( 'branch', $occurence ),
-                        homebranch => $item->girfield( 'branch', $occurence ),
+                          $item->girfield( 'branch', $occurrence ),
+                        homebranch => $item->girfield( 'branch', $occurrence ),
                     };
                     if ( $new_item->{itype} ) {
                         $item_hash->{itype} = $new_item->{itype};
@@ -744,7 +744,7 @@ sub quote_item {
                     );
                 }
 
-                ++$occurence;
+                ++$occurrence;
             }
 
             # increment quantity in orderline for EXISTING budget in $budgets
@@ -772,16 +772,16 @@ sub quote_item {
                         price            => $item->price,
                         replacementprice => $item->price,
                         itype =>
-                          $item->girfield( 'stock_category', $occurence ),
+                          $item->girfield( 'stock_category', $occurrence ),
                         location =>
-                          $item->girfield( 'collection_code', $occurence ),
+                          $item->girfield( 'collection_code', $occurrence ),
                         itemcallnumber =>
-                          $item->girfield( 'shelfmark', $occurence )
-                          || $item->girfield( 'classification', $occurence )
+                          $item->girfield( 'shelfmark', $occurrence )
+                          || $item->girfield( 'classification', $occurrence )
                           || $item_hash->{itemcallnumber},
                         holdingbranch =>
-                          $item->girfield( 'branch', $occurence ),
-                        homebranch => $item->girfield( 'branch', $occurence ),
+                          $item->girfield( 'branch', $occurrence ),
+                        homebranch => $item->girfield( 'branch', $occurrence ),
                     };
                     my $itemnumber;
                     ( undef, undef, $itemnumber ) =
@@ -795,7 +795,7 @@ sub quote_item {
                     );
                 }
 
-                ++$occurence;
+                ++$occurrence;
             }
         }
     }

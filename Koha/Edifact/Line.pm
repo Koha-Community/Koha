@@ -453,7 +453,7 @@ sub coded_substitute_text {
 
 # This will take a standard code as returned
 # by (orderline|substitue)-free_text (FTX seg LIN)
-# and expand it useing EditEUR code list 8B
+# and expand it using EditEUR code list 8B
 sub translate_8B {
     my ($code) = @_;
 
@@ -635,7 +635,7 @@ sub girfield {
     my ( $self, $field, $occ ) = @_;
     if ( $self->number_of_girs ) {
 
-        # defaults to occurence 0 returns undef if occ requested > occs
+        # defaults to occurrence 0 returns undef if occ requested > occs
         if ( defined $occ && $occ >= @{ $self->{GIR} } ) {
             return;
         }
