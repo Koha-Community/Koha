@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( op_add ) %]Enter a new purchase suggestion[% END %]
@@ -161,6 +162,7 @@
                                             <tr>
                                                 [% IF ( loggedinusername ) %]<th>&nbsp;</th>[% END %]
                                                 <th>Summary</th>
+                                                <th>Suggested on</th>
                                                 <th>Note</th>
                                                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]<th>Suggested for</th>[% END %]
                                                 [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) %]<th>Managed by</th>[% END %]
@@ -186,6 +188,9 @@
                                                                 [% IF ( suggestions_loo.collectiontitle ) %] , [% suggestions_loo.collectiontitle |html %][% END %]
                                                                 [% IF ( suggestions_loo.itemtype ) %] - [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 1 ) %][% END %]
                                                         </p>
+                                                    </td>
+                                                    <td>
+                                                        [% IF ( suggestions_loo.suggesteddate ) %][% suggestions_loo.suggesteddate |$KohaDates %][% END %]
                                                     </td>
                                                     <td>
                                                         [% IF ( suggestions_loo.note ) %]
