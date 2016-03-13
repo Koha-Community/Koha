@@ -338,7 +338,7 @@ function submitForm(form) {
                                                 <td>[% IF (basketgroup.freedeliveryplace) %]Free delivery place[% ELSE %][% Branches.GetName( basketgroup.deliveryplace ) %][% END %]</td>
                                                 <td>[% basketgroup.basketsqty %]</td>
                                                 <td>
-                                                    <input type="button" onclick="closeandprint('[% basketgroup.id %]');" value="Close and print" />
+                                                    <input type="button" onclick="closeandprint('[% basketgroup.id %]');" value="Close and export as PDF" />
                                                     <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Edit" /></form>
                                                     <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Delete" /></form>
                                                 </td>
@@ -378,7 +378,7 @@ function submitForm(form) {
                                                 <td>
                                                     <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="View" /></form>
                                                     <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="reopen" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Reopen" /></form>
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="print" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Print" /></form>
+                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="print" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Export as PDF" /></form>
                                                     <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="export" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Export as CSV" /></form>
                                                 </td>
                                             </tr>
