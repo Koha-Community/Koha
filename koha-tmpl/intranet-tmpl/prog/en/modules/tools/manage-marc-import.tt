@@ -452,7 +452,7 @@ Page
           <form method="post" action="[% batch_lis.script_name %]" name="clean_batch_[% batch_lis.import_batch_id %]" id="clean_batch_[% batch_lis.import_batch_id %]" >
             <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id %]" />
             <input type="hidden" name="op" value="clean-batch" />
-            <input type="submit" class="button" value="Clean" onclick="return confirm(MSG_CONFIRM_CLEAN);" />
+            <button class="btn btn-small" onclick="return confirm(MSG_CONFIRM_CLEAN);">Clean</button>
           </form>
         [% END %]
     </td>
