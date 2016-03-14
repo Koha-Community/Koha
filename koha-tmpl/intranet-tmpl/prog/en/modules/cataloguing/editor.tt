@@ -30,19 +30,19 @@
 <div id="editor">
     <input id="import-records-input" type="file" style="display: none">
     <div id="toolbar" class="btn-toolbar">
-        <button class="btn btn-small" id="new-record" title="Open fresh record"><i class="icon-plus"></i> <span>New record</span></button>
+        <button class="btn btn-small" id="new-record" title="Open fresh record"><i class="fa fa-plus"></i> <span>New record</span></button>
         <div class="btn-group">
-            <button class="btn btn-small" id="save-record" title="Save current record (Ctrl-S)"><i class="icon-hdd"></i> <span>Save</span></button>
+            <button class="btn btn-small" id="save-record" title="Save current record (Ctrl-S)"><i class="fa fa-hdd-o"></i> <span>Save</span></button>
             <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" id="save-dropdown">
             </ul>
         </div>
-        <button class="btn btn-small" id="import-records" title="Import an ISO2709 or MARCXML record"><i class="icon-upload"></i> <span>Import record...</span></button>
-        <button class="btn btn-small" id="open-macros" title="Run and edit macros"><i class="icon-play"></i> <span>Macros...</span></button>
+        <button class="btn btn-small" id="import-records" title="Import an ISO2709 or MARCXML record"><i class="fa fa-download"></i> <span>Import record...</span></button>
+        <button class="btn btn-small" id="open-macros" title="Run and edit macros"><i class="fa fa-play"></i> <span>Macros...</span></button>
         <div class="btn-group">
-            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> Settings <span class="caret"></span></button>
+            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
             <ul id="prefs-menu" class="dropdown-menu">
                 <li><a id="switch-editor" href="#">Switch to basic editor</a></li>
                 <li><a id="set-field-widgets" href="#"></a></li>
@@ -60,8 +60,8 @@
                 <li><a class="set-font" style="font-family: Monaco" href="#">Monaco</a></li>
             </ul>
         </div>
-        <button class="btn btn-small" id="show-alerts" title="Previous alerts"><i class="icon-bell"></i> Alerts <span class="caret"></span></button>
-        <button class="btn btn-small" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="icon-list-alt"></i> Keyboard shortcuts <span class="caret"></span></button>
+        <button class="btn btn-small" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts <span class="caret"></span></button>
+        <button class="btn btn-small" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa fa-keyboard-o"></i> Keyboard shortcuts <span class="caret"></span></button>
     </div>
     [%# CodeMirror instance will be inserted here %]
     <div id="statusbar">
@@ -114,8 +114,8 @@
     </div>
     <div class="span9">
         <div id="toolbar" class="btn-toolbar">
-            <button class="btn btn-small" type="submit"><i class="icon-search"></i> <span>Search</span></button>
-            <button class="btn btn-small" type="reset"><i class="icon-remove"></i> <span>Clear</span></button>
+            <button class="btn btn-small" type="submit"><i class="fa fa-search"></i> <span>Search</span></button>
+            <button class="btn btn-small" type="reset"><i class="fa fa-trash"></i> <span>Clear</span></button>
         </div>
         <ul id="advanced-search-fields">
             <li>
@@ -224,8 +224,8 @@
     <div class="span3"><ul id="macro-list"></ul></div>
     <div class="span9" id="macro-editor">
         <div id="macro-toolbar" class="btn-toolbar">
-            <button class="btn btn-small" id="run-macro" title="Run and edit macros"><i class="icon-play"></i> Run macro</button>
-            <button class="btn btn-small" id="delete-macro" title="Delete macro"><i class="icon-remove"></i> Delete macro</button>
+            <button class="btn btn-small" id="run-macro" title="Run and edit macros"><i class="fa fa-play"></i> Run macro</button>
+            <button class="btn btn-small" id="delete-macro" title="Delete macro"><i class="fa fa-remove"></i> Delete macro</button>
             <label for="macro-format">Format: </label> <select id="macro-format"></select>
             <div id="macro-save-message"></div>
         </div>
