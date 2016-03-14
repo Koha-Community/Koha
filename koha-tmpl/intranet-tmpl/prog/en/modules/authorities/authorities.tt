@@ -181,15 +181,15 @@ function confirmnotdup(redirect){
 
 [% IF ( duplicateauthid ) %]
         <div class="dialog alert">
-                <h4>Duplicate record suspected</h4>
-                <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid %]" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid %]&amp;popup=1', 'DuplicateAuthority','800','600'); return false;" class="button">[% duplicateauthvalue %]</a>?</p>
+                <h3>Duplicate record suspected</h3>
+                <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid %]" class="popup" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid %]&amp;popup=1', 'DuplicateAuthority','800','600'); return false;" class="button">[% duplicateauthvalue %]</a> ?</p>
 
                 <form action="authorities.pl" method="get">
                     <input type="hidden" name="authid" value="[% duplicateauthid %]" />
-                    <input type="submit" class="edit" value="Yes: Edit existing authority" />
+                    <button type="submit" class="new"><i class="fa fa-pencil"></i> Yes: Edit existing authority</button>
                 </form>
                 <form action="authorities.pl" method="get">
-                    <input type="button" value="No: Save as new authority" class="save" accesskey="w" onclick="confirmnotdup('items'); return false;" />
+                    <button class="new" onclick="confirmnotdup('items'); return false;"><i class="fa fa-save"></i> No: Save as new authority</button>
                 </form>
         </div>
 [% END %]
