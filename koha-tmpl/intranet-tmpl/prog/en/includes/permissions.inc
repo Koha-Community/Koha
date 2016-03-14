@@ -100,5 +100,7 @@
     [%- CASE 'report' -%]<span>Use report plugins</span>
     [%- CASE 'tool' -%]<span>Use tool plugins</span>
     [%- CASE 'delete_public_lists' -%]<span>Delete public lists</span>
+    [%- CASE 'upload_general_files' -%]<span>Upload any file</span>
+    [%- CASE 'upload_manage' -%]<span>Manage uploaded files (<i>Useless without upload_general_files</i>)</span>
     [%- END -%]
 [%- END -%]
