@@ -8,9 +8,9 @@
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <style type="text/css">
 .setlabel {width: 6em; font-family: courier; background-color:#E8E8E8;}
-tr > td.red      {color:darkred;   background-color: pink;}
-tr > td.green    {color:darkgreen; background-color: #D1EFD5; text-align: center;}
-tr > td.pending  {background-color: lightyellow;}
+.rejected { color: #CC0033; }
+.approved { color: #339900; }
+.pending { color: #CCC; font-style: italic; }
 tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 </style>
 <script type="text/javascript">
@@ -237,10 +237,14 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
                 [% IF ( tagloo.approved == 0 ) %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" class="pending" /></span>
                 [% ELSE %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" /></span>[% END %]
             </td>
-            [% IF ( tagloo.approved == -1 ) %]<td class="red">rejected
-                [% ELSIF ( tagloo.approved == 1 ) %]<td class="green"><img alt="OK" src="[% interface %]/[% theme %]/img/approve.gif" />
-            [% ELSE %]<td class="pending">
-            [% END %]
+            <td>
+                [% IF ( tagloo.approved == -1 ) %]
+                    <span class="rejected">Rejected</span>
+                [% ELSIF ( tagloo.approved == 1 ) %]
+                    <span class="approved">Approved</span>
+                [% ELSE %]
+                    <span class="pending">Pending</span>
+                [% END %]
             </td>
             <td><a href="/cgi-bin/koha/tags/list.pl?tag=[% tagloo.term|uri %]">[% tagloo.term %]</a>
             </td>
