@@ -95,8 +95,8 @@ function check_form_borrowers(nav){
     var message_champ="";
     if (document.form.check_member.value == 1 )
     {
-        if (document.form_double.answernodouble) {
-            if( (!(document.form_double.answernodouble.checked))){
+        if (document.form.answernodouble) {
+            if( (!(document.form.answernodouble.checked))){
                 document.form.nodouble.value=0;
             } else {
                 document.form.nodouble.value=1;
@@ -119,7 +119,7 @@ function check_form_borrowers(nav){
 
     //patrons form to test if you checked no to the question of double
     if (statut!=1 && document.form.check_member.value > 0 ) {
-        if (!(document.form_double.answernodouble.checked)){
+        if (!(document.form.answernodouble.checked)){
             message_champ+= MSG_DUPLICATE_SUSPICION;
             statut=1;
             document.form.nodouble.value=0;
