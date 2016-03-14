@@ -583,13 +583,15 @@ my $view = $batch
     ?'batch_checkout_view'
     : 'circview';
 
-my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
 my @relatives;
-if ( my $guarantor = $patron->guarantor ) {
-    push @relatives, $guarantor->borrowernumber;
-    push @relatives, $_->borrowernumber for $patron->siblings;
-} else {
-    push @relatives, $_->borrowernumber for $patron->guarantees;
+if ( $borrowernumber ) {
+    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+    if ( my $guarantor = $patron->guarantor ) {
+        push @relatives, $guarantor->borrowernumber;
+        push @relatives, $_->borrowernumber for $patron->siblings;
+    } else {
+        push @relatives, $_->borrowernumber for $patron->guarantees;
+    }
 }
 my $relatives_issues_count =
   Koha::Database->new()->schema()->resultset('Issue')
