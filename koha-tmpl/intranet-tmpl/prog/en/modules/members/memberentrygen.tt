@@ -206,16 +206,18 @@ function select_user(borrowernumber, borrower) {
 	[% IF ( check_member ) %]
 			<div class="dialog alert">
 				<h3>Duplicate patron record?</h3>
-				<p><a class="popup" href="javascript:Dopop('moremember.pl?print=brief&amp;borrowernumber=[% check_member %]');" >View existing record</a></p>
+                <p><a class="popup" href="#" onclick="Dopop('moremember.pl?print=brief&amp;borrowernumber=[% check_member %]');return false;" >View existing record</a></p>
                 <form action="/cgi-bin/koha/members/memberentry.pl" method="get">
                     <input type="hidden" name="op" value="modify" />
                     <input type="hidden" name="borrowernumber" value="[% check_member %]" />
-                    <input class="edit" type="submit" value="It is a duplicate. Edit existing record" />
+                    <button type="submit" class="new"><i class="fa fa-pencil"></i> It is a duplicate.
+                    Edit existing record</button>
                 </form>
 
                 <form name="form_double" action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off">
 				<input type="hidden" name="nodouble" value="1" />
-				<input class="new" type="submit" value="Not a duplicate. Save as new record" />
+                <button type="submit" class="new"><i class="fa fa-plus"></i> Not a duplicate.
+                Save as new record</button>
 			</div>
 	[% END %]
 
