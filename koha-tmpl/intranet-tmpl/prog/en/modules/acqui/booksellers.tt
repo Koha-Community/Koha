@@ -52,7 +52,9 @@ $(document).ready(function() {
     
 [% INCLUDE 'acquisitions-toolbar.inc' %]
 [% UNLESS ( count == 1 ) %]
-    [% IF ( supplier.length < 1 ) %]
+    [% UNLESS count %]
+        <h1>Your search returned no results.</h1>
+    [% ELSIF ( supplier.length < 1 ) %]
         <h1>Vendor search: [% count %] results found</h1>
     [% ELSE %]
         <h1>Vendor search: [% count %] results found for '[% supplier %]'</h1>
