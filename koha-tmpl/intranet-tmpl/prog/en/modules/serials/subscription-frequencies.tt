@@ -198,7 +198,7 @@ $(document).ready(function() {
                 <th>Issues per unit</th>
                 <th>Units per issue</th>
                 <th>Display order</th>
-                <th>&nbsp;</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -209,9 +209,9 @@ $(document).ready(function() {
                   <td>[% frequency.issuesperunit %]</td>
                   <td>[% frequency.unitsperissue %]</td>
                   <td>[% frequency.displayorder %]</td>
-                  <td>
-                    <a href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=modify&frequencyid=[% frequency.id %]">Modify</a> |
-                    <a class="delete_frequency" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=del&frequencyid=[% frequency.id %]">Delete</a>
+                  <td class="actions">
+                    <a class="btn btn-mini" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=modify&frequencyid=[% frequency.id %]"><i class="fa fa-pencil"></i> Modify</a>
+                    <a class="delete_frequency btn btn-mini" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=del&frequencyid=[% frequency.id %]"><i class="fa fa-trash"></i> Delete</a>
                   </td>
                 </tr>
               [% END %]
