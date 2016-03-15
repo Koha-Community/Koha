@@ -270,14 +270,14 @@ $(document).ready(function() {
                     </span>
                 </td>
                 <td>
-                    [% IF ( matches = serial.serialseq.match('Spring(.*)') ) %]
-                        Spring[% matches.join("") %]
-                    [% ELSIF ( matches = serial.serialseq.match('Summer(.*)') ) %]
-                        Summer[% matches.join("") %]
-                    [% ELSIF ( matches = serial.serialseq.match('Fall(.*)') ) %]
-                        Fall[% matches.join("") %]
-                    [% ELSIF ( matches = serial.serialseq.match('Winter(.*)') ) %]
-                        Winter[% matches.join("") %]
+                    [% IF ( matches = serial.serialseq.match('(.*)Spring(.*)') ) %]
+                        [% matches.0 %]Spring[% matches.1 %]
+                    [% IF ( matches = serial.serialseq.match('(.*)Summer(.*)') ) %]
+                        [% matches.0 %]Summer[% matches.1 %]
+                    [% IF ( matches = serial.serialseq.match('(.*)Fall(.*)') ) %]
+                        [% matches.0 %]Fall[% matches.1 %]
+                    [% IF ( matches = serial.serialseq.match('(.*)Winter(.*)') ) %]
+                        [% matches.0 %]Winter[% matches.1 %]
                     [% ELSE %]
                         [% serial.serialseq %]
                     [% END %]
