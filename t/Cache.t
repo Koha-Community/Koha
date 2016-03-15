@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 32;
+use Test::More tests => 35;
 
 my $destructorcount = 0;
 
@@ -33,7 +33,7 @@ SKIP: {
     $ENV{ MEMCACHED_NAMESPACE } = 'unit_tests';
     my $cache = Koha::Cache->get_instance();
 
-    skip "Cache not enabled", 28
+    skip "Cache not enabled", 31
       unless ( $cache->is_cache_active() && defined $cache );
 
     # test fetching an item that isnt in the cache
@@ -167,6 +167,26 @@ SKIP: {
     is(length($utf8_res), 1, 'UTF8 string length correct');
     # ...and that it's really the character we intend
     is(ord($utf8_res), 8364, 'UTF8 string value correct');
+
+    # Make sure the item will be deep copied
+    # Scalar
+    my $item = "just a simple scalar";
+    $cache->set_in_cache('test_deep_copy', $item);
+    my $item_from_cache = $cache->get_from_cache('test_deep_copy');
+    $item_from_cache = "a modified scalar";
+    is( $cache->get_from_cache('test_deep_copy'), 'just a simple scalar', 'A scalar will not be modified in the cache if get from the cache' );
+    # Array
+    my @item = qw( an array ref );
+    $cache->set_in_cache('test_deep_copy_array', \@item);
+    $item_from_cache = $cache->get_from_cache('test_deep_copy_array');
+    @$item_from_cache = qw( another array ref );
+    is_deeply( $cache->get_from_cache('test_deep_copy_array'), [ qw ( an array ref ) ], 'An array will be deep copied');
+    # Hash
+    my %item = ( a => 'hashref' );
+    $cache->set_in_cache('test_deep_copy_hash', \%item);
+    $item_from_cache = $cache->get_from_cache('test_deep_copy_hash');
+    %$item_from_cache = ( another => 'hashref' );
+    is_deeply( $cache->get_from_cache('test_deep_copy_hash'), { a => 'hashref' }, 'A hash will be deep copied');
 }
 
 END {
