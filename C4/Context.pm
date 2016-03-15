@@ -516,6 +516,9 @@ sub preference {
 
     $var = lc $var;
 
+    return $ENV{"OVERRIDE_SYSPREF_$var"}
+        if defined $ENV{"OVERRIDE_SYSPREF_$var"};
+
     # Return the value if the var has already been accessed
     if ($use_syspref_cache && exists $syspref_L1_cache{$var}) {
         return $syspref_L1_cache{$var};
@@ -526,14 +529,9 @@ sub preference {
         : undef;
     return $cached_var if defined $cached_var;
 
-    my $value;
-    if ( defined $ENV{"OVERRIDE_SYSPREF_$var"} ) {
-        $value = $ENV{"OVERRIDE_SYSPREF_$var"};
-    } else {
-        my $syspref;
-        eval { $syspref = Koha::Config::SysPrefs->find( lc $var ) };
-        $value = $syspref ? $syspref->value() : undef;
-    }
+    my $syspref;
+    eval { $syspref = Koha::Config::SysPrefs->find( lc $var ) };
+    my $value = $syspref ? $syspref->value() : undef;
 
     if ( $use_syspref_cache ) {
         $syspref_cache->set_in_cache("syspref_$var", $value);
