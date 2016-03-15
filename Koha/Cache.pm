@@ -38,6 +38,7 @@ The first, traditional OO interface provides the following functions:
 use strict;
 use warnings;
 use Carp;
+use Clone qw( clone );
 use Module::Load::Conditional qw(can_load);
 use Koha::Cache::Object;
 
@@ -313,7 +314,12 @@ sub get_from_cache {
     return unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
 
     # Return L1 cache value if exists
-    return $L1_cache{$key} if exists $L1_cache{$key};
+    if ( exists $L1_cache{$key} ) {
+        # No need to deep copy if it's a scalar:
+        return $L1_cache{$key}
+            unless ref $L1_cache{$key};
+        return clone $L1_cache{$key};
+    }
 
     my $get_sub = $self->{ref($self->{$cache}) . "_get"};
     return $get_sub ? $get_sub->($key) : $self->{$cache}->get($key);
