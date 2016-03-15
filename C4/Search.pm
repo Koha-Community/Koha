@@ -1886,8 +1886,8 @@ sub searchResults {
     my $interface = $search_context eq 'opac' ? 'OPAC' : '';
     my $xslsyspref = $interface . "XSLTResultsDisplay";
     my $xslfile = C4::Context->preference($xslsyspref);
-    my $lang = C4::Languages::getlanguage();
-    my $sysxml = C4::XSLT::get_xslt_sysprefs();
+    my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
+    my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
 
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
