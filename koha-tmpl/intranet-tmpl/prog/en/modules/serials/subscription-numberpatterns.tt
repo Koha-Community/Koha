@@ -316,7 +316,7 @@ $(document).ready(function(){
                 <th>Description</th>
                 <th>Numbering formula</th>
                 <th>Display order</th>
-                <th>&nbsp;</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -326,9 +326,9 @@ $(document).ready(function(){
                   <td>[% numberpattern.description %]</td>
                   <td>[% numberpattern.numberingmethod %]</td>
                   <td>[% numberpattern.displayorder %]</td>
-                  <td>
-                    <a href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=modify&id=[% numberpattern.id %]">Edit</a> |
-                    <a class="delete_pattern" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=del&id=[% numberpattern.id %]">Delete</a>
+                  <td class="actions">
+                    <a class="btn btn-mini" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=modify&id=[% numberpattern.id %]"><i class="fa fa-pencil"></i> Edit</a>
+                    <a class="delete_pattern btn btn-mini" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=del&id=[% numberpattern.id %]"><i class="fa fa-trash"></i> Delete</a>
                   </td>
                 </tr>
               [% END %]
