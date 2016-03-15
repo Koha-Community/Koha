@@ -70,8 +70,10 @@ $(document).ready(function() {
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="lists.pl">Patron lists</a> &rsaquo; <a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% list.id %]">[% list.name %]</a> &rsaquo; Add patrons</div>
 
-<div class="yui-t7">
-    <div class="yui-main">
+<div id="doc3" class="yui-t2">
+   <div id="bd">
+    <div id="yui-main">
+        <div class="yui-b">
         <h1>[% list.name %]</h1>
 
         <form action="list.pl" id="add_patrons" method="post">
@@ -151,6 +153,11 @@ $(document).ready(function() {
             <input type="hidden" name="patron_list_id" value="[% list.patron_list_id %]" />
             <input type="submit" value="Remove selected patrons" />
         </form>
-    </div>
 
+            </div>
+        </div>
+        <div class="yui-b noprint">
+            [% INCLUDE 'tools-menu.inc' %]
+        </div>
+    </div>
 [% INCLUDE 'intranet-bottom.inc' %]
