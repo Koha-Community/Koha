@@ -299,25 +299,32 @@ sub set_in_cache {
 
 =head2 get_from_cache
 
-    my $value = $cache->get_from_cache($key);
+    my $value = $cache->get_from_cache($key, [ $options ]);
 
 Retrieve the value stored under the specified key in the default cache.
+
+The options can set an unsafe flag to avoid a deep copy.
+When this flag is set, you have to know what you are doing!
+If you are retrieving a structure and modify it, you will modify the contain
+of the cache!
 
 =cut
 
 sub get_from_cache {
-    my ( $self, $key, $cache ) = @_;
+    my ( $self, $key, $options ) = @_;
+    my $cache  = $options->{cache}  || 'cache';
+    my $unsafe = $options->{unsafe} || 0;
     $key =~ s/[\x00-\x20]/_/g;
-    $cache ||= 'cache';
     croak "No key" unless $key;
     $ENV{DEBUG} && carp "get_from_cache for $key";
     return unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
 
     # Return L1 cache value if exists
     if ( exists $L1_cache{$key} ) {
-        # No need to deep copy if it's a scalar:
+        # No need to deep copy if it's a scalar
+        # Or if we do not need to deep copy
         return $L1_cache{$key}
-            unless ref $L1_cache{$key};
+            if not ref $L1_cache{$key} or $unsafe;
         return clone $L1_cache{$key};
     }
 
