@@ -43,6 +43,7 @@ SKIP: {
     # test expiry time in cache
     $cache->set_in_cache( "timeout", "I AM DATA", 1 ); # expiry time of 1 second
     sleep 2;
+    $cache->flush_L1_cache();
     is( $cache->get_from_cache("timeout"),
         undef, "fetching expired item from cache" );
 
@@ -88,7 +89,9 @@ SKIP: {
     );
     ok( defined($myscalar), 'Created tied scalar' );
     is( $$myscalar, 1, 'Constructor called to first initialize' );
+    $cache->flush_L1_cache();
     is( $$myscalar, 1, 'Data retrieved from cache' );
+    $cache->flush_L1_cache();
     sleep 2;
     is( $$myscalar, 2, 'Constructor called again when timeout reached' );
     $$myscalar = 5;
@@ -119,6 +122,7 @@ SKIP: {
     is($myhash->{'key2'}, 'surprise', 'Setting hash member worked');
     $hash{'key2'} = 'nosurprise';
     sleep 2;
+    $cache->flush_L1_cache();
     is($myhash->{'key2'}, 'nosurprise', 'Cache change caught');
 
 
@@ -134,6 +138,7 @@ SKIP: {
     $hash{'anotherkey'} = 'anothervalue';
 
     sleep 2;
+    $cache->flush_L1_cache();
 
     ok(exists $myhash->{'anotherkey'}, 'Cache reset properly');
 
