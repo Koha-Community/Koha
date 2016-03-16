@@ -537,7 +537,7 @@ foreach my $flag ( sort keys %$flags ) {
     }
 }
 
-my $amountold = $borrower->{flags}->{'CHARGES'}->{'message'} || 0;
+my $amountold = $borrower->{flags} ? $borrower->{flags}->{'CHARGES'}->{'message'} || 0 : 0;
 $amountold =~ s/^.*\$//;    # remove upto the $, if any
 
 my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
