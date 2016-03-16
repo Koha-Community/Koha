@@ -103,15 +103,15 @@ my $strsth =
         items.itemcallnumber,
         items.itemnumber,
         GROUP_CONCAT(DISTINCT items.itemcallnumber 
-        		ORDER BY items.itemnumber SEPARATOR '<br/>') as listcall,
+            ORDER BY items.itemnumber SEPARATOR '|') as listcall,
         GROUP_CONCAT(DISTINCT homebranch
-            ORDER BY items.itemnumber SEPARATOR '<br/>') as homebranch_list,
+            ORDER BY items.itemnumber SEPARATOR '|') as homebranch_list,
         GROUP_CONCAT(DISTINCT holdingbranch 
-            ORDER BY items.itemnumber SEPARATOR '<br/>') as holdingbranch_list,
+            ORDER BY items.itemnumber SEPARATOR '|') as holdingbranch_list,
         GROUP_CONCAT(DISTINCT items.location 
-        		ORDER BY items.itemnumber SEPARATOR '<br/>') as l_location,
+            ORDER BY items.itemnumber SEPARATOR '|') as l_location,
         GROUP_CONCAT(DISTINCT items.itype 
-        		ORDER BY items.itemnumber SEPARATOR '<br/>') as l_itype,
+            ORDER BY items.itemnumber SEPARATOR '|') as l_itype,
 
         reserves.found,
         biblio.title,
@@ -158,18 +158,18 @@ while ( my $data = $sth->fetchrow_hashref ) {
             itemnum            => $data->{itemnumber},
             biblionumber       => $data->{biblionumber},
             holdingbranch      => $data->{holdingbranch},
-            homebranch_list    => $data->{homebranch_list},
-            holdingbranch_list => $data->{holdingbranch_list},
+            homebranch_list    => [split('\|', $data->{homebranch_list})],
+            holdingbranch_list => [split('\|', $data->{holdingbranch_list})],
             branch             => $data->{branch},
             itemcallnumber     => $data->{itemcallnumber},
-            location           => $data->{l_location},
-            itype              => $data->{l_itype},
+            location           => => [split('\|', $data->{l_location})],
+            itype              => => [split('\|', $data->{l_itype})],
             reservecount       => $data->{reservecount},
             itemcount          => $data->{itemcount},
             ratiocalc          => sprintf( "%.0d", $ratio_atleast1 ? ( $thisratio / $ratio ) : $thisratio ),
             thisratio => sprintf( "%.2f", $thisratio ),
             thisratio_atleast1 => ( $thisratio >= 1 ) ? 1 : 0,
-            listcall => $data->{listcall}
+            listcall           => [split('\|', $data->{listcall})]
         }
     );
 }

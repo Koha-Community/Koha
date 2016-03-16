@@ -1,4 +1,7 @@
 [% USE KohaDates %]
+[% USE AuthorisedValues %]
+[% USE Branches %]
+[% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Hold ratios</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -30,6 +33,7 @@
     .sql { display: none; }
     .ulined { text-decoration: underline; }
     .ratiolimit { color: blue; cursor: pointer; }
+    #holdst ul li {  list-style: outside url("[% interface %]/[% theme %]/img/item-bullet.gif") disc; }
 </style>
 </head>
 <body id="circ_reserveratios" class="circ">
@@ -72,11 +76,41 @@
             <td><p class="ratiolimit">[% reserveloo.thisratio %]</p></td>
             <td> [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %][% reserveloo.title |html %] [% IF ( reserveloo.subtitle ) %][% FOREACH subtitl IN reserveloo.subtitle %][% subtitl.subfield %][% END %][% END %]</a>[% IF ( reserveloo.author ) %] by [% reserveloo.author %][% END %]
             </td>
-            <td><p>[% reserveloo.homebranch_list %]</p></td>
-            <td><p>[% reserveloo.holdingbranch_list %]</p></td>
-            <td><p>[% reserveloo.location %]</p></td>
-            <td><p>[% reserveloo.itype %]</p></td>
-            <td><p>[% reserveloo.listcall %]</p></td>
+            <td>
+                  <ul>
+                      [% FOREACH homebranch IN reserveloo.homebranch_list %]
+                          <li>[% Branches.GetName ( homebranch ) %]</li>
+                      [% END %]
+                  </ul>
+            </td>
+            <td>
+                  <ul>
+                      [% FOREACH holdingbranch IN reserveloo.holdingbranch_list %]
+                          <li>[% Branches.GetName ( holdingbranch ) %]</li>
+                      [% END %]
+                  </ul>
+            </td>
+            <td>
+                  <ul>
+                      [% FOREACH location IN reserveloo.location %]
+                          <li>[% AuthorisedValues.GetByCode( 'LOC', location )%]</li>
+                      [% END %]
+                  </ul>
+            </td>
+            <td>
+                  <ul>
+                      [% FOREACH itype IN reserveloo.itype %]
+                          <li>[% ItemTypes.GetDescription( itype ) %]</li>
+                      [% END %]
+                  </ul>
+            </td>
+            <td>
+                  <ul>
+                      [% FOREACH listcall IN reserveloo.listcall %]
+                          <li>[% listcall %]</li>
+                      [% END %]
+                  </ul>
+            </td>
             <td>[% IF ( reserveloo.thisratio_atleast1 ) %]<p>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.ratiocalc %] --><a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;rr_quantity_to_order=[% reserveloo.ratiocalc %]">[% END %]<b>[% reserveloo.ratiocalc %] to order</b>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]</a>[% END %]
             [% IF ( reserveloo.pendingorders ) %]<br><b>[% reserveloo.pendingorders %] pending</b>[% END %]</p>[% END %]</td>
         </tr>
