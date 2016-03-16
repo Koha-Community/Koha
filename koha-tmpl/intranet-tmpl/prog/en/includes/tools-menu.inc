@@ -68,6 +68,9 @@
     [% IF CAN_user_tools_records_batchmod %]
       <li><a href="/cgi-bin/koha/tools/batch_record_modification.pl">Batch record modification</a></li>
     [% END %]
+    [% IF CAN_user_tools_items_batchmod %]
+      <li><a href="/cgi-bin/koha/tools/automatic_item_modification_by_age.pl">Automatic item modifications by age</a></li>
+    [% END %]
     [% IF ( CAN_user_tools_export_catalog ) %]
     <li><a href="/cgi-bin/koha/tools/export.pl">Export data</a></li>
     [% END %]
