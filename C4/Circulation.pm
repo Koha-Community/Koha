@@ -863,11 +863,11 @@ sub CanBookBeIssued {
         }
 
         if ( $guarantees_non_issues_charges > $no_issues_charge_guarantees && !$inprocess && !$allowfineoverride) {
-            $issuingimpossible{DEBT_GUARANTEES} = sprintf( "%.2f", $guarantees_non_issues_charges );
+            $issuingimpossible{DEBT_GUARANTEES} = $guarantees_non_issues_charges;
         } elsif ( $guarantees_non_issues_charges > $no_issues_charge_guarantees && !$inprocess && $allowfineoverride) {
-            $needsconfirmation{DEBT_GUARANTEES} = sprintf( "%.2f", $guarantees_non_issues_charges );
+            $needsconfirmation{DEBT_GUARANTEES} = $guarantees_non_issues_charges;
         } elsif ( $allfinesneedoverride && $guarantees_non_issues_charges > 0 && $guarantees_non_issues_charges <= $no_issues_charge_guarantees && !$inprocess ) {
-            $needsconfirmation{DEBT_GUARANTEES} = sprintf( "%.2f", $guarantees_non_issues_charges );
+            $needsconfirmation{DEBT_GUARANTEES} = $guarantees_non_issues_charges;
         }
     }
 

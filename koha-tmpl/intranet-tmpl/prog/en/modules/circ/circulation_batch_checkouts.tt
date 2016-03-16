@@ -1,5 +1,6 @@
 [% USE Branches %]
 [% USE KohaDates %]
+[% USE Price %]
 [% IF ( export_remove_fields OR export_with_csv_profile ) %]
    [% SET exports_enabled = 1 %]
 [% END %]
@@ -66,7 +67,15 @@ $(document).ready(function() {
   <div class="dialog alert">
     Cannot check out!
     [% IF charges_is_blocker %]
-      Checkouts are <span class="circ-hlt">BLOCKED</span> because fine balance is <span class="circ-hlt">OVER THE LIMIT</span>.
+      <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
+    [% END %]
+    [% IF charges_guarantees_is_blocker %]
+        <li>
+            <span class="circ-hlt">Fees &amp; Charges:</span> Patron's guarantees collectively owe [% chargesamount_guarantees | $Price %].
+        </li>
+        <li>
+            <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
+        </li>
     [% END %]
   </div>
 [% ELSIF borrower and not checkout_infos %]

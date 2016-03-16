@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 13;
 use Test::Warn;
 
 use C4::Context;
@@ -44,23 +44,6 @@ $object->surname("Test Surname");
 $object->store();
 
 is( $object->in_storage, 1, "Object is now stored" );
-my $guarantee1 = Koha::Patron->new(
-    {
-        categorycode => $categorycode,
-        branchcode   => $branchcode,
-        guarantorid  => $object->id
-    }
-)->store();
-my $guarantee2 = Koha::Patron->new(
-    {
-        categorycode => $categorycode,
-        branchcode   => $branchcode,
-        guarantorid  => $object->id
-    }
-)->store();
-my @guarantees = $object->guarantees();
-is( $guarantees[0]->id, $guarantee1->id, "First guarantee matchs" );
-is( $guarantees[1]->id, $guarantee2->id, "Second guarantee matchs" );
 
 my $borrowernumber = $object->borrowernumber;
 

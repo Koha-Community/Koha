@@ -3,6 +3,7 @@
 [% USE KohaDates %]
 [% USE ColumnsSettings %]
 [% USE ItemTypes %]
+[% USE Price %]
 [% IF Koha.Preference('ExportRemoveFields') OR Koha.Preference('ExportWithCsvProfile') %]
    [% SET exports_enabled = 1 %]
 [% END %]
@@ -236,7 +237,7 @@ $(document).ready(function() {
 [% END %]
 
 [% IF ( DEBT_GUARANTEES ) %]
-    <li>The patron's guarantees collectively have a debt of [% DEBT_GUARANTEES %].</li>
+    <li>The patron's guarantees collectively have a debt of [% DEBT_GUARANTEES | $Price %].</li>
 [% END %]
 
 [% IF ( RENTALCHARGE && RENTALCHARGE > 0 ) %]

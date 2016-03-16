@@ -343,7 +343,7 @@ sub patronflags {
         if ( $guarantees_non_issues_charges > $no_issues_charge_guarantees ) {
             my %flaginfo;
             $flaginfo{'message'} = sprintf 'patron guarantees owe %.02f', $guarantees_non_issues_charges;
-            $flaginfo{'amount'}  = sprintf "%.02f", $guarantees_non_issues_charges;
+            $flaginfo{'amount'}  = $guarantees_non_issues_charges;
             $flaginfo{'noissues'} = 1 unless C4::Context->preference("allowfineoverride");
             $flags{'CHARGES_GUARANTEES'} = \%flaginfo;
         }
