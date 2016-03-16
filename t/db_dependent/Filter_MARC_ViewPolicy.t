@@ -60,13 +60,8 @@ sub run_hiding_tests {
 
     my ( $isbn_field, $isbn_subfield ) =
       GetMarcFromKohaField( 'biblioitems.isbn', q{} );
-    my $update_sql =
-        q{UPDATE marc_subfield_structure SET hidden=? }
-      . q{WHERE tagfield='}
-      . $isbn_field
-      . q{' OR }
-      . q{      tagfield='008';};
-    my $sth = $dbh->prepare($update_sql);
+    my $update_sql = q{UPDATE marc_subfield_structure SET hidden=? };
+    my $sth        = $dbh->prepare($update_sql);
     foreach my $hidden_value (@valid_hidden_values) {
 
         $sth->execute($hidden_value);
@@ -99,10 +94,10 @@ sub run_hiding_tests {
         if ( any { $_ == $hidden_value } @{ $hidden->{$interface} } ) {
 
             # Subfield and controlfield are set to be hidden
-            is( $filtered_record->field('020'),
+            is( $filtered_record->field($isbn_field),
                 undef,
                 "Data field has been deleted because of hidden=$hidden_value" );
-            isnt( $unfiltered_record->field('020'), undef,
+            isnt( $unfiltered_record->field($isbn_field), undef,
 "Data field has been deleted in the original record because of hidden=$hidden_value"
             );
 
@@ -118,10 +113,10 @@ sub run_hiding_tests {
 
         }
         else {
-            isnt( $filtered_record->field('020'), undef,
+            isnt( $filtered_record->field($isbn_field), undef,
                 "Data field hasn't been deleted because of hidden=$hidden_value"
             );
-            isnt( $unfiltered_record->field('020'), undef,
+            isnt( $unfiltered_record->field($isbn_field), undef,
 "Data field hasn't been deleted in the original record because of hidden=$hidden_value"
             );
 
@@ -133,11 +128,42 @@ sub run_hiding_tests {
 "Control field hasn't been deleted in the original record because of hidden=$hidden_value"
             );
 
+            # force all the hidden values the same, so filtered and unfiltered
+            # records should be identical.
             is_deeply( $filtered_record, $unfiltered_record,
                 'Records are the same' );
         }
 
     }
+
+    $sth->execute(-1); # -1 is visible in opac and intranet.
+
+    my $cache = Koha::Caches->get_instance();
+    $cache->flush_all();    # easy way to ensure DB is queried again.
+
+    my $shouldhidemarc = Koha::Filter::MARC::ViewPolicy->should_hide_marc(
+        {
+            frameworkcode => q{},
+            interface     => $interface
+        }
+    );
+    my @hiddenfields = grep { $shouldhidemarc->{$_}==1 } keys %{$shouldhidemarc};
+
+    $sth->execute(8); # 8 is invisible in opac and intranet.
+
+    $cache->flush_all();    # easy way to ensure DB is queried again.
+
+    $shouldhidemarc = Koha::Filter::MARC::ViewPolicy->should_hide_marc(
+        {
+            frameworkcode => q{},
+            interface     => $interface
+        }
+    );
+    my @keyvalues = keys %{$shouldhidemarc};
+    my @visiblefields = grep { $shouldhidemarc->{$_}==1 } @keyvalues;
+
+    is(scalar @hiddenfields,0,'Should Hide MARC - Full Visibility');
+    is_deeply(\@visiblefields,\@keyvalues,'Should Hide MARC - No Visibility');
     return;
 }
 
@@ -164,7 +190,7 @@ sub create_marc_record {
 
 subtest 'Koha::Filter::MARC::ViewPolicy opac tests' => sub {
 
-    plan tests => 102;
+    plan tests => 104;
 
     $schema->storage->txn_begin();
     run_hiding_tests('opac');
@@ -173,7 +199,7 @@ subtest 'Koha::Filter::MARC::ViewPolicy opac tests' => sub {
 
 subtest 'Koha::Filter::MARC::ViewPolicy intranet tests' => sub {
 
-    plan tests => 102;
+    plan tests => 104;
 
     $schema->storage->txn_begin();
     run_hiding_tests('intranet');

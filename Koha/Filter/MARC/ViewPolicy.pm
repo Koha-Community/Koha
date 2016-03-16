@@ -215,6 +215,65 @@ sub _should_hide_on_interface {
     return $hide;
 }
 
+=head2 should_hide_marc
+
+Return a hash reference of whether a field, built from
+kohafield and tag, is hidden (1) or not (0) for a given
+interface
+
+  my $OpacHideMARC =
+    should_hide_marc( {
+                        frameworkcode => $frameworkcode,
+                        interface     => 'opac',
+                      } );
+
+  if ($OpacHideMARC->{'stocknumber'}==1) {
+       print "Hidden!\n";
+  }
+
+C<$OpacHideMARC> is a ref to a hash which contains a series
+of key value pairs indicating if that field (key) is
+hidden (value == 1) or not (value == 0).
+
+C<$frameworkcode> is the framework code.
+
+C<$interface> is the interface. It defaults to 'opac' if
+nothing is passed. Valid values include 'opac' or 'intranet'.
+
+=cut
+
+sub should_hide_marc {
+    my ( $self, $parms ) = @_;
+    my $frameworkcode = $parms->{frameworkcode} // q{};
+    my $interface     = $parms->{interface}     // 'opac';
+    my $hide          = _should_hide_on_interface();
+
+    my %shouldhidemarc;
+    my $marc_subfield_structure = GetMarcStructure( 0, $frameworkcode );
+    foreach my $tag ( keys %{$marc_subfield_structure} ) {
+        foreach my $subtag ( keys %{ $marc_subfield_structure->{$tag} } ) {
+            my $subfield_record = $marc_subfield_structure->{$tag}->{$subtag};
+            if ( ref $subfield_record eq 'HASH' ) {
+                my $kohafield = $subfield_record->{'kohafield'};
+                if ($kohafield) {
+                    my @tmpsplit   = split /[.]/xsm, $kohafield;
+                    my $field      = $tmpsplit[-1];
+                    my $hidden     = $subfield_record->{'hidden'};
+                    my $shouldhide = $hide->{$interface}->{$hidden};
+                    if ($shouldhide) {
+                        $shouldhidemarc{$field} = 1;
+                    }
+                    elsif ( !exists $shouldhidemarc{$field} ) {
+                        $shouldhidemarc{$field} = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    return \%shouldhidemarc;
+}
+
 =head1 DIAGNOSTICS
 
  $ prove -v t/RecordProcessor.t
