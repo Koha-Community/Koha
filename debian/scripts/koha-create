@@ -84,7 +84,8 @@ generate_config_file() {
     touch "$2"
     chown "root:$username" "$2"
     chmod 0640 "$2"
-    sed -e "s/__KOHASITE__/$name/g" \
+    sed -e "s/__KOHA_CONF_DIR__/\/etc\/koha\/sites\/$name/g" \
+        -e "s/__KOHASITE__/$name/g" \
         -e "s/__OPACPORT__/$OPACPORT/g" \
         -e "s/__INTRAPORT__/$INTRAPORT/g" \
         -e "s/__OPACSERVER__/$opacdomain/g" \
@@ -110,6 +111,7 @@ generate_config_file() {
         -e "s/__UNIXUSER__/$username/g" \
         -e "s/__UNIXGROUP__/$username/g" \
         -e "s#__UPLOAD_PATH__#$UPLOAD_PATH#g" \
+        -e "s/__LOG_DIR__/\/var\/log\/koha\/$name/g" \
         -e "s/__PLUGINS_DIR__/\/var\/lib\/koha\/$name\/plugins/g" \
         -e "s/__MEMCACHED_NAMESPACE__/$MEMCACHED_NAMESPACE/g" \
         -e "s/__MEMCACHED_SERVERS__/$MEMCACHED_SERVERS/g" \
