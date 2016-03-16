@@ -585,12 +585,13 @@ my $view = $batch
 
 my @relatives;
 if ( $borrowernumber ) {
-    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
-    if ( my $guarantor = $patron->guarantor ) {
-        push @relatives, $guarantor->borrowernumber;
-        push @relatives, $_->borrowernumber for $patron->siblings;
-    } else {
-        push @relatives, $_->borrowernumber for $patron->guarantees;
+    if ( my $patron = Koha::Patrons->find( $borrower->{borrowernumber} ) ) {
+        if ( my $guarantor = $patron->guarantor ) {
+            push @relatives, $guarantor->borrowernumber;
+            push @relatives, $_->borrowernumber for $patron->siblings;
+        } else {
+            push @relatives, $_->borrowernumber for $patron->guarantees;
+        }
     }
 }
 my $relatives_issues_count =
