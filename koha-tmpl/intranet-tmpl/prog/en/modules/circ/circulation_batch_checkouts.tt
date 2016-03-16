@@ -7,7 +7,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET destination = "circ" %]
 <title>Koha &rsaquo; Circulation
-[% IF borrowernumber %]
+[% IF borrowernumber and borrower %]
   &rsaquo; Batch check out &rsaquo; Issuing items to [% INCLUDE 'patron-title.inc' invert_name = 1 %]
 [% END %]
 </title>
@@ -42,7 +42,11 @@ $(document).ready(function() {
 [% INCLUDE 'circ-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;
-    <a href="/cgi-bin/koha/circ/circulation.pl">Batch check out</a> &rsaquo; [% INCLUDE 'patron-title.inc' %]
+    [% IF borrower and borrowernumber %]
+        <a href="/cgi-bin/koha/circ/circulation.pl">Batch check out</a> &rsaquo; [% INCLUDE 'patron-title.inc' %]
+    [% ELSE %]
+        Batch check out
+    [% END %]
 </div>
 <div id="doc3" class="yui-t2">
 
@@ -52,20 +56,20 @@ $(document).ready(function() {
 
 <div class="yui-g">
 
-[% IF ( borrowernumber ) %]
+[% IF borrowernumber and borrower %]
 [% INCLUDE 'members-toolbar.inc' %]
 [% END %]
 
-[% IF NOT batch_allowed %]
+[% IF borrower and not batch_allowed %]
   <div class="dialog alert">You are not allowed to use batch checkout for this patron</div>
-[% ELSIF noissues and not checkout_infos %]
+[% ELSIF borrower and noissues and not checkout_infos %]
   <div class="dialog alert">
     Cannot check out!
     [% IF charges_is_blocker %]
       Checkouts are <span class="circ-hlt">BLOCKED</span> because fine balance is <span class="circ-hlt">OVER THE LIMIT</span>.
     [% END %]
   </div>
-[% ELSIF NOT checkout_infos %]
+[% ELSIF borrower and not checkout_infos %]
   <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl">
     <fieldset id="circ_circulation_issue">
       <label for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
@@ -94,7 +98,7 @@ $(document).ready(function() {
     </fieldset>
   </form>
 
-[% ELSE %]
+[% ELSIF borrower %]
   [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
     <h3>Batch checkout confirmation [% IF borrowernumber %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] [% END %]</h3>
     <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
@@ -276,13 +280,17 @@ $(document).ready(function() {
     </form>
     [% END %]
 
+[% ELSE %]
+    <div class="dialog message">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>
 [% END %]
 
 </div>
 </div>
 </div>
-<div class="yui-b">
-[% INCLUDE 'circ-menu.inc' %]
-</div>
+[% IF borrower %]
+    <div class="yui-b">
+        [% INCLUDE 'circ-menu.inc' %]
+    </div>
+[% END %]
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
