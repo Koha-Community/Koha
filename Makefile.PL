@@ -1,4 +1,5 @@
 # Copyright 2007 MJ Ray
+# Copyright 2016 PTFS Europe
 #
 # This file is part of Koha.
 #
@@ -23,7 +24,7 @@ use warnings;
 use ExtUtils::MakeMaker;
 use POSIX;
 use File::Spec;
-use Getopt::Long;
+use Getopt::Long qw/HelpMessage/;
 use FindBin; # we need to enforce which C4::Installer::PerlModule is used in case more than one is installed
 
 use lib $FindBin::Bin;
@@ -71,6 +72,33 @@ Makefile.PL - Koha packager and installer
 =head2 CLEANING UP
 
 	make clean
+
+=head2 CLI PARAMETERS
+
+    --prev-install-log   Read configuration from previous installation
+    --install_mode       Installation mode (dev, standard, single)
+    --db_type            Database (mysql, Pg)
+    --db_host            Database host (e.g. localhost)
+    --db_port            Database port (e.g. 3306)
+    --db_name            Database name (e.g. koha)
+    --db_user            Database user (e.g. kohaadmin)
+    --db_pass            Database password (e.g. katikoan)
+    --zebra_marc_format  Zebra MARC format (marc21, normarc, unimarc)
+    --zebra_language     Zebra language (e.g. en)
+    --zebra_tokenizer    Zebra tokenizer (chr, icu)
+    --zebra_user         Zebra user (e.g. kohauser)
+    --zebra_pass         Zebra password (e.g. zebrastripes)
+    --auth_index_mode    Authority index mode (grs1, dom)
+    --bib_index_mode     Bibliographic index mode (grs1, dom)
+    --koha_user          Koha Unix user (e.g. koha)
+    --koha_group         Koha Unix group (e.g. koha)
+    --install_sru        Install the SRU server (yes, no)
+    --install_pazpar2    Install PazPar2 (yes, no)
+    --use_memcached      Use Memcached (yes, no)
+    --font_dir           Location of fonts (e.g. /usr/share/fonts/truetype/ttf-dejavu)
+    --run_database_tests Run database dependent tests (yes, no)
+    --install_base       Base directory of installation (e.g. /usr/share/koha)
+    --help               Display this help message
 
 =head1 DESCRIPTION
 
@@ -483,14 +511,62 @@ my %valid_config_values = (
 
 # get settings from command-line
 my $koha_install_log = "";
+my $cli_koha_install_mode = "";
+my $cli_koha_db_type = "";
+my $cli_koha_db_host = "";
+my $cli_koha_db_port = "";
+my $cli_koha_db_name = "";
+my $cli_koha_db_user = "";
+my $cli_koha_db_pass = "";
+my $cli_zebra_marc_format = "";
+my $cli_zebra_language = "",
+my $cli_zebra_tokenizer = "";
+my $cli_zebra_user = "";
+my $cli_zebra_pass = "";
+my $cli_koha_auth_index_mode = "";
+my $cli_koha_bib_index_mode = "";
+my $cli_koha_user = "";
+my $cli_koha_group = "";
+my $cli_koha_install_sru = "";
+my $cli_koha_install_pazpar2 = "";
+my $cli_koha_use_memcached = "";
+my $cli_koha_font_dir = "";
+my $cli_koha_run_database_tests = "";
+my $cli_koha_install_base = "";
 Getopt::Long::Configure('pass_through');
 my $results = GetOptions(
-    "prev-install-log=s" => \$koha_install_log
-);
+    "prev-install-log=s"   => \$koha_install_log,
+    "install_mode=s"       => \$cli_koha_install_mode,
+    "db_type=s"            => \$cli_koha_db_type,
+    "db_host=s"            => \$cli_koha_db_host,
+    "db_port=s"            => \$cli_koha_db_port,
+    "db_name=s"            => \$cli_koha_db_name,
+    "db_user=s"            => \$cli_koha_db_user,
+    "db_pass=s"            => \$cli_koha_db_pass,
+    "zebra_marc_format=s"  => \$cli_zebra_marc_format,
+    "zebra_language=s"     => \$cli_zebra_language,
+    "zebra_tokenizer=s"    => \$cli_zebra_tokenizer,
+    "zebra_user=s"         => \$cli_zebra_user,
+    "zebra_pass=s"         => \$cli_zebra_pass,
+    "auth_index_mode=s"    => \$cli_koha_auth_index_mode,
+    "bib_index_mode=s"     => \$cli_koha_bib_index_mode,
+    "koha_user=s"          => \$cli_koha_user,
+    "koha_group=s"         => \$cli_koha_group,
+    "install_sru=s"        => \$cli_koha_install_sru,
+    "install_pazpar2=s"    => \$cli_koha_install_pazpar2,
+    "use_memcached=s"      => \$cli_koha_use_memcached,
+    "font_dir=s"           => \$cli_koha_font_dir,
+    "run_database_tests=s" => \$cli_koha_run_database_tests,
+    "install_base=s"       => \$cli_koha_install_base,
+    "help"                 => sub { HelpMessage(0) },
+) or HelpMessage(1);
 
 my %install_log_values = ();
 if ($koha_install_log ne "") {
     get_install_log_values($koha_install_log, \%install_log_values);
+} else {
+    # Try to set install_log_values for provided values;
+    get_cli_values(\%install_log_values);
 }
 
 my %config = get_configuration(\%config_defaults, \%valid_config_values, \%install_log_values);
@@ -733,6 +809,43 @@ sub _add_to_file_map {
         $destination =~ s/ /\\ /g;
 
         $file_map->{$source} = $destination;
+    }
+}
+
+=head2 get_cli_values
+
+Reads values provided on cli for configuration values
+
+=cut
+
+sub get_cli_values {
+    my $values = shift;
+    my $map = {
+        INSTALL_MODE       => $cli_koha_install_mode,
+        DB_TYPE            => $cli_koha_db_type,
+        DB_HOST            => $cli_koha_db_host,
+        DB_PORT            => $cli_koha_db_port,
+        DB_NAME            => $cli_koha_db_name,
+        DB_USER            => $cli_koha_db_user,
+        DB_PASS            => $cli_koha_db_pass,
+        ZEBRA_MARC_FORMAT  => $cli_zebra_marc_format,
+        ZEBRA_LANGUAGE     => $cli_zebra_language,
+        ZEBRA_TOKENIZER    => $cli_zebra_tokenizer,
+        ZEBRA_USER         => $cli_zebra_user,
+        ZEBRA_PASS         => $cli_zebra_pass,
+        AUTH_INDEX_MODE    => $cli_koha_auth_index_mode,
+        BIB_INDEX_MODE     => $cli_koha_bib_index_mode,
+        KOHA_USER          => $cli_koha_user,
+        KOHA_GROUP         => $cli_koha_group,
+        INSTALL_SRU        => $cli_koha_install_sru,
+        INSTALL_PAZPAR2    => $cli_koha_install_pazpar2,
+        USE_MEMCACHED      => $cli_koha_use_memcached,
+        FONT_DIR           => $cli_koha_font_dir,
+        RUN_DATABASE_TESTS => $cli_koha_run_database_tests,
+        INSTALL_BASE       => $cli_koha_install_base
+    };
+    foreach my $key (keys %{$map}) {
+        $values->{$key} = $map->{$key} if ($map->{$key});
     }
 }
 
