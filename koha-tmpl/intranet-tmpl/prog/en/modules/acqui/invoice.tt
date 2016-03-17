@@ -136,8 +136,8 @@
                 <th class="gste">Actual cost tax exc.</th>
                 <th class="gsti">Actual cost tax inc.</th>
                 <th>Qty.</th>
-                <th class="gste">Total tax exc. ([% currency %])</th>
-                <th class="gsti">Total tax inc. ([% currency %])</th>
+                <th class="gste">Total tax exc. ([% currency.symbol %])</th>
+                <th class="gsti">Total tax inc. ([% currency.symbol %])</th>
                 <th>GST %</th>
                 <th>GST</th>
                 <th>Fund</th>
@@ -190,7 +190,7 @@
                 </tr>
               [% END %]
               <tr>
-                <th colspan='2'>Total ([% currency %])</th>
+                <th colspan='2'>Total ([% currency.symbol %])</th>
                 <th class="gste"/><th class="gsti"/>
                 <th>[% total_quantity %]</th>
                 <th class="gste">[% total_gste | $Price %]</th>
@@ -200,7 +200,7 @@
                 <th>&nbsp;</th>
               </tr>
               <tr>
-                <th colspan="2">Total + Shipment cost ([% currency %])</th>
+                <th colspan="2">Total + Shipment cost ([% currency.symbol %])</th>
                 <th class="gste"></th>
                 <th class="gsti"></th>
                 <th>[% total_quantity %]</th>
