@@ -65,21 +65,21 @@
     [% FOR message IN messages %]
       [% IF message.code == 'insert' %]
         [% IF message.number > 0 %]
-          <div class="dialog message">The field has been inserted</div>
+          <div class="dialog message">Field created.</div>
         [% ELSE %]
-          <div class="dialog alert">The field has not been inserted (name still exist?)</div>
+          <div class="dialog alert">The field could not be created. Perhaps the name already exists?</div>
         [% END %]
       [% ELSIF message.code == 'update' %]
         [% IF message.number > 0 %]
-          <div class="dialog message">The field has been updated</div>
+          <div class="dialog message">Field updated.</div>
         [% ELSE %]
-          <div class="dialog alert">The field has not been updated (name still exist?)</div>
+          <div class="dialog alert">The field could not be updated. Perhaps the name already exists?</div>
         [% END %]
       [% ELSIF message.code == 'delete' %]
         [% IF message.number > 0 %]
-          <div class="dialog message">The field has been deleted</div>
+          <div class="dialog message">Field deleted.</div>
         [% ELSE %]
-          <div class="dialog alert">The field has not been deleted</div>
+          <div class="dialog alert">The field could not be deleted. Check the log for errors.</div>
         [% END %]
       [% END %]
     [% END %]
