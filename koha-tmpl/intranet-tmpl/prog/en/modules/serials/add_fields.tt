@@ -21,6 +21,9 @@
         'aLengthMenu': [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
         'iDisplayLength': 20,
         'aaSorting': [[ 0, "asc" ]],
+        "aoColumnDefs": [
+            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+        ]
     }));
 
     $(".confirmdelete").click(function(){
@@ -104,9 +107,9 @@
               <td>
                 [% IF field.searchable %]Yes[% ELSE %]No[% END %]
               </td>
-              <td>
-                <a href="/cgi-bin/koha/serials/add_fields.pl?op=add_form&amp;field_id=[% field.id %]" title="Edit this field">Edit</a>
-                <a class="confirmdelete" href="/cgi-bin/koha/serials/add_fields.pl?op=delete&amp;field_id=[% field.id %]" title="Delete this field">Delete</a>
+              <td class="actions">
+                <a class="btn btn-mini" href="/cgi-bin/koha/serials/add_fields.pl?op=add_form&amp;field_id=[% field.id %]"><i class="fa fa-pencil"></i> Edit</a>
+                <a class="confirmdelete btn btn-mini" href="/cgi-bin/koha/serials/add_fields.pl?op=delete&amp;field_id=[% field.id %]"><i class="fa fa-trash"></i> Delete</a>
               </td>
             </tr>
           [% END %]
