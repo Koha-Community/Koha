@@ -10,14 +10,19 @@
     [% END %]
 
     [% IF ( showsql || execute || editsql || save_successful ) %]
-        [% UNLESS ( editsql ) # Do not show edit button on edit page %]
-            [% IF ( CAN_user_reports_create_reports ) %]
+        [% IF ( CAN_user_reports_create_reports ) %]
+            [% UNLESS ( editsql ) # Do not show edit button on edit page %]
                 <div class="btn-group">
                     <a id="editreport" class="btn btn-small" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&amp;phase=Edit%20SQL">
                         <i class="fa fa-pencil"></i> Edit
                     </a>
                 </div>
             [% END %]
+            <div class="btn-group">
+                <a class="btn btn-small" title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from SQL&amp;sql=[% sql %]&amp;reportname=[% reportname %]&amp;notes=[% notes %]">
+                    <i class="fa fa-copy"></i> Duplicate
+                </a>
+            </div>
         [% END %]
 
         [% IF ( CAN_user_reports_create_reports ) %]
@@ -32,6 +37,11 @@
             <div class="btn-group">
                 <a id="runreport" class="btn btn-small" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&amp;phase=Run%20this%20report">
                     <i class="fa fa-play"></i> Run report
+                </a>
+            </div>
+            <div class="btn-group">
+                <a class="btn btn-small" href="/cgi-bin/koha/tools/scheduler.pl?id=[% id %]">
+                    <i class="fa fa-clock-o"></i> Schedule
                 </a>
             </div>
         [% END %]
