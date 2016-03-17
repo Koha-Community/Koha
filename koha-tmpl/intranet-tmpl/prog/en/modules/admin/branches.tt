@@ -308,7 +308,7 @@ tinyMCE.init({
 
 [% IF ( editcategory ) %]
     <h3>[% IF ( categorycode ) %]Edit group [% categorycode %][% ELSE %]Add group[% END %]</h3>
-    <form action="[% action %]" name="Aform" method="post">
+    <form action="[% action %]" name="Aform" method="post" class="validated">
     <input type="hidden" name="op" value="addcategory_validate" />
 	[% IF ( categorycode ) %]
 	<input type="hidden" name="add" value="0">
@@ -323,14 +323,15 @@ tinyMCE.init({
                     <input type="hidden" name="categorycode" id="categorycode" value="[% categorycode |html %]" />
                     [% categorycode %]
                 [% ELSE %]
-                <label for="categorycode">Category code:</label>
+                <label for="categorycode" class="required">Category code:</label>
                     <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" class="required" required="required" />
                     <span class="required">Required</span>
                 [% END %]
             </li>
         <li>
-            <label for="categoryname">Name: </label>
-            <input type="text" name="categoryname" id="categoryname" size="32" maxlength="32" value="[% categoryname |html %]" />
+            <label for="categoryname" class="required">Name: </label>
+            <input type="text" name="categoryname" id="categoryname" size="32" maxlength="32" value="[% categoryname |html %]" class="required" required="required"/>
+            <span class="required">Required</span>
         </li>
         <li>
             <label for="codedescription">Description: </label>
@@ -358,7 +359,10 @@ tinyMCE.init({
         </li>
 		</ol>
     </fieldset>
-	<fieldset class="action"><input type="submit" value="Update" /></fieldset>
+    <fieldset class="action">
+        <input type="submit" value="Submit" />
+        <a href="/cgi-bin/koha/admin/branches.pl" class="cancel">Cancel</a>
+    </fieldset>
     </form>
 [% END %]
 
