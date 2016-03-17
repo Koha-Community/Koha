@@ -178,7 +178,7 @@ $template->param(
     total_gste_shipment => sprintf( $format, $total_gste + $details->{shipmentcost}),
     total_gsti_shipment => sprintf( $format, $total_gsti + $details->{shipmentcost}),
     invoiceincgst    => $bookseller->{invoiceincgst},
-    currency         => Koha::Acquisition::Currency->get_active->currency,
+    currency         => Koha::Acquisition::Currencies->get_active,
     budgets_loop     => \@budgets_loop,
 );
 
