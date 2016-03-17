@@ -79,7 +79,7 @@ tinyMCE.init({
     <div id="yui-main">
     <div class="yui-b">
 
-[% FOR m IN messages %]
+[% FOREACH m IN messages %]
     <div class="dialog [% m.type %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
@@ -381,13 +381,15 @@ tinyMCE.init({
 [% END %]
 
 [% IF op == 'delete_confirm_category' %]
-    <div class="dialog message">
-    Are you sure you want to delete the group '[% category.codedescription %]' ([% category.categorycode %])?
+    <div class="dialog alert">
+    <h3>Are you sure you want to delete the group '[% category.codedescription %]' ([% category.categorycode %])?</h3>
     <form action="/cgi-bin/koha/admin/branches.pl" method="post">
         <input type="hidden" name="op" value="delete_confirmed_category" />
         <input type="hidden" name="categorycode" value="[% category.categorycode |html %]" />
-        <input type="submit" value="Delete" />
-        <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a>
+        <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+    </form>
+    <form action="/cgi-bin/koha/admin/branches.pl" method="get">
+        <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
     </form>
     </div>
 [% END %]
