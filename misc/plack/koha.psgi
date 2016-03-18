@@ -5,7 +5,7 @@ use lib qw( ./lib );
 use Plack::Middleware::Debug;
 use Plack::App::Directory;
 
-use CGI qw(-utf8 ); # we will loose -utf8 under plack
+use CGI qw(-utf8 ); # we will lose -utf8 under plack
 {
     no warnings 'redefine';
     my $old_new = \&CGI::new;
