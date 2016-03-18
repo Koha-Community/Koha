@@ -12022,6 +12022,20 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+
+$DBversion = "XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+
+    my $c = $dbh->selectrow_array('SELECT COUNT(*) FROM systempreferences WHERE variable="intranetcolorstylesheet" AND value="blue.css"');
+
+    if ( $c ) {
+        print "WARNING: You are using a stylesheeet which has been removed from the Koha codebase.\n";
+        print "Update your intranetcolorstylesheet.\n";
+    }
+    print "Upgrade to $DBversion done (Bug 16019 - Check intranetcolorstylesheet for blue.css)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
