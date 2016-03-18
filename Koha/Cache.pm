@@ -84,43 +84,29 @@ sub new {
     $self->{'timeout'}   ||= 0;
     $self->{'namespace'} ||= $ENV{MEMCACHED_NAMESPACE} || 'koha';
 
-    if ( can_load( modules => { 'Cache::Memcached::Fast' => undef } ) ) {
-        _initialize_memcached($self);
-        if ( $self->{'default_type'} eq 'memcached'
-            && defined( $self->{'memcached_cache'} ) )
-        {
-            $self->{'cache'} = $self->{'memcached_cache'};
-        }
+    if ( $self->{'default_type'} eq 'memcached'
+        && can_load( modules => { 'Cache::Memcached::Fast' => undef } )
+        && _initialize_memcached($self)
+        && defined( $self->{'memcached_cache'} ) )
+    {
+        $self->{'cache'} = $self->{'memcached_cache'};
     }
 
     if ( $self->{'default_type'} eq 'fastmmap'
       && defined( $ENV{GATEWAY_INTERFACE} )
-      && can_load( modules => { 'Cache::FastMmap' => undef } ) ) {
-        _initialize_fastmmap($self);
-        if ( defined( $self->{'fastmmap_cache'} ) )
-        {
-            $self->{'cache'} = $self->{'fastmmap_cache'};
-        }
+      && can_load( modules => { 'Cache::FastMmap' => undef } )
+      && _initialize_fastmmap($self)
+      && defined( $self->{'fastmmap_cache'} ) )
+    {
+        $self->{'cache'} = $self->{'fastmmap_cache'};
     }
 
-    if ( can_load( modules => { 'Cache::Memory' => undef, nocache => 1 } ) ) {
-        _initialize_memory($self);
-        if ( $self->{'default_type'} eq 'memory'
-            && defined( $self->{'memory_cache'} ) )
-        {
-            $self->{'cache'} = $self->{'memory_cache'};
-        }
-    }
-
-    # Unless a default has already been picked, we go through in best-to-
-    # least-best order, looking for something we can use. fastmmap_cache
-    # is excluded because it doesn't support expiry in a useful way.
+    # Unless memcache or fastmmap has already been picked, use memory_cache
     unless ( defined( $self->{'cache'} ) ) {
-        foreach my $cachemember (qw(memcached_cache memory_cache )) {
-            if ( defined( $self->{$cachemember} ) ) {
-                $self->{'cache'} = $self->{$cachemember};
-                last;
-            }
+        if ( can_load( modules => { 'Cache::Memory' => undef, nocache => 1 } )
+            && _initialize_memory($self) )
+        {
+                $self->{'cache'} = $self->{'memory_cache'};
         }
     }
 
