@@ -103,7 +103,7 @@ sub new {
         }
     }
 
-    if ( can_load( modules => { 'Cache::Memory' => undef } ) ) {
+    if ( can_load( modules => { 'Cache::Memory' => undef, nocache => 1 } ) ) {
         _initialize_memory($self);
         if ( $self->{'default_type'} eq 'memory'
             && defined( $self->{'memory_cache'} ) )
