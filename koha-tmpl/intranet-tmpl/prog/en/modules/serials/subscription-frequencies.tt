@@ -97,7 +97,7 @@ $(document).ready(function() {
         [% IF (new) %]
           <h1>New frequency</h1>
         [% ELSE %]
-          <h1>Modify frequency: [% description %]</h1>
+          <h1>Edit frequency: [% description %]</h1>
         [% END %]
         <form action="/cgi-bin/koha/serials/subscription-frequencies.pl" method="post" onsubmit="return check_form();">
           [% IF (modify) %]
@@ -210,7 +210,7 @@ $(document).ready(function() {
                   <td>[% frequency.unitsperissue %]</td>
                   <td>[% frequency.displayorder %]</td>
                   <td class="actions">
-                    <a class="btn btn-mini" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=modify&frequencyid=[% frequency.id %]"><i class="fa fa-pencil"></i> Modify</a>
+                    <a class="btn btn-mini" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=modify&frequencyid=[% frequency.id %]"><i class="fa fa-pencil"></i> Edit</a>
                     <a class="delete_frequency btn btn-mini" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=del&frequencyid=[% frequency.id %]"><i class="fa fa-trash"></i> Delete</a>
                   </td>
                 </tr>
