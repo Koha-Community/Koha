@@ -54,7 +54,7 @@
                     [% END %]
                     [% IF ( OPACAmazonCoverImages ) %]
                         [% IF ( OPACURLOpenInNewWindow ) %]
-                            <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" target="_blank">
+                            <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" target="_blank" rel="noreferrer">
                         [% ELSE %]
                             <a href="http://www.amazon[% AmazonTld %]/dp/[% normalized_isbn %]">
                         [% END %]
@@ -88,7 +88,7 @@
                     [% IF ( BakerTaylorEnabled && bt_id ) %]
                         [% IF BakerTaylorBookstoreURL %]
                             [% IF ( OPACURLOpenInNewWindow ) %]
-                                <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]" target="_blank"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
+                                <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]" target="_blank" rel="noreferrer"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
                             [% ELSE %]
                                 <a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>
                             [% END %]
@@ -337,9 +337,9 @@
 
                                         [% IF ( OPACURLOpenInNewWindow ) %]
                                             [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblionumber | url %]" title="[% MARCurl.MARCURL %]" target="_blank">
+                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblionumber | url %]" title="[% MARCurl.MARCURL %]" target="_blank" rel="noreferrer">
                                             [% ELSE %]
-                                                <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank">
+                                                <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank" rel="noreferrer">
                                             [% END %]
                                         [% ELSE %]
                                             [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
@@ -436,9 +436,9 @@
                             <span class="results_summary">
                                 <span class="label">Series information:</span>
                                 [% IF ( using_https ) %]
-                                    <a target="_blank" href="https://secure.syndetics.com/ffseries.aspx?isbn=[% normalized_isbn %]&amp;type=series&amp;num=1&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]">Click to open in new window</a>
+                                    <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/ffseries.aspx?isbn=[% normalized_isbn %]&amp;type=series&amp;num=1&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]">Click to open in new window</a>
                                 [% ELSE %]
-                                    <a target="_blank" href="http://www.syndetics.com/ffseries.aspx?isbn=[% normalized_isbn %]&amp;type=series&amp;num=1&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]">Click to open in new window</a>
+                                    <a target="_blank" rel="noreferrer" href="http://www.syndetics.com/ffseries.aspx?isbn=[% normalized_isbn %]&amp;type=series&amp;num=1&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]">Click to open in new window</a>
                                 [% END %]
                             </span>
                         [% END # / IF SyndeticsSeries && SyndeticsSERIES1Exists%]
@@ -446,9 +446,9 @@
                             <span class="results_summary">
                                 <span class="label">Audiovisual profile:</span>
                                 [% IF ( using_https ) %]
-                                    <a target="_blank" href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/avprofile.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
+                                    <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/avprofile.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
                                 [% ELSE %]
-                                    <a target="_blank" href="http://www.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/avprofile.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
+                                    <a target="_blank" rel="noreferrer" href="http://www.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/avprofile.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
                                 [% END %]
                             </span>
                         [% END # / IF SyndeticsAVPROFILEExists %]
@@ -457,9 +457,9 @@
                             <span class="results_summary">
                             <span class="label">Fiction notes:</span>
                                 [% IF ( using_https ) %]
-                                    <a target="_blank" href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/fiction.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
+                                    <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/fiction.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
                                 [% ELSE %]
-                                    <a target="_blank" href="http://www.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/fiction.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
+                                    <a target="_blank" rel="noreferrer" href="http://www.syndetics.com/index.aspx?isbn=[% normalized_isbn %]/fiction.html&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]&amp;type=xw10">Click to open in new window</a>
                                 [% END %]
                             </span>
                         [% END # / IF SyndeticsFICTIONExists %]
@@ -468,9 +468,9 @@
                             <span class="results_summary">
                                 <span class="label">Awards:</span>
                                 [% IF ( using_https ) %]
-                                    <a target="_blank" href="https://secure.syndetics.com/ffawards.aspx?isbn=[% normalized_isbn %]&amp;type=awards&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]">Click to open in new window</a>
+                                    <a target="_blank" rel="noreferrer" href="https://secure.syndetics.com/ffawards.aspx?isbn=[% normalized_isbn %]&amp;type=awards&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]">Click to open in new window</a>
                                 [% ELSE %]
-                                    <a target="_blank" href="http://www.syndetics.com/ffawards.aspx?isbn=[% normalized_isbn %]&amp;type=awards&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]">Click to open in new window</a>
+                                    <a target="_blank" rel="noreferrer" href="http://www.syndetics.com/ffawards.aspx?isbn=[% normalized_isbn %]&amp;type=awards&amp;client=[% SyndeticsClientCode %][% IF ( normalized_upc ) %]&amp;upc=[% normalized_upc %][% END %][% IF ( normalized_oclc ) %]&amp;oclc=[% normalized_oclc %][% END %]">Click to open in new window</a>
                                 [% END %]
                             </span>
                         [% END # / IF SyndeticsAwards && SyndeticsAWARDS1Exists %]
@@ -515,7 +515,7 @@
                     [% IF ( BakerTaylorContentURL ) %]
                         <span class="results_summary">
                         <span class="label">Enhanced content: </span>
-                              [% IF ( OPACURLOpenInNewWindow ) %]<a href="[% BakerTaylorContentURL |html %]" target="_blank">Content Cafe</a>[% ELSE %]<a href="[% BakerTaylorContentURL |html %]">Content Cafe</a>[% END %]
+                              [% IF ( OPACURLOpenInNewWindow ) %]<a href="[% BakerTaylorContentURL |html %]" target="_blank" rel="noreferrer">Content Cafe</a>[% ELSE %]<a href="[% BakerTaylorContentURL |html %]">Content Cafe</a>[% END %]
                         </span>
                     [% END # / IF BakerTaylorContentURL %]
 
@@ -719,7 +719,7 @@
                                 [% FOREACH MARCNOTE IN MARCNOTES %]
                                     <p>
                                     [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                        <a target="_blank" href="[% MARCNOTE.marcnote %]">[% MARCNOTE.marcnote %]</a>
+                                        <a href="[% MARCNOTE.marcnote %]">[% MARCNOTE.marcnote %]</a>
                                     [% ELSE %]
                                         [% MARCNOTE.marcnote FILTER html_line_break %]
                                     [% END %]
@@ -1287,13 +1287,13 @@
                             [% IF ITEM_RESULT.uri %]
                                 [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
                                     [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
-                                    <a target="_blank" href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&amp;biblionumber=[% biblionumber |url %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
+                                    <a target="_blank" rel="noreferrer" href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&amp;biblionumber=[% biblionumber |url %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
                                     [% ELSE %]
                                     <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | url %]&amp;biblionumber=[% biblionumber |url %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
                                     [% END %]
                                 [% ELSE %]
                                     [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
-                                    <a target="_blank" href="[% ITEM_RESULT.uri %]" property="url">[% ITEM_RESULT.uri %]</a>
+                                    <a target="_blank" rel="noreferrer" href="[% ITEM_RESULT.uri %]" property="url">[% ITEM_RESULT.uri %]</a>
                                     [% ELSE %]
                                     <a href="[% ITEM_RESULT.uri %]" property="url">[% ITEM_RESULT.uri %]</a>
                                     [% END %]

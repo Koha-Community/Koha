@@ -244,7 +244,7 @@ function batchDelete(){
             [% FOREACH MARCNOTE IN BIBLIO_RESULT.MARCNOTES %]
                 <p>
                 [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                    - <a target="_blank" href="[% MARCNOTE.marcnote %]">[% MARCNOTE.marcnote %]</a>
+                    - <a href="[% MARCNOTE.marcnote %]">[% MARCNOTE.marcnote %]</a>
                 [% ELSE %]
                     - [% MARCNOTE.marcnote %]
                 [% END %]
