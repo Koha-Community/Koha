@@ -41,7 +41,7 @@ KOHA.Google = {
     gbsCallBack: function(booksInfo) {
          var target = '';
          if (this.openInNewWindow) {
-            target = 'target="_blank" ';
+            target = 'target="_blank" rel="noreferrer" ';
          }
          for (id in booksInfo) {
              var book = booksInfo[id];
