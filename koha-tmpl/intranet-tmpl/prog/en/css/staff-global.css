@@ -1161,7 +1161,7 @@ div.alert strong {
 }
 
 .dialog button {
-    background-color : #FFF;
+    background: #fff none;
     border: 1px outset #999999;
     border-top-color: #666;
     border-left-color: #666;
@@ -1624,11 +1624,11 @@ div#header_search input.submit {
 	padding : .1em;
 }
 
-input[type=submit]:active, input[type=button]:active, button.submit:active, a.submit:active {
+input[type=submit]:active, input[type=button]:active, button:active, a.submit:active {
 	border : 1px inset #999999;
 }
 
-input[type=submit], input[type=reset], input[type=button], input.submit, button.submit, a.submit {
+input[type=submit], input[type=reset], input[type=button], input.submit, button, a.submit {
 	border: 1px outset #999999;
 	border-top-color: #666;
 	border-left-color: #666;
@@ -1649,14 +1649,14 @@ input[type=submit]:disabled,
 input[type=reset]:disabled,
 input[type=button]:disabled,
 input.submit:disabled,
-button.submit:disabled,
+button:disabled,
 a.submit:disabled {
     color : #999;
     border : 1px solid #C0C0C0;
     background : #EEE none;
 }
 
-input[type=reset]:active, input[type=button]:active, input.submit:active, button.submit:active, a.submit:active {
+input[type=reset]:active, input[type=button]:active, input.submit:active, button:active, a.submit:active {
 	border : 1px inset #999999;
 }
 
@@ -2408,8 +2408,10 @@ video {
 }
 
 /* Bootstrap overrides */
+button,
 .btn {
     border-color : #ADADAD #ADADAD #949494;
+    font-family: arial,helvetica,clean,sans-serif;
 }
 
 .btn.btn-link {
