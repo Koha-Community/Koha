@@ -14,6 +14,7 @@ $(document).ready(function() {
     $('#patrons_to_add_fieldset').hide();
 
         $('#patron-list-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+            "order": [[ 3, "asc" ]],
             "aoColumns": [
                 null,null,null,null,null,null,null,{ "sType": "title-string" },null
             ],
@@ -113,7 +114,7 @@ $(document).ready(function() {
                     <tr>
                         <th>&nbsp;</th>
                         <th>Card</th>
-                        <th>Firstname</th>
+                        <th>First name</th>
                         <th>Surname</th>
                         <th>Address</th>
                         <th>Category</th>
