@@ -2625,6 +2625,7 @@ CREATE TABLE `message_transport_types` (
 DROP TABLE IF EXISTS `overduerules_transport_types`;
 CREATE TABLE overduerules_transport_types(
     `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `letternumber` INT(1) NOT NULL DEFAULT 1,
     `message_transport_type` VARCHAR(20) NOT NULL DEFAULT 'email',
     `overduerules_id` INT(11) NOT NULL,
     PRIMARY KEY (id),
