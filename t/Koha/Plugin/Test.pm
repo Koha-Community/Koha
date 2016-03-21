@@ -6,6 +6,7 @@ use Modern::Perl;
 ## Required for all plugins
 use base qw(Koha::Plugins::Base);
 
+our $VERSION = 1.01;
 our $metadata = {
     name            => 'Test Plugin',
     author          => 'Kyle M Hall',
