@@ -19,8 +19,7 @@ GetOptions(
 ) || pod2usage(1);
 
 if ($help) {
-    pod2usage(1);
-    exit;
+    pod2usage(0);
 }
 
 unless ( C4::Context->preference('UsageStats') ) {
