@@ -300,8 +300,11 @@ sub SearchAuthorities {
                 }
             }
 
-            my $thisauthtypecode = Koha::Authorities->find($authid)->authtypecode;
-            my $thisauthtype = Koha::Authority::Types->find($thisauthtypecode);
+            my ( $thisauthtype, $thisauthtypecode );
+            if ( my $authority = Koha::Authorities->find($authid) ) {
+                $thisauthtypecode = $authority->authtypecode;
+                $thisauthtype = Koha::Authority::Types->find($thisauthtypecode);
+            }
             unless (defined $thisauthtype) {
                 $thisauthtypecode = $authtypecode;
                 $thisauthtype = Koha::Authority::Types->find($thisauthtypecode);
