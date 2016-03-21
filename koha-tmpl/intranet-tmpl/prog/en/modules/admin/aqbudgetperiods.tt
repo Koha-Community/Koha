@@ -112,13 +112,11 @@
             tabs.tabs("option", "active", [% tab %]);
         [% END %]
         $("#activeperiodst,#inactiveperiodst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sDom": 't',
-            "aaSorting": [],
             "aoColumnDefs": [
                 { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 { "sType": "title-string", "aTargets" : [ "title-string" ] }
             ],
-            "bPaginate": false,
+            "sPaginationType": "four_button",
             'bAutoWidth': false
         } ) );
 
@@ -169,8 +167,8 @@
             ],
             'bSort': true,
             'aaSortingFixed': [[ 1, 'asc' ]],
-            'bPaginate': false,
-            "bAutoWidth": false
+            "bAutoWidth": false,
+            "sPaginationType": "full_numbers"
           }));
         [% END %]
     });
@@ -573,7 +571,6 @@
       [% ELSE %]
         No active budgets
       [% END %]
-      <div class="paginationBar">[% active_pagination_bar %]</div>
     </div>
     <div id="inactive">
       [% IF ( period_inactive_loop ) %]
@@ -606,7 +603,6 @@
       [% ELSE %]
         No inactive budgets
       [% END %]
-      <div class="pages">[% inactive_pagination_bar %]</div>
     </div>
   </div>
 [% END %]
