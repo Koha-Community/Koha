@@ -31,7 +31,7 @@
                 "dt_borrowernotes":
                     "[% data.borrowernotes.replace('\\\\' , '\\\\') |html |html_line_break |collapse %]",
                 "dt_action":
-                    "<a href='/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% data.borrowernumber %]'>Edit</a>",
+                    "<span style='white-space:nowrap'><a href='/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% data.borrowernumber %]' class='btn btn-mini'><i class='fa fa-pencil'></i> Edit</a></span>",
                 "borrowernumber":
                     "[% data.borrowernumber %]"
             }[% UNLESS loop.last %],[% END %]
