@@ -12023,7 +12023,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 }
 
 
-$DBversion = "XXX";
+$DBversion = "3.23.00.040";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
     my $c = $dbh->selectrow_array('SELECT COUNT(*) FROM systempreferences WHERE variable="intranetcolorstylesheet" AND value="blue.css"');
