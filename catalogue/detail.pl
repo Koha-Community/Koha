@@ -42,7 +42,6 @@ use Koha::DateUtils;
 use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use C4::Acquisition qw(GetOrdersByBiblionumber);
-
 use Koha::Virtualshelves;
 
 my $query = CGI->new();
@@ -220,7 +219,7 @@ foreach my $item (@items) {
     $item->{'ccode'} = $collections->{$ccode} if ( defined( $ccode ) && defined($collections) && exists( $collections->{$ccode} ) );
     my $copynumber = $item->{'copynumber'};
     $item->{'copynumber'} = $copynumbers->{$copynumber} if ( defined($copynumber) && defined($copynumbers) && exists( $copynumbers->{$copynumber} ) );
-    foreach (qw(ccode enumchron copynumber stocknumber itemnotes uri)) {
+    foreach (qw(ccode enumchron copynumber stocknumber itemnotes itemnotes_nonpublic uri)) {
         $itemfields{$_} = 1 if ( $item->{$_} );
     }
 
@@ -254,7 +253,15 @@ foreach my $item (@items) {
         $item->{nocancel} = 1;
     }
 
-    # item has a host number if its biblio number does not match the current bib
+    foreach my $f (qw( itemnotes )) {
+        if ($item->{$f}) {
+            $item->{$f} =~ s|\n|<br />|g;
+            $itemfields{$f} = 1;
+        }
+    }
+
+    #item has a host number if its biblio number does not match the current bib
+
     if ($item->{biblionumber} ne $biblionumber){
         $item->{hostbiblionumber} = $item->{biblionumber};
 	$item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
@@ -319,7 +326,8 @@ $template->param(
 	itemdata_copynumber => $itemfields{copynumber},
 	itemdata_stocknumber => $itemfields{stocknumber},
 	volinfo				=> $itemfields{enumchron},
-    itemdata_itemnotes  => $itemfields{itemnotes},
+        itemdata_itemnotes  => $itemfields{itemnotes},
+        itemdata_nonpublicnotes => $itemfields{itemnotes_nonpublic},
 	z3950_search_params	=> C4::Search::z3950_search_args($dat),
         hostrecords         => $hostrecords,
 	analytics_flag	=> $analytics_flag,
