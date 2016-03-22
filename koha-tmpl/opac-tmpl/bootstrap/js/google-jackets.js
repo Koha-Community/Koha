@@ -55,7 +55,7 @@ KOHA.Google = {
                      var re = /^gbs-thumbnail-preview/;
                      if ( re.exec($(this).attr("id")) ) {
                          $(this).append(
-                             '<div style="margin-bottom:5px; margin-top:-5px;font-size:9px">' +
+                             '<div class="google-books-preview">' +
                              '<a '+target+'href="' +
                              book.info_url +
                              '"><img src="' +
