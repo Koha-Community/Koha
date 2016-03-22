@@ -134,7 +134,7 @@ ok( Koha::Patron::Password::Recovery::CompletePasswordRecovery($uuid2) == 0, "[C
 # Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail #
 ###############################################################
 
-my $borrower = shift [ Koha::Patrons->search( { userid => $userid1 } ) ];
+my $borrower = Koha::Patrons->search( { userid => $userid1 } )->next;
 ok( Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1, 0) == 1, "[SendPasswordRecoveryEmail] Returns 1 on success" );
 my $letters = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber1, limit => 99 } );
 ok( scalar @$letters == 1, "[SendPasswordRecoveryEmail] There is a letter in the queue for our borrower");
