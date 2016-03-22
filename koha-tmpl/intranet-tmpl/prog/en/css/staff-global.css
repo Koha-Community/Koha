@@ -517,12 +517,11 @@ fieldset.brief ol, fieldset.brief li {
 }
 
 .hint {
-	color : #999999;
+    color : #666;
 	font-size : 95%;
 }
 
 fieldset.brief div.hint, fieldset.rows div.hint, div.yui-u div.hint {
-	font-size : 95%;
 	margin-bottom : .4em;
 }
 
@@ -1006,30 +1005,38 @@ tr.highlight th[scope=row] {
 	border-color : #BCBCBC;
 }
 
-#circ_circulation_issue label {
-	font-size: 105%;
-	font-weight : bold;
+label.circ_barcode {
+    font-size: 105%;
+    font-weight : bold;
 }
 
-#circ_circulation_issue div.hint {
-	color : #666666;
-	margin: .2em 0;
-}
-
-.date-select,
-.onsite_checkout-select {
+.checkout-setting {
     font-size : 85%;
     padding-top : .3em;
 }
 
-#circ_circulation_issue .date-select label,
-.date-select label {
+.checkout-setting label {
     font-size : inherit;
     font-weight: normal;
 }
 
-.date-select input {
+.checkout-setting input {
     vertical-align: middle;
+}
+
+.checkout-settings {
+    background-color: #f4f8f9;
+    border-radius: 0;
+    border-top: 2px solid #b9d8d9;
+    display: none;
+    margin-left: -1em;
+    margin-right: -1em;
+    margin-top: 1em;
+    padding: 1em 1em 0;
+}
+
+#show-checkout-settings {
+    margin-top: .5em;
 }
 
 tr.expired td {

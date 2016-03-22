@@ -650,7 +650,7 @@ No patron matched <span class="ex">[% message %]</span>
 
     [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
 
-    <label for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
+    <label class="circ_barcode" for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
 
 	<div class="hint">Enter item barcode:</div>
 
@@ -661,18 +661,44 @@ No patron matched <span class="ex">[% message %]</span>
     [% END %]
     <button type="submit" class="btn">Check out</button>
 
-    [% UNLESS noissues %]
-        <div class="date-select">
-            [% IF NEEDSCONFIRMATION %]
-                <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
-            [% ELSE %]
-                <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" />
+    <div id="show-checkout-settings">
+        <a href="#"><i class="fa fa-caret-right checkout-settings-icon"></i> Checkout settings</a>
+    </div>
+
+    <div class="checkout-settings">
+
+        [% UNLESS ( noissues && Koha.Preference('OnSiteCheckoutsForce') ) %]
+            [% IF ( SpecifyDueDate ) %]
+                <div id="specify-due-date" class="checkout-setting">
+                    <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
+                    [% IF ( duedatespec ) %]
+                        <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" readonly="readonly" />
+                    [% ELSE %]
+                        <input type="text" size="13" id="duedatespec" name="duedatespec" value="" readonly="readonly" />
+                    [% END %]
+                    <label for="stickyduedate"> Remember for session:</label>
+                    [% IF ( stickyduedate ) %]
+                        <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="checked" />
+                    [% ELSE %]
+                        <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" />
+                    [% END %]
+                    <button class="btn btn-small action" id="cleardate" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" >Clear</button>
+                </div>
             [% END %]
+        [% END %]
 
-            <label for="auto_renew">Automatic renewal</label>
+        [% UNLESS ( noissues ) %]
+            <div id="set-automatic-renewal" class="checkout-setting">
+                [% IF NEEDSCONFIRMATION %]
+                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
+                [% ELSE %]
+                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" />
+                [% END %]
 
-            <span class="circ-override-high-holds">
-                [% IF Koha.Preference('decreaseLoanHighHolds') %]
+                <label for="auto_renew">Automatic renewal</label>
+            </div>
+            [% IF Koha.Preference('decreaseLoanHighHolds') %]
+                <div id="set_high_holds_overrride" class="checkout-setting">
                     [% IF NEEDSCONFIRMATION %]
                         [% IF override_high_holds %]
                             <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" disabled="disabled" checked="checked"/>
@@ -686,45 +712,26 @@ No patron matched <span class="ex">[% message %]</span>
                             <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" />
                         [% END %]
                     [% END %]
-                    <label for="override_high_holds">Don't decrease loan length based on holds</label>
-                [% END %]
-            </span>
-        </div>
-    [% END %]
+                    <label for="override_high_holds">Don't decrease checkout length based on holds</label>
+                </div>
+            [% END %]
+        [% END %]
 
-    [% UNLESS ( noissues && Koha.Preference('OnSiteCheckoutsForce') ) %]
-        [% IF ( SpecifyDueDate ) %]
-            <div class="date-select">
-                <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
-                [% IF ( duedatespec ) %]
-                    <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec %]" readonly="readonly" />
+        [% IF Koha.Preference('OnSiteCheckouts') %]
+            <div id="onsite_checkout-select" class="checkout-setting">
+                [% IF noissues %]
+                    <div class="onsite-checkout-only">
+                        <input type="checkbox" id="onsite_checkout" name="onsite_checkout_forced" checked="checked" disabled="disabled" /> <label for="onsite_checkout">On-site checkouts only. Automatic due date: </label>
+                        <input type="text" name="duedatespec" id="duedatespec" readonly="readonly" />
+                        <input type="hidden" name="onsite_checkout" checked="checked" value="1" />
+                    </div>
                 [% ELSE %]
-                    <input type="text" size="13" id="duedatespec" name="duedatespec" value="" readonly="readonly" />
+                    <input type="checkbox" id="onsite_checkout" name="onsite_checkout" /> <label for="onsite_checkout">On-site checkout</label>
                 [% END %]
-                <label for="stickyduedate"> Remember for session:</label>
-                [% IF ( stickyduedate ) %]
-                    <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="checked" />
-                [% ELSE %]
-                    <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" />
-                [% END %]
-                <button class="btn btn-small action" id="cleardate" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" >Clear</button>
             </div>
         [% END %]
-    [% END %]
 
-    [% IF Koha.Preference('OnSiteCheckouts') %]
-        <div class="onsite_checkout-select">
-            [% IF noissues %]
-                <div class="onsite-checkout-only">
-                    <input type="checkbox" id="onsite_checkout" name="onsite_checkout_forced" checked="checked" disabled="disabled" /> <label for="onsite_checkout">On-site checkouts only. Automatic due date: </label>
-                    <input type="text" name="duedatespec" id="duedatespec" readonly="readonly" />
-                    <input type="hidden" name="onsite_checkout" checked="checked" value="1" />
-                </div>
-            [% ELSE %]
-                <input type="checkbox" id="onsite_checkout" name="onsite_checkout" /> <label for="onsite_checkout">On-site checkout</label>
-            [% END %]
-        </div>
-    [% END %]
+    </div> <!-- /.checkout-settings -->
 
           <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" />
           <input type="hidden" name="branch" value="[% branch %]" />

@@ -45,6 +45,21 @@ $(document).ready(function() {
         export_checkouts(output_format);
         return false;
     });
+
+    var checkout_settings = $(".checkout-settings");
+    var checkout_settings_icon = $(".checkout-settings-icon");
+
+    $("#show-checkout-settings a").on("click",function(){
+        if( checkout_settings.is(":hidden")){
+            checkout_settings.show();
+            checkout_settings_icon.removeClass("fa-caret-right").addClass("fa-caret-down");
+        } else {
+            $("#barcode").focus();
+            checkout_settings.hide();
+            checkout_settings_icon.removeClass("fa-caret-down").addClass("fa-caret-right");
+        }
+    });
+
 });
 
 function export_checkouts(format) {
