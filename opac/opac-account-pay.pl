@@ -24,7 +24,6 @@ use Modern::Perl;
 use CGI;
 use HTTP::Request::Common;
 use LWP::UserAgent;
-use URL::Encode qw(url_encode url_params_mixed);
 use URI;
 
 use C4::Auth;
@@ -64,8 +63,6 @@ my $error = 0;
 if ( $payment_method eq 'paypal' ) {
     my $ua = LWP::UserAgent->new;
 
-    my $amount = url_encode($amount_to_pay);
-
     my $url =
       C4::Context->preference('PayPalSandboxMode')
       ? 'https://api-3t.sandbox.paypal.com/nvp'
@@ -74,7 +71,7 @@ if ( $payment_method eq 'paypal' ) {
     my $opac_base_url = C4::Context->preference('OPACBaseURL');
 
     my $return_url = URI->new( $opac_base_url . "/cgi-bin/koha/opac-account-pay-paypal-return.pl" );
-    $return_url->query_form( { amount => $amount, accountlines => \@accountlines } );
+    $return_url->query_form( { amount => $amount_to_pay, accountlines => \@accountlines } );
 
     my $cancel_url = URI->new( $opac_base_url . "/cgi-bin/koha/opac-account.pl" );
 
@@ -104,10 +101,12 @@ if ( $payment_method eq 'paypal' ) {
     my $response = $ua->request( POST $url, $nvp_params );
 
     if ( $response->is_success ) {
-        my $params = url_params_mixed( $response->decoded_content );
 
-        if ( $params->{ACK} eq "Success" ) {
-            my $token = $params->{TOKEN};
+        my $urlencoded = $response->content;
+        my %params = URI->new( "?$urlencoded" )->query_form;
+
+        if ( $params{ACK} eq "Success" ) {
+            my $token = $params{TOKEN};
 
             my $redirect_url =
               C4::Context->preference('PayPalSandboxMode')
