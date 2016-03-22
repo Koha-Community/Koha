@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha ILS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-14 16:15-0300\n"
-"PO-Revision-Date: 2016-02-15 13:58+0000\n"
+"POT-Creation-Date: 2016-03-14 17:09-0300\n"
+"PO-Revision-Date: 2016-03-07 13:57+0000\n"
 "Last-Translator: Ingrid <ingridschiessl@gmail.com>\n"
 "Language-Team: Portuguese/Brazil <koha-br@lists.koha.org>\n"
 "Language: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1455544712.000000\n"
+"X-POOTLE-MTIME: 1457359031.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -791,6 +791,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
@@ -2888,6 +2889,13 @@ msgstr "Alarmes de Áudio"
 #, c-format
 msgid "Author"
 msgstr "Autor"
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:18
+#, c-format
+msgid ""
+"Authorised values category can be used to turn this search field in to a "
+"pull down instead of a free text field"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/authorities/detail.tt:3
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities-home.tt:3
@@ -6775,6 +6783,13 @@ msgstr ""
 "usuário, 'Excluir' e remover as alterações ou 'Ignorar' e manter as "
 "alterações pendentes para posterior revisão."
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:5
+#, fuzzy, c-format
+msgid ""
+"From here you can add custom search fields to the item search option in the "
+"staff client."
+msgstr "Aqui você pode enviar arquivos para anexar no registro de usuário."
+
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:7
 #, c-format
 msgid "From here you can add new bibliographic records to Koha."
@@ -6798,13 +6813,14 @@ msgid ""
 "will look at the itemnumbers and barcodes to match on for items. Itemnumbers "
 "take precedence over barcodes), or Ignore items and not add them."
 msgstr ""
-"A partir daí você pode optar por adicionar sempre itens independentemente do "
-"status de harmonização, adicioná-los somente se um babador correspondente "
-"foi encontrado , adicionar itens somente se não houve nenhum registro bib "
-"correspondência , substituir os itens se um babador correspondente foi "
-"encontrado ( O jogo vai olhar para o itemnumbers e códigos de barras para "
-"corresponder por itens. Itemnumbers têm precedência sobre os códigos de "
-"barras ) ou Ignorar itens e não adicioná-los."
+"A partir daí você pode optar sempre, por adicionar itens independentemente "
+"do status da regra de correspondência, adicioná-los somente se um registro "
+"bib correspondente for encontrado, adicionar itens somente se não houver "
+"nenhum registro bib na correspondência, substituir os itens se um registro "
+"bib correspondente for encontrado ( A regra correspondência vai verificar o "
+"número do item e códigos de barras para realizar a correspondência entre os "
+"itens. O Número do item têm precedência sobre os códigos de barras ) ou  a "
+"última opção que é: Ignorar itens e não adicioná-los."
 
 #: intranet-tmpl/prog/en/modules/help/serials/serials-collection.tt:7
 #, c-format
@@ -7939,8 +7955,8 @@ msgid ""
 "If the items can be deleted they will be and you will be presented with a "
 "confirmation of your deletion."
 msgstr ""
-"Se os itens pode ser excluídos, os mesmos serão excluídos e será presenteado "
-"com a confirma da operação."
+"Se os itens podem ser excluídos, estes serão excluídos e será apresentada um "
+"mensagem com a confirma da operação."
 
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:37
 #, c-format
@@ -10987,6 +11003,11 @@ msgstr ""
 "Exemplar retorna à biblioteca remetente: o funcionário será solicitado a "
 "transferir o exemplar de volta para a biblioteca onde foi emprestado "
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:3
+#, c-format
+msgid "Item search fields help"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:105
 #, c-format
 msgid "Item should be on the hold shelf waiting for someone else"
@@ -11378,6 +11399,11 @@ msgstr "LR = Examplar perdido devolvido/reposto"
 msgid "Label Creator"
 msgstr "Gerador de etiquetas"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:12
+#, fuzzy, c-format
+msgid "Label is what will appear on the item search page"
+msgstr "O nome que irá aparecer na lista de Listas"
+
 #. %1$s:  fields.008.0.substr( 28, 3 ) 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:128
 #, c-format
@@ -11663,10 +11689,20 @@ msgstr "Subcampos de Registros MARC"
 msgid "MARC export"
 msgstr "Exportação MARC"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:14
+#, c-format
+msgid "MARC field allows you to pick which field you'd like to search in"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:3
 #, c-format
 msgid "MARC import"
 msgstr "Importação MARC"
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:16
+#, c-format
+msgid "MARC subfield is the subfield you'd like to search in"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:50
 #, c-format
@@ -11862,9 +11898,9 @@ msgid ""
 "clicking the 'View' link under 'Diff' you can see the difference between "
 "versions."
 msgstr ""
-"Jogos aparecerá com informação sob o 'Match details column' ' e quando "
-"clicando em 'View' clicando em link sob 'Diff' você pode ver a diferença "
-"entre as versões."
+"As correspondências aparecerão na coluna 'Detalhes da regra de "
+"concordância'  e ao clicar em 'Ver', na coluna 'Diff' você pode ver a "
+"diferença entre as versões."
 
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:34
 #, c-format
@@ -12018,6 +12054,11 @@ msgid ""
 msgstr ""
 "NULL: significa que o usuário solicitou o primeiro disponível e o exemplar "
 "não foi escolhido"
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:10
+#, c-format
+msgid "Name is a field for you to identify the search term"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:26
 #, c-format
@@ -13253,6 +13294,13 @@ msgstr ""
 "editor do framework de edição de quadro onde você pode fazer qualquer "
 "alteração você precisa o framework que você importou"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:21
+#, c-format
+msgid ""
+"Once your new field is added it will be visible at the top of this page and "
+"on the item search page"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:121
 #, c-format
 msgid ""
@@ -14253,6 +14301,15 @@ msgid ""
 "is part of a rotating collection and which branch it should be sent to if it "
 "is not at the correct one."
 msgstr ""
+"Coleção Rotativa é uma ferramenta para o gerenciamento de coleções que "
+"frequentemente se deslocam de biblioteca para biblioteca. Esta possui a "
+"capacidade de armazenar não só qual a biblioteca de origem do item e sua "
+"localização atual, mas também informações sobre qual a próxima biblioteca "
+"para onde será transferido,garantindo que todos os itens na coleção sejam "
+"enviados para a biblioteca correta. Quando um item da Coleção \"Circulante\" "
+"é emprestado, a equipe da biblioteca é notificada de que o item faz parte da "
+"\"Coleção Circulante\" e qual biblioteca setorial o item deve ser enviado "
+"caso ele esteja na biblioteca errada."
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:347
 #, c-format
@@ -14690,6 +14747,11 @@ msgstr "Ver a documentação completa para Registros de Exemplares no "
 #, c-format
 msgid "See the full documentation for Item Types in the "
 msgstr "Ver a documentação completa para Tipos de material no "
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
+#, fuzzy, c-format
+msgid "See the full documentation for Item search fields in the "
+msgstr "Ver a documentação completa para Registros de Exemplares no "
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #, c-format
@@ -18355,8 +18417,8 @@ msgid ""
 msgstr ""
 "Esta ferramenta pode ser usada para importar tanto registros bibliográficos "
 "quanto de autoridades que estejam salvos no formato MARC. Importar registros "
-"para o Koha envolve duas etapas. A primeira é a fase de carregamento dos "
-"registros para importação."
+"para o Koha envolve duas etapas. A primeira é a fase organizar os registros "
+"para importação."
 
 #: intranet-tmpl/prog/en/modules/help/admin/checkmarc.tt:5
 #, c-format
@@ -18473,7 +18535,8 @@ msgstr "Isto será cobrado do usuário no empréstimo"
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:15
 #, c-format
 msgid "This will check the holiday calendar before charging fines"
-msgstr "Isto irá verificar o calendário de férias antes da cobrança de multa"
+msgstr ""
+"Isto irá verificar os feriados no calendário antes da cobrança de multa"
 
 #: intranet-tmpl/prog/en/modules/help/members/readingrec.tt:9
 #, c-format
@@ -18955,6 +19018,11 @@ msgid ""
 msgstr ""
 "Para adicionar um novo perfil, você quer clicar no botão 'Perfis' na parte "
 "superior da página e escolha 'Novo Perfil'"
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:7
+#, c-format
+msgid "To add a new search term simply fill in the 'Add a new field' area:"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:9
 #: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:25
@@ -20749,10 +20817,11 @@ msgid ""
 "find that the ISBN match is not working to your satisfaction you can change "
 "the AggressiveMatchOnISBN preference to 'Do' and then run your import again."
 msgstr ""
-"Ao usar a regra de correspondência ISBN Koha encontrará apenas "
-"correspondências exatas. Se você achar que le ISBN jogo não está funcionando "
-"para a sua satisfação, você pode mudar o Jogo preferência ISBN agressivo de "
-"\"fazer\" e depois executar sua importação novamente."
+"Ao usar a regra de correspondência para o ISBN, o Koha encontrará apenas "
+"correspondências exatas. Se você achar que a regra de correspondência para o "
+"ISBN não está funcionando como você deseja e /ou esperava, você pode "
+"configurar a preferência do sistema 'AggressiveMatchOnISBN' para \"faça\" e "
+"depois executar sua importação novamente."
 
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:5
 #, c-format
@@ -22556,8 +22625,8 @@ msgid "fast_cataloging "
 msgstr "fast_cataloging "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:35
-#, c-format
-msgid "fic:0 Non fiction"
+#, fuzzy, c-format
+msgid "fic:0 Non-fiction"
 msgstr "fic:0 Não ficção"
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:34
@@ -22856,6 +22925,7 @@ msgstr "gerenciamento "
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22

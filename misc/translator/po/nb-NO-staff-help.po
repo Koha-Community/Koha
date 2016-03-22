@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nb-NO-i-staff-prog-v-3000000\n"
-"POT-Creation-Date: 2016-02-14 15:46-0300\n"
-"PO-Revision-Date: 2015-12-03 13:53+0000\n"
-"Last-Translator: Magnus <magnus@enger.priv.no>\n"
+"POT-Creation-Date: 2016-03-14 16:34-0300\n"
+"PO-Revision-Date: 2016-03-08 12:19+0000\n"
+"Last-Translator: Silje <silje.grimseid@kul.oslo.kommune.no>\n"
 "Language-Team: Norwegian Bokmål <>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1449150824.000000\n"
+"X-POOTLE-MTIME: 1457439542.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -101,14 +101,14 @@ msgid "'Add item' will add just the one item"
 msgstr "\"Legg til eksemplar\" vil legge til ett eksemplar"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:34
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'Add multiple items' will ask how many items and will then add that number "
 "of items adding +1 to the barcode so each barcode is unique"
 msgstr ""
 "\"Legg til flere eksemplarer\" vil spørre om hvor mange eksemplarer du "
-"ønsker å legge til, og så legge til så mange eksemplarer. Strekkoden vil bli "
-"økt med 1 for hvert eksemplar, slik at alle strekkodene blir unike"
+"ønsker å legge til, og legge til antallet eksemplarer. Strekkoden vil bli "
+"økt med 1 for hvert eksemplar, slik at alle strekkodene blir unike."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:26
 #, c-format
@@ -164,9 +164,9 @@ msgid ""
 "catalogers can choose from a pull down to fill this field in"
 msgstr ""
 "'Autorisert verdi' lar deg velge en liste med autoriserte verdier som "
-"katalogisatorene kan velge fra en nedtrekksmeny for å fylle ut feltet. For å "
-"endre delfeltene knyttet til et felt, klikk på \"Delfelter\" til høyre for "
-"feltet i \"MARC-struktur\"-lista."
+"katalogisatorene kan velge fra en nedtrekksmeny. For å endre delfeltene "
+"knyttet til et felt, klikk på \"Delfelter\" til høyre for feltet i \"MARC-"
+"struktur\"-lista."
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:16
 #, c-format
@@ -707,6 +707,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
@@ -1460,9 +1461,9 @@ msgid ""
 msgstr ""
 "En mal er basert på det papiret du bruker. Dette kan være Avery 5160 for "
 "addresselapper, Gaylord 47-284 for ryggmerking eller Avery 28371 for "
-"lånerkort, bare for å nevne noen eksemper. Merkelappene vil gi deg all "
-"informasjonen du trenger for å sette opp en mal. Denne informasjonen kan "
-"være på innpakningen eller på leverandørens hjemmeside."
+"lånerkort, bare for å nevne noen eksempler. Merkelappene vil gi deg all "
+"informasjonen du trenger for å sette opp en mal. Informasjonen finnes "
+"vanligvis på innpakningen eller på leverandørens hjemmeside."
 
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:5
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:13
@@ -2664,6 +2665,13 @@ msgstr ""
 #, c-format
 msgid "Author"
 msgstr "Forfatter"
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:18
+#, c-format
+msgid ""
+"Authorised values category can be used to turn this search field in to a "
+"pull down instead of a free text field"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/authorities/detail.tt:3
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities-home.tt:3
@@ -6041,6 +6049,13 @@ msgid ""
 "review later."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:5
+#, c-format
+msgid ""
+"From here you can add custom search fields to the item search option in the "
+"staff client."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:7
 #, fuzzy, c-format
 msgid "From here you can add new bibliographic records to Koha."
@@ -9369,6 +9384,11 @@ msgid ""
 "transfer the item back to the library where it was checked out "
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:3
+#, c-format
+msgid "Item search fields help"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:105
 #, c-format
 msgid "Item should be on the hold shelf waiting for someone else"
@@ -9700,6 +9720,11 @@ msgstr ""
 msgid "Label Creator"
 msgstr "Etikettmaker"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:12
+#, fuzzy, c-format
+msgid "Label is what will appear on the item search page"
+msgstr "Navnet vil vises i oversikten over lister"
+
 #. %1$s:  fields.008.0.substr( 28, 3 ) 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:128
 #, fuzzy, c-format
@@ -9952,10 +9977,20 @@ msgstr "Delfelt i MARC-post"
 msgid "MARC export"
 msgstr "MARC-eksport"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:14
+#, c-format
+msgid "MARC field allows you to pick which field you'd like to search in"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:3
 #, fuzzy, c-format
 msgid "MARC import"
 msgstr "MARC-import"
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:16
+#, c-format
+msgid "MARC subfield is the subfield you'd like to search in"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:50
 #, c-format
@@ -10285,6 +10320,11 @@ msgstr "NATIONAL LIBRARY OF WALES cat.llgc.org.uk:210 default"
 msgid ""
 "NULL: means the patron requested the 1st available, and we haven't chosen "
 "the item"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:10
+#, c-format
+msgid "Name is a field for you to identify the search term"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:26
@@ -11275,6 +11315,13 @@ msgstr ""
 msgid ""
 "Once your import is complete you will be brought to the framework edit tool "
 "where you can make any changes you need to the framework you imported."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:21
+#, c-format
+msgid ""
+"Once your new field is added it will be visible at the top of this page and "
+"on the item search page"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:121
@@ -12617,6 +12664,11 @@ msgstr "Se dokumentasjonen for eksemplarer i "
 #, fuzzy, c-format
 msgid "See the full documentation for Item Types in the "
 msgstr "Se dokumentasjonen for dokumenttyper i "
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
+#, fuzzy, c-format
+msgid "See the full documentation for Item search fields in the "
+msgstr "Se dokumentasjonen for eksemplarer i "
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #, fuzzy, c-format
@@ -16218,6 +16270,11 @@ msgid ""
 "of your page and choose 'New Profile'"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:7
+#, c-format
+msgid "To add a new search term simply fill in the 'Add a new field' area:"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:9
 #: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:25
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:9
@@ -19216,8 +19273,8 @@ msgid "fast_cataloging "
 msgstr "fast_cataloging "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:35
-#, c-format
-msgid "fic:0 Non fiction"
+#, fuzzy, c-format
+msgid "fic:0 Non-fiction"
 msgstr "fic:0 Faglitteratur"
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:34
@@ -19500,6 +19557,7 @@ msgstr "management "
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22

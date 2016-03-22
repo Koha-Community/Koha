@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOHA 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-14 16:35-0300\n"
-"PO-Revision-Date: 2016-02-20 17:40+0200\n"
+"POT-Creation-Date: 2016-03-14 17:34-0300\n"
+"PO-Revision-Date: 2016-03-19 23:24+0200\n"
 "Last-Translator: Paul <paul.vilhan@gmail.com>\n"
 "Language-Team: Paul Vilhan\n"
 "Language: sk\n"
@@ -773,6 +773,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
@@ -2838,6 +2839,15 @@ msgstr "Zvukové upozornneia"
 #, c-format
 msgid "Author"
 msgstr "Autor"
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:18
+#, c-format
+msgid ""
+"Authorised values category can be used to turn this search field in to a "
+"pull down instead of a free text field"
+msgstr ""
+"Kategóriu povolených hodnôt možno použiť na zmenu tohto vyhľadávacieho poľa "
+"na rozbaľovaciu ponuku namiesto voľného textového poľa"
 
 #: intranet-tmpl/prog/en/modules/help/authorities/detail.tt:3
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities-home.tt:3
@@ -6689,6 +6699,15 @@ msgstr ""
 "a odobrať zmeny alebo 'Ignorovať' a zachovať zmeny čakajúce na neskoršie "
 "prezretie."
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:5
+#, c-format
+msgid ""
+"From here you can add custom search fields to the item search option in the "
+"staff client."
+msgstr ""
+"Odtiaľto môžete pridať vlastné vyhľadávacie polia k možnosti hľadania "
+"exemplárov v intranete."
+
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:7
 #, c-format
 msgid "From here you can add new bibliographic records to Koha."
@@ -9908,10 +9927,10 @@ msgid ""
 "branch pull down would be generated like this &lt;&lt;Branch|branches&gt;&gt;"
 msgstr ""
 "Dôležité: Navyše k použitiu ktoréhokoľvek kódu povolenej hodnoty na tvorbu "
-"rozbaľovacej ponuky, môžete použiť aj nasledovné hodnoty: Pobočky "
-"(branches), Typy exemplárov (itemtypes) a Kategórie čitateľov "
-"(categorycode). Napríklad, ponuka pobočiek sa vygeneruje takto: &lt;&lt;"
-"Pobočky|branches&gt;&gt;"
+"rozbaľovacej ponuky, môžete použiť aj nasledovné hodnoty: Pobočky (branches)"
+", Typy exemplárov (itemtypes) a Kategórie čitateľov (categorycode). "
+"Napríklad, ponuka pobočiek sa vygeneruje takto: "
+"&lt;&lt;Pobočky|branches&gt;&gt;"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:7
 #, c-format
@@ -10822,6 +10841,11 @@ msgstr ""
 "Exemplár sa vracia do výpožičnej knižnice: Exemplár vyzve knihovníka, aby "
 "presunul exemplár späť do knižnice, z ktorej bol vypožičaný "
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:3
+#, c-format
+msgid "Item search fields help"
+msgstr "Pomoc pre polia hľadania exemplárov"
+
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:105
 #, c-format
 msgid "Item should be on the hold shelf waiting for someone else"
@@ -11210,6 +11234,11 @@ msgstr "LR = Stratený exemplár vrátený/nahradený"
 msgid "Label Creator"
 msgstr "Tvorba etikiet"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:12
+#, c-format
+msgid "Label is what will appear on the item search page"
+msgstr "Etiketa sa objaví na stránke hľadania exemplárov"
+
 #. %1$s:  fields.008.0.substr( 28, 3 ) 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:128
 #, c-format
@@ -11488,10 +11517,20 @@ msgstr "Podpolia záznamu MARC"
 msgid "MARC export"
 msgstr "MARC export"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:14
+#, c-format
+msgid "MARC field allows you to pick which field you'd like to search in"
+msgstr "Pole MARC vám umožňuje zvoliť si, v ktorom poli by ste chceli hľadať"
+
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:3
 #, c-format
 msgid "MARC import"
 msgstr "MARC import"
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:16
+#, c-format
+msgid "MARC subfield is the subfield you'd like to search in"
+msgstr "Podpole MARC je podpole, v ktorom by ste chceli hľadať"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:50
 #, c-format
@@ -11840,6 +11879,11 @@ msgid ""
 msgstr ""
 "NULL: znamená, že čitateľ si vyžiadal prvý dostupný, a my sme nezvolili "
 "exemplár"
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:10
+#, c-format
+msgid "Name is a field for you to identify the search term"
+msgstr "Názov je pole, v ktorom môžete určiť vyhľadávaný pojem"
 
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:26
 #, c-format
@@ -13041,6 +13085,15 @@ msgid ""
 msgstr ""
 "Po dokončení vášho importu sa vám zobrazí nástroj úpravy rámca, kde môžete "
 "uskutočniť ľubovoľné zmeny potrebné pre vami importovaný rámec."
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:21
+#, c-format
+msgid ""
+"Once your new field is added it will be visible at the top of this page and "
+"on the item search page"
+msgstr ""
+"Len čo pridáte vaše nové pole, bude viditeľné navrchu tento stránky a na "
+"stránke hľadania exemplárov"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:121
 #, c-format
@@ -14474,6 +14527,11 @@ msgstr "Pozrite si kompletnú dokumentáciu o záznamoch exemplárov v "
 #, c-format
 msgid "See the full documentation for Item Types in the "
 msgstr "Pozrite si kompletnú dokumentáciu o typoch exemplárov v "
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
+#, c-format
+msgid "See the full documentation for Item search fields in the "
+msgstr "Pozrite si kompletnú dokumentáciu o hľadaní polí exemplárov v "
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #, c-format
@@ -18667,6 +18725,12 @@ msgstr ""
 "Pre pridanie nového profilu, kliknite na tlačidlo 'Profily' na vrchu stránky "
 "a zvoľte 'Nový profil'"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:7
+#, c-format
+msgid "To add a new search term simply fill in the 'Add a new field' area:"
+msgstr ""
+"Pre pridanie nového pojmu hľadania jednoducho vyplňte 'Pridať nové pole':"
+
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:9
 #: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:25
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:9
@@ -18861,8 +18925,8 @@ msgstr ""
 "Pre vytvorenie novej cirkulujúcej zbierky, kliknite na tlačidlo \"Nová "
 "zbierka\", vyplňte Názov a Popis a kliknite na Odoslať. Potom sa zobrazí "
 "hlásenie \"Názov zbierky bol úspešne pridaný\"; kliknite na \"Vrátiť sa do "
-"cirkulujúcich zbierok\" a vráťte sa na stránku správy Cirkulujúcich zbierok ("
-"alebo kliknite na Cirkulujúce zbierky na bočnej lište)."
+"cirkulujúcich zbierok\" a vráťte sa na stránku správy Cirkulujúcich zbierok "
+"(alebo kliknite na Cirkulujúce zbierky na bočnej lište)."
 
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:15
 #, c-format
@@ -22251,8 +22315,8 @@ msgstr "rýchla_katalogizácia "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:35
 #, c-format
-msgid "fic:0 Non fiction"
-msgstr "fic:0 Nebeletria"
+msgid "fic:0 Non-fiction"
+msgstr "fic:0 Ne-fikcia"
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:34
 #, c-format
@@ -22552,6 +22616,7 @@ msgstr "spracovanie "
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22

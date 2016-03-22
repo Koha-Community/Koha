@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: koha\n"
-"POT-Creation-Date: 2016-02-14 15:24-0300\n"
+"POT-Creation-Date: 2016-03-14 16:08-0300\n"
 "PO-Revision-Date: 2013-06-19 01:21+0300\n"
 "Last-Translator: Harem Abdullah <harem.suli@gmail.com>\n"
 "Language-Team: kurdish translation team\n"
@@ -478,7 +478,7 @@ msgstr ""
 #. %4$s:  END 
 #. %5$s:  ELSE 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:670
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:671
 #, fuzzy, c-format
 msgid "%s %sShared%sPrivate%s %s Public %s "
 msgstr "%sتایبه‌ت%s %sگشتی%s "
@@ -1274,7 +1274,7 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:669
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:670
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr "%s%s %sئایتم%sئایتمه‌كان%s%sبه‌تاڵ%s"
@@ -1631,11 +1631,13 @@ msgstr "%s %s%s%s%sكۆهای ڕاسته‌وخۆی له‌سه‌رهێڵ%s پ�
 #. %4$s:  END 
 #. %5$s:  title |html 
 #. %6$s:  FOREACH subtitl IN subtitle 
-#. %7$s:  subtitl.subfield |html 
+#. %7$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %8$s:  END 
+#. %9$s:  subtitl.subfield |html 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
 #, fuzzy, c-format
-msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s"
+msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
 msgstr "%s %s%s%sكۆهای ڕاسته‌وخۆی له‌سه‌رهێڵ%s پێڕست &rsaquo; وێنه‌ی : %s %s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -2989,7 +2991,7 @@ msgid "- You must enter a Title"
 msgstr "- پێویسته‌ ناونیشانێك داخڵ بكه‌یت"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 msgid "- You must enter a list name"
 msgstr "- پێویسته‌ لیستێكی ناوه‌كان داخڵ بكه‌یت"
 
@@ -3458,7 +3460,7 @@ msgid "Are you sure you want to delete selected search history entries?"
 msgstr "ئایا دڵنیایت كه‌ ده‌توێت مێژووی گه‌ڕانت بسڕیته‌وه‌ ؟"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 msgid "Are you sure you want to delete this list?"
 msgstr "هل انت متأكد انك تريد حذف هذه القائمة؟"
 
@@ -3478,18 +3480,18 @@ msgid "Are you sure you want to remove the selected items?"
 msgstr "هل أنت متأكد أنك تريد إزالة المواد المحددة؟"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 msgid "Are you sure you want to remove these items from the list?"
 msgstr " ئایا دڵنیایت كه‌ ده‌ته‌وێت ئه‌م ئایتمانه‌ له‌ لیسته‌كه‌ت لابه‌ریت ؟"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 #, fuzzy
 msgid "Are you sure you want to remove this item from the list?"
 msgstr " ئایا دڵنیایت كه‌ ده‌ته‌وێت ئه‌م ئایتمانه‌ له‌ لیسته‌كه‌ت لابه‌ریت ؟"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 #, fuzzy
 msgid "Are you sure you want to remove this share?"
 msgstr "ئایا دڵنیایت كه‌  ده‌توێت ئه‌م لیسته‌ بسڕییته‌وه‌"
@@ -3570,8 +3572,8 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:218
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:568
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:570
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:569
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:571
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:63
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:245
 #, c-format
@@ -3861,8 +3863,8 @@ msgstr "رقم الطلب"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:228
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:230
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:578
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:580
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:579
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:581
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1175
@@ -3902,8 +3904,8 @@ msgstr "ژماره‌ی داواكردن"
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:40
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:274
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:614
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:616
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:615
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:617
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
@@ -3982,7 +3984,7 @@ msgstr "الفهرس"
 msgid "Catalogs"
 msgstr "الفهارس"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:81
 #, c-format
 msgid "Category:"
@@ -4095,7 +4097,7 @@ msgstr "مسح"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:36
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:49
@@ -4306,7 +4308,7 @@ msgstr "المحتوى"
 msgid "Content Cafe"
 msgstr "Content Cafe"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:659
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:660
 #, c-format
 msgid "Contents"
 msgstr "المحتويات"
@@ -4393,7 +4395,7 @@ msgstr "contours"
 msgid "Cover image"
 msgstr "وێنه‌ی به‌رگ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:546
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:547
 #, c-format
 msgid "Create a new list"
 msgstr "إنشئ قائمة جديدة"
@@ -4576,7 +4578,7 @@ msgstr ""
 "به‌هاشیاوه‌كان "
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:694
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:92
@@ -4590,7 +4592,7 @@ msgstr "حذف"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:191
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:511
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:512
 msgid "Delete list"
 msgstr "حذف القائمة"
 
@@ -4600,7 +4602,7 @@ msgid "Delete selected"
 msgstr "حذف المحدد"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:537
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:538
 msgid "Delete this list"
 msgstr "ئه‌م لیسته‌ بسڕه‌وه‌"
 
@@ -4651,11 +4653,13 @@ msgstr "وێنه‌ی %s"
 
 #. %1$s:  title |html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield |html 
+#. %3$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %4$s:  END 
+#. %5$s:  subtitl.subfield |html 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
 #, fuzzy, c-format
-msgid "Details for: %s%s, %s%s"
+msgid "Details for: %s%s%s,%s %s%s"
 msgstr "هیچ سه‌رنجێك نیه‌ له‌سه‌ر %s %s, %s%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:175
@@ -4796,7 +4800,7 @@ msgid "ERROR: No record id specified. "
 msgstr "هه‌ڵه‌: هیچ ژماره‌یه‌كی بیبیلیۆگرافی به‌ده‌ست نه‌گه‌شتووه‌"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:684
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:685
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:910
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:61
 #, c-format
@@ -4805,7 +4809,7 @@ msgstr "تعديل"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:183
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:504
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:505
 msgid "Edit list"
 msgstr "تعديل القائمة"
 
@@ -4814,7 +4818,7 @@ msgstr "تعديل القائمة"
 msgid "Edit list "
 msgstr "تعديل القائمة "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:549
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:550
 #, fuzzy, c-format
 msgid "Editing "
 msgstr "چاپ "
@@ -5190,7 +5194,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 msgid "Form not submitted because of the following problem(s)"
 msgstr "الشكل غير مقدم بسبب المشاكل التالية"
@@ -6182,7 +6186,7 @@ msgstr "ناوی لیست"
 msgid "List deleted."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:658
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:659
 #, c-format
 msgid "List name"
 msgstr "ناوی لیست"
@@ -6193,7 +6197,7 @@ msgstr "ناوی لیست"
 msgid "List name:"
 msgstr "اسم القائمة:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:557
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
 #, c-format
 msgid "List name: "
 msgstr "اسم القائمة: "
@@ -6211,7 +6215,7 @@ msgstr "ئه‌و لیستانه‌ی ئه‌م ئایتمه‌ی تیادا د�
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:623
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:624
 #, c-format
 msgid "Lists"
 msgstr "قوائم"
@@ -6221,7 +6225,7 @@ msgstr "قوائم"
 msgid "Loading"
 msgstr "كاری تیادا ده‌كرێت"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:738
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:739
 #, fuzzy, c-format
 msgid "Loading "
 msgstr "التحميل..."
@@ -6273,8 +6277,8 @@ msgstr "الموقع"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:328
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:152
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:650
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:726
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:84
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:73
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:294
@@ -6640,7 +6644,7 @@ msgstr "هیچ سه‌رنجێك نیه‌ له‌سه‌ر %s %s, %s%s"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:70
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:167
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:497
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:647
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:648
 #, c-format
 msgid "New list"
 msgstr "لیستێکی نوێ"
@@ -6824,7 +6828,7 @@ msgstr "هیچ ئایتمێکی بەرجەستە بیە بۆ ئەم تۆمارە
 msgid "No private lists"
 msgstr "هیچ لیستێكی تایبه‌ت نیه‌"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:718
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:719
 #, c-format
 msgid "No private lists."
 msgstr "هیچ لیستێکی تایبەت بوونی نیە"
@@ -6834,7 +6838,7 @@ msgstr "هیچ لیستێکی تایبەت بوونی نیە"
 msgid "No public lists"
 msgstr "هیچ لیستێكی گشتی نیه‌"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:717
 #, c-format
 msgid "No public lists."
 msgstr "هیچ لیستێکی گشتی بوونی نیە"
@@ -6881,8 +6885,8 @@ msgid "No tags from this library for this title."
 msgstr "له‌م كتێبخانه‌یه‌دا هیچ تاگێك بۆ ئه‌م ناونیشانه‌ نیه‌"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:292
-#, c-format
-msgid "Non fiction"
+#, fuzzy, c-format
+msgid "Non-fiction"
 msgstr "زانستی"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:295
@@ -7326,7 +7330,7 @@ msgstr "نۆره‌ی بۆ دابنێ"
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:231
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:437
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:440
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:509
@@ -7559,8 +7563,8 @@ msgstr "پێشخوازی"
 msgid "Priority:"
 msgstr "پێشخوازی:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:589
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:592
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:83
 #, c-format
 msgid "Private"
@@ -7587,8 +7591,8 @@ msgstr "چارەسەردەکات..."
 msgid "Programmed texts"
 msgstr "تێکستە بەرنامەڕێژکراوەکان"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:594
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:596
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:595
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:597
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:85
 #, c-format
 msgid "Public"
@@ -7597,8 +7601,8 @@ msgstr "گشتی"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:41
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:634
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:636
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:635
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:637
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:19
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:41
 #, c-format
@@ -7836,7 +7840,7 @@ msgid "Remove field"
 msgstr "خانه‌ی كۆده‌كان"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 msgid "Remove from list"
 msgstr "لابردن له‌ لیست"
 
@@ -7846,7 +7850,7 @@ msgid "Remove from this list"
 msgstr "لابردن له‌ لیست"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:530
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:531
 msgid "Remove selected items"
 msgstr "لابردنی ئایتمه‌ ده‌ستنیشانكراوه‌كان"
 
@@ -7861,7 +7865,7 @@ msgstr "لابردنی تۆمارە هەڵبژێراوەکان"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:202
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:705
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:706
 #, fuzzy
 msgid "Remove share"
 msgstr "خانه‌ی كۆده‌كان"
@@ -8129,7 +8133,7 @@ msgid "Saturday"
 msgstr "شەممە"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:612
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:613
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:67
@@ -8342,7 +8346,7 @@ msgstr "كۆپیه‌كی دیاریكراو هه‌ڵبژێره‌"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:258
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:48
@@ -8380,7 +8384,7 @@ msgid "Select the term(s) to search"
 msgstr "ناونیشانه‌كان ده‌ستنیشان بكه‌ بۆ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:262
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
@@ -8484,7 +8488,7 @@ msgstr "خوله‌كه‌ بچڕا"
 msgid "Settings updated"
 msgstr "چاكردنه‌كان نوێكرانه‌وه‌"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:698
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
 #, c-format
 msgid "Share"
@@ -8757,7 +8761,7 @@ msgstr "ڕێكیبخه‌ به‌پێی"
 msgid "Sort by: "
 msgstr "الفرز حسب: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:560
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:561
 #, c-format
 msgid "Sort this list by: "
 msgstr "فرز هذه القائمة حسب: "
@@ -9340,7 +9344,7 @@ msgstr "ئه‌م ئایتمه‌ زیاد كرا بۆ سه‌به‌ته‌كه
 msgid "The item is already in your cart"
 msgstr "ئه‌م ئایتمه‌ خۆی له‌ سه‌به‌ته‌كه‌تدایه‌"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:600
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:601
 #, c-format
 msgid ""
 "The library has disabled the ability for patrons to create new public lists. "
@@ -9560,7 +9564,7 @@ msgid "This list does not exist."
 msgstr "ناتوانی داوای ئه‌م ناونیشانه‌ بكه‌ی"
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:517
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:518
 #, fuzzy, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
@@ -9637,8 +9641,8 @@ msgstr "الخميس"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:222
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:224
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:563
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:565
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:564
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:566
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
@@ -9763,7 +9767,7 @@ msgid "Tweet"
 msgstr "Tweet"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:68
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:660
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:661
 #, c-format
 msgid "Type"
 msgstr "نوع"
@@ -10031,7 +10035,7 @@ msgstr "له‌گه‌ڵ پێشنیاره‌ ده‌ستنیشانكراوه‌�
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 msgid "With selected titles: "
@@ -10055,8 +10059,8 @@ msgstr ""
 msgid "Written on %s by %s"
 msgstr "نوسراوه‌ له‌سه‌ر %s له‌ڕێی %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:573
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:575
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:574
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:576
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:246
 #, c-format
 msgid "Year"
@@ -10510,8 +10514,8 @@ msgstr "لیسته‌كه‌ت : %s "
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:628
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:629
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:631
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:17
 #, c-format
 msgid "Your lists"
@@ -11233,7 +11237,7 @@ msgstr "return_type"
 msgid "schema"
 msgstr "هێڵكاری"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:520
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:521
 #, c-format
 msgid "search"
 msgstr "گه‌ڕان"
@@ -11398,8 +11402,8 @@ msgstr ""
 "ڕه‌نگه‌ دره‌نكه‌وتنێك ڕوبدات ئه‌گه‌ر له‌ ئینته‌رنێته‌وه‌ بته‌وێت پێگه‌كه‌ت كارا "
 "بكه‌یته‌وه‌)%s."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:650
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:726
 #, c-format
 msgid "to create new lists."
 msgstr "بۆ دروستكردنی لیستێكی نوێ"
