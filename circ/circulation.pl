@@ -288,7 +288,6 @@ if ($borrowernumber) {
     {
         #borrowercard expired, no issues
         $template->param(
-            flagged  => "1",
             noissues => ($force_allow_issue) ? 0 : "1",
             forceallow => $force_allow_issue,
             expired => "1",
@@ -301,7 +300,6 @@ if ($borrowernumber) {
     {
         # borrower card soon to expire warn librarian
         $template->param( "warndeparture" => $borrower->{dateexpiry} ,
-                          flagged         => "1"
                         );
         if (C4::Context->preference('ReturnBeforeExpiry')){
             $template->param("returnbeforeexpiry" => 1);
@@ -470,7 +468,6 @@ if ($borrowernumber) {
 #title
 my $flags = $borrower->{'flags'};
 foreach my $flag ( sort keys %$flags ) {
-    $template->param( flagged=> 1);
     $flags->{$flag}->{'message'} =~ s#\n#<br />#g;
     if ( $flags->{$flag}->{'noissues'} ) {
         $template->param(
@@ -562,10 +559,6 @@ my $patron_messages = Koha::Patron::Messages->search(
         message_type => 'B',
     }
 );
-
-if( $librarian_messages->count or $patron_messages->count ) {
-    $template->param(flagged => 1)
-}
 
 my $fast_cataloging = 0;
 if (defined getframeworkinfo('FA')) {

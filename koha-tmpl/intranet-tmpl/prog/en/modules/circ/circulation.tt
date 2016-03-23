@@ -409,7 +409,7 @@ $(document).ready(function() {
 </form>
 
 [% IF ( RESERVED || ISSUED_TO_ANOTHER ) && (CAN_user_reserveforothers_place_holds ) %]
-    [% UNLESS flagged && noissues %]
+    [% UNLESS noissues %]
         <button type="submit" onclick="window.location.href='/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber %]&borrowernumber=[% borrowernumber %]'"><i class="fa fa-times-circle"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title.inc' %]</button>
     [% END %]
 [% END %]
@@ -607,12 +607,7 @@ No patron matched <span class="ex">[% message %]</span>
 [% END %]
 
 [% IF ( !noissues ) || ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') )%]
-[% IF ( flagged ) %]
 <div class="yui-u first">
-[% ELSE %]
-<div>
-
-[% END %]
 
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
     <input type="hidden" name="restoreduedatespec" />
@@ -638,7 +633,7 @@ No patron matched <span class="ex">[% message %]</span>
     [% END %]
     <button type="submit" class="btn">Check out</button>
 
-    [% UNLESS flagged and noissues %]
+    [% UNLESS noissues %]
         <div class="date-select">
             [% IF NEEDSCONFIRMATION %]
                 <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
@@ -713,7 +708,6 @@ No patron matched <span class="ex">[% message %]</span>
     <div class="yui-u">
 [% END %]
 
-    [% IF flagged %]
         [% IF ( noissues ) %]
             [% IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) %]
                 <div id="circmessages" class="circmessage attention">
@@ -862,9 +856,6 @@ No patron matched <span class="ex">[% message %]</span>
         </ul>
     </div>
 
-     <!-- /If flagged -->[% END %]
-
-	
 </div>
 </div>
 
