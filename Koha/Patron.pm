@@ -45,7 +45,7 @@ Returns a Koha::Patron object for this patron's guarantor
 sub guarantor {
     my ( $self ) = @_;
 
-    return undef unless $self->guarantorid();
+    return unless $self->guarantorid();
 
     return Koha::Patrons->find( $self->guarantorid() );
 }
@@ -79,7 +79,7 @@ sub siblings {
 
     my $guarantor = $self->guarantor;
 
-    return undef unless $guarantor;
+    return unless $guarantor;
 
     return Koha::Patrons->search(
         {
