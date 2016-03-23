@@ -74,7 +74,7 @@ $(document).ready(function(){
         'aoColumns':[
             [% FOR column IN columns %]
                 [% IF column == 'action' %]
-                    { 'mDataProp': 'dt_action', 'bSortable': false }
+                    { 'mDataProp': 'dt_action', 'bSortable': false, 'sClass': 'actions' }
                 [% ELSIF column == 'address' %]
                     { 'mDataProp': 'dt_address', 'bSortable': false }
                 [% ELSE %]
