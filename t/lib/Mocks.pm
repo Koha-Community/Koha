@@ -24,11 +24,14 @@ sub mock_config {
 
 my %preferences;
 sub mock_preference {
-    my $context = new Test::MockModule('C4::Context');
     my ( $pref, $value ) = @_;
-    $preferences{$pref} = $value;
+
+    $preferences{lc($pref)} = $value;
+
+    my $context = new Test::MockModule('C4::Context');
     $context->mock('preference', sub {
         my ( $self, $pref ) = @_;
+        $pref = lc($pref);
         if ( exists $preferences{$pref} ) {
             return $preferences{$pref}
         } else {
