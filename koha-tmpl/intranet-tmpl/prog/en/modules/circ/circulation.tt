@@ -89,6 +89,10 @@ $(document).ready(function() {
         }
     });
 
+    $(".clickable").click(function() {
+        window.document.location = $(this).data('url');
+    });
+
     [% IF !( CircAutoPrintQuickSlip == 'clear' ) %]
         // listen submit to trigger qslip on empty checkout
         $('#mainform').bind('submit',function() {
@@ -568,10 +572,9 @@ No patron matched <span class="ex">[% message %]</span>
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
 
-    <table id="table_borrowers">
+    <table id="table_borrowers" class="table_borrowers">
         <thead>
             <tr>
-                <th></th>
                 <th>Name</th>
                 <th>Cardnumber</th>
                 <th>Category</th>
@@ -581,8 +584,7 @@ No patron matched <span class="ex">[% message %]</span>
         </thead>
         <tbody>
             [% FOREACH borrower IN borrowers %]
-            <tr>
-                <td><input type="radio" name="borrowernumber" value="[% borrower.borrowernumber %]" /></td>
+            <tr class="clickable" data-url="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrower.borrowernumber %]">
                 <td>[% borrower.surname %], [% borrower.firstname %]</td>
                 <td>[% borrower.cardnumber %]</td>
                 <td>[% borrower.categorycode %]</td>
@@ -592,7 +594,6 @@ No patron matched <span class="ex">[% message %]</span>
             [% END %]
         </tbody>
     </table>
-    <fieldset class="action"><input type="submit" value="Select" /></fieldset>
 </fieldset>
 </form>
 [% ELSE %]
