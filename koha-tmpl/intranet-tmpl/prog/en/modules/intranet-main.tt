@@ -19,8 +19,9 @@
     <div class="yui-b"><div class="yui-g">
     [% IF adminWarning %]
         <div id="adminwarning" class="dialog alert">
-            <p><strong>Warning:</strong> You're logged in with the database administrator account. This is a bad idea, and you are likely to encounter problems.</p>
-            <p>You should <a href="/cgi-bin/koha/members/members-home.pl">create a patron</a> to use when administering Koha and give it superlibrarian permissions.</p>
+            <p><strong>Warning:</strong> You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
+            <p>Please log in instead with a regular staff account. To create a staff account, create a library, a patron category 'Staff' and add a new patron. Then give this patron permissions from 'More' in the toolbar.</p>
+<p><a class="btn btn-small" href="/cgi-bin/koha/members/members-home.pl"><i class="fa fa-plus"> </i> Create patron</a></p>
         </div>
     [% END %]
     <div class="yui-u first">
