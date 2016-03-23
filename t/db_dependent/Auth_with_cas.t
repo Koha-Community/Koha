@@ -43,7 +43,7 @@ C4::Context->disable_syspref_cache();
 t::lib::Mocks::mock_preference('OPACBaseURL','http://localhost');
 t::lib::Mocks::mock_preference('staffClientBaseURL','localhost:8080');
 
-my $opac_base_url = C4::Context->preference('OpacBaseURL');
+my $opac_base_url = C4::Context->preference('OPACBaseURL');
 my $staff_base_url = C4::Context->preference('staffClientBaseURL');
 my $query_string = 'ticket=foo&bar=baz';
 
