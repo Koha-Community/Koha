@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 58;
+use Test::More tests => 59;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -244,6 +244,35 @@ ok( $borrower->{userid},  'A userid should have been generated correctly' );
 # Regression tests for BZ12226
 is( Check_Userid( C4::Context->config('user'), '' ), 0,
     'Check_Userid should return 0 for the DB user (Bug 12226)');
+
+subtest 'GetMemberAccountRecords' => sub {
+
+    plan tests => 2;
+
+    my $borrowernumber = $builder->build({ source => 'Borrower' })->{ borrowernumber };
+    my $accountline_1  = $builder->build({
+        source => 'Accountline',
+        value  => {
+            borrowernumber    => $borrowernumber,
+            amountoutstanding => 64.60
+        }
+    });
+
+    my ($total,undef,undef) = GetMemberAccountRecords( $borrowernumber );
+    is( $total , 64.60, "Rounding works correctly in total calculation (single value)" );
+
+    my $accountline_2 = $builder->build({
+        source => 'Accountline',
+        value  => {
+            borrowernumber    => $borrowernumber,
+            amountoutstanding => 10.65
+        }
+    });
+
+    ($total,undef,undef) = GetMemberAccountRecords( $borrowernumber );
+    is( $total , 75.25, "Rounding works correctly in total calculation (multiple values)" );
+
+};
 
 subtest 'GetMemberAccountBalance' => sub {
 
