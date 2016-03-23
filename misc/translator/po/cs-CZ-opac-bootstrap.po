@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-02-16 18:40-0300\n"
+"POT-Creation-Date: 2016-03-15 08:39-0300\n"
 "PO-Revision-Date: 2015-10-17 15:07+0000\n"
 "Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
@@ -1643,11 +1643,13 @@ msgstr "%s%s%sKoha on-line%s katalog &rsaquo; Kurzy"
 #. %4$s:  END 
 #. %5$s:  title |html 
 #. %6$s:  FOREACH subtitl IN subtitle 
-#. %7$s:  subtitl.subfield |html 
+#. %7$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %8$s:  END 
+#. %9$s:  subtitl.subfield |html 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
-#, c-format
-msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s"
+#, fuzzy, c-format
+msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
 msgstr "%s%s%sKoha on-line%s katalog &rsaquo; Podrobnosti pro: %s%s, %s%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -4679,11 +4681,13 @@ msgstr "Podrobnosti pro %s"
 
 #. %1$s:  title |html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield |html 
+#. %3$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %4$s:  END 
+#. %5$s:  subtitl.subfield |html 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
-#, c-format
-msgid "Details for: %s%s, %s%s"
+#, fuzzy, c-format
+msgid "Details for: %s%s%s,%s %s%s"
 msgstr "Podrobný záznam titulu %s%s, %s%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:175
@@ -5011,13 +5015,14 @@ msgstr "Vyskytla se chyba při hledání v databázi OverDrive."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! Illegal parameter"
-msgstr "Chyba! Neplatný parametr"
+#, fuzzy
+msgid "Error! Adding tags failed at"
+msgstr "Chyba! Nepodařilo se přidat štítek"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! The add_tag operation failed on"
-msgstr "Chyba! Nepodařilo se přidat štítek"
+msgid "Error! Illegal parameter"
+msgstr "Chyba! Neplatný parametr"
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:30
 #, c-format

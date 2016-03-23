@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-02-16 19:13-0300\n"
+"POT-Creation-Date: 2016-03-15 10:14-0300\n"
 "PO-Revision-Date: 2016-02-24 07:37+0000\n"
 "Last-Translator: bybak <hlib.group@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -287,9 +287,9 @@ msgid ""
 "reserves pages, which do not use an API to fetch items that populates item."
 "datedue. -%%] %s %s %s %s "
 msgstr ""
-"%s %s [%%#- 이것은 두 변수를 포함한다: 아이템 구조와 선택적 대출(이슈) 구조. 이슈 구조는 교과목 예약 장서 페이지에서 "
-"사용된다. 이 페이지는 item.datedue 데이터를 기입하는 아이템을 가져오는데 API를 사용하지 않는다. -%%] %s %s %s %"
-"s "
+"%s %s [%%#- 이것은 두 변수를 포함한다: 아이템 구조와 선택적 대출(이슈) 구조. "
+"이슈 구조는 교과목 예약 장서 페이지에서 사용된다. 이 페이지는 item.datedue 데"
+"이터를 기입하는 아이템을 가져오는데 API를 사용하지 않는다. -%%] %s %s %s %s "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -1629,11 +1629,13 @@ msgstr "%s%s%sKoha 온라인%s 도서목록 &rsaquo; 강좌"
 #. %4$s:  END 
 #. %5$s:  title |html 
 #. %6$s:  FOREACH subtitl IN subtitle 
-#. %7$s:  subtitl.subfield |html 
+#. %7$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %8$s:  END 
+#. %9$s:  subtitl.subfield |html 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
-#, c-format
-msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s"
+#, fuzzy, c-format
+msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
 msgstr "%s%s%sKoha 온라인%s 도서목록 &rsaquo; 상세보기: %s%s, %s%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -2060,7 +2062,9 @@ msgstr ""
 msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
 "%sItem checkout %sUnknown %s"
-msgstr "%s자료 대출기한 %s사전 알림 %s예정 일정 %s예약이 꽉 참 %s자료 반납 %s자료 대출 %s불명 %s"
+msgstr ""
+"%s자료 대출기한 %s사전 알림 %s예정 일정 %s예약이 꽉 참 %s자료 반납 %s자료 대"
+"출 %s불명 %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -4662,11 +4666,13 @@ msgstr "%s의 상세 정보"
 
 #. %1$s:  title |html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield |html 
+#. %3$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %4$s:  END 
+#. %5$s:  subtitl.subfield |html 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
-#, c-format
-msgid "Details for: %s%s, %s%s"
+#, fuzzy, c-format
+msgid "Details for: %s%s%s,%s %s%s"
 msgstr "상세 정보 : %s%s, %s%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:175
@@ -4994,13 +5000,14 @@ msgstr "OverDrive 장서 검색 오류입니다."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! Illegal parameter"
-msgstr "오류! 잘못된 매개변수입니다"
+#, fuzzy
+msgid "Error! Adding tags failed at"
+msgstr "오류! 태그 추가에 실패했습니다"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! The add_tag operation failed on"
-msgstr "오류! 태그 추가에 실패했습니다"
+msgid "Error! Illegal parameter"
+msgstr "오류! 잘못된 매개변수입니다"
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:30
 #, c-format

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-02-16 19:50-0300\n"
+"POT-Creation-Date: 2016-03-15 12:00-0300\n"
 "PO-Revision-Date: 2015-04-25 06:42+0000\n"
 "Last-Translator: kaz <karenmyers1@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1577,11 +1577,13 @@ msgstr "%s %s %s %s%s%sKoha online%s katalogu &rsaquo; Kursus %s %s "
 #. %4$s:  END 
 #. %5$s:  title |html 
 #. %6$s:  FOREACH subtitl IN subtitle 
-#. %7$s:  subtitl.subfield |html 
+#. %7$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %8$s:  END 
+#. %9$s:  subtitl.subfield |html 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
 #, fuzzy, c-format
-msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s"
+msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
 msgstr "%s %s%s%s%sKoha online%s katalogu &rsaquo; Imajen ba: %s %s %s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -4635,11 +4637,13 @@ msgstr "Imajen ba %s"
 
 #. %1$s:  title |html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield |html 
+#. %3$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %4$s:  END 
+#. %5$s:  subtitl.subfield |html 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
 #, fuzzy, c-format
-msgid "Details for: %s%s, %s%s"
+msgid "Details for: %s%s%s,%s %s%s"
 msgstr "Komentariu foun kona-ba %s %s, %s%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:175
@@ -4965,13 +4969,14 @@ msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! Illegal parameter"
-msgstr "Sala! Parameter ilegál"
+#, fuzzy
+msgid "Error! Adding tags failed at"
+msgstr "Sala! Operasaun add_tag la konsege"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! The add_tag operation failed on"
-msgstr "Sala! Operasaun add_tag la konsege"
+msgid "Error! Illegal parameter"
+msgstr "Sala! Parameter ilegál"
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:30
 #, c-format

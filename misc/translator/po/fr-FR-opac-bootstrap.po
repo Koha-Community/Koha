@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha\n"
-"POT-Creation-Date: 2016-02-16 18:56-0300\n"
+"POT-Creation-Date: 2016-03-15 09:28-0300\n"
 "PO-Revision-Date: 2015-11-04 13:24+0000\n"
 "Last-Translator: Fridolin <fridolin.somers@biblibre.com>\n"
 "Language-Team: French (France) (http://www.transifex.com/projects/p/koha/"
@@ -1665,11 +1665,13 @@ msgstr "%s %s %s %s%s%sKoha en ligne%s catalogue &rsaquo; Cours"
 #. %4$s:  END 
 #. %5$s:  title |html 
 #. %6$s:  FOREACH subtitl IN subtitle 
-#. %7$s:  subtitl.subfield |html 
+#. %7$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %8$s:  END 
+#. %9$s:  subtitl.subfield |html 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
 #, fuzzy, c-format
-msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s"
+msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
 msgstr "%s %s %s%s%sKoha en ligne%s catalogue &rsaquo; Détails de %s%s, %s%s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -4729,11 +4731,13 @@ msgstr "Détails pour %s"
 
 #. %1$s:  title |html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield |html 
+#. %3$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %4$s:  END 
+#. %5$s:  subtitl.subfield |html 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
-#, c-format
-msgid "Details for: %s%s, %s%s"
+#, fuzzy, c-format
+msgid "Details for: %s%s%s,%s %s%s"
 msgstr "Détails pour&nbsp;: %s%s, %s%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:175
@@ -5067,13 +5071,14 @@ msgstr "Erreur lors de la recherche dans la collection OverDrive."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! Illegal parameter"
-msgstr "Erreur ! paramètre illégal"
+#, fuzzy
+msgid "Error! Adding tags failed at"
+msgstr "Erreur ! Impossible d'ajouter le tag"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! The add_tag operation failed on"
-msgstr "Erreur ! Impossible d'ajouter le tag"
+msgid "Error! Illegal parameter"
+msgstr "Erreur ! paramètre illégal"
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:30
 #, c-format

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-02-16 19:20-0300\n"
+"POT-Creation-Date: 2016-03-15 10:34-0300\n"
 "PO-Revision-Date: 2012-06-14 17:47+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -1529,11 +1529,13 @@ msgstr "%s सारिणी &rsaquo; %s वरील भाष्य "
 #. %4$s:  END 
 #. %5$s:  title |html 
 #. %6$s:  FOREACH subtitl IN subtitle 
-#. %7$s:  subtitl.subfield |html 
+#. %7$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %8$s:  END 
+#. %9$s:  subtitl.subfield |html 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
 #, fuzzy, c-format
-msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s"
+msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
 msgstr "सारिणी &rsaquo; उक्‍ती "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -4311,11 +4313,13 @@ msgstr "बाहेर देत आहे यांना: %s %s (%s)"
 
 #. %1$s:  title |html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield |html 
+#. %3$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %4$s:  END 
+#. %5$s:  subtitl.subfield |html 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
 #, fuzzy, c-format
-msgid "Details for: %s%s, %s%s"
+msgid "Details for: %s%s%s,%s %s%s"
 msgstr "%s %s %s द्वारा भाष्य"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:175
@@ -4641,14 +4645,14 @@ msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-#, fuzzy
-msgid "Error! Illegal parameter"
-msgstr "चुक: %s हा शोध चुकिचा आहे."
+msgid "Error! Adding tags failed at"
+msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! The add_tag operation failed on"
-msgstr ""
+#, fuzzy
+msgid "Error! Illegal parameter"
+msgstr "चुक: %s हा शोध चुकिचा आहे."
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:30
 #, c-format

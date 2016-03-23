@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-02-16 18:44-0300\n"
+"POT-Creation-Date: 2016-03-15 08:53-0300\n"
 "PO-Revision-Date: 2015-12-14 12:08+0000\n"
 "Last-Translator: Georgia <georgia.katsarou@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -1639,11 +1639,13 @@ msgstr "%s%s%s%sKoha%s κατάλογος &rsaquo; Αναγραφή %s %s "
 #. %4$s:  END 
 #. %5$s:  title |html 
 #. %6$s:  FOREACH subtitl IN subtitle 
-#. %7$s:  subtitl.subfield |html 
+#. %7$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %8$s:  END 
+#. %9$s:  subtitl.subfield |html 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
 #, fuzzy, c-format
-msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s"
+msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
 msgstr "%s %s%s%sKoha%s κατάλογος &rsaquo; Εικόνες για: %s %s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -4699,11 +4701,13 @@ msgstr "Λεπτομέρειες για %s"
 
 #. %1$s:  title |html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield |html 
+#. %3$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %4$s:  END 
+#. %5$s:  subtitl.subfield |html 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
-#, c-format
-msgid "Details for: %s%s, %s%s"
+#, fuzzy, c-format
+msgid "Details for: %s%s%s,%s %s%s"
 msgstr "Λεπτομέρειες για: %s%s, %s%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:175
@@ -5032,13 +5036,14 @@ msgstr "Σφάλμα αναζήτησης ηλεκτρονικών πηγών."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! Illegal parameter"
-msgstr "ΣΦΑΛΜΑ! παράνομη παράμετρος"
+#, fuzzy
+msgid "Error! Adding tags failed at"
+msgstr "Σφάλμα! Η λειτουργία add_tag απέτυχε"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! The add_tag operation failed on"
-msgstr "Σφάλμα! Η λειτουργία add_tag απέτυχε"
+msgid "Error! Illegal parameter"
+msgstr "ΣΦΑΛΜΑ! παράνομη παράμετρος"
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:30
 #, c-format

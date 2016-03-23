@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-02-16 19:01-0300\n"
+"POT-Creation-Date: 2016-03-15 09:40-0300\n"
 "PO-Revision-Date: 2015-08-24 20:39+0000\n"
 "Last-Translator: Marijana <mglavica@ffzg.hr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -276,7 +276,7 @@ msgstr ""
 #. %8$s:    CASE 'year'    
 #. %9$s:   END 
 #. %10$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:69
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:72
 #, c-format
 msgid "%s %s %s %s %s day %s week %s month %s year %s %s "
 msgstr "%s %s %s %s %s dan %s tjedan %s mjesec %s godina %s %s "
@@ -307,16 +307,23 @@ msgstr "%s %s %s %s %s dan %s tjedan %s mjesec %s godina %s %s "
 #. %24$s:         CASE 'ISSUE'  
 #. %25$s:         CASE 'RETURN' 
 #. %26$s:         CASE 'CREATE' 
-#. %27$s:         CASE 
-#. %28$s:  action 
-#. %29$s:     END 
-#. %30$s:  END 
+#. %27$s:         CASE 'RENEW'  
+#. %28$s:         CASE 'CHANGE PASS' 
+#. %29$s:         CASE 'ADDCIRCMESSAGE' 
+#. %30$s:         CASE 'DELCIRCMESSAGE' 
+#. %31$s:         CASE 'Run'    
+#. %32$s:         CASE 
+#. %33$s:  action 
+#. %34$s:     END 
+#. %35$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:14
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %s %s %s %sCatalog %sAuthorities %sPatrons %sAcquisitions %sSerials "
 "%sCirculation %sLetter %sFines %sSystem prefs %sCron jobs %s%s %s %s %s %s "
-"%sAdd %sDelete %sModify %sCheckout %sReturn %sCreate %s%s %s %s "
+"%sAdd %sDelete %sModify %sCheckout %sReturn %sCreate %sRenew %sChange "
+"password %sAdd circulation message %sDelete circulation message %sRun %s%s "
+"%s %s "
 msgstr ""
 "%s %s %s %s %sKatalog %sNormativa %sKorisnici %sNabava %sPeriodika "
 "%sCirkulacija %sPoruke %sKazne %sSystem prefs %sCron jobs %s%s %s %s %s %s "
@@ -802,7 +809,7 @@ msgstr "%s %s %sLeft %sCentrirano %sDesno %s %s "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:912
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:919
 #, c-format
 msgid "%s %s %sYes%sNo%s %s "
 msgstr "%s %s %sDa%sNe%s %s "
@@ -1107,7 +1114,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:68
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:70
 #, c-format
 msgid "%s %s No %s"
 msgstr ""
@@ -1413,7 +1420,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF ( MEMBERS ) 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:214
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:219
 #, c-format
 msgid "%s %s for "
 msgstr "%s %s za "
@@ -1652,7 +1659,7 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  action 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:53
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:40
 #, c-format
 msgid "%s %sEdit MARC subfields constraints for field %s authority %s%s %s%s%s"
 msgstr ""
@@ -2192,7 +2199,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  loo.isurl 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:278
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:133
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:120
 #, c-format
 msgid "%s (if checked, it means that the subfield is a URL and can be clicked)"
 msgstr ""
@@ -2234,7 +2241,7 @@ msgstr "%s (neaktivni) %s %s %s "
 #. %4$s:  branche.branchaddress1 |html 
 #. %5$s:  END 
 #. %6$s:  IF ( branche.branchaddress2 ) 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:206
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:213
 #, c-format
 msgid "%s (nothing entered) %s %s %s%s %s "
 msgstr ""
@@ -2502,7 +2509,7 @@ msgid "%s Checkout(s)"
 msgstr "%s Zaduženja"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:758
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:765
 #, c-format
 msgid "%s Circulation note: "
 msgstr "%s Bilješka o cirkulaciji: "
@@ -2562,7 +2569,7 @@ msgid "%s Closed on %s %s Open %s "
 msgstr "%s Zatvoreno %s %s Otvoreno %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:850
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:857
 #, c-format
 msgid "%s Confirm password: "
 msgstr "%s Potvrdi lozinku: "
@@ -2672,7 +2679,7 @@ msgid "%s Error: "
 msgstr "%s Greška: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:720
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:727
 #, c-format
 msgid "%s Expiry date (leave blank for auto calc) "
 msgstr "%s Datum isteka članstva (ostaviti prazno za automatsko računanje) "
@@ -2954,7 +2961,7 @@ msgstr "%s Novi kolegij %s"
 #. %2$s:  IF ( branchcategorie.properties ) 
 #. %3$s:  ELSIF ( branchcategorie.searchdomain ) 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:292
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:299
 #, c-format
 msgid "%s No %sproperties%ssearch domain%s defined. "
 msgstr ""
@@ -3107,7 +3114,7 @@ msgstr ""
 "odjednom %s %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:745
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:752
 #, c-format
 msgid "%s OPAC note: "
 msgstr "%s Obavijest korisniku u OPAC-u: "
@@ -3178,7 +3185,7 @@ msgid "%s Page %s / %s %s "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:807
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:814
 #, c-format
 msgid "%s Password: "
 msgstr "%s Lozinka: "
@@ -3260,7 +3267,7 @@ msgid "%s Receive orders from %s %s "
 msgstr "%s Zaprimi narudžbu od %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:699
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:706
 #, c-format
 msgid "%s Registration date: "
 msgstr "%s Datum upisa: "
@@ -3370,13 +3377,13 @@ msgid "%s Single patron cards"
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:658
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:665
 #, c-format
 msgid "%s Sort 1: "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:670
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:677
 #, c-format
 msgid "%s Sort 2: "
 msgstr ""
@@ -3484,7 +3491,7 @@ msgstr "%s Prezime: "
 #. %29$s:  loo.link 
 #. %30$s:  END 
 #. %31$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:405
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:409
 #, c-format
 msgid ""
 "%s Tab:%s, %s | Koha field: %s, %s %sRepeatable, %sNot repeatable,%s "
@@ -3674,7 +3681,7 @@ msgid "%s Unlimited %s %s %s "
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:778
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:785
 #, c-format
 msgid "%s Username: "
 msgstr "%s Korisničko ime: "
@@ -3697,7 +3704,7 @@ msgstr "%s Da %s Ne %s "
 
 #. %1$s:  IF ( issue.renewals ) 
 #. %2$s:  IF ( issue.lastreneweddate ) 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:67
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:69
 #, c-format
 msgid "%s Yes%s, "
 msgstr ""
@@ -4030,7 +4037,7 @@ msgstr "%s za '%s'%s"
 
 #. For the first occurrence,
 #. %1$s:  authtypecode |html
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:30
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:17
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:37
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:48
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:53
@@ -4213,7 +4220,7 @@ msgid "%s items modified : datelastseen set to %s"
 msgstr ""
 
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:153
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:158
 #, c-format
 msgid "%s lines found."
 msgstr "%s linija pronađeno"
@@ -4739,7 +4746,7 @@ msgstr ""
 #. %7$s:  loopro.object 
 #. %8$s:  END 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:176
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:181
 #, c-format
 msgid "%s%s%s %s (%s) %sMember %s%s%s "
 msgstr "%s%s%s %s (%s) %sČlan %s%s%s "
@@ -4951,7 +4958,7 @@ msgstr ""
 #. %3$s:  suggestions_loo.author 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:523
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:94
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:96
 #, c-format
 msgid "%s%s, by %s%s"
 msgstr ""
@@ -5106,7 +5113,7 @@ msgstr "%s(porez uključen.)%s(bez poreza)%s %s "
 #. %11$s:  IF ( loo.isurl ) 
 #. %12$s:  END 
 #. %13$s:  IF ( loo.authorised_value ) 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:277
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:264
 #, c-format
 msgid ""
 "%s, %s %sRepeatable, %sNot repeatable, %s %sMandatory, %sNot mandatory, %s "
@@ -5348,7 +5355,7 @@ msgstr ""
 #. %2$s:  categorycode 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:303
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:310
 #, c-format
 msgid "%sEdit group %s%sAdd group%s"
 msgstr "%sUredi grupu %s%sDodaj grupu%s"
@@ -5515,7 +5522,7 @@ msgstr ""
 #. %2$s:  END 
 #. %3$s:  IF ( flagloo.key == 'lost' ) 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:897
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:904
 #, c-format
 msgid "%sGone no address:%s %sLost card:%s "
 msgstr ""
@@ -6140,7 +6147,7 @@ msgid "&lt;&lt; Back to suggestions"
 msgstr "&lt;&lt; Natrag na prijedloge"
 
 #: intranet-tmpl/prog/en/includes/page-numbers.inc:3
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:283
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:294
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:210
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:177
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:132
@@ -6266,7 +6273,7 @@ msgstr "&nbsp;Pokaži sve:"
 #. %2$s:  IF ( else ) 
 #. %3$s:  tagfield | html 
 #. %4$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:31
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:18
 #, c-format
 msgid "&rsaquo; %s %sAuthority MARC subfield structure for %s %s"
 msgstr ""
@@ -6285,7 +6292,7 @@ msgstr ""
 #. %12$s:  action 
 #. %13$s:  END 
 #. %14$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:34
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:21
 #, c-format
 msgid ""
 "&rsaquo; %s %sConfirm deletion of subfield %s?%s %sData deleted%s %s %s "
@@ -6654,7 +6661,7 @@ msgid "&rsaquo; Add / modify list"
 msgstr "&rsaquo; Dodaj / promijeni popis"
 
 #. %1$s:  ELSIF ( op_mod ) 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:27
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
 #, c-format
 msgid "&rsaquo; Add a new OAI set%s"
 msgstr "&rsaquo; Dodavanje novog OAI seta%s"
@@ -6853,9 +6860,9 @@ msgid "&rsaquo; Claims"
 msgstr "&rsaquo; Reklamacije"
 
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:9
-#, c-format
-msgid "&rsaquo; Clone issuing rules"
-msgstr "&rsaquo; Kloniraj pravila posudbe"
+#, fuzzy, c-format
+msgid "&rsaquo; Clone circulation and fine rules"
+msgstr "Pravila cirkulacije i kazne"
 
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:104
 #, c-format
@@ -7230,7 +7237,7 @@ msgstr "&rsaquo; Spajanje zapisa"
 #. %1$s:  spec 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:27
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
 #, c-format
 msgid "&rsaquo; Modify OAI set '%s'%s OAI sets configuration%s"
 msgstr "&rsaquo; Promijena OAI seta '%s'%s konfiguracija OAI setova%s"
@@ -7397,7 +7404,7 @@ msgstr "&rsaquo; Brza izrada hrptenih naljepnica"
 msgid "&rsaquo; Quote Editor"
 msgstr "&rsaquo; Alat za uređivanje citata"
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:304
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:305
 #, c-format
 msgid "&rsaquo; Quote uploader"
 msgstr ""
@@ -7435,7 +7442,7 @@ msgstr "&rsaquo; Rezervacija "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:49
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:54
 #, c-format
 msgid "&rsaquo; Results %s Logs %s "
 msgstr "&rsaquo; Rezultati %s Logovi %s "
@@ -7962,8 +7969,8 @@ msgid "(Database) Documentation manager:"
 msgstr "Naziv definicije:"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:333
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:708
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:737
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:715
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:744
 #, c-format
 msgid "(Error)"
 msgstr ""
@@ -8134,7 +8141,7 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:251
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:105
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:92
 #, c-format
 msgid "(ignore means that the subfield does not display in the record editor) "
 msgstr ""
@@ -8592,11 +8599,6 @@ msgstr ""
 msgid ". User "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/preferences.tt:70
-#, c-format
-msgid ". You can try a different search or "
-msgstr ". Možete probati drugo pretraživanje ili "
-
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/members/member.tt:325
@@ -8643,7 +8645,7 @@ msgstr "0 Rezervacije"
 msgid "0 to disable"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:336
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:337
 #, c-format
 msgid "0%%"
 msgstr ""
@@ -8657,8 +8659,8 @@ msgstr "000 "
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:301
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:309
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:188
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:76
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:81
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:78
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:83
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:514
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:146
@@ -8824,7 +8826,7 @@ msgstr "Poruka s kodom '%s' već postoji za '%s'."
 msgid "A new version of this site is available. Load it?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:85
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:95
 #, c-format
 msgid "A pattern with this name already exists."
 msgstr "Obrazac s tim nazivom već postoji."
@@ -9116,13 +9118,13 @@ msgstr "Statistika nabave"
 msgid "Acquisitions statistics "
 msgstr "Statistika nabave "
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:85
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:95
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:78
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:87
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:149
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:323
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:360
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:160
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:165
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:346
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:72
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:423
@@ -9165,7 +9167,7 @@ msgstr "Postupak ako nije pronađen odgovarajući zapis: "
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:283
 #: intranet-tmpl/prog/en/modules/tags/review.tt:227
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:620
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:344
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:345
 #, c-format
 msgid "Actions"
 msgstr "Radnje"
@@ -9187,7 +9189,7 @@ msgstr "Radnje "
 msgid "Actions for this template"
 msgstr "Radnje za ovaj predložak"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:90
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:95
 #, c-format
 msgid "Actions:"
 msgstr "Radnje:"
@@ -9253,7 +9255,7 @@ msgstr "Stvarna cijena: "
 msgid "Adam Thick"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:141
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:151
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:198
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:803
 #: intranet-tmpl/prog/en/modules/serials/tables/members_results.tt:16
@@ -9292,7 +9294,7 @@ msgstr "Dodavanje i dupliciranje"
 msgid "Add a basket to %s"
 msgstr "Dodaj košaricu u %s"
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:197
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:199
 #, c-format
 msgid "Add a contract"
 msgstr "Dodaj ugovor"
@@ -9307,7 +9309,7 @@ msgstr "Dodaj mapiranje"
 msgid "Add a message for:"
 msgstr "Dodaj poruku za:"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:47
 #, c-format
 msgid "Add a new OAI set"
 msgstr "Dodaj novi OAI set"
@@ -9322,7 +9324,7 @@ msgstr "Dodaj novu akciju"
 msgid "Add a new field"
 msgstr "Dodaj novo polje"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:294
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:301
 #, c-format
 msgid "Add a new group"
 msgstr "Dodaj novu grupu"
@@ -9410,7 +9412,7 @@ msgstr "Dodaj izvor klasifikacije"
 msgid "Add credit"
 msgstr "Dodaj iznos"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:63
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:73
 #, c-format
 msgid "Add description"
 msgstr "Dodaj opis"
@@ -9471,8 +9473,8 @@ msgstr "Dodaj primjerke: skeniraj bar-kod"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:69
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:74
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:960
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:963
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:967
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:970
 #, c-format
 msgid "Add manual restriction"
 msgstr "Dodaj ograničenje ručno"
@@ -9750,7 +9752,7 @@ msgstr ""
 msgid "Additional SRU options: "
 msgstr "Dodatni alati"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:982
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:989
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:296
 #, c-format
 msgid "Additional attributes and identifiers"
@@ -9794,7 +9796,7 @@ msgid "Additional values for manual invoice types"
 msgstr "Dodatne vrijednosti za tipove računa koji se ručno izrađuju"
 
 #: intranet-tmpl/prog/en/columns.def:13
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:195
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:202
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:116
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:545
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:273
@@ -9880,7 +9882,7 @@ msgstr "Adresa: "
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:68
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:10
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:57
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:28
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:15
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:245
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:66
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:84
@@ -9894,7 +9896,7 @@ msgstr "Adresa: "
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:27
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:27
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:57
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:27
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:76
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:94
 #, c-format
@@ -9923,7 +9925,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:191
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:172
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:634
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:641
 #, c-format
 msgid "Adult"
 msgstr "Odrasli"
@@ -9933,7 +9935,7 @@ msgstr "Odrasli"
 msgid "Advanced constraints"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:131
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:118
 #, c-format
 msgid "Advanced constraints:"
 msgstr ""
@@ -10074,10 +10076,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:209
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:254
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:269
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:76
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:78
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:93
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:95
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:81
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:83
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:98
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:100
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:56
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:462
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:85
@@ -10588,7 +10590,7 @@ msgstr ""
 msgid "Anonymize checkout history"
 msgstr "Aninimiziraj povijest posudbe"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:92
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:102
 #, c-format
 msgid "Another pattern with this name already exists."
 msgstr ""
@@ -10835,6 +10837,13 @@ msgstr "Jeste li sigurni da želite zatvoriti ovu pretplatu?"
 msgid "Are you sure you want to delete %s %s?"
 msgstr "Jeste li sigurni da želite obrisati %s %s?"
 
+#. %1$s:  branchname 
+#. %2$s:  branchcode 
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:169
+#, fuzzy, c-format
+msgid "Are you sure you want to delete %s (%s)?"
+msgstr "Jeste li sigurni da želite obrisati %s %s?"
+
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:7
 msgid "Are you sure you want to delete batch %s?"
@@ -10876,6 +10885,12 @@ msgstr "Zaista želite obrisati odabrane izvještaje?"
 #, fuzzy
 msgid "Are you sure you want to delete these suggestions?"
 msgstr "Zaista želite obrisati ovaj prijedlog?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:4
+#, fuzzy
+msgid "Are you sure you want to delete this OAI set?"
+msgstr "Zaista želite obrisati ovu košaricu?"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -10928,6 +10943,12 @@ msgstr "Zaista želite obrisati ovaj popis?"
 #, fuzzy
 msgid "Are you sure you want to delete this macro?"
 msgstr "Zaista želite obrisati ovaj kolegij?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:5
+#, fuzzy
+msgid "Are you sure you want to delete this numbering pattern?"
+msgstr "Zaista želite obrisati ovu pretplatu?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:3
@@ -11254,7 +11275,7 @@ msgstr ""
 msgid "Auth value"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:286
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:273
 #, c-format
 msgid "Auth value:"
 msgstr ""
@@ -11427,7 +11448,7 @@ msgid "Authority #%s (%s)"
 msgstr "Normativa #%s (%s)"
 
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:191
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:196
 #, c-format
 msgid "Authority %s"
 msgstr "Normativa %s"
@@ -11448,13 +11469,13 @@ msgstr ""
 
 #. %1$s:  tagfield | html 
 #. %2$s:  authtypecode | html
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:251
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:238
 #, c-format
 msgid "Authority MARC subfield structure admin for %s (authority: %s)"
 msgstr ""
 
 #. %1$s:  tagfield | html 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:34
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:21
 #, c-format
 msgid "Authority MARC subfield structure for %s"
 msgstr ""
@@ -11501,14 +11522,14 @@ msgstr "Vrsta normativnog zapisa: "
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:44
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:33
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:111
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:29
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:16
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:79
 #, c-format
 msgid "Authority types"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:288
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:275
 #, c-format
 msgid "Authority:"
 msgstr ""
@@ -11537,7 +11558,7 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:300
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:161
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:148
 #, c-format
 msgid "Authorized value:"
 msgstr ""
@@ -11710,7 +11731,7 @@ msgstr "Natrag na biblio"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:566
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:105
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:169
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:45
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:597
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:6
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
@@ -12144,7 +12165,7 @@ msgstr ""
 msgid "Beginning date:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:248
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:258
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:797
 #, c-format
 msgid "Begins with"
@@ -12181,7 +12202,7 @@ msgid "BibTex"
 msgstr ""
 
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:182
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:187
 #, c-format
 msgid "Biblio %s"
 msgstr "Biblio %s"
@@ -12238,7 +12259,7 @@ msgid "Bibliographic record"
 msgstr "Bibliografski zapis"
 
 #. %1$s:  object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:214
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:219
 #, c-format
 msgid "Bibliographic record %s"
 msgstr "Bibliografski zapis %s"
@@ -12544,7 +12565,7 @@ msgstr ""
 msgid "Browse by last name: %s "
 msgstr "Pregledavanje po prezimenu: %s "
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:60
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:65
 #, c-format
 msgid "Browse system logs"
 msgstr "Pregledavanje evidencije rada sustava"
@@ -13084,12 +13105,11 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:267
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:80
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:152
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:196
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:189
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:251
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:155
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:206
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:200
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:262
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:133
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:160
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:118
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:320
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:119
@@ -13105,11 +13125,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:465
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:87
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:342
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:431
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:435
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:121
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:104
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:60
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:303
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:47
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:290
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:614
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:639
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:96
@@ -13118,13 +13138,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:72
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:174
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:120
+#: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:70
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:162
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:171
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:65
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:76
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:131
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:238
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:68
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:78
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:141
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:185
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:100
@@ -13166,9 +13186,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:194
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:117
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:971
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1091
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1093
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:978
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1098
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1100
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:158
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:82
@@ -13222,7 +13242,7 @@ msgstr ""
 msgid "Cancel"
 msgstr "Odustani"
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:335
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:336
 #, c-format
 msgid "Cancel Upload"
 msgstr "Otkaži učitavanje"
@@ -13540,10 +13560,29 @@ msgstr "Članski broj"
 msgid "Card number : %s"
 msgstr "Članski broj : %s"
 
+#. %1$s:  maxlength_cardnumber 
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:611
+#, fuzzy, c-format
+msgid "Card number can be up to %s characters."
+msgstr "Dužina broja iskaznice nije ispravna."
+
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:162
 #, c-format
 msgid "Card number list (one cardnumber per line): "
 msgstr "Popis brojeva korisničkih kartica (jedan broj po liniji): "
+
+#. %1$s:  minlength_cardnumber 
+#. %2$s:  maxlength_cardnumber 
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:607
+#, c-format
+msgid "Card number must be between %s and %s characters."
+msgstr ""
+
+#. %1$s:  minlength_cardnumber 
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:603
+#, c-format
+msgid "Card number must be exactly %s characters."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:85
 #, fuzzy, c-format
@@ -13729,12 +13768,12 @@ msgstr ""
 msgid "Category"
 msgstr "Kategorija"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:187
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:194
 #, c-format
 msgid "Category cannot be added, categorycode already exists"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:186
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:193
 #, c-format
 msgid ""
 "Category cannot be deleted because there are libraries using that category"
@@ -13750,7 +13789,7 @@ msgstr ""
 msgid "Category code unknown."
 msgstr "Nepoznat kod za kategoriju."
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:319
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:326
 #, c-format
 msgid "Category code:"
 msgstr ""
@@ -13758,7 +13797,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:138
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:142
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:285
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:315
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:322
 #, c-format
 msgid "Category code: "
 msgstr "Kod za kategoriju: "
@@ -13769,7 +13808,7 @@ msgid "Category name"
 msgstr "Naziv kategorije"
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:188
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:332
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:339
 #, c-format
 msgid "Category type: "
 msgstr ""
@@ -13784,7 +13823,7 @@ msgstr "Kategorija:"
 #: intranet-tmpl/prog/en/includes/patron-search.inc:99
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:79
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:209
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:628
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:635
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:77
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:343
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:531
@@ -13861,7 +13900,7 @@ msgid "Change item status"
 msgstr "Promijeni status primjerka"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1035
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1042
 #, fuzzy
 msgid "Change messaging preferences to default for this category?"
 msgstr "Zadane postavke o obaviještavanju korisika u ovoj kategoriji"
@@ -14175,7 +14214,7 @@ msgid "Checked in item."
 msgstr "Razduženi primjerak"
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:86
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:88
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:126
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:34
 #, c-format
@@ -14205,7 +14244,7 @@ msgstr "Posuđivano %s puta"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:718
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:736
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:45
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:453
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:80
 #, c-format
@@ -14258,7 +14297,7 @@ msgstr ""
 msgid "Checkin message: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:49
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:50
 #, c-format
 msgid "Checkin on"
 msgstr ""
@@ -14340,7 +14379,7 @@ msgstr "Povijest posudbe"
 msgid "Checkout history for %s"
 msgstr "Povijest posudbe za %s"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:47
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:48
 #, c-format
 msgid "Checkout on"
 msgstr "Zaduženo"
@@ -14388,7 +14427,7 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:192
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:633
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:640
 #, c-format
 msgid "Child"
 msgstr ""
@@ -14666,6 +14705,11 @@ msgstr "Izvještaji o cirkulaciji"
 msgid "Circulation alerts for %s"
 msgstr "Obavijesti o cirkulaciji za %s"
 
+#: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:9
+#, fuzzy, c-format
+msgid "Circulation and fine rules"
+msgstr "Pravila cirkulacije i kazne"
+
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:30
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:46
 #, c-format
@@ -14922,7 +14966,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:634
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:525
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1016
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1023
 #: intranet-tmpl/prog/en/modules/members/member.tt:507
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:500
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:227
@@ -14972,7 +15016,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:407
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:414
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:823
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:967
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:974
 #, c-format
 msgid "Clear date"
 msgstr "Obriši datum"
@@ -15059,7 +15103,7 @@ msgid "Click on an image to view it in the image viewer"
 msgstr "Pritisni na sliku za prikaz u pregledniku slika"
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:208
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:324
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:325
 #, c-format
 msgid ""
 "Click on any field to edit the contents; Press the &lt;Enter&gt; key to save "
@@ -15071,7 +15115,7 @@ msgstr ""
 msgid "Click on individual cells to edit."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:325
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:326
 #, c-format
 msgid ""
 "Click on one or more quote numbers to select entire quotes for deletion; "
@@ -15115,7 +15159,7 @@ msgid ""
 "be selected."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:318
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:319
 #, c-format
 msgid ""
 "Click the \"Choose File\" button and select the csv file to be uploaded."
@@ -15134,7 +15178,7 @@ msgid ""
 "quotes."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:326
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:327
 #, c-format
 msgid ""
 "Click the 'Save Quotes' button in the toolbar to save the entire batch of "
@@ -15229,20 +15273,21 @@ msgstr ""
 #. %8$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:16
 #, c-format
-msgid "Cloning issuing rules %s %s from \"%s\"%s %s to \"%s\"%s %s "
+msgid ""
+"Cloning circulation and fine rules %s %s from \"%s\"%s %s to \"%s\"%s %s "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:25
-#, c-format
-msgid "Cloning of issuing rules failed!"
-msgstr ""
+#, fuzzy, c-format
+msgid "Cloning of circulation and fine rules failed!"
+msgstr "Pravila cirkulacije i kazne"
 
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:79
 #: intranet-tmpl/prog/en/modules/serials/result.tt:64
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:42
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:42
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:275
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:225
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:286
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:20
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1073
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:150
@@ -15333,13 +15378,13 @@ msgstr "Zatvoreno na %s."
 msgid "Closed on:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:153
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:164
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:340
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:564
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:294
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:116
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:194
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:271
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:201
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:278
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:164
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:277
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:246
@@ -15490,6 +15535,11 @@ msgstr ""
 msgid "Column name"
 msgstr "Stupac: "
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/columns_settings.inc:6
+msgid "Column visibility"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:183
 #, c-format
 msgid "Column: "
@@ -15546,7 +15596,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/columns.def:63
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:32
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:932
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:939
 #, c-format
 msgid "Comment"
 msgstr "Komentar"
@@ -15563,7 +15613,7 @@ msgstr "Komentar "
 msgid "Comment:"
 msgstr "Komentar:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:965
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:972
 #, c-format
 msgid "Comment: "
 msgstr "Komentar: "
@@ -15683,7 +15733,7 @@ msgstr "Potvrdi"
 msgid "Confirm custom report"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:359
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:366
 #, c-format
 msgid "Confirm delete: "
 msgstr "Potvrdi brisanje: "
@@ -15694,13 +15744,6 @@ msgstr "Potvrdi brisanje: "
 #, c-format
 msgid "Confirm deletion"
 msgstr "Potvrdi brisanje"
-
-#. %1$s:  branchname 
-#. %2$s:  branchcode 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:168
-#, c-format
-msgid "Confirm deletion of %s (%s)?"
-msgstr ""
 
 #. %1$s:  searchfield 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:223
@@ -15718,10 +15761,9 @@ msgstr ""
 msgid "Confirm deletion of classification source "
 msgstr ""
 
-#. %1$s:  contractnumber 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:146
-#, c-format
-msgid "Confirm deletion of contract %s"
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:145
+#, fuzzy, c-format
+msgid "Confirm deletion of contract "
 msgstr "Potvrda brisanja ugovora %s"
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:138
@@ -15750,7 +15792,7 @@ msgid "Confirm deletion of record matching rule "
 msgstr ""
 
 #. %1$s:  tagsubfield 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:349
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:350
 #, c-format
 msgid "Confirm deletion of subfield %s?"
 msgstr "Potvrda brisanja potpolja %s?"
@@ -15834,8 +15876,8 @@ msgstr ""
 msgid "Considered lost"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:389
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:259
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:393
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:246
 #, c-format
 msgid "Constraints"
 msgstr ""
@@ -15951,17 +15993,17 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:166
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:168
 #, c-format
 msgid "Contract deleted"
 msgstr "Ugovor obrisan"
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:150
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:149
 #, c-format
 msgid "Contract description:"
 msgstr "Opis ugovora:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:152
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:151
 #, c-format
 msgid "Contract end date:"
 msgstr ""
@@ -15988,14 +16030,14 @@ msgstr ""
 "Izdavač,Naslov zbirke,Interna napomena,Količina,RRP,Adresa primatelja,Adresa "
 "platitelja "
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:149
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:148
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:254
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:232
 #, c-format
 msgid "Contract name:"
 msgstr "Naziv ugovora:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:148
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:147
 #, c-format
 msgid "Contract number:"
 msgstr "Broj ugovora:"
@@ -16005,7 +16047,7 @@ msgstr "Broj ugovora:"
 msgid "Contract number: "
 msgstr "Broj ugovora: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:151
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:150
 #, c-format
 msgid "Contract start date:"
 msgstr "Početni datum ugovora:"
@@ -16016,7 +16058,7 @@ msgid "Contract(s)"
 msgstr ""
 
 #. %1$s:  booksellername 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:173
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:175
 #, c-format
 msgid "Contract(s) of %s"
 msgstr ""
@@ -16819,8 +16861,8 @@ msgstr ""
 msgid "Darrell Ulm"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:372
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:242
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:376
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:229
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:240
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:98
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:154
@@ -16895,7 +16937,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:75
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:67
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:105
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:157
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:162
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:440
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:511
 #: intranet-tmpl/prog/en/modules/about.tt:757
@@ -17226,8 +17268,8 @@ msgstr ""
 msgid "Default checkout, hold and return policy%s for %s%s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:163
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:31
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:174
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:18
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:175
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:209
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:243
@@ -17259,7 +17301,7 @@ msgid "Default privacy: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:262
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:135
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:122
 #, c-format
 msgid "Default value:"
 msgstr ""
@@ -17342,7 +17384,7 @@ msgstr ""
 msgid "Define libraries and groups."
 msgstr "Definiranje knjižnica i grupiranje."
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:109
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:119
 #, c-format
 msgid "Define mappings"
 msgstr ""
@@ -17457,12 +17499,12 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:179
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:182
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:183
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:186
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:34
 #: intranet-tmpl/prog/en/includes/rotating-collections-toolbar.inc:14
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:207
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:317
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:214
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:331
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:47
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:202
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:204
@@ -17470,9 +17512,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:349
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:65
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:82
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:157
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:228
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:192
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:168
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:239
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:194
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:69
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:439
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:98
@@ -17490,25 +17532,25 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:74
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:122
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:134
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:391
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:421
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:395
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:425
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:201
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:171
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:260
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:293
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:247
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:280
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:408
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:410
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:635
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:263
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:375
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:125
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:254
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:287
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:261
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:294
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:142
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:214
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:227
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:302
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:107
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:117
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:260
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:296
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:228
@@ -17577,11 +17619,6 @@ msgstr "Obriši definiciju"
 #, c-format
 msgid "Delete Images"
 msgstr "Obriši slike"
-
-#. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:171
-msgid "Delete Library"
-msgstr "Obriši knjižnicu"
 
 #. A
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:69
@@ -17665,7 +17702,7 @@ msgstr ""
 
 #. %1$s:  frameworktext 
 #. %2$s:  frameworkcode 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:138
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:146
 #, c-format
 msgid "Delete framework for %s (%s)?"
 msgstr ""
@@ -17699,12 +17736,12 @@ msgstr "Obriši primjerke u skupini"
 msgid "Delete list"
 msgstr "Obriši popis"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:175
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:179
 #, fuzzy, c-format
 msgid "Delete local"
 msgstr "Obriši sve"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:177
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:181
 #, fuzzy, c-format
 msgid "Delete local and remote"
 msgstr "Obriši košaricu i narudžbe"
@@ -17763,7 +17800,7 @@ msgstr ""
 msgid "Delete records if no items remain."
 msgstr "Obriši zapis ako više nema primjeraka."
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:176
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:180
 #, fuzzy, c-format
 msgid "Delete remote"
 msgstr "Obriši predložak"
@@ -17797,7 +17834,7 @@ msgstr "Obriši označene primjerke"
 msgid "Delete stop word "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:220
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:207
 #, c-format
 msgid "Delete subfield "
 msgstr ""
@@ -17849,12 +17886,6 @@ msgstr "Obriši košaricu"
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:320
 msgid "Delete this category"
 msgstr "Obriši ovu kategoriju"
-
-#. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:159
-#, fuzzy
-msgid "Delete this contract"
-msgstr "Obriši printer"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:150
@@ -18021,17 +18052,17 @@ msgstr "Odjel:"
 msgid "Dept."
 msgstr "Ods."
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:189
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:302
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:178
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:196
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:316
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:165
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:180
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:565
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:165
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:254
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:295
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:283
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:117
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:272
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:279
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:165
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:256
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:278
@@ -18094,9 +18125,8 @@ msgstr "Nedostaje opis"
 msgid "Description of charges"
 msgstr "Opis naplate"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:109
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:112
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:223
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:122
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:210
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:432
 #: intranet-tmpl/prog/en/modules/members/files.tt:65
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:91
@@ -18108,6 +18138,7 @@ msgstr "Opis naplate"
 msgid "Description:"
 msgstr "Opis:"
 
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:112
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:126
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:119
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:148
@@ -18117,7 +18148,7 @@ msgstr "Opis:"
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:104
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:339
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:71
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:328
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:335
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:127
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:118
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:166
@@ -18131,7 +18162,7 @@ msgstr "Opis: "
 #. For the first occurrence,
 #. %1$s:  liblibrarian 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:120
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:351
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:352
 #, c-format
 msgid "Description: %s"
 msgstr "Opis: %s"
@@ -18314,7 +18345,7 @@ msgstr "Diskografije"
 msgid "Discount: "
 msgstr "Popust: "
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:110
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:97
 #, c-format
 msgid "Display"
 msgstr ""
@@ -18325,21 +18356,21 @@ msgid "Display children too."
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:191
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:196
 msgid "Display detail for this authority"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:182
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:187
 msgid "Display detail for this biblio"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:201
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:206
 msgid "Display detail for this item"
 msgstr "Prikaz detalja za ovaj primjerak"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:116
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:121
 #, c-format
 msgid "Display from: "
 msgstr "Prikaži od: "
@@ -18371,7 +18402,7 @@ msgid "Display location:"
 msgstr "Prikaži lokaciju:"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:176
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:181
 msgid "Display member details."
 msgstr "Prikaz podataka o korisniku."
 
@@ -18380,16 +18411,20 @@ msgstr "Prikaz podataka o korisniku."
 msgid "Display only used tags/subfields"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:145
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:193
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:304
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:200
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:318
 #, c-format
 msgid "Display order"
 msgstr "Redoslijed prikazivanja"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:120
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:130
 #, c-format
 msgid "Display order:"
+msgstr "Redoslijed prikazivanja:"
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:148
+#, fuzzy, c-format
+msgid "Display order: "
 msgstr "Redoslijed prikazivanja:"
 
 #: intranet-tmpl/prog/en/modules/circ/stats.tt:18
@@ -18397,7 +18432,7 @@ msgstr "Redoslijed prikazivanja:"
 msgid "Display statistics for:"
 msgstr "Prikaži statistiku za:"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:120
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:125
 #, c-format
 msgid "Display to: "
 msgstr "Prikaži do: "
@@ -18687,7 +18722,7 @@ msgstr "Rok za vraćanje %s"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:731
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:566
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:101
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:48
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:49
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:448
 #, c-format
 msgid "Due date"
@@ -18877,11 +18912,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/rotating-collections-toolbar.inc:11
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:202
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:111
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:316
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:330
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:46
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:156
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:227
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:191
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:167
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:238
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:193
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:68
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:438
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:241
@@ -18895,14 +18930,14 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:11
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:121
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:133
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:390
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:420
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:394
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:424
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:199
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:171
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:406
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:262
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:251
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:284
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:258
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:291
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:101
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:141
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:213
@@ -19181,8 +19216,8 @@ msgid "Edit serials"
 msgstr "Uredi sveščiće"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:430
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:302
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:434
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:289
 msgid "Edit subfields"
 msgstr "Uredi potpolja"
 
@@ -19361,7 +19396,7 @@ msgid "End Date: "
 msgstr "Završni datum: "
 
 #: intranet-tmpl/prog/en/columns.def:149
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:180
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:182
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:537
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:574
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:365
@@ -19854,7 +19889,7 @@ msgstr ""
 msgid "Ethnicity:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:147
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:157
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:809
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:56
 #, c-format
@@ -19968,7 +20003,7 @@ msgstr "Očekivani datum pristizanja"
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:901
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:666
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:933
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:940
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:487
 #, c-format
 msgid "Expiration"
@@ -20002,7 +20037,7 @@ msgstr "Datum isteka: %s"
 msgid "Expiration:"
 msgstr "Ističe:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:966
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:973
 #, c-format
 msgid "Expiration: "
 msgstr "Ističe: "
@@ -20047,11 +20082,11 @@ msgid "Explanation: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:64
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:158
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:170
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:188
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:232
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:169
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:181
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:199
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:243
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:261
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:300
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:302
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:99
@@ -20069,7 +20104,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:195
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:241
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:310
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:135
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:140
 #, c-format
 msgid "Export"
 msgstr "Isporuči"
@@ -20080,7 +20115,7 @@ msgid "Export "
 msgstr "Isporuči "
 
 #. %1$s:  loo.frameworktext 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:237
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:248
 #, c-format
 msgid "Export %s framework"
 msgstr "Isporuka %s predložak"
@@ -20143,13 +20178,13 @@ msgstr "Isporuka podataka"
 msgid "Export database"
 msgstr "Isporuči bazu podataka"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:175
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:186
 #, c-format
 msgid "Export default framework"
 msgstr "Isporuči izvorni predložak"
 
 #. TH
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:158
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:169
 msgid ""
 "Export framework structure (fields, subfields) to a spreadsheet file (.csv, ."
 "xml, .ods)"
@@ -20210,27 +20245,27 @@ msgstr "Isporuči ovu grupu košarica u CSV"
 msgid "Export to CSV file: "
 msgstr "Isporuči kao CSV: "
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:181
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:243
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:192
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:254
 #, c-format
 msgid "Export to CSV spreadsheet"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:182
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:244
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:193
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:255
 #, c-format
 msgid ""
 "Export to Excel with XML format, compatible with OpenOffice/LibreOffice as "
 "well"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:183
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:245
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:194
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:256
 #, c-format
 msgid "Export to OpenDocument spreadsheet format"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:189
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:193
 #, c-format
 msgid "Export today's checked in barcodes"
 msgstr "Isporuči danas vraćene bar-kodove"
@@ -20356,7 +20391,7 @@ msgstr "Fax: "
 #. %1$s:  branche.branchfax |html 
 #. %2$s:  END 
 #. %3$s:  IF ( branche.branchemail ) 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:226
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:233
 #, c-format
 msgid "Fax: %s%s %s "
 msgstr "Fax: %s%s %s "
@@ -20774,14 +20809,14 @@ msgstr "Prva"
 msgid "First arrival:"
 msgstr "Dolazak prvog broja:"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:214
-#, c-format
-msgid "First issue publication date"
-msgstr "Datum izdavanja prvog broja"
-
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:635
 #, c-format
 msgid "First issue publication date:"
+msgstr "Datum izdavanja prvog broja:"
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:224
+#, fuzzy, c-format
+msgid "First issue publication date: "
 msgstr "Datum izdavanja prvog broja:"
 
 #: intranet-tmpl/prog/en/columns.def:4
@@ -20953,7 +20988,7 @@ msgstr ""
 msgid "Format: "
 msgstr "Format: "
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:185
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:195
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:841
 #, c-format
 msgid "Formatting"
@@ -20989,7 +21024,7 @@ msgstr ""
 msgid "Framework description"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:150
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:161
 #, c-format
 msgid "Framework name, then go to MARC biblio to set MARC editor parameters"
 msgstr ""
@@ -21034,8 +21069,8 @@ msgstr ""
 msgid "Free"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:85
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:156
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:88
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:164
 #, c-format
 msgid "Frequencies"
 msgstr "Učestalost"
@@ -21052,11 +21087,15 @@ msgid ""
 "consider entering an issue count rather than a time period."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:206
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:134
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:650
 #, c-format
 msgid "Frequency:"
+msgstr "Učestalost:"
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:216
+#, fuzzy, c-format
+msgid "Frequency: "
 msgstr "Učestalost:"
 
 #. SCRIPT
@@ -21658,7 +21697,7 @@ msgstr "Grupe:"
 #. %3$s:  IF ( branchcategorie.searchdomain ) 
 #. %4$s:  END 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:265
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:272
 #, c-format
 msgid "Group(s): %sProperties%s%sSearch domain%s%s"
 msgstr ""
@@ -21787,7 +21826,7 @@ msgstr ""
 msgid "Help"
 msgstr "Pomoć"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:142
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:129
 #, c-format
 msgid "Help input"
 msgstr ""
@@ -21831,9 +21870,9 @@ msgstr ""
 msgid "Hide MARC"
 msgstr "Prikaži MARC"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:116
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:119
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:122
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:103
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:106
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:109
 #, c-format
 msgid "Hide all"
 msgstr "Sakrij sve"
@@ -22219,8 +22258,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:84
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:34
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:83
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:69
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:86
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:79
 #: intranet-tmpl/prog/en/modules/serials/viewalerts.tt:9
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:19
 #: intranet-tmpl/prog/en/modules/serials/serial-issues-full.tt:27
@@ -22254,7 +22293,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:67
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:9
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:57
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:28
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:15
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:66
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:84
@@ -22268,7 +22307,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:26
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:27
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:57
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:27
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:9
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:75
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:94
@@ -22422,7 +22461,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:23
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:47
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:52
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:301
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:26
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:53
@@ -22432,7 +22471,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:193
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:20
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:29
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:304
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:305
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:28
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:97
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:49
@@ -22645,7 +22684,7 @@ msgstr ""
 msgid "INVOICE"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:197
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:204
 #, c-format
 msgid "IP"
 msgstr ""
@@ -22884,7 +22923,7 @@ msgid ""
 "already exists for a library, no change is made."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:234
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:244
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:733
 #, c-format
 msgid "If empty, English is used"
@@ -23158,11 +23197,11 @@ msgstr "Slike za "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:159
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:198
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:213
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:259
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:274
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:170
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:209
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:224
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:270
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:285
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:167
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:172
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:196
@@ -23173,7 +23212,7 @@ msgid "Import"
 msgstr "Učitaj"
 
 #. %1$s:  loo.frameworkcode 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:264
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:275
 #, c-format
 msgid ""
 "Import %s framework structure (fields and subfields) from a spreadsheet file "
@@ -23200,7 +23239,7 @@ msgid ""
 "Import all the checked items in the basket with the following parameters:"
 msgstr "Učitaj sve označene primjerke u košaricu sa sljedećim parametrima:"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:203
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
 #, c-format
 msgid ""
 "Import default framework structure (fields and subfields) from a spreadsheet "
@@ -23209,7 +23248,7 @@ msgstr ""
 "Učitaj strukturu predloška (polja, potpolja) iz tablice (.csv, .xml, .ods)"
 
 #. TH
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:159
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:170
 msgid ""
 "Import framework structure (fields, subfields) from a spreadsheet file (."
 "csv, .xml, .ods)"
@@ -23365,7 +23404,7 @@ msgid "Incorrect syntax, cannot save"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:55
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:945
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:952
 #, c-format
 msgid "Indefinite"
 msgstr ""
@@ -23392,7 +23431,7 @@ msgstr "Kazala"
 msgid "Individual libraries:"
 msgstr "Pojedine knjižnice:"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:162
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:167
 #: intranet-tmpl/prog/en/modules/about.tt:170
 #: intranet-tmpl/prog/en/modules/about.tt:175
 #: intranet-tmpl/prog/en/modules/about.tt:188
@@ -23401,7 +23440,7 @@ msgstr "Pojedine knjižnice:"
 msgid "Info"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:112
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:117
 #, c-format
 msgid "Info:"
 msgstr ""
@@ -23431,7 +23470,7 @@ msgstr "Inicijali"
 msgid "Initials: "
 msgstr "Inicijali: "
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:254
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:264
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:759
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:827
 #, c-format
@@ -23454,7 +23493,7 @@ msgid "Installation complete."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:203
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:314
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:315
 #, c-format
 msgid "Instructions"
 msgstr ""
@@ -23757,7 +23796,7 @@ msgid "Irregularity:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:278
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:133
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:120
 #, c-format
 msgid "Is a URL:"
 msgstr ""
@@ -23825,8 +23864,7 @@ msgstr "Sveščić: "
 msgid "Issues"
 msgstr "Sveščići"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:129
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:191
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:198
 #, c-format
 msgid "Issues per unit"
 msgstr "Brojeva po jedinici"
@@ -23836,15 +23874,15 @@ msgstr "Brojeva po jedinici"
 msgid "Issues per unit is required"
 msgstr "Obavezno je unijeti brojeve po jedinici"
 
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:132
+#, fuzzy, c-format
+msgid "Issues per unit: "
+msgstr "Brojeva po jedinici"
+
 #: intranet-tmpl/prog/en/modules/serials/serial-issues.tt:94
 #, c-format
 msgid "Issues summary"
 msgstr "Sažeci brojeva"
-
-#: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:9
-#, c-format
-msgid "Issuing rules"
-msgstr ""
 
 #: intranet-tmpl/prog/en/modules/serials/serial-issues.tt:26
 #, c-format
@@ -23889,8 +23927,8 @@ msgstr "Primjerak "
 
 #. For the first occurrence,
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:180
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:201
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:185
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:206
 #, c-format
 msgid "Item %s"
 msgstr "Primjerak %s"
@@ -25274,6 +25312,15 @@ msgstr ""
 msgid "Koha &rsaquo; Administration &rsaquo; Circulation and fine rules"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:2
+#, fuzzy, c-format
+msgid ""
+"Koha &rsaquo; Administration &rsaquo; Circulation and fine rules &rsaquo; "
+"Clone circulation and fine rules"
+msgstr ""
+"Koha &rsaquo; Administracija &rsaquo; OAI setovi &rsaquo; mapiranje OAI "
+"setova"
+
 #. %1$s:  IF ( class_source_form ) 
 #. %2$s:  IF ( edit_class_source ) 
 #. %3$s:  ELSE 
@@ -25346,15 +25393,6 @@ msgid ""
 "Koha &rsaquo; Administration &rsaquo; Funds%s &rsaquo; %sModify fund%s '%s'%s"
 "%sAdd fund %s%s"
 msgstr ""
-
-#: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:2
-#, fuzzy, c-format
-msgid ""
-"Koha &rsaquo; Administration &rsaquo; Issuing rules &rsaquo; Clone issuing "
-"rules"
-msgstr ""
-"Koha &rsaquo; Administracija &rsaquo; OAI setovi &rsaquo; mapiranje OAI "
-"setova"
 
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:2
 #, c-format
@@ -26401,8 +26439,8 @@ msgid "Koha &rsaquo; Serials &rsaquo; Frequencies"
 msgstr "Koha &rsaquo; Periodika &rsaquo; Učestalost"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:2
-#, c-format
-msgid "Koha &rsaquo; Serials &rsaquo; Number patterns"
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Serials &rsaquo; Numbering patterns"
 msgstr "Koha &rsaquo; Periodika &rsaquo; Uzorci numeriranja"
 
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:2
@@ -26902,8 +26940,8 @@ msgstr ""
 msgid "Koha field"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:145
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:277
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:132
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:264
 #, c-format
 msgid "Koha field:"
 msgstr ""
@@ -27084,7 +27122,7 @@ msgid "LIBRISMARC"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:12
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:135
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:145
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:791
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:52
 #, c-format
@@ -27400,7 +27438,7 @@ msgstr ""
 msgid "LibLime, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:158
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:163
 #, c-format
 msgid "Librarian"
 msgstr "Knjižničar"
@@ -27418,12 +27456,12 @@ msgstr "Identitet knjižničara:"
 msgid "Librarian interface"
 msgstr "Knjižničarsko sučelje"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:69
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:74
 #, c-format
 msgid "Librarian:"
 msgstr "Knjižničar:"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:176
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:183
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:101
 #, c-format
 msgid "Libraries"
@@ -27496,36 +27534,36 @@ msgstr "Knjižnica "
 msgid "Library %s - %s Checkin and transfer policy"
 msgstr "Library %s - %s Pravila posudbe i trasnferi"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:188
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:195
 #, c-format
 msgid "Library cannot be deleted because there are items held by that library"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:185
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:192
 #, c-format
 msgid ""
 "Library cannot be deleted because there are patrons and items using that "
 "library"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:189
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:196
 #, c-format
 msgid ""
 "Library cannot be deleted because there are patrons registered at that "
 "library"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:182
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:189
 #, c-format
 msgid "Library category added"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:184
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:191
 #, c-format
 msgid "Library category deleted"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:183
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:190
 #, c-format
 msgid "Library category modified"
 msgstr ""
@@ -27536,7 +27574,7 @@ msgstr ""
 msgid "Library code: "
 msgstr "Kod za knjižnicu: "
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:181
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:188
 #, c-format
 msgid "Library deleted"
 msgstr ""
@@ -27551,7 +27589,7 @@ msgstr ""
 msgid "Library management"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:179
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:186
 #, c-format
 msgid "Library not saved &mdash; code and/or name missing"
 msgstr ""
@@ -27561,12 +27599,12 @@ msgstr ""
 msgid "Library of the patron:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:180
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:187
 #, c-format
 msgid "Library saved"
 msgstr "Knjižnica snimljena"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:693
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:700
 #, c-format
 msgid "Library set-up"
 msgstr "Postavke u knjižnici"
@@ -27597,7 +27635,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/auth.tt:57
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:283
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:417
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:614
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:621
 #: intranet-tmpl/prog/en/modules/members/member.tt:489
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:280
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:324
@@ -27830,7 +27868,7 @@ msgid "Loading "
 msgstr "Učitavanje "
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:229
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:351
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:352
 #, c-format
 msgid "Loading data..."
 msgstr ""
@@ -27919,9 +27957,9 @@ msgstr ""
 msgid "Locale"
 msgstr "Jezik"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:227
-#, c-format
-msgid "Locale:"
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:237
+#, fuzzy, c-format
+msgid "Locale: "
 msgstr "Jezik:"
 
 #: intranet-tmpl/prog/en/columns.def:152
@@ -28013,7 +28051,7 @@ msgid "Login"
 msgstr "Prijava"
 
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:11
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:49
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:54
 #, c-format
 msgid "Logs"
 msgstr ""
@@ -28259,7 +28297,7 @@ msgid "MARC field: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:89
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:149
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:160
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:34
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:170
 #, c-format
@@ -28289,8 +28327,8 @@ msgstr "MARC prikaz"
 msgid "MARC staging results :"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:164
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:226
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:175
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:237
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:132
 #, c-format
 msgid "MARC structure"
@@ -28308,7 +28346,7 @@ msgstr ""
 #. %3$s:  frameworkcode 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:381
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:385
 #, c-format
 msgid ""
 "MARC subfield structure admin for %s %s(framework %s)%s(default framework)%s"
@@ -28610,7 +28648,7 @@ msgid "Managed by:"
 msgstr "Administrira:"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:232
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:89
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:76
 #, c-format
 msgid "Managed in tab: "
 msgstr ""
@@ -28635,7 +28673,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:89
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:231
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:86
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:73
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:108
 #, c-format
 msgid "Mandatory: "
@@ -29134,7 +29172,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  minPasswordLength 
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:102
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:844
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:851
 #, c-format
 msgid "Minimum password length: %s"
 msgstr "Minimalna dužina lozinke: %s"
@@ -29297,9 +29335,9 @@ msgstr ""
 msgid "Modified record matching rule &quot;%s&quot;"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:206
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:213
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:194
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:105
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:115
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:391
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:505
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:130
@@ -29314,7 +29352,7 @@ msgid "Modify %s server"
 msgstr "Izmijeni %s server"
 
 #. %1$s:  spec 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:40
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:50
 #, c-format
 msgid "Modify OAI set '%s'"
 msgstr "Izmijeni OAI set '%s'"
@@ -29376,7 +29414,7 @@ msgid "Modify filing rule"
 msgstr "Izmijeni pravilo popunjavanja"
 
 #. %1$s:  description 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:97
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:100
 #, c-format
 msgid "Modify frequency: %s"
 msgstr "Izmijeni učestalost: %s"
@@ -29412,7 +29450,7 @@ msgid "Modify pattern"
 msgstr "Izmijeni uzorak"
 
 #. %1$s:  label 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:89
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:99
 #, c-format
 msgid "Modify pattern: %s"
 msgstr "Promijeni kategoriju %s"
@@ -29450,7 +29488,7 @@ msgstr "Izmijeni označene primjerke"
 msgid "Modify word"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:159
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:164
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:195
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:447
 #, c-format
@@ -29474,7 +29512,7 @@ msgstr "Potrebno je nadograditi modul"
 msgid "Modules in red must be installed before you may continue."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:73
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:78
 #, c-format
 msgid "Modules:"
 msgstr "Moduli:"
@@ -29529,7 +29567,7 @@ msgid "Morag Hills"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/header.inc:13
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:161
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:165
 #, c-format
 msgid "More "
 msgstr "Više "
@@ -29666,7 +29704,7 @@ msgid "N/A "
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:367
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:374
 msgid "NO"
 msgstr ""
 
@@ -29726,15 +29764,15 @@ msgid "Nahuel Angelinetti"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:3
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:301
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:315
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:35
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:63
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:25
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:177
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:179
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:51
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:161
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:193
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:270
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:200
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:277
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:64
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:43
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:38
@@ -29771,22 +29809,22 @@ msgstr "Naziv (bilo koje): "
 msgid "Name is a required field!"
 msgstr "Naziv je obavezno polje!"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:169
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:171
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:179
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:181
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:836
 #, c-format
 msgid "Name of day"
 msgstr "Dan"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:174
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:176
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:184
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:186
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:837
 #, c-format
 msgid "Name of month"
 msgstr "Mjesec"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:179
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:181
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:189
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:191
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:838
 #, c-format
 msgid "Name of season"
@@ -29812,7 +29850,7 @@ msgstr "Ime ili broj iskaznice:"
 msgid "Name the new definition"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:108
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:118
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:51
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:180
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:234
@@ -29822,7 +29860,7 @@ msgid "Name:"
 msgstr "Naziv:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:110
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:324
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:331
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:547
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:541
 #, c-format
@@ -29834,7 +29872,7 @@ msgstr "Naziv: "
 msgid "Name: *"
 msgstr "Naziv: *"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:134
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:139
 #, c-format
 msgid "Named:"
 msgstr "s nazivom:"
@@ -29892,9 +29930,9 @@ msgid "Never"
 msgstr "Nikada"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:207
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:65
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:52
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:180
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1018
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1025
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:95
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:359
@@ -30075,8 +30113,8 @@ msgstr ""
 msgid "New framework"
 msgstr "Novi obrazac"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:95
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:183
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:98
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:161
 #, c-format
 msgid "New frequency"
 msgstr "Nova učestalost"
@@ -30163,12 +30201,8 @@ msgstr "Novi korisnik "
 msgid "New notice"
 msgstr "Nova obavijest"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:82
-#, c-format
-msgid "New number pattern"
-msgstr "Novi uzorak numeriranja"
-
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:296
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:92
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:308
 #, c-format
 msgid "New numbering pattern"
 msgstr "Novi uzorak numeriranja"
@@ -30242,7 +30276,7 @@ msgstr "Novi izvještaj "
 msgid "New routing list"
 msgstr "Izrada popisa za cirkulaciju"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:74
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:84
 #, c-format
 msgid "New set"
 msgstr "Novi skup"
@@ -30326,7 +30360,7 @@ msgid "Next"
 msgstr "Sljedeće"
 
 #: intranet-tmpl/prog/en/includes/page-numbers.inc:6
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:284
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:295
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:214
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:181
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:135
@@ -30427,15 +30461,15 @@ msgstr ""
 msgid "No"
 msgstr "Ne"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:908
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:915
 #, c-format
 msgid "No "
 msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:682
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:685
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:689
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:692
 #, c-format
 msgid "No %s "
 msgstr "Ne %s "
@@ -30569,7 +30603,7 @@ msgstr "Nema podataka u tablici"
 msgid "No database named "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:101
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:111
 #, c-format
 msgid "No descriptions"
 msgstr "Nema opisa"
@@ -30614,7 +30648,7 @@ msgstr ""
 msgid "No group"
 msgstr "Nema grupe"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:298
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:305
 #, c-format
 msgid "No groups defined."
 msgstr "Nema definiranih grupa."
@@ -30739,7 +30773,7 @@ msgid "No limit"
 msgstr "Bez ograničenja"
 
 #. %1$s:  IF ( CATALOGUING ) 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:211
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:216
 #, c-format
 msgid "No log found %s for "
 msgstr "Evidencija nije pronađena %s za "
@@ -30978,9 +31012,9 @@ msgid "No statistics to report"
 msgstr "Nema statistika za izvještaj"
 
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:69
-#, c-format
-msgid "No system preferences matched your search for "
-msgstr ""
+#, fuzzy, c-format
+msgid "No system preferences matched your search for: "
+msgstr "Pretraživanje sistemskih postavki:"
 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:93
 #, c-format
@@ -31003,16 +31037,18 @@ msgid "No, do not Delete"
 msgstr ""
 
 #. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:163
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:541
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:179
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:258
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:126
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:101
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:366
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:368
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:153
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:235
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:222
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:236
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:93
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:177
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:148
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:198
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:211
@@ -31021,7 +31057,7 @@ msgid "No, do not delete"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:144
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:153
 msgid "No, do not delete!"
 msgstr ""
 
@@ -31043,8 +31079,8 @@ msgid "No, don't close (N)"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:179
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:292
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:187
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:302
 msgid "No, don't delete"
 msgstr "Ne, nemoj brisati"
 
@@ -31110,7 +31146,7 @@ msgstr "Interna napomena:"
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:130
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:184
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:186
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:115
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:118
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:557
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:580
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:598
@@ -31360,7 +31396,7 @@ msgid ""
 "the bibliographic record"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:127
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:130
 #, c-format
 msgid "Note: one of the two following fields must be equal to 1"
 msgstr "Napomena: jedno od sljedećih polja mora biti 1"
@@ -31448,7 +31484,7 @@ msgstr "Napomene: %s"
 #. %1$s:  branche.branchnotes |html 
 #. %2$s:  END 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:234
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:241
 #, c-format
 msgid "Notes: %s%s %s "
 msgstr "Napomene: %s%s %s "
@@ -31735,11 +31771,6 @@ msgstr "Broj tjedana: "
 msgid "Number pattern:"
 msgstr "Uzorak numeracije:"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:269
-#, c-format
-msgid "Number patterns"
-msgstr "Uzorci numeracije"
-
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:115
 #, c-format
 msgid "Numbered"
@@ -31750,12 +31781,12 @@ msgstr "Numeracija"
 msgid "Numbering calculation"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:303
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:317
 #, c-format
 msgid "Numbering formula"
 msgstr "Formula za numeriranje"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:116
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:126
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:189
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:774
 #, c-format
@@ -31772,7 +31803,8 @@ msgstr "Uzorak numeriranja"
 msgid "Numbering pattern:"
 msgstr "Uzorak numeriranja:"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:71
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:81
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:279
 #, c-format
 msgid "Numbering patterns"
 msgstr "Uzorci numeriranja"
@@ -31787,14 +31819,14 @@ msgstr ""
 msgid "OAI set mappings"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:77
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:87
 #, c-format
 msgid "OAI sets"
 msgstr "OAI setovi"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:47
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:46
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:27
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:85
 #, c-format
 msgid "OAI sets configuration"
@@ -31817,16 +31849,16 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:200
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:246
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:140
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:169
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:171
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:317
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:133
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:148
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:375
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:379
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:133
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:162
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:112
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:144
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:245
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:232
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:217
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:80
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:100
@@ -31890,7 +31922,14 @@ msgstr ""
 msgid "OPAC (%s)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:232
+#. %1$s:  firstname 
+#. %2$s:  surname 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:162
+#, fuzzy, c-format
+msgid "OPAC - %s %s"
+msgstr "Stranica %s %s "
+
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:239
 #, c-format
 msgid "OPAC Info: "
 msgstr ""
@@ -31921,7 +31960,7 @@ msgstr "Napomena za OPAC:"
 msgid "OPAC view:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:772
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:779
 #, c-format
 msgid "OPAC/Staff login"
 msgstr "Podaci za prijavu"
@@ -31966,12 +32005,12 @@ msgstr ""
 msgid "OVER THE LIMIT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:161
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:166
 #, c-format
 msgid "Object"
 msgstr "Objekt"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:108
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:113
 #, c-format
 msgid "Object: "
 msgstr ""
@@ -32459,7 +32498,7 @@ msgid "Orders with uncertain prices for vendor "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:194
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:636
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:643
 #, c-format
 msgid "Organization"
 msgstr "Organizacija"
@@ -32532,11 +32571,6 @@ msgstr ""
 msgid "Other holdings:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:161
-#, c-format
-msgid "Other librarians"
-msgstr "Drugi knjižničari"
-
 #: intranet-tmpl/prog/en/columns.def:7
 #, c-format
 msgid "Other name"
@@ -32581,7 +32615,7 @@ msgstr "Ostalo.."
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:192
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:238
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:303
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:126
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:131
 #, c-format
 msgid "Output"
 msgstr "Izlazni podaci"
@@ -32837,7 +32871,7 @@ msgstr "Lozinka obnovljena"
 msgid "Password contains leading and/or trailing spaces."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:843
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:850
 #, c-format
 msgid "Password is too short"
 msgstr ""
@@ -32850,7 +32884,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/auth.tt:51
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:111
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1013
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1020
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:44
 #, c-format
 msgid "Password:"
@@ -32866,7 +32900,7 @@ msgstr "Lozinka: "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:4
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:886
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:893
 #, c-format
 msgid "Passwords do not match"
 msgstr ""
@@ -32899,7 +32933,7 @@ msgstr "Patent"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:566
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:35
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:42
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:663
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:20
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:458
@@ -32913,7 +32947,7 @@ msgstr "Korisnik"
 msgid "Patron #:"
 msgstr "Korisnik #:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:894
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:901
 #, c-format
 msgid "Patron account flags"
 msgstr ""
@@ -33148,12 +33182,12 @@ msgid "Patron is RESTRICTED"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:187
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:191
 msgid "Patron is an adult"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:26
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:956
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:963
 #, c-format
 msgid "Patron is currently unrestricted."
 msgstr "Korisnik nema ograničenja."
@@ -33183,7 +33217,7 @@ msgstr "Popisi korisnika"
 msgid "Patron lists:"
 msgstr "Popisi korisnika:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1030
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1037
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:325
 #, c-format
 msgid "Patron messaging preferences"
@@ -33225,7 +33259,7 @@ msgstr "Obavještavanja korisnika: "
 msgid "Patron records were last synced on: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:925
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:932
 #, c-format
 msgid "Patron restrictions"
 msgstr "Korisnik ima restrikciju"
@@ -33725,7 +33759,7 @@ msgstr ""
 #. %1$s:  branche.branchphone |html 
 #. %2$s:  END 
 #. %3$s:  IF ( branche.branchfax ) 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:224
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:231
 #, c-format
 msgid "Ph: %s%s %s "
 msgstr ""
@@ -34526,8 +34560,8 @@ msgid "Plugin Version"
 msgstr "Verzija dodatka"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:324
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:193
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:290
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:180
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:277
 #, c-format
 msgid "Plugin:"
 msgstr ""
@@ -35073,7 +35107,7 @@ msgid "Processing..."
 msgstr "Obrađujem..."
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:195
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:637
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:644
 #, c-format
 msgid "Professional"
 msgstr ""
@@ -35133,7 +35167,7 @@ msgstr ""
 msgid "Programmed texts"
 msgstr "Programirani tekst"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:196
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:203
 #, c-format
 msgid "Properties"
 msgstr ""
@@ -35452,7 +35486,7 @@ msgstr "Brza izrada hrptenih naljepnica"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:109
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:200
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:304
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:305
 #, c-format
 msgid "Quote editor"
 msgstr "Alat za uređivanje citata"
@@ -35462,7 +35496,7 @@ msgstr "Alat za uređivanje citata"
 msgid "Quote editor for Quote-of-the-day feature in OPAC"
 msgstr "Uređivanje citata za opciju 'citat dana' u OPAC-u"
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:311
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:312
 #, c-format
 msgid "Quote uploader"
 msgstr "Alat za učitavanje citata"
@@ -35940,7 +35974,7 @@ msgid "Remote record deleted, local record kept"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:512
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:60
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:70
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:168
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:7
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:10
@@ -36026,7 +36060,7 @@ msgstr ""
 msgid "Remove this match point"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:935
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:942
 #, c-format
 msgid "Remove?"
 msgstr "Ukloni?"
@@ -36071,8 +36105,8 @@ msgstr "Produženje nije uspjelo"
 msgid "Renew or check in selected items"
 msgstr "Produži ili vrati označene primjerke"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:164
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:166
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:168
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:170
 #, c-format
 msgid "Renew patron"
 msgstr "Produži članstvo"
@@ -36104,7 +36138,7 @@ msgstr "Period produženja"
 msgid "Renewals allowed (count)"
 msgstr "Dozvoljen broj produženja (count)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:47
 #, c-format
 msgid "Renewed"
 msgstr "Produženo"
@@ -36197,7 +36231,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:108
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:82
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:230
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:85
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:72
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:101
 #, c-format
 msgid "Repeatable: "
@@ -36425,6 +36459,7 @@ msgstr "Naziv izvještaja"
 #: intranet-tmpl/prog/en/includes/member-alt-contact-style-us.inc:96
 #: intranet-tmpl/prog/en/includes/member-alt-contact-style-us.inc:108
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:57
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:113
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:259
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:402
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:499
@@ -36453,8 +36488,8 @@ msgstr "Naziv izvještaja"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:95
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:123
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:127
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:49
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:59
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:64
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:89
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:95
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:106
@@ -36472,18 +36507,21 @@ msgstr "Naziv izvještaja"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:534
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:547
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:559
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:609
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:624
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:651
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:662
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:674
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:707
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:736
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:750
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:763
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:799
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:843
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:886
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:602
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:606
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:610
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:614
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:631
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:658
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:669
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:681
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:714
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:743
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:757
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:770
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:806
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:850
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:893
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:521
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:548
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:181
@@ -36562,7 +36600,7 @@ msgid "Reserves"
 msgstr "Rezervacije"
 
 #. INPUT type=reset
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:195
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:205
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:271
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:280
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:297
@@ -36712,9 +36750,15 @@ msgid "Return to batch item modification"
 msgstr "Natrag na alat za promjenu primjeraka u seriji"
 
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:29
-#, c-format
-msgid "Return to issuing rules"
-msgstr "Povratak na pravila posudbe"
+#, fuzzy, c-format
+msgid "Return to circulation and fine rules"
+msgstr "Pravila cirkulacije i kazne"
+
+#. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:143
+#, fuzzy
+msgid "Return to frameworks"
+msgstr "Zadani predložak"
 
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:33
 #, c-format
@@ -37033,7 +37077,7 @@ msgstr ""
 msgid "SMS alert number"
 msgstr "SMS broj:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1080
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1087
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:328
 #, c-format
 msgid "SMS number:"
@@ -37108,8 +37152,8 @@ msgid "Saturdays"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:151
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:194
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:154
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:204
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:424
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:100
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:133
@@ -37129,7 +37173,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:370
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:71
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:120
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:68
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:78
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:140
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:184
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:298
@@ -37152,7 +37196,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:534
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:157
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:117
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1089
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1096
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:158
 #: intranet-tmpl/prog/en/modules/members/member.tt:374
@@ -37250,7 +37294,7 @@ msgstr "Snimi kao novi obrazac"
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:109
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:371
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:342
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:60
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:47
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:237
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:283
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:275
@@ -37812,7 +37856,7 @@ msgstr "Pretraži katalog i spremnik:"
 msgid "Search title"
 msgstr "Pretraži naslov"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:159
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:161
 #, c-format
 msgid "Search to hold"
 msgstr "Pretraživanje radi rezervacije"
@@ -38241,7 +38285,7 @@ msgstr "Odaberite datoteku za učitavanje: "
 msgid "Select the host item to link%s to "
 msgstr "Odaberi zapis više razine za povezivanje%s na "
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:112
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:99
 #, c-format
 msgid "Select to display or not:"
 msgstr ""
@@ -38474,8 +38518,8 @@ msgstr "Časopis: %s "
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:15
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:84
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:34
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:84
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:70
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:87
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:80
 #: intranet-tmpl/prog/en/modules/serials/viewalerts.tt:9
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:19
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:35
@@ -38572,7 +38616,7 @@ msgstr ""
 msgid "Set all funds to zero"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:153
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:163
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:225
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:815
 #, c-format
@@ -38603,8 +38647,8 @@ msgstr "Podesi knjižnicu"
 msgid "Set notice/status triggers for overdue items"
 msgstr "Podešavanje opomena/aktiviranje slanja za prekoračenje roka"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:169
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:171
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:173
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:175
 #, c-format
 msgid "Set permissions"
 msgstr "Postavi ovlasti"
@@ -38802,9 +38846,9 @@ msgstr "Prikaži samo aktivna mjesta troška"
 msgid "Show actual/estimated values"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:115
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:118
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:121
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:102
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:105
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:108
 #, c-format
 msgid "Show all"
 msgstr "Prikaži sve"
@@ -38886,7 +38930,7 @@ msgstr ""
 msgid "Show helpers for fixed and coded fields"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:344
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:351
 #, c-format
 msgid "Show in search pulldown: "
 msgstr ""
@@ -38923,8 +38967,8 @@ msgstr "Prikaži samo obnovljene "
 msgid "Show only subscriptions "
 msgstr "Prikaži samo pretplate "
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:163
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:276
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:171
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:286
 #, c-format
 msgid "Show subscriptions"
 msgstr "Prikaži pretplate"
@@ -39201,7 +39245,7 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:219
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:342
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:343
 #, c-format
 msgid "Source"
 msgstr "Izvor"
@@ -39341,10 +39385,15 @@ msgid "Stacey Walker"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:193
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:635
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:642
 #, c-format
 msgid "Staff"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:161
+#, fuzzy, c-format
+msgid "Staff - Internal note"
+msgstr "Interna bilješka:"
 
 #. A
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:16
@@ -39459,7 +39508,7 @@ msgid "Start Date: "
 msgstr "Početni datum: "
 
 #: intranet-tmpl/prog/en/columns.def:148
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:179
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:181
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:536
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:573
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:364
@@ -39499,7 +39548,7 @@ msgstr "Početni datum: "
 msgid "Start date: *"
 msgstr "Početni datum: *"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:260
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:267
 #, c-format
 msgid "Start defining libraries"
 msgstr ""
@@ -39587,7 +39636,7 @@ msgid "Statistic 2: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:196
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:638
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:645
 #, c-format
 msgid "Statistical"
 msgstr ""
@@ -39892,8 +39941,8 @@ msgid "Sub total:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:68
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:387
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:257
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:391
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:244
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:200
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:235
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:91
@@ -39907,7 +39956,7 @@ msgstr ""
 msgid "Subfield code:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:79
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:66
 #, c-format
 msgid "Subfield code: "
 msgstr ""
@@ -39923,13 +39972,13 @@ msgstr ""
 msgid "Subfield ‡"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:222
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:209
 #, c-format
 msgid "Subfield:"
 msgstr ""
 
 #. %1$s:  tagsubfield 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:350
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:351
 #, c-format
 msgid "Subfield: %s"
 msgstr ""
@@ -40112,7 +40161,7 @@ msgstr "Predmeti:"
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:78
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:263
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:329
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:146
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:151
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:178
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:384
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:153
@@ -40140,7 +40189,7 @@ msgid "Subscription #%s"
 msgstr "Pretplata #%s"
 
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:188
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:193
 #, c-format
 msgid "Subscription %s "
 msgstr "Pretplata %s "
@@ -40224,7 +40273,7 @@ msgstr "Informacije o pretplati za "
 msgid "Subscription information for biblio #%s with title : %s"
 msgstr "Informacije o pretplati za biblio #%s s naslovom : %s"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:218
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:228
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:665
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:28
 #, c-format
@@ -40559,7 +40608,7 @@ msgstr ""
 msgid "Sync status: "
 msgstr "Status : "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:679
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:686
 #, c-format
 msgid "Sync with the Norwegian national patron database:"
 msgstr ""
@@ -40673,7 +40722,7 @@ msgstr "UKUPNO"
 msgid "Tab separated text"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:276
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:263
 #, c-format
 msgid "Tab:"
 msgstr ""
@@ -40956,11 +41005,11 @@ msgid "Test"
 msgstr ""
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:262
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:272
 msgid "Test pattern"
 msgstr "Testiranje uzorka"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:203
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:213
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:856
 #, c-format
 msgid "Test prediction pattern"
@@ -40976,10 +41025,10 @@ msgstr ""
 msgid "Tetun (Tetum) Karen Myers"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:388
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:258
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:392
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:245
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:220
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:343
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:344
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:56
 #, c-format
 msgid "Text"
@@ -40998,13 +41047,13 @@ msgid "Text fields"
 msgstr "Tekstualna polja"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:229
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:88
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:75
 #, c-format
 msgid "Text for OPAC: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:228
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:87
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:74
 #, c-format
 msgid "Text for librarian: "
 msgstr "Tekst za knjižničara: "
@@ -41229,8 +41278,8 @@ msgstr "Od biblio broja: "
 msgid "The cart was sent to: %s"
 msgstr "Sadržaj košarice poslan na: %s"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:383
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:253
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:387
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:240
 #, c-format
 msgid ""
 "The column 'Koha field' shows that the subfield is linked with a Koha field."
@@ -41292,7 +41341,7 @@ msgid ""
 "entries in your database."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:319
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:320
 #, c-format
 msgid ""
 "The file will be imported into an editable table for review prior to saving."
@@ -41568,7 +41617,7 @@ msgid ""
 "the hold is being placed. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:317
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:318
 #, c-format
 msgid ""
 "The quote uploader accepts standard csv files with two columns: \"source\","
@@ -41699,7 +41748,7 @@ msgstr ""
 msgid "There are no collections currently defined."
 msgstr "Trenutno nije definirana niti jedna zbirka."
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:197
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:199
 #, c-format
 msgid "There are no contracts with this vendor. "
 msgstr "Nema ugovora za ovog dobavljača. "
@@ -41713,6 +41762,11 @@ msgstr ""
 #, c-format
 msgid "There are no defined templates. Please create a template first."
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:338
+#, fuzzy, c-format
+msgid "There are no existing numbering patterns."
+msgstr "Nema uzoraka."
 
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:90
 #, c-format
@@ -41750,7 +41804,7 @@ msgstr ""
 msgid "There are no libraries defined."
 msgstr "Trenutno nije definirana niti jedna zbirka."
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:260
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:267
 #, c-format
 msgid "There are no libraries defined. "
 msgstr ""
@@ -41823,7 +41877,7 @@ msgstr ""
 msgid "There are no saved reports. "
 msgstr "Nema snimljenih izvještaja. "
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:116
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:126
 #, c-format
 msgid "There are no sets defined."
 msgstr ""
@@ -41844,15 +41898,15 @@ msgstr ""
 msgid "There is more than 1 MARC tag related to items tab (10) : %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:214
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:221
 #, c-format
 msgid "There is no defined frequency."
 msgstr "Učestalost nije definirana."
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:324
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:615
 #, c-format
-msgid "There is no existing patterns."
-msgstr "Nema uzoraka."
+msgid "There is no minimum or maximum character length."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/notices.tt:83
 #, c-format
@@ -41904,7 +41958,7 @@ msgid "Therefore, the record to be merged has not been deleted."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:312
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:177
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:164
 #, c-format
 msgid "Thesaurus:"
 msgstr ""
@@ -41996,14 +42050,19 @@ msgstr ""
 msgid "This field is required."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:139
+#, fuzzy, c-format
+msgid "This framework cannot be deleted"
+msgstr "Ovi zapisi se ne mogu obrisati:"
+
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:140
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:141
 #, c-format
 msgid "This framework is used %s times"
 msgstr ""
 
 #. %1$s:  subscriptions.size 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:159
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:167
 #, c-format
 msgid ""
 "This frequency is still used by %s subscription(s). Do you still want to "
@@ -42131,12 +42190,12 @@ msgstr "Ovaj primjerak se ne može rezervirati prema pravilima."
 msgid "This member has no email"
 msgstr "Član nema e-poštu"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:749
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:756
 #, c-format
 msgid "This message appears on this patron's user page in the OPAC"
 msgstr "Ova poruka se pojavljuje na korisničkoj stranici u OPAC-u"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:762
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:769
 #, c-format
 msgid "This message displays when checking out to this patron"
 msgstr ""
@@ -42182,7 +42241,7 @@ msgid "This patron is from a different library (%s)"
 msgstr ""
 
 #. %1$s:  subscriptions.size 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:272
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:282
 #, c-format
 msgid ""
 "This pattern is still used by %s subscription(s). Do you still want to "
@@ -42234,8 +42293,8 @@ msgstr ""
 "Ovaj izvještaj je zahtjevan za resurse u sustavima s velikim brojem "
 "prekoračenih rokova posudbe."
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:382
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:252
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:386
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:239
 #, c-format
 msgid ""
 "This screen shows the subfields associated with the selected tag. You can "
@@ -42667,7 +42726,7 @@ msgstr "Do datuma : "
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:121
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:261
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:309
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:132
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:137
 #, c-format
 msgid "To a file:"
 msgstr "U datoteku:"
@@ -42742,7 +42801,7 @@ msgstr "Da biste prijavili ovu grešku možete "
 msgid "To screen"
 msgstr "Na ekran"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:129
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:134
 #, c-format
 msgid "To screen in the browser:"
 msgstr "Na ekran u pregledniku:"
@@ -42894,7 +42953,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:44
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:114
 #: intranet-tmpl/prog/en/modules/sms/sms-home.tt:9
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:47
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:52
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:301
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:26
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:54
@@ -42903,7 +42962,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:193
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:20
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:30
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:304
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:305
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:28
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:97
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:50
@@ -43393,7 +43452,7 @@ msgstr "Dva zapisa moraju biti označena za spajanje."
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:172
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #: intranet-tmpl/prog/en/modules/members/notices.tt:49
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:931
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:938
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:72
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:613
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:54
@@ -43616,8 +43675,7 @@ msgstr "Dodaj novi praznik"
 msgid "Unique identifier: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:113
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:190
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:197
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:146
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:308
 #, c-format
@@ -43640,8 +43698,12 @@ msgstr "Pretraživanje jedinične cijene"
 msgid "Unit price "
 msgstr "Jedinična cijena "
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:137
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:192
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:116
+#, fuzzy, c-format
+msgid "Unit: "
+msgstr "Jedinice: "
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:199
 #, c-format
 msgid "Units per issue"
 msgstr "Jedinica po broju"
@@ -43650,6 +43712,11 @@ msgstr "Jedinica po broju"
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:4
 msgid "Units per issue is required"
 msgstr "Jedinica po broju je obavezno"
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:140
+#, fuzzy, c-format
+msgid "Units per issue: "
+msgstr "Jedinica po broju"
 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:71
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:71
@@ -43744,7 +43811,7 @@ msgstr ""
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:29
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:353
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:360
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:231
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:244
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:827
@@ -43766,8 +43833,8 @@ msgstr ""
 msgid "Update all child funds with this owner "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:185
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:187
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:189
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:191
 #, c-format
 msgid "Update child to adult patron"
 msgstr ""
@@ -43872,8 +43939,8 @@ msgstr ""
 msgid "Upload file"
 msgstr "Učitaj datoteku"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:209
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:270
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:220
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:281
 #, c-format
 msgid "Upload file:"
 msgstr "Učitaj datoteku:"
@@ -43931,7 +43998,7 @@ msgstr "Skupno učitavanje slika korisnika ili jedna po jedna"
 msgid "Upload progress: "
 msgstr "Progres učitavanja: "
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:332
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:333
 #, c-format
 msgid "Upload quotes"
 msgstr "Učitaj citate"
@@ -44008,8 +44075,8 @@ msgstr "Odaberi datoteku "
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:32
 #, c-format
 msgid ""
-"Use carefully! If the destination library already has issuing rules, they "
-"will be deleted without warning!"
+"Use carefully! If the destination library already has circulation and fine "
+"rules, they will be deleted without warning!"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:49
@@ -44368,7 +44435,7 @@ msgstr "Rezultati pretraživanja dobavljača"
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:88
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:84
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:361
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:153
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:152
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:195
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:238
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:55
@@ -44927,7 +44994,7 @@ msgid ""
 "find and use the price of the currently active currency. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:159
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:169
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:216
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:821
 #, c-format
@@ -45093,7 +45160,7 @@ msgid "Xercode, Spain"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:364
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:371
 msgid "YES"
 msgstr ""
 
@@ -45156,9 +45223,9 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:681
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:684
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:902
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:688
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:691
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:909
 #, c-format
 msgid "Yes "
 msgstr ""
@@ -45191,12 +45258,13 @@ msgid "Yes, close (Y)"
 msgstr "Da, zatvori (Y)"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:176
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:289
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:184
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:299
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:178
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:99
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:235
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:90
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:174
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:104
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:147
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:464
@@ -45209,13 +45277,19 @@ msgid "Yes, delete (Y)"
 msgstr "Da, obriši (Y)"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:142
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:158
+#, fuzzy
+msgid "Yes, delete contract"
+msgstr "Alternativni kontakt"
+
+#. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:150
 msgid "Yes, delete this framework!"
 msgstr "Da, obriši ovaj predložak!"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:358
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:228
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:359
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:215
 msgid "Yes, delete this subfield"
 msgstr "Da, obriši ovo potpolje"
 
@@ -45285,7 +45359,7 @@ msgid "You are not authorised to manage this basket."
 msgstr "Nemate potrebne ovlasti za uređivanje ove košarice."
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:182
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:186
 msgid "You are not authorized to delete patrons"
 msgstr "Nemate potrebne ovlasti za brisanje korisnika"
 
@@ -45295,12 +45369,12 @@ msgid "You are not authorized to modify this fund"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:166
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:170
 msgid "You are not authorized to renew patrons"
 msgstr "Nemate potrebne ovlasti za obnovu korisnika"
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:171
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:175
 msgid "You are not authorized to set permissions"
 msgstr "Nemate potrebne ovlasti za postavljanje ovlasti"
 
@@ -46000,8 +46074,8 @@ msgid "[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]"
 msgstr ""
 
 #. INPUT type=text name=dateexpiry
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:725
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:731
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:732
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:738
 msgid "[% UNLESS opduplicate %][% dateexpiry %][% END %]"
 msgstr ""
 
@@ -46080,6 +46154,14 @@ msgid ""
 "[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
 "CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) "
 "%%] "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:40
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:54
+#, c-format
+msgid ""
+"[%% IF Koha.Preference('intranetreadinghistory') AND "
+"CAN_user_circulate_circulate_remaining_permissions %%] "
 msgstr ""
 
 #. %1$s:  IF (warnIsRootUser) 
@@ -46501,12 +46583,6 @@ msgstr "Počinje s"
 msgid "below"
 msgstr ""
 
-#. INPUT type=text name=cardnumber
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:603
-msgid ""
-"between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:133
 #, c-format
 msgid "biblio and biblionumber"
@@ -46852,7 +46928,7 @@ msgid "digits"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:170
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:175
 msgid "display detail for this librarian."
 msgstr ""
 
@@ -46980,11 +47056,6 @@ msgstr ""
 msgid "ex: barcode, itemcallnumber, title, \"050a 050b\", 300a "
 msgstr ""
 
-#. INPUT type=text name=cardnumber
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:601
-msgid "exactly [% minlength_cardnumber %] characters"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:501
 #, c-format
 msgid "exists"
@@ -47101,7 +47172,7 @@ msgstr ""
 msgid "has already been added."
 msgstr "već je dodano."
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:94
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:96
 #, c-format
 msgid "has never been checked out."
 msgstr "nije bilo nikad posuđeno."
@@ -47209,8 +47280,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:235
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:237
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:92
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:94
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:79
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:81
 #, c-format
 msgid "ignore"
 msgstr ""
@@ -47571,7 +47642,7 @@ msgid "label_single_%s.xml"
 msgstr ""
 
 #. %1$s:  issue.lastreneweddate |$KohaDates with_hours => 1  
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:68
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:70
 #, c-format
 msgid "last on: %s"
 msgstr ""
@@ -47661,7 +47732,7 @@ msgid "never"
 msgstr "(nikada)"
 
 #. INPUT type=image
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:312
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:299
 msgid "next"
 msgstr ""
 
@@ -47847,7 +47918,7 @@ msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr ""
 
 #. INPUT type=image
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:307
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:294
 msgid "previous"
 msgstr ""
 
@@ -47940,11 +48011,6 @@ msgstr "ponovno otvori grupu košarica"
 msgid "restricted"
 msgstr "ograničeno"
 
-#: intranet-tmpl/prog/en/modules/admin/preferences.tt:70
-#, c-format
-msgid "return to where you were before."
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/macles.tt:66
 #, c-format
 msgid "s&eacute;lection au moyen d'une liste de descripteurs"
@@ -48029,32 +48095,32 @@ msgstr ""
 msgid "serial collection for [% subscription.bibliotitle %]"
 msgstr "zbrika periodike za [% subscription.bibliotitle %]"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:58
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:68
 #, c-format
 msgid "setDescription: "
 msgstr "setDescription: "
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:84
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:94
 #, c-format
 msgid "setDescriptions"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:83
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:93
 #, c-format
 msgid "setName"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:52
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:62
 #, c-format
 msgid "setName: "
 msgstr "setName: "
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:82
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:92
 #, c-format
 msgid "setSpec"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:47
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:57
 #, c-format
 msgid "setSpec: "
 msgstr ""
@@ -48104,8 +48170,8 @@ msgstr "Počinje s:"
 msgid "starts with"
 msgstr "počinje s"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:405
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:274
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:409
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:261
 #, c-format
 msgid "subfield ignored"
 msgstr ""
@@ -48352,11 +48418,6 @@ msgstr "do"
 msgid "until %s"
 msgstr "do %s"
 
-#. INPUT type=text name=cardnumber
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:605
-msgid "up to [% maxlength_cardnumber %] characters"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:217
 #, c-format
 msgid "update your database"
@@ -48527,10 +48588,10 @@ msgstr "| Akcije: %s "
 msgid "| "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:174
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:202
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:236
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:263
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:185
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:213
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:247
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:274
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1066
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:181
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:493

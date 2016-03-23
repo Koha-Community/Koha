@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-02-16 18:50-0300\n"
+"POT-Creation-Date: 2016-03-15 09:11-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1626,11 +1626,13 @@ msgstr "%s%s%s%sKoha Online%s Katalogoa &rsaquo; Sarrera %s %s "
 #. %4$s:  END 
 #. %5$s:  title |html 
 #. %6$s:  FOREACH subtitl IN subtitle 
-#. %7$s:  subtitl.subfield |html 
+#. %7$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %8$s:  END 
+#. %9$s:  subtitl.subfield |html 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
 #, fuzzy, c-format
-msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s"
+msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
 msgstr "%s%s%s%sKoha Online%s Katalogoa &rsaquo; Etiketak %s "
 
 # %s%s%s%sKoha Online%s Katalogoa &rsaquo; Saskia deskargatu%s
@@ -4686,11 +4688,13 @@ msgstr "%s -ren maileguak"
 
 #. %1$s:  title |html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield |html 
+#. %3$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %4$s:  END 
+#. %5$s:  subtitl.subfield |html 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
 #, fuzzy, c-format
-msgid "Details for: %s%s, %s%s"
+msgid "Details for: %s%s%s,%s %s%s"
 msgstr "%s %s, %s%s-(a)(r)i buruzko iruzkin berria"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:175
@@ -5022,13 +5026,14 @@ msgstr "Errorea jazo da OverDrive bildumaren bilaketan"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! Illegal parameter"
-msgstr "Errorea! Parametro ilegala"
+#, fuzzy
+msgid "Error! Adding tags failed at"
+msgstr "Errorea! add_tag eragiketak huts egin du"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! The add_tag operation failed on"
-msgstr "Errorea! add_tag eragiketak huts egin du"
+msgid "Error! Illegal parameter"
+msgstr "Errorea! Parametro ilegala"
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:30
 #, c-format

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14 staff\n"
-"POT-Creation-Date: 2016-02-16 18:49-0300\n"
-"PO-Revision-Date: 2016-02-17 15:08+0000\n"
+"POT-Creation-Date: 2016-03-15 09:08-0300\n"
+"PO-Revision-Date: 2016-03-15 14:27+0000\n"
 "Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1455721716.000000\n"
+"X-POOTLE-MTIME: 1458052061.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -1639,12 +1639,14 @@ msgstr "%s%s%sCatálogo en línea%s Koha &rsaquo; Cursos"
 #. %4$s:  END 
 #. %5$s:  title |html 
 #. %6$s:  FOREACH subtitl IN subtitle 
-#. %7$s:  subtitl.subfield |html 
+#. %7$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %8$s:  END 
+#. %9$s:  subtitl.subfield |html 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
 #, c-format
-msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s"
-msgstr "%s%s%sCatálogo en línea%s Koha &rsaquo; Detalles para: %s%s, %s%s"
+msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
+msgstr "%s%s%sCatálogo en línea%s Koha &rsaquo; Detalles para: %s%s%s,%s %s%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -4691,12 +4693,14 @@ msgstr "Detalles para %s"
 
 #. %1$s:  title |html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield |html 
+#. %3$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %4$s:  END 
+#. %5$s:  subtitl.subfield |html 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
 #, c-format
-msgid "Details for: %s%s, %s%s"
-msgstr "Detalles para: %s%s, %s%s"
+msgid "Details for: %s%s%s,%s %s%s"
+msgstr "Detalles para: %s%s%s,%s %s%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:175
 #, c-format
@@ -5025,13 +5029,13 @@ msgstr "Error en la búsqueda de la colección OverDrive."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! Illegal parameter"
-msgstr "¡Error! Parámetro ilegal"
+msgid "Error! Adding tags failed at"
+msgstr "¡Error! La adición de etiquetas falló en"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! The add_tag operation failed on"
-msgstr "Error! La operación add_tag falló en"
+msgid "Error! Illegal parameter"
+msgstr "¡Error! Parámetro ilegal"
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:30
 #, c-format

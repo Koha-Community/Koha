@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-02-16 19:57-0300\n"
+"POT-Creation-Date: 2016-03-15 12:23-0300\n"
 "PO-Revision-Date: 2014-10-08 03:44+0000\n"
 "Last-Translator: dhoang <dung.hoang@dlcorp.com.vn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -265,7 +265,7 @@ msgstr ""
 #. %8$s:    CASE 'year'    
 #. %9$s:   END 
 #. %10$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:69
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:72
 #, fuzzy, c-format
 msgid "%s %s %s %s %s day %s week %s month %s year %s %s "
 msgstr "%s %s %s %s %s 1 số/ngày %s 1 số/tuần %s 1 số/tháng %s 1 số/năm %s %s "
@@ -296,16 +296,23 @@ msgstr "%s %s %s %s %s 1 số/ngày %s 1 số/tuần %s 1 số/tháng %s 1 số/
 #. %24$s:         CASE 'ISSUE'  
 #. %25$s:         CASE 'RETURN' 
 #. %26$s:         CASE 'CREATE' 
-#. %27$s:         CASE 
-#. %28$s:  action 
-#. %29$s:     END 
-#. %30$s:  END 
+#. %27$s:         CASE 'RENEW'  
+#. %28$s:         CASE 'CHANGE PASS' 
+#. %29$s:         CASE 'ADDCIRCMESSAGE' 
+#. %30$s:         CASE 'DELCIRCMESSAGE' 
+#. %31$s:         CASE 'Run'    
+#. %32$s:         CASE 
+#. %33$s:  action 
+#. %34$s:     END 
+#. %35$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:14
 #, fuzzy, c-format
 msgid ""
 "%s %s %s %s %sCatalog %sAuthorities %sPatrons %sAcquisitions %sSerials "
 "%sCirculation %sLetter %sFines %sSystem prefs %sCron jobs %s%s %s %s %s %s "
-"%sAdd %sDelete %sModify %sCheckout %sReturn %sCreate %s%s %s %s "
+"%sAdd %sDelete %sModify %sCheckout %sReturn %sCreate %sRenew %sChange "
+"password %sAdd circulation message %sDelete circulation message %sRun %s%s "
+"%s %s "
 msgstr ""
 "%s %s %s %s %sBiên mục %sDữ liệu kiểm soát %sBạn đọc %sBổ sung trao đổi %sẤn "
 "phẩm định kỳ %sLưu thông %sThư viện %sTiền phạt %sThông số chung %s%s %s %s "
@@ -799,7 +806,7 @@ msgstr "%s%s%s %s (%s) %sThành viên %s%s%s "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:912
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:919
 #, fuzzy, c-format
 msgid "%s %s %sYes%sNo%s %s "
 msgstr "%s %s %sCó%sKhông%s %s "
@@ -1111,7 +1118,7 @@ msgstr "%s %s Bằng tay %s Quá hạn %s Khóa %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:68
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:70
 #, c-format
 msgid "%s %s No %s"
 msgstr "%s %s Không %s"
@@ -1422,7 +1429,7 @@ msgstr "%s %s, Tác giả: %s%s (Biểu ghi số %s)"
 
 #. %1$s:  END 
 #. %2$s:  IF ( MEMBERS ) 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:214
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:219
 #, c-format
 msgid "%s %s for "
 msgstr "%s %s với "
@@ -1671,7 +1678,7 @@ msgstr "%s %sLỗi: "
 #. %6$s:  ELSE 
 #. %7$s:  action 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:53
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:40
 #, c-format
 msgid "%s %sEdit MARC subfields constraints for field %s authority %s%s %s%s%s"
 msgstr ""
@@ -2239,7 +2246,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  loo.isurl 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:278
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:133
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:120
 #, c-format
 msgid "%s (if checked, it means that the subfield is a URL and can be clicked)"
 msgstr "%s (Nếu bạn tích vào ô, trường con này sẽ thành một URL)"
@@ -2280,7 +2287,7 @@ msgstr "%s (Không hoạt động) %s %s "
 #. %4$s:  branche.branchaddress1 |html 
 #. %5$s:  END 
 #. %6$s:  IF ( branche.branchaddress2 ) 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:206
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:213
 #, c-format
 msgid "%s (nothing entered) %s %s %s%s %s "
 msgstr "%s (không có thông tin được nhập vào) %s %s %s%s %s "
@@ -2553,7 +2560,7 @@ msgid "%s Checkout(s)"
 msgstr "%s Ghi mượn"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:758
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:765
 #, c-format
 msgid "%s Circulation note: "
 msgstr "%s Ghi chú lưu thông: "
@@ -2615,7 +2622,7 @@ msgid "%s Closed on %s %s Open %s "
 msgstr "%s Hóa đơn bị đóng vào ngày %s %s Mở %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:850
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:857
 #, c-format
 msgid "%s Confirm password: "
 msgstr "%s Mật khẩu xác nhận: "
@@ -2727,7 +2734,7 @@ msgid "%s Error: "
 msgstr "%s Lỗi: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:720
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:727
 #, c-format
 msgid "%s Expiry date (leave blank for auto calc) "
 msgstr "%s Ngày hết hạn: "
@@ -3013,7 +3020,7 @@ msgstr "%s Tạo khóa học %s"
 #. %2$s:  IF ( branchcategorie.properties ) 
 #. %3$s:  ELSIF ( branchcategorie.searchdomain ) 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:292
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:299
 #, c-format
 msgid "%s No %sproperties%ssearch domain%s defined. "
 msgstr "%s Không có %snhóm thư viện%snhóm tìm kiếm %s được định nghĩa. "
@@ -3168,7 +3175,7 @@ msgstr ""
 "trong cùng một thời điểm. %s %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:745
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:752
 #, c-format
 msgid "%s OPAC note: "
 msgstr "%s Ghi chú OPAC: "
@@ -3243,7 +3250,7 @@ msgid "%s Page %s / %s %s "
 msgstr "%s Trang %s / %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:807
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:814
 #, c-format
 msgid "%s Password: "
 msgstr "%s Mật khẩu: "
@@ -3327,7 +3334,7 @@ msgid "%s Receive orders from %s %s "
 msgstr "%s Nhận đơn đặt hàng từ nhà cung cấp: %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:699
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:706
 #, c-format
 msgid "%s Registration date: "
 msgstr "%s Ngày đăng kí: "
@@ -3440,13 +3447,13 @@ msgid "%s Single patron cards"
 msgstr "In %s thẻ bạn đọc"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:658
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:665
 #, c-format
 msgid "%s Sort 1: "
 msgstr "%s Thống kê 1: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:670
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:677
 #, c-format
 msgid "%s Sort 2: "
 msgstr "%s Thống kê 2: "
@@ -3554,7 +3561,7 @@ msgstr "%s Họ: "
 #. %29$s:  loo.link 
 #. %30$s:  END 
 #. %31$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:405
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:409
 #, c-format
 msgid ""
 "%s Tab:%s, %s | Koha field: %s, %s %sRepeatable, %sNot repeatable,%s "
@@ -3758,7 +3765,7 @@ msgid "%s Unlimited %s %s %s "
 msgstr "%s Không giới hạn %s %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:778
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:785
 #, c-format
 msgid "%s Username: "
 msgstr "%s Tên đăng nhập: "
@@ -3781,7 +3788,7 @@ msgstr "%s Có %s Không %s "
 
 #. %1$s:  IF ( issue.renewals ) 
 #. %2$s:  IF ( issue.lastreneweddate ) 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:67
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:69
 #, c-format
 msgid "%s Yes%s, "
 msgstr "%s Có%s, "
@@ -4130,7 +4137,7 @@ msgstr "%s của "
 
 #. For the first occurrence,
 #. %1$s:  authtypecode |html
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:30
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:17
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:37
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:48
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:53
@@ -4316,7 +4323,7 @@ msgid "%s items modified : datelastseen set to %s"
 msgstr "%s tài liệu được chỉnh sửa : Lần cuối chỉnh sửa vào ngày %s"
 
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:153
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:158
 #, c-format
 msgid "%s lines found."
 msgstr "Tìm thấy %s sự kiện liên quan."
@@ -4854,7 +4861,7 @@ msgstr "%sIn %s nhãn gáy tài liệu%sIn %s nhãn gáy tài liệu%s"
 #. %7$s:  loopro.object 
 #. %8$s:  END 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:176
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:181
 #, fuzzy, c-format
 msgid "%s%s%s %s (%s) %sMember %s%s%s "
 msgstr "%s%s%s %s (%s) %sThành viên %s%s%s "
@@ -5066,7 +5073,7 @@ msgstr "%s%s&nbsp;với giới hạn: "
 #. %3$s:  suggestions_loo.author 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:523
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:94
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:96
 #, c-format
 msgid "%s%s, by %s%s"
 msgstr "%s%s, Tác giả: %s%s"
@@ -5224,7 +5231,7 @@ msgstr "%s(Sau thuế)%s(Trước thuế)%s %s "
 #. %11$s:  IF ( loo.isurl ) 
 #. %12$s:  END 
 #. %13$s:  IF ( loo.authorised_value ) 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:277
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:264
 #, c-format
 msgid ""
 "%s, %s %sRepeatable, %sNot repeatable, %s %sMandatory, %sNot mandatory, %s "
@@ -5475,7 +5482,7 @@ msgstr "%sChỉnh sửa khóa học%sTạo khóa học%s"
 #. %2$s:  categorycode 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:303
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:310
 #, c-format
 msgid "%sEdit group %s%sAdd group%s"
 msgstr "%sChỉnh sửa  nhóm %s%sTạo nhóm%s"
@@ -5641,7 +5648,7 @@ msgstr "%sMiễn phí vận chuyển%s%s%s"
 #. %2$s:  END 
 #. %3$s:  IF ( flagloo.key == 'lost' ) 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:897
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:904
 #, c-format
 msgid "%sGone no address:%s %sLost card:%s "
 msgstr "%sThiếu địa chỉ:%s %sMất thẻ thư viện:%s "
@@ -6295,7 +6302,7 @@ msgid "&lt;&lt; Back to suggestions"
 msgstr "&lt;&lt; Quay lại đề xuất mua"
 
 #: intranet-tmpl/prog/en/includes/page-numbers.inc:3
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:283
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:294
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:210
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:177
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:132
@@ -6421,7 +6428,7 @@ msgstr "&nbsp;Hiển thị tất cả:"
 #. %2$s:  IF ( else ) 
 #. %3$s:  tagfield | html 
 #. %4$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:31
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:18
 #, c-format
 msgid "&rsaquo; %s %sAuthority MARC subfield structure for %s %s"
 msgstr ""
@@ -6441,7 +6448,7 @@ msgstr ""
 #. %12$s:  action 
 #. %13$s:  END 
 #. %14$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:34
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:21
 #, c-format
 msgid ""
 "&rsaquo; %s %sConfirm deletion of subfield %s?%s %sData deleted%s %s %s "
@@ -6829,7 +6836,7 @@ msgid "&rsaquo; Add / modify list"
 msgstr "&rsaquo; Tạo/Chỉnh sửa giá sách"
 
 #. %1$s:  ELSIF ( op_mod ) 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:27
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
 #, c-format
 msgid "&rsaquo; Add a new OAI set%s"
 msgstr "&rsaquo; Tạo bộ OAI%s"
@@ -7028,9 +7035,9 @@ msgid "&rsaquo; Claims"
 msgstr "&rsaquo; Khiếu nại"
 
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:9
-#, c-format
-msgid "&rsaquo; Clone issuing rules"
-msgstr "&rsaquo; Sao chép chính sách lưu thông"
+#, fuzzy, c-format
+msgid "&rsaquo; Clone circulation and fine rules"
+msgstr "&rsaquo; Chính sách lưu thông"
 
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:104
 #, fuzzy, c-format
@@ -7410,7 +7417,7 @@ msgstr "&rsaquo; Sát nhập biểu ghi"
 #. %1$s:  spec 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:27
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
 #, c-format
 msgid "&rsaquo; Modify OAI set '%s'%s OAI sets configuration%s"
 msgstr "&rsaquo; Chỉnh sửa bộ OAI '%s'%s Cấu hình bộ OAI%s"
@@ -7577,7 +7584,7 @@ msgstr "&rsaquo; Tạo nhanh nhãn gáy"
 msgid "&rsaquo; Quote Editor"
 msgstr "&rsaquo; Trích dẫn trên OPAC"
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:304
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:305
 #, c-format
 msgid "&rsaquo; Quote uploader"
 msgstr "&rsaquo; Nhập trích dẫn"
@@ -7615,7 +7622,7 @@ msgstr "&rsaquo; Tài liệu cho khóa học "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:49
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:54
 #, c-format
 msgid "&rsaquo; Results %s Logs %s "
 msgstr "&rsaquo; Kết quả %s Nhật ký hệ thống %s "
@@ -8155,8 +8162,8 @@ msgid "(Database) Documentation manager:"
 msgstr "(Documentation Manager)"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:333
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:708
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:737
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:715
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:744
 #, c-format
 msgid "(Error)"
 msgstr "(Lỗi)"
@@ -8333,7 +8340,7 @@ msgstr ""
 "hạn trong các giá trị cho phép)"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:251
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:105
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:92
 #, c-format
 msgid "(ignore means that the subfield does not display in the record editor) "
 msgstr ""
@@ -8800,11 +8807,6 @@ msgstr ". Some database servers require "
 msgid ". User "
 msgstr ". User "
 
-#: intranet-tmpl/prog/en/modules/admin/preferences.tt:70
-#, c-format
-msgid ". You can try a different search or "
-msgstr ". Bạn có thể thử một tìm kiếm khác hoặc "
-
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/members/member.tt:325
@@ -8851,7 +8853,7 @@ msgstr "0 Đặt mượn"
 msgid "0 to disable"
 msgstr "Thiết lập 0 để không kích hoạt"
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:336
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:337
 #, c-format
 msgid "0%%"
 msgstr "0%%"
@@ -8865,8 +8867,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:301
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:309
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:188
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:76
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:81
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:78
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:83
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:514
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:146
@@ -9037,7 +9039,7 @@ msgstr "Mẫu đánh số ÂPĐK với tên bạn khai báo đã tồn tại tro
 msgid "A new version of this site is available. Load it?"
 msgstr "Phiên bản mới của giao diện này đã sẵn sàng. Bạn có muốn tải về?"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:85
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:95
 #, c-format
 msgid "A pattern with this name already exists."
 msgstr "Mẫu đánh số ÂPĐK với tên bạn khai báo đã tồn tại trong hệ thống."
@@ -9330,13 +9332,13 @@ msgstr "Báo cáo phân hệ bổ sung"
 msgid "Acquisitions statistics "
 msgstr "Báo cáo phân hệ bổ sung "
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:85
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:95
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:78
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:87
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:149
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:323
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:360
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:160
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:165
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:346
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:72
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:423
@@ -9379,7 +9381,7 @@ msgstr "Xử lý nếu không tìm thấy: "
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:283
 #: intranet-tmpl/prog/en/modules/tags/review.tt:227
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:620
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:344
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:345
 #, c-format
 msgid "Actions"
 msgstr "Thao tác"
@@ -9401,7 +9403,7 @@ msgstr "Thao tác "
 msgid "Actions for this template"
 msgstr "Thao tác của mẫu trên"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:90
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:95
 #, fuzzy, c-format
 msgid "Actions:"
 msgstr "Thao tác"
@@ -9467,7 +9469,7 @@ msgstr "Chi phí thực tế: "
 msgid "Adam Thick"
 msgstr "Adam Thick"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:141
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:151
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:198
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:803
 #: intranet-tmpl/prog/en/modules/serials/tables/members_results.tt:16
@@ -9506,7 +9508,7 @@ msgstr "Tạo & Sao chép"
 msgid "Add a basket to %s"
 msgstr "Thêm giỏ đặt hàng tới nhà cung cấp  %s"
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:197
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:199
 #, c-format
 msgid "Add a contract"
 msgstr "Tạo hợp đồng"
@@ -9521,7 +9523,7 @@ msgstr "Tạo ánh xạ"
 msgid "Add a message for:"
 msgstr "Gửi tin nhắn cho:"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:47
 #, c-format
 msgid "Add a new OAI set"
 msgstr "Tạo bộ OAI"
@@ -9536,7 +9538,7 @@ msgstr "Tạo thao tác mới"
 msgid "Add a new field"
 msgstr "Thêm trường tìm kiếm"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:294
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:301
 #, c-format
 msgid "Add a new group"
 msgstr "Tạo nhóm mới"
@@ -9624,7 +9626,7 @@ msgstr "Tạo khung phân loại"
 msgid "Add credit"
 msgstr "Tạo"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:63
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:73
 #, c-format
 msgid "Add description"
 msgstr "Thêm mô tả"
@@ -9685,8 +9687,8 @@ msgstr "Nhập đăng ký cá biệt:"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:69
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:74
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:960
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:963
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:967
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:970
 #, c-format
 msgid "Add manual restriction"
 msgstr "Hạn chế tài khoản"
@@ -9964,7 +9966,7 @@ msgstr "Adding authority %s"
 msgid "Additional SRU options: "
 msgstr "Công cụ bổ trợ"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:982
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:989
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:296
 #, c-format
 msgid "Additional attributes and identifiers"
@@ -10008,7 +10010,7 @@ msgid "Additional values for manual invoice types"
 msgstr "Các kiểu hóa đơn thêm bằng tay tới bạn đọc"
 
 #: intranet-tmpl/prog/en/columns.def:13
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:195
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:202
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:116
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:545
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:273
@@ -10094,7 +10096,7 @@ msgstr "Địa chỉ: "
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:68
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:10
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:57
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:28
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:15
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:245
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:66
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:84
@@ -10108,7 +10110,7 @@ msgstr "Địa chỉ: "
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:27
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:27
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:57
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:27
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:76
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:94
 #, c-format
@@ -10137,7 +10139,7 @@ msgstr "Adrien Saurat"
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:191
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:172
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:634
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:641
 #, c-format
 msgid "Adult"
 msgstr "Người lớn"
@@ -10147,7 +10149,7 @@ msgstr "Người lớn"
 msgid "Advanced constraints"
 msgstr "Thông tin nâng cao"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:131
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:118
 #, c-format
 msgid "Advanced constraints:"
 msgstr "Thông tin nâng cao:"
@@ -10290,10 +10292,10 @@ msgstr "Alexandra Horsman"
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:209
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:254
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:269
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:76
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:78
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:93
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:95
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:81
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:83
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:98
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:100
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:56
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:462
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:85
@@ -10818,7 +10820,7 @@ msgstr "Andrew Moore"
 msgid "Anonymize checkout history"
 msgstr "Xóa lịch sử ghi mượn"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:92
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:102
 #, c-format
 msgid "Another pattern with this name already exists."
 msgstr "Mẫu đánh số ÂPĐK khác với tên tương tự đã tồn tại."
@@ -11067,6 +11069,13 @@ msgstr "Bạn có chắc chắn muốn đóng ấn phẩm định kỳ này?"
 msgid "Are you sure you want to delete %s %s?"
 msgstr "Bạn chắc chắn muốn xóa %s %s?"
 
+#. %1$s:  branchname 
+#. %2$s:  branchcode 
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:169
+#, fuzzy, c-format
+msgid "Are you sure you want to delete %s (%s)?"
+msgstr "Bạn chắc chắn muốn xóa %s %s?"
+
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:7
 msgid "Are you sure you want to delete batch %s?"
@@ -11108,6 +11117,12 @@ msgstr "Bạn chắc chắn muốn xóa các báo cáo được lựa chọn?"
 #, fuzzy
 msgid "Are you sure you want to delete these suggestions?"
 msgstr "Bạn chắc chắn muốn xóa đề xuất mua này?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:4
+#, fuzzy
+msgid "Are you sure you want to delete this OAI set?"
+msgstr "Bạn chắc chắn muốn xóa giỏ đặt hàng này?"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -11160,6 +11175,12 @@ msgstr "Bạn chắc chắn muốn xóa giá sách ảo này?"
 #, fuzzy
 msgid "Are you sure you want to delete this macro?"
 msgstr "Bạn chắc chắn muốn xóa khóa học này?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:5
+#, fuzzy
+msgid "Are you sure you want to delete this numbering pattern?"
+msgstr "Bạn chắc chắn muốn xóa ấn phẩm định kỳ này?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:3
@@ -11497,7 +11518,7 @@ msgstr "Trường kiểm soát"
 msgid "Auth value"
 msgstr "Giá trị nhất quán"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:286
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:273
 #, c-format
 msgid "Auth value:"
 msgstr "Giá trị nhất quán:"
@@ -11670,7 +11691,7 @@ msgid "Authority #%s (%s)"
 msgstr "Biểu ghi nhất quán số %s (%s)"
 
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:191
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:196
 #, c-format
 msgid "Authority %s"
 msgstr "Dữ liệu kiểm soát %s"
@@ -11691,13 +11712,13 @@ msgstr "Khung mẫu MARC của %s%s%sKhung mẫu mặc định%s"
 
 #. %1$s:  tagfield | html 
 #. %2$s:  authtypecode | html
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:251
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:238
 #, c-format
 msgid "Authority MARC subfield structure admin for %s (authority: %s)"
 msgstr "Quản trị cấu trúc trường con MARC của trường %s (Thuộc kiểu %s)"
 
 #. %1$s:  tagfield | html 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:34
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:21
 #, c-format
 msgid "Authority MARC subfield structure for %s"
 msgstr "Cấu trúc trường con của trường %s biểu ghi nhất quán"
@@ -11744,14 +11765,14 @@ msgstr "Kiểu dữ liệu kiểm soát: "
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:44
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:33
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:111
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:29
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:16
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:79
 #, c-format
 msgid "Authority types"
 msgstr "Kiểu dữ liệu kiểm soát"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:288
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:275
 #, c-format
 msgid "Authority:"
 msgstr "Kiểu nhất quán:"
@@ -11783,7 +11804,7 @@ msgstr ""
 "không được nhập vào khi bạn nhập bạn đọc theo lô."
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:300
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:161
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:148
 #, c-format
 msgid "Authorized value:"
 msgstr "Giá trị nhất quán:"
@@ -11956,7 +11977,7 @@ msgstr "Quay lại bản ghi"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:566
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:105
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:169
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:45
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:597
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:6
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
@@ -12397,7 +12418,7 @@ msgstr ""
 msgid "Beginning date:"
 msgstr "Ngày bắt đầu phát hành:"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:248
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:258
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:797
 #, c-format
 msgid "Begins with"
@@ -12436,7 +12457,7 @@ msgid "BibTex"
 msgstr "BibTex"
 
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:182
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:187
 #, c-format
 msgid "Biblio %s"
 msgstr "Biểu ghi %s"
@@ -12493,7 +12514,7 @@ msgid "Bibliographic record"
 msgstr "Biểu ghi thư mục"
 
 #. %1$s:  object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:214
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:219
 #, c-format
 msgid "Bibliographic record %s"
 msgstr "biểu ghi thư mục %s"
@@ -12803,7 +12824,7 @@ msgstr "Brooke Johnson"
 msgid "Browse by last name: %s "
 msgstr "Tìm kiếm bạn đọc theo tên: %s "
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:60
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:65
 #, c-format
 msgid "Browse system logs"
 msgstr "Chọn nhật ký hệ thống"
@@ -13370,12 +13391,11 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:267
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:80
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:152
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:196
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:189
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:251
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:155
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:206
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:200
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:262
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:133
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:160
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:118
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:320
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:119
@@ -13391,11 +13411,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:465
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:87
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:342
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:431
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:435
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:121
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:104
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:60
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:303
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:47
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:290
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:614
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:639
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:96
@@ -13404,13 +13424,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:72
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:174
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:120
+#: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:70
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:162
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:171
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:65
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:76
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:131
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:238
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:68
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:78
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:141
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:185
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:100
@@ -13452,9 +13472,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:194
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:117
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:971
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1091
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1093
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:978
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1098
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1100
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:158
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:82
@@ -13508,7 +13528,7 @@ msgstr ""
 msgid "Cancel"
 msgstr "Hủy bỏ"
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:335
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:336
 #, c-format
 msgid "Cancel Upload"
 msgstr "Hủy bỏ"
@@ -13831,10 +13851,29 @@ msgstr "Số thẻ bạn đọc"
 msgid "Card number : %s"
 msgstr "Số thẻ bạn đọc : %s"
 
+#. %1$s:  maxlength_cardnumber 
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:611
+#, fuzzy, c-format
+msgid "Card number can be up to %s characters."
+msgstr ". Mật khẩu phải có ít nhất %s ký tự."
+
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:162
 #, c-format
 msgid "Card number list (one cardnumber per line): "
 msgstr "Danh sách thẻ bạn đọc (Mỗi thẻ 1 dòng): "
+
+#. %1$s:  minlength_cardnumber 
+#. %2$s:  maxlength_cardnumber 
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:607
+#, fuzzy, c-format
+msgid "Card number must be between %s and %s characters."
+msgstr ". Mật khẩu phải có ít nhất %s ký tự."
+
+#. %1$s:  minlength_cardnumber 
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:603
+#, fuzzy, c-format
+msgid "Card number must be exactly %s characters."
+msgstr ". Mật khẩu phải có ít nhất %s ký tự."
 
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:85
 #, fuzzy, c-format
@@ -14020,12 +14059,12 @@ msgstr "Catalyst IT, New Zealand"
 msgid "Category"
 msgstr "Kiểu bạn đọc"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:187
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:194
 #, c-format
 msgid "Category cannot be added, categorycode already exists"
 msgstr "Nhóm thư viện đã tồn tại, bạn không thể tạo thêm"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:186
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:193
 #, c-format
 msgid ""
 "Category cannot be deleted because there are libraries using that category"
@@ -14042,7 +14081,7 @@ msgstr "Kiểu bạn đọc"
 msgid "Category code unknown."
 msgstr "Không có kiểu bạn đọc."
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:319
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:326
 #, c-format
 msgid "Category code:"
 msgstr "Mã kiểu bạn đọc:"
@@ -14050,7 +14089,7 @@ msgstr "Mã kiểu bạn đọc:"
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:138
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:142
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:285
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:315
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:322
 #, c-format
 msgid "Category code: "
 msgstr "Mã kiểu bạn đọc: "
@@ -14061,7 +14100,7 @@ msgid "Category name"
 msgstr "Kiểu bạn đọc"
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:188
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:332
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:339
 #, c-format
 msgid "Category type: "
 msgstr "Kiểu nhóm "
@@ -14076,7 +14115,7 @@ msgstr "Kiểu:"
 #: intranet-tmpl/prog/en/includes/patron-search.inc:99
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:79
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:209
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:628
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:635
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:77
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:343
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:531
@@ -14153,7 +14192,7 @@ msgid "Change item status"
 msgstr "Thay đổi trạng thái tài liệu"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1035
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1042
 #, fuzzy
 msgid "Change messaging preferences to default for this category?"
 msgstr "Thiết lập các tin nhắn gửi tới kiểu bạn đọc."
@@ -14475,7 +14514,7 @@ msgid "Checked in item."
 msgstr "Tài liệu được ghi trả."
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:86
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:88
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:126
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:34
 #, c-format
@@ -14505,7 +14544,7 @@ msgstr "Hiện tại tài liệu được ghi mượn %s lần"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:718
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:736
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:45
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:453
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:80
 #, c-format
@@ -14558,7 +14597,7 @@ msgstr "Kiểu tin nhắn: "
 msgid "Checkin message: "
 msgstr "Tin nhắn ghi trả: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:49
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:50
 #, c-format
 msgid "Checkin on"
 msgstr "Ngày ghi trả"
@@ -14640,7 +14679,7 @@ msgstr "Lịch sử ghi mượn"
 msgid "Checkout history for %s"
 msgstr "Lịch sử ghi mượn của %s"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:47
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:48
 #, c-format
 msgid "Checkout on"
 msgstr "Ngày ghi mượn"
@@ -14691,7 +14730,7 @@ msgstr ""
 "các định nghĩa trong mẫu biên mục."
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:192
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:633
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:640
 #, c-format
 msgid "Child"
 msgstr "Trẻ em"
@@ -14989,6 +15028,11 @@ msgstr "BÁO CÁO LƯU THÔNG"
 msgid "Circulation alerts for %s"
 msgstr "Cảnh báo lưu thông cho thư viện %s"
 
+#: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:9
+#, fuzzy, c-format
+msgid "Circulation and fine rules"
+msgstr "Chính sách lưu thông"
+
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:30
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:46
 #, c-format
@@ -15245,7 +15289,7 @@ msgstr "Đã xóa dữ liệu lô dữ liệu số %s"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:634
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:525
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1016
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1023
 #: intranet-tmpl/prog/en/modules/members/member.tt:507
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:500
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:227
@@ -15294,7 +15338,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:407
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:414
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:823
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:967
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:974
 #, c-format
 msgid "Clear date"
 msgstr "Xóa"
@@ -15381,7 +15425,7 @@ msgid "Click on an image to view it in the image viewer"
 msgstr "Click vào ảnh bìa để xem rõ hơn."
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:208
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:324
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:325
 #, c-format
 msgid ""
 "Click on any field to edit the contents; Press the &lt;Enter&gt; key to save "
@@ -15396,7 +15440,7 @@ msgstr ""
 msgid "Click on individual cells to edit."
 msgstr "Kích vào từng ô cụ thể để chỉnh sửa thông tin."
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:325
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:326
 #, c-format
 msgid ""
 "Click on one or more quote numbers to select entire quotes for deletion; "
@@ -15448,7 +15492,7 @@ msgstr ""
 "Kích vào mã của trích dẫn để chọn hoặc hoặc bỏ chọn một trích dẫn. Bạn có "
 "thể chọn nhiều trích dẫn."
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:318
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:319
 #, c-format
 msgid ""
 "Click the \"Choose File\" button and select the csv file to be uploaded."
@@ -15468,7 +15512,7 @@ msgid ""
 "quotes."
 msgstr "Bạn chọn nút 'Nhập trích dẫn' để tạo nhiều trích dẫn qua tệp tin CSV."
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:326
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:327
 #, c-format
 msgid ""
 "Click the 'Save Quotes' button in the toolbar to save the entire batch of "
@@ -15564,21 +15608,22 @@ msgstr "Sao chép trường con này"
 #. %7$s:  END 
 #. %8$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:16
-#, c-format
-msgid "Cloning issuing rules %s %s from \"%s\"%s %s to \"%s\"%s %s "
+#, fuzzy, c-format
+msgid ""
+"Cloning circulation and fine rules %s %s from \"%s\"%s %s to \"%s\"%s %s "
 msgstr "Sao chép chính sách lưu thông %s %s từ \"%s\"%s %s tới \"%s\"%s %s "
 
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:25
-#, c-format
-msgid "Cloning of issuing rules failed!"
+#, fuzzy, c-format
+msgid "Cloning of circulation and fine rules failed!"
 msgstr "Việc sao chép chính sách lưu thông bị lỗi!"
 
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:79
 #: intranet-tmpl/prog/en/modules/serials/result.tt:64
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:42
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:42
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:275
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:225
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:286
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:20
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1073
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:150
@@ -15670,13 +15715,13 @@ msgstr "Hóa đơn bị đóng vào ngày %s."
 msgid "Closed on:"
 msgstr "Ngày đóng:"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:153
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:164
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:340
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:564
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:294
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:116
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:194
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:271
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:201
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:278
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:164
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:277
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:246
@@ -15827,6 +15872,12 @@ msgstr "Cột"
 msgid "Column name"
 msgstr "Cột: "
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/columns_settings.inc:6
+#, fuzzy
+msgid "Column visibility"
+msgstr "Hiển thị trên: "
+
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:183
 #, c-format
 msgid "Column: "
@@ -15883,7 +15934,7 @@ msgstr "Kiểu văn bản"
 
 #: intranet-tmpl/prog/en/columns.def:63
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:32
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:932
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:939
 #, c-format
 msgid "Comment"
 msgstr "Bình luận"
@@ -15900,7 +15951,7 @@ msgstr "Nội dung bình luận "
 msgid "Comment:"
 msgstr "Bình luận:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:965
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:972
 #, c-format
 msgid "Comment: "
 msgstr "Bình luận: "
@@ -16025,7 +16076,7 @@ msgstr "Xác nhận"
 msgid "Confirm custom report"
 msgstr "Xác nhận tùy chỉnh báo cáo"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:359
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:366
 #, c-format
 msgid "Confirm delete: "
 msgstr "Xác nhận xóa: "
@@ -16036,13 +16087,6 @@ msgstr "Xác nhận xóa: "
 #, c-format
 msgid "Confirm deletion"
 msgstr "Xác nhận xóa"
-
-#. %1$s:  branchname 
-#. %2$s:  branchcode 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:168
-#, c-format
-msgid "Confirm deletion of %s (%s)?"
-msgstr "Xác nhận xóa thư viện %s (%s)?"
 
 #. %1$s:  searchfield 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:223
@@ -16060,10 +16104,9 @@ msgstr "Xác nhận xóa cấu trúc biểu ghi nhất quán "
 msgid "Confirm deletion of classification source "
 msgstr "Xác nhận xóa khung phân loại  "
 
-#. %1$s:  contractnumber 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:146
-#, c-format
-msgid "Confirm deletion of contract %s"
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:145
+#, fuzzy, c-format
+msgid "Confirm deletion of contract "
 msgstr "Xác nhận xóa hợp đồng %s"
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:138
@@ -16092,7 +16135,7 @@ msgid "Confirm deletion of record matching rule "
 msgstr "Xác nhận xóa quy tắc kiểm soát biểu ghi "
 
 #. %1$s:  tagsubfield 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:349
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:350
 #, c-format
 msgid "Confirm deletion of subfield %s?"
 msgstr "Xác nhận xóa trường con %s?"
@@ -16176,8 +16219,8 @@ msgstr "Connor Fraser"
 msgid "Considered lost"
 msgstr "Mất (Quá hạn lâu)"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:389
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:259
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:393
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:246
 #, c-format
 msgid "Constraints"
 msgstr "Giới hạn"
@@ -16294,17 +16337,17 @@ msgstr "Tiếp tục và không đánh dấu >>"
 msgid "Contract"
 msgstr "Hợp đồng"
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:166
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:168
 #, c-format
 msgid "Contract deleted"
 msgstr "Hợp đồng đã bị xóa"
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:150
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:149
 #, c-format
 msgid "Contract description:"
 msgstr "Mô tả:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:152
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:151
 #, c-format
 msgid "Contract end date:"
 msgstr "Ngày kết thúc:"
@@ -16331,14 +16374,14 @@ msgstr ""
 "Publisher,Collection title,Internal note,Quantity,RRP,Delivery place,Billing "
 "place "
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:149
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:148
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:254
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:232
 #, c-format
 msgid "Contract name:"
 msgstr "Tên hợp đồng:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:148
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:147
 #, c-format
 msgid "Contract number:"
 msgstr "Số hợp đồng:"
@@ -16348,7 +16391,7 @@ msgstr "Số hợp đồng:"
 msgid "Contract number: "
 msgstr "Số hợp đồng "
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:151
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:150
 #, c-format
 msgid "Contract start date:"
 msgstr "Ngày bắt đầu:"
@@ -16359,7 +16402,7 @@ msgid "Contract(s)"
 msgstr "Hợp đồng của nhà cung cấp"
 
 #. %1$s:  booksellername 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:173
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:175
 #, c-format
 msgid "Contract(s) of %s"
 msgstr "Hợp đồng của %s"
@@ -17181,8 +17224,8 @@ msgstr "Danny Bouman"
 msgid "Darrell Ulm"
 msgstr "Darrell Ulm"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:372
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:242
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:376
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:229
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:240
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:98
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:154
@@ -17257,7 +17300,7 @@ msgstr "Cơ sở dữ liệu: "
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:75
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:67
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:105
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:157
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:162
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:440
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:511
 #: intranet-tmpl/prog/en/modules/about.tt:757
@@ -17588,8 +17631,8 @@ msgstr "Thông tin tài khoản"
 msgid "Default checkout, hold and return policy%s for %s%s"
 msgstr "Chính sách mượn tài liệu, đặt mượn, trả tài liệu mặc định%s cho %s%s"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:163
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:31
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:174
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:18
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:175
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:209
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:243
@@ -17621,7 +17664,7 @@ msgid "Default privacy: "
 msgstr "Giá trị mặc định:"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:262
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:135
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:122
 #, c-format
 msgid "Default value:"
 msgstr "Giá trị mặc định:"
@@ -17713,7 +17756,7 @@ msgstr "Thiết lập kiểu tài liệu được sử dụng cho chính sách l
 msgid "Define libraries and groups."
 msgstr "Thiết lập các thư viện và nhóm thư viện trong hệ thống."
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:109
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:119
 #, c-format
 msgid "Define mappings"
 msgstr "Xác định ánh xạ"
@@ -17837,12 +17880,12 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:179
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:182
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:183
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:186
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:34
 #: intranet-tmpl/prog/en/includes/rotating-collections-toolbar.inc:14
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:207
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:317
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:214
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:331
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:47
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:202
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:204
@@ -17850,9 +17893,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:349
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:65
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:82
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:157
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:228
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:192
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:168
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:239
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:194
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:69
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:439
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:98
@@ -17870,25 +17913,25 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:74
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:122
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:134
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:391
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:421
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:395
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:425
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:201
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:171
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:260
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:293
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:247
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:280
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:408
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:410
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:635
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:263
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:375
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:125
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:254
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:287
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:261
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:294
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:142
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:214
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:227
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:302
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:107
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:117
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:260
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:296
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:228
@@ -17957,11 +18000,6 @@ msgstr "Xóa định nghĩa"
 #, c-format
 msgid "Delete Images"
 msgstr "Xóa hình ảnh"
-
-#. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:171
-msgid "Delete Library"
-msgstr "Xóa thư viện"
 
 #. A
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:69
@@ -18045,7 +18083,7 @@ msgstr "Xóa quy tắc phân loại"
 
 #. %1$s:  frameworktext 
 #. %2$s:  frameworkcode 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:138
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:146
 #, c-format
 msgid "Delete framework for %s (%s)?"
 msgstr "Xóa khung mẫu %s (%s)?"
@@ -18079,12 +18117,12 @@ msgstr "Xóa bản tài liệu theo lô"
 msgid "Delete list"
 msgstr "Xóa giá sách ảo"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:175
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:179
 #, fuzzy, c-format
 msgid "Delete local"
 msgstr "Xoá tất cả"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:177
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:181
 #, fuzzy, c-format
 msgid "Delete local and remote"
 msgstr "Xóa"
@@ -18143,7 +18181,7 @@ msgstr "Xóa"
 msgid "Delete records if no items remain."
 msgstr "Xóa biểu ghi thư mục nếu không chứa bản tài liệu."
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:176
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:180
 #, fuzzy, c-format
 msgid "Delete remote"
 msgstr "Xóa mẫu"
@@ -18177,7 +18215,7 @@ msgstr "Xóa tài liệu được chọn"
 msgid "Delete stop word "
 msgstr "Xóa từ khóa bỏ qua khi tìm kiếm "
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:220
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:207
 #, c-format
 msgid "Delete subfield "
 msgstr "Xóa trường con "
@@ -18229,12 +18267,6 @@ msgstr "Xóa giỏ đặt hàng"
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:320
 msgid "Delete this category"
 msgstr "Xóa kiểu bạn đọc"
-
-#. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:159
-#, fuzzy
-msgid "Delete this contract"
-msgstr "Xóa hợp đồng"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:150
@@ -18401,17 +18433,17 @@ msgstr "Đơn vị:"
 msgid "Dept."
 msgstr "Đơn vị"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:189
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:302
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:178
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:196
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:316
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:165
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:180
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:565
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:165
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:254
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:295
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:283
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:117
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:272
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:279
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:165
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:256
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:278
@@ -18474,9 +18506,8 @@ msgstr "Thiếu thông tin mô tả"
 msgid "Description of charges"
 msgstr "Thông tin khoản tiền phạt."
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:109
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:112
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:223
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:122
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:210
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:432
 #: intranet-tmpl/prog/en/modules/members/files.tt:65
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:91
@@ -18488,6 +18519,7 @@ msgstr "Thông tin khoản tiền phạt."
 msgid "Description:"
 msgstr "Thông tin mô tả:"
 
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:112
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:126
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:119
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:148
@@ -18497,7 +18529,7 @@ msgstr "Thông tin mô tả:"
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:104
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:339
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:71
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:328
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:335
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:127
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:118
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:166
@@ -18511,7 +18543,7 @@ msgstr "Thông tin mô tả: "
 #. For the first occurrence,
 #. %1$s:  liblibrarian 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:120
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:351
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:352
 #, c-format
 msgid "Description: %s"
 msgstr "Mô tả: %s"
@@ -18697,7 +18729,7 @@ msgstr "Danh sách đĩa nhạc"
 msgid "Discount: "
 msgstr "Giảm giá: "
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:110
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:97
 #, c-format
 msgid "Display"
 msgstr "Hiển thị"
@@ -18708,21 +18740,21 @@ msgid "Display children too."
 msgstr "Hiển thị cho nhóm bạn đọc trẻ em"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:191
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:196
 msgid "Display detail for this authority"
 msgstr "Hiển thị thông tin biểu ghi nhất quán"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:182
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:187
 msgid "Display detail for this biblio"
 msgstr "Hiển thị thông tin biểu ghi"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:201
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:206
 msgid "Display detail for this item"
 msgstr "Hiển thị thông tin bản tài liệu"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:116
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:121
 #, c-format
 msgid "Display from: "
 msgstr "Từ ngày: "
@@ -18754,7 +18786,7 @@ msgid "Display location:"
 msgstr "Giao diện hiển thị"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:176
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:181
 msgid "Display member details."
 msgstr "Hiển thị thông tin bạn đọc."
 
@@ -18763,16 +18795,20 @@ msgstr "Hiển thị thông tin bạn đọc."
 msgid "Display only used tags/subfields"
 msgstr "Hiển thị trường và trường con"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:145
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:193
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:304
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:200
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:318
 #, c-format
 msgid "Display order"
 msgstr "Hiển thị đơn hàng"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:120
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:130
 #, c-format
 msgid "Display order:"
+msgstr "Hiển thị đơn hàng:"
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:148
+#, fuzzy, c-format
+msgid "Display order: "
 msgstr "Hiển thị đơn hàng:"
 
 #: intranet-tmpl/prog/en/modules/circ/stats.tt:18
@@ -18780,7 +18816,7 @@ msgstr "Hiển thị đơn hàng:"
 msgid "Display statistics for:"
 msgstr "Hiển thị thống kê lưu thông của:"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:120
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:125
 #, c-format
 msgid "Display to: "
 msgstr "Đến ngày: "
@@ -19075,7 +19111,7 @@ msgstr "Ngày hết hạn: %s"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:731
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:566
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:101
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:48
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:49
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:448
 #, c-format
 msgid "Due date"
@@ -19270,11 +19306,11 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/includes/rotating-collections-toolbar.inc:11
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:202
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:111
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:316
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:330
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:46
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:156
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:227
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:191
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:167
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:238
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:193
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:68
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:438
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:241
@@ -19288,14 +19324,14 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:11
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:121
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:133
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:390
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:420
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:394
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:424
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:199
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:171
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:406
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:262
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:251
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:284
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:258
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:291
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:101
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:141
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:213
@@ -19574,8 +19610,8 @@ msgid "Edit serials"
 msgstr "Chỉnh sửa ÂPĐK"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:430
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:302
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:434
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:289
 msgid "Edit subfields"
 msgstr "Chỉnh sửa trường con"
 
@@ -19754,7 +19790,7 @@ msgid "End Date: "
 msgstr "Đến ngày: "
 
 #: intranet-tmpl/prog/en/columns.def:149
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:180
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:182
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:537
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:574
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:365
@@ -20254,7 +20290,7 @@ msgstr "Ghi chú dân tộc: "
 msgid "Ethnicity:"
 msgstr "Dân tộc:"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:147
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:157
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:809
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:56
 #, c-format
@@ -20371,7 +20407,7 @@ msgstr "Ngày nhận (Dự kiến)"
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:901
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:666
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:933
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:940
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:487
 #, c-format
 msgid "Expiration"
@@ -20405,7 +20441,7 @@ msgstr "Ngày hết hạn: %s"
 msgid "Expiration:"
 msgstr "Tài khoản hết hạn:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:966
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:973
 #, c-format
 msgid "Expiration: "
 msgstr "Ngày hết hạn: "
@@ -20450,11 +20486,11 @@ msgid "Explanation: "
 msgstr "Mô tả: "
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:64
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:158
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:170
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:188
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:232
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:169
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:181
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:199
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:243
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:261
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:300
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:302
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:99
@@ -20472,7 +20508,7 @@ msgstr "Mô tả: "
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:195
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:241
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:310
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:135
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:140
 #, c-format
 msgid "Export"
 msgstr "Xuất dữ liệu"
@@ -20483,7 +20519,7 @@ msgid "Export "
 msgstr "Xuất dữ liệu "
 
 #. %1$s:  loo.frameworktext 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:237
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:248
 #, c-format
 msgid "Export %s framework"
 msgstr "Xuất dữ liệu khung mẫu %s"
@@ -20549,13 +20585,13 @@ msgstr "Xuất dữ liệu"
 msgid "Export database"
 msgstr "Kết xuất CSDL"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:175
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:186
 #, c-format
 msgid "Export default framework"
 msgstr "Xuất dữ liệu khung mẫu mặc định"
 
 #. TH
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:158
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:169
 msgid ""
 "Export framework structure (fields, subfields) to a spreadsheet file (.csv, ."
 "xml, .ods)"
@@ -20617,14 +20653,14 @@ msgstr "Xuất dữ liệu nhóm giỏ đặt hàng này về tệp tin CSV"
 msgid "Export to CSV file: "
 msgstr "Xuất dữ liệu ra CSV: "
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:181
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:243
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:192
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:254
 #, c-format
 msgid "Export to CSV spreadsheet"
 msgstr "Xuất dữ liệu CSV"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:182
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:244
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:193
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:255
 #, c-format
 msgid ""
 "Export to Excel with XML format, compatible with OpenOffice/LibreOffice as "
@@ -20633,13 +20669,13 @@ msgstr ""
 "Xuất dữ liệu sang Excel với định dạng XML, cũng tương thích với OpenOffice/"
 "LibreOffice"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:183
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:245
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:194
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:256
 #, c-format
 msgid "Export to OpenDocument spreadsheet format"
 msgstr "Xuất dữ liệu sang định dạng mở"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:189
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:193
 #, c-format
 msgid "Export today's checked in barcodes"
 msgstr "Xuất dữ liệu ghi mượn trong ngày"
@@ -20766,7 +20802,7 @@ msgstr "Số Fax: "
 #. %1$s:  branche.branchfax |html 
 #. %2$s:  END 
 #. %3$s:  IF ( branche.branchemail ) 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:226
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:233
 #, c-format
 msgid "Fax: %s%s %s "
 msgstr "Số Fax: %s%s %s "
@@ -21187,14 +21223,14 @@ msgstr "Lần 1"
 msgid "First arrival:"
 msgstr "Kỳ đầu tiên nhận về:"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:214
-#, c-format
-msgid "First issue publication date"
-msgstr "Ngày phát hành kỳ ấn phẩm đầu tiên"
-
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:635
 #, c-format
 msgid "First issue publication date:"
+msgstr "Ngày phát hành kỳ ấn phẩm đầu tiên:"
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:224
+#, fuzzy, c-format
+msgid "First issue publication date: "
 msgstr "Ngày phát hành kỳ ấn phẩm đầu tiên:"
 
 #: intranet-tmpl/prog/en/columns.def:4
@@ -21366,7 +21402,7 @@ msgstr "Định dạng:"
 msgid "Format: "
 msgstr "Định dạng: "
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:185
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:195
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:841
 #, c-format
 msgid "Formatting"
@@ -21402,7 +21438,7 @@ msgstr "Mã khung mẫu: "
 msgid "Framework description"
 msgstr "Mô tả của khung mẫu"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:150
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:161
 #, c-format
 msgid "Framework name, then go to MARC biblio to set MARC editor parameters"
 msgstr ""
@@ -21448,8 +21484,8 @@ msgstr "Frederic Durand"
 msgid "Free"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:85
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:156
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:88
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:164
 #, c-format
 msgid "Frequencies"
 msgstr "Tần suất"
@@ -21468,11 +21504,15 @@ msgstr ""
 "Tần suất và chiều dài ấn phẩm định kỳ thường không phù hợp với nhau. Bạn nên "
 "nhập số kỳ đặt mua ấn phẩm định kỳ thay cho thời gian đặt mua ấn phẩm"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:206
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:134
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:650
 #, c-format
 msgid "Frequency:"
+msgstr "Tuần suất phát hành:"
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:216
+#, fuzzy, c-format
+msgid "Frequency: "
 msgstr "Tuần suất phát hành:"
 
 #. SCRIPT
@@ -22077,7 +22117,7 @@ msgstr "Nhóm:"
 #. %3$s:  IF ( branchcategorie.searchdomain ) 
 #. %4$s:  END 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:265
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:272
 #, c-format
 msgid "Group(s): %sProperties%s%sSearch domain%s%s"
 msgstr "Nhóm: %sNhóm thư viện%s%sNhóm tìm kiếm%s%s"
@@ -22206,7 +22246,7 @@ msgstr "Đề mục phù hợp: "
 msgid "Help"
 msgstr "Trợ giúp"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:142
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:129
 #, c-format
 msgid "Help input"
 msgstr "Dữ liệu đầu vào"
@@ -22252,9 +22292,9 @@ msgstr "Không hiển thị"
 msgid "Hide MARC"
 msgstr "Hiển thị MARC"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:116
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:119
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:122
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:103
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:106
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:109
 #, c-format
 msgid "Hide all"
 msgstr "Ẩn tất cả"
@@ -22649,8 +22689,8 @@ msgstr "Kỳ nghỉ dài theo năm"
 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:84
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:34
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:83
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:69
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:86
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:79
 #: intranet-tmpl/prog/en/modules/serials/viewalerts.tt:9
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:19
 #: intranet-tmpl/prog/en/modules/serials/serial-issues-full.tt:27
@@ -22684,7 +22724,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:67
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:9
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:57
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:28
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:15
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:244
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:66
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:84
@@ -22698,7 +22738,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:26
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:27
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:57
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:27
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:9
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:75
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:94
@@ -22852,7 +22892,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:23
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:43
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:47
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:52
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:301
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:26
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:53
@@ -22862,7 +22902,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:193
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:20
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:29
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:304
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:305
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:28
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:97
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:49
@@ -23075,7 +23115,7 @@ msgstr "INTERMARC"
 msgid "INVOICE"
 msgstr "Biên lai thanh toán tiền phạt"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:197
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:204
 #, c-format
 msgid "IP"
 msgstr "Địa chỉ IP"
@@ -23326,7 +23366,7 @@ msgstr ""
 "viện. Nếu thư viện được sao chép đã tồn tại ngày nghỉ khác thì việc này sẽ "
 "không làm thay đổi các ngày nghỉ hiện có."
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:234
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:244
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:733
 #, c-format
 msgid "If empty, English is used"
@@ -23626,11 +23666,11 @@ msgstr "Ảnh bìa biểu ghi: "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:159
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:198
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:213
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:259
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:274
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:170
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:209
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:224
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:270
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:285
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:167
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:172
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:196
@@ -23641,7 +23681,7 @@ msgid "Import"
 msgstr "Nhập dữ liệu"
 
 #. %1$s:  loo.frameworkcode 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:264
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:275
 #, c-format
 msgid ""
 "Import %s framework structure (fields and subfields) from a spreadsheet file "
@@ -23673,7 +23713,7 @@ msgstr ""
 "Nhập tất cả tài liệu được chọn vào trong giỏ đặt hàng với các thông số sau "
 "đây:"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:203
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
 #, c-format
 msgid ""
 "Import default framework structure (fields and subfields) from a spreadsheet "
@@ -23683,7 +23723,7 @@ msgstr ""
 "tệp tin (.csv, .xml, .ods)"
 
 #. TH
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:159
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:170
 msgid ""
 "Import framework structure (fields, subfields) from a spreadsheet file (."
 "csv, .xml, .ods)"
@@ -23843,7 +23883,7 @@ msgid "Incorrect syntax, cannot save"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:55
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:945
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:952
 #, fuzzy, c-format
 msgid "Indefinite"
 msgstr "Không thời hạn"
@@ -23870,7 +23910,7 @@ msgstr "Chỉ dẫn"
 msgid "Individual libraries:"
 msgstr "Thư viện:"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:162
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:167
 #: intranet-tmpl/prog/en/modules/about.tt:170
 #: intranet-tmpl/prog/en/modules/about.tt:175
 #: intranet-tmpl/prog/en/modules/about.tt:188
@@ -23879,7 +23919,7 @@ msgstr "Thư viện:"
 msgid "Info"
 msgstr "Thông tin"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:112
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:117
 #, c-format
 msgid "Info:"
 msgstr "Thông tin:"
@@ -23909,7 +23949,7 @@ msgstr "Tên biết tắt"
 msgid "Initials: "
 msgstr "Tên viết tắt: "
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:254
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:264
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:759
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:827
 #, c-format
@@ -23932,7 +23972,7 @@ msgid "Installation complete."
 msgstr "Installation complete."
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:203
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:314
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:315
 #, c-format
 msgid "Instructions"
 msgstr "Hướng dẫn"
@@ -24238,7 +24278,7 @@ msgid "Irregularity:"
 msgstr "Kỳ bổ sung:"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:278
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:133
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:120
 #, c-format
 msgid "Is a URL:"
 msgstr "Tạo URL:"
@@ -24308,8 +24348,7 @@ msgstr "Kỳ phát hành: "
 msgid "Issues"
 msgstr "Kỳ phát hành"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:129
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:191
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:198
 #, c-format
 msgid "Issues per unit"
 msgstr "Số kỳ ÂPĐK"
@@ -24319,15 +24358,15 @@ msgstr "Số kỳ ÂPĐK"
 msgid "Issues per unit is required"
 msgstr "Số kỳ ÂPĐK là thông số bắt buộc phải khai báo"
 
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:132
+#, fuzzy, c-format
+msgid "Issues per unit: "
+msgstr "Số kỳ ÂPĐK"
+
 #: intranet-tmpl/prog/en/modules/serials/serial-issues.tt:94
 #, c-format
 msgid "Issues summary"
 msgstr "Hiển thị tóm tắt ÂPĐK"
-
-#: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:9
-#, c-format
-msgid "Issuing rules"
-msgstr "Chính sách lưu thông"
 
 #: intranet-tmpl/prog/en/modules/serials/serial-issues.tt:26
 #, c-format
@@ -24374,8 +24413,8 @@ msgstr "Tài liệu "
 
 #. For the first occurrence,
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:180
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:201
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:185
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:206
 #, c-format
 msgid "Item %s"
 msgstr "Bản tài liệu %s"
@@ -25821,6 +25860,15 @@ msgstr ""
 msgid "Koha &rsaquo; Administration &rsaquo; Circulation and fine rules"
 msgstr "Koha &rsaquo; Quản trị hệ thống &rsaquo; Chính sách lưu thông"
 
+#: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:2
+#, fuzzy, c-format
+msgid ""
+"Koha &rsaquo; Administration &rsaquo; Circulation and fine rules &rsaquo; "
+"Clone circulation and fine rules"
+msgstr ""
+"Koha &rsaquo; Quản trị hệ thống &rsaquo; Chính sách lưu thông &rsaquo; Sao "
+"chép chính sách lưu thông "
+
 #. %1$s:  IF ( class_source_form ) 
 #. %2$s:  IF ( edit_class_source ) 
 #. %3$s:  ELSE 
@@ -25903,15 +25951,6 @@ msgid ""
 msgstr ""
 "Koha &rsaquo; Quản trị hệ thống &rsaquo; Quỹ%s &rsaquo; %sChỉnh sửa quỹ%s "
 "'%s'%s%sTạo quỹ %s%s"
-
-#: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:2
-#, fuzzy, c-format
-msgid ""
-"Koha &rsaquo; Administration &rsaquo; Issuing rules &rsaquo; Clone issuing "
-"rules"
-msgstr ""
-"Koha &rsaquo; Quản trị hệ thống &rsaquo; Chính sách lưu thông &rsaquo; Sao "
-"chép chính sách lưu thông "
 
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:2
 #, c-format
@@ -27025,8 +27064,8 @@ msgid "Koha &rsaquo; Serials &rsaquo; Frequencies"
 msgstr "Koha &rsaquo; Ấn phẩm định kỳ &rsaquo; Tần suất"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:2
-#, c-format
-msgid "Koha &rsaquo; Serials &rsaquo; Number patterns"
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Serials &rsaquo; Numbering patterns"
 msgstr "Koha &rsaquo; Ấn phẩm định kỳ &rsaquo; Mẫu đánh số ÂPĐK"
 
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:2
@@ -27574,8 +27613,8 @@ msgstr "Koha development team"
 msgid "Koha field"
 msgstr "Trường Koha"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:145
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:277
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:132
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:264
 #, c-format
 msgid "Koha field:"
 msgstr "Trường Koha:"
@@ -27760,7 +27799,7 @@ msgid "LIBRISMARC"
 msgstr "LIBRISMARC"
 
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:12
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:135
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:145
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:791
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:52
 #, c-format
@@ -28076,7 +28115,7 @@ msgstr "Hiển thị cho thư viện"
 msgid "LibLime, USA"
 msgstr "LibLime, USA"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:158
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:163
 #, c-format
 msgid "Librarian"
 msgstr "Thủ thư"
@@ -28094,12 +28133,12 @@ msgstr "Thủ thư tạo ÂPĐK:"
 msgid "Librarian interface"
 msgstr "Giao diện nhân viên"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:69
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:74
 #, c-format
 msgid "Librarian:"
 msgstr "Thủ thư:"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:176
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:183
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:101
 #, c-format
 msgid "Libraries"
@@ -28172,12 +28211,12 @@ msgstr "Thư viện "
 msgid "Library %s - %s Checkin and transfer policy"
 msgstr "Chính sách chuyển tài liệu của thư viện %s - %s "
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:188
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:195
 #, c-format
 msgid "Library cannot be deleted because there are items held by that library"
 msgstr "Bạn không thể xóa thư viện này bởi vì thư viện còn chứa tài liệu"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:185
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:192
 #, c-format
 msgid ""
 "Library cannot be deleted because there are patrons and items using that "
@@ -28185,24 +28224,24 @@ msgid ""
 msgstr ""
 "Bạn không thể xóa thư viện này bởi vì thư viện còn chứa bạn đọc và tài liệu."
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:189
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:196
 #, c-format
 msgid ""
 "Library cannot be deleted because there are patrons registered at that "
 "library"
 msgstr "Bạn không thể xóa thư viện này bởi vì thư viện còn chứa bạn đọc."
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:182
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:189
 #, c-format
 msgid "Library category added"
 msgstr "Thư viện đã được tạo"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:184
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:191
 #, c-format
 msgid "Library category deleted"
 msgstr "Thư viện đã bị xóa"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:183
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:190
 #, c-format
 msgid "Library category modified"
 msgstr "Thư viện đã được chỉnh sửa"
@@ -28213,7 +28252,7 @@ msgstr "Thư viện đã được chỉnh sửa"
 msgid "Library code: "
 msgstr "Mã thư viện: "
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:181
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:188
 #, c-format
 msgid "Library deleted"
 msgstr "Thư viện đã bị xóa"
@@ -28228,7 +28267,7 @@ msgstr "Thư viện không chính xác."
 msgid "Library management"
 msgstr "Thư viện quản lý"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:179
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:186
 #, c-format
 msgid "Library not saved &mdash; code and/or name missing"
 msgstr ""
@@ -28239,12 +28278,12 @@ msgstr ""
 msgid "Library of the patron:"
 msgstr "Thư viện của bạn đọc:"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:180
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:187
 #, c-format
 msgid "Library saved"
 msgstr "Thư viện đã được lưu lại"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:693
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:700
 #, c-format
 msgid "Library set-up"
 msgstr "Thông tin tài khoản"
@@ -28276,7 +28315,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/auth.tt:57
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:283
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:417
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:614
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:621
 #: intranet-tmpl/prog/en/modules/members/member.tt:489
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:280
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:324
@@ -28509,7 +28548,7 @@ msgid "Loading "
 msgstr "Đang tải..."
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:229
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:351
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:352
 #, c-format
 msgid "Loading data..."
 msgstr "Đang tải dữ liệu..."
@@ -28600,9 +28639,9 @@ msgstr "Thông tin nội bộ sử dụng được ghi lại"
 msgid "Locale"
 msgstr "Địa điểm"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:227
-#, c-format
-msgid "Locale:"
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:237
+#, fuzzy, c-format
+msgid "Locale: "
 msgstr "Địa điểm:"
 
 #: intranet-tmpl/prog/en/columns.def:152
@@ -28694,7 +28733,7 @@ msgid "Login"
 msgstr "Đăng nhập"
 
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:11
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:49
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:54
 #, c-format
 msgid "Logs"
 msgstr "Nhật ký hệ thống"
@@ -28940,7 +28979,7 @@ msgid "MARC field: "
 msgstr "Trường MARC: "
 
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:89
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:149
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:160
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:34
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:170
 #, c-format
@@ -28970,8 +29009,8 @@ msgstr "Xem trước hiển thị MARC:"
 msgid "MARC staging results :"
 msgstr "Kết quả tệp tin tải lên:"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:164
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:226
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:175
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:237
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:132
 #, c-format
 msgid "MARC structure"
@@ -28989,7 +29028,7 @@ msgstr "Trường con MARC"
 #. %3$s:  frameworkcode 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:381
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:385
 #, c-format
 msgid ""
 "MARC subfield structure admin for %s %s(framework %s)%s(default framework)%s"
@@ -29305,7 +29344,7 @@ msgid "Managed by:"
 msgstr "Người quản lý:"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:232
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:89
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:76
 #, c-format
 msgid "Managed in tab: "
 msgstr "Thẻ quản lý: "
@@ -29330,7 +29369,7 @@ msgstr "Bắt buộc"
 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:89
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:231
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:86
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:73
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:108
 #, c-format
 msgid "Mandatory: "
@@ -29830,7 +29869,7 @@ msgstr "Yêu cầu phiên bản Koha tối thiểu"
 #. For the first occurrence,
 #. %1$s:  minPasswordLength 
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:102
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:844
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:851
 #, c-format
 msgid "Minimum password length: %s"
 msgstr "Chiều dài mật khẩu tối thiểu: %s"
@@ -29994,9 +30033,9 @@ msgstr "Cập nhật thành công thuộc tính bạn đọc &quot;%s&quot;"
 msgid "Modified record matching rule &quot;%s&quot;"
 msgstr "Cập nhật thành công quy tắc kiểm soát biểu ghi &quot;%s&quot;"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:206
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:213
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:194
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:105
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:115
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:391
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:505
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:130
@@ -30011,7 +30050,7 @@ msgid "Modify %s server"
 msgstr "Chỉnh sửa máy chủ Z39.50"
 
 #. %1$s:  spec 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:40
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:50
 #, c-format
 msgid "Modify OAI set '%s'"
 msgstr "Chỉnh sửa bộ OAI '%s'"
@@ -30073,7 +30112,7 @@ msgid "Modify filing rule"
 msgstr "Chỉnh sửa quy tắc phân loại"
 
 #. %1$s:  description 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:97
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:100
 #, c-format
 msgid "Modify frequency: %s"
 msgstr "Chỉnh sửa tần suất: %s"
@@ -30109,7 +30148,7 @@ msgid "Modify pattern"
 msgstr "Chỉnh sửa mẫu đánh số ÂPĐK"
 
 #. %1$s:  label 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:89
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:99
 #, c-format
 msgid "Modify pattern: %s"
 msgstr "Chỉnh sửa mẫu đánh số ÂPĐK: %s"
@@ -30147,7 +30186,7 @@ msgstr "Chỉnh sửa tài liệu được chọn"
 msgid "Modify word"
 msgstr "Chỉnh sửa từ khóa"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:159
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:164
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:195
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:447
 #, c-format
@@ -30171,7 +30210,7 @@ msgstr "Module upgrade needed"
 msgid "Modules in red must be installed before you may continue."
 msgstr "be installed before you may continue."
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:73
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:78
 #, fuzzy, c-format
 msgid "Modules:"
 msgstr "Phân hệ áp dụng:"
@@ -30226,7 +30265,7 @@ msgid "Morag Hills"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/header.inc:13
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:161
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:165
 #, c-format
 msgid "More "
 msgstr "Thêm "
@@ -30364,7 +30403,7 @@ msgid "N/A "
 msgstr "N/A "
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:367
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:374
 msgid "NO"
 msgstr "Không xóa"
 
@@ -30428,15 +30467,15 @@ msgid "Nahuel Angelinetti"
 msgstr "Nahuel Angelinetti"
 
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:3
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:301
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:315
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:35
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:63
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:25
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:177
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:179
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:51
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:161
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:193
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:270
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:200
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:277
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:64
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:43
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:38
@@ -30473,22 +30512,22 @@ msgstr "Tên (Bất kỳ): "
 msgid "Name is a required field!"
 msgstr "Trường tên bắt buộc phải khai báo!"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:169
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:171
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:179
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:181
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:836
 #, c-format
 msgid "Name of day"
 msgstr "Tên cho ngày"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:174
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:176
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:184
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:186
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:837
 #, c-format
 msgid "Name of month"
 msgstr "Tên cho tháng"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:179
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:181
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:189
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:191
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:838
 #, c-format
 msgid "Name of season"
@@ -30516,7 +30555,7 @@ msgstr "Tên/Số thẻ bạn đọc"
 msgid "Name the new definition"
 msgstr "Tạo định nghĩa mới"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:108
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:118
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:51
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:180
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:234
@@ -30526,7 +30565,7 @@ msgid "Name:"
 msgstr "Tên:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:110
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:324
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:331
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:547
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:541
 #, fuzzy, c-format
@@ -30538,7 +30577,7 @@ msgstr "Tên tệp tin: "
 msgid "Name: *"
 msgstr "Tên tệp tin: "
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:134
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:139
 #, c-format
 msgid "Named:"
 msgstr "Tên:"
@@ -30596,9 +30635,9 @@ msgid "Never"
 msgstr "Chưa có"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:207
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:65
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:52
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:180
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1018
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1025
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:95
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:359
@@ -30779,8 +30818,8 @@ msgstr "Tạo quy tắc phân loại"
 msgid "New framework"
 msgstr "Tạo khung mẫu biên mục"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:95
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:183
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:98
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:161
 #, c-format
 msgid "New frequency"
 msgstr "Tạo tần suất"
@@ -30867,12 +30906,8 @@ msgstr "Tạo bạn đọc "
 msgid "New notice"
 msgstr "Tạo thông báo"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:82
-#, c-format
-msgid "New number pattern"
-msgstr "Tạo mẫu đánh số ÂPĐK"
-
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:296
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:92
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:308
 #, c-format
 msgid "New numbering pattern"
 msgstr "Tạo mẫu đánh số ÂPĐK"
@@ -30946,7 +30981,7 @@ msgstr "Tạo báo cáo "
 msgid "New routing list"
 msgstr "Tạo danh sách nhận"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:74
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:84
 #, c-format
 msgid "New set"
 msgstr "Tạo bộ OAI"
@@ -31030,7 +31065,7 @@ msgid "Next"
 msgstr "Tiếp tục"
 
 #: intranet-tmpl/prog/en/includes/page-numbers.inc:6
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:284
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:295
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:214
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:181
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:135
@@ -31132,15 +31167,15 @@ msgstr "(3.x Documentation Manager)"
 msgid "No"
 msgstr "Không xóa"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:908
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:915
 #, c-format
 msgid "No "
 msgstr "Không "
 
 #. For the first occurrence,
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:682
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:685
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:689
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:692
 #, fuzzy, c-format
 msgid "No %s "
 msgstr "tới thư viện %s"
@@ -31286,7 +31321,7 @@ msgstr "Không có dữ liệu hiển thị trong bảng"
 msgid "No database named "
 msgstr "No database named "
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:101
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:111
 #, c-format
 msgid "No descriptions"
 msgstr "Không có mô tả"
@@ -31331,7 +31366,7 @@ msgstr "Không tìm thấy nguồn quỹ nào!"
 msgid "No group"
 msgstr "Không có nhóm"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:298
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:305
 #, c-format
 msgid "No groups defined."
 msgstr "Không có nhóm thư viện được định nghĩa."
@@ -31460,7 +31495,7 @@ msgid "No limit"
 msgstr "Tất cả"
 
 #. %1$s:  IF ( CATALOGUING ) 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:211
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:216
 #, c-format
 msgid "No log found %s for "
 msgstr "Không tìm thấy sự kiện nào liên quan %s với "
@@ -31710,8 +31745,8 @@ msgid "No statistics to report"
 msgstr "Không có dữ liệu thống kê lưu thông."
 
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:69
-#, c-format
-msgid "No system preferences matched your search for "
+#, fuzzy, c-format
+msgid "No system preferences matched your search for: "
 msgstr "Không tìm thấy thông số hệ thống phù hợp với tìm kiếm của bạn cho "
 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:93
@@ -31735,16 +31770,18 @@ msgid "No, do not Delete"
 msgstr "Không xóa"
 
 #. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:163
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:541
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:179
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:258
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:126
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:101
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:366
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:368
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:153
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:235
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:222
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:236
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:93
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:177
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:148
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:198
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:211
@@ -31753,7 +31790,7 @@ msgid "No, do not delete"
 msgstr "Không xóa"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:144
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:153
 msgid "No, do not delete!"
 msgstr "Không xóa khung mẫu!"
 
@@ -31775,8 +31812,8 @@ msgid "No, don't close (N)"
 msgstr "Không đóng"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:179
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:292
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:187
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:302
 msgid "No, don't delete"
 msgstr "Không xóa"
 
@@ -31842,7 +31879,7 @@ msgstr "Ghi chú nội bộ:"
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:130
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:184
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:186
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:115
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:118
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:557
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:580
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:598
@@ -32103,7 +32140,7 @@ msgstr ""
 "Ghi chú: Giá trị trong 'Trường kiểm soát' là trường được sao chép giá trị từ "
 "biểu ghi nhất quán sang biểu ghi thư mục. "
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:127
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:130
 #, c-format
 msgid "Note: one of the two following fields must be equal to 1"
 msgstr "Ghi chú: Một trong hai trường sau đây phải có giá trị là 1"
@@ -32191,7 +32228,7 @@ msgstr "Ghi chú: %s"
 #. %1$s:  branche.branchnotes |html 
 #. %2$s:  END 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:234
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:241
 #, c-format
 msgid "Notes: %s%s %s "
 msgstr "Ghi chú: %s%s %s "
@@ -32480,11 +32517,6 @@ msgstr "Số tuần đặt mua: "
 msgid "Number pattern:"
 msgstr "Mẫu số kỳ:"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:269
-#, c-format
-msgid "Number patterns"
-msgstr "Mẫu đánh số ÂPĐK"
-
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:115
 #, c-format
 msgid "Numbered"
@@ -32495,12 +32527,12 @@ msgstr "Kỳ phát hành"
 msgid "Numbering calculation"
 msgstr "Tính toán"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:303
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:317
 #, c-format
 msgid "Numbering formula"
 msgstr "Công thức đánh số"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:116
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:126
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:189
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:774
 #, c-format
@@ -32517,7 +32549,8 @@ msgstr "Mẫu số kỳ"
 msgid "Numbering pattern:"
 msgstr "Mẫu số kỳ:"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:71
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:81
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:279
 #, c-format
 msgid "Numbering patterns"
 msgstr "Mẫu đánh số ÂPĐK"
@@ -32532,14 +32565,14 @@ msgstr "Nuño López Ansótegui"
 msgid "OAI set mappings"
 msgstr "Ánh xạ bộ OAI"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:77
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:87
 #, c-format
 msgid "OAI sets"
 msgstr "Bộ OAI"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:47
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:46
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:27
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:37
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:85
 #, c-format
 msgid "OAI sets configuration"
@@ -32562,16 +32595,16 @@ msgstr "Tắt"
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:200
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:246
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:140
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:169
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:171
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:317
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:133
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:148
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:375
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:379
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:133
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:162
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:112
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:144
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:245
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:232
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:217
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:80
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:100
@@ -32635,7 +32668,14 @@ msgstr "Giao diện OPAC"
 msgid "OPAC (%s)"
 msgstr "OPAC (%s)"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:232
+#. %1$s:  firstname 
+#. %2$s:  surname 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:162
+#, fuzzy, c-format
+msgid "OPAC - %s %s"
+msgstr "OPAC (%s)"
+
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:239
 #, c-format
 msgid "OPAC Info: "
 msgstr "Hiển thị trên OPAC: "
@@ -32666,7 +32706,7 @@ msgstr "Ghi chú OPAC:"
 msgid "OPAC view:"
 msgstr "Xem hiển thị OPAC:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:772
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:779
 #, c-format
 msgid "OPAC/Staff login"
 msgstr "Tài khoản đăng nhập"
@@ -32715,12 +32755,12 @@ msgstr "OS version ('uname -a'): "
 msgid "OVER THE LIMIT"
 msgstr "vượt quá giới hạn"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:161
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:166
 #, c-format
 msgid "Object"
 msgstr "Đối tượng"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:108
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:113
 #, c-format
 msgid "Object: "
 msgstr "Đối tượng: "
@@ -33219,7 +33259,7 @@ msgid "Orders with uncertain prices for vendor "
 msgstr "Đơn hàng (với giá tham khảo) của nhà cung cấp "
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:194
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:636
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:643
 #, c-format
 msgid "Organization"
 msgstr "Cơ quan, tổ chức"
@@ -33292,11 +33332,6 @@ msgstr "Tài liệu của thư viện khác"
 msgid "Other holdings:"
 msgstr "Tài liệu của thư viện khác:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:161
-#, c-format
-msgid "Other librarians"
-msgstr "Thủ thư"
-
 #: intranet-tmpl/prog/en/columns.def:7
 #, c-format
 msgid "Other name"
@@ -33341,7 +33376,7 @@ msgstr "Lý do khác ..."
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:192
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:238
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:303
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:126
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:131
 #, c-format
 msgid "Output"
 msgstr "Hiển thị báo cáo"
@@ -33599,7 +33634,7 @@ msgstr "Mật khẩu được cập nhật thành công!"
 msgid "Password contains leading and/or trailing spaces."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:843
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:850
 #, c-format
 msgid "Password is too short"
 msgstr "Mật khẩu quá ngắn"
@@ -33612,7 +33647,7 @@ msgstr "Mật khẩu đăng nhập phải có độ dài tối thiểu là %s k�
 
 #: intranet-tmpl/prog/en/modules/auth.tt:51
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:111
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1013
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1020
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:44
 #, c-format
 msgid "Password:"
@@ -33628,7 +33663,7 @@ msgstr "Mật khẩu: "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:4
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:886
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:893
 #, c-format
 msgid "Passwords do not match"
 msgstr "Mật khẩu không khớp"
@@ -33661,7 +33696,7 @@ msgstr "Tài liệu sáng chế"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:566
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:35
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:42
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:663
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:20
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:458
@@ -33675,7 +33710,7 @@ msgstr "Bạn đọc"
 msgid "Patron #:"
 msgstr "Bạn đọc bảo lãnh:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:894
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:901
 #, c-format
 msgid "Patron account flags"
 msgstr "Thông tin khác"
@@ -33914,12 +33949,12 @@ msgid "Patron is RESTRICTED"
 msgstr "Bạn đọc bị KHÓA THẺ"
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:187
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:191
 msgid "Patron is an adult"
 msgstr "Bạn đọc là người lớn"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:26
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:956
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:963
 #, c-format
 msgid "Patron is currently unrestricted."
 msgstr "Bạn đọc hiện tại không bị hạn chế tài khoản."
@@ -33949,7 +33984,7 @@ msgstr "Danh sách bạn đọc"
 msgid "Patron lists:"
 msgstr "Danh sách bạn đọc:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1030
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1037
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:325
 #, c-format
 msgid "Patron messaging preferences"
@@ -33991,7 +34026,7 @@ msgstr "Thông báo bạn đọc: "
 msgid "Patron records were last synced on: "
 msgstr "CSDL bạn đọc được đồng bộ lần cuối vào: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:925
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:932
 #, c-format
 msgid "Patron restrictions"
 msgstr "Hạn chế bạn đọc"
@@ -34496,7 +34531,7 @@ msgstr ""
 #. %1$s:  branche.branchphone |html 
 #. %2$s:  END 
 #. %3$s:  IF ( branche.branchfax ) 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:224
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:231
 #, c-format
 msgid "Ph: %s%s %s "
 msgstr "ĐT: %s%s %s "
@@ -35322,8 +35357,8 @@ msgid "Plugin Version"
 msgstr "Phiên bản tính năng bổ trợ"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:324
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:193
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:290
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:180
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:277
 #, c-format
 msgid "Plugin:"
 msgstr "Tích hợp trong:"
@@ -35869,7 +35904,7 @@ msgid "Processing..."
 msgstr "Đang xử lý..."
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:195
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:637
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:644
 #, c-format
 msgid "Professional"
 msgstr "Cán bộ chuyên trách"
@@ -35929,7 +35964,7 @@ msgstr "Mẫu in:"
 msgid "Programmed texts"
 msgstr "Tài liệu lập trình"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:196
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:203
 #, c-format
 msgid "Properties"
 msgstr "Nhóm thư viện"
@@ -36248,7 +36283,7 @@ msgstr "Tạo nhanh nhãn gáy"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:109
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:200
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:304
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:305
 #, c-format
 msgid "Quote editor"
 msgstr "Chỉnh sửa trích dẫn trên OPAC"
@@ -36258,7 +36293,7 @@ msgstr "Chỉnh sửa trích dẫn trên OPAC"
 msgid "Quote editor for Quote-of-the-day feature in OPAC"
 msgstr "Cho phép thủ thư tạo các trích dẫn, thông báo nhanh trên OPAC"
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:311
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:312
 #, c-format
 msgid "Quote uploader"
 msgstr "Nhập trích dẫn"
@@ -36736,7 +36771,7 @@ msgid "Remote record deleted, local record kept"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:512
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:60
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:70
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:168
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:7
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:10
@@ -36822,7 +36857,7 @@ msgstr "Loại bỏ quy tắc kiểm soát biểu ghi"
 msgid "Remove this match point"
 msgstr "Loại bỏ điểm kiểm soát"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:935
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:942
 #, c-format
 msgid "Remove?"
 msgstr "Loại bỏ?"
@@ -36867,8 +36902,8 @@ msgstr "Gia hạn bị lỗi"
 msgid "Renew or check in selected items"
 msgstr "Gia hạn hoặc ghi trả"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:164
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:166
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:168
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:170
 #, c-format
 msgid "Renew patron"
 msgstr "Gia hạn tài khoản"
@@ -36900,7 +36935,7 @@ msgstr "Thời gian gia hạn"
 msgid "Renewals allowed (count)"
 msgstr "Số lần gia hạn"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:47
 #, c-format
 msgid "Renewed"
 msgstr "Gia hạn"
@@ -36993,7 +37028,7 @@ msgstr "Lặp lại"
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:108
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:82
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:230
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:85
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:72
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:101
 #, c-format
 msgid "Repeatable: "
@@ -37221,6 +37256,7 @@ msgstr "Tên báo cáo"
 #: intranet-tmpl/prog/en/includes/member-alt-contact-style-us.inc:96
 #: intranet-tmpl/prog/en/includes/member-alt-contact-style-us.inc:108
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:57
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:113
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:259
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:402
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:499
@@ -37249,8 +37285,8 @@ msgstr "Tên báo cáo"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:95
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:123
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:127
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:49
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:59
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:64
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:89
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:95
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:106
@@ -37268,18 +37304,21 @@ msgstr "Tên báo cáo"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:534
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:547
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:559
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:609
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:624
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:651
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:662
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:674
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:707
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:736
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:750
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:763
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:799
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:843
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:886
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:602
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:606
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:610
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:614
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:631
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:658
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:669
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:681
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:714
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:743
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:757
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:770
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:806
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:850
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:893
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:521
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:548
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:181
@@ -37358,7 +37397,7 @@ msgid "Reserves"
 msgstr "Nhập tài liệu"
 
 #. INPUT type=reset
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:195
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:205
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:271
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:280
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:297
@@ -37508,9 +37547,15 @@ msgid "Return to batch item modification"
 msgstr "Quay lại"
 
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:29
-#, c-format
-msgid "Return to issuing rules"
-msgstr "Quay lại chính sách lưu thông"
+#, fuzzy, c-format
+msgid "Return to circulation and fine rules"
+msgstr "Chính sách lưu thông"
+
+#. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:143
+#, fuzzy
+msgid "Return to frameworks"
+msgstr "Khung mẫu mặc định"
 
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:33
 #, c-format
@@ -37830,7 +37875,7 @@ msgstr "Tin nhắn SMS"
 msgid "SMS alert number"
 msgstr "Số tin nhắn:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1080
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1087
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:328
 #, c-format
 msgid "SMS number:"
@@ -37905,8 +37950,8 @@ msgid "Saturdays"
 msgstr "Thứ 7"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:151
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:194
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:154
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:204
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:424
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:100
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:133
@@ -37926,7 +37971,7 @@ msgstr "Thứ 7"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:370
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:71
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:120
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:68
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:78
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:140
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:184
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:298
@@ -37949,7 +37994,7 @@ msgstr "Thứ 7"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:534
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:157
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:117
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1089
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1096
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:158
 #: intranet-tmpl/prog/en/modules/members/member.tt:374
@@ -38047,7 +38092,7 @@ msgstr "Lưu mẫu mới"
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:109
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:371
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:342
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:60
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:47
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:237
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:283
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:275
@@ -38612,7 +38657,7 @@ msgstr "Tìm kiếm tài liệu:"
 msgid "Search title"
 msgstr "Tìm theo nhan đề"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:159
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:161
 #, c-format
 msgid "Search to hold"
 msgstr "Tìm kiếm"
@@ -39053,7 +39098,7 @@ msgstr "Chọn tệp tin tải lên:  "
 msgid "Select the host item to link%s to "
 msgstr "Chọn tài liệu chủ để liên kết%s  tới biểu ghi "
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:112
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:99
 #, c-format
 msgid "Select to display or not:"
 msgstr "Lựa chọn để hiển thị hoặc không:"
@@ -39286,8 +39331,8 @@ msgstr "ÂPĐK: %s "
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:15
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:84
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:34
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:84
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:70
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:87
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:80
 #: intranet-tmpl/prog/en/modules/serials/viewalerts.tt:9
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:19
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:35
@@ -39384,7 +39429,7 @@ msgstr "Phiên làm việc hết giờ."
 msgid "Set all funds to zero"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:153
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:163
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:225
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:815
 #, c-format
@@ -39417,8 +39462,8 @@ msgstr ""
 "Thiết lập các chính sách thông báo quá hạn của thư viện đối với các ghi mượn "
 "quá hạn"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:169
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:171
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:173
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:175
 #, c-format
 msgid "Set permissions"
 msgstr "Phân quyền người dùng"
@@ -39616,9 +39661,9 @@ msgstr "Hiển thị quỹ hoạt động"
 msgid "Show actual/estimated values"
 msgstr "Hiển thị giá trị ước tính/thực tế"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:115
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:118
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:121
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:102
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:105
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:108
 #, c-format
 msgid "Show all"
 msgstr "Hiển thị tất cả"
@@ -39701,7 +39746,7 @@ msgstr ""
 msgid "Show helpers for fixed and coded fields"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:344
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:351
 #, c-format
 msgid "Show in search pulldown: "
 msgstr "Hiển thị trong tìm kiếm thả xuống: "
@@ -39738,8 +39783,8 @@ msgstr "Hiển thị ấn phẩm định kỳ được gia hạn "
 msgid "Show only subscriptions "
 msgstr "Chỉ hiển thị ÂPĐK "
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:163
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:276
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:171
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:286
 #, c-format
 msgid "Show subscriptions"
 msgstr "Hiển thị ấn phẩm định kỳ"
@@ -40024,7 +40069,7 @@ msgstr "Nguồn phân loại"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:219
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:342
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:343
 #, c-format
 msgid "Source"
 msgstr "Nguồn trích dẫn"
@@ -40164,10 +40209,15 @@ msgid "Stacey Walker"
 msgstr "Stacey Walker"
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:193
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:635
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:642
 #, c-format
 msgid "Staff"
 msgstr "Cán bộ thư viện"
+
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:161
+#, fuzzy, c-format
+msgid "Staff - Internal note"
+msgstr "Ghi chú nội bộ:"
 
 #. A
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:16
@@ -40284,7 +40334,7 @@ msgid "Start Date: "
 msgstr "Ngày bắt đầu: "
 
 #: intranet-tmpl/prog/en/columns.def:148
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:179
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:181
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:536
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:573
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:364
@@ -40324,7 +40374,7 @@ msgstr "Ngày bắt đầu: "
 msgid "Start date: *"
 msgstr "Ngày bắt đầu: "
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:260
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:267
 #, c-format
 msgid "Start defining libraries"
 msgstr "Tạo thư viện"
@@ -40412,7 +40462,7 @@ msgid "Statistic 2: "
 msgstr "Thống kê 2: "
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:196
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:638
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:645
 #, c-format
 msgid "Statistical"
 msgstr "Thống kê"
@@ -40719,8 +40769,8 @@ msgid "Sub total:"
 msgstr "Tổng tiền:"
 
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:68
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:387
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:257
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:391
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:244
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:200
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:235
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:91
@@ -40734,7 +40784,7 @@ msgstr "Trường con"
 msgid "Subfield code:"
 msgstr "Mã trường con:"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:79
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:66
 #, c-format
 msgid "Subfield code: "
 msgstr "Mã trường con: "
@@ -40751,13 +40801,13 @@ msgstr "Dấu phân cách trường con: "
 msgid "Subfield ‡"
 msgstr "Trường con"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:222
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:209
 #, c-format
 msgid "Subfield:"
 msgstr "Trường con:"
 
 #. %1$s:  tagsubfield 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:350
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:351
 #, c-format
 msgid "Subfield: %s"
 msgstr "Trường con: %s"
@@ -40940,7 +40990,7 @@ msgstr "Chủ đề:"
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:78
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:263
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:329
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:146
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:151
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:178
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:384
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:153
@@ -40968,7 +41018,7 @@ msgid "Subscription #%s"
 msgstr "ÂPĐK số %s"
 
 #. %1$s:  loopro.object 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:188
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:193
 #, fuzzy, c-format
 msgid "Subscription %s "
 msgstr "Ấn phẩm định kỳ %s "
@@ -41052,7 +41102,7 @@ msgstr "Thông tin ấn phẩm định kỳ "
 msgid "Subscription information for biblio #%s with title : %s"
 msgstr "Thông tin ÂPĐK của bản ghi số %s với nhan đề : %s"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:218
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:228
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:665
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:28
 #, c-format
@@ -41387,7 +41437,7 @@ msgstr "Ký hiệu: "
 msgid "Sync status: "
 msgstr "Trạng thái : "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:679
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:686
 #, c-format
 msgid "Sync with the Norwegian national patron database:"
 msgstr ""
@@ -41512,7 +41562,7 @@ msgstr "Tổng số"
 msgid "Tab separated text"
 msgstr "Kiểu bảng"
 
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:276
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:263
 #, c-format
 msgid "Tab:"
 msgstr "Thẻ:"
@@ -41798,11 +41848,11 @@ msgid "Test"
 msgstr "Kiểm tra"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:262
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:272
 msgid "Test pattern"
 msgstr "Kiểm tra mẫu đánh số"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:203
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:213
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:856
 #, c-format
 msgid "Test prediction pattern"
@@ -41818,10 +41868,10 @@ msgstr "Đang kiểm tra..."
 msgid "Tetun (Tetum) Karen Myers"
 msgstr "Tetun (Tetum) Karen Myers"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:388
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:258
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:392
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:245
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:220
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:343
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:344
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:56
 #, c-format
 msgid "Text"
@@ -41840,13 +41890,13 @@ msgid "Text fields"
 msgstr "Trường dữ liệu"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:229
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:88
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:75
 #, c-format
 msgid "Text for OPAC: "
 msgstr "Mô tả trên OPAC: "
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:228
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:87
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:74
 #, c-format
 msgid "Text for librarian: "
 msgstr "Mô tả cho thủ thư "
@@ -42090,8 +42140,8 @@ msgstr "Đến biểu ghi: "
 msgid "The cart was sent to: %s"
 msgstr "Thông tin giỏ tài liệu của bạn được gửi tới hòm thư: %s"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:383
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:253
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:387
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:240
 #, c-format
 msgid ""
 "The column 'Koha field' shows that the subfield is linked with a Koha field."
@@ -42161,7 +42211,7 @@ msgid ""
 "entries in your database."
 msgstr "Các trường 'Mã thư viện' và 'Mã kiểu bạn đọc' là "
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:319
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:320
 #, c-format
 msgid ""
 "The file will be imported into an editable table for review prior to saving."
@@ -42449,7 +42499,7 @@ msgid ""
 "the hold is being placed. "
 msgstr "dựa trên thư viện, nơi các đặt mượn được đặt. "
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:317
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:318
 #, c-format
 msgid ""
 "The quote uploader accepts standard csv files with two columns: \"source\","
@@ -42588,7 +42638,7 @@ msgstr "Không có giá trị định trước cho %s"
 msgid "There are no collections currently defined."
 msgstr "%s Hiện tại chưa có bộ sưu tập nào được định nghĩa. %s "
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:197
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:199
 #, c-format
 msgid "There are no contracts with this vendor. "
 msgstr "Hiện tại không có hợp đồng liên quan đến nhà cung cấp này."
@@ -42604,6 +42654,11 @@ msgid "There are no defined templates. Please create a template first."
 msgstr ""
 "Hiện tại chưa có mẫu chỉnh sửa biểu ghi MARC. Bạn vui lòng tạo mẫu chỉnh sửa "
 "biểu ghi trước."
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:338
+#, fuzzy, c-format
+msgid "There are no existing numbering patterns."
+msgstr "Hiện tại không có mẫu đánh số ấn phẩm định kỳ."
 
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:90
 #, c-format
@@ -42641,7 +42696,7 @@ msgstr "Bạn không có đơn hàng chậm."
 msgid "There are no libraries defined."
 msgstr "Không có thư viện được khai báo. "
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:260
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:267
 #, c-format
 msgid "There are no libraries defined. "
 msgstr "Không có thư viện được khai báo. "
@@ -42716,7 +42771,7 @@ msgstr "Không có các thuộc tính bạn đọc được lưu lại."
 msgid "There are no saved reports. "
 msgstr "Không có các báo cáo được lưu lại. "
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:116
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:126
 #, c-format
 msgid "There are no sets defined."
 msgstr "Không có bộ OAI được định nghĩa."
@@ -42737,15 +42792,15 @@ msgstr "Không có tài liệu nào được bạn đọc gán từ khóa "
 msgid "There is more than 1 MARC tag related to items tab (10) : %s"
 msgstr "Phải có tối thiểu một trường MARC liên quan tới thẻ tài liệu (10): %s"
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:214
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:221
 #, c-format
 msgid "There is no defined frequency."
 msgstr "Hiện tại chưa có tần suất nào được tạo."
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:324
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:615
 #, c-format
-msgid "There is no existing patterns."
-msgstr "Hiện tại không có mẫu đánh số ấn phẩm định kỳ."
+msgid "There is no minimum or maximum character length."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/notices.tt:83
 #, c-format
@@ -42797,7 +42852,7 @@ msgid "Therefore, the record to be merged has not been deleted."
 msgstr "Do đó, biểu ghi sát nhập không bị xóa."
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:312
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:177
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:164
 #, c-format
 msgid "Thesaurus:"
 msgstr "Kiểu dữ liệu kiểm soát:"
@@ -42896,14 +42951,19 @@ msgstr "Trường bắt buộc"
 msgid "This field is required."
 msgstr "Trường này bắt buộc."
 
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:139
+#, fuzzy, c-format
+msgid "This framework cannot be deleted"
+msgstr "Những tài liệu này sẽ không bị xóa"
+
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:140
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:141
 #, c-format
 msgid "This framework is used %s times"
 msgstr "Khung mẫu này được sử dụng trong %s biểu ghi"
 
 #. %1$s:  subscriptions.size 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:159
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:167
 #, c-format
 msgid ""
 "This frequency is still used by %s subscription(s). Do you still want to "
@@ -43042,12 +43102,12 @@ msgstr "Thông thường tài liệu này không thể đặt mượn."
 msgid "This member has no email"
 msgstr "Bạn đọc chưa khai báo địa chỉ thư điện tử"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:749
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:756
 #, c-format
 msgid "This message appears on this patron's user page in the OPAC"
 msgstr "Thông báo này hiển thị trên trang OPAC của bạn đọc"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:762
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:769
 #, c-format
 msgid "This message displays when checking out to this patron"
 msgstr "Thông báo hiển thị khi ghi mượn cho bạn đọc"
@@ -43093,7 +43153,7 @@ msgid "This patron is from a different library (%s)"
 msgstr "Bạn đọc không thuộc về thư viện của bạn (%s)"
 
 #. %1$s:  subscriptions.size 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:272
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:282
 #, c-format
 msgid ""
 "This pattern is still used by %s subscription(s). Do you still want to "
@@ -43148,8 +43208,8 @@ msgstr ""
 "Nếu bạn có quá nhiều tài liệu quá hạn thì bạn sẽ mất nhiều thời gian để chạy "
 "báo cáo này."
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:382
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:252
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:386
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:239
 #, fuzzy, c-format
 msgid ""
 "This screen shows the subfields associated with the selected tag. You can "
@@ -43605,7 +43665,7 @@ msgstr "Đến ngày : "
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:121
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:261
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:309
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:132
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:137
 #, c-format
 msgid "To a file:"
 msgstr "Xuất ra tệp tin:"
@@ -43685,7 +43745,7 @@ msgstr "Bạn vui lòng gửi thông tin về lỗi xảy ra tới "
 msgid "To screen"
 msgstr "Xuất báo cáo ra màn hình"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:129
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:134
 #, c-format
 msgid "To screen in the browser:"
 msgstr "Hiển thị trên màn hình:"
@@ -43841,7 +43901,7 @@ msgstr "Công cụ bổ trợ"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:44
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:114
 #: intranet-tmpl/prog/en/modules/sms/sms-home.tt:9
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:47
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:52
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:301
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:26
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:54
@@ -43850,7 +43910,7 @@ msgstr "Công cụ bổ trợ"
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:193
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:20
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:30
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:304
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:305
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:28
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:97
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:50
@@ -44340,7 +44400,7 @@ msgstr "Bạn phải chọn hai biểu ghi cần sát nhập."
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:172
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #: intranet-tmpl/prog/en/modules/members/notices.tt:49
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:931
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:938
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:72
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:613
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:54
@@ -44564,8 +44624,7 @@ msgstr "Ngày nghỉ đặc biệt"
 msgid "Unique identifier: "
 msgstr "Định danh duy nhất: "
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:113
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:190
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:197
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:146
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:308
 #, c-format
@@ -44588,8 +44647,12 @@ msgstr "Tìm kiếm đơn giá"
 msgid "Unit price "
 msgstr "Đơn giá "
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:137
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:192
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:116
+#, fuzzy, c-format
+msgid "Unit: "
+msgstr "Đơn vị tính toán: "
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:199
 #, c-format
 msgid "Units per issue"
 msgstr "Số bản mỗi kỳ phát hành"
@@ -44598,6 +44661,11 @@ msgstr "Số bản mỗi kỳ phát hành"
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:4
 msgid "Units per issue is required"
 msgstr "Số bản của mỗi kỳ ấn phẩm là trường bắt buộc phải khai báo thông tin."
+
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:140
+#, fuzzy, c-format
+msgid "Units per issue: "
+msgstr "Số bản mỗi kỳ phát hành"
 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:71
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:71
@@ -44692,7 +44760,7 @@ msgstr "Ngày hết hạn: "
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:29
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:353
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:360
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:231
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:244
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:827
@@ -44714,8 +44782,8 @@ msgstr "Cập nhật thao tác"
 msgid "Update all child funds with this owner "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:185
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:187
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:189
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:191
 #, c-format
 msgid "Update child to adult patron"
 msgstr "Cập nhật Trẻ em - Người lớn"
@@ -44820,8 +44888,8 @@ msgstr "Tải lên tệp tin .koc khác"
 msgid "Upload file"
 msgstr "Tải lên"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:209
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:270
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:220
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:281
 #, c-format
 msgid "Upload file:"
 msgstr "Tải lên:"
@@ -44879,7 +44947,7 @@ msgstr "Tải ảnh đại diện bạn đọc lên cơ sở dữ liệu"
 msgid "Upload progress: "
 msgstr "Tiến trình tải lên: "
 
-#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:332
+#: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:333
 #, c-format
 msgid "Upload quotes"
 msgstr "Tải trích dẫn"
@@ -44957,8 +45025,8 @@ msgstr "Sử dụng tệp tin"
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:32
 #, fuzzy, c-format
 msgid ""
-"Use carefully! If the destination library already has issuing rules, they "
-"will be deleted without warning!"
+"Use carefully! If the destination library already has circulation and fine "
+"rules, they will be deleted without warning!"
 msgstr ""
 "Bạn nên cẩn thận khi sử dụng tính năng này. Toàn bộ chính sách lưu thông đã "
 "được thiết lập của thư viện đích sẽ bị xóa khi bạn sao chép chính sách lưu "
@@ -45331,7 +45399,7 @@ msgstr "Kết quả tìm kiếm nhà cung cấp"
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:88
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:84
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:361
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:153
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:152
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:195
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:238
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:55
@@ -45905,7 +45973,7 @@ msgstr ""
 "Khi bạn nhập tệp tin MARC thông qua công cụ bổ trợ, hệ thống sẽ thực hiện "
 "tìm kiếm và sử dụng giá của đơn vị tiền tệ chính hiện tại."
 
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:159
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:169
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:216
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:821
 #, c-format
@@ -46073,7 +46141,7 @@ msgid "Xercode, Spain"
 msgstr "Xercode, Spain"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:364
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:371
 msgid "YES"
 msgstr "Có"
 
@@ -46136,9 +46204,9 @@ msgstr "Kỳ nghỉ hàng năm: %s"
 msgid "Yes"
 msgstr "Có"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:681
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:684
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:902
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:688
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:691
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:909
 #, c-format
 msgid "Yes "
 msgstr "Có "
@@ -46171,12 +46239,13 @@ msgid "Yes, close (Y)"
 msgstr "Đóng"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:176
-#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:289
+#: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:184
+#: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:299
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:178
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:99
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:235
 #: intranet-tmpl/prog/en/modules/admin/stopwords.tt:90
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:174
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:104
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:147
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:464
@@ -46189,13 +46258,19 @@ msgid "Yes, delete (Y)"
 msgstr "Đồng ý xóa"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:142
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:158
+#, fuzzy
+msgid "Yes, delete contract"
+msgstr "Thông tin liên hệ thay thế"
+
+#. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:150
 msgid "Yes, delete this framework!"
 msgstr "Xóa khung mẫu!"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:358
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:228
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:359
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:215
 msgid "Yes, delete this subfield"
 msgstr "Xóa trường con"
 
@@ -46269,7 +46344,7 @@ msgid "You are not authorised to manage this basket."
 msgstr "Bạn không được phân quyền để quản lý giỏ đặt hàng này."
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:182
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:186
 msgid "You are not authorized to delete patrons"
 msgstr "Bạn không được phân quyền để xóa tài khoản bạn đọc"
 
@@ -46279,12 +46354,12 @@ msgid "You are not authorized to modify this fund"
 msgstr "Bạn không được phân quyền để chỉnh sửa quỹ này."
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:166
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:170
 msgid "You are not authorized to renew patrons"
 msgstr "Bạn không được phân quyền để gia hạn tài khoản bạn đọc"
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:171
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:175
 msgid "You are not authorized to set permissions"
 msgstr "Bạn không được phân quyền để phân quyền chức năng cho bạn đọc"
 
@@ -47043,8 +47118,8 @@ msgstr ""
 "%]"
 
 #. INPUT type=text name=dateexpiry
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:725
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:731
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:732
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:738
 #, fuzzy
 msgid "[% UNLESS opduplicate %][% dateexpiry %][% END %]"
 msgstr "[% IF ( opduplicate ) %][% ELSE %][% dateofbirth %][% END %]"
@@ -47136,6 +47211,14 @@ msgstr ""
 "[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
 "CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) "
 "%%] "
+
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:40
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:54
+#, c-format
+msgid ""
+"[%% IF Koha.Preference('intranetreadinghistory') AND "
+"CAN_user_circulate_circulate_remaining_permissions %%] "
+msgstr ""
 
 #. %1$s:  IF (warnIsRootUser) 
 #: intranet-tmpl/prog/en/modules/about.tt:102
@@ -47565,12 +47648,6 @@ msgstr "Bắt đầu với"
 msgid "below"
 msgstr "bên dưới"
 
-#. INPUT type=text name=cardnumber
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:603
-msgid ""
-"between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters"
-msgstr "giữa [% minlength_cardnumber %] và [% maxlength_cardnumber %] ký tự"
-
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:133
 #, c-format
 msgid "biblio and biblionumber"
@@ -47922,7 +47999,7 @@ msgid "digits"
 msgstr "số"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:170
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:175
 msgid "display detail for this librarian."
 msgstr "Hiển thị thông tin cho thủ thư."
 
@@ -48052,11 +48129,6 @@ msgstr ""
 msgid "ex: barcode, itemcallnumber, title, \"050a 050b\", 300a "
 msgstr "VD: barcode, itemcallnumber, title, \"050a 050b\", 300a "
 
-#. INPUT type=text name=cardnumber
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:601
-msgid "exactly [% minlength_cardnumber %] characters"
-msgstr "chính xác [% minlength_cardnumber %] ký tự"
-
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:501
 #, c-format
 msgid "exists"
@@ -48173,7 +48245,7 @@ msgstr "has all required privileges on database "
 msgid "has already been added."
 msgstr "đã tồn tại trong giá sách ảo."
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:94
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:96
 #, c-format
 msgid "has never been checked out."
 msgstr "chưa được ghi mượn."
@@ -48283,8 +48355,8 @@ msgstr "ig"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:235
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:237
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:92
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:94
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:79
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:81
 #, c-format
 msgid "ignore"
 msgstr "Bỏ qua"
@@ -48653,7 +48725,7 @@ msgid "label_single_%s.xml"
 msgstr "label_single_%s.xml"
 
 #. %1$s:  issue.lastreneweddate |$KohaDates with_hours => 1  
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:68
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:70
 #, c-format
 msgid "last on: %s"
 msgstr "lần cuối vào ngày: %s"
@@ -48744,7 +48816,7 @@ msgid "never"
 msgstr "(không)"
 
 #. INPUT type=image
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:312
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:299
 msgid "next"
 msgstr "Tiếp tục"
 
@@ -48931,7 +49003,7 @@ msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr "by Binny V A is licensed under the BSD license."
 
 #. INPUT type=image
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:307
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:294
 msgid "previous"
 msgstr "Sau"
 
@@ -49024,11 +49096,6 @@ msgstr "Mở lại nhóm giỏ đặt hàng"
 msgid "restricted"
 msgstr "Bị khóa tài khoản"
 
-#: intranet-tmpl/prog/en/modules/admin/preferences.tt:70
-#, c-format
-msgid "return to where you were before."
-msgstr "quay lại giao diện trước."
-
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/macles.tt:66
 #, c-format
 msgid "s&eacute;lection au moyen d'une liste de descripteurs"
@@ -49113,32 +49180,32 @@ msgstr "ÂPĐK"
 msgid "serial collection for [% subscription.bibliotitle %]"
 msgstr "Bộ sưu tập ÂPĐK của [% subscription.bibliotitle %]"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:58
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:68
 #, c-format
 msgid "setDescription: "
 msgstr "Mô tả: "
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:84
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:94
 #, c-format
 msgid "setDescriptions"
 msgstr "Mô tả"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:83
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:93
 #, c-format
 msgid "setName"
 msgstr "Tên bộ"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:52
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:62
 #, c-format
 msgid "setName: "
 msgstr "Tên bộ: "
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:82
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:92
 #, c-format
 msgid "setSpec"
 msgstr "Thông số bộ"
 
-#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:47
+#: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:57
 #, c-format
 msgid "setSpec: "
 msgstr "Thông số bộ: "
@@ -49188,8 +49255,8 @@ msgstr "Bắt đầu với:"
 msgid "starts with"
 msgstr "bắt đầu với"
 
-#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:405
-#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:274
+#: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:409
+#: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:261
 #, c-format
 msgid "subfield ignored"
 msgstr "Trường con bị bỏ qua"
@@ -49458,11 +49525,6 @@ msgstr "tới ngày"
 msgid "until %s"
 msgstr "tới ngày"
 
-#. INPUT type=text name=cardnumber
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:605
-msgid "up to [% maxlength_cardnumber %] characters"
-msgstr "lên tới [% maxlength_cardnumber %] ký tự"
-
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:217
 #, c-format
 msgid "update your database"
@@ -49637,10 +49699,10 @@ msgstr "| Thao tác: %s "
 msgid "| "
 msgstr "| "
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:174
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:202
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:236
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:263
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:185
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:213
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:247
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:274
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1066
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:181
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:493

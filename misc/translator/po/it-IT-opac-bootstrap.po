@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha Staff\n"
-"POT-Creation-Date: 2016-02-16 19:07-0300\n"
-"PO-Revision-Date: 2016-02-24 07:06+0000\n"
+"POT-Creation-Date: 2016-03-15 09:57-0300\n"
+"PO-Revision-Date: 2016-03-18 05:46+0000\n"
 "Last-Translator: Zeno <z.tajoli@cineca.it>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1456297614.000000\n"
+"X-POOTLE-MTIME: 1458279994.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
@@ -1634,12 +1634,14 @@ msgstr "%s%s%sKoha online%s catalogo &rsaquo; Coursi"
 #. %4$s:  END 
 #. %5$s:  title |html 
 #. %6$s:  FOREACH subtitl IN subtitle 
-#. %7$s:  subtitl.subfield |html 
+#. %7$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %8$s:  END 
+#. %9$s:  subtitl.subfield |html 
+#. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
 #, c-format
-msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s, %s%s"
-msgstr "%s%s%sKoha online%s catalogo &rsaquo; Dettagli per: %s%s, %s%s"
+msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
+msgstr "%s%s%sKoha online%s catalogo &rsaquo; Dettagli per:  %s%s%s,%s %s%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -4689,12 +4691,14 @@ msgstr "Dettagli di %s"
 
 #. %1$s:  title |html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield |html 
+#. %3$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %4$s:  END 
+#. %5$s:  subtitl.subfield |html 
+#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
 #, c-format
-msgid "Details for: %s%s, %s%s"
-msgstr "Dettagli di: %s%s, %s%s"
+msgid "Details for: %s%s%s,%s %s%s"
+msgstr "Details per: %s%s%s,%s %s%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:175
 #, c-format
@@ -5023,13 +5027,13 @@ msgstr "Errore cercando in OverDrive"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! Illegal parameter"
-msgstr "Errore! Parametro illegale"
+msgid "Error! Adding tags failed at"
+msgstr "Errore! L'aggiunta del tag è fallita in"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
-msgid "Error! The add_tag operation failed on"
-msgstr "Errore! L'aggiunta del tag è fallita"
+msgid "Error! Illegal parameter"
+msgstr "Errore! Parametro illegale"
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:30
 #, c-format
