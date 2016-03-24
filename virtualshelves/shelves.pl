@@ -215,14 +215,19 @@ if ( $op eq 'view' ) {
 
             my $borrower = GetMember( borrowernumber => $loggedinuser );
 
+            my $xslfile = C4::Context->preference('XSLTResultsDisplay');
+            my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
+            my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
+
             my @items;
             while ( my $content = $contents->next ) {
                 my $this_item;
                 my $biblionumber = $content->biblionumber->biblionumber;
                 my $record       = GetMarcBiblio($biblionumber);
 
-                if ( C4::Context->preference("XSLTResultsDisplay") ) {
-                    $this_item->{XSLTBloc} = XSLTParse4Display( $biblionumber, $record, "XSLTResultsDisplay" );
+                if ( $xslfile ) {
+                    $this_item->{XSLTBloc} = XSLTParse4Display( $biblionumber, $record, "XSLTResultsDisplay",
+                                                                1, undef, $sysxml, $xslfile, $lang);
                 }
 
                 my $marcflavour = C4::Context->preference("marcflavour");
