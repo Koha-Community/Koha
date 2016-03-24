@@ -259,7 +259,7 @@ if ( $op eq 'view' ) {
                 }
 
                 my $marcflavour = C4::Context->preference("marcflavour");
-                my $itemtypeinfo = getitemtypeinfo( $content->biblionumber->biblioitems->first->itemtype, 'intranet' );
+                my $itemtypeinfo = getitemtypeinfo( $content->biblionumber->biblioitems->first->itemtype, 'opac' );
                 $this_item->{imageurl}          = $itemtypeinfo->{imageurl};
                 $this_item->{description}       = $itemtypeinfo->{description};
                 $this_item->{notforloan}        = $itemtypeinfo->{notforloan};
