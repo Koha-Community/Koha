@@ -329,7 +329,13 @@ sub get_from_cache {
     }
 
     my $get_sub = $self->{ref($self->{$cache}) . "_get"};
-    return $get_sub ? $get_sub->($key) : $self->{$cache}->get($key);
+    my $value = $get_sub ? $get_sub->($key) : $self->{$cache}->get($key);
+
+    # Update the L1 cache when fetching the L2 cache
+    # Otherwise the L1 cache won't ever be populated
+    $L1_cache{$key} = $value;
+
+    return $value;
 }
 
 =head2 clear_from_cache
