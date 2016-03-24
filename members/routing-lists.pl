@@ -88,7 +88,6 @@ if ($borrowernumber) {
 
 ##################################################################################
 
-
 $template->param(%$borrower);
 
 $template->param(

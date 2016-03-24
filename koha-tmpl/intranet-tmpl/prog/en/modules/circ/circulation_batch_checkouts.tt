@@ -79,7 +79,7 @@ $(document).ready(function() {
     [% END %]
   </div>
 [% ELSIF borrower and not checkout_infos %]
-  <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl">
+  <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrowernumber %]&batch=1">
     <fieldset id="circ_circulation_issue">
       <label for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
       <fieldset class="rows">
@@ -110,7 +110,7 @@ $(document).ready(function() {
 [% ELSIF borrower %]
   [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
     <h3>Batch checkout confirmation [% IF borrowernumber %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] [% END %]</h3>
-    <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
+    <form method="post" action="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrowernumber %]" id="mainform" name="mainform" autocomplete="off">
   [% ELSE %]
     <h3>Batch checkout information [% IF borrowernumber %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] [% END %]</h3>
   [% END %]

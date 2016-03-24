@@ -47,7 +47,6 @@ var relatives_borrowernumbers = new Array();
     relatives_borrowernumbers.push("[% b %]");
 [% END %]
 
-var MSG_ADD_MESSAGE = _("Add a new message");
 var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 var MSG_CONFIRM_DELETE_MESSAGE = _("Are you sure you want to delete this message? This cannot be undone.");
 
@@ -140,43 +139,6 @@ $(document).ready(function() {
 [% END %]
 
 <!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
-<div style="display: none;" id="add_message_form">
-<form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
-<fieldset id="borrower_messages" class="brief">
-<legend>Leave a message</legend>
-	<ol>
-    <li>
-            <label for="message_type">Add a message for:</label>
-          <select name="message_type" id="message_type">
-            <option value="L">Staff - Internal note</option>
-            <option value="B">OPAC - [% firstname %] [% surname %]</option>
-        </select>
-    </li>
-    [% IF ( canned_bor_notes_loop ) %]
-        <li>
-                <label for="type">Predefined notes: </label>
-                <select name="type" id="type" onchange="this.form.borrower_message.value=this.options[this.selectedIndex].value;">
-                    <option value="">Select note</option>
-                    [% FOREACH canned_bor_notes_loo IN canned_bor_notes_loop %]
-                    <option value="[% canned_bor_notes_loo.lib %]">[% canned_bor_notes_loo.lib %]</option>
-                    [% END %]
-                </select>
-        </li>
-    [% END %]
-    <li>
-        <textarea rows="3" cols="60" name="borrower_message" id="borrower_message" ></textarea>
-    </li>
-	</ol>
-    <fieldset class="action">
-        <input type="submit" value="Save" /> <a href="#" class="cancel">Cancel</a>
-    </fieldset>
-
-        <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-        <input type="hidden" name="branchcode" value="[% branch %]" />
-</fieldset>
-</form>
-</div>
-
 [% IF ( was_renewed ) %]<div class="dialog message">Patron's account has been renewed until [% expiry | $KohaDates %]</div>[% END %]
 
 [% IF additional_materials %]
@@ -880,6 +842,7 @@ No patron matched <span class="ex">[% message %]</span>
                 [% END %]</li>
             [% END %]
         </ul>
+        <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal">Add a new message</a>
     </div>
 
 </div>

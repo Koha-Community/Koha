@@ -51,5 +51,5 @@ Koha::Patron::Message->new(
     }
 )->store;
 
-print $input->redirect(
-    "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+my $url = $input->referer() // "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber";
+print $input->redirect($url);

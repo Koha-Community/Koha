@@ -658,15 +658,10 @@ $template->param(
 my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
 $template->param( picture => 1 ) if $patron_image;
 
-# get authorised values with type of BOR_NOTES
-
-my $canned_notes = GetAuthorisedValues("BOR_NOTES");
-
 $template->param(
     debt_confirmed            => $debt_confirmed,
     SpecifyDueDate            => $duedatespec_allow,
     CircAutocompl             => C4::Context->preference("CircAutocompl"),
-    canned_bor_notes_loop     => $canned_notes,
     debarments                => GetDebarments({ borrowernumber => $borrowernumber }),
     todaysdate                => output_pref( { dt => dt_from_string()->set(hour => 23)->set(minute => 59), dateformat => 'sql' } ),
     modifications             => Koha::Patron::Modifications->GetModifications({ borrowernumber => $borrowernumber }),

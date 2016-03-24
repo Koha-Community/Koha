@@ -14,8 +14,6 @@ $(document).ready(function() {
         }
     });
 
-    $("#messages ul").after("<a href=\"#\" id=\"addmessage\">"+MSG_ADD_MESSAGE+"</a>");
-
     $("#borrower_messages .cancel").on("click",function(){
         $("#add_message_form").hide();
         $("#addmessage").show();

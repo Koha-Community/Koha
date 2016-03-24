@@ -119,7 +119,6 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-
 $template->param(%$data);
 
 $template->param(

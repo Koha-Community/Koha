@@ -1,5 +1,7 @@
 [% USE Koha %]
 [% USE Borrowers %]
+[% USE Branches %]
+[% USE AuthorisedValues %]
 [% SET NorwegianPatronDBEnable = Koha.Preference( 'NorwegianPatronDBEnable' ) %]
 <script type="text/javascript">
 //<![CDATA[
@@ -170,6 +172,8 @@ function searchToHold(){
         <a id="searchtohold" class="btn btn-small" href="#"><i class="fa fa-search"></i> Search to hold</a>
     [% END %]
 
+    <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal" class="btn btn-small"><i class="fa fa-comment-o"></i> Add message</a>
+
          <div class="btn-group">
         <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
             <ul class="dropdown-menu">
@@ -210,5 +214,46 @@ function searchToHold(){
                     [% END %]
                 [% END %]
             </ul>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="add_message_form" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="addnewmessageLabel" aria-hidden="true">
+    <div class="modal-body">
+        <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
+        <fieldset id="borrower_messages" class="brief">
+            <legend>Leave a message</legend>
+            <ol>
+                <li>
+                    <label for="message_type">Add a message for:</label>
+                    <select name="message_type" id="message_type">
+                        <option value="L">Staff - Internal note</option>
+                        <option value="B">OPAC - [% firstname %] [% surname %]</option>
+                    </select>
+                </li>
+                [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]
+                [% IF bor_notes %]
+                    <li>
+                        <label for="type">Predefined notes: </label>
+                        <select name="type" id="type" onchange="this.form.borrower_message.value=this.options[this.selectedIndex].value;">
+                            <option value="">Select note</option>
+                            [% FOREACH bor_note IN bor_notes %]
+                                <option value="[% bor_note.lib %]">[% bor_note.lib %]</option>
+                            [% END %]
+                        </select>
+                    </li>
+                [% END %]
+                <li>
+                    <textarea rows="3" cols="60" name="borrower_message" id="borrower_message" ></textarea>
+                </li>
+            </ol>
+            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+            <input type="hidden" name="branchcode" value="[% LoginBranchcode %]" />
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <fieldset class="action">
+            <input type="submit" value="Save" /> </form><a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
+        </fieldset>
     </div>
 </div>
