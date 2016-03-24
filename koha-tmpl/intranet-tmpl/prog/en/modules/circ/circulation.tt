@@ -839,7 +839,7 @@ No patron matched <span class="ex">[% message %]</span>
                 <li>
                     <span class="circ-hlt">
                         [% message.message_date | $KohaDates %]
-                        [% Branches.GetName( lib_messages_loo.branchcode ) %]
+                        [% Branches.GetName( message.branchcode ) %]
                         <i>"[% message.message %]"</i>
                     </span>
                     [% IF message.branchcode == branch OR Koha.Preference('AllowAllMessageDeletion') %]
