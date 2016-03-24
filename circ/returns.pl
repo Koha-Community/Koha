@@ -44,6 +44,7 @@ use C4::Reserves;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
+use C4::Members::Messaging;
 use C4::Branch; # GetBranches GetBranchName
 use C4::Koha;   # FIXME : is it still useful ?
 use C4::RotatingCollections;
@@ -429,7 +430,7 @@ if ( $messages->{'ResFound'}) {
     my $reserve    = $messages->{'ResFound'};
     my $branchname = $branches->{ $reserve->{'branchcode'} }->{'branchname'};
     my $borr = C4::Members::GetMember( borrowernumber => $reserve->{'borrowernumber'} );
-
+    my $holdmsgpreferences =  C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $reserve->{'borrowernumber'}, message_name   => 'Hold_Filled' } );
     if ( $reserve->{'ResFound'} eq "Waiting" or $reserve->{'ResFound'} eq "Reserved" ) {
         if ( $reserve->{'ResFound'} eq "Waiting" ) {
             $template->param(
@@ -468,6 +469,7 @@ if ( $messages->{'ResFound'}) {
             borrowernumber => $reserve->{'borrowernumber'},
             itemnumber     => $reserve->{'itemnumber'},
             reservenotes   => $reserve->{'reservenotes'},
+            bormessagepref => $holdmsgpreferences->{'transports'},
         );
     } # else { ; }  # error?
 }
