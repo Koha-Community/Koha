@@ -70,11 +70,11 @@
                 <td>
                     [% suggestions_loo.surnamemanagedby %][% IF ( suggestions_loo.firstnamemanagedby ) %],[% END %] [% suggestions_loo.firstnamemanagedby %]
                 </td>
-                <td>
+                <td class="actions">
                     [% IF ( suggestions_loo.biblionumber ) %]
-                        <a href="neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;suggestionid=[% suggestions_loo.suggestionid %]&amp;biblio=[% suggestions_loo.biblionumber %]" class="button">Order</a>
+                        <a href="neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;suggestionid=[% suggestions_loo.suggestionid %]&amp;biblio=[% suggestions_loo.biblionumber %]" class="btn btn-mini"><i class="fa fa-plus"></i> Order</a>
                     [% ELSE %]
-                        <a href="neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;suggestionid=[% suggestions_loo.suggestionid %]" class="button">Order</a>
+                        <a href="neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;suggestionid=[% suggestions_loo.suggestionid %]" class="btn btn-mini"><i class="fa fa-plus"></i> Order</a>
                     [% END %]
                 </td>
             </tr>
