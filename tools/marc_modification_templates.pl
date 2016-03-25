@@ -113,11 +113,6 @@ if ( $op eq "create_template" ) {
 
 my @templates = GetModificationTemplates( $template_id );
 
-unless ( $template_id ) {
-  $template_id = $templates[0]->{'template_id'};
-  @templates = GetModificationTemplates( $template_id );
-}
-
 my @actions = GetModificationTemplateActions( $template_id );
 foreach my $action ( @actions ) {
   $action->{'action_delete_field'} = ( $action->{'action'} eq 'delete_field' );

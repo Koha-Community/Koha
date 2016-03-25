@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    window.modaction_legend_innerhtml = document.getElementById('modaction_legend').innerHTML;
+    window.action_submit_value = document.getElementById('action_submit').value;
+
     $('#select_template').find("input:submit").hide();
     $('#select_template').change(function() {
         $('#select_template').submit();
@@ -43,6 +46,35 @@ $(document).ready(function() {
     $("#conditional_field,#from_field").change(function(){
         updateAllEvery();
     });
+
+    $("#new_action").on("click",function(){
+        cancelEditAction();
+        $("#add_action").show();
+        $("#action").focus();
+    });
+
+    $(".duplicate_template").on("click",function(){
+        var template_id = $(this).data("template_id");
+        $("#duplicate_a_template").val(template_id);
+        $("#duplicate_current_template").val(1);
+    });
+
+    $('#createTemplate').on('shown', function () {
+        $("#template_name").focus();
+    });
+
+    $("#duplicate_a_template").on("change",function(){
+        if( this.value == '' ){
+            $("#duplicate_current_template").val("");
+        } else {
+            $("#duplicate_current_template").val(1);
+        }
+    });
+
+    $(".delete_template").on("click",function(){
+        return confirmDelete();
+    });
+
 });
 
 function updateAllEvery(){
@@ -200,6 +232,7 @@ function editAction( mmta_id, ordering, action, field_number, from_field, from_s
     to_subfield, to_regex_search, to_regex_replace, to_regex_modifiers, conditional, conditional_field, conditional_subfield,
     conditional_comparison, conditional_value, conditional_regex, description
 ) {
+    $("#add_action").show();
     document.getElementById('mmta_id').value = mmta_id;
 
     setSelectByValue( 'action', action );
@@ -239,8 +272,6 @@ function editAction( mmta_id, ordering, action, field_number, from_field, from_s
 
     window.action_submit_value = document.getElementById('action_submit').value;
     document.getElementById('action_submit').value = MSG_MMT_UPDATE_ACTION;
-
-    show('cancel_edit');
 }
 
 function cancelEditAction() {
@@ -257,6 +288,7 @@ function cancelEditAction() {
     $("#to_regex_search").val("");
     $("#to_regex_replace").val("");
     $("#to_regex_modifiers").val("");
+    $("#description").val("");
 
     document.getElementById('to_field_regex').checked = false;
     document.getElementById('to_field_regex').onchange();
@@ -276,8 +308,7 @@ function cancelEditAction() {
 
     document.getElementById('modaction_legend').innerHTML = window.modaction_legend_innerhtml;
     document.getElementById('action_submit').value = window.action_submit_value;
-
-    hide('cancel_edit');
+    $("#add_action").hide();
 }
 
 function setSelectByValue( selectId, value ) {

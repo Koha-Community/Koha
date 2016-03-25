@@ -18,19 +18,45 @@
     //]]>
 </script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/marc_modification_templates.js"></script>
+<style type="text/css">
+    #add_action { display: none; }
+</style>
 </head>
 
 <body id="tools_marc_modification_templates" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; MARC modification templates</div>
+[% IF ( TemplatesLoop ) %]
+    [% FOREACH TemplatesLoo IN TemplatesLoop %]
+        [% IF ( TemplatesLoo.selected ) %]
+            [% SET template_name = TemplatesLoo.name %]
+        [% END %]
+    [% END %]
+[% END %]
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
+    [% IF ( template_name ) %]
+        <a href="/cgi-bin/koha/tools/marc_modification_templates.pl">MARC modification templates</a>
+        &rsaquo; [% template_name %]
+    [% ELSE %]
+        MARC modification templates
+    [% END %]
+</div>
 
 <div id="doc3" class="yui-t2">
   <div id="bd">
     <div id="yui-main">
         <div class="yui-b">
-            <h2>MARC modification templates</h2>
+
+            <div id="toolbar" class="btn-toolbar">
+                <a href="#" data-toggle="modal" data-template_id="" data-target="#createTemplate" id="new_template" class="btn btn-small duplicate_template"><i class="fa fa-plus"></i> New template</a>
+                [% IF ( template_id != '' ) %]
+                    <a href="#" id="new_action" class="btn btn-small"><i class="fa fa-plus"></i> New action</a>
+                [% END %]
+            </div>
 
             [% IF error %]
                 [% IF error == 'no_from_field' %]
@@ -40,246 +66,278 @@
 
             [% IF ( TemplatesLoop ) %]
 
-                <form method="get" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="select_template">
-                    <label for="select_template">Template: </label>
-                    <select name="template_id" id="select_template" style="width:20em;">
-                        [% FOREACH TemplatesLoo IN TemplatesLoop %]
-                                                    [% IF ( TemplatesLoo.selected ) %]
-                            <option value="[% TemplatesLoo.template_id %]" selected="selected"> [% TemplatesLoo.name %]</option>
-                                                    [% ELSE %]
-                            <option value="[% TemplatesLoo.template_id %]"> [% TemplatesLoo.name %]</option>
-                                                    [% END %]
-                        [% END %]
-                    </select>
-                    <input type="hidden" name="op" value="select_template">
-                    <input type="submit" value="Go" />
-                </form>
+                [% IF ( template_id == '' ) %]
 
-                <form method="get" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="delete_template">
-                    <input type="hidden" name="template_id" value="[% template_id %]" />
-                    <input type="hidden" name="op" value="delete_template">
-                    <input type="submit" value="Delete template" onClick="return confirmDelete()" />
-                </form>
+                    <h2>MARC modification templates [% template_id %]</h2>
 
-
-                [% IF ( ActionsLoop ) %]
-                    <table>
-                        <caption>Actions for this template</caption>
-
-                        <tr>
-                            <th>Change order</th>
-                            <th>Order</th>
-                            <th>Action</th>
-                            <th>Description</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
-
-                        [% FOREACH ActionsLoo IN ActionsLoop %]
+                    <table id="templatest">
+                        <thead>
                             <tr>
-                                <td style="white-space:nowrap;">
-                                    <a title="Move action up" href="marc_modification_templates.pl?op=move_action&amp;where=up&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
-                                    <img src="[% interface %]/[% theme %]/img/go-up.png" alt="Go up" />
-                                        </a>
-
-                                <a title="Move action to top" href="marc_modification_templates.pl?op=move_action&amp;where=top&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
-                                    <img src="[% interface %]/[% theme %]/img/go-top.png" alt="Go top" />
-                                        </a>
-
-                                        <a title="Move action to bottom" href="marc_modification_templates.pl?op=move_action&amp;where=bottom&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
-                                    <img src="[% interface %]/[% theme %]/img/go-bottom.png" alt="Go bottom" />
-                                        </a>
-
-                                        <a title="Move action down" href="marc_modification_templates.pl?op=move_action&amp;where=down&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
-                                    <img src="[% interface %]/[% theme %]/img/go-down.png" alt="Go down" />
-                                        </a>
-                                </td>
-
-                                <td>[% ActionsLoo.ordering %]</td>
-                                <td>
-                                    [% IF ( ActionsLoo.action_delete_field ) %] Delete [% END %]
-                                    [% IF ( ActionsLoo.action_update_field ) %] Update [% END %]
-                                    [% IF ( ActionsLoo.action_move_field ) %] Move [% END %]
-                                    [% IF ( ActionsLoo.action_copy_field ) %] Copy [% END %]
-                                    [% IF ( ActionsLoo.action_copy_and_replace_field ) %] Copy and replace [% END %]
-
-                                    [% UNLESS ( ActionsLoo.action_update_field ) %]
-                                        [% IF ( ActionsLoo.field_number ) %]
-                                            1st
-                                        [% END %]
-                                    [% END %]
-
-                                    field
-
-                                    [% ActionsLoo.from_field %][% IF ( ActionsLoo.from_subfield ) %]$[% ActionsLoo.from_subfield %][% END %]
-
-                                    [% IF ( ActionsLoo.field_value ) %]
-                                        with value <i>[% ActionsLoo.field_value %]</i>
-                                    [% END %]
-
-                                    [% IF ( ActionsLoo.to_field ) %]
-                                        to [% ActionsLoo.to_field %][% IF ( ActionsLoo.to_subfield ) %]$[% ActionsLoo.to_subfield %][% END %]
-
-                                        [% IF ( ActionsLoo.to_regex_search ) %]
-                                             using RegEx s<strong>/[% ActionsLoo.to_regex_search %]/[% ActionsLoo.to_regex_replace %]/[% ActionsLoo.to_regex_modifiers %]</strong>
-                                        [% END %]
-                                    [% END %]
-
-                                    [% IF ( ActionsLoo.conditional ) %]
-                                        [% IF ( ActionsLoo.conditional_if ) %] if [% END %]
-                                        [% IF ( ActionsLoo.conditional_unless ) %] unless [% END %]
-
-                                        [% ActionsLoo.conditional_field %][% IF ( ActionsLoo.conditional_subfield ) %]$[% ActionsLoo.conditional_subfield %][% END %]
-
-                                        [% IF ( ActionsLoo.conditional_comparison_exists ) %] exists [% END %]
-                                        [% IF ( ActionsLoo.conditional_comparison_not_exists ) %] does not exist [% END %]
-                                        [% IF ( ActionsLoo.conditional_comparison_equals ) %] matches [% END %]
-                                        [% IF ( ActionsLoo.conditional_comparison_not_equals ) %] does not match [% END %]
-
-                                        [% IF ( ActionsLoo.conditional_regex ) %] RegEx m/[% END %]
-                                        <strong>[% ActionsLoo.conditional_value %]</strong>
-                                        [% IF ( ActionsLoo.conditional_regex ) %]/[% END %]
-                                    [% END %]
-                                </td>
-                                <td>[% ActionsLoo.description %]</td>
-                                <td><a href="#modaction" onclick='editAction(
-                                                    "[% ActionsLoo.mmta_id |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.ordering |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.action |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.field_number |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.from_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.from_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.field_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.to_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.to_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.to_regex_search |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.to_regex_replace |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.to_regex_modifiers |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.conditional |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.conditional_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.conditional_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.conditional_comparison |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.conditional_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.conditional_regex |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-                                                    "[% ActionsLoo.description |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
-                                                );updateAllEvery();'>Edit</a></td>
-                                <td><a href="marc_modification_templates.pl?template_id=[% ActionsLoo.template_id %]&op=delete_action&mmta_id=[% ActionsLoo.mmta_id %]" onclick="return confirmDeleteAction();">Delete</a></td>
+                                <th>Template</th>
+                                <th>Actions</th>
                             </tr>
-                        [% END %]
+                        </thead>
+                        <tbody>
+                            [% FOREACH TemplatesLoo IN TemplatesLoop %]
+                                <tr>
+                                    <td>[% TemplatesLoo.name %]</td>
+                                    <td class="actions">
+                                        <a class="btn btn-mini" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id %]&amp;op=select_template" ><i class="fa fa-fw fa-pencil"></i> Edit actions</a>
+                                        <a class="btn btn-mini duplicate_template" href="#" data-toggle="modal" data-template_id="[% TemplatesLoo.template_id %]" data-target="#createTemplate"><i class="fa fa-fw fa-copy"></i> Duplicate</a>
+                                        <a class="btn btn-mini" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id %]&amp;op=delete_template" class="delete_template" onclick="return confirmDeleteAction();"><i class="fa fa-fw fa-trash"></i> Delete</a>
+                                    </td>
+                                </tr>
+                            [% END %]
+                        </tbody>
                     </table>
+
                 [% ELSE %]
-                    <div class="dialog message"><p>There are no defined actions for this template.</p></div>
+
+                    <h2>Actions for <i>[% template_name %]</i></h2>
+
+                    [% IF ( ActionsLoop ) %]
+
+                        <table id="template_actions" class="template_actions">
+                            <thead>
+                                <tr>
+                                    <th>Change order</th>
+                                    <th>Order</th>
+                                    <th>Action</th>
+                                    <th>Description</th>
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH ActionsLoo IN ActionsLoop %]
+                                    <tr>
+                                        <td class="actions">
+                                            <a title="Move action up" href="marc_modification_templates.pl?op=move_action&amp;where=up&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                            <img src="[% interface %]/[% theme %]/img/go-up.png" alt="Move action up" />
+                                                </a>
+
+                                        <a title="Move action to top" href="marc_modification_templates.pl?op=move_action&amp;where=top&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                            <img src="[% interface %]/[% theme %]/img/go-top.png" alt="Move action to the top" />
+                                                </a>
+
+                                                <a title="Move action to bottom" href="marc_modification_templates.pl?op=move_action&amp;where=bottom&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                            <img src="[% interface %]/[% theme %]/img/go-bottom.png" alt="Move action to the bottom" />
+                                                </a>
+
+                                                <a title="Move action down" href="marc_modification_templates.pl?op=move_action&amp;where=down&amp;template_id=[% ActionsLoo.template_id %]&amp;mmta_id=[% ActionsLoo.mmta_id %]">
+                                            <img src="[% interface %]/[% theme %]/img/go-down.png" alt="Move action down" />
+                                                </a>
+                                        </td>
+
+                                        <td>[% ActionsLoo.ordering %]</td>
+                                        <td>
+                                            [% IF ( ActionsLoo.action_delete_field ) %] Delete [% END %]
+                                            [% IF ( ActionsLoo.action_update_field ) %] Update [% END %]
+                                            [% IF ( ActionsLoo.action_move_field ) %] Move [% END %]
+                                            [% IF ( ActionsLoo.action_copy_field ) %] Copy [% END %]
+                                            [% IF ( ActionsLoo.action_copy_and_replace_field ) %] Copy and replace [% END %]
+
+                                            [% UNLESS ( ActionsLoo.action_update_field ) %]
+                                                [% IF ( ActionsLoo.field_number ) %]
+                                                    1st
+                                                [% END %]
+                                            [% END %]
+
+                                            field
+
+                                            [% ActionsLoo.from_field %][% IF ( ActionsLoo.from_subfield ) %]$[% ActionsLoo.from_subfield %][% END %]
+
+                                            [% IF ( ActionsLoo.field_value ) %]
+                                                with value <i>[% ActionsLoo.field_value %]</i>
+                                            [% END %]
+
+                                            [% IF ( ActionsLoo.to_field ) %]
+                                                to [% ActionsLoo.to_field %][% IF ( ActionsLoo.to_subfield ) %]$[% ActionsLoo.to_subfield %][% END %]
+
+                                                [% IF ( ActionsLoo.to_regex_search ) %]
+                                                     using RegEx s<strong>/[% ActionsLoo.to_regex_search %]/[% ActionsLoo.to_regex_replace %]/[% ActionsLoo.to_regex_modifiers %]</strong>
+                                                [% END %]
+                                            [% END %]
+
+                                            [% IF ( ActionsLoo.conditional ) %]
+                                                [% IF ( ActionsLoo.conditional_if ) %] if [% END %]
+                                                [% IF ( ActionsLoo.conditional_unless ) %] unless [% END %]
+
+                                                [% ActionsLoo.conditional_field %][% IF ( ActionsLoo.conditional_subfield ) %]$[% ActionsLoo.conditional_subfield %][% END %]
+
+                                                [% IF ( ActionsLoo.conditional_comparison_exists ) %] exists [% END %]
+                                                [% IF ( ActionsLoo.conditional_comparison_not_exists ) %] does not exist [% END %]
+                                                [% IF ( ActionsLoo.conditional_comparison_equals ) %] matches [% END %]
+                                                [% IF ( ActionsLoo.conditional_comparison_not_equals ) %] does not match [% END %]
+
+                                                [% IF ( ActionsLoo.conditional_regex ) %] RegEx m/[% END %]
+                                                <strong>[% ActionsLoo.conditional_value %]</strong>
+                                                [% IF ( ActionsLoo.conditional_regex ) %]/[% END %]
+                                            [% END %]
+                                        </td>
+                                        <td>[% ActionsLoo.description %]</td>
+                                        <td>
+                                            <a class="btn btn-mini" href="#modaction" onclick='editAction(
+                                                            "[% ActionsLoo.mmta_id |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.ordering |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.action |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.field_number |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.from_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.from_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.field_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.to_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.to_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.to_regex_search |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.to_regex_replace |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.to_regex_modifiers |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.conditional |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.conditional_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.conditional_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.conditional_comparison |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.conditional_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.conditional_regex |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+                                                            "[% ActionsLoo.description |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
+                                                        );updateAllEvery();'><i class="fa fa-pencil"></i> Edit</a>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-mini" href="marc_modification_templates.pl?template_id=[% ActionsLoo.template_id %]&op=delete_action&mmta_id=[% ActionsLoo.mmta_id %]" onclick="return confirmDeleteAction();"><i class="fa fa-trash"></i> Delete</a>
+                                        </td>
+                                    </tr>
+                                [% END # /FOREACH ActionsLoo %]
+                            </tbody>
+                        </table>
+                    [% ELSE %]
+                        <div class="dialog message template_actions"><p>There are no defined actions for this template.</p></div>
+                    [% END # /IF ActionsLoop %]
+
+                    <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="add_action" >
+                        <a name="modaction"></a>
+                        <fieldset>
+                            <legend id="modaction_legend">Add a new action</legend>
+                            <div id="warning_multivalued" style="color:red; display:none;">You have chosen a condition on the same field as the original field. If your records contain multivalued fields it is highly recommended not to do that.</div>
+
+                            <select name="action" id="action" onchange="onActionChange(this);">
+                                <option value="delete_field">Delete</option>
+                                <option value="update_field">Add/Update</option>
+                                <option value="move_field">Move</option>
+                                <option value="copy_field">Copy</option>
+                                <option value="copy_and_replace_field">Copy and replace</option>
+                            </select>
+
+                            <span id="field_number_block">
+                                <select name="field_number" id="field_number">
+                                    <option value="0">All</option>
+                                    <option value="1">1st</option>
+                                </select>
+                            </span>
+
+                            field(s) <input type="text" name="from_field" id="from_field" size="3" maxlength="3" /> <input type="text" name="from_subfield" id="from_subfield" size="1" maxlength="1" title="let blank for the entire field" />
+
+                            <span name="with_value_block" id="with_value_block" style="display:none;">
+                                with value <input type="text" name="field_value" id="field_value" />
+                            </span>
+
+                            <span name="to_field_block" id="to_field_block" style="display:none;">
+                                to field <input type="text" name="to_field" id="to_field" size="3" maxlength="3" /> <input type="text" name="to_subfield" id="to_subfield" size="1" maxlength="1" title="let blank for the entire field" />
+
+                                <span name="to_field_regex_block" id="to_field_regex_block">
+                                    <sup>
+                                        <label for="to_field_regex">RegEx</label>
+                                        <input type="checkbox" name="to_field_regex" id="to_field_regex" onchange="onToFieldRegexChange(this);" />
+
+                                        <span name="to_field_regex_value_block" id="to_field_regex_value_block" style="display:none;">
+                                            s/<input type="text" name="to_regex_search" id="to_regex_search" placeholder="regex pattern" />/<input type="text" name="to_regex_replace" id="to_regex_replace" placeholder="regex replacement" />/<input type="text" name="to_regex_modifiers" id="to_regex_modifiers" placeholder="ig" size="3" />
+                                        </span>
+                                    </sup>
+                                </span>
+                            </span>
+
+                            <p/>
+
+                            <select name="conditional" id="conditional" onchange="onConditionalChange(this);">
+                                <option value="" selected="selected" />
+                                <option value="if">if</option>
+                                <option value="unless">unless</option>
+                            </select>
+
+                            <span name="conditional_block" id="conditional_block" style="display:none;">
+                                field <input type="text" name="conditional_field" id="conditional_field" size="3" maxlength="3" /> <input type="text" name="conditional_subfield" id="conditional_subfield" size="1" maxlength="1" />
+
+                                <select name="conditional_comparison" id="conditional_comparison" onchange="onConditionalComparisonChange(this);">
+                                    <option value="" />
+                                    <option value="exists">exists</option>
+                                    <option value="not_exists">doesn't exist</option>
+                                    <option value="equals">matches</option>
+                                    <option value="not_equals">doesn't match</option>
+                                </select>
+
+                                <span name="conditional_comparison_block" id="conditional_comparison_block" style="display:none;">
+
+                                    <span class="match_regex_prefix">m/</span><input type="text" id="conditional_value" name="conditional_value" /><span class="match_regex_suffix">/</span>
+
+                                    <sup>
+                                        <label for="conditional_regex">RegEx</label>
+                                        <input type="checkbox" name="conditional_regex" id="conditional_regex" onchange="onConditionalRegexChange(this);" />
+                                    </sup>
+
+                                </span>
+                            </span>
+
+                            <input type="hidden" name="template_id" value="[% template_id %]" />
+                            <input type="hidden" name="mmta_id" id="mmta_id" />
+                            <input type="hidden" name="op" value="add_action" />
+
+                            <br/><br/>
+                            <label for="description">Description:</label>
+                            <input type="text" name="description" id="description" size="60" />
+
+                            <br/><br/>
+                            <input id="action_submit" type="submit" value="Add action" /> <a href="#modaction" id="cancel_edit" onclick="cancelEditAction();">Cancel</a>
+
+                        </fieldset>
+                    </form>
+
                 [% END %]
-
-                <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="add_action" >
-                    <a name="modaction"></a>
-                    <fieldset>
-                        <legend id="modaction_legend">Add a new action</legend>
-                        <div id="warning_multivalued" style="color:red; display:none;">You have chosen a condition on the same field as the original field. If your records contain multivalued fields it is highly recommended not to do that.</div>
-
-                        <select name="action" id="action" onchange="onActionChange(this);">
-                            <option value="delete_field">Delete</option>
-                            <option value="update_field">Add/Update</option>
-                            <option value="move_field">Move</option>
-                            <option value="copy_field">Copy</option>
-                            <option value="copy_and_replace_field">Copy and replace</option>
-                        </select>
-
-                        <span id="field_number_block">
-                            <select name="field_number" id="field_number">
-                                <option value="0">All</option>
-                                <option value="1">1st</option>
-                            </select>
-                        </span>
-
-                        field(s) <input type="text" name="from_field" id="from_field" size="3" maxlength="3" /> <input type="text" name="from_subfield" id="from_subfield" size="1" maxlength="1" title="let blank for the entire field" />
-
-                        <span name="with_value_block" id="with_value_block" style="display:none;">
-                            with value <input type="text" name="field_value" id="field_value" />
-                        </span>
-
-                        <span name="to_field_block" id="to_field_block" style="display:none;">
-                            to field <input type="text" name="to_field" id="to_field" size="3" maxlength="3" /> <input type="text" name="to_subfield" id="to_subfield" size="1" maxlength="1" title="let blank for the entire field" />
-
-                            <span name="to_field_regex_block" id="to_field_regex_block">
-                                <sup>
-                                    <label for="to_field_regex">RegEx</label>
-                                    <input type="checkbox" name="to_field_regex" id="to_field_regex" onchange="onToFieldRegexChange(this);" />
-
-                                    <span name="to_field_regex_value_block" id="to_field_regex_value_block" style="display:none;">
-                                        s/<input type="text" name="to_regex_search" id="to_regex_search" placeholder="regex pattern" />/<input type="text" name="to_regex_replace" id="to_regex_replace" placeholder="regex replacement" />/<input type="text" name="to_regex_modifiers" id="to_regex_modifiers" placeholder="ig" size="3" />
-                                    </span>
-                                </sup>
-                            </span>
-                        </span>
-
-                        <p/>
-
-                        <select name="conditional" id="conditional" onchange="onConditionalChange(this);">
-                            <option value="" selected="selected" />
-                            <option value="if">if</option>
-                            <option value="unless">unless</option>
-                        </select>
-
-                        <span name="conditional_block" id="conditional_block" style="display:none;">
-                            field <input type="text" name="conditional_field" id="conditional_field" size="3" maxlength="3" /> <input type="text" name="conditional_subfield" id="conditional_subfield" size="1" maxlength="1" />
-
-                            <select name="conditional_comparison" id="conditional_comparison" onchange="onConditionalComparisonChange(this);">
-                                <option value="" />
-                                <option value="exists">exists</option>
-                                <option value="not_exists">doesn't exist</option>
-                                <option value="equals">matches</option>
-                                <option value="not_equals">doesn't match</option>
-                            </select>
-
-                            <span name="conditional_comparison_block" id="conditional_comparison_block" style="display:none;">
-
-                                <span class="match_regex_prefix">m/</span><input type="text" id="conditional_value" name="conditional_value" /><span class="match_regex_suffix">/</span>
-
-                                <sup>
-                                    <label for="conditional_regex">RegEx</label>
-                                    <input type="checkbox" name="conditional_regex" id="conditional_regex" onchange="onConditionalRegexChange(this);" />
-                                </sup>
-
-                            </span>
-                        </span>
-
-                        <input type="hidden" name="template_id" value="[% template_id %]" />
-                        <input type="hidden" name="mmta_id" id="mmta_id" />
-                        <input type="hidden" name="op" value="add_action" />
-
-                        <br/><br/>
-                        <label for="description">Description:</label>
-                        <input type="text" name="description" id="description" size="60" />
-
-                        <br/><br/>
-                        <input id="action_submit" type="submit" value="Add action" /> <a href="#modaction" id="cancel_edit" onclick="cancelEditAction();" style="display:none;">Cancel</a>
-
-                    </fieldset>
-                </form>
 
             [% ELSE %]
                 <div class="dialog message"><p>There are no defined templates. Please create a template first.</p></div>
-            [% END %]
+            [% END # /IF TemplatesLoop %]
 
-            <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="add_template" class="validated">
-                <fieldset>
-                    <legend>Create a new template</legend>
+            <!-- Modal to create new template -->
+            <div class="modal hide" id="createTemplate" tabindex="-1" role="dialog" aria-labelledby="LabelcreateTemplate" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="LabelcreateTemplate">Create a new template</h3>
+                </div>
+                <form method="post" action="/cgi-bin/koha/tools/marc_modification_templates.pl" id="add_template" class="validated">
+                    <div class="modal-body">
+                        <fieldset>
+                            <p>
+                                <label for="template_name" class="required">Name: </label>
+                                <input name="template_name" id="template_name" type="text" size="30" required="required" class="required" />
+                                <span class="required">Required</span>
+                            </p>
 
-                    <label for="template_name" class="required">Name: </label>
-                    <input name="template_name" id="template_name" type="text" size="30" required="required" class="required" />
-                    <span class="required">Required</span>
+                            <input type="hidden" name="op" value="create_template" />
 
-                    <input type="hidden" name="op" value="create_template" />
-                    <input type="submit" value="Create template" />
-
-                    [% IF ( template_id ) %]
-                        <input type="hidden" name="template_id" value="[% template_id %]" />
-                        <input type="checkbox" name="duplicate_current_template" id="duplicate_current_template" />
-                        <label for="duplicate_current_template">Duplicate current template</label>
-                    [% END %]
-                </fieldset>
-            </form>
+                            <p>
+                                <label for="duplicate_a_template">Duplicate a template:</label>
+                                <select name="template_id" id="duplicate_a_template">
+                                    <option value=""> -- None --</option>
+                                    [% FOREACH TemplatesLoo IN TemplatesLoop %]
+                                        <option value="[% TemplatesLoo.template_id %]"> [% TemplatesLoo.name %]</option>
+                                    [% END %]
+                                </select>
+                                <input type="hidden" name="duplicate_current_template" id="duplicate_current_template" />
+                            </p>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn">Submit</button>
+                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -287,5 +345,5 @@
         [% INCLUDE 'tools-menu.inc' %]
     </div>
   </div>
-</div>
+
 [% INCLUDE 'intranet-bottom.inc' %]
