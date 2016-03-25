@@ -2694,7 +2694,12 @@ div#cn_browser_table_wrapper > table#cn_browser_table {
 div.rules {
     display: block;
 }
-div#new_rule, div.rule {
+
+#new_rule {
+    display: none;
+}
+
+#new_rule, div.rule {
     background-color: #F4F8F9;
     border: 2px solid #B9D8D9;
     border-radius: 5px;
@@ -2702,21 +2707,13 @@ div#new_rule, div.rule {
     padding: .3em;
 }
 
-div.duration, div.blocks {
-    border: 2px solid #B9D8D9;
-    border-radius: 5px 5px 5px 5px;
-    margin: .3em;
-    padding: 0 .3em .3em .3em;
+.blocks {
+    margin-bottom: .3em;
 }
 
-div.duration h5, div.blocks h5 {
-    padding-bottom: 4px;
-    padding-left: 0.2em;
-    background-color: #E6F0F2;
-    border-radius: 1px;
-}
-div.duration span, div.blocks div {
-    display:block;
+.remove_rule {
+    padding-left: .7em;
+    font-size: 80%;
 }
 
 div[class$="_table_controls"] {
