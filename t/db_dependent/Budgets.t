@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use Modern::Perl;
 use Test::More tests => 133;
+
 BEGIN {
     use_ok('C4::Budgets')
 }
@@ -631,6 +632,55 @@ is( C4::Budgets::GetBudget($budget_id2)->{budget_owner_id},
     undef, "SetOwnerToFundHierarchy should have set John Doe $john_doe for budget 2 ($budget_id2)" );
 is( C4::Budgets::GetBudget($budget_id21)->{budget_owner_id},
     undef, "SetOwnerToFundHierarchy should have set John Doe $john_doe for budget 21 ($budget_id21)" );
+
+# Test GetBudgetAuthCats
+
+my $budgetPeriodId = 1;
+
+my $bdgts = GetBudgets();
+my $i = 0;
+for my $budget ( @{$bdgts} )
+{
+    $budget->{sort1_authcat} = "sort1_authcat_$i";
+    $budget->{sort2_authcat} = "sort2_authcat_$i";
+    $budget->{budget_period_id} = $budgetPeriodId;
+    ModBudget( $budget );
+    $i++;
+}
+
+my $authCat = GetBudgetAuthCats($budgetPeriodId);
+
+is( scalar @{$authCat}, $i * 2, "GetBudgetAuthCats returns only non-empty sorting categories (no empty authCat in db)" );
+
+$i = 0;
+for my $budget ( @{$bdgts} )
+{
+    $budget->{sort1_authcat} = "sort1_authcat_$i";
+    $budget->{sort2_authcat} = "";
+    $budget->{budget_period_id} = $budgetPeriodId;
+    ModBudget( $budget );
+    $i++;
+}
+
+$authCat = GetBudgetAuthCats($budgetPeriodId);
+
+is( scalar @{$authCat}, $i, "GetBudgetAuthCats returns only non-empty sorting categories (empty sort2_authcat on all records)" );
+
+$i = 0;
+for my $budget ( @{$bdgts} )
+{
+    $budget->{sort1_authcat} = "";
+    $budget->{sort2_authcat} = "";
+    $budget->{budget_period_id} = $budgetPeriodId;
+    ModBudget( $budget );
+    $i++;
+}
+
+$authCat = GetBudgetAuthCats($budgetPeriodId);
+
+is( scalar @{$authCat}, 0, "GetBudgetAuthCats returns only non-empty sorting categories (all empty)" );
+
+# /Test GetBudgetAuthCats
 
 sub _get_dependencies {
     my ($budget_hierarchy) = @_;
