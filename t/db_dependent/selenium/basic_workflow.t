@@ -51,7 +51,7 @@ like( $driver->get_title(), qr(Log in to Koha), );
 auth( $driver, $login, $password );
 time_diff("main");
 
-$driver->get($base_url.'admin/categorie.pl');
+$driver->get($base_url.'admin/categories.pl');
 like( $driver->get_title(), qr(Patron categories), );
 $driver->find_element('//a[@id="newcategory"]')->click;
 like( $driver->get_title(), qr(New category), );
