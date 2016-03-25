@@ -11,10 +11,17 @@ use C4::Biblio;
 use C4::Context;
 use C4::Items;
 use Koha::DateUtils;
+use t::lib::TestBuilder;
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+
+# this test assumes a CPL branch
+my $builder = t::lib::TestBuilder->new;
+if( !$builder->schema->resultset('Branch')->find('CPL') ) {
+    $builder->build( { source => 'Branch', value => { branchcode => 'CPL' }});
+}
 
 $dbh->do(q|
     DELETE FROM marc_subfield_structure

@@ -3,11 +3,11 @@
 
 <p>This configuration page allows to configure the rules for the automatic item modifications by age cronjob script.</p>
 
-<p>Libraries can manage the 'new' status for items. With this script, it will be possible to:<p>
+<p>Libraries can manage the 'new_status' field for items. With this script, it will be possible to:<p>
 <ul>
   <li>know easily what are the new items in the catalogue.</li>
   <li>display an icon in the search results for new items.</li>
-  <li>configure circulation and fine rules depending the 'new' status.</li>
+  <li>configure circulation and fine rules depending the 'new_status' field.</li>
   <li>get a RSS/Atom feeds on these new items.</li>
 </ul>
 
@@ -23,11 +23,11 @@
 <p>At least one substitution must be defined, else there is no sense to launch the script.</p>
 <p>If the value is an empty string, the field will be deleted.</p>
 <h3>Examples</h3>
-<p>You want to remove the items.new value for items created 10 days ago:</p>
+<p>You want to remove the items.new_status value for items created 10 days ago:</p>
 <ul>
   <li>Duration: 10 days</li>
   <li>No condition</li>
-  <li>Substitution: items.new = '' (no value in the input)</li>
+  <li>Substitution: items.new_status = '' (no value in the input)</li>
 </ul>
 
 <p>You want to change the items.ccode=1 to items.ccode=2 for items created 7 days ago.
