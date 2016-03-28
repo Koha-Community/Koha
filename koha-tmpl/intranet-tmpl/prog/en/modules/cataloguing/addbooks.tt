@@ -64,11 +64,15 @@
      */
     function MergeItems() {
      var checkboxes = $("input:checkbox:checked");
-        var nbCheckbox = checkboxes.length;
-     if (nbCheckbox != 2) {
-         alert(_("Two records must be selected for merging."));
+     if (checkboxes.length < 2) {
+         alert(_("At least two records must be selected for merging."));
      } else {
-         location.href='/cgi-bin/koha/cataloguing/merge.pl?biblionumber=' + checkboxes[0].value + '&amp;biblionumber=' + checkboxes[1].value;
+         var params = [];
+         $(checkboxes).each(function() {
+             params.push('biblionumber=' + $(this).val());
+         });
+         var url = '/cgi-bin/koha/cataloguing/merge.pl?' + params.join('&');
+         location.href = url;
      }
      return false;
     }
