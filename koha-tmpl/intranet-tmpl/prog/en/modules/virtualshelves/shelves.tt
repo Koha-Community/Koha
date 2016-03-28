@@ -199,15 +199,15 @@ $(document).ready(function(){
      */
     function MergeItems() {
         var checkboxes = $("input:checkbox:checked");
-        if (checkboxes.length > 0) {
+        if (checkboxes.length < 2) {
+            alert(_("At least two records must be selected for merging."));
+        } else {
             var params = [];
             $(checkboxes).each(function() {
                 params.push('biblionumber=' + $(this).val());
             });
             var url = '/cgi-bin/koha/cataloguing/merge.pl?' + params.join('&');
             location.href = url;
-        } else {
-            alert(_("You must select at least one record"));
         }
         return false;
     }
