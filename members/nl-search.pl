@@ -111,35 +111,35 @@ if ( $op && $op eq 'search' ) {
     my %borrower = (
         'surname'      => NLGetSurname( $cgi->param('navn') ),
         'firstname'    => NLGetFirstname( $cgi->param('navn') ),
-        'sex'          => $cgi->param('kjonn'),
-        'dateofbirth'  => $cgi->param('fdato'),
-        'cardnumber'   => $cgi->param('lnr'),
-        'userid'       => $cgi->param('lnr'),
-        'address'      => $cgi->param('p_adresse1'),
-        'address2'     => $cgi->param('p_adresse2'),
-        'zipcode'      => $cgi->param('p_postnr'),
-        'city'         => $cgi->param('p_sted'),
-        'country'      => $cgi->param('p_land'),
-        'B_address'    => $cgi->param('m_adresse1'),
-        'B_address2'   => $cgi->param('m_adresse2'),
-        'B_zipcode'    => $cgi->param('m_postnr'),
-        'B_city'       => $cgi->param('m_sted'),
-        'B_country'    => $cgi->param('m_land'),
+        'sex'          => scalar $cgi->param('kjonn'),
+        'dateofbirth'  => scalar $cgi->param('fdato'),
+        'cardnumber'   => scalar $cgi->param('lnr'),
+        'userid'       => scalar $cgi->param('lnr'),
+        'address'      => scalar $cgi->param('p_adresse1'),
+        'address2'     => scalar $cgi->param('p_adresse2'),
+        'zipcode'      => scalar $cgi->param('p_postnr'),
+        'city'         => scalar $cgi->param('p_sted'),
+        'country'      => scalar $cgi->param('p_land'),
+        'B_address'    => scalar $cgi->param('m_adresse1'),
+        'B_address2'   => scalar $cgi->param('m_adresse2'),
+        'B_zipcode'    => scalar $cgi->param('m_postnr'),
+        'B_city'       => scalar $cgi->param('m_sted'),
+        'B_country'    => scalar $cgi->param('m_land'),
         'password'     => NLDecodePin( $cgi->param('pin') ),
-        'dateexpiry'   => $cgi->param('gyldig_til'),
-        'email'        => $cgi->param('epost'),
-        'mobile'       => $cgi->param('tlf_mobil'),
-        'phone'        => $cgi->param('tlf_hjemme'),
-        'phonepro'     => $cgi->param('tlf_jobb'),
+        'dateexpiry'   => scalar $cgi->param('gyldig_til'),
+        'email'        => scalar $cgi->param('epost'),
+        'mobile'       => scalar $cgi->param('tlf_mobil'),
+        'phone'        => scalar $cgi->param('tlf_hjemme'),
+        'phonepro'     => scalar $cgi->param('tlf_jobb'),
         'branchcode'   => $userenv->{'branch'},
-        'categorycode' => $cgi->param('categorycode'),
+        'categorycode' => scalar $cgi->param('categorycode'),
     );
     # Add the new patron
     my $borrowernumber = &AddMember(%borrower);
     if ( $borrowernumber ) {
         # Add extended patron attributes
         SetBorrowerAttributes($borrowernumber, [
-            { code => 'fnr', value => $cgi->param('fnr_hash') },
+            { code => 'fnr', value => scalar $cgi->param('fnr_hash') },
         ], 'no_branch_limit' );
         # Override the default sync data created by AddMember
         my $borrowersync = Koha::Database->new->schema->resultset('BorrowerSync')->find({

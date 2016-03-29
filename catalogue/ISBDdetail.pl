@@ -110,7 +110,7 @@ $template->param (
     z3950_search_params => C4::Search::z3950_search_args(GetBiblioData($biblionumber)),
     ocoins => GetCOinSBiblio($record),
     C4::Search::enabled_staff_search_views,
-    searchid            => $query->param('searchid'),
+    searchid            => scalar $query->param('searchid'),
 );
 
 my @allorders_using_biblio = GetOrdersByBiblionumber ($biblionumber);

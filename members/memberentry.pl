@@ -119,7 +119,7 @@ if ( $input->param('add_debarment') ) {
         {
             borrowernumber => $borrowernumber,
             type           => 'MANUAL',
-            comment        => $input->param('debarred_comment'),
+            comment        => scalar $input->param('debarred_comment'),
             expiration     => $expiration,
         }
     );

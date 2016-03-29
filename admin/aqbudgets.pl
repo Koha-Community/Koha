@@ -69,7 +69,7 @@ if (not defined $template->{VARS}->{'CAN_user_acquisition_budget_add_del'}
 
 # get only the columns of aqbudgets in budget_hash
 my @columns = Koha::Database->new()->schema->source('Aqbudget')->columns;
-my $budget_hash = { map { join(' ',@columns) =~ /$_/ ? ( $_ => $input->param($_) )  : () } keys( %{$input->Vars()}) } ;
+my $budget_hash = { map { join(' ',@columns) =~ /$_/ ? ( $_ => scalar $input->param($_) )  : () } keys( %{$input->Vars()}) } ;
 
 my $budget_id                 = $input->param('budget_id');
 my $budget_period_id          = $input->param('budget_period_id');

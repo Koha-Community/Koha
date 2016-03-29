@@ -71,7 +71,7 @@ my $op                   = $input->param('op')||"else";
 
 # get only the columns of aqbudgetperiods in budget_period_hashref
 my @columns = Koha::Database->new()->schema->source('Aqbudgetperiod')->columns;
-my $budget_period_hashref = { map { join(' ',@columns) =~ /$_/ ? ( $_ => $input->param($_) )  : () } keys( %{$input->Vars()} ) } ;
+my $budget_period_hashref = { map { join(' ',@columns) =~ /$_/ ? ( $_ => scalar $input->param($_) )  : () } keys( %{$input->Vars()} ) } ;
 $budget_period_hashref->{budget_period_startdate} = dt_from_string( $input->param('budget_period_startdate') );
 $budget_period_hashref->{budget_period_enddate}   = dt_from_string( $input->param('budget_period_enddate') );
 

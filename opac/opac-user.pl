@@ -353,7 +353,7 @@ $template->param(
     SuspendHoldsOpac         => C4::Context->preference('SuspendHoldsOpac'),
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
     OpacHoldNotes            => C4::Context->preference('OpacHoldNotes'),
-    failed_holds             => $query->param('failed_holds'),
+    failed_holds             => scalar $query->param('failed_holds'),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

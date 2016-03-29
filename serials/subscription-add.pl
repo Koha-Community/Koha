@@ -323,9 +323,9 @@ sub redirect_add_subscription {
     my $location          = $query->param('location');
     my $skip_serialseq    = $query->param('skip_serialseq');
 
-    my $startdate      = output_pref( { str => $query->param('startdate'),      dateonly => 1, dateformat => 'iso' } );
-    my $enddate        = output_pref( { str => $query->param('enddate'),        dateonly => 1, dateformat => 'iso' } );
-    my $firstacquidate = output_pref( { str => $query->param('firstacquidate'), dateonly => 1, dateformat => 'iso' } );
+    my $startdate      = output_pref( { str => scalar $query->param('startdate'),      dateonly => 1, dateformat => 'iso' } );
+    my $enddate        = output_pref( { str => scalar $query->param('enddate'),        dateonly => 1, dateformat => 'iso' } );
+    my $firstacquidate = output_pref( { str => scalar $query->param('firstacquidate'), dateonly => 1, dateformat => 'iso' } );
 
     if(!defined $enddate || $enddate eq '') {
         if($subtype eq "issues") {
@@ -357,16 +357,16 @@ sub redirect_mod_subscription {
     my $subscriptionid = $query->param('subscriptionid');
     my @irregularity = $query->multi_param('irregularity');
     my $auser = $query->param('user');
-    my $librarian => $query->param('librarian'),
+    my $librarian => scalar $query->param('librarian'),
     my $branchcode = $query->param('branchcode');
     my $cost = $query->param('cost');
     my $aqbooksellerid = $query->param('aqbooksellerid');
     my $biblionumber = $query->param('biblionumber');
     my $aqbudgetid = $query->param('aqbudgetid');
 
-    my $startdate      = output_pref( { str => $query->param('startdate'),      dateonly => 1, dateformat => 'iso' } );
-    my $enddate        = output_pref( { str => $query->param('enddate'),        dateonly => 1, dateformat => 'iso' } );
-    my $firstacquidate = output_pref( { str => $query->param('firstacquidate'), dateonly => 1, dateformat => 'iso' } );
+    my $startdate      = output_pref( { str => scalar $query->param('startdate'),      dateonly => 1, dateformat => 'iso' } );
+    my $enddate        = output_pref( { str => scalar $query->param('enddate'),        dateonly => 1, dateformat => 'iso' } );
+    my $firstacquidate = output_pref( { str => scalar $query->param('firstacquidate'), dateonly => 1, dateformat => 'iso' } );
 
     my $nextacquidate  = $query->param('nextacquidate');
     $nextacquidate = $nextacquidate
@@ -451,7 +451,7 @@ sub insert_additional_fields {
             }
         } else {
             $af->{values} = {
-                $subscriptionid => $query->param('additional_field_' . $field->{id})
+                $subscriptionid => scalar $query->param('additional_field_' . $field->{id})
             } if defined $query->param('additional_field_' . $field->{id});
         }
         $af->insert_values;

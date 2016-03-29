@@ -88,7 +88,7 @@ foreach my $type (@advanced_search_types) {
         $type = 'itemtype';
     }
     $params->{$type} = $input->param($type);
-    $template->param('selected_' . $type => $input->param($type));
+    $template->param('selected_' . $type => scalar $input->param($type));
 }
 
 my @results = GetTopIssues($params);

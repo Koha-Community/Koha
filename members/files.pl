@@ -91,7 +91,7 @@ else {
                     name    => $filename,
                     type    => $mimetype,
                     content => $file_content,
-                    description => $cgi->param('description'),
+                    description => scalar $cgi->param('description'),
                 );
             }
         }
@@ -99,7 +99,7 @@ else {
             $errors{'no_file'} = 1;
         }
     } elsif ( $op eq 'delete' ) {
-        $bf->DelFile( id => $cgi->param('file_id') );
+        $bf->DelFile( id => scalar $cgi->param('file_id') );
     }
 
     $template->param(

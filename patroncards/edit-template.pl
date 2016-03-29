@@ -53,20 +53,20 @@ if ($op eq 'edit') {
     $profile_list = get_all_profiles(field_list => 'profile_id,printer_name,paper_bin', filter => "template_id=$template_id OR template_id=''");
 }
 elsif ($op eq 'save') {
-    my @params = (      profile_id      => $cgi->param('profile_id') || '',
-                        template_code   => $cgi->param('template_code'),
-                        template_desc   => $cgi->param('template_desc'),
-                        page_width      => $cgi->param('page_width'),
-                        page_height     => $cgi->param('page_height'),
-                        label_width     => $cgi->param('card_width'),
-                        label_height    => $cgi->param('card_height'),
-                        top_margin      => $cgi->param('top_margin'),
-                        left_margin     => $cgi->param('left_margin'),
-                        cols            => $cgi->param('cols'),
-                        rows            => $cgi->param('rows'),
-                        col_gap         => $cgi->param('col_gap'),
-                        row_gap         => $cgi->param('row_gap'),
-                        units           => $cgi->param('units'),
+    my @params = (      profile_id      => scalar $cgi->param('profile_id') || '',
+                        template_code   => scalar $cgi->param('template_code'),
+                        template_desc   => scalar $cgi->param('template_desc'),
+                        page_width      => scalar $cgi->param('page_width'),
+                        page_height     => scalar $cgi->param('page_height'),
+                        label_width     => scalar $cgi->param('card_width'),
+                        label_height    => scalar $cgi->param('card_height'),
+                        top_margin      => scalar $cgi->param('top_margin'),
+                        left_margin     => scalar $cgi->param('left_margin'),
+                        cols            => scalar $cgi->param('cols'),
+                        rows            => scalar $cgi->param('rows'),
+                        col_gap         => scalar $cgi->param('col_gap'),
+                        row_gap         => scalar $cgi->param('row_gap'),
+                        units           => scalar $cgi->param('units'),
                         );
     if ($template_id) {   # if a template_id was passed in, this is an update to an existing template
         $card_template = C4::Patroncards::Template->retrieve(template_id => $template_id);
@@ -76,7 +76,7 @@ elsif ($op eq 'save') {
                 $old_profile->set_attr(template_id => 0);
                 $old_profile->save();
             }
-            my $new_profile = C4::Patroncards::Profile->retrieve(profile_id => $cgi->param('profile_id'));
+            my $new_profile = C4::Patroncards::Profile->retrieve(profile_id => scalar $cgi->param('profile_id'));
             $new_profile->set_attr(template_id => $card_template->get_attr('template_id'));
             $new_profile->save();
         }
@@ -88,7 +88,7 @@ elsif ($op eq 'save') {
         die "Error: $card_template\n" if !ref($card_template);
         my $template_id = $card_template->save();
         if ($cgi->param('profile_id')) {
-            my $profile = C4::Patroncards::Profile->retrieve(profile_id => $cgi->param('profile_id'));
+            my $profile = C4::Patroncards::Profile->retrieve(profile_id => scalar $cgi->param('profile_id'));
             $profile->set_attr(template_id => $template_id) if $template_id != $profile->get_attr('template_id');
             $profile->save();
         }

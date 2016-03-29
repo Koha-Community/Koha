@@ -44,7 +44,7 @@ if ( $action eq 'del' ) {
     AddDebarment(
         {   borrowernumber => $borrowernumber,
             type           => 'MANUAL',
-            comment        => $cgi->param('comment'),
+            comment        => scalar $cgi->param('comment'),
             expiration     => $expiration,
         }
     );

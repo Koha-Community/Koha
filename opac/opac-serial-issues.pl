@@ -78,7 +78,7 @@ if ( $selectview eq "full" ) {
     # $subscription->{opacnote} =~ s/\n/\<br\/\>/g;
 
     $template->param(
-        biblionumber   => $query->param('biblionumber'),
+        biblionumber   => scalar $query->param('biblionumber'),
         years          => $subscriptioninformation,
         yearmin        => $yearmin,
         yearmax        => $yearmax,
@@ -114,7 +114,7 @@ else {
     # $subscription->{opacnote} =~ s/\n/\<br\/\>/g;
 
     $template->param(
-        biblionumber      => $query->param('biblionumber'),
+        biblionumber      => scalar $query->param('biblionumber'),
         subscription_LOOP => $subscriptions,
     );
 }

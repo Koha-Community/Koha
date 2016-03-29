@@ -74,7 +74,7 @@ $template->param(
     'biblionumber'   => $biblionumber,
     'borrowernumber' => $borrowernumber,
     'review'         => $clean || $savedreview->{'review'},
-	'reviewid'       => $query->param('reviewid') || 0,
+	'reviewid'       => scalar $query->param('reviewid') || 0,
     'title'          => $biblio->{'title'},
 );
 

@@ -136,7 +136,7 @@ my ($input) = @_;
         my $link="../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&amp;authtypecode=EDITORS&amp;".join("&amp;",map {"value=".$_} @value)."&amp;op=do_search&amp;type=intranet&amp;index=$index";
 
         $template->param(result => $results) if $results;
-        $template->param('index' => $query->param('index'));
+        $template->param('index' => scalar $query->param('index'));
         $template->param(startfrom=> $startfrom,
                                 displaynext=> $displaynext,
                                 displayprev=> $displayprev,

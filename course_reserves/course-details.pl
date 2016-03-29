@@ -47,7 +47,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 if ( $action eq 'del_reserve' ) {
-    DelCourseReserve( cr_id => $cgi->param('cr_id') );
+    DelCourseReserve( cr_id => scalar $cgi->param('cr_id') );
 }
 
 my $course          = GetCourse($course_id);

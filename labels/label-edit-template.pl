@@ -61,22 +61,22 @@ if ($op eq 'edit') {
     }
 }
 elsif ($op eq 'save') {
-    my @params = (      profile_id      => $cgi->param('profile_id'),
-                        template_code   => $cgi->param('template_code') || 'DEFAULT_TEMPLATE',
-                        template_desc   => $cgi->param('template_desc') || 'Default description',
-                        page_width      => $cgi->param('page_width') || 0,
-                        page_height     => $cgi->param('page_height') || 0,
-                        label_width     => $cgi->param('label_width') || 0,
-                        label_height    => $cgi->param('label_height') || 0,
-                        top_text_margin => $cgi->param('top_text_margin') || 0,
-                        left_text_margin=> $cgi->param('left_text_margin') || 0,
-                        top_margin      => $cgi->param('top_margin') || 0,
-                        left_margin     => $cgi->param('left_margin') || 0,
-                        cols            => $cgi->param('cols') || 0,
-                        rows            => $cgi->param('rows') || 0,
-                        col_gap         => $cgi->param('col_gap') || 0,
-                        row_gap         => $cgi->param('row_gap') || 0,
-                        units           => $cgi->param('units') || 'POINT',
+    my @params = (      profile_id      => scalar $cgi->param('profile_id'),
+                        template_code   => scalar $cgi->param('template_code') || 'DEFAULT_TEMPLATE',
+                        template_desc   => scalar $cgi->param('template_desc') || 'Default description',
+                        page_width      => scalar $cgi->param('page_width') || 0,
+                        page_height     => scalar $cgi->param('page_height') || 0,
+                        label_width     => scalar $cgi->param('label_width') || 0,
+                        label_height    => scalar $cgi->param('label_height') || 0,
+                        top_text_margin => scalar $cgi->param('top_text_margin') || 0,
+                        left_text_margin=> scalar $cgi->param('left_text_margin') || 0,
+                        top_margin      => scalar $cgi->param('top_margin') || 0,
+                        left_margin     => scalar $cgi->param('left_margin') || 0,
+                        cols            => scalar $cgi->param('cols') || 0,
+                        rows            => scalar $cgi->param('rows') || 0,
+                        col_gap         => scalar $cgi->param('col_gap') || 0,
+                        row_gap         => scalar $cgi->param('row_gap') || 0,
+                        units           => scalar $cgi->param('units') || 'POINT',
                         );
     if ($template_id) {   # if a template_id was passed in, this is an update to an existing template
         $label_template = C4::Labels::Template->retrieve(template_id => $template_id);
@@ -87,7 +87,7 @@ elsif ($op eq 'save') {
                 $old_profile->set_attr(template_id => 0);
                 $old_profile->save();
             }
-            my $new_profile = C4::Labels::Profile->retrieve(profile_id => $cgi->param('profile_id'));
+            my $new_profile = C4::Labels::Profile->retrieve(profile_id => scalar $cgi->param('profile_id'));
             $new_profile->set_attr(template_id => $label_template->get_attr('template_id'));
             $new_profile->save();
         }
@@ -106,7 +106,7 @@ elsif ($op eq 'save') {
         $label_template = C4::Labels::Template->new(@params);
         my $template_id = $label_template->save();
         if ($cgi->param('profile_id')) {
-            my $profile = C4::Labels::Profile->retrieve(profile_id => $cgi->param('profile_id'));
+            my $profile = C4::Labels::Profile->retrieve(profile_id => scalar $cgi->param('profile_id'));
             $profile->set_attr(template_id => $template_id) if $template_id != $profile->get_attr('template_id');
             $profile->save();
         }

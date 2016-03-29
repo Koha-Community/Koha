@@ -147,7 +147,7 @@ my $launcher = sub {
         $subfield_value_z =~ s/'/\\'/g;
         $template->param(
             fillinput        => 1,
-            index            => $query->param('index') . "",
+            index            => scalar $query->param('index') . "",
             biblionumber     => $biblionumber ? $biblionumber : "",
             subfield_value_9 => "$subfield_value_9",
             subfield_value_0 => "$subfield_value_0",
@@ -285,7 +285,7 @@ my $launcher = sub {
         #           );
         $template->param(
             result         => \@arrayresults,
-            index          => $query->param('index') . "",
+            index          => scalar $query->param('index') . "",
             startfrom      => $startfrom,
             displaynext    => $displaynext,
             displayprev    => $displayprev,
@@ -316,7 +316,7 @@ my $launcher = sub {
 
         $template->param(
             itypeloop => \@itemtypes,
-            index     => $query->param('index'),
+            index     => scalar $query->param('index'),
             Search    => 1,
         );
     }

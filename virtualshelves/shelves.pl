@@ -302,7 +302,7 @@ $template->param(
     shelf    => $shelf,
     messages => \@messages,
     category => $category,
-    print    => $query->param('print') || 0,
+    print    => scalar $query->param('print') || 0,
     csv_profiles => GetCsvProfilesLoop('marc'),
 );
 

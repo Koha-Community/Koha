@@ -286,16 +286,16 @@ elsif ( $phase eq 'Report on this Area' ) {
         'areas'   => get_report_areas(),
         'cache_expiry' => $cache_expiry,
         'usecache' => $usecache,
-        'public' => $input->param('public'),
+        'public' => scalar $input->param('public'),
       );
     } else {
       # they have choosen a new report and the area to report on
       $template->param(
           'build2' => 1,
-          'area'   => $input->param('area'),
+          'area'   => scalar $input->param('area'),
           'types'  => get_report_types(),
           'cache_expiry' => $cache_expiry,
-          'public' => $input->param('public'),
+          'public' => scalar $input->param('public'),
       );
     }
 }
@@ -310,8 +310,8 @@ elsif ( $phase eq 'Choose this type' ) {
         'area'   => $area,
         'type'   => $type,
         columns  => get_columns($area,$input),
-        'cache_expiry' => $input->param('cache_expiry'),
-        'public' => $input->param('public'),
+        'cache_expiry' => scalar $input->param('cache_expiry'),
+        'public' => scalar $input->param('public'),
     );
 }
 
@@ -330,12 +330,12 @@ elsif ( $phase eq 'Choose these columns' ) {
         'column' => $column,
         definitions => get_from_dictionary($area),
         criteria    => get_criteria($area,$input),
-        'public' => $input->param('public'),
+        'public' => scalar $input->param('public'),
     );
     if ( $usecache ) {
         $template->param(
-            cache_expiry => $input->param('cache_expiry'),
-            cache_expiry_units => $input->param('cache_expiry_units'),
+            cache_expiry => scalar $input->param('cache_expiry'),
+            cache_expiry_units => scalar $input->param('cache_expiry_units'),
         );
     }
 
@@ -395,12 +395,12 @@ elsif ( $phase eq 'Choose these criteria' ) {
         'column'         => $column,
         'definition'     => $definition,
         'criteriastring' => $query_criteria,
-        'public' => $input->param('public'),
+        'public' => scalar $input->param('public'),
     );
     if ( $usecache ) {
         $template->param(
-            cache_expiry => $input->param('cache_expiry'),
-            cache_expiry_units => $input->param('cache_expiry_units'),
+            cache_expiry => scalar $input->param('cache_expiry'),
+            cache_expiry_units => scalar $input->param('cache_expiry_units'),
         );
     }
 
@@ -442,8 +442,8 @@ elsif ( $phase eq 'Choose these operations' ) {
         'criteriastring' => $criteria,
         'totals'         => $totals,
         'definition'     => $definition,
-        'cache_expiry' => $input->param('cache_expiry'),
-        'public' => $input->param('public'),
+        'cache_expiry' => scalar $input->param('cache_expiry'),
+        'public' => scalar $input->param('public'),
     );
 
     # get columns
@@ -495,8 +495,8 @@ elsif ( $phase eq 'Build report' ) {
         'area'       => $area,
         'sql'        => $sql,
         'type'       => $type,
-        'cache_expiry' => $input->param('cache_expiry'),
-        'public' => $input->param('public'),
+        'cache_expiry' => scalar $input->param('cache_expiry'),
+        'public' => scalar $input->param('public'),
     );
 }
 
@@ -510,8 +510,8 @@ elsif ( $phase eq 'Save' ) {
         'area'  => $area,
         'sql'  => $sql,
         'type' => $type,
-        'cache_expiry' => $input->param('cache_expiry'),
-        'public' => $input->param('public'),
+        'cache_expiry' => scalar $input->param('cache_expiry'),
+        'public' => scalar $input->param('public'),
         'groups_with_subgroups' => groups_with_subgroups($area), # in case we have a report group that matches area
     );
 }
@@ -912,9 +912,9 @@ elsif ( $phase eq 'Create report from SQL' ) {
         $group = $input->param('report_group');
         $subgroup  = $input->param('report_subgroup');
         $template->param(
-            'sql'           => $input->param('sql') // '',
-            'reportname'    => $input->param('reportname') // '',
-            'notes'         => $input->param('notes') // '',
+            'sql'           => scalar $input->param('sql') // '',
+            'reportname'    => scalar $input->param('reportname') // '',
+            'notes'         => scalar $input->param('notes') // '',
         );
     }
     $template->param(

@@ -624,7 +624,7 @@ $template->param(
     branchname        => GetBranchName($borrower->{'branchcode'}),
     printer           => $printer,
     printername       => $printer,
-    was_renewed       => $query->param('was_renewed') ? 1 : 0,
+    was_renewed       => scalar $query->param('was_renewed') ? 1 : 0,
     expiry            => $borrower->{'dateexpiry'},
     roadtype          => $roadtype,
     amountold         => $amountold,

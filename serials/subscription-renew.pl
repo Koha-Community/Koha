@@ -74,7 +74,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 if ( $op eq "renew" ) {
-    my $startdate = output_pref( { str => $query->param('startdate'), dateonly => 1, dateformat => 'iso' } );
+    my $startdate = output_pref( { str => scalar $query->param('startdate'), dateonly => 1, dateformat => 'iso' } );
     ReNewSubscription(
         $subscriptionid, $loggedinuser,
         $startdate, $query->param('numberlength'),

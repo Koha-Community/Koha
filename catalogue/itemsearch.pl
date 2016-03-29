@@ -189,10 +189,10 @@ if (scalar keys %params > 0) {
         $sortby = 'copyrightdate';
     }
     my $search_params = {
-        rows => $cgi->param('rows') // 20,
-        page => $cgi->param('page') || 1,
+        rows => scalar $cgi->param('rows') // 20,
+        page => scalar $cgi->param('page') || 1,
         sortby => $sortby,
-        sortorder => $cgi->param('sortorder') || 'asc',
+        sortorder => scalar $cgi->param('sortorder') || 'asc',
     };
 
     my ($results, $total_rows) = SearchItems($filter, $search_params);

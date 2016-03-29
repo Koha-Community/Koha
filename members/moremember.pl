@@ -324,7 +324,7 @@ $template->param(
     borrowernumber  => $borrowernumber,
     othernames      => $data->{'othernames'},
     categoryname    => $data->{'description'},
-    was_renewed     => $input->param('was_renewed') ? 1 : 0,
+    was_renewed     => scalar $input->param('was_renewed') ? 1 : 0,
     branch          => $branch,
     todaysdate      => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
     totalprice      => sprintf("%.2f", $totalprice),

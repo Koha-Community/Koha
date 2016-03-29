@@ -119,7 +119,7 @@ foreach ($query->param()) {
     $_ eq "oldreferer" and next;  # disclude oldreferer
     push @recycle_loop, {
         param => $_,
-        value => $query->param($_),
+        value => scalar $query->param($_),
     };
 }
 

@@ -101,7 +101,7 @@ if ( $op eq 'add_form' ) {
         $branchcode =~ s|\s||g;
         my $library = Koha::Library->new(
             {   branchcode => $branchcode,
-                ( map { $_ => $input->param($_) || undef } @fields )
+                ( map { $_ => scalar $input->param($_) || undef } @fields )
             }
         );
         eval { $library->store; };
@@ -180,7 +180,7 @@ if ( $op eq 'add_form' ) {
     } else {
         my $category = Koha::LibraryCategory->new(
             {   categorycode => $categorycode,
-                ( map { $_ => $input->param($_) || undef } @fields )
+                ( map { $_ => scalar $input->param($_) || undef } @fields )
             }
         );
         $category->show_in_pulldown( $input->param('show_in_pulldown') eq 'on' );

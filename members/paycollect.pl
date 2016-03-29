@@ -96,7 +96,7 @@ if ( $individual || $writeoff ) {
     $template->param(
         selected_accts => $select_lines,
         amt            => $total_due,
-        selected_accts_notes => $input->param('notes'),
+        selected_accts_notes => scalar $input->param('notes'),
     );
 }
 
