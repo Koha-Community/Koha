@@ -4,7 +4,7 @@ use Modern::Perl;
 
 use C4::Context;
 
-use Test::More tests => 7;
+use Test::More tests => 9;
 
 BEGIN {
         use_ok('C4::ImportBatch');
@@ -117,3 +117,32 @@ $original_record->delete_fields($original_record->field($item_tag)); #Remove ite
 my $record_from_import_biblio_without_items = C4::ImportBatch::GetRecordFromImportBiblio( $import_record_id );
 $original_record->leader($record_from_import_biblio_without_items->leader());
 is_deeply( $record_from_import_biblio_without_items, $original_record, 'GetRecordFromImportBiblio should return the record without items by default' );
+
+# fresh data
+my $sample_import_batch3 = {
+    matcher_id => 3,
+    template_id => 3,
+    branchcode => 'QRT',
+    overlay_action => 'create_new',
+    nomatch_action => 'create_new',
+    item_action => 'always_add',
+    import_status => 'staged',
+    batch_type => 'z3950',
+    file_name => 'test.mrc',
+    comments => 'test',
+    record_type => 'auth',
+};
+
+my $id_import_batch3 = C4::ImportBatch::AddImportBatch($sample_import_batch3);
+
+# Test CleanBatch
+C4::ImportBatch::CleanBatch( $id_import_batch3 );
+my $batch3_clean = $dbh->do('SELECT * FROM import_records WHERE import_batch_id = "$id_import_batch3"');
+is_deeply( $batch3_clean, "0E0",
+    "Batch 3 has been cleaned" );
+
+# Test DeleteBatch
+C4::ImportBatch::DeleteBatch( $id_import_batch3 );
+my $batch3_results = $dbh->do('SELECT * FROM import_batches WHERE import_batch_id = "$id_import_batch3"');
+is_deeply( $batch3_results, "0E0", # 0E0 == 0
+    "Batch 3 has been deleted");

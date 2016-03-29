@@ -53,6 +53,7 @@ BEGIN {
     BatchCommitRecords
     BatchRevertRecords
     CleanBatch
+    DeleteBatch
 
     GetAllImportBatches
     GetStagedWebserviceBatches
@@ -957,6 +958,24 @@ sub CleanBatch {
 
     C4::Context->dbh->do('DELETE FROM import_records WHERE import_batch_id = ?', {}, $batch_id);
     SetImportBatchStatus($batch_id, 'cleaned');
+}
+
+=head2 DeleteBatch
+
+  DeleteBatch($batch_id)
+
+Deletes the record from the database. This can only be done
+once the batch has been cleaned.
+
+=cut
+
+sub DeleteBatch {
+    my $batch_id = shift;
+    return unless defined $batch_id;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare('DELETE FROM import_batches WHERE import_batch_id = ?');
+    $sth->execute( $batch_id );
 }
 
 =head2 GetAllImportBatches

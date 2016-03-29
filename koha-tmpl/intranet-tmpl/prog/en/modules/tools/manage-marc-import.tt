@@ -39,6 +39,7 @@
 //<![CDATA[
 var MSG_CONFIRM_CLEAN = _("Clear all reservoir records staged in this batch?  This cannot be undone.");
 var MSG_CONFIRM_UNDO_IMPORT = _("Are you sure you want to undo the import of this batch into the catalog?");
+var MSG_CONFIRM_DELETE = _("Are you sure you want to permanently delete this batch?");
 
 $(document).ready(function(){
   $("#staged-record-matching-rules select").change(function(){
@@ -193,6 +194,10 @@ $(document).ready(function(){
 
 [% IF ( did_clean ) %]
   <div class="dialog message">Cleaned import batch #[% import_batch_id %]</div>
+[% END %]
+
+[% IF ( did_delete ) %]
+  <div class="dialog message">Import batch deleted successfully</div>
 [% END %]
 
 [% UNLESS ( batch_list ) %]
@@ -449,11 +454,17 @@ Page
     <td>[% batch_lis.upload_timestamp %]</td>
     <td>[% batch_lis.num_records %]</td>
     <td>[% batch_lis.num_items %][% IF ( batch_lis.num_items ) %] <a href="[% batch_lis.script_name %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;op=create_labels">(Create label batch)</a>[% END %]</td>
-    <td>[% IF ( batch_lis.can_clean ) %]
+    <td class="actions">[% IF ( batch_lis.can_clean ) %]
           <form method="post" action="[% batch_lis.script_name %]" name="clean_batch_[% batch_lis.import_batch_id %]" id="clean_batch_[% batch_lis.import_batch_id %]" >
             <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id %]" />
             <input type="hidden" name="op" value="clean-batch" />
-            <button class="btn btn-small" onclick="return confirm(MSG_CONFIRM_CLEAN);">Clean</button>
+            <button class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_CLEAN);"><i class="fa fa-eraser"></i> Clean</button>
+          </form>
+        [% ELSIF ( batch_lis.import_status == 'cleaned' ) %]
+          <form method="post" action="/cgi-bin/koha/tools/manage-marc-import.pl" name="delete_batch_[% batch_lis.import_batch_id %]" id="delete_batch_[% batch_lis.import_batch_id %]">
+            <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id %]" />
+            <input type="hidden" name="op" value="delete-batch" />
+            <button class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);"><i class="fa fa-trash"></i> Delete</button>
           </form>
         [% END %]
     </td>
