@@ -3,6 +3,9 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <style type="text/css">fieldset.rows table { clear: none; margin: 0;}</style>
+<script type="text/javascript">
+var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this dictionary definition? This cannot be undone.");
+</script>
 </head>
 <body id="rep_dictionary" class="rep">
 [% INCLUDE 'header.inc' %]
@@ -79,7 +82,7 @@
 			<td><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
 			<input type="hidden" name="id" value="[% definition.id %]" />
 			<input type="hidden" name="phase" value="Delete Definition" />
-			<input type="submit" name="submit" value="Delete Definition" />
+			<input type="submit" name="submit" value="Delete Definition" onclick="return confirm(MSG_CONFIRM_DELETE);" />
 			</form></td>
 			</tr>
 		[% END %]
