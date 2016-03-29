@@ -381,11 +381,11 @@ unless (@servers) {
 }
 # operators include boolean and proximity operators and are used
 # to evaluate multiple operands
-my @operators = map uri_unescape($_), $cgi->param('op');
+my @operators = map uri_unescape($_), $cgi->multi_param('op');
 
 # indexes are query qualifiers, like 'title', 'author', etc. They
 # can be single or multiple parameters separated by comma: kw,right-Truncation 
-my @indexes = map uri_unescape($_), $cgi->param('idx');
+my @indexes = map uri_unescape($_), $cgi->multi_param('idx');
 
 # if a simple index (only one)  display the index used in the top search box
 if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
@@ -395,11 +395,11 @@ if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
 }
 
 # an operand can be a single term, a phrase, or a complete ccl query
-my @operands = map uri_unescape($_), $cgi->param('q');
+my @operands = map uri_unescape($_), $cgi->multi_param('q');
 
 # limits are use to limit to results to a pre-defined category such as branch or language
-my @limits = map uri_unescape($_), $cgi->param('limit');
-my @nolimits = map uri_unescape($_), $cgi->param('nolimit');
+my @limits = map uri_unescape($_), $cgi->multi_param('limit');
+my @nolimits = map uri_unescape($_), $cgi->multi_param('nolimit');
 my %is_nolimit = map { $_ => 1 } @nolimits;
 @limits = grep { not $is_nolimit{$_} } @limits;
 

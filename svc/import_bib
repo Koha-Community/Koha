@@ -44,7 +44,7 @@ if ($query->request_method eq "POST") {
     $xml = $query->param('xml');
 }
 if ($xml) {
-    my %params = map { $_ => $query->param($_) } $query->param;
+    my %params = map { $_ => scalar $query->param($_) } $query->param;
     my $result = import_bib($xml, \%params );
     print $query->header(-type => 'text/xml');
     print XMLout($result, NoAttr => 1, RootName => 'response', XMLDecl => 1);

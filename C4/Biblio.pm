@@ -2516,7 +2516,7 @@ sub _default_ind_to_space {
 sub TransformHtmlToMarc {
     my ($cgi, $isbiblio) = @_;
 
-    my @params = $cgi->param();
+    my @params = $cgi->multi_param();
 
     # explicitly turn on the UTF-8 flag for all
     # 'tag_' parameters to avoid incorrect character
