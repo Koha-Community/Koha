@@ -42,14 +42,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $op = $cgi->param('op') || 'none';
 my @label_ids;
-@label_ids = $cgi->param('label_id') if $cgi->param('label_id');   # this will handle individual label printing
+@label_ids = $cgi->multi_param('label_id') if $cgi->param('label_id');   # this will handle individual label printing
 my @batch_ids;
-@batch_ids = $cgi->param('batch_id') if $cgi->param('batch_id');
+@batch_ids = $cgi->multi_param('batch_id') if $cgi->param('batch_id');
 my $layout_id = $cgi->param('layout_id') || undef;
 my $template_id = $cgi->param('template_id') || undef;
 my $start_label = $cgi->param('start_label') || 1;
 my @item_numbers;
-@item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
+@item_numbers = $cgi->multi_param('item_number') if $cgi->param('item_number');
 my $output_format = $cgi->param('output_format') || 'pdf';
 my $referer = $cgi->param('referer') || undef;
 

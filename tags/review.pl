@@ -97,7 +97,7 @@ foreach (qw( approve reject test )) {
 }
 $op ||= 'none';
 
-@tags = $input->param('tags');
+@tags = $input->multi_param('tags');
 
 $borrowernumber == 0 and push @errors, {op_zero=>1};
      if ($op eq 'approve') {

@@ -50,18 +50,18 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my @data;
 if ( $input->param('renew_all') ) {
-    @data = $input->param('all_items[]');
+    @data = $input->multi_param('all_items[]');
 }
 else {
-    @data = $input->param('items[]');
+    @data = $input->multi_param('items[]');
 }
 
 my @barcodes;
 if ( $input->param('return_all') ) {
-    @barcodes = $input->param('all_barcodes[]');
+    @barcodes = $input->multi_param('all_barcodes[]');
 }
 else {
-    @barcodes = $input->param('barcodes[]');
+    @barcodes = $input->multi_param('barcodes[]');
 }
 
 my $branch = $input->param('branch');

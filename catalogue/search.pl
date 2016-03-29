@@ -365,7 +365,7 @@ if (   C4::Context->preference('defaultSortField')
       . C4::Context->preference('defaultSortOrder');
 }
 
-@sort_by = $cgi->param('sort_by');
+@sort_by = $cgi->multi_param('sort_by');
 $sort_by[0] = $default_sort_by unless $sort_by[0];
 foreach my $sort (@sort_by) {
     $template->param($sort => 1) if $sort;

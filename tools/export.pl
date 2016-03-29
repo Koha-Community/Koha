@@ -48,7 +48,7 @@ my @record_ids;
 # biblionumbers is sent from circulation.pl only
 if ( $query->param("biblionumbers") ) {
     $record_type = 'bibs';
-    @record_ids = $query->param("biblionumbers");
+    @record_ids = $query->multi_param("biblionumbers");
 }
 
 # Default value for output_format is 'iso2709'

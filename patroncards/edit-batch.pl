@@ -55,9 +55,9 @@ my $display_columns = [ {_summary       => {label => 'Summary', link_field => 0}
 my $op = $cgi->param('op') || 'new';
 my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || 0;
 my ( @label_ids, @item_numbers, @borrower_numbers );
-@label_ids = $cgi->param('label_id') if $cgi->param('label_id');
-@item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
-@borrower_numbers = $cgi->param('borrower_number') if $cgi->param('borrower_number');
+@label_ids = $cgi->multi_param('label_id') if $cgi->param('label_id');
+@item_numbers = $cgi->multi_param('item_number') if $cgi->param('item_number');
+@borrower_numbers = $cgi->multi_param('borrower_number') if $cgi->param('borrower_number');
 my $errstr = $cgi->param('error') || '';
 my $bor_num_list = $cgi->param('bor_num_list') || undef;
 my $branch_code = C4::Context->userenv->{'branch'};

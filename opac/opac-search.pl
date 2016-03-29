@@ -425,7 +425,7 @@ if (   C4::Context->preference('OPACdefaultSortField')
 }
 
 my @allowed_sortby = qw /acqdate_asc acqdate_dsc author_az author_za call_number_asc call_number_dsc popularity_asc popularity_dsc pubdate_asc pubdate_dsc relevance title_az title_za/; 
-@sort_by = $cgi->param('sort_by');
+@sort_by = $cgi->multi_param('sort_by');
 $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
 foreach my $sort (@sort_by) {
     if ( grep { /^$sort$/ } @allowed_sortby ) {
