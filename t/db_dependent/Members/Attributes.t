@@ -27,8 +27,6 @@ use t::lib::TestBuilder;
 
 use Test::More tests => 53;
 
-use t::lib::TestBuilder;
-
 use_ok('C4::Members::Attributes');
 
 my $schema = Koha::Database->schema;
