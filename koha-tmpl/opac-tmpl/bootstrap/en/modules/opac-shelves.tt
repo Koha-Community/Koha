@@ -764,9 +764,7 @@ var MSG_CONFIRM_REMOVE_SHARE = _("Are you sure you want to remove this share?");
         } else {
             var bibs = "";
             $(checkedBoxes).each(function(){
-                var name = $(this).attr("name");
-                bib = name.substr(4);
-                bibs += bib + "/";
+                bibs += $(this).val() + "/";
             });
             document.location = "/cgi-bin/koha/opac-reserve.pl?biblionumbers="+bibs;
         }
