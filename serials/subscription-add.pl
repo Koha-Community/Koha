@@ -294,7 +294,7 @@ sub redirect_add_subscription {
     my $cost           = $query->param('cost');
     my $aqbudgetid     = $query->param('aqbudgetid');
     my $periodicity    = $query->param('frequency');
-    my @irregularity   = $query->param('irregularity');
+    my @irregularity   = $query->multi_param('irregularity');
     my $numberpattern  = $query->param('numbering_pattern');
     my $locale         = $query->param('locale');
     my $graceperiod    = $query->param('graceperiod') || 0;
@@ -355,7 +355,7 @@ sub redirect_add_subscription {
 
 sub redirect_mod_subscription {
     my $subscriptionid = $query->param('subscriptionid');
-    my @irregularity = $query->param('irregularity');
+    my @irregularity = $query->multi_param('irregularity');
     my $auser = $query->param('user');
     my $librarian => $query->param('librarian'),
     my $branchcode = $query->param('branchcode');

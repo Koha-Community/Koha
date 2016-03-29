@@ -46,7 +46,7 @@ my ($template, $loggedinuser, $cookie)
                             debug => 1,
                             });
 my $biblionumber = $query->param('biblionumber');
-my @subscriptionid = $query->param('subscriptionid');
+my @subscriptionid = $query->multi_param('subscriptionid');
 
 @subscriptionid= uniq @subscriptionid;
 @subscriptionid= sort @subscriptionid;

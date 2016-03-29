@@ -90,7 +90,7 @@ if ( $op ne "do_search" ) {
     exit;
 }
 
-my @id = $input->param('id');
+my @id = $input->multi_param('id');
 if ( @id==0 ) {
         # empty server list -> report and exit
         $template->param( emptyserverlist => 1 );

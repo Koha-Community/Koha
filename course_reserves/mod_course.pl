@@ -59,7 +59,7 @@ if ( $action eq 'del' ) {
 
     my $course_id = ModCourse(%params);
 
-    my @instructors = $cgi->param('instructors');
+    my @instructors = $cgi->multi_param('instructors');
     ModCourseInstructors(
         mode        => 'replace',
         cardnumbers => \@instructors,

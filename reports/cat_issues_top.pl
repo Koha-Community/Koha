@@ -46,7 +46,7 @@ my $do_it=$input->param('do_it');
 my $fullreportname = "reports/cat_issues_top.tt";
 my $limit = $input->param("Limit");
 my $column = $input->param("Criteria");
-my @filters = $input->param("Filter");
+my @filters = $input->multi_param("Filter");
 foreach ( @filters[0..3] ) {
     $_ and $_ = eval { output_pref( { dt => dt_from_string ( $_ ), dateonly => 1, dateformat => 'iso' } ); };
 }

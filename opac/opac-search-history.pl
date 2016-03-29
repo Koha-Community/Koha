@@ -55,7 +55,7 @@ unless ( $loggedinuser ) {
     # Deleting search history
     if ( $action eq 'delete') {
         # Deleting session's search history
-        my @id = $cgi->param('id');
+        my @id = $cgi->multi_param('id');
         my $all = not scalar( @id );
 
         my $type = $cgi->param('type');
@@ -99,7 +99,7 @@ unless ( $loggedinuser ) {
 
     # Deleting search history
     if ( $action eq 'delete' ) {
-        my @id = $cgi->param('id');
+        my @id = $cgi->multi_param('id');
         if ( @id ) {
             C4::Search::History::delete(
                 {

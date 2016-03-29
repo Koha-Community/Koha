@@ -24,7 +24,7 @@ my $action = $input->param('action') // 'list';
 
 if ( $action eq 'save' ) {
     my $module = $input->param('module');
-    my @columnids = $input->param("columnid");
+    my @columnids = $input->multi_param("columnid");
     my @columns;
     for my $columnid (@columnids) {
         next unless $columnid =~ m|^([^#]*)#([^#]*)#(.*)$|;

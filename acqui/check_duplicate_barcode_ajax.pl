@@ -41,7 +41,7 @@ if ($auth_status ne "ok") {
 my $json;
 
 #Check if the barcodes already exist.
-my @barcodes = $input->param('barcodes');
+my @barcodes = $input->multi_param('barcodes');
 foreach my $barcode (@barcodes) {
     my $existing_itemnumber = GetItemnumberFromBarcode($barcode);
     if ($existing_itemnumber) {

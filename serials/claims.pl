@@ -67,7 +67,7 @@ for my $field ( @$additional_fields ) {
 
 my $branchloop = GetBranchesLoop();
 
-my @serialnums=$input->param('serialid');
+my @serialnums=$input->multi_param('serialid');
 if (@serialnums) { # i.e. they have been flagged to generate claims
     my $err;
     eval {

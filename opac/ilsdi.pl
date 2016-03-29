@@ -199,7 +199,7 @@ if ( $service and any { $service eq $_ } @services ) {
 
     # check for multiple parameters
     for ( @names ) {
-        my @values = $cgi->param($_);
+        my @values = $cgi->multi_param($_);
         if ( $#values != 0 ) {
             $out->{'code'} = "MultipleValuesNotAllowed";
             $out->{'message'} = "Multiple values not allowed for the parameter ".$_.".";

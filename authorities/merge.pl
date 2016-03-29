@@ -28,7 +28,7 @@ use C4::Koha;
 use C4::Biblio;
 
 my $input  = new CGI;
-my @authid = $input->param('authid');
+my @authid = $input->multi_param('authid');
 my $merge  = $input->param('merge');
 
 my @errors;

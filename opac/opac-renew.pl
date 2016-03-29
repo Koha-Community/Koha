@@ -42,7 +42,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
 	}
 ); 
-my @items = $query->param('item');
+my @items = $query->multi_param('item');
 
 my $opacrenew = C4::Context->preference("OpacRenewalAllowed");
 

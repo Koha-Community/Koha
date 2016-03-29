@@ -50,7 +50,7 @@ my $fullreportname = "reports/issues_stats.tt";
 my $do_it    = $input->param('do_it');
 my $line     = $input->param("Line");
 my $column   = $input->param("Column");
-my @filters  = $input->param("Filter");
+my @filters  = $input->multi_param("Filter");
 $filters[0] = eval { output_pref( { dt => dt_from_string( $filters[0]), dateonly => 1, dateformat => 'iso' } ); }
     if ( $filters[0] );
 $filters[1] = eval { output_pref( { dt => dt_from_string( $filters[1]), dateonly => 1, dateformat => 'iso' } ); }

@@ -32,7 +32,7 @@ my $sound    = $cgi->param('sound');
 my $id       = $cgi->param('id');
 my $action     = $cgi->param('action');
 my $where    = $cgi->param('where');
-my @delete   = $cgi->param('delete');
+my @delete   = $cgi->multi_param('delete');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

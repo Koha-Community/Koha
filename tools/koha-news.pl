@@ -139,7 +139,7 @@ elsif ( $op eq 'edit' ) {
     print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
 }
 elsif ( $op eq 'del' ) {
-    my @ids = $cgi->param('ids');
+    my @ids = $cgi->multi_param('ids');
     del_opac_new( join ",", @ids );
     print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
 }

@@ -40,7 +40,7 @@ my $input   = new CGI;
 my $do_it   = $input->param('do_it');
 my $limit   = $input->param("Limit") || 10;
 my $column  = $input->param("Criteria");
-my @filters = $input->param("Filter");
+my @filters = $input->multi_param("Filter");
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {

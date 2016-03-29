@@ -49,8 +49,8 @@ my $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $template_id = $cgi->param('template_id') || undef;
 my $layout_id   = $cgi->param('layout_id') || undef;
 my $start_card = $cgi->param('start_card') || 1;
-my @label_ids   = $cgi->param('label_id') if $cgi->param('label_id');
-my @borrower_numbers  = $cgi->param('borrower_number') if $cgi->param('borrower_number');
+my @label_ids   = $cgi->multi_param('label_id') if $cgi->param('label_id');
+my @borrower_numbers  = $cgi->multi_param('borrower_number') if $cgi->param('borrower_number');
 
 my $items = undef; # items = cards
 my $new_page = 0;

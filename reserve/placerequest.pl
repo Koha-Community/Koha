@@ -37,14 +37,14 @@ my $input = CGI->new();
 
 checkauth($input, 0, { reserveforothers => 'place_holds' }, 'intranet');
 
-my @bibitems=$input->param('biblioitem');
-my @reqbib=$input->param('reqbib'); 
+my @bibitems=$input->multi_param('biblioitem');
+my @reqbib=$input->multi_param('reqbib');
 my $biblionumber=$input->param('biblionumber');
 my $borrowernumber=$input->param('borrowernumber');
 my $notes=$input->param('notes');
 my $branch=$input->param('pickup');
 my $startdate=$input->param('reserve_date') || '';
-my @rank=$input->param('rank-request');
+my @rank=$input->multi_param('rank-request');
 my $type=$input->param('type');
 my $title=$input->param('title');
 my $borrower=GetMember('borrowernumber'=>$borrowernumber);

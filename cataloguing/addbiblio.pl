@@ -833,7 +833,7 @@ if ( $op eq "addbiblio" ) {
         biblionumberdata => $biblionumber,
     );
     # getting html input
-    my @params = $input->param();
+    my @params = $input->multi_param();
     $record = TransformHtmlToMarc( $input, 1 );
     # check for a duplicate
     my ( $duplicatebiblionumber, $duplicatetitle );

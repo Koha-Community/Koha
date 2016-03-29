@@ -31,7 +31,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
     authnotrequired => 0,
     flagsrequired => {acquisition => 'order_receive'},
 });
-my @ordernumbers = $input->param('ordernumber');
+my @ordernumbers = $input->multi_param('ordernumber');
 
 my @orders;
 for my $ordernumber ( @ordernumbers ) {

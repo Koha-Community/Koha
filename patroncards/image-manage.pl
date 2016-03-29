@@ -30,7 +30,7 @@ my $image_name = $cgi->param('image_name') || '';
 my $file_name = $cgi->param('uploadfile') || '';
 my $upload_file = $cgi->upload('uploadfile') || '';
 my $op = $cgi->param('op') || 'none';
-my @image_ids = $cgi->param('image_id') if $cgi->param('image_id');
+my @image_ids = $cgi->multi_param('image_id') if $cgi->param('image_id');
 
 my $source_file = "$file_name"; # otherwise we end up with what amounts to a pointer to a filehandle rather than a user-friendly filename
 
