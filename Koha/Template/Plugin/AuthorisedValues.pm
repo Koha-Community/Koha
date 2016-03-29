@@ -29,8 +29,8 @@ sub GetByCode {
 }
 
 sub Get {
-    my ( $self, $category, $selected, $opac ) = @_;
-    return GetAuthorisedValues( $category, $selected, $opac );
+    my ( $self, $category, $opac ) = @_;
+    return GetAuthorisedValues( $category, $opac );
 }
 
 sub GetAuthValueDropbox {

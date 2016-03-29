@@ -53,8 +53,8 @@
                         <label for="ccode">Limit to:</label>
                         <select name="ccode" id="ccode">
                             <option value="">All collections</option>
-                            [% FOREACH ccode IN AuthorisedValues.Get('CCODE', selected_ccode, 1) %]
-                                [% IF ccode.selected %]
+                            [% FOREACH ccode IN AuthorisedValues.Get('CCODE', 1) %]
+                                [% IF ccode.authorised_value == selected_ccode %]
                                     <option value="[% ccode.authorised_value %]" selected="selected">
                                 [% ELSE %]
                                     <option value="[% ccode.authorised_value %]">

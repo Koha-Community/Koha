@@ -218,9 +218,9 @@ foreach my $item (@items) {
 
     $item->{datedue} = format_sqldatetime($item->{datedue});
     # item damaged, lost, withdrawn loops
-    $item->{itemlostloop} = GetAuthorisedValues($authvalcode_items_itemlost, $item->{itemlost}) if $authvalcode_items_itemlost;
+    $item->{itemlostloop} = GetAuthorisedValues($authvalcode_items_itemlost) if $authvalcode_items_itemlost;
     if ($item->{damaged}) {
-        $item->{itemdamagedloop} = GetAuthorisedValues($authvalcode_items_damaged, $item->{damaged}) if $authvalcode_items_damaged;
+        $item->{itemdamagedloop} = GetAuthorisedValues($authvalcode_items_damaged) if $authvalcode_items_damaged;
     }
     #get shelf location and collection code description if they are authorised value.
     # same thing for copy number

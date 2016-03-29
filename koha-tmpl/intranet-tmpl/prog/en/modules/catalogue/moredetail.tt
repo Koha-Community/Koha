@@ -109,7 +109,7 @@
                         <select name="itemlost" >
                                     <option value="">Choose</option>
                         [% FOREACH itemlostloo IN ITEM_DAT.itemlostloop %]
-                            [% IF ( itemlostloo.selected ) %]
+                            [% IF itemlostloo.authorised_value == ITEM_DAT.itemlost %]
                                     <option value="[% itemlostloo.authorised_value %]" selected="selected">[% itemlostloo.lib %]</option>
                             [% ELSE %]
                                     <option value="[% itemlostloo.authorised_value %]">[% itemlostloo.lib %]</option>
@@ -142,7 +142,7 @@
                     <select name="damaged" >
                     <option value="">Choose</option>
             [% FOREACH itemdamagedloo IN ITEM_DAT.itemdamagedloop %]
-                [% IF ( itemdamagedloo.selected ) %]
+                [% IF itemdamagedloo.authorised_value == ITEM_DAT.damaged %]
                     <option value="[% itemdamagedloo.authorised_value %]" selected="selected">[% itemdamagedloo.lib %]</option>
                 [% ELSE %]
                     <option value="[% itemdamagedloo.authorised_value %]">[% itemdamagedloo.lib %]</option>
@@ -173,7 +173,7 @@
                             <select name="withdrawn" >
                                 <option value="">Choose</option>
                                 [% FOREACH itemwithdrawn IN ITEM_DAT.itemwithdrawnloop %]
-                                    [% IF ( itemwithdrawn.selected ) %]
+                                    [% IF itemwithdrawn.authorised_value == ITEM_DAT.withdrawn %]
                                         <option value="[% itemwithdrawn.authorised_value %]" selected="selected">[% itemwithdrawn.lib %]</option>
                                     [% ELSE %]
                                         <option value="[% itemwithdrawn.authorised_value %]">[% itemwithdrawn.lib %]</option>
@@ -185,7 +185,7 @@
                             <input type="submit" name="submit" class="submit" value="Set status" /></form>
                     [% ELSE %]
                         [% FOREACH itemwithdrawn IN ITEM_DAT.itemwithdrawnloop %]
-                            [% IF ( itemwithdrawn.selected ) %]
+                            [% IF itemwithdrawn.authorised_value == ITEM_DAT.withdrawn %]
                                 [% itemwithdrawn.lib %]
                             [% END %]
                         [% END %]

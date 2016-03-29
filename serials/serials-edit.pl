@@ -398,11 +398,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
         print $query->redirect($redirect);
     }
 }
-my $location = GetAuthorisedValues('LOC', $serialdatalist[0]->{'location'});
-my $locationlib;
-foreach (@$location) {
-    $locationlib = $_->{'lib'} if $_->{'selected'};
-}
+my $location = $serialdatalist[0]->{'location'};
 my $default_bib_view = get_default_view();
 
 $template->param(
@@ -413,7 +409,7 @@ $template->param(
     biblionumber    => $serialdatalist[0]->{'biblionumber'},
     serialslist     => \@serialdatalist,
     default_bib_view => $default_bib_view,
-    location         => $locationlib,
+    location         => $location,
     (uc(C4::Context->preference("marcflavour"))) => 1
 
 );

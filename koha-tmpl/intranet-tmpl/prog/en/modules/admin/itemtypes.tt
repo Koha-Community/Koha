@@ -149,7 +149,7 @@ Item types administration
                     <select id="searchcategory" name="searchcategory">
                     <option value="">None</option>
                         [% FOREACH cat IN searchcategory %]
-                            [% IF cat.selected %]
+                            [% IF cat.authorised_value == itemtype.searchcategory %]
                                 <option value="[% cat.authorised_value %]" selected="selected">
                                     [% cat.lib %]
                                 </option>
@@ -278,8 +278,8 @@ Item types administration
                     <label for="sip_media_type">SIP media type: </label>
                     <select id="sip_media_type" name="sip_media_type">
                         <option value=""></option>
-                        [% FOREACH a IN AuthorisedValues.Get('SIP_MEDIA_TYPE', itemtype.sip_media_type ) %]
-                            [% IF a.selected %]
+                        [% FOREACH a IN AuthorisedValues.Get('SIP_MEDIA_TYPE') %]
+                            [% IF a.authorised_value == itemtype.sip_media_type %]
                                 <option value="[% a.authorised_value %]" selected="selected">[% a.lib %]</option>
                             [% ELSE %]
                                 <option value="[% a.authorised_value %]">[% a.lib %]</option>

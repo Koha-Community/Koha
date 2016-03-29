@@ -600,7 +600,7 @@ $(document).ready(function() {
                                     <select name="location" id="location">
                                         <option value="">None</option>
                                         [% FOREACH locations_loo IN locations_loop %]
-                                            [% IF ( locations_loo.selected ) %]
+                                            [% IF locations_loo.authorised_value == location %]
                                                 <option value="[% locations_loo.authorised_value %]" selected="selected">[% locations_loo.lib %]</option>
                                             [% ELSE %]
                                                 <option value="[% locations_loo.authorised_value %]">[% locations_loo.lib %]</option>

@@ -24,7 +24,7 @@
       <select name="streettype">
         <option value=""></option>
         [% FOR roadtype IN roadtypes %]
-          [% IF roadtype.selected %]
+          [% IF roadtype.authorised_value == streettype%]
             <option value="[% roadtype.authorised_value %]" selected="selected">[% roadtype.lib %]</option>
           [% ELSE %]
             <option value="[% roadtype.authorised_value %]">[% roadtype.lib %]</option>

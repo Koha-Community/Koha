@@ -155,7 +155,7 @@ $template->param(
     publisher_filter => $publisher,
     bookseller_filter  => $bookseller,
     branch_filter => $branch,
-    locations     => C4::Koha::GetAuthorisedValues('LOC', $location),
+    location_filter => $location,
     expiration_date_filter => $expiration_date_dt,
     branches_loop => \@branches_loop,
     done_searched => $searched,

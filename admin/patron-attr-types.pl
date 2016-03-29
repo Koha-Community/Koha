@@ -99,7 +99,7 @@ sub add_attribute_type_form {
         branches_loop => \@branches_loop,
     );
     authorised_value_category_list($template);
-    pa_classes($template);
+    $template->param(classes_val_loop => GetAuthorisedValues( 'PA_CLASS'));
 }
 
 sub error_add_attribute_type_form {
@@ -255,7 +255,7 @@ sub edit_attribute_type_form {
         $template->param(display_checkout_checked => 'checked="checked"');
     }
     authorised_value_category_list($template, $attr_type->authorised_value_category());
-    pa_classes( $template, $attr_type->class );
+    $template->param(classes_val_loop => GetAuthorisedValues( 'PA_CLASS' ));
 
 
     my $branches = GetBranches;
@@ -271,8 +271,11 @@ sub edit_attribute_type_form {
     }
     $template->param( branches_loop => \@branches_loop );
 
-    $template->param ( category_code => $attr_type->category_code );
-    $template->param ( category_description => $attr_type->category_description );
+    $template->param(
+        category_code        => $attr_type->category_code,
+        category_class       => $attr_type->class,
+        category_description => $attr_type->category_description,
+    );
 
     $template->param(
         attribute_type_form => 1,
@@ -324,11 +327,4 @@ sub authorised_value_category_list {
         push @list, $entry;
     }
     $template->param(authorised_value_categories => \@list);
-}
-
-sub pa_classes {
-    my $template = shift;
-    my $selected = @_ ? shift : '';
-
-    $template->param(classes_val_loop => GetAuthorisedValues( 'PA_CLASS', $selected ) );
 }

@@ -218,7 +218,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
         [% IF ( patron_reason_loop ) %]
           <li><span class="label">Reason for suggestion: </span>
             [% FOREACH patron_reason_loo IN patron_reason_loop %]
-              [% IF ( patron_reason_loo.selected ) %][% patron_reason_loo.lib %][% END %]
+              [% IF patron_reason_loo.authorised_value == patronreason %][% patron_reason_loo.lib %][% END %]
             [% END %]
           </li>
         [% END %]
@@ -336,9 +336,21 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
         <li><label for="itemtype">Document type:</label>
             [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20, default=itemtype %]
         </li>
-        [% IF ( patron_reason_loop ) %]<li><label for="patronreason">Reason for suggestion: </label><select name="patronreason" id="patronreason"><option value=""> -- Choose -- </option>[% FOREACH patron_reason_loo IN patron_reason_loop %]
-                [% IF ( patron_reason_loo.selected ) %]<option value="[% patron_reason_loo.authorised_value %]" selected="selected">[% patron_reason_loo.lib %]</option>[% ELSE %]<option value="[% patron_reason_loo.authorised_value %]">[% patron_reason_loo.lib %]</option>[% END %]
-           [% END %]</select></li>[% END %]
+        [% IF patron_reason_loop %]
+            <li>
+                <label for="patronreason">Reason for suggestion: </label>
+                <select name="patronreason" id="patronreason">
+                    <option value=""> -- Choose -- </option>
+                    [% FOREACH patron_reason_loo IN patron_reason_loop %]
+                        [% IF patron_reason_loo.authorised_value == patronreason %]
+                            <option value="[% patron_reason_loo.authorised_value %]" selected="selected">[% patron_reason_loo.lib %]</option>
+                        [% ELSE %]
+                            <option value="[% patron_reason_loo.authorised_value %]">[% patron_reason_loo.lib %]</option>
+                        [% END %]
+                    [% END %]
+                </select>
+            </li>
+        [% END %]
         <li><label for="note">Notes:</label><textarea name="note" id="note" rows="5" cols="40">[% note %]</textarea></li>
         </ol>
     </fieldset>

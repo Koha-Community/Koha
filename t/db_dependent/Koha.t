@@ -106,7 +106,6 @@ subtest 'Authorized Values Tests' => sub {
                     id => ignore(),
                     category => 'BUG10656',
                     authorised_value => 'AAA',
-                    selected => 0,
                     lib => 'A_STAFF',
                     lib_opac => 'Z_PUBLIC',
                     imageurl => '',
@@ -115,7 +114,6 @@ subtest 'Authorized Values Tests' => sub {
                     id => ignore(),
                     category => 'BUG10656',
                     authorised_value => 'DDD',
-                    selected => 0,
                     lib => 'D_STAFF',
                     lib_opac => undef,
                     imageurl => '',
@@ -124,7 +122,6 @@ subtest 'Authorized Values Tests' => sub {
                     id => ignore(),
                     category => 'BUG10656',
                     authorised_value => 'ZZZ',
-                    selected => 0,
                     lib => 'Z_STAFF',
                     lib_opac => 'A_PUBLIC',
                     imageurl => '',
@@ -132,7 +129,7 @@ subtest 'Authorized Values Tests' => sub {
             ],
             'list of authorised values in staff mode sorted by staff label (bug 10656)'
         );
-        $authvals = GetAuthorisedValues('BUG10656', '', 1);
+        $authvals = GetAuthorisedValues('BUG10656', 1);
         cmp_deeply(
             $authvals,
             [
@@ -140,7 +137,6 @@ subtest 'Authorized Values Tests' => sub {
                     id => ignore(),
                     category => 'BUG10656',
                     authorised_value => 'ZZZ',
-                    selected => 0,
                     lib => 'A_PUBLIC',
                     lib_opac => 'A_PUBLIC',
                     imageurl => '',
@@ -149,7 +145,6 @@ subtest 'Authorized Values Tests' => sub {
                     id => ignore(),
                     category => 'BUG10656',
                     authorised_value => 'DDD',
-                    selected => 0,
                     lib => 'D_STAFF',
                     lib_opac => undef,
                     imageurl => '',
@@ -158,7 +153,6 @@ subtest 'Authorized Values Tests' => sub {
                     id => ignore(),
                     category => 'BUG10656',
                     authorised_value => 'AAA',
-                    selected => 0,
                     lib => 'Z_PUBLIC',
                     lib_opac => 'Z_PUBLIC',
                     imageurl => '',

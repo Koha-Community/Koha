@@ -326,7 +326,7 @@ $template->param( branchloop => \@branchloop,
 
 $template->param( returnsuggestedby => $returnsuggestedby );
 
-my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG",$$suggestion_ref{'patronreason'});
+my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
 $template->param(patron_reason_loop=>$patron_reason_loop);
 
 #Budgets management

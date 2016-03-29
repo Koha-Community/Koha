@@ -59,7 +59,7 @@ undef($sip_media_type) if defined($sip_media_type) and $sip_media_type =~ /^\s*$
 if ( $op eq 'add_form' ) {
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
     my $imagesets = C4::Koha::getImageSets( checked => ( $itemtype ? $itemtype->imageurl : undef ) );
-    my $searchcategory = GetAuthorisedValues("ITEMTYPECAT", ( $itemtype ? $itemtype->searchcategory : '' ) );
+    my $searchcategory = GetAuthorisedValues("ITEMTYPECAT");
     my $translated_languages = C4::Languages::getTranslatedLanguages( undef , C4::Context->preference('template') );
     $template->param(
         itemtype  => $itemtype,

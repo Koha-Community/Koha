@@ -1046,7 +1046,7 @@ function select_user(borrowernumber, borrower) {
                             <select id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">
                                 <option value=""></option>
                                 [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
-                                    [% IF ( auth_val_loo.selected ) %]
+                                    [% IF auth_val_loo.authorised_value == patron_attribute.value %]
                                         <option value="[% auth_val_loo.authorised_value %]" selected="selected">
                                             [% auth_val_loo.lib %]
                                         </option>

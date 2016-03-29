@@ -6,6 +6,7 @@
     default: the default authorised value to select
     class: the CSS class of the select element
     size: the size to use for the input (generated if the authorised value category does not exist).
+    all: add a "All" entry
 %]
 
 [% SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) %]
@@ -16,6 +17,7 @@
 
 [% IF avs %]
   <select id="[% name %]" name="[% name %]" class="[% class %]" >
+  [% IF all %]<option value="All">All</option>[% END %]
   [% FOR av IN avs %]
     [% IF av.default %]
       <option value="[% av.value %]" selected="selected">[% av.label | html_entity %]</option>

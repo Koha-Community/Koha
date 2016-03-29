@@ -146,7 +146,7 @@ for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{b
     };
 }
 
-my $locations_loop = GetAuthorisedValues("LOC",$subs->{'location'});
+my $locations_loop = GetAuthorisedValues("LOC");
 
 $template->param(branchloop => $branchloop,
     locations_loop=>$locations_loop,

@@ -998,35 +998,25 @@ sub GetAuthValCodeFromField {
 
 =head2 GetAuthorisedValues
 
-  $authvalues = GetAuthorisedValues([$category], [$selected]);
+  $authvalues = GetAuthorisedValues([$category]);
 
 This function returns all authorised values from the'authorised_value' table in a reference to array of hashrefs.
 
 C<$category> returns authorised values for just one category (optional).
-
-C<$selected> adds a "selected => 1" entry to the hash if the
-authorised_value matches it. B<NOTE:> this feature should be considered
-deprecated as it may be removed in the future.
 
 C<$opac> If set to a true value, displays OPAC descriptions rather than normal ones when they exist.
 
 =cut
 
 sub GetAuthorisedValues {
-    my ( $category, $selected, $opac ) = @_;
-
-    # TODO: the "selected" feature should be replaced by a utility function
-    # somewhere else, it doesn't belong in here. For starters it makes
-    # caching much more complicated. Or just let the UI logic handle it, it's
-    # what it's for.
+    my ( $category, $opac ) = @_;
 
     # Is this cached already?
     $opac = $opac ? 1 : 0;    # normalise to be safe
     my $branch_limit =
       C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
-    my $selected_key = defined($selected) ? $selected : '';
     my $cache_key =
-      "AuthorisedValues-$category-$selected_key-$opac-$branch_limit";
+      "AuthorisedValues-$category-$opac-$branch_limit";
     my $cache  = Koha::Cache->get_instance();
     my $result = $cache->get_from_cache($cache_key);
     return $result if $result;
@@ -1063,13 +1053,6 @@ sub GetAuthorisedValues {
 
     $sth->execute( @where_args );
     while (my $data=$sth->fetchrow_hashref) {
-        if ( defined $selected and $selected eq $data->{authorised_value} ) {
-            $data->{selected} = 1;
-        }
-        else {
-            $data->{selected} = 0;
-        }
-
         if ($opac && $data->{lib_opac}) {
             $data->{lib} = $data->{lib_opac};
         }
@@ -1077,9 +1060,6 @@ sub GetAuthorisedValues {
     }
     $sth->finish;
 
-    # We can't cache for long because of that "selected" thing which
-    # makes it impossible to clear the cache without iterating through every
-    # value, which sucks. This'll cover this request, and not a whole lot more.
     $cache->set_in_cache( $cache_key, \@results, { deepcopy => 1, expiry => 5 } );
     return \@results;
 }

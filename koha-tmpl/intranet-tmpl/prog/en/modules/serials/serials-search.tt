@@ -98,21 +98,10 @@
                     [% END %]
                   </select>
                 </li>
-                [% IF locations %]
-                  <li>
-                    <label for="location">Location:</label>
-                    <select name="location_filter">
-                      <option value="">All</option>
-                      [% FOR loc IN locations %]
-                        [% IF loc.selected %]
-                          <option value="[% loc.authorised_value %]" selected="selected">[% loc.lib %]</option>
-                        [% ELSE %]
-                          <option value="[% loc.authorised_value %]">[% loc.lib %]</option>
-                        [% END %]
-                      [% END %]
-                    </select>
-                  </li>
-                [% END %]
+                <li>
+                  <label for="location">Location:</label>
+                  [% PROCESS 'av-build-dropbox.inc' name="location_filter", category="LOC", default=location_filter, all=1 %]
+                </li>
                 <li>
                   <label for="to">Expires before:</label>
                   <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="datepickerto" />
@@ -418,21 +407,10 @@
                     [% END %]
                   </select>
                 </li>
-                [% IF locations %]
-                  <li>
-                    <label for="location">Location:</label>
-                    <select name="location_filter">
-                      <option value="">All</option>
-                      [% FOR loc IN locations %]
-                        [% IF loc.selected %]
-                          <option value="[% loc.authorised_value %]" selected="selected">[% loc.lib %]</option>
-                        [% ELSE %]
-                          <option value="[% loc.authorised_value %]">[% loc.lib %]</option>
-                        [% END %]
-                      [% END %]
-                    </select>
-                  </li>
-                [% END %]
+                <li>
+                  <label for="location">Location:</label>
+                  [% PROCESS 'av-build-dropbox.inc' name="location_filter", category="LOC", default=location_filter, all=1 %]
+                </li>
                 <li>
                   <label for="to">Expires before:</label>
                   <input type="text" id="to" name="expiration_date_filter" value="[% expiration_date_filter | $KohaDates %]" size="10" maxlength="10" class="datepickerto" />

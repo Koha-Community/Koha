@@ -220,7 +220,7 @@ function CheckAttributeTypeForm(f) {
             <select name="class">
                 <option value="" />
                 [% FOREACH class IN classes_val_loop %]
-                    [% IF ( class.selected ) %]
+                    [% IF class.authorised_value == category_class %]
                         <option value="[% class.authorised_value %]" selected="selected">
                             [% class.lib %]
                         </option>
