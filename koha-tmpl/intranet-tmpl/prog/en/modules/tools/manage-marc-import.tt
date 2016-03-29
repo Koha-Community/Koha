@@ -38,6 +38,7 @@
 <script type="text/javascript">
 //<![CDATA[
 var MSG_CONFIRM_CLEAN = _("Clear all reservoir records staged in this batch?  This cannot be undone.");
+var MSG_CONFIRM_UNDO_IMPORT = _("Are you sure you want to undo the import of this batch into the catalog?");
 
 $(document).ready(function(){
   $("#staged-record-matching-rules select").change(function(){
@@ -363,7 +364,7 @@ $(document).ready(function(){
     <input type="hidden" name="runinbackground" value="" />
     <input type="hidden" name="completedJobID" value="" />
     <input type="hidden" name="import_batch_id" value="[% import_batch_id %]" />
-    <fieldset class="action"><input type="submit" class="button" name="mainformsubmit" value="Undo import into catalog" onclick="return submitBackgroundJob(this.form);" /></fieldset>
+    <fieldset class="action"><input type="submit" class="button" name="mainformsubmit" value="Undo import into catalog" onclick="return confirm(MSG_CONFIRM_UNDO_IMPORT) && submitBackgroundJob(this.form);" /></fieldset>
   </form>
   <div id="jobpanel"><div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
      <div id="jobfailed"></div></div>
