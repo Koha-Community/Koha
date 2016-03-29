@@ -27,7 +27,7 @@
 
         [% IF ( CAN_user_reports_create_reports ) %]
             <div class="btn-group">
-                <a class="confirmdelete btn btn-small" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&phase=Delete%20Saved">
+                <a class="confirmdelete btn btn-small" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&phase=Delete%20Saved" onclick="return confirm(MSG_CONFIRM_DELETE);">
                     <i class="fa fa-remove"></i> Delete
                 </a>
             </div>
@@ -47,3 +47,7 @@
         [% END %]
     [% END %]
 </div>
+
+<script type="text/javascript">
+var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this report? This cannot be undone.");
+</script>
