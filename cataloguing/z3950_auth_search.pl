@@ -86,7 +86,7 @@ if ( @id==0 ) {
 }
 
 my $pars= {
-        random => $input->param('random') || rand(1000000000),
+        random => scalar $input->param('random') || rand(1000000000),
         page => $page,
         id => \@id,
         nameany => $nameany,

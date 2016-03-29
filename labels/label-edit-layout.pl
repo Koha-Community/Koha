@@ -103,16 +103,16 @@ elsif  ($op eq 'save') {
         $cgi->param('format_string', $format_string);
     }
     my @params = (
-                    barcode_type    => $cgi->param('barcode_type') || 'CODE39',
-                    printing_type   => $cgi->param('printing_type') || 'BAR',
-                    layout_name     => $cgi->param('layout_name') || 'DEFAULT',
+                    barcode_type    => scalar $cgi->param('barcode_type') || 'CODE39',
+                    printing_type   => scalar $cgi->param('printing_type') || 'BAR',
+                    layout_name     => scalar $cgi->param('layout_name') || 'DEFAULT',
                     guidebox        => ($cgi->param('guidebox') ? 1 : 0),
                     oblique_title   => ($cgi->param('oblique_title') ? 1 : 0),
-                    font            => $cgi->param('font') || 'TR',
-                    font_size       => $cgi->param('font_size') || 3,
+                    font            => scalar $cgi->param('font') || 'TR',
+                    font_size       => scalar $cgi->param('font_size') || 3,
                     callnum_split   => ($cgi->param('callnum_split') ? 1 : 0),
-                    text_justify    => $cgi->param('text_justify') || 'L',
-                    format_string   => $cgi->param('format_string') || 'title, author, isbn, issn, itemtype, barcode, itemcallnumber',
+                    text_justify    => scalar $cgi->param('text_justify') || 'L',
+                    format_string   => scalar $cgi->param('format_string') || 'title, author, isbn, issn, itemtype, barcode, itemcallnumber',
     );
     if ($layout_id) {   # if a label_id was passed in, this is an update to an existing layout
         $layout = C4::Labels::Layout->retrieve(layout_id => $layout_id);

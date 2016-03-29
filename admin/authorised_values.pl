@@ -135,8 +135,8 @@ if ($op eq 'add_form') {
         my $av = Koha::AuthorisedValue->new( {
             category => $new_category,
             authorised_value => $new_authorised_value,
-            lib => $input->param('lib') || undef,
-            lib_opac => $input->param('lib_opac') || undef,
+            lib => scalar $input->param('lib') || undef,
+            lib_opac => scalar $input->param('lib_opac') || undef,
             imageurl => $imageurl,
         } );
 

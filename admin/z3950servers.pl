@@ -115,5 +115,5 @@ sub ServerSearch  { #find server(s) by id or name
 
 sub _form_data_hashref {
     my ( $input, $fieldref ) = @_;
-    return { map { ( $_ => $input->param($_)//'' ) } @$fieldref };
+    return { map { ( $_ => scalar $input->param($_)//'' ) } @$fieldref };
 }

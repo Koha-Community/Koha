@@ -75,8 +75,8 @@ if ($session->param('branch') eq 'NO_LIBRARY_SET'){
 if ( $query->param('print_slip') ) {
     $template->param(
         print_slip     => 1,
-        borrowernumber => $query->param('borrowernumber'),
-        biblionumber   => $query->param('biblionumber'),
+        borrowernumber => scalar $query->param('borrowernumber'),
+        biblionumber   => scalar $query->param('biblionumber'),
     );
 }
 

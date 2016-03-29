@@ -120,8 +120,8 @@ my $launcher= sub {
         flagsrequired => {editcatalogue => '*'},
     });
     $template->param(
-        index => $cgi->param('index'),
-        result => $cgi->param('result'),
+        index => scalar $cgi->param('index'),
+        result => scalar $cgi->param('result'),
     );
     output_html_with_http_headers $cgi, $cookie, $template->output;
 };

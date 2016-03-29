@@ -982,7 +982,7 @@ $template->param(
     frameworkcode => $frameworkcode,
     itemtype => $frameworkcode,
     borrowernumber => $loggedinuser,
-    tab => $input->param('tab')
+    tab => scalar $input->param('tab')
 );
 $template->{'VARS'}->{'searchid'} = $searchid;
 

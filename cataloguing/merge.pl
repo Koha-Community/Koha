@@ -178,7 +178,7 @@ if ($merge) {
         result => 1,
         report_records => \@report_records,
         report_header => $report_header,
-        ref_biblionumber => $input->param('ref_biblionumber')
+        ref_biblionumber => scalar $input->param('ref_biblionumber')
     );
 
 #-------------------------

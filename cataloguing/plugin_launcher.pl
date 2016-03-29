@@ -24,6 +24,6 @@ use Koha::FrameworkPlugin;
 
 my $input = new CGI;
 my $plugin= Koha::FrameworkPlugin->new( {
-    name => $input->param("plugin_name"),
+    name => scalar $input->param("plugin_name"),
 });
 $plugin->launch({ cgi => $input });

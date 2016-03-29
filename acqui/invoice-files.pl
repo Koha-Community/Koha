@@ -102,7 +102,7 @@ else {
                     name    => $filename,
                     type    => $mimetype,
                     content => $file_content,
-                    description => $input->param('description')
+                    description => scalar $input->param('description')
                 );
             }
         }
@@ -110,7 +110,7 @@ else {
             $errors{'no_file'} = 1;
         }
     } elsif ( $op eq 'delete' ) {
-        $mf->DelFile( id => $input->param('file_id') );
+        $mf->DelFile( id => scalar $input->param('file_id') );
     }
 
     $template->param(

@@ -54,13 +54,13 @@ if ($op eq 'edit') {
 }
 elsif ($op eq 'save') {
     my @params = (
-        printer_name        => $cgi->param('printer_name'),
-        paper_bin           => $cgi->param('paper_bin'),
-        offset_horz         => $cgi->param('offset_horz'),
-        offset_vert         => $cgi->param('offset_vert'),
-        creep_horz          => $cgi->param('creep_horz'),
-        creep_vert          => $cgi->param('creep_vert'),
-        units               => $cgi->param('units'),
+        printer_name        => scalar $cgi->param('printer_name'),
+        paper_bin           => scalar $cgi->param('paper_bin'),
+        offset_horz         => scalar $cgi->param('offset_horz'),
+        offset_vert         => scalar $cgi->param('offset_vert'),
+        creep_horz          => scalar $cgi->param('creep_horz'),
+        creep_vert          => scalar $cgi->param('creep_vert'),
+        units               => scalar $cgi->param('units'),
     );
     if ($profile_id) {   # if a label_id was passed in, this is an update to an existing layout
         $profile = C4::Patroncards::Profile->retrieve(profile_id => $profile_id);

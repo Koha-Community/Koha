@@ -154,7 +154,7 @@ elsif ( $op eq 'add_validate' ) {
 
     if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
         C4::Form::MessagingPreferences::handle_form_action( $input,
-            { categorycode => $input->param('categorycode') }, $template );
+            { categorycode => scalar $input->param('categorycode') }, $template );
     }
 
     $searchfield = q||;

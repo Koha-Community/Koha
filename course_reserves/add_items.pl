@@ -79,18 +79,18 @@ if ( $action eq 'lookup' ) {
 
 } elsif ( $action eq 'add' ) {
     my $ci_id = ModCourseItem(
-        itemnumber    => $cgi->param('itemnumber'),
-        itype         => $cgi->param('itype'),
-        ccode         => $cgi->param('ccode'),
-        holdingbranch => $cgi->param('holdingbranch'),
-        location      => $cgi->param('location'),
+        itemnumber    => scalar $cgi->param('itemnumber'),
+        itype         => scalar $cgi->param('itype'),
+        ccode         => scalar $cgi->param('ccode'),
+        holdingbranch => scalar $cgi->param('holdingbranch'),
+        location      => scalar $cgi->param('location'),
     );
 
     my $cr_id = ModCourseReserve(
         course_id   => $course_id,
         ci_id       => $ci_id,
-        staff_note  => $cgi->param('staff_note'),
-        public_note => $cgi->param('public_note'),
+        staff_note  => scalar $cgi->param('staff_note'),
+        public_note => scalar $cgi->param('public_note'),
     );
 
     if ( $return ) {
