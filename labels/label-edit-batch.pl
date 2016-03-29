@@ -52,7 +52,7 @@ my $display_columns = [ {_label_number  => {label => 'Label Number', link_field 
                         {_summary       => {label => 'Summary', link_field => 0}},
                         {_item_type     => {label => 'Item Type', link_field => 0}},
                         {_barcode       => {label => 'Barcode', link_field => 0}},
-                        {_delete        => {label => ' ', link_field => 0}},
+                        {_delete        => {label => 'Actions', link_field => 0}},
                         {select         => {label => 'Select', value => '_label_id'}},
                       ];
 my $op = $cgi->param('op') || 'edit';
