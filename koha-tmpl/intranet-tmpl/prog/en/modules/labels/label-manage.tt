@@ -139,7 +139,7 @@
                                         <tr>
                                         [% FOREACH text_field IN table_loo.text_fields %]
                                             [% IF ( text_field.select_field ) %]
-                                                <td align="center"><a class="btn btn-mini" href="/cgi-bin/koha/labels/label-edit-[% label_element |url %].pl?op=edit&amp;element_id=[% text_field.field_value |url %]"><icon class="fa fa-edit"></icon> Edit</a>  <a class="btn btn-mini" href="/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=[% label_element %]&amp;element_id=[% text_field.field_value |url %]" onclick="return confirm(MSG_CONFIRM_DELETE);"><icon class="fa fa-trash"></icon> Delete</a></td>
+                                                <td align="center" class="actions"><a class="btn btn-mini" href="/cgi-bin/koha/labels/label-edit-[% label_element |url %].pl?op=edit&amp;element_id=[% text_field.field_value |url %]"><icon class="fa fa-edit"></icon> Edit</a>  <a class="btn btn-mini" href="/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=[% label_element %]&amp;element_id=[% text_field.field_value |url %]" onclick="return confirm(MSG_CONFIRM_DELETE);"><icon class="fa fa-trash"></icon> Delete</a></td>
                                                 [% IF label_element == 'batch' %] <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>[% END %]
                                             [% ELSIF ( text_field.field_value ) %]
                                                 <td>[% text_field.field_value %]</td>
