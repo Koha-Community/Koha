@@ -146,4 +146,22 @@ sub navigateYourPersonalDetails {
     return t::lib::Page::Opac::OpacMemberentry->rebrandFromPageObject($self);
 }
 
+sub navigateYourFines {
+    my ($self) = @_;
+    my $d = $self->getDriver();
+    $self->debugTakeSessionSnapshot();
+
+    my $elements = $self->_getLeftNavigationActionElements();
+    $elements->{yourFines}->click();
+    $self->debugTakeSessionSnapshot();
+
+    my $breadcrumbs = $self->_getBreadcrumbLinks();
+
+    ok(ref($breadcrumbs) eq 'ARRAY' &&
+       $breadcrumbs->[scalar(@$breadcrumbs)-1]->get_text() =~ m/Your fines and charges/i,
+       "Opac Navigate to Your fines");
+
+    return t::lib::Page::Opac::OpacAccount->rebrandFromPageObject($self);
+}
+
 1; #Make the compiler happy!
