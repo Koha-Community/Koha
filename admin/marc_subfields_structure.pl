@@ -249,19 +249,19 @@ elsif ( $op eq 'add_validate' ) {
         update marc_subfield_structure set tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, authtypecode=?, value_builder=?, hidden=?, isurl=?, frameworkcode=?,  link=?, defaultvalue=?, maxlength=?
         where tagfield=? and tagsubfield=? and frameworkcode=?
     });
-    my @tagsubfield       = $input->param('tagsubfield');
-    my @liblibrarian      = $input->param('liblibrarian');
-    my @libopac           = $input->param('libopac');
-    my @kohafield         = $input->param('kohafield');
-    my @tab               = $input->param('tab');
-    my @seealso           = $input->param('seealso');
-    my @hidden            = $input->param('hidden');
-    my @authorised_values = $input->param('authorised_value');
-    my @authtypecodes     = $input->param('authtypecode');
-    my @value_builder     = $input->param('value_builder');
-    my @link              = $input->param('link');
-    my @defaultvalue      = $input->param('defaultvalue');
-    my @maxlength         = $input->param('maxlength');
+    my @tagsubfield       = $input->multi_param('tagsubfield');
+    my @liblibrarian      = $input->multi_param('liblibrarian');
+    my @libopac           = $input->multi_param('libopac');
+    my @kohafield         = $input->multi_param('kohafield');
+    my @tab               = $input->multi_param('tab');
+    my @seealso           = $input->multi_param('seealso');
+    my @hidden            = $input->multi_param('hidden');
+    my @authorised_values = $input->multi_param('authorised_value');
+    my @authtypecodes     = $input->multi_param('authtypecode');
+    my @value_builder     = $input->multi_param('value_builder');
+    my @link              = $input->multi_param('link');
+    my @defaultvalue      = $input->multi_param('defaultvalue');
+    my @maxlength         = $input->multi_param('maxlength');
     
     for ( my $i = 0 ; $i <= $#tagsubfield ; $i++ ) {
         my $tagfield    = $input->param('tagfield');

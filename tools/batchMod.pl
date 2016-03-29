@@ -40,7 +40,7 @@ use Koha::DateUtils;
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
 my $error        = $input->param('error');
-my @itemnumbers  = $input->param('itemnumber');
+my @itemnumbers  = $input->multi_param('itemnumber');
 my $biblionumber = $input->param('biblionumber');
 my $op           = $input->param('op');
 my $del          = $input->param('del');
@@ -98,13 +98,13 @@ my $sessionID = $cookies{'CGISESSID'}->value;
 #--- ----------------------------------------------------------------------------
 if ($op eq "action") {
 #-------------------------------------------------------------------------------
-    my @tags      = $input->param('tag');
-    my @subfields = $input->param('subfield');
-    my @values    = $input->param('field_value');
-    my @disabled  = $input->param('disable_input');
+    my @tags      = $input->multi_param('tag');
+    my @subfields = $input->multi_param('subfield');
+    my @values    = $input->multi_param('field_value');
+    my @disabled  = $input->multi_param('disable_input');
     # build indicator hash.
-    my @ind_tag   = $input->param('ind_tag');
-    my @indicator = $input->param('indicator');
+    my @ind_tag   = $input->multi_param('ind_tag');
+    my @indicator = $input->multi_param('indicator');
 
     # Is there something to modify ?
     # TODO : We shall use this var to warn the user in case no modification was done to the items

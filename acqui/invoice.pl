@@ -92,7 +92,7 @@ elsif ( $op && $op eq 'mod' ) {
     } elsif ($input->param('close')) {
         CloseInvoice($invoiceid);
     } elsif ($input->param('merge')) {
-        my @sources = $input->param('merge');
+        my @sources = $input->multi_param('merge');
         MergeInvoices($invoiceid, \@sources);
         defined($invoice_files) && $invoice_files->MergeFileRecIds(@sources);
     }

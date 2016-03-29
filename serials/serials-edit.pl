@@ -79,14 +79,14 @@ use List::MoreUtils qw/uniq/;
 
 my $query           = CGI->new();
 my $dbh             = C4::Context->dbh;
-my @serialids       = $query->param('serialid');
-my @serialseqs      = $query->param('serialseq');
-my @planneddates    = $query->param('planneddate');
-my @publisheddates  = $query->param('publisheddate');
-my @publisheddatetexts = $query->param('publisheddatetext');
-my @status          = $query->param('status');
-my @notes           = $query->param('notes');
-my @subscriptionids = $query->param('subscriptionid');
+my @serialids       = $query->multi_param('serialid');
+my @serialseqs      = $query->multi_param('serialseq');
+my @planneddates    = $query->multi_param('planneddate');
+my @publisheddates  = $query->multi_param('publisheddate');
+my @publisheddatetexts = $query->multi_param('publisheddatetext');
+my @status          = $query->multi_param('status');
+my @notes           = $query->multi_param('notes');
+my @subscriptionids = $query->multi_param('subscriptionid');
 my $op              = $query->param('op');
 if ( scalar(@subscriptionids) == 1 && index( $subscriptionids[0], q|,| ) > 0 ) {
     @subscriptionids = split( /,/, $subscriptionids[0] );
@@ -251,16 +251,16 @@ if ( $op and $op eq 'serialchangestatus' ) {
             );
         }
     }
-    my @moditems = $query->param('moditem');
+    my @moditems = $query->multi_param('moditem');
     if ( scalar(@moditems) ) {
-        my @tags         = $query->param('tag');
-        my @subfields    = $query->param('subfield');
-        my @field_values = $query->param('field_value');
-        my @serials      = $query->param('serial');
-        my @bibnums      = $query->param('bibnum');
-        my @itemid       = $query->param('itemid');
-        my @ind_tag      = $query->param('ind_tag');
-        my @indicator    = $query->param('indicator');
+        my @tags         = $query->multi_param('tag');
+        my @subfields    = $query->multi_param('subfield');
+        my @field_values = $query->multi_param('field_value');
+        my @serials      = $query->multi_param('serial');
+        my @bibnums      = $query->multi_param('bibnum');
+        my @itemid       = $query->multi_param('itemid');
+        my @ind_tag      = $query->multi_param('ind_tag');
+        my @indicator    = $query->multi_param('indicator');
 
         #Rebuilding ALL the data for items into a hash
         # parting them on $itemid.

@@ -258,7 +258,7 @@ if ( $op eq 'show' ) {
 # Process modifications
 if ( $op eq 'do' ) {
 
-    my @disabled = $input->param('disable_input');
+    my @disabled = $input->multi_param('disable_input');
     my $infos;
     for my $field ( qw/surname firstname branchcode categorycode city state zipcode country sort1 sort2 dateenrolled dateexpiry borrowernotes/ ) {
         my $value = $input->param($field);
@@ -270,11 +270,11 @@ if ( $op eq 'do' ) {
         $infos->{$field} = dt_from_string($infos->{$field}) if $infos->{$field};
     }
 
-    my @attributes = $input->param('patron_attributes');
-    my @attr_values = $input->param('patron_attributes_value');
+    my @attributes = $input->multi_param('patron_attributes');
+    my @attr_values = $input->multi_param('patron_attributes_value');
 
     my @errors;
-    my @borrowernumbers = $input->param('borrowernumber');
+    my @borrowernumbers = $input->multi_param('borrowernumber');
     # For each borrower selected
     for my $borrowernumber ( @borrowernumbers ) {
         # If at least one field are filled, we want to modify the borrower

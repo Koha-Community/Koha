@@ -91,7 +91,7 @@ my $err=0;
 my %temphash;
 my $input_saved = 0;
 if ($op eq 'save') {
-    my @names=$input->param();
+    my @names=$input->multi_param();
     my $sth_search = $dbh->prepare("SELECT count(*) AS total FROM overduerules WHERE branchcode=? AND categorycode=?");
 
     my $sth_insert = $dbh->prepare("INSERT INTO overduerules (branchcode,categorycode, delay1,letter1,debarred1, delay2,letter2,debarred2, delay3,letter3,debarred3) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
@@ -194,7 +194,7 @@ if ($op eq 'save') {
 
                     $sth_delete_mtt->execute( $branch, $bor );
                     for my $letternumber ( 1..3 ) {
-                        my @mtt = $input->param( "mtt${letternumber}-$bor" );
+                        my @mtt = $input->multi_param( "mtt${letternumber}-$bor" );
                         next unless @mtt;
                         for my $mtt ( @mtt ) {
                             $sth_insert_mtt->execute( $branch, $bor, $letternumber, $mtt);

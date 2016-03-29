@@ -55,7 +55,7 @@ my $active_currency = Koha::Acquisition::Currencies->get_active;
 my $token    = $cgi->param('token');
 my $payer_id = $cgi->param('PayerID');
 my $amount   = $cgi->param('amount');
-my @accountlines = $cgi->param('accountlines');
+my @accountlines = $cgi->multi_param('accountlines');
 
 my $ua = LWP::UserAgent->new;
 

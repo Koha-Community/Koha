@@ -58,12 +58,12 @@ my $op = $cgi->param('op') // 'show';
 my $syspref_name = q|automatic_item_modification_by_age_configuration|;
 if ( $op eq 'update' ) {
     my @rules;
-    my @unique_ids = $cgi->param('unique_id');
+    my @unique_ids = $cgi->multi_param('unique_id');
     for my $unique_id ( @unique_ids ) {
-        my @substitution_fields = $cgi->param("substitution_field_$unique_id");
-        my @substitution_values = $cgi->param("substitution_value_$unique_id");
-        my @condition_fields = $cgi->param("condition_field_$unique_id");
-        my @condition_values = $cgi->param("condition_value_$unique_id");
+        my @substitution_fields = $cgi->multi_param("substitution_field_$unique_id");
+        my @substitution_values = $cgi->multi_param("substitution_value_$unique_id");
+        my @condition_fields = $cgi->multi_param("condition_field_$unique_id");
+        my @condition_values = $cgi->multi_param("condition_value_$unique_id");
         my $rule = {
             substitutions => [],
             conditions => [],

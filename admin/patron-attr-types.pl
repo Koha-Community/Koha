@@ -168,7 +168,7 @@ sub add_update_attribute_type {
     $attr_type->display_checkout($display_checkout);
     $attr_type->category_code($input->param('category_code'));
     $attr_type->class($input->param('class'));
-    my @branches = $input->param('branches');
+    my @branches = $input->multi_param('branches');
     $attr_type->branches( \@branches );
 
     if ($op eq 'edit') {

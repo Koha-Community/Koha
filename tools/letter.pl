@@ -254,9 +254,9 @@ sub add_validate {
     my $oldmodule     = $input->param('oldmodule');
     my $code          = $input->param('code');
     my $name          = $input->param('name');
-    my @mtt           = $input->param('message_transport_type');
-    my @title         = $input->param('title');
-    my @content       = $input->param('content');
+    my @mtt           = $input->multi_param('message_transport_type');
+    my @title         = $input->multi_param('title');
+    my @content       = $input->multi_param('content');
     for my $mtt ( @mtt ) {
         my $is_html = $input->param("is_html_$mtt");
         my $title   = shift @title;

@@ -40,12 +40,12 @@ my ( $template, $logged_in_user, $cookie ) = get_template_and_user(
 my ($list) =
   GetPatronLists( { patron_list_id => $cgi->param('patron_list_id') } );
 
-my @patrons_to_add = $cgi->param('patrons_to_add');
+my @patrons_to_add = $cgi->multi_param('patrons_to_add');
 if (@patrons_to_add) {
     AddPatronsToList( { list => $list, cardnumbers => \@patrons_to_add } );
 }
 
-my @patrons_to_remove = $cgi->param('patrons_to_remove');
+my @patrons_to_remove = $cgi->multi_param('patrons_to_remove');
 if (@patrons_to_remove) {
     DelPatronsFromList( { list => $list, patron_list_patrons => \@patrons_to_remove } );
 }

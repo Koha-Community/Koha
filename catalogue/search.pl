@@ -168,7 +168,7 @@ my $cgi = new CGI;
 # decide which template to use
 my $template_name;
 my $template_type;
-my @params = $cgi->param("limit");
+my @params = $cgi->multi_param("limit");
 if ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
     $template_name = 'catalogue/results.tt';
 }
@@ -373,7 +373,7 @@ foreach my $sort (@sort_by) {
 $template->param('sort_by' => $sort_by[0]);
 
 # Use the servers defined, or just search our local catalog(default)
-my @servers = $cgi->param('server');
+my @servers = $cgi->multi_param('server');
 unless (@servers) {
     #FIXME: this should be handled using Context.pm
     @servers = ("biblioserver");

@@ -142,7 +142,7 @@ if ( $op eq "add_confirm" ) {
 }
 
 if ( $op eq "delete_confirm" ) {
-    my @delete_field = $input->param("delete_field");
+    my @delete_field = $input->multi_param("delete_field");
     foreach my $delete_field (@delete_field) {
         &DelSuggestion( $borrowernumber, $delete_field );
     }

@@ -133,13 +133,13 @@ if ($op eq ""){
     my $biblios = GetImportRecordsRange($import_batch_id);
     my $duplinbatch;
     my $imported = 0;
-    my @import_record_id_selected = $input->param("import_record_id");
-    my @quantities = $input->param('quantity');
-    my @prices = $input->param('price');
-    my @budgets_id = $input->param('budget_id');
-    my @discount = $input->param('discount');
-    my @sort1 = $input->param('sort1');
-    my @sort2 = $input->param('sort2');
+    my @import_record_id_selected = $input->multi_param("import_record_id");
+    my @quantities = $input->multi_param('quantity');
+    my @prices = $input->multi_param('price');
+    my @budgets_id = $input->multi_param('budget_id');
+    my @discount = $input->multi_param('discount');
+    my @sort1 = $input->multi_param('sort1');
+    my @sort2 = $input->multi_param('sort2');
     my $active_currency = Koha::Acquisition::Currencies->get_active;
     for my $biblio (@$biblios){
         # Check if this import_record_id was selected
@@ -239,12 +239,12 @@ if ($op eq ""){
         # parse the item sent by the form, and create an item just for the import_record_id we are dealing with
         # this is not optimised, but it's working !
         if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
-            my @tags         = $input->param('tag');
-            my @subfields    = $input->param('subfield');
-            my @field_values = $input->param('field_value');
-            my @serials      = $input->param('serial');
-            my @ind_tag   = $input->param('ind_tag');
-            my @indicator = $input->param('indicator');
+            my @tags         = $input->multi_param('tag');
+            my @subfields    = $input->multi_param('subfield');
+            my @field_values = $input->multi_param('field_value');
+            my @serials      = $input->multi_param('serial');
+            my @ind_tag   = $input->multi_param('ind_tag');
+            my @indicator = $input->multi_param('indicator');
             my $item;
             push @{ $item->{tags} },         $tags[0];
             push @{ $item->{subfields} },    $subfields[0];

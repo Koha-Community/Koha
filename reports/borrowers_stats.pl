@@ -49,7 +49,7 @@ my $do_it=$input->param('do_it');
 my $fullreportname = "reports/borrowers_stats.tt";
 my $line = $input->param("Line");
 my $column = $input->param("Column");
-my @filters = $input->param("Filter");
+my @filters = $input->multi_param("Filter");
 $filters[3] = eval { output_pref( { dt => dt_from_string( $filters[3]), dateonly => 1, dateformat => 'iso' } ); }
     if ( $filters[3] );
 $filters[4] = eval { output_pref ({ dt => dt_from_string( $filters[4]), dateonly => 1, dateformat => 'iso' } ); }

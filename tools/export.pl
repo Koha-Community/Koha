@@ -67,7 +67,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     }
 );
 
-my @branch = $query->param("branch");
+my @branch = $query->multi_param("branch");
 my $only_my_branch;
 # Limit to local branch if IndependentBranches and not superlibrarian
 if (
@@ -89,8 +89,8 @@ my %branchmap = map { $_ => 1 } @branch; # for quick lookups
 if ( $op eq "export" ) {
 
     my $export_remove_fields = $query->param("export_remove_fields") || q||;
-    my @biblionumbers      = $query->param("biblionumbers");
-    my @itemnumbers        = $query->param("itemnumbers");
+    my @biblionumbers      = $query->multi_param("biblionumbers");
+    my @itemnumbers        = $query->multi_param("itemnumbers");
     my @sql_params;
     my $sql_query;
 

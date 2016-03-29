@@ -43,7 +43,7 @@ $member2{'borrowernumber'}=$member;
 if ($input->param('newflags')) {
     my $dbh=C4::Context->dbh();
 
-    my @perms = $input->param('flag');
+    my @perms = $input->multi_param('flag');
     my %all_module_perms = ();
     my %sub_perms = ();
     foreach my $perm (@perms) {

@@ -55,10 +55,10 @@ my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authty
 
 # If search form posted
 if ( $op eq "do_search" ) {
-    my @marclist  = $query->param('marclist');
-    my @and_or    = $query->param('and_or');
-    my @excluding = $query->param('excluding');
-    my @operator  = $query->param('operator');
+    my @marclist  = $query->multi_param('marclist');
+    my @and_or    = $query->multi_param('and_or');
+    my @excluding = $query->multi_param('excluding');
+    my @operator  = $query->multi_param('operator');
     my @value     = (
         $query->param('value_mainstr') || undef,
         $query->param('value_main')    || undef,
@@ -84,7 +84,7 @@ if ( $op eq "do_search" ) {
     my @field_data = ();
 
 # get marclist again, as the previous one has been modified by catalogsearch (mainentry replaced by field name)
-    my @marclist_ini = $query->param('marclist');
+    my @marclist_ini = $query->multi_param('marclist');
     for ( my $i = 0 ; $i <= $#marclist ; $i++ ) {
         push @field_data, { term => "marclist",  val => $marclist_ini[$i] };
         push @field_data, { term => "and_or",    val => $and_or[$i] };

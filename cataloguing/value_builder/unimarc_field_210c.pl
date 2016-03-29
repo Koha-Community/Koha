@@ -70,11 +70,11 @@ my ($input) = @_;
     my $resultsperpage;
 
     if ($op eq "do_search") {
-        my @marclist = $query->param('marclist');
-        my @and_or = $query->param('and_or');
-        my @excluding = $query->param('excluding');
-        my @operator = $query->param('operator');
-        my @value = $query->param('value');
+        my @marclist = $query->multi_param('marclist');
+        my @and_or = $query->multi_param('and_or');
+        my @excluding = $query->multi_param('excluding');
+        my @operator = $query->multi_param('operator');
+        my @value = $query->multi_param('value');
         my $orderby   = $query->param('orderby');
 
         $resultsperpage= $query->param('resultsperpage');

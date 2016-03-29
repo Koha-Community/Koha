@@ -147,11 +147,11 @@ if (!C4::Auth::haspermission( C4::Context->userenv->{id} , { circulate => 'force
 
 my $onsite_checkout = $query->param('onsite_checkout');
 
-my @failedrenews = $query->param('failedrenew');    # expected to be itemnumbers
+my @failedrenews = $query->multi_param('failedrenew');    # expected to be itemnumbers
 our %renew_failed = ();
 for (@failedrenews) { $renew_failed{$_} = 1; }
 
-my @failedreturns = $query->param('failedreturn');
+my @failedreturns = $query->multi_param('failedreturn');
 our %return_failed = ();
 for (@failedreturns) { $return_failed{$_} = 1; }
 

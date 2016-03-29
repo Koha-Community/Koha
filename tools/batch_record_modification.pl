@@ -151,7 +151,7 @@ if ( $op eq 'form' ) {
     );
 } elsif ( $op eq 'modify' ) {
     # We want to modify selected records!
-    my @record_ids = $input->param('record_id');
+    my @record_ids = $input->multi_param('record_id');
 
     my ( $job );
     if ( $runinbackground ) {

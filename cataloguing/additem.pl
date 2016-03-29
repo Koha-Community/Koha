@@ -429,12 +429,12 @@ if ($op eq "additem") {
 
     #-------------------------------------------------------------------------------
     # rebuild
-    my @tags      = $input->param('tag');
-    my @subfields = $input->param('subfield');
-    my @values    = $input->param('field_value');
+    my @tags      = $input->multi_param('tag');
+    my @subfields = $input->multi_param('subfield');
+    my @values    = $input->multi_param('field_value');
     # build indicator hash.
-    my @ind_tag   = $input->param('ind_tag');
-    my @indicator = $input->param('indicator');
+    my @ind_tag   = $input->multi_param('ind_tag');
+    my @indicator = $input->multi_param('indicator');
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
     my $record = MARC::Record::new_from_xml($xml, 'UTF-8');
 
@@ -671,12 +671,12 @@ if ($op eq "additem") {
 } elsif ($op eq "saveitem") {
 #-------------------------------------------------------------------------------
     # rebuild
-    my @tags      = $input->param('tag');
-    my @subfields = $input->param('subfield');
-    my @values    = $input->param('field_value');
+    my @tags      = $input->multi_param('tag');
+    my @subfields = $input->multi_param('subfield');
+    my @values    = $input->multi_param('field_value');
     # build indicator hash.
-    my @ind_tag   = $input->param('ind_tag');
-    my @indicator = $input->param('indicator');
+    my @ind_tag   = $input->multi_param('ind_tag');
+    my @indicator = $input->multi_param('indicator');
     # my $itemnumber = $input->param('itemnumber');
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag,'ITEM');
     my $itemtosave=MARC::Record::new_from_xml($xml, 'UTF-8');

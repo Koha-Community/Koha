@@ -28,7 +28,7 @@ use Text::CSV_XS;
 
 my $query = new CGI;
 my $supplierid = $query->param('supplierid');
-my @serialids = $query->param('serialid');
+my @serialids = $query->multi_param('serialid');
 my $op = $query->param('op') || q{};
 
 my $csv_profile_id = $query->param('csv_profile');

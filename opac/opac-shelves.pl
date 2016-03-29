@@ -188,7 +188,7 @@ if ( $op eq 'add_form' ) {
 } elsif ( $op eq 'remove_biblios' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber);
-    my @biblionumber = $query->param('biblionumber');
+    my @biblionumber = $query->multi_param('biblionumber');
     if ($shelf) {
         if ( $shelf->can_biblios_be_removed( $loggedinuser ) ) {
             my $number_of_biblios_removed = eval {

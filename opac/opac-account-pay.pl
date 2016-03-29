@@ -50,7 +50,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $payment_method = $cgi->param('payment_method');
-my @accountlines = $cgi->param('accountline');
+my @accountlines = $cgi->multi_param('accountline');
 
 my $amount_to_pay =
   Koha::Database->new()->schema()->resultset('Accountline')->search( { accountlines_id => { -in => \@accountlines } } )

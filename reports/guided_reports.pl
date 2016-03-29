@@ -116,7 +116,7 @@ elsif ( $phase eq 'Build new' ) {
 }
 
 elsif ( $phase eq 'Delete Multiple') {
-    my @ids = $input->param('ids');
+    my @ids = $input->multi_param('ids');
     delete_report( @ids );
     print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved");
     exit;
@@ -320,7 +320,7 @@ elsif ( $phase eq 'Choose these columns' ) {
     # next step is the constraints
     my $area    = $input->param('area');
     my $type    = $input->param('type');
-    my @columns = $input->param('columns');
+    my @columns = $input->multi_param('columns');
     my $column  = join( ',', @columns );
 
     $template->param(
@@ -345,9 +345,9 @@ elsif ( $phase eq 'Choose these criteria' ) {
     my $area     = $input->param('area');
     my $type     = $input->param('type');
     my $column   = $input->param('column');
-    my @definitions = $input->param('definition');
+    my @definitions = $input->multi_param('definition');
     my $definition = join (',',@definitions);
-    my @criteria = $input->param('criteria_column');
+    my @criteria = $input->multi_param('criteria_column');
     my $query_criteria;
     foreach my $crit (@criteria) {
         my $value = $input->param( $crit . "_value" );
@@ -427,7 +427,7 @@ elsif ( $phase eq 'Choose these operations' ) {
     my $column   = $input->param('column');
     my $criteria = $input->param('criteria');
 	my $definition = $input->param('definition');
-    my @total_by = $input->param('total_by');
+    my @total_by = $input->multi_param('total_by');
     my $totals;
     foreach my $total (@total_by) {
         my $value = $input->param( $total . "_tvalue" );
@@ -474,7 +474,7 @@ elsif ( $phase eq 'Build report' ) {
     my $query_criteria=$crit;
     # split the columns up by ,
     my @columns = split( ',', $column );
-    my @order_by = $input->param('order_by');
+    my @order_by = $input->multi_param('order_by');
 
     my $query_orderby;
     foreach my $order (@order_by) {
@@ -621,7 +621,7 @@ elsif ($phase eq 'Run this report'){
     my $limit      = $input->param('limit') || 20;
     my $offset     = 0;
     my $report_id  = $input->param('reports');
-    my @sql_params = $input->param('sql_params');
+    my @sql_params = $input->multi_param('sql_params');
     # offset algorithm
     if ($input->param('page')) {
         $offset = ($input->param('page') - 1) * $limit;

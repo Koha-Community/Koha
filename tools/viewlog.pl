@@ -45,9 +45,9 @@ my $input = new CGI;
 
 $debug or $debug = $cgi_debug;
 my $do_it    = $input->param('do_it');
-my @modules  = $input->param("modules");
+my @modules  = $input->multi_param("modules");
 my $user     = $input->param("user") // '';
-my @actions  = $input->param("actions");
+my @actions  = $input->multi_param("actions");
 my $object   = $input->param("object");
 my $info     = $input->param("info");
 my $datefrom = $input->param("from");

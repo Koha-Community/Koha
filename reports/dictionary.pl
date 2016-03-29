@@ -92,7 +92,7 @@ elsif ( $phase eq 'New Term step 3' ) {
 elsif ( $phase eq 'New Term step 4' ) {
 
     # Choosing the values
-    my @columns                = $input->param('columns');
+    my @columns                = $input->multi_param('columns');
     my $columnstring           = join( ',', @columns );
     my @column_loop;
     foreach my $column (@columns) {
@@ -130,7 +130,7 @@ elsif ( $phase eq 'New Term step 4' ) {
 elsif ( $phase eq 'New Term step 5' ) {
     # Confirmation screen
     my $columnstring           = $input->param('columnstring');
-    my @criteria               = $input->param('criteria_column');
+    my @criteria               = $input->multi_param('criteria_column');
     my $query_criteria;
     my @criteria_loop;
 

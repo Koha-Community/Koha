@@ -192,18 +192,18 @@ if ($op eq 'add_form') {
                                     values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     my $sth_update = $dbh->prepare("update auth_subfield_structure set authtypecode=?, tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, frameworkcode=?, value_builder=?, hidden=?, isurl=?, defaultvalue=?
                                     where authtypecode=? and tagfield=? and tagsubfield=?");
-	my @tagsubfield	= $input->param('tagsubfield');
-	my @liblibrarian	= $input->param('liblibrarian');
-	my @libopac		= $input->param('libopac');
+	my @tagsubfield	= $input->multi_param('tagsubfield');
+	my @liblibrarian	= $input->multi_param('liblibrarian');
+	my @libopac		= $input->multi_param('libopac');
 	my @kohafield		= ''.$input->param('kohafield');
-	my @tab				= $input->param('tab');
-	my @seealso		= $input->param('seealso');
-    my @ohidden             = $input->param('ohidden');
-	my @authorised_values	= $input->param('authorised_value');
+	my @tab				= $input->multi_param('tab');
+	my @seealso		= $input->multi_param('seealso');
+    my @ohidden             = $input->multi_param('ohidden');
+	my @authorised_values	= $input->multi_param('authorised_value');
 	my $authtypecode	= $input->param('authtypecode');
-	my @frameworkcodes	= $input->param('frameworkcode');
-	my @value_builder	=$input->param('value_builder');
-    my @defaultvalue = $input->param('defaultvalue');
+	my @frameworkcodes	= $input->multi_param('frameworkcode');
+	my @value_builder	=$input->multi_param('value_builder');
+    my @defaultvalue = $input->multi_param('defaultvalue');
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
 		my $tagsubfield		=$tagsubfield[$i];

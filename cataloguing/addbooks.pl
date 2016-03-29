@@ -41,7 +41,7 @@ my $input = new CGI;
 
 my $success = $input->param('biblioitem');
 my $query   = $input->param('q');
-my @value   = $input->param('value');
+my @value   = $input->multi_param('value');
 my $page    = $input->param('page') || 1;
 my $results_per_page = 20;
 

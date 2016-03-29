@@ -606,12 +606,12 @@ $op ||= q{};
 if ($op eq "add") {
 #------------------------------------------------------------------------------------------------------------------------------
     # rebuild
-    my @tags = $input->param('tag');
-    my @subfields = $input->param('subfield');
-    my @values = $input->param('field_value');
+    my @tags = $input->multi_param('tag');
+    my @subfields = $input->multi_param('subfield');
+    my @values = $input->multi_param('field_value');
     # build indicator hash.
-    my @ind_tag = $input->param('ind_tag');
-    my @indicator = $input->param('indicator');
+    my @ind_tag = $input->multi_param('ind_tag');
+    my @indicator = $input->multi_param('indicator');
     my $record = TransformHtmlToMarc($input, 0);
 
     my ($duplicateauthid,$duplicateauthvalue);

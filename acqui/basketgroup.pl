@@ -340,7 +340,7 @@ if ( $op eq "add" ) {
 #
     # Getting parameters
     my $basketgroup       = {};
-    my @baskets           = $input->param('basket');
+    my @baskets           = $input->multi_param('basket');
     my $basketgroupid     = $input->param('basketgroupid');
     my $basketgroupname   = $input->param('basketgroupname');
     my $booksellerid      = $input->param('booksellerid');

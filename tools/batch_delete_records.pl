@@ -109,7 +109,7 @@ if ( $op eq 'form' ) {
     );
 } elsif ( $op eq 'delete' ) {
     # We want to delete selected records!
-    my @record_ids = $input->param('record_id');
+    my @record_ids = $input->multi_param('record_id');
     my $dbh = C4::Context->dbh;
     $dbh->{AutoCommit} = 0;
     $dbh->{RaiseError} = 1;

@@ -41,13 +41,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my @reserve_id = $query->param('reserve_id');
-my @rank = $query->param('rank-request');
-my @biblionumber = $query->param('biblionumber');
-my @borrower = $query->param('borrowernumber');
-my @branch = $query->param('pickup');
-my @itemnumber = $query->param('itemnumber');
-my @suspend_until=$query->param('suspend_until');
+my @reserve_id = $query->multi_param('reserve_id');
+my @rank = $query->multi_param('rank-request');
+my @biblionumber = $query->multi_param('biblionumber');
+my @borrower = $query->multi_param('borrowernumber');
+my @branch = $query->multi_param('pickup');
+my @itemnumber = $query->multi_param('itemnumber');
+my @suspend_until=$query->multi_param('suspend_until');
 my $multi_hold = $query->param('multi_hold');
 my $biblionumbers = $query->param('biblionumbers');
 my $count=@rank;

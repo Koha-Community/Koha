@@ -102,7 +102,7 @@ my $userenv = C4::Context->userenv;
 ## Deal with debarments
 $template->param(
     debarments => GetDebarments( { borrowernumber => $borrowernumber } ) );
-my @debarments_to_remove = $input->param('remove_debarment');
+my @debarments_to_remove = $input->multi_param('remove_debarment');
 foreach my $d ( @debarments_to_remove ) {
     DelDebarment( $d );
 }

@@ -48,13 +48,13 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-    my @value      = $query->param('term');
+    my @value      = $query->multi_param('term');
     my $searchtype = $query->param('querytype');
     my @marclist  = ($searchtype);
     my $authtypecode = $query->param('authtypecode');
-    my @and_or    = $query->param('and_or');
-    my @excluding = $query->param('excluding');
-    my @operator  = $query->param('operator');
+    my @and_or    = $query->multi_param('and_or');
+    my @excluding = $query->multi_param('excluding');
+    my @operator  = $query->multi_param('operator');
     my $orderby   = $query->param('orderby');
 
     my $resultsperpage = 50;

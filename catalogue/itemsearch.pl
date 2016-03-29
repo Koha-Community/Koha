@@ -47,11 +47,11 @@ if (defined $format and $format eq 'json') {
     $cgi->param('sortby', $columns[ $cgi->param('iSortCol_0') ]);
     $cgi->param('sortorder', $cgi->param('sSortDir_0'));
 
-    my @f = $cgi->param('f');
-    my @q = $cgi->param('q');
+    my @f = $cgi->multi_param('f');
+    my @q = $cgi->multi_param('q');
     push @q, '' if @q == 0;
-    my @op = $cgi->param('op');
-    my @c = $cgi->param('c');
+    my @op = $cgi->multi_param('op');
+    my @c = $cgi->multi_param('c');
     foreach my $i (0 .. ($cgi->param('iColumns') - 1)) {
         my $sSearch = $cgi->param("sSearch_$i");
         if (defined $sSearch and $sSearch ne '') {
@@ -116,10 +116,10 @@ if (scalar keys %params > 0) {
         }
     }
 
-    my @c = $cgi->param('c');
-    my @fields = $cgi->param('f');
-    my @q = $cgi->param('q');
-    my @op = $cgi->param('op');
+    my @c = $cgi->multi_param('c');
+    my @fields = $cgi->multi_param('f');
+    my @q = $cgi->multi_param('q');
+    my @op = $cgi->multi_param('op');
 
     my $f;
     for (my $i = 0; $i < @fields; $i++) {
@@ -232,7 +232,7 @@ if (scalar keys %params > 0) {
         my $url = '/cgi-bin/koha/catalogue/itemsearch.pl';
         my @params;
         foreach my $p (keys %params) {
-            my @v = $cgi->param($p);
+            my @v = $cgi->multi_param($p);
             push @params, map { "$p=" . $_ } @v;
         }
         $url .= '?' . join ('&', @params);

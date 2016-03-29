@@ -96,8 +96,8 @@ my ($template,$borrowernumber,$cookie);
 # decide which template to use
 my $template_name;
 my $template_type = 'basic';
-my @params = $cgi->param("limit");
-my @searchCategories = $cgi->param('searchcat');
+my @params = $cgi->multi_param("limit");
+my @searchCategories = $cgi->multi_param('searchcat');
 
 my $format = $cgi->param("format") || '';
 my $build_grouped_results = C4::Context->preference('OPACGroupResults');
@@ -404,7 +404,7 @@ if ( $params->{tag} ) {
 my $pasarParams = '';
 my $j = 0;
 for (keys %$params) {
-    my @pasarParam = $cgi->param($_);
+    my @pasarParam = $cgi->multi_param($_);
     for my $paramValue(@pasarParam) {
         $pasarParams .= '&amp;' if ($j > 0);
         $pasarParams .= $_ . '=' . uri_escape_utf8($paramValue);
@@ -435,7 +435,7 @@ foreach my $sort (@sort_by) {
 $template->param('sort_by' => $sort_by[0]);
 
 # Use the servers defined, or just search our local catalog(default)
-my @servers = $cgi->param('server');
+my @servers = $cgi->multi_param('server');
 unless (@servers) {
     #FIXME: this should be handled using Context.pm
     @servers = ("biblioserver");
@@ -444,12 +444,12 @@ unless (@servers) {
 
 # operators include boolean and proximity operators and are used
 # to evaluate multiple operands
-my @operators = $cgi->param('op');
+my @operators = $cgi->multi_param('op');
 @operators = map { uri_unescape($_) } @operators;
 
 # indexes are query qualifiers, like 'title', 'author', etc. They
 # can be single or multiple parameters separated by comma: kw,right-Truncation 
-my @indexes = $cgi->param('idx');
+my @indexes = $cgi->multi_param('idx');
 @indexes = map { uri_unescape($_) } @indexes;
 
 # if a simple index (only one)  display the index used in the top search box
@@ -457,7 +457,7 @@ if ($indexes[0] && !$indexes[1]) {
     $template->param("ms_".$indexes[0] => 1);
 }
 # an operand can be a single term, a phrase, or a complete ccl query
-my @operands = $cgi->param('q');
+my @operands = $cgi->multi_param('q');
 @operands = map { uri_unescape($_) } @operands;
 
 $template->{VARS}->{querystring} = join(' ', @operands);
@@ -470,9 +470,9 @@ if ($operands[0] && !$operands[1]) {
 }
 
 # limits are use to limit to results to a pre-defined category such as branch or language
-my @limits = $cgi->param('limit');
+my @limits = $cgi->multi_param('limit');
 @limits = map { uri_unescape($_) } @limits;
-my @nolimits = $cgi->param('nolimit');
+my @nolimits = $cgi->multi_param('nolimit');
 @nolimits = map { uri_unescape($_) } @nolimits;
 my %is_nolimit = map { $_ => 1 } @nolimits;
 @limits = grep { not $is_nolimit{$_} } @limits;

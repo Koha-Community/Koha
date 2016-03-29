@@ -53,10 +53,10 @@ my $id = $input->param('id');
 my $op = $input->param('op');
 
 if($op && $op eq "save") {
-    my @marcfields = $input->param('marcfield');
-    my @marcsubfields = $input->param('marcsubfield');
-    my @operators = $input->param('operator');
-    my @marcvalues = $input->param('marcvalue');
+    my @marcfields = $input->multi_param('marcfield');
+    my @marcsubfields = $input->multi_param('marcsubfield');
+    my @operators = $input->multi_param('operator');
+    my @marcvalues = $input->multi_param('marcvalue');
 
     my @mappings;
     my $i = 0;

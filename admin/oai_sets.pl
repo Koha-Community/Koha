@@ -52,7 +52,7 @@ if($op && $op eq "new") {
 } elsif($op && $op eq "savenew") {
     my $spec = $input->param('spec');
     my $name = $input->param('name');
-    my @descriptions = $input->param('description');
+    my @descriptions = $input->multi_param('description');
     AddOAISet({
         spec => $spec,
         name => $name,
@@ -72,7 +72,7 @@ if($op && $op eq "new") {
     my $id = $input->param('id');
     my $spec = $input->param('spec');
     my $name = $input->param('name');
-    my @descriptions = $input->param('description');
+    my @descriptions = $input->multi_param('description');
     ModOAISet({
         id => $id,
         spec => $spec,

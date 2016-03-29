@@ -96,7 +96,7 @@ my $del          = $input->param("sep");
 
 my $show_mine       = $input->param('show_mine') ;
 
-my @hide_cols      = $input->param('hide_cols');
+my @hide_cols      = $input->multi_param('hide_cols');
 
 if ( $budget_period_locked == 1  && not defined  $show_actual ) {
      $show_actual  = 1;
@@ -141,7 +141,7 @@ my @budgets = @$budgets_ref;
 my @authvals;
 my %labels;
 
-my @names = $input->param();
+my @names = $input->multi_param();
 # ------------------------------------------------------------
 if ( $op eq 'save' ) {
     #get budgets
