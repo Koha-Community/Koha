@@ -43,7 +43,7 @@ if (defined $format and $format eq 'json') {
     # Map DataTables parameters with 'regular' parameters
     $cgi->param('rows', $cgi->param('iDisplayLength'));
     $cgi->param('page', ($cgi->param('iDisplayStart') / $cgi->param('iDisplayLength')) + 1);
-    my @columns = split /,/, $cgi->param('sColumns');
+    my @columns = split /,/, $cgi->multi_param('sColumns');
     $cgi->param('sortby', $columns[ $cgi->param('iSortCol_0') ]);
     $cgi->param('sortorder', $cgi->param('sSortDir_0'));
 
@@ -102,7 +102,7 @@ if (scalar keys %params > 0) {
     };
 
     foreach my $p (qw(homebranch location itype ccode issues datelastborrowed notforloan)) {
-        if (my @q = $cgi->param($p)) {
+        if (my @q = $cgi->multi_param($p)) {
             if ($q[0] ne '') {
                 my $f = {
                     field => $p,

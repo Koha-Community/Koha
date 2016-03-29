@@ -171,7 +171,7 @@ if ( $service and any { $service eq $_ } @services ) {
     my @parmsrequired = @{ $required{$service} };
     my @parmsoptional = @{ $optional{$service} };
     my @parmsall      = ( @parmsrequired, @parmsoptional );
-    my @names         = $cgi->param;
+    my @names         = $cgi->multi_param;
     my %paramhash;
     $paramhash{$_} = 1 for @names;
 
