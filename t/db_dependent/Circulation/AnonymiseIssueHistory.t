@@ -35,14 +35,19 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 # TODO create a subroutine in t::lib::Mocks
-my $userenv_patron = $builder->build( { source => 'Borrower', }, );
+my $branch = $builder->build({ source => 'Branch' });
+my $userenv_patron = $builder->build({
+    source => 'Borrower',
+    value  => { branchcode => $branch->{branchcode} },
+});
 C4::Context->_new_userenv('DUMMY SESSION');
 C4::Context->set_userenv(
     $userenv_patron->{borrowernumber},
     $userenv_patron->{userid},
     'usercnum', 'First name', 'Surname',
-    $userenv_patron->{_fk}{branchcode}{branchcode},
-    $userenv_patron->{_fk}{branchcode}{branchname}, 0
+    $branch->{branchcode},
+    $branch->{branchname},
+    0,
 );
 
 my $anonymous = $builder->build( { source => 'Borrower', }, );

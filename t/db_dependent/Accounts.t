@@ -52,11 +52,10 @@ my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
+# this test needs a MPL branch; also create another one
 my $builder = t::lib::TestBuilder->new();
-
-my $library = $builder->build({
-    source => 'Branch',
-});
+$builder->build({ source => 'Branch', value => { branchcode => 'MPL' }});
+my $library = $builder->build({ source => 'Branch' });
 
 $dbh->do(q|DELETE FROM accountlines|);
 $dbh->do(q|DELETE FROM issues|);

@@ -23,14 +23,21 @@ use C4::Reserves;
 use Koha::Database;
 
 use t::lib::TestBuilder;
+use Data::Dumper qw|Dumper|;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 # NOTE This is a trick, if we want to populate the biblioitems table, we should not create a Biblio but a Biblioitem
-my $from_biblio = $builder->build( { source => 'Biblioitem', } )->{_fk}{biblionumber};
-my $to_biblio   = $builder->build( { source => 'Biblioitem', } )->{_fk}{biblionumber};
+my $param = { source => 'Biblioitem' };
+my $from_biblio = {
+    biblionumber => $builder->build($param)->{biblionumber},
+};
+my $to_biblio = {
+    biblionumber => $builder->build($param)->{biblionumber},
+};
+
 my $item1       = $builder->build(
     {   source => 'Item',
         value  => { biblionumber => $from_biblio->{biblionumber}, },

@@ -65,6 +65,13 @@ my $item = $builder->build(
 
 subtest 'Test basic functionality' => sub {
     plan tests => 1;
+
+    my $rule = $builder->schema->resultset('Issuingrule')->find({
+        branchcode                    => '*',
+        categorycode                  => '*',
+        itemtype                      => '*',
+    });
+    $rule->delete if $rule;
     my $issuingrule = $builder->build(
         {
             source => 'Issuingrule',

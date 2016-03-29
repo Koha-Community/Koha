@@ -43,8 +43,8 @@ subtest 'Test generation of annual barcodes from DB values' => sub {
 
     plan tests => 4;
 
-    $builder->clear( { source => 'Issue' } );
-    $builder->clear( { source => 'Item' } );
+    $builder->schema->resultset( 'Issue' )->delete_all;
+    $builder->schema->resultset( 'Item' )->delete_all;
 
     my $barcodeobj;
 
@@ -84,8 +84,8 @@ subtest 'Test generation of annual barcodes from DB values' => sub {
 };
 
 
-$builder->clear( { source => 'Issue' } );
-$builder->clear( { source => 'Item' } );
+$builder->schema->resultset( 'Issue' )->delete_all;
+$builder->schema->resultset( 'Item' )->delete_all;
 
 my %thash = (
     incremental => [],
