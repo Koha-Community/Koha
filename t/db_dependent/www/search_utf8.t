@@ -153,6 +153,7 @@ sub test_search{
                 'encoding'        => 'utf8',
                 'parse_items'     => '1',
                 'runinbackground' => '1',
+                'record_type'     => 'biblio'
             }
         },
         'stage MARC'
@@ -207,6 +208,7 @@ sub test_search{
                 'parse_items'     => '1',
                 'runinbackground' => '1',
                 'completedJobID'  => $jobID,
+                'record_type'     => 'biblio'
             }
         },
         'stage MARC'
@@ -215,7 +217,7 @@ sub test_search{
     $agent->follow_link_ok( { text => 'Manage staged records' }, 'view batch' );
 
 
-    $agent->form_number(5);
+    $agent->form_number(6);
     $agent->field( 'framework', '' );
     $agent->click_ok( 'mainformsubmit', "imported records into catalog" );
     my $webpage = $agent->{content};
