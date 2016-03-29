@@ -123,6 +123,12 @@ if ($op eq "") {
         did_clean       => 1,
         import_batch_id => $import_batch_id,
     );
+} elsif ($op eq "delete-batch") {
+    DeleteBatch($import_batch_id);
+    import_batches_list($template, $offset, $results_per_page);
+    $template->param(
+        did_delete      => 1,
+    );
 } elsif ($op eq "redo-matching") {
     my $new_matcher_id = $input->param('new_matcher_id');
     my $current_matcher_id = $input->param('current_matcher_id');
