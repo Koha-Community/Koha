@@ -186,8 +186,13 @@ my $collections    = GetKohaAuthorisedValues('items.ccode'   , $fw);
 my $copynumbers    = GetKohaAuthorisedValues('items.copynumber', $fw);
 my (@itemloop, @otheritemloop, %itemfields);
 my $norequests = 1;
-my $authvalcode_items_itemlost = GetAuthValCode('items.itemlost',$fw);
-my $authvalcode_items_damaged  = GetAuthValCode('items.damaged', $fw);
+
+if ( my $lost_av = GetAuthValCode('items.itemlost', $fw) ) {
+    $template->param( itemlostloop => GetAuthorisedValues( $lost_av ) );
+}
+if ( my $damaged_av = GetAuthValCode('items.damaged', $fw) ) {
+    $template->param( itemdamagedloop => GetAuthorisedValues( $damaged_av ) );
+}
 
 my $materials_authvalcode = GetAuthValCode('items.materials', $fw);
 my %materials_map;
@@ -217,11 +222,7 @@ foreach my $item (@items) {
                                                : '';
 
     $item->{datedue} = format_sqldatetime($item->{datedue});
-    # item damaged, lost, withdrawn loops
-    $item->{itemlostloop} = GetAuthorisedValues($authvalcode_items_itemlost) if $authvalcode_items_itemlost;
-    if ($item->{damaged}) {
-        $item->{itemdamagedloop} = GetAuthorisedValues($authvalcode_items_damaged) if $authvalcode_items_damaged;
-    }
+
     #get shelf location and collection code description if they are authorised value.
     # same thing for copy number
     my $shelfcode = $item->{'location'};

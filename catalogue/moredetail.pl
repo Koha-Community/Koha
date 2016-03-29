@@ -137,9 +137,6 @@ foreach ( keys %{$data} ) {
 ($itemnumber) and @items = (grep {$_->{'itemnumber'} == $itemnumber} @items);
 foreach my $item (@items){
     $item->{object} = Koha::Items->find( $item->{itemnumber} );
-    $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw)) if GetAuthValCode('items.itemlost',$fw);
-    $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw)) if GetAuthValCode('items.damaged',$fw);
-    $item->{itemwithdrawnloop}= GetAuthorisedValues(GetAuthValCode('items.withdrawn',$fw)) if GetAuthValCode('items.withdrawn',$fw);
     $item->{'collection'}              = $ccodes->{ $item->{ccode} } if ($ccodes);
     $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'translated_description'};
     $item->{'replacementprice'}        = sprintf( "%.2f", $item->{'replacementprice'} );
@@ -203,6 +200,17 @@ foreach my $item (@items){
     }
 
 }
+
+if ( my $lost_av = GetAuthValCode('items.itemlost', $fw) ) {
+    $template->param( itemlostloop => GetAuthorisedValues( $lost_av ) );
+}
+if ( my $damaged_av = GetAuthValCode('items.damaged', $fw) ) {
+    $template->param( itemdamagedloop => GetAuthorisedValues( $damaged_av ) );
+}
+if ( my $withdrawn_av = GetAuthValCode('items.withdrawn', $fw) ) {
+    $template->param( itemwithdrawnloop => GetAuthorisedValues( $withdrawn_av ) );
+}
+
 $template->param(count => $data->{'count'},
 	subscriptionsnumber => $subscriptionsnumber,
     subscriptiontitle   => $data->{title},

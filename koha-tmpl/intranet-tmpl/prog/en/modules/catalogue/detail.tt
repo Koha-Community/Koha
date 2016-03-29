@@ -648,8 +648,8 @@ function verify_images() {
                         [% END %]
 
                         [% IF ( item.itemlost ) %]
-                            [% IF ( item.itemlostloop ) %]
-                                [% FOREACH itemlostloo IN item.itemlostloop %]
+                            [% IF itemlostloop %]
+                                [% FOREACH itemlostloo IN itemlostloop %]
                                     [% IF itemlostloo.authorised_value == item.itemlost %]
                                         <span class="lost">[% itemlostloo.lib %]</span>
                                     [% END %]
@@ -664,8 +664,8 @@ function verify_images() {
                         [% END %]
 
                         [% IF ( item.damaged ) %]
-                            [% IF ( item.itemdamagedloop ) %]
-                                [% FOREACH itemdamagedloo IN item.itemdamagedloop %]
+                            [% IF itemdamagedloop %]
+                                [% FOREACH itemdamagedloo IN itemdamagedloop %]
                                     [% IF itemdamagedloo.authorised_value == item.damaged %]
                                         <span class="dmg">[% itemdamagedloo.lib %]</span>
                                     [% END %]

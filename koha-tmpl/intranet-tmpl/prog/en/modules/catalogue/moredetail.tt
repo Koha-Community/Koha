@@ -99,7 +99,7 @@
             [% END %]
             &nbsp;</li>
             <li><span class="label">Current renewals:</span> [% ITEM_DAT.renewals %]&nbsp;</li>
-            [% IF ( ITEM_DAT.itemlostloop ) %]
+            [% IF itemlostloop %]
                 <li><span class="label">Lost status:</span>
                     [% IF ( CAN_user_circulate ) %]
                         <form action="updateitem.pl" method="post">
@@ -108,7 +108,7 @@
                         <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber %]" />
                         <select name="itemlost" >
                                     <option value="">Choose</option>
-                        [% FOREACH itemlostloo IN ITEM_DAT.itemlostloop %]
+                        [% FOREACH itemlostloo IN itemlostloop %]
                             [% IF itemlostloo.authorised_value == ITEM_DAT.itemlost %]
                                     <option value="[% itemlostloo.authorised_value %]" selected="selected">[% itemlostloo.lib %]</option>
                             [% ELSE %]
@@ -120,7 +120,7 @@
                         <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged %]" />
                         <input type="submit" name="submit" class="submit" value="Set status" /></form>
                     [% ELSE %]
-                        [% FOREACH itemlostloo IN ITEM_DAT.itemlostloop %]
+                        [% FOREACH itemlostloo IN itemlostloop %]
                             [% IF ( itemlostloo.selected ) %]
                                 [% itemlostloo.lib %]
                             [% END %]
@@ -132,7 +132,7 @@
                     <li><span class="label">Lost on:</span>[% ITEM_DAT.itemlost_on | $KohaDates %] &nbsp;</li>
                 [% END %]
             [% END %]
-            [% IF ( ITEM_DAT.itemdamagedloop ) %]
+            [% IF itemdamagedloop %]
             <li><span class="label">Damaged status:</span>
                 [% IF ( CAN_user_circulate ) %]
                     <form action="updateitem.pl" method="post">
@@ -141,7 +141,7 @@
                     <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber %]" />
                     <select name="damaged" >
                     <option value="">Choose</option>
-            [% FOREACH itemdamagedloo IN ITEM_DAT.itemdamagedloop %]
+            [% FOREACH itemdamagedloo IN itemdamagedloop %]
                 [% IF itemdamagedloo.authorised_value == ITEM_DAT.damaged %]
                     <option value="[% itemdamagedloo.authorised_value %]" selected="selected">[% itemdamagedloo.lib %]</option>
                 [% ELSE %]
@@ -153,7 +153,7 @@
                     <input type="hidden" name="itemlost" value="[% ITEM_DAT.itemlost %]" />
                     <input type="submit" name="submit" class="submit" value="Set status" /></form>
                 [% ELSE %]
-                    [% FOREACH itemdamagedloo IN ITEM_DAT.itemdamagedloop %]
+                    [% FOREACH itemdamagedloo IN itemdamagedloop %]
                         [% IF ( itemdamagedloo.selected ) %]
                             [% itemdamagedloo.lib %]
                         [% END %]
@@ -163,7 +163,7 @@
             </li>
             [% END %]
 
-            [% IF ( ITEM_DAT.itemwithdrawnloop ) %]
+            [% IF itemwithdrawnloop %]
                 <li><span class="label">Withdrawn status:</span>
                     [% IF ( CAN_user_circulate ) %]
                         <form action="updateitem.pl" method="post">
@@ -172,7 +172,7 @@
                             <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber %]" />
                             <select name="withdrawn" >
                                 <option value="">Choose</option>
-                                [% FOREACH itemwithdrawn IN ITEM_DAT.itemwithdrawnloop %]
+                                [% FOREACH itemwithdrawn IN itemwithdrawnloop %]
                                     [% IF itemwithdrawn.authorised_value == ITEM_DAT.withdrawn %]
                                         <option value="[% itemwithdrawn.authorised_value %]" selected="selected">[% itemwithdrawn.lib %]</option>
                                     [% ELSE %]
@@ -184,7 +184,7 @@
                             <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged %]" />
                             <input type="submit" name="submit" class="submit" value="Set status" /></form>
                     [% ELSE %]
-                        [% FOREACH itemwithdrawn IN ITEM_DAT.itemwithdrawnloop %]
+                        [% FOREACH itemwithdrawn IN itemwithdrawnloop %]
                             [% IF itemwithdrawn.authorised_value == ITEM_DAT.withdrawn %]
                                 [% itemwithdrawn.lib %]
                             [% END %]
