@@ -45,8 +45,8 @@ $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $template_id = $cgi->param('template_id') || undef;
 my $layout_id   = $cgi->param('layout_id') || undef;
 my $start_label = $cgi->param('start_label') || 1;
-@label_ids   = $cgi->param('label_id') if $cgi->param('label_id');
-@item_numbers  = $cgi->param('item_number') if $cgi->param('item_number');
+@label_ids   = $cgi->multi_param('label_id') if $cgi->param('label_id');
+@item_numbers  = $cgi->multi_param('item_number') if $cgi->param('item_number');
 
 my $items = undef;
 

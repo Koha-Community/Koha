@@ -65,7 +65,7 @@ my $new_ordernumber  = $ordernumber;
 if ($quantityrec > $origquantityrec ) {
     my @received_items = ();
     if(C4::Context->preference('AcqCreateItem') eq 'ordering') {
-        @received_items = $input->param('items_to_receive');
+        @received_items = $input->multi_param('items_to_receive');
         my @affects = split q{\|}, C4::Context->preference("AcqItemSetSubfieldsWhenReceived");
         if ( @affects ) {
             my $frameworkcode = GetFrameworkCode($biblionumber);
