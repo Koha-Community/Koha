@@ -71,7 +71,7 @@ var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this dictionary defi
 		<th>Description</th>
 		<th>Area</th>
 		<th>Definition</th>
-		<th>&nbsp;</th>
+                <th>Action</th>
 		</tr>
 		[% FOREACH definition IN definitions %]
         <tr>
@@ -79,10 +79,10 @@ var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this dictionary defi
 			<td>[% definition.description %]</td>
 			<td>[% definition.areaname %]</td>
 			<td>[% definition.saved_sql %]</td>
-			<td><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
+                        <td class="actions"><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
 			<input type="hidden" name="id" value="[% definition.id %]" />
 			<input type="hidden" name="phase" value="Delete Definition" />
-			<input type="submit" name="submit" value="Delete Definition" onclick="return confirm(MSG_CONFIRM_DELETE);" />
+                        <button type="submit" name="submit" class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);"><i class="fa fa-trash"></i> Delete</button>
 			</form></td>
 			</tr>
 		[% END %]
