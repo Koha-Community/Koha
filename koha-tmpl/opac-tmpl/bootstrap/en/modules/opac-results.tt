@@ -220,18 +220,7 @@
                                                 </td>
                                             [% END %]
 
-                                            [% IF ( AuthorisedValueImages ) %]
-                                                [% # Cell 4: Show Authorized value image %]
-                                                <td class="authvalcol">
-                                                    [% FOREACH authorised_value_image IN SEARCH_RESULT.authorised_value_images %]
-                                                        [% IF ( authorised_value_image.imageurl ) %]
-                                                            <img src="[% authorised_value_image.imageurl %]" alt="[% authorised_value_image.label %]" title="[% authorised_value_image.label %]">
-                                                        [% END %]
-                                                    [% END %]
-                                                </td>
-                                            [% END %]
-
-                                            [% # Cell 5: Search result details and controls %]
+                                            [% # Cell 4: Search result details and controls %]
                                             <td class="bibliocol">
                                                 <div class="coverimages">
                                                     <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">

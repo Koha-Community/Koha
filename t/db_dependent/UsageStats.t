@@ -469,7 +469,6 @@ sub mocking_systempreferences_to_a_set_value {
         LetterLog
         ReturnLog
         SubscriptionLog
-        AuthorisedValueImages
         BiblioDefaultView
         COinSinOPACResults
         DisplayOPACiconsXSLT
@@ -565,7 +564,6 @@ sub mocking_systempreferences_to_a_set_value {
         SubscriptionHistory
         Display856uAsImage
         DisplayIconsXSLT
-        StaffAuthorisedValueImages
         template
         yuipath
         HidePatronName

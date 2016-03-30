@@ -509,7 +509,6 @@ sub get_template_and_user {
         $template->param(
             OpacAdditionalStylesheet                   => C4::Context->preference("OpacAdditionalStylesheet"),
             AnonSuggestions                       => "" . C4::Context->preference("AnonSuggestions"),
-            AuthorisedValueImages                 => C4::Context->preference("AuthorisedValueImages"),
             BranchesLoop                          => GetBranchesLoop($opac_name),
             BranchCategoriesLoop                  => $library_categories,
             opac_name                             => $opac_name,

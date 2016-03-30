@@ -551,14 +551,6 @@ var holdForPatron = function () {
                                     </p>
                                     [% IF ( SEARCH_RESULT.searchhighlightblob ) %]<p class="searchhighlightblob">[% SEARCH_RESULT.searchhighlightblob %]</p>[% END %]
 
-                                    [% IF ( SEARCH_RESULT.authorised_value_images ) %]
-                                <p>
-                                  [% FOREACH authorised_value_image IN SEARCH_RESULT.authorised_value_images %]
-                                  <img src="[% authorised_value_image.imageurl %]" alt="[% authorised_value_image.description %]" />
-                                  [% END %]
-                                </p>
-                                [% END %]
-
                                 [% END %]
                                 [% END %]
                                   <p class="hold">[% IF ( SEARCH_RESULT.norequests ) %]

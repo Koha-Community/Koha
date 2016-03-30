@@ -217,7 +217,6 @@ sub BuildReport {
         LetterLog
         ReturnLog
         SubscriptionLog
-        AuthorisedValueImages
         BiblioDefaultView
         COinSinOPACResults
         DisplayOPACiconsXSLT
@@ -312,7 +311,6 @@ sub BuildReport {
         SubscriptionHistory
         Display856uAsImage
         DisplayIconsXSLT
-        StaffAuthorisedValueImages
         template
         yuipath
         HidePatronName

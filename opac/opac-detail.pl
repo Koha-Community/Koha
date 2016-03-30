@@ -560,10 +560,6 @@ foreach my $subscription (@subscriptions) {
 $dat->{'count'} = scalar(@items);
 
 
-my $biblio_authorised_value_images = C4::Context->preference('AuthorisedValueImages')
-    ? C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber, $record ) )
-    : [];
-
 my (%item_reserves, %priority);
 my ($show_holds_count, $show_priority);
 for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
@@ -656,15 +652,6 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         $itemfields{$_} = 1 if ($itm->{$_});
     }
 
-     # walk through the item-level authorised values and populate some images
-     my $item_authorised_value_images = C4::Items::get_authorised_value_images( C4::Items::get_item_authorised_values( $itm->{'itemnumber'} ) );
-     # warn( Data::Dumper->Dump( [ $item_authorised_value_images ], [ 'item_authorised_value_images' ] ) );
-
-     if ( $itm->{'itemlost'} ) {
-         my $lostimageinfo = List::Util::first { $_->{'category'} eq 'LOST' } @$item_authorised_value_images;
-         $itm->{'lostimageurl'}   = $lostimageinfo->{ 'imageurl' };
-         $itm->{'lostimagelabel'} = $lostimageinfo->{ 'label' };
-     }
      my $reserve_status = C4::Reserves::GetReserveStatus($itm->{itemnumber});
       if( $reserve_status eq "Waiting"){ $itm->{'waiting'} = 1; }
       if( $reserve_status eq "Reserved"){ $itm->{'onhold'} = 1; }
@@ -736,7 +723,6 @@ my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($bib
                      itemdata_uri            => $itemfields{uri},
                      itemdata_copynumber     => $itemfields{copynumber},
                      itemdata_itemnotes          => $itemfields{itemnotes},
-                     authorised_value_images => $biblio_authorised_value_images,
                      subtitle                => $subtitle,
                      OpacStarRatings         => C4::Context->preference("OpacStarRatings"),
     );

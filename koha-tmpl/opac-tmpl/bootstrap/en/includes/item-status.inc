@@ -14,11 +14,7 @@ not use an API to fetch items that populates item.datedue.
     [% IF ( av_lib_include ) %]
         <span class="item-status lost">[% av_lib_include %]</span>
     [% ELSE %]
-        [% IF ( item.lostimageurl ) %]
-            <img src="[% item.lostimageurl %]" alt="[% item.lostimagelabel %]" title="[% item.lostimagelabel %]" />
-        [% ELSE %]
-            <span class="item-status lost">Item lost</span>
-        [% END %]
+        <span class="item-status lost">Item lost</span>
     [% END %]
 [% END %]
 

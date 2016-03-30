@@ -1916,7 +1916,6 @@ sub searchResults {
         # add imageurl to itemtype if there is one
         $oldbiblio->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
 
-        $oldbiblio->{'authorised_value_images'}  = ($search_context eq 'opac' && C4::Context->preference('AuthorisedValueImages')) || ($search_context eq 'intranet' && C4::Context->preference('StaffAuthorisedValueImages')) ? C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{'biblionumber'}, $marcrecord ) ) : [];
 		$oldbiblio->{normalized_upc}  = GetNormalizedUPC(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_ean}  = GetNormalizedEAN(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_oclc} = GetNormalizedOCLCNumber($marcrecord,$marcflavour);

@@ -363,14 +363,6 @@
                         [% END # / IF MARCURLS %]
                     [% END # / IF OPACXSLTDetailsDisplay %]
 
-                    [% IF ( AuthorisedValueImages && authorised_value_images ) %]
-                        <div class="authorised_value_images">
-                            [% FOREACH authorised_value_image IN authorised_value_images %]
-                                <img src="[% authorised_value_image.imageurl %]" alt="[% authorised_value_image.label %]" title="[% authorised_value_image.label %]" />
-                            [% END %]
-                        </div>
-                    [% END # / AuthorisedValueImages && authorised_value_images %]
-
                     <!-- This puts the LTFL reviews in, and if TabbedView is not set, puts the remaining content above the Tabs instead of in them -->
                     [% IF ( LibraryThingForLibrariesID ) %]
                         [% UNLESS ( LibraryThingForLibrariesTabbedView ) %]
