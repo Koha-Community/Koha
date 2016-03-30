@@ -333,4 +333,9 @@ sub GetBiblionumberFromImport{
 
     return $biblionumber;
 }
+
+END {
+    cleanup();
+};
+
 1;
