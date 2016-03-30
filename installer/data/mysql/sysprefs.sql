@@ -450,7 +450,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SpineLabelAutoPrint','0','','If this setting is turned on, a print dialog will automatically pop up for the quick spine label printer.','YesNo'),
 ('SpineLabelFormat','<itemcallnumber><copynumber>','30|10','This preference defines the format for the quick spine label printer. Just list the fields you would like to see in the order you would like to see them, surrounded by <>, for example <itemcallnumber>.','Textarea'),
 ('SpineLabelShowPrintOnBibDetails','0','','If turned on, a \"Print Label\" link will appear for each item on the bib details page in the staff interface.','YesNo'),
-('StaffAuthorisedValueImages','1',NULL,'','YesNo'),
+('StaffAuthorisedValueImages','0',NULL,'','YesNo'),
 ('staffClientBaseURL','',NULL,'Specify the base URL of the staff client','free'),
 ('StaffDetailItemSelection', '1', NULL, 'Enable item selection in record detail page', 'YesNo'),
 ('StaffSearchResultsDisplayBranch','holdingbranch','holdingbranch|homebranch','Controls the display of the home or holding branch for staff search results','Choice'),

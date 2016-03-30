@@ -560,7 +560,9 @@ foreach my $subscription (@subscriptions) {
 $dat->{'count'} = scalar(@items);
 
 
-my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber, $record ) );
+my $biblio_authorised_value_images = C4::Context->preference('AuthorisedValueImages')
+    ? C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber, $record ) )
+    : [];
 
 my (%item_reserves, %priority);
 my ($show_holds_count, $show_priority);
