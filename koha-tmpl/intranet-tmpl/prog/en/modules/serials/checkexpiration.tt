@@ -100,7 +100,7 @@
             <th>OPAC note</th>
             <th>Nonpublic note</th>
             <th>Expiration date</th>
-			<th colspan="2">&nbsp;</th>
+            <th>Actions</th>
         </tr>
     [% FOREACH subscriptions_loo IN subscriptions_loop %]
         <tr>
@@ -126,8 +126,10 @@
             <td>
                 [% subscriptions_loo.expirationdate | $KohaDates %]
             </td>
-            <td><a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid %]">Edit</a></td>
-			<td><a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid %]" onclick="popup([% subscriptions_loo.subscriptionid %]); return false;">Renew</a></td>
+            <td class="actions">
+                <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid %]" class="btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
+                <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid %]" onclick="popup([% subscriptions_loo.subscriptionid %]); return false;" class="btn btn-mini"><i class="fa fa-refresh"></i> Renew</a>
+            </td>
         </tr>
     [% END %]
     </table>
