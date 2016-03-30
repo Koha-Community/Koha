@@ -97,9 +97,9 @@ my $expected = {
                 schema => 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
             },
             {
-                metadataNamespace => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim',
+                metadataNamespace => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim',
                 metadataPrefix => 'marcxml',
-                schema => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd',
+                schema => 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
             },
         ],
     },
