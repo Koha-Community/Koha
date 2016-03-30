@@ -1,11 +1,10 @@
 use Modern::Perl;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::MockModule;
 
 use t::lib::Mocks;
 
 BEGIN {
-    my $context_module = t::lib::Mocks::mock_dbh;
     use_ok('C4::Acquisition');
     use_ok('C4::Bookseller');
     use_ok('C4::Context');
@@ -13,6 +12,23 @@ BEGIN {
 };
 
 t::lib::Mocks::mock_preference( 'gist', '0.02|0.05|0.196' );
+
+use Test::DBIx::Class {
+    schema_class => 'Koha::Schema',
+    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
+    connect_opts => { name_sep => '.', quote_char => '`', },
+    fixture_class => '::Populate',
+}, 'Currency' ;
+
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock( _new_schema => sub { return Schema(); } );
+
+fixtures_ok [
+    Currency => [
+        [ qw/ currency symbol rate active / ],
+        [[ 'my_cur', '€', 1, 1, ]],
+    ],
+], 'add currency fixtures';
 
 my $bookseller_module = Test::MockModule->new('Koha::Acquisition::Bookseller');
 
