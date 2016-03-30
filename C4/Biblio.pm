@@ -1114,7 +1114,6 @@ $frameworkcode : the framework code to read
 
 sub GetMarcStructure {
     my ( $forlibrarian, $frameworkcode ) = @_;
-    my $dbh = C4::Context->dbh;
     $frameworkcode = "" unless $frameworkcode;
 
     $forlibrarian = $forlibrarian ? 1 : 0;
@@ -1123,6 +1122,7 @@ sub GetMarcStructure {
     my $cached = $cache->get_from_cache($cache_key);
     return $cached if $cached;
 
+    my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
         "SELECT tagfield,liblibrarian,libopac,mandatory,repeatable 
         FROM marc_tag_structure 
@@ -1667,7 +1667,6 @@ descriptions rather than normal ones when they exist.
 
 sub GetAuthorisedValueDesc {
     my ( $tag, $subfield, $value, $framework, $tagslib, $category, $opac ) = @_;
-    my $dbh = C4::Context->dbh;
 
     if ( !$category ) {
 
@@ -1687,6 +1686,7 @@ sub GetAuthorisedValueDesc {
         $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
     }
 
+    my $dbh = C4::Context->dbh;
     if ( $category ne "" ) {
         my $sth = $dbh->prepare( "SELECT lib, lib_opac FROM authorised_values WHERE category = ? AND authorised_value = ?" );
         $sth->execute( $category, $value );
@@ -2618,6 +2618,7 @@ hash_ref
 
 sub TransformMarcToKoha {
     my ( $dbh, $record, $frameworkcode, $limit_table ) = @_;
+    ## FIXME: $dbh parameter is never used inside this subroutine ???
 
     my $result = {};
     if (!defined $record) {
