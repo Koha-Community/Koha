@@ -1002,14 +1002,14 @@
 
                         [% IF ( HTML5MediaEnabled ) %]
                             <div id="html5media">
-                                    <p>
-                                        <[% HTML5MediaParent %] controls preload=none>
-                                          [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
-                                            <[% HTML5MediaSet.child  %] src="[% HTML5MediaSet.srcblock %]"[% HTML5MediaSet.typeblock %] />
-                                          [% END %]
-                                            [[% HTML5MediaParent %] tag not supported by your browser.]
-                                        </[% HTML5MediaParent %]>
-                                    </p>
+                              [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
+                                <p>
+                                  <[% HTML5MediaParent %] controls preload=none>
+                                    <[% HTML5MediaSet.child  %] src="[% HTML5MediaSet.srcblock %]"[% HTML5MediaSet.typeblock %] />
+                                    [[% HTML5MediaParent %] tag not supported by your browser.]
+                                  </[% HTML5MediaParent %]>
+                                </p>
+                              [% END %]
                             </div>
                         [% END # / IF HTML5MediaEnabled %]
 
