@@ -100,6 +100,7 @@ $dbh->{RaiseError} = 0;
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 
+$schema->resultset( 'Issue' )->delete_all;
 $schema->resultset( 'Borrower' )->delete_all;
 $schema->resultset( 'BorrowerAttribute' )->delete_all;
 $schema->resultset( 'BorrowerAttributeType' )->delete_all;
@@ -180,7 +181,7 @@ $schema->resultset( 'Branch' )->delete_all;
 
     my $reply = C4::ILSDI::Services::GetPatronInfo( $query );
 
-    # Build a structure for comparision:
+    # Build a structure for comparison:
     my $cmp = {
         category_code     => $attr_type->{'category_code'},
         class             => $attr_type->{'class'},
@@ -193,7 +194,7 @@ $schema->resultset( 'Branch' )->delete_all;
     };
 
     # Check results:
-    is_deeply( $reply->{'attributes'}, [ $cmp ] );
+    is_deeply( $reply->{'attributes'}, [ $cmp ], 'Test GetPatronInfo - show_attributes parameter' );
 }
 
 # Cleanup
