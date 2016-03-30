@@ -162,7 +162,7 @@ ok( !defined $ret, 'GetMarcHosts returns undef if not passed rec');
 
 my $hash_ref;
 
-warning_is { $hash_ref = TransformMarcToKoha(undef, undef) }
+warning_is { $hash_ref = TransformMarcToKoha( undef) }
            { carped => 'TransformMarcToKoha called with undefined record'},
            "TransformMarcToKoha returns carped warning on undef record";
 

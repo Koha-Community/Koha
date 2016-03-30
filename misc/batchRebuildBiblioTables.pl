@@ -96,7 +96,7 @@ if (scalar(@errors) > 0) {
 sub localNEWmodbiblio {
     my ($dbh,$record,$biblionumber,$frameworkcode) =@_;
     $frameworkcode="" unless $frameworkcode;
-    my $oldbiblio = TransformMarcToKoha($dbh,$record,$frameworkcode);
+    my $oldbiblio = TransformMarcToKoha($record,$frameworkcode);
     C4::Biblio::_koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
     C4::Biblio::_koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
     return 1;

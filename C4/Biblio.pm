@@ -257,7 +257,7 @@ sub AddBiblio {
 
     # transform the data into koha-table style data
     SetUTF8Flag($record);
-    my $olddata = TransformMarcToKoha( $dbh, $record, $frameworkcode );
+    my $olddata = TransformMarcToKoha( $record, $frameworkcode );
     ( $biblionumber, $error ) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
     $olddata->{'biblionumber'} = $biblionumber;
     ( $biblioitemnumber, $error ) = _koha_add_biblioitem( $dbh, $olddata );
@@ -340,7 +340,7 @@ sub ModBiblio {
     _koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber, $biblioitemnumber );
 
     # load the koha-table data object
-    my $oldbiblio = TransformMarcToKoha( $dbh, $record, $frameworkcode );
+    my $oldbiblio = TransformMarcToKoha( $record, $frameworkcode );
 
     # update MARC subfield that stores biblioitems.cn_sort
     _koha_marc_update_biblioitem_cn_sort( $record, $oldbiblio, $frameworkcode );
@@ -2606,7 +2606,7 @@ our $inverted_field_map;
 
 =head2 TransformMarcToKoha
 
-  $result = TransformMarcToKoha( $dbh, $record, $frameworkcode )
+  $result = TransformMarcToKoha( $record, $frameworkcode )
 
 Extract data from a MARC bib record into a hashref representing
 Koha biblio, biblioitems, and items fields. 
@@ -2617,8 +2617,7 @@ hash_ref
 =cut
 
 sub TransformMarcToKoha {
-    my ( $dbh, $record, $frameworkcode, $limit_table ) = @_;
-    ## FIXME: $dbh parameter is never used inside this subroutine ???
+    my ( $record, $frameworkcode, $limit_table ) = @_;
 
     my $result = {};
     if (!defined $record) {

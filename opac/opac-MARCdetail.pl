@@ -306,7 +306,7 @@ if(C4::Context->preference("ISBD")) {
 
 #Search for title in links
 my $marcflavour  = C4::Context->preference("marcflavour");
-my $dat = TransformMarcToKoha( $dbh, $record );
+my $dat = TransformMarcToKoha( $record );
 my $isbn = GetNormalizedISBN(undef,$record,$marcflavour);
 my $marccontrolnumber   = GetMarcControlnumber ($record, $marcflavour);
 my $marcissns = GetMarcISSN( $record, $marcflavour );

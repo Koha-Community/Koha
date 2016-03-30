@@ -208,7 +208,7 @@ my $launcher = sub {
         my @field_data = ($search);
         for ( my $i = 0 ; $i < $resultsperpage ; $i++ ) {
             my $record = C4::Search::new_record_from_zebra( 'biblioserver', $results->[$i] );
-            my $rechash = TransformMarcToKoha( $dbh, $record );
+            my $rechash = TransformMarcToKoha( $record );
             my $pos;
             my $countitems = $rechash->{itembumber} ? 1 : 0;
             while ( index( $rechash->{itemnumber}, '|', $pos ) > 0 ) {

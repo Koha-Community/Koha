@@ -397,7 +397,7 @@ sub plugin {
          {
             my $record = C4::Search::new_record_from_zebra( 'biblioserver', $results->[$i] );
             next unless $record;
-            my $rechash = TransformMarcToKoha( $dbh, $record );
+            my $rechash = TransformMarcToKoha( $record );
             if ( my $f = $record->field('200') ) {
                 $rechash->{fulltitle} =
                     join(', ', map { $_->[1] } grep { $_->[0] =~ /[aehi]/ } $f->subfields() );

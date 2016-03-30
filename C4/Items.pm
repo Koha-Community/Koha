@@ -251,7 +251,7 @@ sub AddItemFromMarc {
 	
 	my $localitemmarc=MARC::Record->new;
 	$localitemmarc->append_fields($source_item_marc->field($itemtag));
-    my $item = &TransformMarcToKoha( $dbh, $localitemmarc, $frameworkcode ,'items');
+    my $item = &TransformMarcToKoha( $localitemmarc, $frameworkcode ,'items');
     my $unlinked_item_subfields = _get_unlinked_item_subfields($localitemmarc, $frameworkcode);
     return AddItem($item, $biblionumber, $dbh, $frameworkcode, $unlinked_item_subfields);
 }
@@ -383,7 +383,7 @@ sub AddItemBatchFromMarc {
         $temp_item_marc->append_fields($item_field);
     
         # add biblionumber and biblioitemnumber
-        my $item = TransformMarcToKoha( $dbh, $temp_item_marc, $frameworkcode, 'items' );
+        my $item = TransformMarcToKoha( $temp_item_marc, $frameworkcode, 'items' );
         my $unlinked_item_subfields = _get_unlinked_item_subfields($temp_item_marc, $frameworkcode);
         $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
         $item->{'biblionumber'} = $biblionumber;
@@ -507,7 +507,7 @@ sub ModItemFromMarc {
 
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
-    my $item = &TransformMarcToKoha( $dbh, $localitemmarc, $frameworkcode, 'items' );
+    my $item = &TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
     my $default_values = _build_default_values_for_mod_marc();
     foreach my $item_field ( keys %$default_values ) {
         $item->{$item_field} = $default_values->{$item_field}

@@ -759,7 +759,7 @@ sub BatchCommitItems {
         my ( $MARCfield, $MARCsubfield ) = GetMarcFromKohaField( 'items.onloan', GetFrameworkCode($biblionumber) );
         $item_marc->field($MARCfield)->delete_subfield( code => $MARCsubfield );
 
-        my $item = TransformMarcToKoha( $dbh, $item_marc );
+        my $item = TransformMarcToKoha( $item_marc );
 
         my $duplicate_barcode = exists( $item->{'barcode'} ) && GetItemnumberFromBarcode( $item->{'barcode'} );
         my $duplicate_itemnumber = exists( $item->{'itemnumber'} );
@@ -1545,7 +1545,7 @@ sub _parse_biblio_fields {
     my ($marc_record) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $bibliofields = TransformMarcToKoha($dbh, $marc_record, '');
+    my $bibliofields = TransformMarcToKoha($marc_record, '');
     return ($bibliofields->{'title'}, $bibliofields->{'author'}, $bibliofields->{'isbn'}, $bibliofields->{'issn'});
 
 }

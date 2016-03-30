@@ -119,7 +119,7 @@ $template->param(
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my $dbh = C4::Context->dbh;
-my $dat                 = TransformMarcToKoha( $dbh, $record );
+my $dat                 = TransformMarcToKoha( $record );
 
 my @subscriptions       = SearchSubscriptions({ biblionumber => $biblionumber, orderby => 'title' });
 my @subs;

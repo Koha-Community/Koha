@@ -1555,7 +1555,7 @@ sub merge {
 #         $update=1;
 #       }#for each tag
 #     }#foreach tagfield
-#     my $authoritynumber = TransformMarcToKoha($dbh,$marcrecord,"") ;
+#     my $authoritynumber = TransformMarcToKoha($marcrecord,"") ;
 #     if ($update==1){
 #       &ModAuthority($marcrecord,$authoritynumber,GetAuthTypeCode($authoritynumber)) ;
 #     }

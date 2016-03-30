@@ -361,8 +361,7 @@ if (@$barcodes) {
             my @options = ();
             foreach my $hit ( @{$results} ) {
                 my $chosen =
-                  TransformMarcToKoha( C4::Context->dbh,
-                    C4::Search::new_record_from_zebra('biblioserver',$hit) );
+                  TransformMarcToKoha( C4::Search::new_record_from_zebra('biblioserver',$hit) );
 
                 # offer all barcodes individually
                 if ( $chosen->{barcode} ) {

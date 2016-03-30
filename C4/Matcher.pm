@@ -708,7 +708,7 @@ sub get_matches {
         foreach my $marcblob (keys %matches) {
             my $target_record = C4::Search::new_record_from_zebra('biblioserver',$marcblob);
             my $record_number;
-            my $result = C4::Biblio::TransformMarcToKoha(C4::Context->dbh, $target_record, '');
+            my $result = C4::Biblio::TransformMarcToKoha($target_record, '');
             $record_number = $result->{'biblionumber'};
             push @results, { 'record_id' => $record_number, 'score' => $matches{$marcblob} };
         }

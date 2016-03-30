@@ -404,7 +404,7 @@ $restrictededition = 0 if ($restrictededition != 0 && $frameworkcode eq 'FA' && 
 
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
 my $record = GetMarcBiblio($biblionumber);
-my $oldrecord = TransformMarcToKoha($dbh,$record);
+my $oldrecord = TransformMarcToKoha($record);
 my $itemrecord;
 my $nextop="additem";
 my @errors; # store errors found while checking data BEFORE saving item.
@@ -457,7 +457,7 @@ if ($op eq "additem") {
         $record = _increment_barcode($record, $frameworkcode);
     }
 
-    my $addedolditem = TransformMarcToKoha( $dbh, $record );
+    my $addedolditem = TransformMarcToKoha( $record );
 
     # If we have to add or add & duplicate, we add the item
     if ( $add_submit || $add_duplicate_submit ) {
@@ -683,7 +683,7 @@ if ($op eq "additem") {
     # MARC::Record builded => now, record in DB
     # warn "R: ".$record->as_formatted;
     # check that the barcode don't exist already
-    my $addedolditem = TransformMarcToKoha($dbh,$itemtosave);
+    my $addedolditem = TransformMarcToKoha($itemtosave);
     my $exist_itemnumber = get_item_from_barcode($addedolditem->{'barcode'});
     if ($exist_itemnumber && $exist_itemnumber != $itemnumber) {
         push @errors,"barcode_not_unique";
