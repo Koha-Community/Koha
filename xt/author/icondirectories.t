@@ -42,7 +42,7 @@ my $staff_dir = 'koha-tmpl/intranet-tmpl';
 
 # Find OPAC themes
 opendir ( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
-my @opac_themes = grep { not /^\.|lib|js/ } readdir($dh);
+my @opac_themes = grep { not /^\.|lib|js|xslt/ } readdir($dh);
 close $dh;
 
 # Find STAFF themes
