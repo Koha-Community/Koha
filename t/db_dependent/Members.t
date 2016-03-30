@@ -17,11 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 59;
+use Test::More tests => 76;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
 use Koha::Database;
+use Koha::List::Patron;
+
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -228,6 +230,132 @@ $data{userid} = 'a_user_id';
 $borrowernumber = AddMember( %data );
 $borrower = GetMember( borrowernumber => $borrowernumber );
 is( $borrower->{userid}, $data{userid}, 'AddMember should insert the given userid' );
+
+#Regression tests for bug 10612
+my $library3 = $builder->build({
+    source => 'Branch',
+});
+$builder->build({
+        source => 'Category',
+        value => {
+            categorycode         => 'STAFFER',
+            description          => 'Staff dont batch del',
+            category_type        => 'S',
+        },
+});
+
+$builder->build({
+        source => 'Category',
+        value => {
+            categorycode         => 'CIVILIAN',
+            description          => 'Civilian batch del',
+            category_type        => 'A',
+        },
+});
+
+$builder->build({
+        source => 'Category',
+        value => {
+            categorycode         => 'KIDclamp',
+            description          => 'Kid to be guaranteed',
+            category_type        => 'C',
+        },
+});
+
+#$builder->clear( { source => 'Borrower' } );
+my $borrower1 = $builder->build({
+        source => 'Borrower',
+        value  => {
+            categorycode=>'STAFFER',
+            branchcode => $library3->{branchcode},
+            dateexpiry => '2015-01-01',
+        },
+});
+my $bor1inlist = $borrower1->{borrowernumber};
+my $borrower2 = $builder->build({
+        source => 'Borrower',
+        value  => {
+            categorycode=>'STAFFER',
+            branchcode => $library3->{branchcode},
+            dateexpiry => '2015-01-01',
+        },
+});
+
+my $guarantee = $builder->build({
+        source => 'Borrower',
+        value  => {
+            categorycode=>'KIDclamp',
+            branchcode => $library3->{branchcode},
+            dateexpiry => '2015-01-01',
+        },
+});
+
+my $bor2inlist = $borrower2->{borrowernumber};
+
+$builder->build({
+        source => 'OldIssue',
+        value  => {
+            borrowernumber => $bor2inlist,
+            timestamp => '2016-01-01',
+        },
+});
+
+my $owner = AddMember (categorycode => 'STAFFER', branchcode => $library2->{branchcode} );
+my $list1 = AddPatronList( { name => 'Test List 1', owner => $owner } );
+my @listpatrons = ($bor1inlist, $bor2inlist);
+AddPatronsToList(  { list => $list1, borrowernumbers => \@listpatrons });
+my $patstodel = GetBorrowersToExpunge( {patron_list_id => $list1->patron_list_id() } );
+is( scalar(@$patstodel),0,'No staff deleted from list of all staff');
+ModMember( borrowernumber => $bor2inlist, categorycode => 'CIVILIAN' );
+$patstodel = GetBorrowersToExpunge( {patron_list_id => $list1->patron_list_id()} );
+ok( scalar(@$patstodel)== 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Staff patron not deleted from list');
+$patstodel = GetBorrowersToExpunge( {branchcode => $library3->{branchcode},patron_list_id => $list1->patron_list_id() } );
+ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Staff patron not deleted by branchcode and list');
+$patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02', patron_list_id => $list1->patron_list_id() } );
+ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Staff patron not deleted by expirationdate and list');
+$patstodel = GetBorrowersToExpunge( {not_borrowered_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
+ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Staff patron not deleted by last issue date');
+
+ModMember( borrowernumber => $bor1inlist, categorycode => 'CIVILIAN' );
+ModMember( borrowernumber => $guarantee->{borrowernumber} ,guarantorid=>$bor1inlist );
+
+$patstodel = GetBorrowersToExpunge( {patron_list_id => $list1->patron_list_id()} );
+ok( scalar(@$patstodel)== 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted from list');
+$patstodel = GetBorrowersToExpunge( {branchcode => $library3->{branchcode},patron_list_id => $list1->patron_list_id() } );
+ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted by branchcode and list');
+$patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02', patron_list_id => $list1->patron_list_id() } );
+ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted by expirationdate and list');
+$patstodel = GetBorrowersToExpunge( {not_borrowered_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
+ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted by last issue date');
+ModMember( borrowernumber => $guarantee->{borrowernumber}, guarantorid=>'' );
+
+$builder->build({
+        source => 'Issue',
+        value  => {
+            borrowernumber => $bor2inlist,
+        },
+});
+$patstodel = GetBorrowersToExpunge( {patron_list_id => $list1->patron_list_id()} );
+is( scalar(@$patstodel),1,'Borrower with issue not deleted from list');
+$patstodel = GetBorrowersToExpunge( {branchcode => $library3->{branchcode},patron_list_id => $list1->patron_list_id() } );
+is( scalar(@$patstodel),1,'Borrower with issue not deleted by branchcode and list');
+$patstodel = GetBorrowersToExpunge( {category_code => 'CIVILIAN',patron_list_id => $list1->patron_list_id() } );
+is( scalar(@$patstodel),1,'Borrower with issue not deleted by category_code and list');
+$patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02',patron_list_id => $list1->patron_list_id() } );
+is( scalar(@$patstodel),1,'Borrower with issue not deleted by expiration_date and list');
+$builder->clear( { source => 'Issue' } );
+$patstodel = GetBorrowersToExpunge( {patron_list_id => $list1->patron_list_id()} );
+ok( scalar(@$patstodel)== 2,'Borrowers without issue deleted from list');
+$patstodel = GetBorrowersToExpunge( {category_code => 'CIVILIAN',patron_list_id => $list1->patron_list_id() } );
+is( scalar(@$patstodel),2,'Borrowers without issues deleted by category_code and list');
+$patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02',patron_list_id => $list1->patron_list_id() } );
+is( scalar(@$patstodel),2,'Borrowers without issues deleted by expiration_date and list');
+$patstodel = GetBorrowersToExpunge( {not_borrowered_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
+is( scalar(@$patstodel),2,'Borrowers without issues deleted by last issue date');
+
+
+
+
 
 # Regression tests for BZ13502
 ## Remove all entries with userid='' (should be only 1 max)
