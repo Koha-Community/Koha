@@ -12064,6 +12064,16 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.043";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+            UPDATE systempreferences SET value="" WHERE value IS NULL;
+            });
+
+    print "Upgrade to $DBversion done (Bug 16070 - Empty (undef) system preferences may cause some issues in combination with memcache)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
