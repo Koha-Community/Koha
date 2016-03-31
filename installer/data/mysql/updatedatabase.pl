@@ -12050,6 +12050,24 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.042";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+
+    $dbh->do(q{
+            ALTER TABLE items CHANGE new new_status VARCHAR(32) NULL;
+            });
+    $dbh->do(q{
+            ALTER TABLE deleteditems CHANGE new new_status VARCHAR(32) NULL;
+            });
+    $dbh->do(q{
+            UPDATE systempreferences SET value=REPLACE(value, '"items.new"', '"items.new_status"') WHERE variable="automatic_item_modification_by_age_configuration";
+            });
+
+    print "Upgrade to $DBversion done (Bug 16004 - Replace items.new with items.new_status)\n";
+    SetVersion($DBversion);
+}
+
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
