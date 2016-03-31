@@ -273,9 +273,8 @@ __PACKAGE__->table("items");
   is_nullable: 1
   size: 32
 
-=head2 new
+=head2 new_status
 
-  accessor: undef
   data_type: 'varchar'
   is_nullable: 1
   size: 32
@@ -387,8 +386,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "stocknumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
-  "new",
-  { accessor => undef, data_type => "varchar", is_nullable => 1, size => 32 },
+  "new_status",
+  { data_type => "varchar", is_nullable => 1, size => 32 },
 );
 
 =head1 PRIMARY KEY
@@ -640,8 +639,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-04 19:32:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rhW0Ddhh2hLoV//7nonLCA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-31 17:10:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:f3uSqG4SRK96xnD8HnhcFA
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
