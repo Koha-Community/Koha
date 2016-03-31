@@ -455,6 +455,7 @@ sub mocking_systempreferences_to_a_set_value {
         NovelistSelectEnabled
         XISBN
         OpenLibraryCovers
+        OpenLibrarySearch
         UseKohaPlugins
         SyndeticsEnabled
         TagsEnabled
