@@ -29,6 +29,12 @@ __PACKAGE__->table("overduerules_transport_types");
   is_auto_increment: 1
   is_nullable: 0
 
+=head2 letternumber
+
+  data_type: 'integer'
+  default_value: 1
+  is_nullable: 0
+
 =head2 message_transport_type
 
   data_type: 'varchar'
@@ -48,6 +54,8 @@ __PACKAGE__->table("overduerules_transport_types");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+  "letternumber",
+  { data_type => "integer", default_value => 1, is_nullable => 0 },
   "message_transport_type",
   {
     data_type => "varchar",
@@ -105,8 +113,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-06 12:00:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KYpSfCfzkLxRYI2pQY5Htg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-31 15:44:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GV2VZ1kIA9Fl8pQd0qkrjg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
