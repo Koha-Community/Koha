@@ -1,3 +1,7 @@
+#!/usr/bin/perl
+
+use C4::Context;
+
 my $dbh = C4::Context->dbh;
 my $DBversion = "XXX";
 
