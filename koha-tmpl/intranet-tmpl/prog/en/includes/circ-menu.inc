@@ -20,13 +20,13 @@
     [% END %]
 
     [% IF ( phone ) %]<li class="patronphone">
-        [% phone %]
+        <a href="tel:[% phone %]">[% phone %]</a>
     [% ELSE %]
         [% IF ( mobile ) %]
-            [% mobile %]
+            <a href="tel:[% mobile %]">[% mobile %]</a>
         [% ELSE %]
             [% IF ( phonepro ) %]
-                [% phonepro %]
+                <a href="tel:[% phonepro %]">[% phonepro %]</a>
             [% END %]
         [% END %]</li>
     [% END %]
@@ -107,4 +107,3 @@
     [% END %]
 </ul></div>
 [% END %]
-
