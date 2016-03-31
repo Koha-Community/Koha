@@ -40,7 +40,7 @@ cronlogaction();
 
 my $members = GetBorrowersToExpunge(
     {
-        not_borrowered_since => $not_borrowed_since,
+        not_borrowed_since => $not_borrowed_since,
         expired_before       => $expired_before,
         category_code        => $category_code,
         branchcode           => $branchcode,

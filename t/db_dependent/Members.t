@@ -313,7 +313,7 @@ $patstodel = GetBorrowersToExpunge( {branchcode => $library3->{branchcode},patro
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Staff patron not deleted by branchcode and list');
 $patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02', patron_list_id => $list1->patron_list_id() } );
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Staff patron not deleted by expirationdate and list');
-$patstodel = GetBorrowersToExpunge( {not_borrowered_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
+$patstodel = GetBorrowersToExpunge( {not_borrowed_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Staff patron not deleted by last issue date');
 
 ModMember( borrowernumber => $bor1inlist, categorycode => 'CIVILIAN' );
@@ -325,7 +325,7 @@ $patstodel = GetBorrowersToExpunge( {branchcode => $library3->{branchcode},patro
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted by branchcode and list');
 $patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02', patron_list_id => $list1->patron_list_id() } );
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted by expirationdate and list');
-$patstodel = GetBorrowersToExpunge( {not_borrowered_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
+$patstodel = GetBorrowersToExpunge( {not_borrowed_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted by last issue date');
 ModMember( borrowernumber => $guarantee->{borrowernumber}, guarantorid=>'' );
 
@@ -350,7 +350,7 @@ $patstodel = GetBorrowersToExpunge( {category_code => 'CIVILIAN',patron_list_id 
 is( scalar(@$patstodel),2,'Borrowers without issues deleted by category_code and list');
 $patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02',patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel),2,'Borrowers without issues deleted by expiration_date and list');
-$patstodel = GetBorrowersToExpunge( {not_borrowered_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
+$patstodel = GetBorrowersToExpunge( {not_borrowed_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel),2,'Borrowers without issues deleted by last issue date');
 
 
