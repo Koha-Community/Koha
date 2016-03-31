@@ -142,15 +142,15 @@ function select_user(borrowernumber, borrower) {
 
         var age_string;
         if (age.year || age.month) {
-            age_string = _('Age: ');
+            age_string = _("Age: ");
         }
 
         if (age.year) {
-            age_string += age.year > 1 ? _('%s years ').format(age.year) : _('%s year ').format(age.year);
+            age_string += age.year > 1 ? _("%s years ").format(age.year) : _("%s year ").format(age.year);
         }
 
         if (age.month) {
-            age_string += age.month > 1 ? _('%s months ').format(age.month) : _('%s month ').format(age.month);
+            age_string += age.month > 1 ? _("%s months ").format(age.month) : _("%s month ").format(age.month);
         }
 
         hint.html(age_string);
