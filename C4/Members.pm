@@ -1983,7 +1983,7 @@ sub GetHideLostItemsPreference {
 =head2 GetBorrowersToExpunge
 
   $borrowers = &GetBorrowersToExpunge(
-      not_borrowered_since => $not_borrowered_since,
+      not_borrowed_since   => $not_borrowed_since,
       expired_before       => $expired_before,
       category_code        => $category_code,
       branchcode           => $branchcode
@@ -1996,7 +1996,7 @@ sub GetHideLostItemsPreference {
 sub GetBorrowersToExpunge {
     my $params = shift;
 
-    my $filterdate     = $params->{'not_borrowered_since'};
+    my $filterdate     = $params->{'not_borrowed_since'};
     my $filterexpiry   = $params->{'expired_before'};
     my $filtercategory = $params->{'category_code'};
     my $filterbranch   = $params->{'branchcode'} ||
