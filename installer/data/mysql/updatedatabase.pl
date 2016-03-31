@@ -11755,9 +11755,6 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
         ALTER TABLE deletedborrowers ADD sms_provider_id INT( 11 ) NULL DEFAULT NULL AFTER smsalertnumber;
     });
-    $dbh->do(q{
-        ALTER TABLE deletedborrowers ADD FOREIGN KEY ( sms_provider_id ) REFERENCES sms_providers ( id ) ON UPDATE CASCADE ON DELETE SET NULL;
-    });
 
     print "Upgrade to $DBversion done (Bug 9021 - Add SMS via email as an alternative to SMS services via SMS::Send drivers)\n";
     SetVersion($DBversion);
