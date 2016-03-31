@@ -50,6 +50,7 @@ sub get_columns {
     $columns = [ map {
         {
             cannot_be_toggled => exists $_->{cannot_be_toggled} ? $_->{cannot_be_toggled} : 0,
+            cannot_be_modified => exists $_->{cannot_be_modified} ? $_->{cannot_be_modified} : 0,
             is_hidden => exists $_->{is_hidden} ? $_->{is_hidden} : 0,
             columnname => $_->{columnname},
         }
@@ -69,6 +70,8 @@ sub get_modules {
         @{ $list->{modules}{ $c->module }{ $c->page }{ $c->tablename } };
         $column->{is_hidden}         = $c->is_hidden;
         $column->{cannot_be_toggled} = $c->cannot_be_toggled;
+        $column->{cannot_be_modified} = 0
+            unless exists $column->{cannot_be_modified};
     }
 
     return $list->{modules};

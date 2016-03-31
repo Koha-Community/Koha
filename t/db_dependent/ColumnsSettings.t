@@ -133,26 +133,31 @@ my $modules_expected = {
                 {
                     columnname => 'symbol',
                     cannot_be_toggled  => 0,
+                    cannot_be_modified => 0,
                     is_hidden  => 0,
                 },
                 {
                     columnname => 'iso_code',
                     cannot_be_toggled  => 0,
+                    cannot_be_modified => 0,
                     is_hidden  => 0,
                 },
                 {
                     columnname => 'last_updated',
                     cannot_be_toggled  => 0,
+                    cannot_be_modified => 0,
                     is_hidden  => 0,
                 },
                 {
                     columnname => 'active',
                     cannot_be_toggled  => 0,
+                    cannot_be_modified => 0,
                     is_hidden  => 1,
                 },
                 {
                     columnname        => 'actions',
                     cannot_be_toggled => 1,
+                    cannot_be_modified => 0,
                     is_hidden  => 0,
                 },
             ]
