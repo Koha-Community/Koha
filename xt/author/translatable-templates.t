@@ -39,7 +39,7 @@ my $po_dir = tempdir(CLEANUP => 1);
 # Find OPAC themes
 my $opac_dir  = 'koha-tmpl/opac-tmpl';
 opendir ( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
-my @opac_themes = grep { not /^\.|lib|js/ } readdir($dh);
+my @opac_themes = grep { not /^\.|lib|js|xslt/ } readdir($dh);
 close $dh;
 
 # Find STAFF themes

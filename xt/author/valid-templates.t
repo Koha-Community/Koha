@@ -41,7 +41,7 @@ my @themes;
 # OPAC themes
 my $opac_dir  = 'koha-tmpl/opac-tmpl';
 opendir ( my $dh, $opac_dir ) or die "can't opendir $opac_dir: $!";
-for my $theme ( grep { not /^\.|lib|js/ } readdir($dh) ) {
+for my $theme ( grep { not /^\.|lib|js|xslt/ } readdir($dh) ) {
     push @themes, {
         type     => "opac",
         theme    => $theme,
