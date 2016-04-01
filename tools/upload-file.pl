@@ -28,7 +28,6 @@ use URI::Escape;
 use C4::Context;
 use C4::Auth qw/check_cookie_auth haspermission/;
 use Koha::Upload;
-use Koha::Schema::Result::UploadedFile;
 
 # upload-file.pl must authenticate the user
 # before processing the POST request,
@@ -42,7 +41,7 @@ my %cookies = CGI::Cookie->fetch;
 my $sid = $cookies{'CGISESSID'}->value;
 my ( $auth_status, $sessionID ) = check_cookie_auth( $sid );
 my $uid = C4::Auth::get_session($sid)->param('id');
-my $allowed = Koha::Schema::Result::UploadedFile->allows_add_by( $uid );
+my $allowed = Koha::Upload->allows_add_by( $uid );
 
 if( $auth_status ne 'ok' || !$allowed ) {
     send_reply( 'denied' );

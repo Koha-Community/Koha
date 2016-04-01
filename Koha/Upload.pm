@@ -240,6 +240,27 @@ sub httpheaders {
     );
 }
 
+=head2 allows_add_by
+
+    allows_add_by checks if $userid has permission to add uploaded files
+
+=cut
+
+sub allows_add_by {
+    my ( $class, $userid ) = @_; # do not confuse with borrowernumber
+    my $flags = [
+        { tools      => 'upload_general_files' },
+        { circulate  => 'circulate_remaining_permissions' },
+        { tools      => 'stage_marc_import' },
+        { tools      => 'upload_local_cover_images' },
+    ];
+    require C4::Auth;
+    foreach( @$flags ) {
+        return 1 if C4::Auth::haspermission( $userid, $_ );
+    }
+    return;
+}
+
 =head1 INTERNAL ROUTINES
 
 =cut

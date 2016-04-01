@@ -84,7 +84,7 @@ subtest 'Test07' => sub {
     plan tests => 2;
     test07();
 };
-subtest 'Test08: UploadedFile->allows_add_by' => sub {
+subtest 'Test08: allows_add_by' => sub {
     plan tests => 4;
     test08();
 };
@@ -176,26 +176,26 @@ sub test07 { #simple test for httpheaders and getCategories
     is( @$cat >= 1, 1, 'getCategories returned at least one category' );
 }
 
-sub test08 { # UploadedFile->allows_add_by
+sub test08 { # allows_add_by
     my $builder = t::lib::TestBuilder->new;
     my $patron = $builder->build({
         source => 'Borrower',
         value  => { flags => 0 }, #no permissions
     });
     my $patronid = $patron->{borrowernumber};
-    is( Koha::Schema::Result::UploadedFile->allows_add_by( $patron->{userid} ),
+    is( Koha::Upload->allows_add_by( $patron->{userid} ),
         undef, 'Patron is not allowed to do anything' );
 
     # add some permissions: edit_catalogue
     my $fl = 2**9; # edit_catalogue
     $schema->resultset('Borrower')->find( $patronid )->update({ flags => $fl });
-    is( Koha::Schema::Result::UploadedFile->allows_add_by( $patron->{userid} ),
+    is( Koha::Upload->allows_add_by( $patron->{userid} ),
         undef, 'Patron is still not allowed to add uploaded files' );
 
     # replace flags by all tools
     $fl = 2**13; # tools
     $schema->resultset('Borrower')->find( $patronid )->update({ flags => $fl });
-    is( Koha::Schema::Result::UploadedFile->allows_add_by( $patron->{userid} ),
+    is( Koha::Upload->allows_add_by( $patron->{userid} ),
         1, 'Patron should be allowed now to add uploaded files' );
 
     # remove all tools and add upload_general_files only
@@ -209,7 +209,7 @@ sub test08 { # UploadedFile->allows_add_by
             code           => 'upload_general_files',
         },
     });
-    is( Koha::Schema::Result::UploadedFile->allows_add_by( $patron->{userid} ),
+    is( Koha::Upload->allows_add_by( $patron->{userid} ),
         1, 'Patron is still allowed to add uploaded files' );
 }
 
