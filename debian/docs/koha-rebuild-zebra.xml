@@ -23,7 +23,7 @@
 
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>koha-rebuild-zebra</command> <arg><option>-u</option>|<option>--usmarc</option></arg> <arg><option>-f</option>|<option>--full</option></arg> <arg><option>-a</option>|<option>--authorities</option></arg> <arg><option>-b</option>|<option>--biblios</option></arg> <arg><option>-q</option>|<option>--quiet</option></arg> <arg><option>-v</option>|<option>--verbose</option></arg> <arg><option>...</option></arg> <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+      <command>koha-rebuild-zebra</command> <arg><option>-u</option>|<option>--usmarc</option></arg> <arg><option>--force</option></arg> <arg><option>-f</option>|<option>--full</option></arg> <arg><option>-a</option>|<option>--authorities</option></arg> <arg><option>-b</option>|<option>--biblios</option></arg> <arg><option>-q</option>|<option>--quiet</option></arg> <arg><option>-v</option>|<option>--verbose</option></arg> <arg><option>...</option></arg> <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
   
@@ -36,9 +36,15 @@
       </listitem>
     </varlistentry>
     <varlistentry>
+      <term><option>--force</option></term>
+      <listitem>
+        <para>Force incremental indexing when <option>USE_INDEXER_DAEMON=yes</option>.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
       <term><option>-f, --full</option></term>
       <listitem>
-        <para>Does a reindex of the whole collection.</para>
+        <para>Does a reindex of the whole collection. Will run even if <option>USE_INDEXER_DAEMON=yes</option>.</para>
       </listitem>
     </varlistentry>
     <varlistentry>
@@ -75,7 +81,7 @@
   </refsect1>
 
   <refsect1><title>Description</title>
-  <para>Rebuild the Zebra database for Koha instances.</para>
+  <para>Rebuild the Zebra database for Koha instances. It will run incremental updates by default. It will be skipped if <option>USE_INDEXER_DAEMON=yes</option> in /etc/default/koha-common, unless <option>--force</option> or <option>--full</option> are used.</para>
   </refsect1>
   
   <refsect1><title>See also</title>
