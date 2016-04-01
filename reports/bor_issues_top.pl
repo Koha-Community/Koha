@@ -160,6 +160,7 @@ sub calculate {
     my $grantotal =0;
     my $dbh = C4::Context->dbh;
 
+
 # Checking filters
     my @loopfilter;
 	my @cellmap = (
@@ -362,6 +363,7 @@ sub calculate {
 						} keys %patrons;
     foreach my $id (@ranked_ids) {
         my @loopcell;
+
         foreach my $key (@cols_in_order) {
 			if($column){
 		      push @loopcell, {
@@ -381,8 +383,10 @@ sub calculate {
                         'loopcell' => \@loopcell,
                         'hilighted' => ($i%2),
                     };
+        # use a limit, if a limit is defined
+        last if $i > $limit and $limit
     }
-	
+
     # the header of the table
     $globalline{loopfilter}=\@loopfilter;
     # the core of the table
