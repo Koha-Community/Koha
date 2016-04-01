@@ -134,6 +134,7 @@ my $sampleissuingrule1 = {
     maxsuspensiondays  => 0,
     onshelfholds       => 0,
     opacitemholds      => 'N',
+    cap_fine_to_replacement_price => 0,
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
@@ -164,6 +165,7 @@ my $sampleissuingrule2 = {
     maxsuspensiondays  => 0,
     onshelfholds       => 1,
     opacitemholds      => 'Y',
+    cap_fine_to_replacement_price => 0,
 };
 my $sampleissuingrule3 = {
     branchcode         => $samplebranch1->{branchcode},
@@ -194,6 +196,7 @@ my $sampleissuingrule3 = {
     maxsuspensiondays  => 0,
     onshelfholds       => 1,
     opacitemholds      => 'F',
+    cap_fine_to_replacement_price => 0,
 };
 
 $query = 'INSERT INTO issuingrules (
@@ -222,8 +225,11 @@ $query = 'INSERT INTO issuingrules (
                 reservecharge,
                 chargename,
                 restrictedtype,
-                maxsuspensiondays
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                maxsuspensiondays,
+                onshelfholds,
+                opacitemholds,
+                cap_fine_to_replacement_price
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 my $sth = $dbh->prepare($query);
 $sth->execute(
     $sampleissuingrule1->{branchcode},
@@ -252,6 +258,9 @@ $sth->execute(
     $sampleissuingrule1->{chargename},
     $sampleissuingrule1->{restrictedtype},
     $sampleissuingrule1->{maxsuspensiondays},
+    $sampleissuingrule1->{onshelfholds},
+    $sampleissuingrule1->{opacitemholds},
+    $sampleissuingrule1->{cap_fine_to_replacement_price},
 );
 $sth->execute(
     $sampleissuingrule2->{branchcode},
@@ -280,6 +289,9 @@ $sth->execute(
     $sampleissuingrule2->{chargename},
     $sampleissuingrule2->{restrictedtype},
     $sampleissuingrule2->{maxsuspensiondays},
+    $sampleissuingrule2->{onshelfholds},
+    $sampleissuingrule2->{opacitemholds},
+    $sampleissuingrule2->{cap_fine_to_replacement_price},
 );
 $sth->execute(
     $sampleissuingrule3->{branchcode},
@@ -308,6 +320,9 @@ $sth->execute(
     $sampleissuingrule3->{chargename},
     $sampleissuingrule3->{restrictedtype},
     $sampleissuingrule3->{maxsuspensiondays},
+    $sampleissuingrule3->{onshelfholds},
+    $sampleissuingrule3->{opacitemholds},
+    $sampleissuingrule3->{cap_fine_to_replacement_price},
 );
 
 is_deeply(
