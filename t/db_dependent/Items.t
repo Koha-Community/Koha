@@ -228,21 +228,16 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 
     $schema->storage->txn_begin;
 
-    my $biblio =
-    $schema->resultset('Biblio')->create(
-        {
-            title       => "Test title",
-            biblioitems => [
-                {
-                    itemtype => 'BIB_LEVEL',
-                    items    => [ { itype => "ITEM_LEVEL" } ]
-                }
-            ]
-        }
-    );
-
-    my @bi = $biblio->biblioitems();
-    my ( $item ) = $bi[0]->items();
+    my $biblio = $schema->resultset('Biblio')->create({
+        title       => "Test title",
+        biblioitems => [ { itemtype => 'BIB_LEVEL' } ],
+    });
+    my $biblioitem = $biblio->biblioitems->first;
+    my $item = $schema->resultset('Item')->create({
+        biblioitemnumber => $biblioitem->biblioitemnumber,
+        biblionumber     => $biblio->biblionumber,
+        itype            => "ITEM_LEVEL",
+    });
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
     is( $item->effective_itemtype(), 'BIB_LEVEL', '$item->itemtype() returns biblioitem.itemtype when item-level_itypes is disabled' );
