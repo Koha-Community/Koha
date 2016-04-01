@@ -12074,7 +12074,19 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.044";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+            INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES
+            ('GoogleOpenIDConnect', '0', NULL, 'if ON, allows the use of Google OpenID Connect for login', 'YesNo'),
+            ('GoogleOAuth2ClientID', '', NULL, 'Client ID for the web app registered with Google', 'Free'),
+            ('GoogleOAuth2ClientSecret', '', NULL, 'Client Secret for the web app registered with Google', 'Free'),
+            ('GoogleOpenIDConnectDomain', '', NULL, 'Restrict OpenID Connect to this domain (or subdomains of this domain). Leave blank for all Google domains', 'Free');
+            });
 
+    print "Upgrade to $DBversion done (Bug 10988 - Allow login via Google OAuth2 (OpenID Connect))\n";
+    SetVersion($DBversion);
+}
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
