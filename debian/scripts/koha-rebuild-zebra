@@ -19,6 +19,9 @@
 
 set -e
 
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
+
 # include helper functions
 if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
     . "/usr/share/koha/bin/koha-functions.sh"
@@ -49,15 +52,20 @@ run_rebuild_zebra()
 {
     local instancename=$1; shift
 
-    # TODO: This comment is here to remind us that we should make
-    # rebuild_zebra.pl return error codes on failure
-    if sudo -u "$instancename-koha" -H \
-        env PERL5LIB=/usr/share/koha/lib \
-        KOHA_CONF="/etc/koha/sites/$instancename/koha-conf.xml" \
-        /usr/share/koha/bin/migration_tools/rebuild_zebra.pl $@ ; then
-        return 0
-    else
-        return 1
+    if [ "$USE_INDEXER_DAEMON" = "no"  ] ||
+       [     "${full_reindex}" = "yes" ] ||
+       [            "${force}" = "yes" ] ; then
+
+        # TODO: This comment is here to remind us that we should make
+        # rebuild_zebra.pl return error codes on failure
+        if sudo -u "$instancename-koha" -H \
+            env PERL5LIB=/usr/share/koha/lib \
+            KOHA_CONF="/etc/koha/sites/$instancename/koha-conf.xml" \
+            /usr/share/koha/bin/migration_tools/rebuild_zebra.pl $@ ; then
+            return 0
+        else
+            return 1
+        fi
     fi
 }
 
@@ -75,6 +83,7 @@ Options:
     --authorities|-a  Only run process for authorities.
     --biblios|-b      Only run process for biblios.
     --full|-f         Does a reindex of the whole collection.
+    --force           Run incremental indexing even if USE_INDEXER_DAEMON="yes"
     --quiet|-q        Sometimes be a bit quieter for scripts/cronjobs.
     --verbose|-v      Be verbose.
     --help|-h         Print this help.
@@ -93,6 +102,9 @@ biblios_only="no"
 authorities_only="no"
 biblios="yes"
 authorities="yes"
+force="no"
+full_reindex="no"
+
 # The '-q' option is intended to prevent the cronjob causing this to output
 # help information if there are no instances defined.
 quiet="no"
@@ -113,7 +125,11 @@ while [ -n "$*" ]; do
             opt_xml=""
             ;;
         -f|--full)
+            full_reindex="yes"
             opt_idx="-r"
+            ;;
+        --force)
+            force="yes"
             ;;
         -v|--verbose)
             opt_verbose="-v"
