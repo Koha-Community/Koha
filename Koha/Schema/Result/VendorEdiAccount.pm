@@ -224,8 +224,8 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
   },
 );
 
@@ -244,14 +244,14 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
+    on_delete     => "RESTRICT",
+    on_update     => "RESTRICT",
   },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2015-12-21 12:59:02
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xPfUnPxnQOmWWX3shkTVRA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-04-01 21:58:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rsSTteR7nV22B/kxr33BBA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
