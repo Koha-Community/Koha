@@ -388,7 +388,8 @@ sub print_typetag {
 		);
     
     ## The type of a MARC record is found at position 06 of the leader
-    my $typeofrecord = substr($leader, 6, 1);
+    my $typeofrecord = defined($leader) && length $leader >=6 ?
+                       substr($leader, 6, 1): undef;
 
     ## ToDo: for books, field 008 positions 24-27 might have a few more
     ## hints
@@ -396,7 +397,11 @@ sub print_typetag {
     my %typehash;
     
     ## the ukmarc here is just a guess
-    if ($intype eq "marc21" || $intype eq "ukmarc") {
+    if (! defined $intype) {
+        ## assume MARC21 as default
+        %typehash = %ustypehash;
+    }
+    elsif ($intype eq "marc21" || $intype eq "ukmarc") {
 	%typehash = %ustypehash;
     }
     elsif ($intype eq "unimarc") {
@@ -407,7 +412,7 @@ sub print_typetag {
 	%typehash = %ustypehash;
     }
 
-    if (!exists $typehash{$typeofrecord}) {
+    if (!defined $typeofrecord || !exists $typehash{$typeofrecord}) {
 	print "TY  - BOOK\r\n"; ## most reasonable default
 	warn ("no type found - assume BOOK") if $marcprint;
     }
