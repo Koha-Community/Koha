@@ -280,7 +280,7 @@ sub calculate {
     my $strcalc ;
 
 # Processing average loanperiods
-    $strcalc .= "SELECT  CONCAT(borrowers.surname , \",\\t\",borrowers.firstname),  COUNT(*) AS RANK, borrowers.borrowernumber AS ID";
+    $strcalc .= "SELECT  CONCAT_WS('', borrowers.surname , \",\\t\", borrowers.firstname),  COUNT(*) AS RANK, borrowers.borrowernumber AS ID";
     $strcalc .= " , $colfield " if ($colfield);
     $strcalc .= " FROM `old_issues`
                   LEFT JOIN  borrowers  USING(borrowernumber)
