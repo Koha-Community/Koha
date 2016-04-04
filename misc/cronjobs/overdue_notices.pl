@@ -675,6 +675,8 @@ END_SQL
                         # email or sms is requested but not exist, do a print.
                         $effective_mtt = 'print';
                     }
+
+                    my $letter_exists = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"}, $branchcode, $effective_mtt ) ? 1 : 0;
                     my $letter = parse_overdues_letter(
                         {   letter_code     => $overdue_rules->{"letter$i"},
                             borrowernumber  => $borrowernumber,
@@ -685,7 +687,9 @@ END_SQL
                                                 'items.content' => $titles,
                                                 'count'         => $itemcount,
                                                },
-                            message_transport_type => $effective_mtt,
+                            # If there is no template defined for the requested letter
+                            # Fallback on email
+                            message_transport_type => $letter_exists ? $effective_mtt : 'email',
                         }
                     );
                     unless ($letter) {
