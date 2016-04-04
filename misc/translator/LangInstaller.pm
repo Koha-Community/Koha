@@ -110,7 +110,7 @@ sub new {
 
     # OPAC themes
     opendir my $dh, $context->config('opachtdocs');
-    for my $theme ( grep { not /^\.|lib/ } readdir($dh) ) {
+    for my $theme ( grep { not /^\.|lib|xslt/ } readdir($dh) ) {
         push @{$self->{interface}}, {
             name   => "OPAC $theme",
             dir    => "$opachtdocs/$theme",
@@ -123,7 +123,7 @@ sub new {
         # search for strings on staff & opac marc files
         my $dirs = $context->config('intrahtdocs') . '/prog';
         opendir $fh, $context->config('opachtdocs');
-        for ( grep { not /^\.|\.\.|lib$/ } readdir($fh) ) {
+        for ( grep { not /^\.|\.\.|lib$|xslt/ } readdir($fh) ) {
             $dirs .= ' ' . "$opachtdocs/$_";
         }
         push @{$self->{interface}}, {
