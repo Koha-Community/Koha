@@ -11,7 +11,6 @@ use t::lib::TestBuilder;
 use C4::Context;
 use Koha::Database;
 use Koha::Upload;
-use Koha::Schema::Result::UploadedFile;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
