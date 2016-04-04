@@ -45,6 +45,13 @@ my $rating_old_value = $query->param('rating_value');
 my $rating_value     = $query->param('rating');
 my $rating;
 
+# If JS is disabled and a user click on "Rate me" without selecting a rate
+unless ( $biblionumber and $rating_value ) {
+    print $query->redirect(
+        "/cgi-bin/koha/opac-detail.pl?biblionumber=$biblionumber");
+    exit;
+}
+
 if ( !$rating_old_value ) {
     $rating = AddRating( $biblionumber, $loggedinuser, $rating_value );
 }
