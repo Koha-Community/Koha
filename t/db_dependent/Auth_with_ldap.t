@@ -270,37 +270,50 @@ subtest "search_method tests" => sub {
 
 # Function that mocks the call to C4::Context->config(param)
 sub mockedC4Config {
-
+    my $class = shift;
     my $param =  shift;
 
-    my %ldap_mapping = (
-        firstname    => { is => 'givenname' },
-        surname      => { is => 'sn' },
-        address      => { is => 'postaladdress' },
-        city         => { is => 'l' },
-        zipcode      => { is => 'postalcode' },
-        branchcode   => { is => 'branch' },
-        userid       => { is => 'uid' },
-        password     => { is => 'userpassword' },
-        email        => { is => 'mail' },
-        categorycode => { is => 'employeetype' },
-        phone        => { is => 'telephonenumber' }
-    );
+    if ($param eq 'useshibboleth') {
+        return 0;
+    }
+    elsif ($param eq 'ldapserver') {
+        my %ldap_mapping = (
+            firstname    => { is => 'givenname' },
+            surname      => { is => 'sn' },
+            address      => { is => 'postaladdress' },
+            city         => { is => 'l' },
+            zipcode      => { is => 'postalcode' },
+            branchcode   => { is => 'branch' },
+            userid       => { is => 'uid' },
+            password     => { is => 'userpassword' },
+            email        => { is => 'mail' },
+            categorycode => { is => 'employeetype' },
+            phone        => { is => 'telephonenumber' }
+        );
 
-    my %ldap_config  = (
-        anonymous_bind => $anonymous_bind,
-        auth_by_bind   => $auth_by_bind,
-        base           => 'dc=metavore,dc=com',
-        hostname       => 'localhost',
-        mapping        => \%ldap_mapping,
-        pass           => 'metavore',
-        principal_name => '%s@my_domain.com',
-        replicate      => $replicate,
-        update         => $update,
-        user           => 'cn=Manager,dc=metavore,dc=com'
-    );
-
-    return \%ldap_config;
+        my %ldap_config  = (
+            anonymous_bind => $anonymous_bind,
+            auth_by_bind   => $auth_by_bind,
+            base           => 'dc=metavore,dc=com',
+            hostname       => 'localhost',
+            mapping        => \%ldap_mapping,
+            pass           => 'metavore',
+            principal_name => '%s@my_domain.com',
+            replicate      => $replicate,
+            update         => $update,
+            user           => 'cn=Manager,dc=metavore,dc=com'
+        );
+        return \%ldap_config;
+    }
+    elsif ($param =~ /(intranetdir|opachtdocs|intrahtdocs)/ ) {
+        return '';
+    }
+    elsif (ref $class eq 'HASH') {
+        return $class->{$param};
+    }
+    else {
+        return;
+    }
 };
 
 # Function that mocks the call to Net::LDAP
