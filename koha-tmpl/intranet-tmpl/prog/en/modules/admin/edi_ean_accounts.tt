@@ -1,14 +1,14 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; EDI EANs
+<title>Koha &rsaquo; Administration &rsaquo; Library EANs
 [% IF ean_form %]
   [% IF ean %]
-     &rsquo; Modify library EAN
+     &rsaquo; Modify library EAN
   [% ELSE %]
-     &rsquo; Add new library EAN
+     &rsaquo; Add new library EAN
   [% END %]
 [% END %]
 [% IF delete_confirm %]
-     &rsquo; Confirm deletion of EAN
+     &rsaquo; Confirm deletion of EAN
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -20,15 +20,14 @@
 <div id="breadcrumbs">
 <a href="/cgi-bin/koha/mainpage.pl">Home</a>
  &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
- &rsaquo; <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">EDI EANs</a>
 [% IF ean_form %]
   [% IF ean %]
-     &rsaquo; Modify library EAN
+     &rsaquo; <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a> &rsaquo; Modify library EAN
   [% ELSE %]
-     &rsaquo; Add new library EAN
+     &rsaquo; <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a> &rsaquo; Add new library EAN
   [% END %]
 [% ELSIF delete_confirm %]
-     &rsaquo; Confirm deletion of Ean
+     &rsaquo; <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a> &rsaquo; Confirm deletion of EAN
 [% ELSE %]
      &rsaquo; Library EANs
 [% END %]
@@ -42,7 +41,7 @@
 [% IF display %]
     <div id="toolbar" class="btn-toolbar">
     <a class="btn btn-small" id="newediean" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form">
-         <i class="icon-plus"></i>
+         <i class="fa fa-plus"></i>
          New EAN
     </a>
     </div>
@@ -80,11 +79,11 @@
           </li>
           <li>
              <label for="description">Description: </label>
-             <input type="text" name="description" id="description" size="30" maxlength="64" value="[% ean.description %]" />
+             <input type="text" name="description" id="description" size="30" maxlength="128" value="[% ean.description %]" />
           </li>
           <li>
              <label for="ean">EAN: </label>
-             <input type="text" name="ean" id="ean" size="20" maxlength="90" value="[% ean.ean %]" />
+             <input type="text" name="ean" id="ean" size="20" maxlength="15" value="[% ean.ean %]" />
           </li>
           <li>
              <label for="id_code_qualifier">Qualifier: </label>
@@ -119,15 +118,16 @@
     <input type="hidden" name="op" value="delete_confirmed" />
     <input type="hidden" name="branchcode" value="[% ean.branch.branchcode %]" />
     <input type="hidden" name="ean" value="[% ean.ean %]" />
-    <input type="submit" class="approve" value="Yes, Delete" />
+    <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
 </form>
 <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="get">
-    <input type="submit" class="deny" value="No, do not Delete" />
+    <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
 </form>
 </div>
 [% END %]
 
 [% IF display %]
+[% IF ( eans ) %]
     <h2>Library EANs</h2>
     <table>
         <tr>
@@ -138,7 +138,7 @@
             <th>Actions</th>
         </tr>
         [% FOREACH ean IN eans %]
-            [% IF loop.even %]<tr>[% ELSE %]<tr class="highlight">[% END %]
+            <tr>
                 <td>[% ean.branch.branchname %]</td>
                 <td>[% ean.description %]</td>
                 <td>[% ean.ean %]</td>
@@ -149,14 +149,18 @@
                     [% END %]
                  [% END %]
                 </td>
-                <td align="center">
-                    <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form&branchcode=[% ean.branch.branchcode %]&ean=[% ean.ean %]">Edit</a>
-                    |
-                    <a href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=delete_confirm&branchcode=[% ean.branch.branchcode %]&ean=[% ean.ean %]">Delete</a>
+                <td class="actions">
+                    <a class="btn btn-mini" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form&branchcode=[% ean.branch.branchcode %]&ean=[% ean.ean %]"><i class="fa fa-pencil"></i> Edit</a>
+                    <a class="btn btn-mini" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=delete_confirm&branchcode=[% ean.branch.branchcode %]&ean=[% ean.ean %]"><i class="fa fa-trash"></i> Delete</a>
                 </td>
             </tr>
         [% END %]
     </table>
+[% ELSE %]
+    <div class="dialog message">
+        There are no library EANs.
+    </div>
+[% END %]
 [% END %]
 
 </div>

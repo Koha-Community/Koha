@@ -2,13 +2,13 @@
 <title>Koha &rsaquo; Administration &rsaquo; EDI accounts
 [% IF acct_form %]
   [% IF account %]
-     &rsquo; Modify account
+     &rsaquo; Modify account
   [% ELSE %]
-     &rsquo; Add new account
+     &rsaquo; Add new account
   [% END %]
 [% END %]
 [% IF delete_confirm %]
-     &rsquo; Confirm deletion of account
+     &rsaquo; Confirm deletion of account
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -19,18 +19,17 @@
 
 <div id="breadcrumbs">
 <a href="/cgi-bin/koha/mainpage.pl">Home</a>
- &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
- &rsaquo; <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a>
-[% IF acct_form %]
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+ [% IF acct_form %]
   [% IF account %]
-     &rsaquo; Modify account
+     <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a> &rsaquo; Modify account
   [% ELSE %]
-     &rsaquo; Add new account
+     <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a> &rsaquo; Add new account
   [% END %]
 [% ELSIF delete_confirm %]
-     &rsaquo; Confirm deletion of account
+     <a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a> &rsaquo; Confirm deletion of account
 [% ELSE %]
-     &rsaquo; Accounts
+     &rsaquo; EDI accounts
 [% END %]
 </div>
 
@@ -42,7 +41,7 @@
 [% IF display %]
     <div id="toolbar" class="btn-toolbar">
     <a class="btn btn-small" id="newediacct" href="/cgi-bin/koha/admin/edi_accounts.pl?op=acct_form">
-         <i class="icon-plus"></i>
+         <i class="fa fa-plus"></i>
          New account
     </a>
     </div>
@@ -95,7 +94,7 @@
   [% END %]
   <li>
      <label for="description">Description: </label>
-     <input type="text" name="description" id="description" size="20" maxlength="90" value="[% account.description %]" />
+     <input type="text" name="description" id="description" size="20" value="[% account.description %]" />
   </li>
   <li>
      [% transport_types = [
@@ -116,27 +115,25 @@
   </li>
   <li>
      <label for="host">Remote host: </label>
-     <input type="text" name="host" id="host" size="20" maxlength="90" value="[% account.host %]" />
+     <input type="text" name="host" id="host" size="20" maxlength="40" value="[% account.host %]" />
   </li>
   <li>
      <label for="username">Username: </label>
-     <input type="text" name="username" id="username" size="20" maxlength="90" value="[% account.username %]" />
+     <input type="text" name="username" id="username" size="20" maxlength="40" value="[% account.username %]" />
   </li>
   <li>
      <label for="password">Password: </label>
-     <input type="text" name="password" id="password" size="20" maxlength="90" value="[% account.password %]" />
+     <input type="text" name="password" id="password" size="20" maxlength="40" value="[% account.password %]" />
   </li>
   <li>
      <label for="download_directory">Download directory: </label>
-     <input type="text" name="download_directory" id="download_directory" size="20" maxlength="90"
-      title="The download directory specifies the directory on the ftpsite from which we download quotes and invoices"
-      value="[% account.download_directory %]" />
+     <input type="text" name="download_directory" id="download_directory" size="20" value="[% account.download_directory %]" />
+        <div class="hint">The download directory specifies the directory on the ftp site from which quotes and invoices are downloaded.</div>
   </li>
   <li>
      <label for="upload_directory">Upload directory: </label>
-     <input type="text" name="upload_directory" id="upload_directory" size="20" maxlength="90"
-      title="The upload directory specifies the directory on the ftp site to which we upload orders"
-      value="[% account.upload_directory %]" />
+     <input type="text" name="upload_directory" id="upload_directory" size="20" value="[% account.upload_directory %]" />
+        <div class="hint">The upload directory specifies the directory on the ftp site to which orders are uploaded.</div>
   </li>
   <li>
      <label for="id_code_qualifier">Qualifier:</label>
@@ -156,12 +153,12 @@
   </li>
   <li>
      <label for="san">SAN: </label>
-     <input type="text" name="san" id="san" size="20" maxlength="90" value="[% account.san %]" />
+     <input type="text" name="san" id="san" size="20" maxlength="20" value="[% account.san %]" />
   </li>
   <li>
      <label for="quotes_enabled">Quotes enabled: </label>
       [% IF account.quotes_enabled %]
-     <input type="checkbox" name="quotes_enabled" id="quotes_enabled" value="[% account.quotes_enabled %]" checked />
+     <input type="checkbox" name="quotes_enabled" id="quotes_enabled" value="[% account.quotes_enabled %]" checked="checked" />
       [% ELSE %]
      <input type="checkbox" name="quotes_enabled" id="quotes_enabled" value="[% account.quotes_enabled %]" />
       [% END %]
@@ -169,7 +166,7 @@
   <li>
      <label for="orders_enabled">Orders enabled: </label>
 [% IF account.orders_enabled %]
-     <input type="checkbox" name="orders_enabled" id="orders_enabled" value="[% account.orders_enabled %]" checked />
+     <input type="checkbox" name="orders_enabled" id="orders_enabled" value="[% account.orders_enabled %]" checked="checked" />
 [% ELSE %]
      <input type="checkbox" name="orders_enabled" id="orders_enabled" value="[% account.orders_enabled %]" />
 [% END %]
@@ -177,7 +174,7 @@
   <li>
      <label for="invoices_enabled">Invoices enabled: </label>
 [% IF account.invoices_enabled %]
-     <input type="checkbox" name="invoices_enabled" id="invoices_enabled" value="[% account.invoices_enabled %]" checked />
+     <input type="checkbox" name="invoices_enabled" id="invoices_enabled" value="[% account.invoices_enabled %]" checked="checked" />
 [% ELSE %]
      <input type="checkbox" name="invoices_enabled" id="invoices_enabled" value="[% account.invoices_enabled %]" />
 [% END %]
@@ -185,18 +182,21 @@
   <li>
      <label for="responses_enabled">Responses enabled: </label>
 [% IF account.responses_enabled %]
-     <input type="checkbox" name="responses_enabled" id="responses_enabled" value="[% account.responses_enabled %]" checked />
+     <input type="checkbox" name="responses_enabled" id="responses_enabled" value="[% account.responses_enabled %]" checked="checked" />
 [% ELSE %]
      <input type="checkbox" name="responses_enabled" id="responses_enabled" value="[% account.responses_enabled %]" />
 [% END %]
   </li>
   <li>
-     <label for="auto_orders">Automatic ordering (Quotes generate orders without staff intervention): </label>
+     <label for="auto_orders">Automatic ordering: </label>
 [% IF account.auto_orders %]
-     <input type="checkbox" name="auto_orders" id="auto_orders" value="[% account.auto_orders %]" checked />
+     <input type="checkbox" name="auto_orders" id="auto_orders" value="[% account.auto_orders %]" checked="checked" />
 [% ELSE %]
      <input type="checkbox" name="auto_orders" id="auto_orders" value="[% account.auto_orders %]" />
 [% END %]
+    <div class="hint">
+        With automatic ordering quotes generate orders without staff intervention.
+    </div>
   </li>
   </ol>
   </fieldset>
@@ -214,7 +214,7 @@
 <table>
     <tr>
     <th>Vendor</th>
-    <td>[% account.vendor %]</td>
+    <td>[% account.vendor.name %]</td>
     </tr>
     <tr>
     <th>Description</th>
@@ -230,13 +230,15 @@
     </table>
     <input type="hidden" name="op" value="delete_confirmed" />
     <input type="hidden" name="id" value="[% account.id %]" />
-    <input type="submit" class="approve" value="Yes, Delete" />
+    <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
 </form>
 <form action="/cgi-bin/koha/admin/edi_accounts.pl" method="get">
-    <input type="submit" class="deny" value="No, do not Delete" />
+    <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
 </form>
+</div>
 [% END %]
 [% IF display %]
+[% IF ( ediaccounts ) %]
 <h2>Vendor EDI accounts</h2>
 
     <table>
@@ -248,8 +250,8 @@
        <th>Remote host</th>
        <th>Username</th>
        <th>Password</th>
-       <th>Download Directory</th>
-       <th>Upload Directory</th>
+       <th>Download directory</th>
+       <th>Upload directory</th>
        <th>Qualifier</th>
        <th>SAN</th>
        <th>Quotes</th>
@@ -260,11 +262,9 @@
        <th>Actions</th>
     </tr>
     [% FOREACH account IN ediaccounts %]
-    [% IF loop.even %]<tr>
-    [% ELSE %]<tr class="highlight">
-    [% END %]
+    <tr>
       <td>[% account.id %]</td>
-      <td><a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% account.vendor_id %]">[% account.vendor.name %]</a></td>
+      <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% account.vendor_id %]">[% account.vendor.name %]</a></td>
       <td>[% account.description %]</td>
       <td>[% account.transport %]</td>
       <td>[% account.host %]</td>
@@ -306,12 +306,17 @@
       [% ELSE %]
          <td>N</td>
       [% END %]
-      <td align="center">
-          <a href="/cgi-bin/koha/admin/edi_accounts.pl?op=acct_form&id=[% account.id %]">Edit</a> | <a href="/cgi-bin/koha/admin/edi_accounts.pl?op=delete_confirm&id=[% account.id %]">Delete</a>
+      <td class="actions">
+          <a class="btn btn-mini" href="/cgi-bin/koha/admin/edi_accounts.pl?op=acct_form&id=[% account.id %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-mini" href="/cgi-bin/koha/admin/edi_accounts.pl?op=delete_confirm&id=[% account.id %]"><i class="fa fa-trash"></i> Delete</a>
       </td>
     </tr>
     [% END %]
     </table>
+    [% ELSE %]
+        <div class="dialog message">
+            There are no EDI accounts.
+        </div>
+    [% END %]
 [% END %]
 
 </div>
