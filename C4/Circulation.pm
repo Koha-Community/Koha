@@ -933,7 +933,6 @@ sub CanBookBeIssued {
     if ( $rentalConfirmation ){
         my ($rentalCharge) = GetIssuingCharges( $item->{'itemnumber'}, $borrower->{'borrowernumber'} );
         if ( $rentalCharge > 0 ){
-            $rentalCharge = sprintf("%.02f", $rentalCharge);
             $needsconfirmation{RENTALCHARGE} = $rentalCharge;
         }
     }
@@ -3240,6 +3239,9 @@ sub GetIssuingCharges {
             # We may have multiple rules so get the most specific
             my $discount = _get_discount_from_rule($discount_rules, $branch, $item_type);
             $charge = ( $charge * ( 100 - $discount ) ) / 100;
+        }
+        if ($charge) {
+            $charge = sprintf '%.2f', $charge; # ensure no fractions of a penny returned
         }
     }
 
