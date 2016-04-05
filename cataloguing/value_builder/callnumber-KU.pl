@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Converted to new plugin style (Bug 13437)
+
 # Copyright 2012 CatalystIT Ltd
 #
 # This file is part of Koha.
@@ -17,10 +19,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
-use C4::Auth;
+use Modern::Perl;
 use CGI qw ( -utf8 );
+
+use C4::Auth;
 use C4::Context;
 use C4::Output;
 
@@ -40,12 +42,12 @@ CCC QW - returns first unused number CCC QWxx starting with CCC QW01
 
 =cut
 
-sub plugin_javascript {
-    my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
+my $builder = sub {
+    my ( $params ) = @_;
     my $res="
     <script type='text/javascript'>
-        function Clic$field_number() {
-                var code = document.getElementById('$field_number');
+        function Click$params->{id}() {
+                var code = document.getElementById('$params->{id}');
                 var url = '../cataloguing/plugin_launcher.pl?plugin_name=callnumber-KU.pl&code=' + code.value;
                 var req = \$.get(url);
                 req.done(function(resp){
@@ -56,13 +58,12 @@ sub plugin_javascript {
         }
     </script>
     ";
+    return $res;
+};
 
-    return ($field_number,$res);
-}
-
-my $BASE_CALLNUMBER_RE = qr/^(\w+) (\w+)$/;
-sub plugin {
-    my ($input) = @_;
+my $launcher = sub {
+    my ( $params ) = @_;
+    my $input = $params->{cgi};
     my $code = $input->param('code');
 
     my ($template, $loggedinuser, $cookie) = get_template_and_user({
@@ -74,6 +75,7 @@ sub plugin {
         debug           => 1,
     });
 
+    my $BASE_CALLNUMBER_RE = qr/^(\w+) (\w+)$/;
     my $ret;
     my ($alpha, $num) = ($code =~ $BASE_CALLNUMBER_RE);
     if (defined $num) { # otherwise no point
@@ -117,4 +119,6 @@ sub plugin {
         return => $ret || $code
     );
     output_html_with_http_headers $input, $cookie, $template->output;
-}
+};
+
+return { builder => $builder, launcher => $launcher };

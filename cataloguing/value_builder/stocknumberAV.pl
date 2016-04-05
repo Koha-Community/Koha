@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Converted to new plugin style (Bug 13437)
+
 # Copyright 2012 BibLibre SARL
 #
 # This file is part of Koha.
@@ -18,8 +20,9 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Auth;
 use CGI qw ( -utf8 );
+
+use C4::Auth;
 use C4::Context;
 use C4::Output;
 
@@ -37,12 +40,12 @@ In this case, a stocknumber has this form : "PREFIX 0009678570".
 
 =cut
 
-sub plugin_javascript {
-    my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
+my $builder = sub {
+    my ( $params ) = @_;
     my $res = qq{
     <script type='text/javascript'>
-        function Clic$field_number() {
-                var code = document.getElementById('$field_number');
+        function Click$params->{id}() {
+                var code = document.getElementById('$params->{id}');
                 \$.ajax({
                     url: '/cgi-bin/koha/cataloguing/plugin_launcher.pl',
                     type: 'POST',
@@ -51,7 +54,7 @@ sub plugin_javascript {
                         'code'    : code.value,
                     },
                     success: function(data){
-                        var field = document.getElementById('$field_number');
+                        var field = document.getElementById('$params->{id}');
                         field.value = data;
                         return 1;
                     }
@@ -60,11 +63,12 @@ sub plugin_javascript {
     </script>
     };
 
-    return ($field_number,$res);
-}
+    return $res;
+};
 
-sub plugin {
-    my ($input) = @_;
+my $launcher = sub {
+    my ( $params ) = @_;
+    my $input = $params->{cgi};
     my $code = $input->param('code');
 
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -98,4 +102,6 @@ sub plugin {
     }
 
     output_html_with_http_headers $input, $cookie, $template->output;
-}
+};
+
+return { builder => $builder, launcher => $launcher };

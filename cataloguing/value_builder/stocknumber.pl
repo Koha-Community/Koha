@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Converted to new plugin style (Bug 13437)
+
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -17,13 +19,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Context;
 
-sub plugin_javascript {
-	my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-	my $function_name= "inventory".(int(rand(100000))+1);
+my $builder = sub {
+    my ( $params ) = @_;
+    my $function_name = $params->{id};
+    my $dbh = $params->{dbh};
 
 	my $branchcode = C4::Context->userenv->{'branch'};
 
@@ -34,26 +36,24 @@ sub plugin_javascript {
 	my ($nextnum) = $sth->fetchrow;
 	$nextnum = $branchcode.'_'.$nextnum;
 
-    my $scr = <<END_OF_JS;
-if (\$('#' + id).val() == '' || force) {
-    \$('#' + id).val('$nextnum');
-}
-END_OF_JS
-
     my $js  = <<END_OF_JS;
 <script type="text/javascript">
 //<![CDATA[
 
-function Focus$function_name(subfield_managed, id, force) {
-$scr
-    return 0;
+function Focus$function_name(id, force) {
+    if (\$('#' + id).val() == '' || force) {
+        \$('#' + id).val('$nextnum');
+    }
 }
 
-function Clic$function_name(id) {
-    return Focus$function_name('not_relavent', id, 1);
+function Click$function_name(event) {
+    Focus$function_name(event.data.id, 1);
+    return false;
 }
 //]]>
 </script>
 END_OF_JS
-    return ($function_name, $js);
-}
+    return $js;
+};
+
+return { builder => $builder };

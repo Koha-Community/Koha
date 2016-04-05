@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+
+# Converted to new plugin style (Bug 13437)
+
 # Copyright 2000-2002 Katipo Communications
 # Parts copyright 2008-2010 Foundations Bible College
 #
@@ -17,21 +20,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
-no warnings 'redefine'; # otherwise loading up multiple plugins fills the log with subroutine redefine warnings
+use Modern::Perl;
 
 use C4::Context;
-require C4::Barcodes::ValueBuilder;
+use C4::Barcodes::ValueBuilder;
 use Koha::DateUtils;
 
 use Algorithm::CheckDigits;
 
 my $DEBUG = 0;
 
-sub plugin_javascript {
-	my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-	my $function_name= "barcode".(int(rand(100000))+1);
+my $builder = sub {
+    my ( $params ) = @_;
+    my $function_name = $params->{id};
     my %args;
 
 	# find today's date
@@ -45,13 +46,7 @@ sub plugin_javascript {
     warn "Barcode type = $autoBarcodeType" if $DEBUG;
 	if ((not $autoBarcodeType) or $autoBarcodeType eq 'OFF') {
         # don't return a value unless we have the appropriate syspref set
-		return ($function_name, 
-        "<script type=\"text/javascript\">
-        // autoBarcodeType OFF (or not defined)
-        function Focus$function_name() { return 0;}
-        function  Clic$function_name() { return 0;}
-        function  Blur$function_name() { return 0;}
-        </script>");
+        return q|<script type=\"text/javascript\"></script>|;
     }
 	if ($autoBarcodeType eq 'annual') {
         ($nextnum, $scr) = C4::Barcodes::ValueBuilder::annual::get_barcode(\%args);
@@ -65,6 +60,7 @@ sub plugin_javascript {
     elsif ($autoBarcodeType eq 'EAN13') {
         # not the best, two catalogers could add the same barcode easily this way :/
         my $query = "select max(abs(barcode)) from items";
+    my $dbh = $params->{dbh};
         my $sth = $dbh->prepare($query);
         $sth->execute();
         while (my ($last)= $sth->fetchrow_array) {
@@ -88,23 +84,25 @@ sub plugin_javascript {
     $scr or $scr = <<END_OF_JS;
 if (\$('#' + id).val() == '' || force) {
     \$('#' + id).val('$nextnum');
-}
+};
 END_OF_JS
 
     my $js  = <<END_OF_JS;
 <script type="text/javascript">
 //<![CDATA[
 
-function Focus$function_name(subfield_managed, id, force) {
+function Focus$function_name(id, force) {
 $scr
-    return 0;
 }
 
-function Clic$function_name(id) {
-    return Focus$function_name('not_relavent', id, 1);
+function Click$function_name(id) {
+    Focus$function_name(id, 1);
+    return false;
 }
 //]]>
 </script>
 END_OF_JS
-    return ($function_name, $js);
-}
+    return $js;
+};
+
+return { builder => $builder };

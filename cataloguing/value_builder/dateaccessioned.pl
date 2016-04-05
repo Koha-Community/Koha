@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Converted to new plugin style (Bug 13437)
+
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -18,12 +20,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use C4::Biblio qw/GetMarcFromKohaField/;
 use Koha::DateUtils;
-no warnings 'redefine';
 
-sub plugin_javascript {
-	# my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-	my $function_name = "dateaccessioned".(int(rand(100000))+1);
+my $builder = sub {
+    my ( $params ) = @_;
+    my $function_name = $params->{id};
 
     my $date = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 
@@ -35,29 +37,25 @@ sub plugin_javascript {
 //  
 // from: cataloguing/value_builder/dateaccessioned.pl
 
-function Focus$function_name(subfield_managed, id, force) {
-    //var summary = "";
-    //for (i=0 ; i<document.f.field_value.length ; i++) {
-    //  summary += i + ": " + document.f.tag[i].value + " " + document.f.subfield[i].value + ": " + document.f.field_value[i].value + "\\n"; 
-    //}
-    //alert("Got focus, subfieldmanaged: " + subfield_managed + "\\n" + summary);
-    set_to_today(id);
-    return 0;
+function Focus$function_name(event) {
+    set_to_today(event.data.id);
 }
 
-function Clic$function_name(id) {
-    set_to_today(id, 1);
-    return 0;
+function Click$function_name(event) {
+    set_to_today(event.data.id);
+    return false; // prevent page scroll
 }
 
-function set_to_today(id, force) {
+function set_to_today( id ) {
     if (! id) { alert(_("Bad id ") + id + _(" sent to set_to_today()")); return 0; }
-    if (\$("#" + id).val() == '' || \$("#" + id).val() == '0000-00-00' || force) {
+    if (\$("#" + id).val() == '' || \$("#" + id).val() == '0000-00-00' ) {
         \$("#" + id).val("$date");
     }
 }
 //]]>
 </script>
 END_OF_JS
-	return ($function_name, $res);
-}
+    return $res;
+};
+
+return { builder => $builder };
