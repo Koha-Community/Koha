@@ -146,8 +146,6 @@ function submitForm(form) {
                             <div class="btn-group"><a href="[% script_name %]?op=print&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="printbutton"><i class="fa fa-download"></i> Print this basket group in PDF</a></div>
                             <div class="btn-group"><a href="[% script_name %]?op=ediprint&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="printbutton"><i class="fa fa-download"></i> Generate edifact order</a></div>
                         </div>
-                    [% ELSE %]
-                        <div class="btn-group"><a href="[% script_name %]?op=delete&amp;basketgroupid=[% basketgroupid %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="delbutton"><i class="fa fa-remove"></i> Delete basket group</a></div>
                     [% END %]
                     [% IF (name && closedbg) %]
                         <h1>Basket group [% name %] ([% basketgroupid %]) for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a></h1>
@@ -341,7 +339,9 @@ function submitForm(form) {
                                                 <td>
                                                     <input type="button" onclick="closeandprint('[% basketgroup.id %]');" value="Close and export as PDF" />
                                                     <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="add" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Edit" /></form>
-                                                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Delete" /></form>
+                                                    [% UNLESS basketgroup.basketsqty %]
+                                                        <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="booksellerid" value="[% basketgroup.booksellerid %]" /><input type="hidden" name="basketgroupid" value="[% basketgroup.id %]" /><input type="submit" value="Delete" /></form>
+                                                    [% END %]
                                                 </td>
                                             </tr>
                                         [% END %]
