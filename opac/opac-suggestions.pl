@@ -150,7 +150,12 @@ if ( $op eq "delete_confirm" ) {
     print $input->redirect("/cgi-bin/koha/opac-suggestions.pl?op=else");
     exit;
 }
-map{ $_->{'branchcodesuggestedby'} = Koha::Libraries->find($_->{'branchcodesuggestedby'})->branchname} @$suggestions_loop;
+
+map{
+    my $s = $_;
+    my $library = Koha::Libraries->find($s->{branchcodesuggestedby});
+    $library ? $s->{branchcodesuggestedby} = $library->branchname : ()
+} @$suggestions_loop;
 
 foreach my $suggestion(@$suggestions_loop) {
     if($suggestion->{'suggestedby'} == $borrowernumber) {
