@@ -12199,7 +12199,7 @@ $DBversion = "3.23.00.046";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
     $dbh->do(q{
-    ALTER TABLE vendor_edi_accounts ADD COLUMN plugin VARCHAR(256) NOT NULL DEFAULT “”;
+    ALTER TABLE vendor_edi_accounts ADD COLUMN plugin VARCHAR(256) NOT NULL DEFAULT "";
     });
 
     print "Upgrade to $DBversion done (Bug 15630 - Make Edifact module pluggable))\n";
