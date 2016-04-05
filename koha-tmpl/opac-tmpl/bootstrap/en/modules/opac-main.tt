@@ -50,8 +50,9 @@
                 [% END %]
             </div>
             <div id="rssnews-container">
+                <!-- Logged in users have a branch code or it could be explicitly set -->
                 <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode %]"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png"></a>
-                RSS feed for [% IF ( loggedinusername ) %][% Branches.GetName( branchcode ) %] <i>and</i> [% END %] system-wide library news.
+                RSS feed for [% IF ( branchcode ) %][% Branches.GetName( branchcode ) %] <i>and</i> [% END %] system-wide library news.
             </div>
         [% END %]
 
