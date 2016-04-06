@@ -451,6 +451,9 @@ $(document).ready(function() {
 
 <div class="yui-g">
 <div id="circ_impossible" class="dialog alert audio-alert-warning">
+    [% IF ( UNKNOWN_BARCODE ) %]
+        <h3>Barcode not found</h3>
+    [% END %]
 <!-- RESULT OF ISSUING REQUEST -->
         <ul>
         [% IF ( STATS ) %]
@@ -462,7 +465,7 @@ $(document).ready(function() {
         [% END %]
 
         [% IF ( UNKNOWN_BARCODE ) %]
-            <li>The barcode was not found [% barcode |html %]
+            <li>The barcode was not found: <span class="ex">[% barcode |html %]</span>
 	    [% IF ( fast_cataloging ) %]
 	        [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
             <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&amp;barcode=[% barcode |uri %]&amp;circborrowernumber=[% borrowernumber %]&amp;branch=[% branch %]&amp;duedatespec=[% duedatespec %]&amp;stickyduedate=[% stickyduedate %]">Fast cataloging</a>
