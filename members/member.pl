@@ -79,7 +79,7 @@ $template->param(
     searchmember        => $searchmember,
     branchcode_filter   => $input->param('branchcode_filter'),
     categorycode_filter => $input->param('categorycode_filter'),
-    searchtype          => $input->param('searchtype') || 'start_with',
+    searchtype          => $input->param('searchtype') || 'contain',
     searchfieldstype    => $searchfieldstype,
     PatronsPerPage      => C4::Context->preference("PatronsPerPage") || 20,
     view                => $view,
