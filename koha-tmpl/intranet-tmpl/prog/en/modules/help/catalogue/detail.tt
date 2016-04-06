@@ -6,4 +6,20 @@
 
 <p><strong>See the full documentation for Cataloging in the <a href="http://manual.koha-community.org/[% helpVersion %]/en/cataloging.html#catbibs">manual</a> (online).</strong></p>
 
+<h4>Cataloguing record "push"-feature</h4>
+<p>
+    If system preference "RemoteAPIs" is configured, all configured remote APIs that this Koha can interact with are shown under
+    the "Save"-toolbar link's dropdown menu under "Push to remote".
+</p>
+<p>
+    When the "push"-link is clicked, the currently opened bibliographic record is sent to the chosen remote API. If the operation
+    is successful, a radial menu is shown listing all possible operations the remote API allows. If not, a myriad of errors can be
+    shown in an alert-dialog.
+    <ul>
+        <li>You must be logged in to the current Koha instance and to the remote API to authenticate the cross-Koha record transfer.</li>
+        <li>You must have the "editcatalogue"->"add_catalogue" -permission in the remote API or a respective permission the API requires.</li>
+    </ul>
+</p>
+<p><a href ="/tutorials/screencasts/cataloguingRecordPush.webm">Screencast about the feature is available here</a></p>
+
 [% INCLUDE 'help-bottom.inc' %]

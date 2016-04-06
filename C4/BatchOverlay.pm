@@ -19,7 +19,6 @@ package C4::BatchOverlay;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
-use YAML::XS;
 use Scalar::Util qw(blessed);
 use Try::Tiny;
 use Koha::Logger;

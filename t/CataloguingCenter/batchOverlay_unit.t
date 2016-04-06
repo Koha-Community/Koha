@@ -38,7 +38,7 @@ use Koha::Exception::BatchOverlay::DuplicateSearchTerm;
 
 my $globalTestContext = {};
 t::lib::TestContext::setUserenv({cardnumber => '1AbatchOverlay'}, $globalTestContext);
-t::CataloguingCenter::ContextSysprefs::create($globalTestContext);
+t::CataloguingCenter::ContextSysprefs::createBatchOverlayRules($globalTestContext);
 
 subtest "BatchOverlay::Rule", \&batchOverlayRule;
 sub batchOverlayRule {

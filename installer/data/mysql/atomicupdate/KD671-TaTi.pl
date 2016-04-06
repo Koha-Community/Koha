@@ -26,6 +26,7 @@ my $dbh = C4::Context->dbh();
 my $atomicUpdater = Koha::AtomicUpdater->new();
 
 unless($atomicUpdater->find('KD671')) {
+    print "KD671 - Deploying Batch Overlay -feature";
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BatchOverlayRules','','Define BatchOverlayRules YAML','70|10','Textarea')");
     $dbh->do("DROP TABLE batch_overlay_rules");
 
@@ -127,11 +128,15 @@ SQL
                     },
                 ], undef, undef);
 
+
+    print "KD671 - Deploying Record Pushing -feature";
     Koha::Auth::PermissionManager->addPermission( Koha::Auth::Permission->new({
         module => 'editcatalogue',
         code => 'add_catalogue',
         description => 'Allow adding a new bibliographic record from the REST API.'
     }) );
+
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RemoteAPIs','','Define RemoteAPIs YAML','70|10','Textarea')");
 
     print "Upgrade done (KD-671 - TäTi)\n";
 }

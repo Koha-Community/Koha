@@ -27,7 +27,7 @@ We instantiate the BatchOverlayRules-syspref for CataloguingCenter tests.
 
 =cut
 
-sub create {
+sub createBatchOverlayRules {
 my ($testContext) = @_;
 
 my $spref = t::lib::TestObjects::SystemPreferenceFactory->createTestGroup(
@@ -52,6 +52,33 @@ VALUE
                 , undef, $testContext);
 
 return $spref;
-} #EO create()
+} #EO createBatchOverlayRules()
+
+
+sub createRemoteAPIs {
+my ($testContext) = @_;
+
+my $spref = t::lib::TestObjects::SystemPreferenceFactory->createTestGroup(
+                    {
+                        preference => 'RemoteAPIs',
+                        value => <<VALUE,
+---
+Test Remote:
+    host: http://testcluster.koha-suomi.fi:80
+    basePath: /api/v1/
+    authentication: cookies
+    api: Koha-Suomi
+Test Stub:
+    host: http://test.example.com:80
+    basePath: /apina/
+    authentication: none
+    api: Koha-Suomi
+
+VALUE
+                    }
+                , undef, $testContext);
+
+return $spref;
+} #EO createRemoteAPIs()
 
 1;

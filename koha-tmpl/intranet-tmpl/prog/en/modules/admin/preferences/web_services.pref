@@ -61,3 +61,16 @@ Web services:
                 no: Disable
             - the IdRef webservice from the opac detail page. IdRef allows to request authorities from the Sudoc database.
             - Please note that this feature is available only for UNIMARC.
+    RemoteAPIs:
+        -
+            - Configure remote APIs to interface from Koha.
+            - pref: RemoteAPIs
+              type: textarea
+              class: code
+            - "Example YAML config"
+            - "<pre>---</pre>
+               <pre>Example API:</pre>
+               <pre>    host: http://test.example.com:8080</pre>
+               <pre>    basePath: /api/v1/</pre>
+               <pre>    authentication: cookies</pre>
+               <pre>    api: Koha-Suomi</pre></pre>"

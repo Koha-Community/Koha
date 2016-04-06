@@ -242,6 +242,9 @@ function verify_images() {
 <!--[if lt IE 9]>
 <script type="text/javascript" src="[% interface %]/lib/shims/json2.min_[% KOHA_VERSION %].js"></script>
 <![endif]-->
+<script src="[% themelang %]/js/RadialMenu_[% KOHA_VERSION %].js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/RadialMenu_[% KOHA_VERSION %].css" />
+<link rel="stylesheet" href="/css/font-awesome_[% KOHA_VERSION %].css" />
 <script type="text/javascript" src="[% interface %]/js/browser_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript">
 //<![CDATA[
@@ -355,6 +358,12 @@ function verify_images() {
     });
 //]]>
 </script>
+[% IF jasmineTesting %]<!-- Load jasmine.js javscript BDD framework -->
+<link rel="stylesheet" href="[% interface %]/lib/jasmine-2.4.1/jasmine.css"/>
+<script type="text/javascript" src="[% interface %]/lib/jasmine-2.4.1/jasmine.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jasmine-2.4.1/jasmine-html.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jasmine-2.4.1/boot.js"></script>
+[% END %]
 </head>
 
 <body id="catalog_detail" class="catalog">
@@ -1169,5 +1178,22 @@ function verify_images() {
 </div>
 [% END %]
 </div>
+
+<script src="[% themelang %]/js/RemoteAPIs/Driver_[% KOHA_VERSION %].js"></script>
+<script src="[% themelang %]/js/RemoteAPIs/Driver/KohaSuomi_[% KOHA_VERSION %].js"></script>
+<script src="[% themelang %]/js/Cataloguing/RecordPusher_[% KOHA_VERSION %].js"></script>
+<script>
+  var jasmineTesting = "[% jasmineTesting %]";
+  var biblio = {biblionumber:  "[% biblionumber %]"};
+  var remoteAPIs = [% remoteAPIs %];
+  if (! jasmineTesting) {
+    var recordPusher = new Cataloguing.RecordPusher("#saveDropdownContainer .dropdown-menu", "dropdown-menu-list", "body", remoteAPIs, biblio);
+  }
+</script>
+<!-- Load jasmine specs/tests -->
+[% IF jasmineTesting %]
+<script src="[% themelang %]/js/t/RadialMenu.t_[% KOHA_VERSION %].js"></script>
+<script src="[% themelang %]/js/t/Catalogue/RecordPusher.t_[% KOHA_VERSION %].js"></script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

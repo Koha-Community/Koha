@@ -448,6 +448,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RandomizeHoldsQueueWeight','0',NULL,'if ON, the holds queue in circulation will be randomized, either based on all location codes, or by the location codes specified in StaticHoldsQueueWeight','YesNo'),
 ('RecordLocalUseOnReturn','0',NULL,'If ON, statistically record returns of unissued items as local use, instead of return','YesNo'),
 ('RefundLostOnReturnControl','CheckinLibrary','CheckinLibrary|ItemHomeBranch|ItemHoldingBranch','If a lost item is returned, choose which branch to pick rules for refunding.','Choice'),
+('RemoteAPIs','','70|10','Define RemoteAPIs YAML','Textarea'),
 ('RenewalLog','0','','If ON, log information about renewals','YesNo'),
 ('RenewalPeriodBase','date_due','date_due|now','Set whether the renewal date should be counted from the date_due or from the moment the Patron asks for renewal ','Choice'),
 ('RenewalSendNotice','0','',NULL,'YesNo'),
