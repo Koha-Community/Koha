@@ -468,10 +468,11 @@ function filterByFirstLetterSurname(letter) {
             <li>
               <label for="searchtype_filter">Search type:</label>
               <select name="searchtype" id="searchtype_filter">
-                <option value='start_with'>Starts with</option>
-                [% IF searchtype == "contain" %]
-                  <option value="contain" selected="selected">Contains</option>
+                [% IF searchtype == "start_with" %]
+                  <option value='start_with' selected="selected">Starts with</option>
+                  <option value="contain">Contains</option>
                 [% ELSE %]
+                  <option value='start_with'>Starts with</option>
                   <option value="contain" selected="selected">Contains</option>
                 [% END %]
               </select>
