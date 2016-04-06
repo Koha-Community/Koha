@@ -8363,10 +8363,9 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.15.00.041";
 if ( CheckVersion($DBversion) ) {
-    my $name = $dbh->selectcol_arrayref(q|
+    my ( $name ) = $dbh->selectrow_array(q|
         SELECT name FROM letter WHERE code="HOLD"
     |);
-    $name = $name->[0];
     $dbh->do(q|
         UPDATE letter
         SET code="HOLD",
@@ -8375,6 +8374,9 @@ if ( CheckVersion($DBversion) ) {
         WHERE code="HOLD_PHONE"
     |, {}, $name);
 
+    ( $name ) = $dbh->selectrow_array(q|
+        SELECT name FROM letter WHERE code="PREDUE"
+    |);
     $dbh->do(q|
         UPDATE letter
         SET code="PREDUE",
@@ -8383,6 +8385,9 @@ if ( CheckVersion($DBversion) ) {
         WHERE code="PREDUE_PHONE"
     |, {}, $name);
 
+    ( $name ) = $dbh->selectrow_array(q|
+        SELECT name FROM letter WHERE code="OVERDUE"
+    |);
     $dbh->do(q|
         UPDATE letter
         SET code="OVERDUE",
