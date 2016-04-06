@@ -13348,18 +13348,29 @@ $DBversion = "3.23.00.XXX";
 if ( CheckVersion($DBversion) ) {
 
     $sth = $dbh->prepare(q{
-     SELECT s.itemnumber, i.itype, b.itemtype FROM
-      ( SELECT DISTINCT itemnumber
-        FROM statistics
-        WHERE ( type = "return" OR type = "localuse" ) AND itemtype IS NULL ) s
-      LEFT JOIN
-      ( SELECT itemnumber,biblionumber, itype
-        FROM items ) i
-      ON (s.itemnumber=i.itemnumber)
-      LEFT JOIN
-      ( SELECT biblionumber, itemtype
-        FROM biblioitems ) b
-      ON (i.biblionumber=b.biblionumber)
+        SELECT s.itemnumber, i.itype, b.itemtype
+        FROM
+         ( SELECT DISTINCT itemnumber
+           FROM statistics
+           WHERE ( type = "return" OR type = "localuse" ) AND
+                 itemtype IS NULL
+         ) s
+        LEFT JOIN
+         ( SELECT itemnumber,biblionumber, itype
+             FROM items
+           UNION
+           SELECT itemnumber,biblionumber, itype
+             FROM deleteditems
+         ) i
+        ON (s.itemnumber=i.itemnumber)
+        LEFT JOIN
+         ( SELECT biblionumber, itemtype
+             FROM biblioitems
+           UNION
+           SELECT biblionumber, itemtype
+             FROM deletedbiblioitems
+         ) b
+        ON (i.biblionumber=b.biblionumber);
     });
     $sth->execute();
 
