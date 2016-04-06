@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -26,6 +26,7 @@ use DateTime;
 
 use C4::Context;
 use C4::Reserves;
+use C4::Items;
 
 use Koha::Database;
 use Koha::DateUtils;
@@ -49,6 +50,7 @@ my $tx;
 
 my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
 my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
 
 # User without any permissions
 my $nopermission = $builder->build({
@@ -123,10 +125,14 @@ $session3->param('lasttime', time());
 $session3->flush;
 
 my $biblionumber = create_biblio('RESTful Web APIs');
-my $itemnumber = create_item($biblionumber, 'TEST000001');
+my $item = create_item($biblionumber, 'TEST000001');
+my $itemnumber = $item->{itemnumber};
+$item->{itype} = $itemtype;
+C4::Items::ModItem($item, $biblionumber, $itemnumber);
 
 my $biblionumber2 = create_biblio('RESTful Web APIs');
-my $itemnumber2 = create_item($biblionumber2, 'TEST000002');
+my $item2 = create_item($biblionumber2, 'TEST000002');
+my $itemnumber2 = $item2->{itemnumber};
 
 my $dbh = C4::Context->dbh;
 $dbh->do('DELETE FROM reserves');
@@ -331,6 +337,38 @@ subtest "Test endpoints with permission" => sub {
       ->json_like('/error', qr/tooManyReserves/);
 };
 
+
+subtest 'Reserves with itemtype' => sub {
+    plan tests => 9;
+
+    my $post_data = {
+        borrowernumber => int($patron_1->borrowernumber),
+        biblionumber => int($biblionumber),
+        branchcode => $branchcode,
+        itemtype => $itemtype,
+    };
+
+    $tx = $t->ua->build_tx(DELETE => "/api/v1/holds/$reserve_id");
+    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
+    $t->request_ok($tx)
+      ->status_is(200);
+
+    $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
+    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
+    $t->request_ok($tx)
+      ->status_is(201)
+      ->json_has('/reserve_id');
+
+    $reserve_id = $t->tx->res->json->{reserve_id};
+
+    $tx = $t->ua->build_tx(GET => "/api/v1/holds?borrowernumber=" . $patron_1->borrowernumber);
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is('/0/reserve_id', $reserve_id)
+      ->json_is('/0/itemtype', $itemtype);
+};
+
 $schema->storage->txn_rollback;
 
 sub create_biblio {
@@ -357,5 +395,5 @@ sub create_item {
         }
     );
 
-    return $item->{itemnumber};
+    return $item;
 }
