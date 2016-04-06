@@ -409,6 +409,19 @@ $(document).ready(function () {
 			[% borcity %] [% borzip %]</li>
             [% IF ( borphone ) %]<li>[% borphone %]</li>[% END %]
             [% IF ( boremail ) %]<li>[% IF ( transfertodo ) %][% boremail %][% ELSE %]<a id="boremail" href="mailto:[% boremail %]">[% boremail %]</a>[% END %]</li>[% END %]
+            [% UNLESS ( transfertodo) %]
+                [% IF ( bormessagepref ) %]
+                   <li>Patron is notified:
+                   [% FOREACH key IN bormessagepref.keys %]
+                       [% IF ( key == 'email' ) %] Email. [% END %]
+                       [% IF ( key == 'phone' ) %] Phone. [% END %]
+                       [% IF ( key == 'sms' ) %] SMS. [% END %]
+                   [% END %]
+                   </li>
+               [% ELSE %]
+                   <li>Patron is not notified</li>
+               [% END %]
+            [% END %]
 [% IF ( debarred ) %]<li class="error">Patron is RESTRICTED</li>[% END %]
 [% IF ( gonenoaddress ) %]<li class="error">Patron's address is in doubt</li>[% END %]
         </ul>
