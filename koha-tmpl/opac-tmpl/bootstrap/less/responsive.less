@@ -21,21 +21,6 @@
     .statictabs li a {
         padding: .1em .5em;
     }
-    #views {
-        border : 0;
-        padding : 0;
-        margin : 0;
-    }
-    .view {
-        padding : 0;
-        a,
-        span {
-            border : 1px solid #C9C9C9;
-            .border-radius-all(4px);
-            font-size : 80%;
-            padding : 0.3em 0.4em 4px 26px
-        }
-    }
     .input-fluid {
         width : 90%;
     }
@@ -280,6 +265,28 @@
     }
     .input-fluid {
         width : 75%;
+    }
+}
+
+@media only screen and (min-width: 608px) {
+    #views {
+        border-bottom : 1px solid #D6D6D6;
+        margin: 0;
+        padding: 0;
+        white-space : nowrap;
+    }
+    .view {
+        border-radius: 0;
+        border-right-width: 0;
+        border-top-width: 0;
+        border-bottom-width: 0;
+    }
+
+    .current-view {
+        border: 0;
+        -webkit-box-shadow: none;
+        -moz-box-shadow:    none;
+        box-shadow:         none;
     }
 }
 

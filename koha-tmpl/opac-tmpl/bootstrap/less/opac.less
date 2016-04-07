@@ -1059,14 +1059,17 @@ div.rows {
 }
 
 #views {
-    border-bottom : 1px solid #D6D6D6;
     margin-bottom : .5em;
     padding : 0 2em 0.2em 0.2em;
-    white-space : nowrap;
 }
 
 .view {
-    padding : 0.2em .2em 2px .2em;
+    background-color : #F3F3F3;
+    border: 1px solid #C9C9C9;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 0.2em 0.5em;
+    white-space: nowrap;
 }
 
 #bibliodescriptions,
@@ -1081,40 +1084,30 @@ div.rows {
         background-image: url("../images/sprite.png");
         background-repeat : no-repeat;
         font-size : 87%;
-        font-weight : normal;
-        padding: 0.4em 0.7em 5px 26px;
+        padding-left: 15px;
         text-decoration: none;
     }
 }
 
-span#MARCview,
-span#ISBDview,
-span#Normalview,
-span#Fullhistory,
-span#Briefhistory {
+.view {
+    a {
+        font-weight : normal;
+    }
+}
+
+.current-view {
+    background-color: #fff;
     font-weight: bold;
 }
 
-a#MARCview,
-span#MARCview {
-    background-position: -3px -23px;
+#MARCview {
+    background-position: -9px -27px;
 }
-a#MARCviewPop,
-span#MARCviewPop {
-    background-position: -3px -23px;
+#ISBDview {
+    background-position: -10px -56px;
 }
-a#ISBDview,
-span#ISBDview {
-    background-position: -3px -52px;
-}
-a#Normalview,
-span#Normalview {
-    background-position: -1px 6px;
-}
-
-.view a {
-    background-color : #F3F3F3;
-    border-left : 1px solid #C9C9C9;
+#Normalview {
+    background-position: -8px 3px;
 }
 
 #bookcover {
