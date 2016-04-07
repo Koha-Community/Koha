@@ -117,6 +117,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('CumulativeRestrictionPeriods',0,NULL,'Cumulate the restriction periods instead of keeping the highest','YesNo'),
 ('CurrencyFormat','US','US|FR|CH','Determines the display format of currencies. eg: \'36000\' is displayed as \'360 000,00\'  in \'FR\' or \'360,000.00\'  in \'US\'.','Choice'),
 ('dateformat','us','metric|us|iso|dmydot','Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy-mm-dd, dmydot dd.mm.yyyy)','Choice'),
+('DebarmentsToLiftAfterPayment', '', '', 'Lift these debarments after Borrower has paid his/her fees', 'textarea'),
 ('DebugLevel','2','0|1|2','Define the level of debugging information sent to the browser when errors are encountered (set to 0 in production). 0=none, 1=some, 2=most','Choice'),
 ('decreaseLoanHighHolds',NULL,'','Decreases the loan period for items with number of holds above the threshold specified in decreaseLoanHighHoldsValue','YesNo'),
 ('decreaseLoanHighHoldsControl', 'static', 'static|dynamic', "Chooses between static and dynamic high holds checking", 'Choice'),

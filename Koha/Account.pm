@@ -28,6 +28,7 @@ use C4::Stats qw( UpdateStats );
 use Koha::Account::Line;
 use Koha::Account::Lines;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Patron::Debarments;
 
 =head1 NAME
 
@@ -206,6 +207,8 @@ sub pay {
             accountno      => $accountno,
         }
     );
+
+    Koha::Patron::Debarments::DelDebarmentsAfterPayment({ borrowernumber => $self->{patron_id} });
 
     if ( C4::Context->preference("FinesLog") ) {
         logaction(

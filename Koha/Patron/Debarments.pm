@@ -20,6 +20,10 @@ package Koha::Patron::Debarments;
 use Modern::Perl;
 
 use C4::Context;
+use C4::Members;
+use Koha::Patrons;
+
+use YAML::XS;
 
 use parent qw( Exporter );
 
@@ -243,6 +247,71 @@ sub DelUniqueDebarment {
     return unless ( $debarment );
 
     return DelDebarment( $debarment->{'borrower_debarment_id'} );
+}
+
+=head2 DelDebarmentsAfterPayment
+
+my $success = DelDebarmentsAfterPayment({
+    borrowernumber => $borrowernumber,
+});
+
+Deletes any debarments from Borrower by following the rules
+defined in system preference DebarmentsToLiftAfterPayment
+
+Debarments are defined in the system preference by comment.
+
+=cut
+
+sub DelDebarmentsAfterPayment {
+    my ($params) = @_;
+
+    my $borrowernumber = $params->{'borrowernumber'};
+    return unless ( $borrowernumber );
+
+    my $debarments = GetDebarments( { borrowernumber => $borrowernumber } );
+    return unless ( $debarments );
+
+    my $liftDebarmentRules = C4::Context->preference("DebarmentsToLiftAfterPayment");
+    return unless ( $liftDebarmentRules );
+
+    my $borrower = Koha::Patrons->find( $borrowernumber );
+    return unless ( $borrower );
+
+    $liftDebarmentRules = YAML::XS::Load(
+                            Encode::encode(
+                                'UTF-8',
+                                $liftDebarmentRules,
+                                Encode::FB_CROAK
+    ));
+
+    my ( $total_due, $accts, $numaccts ) = C4::Members::GetMemberAccountRecords($borrowernumber);
+
+    foreach my $debarment (@{ $debarments }){
+        my $rule;
+
+        foreach my $liftRule (keys $liftDebarmentRules){
+            my $comment = $debarment->{'comment'};
+            $rule = $liftRule if $comment =~ $liftRule;
+        }
+        next unless $rule;
+
+        # Delete debarment IF:
+        # 1. there is no maximum outstanding fines defined for the liftDebarmentRule
+        #    and there is no outstanding fines.
+        # 2. there is a maximum outstanding fines amount defined
+        #    and total_due is smaller or equal than the defined maximum outstanding amount
+        # Otherwise, do not lift the debarment.
+        if (not defined $liftDebarmentRules->{$rule}->{'outstanding'}){
+            if ($total_due <= 0) {
+                DelDebarment($debarment->{'borrower_debarment_id'});
+            }
+        }
+        else {
+            if ($total_due <= $liftDebarmentRules->{$rule}->{'outstanding'}) {
+                DelDebarment($debarment->{'borrower_debarment_id'});
+            }
+        }
+    }
 }
 
 =head2 _UpdateBorrowerDebarmentFlags

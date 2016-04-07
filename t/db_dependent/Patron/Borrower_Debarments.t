@@ -9,7 +9,7 @@ use Koha::Patrons;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 31;
+use Test::More tests => 33;
 
 use_ok('Koha::Patron::Debarments');
 
@@ -163,3 +163,29 @@ is( Koha::Patrons->find( $borrowernumber )->is_debarred, undef, 'A patron withou
 
 $dbh->do(q|UPDATE borrowers SET debarred = '9999-12-31'|); # Note: Change this test before the first of January 10000!
 is( Koha::Patrons->find( $borrowernumber )->is_debarred, '9999-12-31', 'A patron with a debarred date in the future is debarred' );
+
+
+my $sth = $dbh->prepare("DELETE FROM accountlines WHERE borrowernumber=?");
+$sth->execute($borrowernumber);
+
+my $line = Koha::Account::Line->new({ borrowernumber => $borrowernumber, amountoutstanding => 100, note => "Test debarment" })->store();
+
+my $debarmentsRulesPref = C4::Context->preference("DebarmentsToLiftAfterPayment");
+C4::Context->set_preference("DebarmentsToLiftAfterPayment", "Test debarment:\n  outstanding: 0\nTest debarment 2:");
+AddDebarment({
+    borrowernumber => $borrowernumber,
+    comment => 'Test debarment',
+});
+AddDebarment({
+    borrowernumber => $borrowernumber,
+    comment => 'Test debarment 2',
+});
+
+$debarments = GetDebarments({ borrowernumber => $borrowernumber });
+is( @$debarments, 2, "GetDebarments returns 2 debarments before payment" );
+
+Koha::Account->new( { patron_id => $borrowernumber } )->pay( { amount => $line->amountoutstanding, note => "Test debarment" } );
+# Set the preference back to old value
+C4::Context->set_preference("DebarmentsToLiftAfterPayment", $debarmentsRulesPref);
+$debarments = GetDebarments({ borrowernumber => $borrowernumber });
+is( @$debarments, 0, "GetDebarments returns 0 debarments after payment" );
