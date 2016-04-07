@@ -6,7 +6,7 @@ use DateTime;
 use Koha::DateUtils;
 use Koha::Library;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -113,7 +113,7 @@ my $sampleissuingrule1 = {
     maxissueqty        => 5,
     maxonsiteissueqty  => 4,
     finedays           => 0,
-    lengthunit         => 'Null',
+    lengthunit         => 'days',
     renewalperiod      => 5,
     norenewalbefore    => 6,
     auto_renew         => 0,
@@ -148,7 +148,7 @@ my $sampleissuingrule2 = {
     auto_renew         => 0,
     reservesallowed    => 'Null',
     issuelength        => 2,
-    lengthunit         => 'Null',
+    lengthunit         => 'days',
     hardduedate        => 2,
     hardduedatecompare => 'Null',
     fine               => 'Null',
@@ -179,7 +179,7 @@ my $sampleissuingrule3 = {
     auto_renew         => 0,
     reservesallowed    => 'Null',
     issuelength        => 3,
-    lengthunit         => 'Null',
+    lengthunit         => 'days',
     hardduedate        => 3,
     hardduedatecompare => 'Null',
     fine               => 'Null',
@@ -340,7 +340,7 @@ is_deeply(
         $samplecat->{categorycode},
         'BOOK', $samplebranch1->{branchcode}
     ),
-    { issuelength => 5, lengthunit => 'Null', renewalperiod => 5 },
+    { issuelength => 5, lengthunit => 'days', renewalperiod => 5 },
     "GetLoanLength"
 );
 is_deeply(
@@ -377,8 +377,17 @@ is_deeply(
         renewalperiod => 21,
         lengthunit    => 'days',
     },
-    "With only one parameter, GetLoanLength returns hardcoded values"
+    "With only two parameters, GetLoanLength returns hardcoded values"
 );    #NOTE : is that really what is expected?
+is_deeply(
+    C4::Circulation::GetLoanLength( $samplecat->{categorycode}, 'BOOK', $samplebranch1->{branchcode} ),
+    {
+        issuelength   => 5,
+        renewalperiod => 5,
+        lengthunit    => 'days',
+    },
+    "With the correct number of parameters, GetLoanLength returns the expected values"
+);
 
 #Test GetHardDueDate
 my @hardduedate = C4::Circulation::GetHardDueDate( $samplecat->{categorycode},
