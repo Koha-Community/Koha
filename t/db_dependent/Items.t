@@ -276,7 +276,7 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
     $item->update();
     my $effective_itemtype;
     warning_is { $effective_itemtype = $item->effective_itemtype() }
-                "item-level_itypes set but no itemtype set for item ($item->itemnumber)",
+                "item-level_itypes set but no itemtype set for item (".$item->itemnumber.")",
                 '->effective_itemtype() raises a warning when falling back to bib-level';
 
     ok( defined $effective_itemtype &&
