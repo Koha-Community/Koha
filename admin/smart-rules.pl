@@ -140,6 +140,7 @@ elsif ($op eq 'add') {
     $maxonsiteissueqty =~ s/\s//g;
     $maxonsiteissueqty = undef if $maxonsiteissueqty !~ /^\d+/;
     my $issuelength  = $input->param('issuelength');
+    $issuelength = $issuelength eq q{} ? undef : $issuelength;
     my $lengthunit  = $input->param('lengthunit');
     my $hardduedate = $input->param('hardduedate') || undef;
     $hardduedate = eval { dt_from_string( $input->param('hardduedate') ) } if ( $hardduedate );
