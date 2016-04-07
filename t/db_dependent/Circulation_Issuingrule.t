@@ -104,6 +104,12 @@ $dbh->do(
 
 #Begin Tests
 
+my $default = {
+    issuelength => 0,
+    renewalperiod => 0,
+    lengthunit => 'days'
+};
+
 #Test GetIssuingRule
 my $sampleissuingrule1 = {
     reservecharge      => '0.000000',
@@ -343,40 +349,25 @@ is_deeply(
     { issuelength => 5, lengthunit => 'days', renewalperiod => 5 },
     "GetLoanLength"
 );
+
 is_deeply(
     C4::Circulation::GetLoanLength(),
-    {
-        issuelength   => 21,
-        renewalperiod => 21,
-        lengthunit    => 'days',
-    },
+    $default,
     "Without parameters, GetLoanLength returns hardcoded values"
 );
 is_deeply(
     C4::Circulation::GetLoanLength( -1, -1 ),
-    {
-        issuelength   => 21,
-        renewalperiod => 21,
-        lengthunit    => 'days',
-    },
+    $default,
     "With wrong parameters, GetLoanLength returns hardcoded values"
 );
 is_deeply(
     C4::Circulation::GetLoanLength( $samplecat->{categorycode} ),
-    {
-        issuelength   => 21,
-        renewalperiod => 21,
-        lengthunit    => 'days',
-    },
+    $default,
     "With only one parameter, GetLoanLength returns hardcoded values"
 );    #NOTE : is that really what is expected?
 is_deeply(
     C4::Circulation::GetLoanLength( $samplecat->{categorycode}, 'BOOK' ),
-    {
-        issuelength   => 21,
-        renewalperiod => 21,
-        lengthunit    => 'days',
-    },
+    $default,
     "With only two parameters, GetLoanLength returns hardcoded values"
 );    #NOTE : is that really what is expected?
 is_deeply(

@@ -27,8 +27,8 @@ my $expected = {
 };
 
 my $default = {
-    issuelength => 21,
-    renewalperiod => 21,
+    issuelength => 0,
+    renewalperiod => 0,
     lengthunit => 'days'
 };
 
