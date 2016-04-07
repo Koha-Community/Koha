@@ -38,7 +38,7 @@ The first, traditional OO interface provides the following functions:
 use strict;
 use warnings;
 use Carp;
-use Clone qw( clone );
+use Storable qw(dclone);
 use Module::Load::Conditional qw(can_load);
 use Koha::Cache::Object;
 
@@ -328,7 +328,7 @@ sub get_from_cache {
         # Or if we do not need to deep copy
         return $L1_cache{$key}
             if not ref $L1_cache{$key} or $unsafe;
-        return clone $L1_cache{$key};
+        return dclone $L1_cache{$key};
     }
 
     my $get_sub = $self->{ref($self->{$cache}) . "_get"};
