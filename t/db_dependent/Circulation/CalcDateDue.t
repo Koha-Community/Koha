@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 5;
 use Test::MockModule;
 use DBI;
 use DateTime;
@@ -20,18 +20,6 @@ my $issuelength = 10;
 my $renewalperiod = 5;
 my $lengthunit = 'days';
 
-my $expected = {
-    issuelength => $issuelength,
-    renewalperiod => $renewalperiod,
-    lengthunit => $lengthunit
-};
-
-my $default = {
-    issuelength => 0,
-    renewalperiod => 0,
-    lengthunit => 'days'
-};
-
 my $loanlength;
 my $mock_undef = [
     []
@@ -45,17 +33,6 @@ my $mock_loan_length = [
 my $categorycode = 'B';
 my $itemtype = 'MX';
 my $branchcode = 'FPL';
-
-#=== GetLoanLength
-$dbh->{mock_add_resultset} = $mock_loan_length;
-$loanlength = C4::Circulation::GetLoanLength($categorycode, $itemtype, $branchcode);
-is_deeply($loanlength, $expected, 'first matches');
-
-$dbh->{mock_add_resultset} = $mock_undef;
-$loanlength = C4::Circulation::GetLoanLength($categorycode, $itemtype, $branchcode);
-is_deeply($loanlength, $default, 'none matches');
-
-#=== CalcDateDue
 
 #Set syspref ReturnBeforeExpiry = 1 and useDaysMode = 'Days'
 t::lib::Mocks::mock_preference('ReturnBeforeExpiry', 1);
