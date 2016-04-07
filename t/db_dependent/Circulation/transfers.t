@@ -140,7 +140,7 @@ cmp_deeply(
             frombranch => $samplebranch1->{branchcode}
         }
     ],
-    "Item1 and Item2 has been transfered from branch1 to branch2"
+    "Item1 and Item2 has been transferred from branch1 to branch2"
 );
 my @transferto = GetTransfersFromTo( undef, $samplebranch2->{branchcode} );
 is_deeply( \@transferto, [],

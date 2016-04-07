@@ -20,7 +20,6 @@ my $issuelength = 10;
 my $renewalperiod = 5;
 my $lengthunit = 'days';
 
-my $loanlength;
 my $mock_undef = [
     []
 ];
