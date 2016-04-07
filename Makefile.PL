@@ -260,6 +260,7 @@ my $target_map = {
   './about.pl'                  => 'INTRANET_CGI_DIR',
   './acqui'                     => 'INTRANET_CGI_DIR',
   './admin'                     => 'INTRANET_CGI_DIR',
+  './api'                       => 'INTRANET_CGI_DIR',
   './authorities'               => 'INTRANET_CGI_DIR',
   './basket'                    => 'INTRANET_CGI_DIR',
   './C4'                        => 'PERL_MODULE_DIR',
