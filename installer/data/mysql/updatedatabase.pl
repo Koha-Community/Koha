@@ -12206,6 +12206,19 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.047";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+
+    $dbh->do(q{
+         INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('IntranetReportsHomeHTML', '', 'Show the following HTML in a div on the bottom of the reports home page', NULL, 'Free');
+         });
+    $dbh->do(q{
+         INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('IntranetCirculationHomeHTML', '', 'Show the following HTML in a div on the bottom of the reports home page', NULL, 'Free');
+         });
+
+    print "Upgrade to $DBversion done (Bug 15008 - Add custom HTML areas to circulation and reports home pages)\n";
+    SetVersion($DBversion);
+}
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
