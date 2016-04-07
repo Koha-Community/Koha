@@ -194,9 +194,12 @@ function clearFormElements(divId) {
 
 }
 
+function confirmDeleteAction() {
+    return confirm(_("Are you sure you wish to delete this template action?"));
+}
+
 function confirmDelete() {
-    var agree = confirm(_("Are you sure you wish to delete this template?"));
-    return agree;
+    return confirm(_("Are you sure you wish to delete this template?"));
 }
 
 var modaction_legend_innerhtml;
@@ -443,7 +446,7 @@ function setSelectByValue( selectId, value ) {
                                                     "[% ActionsLoo.conditional_regex |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
                                                     "[% ActionsLoo.description |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
                                                 );updateAllEvery();'>Edit</a></td>
-                                <td><a href="marc_modification_templates.pl?template_id=[% ActionsLoo.template_id %]&op=delete_action&mmta_id=[% ActionsLoo.mmta_id %]">Delete</a></td>
+                                <td><a href="marc_modification_templates.pl?template_id=[% ActionsLoo.template_id %]&op=delete_action&mmta_id=[% ActionsLoo.mmta_id %]" onclick="return confirmDeleteAction();">Delete</a></td>
                             </tr>
                         [% END %]
                     </table>
