@@ -269,7 +269,7 @@ sub set_in_cache {
     my $set_sub = $self->{ref($self->{$cache}) . "_set"};
 
     # Deep copy if it's not a scalar and unsafe is not passed
-    $value = clone( $value ) if ref($value) and not $unsafe;
+    $value = dclone( $value ) if ref($value) and not $unsafe;
 
     # Set in L1 cache
     $L1_cache{ $key } = $value;
@@ -338,7 +338,7 @@ sub get_from_cache {
     # Otherwise the L1 cache won't ever be populated
     $L1_cache{$key} = $value;
 
-    $value = clone $value if ref $L1_cache{$key} and not $unsafe;
+    $value = dclone $value if ref $L1_cache{$key} and not $unsafe;
 
     return $value;
 }
