@@ -18,15 +18,16 @@
 
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
 
-<link rel="stylesheet" type="text/css" href="[% interface %]/lib/jquery/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/lib/jquery/jquery-ui-1.11.4.min.css" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/bootstrap/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/font-awesome/css/font-awesome.min.css" />
 <link rel="stylesheet" type="text/css" media="print" href="[% themelang %]/css/print.css" />
 [% INCLUDE intranetstylesheet.inc %]
 [% IF ( bidi )            %]<link rel="stylesheet" type="text/css" href="[% themelang %]/css/right-to-left.css" />[% END %]
 
-<script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-migrate-1.3.0.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui-1.11.4.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.highlight-3.js"></script>
