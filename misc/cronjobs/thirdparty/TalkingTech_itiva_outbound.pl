@@ -164,6 +164,8 @@ TalkingTech_itiva_outbound.pl
 Script to generate Spec C outbound notifications file for Talking Tech i-tiva
 phone notification system.
 
+=over
+
 =item B<--help> B<-h>
 
 Prints this help
@@ -204,6 +206,8 @@ The library code is used to group notices together for
 consortium purposes and apply library specific settings, such as
 prompts, to those notices.
 This field can be blank if all messages are from a single library.
+
+=back
 
 =cut
 
