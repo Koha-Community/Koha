@@ -1,20 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version %]" /> <!-- leave this for stats -->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-[%# Prevent XFS attacks -%]
-[% UNLESS popup %]
-    <style id="antiClickjack">body{display:none !important;}</style>
-    <script type="text/javascript">
-       if (self === top) {
-           var antiClickjack = document.getElementById("antiClickjack");
-           antiClickjack.parentNode.removeChild(antiClickjack);
-       } else {
-           top.location = self.location;
-       }
-    </script>
-[% END %]
-
 <link rel="shortcut icon" href="[% IF ( OpacFavicon ) %][% OpacFavicon %][% ELSE %][% interface %]/[% theme %]/images/favicon.ico[% END %]" type="image/x-icon" />
 [% IF ( bidi ) %]
     <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/lib/bootstrap/css/bootstrap-rtl.min.css" />
