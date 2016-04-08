@@ -302,8 +302,8 @@ $(document).ready(function()
         <input type="hidden" name="suggestionid" value="[% suggestionid %]" />
         <input type="hidden" name="import_batch_id" value="[% import_batch_id %]" />
 
-        [% FOREACH currency IN currencies %]
-            <input type="hidden" id="currency_rate_[% currency.currency %]"  name="[% currency.currency %]" value="[% currency.rate %]" />
+        [% FOREACH c IN currencies %]
+            <input type="hidden" id="currency_rate_[% c.currency %]"  name="[% c.currency %]" value="[% c.rate %]" />
         [% END %]
 
         <ol><li>
@@ -523,11 +523,11 @@ $(document).ready(function()
                 [% ELSE %]
 			<label for="currency">Currency:</label>
             <select name="currency" id="currency" onchange="updateCosts();">
-                [% FOREACH currency IN currencies %]
-                    [% IF ordernumber and currency.currency == listprice or not ordernumber and currency.active %]
-                        <option value="[% currency.currency %]" selected="selected">[% currency.currency %]</option>
-                    [% ELSIF not currency.archived %]
-                        <option value="[% currency.currency %]">[% currency.currency %]</option>
+                [% FOREACH c IN currencies %]
+                    [% IF ordernumber and c.currency == currency or not ordernumber and c.currency == vendor_currency %]
+                        <option value="[% c.currency %]" selected="selected">[% c.currency %]</option>
+                    [% ELSIF not c.archived %]
+                        <option value="[% c.currency %]">[% c.currency %]</option>
                     [% END %]
                 [% END %]
             </select>

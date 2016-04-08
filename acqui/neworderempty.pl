@@ -352,6 +352,8 @@ $template->param(
     cur_active_sym   => $active_currency->symbol,
     cur_active       => $active_currency->currency,
     currencies       => \@currencies,
+    currency         => $data->{currency},
+    vendor_currency  => $bookseller->{listprice},
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
     title            => $data->{'title'},
     author           => $data->{'author'},
