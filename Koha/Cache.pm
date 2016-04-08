@@ -335,6 +335,8 @@ sub get_from_cache {
     # Otherwise the L1 cache won't ever be populated
     $L1_cache{$key} = $value;
 
+    $value = clone $value if ref $L1_cache{$key} and not $unsafe;
+
     return $value;
 }
 

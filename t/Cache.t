@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 37;
+use Test::More tests => 38;
 
 my $destructorcount = 0;
 
@@ -181,6 +181,12 @@ SKIP: {
     $item_from_cache = $cache->get_from_cache('test_deep_copy_array');
     @$item_from_cache = qw( another array ref );
     is_deeply( $cache->get_from_cache('test_deep_copy_array'), [ qw ( an array ref ) ], 'An array will be deep copied');
+
+    $cache->flush_L1_cache();
+    $item_from_cache = $cache->get_from_cache('test_deep_copy_array');
+    @$item_from_cache = qw( another array ref );
+    is_deeply( $cache->get_from_cache('test_deep_copy_array'), [ qw ( an array ref ) ], 'An array will be deep copied even it is the first fetch from L2');
+
     $item_from_cache = $cache->get_from_cache('test_deep_copy_array', { unsafe => 1 });
     @$item_from_cache = qw( another array ref );
     is_deeply( $cache->get_from_cache('test_deep_copy_array'), [ qw ( another array ref ) ], 'An array will not be deep copied if the unsafe flag is set');
