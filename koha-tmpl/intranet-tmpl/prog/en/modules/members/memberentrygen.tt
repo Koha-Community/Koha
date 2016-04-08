@@ -7,7 +7,6 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
-
 	[% IF categorycode %]
 		update_category_code( "[% categorycode %]" );
 	[% ELSE %]
@@ -16,148 +15,7 @@ $(document).ready(function() {
 			update_category_code( category_code );
 		}
 	[% END %]
-	$("#dateofbirth").datepicker({ maxDate: "-1D", yearRange: "c-120:" });
-	dateformat = $("#dateofbirth").siblings(".hint").first().html();
-    if( $('#dateofbirth').length ) {
-        write_age();
-    }
-	$("#entryform").validate({
-		rules: {
-			email: {
-				email: true
-			},
-			emailpro: {
-				email: true
-			},
-			B_email: {
-				email: true
-			}
-		},
-		submitHandler: function(form) {
-			$("body, form input[type='submit'], form button[type='submit'], form a").addClass('waiting');
-			if (form.beenSubmitted)
-				return false;
-			else
-				form.beenSubmitted = true;
-				form.submit();
-			}
-	});
-
-	var mrform = $("#manual_restriction_form");
-	var mrlink = $("#add_manual_restriction");
-	mrform.hide();
-	mrlink.on("click",function(e){
-		$(this).hide();
-		mrform.show();
-		e.preventDefault();
-	});
-	$("#cancel_manual_restriction").on("click",function(e){
-		$('#debarred_expiration').val('');
-		$('#add_debarment').val(0);
-		$('#debarred_comment').val('');
-		mrlink.show();
-		mrform.hide();
-		e.preventDefault();
-	});
-    $('#floating-save').css( { bottom: parseInt( $('#floating-save').css('bottom') ) + $('#changelanguage').height() + 'px' } );
 });
-
-function clear_entry(node) {
-	var original = $(node).parent();
-	$("textarea", original).attr('value', '');
-	$("select", original).attr('value', '');
-}
-
-function clone_entry(node) {
-	var original = $(node).parent();
-	var clone = original.clone();
-
-	var newId = 50 + parseInt(Math.random() * 100000);
-	$("input,select,textarea", clone).attr('id', function() {
-		return this.id.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
-	});
-	$("input,select,textarea", clone).attr('name', function() {
-		return this.name.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
-	});
-	$("label", clone).attr('for', function() {
-		return $(this).attr("for").replace(/patron_attr_\d+/, 'patron_attr_' + newId);
-	});
-	$("input#patron_attr_" + newId, clone).attr('value','');
-	$("select#patron_attr_" + newId, clone).attr('value','');
-	$(original).after(clone);
-	return false;
-}
-
-function update_category_code(category_code) {
-	if ( $(category_code).is("select") ) {
-		category_code = $("#categorycode_entry").find("option:selected").val();
-	}
-	var mytables = $(".attributes_table");
-	$(mytables).find("li").hide();
-	$(mytables).find(" li[data-category_code='"+category_code+"']").show();
-	$(mytables).find(" li[data-category_code='']").show();
-}
-
-function select_user(borrowernumber, borrower) {
-	var form = $('#entryform').get(0);
-	if (form.guarantorid.value) {
-		$("#contact-details").find('a').remove();
-		$("#contactname, #contactfirstname").parent().find('span').remove();
-	}
-
-	var id = borrower.borrowernumber;
-	form.guarantorid.value = id;
-	$('#contact-details')
-		.show()
-		.find('span')
-		.after('<a target="blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + id + '">' + id + '</a>');
-
-	$(form.contactname)
-		.val(borrower.surname)
-		.before('<span>' + borrower.surname + '</span>').get(0).type = 'hidden';
-	$(form.contactfirstname)
-		.val(borrower.firstname)
-		.before('<span>' + borrower.firstname + '</span>').get(0).type = 'hidden';
-
-	form.streetnumber.value = borrower.streetnumber;
-	form.address.value = borrower.address;
-	form.address2.value = borrower.address2;
-	form.city.value = borrower.city;
-	form.state.value = borrower.state;
-	form.zipcode.value = borrower.zipcode;
-	form.country.value = borrower.country;
-	form.branchcode.value = borrower.branchcode;
-
-	form.guarantorsearch.value = _("Change");
-
-	return 0;
-}
-
-    function write_age() {
-        var hint = $("#dateofbirth").siblings(".hint").first();
-        hint.html(dateformat);
-
-        var age = CalculateAge(document.form.dateofbirth.value);
-
-        if (!age.year && !age.month) {
-            return;
-        }
-
-        var age_string;
-        if (age.year || age.month) {
-            age_string = _("Age: ");
-        }
-
-        if (age.year) {
-            age_string += age.year > 1 ? _("%s years ").format(age.year) : _("%s year ").format(age.year);
-        }
-
-        if (age.month) {
-            age_string += age.month > 1 ? _("%s months ").format(age.month) : _("%s month ").format(age.month);
-        }
-
-        hint.html(age_string);
-    }
 
         var MSG_SEPARATOR = _("Separator must be / in field %s");
         var MSG_INCORRECT_DAY = _("Invalid day entered in field %s");
@@ -169,8 +27,14 @@ function select_user(borrowernumber, borrower) {
         var MSG_DUPLICATE_SUSPICION = _("Please confirm whether this is a duplicate patron");
         var MSG_PASSWORD_MISMATCH = _("The passwords entered do not match");
         var MSG_PASSWORD_CONTAINS_TRAILING_SPACES = _("Password contains leading and/or trailing spaces.");
+        var MSG_MONTH = _("%s month")
+        var MSG_MONTHS = _("%s months")
+        var MSG_YEAR = _("%s year")
+        var MSG_YEARS = _("%s years")
         var LABEL_CHANGE = _("Change");
         var LABEL_SET_TO_PATRON = _("Set to patron");
+        var LABEL_AGE = _("Age");
+
 //]]>
 </script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/members.js"></script>

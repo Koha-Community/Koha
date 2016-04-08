@@ -219,8 +219,8 @@ function select_user(borrowernumber, borrower) {
 
 function CalculateAge(dateofbirth) {
     var today = new Date();
-    var dob = Date_from_syspref(dateofbirth)
-    var age = new Object();
+    var dob = Date_from_syspref(dateofbirth);
+    var age = {};
 
     age.year = today.getFullYear() - dob.getFullYear();
     age.month = today.getMonth() - dob.getMonth();
@@ -236,6 +236,33 @@ function CalculateAge(dateofbirth) {
     }
 
     return age;
+}
+
+function write_age() {
+    var hint = $("#dateofbirth").siblings(".hint").first();
+    hint.html(dateformat);
+
+    var age = CalculateAge(document.form.dateofbirth.value);
+
+    if (!age.year && !age.month) {
+        return;
+    }
+
+    var age_string;
+    if (age.year || age.month) {
+        age_string = LABEL_AGE + ": ";
+    }
+
+    if (age.year) {
+        age_string += age.year > 1 ? MSG_YEARS.format(age.year) : MSG_YEAR.format(age.year);
+        age_string += " ";
+    }
+
+    if (age.month) {
+        age_string += age.month > 1 ? MSG_MONTHS.format(age.month) : MSG_MONTH.format(age.month);
+    }
+
+    hint.html(age_string);
 }
 
 $(document).ready(function(){
@@ -278,6 +305,11 @@ $(document).ready(function(){
     });
 
     $("#dateofbirth").datepicker({ maxDate: "-1D", yearRange: "c-120:" });
+    dateformat = $("#dateofbirth").siblings(".hint").first().html();
+
+    if( $('#dateofbirth').length ) {
+        write_age();
+    }
 
     $("#entryform").validate({
         rules: {
@@ -318,5 +350,5 @@ $(document).ready(function(){
         mrform.hide();
         e.preventDefault();
     });
-
+    $('#floating-save').css( { bottom: parseInt( $('#floating-save').css('bottom') ) + $('#changelanguage').height() + 'px' } );
 });
