@@ -193,9 +193,11 @@ sub get_template_and_user {
 
             $template->param( loginprompt => 1 );
             print $in->{query}->header(
-                -type    => 'text/html',
-                -charset => 'utf-8',
-                -cookie  => $cookie,
+                {   type              => 'text/html',
+                    charset           => 'utf-8',
+                    cookie            => $cookie,
+                    'X-Frame-Options' => 'SAMEORIGIN'
+                }
               ),
             $template->output;
             safe_exit;
@@ -1285,9 +1287,11 @@ sub checkauth {
     #    $cookie = $query->cookie(CGISESSID => $session->id
     #   );
     print $query->header(
-        -type    => 'text/html',
-        -charset => 'utf-8',
-        -cookie  => $cookie
+        {   type              => 'text/html',
+            charset           => 'utf-8',
+            cookie            => $cookie,
+            'X-Frame-Options' => 'SAMEORIGIN'
+        }
       ),
       $template->output;
     safe_exit;
