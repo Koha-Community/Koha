@@ -267,6 +267,7 @@ sub set_in_cache {
         $new_options->{cache} = $_cache if defined $_cache;
         $options = $new_options;
     }
+    my $unsafe = $options->{unsafe} || 0;
 
     # the key mustn't contain whitespace (or control characters) for memcache
     # but shouldn't be any harm in applying it globally.
@@ -281,7 +282,9 @@ sub set_in_cache {
     $expiry //= $self->{timeout};
     my $set_sub = $self->{ref($self->{$cache}) . "_set"};
 
-    $value = clone $value;
+    # Deep copy if it's not a scalar and unsafe is not passed
+    $value = clone( $value ) if ref($value) and not $unsafe;
+
     # Set in L1 cache
     $L1_cache{ $key } = $value;
 
