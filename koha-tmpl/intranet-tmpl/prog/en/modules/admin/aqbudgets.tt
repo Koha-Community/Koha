@@ -228,9 +228,9 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
             $("#fundfilters").slideToggle(0);
         });
 
-        $(".deletefund-disabled").on("click", function(e){
+        $(".deletefund-disabled").tooltip().on("click", function(e){
             e.preventDefault();
-            alert("This fund has children. It cannot be deleted.");
+            alert(_("This fund has children. It cannot be deleted."));
         });
     });
 //]]>
