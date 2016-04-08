@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 38;
+use Test::More tests => 39;
 
 my $destructorcount = 0;
 
@@ -196,6 +196,8 @@ SKIP: {
     $item_from_cache = $cache->get_from_cache('test_deep_copy_hash');
     %$item_from_cache = ( another => 'hashref' );
     is_deeply( $cache->get_from_cache('test_deep_copy_hash'), { a => 'hashref' }, 'A hash will be deep copied');
+    %item = ( a_modified => 'hashref' );
+    is_deeply( $cache->get_from_cache('test_deep_copy_hash'), { a => 'hashref' }, 'A hash will be deep copied when set in cache');
     $item_from_cache = $cache->get_from_cache('test_deep_copy_hash', { unsafe => 1});
     %$item_from_cache = ( another => 'hashref' );
     is_deeply( $cache->get_from_cache('test_deep_copy_hash'), { another => 'hashref' }, 'A hash will not be deep copied if the unsafe flag is set');

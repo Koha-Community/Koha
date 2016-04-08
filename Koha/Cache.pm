@@ -281,6 +281,7 @@ sub set_in_cache {
     $expiry //= $self->{timeout};
     my $set_sub = $self->{ref($self->{$cache}) . "_set"};
 
+    $value = clone $value;
     # Set in L1 cache
     $L1_cache{ $key } = $value;
 
