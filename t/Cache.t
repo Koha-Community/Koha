@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 40;
+use Test::More tests => 41;
 
 my $destructorcount = 0;
 
@@ -34,7 +34,7 @@ SKIP: {
     $ENV{ MEMCACHED_NAMESPACE } = 'unit_tests';
     my $cache = Koha::Cache->get_instance();
 
-    skip "Cache not enabled", 34
+    skip "Cache not enabled", 35
       unless ( $cache->is_cache_active() && defined $cache );
 
     # test fetching an item that isnt in the cache
@@ -197,6 +197,8 @@ SKIP: {
     $item_from_cache = $cache->get_from_cache('test_deep_copy_hash');
     %$item_from_cache = ( another => 'hashref' );
     is_deeply( $cache->get_from_cache('test_deep_copy_hash'), { a => 'hashref' }, 'A hash will be deep copied');
+    %item = ( a_modified => 'hashref' );
+    is_deeply( $cache->get_from_cache('test_deep_copy_hash'), { a => 'hashref' }, 'A hash will be deep copied when set in cache');
     $item_from_cache = $cache->get_from_cache('test_deep_copy_hash', { unsafe => 1});
     %$item_from_cache = ( another => 'hashref' );
     is_deeply( $cache->get_from_cache('test_deep_copy_hash'), { another => 'hashref' }, 'A hash will not be deep copied if the unsafe flag is set');
