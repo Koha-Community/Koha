@@ -111,8 +111,8 @@ $(document).ready(function(){
 
     // Check all checkboxes in first tab, and uncheck all others to avoid
     // inconsistencies from a page refresh.
-    $('#tabs div#tabrecord[% ref_biblionumber %]').find('input[type="checkbox"]').attr('checked', true);
-    $('#tabs > div:not("#tabrecord[% ref_biblionumber %]")').find('input[type="checkbox"]').removeAttr('checked');
+    $('#tabs div#tabrecord[% ref_biblionumber %]').find('input[type="checkbox"]').prop('checked', true);
+    $('#tabs > div:not("#tabrecord[% ref_biblionumber %]")').find('input[type="checkbox"]').prop('checked', false);
 
     //Set focus to cataloging search
     $("input[name=q]:eq(0)").focus();

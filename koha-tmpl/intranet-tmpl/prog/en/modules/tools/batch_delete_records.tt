@@ -36,7 +36,7 @@ $(document).ready(function() {
     $(".records input:checkbox[data-issues!='0']").each(function(){
       $(this).attr('title', MSG_CANNOT_BE_DELETED)
       $(this).attr('disabled', true);
-      $(this).attr('checked', false);
+      $(this).prop('checked', false);
       $(this).parents('tr').find('td').css('background-color', '#ffff99');
     });
   [% END %]

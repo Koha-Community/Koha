@@ -28,7 +28,7 @@
             updateColumnsVisibility($(this).is(":checked"));
         });
 
-        $("#show_all_details").attr('checked', false);
+        $("#show_all_details").prop('checked', false);
         updateColumnsVisibility(false);
         [% UNLESS ( closedate ) %]
             $('#addtoBasket').on('show', function () {

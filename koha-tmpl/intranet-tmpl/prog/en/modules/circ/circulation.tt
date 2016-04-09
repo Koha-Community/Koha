@@ -64,7 +64,7 @@ columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'issues
 
 // On-site checkout
 function toggle_onsite_checkout(){
-    if ( $("#onsite_checkout").attr('checked') ) {
+    if ( $("#onsite_checkout").prop('checked') ) {
         $("#duedatespec").val("[% todaysdate | $KohaDates with_hours => 1%]")
         [% IF !Koha.Preference('SpecifyDueDate') %]
             $("#duedatespec").datetimepicker('destroy');
@@ -120,7 +120,7 @@ $(document).ready(function() {
         $('#table_borrowers tbody tr').removeClass('selected');
         $(this).addClass('selected');
         if (event.target.type !== 'radio') {
-            $(':radio', this).attr('checked', 'true')
+            $(':radio', this).prop('checked', 'true')
         }
     });
 

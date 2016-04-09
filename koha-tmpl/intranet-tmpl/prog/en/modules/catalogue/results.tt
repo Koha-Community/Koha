@@ -204,10 +204,10 @@ function highlightOn() {
 }[% END %]
 
 function selectAll () {
-    $(".selection").attr("checked", "checked");
+    $(".selection").prop("checked", true);
 }
 function clearAll () {
-    $(".selection").removeAttr("checked");
+    $(".selection").prop("checked", false);
 }
 function placeHold () {
     var checkedItems = $(".selection:checked");

@@ -1,10 +1,10 @@
 $(document).ready(function() {
     $("#CheckAllExports").on("click",function(){
-        $(".export:visible").attr("checked", "checked" );
+        $(".export:visible").prop("checked", true);
         return false;
     });
     $("#UncheckAllExports").on("click",function(){
-        $(".export:visible").removeAttr("checked");
+        $(".export:visible").prop("checked", false);
         return false;
     });
 
@@ -72,7 +72,7 @@ $(document).ready(function() {
 });
 
 function export_checkouts(format) {
-    if ($("input:checkbox[name='biblionumbers'][checked]").length < 1){
+    if ($("input:checkbox[name='biblionumbers']:checked").length < 1){
         alert(MSG_EXPORT_SELECT_CHECKOUTS);
         return;
     }
@@ -80,9 +80,9 @@ function export_checkouts(format) {
     $("input:checkbox[name='biblionumbers']").each( function(){
         var input_item = $(this).siblings("input:checkbox");
         if ( $(this).is(":checked") ) {
-            $(input_item).attr("checked", "checked");
+            $(input_item).prop("checked", true);
         } else {
-            $(input_item).attr("checked", "");
+            $(input_item).prop("checked", false);
         }
     } );
 

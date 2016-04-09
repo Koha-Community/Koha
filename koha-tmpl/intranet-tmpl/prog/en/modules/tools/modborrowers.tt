@@ -27,13 +27,13 @@
                 }));
                 $("#selectallbutton").click(function() {
                     $("#borrowerst").find("input:checkbox").each(function() {
-                        $(this).attr("checked", true);
+                        $(this).prop("checked", true);
                     });
                     return false;
                 });
                 $("#clearallbutton").click(function() {
                     $("#borrowerst").find("input:checkbox").each(function() {
-                        $(this).attr("checked", false);
+                        $(this).prop("checked", false);
                     });
                     return false;
                 });

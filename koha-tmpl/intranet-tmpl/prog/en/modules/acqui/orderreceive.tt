@@ -88,10 +88,10 @@
 
         function CheckNItems(n) {
             $("input[name='items_to_receive']").each(function() {
-                $(this).attr('checked', false);
+                $(this).prop('checked', false);
             });
             $("input[name='items_to_receive']:lt("+n+")").each(function () {
-                $(this).attr('checked', true);
+                $(this).prop('checked', true);
             });
         }
     [% END %]

@@ -29,7 +29,7 @@
         $("#show_only_renewed").click(function(){
             updateRowsVisibility( $(this).is(":checked") );
         });
-        $("#show_only_renewed").attr('checked', false);
+        $("#show_only_renewed").prop('checked', false);
         updateRowsVisibility(false);
 
         $("#advsearch_form").show();

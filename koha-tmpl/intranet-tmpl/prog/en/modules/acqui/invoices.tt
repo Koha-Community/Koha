@@ -18,10 +18,10 @@ $(document).ready(function() {
         ]
     }));
 
-    $("#show_only_subscription").attr("checked", false);
+    $("#show_only_subscription").prop("checked", false);
 
     $("#show_only_subscription").click(function(){
-        if ( $(this).attr("checked") ) {
+        if ( $(this).prop("checked") ) {
             resultst.fnFilter( "1", 0, true );
         } else {
             resultst.fnFilter( '', 0 );

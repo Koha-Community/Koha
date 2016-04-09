@@ -103,7 +103,7 @@ $(document).ready(function () {
         $("#barcode").focus();
     });
     [% IF(overduecharges) %] $("#barcode").focus(function () {
-        if (($("#exemptcheck").attr("checked") == true) || ($("#dropboxcheck").attr("checked") == true)) {
+        if (($("#exemptcheck").prop("checked") == true) || ($("#dropboxcheck").prop("checked") == true)) {
             $("#barcode").addClass("alert");
         } else {
             $("#barcode").removeClass("alert");

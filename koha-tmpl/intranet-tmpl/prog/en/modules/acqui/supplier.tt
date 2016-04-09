@@ -125,8 +125,8 @@ function delete_contact(ev) {
     $('body').on('click', '.delete-contact', null, delete_contact);
     $('#add-contact').click(add_contact);
     $('body').on('click', '.contact_acqprimary', null, function () {
-        if ($(this).attr('checked') === 'checked') {
-            $('.contact_acqprimary').filter(':checked').not(this).removeAttr('checked');
+        if ($(this).is(':checked')) {
+            $('.contact_acqprimary').filter(':checked').not(this).prop('checked', false);
             $('.contact_acqprimary_hidden').each(function () {
                 $(this).val('0');
             });
@@ -134,19 +134,19 @@ function delete_contact(ev) {
         $(this).next('.contact_acqprimary_hidden').val('1');
     });
     $('body').on('click', '.contact_serialsprimary', null, function () {
-        if ($(this).attr('checked') === 'checked') {
-            $('.contact_serialsprimary').filter(':checked').not(this).removeAttr('checked');
+        if ($(this).is(':checked')) {
+            $('.contact_serialsprimary').filter(':checked').not(this).prop('checked', false);
             $('.contact_serialsprimary_hidden').each(function () {
                 $(this).val('0');
             });
         }
-        $(this).next('.contact_serialsprimary_hidden').val($(this).attr('checked') === 'checked' ? '1' : '0');
+        $(this).next('.contact_serialsprimary_hidden').val($(this).is(':checked') ? '1' : '0');
     });
     $('body').on('click', '.contact_claimacquisition', null, function () {
-        $(this).next('.contact_claimacquisition_hidden').val($(this).attr('checked') === 'checked' ? '1' : '0');
+        $(this).next('.contact_claimacquisition_hidden').val($(this).is(':checked') ? '1' : '0');
     });
     $('body').on('click', '.contact_claimissues', null, function () {
-        $(this).next('.contact_claimissues_hidden').val($(this).attr('checked') === 'checked' ? '1' : '0');
+        $(this).next('.contact_claimissues_hidden').val($(this).is(':checked') ? '1' : '0');
     });
  });
 //]]>

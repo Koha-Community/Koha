@@ -10,13 +10,13 @@
         <script type="text/javascript">
         //<![CDATA[
         function Check_boxes(dow) {
-            if($(":checkbox[data-dow='"+dow+"']:first").attr("checked") == 'checked') {
+            if($(":checkbox[data-dow='"+dow+"']:first").is(':checked')) {
                 $("#predictionst :checkbox[data-dow='"+dow+"']").each(function(){
-                    $(this).attr('checked', true);
+                    $(this).prop('checked', true);
                 });
             } else {
                 $("#predictionst :checkbox[data-dow='"+dow+"']").each(function(){
-                    $(this).attr('checked', false);
+                    $(this).prop('checked', false);
                 });
             }
         }

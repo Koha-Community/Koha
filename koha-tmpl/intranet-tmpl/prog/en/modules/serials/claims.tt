@@ -29,7 +29,7 @@
 	    $("span.checkall").html("<input type=\"checkbox\" name=\"CheckAll\"> "+_("Check All")+"</input>");
 
         $("#CheckAll").click(function() {
-            $("#claimst tr:visible :checkbox").attr('checked', $("#CheckAll").is(':checked'));
+            $("#claimst tr:visible :checkbox").prop('checked', $("#CheckAll").is(':checked'));
         });
 
         // Generates a dynamic link for exporting the selections data as CSV

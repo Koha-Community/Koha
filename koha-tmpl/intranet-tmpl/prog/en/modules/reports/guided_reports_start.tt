@@ -182,12 +182,12 @@ $("#delColumn").on("click",function(){
 
 [% IF (create || editsql || save) %]
     $("#select_group").change(function() {
-        if($(this).attr('checked')) {
+        if($(this).prop('checked')) {
             $("#group_input").attr('disabled', 'disabled');
             $("#groupdesc_input").attr('disabled', 'disabled');
             $("#group_select").attr('disabled', false);
             if ($("#group_select").val().length > 0) {
-                $("#select_subgroup").attr('checked', 'checked');
+                $("#select_subgroup").prop('checked', true);
                 $("#select_subgroup").change();
                 $("#subgroup, #subgroup *").show();
             } else {
@@ -196,11 +196,11 @@ $("#delColumn").on("click",function(){
         }
     });
     $("#create_group").change(function() {
-        if($(this).attr('checked')) {
+        if($(this).prop('checked')) {
             $("#group_input").attr('disabled', false);
             $("#groupdesc_input").attr('disabled', false);
             $("#group_select").attr('disabled', 'disabled');
-            $("#create_subgroup").attr('checked', 'checked').change();
+            $("#create_subgroup").prop('checked', true).change();
             $("#subgroup_select").hide();
             $("#subgroup input[type='radio']").hide();
             $("#subgroup label[for]").hide();
@@ -210,14 +210,14 @@ $("#delColumn").on("click",function(){
         }
     });
     $("#select_subgroup").change(function() {
-        if($(this).attr('checked')) {
+        if($(this).prop('checked')) {
             $("#subgroup_select").attr('disabled', false);
             $("#subgroup_input").attr('disabled', 'disabled');
             $("#subgroupdesc_input").attr('disabled', 'disabled');
         }
     });
     $("#create_subgroup").change(function() {
-        if($(this).attr('checked')) {
+        if($(this).prop('checked')) {
             $("#subgroup_input").attr('disabled', false);
             $("#subgroupdesc_input").attr('disabled', false);
             $("#subgroup_select").attr('disabled', 'disabled');

@@ -41,7 +41,7 @@ $(document).ready(function() {
         $('#table_borrowers tbody tr').removeClass('selected');
         $(this).addClass('selected');
         if (event.target.type !== 'radio') {
-            $(':radio', this).attr('checked', 'true')
+            $(':radio', this).prop('checked', 'true')
         }
     });
     var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -153,7 +153,7 @@ function checkMultiHold() {
  	$("#requestany").click(function() {
 		if(this.checked){
 		$("input[name=checkitem]").each(function() {
-            $(this).removeAttr("checked");
+            $(this).prop("checked", false);
 		});
 		}
 	});
@@ -165,9 +165,9 @@ function checkMultiHold() {
 			}
 		});
 		if(onechecked == 1){
-            $("#requestany").removeAttr("checked");
+            $("#requestany").prop("checked", false);
 		} else {
-			$("#requestany").attr("checked","checked");
+			$("#requestany").prop("checked",true);
 		}
 	});
 

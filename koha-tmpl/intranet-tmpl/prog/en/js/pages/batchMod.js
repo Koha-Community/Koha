@@ -8,19 +8,19 @@ function hideColumns(){
   valCookie = $.cookie("showColumns");
   if(valCookie){
     valCookie = valCookie.split("/");
-    $("#showall").removeAttr("checked").parent().removeClass("selected");
+    $("#showall").prop("checked", false).parent().removeClass("selected");
     for( i=0; i<valCookie.length; i++ ){
       if(valCookie[i] !== ''){
         index = valCookie[i] - 2;
         $("#itemst td:nth-child("+valCookie[i]+"),#itemst th:nth-child("+valCookie[i]+")").toggle();
-        $("#checkheader"+index).removeAttr("checked").parent().removeClass("selected");
+        $("#checkheader"+index).prop("checked", false).parent().removeClass("selected");
       }
     }
   }
 }
 
 function hideColumn(num) {
-  $("#hideall,#showall").removeAttr("checked").parent().removeClass("selected");
+  $("#hideall,#showall").prop("checked", false).parent().removeClass("selected");
   valCookie = $.cookie("showColumns");
   // set the index of the table column to hide
   $("#"+num).parent().removeClass("selected");
@@ -56,7 +56,7 @@ Array.prototype.remove = function(from, to) {
 };
 
 function showColumn(num){
-  $("#hideall").removeAttr("checked").parent().removeClass("selected");
+  $("#hideall").prop("checked", false).parent().removeClass("selected");
   $("#"+num).parent().addClass("selected");
   valCookie = $.cookie("showColumns");
   // set the index of the table column to hide
@@ -84,13 +84,13 @@ function showAllColumns(){
     $("#selections span").addClass("selected");
     $("#itemst td:nth-child(2),#itemst tr th:nth-child(2)").nextAll().show();
     $.removeCookie("showColumns", { path: '/' });
-    $("#hideall").removeAttr("checked").parent().removeClass("selected");
+    $("#hideall").prop("checked", false).parent().removeClass("selected");
 }
 function hideAllColumns(){
     $("#selections").unCheckCheckboxes();
     $("#selections span").removeClass("selected");
     $("#itemst td:nth-child(2),#itemst th:nth-child(2)").nextAll().hide();
-    $("#hideall").attr("checked","checked").parent().addClass("selected");
+    $("#hideall").prop("checked", true).parent().addClass("selected");
     var cookieString = allColumns.join("/");
     $.cookie("showColumns", cookieString, { expires : date, path: '/' });
 }
@@ -115,7 +115,7 @@ function hideAllColumns(){
     });
     $("#clearonloanbutton").click(function(){
       $("#itemst input[name='itemnumber'][data-is-onloan='1']").each(function(){
-        $(this).attr('checked', false);
+        $(this).prop('checked', false);
       });
       return false;
     });
@@ -128,7 +128,7 @@ function hideAllColumns(){
         hideAllColumns();
         e.stopPropagation();
       } else {
-        if($(this).attr("checked")){
+        if($(this).prop("checked")){
           showColumn(num);
         } else {
           hideColumn(num);

@@ -17,7 +17,7 @@
             $("#active").removeAttr('disabled');
             $("#hint").html("");
         } else {
-            $("#active").removeAttr('checked');
+            $("#active").prop('checked', false);
             $("#active").attr('disabled','disabled');
             $("#hint").html(_("The active currency must have a rate of 1.0"));
         }

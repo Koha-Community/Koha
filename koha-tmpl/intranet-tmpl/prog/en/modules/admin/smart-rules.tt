@@ -17,7 +17,7 @@ function clear_edit(){
             $(this).removeAttr("disabled");
         }
         if ( type == "checkbox" ) {
-            $(this).attr('checked', false);
+            $(this).prop('checked', false);
         }
     });
     $(edit_row).find("select").removeAttr("disabled");
@@ -64,7 +64,7 @@ $(document).ready(function() {
                 } else if ( i == 12 ) {
                     // specific processing for cap_fine_to_replacement_price
                     var cap_fine_to_replacement_price = $(this).find("input[type='checkbox']");
-                    $('#cap_fine_to_replacement_price').attr('checked', cap_fine_to_replacement_price.is(':checked') );
+                    $('#cap_fine_to_replacement_price').prop('checked', cap_fine_to_replacement_price.is(':checked') );
                     $('#overduefinescap').prop('disabled', cap_fine_to_replacement_price.is(':checked') );
                 } else {
                     $(current_column).find("input[type='text']").val(itm);

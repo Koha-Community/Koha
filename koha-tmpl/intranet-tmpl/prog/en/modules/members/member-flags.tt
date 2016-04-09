@@ -18,7 +18,7 @@
             $('input[name="flag"]').each(function() {
                 if($(this).attr('id') != "flag-0"){
                     $(this).attr('disabled', 'disabled');
-                    $(this).removeAttr('checked', 'checked');
+                    $(this).prop('checked', false);
                 }
             });
         }
@@ -28,7 +28,7 @@
                 $('input[name="flag"]').each(function() {
                     if($(this).attr('id') != "flag-0"){
                         $(this).attr('disabled', 'disabled');
-                        $(this).removeAttr('checked', 'checked');
+                        $(this).prop('checked', false);
                     }
                 });
             }

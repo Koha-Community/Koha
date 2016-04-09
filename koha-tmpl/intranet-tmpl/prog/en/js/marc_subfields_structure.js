@@ -11,7 +11,7 @@ $(document).ready(function() {
 /* Function to enable/disable hidden values checkboxes when Flag is (de)selected */
 function enable_cb(tab) {
     if ($("#hidden_flagged_" + tab).is(':checked')) {
-        $('.inclusive_' + tab).attr('disabled',true).removeAttr('checked');
+        $('.inclusive_' + tab).attr('disabled',true).prop('checked', false);
     }
     else {
         $('.inclusive_' + tab).removeAttr('disabled');
@@ -132,11 +132,11 @@ function populateHiddenCheckboxes(tab) {
         collapsed_checked = true;
     } // else if ( hidden_value == '8') { skip }
 
-    $("#hidden_opac_" + tab).attr('checked',opac_checked);
-    $("#hidden_intranet_" + tab).attr('checked',intranet_checked);
-    $("#hidden_editor_" + tab).attr('checked',editor_checked);
-    $("#hidden_collapsed_" + tab).attr('checked',collapsed_checked);
-    $("#hidden_flagged_" + tab).attr('checked',flagged_checked);
+    $("#hidden_opac_" + tab).prop('checked',opac_checked);
+    $("#hidden_intranet_" + tab).prop('checked',intranet_checked);
+    $("#hidden_editor_" + tab).prop('checked',editor_checked);
+    $("#hidden_collapsed_" + tab).prop('checked',collapsed_checked);
+    $("#hidden_flagged_" + tab).prop('checked',flagged_checked);
 
     enable_cb(tab);
 

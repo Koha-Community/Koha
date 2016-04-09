@@ -345,7 +345,7 @@ function checkBudgetParent(budgetId, newBudgetParent) {
 }
 
 function hideColumn(num) {
-    $("#hideall,#showall").removeAttr("checked").parent().removeClass("selected");
+    $("#hideall,#showall").prop("checked", false).parent().removeClass("selected");
     $("#"+num).parent().removeClass("selected");
     var hide = Number(num.replace("col","")) + 2;
     // hide header and cells matching the index
@@ -353,7 +353,7 @@ function hideColumn(num) {
 }
 
 function showColumn(num){
-    $("#hideall").removeAttr("checked").parent().removeClass("selected");
+    $("#hideall").prop("checked", false).parent().removeClass("selected");
     $("#"+num).parent().addClass("selected");
     // set the index of the table column to hide
     show = Number(num.replace("col","")) + 2;
@@ -365,12 +365,12 @@ function showAllColumns(){
     $("#selections").checkCheckboxes();
     $("#selections span").addClass("selected");
     $("#plan td:nth-child(2),#plan tr th:nth-child(2)").nextAll().show();
-    $("#hideall").removeAttr("checked").parent().removeClass("selected");
+    $("#hideall").prop("checked", false).parent().removeClass("selected");
 }
 function hideAllColumns(){
     var allCols = $("#plan th").length;
     $("#selections").unCheckCheckboxes();
     $("#selections span").removeClass("selected");
     $("#plan td:nth-child(2),#plan th:nth-child(2)").nextUntil("th:nth-child("+(allCols-1)+"),td:nth-child("+(allCols-1)+")").hide(); // hide all but the last two columns
-    $("#hideall").attr("checked","checked").parent().addClass("selected");
+    $("#hideall").prop("checked", true).parent().addClass("selected");
 }

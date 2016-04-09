@@ -44,7 +44,7 @@ function build_target_record($sources) {
         'code' : subfield
       });
     } else {
-      $field_li.find('input.fieldpick').attr('checked', true);
+      $field_li.find('input.fieldpick').prop('checked', true);
       target_record[field] = [{
         'id' : $field_li.attr('id'),
         'tag' : field,
@@ -141,7 +141,7 @@ function rebuild_target($sources, $target) {
           $field_clone.find('ul').append($subfield_clone);
         }
       } else {
-        $('#' + field.id).find('input.fieldpick').removeAttr('checked');
+        $('#' + field.id).find('input.fieldpick').prop('checked', false);
       }
     }
   }
@@ -155,11 +155,11 @@ $(document).ready(function(){
     $('input.fieldpick').click(function() {
         var ischecked = this.checked;
         if (ischecked) {
-          $(this).removeAttr('checked');
+          $(this).prop('checked', false);
           if (!field_can_be_added($('#tabs'), $(this).parent())) {
             return false;
           }
-          $(this).attr('checked', 'checked');
+          $(this).prop('checked', true);
         }
 
         // (un)check all subfields
@@ -173,11 +173,11 @@ $(document).ready(function(){
     $("input.subfieldpick").click(function() {
       var ischecked = this.checked;
       if (ischecked) {
-        $(this).removeAttr('checked');
+        $(this).prop('checked', false);
         if (!subfield_can_be_added($('#tabs'), $(this).parent())) {
           return false;
         }
-        $(this).attr('checked', 'checked');
+        $(this).prop('checked', true);
       }
       rebuild_target($('#tabs'), $('#resultul'));
     });

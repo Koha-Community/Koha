@@ -95,12 +95,12 @@ function verify_images() {
 
     [% IF StaffDetailItemSelection %]
         function selectAllItems(div) {
-            $("input[name='itemnumber'][type='checkbox']", div).attr('checked', 'checked');
+            $("input[name='itemnumber'][type='checkbox']", div).prop('checked', true);
             itemSelectionBuildActionLinks(div);
         }
 
         function clearAllItems(div) {
-            $("input[name='itemnumber'][type='checkbox']", div).removeAttr('checked');
+            $("input[name='itemnumber'][type='checkbox']", div).prop('checked', false);
             itemSelectionBuildActionLinks(div);
         }
 

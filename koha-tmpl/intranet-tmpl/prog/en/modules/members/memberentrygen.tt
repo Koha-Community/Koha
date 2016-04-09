@@ -1102,15 +1102,15 @@ function select_user(borrowernumber, borrower) {
                             var transports = ['email', 'rss', 'sms'];
                             $.each(transports, function(j, transport) {
                                 if (item['transports_' + transport] == 1) {
-                                    $('#' + transport + attrid).attr('checked', 'checked');
+                                    $('#' + transport + attrid).prop('checked', true);
                                 } else {
-                                    $('#' + transport + attrid).removeAttr('checked');
+                                    $('#' + transport + attrid).prop('checked', false);
                                 }
                             });
                             if (item.digest && item.digest != ' ') {
-                                $('#digest' + attrid).attr('checked', item.digest);
+                                $('#digest' + attrid).prop('checked', true);
                             } else {
-                                $('#digest' + attrid).removeAttr('checked');
+                                $('#digest' + attrid).prop('checked', false);
                             }
                             if (item.takes_days == '1') {
                                 $('[name=' + attrid + '-DAYS]').val('' + item.days_in_advance);

@@ -6,33 +6,33 @@ $(document).ready(function() {
     // Handle the select all/none links for checkouts table columns
     $("#CheckAllRenewals").on("click",function(){
         $("#UncheckAllCheckins").click();
-        $(".renew:visible").attr("checked", "checked" );
+        $(".renew:visible").prop("checked", true);
         return false;
     });
     $("#UncheckAllRenewals").on("click",function(){
-        $(".renew:visible").removeAttr("checked");
+        $(".renew:visible").prop("checked", false);
         return false;
     });
 
     $("#CheckAllCheckins").on("click",function(){
         $("#UncheckAllRenewals").click();
-        $(".checkin:visible").attr("checked", "checked" );
+        $(".checkin:visible").prop("checked", true);
         return false;
     });
     $("#UncheckAllCheckins").on("click",function(){
-        $(".checkin:visible").removeAttr("checked");
+        $(".checkin:visible").prop("checked", false);
         return false;
     });
 
     // Don't allow both return and renew checkboxes to be checked
     $(document).on("change", '.renew', function(){
         if ( $(this).is(":checked") ) {
-            $( "#checkin_" + $(this).val() ).removeAttr("checked");
+            $( "#checkin_" + $(this).val() ).prop("checked", false);
         }
     });
     $(document).on("change", '.checkin', function(){
         if ( $(this).is(":checked") ) {
-            $( "#renew_" + $(this).val() ).removeAttr("checked");
+            $( "#renew_" + $(this).val() ).prop("checked", false);
         }
     });
 
@@ -603,6 +603,6 @@ $(document).ready(function() {
             } else {
                 $( '.renewals-allowed' ).hide(); $( '.renewals-disabled' ).show();
             }
-        } ).attr( 'checked', false );
+        } ).prop('checked', false);
     }
  });
