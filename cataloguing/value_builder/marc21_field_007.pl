@@ -64,87 +64,36 @@ my $launcher = sub {
             debug           => 1,
         }
     );
+
     $result = "ta" unless $result;
-    my $f0 = substr( $result, 0, 1 );
-    my $f1 = substr( $result, 1, 1 );
+    my $pad_length = 23 - length $result;
+    my @fvalues = split //, $result;
+    if ($pad_length>0) {
+        push @fvalues, (undef)x($pad_length);
+    }
+    my @fnames = map { "f$_" } (0..22);
 
-    #added new parameters to allow for all material types
-    my $f2  = substr( $result, 2,  1 );
-    my $f3  = substr( $result, 3,  1 );
-    my $f4  = substr( $result, 4,  1 );
-    my $f5  = substr( $result, 5,  1 );
-    my $f6  = substr( $result, 6,  1 );
-    my $f7  = substr( $result, 7,  1 );
-    my $f8  = substr( $result, 8,  1 );
-    my $f9  = substr( $result, 9,  1 );
-    my $f10 = substr( $result, 10, 1 );
-    my $f11 = substr( $result, 11, 1 );
-    my $f12 = substr( $result, 12, 1 );
-    my $f13 = substr( $result, 13, 1 );
-    my $f14 = substr( $result, 14, 1 );
-    my $f15 = substr( $result, 15, 1 );
-    my $f16 = substr( $result, 16, 1 );
-    my $f17 = substr( $result, 17, 1 );
-    my $f18 = substr( $result, 18, 1 );
-    my $f19 = substr( $result, 19, 1 );
-    my $f20 = substr( $result, 20, 1 );
-    my $f21 = substr( $result, 21, 1 );
-    my $f22 = substr( $result, 22, 1 );
-
-    #FIXME:  There is probably a more-elegant way to do this!
     #FIXME:  Two of the material types treat position 06, 07, and 08 as a single
     #three-char field.  This script works fine for creating values and sending them
     #back to the MARC, but if there is already a value in the 007, it won't send
     #it properly to the value builder for those two instances.  Not sure how to solve.
-    $template->param(
-        index     => $index,
-        f0        => $f0,
-        "f0$f0"   => $f0,
-        f1        => $f1,
-        "f1$f1"   => $f1,
-        f2        => $f2,
-        "f2$f2"   => $f2,
-        f3        => $f3,
-        "f3$f3"   => $f3,
-        f4        => $f4,
-        "f4$f4"   => $f4,
-        f5        => $f5,
-        "f5$f5"   => $f5,
-        f6        => $f6,
-        "f6$f6"   => $f6,
-        f7        => $f7,
-        "f7$f7"   => $f7,
-        f8        => $f8,
-        "f8$f8"   => $f8,
-        f9        => $f9,
-        "f9$f9"   => $f9,
-        f10       => $f10,
-        "f10$f10" => $f10,
-        f11       => $f11,
-        "f11$f11" => $f11,
-        f12       => $f12,
-        "f12$f12" => $f12,
-        f13       => $f13,
-        "f13$f13" => $f13,
-        f14       => $f14,
-        "f14$f14" => $f14,
-        f15       => $f15,
-        "f15$f15" => $f15,
-        f16       => $f16,
-        "f16$f16" => $f16,
-        f17       => $f17,
-        "f17$f17" => $f17,
-        f18       => $f18,
-        "f18$f18" => $f18,
-        f19       => $f19,
-        "f19$f19" => $f19,
-        f20       => $f20,
-        "f20$f20" => $f20,
-        f21       => $f21,
-        "f21$f21" => $f21,
-        f22       => $f22,
-        "f22$f22" => $f22,
-    );
+    $template->param( index => $index );
+    foreach my $count ( 0..22 ) {
+        if (defined $fvalues[$count]) {
+            # template uses f##pipe variables.
+            my $key2;
+            if ($fvalues[$count] eq q{|}) {
+                $key2 = $fnames[$count] . 'pipe';
+            }
+            else {
+                $key2 = $fnames[$count] . $fvalues[$count];
+            }
+            $template->param(
+                $fnames[$count] => $fvalues[$count],
+                $key2           => $fvalues[$count]
+            );
+        }
+    }
     output_html_with_http_headers $input, $cookie, $template->output;
 };
 
