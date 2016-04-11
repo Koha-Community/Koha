@@ -59,6 +59,18 @@ sub search_compat {
     return getRecords(@_);
 }
 
+=head2 simple_search_compat
+
+This passes straight through to C4::Search::SimpleSearch.
+
+=cut
+
+
+sub simple_search_compat {
+    shift;
+    return C4::Search::SimpleSearch(@_);
+}
+
 =head search_auth_compat
 
 This passes the search query on to C4::AuthoritiesMarc::SearchAuthorities
