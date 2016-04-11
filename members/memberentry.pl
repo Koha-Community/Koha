@@ -718,11 +718,10 @@ sub  parse_extended_patron_attributes {
     foreach my $key (@patron_attr) {
         my $value = $input->param($key);
         next unless defined($value) and $value ne '';
-        my $password = $input->param("${key}_password");
         my $code     = $input->param("${key}_code");
         next if exists $dups{$code}->{$value};
         $dups{$code}->{$value} = 1;
-        push @attr, { code => $code, value => $value, password => $password };
+        push @attr, { code => $code, value => $value };
     }
     return \@attr;
 }
@@ -756,16 +755,13 @@ sub patron_attributes_form {
             code              => $attr_type->code(),
             description       => $attr_type->description(),
             repeatable        => $attr_type->repeatable(),
-            password_allowed  => $attr_type->password_allowed(),
             category          => $attr_type->authorised_value_category(),
             category_code     => $attr_type->category_code(),
-            password          => '',
         };
         if (exists $attr_hash{$attr_type->code()}) {
             foreach my $attr (@{ $attr_hash{$attr_type->code()} }) {
                 my $newentry = { %$entry };
                 $newentry->{value} = $attr->{value};
-                $newentry->{password} = $attr->{password};
                 $newentry->{use_dropdown} = 0;
                 if ($attr_type->authorised_value_category()) {
                     $newentry->{use_dropdown} = 1;

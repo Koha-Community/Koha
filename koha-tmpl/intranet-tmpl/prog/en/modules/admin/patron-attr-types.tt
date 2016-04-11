@@ -139,14 +139,6 @@ function CheckAttributeTypeForm(f) {
             <span>If checked, attribute will be a unique identifier &mdash; if a value is given to a patron record, the same value
                   cannot be given to a different record.  This setting cannot be changed after an attribute is defined.</span>
        </li>
-       <li><label for="password_allowed">Allow password: </label>
-          [% IF ( password_allowed_checked ) %]
-            <input type="checkbox" id="password_allowed" name="password_allowed" checked="checked" />
-          [% ELSE %]
-            <input type="checkbox" id="password_allowed" name="password_allowed" />
-          [% END %]
-            <span>Check to make it possible to associate a password with this attribute.</span>
-       </li>
        <li><label for="opac_display">Display in OPAC: </label>
           [% IF ( opac_display_checked ) %]
             <input type="checkbox" id="opac_display" name="opac_display" checked="checked" />

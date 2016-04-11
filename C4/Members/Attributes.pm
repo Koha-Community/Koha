@@ -59,7 +59,6 @@ code (attribute type code)
 description (attribute type description)
 value (attribute value)
 value_description (attribute value description (if associated with an authorised value))
-password (password, if any, associated with attribute
 
 If the C<$opac_only> parameter is present and has a true value, only the attributes
 marked for OPAC display are returned.
@@ -71,7 +70,7 @@ sub GetBorrowerAttributes {
     my $opac_only = @_ ? shift : 0;
 
     my $dbh = C4::Context->dbh();
-    my $query = "SELECT code, description, attribute, lib, password, display_checkout, category_code, class
+    my $query = "SELECT code, description, attribute, lib, display_checkout, category_code, class
                  FROM borrower_attributes
                  JOIN borrower_attribute_types USING (code)
                  LEFT JOIN authorised_values ON (category = authorised_value_category AND attribute = authorised_value)
@@ -87,7 +86,6 @@ sub GetBorrowerAttributes {
             description       => $row->{'description'},
             value             => $row->{'attribute'},
             value_description => $row->{'lib'},
-            password          => $row->{'password'},
             display_checkout  => $row->{'display_checkout'},
             category_code     => $row->{'category_code'},
             class             => $row->{'class'},
@@ -205,7 +203,7 @@ sub CheckUniqueness {
 
 =head2 SetBorrowerAttributes 
 
-  SetBorrowerAttributes($borrowernumber, [ { code => 'CODE', value => 'value', password => 'password' }, ... ] );
+  SetBorrowerAttributes($borrowernumber, [ { code => 'CODE', value => 'value' }, ... ] );
 
 Set patron attributes for the patron identified by C<$borrowernumber>,
 replacing any that existed previously.
@@ -221,11 +219,10 @@ sub SetBorrowerAttributes {
 
     DeleteBorrowerAttributes( $borrowernumber, $no_branch_limit );
 
-    my $sth = $dbh->prepare("INSERT INTO borrower_attributes (borrowernumber, code, attribute, password)
-                             VALUES (?, ?, ?, ?)");
+    my $sth = $dbh->prepare("INSERT INTO borrower_attributes (borrowernumber, code, attribute)
+                             VALUES (?, ?, ?)");
     foreach my $attr (@$attr_list) {
-        $attr->{password} = undef unless exists $attr->{password};
-        $sth->execute($borrowernumber, $attr->{code}, $attr->{value}, $attr->{password});
+        $sth->execute($borrowernumber, $attr->{code}, $attr->{value});
         if ($sth->err) {
             warn sprintf('Database returned the following error: %s', $sth->errstr);
             return; # bail immediately on errors
@@ -301,10 +298,6 @@ sub UpdateBorrowerAttribute {
     my $dbh = C4::Context->dbh;
     my $query = "INSERT INTO borrower_attributes SET attribute = ?, code = ?, borrowernumber = ?";
     my @params = ( $attribute->{attribute}, $attribute->{code}, $borrowernumber );
-    if ( defined $attribute->{password} ) {
-        $query .= ", password = ?";
-        push @params, $attribute->{password};
-    }
     my $sth = $dbh->prepare( $query );
 
     $sth->execute( @params );

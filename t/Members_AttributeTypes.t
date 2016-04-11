@@ -48,13 +48,13 @@ fixtures_ok [
     [
         'code',             'description',
         'repeatable',       'unique_id',
-        'opac_display',     'password_allowed',
+        'opac_display',
         'staff_searchable', 'authorised_value_category',
         'display_checkout', 'category_code',
         'class'
     ],
-    [ 'one', 'ISBN', '1', '1', '1', '1', '1', 'red',  '1', 'orange', 'green' ],
-    [ 'two', 'ISSN', '0', '0', '0', '0', '0', 'blue', '0', 'yellow', 'silver' ]
+    [ 'one', 'ISBN', '1', '1', '1', '1', 'red',  '1', 'orange', 'green' ],
+    [ 'two', 'ISSN', '0', '0', '0', '0', 'blue', '0', 'yellow', 'silver' ]
 
     ],
 ], 'add fixtures';
