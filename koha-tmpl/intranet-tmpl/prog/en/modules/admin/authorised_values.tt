@@ -252,8 +252,7 @@ $(document).ready(function() {
 	<th>Description (OPAC)</th>
 	<th>Icon</th>
     <th>Branches limitations</th>
-	<th>Edit</th>
-	<th>Delete</th>
+	<th>Actions</th>
 	</tr>
 </thead><tbody>
 [% FOREACH loo IN loop %]
@@ -282,8 +281,8 @@ $(document).ready(function() {
             No limitation
         [% END %]
     </td>
-    <td><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;id=[% loo.id %]">Edit</a></td>
-    <td><a class="delete" href="/cgi-bin/koha/admin/authorised_values.pl?op=delete&amp;searchfield=[% searchfield %]&amp;id=[% loo.id %]">Delete</a></td>
+    <td class="actions"><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;id=[% loo.id %]" class="btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
+    <a class="delete btn btn-mini" href="/cgi-bin/koha/admin/authorised_values.pl?op=delete&amp;searchfield=[% searchfield %]&amp;id=[% loo.id %]"><i class="fa fa-trash"></i> Delete</a></td>
 </tr>
 [% END %]
 </tbody></table>[% ELSE %]
