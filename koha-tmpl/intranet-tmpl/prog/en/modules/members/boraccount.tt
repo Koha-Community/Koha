@@ -14,7 +14,8 @@ $(document).ready(function() {
         'aaSorting': [[0, 'desc']],
         "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
         "aoColumnDefs": [
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
+            { "sType": "title-string", "aTargets" : [ "title-string" ] },
+            { "bSortable": false, "bSearchable": false, "aTargets": [-1] }
         ]
     }));
     $("#filter_c").html('<p><a href="#" id="filter_transacs">'+txtActivefilter+'</a>');
@@ -66,9 +67,10 @@ $(document).ready(function() {
           <th>Amount</th>
           <th>Outstanding</th>
           [% IF ( reverse_col ) %]
+              <th>Actions</th>
+          [% ELSE %]
               <th>&nbsp;</th>
           [% END %]
-          <th>Print</th>
         </tr>
     </thead>
 
@@ -104,21 +106,19 @@ $(document).ready(function() {
       <td>[% account.note | html_line_break %]</td>
       [% IF ( account.amountcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount %]</td>
       [% IF ( account.amountoutstandingcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding %]</td>
-    [% IF ( reverse_col ) %]
-      <td>
-	[% IF ( account.payment ) %]
-		<a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]">Reverse</a>
-	[% ELSE %]
-		&nbsp;
-	[% END %]
-      </td>
-	[% END %]
-<td>
-	[% IF ( account.payment ) %]
-		<a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]">Print</a>
-	[% ELSE %]
-		<a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]">Print</a>
-	[% END %]
+      <td class="actions">
+        [% IF ( account.payment ) %]
+          <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-mini"><i class="fa fa-print"></i> Print</a>
+        [% ELSE %]
+          <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-mini"><i class="fa fa-print"></i> Print</a>
+        [% END %]
+        [% IF ( reverse_col) %]
+          [% IF ( account.payment ) %]
+            <a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-mini"><i class="fa fa-undo"></i> Reverse</a>
+          [% ELSE %]
+            &nbsp;
+          [% END %]
+        [% END %]
       </td>
     </tr>
 
@@ -131,11 +131,7 @@ $(document).ready(function() {
     [% ELSE %]
        <td class="debit"style="text-align: right;">[% total %]</td>
     [% END %]
-    [% IF ( reverse_col ) %]
-      <td colspan="2"></td>
-      [% ELSE %]
-        <td></td>
-    [% END %]
+    <td></td>
   </tr>
   </tfoot>
 </table>
