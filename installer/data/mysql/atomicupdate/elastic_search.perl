@@ -10,6 +10,11 @@ use Koha::SearchFields;
 
 my $dbh = C4::Context->dbh;
 
+
+$dbh->do(q|INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES('SearchEngine','Zebra','Choose format to display postal addresses','','Choice')|);
+
+
 $dbh->do(q|DROP TABLE IF EXISTS search_marc_to_field|);
 $dbh->do(q|DROP TABLE IF EXISTS search_marc_map|);
 $dbh->do(q|DROP TABLE IF EXISTS search_field|);
