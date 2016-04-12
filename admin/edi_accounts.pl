@@ -53,8 +53,13 @@ if ( $op eq 'acct_form' ) {
     );
     $template->param( vendors => \@vendors );
 
-    my @plugins = Koha::Plugins->new()->GetPlugins('edifact');
-    $template->param( plugins => \@plugins );
+    my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins");
+    $template->param( plugins_enabled => $plugins_enabled );
+
+    if ( $plugins_enabled ) {
+        my @plugins = Koha::Plugins->new()->GetPlugins('edifact');
+        $template->param( plugins => \@plugins );
+    }
 }
 elsif ( $op eq 'delete_confirm' ) {
     show_account();

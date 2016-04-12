@@ -76,6 +76,7 @@
      [% END %]
      </select>
   </li>
+  [% IF plugins_enabled %]
   <li>
      <label for="plugin">Plugin: </label>
      <select name="plugin" id="plugin">
@@ -89,6 +90,9 @@
         [% END %]
      </select>
   </li>
+  [% ELSE %]
+  <input type="hidden" name="plugin" value="" />
+  [% END %]
   <li>
      <label for="description">Description: </label>
      <input type="text" name="description" id="description" size="20" maxlength="90" value="[% account.description %]" />
