@@ -2932,27 +2932,27 @@ sub ModZebra {
         else {
             croak "ModZebra called with unknown operation: $op";
         }
-    } else {
-        my $dbh = C4::Context->dbh;
+    }
 
-        # true ModZebra commented until indexdata fixes zebraDB crashes (it seems they occur on multiple updates
-        # at the same time
-        # replaced by a zebraqueue table, that is filled with ModZebra to run.
-        # the table is emptied by rebuild_zebra.pl script (using the -z switch)
-        my $check_sql = "SELECT COUNT(*) FROM zebraqueue
-        WHERE server = ?
-            AND   biblio_auth_number = ?
-            AND   operation = ?
-            AND   done = 0";
-        my $check_sth = $dbh->prepare_cached($check_sql);
-        $check_sth->execute( $server, $biblionumber, $op );
-        my ($count) = $check_sth->fetchrow_array;
-        $check_sth->finish();
-        if ( $count == 0 ) {
-            my $sth = $dbh->prepare("INSERT INTO zebraqueue  (biblio_auth_number,server,operation) VALUES(?,?,?)");
-            $sth->execute( $biblionumber, $server, $op );
-            $sth->finish;
-        }
+    my $dbh = C4::Context->dbh;
+
+    # true ModZebra commented until indexdata fixes zebraDB crashes (it seems they occur on multiple updates
+    # at the same time
+    # replaced by a zebraqueue table, that is filled with ModZebra to run.
+    # the table is emptied by rebuild_zebra.pl script (using the -z switch)
+    my $check_sql = "SELECT COUNT(*) FROM zebraqueue
+    WHERE server = ?
+        AND   biblio_auth_number = ?
+        AND   operation = ?
+        AND   done = 0";
+    my $check_sth = $dbh->prepare_cached($check_sql);
+    $check_sth->execute( $server, $biblionumber, $op );
+    my ($count) = $check_sth->fetchrow_array;
+    $check_sth->finish();
+    if ( $count == 0 ) {
+        my $sth = $dbh->prepare("INSERT INTO zebraqueue  (biblio_auth_number,server,operation) VALUES(?,?,?)");
+        $sth->execute( $biblionumber, $server, $op );
+        $sth->finish;
     }
 }
 
