@@ -93,6 +93,7 @@ our $QueryAutoTruncate = 0;
 our $QueryWeightFields = 0;
 our $QueryFuzzy = 0;
 our $UseQueryParser = 0;
+our $SearchEngine = 'Zebra';
 our $marcflavour = 'MARC21';
 our $contextmodule = new Test::MockModule('C4::Context');
 $contextmodule->mock('preference', sub {
@@ -109,6 +110,8 @@ $contextmodule->mock('preference', sub {
         return $QueryFuzzy;
     } elsif ($pref eq 'UseQueryParser') {
         return $UseQueryParser;
+    } elsif ($pref eq 'SearchEngine') {
+        return $SearchEngine;
     } elsif ($pref eq 'maxRecordsForFacets') {
         return 20;
     } elsif ($pref eq 'FacetLabelTruncationLength') {
