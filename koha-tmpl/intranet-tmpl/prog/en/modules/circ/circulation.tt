@@ -970,7 +970,7 @@ No patron matched <span class="ex">[% message %]</span>
 [% END %]
 </div> <!-- reservesloop -->
 
-[% ELSE %]
+[% ELSIF borrowernumber %]
     <div class="dialog message">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>
 [% END %] <!-- borrowernumber and borrower-->
 </div></div>
