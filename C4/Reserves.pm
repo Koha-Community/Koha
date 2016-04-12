@@ -523,8 +523,8 @@ sub CanItemBeReserved{
     # level itemtype if the hold has no associated item
     $querycount .=
       C4::Context->preference('item-level_itypes')
-      ? " AND COALESCE( itype, itemtype ) = ?"
-      : " AND itemtype = ?"
+      ? " AND COALESCE( items.itype, biblioitems.itemtype ) = ?"
+      : " AND biblioitems.itemtype = ?"
       if ( $ruleitemtype ne "*" );
 
     my $sthcount = $dbh->prepare($querycount);
