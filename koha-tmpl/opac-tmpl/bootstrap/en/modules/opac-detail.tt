@@ -1428,8 +1428,10 @@
         $(".holdingst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumns": [
                 [% IF ( item_level_itypes ) %]null,[% END %]
-                null,
-                [% IF ( OpacLocationBranchToDisplay == 'both' ) %]null,[% END %]
+                [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' || singleBranchMode ) %]null,[% END %]
+                [% UNLESS ( singleBranchMode ) %]
+                    [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]null,[% END %]
+                [% END %]
                 [% IF ( itemdata_ccode ) %]null,[% END %]
                 null,
                 [% IF ( itemdata_enumchron ) %]null,[% END %]
