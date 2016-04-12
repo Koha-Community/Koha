@@ -47,7 +47,7 @@ use C4::Context;
 use Modern::Perl;
 
 sub new {
-    my $engine = C4::Context->preference("SearchEngine");
+    my $engine = C4::Context->preference("SearchEngine") // 'Zebra';
     my $file = "Koha/SearchEngine/${engine}/Search.pm";
     my $class = "Koha::SearchEngine::${engine}::Search";
     require $file;
