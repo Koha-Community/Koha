@@ -185,14 +185,6 @@
           "type": ["string", "null"],
           "description": "used for children to include the relationship to their guarantor"
         },
-        "ethnicity": {
-          "type": ["string", "null"],
-          "description": "unused"
-        },
-        "ethnotes": {
-          "type": ["string", "null"],
-          "description": "unused"
-        },
         "sex": {
           "type": ["string", "null"],
           "description": "patron's gender"
@@ -265,9 +257,17 @@
           "type": ["string", "null"],
           "description": "the mobile phone number where the patron would like to receive notices (if SMS turned on)"
         },
+        "sms_provider_id": {
+          "type": ["string", "null"],
+          "description": "the provider of the mobile phone number defined in smsalertnumber"
+        },
         "privacy": {
           "type": "string",
           "description": "patron's privacy settings related to their reading history"
+        },
+        "privacy_guarantor_checkouts": {
+          "type": "string",
+          "description": "controls if relatives can see this patron's checkouts"
         }
       }
 }
