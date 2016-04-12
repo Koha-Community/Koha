@@ -1,5 +1,5 @@
 [% INCLUDE 'format_price.inc' %]
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/buttons.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/buttons.dataTables.min.css" />
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/buttons.colVis.min.js"></script>

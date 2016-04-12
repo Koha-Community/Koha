@@ -5,7 +5,7 @@
 tinyMCE.init({
 	mode : "textareas",
         theme : "advanced",
-    content_css : "[% themelang %]/css/tinymce.css",
+    content_css : "[% interface %]/[% theme %]/css/tinymce.css",
     plugins : "table,save,advhr,advlink,searchreplace,print,contextmenu",
         theme_advanced_disable : "underline,strikethrough,styleselect,image",
 	theme_advanced_buttons1_add_before : "save,|",
@@ -22,7 +22,7 @@ tinyMCE.init({
 //]]>
 </script>
 [% INCLUDE intranetstylesheet.inc %]
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/help.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/help.css" />
 </head>
 <body id="help_edithelp" class="help">
 	<h1>Online Help</h1>

@@ -46,7 +46,7 @@ tinyMCE.init({
     mode : "specific_textareas",
     editor_selector : "mce",
     theme : "advanced",
-    content_css : "[% themelang %]/css/tinymce.css",
+    content_css : "[% interface %]/[% theme %]/css/tinymce.css",
     plugins : "table,save,advhr,advlink,contextmenu,advimage",
     theme_advanced_buttons1 : "bold,italic,|,cut,copy,paste,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,|,image,link,unlink,anchor,cleanup,help,code,advhr,",
     theme_advanced_buttons2 : "tablecontrols,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,removeformat,|,visualaid,|,sub,sup,|,charmap|,forecolor,backcolor",

@@ -3,7 +3,7 @@
 <style type="text/css" media="screen">
 
 [% IF ( login ) %]
-    @import url([% themelang %]/css/login.css);
+    @import url([% interface %]/[% theme %]/css/login.css);
 [% END %]
 
 html { background: #eee; }

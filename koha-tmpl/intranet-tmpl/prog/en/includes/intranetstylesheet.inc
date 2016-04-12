@@ -2,7 +2,7 @@
 [% IF (intranetstylesheet.match('^https?:|^\/')) %]
     <link rel="stylesheet" type="text/css" href="[% intranetstylesheet %]" />
 [% ELSE %]
-    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/[% intranetstylesheet %]" />
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/[% intranetstylesheet %]" />
 [% END %]
 
 <!-- local colors -->
@@ -10,6 +10,6 @@
     [% IF (intranetcolorstylesheet.match('^https?:|^\/')) %]
         <link rel="stylesheet" type="text/css" href="[% intranetcolorstylesheet %]" />
     [% ELSE %]
-        <link rel="stylesheet" type="text/css" href="[% themelang %]/css/[% intranetcolorstylesheet %]" />
+        <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/[% intranetcolorstylesheet %]" />
     [% END %]
 [% END %]
