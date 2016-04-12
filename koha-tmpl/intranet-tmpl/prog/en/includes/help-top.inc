@@ -13,7 +13,7 @@
 <script type="text/javascript" src="[% interface %]/lib/jquery-ui-1.11.4.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut.js"></script>
 <!-- koha core js -->
-<script type="text/javascript" src="[% themelang %]/js/staff-global.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/staff-global.js"></script>
 
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/help.css" />
 </head>

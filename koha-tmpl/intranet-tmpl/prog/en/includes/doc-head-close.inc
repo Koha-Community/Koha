@@ -40,7 +40,7 @@
 [% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
 
 <!-- koha core js -->
-<script type="text/javascript" src="[% themelang %]/js/staff-global.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/staff-global.js"></script>
 
 [% INCLUDE 'validator-strings.inc' %]
 [% IF ( IntranetUserJS ) %]
@@ -68,11 +68,11 @@
     //]]>
     </script>
 
-    <script type="text/javascript" src="[% themelang %]/js/basket.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/basket.js"></script>
 [% END %]
 
 [% IF LocalCoverImages %]
-    <script type="text/javascript" src="[% themelang %]/js/localcovers.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/localcovers.js"></script>
     <script type="text/javascript">
         //<![CDATA[
             var NO_LOCAL_JACKET = _("No cover image available");
