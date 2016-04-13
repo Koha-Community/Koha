@@ -1,7 +1,7 @@
 #
 #===============================================================================
 #
-#         FILE: Koha_ElasticSearch_Search.t
+#         FILE: Koha_SearchEngine_Elasticsearch_Search.t
 #
 #  DESCRIPTION:
 #
@@ -19,11 +19,14 @@ use strict;
 use warnings;
 
 use Test::More tests => 5;    # last test to print
+use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 
-use_ok('Koha::ElasticSearch::Search');
+my $builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new( { index => 'mydb' } );
+
+use_ok('Koha::SearchEngine::Elasticsearch::Search');
 
 ok(
-    my $searcher = Koha::ElasticSearch::Search->new(
+    my $searcher = Koha::SearchEngine::Elasticsearch::Search->new(
         { 'nodes' => ['localhost:9200'], 'index' => 'mydb' }
     ),
     'Creating a Koha::ElasticSearch::Search object'
@@ -31,8 +34,6 @@ ok(
 
 is( $searcher->index, 'mydb', 'Testing basic accessor' );
 
-ok( $searcher->connect, 'Connect to ElasticSearch server' );
-ok( my $results = $searcher->search( { record => 'easy' } ), 'Do a search ' );
+ok( my $query = $builder->build_query('easy'), 'Build a search query');
 
-ok( my $marcresults = $searcher->marc_search( { record => 'Fish' } ),
-    'Do a marc search' );
+ok( my $results = $searcher->search( $query) , 'Do a search ' );
