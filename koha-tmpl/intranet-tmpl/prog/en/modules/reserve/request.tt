@@ -150,26 +150,26 @@ function checkMultiHold() {
     $("input.warning").click(function() {
         return confirm( _("None of these items can normally be put on hold for this patron.") + "\n\n" + _("Place hold?") );
     });
- 	$("#requestany").click(function() {
-		if(this.checked){
-		$("input[name=checkitem]").each(function() {
-            $(this).prop("checked", false);
-		});
-		}
-	});
- 	$("input[name=checkitem]").click(function() {
-		onechecked = 0;
-		$("input[name=checkitem]").each(function() {
-			if(this.checked){
-				onechecked = 1;
-			}
-		});
-		if(onechecked == 1){
+    $("#requestany").click(function() {
+        if(this.checked){
+            $("input[name=checkitem]").each(function() {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+    $("input[name=checkitem]").click(function() {
+        onechecked = 0;
+        $("input[name=checkitem]").each(function() {
+            if(this.checked){
+                onechecked = 1;
+            }
+        });
+        if(onechecked == 1){
             $("#requestany").prop("checked", false);
-		} else {
-			$("#requestany").prop("checked",true);
-		}
-	});
+        } else {
+            $("#requestany").prop("checked",true);
+        }
+    });
 
     $(".clear-date").on("click",function(e){
         e.preventDefault();

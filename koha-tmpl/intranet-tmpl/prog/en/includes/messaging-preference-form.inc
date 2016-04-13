@@ -1,20 +1,20 @@
 [% USE Koha %]
 <!-- snippet for form to set borrower and patron category messaging preferences -->
 <script type="text/javascript">//<![CDATA[
-	$(document).ready(function(){
-		$(".none").click(function(){
-			if($(this).prop("checked")){
-				var rowid = $(this).attr("id");
-				newid = Number(rowid.replace("none","")) 
-          $("#sms"+newid).prop("checked", false);
-          $("#email"+newid).prop("checked", false);
-          $("#phone"+newid).prop("checked", false);
-          $("#digest"+newid).prop("checked", false);
-          $("#rss"+newid).prop("checked", false);
-			}
-		});
-        $("#info_digests").tooltip();
-	});
+$(document).ready(function(){
+    $(".none").click(function(){
+        if($(this).prop("checked")){
+            var rowid = $(this).attr("id");
+            newid = Number(rowid.replace("none",""))
+            $("#sms"+newid).prop("checked", false);
+            $("#email"+newid).prop("checked", false);
+            $("#phone"+newid).prop("checked", false);
+            $("#digest"+newid).prop("checked", false);
+            $("#rss"+newid).prop("checked", false);
+        }
+    });
+    $("#info_digests").tooltip();
+});
 //]]>
 </script>
 
