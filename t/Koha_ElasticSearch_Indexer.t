@@ -25,7 +25,7 @@ use_ok('Koha::ElasticSearch::Indexer');
 
 my $indexer;
 ok(
-    my $indexer = Koha::ElasticSearch::Indexer->new(
+    $indexer = Koha::ElasticSearch::Indexer->new(
         {
             'nodes' => ['localhost:9200'],
             'index' => 'mydb'
@@ -43,9 +43,9 @@ $field = MARC::Field->new( '245', '', '', 'a' => 'Title' );
 $marc_record->append_fields($field);
 
 my $records = [$marc_record];
-ok( my $converted = $indexer->convert_marc_to_json($records),
+ok( my $converted = $indexer->_convert_marc_to_json($records),
     'Convert some records' );
 
 is( $converted->count, 1, 'One converted record' );
 
-ok( $indexer->update_index($records), 'Update Index' );
+ok( $indexer->update_index(undef,$records), 'Update Index' );
