@@ -35,7 +35,7 @@ $(document).ready(function() {
   [% IF recordtype == 'biblio' %]
     $(".records input:checkbox[data-issues!='0']").each(function(){
       $(this).attr('title', MSG_CANNOT_BE_DELETED)
-      $(this).attr('disabled', true);
+      $(this).prop('disabled', true);
       $(this).prop('checked', false);
       $(this).parents('tr').find('td').css('background-color', '#ffff99');
     });

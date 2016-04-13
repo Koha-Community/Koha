@@ -24,10 +24,10 @@ $(document).ready(function(){
       var subfield = $(this).next();
       if ($(this).is(":checked")){
           $(this).val($(this).siblings("[name='subfield']").val());
-          $(subfield).attr('disabled',true);
+          $(subfield).prop('disabled', true);
           $("#"+row).html(_("This subfield will be deleted"));
       } else {
-          $(subfield).removeAttr('disabled');
+          $(subfield).prop('disabled', false);
           $("#"+row).html("");
       }
   });

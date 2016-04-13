@@ -103,9 +103,9 @@ function frequencyload(){
             if ( globalfreqdata.unit && globalfreqdata.unit.length == 0 ) {
                 var option = $("#subtype option[value='issues']");
                 $(option).attr('selected', 'selected');
-                $("#subtype option[value!='issues']").attr('disabled', 'disabled')
+                $("#subtype option[value!='issues']").prop('disabled', true)
             } else {
-                $("#subtype option").attr('disabled', false)
+                $("#subtype option").prop('disabled', false)
             }
         }
     )
@@ -204,7 +204,7 @@ function modifyAdvancedPattern() {
         $(this).attr("readonly", false);
     });
     $("#advancedpredictionpatternt select").each(function() {
-        $(this).attr("disabled", false);
+        $(this).prop('disabled', false);
     });
 
     $("#restoreadvancedpatternbutton").show();
@@ -229,7 +229,7 @@ function restoreAdvancedPattern() {
         }
     });
     $("#advancedpredictionpatternt select").each(function() {
-        $(this).attr("disabled", true);
+        $(this).prop('disabled', true);
         var id = $(this).attr('id');
         $(this).val(globalnumpatterndata[id]);
     });

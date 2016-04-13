@@ -14,13 +14,13 @@ function clear_edit(){
         var type = $(this).attr("type");
         if (type != "button" && type != "submit" ) {
             $(this).val("");
-            $(this).removeAttr("disabled");
+            $(this).prop('disabled', false);
         }
         if ( type == "checkbox" ) {
             $(this).prop('checked', false);
         }
     });
-    $(edit_row).find("select").removeAttr("disabled");
+    $(edit_row).find("select").prop('disabled', false);
     $(edit_row).find("select option:first").attr("selected", "selected");
     $(edit_row).find("td:last input[name='clear']").remove();
 }
@@ -96,8 +96,8 @@ $(document).ready(function() {
                     }
                 }
             });
-            $("#default-circulation-rules tr:last td:eq(0) select").attr('disabled', 'disabled');
-            $("#default-circulation-rules tr:last td:eq(1) select").attr('disabled', 'disabled');
+            $("#default-circulation-rules tr:last td:eq(0) select").prop('disabled', true);
+            $("#default-circulation-rules tr:last td:eq(1) select").prop('disabled', true);
             return false;
         });
 });

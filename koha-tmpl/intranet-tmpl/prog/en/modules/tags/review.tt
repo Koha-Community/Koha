@@ -73,7 +73,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	};
 
 	var success_test_call = function() {
-		$('#test_button').removeAttr("disabled");
+		$('#test_button').prop('disabled', false);
 		$('#test_button').attr("value","test");
 	};
 	$(document).ready(function() {
@@ -99,8 +99,8 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
                     "data": {ok: $(event.target).attr("title")},
 					"success": count_approve // success_approve
 				});
-                $(event.target).next(".rej").removeAttr("disabled").attr("value",_("Reject")).css("color","#000");
-				$(event.target).attr(   "value",_("Approved")).attr("disabled","disabled").css("color","#666");
+                $(event.target).next(".rej").prop('disabled', false).attr("value",_("Reject")).css("color","#000");
+				$(event.target).attr(   "value",_("Approved")).prop('disabled', true).css("color","#666");
 				return false;	// cancel submit
 			}
 			if ($(event.target).is('.rej')) {
@@ -108,12 +108,12 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
                     "data": {rej: $(event.target).attr("title")},
 					"success": count_reject // success_reject
 				});
-                $(event.target).prev(".ok").removeAttr("disabled").attr("value",_("Approve")).css("color","#000");
-				$(event.target).attr(   "value",_("Rejected")).attr("disabled","disabled").css("color","#666");
+                $(event.target).prev(".ok").prop('disabled', false).attr("value",_("Approve")).css("color","#000");
+				$(event.target).attr(   "value",_("Rejected")).prop('disabled', true).css("color","#666");
 				return false;	// cancel submit
 			}
 			if ($(event.target).is('#test_button')) {
-				$(event.target).attr(   "value",_("Testing...")).attr("disabled","disabled");
+				$(event.target).attr(   "value",_("Testing...")).prop('disabled', true);
 				$.ajax({
 					"data": {test: $('#test').attr("value")},
 					"success": success_test_call // success_reject

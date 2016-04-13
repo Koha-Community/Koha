@@ -34,7 +34,7 @@ KOHA.AJAX = {
     MarkRunning: function ( selector, text ) {
         text = text || _("Loading...");
         $( selector )
-            .attr( 'disabled', 'disabled' )
+            .prop('disabled', true)
             .each( function () {
                 var $spinner = $( '<span class="loading"></span>' );
                 var selector_type = this.localName;
@@ -62,7 +62,7 @@ KOHA.AJAX = {
     },
     MarkDone: function ( selector ) {
         $( selector )
-            .removeAttr( 'disabled' )
+            .prop('disabled', false)
             .each( function () {
                 var selector_type = this.localName;
                 if (selector_type === undefined) selector_type = this.nodeName; // IE only

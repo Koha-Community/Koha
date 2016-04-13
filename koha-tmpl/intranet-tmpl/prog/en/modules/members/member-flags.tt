@@ -17,7 +17,7 @@
 
             $('input[name="flag"]').each(function() {
                 if($(this).attr('id') != "flag-0"){
-                    $(this).attr('disabled', 'disabled');
+                    $(this).prop('disabled', true);
                     $(this).prop('checked', false);
                 }
             });
@@ -27,14 +27,14 @@
             if($('input[id="flag-0"]:checked').length){
                 $('input[name="flag"]').each(function() {
                     if($(this).attr('id') != "flag-0"){
-                        $(this).attr('disabled', 'disabled');
+                        $(this).prop('disabled', true);
                         $(this).prop('checked', false);
                     }
                 });
             }
             else {
                 $('input[name="flag"]').each(function() {
-                    $(this).removeAttr('disabled', 'disabled');
+                    $(this).prop('disabled', false);
                 });
             }
         });

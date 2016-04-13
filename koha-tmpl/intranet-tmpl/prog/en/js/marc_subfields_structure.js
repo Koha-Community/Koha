@@ -11,10 +11,10 @@ $(document).ready(function() {
 /* Function to enable/disable hidden values checkboxes when Flag is (de)selected */
 function enable_cb(tab) {
     if ($("#hidden_flagged_" + tab).is(':checked')) {
-        $('.inclusive_' + tab).attr('disabled',true).prop('checked', false);
+        $('.inclusive_' + tab).prop('disabled', true).prop('checked', false);
     }
     else {
-        $('.inclusive_' + tab).removeAttr('disabled');
+        $('.inclusive_' + tab).prop('disabled', false);
     }
 }
 

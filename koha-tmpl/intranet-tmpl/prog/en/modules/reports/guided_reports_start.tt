@@ -183,9 +183,9 @@ $("#delColumn").on("click",function(){
 [% IF (create || editsql || save) %]
     $("#select_group").change(function() {
         if($(this).prop('checked')) {
-            $("#group_input").attr('disabled', 'disabled');
-            $("#groupdesc_input").attr('disabled', 'disabled');
-            $("#group_select").attr('disabled', false);
+            $("#group_input").prop('disabled', true);
+            $("#groupdesc_input").prop('disabled', true);
+            $("#group_select").prop('disabled', false);
             if ($("#group_select").val().length > 0) {
                 $("#select_subgroup").prop('checked', true);
                 $("#select_subgroup").change();
@@ -197,9 +197,9 @@ $("#delColumn").on("click",function(){
     });
     $("#create_group").change(function() {
         if($(this).prop('checked')) {
-            $("#group_input").attr('disabled', false);
-            $("#groupdesc_input").attr('disabled', false);
-            $("#group_select").attr('disabled', 'disabled');
+            $("#group_input").prop('disabled', false);
+            $("#groupdesc_input").prop('disabled', false);
+            $("#group_select").prop('disabled', true);
             $("#create_subgroup").prop('checked', true).change();
             $("#subgroup_select").hide();
             $("#subgroup input[type='radio']").hide();
@@ -211,16 +211,16 @@ $("#delColumn").on("click",function(){
     });
     $("#select_subgroup").change(function() {
         if($(this).prop('checked')) {
-            $("#subgroup_select").attr('disabled', false);
-            $("#subgroup_input").attr('disabled', 'disabled');
-            $("#subgroupdesc_input").attr('disabled', 'disabled');
+            $("#subgroup_select").prop('disabled', false);
+            $("#subgroup_input").prop('disabled', true);
+            $("#subgroupdesc_input").prop('disabled', true);
         }
     });
     $("#create_subgroup").change(function() {
         if($(this).prop('checked')) {
-            $("#subgroup_input").attr('disabled', false);
-            $("#subgroupdesc_input").attr('disabled', false);
-            $("#subgroup_select").attr('disabled', 'disabled');
+            $("#subgroup_input").prop('disabled', false);
+            $("#subgroupdesc_input").prop('disabled', false);
+            $("#subgroup_select").prop('disabled', true);
         }
     });
     $("#select_group").change();

@@ -11,7 +11,7 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
-    $('#add_to_patron_list_submit').attr('disabled', 'disabled');
+    $('#add_to_patron_list_submit').prop('disabled', true);
     $('#new_patron_list').hide();
 
     $('#add_to_patron_list').change(function() {
@@ -22,18 +22,18 @@ $(document).ready(function() {
             $('#new_patron_list').focus();
         } else if ( value ) {
             $('#new_patron_list').hide();
-            $('#add_to_patron_list_submit').removeAttr('disabled');
+            $('#add_to_patron_list_submit').prop('disabled', false);
         } else {
             $('#new_patron_list').hide();
-            $('#add_to_patron_list_submit').attr('disabled', 'disabled');
+            $('#add_to_patron_list_submit').prop('disabled', true);
         }
     });
 
     $('#new_patron_list').on('input', function() {
         if ( $('#new_patron_list').val() ) {
-            $('#add_to_patron_list_submit').removeAttr('disabled');
+            $('#add_to_patron_list_submit').prop('disabled', false);
         } else {
-            $('#add_to_patron_list_submit').attr('disabled', 'disabled');
+            $('#add_to_patron_list_submit').prop('disabled', true);
         }
     });
 

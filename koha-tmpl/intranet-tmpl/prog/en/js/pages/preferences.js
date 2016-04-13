@@ -54,7 +54,7 @@ $( document ).ready( function () {
     }));
 
     function mark_modified() {
-        $( this.form ).find( '.save-all' ).removeAttr( 'disabled' );
+        $( this.form ).find( '.save-all' ).prop('disabled', false);
         $( this ).addClass( 'modified' );
         var name_cell = $( this ).parents( '.name-row' ).find( '.name-cell' );
         if ( !name_cell.find( '.modified-warning' ).length )
@@ -90,7 +90,7 @@ $( document ).ready( function () {
 
     $( '.prefs-tab .action .cancel' ).click( function () { KOHA.Preferences.Modified = false } );
 
-    $( '.prefs-tab .save-all' ).attr( 'disabled', true ).click( function () {
+    $( '.prefs-tab .save-all' ).prop('disabled', true).click( function () {
         KOHA.Preferences.Save( this.form );
         return false;
     } );

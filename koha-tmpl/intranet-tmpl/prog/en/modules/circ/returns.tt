@@ -81,13 +81,13 @@ $(document).ready(function () {
             $("#barcode").addClass("alert");
             $("#dropboxmode").show();
 
-            $("#return_date_override_fields :input").attr("disabled", true);
+            $("#return_date_override_fields :input").prop('disabled', true);
             $("#return_date_override").datetimepicker("disable");
         } else {
             $("#barcode").removeClass("alert");
             $("#dropboxmode").hide();
 
-            $("#return_date_override_fields :input").attr("disabled", false);
+            $("#return_date_override_fields :input").prop('disabled', false);
             $("#return_date_override").datetimepicker("enable");
         }
         $("#barcode").focus();

@@ -17,9 +17,9 @@ function check_uncheck() {
     var all_nodes = $(late_orderst.fnGetNodes());
     if ( $(all_nodes).find("input:checkbox[name=ordernumber]:checked").length > 0) {
         var booksellerid = $(all_nodes).find("input:checkbox[name=ordernumber]:checked:first").attr("data-booksellerid");
-        $(all_nodes).find("input:checkbox[name=ordernumber][data-booksellerid!="+booksellerid+"]").attr('disabled', 'disabled');
+        $(all_nodes).find("input:checkbox[name=ordernumber][data-booksellerid!="+booksellerid+"]").prop('disabled', true);
     } else {
-        $("input:checkbox[name=ordernumber]").removeAttr('disabled');
+        $("input:checkbox[name=ordernumber]").prop('disabled', false);
     }
 }
 

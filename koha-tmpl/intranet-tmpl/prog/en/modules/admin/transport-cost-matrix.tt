@@ -16,9 +16,9 @@ function disable_transport_cost_chg(e, cost_id) {
 }
 function disable_transport_cost(cost_id, disable) {
     if (disable) {
-        $('#celldiv_'+cost_id).find('input[type=text]').attr("disabled","disabled").addClass('disabled-transfer');
+        $('#celldiv_'+cost_id).find('input[type=text]').prop('disabled', true).addClass('disabled-transfer');
     } else {
-        $('#celldiv_'+cost_id).find('input:disabled').removeAttr("disabled").removeClass('disabled-transfer');
+        $('#celldiv_'+cost_id).find('input:disabled').prop('disabled', false).removeClass('disabled-transfer');
     }
 }
 function enable_cost_input(cost_id) {
@@ -35,7 +35,7 @@ function enable_cost_input(cost_id) {
 }
 
 function form_submit (f) {
-    $(f).find('input:disabled').removeAttr("disabled");
+    $(f).find('input:disabled').prop('disabled', false);
     return true;
 }
 //]]>

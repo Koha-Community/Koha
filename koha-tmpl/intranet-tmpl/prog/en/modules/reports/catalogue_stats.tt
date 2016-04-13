@@ -8,14 +8,14 @@
         var Cellvalue = $("input[name='Cellvalue']:checked").val();
         if(Cellvalue == "deleteditems") {
             $("#removeddatetr").show();
-            $("input[value='deleteditems.timestamp']").attr('disabled', false);
-            $("#deldateFrom").attr('disabled', false);
-            $("#deldateTo").attr('disabled', false);
+            $("input[value='deleteditems.timestamp']").prop('disabled', false);
+            $("#deldateFrom").prop('disabled', false);
+            $("#deldateTo").prop('disabled', false);
         } else {
             $("#removeddatetr").hide();
-            $("input[value='deleteditems.timestamp']").attr('disabled', true).prop('checked', false);
-            $("#deldateFrom").attr('disabled', true).val('');
-            $("#deldateTo").attr('disabled', true).val('');
+            $("input[value='deleteditems.timestamp']").prop('disabled', true).prop('checked', false);
+            $("#deldateFrom").prop('disabled', true).val('');
+            $("#deldateTo").prop('disabled', true).val('');
         }
     }
 

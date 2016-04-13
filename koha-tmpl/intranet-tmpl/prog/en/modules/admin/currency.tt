@@ -14,11 +14,11 @@
 
     function check_currency(val) {
         if ( val == 1.0 ) {
-            $("#active").removeAttr('disabled');
+            $("#active").prop('disabled', false);
             $("#hint").html("");
         } else {
             $("#active").prop('checked', false);
-            $("#active").attr('disabled','disabled');
+            $("#active").prop('disabled', true);
             $("#hint").html(_("The active currency must have a rate of 1.0"));
         }
     }
