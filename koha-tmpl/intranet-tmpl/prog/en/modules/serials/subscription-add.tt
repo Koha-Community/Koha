@@ -197,11 +197,11 @@ function toggleAdvancedPattern() {
 }
 
 function modifyAdvancedPattern() {
-    $("#patternname").attr("readonly", false).val('');
-    $("#numberingmethod").attr("readonly", false);
+    $("#patternname").prop('readOnly', false).val('');
+    $("#numberingmethod").prop('readOnly', false);
 
     $("#advancedpredictionpatternt input").each(function() {
-        $(this).attr("readonly", false);
+        $(this).prop('readOnly', false);
     });
     $("#advancedpredictionpatternt select").each(function() {
         $(this).prop('disabled', false);
@@ -215,11 +215,11 @@ function modifyAdvancedPattern() {
 }
 
 function restoreAdvancedPattern() {
-    $("#patternname").attr("readonly", true).val(globalnumpatterndata.label);
-    $("#numberingmethod").attr("readonly", true).val(globalnumpatterndata.numberingmethod);
+    $("#patternname").prop('readOnly', true).val(globalnumpatterndata.label);
+    $("#numberingmethod").prop('readOnly', true).val(globalnumpatterndata.numberingmethod);
 
     $("#advancedpredictionpatternt input").each(function() {
-        $(this).attr("readonly", true);
+        $(this).prop('readOnly', true);
         var id = $(this).attr('id');
         if(id.match(/lastvalue/) || id.match(/innerloop/)) {
             var tempid = id.replace(/(\d)/, "temp$1");
