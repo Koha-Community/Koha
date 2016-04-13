@@ -47,7 +47,7 @@ unless (haspermission($userid, { circulate => 'circulate_remaining_permissions' 
 
 my @sort_columns = qw/date_due title itype issuedate branchcode itemcallnumber/;
 
-my @borrowernumber   = $input->param('borrowernumber');
+my @borrowernumber   = $input->multi_param('borrowernumber');
 my $offset           = $input->param('iDisplayStart');
 my $results_per_page = $input->param('iDisplayLength') || -1;
 

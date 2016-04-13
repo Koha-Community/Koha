@@ -48,7 +48,7 @@ my $branchcode     = $input->param('branchcode')
   || C4::Context->userenv->{'branch'};
 my $date_due;
 if ( $input->param('date_due') ) {
-    $date_due = dt_from_string( $input->param('date_due') );
+    $date_due = dt_from_string( scalar $input->param('date_due') );
 }
 
 my $data;

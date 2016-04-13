@@ -71,8 +71,8 @@ my $op                   = $input->param('op')||"else";
 # get only the columns of aqbudgetperiods in budget_period_hashref
 my @columns = Koha::Database->new()->schema->source('Aqbudgetperiod')->columns;
 my $budget_period_hashref = { map { join(' ',@columns) =~ /$_/ ? ( $_ => scalar $input->param($_) )  : () } keys( %{$input->Vars()} ) } ;
-$budget_period_hashref->{budget_period_startdate} = dt_from_string( $input->param('budget_period_startdate') );
-$budget_period_hashref->{budget_period_enddate}   = dt_from_string( $input->param('budget_period_enddate') );
+$budget_period_hashref->{budget_period_startdate} = dt_from_string( scalar $input->param('budget_period_startdate') );
+$budget_period_hashref->{budget_period_enddate}   = dt_from_string( scalar $input->param('budget_period_enddate') );
 
 my $activepagesize = 20;
 my $inactivepagesize = 20;
@@ -160,8 +160,8 @@ elsif ( $op eq 'duplicate_form'){
 elsif ( $op eq 'duplicate_budget' ){
     die "please specify a budget period id\n" if( !defined $budget_period_id || $budget_period_id eq '' );
 
-    my $budget_period_startdate = dt_from_string $input->param('budget_period_startdate');
-    my $budget_period_enddate   = dt_from_string $input->param('budget_period_enddate');
+    my $budget_period_startdate = dt_from_string scalar $input->param('budget_period_startdate');
+    my $budget_period_enddate   = dt_from_string scalar $input->param('budget_period_enddate');
     my $budget_period_description = $input->param('budget_period_description');
     my $mark_original_budget_as_inactive = $input->param('mark_original_budget_as_inactive');
     my $reset_all_budgets = $input->param('reset_all_budgets');

@@ -43,7 +43,7 @@ my ($template, $loggedinuser, $cookie)
 
 # calendardate - date passed in url for human readability (syspref)
 # if the url has an invalid date default to 'now.'
-my $calendarinput_dt = eval { dt_from_string( $input->param('calendardate') ); } || dt_from_string;
+my $calendarinput_dt = eval { dt_from_string( scalar $input->param('calendardate') ); } || dt_from_string;
 my $calendardate = output_pref( { dt => $calendarinput_dt, dateonly => 1 } );
 
 # keydate - date passed to calendar.js.  calendar.js does not process dashes within a date.

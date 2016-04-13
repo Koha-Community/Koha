@@ -23,7 +23,7 @@ my $year = $input->param('showYear');
 my $title = $input->param('showTitle');
 my $description = $input->param('showDescription');
 my $holidaytype = $input->param('showHolidayType');
-my $datecancelrange_dt = eval { dt_from_string( $input->param('datecancelrange') ) };
+my $datecancelrange_dt = eval { dt_from_string( scalar $input->param('datecancelrange') ) };
 my $calendardate = sprintf("%04d-%02d-%02d", $year, $month, $day);
 
 my $calendar = C4::Calendar->new(branchcode => $branchcode);

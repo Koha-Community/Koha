@@ -67,7 +67,7 @@ else {
 my $branch = $input->param('branch');
 my $datedue;
 if ( $input->param('newduedate') ) {
-    $datedue = dt_from_string( $input->param('newduedate') );
+    $datedue = dt_from_string( scalar $input->param('newduedate') );
     $datedue->set_hour(23);
     $datedue->set_minute(59);
 }

@@ -91,7 +91,7 @@ elsif ( $op eq 'add_validate' ) {
     my $category_type = $input->param('category_type');
     my $BlockExpiredPatronOpacActions = $input->param('BlockExpiredPatronOpacActions');
     my $default_privacy = $input->param('default_privacy');
-    my @branches = grep { $_ ne q{} } $input->param('branches');
+    my @branches = grep { $_ ne q{} } $input->multi_param('branches');
 
     my $is_a_modif = $input->param("is_a_modif");
 

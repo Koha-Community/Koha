@@ -151,7 +151,7 @@ my @scanned_items;
 my @errorloop;
 if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
     my $dbh = C4::Context->dbh;
-    my $date = dt_from_string( $input->param('setdate') );
+    my $date = dt_from_string( scalar $input->param('setdate') );
     $date = output_pref ( { dt => $date, dateformat => 'iso' } );
 
     my $strsth  = "select * from issues, items where items.itemnumber=issues.itemnumber and items.barcode =?";

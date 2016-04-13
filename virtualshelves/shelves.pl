@@ -92,12 +92,12 @@ if ( $op eq 'add_form' ) {
     if ( $shelf ) {
         $op = $referer;
         if ( $shelf->can_be_managed( $loggedinuser ) ) {
-            $shelf->shelfname( $query->param('shelfname') );
-            $shelf->sortfield( $query->param('sortfield') );
-            $shelf->allow_add( $query->param('allow_add') );
-            $shelf->allow_delete_own( $query->param('allow_delete_own') );
-            $shelf->allow_delete_other( $query->param('allow_delete_other') );
-            $shelf->category( $query->param('category') );
+            $shelf->shelfname( scalar $query->param('shelfname') );
+            $shelf->sortfield( scalar $query->param('sortfield') );
+            $shelf->allow_add( scalar $query->param('allow_add') );
+            $shelf->allow_delete_own( scalar $query->param('allow_delete_own') );
+            $shelf->allow_delete_other( scalar $query->param('allow_delete_other') );
+            $shelf->category( scalar $query->param('category') );
             eval { $shelf->store };
 
             if ($@) {

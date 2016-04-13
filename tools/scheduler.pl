@@ -62,7 +62,7 @@ my $id   = $input->param('id');
 if ( $mode eq 'job_add' ) {
 
     # Retrieving the date according to the dateformat syspref
-    my $c4date = output_pref({ dt => dt_from_string( $input->param('startdate') ), dateformat => 'iso', dateonly => 1 });
+    my $c4date = output_pref({ dt => dt_from_string( scalar $input->param('startdate') ), dateformat => 'iso', dateonly => 1 });
 
     # Formatting it for Schedule::At
     my $startdate = join('', (split /-/, $c4date));

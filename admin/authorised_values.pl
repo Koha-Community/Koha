@@ -101,7 +101,7 @@ if ($op eq 'add_form') {
     my $imageurl     = $input->param( 'imageurl' ) || '';
     $imageurl = '' if $imageurl =~ /removeImage/;
     my $duplicate_entry = 0;
-    my @branches = grep { $_ ne q{} } $input->param('branches');
+    my @branches = grep { $_ ne q{} } $input->multi_param('branches');
 
     my $already_exists = Koha::AuthorisedValues->search(
         {
