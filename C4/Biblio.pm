@@ -4389,7 +4389,6 @@ sub _getComponentParts {
         ($error, $componentPartRecordXMLs, $resultSetSize) = C4::Search::SimpleSearch("rcn=$parentsField001");
     }
     else {
-        warn "Following record has NO field 001 or 003:\n ".$parentrecord->as_formatted() if $parentrecord;
         warn "Record with no field 001 or 003 found! This is an outrage!" unless $parentrecord;
     }
 
