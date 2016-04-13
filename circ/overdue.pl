@@ -102,8 +102,8 @@ $branchfilter = C4::Context->userenv->{'branch'} if ($onlymine && !$branchfilter
 #  %borrowernumber_to_attributes   is populated by those borrowernumbers matching the patron attribute filters
 
 my %cgi_attrcode_to_attrvalues;     # ( patron_attribute_code => [ zero or more attribute filter values from the CGI ] )
-for my $attrcode (grep { /^patron_attr_filter_/ } $input->param) {
-    if (my @attrvalues = grep { length($_) > 0 } $input->param($attrcode)) {
+for my $attrcode (grep { /^patron_attr_filter_/ } $input->multi_param) {
+    if (my @attrvalues = grep { length($_) > 0 } $input->multi_param($attrcode)) {
         $attrcode =~ s/^patron_attr_filter_//;
         $cgi_attrcode_to_attrvalues{$attrcode} = \@attrvalues;
         print STDERR ">>>param($attrcode)[@{[scalar @attrvalues]}] = '@attrvalues'\n" if $debug;

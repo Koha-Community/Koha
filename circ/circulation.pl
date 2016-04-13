@@ -107,7 +107,7 @@ if ( $barcode || $barcode eq '0' ) {
         push @$barcodes, split( /\s\n/, $list );
         $barcodes = [ map { $_ =~ /^\s*$/ ? () : $_ } @$barcodes ];
     } else {
-        @$barcodes = $query->param('barcodes');
+        @$barcodes = $query->multi_param('barcodes');
     }
 }
 

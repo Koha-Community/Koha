@@ -105,11 +105,11 @@ if ( $op eq "export" ) {
                 my $end_callnumber       = $query->param("end_callnumber");
                 my $start_accession =
                   ( $query->param("start_accession") )
-                  ? dt_from_string( $query->param("start_accession") )
+                  ? dt_from_string( scalar $query->param("start_accession") )
                   : '';
                 my $end_accession =
                   ( $query->param("end_accession") )
-                  ? dt_from_string( $query->param("end_accession") )
+                  ? dt_from_string( scalar $query->param("end_accession") )
                   : '';
 
 

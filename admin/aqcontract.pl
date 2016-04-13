@@ -93,8 +93,8 @@ elsif ( $op eq 'add_validate' ) {
 
     my $is_a_modif = $input->param("is_a_modif");
 
-    my $contractstart_dt = eval { dt_from_string( $input->param('contractstartdate') ); };
-    my $contractend_dt = eval { dt_from_string( $input->param('contractenddate') ); };
+    my $contractstart_dt = eval { dt_from_string( scalar $input->param('contractstartdate') ); };
+    my $contractend_dt = eval { dt_from_string( scalar $input->param('contractenddate') ); };
     unless ( $contractstart_dt and $contractend_dt ) {
         my $today = dt_from_string;
         $contractstart_dt ||= $today;
@@ -115,8 +115,8 @@ elsif ( $op eq 'add_validate' ) {
             contractname        => scalar $input->param('contractname'),
             contractdescription => scalar $input->param('contractdescription'),
             booksellerid        => scalar $input->param('booksellerid'),
-            contractstartdate   => eval { output_pref({ dt => dt_from_string( $input->param('contractstartdate') ), dateformat => 'iso', dateonly => 1 } ); },
-            contractenddate     => eval { output_pref({ dt => dt_from_string( $input->param('contractenddate') ), dateformat => 'iso', dateonly => 1 } ); },
+            contractstartdate   => eval { output_pref({ dt => dt_from_string( scalar $input->param('contractstartdate') ), dateformat => 'iso', dateonly => 1 } ); },
+            contractenddate     => eval { output_pref({ dt => dt_from_string( scalar $input->param('contractenddate') ), dateformat => 'iso', dateonly => 1 } ); },
         });
     }
 

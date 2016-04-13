@@ -71,7 +71,7 @@ my $title = $query->param('title');
 my $issn  = $query->param('issn');
 my $branch = $query->param('branch');
 my $date = $query->param('date');
-$date = eval { dt_from_string( $query->param('date') ) } if $date;
+$date = eval { dt_from_string( scalar $query->param('date') ) } if $date;
 
 if ($date) {
     my @subscriptions = SearchSubscriptions({ title => $title, issn => $issn, orderby => 'title' });

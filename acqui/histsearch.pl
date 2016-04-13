@@ -76,8 +76,8 @@ my $ordernumber             = $input->param( 'ordernumber' );
 my $search_children_too     = $input->param( 'search_children_too' );
 my @created_by              = $input->multi_param('created_by');
 
-my $from_placed_on = eval { dt_from_string( $input->param('from') ) } || dt_from_string;
-my $to_placed_on   = eval { dt_from_string( $input->param('to')   ) } || dt_from_string;
+my $from_placed_on = eval { dt_from_string( scalar $input->param('from') ) } || dt_from_string;
+my $to_placed_on   = eval { dt_from_string( scalar $input->param('to')   ) } || dt_from_string;
 unless ( $input->param('from') ) {
     # Fill the form with year-1
     $from_placed_on->subtract( years => 1 );

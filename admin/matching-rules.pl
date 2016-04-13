@@ -96,18 +96,18 @@ sub add_update_matching_rule {
 
     # do parsing
     my $matcher = C4::Matcher->new($record_type, 1000);
-    $matcher->code($input->param('code'));
-    $matcher->description($input->param('description'));
-    $matcher->threshold($input->param('threshold'));
+    $matcher->code(scalar $input->param('code'));
+    $matcher->description(scalar $input->param('description'));
+    $matcher->threshold(scalar $input->param('threshold'));
 
     # matchpoints
-    my @mp_nums = sort map { /^mp_(\d+)_search_index/ ? int($1): () } $input->param;
+    my @mp_nums = sort map { /^mp_(\d+)_search_index/ ? int($1): () } $input->multi_param;
     foreach my $mp_num (@mp_nums) {
         my $index = $input->param("mp_${mp_num}_search_index");
         my $score = $input->param("mp_${mp_num}_score");
         # components
         my $components = [];
-        my @comp_nums = sort map { /^mp_${mp_num}_c_(\d+)_tag/ ? int($1): () } $input->param;
+        my @comp_nums = sort map { /^mp_${mp_num}_c_(\d+)_tag/ ? int($1): () } $input->multi_param;
         foreach my $comp_num (@comp_nums) {
             my $component = {};
             $component->{'tag'} = $input->param("mp_${mp_num}_c_${comp_num}_tag");
@@ -116,9 +116,9 @@ sub add_update_matching_rule {
             $component->{'length'} = $input->param("mp_${mp_num}_c_${comp_num}_length");
             # norms
             $component->{'norms'} = [];
-            my @norm_nums = sort map { /^mp_${mp_num}_c_${comp_num}_n_(\d+)_norm/ ? int($1): () } $input->param;
+            my @norm_nums = sort map { /^mp_${mp_num}_c_${comp_num}_n_(\d+)_norm/ ? int($1): () } $input->multi_param;
             foreach my $norm_num (@norm_nums) {
-                push @{ $component->{'norms'} }, $input->param("mp_${mp_num}_c_${comp_num}_n_${norm_num}_norm");
+                push @{ $component->{'norms'} }, $input->multi_param("mp_${mp_num}_c_${comp_num}_n_${norm_num}_norm");
             }
             push @$components, $component;
         }
@@ -126,11 +126,11 @@ sub add_update_matching_rule {
     }
 
     # match checks
-    my @mc_nums = sort map { /^mc_(\d+)_id/ ? int($1): () } $input->param;
+    my @mc_nums = sort map { /^mc_(\d+)_id/ ? int($1): () } $input->multi_param;
     foreach my $mc_num (@mc_nums) {
         # source components
         my $src_components = [];
-        my @src_comp_nums = sort map { /^mc_${mc_num}_src_c_(\d+)_tag/ ? int($1): () } $input->param;
+        my @src_comp_nums = sort map { /^mc_${mc_num}_src_c_(\d+)_tag/ ? int($1): () } $input->multi_param;
         foreach my $comp_num (@src_comp_nums) {
             my $component = {};
             $component->{'tag'} = $input->param("mc_${mc_num}_src_c_${comp_num}_tag");
@@ -139,15 +139,15 @@ sub add_update_matching_rule {
             $component->{'length'} = $input->param("mc_${mc_num}_src_c_${comp_num}_length");
             # norms
             $component->{'norms'} = [];
-            my @norm_nums = sort map { /^mc_${mc_num}_src_c_${comp_num}_n_(\d+)_norm/ ? int($1): () } $input->param;
+            my @norm_nums = sort map { /^mc_${mc_num}_src_c_${comp_num}_n_(\d+)_norm/ ? int($1): () } $input->multi_param;
             foreach my $norm_num (@norm_nums) {
-                push @{ $component->{'norms'} }, $input->param("mc_${mc_num}_src_c_${comp_num}_n_${norm_num}_norm");
+                push @{ $component->{'norms'} }, $input->multi_param("mc_${mc_num}_src_c_${comp_num}_n_${norm_num}_norm");
             }
             push @$src_components, $component;
         }
         # target components
         my $tgt_components = [];
-        my @tgt_comp_nums = sort map { /^mc_${mc_num}_tgt_c_(\d+)_tag/ ? int($1): () } $input->param;
+        my @tgt_comp_nums = sort map { /^mc_${mc_num}_tgt_c_(\d+)_tag/ ? int($1): () } $input->multi_param;
         foreach my $comp_num (@tgt_comp_nums) {
             my $component = {};
             $component->{'tag'} = $input->param("mc_${mc_num}_tgt_c_${comp_num}_tag");
@@ -156,9 +156,9 @@ sub add_update_matching_rule {
             $component->{'length'} = $input->param("mc_${mc_num}_tgt_c_${comp_num}_length");
             # norms
             $component->{'norms'} = [];
-            my @norm_nums = sort map { /^mc_${mc_num}_tgt_c_${comp_num}_n_(\d+)_norm/ ? int($1): () } $input->param;
+            my @norm_nums = sort map { /^mc_${mc_num}_tgt_c_${comp_num}_n_(\d+)_norm/ ? int($1): () } $input->multi_param;
             foreach my $norm_num (@norm_nums) {
-                push @{ $component->{'norms'} }, $input->param("mc_${mc_num}_tgt_c_${comp_num}_n_${norm_num}_norm");
+                push @{ $component->{'norms'} }, $input->multi_param("mc_${mc_num}_tgt_c_${comp_num}_n_${norm_num}_norm");
             }
             push @$tgt_components, $component;
         }

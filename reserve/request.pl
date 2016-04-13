@@ -132,7 +132,7 @@ my $biblionumbers = $input->param('biblionumbers');
 if ($multihold) {
     @biblionumbers = split '/', $biblionumbers;
 } else {
-    push @biblionumbers, $input->param('biblionumber');
+    push @biblionumbers, $input->multi_param('biblionumber');
 }
 
 

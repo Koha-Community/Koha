@@ -711,7 +711,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 sub  parse_extended_patron_attributes {
     my ($input) = @_;
-    my @patron_attr = grep { /^patron_attr_\d+$/ } $input->param();
+    my @patron_attr = grep { /^patron_attr_\d+$/ } $input->multi_param();
 
     my @attr = ();
     my %dups = ();
