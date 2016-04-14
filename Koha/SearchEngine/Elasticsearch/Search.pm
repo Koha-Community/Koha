@@ -43,7 +43,7 @@ use C4::Context;
 use Koha::ItemTypes;
 use Koha::AuthorisedValues;
 use Koha::SearchEngine::QueryBuilder;
-
+use MARC::Record;
 use Catmandu::Store::ElasticSearch;
 
 use Data::Dumper; #TODO remove
@@ -120,8 +120,8 @@ sub count {
         Catmandu::Store::ElasticSearch->new( %$params, trace_calls => 0, ) )
       unless $self->store;
 
-    my $searcher = $self->store->bag->searcher(query => $query);
-    my $count = $searcher->count();
+    my $search = $self->store->bag->search( %$query);
+    my $count = $search->total() || 0;
     return $count;
 }
 
