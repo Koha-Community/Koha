@@ -1,20 +1,19 @@
+# Copyright 2015 Catalyst IT
 #
-#===============================================================================
+# This file is part of Koha.
 #
-#         FILE: Koha_SearchEngine_Elasticsearch_Search.t
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-#  DESCRIPTION:
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 #
-#        FILES: ---
-#         BUGS: ---
-#        NOTES: ---
-#       AUTHOR: Chris Cormack (rangi), chrisc@catalyst.net.nz
-# ORGANIZATION: Koha Development Team
-#      VERSION: 1.0
-#      CREATED: 09/12/13 09:43:29
-#     REVISION: ---
-#===============================================================================
-
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 use strict;
 use warnings;
 
