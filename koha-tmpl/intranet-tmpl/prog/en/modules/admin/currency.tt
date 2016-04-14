@@ -125,10 +125,17 @@
 [% END %]
 
 [% IF ( delete_confirm ) %]
-    [% IF ( totalgtzero ) %]
+    [% IF ( nb_of_orders or nb_of_vendors ) %]
     <div class="dialog message">
         <h3>Cannot delete currency <span class="ex">'[% searchfield %]'</span></h3>
-        <p>This currency is used [% total %] times. Deletion not possible</p>
+        <p>
+            [% IF nb_of_orders %]
+                This currency is used by [% nb_of_orders %] orders.
+            [% ELSIF nb_of_vendors %]
+                This currency is used by [% nb_of_vendors %] vendors.
+            [% END %]
+            Deletion not possible
+        </p>
         <form action="[% script_name %]" method="post">
             <input type="submit" value="OK" class="approve" />
         </form>
