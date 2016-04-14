@@ -242,12 +242,12 @@ The possible options are:
 
 Expiry time of this cached entry in seconds.
 
-=item deepcopy
+=item unsafe
 
-If set, this will perform a deep copy of the item when it's retrieved. This
-means that it'll be safe if something later modifies the result of the
-function. Will be ignored in situations where the same behaviour comes from
-the caching layer anyway.
+If set, this will avoid performing a deep copy of the item. This
+means that it won't be safe if something later modifies the result of the
+function. It should be used with caution, and could save processing time
+in some situations where is safe to use it.
 
 =item cache
 
@@ -307,10 +307,23 @@ sub set_in_cache {
 
 Retrieve the value stored under the specified key in the default cache.
 
-The options can set an unsafe flag to avoid a deep copy.
-When this flag is set, you have to know what you are doing!
-If you are retrieving a structure and modify it, you will modify the contain
-of the cache!
+The possible options are:
+
+=over
+
+=item unsafe
+
+If set, this will avoid performing a deep copy of the item. This
+means that it won't be safe if something later modifies the result of the
+function. It should be used with caution, and could save processing time
+in some situations where is safe to use it. Make sure you know what you are doing!
+
+=item cache
+
+The cache object to use if you want to provide your own. It should be an
+instance of C<Cache::*> and follow the same interface as L<Cache::Memcache>.
+
+=back
 
 =cut
 
