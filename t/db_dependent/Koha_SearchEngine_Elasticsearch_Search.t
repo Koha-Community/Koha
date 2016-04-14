@@ -17,7 +17,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 5;    # last test to print
+use Test::More tests => 10;    # last test to print
 use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 
 my $builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new( { index => 'mydb' } );
@@ -36,3 +36,13 @@ is( $searcher->index, 'mydb', 'Testing basic accessor' );
 ok( my $query = $builder->build_query('easy'), 'Build a search query');
 
 ok( my $results = $searcher->search( $query) , 'Do a search ' );
+
+ok( my $marc = $searcher->json2marc( $results->first ), 'Convert JSON to MARC');
+
+is (my $count = $searcher->count( $query ), 0 , 'Get a count of the results, without returning results ');
+
+ok ($results = $searcher->search_compat( $query ), 'Test search_compat' );
+
+ok (($results,$count) = $searcher->search_auth_compat ( $query ), 'Test search_auth_compat' );
+
+is ( $count = $searcher->count_auth_use($searcher,1), 0, 'Testing count_auth_use');
