@@ -379,9 +379,9 @@ Item types administration
             [% END %]
             </td>
             <td>[% itemtype.checkinmsg | html_line_break %]</td>
-            <td>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype |html %]">Edit</a>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype |html %]">Delete</a>
+            <td class="actions">
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype |html %]" class="btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype |html %]" class="btn btn-mini"><i class="fa fa-trash"></i> Delete</a>
             </td>
           </tr>
           [% END %]
