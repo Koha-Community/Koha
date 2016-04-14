@@ -274,7 +274,7 @@
         <th>Subfield</th>
         <th>Text</th>
         <th>Constraints</th>
-        <th>Delete</th>
+        <th>&nbsp;</th>
     </tr>
     [% FOREACH loo IN loop %]
     <tr>
@@ -307,7 +307,7 @@
                 [% IF ( loo.value_builder ) %] | <strong>Plugin:</strong>[% loo.value_builder %],[% END %]
             [% END %]
         </td>
-        <td><a href="[% loo.delete %]">Delete</a></td>
+        <td><a href="[% loo.delete %]" class="btn btn-mini"><i class="fa fa-trash"></i> Delete</a></td>
     </tr>
     [% END %]
 </table>
