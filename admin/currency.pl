@@ -132,21 +132,23 @@ sub delete_confirm {
     my $curr = shift;
 
     $template->param( delete_confirm => 1 );
-    my $total_row = $dbh->selectrow_hashref(
-        'select count(*) as total from aqbooksellers where currency=?',
-        {}, $curr );
+    my ($nb_of_vendors) = $dbh->selectrow_array(q{
+        select count(*) from aqbooksellers
+        where listprice = ? or invoiceprice = ?
+    }, {}, $curr, $curr);
+    my ($nb_of_orders) = $dbh->selectrow_array(q{
+        select count(*) from aqorders
+        where currency = ?
+    }, {}, $curr);
 
     my $curr_ref = $dbh->selectrow_hashref(
         'select currency,rate from currency where currency=?',
         {}, $curr );
 
-    if ( $total_row->{total} ) {
-        $template->param( totalgtzero => 1 );
-    }
-
     $template->param(
         rate  => $curr_ref->{rate},
-        total => $total_row->{total}
+        nb_of_orders => $nb_of_orders,
+        nb_of_vendors => $nb_of_vendors,
     );
 
     return;
