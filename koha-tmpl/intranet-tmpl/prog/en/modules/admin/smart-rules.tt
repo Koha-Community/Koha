@@ -173,7 +173,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>On shelf holds allowed</th>
                 <th>Item level holds</th>
                 <th>Rental discount (%)</th>
-                <th colspan="2">&nbsp;</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -258,9 +258,9 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                                                             [% END %]</td>
                                                         <td>[% IF rule.opacitemholds == 'F'%]Force[% ELSIF rule.opacitemholds == 'Y'%]Allow[% ELSE %]Don't allow[% END %]</td>
 							<td>[% rule.rentaldiscount %]</td>
-                            <td><a href="#" class="editrule">Edit</a></td>
-							<td>
-								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]">Delete</a>
+                                                        <td class="actions">
+                                                          <a href="#" class="editrule btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
+                                                          <a class="btn btn-mini" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]"><i class="fa fa-trash"></i> Delete</a>
 							</td>
                 	</tr>
             	[% END %]
@@ -337,10 +337,10 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                         </select>
                     </td>
                     <td><input type="text" name="rentaldiscount" id="rentaldiscount" size="2" /></td>
-                    <td colspan="2">
+                    <td class="actions">
                         <input type="hidden" name="branch" value="[% current_branch %]"/>
-                        <input type="submit" value="Save" class="submit" />
-                        <input type="button" name="cancel" value="Clear" onclick="clear_edit();return false;" />
+                        <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save</button>
+                        <button name="cancel" onclick="clear_edit();return false;" class="btn btn-mini"><i class="fa fa-undo"></i> Clear</button>
                     </td>
                 </tr>
                 <tfoot>
@@ -389,8 +389,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     <th>Hold policy</th>
                     <th>Hold pickup library match</th>
                     <th>Return policy</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
+                    <th>Actions</th>
                 </tr>
                 <tr>
                     <td><em>Defaults[% UNLESS ( default_rules ) %] (not set)[% END %]</em></td>
@@ -479,9 +478,9 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             </option>
                         </select>
                     </td>
-                    <td><input type="submit" value="Save" class="submit" /></td>
-                    <td>
-                        <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch %]">Unset</a>
+                    <td class="actions">
+                        <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save</button>
+                        <a class="btn btn-mini" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch %]"><i class="fa fa-undo"></i> Unset</a>
                     </td>
                 </tr>
             </table>
@@ -531,8 +530,8 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             [% END %]
                         </td>
 
-                        <td>
-                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% branch_cat_rule_loo.categorycode %]&amp;branch=[% current_branch %]">Delete</a>
+                        <td class="actions">
+                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% branch_cat_rule_loo.categorycode %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 [% END %]
@@ -546,7 +545,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     </td>
                     <td><input name="maxissueqty" size="3" /></td>
                     <td><input name="maxonsiteissueqty" size="3" /></td>
-                    <td><input type="submit" value="Add" class="submit" /></td>
+                    <td class="actions"><button type="submit" class="btn btn-mini"><i class="fa fa-plus"></i> Add</td>
                 </tr>
             </table>
         </form>
@@ -620,8 +619,8 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                                 Error - unknown option
                             [% END %]
                         </td>
-                        <td>
-                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% branch_item_rule_loo.itemtype %]&amp;branch=[% current_branch %]">Delete</a>
+                        <td class="actions">
+                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% branch_item_rule_loo.itemtype %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 [% END %]
@@ -662,7 +661,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             <option value="noreturn">Item floats</option>
                         </select>
                     </td>
-                    <td><input type="submit" value="Add" class="submit" /></td>
+                    <td class="actions"><button type="submit" class="btn btn-mini"><i class="fa fa-plus"></i> Add</button></td>
                 </tr>
             </table>
         </form>
