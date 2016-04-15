@@ -577,7 +577,9 @@ opacdomain="$OPACPREFIX$name$OPACSUFFIX$DOMAIN"
 intradomain="$INTRAPREFIX$name$INTRASUFFIX$DOMAIN"
 
 # Check everything is ok with letsencrypt, die otherwise
-check_letsencrypt
+if [ "$CLO_LETSENCRYPT" = "yes" ]; then
+    check_letsencrypt
+fi
 
 if [ -f $PASSWDFILE ] && [ `cat $PASSWDFILE | grep "^$name:"` ]
 then
