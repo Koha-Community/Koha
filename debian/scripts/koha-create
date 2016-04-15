@@ -361,7 +361,7 @@ letsencrypt_instance()
     # enable redirect from http to https on port 80
     sed -i "s:^\s*#\(.*\)#nohttps$:\1:" "/etc/apache2/sites-available/$name.conf"
     # make koha-list --letsencrypt aware of this instance # could be done by checking apache conf instead
-    touch /var/lib/koha/$name/letsencrypt.enabled
+    echo -e "opacdomain=\"$opacdomain\"\nintradomain=\"$intradomain\"" > /var/lib/koha/$name/letsencrypt.enabled
     # restart apache with working certs
     service apache2 restart
 }

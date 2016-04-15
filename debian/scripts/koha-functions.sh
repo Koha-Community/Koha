@@ -43,6 +43,46 @@ get_apache_config_for()
     fi
 }
 
+get_opacdomain_for()
+{
+    local site=$1
+
+    if [ -e /etc/koha/koha-sites.conf ]; then
+        . /etc/koha/koha-sites.conf
+    else
+        echo "Error: /etc/koha/koha-sites.conf not present." 1>&2
+        exit 1
+    fi
+    local opacdomain="$OPACPREFIX$site$OPACSUFFIX$DOMAIN"
+    echo "$opacdomain"
+}
+
+get_intradomain_for()
+{
+    local site=$1
+
+    if [ -e /etc/koha/koha-sites.conf ]; then
+        . /etc/koha/koha-sites.conf
+    else
+        echo "Error: /etc/koha/koha-sites.conf not present." 1>&2
+        exit 1
+    fi
+    local intradomain="$INTRAPREFIX$site$INTRASUFFIX$DOMAIN"
+    echo "$intradomain"
+}
+
+letsencrypt_get_opacdomain_for()
+{
+    local site=$1
+
+    if [ -e /var/lib/koha/$site/letsencrypt.enabled ]; then
+        . /var/lib/koha/$site/letsencrypt.enabled
+    else
+        local opacdomain=$(get_opacdomain_for $site)
+    fi
+    echo "$opacdomain"
+}
+
 is_enabled()
 {
     local site=$1

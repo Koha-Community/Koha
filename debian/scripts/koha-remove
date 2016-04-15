@@ -80,6 +80,7 @@ eof
     koha-stop-zebra $name || /bin/true
 
     instancefile=$(get_apache_config_for $name)
+    le_opacdomain=$(letsencrypt_get_opacdomain_for $name)
 
     [ -f "$instancefile" ]  && \
         rm "$instancefile"
@@ -97,6 +98,10 @@ eof
         rm "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
     [ -f "/etc/koha/sites/$name/zebra.passwd" ] && \
         rm "/etc/koha/sites/$name/zebra.passwd"
+    [ -f "/var/lib/koha/$name/letsencrypt.enabled" ] && \
+        rm -r "/var/lib/koha/$name/letsencrypt.enabled"
+    [ -f "/etc/letsencrypt/renewal/$le_opacdomain.conf" ] && \
+        rm -r "/etc/letsencrypt/renewal/$le_opacdomain.conf"
     # Maybe a user has left something in the config directory they want to keep? We won't delete it here, nor throw an error if the have.
     [ -d "/etc/koha/sites/$name" ] && \
         rmdir --ignore-fail-on-non-empty "/etc/koha/sites/$name"
