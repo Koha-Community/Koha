@@ -94,7 +94,7 @@ sub set_preferences {
 
             next if ( !defined( $pref ) );
 
-            my $value = join( ',', $query->param( $param ) );
+            my $value = join( ',', $query->multi_param( $param ) );
 
             C4::Context->set_preference( $pref, $value );
         }

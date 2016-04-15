@@ -64,7 +64,7 @@ if ( C4::Context->preference("LocalCoverImages") ) {
         $imagenumber = $data->param('imagenumber');
     }
     elsif ( defined $data->param('biblionumber') ) {
-        my @imagenumbers = ListImagesForBiblio( $data->param('biblionumber') );
+        my @imagenumbers = ListImagesForBiblio( $data->multi_param('biblionumber') );
         if (@imagenumbers) {
             $imagenumber = $imagenumbers[0];
         }

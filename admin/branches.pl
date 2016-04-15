@@ -87,7 +87,7 @@ if ( $op eq 'add_form' ) {
     if ($is_a_modif) {
         my $library = Koha::Libraries->find($branchcode);
         for my $field (@fields) {
-            $library->$field( $input->param($field) );
+            $library->$field( scalar $input->param($field) );
         }
         $library->update_categories( \@categories );
 
@@ -168,9 +168,9 @@ if ( $op eq 'add_form' ) {
     if ($is_a_modif) {
         my $category = Koha::LibraryCategories->find($categorycode);
         for my $field (@fields) {
-            $category->$field( $input->param($field) );
+            $category->$field( scalar $input->param($field) );
         }
-        $category->show_in_pulldown( $input->param('show_in_pulldown') eq 'on' );
+        $category->show_in_pulldown( scalar $input->param('show_in_pulldown') eq 'on' );
         eval { $category->store; };
         if ($@) {
             push @messages, { type => 'alert', code => 'error_on_update_category' };
@@ -183,7 +183,7 @@ if ( $op eq 'add_form' ) {
                 ( map { $_ => scalar $input->param($_) || undef } @fields )
             }
         );
-        $category->show_in_pulldown( $input->param('show_in_pulldown') eq 'on' );
+        $category->show_in_pulldown( scalar $input->param('show_in_pulldown') eq 'on' );
         eval { $category->store; };
         if ($@) {
             push @messages, { type => 'alert', code => 'error_on_insert_category' };
