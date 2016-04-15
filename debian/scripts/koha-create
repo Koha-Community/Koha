@@ -331,8 +331,11 @@ enable_sru_server()
 check_letsencrypt()
 {
     if [ $(dpkg-query -W -f='${Status}' letsencrypt 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+        set +e
         apt-cache show letsencrypt &>/dev/null
-        if [ $? -eq 0 ]; then
+        local aptcacheshow=$?
+        set -e
+        if [ $aptcacheshow -eq 0 ]; then
                 read -r -p "The letsencrypt package is not installed. Do it now?  [y/N] " response
                 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
                     apt-get install -y letsencrypt
