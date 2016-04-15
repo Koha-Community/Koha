@@ -81,11 +81,11 @@ sub handle_form_action {
                         message_attribute_id    => $option->{'message_attribute_id'} };
         
         # find the desired transports
-        @{$updater->{'message_transport_types'}} = $query->param( $option->{'message_attribute_id'} );
+        @{$updater->{'message_transport_types'}} = $query->multi_param( $option->{'message_attribute_id'} );
         next OPTION unless $updater->{'message_transport_types'};
 
         if ( $option->{'has_digest'} ) {
-            if ( List::Util::first { $_ == $option->{'message_attribute_id'} } $query->param( 'digest' ) ) {
+            if ( List::Util::first { $_ == $option->{'message_attribute_id'} } $query->multi_param( 'digest' ) ) {
                 $updater->{'wants_digest'} = 1;
             }
         }

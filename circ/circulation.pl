@@ -176,7 +176,7 @@ if ( @$barcodes ) {
         $stickyduedate  = $query->param('stickyduedate');
         $duedatespec    = $query->param('duedatespec');
     }
-    $session->param('auto_renew', $query->param('auto_renew'));
+    $session->param('auto_renew', scalar $query->param('auto_renew'));
 }
 else {
     $session->clear('auto_renew');

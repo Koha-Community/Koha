@@ -171,8 +171,8 @@ sub add_update_attribute_type {
     $attr_type->password_allowed($password_allowed);
     my $display_checkout = $input->param('display_checkout');
     $attr_type->display_checkout($display_checkout);
-    $attr_type->category_code($input->param('category_code'));
-    $attr_type->class($input->param('class'));
+    $attr_type->category_code(scalar $input->param('category_code'));
+    $attr_type->class(scalar $input->param('class'));
     my @branches = $input->multi_param('branches');
     $attr_type->branches( \@branches );
 

@@ -42,7 +42,7 @@ my ($template, $loggedinuser, $cookie)
 
 if ( $op eq "create_template" ) {
   $template_id = '' unless $cgi->param('duplicate_current_template');
-  $template_id = AddModificationTemplate( $cgi->param('template_name'), $template_id );
+  $template_id = AddModificationTemplate( scalar $cgi->param('template_name'), $template_id );
 
 } elsif ( $op eq "delete_template" ) {
 
@@ -103,11 +103,11 @@ if ( $op eq "create_template" ) {
     }
 
 } elsif ( $op eq "delete_action" ) {
-  DelModificationTemplateAction( $cgi->param('mmta_id') );
+  DelModificationTemplateAction( scalar $cgi->param('mmta_id') );
 
 } elsif ( $op eq "move_action" ) {
 
-  MoveModificationTemplateAction( $cgi->param('mmta_id'), $cgi->param('where') );
+  MoveModificationTemplateAction( scalar $cgi->param('mmta_id'), scalar $cgi->param('where') );
 
 }
 
