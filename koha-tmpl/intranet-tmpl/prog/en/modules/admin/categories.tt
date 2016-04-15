@@ -9,98 +9,12 @@
 [% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" id="js">
-//<![CDATA[
-    $(document).ready(function() {
-        $("#table_categorie").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [{
-                "aTargets": [-1, -2],
-                "bSortable": false,
-                "bSearchable": false
-            }, {
-                "aTargets": [3, 4, 5],
-                "sType": "natural"
-            }, ],
-            "aaSorting": [
-                [1, "asc"]
-            ],
-            "sPaginationType": "four_button"
-        }));
-
-        $("#enrolmentperioddate").datepicker({
-            minDate: 1
-        }); // Require that "until date" be in the future
-
-        if ($("#branches option:selected").length < 1) {
-            $("#branches option:first").attr("selected", "selected");
-        }
-    });
-
-    function isNotNull(f, noalert) {
-        if (f.value.length == 0) {
-            return false;
-        }
-        return true;
-    }
-
-    function isNum(v, maybenull) {
-        var n = new Number(v.value);
-        if (isNaN(n)) {
-            return false;
-        }
-        if (maybenull == 0 && v.value == '') {
-            return false;
-        }
-        return true;
-    }
-
-    // to check if the data are correctly entered.
-    function Check(ff) {
-        var ok = 0;
-        var _alertString = _("Form not submitted because of the following problem(s)");
-        _alertString += "\n-------------------------------------------------------------------\n\n";
-        ff.categorycode.value = $.trim(ff.categorycode.value);
-        if (ff.categorycode.value.length == 0) {
-            ok = 1;
-            _alertString += _("- categorycode missing") + "\n";
-        } else {
-            var patt = /^[a-zA-Z0-9\-_]+$/g;
-            if (!patt.test(ff.categorycode.value)) {
-                ok = 1;
-                _alertString += _("- category code can only contain the following characters: letters, numbers, - and _") + "\n";
-            }
-        }
-        if (!(ff.category_type.value)) {
-            ok = 1;
-            _alertString += _("- category type missing") + "\n";
-        }
-        if (!(isNotNull(ff.description, 1))) {
-            ok = 1;
-            _alertString += _("- description missing") + "\n";
-        }
-        if (!isNum(ff.upperagelimit, 0) && ff.category_type.value == 'C') {
-            ok = 1;
-            _alertString += _("- upperagelimit is not a number") + "\n";
-
-        }
-        if (!(ff.enrolmentperioddate.value || ff.enrolmentperiod.value)) {
-            ok = 1;
-            _alertString += _("- either Enrollment period or Until date must be provided") + "\n";
-        }
-        if (ff.enrolmentperioddate.value && ff.enrolmentperiod.value) {
-            document.getElementById('enrolmentmessage').className = "error";
-            return false;
-        }
-
-        if (ok) { // if there is a problem
-            alert(_alertString);
-            return false;
-        }
-        // if all is good
-        ff.submit();
-    }
-//]]>
+<script type="text/javascript">
+    var MSG_CATEGORYCODE_CHARS = _("Category code can only contain the following characters: letters, numbers, - and _.");
+    var MSG_BOTH_ENROLLMENTPERIODS = _("Please choose only one enrollment period setting.");
+    var MSG_ONE_ENROLLMENTPERIOD = ("Please choose an enrollment period in months OR by date.");
 </script>
+<script type="text/javascript" src="[% themelang %]/js/categories.js"></script>
 <style type="text/css">#enrolmentmessage.hint { display : none; }</style>
 </head>
 <body id="admin_categorie" class="admin">
@@ -141,7 +55,7 @@
 [% END %]
 
 [% IF op == 'add_form' %]
-    <form name="Aform" action="/cgi-bin/koha/admin/categories.pl" method="post">
+    <form id="category_form" action="/cgi-bin/koha/admin/categories.pl" method="post">
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="checked" value="0" />
         [% IF category %]
@@ -159,28 +73,27 @@
                 [% ELSE %]
                     <li>
                         <label for="categorycode" class="required">Category code: </label>
-                        <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" onblur="toUC(this)" />
+                        <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" class="required" required="required" />
                         <span class="required">Required</span>
                     </li>
                 [% END %]
                 <li>
                     <label for="description" class="required">Description: </label>
-                    <input type="text" name="description" id="description" size="40" maxlength="80" value="[% category.description |html %]" />
+                    <input type="text" name="description" id="description" size="40" maxlength="80" class="required" required="required" value="[% category.description |html %]" />
                     <span class="required">Required</span>
                 </li>
                 <li>
-                    <label for="enrolmentperiod" class="required">Enrollment period: </label>
+                    <span class="label">Enrollment period: </span>
                     <fieldset>
                         <legend>Choose one</legend>
                         <ol>
                             <li>
                                 <label for="enrolmentperiod" style="width:6em;">In months: </label>
-                                <input type="text" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="[% IF category.enrolmentperiod %][% category.enrolmentperiod %][% END %]" /> months
+                                <input type="text" class="enrollmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="[% IF category.enrolmentperiod %][% category.enrolmentperiod %][% END %]" /> months
                             </li>
                             <li>
                                 <label for="enrolmentperioddate" style="width:6em;">Until date: </label>
-                                <input type="text" name="enrolmentperioddate" id="enrolmentperioddate" value="[% category.enrolmentperioddate | $KohaDates %]" />
-                                <div id="enrolmentmessage" class="hint" style="margin-left:0;">Cannot have "months" and "until date" at the same time</div>
+                                <input type="text" class="enrollmentperiod" name="enrolmentperioddate" id="enrolmentperioddate" value="[% category.enrolmentperioddate | $KohaDates %]" />
                             </li>
                         </ol>
                     </fieldset>
@@ -307,7 +220,10 @@
                 [% INCLUDE 'messaging-preference-form.inc' %]
             </fieldset>
         [% END %]
-        <fieldset class="action"><input type="button" value="Save" onclick="Check(this.form);" /> </fieldset>
+        <fieldset class="action">
+            <input type="submit" value="Save" />
+            <a href="/cgi-bin/koha/admin/categories.pl" class="cancel">Cancel</a>
+        </fieldset>
     </form>
 [% END %]
 
