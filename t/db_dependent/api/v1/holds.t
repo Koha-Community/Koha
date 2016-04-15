@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 30;
+use Test::More tests => 39;
 use Test::Mojo;
 
 use DateTime;
@@ -56,12 +56,25 @@ my $borrowernumber2 = $borrower2->borrowernumber;
 my $biblionumber = create_biblio('RESTful Web APIs');
 my $itemnumber = create_item($biblionumber, 'TEST000001');
 
+$dbh->do('DELETE FROM reserves');
+
 my $reserve_id = C4::Reserves::AddReserve($branchcode, $borrowernumber,
     $biblionumber, undef, 1, undef, undef, undef, '', $itemnumber);
 
 # Add another reserve to be able to change first reserve's rank
 C4::Reserves::AddReserve($branchcode, $borrowernumber2,
     $biblionumber, undef, 2, undef, undef, undef, '', $itemnumber);
+
+$t->get_ok('/api/v1/holds')
+    ->status_is(200)
+    ->json_has('/0')
+    ->json_has('/1')
+    ->json_hasnt('/2');
+
+$t->get_ok('/api/v1/holds?priority=2')
+    ->status_is(200)
+    ->json_is('/0/borrowernumber', $borrowernumber2)
+    ->json_hasnt('/1');
 
 my $suspend_until = DateTime->now->add(days => 10)->ymd;
 my $put_data = {
@@ -92,8 +105,8 @@ $t->get_ok("/api/v1/holds?borrowernumber=$borrowernumber")
 
 my $inexisting_borrowernumber = $borrowernumber2 + 1;
 $t->get_ok("/api/v1/holds?borrowernumber=$inexisting_borrowernumber")
-  ->status_is(404)
-  ->json_has('/error');
+  ->status_is(200)
+  ->json_is([]);
 
 $dbh->do('DELETE FROM issuingrules');
 $dbh->do(q{

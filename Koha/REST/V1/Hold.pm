@@ -23,20 +23,20 @@ use C4::Biblio;
 use C4::Reserves;
 
 use Koha::Patrons;
+use Koha::Holds;
 use Koha::DateUtils;
 
 sub list {
     my ($c, $args, $cb) = @_;
 
-    my $borrowernumber = $c->param('borrowernumber');
-    my $borrower = Koha::Patrons->find($borrowernumber);
-    unless ($borrower) {
-        return $c->$cb({error => "Borrower not found"}, 404);
+    my $params = $c->req->query_params->to_hash;
+    my @valid_params = Koha::Holds->_resultset->result_source->columns;
+    foreach my $key (keys %$params) {
+        delete $params->{$key} unless grep { $key eq $_ } @valid_params;
     }
+    my $holds = Koha::Holds->search($params)->unblessed;
 
-    my @reserves = C4::Reserves::GetReservesFromBorrowernumber($borrowernumber);
-
-    return $c->$cb(\@reserves, 200);
+    return $c->$cb($holds, 200);
 }
 
 sub add {
