@@ -68,6 +68,18 @@ function load_group_subgroups () {
 
 $(document).ready(function(){
 
+$(".goback").on("click",function(){
+    window.history.back();
+});
+
+$("#addColumn").on("click",function(){
+    addColumn();
+});
+
+$("#delColumn").on("click",function(){
+    delColumn();
+});
+
 [% IF (saved1) %]
     var rtable = $("#table_reports").dataTable($.extend(true, {}, dataTablesDefaults, {
         'bAutoWidth': false,
@@ -466,7 +478,7 @@ canned reports and writing custom SQL reports.</p>
 
 <fieldset class="action">
     <input type="hidden" name="phase" value="Choose this type" />
-    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="button" name="back" value="&lt;&lt; Back" class="goback" />
     <input type="submit" name="submit" value="Next &gt;&gt;" />
 </fieldset>
 </form>
@@ -514,8 +526,8 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 </optgroup>
 </select></div>
-<div style="width: 6.3em; float: right; margin-top: 100px"><input type="button" name="Add" value="Add" class="button" style="width:6em;" onclick="addColumn()" /><br />
-<input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width: 6em; margin: 1em 0;" onclick="delColumn()" /></div>
+<div style="width: 6.3em; float: right; margin-top: 100px"><input type="button" name="Add" value="Add" class="button" style="width:6em;" id="addColumn" /><br />
+<input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width: 6em; margin: 1em 0;" id="delColumn" /></div>
 </div>
 
 <div class="yui-u">
@@ -526,7 +538,7 @@ canned reports and writing custom SQL reports.</p>
 <div class="yui-g">
 <fieldset class="action">
     <input type="hidden" name="phase" value="Choose these columns" />
-    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="button" name="back" value="&lt;&lt; Back" class="goback" />
     <input type="submit" name="submit" value="Next &gt;&gt;" />
 </fieldset>
 </div>
@@ -599,7 +611,7 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 <fieldset class="action"><input type="hidden" name="phase" value="Choose these criteria" />
-    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="button" name="back" value="&lt;&lt; Back" class="goback" />
     <input type="submit" name="submit" value="Next &gt;&gt;" /> </fieldset>
 </form>
 [% END %]
@@ -631,7 +643,7 @@ canned reports and writing custom SQL reports.</p>
 </table></fieldset>
 
 <fieldset class="action"><input type="hidden" name="phase" value="Choose these operations" />
-    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="button" name="back" value="&lt;&lt; Back" class="goback" />
     <input type="submit" name="submit" value="Next &gt;&gt;" /></fieldset>
 </form>
 [% END %]
@@ -738,7 +750,7 @@ canned reports and writing custom SQL reports.</p>
         </form>
         <!-- Go back to editing -->
         <form action='/cgi-bin/koha/reports/guided_reports.pl'>
-            <button type="button" class="new" onclick="history.back()"><i class="fa fa-fw fa-pencil"></i> Edit SQL</button>
+            <button type="button" class="new goback"><i class="fa fa-fw fa-pencil"></i> Edit SQL</button>
         </form>
     </div>
 [% END %]
@@ -1005,7 +1017,7 @@ Sub report:<select name="subreport">
     [% ELSE %]
     [% END %]
     <div id="onerror_actions">
-        <a href="javascript:window.history.back()" class="button">Return to previous page</a>
+        <a class="button goback">Return to previous page</a>
     </div>
 [% END %]
 </div>
