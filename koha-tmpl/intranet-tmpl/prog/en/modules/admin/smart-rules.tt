@@ -25,7 +25,13 @@ function clear_edit(){
     $(edit_row).find("td:last input[name='clear']").remove();
 }
 
+var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this rule? This cannot be undone.");
+
 $(document).ready(function() {
+    $(".delete").on("click",function(){
+        return confirmDelete(MSG_CONFIRM_DELETE);
+    });
+
         $('#cap_fine_to_replacement_price').on('change', function(){
             $('#overduefinescap').prop('disabled', $(this).is(':checked') );
         });
@@ -260,7 +266,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 							<td>[% rule.rentaldiscount %]</td>
                                                         <td class="actions">
                                                           <a href="#" class="editrule btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
-                                                          <a class="btn btn-mini" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                                                          <a class="btn btn-mini delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]"><i class="fa fa-trash"></i> Delete</a>
 							</td>
                 	</tr>
             	[% END %]
@@ -480,7 +486,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     </td>
                     <td class="actions">
                         <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save</button>
-                        <a class="btn btn-mini" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch %]"><i class="fa fa-undo"></i> Unset</a>
+                        <a class="btn btn-mini delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch %]" id="unset"><i class="fa fa-undo"></i> Unset</a>
                     </td>
                 </tr>
             </table>
@@ -531,7 +537,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                         </td>
 
                         <td class="actions">
-                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% branch_cat_rule_loo.categorycode %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-mini delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% branch_cat_rule_loo.categorycode %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 [% END %]
@@ -620,7 +626,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                             [% END %]
                         </td>
                         <td class="actions">
-                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% branch_item_rule_loo.itemtype %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-mini delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% branch_item_rule_loo.itemtype %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 [% END %]
