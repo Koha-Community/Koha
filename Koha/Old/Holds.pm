@@ -43,7 +43,7 @@ This object represents a set of holds that have been filled or canceled
 
 =cut
 
-sub type {
+sub _type {
     return 'OldReserve';
 }
 
