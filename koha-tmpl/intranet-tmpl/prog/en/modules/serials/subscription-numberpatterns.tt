@@ -180,15 +180,30 @@ $(document).ready(function(){
                         [% ELSE %]
                             <option value="dayname">Name of day</option>
                         [% END %]
+                        [% IF (value == "dayabrv") %]
+                            <option selected="selected" value="dayabrv">Name of day (abbreviated)</option>
+                        [% ELSE %]
+                            <option value="dayabrv">Name of day (abbreviated)</option>
+                        [% END %]
                         [% IF (value == "monthname") %]
                             <option selected="selected" value="monthname">Name of month</option>
                         [% ELSE %]
                             <option value="monthname">Name of month</option>
                         [% END %]
+                        [% IF (value == "monthabrv") %]
+                            <option selected="selected" value="monthabrv">Name of month (abbreviated)</option>
+                        [% ELSE %]
+                            <option value="monthabrv">Name of month (abbreviated)</option>
+                        [% END %]
                         [% IF (value == "season") %]
                             <option selected="selected" value="season">Name of season</option>
                         [% ELSE %]
                             <option value="season">Name of season</option>
+                        [% END %]
+                        [% IF (value == "seasonabrv") %]
+                            <option selected="selected" value="seasonabrv">Name of season (abbreviated)</option>
+                        [% ELSE %]
+                            <option value="seasonabrv">Name of season (abbreviated)</option>
                         [% END %]
                       </select>
                     [% END %]

@@ -2483,8 +2483,11 @@ sub GetNextDate {
 _numeration returns the string corresponding to $value in the num_type
 num_type can take :
     -dayname
+    -dayabrv
     -monthname
+    -monthabrv
     -season
+    -seasonabrv
 =cut
 
 #'
@@ -2505,6 +2508,16 @@ sub _numeration {
             locale  => $locale,
         );
         $string = $dt->strftime("%A");
+    } elsif ( $num_type =~ /^dayabrv$/ ) {
+        # 1970-11-01 was a Sunday
+        $value = $value % 7;
+        my $dt = DateTime->new(
+            year    => 1970,
+            month   => 11,
+            day     => $value + 1,
+            locale  => $locale,
+        );
+        $string = $dt->strftime("%a");
     } elsif ( $num_type =~ /^monthname$/ ) {
         $value = $value % 12;
         my $dt = DateTime->new(
@@ -2513,10 +2526,22 @@ sub _numeration {
             locale  => $locale,
         );
         $string = $dt->strftime("%B");
+    } elsif ( $num_type =~ /^monthabrv$/ ) {
+        $value = $value % 12;
+        my $dt = DateTime->new(
+            year    => 1970,
+            month   => $value + 1,
+            locale  => $locale,
+        );
+        $string = $dt->strftime("%b");
     } elsif ( $num_type =~ /^season$/ ) {
         my @seasons= qw( Spring Summer Fall Winter );
         $value = $value % 4;
         $string = $seasons[$value];
+    } elsif ( $num_type =~ /^seasonabrv$/ ) {
+        my @seasonsabrv= qw( Spr Sum Fal Win );
+        $value = $value % 4;
+        $string = $seasonsabrv[$value];
     } else {
         $string = $value;
     }
