@@ -344,9 +344,13 @@ check_letsencrypt()
                 fi
         else
             echo "No installation candidate available for package letsencrypt."
-            read -r -p "If you have a symlink from /usr/bin/letsencrypt to letsencrypt-auto, it should work. [y/N] " response
-            if [[ ! $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-                die "You have to install letsencrypt to use the --letsencrypt parameter."
+            if [[ -f /usr/bin/letsencrypt ]]; then
+                read -r -p "If you have a symlink from /usr/bin/letsencrypt to letsencrypt-auto, it should work. [y/N] " response
+                if [[ ! $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+                    die "You have to install letsencrypt to use the --letsencrypt parameter."
+                fi
+            else
+                die "You can create a symlink from /usr/bin/letsencrypt to letsencrypt-auto."
             fi
         fi
     fi
