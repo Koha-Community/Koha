@@ -18,7 +18,9 @@ $(document).ready(function() {
 	[% END %]
 	$("#dateofbirth").datepicker({ maxDate: "-1D", yearRange: "c-120:" });
 	dateformat = $("#dateofbirth").siblings(".hint").first().html();
-	write_age();
+    if( $('#dateofbirth').length ) {
+        write_age();
+    }
 	$("#entryform").validate({
 		rules: {
 			email: {
