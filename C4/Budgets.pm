@@ -397,7 +397,14 @@ sub GetBudgetName {
     return $sth->fetchrow_array;
 }
 
-# -------------------------------------------------------------------
+=head2 GetBudgetAuthCats
+
+  my $auth_cats = &GetBudgetAuthCats($budget_period_id);
+
+Return the list of authcat for a given budget_period_id
+
+=cut
+
 sub GetBudgetAuthCats  {
     my ($budget_period_id) = shift;
     # now, populate the auth_cats_loop used in the budget planning button
@@ -410,11 +417,7 @@ sub GetBudgetAuthCats  {
         $authcats{$sort1_authcat}=1 if $sort1_authcat;
         $authcats{$sort2_authcat}=1 if $sort2_authcat;
     }
-    my @auth_cats_loop;
-    foreach (sort keys %authcats) {
-        push @auth_cats_loop,{ authcat => $_ };
-    }
-    return \@auth_cats_loop;
+    return [ sort keys %authcats ];
 }
 
 # -------------------------------------------------------------------

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use Modern::Perl;
-use Test::More tests => 133;
+use Test::More tests => 134;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -635,11 +635,16 @@ is( C4::Budgets::GetBudget($budget_id21)->{budget_owner_id},
 
 # Test GetBudgetAuthCats
 
-my $budgetPeriodId = 1;
+my $budgetPeriodId = AddBudgetPeriod({
+    budget_period_startdate   => '2008-01-01',
+    budget_period_enddate     => '2008-12-31',
+    budget_period_description => 'just another budget',
+    budget_period_active      => 0,
+});
 
-my $bdgts = GetBudgets();
+$budgets = GetBudgets();
 my $i = 0;
-for my $budget ( @{$bdgts} )
+for my $budget ( @$budgets )
 {
     $budget->{sort1_authcat} = "sort1_authcat_$i";
     $budget->{sort2_authcat} = "sort2_authcat_$i";
@@ -653,7 +658,20 @@ my $authCat = GetBudgetAuthCats($budgetPeriodId);
 is( scalar @{$authCat}, $i * 2, "GetBudgetAuthCats returns only non-empty sorting categories (no empty authCat in db)" );
 
 $i = 0;
-for my $budget ( @{$bdgts} )
+for my $budget ( @$budgets )
+{
+    $budget->{sort1_authcat} = "sort_authcat_$i";
+    $budget->{sort2_authcat} = "sort_authcat_$i";
+    $budget->{budget_period_id} = $budgetPeriodId;
+    ModBudget( $budget );
+    $i++;
+}
+
+$authCat = GetBudgetAuthCats($budgetPeriodId);
+is( scalar @$authCat, scalar @$budgets, "GetBudgetAuthCats returns distinct authCat" );
+
+$i = 0;
+for my $budget ( @$budgets )
 {
     $budget->{sort1_authcat} = "sort1_authcat_$i";
     $budget->{sort2_authcat} = "";
@@ -667,7 +685,7 @@ $authCat = GetBudgetAuthCats($budgetPeriodId);
 is( scalar @{$authCat}, $i, "GetBudgetAuthCats returns only non-empty sorting categories (empty sort2_authcat on all records)" );
 
 $i = 0;
-for my $budget ( @{$bdgts} )
+for my $budget ( @$budgets )
 {
     $budget->{sort1_authcat} = "";
     $budget->{sort2_authcat} = "";

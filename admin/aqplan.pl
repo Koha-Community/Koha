@@ -127,7 +127,7 @@ while ( my ($category) = $sth->fetchrow_array ) {
 push( @category_list, 'MONTHS' );
 push( @category_list, 'ITEMTYPES' );
 push( @category_list, 'BRANCHES' );
-push( @category_list, $$_{'authcat'} ) foreach @$auth_cats_loop;
+push( @category_list, $_ ) foreach @$auth_cats_loop;
 
 #reorder the list
 @category_list = sort { $a cmp $b } @category_list;
