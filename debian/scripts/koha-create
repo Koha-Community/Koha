@@ -338,7 +338,12 @@ check_letsencrypt()
         if [ $aptcacheshow -eq 0 ]; then
                 read -r -p "The letsencrypt package is not installed. Do it now?  [y/N] " response
                 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-                    apt-get install -y letsencrypt
+                    local debrelease="$(lsb_release -c -s)"
+                    if [ $debrelease = "jessie" ]; then
+                        apt-get install -y -t jessie-backports letsencrypt
+                    else
+                        apt-get install -y letsencrypt
+                    fi
                 else
                     die "You have to install letsencrypt to use the --letsencrypt parameter."
                 fi
