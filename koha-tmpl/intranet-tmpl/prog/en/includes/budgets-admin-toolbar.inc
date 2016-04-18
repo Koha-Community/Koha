@@ -48,7 +48,7 @@
                         [% ELSE %]
                         <li class="disabled">
                         [% END %]
-                        <a href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]&amp;authcat=[% auth_cats_loo.authcat %]">Plan by [% auth_cats_loo.authcat %]</a>
+                        <a href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]&amp;authcat=[% auth_cats_loo %]">Plan by [% auth_cats_loo %]</a>
                         </li>
                     [% END %]
                 </ul>
