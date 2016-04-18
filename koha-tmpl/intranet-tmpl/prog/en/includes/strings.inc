@@ -17,6 +17,7 @@
     var NOT_RENEWABLE = _("Not renewable");
     var NOT_RENEWABLE_TOO_SOON = _("No renewal before %s");
     var NOT_RENEWABLE_AUTO_TOO_SOON = _("Scheduled for automatic renewal");
+    var NOT_RENEWABLE_AUTO_TOO_LATE = _("Scheduled for automatic renewal");
     var NOT_RENEWABLE_AUTO_RENEW = _("Scheduled for automatic renewal");
     var RENEWALS_REMAINING = _("%s of %s renewals remaining");
     var HOLD_IS_SUSPENDED = _("Hold is <strong>suspended</strong>");
