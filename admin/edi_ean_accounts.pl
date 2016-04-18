@@ -58,7 +58,7 @@ elsif ( $op eq 'delete_confirm' ) {
 }
 else {
     if ( $op eq 'save' ) {
-        my $change = $input->param('oldean');
+        my $change = $input->param('id');
         if ($change) {
             editsubmit();
         }
@@ -124,19 +124,14 @@ sub addsubmit {
 }
 
 sub editsubmit {
-    $schema->resultset('EdifactEan')->search(
-        {
-            branchcode => $input->param('oldbranchcode'),
-            ean        => $input->param('oldean'),
-        }
-      )->update_all(
+    $schema->resultset('EdifactEan')->find( $input->param('id') )->update(
         {
             branchcode        => $input->param('branchcode'),
             description       => $input->param('description'),
             ean               => $input->param('ean'),
             id_code_qualifier => $input->param('id_code_qualifier'),
         }
-      );
+    );
     return;
 }
 

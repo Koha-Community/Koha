@@ -52,7 +52,7 @@
   <input type="hidden" name="op" value="save" />
   [% IF ean %]
       <input type="hidden" name="oldbranchcode" value="[% ean.branch.branchcode %]" />
-      <input type="hidden" name="oldean" value="[% ean.ean %]" />
+      <input type="hidden" name="id" value="[% ean.id %]" />
   [% END %]
 
   <fieldset class="rows">
@@ -149,7 +149,7 @@
                  [% END %]
                 </td>
                 <td class="actions">
-                    <a class="btn btn-mini" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form&branchcode=[% ean.branch.branchcode %]&ean=[% ean.ean %]"><i class="fa fa-pencil"></i> Edit</a>
+                    <a class="btn btn-mini" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form&id=[% ean.id %]"><i class="fa fa-pencil"></i> Edit</a>
                     <a class="btn btn-mini" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=delete_confirm&id=[% ean.id %]"><i class="fa fa-trash"></i> Delete</a>
                 </td>
             </tr>
