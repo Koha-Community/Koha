@@ -12,8 +12,6 @@ use Test::More tests => 4;
 use t::lib::TestBuilder;
 
 BEGIN {
-    use FindBin;
-    use lib $FindBin::Bin;
     use_ok('C4::Reserves');
 }
 
