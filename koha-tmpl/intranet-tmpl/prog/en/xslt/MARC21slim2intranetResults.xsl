@@ -28,6 +28,7 @@
         <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
         <xsl:variable name="DisplayIconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayIconsXSLT']"/>
         <xsl:variable name="IntranetBiblioDefaultView" select="marc:sysprefs/marc:syspref[@name='IntranetBiblioDefaultView']"/>
+        <xsl:variable name="OpacSuppression" select="marc:sysprefs/marc:syspref[@name='OpacSuppression']"/>
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
@@ -282,8 +283,10 @@
         </xsl:variable>
 
         <!-- Indicate if record is suppressed in OPAC -->
-        <xsl:if test="marc:datafield[@tag=942][marc:subfield[@code='n'] = '1']">
-            <span class="results_summary suppressed_opac"><xsl:value-of select="concat('#',marc:datafield[@tag=999]/marc:subfield[@code='c'])"/> - Suppressed in OPAC</span>
+        <xsl:if test="$OpacSuppression = 1">
+            <xsl:if test="marc:datafield[@tag=942][marc:subfield[@code='n'] = '1']">
+                <span class="results_summary suppressed_opac"><xsl:value-of select="concat('#',marc:datafield[@tag=999]/marc:subfield[@code='c'])"/> - Suppressed in OPAC</span>
+            </xsl:if>
         </xsl:if>
 
         <!-- Title Statement: Alternate Graphic Representation (MARC 880) -->

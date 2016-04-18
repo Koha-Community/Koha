@@ -75,6 +75,7 @@ sub transformMARCXML4XSLT {
         @fields = $record->fields();
     };
     if ($@) { warn "PROBLEM WITH RECORD"; next; }
+    my $marcflavour = C4::Context->preference('marcflavour');
     my $av = getAuthorisedValues4MARCSubfields($frameworkcode);
     foreach my $tag ( keys %$av ) {
         foreach my $field ( $record->field( $tag ) ) {
@@ -82,8 +83,11 @@ sub transformMARCXML4XSLT {
                 my @new_subfields = ();
                 for my $subfield ( $field->subfields() ) {
                     my ( $letter, $value ) = @$subfield;
-                    $value = GetAuthorisedValueDesc( $tag, $letter, $value, '', $tagslib )
-                        if $av->{ $tag }->{ $letter };
+                    # Replace the field value with the authorised value *except* for 942$n ( record supression )
+                    if ( $tag ne '942' && $subfield ne 'n' && $marcflavour ne 'UNIMARC' ) {
+                        $value = GetAuthorisedValueDesc( $tag, $letter, $value, '', $tagslib )
+                            if $av->{ $tag }->{ $letter };
+                    }
                     push( @new_subfields, $letter, $value );
                 } 
                 $field ->replace_with( MARC::Field->new(
@@ -206,7 +210,7 @@ sub XSLTParse4Display {
                               UseControlNumber IntranetBiblioDefaultView BiblioDefaultView
                               OPACItemLocation DisplayIconsXSLT
                               AlternateHoldingsField AlternateHoldingsSeparator
-                              TrackClicks opacthemes IdRef / )
+                              TrackClicks opacthemes IdRefi OpacSuppression / )
     {
         my $sp = C4::Context->preference( $syspref );
         next unless defined($sp);

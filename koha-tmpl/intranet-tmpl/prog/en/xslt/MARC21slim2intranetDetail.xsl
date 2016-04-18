@@ -27,6 +27,7 @@
         <xsl:variable name="TraceSubjectSubdivisions" select="marc:sysprefs/marc:syspref[@name='TraceSubjectSubdivisions']"/>
         <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='Display856uAsImage']"/>
         <xsl:variable name="DisplayIconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayIconsXSLT']"/>
+        <xsl:variable name="OpacSuppression" select="marc:sysprefs/marc:syspref[@name='OpacSuppression']"/>
         <xsl:variable name="TracingQuotesLeft">
            <xsl:choose>
              <xsl:when test="marc:sysprefs/marc:syspref[@name='UseICU']='1'">{</xsl:when>
@@ -91,8 +92,10 @@
         </xsl:variable>
 
         <!-- Indicate if record is suppressed in OPAC -->
-        <xsl:if test="marc:datafield[@tag=942][marc:subfield[@code='n'] = '1']">
-            <span class="results_summary suppressed_opac"><xsl:value-of select="concat('#',marc:datafield[@tag=999]/marc:subfield[@code='c'])"/> - Suppressed in OPAC</span>
+        <xsl:if test="$OpacSuppression = 1">
+            <xsl:if test="marc:datafield[@tag=942][marc:subfield[@code='n'] = '1']">
+                <span class="results_summary suppressed_opac"><xsl:value-of select="concat('#',marc:datafield[@tag=999]/marc:subfield[@code='c'])"/> - Suppressed in OPAC</span>
+            </xsl:if>
         </xsl:if>
 
         <!-- Title Statement -->
