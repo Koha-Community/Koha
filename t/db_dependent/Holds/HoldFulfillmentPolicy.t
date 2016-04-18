@@ -9,8 +9,6 @@ use Test::More tests => 10;
 use t::lib::TestBuilder;
 
 BEGIN {
-    use FindBin;
-    use lib $FindBin::Bin;
     use_ok('C4::Reserves');
 }
 
@@ -46,11 +44,6 @@ my $borrowernumber = $borrower->{borrowernumber};
 my $library_A = $library1->{branchcode};
 my $library_B = $library2->{branchcode};
 my $library_C = $library3->{branchcode};
-$dbh->do("DELETE FROM reserves");
-$dbh->do("DELETE FROM issues");
-$dbh->do("DELETE FROM items");
-$dbh->do("DELETE FROM biblio");
-$dbh->do("DELETE FROM biblioitems");
 $dbh->do("DELETE FROM transport_cost");
 $dbh->do("DELETE FROM tmp_holdsqueue");
 $dbh->do("DELETE FROM hold_fill_targets");
@@ -145,8 +138,3 @@ $reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup ne home, pickup ne holding targeted" );
 CancelReserve( { reserve_id => $reserve_id } );
-
-# End testing hold_fulfillment_policy
-
-# Cleanup
-$schema->storage->txn_rollback;
