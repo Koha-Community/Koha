@@ -103,13 +103,9 @@ $template->param(
 output_html_with_http_headers( $input, $cookie, $template->output );
 
 sub delsubmit {
-    my $ean = $schema->resultset('EdifactEan')->find(
-        {
-            branchcode => $input->param('branchcode'),
-            ean        => $input->param('ean')
-        }
-    );
-    $ean->delete;
+    my $id = $input->param('id');
+    my $e = $schema->resultset('EdifactEan')->find( $id );
+    $e->delete if $e;
     return;
 }
 
@@ -128,7 +124,6 @@ sub addsubmit {
 }
 
 sub editsubmit {
-    warn "DESC: " . $input->param('description');
     $schema->resultset('EdifactEan')->search(
         {
             branchcode => $input->param('oldbranchcode'),
@@ -146,16 +141,8 @@ sub editsubmit {
 }
 
 sub show_ean {
-    my $branchcode = $input->param('branchcode');
-    my $ean        = $input->param('ean');
-    if ( $branchcode && $ean ) {
-        my $e = $schema->resultset('EdifactEan')->find(
-            {
-                ean        => $ean,
-                branchcode => $branchcode,
-            }
-        );
-        $template->param( ean => $e );
-    }
+    my $id = $input->param('id');
+    my $e = $schema->resultset('EdifactEan')->find( $id );
+    $template->param( ean => $e );
     return;
 }
