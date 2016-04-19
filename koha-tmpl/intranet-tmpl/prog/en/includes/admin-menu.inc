@@ -27,7 +27,7 @@
 
 <h5>Patrons and circulation</h5>
 <ul>
-    <li><a href="/cgi-bin/koha/admin/categories.pl">Patron types and categories</a></li>
+    <li><a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a></li>
     <li><a href="/cgi-bin/koha/admin/smart-rules.pl">Circulation and fines rules</a></li>
     <li><a href="/cgi-bin/koha/admin/patron-attr-types.pl">Patron attribute types</a></li>
     <li><a href="/cgi-bin/koha/admin/branch_transfer_limits.pl">Library transfer limits</a></li>
