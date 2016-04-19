@@ -250,8 +250,8 @@ if ( $op eq 'view' ) {
 
             my @items;
             while ( my $content = $contents->next ) {
-                my $this_item;
                 my $biblionumber = $content->biblionumber->biblionumber;
+                my $this_item    = GetBiblioData($biblionumber);
                 my $record       = GetMarcBiblio($biblionumber);
 
                 if ( C4::Context->preference("OPACXSLTResultsDisplay") ) {
