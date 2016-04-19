@@ -116,7 +116,7 @@
 <h3>Delete EAN [% ean.ean %] for [% ean.branch.branchname %]?</h3>
 <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="post">
     <input type="hidden" name="op" value="delete_confirmed" />
-    <input type="hidden" name="ean" value="[% ean.id %]" />
+    <input type="hidden" name="id" value="[% ean.id %]" />
     <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
 </form>
 <form action="/cgi-bin/koha/admin/edi_ean_accounts.pl" method="get">
@@ -150,7 +150,7 @@
                 </td>
                 <td class="actions">
                     <a class="btn btn-mini" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form&branchcode=[% ean.branch.branchcode %]&ean=[% ean.ean %]"><i class="fa fa-pencil"></i> Edit</a>
-                    <a class="btn btn-mini" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=delete_confirm&ean=[% ean.id %]"><i class="fa fa-trash"></i> Delete</a>
+                    <a class="btn btn-mini" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=delete_confirm&id=[% ean.id %]"><i class="fa fa-trash"></i> Delete</a>
                 </td>
             </tr>
         [% END %]
