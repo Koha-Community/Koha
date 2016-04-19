@@ -12,7 +12,6 @@ use Modern::Perl;
 use Carp;
 
 use Log::Log4perl;
-use base qw(Log::Log4perl::Logger);
 
 =head1 NAME
 
@@ -44,6 +43,23 @@ my $defaultConfig = q(
     log4perl.appender.ROOT.utf8=1
 );
 
+=head2 new
+
+    my $logger = Koha::Logger->new($params);
+
+See get() for available $params.
+Prepares the logger for lazyLoading if uncertain whether or not the environment is set.
+This is meant to be used to instantiate package-level loggers.
+
+=cut
+
+sub new {
+    my ($class, $params) = @_;
+    my $self = {lazyLoad => $params}; #Mark self as lazy loadable
+    bless $self, $class;
+    return $self;
+}
+
 =head2 get
 
     Returns a logger object (based on log4perl).
@@ -59,9 +75,11 @@ sub get {
     my $category = $params ? ( $params->{category} || caller ) : caller;
     my $l4pcat = $interface . '.' . $category;
     _init();
-    my $logger = Log::Log4perl->get_logger($l4pcat);
-    bless($logger, $class);
-    return $logger;
+    my $self = {
+        logger => Log::Log4perl->get_logger($l4pcat),
+    };
+    bless($self, $class);
+    return $self;
 }
 
 sub _init {
@@ -114,8 +132,16 @@ sub _initFromConfFile {
 
 sub AUTOLOAD {
     my $self = shift;
-    my $method = $Koha::Logger::AUTOLOAD;
-    warn "ERROR: Unsupported method $method, params '@_'";
+    my $method = $Koha::Logger::AUTOLOAD =~ s/Koha::Logger:://r;
+
+    if ($self->{lazyLoad}) { #We have created this logger to be lazy loadable
+        $self = ref($self)->get( $self->{lazyLoad} ); #Lazy load me!
+    }
+
+    if ($self->{logger}->can($method)) {
+        return $self->{logger}->$method(@_);
+    }
+    warn "ERROR: Unsupported method $Koha::Logger::AUTOLOAD, params '@_'";
     return undef;
 }
 

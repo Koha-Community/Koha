@@ -24,6 +24,8 @@ use Time::HiRes;
 use C4::Context;
 use Koha::Logger;
 
+use t::Koha::Logger;
+
 C4::Context->interface('intranet');
 
 my $acceptedDelay; #This is baselined from the vanilla Log4perl subtest
@@ -39,9 +41,7 @@ my $acceptedPerformanceLoss = 1.33; #33%
 =cut
 
 #Initialize the Log4perl to write to /tmp/log4perl_test.log so we can clean it later
-my $conf = join("\n",<DATA>);
-Log::Log4perl::init(\$conf);
-
+Log::Log4perl::init( t::Koha::Logger::getLog4perlConfig() );
 
 subtest "Log4perl vanilla, 10000 errors", \&Log4perlVanilla;
 sub Log4perlVanilla {
@@ -100,26 +100,6 @@ sub _logErrors {
 
 sub verifyThatLogWasWritten {
     #Verify that we actually wrote something and the Koha::Logger configurations work
-    open(my $FH, '<', '/tmp/log4perl_test.log') or die $!;
-    my $firstRow = <$FH>;
-    close($FH);
-    ok($firstRow =~ /The incredible burden of building good logging faculties/, "Log writing confirmed");
-    #Clean up the temp log file or it will grow big quickly
-    open($FH, '>', '/tmp/log4perl_test.log') or die $!;
-    close($FH);
+    ok(t::Koha::Logger::getFirstLogRow() =~ /The incredible burden of building good logging faculties/, "Log writing confirmed");
+    t::Koha::Logger::clearLog(); #Clean up the temp log file or it will grow big quickly
 }
-
-__DATA__
-log4perl.logger.intranet = WARN, INTRANET
-log4perl.appender.INTRANET=Log::Log4perl::Appender::File
-log4perl.appender.INTRANET.filename=/tmp/log4perl_test.log
-log4perl.appender.INTRANET.mode=append
-log4perl.appender.INTRANET.layout=PatternLayout
-log4perl.appender.INTRANET.layout.ConversionPattern=[%d] [%p] %m %l %n
-
-log4perl.logger.opac = WARN, OPAC
-log4perl.appender.OPAC=Log::Log4perl::Appender::File
-log4perl.appender.OPAC.filename=/tmp/log4perl_test.log
-log4perl.appender.OPAC.mode=append
-log4perl.appender.OPAC.layout=PatternLayout
-log4perl.appender.OPAC.layout.ConversionPattern=[%d] [%p] %m %l %n
