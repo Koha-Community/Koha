@@ -20,32 +20,6 @@ $(document).ready(function() {
         $("#branches option:first").attr("selected", "selected");
     }
 } );
-
-function DoCancel(f) {
-  f.op.value='';
-  document.Aform.submit();
-}
-
-function CheckAttributeTypeForm(f) {
-    var ok=1;
-    var _alertString="";
-    var alertString2;
-    if (f.code.value.length==0) {
-        _alertString += "\n- " + _("Patron attribute type code missing");
-    }
-    if (f.description.value.length==0) {
-        _alertString += "\n- " + _("Description missing");
-    }
-    if (_alertString.length==0) {
-        document.Aform.submit();
-    } else {
-        alertString2  = _("Form not submitted because of the following problem(s)");
-        alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += _alertString;
-        alert(alertString2);
-    }
-}
-
 //]]>
 </script>
 </head>
@@ -87,7 +61,7 @@ function CheckAttributeTypeForm(f) {
     &mdash; one with that code already exists.
 </div>
 [% END %]
-<form action="[% script_name %]" name="Aform" method="post">
+<form action="[% script_name %]" class="validated" method="post">
   <input type="hidden" name="op" value="[% confirm_op %]" />
   <fieldset class="rows">
     <ol>
@@ -97,13 +71,14 @@ function CheckAttributeTypeForm(f) {
             <input type="hidden" name="code" value="[% code |html %]" />
             [% code |html %]
           [% ELSE %]
-		  <label for="code">Patron attribute type code: </label>
-            <input type="text" id="code" name="code"  size="10" maxlength="10" />
+              <label for="code" class="required">Patron attribute type code: </label>
+              <input type="text" id="code" name="code" required="required" class="required" size="10" maxlength="10" />
+              <span class="required">Required</span>
           [% END %]
        </li>
-       <li><label for="description">Description: </label>
-           <input type="text" id="description" name="description" size="50" maxlength="250" 
-                  value="[% description |html %]" />
+       <li><label for="description" class="required">Description: </label>
+           <input type="text" id="description" name="description" required="required" class="required" size="50" maxlength="250" value="[% description |html %]" />
+           <span class="required">Required</span>
        </li>
        <li><label for="repeatable">Repeatable: </label>
             [% IF ( repeatable_checked ) %]
@@ -209,8 +184,8 @@ function CheckAttributeTypeForm(f) {
         </li>
         <li>
             <label for="class">Class: </label>
-            <select name="class">
-                <option value="" />
+            <select name="class" id="class">
+                <option value=""></option>
                 [% FOREACH class IN classes_val_loop %]
                     [% IF class.authorised_value == category_class %]
                         <option value="[% class.authorised_value %]" selected="selected">
@@ -228,13 +203,7 @@ function CheckAttributeTypeForm(f) {
     </ol>
   </fieldset>
   <fieldset class="action">
-    [% IF ( edit_attribute_type ) %]
-    <input type="button" value="Save"
-           onclick="CheckAttributeTypeForm(this.form)" />
-    [% ELSE %]
-    <input type="button" value="Save"
-           onclick="CheckAttributeTypeForm(this.form)" />
-    [% END %]
+      <input type="submit" value="Save" />
     <a class="cancel" href="/cgi-bin/koha/admin/patron-attr-types.pl">Cancel</a>
   </fieldset>
 </form>
