@@ -180,7 +180,7 @@ if ($do_it) {
 						$row->{barcode};
 						$row->{itype};
                 if ($csv->combine(@rowValues)) {
-                    $content .= $csv->string() . "\n";
+                    $content .= Encode::decode('UTF-8',$csv->string()) . "\n";
                 } else {
                     push @$q_errors, { combine => $csv->error_diag() } ;
                 }
