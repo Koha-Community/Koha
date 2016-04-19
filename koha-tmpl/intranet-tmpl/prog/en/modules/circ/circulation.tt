@@ -732,7 +732,7 @@ No patron matched <span class="ex">[% message %]</span>
 
                    [% IF ( modifications ) %]
                     <li><span class="circ-hlt">Pending modifications:</span> Patron has pending modifications.
-                            [% IF ( CAN_user_borrowers ) %]
+                            [% IF CAN_user_borrowers && ( !Koha.Preference('IndependentBranchesPatronModifications') || borrower.branch == branch ) %]
                                     <a href="/cgi-bin/koha/members/members-update.pl">View all pending patron modifications</a>
                             [% END %]
                    </li>
