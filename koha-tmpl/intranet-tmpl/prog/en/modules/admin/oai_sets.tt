@@ -7,13 +7,13 @@ function newDescField() {
     $("#adddescription").before(
         '<li><label>setDescription: </label>' +
         '<textarea style="vertical-align:middle" rows="2" cols="30" name="description"></textarea>' +
-        '<a onclick="delDescField(this); return false;" href="#"><i class="fa fa-fw fa-trash"></i> Remove</a>' +
+        '<a class="remove_description" href="#"><i class="fa fa-fw fa-trash"></i> Remove</a>' +
         '</li>'
     );
 }
 
 function delDescField(minusButton) {
-    var li = $(minusButton).parent('li');
+    var li = minusButton.parent('li');
     $(li).remove();
 }
 
@@ -25,6 +25,17 @@ $(document).ready(function() {
     $(".delete_oai_set").on("click",function(){
         return confirmDelete();
     });
+
+    $("body").on("click", ".remove_description", function(e){
+        e.preventDefault();
+        delDescField($(this));
+    });
+
+    $(".add_description").on("click", function(e){
+        e.preventDefault();
+        newDescField();
+    });
+
 });
 //]]>
 </script>
@@ -67,10 +78,10 @@ $(document).ready(function() {
                             <li>
                                 <label>setDescription: </label>
                                 <textarea style="vertical-align:middle" rows="2" cols="30" name="description">[% desc.description %]</textarea>
-                                <a onclick="delDescField(this); return false;" href="#"><i class="fa fa-fw fa-trash"></i> Remove</a>
+                                <a class="remove_description" href="#"><i class="fa fa-fw fa-trash"></i> Remove</a>
                             </li>
                         [% END %]
-                        <li id="adddescription"><span class="label">&nbsp;</span><a href="#" onclick='newDescField(); return false;'><i class="fa fa-fw fa-plus"></i> Add description</a></li>
+                        <li id="adddescription"><span class="label">&nbsp;</span><a href="#" class="add_description"><i class="fa fa-fw fa-plus"></i> Add description</a></li>
 
                     </ol>
                 </fieldset>
