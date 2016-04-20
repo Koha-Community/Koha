@@ -260,7 +260,7 @@ my $target_map = {
   './about.pl'                  => 'INTRANET_CGI_DIR',
   './acqui'                     => 'INTRANET_CGI_DIR',
   './admin'                     => 'INTRANET_CGI_DIR',
-  './api'                       => 'INTRANET_CGI_DIR',
+  './api'                       => 'API_CGI_DIR',
   './authorities'               => 'INTRANET_CGI_DIR',
   './basket'                    => 'INTRANET_CGI_DIR',
   './C4'                        => 'PERL_MODULE_DIR',
@@ -1219,6 +1219,7 @@ sub get_target_directories {
     my %dirmap = ();
     my %skipdirs = ();
     if ($mode eq 'single') {
+        $dirmap{'API_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'api');
         $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'cgi-bin');
         $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'htdocs', 'intranet-tmpl');
         $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'htdocs');
@@ -1242,6 +1243,8 @@ sub get_target_directories {
         $dirmap{'ZEBRA_RUN_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'run', 'zebradb');
     } elsif ($mode eq 'dev') {
         my $curdir = File::Spec->rel2abs(File::Spec->curdir());
+        $dirmap{'API_CGI_DIR'} = File::Spec->catdir($curdir, 'api');
+        $skipdirs{'API_CGI_DIR'} = 1;
         $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir($curdir);
         $skipdirs{'INTRANET_CGI_DIR'} = 1;
         $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'intranet-tmpl');
@@ -1275,6 +1278,7 @@ sub get_target_directories {
         $dirmap{'ZEBRA_RUN_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'run', 'zebradb');
     } else {
         # mode is standard, i.e., 'fhs'
+        $dirmap{'API_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'api');
         $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'cgi-bin');
         $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'htdocs', 'intranet-tmpl');
         $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'htdocs');
