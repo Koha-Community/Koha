@@ -1005,6 +1005,42 @@ sub IsSuperLibrarian {
     return ($userenv->{flags}//0) % 2;
 }
 
+=head2 setCommandlineEnvironment
+
+Sets the Koha environment for command line scripts.
+
+=cut
+
+sub setCommandlineEnvironment {
+   my ($class) = @_;
+
+   C4::Context->interface('commandline'); #Set interface for logger and friends
+   C4::Context->_new_userenv('commandline');
+   my $clisu = _enforceCommandlineSuperuserBorrowerExists();
+   C4::Context::set_userenv($clisu->{borrowernumber},$clisu->{userid},$clisu->{cardnumber},$clisu->{firstname},$clisu->{surname}, $clisu->{branchcode}, '', {}, '', '', '');
+}
+
+sub _enforceCommandlineSuperuserBorrowerExists {
+    require Koha::Patrons;
+    my $commandlineSuperuser = Koha::Patrons->find({userid => 'commandlineadmin'});
+    unless ($commandlineSuperuser) {
+        my $dbh = C4::Context->dbh();
+        my $ctgr = $dbh->selectrow_array("SELECT categorycode FROM categories WHERE category_type = 'I' LIMIT 1;");
+                $ctgr = $dbh->selectrow_array("SELECT categorycode FROM categories LIMIT 1;") unless $ctgr;
+        my $brnchcd = $dbh->selectrow_array("SELECT branchcode FROM borrowers GROUP BY branchcode ORDER BY COUNT(*) DESC LIMIT 1;");
+        Koha::Patron->new({cardnumber => 'commandlineadmin',
+                               userid => 'commandlineadmin',
+                               surname => 'Admin',
+                               firstname => 'Koha',
+                               dateexpiry => '2099-12-31',
+                               categorycode => $ctgr || 'NOCAT',
+                               branchcode => $brnchcd,
+        });
+        $commandlineSuperuser = Koha::Patrons->find({userid => 'commandlineadmin'});
+    }
+    return $commandlineSuperuser;
+}
+
 =head2 interface
 
 Sets the current interface for later retrieval in any Perl module
