@@ -11,7 +11,9 @@ function check_transport_cost(e) {
     }
     alert(_("Cost must be expressed as a decimal number >= 0"));
 }
-function disable_transport_cost_chg(e, cost_id) {
+function disable_transport_cost_chg(e) {
+    var input_name = e.name;
+    var cost_id = input_name.replace(/disable_/,''); // Parse the code_id out of the input name
     disable_transport_cost(cost_id, e.checked);
 }
 function disable_transport_cost(cost_id, disable) {
@@ -28,8 +30,8 @@ function enable_cost_input(cost_id) {
     $(cell).removeClass('disabled-transfer');
 
     $('#celldiv_'+cost_id).html(
-        '<input type="text" name="cost_'+cost_id+'" onblur="check_transport_cost(this);" size="4" value="'+$.trim(cost)+'" />'+
-        '<br/>Disable <input name="disable_'+cost_id+'" value="1" onchange="disable_transport_cost_chg(this, \''+cost_id+'\');" type="checkbox" '+(disabled ? 'checked' : '')+' />'
+        '<input type="text" name="cost_'+cost_id+'" class="cost_input" size="4" value="'+$.trim(cost)+'" />'+
+        '<br/>Disable <input name="disable_'+cost_id+'" value="1" class="disable_transport_cost" type="checkbox" '+(disabled ? 'checked' : '')+' />'
     );
     disable_transport_cost(cost_id, disabled);
 }
@@ -38,6 +40,18 @@ function form_submit (f) {
     $(f).find('input:disabled').prop('disabled', false);
     return true;
 }
+$(document).ready(function(){
+    $(".enable_cost_input").on("click",function(){
+        var cost_id = $(this).data("cost-id");
+        enable_cost_input( cost_id );
+    });
+    $("body").on("blur",".cost_input",function(){
+        check_transport_cost(this);
+    });
+    $("body").on("change",".disable_transport_cost",function(){
+        disable_transport_cost_chg(this);
+    });
+})
 //]]>
 </script>
 <style type="text/css">
@@ -103,7 +117,7 @@ function form_submit (f) {
                             [% ELSE %]
                             <div id="celldiv_[% bt.id %]">
                             [% END %]
-                            <div onclick="enable_cost_input('[% bt.id %]');">[% bt.disabled ? '&nbsp;' : bt.value %]</div>
+                            <div class="enable_cost_input" data-cost-id="[% bt.id %]">[% bt.disabled ? '&nbsp;' : bt.value %]</div>
                             <input type="hidden" name="cost_[% bt.id %]" value="[% bt.value %]" />
                             [% IF bt.disabled %]
                             <input type="hidden" name="disable_[% bt.id %]" value="1" />
