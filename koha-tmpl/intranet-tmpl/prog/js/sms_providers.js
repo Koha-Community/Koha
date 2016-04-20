@@ -5,6 +5,21 @@ $(document).ready(function() {
     $("#new_provider").on("click",function(){
         add_provider();
     });
+    $(".edit").on("click",function(e){
+        e.preventDefault();
+        var providerid = $(this).data("providerid");
+        edit_provider( providerid );
+    });
+    $(".delete").on("click",function(e){
+        e.preventDefault();
+        var providerid = $(this).data("providerid");
+        var patrons_using = $(this).data("patrons_using");
+        if( patrons_using !== "" ){
+            delete_provider( providerid, patrons_using );
+        } else {
+            delete_provider( providerid );
+        }
+    });
 });
 
 function clear_form(){

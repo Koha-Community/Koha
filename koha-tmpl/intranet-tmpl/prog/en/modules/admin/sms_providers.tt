@@ -38,7 +38,6 @@
                                 <th>Domain</th>
                                 <th title="Patrons using this provider">Patrons</th>
                                 <th>&nbsp;</th>
-                                <th>&nbsp;</th>
                             </tr>
                         </thead>
 
@@ -48,21 +47,13 @@
                                     <td id="name_[% p.id %]">[% p.name %]</td>
                                     <td id="domain_[% p.id %]">[% p.domain %]</td>
                                     <td id="patrons_using_[% p.id %]">[% p.patrons_using %]</td>
-                                    <td>
-                                        <a class="btn edit" href="#" id="edit_[% p.id %]" onclick="edit_provider( [% p.id %] );">
+                                    <td class="actions">
+                                        <a class="btn btn-mini edit" href="#" id="edit_[% p.id %]" data-providerid="[% p.id %]">
                                             <i class="fa fa-pencil"></i> Edit
                                         </a>
-                                    </td>
-                                    <td>
-                                        [% IF p.patrons_using %]
-                                            <a class="btn btn-danger" href="#" id="delete_[% p.id %]" class="delete" onclick="delete_provider( [% p.id %], [% p.patrons_using %] );">
-                                                <span style="color:white"><i class="fa fa-trash"></i> Delete</span>
-                                            </a>
-                                        [% ELSE %]
-                                            <a class="btn delete" href="#" id="delete_[% p.id %]" onclick="delete_provider( [% p.id %] );">
-                                                <i class="fa fa-trash"></i> Delete
-                                            </a>
-                                        [% END %]
+                                        <a class="btn btn-mini delete" href="#" data-providerid="[% p.id %]" data-patrons_using="[% p.patrons_using %]" id="delete_[% p.id %]">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </a>
                                     </td>
                                 </tr>
                             [% END %]
