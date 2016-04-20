@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; SRU Search fields mapping</title>
+<title>Koha &rsaquo; SRU search fields mapping</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <script type="text/javascript">
@@ -34,53 +34,59 @@
 <div id="custom-doc" class="yui-t7">
 
     <div id="bd">
-        <h1>Modify SRU Search fields mapping</h1>
+        <h1>Modify SRU search fields mapping</h1>
         <form id="form01" method="post">
             <fieldset class="rows">
-                <legend>Legend </legend>
-                <ul>
-                <li>
-                <label for="Title">Title: </label>
-                <input id="title" type="text" value="[% mapping.title %]" />
-                </li>
-                <li>
-                <label for="ISBN">ISBN: </label>
-                <input id="isbn" type="text" value="[% mapping.isbn %]" />
-                </li>
-                <li>
-                <label for="LCCall">LC Call No: </label>
-                <input id="lccall" type="text" value="[% mapping.lccall %]" />
-                </li>
-                <li>
-                <label for="Control number">Control no: </label>
-                <input id="controlnumber" type="text" value="[% mapping.controlnumber %]" />
-                </li>
-                <li>
-                <label for="Any">Any: </label>
-                <input id="srchany" type="text" value="[% mapping.srchany %]" />
-                </li>
-                <li>
-                <label for="Author">Author: </label>
-                <input id="author" type="text" value="[% mapping.author %]" />
-                </li>
-                <li>
-                <label for="ISSN">ISSN: </label>
-                <input id="issn" type="text" value="[% mapping.issn %]" />
-                </li>
-                <li>
-                <label for="Subject">Subject: </label>
-                <input id="subject" type="text" value="[% mapping.subject %]" />
-                </li>
-                <li>
-                <label for="Dewey">Dewey: </label>
-                <input id="dewey" type="text" value="[% mapping.dewey %]" />
-                </li>
-                <li>
-                <label for="Standard ID">Standard ID: </label>
-                <input id="stdid" type="text" value="[% mapping.stdid %]" />
-                </li>
-
-                </ul>
+                <div class="yui-g">
+                    <div class="yui-u first">
+                        <ol>
+                            <li>
+                                <label for="title">Title: </label>
+                                <input id="title" type="text" value="[% mapping.title %]" />
+                            </li>
+                            <li>
+                                <label for="isbn">ISBN: </label>
+                                <input id="isbn" type="text" value="[% mapping.isbn %]" />
+                            </li>
+                            <li>
+                                <label for="lccall">LC call number: </label>
+                                <input id="lccall" type="text" value="[% mapping.lccall %]" />
+                            </li>
+                            <li>
+                                <label for="controlnumber">Control number: </label>
+                                <input id="controlnumber" type="text" value="[% mapping.controlnumber %]" />
+                            </li>
+                            <li>
+                                <label for="srchany">Any: </label>
+                                <input id="srchany" type="text" value="[% mapping.srchany %]" />
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="yui-u">
+                        <ol>
+                            <li>
+                                <label for="author">Author: </label>
+                                <input id="author" type="text" value="[% mapping.author %]" />
+                            </li>
+                            <li>
+                                <label for="issn">ISSN: </label>
+                                <input id="issn" type="text" value="[% mapping.issn %]" />
+                            </li>
+                            <li>
+                                <label for="subject">Subject: </label>
+                                <input id="subject" type="text" value="[% mapping.subject %]" />
+                            </li>
+                            <li>
+                                <label for="dewey">Dewey: </label>
+                                <input id="dewey" type="text" value="[% mapping.dewey %]" />
+                            </li>
+                            <li>
+                                <label for="stdid">Standard ID: </label>
+                                <input id="stdid" type="text" value="[% mapping.stdid %]" />
+                            </li>
+                        </ol>
+                    </div>
+                </div>
             </fieldset>
             <fieldset class="action">
                 <input type="submit" value="Save" class="submit" />

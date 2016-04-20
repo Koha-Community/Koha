@@ -56,10 +56,16 @@
             // enable recordtype to include field in post
             $('#recordtype').prop('disabled',false);
         });
+        $("#servername").on("blur",function(){
+            toUC(this);
+        });
+        $("#modify_sru_fields").on("click",function(){
+            ModMapping();
+        });
     });
     function ModMapping () {
         var map= $('#show_sru_fields').val();
-        window.open('/cgi-bin/koha/admin/sru_modmapping.pl?mapping='+map,'popup','width=800,height=400,resizable=no,toolbar=false,scrollbars=no,top');
+        window.open('/cgi-bin/koha/admin/sru_modmapping.pl?mapping='+map,'popup','width=800,height=400,resizable=yes,toolbar=false,scrollbars=yes,top');
     }
 [% ELSE %]
     $(document).ready(function() {
@@ -69,14 +75,15 @@
             ],
             "sPaginationType": "four_button"
         }));
+        $(".delete").on("click",function(e){
+            var servername = $(this).data("servername");
+            if( confirm( _("Are you sure you want to delete server %s?").format(servername) ) ) {
+                return true;
+            } else {
+                e.preventDefault();
+            }
+        });
     });
-    function ConfirmDelete(name,id) {
-        if( confirm( _("Choose OK if you really want to delete server ")+
-          name+'.')) {
-            window.location="[% script_name %]?op=delete_confirmed&id="+id;
-        }
-        return false;
-    }
 [% END %]
 //]]>
 </script>
@@ -116,10 +123,12 @@
             <input type="hidden" name="id" value="[% server.id %]" />
         [% ELSE %]
             <h1>New [% PROCESS ServerType %] server</h1>
-        [% END %]                
+        [% END %]
         <fieldset class="rows">
         <ol>
-        <li><label for="name">Server name: </label><input type="text" name="servername" id="servername" size="65" maxlength="100" onblur="toUC(this)" value="[% server.servername | html %]"/></li>
+        <li><label for="name">Server name: </label>
+            <input type="text" name="servername" id="servername" size="65" maxlength="100" value="[% server.servername | html %]"/>
+        </li>
 
         <li><label for="host" class="required">Hostname: </label> <input type="text" name="host" id="host" size="30" value="[% server.host %]" required="required" /> <span class="required">Required</span>
             [% IF (server.servertype||type) == 'sru' %]
@@ -191,7 +200,7 @@
         <li>
         <label for="sru_fields">SRU Search fields mapping: </label>
         <input type="hidden" name="sru_fields" id="sru_fields" value="[% server.sru_fields %]" />
-        <input type="text" name="show_sru_fields" id="show_sru_fields" size="100" value="[% server.sru_fields %]" disabled/> <input type="button" value="Modify" onclick="ModMapping()" />
+            <input type="text" name="show_sru_fields" id="show_sru_fields" size="100" value="[% server.sru_fields %]" disabled="disabled" /> <input type="button" id="modify_sru_fields" value="Modify" />
         </li>
         [% END %]
         <li>
@@ -224,7 +233,7 @@
         <tbody>
         [% FOREACH loo IN loop %]
             <tr>
-            <td><a href="[% loo.script_name %]?op=edit&amp;id=[% loo.id %]">[% loo.servername %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% IF loo.password %]########[% END %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>
+            <td><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id %]">[% loo.servername %]</a></td><td>[% loo.host %]:[% loo.port %]</td><td>[% loo.db %]</td><td>[% loo.userid %]</td><td>[% IF loo.password %]########[% END %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank %]</td>
             <td>[% loo.syntax %]</td><td>[% loo.encoding %]</td><td>[% loo.timeout %]</td>
             <td>[% IF ( loo.recordtype == 'biblio' )  %]
                 <span>Bibliographic</span>
@@ -238,9 +247,9 @@
                         Actions <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id %]">
-                        <li><a href="[% loo.script_name %]?op=edit&amp;id=[% loo.id %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                        <li><a href="[% loo.script_name %]?op=add&amp;id=[% loo.id %]"><i class="fa fa-copy"></i> Copy</a></li>
-                        <li><a href="javascript:void(0);" onclick="ConfirmDelete('[% loo.servername | replace("['\"]","") %]','[% loo.id %]');"><i class="fa fa-remove"></i> Delete</a></li>
+                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=add&amp;id=[% loo.id %]"><i class="fa fa-copy"></i> Copy</a></li>
+                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=delete_confirmed&amp;id=[% loo.id %]" class="delete" data-servername="[% loo.servername %]"><i class="fa fa-remove"></i> Delete</a></li>
                     </ul>
                 </div>
             </td>
