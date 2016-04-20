@@ -65,6 +65,16 @@ $( document ).ready(function() {
             return false;
         }
     });
+
+    $(".edit").on("click",function(e){
+        e.preventDefault();
+        var elt = this;
+        var id = $(this).data("soundid");
+        var precedence = $(this).data("precedence");
+        var selector = $(this).data("selector");
+        var sound = $(this).data("sound");
+        EditAlert( elt, id, precedence, selector, sound );
+    });
 });
 
 function enablePlayButton(sound_field_value,playbutton){
