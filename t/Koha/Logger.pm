@@ -80,4 +80,8 @@ sub clearLog {
     close($FH);
 }
 
+sub getLogfile {
+    return $logfile;
+}
+
 1; #Satisfy insanity

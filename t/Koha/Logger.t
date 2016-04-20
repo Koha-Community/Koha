@@ -19,14 +19,17 @@ use Modern::Perl;
 use Test::More;
 
 use Log::Log4perl;
+use Scalar::Util qw(blessed);
+use Try::Tiny;
+
 use C4::Context;
-C4::Context->interface('commandline'); #Set the context already prior to loading Koha::Logger (this actually doesn't fix the logger interface definition issue. Just doing it like this to show this doesn't work)
+C4::Context->setCommandlineEnvironment(); #Set the context already prior to loading Koha::Logger (this actually doesn't fix the logger interface definition issue. Just doing it like this to show this doesn't work)
 is(C4::Context->interface(), 'commandline', "Current Koha interface is 'commandline'"); #Show in test output what we are expecting to make test plan more understandable
 
 #Initialize the Log4perl to write to /tmp/log4perl_test.log so we can clean it later
 Log::Log4perl::init( t::Koha::Logger::getLog4perlConfig() );
 
-use Koha::Logger;
+require Koha::Logger;
 use t::Koha::Logger;
 
 
@@ -56,5 +59,125 @@ t::Koha::Logger::clearLog();
 #### END OF Test for Bug 16304 - Koha::Logger, lazy load loggers so environment has time to get set  ####
 #########################################################################################################
 
+###############################################################################################
+#### KD976 - Koha::Logger overload configuration for command line scripts verbosity levels ####
+subtest "Overload Logger configurations", \&overloadLoggerConfigurations;
+sub overloadLoggerConfigurations {
+    my ($logger, $log, $LOGFILEOUT, $stdoutLogHandle, $stdoutLogPtr, @stdoutLog);
+    $stdoutLogPtr = \$stdoutLogHandle;
+
+    #Test increasing log verbosity
+    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
+    Koha::Logger->setConsoleVerbosity(1);
+    $logger = Koha::Logger->get({category => "test-is-fun-1"});
+    _loggerBlarbAllLevels($logger);
+    $log = t::Koha::Logger::slurpLog('wantArray');
+    @stdoutLog = split("\n", $stdoutLogHandle);
+    ok($log->[0]     =~ /info/,  'Increment by 1. file   - info ok');
+    ok($stdoutLog[0] =~ /info/,  'Increment by 1. stdout - info ok');
+    ok($log->[1]     =~ /warn/,  'Increment by 1. file   - warn ok');
+    ok($stdoutLog[1] =~ /warn/,  'Increment by 1. stdout - warn ok');
+    ok($log->[2]     =~ /error/, 'Increment by 1. file   - error ok');
+    ok($stdoutLog[2] =~ /error/, 'Increment by 1. stdout - error ok');
+    ok($log->[3]     =~ /fatal/, 'Increment by 1. file   - fatal ok');
+    ok($stdoutLog[3] =~ /fatal/, 'Increment by 1. stdout - fatal ok');
+    t::Koha::Logger::clearLog();
+
+    #Test decreasing log verbosity
+    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
+    Koha::Logger->setConsoleVerbosity(-1);
+    $logger = Koha::Logger->get({category => "test-is-fun-2"});
+    _loggerBlarbAllLevels($logger);
+    $log = t::Koha::Logger::slurpLog('wantArray');
+    @stdoutLog = split("\n", $stdoutLogHandle);
+    ok($log->[0]     =~ /error/, 'Decrement by 1. file   - error ok');
+    ok($stdoutLog[0] =~ /error/, 'Decrement by 1. stdout - error ok');
+    ok($log->[1]     =~ /fatal/, 'Decrement by 1. file   - fatal ok');
+    ok($stdoutLog[1] =~ /fatal/, 'Decrement by 1. stdout - fatal ok');
+    t::Koha::Logger::clearLog();
+
+    #Test increasing log verbosity multiple levels
+    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
+    Koha::Logger->setConsoleVerbosity(2);
+    $logger = Koha::Logger->get({category => "test-is-fun-3"});
+    _loggerBlarbAllLevels($logger);
+    $log = t::Koha::Logger::slurpLog('wantArray');
+    @stdoutLog = split("\n", $stdoutLogHandle);
+    ok($log->[0]     =~ /debug/, 'Increment by 1. file   - debug ok');
+    ok($stdoutLog[0] =~ /debug/, 'Increment by 1. stdout - debug ok');
+    ok($log->[1]     =~ /info/,  'Increment by 1. file   - info ok');
+    ok($stdoutLog[1] =~ /info/,  'Increment by 1. stdout - info ok');
+    ok($log->[2]     =~ /warn/,  'Increment by 1. file   - warn ok');
+    ok($stdoutLog[2] =~ /warn/,  'Increment by 1. stdout - warn ok');
+    ok($log->[3]     =~ /error/, 'Increment by 1. file   - error ok');
+    ok($stdoutLog[3] =~ /error/, 'Increment by 1. stdout - error ok');
+    ok($log->[4]     =~ /fatal/, 'Increment by 1. file   - fatal ok');
+    ok($stdoutLog[4] =~ /fatal/, 'Increment by 1. stdout - fatal ok');
+    t::Koha::Logger::clearLog();
+
+    #Test decreasing log verbosity beyond FATAL, this results to no output
+    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
+    Koha::Logger->setConsoleVerbosity(-3);
+    $logger = Koha::Logger->get({category => "test-is-fun-4"});
+    _loggerBlarbAllLevels($logger);
+    $log = t::Koha::Logger::slurpLog('wantArray');
+    @stdoutLog = split("\n", $stdoutLogHandle);
+    is(scalar(@$log), 0,         'Decrement overboard. no logging');
+    t::Koha::Logger::clearLog();
+
+    #Test static log level
+    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
+    Koha::Logger->setConsoleVerbosity('FATAL');
+    $logger = Koha::Logger->get({category => "test-is-fun-5"});
+    _loggerBlarbAllLevels($logger);
+    $log = t::Koha::Logger::slurpLog('wantArray');
+    @stdoutLog = split("\n", $stdoutLogHandle);
+    ok($log->[0]     =~ /fatal/, 'Static log level. file   - fatal ok');
+    ok($stdoutLog[0] =~ /fatal/, 'Static log level. stdout - fatal ok');
+    t::Koha::Logger::clearLog();
+
+    #Test bad log level, then continue using the default config unhindered
+    Koha::Logger->setConsoleVerbosity(); #Clear overrides with empty params
+    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
+    try {
+        Koha::Logger->setConsoleVerbosity('WARNNNG');
+        die "We should have died";
+    } catch {
+        ok($_ =~ /verbosity must be a positive or negative digit/, "Bad \$verbosiness, but got instructions on how to properly give \$verbosiness");
+    };
+    $logger = Koha::Logger->get({category => "test-is-fun-6"});
+    _loggerBlarbAllLevels($logger);
+    $log = t::Koha::Logger::slurpLog('wantArray');
+    @stdoutLog = split("\n", $stdoutLogHandle);
+    is(scalar(@stdoutLog), 0,    'Bad config, defaulting. Stdout not printed to in default mode.');
+    ok($log->[0]     =~ /warn/,  'Bad config, defaulting. file   - warn ok');
+    ok($log->[1]     =~ /error/, 'Bad config, defaulting. file   - error ok');
+    ok($log->[2]     =~ /fatal/, 'Bad config, defaulting. file   - fatal ok');
+    t::Koha::Logger::clearLog();
+
+    close($LOGFILEOUT);
+}
+
+#### END OF Test for KD976 - Koha::Logger overload configuration for command line scripts verbosity levels ####
+###############################################################################################################
+
+sub _loggerBlarbAllLevels {
+    my ($logger) = @_;
+    $logger->trace('trace');
+    $logger->debug('debug');
+    $logger->info('info');
+    $logger->warn('warn');
+    $logger->error('error');
+    $logger->fatal('fatal');
+}
+sub _reopenStdoutScalarHandle {
+    my ($LOGFILEOUT, $pointerToScalar) = @_;
+    $$pointerToScalar = '';
+    close($LOGFILEOUT) if $LOGFILEOUT;
+    open($LOGFILEOUT, '>', $pointerToScalar) or die $!;
+    $LOGFILEOUT->autoflush ( 1 );
+    select $LOGFILEOUT; #Use this as the default print target, so Console appender is redirected to this logfile
+    return ($LOGFILEOUT, $pointerToScalar);
+}
 
 done_testing();

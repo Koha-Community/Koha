@@ -10,6 +10,7 @@ package Koha::Logger;
 
 use Modern::Perl;
 use Carp;
+use Scalar::Util qw(blessed);
 
 use Log::Log4perl;
 
@@ -79,6 +80,9 @@ sub get {
         logger => Log::Log4perl->get_logger($l4pcat),
     };
     bless($self, $class);
+
+    $self->_checkLoggerOverloads();
+
     return $self;
 }
 
@@ -121,6 +125,100 @@ sub _initFromConfFile {
         $msg .= "Configuration file has these problems: @err\n" if (scalar(@err));
         $msg .= "Log::Log4Perl exception: $@\n";
         die $msg;
+    }
+}
+
+=head2 setConsoleVerbosity
+
+    Koha::Logger->setConsoleVerbosity($verbosity);
+
+Sets all Koha::Loggers to use also the console for logging and adjusts their
+verbosity by the given verbosity.
+
+=USAGE
+
+Do deploy verbose mode in a commandline script, add the following code:
+
+    use C4::Context;
+    use Koha::Logger;
+    C4::Context->setCommandlineEnvironment();
+    Koha::Logger->setConsoleVerbosity( 1 || -3 || 'WARN' || ... );
+
+=PARAMS
+
+@param {String or Signed Integer} $verbosity,
+                if $verbosity is 0, no adjustment is made,
+                If $verbosity is > 1, log level is decremented by that many steps
+                    towards TRACE
+                If $verbosity is < 0, log level is incremented by that many steps
+                    towards FATAL
+                If $verbosity is one of log levels, log level is set to that level
+                If $verbosity is undef, clear all overrides
+
+=cut
+
+sub setConsoleVerbosity {
+    if ($_[0] eq __PACKAGE__ || blessed($_[0]) && $_[0]->isa('Koha::Logger') ) {
+        shift(@_); #Compensate for erratic calling styles.
+    }
+    my ($verbosity) = @_;
+
+    if (defined($verbosity)) {
+        #Tell all Koha::Loggers to use a console logger as well
+        unless ($verbosity =~ /^-?\d+$/ ||
+                $verbosity =~ /^(?:FATAL|ERROR|WARN|INFO|DEBUG|TRACE)$/) {
+            my @cc = caller(0);
+            die $cc[3]."($verbosity):> \$verbosity must be a positive or negative"
+                        ." digit, or a valid Log::Log4perl log level, eg. FATAL,"
+                        ." ERROR, WARN, ...";
+        }
+        $ENV{LOG4PERL_TO_CONSOLE} = 1;
+
+        $ENV{LOG4PERL_VERBOSITY_CHANGE} = $verbosity if defined($verbosity);
+    }
+    else {
+        delete $ENV{LOG4PERL_TO_CONSOLE};
+        delete $ENV{LOG4PERL_VERBOSITY_CHANGE};
+    }
+}
+
+=head2 _checkLoggerOverloads
+
+Checks if there are Environment variables that should overload configured behavior
+
+=cut
+
+# Define a stdout appender. I wonder how can I load a PatternedLayout from
+# log4perl.conf here?
+my $commandlineScreen =  Log::Log4perl::Appender->new(
+                             "Log::Log4perl::Appender::Screen",
+                             name      => "commandlineScreen",
+                             stderr    => 0);
+#I want this to be defined in log4perl.conf instead :(
+my $commandlineLayout = Log::Log4perl::Layout::PatternLayout->new(
+                   "%d %M{2}> %m %n");
+$commandlineScreen->layout($commandlineLayout);
+
+sub _checkLoggerOverloads {
+    my ($self) = @_;
+    return unless blessed($self->{logger})
+        && $self->{logger}->isa('Log::Log4perl::Logger');
+
+    if ($ENV{LOG4PERL_TO_CONSOLE}) {
+        $self->{logger}->add_appender($commandlineScreen);
+    }
+    if ($ENV{LOG4PERL_VERBOSITY_CHANGE}) {
+        if ($ENV{LOG4PERL_VERBOSITY_CHANGE} =~ /^-?(\d)$/) {
+            if ($ENV{LOG4PERL_VERBOSITY_CHANGE} > 0) {
+                $self->{logger}->dec_level( $1 );
+            }
+            elsif ($ENV{LOG4PERL_VERBOSITY_CHANGE} < 0) {
+                $self->{logger}->inc_level( $1 );
+            }
+        }
+       else {
+            $self->{logger}->level( $ENV{LOG4PERL_VERBOSITY_CHANGE} );
+        }
     }
 }
 
