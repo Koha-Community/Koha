@@ -209,8 +209,7 @@ subtest 'get_saved_reports' => sub {
     is( scalar @{ get_saved_reports() },
         $count, "$count reports have been added" );
 
-    is( scalar @{ get_saved_reports( $report_ids[0] ) },
-        1, "filter takes report id" );
+    ok( 0 < scalar @{ get_saved_reports( $report_ids[0] ) }, "filter takes report id" );
 
     #Test delete_report
     is (delete_report(),undef, "Without id delete_report returns undef");
