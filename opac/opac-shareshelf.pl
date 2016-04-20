@@ -138,7 +138,7 @@ sub show_accept {
             shelfnumber => $param->{shelfnumber},
         },
         {
-            order_by => 'sharedate desc',
+            order_by => { -desc => 'sharedate' },
             limit => 1,
         }
     );
