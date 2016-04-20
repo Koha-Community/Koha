@@ -161,6 +161,25 @@ sub overloadLoggerConfigurations {
 #### END OF Test for KD976 - Koha::Logger overload configuration for command line scripts verbosity levels ####
 ###############################################################################################################
 
+subtest "Return value passthrough", \&returnValuePassthrough;
+sub returnValuePassthrough {
+    my ($logger, $log, $retval);
+
+    $logger = Koha::Logger->get({category => "retval-madness-1"});
+    $retval = $logger->trace('This is not printed');
+    $log = t::Koha::Logger::slurpLog('wantArray');
+    is(scalar(@$log), 0, "No trace written");
+    is($retval, undef, "Koha::Logger returns undef per Log4perl best practices");
+    t::Koha::Logger::clearLog();
+
+    $retval = $logger->error('This is printed');
+    $log = t::Koha::Logger::slurpLog('wantArray');
+    is(scalar(@$log), 1, "Error written");
+    is($retval, 1, "Koha::Logger returns 1 per Log4perl best practices");
+    t::Koha::Logger::clearLog();
+}
+t::Koha::Logger::clearLog();
+
 sub _loggerBlarbAllLevels {
     my ($logger) = @_;
     $logger->trace('trace');
