@@ -30,8 +30,8 @@ C4::Scrubber is used to remove all markup content from the sumitted text.
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
+
 use CGI qw ( -utf8 );
 use CGI::Cookie; # need to check cookies before having CGI parse the POST request
 
@@ -234,9 +234,18 @@ if ($loggedinuser) {
         $tag->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $tag->{biblionumber} ) );
         $tag->{title} = $biblio->{title};
         $tag->{author} = $biblio->{author};
-        if (C4::Context->preference("OPACXSLTResultsDisplay")) {
-            $tag->{XSLTBloc} = XSLTParse4Display($tag->{biblionumber}, $record, "OPACXSLTResultsDisplay");
+
+        my $xslfile = C4::Context->preference('OPACXSLTResultsDisplay');
+        my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
+        my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
+
+        if ( $xslfile ) {
+            $tag->{XSLTBloc} = XSLTParse4Display(
+                    $tag->{ biblionumber }, $record, "OPACXSLTResultsDisplay",
+                    1, undef, $sysxml, $xslfile, $lang
+            );
         }
+
         my $date = $tag->{date_created} || '';
         $date =~ /\s+(\d{2}\:\d{2}\:\d{2})/;
         $tag->{time_created_display} = $1;

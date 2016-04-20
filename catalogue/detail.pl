@@ -16,8 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Acquisition qw( GetHistory );
@@ -84,9 +83,18 @@ my $showallitems = $query->param('showallitems');
 my $marcflavour  = C4::Context->preference("marcflavour");
 
 # XSLT processing of some stuff
-if (C4::Context->preference("XSLTDetailsDisplay") ) {
-    $template->param('XSLTDetailsDisplay' =>'1',
-        'XSLTBloc' => XSLTParse4Display($biblionumber, $record, "XSLTDetailsDisplay") );
+my $xslfile = C4::Context->preference('XSLTDetailsDisplay');
+my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
+my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
+
+if ( $xslfile ) {
+    $template->param(
+        XSLTDetailsDisplay => '1',
+        XSLTBloc => XSLTParse4Display(
+                        $biblionumber, $record, "XSLTDetailsDisplay",
+                        1, undef, $sysxml, $xslfile, $lang
+                    )
+    );
 }
 
 $template->param( 'SpineLabelShowPrintOnBibDetails' => C4::Context->preference("SpineLabelShowPrintOnBibDetails") );

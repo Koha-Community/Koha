@@ -20,8 +20,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Acquisition qw( SearchOrders );
@@ -141,8 +140,17 @@ my $marcflavour      = C4::Context->preference("marcflavour");
 my $ean = GetNormalizedEAN( $record, $marcflavour );
 
 # XSLT processing of some stuff
-if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
-    $template->param( 'XSLTBloc' => XSLTParse4Display($biblionumber, $record, "OPACXSLTDetailsDisplay" ) );
+my $xslfile = C4::Context->preference('OPACXSLTDetailsDisplay');
+my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
+my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
+
+if ( $xslfile ) {
+    $template->param(
+        XSLTBloc => XSLTParse4Display(
+                        $biblionumber, $record, "OPACXSLTDetailsDisplay",
+                        1, undef, $sysxml, $xslfile, $lang
+                    )
+    );
 }
 
 my $OpacBrowseResults = C4::Context->preference("OpacBrowseResults");
