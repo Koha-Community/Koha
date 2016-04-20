@@ -28,6 +28,7 @@ $dbh->{AutoCommit} = 0;
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM items|);
 $dbh->do(q|DELETE FROM borrowers|);
+$dbh->do(q|DELETE FROM edifact_ean|);
 $dbh->do(q|DELETE FROM branches|);
 $dbh->do(q|DELETE FROM categories|);
 $dbh->do(q|DELETE FROM issuingrules|);
