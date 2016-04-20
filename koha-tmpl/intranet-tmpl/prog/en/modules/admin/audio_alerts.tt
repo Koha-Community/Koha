@@ -111,14 +111,15 @@
                                     </td>
                                     <td>[% a.selector %]</td>
                                     <td>[% a.sound %]</td>
-                                    <td><a class="btn btn-small" onclick="EditAlert( this, '[% a.id %]','[% a.precedence %]', '[% a.selector | replace( "'", "\\'" ) | html %]', '[% a.sound %]' )" ><i class="fa fa-pencil"></i> Edit</a></td>
+                                    <td>
+                                        <a class="btn btn-mini edit" data-soundid="[% a.id %]" data-precedence="[% a.precedence %]" data-selector="[% a.selector %]" data-sound="[% a.sound %]"><i class="fa fa-pencil"></i> Edit</a></td>
                                 </tr>
                             [% END %]
                         </tbody>
                     </table>
 
                     <p>
-                        <button id="delete-alerts" type="submit" class="btn disabled"><i class="fa fa-trash"></i> Delete selected alerts</button>
+                        <button id="delete-alerts" type="submit" class="btn btn-small disabled"><i class="fa fa-trash"></i> Delete selected alerts</button>
                     </p>
                 </form>
             </div>
