@@ -93,7 +93,12 @@ elsif ($format =~ /marcstd/) {
     $format = 'marcstd';
 }
 elsif ( $format =~ /isbd/ ) {
-    $marc   = GetISBDView($biblionumber, "opac");
+    my $framework = GetFrameworkCode( $biblionumber );
+    $marc   = GetISBDView({
+        'record'    => $marc,
+        'template'  => 'opac',
+        'framework' => $framework,
+    });
     $format = 'isbd';
 }
 else {

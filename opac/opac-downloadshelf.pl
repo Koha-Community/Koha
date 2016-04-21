@@ -28,8 +28,8 @@ use C4::Items;
 use C4::Output;
 use C4::Record;
 use C4::Ris;
-
 use Koha::CsvProfiles;
+use Koha::RecordProcessor;
 use Koha::Virtualshelves;
 
 use utf8;
@@ -76,10 +76,15 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
             $output = marc2csv(\@biblios, $format);
         # Other formats
         } else {
+            my $record_processor = Koha::RecordProcessor->new({
+                filters => 'ViewPolicy'
+            });
             while ( my $content = $contents->next ) {
                 my $biblionumber = $content->biblionumber->biblionumber;
 
-                my $record = GetMarcBiblio($biblionumber, 1);
+                my $record_unfiltered = GetMarcBiblio($biblionumber, 1);
+                my $record_filtered   = $record_unfiltered->clone();
+                my $record = $record_processor->process($record_filtered);
                 next unless $record;
 
                 if ($format eq 'iso2709') {
@@ -92,7 +97,12 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
                     $output .= marc2bibtex($record, $biblionumber);
                 }
                 elsif ( $format eq 'isbd' ) {
-                    $output   .= GetISBDView($biblionumber, "opac");
+                    my $framework = GetFrameworkCode( $biblionumber );
+                    $output   .= GetISBDView({
+                        'record'    => $record,
+                        'template'  => 'opac',
+                        'framework' => $framework,
+                    });
                     $extension = "txt";
                     $type      = "text/plain";
                 }

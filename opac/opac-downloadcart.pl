@@ -28,8 +28,8 @@ use C4::Items;
 use C4::Output;
 use C4::Record;
 use C4::Ris;
-
 use Koha::CsvProfiles;
+use Koha::RecordProcessor;
 
 use utf8;
 my $query = new CGI;
@@ -63,9 +63,16 @@ if ($bib_list && $format) {
 
         # Other formats
     } else {
+        my $record_processor = Koha::RecordProcessor->new({
+            filters => 'ViewPolicy'
+        });
         foreach my $biblio (@bibs) {
 
-            my $record = GetMarcBiblio($biblio, 1);
+            my $record_unfiltered = GetMarcBiblio($biblio, 1);
+            my $record_filtered   = $record_unfiltered->clone();
+            my $record            =
+                $record_processor->process($record_filtered);
+
             next unless $record;
 
             if ($format eq 'iso2709') {
@@ -78,7 +85,12 @@ if ($bib_list && $format) {
                 $output .= marc2bibtex($record, $biblio);
             }
             elsif ( $format eq 'isbd' ) {
-                $output   .= GetISBDView($biblio, "opac");
+                my $framework = GetFrameworkCode( $biblio );
+                $output   .= GetISBDView({
+                    'record'    => $record,
+                    'template'  => 'opac',
+                    'framework' => $framework,
+                });
                 $extension = "txt";
                 $type      = "text/plain";
             }

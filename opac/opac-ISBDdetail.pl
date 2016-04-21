@@ -92,7 +92,7 @@ if (scalar @items >= 1) {
     }
 }
 
-my $record_unfiltered = GetMarcBiblio($biblionumber);
+my $record_unfiltered = GetMarcBiblio($biblionumber,1);
 if ( ! $record_unfiltered ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
@@ -150,7 +150,12 @@ $template->param(
 
 my $norequests = 1;
 my $allow_onshelf_holds;
-my $res = GetISBDView($biblionumber, "opac");
+my $framework = GetFrameworkCode( $biblionumber );
+my $res = GetISBDView({
+    'record'    => $record,
+    'template'  => 'opac',
+    'framework' => $framework
+});
 
 my $itemtypes = GetItemTypes();
 my $borrower = GetMember( 'borrowernumber' => $loggedinuser );

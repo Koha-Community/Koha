@@ -917,19 +917,27 @@ sub GetBiblioFromItemNumber {
 
 =head2 GetISBDView 
 
-  $isbd = &GetISBDView($biblionumber);
+  $isbd = &GetISBDView({
+      'record'    => $marc_record,
+      'template'  => $interface, # opac/intranet
+      'framework' => $framework,
+  });
 
 Return the ISBD view which can be included in opac and intranet
 
 =cut
 
 sub GetISBDView {
-    my ( $biblionumber, $template ) = @_;
-    my $record   = GetMarcBiblio($biblionumber, 1);
-    $template ||= '';
-    my $sysprefname = $template eq 'opac' ? 'opacisbd' : 'isbd';
+    my ( $params ) = @_;
+
+    # Expecting record WITH items.
+    my $record    = $params->{record};
     return unless defined $record;
-    my $itemtype = &GetFrameworkCode($biblionumber);
+
+    my $template  = $params->{template} // q{};
+    my $sysprefname = $template eq 'opac' ? 'opacisbd' : 'isbd';
+    my $framework = $params->{framework};
+    my $itemtype  = $framework;
     my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
     my $tagslib = &GetMarcStructure( 1, $itemtype );
 

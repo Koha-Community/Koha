@@ -26,6 +26,7 @@ use C4::Items;
 use C4::Circulation;
 use C4::Auth;
 use C4::Output;
+use Koha::RecordProcessor;
 
 my $query = new CGI;
 
@@ -57,13 +58,15 @@ if (C4::Context->preference('TagsEnabled')) {
 	}
 }
 
-
+my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
 foreach my $biblionumber ( @bibs ) {
     $template->param( biblionumber => $biblionumber );
 
     my $dat              = &GetBiblioData($biblionumber);
     next unless $dat;
-    my $record           = &GetMarcBiblio($biblionumber);
+    my $record_unfiltered = &GetMarcBiblio($biblionumber);
+    my $record_filtered   = $record_unfiltered->clone();
+    my $record            = $record_processor->process($record_filtered);
     next unless $record;
     my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
