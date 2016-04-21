@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use C4::Context;
 
 use C4::Biblio;
@@ -104,6 +104,21 @@ my $issue = C4::Circulation::GetItemIssue( $item->{itemnumber} );
 is( $issue->{onsite_checkout}, 0, '' );
 my $five_days_after = dt_from_string->add( days => 5 )->set( hour => 23, minute => 59, second => 0 );
 is( $issue->{date_due}, $five_days_after );
+
+# Specific case
+t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 1);
+my $another_item = $builder->build({
+    source => 'Item',
+    value => {
+        biblionumber => $biblio->{biblionumber},
+        homebranch => $branch->{branchcode},
+        holdingbranch => $branch->{branchcode},
+    },
+});
+
+C4::Circulation::AddIssue( $patron, $another_item->{barcode}, dt_from_string, undef, dt_from_string, undef, { onsite_checkout => 1 } );
+( undef, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $another_item->{barcode} );
+is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1, '' );
 
 $schema->storage->txn_rollback;
 

@@ -387,6 +387,7 @@ sub TooMany {
 	my $item		= shift;
     my $params = shift;
     my $onsite_checkout = $params->{onsite_checkout} || 0;
+    my $switch_onsite_checkout = $params->{switch_onsite_checkout} || 0;
     my $cat_borrower    = $borrower->{'categorycode'};
     my $dbh             = C4::Context->dbh;
 	my $branch;
@@ -477,7 +478,8 @@ sub TooMany {
             }
         }
         if ( C4::Context->preference('ConsiderOnSiteCheckoutsAsNormalCheckouts') ) {
-            if ( $checkout_count >= $max_checkouts_allowed ) {
+            my $delta = $switch_onsite_checkout ? 1 : 0;
+            if ( $checkout_count >= $max_checkouts_allowed + $delta ) {
                 return {
                     reason => 'TOO_MANY_CHECKOUTS',
                     count => $checkout_count,
@@ -819,7 +821,12 @@ sub CanBookBeIssued {
 #
     # JB34 CHECKS IF BORROWERS DON'T HAVE ISSUE TOO MANY BOOKS
     #
-    my $toomany = TooMany( $borrower, $item->{biblionumber}, $item, { onsite_checkout => $onsite_checkout } );
+    my $switch_onsite_checkout =
+          C4::Context->preference('SwitchOnSiteCheckouts')
+      and $issue->{onsite_checkout}
+      and $issue
+      and $issue->{borrowernumber} == $borrower->{'borrowernumber'} ? 1 : 0;
+    my $toomany = TooMany( $borrower, $item->{biblionumber}, $item, { onsite_checkout => $onsite_checkout, switch_onsite_checkout => $switch_onsite_checkout, } );
     # if TooMany max_allowed returns 0 the user doesn't have permission to check out this book
     if ( $toomany ) {
         if ( $toomany->{max_allowed} == 0 ) {
