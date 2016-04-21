@@ -143,7 +143,7 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
         source => 'Borrower',
         value  => {
             categorycode => $cat->{'categorycode'},
-            branchcode   => $lib,
+            branchcode   => $lib->{'branchcode'},
         }
     } );
 
