@@ -493,6 +493,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                 [% ELSIF (suggestion.suggestiontypelabel == "Rejected") %]Rejected
                 [% ELSIF (suggestion.suggestiontypelabel == "Available") %]Available
                 [% ELSIF (suggestion.suggestiontypelabel == "Ordered") %]Ordered
+                [% ELSIF (suggestion.suggestiontypelabel == "Unknown") %]Status unknown
                 [% ELSE %][% suggestion.suggestiontypelabel %][% END %]
             [% ELSE %]
                 [% IF ( suggestion.suggestiontype ) %]
