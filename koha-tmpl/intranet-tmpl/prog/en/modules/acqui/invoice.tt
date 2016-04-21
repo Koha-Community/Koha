@@ -41,7 +41,7 @@
         }));
 [% END %]
         $("#show_all_details").click(function(){
-            updateColumnsVisibility($(this+":checked").val());
+            updateColumnsVisibility( $(this).is(":checked") );
         });
 
         $("#show_all_details").attr('checked', false);
