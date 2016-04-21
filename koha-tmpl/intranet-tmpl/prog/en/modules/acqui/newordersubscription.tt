@@ -27,7 +27,7 @@
         } ) )
 
         $("#show_only_renewed").click(function(){
-            updateRowsVisibility($(this+":checked").val());
+            updateRowsVisibility( $(this).is(":checked") );
         });
         $("#show_only_renewed").attr('checked', false);
         updateRowsVisibility(false);
