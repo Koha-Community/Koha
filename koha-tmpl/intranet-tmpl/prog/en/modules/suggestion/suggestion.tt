@@ -570,6 +570,8 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                         Checked
                     [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS ) %]
                         [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS ) %]
+                    [% ELSE %]
+                        Status unknown
                     [% END %]
 
                     [% IF ( suggestions_loo.reason ) %]
