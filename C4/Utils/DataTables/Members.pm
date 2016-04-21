@@ -61,6 +61,7 @@ sub search {
 
     my $searchfields = {
         standard => 'surname,firstname,othernames,cardnumber,userid',
+        surname => 'surname',
         email => 'email,emailpro,B_email',
         borrowernumber => 'borrowernumber',
         userid => 'userid',

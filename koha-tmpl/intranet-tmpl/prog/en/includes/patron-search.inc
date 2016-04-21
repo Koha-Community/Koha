@@ -22,6 +22,11 @@
               [% ELSE %]
                 <option value='standard'>Standard</option>
               [% END %]
+              [% IF searchfieldstype == "surname" %]
+                <option selected="selected" value='surname'>Surname</option>
+              [% ELSE %]
+                <option value='surname'>Surname</option>
+              [% END %]
               [% IF searchfieldstype == "email" %]
                 <option selected="selected" value='email'>Email</option>
               [% ELSE %]
