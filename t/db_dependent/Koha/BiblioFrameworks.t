@@ -21,9 +21,10 @@ use Modern::Perl;
 use Test::More tests => 3;
 use Koha::BiblioFramework;
 use Koha::BiblioFrameworks;
-use t::lib::TestBuilder;
 
-my $builder = t::lib::TestBuilder->new;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
 my $nb_of_frameworks = Koha::BiblioFrameworks->search->count;
 my $new_framework_1 = Koha::BiblioFramework->new({
     frameworkcode => 'mfw1',
@@ -41,3 +42,4 @@ is( $retrieved_framework_1->frameworktext, $new_framework_1->frameworktext, 'Fin
 
 $retrieved_framework_1->delete;
 is( Koha::BiblioFrameworks->search->count, $nb_of_frameworks + 1, 'Delete should have deleted the biblio framework' );
+$schema->storage->txn_rollback;
