@@ -477,6 +477,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SuspendHoldsIntranet','1','Allow holds to be suspended from the intranet.',NULL,'YesNo'),
 ('SuspendHoldsOpac','1','Allow holds to be suspended from the OPAC.',NULL,'YesNo'),
 ('SvcMaxReportRows','10',NULL,'Maximum number of rows to return via the report web service.','Integer'),
+('SwitchOnSiteCheckouts','0',NULL,'Automatically switch an on-site checkout to a normal checkout','YesNo');
 ('SyndeticsAuthorNotes','0','','Display Notes about the Author on OPAC from Syndetics','YesNo'),
 ('SyndeticsAwards','0','','Display Awards on OPAC from Syndetics','YesNo'),
 ('SyndeticsClientCode','0','','Client Code for using Syndetics Solutions content','free'),

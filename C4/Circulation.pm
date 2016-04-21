@@ -658,6 +658,7 @@ sub CanBookBeIssued {
     my %needsconfirmation;    # filled with problems that needs confirmations
     my %issuingimpossible;    # filled with problems that causes the issue to be IMPOSSIBLE
     my %alerts;               # filled with messages that shouldn't stop issuing, but the librarian should be aware of.
+    my %messages;             # filled with information messages that should be displayed.
 
     my $onsite_checkout     = $params->{onsite_checkout}     || 0;
     my $override_high_holds = $params->{override_high_holds} || 0;
@@ -926,22 +927,29 @@ sub CanBookBeIssued {
     #
     if ( $issue->{borrowernumber} && $issue->{borrowernumber} eq $borrower->{'borrowernumber'} ){
 
-        # Already issued to current borrower. Ask whether the loan should
-        # be renewed.
-        my ($CanBookBeRenewed,$renewerror) = CanBookBeRenewed(
-            $borrower->{'borrowernumber'},
-            $item->{'itemnumber'}
-        );
-        if ( $CanBookBeRenewed == 0 ) {    # no more renewals allowed
-            if ( $renewerror eq 'onsite_checkout' ) {
-                $issuingimpossible{NO_RENEWAL_FOR_ONSITE_CHECKOUTS} = 1;
+        # Already issued to current borrower.
+        # If it is an on-site checkout if it can be switched to a normal checkout
+        # or ask whether the loan should be renewed
+
+        if ( $issue->{onsite_checkout}
+                and C4::Context->preference('SwitchOnSiteCheckouts') ) {
+            $messages{ONSITE_CHECKOUT_WILL_BE_SWITCHED} = 1;
+        } else {
+            my ($CanBookBeRenewed,$renewerror) = CanBookBeRenewed(
+                $borrower->{'borrowernumber'},
+                $item->{'itemnumber'},
+            );
+            if ( $CanBookBeRenewed == 0 ) {    # no more renewals allowed
+                if ( $renewerror eq 'onsite_checkout' ) {
+                    $issuingimpossible{NO_RENEWAL_FOR_ONSITE_CHECKOUTS} = 1;
+                }
+                else {
+                    $issuingimpossible{NO_MORE_RENEWALS} = 1;
+                }
             }
             else {
-                $issuingimpossible{NO_MORE_RENEWALS} = 1;
+                $needsconfirmation{RENEW_ISSUE} = 1;
             }
-        }
-        else {
-            $needsconfirmation{RENEW_ISSUE} = 1;
         }
     }
     elsif ($issue->{borrowernumber}) {
@@ -1057,7 +1065,7 @@ sub CanBookBeIssued {
         }
     }
 
-    return ( \%issuingimpossible, \%needsconfirmation, \%alerts );
+    return ( \%issuingimpossible, \%needsconfirmation, \%alerts, \%messages, );
 }
 
 =head2 CanBookBeReturned
@@ -1242,6 +1250,7 @@ sub AddIssue {
     my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate, $sipmode, $params ) = @_;
 
     my $onsite_checkout = $params && $params->{onsite_checkout} ? 1 : 0;
+    my $switch_onsite_checkout = $params && $params->{switch_onsite_checkout};
     my $auto_renew = $params && $params->{auto_renew};
     my $dbh          = C4::Context->dbh;
     my $barcodecheck = CheckValidBarcode($barcode);
@@ -1278,7 +1287,8 @@ sub AddIssue {
         my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
 
         # check if we just renew the issue.
-        if ( $actualissue->{borrowernumber} eq $borrower->{'borrowernumber'} ) {
+        if ( $actualissue->{borrowernumber} eq $borrower->{'borrowernumber'}
+                and not $switch_onsite_checkout ) {
             $datedue = AddRenewal(
                 $borrower->{'borrowernumber'},
                 $item->{'itemnumber'},
@@ -1289,7 +1299,8 @@ sub AddIssue {
         }
         else {
             # it's NOT a renewal
-            if ( $actualissue->{borrowernumber} ) {
+            if ( $actualissue->{borrowernumber}
+                    and not $switch_onsite_checkout ) {
                 # This book is currently on loan, but not to the person
                 # who wants to borrow it now. mark it returned before issuing to the new borrower
                 my ( $allowed, $message ) = CanBookBeReturned( $item, C4::Context->userenv->{branch} );
@@ -1331,7 +1342,7 @@ sub AddIssue {
             }
             $datedue->truncate( to => 'minute' );
 
-            $issue = Koha::Database->new()->schema()->resultset('Issue')->create(
+            $issue = Koha::Database->new()->schema()->resultset('Issue')->update_or_create(
                 {
                     borrowernumber => $borrower->{'borrowernumber'},
                     itemnumber     => $item->{'itemnumber'},

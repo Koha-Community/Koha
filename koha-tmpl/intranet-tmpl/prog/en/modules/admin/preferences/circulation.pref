@@ -412,6 +412,12 @@ Circulation:
             - If enabled, the number of checkouts allowed will be normal checkouts + on-site checkouts.
             - If disabled, both values will be checked separately.
         -
+            - pref: SwitchOnSiteCheckouts
+              choices:
+                  yes: Switch
+                  no: "Don't switch"
+            - on-site checkouts to normal checkouts when checked out.
+        -
             - When a patron's checked out item is overdue,
             - pref: OverduesBlockRenewing
               type: choice
