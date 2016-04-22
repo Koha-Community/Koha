@@ -12232,7 +12232,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 
 
 
-DBversion = "3.23.00.049";
+$DBversion = "3.23.00.049";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 my $dbh = C4::Context->dbh;
 my ( $column_has_been_used ) = $dbh->selectrow_array(q|
