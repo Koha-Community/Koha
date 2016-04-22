@@ -6,7 +6,7 @@ my ( $column_has_been_used ) = $dbh->selectrow_array(q|
 |);
 
 if ( $column_has_been_used ) {
-    warn q|WARNING: The columns borrower_attribute_types.password_allowed and borrower_attributes.column have been removed from the Koha codebase. There were not used. However your installation has at least 1 borrower_attributes.password defined. In order not to alter your data, the columns have been kept, please remove them manually if you do not use them this feature.|;
+    print q|WARNING: The columns borrower_attribute_types.password_allowed and borrower_attributes.password have been removed from the Koha codebase. They were not used. However your installation has at least one borrower_attributes.password defined. In order not to alter your data, the columns have been kept, please save the information elsewhere and remove these columns manually.|;
 } else {
     $dbh->do(q|
         ALTER TABLE borrower_attribute_types DROP column password_allowed
