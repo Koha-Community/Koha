@@ -68,7 +68,8 @@ function load_group_subgroups () {
 
 $(document).ready(function(){
 
-$(".goback").on("click",function(){
+$(".goback").on("click",function(e){
+    e.preventDefault();
     window.history.back();
 });
 
@@ -1017,7 +1018,7 @@ Sub report:<select name="subreport">
     [% ELSE %]
     [% END %]
     <div id="onerror_actions">
-        <a class="button goback">Return to previous page</a>
+        <a href="#" class="button goback">Return to previous page</a>
     </div>
 [% END %]
 </div>
