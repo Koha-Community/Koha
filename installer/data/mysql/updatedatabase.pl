@@ -12219,6 +12219,18 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 15008 - Add custom HTML areas to circulation and reports home pages)\n";
     SetVersion($DBversion);
 }
+
+$DBversion = "3.23.00.048";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(q{
+    INSERT IGNORE INTO `systempreferences` (variable,value,options,explanation,type)  SELECT 'OPACISBD', value, '70|10', 'Allows to define ISBD view in OPAC', 'Textarea' FROM `systempreferences` WHERE variable = 'ISBD';
+    });
+
+    print "Upgrade to $DBversion done (Bug 5979 - Add separate OPACISBD system preference)\n";
+    SetVersion($DBversion);
+}
+
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
