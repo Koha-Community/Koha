@@ -370,7 +370,7 @@ sub GetPatronInfo {
     delete $borrower->{'password'};
 
     # Contact fields management
-    if ( $cgi->param('show_contact') eq "0" ) {
+    if ( defined $cgi->param('show_contact') && $cgi->param('show_contact') eq "0" ) {
 
         # Define contact fields
         my @contactfields = (
@@ -387,7 +387,7 @@ sub GetPatronInfo {
     }
 
     # Fines management
-    if ( $cgi->param('show_fines') eq "1" ) {
+    if ( $cgi->param('show_fines') && $cgi->param('show_fines') eq "1" ) {
         my @charges;
         for ( my $i = 1 ; my @charge = getcharges( $borrowernumber, undef, $i ) ; $i++ ) {
             push( @charges, @charge );
@@ -396,7 +396,7 @@ sub GetPatronInfo {
     }
 
     # Reserves management
-    if ( $cgi->param('show_holds') eq "1" ) {
+    if ( $cgi->param('show_holds') && $cgi->param('show_holds') eq "1" ) {
 
         # Get borrower's reserves
         my @reserves = GetReservesFromBorrowernumber( $borrowernumber, undef );
@@ -420,7 +420,7 @@ sub GetPatronInfo {
     }
 
     # Issues management
-    if ( $cgi->param('show_loans') eq "1" ) {
+    if ( $cgi->param('show_loans') && $cgi->param('show_loans') eq "1" ) {
         my $issues = GetPendingIssues($borrowernumber);
         foreach my $issue ( @$issues ){
             $issue->{'issuedate'} = $issue->{'issuedate'}->strftime('%Y-%m-%d %H:%M');
