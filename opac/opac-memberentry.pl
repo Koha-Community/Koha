@@ -32,6 +32,7 @@ use Koha::Patron::Modifications;
 use C4::Scrubber;
 use Email::Valid;
 use Koha::DateUtils;
+use Koha::Libraries;
 use Koha::Patron::Images;
 use Koha::Token;
 
@@ -65,10 +66,16 @@ if ( $action eq q{} ) {
 
 my $mandatory = GetMandatoryFields($action);
 
+my @libraries = Koha::Libraries->search;
+if ( my @libraries_to_display = split '\|', C4::Context->preference('PatronSelfRegistrationLibraryList') ) {
+    @libraries = map { my $b = $_; my $branchcode = $_->branchcode; grep( /^$branchcode$/, @libraries_to_display ) ? $b : () } @libraries;
+}
+
 $template->param(
     action            => $action,
     hidden            => GetHiddenFields( $mandatory, 'registration' ),
     mandatory         => $mandatory,
+    libraries         => \@libraries,
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
 );
 

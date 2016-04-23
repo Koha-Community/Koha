@@ -160,7 +160,13 @@
                                         Home library:</label>
 
                                         <select id="borrower_branchcode" name="borrower_branchcode">
-                                            [% PROCESS options_for_libraries libraries => Branches.all( selected => borrower.branchcode ) %]
+                                            [% FOREACH l IN libraries %]
+                                                [% IF l.branchcode == borrower.branchcode %]
+                                                    <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname %]</option>
+                                                [% ELSE %]
+                                                    <option value="[% l.branchcode | html %]">[% l.branchname %]</option>
+                                                [% END %]
+                                            [% END %]
                                         </select>
                                     </li>
                                 [% END %]
