@@ -65,6 +65,9 @@
                                 [% IF field == "password_match" %]<li>Passwords do not match! <a href="#password">password</a></li>[% END %]
                                 [% IF field == "password_invalid" %]<li>Password does not meet minimum requirements! <a href="#password">password</a></li>[% END %]
                                 [% IF field == "password_spaces" %]<li>Password contains leading and/or trailing spaces! <a href="#password">password</a></li>[% END %]
+                                [% IF field == "duplicate_email" %]
+                                    <li>This email address already exists in our database.</li>
+                                [% END %]
                             [% END %]
                         </ul>
                         Please correct the errors and resubmit.

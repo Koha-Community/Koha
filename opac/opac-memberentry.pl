@@ -352,7 +352,14 @@ sub CheckForInvalidFields {
     my $borrower = shift;
     my @invalidFields;
     if ($borrower->{'email'}) {
-        push(@invalidFields, "email") if (!Email::Valid->address($borrower->{'email'}));
+        unless ( Email::Valid->address($borrower->{'email'}) ) {
+            push(@invalidFields, "email");
+        } elsif ( C4::Context->preference("PatronSelfRegistrationEmailMustBeUnique") ) {
+            my $patrons_with_same_email = Koha::Patrons->search( { email => $borrower->{email} })->count;
+            if ( $patrons_with_same_email ) {
+                push @invalidFields, "duplicate_email";
+            }
+        }
     }
     if ($borrower->{'emailpro'}) {
         push(@invalidFields, "emailpro") if (!Email::Valid->address($borrower->{'emailpro'}));
