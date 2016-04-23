@@ -740,6 +740,12 @@ OPAC:
             - pref: PatronSelfRegistrationAdditionalInstructions
               type: htmlarea
               class: html
+        -
+            - pref: PatronSelfRegistrationEmailMustBeUnique
+              choices:
+                  yes: "Consider"
+                  no: "Do not consider"
+            - "patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
     Advanced Search Options:
         -
             - Show search options

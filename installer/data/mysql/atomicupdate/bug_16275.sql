@@ -1,0 +1,1 @@
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('PatronSelfRegistrationEmailMustBeUnique', '0', 'If set, the field borrowers.email will be considered as a unique field on self registering', NULL, 'YesNo');
