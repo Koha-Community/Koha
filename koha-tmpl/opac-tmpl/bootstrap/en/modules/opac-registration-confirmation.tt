@@ -32,25 +32,28 @@
                     <div id="registration-complete">
                         <h1>Registration Complete!</h1>
 
-                        <p>You have successfully registered your new account. To log in, use the following credentials:</p>
+                        <p>You have successfully registered your new account.</p>
+                        [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
+                            <p>To log in, use the following credentials:</p>
 
-                        <p id="patron-userid-p">
-                            <span id="patron-userid-label">Username:</span>
-                            <span id="patron-userid">[% borrower.userid %]</span>
-                        </p>
-                        <p id="patron-password-p">
-                            <span id="patron-password-label">Password:</span>
-                            <span id="patron-password">[% password_cleartext %]<span>
-                        </p>
-
-                        [% IF borrower.cardnumber %]
-                            <p id="patron-cardnumber-p">
-                                <span id="patron-cardnumber-label">Card number:</span>
-                                <span id="patron-cardnumber">[% borrower.cardnumber %]</span>
+                            <p id="patron-userid-p">
+                                <span id="patron-userid-label">Username:</span>
+                                <span id="patron-userid">[% borrower.userid %]</span>
                             </p>
-                        [% END %]
+                            <p id="patron-password-p">
+                                <span id="patron-password-label">Password:</span>
+                                <span id="patron-password">[% password_cleartext %]<span>
+                            </p>
 
-                        <p id="patron-instructions">For your convenience, the login box on this page has been pre-filled with this data. Please log in[% IF OpacPasswordChange %] and change your password[% END %].</p>
+                            [% IF borrower.cardnumber %]
+                                <p id="patron-cardnumber-p">
+                                    <span id="patron-cardnumber-label">Card number:</span>
+                                    <span id="patron-cardnumber">[% borrower.cardnumber %]</span>
+                                </p>
+                            [% END %]
+
+                            <p id="patron-instructions">For your convenience, the login box on this page has been pre-filled with this data. Please log in[% IF OpacPasswordChange %] and change your password[% END %].</p>
+                        [% END %]
 
                         <div id="PatronSelfRegistrationAdditionalInstructions">[% PatronSelfRegistrationAdditionalInstructions %]</div>
                     </div>
@@ -67,8 +70,18 @@
                                                 <input type="hidden" name="koha_login_context" value="opac" />
                                                 <fieldset class="brief">
                                                     <legend>Log in to your account:</legend>
-                                                    <label for="userid">Login:</label><input type="text" id="userid" size="10" name="userid" value="[% borrower.userid %]" />
-                                                    <label for="password">Password:</label><input type="password" id="password" size="10" name="password" value="[% password_cleartext %]" />
+                                                    <label for="userid">Login:</label>
+                                                    [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
+                                                        <input type="text" id="userid" size="10" name="userid" value="[% borrower.userid %]" />
+                                                    [% ELSE %]
+                                                        <input type="text" id="userid" size="10" name="userid" value="" />
+                                                    [% END %]
+                                                    <label for="password">Password:</label>
+                                                    [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
+                                                        <input type="password" id="password" size="10" name="password" value="[% password_cleartext %]" />
+                                                    [% ELSE %]
+                                                        <input type="password" id="password" size="10" name="password" value="" />
+                                                    [% END %]
                                                 <fieldset class="action">
                                                     <input type="submit" value="Log in" class="btn" />
                                                 </fieldset>
