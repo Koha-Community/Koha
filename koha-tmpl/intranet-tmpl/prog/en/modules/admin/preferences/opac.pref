@@ -746,6 +746,11 @@ OPAC:
                   yes: "Consider"
                   no: "Do not consider"
             - "patron's email (borrowers.email) as unique on self registering. An email won't be accepted if it already exists in the database."
+        -
+            - "Enable the self registration for the following libraries:"
+            - pref: PatronSelfRegistrationLibraryList
+            - (separate branchcode with |).
+            - If empty, all libraries will be listed.
     Advanced Search Options:
         -
             - Show search options
