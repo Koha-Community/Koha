@@ -2,6 +2,7 @@
 
 # This file is part of Koha.
 #
+# Copyright 2015 Koha Development Team
 # Copyright (C) 2015  Mark Tompsett (Time Zone Shifts)
 #
 # Koha is free software; you can redistribute it and/or modify it
