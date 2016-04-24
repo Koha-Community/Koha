@@ -86,6 +86,23 @@ sub get {
     return $self;
 }
 
+=head2 sql
+
+    $logger->sql('debug', $sql, $params) if $logger->is_debug();
+
+Log SQL-statements using a unified interface.
+@param {String} Log level
+@param {String} SQL-command
+@param {ArrayRef} SQL prepared statement parameters
+@returns whatever Log::Log4perl returns
+
+=cut
+
+sub sql {
+    my ($self, $level, $sql, $params) = @_;
+    return $self->$level("$sql -- @$params");
+}
+
 sub _init {
     my $confFile = C4::Context->config("log4perl_conf");
     if ($confFile) {

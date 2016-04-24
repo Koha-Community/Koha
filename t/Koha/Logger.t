@@ -180,6 +180,19 @@ sub returnValuePassthrough {
 }
 t::Koha::Logger::clearLog();
 
+
+subtest "Koha::Logger->sql()", \&sqlsql;
+sub sqlsql {
+    my $logger = Koha::Logger->get({category => "sqlsql-1"});
+    my $retval = $logger->sql('fatal', 'SELECT * FROM a WHERE b=? AND c=? OR d=?', [1,2,3]) if $logger->is_fatal();
+    my $log = t::Koha::Logger::slurpLog('wantArray');
+    is(scalar(@$log), 1, "One entry written");
+    is($retval, 1, "Koha::Logger->sql() returns 'true' per Log4perl best practices");
+    ok($log->[0] =~ /SELECT \* FROM a WHERE b=\? AND c=\? OR d=\? -- 1 2 3/);
+    t::Koha::Logger::clearLog();
+}
+
+
 sub _loggerBlarbAllLevels {
     my ($logger) = @_;
     $logger->trace('trace');
