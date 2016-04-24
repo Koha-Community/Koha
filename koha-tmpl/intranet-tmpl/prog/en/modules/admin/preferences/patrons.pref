@@ -179,7 +179,13 @@ Patrons:
                yes: Show
                no: "Don't show"
          - "patron messaging setting on the OPAC (note: EnhancedMessagingPreferences must be enabled)."
-
+     -
+         - pref: TrackLastPatronActivity
+           choices:
+               yes: Do
+               no: "Don't"
+         - track last patron activity.
+         - Everytime a patron will connect, the borrowers.lastseen will be updated with the current time.
     "Norwegian patron database":
      -
          - pref: NorwegianPatronDBEnable
