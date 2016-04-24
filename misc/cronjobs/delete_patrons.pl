@@ -9,13 +9,14 @@ use C4::Members;
 use Koha::DateUtils;
 use C4::Log;
 
-my ( $help, $verbose, $not_borrowed_since, $expired_before, $category_code,
-    $branchcode, $confirm );
+my ( $help, $verbose, $not_borrowed_since, $expired_before, $last_seen,
+    $category_code, $branchcode, $confirm );
 GetOptions(
     'h|help'                 => \$help,
     'v|verbose'              => \$verbose,
     'not_borrowed_since:s'   => \$not_borrowed_since,
     'expired_before:s'       => \$expired_before,
+    'last_seen:s'            => \$last_seen,
     'category_code:s'        => \$category_code,
     'library:s'              => \$branchcode,
     'c|confirm'              => \$confirm,
@@ -31,9 +32,12 @@ $not_borrowed_since = dt_from_string( $not_borrowed_since, 'iso' )
 $expired_before = dt_from_string( $expired_before, 'iso' )
   if $expired_before;
 
-unless ( $not_borrowed_since or $expired_before or $category_code or $branchcode ) {
+if ( $last_seen and not C4::Context->preference('TrackLastPatronActivity') ) {
+    pod2usage(q{The --last_seen option cannot be used with TrackLastPatronActivity turned off});
+}
+
+unless ( $not_borrowed_since or $expired_before or $last_seen or $category_code or $branchcode ) {
     pod2usage(q{At least one filter is mandatory});
-    exit;
 }
 
 cronlogaction();
@@ -42,6 +46,7 @@ my $members = GetBorrowersToExpunge(
     {
         not_borrowed_since => $not_borrowed_since,
         expired_before       => $expired_before,
+        last_seen            => $last_seen,
         category_code        => $category_code,
         branchcode           => $branchcode,
     }
@@ -108,7 +113,7 @@ delete_patrons - This script deletes patrons
 
 =head1 SYNOPSIS
 
-delete_patrons.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--not_borrowed_since=DATE] [--expired_before=DATE] [--category_code=CAT] [--library=LIBRARY]
+delete_patrons.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--not_borrowed_since=DATE] [--expired_before=DATE] [--last-seen=DATE] [--category_code=CAT] [--library=LIBRARY]
 
 Dates should be in ISO format, e.g., 2013-07-19, and can be generated
 with `date -d '-3 month' "+%Y-%m-%d"`.
@@ -132,6 +137,12 @@ Delete patrons who have not borrowed since this date.
 =item B<--expired_before>
 
 Delete patrons with an account expired before this date.
+
+=item B<--last_seen>
+
+Delete patrons who have not been connected since this date.
+
+The system preference TrackLastPatronActivity must be enabled to use this option.
 
 =item B<--category_code>
 
