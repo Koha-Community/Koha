@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 79;
+use Test::More tests => 81;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -376,9 +376,17 @@ is( scalar(@$patstodel),2,'Borrowers without issues deleted by expiration_date a
 $patstodel = GetBorrowersToExpunge( {not_borrowed_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel),2,'Borrowers without issues deleted by last issue date');
 
-
-
-
+# Test GetBorrowersToExpunge and TrackLastPatronActivity
+$dbh->do(q|UPDATE borrowers SET lastseen=NULL|);
+$builder->build({ source => 'Borrower', value => { lastseen => '2016-01-01 01:01:01', guarantorid => undef } } );
+$builder->build({ source => 'Borrower', value => { lastseen => '2016-02-02 02:02:02', guarantorid => undef } } );
+$builder->build({ source => 'Borrower', value => { lastseen => '2016-03-03 03:03:03', guarantorid => undef } } );
+$patstodel = GetBorrowersToExpunge( { last_seen => '1999-12-12' });
+is( scalar @$patstodel, 0, 'TrackLastPatronActivity - 0 patrons must be deleted' );
+$patstodel = GetBorrowersToExpunge( { last_seen => '2016-02-15' });
+is( scalar @$patstodel, 2, 'TrackLastPatronActivity - 2 patrons must be deleted' );
+$patstodel = GetBorrowersToExpunge( { last_seen => '2016-04-04' });
+is( scalar @$patstodel, 3, 'TrackLastPatronActivity - 3 patrons must be deleted' );
 
 # Regression tests for BZ13502
 ## Remove all entries with userid='' (should be only 1 max)
