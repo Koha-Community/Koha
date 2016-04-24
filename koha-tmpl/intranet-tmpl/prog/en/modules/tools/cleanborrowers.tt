@@ -13,7 +13,7 @@
          */
           function checkForm(form) {
               if((form.checkbox[0].checked)){
-                  if ( (!form.date1.value) && (!form.borrower_dateexpiry.value) && (!form.borrower_categorycode.value) && (!form.patron_list_id.value)){
+                  if ( (!form.date1.value) && (!form.borrower_dateexpiry.value) [% IF Koha.Preference('TrackLastPatronActivity') %]&& (!form.borrower_lastseen.value) [% END %]&& (!form.borrower_categorycode.value) && (!form.patron_list_id.value)){
                     alert(_("Please enter at least one criterion for deletion!"));
                     return false;
                   }
@@ -107,6 +107,13 @@
                     <input size="10" id="borrower_dateexpiry" name="borrower_dateexpiry" type="text" class="datepicker" />
                     <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                 </li>
+                [% IF Koha.Preference('TrackLastPatronActivity') %]
+                    <li>
+                        <label for="borrower_lastseen">who have not been connected since:</label>
+                        <input size="10" id="borrower_lastseen" name="borrower_lastseen" type="text" class="datepicker" />
+                        <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                    </li>
+                [% END %]
                 <li>
                     <label for="borrower_categorycode">whose patron category is:</label>
                     <select id="borrower_categorycode" name="borrower_categorycode">
@@ -191,6 +198,9 @@
             <input type="hidden" name="not_borrowed_since" value="[% not_borrowed_since | $KohaDates %]" />
             <input type="hidden" name="last_issue_date" value="[% last_issue_date | $KohaDates %]" />
             <input type="hidden" name="borrower_dateexpiry" value="[% borrower_dateexpiry | $KohaDates %]" />
+            [% IF Koha.Preference('TrackLastPatronActivity') %]
+                <input type="hidden" name="borrower_lastseen" value="[% borrower_lastseen | $KohaDates %]" />
+            [% END %]
             <input type="hidden" name="borrower_categorycode" value="[% borrower_categorycode %]" />
             <input type="hidden" name="patron_list_id" value="[% patron_list_id %]" />
             <input type="hidden" name="branch" value="[% current_branch %]" />

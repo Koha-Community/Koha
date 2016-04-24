@@ -64,6 +64,10 @@ my $borrower_dateexpiry =
   $params->{borrower_dateexpiry}
   ? dt_from_string $params->{borrower_dateexpiry}
   : undef;
+my $borrower_lastseen =
+  $params->{borrower_lastseen}
+  ? dt_from_string $params->{borrower_lastseen}
+  : undef;
 my $patron_list_id = $params->{patron_list_id};
 
 my $borrower_categorycode = $params->{'borrower_categorycode'} || q{};
@@ -92,6 +96,7 @@ if ( $step == 2 ) {
              _get_selection_params(
                   $not_borrowed_since,
                   $borrower_dateexpiry,
+                  $borrower_lastseen,
                   $borrower_categorycode,
                   $patron_list_id,
                   $branch
@@ -128,6 +133,7 @@ elsif ( $step == 3 ) {
                 _get_selection_params(
                     $not_borrowed_since,
                     $borrower_dateexpiry,
+                    $borrower_lastseen,
                     $borrower_categorycode,
                     $patron_list_id,
                     $branch
@@ -179,6 +185,7 @@ $template->param(
     step                   => $step,
     not_borrowed_since   => $not_borrowed_since,
     borrower_dateexpiry    => $borrower_dateexpiry,
+    borrower_lastseen      => $borrower_lastseen,
     last_issue_date        => $last_issue_date,
     borrower_categorycodes => $patron_categories,
     borrower_categorycode  => $borrower_categorycode,
@@ -197,7 +204,7 @@ sub _skip_borrowers_with_nonzero_balance {
 }
 
 sub _get_selection_params {
-    my ($not_borrowed_since, $borrower_dateexpiry,
+    my ($not_borrowed_since, $borrower_dateexpiry, $borrower_lastseen,
         $borrower_categorycode, $patron_list_id, $branch) = @_;
 
     my $params = {};
@@ -211,6 +218,11 @@ sub _get_selection_params {
         dateformat => 'iso',
         dateonly   => 1
     }) if $borrower_dateexpiry;
+    $params->{last_seen} = output_pref({
+        dt         => $borrower_lastseen,
+        dateformat => 'iso',
+        dateonly   => 1
+    }) if $borrower_lastseen;
     $params->{category_code} = $borrower_categorycode if $borrower_categorycode;
     $params->{patron_list_id} = $patron_list_id if $patron_list_id;
 
