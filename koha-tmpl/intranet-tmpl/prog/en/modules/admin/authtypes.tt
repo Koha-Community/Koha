@@ -167,7 +167,7 @@
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authtypeactions[% authority_type.authtypecode %]">
                       <li><a href="auth_tag_structure.pl?authtypecode=[% authority_type.authtypecode %]" class="button parameters"><i class="fa fa-eye"></i> MARC structure</a></li>
                       <li><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode |html %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                      <li><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode |html %]"><i class="fa fa-trash"></i> Delete</a></li>
+                      [% IF authority_type.authtypecode %]<li><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode |html %]"><i class="fa fa-trash"></i> Delete</a></li>[% END %]
                     </ul>
                   </div>
                 </td>
