@@ -17,12 +17,15 @@
 
 use Modern::Perl;
 use DateTime::Format::MySQL;
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Quote;
 use Koha::Quotes;
+
+use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 BEGIN {
     use_ok('Koha::Quote');
@@ -76,3 +79,41 @@ my $quote_6 = Koha::Quote->new({ id => 6, source => 'George Washington', text =>
 
 $quote = Koha::Quote->get_daily_quote();
 is( $quote->{id}, 6, ' get_daily_quote returns the only existing quote' );
+
+$schema->storage->txn_rollback;
+
+subtest "get_daily_quote_for_interface" => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my ($quote);
+    my $quote_1 = Koha::Quote->new({ id => 10, source => 'Dusk And Her Embrace', text => 'Unfurl thy limbs breathless succubus<br/>How the full embosomed fog<br/>Imparts the night to us....', timestamp =>  dt_from_string })->store;
+
+    my $expected_quote = {
+        id          => 10,
+        source      => 'Dusk And Her Embrace',
+        text        => 'Unfurl thy limbs breathless succubus<br/>How the full embosomed fog<br/>Imparts the night to us....',
+        timestamp   => DateTime::Format::MySQL->format_datetime(dt_from_string),
+    };
+
+    t::lib::Mocks::mock_preference('QuoteOfTheDay', '');
+
+    ##Set interface and get nothing because syspref is not set.
+    C4::Context->interface('opac');
+    $quote = Koha::Quote->get_daily_quote_for_interface(id => $quote_1->id);
+    ok(not($quote), "'QuoteOfTheDay'-syspref not set so nothing returned");
+
+    ##Set 'QuoteOfTheDay'-syspref to not include current interface 'opac'
+    t::lib::Mocks::mock_preference('QuoteOfTheDay', 'intra commandline sip2 api yo-mama');
+    $quote = Koha::Quote->get_daily_quote_for_interface(id => $quote_1->id);
+    ok(not($quote), "'QuoteOfTheDay'-syspref doesn't include 'opac'");
+
+    ##Set 'QuoteOfTheDay'-syspref to include current interface 'opac'
+    t::lib::Mocks::mock_preference('QuoteOfTheDay', 'intraopaccommandline');
+    $quote = Koha::Quote->get_daily_quote_for_interface(id => $quote_1->id);
+    is_deeply($quote, $expected_quote, "Got the expected quote");
+
+    $schema->storage->txn_rollback;
+};

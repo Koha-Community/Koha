@@ -32,6 +32,7 @@ use Koha::Patron::Discharge;
 use Koha::Reviews;
 use Koha::ArticleRequests;
 use Koha::ProblemReports;
+use Koha::Quote;
 
 my $query = new CGI;
 
@@ -54,7 +55,8 @@ my $koha_news_count = scalar @$all_koha_news;
 
 $template->param(
     koha_news       => $all_koha_news,
-    koha_news_count => $koha_news_count
+    koha_news_count => $koha_news_count,
+    daily_quote     => Koha::Quote->get_daily_quote_for_interface(),
 );
 
 my $branch =

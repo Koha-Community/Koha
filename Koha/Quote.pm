@@ -22,6 +22,7 @@ use DBI qw(:sql_types);
 
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
+use Koha::Exceptions::UnknownProgramState;
 
 use base qw(Koha::Object);
 
@@ -104,6 +105,31 @@ sub get_daily_quote {
         );
     }
     return $quote;
+}
+
+=head2 get_daily_quote_for_interface
+
+    my $quote = Koha::Quote->get_daily_quote_for_interface();
+
+Is a wrapper for get_daily_quote(), with an extra check for using the correct
+interface defined in the syspref 'QuoteOfTheDay'.
+If the current interface is not allowed to display quotes, then returns undef.
+
+=cut
+
+sub get_daily_quote_for_interface {
+    my ($self, %opts) = @_;
+    my $qotdPref = C4::Context->preference('QuoteOfTheDay');
+    my $interface = C4::Context->interface();
+    unless ($interface) {
+        my @cc = caller(3);
+        Koha::Exceptions::UnknownProgramState->throw(error => $cc[3]."()> C4::Context->interface() is not set! Don't know are you in OPAC or staff client?");
+    }
+    unless ($qotdPref =~ /$interface/) {
+        return undef;
+    }
+
+    return $self->get_daily_quote(%opts);
 }
 
 =head3 _type

@@ -73,8 +73,6 @@ if (defined $news_id){
     @all_koha_news   = &GetNewsToDisplay( $template->lang, $homebranch);
 }
 
-my $quote = Koha::Quote->get_daily_quote();   # other options are to pass in an exact quote id or select a random quote each pass... see perldoc C4::Koha
-
 # For dashboard
 my $patron = Koha::Patrons->find( $borrowernumber );
 
@@ -101,8 +99,7 @@ if ( $patron ) {
 $template->param(
     koha_news           => @all_koha_news,
     branchcode          => $homebranch,
-    display_daily_quote => C4::Context->preference('QuoteOfTheDay'),
-    daily_quote         => $quote,
+    daily_quote         => Koha::Quote->get_daily_quote_for_interface(),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
