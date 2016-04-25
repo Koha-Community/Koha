@@ -19,11 +19,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Data::Dumper;
 use Koha::Database;
 
 BEGIN {
+    use_ok('Koha::ItemType');
     use_ok('Koha::ItemTypes');
 }
 
@@ -31,7 +32,7 @@ my $database = Koha::Database->new();
 my $schema   = $database->schema();
 $schema->txn_begin;
 
-$schema->resultset('Itemtype')->create(
+Koha::ItemType->new(
     {
         itemtype       => 'type1',
         description    => 'description',
@@ -41,8 +42,9 @@ $schema->resultset('Itemtype')->create(
         checkinmsg     => 'checkinmsg',
         checkinmsgtype => 'checkinmsgtype',
     }
-);
-$schema->resultset('Itemtype')->create(
+)->store;
+
+Koha::ItemType->new(
     {
         itemtype       => 'type2',
         description    => 'description',
@@ -52,14 +54,11 @@ $schema->resultset('Itemtype')->create(
         checkinmsg     => 'checkinmsg',
         checkinmsgtype => 'checkinmsgtype',
     }
-);
-my $itypes = Koha::ItemTypes->new();
+)->store;
 
-my @types = $itypes->get_itemtype( 'type1', 'type2' );
-
-my $type = $types[0];
+my $type = Koha::ItemTypes->find('type1');
 ok( defined($type), 'first result' );
-is( $type->code,           'type1',          'itemtype/code' );
+is( $type->itemtype,       'type1',          'itemtype/code' );
 is( $type->description,    'description',    'description' );
 is( $type->rentalcharge,   '0.0000',             'rentalcharge' );
 is( $type->imageurl,       'imageurl',       'imageurl' );
@@ -67,9 +66,9 @@ is( $type->summary,        'summary',        'summary' );
 is( $type->checkinmsg,     'checkinmsg',     'checkinmsg' );
 is( $type->checkinmsgtype, 'checkinmsgtype', 'checkinmsgtype' );
 
-$type = $types[1];
+$type = Koha::ItemTypes->find('type2');
 ok( defined($type), 'second result' );
-is( $type->code,           'type2',          'itemtype/code' );
+is( $type->itemtype,       'type2',          'itemtype/code' );
 is( $type->description,    'description',    'description' );
 is( $type->rentalcharge,   '0.0000',             'rentalcharge' );
 is( $type->imageurl,       'imageurl',       'imageurl' );
