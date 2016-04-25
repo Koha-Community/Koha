@@ -53,12 +53,6 @@ __PACKAGE__->table("borrower_attribute_types");
   default_value: 0
   is_nullable: 0
 
-=head2 password_allowed
-
-  data_type: 'tinyint'
-  default_value: 0
-  is_nullable: 0
-
 =head2 staff_searchable
 
   data_type: 'tinyint'
@@ -102,8 +96,6 @@ __PACKAGE__->add_columns(
   "unique_id",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "opac_display",
-  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
-  "password_allowed",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "staff_searchable",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
@@ -162,8 +154,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-01-13 13:14:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9fLFZ/u89xmeCollneyUIg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-04-25 18:09:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KzCA3jRyp/uqYdrHFXaw7Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
