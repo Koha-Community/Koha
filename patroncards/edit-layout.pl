@@ -236,7 +236,7 @@ elsif  ($op eq 'save') {
 elsif  ($op eq 'new') { # this is a new layout
     $layout = C4::Patroncards::Layout->new();
     my @fields = ();
-    for (my $field; $field < 4; $field++) {     # limit 3 text fields
+    for (my $field = 0; $field < 4; $field++) {     # limit 3 text fields
         push @fields, (
                         "field_$field" . "_font" => get_font_types(),
                         "field_$field" . "_text_alignment" => get_text_justification_types(),
@@ -244,7 +244,7 @@ elsif  ($op eq 'new') { # this is a new layout
     }
 
     my @images = ();
-    for (my $image; $image < 3; $image++) {     #limit 2 images
+    for (my $image = 0; $image < 3; $image++) {     #limit 2 images
         push @images, (
                         "image_$image" . "_image_source" => $image_sources,
                         "image_$image" . "_image_name" => $image_names,
