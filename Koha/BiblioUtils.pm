@@ -120,7 +120,7 @@ sub get_all_biblios_iterator {
         # Warn and skip bad records, otherwise we break the loop
         while (1) {
             my $row = $rs->next();
-            return undef if !$row;
+            return if !$row;
             my $marc = C4::Biblio::GetMarcBiblio( $row->biblionumber, 1 );
             my $next = eval {
                 __PACKAGE__->new($marc, $row->biblionumber);

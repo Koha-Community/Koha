@@ -1330,6 +1330,7 @@ Shim function to ease the transition from buildQuery to a new QueryParser.
 This function is called at the beginning of buildQuery, and modifies
 buildQuery's input. If it can handle the input, it returns a query that
 buildQuery will not try to parse.
+
 =cut
 
 sub parseQuery {

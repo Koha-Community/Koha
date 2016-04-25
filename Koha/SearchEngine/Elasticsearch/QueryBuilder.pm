@@ -134,6 +134,7 @@ to be searched must have been indexed with an appropriate mapping as a
 "phrase" subfield, which pretty much everything has.
 
 =cut
+
 # XXX this isn't really a browse query like we want in the end
 sub build_browse_query {
     my ( $self, $field, $query ) = @_;
@@ -224,14 +225,17 @@ sub build_query_compat {
 
     #die Dumper($query);
     # We roughly emulate the CGI parameters of the zebra query builder
-    my $query_cgi = 'idx=kw&q=' . uri_escape_utf8( $operands->[0] ) if @$operands;
-    my $simple_query = $operands->[0] if @$operands == 1;
+    my $query_cgi;
+    $query_cgi = 'idx=kw&q=' . uri_escape_utf8( $operands->[0] ) if @$operands;
+    my $simple_query;
+    $simple_query = $operands->[0] if @$operands == 1;
     my $query_desc   = $simple_query;
     my $limit        = $self->_join_queries( $self->_convert_index_strings(@$limits));
     my $limit_cgi = ( $orig_limits and @$orig_limits )
       ? '&limit=' . join( '&limit=', map { uri_escape_utf8($_) } @$orig_limits )
       : '';
-    my $limit_desc = "$limit" if $limit;
+    my $limit_desc;
+    $limit_desc = "$limit" if $limit;
     return (
         undef,  $query,     $simple_query, $query_cgi, $query_desc,
         $limit, $limit_cgi, $limit_desc,   undef,      undef
@@ -311,8 +315,8 @@ sub build_authorities_query {
 
     # We need to add '.phrase' to all the sort headings otherwise it'll sort
     # based on the tokenised form.
+    my %s;
     if ( exists $search->{sort} ) {
-        my %s;
         foreach my $k ( keys %{ $search->{sort} } ) {
             my $f = $self->_sort_field($k);
             $s{"$f.phrase"} = $search->{sort}{$k};
@@ -321,7 +325,8 @@ sub build_authorities_query {
     }
 
     # extract the sort stuff
-    my %sort = ( sort => [ $search->{sort} ] ) if exists $search->{sort};
+    my %sort;
+    %sort = ( sort => [ $search->{sort} ] ) if exists $search->{sort};
     my $query;
     if (@filter_parts) {
         $query =
@@ -374,11 +379,11 @@ truncation). If left blank, then word list, right truncted, anywhere is used.
 
 The actual user-provided string value to search for.
 
-=authtypecode
+=item authtypecode
 
 The authority type code to search within. If blank, then all will be searched.
 
-=orderby
+=item orderby
 
 The order to sort the results by. Options are Relevance, HeadingAsc,
 HeadingDsc, AuthidAsc, AuthidDsc.

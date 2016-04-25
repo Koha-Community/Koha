@@ -39,7 +39,7 @@ Koha::SearchFields - Koha SearchField Object set class
 
 =cut
 
-sub type {
+sub _type {
     return 'SearchField';
 }
 

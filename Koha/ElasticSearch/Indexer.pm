@@ -41,8 +41,6 @@ Koha::ElasticSearch::Indexer - handles adding new records to the index
 
 =head1 FUNCTIONS
 
-=cut
-
 =head2 $indexer->update_index($biblionums, $records);
 
 C<$biblionums> is an arrayref containing the biblionumbers for the records.
@@ -138,6 +136,7 @@ sub delete_index_background {
     my $self = shift;
     $self->delete_index(@_);
 }
+
 =head2 $indexer->drop_index();
 
 Drops the index from the elasticsearch server. Calling C<update_index>
@@ -206,5 +205,3 @@ __END__
 =item Robin Sheat C<< <robin@catalyst.net.nz> >>
 
 =back
-
-=cut

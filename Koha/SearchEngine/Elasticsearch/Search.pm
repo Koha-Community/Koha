@@ -38,6 +38,8 @@ Koha::SearchEngine::ElasticSearch::Search - search functions for Elasticsearch
 
 =cut
 
+use Modern::Perl;
+
 use base qw(Koha::ElasticSearch);
 use C4::Context;
 use Koha::ItemTypes;
@@ -93,7 +95,6 @@ sub search {
             %$params,
         )
     ) unless $self->store;
-    my $error;
     my $results = eval {
         $self->store->bag->search( %$query, %paging );
     };
@@ -108,7 +109,7 @@ sub search {
     my $count = $searcher->count($query);
 
 This mimics a search request, but just gets the result count instead. That's
-faster than pulling all the data in, ususally.
+faster than pulling all the data in, usually.
 
 =cut
 
@@ -157,7 +158,7 @@ sub search_compat {
         # right place in the array, according to $offset
     $results->each(sub {
             # The results come in an array for some reason
-            my $marc_json = @_[0]->{record};
+            my $marc_json = $_[0]->{record};
             my $marc = $self->json2marc($marc_json);
             $records[$index++] = $marc;
         });
@@ -191,7 +192,7 @@ sub search_auth_compat {
     $res->each(
         sub {
             my %result;
-            my $record    = @_[0];
+            my $record    = $_[0];
             my $marc_json = $record->{record};
 
             # I wonder if these should be real values defined in the mapping
@@ -333,7 +334,7 @@ sub simple_search_compat {
     my @records;
     $results->each(sub {
             # The results come in an array for some reason
-            my $marc_json = @_[0]->{record};
+            my $marc_json = $_[0]->{record};
             my $marc = $self->json2marc($marc_json);
             push @records, $marc;
         });
@@ -358,7 +359,7 @@ sub json2marc {
     # fields are like:
     # [ '245', '1', '2', 'a' => 'Title', 'b' => 'Subtitle' ]
     # conveniently, this is the form that MARC::Field->new() likes
-    foreach $field (@$marcjson) {
+    foreach my $field (@$marcjson) {
         next if @$field < 5;    # Shouldn't be possible, but...
         if ( $field->[0] eq 'LDR' ) {
             $marc->leader( $field->[4] );
@@ -387,7 +388,7 @@ than just 5 like normal.
 sub _convert_facets {
     my ( $self, $es, $exp_facet ) = @_;
 
-    return undef if !$es;
+    return if !$es;
 
     # These should correspond to the ES field names, as opposed to the CCL
     # things that zebra uses.
@@ -412,7 +413,7 @@ sub _convert_facets {
     );
     my @facets;
     $exp_facet //= '';
-    while ( ( $type, $data ) = each %$es ) {
+    while ( my ( $type, $data ) = each %$es ) {
         next if !exists( $type_to_label{$type} );
 
         # We restrict to the most popular $limit !results
@@ -430,6 +431,7 @@ sub _convert_facets {
         foreach my $term ( @{ $data->{terms} }[ 0 .. $limit - 1 ] ) {
             my $t = $term->{term};
             my $c = $term->{count};
+            my $label;
             if ( exists( $special{$type} ) ) {
                 $label = $special{$type}->{$t} // $t;
             }
