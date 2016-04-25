@@ -138,6 +138,9 @@ elsif ($op eq 'add') {
     my $auto_renew = $input->param('auto_renew') eq 'yes' ? 1 : 0;
     my $no_auto_renewal_after = $input->param('no_auto_renewal_after');
     $no_auto_renewal_after = undef if $no_auto_renewal_after =~ /^\s*$/;
+    my $no_auto_renewal_after_hard_limit = $input->param('no_auto_renewal_after_hard_limit') || undef;
+    $no_auto_renewal_after_hard_limit = eval { dt_from_string( $input->param('no_auto_renewal_after_hard_limit') ) } if ( $no_auto_renewal_after_hard_limit );
+    $no_auto_renewal_after_hard_limit = output_pref( { dt => $no_auto_renewal_after_hard_limit, dateonly => 1, dateformat => 'iso' } ) if ( $no_auto_renewal_after_hard_limit );
     my $reservesallowed  = $input->param('reservesallowed');
     my $holds_per_record  = $input->param('holds_per_record');
     my $onshelfholds     = $input->param('onshelfholds') || 0;
@@ -176,6 +179,7 @@ elsif ($op eq 'add') {
         norenewalbefore               => $norenewalbefore,
         auto_renew                    => $auto_renew,
         no_auto_renewal_after         => $no_auto_renewal_after,
+        no_auto_renewal_after_hard_limit => $no_auto_renewal_after_hard_limit,
         reservesallowed               => $reservesallowed,
         holds_per_record              => $holds_per_record,
         issuelength                   => $issuelength,
@@ -503,6 +507,11 @@ while (my $row = $sth2->fetchrow_hashref) {
     } else {
        $row->{'hardduedate'} = 0;
     }
+    if ($row->{no_auto_renewal_after_hard_limit}) {
+       my $dt = eval { dt_from_string( $row->{no_auto_renewal_after_hard_limit} ) };
+       $row->{no_auto_renewal_after_hard_limit} = eval { output_pref( { dt => $dt, dateonly => 1 } ) } if $dt;
+    }
+
     push @row_loop, $row;
 }
 

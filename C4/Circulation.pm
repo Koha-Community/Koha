@@ -2753,19 +2753,26 @@ sub CanBookBeRenewed {
         return ( 0, 'overdue');
     }
 
-    if ( $itemissue->{auto_renew}
-        and defined $issuing_rule->no_auto_renewal_after
+    if ( $itemissue->{auto_renew} ) {
+        if ( defined $issuing_rule->no_auto_renewal_after
                 and $issuing_rule->no_auto_renewal_after ne "" ) {
-
-        # Get issue_date and add no_auto_renewal_after
-        # If this is greater than today, it's too late for renewal.
-        my $maximum_renewal_date = dt_from_string($itemissue->{issuedate});
-        $maximum_renewal_date->add(
-            $issuing_rule->lengthunit => $issuing_rule->no_auto_renewal_after
-        );
-        my $now = dt_from_string;
-        if ( $now >= $maximum_renewal_date ) {
-            return ( 0, "auto_too_late" );
+            # Get issue_date and add no_auto_renewal_after
+            # If this is greater than today, it's too late for renewal.
+            my $maximum_renewal_date = dt_from_string($itemissue->{issuedate});
+            $maximum_renewal_date->add(
+                $issuing_rule->lengthunit => $issuing_rule->no_auto_renewal_after
+            );
+            my $now = dt_from_string;
+            if ( $now >= $maximum_renewal_date ) {
+                return ( 0, "auto_too_late" );
+            }
+        }
+        if ( defined $issuing_rule->no_auto_renewal_after_hard_limit
+                      and $issuing_rule->no_auto_renewal_after_hard_limit ne "" ) {
+            # If no_auto_renewal_after_hard_limit is >= today, it's also too late for renewal
+            if ( dt_from_string >= dt_from_string( $issuing_rule->no_auto_renewal_after_hard_limit ) ) {
+                return ( 0, "auto_too_late" );
+            }
         }
     }
 
@@ -3069,8 +3076,8 @@ has the item on loan.
 C<$itemnumber> is the number of the item to renew.
 
 C<$GetLatestAutoRenewDate> returns the DateTime of the latest possible
-auto renew date, based on the value "No auto renewal after" of the applicable
-issuing rule.
+auto renew date, based on the value "No auto renewal after" and the "No auto
+renewal after (hard limit) of the applicable issuing rule.
 Returns undef if there is no date specify in the circ rules or if the patron, loan,
 or item cannot be found.
 
@@ -3097,14 +3104,24 @@ sub GetLatestAutoRenewDate {
     );
 
     return unless $issuing_rule;
-    return if not $issuing_rule->no_auto_renewal_after
-               or $issuing_rule->no_auto_renewal_after eq '';
+    return
+      if ( not $issuing_rule->no_auto_renewal_after
+            or $issuing_rule->no_auto_renewal_after eq '' )
+      and ( not $issuing_rule->no_auto_renewal_after_hard_limit
+             or $issuing_rule->no_auto_renewal_after_hard_limit eq '' );
 
-    my $maximum_renewal_date = dt_from_string($itemissue->{issuedate});
-    $maximum_renewal_date->add(
-        $issuing_rule->lengthunit => $issuing_rule->no_auto_renewal_after
-    );
+    my $maximum_renewal_date;
+    if ( $issuing_rule->no_auto_renewal_after ) {
+        $maximum_renewal_date = dt_from_string($itemissue->{issuedate});
+        $maximum_renewal_date->add(
+            $issuing_rule->lengthunit => $issuing_rule->no_auto_renewal_after
+        );
+    }
 
+    if ( $issuing_rule->no_auto_renewal_after_hard_limit ) {
+        my $dt = dt_from_string( $issuing_rule->no_auto_renewal_after_hard_limit );
+        $maximum_renewal_date = $dt if not $maximum_renewal_date or $maximum_renewal_date > $dt;
+    }
     return $maximum_renewal_date;
 }
 

@@ -579,7 +579,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     );
 
     subtest "too_late_renewal / no_auto_renewal_after" => sub {
-        plan tests => 8;
+        plan tests => 14;
         my $item_to_auto_renew = $builder->build(
             {   source => 'Item',
                 value  => {
@@ -617,10 +617,28 @@ C4::Context->dbh->do("DELETE FROM accountlines");
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0,            'Do not renew, renewal is automatic' );
         is( $error,     'auto_renew', 'Cannot renew, renew is automatic' );
+
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = NULL, no_auto_renewal_after_hard_limit = ?', undef, dt_from_string->add( days => -1 ) );
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is( $error, 'auto_too_late', 'Cannot renew, too late(returned code is auto_too_late)' );
+
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = 15, no_auto_renewal_after_hard_limit = ?', undef, dt_from_string->add( days => -1 ) );
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is( $error, 'auto_too_late', 'Cannot renew, too late(returned code is auto_too_late)' );
+
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = NULL, no_auto_renewal_after_hard_limit = ?', undef, dt_from_string->add( days => 1 ) );
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is( $error, 'auto_renew', 'Cannot renew, renew is automatic' );
     };
 
     subtest "GetLatestAutoRenewDate" => sub {
-        plan tests => 3;
+        plan tests => 5;
         my $item_to_auto_renew = $builder->build(
             {   source => 'Item',
                 value  => {
@@ -634,23 +652,37 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         my $ten_days_before = dt_from_string->add( days => -10 );
         my $ten_days_ahead  = dt_from_string->add( days => 10 );
         AddIssue( $renewing_borrower, $item_to_auto_renew->{barcode}, $ten_days_ahead, undef, $ten_days_before, undef, { auto_renew => 1 } );
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = ""');
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = "", no_auto_renewal_after_hard_limit = NULL');
         my $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
-        is( $latest_auto_renew_date, undef, 'GetLatestAutoRenewDate should return undef if no_auto_renewal_after is not defined' );
+        is( $latest_auto_renew_date, undef, 'GetLatestAutoRenewDate should return undef if no_auto_renewal_after or no_auto_renewal_after_hard_limit are not defined' );
         my $five_days_before = dt_from_string->add( days => -5 );
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 5');
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 5, no_auto_renewal_after_hard_limit = NULL');
         $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $latest_auto_renew_date->truncate( to => 'minute' ),
             $five_days_before->truncate( to => 'minute' ),
             'GetLatestAutoRenewDate should return -5 days if no_auto_renewal_after = 5 and date_due is 10 days before'
         );
         my $five_days_ahead = dt_from_string->add( days => 5 );
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 15');
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 15, no_auto_renewal_after_hard_limit = NULL');
         $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $latest_auto_renew_date->truncate( to => 'minute' ),
             $five_days_ahead->truncate( to => 'minute' ),
             'GetLatestAutoRenewDate should return +5 days if no_auto_renewal_after = 15 and date_due is 10 days before'
         );
+        my $two_days_ahead = dt_from_string->add( days => 2 );
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = "", no_auto_renewal_after_hard_limit = ?', undef, dt_from_string->add( days => 2 ) );
+        $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $latest_auto_renew_date->truncate( to => 'day' ),
+            $two_days_ahead->truncate( to => 'day' ),
+            'GetLatestAutoRenewDate should return +2 days if no_auto_renewal_after_hard_limit is defined and not no_auto_renewal_after'
+        );
+        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 15, no_auto_renewal_after_hard_limit = ?', undef, dt_from_string->add( days => 2 ) );
+        $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $latest_auto_renew_date->truncate( to => 'day' ),
+            $two_days_ahead->truncate( to => 'day' ),
+            'GetLatestAutoRenewDate should return +2 days if no_auto_renewal_after_hard_limit is < no_auto_renewal_after'
+        );
+
     };
 
     # Too many renewals

@@ -871,6 +871,7 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   `norenewalbefore` int(4) default NULL, -- no renewal allowed until X days or hours before due date.
   `auto_renew` BOOLEAN default FALSE, -- automatic renewal
   `no_auto_renewal_after` int(4) default NULL, -- no auto renewal allowed after X days or hours after the issue date
+  `no_auto_renewal_after_hard_limit` date default NULL, -- no auto renewal allowed after a given date
   `reservesallowed` smallint(6) NOT NULL default "0", -- how many holds are allowed
   `holds_per_record` SMALLINT(6) NOT NULL DEFAULT 1, -- How many holds a patron can have on a given bib
   `branchcode` varchar(10) NOT NULL default '', -- the branch this rule is for (branches.branchcode)
