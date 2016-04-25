@@ -191,6 +191,14 @@
             [% END %]
         </div><!-- /koha-news -->
     [% END %]
+    [% IF ( daily_quote ) %]
+        <div id="area-news">
+            <h3>Quote of the Day</h3>
+            <div class="newsitem">
+                <span id="daily-quote-text">[% daily_quote.text %]</span><span id="daily-quote-sep"> ~ </span><span id="daily-quote-source">[% daily_quote.source %]</span>
+            </div>
+        </div>
+    [% END %]
     </div>
 </div>
 

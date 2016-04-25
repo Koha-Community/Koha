@@ -60,14 +60,11 @@ elsif (C4::Context->userenv and defined $input->param('branch') and length $inpu
 my $all_koha_news   = &GetNewsToDisplay($news_lang,$homebranch);
 my $koha_news_count = scalar @$all_koha_news;
 
-my $quote = GetDailyQuote();   # other options are to pass in an exact quote id or select a random quote each pass... see perldoc C4::Koha
-
 $template->param(
     koha_news           => $all_koha_news,
     koha_news_count     => $koha_news_count,
     branchcode          => $homebranch,
-    display_daily_quote => C4::Context->preference('QuoteOfTheDay'),
-    daily_quote         => $quote,
+    daily_quote         => C4::Koha::GetDailyQuoteForInterface(),
 );
 
 # If GoogleIndicTransliteration system preference is On Set parameter to load Google's javascript in OPAC search screens

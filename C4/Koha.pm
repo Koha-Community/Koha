@@ -36,6 +36,8 @@ use autouse 'Data::cselectall_arrayref' => qw(Dumper);
 use DBI qw(:sql_types);
 use vars qw(@ISA @EXPORT @EXPORT_OK $DEBUG);
 
+use Koha::Exception::UnknownProgramState;
+
 BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
@@ -1029,6 +1031,30 @@ sub IsKohaFieldLinked {
 }
 
 1;
+
+=head2 GetDailyQuoteForInterface
+
+    my $quote = C4::Koha::GetDailyQuoteForInterface();
+
+Is a wrapper for GetDailyQuotes(), with an extra check for using the correct
+interface defined in the syspref 'QuoteOfTheDay'.
+If the current interface is not allowed to display quotes, then returns undef.
+
+=cut
+
+sub GetDailyQuoteForInterface {
+    my %opts = @_;
+    my $qotdPref = C4::Context->preference('QuoteOfTheDay');
+    my $interface = C4::Context->interface();
+    unless ($interface) {
+        my @cc = caller(3);
+        Koha::Exception::UnknownProgramState->throw(error => $cc[3]."()> C4::Context->interface() is not set! Don't know are you in OPAC or staff client?");
+    }
+    unless ($qotdPref =~ /$interface/) {
+        return undef;
+    }
+    return GetDailyQuote(%opts);
+}
 
 __END__
 

@@ -476,11 +476,12 @@ OPAC:
             - browsing and paging search results from the OPAC detail page.
         -
             - pref: QuoteOfTheDay
-              default: 0
-              choices:
-                  yes: Enable
-                  no: Disable
-            - Quote of the Day display on OPAC home page
+              default:
+              class: short
+            - Quote of the Day display in Koha.
+            - Add 'opac' to show in OPAC home page.
+            - Add 'intranet' to show in the staff client main page.
+            - Example 'opac intranet', displays QOTD in OPAC and the staff client.
         -
             - pref: OPACPopupAuthorsSearch
               default: 0
