@@ -94,15 +94,6 @@ function verify_images() {
     }
 
     [% IF StaffDetailItemSelection %]
-        function selectAllItems(div) {
-            $("input[name='itemnumber'][type='checkbox']", div).prop('checked', true);
-            itemSelectionBuildActionLinks(div);
-        }
-
-        function clearAllItems(div) {
-            $("input[name='itemnumber'][type='checkbox']", div).prop('checked', false);
-            itemSelectionBuildActionLinks(div);
-        }
 
         function itemSelectionBuildDeleteLink(div) {
             var itemnumbers = new Array();
@@ -114,9 +105,7 @@ function verify_images() {
                   url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
                   url += '&src=' + '[% "/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber" |uri %]';
                   $('a.itemselection_action_delete').attr('href', url);
-                  $('a.itemselection_action_delete').show();
             } else {
-                $('a.itemselection_action_delete').hide();
                 return false;
             }
             return true
@@ -132,15 +121,14 @@ function verify_images() {
                   url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
                   url += '&src=' + '[% "/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber" |uri %]';
                   $('a.itemselection_action_modify').attr('href', url);
-                  $('a.itemselection_action_modify').show();
             } else {
-                $('a.itemselection_action_modify').hide();
                 return false;
             }
             return true;
         }
 
-        function itemSelectionBuildActionLinks(div) {
+        function itemSelectionBuildActionLinks(tab) {
+            var div = $("#" + tab);
           var delete_link_ok = itemSelectionBuildDeleteLink(div);
           var modify_link_ok = itemSelectionBuildModifyLink(div);
           if (modify_link_ok || delete_link_ok) {
@@ -151,14 +139,31 @@ function verify_images() {
         }
 
         $(document).ready(function() {
+
           $('table.items_table').each(function() {
-            var div = $(this).parent().parent();
+            var div = $(this).parent().attr("id");
             itemSelectionBuildActionLinks(div);
           });
+
           $("input[name='itemnumber'][type='checkbox']").change(function() {
-            var div = $(this).parents('table').parent().parent();
+            var div = $(this).parents('table').parent().parent().attr("id");
             itemSelectionBuildActionLinks(div);
           });
+
+            $(".SelectAll").on("click",function(e){
+                e.preventDefault();
+                var tab = $(this).data("tab");
+                $("input[name='itemnumber'][type='checkbox']", $("#"+tab)).prop('checked', true);
+                itemSelectionBuildActionLinks(tab);
+            });
+
+            $(".ClearAll").on("click",function(e){
+                e.preventDefault();
+                var tab = $(this).data("tab");
+                $("input[name='itemnumber'][type='checkbox']", $("#"+tab)).prop('checked', false);
+                itemSelectionBuildActionLinks(tab);
+            });
+
         });
     [% END %]
 
@@ -236,7 +241,7 @@ function verify_images() {
         }
 
         $('#' + id + '_activate_filters')
-            .text(_("Deactivate filters"))
+            .html('<i class="fa fa-filter"></i> ' + _("Deactivate filters") )
             .unbind('click')
             .click(function() {
                 deactivate_filters(id);
@@ -254,7 +259,7 @@ function verify_images() {
         filters_row.hide();
 
         $('#' + id + '_activate_filters')
-            .text(_("Activate filters"))
+            .html('<i class="fa fa-filter"></i> ' + _("Activate filters") )
             .unbind('click')
             .click(function() {
                 activate_filters(id);
@@ -288,7 +293,7 @@ function verify_images() {
             link = $('<a>')
                 .attr('href', '#')
                 .attr('id', id + '_activate_filters');
-            table.before(link);
+            $("." + id + "_table_controls").prepend(link);
             deactivate_filters(id);
         }
         [% IF Koha.Preference('AcquisitionDetails') %]
@@ -561,19 +566,21 @@ function verify_images() {
 [% items_table_block_iter = 0 %]
 [% BLOCK items_table %]
     [% items_table_block_iter = items_table_block_iter + 1 %]
-    [% IF (StaffDetailItemSelection) %]
-        <a href="#" onclick="selectAllItems($(this).parent()); return false;">Select all</a> |
-        <a href="#" onclick="clearAllItems($(this).parent()); return false;">Clear all</a>
-        <span class="itemselection_actions">
-          | Actions:
-          [% IF CAN_user_tools_items_batchdel %]
-            <a class="itemselection_action_delete">Delete selected items</a>
-          [% END %]
-          [% IF CAN_user_tools_items_batchmod %]
-            <a class="itemselection_action_modify">Modify selected items</a>
-          [% END %]
-        </span>
-    [% END %]
+    <div class="[% tab %]_table_controls">
+        [% IF (StaffDetailItemSelection) %]
+            | <a href="#" class="SelectAll" data-tab="[% tab %]"><i class="fa fa-check"></i> Select all</a> |
+            <a href="#" class="ClearAll" data-tab="[% tab %]"><i class="fa fa-remove"></i> Clear all</a>
+            <span class="itemselection_actions">
+              | Actions:
+              [% IF CAN_user_tools_items_batchdel %]
+                <a class="itemselection_action_delete"><i class="fa fa-trash"></i> Delete selected items</a>
+              [% END %]
+              [% IF CAN_user_tools_items_batchmod %]
+                <a class="itemselection_action_modify"><i class="fa fa-pencil"></i> Modify selected items</a>
+              [% END %]
+            </span>
+        [% END %]
+    </div>
     <table class="items_table">
         <thead>
             <tr>
@@ -597,7 +604,7 @@ function verify_images() {
                 [% IF ( hostrecords ) %]<th>Host records</th>[% END %]
                 [% IF ( analyze ) %]<th>Used in</th><th></th>[% END %]
                 [% IF ( ShowCourseReserves ) %]<th>Course Reserves</th>[% END %]
-                [% IF ( CAN_user_editcatalogue_edit_items ) %]<th class="NoSort">Edit</th>[% END %]
+                [% IF ( CAN_user_editcatalogue_edit_items ) %]<th class="NoSort">&nbsp;</th>[% END %]
             </tr>
         </thead>
         <tbody>
@@ -803,9 +810,9 @@ function verify_images() {
                     </td>
                 [% END %]
                 [% IF CAN_user_editcatalogue_edit_items %]
-                    <td>
+                    <td class="actions">
                         [% UNLESS item.cannot_be_edited %]
-                            <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber %]&itemnumber=[% item.itemnumber %]#edititem">Edit</a>
+                            <a class="btn btn-mini" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber %]&itemnumber=[% item.itemnumber %]#edititem"><i class="fa fa-pencil"></i> Edit</a>
                         [% END %]
                     </td>
                 [% END %]
@@ -818,7 +825,7 @@ function verify_images() {
 <div id="holdings">
 [% IF ( count ) %]
     [% IF ( showncount ) %]
-        [% PROCESS items_table items=itemloop %]
+        [% PROCESS items_table tab="holdings" items=itemloop %]
         [% END %]
                 [% IF ( hiddencount ) %]
                    <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&amp;showallitems=1">Show all items ([% hiddencount %] hidden)</a>
@@ -845,7 +852,7 @@ function verify_images() {
 [% IF (SeparateHoldings) %]
     <div id="otherholdings">
         [% IF (otheritemloop.size) %]
-            [% PROCESS items_table items=otheritemloop %]
+            [% PROCESS items_table tab="otherholdings" items=otheritemloop %]
         [% ELSE %]
             No other items.
         [% END %]
