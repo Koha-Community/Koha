@@ -23,6 +23,14 @@ $(document).ready(function(){
             $('#items').show();
         }
     });
+    $("#fileuploadbutton").on("click",function(e){
+        e.preventDefault();
+        StartUpload();
+    });
+    $("#fileuploadcancel").on("click",function(e){
+        e.preventDefault();
+        CancelUpload();
+    });
 });
 function CheckForm(f) {
     if ($("#fileToUpload").value == '') {
@@ -137,8 +145,8 @@ function cbUpload( status, fileid ) {
         </div>	</li>
 </ol>
     <fieldset class="action">
-        <button id="fileuploadbutton" onclick="StartUpload(); return false;">Upload file</button>
-        <button id="fileuploadcancel" onclick="CancelUpload(); return false;">Cancel</button>
+        <button id="fileuploadbutton">Upload file</button>
+        <button id="fileuploadcancel">Cancel</button>
     </fieldset>
 </fieldset>
 		
