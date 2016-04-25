@@ -131,7 +131,7 @@
 			<td>[% loo.auth_tag_to_report %]</td>
 			<td><a href="auth_tag_structure.pl?authtypecode=[% loo.authtypecode %]" class="button parameters" >MARC structure</a></td>
 			<td><a href="[% loo.script_name %]?op=add_form&amp;authtypecode=[% loo.authtypecode |html %]">Edit</a></td>
-			<td><a href="[% loo.script_name %]?op=delete_confirm&amp;authtypecode=[% loo.authtypecode |html %]">Delete</a></td>
+			<td>[% IF loo.authtypecode %]<a href="[% loo.script_name %]?op=delete_confirm&amp;authtypecode=[% loo.authtypecode |html %]">Delete</a>[% END %]</td>
 		</tr>
 	[% END %]
     <tbody>
