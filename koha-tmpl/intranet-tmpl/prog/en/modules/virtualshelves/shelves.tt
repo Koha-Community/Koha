@@ -107,6 +107,9 @@ $(document).ready(function(){
             }
         }
     });
+    $("body").on("click", ".deleteshelf", function(){
+        return confirmDelete(MSG_CONFIRM_DELETE_LIST);
+    });
 });
 [% END %]
 
