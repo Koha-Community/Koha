@@ -29,7 +29,6 @@ use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
 use C4::Context;
 use C4::Search qw(SimpleSearch);
-use C4::Dates;
 use C4::Biblio qw(TransformMarcToKoha);
 use C4::Items qw(GetItemInfosOf get_itemnumbers_of);
 use C4::Koha qw(GetItemTypes);

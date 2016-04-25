@@ -42,7 +42,7 @@ sub add_to_search_marc_maps {
 
 =cut
 
-sub type {
+sub _type {
     return 'SearchField';
 }
 

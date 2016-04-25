@@ -982,21 +982,6 @@ CREATE TABLE `deleteditems` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Table structure for table `elasticsearch_mapping`
---
-
-DROP TABLE IF EXISTS `elasticsearch_mapping`;
-CREATE TABLE `elasticsearch_mapping` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `mapping` varchar(255) DEFAULT NULL,
-  `type` varchar(255) DEFAULT NULL,
-  `marc21` varchar(255) DEFAULT NULL,
-  `unimarc` varchar(255) DEFAULT NULL,
-  `normarc` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `export_format`
 --
 
@@ -1961,6 +1946,19 @@ CREATE TABLE saved_reports (
    PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Table structure for table 'search_field'
+--
+
+DROP TABLE IF EXISTS search_field;
+CREATE TABLE `search_field` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL COMMENT 'the name of the field as it will be stored in the search engine',
+  `label` varchar(255) NOT NULL COMMENT 'the human readable name of the field, for display',
+  `type` ENUM('string', 'date', 'number', 'boolean', 'sum') NOT NULL COMMENT 'what type of data this holds, relevant when storing it in the search engine',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `search_history`
@@ -1981,6 +1979,36 @@ CREATE TABLE IF NOT EXISTS `search_history` ( -- patron's opac search history
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Opac search history results';
 
+--
+-- Table structure for table 'search_marc_map'
+--
+
+DROP TABLE IF EXISTS search_marc_map;
+CREATE TABLE `search_marc_map` (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  index_name ENUM('biblios','authorities') NOT NULL COMMENT 'what storage index this map is for',
+  marc_type ENUM('marc21', 'unimarc', 'normarc') NOT NULL COMMENT 'what MARC type this map is for',
+  marc_field VARCHAR(255) NOT NULL COMMENT 'the MARC specifier for this field',
+  PRIMARY KEY(`id`),
+  UNIQUE key(index_name, marc_field, marc_type),
+  INDEX (`index_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table 'search_marc_to_field'
+--
+
+DROP TABLE IF EXISTS search_marc_to_field;
+CREATE TABLE `search_marc_to_field` (
+  search_marc_map_id int(11) NOT NULL,
+  search_field_id int(11) NOT NULL,
+  facet boolean DEFAULT FALSE COMMENT 'true if a facet field should be generated for this',
+  suggestible boolean DEFAULT FALSE COMMENT 'true if this field can be used to generate suggestions for browse',
+  sort boolean DEFAULT NULL COMMENT 'true/false creates special sort handling, null doesn''t',
+  PRIMARY KEY(search_marc_map_id, search_field_id),
+  FOREIGN KEY(search_marc_map_id) REFERENCES search_marc_map(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY(search_field_id) REFERENCES search_field(id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `serial`

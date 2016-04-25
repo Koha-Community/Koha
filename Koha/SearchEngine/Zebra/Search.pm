@@ -21,10 +21,22 @@ package Koha::SearchEngine::Zebra::Search;
 #use Moose::Role;
 #with 'Koha::SearchEngine::SearchRole';
 
+use Modern::Perl;
+
 use base qw(Class::Accessor);
 
 use C4::Search; # :(
 use C4::AuthoritiesMarc;
+
+=head1 NAME
+
+Koha::SearchEngine::Zebra::Search - Search implementation for Zebra
+
+=head1 METHODS
+
+=head2 search
+
+=cut
 
 sub search {
     my ($self,$query_string) = @_;
@@ -35,15 +47,12 @@ sub search {
        query => $query_string,
      );
 
-    warn "search for $query_string";
-
     my $results = $self->searchengine->search($query);
 
     foreach my $item (@{ $results->items }) {
         my $title = $item->get_value('ste_title');
         #utf8::encode($title);
         print "$title\n";
-                warn dump $title;
     }
 }
 
@@ -71,7 +80,7 @@ sub simple_search_compat {
     return C4::Search::SimpleSearch(@_);
 }
 
-=head search_auth_compat
+=head2 search_auth_compat
 
 This passes the search query on to C4::AuthoritiesMarc::SearchAuthorities
 
@@ -81,9 +90,9 @@ sub search_auth_compat {
     my ( $self, $q, $startfrom, $resperpage ) = @_;
 
     my @params = (
-        @{$q}{ marclist, and_or, excluding, operator, value },
+        @{$q}{ 'marclist', 'and_or', 'excluding', 'operator', 'value' },
         $startfrom - 1,
-        $resperpage, @{$q}{ authtypecode, orderby }
+        $resperpage, @{$q}{ 'authtypecode', 'orderby' }
     );
     C4::AuthoritiesMarc::SearchAuthorities(@params);
 }

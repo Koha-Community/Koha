@@ -355,7 +355,7 @@ sub CountUsage {
         # Should really be replaced with a real count call, this is a
         # bad way.
         my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
-		my ($err,$res,$result) = $searcher->simple_search_compat($query,0,1);
+        my ($err,$res,$result) = $searcher->simple_search_compat($query,0,1);
         if ($err) {
             warn "Error: $err from search $query";
             $result = 0;

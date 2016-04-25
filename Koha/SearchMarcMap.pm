@@ -43,7 +43,7 @@ sub add_to_search_fields {
 
 =cut
 
-sub type {
+sub _type {
     return 'SearchMarcMap';
 }
 
