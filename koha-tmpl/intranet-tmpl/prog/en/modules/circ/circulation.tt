@@ -91,10 +91,6 @@ $(document).ready(function() {
         }
     });
 
-    $(".clickable").click(function() {
-        window.document.location = $(this).data('url');
-    });
-
     [% IF !( CircAutoPrintQuickSlip == 'clear' ) %]
         // listen submit to trigger qslip on empty checkout
         $('#mainform').bind('submit',function() {
@@ -106,22 +102,6 @@ $(document).ready(function() {
     toggle_onsite_checkout();
     $("#onsite_checkout").click(function(){
         toggle_onsite_checkout();
-    });
-
-    var table = $("#table_borrowers").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-        ],
-        "aaSorting": [ 2, "asc" ],
-        "sDom": "t",
-        "iDisplayLength": -1
-    }));
-    $(table).find('tbody tr').filter(':has(:radio:checked)').end().click(function(event) {
-        $('#table_borrowers tbody tr').removeClass('selected');
-        $(this).addClass('selected');
-        if (event.target.type !== 'radio') {
-            $(':radio', this).prop('checked', 'true')
-        }
     });
 });
 
@@ -594,40 +574,9 @@ No patron matched <span class="ex">[% message %]</span>
 [% IF ( borrowers ) %]
 [% INCLUDE 'patron-toolbar.inc' %]
 
-<form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
-    <input type="hidden" name="restoreduedatespec" />
-<fieldset id="circ_circulation_selectborrower" class="brief">
-    <legend>Patron selection</legend>
-
-[% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
-    <input type="hidden" name="branch" value="[% branch %]" />
-    <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
-    <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
-
-    <table id="table_borrowers" class="table_borrowers">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Cardnumber</th>
-                <th>Category</th>
-                <th>Library</th>
-                <th>Address</th>
-            </tr>
-        </thead>
-        <tbody>
-            [% FOREACH borrower IN borrowers %]
-            <tr class="clickable" data-url="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrower.borrowernumber %]">
-                <td>[% borrower.surname %], [% borrower.firstname %]</td>
-                <td>[% borrower.cardnumber %]</td>
-                <td>[% borrower.categorycode %]</td>
-                <td>[% borrower.branchcode %]</td>
-                <td>[% borrower.address %]</td>
-            </tr>
-            [% END %]
-        </tbody>
-    </table>
+<fieldset id="circ_circulation_selectborrower">
+    [% INCLUDE 'circ-patron-search-results.inc' destination = "circ" %]
 </fieldset>
-</form>
 [% ELSE %]
 
 <!-- BARCODE ENTRY -->

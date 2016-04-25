@@ -29,21 +29,6 @@ $(document).ready(function() {
         $(".suspend_until_datepicker, .datepickerfrom, .datepickerto").datepicker("option", "minDate", 1);
     [% END %]
 
-    var table = $("#table_borrowers").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-        ],
-        "aaSorting": [[ 2, "asc" ]],
-        "sDom": "t",
-        "iDisplayLength": -1
-    }));
-    $(table).find('tbody tr').filter(':has(:radio:checked)').end().click(function(event) {
-        $('#table_borrowers tbody tr').removeClass('selected');
-        $(this).addClass('selected');
-        if (event.target.type !== 'radio') {
-            $(':radio', this).prop('checked', 'true')
-        }
-    });
     var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
         'bPaginate': false,
         "sDom": '<"top pager"ilf>t',
@@ -254,8 +239,9 @@ function checkMultiHold() {
       <div class="dialog alert"><h3>Patron not found</h3><p>No patron with this name, please, try another</p> </div>
     [% END %]
     <form  id="holds_patronsearch" action="request.pl?biblionumber=[% biblionumber %]" method="post">
+        <fieldset id="circ_holds_selectborrower" class="brief">
+
         [% UNLESS borrowers %]
-            <fieldset class="brief">
                 <label for="patron">Patron: </label>
                 <div class="hint">Enter patron card number or partial name:</div>
                 <input type="text" size="40" id="patron" class="focus" name="findborrower" />
@@ -263,33 +249,7 @@ function checkMultiHold() {
                 <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
             </fieldset>
         [% ELSE %]
-          <fieldset>
-            <table id="table_borrowers">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Cardnumber</th>
-                        <th>Category</th>
-                        <th>Library</th>
-                        <th>Address</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH borrower IN borrowers %]
-                    <tr>
-                        <td><input type="radio" name="borrowernumber" value="[% borrower.borrowernumber %]" /></td>
-                        <td>[% borrower.surname %], [% borrower.firstname %]</td>
-                        <td>[% borrower.cardnumber %]</td>
-                        <td>[% borrower.categorycode %]</td>
-                        <td>[% borrower.branchcode %]</td>
-                        <td>[% borrower.address %]</td>
-                    </tr>
-                    [% END %]
-                </tbody>
-            </table>
-            <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-            <fieldset class="action"><input type="submit" value="Select" /></fieldset>
+            [% INCLUDE 'circ-patron-search-results.inc' destination = "holds" %]
           </fieldset>
 
         [% END %]
