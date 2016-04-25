@@ -37,7 +37,7 @@ my $data = {
 
 my $type = Koha::ItemType->new($data);
 
-is( $type->code,           'CODE',           'itemtype/code' );
+is( $type->itemtype,       'CODE',           'itemtype/code' );
 is( $type->description,    'description',    'description' );
 is( $type->rentalcharge,   'rentalcharge',   'rentalcharge' );
 is( $type->imageurl,       'imageurl',       'imageurl' );
