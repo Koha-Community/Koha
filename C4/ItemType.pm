@@ -116,6 +116,7 @@ sub get {
     my $data = $dbh->selectrow_hashref(
         "SELECT * FROM itemtypes WHERE itemtype = ?", undef, $itemtype
     );
+    return unless defined $data;
     return $class->new($data);
 }
 
