@@ -146,14 +146,14 @@
 [% END %]
 
     <div id="parcels_new_parcel">
-        <form method="get" action="parcels.pl">
+        <form method="get" action="parcels.pl" class="validated">
     <fieldset class="rows">
     <legend>Receive a new shipment</legend>
        <ol> <li>
-            <label for="invoice">Vendor invoice </label>
+            <label for="invoice" class="required">Vendor invoice:</label>
             <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
             <input type="hidden" name="op" value="new" />
-			<input type="text" size="20" id="invoice" name="invoice" class="focus" />
+            <input type="text" size="20" id="invoice" name="invoice" class="focus required" required="required" />
         </li>
 		[% IF ( gst ) %]
         <li>
