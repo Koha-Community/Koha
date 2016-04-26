@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 27;
 
 use C4::Context;
 use C4::Members;
@@ -98,6 +98,17 @@ my %jeanpaul_dupont = (
     userid       => 'jeanpaul.dupont'
 );
 
+my %dupont_brown = (
+    cardnumber   => '567890',
+    firstname    => 'Dupont',
+    surname      => 'Brown',
+    categorycode => $categorycode,
+    branchcode   => $branchcode,
+    dateofbirth  => '',
+    dateexpiry   => '9999-12-31',
+    userid       => 'dupont.brown'
+);
+
 $john_doe{borrowernumber} = AddMember( %john_doe );
 warn "Error adding John Doe, check your tests" unless $john_doe{borrowernumber};
 $john_smith{borrowernumber} = AddMember( %john_smith );
@@ -106,6 +117,8 @@ $jane_doe{borrowernumber} = AddMember( %jane_doe );
 warn "Error adding Jane Doe, check your tests" unless $jane_doe{borrowernumber};
 $jeanpaul_dupont{borrowernumber} = AddMember( %jeanpaul_dupont );
 warn "Error adding Jean Paul Dupont, check your tests" unless $jeanpaul_dupont{borrowernumber};
+$dupont_brown{borrowernumber} = AddMember( %dupont_brown );
+warn "Error adding Dupont Brown, check your tests" unless $dupont_brown{borrowernumber};
 
 # Set common datatables params
 my %dt_params = (
@@ -185,6 +198,59 @@ is( $search_results->{ patrons }[1]->{ cardnumber },
     $jane_doe{ cardnumber },
     "Jane Doe is the second result");
 
+# Search "Smith" as surname - there is only one occurrence of Smith
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "Smith",
+    searchfieldstype => 'surname',
+    searchtype       => 'contain',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+
+is( $search_results->{ iTotalDisplayRecords }, 1,
+    "There is one Smith at $branchcode when searching for surname");
+
+is( $search_results->{ patrons }[0]->{ cardnumber },
+    $john_smith{ cardnumber },
+    "John Smith is the first result");
+
+# Search "Dupont" as surname - Dupont is used both as firstname and surname, we
+# Should only fin d the user with Dupont as surname
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "Dupont",
+    searchfieldstype => 'surname',
+    searchtype       => 'contain',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+
+is( $search_results->{ iTotalDisplayRecords }, 1,
+    "There is one Dupont at $branchcode when searching for surname");
+
+is( $search_results->{ patrons }[0]->{ cardnumber },
+    $jeanpaul_dupont{ cardnumber },
+    "Jean Paul Dupont is the first result");
+
+# Search "Doe" as surname - Doe is used twice as surname
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "Doe",
+    searchfieldstype => 'surname',
+    searchtype       => 'contain',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+
+is( $search_results->{ iTotalDisplayRecords }, 2,
+    "There are two Doe at $branchcode when searching for surname");
+
+is( $search_results->{ patrons }[0]->{ cardnumber },
+    $john_doe{ cardnumber },
+    "John Doe is the first result");
+
+is( $search_results->{ patrons }[1]->{ cardnumber },
+    $jane_doe{ cardnumber },
+    "Jane Doe is the second result");
+
 # Search by userid
 $search_results = C4::Utils::DataTables::Members::search({
     searchmember     => "john.doe",
@@ -207,6 +273,17 @@ $search_results = C4::Utils::DataTables::Members::search({
 
 is( $search_results->{ iTotalDisplayRecords }, 1,
     "John Doe is found by userid, userid search (Bug 14782)");
+
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "john.doe",
+    searchfieldstype => 'surname',
+    searchtype       => 'contain',
+    branchcode       => $branchcode,
+    dt_params        => \%dt_params
+});
+
+is( $search_results->{ iTotalDisplayRecords }, 0,
+    "No members are found by userid, surname search");
 
 my $attribute_type = C4::Members::AttributeTypes->new( 'ATM_1', 'my attribute type' );
 $attribute_type->{staff_searchable} = 1;
