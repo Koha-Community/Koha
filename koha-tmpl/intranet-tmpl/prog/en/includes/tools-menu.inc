@@ -108,4 +108,7 @@
     [% IF ( CAN_user_tools_edit_quotes ) %]
        <li><a href="/cgi-bin/koha/tools/quotes.pl">Quote editor</a></li>
     [% END %]
+    [% IF ( UseKohaPlugins && CAN_user_plugins_tool ) %]
+        <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">Tool plugins</a></li>
+    [% END %]
 </ul></div></div>

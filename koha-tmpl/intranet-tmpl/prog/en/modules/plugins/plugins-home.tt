@@ -3,14 +3,25 @@
 <title>Koha &rsaquo; Tools &rsaquo; Plugins </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".uninstall_plugin").on("click", function(){
+            $(".dropdown").removeClass("open");
+            var plugin_name = $(this).data("plugin-name");
+            return confirmDelete( _("Are you sure you want to uninstall the plugin %s?").format( plugin_name ) );
+        });
+    });
+</script>
 </head>
 
 <body id="plugins_plugins_home" class="plugins">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
-&rsaquo; Plugins
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
+    Plugins
 </div>
 
 <div id="doc3" class="yui-t1">
@@ -18,51 +29,45 @@
         <div id="yui-main">
             <div class="yui-b">
                 <div class="details">
+
+                    [% IF ( CAN_user_plugins_manage ) %]
+                        <div class="btn-toolbar" id="toolbar">
+                            <a href="/cgi-bin/koha/plugins/plugins-upload.pl" id="upload_plugin" class="btn btn-small"><i class="fa fa-upload"></i> Upload plugin</a>
+                        </div>
+                    [% END %]
+
                     <h1>Plugins</h1>
 
                     [% UNLESS ( plugins ) %]
                         [% UNLESS ( method ) %]
-                            <h3>No plugins installed</h3>
+                            <div class="dialog message">No plugins installed</div>
                         [% ELSE %]
                             [% IF method == 'tool' %]
-                                <h3>No plugins that can be used as a tool are installed</h3>
+                                <div class="dialog message">No plugins that can be used as a tool are installed</div>
                             [% ELSIF method == 'report' %]
-                                <h3>No plugins that can create a report are installed</h3>
+                                <div class="dialog message">No plugins that can create a report are installed</div>
                             [% ELSE %]
-                                <h3>Unknown plugin type <i>[% method %]</i>
+                                <div class="dialog message">Unknown plugin type <i>[% method %]</i></div>
                             [% END %]
                         [% END %]
                     [% ELSE %]
                         <table>
                             <tr>
                                 <th>Name</th>
-                                <th>&nbsp;</th>
                                 <th>Description</th>
                                 <th>Author</th>
-                                <th>Plugin Version</th>
-                                <th>Minimum Koha Version</th>
-                                <th>Maximum Koha Version</th>
-                                <th>Last Updated</th>
-                                [% IF ( CAN_user_plugins_configure ) %]<th>Configure</th>[% END %]
-                                [% IF ( CAN_user_plugins_manage ) %]<th>Uninstall</th>[% END %]
+                                <th>Plugin version</th>
+                                <th>Minimum Koha version</th>
+                                <th>Maximum Koha version</th>
+                                <th>Last updated</th>
+                                [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
+                                    <th>Actions</th>
+                                [% END %]
                             </tr>
 
                             [% FOREACH plugin IN plugins %]
                                 <tr>
                                     <td><strong>[% plugin.metadata.name %]</strong></td>
-                                    <td>
-                                        [% IF ( CAN_user_plugins_report ) %]
-                                            [% IF plugin.can('report') %]
-                                                <p style="white-space:nowrap"><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=report">Run report</a></p>
-                                            [% END %]
-                                        [% END %]
-
-                                        [% IF ( CAN_user_plugins_tool ) %]
-                                            [% IF plugin.can('tool') %]
-                                                <p style="white-space:nowrap"><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=tool">Run tool</a></p>
-                                            [% END %]
-                                        [% END %]
-                                    </td>
                                     <td>
                                         [% plugin.metadata.description %]
 
@@ -79,18 +84,37 @@
                                     <td>[% plugin.metadata.minimum_version %]</td>
                                     <td>[% plugin.metadata.maximum_version %]</td>
                                     <td>[% plugin.metadata.date_updated | $KohaDates %]</td>
-                                    [% IF ( CAN_user_plugins_configure ) %]
-                                        <td>
-                                            [% IF plugin.can('configure') %]
-                                                <a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=configure">Configure</a>
-                                            [% END %]
-                                        </td>
-                                    [% END %]
-                                    [% IF ( CAN_user_plugins_manage ) %]
-                                        <td>
-                                            [% IF plugin.can('uninstall') %]
-                                                <a href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class %]" onclick="return confirm('Are you sure you want to uninstall the plugin [% plugin.metadata.name %]?')">Uninstall</a>
-                                            [% END %]
+                                    [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
+                                        <td class="actions">
+                                            <div class="dropdown">
+                                                <a class="btn btn-mini dropdown-toggle" id="pluginactions[% plugin.class %]" role="button" data-toggle="dropdown" href="#">
+                                                   Actions <b class="caret"></b>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="pluginactions[% plugin.class %]">
+                                                    [% IF ( CAN_user_plugins_report ) %]
+                                                        [% IF plugin.can('report') %]
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=report"><i class="fa fa-table"></i> Run report</a></li>
+                                                        [% END %]
+                                                    [% END %]
+
+                                                    [% IF ( CAN_user_plugins_tool ) %]
+                                                        [% IF plugin.can('tool') %]
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=tool"><i class="fa fa-wrench"></i> Run tool</a></li>
+                                                        [% END %]
+                                                    [% END %]
+
+                                                    [% IF ( CAN_user_plugins_configure ) %]
+                                                        [% IF plugin.can('configure') %]
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=configure"><i class="fa fa-cog"></i> Configure</a></li>
+                                                        [% END %]
+                                                    [% END %]
+                                                    [% IF ( CAN_user_plugins_manage ) %]
+                                                        [% IF plugin.can('uninstall') %]
+                                                            <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class %]"><i class="fa fa-trash"></i> Uninstall</a></li>
+                                                        [% END %]
+                                                    [% END %]
+                                                </ul>
+                                            </div>
                                         </td>
                                     [% END %]
                             [% END %]
@@ -100,15 +124,8 @@
             </div>
         </div>
 
-        <div class="yui-b noprint">
-            <div id="navmenu">
-                <ul id="navmenulist">
-                    [% IF ( CAN_user_plugins_manage ) %]
-                        <li><a href="plugins-upload.pl">Upload a plugin</a></li>
-                    [% END %]
-                </ul>
-            </div>
-        </div>
+    <div class="yui-b noprint">
+        [% INCLUDE 'tools-menu.inc' %]
     </div>
 </div>
 
