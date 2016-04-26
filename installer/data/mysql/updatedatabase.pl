@@ -12309,7 +12309,7 @@ $dbh->do(q|
 #   * any sorts on the field name will be applied to $fieldname.'__sort' instead.
 # this means that we can have search for author that includes 1xx, 245$c, and 7xx, but the sort only applies to 1xx.
 
-dbh->do(q|
+$dbh->do(q|
         CREATE TABLE `search_marc_to_field` (
             search_marc_map_id int(11) NOT NULL,
             search_field_id int(11) NOT NULL,
