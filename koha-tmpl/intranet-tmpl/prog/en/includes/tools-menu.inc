@@ -117,6 +117,9 @@
     [% IF ( CAN_user_tools_edit_quotes ) %]
        <li><a href="/cgi-bin/koha/tools/quotes.pl">Quote editor</a></li>
     [% END %]
+    [% IF ( UseKohaPlugins && CAN_user_plugins_tool ) %]
+        <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">Tool plugins</a></li>
+    [% END %]
     [% IF ( CAN_user_tools_upload_general_files ) %]
        <li><a href="/cgi-bin/koha/tools/upload.pl">Upload any file</a></li>
     [% END %]
