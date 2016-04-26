@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
 <script type="text/javascript">
 //<![CDATA[
     function updateColumnsVisibility(visible) {
@@ -22,6 +23,7 @@
     }
 
     $(document).ready(function() {
+        $('#toolbar').fixFloat();
         $("#show_all_details").click(function(){
             updateColumnsVisibility($(this).is(":checked"));
         });
@@ -646,17 +648,18 @@
 
     <!-- Modal -->
     <div id="addtoBasket" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel" aria-hidden="true">
-        <div class="modal-body"></div>
+        <div class="modal-body">
+        [% IF active %]
+            [% INCLUDE 'acquisitions-add-to-basket.inc' %]
+        [% END %]
+        </div>
         <div class="modal-footer">
             <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
         </div>
     </div>
 
-    [% IF active %]
-        [% INCLUDE 'acquisitions-add-to-basket.inc' %]
-    [% END %]
-
         [% END %]
+
 [% END %]
 [% END %]    [% ELSE %] <!-- if we want just to select a basketgroup for a closed basket -->
     [% END %]
