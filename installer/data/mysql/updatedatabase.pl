@@ -12340,7 +12340,27 @@ while ( my ( $index_name, $fields ) = each %$indexes ) {
 
 print "Upgrade to $DBversion done (Bug 12478 - Elasticsearch support for Koha)\n";
     SetVersion($DBversion);
+    }
+
+
+$DBversion = "3.23.00.051";
+if ( CheckVersion($DBversion) ) {
+$dbh->do(q{
+        ALTER TABLE edifact_messages
+        DROP FOREIGN KEY emfk_vendor,
+        DROP FOREIGN KEY emfk_edi_acct,
+        DROP FOREIGN KEY emfk_basketno;
+
+        ALTER TABLE edifact_messages
+        ADD CONSTRAINT emfk_vendor FOREIGN KEY ( vendor_id ) REFERENCES aqbooksellers ( id ) ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT emfk_edi_acct FOREIGN KEY ( edi_acct ) REFERENCES vendor_edi_accounts ( id ) ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT emfk_basketno FOREIGN KEY ( basketno ) REFERENCES aqbasket ( basketno ) ON DELETE CASCADE ON UPDATE CASCADE;
+        });
+
+print "Upgrade to $DBversion done (Bug 16354 - Fix FK constraints for edifact_messages table)\n";
+        SetVersion($DBversion);
             }
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
