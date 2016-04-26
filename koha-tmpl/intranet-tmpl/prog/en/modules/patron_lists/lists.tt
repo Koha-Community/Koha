@@ -15,11 +15,12 @@
             ],
             "sPaginationType": "four_button"
         } ));
+        $(".delete_patron").on("click", function(){
+            $(".dropdown").removeClass("open");
+            var list = $(this).data("list-name");
+            return confirmDelete( _("Are you sure you want to delete the list %s?").format(list) );
+        });
     });
-
-    function ConfirmDelete( list ) {
-        return confirm( _("Are you sure you want to delete the list %s?").format(list) );
-    }
 //]]>
 </script>
 
@@ -67,7 +68,7 @@
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="listactions[% l.patron_list_id %]">
                                     <li><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id %]"><i class="fa fa-user"></i> Add patrons</a></li>
                                     <li><a href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id %]"><i class="fa fa-pencil"></i> Edit list</a></li>
-                                    <li><a href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id %]" onclick='return ConfirmDelete("[% l.name %]")'><i class="fa fa-trash"></i> Delete list</a></li>
+                                    <li><a class="delete_patron" href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id %]" data-list-name="[% l.name %]"><i class="fa fa-trash"></i> Delete list</a></li>
                                     [% IF ( l.patron_list_patrons_rs.count ) %]
                                         <li class="divider"></li>
                                         <li><a href="#" onclick='GB_showCenter(_("Print patron cards from list"), "/cgi-bin/koha/patroncards/print.pl?patronlist_id=[% l.patron_list_id %]", 400, 800);return false;'><i class="fa fa-print"></i> Print patron cards</a></li>

@@ -3,7 +3,6 @@
     [% INCLUDE 'doc-head-close.inc' %]
     <script type="text/javascript">
         //<![CDATA[
-            var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this image?");
             function DeleteConfirm() {
                 var results = selected_images("delete");
                 if (results.images != -1) {
@@ -39,6 +38,9 @@
         $(document).ready(function() {
             $("#delete").click(function(){
                 return DeleteConfirm();
+            });
+            $(".delete_image").on("click", function(){
+                return confirmDelete( _("Are you sure you want to delete this image?") );
             });
          });
         //]]>
@@ -133,7 +135,7 @@
                                     [% FOREACH text_field IN TABL.text_fields %]
                                     [% IF ( text_field.select_field ) %]
                                         <td>
-                                            <a class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);" href="/cgi-bin/koha/patroncards/image-manage.pl?op=delete&image_id=[% text_field.field_value %]"><icon class="fa fa-trash"></icon> Delete</a>
+                                            <a class="delete_image btn btn-mini" href="/cgi-bin/koha/patroncards/image-manage.pl?op=delete&image_id=[% text_field.field_value %]"><icon class="fa fa-trash"></icon> Delete</a>
                                         </td>
                                         <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
                                     [% ELSIF ( text_field.field_value ) %]
