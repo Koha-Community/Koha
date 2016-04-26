@@ -12,24 +12,24 @@
 </div>
 
 <div id="doc3" class="yui-t2">
-
-[% IF no_message %]
-  <div class"dialog message">The requested message cannot be displayed</div>
-[% ELSE %]
-  <div id="bd">
-  <div id="yui-main">
-  <div class="yui-b">
-   <ul>
-   [% FOREACH seg IN segments %]
-   <li>[% seg | html %]</li>
-   [% END %]
-   </ul>
-[% END %]
-
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'acquisitions-menu.inc' %]
-</div>
-</div>
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <div id="edimsg">
+                    [% IF no_message %]
+                        <div class"dialog message">The requested message cannot be displayed</div>
+                    [% ELSE %]
+                        <ul>
+                            [% FOREACH seg IN segments %]
+                                <li>[% seg | html %]</li>
+                            [% END %]
+                        </ul>
+                    [% END %]
+                </div>
+            </div>
+        </div>
+        <div class="yui-b">
+            [% INCLUDE 'acquisitions-menu.inc' %]
+        </div>
+    </div>
 [% INCLUDE 'intranet-bottom.inc' %]
