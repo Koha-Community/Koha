@@ -38,7 +38,7 @@ The first, traditional OO interface provides the following functions:
 use strict;
 use warnings;
 use Carp;
-use Storable qw(dclone);
+use Storable qw(freeze thaw);
 use Module::Load::Conditional qw(can_load);
 use Koha::Cache::Object;
 
@@ -228,13 +228,6 @@ The possible options are:
 
 Expiry time of this cached entry in seconds.
 
-=item unsafe
-
-If set, this will avoid performing a deep copy of the item. This
-means that it won't be safe if something later modifies the result of the
-function. It should be used with caution, and could save processing time
-in some situations where is safe to use it.
-
 =item cache
 
 The cache object to use if you want to provide your own. It should be an
@@ -253,7 +246,6 @@ sub set_in_cache {
         $new_options->{cache} = $_cache if defined $_cache;
         $options = $new_options;
     }
-    my $unsafe = $options->{unsafe} || 0;
 
     # the key mustn't contain whitespace (or control characters) for memcache
     # but shouldn't be any harm in applying it globally.
@@ -268,14 +260,20 @@ sub set_in_cache {
     $expiry //= $self->{timeout};
     my $set_sub = $self->{ref($self->{$cache}) . "_set"};
 
-    # Deep copy if it's not a scalar and unsafe is not passed
-    $value = dclone( $value ) if ref($value) and not $unsafe;
+    my $flag = '-CF0'; # 0: scalar, 1: frozen data structure
+    if (ref($value)) {
+        # Set in L1 cache as a data structure, initially only in frozen form (for performance reasons)
+        $value = freeze($value);
+        $L1_cache{$key}->{frozen} = $value;
+        $flag = '-CF1';
+    } else {
+        # Set in L1 cache as a scalar; exit if we are caching an undef
+        $L1_cache{$key} = $value;
+        return if !defined $value;
+    }
 
-    # Set in L1 cache; exit if we are caching an undef
-    $L1_cache{ $key } = $value;
-    return if !defined $value;
-
-    # We consider an expiry of 0 to be infinite
+    $value .= $flag;
+    # We consider an expiry of 0 to be inifinite
     if ( $expiry ) {
         return $set_sub
           ? $set_sub->( $key, $value, $expiry )
@@ -292,7 +290,7 @@ sub set_in_cache {
 
     my $value = $cache->get_from_cache($key, [ $options ]);
 
-Retrieve the value stored under the specified key in the default cache.
+Retrieve the value stored under the specified key in the cache.
 
 The possible options are:
 
@@ -325,23 +323,42 @@ sub get_from_cache {
 
     # Return L1 cache value if exists
     if ( exists $L1_cache{$key} ) {
-        # No need to deep copy if it's a scalar
-        # Or if we do not need to deep copy
-        return $L1_cache{$key}
-            if not ref $L1_cache{$key} or $unsafe;
-        return dclone $L1_cache{$key};
+        if (ref($L1_cache{$key})) {
+            if ($unsafe) {
+                $L1_cache{$key}->{thawed} ||= thaw($L1_cache{$key}->{frozen});
+                return $L1_cache{$key}->{thawed};
+            } else {
+                return thaw($L1_cache{$key}->{frozen});
+            }
+        } else {
+            # No need to thaw if it's a scalar
+            return $L1_cache{$key};
+        }
     }
 
     my $get_sub = $self->{ref($self->{$cache}) . "_get"};
-    my $value = $get_sub ? $get_sub->($key) : $self->{$cache}->get($key);
+    my $L2_value = $get_sub ? $get_sub->($key) : $self->{$cache}->get($key);
 
-    # Update the L1 cache when fetching the L2 cache
-    # Otherwise the L1 cache won't ever be populated
-    $L1_cache{$key} = $value;
+    return if ref($L2_value);
+    return unless (defined($L2_value) && length($L2_value) >= 4);
 
-    $value = dclone $value if ref $L1_cache{$key} and not $unsafe;
+    my $flag = substr($L2_value, -4, 4, '');
+    if ($flag eq '-CF0') {
+        # it's a scalar
+        $L1_cache{$key} = $L2_value;
+        return $L2_value;
+    } elsif ($flag eq '-CF1') {
+        # it's a frozen data structure
+        my $thawed;
+        eval { $thawed = thaw($L2_value); };
+        return if $@;
+        $L1_cache{$key}->{frozen} = $L2_value;
+        $L1_cache{$key}->{thawed} = $thawed if $unsafe;
+        return $thawed;
+    }
 
-    return $value;
+    # Unknown value / data type returned from L2 cache
+    return;
 }
 
 =head2 clear_from_cache
