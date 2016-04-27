@@ -48,8 +48,8 @@ our $fields = get_fields();
   Get fields form syspref 'StatisticsFields'
   Returns list of valid fields, defaults to 'location|itype|ccode'
   if syspref is empty or does not contain valid fields
-=cut
 
+=cut
 
 sub get_fields {
 
@@ -59,14 +59,11 @@ sub get_fields {
     if ( $syspref ) {
         my @ret;
         my @spfields = split ('\|', $syspref);
-        my $dbh=C4::Context->dbh;
-        my $sth = $dbh->prepare('SHOW COLUMNS FROM items');
-        $sth->execute;
-        my $dbfields =  $sth->fetchall_hashref('Field');
-        $sth->finish();
+        my $schema       = Koha::Database->new()->schema();
+        my @columns = $schema->source('Item')->columns;
 
         foreach my $fn ( @spfields ) {
-            push ( @ret, $fn ) if ( $dbfields->{ $fn } );
+            push ( @ret, $fn ) if ( grep(/^$fn$/, @columns) );
         }
         $ret = join( '|', @ret);
     }
@@ -76,7 +73,9 @@ sub get_fields {
 =head2 construct_query
   Build a sql query from a subquery
   Adds statistics fields to the select and the group by clause
+
 =cut
+
 sub construct_query {
     my $count    = shift;
     my $subquery = shift;
@@ -95,7 +94,9 @@ sub construct_query {
 
 =head2 GetTotalIssuesTodayByBorrower
   Return total issues for a borrower at this current day
+
 =cut
+
 sub GetTotalIssuesTodayByBorrower {
     my ($borrowernumber) = @_;
     my $dbh   = C4::Context->dbh;
@@ -114,7 +115,9 @@ sub GetTotalIssuesTodayByBorrower {
 
 =head2 GetTotalIssuesReturnedTodayByBorrower
   Return total issues returned by a borrower at this current day
+
 =cut
+
 sub GetTotalIssuesReturnedTodayByBorrower {
     my ($borrowernumber) = @_;
     my $dbh   = C4::Context->dbh;
@@ -128,7 +131,9 @@ sub GetTotalIssuesReturnedTodayByBorrower {
 
 =head2 GetPrecedentStateByBorrower
   Return the precedent state (before today) for a borrower of his checkins and checkouts
+
 =cut
+
 sub GetPrecedentStateByBorrower {
     my ($borrowernumber) = @_;
     my $dbh   = C4::Context->dbh;
