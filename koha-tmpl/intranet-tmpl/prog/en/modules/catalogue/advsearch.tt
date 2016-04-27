@@ -1,6 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Advanced search</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 	/**
 	 *  Function add_field();
@@ -16,6 +17,7 @@
 	$(document).ready(function() {
 		$("input[name=q]:eq(0)").focus();
         $('#advsearches').tabs();
+        $('#toolbar').fixFloat();
 	});
 </script>
 </head>
@@ -31,6 +33,28 @@
 <div id="advanced-search">
 <h1>Advanced search</h1>
 <a href="/cgi-bin/koha/catalogue/itemsearch.pl">Go to item search</a>
+
+<!-- SEARCH BUTTONS -->
+<div id="toolbar" class="btn-toolbar">
+    <fieldset class="action" id="submit1">
+        <div class="btn-group">
+            <button class="btn btn-small" type="submit" accesskey="s"><i class="fa fa-search"></i> Search</button>
+        </div>
+        <div class="btn-group">
+        [% IF ( expanded_options ) %]
+            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0" class="btn-small"><i class="fa fa-search-minus"></i> Fewer options</a>
+        </div>
+        [% ELSE %]
+            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1" class="btn-small"><i class="fa fa-search-plus"></i> More options</a>
+        </div>
+        [% END %]
+        <div class="btn-group">
+            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear" class="btn-small"><i class="fa fa-times"></i> Clear fields</a>
+        </div>
+    </fieldset>
+</div>
+<!-- /SEARCH BUTTONS -->
+
 
 [% IF ( outer_servers_loop ) %]
 <!-- DATABASES -->
@@ -84,16 +108,6 @@
     </fieldset>
 <!-- /BOOLEAN SEARCH OPTIONS -->
 
-<!-- SEARCH BUTTONS -->
-            <fieldset class="action" id="submit1"><input class="submit" type="submit" accesskey="s" value="Search" />
-            [% IF ( expanded_options ) %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0">[Fewer options]</a>
-            [% ELSE %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1">[More options]</a>
-            [% END %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear">[New search]</a>
-            </fieldset>
-<!-- /SEARCH BUTTONS -->
 </div>
 <!-- MC-TYPE LIMITS -->
     <div class="yui-g">
@@ -269,17 +283,6 @@
         </p>
 </fieldset>
 <!-- /RANK LIMITS -->
-
-<!-- SEARCH BUTTONS -->
-            <fieldset class="action" id="submit2"><input class="submit" type="submit" accesskey="s" value="Search" />
-            [% IF ( expanded_options ) %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0">[Fewer options]</a>
-            [% ELSE %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1">[More options]</a>
-            [% END %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear">[New search]</a> 
-            </fieldset>
-<!-- /SEARCH BUTTONS -->
 </div>
 </div>
 </form>
