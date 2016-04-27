@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 21;
+use Test::More tests => 75;
 use Test::Mojo;
 use t::lib::TestBuilder;
 
@@ -25,16 +25,20 @@ use C4::Auth;
 use C4::Context;
 
 use Koha::Database;
-use Koha::Patron;
+
+BEGIN {
+    use_ok('Koha::Object');
+    use_ok('Koha::Patron');
+}
 
 my $builder = t::lib::TestBuilder->new();
-
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema  = Koha::Database->schema;
 
 $ENV{REMOTE_ADDR} = '127.0.0.1';
 my $t = Test::Mojo->new('Koha::REST::V1');
+
+$schema->storage->txn_begin;
 
 my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
 my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
@@ -46,7 +50,7 @@ my $guarantor = $builder->build({
         flags        => 0,
     }
 });
-my $borrower = $builder->build({
+my $patron = $builder->build({
     source => 'Borrower',
     value => {
         branchcode   => $branchcode,
@@ -60,12 +64,12 @@ my $borrower = $builder->build({
 $t->get_ok('/api/v1/patrons')
   ->status_is(401);
 
-$t->get_ok("/api/v1/patrons/" . $borrower->{ borrowernumber })
+$t->get_ok("/api/v1/patrons/" . $patron->{ borrowernumber })
   ->status_is(401);
 
 my $session = C4::Auth::get_session('');
-$session->param('number', $borrower->{ borrowernumber });
-$session->param('id', $borrower->{ userid });
+$session->param('number', $patron->{ borrowernumber });
+$session->param('id', $patron->{ userid });
 $session->param('ip', '127.0.0.1');
 $session->param('lasttime', time());
 $session->flush;
@@ -82,20 +86,20 @@ $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403);
 
-$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . ($borrower->{ borrowernumber }-1));
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . ($patron->{ borrowernumber }-1));
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403)
   ->json_is('/required_permissions', {"borrowers" => "1"});
 
 # User without permissions, but is the owner of the object
-$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $borrower->{borrowernumber});
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $patron->{borrowernumber});
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200);
 
 # User without permissions, but is the guarantor of the owner of the object
-$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $borrower->{borrowernumber});
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $patron->{borrowernumber});
 $tx->req->cookies({name => 'CGISESSID', value => $session2->id});
 $t->request_ok($tx)
   ->status_is(200)
@@ -122,13 +126,145 @@ $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
 $t->request_ok($tx)
   ->status_is(200);
+ok(@{$tx->res->json} >= 1, 'Json response lists all when no params given');
 
-$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $borrower->{ borrowernumber });
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $patron->{ borrowernumber });
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/borrowernumber' => $borrower->{ borrowernumber })
-  ->json_is('/surname' => $borrower->{ surname })
+  ->json_is('/borrowernumber' => $patron->{ borrowernumber })
+  ->json_is('/surname' => $patron->{ surname })
   ->json_is('/lost' => Mojo::JSON->true );
 
-$dbh->rollback;
+$tx = $t->ua->build_tx(GET => '/api/v1/patrons' => form => {surname => 'nonexistent'});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+  ->status_is(200);
+ok(@{$tx->res->json} == 0, "Json response yields no results when params doesn't match");
+
+$tx = $t->ua->build_tx(GET => '/api/v1/patrons' => form => {surname => $patron->{ surname }});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+  ->status_is(200)
+  ->json_has($patron);
+ok(@{$tx->res->json} == 1, 'Json response yields expected results when params match');
+
+### POST /api/v1/patrons
+
+my $newpatron = {
+  branchcode   => $branchcode,
+  categorycode => $categorycode,
+  surname      => "TestUser",
+  cardnumber => "123456",
+  userid => "testuser"
+};
+
+$newpatron->{ branchcode } = "nonexistent"; # Test invalid branchcode
+$tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(404)
+  ->json_is('/error' => "Library with branchcode \"nonexistent\" does not exist");
+
+$newpatron->{ branchcode } = $branchcode;
+$newpatron->{ categorycode } = "nonexistent"; # Test invalid patron category
+$tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(404)
+  ->json_is('/error' => "Patron category \"nonexistent\" does not exist");
+$newpatron->{ categorycode } = $categorycode;
+
+$newpatron->{ falseproperty } = "Non existent property";
+$tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(500)
+  ->json_is('/error' => "Something went wrong, check Koha logs for details");
+
+delete $newpatron->{ falseproperty };
+$tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(201, 'Patron created successfully')
+  ->json_has('/borrowernumber', 'got a borrowernumber')
+  ->json_is('/cardnumber', $newpatron->{ cardnumber })
+  ->json_is('/surname' => $newpatron->{ surname })
+  ->json_is('/firstname' => $newpatron->{ firstname });
+$newpatron->{borrowernumber} = $tx->res->json->{borrowernumber};
+
+$tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(409)
+  ->json_has('/error', 'Fails when trying to POST duplicate cardnumber or userid')
+  ->json_has('/conflict', { userid => $newpatron->{ userid }, cardnumber => $newpatron->{ cardnumber } });
+
+### PUT /api/v1/patrons
+$tx = $t->ua->build_tx(PUT => "/api/v1/patrons/0" => json => {});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(404)
+  ->json_has('/error', 'Fails when trying to PUT nonexistent patron');
+
+$tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => {categorycode => "nonexistent"});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(404)
+  ->json_is('/error' => "Patron category \"nonexistent\" does not exist");
+
+$tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => {branchcode => "nonexistent"});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(404)
+  ->json_is('/error' => "Library with branchcode \"nonexistent\" does not exist");
+
+$newpatron->{ falseproperty } = "Non existent property";
+$tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => $newpatron);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(500)
+  ->json_is('/error' => "Something went wrong, check Koha logs for details");
+delete $newpatron->{ falseproperty };
+
+$newpatron->{ cardnumber } = $patron-> { cardnumber };
+$newpatron->{ userid } = $patron-> { userid };
+$tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => $newpatron);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(409)
+  ->json_has('/error' => "Fails when trying to update to an existing cardnumber or userid")
+  ->json_has('/conflict', { cardnumber => $patron->{ cardnumber }, userid => $patron->{ userid } });
+
+$newpatron->{ cardnumber } = "123456";
+$newpatron->{ userid } = "testuser";
+$tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => $newpatron);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(204, 'No changes - patron NOT updated');
+
+$newpatron->{ cardnumber } = "234567";
+$newpatron->{ userid } = "updatedtestuser";
+$newpatron->{ surname } = "UpdatedTestUser";
+
+$tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => $newpatron);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200, 'Patron updated successfully')
+  ->json_has($newpatron);
+
+### DELETE /api/v1/patrons
+
+$tx = $t->ua->build_tx(DELETE => "/api/v1/patrons/0");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(404, 'Patron not found');
+
+$tx = $t->ua->build_tx(DELETE => "/api/v1/patrons/" . $newpatron->{ borrowernumber });
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200, 'Patron deleted successfully');
+
+$schema->storage->txn_rollback;

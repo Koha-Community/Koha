@@ -47,6 +47,60 @@
           "borrowers": "1"
         }
       }
+    },
+    "post": {
+      "operationId": "addPatron",
+      "tags": ["patrons"],
+      "parameters": [{
+        "name": "body",
+        "in": "body",
+        "description": "A JSON object containing information about the new patron",
+        "required": true,
+        "schema": {
+          "$ref": "../definitions.json#/patron"
+        }
+      }],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "201": {
+          "description": "A successfully created patron",
+          "schema": {
+            "items": {
+              "$ref": "../definitions.json#/patron"
+            }
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Resource not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "409": {
+          "description": "Conflict in creating resource",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "1"
+        }
+      }
     }
   },
   "/patrons/{borrowernumber}": {
@@ -55,11 +109,10 @@
       "operationId": "getPatron",
       "tags": ["patrons"],
       "parameters": [{
-          "$ref": "../parameters.json#/borrowernumberPathParam"
-        }
-      ],
+        "$ref": "../parameters.json#/borrowernumberPathParam"
+      }],
       "produces": [
-          "application/json"
+        "application/json"
       ],
       "responses": {
         "200": {
@@ -94,6 +147,114 @@
         },
         "503": {
           "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "borrowers": "1"
+        }
+      }
+    },
+    "put": {
+      "operationId": "editPatron",
+      "tags": ["patrons"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/borrowernumberPathParam"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing new information about existing patron",
+          "required": true,
+          "schema": {
+            "$ref": "../definitions.json#/patron"
+          }
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "A successfully updated patron",
+          "schema": {
+            "items": {
+              "$ref": "../definitions.json#/patron"
+            }
+          }
+        },
+        "204": {
+          "description": "No Content",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Resource not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "409": {
+          "description": "Conflict in updating resource",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "borrowers": "1"
+        }
+      }
+    },
+    "delete": {
+      "operationId": "deletePatron",
+      "tags": ["patrons"],
+      "parameters": [{
+        "$ref": "../parameters.json#/borrowernumberPathParam"
+      }],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Patron deleted successfully",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "400": {
+          "description": "Patron deletion failed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Patron not found",
           "schema": {
             "$ref": "../definitions.json#/error"
           }
