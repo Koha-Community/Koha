@@ -76,7 +76,6 @@ my $itemnumber =
 $dbh->do("DELETE FROM default_circ_rules");
 $dbh->do("INSERT INTO default_circ_rules ( holdallowed, hold_fulfillment_policy ) VALUES ( 2, 'homebranch' )");
 
-my $holds_queue;
 # Home branch matches pickup branch
 my $reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
 my ( $status ) = CheckReserves($itemnumber);
