@@ -1516,7 +1516,7 @@ sub IsAvailableForItemLevelRequest {
               || $i->{notforloan} > 0
               || $i->withdrawn
               || $i->onloan
-              || GetReserveStatus( $i->id ) eq "Waiting"
+              || IsItemOnHoldAndFound( $i->id )
               || ( $i->damaged
                 && !C4::Context->preference('AllowHoldsOnDamagedItems') )
               || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan;
