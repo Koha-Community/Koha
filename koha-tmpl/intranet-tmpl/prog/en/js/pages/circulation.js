@@ -49,6 +49,15 @@ $(document).ready(function() {
     var checkout_settings = $(".checkout-settings");
     var checkout_settings_icon = $(".checkout-settings-icon");
 
+    // If any checkboxes in the checkout settings are selected, show the settings by default
+    if ( $(".checkout-settings input:checked,#duedatespec[value!='']").length ) {
+        checkout_settings.show();
+        checkout_settings_icon.removeClass("fa-caret-right").addClass("fa-caret-down");
+    } else {
+        checkout_settings.hide();
+        checkout_settings_icon.removeClass("fa-caret-down").addClass("fa-caret-right");
+    }
+
     $("#show-checkout-settings a").on("click",function(){
         if( checkout_settings.is(":hidden")){
             checkout_settings.show();
