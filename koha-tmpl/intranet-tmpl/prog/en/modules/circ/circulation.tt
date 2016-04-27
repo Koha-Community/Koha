@@ -214,7 +214,7 @@ $(document).ready(function() {
 [% END %]
 
 [% IF alert.HIGHHOLDS %]
-    <div class="dialog message">High demand item. Loan period <i>not</i> shortened to [% alert.HIGHHOLDS.duration %] days (due [% alert.HIGHHOLDS.returndate %]) due to override.</div>
+    <div class="dialog message">High demand item. <b>Loan period was not shortened due to override.</b> Shortened due date would have been [% alert.HIGHHOLDS.returndate %] ([% alert.HIGHHOLDS.duration %] days).</div>
 [% END %]
 
 [% IF ( NEEDSCONFIRMATION ) %]
