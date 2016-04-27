@@ -12390,7 +12390,7 @@ if ( CheckVersion($DBversion) ) {
                 });
 
     print "Upgrade to $DBversion done (Bug 14686 - New menu option and permission for file uploading)\n";
-
+    SetVersion($DBversion);
 }
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
