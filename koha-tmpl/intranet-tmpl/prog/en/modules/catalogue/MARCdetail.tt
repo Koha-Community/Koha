@@ -93,7 +93,7 @@ function Changefwk(FwkList) {
                     [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
                     [% IF ( subfiel.link ) %]
                         <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
-                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                            <img src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
                         </a>
                     [% END %]
                     [% IF ( subfiel.authority ) %]

@@ -131,7 +131,7 @@
     <table>
         <tr>
     [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
-        <td><input type="checkbox" id="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]"/><label for="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]">[% UNLESS ( noItemTypeImages ) %][% IF ( itemtypeloo.imageurl ) %]<img border="0" src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]&nbsp;[% END %]
+        <td><input type="checkbox" id="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]"/><label for="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]">[% UNLESS ( noItemTypeImages ) %][% IF ( itemtypeloo.imageurl ) %]<img src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]&nbsp;[% END %]
         [% itemtypeloo.description %]</label></td>
         [% IF ( loop.last ) %]</tr>[% ELSE %][% UNLESS ( loop.count % 5 ) %]</tr><tr>[% END %][% END %]
     [% END %]

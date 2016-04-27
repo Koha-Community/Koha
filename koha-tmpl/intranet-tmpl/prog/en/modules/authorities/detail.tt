@@ -125,7 +125,7 @@ function searchauthority() {
                 [% subfiel.marc_value %]
                 [% IF ( subfiel.link ) %]
                     <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=[% subfiel.link %]&amp;operator==&amp;type=intranet&amp;value=[% subfiel.marc_value |url %]">
-                        <img border="0" src="[% interface %]/[% theme %]/images/filefind.png" height="15" title="Search on [% subfiel.marc_value %]">
+                        <img src="[% interface %]/[% theme %]/images/filefind.png" height="15" title="Search on [% subfiel.marc_value %]">
                     </a>
                 [% END %]
                 [% IF ( subfiel.authority ) %]
