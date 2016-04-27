@@ -940,7 +940,7 @@ sub GetISBDView {
     my $framework = $params->{framework};
     my $itemtype  = $framework;
     my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
-    my $tagslib = &GetMarcStructure( 1, $itemtype );
+    my $tagslib = &GetMarcStructure( 1, $itemtype, { unsafe => 1 } );
 
     my $ISBD = C4::Context->preference($sysprefname);
     my $bloc = $ISBD;
@@ -1117,22 +1117,28 @@ sub IsMarcStructureInternal {
 
 =head2 GetMarcStructure
 
-  $res = GetMarcStructure($forlibrarian,$frameworkcode);
+  $res = GetMarcStructure($forlibrarian, $frameworkcode, [ $params ]);
 
 Returns a reference to a big hash of hash, with the Marc structure for the given frameworkcode
 $forlibrarian  :if set to 1, the MARC descriptions are the librarians ones, otherwise it's the public (OPAC) ones
 $frameworkcode : the framework code to read
+$params allows you to pass { unsafe => 1 } for better performance.
+
+Note: If you call GetMarcStructure with unsafe => 1, do not modify or
+even autovivify its contents. It is a cached/shared data structure. Your
+changes c/would be passed around in subsequent calls.
 
 =cut
 
 sub GetMarcStructure {
-    my ( $forlibrarian, $frameworkcode ) = @_;
+    my ( $forlibrarian, $frameworkcode, $params ) = @_;
     $frameworkcode = "" unless $frameworkcode;
 
     $forlibrarian = $forlibrarian ? 1 : 0;
+    my $unsafe = ($params && $params->{unsafe})? 1: 0;
     my $cache = Koha::Caches->get_instance();
     my $cache_key = "MarcStructure-$forlibrarian-$frameworkcode";
-    my $cached = $cache->get_from_cache($cache_key);
+    my $cached = $cache->get_from_cache($cache_key, { unsafe => $unsafe });
     return $cached if $cached;
 
     my $dbh = C4::Context->dbh;
@@ -1957,10 +1963,11 @@ sub GetMarcAuthors {
     }
     my ( $mintag, $maxtag, $fields_filter );
 
-    # tagslib useful for UNIMARC author reponsabilities
-    my $tagslib =
-      &GetMarcStructure( 1, '' );    # FIXME : we don't have the framework available, we take the default framework. May be buggy on some setups, will be usually correct.
+    # tagslib useful only for UNIMARC author responsibilities
+    my $tagslib;
     if ( $marcflavour eq "UNIMARC" ) {
+        # FIXME : we don't have the framework available, we take the default framework. May be buggy on some setups, will be usually correct.
+        $tagslib = GetMarcStructure( 1, '', { unsafe => 1 });
         $mintag = "700";
         $maxtag = "712";
         $fields_filter = '7..';

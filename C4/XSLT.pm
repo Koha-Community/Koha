@@ -66,7 +66,7 @@ Is only used in this module currently.
 sub transformMARCXML4XSLT {
     my ($biblionumber, $record) = @_;
     my $frameworkcode = GetFrameworkCode($biblionumber) || '';
-    my $tagslib = &GetMarcStructure(1,$frameworkcode);
+    my $tagslib = &GetMarcStructure(1, $frameworkcode, { unsafe => 1 });
     my @fields;
     # FIXME: wish there was a better way to handle exceptions
     eval {

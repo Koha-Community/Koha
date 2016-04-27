@@ -2475,7 +2475,7 @@ sub _get_unlinked_item_subfields {
     my $original_item_marc = shift;
     my $frameworkcode = shift;
 
-    my $marcstructure = GetMarcStructure(1, $frameworkcode);
+    my $marcstructure = GetMarcStructure(1, $frameworkcode, { unsafe => 1 });
 
     # assume that this record has only one field, and that that
     # field contains only the item information
@@ -2859,6 +2859,10 @@ sub PrepareItemrecordDisplay {
     my $dbh = C4::Context->dbh;
     $frameworkcode = &GetFrameworkCode($bibnum) if $bibnum;
     my ( $itemtagfield, $itemtagsubfield ) = &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+
+    # it would be perhaps beneficial (?) to call GetMarcStructure with 'unsafe' parameter
+    # for performance reasons, but $tagslib may be passed to $plugin->build(), and there
+    # is no way to ensure that this structure is not getting corrupted somewhere in there
     my $tagslib = &GetMarcStructure( 1, $frameworkcode );
 
     # return nothing if we don't have found an existing framework.

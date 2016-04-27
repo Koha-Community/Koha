@@ -84,7 +84,7 @@ sub filter {
         my $frameworkcode = $self->{options}->{frameworkcode} // q{};
         my $hide          = _should_hide_on_interface();
 
-        my $marcsubfieldstructure = GetMarcStructure( 0, $frameworkcode );
+        my $marcsubfieldstructure = GetMarcStructure( 0, $frameworkcode, { unsafe => 1 } );
 
         #if ($marcsubfieldstructure->{'000'}->{'@'}->{hidden}>0) {
         # LDR field is excluded from $current_record->fields().
