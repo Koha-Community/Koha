@@ -10,8 +10,8 @@ use Exception::Class (
     },
     'Koha::Exceptions::BadParameter' => {
         isa => 'Koha::Exceptions::Exception',
-        description => 'Bad parameter was given',
-        fields => ["parameter"],
+        description => 'A bad parameter was given',
+        fields => ['parameter'],
     },
     'Koha::Exceptions::DuplicateObject' => {
         isa => 'Koha::Exceptions::Exception',
@@ -28,6 +28,10 @@ use Exception::Class (
     'Koha::Exceptions::MissingParameter' => {
         isa => 'Koha::Exceptions::Exception',
         description => 'A required parameter is missing'
+    },
+    'Koha::Exceptions::NoChanges' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'No changes were made',
     },
     'Koha::Exceptions::WrongParameter' => {
         isa => 'Koha::Exceptions::Exception',

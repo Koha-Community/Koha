@@ -121,6 +121,7 @@
     },
     "dateofbirth": {
       "type": ["string", "null"],
+      "format": "date",
       "description": "patron's date of birth"
     },
     "branchcode": {
@@ -133,10 +134,12 @@
     },
     "dateenrolled": {
       "type": ["string", "null"],
+      "format": "date",
       "description": "date the patron was added to Koha"
     },
     "dateexpiry": {
       "type": ["string", "null"],
+      "format": "date",
       "description": "date the patron's card is set to expire"
     },
     "date_renewed": {
@@ -153,6 +156,7 @@
     },
     "debarred": {
       "type": ["string", "null"],
+      "format": "date",
       "description": "until this date the patron can only check-in"
     },
     "debarredcomment": {
@@ -272,15 +276,17 @@
       "description": "produce a warning for this patron if this item has previously been checked out to this patron if 'yes', not if 'no', defer to category setting if 'inherit'"
     },
     "updated_on": {
-      "type": ["string", "null"],
+      "type": "string",
+      "format": "date-time",
       "description": "time of last change could be useful for synchronization with external systems (among others)"
     },
     "lastseen": {
       "type": ["string", "null"],
+      "format": "date-time",
       "description": "last time a patron has been seen (connected at the OPAC or staff interface)"
     },
     "lang": {
-      "type": ["string", "null"],
+      "type": "string",
       "description": "lang to use to send notices to this patron"
     },
     "login_attempts": {
@@ -291,5 +297,7 @@
       "type": ["string", "null"],
       "description": "persist OverDrive auth token"
     }
-  }
+  },
+  "additionalProperties": false,
+  "required": ["surname", "address", "city", "branchcode", "categorycode"]
 }
