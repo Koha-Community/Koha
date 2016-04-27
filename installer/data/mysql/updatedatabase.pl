@@ -12352,16 +12352,16 @@ $dbh->do(q{
         DROP FOREIGN KEY emfk_basketno;
         });
 
-$dbh->(q{
+$dbh->do(q{
         ALTER TABLE edifact_messages
         ADD CONSTRAINT emfk_vendor FOREIGN KEY ( vendor_id ) REFERENCES aqbooksellers ( id ) ON DELETE CASCADE ON UPDATE CASCADE,
         ADD CONSTRAINT emfk_edi_acct FOREIGN KEY ( edi_acct ) REFERENCES vendor_edi_accounts ( id ) ON DELETE CASCADE ON UPDATE CASCADE,
         ADD CONSTRAINT emfk_basketno FOREIGN KEY ( basketno ) REFERENCES aqbasket ( basketno ) ON DELETE CASCADE ON UPDATE CASCADE;
         });
 
-print "Upgrade to $DBversion done (Bug 16354 - Fix FK constraints for edifact_messages table)\n";
-        SetVersion($DBversion);
-            }
+    print "Upgrade to $DBversion done (Bug 16354 - Fix FK constraints for edifact_messages table)\n";
+    SetVersion($DBversion);
+}
 
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
