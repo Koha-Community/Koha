@@ -59,6 +59,7 @@ $(document).ready(function() {
 		mrform.hide();
 		e.preventDefault();
 	});
+    $('#floating-save').css( { bottom: parseInt( $('#floating-save').css('bottom') ) + $('#changelanguage').height() + 'px' } );
 });
 
 function clear_entry(node) {
