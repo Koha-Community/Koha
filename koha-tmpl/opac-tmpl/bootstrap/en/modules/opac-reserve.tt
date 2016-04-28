@@ -249,18 +249,20 @@
                                                             <span class="date-format to" data-biblionumber="[% bibitemloo.biblionumber %]">[% INCLUDE 'date-format.inc' %]</span>
                                                         </li>
 
-                                                        [% UNLESS ( multi_hold ) %]
-                                                            [% IF Koha.Preference('AllowHoldItemTypeSelection') %]
-                                                                <li>
-                                                                    <label for="itemtype">Request specific item type:</label>
-                                                                    <select name="itemtype" size="1" id="itemtype">
-                                                                        <option value="">Any item type</option>
-                                                                        [%- FOREACH itemtype IN available_itemtypes %]
-                                                                            <option value="[% itemtype %]">[% ItemTypes.GetDescription( itemtype ) %]</option>
-                                                                        [%- END %]
-                                                                    </select>
-                                                                </li>
-                                                            [% END %]
+                                                        [% IF Koha.Preference('AllowHoldItemTypeSelection') %]
+                                                            [% itemtypes = [] %]
+                                                            [% FOREACH item IN bibitemloo.itemLoop %]
+                                                                [% itemtypes.push( item.itype ) %]
+                                                            [%- END %]
+                                                            <li>
+                                                                <label for="itemtype">Request specific item type:</label>
+                                                                <select name="itemtype" size="1" id="itemtype">
+                                                                    <option value="">Any item type</option>
+                                                                    [% FOREACH i IN itemtypes.unique.sort %]
+                                                                        <option value="[% i %]">[% ItemTypes.GetDescription( i ) %]</option>
+                                                                    [%- END %]
+                                                                </select>
+                                                            </li>
                                                         [% END %]
 
                                                         [% IF ( OpacHoldNotes ) %]

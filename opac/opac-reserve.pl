@@ -383,7 +383,6 @@ unless ($noreserves) {
 #
 my $notforloan_label_of = get_notforloan_label_of();
 
-my @available_itemtypes;
 my $biblioLoop = [];
 my $numBibsAvailable = 0;
 my $itemdata_enumchron = 0;
@@ -444,6 +443,7 @@ foreach my $biblioNum (@biblionumbers) {
         $itemLoopIter->{copynumber} = $itemInfo->{copynumber};
         if ($itemLevelTypes) {
             $itemLoopIter->{translated_description} = $itemInfo->{translated_description};
+            $itemLoopIter->{itype} = $itemInfo->{itype};
             $itemLoopIter->{imageurl} = $itemInfo->{imageurl};
         }
 
@@ -537,7 +537,6 @@ foreach my $biblioNum (@biblionumbers) {
                 $itemLoopIter->{available} = 1;
                 $numCopiesOPACAvailable++;
                 $biblioLoopIter{force_hold} = 1 if $hold_allowed eq 'F';
-                push( @available_itemtypes, $itemInfo->{itype} );
             }
             $numCopiesAvailable++;
         }
@@ -575,8 +574,6 @@ foreach my $biblioNum (@biblionumbers) {
     $anyholdable = 1 if $biblioLoopIter{holdable};
 }
 
-@available_itemtypes = uniq( @available_itemtypes );
-$template->param( available_itemtypes => \@available_itemtypes );
 
 if ( $numBibsAvailable == 0 || $anyholdable == 0) {
     $template->param( none_available => 1 );
