@@ -83,6 +83,10 @@ if ($shelfid && $format) {
                     }
                 }
             }
+
+            # If it was a CSV export we change the format after the export so the file extension is fine
+            $format = "csv" if ($format =~ m/^\d+$/);
+
             print $query->header(
             -type => 'application/octet-stream',
             -'Content-Transfer-Encoding' => 'binary',
@@ -95,9 +99,6 @@ if ($shelfid && $format) {
     } else {
         push @messages, { type => 'error', code => 'does_not_exist' };
     }
-
-    # If it was a CSV export we change the format after the export so the file extension is fine
-    $format = "csv" if ($format =~ m/^\d+$/);
 }
 else {
     $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ]);
