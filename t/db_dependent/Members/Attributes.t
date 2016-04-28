@@ -25,7 +25,7 @@ use C4::Members::AttributeTypes;
 use Koha::Database;
 use t::lib::TestBuilder;
 
-use Test::More tests => 57;
+use Test::More tests => 53;
 
 use t::lib::TestBuilder;
 
@@ -94,12 +94,10 @@ my $attributes = [
     {
         value => 'my attribute1',
         code => $attribute_type1->code(),
-        password => 'my password1',
     },
     {
         value => 'my attribute2',
         code => $attribute_type2->code(),
-        password => 'my password2',
     },
     {
         value => 'my attribute limited',
@@ -124,11 +122,9 @@ is( @$borrower_attributes, 3, 'GetBorrowerAttributes returns the correct number 
 is( $borrower_attributes->[0]->{code}, $attributes->[0]->{code}, 'SetBorrowerAttributes stores the correct code correctly' );
 is( $borrower_attributes->[0]->{description}, $attribute_type1->description(), 'SetBorrowerAttributes stores the field description correctly' );
 is( $borrower_attributes->[0]->{value}, $attributes->[0]->{value}, 'SetBorrowerAttributes stores the field value correctly' );
-is( $borrower_attributes->[0]->{password}, $attributes->[0]->{password}, 'SetBorrowerAttributes stores the field password correctly' );
 is( $borrower_attributes->[1]->{code}, $attributes->[1]->{code}, 'SetBorrowerAttributes stores the field code correctly' );
 is( $borrower_attributes->[1]->{description}, $attribute_type2->description(), 'SetBorrowerAttributes stores the field description correctly' );
 is( $borrower_attributes->[1]->{value}, $attributes->[1]->{value}, 'SetBorrowerAttributes stores the field value correctly' );
-is( $borrower_attributes->[1]->{password}, $attributes->[1]->{password}, 'SetBorrowerAttributes stores the field password correctly' );
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
 is( @$borrower_attributes, 3, 'GetBorrowerAttributes returns the correct number of borrower attributes' );
 
@@ -136,12 +132,10 @@ $attributes = [
     {
         value => 'my attribute1',
         code => $attribute_type1->code(),
-        password => 'my password1',
     },
     {
         value => 'my attribute2',
         code => $attribute_type2->code(),
-        password => 'my password2',
     }
 ];
 C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $attributes);
@@ -170,7 +164,6 @@ is( $attribute_value, $attributes->[1]->{value}, 'GetBorrowerAttributeValue retu
 my $attribute = {
     attribute => 'my attribute3',
     code => $attribute_type1->code(),
-    password => 'my password3',
 };
 C4::Members::Attributes::UpdateBorrowerAttribute($borrowernumber, $attribute);
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
@@ -178,7 +171,6 @@ is( @$borrower_attributes, 3, 'UpdateBorrowerAttribute does not change the numbe
 is( $borrower_attributes->[0]->{code}, $attribute->{code}, 'UpdateBorrowerAttribute updates the field code correctly' );
 is( $borrower_attributes->[0]->{description}, $attribute_type1->description(), 'UpdateBorrowerAttribute updates the field description correctly' );
 is( $borrower_attributes->[0]->{value}, $attribute->{attribute}, 'UpdateBorrowerAttribute updates the field value correctly' );
-is( $borrower_attributes->[0]->{password}, $attribute->{password}, 'UpdateBorrowerAttributes updates the field password correctly' );
 
 
 my $check_uniqueness = C4::Members::Attributes::CheckUniqueness();
@@ -226,7 +218,6 @@ is( @$borrower_attributes, 2, 'DeleteBorrowerAttribute deletes a borrower attrib
 is( $borrower_attributes->[0]->{code}, $attributes->[1]->{code}, 'DeleteBorrowerAttribute deletes the correct entry');
 is( $borrower_attributes->[0]->{description}, $attribute_type2->description(), 'DeleteBorrowerAttribute deletes the correct entry');
 is( $borrower_attributes->[0]->{value}, $attributes->[1]->{value}, 'DeleteBorrowerAttribute deletes the correct entry');
-is( $borrower_attributes->[0]->{password}, $attributes->[1]->{password}, 'DeleteBorrowerAttribute deletes the correct entry');
 
 C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber, $attributes->[1]);
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
