@@ -25,8 +25,6 @@ use C4::Circulation;
 use DateTime;
 use Koha::DateUtils;
 use Text::CSV::Encoded;
-#use Data::Dumper;
-#use Smart::Comments;
 
 my $input            = new CGI;
 my $dbh              = C4::Context->dbh;
@@ -153,32 +151,32 @@ if ($do_it) {
             $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
             my @headers = ();
             push @headers, "mfirstname",
-			            "cardnumber",
-			            "bfirstname",
-			            "branchname",
-			            "date",
-			            "accounttype",
-			            "amount",
-			            "title",
-			            "barcode",
-			            "itype";
+                        "cardnumber",
+                        "bfirstname",
+                        "branchname",
+                        "date",
+                        "accounttype",
+                        "amount",
+                        "title",
+                        "barcode",
+                        "itype";
             if ($csv->combine(@headers)) {
                 $content .= Encode::decode('UTF-8', $csv->string()) . "\n";
             } else {
                 push @$q_errors, { combine => 'HEADER ROW: ' . $csv->error_diag() } ;
             }
             foreach my $row (@loopresult) {
-				my @rowValues = ();
+                my @rowValues = ();
                 push @rowValues, $row->{mfirstname},
                         $row->{cardnumber},
-						$row->{bfirstname},
-						$row->{branchname},
-						$row->{date},
-						$row->{accounttype},
-						$row->{amount},
-						$row->{title},
-						$row->{barcode};
-						$row->{itype};
+                        $row->{bfirstname},
+                        $row->{branchname},
+                        $row->{date},
+                        $row->{accounttype},
+                        $row->{amount},
+                        $row->{title},
+                        $row->{barcode};
+                        $row->{itype};
                 if ($csv->combine(@rowValues)) {
                     $content .= Encode::decode('UTF-8',$csv->string()) . "\n";
                 } else {
