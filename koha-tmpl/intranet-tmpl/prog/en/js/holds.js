@@ -62,6 +62,10 @@ $(document).ready(function() {
                                 data += "</p>";
                             }
 
+                            if ( oObj.itemtype_limit ) {
+                                data += _("<b> Next available %s item").format( oObj.itemtype_limit );
+                            }
+
                             if ( oObj.barcode ) {
                                 data += "<em>";
                                 if ( oObj.found == "W" ) {

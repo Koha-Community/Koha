@@ -73,6 +73,12 @@ while ( my $h = $holds_rs->next() ) {
 
     my $biblionumber = $h->biblio()->biblionumber();
 
+    my $itemtype_limit;
+    if ( $h->itemtype ) {
+        my $itemtype = C4::Koha::getitemtypeinfo( $h->itemtype );
+        $itemtype_limit = $itemtype->{translated_description};
+    }
+
     my $hold = {
         DT_RowId       => $h->reserve_id(),
         biblionumber   => $biblionumber,
@@ -89,6 +95,7 @@ while ( my $h = $holds_rs->next() ) {
         waiting_at     => $h->branch()->branchname(),
         waiting_here   => $h->branch()->branchcode() eq $branch,
         priority       => $h->priority(),
+        itemtype_limit => $itemtype_limit,
         subtitle       => GetRecordValue(
             'subtitle', GetMarcBiblio($biblionumber),
             GetFrameworkCode($biblionumber)

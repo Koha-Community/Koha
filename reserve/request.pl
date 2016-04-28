@@ -567,7 +567,7 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'suspend'}        = $res->suspend();
         $reserve{'suspend_until'}  = $res->suspend_until();
         $reserve{'reserve_id'}     = $res->reserve_id();
-        $reserve{itemtype}         = $res->{itemtype};
+        $reserve{itemtype}         = $res->itemtype();
 
         if ( C4::Context->preference('IndependentBranches') && $flags->{'superlibrarian'} != 1 ) {
             $reserve{'branchloop'} = [ Koha::Libraries->find( $res->branchcode() ) ];
