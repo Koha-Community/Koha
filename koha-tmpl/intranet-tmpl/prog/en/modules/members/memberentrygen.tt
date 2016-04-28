@@ -1146,6 +1146,7 @@ function select_user(borrowernumber, borrower) {
   </fieldset>
 [% END %] [% END %]
 
+<fieldset class="rows" id="save">
 [% UNLESS ( check_member ) %]
     <fieldset class="action">
         <input type="submit" name="save" onclick="return check_form_borrowers();" value="Save" />
@@ -1156,6 +1157,7 @@ function select_user(borrowernumber, borrower) {
 	   [% END %]
     </fieldset>
 [% END %]
+</fieldset>
 </form>
   
 </div>
