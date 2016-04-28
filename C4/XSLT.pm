@@ -83,8 +83,7 @@ sub transformMARCXML4XSLT {
                 my @new_subfields = ();
                 for my $subfield ( $field->subfields() ) {
                     my ( $letter, $value ) = @$subfield;
-                    # Replace the field value with the authorised value *except* for 942$n ( record supression )
-                    # but don't replace the field if we are using UNIMARC
+                    # Replace the field value with the authorised value *except* for MARC21/NORMARC field 942$n (suppression in opac)
                     if ( !( $tag eq '942' && $subfield eq 'n' ) || $marcflavour eq 'UNIMARC' ) {
                         $value = GetAuthorisedValueDesc( $tag, $letter, $value, '', $tagslib )
                             if $av->{ $tag }->{ $letter };
@@ -211,7 +210,7 @@ sub XSLTParse4Display {
                               UseControlNumber IntranetBiblioDefaultView BiblioDefaultView
                               OPACItemLocation DisplayIconsXSLT
                               AlternateHoldingsField AlternateHoldingsSeparator
-                              TrackClicks opacthemes IdRefi OpacSuppression / )
+                              TrackClicks opacthemes IdRef OpacSuppression / )
     {
         my $sp = C4::Context->preference( $syspref );
         next unless defined($sp);
