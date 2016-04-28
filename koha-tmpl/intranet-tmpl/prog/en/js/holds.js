@@ -63,7 +63,7 @@ $(document).ready(function() {
                             }
 
                             if ( oObj.itemtype_limit ) {
-                                data += _("<b> Next available %s item").format( oObj.itemtype_limit );
+                                data += NEXT_AVAILABLE_ITYPE.format( oObj.itemtype_limit );
                             }
 
                             if ( oObj.barcode ) {

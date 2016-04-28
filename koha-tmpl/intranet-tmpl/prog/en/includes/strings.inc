@@ -21,6 +21,7 @@
     var RENEWALS_REMAINING = _("%s of %s renewals remaining");
     var HOLD_IS_SUSPENDED = _("Hold is <strong>suspended</strong>");
     var UNTIL = _("until %s");
+    var NEXT_AVAILABLE_ITYPE = _("Next available %s item");
     var ITEM_IS_WAITING = _("Item is <strong>waiting</strong>");
     var ITEM_IS_WAITING_HERE = _("Item is <strong>waiting here</strong>");
     var AT = _("at %s");
