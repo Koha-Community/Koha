@@ -17,6 +17,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AllowAllMessageDeletion','0','','Allow any Library to delete any message','YesNo'),
 ('AllowFineOverride','0','0','If on, staff will be able to issue books to patrons with fines greater than noissuescharge.','YesNo'),
 ('AllowHoldDateInFuture','0','','If set a date field is displayed on the Hold screen of the Staff Interface, allowing the hold date to be set in the future.','YesNo'),
+('AllowHoldItemTypeSelection','0','','If enabled, patrons and staff will be able to select the itemtype when placing a hold','YesNo'),
 ('AllowHoldPolicyOverride','0',NULL,'Allow staff to override hold policies when placing holds','YesNo'),
 ('AllowHoldsOnDamagedItems','1','','Allow hold requests to be placed on damaged items','YesNo'),
 ('AllowHoldsOnPatronsPossessions','1',NULL,'Allow holds on records that patron have items of it','YesNo'),

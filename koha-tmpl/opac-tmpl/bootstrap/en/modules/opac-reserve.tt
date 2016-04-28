@@ -250,15 +250,17 @@
                                                         </li>
 
                                                         [% UNLESS ( multi_hold ) %]
-                                                            <li>
-                                                                <label for="itemtype">Request specific item type:</label>
-                                                                <select name="itemtype" size="1" id="itemtype">
-                                                                    <option value="">Any item type</option>
-                                                                    [%- FOREACH itemtype IN available_itemtypes %]
-                                                                        <option value="[% itemtype %]">[% ItemTypes.GetDescription( itemtype ) %]</option>
-                                                                    [%- END %]
-                                                                </select>
-                                                            </li>
+                                                            [% IF Koha.Preference('AllowHoldItemTypeSelection') %]
+                                                                <li>
+                                                                    <label for="itemtype">Request specific item type:</label>
+                                                                    <select name="itemtype" size="1" id="itemtype">
+                                                                        <option value="">Any item type</option>
+                                                                        [%- FOREACH itemtype IN available_itemtypes %]
+                                                                            <option value="[% itemtype %]">[% ItemTypes.GetDescription( itemtype ) %]</option>
+                                                                        [%- END %]
+                                                                    </select>
+                                                                </li>
+                                                            [% END %]
                                                         [% END %]
 
                                                         [% IF ( OpacHoldNotes ) %]
