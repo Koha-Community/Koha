@@ -162,7 +162,6 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
             borrowernumber => $brwr->{'borrowernumber'},
             code           => $attr_type->{'code'},
             attribute      => '1337',
-            password       => undef,
         }
     } );
 
@@ -181,7 +180,6 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
         code              => $attr->{'code'},
         description       => $attr_type->{'description'},
         display_checkout  => $attr_type->{'display_checkout'},
-        password          => undef,
         value             => $attr->{'attribute'},
         value_description => undef,
     };
