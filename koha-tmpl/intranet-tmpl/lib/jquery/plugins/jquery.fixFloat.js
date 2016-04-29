@@ -3,13 +3,16 @@
 */
 (function ($, window) {
     "use strict";
-    $.fn.fixFloat = function (options) {
-        var defaults = {
-            enabled: true
-        };
-        options = $.extend(defaults, options);
+    $.fn.fixFloat = function (options={}) {
         var tbh = $(this);
-        var originalOffset = tbh.position().top;
+        var defaults = {
+            enabled: true,
+            originalOffset: tbh.position().top
+        };
+        var originalOffset = typeof options.originalOffset === 'undefined'
+            ? defaults.originalOffset
+            : options.originalOffset;
+        options = $.extend(defaults, options);
 
         if (tbh.css('position') !== 'absolute') {
             var tbhBis = tbh.clone();
