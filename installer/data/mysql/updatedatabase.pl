@@ -12471,6 +12471,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.056";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('NoIssuesChargeGuarantees','','','Define maximum amount withstanding before check outs are blocked','Integer');
+    });
+
+    print "Upgrade to $DBversion done (Bug 14577 - Allow restriction of checkouts based on fines of guarantor/guarantee)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
