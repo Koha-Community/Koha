@@ -2,7 +2,7 @@ $( document ).ready(function() {
     var checkboxes = $("#delete-alert-form input[type='checkbox']");
     var checkedcheckboxes = 0;
     checkboxes.on("change",function(){
-        if( $(checkboxes+":checked").length > 0){
+        if( $("#delete-alert-form").find("input:checked").length > 0){
             checkedcheckboxes = 1;
             $("#delete-alerts").removeClass("disabled");
         } else {
