@@ -841,19 +841,6 @@ canned reports and writing custom SQL reports.</p>
 </tr>
 [% END %]
 </table>
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<fieldset class="action">
-<label for="format">Download the report: </label>
-<select name="format" id="format">
-<option value="csv">Comma separated text</option>
-<option value="tab">Tab separated text</option>
-<option value="ods">Open Document Spreadsheet</option>
-</select>
-<input type="hidden" name="sql" value="[% sql |html %]" />
-<input type="hidden" name="phase" value="Export" />
-<input type="submit" name="submit" value="Download" /></fieldset>
-<input type="hidden" name="reportname" value="[% name %]" />
-</form>
 [% END %]
 [% END %]
 

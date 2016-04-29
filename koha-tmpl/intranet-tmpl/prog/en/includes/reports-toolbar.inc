@@ -9,7 +9,7 @@
         </div>
     [% END %]
 
-    [% IF ( showsql || execute || editsql || save_successful ) %]
+    [% IF ( showsql || execute || editsql || save_successful || runreport ) %]
         [% IF ( CAN_user_reports_create_reports ) %]
             [% UNLESS ( editsql ) # Do not show edit button on edit page %]
                 <div class="btn-group">
@@ -45,6 +45,18 @@
                 </a>
             </div>
         [% END %]
+
+        [% IF ( runreport ) %]
+            <div class="btn-group">
+                <button class="btn btn-small dropdown-toggle" data-toggle="dropdown" id="format"><i class="fa fa-upload"></i> Download <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=csv&amp;sql=[% sql |uri %]&amp;reportname=[% name |uri %]">Comma separated text</a></li>
+                    <li><a id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=tab&amp;sql=[% sql |uri %]&amp;reportname=[% name |uri %]">Tab separated text</a></li>
+                    <li><a id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=ods&amp;sql=[% sql |uri %]&amp;reportname=[% name |uri %]">Open Document Spreadsheet</a></li>
+                </ul>
+            </div>
+        [% END %]
+
     [% END %]
 </div>
 
