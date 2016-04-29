@@ -3,10 +3,26 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; [% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
+
+        var original_offset = $("#toolbar").position().top;
+        var additional_height = $("#filters").height();
+        $('#toolbar').fixFloat({ 'originalOffset': original_offset - additional_height });
+        $("#filteraction_on").on("click", function(){
+            $(window).off('scroll');
+            $("#toolbar").css({ top: original_offset });
+            $('#toolbar').fixFloat({ 'originalOffset': original_offset });
+        });
+        $("#filteraction_off").on("click", function(){
+            $(window).off('scroll');
+            $("#toolbar").css({ top: original_offset - additional_height});
+            $('#toolbar').fixFloat({ 'originalOffset': original_offset - additional_height });
+        })
+
 	[% IF categorycode %]
 		update_category_code( "[% categorycode %]" );
 	[% ELSE %]
@@ -163,6 +179,23 @@ $(document).ready(function() {
 [% END %]
 [% END %]
 [% END %]
+<div id="toolbar" class="btn-toolbar">
+[% UNLESS ( check_member ) %]
+    <div class="btn-group">
+        <button class="btn btn-small" id="saverecord" type="submit" name="save" onclick="return check_form_borrowers();"><i class="fa fa-save"></i> Save</button>
+    </div>
+    [% IF opadd %]
+            <a class="cancel" href="/cgi-bin/koha/members/member.pl">Cancel</a>
+            <div class="btn-group">
+                <a class="btn btn-small cancel" id="cancel" href="/cgi-bin/koha/members/member.pl">Cancel</a>
+            </div>
+       [% ELSE %]
+            <div class="btn-group">
+                <a class="btn btn-small cancel" id="cancel" href="/cgi-bin/koha/members/member.pl?borrowernumber=[% borrowernumber %]">Cancel</a>
+            </div>
+        [% END %]
+[% END %]
+</div>
 
 [% IF ( step_1 ) %]
 [%UNLESS notitle && nosurname && nofirstname && nodateofbirth && noinitials && noothernames &&nosex %]
@@ -1015,20 +1048,6 @@ $(document).ready(function() {
   </fieldset>
 [% END %] [% END %]
 
-<fieldset class="rows" id="floating-save">
-[% UNLESS ( check_member ) %]
-    <fieldset class="action">
-        <button type="submit" name="save" onclick="return check_form_borrowers();">
-            <i class="fa fa-save"></i> Save
-        </button>
-      [% IF ( opadd ) %]
-       <a class="cancel" href="/cgi-bin/koha/members/member.pl">Cancel</a>
-	   [% ELSE %]
-	  <a class="cancel" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Cancel</a>
-	   [% END %]
-    </fieldset>
-[% END %]
-</fieldset>
 </form>
   
 </div>
