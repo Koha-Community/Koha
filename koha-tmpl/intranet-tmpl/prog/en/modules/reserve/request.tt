@@ -27,6 +27,18 @@ var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo 
 var MSG_NO_ITEMS_AVAILABLE = _("A hold cannot be requested on any of these items.");
 
 $(document).ready(function() {
+    function ToggleHoldsToPlace() {
+        if ( $("#requestany").prop('checked') ) {
+            $("#holds_to_place_count").prop('disabled', false);
+        } else {
+            $("#holds_to_place_count").prop('disabled', true);
+        }
+    }
+    ToggleHoldsToPlace();
+    $("#requestany").on('change', function(){
+        ToggleHoldsToPlace();
+    });
+
     [% IF AutoResumeSuspendedHolds %]
         $(".suspend_until_datepicker, .datepickerfrom, .datepickerto").datepicker("option", "minDate", 1);
     [% END %]
