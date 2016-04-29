@@ -67,6 +67,9 @@ function load_group_subgroups () {
 }
 
 $(document).ready(function(){
+    $('#limit').change(function() {
+        $('#limitselect').submit();
+    });
 
 $(".goback").on("click",function(e){
     e.preventDefault();
@@ -807,7 +810,7 @@ canned reports and writing custom SQL reports.</p>
 [% IF ( unlimited_total ) %]<p>Total number of rows matching the (unlimited) query is [% unlimited_total %].</p>[% END %]
 <pre id="sql_output">[% sql |html %]</pre>
 
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="get" id="limitselect">
     <input type="hidden" name="phase" value="Run this report"/>
     <input type="hidden" name="reports" value="[% report_id %]"/>
 
@@ -816,7 +819,7 @@ canned reports and writing custom SQL reports.</p>
     [% END %]
 
     <label for="limit">Rows per page: </label>
-    <select name="limit">
+    <select name="limit" id="limit">
         [% limits = [ 10, 20, 50, 100, 200, 300, 400, 500, 1000 ] %]
         [% FOREACH l IN limits %]
                 [% IF l == limit %]
@@ -826,8 +829,6 @@ canned reports and writing custom SQL reports.</p>
                 [% END %]
         [% END %]
     </select>
-
-    <input type="submit" value="Update" />
 </form>
 
 <div class="pages">[% pagination_bar %]</div>
