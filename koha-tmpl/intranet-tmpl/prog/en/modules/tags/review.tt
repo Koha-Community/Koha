@@ -74,7 +74,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 
 	var success_test_call = function() {
         $('#test_button').prop('disabled', false);
-		$('#test_button').attr("value","test");
+        $('#test_button').attr("value","Test");
 	};
 	$(document).ready(function() {
 		$('.ajax_buttons' ).css({visibility:"visible"});
@@ -173,11 +173,11 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 <h1>Tags</h1>
 <form method="post" action="/cgi-bin/koha/tags/review.pl" class="checkboxed">
   <h4>Displaying 
-	[% IF ( filter_approved_all ) %]ALL[% END %]
-	[% IF ( filter_approved_ok ) %]Approved[% END %]
-	[% IF ( filter_approved_pending ) %]Pending[% END %]
-	[% IF ( filter_approved_rej ) %]Rejected[% END %]
-	Terms
+	[% IF ( filter_approved_all ) %]all[% END %]
+	[% IF ( filter_approved_ok ) %]approved[% END %]
+	[% IF ( filter_approved_pending ) %]pending[% END %]
+	[% IF ( filter_approved_rej ) %]rejected[% END %]
+	terms
   </h4>
 
   [% IF ( op_count ) %]
