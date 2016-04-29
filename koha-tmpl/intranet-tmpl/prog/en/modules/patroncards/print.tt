@@ -6,6 +6,11 @@
             function Done() {
                 window.location = "[% referer %]";
             };
+            $(document).ready(function(){
+                $(".gb-close").on("click",function(){
+                    parent.parent.GB_hide();
+                });
+            })
         //]]>
     </script>
     <style type="text/css">#custom-doc {width:47.23em; *width:46.04em; min-width:610px; margin:auto; margin-top:0.4em;}</style>
@@ -38,7 +43,7 @@
                     </fieldset>
 
                 <fieldset class="action">
-                    <input type="button" class="btn btn-default submit" id="done" onclick="parent.parent.GB_hide();" value="Done" />
+                    <input type="button" class="gb-close" value="Done" />
                 </fieldset>
             </form>
             [% ELSIF ( patronlist_id && template_id && layout_id ) %]
@@ -95,10 +100,11 @@
                     </ol>
                 </fieldset>
                 <fieldset class="action">
-                    <input type="submit" class="btn btn-default submit" value="Export" />
-                    <a href="#" class="cancel" id="done" onclick="parent.parent.GB_hide();">Cancel</a>
+                    <input type="submit" value="Export" />
+                    <a href="#" class="cancel gb-close">Cancel</a>
                 </fieldset>
             </form>
             [% END %]
         </div>
+    </div>
     [% INCLUDE 'popup-bottom.inc' %]

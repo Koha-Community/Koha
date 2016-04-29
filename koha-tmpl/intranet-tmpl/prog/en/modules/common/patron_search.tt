@@ -100,6 +100,13 @@ $(document).ready(function(){
         e.preventDefault();
         filterByFirstLetterSurname($(this).text());
     });
+    $("body").on("click",".add_user",function(e){
+        e.preventDefault();
+        var borrowernumber = $(this).data("borrowernumber");
+        var firstname = $(this).data("firstname");
+        var surname = $(this).data("surname");
+        add_user( borrowernumber, firstname + " " + surname );
+    });
 });
 
 function filter() {
@@ -133,10 +140,10 @@ function filterByFirstLetterSurname(letter) {
                     $("#info").hide();
                     $("#error").hide();
                     if ( p.add_user(borrowernumber, borrowername) < 0 ) {
-                        $("#error").html(_("Borrower '%s' is already in the list.").format(borrowername));
+                        $("#error").html(_("Patron '%s' is already in the list.").format(borrowername));
                         $("#error").show();
                     } else {
-                        $("#info").html(_("Borrower '%s' added.").format(borrowername));
+                        $("#info").html(_("Patron '%s' added.").format(borrowername));
                         $("#info").show();
                     }
                 }
@@ -189,7 +196,7 @@ function filterByFirstLetterSurname(letter) {
                     </li>
                 </ol>
                 <fieldset class="action">
-                    <input class="btn btn-default" type="submit" value="Search" />
+                    <input type="submit" value="Search" />
                 </fieldset>
             </fieldset>
         <form>

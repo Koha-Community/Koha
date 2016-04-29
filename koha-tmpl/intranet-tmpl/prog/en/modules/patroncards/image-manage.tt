@@ -135,7 +135,7 @@
                                     [% FOREACH text_field IN TABL.text_fields %]
                                     [% IF ( text_field.select_field ) %]
                                         <td>
-                                            <a class="delete_image btn btn-mini" href="/cgi-bin/koha/patroncards/image-manage.pl?op=delete&image_id=[% text_field.field_value %]"><icon class="fa fa-trash"></icon> Delete</a>
+                                            <a class="delete_image btn btn-mini" href="/cgi-bin/koha/patroncards/image-manage.pl?op=delete&image_id=[% text_field.field_value %]"><i class="fa fa-trash"></i> Delete</a>
                                         </td>
                                         <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>
                                     [% ELSIF ( text_field.field_value ) %]

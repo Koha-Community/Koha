@@ -19,7 +19,7 @@
                 "dt_borrowernotes":
                     "[% data.borrowernotes.replace('\\\\' , '\\\\') |html |html_line_break |collapse %]",
                 "dt_action":
-                    "<a href=\"#\" onclick='add_user(\"[% data.borrowernumber %]\", \"[% data.firstname %] [% data.surname %]\"); return false;'>Add</a>"
+                    "<a href=\"#\" data-borrowernumber=\"[% data.borrowernumber %]\" data-firstname=\"[% data.firstname %]\" data-surname=\"[% data.surname %]\" class=\"btn btn-mini add_user\"><i class=\"fa fa-plus\"></i> Add</a>"
             }[% UNLESS loop.last %],[% END %]
         [% END %]
     ]

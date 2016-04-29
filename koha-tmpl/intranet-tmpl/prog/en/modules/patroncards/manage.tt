@@ -26,7 +26,6 @@
     [% INCLUDE 'greybox.inc' %]
     <script type="text/javascript">
         //<![CDATA[
-            var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this?");
             function DeleteConfirm() {
                 var element_ids = selected_layouts("delete");
 
@@ -157,6 +156,14 @@
                 XportPatronlist();
                 return false;
             });
+            $(".delete").on("click", function(){
+                return confirmDelete( _("Are you sure you want to delete this?") );
+            });
+            $(".export").on("click", function(e){
+                e.preventDefault();
+                var batch_id = $(this).data("batch-id");
+                GB_showCenter( _("Export single batch"),'/cgi-bin/koha/patroncards/print.pl?batch_id='+batch_id, 400, 800);
+            });
          });
 //]]>
 </script>
@@ -200,11 +207,11 @@
                                 [% FOREACH text_field IN table_loo.text_fields %]
                                 [% IF ( text_field.select_field ) %]
                                     <td>
-                                      <a class="btn btn-mini" href="/cgi-bin/koha/patroncards/edit-[% card_element %].pl?op=edit&element_id=[% text_field.field_value %]"><icon class="fa fa-edit"></icon> Edit</a>
-                                      [% IF ( print ) %]<a class="btn btn-mini" href="#" onclick="GB_showCenter('Export single batch','/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]', 400, 800)"><icon class="fa fa-share-square-o"></icon> Export</a>[% END %]
-                                      <a class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);" href="/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element %]&element_id=[% text_field.field_value %]"><icon class="fa fa-trash"></icon> Delete</a>
+                                      <a class="btn btn-mini" href="/cgi-bin/koha/patroncards/edit-[% card_element %].pl?op=edit&element_id=[% text_field.field_value %]"><i class="fa fa-edit"></i> Edit</a>
+                                      [% IF ( print ) %]<a class="btn btn-mini export" data-batch-id="[% text_field.field_value |url %]" href="/cgi-bin/koha/patroncards/print.pl?batch_id=[% text_field.field_value |url %]"><i class="fa fa-share-square-o"></i> Export</a>[% END %]
+                                      <a class="btn btn-mini delete" href="/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element %]&element_id=[% text_field.field_value %]"><i class="fa fa-trash"></i> Delete</a>
                                     </td>
-                                    [% IF ( print ) %]<td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>[% END %]
+                                    [% IF ( print ) %]<td><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>[% END %]
                                 [% ELSIF ( text_field.field_value ) %]
                                     <td>[% text_field.field_value %]</td>
                                 [% ELSE %]
@@ -216,7 +223,7 @@
                                 [% END %]
                             </table>
                             <fieldset class="action">
-                                [% IF ( print ) %]<input class="btn btn-sm" type="button" id="print" value="Export selected batches" />[% END %]
+                                [% IF ( print ) %]<input type="button" id="print" value="Export selected batches" />[% END %]
                             </fieldset>
                             [% IF patron_lists %]
                             <fieldset class="rows">
