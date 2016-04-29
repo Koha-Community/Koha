@@ -12400,23 +12400,46 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.23.00.053";
 if ( CheckVersion($DBversion) ) {
-my $letters = $dbh->selectall_arrayref(q|
+    my $letters = $dbh->selectall_arrayref(
+        q|
         SELECT code, name
         FROM letter
         WHERE message_transport_type="email"
-        |, { Slice => {} });
-for my $letter ( @$letters ) {
-        $dbh->do(q|
+        |, { Slice => {} }
+    );
+    for my $letter (@$letters) {
+        $dbh->do(
+            q|
                 UPDATE letter
                 SET name = ?
                 WHERE code = ?
                 AND message_transport_type <> "email"
-                |, undef, $letter->{name}, $letter->{code});
-}
+                |, undef, $letter->{name}, $letter->{code}
+        );
+    }
 
     print "Upgrade to $DBversion done (Bug 16217 - Notice' names may have diverged)\n";
-        SetVersion($DBversion);
-        }
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.23.00.054";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE branch_item_rules ADD COLUMN hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any' AFTER holdallowed;
+    });
+    $dbh->do(q{
+        ALTER TABLE default_branch_circ_rules ADD COLUMN hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any' AFTER holdallowed;
+    });
+    $dbh->do(q{
+        ALTER TABLE default_branch_item_rules ADD COLUMN hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any' AFTER holdallowed;
+    });
+    $dbh->do(q{
+        ALTER TABLE default_circ_rules ADD COLUMN hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any' AFTER holdallowed;
+    });
+
+    print "Upgrade to $DBversion done (Bug 15532 - Add ability to allow only items whose home/holding branch matches the hold's pickup branch to fill a given hold)\n";
+    SetVersion($DBversion);
+}
 
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
