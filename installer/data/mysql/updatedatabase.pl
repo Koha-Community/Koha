@@ -12463,7 +12463,7 @@ if ( CheckVersion($DBversion) ) {
     });
 
     $dbh->do(q{
-        INSERT INGORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
         ('AllowHoldItemTypeSelection','0','','If enabled, patrons and staff will be able to select the itemtype when placing a hold','YesNo');
     });
 
