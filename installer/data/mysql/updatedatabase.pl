@@ -12535,6 +12535,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.060";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( value, variable, options, explanation,type )
+        SELECT value ,'EnhancedMessagingPreferencesOPAC', NULL, 'If ON, allows patrons to select to receive additional messages about items due or nearly due.', 'YesNo' FROM systempreferences WHERE variable = 'EnhancedMessagingPreferences';
+    });
+
+    print "Upgrade to $DBversion done (Bug 12528 - Enable staff to deny message setting access to patrons on the OPAC)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
