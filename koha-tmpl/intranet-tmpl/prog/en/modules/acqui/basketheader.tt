@@ -127,7 +127,11 @@
         <fieldset class="action">
             <input type="hidden" name="op" value="add_validate" />
             <input type="submit" value="Save" />
-            <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">Cancel</a>
+            [% IF ( basketno ) %]
+                <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Cancel</a>
+            [% ELSE %]
+                <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">Cancel</a>
+            [% END %]
         </fieldset>
     </form>
     [% END %]
