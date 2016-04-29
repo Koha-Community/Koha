@@ -18,6 +18,7 @@
         <xsl:variable name="OPACBaseURL" select="marc:sysprefs/marc:syspref[@name='OPACBaseURL']"/>
         <xsl:variable name="SubjectModifier"><xsl:if test="marc:sysprefs/marc:syspref[@name='TraceCompleteSubfields']='1'">,complete-subfield</xsl:if></xsl:variable>
         <xsl:variable name="TraceSubjectSubdivisions" select="marc:sysprefs/marc:syspref[@name='TraceSubjectSubdivisions']"/>
+        <xsl:variable name="OpacSuppression" select="marc:sysprefs/marc:syspref[@name='OpacSuppression']"/>
         <xsl:variable name="TracingQuotesLeft">
           <xsl:choose>
             <xsl:when test="marc:sysprefs/marc:syspref[@name='UseICU']='1'">{</xsl:when>
@@ -57,6 +58,13 @@
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
+
+        <!-- Indicate if record is suppressed in OPAC -->
+        <xsl:if test="$OpacSuppression = 1">
+            <xsl:if test="marc:datafield[@tag=942][marc:subfield[@code='n'] = '1']">
+                <span class="results_summary suppressed_opac">Suppressed in OPAC</span>
+            </xsl:if>
+        </xsl:if>
 
         <!-- Tittel og ansvarsopplysninger -->
         <xsl:if test="marc:datafield[@tag=245]">
