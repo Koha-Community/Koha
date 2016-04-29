@@ -12482,6 +12482,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.057";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE aqbasket ADD COLUMN is_standing TINYINT(1) NOT NULL DEFAULT 0 AFTER branch;
+    });
+
+    print "Upgrade to $DBversion done (Bug 15531 - Add support for standing orders)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
