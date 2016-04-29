@@ -12521,7 +12521,7 @@ if ( CheckVersion($DBversion) ) {
         warn "The system preference AuthorisedValueImages or StaffAuthorisedValueImages could be turned off if you are not aware of this feature\n";
     }
 
-    print "Upgrade to $DBversion done (Bug 15531 - Add support for standing orders)\n";
+    print "Upgrade to $DBversion done (Bug 16041 - StaffAuthorisedValueImages & AuthorisedValueImages preferences - impact on search performance)\n";
     SetVersion($DBversion);
 }
 
