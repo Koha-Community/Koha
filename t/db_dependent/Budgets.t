@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use Modern::Perl;
-use Test::More tests => 134;
+use Test::More tests => 137;
 
 BEGIN {
     use_ok('C4::Budgets')
