@@ -14,7 +14,7 @@
         [% IF ( loop ) %]$("#sysprefst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sDom": '<"top pager"ilf>t',
             "aoColumnDefs": [
-                { "aTargets": [ -1, -2, -3, -4 ], "bSortable": false }
+                { "aTargets": [ -1, -2, -3 ], "bSortable": false }
             ],
             "bPaginate": false
         }));[% END %]
@@ -321,8 +321,7 @@
         <th>Preference</th>
         <th>Explanation</th>
         <th>Value</th>
-        <th>Edit</th>
-        <th>Delete</th>
+        <th>Actions</th>
         </tr></thead>
     [% END %]
     <tbody>[% FOREACH loo IN loop %]
@@ -433,12 +432,11 @@
                 <input type="hidden" name="prefoptions" value="[% loo.prefoptions |html %]" />
                 <input type="hidden" name="preftype" value="[% loo.type %]" />
                 <input type="hidden" name="explanation" value="[% loo.explanation |html %]" />
-                <input type="submit" value="Save" />
+                <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save</button>
             </form>
         </td>
 
-        <td><a href="[% loo.edit %]">Edit </a></td>
-        <td><a href="[% loo.delete %]">Delete</a></td>
+        <td class="actions"><a class="btn btn-mini" href="[% loo.edit %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-mini" href="[% loo.delete %]"><i class="fa fa-trash"></i> Delete</a></td>
     </tr>
     [% END %]</tbody>
     </table>
