@@ -12525,6 +12525,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.059";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        DELETE FROM systempreferences WHERE variable="AuthorisedValueImages" OR variable="StaffAuthorisedValueImages";
+    });
+
+    print "Upgrade to $DBversion done (Bug 16167 - Remove prefs to drive authorised value images)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
