@@ -12398,6 +12398,27 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.053";
+if ( CheckVersion($DBversion) ) {
+my $letters = $dbh->selectall_arrayref(q|
+        SELECT code, name
+        FROM letter
+        WHERE message_transport_type="email"
+        |, { Slice => {} });
+for my $letter ( @$letters ) {
+        $dbh->do(q|
+                UPDATE letter
+                SET name = ?
+                WHERE code = ?
+                AND message_transport_type <> "email"
+                |, undef, $letter->{name}, $letter->{code});
+}
+
+    print "Upgrade to $DBversion done (Bug 16217 - Notice' names may have diverged)\n";
+        SetVersion($DBversion);
+        }
+
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
