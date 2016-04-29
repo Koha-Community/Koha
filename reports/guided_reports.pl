@@ -787,6 +787,7 @@ elsif ($phase eq 'Run this report'){
                 $url = join('&amp;sql_params=', $url, map { URI::Escape::uri_escape_utf8($_) } @sql_params);
             }
             $template->param(
+                'runreport' => 1,
                 'results' => \@rows,
                 'sql'     => $sql,
                 'id'      => $report_id,
