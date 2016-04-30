@@ -223,27 +223,28 @@ is_deeply(
 );
 
 #Test GetBranchItemRule
+my @lazy_any = ( 'hold_fulfillment_policy' => 'any' );
 is_deeply(
     GetBranchItemRule(
         $samplebranch1->{branchcode},
-        $sampleitemtype1->{itemtype}
+        $sampleitemtype1->{itemtype},
     ),
-    { returnbranch => 'homebranch', holdallowed => 5 },
+    { returnbranch => 'homebranch', holdallowed => 5, @lazy_any },
     "GetBranchitem returns holdallowed and return branch"
 );
 is_deeply(
     GetBranchItemRule(),
-    { returnbranch => 'homebranch', holdallowed => 3 },
+    { returnbranch => 'homebranch', holdallowed => 3, @lazy_any },
 "Without parameters GetBranchItemRule returns the values in default_circ_rules"
 );
 is_deeply(
     GetBranchItemRule( $samplebranch2->{branchcode} ),
-    { returnbranch => 'holdingbranch', holdallowed => 1 },
+    { returnbranch => 'holdingbranch', holdallowed => 1, @lazy_any },
 "With only a branchcode GetBranchItemRule returns values in default_branch_circ_rules"
 );
 is_deeply(
     GetBranchItemRule( -1, -1 ),
-    { returnbranch => 'homebranch', holdallowed => 3 },
+    { returnbranch => 'homebranch', holdallowed => 3, @lazy_any },
     "With only one parametern GetBranchItemRule returns default values"
 );
 
