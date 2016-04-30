@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 549;
+use Test::More tests => 545;
 use t::lib::Mocks qw(mock_preference);
 use POSIX qw(strftime);
 
