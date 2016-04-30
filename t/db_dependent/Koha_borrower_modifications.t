@@ -4,6 +4,7 @@ use Modern::Perl;
 use Test::More tests => 14;
 
 use C4::Context;
+use t::lib::TestBuilder;
 use C4::Members;
 
 use Koha::Patron::Modifications;
@@ -48,7 +49,10 @@ ok(
 );
 
 ## Create new pending modification, but for an existing borrower
-Koha::Patron::Modifications->new( borrowernumber => '2' )
+## But not a hardcoded borrowernumber of course (Bug 16407)
+my $builder = t::lib::TestBuilder->new;
+my $borr1 = $builder->build({ source => 'Borrower' })->{borrowernumber};
+Koha::Patron::Modifications->new( borrowernumber => $borr1 )
   ->AddModifications( { surname => 'Hall', firstname => 'Kyle' } );
 
 ## Test the counter
@@ -56,7 +60,8 @@ ok( Koha::Patron::Modifications->GetPendingModificationsCount() == 1,
     'Test GetPendingModificationsCount()' );
 
 ## Create new pending modification for another existing borrower
-Koha::Patron::Modifications->new( borrowernumber => '3' )
+my $borr2 = $builder->build({ source => 'Borrower' })->{borrowernumber};
+Koha::Patron::Modifications->new( borrowernumber => $borr2 )
   ->AddModifications( { surname => 'Smith', firstname => 'Sandy' } );
 
 ## Test the counter
@@ -72,17 +77,17 @@ ok( $firstnames_mod[0] eq 'Kyle', 'Test GetPendingModifications()' );
 ok( $firstnames_mod[1] eq 'Sandy', 'Test GetPendingModifications() again' );
 
 ## This should delete the row from the table
-Koha::Patron::Modifications->DenyModifications('3');
+Koha::Patron::Modifications->DenyModifications( $borr2 );
 
 ## Test the counter
 ok( Koha::Patron::Modifications->GetPendingModificationsCount() == 1,
     'Test DenyModifications()' );
 
 ## Save a copy of the borrowers original data
-my $old_borrower = GetMember( borrowernumber => '2' );
+my $old_borrower = GetMember( borrowernumber => $borr1 );
 
 ## Apply the modifications
-Koha::Patron::Modifications->ApproveModifications('2');
+Koha::Patron::Modifications->ApproveModifications( $borr1 );
 
 ## Test the counter
 ok(
@@ -91,14 +96,14 @@ ok(
 );
 
 ## Get a copy of the borrowers current data
-my $new_borrower = GetMember( borrowernumber => '2' );
+my $new_borrower = GetMember( borrowernumber => $borr1 );
 
 ## Check to see that the approved modifications were saved
 ok( $new_borrower->{'surname'} eq 'Hall',
     'Test ApproveModifications() applys modification to borrower' );
 
 ## Now let's put it back the way it was
-Koha::Patron::Modifications->new( borrowernumber => '2' )->AddModifications(
+Koha::Patron::Modifications->new( borrowernumber => $borr1 )->AddModifications(
     {
         surname   => $old_borrower->{'surname'},
         firstname => $old_borrower->{'firstname'}
@@ -110,7 +115,7 @@ ok( Koha::Patron::Modifications->GetPendingModificationsCount() == 1,
     'Test GetPendingModificationsCount()' );
 
 ## Apply the modifications
-Koha::Patron::Modifications->ApproveModifications('2');
+Koha::Patron::Modifications->ApproveModifications( $borr1 );
 
 ## Test the counter
 ok(
@@ -118,7 +123,7 @@ ok(
     'Test ApproveModifications() removes pending modification from db, again'
 );
 
-$new_borrower = GetMember( borrowernumber => '2' );
+$new_borrower = GetMember( borrowernumber => $borr1 );
 
 ## Test to verify the borrower has been updated with the original values
 ok(
