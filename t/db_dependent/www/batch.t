@@ -17,10 +17,10 @@
 #
 
 use Modern::Perl;
+
 use utf8;
 use Test::More tests => 20;
 use Test::WWW::Mechanize;
-use Data::Dumper;
 use XML::Simple;
 use JSON;
 use File::Basename;
@@ -71,7 +71,7 @@ $agent->follow_link_ok( { text => 'Stage MARC records for import' },
     'go to stage MARC' );
 
 $agent->post(
-    "$intranet/cgi-bin/koha/tools/upload-file.pl",
+    "$intranet/cgi-bin/koha/tools/upload-file.pl?temp=1",
     [ 'fileToUpload' => [$file], ],
     'Content_Type' => 'form-data',
 );
@@ -96,6 +96,7 @@ $agent->submit_form_ok(
             'encoding'        => 'utf8',
             'parse_items'     => '1',
             'runinbackground' => '1',
+            'record_type'     => 'biblio'
         }
     },
     'stage MARC'
@@ -150,12 +151,14 @@ $agent->submit_form_ok(
             'parse_items'     => '1',
             'runinbackground' => '1',
             'completedJobID'  => $jobID,
+            'record_type'     => 'biblio'
         }
     },
     'stage MARC'
 );
 
 $agent->follow_link_ok( { text => 'Manage staged records' }, 'view batch' );
+
 my $bookdescription;
 if ( $marcflavour eq 'UNIMARC' ) {
     $bookdescription = 'Jeffrey Esakov et Tom Weiss';
@@ -163,24 +166,31 @@ if ( $marcflavour eq 'UNIMARC' ) {
 else {
     $bookdescription = 'Data structures';
 }
-$agent->content_contains( $bookdescription, 'found book' );
-$agent->form_number(5);
+
+# Save the staged records URI for later use
+my $staged_records_uri = $agent->uri;
+
+my $import_batch_id = ( split( '=', $staged_records_uri->as_string ) )[-1];
+# Get datatable for the batch id
+$agent->get_ok(
+    "$intranet/cgi-bin/koha/tools/batch_records_ajax.pl?import_batch_id=$import_batch_id",
+    'get the datatable for the new batch id'
+);
+$jsonresponse = decode_json $agent->content;
+like( $jsonresponse->{ aaData }[0]->{ citation }, qr/$bookdescription/, 'found book' );
+my $biblionumber = $jsonresponse->{ aaData }[0]->{ import_record_id };
+# Back to the manage staged records page
+$agent->get($staged_records_uri);
+$agent->form_number(6);
 $agent->field( 'framework', '' );
 $agent->click_ok( 'mainformsubmit', "imported records into catalog" );
-my $newbib;
-foreach my $link ( $agent->links() ) {
-    if ( $link->url() =~ m#/cgi-bin/koha/catalogue/detail.pl\?biblionumber=# ) {
-        $newbib = $link->text();
-        $agent->link_content_like( [$link], qr/$bookdescription/,
-            'successfully imported record' );
-        last;
-    }
-}
 
-$agent->form_number(4);
+$agent->form_number(5);
 $agent->click_ok( 'mainformsubmit', "revert import" );
 $agent->get_ok(
-    "$intranet/cgi-bin/koha/catalogue/detail.pl?biblionumber=$newbib",
+    "$intranet/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber",
     'getting reverted bib' );
 $agent->content_contains( 'The record you requested does not exist',
     'bib is gone' );
+
+1;
