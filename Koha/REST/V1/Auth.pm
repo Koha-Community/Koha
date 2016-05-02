@@ -320,7 +320,7 @@ sub allow_guarantor {
         return;
     }
 
-    my $guarantees = $user->guarantees->as_list;
+    my $guarantees = $user->guarantee_relationships->guarantees->as_list;
     foreach my $guarantee (@{$guarantees}) {
         return 1 if check_object_ownership($c, $guarantee);
     }

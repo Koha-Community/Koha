@@ -71,7 +71,7 @@
                                         </select>
                                     </div>
 
-                                    [% IF borrower.guarantorid && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
+                                    [% IF borrower.guarantor_relationships && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
                                         <div>
                                             <label for="privacy_guarantor_checkouts">Allow your guarantor to view your current checkouts?</label>
                                             <select name="privacy_guarantor_checkouts">
@@ -84,7 +84,12 @@
                                                 [% END %]
                                             </select>
                                             <span class="hint">
-                                                Your guarantor is <i>[% borrower.guarantor.firstname | html %] [% borrower.guarantor.surname | html %]</i>
+                                                Guaranteed by
+                                                [% FOREACH gr IN borrower.guarantor_relationships %]
+                                                    [% SET g = gr.guarantor %]
+                                                    [% g.firstname | html %] [% g.surname | html %]
+                                                    [%- IF ! loop.last %], [% END %]
+                                                [% END %]
                                             </span>
                                         </div>
                                     [% END %]

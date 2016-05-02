@@ -550,7 +550,7 @@ subtest 'SearchItems test' => sub {
 
 subtest 'Koha::Item(s) tests' => sub {
 
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin();
 
@@ -588,6 +588,10 @@ subtest 'Koha::Item(s) tests' => sub {
     my $holdingbranch = $item->holding_branch();
     is( ref($holdingbranch), 'Koha::Library', "Got Koha::Library from holding_branch method" );
     is( $holdingbranch->branchcode(), $library2->{branchcode}, "Home branch code matches holdingbranch" );
+
+    my $biblio = $item->biblio();
+    is( ref($biblio), 'Koha::Biblio', "Got Koha::Biblio from biblio method" );
+    is( $biblio->title(), 'Silence in the library', 'Title matches biblio title' );
 
     $schema->storage->txn_rollback;
 };

@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE To %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -317,113 +318,122 @@
 	</fieldset>
 [% END # hide fieldset %]
 
-[% IF ( showguarantor ) %]
-    <input type="hidden" id="guarantorid" name="guarantorid"   value="[% guarantorid | html %]" />
-    [% UNLESS step_6 %]
-        <input type="hidden" name="branchcode" value="[% branchcode | html %]" />
-    [% END %]
-    <fieldset id="memberentry_guarantor" class="rows">
-        <legend id="guarantor_lgd">Guarantor information</legend>
-        <ol>
-[% IF ( P ) %]
-	        [% IF ( guarantorid ) %]
-	        <li id="contact-details">
-	        [% ELSE %]
-	        <li id="contact-details" style="display: none">
-	        [% END %]
-                <span class="label">Organization #:</span> [% IF ( guarantorid ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid | uri %]" target="blank">[% guarantorid | html %]</a>[% END %]
-	        </li>
-	        <li>
-	            <label for="contactname">Organization name: </label>
-	            [% IF ( guarantorid ) %]
-	            <span>[% contactname | html %]</span>
-	            <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname | html %]" />
-	            [% ELSE %]
-                    <input name="contactname" id="contactname" type="text" size="20" value="[% contactname | html %]" />
-	            [% END %]
-	        </li>
-[% ELSE %]
- [% IF ( C ) %]
- [% IF ( guarantorid ) %]
- <li id="contact-details">
- [% ELSE %]
- <li id="contact-details" style="display: none">
- [% END %]
-     <span class="label">Patron #:</span>
-     [% IF guarantorid %]
-        [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
-            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid | uri %]" target="blank">[% guarantorid | html %]</a>
-        [% ELSE %]
-            [% guarantorid | html %]
-        [% END %]
-    [% END %]
- </li>
-        [% UNLESS nocontactname %]
- <li>
-     <label for="contactname">Surname: </label>
-     [% IF ( guarantorid ) %]
-     <span>[% contactname | html %]</span>
-     <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname | html %]" />
-     [% ELSE %]
-        <input name="contactname" id="contactname" type="text" size="20" value="[% contactname | html %]" />
-     [% END %]
- </li>
-        [% END %]
-        [% UNLESS nocontactfirstname %]
- <li>
-     <label for="contactfirstname">First name: </label>
-     [% IF ( guarantorid ) %]
-     <span>[% contactfirstname | html %]</span>
-     <input name="contactfirstname" id="contactfirstname" type="hidden" size="20" value="[% contactfirstname | html %]" />
-     [% ELSE %]
-        <input name="contactfirstname" id="contactfirstname" type="text" size="20" value="[% contactfirstname | html %]" />
-     [% END %]
- </li>
-        [% END %]
- [% IF ( relshiploop ) %]
- <li>
-     <label for="relationship">Relationship: </label>
-     <select name="relationship" id="relationship" >
-         [% FOREACH relshiploo IN relshiploop %]
-         [% IF ( relshiploo.selected ) %]
-         <option value="[% relshiploo.relationship | html %]" selected="selected" >[% relshiploo.relationship | html %]</option>
-         [% ELSE %]
-         <option value="[% relshiploo.relationship | html %]">[% relshiploo.relationship | html %]</option>
-         [% END %]
-         [% END %]
-     </select>
- </li>
- [% END %]
- [% END %]
-[% END %]
-        <li>
-            <span class="label">&nbsp;</span>
-            [% IF ( guarantorid ) %]
-            <input id="guarantorsearch" type="button" value="Change" onclick="Dopopguarantor('guarantor_search.pl');" />
-            [% ELSE %]
-            <input id="guarantorsearch" type="button" value="Set to patron" onclick="Dopopguarantor('guarantor_search.pl');" />
-            [% END %]
-            <input id="guarantordelete" type="button" value="Delete" />
-        </li>
-    [% IF guarantorid && Koha.Preference('AllowStaffToSetCheckoutsVisibilityForGuarantor') %]
-        <li>
-            <label for="privacy_guarantor_checkouts">Show checkouts to guarantor</label>
-            <select name="privacy_guarantor_checkouts" id="privacy_guarantor_checkouts">
-                [% IF privacy_guarantor_checkouts %]
-                    <option value="0">No</option>
-                    <option value="1" selected>Yes</option>
-                [% ELSE %]
-                    <option value="0" selected>No</option>
-                    <option value="1">Yes</option>
-                [% END %]
-            </select>
-            <div class="hint">Allow guarantor of this patron to view this patron's checkouts from the OPAC</div>
-        </li>
-    [% END %]
-        </ol>
-    </fieldset>
+[% IF show_guarantor || guarantor %]
+    [% SET possible_relationships = Koha.Preference('borrowerRelationship') %]
+    <fieldset class="rows">
+        <legend>Guarantor information</legend>
 
+        <span id="guarantor_relationships">
+            [% FOREACH r IN relationships %]
+                <fieldset class="rows">
+                    <ol>
+                        [% IF category_type == 'P' %]
+                            <li id="contact-details">
+                                <span class="label">Organization #:</span> [% IF ( r.guarantor_id ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% r.guarantor_id | uri %]" target="blank">[% r.guarantor_id | html %]</a>[% END %]
+                            </li>
+
+                            <li>
+                                <label for="guarantor_surname">Organization name: </label>
+                                <span>[% r.guarantor.surname | html %]</span>
+                            </li>
+                        [% ELSE %]
+                            <li id="contact-details">
+                                <span class="label">Patron #:</span>
+                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% r.guarantor_id | uri %]" target="blank">[% r.guarantor_id | html %]</a>
+                            </li>
+
+                            [% IF r.guarantor.surname %]
+                                <li>
+                                    <label for="guarantor_surname">Surname: </label>
+                                    <span>[% r.guarantor.surname | html %]</span>
+                                </li>
+                            [% END %]
+
+                            [% IF r.guarantor.firstname %]
+                                <li>
+                                    <label for="guarantor_firstname">First name: </label>
+                                    <span>[% r.guarantor.firstname | html %]</span>
+                                </li>
+                            [% END %]
+
+                            <li>
+                                <label for="relationship">Relationship: </label>
+                                <span>[% r.relationship | html %]</span>
+                            </li>
+
+                            <li>
+                                <label for="delete_guarantor-[% r.id | uri %]">Delete: </label>
+                                <input type="checkbox" id="delete_guarantor-[% r.id | uri %]" name="delete_guarantor" value="[% r.id | html %]" />
+                            </li>
+                        [% END %]
+                    </ol>
+                </fieldset>
+            [% END # END relationships foreach %]
+        </span>
+
+        <fieldset class="rows guarantor" id="guarantor_template">
+            <ol>
+                <li class="guarantor_id">
+                    <span class="label">Patron #:</span>
+                    <span class="new_guarantor_id_text"></span>
+                    <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value=""/>
+                </li>
+
+                <li>
+                    <label for="guarantor_surname">Surname: </label>
+                    <span class="new_guarantor_surname_text"></span>
+                </li>
+
+                <li>
+                    <label for="guarantor_firstname">First name: </label>
+                    <span class="new_guarantor_firstname_text"></span>
+                </li>
+
+                <li>
+                    <label for="guarantor_relationship">Relationship: </label>
+                    <select class="new_guarantor_relationship" name="new_guarantor_relationship">
+                        [% FOREACH pr IN possible_relationships.split('\|') %]
+                            <option value="[% pr | html %]">[% pr | html %]</option>
+                        [% END %]
+                    </select>
+                </li>
+
+                <li>
+                    <label for="guarantor_cancel">&nbsp;</label>
+                    <span><a href="#" class="guarantor_cancel">Cancel</a></span>
+                </li>
+            </ol>
+        </fieldset>
+
+            <ol>
+                <input type="hidden" id="guarantor_id" value="" />
+                <input name="guarantor_surname" id="guarantor_surname" type="hidden" />
+                <input name="guarantor_firstname" id="guarantor_firstname" type="hidden" />
+
+                <li>
+                    <a href="#" id="guarantor_search" class="btn btn-sm"><i class="fa fa-search"></i> Search</a>
+                </li>
+
+                [% IF relationships && Koha.Preference('AllowStaffToSetCheckoutsVisibilityForGuarantor') %]
+                    <li>
+                        <label for="privacy_guarantor_checkouts">Show checkouts to guarantors</label>
+                        <select name="privacy_guarantor_checkouts" id="privacy_guarantor_checkouts">
+                            [% IF privacy_guarantor_checkouts %]
+                                <option value="0">No</option>
+                                <option value="1" selected>Yes</option>
+                            [% ELSE %]
+                                <option value="0" selected>No</option>
+                                <option value="1">Yes</option>
+                            [% END %]
+                        </select>
+                        <div class="hint">Allow guarantors of this patron to view this patron's checkouts from the OPAC</div>
+                    </li>
+                [% END %]
+            </ol>
+    </fieldset>
 [% END %]
+
+
 [% UNLESS noaddress && noaddress2 && nocity && nostate && nozipcode && nocountry %]
     [% IF Koha.Preference( 'AddressFormat' ) %]
         [% INCLUDE "member-main-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
@@ -431,84 +441,132 @@
 [% END # nostreet && nocity etc group%]
 
 [% UNLESS nophone && nophonepro && nomobile && noemail && noemailpro && nofax %]
-  <fieldset class="rows" id="memberentry_contact">
-    <legend id="contact_lgd">Contact</legend><ol>
+    <fieldset class="rows" id="memberentry_contact">
+        <legend id="contact_lgd">Contact</legend><ol>
+
+        [% UNLESS nocontactname %]
+            <li>
+                [% IF ( mandatorycontactname ) %]
+                    <label for="contactname" class="required">
+                [% ELSE %]
+                    <label for="contactname">
+                [% END %]
+                Guarantor surname: </label>
+                <input type="text" id="contactname" name="contactname" value="[% contactname | html %]" />
+                [% IF ( mandatorycontactname ) %]<span class="required">Required</span>[% END %]<div class="hint">Non-patron guarantor surname</div>
+            </li>
+        [% END %]
+
+        [% UNLESS nocontactfirstname %]
+            <li>
+                [% IF ( mandatorycontactfirstname ) %]
+                    <label for="contactfirstname" class="required">
+                [% ELSE %]
+                    <label for="contactfirstname">
+                [% END %]
+                Guarantor first name: </label>
+                <input type="text" id="contactfirstname" name="contactfirstname" value="[% contactfirstname | html %]" />
+                [% IF ( mandatorycontactfirstname ) %]<span class="required">Required</span>[% END %]<div class="hint">Non-patron guarantor first name</div>
+            </li>
+        [% END %]
+
+		[% UNLESS norelationship %]
+			[% IF possible_relationships %]
+                <li>
+                    <label for="relationship">Relationship: </label>
+                    <select class="relationship" name="relationship">
+                        <option value=""></option>
+                        [% FOREACH pr IN possible_relationships.split('\|') %]
+                            [% IF pr == relationship %]
+                                <option value="[% pr %]" selected="selected">[% pr %]</option>
+                            [% ELSE %]
+                                <option value="[% pr %]">[% pr %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                </li>
+			[% END %]
+		[% END %]
+
         [% UNLESS nophone %]
-      <li>
-      [% IF ( mandatoryphone ) %]
-      <label for="phone" class="required">
-      [% ELSE %]
-      <label for="phone">
-      [% END %]
-      Primary phone: </label>
-        <input type="text" id="phone" name="phone" value="[% phone | html %]" />
-	  [% IF ( mandatoryphone ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
-
-    </li>
+            <li>
+                [% IF ( mandatoryphone ) %]
+                    <label for="phone" class="required">
+                [% ELSE %]
+                    <label for="phone">
+                [% END %]
+                Primary phone: </label>
+                <input type="text" id="phone" name="phone" value="[% phone | html %]" />
+                [% IF ( mandatoryphone ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
+            </li>
         [% END %]
+
         [% UNLESS nophonepro %]
-    <li>
-      [% IF ( mandatoryphonepro ) %]
-      <label for="phonepro" class="required">
-      [% ELSE %]
-      <label for="phonepro">
-      [% END %]
-      Secondary phone: </label>
-    <input type="text" id="phonepro" name="phonepro" value="[% phonepro | html %]" />
-	  [% IF ( mandatoryphonepro ) %]<span class="required">Required</span>[% END %]
-    </li>
+            <li>
+                [% IF ( mandatoryphonepro ) %]
+                    <label for="phonepro" class="required">
+                [% ELSE %]
+                    <label for="phonepro">
+                [% END %]
+                Secondary phone: </label>
+                <input type="text" id="phonepro" name="phonepro" value="[% phonepro | html %]" />
+                [% IF ( mandatoryphonepro ) %]<span class="required">Required</span>[% END %]
+            </li>
         [% END %]
-        [% UNLESS nomobile %]
-    <li>
-      [% IF ( mandatorymobile ) %]
-      <label for="mobile" class="required">
-      [% ELSE %]
-      <label for="mobile">
-      [% END %]
-      Other phone: </label>
-        <input type="text" id="mobile" name="mobile" value="[% mobile | html %]" />
-	  [% IF ( mandatorymobile ) %]<span class="required">Required</span>[% END %]
-    </li>
-        [% END %]
-        [% UNLESS noemail %]
-    <li>
-      [% IF ( mandatoryemail ) %]
-      <label for="email" class="required">
-      [% ELSE %]
-      <label for="email">
-      [% END %]
-      Primary email: </label>
-        <input type="text" id="email" name="email" size="45" value="[% email | html %]" />
-	  [% IF ( mandatoryemail ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
 
-    </li>
+        [% UNLESS nomobile %]
+            <li>
+                [% IF ( mandatorymobile ) %]
+                    <label for="mobile" class="required">
+                [% ELSE %]
+                    <label for="mobile">
+                [% END %]
+                Other phone: </label>
+                <input type="text" id="mobile" name="mobile" value="[% mobile | html %]" />
+                [% IF ( mandatorymobile ) %]<span class="required">Required</span>[% END %]
+            </li>
         [% END %]
+
+        [% UNLESS noemail %]
+            <li>
+                [% IF ( mandatoryemail ) %]
+                    <label for="email" class="required">
+                [% ELSE %]
+                    <label for="email">
+                [% END %]
+                Primary email: </label>
+                <input type="text" id="email" name="email" size="45" value="[% email | html %]" />
+                [% IF ( mandatoryemail ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
+            </li>
+        [% END %]
+
         [% UNLESS noemailpro %]
-    <li>
-      [% IF ( mandatoryemailpro ) %]
-      <label for="emailpro" class="required">
-      [% ELSE %]
-      <label for="emailpro">
-      [% END %]
-      Secondary email: </label>
-        <input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro | html %]" />
-	  [% IF ( mandatoryemailpro ) %]<span class="required">Required</span>[% END %]
-    </li>
+            <li>
+                [% IF ( mandatoryemailpro ) %]
+                    <label for="emailpro" class="required">
+                [% ELSE %]
+                    <label for="emailpro">
+                [% END %]
+                Secondary email: </label>
+                <input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro | html %]" />
+                [% IF ( mandatoryemailpro ) %]<span class="required">Required</span>[% END %]
+            </li>
         [% END %]
+
         [% UNLESS nofax %]
-    <li>
-      [% IF ( mandatoryfax ) %]
-      <label for="fax" class="required">
-      [% ELSE %]
-      <label for="fax">
-      [% END %]
-      Fax: </label>
-        <input type="text" id="fax" name="fax" value="[% fax | html %]" />
-	  [% IF ( mandatoryfax ) %]<span class="required">Required</span>[% END %]
-    </li>
+            <li>
+                [% IF ( mandatoryfax ) %]
+                    <label for="fax" class="required">
+                [% ELSE %]
+                    <label for="fax">
+                [% END %]
+                Fax: </label>
+                <input type="text" id="fax" name="fax" value="[% fax | html %]" />
+                [% IF ( mandatoryfax ) %]<span class="required">Required</span>[% END %]
+            </li>
         [% END %]
-	</ol>
-  </fieldset>
+    </ol>
+</fieldset>
 [%END # hide fieldset %]
 
 <!-- ************************ STEP_1 *********************** -->
@@ -1170,6 +1228,10 @@
                     var category_code = $("#categorycode_entry").find("option:selected").val();
                     update_category_code( category_code );
                 }
+            [% END %]
+
+            [% IF guarantor %]
+                select_user( '[% guarantor.borrowernumber %]', [% To.json( guarantor.unblessed ) | $raw %] );
             [% END %]
 
             $("#cn_max").hide();

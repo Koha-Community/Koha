@@ -62,6 +62,7 @@ my $extended = C4::Context->preference('ExtendedPatronAttributes');
 
 my @columnkeys = map { $_ ne 'borrowernumber' ? $_ : () } Koha::Patrons->columns();
 push( @columnkeys, 'patron_attributes' ) if $extended;
+push( @columnkeys, qw( relationship guarantor_id  guarantor_firstname guarantor_surname ) );
 
 my $input = CGI->new();
 

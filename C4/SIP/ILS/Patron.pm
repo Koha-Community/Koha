@@ -627,7 +627,6 @@ __END__
 | contactname         | mediumtext   | YES  |     | NULL    |                |
 | contactfirstname    | text         | YES  |     | NULL    |                |
 | contacttitle        | text         | YES  |     | NULL    |                |
-| guarantorid         | int(11)      | YES  | MUL | NULL    |                |
 | borrowernotes       | mediumtext   | YES  |     | NULL    |                |
 | relationship        | varchar(100) | YES  |     | NULL    |                |
 | ethnicity           | varchar(50)  | YES  |     | NULL    |                |

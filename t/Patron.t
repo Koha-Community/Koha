@@ -95,12 +95,7 @@ my $patron = Koha::Patron->new(
         lost                => '0',
         debarred            => '2015-04-19',
         debarredcomment     => 'You are debarred',
-        contactname         => 'myContactname',
-        contactfirstname    => 'myContactfirstname',
-        contacttitle        => 'myContacttitle',
-        guarantorid         => '123454321',
         borrowernotes       => 'borrowernotes',
-        relationship        => 'myRelationship',
         sex                 => 'M',
         password            => 'hfkurhfe976634èj!',
         flags               => '55555',
@@ -125,7 +120,7 @@ my $patron = Koha::Patron->new(
 
 # patron Accessor tests
 subtest 'Accessor tests' => sub {
-    plan tests => 65;
+    plan tests => 60;
     is( $patron->borrowernumber, '12345',                           'borrowernumber accessor returns correct value' );
     is( $patron->cardnumber,     '1234567890',                      'cardnumber accessor returns correct value' );
     is( $patron->surname,        'mySurname',                       'surname accessor returns correct value' );
@@ -166,12 +161,7 @@ subtest 'Accessor tests' => sub {
     is( $patron->lost,           '0',                               'lost accessor returns correct value' );
     is( $patron->debarred,       '2015-04-19',                      'debarred accessor returns correct value' );
     is( $patron->debarredcomment,     'You are debarred',      'debarredcomment accessor returns correct value' );
-    is( $patron->contactname,         'myContactname',         'contactname accessor returns correct value' );
-    is( $patron->contactfirstname,    'myContactfirstname',    'contactfirstname accessor returns correct value' );
-    is( $patron->contacttitle,        'myContacttitle',        'contacttitle accessor returns correct value' );
-    is( $patron->guarantorid,         '123454321',             'guarantorid accessor returns correct value' );
     is( $patron->borrowernotes,       'borrowernotes',         'borrowernotes accessor returns correct value' );
-    is( $patron->relationship,        'myRelationship',        'relationship accessor returns correct value' );
     is( $patron->sex,                 'M',                     'sex accessor returns correct value' );
     is( $patron->password,            'hfkurhfe976634èj!',    'password accessor returns correct value' );
     is( $patron->flags,               '55555',                 'flags accessor returns correct value' );
@@ -195,7 +185,7 @@ subtest 'Accessor tests' => sub {
 
 # patron Set tests
 subtest 'Set tests' => sub {
-    plan tests => 65;
+    plan tests => 60;
 
     $patron->set(
         {
@@ -239,12 +229,7 @@ subtest 'Set tests' => sub {
             lost                => '1',
             debarred            => '2016-04-19',
             debarredcomment     => 'You are still debarred',
-            contactname         => 'SmyContactname',
-            contactfirstname    => 'SmyContactfirstname',
-            contacttitle        => 'SmyContacttitle',
-            guarantorid         => '223454321',
             borrowernotes       => 'Sborrowernotes',
-            relationship        => 'SmyRelationship',
             sex                 => 'F',
             password            => 'zerzerzer#',
             flags               => '666666',
@@ -307,12 +292,7 @@ subtest 'Set tests' => sub {
     is( $patron->lost,                '1',                                'lost field set ok' );
     is( $patron->debarred,            '2016-04-19',                       'debarred field set ok' );
     is( $patron->debarredcomment,     'You are still debarred',           'debarredcomment field set ok' );
-    is( $patron->contactname,         'SmyContactname',                   'contactname field set ok' );
-    is( $patron->contactfirstname,    'SmyContactfirstname',              'contactfirstname field set ok' );
-    is( $patron->contacttitle,        'SmyContacttitle',                  'contacttitle field set ok' );
-    is( $patron->guarantorid,         '223454321',                        'guarantorid field set ok' );
     is( $patron->borrowernotes,       'Sborrowernotes',                   'borrowernotes field set ok' );
-    is( $patron->relationship,        'SmyRelationship',                  'relationship field set ok' );
     is( $patron->sex,                 'F',                                'sex field set ok' );
     is( $patron->password,            'zerzerzer#',                       'password field set ok' );
     is( $patron->flags,               '666666',                           'flags field set ok' );

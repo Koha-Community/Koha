@@ -270,15 +270,16 @@
                                                     [% END %]
                                                 </ul>
                                             </li>
-                                        [% ELSIF guarantor %]
-                                            <li>
-                                                <span class="label">Guarantor:</span>
-                                                [% IF guarantor.borrowernumber AND logged_in_user.can_see_patron_infos( guarantor ) %]
-                                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a>
-                                                [% ELSE %]
-                                                    [% guarantor.firstname | html %] [% guarantor.surname | html %]
-                                                [% END %]
-                                            </li>
+                                        [% ELSIF guarantor_relationships %]
+                                            [% FOREACH gr IN guarantor_relationships %]
+                                                <li>
+                                                    <span class="label">Guarantor:</span>
+                                                    [% SET guarantor = gr.guarantor %]
+                                                    [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
+                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.id | uri %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a>
+                                                    [% END %]
+                                                </li>
+                                            [% END %]
                                         [% END %]
                                     </ol>
                                 </div> [% # /div.rows %]

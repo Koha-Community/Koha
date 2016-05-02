@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
@@ -40,13 +41,26 @@
                 [% IF ( patron.dateofbirth ) %]<li><span class="label">Date of birth:</span>[% patron.dateofbirth | $KohaDates %]</li>[% END %]
                 [% IF ( patron.sex ) %]<li><span class="label">Gender:</span>[% IF ( patron.sex == 'F' ) %]Female[% ELSIF ( patron.sex == 'M' ) %]Male[% ELSE %][% patron.sex | html %][% END %]</li>[% END %]
             [% END %]
-            [% IF ( guarantees ) %]
-                <li><span class="label">Guarantees:</span><ul>[% FOREACH guarantee IN guarantees %]<li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=guarantee %]</a></li>[% END %]</ul></li>
+
+            [% IF guarantees %]
+                <li>
+                    <span class="label">Guarantees:</span>
+                    <ul>
+                        [% FOREACH guarantee IN guarantees %]
+                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber | uri %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
+                        [% END %]
+                    </ul>
+                </li>
+            [% ELSIF guarantor_relationships %]
+                [% FOREACH gr IN guarantor_relationships %]
+                    <li>
+                        <span class="label">Guarantor:</span>
+                        [% SET guarantor = gr.guarantor %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.id | uri %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a>
+                    </li>
+                [% END %]
             [% END %]
-            [% IF ( guarantor ) %]
-                <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]">[% guarantor.surname | html %], [% guarantor.firstname | html %]</a></li>
-            [% END %]
-        </ol>
+	    </ol>
     </div>
 </div>
 </div>

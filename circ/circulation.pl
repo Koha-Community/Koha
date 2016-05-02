@@ -512,7 +512,7 @@ if ( $patron ) {
     $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
     if ( defined $no_issues_charge_guarantees ) {
         my $guarantees_non_issues_charges = 0;
-        my $guarantees = $patron->guarantees;
+        my $guarantees = $patron->guarantee_relationships->guarantees;
         while ( my $g = $guarantees->next ) {
             $guarantees_non_issues_charges += $g->account->non_issues_charges;
         }
@@ -567,14 +567,12 @@ my $view = $batch
     : 'circview';
 
 my @relatives;
-if ( $borrowernumber ) {
-    if ( $patron ) {
-        if ( my $guarantor = $patron->guarantor ) {
-            push @relatives, $guarantor->borrowernumber;
-            push @relatives, $_->borrowernumber for $patron->siblings;
-        } else {
-            push @relatives, $_->borrowernumber for $patron->guarantees;
-        }
+if ( $patron ) {
+    if ( my @guarantors = $patron->guarantor_relationships()->guarantors() ) {
+        push( @relatives, $_->id ) for @guarantors;
+        push( @relatives, $_->id ) for $patron->siblings();
+    } else {
+        push( @relatives, $_->id ) for $patron->guarantee_relationships()->guarantees();
     }
 }
 my $relatives_issues_count =

@@ -33,6 +33,7 @@ use C4::Auth;
 use C4::Output;
 use Koha::Patrons;
 use Koha::Patron::Categories;
+use Koha::Patrons;
 
 # use Smart::Comments;
 
@@ -68,7 +69,6 @@ if ( $op eq 'multi' ) {
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
-
 elsif ( $op eq 'update' ) {
     my $patron         = Koha::Patrons->find( $borrowernumber );
     output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
@@ -84,7 +84,8 @@ elsif ( $op eq 'update' ) {
     # But we should not hit that with a normal use of the interface
     die "You are doing something wrong updating this child" unless $adult_category;
 
-    $patron->guarantorid(undef);
+    $_->delete() for $patron->guarantor_relationships();
+
     $patron->categorycode($adult_category->categorycode);
     $patron->store;
 
@@ -92,12 +93,15 @@ elsif ( $op eq 'update' ) {
     # We could redirect with a friendly message
     if ( $patron_categories->count > 1 ) {
         $template->param(
-                SUCCESS        => 1,
-                borrowernumber => $borrowernumber,
-                );
+            SUCCESS        => 1,
+            borrowernumber => $borrowernumber,
+        );
         output_html_with_http_headers $input, $cookie, $template->output;
-    } else {
-        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+    }
+    else {
+        print $input->redirect(
+            "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber"
+        );
     }
 }
 

@@ -27,6 +27,7 @@ use Koha::Database;
 use Koha::Holds;
 use Koha::List::Patron;
 use Koha::Patrons;
+use Koha::Patron::Relationship;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -39,9 +40,6 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-
-# Remove invalid guarantorid's as long as we have no FK
-$dbh->do("UPDATE borrowers b1 LEFT JOIN borrowers b2 ON b2.borrowernumber=b1.guarantorid SET b1.guarantorid=NULL where b1.guarantorid IS NOT NULL AND b2.borrowernumber IS NULL");
 
 my $library1 = $builder->build({
     source => 'Branch',
@@ -215,7 +213,6 @@ my $borrower1 = $builder->build({
             categorycode=>'STAFFER',
             branchcode => $library3->{branchcode},
             dateexpiry => '2015-01-01',
-            guarantorid=> undef,
         },
 });
 my $bor1inlist = $borrower1->{borrowernumber};
@@ -225,7 +222,6 @@ my $borrower2 = $builder->build({
             categorycode=>'STAFFER',
             branchcode => $library3->{branchcode},
             dateexpiry => '2015-01-01',
-            guarantorid=> undef,
         },
 });
 
@@ -235,7 +231,6 @@ my $guarantee = $builder->build({
             categorycode=>'KIDclamp',
             branchcode => $library3->{branchcode},
             dateexpiry => '2015-01-01',
-            guarantorid=> undef, # will be filled later
         },
 });
 
@@ -270,7 +265,7 @@ $patstodel = GetBorrowersToExpunge( {not_borrowed_since => '2016-01-02', patron_
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Staff patron not deleted by last issue date');
 
 Koha::Patrons->find($bor1inlist)->set({ categorycode => 'CIVILIAN' })->store;
-Koha::Patrons->find($guarantee->{borrowernumber})->set({ guarantorid => $bor1inlist })->store;
+my $relationship = Koha::Patron::Relationship->new( { guarantor_id => $bor1inlist, guarantee_id => $guarantee->{borrowernumber}, relationship => 'test' } )->store();
 
 $patstodel = GetBorrowersToExpunge( {patron_list_id => $list1->patron_list_id()} );
 ok( scalar(@$patstodel)== 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted from list');
@@ -280,7 +275,7 @@ $patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02', patron_list
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted by expirationdate and list');
 $patstodel = GetBorrowersToExpunge( {not_borrowed_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted by last issue date');
-Koha::Patrons->find($guarantee->{borrowernumber})->set({ guarantorid => undef })->store;
+$relationship->delete();
 
 $builder->build({
         source => 'Issue',
@@ -308,9 +303,9 @@ is( scalar(@$patstodel),2,'Borrowers without issues deleted by last issue date')
 
 # Test GetBorrowersToExpunge and TrackLastPatronActivity
 $dbh->do(q|UPDATE borrowers SET lastseen=NULL|);
-$builder->build({ source => 'Borrower', value => { lastseen => '2016-01-01 01:01:01', categorycode => 'CIVILIAN', guarantorid => undef } } );
-$builder->build({ source => 'Borrower', value => { lastseen => '2016-02-02 02:02:02', categorycode => 'CIVILIAN', guarantorid => undef } } );
-$builder->build({ source => 'Borrower', value => { lastseen => '2016-03-03 03:03:03', categorycode => 'CIVILIAN', guarantorid => undef } } );
+$builder->build({ source => 'Borrower', value => { lastseen => '2016-01-01 01:01:01', categorycode => 'CIVILIAN' } } );
+$builder->build({ source => 'Borrower', value => { lastseen => '2016-02-02 02:02:02', categorycode => 'CIVILIAN' } } );
+$builder->build({ source => 'Borrower', value => { lastseen => '2016-03-03 03:03:03', categorycode => 'CIVILIAN' } } );
 $patstodel = GetBorrowersToExpunge( { last_seen => '1999-12-12' });
 is( scalar @$patstodel, 0, 'TrackLastPatronActivity - 0 patrons must be deleted' );
 $patstodel = GetBorrowersToExpunge( { last_seen => '2016-02-15' });

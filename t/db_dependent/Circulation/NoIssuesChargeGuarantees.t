@@ -26,6 +26,7 @@ use C4::Circulation qw( CanBookBeIssued );
 use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
+use Koha::Patron::Relationship;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -52,12 +53,23 @@ my $patron = $builder->build_object(
         }
     }
 );
-my $guarantee = $builder->build(
+
+my $guarantee = $builder->build_object(
     {
-        source => 'Borrower',
-        value  => {
-            guarantorid => $patron->borrowernumber,
-            categorycode => $patron_category->{categorycode},
+        class => 'Koha::Patrons',
+        value => {
+            patron_category => $patron_category->{categorycode},
+        }
+    }
+);
+
+my $r = $builder->build_object(
+    {
+        class => 'Koha::Patron::Relationships',
+        value => {
+            guarantor_id => $patron->id,
+            guarantee_id => $guarantee->id,
+            relationship => 'parent',
         }
     }
 );
@@ -73,7 +85,7 @@ $account->add_debit({ amount => 10.00, type => 'lost_item', interface => 'test' 
 ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->{barcode} );
 is( $issuingimpossible->{DEBT_GUARANTEES} + 0, '10.00' + 0, "Patron cannot check out item due to debt for guarantee" );
 
-my $accountline = Koha::Account::Lines->search({ borrowernumber => $guarantee->{borrowernumber} })->next();
+my $accountline = Koha::Account::Lines->search({ borrowernumber => $guarantee->id })->next();
 is( $accountline->amountoutstanding, "10.000000", "Found 10.00 amount outstanding" );
 is( $accountline->accounttype, "LOST", "Account type is LOST" );
 

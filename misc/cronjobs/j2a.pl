@@ -96,6 +96,7 @@ C<juv2adult.pl> - Suggests that you read this help. :)
 C<juv2adult.pl> -b=<branchcode> -f=<categorycode> -t=<categorycode>  - Processes a single branch, and updates the patron categories from fromcat to tocat.
 
 C<juv2adult.pl> -f=<categorycode> -t=<categorycode> -v -n - Processes all branches, shows all messages, and reports the patrons who would be affected. Takes no action on the database.
+
 =cut
 
 # These variables are set by command line options.
@@ -128,7 +129,9 @@ if ( not $fromcat && $tocat ) {    #make sure we've specified the info we need.
 
 cronlogaction();
 
-my $dbh = C4::Context->dbh;
+my $dbh      = C4::Context->dbh;
+my $database = Koha::Database->new();
+my $schema   = $database->schema;
 
 #get today's date, format it and subtract upperagelimit
 my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) =
@@ -164,12 +167,12 @@ $verbose and print "The age limit for category $fromcat is $agelimit\n";
 my $itsyourbirthday = "$year-$mon-$mday";
 
 if ( not $noaction ) {
+    # Start a transaction since we need to delete from relationships and update borrowers atomically
+
+    my $success = 1;
     if ($mybranch) {    #yep, we received a specific branch to work on.
         $verbose and print "Looking for patrons of $mybranch to update from $fromcat to $tocat that were born before $itsyourbirthday\n";
-        my $query = qq|
-            UPDATE borrowers
-            SET guarantorid ='0',
-                categorycode = ?
+        my $where = qq|
             WHERE dateofbirth <= ?
               AND dateofbirth != '0000-00-00'
               AND branchcode = ?
@@ -178,10 +181,35 @@ if ( not $noaction ) {
                 FROM categories
                 WHERE category_type = 'C'
                   AND categorycode = ?
-              )|;
+              )
+        |;
+
+        $schema->storage->txn_begin;
+
+        my $query = qq|
+            DELETE relationships FROM relationships
+            LEFT JOIN borrowers ON ( borrowers.borrowernumber = relationships.guarantee_id )
+            $where
+        |;
         my $sth = $dbh->prepare($query);
+        $sth->execute( $itsyourbirthday, $mybranch, $fromcat )
+          or $success = 0;
+
+        $query = qq|
+            UPDATE borrowers
+            SET categorycode = ?
+            $where
+        |;
+        $sth = $dbh->prepare($query);
         my $res = $sth->execute( $tocat, $itsyourbirthday, $mybranch, $fromcat )
-          or die "can't execute";
+          or $success = 0;
+
+        if ( $success ) {
+            $schema->storage->txn_commit;
+        } else {
+            $schema->storage->txn_rollback;
+            die "can't execute";
+        }
 
         if ( $res eq '0E0' ) {
             print "No patrons updated\n";
@@ -192,10 +220,7 @@ if ( not $noaction ) {
     }
     else {    # branch was not supplied, processing all branches
         $verbose and print "Looking in all branches for patrons to update from $fromcat to $tocat that were born before $itsyourbirthday\n";
-        my $query = qq|
-            UPDATE borrowers
-            SET guarantorid = '0',
-                categorycode = ?
+        my $where = qq|
             WHERE dateofbirth <= ?
               AND dateofbirth!='0000-00-00'
               AND categorycode IN (
@@ -203,10 +228,34 @@ if ( not $noaction ) {
                 FROM categories
                 WHERE category_type = 'C'
                   AND categorycode = ?
-              )|;
+              )
+        |;
+
+        my $query = qq|
+            DELETE relationships FROM relationships
+            LEFT JOIN borrowers ON ( borrowers.borrowernumber = relationships.guarantee_id )
+            $where
+        |;
         my $sth = $dbh->prepare($query);
+        $sth->execute( $itsyourbirthday, $fromcat )
+          or $success = 0;
+
+        $query = qq|
+            UPDATE borrowers
+            SET categorycode = ?
+            $where
+        |;
+        $sth = $dbh->prepare($query);
         my $res = $sth->execute( $tocat, $itsyourbirthday, $fromcat )
-          or die "can't execute";
+          or $success = 0;
+        $dbh->commit;
+
+        if ( $success ) {
+            $dbh->commit;
+        } else {
+            $dbh->rollback;
+            die "can't execute";
+        }
 
         if ( $res eq '0E0' ) {
             print "No patrons updated\n";
@@ -268,6 +317,7 @@ else {
         my $sth = $dbh->prepare($query);
         $sth->execute( $itsyourbirthday, $fromcat )
           or die "Couldn't execute statement: " . $sth->errstr;
+        $dbh->commit;
 
         while ( my @res = $sth->fetchrow_array() ) {
             my $firstname = $res[0];

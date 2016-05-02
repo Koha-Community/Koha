@@ -176,7 +176,7 @@ sub patronflags {
     $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
     if ( defined $no_issues_charge_guarantees ) {
         my $p = Koha::Patrons->find( $patroninformation->{borrowernumber} );
-        my @guarantees = $p->guarantees();
+        my @guarantees = map { $_->guarantee } $p->guarantee_relationships;
         my $guarantees_non_issues_charges;
         foreach my $g ( @guarantees ) {
             $guarantees_non_issues_charges += $g->account->non_issues_charges;
@@ -397,18 +397,18 @@ sub GetBorrowersToExpunge {
             FROM   borrowers
             JOIN   categories USING (categorycode)
             LEFT JOIN (
-                SELECT guarantorid
-                FROM borrowers
-                WHERE guarantorid IS NOT NULL
-                    AND guarantorid <> 0
-            ) as tmp ON borrowers.borrowernumber=tmp.guarantorid
+                SELECT guarantor_id
+                FROM borrower_relationships
+                WHERE guarantor_id IS NOT NULL
+                    AND guarantor_id <> 0
+            ) as tmp ON borrowers.borrowernumber=tmp.guarantor_id
             LEFT JOIN old_issues USING (borrowernumber)
             LEFT JOIN issues USING (borrowernumber)|;
     if ( $filterpatronlist  ){
         $query .= q| LEFT JOIN patron_list_patrons USING (borrowernumber)|;
     }
     $query .= q| WHERE  category_type <> 'S'
-        AND tmp.guarantorid IS NULL
+        AND tmp.guarantor_id IS NULL
     |;
     my @query_params;
     if ( $filterbranch && $filterbranch ne "" ) {

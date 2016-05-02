@@ -83,7 +83,6 @@ if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
     $template->param( sms_providers => \@providers );
 }
 
-my $guarantorid    = $input->param('guarantorid');
 my $actionType     = $input->param('actionType') || '';
 my $modify         = $input->param('modify');
 my $delete         = $input->param('delete');
@@ -99,12 +98,24 @@ $nodouble = 1 if ($op eq 'modify' or $op eq 'duplicate');    # FIXME hack to rep
                                      # isn't a duplicate.  Marking FIXME because this
                                      # script needs to be refactored.
 my $nok           = $input->param('nok');
-my $guarantorinfo = $input->param('guarantorinfo');
 my $step          = $input->param('step') || 0;
 my @errors;
 my $borrower_data;
 my $NoUpdateLogin;
 my $userenv = C4::Context->userenv;
+
+## Deal with guarantor stuff
+$template->param( relationships => scalar $patron->guarantor_relationships ) if $patron;
+
+my $guarantor_id = $input->param('guarantor_id');
+my $guarantor = Koha::Patrons->find( $guarantor_id ) if $guarantor_id;
+$template->param( guarantor => $guarantor );
+
+my @delete_guarantor = $input->multi_param('delete_guarantor');
+foreach my $id ( @delete_guarantor ) {
+    my $r = Koha::Patron::Relationships->find( $id );
+    $r->delete() if $r;
+}
 
 ## Deal with debarments
 $template->param(
@@ -137,14 +148,14 @@ $template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnam
 my $check_BorrowerMandatoryField=C4::Context->preference("BorrowerMandatoryField");
 my @field_check=split(/\|/,$check_BorrowerMandatoryField);
 foreach (@field_check) {
-	$template->param( "mandatory$_" => 1);    
+    $template->param( "mandatory$_" => 1 );
 }
 # function to designate unwanted fields
 my $check_BorrowerUnwantedField=C4::Context->preference("BorrowerUnwantedField");
 @field_check=split(/\|/,$check_BorrowerUnwantedField);
 foreach (@field_check) {
     next unless m/\w/o;
-	$template->param( "no$_" => 1);
+    $template->param( "no$_" => 1 );
 }
 $template->param( "add" => 1 ) if ( $op eq 'add' );
 $template->param( "quickadd" => 1 ) if ( $quickadd );
@@ -224,6 +235,10 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         qr/^add_debarment$/, qr/^debarred_expiration$/, qr/^remove_debarment$/, # We already dealt with debarments previously
         qr/^housebound_chooser$/, qr/^housebound_deliverer$/,
         qr/^select_city$/,
+        qr/^new_guarantor_/,
+        qr/^guarantor_firstname$/,
+        qr/^guarantor_surname$/,
+        qr/^delete_guarantor$/,
     );
     for my $regexp (@keys_to_delete) {
         for (keys %newdata) {
@@ -245,26 +260,6 @@ if ( ( $op eq 'insert' ) and !$nodouble ) {
     if ( $patrons->count > 0) {
         $nodouble = 0;
         $check_member = $patrons->next->borrowernumber;
-    }
-}
-
-  #recover all data from guarantor address phone ,fax... 
-if ( $guarantorid ) {
-    if (my $guarantor = Koha::Patrons->find( $guarantorid )) {
-        my $guarantordata = $guarantor->unblessed;
-        $category_type = $guarantordata->{categorycode} eq 'I' ? 'P' : 'C';
-        $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
-        $newdata{'contactfirstname'}= $guarantordata->{'firstname'};
-        $newdata{'contactname'}     = $guarantordata->{'surname'};
-        $newdata{'contacttitle'}    = $guarantordata->{'title'};
-        if ( $op eq 'add' ) {
-	        foreach (qw(streetnumber address streettype address2
-                        zipcode country city state phone phonepro mobile fax email emailpro branchcode
-                        B_streetnumber B_streettype B_address B_address2
-                        B_city B_state B_zipcode B_country B_email B_phone)) {
-		        $newdata{$_} = $guarantordata->{$_};
-	        }
-        }
     }
 }
 
@@ -431,6 +426,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             # Lot of code will need to be removed from this script to handle exceptions raised by Koha::Patron->store
             warn "Patron creation failed! - $@"; # Maybe we must die instead of just warn
         } else {
+            add_guarantors( $patron, $input );
             $borrowernumber = $patron->borrowernumber;
             $newdata{'borrowernumber'} = $borrowernumber;
         }
@@ -538,6 +534,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             $patron->set_password({ password => $password });
         }
 
+        add_guarantors( $patron, $input );
         if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
             C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
         }
@@ -636,11 +633,10 @@ foreach my $category_type (qw(C A S P I X)) {
         'categoryloop'   => \@categoryloop
       };
 }
-
-$template->param('typeloop' => \@typeloop,
-        no_categories => $no_categories);
-if($no_categories){ $no_add = 1; }
-
+$template->param(
+    typeloop      => \@typeloop,
+    no_categories => $no_categories,
+);
 
 my $cities = Koha::Cities->search( {}, { order_by => 'city_name' } );
 my $roadtypes = C4::Koha::GetAuthorisedValues( 'ROADTYPE' );
@@ -665,24 +661,27 @@ while (@relationships) {
   push(@relshipdata, \%row);
 }
 
-my %flags = ( 'gonenoaddress' => ['gonenoaddress' ],
-        'lost'          => ['lost']);
+my %flags = (
+    'gonenoaddress' => ['gonenoaddress'],
+    'lost'          => ['lost']
+);
 
- 
 my @flagdata;
-foreach (keys(%flags)) {
-	my $key = $_;
-	my %row =  ('key'   => $key,
-		    'name'  => $flags{$key}[0]);
-	if ($data{$key}) {
-		$row{'yes'}=' checked';
-		$row{'no'}='';
+foreach ( keys(%flags) ) {
+    my $key = $_;
+    my %row = (
+        'key'  => $key,
+        'name' => $flags{$key}[0]
+    );
+    if ( $data{$key} ) {
+        $row{'yes'} = ' checked';
+        $row{'no'}  = '';
     }
-	else {
-		$row{'yes'}='';
-		$row{'no'}=' checked';
-	}
-	push @flagdata,\%row;
+    else {
+        $row{'yes'} = '';
+        $row{'no'}  = ' checked';
+    }
+    push @flagdata, \%row;
 }
 
 # get Branch Loop
@@ -757,7 +756,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     $template->param(TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"));
 }
 
-$template->param( "showguarantor"  => ($category_type=~/A|I|S|X/) ? 0 : 1); # associate with step to know where you are
+$template->param( "show_guarantor" => ( $category_type =~ /A|I|S|X/ ) ? 0 : 1 ); # associate with step to know where you are
 $debug and warn "memberentry step: $step";
 $template->param(%data);
 $template->param( "step_$step"  => 1) if $step;	# associate with step to know where u are
@@ -771,17 +770,12 @@ $template->param(
   check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
   "op$op"   => 1);
 
-$guarantorid = $borrower_data->{'guarantorid'} || $guarantorid;
-my $guarantor = $guarantorid ? Koha::Patrons->find( $guarantorid ) : undef;
 $template->param(
   patron => $patron ? $patron : \%newdata, # Used by address include templates now
   nodouble  => $nodouble,
   borrowernumber  => $borrowernumber, #register number
-  guarantor   => $guarantor,
-  guarantorid => $guarantorid,
   relshiploop => \@relshipdata,
   btitle=> $default_borrowertitle,
-  guarantorinfo   => $guarantorinfo,
   flagloop  => \@flagdata,
   category_type =>$category_type,
   modify          => $modify,
@@ -909,6 +903,28 @@ sub patron_attributes_form {
 
     $template->param(patron_attributes => \@attribute_loop);
 
+}
+
+sub add_guarantors {
+    my ( $patron, $input ) = @_;
+
+    my @new_guarantor_id           = $input->multi_param('new_guarantor_id');
+    my @new_guarantor_relationship = $input->multi_param('new_guarantor_relationship');
+
+    for ( my $i = 0 ; $i < scalar @new_guarantor_id; $i++ ) {
+        my $guarantor_id = $new_guarantor_id[$i];
+        my $relationship = $new_guarantor_relationship[$i];
+
+        next unless $guarantor_id;
+
+        $patron->add_guarantor(
+            {
+                guarantee_id => $patron->id,
+                guarantor_id => $guarantor_id,
+                relationship => $relationship,
+            }
+        );
+    }
 }
 
 # Local Variables:

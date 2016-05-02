@@ -129,10 +129,6 @@ function Dopop(link) {
     var newin=window.open(link,'popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=no,top');
 }
 
-function Dopopguarantor(link) {
-    var newin=window.open(link,'popup','width=800,height=500,resizable=no,toolbar=false,scrollbars=yes,top');
-}
-
 function clear_entry(node) {
     var original = $(node).parent();
     $("textarea", original).attr('value', '');
@@ -170,48 +166,38 @@ function update_category_code(category_code) {
 }
 
 function select_user(borrowernumber, borrower) {
-    var form = $('#entryform').get(0);
-    if (form.guarantorid.value) {
-        $("#contact-details, #quick_add_form #contact-details").find('a').remove();
-        $("#contactname, #contactfirstname, #quick_add_form #contactname, #quick_add_form #contactfirstname").parent().find('span').remove();
+    $('#guarantor_id').val(borrower.borrowernumber);
+    $('#guarantor_surname').val(borrower.surname);
+    $('#guarantor_firstname').val(borrower.firstname);
+
+    var fieldset = $('#guarantor_template').clone();
+    fieldset.removeAttr('id');
+
+    var guarantor_id = $('#guarantor_id').val();
+    if ( guarantor_id ) {
+        fieldset.find('.new_guarantor_id').first().val( guarantor_id );
+        fieldset.find('.new_guarantor_id_text').first().text( guarantor_id );
+    } else {
+        fieldset.find('.guarantor_id').first().hide();
     }
+    $('#guarantor_id').val("");
 
-    var id = borrower.borrowernumber;
-    form.guarantorid.value = id;
-    $('#contact-details, #quick_add_form #contact-details')
-        .show()
-        .find('span')
-        .after('<a target="blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + id + '">' + id + '</a>');
+    var guarantor_surname = $('#guarantor_surname').val();
+    fieldset.find('.new_guarantor_surname').first().val( guarantor_surname );
+    fieldset.find('.new_guarantor_surname_text').first().text( guarantor_surname );
+    $('#guarantor_surname').val("");
 
-    $(form.contactname)
-        .val(borrower.surname)
-        .before('<span>' + borrower.surname + '</span>').get(0).type = 'hidden';
-    $("#quick_add_form #contactname").val(borrower.surname).before('<span>'+borrower.surname+'</span.').attr({type:"hidden"});
-    $(form.contactfirstname,"#quick_add_form #contactfirstname")
-        .val(borrower.firstname)
-        .before('<span>' + borrower.firstname + '</span>').get(0).type = 'hidden';
-    $("#quick_add_form #contactfirstname").val(borrower.firstname).before('<span>'+borrower.firstname+'</span.').attr({type:"hidden"});
+    var guarantor_firstname = $('#guarantor_firstname').val();
+    fieldset.find('.new_guarantor_firstname').first().val( guarantor_firstname );
+    fieldset.find('.new_guarantor_firstname_text').first().text( guarantor_firstname );
+    $('#guarantor_firstname').val("");
 
-    form.streetnumber.value = borrower.streetnumber;
-    form.address.value = borrower.address;
-    form.address2.value = borrower.address2;
-    form.city.value = borrower.city;
-    form.state.value = borrower.state;
-    form.zipcode.value = borrower.zipcode;
-    form.country.value = borrower.country;
-    form.branchcode.value = borrower.branchcode;
+    var guarantor_relationship = $('#relationship').val();
+    fieldset.find('.new_guarantor_relationship').first().val( guarantor_relationship );
+    $('#relationship').find('option:eq(0)').prop('selected', true);;
 
-    $("#quick_add_form #streetnumber").val(borrower.streetnumber);
-    $("#quick_add_form #address").val(borrower.address);
-    $("#quick_add_form #address2").val(borrower.address2);
-    $("#quick_add_form #city").val(borrower.city);
-    $("#quick_add_form #state").val(borrower.state);
-    $("#quick_add_form #zipcode").val(borrower.zipcode);
-    $("#quick_add_form #country").val(borrower.country);
-    $("#quick_add_form select[name='branchcode']").val(borrower.branchcode);
-
-    form.guarantorsearch.value = LABEL_CHANGE;
-    $("#quick_add_form #guarantorsearch").val(LABEL_CHANGE);
+    $('#guarantor_relationships').append( fieldset );
+    fieldset.show();
 
     return 0;
 }
@@ -284,13 +270,17 @@ $(document).ready(function(){
     });
 
     $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
-    $("#guarantordelete").click(function() {
-        $("#quick_add_form #contact-details, #contact-details").hide().find('a').remove();
-        $("#quick_add_form #guarantorid, #quick_add_form  #contactname, #quick_add_form #contactfirstname, #guarantorid, #contactname, #contactfirstname").each(function () { this.value = ""; });
-        $("#quick_add_form #contactname, #quick_add_form #contactfirstname, #contactname, #contactfirstname")
-            .each(function () { this.type = 'text'; })
-            .parent().find('span').remove();
-        $("#quick_add_form #guarantorsearch, #guarantorsearch").val(LABEL_SET_TO_PATRON);
+
+    $('#guarantor_template').hide();
+
+    $('#guarantor_search').on('click', function(e) {
+        e.preventDefault();
+        var newin = window.open('guarantor_search.pl','popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=yes,top');
+    });
+
+    $('#guarantor_relationships').on('click', '.guarantor_cancel', function(e) {
+        e.preventDefault();
+        $(this).parents('fieldset').first().remove();
     });
 
     $(document.body).on('change','.select_city',function(){

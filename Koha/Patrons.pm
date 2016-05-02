@@ -125,18 +125,6 @@ sub search_upcoming_membership_expires {
     );
 }
 
-=head3 guarantor
-
-Returns a Koha::Patron object for this borrower's guarantor
-
-=cut
-
-sub guarantor {
-    my ( $self ) = @_;
-
-    return Koha::Patrons->find( $self->guarantorid() );
-}
-
 =head3 search_patrons_to_anonymise
 
     my $patrons = Koha::Patrons->search_patrons_to_anonymise( { before => $older_than_date, [ library => $library ] } );

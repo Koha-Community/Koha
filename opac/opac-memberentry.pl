@@ -312,7 +312,6 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
 
     $template->param(
         borrower  => $borrower,
-        guarantor => scalar Koha::Patrons->find($borrowernumber)->guarantor(),
         hidden => GetHiddenFields( $mandatory, 'edit' ),
         csrf_token => Koha::Token->new->generate_csrf({
             session_id => scalar $cgi->cookie('CGISESSID'),
@@ -333,7 +332,8 @@ my $captcha = random_string("CCCCC");
 
 $template->param(
     captcha        => $captcha,
-    captcha_digest => md5_base64($captcha)
+    captcha_digest => md5_base64($captcha),
+    patron         => Koha::Patrons->find( $borrowernumber ),
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output, undef, { force_no_caching => 1 };

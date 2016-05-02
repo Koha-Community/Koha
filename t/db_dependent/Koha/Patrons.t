@@ -37,6 +37,7 @@ use Koha::Holds;
 use Koha::Old::Holds;
 use Koha::Patrons;
 use Koha::Patron::Categories;
+use Koha::Patron::Relationship;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Virtualshelves;
@@ -86,21 +87,23 @@ subtest 'library' => sub {
 
 subtest 'guarantees' => sub {
     plan tests => 13;
-    my $guarantees = $new_patron_1->guarantees;
-    is( ref($guarantees), 'Koha::Patrons', 'Koha::Patron->guarantees should return a Koha::Patrons result set in a scalar context' );
-    is( $guarantees->count, 0, 'new_patron_1 should have 0 guarantee' );
-    my @guarantees = $new_patron_1->guarantees;
-    is( ref(\@guarantees), 'ARRAY', 'Koha::Patron->guarantees should return an array in a list context' );
+    my $guarantees = $new_patron_1->guarantee_relationships;
+    is( ref($guarantees), 'Koha::Patron::Relationships', 'Koha::Patron->guarantees should return a Koha::Patrons result set in a scalar context' );
+    is( $guarantees->count, 0, 'new_patron_1 should have 0 guarantee relationships' );
+    my @guarantees = $new_patron_1->guarantee_relationships;
+    is( ref(\@guarantees), 'ARRAY', 'Koha::Patron->guarantee_relationships should return an array in a list context' );
     is( scalar(@guarantees), 0, 'new_patron_1 should have 0 guarantee' );
 
-    my $guarantee_1 = $builder->build({ source => 'Borrower', value => { guarantorid => $new_patron_1->borrowernumber }});
-    my $guarantee_2 = $builder->build({ source => 'Borrower', value => { guarantorid => $new_patron_1->borrowernumber }});
+    my $guarantee_1 = $builder->build({ source => 'Borrower' });
+    my $relationship_1 = Koha::Patron::Relationship->new( { guarantor_id => $new_patron_1->id, guarantee_id => $guarantee_1->{borrowernumber}, relationship => 'test' } )->store();
+    my $guarantee_2 = $builder->build({ source => 'Borrower' });
+    my $relationship_2 = Koha::Patron::Relationship->new( { guarantor_id => $new_patron_1->id, guarantee_id => $guarantee_2->{borrowernumber}, relationship => 'test' } )->store();
 
-    $guarantees = $new_patron_1->guarantees;
-    is( ref($guarantees), 'Koha::Patrons', 'Koha::Patron->guarantees should return a Koha::Patrons result set in a scalar context' );
+    $guarantees = $new_patron_1->guarantee_relationships;
+    is( ref($guarantees), 'Koha::Patron::Relationships', 'Koha::Patron->guarantee_relationships should return a Koha::Patrons result set in a scalar context' );
     is( $guarantees->count, 2, 'new_patron_1 should have 2 guarantees' );
-    @guarantees = $new_patron_1->guarantees;
-    is( ref(\@guarantees), 'ARRAY', 'Koha::Patron->guarantees should return an array in a list context' );
+    @guarantees = $new_patron_1->guarantee_relationships;
+    is( ref(\@guarantees), 'ARRAY', 'Koha::Patron->guarantee_relationships should return an array in a list context' );
     is( scalar(@guarantees), 2, 'new_patron_1 should have 2 guarantees' );
     $_->delete for @guarantees;
 
@@ -110,40 +113,107 @@ subtest 'guarantees' => sub {
 
     my $guarantor = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $order_guarantee1 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
-            surname => 'Zebra',
-            guarantorid => $guarantor->borrowernumber
+    my $order_guarantee1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                surname     => 'Zebra',
+            }
         }
-    })->borrowernumber;
-
-    my $order_guarantee2 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
-            surname => 'Yak',
-            guarantorid => $guarantor->borrowernumber
+    )->borrowernumber;
+    $builder->build_object(
+        {
+            class => 'Koha::Patron::Relationships',
+            value => {
+                guarantor_id  => $guarantor->id,
+                guarantee_id => $order_guarantee1,
+                relationship => 'test',
+            }
         }
-    })->borrowernumber;
+    );
 
-    my $order_guarantee3 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
-            surname => 'Xerus',
-            firstname => 'Walrus',
-            guarantorid => $guarantor->borrowernumber
+    my $order_guarantee2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                surname     => 'Yak',
+            }
         }
-    })->borrowernumber;
-
-    my $order_guarantee4 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
-            surname => 'Xerus',
-            firstname => 'Vulture',
-            guarantorid => $guarantor->borrowernumber
+    )->borrowernumber;
+    $builder->build_object(
+        {
+            class => 'Koha::Patron::Relationships',
+            value => {
+                guarantor_id  => $guarantor->id,
+                guarantee_id => $order_guarantee2,
+                relationship => 'test',
+            }
         }
-    })->borrowernumber;
+    );
 
-    my $order_guarantee5 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
-            surname => 'Xerus',
-            firstname => 'Unicorn',
-            guarantorid => $guarantor->borrowernumber
+    my $order_guarantee3 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                surname     => 'Xerus',
+                firstname   => 'Walrus',
+            }
         }
-    })->borrowernumber;
+    )->borrowernumber;
+    $builder->build_object(
+        {
+            class => 'Koha::Patron::Relationships',
+            value => {
+                guarantor_id  => $guarantor->id,
+                guarantee_id => $order_guarantee3,
+                relationship => 'test',
+            }
+        }
+    );
 
-    $guarantees = $guarantor->guarantees();
+    my $order_guarantee4 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                surname     => 'Xerus',
+                firstname   => 'Vulture',
+                guarantorid => $guarantor->borrowernumber
+            }
+        }
+    )->borrowernumber;
+    $builder->build_object(
+        {
+            class => 'Koha::Patron::Relationships',
+            value => {
+                guarantor_id  => $guarantor->id,
+                guarantee_id => $order_guarantee4,
+                relationship => 'test',
+            }
+        }
+    );
+
+    my $order_guarantee5 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                surname     => 'Xerus',
+                firstname   => 'Unicorn',
+                guarantorid => $guarantor->borrowernumber
+            }
+        }
+    )->borrowernumber;
+    my $r = $builder->build_object(
+        {
+            class => 'Koha::Patron::Relationships',
+            value => {
+                guarantor_id  => $guarantor->id,
+                guarantee_id => $order_guarantee5,
+                relationship => 'test',
+            }
+        }
+    );
+
+    $guarantees = $guarantor->guarantee_relationships->guarantees;
 
     is( $guarantees->next()->borrowernumber, $order_guarantee5, "Return first guarantor alphabetically" );
     is( $guarantees->next()->borrowernumber, $order_guarantee4, "Return second guarantor alphabetically" );
@@ -163,15 +233,18 @@ subtest 'siblings' => sub {
     plan tests => 7;
     my $siblings = $new_patron_1->siblings;
     is( $siblings, undef, 'Koha::Patron->siblings should not crashed if the patron has no guarantor' );
-    my $guarantee_1 = $builder->build( { source => 'Borrower', value => { guarantorid => $new_patron_1->borrowernumber } } );
+    my $guarantee_1 = $builder->build( { source => 'Borrower' } );
+    my $relationship_1 = Koha::Patron::Relationship->new( { guarantor_id => $new_patron_1->borrowernumber, guarantee_id => $guarantee_1->{borrowernumber}, relationship => 'test' } )->store();
     my $retrieved_guarantee_1 = Koha::Patrons->find($guarantee_1);
     $siblings = $retrieved_guarantee_1->siblings;
     is( ref($siblings), 'Koha::Patrons', 'Koha::Patron->siblings should return a Koha::Patrons result set in a scalar context' );
     my @siblings = $retrieved_guarantee_1->siblings;
     is( ref( \@siblings ), 'ARRAY', 'Koha::Patron->siblings should return an array in a list context' );
     is( $siblings->count,  0,       'guarantee_1 should not have siblings yet' );
-    my $guarantee_2 = $builder->build( { source => 'Borrower', value => { guarantorid => $new_patron_1->borrowernumber } } );
-    my $guarantee_3 = $builder->build( { source => 'Borrower', value => { guarantorid => $new_patron_1->borrowernumber } } );
+    my $guarantee_2 = $builder->build( { source => 'Borrower' } );
+    my $relationship_2 = Koha::Patron::Relationship->new( { guarantor_id => $new_patron_1->borrowernumber, guarantee_id => $guarantee_2->{borrowernumber}, relationship => 'test' } )->store();
+    my $guarantee_3 = $builder->build( { source => 'Borrower' } );
+    my $relationship_3 = Koha::Patron::Relationship->new( { guarantor_id => $new_patron_1->borrowernumber, guarantee_id => $guarantee_3->{borrowernumber}, relationship => 'test' } )->store();
     $siblings = $retrieved_guarantee_1->siblings;
     is( $siblings->count,               2,                               'guarantee_1 should have 2 siblings' );
     is( $guarantee_2->{borrowernumber}, $siblings->next->borrowernumber, 'guarantee_2 should exist in the guarantees' );

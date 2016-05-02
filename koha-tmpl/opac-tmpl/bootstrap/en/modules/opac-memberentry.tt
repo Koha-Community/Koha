@@ -114,7 +114,7 @@
                     <div class="alert">You typed in the wrong characters in the box before submitting. Please try again.</div>
                 [% END %]
 
-                [% IF borrower.guarantorid && !Koha.Preference('OPACPrivacy') && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
+                [% IF patron.guarantor_relationships && !Koha.Preference('OPACPrivacy') && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
                     <fieldset class="rows" id="memberentry_privacy">
                         <legend id="privacy_legend">Privacy</legend>
                         <ol>
@@ -133,7 +133,12 @@
                                     <span id="update_privacy_guarantor_checkouts_message" class="alert" style="display:none"></span>
                                 </span>
                                 <span class="hint">
-                                    Your guarantor is <i>[% guarantor.firstname | html %] [% guarantor.surname | html %]</i>
+                                    Guaranteed by
+                                    [% FOREACH gr IN patron.guarantor_relationships %]
+                                        [% SET g = gr.guarantor %]
+                                        [% g.firstname | html %] [% g.surname | html %]
+                                        [%- IF ! loop.last %], [% END %]
+                                    [% END %]
                                 </span>
                             </li>
                         </ol>
@@ -1019,7 +1024,7 @@
                 }
             });
 
-            [% IF borrower.guarantorid && !Koha.Preference('OPACPrivacy') && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
+            [% IF patron.guarantor_relationships && !Koha.Preference('OPACPrivacy') && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
                 $('#update_privacy_guarantor_checkouts').click( function() {
                     $.post( "/cgi-bin/koha/svc/patron/show_checkouts_to_relatives", { privacy_guarantor_checkouts: $('#privacy_guarantor_checkouts').val() }, null, 'json')
                      .done(function( data ) {

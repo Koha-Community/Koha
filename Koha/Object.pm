@@ -72,8 +72,9 @@ sub new {
             next if not exists $attributes->{$column_name} or defined $attributes->{$column_name};
             delete $attributes->{$column_name};
         }
-        $self->{_result} = $schema->resultset( $class->_type() )
-          ->new($attributes);
+
+        $self->{_result} =
+          $schema->resultset( $class->_type() )->new($attributes);
     }
 
     croak("No _type found! Koha::Object must be subclassed!")
