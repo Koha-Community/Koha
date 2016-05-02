@@ -407,7 +407,7 @@ if (@$barcodes) {
         }
         unless($confirm_required) {
             my $issue = AddIssue( $borrower, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew') } );
-            $template->param( issue => $issue );
+            $template_params->{issue} = $issue;
             $session->clear('auto_renew');
             $inprocess = 1;
         }
