@@ -48,8 +48,7 @@ ok(
     'Test that Verify() method fails for a bad token'
 );
 
-## Create new pending modification, but for an existing borrower
-## But not a hardcoded borrowernumber of course (Bug 16407)
+## Create new pending modification for a patron
 my $builder = t::lib::TestBuilder->new;
 my $borr1 = $builder->build({ source => 'Borrower' })->{borrowernumber};
 Koha::Patron::Modifications->new( borrowernumber => $borr1 )
@@ -59,7 +58,7 @@ Koha::Patron::Modifications->new( borrowernumber => $borr1 )
 ok( Koha::Patron::Modifications->GetPendingModificationsCount() == 1,
     'Test GetPendingModificationsCount()' );
 
-## Create new pending modification for another existing borrower
+## Create new pending modification for another patron
 my $borr2 = $builder->build({ source => 'Borrower' })->{borrowernumber};
 Koha::Patron::Modifications->new( borrowernumber => $borr2 )
   ->AddModifications( { surname => 'Smith', firstname => 'Sandy' } );
