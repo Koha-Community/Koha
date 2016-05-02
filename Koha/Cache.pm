@@ -271,10 +271,11 @@ sub set_in_cache {
     # Deep copy if it's not a scalar and unsafe is not passed
     $value = dclone( $value ) if ref($value) and not $unsafe;
 
-    # Set in L1 cache
+    # Set in L1 cache; exit if we are caching an undef
     $L1_cache{ $key } = $value;
+    return if !defined $value;
 
-    # We consider an expiry of 0 to be inifinite
+    # We consider an expiry of 0 to be infinite
     if ( $expiry ) {
         return $set_sub
           ? $set_sub->( $key, $value, $expiry )
