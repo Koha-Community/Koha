@@ -73,7 +73,7 @@ foreach my $borrowernumber ( @borrowernumbers ) {
         $borrowernumber,
         $biblionumber,
         my $bibitems = q{},
-        my $priority = C4::Reserves::CalculatePriority( $biblionumber, undef ),
+        my $priority = C4::Reserves::CalculatePriority( $biblionumber ),
         my $resdate,
         my $expdate,
         my $notes = q{},
