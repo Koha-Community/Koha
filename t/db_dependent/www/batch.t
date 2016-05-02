@@ -19,7 +19,7 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More tests => 20;
+use Test::More tests => 24;
 use Test::WWW::Mechanize;
 use XML::Simple;
 use JSON;
@@ -178,6 +178,9 @@ $agent->get_ok(
 );
 $jsonresponse = decode_json $agent->content;
 like( $jsonresponse->{ aaData }[0]->{ citation }, qr/$bookdescription/, 'found book' );
+is( $jsonresponse->{ aaData }[0]->{ status }, 'staged', 'record marked as staged' );
+is( $jsonresponse->{ aaData }[0]->{ overlay_status }, 'no_match', 'record has no matches' );
+
 my $biblionumber = $jsonresponse->{ aaData }[0]->{ import_record_id };
 # Back to the manage staged records page
 $agent->get($staged_records_uri);
@@ -185,6 +188,11 @@ $agent->form_number(6);
 $agent->field( 'framework', '' );
 $agent->click_ok( 'mainformsubmit', "imported records into catalog" );
 
+$agent->get("$intranet/cgi-bin/koha/tools/batch_records_ajax.pl?import_batch_id=$import_batch_id");
+$jsonresponse = decode_json $agent->content;
+is( $jsonresponse->{ aaData }[0]->{ status }, 'imported', 'record marked as imported' );
+
+$agent->get($staged_records_uri);
 $agent->form_number(5);
 $agent->click_ok( 'mainformsubmit', "revert import" );
 $agent->get_ok(
@@ -192,5 +200,9 @@ $agent->get_ok(
     'getting reverted bib' );
 $agent->content_contains( 'The record you requested does not exist',
     'bib is gone' );
+
+$agent->get("$intranet/cgi-bin/koha/tools/batch_records_ajax.pl?import_batch_id=$import_batch_id");
+$jsonresponse = decode_json $agent->content;
+is( $jsonresponse->{ aaData }[0]->{ status }, 'reverted', 'record marked as reverted' );
 
 1;
