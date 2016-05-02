@@ -359,7 +359,6 @@ my @expectedfields = qw(
   gstrate
   discount
   budget_id
-  budgetgroup_id
   budgetdate
   sort1
   sort2
@@ -487,7 +486,6 @@ my @base_expectedfields = qw(
   publicationyear
   collectiontitle
   invoiceid
-  budgetgroup_id
   place
   issn
   quantityreceived
@@ -609,7 +607,6 @@ ok(
   title
   closedate
   basketname
-  budgetgroup_id
   invoiceid
   author
   parent_ordernumber
