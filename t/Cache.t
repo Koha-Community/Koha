@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 42;
+use Test::More tests => 43;
+use Test::Warn;
 
 my $destructorcount = 0;
 
@@ -34,12 +35,22 @@ SKIP: {
     $ENV{ MEMCACHED_NAMESPACE } = 'unit_tests';
     my $cache = Koha::Cache->get_instance();
 
-    skip "Cache not enabled", 36
+    skip "Cache not enabled", 37
       unless ( $cache->is_cache_active() && defined $cache );
 
     # test fetching an item that isnt in the cache
     is( $cache->get_from_cache("not in here"),
         undef, "fetching item NOT in cache" );
+
+    # set_in_cache should not warn
+    my $warn;
+    {
+        local $SIG{__WARN__} = sub {
+            $warn = shift;
+        };
+        $cache->set_in_cache( "a key", undef );
+        is( $warn, undef, 'Koha::Cache->set_in_cache should not return any warns' );
+    }
 
     # test expiry time in cache
     $cache->set_in_cache( "timeout", "I AM DATA", 1 ); # expiry time of 1 second
