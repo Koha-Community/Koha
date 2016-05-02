@@ -941,16 +941,14 @@ ok(($order4->{cancellationreason} eq "foobar"), "order has cancellation reason \
 ok((not defined GetBiblio($order4->{biblionumber})), "biblio does not exist anymore");
 # End of tests for DelOrder
 
-$schema->storage->txn_rollback();
 # Budget reports
-#my @report = GetBudgetReport(1);
-#ok(@report >= 1, "GetBudgetReport OK");
-
 my $all_count = scalar GetBudgetsReport();
 ok($all_count >= 1, "GetBudgetReport OK");
 
 my $active_count = scalar GetBudgetsReport(1);
 ok($active_count >= 1 , "GetBudgetsReport(1) OK");
 
-ok($all_count == scalar GetBudgetsReport(), "GetBudgetReport returns inactive budget period acquisitions.");
+is($all_count, scalar GetBudgetsReport(), "GetBudgetReport returns inactive budget period acquisitions.");
 ok($active_count >= scalar GetBudgetsReport(1), "GetBudgetReport doesn't return inactive budget period acquisitions.");
+
+$schema->storage->txn_rollback();
