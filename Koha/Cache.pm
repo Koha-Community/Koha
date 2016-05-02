@@ -103,7 +103,7 @@ sub new {
 
     # Unless memcache or fastmmap has already been picked, use memory_cache
     unless ( defined( $self->{'cache'} ) ) {
-        if ( can_load( modules => { 'Cache::Memory' => undef, nocache => 1 } )
+        if ( can_load( modules => { 'Cache::Memory' => undef } )
             && _initialize_memory($self) )
         {
                 $self->{'cache'} = $self->{'memory_cache'};
