@@ -25,6 +25,7 @@ use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Item;
 use Koha::DateUtils;
+use t::lib::TestBuilder;
 
 use Test::More tests => 31;
 
@@ -33,11 +34,13 @@ use_ok('Koha::Hold');
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-
-my @branches = Koha::Libraries->search();
-my $borrower = Koha::Patrons->search()->next();
+# add two branches and a borrower
+my $builder = t::lib::TestBuilder->new;
+my @branches;
+foreach( 1..2 ) {
+    push @branches, $builder->build({ source => 'Branch' });
+}
+my $borrower = $builder->build({ source => 'Borrower' });
 
 my $biblio = MARC::Record->new();
 my $title  = 'Silence in the library';
@@ -51,8 +54,8 @@ my $item = Koha::Item->new(
     {
         biblionumber     => $biblionumber,
         biblioitemnumber => $biblioitemnumber,
-        holdingbranch    => $branches[0]->branchcode(),
-        homebranch       => $branches[0]->branchcode(),
+        holdingbranch    => $branches[0]->{branchcode},
+        homebranch       => $branches[0]->{branchcode},
     }
 );
 $item->store();
@@ -62,8 +65,8 @@ my $hold = Koha::Hold->new(
         biblionumber   => $biblionumber,
         itemnumber     => $item->id(),
         waitingdate    => '2000-01-01',
-        borrowernumber => $borrower->borrowernumber(),
-        branchcode     => $branches[1]->branchcode(),
+        borrowernumber => $borrower->{borrowernumber},
+        branchcode     => $branches[1]->{branchcode},
         suspend        => 0,
     }
 );
@@ -90,7 +93,7 @@ $item = $hold->item();
 
 my $hold_borrower = $hold->borrower();
 ok( $hold_borrower, 'Got hold borrower' );
-is( $hold_borrower->borrowernumber(), $borrower->borrowernumber(), 'Hold borrower matches correct borrower' );
+is( $hold_borrower->borrowernumber(), $borrower->{borrowernumber}, 'Hold borrower matches correct borrower' );
 
 t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay', '' );
 $dt = $hold->waiting_expires_on();
@@ -134,7 +137,7 @@ $hold->found('T');
 ok( !$hold->is_at_destination(), "In transit hold cannot be at destination" );
 $hold->found('W');
 ok( !$hold->is_at_destination(), "Waiting hold where hold branchcode is not the same as the item's holdingbranch is not at destination" );
-$item->holdingbranch( $branches[1]->branchcode() );
+$item->holdingbranch( $branches[1]->{branchcode} );
 ok( $hold->is_at_destination(), "Waiting hold where hold branchcode is the same as the item's holdingbranch is at destination" );
 
 $schema->storage->txn_rollback();
