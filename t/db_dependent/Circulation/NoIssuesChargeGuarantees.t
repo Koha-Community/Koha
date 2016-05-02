@@ -60,7 +60,7 @@ is( $issuingimpossible->{DEBT_GUARANTEES}, undef, "Patron can check out item" );
 
 manualinvoice( $guarantee->{borrowernumber}, undef, undef, 'L', 10.00 );
 ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->{barcode} );
-is( $issuingimpossible->{DEBT_GUARANTEES}, '10.00', "Patron cannot check out item due to debt for guarantee" );
+is( $issuingimpossible->{DEBT_GUARANTEES} + 0, '10.00' + 0, "Patron cannot check out item due to debt for guarantee" );
 
 $schema->storage->txn_rollback;
 
