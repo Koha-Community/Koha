@@ -233,7 +233,7 @@ sub test_search{
 
 
     $agent->get_ok( "$intranet/cgi-bin/koha/catalogue/search.pl" , "got search on intranet");
-    $agent->form_number(1);
+    $agent->form_number(5);
     $agent->field('idx', 'kw');
     $agent->field('q', $search_key);
     $agent->click();
@@ -241,7 +241,7 @@ sub test_search{
     like( $intra_text, qr|Publisher: $publisher|, );
 
     $agent->get_ok( "$intranet/cgi-bin/koha/catalogue/search.pl" , "got search on intranet");
-    $agent->form_number(1);
+    $agent->form_number(5);
     $agent->field('idx', 'kw');
     $agent->field('q', $publisher);
     $agent->click();
