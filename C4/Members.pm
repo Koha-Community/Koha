@@ -631,6 +631,8 @@ sub ModMember {
         borrowernumber => $new_borrower->{borrowernumber},
      });
 
+    delete $new_borrower->{userid} if exists $new_borrower->{userid} and not $new_borrower->{userid};
+
     my $execute_success = $rs->update($new_borrower);
     if ($execute_success ne '0E0') { # only proceed if the update was a success
         # If the patron changes to a category with enrollment fee, we add a fee
