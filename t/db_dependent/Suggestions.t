@@ -27,7 +27,7 @@ use C4::Budgets qw( AddBudgetPeriod AddBudget );
 use Koha::DateUtils qw( dt_from_string );
 
 use DateTime::Duration;
-use Test::More tests => 105;
+use Test::More tests => 106;
 use Test::Warn;
 
 BEGIN {
@@ -302,6 +302,11 @@ $search_suggestion = SearchSuggestion({
     STATUS => $mod_suggestion3->{STATUS},
 });
 is( @$search_suggestion, 1, 'SearchSuggestion returns the correct number of suggestions' );
+
+$search_suggestion = SearchSuggestion({
+    STATUS => q||
+});
+is( @$search_suggestion, 0, 'SearchSuggestion should not return all suggestions if we want the suggestions with a STATUS=""' );
 $search_suggestion = SearchSuggestion({
     STATUS => 'REJECTED',
 });
