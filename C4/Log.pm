@@ -24,8 +24,11 @@ package C4::Log;
 use strict;
 use warnings;
 
+use JSON qw( to_json );
+
 use C4::Context;
 use Koha::DateUtils;
+use Koha::Logger;
 
 use vars qw(@ISA @EXPORT);
 
@@ -77,6 +80,26 @@ sub logaction {
     my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info) values (now(),?,?,?,?,?)");
     $sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos);
     $sth->finish;
+
+    my $logger = Koha::Logger->get(
+        {
+            interface => 'intranet',
+            category  => "ActionLogs.$modulename.$actionname"
+        }
+    );
+    $logger->info(
+        sub {
+            "ACTION LOG: " . to_json(
+                {
+                    user   => $usernumber,
+                    module => $modulename,
+                    action => $actionname,
+                    object => $objectnumber,
+                    info   => $infos
+                }
+            );
+        }
+    );
 }
 
 =item cronlogaction
@@ -144,10 +167,10 @@ sub displaylog {
 		SELECT action_logs.timestamp, action_logs.action, action_logs.info,
 				borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,
         		biblio.biblionumber, biblio.title, biblio.author
-        FROM action_logs 
-		LEFT JOIN borrowers ON borrowers.borrowernumber=action_logs.user 
+        FROM action_logs
+		LEFT JOIN borrowers ON borrowers.borrowernumber=action_logs.user
         LEFT JOIN  biblio   ON action_logs.object=biblio.biblionumber
-        WHERE action_logs.module = 'cataloguing' 
+        WHERE action_logs.module = 'cataloguing'
 	|;
 	my %filtermap = ();
     if ($modulename eq "catalogue" or $modulename eq "acqui") {
@@ -158,13 +181,13 @@ sub displaylog {
 		);
     } elsif ($modulename eq "members") {
         $strsth=qq|
-		SELECT action_logs.timestamp, action_logs.action, action_logs.info, 
+		SELECT action_logs.timestamp, action_logs.action, action_logs.info,
         		borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,
         		bor2.cardnumber, bor2.surname, bor2.firstname, bor2.userid
-        FROM action_logs 
-		LEFT JOIN borrowers ON borrowers.borrowernumber=action_logs.user 
+        FROM action_logs
+		LEFT JOIN borrowers ON borrowers.borrowernumber=action_logs.user
 		LEFT JOIN borrowers as bor2 ON action_logs.object=bor2.borrowernumber
-        WHERE action_logs.module = 'members' 
+        WHERE action_logs.module = 'members'
 		|;
 		%filtermap = (
 		       user => 'borrowers.surname',
@@ -204,7 +227,7 @@ sub displaylog {
 
 $logs = GetLogs($datefrom,$dateto,$user,\@modules,$action,$object,$info);
 
-Return: 
+Return:
 C<$logs> is a ref to a hash which containts all columns from action_logs
 
 =cut
