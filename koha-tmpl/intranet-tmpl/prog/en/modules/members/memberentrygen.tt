@@ -290,8 +290,8 @@ $(document).ready(function() {
 [% END # hide fieldset %]
 
 [% IF ( showguarantor ) %]<input type="hidden" id="guarantorid" name="guarantorid"   value="[% guarantorid %]" />
-    <fieldset class="rows">
-        <legend>Guarantor information</legend>
+    <fieldset id="memberentry_guarantor" class="rows">
+        <legend id="guarantor_lgd">Guarantor information</legend>
         <ol>
 [% IF ( P ) %]
 	        [% IF ( guarantorid ) %]
@@ -808,8 +808,8 @@ $(document).ready(function() {
         [% END # hide fieldset %][% END %]
 		<!--this zones are not necessary in modif mode -->
         [% UNLESS ( opadd || opduplicate ) %]
-		<fieldset class="rows">
-            <legend>Patron account flags</legend>
+        <fieldset class="rows" id="memberentry_account_flags">
+            <legend id="account_flags_lgd">Patron account flags</legend>
 			<ol class="radio">
 			[% FOREACH flagloo IN flagloop %]
 				<li><label class="radio" for="yes[% flagloo.name %]">
@@ -839,8 +839,8 @@ $(document).ready(function() {
 			</ol>
 			</fieldset>
 
-              <fieldset class="rows">
-                <legend>Patron restrictions</legend>
+              <fieldset class="rows" id="memberentry_restrictions">
+                <legend id="restrictions_lgd">Patron restrictions</legend>
 
                 [% IF ( debarments ) %]
                     <table>
@@ -878,7 +878,7 @@ $(document).ready(function() {
                     <p><a href="#" id="add_manual_restriction">Add manual restriction</a></p>
                     <fieldset id="manual_restriction_form">
                         <input type="hidden" id="add_debarment" name="add_debarment" value="0" />
-                        <legend>Add manual restriction</legend>
+                        <legend id="manual_restriction_lgd">Add manual restriction</legend>
                         <ol>
                             <li><label for="debarred_comment">Comment: </label><input type="text" id="debarred_comment" name="debarred_comment" onchange="$('#add_debarment').val(1);" /></li>
                             <li><label for="debarred_expiration">Expiration: </label><input name="debarred_expiration" id="debarred_expiration" size="10" readonly="readonly" value="" class="datepicker" onchange="$('#add_debarment').val(1);" />
@@ -897,12 +897,12 @@ $(document).ready(function() {
 
 [% IF ( step_4 ) %][% IF ( ExtendedPatronAttributes ) %][% UNLESS ( no_patron_attribute_types ) %]
   <fieldset class="rows" id="memberentry_patron_attributes">
-    <legend>Additional attributes and identifiers</legend>
+    <legend id="patron_attributes_lgd">Additional attributes and identifiers</legend>
     <input type="hidden" name="setting_extended_patron_attributes" value="1" />
     [% FOREACH pa_loo IN patron_attributes %]
         [% IF pa_loo.class %]
             <fieldset id="aai_[% pa_loo.class %]">
-            <legend>[% pa_loo.lib %]</legend>
+            <legend id="[% pa_loo.class %]_lgd">[% pa_loo.lib %]</legend>
         [% END %]
         <ol class="attributes_table">
             [% FOREACH patron_attribute IN pa_loo.items %]
