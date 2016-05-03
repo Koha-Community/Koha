@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 77;
+use Test::More tests => 78;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -272,6 +272,19 @@ $data{userid} = 'a_user_id';
 $borrowernumber = AddMember( %data );
 $borrower = GetMember( borrowernumber => $borrowernumber );
 is( $borrower->{userid}, $data{userid}, 'AddMember should insert the given userid' );
+
+subtest 'ModMember should not update userid if not true' => sub {
+    plan tests => 3;
+    ModMember( borrowernumber => $borrowernumber, firstname => 'Tomas', userid => '' );
+    $borrower = GetMember( borrowernumber => $borrowernumber );
+    is ( $borrower->{userid}, $data{userid}, 'ModMember should not update the userid with an empty string' );
+    ModMember( borrowernumber => $borrowernumber, firstname => 'Tomas', userid => 0 );
+    $borrower = GetMember( borrowernumber => $borrowernumber );
+    is ( $borrower->{userid}, $data{userid}, 'ModMember should not update the userid with an 0');
+    ModMember( borrowernumber => $borrowernumber, firstname => 'Tomas', userid => undef );
+    $borrower = GetMember( borrowernumber => $borrowernumber );
+    is ( $borrower->{userid}, $data{userid}, 'ModMember should not update the userid with an undefined value');
+};
 
 # Regression tests for BZ13502
 ## Remove all entries with userid='' (should be only 1 max)
