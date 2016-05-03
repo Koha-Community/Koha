@@ -253,14 +253,6 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             next;
         }
 
-        # generate a proper login if none provided
-        if ( $borrower{userid} eq '' || !Check_Userid( $borrower{userid} ) ) {
-            push @errors, { duplicate_userid => 1, userid => $borrower{userid} };
-            $invalid++;
-            next LINE;
-        }
-
-
         if ($borrowernumber) {
             # borrower exists
             unless ($overwrite_cardnumber) {
@@ -280,6 +272,16 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                     $borrower{$col} = $member->{$col} if($member->{$col}) ;
                 }
             }
+
+            # Check if the userid provided does not exist yet
+            if (  exists $borrower{userid}
+                     and $borrower{userid}
+                 and not Check_Userid( $borrower{userid}, $borrower{borrowernumber} ) ) {
+                push @errors, { duplicate_userid => 1, userid => $borrower{userid} };
+                $invalid++;
+                next LINE;
+            }
+
             unless (ModMember(%borrower)) {
                 $invalid++;
                 # until we have better error trapping, we have no way of knowing why ModMember errored out...
