@@ -62,24 +62,7 @@ my $query = new CGI;
 
 my $sessionID = $query->cookie("CGISESSID") ;
 my $session = get_session($sessionID);
-
-# branch and printer are now defined by the userenv
-# but first we have to check if someone has tried to change them
-
-my $branch = $query->param('branch');
-if ($branch){
-    # update our session so the userenv is updated
-    $session->param('branch', $branch);
-    $session->param('branchname', GetBranchName($branch));
-}
-
-my $printer = $query->param('printer');
-if ($printer){
-    # update our session so the userenv is updated
-    $session->param('branchprinter', $printer);
-}
-
-if (!C4::Context->userenv && !$branch){
+if (!C4::Context->userenv){
     if ($session->param('branch') eq 'NO_LIBRARY_SET'){
         # no branch set we can't issue
         print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
@@ -154,8 +137,7 @@ for (@failedreturns) { $return_failed{$_} = 1; }
 my $findborrower = $query->param('findborrower') || q{};
 $findborrower =~ s|,| |g;
 
-$branch  = C4::Context->userenv->{'branch'};  
-$printer = C4::Context->userenv->{'branchprinter'};
+my $branch = C4::Context->userenv->{'branch'};
 
 # If AutoLocation is not activated, we show the Circulation Parameters to chage settings of librarian
 if (C4::Context->preference("AutoLocation") != 1) {
@@ -594,8 +576,6 @@ $template->param(
     categoryname      => $borrower->{'description'},
     branch            => $branch,
     branchname        => GetBranchName($borrower->{'branchcode'}),
-    printer           => $printer,
-    printername       => $printer,
     was_renewed       => $query->param('was_renewed') ? 1 : 0,
     expiry            => $borrower->{'dateexpiry'},
     roadtype          => $roadtype,

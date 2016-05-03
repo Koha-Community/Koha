@@ -21,7 +21,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use CGI qw ( -utf8 );
 use C4::Output;
-use C4::Auth qw/:DEFAULT get_session/;
+use C4::Auth qw/:DEFAULT/;
 use C4::Branch; # GetBranches
 use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
@@ -30,19 +30,6 @@ use C4::Serials;
 use CGI::Session;
 
 my $query = new CGI;
-
-my $sessionID = $query->cookie("CGISESSID") ;
-my $session = get_session($sessionID);
-
-# branch are now defined by the userenv
-# but first we have to check if someone has tried to change them
-
-my $branch = $query->param('branch');
-if ($branch){
-    # update our session so the userenv is updated
-    $session->param('branch', $branch);
-    $session->param('branchname', GetBranchName($branch));
-}
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     {
@@ -61,7 +48,7 @@ $findborrower =~ s|,| |g;
 
 my $borrowernumber = $query->param('borrowernumber');
 
-$branch  = C4::Context->userenv->{'branch'};
+my $branch = C4::Context->userenv->{'branch'};
 
 # get the borrower information.....
 my $borrower;
