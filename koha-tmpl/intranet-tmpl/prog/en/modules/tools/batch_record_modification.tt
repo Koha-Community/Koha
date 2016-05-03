@@ -192,8 +192,8 @@ $(document).ready(function() {
         </div>
         [% IF recordtype == 'biblio' %]
           <div id="toolbar">
-            <a id="selectall" href="#">Select all</a>
-            | <a id="clearall" href="#">Clear all</a>
+            <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
+            | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
           </div>
           <table id="biblios" class="records">
             <thead>
@@ -218,8 +218,8 @@ $(document).ready(function() {
           <div class="note"><i class="fa fa-exclamation"></i> Reminder: this action will modify all selected biblios!</div>
         [% ELSE %]
           <div id="toolbar">
-            <a id="selectall" href="#">Select all</a>
-            | <a id="clearall" href="#">Clear all</a>
+            <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
+            | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
           </div>
           <table id="authorities" class="records">
             <thead>
