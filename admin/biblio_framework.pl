@@ -87,6 +87,7 @@ if ($op eq 'add_form') {
         }
         $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
         $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+        $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
 	}
 	print $input->redirect($script_name);   # FIXME: unnecessary redirect
 	exit;
@@ -121,6 +122,7 @@ if ($op eq 'add_form') {
 		$sth->execute($frameworkcode);
         $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
         $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+        $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
 	}
 	print $input->redirect($script_name);   # FIXME: unnecessary redirect
 	exit;

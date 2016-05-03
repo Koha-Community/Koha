@@ -164,6 +164,7 @@ if ($op eq 'add_form') {
         }
         $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
         $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+        $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
     }
     print $input->redirect("/cgi-bin/koha/admin/marctagstructure.pl?searchfield=$tagfield&frameworkcode=$frameworkcode");
     exit;
@@ -190,6 +191,7 @@ if ($op eq 'add_form') {
         $sth2->execute($searchfield, $frameworkcode);
         $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
         $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+        $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
 	}
 	$template->param(
           searchfield => $searchfield,
@@ -355,5 +357,6 @@ sub duplicate_framework {
 	}
     $cache->clear_from_cache("MarcStructure-0-$newframeworkcode");
     $cache->clear_from_cache("MarcStructure-1-$newframeworkcode");
+    $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
 }
 
