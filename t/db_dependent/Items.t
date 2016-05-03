@@ -26,7 +26,7 @@ use Koha::Library;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use Test::Warn;
 
@@ -553,13 +553,125 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
     $schema->storage->txn_rollback;
 };
 
+
+subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin();
+
+    # Clear cache
+    $C4::Context::context->{marcfromkohafield} = undef;
+    $C4::Biblio::inverted_field_map = undef;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $framework = $builder->build({
+        source => 'BiblioFramework',
+    });
+    # Link biblio.biblionumber and biblioitems.biblioitemnumber to avoid _koha_marc_update_bib_ids to fail with 'no biblio[item]number tag for framework"
+    $builder->build({
+        source => 'MarcSubfieldStructure',
+        value => {
+            frameworkcode => $framework->{frameworkcode},
+            kohafield => 'biblio.biblionumber',
+            tagfield => '999',
+            tagsubfield => 'c',
+        }
+    });
+    $builder->build({
+        source => 'MarcSubfieldStructure',
+        value => {
+            frameworkcode => $framework->{frameworkcode},
+            kohafield => 'biblioitems.biblioitemnumber',
+            tagfield => '999',
+            tagsubfield => 'd',
+        }
+    });
+    my $mss_itemnumber = $builder->build({
+        source => 'MarcSubfieldStructure',
+        value => {
+            frameworkcode => $framework->{frameworkcode},
+            kohafield => 'items.itemnumber',
+            tagfield => '952',
+            tagsubfield => '9',
+        }
+    });
+
+    my $mss_barcode = $builder->build({
+        source => 'MarcSubfieldStructure',
+        value => {
+            frameworkcode => $framework->{frameworkcode},
+            kohafield => 'items.barcode',
+            tagfield => '952',
+            tagsubfield => 'p',
+        }
+    });
+
+    # Create a record with a barcode
+    my ($biblionumber) = get_biblio( $framework->{frameworkcode} );
+    my $item_record = new MARC::Record;
+    my $a_barcode = 'a barcode';
+    my $barcode_field = MARC::Field->new(
+        '952', ' ', ' ',
+        p => $a_barcode,
+    );
+    $item_record->append_fields( $barcode_field );
+    my (undef, undef, $item_itemnumber) = AddItemFromMarc($item_record, $biblionumber);
+
+    # Make sure everything has been set up
+    my $item = GetItem($item_itemnumber);
+    is( $item->{barcode}, $a_barcode, 'Everything has been set up correctly, the barcode is defined as expected' );
+
+    # Delete the barcode field and save the record
+    $item_record->delete_fields( $barcode_field );
+    ModItemFromMarc($item_record, $biblionumber, $item_itemnumber);
+    $item = GetItem($item_itemnumber);
+    is( $item->{barcode}, undef, 'The default value should have been set to the barcode, the field is mapped to a kohafield' );
+
+    # Re-add the barcode field and save the record
+    $item_record->append_fields( $barcode_field );
+    ModItemFromMarc($item_record, $biblionumber, $item_itemnumber);
+    $item = GetItem($item_itemnumber);
+    is( $item->{barcode}, $a_barcode, 'Everything has been set up correctly, the barcode is defined as expected' );
+
+    # Remove the mapping
+    my $dbh = C4::Context->dbh;
+    $dbh->do(q|
+        DELETE FROM marc_subfield_structure
+        WHERE kohafield = 'items.barcode'
+        AND frameworkcode = ?
+    |, undef, $framework->{frameworkcode} );
+
+    # And make sure the caches are cleared
+    $C4::Context::context->{marcfromkohafield} = undef;
+    $C4::Biblio::inverted_field_map = undef;
+    my $cache     = Koha::Cache->get_instance();
+    $cache->clear_from_cache("default_value_for_mod_marc-" . $framework->{frameworkcode} );
+
+    # Update the MARC field with another value
+    $item_record->delete_fields( $barcode_field );
+    my $another_barcode = 'another_barcode';
+    my $another_barcode_field = MARC::Field->new(
+        '952', ' ', ' ',
+        p => $another_barcode,
+    );
+    $item_record->append_fields( $another_barcode_field );
+    # The DB value should not have been updated
+    ModItemFromMarc($item_record, $biblionumber, $item_itemnumber);
+    $item = GetItem($item_itemnumber);
+    is ( $item->{barcode}, $a_barcode, 'items.barcode is not mapped anymore, so the DB column has not been updated' );
+
+    $schema->storage->txn_rollback;
+};
+
 # Helper method to set up a Biblio.
 sub get_biblio {
+    my ( $frameworkcode ) = @_;
+    $frameworkcode //= '';
     my $bib = MARC::Record->new();
     $bib->append_fields(
         MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
         MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
     );
-    my ($bibnum, $bibitemnum) = AddBiblio($bib, '');
+    my ($bibnum, $bibitemnum) = AddBiblio($bib, $frameworkcode);
     return ($bibnum, $bibitemnum);
 }

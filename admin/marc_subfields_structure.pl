@@ -341,6 +341,7 @@ elsif ( $op eq 'add_validate' ) {
     $sth_update->finish;
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+    $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
 
     print $input->redirect("/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=$tagfield&amp;frameworkcode=$frameworkcode");
     exit;
@@ -384,6 +385,7 @@ elsif ( $op eq 'delete_confirmed' ) {
     }
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+    $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
     print $input->redirect("/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=$tagfield&amp;frameworkcode=$frameworkcode");
     exit;
 
