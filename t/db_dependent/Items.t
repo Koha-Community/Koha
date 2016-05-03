@@ -372,15 +372,19 @@ subtest 'SearchItems test' => sub {
     }
     ok($found, "item1 found");
 
-    my ($itemfield) = GetMarcFromKohaField('items.itemnumber', '');
+    my $frameworkcode = q||;
+    my ($itemfield) = GetMarcFromKohaField('items.itemnumber', $frameworkcode);
 
     # Create item subfield 'z' without link
-    $dbh->do('DELETE FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield="z" AND frameworkcode=""', undef, $itemfield);
-    $dbh->do('INSERT INTO marc_subfield_structure (tagfield, tagsubfield, frameworkcode) VALUES (?, "z", "")', undef, $itemfield);
+    $dbh->do('DELETE FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield="z" AND frameworkcode=?', undef, $itemfield, $frameworkcode);
+    $dbh->do('INSERT INTO marc_subfield_structure (tagfield, tagsubfield, frameworkcode) VALUES (?, "z", ?)', undef, $itemfield, $frameworkcode);
 
     # Clear cache
-    $C4::Context::context->{marcfromkohafield} = undef;
-    $C4::Biblio::inverted_field_map = undef;
+    my $cache = Koha::Cache->get_instance();
+    $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+    $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+    $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
+    $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
     my $item3_record = new MARC::Record;
     $item3_record->append_fields(
@@ -400,12 +404,14 @@ subtest 'SearchItems test' => sub {
 
     # Link $z to items.itemnotes (and make sure there is no other subfields
     # linked to it)
-    $dbh->do('DELETE FROM marc_subfield_structure WHERE kohafield="items.itemnotes" AND frameworkcode=""', undef, $itemfield);
-    $dbh->do('UPDATE marc_subfield_structure SET kohafield="items.itemnotes" WHERE tagfield=? AND tagsubfield="z" AND frameworkcode=""', undef, $itemfield);
+    $dbh->do('DELETE FROM marc_subfield_structure WHERE kohafield="items.itemnotes" AND frameworkcode=?', undef, $itemfield, $frameworkcode);
+    $dbh->do('UPDATE marc_subfield_structure SET kohafield="items.itemnotes" WHERE tagfield=? AND tagsubfield="z" AND frameworkcode=?', undef, $itemfield, $frameworkcode);
 
     # Clear cache
-    $C4::Context::context->{marcfromkohafield} = undef;
-    $C4::Biblio::inverted_field_map = undef;
+    $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+    $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+    $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
+    $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
     ModItemFromMarc($item3_record, $biblionumber, $item3_itemnumber);
 
@@ -559,10 +565,6 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
 
     $schema->storage->txn_begin();
 
-    # Clear cache
-    $C4::Context::context->{marcfromkohafield} = undef;
-    $C4::Biblio::inverted_field_map = undef;
-
     my $builder = t::lib::TestBuilder->new;
     my $framework = $builder->build({
         source => 'BiblioFramework',
@@ -642,10 +644,11 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
     |, undef, $framework->{frameworkcode} );
 
     # And make sure the caches are cleared
-    $C4::Context::context->{marcfromkohafield} = undef;
-    $C4::Biblio::inverted_field_map = undef;
-    my $cache     = Koha::Cache->get_instance();
-    $cache->clear_from_cache("default_value_for_mod_marc-" . $framework->{frameworkcode} );
+    my $cache = Koha::Cache->get_instance();
+    $cache->clear_from_cache("MarcStructure-0-" . $framework->{frameworkcode});
+    $cache->clear_from_cache("MarcStructure-1-" . $framework->{frameworkcode});
+    $cache->clear_from_cache("default_value_for_mod_marc-" . $framework->{frameworkcode});
+    $cache->clear_from_cache("MarcSubfieldStructure-" . $framework->{frameworkcode});
 
     # Update the MARC field with another value
     $item_record->delete_fields( $barcode_field );

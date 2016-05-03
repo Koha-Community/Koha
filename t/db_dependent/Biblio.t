@@ -33,10 +33,63 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
-# Mocking variables
-my $context = new Test::MockModule('C4::Context');
+subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
+    plan tests => 23;
 
-mock_marcfromkohafield();
+    my @columns = qw(
+        tagfield tagsubfield liblibrarian libopac repeatable mandatory kohafield tab
+        authorised_value authtypecode value_builder isurl hidden frameworkcode
+        seealso link defaultvalue maxlength
+    );
+
+    # biblio.biblionumber must be mapped so this should return something
+    my $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('biblio.biblionumber', '');
+
+    ok(defined $marc_subfield_structure, "There is a result");
+    is(ref $marc_subfield_structure, "HASH", "Result is a hashref");
+    foreach my $col (@columns) {
+        ok(exists $marc_subfield_structure->{$col}, "Hashref contains key '$col'");
+    }
+    is($marc_subfield_structure->{kohafield}, 'biblio.biblionumber', "Result is the good result");
+    like($marc_subfield_structure->{tagfield}, qr/^\d{3}$/, "tagfield is a valid tagfield");
+
+    # foo.bar does not exist so this should return undef
+    $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('foo.bar', '');
+    is($marc_subfield_structure, undef, "invalid kohafield returns undef");
+};
+
+
+# Mocking variables
+my $biblio_module = new Test::MockModule('C4::Biblio');
+$biblio_module->mock(
+    'GetMarcSubfieldStructure',
+    sub {
+        my ($self) = shift;
+
+        if (   C4::Context->preference('marcflavour') eq 'MARC21'
+            || C4::Context->preference('marcflavour') eq 'NORMARC' ) {
+
+            return {
+                'biblio.title'                 => { tagfield => '245', tagsubfield => 'a' },
+                'biblio.biblionumber'          => { tagfield => '999', tagsubfield => 'c' },
+                'biblioitems.isbn'             => { tagfield => '020', tagsubfield => 'a' },
+                'biblioitems.issn'             => { tagfield => '022', tagsubfield => 'a' },
+                'biblioitems.biblioitemnumber' => { tagfield => '999', tagsubfield => 'd' },
+                'items.itemnumber'             => { tagfield => '952', tagsubfield => '9' },
+            };
+        } elsif ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+
+            return {
+                'biblio.title'                 => { tagfield => '200', tagsubfield => 'a' },
+                'biblio.biblionumber'          => { tagfield => '999', tagsubfield => 'c' },
+                'biblioitems.isbn'             => { tagfield => '010', tagsubfield => 'a' },
+                'biblioitems.issn'             => { tagfield => '011', tagsubfield => 'a' },
+                'biblioitems.biblioitemnumber' => { tagfield => '090', tagsubfield => 'a' },
+                'items.itemnumber'             => { tagfield => '995', tagsubfield => '9' },
+            };
+        }
+    }
+);
 
 my $currency = new Test::MockModule('Koha::Acquisition::Currencies');
 $currency->mock(
@@ -53,10 +106,6 @@ $currency->mock(
 );
 
 sub run_tests {
-
-    # Undef C4::Biblio::inverted_field_map to avoid problems introduced
-    # by caching in TransformMarcToKoha
-    undef $C4::Biblio::inverted_field_map;
 
     my $marcflavour = shift;
     t::lib::Mocks::mock_preference('marcflavour', $marcflavour);
@@ -226,39 +275,6 @@ sub run_tests {
         'Check the number of returned notes of GetMarcNotes' );
 }
 
-sub mock_marcfromkohafield {
-
-    $context->mock('marcfromkohafield',
-        sub {
-            my ( $self ) = shift;
-
-            if ( C4::Context->preference('marcflavour') eq 'MARC21' ||
-                 C4::Context->preference('marcflavour') eq 'NORMARC' ) {
-
-                return  {
-                '' => {
-                    'biblio.title' => [ '245', 'a' ],
-                    'biblio.biblionumber' => [ '999', 'c' ],
-                    'biblioitems.isbn' => [ '020', 'a' ],
-                    'biblioitems.issn' => [ '022', 'a' ],
-                    'biblioitems.biblioitemnumber' => [ '999', 'd' ]
-                    }
-                };
-            } elsif ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
-
-                return {
-                '' => {
-                    'biblio.title' => [ '200', 'a' ],
-                    'biblio.biblionumber' => [ '999', 'c' ],
-                    'biblioitems.isbn' => [ '010', 'a' ],
-                    'biblioitems.issn' => [ '011', 'a' ],
-                    'biblioitems.biblioitemnumber' => [ '090', 'a' ]
-                    }
-                };
-            }
-        });
-}
-
 sub create_title_field {
     my ( $title, $marcflavour ) = @_;
 
@@ -305,31 +321,6 @@ subtest 'NORMARC' => sub {
     plan tests => 29;
     run_tests('NORMARC');
     $dbh->rollback;
-};
-
-subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
-    plan tests => 23;
-
-    my @columns = qw(
-        tagfield tagsubfield liblibrarian libopac repeatable mandatory kohafield tab
-        authorised_value authtypecode value_builder isurl hidden frameworkcode
-        seealso link defaultvalue maxlength
-    );
-
-    # biblio.biblionumber must be mapped so this should return something
-    my $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('biblio.biblionumber', '');
-
-    ok(defined $marc_subfield_structure, "There is a result");
-    is(ref $marc_subfield_structure, "HASH", "Result is a hashref");
-    foreach my $col (@columns) {
-        ok(exists $marc_subfield_structure->{$col}, "Hashref contains key '$col'");
-    }
-    is($marc_subfield_structure->{kohafield}, 'biblio.biblionumber', "Result is the good result");
-    like($marc_subfield_structure->{tagfield}, qr/^\d{3}$/, "tagfield is a valid tagfield");
-
-    # foo.bar does not exist so this should return undef
-    $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('foo.bar', '');
-    is($marc_subfield_structure, undef, "invalid kohafield returns undef");
 };
 
 subtest 'IsMarcStructureInternal' => sub {
