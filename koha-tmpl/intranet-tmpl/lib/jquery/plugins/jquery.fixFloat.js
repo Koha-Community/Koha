@@ -51,12 +51,14 @@
                         'position': 'fixed',
                             'top': '0'
                     });
+                    tbh.addClass("floating");
                 }
                 if (repositionMe) {
                     tbh.css({
                         'position': 'absolute',
                             'top': originalOffset
                     });
+                    tbh.removeClass("floating");
                 }
             });
         }
