@@ -663,6 +663,9 @@ sub ModMember {
     my $rs = $schema->resultset('Borrower')->search({
         borrowernumber => $new_borrower->{borrowernumber},
      });
+
+    delete $new_borrower->{userid} if exists $new_borrower->{userid} and not $new_borrower->{userid};
+
     my $execute_success = $rs->update($new_borrower);
     if ($execute_success ne '0E0') { # only proceed if the update was a success
         # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
