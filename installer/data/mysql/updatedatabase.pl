@@ -12546,6 +12546,26 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.061";
+if ( CheckVersion($DBversion) ) {
+    my ( $cnt ) = $dbh->selectrow_array( q|
+        SELECT COUNT(*) FROM items it
+        LEFT JOIN biblio bi ON bi.biblionumber=it.biblionumber
+        LEFT JOIN biblioitems bii USING (biblioitemnumber)
+        WHERE bi.biblionumber IS NULL
+    |);
+    if( $cnt ) {
+        print "WARNING: You have corrupted data in your items table!! The table contains $cnt references to biblio records that do not exist.\nPlease correct your data IMMEDIATELY after this upgrade and manually add the foreign key constraint for biblionumber in the items table.\n";
+    } else {
+        # now add FK
+        $dbh->do( q|
+            ALTER TABLE items
+            ADD FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+        |);
+        print "Upgrade to $DBversion done (Bug 16170 - Add FK for biblionumber in items)\n";
+    }
+    SetVersion($DBversion);
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
