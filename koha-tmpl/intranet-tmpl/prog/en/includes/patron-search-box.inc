@@ -37,7 +37,7 @@ $(document).ready(function(){
         </div>
 	[% ELSE %]
             <input id="findborrower" name="findborrower" size="40" class="head-searchbox focus" type="text" />
-            <input name="branch" value="[% branch %]" type="hidden" />
+            <input name="branch" value="[% Branches.GetLoggedInBranchcode() %]" type="hidden" />
             <input name="printer" value="" type="hidden" />
             [% IF ( stickyduedate ) %]
             <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
