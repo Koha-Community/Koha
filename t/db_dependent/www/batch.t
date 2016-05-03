@@ -44,7 +44,6 @@ my $file =
 my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
 my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
 my $intranet = $ENV{KOHA_INTRANET_URL};
-my $opac     = $ENV{KOHA_OPAC_URL};
 
 BAIL_OUT("You must set the environment variable KOHA_INTRANET_URL to ".
          "point this test to your staff client. If you do not have ".
@@ -52,7 +51,6 @@ BAIL_OUT("You must set the environment variable KOHA_INTRANET_URL to ".
          "your username and password") unless $intranet;
 
 $intranet =~ s#/$##;
-$opac     =~ s#/$##;
 
 my $agent = Test::WWW::Mechanize->new( autocheck => 1 );
 my $jsonresponse;
