@@ -81,7 +81,13 @@
                     [% FOREACH item IN shelfbrowser_items %]
                         <td class="top">
                             [% item.itemcallnumber %]
-                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber %]&amp;shelfbrowse_itemnumber=[% item.itemnumber %]#shelfbrowser">[% item.title |html %]</a>
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber %]&amp;shelfbrowse_itemnumber=[% item.itemnumber %]#shelfbrowser">
+                                [% item.title |html %]
+                                [% FOREACH subtitl IN item.subtitle %]
+                                    [% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %]
+                                    [% subtitl.subfield |html %]
+                                [% END %]
+                            </a>
                         </td>
                     [% END %]
                 </tr>
