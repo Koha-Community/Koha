@@ -88,7 +88,6 @@ sub GetAuthMARCFromKohaField {
   my $dbh=C4::Context->dbh;
   return 0, 0 unless $kohafield;
   $authtypecode="" unless $authtypecode;
-  my $marcfromkohafield;
   my $sth = $dbh->prepare("select tagfield,tagsubfield from auth_subfield_structure where kohafield= ? and authtypecode=? ");
   $sth->execute($kohafield,$authtypecode);
   my ($tagfield,$tagsubfield) = $sth->fetchrow;

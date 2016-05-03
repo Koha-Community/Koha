@@ -1209,16 +1209,42 @@ C<$frameworkcode> is the framework code.
 
 sub GetUsedMarcStructure {
     my $frameworkcode = shift || '';
-    my $query = qq/
+    my $query = q{
         SELECT *
         FROM   marc_subfield_structure
         WHERE   tab > -1 
             AND frameworkcode = ?
         ORDER BY tagfield, tagsubfield
-    /;
+    };
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($frameworkcode);
     return $sth->fetchall_arrayref( {} );
+}
+
+=head2 GetMarcSubfieldStructure
+
+=cut
+
+sub GetMarcSubfieldStructure {
+    my ( $frameworkcode ) = @_;
+
+    $frameworkcode //= '';
+
+    my $cache     = Koha::Cache->get_instance();
+    my $cache_key = "MarcSubfieldStructure-$frameworkcode";
+    my $cached    = $cache->get_from_cache($cache_key);
+    return $cached if $cached;
+
+    my $dbh = C4::Context->dbh;
+    my $subfield_structure = $dbh->selectall_hashref( q|
+        SELECT *
+        FROM marc_subfield_structure
+        WHERE frameworkcode = ?
+        AND kohafield > ''
+    |, 'kohafield', {}, $frameworkcode );
+
+    $cache->set_in_cache( $cache_key, $subfield_structure );
+    return $subfield_structure;
 }
 
 =head2 GetMarcFromKohaField
@@ -1231,14 +1257,10 @@ for the given frameworkcode or default framework if $frameworkcode is missing
 =cut
 
 sub GetMarcFromKohaField {
-    my $kohafield = shift;
-    my $frameworkcode = shift || '';
+    my ( $kohafield, $frameworkcode ) = @_;
     return (0, undef) unless $kohafield;
-    my $relations = C4::Context->marcfromkohafield;
-    if ( my $mf = $relations->{$frameworkcode}->{$kohafield} ) {
-        return @$mf;
-    }
-    return (0, undef);
+    my $mss = GetMarcSubfieldStructure( $frameworkcode );
+    return ( $mss->{$kohafield}{tagfield}, $mss->{$kohafield}{tagsubfield} );
 }
 
 =head2 GetMarcSubfieldStructureFromKohaField
@@ -1253,24 +1275,14 @@ $frameworkcode is optional. If not given, then the default framework is used.
 =cut
 
 sub GetMarcSubfieldStructureFromKohaField {
-    my ($kohafield, $frameworkcode) = @_;
+    my ( $kohafield, $frameworkcode ) = @_;
 
-    return undef unless $kohafield;
-    $frameworkcode //= '';
+    return unless $kohafield;
 
-    my $dbh = C4::Context->dbh;
-    my $query = qq{
-        SELECT *
-        FROM marc_subfield_structure
-        WHERE kohafield = ?
-          AND frameworkcode = ?
-    };
-    my $sth = $dbh->prepare($query);
-    $sth->execute($kohafield, $frameworkcode);
-    my $result = $sth->fetchrow_hashref;
-    $sth->finish;
-
-    return $result;
+    my $mss = GetMarcSubfieldStructure( $frameworkcode );
+    return exists $mss->{$kohafield}
+        ? $mss->{$kohafield}
+        : undef;
 }
 
 =head2 GetMarcBiblio
@@ -2231,17 +2243,18 @@ sub TransformKohaToMarc {
     my $hash = shift;
     my $record = MARC::Record->new();
     SetMarcUnicodeFlag( $record, C4::Context->preference("marcflavour") );
-    my $db_to_marc = C4::Context->marcfromkohafield;
+    # FIXME Do not we want to get the marc subfield structure for the biblio framework?
+    my $mss = GetMarcSubfieldStructure();
     my $tag_hr = {};
-    while ( my ($name, $value) = each %$hash ) {
-        next unless my $dtm = $db_to_marc->{''}->{$name};
-        next unless ( scalar( @$dtm ) );
-        my ($tag, $letter) = @$dtm;
-        $tag .= '';
+    while ( my ($kohafield, $value) = each %$hash ) {
+        next unless exists $mss->{$kohafield};
+        next unless $mss->{$kohafield};
+        my $tagfield    = $mss->{$kohafield}{tagfield} . '';
+        my $tagsubfield = $mss->{$kohafield}{tagsubfield};
         foreach my $value ( split(/\s?\|\s?/, $value, -1) ) {
             next if $value eq '';
-            $tag_hr->{$tag} //= [];
-            push @{$tag_hr->{$tag}}, [($letter, $value)];
+            $tag_hr->{$tagfield} //= [];
+            push @{$tag_hr->{$tagfield}}, [($tagsubfield, $value)];
         }
     }
     foreach my $tag (sort keys %$tag_hr) {
@@ -2606,9 +2619,6 @@ sub TransformHtmlToMarc {
     return $record;
 }
 
-# cache inverted MARC field map
-our $inverted_field_map;
-
 =head2 TransformMarcToKoha
 
   $result = TransformMarcToKoha( $record, $frameworkcode )
@@ -2632,9 +2642,7 @@ sub TransformMarcToKoha {
     $limit_table = $limit_table || 0;
     $frameworkcode = '' unless defined $frameworkcode;
 
-    unless ( defined $inverted_field_map ) {
-        $inverted_field_map = _get_inverted_marc_field_map();
-    }
+    my $inverted_field_map = _get_inverted_marc_field_map($frameworkcode);
 
     my %tables = ();
     if ( defined $limit_table && $limit_table eq 'items' ) {
@@ -2648,9 +2656,9 @@ sub TransformMarcToKoha {
     # traverse through record
   MARCFIELD: foreach my $field ( $record->fields() ) {
         my $tag = $field->tag();
-        next MARCFIELD unless exists $inverted_field_map->{$frameworkcode}->{$tag};
+        next MARCFIELD unless exists $inverted_field_map->{$tag};
         if ( $field->is_control_field() ) {
-            my $kohafields = $inverted_field_map->{$frameworkcode}->{$tag}->{list};
+            my $kohafields = $inverted_field_map->{$tag}->{list};
           ENTRY: foreach my $entry ( @{$kohafields} ) {
                 my ( $subfield, $table, $column ) = @{$entry};
                 next ENTRY unless exists $tables{$table};
@@ -2668,9 +2676,9 @@ sub TransformMarcToKoha {
             # deal with subfields
           MARCSUBFIELD: foreach my $sf ( $field->subfields() ) {
                 my $code = $sf->[0];
-                next MARCSUBFIELD unless exists $inverted_field_map->{$frameworkcode}->{$tag}->{sfs}->{$code};
+                next MARCSUBFIELD unless exists $inverted_field_map->{$tag}->{sfs}->{$code};
                 my $value = $sf->[1];
-              SFENTRY: foreach my $entry ( @{ $inverted_field_map->{$frameworkcode}->{$tag}->{sfs}->{$code} } ) {
+              SFENTRY: foreach my $entry ( @{ $inverted_field_map->{$tag}->{sfs}->{$code} } ) {
                     my ( $table, $column ) = @{$entry};
                     next SFENTRY unless exists $tables{$table};
                     my $key = _disambiguate( $table, $column );
@@ -2713,18 +2721,17 @@ sub TransformMarcToKoha {
 }
 
 sub _get_inverted_marc_field_map {
+    my ( $frameworkcode ) = @_;
     my $field_map = {};
-    my $relations = C4::Context->marcfromkohafield;
+    my $mss = GetMarcSubfieldStructure( $frameworkcode );
 
-    foreach my $frameworkcode ( keys %{$relations} ) {
-        foreach my $kohafield ( keys %{ $relations->{$frameworkcode} } ) {
-            next unless @{ $relations->{$frameworkcode}->{$kohafield} };    # not all columns are mapped to MARC tag & subfield
-            my $tag      = $relations->{$frameworkcode}->{$kohafield}->[0];
-            my $subfield = $relations->{$frameworkcode}->{$kohafield}->[1];
-            my ( $table, $column ) = split /[.]/, $kohafield, 2;
-            push @{ $field_map->{$frameworkcode}->{$tag}->{list} }, [ $subfield, $table, $column ];
-            push @{ $field_map->{$frameworkcode}->{$tag}->{sfs}->{$subfield} }, [ $table, $column ];
-        }
+    foreach my $kohafield ( keys %{ $mss } ) {
+        next unless exists $mss->{$kohafield};    # not all columns are mapped to MARC tag & subfield
+        my $tag      = $mss->{$kohafield}{tagfield};
+        my $subfield = $mss->{$kohafield}{tagsubfield};
+        my ( $table, $column ) = split /[.]/, $kohafield, 2;
+        push @{ $field_map->{$tag}->{list} }, [ $subfield, $table, $column ];
+        push @{ $field_map->{$tag}->{sfs}->{$subfield} }, [ $table, $column ];
     }
     return $field_map;
 }

@@ -373,7 +373,6 @@ sub new {
     return if !defined($self->{"config"});
 
     $self->{"Zconn"} = undef;    # Zebra Connections
-    $self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
     $self->{"userenv"} = undef;        # User env
     $self->{"activeuser"} = undef;        # current active user
     $self->{"shelves"} = undef;
@@ -929,45 +928,6 @@ sub _new_queryparser {
         }
     }
     return;
-}
-
-=head2 marcfromkohafield
-
-  $dbh = C4::Context->marcfromkohafield;
-
-Returns a hash with marcfromkohafield.
-
-This hash is cached for future use: if you call
-C<C4::Context-E<gt>marcfromkohafield> twice, you will get the same hash without real DB access
-
-=cut
-
-#'
-sub marcfromkohafield
-{
-    my $retval = {};
-
-    # If the hash already exists, return it.
-    return $context->{"marcfromkohafield"} if defined($context->{"marcfromkohafield"});
-
-    # No hash. Create one.
-    $context->{"marcfromkohafield"} = &_new_marcfromkohafield();
-
-    return $context->{"marcfromkohafield"};
-}
-
-# _new_marcfromkohafield
-sub _new_marcfromkohafield
-{
-    my $dbh = C4::Context->dbh;
-    my $marcfromkohafield;
-    my $sth = $dbh->prepare("select frameworkcode,kohafield,tagfield,tagsubfield from marc_subfield_structure where kohafield > ''");
-    $sth->execute;
-    while (my ($frameworkcode,$kohafield,$tagfield,$tagsubfield) = $sth->fetchrow) {
-        my $retval = {};
-        $marcfromkohafield->{$frameworkcode}->{$kohafield} = [$tagfield,$tagsubfield];
-    }
-    return $marcfromkohafield;
 }
 
 =head2 userenv
