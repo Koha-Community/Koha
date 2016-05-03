@@ -510,7 +510,7 @@ sub ModItemFromMarc {
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
     my $item = &TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
-    my $default_values = _build_default_values_for_mod_marc();
+    my $default_values = _build_default_values_for_mod_marc($frameworkcode);
     foreach my $item_field ( keys %$default_values ) {
         $item->{$item_field} = $default_values->{$item_field}
           unless exists $item->{$item_field};
