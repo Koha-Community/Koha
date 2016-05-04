@@ -18,7 +18,7 @@
                     [%- IF selection_type == 'select' -%]
                         "<a href=\"#\" style='cursor:pointer' onclick='select_user(\"[% data.borrowernumber %]\", [% To.json(data) | html %] );'>Select</a>"
                     [%- ELSE -%]
-                        "<a href=\"#\" style='cursor:pointer' onclick='add_user(\"[% data.borrowernumber %]\", \"[% data.firstname %] [% data.surname %]\");'>Select</a>"
+                        "<a href=\"#\" data-borrowernumber=\"[% data.borrowernumber %]\" data-firstname=\"[% data.firstname %]\" data-surname=\"[% data.surname %]\" class=\"btn btn-mini add_user\"><i class=\"fa fa-plus\"></i> Add</a>"
                     [%- END -%]
             }[% UNLESS loop.last %],[% END %]
         [% END %]
