@@ -85,7 +85,7 @@ function verify_images() {
         no_images_msg = '<p>' + no_images_msg + '</p>';
     [% IF ( CAN_user_tools_upload_local_cover_images ) %]
         var please_upload = _("Please select the image file to upload. %sUpload%s").format(
-            "<a class='btn' href='/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber %]&amp;filetype=image'>",
+            "<a class='btn btn-mini' href='/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber %]&amp;filetype=image'><i class='fa fa-upload' aria-hidden='true'></i> ",
             "</a>");
         no_images_msg += "<p id='upload_image'>" + please_upload + '</p>';
     [% END %]
