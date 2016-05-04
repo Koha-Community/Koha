@@ -100,6 +100,14 @@ $(document).ready(function(){
         e.preventDefault();
         filterByFirstLetterSurname($(this).text());
     });
+
+    $("body").on("click",".select_user",function(e){
+        e.preventDefault();
+        var borrowernumber = $(this).data("borrowernumber");
+        var guarantor_data = $("#guarantor_data"+borrowernumber).val();
+        select_user( borrowernumber, JSON.parse(guarantor_data) );
+    });
+
 });
 
 function filter() {

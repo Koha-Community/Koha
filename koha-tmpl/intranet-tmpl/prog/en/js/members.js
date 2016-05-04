@@ -143,8 +143,7 @@ function Dopop(link) {
 }
 
 function Dopopguarantor(link) {
-
-    var newin=window.open(link,'popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=yes,top');
+    var newin=window.open(link,'popup','width=800,height=500,resizable=no,toolbar=false,scrollbars=yes,top');
 }
 
 $(document).ready(function(){
