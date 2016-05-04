@@ -52,6 +52,7 @@ use CGI qw ( -utf8 );
 use File::Spec;
 
 use C4::Acquisition qw( GetOrders GetOrder get_rounded_price GetBasket GetBasketgroup GetBasketsByBasketgroup GetBasketgroups GetBasketsByBookseller ModBasket CloseBasketgroup GetBasketGroupAsCSV DelBasketgroup ReOpenBasketgroup ModBasketgroup NewBasket NewBasketgroup );
+use Koha::Database;
 use Koha::EDI qw( get_edifact_ean create_edi_order );
 
 use Koha::Biblioitems;
