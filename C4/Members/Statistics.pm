@@ -40,10 +40,6 @@ BEGIN {
     );
 }
 
-
-our $fields = get_fields();
-
-
 =head2 get_fields
   Get fields form syspref 'StatisticsFields'
   Returns list of valid fields, defaults to 'location|itype|ccode'
@@ -79,6 +75,7 @@ sub get_fields {
 sub construct_query {
     my $count    = shift;
     my $subquery = shift;
+    my $fields = get_fields();
     my @select_fields = split '\|', $fields;
     my $query = "SELECT COUNT(*) as count_$count,";
     $query .= join ',', @select_fields;
