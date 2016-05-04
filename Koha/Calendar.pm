@@ -52,23 +52,14 @@ sub _init {
     return;
 }
 
-
-# FIXME: use of package-level variables for caching the holiday
-# lists breaks persistance engines.  As of 2013-12-10, the RM
-# is allowing this with the expectation that prior to release of
-# 3.16, bug 8089 will be fixed and we can switch the caching over
-# to Koha::Cache.
-
-our $exception_holidays;
-
 sub exception_holidays {
     my ( $self ) = @_;
     my $dbh = C4::Context->dbh;
     my $branch = $self->{branchcode};
-    if ( $exception_holidays ) {
-        $self->{exception_holidays} = $exception_holidays;
-        return $exception_holidays;
-    }
+    my $cache  = Koha::Cache->get_instance();
+    my $cached = $cache->get_from_cache('exception_holidays');
+    return $cached if $cached;
+
     my $exception_holidays_sth = $dbh->prepare(
 'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 1'
     );
@@ -85,8 +76,8 @@ sub exception_holidays {
     }
     $self->{exception_holidays} =
       DateTime::Set->from_datetimes( dates => $dates );
-    $exception_holidays = $self->{exception_holidays};
-    return $exception_holidays;
+    $cache->set_in_cache( 'exception_holidays', $self->{exception_holidays} );
+    return $self->{exception_holidays};
 }
 
 sub single_holidays {

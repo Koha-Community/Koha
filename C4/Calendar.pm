@@ -278,6 +278,7 @@ sub insert_single_holiday {
     # changed the 'single_holidays' table, lets force/reset its cache
     my $cache = Koha::Cache->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
+    $cache->clear_from_cache( 'exception_holidays') ;
 
     return $self;
 
@@ -322,6 +323,7 @@ sub insert_exception_holiday {
     # changed the 'single_holidays' table, lets force/reset its cache
     my $cache = Koha::Cache->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
+    $cache->clear_from_cache( 'exception_holidays') ;
 
     return $self;
 }
@@ -422,6 +424,7 @@ UPDATE special_holidays SET title = ?, description = ?
     # changed the 'single_holidays' table, lets force/reset its cache
     my $cache = Koha::Cache->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
+    $cache->clear_from_cache( 'exception_holidays') ;
 
     return $self;
 }
@@ -464,6 +467,7 @@ UPDATE special_holidays SET title = ?, description = ?
     # changed the 'single_holidays' table, lets force/reset its cache
     my $cache = Koha::Cache->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
+    $cache->clear_from_cache( 'exception_holidays') ;
 
     return $self;
 }
@@ -544,6 +548,7 @@ sub delete_holiday {
     # changed the 'single_holidays' table, lets force/reset its cache
     my $cache = Koha::Cache->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
+    $cache->clear_from_cache( 'exception_holidays') ;
 
     return $self;
 }
@@ -574,6 +579,7 @@ sub delete_holiday_range {
     # changed the 'single_holidays' table, lets force/reset its cache
     my $cache = Koha::Cache->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
+    $cache->clear_from_cache( 'exception_holidays') ;
 
 }
 
@@ -627,6 +633,7 @@ sub delete_exception_holiday_range {
     # changed the 'single_holidays' table, lets force/reset its cache
     my $cache = Koha::Cache->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
+    $cache->clear_from_cache( 'exception_holidays') ;
 }
 
 =head2 isHoliday
