@@ -33,6 +33,11 @@ use Koha::DateUtils;
 
 my $input = new CGI;
 
+unless ( C4::Context->preference('useDischarge') ) {
+    print $input->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 my $op = $input->param("op");
 
 # Getting the template and auth
