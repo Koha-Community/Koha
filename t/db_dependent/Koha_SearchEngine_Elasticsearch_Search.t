@@ -14,10 +14,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
-use strict;
-use warnings;
 
-use Test::More tests => 10;    # last test to print
+use Modern::Perl;
+
+use Test::More tests => 10;
+
 use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 
 my $builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new( { index => 'mydb' } );
@@ -35,14 +36,25 @@ is( $searcher->index, 'mydb', 'Testing basic accessor' );
 
 ok( my $query = $builder->build_query('easy'), 'Build a search query');
 
-ok( my $results = $searcher->search( $query) , 'Do a search ' );
+SKIP: {
 
-ok( my $marc = $searcher->json2marc( $results->first ), 'Convert JSON to MARC');
+    eval { $builder->get_elasticsearch_params; };
 
-is (my $count = $searcher->count( $query ), 0 , 'Get a count of the results, without returning results ');
+    skip 'ElasticSeatch configuration not available', 6
+        if $@;
 
-ok ($results = $searcher->search_compat( $query ), 'Test search_compat' );
+    ok( my $results = $searcher->search( $query) , 'Do a search ' );
 
-ok (($results,$count) = $searcher->search_auth_compat ( $query ), 'Test search_auth_compat' );
+    ok( my $marc = $searcher->json2marc( $results->first ), 'Convert JSON to MARC');
 
-is ( $count = $searcher->count_auth_use($searcher,1), 0, 'Testing count_auth_use');
+    is (my $count = $searcher->count( $query ), 0 , 'Get a count of the results, without returning results ');
+
+    ok ($results = $searcher->search_compat( $query ), 'Test search_compat' );
+
+    ok (($results,$count) = $searcher->search_auth_compat ( $query ), 'Test search_auth_compat' );
+
+    is ( $count = $searcher->count_auth_use($searcher,1), 0, 'Testing count_auth_use');
+
+}
+
+1;
