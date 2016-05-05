@@ -64,7 +64,7 @@ sub get_all_authorities_iterator {
         { columns => [qw/ authid authtypecode marcxml /] } );
     my $next_func = sub {
         my $row = $rs->next();
-        return undef if !$row;
+        return if !$row;
         my $authid       = $row->authid;
         my $authtypecode = $row->authtypecode;
         my $marcxml      = $row->marcxml;

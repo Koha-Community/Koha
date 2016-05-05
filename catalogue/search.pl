@@ -472,8 +472,6 @@ my $builder = Koha::SearchEngine::QueryBuilder->new(
 my $searcher = Koha::SearchEngine::Search->new(
     { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 
-my @results;
-
 ## I. BUILD THE QUERY
 (
     $error,             $query, $simple_query, $query_cgi,
