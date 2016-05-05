@@ -3154,7 +3154,6 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `gstrate` decimal(6,4) default NULL, -- the tax rate for this line item
   `discount` float(6,4) default NULL, -- the discount for this line item
   `budget_id` int(11) NOT NULL, -- the fund this order goes against (aqbudgets.budget_id)
-  `budgetgroup_id` int(11) NOT NULL, -- not used? always zero
   `budgetdate` date default NULL, -- not used? always NULL
   `sort1` varchar(80) default NULL, -- statistical field
   `sort2` varchar(80) default NULL, -- second statistical field
