@@ -129,11 +129,7 @@
 				<select name="itype" id="itypeloop">
                 <option value="">All item types</option>
 				[% FOREACH itypeloo IN itypeloop %]
-				[% IF ( itypeloo.selected ) %]
-                <option value="[% itypeloo.itemtype %]" selected="selected">[% itypeloo.description |html %]</option>
-				[% ELSE %]
                 <option value="[% itypeloo.itemtype %]">[% itypeloo.description |html %]</option>
-				[% END %]
 				[% END %]
 				</select>
 			</p>
