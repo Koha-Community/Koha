@@ -1428,7 +1428,7 @@ DROP TABLE IF EXISTS `letter`;
 CREATE TABLE `letter` ( -- table for all notice templates in Koha
   `module` varchar(20) NOT NULL default '', -- Koha module that triggers this notice or slip
   `code` varchar(20) NOT NULL default '', -- unique identifier for this notice or slip
-  `branchcode` varchar(10) default NULL, -- the branch this notice or slip is used at (branches.branchcode)
+  `branchcode` varchar(10) NOT NULL default '', -- the branch this notice or slip is used at (branches.branchcode)
   `name` varchar(100) NOT NULL default '', -- plain text name for this notice or slip
   `is_html` tinyint(1) default 0, -- does this notice or slip use HTML (1 for yes, 0 for no)
   `title` varchar(200) NOT NULL default '', -- subject line of the notice
@@ -2577,7 +2577,7 @@ CREATE TABLE language_script_mapping (
 DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions` (
   `module_bit` int(11) NOT NULL DEFAULT 0,
-  `code` varchar(64) DEFAULT NULL,
+  `code` varchar(64) NOT NULL DEFAULT '',
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY  (`module_bit`, `code`),
   CONSTRAINT `permissions_ibfk_1` FOREIGN KEY (`module_bit`) REFERENCES `userflags` (`bit`)
