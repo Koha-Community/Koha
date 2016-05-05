@@ -59,7 +59,7 @@ if ( $email_add ) {
             query           => $query,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { borrow => 1 },
+            flagsrequired   => { catalogue => 1 },
         }
     );
 

@@ -37,7 +37,7 @@ $dbh->{RaiseError} = 1;
         # we don't need to bother about permissions for this test
         my $flags = {
             superlibrarian    => 1, acquisition       => 0,
-            borrow            => 0, borrowers         => 0,
+            borrowers         => 0,
             catalogue         => 1, circulate         => 0,
             coursereserves    => 0, editauthorities   => 0,
             editcatalogue     => 0, management        => 0,
