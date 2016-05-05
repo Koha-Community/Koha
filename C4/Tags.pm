@@ -57,7 +57,9 @@ BEGIN {
 	}
 	if ($ext_dict) {
 		require Lingua::Ispell;
-		import Lingua::Ispell qw(spellcheck add_word_lc save_dictionary);
+        import Lingua::Ispell qw(spellcheck add_word_lc);
+        $Lingua::Ispell::path = $ext_dict;
+        $debug and print STDERR "\$Lingua::Ispell::path = $Lingua::Ispell::path\n";
 	}
 }
 
@@ -66,12 +68,6 @@ BEGIN {
 More verose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"}.
 
 =cut
-
-INIT {
-    my $ext_dict = C4::Context->preference('TagsExternalDictionary');
-    $ext_dict and $Lingua::Ispell::path = $ext_dict;
-    $debug and print STDERR "\$Lingua::Ispell::path = $Lingua::Ispell::path\n";
-}
 
 sub get_filters {
 	my $query = "SELECT * FROM tags_filters ";
