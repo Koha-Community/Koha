@@ -9,6 +9,9 @@ BEGIN {
     use_ok('Koha::List::Patron');
 }
 
+C4::Context->_new_userenv('DUMMY SESSION');
+C4::Context->set_userenv(0,0,0,'firstname','surname', 'BRANCH1', 'Library 1', 0, ', ');
+
 my $dbh = C4::Context->dbh;
 my $sth = $dbh->prepare("SELECT * FROM borrowers ORDER BY RAND() LIMIT 10");
 $sth->execute();
