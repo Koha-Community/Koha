@@ -43,7 +43,7 @@ if ( $response->is_success ) {
     my $content      = $response->decoded_content();
     my $decoded_json = decode_json($content);
     my ( $userid, $cookie, $sessionID ) =
-      checkauth( $query, 1,  { borrow => 1 }, 'opac', $decoded_json->{'email'} );
+      checkauth( $query, 1,  {}, 'opac', $decoded_json->{'email'} );
     if ($userid) { # a valid user has logged in
         print $query->header( -cookie => $cookie );
         print $decoded_json;
