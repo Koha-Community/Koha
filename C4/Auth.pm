@@ -192,7 +192,10 @@ sub get_template_and_user {
                 -HttpOnly => 1,
             );
 
-            $template->param( loginprompt => 1 );
+            $template->param(
+                loginprompt => 1,
+                script_name => _get_script_name(),
+            );
             print $in->{query}->header(
                 {   type              => 'text/html',
                     charset           => 'utf-8',
@@ -1208,6 +1211,7 @@ sub checkauth {
         opaclayoutstylesheet                  => C4::Context->preference("opaclayoutstylesheet"),
         login                                 => 1,
         INPUTS                                => \@inputs,
+        script_name                           => _get_script_name(),
         casAuthentication                     => C4::Context->preference("casAuthentication"),
         shibbolethAuthentication              => $shib,
         SessionRestrictionByIP                => C4::Context->preference("SessionRestrictionByIP"),
@@ -2039,6 +2043,24 @@ sub getborrowernumber {
         }
     }
     return 0;
+}
+
+=head2 _get_script_name
+
+This returns the correct script name, for use in redirecting back to the correct page after showing
+the login screen. It depends on details of the package Plack configuration, and should not be used
+outside this context.
+
+=cut
+
+sub _get_script_name {
+    # This is the method about.pl uses to detect Plack; now that two places use it, it MUST be
+    # right.
+    if ( ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) && $ENV{SCRIPT_NAME} =~ m,^/(intranet|opac)(.*), ) {
+        return '/cgi-bin/koha' . $2;
+    } else {
+        return $ENV{SCRIPT_NAME};
+    }
 }
 
 END { }    # module clean-up code here (global destructor)

@@ -155,7 +155,7 @@
                             [% IF SCO_login %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="auth" id="auth" method="post">
                             [% ELSE %]
-                                <form action="/cgi-bin/koha/opac-user.pl" name="auth" id="auth" method="post">
+                                <form action="[% script_name %]" name="auth" id="auth" method="post">
                             [% END %]
                                 <input type="hidden" name="koha_login_context" value="opac" />
                                 <fieldset class="brief">
