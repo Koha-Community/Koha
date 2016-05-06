@@ -40,7 +40,7 @@
 [% END %]
 
 <!-- login prompt time-->
-<form action="/cgi-bin/koha/mainpage.pl" method="post" name="loginform" id="loginform">
+<form action="[% script_name %]" method="post" name="loginform" id="loginform">
     <input type="hidden" name="koha_login_context" value="intranet" />
 [% FOREACH INPUT IN INPUTS %]
     <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
