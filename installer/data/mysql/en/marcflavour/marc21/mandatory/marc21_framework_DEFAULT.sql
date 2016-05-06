@@ -7,7 +7,7 @@
 --                    guided by Paul POULAIN
 --                      by thd for LibLime
 --
---           Revised to Update No. 21 (September 2015)
+--           Revised to Update No. 22 (April 2016)
 -- *************************************************************
 
 
@@ -385,7 +385,7 @@ INSERT IGNORE INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, 
 		('651', 'SUBJECT ADDED ENTRY--GEOGRAPHIC NAME', 'SUBJECT ADDED ENTRY--GEOGRAPHIC NAME', 1, 0, NULL, ''),
 		('652', 'SUBJECT ADDED ENTRY--REVERSE GEOGRAPHIC (BK MP SE) [OBSOLETE]', 'SUBJECT ADDED ENTRY--REVERSE GEOGRAPHIC (BK MP SE) [OBSOLETE]', 1, 0, NULL, ''),
 		('653', 'INDEX TERM--UNCONTROLLED', 'INDEX TERM--UNCONTROLLED', 1, 0, NULL, ''),
-		('654', 'SUBJECT ADDED ENTRY--FACETED TOPICAL TERM', 'SUBJECT ADDED ENTRY--FACETED TOPICAL TERM', 1, 0, NULL, ''),
+		('654', 'SUBJECT ADDED ENTRY--FACETED TOPICAL TERMS', 'SUBJECT ADDED ENTRY--FACETED TOPICAL TERMS', 1, 0, NULL, ''),
 		('655', 'INDEX TERM--GENRE/FORM', 'INDEX TERM--GENRE/FORM', 1, 0, NULL, ''),
 		('656', 'INDEX TERM--OCCUPATION', 'INDEX TERM--OCCUPATION', 1, 0, NULL, ''),
 		('657', 'INDEX TERM--FUNCTION', 'INDEX TERM--FUNCTION', 1, 0, NULL, ''),
@@ -1462,10 +1462,12 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
         ('382', 'a', 'Medium of performance', 'Medium of performance', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('382', 'b', 'Soloist', 'Soloist', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('382', 'd', 'Doubling instrument', 'Doubling instrument', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
-		('382', 'e', 'Number of ensembles', 'Number of ensembles', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('382', 'e', 'Number of ensembles of the same type', 'Number of ensembles of the same type', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('382', 'n', 'Number of performers of the same medium', 'Number of performers of the same medium', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('382', 'p', 'Alternative medium of performance', 'Alternative medium of performance', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('382', 'r', 'Total number of individuals performing alongside ensembles', 'Total number of individuals performing alongside ensembles', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('382', 's', 'Total number of performers', 'Total number of performers', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('382', 't', 'Total number of ensembles', 'Total number of ensembles', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('382', 'v', 'Note', 'Note', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('383', '2', 'Source', 'Source', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('383', '6', 'Linkage', 'Linkage', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
@@ -2534,6 +2536,8 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('752', 'f', 'City subsection', 'City subsection', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('752', 'g', 'Other nonjurisdictional geographic region and feature', 'Other nonjurisdictional geographic region and feature', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('752', 'h', 'Extraterrestrial area', 'Extraterrestrial area', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
+        ('753', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
+        ('753', '2', 'Source of term', 'Source of term', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('753', '6', 'Linkage', 'Linkage', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('753', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('753', 'a', 'Make and model of machine', 'Make and model of machine', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),

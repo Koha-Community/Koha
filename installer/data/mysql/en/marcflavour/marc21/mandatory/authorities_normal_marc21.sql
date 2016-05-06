@@ -1,7 +1,7 @@
 -- *******************************************************
 --   KOHA  MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS
 --
---        Revised to Update No. 21 (September 2015)
+--        Revised to Update No. 22 (April 2016)
 -- *******************************************************
 
 -- ******************************************************
@@ -915,10 +915,12 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '382', 'a', 'Medium of performance', 'Medium of performance', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'b', 'Soloist', 'Soloist', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'd', 'Doubling instrument', 'Doubling instrument', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '382', 'e', 'Number of ensembles', 'Number of ensembles', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '382', 'e', 'Number of ensembles of the same type', 'Number of ensembles of the same type', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'n', 'Number of performers of the same medium', 'Number of performers of the same medium', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'p', 'Alternative medium of performance', 'Alternative medium of performance', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '382', 'r', 'Total number of individuals performing alongside ensembles', 'Total number of individuals performing alongside ensembles', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 's', 'Total number of performers', 'Total number of performers', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '382', 't', 'Total number of ensembles', 'Total number of ensembles', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'v', 'Note', 'Note', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', '2', 'Source of term', 'Source of term', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
