@@ -7,6 +7,11 @@
 
 $(document).ready(function(){
     showCover([% imagenumber %]);
+    $(".show_cover").on("click",function(e){
+        e.preventDefault();
+        var coverimg = $(this).data("coverimg");
+        showCover(coverimg);
+    });
 });
 
 function showCover(img) {
@@ -75,7 +80,7 @@ img.thumbnail {
 
             [% FOREACH img IN images %]
                 [% IF img %]
-                <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% img %]" onclick="showCover([% img %]); return false;">
+                <a class="show_cover" data-coverimg="[% img %]" href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% img %]">
                     [% IF ( imagenumber == img ) %]
                         <img class="thumbnail selected" id="[% img %]" src="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail" />
                     [% ELSE %]
