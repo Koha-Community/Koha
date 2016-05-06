@@ -31,6 +31,9 @@ $(document).ready(function(){
         e.preventDefault();
         CancelUpload();
     });
+    $("#mainformsubmit").on("click",function(){
+        return CheckForm( document.getElementById("processfile"));
+    });
 });
 function CheckForm(f) {
     if ($("#fileToUpload").value == '') {
@@ -179,7 +182,14 @@ function cbUpload( status, fileid ) {
     </li>
 	<li>
 		<label for="encoding">Character encoding: </label>
-            <select name="encoding" id="encoding"><option value="utf8" selected="selected">UTF-8 (Default)</option><option value="MARC-8">MARC 8</option><option value="ISO_5426">ISO 5426</option><option value="ISO_6937">ISO 6937</option><option value=ISO_8859-1">ISO 8859-1</option><option value="EUC-KR">EUC-KR</option></select>
+            <select name="encoding" id="encoding">
+                <option value="utf8" selected="selected">UTF-8 (Default)</option>
+                <option value="MARC-8">MARC 8</option>
+                <option value="ISO_5426">ISO 5426</option>
+                <option value="ISO_6937">ISO 6937</option>
+                <option value="ISO_8859-1">ISO 8859-1</option>
+                <option value="EUC-KR">EUC-KR</option>
+            </select>
 	</li>
 </ol></fieldset>
 
@@ -254,7 +264,7 @@ function cbUpload( status, fileid ) {
       </li>
     </ol>
   </fieldset>
-  <fieldset class="action"><input type="button" id="mainformsubmit" onclick="return CheckForm(this.form);" value="Stage for import" /></fieldset>
+  <fieldset class="action"><input type="button" id="mainformsubmit" value="Stage for import" /></fieldset>
  
        <div id="jobpanel"><div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
      <div id="jobfailed"></div></div>
