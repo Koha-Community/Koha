@@ -183,7 +183,14 @@ $('#sort_by').change(function() {
     [% END %]
 
 [% IF LocalCoverImages %]KOHA.LocalCover.LoadResultsCovers();[% END %]
-
+    $("#select_all").on("click",function(e){
+        e.preventDefault();
+        selectAll();
+    });
+    $("#clear_all").on("click",function(e){
+        e.preventDefault();
+        clearAll();
+    });
 });
 
 
@@ -338,9 +345,9 @@ var holdForPatron = function () {
                 [% total %] result(s) found [% IF ( query_desc ) %]for <span style="font-weight: bold;">'[% query_desc |html %]'</span>[% END %][% IF limit_desc  %]&nbsp;with limit(s): <span style="font-weight: bold;">'[% limit_desc | html %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName %] Catalog[% END %].<br />&nbsp;
             </h3>
             <div id="selection_ops" class="cartlist" style="display:none">
-                <a href="#" onclick="selectAll(); return false;">Select all</a>
+                <a href="#" id="select_all">Select all</a>
                 |
-                <a href="#" onclick="clearAll(); return false;">Clear all</a>
+                <a href="#" id="clear_all">Clear all</a>
                 |
                 <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
                 <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
