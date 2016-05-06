@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
-"POT-Creation-Date: 2015-11-20 02:31-0300\n"
-"PO-Revision-Date: 2015-11-25 23:43+0000\n"
+"POT-Creation-Date: 2016-05-06 00:06-0300\n"
+"PO-Revision-Date: 2016-05-04 02:04+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1448495037.000000\n"
+"X-POOTLE-MTIME: 1462327448.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -196,10 +196,10 @@ msgid ""
 "items)."
 msgstr "'CCODE' 是館藏代碼(編目與館藏時出現)。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:24
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:26
 #, c-format
-msgid "'Call Number' is for your item's call number prefix"
-msgstr "'Call Number' 是供館藏索書號用的前置碼"
+msgid "'Call Number' is for your item's call number or call number prefix"
+msgstr "'索書號' 是供館藏索書號用的前置碼"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:21
 #, c-format
@@ -342,17 +342,17 @@ msgstr ""
 msgid "'Length' - For use with control fields, 001-009"
 msgstr "'長度' - 係供控制欄位 001-009使用"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:10
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:9
 #, c-format
 msgid "'Librarian' field will show the logged in librarian's username"
 msgstr "'館員' 欄位顯示登錄的圖書館名稱"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:25
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:27
 #, c-format
-msgid "'Library' is the library that owns this subscription. "
+msgid "'Library' is the branch that owns this subscription. "
 msgstr "'圖書館' 是擁有該訂閱的圖書館。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:23
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:42
 #, c-format
 msgid "'Location' is for the shelving location"
 msgstr "'位置' 是館藏位置"
@@ -391,7 +391,7 @@ msgstr "'匹配閾值' - 達到指定的 '點數' 後，才認定為 '匹配'"
 msgid "'NOT_LOAN' is used to list reasons why a title is not for loan."
 msgstr "'NOT_LOAN' 列出不外借的原因。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:33
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:35
 #, c-format
 msgid ""
 "'Nonpublic Note' should be used for notes that are only visible to the "
@@ -406,12 +406,13 @@ msgid ""
 "runs"
 msgstr "'說明' 顯示在儲存報表頁面，列出該報表更詳盡的說明"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:67
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:80
 #, c-format
 msgid ""
 "'Numbering pattern' will help you determine how the numbers are printed for "
-"each issue "
-msgstr "'編碼模式' 協助您決定每期列印期號的方式 "
+"each issue. Patterns entered here are saved and editable at any time by "
+"visiting 'Manage numbering patterns' "
+msgstr "'編碼模式' 協助您決定列印期號的方式。進入 '管理編碼模式' 隨時可編修它 "
 
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:22
 #, c-format
@@ -573,14 +574,14 @@ msgid ""
 "the source (such as the library name)."
 msgstr "'伺服器名稱' 應使用易於辨識來源的名稱(例如圖書館名稱)。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:80
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:79
 #, c-format
 msgid ""
 "'Subscription end date' should only be entered for subscriptions that have "
 "ended (if you're entering in a backlog of serials)"
 msgstr "'訂閱到期日期'，祗供有到期日的訂閱使用(即過期期刊)"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:79
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:77
 #, c-format
 msgid ""
 "'Subscription length' is the number of issues or months in the subscription. "
@@ -629,7 +630,7 @@ msgid ""
 "protected."
 msgstr "'使用者帳號' 與 '密碼' 是伺服器要求的。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:11
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:10
 #, c-format
 msgid ""
 "'Vendor' can be found by either searching vendors entered via the "
@@ -668,22 +669,23 @@ msgstr "( ! 表示 '不可見' 或在折疊時為 '不可收疊')"
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-numberpatterns.tt:11
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-detail.tt:9
 #: intranet-tmpl/prog/en/modules/help/serials/serials-edit.tt:27
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:86
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:105
 #: intranet-tmpl/prog/en/modules/help/serials/serials-home.tt:9
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:95
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:67
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -712,6 +714,10 @@ msgstr "( ! 表示 '不可見' 或在折疊時為 '不可收疊')"
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:33
 #: intranet-tmpl/prog/en/modules/help/labels/spinelabel-home.tt:14
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:44
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:17
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:49
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:79
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:103
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:15
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:31
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course-details.tt:9
@@ -845,9 +851,19 @@ msgstr "( ! 表示 '不可見' 或在折疊時為 '不可收疊')"
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "(online)."
 msgstr "(線上)。"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid ""
+"(system preference) must be set to \"Don't automatically transfer items to "
+"their home library when they are returned\" for Rotating Collections to "
+"function properly."
+msgstr ""
+"(系統偏好)必須設為 \"館藏還入後不自動移轉至所屬圖書館\" 巡迴書庫才能順利運。"
 
 #: intranet-tmpl/prog/en/modules/help/offline_circ/list.tt:5
 #, c-format
@@ -962,54 +978,54 @@ msgstr "1 = 預期"
 msgid "1 =&gt; !OPAC Intranet Editor Collapsed"
 msgstr "1 =&gt; !OPAC Intranet編輯器毀損"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:58
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:69
 #, c-format
 msgid "1/ 2 months (6/year): Bi-monthly"
 msgstr "1/2 月(6/年)：雙月刊"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:55
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:66
 #, c-format
 msgid "1/ 2 weeks: Twice monthly (fortnightly)"
 msgstr "1/ 2 週：每月兩次 (兩週)"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:63
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:74
 #, c-format
 msgid "1/ 2 years: Bi-annual"
 msgstr "1/ 2 年：半年刊"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:59
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:70
 #, c-format
 msgid "1/ 3 months (1/quarter): Quarterly"
 msgstr "1/3 月(1/季)：季刊"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:56
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:67
 #, c-format
 msgid "1/ 3 weeks: Tri-weekly"
 msgstr "1/ 3 週：三週刊"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:52
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:63
 #, c-format
 msgid "1/day: Daily"
 msgstr "1/ 日：日刊"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:57
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:68
 #, c-format
 msgid "1/month: Monthly"
 msgstr "1/月：月刊"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:60
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:71
 #, c-format
 msgid ""
 "1/quarter (seasonal) : Quarterly related to seasons (ie. Summer, Autumn, "
 "Winter, Spring)"
 msgstr "1/季(季節性)：與季節有關 (如：春、夏、秋、冬)"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:54
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:65
 #, c-format
 msgid "1/week: Weekly"
 msgstr "1/週：週刊"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:62
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:73
 #, c-format
 msgid "1/year: Annual"
 msgstr "1/年：年刊"
@@ -1034,12 +1050,12 @@ msgstr "2 = 目錄"
 msgid "2 =&gt; !OPAC !Intranet Editor !Collapsed"
 msgstr "2 =&gt; !OPAC！內部網路編輯器！毀損"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:51
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:62
 #, c-format
 msgid "2/day: Twice daily"
 msgstr "2/天：一天兩次"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:61
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:72
 #, c-format
 msgid "2/year: Half yearly"
 msgstr "2/年：一年兩次"
@@ -1059,7 +1075,7 @@ msgstr "3 = 讀者"
 msgid "3 =&gt; !OPAC !Intranet Editor Collapsed"
 msgstr "3 =&gt; !OPAC!內部網路編輯器已毀損"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:53
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:64
 #, c-format
 msgid "3/week: Three times a week"
 msgstr "3/週：每週三次"
@@ -1243,8 +1259,8 @@ msgid ""
 "no holds and owe no money. To enable this option on the patron record you "
 "need to set the useDischarge system preference to 'Allow'."
 msgstr ""
-"退出表示讀者沒有借出、沒有保留也沒有欠款。必須設定 useDischarge 系統偏好為 "
-"'允許' 才能啟用此功能。"
+"離館除籍證明讀者沒有借出、沒有保留也沒有欠款。必須設定 useDischarge 系統偏好"
+"為 '允許' 才能啟用此功能。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:184
 #, c-format
@@ -1267,6 +1283,7 @@ msgid ""
 msgstr "布局定義印在讀者證的文字與照片位置。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:38
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:7
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:5
 #, c-format
 msgid ""
@@ -1318,6 +1335,7 @@ msgid ""
 msgstr "讀者照片可以經由 '管理讀者照片' 區，瀏覽本機的照片檔新增它 "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:23
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:39
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:19
 #, c-format
 msgid ""
@@ -1345,6 +1363,7 @@ msgstr ""
 "印表機給個設定檔，指示上下左右的位移值。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:32
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:53
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:5
 #, c-format
 msgid ""
@@ -1389,6 +1408,7 @@ msgstr "報表的摘要將與選項同時出現，供改變對映規則之用"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:5
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:28
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:21
 #, c-format
 msgid ""
 "A template is based on the label/card stock you are using. This might be "
@@ -1637,7 +1657,7 @@ msgstr "新增訂閱期刊"
 msgid "Add CSV Profiles"
 msgstr "新增 CSV 設定檔"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:74
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:73
 #, c-format
 msgid "Add New Authorized Value"
 msgstr "新增容許值"
@@ -1658,6 +1678,7 @@ msgid "Add Quote"
 msgstr "新增引句"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:7
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:85
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-batch.tt:7
 #, c-format
 msgid "Add a Batch"
@@ -1673,12 +1694,14 @@ msgstr "新增合約"
 msgid "Add a Fund"
 msgstr "新增基金"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:9
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:7
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:7
 #, c-format
 msgid "Add a Layout"
 msgstr "新增布局"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:57
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:9
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:9
 #, c-format
@@ -1691,6 +1714,7 @@ msgid "Add a Staff Patron"
 msgstr "新增館員讀者"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:7
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:23
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:7
 #, c-format
 msgid "Add a Template"
@@ -2018,7 +2042,18 @@ msgstr "鍵入館藏條碼並按下 '選擇' 鈕後，出現確認訊息。"
 msgid "After filling in all of the fields, click 'Submit'"
 msgstr "鍵入資料於所有欄位後，點選 '送出'"
 
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:98
+#, c-format
+msgid ""
+"After filling in this data click the 'Test prediction pattern' button to see "
+"what issues the system will generate, if there are irregularities you can "
+"choose which issues don't exist from the list presented."
+msgstr ""
+"填入資料後按 '測試預期模式' 鈕檢視系統產生的卷期，若出現不規則卷期可從清單選"
+"擇不存在的卷期。"
+
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:26
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:42
 #, c-format
 msgid ""
 "After finding any anomalies in the printed document, create a profile and "
@@ -2056,6 +2091,7 @@ msgid ""
 msgstr "儲存之後，您可在行事曆右方看到事件清單摘要"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:23
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:101
 #, c-format
 msgid ""
 "After saving your file, simply print to the blank labels you have in your "
@@ -2069,12 +2105,14 @@ msgid ""
 "what preferences were saved"
 msgstr "儲存偏好後，出現確認訊息，告知已儲存的偏好"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:15
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:13
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:32
 #, c-format
 msgid "After saving, your layouts will appear on the 'Manage Layouts' page."
 msgstr "儲存之後，您的布局將出現在 '管理布局' 頁面。"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:75
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:27
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:27
 #, c-format
@@ -2082,6 +2120,7 @@ msgid "After saving, your profiles will appear on the 'Manage Profiles' page."
 msgstr "儲存之後，您的設定檔將出現在 '管理設定檔' 頁面。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:31
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:47
 #, c-format
 msgid ""
 "After saving, your templates will appear on the 'Manage Templates' page."
@@ -2178,8 +2217,8 @@ msgid ""
 "customized using the Notices &amp; Slips Tool. The system comes with several "
 "predefined templates that will appear when you first visit this tool."
 msgstr ""
-"Koha產生的通知與流通收條都可以用通知&amp;收條工具客製它。系統本身有若干預設的"
-"模版在工具頁面裡。"
+"Koha 產生的通知與流通收條都可以用通知 &amp; 收條工具客製它。系統本身有若干預"
+"設的模版在工具頁面裡。"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/neworderbiblio.tt:9
 #, c-format
@@ -2412,6 +2451,13 @@ msgid ""
 "system is working."
 msgstr "檔案上傳後出現確認訊息。"
 
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:23
+#, c-format
+msgid ""
+"At least one substitution must be defined, else there is no sense to launch "
+"the script."
+msgstr "至少指定一個替代品，否則無法啟動腳本。"
+
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:29
 #, c-format
 msgid ""
@@ -2547,6 +2593,13 @@ msgstr "音效警示"
 msgid "Author"
 msgstr "著者"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:18
+#, c-format
+msgid ""
+"Authorised values category can be used to turn this search field in to a "
+"pull down instead of a free text field"
+msgstr "容許值範圍可翻轉此欄位為下拉選單而不允許自行鍵入文字"
+
 #: intranet-tmpl/prog/en/modules/help/authorities/detail.tt:3
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities-home.tt:3
 #, c-format
@@ -2620,6 +2673,16 @@ msgid ""
 msgstr ""
 "容許值範圍；選擇其中之一，讀者紀錄鍵入頁面將允許從容許值清單中選擇一個值。"
 
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:2
+#, c-format
+msgid "Automatic item modifications by age configuration"
+msgstr "依年齡組態自動修正館藏"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#, c-format
+msgid "AutomaticItemReturn"
+msgstr "AutomaticItemReturn"
+
 #: intranet-tmpl/prog/en/modules/help/reports/issues_avg_stats.tt:3
 #, c-format
 msgid "Average loan time"
@@ -2692,6 +2755,7 @@ msgstr "批次讀者修訂"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:3
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:40
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:81
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-batch.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:15
 #, c-format
@@ -2700,6 +2764,7 @@ msgstr "批次"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:5
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:42
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:83
 #, c-format
 msgid ""
 "Batches are made up of the barcodes you would like to print. Once in this "
@@ -2708,6 +2773,7 @@ msgid ""
 msgstr "把列印的條碼匯成批次。在此工具裡可以搜尋館藏條碼再把它列印出來。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:9
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:87
 #, c-format
 msgid ""
 "Batches can be created in one of two ways. The first is to click the 'Create "
@@ -2755,6 +2821,7 @@ msgstr ""
 "挑選列印的設定檔前，先試印幾張讀者證，就能看出印表機/模版組合的可行性。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:25
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:41
 #, c-format
 msgid ""
 "Before picking a profile try printing some sample labels so that you can "
@@ -2886,8 +2953,10 @@ msgstr "讀者證號碼："
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
 #, c-format
-msgid "Both the 'Source' and the 'Text' fields "
-msgstr "包括 '來源' 與 '文字' 欄位 "
+msgid ""
+"Both the 'Source' and the 'Text' fields must be filled in in order to save "
+"the new quote."
+msgstr "必須在 '來源' 與 '內文' 欄位鍵入資料才能儲存新的引句。"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:491
 #, c-format
@@ -3089,6 +3158,13 @@ msgstr "編目"
 msgid "Change Patron Password"
 msgstr "變更讀者密碼"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:21
+#, c-format
+msgid ""
+"Change the current location of the items in that collection to the library "
+"it is to be transferred to"
+msgstr "變更即將轉移的館藏至新的館藏地"
+
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:7
 #, c-format
 msgid "Charging Fines/Fees"
@@ -3194,21 +3270,21 @@ msgid ""
 "Anonymize)"
 msgstr "在您想要完成的工作 (刪除或匿名) 裡，勾選 '確認' 鈕"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:41
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:60
 #, c-format
 msgid ""
 "Check the box for 'Mark the original budget as inactive' if the original "
 "budget should no longer be used."
 msgstr "若不使用原預算則按 '標記原預算為停用' 盒。"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:59
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:78
 #, c-format
 msgid ""
 "Check the box for 'Move remaining unspent funds' to move the unspent amounts "
 "from the funds of the budget being closed to the selected budget."
 msgstr "按 '移動尚未動用的基金' 鈕把餘額移至指定的預算。"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:43
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:62
 #, c-format
 msgid ""
 "Check the box for 'Set all funds to zero' if you wish the new budget to "
@@ -3289,14 +3365,19 @@ msgid ""
 "Checking out is done by searching for the patron by barcode or name at the "
 "top of the 'Check out' screen. After selecting a patron you will be "
 "presented with the synced patron info, including fines and check outs."
-msgstr "在 '借出' 頁面以條碼或名稱搜尋該讀者確認完成借出。點選讀者後，出現罰款與借出等讀者資訊。"
+msgstr ""
+"在 '借出' 頁面以條碼或名稱搜尋該讀者確認完成借出。點選讀者後，出現罰款與借出"
+"等讀者資訊。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:66
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:25
 #, c-format
 msgid ""
 "Checking the 'Manual history' box will allow you to enter serials outside "
-"the prediction pattern."
-msgstr "勾選 '人工紀錄' 盒，將允許您鍵入預期模式外的期刊。"
+"the prediction pattern once the subscription is saved by going to the "
+"'Planning' tab on the subscription detail page."
+msgstr ""
+"從訂閱詳情頁面的 '計畫' 分頁儲存訂閱後，再勾選 '人工紀錄' 盒將允許您鍵入預期"
+"模式外的期刊。"
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:3
 #, c-format
@@ -3329,7 +3410,9 @@ msgid ""
 "Children patrons do not become adults automatically in Koha. To upgrade a "
 "child patron to and adult patron category click on the 'More' menu and "
 "choose 'Update Child to Adult Patron' "
-msgstr "Koha 不會把兒童讀者自動昇格為成人讀者。必須點選 '其他' 選單並選擇 '昇格兒童為成人讀者' "
+msgstr ""
+"Koha 不會把兒童讀者自動昇格為成人讀者。必須點選 '其他' 選單並選擇 '昇格兒童為"
+"成人讀者' "
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:30
 #, c-format
@@ -3435,7 +3518,8 @@ msgid ""
 "Choose any limits you might want to apply to your report (such as item types "
 "or branches). If you don't want to apply any limits, simply click Next "
 "instead of making an option."
-msgstr "選擇對您的報表限制(如館藏類型或分館)。若不使用任何限制，勾選下一步即可。"
+msgstr ""
+"選擇對您的報表限制(如館藏類型或分館)。若不使用任何限制，勾選下一步即可。"
 
 #: intranet-tmpl/prog/en/modules/help/reports/itemslost.tt:10
 #, c-format
@@ -3569,7 +3653,9 @@ msgid ""
 "Choose which MARC field you would like to map to this Koha Field and click "
 "the 'OK' button. If you would like to clear all mappings, click the 'Click "
 "to \"Unmap\"' button."
-msgstr "選擇想要對映至此 Koha 欄位的 MARC 欄位並按下 'OK' 鈕。若想要清除所有的對映，則按下 '按了\"不對映\"' 鈕。"
+msgstr ""
+"選擇想要對映至此 Koha 欄位的 MARC 欄位並按下 'OK' 鈕。若想要清除所有的對映，"
+"則按下 '按了\"不對映\"' 鈕。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:17
 #, c-format
@@ -3867,7 +3953,7 @@ msgstr "勾選 '新增紀錄'"
 msgid "Click 'New Record' "
 msgstr "勾選 '新增紀錄' "
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:79
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:78
 #, c-format
 msgid "Click 'New authorized value for ...'"
 msgstr "勾選 '新增容許值供 ...'"
@@ -3896,13 +3982,13 @@ msgstr "勾選 '下一步'"
 msgid "Click 'Process images'"
 msgstr "勾選 '處理照片'"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:84
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:103
 #, c-format
 msgid "Click 'Save Subscription' to save the information you have entered."
 msgstr "勾選 '儲存訂閱' 以儲存鍵入的資訊。"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:69
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:90
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:68
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:87
 #, c-format
 msgid "Click 'Save'"
 msgstr "勾選 '儲存'"
@@ -4288,12 +4374,12 @@ msgstr ""
 "勾選此鈕將產生下一期供館員標記並把稍早那期自動標記為 '遲到'。館員可勾選每期右"
 "方的 '編輯' 盒立即編輯其狀態。"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:47
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:66
 #, c-format
 msgid "Close a budget"
 msgstr "關閉預算"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:68
 #, c-format
 msgid ""
 "Close a budget to move or roll over unreceived orders and if desired unspent "
@@ -4323,6 +4409,18 @@ msgstr "評論"
 #, c-format
 msgid "Commonly used values of this field are:"
 msgstr "此欄位的常用值是："
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:36
+#, c-format
+msgid "Condition: items.ccode = 1"
+msgstr "Condition: items.ccode = 1"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:19
+#, c-format
+msgid ""
+"Conditions should be defined if you want to test some values before to "
+"substitute fields in the items."
+msgstr "取代館藏部份欄位前，若想測試其值，則應設定條件。"
 
 #: intranet-tmpl/prog/en/modules/help/reports/dictionary.tt:15
 #, c-format
@@ -4720,7 +4818,9 @@ msgid ""
 "tags before they are published on the OPAC. This is done via the Tag "
 "Moderation Tool. If there are tags awaiting moderation they will be listed "
 "on the main staff dashboard under the module labels."
-msgstr "依照您標籤系統偏好的方式，館員可能需先審核才能讓標籤顯示在 OPAC。經由標籤管理工具就可以了。待審核的標籤將出現在館員介面的標籤模組。"
+msgstr ""
+"依照您標籤系統偏好的方式，館員可能需先審核才能讓標籤顯示在 OPAC。經由標籤管理"
+"工具就可以了。待審核的標籤將出現在館員介面的標籤模組。"
 
 #: intranet-tmpl/prog/en/modules/help/patroncards/home.tt:9
 #, c-format
@@ -4799,6 +4899,16 @@ msgstr "複製預算"
 msgid "Duplicating records"
 msgstr "複製紀錄"
 
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:28
+#, c-format
+msgid "Duration: 10 days"
+msgstr "期間：10 天"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:35
+#, c-format
+msgid "Duration: 7 days"
+msgstr "期間：7 天"
+
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:21
 #, c-format
 msgid ""
@@ -4817,7 +4927,9 @@ msgid ""
 "patron information depending on your settings), but each item also has its "
 "own circulation history page. To see this, click on the 'Items' tab to the "
 "left of the record you are viewing."
-msgstr "每筆書目紀錄有其流通紀錄(含或不含讀者資訊，視您的設定)，但每筆館藏也有其自身的流通紀錄。勾選紀錄左方的 '館藏' 分頁，即可看到。"
+msgstr ""
+"每筆書目紀錄有其流通紀錄(含或不含讀者資訊，視您的設定)，但每筆館藏也有其自身"
+"的流通紀錄。勾選紀錄左方的 '館藏' 分頁，即可看到。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/auth_subfields_structure.tt:8
 #, c-format
@@ -4849,7 +4961,8 @@ msgstr "每個館藏類型旁都有編輯鈕。按 '編輯' 連結就能編輯�
 msgid ""
 "Each library will have an 'Edit' link to the right of it. Click this link to "
 "edit/alter details associated with the library in question."
-msgstr "每個圖書館右方都有 '編輯' 連結。按該連結就能編輯/改變相關圖書館的資訊。"
+msgstr ""
+"每個圖書館右方都有 '編輯' 連結。按該連結就能編輯/改變相關圖書館的資訊。"
 
 #: intranet-tmpl/prog/en/modules/help/members/pay.tt:5
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:5
@@ -5024,7 +5137,9 @@ msgid ""
 "Enrollment period (in months) should be filled in if you have a limited "
 "enrollment period for your patrons (eg. Student cards expire after 9 months "
 "or until a specific date) "
-msgstr "註冊期間 (月) 應填入資料若您的讀者有固定的註冊期間 (如：學生證在 9 個月後失效或祗能在指定的時間內使用) "
+msgstr ""
+"註冊期間 (月) 應填入資料若您的讀者有固定的註冊期間 (如：學生證在 9 個月後失效"
+"或祗能在指定的時間內使用) "
 
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:11
 #, c-format
@@ -5046,7 +5161,7 @@ msgid "Enter a code and a description"
 msgstr "鍵入代碼與說明"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:59
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:81
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:80
 #, c-format
 msgid ""
 "Enter a code for your Authorized Value into the 'Authorized value' field "
@@ -5085,7 +5200,9 @@ msgid ""
 "Enter a sound to be played, you can either select a built-in Koha sound "
 "using the pulldown selector, or you can enter a full URL to a sound file on "
 "another server."
-msgstr "鍵入可撥放的音效，可以用下拉選單選取 Koha 內建的音效，或鍵入音效檔所在的網址。"
+msgstr ""
+"鍵入可撥放的音效，可以用下拉選單選取 Koha 內建的音效，或鍵入音效檔所在的網"
+"址。"
 
 #: intranet-tmpl/prog/en/modules/help/members/pay.tt:36
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:36
@@ -5323,6 +5440,16 @@ msgstr "範例"
 msgid "Example: %s is the indicator 1 for the first 245 field."
 msgstr "例子：%s 是第一個 245 欄位的指標 1。"
 
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:54
+#, c-format
+msgid ""
+"Example: If you duplicate a budget which have an amount of 999, and decide "
+"to change amount by 2.6%% (1024.974) and to round to a multiple of 0.5, the "
+"result will be 1024.5 (amounts are rounded down). "
+msgstr ""
+"範例：若複製金額為 999 的預算，並決定增加 2.6%% (1024.974) 並取 0.5 倍數，結"
+"果將是 1024.5 (捨去後的金額)。"
+
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:32
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:34
 #, c-format
@@ -5345,6 +5472,7 @@ msgid ""
 "will appear in between each one in the column"
 msgstr "例如：您可有多個650欄位，這是顯示在欄位的字元"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:70
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:22
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:22
 #, c-format
@@ -5356,6 +5484,11 @@ msgid ""
 msgstr ""
 "例如：文字是 .25\" 由第一個標籤的左緣開始，.28\" 從第二個標籤的左緣開"
 "始 .31\" 從第三個標籤的左緣開始。表示水平的點設為 .03\"。"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:25
+#, c-format
+msgid "Examples"
+msgstr "範例"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:161
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:107
@@ -5508,8 +5641,9 @@ msgid ""
 "'XXX'. Fill 'Field' with 999, 'Subfield' with 9, 'Operator' with is equal to "
 "and 'Value' with XXX."
 msgstr ""
-"填入 '欄位'、'分欄'、'運算元' 與 '值'。例如：若要找到欄位 999$9 裡有 'XXX' 的記錄則在 '欄位' 填入 999、'分欄' 填入 "
-"9，並在 '運算元' 填入等於以及 '值' 填入 XXX。"
+"填入 '欄位'、'分欄'、'運算元' 與 '值'。例如：若要找到欄位 999$9 裡有 'XXX' 的"
+"記錄則在 '欄位' 填入 999、'分欄' 填入 9，並在 '運算元' 填入等於以及 '值' 填"
+"入 XXX。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/oai_sets.tt:11
 #, c-format
@@ -5611,7 +5745,7 @@ msgstr ""
 "在詳情頁面查看 URL 址最後的數字，或勾選館員介面的 MARC 分頁的詳情頁面，就能找"
 "到書目號"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:51
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:70
 #, c-format
 msgid ""
 "Find the previous budget with unreceived orders on the Active budgets or the "
@@ -5699,7 +5833,9 @@ msgid ""
 "by 1 each time after. To have it start with the starting number of your "
 "barcodes, enter the first barcode by hand in the patron record and save the "
 "patron. After that the field will increment that number by 1."
-msgstr "新安裝的系統裡這個偏好從 1 開始每次增加 1。若希望從其他數字開始以符合您的條碼號，可手動加入第一個讀者的條碼並儲存它。接著就繼續增加 1。"
+msgstr ""
+"新安裝的系統裡這個偏好從 1 開始每次增加 1。若希望從其他數字開始以符合您的條碼"
+"號，可手動加入第一個讀者的條碼並儲存它。接著就繼續增加 1。"
 
 #: intranet-tmpl/prog/en/modules/help/reports/issues_stats.tt:19
 #, c-format
@@ -5743,7 +5879,9 @@ msgid ""
 "the ones that appear on notices and slips printed during circulation "
 "(receipts, transfer slips and hold slips). The primary email is also the one "
 "that overdue notices and other messages go to."
-msgstr "對連絡資訊而言，主要電話與電子郵件都出現在流通的印本通知與收條(包括轉移收條與預約收條)。主要電子郵件也是接收逾期通知與其他通知的管道。"
+msgstr ""
+"對連絡資訊而言，主要電話與電子郵件都出現在流通的印本通知與收條(包括轉移收條與"
+"預約收條)。主要電子郵件也是接收逾期通知與其他通知的管道。"
 
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:22
 #, c-format
@@ -5810,6 +5948,16 @@ msgstr ""
 msgid "For example: \"INSTID:12345,BASEBALL:Cubs\""
 msgstr "例如：\"INSTID:12345,BASEBALL:Cubs\""
 
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:95
+#, c-format
+msgid ""
+"For example: If the first issue to receive is \"vol. 4, no. 1, iss. 796\", "
+"you need to set up \"inner counter = 0\" But if it's \"vol. 4, no. 2, iss. "
+"797\", the inner counter should be \"1\"."
+msgstr ""
+"例如：若收到的第一期是 \"vol. 4, no. 1, iss. 796\"，您需設定為 \"inner "
+"counter = 0\" 若是 \"vol. 4, no. 2, iss. 797\"，則內部計數器應為 \"1\"。"
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:5
 #, c-format
 msgid ""
@@ -5850,6 +5998,7 @@ msgstr ""
 msgid "For multiple images, choose to upload a zip file"
 msgstr "多筆圖片時，選擇上傳一個壓縮檔"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:69
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:21
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:21
 #, c-format
@@ -5863,7 +6012,9 @@ msgstr "對這些值而言，負數把錯誤向上與向左移動，正數把錯
 msgid ""
 "For this library, you can edit rules for given itemtypes, regardless of the "
 "patron's category. Currently, this means hold policies."
-msgstr "對此圖書館而言，您可編輯指定館藏類型的規則，不必理會讀者類型。目前，指的是預約政策。"
+msgstr ""
+"對此圖書館而言，您可編輯指定館藏類型的規則，不必理會讀者類型。目前，指的是預"
+"約政策。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:126
 #, c-format
@@ -5872,7 +6023,7 @@ msgid ""
 "of a given category can make, regardless of the item type."
 msgstr "對此圖書館而言，您可指定讀者借出館藏的最大量，而不必理會館藏的類型。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:36
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:39
 #, c-format
 msgid ""
 "For this option to appear you need to make sure that you have a Routing List "
@@ -5889,11 +6040,13 @@ msgstr "強制：將允許讀者選擇指定的館藏"
 msgid "Format"
 msgstr "格式"
 
-#. %1$s:  themelang 
+#. %1$s:  interface 
+#. %2$s:  theme 
 #: intranet-tmpl/prog/en/modules/help/labels/spinelabel-home.tt:9
 #, c-format
-msgid "Format your label printing by editing spinelabel.css found in %s/css/"
-msgstr "編輯在 %s/css/ 找到的書標列印格式 spinelabel.css"
+msgid ""
+"Format your label printing by editing spinelabel.css found in %s/%s/css/"
+msgstr "編輯在 %s/%s/css/ 找到的 spinelabel.css 格式化您的列印書標"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:59
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:5
@@ -5903,7 +6056,9 @@ msgid ""
 "Frameworks you must edit the fields and subfields. Clicking 'Edit' to the "
 "right of each subfield will allow you to make changes to the text associated "
 "with the field"
-msgstr "框架由 MARC 的欄位與分欄構成。必須適度地編輯欄位與分欄構成框架。勾選每個分欄右方的 '編輯' 鈕就能夠改變該欄位的文字"
+msgstr ""
+"框架由 MARC 的欄位與分欄構成。必須適度地編輯欄位與分欄構成框架。勾選每個分欄"
+"右方的 '編輯' 鈕就能夠改變該欄位的文字"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:105
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:137
@@ -5935,6 +6090,13 @@ msgid ""
 msgstr ""
 "從這裡，您可以 '批准' 並採用此改變於讀者記錄；'刪除' 並移除這些改變；或 '忽"
 "略' 並維持此改變待來日再決定。"
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:5
+#, c-format
+msgid ""
+"From here you can add custom search fields to the item search option in the "
+"staff client."
+msgstr "從此處新增客製化搜尋欄位於館員介面的館藏搜尋選項。"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:7
 #, c-format
@@ -6118,6 +6280,16 @@ msgid ""
 "than or fewer than 2, you will be presented with an error"
 msgstr "從虛擬書架裡選取兩個要合併的館藏。若超過 2 個，則出現錯誤訊息"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:27
+#, c-format
+msgid ""
+"From the main Rotating Collections page, click on Transfer next to the title "
+"of the collection you wish to transfer; choose the library you wish to "
+"transfer the collection to and click \"Transfer collection\"."
+msgstr ""
+"於巡迴書庫首頁，按欲轉移館藏題名旁的轉移；再選擇轉移的圖書館並按 \"轉移館藏"
+"\" 鈕。"
+
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:13
 #, c-format
 msgid ""
@@ -6240,6 +6412,7 @@ msgstr ""
 "從搜尋結果裡，可以點選 '簽收期刊' 連結；或點選訂閱題名，再按下 '收到' 鈕。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:15
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:93
 #, c-format
 msgid ""
 "From the search results, click the check box next to the items you want to "
@@ -6282,7 +6455,9 @@ msgid ""
 "you can't find the authority to link, you can click the 'Create new' button "
 "and add the necessary authority for the link. This plugin also allows for "
 "you to choose the link relationship between the authorities."
-msgstr "從此可搜尋權威紀錄檔找尋權威連結。若找不到，可點選 '新增' 鈕加入必要的權威給此連結。此外掛程式允許您選擇權威間的關係。"
+msgstr ""
+"從此可搜尋權威紀錄檔找尋權威連結。若找不到，可點選 '新增' 鈕加入必要的權威給"
+"此連結。此外掛程式允許您選擇權威間的關係。"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/parcel.tt:13
 #: intranet-tmpl/prog/en/modules/help/acqui/orderreceive.tt:13
@@ -6322,7 +6497,9 @@ msgid ""
 "From this form you can make edits to the suggestion (adding more details or "
 "updating incorrect information provided by the patron). You can also choose "
 "to accept or reject the suggestion on an individual basis."
-msgstr "從此表單您可編輯建議 (新增更多詳情或更新不正確的資料)。也能選擇接受或拒絕個別的建議。"
+msgstr ""
+"從此表單您可編輯建議 (新增更多詳情或更新不正確的資料)。也能選擇接受或拒絕個別"
+"的建議。"
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:95
 #, c-format
@@ -6531,6 +6708,11 @@ msgstr "HOLD (預約到館待提取) "
 msgid "HOLDPLACED (a notice to the library staff that a hold has been placed) "
 msgstr "HOLDPLACED (提示館員預約已到的通知) "
 
+#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:281
+#, c-format
+msgid "HOLD_SLIP "
+msgstr "HOLD_SLIP "
+
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:9
 #, c-format
 msgid ""
@@ -6612,6 +6794,16 @@ msgstr "行事曆"
 #, c-format
 msgid "Host"
 msgstr "主機"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:40
+#, c-format
+msgid "How to execute the cronjob script?"
+msgstr "如何執行工作排程腳本？"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:14
+#, c-format
+msgid "How to work the configuration page?"
+msgstr "如何組態頁面？"
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:13
 #, c-format
@@ -6742,6 +6934,17 @@ msgstr ""
 msgid "If a record you want to delete can't be deleted it will be highlighted."
 msgstr "將提示不能借出的館藏。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:33
+#, c-format
+msgid ""
+"If an item in a rotating collection is checked in at a library other than "
+"the one it is supposed to be transferred to, a notification will appear "
+"notifying library staff that the item is part of a rotating collection, also "
+"letting them know where the item needs to be sent."
+msgstr ""
+"若巡迴書庫的館藏被還入非巡迴書庫的圖書館，將出現提示訊息，並警示圖書館員將該"
+"館藏送至適當的地方。"
+
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:11
 #, c-format
 msgid ""
@@ -6756,7 +6959,7 @@ msgid ""
 "expiration date or category"
 msgstr "可以依照有效日或範圍，找尋欲刪除的讀者"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:63
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:82
 #, c-format
 msgid ""
 "If everything seems correct click 'OK' and the unreceived orders and, if "
@@ -6769,7 +6972,7 @@ msgstr "全部處理好後按 'OK' 鈕，則移除未簽收訂單與未支付基
 msgid "If left empty, the text for librarian is used instead"
 msgstr "若左方空白，則以館員的文字取代"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:27
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:30
 #, c-format
 msgid ""
 "If more than one library subscribes to this serial you will need to create a "
@@ -6785,7 +6988,7 @@ msgid ""
 msgstr ""
 "若未從 MARC 記錄匯入基金資訊，可以使用 '預設帳戶詳情' 鈕，將價格加入帳戶。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:42
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:47
 #, c-format
 msgid ""
 "If no values are entered in these fields, they will use the "
@@ -6801,7 +7004,7 @@ msgstr ""
 msgid ""
 "If not then you'll see an error explaining why you can't discharge the "
 "patron."
-msgstr "不可以時將看到說明不能讓讀者退出的原因。"
+msgstr "不可以時將看到說明不能讓讀者離館除籍的原因。"
 
 #: intranet-tmpl/prog/en/modules/help/circ/offline.tt:5
 #, c-format
@@ -6861,7 +7064,8 @@ msgid ""
 "If the checked out time is listed as 00:00 then the item is a daily loan "
 "item. The due time for daily checkouts will show 23:59 which is the last "
 "minute of the day."
-msgstr "若借出時間是 00:00 則是當天需還入的館藏。還入時間是當天最後一分鐘 23:59。"
+msgstr ""
+"若借出時間是 00:00 則是當天需還入的館藏。還入時間是當天最後一分鐘 23:59。"
 
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:12
 #, c-format
@@ -6922,7 +7126,9 @@ msgid ""
 "If the list looks the way you expect it to, then click 'Save'. Next you will "
 "be brought to a preview of the routing list. To print the list click 'Save "
 "and preview routing slip.' This will open a printable version of the list."
-msgstr "若傳閱清單看起來沒問題，按下 '儲存' 鈕。然後進入預覽階段。勾選 '儲存並預覽傳閱清單'。則開啟列印版本的傳閱清單。"
+msgstr ""
+"若傳閱清單看起來沒問題，按下 '儲存' 鈕。然後進入預覽階段。勾選 '儲存並預覽傳"
+"閱清單'。則開啟列印版本的傳閱清單。"
 
 #: intranet-tmpl/prog/en/modules/help/members/discharge.tt:13
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:83
@@ -6930,7 +7136,7 @@ msgstr "若傳閱清單看起來沒問題，按下 '儲存' 鈕。然後進入�
 msgid ""
 "If the patron can have a discharge generated then it will have a button that "
 "says 'Generate discharge'"
-msgstr "可以退出的讀者將顯示 '實現退出' 鈕"
+msgstr "可以離館除籍的讀者將顯示 '實現離館除籍' 鈕"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:78
 #, c-format
@@ -7075,6 +7281,11 @@ msgid ""
 "If the system suspects this patron is a duplicate of another it will warn "
 "you."
 msgstr "若系統懷疑該讀者已重複，則提示。"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:24
+#, c-format
+msgid "If the value is an empty string, the field will be deleted."
+msgstr "若內容為空白字串，則刪除此欄位。"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/supplier.tt:52
 #, c-format
@@ -7314,7 +7525,7 @@ msgstr ""
 "處理還入箱的館藏時先勾選 '還入箱模式' 再掃瞄館藏。才能把還入日期設為上個開館"
 "日。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:7
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:5
 #, c-format
 msgid ""
 "If you are entering a new subscription from the Serials module you will be "
@@ -7535,19 +7746,23 @@ msgid ""
 "presented with a search box"
 msgstr "選擇搜尋其他圖書館的權威記錄，將出現該搜尋框"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:72
-#, c-format
-msgid ""
-"If you chose the 'Number' Numbering Format you will see 'issues expected' in "
-"which you will enter the total number of issues you expect to receive."
-msgstr "若選擇 '數字' 編碼格式可看到 '預期期數' 從此鍵入每卷可收到期數。"
-
 #: intranet-tmpl/prog/en/modules/help/admin/classsources.tt:14
 #, c-format
 msgid ""
 "If you chose to install classification sources during Koha's installation, "
 "you would see other values too:"
 msgstr "安裝Koha時，已安裝分類法來源，則可看到其他的值："
+
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:47
+#, c-format
+msgid ""
+"If you decided to change the amounts of budget and funds, you can also "
+"choose how to round the result by filling the text field for 'If amounts "
+"changed, round to a multiple of'. This should be a positive number. Decimal "
+"point can be used. "
+msgstr ""
+"若想改變預算與基金的金額，在文字欄位填入 '改變金額時，捨去其值' 就能選擇捨去"
+"的方法。應該是正數。可使用小數點。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:7
 #, c-format
@@ -7624,8 +7839,9 @@ msgid ""
 "values when running the report'. The syntax is &lt;&lt;Question to ask "
 "authorized_value&gt;&gt;. "
 msgstr ""
-"在詢問時使用執行參數可減少資源的耗費。在執行前以執行參數先行篩選以節省系統資源。Koha 使用特定的語法 '執行報表時先詢問值' 執行它。其語法是 "
-"&lt;&lt;詢問 authorized_value 問題&gt;&gt;。"
+"在詢問時使用執行參數可減少資源的耗費。在執行前以執行參數先行篩選以節省系統資"
+"源。Koha 使用特定的語法 '執行報表時先詢問值' 執行它。其語法是 &lt;&lt;詢問 "
+"authorized_value 問題&gt;&gt;。"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:41
 #, c-format
@@ -7635,17 +7851,6 @@ msgid ""
 msgstr ""
 "若將 SpineLabelShowPrintOnBibDetails 設為 '顯示' 在每個館藏旁有個連結至快速列"
 "印書標。"
-
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:66
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:88
-#, c-format
-msgid ""
-"If you have StaffAuthorisedValueImages and/or AuthorisedValueImages set to "
-"show images for authorized values you can choose the image under 'Choose an "
-"icon'"
-msgstr ""
-"若設定 StaffAuthorisedValueImages 與 AuthorisedValueImages 參數，控制容許值的"
-"圖示，您可從 '選擇圖示' 裡，選定它"
 
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:52
 #, c-format
@@ -7686,16 +7891,6 @@ msgid ""
 "also have an option to choose which contract you're ordering these items "
 "under."
 msgstr "若新增訂閱代理商的合約，可以選擇訂閱該等館藏的合約。"
-
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:70
-#, c-format
-msgid ""
-"If you have chosen any 'Numbering Format' other than 'Number' in the "
-"'Rollover at' field, enter the last issue number before the volume number "
-"changes "
-msgstr ""
-"若從 'Rollover at' 欄位選擇 '數字' 以外的任何 '數字格式'，鍵入卷號改變前最後"
-"一期的數字 "
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:7
 #, c-format
@@ -7741,7 +7936,9 @@ msgid ""
 "If you have entered an email address for the vendors in your system, you can "
 "send them claim emails when an order is late. Before you can send claims, "
 "you will need to set up an acquisitions claim notice."
-msgstr "若鍵入代理商的電子郵件，您可送出催缺電子郵件。在此之前，需先設定採訪催缺通知。"
+msgstr ""
+"若鍵入代理商的電子郵件，您可送出催缺電子郵件。在此之前，需先設定採訪催缺通"
+"知。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:19
 #, c-format
@@ -7768,8 +7965,9 @@ msgid ""
 "this, go to the analytic record and click the 'Edit' button and choose to "
 "'Edit items'. To the left of each item you will see two options."
 msgstr ""
-"若分析紀錄的連結不正確可從分析紀錄(不是主紀錄)裡編輯該連結以移除它。進入分析連結，勾選 '編輯' 鈕與選擇 '編輯館藏' "
-"就可以了。從每個館藏的左方可以看到這兩個選項。"
+"若分析紀錄的連結不正確可從分析紀錄(不是主紀錄)裡編輯該連結以移除它。進入分析"
+"連結，勾選 '編輯' 鈕與選擇 '編輯館藏' 就可以了。從每個館藏的左方可以看到這兩"
+"個選項。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/modborrowers.tt:13
 #, c-format
@@ -7777,7 +7975,8 @@ msgid ""
 "If you have multiple patron attributes you can change them all by using the "
 "plus (+) sign to the right of the text box. This will allow you to add "
 "another attribute value."
-msgstr "若有多個讀者屬性可使用文字區右方的加號 (+) 切換它。允許您新增其他屬性。"
+msgstr ""
+"若有多個讀者屬性可使用文字區右方的加號 (+) 切換它。允許您新增其他屬性。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:36
 #, c-format
@@ -7804,7 +8003,9 @@ msgid ""
 "If you have set your BorrowersLog to track changes to patron records, then "
 "this tab will appear. The Modification Log will show all changes made to the "
 "patron record."
-msgstr "若已設定 BorrowersLog 追蹤讀者紀錄的改變，才會出現此分頁。修改紀錄將顯示讀者紀錄的所有改變。"
+msgstr ""
+"若已設定 BorrowersLog 追蹤讀者紀錄的改變，才會出現此分頁。修改紀錄將顯示讀者"
+"紀錄的所有改變。"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:35
 #, c-format
@@ -7965,6 +8166,16 @@ msgid ""
 "above the other."
 msgstr "需要優先權的外掛程式，應把它拉到最上面。"
 
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:41
+#, c-format
+msgid ""
+"If you want the amounts of budget and funds to be modified by a percentage, "
+"fill the text field for 'Change amounts by'. This should be a number, "
+"positive or negative. Decimal point can be used. "
+msgstr ""
+"若想改變預算與基金的金額為百分比，在文字欄位填入 '改變數值'。可以是數字，正數"
+"或負數。可使用小數點。"
+
 #: intranet-tmpl/prog/en/modules/help/circ/view_holdsqueue.tt:17
 #, c-format
 msgid ""
@@ -7973,7 +8184,9 @@ msgid ""
 "When this system preference is enabled, the order in which libraries will be "
 "requested to fulfill an on-shelf hold will be randomized each time the list "
 "is regenerated."
-msgstr "若期望各圖書館平均分擔預約的任務，應啟用 RandomizeHoldsQueueWeight 偏好。該偏好啟用後，將隨機把預約分配給各圖書館。"
+msgstr ""
+"若期望各圖書館平均分擔預約的任務，應啟用 RandomizeHoldsQueueWeight 偏好。該偏"
+"好啟用後，將隨機把預約分配給各圖書館。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/auth_tag_structure.tt:15
 #, c-format
@@ -8120,7 +8333,7 @@ msgstr ""
 "入其他圖書館，才能看到其他圖書館的逾期罰款。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:65
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:87
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:86
 #, c-format
 msgid ""
 "If you would like to limit this authorized value category to only specific "
@@ -8346,6 +8559,7 @@ msgid ""
 msgstr "填寫補篇資訊，供補篇的刊期使用。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:34
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:55
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:7
 #, c-format
 msgid ""
@@ -8442,6 +8656,12 @@ msgid ""
 "options are here for future development."
 msgstr "你的意思是重要嗎？目前祗有在 OPAC 的作品。內部網路選項為未來發展。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, c-format
+msgid "Important:"
+msgstr "重要："
+
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:108
 #, c-format
 msgid ""
@@ -8488,8 +8708,10 @@ msgid ""
 "specific library set for all item types and all patron types to avoid this "
 "holds issue. Koha needs to know what rule to fall back on."
 msgstr ""
-"重要：至少應設定流通規則。包括所有館藏類型、圖書館與讀者類型。不符合特定規則者都適用此規則。還沒有設定適用於所有館藏類型、圖書館與讀者類型的流通規則前，讀"
-"者不能預約館藏。必須有個適用於自己圖書館、所有館藏類型與讀者類型的規則才能避免此預約問題。Koha 必須知道適用的規則。"
+"重要：至少應設定流通規則。包括所有館藏類型、圖書館與讀者類型。不符合特定規則"
+"者都適用此規則。還沒有設定適用於所有館藏類型、圖書館與讀者類型的流通規則前，"
+"讀者不能預約館藏。必須有個適用於自己圖書館、所有館藏類型與讀者類型的規則才能"
+"避免此預約問題。Koha 必須知道適用的規則。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/koha2marclinks.tt:13
 #, c-format
@@ -8498,11 +8720,11 @@ msgid ""
 "means that you won't be able to map both the 100a and the 700a to the author "
 "field, you need to choose one or the other."
 msgstr ""
-"重要：此時，祗能讓 1 個 MARC 欄位對映至 1 個 Koha 欄位。也就是不能把 100a 與 700a 同時對映至 Koha "
-"的著者欄位，祗能選擇一個。"
+"重要：此時，祗能讓 1 個 MARC 欄位對映至 1 個 Koha 欄位。也就是不能把 100a 與 "
+"700a 同時對映至 Koha 的著者欄位，祗能選擇一個。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:61
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:83
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:82
 #, c-format
 msgid ""
 "Important: Authorized value is limited to 80 characters and cannot have "
@@ -8553,7 +8775,9 @@ msgstr ""
 msgid ""
 "Important: Do not enter symbols in this field, only numbers and decimal "
 "points (ex. $5.00 should be entered as 5 or 5.00)"
-msgstr "重要：在此欄位不要鍵入符號，祗能鍵入數字與小數點 (如：$5.00 應鍵入為 5.00 或 5)"
+msgstr ""
+"重要：在此欄位不要鍵入符號，祗能鍵入數字與小數點 (如：$5.00 應鍵入為 5.00 或 "
+"5)"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:48
 #, c-format
@@ -8588,10 +8812,10 @@ msgstr "重要：不能清除必備欄位的值。"
 msgid ""
 "Important: If this field is left blank then Koha will not put a limit on the "
 "fines this item will accrue. A maximum fine amount can be set using the "
-"MaxFinesystem preference."
+"MaxFine system preference."
 msgstr ""
-"重要：若此欄位左側空白，則Koha不會置入任何罰款限制。罰款上限規定在"
-"MaxFinesystem偏好。"
+"重要：若此欄位空白則 Koha 不會置入任何罰款。罰款上限規定在 MaxFinesystem 偏"
+"好。"
 
 #: intranet-tmpl/prog/en/modules/help/circ/branchoverdues.tt:9
 #, c-format
@@ -8601,6 +8825,7 @@ msgid ""
 msgstr "重要：未收取罰款或未執行罰款排程工作，在此報表內就看不到資料。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:20
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:36
 #, c-format
 msgid ""
 "Important: If you do not supply a left text margin in the template, a "
@@ -8739,7 +8964,9 @@ msgid ""
 "Important: The Uncertain Prices page is independent of the basket. It is "
 "linked to the vendor so you will see all items on order with uncertain "
 "prices for that vendor."
-msgstr "重要：價格未定頁面是獨立於採購項目之外。連結至供應商所以可以從供應商看到價格未定的所有訂購館藏。"
+msgstr ""
+"重要：價格未定頁面是獨立於採購項目之外。連結至供應商所以可以從供應商看到價格"
+"未定的所有訂購館藏。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/cleanborrowers.tt:11
 #, c-format
@@ -8873,7 +9100,9 @@ msgid ""
 "Important: When working with the overdue notices you want each notice at "
 "each branch to have a unique code. Think about using the branch code in "
 "front of the notice code for each branch."
-msgstr "重要：每個分館的各種逾期通知應有不同的代碼。建議以分館代碼做為逾期通知代碼的前置碼。"
+msgstr ""
+"重要：每個分館的各種逾期通知應有不同的代碼。建議以分館代碼做為逾期通知代碼的"
+"前置碼。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgets.tt:27
 #, c-format
@@ -8915,7 +9144,7 @@ msgstr "重要：批次匯入讀者時，容許值不是強制的。"
 msgid "Importing Patrons"
 msgstr "匯入讀者"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:45
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:55
 #, c-format
 msgid ""
 "In 'First issue publication date' you want to enter the date of the issue "
@@ -8969,7 +9198,9 @@ msgid ""
 "In addition to the existing categories that come by default with Koha, "
 "librarians can add their own authorized value categories to control data "
 "that is entered into the system. To add a new category:"
-msgstr "Koha 預設的類型之外，圖書館可以自由新增其他容許值類型藉以控制鍵入系統的資料。新增類型："
+msgstr ""
+"Koha 預設的類型之外，圖書館可以自由新增其他容許值類型藉以控制鍵入系統的資料。"
+"新增類型："
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:35
 #, c-format
@@ -8977,7 +9208,9 @@ msgid ""
 "In addition to the report wizard, you have the option to write your own "
 "queries using SQL. To find reports written by other Koha users, visit the "
 "Koha Wiki: "
-msgstr "除了報表精靈外還可以用 SQL 自行撰寫報表。其他 Koha 使用者客製的報表，請參照 Koha 共筆："
+msgstr ""
+"除了報表精靈外還可以用 SQL 自行撰寫報表。其他 Koha 使用者客製的報表，請參照 "
+"Koha 共筆："
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:39
 #, c-format
@@ -8992,6 +9225,26 @@ msgid ""
 "In order to claim missing and late issues you need to enter vendor "
 "information"
 msgstr "需鍵入供應商資訊，才能發出催缺資訊"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
+#, c-format
+msgid ""
+"In order to complete the transfer process, the library receiving the "
+"rotating collection should check in all items from the collection as they "
+"receive them. This will clear the transfer so that the items are no longer "
+"shown as being \"in transit\"."
+msgstr ""
+"為了完成轉移程序，應先還入至巡迴書庫的圖書館。甚狀態就不會是 \"轉移中\"。"
+
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:24
+#, c-format
+msgid ""
+"In order to determine how to handle irregularities in your subscription "
+"answer 'When there is an irregular issue', if the numbers are always "
+"sequential you'll want to pick 'Keep issue number'"
+msgstr ""
+"在訂閱時回答 '出現不規則刊期時間' 有助於處理的方式，若經常連續出現您可以點選 "
+"'保持刊期編號'"
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:60
 #, c-format
@@ -9027,7 +9280,9 @@ msgid ""
 "the hold is cancelled when you check the item out to someone else. When "
 "trying to check out an item that is already waiting for someone else you "
 "will be presented with a warning message."
-msgstr "有的圖書館允許讀者代別人 (或家人) 提取預約到館的館藏。在此情況下必須在借出之後消除原來的預約。系統對這種借出方式會發出警語。"
+msgstr ""
+"有的圖書館允許讀者代別人 (或家人) 提取預約到館的館藏。在此情況下必須在借出之"
+"後消除原來的預約。系統對這種借出方式會發出警語。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:79
 #, c-format
@@ -9192,7 +9447,20 @@ msgid ""
 "In your results you will see all subscriptions that will expire before the "
 "date you entered. From there you can choose to view the subscription further "
 "or renew it in one click."
-msgstr "可從結果裡看到所有在鍵入日期前將終止的訂購。從此可選擇檢視訂購詳情或更新內容。"
+msgstr ""
+"可從結果裡看到所有在鍵入日期前將終止的訂購。從此可選擇檢視訂購詳情或更新內"
+"容。"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:22
+#, c-format
+msgid ""
+"Initiate a transfer from its original current location/holding library to "
+"the current location/holding library it is to be rotated to. When a library "
+"receives a collection they will need to check in the items to complete the "
+"transfer."
+msgstr ""
+"啟動轉移程序從原位置/儲存圖書館至現在位置/儲存圖書館。收到館藏後應先還入才算"
+"完成轉移。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:3
 #, c-format
@@ -9205,7 +9473,7 @@ msgstr "館藏盤點"
 msgid "Invoices"
 msgstr "發票"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:50
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:61
 #, c-format
 msgid ""
 "Irregular: The journal is not \"regular\" but has a periodicity. You know "
@@ -9377,6 +9645,11 @@ msgid ""
 "transfer the item back to the library where it was checked out "
 msgstr "館藏還入至借出圖書館：將指示圖書員將館藏轉移回借出的圖書館 "
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:3
+#, c-format
+msgid "Item search fields help"
+msgstr "館藏搜尋欄位說明"
+
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:105
 #, c-format
 msgid "Item should be on the hold shelf waiting for someone else"
@@ -9498,7 +9771,9 @@ msgid ""
 "holdings and/or authority data in bulk. This can be used to send your "
 "records to fellow libraries, organizations or services; or simply for backup "
 "purposes."
-msgstr "Koha 內建的工具允許匯出大量的書目、館藏與權威資料。把它們寄送給其他圖書館、機構或服務；或祗供備份之用。"
+msgstr ""
+"Koha 內建的工具允許匯出大量的書目、館藏與權威資料。把它們寄送給其他圖書館、機"
+"構或服務；或祗供備份之用。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:7
 #, c-format
@@ -9508,8 +9783,8 @@ msgstr "Koha內建必要的權威框架。"
 
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:11
 #, c-format
-msgid "Koha database schema"
-msgstr "Koha資料庫綱要"
+msgid "Koha database schema:"
+msgstr "Koha 資料庫綱要："
 
 #: intranet-tmpl/prog/en/modules/help/admin/admin-home.tt:9
 #, c-format
@@ -9518,7 +9793,9 @@ msgid ""
 "control all the various features within Koha, whether they are active in "
 "your install or not. System preferences are set at install and are generally "
 "not changed afterwards."
-msgstr "Koha 有豐富的系統偏好。控制 Koha 的各種功能，啟用或關閉這些功能。安裝 Koha 時，就已經有系統偏好的預設值通常不需要改變它們。"
+msgstr ""
+"Koha 有豐富的系統偏好。控制 Koha 的各種功能，啟用或關閉這些功能。安裝 Koha "
+"時，就已經有系統偏好的預設值通常不需要改變它們。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:9
 #, c-format
@@ -9586,8 +9863,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:12
 #, c-format
-msgid "Koha reports library"
-msgstr "Koha報表庫"
+msgid "Koha reports library:"
+msgstr "Koha 報表程式庫："
 
 #: intranet-tmpl/prog/en/modules/help/about.tt:20
 #, c-format
@@ -9717,6 +9994,11 @@ msgstr "LR = 還入/退款遺失館藏"
 msgid "Label Creator"
 msgstr "書標產生器"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:12
+#, c-format
+msgid "Label is what will appear on the item search page"
+msgstr "標籤將顯示於館藏搜尋頁面"
+
 #. %1$s:  fields.008.0.substr( 28, 3 ) 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:128
 #, c-format
@@ -9724,6 +10006,7 @@ msgid "Language=%s "
 msgstr "Language=%s "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:36
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:5
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:3
@@ -9738,11 +10021,6 @@ msgid ""
 "Learn more about Purchase suggestions in the Acquisitions chapter of the "
 "manual."
 msgstr "請見手冊採訪專章的採訪建議。"
-
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:37
-#, c-format
-msgid "Learn more about Routing Lists later in this manual"
-msgstr "傳閱清單詳情，請見此手冊"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:117
 #, c-format
@@ -9787,6 +10065,13 @@ msgstr ""
 "圖書館設定閉館日與假日供計算到期日之用。打開適當的系統偏好設定，就能使用行事"
 "曆："
 
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:6
+#, c-format
+msgid ""
+"Libraries can manage the 'new_status' field for items. With this script, it "
+"will be possible to:"
+msgstr "可管理館藏的 'new_status' 欄位。以此腳本，可能為："
+
 #: intranet-tmpl/prog/en/modules/help/cataloguing/linkitem.tt:5
 #, c-format
 msgid ""
@@ -9799,8 +10084,9 @@ msgid ""
 "not physically separated from the host item. Learn more about Analytics in "
 "Chapter 13 of AACR2."
 msgstr ""
-"有的圖書館使用分析編目技術讓讀者可以搜尋學刊內的論文與圖書內的章節。分析編目把圖書、學刊報紙裡的論文、章節與專欄抽出，為這些論文、篇章與章節另立款目。實體"
-"上仍未與主紀錄分隔。詳情參見 AACR2 的第 13 章。"
+"有的圖書館使用分析編目技術讓讀者可以搜尋學刊內的論文與圖書內的章節。分析編目"
+"把圖書、學刊報紙裡的論文、章節與專欄抽出，為這些論文、篇章與章節另立款目。實"
+"體上仍未與主紀錄分隔。詳情參見 AACR2 的第 13 章。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:74
 #, c-format
@@ -9978,10 +10264,20 @@ msgstr "MARC 紀錄分欄"
 msgid "MARC export"
 msgstr "MARC 匯出"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:14
+#, c-format
+msgid "MARC field allows you to pick which field you'd like to search in"
+msgstr "MARC 欄位允許您指定搜尋的欄位"
+
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:3
 #, c-format
 msgid "MARC import"
 msgstr "MARC 匯入"
+
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:16
+#, c-format
+msgid "MARC subfield is the subfield you'd like to search in"
+msgstr "MARC 分欄是您打算搜尋的分欄"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:50
 #, c-format
@@ -10017,6 +10313,11 @@ msgstr "管理照片"
 #, c-format
 msgid "Manage Koha system settings (Administration panel)"
 msgstr "管理 Koha 系統設定 (管理面板)"
+
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:3
+#, c-format
+msgid "Manage Labels"
+msgstr "管理標籤"
 
 #: intranet-tmpl/prog/en/modules/help/tools/manage-marc-import.tt:3
 #, c-format
@@ -10132,7 +10433,9 @@ msgid ""
 "acquisitions module, even if the order is placed after the budget end date. "
 "This will allow you to record orders that were places in a previous budget "
 "period."
-msgstr "在採訪模組標記預算啟用就可以指定訂單使用它，即使該訂單在預算終止後才發出。即允許把訂單放在較早的預算期內。"
+msgstr ""
+"在採訪模組標記預算啟用就可以指定訂單使用它，即使該訂單在預算終止後才發出。即"
+"允許把訂單放在較早的預算期內。"
 
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:15
 #, c-format
@@ -10301,12 +10604,17 @@ msgid ""
 "the item"
 msgstr "NULL：表示讀者要求第 1 個可用的館藏，我們沒有選擇該館藏"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:10
+#, c-format
+msgid "Name is a field for you to identify the search term"
+msgstr "名稱是辨識搜尋術語的欄位"
+
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:26
 #, c-format
 msgid "Name the list and choose what type of list this is "
 msgstr "虛擬書架名稱並選擇其類型 "
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:76
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:75
 #, c-format
 msgid ""
 "New authorized values can be added to any existing or new category. To add a "
@@ -10439,11 +10747,12 @@ msgstr ""
 "接著選擇傳送逾期通知的方式。包括：電子郵件、Feed、電話(必須使用iTiva Talking "
 "Tech或其他的服務)、列印與簡訊(必須設SMSSendDriver偏好)。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:22
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:23
 #, c-format
 msgid ""
-"Next you can choose whether a new item is created when receiving an issue"
-msgstr "簽收期刊後，接著選擇新增館藏"
+"Next you can choose whether a new item is created when receiving an issue "
+"(if you barcode issues you'll want to create an item at this time)"
+msgstr "接著選擇是否新增館藏 (新的條碼表示新的館藏)"
 
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:26
 #, c-format
@@ -10507,6 +10816,11 @@ msgstr "Nicole Engard "
 msgid "No Holds Allowed: No patron may put this book on hold."
 msgstr "無可預約的館藏：讀者不能預約此圖書。"
 
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:29
+#, c-format
+msgid "No condition"
+msgstr "沒有條件"
+
 #: intranet-tmpl/prog/en/modules/help/acqui/supplier.tt:21
 #, c-format
 msgid ""
@@ -10547,6 +10861,11 @@ msgstr "在模組名稱後括弧內的版本數字昰必備的版本；安裝的
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:38
 #, c-format
 msgid "Note:"
+msgstr "說明："
+
+#: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
+#, c-format
+msgid "Note: "
 msgstr "說明："
 
 #: intranet-tmpl/prog/en/modules/help/members/discharge.tt:9
@@ -10591,7 +10910,7 @@ msgstr "說明：您可使用虛擬書架工具合併記錄弓。"
 msgid ""
 "Note: In France a \"quitus\" (\"discharge\") is needed if you want to "
 "register for an account in a library or a university)."
-msgstr "說明：於法文裡於圖書館或大學登錄帳號需 \"quitus\" (\"退出\") )。"
+msgstr "說明：圖書館或大學登錄帳號) 法文這麼說 \"quitus\" (\"離館除籍\")。"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:225
 #, c-format
@@ -10675,7 +10994,8 @@ msgid ""
 "Of these fields, only the vendor name is required. The rest of the "
 "information should be added to help with generating claim letters and "
 "invoices."
-msgstr "列出的欄位裡，祗有供應商名稱是必備。其他的資訊有助於產生催缺信與發票之用。"
+msgstr ""
+"列出的欄位裡，祗有供應商名稱是必備。其他的資訊有助於產生催缺信與發票之用。"
 
 #: intranet-tmpl/prog/en/modules/help/circ/offline.tt:3
 #, c-format
@@ -10687,6 +11007,7 @@ msgstr "離線流通"
 msgid "Offline circulation"
 msgstr "離線流通"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:67
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:19
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:19
 #, c-format
@@ -10780,6 +11101,11 @@ msgid ""
 "this patron is on."
 msgstr "在此分頁可看到並編輯此讀者所屬的傳閱清單。"
 
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:88
+#, c-format
+msgid "Once a 'Numbering pattern' is chosen the number formula will appear. "
+msgstr "選定 '編碼模式' 後即出現編碼公式。"
+
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:17
 #, c-format
 msgid ""
@@ -10863,6 +11189,13 @@ msgstr "做好後，勾選 '儲存'"
 msgid ""
 "Once quote selection is finished, simply click the 'Delete quote(s)' key."
 msgstr "選定引句後，再勾選 '刪除引句' 鍵。"
+
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:50
+#, c-format
+msgid ""
+"Once that data is filled in you can click 'Next' to enter the prediction "
+"pattern information. "
+msgstr "填好資料後按 '下一步' 進入預測模式資訊。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:21
 #, c-format
@@ -10954,6 +11287,7 @@ msgid ""
 msgstr "篩選訂單，選出認為遲到的館藏後，這些館藏將呈現在另個清單裡。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:17
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:95
 #, c-format
 msgid ""
 "Once you have added all of the items click the 'Done' button. The resulting "
@@ -10981,7 +11315,9 @@ msgid ""
 "tab. The status will also be updated on the patron's account in the OPAC and "
 "an email notice will be sent to the patron using the template that matches "
 "the status you have chosen."
-msgstr "按下 '送出' 鈕後建議將被移至對映的分頁。更新後的狀態將送到 OPAC 的讀者帳號並以模板將電子郵件送交讀者。"
+msgstr ""
+"按下 '送出' 鈕後建議將被移至對映的分頁。更新後的狀態將送到 OPAC 的讀者帳號並"
+"以模板將電子郵件送交讀者。"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/merge.tt:15
 #, c-format
@@ -11008,7 +11344,9 @@ msgid ""
 "Once you have completed your selections click the 'merge' button. The "
 "primary record will now show the data you chose for it as well as all of the "
 "items/holdings from both bib records, and the second record will be deleted."
-msgstr "選好之後按下 '合併' 鈕。主要紀錄將顯示選擇的資料以及來自書目資料的館藏/預約資料，次要資料被刪除。"
+msgstr ""
+"選好之後按下 '合併' 鈕。主要紀錄將顯示選擇的資料以及來自書目資料的館藏/預約資"
+"料，次要資料被刪除。"
 
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course.tt:5
 #, c-format
@@ -11022,7 +11360,9 @@ msgstr "設定指定參考書課程後，您可新增課程並新增題名入指
 msgid ""
 "Once you have configured all your sets, you have to build the sets. This is "
 "done by calling the script misc/migration_tools/build_oai_sets.pl."
-msgstr "組態之後，就可以建立資料夾。呼叫 misc/migration_tools/build_oai_sets.pl 程式即可。"
+msgstr ""
+"組態之後，就可以建立資料夾。呼叫 misc/migration_tools/build_oai_sets.pl 程式"
+"即可。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:43
 #, c-format
@@ -11074,7 +11414,7 @@ msgid ""
 "items."
 msgstr "改變之後，將出現結果館藏。"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:61
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:80
 #, c-format
 msgid ""
 "Once you have made your choices, click the 'Move unreceived orders' button. "
@@ -11108,6 +11448,7 @@ msgid ""
 "right."
 msgstr "儲存改變後，您的新圖書館將出現在右上角。"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:77
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:29
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:29
 #, c-format
@@ -11303,6 +11644,13 @@ msgid ""
 "where you can make any changes you need to the framework you imported."
 msgstr "匯入之後進入框架編輯工具再編輯它。"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:21
+#, c-format
+msgid ""
+"Once your new field is added it will be visible at the top of this page and "
+"on the item search page"
+msgstr "新增的欄位將顯示在此頁面上方與館藏搜尋頁面"
+
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:121
 #, c-format
 msgid ""
@@ -11358,6 +11706,16 @@ msgstr "開啟讀者做為使用的基礎(做為複製之用)"
 #, c-format
 msgid "Or you can just have no image associated with the item type"
 msgstr "或您可沒有圖示連結至館藏類型"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:28
+#, c-format
+msgid ""
+"Or, from the \"add or remove items\" page for a collection, you can click "
+"the Transfer button, choose the library you wish to transfer the collection "
+"to and click \"Transfer Collection\"."
+msgstr ""
+"或，從書庫的 \"新增或移除館藏\" 頁面，您可按轉移鈕，選擇欲轉移至的書庫再按 "
+"\"轉移書庫\" 鈕。"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersuggestion.tt:3
 #, c-format
@@ -11517,7 +11875,9 @@ msgid ""
 "Patron attributes can be used to define custom fields to associate with your "
 "patron records. In order to enable the use of custom fields you need to set "
 "the ExtendedPatronAttributes system preference."
-msgstr "讀者屬性可用於設定與讀者紀錄有關的客製化欄位。需先設定 ExtendedPatronAttributes 系統偏好才能啟用客製化欄位。"
+msgstr ""
+"讀者屬性可用於設定與讀者紀錄有關的客製化欄位。需先設定 "
+"ExtendedPatronAttributes 系統偏好才能啟用客製化欄位。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:5
 #, c-format
@@ -11553,7 +11913,7 @@ msgstr "讀者詳情"
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:73
 #, c-format
 msgid "Patron discharges"
-msgstr "讀者退出"
+msgstr "讀者離館除籍"
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:3
 #, c-format
@@ -11586,7 +11946,8 @@ msgid ""
 "Patron images can be uploaded in bulk if you are allowing patron images to "
 "be attached to patron records. These images can also be used when creating "
 "patron cards."
-msgstr "若允許照片附加在讀者紀錄就可以批次上傳讀者照片。這些照片也可用於新增讀者證。"
+msgstr ""
+"若允許照片附加在讀者紀錄就可以批次上傳讀者照片。這些照片也可用於新增讀者證。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:3
 #, c-format
@@ -11627,7 +11988,9 @@ msgid ""
 "next to the Password label are always there even if a password isn't set. If "
 "a patron forgets their password the only option is to reset their password. "
 "To change the patron's password, click the 'Change Password' button"
-msgstr "不能擷取讀者密碼。即使沒有設定密碼在讀者詳情的密碼標示下仍出現星號。若忘記密碼祗能重設密碼。按 '變更密碼' 鈕，就能變更密碼"
+msgstr ""
+"不能擷取讀者密碼。即使沒有設定密碼在讀者詳情的密碼標示下仍出現星號。若忘記密"
+"碼祗能重設密碼。按 '變更密碼' 鈕，就能變更密碼"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:3
 #, c-format
@@ -11896,6 +12259,7 @@ msgid "Professional patrons can be linked to Organizational patrons"
 msgstr "專業讀者可連結至機構讀者"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:30
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:51
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:7
@@ -11976,11 +12340,6 @@ msgstr "上傳者的每日一句"
 #, c-format
 msgid "RENEWAL "
 msgstr "RENEWAL "
-
-#: intranet-tmpl/prog/en/modules/help/tools/letter.tt:281
-#, c-format
-msgid "RESERVESLIP "
-msgstr "RESERVESLIP "
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:241
 #, c-format
@@ -12189,6 +12548,27 @@ msgid ""
 "matching rule worked and that the records appear as you expect them to"
 msgstr "完成匯入前，先審核您的摘要，確試匹配規則運作運利，如預期顯示紀錄"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:3
+#, c-format
+msgid "Rotating Collections"
+msgstr "巡迴書庫"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:5
+#, c-format
+msgid ""
+"Rotating Collections is a tool for managing collections of materials that "
+"frequently get shifted from library to library. It adds the ability to store "
+"not only an item's home library and current location, but also information "
+"about where it is supposed to be transferred to next to ensure that all "
+"items in the collection are sent to the correct library. When an item in a "
+"rotating collection is checked in, library staff are notified that the item "
+"is part of a rotating collection and which branch it should be sent to if it "
+"is not at the correct one."
+msgstr ""
+"巡迴書庫是用來管理在各圖書館移動的館藏。不祗處理館藏所屬圖書館與當前位置，而"
+"且還能夠顯示應該轉移至下個位置的資訊以確保所有的館藏都送至正確的圖書館。巡迴"
+"書庫的館藏還入其他圖書館後，將提示該館藏屬於巡迴書庫及該送至的下個圖書館。"
+
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:347
 #, c-format
 msgid "Routing"
@@ -12372,7 +12752,7 @@ msgstr "見採訪的完整文件 "
 msgid "See the full documentation for Adding Patrons in the "
 msgstr "見新增讀者的完整文件 "
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:86
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:105
 #, c-format
 msgid "See the full documentation for Adding a Subscription in the "
 msgstr "見新增訂閱的完整文件 "
@@ -12402,7 +12782,7 @@ msgstr "見匿名讀者的完整文件 "
 msgid "See the full documentation for Authorities in the "
 msgstr "見權威的完整文件 "
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:95
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #, c-format
 msgid "See the full documentation for Authorized Values in the "
 msgstr "見容許值的完整文件 "
@@ -12432,7 +12812,7 @@ msgstr "見批次修改記錄的完整文件於 "
 msgid "See the full documentation for Budget Planning in the "
 msgstr "見預算規畫的完整文件 "
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:67
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
 #, c-format
 msgid "See the full documentation for Budgets in the "
 msgstr "見預算的完整文件 "
@@ -12616,6 +12996,11 @@ msgstr "見館藏紀錄的完整文件 "
 msgid "See the full documentation for Item Types in the "
 msgstr "見館藏類型的完整文件 "
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
+#, c-format
+msgid "See the full documentation for Item search fields in the "
+msgstr "見館藏搜尋欄位的完整文件 "
+
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #, c-format
 msgid "See the full documentation for Keyword to MARC Mapping in the "
@@ -12632,21 +13017,25 @@ msgid "See the full documentation for Koha to MARC Mapping in the "
 msgstr "見 Koha 對映 MARC 的完整文件 "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:25
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:103
 #, c-format
 msgid "See the full documentation for Label Batches in the "
 msgstr "見批次書標的完整文件 "
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:17
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:15
 #, c-format
 msgid "See the full documentation for Label Layouts in the "
 msgstr "見書標布局的完整文件 "
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:79
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:31
 #, c-format
 msgid "See the full documentation for Label Profiles in the "
 msgstr "見書標設定檔的完整文件 "
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:33
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:49
 #, c-format
 msgid "See the full documentation for Label Templates in the "
 msgstr "見書標模版的完整文件 "
@@ -12844,6 +13233,11 @@ msgstr "見續訂的完整文件 "
 #, c-format
 msgid "See the full documentation for Reports in the "
 msgstr "見報表的完整文件 "
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
+#, c-format
+msgid "See the full documentation for Rotating Collections in the "
+msgstr "見巡迴書庫的完整文件 "
 
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #, c-format
@@ -13089,7 +13483,7 @@ msgstr "見上傳讀者照片的完整文件 "
 #: intranet-tmpl/prog/en/modules/help/members/discharge.tt:19
 #, c-format
 msgid "See the full documentation for the Patron discharges in the "
-msgstr "見讀者退出的完整文件於 "
+msgstr "見讀者離館除籍的完整文件於 "
 
 #: intranet-tmpl/prog/en/modules/help/members/purchase-suggestions.tt:11
 #, c-format
@@ -13334,7 +13728,9 @@ msgid ""
 "Sometimes checkouts will trigger warning messages that will appear in a "
 "yellow box above the check out field. These warnings need to be acknowledged "
 "before you will be able to continue checking items out."
-msgstr "有時借出會啟動警示訊息以黃色顯示在借出欄位之下。館員需確認看到這些警示才能繼續借出館藏。"
+msgstr ""
+"有時借出會啟動警示訊息以黃色顯示在借出欄位之下。館員需確認看到這些警示才能繼"
+"續借出館藏。"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:131
 #, c-format
@@ -13473,7 +13869,7 @@ msgid ""
 "actions) by entering a name and clicking 'Create template'."
 msgstr "鍵入新模板 (模板可由多個作為構成) 的名稱並按 '新增模板' 鈕。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:69
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:83
 #, c-format
 msgid ""
 "Start with the numbering on the issue you have in hand, the numbering that "
@@ -13608,12 +14004,20 @@ msgstr "送出補丁給 Koha 的 git (版本控制系統)"
 msgid "Subscription Detail"
 msgstr "訂閱詳情"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:5
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:37
 #, c-format
-msgid ""
-"Subscriptions can be added by clicking the 'New' button on any bibliographic "
-"record or by visiting the Serials module and clicking 'New Subscription'"
-msgstr "勾選任何書目紀錄的 '新增' 鈕或從期刊模組裡點選 '新增訂閱' 都可以訂閱"
+msgid "Substitution: items.ccode = 2"
+msgstr "取代：items.ccode = 2"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:30
+#, c-format
+msgid "Substitution: items.new_status = '' (no value in the input)"
+msgstr "取代：items.new_status = '' (輸入無值)"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:22
+#, c-format
+msgid "Substitutions are changes to apply to the matching items."
+msgstr "取代意思是改變匹配的館藏。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:93
 #, c-format
@@ -13726,8 +14130,9 @@ msgid ""
 "every user can use it. Talk to your system admin about adding the user to "
 "the right place to make the task scheduler work."
 msgstr ""
-"若網站使用者沒有權限則不會執行工作排程。檢查 /etc/at.allow 查看使用者的權限。若沒有該檔案，則檢查 etc/at.deny 檔案。若 "
-"at.deny 內容為空白，則每個人都可以執行它。要求您的系統管理員把使用者加入正確的位置才能執行排定工作。"
+"若網站使用者沒有權限則不會執行工作排程。檢查 /etc/at.allow 查看使用者的權限。"
+"若沒有該檔案，則檢查 etc/at.deny 檔案。若 at.deny 內容為空白，則每個人都可以"
+"執行它。要求您的系統管理員把使用者加入正確的位置才能執行排定工作。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/stage-marc-import.tt:12
 #, c-format
@@ -13735,6 +14140,7 @@ msgid "Tell Koha which type of file this is, bibliographic or authority"
 msgstr "告知 Koha 此檔案的屬性，書目或權威"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:15
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:31
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:15
 #, c-format
 msgid ""
@@ -13743,6 +14149,7 @@ msgid ""
 msgstr "模板代碼用於辨識模板清單裡的模板"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:14
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:30
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:14
 #, c-format
 msgid ""
@@ -13755,6 +14162,7 @@ msgstr "儲存模板之後，由自動產生不重複模板代碼"
 msgid "Template Toolkit tags"
 msgstr "模板工具標籤"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:65
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:17
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:17
 #, c-format
@@ -13765,6 +14173,7 @@ msgstr "在模板編輯表單裡選定模板設定檔後，立即填滿模板"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:3
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:26
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:19
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:3
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:11
 #, c-format
@@ -13783,18 +14192,21 @@ msgstr "給 OPAC 的文字 "
 msgid "Text for librarian "
 msgstr "給館員的文字 "
 
-#: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:11
-#: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:12
-#, c-format
-msgid "The "
-msgstr "這個 "
-
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:62
 #, c-format
 msgid ""
 "The &lt;&lt; and &gt;&gt; are just delimiters. You must put &lt;&lt; at the "
 "beginning and &gt;&gt; at the end of your parameter"
-msgstr "&lt;&lt; 與 &gt;&gt; 祗是區隔符號。在參數前必須鍵入 &lt;&lt; 在結尾鍵入 &gt;&gt;"
+msgstr ""
+"&lt;&lt; 與 &gt;&gt; 祗是區隔符號。在參數前必須鍵入 &lt;&lt; 在結尾鍵入 &gt;"
+"&gt;"
+
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:91
+#, c-format
+msgid ""
+"The 'Begins with' number is the number of the issue you're holding in your "
+"hand."
+msgstr "此 '開始號碼' 是在館的期刊編號。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:16
 #, c-format
@@ -13834,15 +14246,22 @@ msgid ""
 "you start charging fines. "
 msgstr "此 '罰款寬限期' 是館藏逾期後的一段時間，過了這段時間，才開始收取罰款。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:31
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:43
 #, c-format
 msgid ""
-"The 'Grace Period' is the number of days before an issue is automatically "
-"moved from 'expected' status to 'waiting' and how many days before an issue "
-"is automatically moved from 'waiting' status to 'late'"
+"The 'Grace period' is the number of days before an issue is automatically "
+"moved from 'Expected' status to 'Waiting' and how many days before an issue "
+"is automatically moved from 'Waiting' status to 'Late'"
 msgstr ""
 "此 '寬限期' 是天數，自動把期刊從 '預期' 狀態轉移為 '等待'，同樣的天數，自動把"
 "期刊從 '等待' 狀態轉移為 '遲到'"
+
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:92
+#, c-format
+msgid ""
+"The 'Inner counter' is used to tell Koha where the \"receiving cycle\" "
+"starts "
+msgstr "此 '內部計數器' 係告知 Koha 啟動 \"簽收週期\" "
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:47
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:13
@@ -13889,6 +14308,16 @@ msgid ""
 msgstr ""
 "當 advancedMARCeditor 偏好設為顯示標籤時，'圖書館標籤' 就顯示在編目模組"
 
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:87
+#, c-format
+msgid ""
+"The 'Locale' option is useful when you want to display days, month or "
+"season. For example, if you have a German serial, you can use the German "
+"locale option to display days, etc. in German."
+msgstr ""
+"顯示日、月或季時此 'Locale' 選項就有用。例如：館藏德國的期刊，就可以選用德國"
+"的選項。"
+
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:41
 #, c-format
 msgid ""
@@ -13905,19 +14334,20 @@ msgid ""
 "The 'News' box allows for the use of HTML for formatting of your news item"
 msgstr "此 '最新消息' 盒可以使用HTML格式它"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:81
-#, c-format
-msgid ""
-"The 'Numbering formula' is editable to match the way you'd like your "
-"numbering to print on the item record and subscription information pages"
-msgstr "此 '編碼公式' 可以編輯成喜歡的模式，讓它顯示在館藏紀錄或訂閱資訊頁面"
-
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:57
 #, c-format
 msgid ""
 "The 'Overdue Fines Cap' is the maximum fine for this patron and item "
 "combination "
 msgstr "此 '逾期罰款上限' 是罰款的最高額 "
+
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:36
+#, c-format
+msgid ""
+"The 'Patron notification' option lets you pick a notice to send to patrons "
+"who subscribe to updates on this serial via the OPAC. "
+msgstr ""
+"讀者經由 OPAC 更新對此期刊的訂閱後您可經由 '讀者通知' 選項挑選送出的讀者。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:15
 #, c-format
@@ -14164,6 +14594,7 @@ msgstr ""
 msgid "The Patrons module stores the information you add about your patrons."
 msgstr "讀者模組儲存新增的讀者。"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:64
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:16
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:16
 #, c-format
@@ -14200,7 +14631,7 @@ msgstr ""
 msgid "The RenewalSendNotice preference is set to 'Send'"
 msgstr "RenewalSendNotice 偏好已設為 '送出'"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:40
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:44
 #, c-format
 msgid ""
 "The Staff and OPAC Display options allow you to control how many issues "
@@ -14231,7 +14662,9 @@ msgid ""
 "The Uncertain Prices page is independent of the basket. It is linked to the "
 "vendor so you will see all items on order with uncertain prices for that "
 "vendor."
-msgstr "價格不定的頁面獨立於購物籃之外。它連結至代理商讓您看到該代理商所有價格未定的館藏。"
+msgstr ""
+"價格不定的頁面獨立於購物籃之外。它連結至代理商讓您看到該代理商所有價格未定的"
+"館藏。"
 
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:17
 #, c-format
@@ -14239,9 +14672,12 @@ msgid ""
 "The Units pull down is used to define what measurement scale you're going to "
 "be using for the template. This should probably match the unit of "
 "measurement used on the template description provided by the product vendor."
-msgstr "單位的下拉選單用在模板內設定衡量的單位。應與產品代理商提供模板說明裡的單位相呼應。"
+msgstr ""
+"單位的下拉選單用在模板內設定衡量的單位。應與產品代理商提供模板說明裡的單位相"
+"呼應。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:17
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:33
 #, c-format
 msgid ""
 "The Units pull down is used to define what measurement scale you're going to "
@@ -14266,6 +14702,7 @@ msgid ""
 "be using for your profile."
 msgstr "單位下拉選單用在您的設定檔內，用以設定衡量的單位。"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:66
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:18
 #, c-format
 msgid ""
@@ -14320,7 +14757,9 @@ msgid ""
 "active currency will have a check mark in the 'Active' column. If you don't "
 "have an active currency you will see an error message telling you to choose "
 "an active currency."
-msgstr "使用幣別是圖書館的主要幣別。在 '使用' 欄位打勾即啟用它。若沒有打勾將出現錯誤訊息提示您勾選使用幣別。"
+msgstr ""
+"使用幣別是圖書館的主要幣別。在 '使用' 欄位打勾即啟用它。若沒有打勾將出現錯誤"
+"訊息提示您勾選使用幣別。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:24
 #, c-format
@@ -14422,6 +14861,11 @@ msgstr ""
 "OPACPrivacy 系統偏好為 '允許' 讀者可以決定不讓圖書館保留流通紀錄祗顯示尚未還"
 "入的館藏。"
 
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:18
+#, c-format
+msgid "The conditions"
+msgstr "條件"
+
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:11
 #, c-format
 msgid ""
@@ -14439,6 +14883,12 @@ msgid ""
 msgstr ""
 "Koha 的指定參考書模組可以把館藏暫時移入 '保留' 區，並適用特別的流通規則，供指"
 "定的課程使用。"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:41
+#, c-format
+msgid ""
+"The cronjob script is misc/cronjobs/automatic_item_modification_by_age.pl."
+msgstr "工作排程腳本是 misc/cronjobs/automatic_item_modification_by_age.pl。"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:77
 #, c-format
@@ -14490,7 +14940,8 @@ msgstr "借出詳情也將出現在館員介面的書目詳情頁面。"
 msgid ""
 "The details page will show you the items you have on reserve for your "
 "course. From here you can add/remove items and edit the course."
-msgstr "在詳細頁面顯示課程指定的參考書內容。在該頁面可以新增/移除館藏以及編輯課程。"
+msgstr ""
+"在詳細頁面顯示課程指定的參考書內容。在該頁面可以新增/移除館藏以及編輯課程。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:24
 #, c-format
@@ -14499,7 +14950,9 @@ msgid ""
 "extremely useful tool in the course of your cataloging work. You are "
 "encouraged to submit any enhancement requests as well as any bugs via Koha "
 "Project Bugzilla."
-msgstr "新增標籤模組的發展者希望您將發現這個極為有用的編目工具。您可送出任何強化它的建議以及可能錯誤送至 Koha 的 Bugzilla 計畫。"
+msgstr ""
+"新增標籤模組的發展者希望您將發現這個極為有用的編目工具。您可送出任何強化它的"
+"建議以及可能錯誤送至 Koha 的 Bugzilla 計畫。"
 
 #: intranet-tmpl/prog/en/modules/help/patroncards/home.tt:18
 #, c-format
@@ -14507,7 +14960,14 @@ msgid ""
 "The developers of the Patron Card Creator module hope you will find this an "
 "extremely useful tool. You are encouraged to submit any enhancement requests "
 "as well as any bugs via Koha Project Bugzilla."
-msgstr "新增讀者證模組的發展者希望您將發現這個極為有用的工具。您可送出任何強化它的建議以及發現的可能錯誤至 Koha 的 Bugzilla 計畫。"
+msgstr ""
+"新增讀者證模組的發展者希望您將發現這個極為有用的工具。您可送出任何強化它的建"
+"議以及發現的可能錯誤至 Koha 的 Bugzilla 計畫。"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:16
+#, c-format
+msgid "The duration"
+msgstr "持續時間"
 
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:54
 #, c-format
@@ -14653,7 +15113,9 @@ msgid ""
 "The index name is 'ctype' is taken from the 008 and it's where we get the "
 "'additional content types'. It's position 008/24-28 field. Common values "
 "are: "
-msgstr "從 008 取得索引名稱 'ctype' 就是 '其他內容類型'。它的位置在 008/24-28 欄位。通常的值是："
+msgstr ""
+"從 008 取得索引名稱 'ctype' 就是 '其他內容類型'。它的位置在 008/24-28 欄位。"
+"通常的值是："
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:42
 #, c-format
@@ -14743,6 +15205,7 @@ msgid ""
 msgstr "尺寸可以從供應商的包裝或網站找到。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:18
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:34
 #, c-format
 msgid ""
 "The measurements, number of columns and number of rows can be found on the "
@@ -14780,7 +15243,7 @@ msgstr "指定給布局的名稱係供您未來容易辨識使用"
 msgid "The new list form offers several options for creating your list:"
 msgstr "新增的虛擬書架表格提供若干選項："
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:91
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:88
 #, c-format
 msgid "The new value will appear in the list along with existing values"
 msgstr "新的值將與舊的值一起出現在清單"
@@ -14821,6 +15284,7 @@ msgstr ""
 "可以用新增讀者證工具裡的 '管理圖像' 上傳其他圖像，包括圖書館標識或符號。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:11
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:89
 #, c-format
 msgid ""
 "The other is to choose to create a new batch from the label creator tool"
@@ -14890,7 +15354,8 @@ msgid ""
 "The patron import tool can be used at any time to add patrons in bulk. It is "
 "commonly used in universities and schools when a new batch of students "
 "registers."
-msgstr "任何時間都可以使用讀者匯入工具批次新增讀者。通常用於各級學校新生入學時。"
+msgstr ""
+"任何時間都可以使用讀者匯入工具批次新增讀者。通常用於各級學校新生入學時。"
 
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:5
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:26
@@ -15026,6 +15491,11 @@ msgid ""
 "are still checked out"
 msgstr "收條顯示今天借出與尚未還入的館藏"
 
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:21
+#, c-format
+msgid "The substitutions"
+msgstr "取代"
+
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:19
 #, c-format
 msgid ""
@@ -15131,6 +15601,11 @@ msgstr ""
 "可在此加入說明。勾選 '新增說明' 並在文字盒鍵入文字資料。就可對此資料集新增說"
 "明。"
 
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:15
+#, c-format
+msgid "There are 3 values to define:"
+msgstr "可設定 3 個值："
+
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:266
 #, c-format
 msgid ""
@@ -15159,18 +15634,22 @@ msgid ""
 "item you can do this by opening up the detail page for the bib record and "
 "clicking the 'Edit' button at the top. From there you can choose to 'Edit "
 "items'."
-msgstr "很多方法可以刪除館藏紀錄。打開書目紀錄詳情按上方的 '編輯' 鈕就能刪除單筆館藏紀錄。從這裡再勾選 '編輯館藏'。"
+msgstr ""
+"很多方法可以刪除館藏紀錄。打開書目紀錄詳情按上方的 '編輯' 鈕就能刪除單筆館藏"
+"紀錄。從這裡再勾選 '編輯館藏'。"
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:30
 #, c-format
 msgid "There are several messages that can appear when checking items in:"
 msgstr "還入館藏時出現若干訊息："
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:46
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:56
 #, c-format
 msgid ""
-"There are several pre-defined options for the 'Frequency' of publication "
-msgstr "出版 '刊期' 有幾個預設的選項 "
+"There are several pre-defined options for the 'Frequency' of publication all "
+"of which are visible alongside your own custom frequencies by visiting "
+"'Manage frequencies' "
+msgstr "進入 '刊期管理' 客製化預設的 '刊期' "
 
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:7
 #, c-format
@@ -15253,6 +15732,13 @@ msgid ""
 "fields from the biblio, biblioitems, and items tables."
 msgstr "&lt;item&gt;&lt;/item&gt; 應包括來自書目與館藏表的所有欄位。"
 
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:20
+#, c-format
+msgid ""
+"They are cumulatives but you can separate with a pipe '|' for a field with "
+"several values."
+msgstr "原為累加的但可以用直線 '|' 區隔欄位內的多個值。"
+
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:5
 #, c-format
 msgid ""
@@ -15281,7 +15767,7 @@ msgstr ""
 "此區塊讓您控制顯示的 Koha 模組。若都不隱藏就看不到勾選區且檢視表單時可看到所"
 "有的欄位。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:19
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:20
 #, c-format
 msgid ""
 "This can be done by searching for an existing record by clicking on the "
@@ -15292,7 +15778,7 @@ msgstr ""
 "點選盒之下的 '搜尋書目' 連結或在第一個盒鍵入書目號，都能搜尋既有的紀錄。祗有"
 "搜尋欄位才需用到括號。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:28
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:31
 #, c-format
 msgid ""
 "This can be done easily by using the 'Edit as New (Duplicate)' option found "
@@ -15320,6 +15806,13 @@ msgid ""
 "restriction or by the Overdue/Notice Status Triggers"
 msgstr "館員編輯讀者紀錄並新增限制或設定逾期/通知狀態啟動機制"
 
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:4
+#, c-format
+msgid ""
+"This configuration page allows to configure the rules for the automatic item "
+"modifications by age cronjob script."
+msgstr "此組態頁面允許您以年齡工作排程腳本自動修改館藏的組態規則。"
+
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:28
 #, c-format
 msgid "This field must be wrapped in quotes if multiple values are defined."
@@ -15338,7 +15831,9 @@ msgid ""
 "This form can automatically generate a random password if you click the link "
 "labeled \"Click to fill with a randomly generated suggestion. Passwords will "
 "be displayed as text.\""
-msgstr "若您點選標示為 \"勾選將產生隨機建議。密碼以純文字顯示。\" 此表單就能自動產生隨機密碼"
+msgstr ""
+"若您點選標示為 \"勾選將產生隨機建議。密碼以純文字顯示。\" 此表單就能自動產生"
+"隨機密碼"
 
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:104
 #, c-format
@@ -15381,7 +15876,9 @@ msgid ""
 "This list of parameters includes functionalities that didn't fit in any "
 "other category. These items are optional and may not need to be altered, "
 "depending on your library's needs."
-msgstr "此參數清單包括不屬於其他類型的參數。這些參數是選項且不需要改變，視圖書館的需要而定。"
+msgstr ""
+"此參數清單包括不屬於其他類型的參數。這些參數是選項且不需要改變，視圖書館的需"
+"要而定。"
 
 #: intranet-tmpl/prog/en/modules/help/tags/list.tt:5
 #, c-format
@@ -15682,7 +16179,9 @@ msgid ""
 "This section provides information about your Koha installation. It is useful "
 "for developers and if you wish to report bugs or issues to the Koha "
 "community."
-msgstr "此區提供安裝 Koha 的資訊。對軟體發展者極有幫助向 Koha 社群報告錯誤時亦有幫助。"
+msgstr ""
+"此區提供安裝 Koha 的資訊。對軟體發展者極有幫助向 Koha 社群報告錯誤時亦有幫"
+"助。"
 
 #: intranet-tmpl/prog/en/modules/help/about.tt:9
 #, c-format
@@ -15715,7 +16214,9 @@ msgid ""
 "you have them installed, and the version number. If you are reporting an "
 "issue, the developer may ask what is the state of the Perl modules you have "
 "installed."
-msgstr "不論是否安裝，此表單列出 Koha 用到的所有獨立 Perl 模組及其版本。報告問題時，軟體發展者可能詢問安裝的 Perl 模組狀態。"
+msgstr ""
+"不論是否安裝，此表單列出 Koha 用到的所有獨立 Perl 模組及其版本。報告問題時，"
+"軟體發展者可能詢問安裝的 Perl 模組狀態。"
 
 #: intranet-tmpl/prog/en/modules/help/about.tt:36
 #, c-format
@@ -15764,7 +16265,9 @@ msgid ""
 "This tool can be used to import both bibliographic and authority records "
 "that are saved in MARC format. Importing records into Koha includes two "
 "steps. The first is to stage records for import."
-msgstr "此工具可用於匯入儲存為 MARC 格式的書目與權威記錄。Koha 以兩步驟匯入記錄。首先是匯入為待處理記錄。"
+msgstr ""
+"此工具可用於匯入儲存為 MARC 格式的書目與權威記錄。Koha 以兩步驟匯入記錄。首先"
+"是匯入為待處理記錄。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/checkmarc.tt:5
 #, c-format
@@ -15816,8 +16319,9 @@ msgid ""
 "will need to set your LocalCoverImages and/or OPACLocalCoverImages "
 "preferences to 'Display.' Images can be uploaded in batches or one by one."
 msgstr ""
-"此工具允許上傳封面。館員需有 upload_local_cover_images 權限，才能使用此工具。需設定 LocalCoverImages 與 "
-"OPACLocalCoverImages 偏好為 '顯示' 才能在館員介面與線上公用目錄顯示封面。可以批次或個別上傳封面。"
+"此工具允許上傳封面。館員需有 upload_local_cover_images 權限，才能使用此工具。"
+"需設定 LocalCoverImages 與 OPACLocalCoverImages 偏好為 '顯示' 才能在館員介面"
+"與線上公用目錄顯示封面。可以批次或個別上傳封面。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/batch_delete_records.tt:5
 #, c-format
@@ -15826,6 +16330,11 @@ msgid ""
 "records or authority records and allow you to delete all those records and "
 "any items attached to them in a batch."
 msgstr "此工具可以取得批次的書目或權威紀錄並允許您刪除該等紀錄及其館藏紀錄。"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:17
+#, c-format
+msgid "This value corresponds to the duration an item is considered as new."
+msgstr "此值對應館藏的期間可算是新的。"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:19
 #, c-format
@@ -15873,7 +16382,7 @@ msgid ""
 "information and what library the item is at."
 msgstr "此清單將列出到期日 (逾期則以紅色顯示)、借出者、館藏資訊與館藏所在地。"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:45
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:64
 #, c-format
 msgid ""
 "This will not only duplicate your budget, but all of the funds associated "
@@ -16014,7 +16523,7 @@ msgid ""
 msgstr ""
 "秘訣：即時新增報表群組時，其代碼必須少於10個字元且不能包括特殊字元與空格。"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:53
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:72
 #, c-format
 msgid ""
 "Tip: In order for the unreceived orders to be automatically moved to the new "
@@ -16229,6 +16738,7 @@ msgid ""
 "of the Item Types page."
 msgstr "勾選頁面上方的 '新增館藏類型' 鈕，就能新增館藏類型。"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:11
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:9
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:9
 #, c-format
@@ -16253,6 +16763,7 @@ msgid ""
 "To add a new patron category click 'New Category' at the top of the page"
 msgstr "勾選頁面上方的 '新增類型' 鈕，就能新增讀者類型"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:59
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:11
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:11
 #, c-format
@@ -16261,7 +16772,13 @@ msgid ""
 "of your page and choose 'New Profile'"
 msgstr "勾選頁面上方的 '設定檔' 鈕，選取 '新增設定檔'，就能新增設定檔"
 
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:7
+#, c-format
+msgid "To add a new search term simply fill in the 'Add a new field' area:"
+msgstr "在 '新增欄位' 區塊鍵入搜尋術語："
+
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:9
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:25
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:9
 #, c-format
 msgid ""
@@ -16289,6 +16806,17 @@ msgid ""
 "current template' checkbox to create a copy of an existing template to start "
 "with."
 msgstr "完全新增或按 '複製既有模板' 盒。"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:11
+#, c-format
+msgid ""
+"To add items to a collection, click \"Add or remove items\" next to the "
+"collection's name in the list of collections. Under \"Add or remove items\" "
+"scan or type in the barcode of the item you wish to add to the collection, "
+"and hit Enter or click Submit if necessary."
+msgstr ""
+"新增館藏入書庫，按書庫名稱旁的 \"新增或移除館藏\" 鈕。在 \"新增或移除館藏\" "
+"鈕下掃瞄或鍵入館藏條碼，再按 Enter 就能新增該館藏入書庫。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/koha-news.tt:7
 #, c-format
@@ -16399,6 +16927,19 @@ msgstr "點選 '新增讀者清單' 鈕，就能新增讀者清單"
 msgid "To create a new matching rule:"
 msgstr "新增匹配規則："
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:10
+#, c-format
+msgid ""
+"To create a new rotating collection, click the \"New Collection\" button, "
+"fill in the Title and Description, and click Submit. Once submitted you'll "
+"see \"Collection Name added successfully\"; click \"Return to rotating "
+"collections home\" to return to the main Rotating Collections management "
+"page (or click Rotating Collections in the sidebar)."
+msgstr ""
+"新增巡迴書庫時，按 \"新增書庫\" 鈕，鍵入名稱與說明，再按送出鈕。畫面出現 \"成"
+"功新增書庫名稱\"；按 \"回到巡迴書庫首頁\" 就回到巡迴書庫館理頁面 (或按側面的"
+"巡迴書庫連結)。"
+
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:15
 #, c-format
 msgid ""
@@ -16439,7 +16980,9 @@ msgid ""
 "To delete one or more alerts, check the checkboxes for those alerts you wish "
 "to delete, then click the \"Delete selected alerts\" button and confirm you "
 "want to delete those alerts. %s "
-msgstr "刪除提示時，勾選盒內打算刪除的提示，然後按 \"刪除勾選的提示\" 鈕並確認刪除他們。%s "
+msgstr ""
+"刪除提示時，勾選盒內打算刪除的提示，然後按 \"刪除勾選的提示\" 鈕並確認刪除他"
+"們。%s "
 
 #: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:17
 #, c-format
@@ -16607,7 +17150,7 @@ msgstr ""
 msgid ""
 "To generate a discharge for a patron click the 'Discharge' tab on the left "
 "of the patron record"
-msgstr "按下讀者紀錄左方的 '退出' 分頁就能產生退出表單"
+msgstr "按下讀者紀錄左方的 '離館除籍' 分頁就能產生離館除籍表單"
 
 #: intranet-tmpl/prog/en/modules/help/circ/view_holdsqueue.tt:7
 #, c-format
@@ -16677,7 +17220,9 @@ msgid ""
 "in the framework you're using and then they will appear in red with a "
 "'required' label. The item will not save until the required fields are "
 "filled in."
-msgstr "在框架裡被標記為必備的欄位以紅色顯示 '必備' 標籤。此欄位內必須有資料才能儲存整筆記錄。"
+msgstr ""
+"在框架裡被標記為必備的欄位以紅色顯示 '必備' 標籤。此欄位內必須有資料才能儲存"
+"整筆記錄。"
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:36
 #, c-format
@@ -16752,6 +17297,7 @@ msgid ""
 msgstr "訂閱別處找不到的紀錄時，選擇 '取自新(空白)紀錄'。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:19
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:97
 #, c-format
 msgid ""
 "To print your labels, click the 'Export Batch' button. To print only some of "
@@ -16799,6 +17345,23 @@ msgid ""
 "To remove a tag from a specific title, simply click the 'Remove tag' button "
 "to the right of the title."
 msgstr "點選題名右方的 '移除標籤' 鈕，就能移除該題名的標籤。"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:12
+#, c-format
+msgid ""
+"To remove an item from a collection, either click Remove next to the item's "
+"barcode in the list of items within the collection or check the \"Remove "
+"item from collection\" box next to the Barcode text box under \"Add or "
+"remove items\", and scan or type in the barcode, clicking Submit or hitting "
+"Enter if necessary. Note: The \"Remove item from collection\" checkbox will "
+"remain checked as long as you are on the \"Add or remove items\" page, "
+"unless you uncheck it, to facilitate quickly removing a number of items at a "
+"time by scanning their barcodes."
+msgstr ""
+"多種方式可從巡迴書庫移除館藏，從巡迴書庫館藏清單按該館藏條碼旁的移除字樣或在 "
+"\"新增或移除館藏\" 下按條碼字樣旁的 \"從書庫移除館藏\" 盒，然後掃瞄或鍵入條"
+"碼，按送出即可。說明：為了掃瞄條碼快速移除多筆館藏，必須再次勾選 \"新增或移除"
+"館藏\" 頁面的 \"從書庫移除館藏\" 勾選盒以移除它，否則永遠都是在勾選狀態。"
 
 #: intranet-tmpl/prog/en/modules/help/circ/renew.tt:7
 #, c-format
@@ -16876,13 +17439,6 @@ msgstr "必須是 '館員' 類型，才能設定館員的權限"
 msgid "To set preferences for all libraries, keep the menu set to 'Default'"
 msgstr "保持選單為 '預設'，就能設定所有的圖書館"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:34
-#, c-format
-msgid ""
-"To set up a routing list for serials, choose 'Routing List' from the 'Patron "
-"notification' field. "
-msgstr "從 '讀者通知' 欄位選擇 '傳閱清單'，就能設定期刊的傳閱清單。"
-
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:11
 #, c-format
 msgid "To set up circulation alerts:"
@@ -16912,7 +17468,8 @@ msgid ""
 "To the right of each account line there is a print link. Clicking that link "
 "will print an invoice for the line item that includes the date and "
 "description of the line item along with the total outstanding on the account."
-msgstr "帳號右方有個列印連結。按下該連結印出包括日期與說明的館藏收據以及待付款。"
+msgstr ""
+"帳號右方有個列印連結。按下該連結印出包括日期與說明的館藏收據以及待付款。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgets.tt:34
 #, c-format
@@ -16929,7 +17486,9 @@ msgid ""
 "that you want a claim letter sent to and click 'Claim Order' at the bottom "
 "right of the list. This will automatically send an email to the vendor at "
 "the email address you have on file."
-msgstr "遲到題名右方有個勾選盒。勾選要送出催缺信的題名再按清單右下方的 '催缺訂單' 鈕。就會依照檔案裡的電子郵件地址自動送出催缺信給代理商。"
+msgstr ""
+"遲到題名右方有個勾選盒。勾選要送出催缺信的題名再按清單右下方的 '催缺訂單' "
+"鈕。就會依照檔案裡的電子郵件地址自動送出催缺信給代理商。"
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:87
 #, c-format
@@ -16938,7 +17497,9 @@ msgid ""
 "and choose 'Duplicate' to use an existing report as the basis for your new "
 "report. That will populate the new report form with the existing SQL for "
 "easy editing and resaving."
-msgstr "在報表右方有個 '動作' 下拉選單。按下並選擇 '複製' 鈕以現在的報表為基礎產生新報表。修改必要的 SQL 後成為新的報表。"
+msgstr ""
+"在報表右方有個 '動作' 下拉選單。按下並選擇 '複製' 鈕以現在的報表為基礎產生新"
+"報表。修改必要的 SQL 後成為新的報表。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:55
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:21
@@ -16965,7 +17526,9 @@ msgid ""
 "To turn on the 'Did you mean?' bar on your search results you need to check "
 "the box next to each plugin you would like to use. The two plugins you have "
 "to choose from are:"
-msgstr "為了打開搜尋結果的 '您的意思是？' 欄需勾選每個使用的外掛程式盒。現在使用的兩個外掛程式是："
+msgstr ""
+"為了打開搜尋結果的 '您的意思是？' 欄需勾選每個使用的外掛程式盒。現在使用的兩"
+"個外掛程式是："
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:59
 #, c-format
@@ -16986,7 +17549,9 @@ msgid ""
 "Acquisitions home page. Your search can be for any part of the vendor's "
 "name. From the results, click on the name of the vendor you want to view or "
 "edit."
-msgstr "必須從採訪頁面搜尋代理商，才能檢視代理商資訊。可搜尋代理商名稱的任何部份。從結果點選代理商名稱，就能檢視或編輯它。"
+msgstr ""
+"必須從採訪頁面搜尋代理商，才能檢視代理商資訊。可搜尋代理商名稱的任何部份。從"
+"結果點選代理商名稱，就能檢視或編輯它。"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/linkitem.tt:24
 #, c-format
@@ -17013,12 +17578,22 @@ msgstr ""
 "Koha 的工具都是執行特定工作之用。其他的圖書館管理系統常把這些工具當成 '報"
 "表'。"
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:17
+#, c-format
+msgid "Transfer a Rotating Collection"
+msgstr "轉移巡迴書庫"
+
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:11
 #, c-format
 msgid ""
 "Transfer limits are set based on the collections codes you have applied via "
 "the Authorized Value administration area."
 msgstr "館藏代碼的轉移限制根據管理區塊的容許值而定。"
+
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:19
+#, c-format
+msgid "Transferring a collection will:"
+msgstr "轉移巡迴書庫將："
 
 #: intranet-tmpl/prog/en/modules/help/circ/branchtransfers.tt:3
 #, c-format
@@ -17044,6 +17619,11 @@ msgstr "轉移成本矩陣"
 #, c-format
 msgid "Troubleshooting"
 msgstr "解決問題"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:42
+#, c-format
+msgid "Try the -h parameter in order to see the help."
+msgstr "查看說明時使用 -h 參數。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:51
 #, c-format
@@ -17078,7 +17658,7 @@ msgstr "唯一辨識碼"
 msgid "Universal Decimal Classification"
 msgstr "國際十進分類法"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:49
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:60
 #, c-format
 msgid "Unknown select this if none of the other choices are relevant"
 msgstr "若其他的選項都無關，選擇其他"
@@ -17129,21 +17709,23 @@ msgid ""
 "Upon clicking the link to 'Late Orders' from the Acquisitions page, you will "
 "be presented with a series of filter options on the left hand side. These "
 "filters will be applied only to closed baskets."
-msgstr "從採訪頁面勾選 '遲到訂單' 連結，在左側出現篩選期刊選項。這些篩選祗適用於閉架書庫。"
+msgstr ""
+"從採訪頁面勾選 '遲到訂單' 連結，在左側出現篩選期刊選項。這些篩選祗適用於閉架"
+"書庫。"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:100
 #, c-format
 msgid "Use all tools"
 msgstr "使用所有工具"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:32
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:34
 #, c-format
 msgid ""
 "Use the 'Public Note' for any notes you would like to appear in the OPAC for "
 "the patrons"
 msgstr "此 '公開說明' 顯示於 OPAC 供讀者使用"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:57
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:76
 #, c-format
 msgid ""
 "Use the 'Select a budget' drop down to choose the new budget for the "
@@ -17165,7 +17747,7 @@ msgid ""
 msgstr "以AdvancedSearchTypes偏好控制分頁顯示館藏類型、館藏代碼與書架位置。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:64
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:85
 #, c-format
 msgid ""
 "Use the Description field for the actual value that will be displayed. If "
@@ -17258,13 +17840,25 @@ msgid ""
 "or without the vendor."
 msgstr "使用訂單搜尋，可搜尋已發出訂單的館藏，不論是否有代理商承接。"
 
+#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:35
+#, c-format
+msgid ""
+"Using the circulation and fine rules matrix you can define rules that depend "
+"on patron/item type combinations. To set your rules, choose a library from "
+"the pull down (or 'all libraries' if you want to apply these rules to all "
+"libraries)"
+msgstr ""
+"依讀者/館藏類型的組合從流通規則矩陣中決定適用的流通規則。從下拉選單裡，選取適"
+"合的流通規則 (或選 '所有圖書館' 以適合全部圖書館)"
+
 #: intranet-tmpl/prog/en/modules/help/tools/batchMod.tt:11
 #, c-format
 msgid ""
 "Using the edit form you can choose which fields to make edits to. By "
 "checking the checkbox to the right of each field you can clear the values in "
 "that field for the records you are modifying."
-msgstr "從編輯表單勾選欲編輯的欄位。按欄位右方的勾選盒自動清除其內容再鍵入新的值。"
+msgstr ""
+"從編輯表單勾選欲編輯的欄位。按欄位右方的勾選盒自動清除其內容再鍵入新的值。"
 
 #: intranet-tmpl/prog/en/modules/help/reports/reserves_stats.tt:7
 #, c-format
@@ -17294,6 +17888,8 @@ msgid ""
 "Column and which will appear in the Row."
 msgstr "從選定的表單指定顯示的欄與列。"
 
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:13
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:61
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:11
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:13
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:13
@@ -17305,22 +17901,13 @@ msgid ""
 msgstr "以顯示的表單，可以新增設定檔以彌補模板的任何問題。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:11
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:27
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:11
 #, c-format
 msgid ""
 "Using the form that appears you can define the template for your sheet of "
 "labels or cards."
 msgstr "以顯示的表單，可以設定書標與讀者證的模板。"
-
-#: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:35
-#, c-format
-msgid ""
-"Using the issuing rules matrix you can define rules that depend on patron/"
-"item type combinations. To set your rules, choose a library from the pull "
-"down (or 'all libraries' if you want to apply these rules to all libraries)"
-msgstr ""
-"依讀者/館藏類型的組合從流通規則矩陣中決定適用的流通規則。從下拉選單裡選取圖書"
-"館決定您的流通規則 (若要該規則適用於所有圖書館時則選取 '所有圖書館')"
 
 #: intranet-tmpl/prog/en/modules/help/tools/koha-news.tt:14
 #, c-format
@@ -17456,7 +18043,7 @@ msgstr "W = 等待：此保留連結至館藏，在提取圖書館置於預約�
 msgid "W = Writeoff"
 msgstr "W = 撤銷"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:65
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:84
 #, c-format
 msgid ""
 "Wait until the 'Report after moving unreceived orders from budget X to Y' "
@@ -17669,7 +18256,9 @@ msgid ""
 "When retrieving records from external targets you may wish to automate some "
 "changes to those records. XSLT's allow you to do this. Koha ships with some "
 "sample XSLT files ready for use."
-msgstr "從外部目標取得欲自動納入的記錄。XSLT 能做到自動修訂從外部目標取得的記錄。Koha 提供可用的 XSLT 範例檔案。"
+msgstr ""
+"從外部目標取得欲自動納入的記錄。XSLT 能做到自動修訂從外部目標取得的記錄。"
+"Koha 提供可用的 XSLT 範例檔案。"
 
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:21
 #, c-format
@@ -17831,7 +18420,7 @@ msgid ""
 "see the results right away"
 msgstr "執行報表時，會要求輸入值或立即看到結果"
 
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:55
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:74
 #, c-format
 msgid "When you select 'Close' you will be presented with a form."
 msgstr "選擇 '關閉' 將出現表單。"
@@ -17953,7 +18542,16 @@ msgstr ""
 "以此工具可批次編輯讀者紀錄。載入有讀者號的檔案 (每列一個讀者號) 或掃瞄讀者號"
 "進入盒內。"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:48
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:43
+#, c-format
+msgid ""
+"Without any parameter, the script will be launched in a dry-run mode. If the "
+"-c (or --confirm) flag is given, the script will apply the changes."
+msgstr ""
+"沒有參數時，則每日執行該腳本。若使用 -c (或 --confirm) 旗標，則腳本採用此變"
+"動。"
+
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:59
 #, c-format
 msgid ""
 "Without periodicy: some very specific (usually high level science journals) "
@@ -18097,7 +18695,8 @@ msgid ""
 "type. A hard due date ignores your usual circulation rules and makes it so "
 "that all items of the type defined are due on, before or after the date you "
 "specify."
-msgstr "可指定讀者與館藏類型的到期日。忽略流通規則，所有的借出都有指定的到期日。"
+msgstr ""
+"可指定讀者與館藏類型的到期日。忽略流通規則，所有的借出都有指定的到期日。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:67
 #, c-format
@@ -18214,7 +18813,7 @@ msgid ""
 "that only that librarian can make changes to the Fund"
 msgstr "可以把預算指定個特定圖書館員。祗有該圖書館員可以改變該基金"
 
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:75
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:84
 #, c-format
 msgid ""
 "You can choose to create your own numbering pattern by choosing 'None of the "
@@ -18241,7 +18840,9 @@ msgid ""
 "You can decide if this patron category is blocked from performing actions in "
 "the OPAC if their card is expired using the next option. By default it will "
 "follow the rule set in the BlockExpiredPatronOpacActions preference"
-msgstr "若讀者證已到期可禁止其執行若干 OPAC 的功能。預設係遵守 BlockExpiredPatronOpacActions 偏好的設定"
+msgstr ""
+"若讀者證已到期可禁止其執行若干 OPAC 的功能。預設係遵守 "
+"BlockExpiredPatronOpacActions 偏好的設定"
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:5
 #, c-format
@@ -18250,7 +18851,9 @@ msgid ""
 "vendor. This is used so that at the end of the year you can see how much you "
 "spent on a specific contract with a vendor. In some places, contracts are "
 "set up with a minimum and maximum yearly amount."
-msgstr "可設定合約 (含開始與結束日期) 給供應商。年度結束時才可看出該供應商用了多少合約。有的圖書館，指定合約每年的最低與最高金額。"
+msgstr ""
+"可設定合約 (含開始與結束日期) 給供應商。年度結束時才可看出該供應商用了多少合"
+"約。有的圖書館，指定合約每年的最低與最高金額。"
 
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:22
 #, c-format
@@ -18332,6 +18935,11 @@ msgstr "在noissuescharge 系統偏好裡設定禁止借出的數量"
 msgid "You can set up record matching rules through the administration area "
 msgstr "從管理區塊可設定紀錄匹配規則 "
 
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:25
+#, c-format
+msgid "You can transfer a collection in one of two ways:"
+msgstr "可以用以下的方法之一轉移巡迴書庫："
+
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:13
 #, c-format
 msgid "You can upload a file of these numbers or"
@@ -18365,6 +18973,7 @@ msgstr ""
 "REPORT_GROUP 容許值範圍或在新增報表時點選 '或新增' 鈕，新增它。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:16
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:32
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:16
 #, c-format
 msgid ""
@@ -18387,7 +18996,8 @@ msgid ""
 "you want to print fields from the patron record you want to put the field "
 "names in brackets like so - &lt;firstname&gt;"
 msgstr ""
-"讀者證最多有 3 列文字可以是固定的文字或從讀者紀錄提取的欄位內容。把欄位名稱於方括號內，就能提取欄位的內容 - &lt;firstname&gt;"
+"讀者證最多使用 3 列文字。可以是固定的文字或從讀者紀錄欄位提取的內容。把欄位名"
+"稱於方括號內，就能提取欄位的內容 - &lt;firstname&gt;"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:248
 #, c-format
@@ -18414,6 +19024,19 @@ msgid ""
 "You may cancel the addition of a new quote any time prior to saving it "
 "simply by pressing the &lt;Esc&gt; key."
 msgstr "儲存之前，可以按下&lt;Esc&gt;鈕，取消新增引句。"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:33
+#, c-format
+msgid ""
+"You want to change the items.ccode=1 to items.ccode=2 for items created 7 "
+"days ago. "
+msgstr "若想把 7 天前新增的館藏 items.ccode=1 改變為 items.ccode=2。"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:26
+#, c-format
+msgid ""
+"You want to remove the items.new_status value for items created 10 days ago:"
+msgstr "若想移除 10 天前新增館藏的 items.new_status 值："
 
 #: intranet-tmpl/prog/en/modules/help/acqui/parcel.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/orderreceive.tt:19
@@ -18451,6 +19074,7 @@ msgid ""
 msgstr "以讀者的條碼或名稱的任何部份搜尋讀者，進入預約程序。"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:13
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:91
 #, c-format
 msgid ""
 "You will be brought to an empty batch with an 'Add item(s)' button at the "
@@ -18523,7 +19147,9 @@ msgid ""
 "here you can uncheck the items you don't want to modify before making "
 "changes in the form below. You can also hide columns you don't need to see "
 "to prevent having to scroll from left to right to see the entire item form."
-msgstr "出現待修改的館藏摘要。可以先剔除不修改的館藏。也可隱藏不想要看到的欄以免左右移動畫面。"
+msgstr ""
+"出現待修改的館藏摘要。可以先剔除不修改的館藏。也可隱藏不想要看到的欄以免左右"
+"移動畫面。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/upload-cover-image.tt:36
 #, c-format
@@ -18666,6 +19292,7 @@ msgid ""
 msgstr "儲存之前顯示可編輯的權威表單"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:21
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:99
 #, c-format
 msgid ""
 "You will then be presented with three download options: PDF, Excel, and CSV."
@@ -18714,7 +19341,7 @@ msgid ""
 "record display."
 msgstr "館藏將顯示在書目記錄頁面的書目詳情之下。"
 
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:70
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:69
 #, c-format
 msgid ""
 "Your new category and value will appear on the list of Authorized Values"
@@ -18728,7 +19355,8 @@ msgid ""
 "To link an instructor to this course simply start typing their name and Koha "
 "will search your patron database to find you the right person."
 msgstr ""
-"您的新課程至少需要系所、代號及名稱。還可新增額外的資訊如課程區塊編號及要求等。鍵入教師名稱後 Koha 搜尋讀者資料庫找到適當的人並與課程連結。"
+"您的新課程至少需要系所、代號及名稱。還可新增額外的資訊如課程區塊編號及要求"
+"等。鍵入教師名稱後 Koha 搜尋讀者資料庫找到適當的人並與課程連結。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/itemtypes.tt:45
 #, c-format
@@ -18903,11 +19531,6 @@ msgstr "bath.issn"
 msgid "bath.standardIdentifier"
 msgstr "bath.standardIdentifier"
 
-#: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
-#, c-format
-msgid "be filled in in order to save the new quote."
-msgstr "鍵入資料以儲存新的引句。"
-
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:36
 #, c-format
 msgid "bio:b Biography"
@@ -18996,6 +19619,11 @@ msgstr "circulate_remaining_permissions "
 #, c-format
 msgid "claim_serials "
 msgstr "claim_serials "
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:10
+#, c-format
+msgid "configure circulation and fine rules depending the 'new_status' field."
+msgstr "以 'new_status' 欄位組態流通與罰款規則。"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:261
 #, c-format
@@ -19167,7 +19795,8 @@ msgid ""
 "defines the tab where the subfield is shown. All subfields of a given field "
 "must be in the same tab or ignored. Ignore means that the subfield is not "
 "managed."
-msgstr "設定顯示分欄的分頁。同個欄位的分欄必須在同個分頁。忽略它們就是不管理它們。"
+msgstr ""
+"設定顯示分欄的分頁。同個欄位的分欄必須在同個分頁。忽略它們就是不管理它們。"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:115
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:61
@@ -19199,6 +19828,11 @@ msgstr "delete_public_lists "
 #, c-format
 msgid "delete_subscription "
 msgstr "delete_subscription "
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:9
+#, c-format
+msgid "display an icon in the search results for new items."
+msgstr "在搜尋新館藏時顯示圖示。"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:375
 #, c-format
@@ -19261,7 +19895,8 @@ msgid ""
 "ex. If you're importing patrons specific to one library you can use the "
 "field on the Import form to apply the branchcode to all those you are "
 "importing."
-msgstr "如：匯入特定圖書館的讀者時可以在匯入表單將分館代碼欄位給那些匯入的讀者。"
+msgstr ""
+"如：匯入特定圖書館的讀者時可以在匯入表單將分館代碼欄位給那些匯入的讀者。"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
 #, c-format
@@ -19280,13 +19915,18 @@ msgstr "fast_cataloging "
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:35
 #, c-format
-msgid "fic:0 Non fiction"
+msgid "fic:0 Non-fiction"
 msgstr "fic:0 非小說"
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:34
 #, c-format
 msgid "fic:1 Fiction"
 msgstr "fic:1 小說"
+
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:11
+#, c-format
+msgid "get a RSS/Atom feeds on these new items."
+msgstr "取得該等館藏的 RSS/Atom。"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:266
 #, c-format
@@ -19454,6 +20094,11 @@ msgstr "按著Alt+R，進入還入"
 msgid "jump to the checkout with Alt+U "
 msgstr "按著Alt+U，進入借出 "
 
+#: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:8
+#, c-format
+msgid "know easily what are the new items in the catalogue."
+msgstr "很容易知道目錄內的新增館藏。"
+
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:51
 #, c-format
 msgid "l-format:co CD Software"
@@ -19555,22 +20200,23 @@ msgstr "管理 "
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-numberpatterns.tt:11
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-detail.tt:9
 #: intranet-tmpl/prog/en/modules/help/serials/serials-edit.tt:27
-#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:86
+#: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:105
 #: intranet-tmpl/prog/en/modules/help/serials/serials-home.tt:9
 #: intranet-tmpl/prog/en/modules/help/serials/claims.tt:15
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:200
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:19
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
+#: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:91
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:21
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
-#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:95
+#: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
-#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:67
+#: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -19599,6 +20245,10 @@ msgstr "管理 "
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-template.tt:33
 #: intranet-tmpl/prog/en/modules/help/labels/spinelabel-home.tt:14
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:44
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:17
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:49
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:79
+#: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:103
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-layout.tt:15
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-profile.tt:31
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course-details.tt:9
@@ -19731,6 +20381,7 @@ msgstr "管理 "
 #: intranet-tmpl/prog/en/modules/help/tools/holidays.tt:68
 #: intranet-tmpl/prog/en/modules/help/about.tt:38
 #: intranet-tmpl/prog/en/modules/help/reviews/reviewswaiting.tt:13
+#: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:35
 #, c-format
 msgid "manual"
 msgstr "手冊"
@@ -19783,11 +20434,6 @@ msgstr "mus:i 非音樂錄音"
 #, c-format
 msgid "mus:j Musical recording"
 msgstr "mus:j 音樂錄音"
-
-#: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:21
-#, c-format
-msgid "must"
-msgstr "必須"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:15
 #, c-format
@@ -19962,6 +20608,13 @@ msgstr "schedule_tasks "
 msgid "serials "
 msgstr "期刊 "
 
+#: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:11
+#, c-format
+msgid ""
+"shows the entire Koha database structure so that you can write effective SQL "
+"Queries"
+msgstr "顯示全部 Koha 資料庫結構以撰寫有效的 SQL 詢問"
+
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:122
 #, c-format
 msgid "staffaccess "
@@ -20073,13 +20726,6 @@ msgstr "內容，顯示在館員介面分欄前"
 #, c-format
 msgid "will be stored into the following structure:"
 msgstr "將儲存入以下的結構："
-
-#: intranet-tmpl/prog/en/modules/help/reports/reports-home.tt:11
-#, c-format
-msgid ""
-"will help you learn the Koha database structure so that you can write "
-"effective SQL Queries"
-msgstr "將協助您學習Koha資料庫結構，足以撰寫有效的SQL詢問"
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:142
 #, c-format
