@@ -270,6 +270,10 @@ $(document).ready(function() {
                   [% END %]
                 </p>
               [% END %]
+
+              [% IF checkout_info.issue.date_due %]
+                <li>Due on [% checkout_info.issue.date_due | $KohaDates %]</li>
+              [% END %]
             </td>
           </tr>
         [% END %]
