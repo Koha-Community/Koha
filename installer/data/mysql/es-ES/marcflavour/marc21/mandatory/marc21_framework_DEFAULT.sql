@@ -7,7 +7,7 @@
 --                    guided by Paul POULAIN
 --                      by thd for LibLime
 --
---           Revised to Update No. 21 (September 2015)
+--           Revised to Update No. 22 (April 2016)
 -- *************************************************************
 
 
@@ -513,7 +513,7 @@ INSERT IGNORE INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, 
 INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'campo de control de longitud fija', 'campo de control de longitud fija', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, '', '', '', NULL),
 		('001', '@', 'campo de control', 'campo de control', 0, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
-        ('003', '@', 'campo de control', 'campo de control', 0, 1, '', 0, '', '', 'marc21_orgcode.pl', 0, 0, '', '', '', NULL),
+		('003', '@', 'campo de control', 'campo de control', 0, 1, '', 0, '', '', 'marc21_orgcode.pl', 0, 0, '', '', '', NULL),
 		('005', '@', 'campo de control', 'campo de control', 0, 1, '', 0, '', '', 'marc21_field_005.pl', 0, 0, '', '', '', NULL),
 		('006', '@', 'campo de control de longitud fija', 'campo de control de longitud fija', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, '', '', '', NULL),
 		('007', '@', 'campo de control de longitud fija', 'campo de control de longitud fija', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, '', '', '', NULL),
@@ -1462,10 +1462,12 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('382', 'a', 'Medio de interpretación', 'Medio de interpretación', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 'b', 'Solista', 'Solista', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 'd', 'Instrumento auxiliar', 'Instrumento auxiliar', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
-		('382', 'e', 'Número de conjuntos', 'Número de conjuntos', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+		('382', 'e', 'Número de conjuntos de un mismo medio', 'Número de conjuntos de un mismo medio', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 'n', 'Número de intérpretes de un mismo medio', 'Número de intérpretes de un mismo medio', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 'p', 'Medio de interpretación alternativo', 'Medio de interpretación alternativo', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+		('382', 'r', 'Número total de individuos que interpretan junto a los conjuntos', 'Número total de individuos que interpretan junto a los conjuntos', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 's', 'Número total de intérpretes', 'Número total de intérpretes', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+		('382', 't', 'Número total de conjuntos', 'Número total de conjuntos', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 'v', 'Nota', 'Nota', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('383', '2', 'Fuente', 'Fuente', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('383', '6', 'Enlace', 'Enlace', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
@@ -2534,6 +2536,8 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('752', 'f', 'Subdivisión de ciudad', 'Subdivisión de ciudad', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('752', 'g', 'Otras regiones o rasgos geográficos no jurisdiccionales', 'Otras regiones o rasgos geográficos no jurisdiccionales', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('752', 'h', 'Área extraterrestre', 'Área extraterrestre', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
+		('753', '0', 'Número de control del registro de autoridad o número normalizado', 'Número de control del registro de autoridad o número normalizado', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
+		('753', '2', 'Fuente del término', 'Fuente del término', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('753', '6', 'Enlace', 'Enlace', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('753', '8', 'Enlace entre campo y número de secuencia', 'Enlace entre campo y número de secuencia', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('753', 'a', 'Marca y modelo de la máquina', 'Marca y modelo de la máquina', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
