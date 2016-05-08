@@ -65,7 +65,7 @@
             }
 
             function confirm_ediorder() {
-                var is_confirmed = confirm(_("Are you sure you want to close this basket and generate an Edifact order?"));
+                var is_confirmed = confirm(_("Are you sure you want to close this basket and generate an EDIFACT order?"));
                 if (is_confirmed) {
                     window.location = "/cgi-bin/koha/acqui/basket.pl?op=edi_confirm&basketno=[% basketno %]";
                 }
@@ -198,7 +198,7 @@
                     [% END %]
                         <div class="btn-group"><a href="/cgi-bin/koha/acqui/basket.pl?op=export&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="exportbutton"><i class="fa fa-download"></i> Export this basket as CSV</a></div>
                         [% IF ediaccount %]
-                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/edi_ean.pl?op=ediorder&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="ediorderbutton"><i class="fa fa-download"></i> Create edifact order</a></div>
+                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/edi_ean.pl?op=ediorder&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-small" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</a></div>
                         [% END %]
                 </div>
 <!-- Modal for confirm deletion box-->
@@ -728,7 +728,7 @@
         <div id="closebasket_needsconfirmation" class="dialog alert">
 
         <form action="/cgi-bin/koha/acqui/basket.pl">
-            <h1>Are you sure you want to generate an edifact order and close basket [% basketname|html %]?</h1>
+            <h1>Are you sure you want to generate an EDIFACT order and close basket [% basketname|html %]?</h1>
             [% IF CAN_user_acquisition_group_manage %]
             <p>
             <label for="createbasketgroup">Attach this basket to a new basket group with the same name</label>

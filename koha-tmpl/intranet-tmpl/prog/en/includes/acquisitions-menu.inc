@@ -10,6 +10,6 @@
      <li><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></li>
     [% END %]
     [% IF CAN_user_acquisition_edi_manage %]
-     <li><a href="/cgi-bin/koha/acqui/edifactmsgs.pl">Edifact Messages</a></li>
+     <li><a href="/cgi-bin/koha/acqui/edifactmsgs.pl">EDIFACT messages</a></li>
     [% END %]
 </ul>
