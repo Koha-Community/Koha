@@ -80,8 +80,8 @@
                                             [% FOREACH issue IN READING_RECORD %]
                                                 <tr>
                                                     <td style="display:none;">
-                                                      [% IF issue.onsite_checkout %][% issuetype = 'onsite' %]
-                                                      [% ELSE %][% issuetype = 'checkout' %]
+                                                      [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' %]
+                                                      [% ELSE %][% issuetype = 'standard_checkout' %]
                                                       [% END %]
                                                       [% issuetype %]
                                                     </td>
@@ -192,9 +192,9 @@
             select: function(e, ui) {
                 var id = $(ui.tab).attr("id");
                 if ( id == "tab_checkout" ) {
-                    table.fnFilter("checkout", 0);
+                    table.fnFilter("standard_checkout", 0);
                 } else if ( id == "tab_onsite_checkout" ) {
-                    table.fnFilter("onsite", 0);
+                    table.fnFilter("onsite_checkout", 0);
                 } else { // all
                     table.fnFilter('', 0);
                 }
