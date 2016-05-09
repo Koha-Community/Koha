@@ -35,8 +35,6 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
-diag("This could take a while for large datasets...");
-
 my ($oldResults, $oldCount) = OldWay($dbh);
 my ($newResults, $newCount) = GetItemsForInventory( { interface => 'staff' } );
 
