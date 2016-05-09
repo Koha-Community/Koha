@@ -88,11 +88,10 @@
       [% FOREACH issue IN loop_reading %]
         [% IF  issue.returndate  %]<tr>[% ELSE %]<tr class="onissue">[% END %]
           <td style="display:none;">
-            [% IF issue.onsite_checkout %]
-              onsite_checkout
-            [% ELSE %]
-              standard_checkout
+            [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' %]
+            [% ELSE %][% issuetype = 'standard_checkout' %]
             [% END %]
+            [% issuetype %]
           </td>
           <td>
             <span title="[% issue.issuestimestamp %]">[% issue.issuestimestamp | $KohaDates with_hours => 1 %]</span>
