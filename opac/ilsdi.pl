@@ -128,7 +128,7 @@ unless ( $cgi->param('service') ) {
 }
 
 # If user requested a service description, then display it
-if ( $cgi->param('service') eq "Describe" and any { $cgi->param('verb') eq $_ } @services ) {
+if ( scalar $cgi->param('service') eq "Describe" and any { scalar $cgi->param('verb') eq $_ } @services ) {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {   template_name   => "ilsdi.tt",
             query           => $cgi,
@@ -137,7 +137,7 @@ if ( $cgi->param('service') eq "Describe" and any { $cgi->param('verb') eq $_ } 
             debug           => 1,
         }
     );
-    $template->param( $cgi->param('verb') => 1 );
+    $template->param( scalar $cgi->param('verb') => 1 );
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit 0;
 }
