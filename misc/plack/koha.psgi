@@ -13,6 +13,7 @@ use CGI qw(-utf8 ); # we will lose -utf8 under plack
         my $q = $old_new->( @_ );
         $CGI::PARAM_UTF8 = 1;
         Koha::Cache->flush_L1_cache();
+        Koha::Cache::Memory::Lite->flush();
         return $q;
     };
 }
@@ -46,6 +47,7 @@ use C4::Branch;
 use C4::Category;
 use Koha::DateUtils;
 use Koha::Cache;
+use Koha::Cache::Memory::Lite;
 =for preload
 use C4::Tags; # FIXME
 =cut
