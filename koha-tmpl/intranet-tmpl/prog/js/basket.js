@@ -388,8 +388,7 @@ function updateBasket(updated_value,target) {
 	var basketcount = updated_value;
 }
 
-function openBiblio(dest,biblionumber) {
-    openerURL=dest+"?biblionumber="+biblionumber;
+function openBiblio(openerURL) {
     opener.document.location = openerURL;
     opener.focus();
 }
@@ -443,5 +442,3 @@ $(document).ready(function(){
 	$("#cartmenulink").click(function(){ openBasket(); return false; });
 	if(basketcount){ updateBasket(basketcount); }
 });
-
-
