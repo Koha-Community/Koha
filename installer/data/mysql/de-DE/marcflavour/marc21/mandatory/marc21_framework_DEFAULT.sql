@@ -7,7 +7,7 @@
 --                    guided by Paul POULAIN
 --                      by thd for LibLime
 --
---           Revised to Update No. 21 (September 2015)
+--           Revised to Update No. 22 (April 2016)
 -- *************************************************************
 
 
@@ -385,7 +385,7 @@ INSERT IGNORE INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, 
 		('651', 'Nebeneintragung unter einem Schlagwort - Geografischer Name', 'Nebeneintragung unter einem Schlagwort - Geografischer Name', 1, 0, NULL, ''),
 		('652', 'SUBJECT ED ENTRY--REVERSE GEOGRAPHIC (BK MP SE) [OBSOLETE]', 'SUBJECT ED ENTRY--REVERSE GEOGRAPHIC (BK MP SE) [OBSOLETE]', 1, 0, NULL, ''),
 		('653', 'Indexierungsterm - Nicht normiert', 'Indexierungsterm - Nicht normiert', 1, 0, NULL, ''),
-		('654', 'Nebeneintragung unter einem Schlagwort - Kontrolliertes Sachschlagwort', 'Nebeneintragung unter einem Schlagwort - Kontrolliertes Sachschlagwort', 1, 0, NULL, ''),
+		('654', 'Nebeneintragung unter einem Schlagwort - Facettierte Sachschlagworte', 'Nebeneintragung unter einem Schlagwort - Facettierte Sachschlagworte', 1, 0, NULL, ''),
 		('655', 'Indexierungsterm - Genre/Form', 'Indexierungsterm - Genre/Form', 1, 0, NULL, ''),
 		('656', 'Indexierungsterm - Beruf', 'Indexierungsterm - Beruf', 1, 0, NULL, ''),
 		('657', 'Indexierungsterm - Funktion', 'Indexierungsterm - Funktion', 1, 0, NULL, ''),
@@ -513,7 +513,7 @@ INSERT IGNORE INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, 
 INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('000', '@', 'Kontrollfeld mit fester Länge', 'Kontrollfeld mit fester Länge', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, '', '', '', NULL),
 		('001', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 0, '', 0, '', '', '', 0, 0, '', '', '', NULL),
-        ('003', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, '', 0, '', '', 'marc21_orgcode.pl', 0, 0, '', '', '', NULL),
+		('003', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, '', 0, '', '', 'marc21_orgcode.pl', 0, 0, '', '', '', NULL),
 		('005', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, '', 0, '', '', 'marc21_field_005.pl', 0, 0, '', '', '', NULL),
 		('006', '@', 'Kontrollfeld mit fester Länge', 'Kontrollfeld mit fester Länge', 0, 0, '', 0, '', '', 'marc21_field_006.pl', 0, -1, '', '', '', NULL),
 		('007', '@', 'Kontrollfeld mit fester Länge', 'Kontrollfeld mit fester Länge', 0, 0, '', 0, '', '', 'marc21_field_007.pl', 0, 0, '', '', '', NULL),
@@ -1236,7 +1236,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('338', '3', 'Spezifische Materialangaben', 'Spezifische Materialangaben', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('338', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('338', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
-		('338', 'a', 'Datenträgertypterm', 'Datenträgertypterm', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+		('338', 'a', 'Datenträgertypbezeichnung', 'Datenträgertypbezeichnung', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('338', 'b', 'Datenträgertypcode', 'Datenträgertypcode', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('340', '0', 'IDN des Normdatensatzes oder Standardnummer', 'IDN des Normdatensatzes oder Standardnummer', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('340', '2', 'Quelle', 'Quelle', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
@@ -1462,10 +1462,12 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('382', 'a', 'Besetzung', 'Besetzung', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 'b', 'Solist', 'Solist', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 'd', 'Doppelt besetztes Instrument', 'Doppelt besetztes Instrument', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
-		('382', 'e', 'Anzahl der Ensembles', 'Anzahl der Ensembles', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+		('382', 'e', 'Anzahl der Ensembles gleichen Typs', 'Anzahl der Ensembles gleichen Typs', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 'n', 'Anzahl der Künstler eines Mediums', 'Anzahl der Künstler eines Mediums', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 'p', 'Alternative Besetzung', 'Alternative Besetzung', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+		('382', 'r', 'Gesamtzahl der Personen, die mit den Ensembles auftreten', 'Gesamtzahl der Personen, die mit den Ensembles auftreten', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 's', 'Gesamtzahl der Künstler', 'Gesamtzahl der Künstler', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+		('382', 't', 'Gesamtzahl der Ensembles', 'Gesamtzahl der Ensembles', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('382', 'v', 'Fußnote', 'Fußnote', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('383', '2', 'Quelle', 'Quelle', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('383', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
@@ -2534,6 +2536,8 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('752', 'f', 'Stadtteil', 'Stadtteil', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('752', 'g', 'Andere nichtgerichtliche geografische Region und Einrichtung', 'Andere nichtgerichtliche geografische Region und Einrichtung', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('752', 'h', 'Außerirdischer Bereich', 'Außerirdischer Bereich', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
+		('753', '0', 'IDN des Normdatensatzes oder Standardnummer', 'IDN des Normdatensatzes oder Standardnummer', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
+		('753', '2', 'Quelle der Ansetzung oder des Terms', 'Quelle der Ansetzung oder des Terms', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('753', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('753', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('753', 'a', 'Fabrikat und Modell des Gerätes', 'Fabrikat und Modell des Gerätes', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL),

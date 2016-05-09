@@ -1,7 +1,7 @@
 -- *******************************************************
 --   KOHA  MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS
 --
---        Revised to Update No. 21 (September 2015)
+--        Revised to Update No. 22 (April 2016)
 -- *******************************************************
 
 -- ******************************************************
@@ -273,7 +273,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('', '000', '@', 'Kontrollfeld mit fester Länge', 'Kontrollfeld mit fester Länge', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
 		('', '001', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
-        ('', '003', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
+		('', '003', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
 		('', '005', '@', 'Kontrollfeld', 'Kontrollfeld', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
 		('', '008', '@', 'Kontrollfeld mit fester Länge', 'Kontrollfeld mit fester Länge', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
 		('', '010', 'a', 'LC-Kontrollnummer', 'LC-Kontrollnummer', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -351,7 +351,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '035', 'z', 'Gelöschte/ungültige Kontrollnummer', 'Gelöschte/ungültige Kontrollnummer', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '035', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '035', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-        ('', '040', 'a', 'Original-Katalogisierungsstelle', 'Original-Katalogisierungsstelle', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
+		('', '040', 'a', 'Original-Katalogisierungsstelle', 'Original-Katalogisierungsstelle', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
 		('', '040', 'b', 'Katalogisierungssprache', 'Katalogisierungssprache', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '040', 'c', 'Übertragungsstelle', 'Übertragungsstelle', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '040', 'd', 'Bearbeitungsstelle', 'Bearbeitungsstelle', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -915,10 +915,12 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '382', 'a', 'Besetzung', 'Besetzung', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'b', 'Solist', 'Solist', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'd', 'Doppelt besetztes Instrument', 'Doppelt besetztes Instrument', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '382', 'e', 'Anzahl der Ensembles', 'Anzahl der Ensembles', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '382', 'e', 'Anzahl der Ensembles gleichen Typs', 'Anzahl der Ensembles gleichen Typs', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'n', 'Anzahl der Künstler eines Mediums', 'Anzahl der Künstler eines Mediums', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'p', 'Alternative Besetzung', 'Alternative Besetzung', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '382', 'r', 'Gesamtzahl der Personen, die mit den Ensembles auftreten', 'Gesamtzahl der Personen, die mit den Ensembles auftreten', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 's', 'Gesamtzahl der Künstler', 'Gesamtzahl der Künstler', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '382', 't', 'Gesamtzahl der Ensembles', 'Gesamtzahl der Ensembles', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'v', 'Fußnote', 'Fußnote', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', '0', 'IDN des Normdatensatzes oder Standardnummer', 'IDN des Normdatensatzes oder Standardnummer', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', '2', 'Quelle der Ansetzung oder des Terms', 'Quelle der Ansetzung oder des Terms', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
