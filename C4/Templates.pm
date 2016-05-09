@@ -36,6 +36,8 @@ use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language
 
 use C4::Context;
 
+use Koha::Cache::Memory::Lite;
+
 __PACKAGE__->mk_accessors(qw( theme activethemes preferredtheme lang filename htdocs interface vars));
 
 
@@ -273,12 +275,12 @@ sub themelanguage {
 sub setlanguagecookie {
     my ( $query, $language, $uri ) = @_;
 
-    my $cookie = $query->cookie(
-        -name    => 'KohaOpacLanguage',
-        -value   => $language,
-        -HttpOnly => 1,
-        -expires => '+3y'
-    );
+    my $cookie = getlanguagecookie( $query, $language );
+
+    # We do not want to set getlanguage in cache, some additional checks are
+    # done in C4::Languages::getlanguage
+    Koha::Cache::Memory::Lite->get_instance()->clear_from_cache( 'getlanguage' );
+
     print $query->redirect(
         -uri    => $uri,
         -cookie => $cookie

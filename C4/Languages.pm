@@ -26,6 +26,7 @@ use Carp;
 use CGI;
 use List::MoreUtils qw( any );
 use C4::Context;
+use Koha::Cache::Memory::Lite;
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
 eval {
@@ -569,6 +570,13 @@ sub accept_language {
 sub getlanguage {
     my ($cgi) = @_;
 
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
+    my $cache_key = "getlanguage";
+    unless ( $cgi and $cgi->param('language') ) {
+        my $cached = $memory_cache->get_from_cache($cache_key);
+        return $cached if $cached;
+    }
+
     $cgi //= new CGI;
     my $interface = C4::Context->interface;
     my $theme = C4::Context->preference( ( $interface eq 'opac' ) ? 'opacthemes' : 'template' );
@@ -584,14 +592,14 @@ sub getlanguage {
     }
 
     # Chose language from the URL
-    $language = $cgi->param( 'language' );
-    if ( defined $language && any { $_ eq $language } @languages) {
-        return $language;
+    my $cgi_param_language = $cgi->param( 'language' );
+    if ( defined $cgi_param_language && any { $_ eq $cgi_param_language } @languages) {
+        $language = $cgi_param_language;
     }
 
     # cookie
-    if ($language = $cgi->cookie('KohaOpacLanguage') ) {
-        $language =~ s/[^a-zA-Z_-]*//; # sanitize cookie
+    if (not $language and my $cgi_cookie_language = $cgi->cookie('KohaOpacLanguage') ) {
+        ( $language = $cgi_cookie_language ) =~ s/[^a-zA-Z_-]*//; # sanitize cookie
     }
 
     # HTTP_ACCEPT_LANGUAGE
@@ -601,16 +609,18 @@ sub getlanguage {
     }
 
     # Ignore a lang not selected in sysprefs
-    if ( $language && any { $_ eq $language } @languages ) {
-        return $language;
+    if ( $language && not any { $_ eq $language } @languages ) {
+        $language = undef;
     }
 
     # Pick the first selected syspref language
-    $language = shift @languages;
-    return $language if $language;
+    $language = shift @languages unless $language;
 
     # Fall back to English if necessary
-    return 'en';
+    $language ||= 'en';
+
+    $memory_cache->set_in_cache( $cache_key, $language );
+    return $language;
 }
 
 1;

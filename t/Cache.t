@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 41;
+use Test::More tests => 43;
 use Test::Warn;
 
 my $destructorcount = 0;
@@ -25,6 +25,7 @@ my $destructorcount = 0;
 BEGIN {
     use_ok('Koha::Cache');
     use_ok('Koha::Cache::Object');
+    use_ok('Koha::Cache::Memory::Lite');
     use_ok('C4::Context');
 }
 
@@ -220,6 +221,43 @@ SKIP: {
     %$item_from_cache = ( another => 'hashref' );
     is_deeply( $cache->get_from_cache('test_deep_copy_hash'), { another => 'hashref' }, 'A hash will not be deep copied if the unsafe flag is set');
 }
+
+subtest 'Koha::Cache::Memory::Lite' => sub {
+    plan tests => 6;
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
+
+    # test fetching an item that isnt in the cache
+    is( $memory_cache->get_from_cache("not in here"),
+        undef, "fetching item NOT in cache" );
+
+    # test fetching a valid item from cache
+    $memory_cache->set_in_cache( "clear_me", "I AM MORE DATA" );
+    $memory_cache->set_in_cache( "dont_clear_me", "I AM MORE DATA22" );
+      ;    # overly large expiry time, clear below
+    is(
+        $memory_cache->get_from_cache("clear_me"),
+        "I AM MORE DATA",
+        "fetching valid item from cache"
+    );
+
+    # test clearing from cache
+    $memory_cache->clear_from_cache("clear_me");
+    is( $memory_cache->get_from_cache("clear_me"),
+        undef, "fetching cleared item from cache" );
+    is(
+        $memory_cache->get_from_cache("dont_clear_me"),
+        "I AM MORE DATA22",
+        "fetching valid item from cache (after clearing another item)"
+    );
+
+    #test flushing from cache
+    $memory_cache->set_in_cache( "flush_me", "testing 1 data" );
+    $memory_cache->flush;
+    is( $memory_cache->get_from_cache("flush_me"),
+        undef, "fetching flushed item from cache" );
+    is( $memory_cache->get_from_cache("dont_clear_me"),
+        undef, "fetching flushed item from cache" );
+};
 
 END {
   SKIP: {
