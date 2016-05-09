@@ -13,7 +13,7 @@ my $input = new CGI;
 exit unless $input->param('template_path');
 
 my ($template, $user, $cookie) = get_template_and_user({
-    template_name   => $input->param('template_path'),
+    template_name   => scalar $input->param('template_path'),
     query           => $input,
     type            => "intranet",
     authnotrequired => 0,

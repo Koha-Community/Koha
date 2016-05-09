@@ -117,7 +117,7 @@ sub get_template {
 
     $template->param(
         CLASS       => $self->{'class'},
-        METHOD      => $self->{'cgi'}->param('method'),
+        METHOD      => scalar $self->{'cgi'}->param('method'),
         PLUGIN_PATH => $self->get_plugin_http_path(),
     );
 
