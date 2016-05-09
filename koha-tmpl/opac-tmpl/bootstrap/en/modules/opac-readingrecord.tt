@@ -80,11 +80,10 @@
                                             [% FOREACH issue IN READING_RECORD %]
                                                 <tr>
                                                     <td style="display:none;">
-                                                      [% IF issue.onsite_checkout %]
-                                                        onsite
-                                                      [% ELSE %]
-                                                        checkout
+                                                      [% IF issue.onsite_checkout %][% issuetype = 'onsite' %]
+                                                      [% ELSE %][% issuetype = 'checkout' %]
                                                       [% END %]
+                                                      [% issuetype %]
                                                     </td>
                                                 <td>
                                                     [% IF  OPACAmazonCoverImages %]
