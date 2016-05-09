@@ -1,104 +1,40 @@
+[% BLOCK controls %]
+    <p style="padding: 7px 0; border-top : 1px solid #E8E8E8;">
+        <a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a> <a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a>
+        | <b>Selected items :</b>
+        <a href="#" id="remove_from_cart">Remove</a>
+
+        [% IF ( loggedinusername ) %]
+             | <a href="#" id="add_to_list">Add to a list</a>
+        [% END %]
+
+        [% IF ( CAN_user_reserveforothers ) %]
+             | <a href="#" id="place_hold">Place hold</a>
+        [% END %]
+
+        [% IF CAN_user_tools_records_batchmod %]
+            | <a href="#" id="batch_modify">Batch modify</a>
+        [% END %]
+
+        [% IF CAN_user_tools_records_batchdel %]
+            | <a href="#" id="batch_delete">Batch delete</a>
+        [% END %]
+    </p>
+[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] Catalog &rsaquo; Your cart</title>
     [% IF ( print_basket ) %]
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
-<meta http-equiv="Content-Language" content="en-us" />
 <style type="text/css">
     @import url([% interface %]/[% theme %]/css/print.css);
 </style>
     [% ELSE %][% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/cart.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-	//<![CDATA[
-
-function placeHold () {
-    var checkedItems = $("input:checkbox:checked");
-    if ($(checkedItems).size() == 0) {
-        alert(MSG_NO_RECORD_SELECTED);
-        return false;
-    }
-
-    var newloc;
-
-    if ($(checkedItems).size() > 1) {
-        var bibs = "";
-        $(checkedItems).each(function() {
-            var bib = $(this).val();
-            bibs += bib + "/";
-        });
-
-        newloc = "/cgi-bin/koha/reserve/request.pl?biblionumbers=" + bibs + "&multi_hold=1";
-    } else {
-        var bib = checkedItems[0].value;
-        newloc = "/cgi-bin/koha/reserve/request.pl?biblionumber=" + bib;
-    }
-
-    window.opener.location = newloc;
-    window.close();
-}
-[% IF CAN_user_tools_records_batchdel %]
-function batchDelete(){
-    var checkedItems = $("input:checkbox:checked");
-    if ($(checkedItems).size() == 0) {
-        alert(MSG_NO_RECORD_SELECTED);
-        return false;
-    }
-    var newloc;
-
-    var bibs = "";
-    $(checkedItems).each(function() {
-        var bib = $(this).val();
-        bibs += bib + "/";
-    });
-
-    newloc = "/cgi-bin/koha/tools/batch_delete_records.pl?op=list&type=biblio&bib_list=" + bibs;
-
-    window.opener.location = newloc;
-    window.close();
-}
-[% END %]
-	$(document).ready(function(){
-                $("#items-popover").popover();
-		$("#CheckAll").click(function(){
-		var checked = [];
-		$("#bookbag_form").checkCheckboxes("*", true).each(
-		    function() {
-				selRecord(this.value,true);
-			}
-		);
-	        return false;
-	    });
-	    $("#CheckNone").click(function(){
-	    var checked = [];
-		$("#bookbag_form").unCheckCheckboxes("*",true).each(
-		    function() {
-				selRecord(this.value,false);
-			}
-		);
-	        return false;
-	    });
-        $(".holdsep").text("| ");
-        $(".hold").text(_("Place hold"));
-        $("#downloadcartc").empty();
-
-        $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sDom": 't',
-            "aoColumnDefs": [
-                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                { "sType": "callnumbers", "aTargets" : [ "callnumbers"] }
-            ],
-            "aaSorting": [[ 1, "asc" ]],
-            "bPaginate": false
-        }));
-
-	});
-	//]]>
-	</script>
 	[% END %]
 </head>
 [% IF ( print_basket ) %]<body id="cart_basket" class="cart" onload="print();history.back();">[% ELSE %]<body id="cart_basket" class="cart">[% END %]
@@ -109,8 +45,13 @@ function batchDelete(){
 <h1>Your cart</h1>
 
 <div id="toolbar" class="btn-toolbar">
-    [% IF ( verbose ) %]<a href="basket.pl" class="btn btn-small" onclick="showLess(); return false;"><i class="fa fa-folder"></i> Brief display</a>[% ELSE %]<a href="basket.pl" class="btn btn-small" onclick="showMore(); return false;"><i class="fa fa-folder-open"></i> More details</a>[% END %]
-    <a class="btn btn-small" href="basket.pl" onclick="sendBasket(); return false;"><i class="fa fa-envelope"></i> Send</a>
+    [% IF ( verbose ) %]
+        <a href="basket.pl" class="btn btn-small showdetails showless"><i class="fa fa-folder"></i> Brief display</a>
+    [% ELSE %]
+        <a href="basket.pl" class="btn btn-small showdetails showmore"><i class="fa fa-folder-open"></i> More details</a>
+    [% END %]
+
+    <a class="btn btn-small" href="basket.pl" id="send_cart"><i class="fa fa-envelope"></i> Send</a>
     <div class="btn-group">
         <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#" id="downloadcart"><i class="fa fa-download"></i> Download <span class="caret"></span> </a>
         <ul class="dropdown-menu">
@@ -122,40 +63,16 @@ function batchDelete(){
         [% END %]
         </ul>
     </div>
-    [% IF CAN_user_tools_records_batchmod %]
-      <div class="btn-group">
-        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#" id="actioncart"><i class="fa fa-play"></i> Actions <span class="caret"></span> </a>
-        <ul class="dropdown-menu">
-          [% IF CAN_user_tools_records_batchmod %]
-            <li><a href="/cgi-bin/koha/tools/batch_record_modification.pl?op=list&amp;bib_list=[% bib_list %]&amp;type=biblio">Modify</a></li>
-          [% END %]
-        </ul>
-      </div>
-    [% END %]
-    <a class="btn btn-small" href="basket.pl" onclick="printBasket(); return false;"><i class="fa fa-print"></i> Print</a>
-    <a class="btn btn-small" href="basket.pl" onclick="delBasket('popup'); return false;"><i class="fa fa-trash"></i> Empty and close</a>
+    <a class="btn btn-small" href="basket.pl" id="print_cart"><i class="fa fa-print"></i> Print</a>
+    <a class="btn btn-small" href="basket.pl" id="empty_cart"><i class="fa fa-trash"></i> Empty and close</a>
     <a class="btn btn-small close" href="basket.pl"><i class="fa fa-times-circle"></i> Hide window</a>
 </div>
         [% END %]
 
 [% IF ( verbose ) %]
-    [% UNLESS ( print_basket ) %]<p style="padding: 7px 0; border-top : 1px solid #E8E8E8;"><a id="CheckAll" href="#">Select all</a> <a id="CheckNone" href="#">Clear all</a> | <b>Selected items :</b>
-
-    <a href="#" onclick="delSelRecords(); return false;">Remove</a>
-
-[% IF ( loggedinusername ) %]
-     | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
-[% END %]
-
-[% IF ( CAN_user_reserveforothers ) %]
-     | <a href="#" onclick="placeHold(); return false;">Place hold</a>
-[% END %]
-
-[% IF CAN_user_tools_records_batchdel %]
-    | <a href="#" onclick="batchDelete(); return false;">Batch delete</a>
-[% END %]
-
-</p>[% END %]
+    [% UNLESS ( print_basket ) %]
+        [% PROCESS controls %]
+    [% END %]
             <form action="basket.pl" method="get" name="bookbag_form" id="bookbag_form">
     [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
     <h3>
@@ -164,7 +81,7 @@ function batchDelete(){
                 [% IF ( BIBLIO_RESULT.subtitle ) %] [% BIBLIO_RESULT.subtitle %][% END %]
                 [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
         [% ELSE %]
-                <input type="checkbox" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" onclick="selRecord(value,checked)" />
+                <input type="checkbox" class="select_record" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" />
                 [% BIBLIO_RESULT.title |html %]
                 [% IF ( BIBLIO_RESULT.subtitle ) %] [% BIBLIO_RESULT.subtitle %][% END %]
                 [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
@@ -317,28 +234,10 @@ function batchDelete(){
 
 [% ELSE %]
 [% UNLESS ( print_basket ) %]
-<p style="border-top : 1px solid #E8E8E8;">
-	<form action="/cgi-bin/koha/basket/basket.pl" method="get" name="bookbag_form" id="bookbag_form">
-    <a id="CheckAll" href="#">Select all</a>
-    <a id="CheckNone" href="#">Clear all</a>
-    | <b>Selected items :</b>
-<a href="#" onclick="delSelRecords(); return false;">Remove</a>
-
-[% IF ( loggedinusername ) %]
-     | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
+    <form action="/cgi-bin/koha/basket/basket.pl" method="get" name="bookbag_form" id="bookbag_form">
+    [% PROCESS controls %]
 [% END %]
 
-[% IF ( CAN_user_reserveforothers ) %]
-     | <a href="#" onclick="placeHold(); return false;">Place hold</a>
-[% END %]
-
-[% IF CAN_user_tools_records_batchdel %]
-    | <a href="#" onclick="batchDelete(); return false;">Batch delete</a>
-[% END %]
-
-[% END %]
-
-</p>
     <table id="itemst">
 	<thead><tr>
         [% UNLESS ( print_basket ) %]<th class="NoSort">&nbsp;</th>[% END %]
@@ -350,10 +249,10 @@ function batchDelete(){
         [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
                 <tr>
             [% UNLESS ( print_basket ) %]<td>
-                        <input type="checkbox" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" onclick="selRecord(value,checked);" />
+                        <input type="checkbox" class="select_record" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" />
 
                 </td> [% END %]
-            <td><a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest %]',[% BIBLIO_RESULT.biblionumber %])">
+            <td><a href="[% BIBLIO_RESULT.dest %]?biblionumber=[% BIBLIO_RESULT.biblionumber %]" class="open_title">
                         [% BIBLIO_RESULT.title |html %]
                     </a>
                         [% BIBLIO_RESULT.author %]
