@@ -12,7 +12,7 @@
         // Enforce Superlibrarian Privilege Mutual Exclusivity
         if($('input[id="flag-0"]:checked').length){
             if ($('input[name="flag"]:checked').length > 1){
-                alert('Inconsistency Detected!\n\nThe superlibrarian privilege is mutually exclusive of other privileges, as it includes them all.\n\nThis patron\'s privileges will now be reset to include only superlibrarian.');
+                alert(_("Inconsistency detected! The superlibrarian privilege is mutually exclusive of other privileges, as it includes them all. This patron's privileges will now be reset to include only superlibrarian."));
             }
 
             $('input[name="flag"]').each(function() {
@@ -39,10 +39,17 @@
             }
         });
 
+        $(".flag").on("change",function(){
+            if( $(this).hasClass("parent") ){
+                toggleChildren(this);
+            } else {
+                toggleParent(this);
+            }
+        });
+
     });
-</script>
-<!-- manage checking/unchecking parent permissions -->
-<script type="text/javascript">
+
+    // manage checking/unchecking parent permissions
     var originalChildStates = {}; /* keep track of subpermission checkbox values
                                      so that user can recover from accidentally
                                      toggling a parent/module permission */
@@ -127,9 +134,9 @@
         <li>
         [% END %]
 			[% IF ( loo.checked ) %]
-			   <input type="checkbox" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" checked="checked" onclick="toggleChildren(this)" />
+                <input type="checkbox" class="flag parent" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" checked="checked" />
 			[% ELSE %]
-				<input type="checkbox" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]"  onclick="toggleChildren(this)" />
+                <input type="checkbox" class="flag parent" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" />
 			[% END %]
                 <label class="permissioncode" for="flag-[% loo.bit %]">[% loo.flag %]</label>
                 <span class="permissiondesc">[% PROCESS main_permissions name=loo.flag %]</span>
@@ -138,9 +145,9 @@
                     [% FOREACH sub_perm_loo IN loo.sub_perm_loop %]
                         <li>
 			            [% IF ( sub_perm_loo.checked ) %]
-			                <input type="checkbox" id="[% sub_perm_loo.id %]" name="flag" value="[% sub_perm_loo.perm %]" checked="checked" onclick="toggleParent(this)" />
+                            <input type="checkbox" class="flag child" id="[% sub_perm_loo.id %]" name="flag" value="[% sub_perm_loo.perm %]" checked="checked" />
 			            [% ELSE %]
-			                <input type="checkbox" id="[% sub_perm_loo.id %]" name="flag" value="[% sub_perm_loo.perm %]" onclick="toggleParent(this)" />
+                            <input type="checkbox" class="flag child" id="[% sub_perm_loo.id %]" name="flag" value="[% sub_perm_loo.perm %]" />
 			            [% END %]
                     <label class="permissioncode" for="[% sub_perm_loo.id %]">[% sub_perm_loo.code %]</label>
                              <span class="permissiondesc">[% PROCESS sub_permissions name=sub_perm_loo.code %]</span>
