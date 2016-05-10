@@ -17,9 +17,10 @@ package Koha::SearchEngine::Zebra::QueryBuilder;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use base qw(Class::Accessor);
 use Modern::Perl;
-use Moose::Role;
+
+use base qw(Class::Accessor);
+
 use C4::Search;
 use C4::AuthoritiesMarc;
 

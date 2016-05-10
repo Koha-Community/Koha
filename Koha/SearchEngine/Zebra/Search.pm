@@ -17,10 +17,6 @@ package Koha::SearchEngine::Zebra::Search;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-# I don't think this ever worked right
-#use Moose::Role;
-#with 'Koha::SearchEngine::SearchRole';
-
 use Modern::Perl;
 
 use base qw(Class::Accessor);
