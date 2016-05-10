@@ -182,7 +182,10 @@ $('#sort_by').change(function() {
         [% END %]
     [% END %]
 
-[% IF LocalCoverImages %]KOHA.LocalCover.LoadResultsCovers();[% END %]
+    [% IF LocalCoverImages %]
+        KOHA.LocalCover.LoadResultsCovers();
+    [% END %]
+
     $("#select_all").on("click",function(e){
         e.preventDefault();
         selectAll();
@@ -191,6 +194,21 @@ $('#sort_by').change(function() {
         e.preventDefault();
         clearAll();
     });
+
+    $("#searchresults").on("click",".addtocart",function(e){
+        e.preventDefault();
+        var selection_id = this.id;
+        var biblionumber = selection_id.replace("cart","");
+        addRecord(biblionumber);
+    });
+
+    $("#searchresults").on("click",".cartRemove",function(e){
+        e.preventDefault();
+        var selection_id = this.id;
+        var biblionumber = selection_id.replace("cartR","");
+        delSingleRecord(biblionumber);
+    });
+
 });
 
 
@@ -560,12 +578,23 @@ var holdForPatron = function () {
 
                                 [% END %]
                                 [% END %]
-                                  <p class="hold">[% IF ( SEARCH_RESULT.norequests ) %]
-                                  <span class="noholdstext">No holds allowed</span>
-                              [% ELSE %]
-                                  <a id="reserve_[% SEARCH_RESULT.biblionumber %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Holds</a>
-                                  [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></span>[% END %]
-                              [% END %]
+                                  <p class="hold">
+
+                            [% IF ( SEARCH_RESULT.norequests ) %]
+                                <span class="noholdstext">No holds allowed</span>
+                            [% ELSE %]
+                                <a id="reserve_[% SEARCH_RESULT.biblionumber %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Holds</a>
+                                [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></span>[% END %]
+                            [% END %]
+
+                                [% IF Koha.Preference('intranetbookbag') == 1 %]
+                                    [% IF ( SEARCH_RESULT.incart ) %]
+                                        | <a class="addtocart" id="cart[% SEARCH_RESULT.biblionumber %]" href="#">In your cart</a> <a class="cartRemove" id="cartR[% SEARCH_RESULT.biblionumber %]" href="#">(remove)</a>
+                                    [% ELSE %]
+                                        | <a class="addtocart" id="cart[% SEARCH_RESULT.biblionumber %]" href="#">Add to cart</a> <a style="display:none;" class="cartRemove" id="cartR[% SEARCH_RESULT.biblionumber %]" href="#">(remove)</a>
+                                    [% END %]
+                                [% END # / IF intranetbookbag %]
+
                           [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                           | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Edit record</a>
                           [% END %]
