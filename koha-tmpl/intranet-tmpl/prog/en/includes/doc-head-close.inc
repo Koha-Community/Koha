@@ -65,6 +65,9 @@
         var MSG_CONFIRM_DEL_RECORDS = _("Are you sure you want to remove the selected items?");
         var MSG_IN_YOUR_CART = _("Items in your cart: %s");
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be reserved.");
+        var MSG_ITEM_NOT_IN_CART = _("Add to cart");
+        var MSG_ITEM_IN_CART = _("In your cart");
+        var MSG_RECORD_REMOVED = _("The item has been removed from your cart");
     //]]>
     </script>
 
