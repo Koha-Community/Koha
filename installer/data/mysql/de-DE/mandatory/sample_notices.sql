@@ -17,8 +17,15 @@ VALUES ('circulation','ODUE','Mahnung','Mahnung','Liebe/r <<borrowers.firstname>
 ('suggestions','AVAILABLE','Vorgeschlagenes Medium verfügbar', 'Das vorgeschlagene Medium ist jetzt verfügbar','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nSie haben der Bibliothek folgendes Medium zur Anschaffung vorgeschlagen: <<suggestions.title>> von <<suggestions.author>>.\n\nWir freuen uns Ihnen mitteilen zu können, dass dieser Titel jetzt im Bestand der Bibliothek verfügbar ist.\n\nWenn Sie Fragen haben, richten Sie Ihre Mail bitte an: <<branches.branchemail>>.\n\nVielen Dank,\n\n<<branches.branchname>>', 'email'),
 ('suggestions','ORDERED','Vorgeschlagenes Medium bestellt', 'Das vorgeschlagene Medium wurde im Buchhandel bestellt','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nSie haben der Bibliothek folgendes Medium zur Anschaffung vorgeschlaten: <<suggestions.title>> von <<suggestions.author>>.\n\nWir freuen uns Ihnen mitteilen zu können, dass dieser Titel jetzt im Buchhandel bestellt wurde. Nach Eintreffen wird er in unseren Bestand eingearbeitet.\n\nSie erhalten Nachricht, sobald das Medium verfügbar ist.\n\nBei Nachfragen erreichen Sie uns unter der Emailadresse <<branches.branchemail>>.\n\nVielen Dank,\n\n<<branches.branchname>>', 'email'),
 ('suggestions','REJECTED','Anschaffungsvorschlag nicht angenommen', 'Ihr Anschaffungsvorschlag wurde nicht angenommen','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nSie haven der Bibliothek folgendes Medium zur Anschaffung vorgeschlagen: <<suggestions.title>> von <<suggestions.author>>.\n\nDie Bibliothek hat diesen Titel heute recherchiert und sich gegen eine Anschaffung entschieden.\n\nBegründung: <<suggestions.reason>>\n\nWenn Sie Fragen haben, richten Sie Ihre Mail bitte an: <<branches.branchemail>>.\n\nVielen Dank,\n\n<<branches.branchname>>', 'email'),
-('suggestions','TO_PROCESS','Benachrichtigung an Besitzer des Kontos', 'Anschaffungsvorschlag wartet auf Bearbeitung','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nEin neuer Anschaffungsvorschlag wartet auf Bearbeitung: <<suggestions.title>> von <<suggestions.author>>.\n\nVielen Dank,\n\n<<branches.branchname>>', 'email'),
-('members', 'DISCHARGE', 'Bestätigung', 'Bestätigung <<borrowers.firstname>> <<borrowers.surname>>', '<h1>Bestätigung</h1>\r\n\r\nDie Bibliothek <<borrowers.branchcode>> bestätigt, dass\r\n\r\n    <<borrowers.firstname>> <<borrowers.surname>>\r\n   (Kartennummer <<borrowers.cardnumber>>)\r\n\r\nalle ausgeliehenen Medien zurückgegeben hat.', 'email');
+('suggestions','TO_PROCESS','Benachrichtigung an Besitzer des Kontos', 'Anschaffungsvorschlag wartet auf Bearbeitung','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nEin neuer Anschaffungsvorschlag wartet auf Bearbeitung: <<suggestions.title>> von <<suggestions.author>>.\n\nVielen Dank,\n\n<<branches.branchname>>', 'email');
+
+INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
+VALUES ('members', 'DISCHARGE', 'Entlastung', 'Entlastung für <<borrowers.firstname>> <<borrowers.surname>>', '
+<<today>>
+<h1>Entlastungsbescheinigung</h1>
+<p><<branches.branchname>> bestätigt, dass der nachfolgende Benutzer:<br>
+<<borrowers.firstname>> <<borrowers.surname>> (Ausweisnummer: <<borrowers.cardnumber>>)<br>
+alle Medien zurückgegeben und ausstehende Gebühren beglichen hat.</p>', 1, 'email');
 
 INSERT INTO `letter` (module, code, name, title, content, is_html)
 VALUES ('circulation','ISSUESLIP','Ausleihquittung (Quittungsdruck)','Ausleihquittung (Quittungsdruck)', '<h2>Ausleihquittung</h2>
@@ -136,7 +143,7 @@ Ihr Biblioheksteam'
 
 INSERT INTO letter(module, code, branchcode, name, title, content, message_transport_type)
 VALUES ('acquisition', 'ACQ_NOTIF_ON_RECEIV', '', 'Benachrichtigung bei Zugang', 'Bestelltes Medium ist eingetroffen', 'Liebe/r <<borrowers.firstname>> <<borrowers.surname>>,\n\nDie Bestellung <<aqorders.ordernumber>> (<<biblio.title>>) ist eingetroffen und wird bearbeitet.\n\nIhr Bibliotheksteam', 'email'),
-('members','MEMBERSHIP_EXPIRY','','Ablauf des Benutzerkontos','Benutzerkonto läuft ab','Liebe(r) <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>,.\r\n\r\nIhr Bibliotheksausweis läuft demnächst ab:\r\n\r\n<<borrowers.dateexpiry>>\r\n\r\nVielen Dank,\r\n\r\nLibrarian\r\n\r\n<<branches.branchname>>','email');
+('members','MEMBERSHIP_EXPIRY','','Ablauf des Benutzerkontos','Benutzerkonto läuft ab','Liebe(r) <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nIhr Bibliotheksausweis läuft demnächst ab:\r\n\r\n<<borrowers.dateexpiry>>\r\n\r\nVielen Dank,\r\n\r\nLibrarian\r\n\r\n<<branches.branchname>>','email');
 
 INSERT INTO letter ( module, code, branchcode, name, is_html, title, content, message_transport_type )
 VALUES ( 'circulation', 'OVERDUES_SLIP', '', 'Überfälligkeiten (Quittung)', '0', 'OVERDUES_SLIP', 'Die folgenden Exemplare sind aktuell überfällig:
@@ -145,5 +152,5 @@ VALUES ( 'circulation', 'OVERDUES_SLIP', '', 'Überfälligkeiten (Quittung)', '0
 ', 'print' );
 
 INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, message_transport_type)
-VALUES ('members','PASSWORD_RESET','','Online password reset',1,'Koha password recovery','<html>\r\n<p>This email has been sent in response to your password recovery request for the account <strong><<user>></strong>.\r\n</p>\r\n<p>\r\nYou can now create your new password using the following link:\r\n<br/><a href=\"<<passwordreseturl>>\"><<passwordreseturl>></a>\r\n</p>\r\n<p>This link will be valid for 2 days from this email\'s reception, then you must reapply if you do not change your password.</p>\r\n<p>Thank you.</p>\r\n</html>\r\n','email'
+VALUES ('members','PASSWORD_RESET','','Neues Passwort',1,'Neues Passwort','<html>\r\n<p>Liebe(r) <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>,</p>\r\n\r\n<p>Diese E-Mail wurde verschickt, da Sie ein neues Passwort für Ihr Bibliotheksbenutzerkonto angefordert haben: <strong><<user>></strong>.\r\n</p>\r\n<p>\r\nBitte klicken Sie auf den folgenden Link um Ihr neues Passwort zu erstellen:\r\n<br/><a href=\"<<passwordreseturl>>\"><<passwordreseturl>></a>\r\n</p>\r\n<p>Dieser Link ist von dieser E-Mail an für 2 Tage gültig. Wenn Sie bis dahin Ihr Passwort nicht geändert haben, müssen Sie die E-Mail erneut anfordern.</p>\r\n<p>Vielen Dank</p>\r\n</html>\r\n','email'
 );
