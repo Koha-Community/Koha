@@ -97,6 +97,18 @@ $(document).ready(function() {
         e.preventDefault();
         filterByFirstLetterSurname($(this).text());
     });
+    $("#select_all").on("click",function(e){
+        e.preventDefault();
+        $(".selection").prop("checked", true);
+    });
+    $("#clear_all").on("click",function(e){
+        e.preventDefault();
+        $(".selection").prop("checked", false);
+    });
+    $("#clear_search").on("click",function(e){
+        e.preventDefault();
+        clearFilters(true);
+    });
 });
 
 var dtMemberResults;
@@ -354,9 +366,9 @@ function filterByFirstLetterSurname(letter) {
             [% IF CAN_user_tools_manage_patron_lists %]
               <div id="searchheader">
                   <div>
-                      <a href="javascript:void(0)" onclick="$('.selection').prop('checked', true)">Select all</a>
+                      <a href="#" id="select_all"><i class="fa fa-check"></i> Select all</a>
                       |
-                      <a href="javascript:void(0)" onclick="$('.selection').prop('checked', false)">Clear all</a>
+                      <a href="#" id="clear_all"><i class="fa fa-remove"></i> Clear all</a>
                       |
                       <span>
                           <label for="add_to_patron_list">Add selected patrons to:</label>
@@ -515,7 +527,7 @@ function filterByFirstLetterSurname(letter) {
           </ol>
           <fieldset class="action">
             <input type="submit" value="Search" />
-            <input type="button" value="Clear" onclick="clearFilters(true);" />
+            <input type="button" value="Clear" id="clear_search" />
           </fieldset>
         </fieldset>
       </form>

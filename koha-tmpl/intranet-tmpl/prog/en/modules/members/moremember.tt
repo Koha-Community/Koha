@@ -89,6 +89,9 @@ $(document).ready(function() {
         hour: 23,
         minute: 59
     });
+    $("#view_restrictions").on("click",function(){
+        $('#debarments-tab-link').click();
+    });
  });
 function uncheck_sibling(me){
 nodename=me.getAttribute("name");
@@ -188,7 +191,7 @@ function validate1(date) {
                [% IF ( debarredcomment ) %]
                    with the explanation: <i>[% debarredcomment | html_line_break %]</i>
                [% END %]
-                <a href="#reldebarments" onclick="$('#debarments-tab-link').click()">View restrictions</a>
+                <a href="#reldebarments" id="view_restrictions">View restrictions</a>
             </li>
         [% END %]
         [% IF ( gonenoaddress ) %]<li class="blocker">Patron's address is in doubt.</li>[% END %]

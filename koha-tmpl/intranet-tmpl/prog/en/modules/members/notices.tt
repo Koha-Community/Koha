@@ -80,7 +80,9 @@
                     <input type="hidden" name="op" value="resend_notice" />
                     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
                     <input type="hidden" name="message_id" value="[% QUEUED_MESSAGE.message_id %]" />
-                    <a href="#" onclick="$(this).closest('form').submit();return false;" title="Attempt to resend the notice">Resend</a>
+                    <fieldset class="action">
+                        <button class="btn btn-mini" type="submit">Resend</button>
+                    </fieldset>
                 </form>
             </div>
             [% END %]

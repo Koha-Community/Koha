@@ -44,8 +44,8 @@
     [% END %]
 	[% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax %]</li>[% END %]
     [% UNLESS ( I ) %]
-        [% IF ( email ) %]<li><span class="label">Primary email:</span><a href="mailto:[% email %]">[% email %]</a></li>[% END %]
-        [% IF ( emailpro ) %]<li><span class="label">Secondary email: </span><a href="mailto:[% emailpro %]">[% emailpro %]</a></li>[% END %]
+        [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a href="mailto:[% email %]">[% email %]</a></li>[% END %]
+        [% IF ( emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a href="mailto:[% emailpro %]">[% emailpro %]</a></li>[% END %]
     [% END %]
     <li><span class="label">Initials: </span>[% initials %]</li>
     <li><span class="label">Date of birth:</span>[% dateofbirth | $KohaDates %]</li>
@@ -86,7 +86,7 @@
 	</ol>
 	</div>
 	</div>
-	<fieldset class="action"><input type="button" class="submit" value="Close window" onclick="window.close();" /></fieldset>
+    <fieldset class="action"><input type="button" class="close" value="Close window" /></fieldset>
 	</div>
 	</div>
 </div>
