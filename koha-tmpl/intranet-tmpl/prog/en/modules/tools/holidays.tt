@@ -191,7 +191,14 @@
             dateChanged($(this).datepicker("getDate"));
         },
         defaultDate: new Date("[% keydate %]")
-    });
+        });
+        $(".hidePanel").on("click",function(){
+            if( $(this).hasClass("showHoliday") ){
+                hidePanel("showHoliday");
+            } else {
+                hidePanel("newHoliday");
+            }
+        })
     });
 //]]>
 </script>
@@ -309,7 +316,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
             </ol>
             <fieldset class="action">
                 <input type="submit" name="submit" value="Save" />
-                <a href="#" class="cancel" onclick=" hidePanel('showHoliday');">Cancel</a>
+                <a href="#" class="cancel hidePanel showHoliday">Cancel</a>
             </fieldset>
             </fieldset>
         </form>
@@ -380,7 +387,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
                 </li></ol>
                 <fieldset class="action">
                     <input type="submit" name="submit" value="Save" />
-                    <a href="#" class="cancel" onclick=" hidePanel('newHoliday');">Cancel</a>
+                    <a href="#" class="cancel hidePanel newHoliday">Cancel</a>
                 </fieldset>
                 </fieldset>
          </form>

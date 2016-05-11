@@ -20,6 +20,11 @@
             var list = $(this).data("list-name");
             return confirmDelete( _("Are you sure you want to delete the list %s?").format(list) );
         });
+        $(".print_cards").on("click",function(e){
+            e.preventDefault();
+            var patron_list_id = $(this).data("patron_list_id");
+            GB_showCenter(_("Print patron cards from list"), "/cgi-bin/koha/patroncards/print.pl?patronlist_id=" + patron_list_id, 400, 800);
+        });
     });
 //]]>
 </script>
@@ -71,18 +76,18 @@
                                     <li><a class="delete_patron" href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id %]" data-list-name="[% l.name %]"><i class="fa fa-trash"></i> Delete list</a></li>
                                     [% IF ( l.patron_list_patrons_rs.count ) %]
                                         <li class="divider"></li>
-                                        <li><a href="#" onclick='GB_showCenter(_("Print patron cards from list"), "/cgi-bin/koha/patroncards/print.pl?patronlist_id=[% l.patron_list_id %]", 400, 800);return false;'><i class="fa fa-print"></i> Print patron cards</a></li>
+                                        <li><a href="#" class="print_cards" data-patron_list_id="[% l.patron_list_id %]"><i class="fa fa-print"></i> Print patron cards</a></li>
                                         [% IF CAN_user_tools_edit_patrons %]
                                             <li>
                                                 <a href="/cgi-bin/koha/tools/modborrowers.pl?patron_list_id=[% l.patron_list_id %]&op=show">
-                                                    <i class="fa fa-pencil"></i> Batch edit patrons</i>
+                                                    <i class="fa fa-pencil"></i> Batch edit patrons
                                                 </a>
                                             </li>
                                         [% END %]
                                         [% IF CAN_user_tools_delete_anonymize_patrons %]
                                             <li>
                                                 <a href="/cgi-bin/koha/tools/cleanborrowers.pl?step=2&patron_list_id=[% l.patron_list_id %]&checkbox=borrower">
-                                                    <i class="fa fa-trash"></i> Batch delete patrons</i>
+                                                    <i class="fa fa-trash"></i> Batch delete patrons
                                                 </a>
                                             </li>
                                         [% END %]
