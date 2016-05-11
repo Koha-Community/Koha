@@ -15,6 +15,11 @@ var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% 
 for( x=0; x<allColumns.length; x++ ){
   allColumns[x] = Number(allColumns[x]) + 2;
 }
+$(document).ready(function(){
+    $("#mainformsubmit").on("click",function(){
+        return submitBackgroundJob(this.form);
+    });
+});
 //]]>
 </script>
 <!--[if IE]>
@@ -137,9 +142,9 @@ for( x=0; x<allColumns.length; x++ ){
 		</div>
         <input type="checkbox" name="del_records" id="del_records" /> <label for="del_records">Delete records if no items remain.</label>
         [% IF too_many_items %]
-            <input type="submit" name="mainformsubmit" value="Delete ALL submitted items" onclick="return submitBackgroundJob(this.form);" />
+            <input type="submit" id="mainformsubmit" name="mainformsubmit" value="Delete ALL submitted items" />
         [% ELSE %]
-            <input type="submit" name="mainformsubmit" value="Delete selected items" onclick="return submitBackgroundJob(this.form);" />
+            <input type="submit" id="mainformsubmit" name="mainformsubmit" value="Delete selected items" />
         [% END %]
 
 		<a href="/cgi-bin/koha/tools/batchMod.pl?del=1" class="cancel">Cancel</a>

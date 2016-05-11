@@ -32,7 +32,9 @@ $(document).ready(function(){
           $("#"+row).html("");
       }
   });
-
+    $("#mainformsubmit").on("click",function(){
+        return submitBackgroundJob(this.form);
+    });
 });
 //]]>
 </script>
@@ -236,8 +238,8 @@ $(document).ready(function(){
        <div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
        <div id="jobfailed"></div>
    </div>
-   <input type="submit" name="mainformsubmit" value="Save" onclick="return submitBackgroundJob(this.form);" />
-         <a href="/cgi-bin/koha/tools/batchMod.pl" class="cancel" onclick="history.back();return false;">Cancel</a>
+   <input type="submit" id="mainformsubmit" value="Save" />
+         <a href="/cgi-bin/koha/tools/batchMod.pl" class="cancel">Cancel</a>
     </fieldset>
 </div>
 [% ELSE %]
