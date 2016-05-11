@@ -455,7 +455,6 @@ sub _build_default_values_for_mod_marc {
     my ($frameworkcode) = @_;
     return $default_values_for_mod_from_marc{$frameworkcode}
       if exists $default_values_for_mod_from_marc{$frameworkcode};
-    my $marc_structure = C4::Biblio::GetMarcStructure( 1, $frameworkcode );
     my $default_values = {
         barcode                  => undef,
         booksellerid             => undef,
