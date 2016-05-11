@@ -37,15 +37,6 @@ our $uploads = [
     ],
 ];
 
-# Before we mock upload_path, we are checking the real folder
-# This may help identifying upload problems
-my $realdir = C4::Context->config('upload_path');
-if( !$realdir ) {
-    warn "WARNING: You do not have upload_path in koha-conf.xml";
-} elsif( !-w $realdir ) {
-    warn "WARNING: You do not have write permissions in $realdir";
-}
-
 # Redirect upload dir structure and mock File::Spec and CGI
 my $tempdir = tempdir( CLEANUP => 1 );
 t::lib::Mocks::mock_config('upload_path', $tempdir);
