@@ -54,7 +54,9 @@ subtest 'Start with some trivial tests' => sub {
     # return undef if a record exists
     my $param = { source => 'Branch', value => { branchcode => 'MPL' } };
     $builder->build( $param ); # at least it should exist now
-    is( $builder->build( $param ), undef, 'Return undef when exists' );
+    warning_like { $builder->build( $param ) }
+        qr/Violation of unique constraint/,
+        'Catch warn on adding existing record';
 };
 
 
@@ -229,7 +231,9 @@ subtest 'Test build with NULL values' => sub {
 
     # PK should not be null
     my $params = { source => 'Branch', value => { branchcode => undef }};
-    is( $builder->build( $params ), undef, 'PK should not be null' );
+    warning_like { $builder->build( $params ) }
+        qr/Null value for branchcode/,
+        'Catch warn on adding branch with a null branchcode';
     # Nullable column
     my $info = $schema->source( 'Item' )->column_info( 'barcode' );
     $params = { source => 'Item', value  => { barcode => undef }};
