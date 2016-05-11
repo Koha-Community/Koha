@@ -289,7 +289,11 @@ $(document).ready(function() {
 	</fieldset>
 [% END # hide fieldset %]
 
-[% IF ( showguarantor ) %]<input type="hidden" id="guarantorid" name="guarantorid"   value="[% guarantorid %]" />
+[% IF ( showguarantor ) %]
+    <input type="hidden" id="guarantorid" name="guarantorid"   value="[% guarantorid %]" />
+    [% UNLESS step_6 %]
+        <input type="hidden" name="branchcode" value="[% branchcode %]" />
+    [% END %]
     <fieldset id="memberentry_guarantor" class="rows">
         <legend id="guarantor_lgd">Guarantor information</legend>
         <ol>
