@@ -351,4 +351,12 @@ $(document).ready(function(){
         e.preventDefault();
     });
     $('#floating-save').css( { bottom: parseInt( $('#floating-save').css('bottom') ) + $('#changelanguage').height() + 'px' } );
+    $('#qa-save').css( {
+        bottom: parseInt( $('#qa-save').css('bottom') ) + $('#changelanguage').height() + 'px' ,
+        "background-color": "rgba(185, 216, 217, 0.6)",
+        "bottom": "3%",
+        "position": "fixed",
+        "right": "1%",
+        "width": "150px",
+    } );
 });
