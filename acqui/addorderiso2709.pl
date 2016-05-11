@@ -31,7 +31,6 @@ use C4::Auth;
 use C4::Output;
 use C4::ImportBatch;
 use C4::Matcher;
-use C4::Search qw/FindDuplicate/;
 use C4::Acquisition;
 use C4::Biblio;
 use C4::Items;
@@ -167,6 +166,7 @@ if ($op eq ""){
     my @discount = $input->multi_param('discount');
     my @sort1 = $input->multi_param('sort1');
     my @sort2 = $input->multi_param('sort2');
+    my $matcher_id = $input->multi_param('matcher_id');
     my $cur = GetCurrency();
     for my $biblio (@$biblios){
         # Check if this import_record_id was selected
@@ -184,7 +184,14 @@ if ($op eq ""){
 
         # 1st insert the biblio, or find it through matcher
         unless ( $biblionumber ) {
-            $duplinbatch=$import_batch_id and next if FindDuplicate($marcrecord);
+            if ($matcher_id) {
+                my $matcher = C4::Matcher->fetch($matcher_id);
+                my @matches = $matcher->get_matches( $marcrecord, my $max_matches = 1 );
+                if ( @matches ) {
+                    $duplinbatch = $import_batch_id;
+                    next;
+                }
+            }
             # add the biblio
             my $bibitemnum;
 
