@@ -189,10 +189,37 @@
                   </ul>
 
                   <div id="records_to_import">
-                    <span class="checkall"><a id="checkAll" href="#">Check all</a></span>
-                    <span class="uncheckall"><a id="unCheckAll" href="#">Uncheck all</a></span>
-                    <label for="showallbudgets" style="float:none;width:auto;">&nbsp;Show inactive funds:</label>
-                    <input type="checkbox" id="showallbudgets" />
+                    <div id="searchheader">
+                        <div>
+                            <span class="checkall"><a id="checkAll" href="#">Select all</a></span>
+                            |
+                            <span class="uncheckall"><a id="unCheckAll" href="#">Clear all</a></span>
+                            |
+                            <span>
+                                <label for="matcher_id">Matching:</label>
+                                    <select name="matcher_id" id="matcher_id">
+                                        <option value="">Do not look for matching records</option>
+                                        [% FOREACH available_matcher IN available_matchers %]
+                                            [% IF ( available_matcher.code == current_matcher_code ) %]
+                                                <option value="[% available_matcher.matcher_id %]" selected="selected">
+                                                    [% available_matcher.code %] ([% available_matcher.description %])
+                                                </option>
+                                            [% ELSE %]
+                                                <option value="[% available_matcher.matcher_id %]">
+                                                    [% available_matcher.code %] ([% available_matcher.description %])
+                                                </option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                            </span>
+                            |
+                            <span>
+                                <label for="showallbudgets" style="float:none;width:auto;">&nbsp;Show inactive funds:</label>
+                                <input type="checkbox" id="showallbudgets" />
+                            </span>
+                        </div>
+                    </div>
+
                         <input type="hidden" name="op" value="import_records"/>
                         <input type="hidden" name="basketno" value="[% basketno %]" />
                         <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
