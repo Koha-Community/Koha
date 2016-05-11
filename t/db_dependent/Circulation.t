@@ -30,7 +30,7 @@ use Koha::Database;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 83;
+use Test::More tests => 84;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -868,6 +868,44 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my ( $renewed, $error ) = CanBookBeRenewed( $borrowernumber, $itemnumber );
     is( $renewed, 0, 'CanBookBeRenewed should not allow to renew on-site checkout' );
     is( $error, 'onsite_checkout', 'A correct error code should be returned by CanBookBeRenewed for on-site checkout' );
+}
+
+{
+    my $library = $builder->build({ source => 'Branch' });
+
+    my $biblio = MARC::Record->new();
+    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+
+    my $barcode = 'just a barcode';
+    my ( undef, undef, $itemnumber ) = AddItem(
+        {
+            homebranch       => $library->{branchcode},
+            holdingbranch    => $library->{branchcode},
+            barcode          => $barcode,
+        },
+        $biblionumber,
+    );
+
+    my $patron = $builder->build({ source => 'Borrower', value => { branchcode => $library->{branchcode} } } );
+
+    my $issue = AddIssue( GetMember( borrowernumber => $patron->{borrowernumber} ), $barcode );
+    UpdateFine(
+        {
+            issue_id       => $issue->id(),
+            itemnumber     => $itemnumber,
+            borrowernumber => $patron->{borrowernumber},
+            amount         => 1,
+        }
+    );
+    UpdateFine(
+        {
+            issue_id       => $issue->id(),
+            itemnumber     => $itemnumber,
+            borrowernumber => $patron->{borrowernumber},
+            amount         => 2,
+        }
+    );
+    is( Koha::Account::Lines->search({ issue_id => $issue->id })->count, 1, 'UpdateFine should not create a new accountline when updating an existing fine');
 }
 
 1;
