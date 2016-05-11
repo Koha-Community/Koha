@@ -81,7 +81,7 @@ if (!C4::Context->userenv){
 my $barcodes = [];
 my $barcode =  $query->param('barcode');
 # Barcode given by user could be '0'
-if ( $barcode || $barcode eq '0' ) {
+if ( $barcode or defined $barcode and $barcode eq '0' ) {
     $barcodes = [ $barcode ];
 } else {
     my $filefh = $query->upload('uploadfile');
@@ -167,7 +167,7 @@ my $duedatespec    = $query->param('duedatespec')   || $session->param('stickydu
 $duedatespec = eval { output_pref( { dt => dt_from_string( $duedatespec ), dateformat => 'iso' }); }
     if ( $duedatespec );
 my $restoreduedatespec  = $query->param('restoreduedatespec') || $session->param('stickyduedate') || $duedatespec;
-if ($restoreduedatespec eq "highholds_empty") {
+if ($restoreduedatespec and $restoreduedatespec eq "highholds_empty") {
     undef $restoreduedatespec;
 }
 my $issueconfirmed = $query->param('issueconfirmed');
