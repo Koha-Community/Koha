@@ -29,7 +29,7 @@
     </div>
 [% END %]
 [% UNLESS can_be_discharged %]
-    <p>Cannot edit discharge: borrower has issues.</p>
+    <p>Cannot edit discharge: the patron has checked out items.</p>
 [% ELSE %]
     [% IF has_reserves %]
         <p>Borrower has reserves: they will be canceled if the discharge is generated.</p>
