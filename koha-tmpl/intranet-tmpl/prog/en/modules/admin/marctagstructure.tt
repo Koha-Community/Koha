@@ -66,9 +66,9 @@ $(document).ready(function() {
 [% IF ( add_form ) %]
 
     <form action="[% script_name %]" name="Aform" method="post" class="validated">
-	
+
       <fieldset class="rows"><legend>[% IF ( use_heading_flags_p ) %][% IF ( heading_modify_tag_p ) %]Modify tag <input type="hidden" name="modif" value="1" />[% searchfield %][% END %][% IF ( heading_add_tag_p ) %]Add tag[% END %][% ELSE %][% action %][% END %]</legend>  <input type="hidden" name="op" value="add_validate" />
-    <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode %]" />
+        <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode %]" />
 
         <ol>
             <li>

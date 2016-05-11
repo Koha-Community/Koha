@@ -501,15 +501,15 @@ function Changefwk() {
                     Default
                 </a>
             </li>
-            [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
+            [% FOREACH framework IN frameworks%]
                 <li>
-                    <a href="#" class="change-framework" data-frameworkcode="[% frameworkcodeloo.frameworkcode %]">
-                        [% IF ( frameworkcodeloo.frameworkcode == frameworkcode ) %]
+                    <a href="#" class="change-framework" data-frameworkcode="[% framework.frameworkcode %]">
+                        [% IF framework.frameworkcode == frameworkcode %]
                             <i class="fa fa-fw fa-check"></i>
                         [% ELSE %]
                             <i class="fa fa-fw">&nbsp;</i>
                         [% END %]
-                        [% frameworkcodeloo.frameworktext %]
+                        [% framework.frameworktext %]
                     </a>
                 </li>
             [% END %]
