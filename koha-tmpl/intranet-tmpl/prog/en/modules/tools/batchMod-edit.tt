@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch item modification</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -163,7 +164,7 @@ $(document).ready(function(){
 [% IF ( show ) %]
 
 [% IF ( too_many_items ) %]
-    <p>Too many items ([% too_many_items %]): not displaying each one individually.</p>
+    <p>Too many items ([% too_many_items %]): You are not allowed to edit more than [% Koha.Preference('MaxItemsToProcessForBatchMod') %] items in a batch.</p>
     [% FOREACH itemnumber IN itemnumbers_array %]
   <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
     [% END %]

@@ -115,7 +115,7 @@ if ($op eq "action") {
     # Once the job is done
     if ($completedJobID) {
 	# If we have a reasonable amount of items, we display them
-    if (scalar(@itemnumbers) <= ( C4::Context->preference("MaxItemsForBatch") // 1000 ) ) {
+    if (scalar(@itemnumbers) <= ( C4::Context->preference("MaxItemsToDisplayForBatchDel") // 1000 ) ) {
 	    $items_display_hashref=BuildItemsData(@itemnumbers);
 	} else {
 	    # Else, we only display the barcode
@@ -270,8 +270,11 @@ if ($op eq "show"){
 
     # Flag to tell the template there are valid results, hidden or not
     if(scalar(@itemnumbers) > 0){ $template->param("itemresults" => 1); }
-    # Only display the items if there are no more than pref MaxItemsForBatch
-    if (scalar(@itemnumbers) <= ( C4::Context->preference("MaxItemsForBatch") // 1000 ) ) {
+    # Only display the items if there are no more than pref MaxItemsToProcessForBatchMod or MaxItemsToDisplayForBatchDel
+    my $max_items = $del
+        ? C4::Context->preference("MaxItemsToDisplayForBatchDel")
+        : C4::Context->preference("MaxItemsToProcessForBatchMod");
+    if (scalar(@itemnumbers) <= ( $max_items // 1000 ) ) {
         $items_display_hashref=BuildItemsData(@itemnumbers);
     } else {
         $template->param("too_many_items" => scalar(@itemnumbers));
