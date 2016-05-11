@@ -1001,10 +1001,10 @@ sub handle_patron_info {
         if( defined( $patron_pwd ) && !$password_rc ) {
             $msg .= ' -- ' . INVALID_PW;
         }
-        if ( $server->{account}->{send_patron_home_library_in_af} ) {
-            $msg .= ' -- ' . $patron->{branchcode};
-        }
         $resp .= maybe_add( FID_SCREEN_MSG, $msg, $server );
+        if ( $server->{account}->{send_patron_home_library_in_af} ) {
+            $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode}, $server);
+        }
         $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line );
     } else {
 
