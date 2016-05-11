@@ -35,7 +35,7 @@ SKIP: {
     $ENV{ MEMCACHED_NAMESPACE } = 'unit_tests';
     my $cache = Koha::Cache->get_instance();
 
-    skip "Cache not enabled", 33
+    skip "Cache not enabled", 37
       unless ( $cache->is_cache_active() && defined $cache );
 
     # test fetching an item that isnt in the cache
