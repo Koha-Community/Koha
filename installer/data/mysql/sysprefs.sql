@@ -132,7 +132,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('DumpTemplateVarsIntranet',  '0', NULL ,  'If enabled, dump all Template Toolkit variable to a comment in the html source for the staff intranet.',  'YesNo'),
 ('DumpTemplateVarsOpac',  '0', NULL ,  'If enabled, dump all Template Toolkit variable to a comment in the html source for the opac.',  'YesNo'),
 ('EasyAnalyticalRecords','0','','If on, display in the catalogue screens tools to easily setup analytical record relationships','YesNo'),
-('EDIInvoicesShippingBudget',NULL,NULL,'The budget code used to allocate shipping charges to when processing EDI Invoice messages','free'),
 ('emailLibrarianWhenHoldIsPlaced','0',NULL,'If ON, emails the librarian whenever a hold is placed','YesNo'),
 ('EnableAdvancedCatalogingEditor','0','','Enable the Rancor advanced cataloging editor','YesNo'),
 ('EnableBorrowerFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo'),
