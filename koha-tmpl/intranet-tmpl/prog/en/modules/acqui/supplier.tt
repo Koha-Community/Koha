@@ -117,7 +117,7 @@ function delete_contact(ev) {
  $(document).ready(function() {
     var contractst = $("#contractst").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
-          { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+          { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
           { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ],
         'sDom': 't'
@@ -369,8 +369,7 @@ function delete_contact(ev) {
                         <th scope="col">Description</th>
                         <th scope="col" class="title-string">Start date</th>
                         <th scope="col" class="title-string">End date</th>
-                        <th scope="col">&nbsp; </th>
-                        <th scope="col">&nbsp; </th>
+                        <th scope="col">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -382,8 +381,10 @@ function delete_contact(ev) {
                         <td>[% contract.contractdescription %]</td>
                         <td><span title="[% contract.contractstartdate %]">[% contract.contractstartdate | $KohaDates %]</span></td>
                         <td><span title="[% contract.contractenddate %]">[% contract.contractenddate | $KohaDates %]</span></td>
-                        <td><a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]">Edit</a></td>
-                        <td><a href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]">Delete</a></td>
+                        <td class="actions">
+                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]"><i class="fa fa-pencil"></i> Edit</a>
+                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]"><i class="fa fa-trash"></i> Delete</a>
+                        </td>
                         </tr>
                     [% END %]
                   </tbody>
