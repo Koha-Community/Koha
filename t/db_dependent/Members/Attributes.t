@@ -25,7 +25,7 @@ use C4::Members::AttributeTypes;
 use Koha::Database;
 use t::lib::TestBuilder;
 
-use Test::More tests => 53;
+use Test::More tests => 55;
 
 use_ok('C4::Members::Attributes');
 
@@ -220,3 +220,35 @@ is( $borrower_attributes->[0]->{value}, $attributes->[1]->{value}, 'DeleteBorrow
 C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber, $attributes->[1]);
 $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
 is( @$borrower_attributes, 1, 'DeleteBorrowerAttribute deletes a borrower attribute' );
+
+# Regression tests for bug 16504
+C4::Context->set_userenv(123, 'userid', 'usercnum', 'First name', 'Surname', $new_library->{branchcode}, 'My Library', 0);
+my $another_patron = $builder->build(
+    {   source => 'Borrower',
+        value  => {
+            firstname    => 'my another firstname',
+            surname      => 'my another surname',
+            categorycode => 'S',
+            branchcode => $new_library->{branchcode},
+        }
+    }
+);
+$attributes = [
+    {
+        value => 'my attribute1',
+        code => $attribute_type1->code(),
+    },
+    {
+        value => 'my attribute2',
+        code => $attribute_type2->code(),
+    },
+    {
+        value => 'my attribute limited',
+        code => $attribute_type_limited->code(),
+    }
+];
+C4::Members::Attributes::SetBorrowerAttributes($another_patron->{borrowernumber}, $attributes);
+$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($another_patron->{borrowernumber});
+is( @$borrower_attributes, 3, 'SetBorrowerAttributes should have added the 3 attributes for another patron');
+$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
+is( @$borrower_attributes, 1, 'SetBorrowerAttributes should not have removed the attributes of other patrons' );
