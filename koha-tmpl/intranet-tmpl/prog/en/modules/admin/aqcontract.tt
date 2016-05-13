@@ -181,7 +181,7 @@ function Check(ff) {
                             <th scope="col">Description</th>
                             <th scope="col">Start date</th>
                             <th scope="col">End date</th>
-                            <th scope="col" colspan="2">&nbsp; </th>
+                            <th scope="col">Actions</th>
                         </tr>
                     [% FOREACH loo IN loop %]
                         <tr>
@@ -191,8 +191,10 @@ function Check(ff) {
                         <td>[% loo.contractdescription %]</td>
                         <td>[% loo.contractstartdate %]</td>
                         <td>[% loo.contractenddate %]</td>
-                        <td><a href="[% loo.script_name %]?op=add_form&amp;contractnumber=[% loo.contractnumber %]&amp;booksellerid=[% loo.booksellerid %]">Edit</a></td>
-                        <td><a href="[% loo.script_name %]?op=delete_confirm&amp;contractnumber=[% loo.contractnumber %]&amp;booksellerid=[% loo.booksellerid %]">Delete</a></td>
+                        <td class="actions">
+                            <a href="[% loo.script_name %]?op=add_form&amp;contractnumber=[% loo.contractnumber %]&amp;booksellerid=[% loo.booksellerid %]" class="btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
+                            <a href="[% loo.script_name %]?op=delete_confirm&amp;contractnumber=[% loo.contractnumber %]&amp;booksellerid=[% loo.booksellerid %]" class="btn btn-mini"><i class="fa fa-trash"></i> Delete</a>
+                        </td>
                         </tr>
                     [% END %]
                 </table>
