@@ -95,6 +95,9 @@ builder {
 		path => qr{^/(intranet|opac)-tmpl/},
 		root => "$ENV{INTRANETDIR}/koha-tmpl/";
 
+    # + is required so Plack doesn't try to prefix Plack::Middleware::
+    enable "+Koha::Middleware::SetEnv";
+
 	mount "/cgi-bin/koha" => $app;
 	mount "/" => $home;
 

@@ -24,6 +24,7 @@ use Plack::Builder;
 use Plack::App::CGIBin;
 use Plack::App::Directory;
 use Plack::App::URLMap;
+use Plack::Request;
 
 use Mojo::Server::PSGI;
 
@@ -67,11 +68,13 @@ my $apiv1  = builder {
 };
 
 builder {
-
     enable "ReverseProxy";
     enable "Plack::Middleware::Static";
+    # + is required so Plack doesn't try to prefix Plack::Middleware::
+    enable "+Koha::Middleware::SetEnv";
 
     mount '/opac'          => $opac;
     mount '/intranet'      => $intranet;
     mount '/api/v1/app.pl' => $apiv1;
+
 };
