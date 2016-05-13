@@ -168,6 +168,14 @@ my $dbh = C4::Context->dbh;
 my ($biblionumbertagfield,$biblionumbertagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
 my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaField("biblioitems.biblioitemnumber","");
 
+my $marcxml_open = q{<?xml version="1.0" encoding="UTF-8"?>
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+};
+
+my $marcxml_close = q{
+</collection>
+};
+
 # Protect again simultaneous update of the zebra index by using a lock file.
 # Create our own lock directory if its missing.  This shouild be created
 # by koha-zebra-ctl.sh or at system installation.  If the desired directory
@@ -478,10 +486,10 @@ sub export_marc_records_from_sth {
 
     my $num_exported = 0;
     open my $fh, '>:encoding(UTF-8) ', "$directory/exported_records" or die $!;
-    if (include_xml_wrapper($as_xml, $record_type)) {
-        # include XML declaration and root element
-        print {$fh} '<?xml version="1.0" encoding="UTF-8"?><collection>';
-    }
+
+    print {$fh} $marcxml_open
+        if include_xml_wrapper($as_xml, $record_type);
+
     my $i = 0;
     my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",'');
     while (my ($record_number) = $sth->fetchrow_array) {
@@ -550,7 +558,8 @@ sub export_marc_records_from_sth {
         }
     }
     print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
-    print {$fh} '</collection>' if (include_xml_wrapper($as_xml, $record_type));
+    print {$fh} $marcxml_close
+        if include_xml_wrapper($as_xml, $record_type);
     close $fh;
     return $num_exported;
 }
@@ -560,10 +569,10 @@ sub export_marc_records_from_list {
 
     my $num_exported = 0;
     open my $fh, '>:encoding(UTF-8)', "$directory/exported_records" or die $!;
-    if (include_xml_wrapper($as_xml, $record_type)) {
-        # include XML declaration and root element
-        print {$fh} '<?xml version="1.0" encoding="UTF-8"?><collection>';
-    }
+
+    print {$fh} $marcxml_open
+        if include_xml_wrapper($as_xml, $record_type);
+
     my $i = 0;
 
     # Skip any deleted records. We check for this anyway, but this reduces error spam
@@ -592,7 +601,10 @@ sub export_marc_records_from_list {
         }
     }
     print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
-    print {$fh} '</collection>' if (include_xml_wrapper($as_xml, $record_type));
+
+    print {$fh} $marcxml_close
+        if include_xml_wrapper($as_xml, $record_type);
+
     close $fh;
     return $num_exported;
 }
@@ -602,10 +614,10 @@ sub generate_deleted_marc_records {
 
     my $records_deleted = {};
     open my $fh, '>:encoding(UTF-8)', "$directory/exported_records" or die $!;
-    if (include_xml_wrapper($as_xml, $record_type)) {
-        # include XML declaration and root element
-        print {$fh} '<?xml version="1.0" encoding="UTF-8"?><collection>';
-    }
+
+    print {$fh} $marcxml_open
+        if include_xml_wrapper($as_xml, $record_type);
+
     my $i = 0;
     foreach my $record_number (map { $_->{biblio_auth_number} } @$entries ) {
         print "\r$i" unless ($i++ %100 or !$verbose_logging);
@@ -633,7 +645,10 @@ sub generate_deleted_marc_records {
         $records_deleted->{$record_number} = 1;
     }
     print "\nRecords exported: $i\n" if ( $verbose_logging );
-    print {$fh} '</collection>' if (include_xml_wrapper($as_xml, $record_type));
+
+    print {$fh} $marcxml_close
+        if include_xml_wrapper($as_xml, $record_type);
+
     close $fh;
     return $records_deleted;
 
