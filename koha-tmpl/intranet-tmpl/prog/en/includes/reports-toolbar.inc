@@ -9,7 +9,7 @@
         </div>
     [% END %]
 
-    [% IF ( showsql || execute || editsql || save_successful || runreport ) %]
+    [% IF ( showsql || execute || editsql || save_successful ) %]
         [% IF ( CAN_user_reports_create_reports ) %]
             [% UNLESS ( editsql ) # Do not show edit button on edit page %]
                 <div class="btn-group">
@@ -46,7 +46,7 @@
             </div>
         [% END %]
 
-        [% IF ( runreport ) %]
+        [% IF ( execute ) %]
             <div class="btn-group">
                 <button class="btn btn-small dropdown-toggle" data-toggle="dropdown" id="format"><i class="fa fa-upload"></i> Download <span class="caret"></span></button>
                 <ul class="dropdown-menu">
