@@ -97,7 +97,11 @@ $(document).ready(function() {
         }
     });
     $( "#transport-types" ).accordion({ collapsible: true, active:false, animate: 200 });
-}); 
+    $(".insert").on("click",function(){
+        var containerid = $(this).data("containerid");
+        insertValueQuery( containerid );
+    })
+});
 [% IF add_form or copy_form %]
 	
     function cancel(f) {
@@ -129,17 +133,11 @@ $(document).ready(function() {
             var myListBox = $(fieldset).find('select[name="SQLfieldname"]');
 
             if($(myListBox).find('option').length > 0) {
-                var chaineAj = "";
-                var NbSelect = 0;
                 $(myListBox).find('option').each( function (){
                     if ( $(this).attr('selected') ) {
-                        NbSelect++;
-                        if (NbSelect > 1)
-                            chaineAj += ", ";
-                        chaineAj += $(this).val();
+                        $(myQuery).insertAtCaret("<<" + $(this).val() + ">>");
                     }
-                } );
-                $(myQuery).insertAtCaret("<<" + chaineAj + ">>");
+                });
             }
         }
 	[% END %]
@@ -274,8 +272,8 @@ $(document).ready(function() {
             [% ELSE %]
             <li>
 
-                <label for="branch">Library:</label>
                 [% IF adding %]
+                    <label for="branch">Library:</label>
                     <select name="branchcode" id="branch" style="width:20em;">
                         <option value="">All libraries</option>
                     [% FOREACH branchloo IN branchloop %]
@@ -283,8 +281,13 @@ $(document).ready(function() {
                     [% END %]
                     </select>
                 [% ELSE %]
+                    <span class="label">Library:</span>
                     <input type="hidden" id="branch" name="branchcode" value="[% branchcode %]" />
-                    [% Branches.GetName( branchcode ) %]
+                    [% IF ( branchcode ) %]
+                       [% Branches.GetName( branchcode ) %]
+                    [% ELSE %]
+                        All libraries
+                    [% END %]
                 [% END %]
             </li>
             [% END %]
@@ -349,8 +352,8 @@ $(document).ready(function() {
                   <input type="text" id="code" name="code" size="20" maxlength="20" value="" required="required"/>
                   <span class="required">Required</span>
               [% ELSE %]
-                  <label for="code">Code:</label>
-                  <input type="hidden" id="code" name="code" size="20" maxlength="20" value="[% code %]" required="required"/>
+                  <span class="label">Code:</span>
+                  <input type="hidden" id="code" name="code" value="[% code %]" />
                   [% code %]
               [% END %]
             </li>
@@ -415,7 +418,9 @@ $(document).ready(function() {
                           [% END %]
                         </select>
                       </td>
-                      <td><input type="button" name="insert" value="&gt;&gt;" onclick="insertValueQuery('[% letter.message_transport_type %]')" title="Insert" /></td>
+                        <td class="actions">
+                            <button type="button" data-containerid="[% letter.message_transport_type %]" class="btn btn-small insert">Insert <i class="fa fa-long-arrow-right"></i></button>
+                        </td>
                       <td><textarea name="content" id="content_[% letter.message_transport_type %]" cols="80" rows="15">[% letter.content %]</textarea></td>
                     </tr>
                   </table>
