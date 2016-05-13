@@ -12094,7 +12094,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 }
 
 $DBversion = "3.23.00.045";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+if ( CheckVersion($DBversion) ) {
 ## Holds details for vendors supplying goods by EDI
    $dbh->do(q{
            CREATE TABLE IF NOT EXISTS vendor_edi_accounts (
@@ -12185,10 +12185,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
                    id_code_qualifier VARCHAR(3) NOT NULL DEFAULT '14',
                    CONSTRAINT efk_branchcode FOREIGN KEY ( branchcode ) REFERENCES branches ( branchcode )
                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-           });
-## Syspref budget to hold shipping costs
-   $dbh->do(q{
-           INSERT INTO systempreferences (variable, explanation, type) VALUES('EDIInvoicesShippingBudget','The budget code used to allocate shipping charges to when processing EDI Invoice messages',  'free');
            });
 
 ## Add a permission for managing EDI
