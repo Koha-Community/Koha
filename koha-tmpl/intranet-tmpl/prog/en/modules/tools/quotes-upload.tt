@@ -11,6 +11,14 @@
     var oTable; //DataTable object
     $(document).ready(function() {
 
+        $("#cancel_upload").on("click",function(e){
+            e.preventDefault();
+            fnAbortRead();
+        });
+        $("#cancel_quotes").on("click",function(){
+            return confirm( _("Are you sure you want to cancel this import?") );
+        });
+
     // Credits:
     // FileReader() code copied and hacked from:
     // http://www.html5rocks.com/en/tutorials/file/dndfiles/
@@ -222,14 +230,14 @@
             parent.location='quotes-upload.pl';
         };
         reader.onloadstart = function(e) {
-            $('#cancel_upload').css("visibility","visible");
+            $('#cancel_upload').show();
             $('#progress_bar').addClass("loading");
         };
         reader.onload = function(e) {
             // Ensure that the progress bar displays 100% at the end.
             progress.style.width = '100%';
             progress.textContent = '100%';
-            $('#cancel_upload').css("visibility","hidden");
+            $('#cancel_upload').hide();
             quotes = fnCSVToArray(e.target.result, ',');
             fnDataTable(quotes);
         }
@@ -333,7 +341,7 @@
                     <legend>Upload quotes</legend>
                     <div id="file_upload">
                         <input type="file" name="file" />
-                        <button id="cancel_upload" style="visibility:hidden;" onclick="fnAbortRead();">Cancel Upload</button>
+                        <button id="cancel_upload" style="display:none">Cancel upload</button>
                         <div id="progress_bar"><div class="percent">0%</div></div>
                     </div>
                 </fieldset>
