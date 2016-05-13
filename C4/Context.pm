@@ -407,15 +407,16 @@ sub preference {
     my $self = shift;
     my $var  = shift;    # The system preference to return
 
-    $var = lc $var;
-
     return $ENV{"OVERRIDE_SYSPREF_$var"}
         if defined $ENV{"OVERRIDE_SYSPREF_$var"};
 
-    my $cached_var = $use_syspref_cache
-        ? $syspref_cache->get_from_cache("syspref_$var")
-        : undef;
-    return $cached_var if defined $cached_var;
+    $var = lc $var;
+
+    if ($use_syspref_cache) {
+        $syspref_cache = Koha::Cache->get_instance() unless $syspref_cache;
+        my $cached_var = $syspref_cache->get_from_cache("syspref_$var");
+        return $cached_var if defined $cached_var;
+    }
 
     my $syspref;
     eval { $syspref = Koha::Config::SysPrefs->find( lc $var ) };
