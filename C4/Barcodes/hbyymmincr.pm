@@ -44,7 +44,7 @@ INIT {
 
 sub db_max {
 	my $self = shift;
-	my $query = "SELECT MAX(SUBSTRING(barcode,-$width)), barcode FROM items WHERE barcode REGEXP ? GROUP BY barcode";
+    my $query = "SELECT SUBSTRING(barcode,-$width) AS chunk, barcode FROM items WHERE barcode REGEXP ?  ORDER BY chunk DESC LIMIT 1";
 	$debug and print STDERR "(hbyymmincr) db_max query: $query\n";
 	my $sth = C4::Context->dbh->prepare($query);
 	my ($iso);
@@ -75,6 +75,7 @@ sub initial {
 	my $self = shift;
 	# FIXME: populated branch?
     my $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); # like "2008-07-02"
+    if ( $self->branch eq '' ) { warn "HBYYMM Barcode was not passed a branch, default is blank" }
 	return $self->branch . substr($iso,2,2) . substr($iso,5,2) . sprintf('%' . "$width.$width" . 'd',1);
 }
 
@@ -116,6 +117,7 @@ sub new_object {
 	my $self = $class_or_object->default_self('hbyymmincr');
 	bless $self, $type;
 	$self->branch(@_ ? shift : $from_obj ? $class_or_object->branch : $branch);
+    if ( $self->branch() eq '' ) { warn "HBYYMM Barcode created with no branchcode, default is blank"; }
 		# take the branch from argument, or existing object, or default
 	use Data::Dumper;
 	$debug and print STDERR "(hbyymmincr) new_object: ", Dumper($self), "\n";
