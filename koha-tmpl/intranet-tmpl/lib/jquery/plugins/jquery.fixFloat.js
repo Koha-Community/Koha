@@ -36,9 +36,6 @@
                     'top': originalOffset
             });
         }
-        tbh.css({
-            'z-index': 1000
-        });
 
         if (options.enabled) {
             $(window).scroll(function () {
@@ -49,14 +46,16 @@
                 if (fixMe) {
                     tbh.css({
                         'position': 'fixed',
-                            'top': '0'
+                            'top': '0',
+                        'z-index': '1000'
                     });
                     tbh.addClass("floating");
                 }
                 if (repositionMe) {
                     tbh.css({
                         'position': 'absolute',
-                            'top': originalOffset
+                            'top': originalOffset,
+                        'z-index': '1'
                     });
                     tbh.removeClass("floating");
                 }
