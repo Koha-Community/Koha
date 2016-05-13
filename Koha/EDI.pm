@@ -47,7 +47,6 @@ sub create_edi_order {
     my $ean        = $parameters->{ean};
     my $branchcode = $parameters->{branchcode};
     my $noingest   = $parameters->{noingest};
-    $ean ||= C4::Context->preference('EDIfactEAN');
     if ( !$basketno || !$ean ) {
         carp 'create_edi_order called with no basketno or ean';
         return;
