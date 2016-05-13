@@ -212,6 +212,11 @@ function showCartUpdate(msg){
     setTimeout("hideCart()",2000);
 }
 
+function showListsUpdate(msg){
+       // set body of popup window
+       alert(msg);
+}
+
 function selRecord(num, status) {
     var str = document.myform.records.value
     if (status){
