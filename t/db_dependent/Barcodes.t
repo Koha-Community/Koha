@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 74;
+use Test::More tests => 75;
 use Test::Warn;
 use Test::MockModule;
 use t::lib::TestBuilder;
@@ -81,6 +81,62 @@ subtest 'Test generation of annual barcodes from DB values' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'Test generation of hbyymmincr barcodes from DB values' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+    $builder->schema->resultset( 'Issue' )->delete_all;
+    $builder->schema->resultset( 'Item' )->delete_all;
+
+    my $branchcode_1 = "LETTERS"; #NOTE: This barcode type supports only letters in the branchcode
+    my $barcodeobj;
+
+    warnings_are { $barcodeobj = C4::Barcodes->new('hbyymmincr'); }
+        [  "HBYYMM Barcode created with no branchcode, default is blank",
+          "No existing hbyymmincr barcodes found.  Reverting to initial value.",
+          "HBYYMM Barcode was not passed a branch, default is blank"]
+        , "(hbyymmincr) Expected complaint regarding no max barcode found";
+
+
+    warning_like { $barcodeobj = C4::Barcodes->new('hbyymmincr',$branchcode_1); }
+    [ qr/No existing hbyymmincr barcodes found\.  Reverting to initial value\./],
+        "(hbyymmincr) Expected complaint regarding no max barcode found";
+
+    my $barcodevalue = $barcodeobj->value();
+
+    my $item_1 = $builder->build({
+        source => 'Item',
+        value => {
+            barcode => $barcodevalue
+        }
+    });
+
+    is($barcodevalue,$barcodeobj->db_max(), "(hbyymmincr) First barcode saved to db is equal to db_max" );
+
+    #This is just setting the value ahead an arbitrary amount before adding a second barcode to db
+    $barcodevalue = $barcodeobj->next_value();
+    $barcodevalue = $barcodeobj->next_value($barcodevalue);
+    $barcodevalue = $barcodeobj->next_value($barcodevalue);
+    $barcodevalue = $barcodeobj->next_value($barcodevalue);
+    $barcodevalue = $barcodeobj->next_value($barcodevalue);
+
+    my $item_2 = $builder->build({
+        source => 'Item',
+        value => {
+            barcode => $barcodevalue
+        }
+    });
+
+    $barcodeobj = C4::Barcodes->new('hbyymmincr',$branchcode_1);
+
+    is($barcodevalue,$barcodeobj->db_max(), '(hbyymmincr) db_max should equal the greatest barcode in the db when more than 1 present');
+    ok($barcodeobj->value() gt $barcodevalue, '(hbyymmincr) new barcode object should be created with value greater and last value inserted into db');
+
+    $schema->storage->txn_rollback;
+};
+
+
 $schema->storage->txn_begin;
 
 $builder->schema->resultset( 'Issue' )->delete_all;
@@ -108,9 +164,11 @@ foreach (@formats) {
                      "$pre Expected complaint regarding no max barcode found";
     }
     elsif ($_ eq 'hbyymmincr') {
-        warning_like { $obj1 = C4::Barcodes->new($_); }
-                     [ qr/No existing hbyymmincr barcodes found\.  Reverting to initial value\./ ],
-                     "$pre Expected complaint regarding no hbyymmincr barcodes found";
+        warnings_are { $obj1 = C4::Barcodes->new($_); }
+        [  "HBYYMM Barcode created with no branchcode, default is blank",
+          "No existing hbyymmincr barcodes found.  Reverting to initial value.",
+          "HBYYMM Barcode was not passed a branch, default is blank"]
+        , "$pre Expected complaint regarding no max barcode found";
     }
     elsif ($_ eq 'incremental') {
         $obj1 = C4::Barcodes->new($_);
@@ -122,20 +180,30 @@ foreach (@formats) {
     SKIP: {
         skip "No Object Returned by new($_)", 17 unless $obj1;
         ok($_ eq ($format = $obj1->autoBarcode()),  "$pre autoBarcode()    : " . ($format || 'FAILED') );
-        ok($initial= $obj1->initial(),              "$pre initial()        : " . ($initial|| 'FAILED') );
         if ($_ eq 'hbyymmincr') {
-            warning_like { $temp = $obj1->db_max(); }
-                         [ qr/No existing hbyymmincr barcodes found\.  Reverting to initial value\./ ],
-                         "$pre Expected complaint regarding no hbyymmincr barcodes found";
+            warning_like { $initial= $obj1->initial(); }
+            [ qr/HBYYMM Barcode was not passed a branch, default is blank/ ]
+           ,"$pre Expected complaint regarding no branch passed when getting initial\n      $pre initial()        : " . $initial ;
+            warnings_are { $temp = $obj1->db_max(); }
+       [   "No existing hbyymmincr barcodes found.  Reverting to initial value.",
+           "HBYYMM Barcode was not passed a branch, default is blank"]
+           ,"$pre Expected complaint regarding no hbyymmincr barcodes found";
         }
         else {
+            ok($initial= $obj1->initial(),              "$pre initial()        : " . ($initial|| 'FAILED') );
             $temp = $obj1->db_max();
         }
         ok($temp   = $obj1->max(),                  "$pre max()            : " . ($temp   || 'FAILED') );
         ok($value  = $obj1->value(),                "$pre value()          : " . ($value  || 'FAILED') );
         ok($serial = $obj1->serial(),               "$pre serial()         : " . ($serial || 'FAILED') );
         ok($temp   = $obj1->is_max(),               "$pre obj1->is_max() [obj1 should currently be max]");
-        ok($obj2   = $obj1->new(),                  "$pre Barcode Creation : obj2 = obj1->new()");
+        if ($_ eq 'hbyymmincr') {
+            warning_like { $obj2   = $obj1->new(); }
+            [ qr/HBYYMM Barcode created with no branchcode, default is blank/ ]
+           ,"$pre Expected complaint regarding no branch passed when getting initial\n      $pre Barcode Creation : obj2 = obj1->new()" ;
+        } else {
+            ok($obj2   = $obj1->new(),                  "$pre Barcode Creation : obj2 = obj1->new()");
+        }
         ok(not($obj1->is_max()),                    "$pre obj1->is_max() [obj1 should no longer be max]");
         ok(    $obj2->is_max(),                     "$pre obj2->is_max() [obj2 should currently be max]");
         ok($obj2->serial == $obj1->serial + 1,      "$pre obj2->serial()   : " . ($obj2->serial || 'FAILED'));
