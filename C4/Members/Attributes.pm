@@ -254,7 +254,7 @@ sub DeleteBorrowerAttributes {
     $query .= $branch_limit
         ? q{
             LEFT JOIN borrower_attribute_types_branches ON bat_code = code
-            WHERE b_branchcode = ? OR b_branchcode IS NULL
+            WHERE ( b_branchcode = ? OR b_branchcode IS NULL )
                 AND borrowernumber = ?
         }
         : q{
