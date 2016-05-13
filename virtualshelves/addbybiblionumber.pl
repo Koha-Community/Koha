@@ -132,8 +132,8 @@ sub HandleNewVirtualShelf {
                 sortfield => $sortfield,
                 owner => $loggedinuser,
             }
-        );
-    }->store;
+        )->store;
+    };
     if ( $@ or not $shelf ) {
         $authorized = 0;
         $errcode    = 1;
