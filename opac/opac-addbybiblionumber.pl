@@ -38,7 +38,7 @@ our $newvirtualshelf	= $query->param('newvirtualshelf');
 our $category     	= $query->param('category');
 our $authorized          = 1;
 our $errcode		= 0;
-our @biblios;
+our @biblios = ();
 
 # if virtualshelves is disabled, leave immediately
 if ( ! C4::Context->preference('virtualshelves') ) {
