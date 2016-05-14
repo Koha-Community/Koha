@@ -33,7 +33,7 @@ function patron_autocomplete(params) {
 }
 
 function AddPatron( patron_name, value, container, input_name ) {
-    div = "<div id='borrower_" + value + "'>" + patron_name + " ( <a href='#' class='removePatron'> " + MSG_REMOVE_PATRON + " </a> ) <input type='hidden' name='" + input_name + "' value='" + value + "' /></div>";
+    div = "<div id='borrower_" + value + "'>" + patron_name + " ( <a href='#' class='removePatron'><i class='fa fa-trash' aria-hidden='true'></i> " + MSG_REMOVE_PATRON + " </a> ) <input type='hidden' name='" + input_name + "' value='" + value + "' /></div>";
     $(container).append( div );
 
     $(container).parent().show( 800 );

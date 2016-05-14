@@ -102,8 +102,8 @@ $(document).ready(function() {
         <form action="list.pl" id="remove_patrons" method="post">
 
             <div id="searchheader">
-                <span class="checkall"><a id="CheckAll" href="#">Select all</a></span> |
-                <span class="clearall"><a id="CheckNone" href="#">Clear all</a></span> |
+                <span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i>  Select all</a></span> |
+                <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></span> |
                 <div class="btn-group">
                     <button class="btn btn-mini list-remove" type="submit"><i class="fa fa-trash"></i> Remove selected</button>
                 </div>
@@ -152,7 +152,7 @@ $(document).ready(function() {
             </table>
 
             <input type="hidden" name="patron_list_id" value="[% list.patron_list_id %]" />
-            <input type="submit" value="Remove selected patrons" />
+            <button type="submit" class="btn btn-small"><i class="fa fa-trash" aria-hidden="true"></i> Remove selected patrons</button>
         </form>
 
             </div>

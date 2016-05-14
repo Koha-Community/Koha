@@ -53,8 +53,8 @@
             [% review.review |html %]
         </td>
         <td>
-            [% IF ( status ) %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=unapprove&amp;reviewid=[% review.reviewid %]">Unapprove</a>[% ELSE %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&amp;reviewid=[% review.reviewid %]">Approve</a>[% END %] |
-            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=delete&amp;reviewid=[% review.reviewid %]">Delete</a>
+            [% IF ( status ) %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=unapprove&amp;reviewid=[% review.reviewid %]" class="btn btn-mini"><i class="fa fa-remove"></i> Unapprove</a>[% ELSE %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&amp;reviewid=[% review.reviewid %]" class="btn btn-mini"><i class="fa fa-check"></i> Approve</a>[% END %]
+            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=delete&amp;reviewid=[% review.reviewid %]" class="btn btn-mini"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
         </td>
     </tr>
     [% END %]</tbody>
