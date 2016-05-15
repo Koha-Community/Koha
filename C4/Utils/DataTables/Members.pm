@@ -76,7 +76,7 @@ sub search {
     }
 
     my $searchfields = {
-        standard => 'surname,firstname,othernames,cardnumber,userid',
+        standard => C4::Context->preference('DefaultPatronSearchFields'),
         surname => 'surname',
         email => 'email,emailpro,B_email',
         borrowernumber => 'borrowernumber',
@@ -104,10 +104,16 @@ sub search {
     foreach my $term (@terms) {
         next unless $term;
 
-        $term .= '%' # end with anything
-            if $term !~ /%$/;
-        $term = "%$term" # begin with anythin unless start_with
-            if $searchtype eq 'contain' && $term !~ /^%/;
+        my $term_dt = eval { local $SIG{__WARN__} = {}; output_pref( { str => $term, dateonly => 1, dateformat => 'sql' } ); };
+
+        if ($term_dt) {
+            $term = $term_dt;
+        } else {
+            $term .= '%'    # end with anything
+              if $term !~ /%$/;
+            $term = "%$term"    # begin with anythin unless start_with
+              if $searchtype eq 'contain' && $term !~ /^%/;
+        }
 
         my @where_strs_or;
         for my $searchfield ( split /,/, $searchfields->{$searchfieldstype} ) {

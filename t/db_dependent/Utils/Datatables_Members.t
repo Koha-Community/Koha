@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 29;
+use Test::More tests => 49;
 
 use C4::Context;
 use C4::Members;
@@ -29,97 +29,80 @@ use Koha::Library;
 use Koha::Patron::Categories;
 
 use t::lib::Mocks;
+use t::lib::TestBuilder;
+
+use Koha::Database;
 
 use_ok( "C4::Utils::DataTables::Members" );
 
-my $dbh = C4::Context->dbh;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $builder = t::lib::TestBuilder->new;
 
-# Pick a categorycode from the DB
-my @categories   = Koha::Patron::Categories->search_limited;
-my $categorycode = $categories[0]->categorycode;
-# Add a new branch so we control what borrowers it has
-my $branchcode   = "UNC";
-my $branch_data = {
-    branchcode     => $branchcode,
-    branchname     => 'Universidad Nacional de Cordoba',
-    branchaddress1 => 'Haya de la Torre',
-    branchaddress2 => 'S/N',
-    branchzip      => '5000',
-    branchcity     => 'Cordoba',
-    branchstate    => 'Cordoba',
-    branchcountry  => 'Argentina'
-};
-Koha::Library->new( $branch_data )->store;
+my $library = $builder->build({
+    source => "Branch",
+});
 
-my %john_doe = (
-    cardnumber   => '123456',
-    firstname    => 'John',
-    surname      => 'Doe',
-    categorycode => $categorycode,
-    branchcode   => $branchcode,
-    dateofbirth  => '2010-10-15',
-    dateexpiry   => '9999-12-31',
-    userid       => 'john.doe'
-);
+my $branchcode=$library->{branchcode};
 
-my %john_smith = (
-    cardnumber   => '234567',
-    firstname    =>  'John',
-    surname      => 'Smith',
-    categorycode => $categorycode,
-    branchcode   => $branchcode,
-    dateofbirth  => '2010-01-31',
-    dateexpiry   => '9999-12-31',
-    userid       => 'john.smith'
-);
+my $john_doe = $builder->build({
+        source => "Borrower",
+        value => {
+            cardnumber   => '123456',
+            firstname    => 'John',
+            surname      => 'Doe',
+            branchcode   => $branchcode,
+            dateofbirth  => '1983-03-01',
+            userid       => 'john.doe'
+        },
+});
 
-my %jane_doe = (
-    cardnumber   => '345678',
-    firstname    =>  'Jane',
-    surname      => 'Doe',
-    categorycode => $categorycode,
-    branchcode   => $branchcode,
-    dateofbirth  => '',
-    dateexpiry   => '9999-12-31',
-    userid       => 'jane.doe'
-);
+my $john_smith = $builder->build({
+        source => "Borrower",
+        value => {
+            cardnumber   => '234567',
+            firstname    => 'John',
+            surname      => 'Smith',
+            branchcode   => $branchcode,
+            dateofbirth  => '1982-02-01',
+            userid       => 'john.smith'
+        },
+});
 
-my %jeanpaul_dupont = (
-    cardnumber   => '456789',
-    firstname    => 'Jean Paul',
-    surname      => 'Dupont',
-    categorycode => $categorycode,
-    branchcode   => $branchcode,
-    dateofbirth  => '',
-    dateexpiry   => '9999-12-31',
-    userid       => 'jeanpaul.dupont'
-);
-
-my %dupont_brown = (
-    cardnumber   => '567890',
-    firstname    => 'Dupont',
-    surname      => 'Brown',
-    categorycode => $categorycode,
-    branchcode   => $branchcode,
-    dateofbirth  => '',
-    dateexpiry   => '9999-12-31',
-    userid       => 'dupont.brown'
-);
-
-$john_doe{borrowernumber} = AddMember( %john_doe );
-warn "Error adding John Doe, check your tests" unless $john_doe{borrowernumber};
-$john_smith{borrowernumber} = AddMember( %john_smith );
-warn "Error adding John Smith, check your tests" unless $john_smith{borrowernumber};
-$jane_doe{borrowernumber} = AddMember( %jane_doe );
-warn "Error adding Jane Doe, check your tests" unless $jane_doe{borrowernumber};
-$jeanpaul_dupont{borrowernumber} = AddMember( %jeanpaul_dupont );
-warn "Error adding Jean Paul Dupont, check your tests" unless $jeanpaul_dupont{borrowernumber};
-$dupont_brown{borrowernumber} = AddMember( %dupont_brown );
-warn "Error adding Dupont Brown, check your tests" unless $dupont_brown{borrowernumber};
+my $jane_doe = $builder->build({
+        source => "Borrower",
+        value => {
+            cardnumber   => '345678',
+            firstname    => 'Jane',
+            surname      => 'Doe',
+            branchcode   => $branchcode,
+            dateofbirth  => '1983-03-01',
+            userid       => 'jane.doe'
+        },
+});
+my $jeanpaul_dupont = $builder->build({
+        source => "Borrower",
+        value => {
+            cardnumber   => '456789',
+            firstname    => 'Jean Paul',
+            surname      => 'Dupont',
+            branchcode   => $branchcode,
+            dateofbirth  => '1982-02-01',
+            userid       => 'jeanpaul.dupont'
+        },
+});
+my $dupont_brown = $builder->build({
+        source => "Borrower",
+        value => {
+            cardnumber   => '567890',
+            firstname    => 'Dupont',
+            surname      => 'Brown',
+            branchcode   => $branchcode,
+            dateofbirth  => '1979-01-01',
+            userid       => 'dupont.brown'
+        },
+});
 
 # Set common datatables params
 my %dt_params = (
@@ -139,7 +122,7 @@ my $search_results = C4::Utils::DataTables::Members::search({
 is( $search_results->{ iTotalDisplayRecords }, 1,
     "John Doe has only one match on $branchcode (Bug 12595)");
 
-ok( $search_results->{ patrons }[0]->{ cardnumber } eq $john_doe{ cardnumber }
+ok( $search_results->{ patrons }[0]->{ cardnumber } eq $john_doe->{ cardnumber }
     && ! $search_results->{ patrons }[1],
     "John Doe is the only match (Bug 12595)");
 
@@ -156,7 +139,7 @@ is( $search_results->{ iTotalDisplayRecords }, 1,
     "Jane Doe has only one match on $branchcode (Bug 12595)");
 
 is( $search_results->{ patrons }[0]->{ cardnumber },
-    $jane_doe{ cardnumber },
+    $jane_doe->{ cardnumber },
     "Jane Doe is the only match (Bug 12595)");
 
 # Search "John"
@@ -172,11 +155,11 @@ is( $search_results->{ iTotalDisplayRecords }, 2,
     "There are two John at $branchcode");
 
 is( $search_results->{ patrons }[0]->{ cardnumber },
-    $john_doe{ cardnumber },
+    $john_doe->{ cardnumber },
     "John Doe is the first result");
 
 is( $search_results->{ patrons }[1]->{ cardnumber },
-    $john_smith{ cardnumber },
+    $john_smith->{ cardnumber },
     "John Smith is the second result");
 
 # Search "Doe"
@@ -192,11 +175,11 @@ is( $search_results->{ iTotalDisplayRecords }, 2,
     "There are two Doe at $branchcode");
 
 is( $search_results->{ patrons }[0]->{ cardnumber },
-    $john_doe{ cardnumber },
+    $john_doe->{ cardnumber },
     "John Doe is the first result");
 
 is( $search_results->{ patrons }[1]->{ cardnumber },
-    $jane_doe{ cardnumber },
+    $jane_doe->{ cardnumber },
     "Jane Doe is the second result");
 
 # Search "Smith" as surname - there is only one occurrence of Smith
@@ -212,7 +195,7 @@ is( $search_results->{ iTotalDisplayRecords }, 1,
     "There is one Smith at $branchcode when searching for surname");
 
 is( $search_results->{ patrons }[0]->{ cardnumber },
-    $john_smith{ cardnumber },
+    $john_smith->{ cardnumber },
     "John Smith is the first result");
 
 # Search "Dupont" as surname - Dupont is used both as firstname and surname, we
@@ -229,7 +212,7 @@ is( $search_results->{ iTotalDisplayRecords }, 1,
     "There is one Dupont at $branchcode when searching for surname");
 
 is( $search_results->{ patrons }[0]->{ cardnumber },
-    $jeanpaul_dupont{ cardnumber },
+    $jeanpaul_dupont->{ cardnumber },
     "Jean Paul Dupont is the first result");
 
 # Search "Doe" as surname - Doe is used twice as surname
@@ -245,11 +228,11 @@ is( $search_results->{ iTotalDisplayRecords }, 2,
     "There are two Doe at $branchcode when searching for surname");
 
 is( $search_results->{ patrons }[0]->{ cardnumber },
-    $john_doe{ cardnumber },
+    $john_doe->{ cardnumber },
     "John Doe is the first result");
 
 is( $search_results->{ patrons }[1]->{ cardnumber },
-    $jane_doe{ cardnumber },
+    $jane_doe->{ cardnumber },
     "Jane Doe is the second result");
 
 # Search by userid
@@ -292,10 +275,10 @@ $attribute_type->store;
 
 
 C4::Members::Attributes::SetBorrowerAttributes(
-    $john_doe{borrowernumber}, [ { code => $attribute_type->{code}, value => 'the default value for a common user' } ]
+    $john_doe->{borrowernumber}, [ { code => $attribute_type->{code}, value => 'the default value for a common user' } ]
 );
 C4::Members::Attributes::SetBorrowerAttributes(
-    $jane_doe{borrowernumber}, [ { code => $attribute_type->{code}, value => 'the default value for another common user' } ]
+    $jane_doe->{borrowernumber}, [ { code => $attribute_type->{code}, value => 'the default value for another common user' } ]
 );
 
 t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
@@ -363,24 +346,90 @@ $search_results = C4::Utils::DataTables::Members::search({
 is( $search_results->{ iTotalDisplayRecords }, 1,
     "Jean Paul Dupont is found using contains and two terms search 'Jea Pau' (Bug 15252)");
 
+my @datetimeprefs = ("dmydot","iso","metric","us");
+my %dates_in_pref = (
+        dmydot  => ["01.02.1982","01.03.1983","01.01.1979","01.01.1988"],
+        iso     => ["1982-02-01","1983-03-01","1979-01-01","1988-01-01"],
+        metric  => ["01/02/1982","01/03/1983","01/01/1979","01/01/1988"],
+        us      => ["02/01/1982","03/01/1983","01/01/1979","01/01/1988"],
+        );
+foreach my $dateformloo (@datetimeprefs){
+    t::lib::Mocks::mock_preference('dateformat', $dateformloo);
+    t::lib::Mocks::mock_preference('DefaultPatronSearchFields', 'surname,firstname,othernames,userid,dateofbirth');
+    $search_results = C4::Utils::DataTables::Members::search({
+        searchmember     => $dates_in_pref{$dateformloo}[0],
+        searchfieldstype => 'standard',
+        searchtype       => 'contain',
+        branchcode       => $branchcode,
+        dt_params        => \%dt_params
+    });
+
+    is( $search_results->{ iTotalDisplayRecords }, 2,
+        "dateformat: $dateformloo Two borrowers have dob $dates_in_pref{$dateformloo}[0], standard search fields plus dob works");
+
+    $search_results = C4::Utils::DataTables::Members::search({
+        searchmember     => $dates_in_pref{$dateformloo}[2],
+        searchfieldstype => 'standard',
+        searchtype       => 'contain',
+        branchcode       => $branchcode,
+        dt_params        => \%dt_params
+    });
+
+    is( $search_results->{ iTotalDisplayRecords }, 1,
+        "dateformat: $dateformloo One borrower has dob $dates_in_pref{$dateformloo}[2], standard search fields plus dob works");
+
+    $search_results = C4::Utils::DataTables::Members::search({
+        searchmember     => $dates_in_pref{$dateformloo}[1],
+        searchfieldstype => 'dateofbirth',
+        searchtype       => 'contain',
+        branchcode       => $branchcode,
+        dt_params        => \%dt_params
+    });
+
+    is( $search_results->{ iTotalDisplayRecords }, 2,
+        "dateformat: $dateformloo Two borrowers have dob $dates_in_pref{$dateformloo}[1], dateofbirth search field works");
+
+    $search_results = C4::Utils::DataTables::Members::search({
+        searchmember     => $dates_in_pref{$dateformloo}[3],
+        searchfieldstype => 'dateofbirth',
+        searchtype       => 'contain',
+        branchcode       => $branchcode,
+        dt_params        => \%dt_params
+    });
+
+    is( $search_results->{ iTotalDisplayRecords }, 0,
+        "dateformat: $dateformloo No borrowers have dob $dates_in_pref{$dateformloo}[3], dateofbirth search field works");
+
+    $search_results = C4::Utils::DataTables::Members::search({
+        searchmember     => $dates_in_pref{$dateformloo}[3],
+        searchfieldstype => 'standard',
+        searchtype       => 'contain',
+        branchcode       => $branchcode,
+        dt_params        => \%dt_params
+    });
+
+    is( $search_results->{ iTotalDisplayRecords }, 0,
+        "dateformat: $dateformloo No borrowers have dob $dates_in_pref{$dateformloo}[3], standard search fields plus dob works");
+}
+
 # Date of birth formatting
 t::lib::Mocks::mock_preference('dateformat', 'metric');
 $search_results = C4::Utils::DataTables::Members::search({
-    searchmember     => "15/10/2010",
+    searchmember     => "01/02/1982",
     searchfieldstype => 'dateofbirth',
     dt_params        => \%dt_params
 });
-is( $search_results->{ iTotalDisplayRecords }, 1,
+is( $search_results->{ iTotalDisplayRecords }, 2,
     "Sarching by date of birth should handle date formatted given the dateformat pref");
 $search_results = C4::Utils::DataTables::Members::search({
-    searchmember     => "2010-10-15",
+    searchmember     => "1982-02-01",
     searchfieldstype => 'dateofbirth',
     dt_params        => \%dt_params
 });
-is( $search_results->{ iTotalDisplayRecords }, 1,
+is( $search_results->{ iTotalDisplayRecords }, 2,
     "Sarching by date of birth should handle date formatted in iso");
 
 # End
-$dbh->rollback;
+$schema->storage->txn_rollback;
 
 1;
