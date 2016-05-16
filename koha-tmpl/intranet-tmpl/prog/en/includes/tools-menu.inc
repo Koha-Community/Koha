@@ -75,7 +75,7 @@
     <li><a href="/cgi-bin/koha/tools/export.pl">Export data</a></li>
     [% END %]
     [% IF ( CAN_user_tools_inventory ) %]
-	<li><a href="/cgi-bin/koha/tools/inventory.pl">Inventory</a></li>
+        <li><a href="/cgi-bin/koha/tools/inventory.pl">Inventory</a></li>
     [% END %]
     [% IF ( CAN_user_tools_label_creator ) %]
 	<li><a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a></li>
