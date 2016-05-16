@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 21;
+use Test::More tests => 22;
 use File::Basename;
 use FindBin qw($Bin);
 use Archive::Extract;
@@ -47,8 +47,8 @@ ok( $plugins[0]->get_metadata()->{'name'} eq 'Test Plugin', "Koha::Plugins::GetP
 
 SKIP: {
     my $plugins_dir = C4::Context->config("pluginsdir");
-    skip "plugindir not set", 3 unless defined $plugins_dir;
-    skip "plugindir not writable", 3 unless -w $plugins_dir;
+    skip "plugindir not set", 4 unless defined $plugins_dir;
+    skip "plugindir not writable", 4 unless -w $plugins_dir;
     # no need to skip further tests if KitchenSink would already exist
 
     my $ae = Archive::Extract->new( archive => "$Bin/KitchenSinkPlugin.kpz", type => 'zip' );
@@ -57,8 +57,12 @@ SKIP: {
     }
     use_ok('Koha::Plugin::Com::ByWaterSolutions::KitchenSink');
     $plugin = Koha::Plugin::Com::ByWaterSolutions::KitchenSink->new({ enable_plugins => 1});
+    my $table = $plugin->get_qualified_table_name( 'mytable' );
 
     ok( -f $plugins_dir . "/Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm", "KitchenSink plugin installed successfully" );
     Koha::Plugins::Handler->delete({ class => "Koha::Plugin::Com::ByWaterSolutions::KitchenSink", enable_plugins => 1 });
+    my $sth = C4::Context->dbh->table_info( undef, undef, $table, 'TABLE' );
+    my $info = $sth->fetchall_arrayref;
+    is( @$info, 0, "Table $table does no longer exist" );
     ok( !( -f $plugins_dir . "/Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm" ), "Koha::Plugins::Handler::delete works correctly." );
 }
