@@ -49,7 +49,7 @@ SKIP: {
     my $plugins_dir = C4::Context->config("pluginsdir");
     skip "plugindir not set", 3 unless defined $plugins_dir;
     skip "plugindir not writable", 3 unless -w $plugins_dir;
-    skip "KitchenSink plugin already installed", 3 if (-f "$plugins_dir/Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm");
+    # no need to skip further tests if KitchenSink would already exist
 
     my $ae = Archive::Extract->new( archive => "$Bin/KitchenSinkPlugin.kpz", type => 'zip' );
     unless ( $ae->extract( to => $plugins_dir ) ) {
@@ -59,7 +59,6 @@ SKIP: {
     $plugin = Koha::Plugin::Com::ByWaterSolutions::KitchenSink->new({ enable_plugins => 1});
 
     ok( -f $plugins_dir . "/Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm", "KitchenSink plugin installed successfully" );
-    Koha::Plugins::Handler->delete({ class => "Koha::Plugin::Com::ByWaterSolutions::KitchenSink" });
+    Koha::Plugins::Handler->delete({ class => "Koha::Plugin::Com::ByWaterSolutions::KitchenSink", enable_plugins => 1 });
     ok( !( -f $plugins_dir . "/Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm" ), "Koha::Plugins::Handler::delete works correctly." );
 }
-
