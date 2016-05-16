@@ -127,14 +127,6 @@ if ($process_zebraqueue and $do_not_clear_zebraqueue) {
     die $msg;
 }
 
-if ($reset) {
-    $noshadow = 1;
-}
-
-if ($noshadow) {
-    $noshadow = ' -n ';
-}
-
 if ($daemon_mode) {
     # incompatible flags handled above: help, reset, and do_not_clear_zebraqueue
     if ($skip_export or $keep_export or $skip_index or
@@ -815,10 +807,15 @@ sub do_indexing {
     my $zebra_config  = C4::Context->zebraconfig($zebra_server)->{'config'};
     my $zebra_db_dir  = C4::Context->zebraconfig($zebra_server)->{'directory'};
 
+    $noshadow //= '';
+
+    if ($noshadow or $reset_index) {
+        $noshadow = '-n';
+    }
+
     system("zebraidx -c $zebra_config $zebraidx_log_opt -g $record_format -d $zebra_db_name init") if $reset_index;
     system("zebraidx -c $zebra_config $zebraidx_log_opt $noshadow -g $record_format -d $zebra_db_name $op $record_dir");
     system("zebraidx -c $zebra_config $zebraidx_log_opt -g $record_format -d $zebra_db_name commit") unless $noshadow;
-
 }
 
 sub _flock {
