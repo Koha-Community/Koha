@@ -138,7 +138,7 @@ use C4::Circulation;
 
 The functions in this module deal with circulation, issues, and
 returns, as well as general information about the library.
-Also deals with stocktaking.
+Also deals with inventory.
 
 =head1 FUNCTIONS
 
