@@ -33,7 +33,7 @@
 [% END %]
 
 [% BLOCK form_new %]
-    <form method="post" action="[% SCRIPT_NAME %]" id="uploadfile" enctype="multipart/form-data">
+    <form method="post" action="/cgi-bin/koha/tools/upload.pl" id="uploadfile" enctype="multipart/form-data">
         [% PROCESS plugin_pars %]
         <fieldset class="rows" id="uploadform">
         <legend>Upload new files</legend>
@@ -49,7 +49,7 @@
                 <label for="uploadcategory">Category: </label>
                 <select id="uploadcategory" name="uploadcategory">
                 [% IF !plugin %]
-                    <option value="" disabled hidden selected></option>
+                    <option value=""></option>
                 [% END %]
                 [% FOREACH cat IN uploadcategories %]
                     <option value="[% cat.code %]">[% cat.name %]</option>
@@ -71,19 +71,18 @@
                 <input type="hidden" id="public" name="public" value="1"/>
             [% ELSE %]
                 <label id="public_cb">Allow public downloads:</label>
-                <input type="checkbox" id="public" name="public">
-                </input>
+                <input type="checkbox" id="public" name="public" />
             [% END %]
         </li>
         </ol>
         <fieldset class="action">
-            <button id="fileuploadbutton" onclick="StartUpload(); return false;">Upload</button>
-            <button id="fileuploadcancel" onclick="CancelUpload(); return false;">Cancel</button>
+            <button id="fileuploadbutton">Upload</button>
+            <button id="fileuploadcancel">Cancel</button>
         </fieldset>
         </fieldset>
         <div id="fileuploadpanel">
             <div id="fileuploadstatus">Upload progress:
-            <progress id="fileuploadprogress" min="0" max="100" value="0">
+            <progress id="fileuploadprogress" max="100" value="0">
             </progress>
             <span class="fileuploadpercent">0</span>%
             </div>
@@ -93,22 +92,20 @@
 [% END %]
 
 [% BLOCK form_search %]
-    <form method="post" id="searchfile" action="[% SCRIPT_NAME %]" enctype="multipart/form-data">
+    <form method="post" id="searchfile" action="/cgi-bin/koha/tools/upload.pl" enctype="multipart/form-data">
         [% PROCESS plugin_pars %]
         <input type="hidden" name="op" value="search"/>
         <fieldset class="rows">
         <legend>Search uploads by name or hashvalue</legend>
         <ol>
         <li>
-            <label for="searchupload">Search term: </label>
+            <label for="term">Search term: </label>
             <input type="text" id="term" name="term" value=""/>
         </li>
-        <li>
-            <fieldset class="action">
-                <button id="searchbutton" onclick="return CheckSearch();" class="submit">Search</button>
-            </fieldset>
-        </li>
         </ol>
+        <fieldset class="action">
+            <button id="searchbutton" class="submit">Search</button>
+        </fieldset>
         </fieldset>
     </form>
 [% END %]
@@ -124,11 +121,7 @@
 
 [% BLOCK closer %]
     [% IF plugin %]
-        <form id="closer">
-            <fieldset class="action">
-                <button onclick="window.close();return false;">Close</button>
-            </fieldset>
-        </form>
+        <div id="closewindow"><a class="btn btn-default close" href="#">Close</a></div>
     [% END %]
 [% END %]
 
@@ -146,24 +139,24 @@
     <form id="newsearch">
         <fieldset class="action">
             <button onclick="SubmitMe('new'); return false;">New search</button>
-            [% IF plugin %]
-                <button onclick="window.close();return false;">Close</button>
-            [% END %]
         </fieldset>
     </form>
+    [% IF plugin %]
+        <div id="closewindow"><a class="btn btn-default close" href="#">Close</a></div>
+    [% END %]
 [% END %]
 
 [% BLOCK table_results %]
     <table>
     <thead>
     <tr>
-        <th>Filename</td>
-        <th>Size</td>
-        <th>Hashvalue</td>
-        <th>Category</td>
-        [% IF !plugin %]<th>Public</td>[% END %]
-        [% IF !plugin %]<th>Temporary</td>[% END %]
-        <th>Actions</td>
+        <th>Filename</th>
+        <th>Size</th>
+        <th>Hashvalue</th>
+        <th>Category</th>
+        [% IF !plugin %]<th>Public</th>[% END %]
+        [% IF !plugin %]<th>Temporary</th>[% END %]
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -177,13 +170,13 @@
             <td>[% IF record.public %]Yes[% ELSE %]No[% END %]</td>
             <td>[% IF record.permanent %]No[% ELSE %]Yes[% END %]</td>
         [% END %]
-        <td>
+        <td class="actions">
             [% IF plugin %]
-                <a href="" onclick="Choose('[% record.hashvalue %]'); return false;">Choose</a>&nbsp;
+                <button class="btn btn-mini choose_entry" data-record-hashvalue="[% record.hashvalue %]"><i class="fa fa-plus"></i> Choose</button>
             [% END %]
-            <a href="" onclick="SubmitMe( 'download', [% record.id %] ); return false;">Download</a>&nbsp;
+            <button class="btn btn-mini download_entry" data-record-id="[% record.id %]"><i class="fa fa-download"></i> Download</button>
             [% IF record.owner == owner || CAN_user_tools_upload_manage %]
-                <a href="" onclick="DeleteEntry( [% record.id %] ); return false;">Delete</a>
+                <button class="btn btn-mini delete_entry" data-record-id="[% record.id %]"><i class="fa fa-trash"></i> Delete</button>
             [% END %]
         </td>
    </tr>
@@ -318,22 +311,54 @@ $(document).ready(function() {
     $("#public_cb").click(function() {
         $("#public").click();
     });
+    $("#fileuploadbutton").on("click",function(e){
+        e.preventDefault();
+        StartUpload();
+    });
+    $("#fileuploadcancel").on("click",function(e){
+        e.preventDefault();
+        CancelUpload();
+    });
+    $("#searchbutton").on("click",function(){
+        return CheckSearch();
+    });
+    $(".choose_entry").on("click",function(e){
+        e.preventDefault();
+        var record_hashvalue = $(this).data("record-hashvalue");
+        Choose( record_hashvalue );
+    });
+    $(".download_entry").on("click",function(e){
+        e.preventDefault();
+        var record_id = $(this).data("record-id");
+        SubmitMe( 'download', record_id );
+    });
+    $(".delete_entry").on("click",function(e){
+        e.preventDefault();
+        var record_id = $(this).data("record-id");
+        DeleteEntry( record_id );
+    });
 });
 //]]>
 </script>
 </head>
 
-<body id="tools_upload" class="tools">
-[% IF !plugin %]
+[% IF ( plugin ) %]
+    <body id="tools_upload" class="tools">
+        <div class="yui-t7">
+            <div id="bd">
+                <div class="yui-g">
+[% ELSE %]
+    <body id="tools_upload" class="tools">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
     [% PROCESS breadcrumbs %]
+    <div id="doc3" class="yui-t2">
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
 [% END %]
 
-<div id="doc3" class="yui-t2">
-   <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+
 
 <h1>Upload</h1>
 <div class="dialog alert" id="myalerts" style="display:none;"></div>
@@ -356,9 +381,9 @@ $(document).ready(function() {
 [% END %]
 
 </div>
-</div>
 
 [% IF !plugin %]
+</div>
     <div class="yui-b noprint">
         [% INCLUDE 'tools-menu.inc' %]
     </div>
