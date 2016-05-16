@@ -78,11 +78,18 @@ Deletes a plugin
 
 sub delete {
     my ( $class, $args ) = @_;
+
+    return unless ( C4::Context->config("enable_plugins") || $args->{'enable_plugins'} );
+
     my $plugin_class = $args->{'class'};
     my $plugin_dir   = C4::Context->config("pluginsdir");
     my $plugin_path  = "$plugin_dir/" . join( '/', split( '::', $args->{'class'} ) );
 
-    Koha::Plugins::Handler->run( { class => $plugin_class, method => 'uninstall' } );
+    Koha::Plugins::Handler->run({
+        class          => $plugin_class,
+        method         => 'uninstall',
+        enable_plugins => $args->{enable_plugins},
+    });
 
     C4::Context->dbh->do( "DELETE FROM plugin_data WHERE plugin_class = ?", undef, ($plugin_class) );
 
