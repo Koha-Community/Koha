@@ -181,19 +181,14 @@ $(document).ready(function() {
 [% END %]
 <div id="toolbar" class="btn-toolbar">
 [% UNLESS ( check_member ) %]
-    <div class="btn-group">
-        <button class="btn btn-small" id="saverecord" type="submit" name="save" onclick="return check_form_borrowers();"><i class="fa fa-save"></i> Save</button>
-    </div>
+    <button class="btn btn-small" id="saverecord" type="submit" name="save" onclick="return check_form_borrowers();"><i class="fa fa-save"></i> Save</button>
     [% IF opadd %]
-            <a class="cancel" href="/cgi-bin/koha/members/member.pl">Cancel</a>
-            <div class="btn-group">
-                <a class="btn btn-small cancel" id="cancel" href="/cgi-bin/koha/members/member.pl">Cancel</a>
-            </div>
-       [% ELSE %]
-            <div class="btn-group">
-                <a class="btn btn-small cancel" id="cancel" href="/cgi-bin/koha/members/member.pl?borrowernumber=[% borrowernumber %]">Cancel</a>
-            </div>
-        [% END %]
+    <button class="btn btn-small cancel" onclick="/cgi-bin/koha/members/member.pl">
+    [% ELSE %]
+    <a class='btn btn-small cancel" onclick="/cgi-bin/koha/members/member.pl?borrowernumber=[% borrowernumber %]">
+    [% END %]
+        <i class="fa fa-times"></i> Cancel
+    </button>
 [% END %]
 </div>
 
