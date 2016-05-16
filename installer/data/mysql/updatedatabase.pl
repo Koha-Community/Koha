@@ -12584,6 +12584,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.23.00.064";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE creator_layouts MODIFY layout_name char(25) NOT NULL DEFAULT 'DEFAULT';
+    });
+    print "Upgrade to $DBversion done (Bug 15086 - Creators layout and template sql has warnings)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068

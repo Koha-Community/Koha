@@ -54,7 +54,7 @@ __PACKAGE__->table("creator_layouts");
   data_type: 'char'
   default_value: 'DEFAULT'
   is_nullable: 0
-  size: 20
+  size: 25
 
 =head2 guidebox
 
@@ -141,7 +141,7 @@ __PACKAGE__->add_columns(
     data_type => "char",
     default_value => "DEFAULT",
     is_nullable => 0,
-    size => 20,
+    size => 25,
   },
   "guidebox",
   { data_type => "integer", default_value => 0, is_nullable => 1 },
@@ -188,8 +188,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("layout_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-10-22 10:32:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kRzOQpJWvu5ZXfurfpmqzg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-05-16 17:38:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BDNkfgqz53LCR2Ij7cVCow
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
