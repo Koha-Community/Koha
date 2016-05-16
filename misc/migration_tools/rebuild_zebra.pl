@@ -110,7 +110,7 @@ if( not defined $run_as_root and $run_user eq 'root') {
 }
 
 if ( $as_usmarc and $nosanitize ) {
-    my $msg = "Cannot specify both -no_xml and -nosanitize\n";
+    my $msg = "Cannot specify both -noxml and -nosanitize\n";
     $msg   .= "Please do '$0 --help' to see usage.\n";
     die $msg;
 }
