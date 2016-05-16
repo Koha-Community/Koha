@@ -378,9 +378,13 @@
     <fieldset class="action">
         <!-- "save changes" button -->
         <!-- ###################################### -->
-        <input type="button" value="Save changes"  onclick="Check(this.form)"    />
+        <input type="button" value="Save"  onclick="Check(this.form)" />
         <!--             <input type="submit" value="Save Changes"  />  -->
-        [% IF ( budget_period_id ) %]<a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]" class="cancel">Cancel</a>[% END %]
+        [% IF ( budget_period_id ) %]
+            <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]" class="cancel">Cancel</a>
+        [% ELSE %]
+            <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl" class="cancel">Cancel</a>
+        [% END %]
     </fieldset>
 
 </form>
