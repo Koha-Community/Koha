@@ -183,12 +183,12 @@ $(document).ready(function() {
 [% UNLESS ( check_member ) %]
     <button class="btn btn-small" id="saverecord" type="submit" name="save" onclick="return check_form_borrowers();"><i class="fa fa-save"></i> Save</button>
     [% IF opadd %]
-    <button class="btn btn-small cancel" onclick="/cgi-bin/koha/members/member.pl">
+        <a class="btn btn-small" href="/cgi-bin/koha/members/member.pl">
     [% ELSE %]
-    <a class='btn btn-small cancel" onclick="/cgi-bin/koha/members/member.pl?borrowernumber=[% borrowernumber %]">
+        <a class="btn btn-small" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
     [% END %]
         <i class="fa fa-times"></i> Cancel
-    </button>
+    </a>
 [% END %]
 </div>
 
