@@ -78,55 +78,65 @@
 	<div class="yui-b">
 
 [% IF ( noreport ) %]
-
-<h2>Overdue report</h2>
-
-<p>Please choose one or more filters to proceed.</p>
-
+  <h2>Overdue report</h2>
+  <p>Please choose one or more filters to proceed.</p>
 [% ELSE %]
 
-<h2>[% nnoverdue %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %]
-overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%;">(Filtered. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a>)</span>[% END %]</h2>
+[% IF ( overdueloop ) %]
 
-<p>
+  <h2>[% nnoverdue %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %] overdue as of [% todaysdate %][% IF ( isfiltered ) %] <span style="font-size:70%;">(Filtered. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a>)</span>[% END %]</h2>
+
+  <p>
     [% IF ( isfiltered ) %]
       <a href="overdue.pl?op=csv&amp;[% csv_param_string |html %]">Download file of displayed overdues</a>
     [% ELSE %]
       <a href="overdue.pl?op=csv">Download file of all overdues</a>
     [% END %]
-</p>
-<div class="sql"><pre>[% sql |html %]</pre></div>
-<div class="searchresults">
-<table id="overduest">
-<thead><tr>
-    <th>Due date</th>
-    <th>Patron</th>
-    <th>Library</th>
-    <th>Title</th>
-    <th>Barcode</th>
-    <th>Call number</th>
-    <th>Price</th>
-</tr></thead>
+  </p>
 
-[%- BLOCK subject -%]Overdue:[%- END -%]
-
-<tbody>[% FOREACH overdueloo IN overdueloop %]
-    <tr>
-        <td>[% overdueloo.duedate %]</td>
-        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overdueloo.borrowernumber %]">[% overdueloo.surname %][% IF (overdueloo.firstname) %], [% overdueloo.firstname %][% END %] ([% overdueloo.cardnumber %])</a>
-        [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email %]?subject=[% INCLUDE subject %] [% overdueloo.title |html %]">email</a>][% END %]
-        [% IF ( overdueloo.phone ) %]([% overdueloo.phone %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro %])[% END %]</td>
-        <td>[% IF overdueloo.branchcode %][% Branches.GetName( overdueloo.branchcode ) %][% END %]</td>
-        <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title |html %]  [% overdueloo.subtitle %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron %][% END %]
-        </td>
-		<td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber %]&amp;itemnumber=[% overdueloo.itemnum %]#item[% overdueloo.itemnum %]">[% overdueloo.barcode %]</a></td>
-		<td>[% overdueloo.itemcallnumber %]</td>
-                <td>[% overdueloo.replacementprice %]</td>
+  <div class="sql"><pre>[% sql |html %]</pre></div>
+  <div class="searchresults">
+    <table id="overduest">
+      <thead>
+        <tr>
+          <th>Due date</th>
+          <th>Patron</th>
+          <th>Library</th>
+          <th>Title</th>
+          <th>Barcode</th>
+          <th>Call number</th>
+          <th>Price</th>
         </tr>
-[% END %]</tbody>
-</table>
+      </thead>
+      [%- BLOCK subject -%]Overdue:[%- END -%]
+      <tbody>
+      [% FOREACH overdueloo IN overdueloop %]
+        <tr>
+          <td>[% overdueloo.duedate %]</td>
+          <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overdueloo.borrowernumber %]">[% overdueloo.surname %][% IF (overdueloo.firstname) %], [% overdueloo.firstname %][% END %] ([% overdueloo.cardnumber %])</a>
+          [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email %]?subject=[% INCLUDE subject %] [% overdueloo.title |html %]">email</a>][% END %]
+          [% IF ( overdueloo.phone ) %]([% overdueloo.phone %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro %])[% END %]</td>
+          <td>[% IF overdueloo.branchcode %][% Branches.GetName( overdueloo.branchcode ) %][% END %]</td>
+          <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title |html %]  [% overdueloo.subtitle %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron %][% END %]</td>
+          <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber %]&amp;itemnumber=[% overdueloo.itemnum %]#item[% overdueloo.itemnum %]">[% overdueloo.barcode %]</a></td>
+          <td>[% overdueloo.itemcallnumber %]</td>
+          <td>[% overdueloo.replacementprice %]</td>
+        </tr>
+      [% END %]
+      </tbody>
+    </table>
+  </div>
 
-</div>
+[% ELSE %]
+
+  <h2>Overdue report</h2>
+  [% IF ( isfiltered ) %]
+    <p>There are no overdues matching your search. <a href="/cgi-bin/koha/circ/overdue.pl">Reset filter</a></p>
+  [% ELSE %]
+    <p>There are no overdues.</p>
+  [% END %]
+
+[% END %]  <!-- overdueloop -->
 [% END %]  <!-- noreport -->
 
 </div>
