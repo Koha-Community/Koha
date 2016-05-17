@@ -1,7 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch item deletion</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/batchMod.js"></script>
@@ -42,8 +41,8 @@ $(document).ready(function(){
                 [% IF ( show ) %]<h1>Batch item deletion</h1>[% ELSE %]<h1>Batch item deletion results</h1>[% END %]
 	    [% IF ( barcode_not_unique ) %]<div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]
 	    [% IF ( no_next_barcode ) %]<div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div>[% END %]
-	    [% IF ( book_on_loan ) %]<div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div>[% END %]
-	    [% IF ( book_reserved ) %]<div class="dialogalert"><strong>Cannot Delete</strong>: item has a waiting hold.</div>[% END %]
+        [% IF ( book_on_loan ) %]<div class="dialog alert"><strong>Cannot delete</strong>: item is checked out.</div>[% END %]
+        [% IF ( book_reserved ) %]<div class="dialogalert"><strong>Cannot delete</strong>: item has a waiting hold.</div>[% END %]
 
     [% UNLESS ( action ) %]
 
@@ -136,15 +135,11 @@ $(document).ready(function(){
 	     <p>This will delete [% IF ( too_many_items ) %]all the[% ELSE %]the selected[% END %] items.</p>
 	     <input type="hidden" name="del" value="1" />
 	     <fieldset class="action">    
-		<div id="jobpanel">
-		    <div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
-		    <div id="jobfailed"></div>
-		</div>
         <input type="checkbox" name="del_records" id="del_records" /> <label for="del_records">Delete records if no items remain.</label>
         [% IF too_many_items %]
-            <input type="submit" id="mainformsubmit" name="mainformsubmit" value="Delete ALL submitted items" />
+            <input type="submit" name="mainformsubmit" value="Delete ALL submitted items" />
         [% ELSE %]
-            <input type="submit" id="mainformsubmit" name="mainformsubmit" value="Delete selected items" />
+            <input type="submit" name="mainformsubmit" value="Delete selected items" />
         [% END %]
 
 		<a href="/cgi-bin/koha/tools/batchMod.pl?del=1" class="cancel">Cancel</a>

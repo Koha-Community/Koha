@@ -7,8 +7,6 @@
 
 <style type="text/css">
     #fileuploadstatus,#fileuploadfailed,#jobpanel,#jobstatus,#jobfailed { display : none; }
-	#fileuploadstatus,#jobstatus { margin:.4em; }
-    #fileuploadprogress,#jobprogress { width:150px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; }
 </style>
 
 <script type="text/javascript">
@@ -89,7 +87,7 @@ $(document).ready(function(){
 <ul>
 	<li>Select an image file or ZIP file to upload. The tool will accept images in GIF, JPEG, PNG, and XPM formats.</li>
 </ul>
-<form method="post" action="[% SCRIPT_NAME %]" id="uploadfile" enctype="multipart/form-data">
+<form method="post" action="/cgi-bin/koha/tools/upload-cover-image.pl" id="uploadfile" enctype="multipart/form-data">
 <fieldset class="rows" id="uploadform">
 <legend>Upload images</legend>
 <ol>
@@ -104,8 +102,8 @@ $(document).ready(function(){
 </fieldset>
 
     <div id="uploadpanel">
-        <div id="fileuploadstatus">Upload progress:
-            <progress min="0" max="100" value="0" id="fileuploadprogress">
+        <div id="fileuploadstatus" class="progress_panel">Upload progress:
+            <progress max="100" value="0" id="fileuploadprogress">
             </progress>
             <span class="fileuploadpercent">0</span>%
         </div>
@@ -113,7 +111,7 @@ $(document).ready(function(){
     </div>
 </form>
 
-    <form method="post" id="processfile" action="[% SCRIPT_NAME %]" enctype="multipart/form-data">
+    <form method="post" id="processfile" action="/cgi-bin/koha/tools/upload-cover-image.pl" enctype="multipart/form-data">
 <fieldset class="rows">
         <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
         <input type="hidden" name="runinbackground" id="runinbackground" value="" />
@@ -128,7 +126,7 @@ $(document).ready(function(){
       </li>
       <li class="radio">
         [% IF (filetype == 'image' ) %]<input type="radio" id="image" name="filetype" value="image" checked="checked" />[% ELSE %]<input type="radio" id="image" name="filetype" value="image" />[% END %]
-        <label for="imagefile">Image file</label>
+        <label for="image">Image file</label>
       </li>
       <li class="radio">
         [% IF ( filetype == 'image' ) %]<span id="bibnum">[% ELSE %]<span id="bibnum" style="display: none">[% END %]<label for="biblionumber">Enter cover biblionumber: </label><input type="text" id="biblionumber" name="biblionumber" value="[% biblionumber %]" size="15" /></span>
@@ -145,10 +143,6 @@ $(document).ready(function(){
     </ol>
   </fieldset>
   <fieldset class="action"><input type="submit" value="Process images" /></fieldset>
-
-       <div id="jobpanel"><div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
-     <div id="jobfailed"></div></div>
-
 </form>
 
 </div>
