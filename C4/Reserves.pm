@@ -1101,7 +1101,7 @@ sub CancelReserve {
         # and, if desired, charge a cancel fee
         my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
         if ( $charge && $params->{'charge_cancel_fee'} ) {
-            manualinvoice($reserve->{'borrowernumber'}, $reserve->{'itemnumber'}, 'Hold waiting too long', 'F', $charge);
+            manualinvoice($reserve->{'borrowernumber'}, $reserve->{'itemnumber'}, '', 'HE', $charge);
         }
     }
 
