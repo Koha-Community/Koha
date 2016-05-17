@@ -162,6 +162,7 @@
   <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
   [% INCLUDE 'datatables.inc' %]
   <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+  <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
   <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/itemsearchform.css" />
   <script type="text/javascript">
     //<![CDATA[
@@ -305,6 +306,7 @@
     }
 
     $(document).ready(function () {
+      $('#toolbar').fixFloat();
       // Add the "New field" link.
       var form_field = $('div.form-field-select-text').last()
       var NEW_FIELD = _("New field");
@@ -366,6 +368,13 @@
       <h1>Item search</h1>
       <p><a href="/cgi-bin/koha/catalogue/search.pl">Go to advanced search</a></p>
       <form action="/cgi-bin/koha/catalogue/itemsearch.pl" method="get" id="itemsearchform">
+          <div id="toolbar" class="btn-toolbar">
+              <fieldset class="action">
+                  <div class="btn-group">
+                      <button class="btn btn-small"><i class="fa fa-search"></i> Search</button>
+                  </div>
+              </fieldset>
+          </div>
           <fieldset>
             [% INCLUDE form_field_select
               name="homebranch"
@@ -442,9 +451,6 @@
               <label>Output:</label>
               <input type="radio" id="format-html" name="format" value="html" checked="checked" /> <label for="format-html">Screen</label>
               <input type="radio" id="format-csv" name="format" value="csv" /> <label for="format-csv">CSV</label>
-            </div>
-            <div class="form-actions">
-              <input type="submit" value="Search" />
             </div>
           </fieldset>
       </form>
