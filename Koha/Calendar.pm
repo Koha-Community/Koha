@@ -116,7 +116,7 @@ sub single_holidays {
             my $single_holidays_sth = $dbh->prepare(
 'SELECT day, month, year FROM special_holidays WHERE branchcode = ? AND isexception = 0'
             );
-            $single_holidays_sth->execute($branchcode);
+            $single_holidays_sth->execute($br);
 
             my @ymd_arr;
             while ( my ( $day, $month, $year ) =
