@@ -1005,12 +1005,24 @@ No patron matched <span class="ex">[% message | html %]</span>
 [% END %] <!-- borrowernumber and borrower-->
 </div></div>
 [% END %]
-
+[% IF Koha.Preference('CircSidebar') %]
+[% UNLESS ( borrowers ) %]
+    [% IF not( borrowernumber and borrower ) %]
+        <div class="yui-b noprint">
+            [% INCLUDE 'circ-nav.inc' %]
+        </div>
+    [% END %]
+[% END %]
+[% END %]
 </div>
 </div>
-[% UNLESS ( borrowers ) %][% IF borrowernumber and borrower %]<div class="yui-b">
-[% INCLUDE 'circ-menu.inc' %]
-</div>[% END %][% END %]
+[% UNLESS ( borrowers ) %]
+    [% IF borrowernumber and borrower %]
+        <div class="yui-b">
+            [% INCLUDE 'circ-menu.inc' %]
+        </div>
+    [% END %]
+[% END %]
 </div>
 <!-- Modal -->
 <div id="barcodeSubmittedModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="barcodeSubmittedModalLabel" aria-hidden="true">

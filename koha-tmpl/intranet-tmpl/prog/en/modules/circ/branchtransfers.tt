@@ -12,9 +12,10 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Transfers</div>
 
-<div id="doc" class="yui-t7">
+[% IF Koha.Preference('CircSidebar') %]<div id="doc3" class="yui-t2">[% ELSE %]<div id="doc" class="yui-t7">[% END %]
    <div id="bd">
-
+<div id="yui-main">
+[% IF Koha.Preference('CircSidebar') %]<div class="yui-b">[% END %]
 [% IF ( found ) %]
    <div class="yui-g"> <h3>Reserve found</h3>
     <table>
@@ -196,6 +197,12 @@
 	
 	
 [% END %]
-
+</div>
+[% IF Koha.Preference('CircSidebar') %]
+<div class="yui-b noprint">
+[% INCLUDE 'circ-nav.inc' %]
+</div>
+[% END %]
+</div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]

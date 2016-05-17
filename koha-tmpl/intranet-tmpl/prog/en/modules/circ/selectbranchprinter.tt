@@ -1,4 +1,5 @@
 [% USE Branches %]
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Set library</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -16,7 +17,7 @@
 &rsaquo; <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>
 </div>
 
-<div id="doc" class="yui-t7">
+[% IF Koha.Preference('CircSidebar') %]<div id="doc3" class="yui-t2">[% ELSE %]<div id="doc" class="yui-t7">[% END %]
   <div id="bd">
     <div id="yui-main">
       <div class="yui-b">
@@ -89,5 +90,10 @@ Updated:<ul>
 
       </div>
     </div>
-  </div>
+[% IF Koha.Preference('CircSidebar') %]
+<div class="yui-b noprint">
+    [% INCLUDE 'circ-nav.inc' %]
+</div>
+[% END %]
+</div>
 [% INCLUDE 'intranet-bottom.inc' %]

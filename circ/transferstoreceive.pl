@@ -24,7 +24,6 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output;
 use C4::Auth;
-use Koha::DateUtils;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Members;
@@ -37,11 +36,13 @@ use Date::Calc qw(
 use C4::Koha;
 use C4::Reserves;
 use Koha::Libraries;
+use Koha::DateUtils;
+use Koha::BiblioFrameworks;
 
 my $input = new CGI;
 my $itemnumber = $input->param('itemnumber');
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
         template_name   => "circ/transferstoreceive.tt",
         query           => $input,
@@ -123,6 +124,12 @@ $template->param(
 	TransfersMaxDaysWarning => C4::Context->preference('TransfersMaxDaysWarning'),
 	latetransfers => $latetransfers ? 1 : 0,
 );
+
+# Checking if there is a Fast Cataloging Framework
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+
+# Checking if the transfer page needs to be displayed
+$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

@@ -24,12 +24,14 @@ use C4::Context;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Circulation;
+use C4::Koha;
 use Koha::DateUtils;
 use Koha::Database;
+use Koha::BiblioFrameworks;
 
 my $cgi = new CGI;
 
-my ( $template, $librarian, $cookie ) = get_template_and_user(
+my ( $template, $librarian, $cookie, $flags ) = get_template_and_user(
     {
         template_name   => "circ/renew.tt",
         query           => $cgi,
@@ -115,5 +117,11 @@ if ($barcode) {
         latestautorenewdate => $latest_auto_renew_date,
     );
 }
+
+# Checking if there is a Fast Cataloging Framework
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+
+# Checking if the transfer page needs to be displayed
+$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
 
 output_html_with_http_headers( $cgi, $cookie, $template->output );

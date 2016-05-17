@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE KohaDates %]
 [% USE ItemTypes %]
 [% USE Branches %]
@@ -53,10 +54,11 @@ $(document).ready(function() {
 [% IF ( run_report ) %] &rsaquo; Results[% END %]
 </div>
 
-<div id="doc2" class="yui-t7">
+[% IF Koha.Preference('CircSidebar') %]<div id="doc3" class="yui-t2">[% ELSE %]<div id="doc2" class="yui-t7">[% END %]
 
    <div id="bd">
 	<div id="yui-main">
+        [% IF Koha.Preference('CircSidebar') %]<div class="yui-b">[% END %]
 	<div class="yui-g">
 
 <h1>Holds queue</h1>
@@ -226,5 +228,11 @@ $(document).ready(function() {
 
 </div>
 </div>
+[% IF Koha.Preference('CircSidebar') %]
+</div>
+<div class="yui-b noprint">
+    [% INCLUDE 'circ-nav.inc' %]
+</div>
+[% END %]
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]

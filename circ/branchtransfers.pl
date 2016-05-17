@@ -31,7 +31,7 @@ use C4::Items;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Koha;
 use C4::Members;
-
+use Koha::BiblioFrameworks;
 use Koha::AuthorisedValues;
 
 ###############################################
@@ -52,7 +52,7 @@ if (!C4::Context->userenv){
 
 #######################################################################################
 # Make the page .....
-my ($template, $user, $cookie) = get_template_and_user(
+my ($template, $user, $cookie, $flags ) = get_template_and_user(
     {
         template_name   => "circ/branchtransfers.tt",
         query           => $query,
@@ -236,5 +236,12 @@ $template->param(
     errmsgloop              => \@errmsgloop,
     CircAutocompl           => C4::Context->preference("CircAutocompl")
 );
+
+# Checking if there is a Fast Cataloging Framework
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+
+# Checking if the transfer page needs to be displayed
+$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
+
 output_html_with_http_headers $query, $cookie, $template->output;
 

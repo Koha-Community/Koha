@@ -21,10 +21,12 @@ use Modern::Perl;
 use C4::Auth;
 use C4::Circulation qw( GetPendingOnSiteCheckouts );
 use C4::Output;
+use C4::Koha;
+use Koha::BiblioFrameworks;
 
 my $cgi = new CGI;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
         template_name   => "circ/on-site_checkouts.tt",
         query           => $cgi,
@@ -33,6 +35,12 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired => {circulate => "circulate_remaining_permissions"},
     }
 );
+
+# Checking if there is a Fast Cataloging Framework
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+
+# Checking if the transfer page needs to be displayed
+$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
 
 my $pending_onsite_checkouts = C4::Circulation::GetPendingOnSiteCheckouts();
 

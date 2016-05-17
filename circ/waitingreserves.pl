@@ -28,7 +28,6 @@ use C4::Circulation;
 use C4::Members;
 use C4::Biblio;
 use C4::Items;
-use Koha::DateUtils;
 use Date::Calc qw(
   Today
   Add_Delta_Days
@@ -36,6 +35,8 @@ use Date::Calc qw(
 );
 use C4::Reserves;
 use C4::Koha;
+use Koha::DateUtils;
+use Koha::BiblioFrameworks;
 
 my $input = new CGI;
 
@@ -47,7 +48,7 @@ my $all_branches   = $input->param('allbranches') || '';
 my $cancelall      = $input->param('cancelall');
 my $tab            = $input->param('tab');
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
         template_name   => "circ/waitingreserves.tt",
         query           => $input,
@@ -162,6 +163,12 @@ $template->param(
     ReservesMaxPickUpDelay => $max_pickup_delay,
     tab => $tab,
 );
+
+# Checking if there is a Fast Cataloging Framework
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+
+# Checking if the transfer page needs to be displayed
+$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
 
 if ($item && $tab eq 'holdsover' && !@cancel_result) {
     print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl#holdsover");

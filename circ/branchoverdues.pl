@@ -27,6 +27,7 @@ use C4::Biblio;
 use C4::Koha;
 use C4::Debug;
 use Koha::DateUtils;
+use Koha::BiblioFrameworks;
 use Data::Dumper;
 
 =head1 branchoverdues.pl
@@ -61,7 +62,7 @@ use Data::Dumper;
 my $input       = new CGI;
 my $dbh = C4::Context->dbh;
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user({
         template_name   => "circ/branchoverdues.tt",
         query           => $input,
         type            => "intranet",
@@ -154,5 +155,11 @@ $template->param(
     overduesloop => \@overduesloop,
     location     => $location,
 );
+
+# Checking if there is a Fast Cataloging Framework
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+
+# Checking if the transfer page needs to be displayed
+$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
 
 output_html_with_http_headers $input, $cookie, $template->output;

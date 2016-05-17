@@ -51,11 +51,12 @@ use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Checkouts;
+use Koha::BiblioFrameworks;
 
 my $query = new CGI;
 
 #getting the template
-my ( $template, $librarian, $cookie ) = get_template_and_user(
+my ( $template, $librarian, $cookie, $flags ) = get_template_and_user(
     {
         template_name   => "circ/returns.tt",
         query           => $query,
@@ -647,6 +648,12 @@ if ( $itemnumber ) {
         }
     }
 }
+
+# Checking if there is a Fast Cataloging Framework
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+
+# Checking if the transfer page needs to be displayed
+$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
 
 # actually print the page!
 output_html_with_http_headers $query, $cookie, $template->output;

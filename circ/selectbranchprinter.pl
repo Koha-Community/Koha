@@ -26,14 +26,14 @@ use C4::Output;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Print;  # GetPrinters
 use C4::Koha;
-
+use Koha::BiblioFrameworks;
 use Koha::Libraries;
 
 # this will be the script that chooses branch and printer settings....
 
 my $query = CGI->new();
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user({
+my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user({
     template_name   => "circ/selectbranchprinter.tt",
     query           => $query,
     type            => "intranet",
@@ -133,5 +133,11 @@ $template->param(
     branch      => $branch,
     recycle_loop=> \@recycle_loop,
 );
+
+# Checking if there is a Fast Cataloging Framework
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+
+# Checking if the transfer page needs to be displayed
+$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
 
 output_html_with_http_headers $query, $cookie, $template->output;

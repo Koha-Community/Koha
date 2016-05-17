@@ -31,9 +31,10 @@ use C4::Biblio;
 use C4::Items;
 use C4::Koha;   # GetItemTypes
 use C4::HoldsQueue qw(GetHoldsQueueItems);
+use Koha::BiblioFrameworks;
 
 my $query = new CGI;
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {
         template_name   => "circ/view_holdsqueue.tt",
         query           => $query,
@@ -73,6 +74,12 @@ foreach my $thisitemtype ( sort keys %$itemtypes ) {
 $template->param(
    itemtypeloop => \@itemtypesloop,
 );
+
+# Checking if there is a Fast Cataloging Framework
+$template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
+
+# Checking if the transfer page needs to be displayed
+$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
 
 # writing the template
 output_html_with_http_headers $query, $cookie, $template->output;
