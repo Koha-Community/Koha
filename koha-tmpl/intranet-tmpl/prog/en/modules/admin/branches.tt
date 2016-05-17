@@ -218,7 +218,7 @@ tinyMCE.init({
 
 [% IF op == 'list' %]
     <h3>Libraries</h3>
-    [% IF libraries %]
+    [% IF libraries.count %]
         <table id="branchest">
             <thead>
                 <tr>
@@ -283,7 +283,7 @@ tinyMCE.init({
     [% IF group_types %]
         [% FOREACH group_type IN group_types %]
             <h3>[% IF group_type.categorytype == 'properties' %]Properties[% ELSIF group_type.categorytype == 'searchdomain' %]Search domain[% END %]</h3>
-            [% IF group_type.categories %]
+            [% IF group_type.categories.size %]
                 <table>
                     <thead>
                         <tr>
