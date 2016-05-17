@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use DateTime::Duration;
 
 use C4::Context;
@@ -400,6 +400,94 @@ subtest 'Get shelves' => sub {
 
     my $public_shelves = Koha::Virtualshelves->get_public_shelves;
     is( $public_shelves->count, 2, 'get_public_shelves should return all public shelves, no matter who is the owner' );
+
+    teardown();
+};
+
+subtest 'Get shelves containing biblios' => sub {
+
+    plan tests => 9;
+    my $patron1 = $builder->build( { source => 'Borrower', } );
+    my $patron2 = $builder->build( { source => 'Borrower', } );
+    my $biblio1 = $builder->build( { source => 'Biblio', } );
+    my $biblio2 = $builder->build( { source => 'Biblio', } );
+    my $biblio3 = $builder->build( { source => 'Biblio', } );
+    my $biblio4 = $builder->build( { source => 'Biblio', } );
+
+    my $shelf1 = Koha::Virtualshelf->new(
+        {   shelfname    => "my first shelf",
+            owner        => $patron1->{borrowernumber},
+            category     => 1,
+        }
+    )->store;
+    my $shelf2 = Koha::Virtualshelf->new(
+        {   shelfname    => "my x second shelf", # 'x' to make it sorted after 'third'
+            owner        => $patron2->{borrowernumber},
+            category     => 1,
+        }
+    )->store;
+    my $shelf3 = Koha::Virtualshelf->new(
+        {   shelfname    => "my third shelf",
+            owner        => $patron1->{borrowernumber},
+            category     => 2,
+        }
+    )->store;
+
+    my $content1 = $shelf1->add_biblio( $biblio1->{biblionumber}, $patron1->{borrowernumber} );
+    my $content2 = $shelf1->add_biblio( $biblio2->{biblionumber}, $patron1->{borrowernumber} );
+    my $content3 = $shelf2->add_biblio( $biblio2->{biblionumber}, $patron2->{borrowernumber} );
+    my $content4 = $shelf2->add_biblio( $biblio3->{biblionumber}, $patron2->{borrowernumber} );
+    my $content5 = $shelf2->add_biblio( $biblio4->{biblionumber}, $patron2->{borrowernumber} );
+    my $content6 = $shelf3->add_biblio( $biblio4->{biblionumber}, $patron2->{borrowernumber} );
+
+    my $shelves_with_biblio1_for_any_patrons = Koha::Virtualshelves->get_shelves_containing_record(
+        {
+            biblionumber => $biblio1->{biblionumber},
+        }
+    );
+    is ( $shelves_with_biblio1_for_any_patrons->count, 0, 'shelf1 is private and should not be displayed if patron is not logged in' );
+
+    my $shelves_with_biblio4_for_any_patrons = Koha::Virtualshelves->get_shelves_containing_record(
+        {
+            biblionumber => $biblio4->{biblionumber},
+        }
+    );
+    is ( $shelves_with_biblio4_for_any_patrons->count, 1, 'shelf3 is public and should be displayed for any patrons' );
+    is ( $shelves_with_biblio4_for_any_patrons->next->shelfname, $shelf3->shelfname, 'The correct shelf (3) should be displayed' );
+
+    my $shelves_with_biblio1_for_other_patrons = Koha::Virtualshelves->get_shelves_containing_record(
+        {
+            biblionumber => $biblio1->{biblionumber},
+            borrowernumber => $patron2->{borrowernumber},
+        }
+    );
+    is ( $shelves_with_biblio1_for_other_patrons->count, 0, 'shelf1 is private and should not be displayed for other patrons' );
+
+    my $shelves_with_biblio1_for_owner = Koha::Virtualshelves->get_shelves_containing_record(
+        {
+            biblionumber => $biblio1->{biblionumber},
+            borrowernumber => $patron1->{borrowernumber},
+        }
+    );
+    is ( $shelves_with_biblio1_for_owner->count, 1, 'shelf1 is private and should be displayed for the owner' );
+
+    my $shelves_with_biblio2_for_patron1 = Koha::Virtualshelves->get_shelves_containing_record(
+        {
+            biblionumber => $biblio2->{biblionumber},
+            borrowernumber => $patron1->{borrowernumber},
+        }
+    );
+    is ( $shelves_with_biblio2_for_patron1->count, 1, 'Only shelf1 should be displayed for patron 1 and biblio 1' );
+    is ( $shelves_with_biblio2_for_patron1->next->shelfname, $shelf1->shelfname, 'The correct shelf (1) should be displayed for patron 1' );
+
+    my $shelves_with_biblio4_for_patron2 = Koha::Virtualshelves->get_shelves_containing_record(
+        {
+            biblionumber => $biblio4->{biblionumber},
+            borrowernumber => $patron2->{borrowernumber},
+        }
+    );
+    is ( $shelves_with_biblio4_for_patron2->count, 2, 'Patron should shown private and public lists for a given biblio' );
+    is ( $shelves_with_biblio4_for_patron2->next->shelfname, $shelf3->shelfname, 'The shelves should be sorted by shelfname' );
 
     teardown();
 };

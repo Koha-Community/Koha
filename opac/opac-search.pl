@@ -54,6 +54,7 @@ use C4::External::OverDrive;
 
 use Koha::LibraryCategories;
 use Koha::Ratings;
+use Koha::Virtualshelves;
 
 use POSIX qw(ceil floor strftime);
 use URI::Escape;
@@ -691,6 +692,13 @@ for (my $i=0;$i<@servers;$i++) {
                     });
                 }
             }
+
+            $res->{shelves} = Koha::Virtualshelves->get_shelves_containing_record(
+                {
+                    biblionumber   => $res->{biblionumber},
+                    borrowernumber => $borrowernumber
+                }
+            );
 
             if ( C4::Context->preference('OpacStarRatings') eq 'all' ) {
                 my $ratings = Koha::Ratings->search({ biblionumber => $res->{biblionumber} });

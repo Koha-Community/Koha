@@ -119,6 +119,45 @@ sub get_some_shelves {
     );
 }
 
+sub get_shelves_containing_record {
+    my ( $self, $params ) = @_;
+    my $borrowernumber = $params->{borrowernumber};
+    my $biblionumber   = $params->{biblionumber};
+
+    my @conditions = ( 'virtualshelfcontents.biblionumber' => $biblionumber );
+    if ($borrowernumber) {
+        push @conditions,
+          {
+              -or => [
+                {
+                    category => 1,
+                    -or      => {
+                        'me.owner' => $borrowernumber,
+                        -or        => {
+                            'virtualshelfshares.borrowernumber' => $borrowernumber,
+                            "me.allow_add"                      => 1,
+                        },
+                    }
+                },
+                { category => 2 },
+            ]
+          };
+    } else {
+        push @conditions, { category => 2 };
+    }
+
+    return Koha::Virtualshelves->search(
+        {
+            -and => \@conditions
+        },
+        {
+            join     => [ 'virtualshelfcontents', 'virtualshelfshares' ],
+            group_by => 'shelfnumber',
+            order_by => { -asc => 'shelfname' },
+        }
+    );
+}
+
 sub _type {
     return 'Virtualshelve';
 }
