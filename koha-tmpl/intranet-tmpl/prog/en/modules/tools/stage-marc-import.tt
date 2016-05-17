@@ -7,8 +7,6 @@
 
 <style type="text/css">
     #fileuploadstatus,#fileuploadfailed,#fileuploadcancel,#jobpanel,#jobstatus,#jobfailed { display : none; }
-	#fileuploadstatus,#jobstatus { margin:.4em; }
-    #fileuploadprogress,#jobprogress { width:150px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; }
 </style>
 
 <script type="text/javascript">
@@ -154,8 +152,8 @@ function cbUpload( status, fileid ) {
 </fieldset>
 		
     <div id="fileuploadpanel">
-        <div id="fileuploadstatus">Upload progress:
-            <progress id="fileuploadprogress" min="0" max="100" value="0">
+        <div id="fileuploadstatus" class="progress_panel">Upload progress:
+            <progress id="fileuploadprogress" max="100" value="0">
             </progress>
             <span class="fileuploadpercent">0</span>%
         </div>
@@ -266,7 +264,7 @@ function cbUpload( status, fileid ) {
   </fieldset>
   <fieldset class="action"><input type="button" id="mainformsubmit" value="Stage for import" /></fieldset>
  
-       <div id="jobpanel"><div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+       <div id="jobpanel"><div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
      <div id="jobfailed"></div></div>
   
 </form>

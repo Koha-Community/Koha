@@ -152,9 +152,7 @@ $(document).ready(function(){
 //]]>
 </script>
 <style type="text/css">
-	#jobpanel,#jobstatus,#jobfailed { display : none; }
-	#jobstatus { margin:.4em; }
-    #jobprogress{ width:200px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; } span.change-status { font-style:italic; color:#666; display:none; }#marcPreview { width : 80%; margin-left : -40%; } @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }
+    #jobpanel,#jobstatus,#jobfailed { display : none; }
 </style>
 </head>
 <body id="tools_manage-marc-import" class="tools">
@@ -360,7 +358,7 @@ $(document).ready(function(){
     [% END %]
     </fieldset>
   </form>
-  <div id="jobpanel"><div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+  <div id="jobpanel"><div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
      <div id="jobfailed"></div></div>
   [% END %]
   [% IF ( can_revert ) %]
