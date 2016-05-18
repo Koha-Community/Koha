@@ -10,10 +10,9 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-
 [% Asset.css("css/datatables.css") | $raw %]
 
-<style type="text/css">
+<style>
 	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
     fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-active {background-color : #F4F8F9; }
 	fieldset.rows .ui-tabs-panel { margin-right : 10px; margin-left : 10px;margin-bottom:10px;}
@@ -24,10 +23,21 @@
 <body id="admin_authorised_values" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF op == 'add_form' %] <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo; [% IF ( action_modify ) %]Modify authorized value[% END %]
-	   [% IF ( action_add_value ) %]New authorized value[% END %]
-	   [% IF ( action_add_category ) %]New category[% END %][% END %]
-[% IF op == 'list' %]Authorized values[% END %]</div>
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+    [% IF op == 'add_form' %]
+        <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo;
+        [% IF ( action_modify ) %]Modify authorized value[% END %]
+        [% IF ( action_add_value ) %]New authorized value[% END %]
+        [% IF ( action_add_category ) %]New category[% END %]
+    [% ELSIF ( loop ) %]
+        <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo;
+        Authorized values for category [% category | html %]
+    [% ELSE %]
+        Authorized values
+    [% END %]
+</div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -127,16 +137,27 @@
     </form>
 [% END %]
 
-
 [% IF op == 'list' %]
 
 <div id="toolbar" class="btn-toolbar">
-    <a id="addauth" class="btn btn-default btn-sm" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category | url %]"><i class="fa fa-plus"> </i> New authorized value for [% category | html %]</a>
     <a id="addcat" class="btn btn-default btn-sm" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form"><i class="fa fa-plus"> </i> New category</a>
+    [% IF ( searchfield ) %]
+        <a id="addauth" class="btn btn-default btn-sm" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category | url %]"><i class="fa fa-plus"> </i> New authorized value for [% category | html %]</a>
+    [% END %]
 </div>
 
-<h1>Authorized values</h1>
-<div class="note"><i class="fa fa-exclamation"></i> <strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.</div>
+[% IF ( searchfield ) %]
+    <h1>Authorized values for category [% category | html %]</h1>
+    [% PROCESS category_descriptions code_category = category %]
+[% ELSE %]
+    <h1>Authorized values</h1>
+[% END %]
+
+[% IF ( searchfield ) %]
+    <div class="note">
+        <i class="fa fa-exclamation"></i> <strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.
+    </div>
+[% END %]
 
 [% FOR m IN messages %]
     <div class="dialog [% m.type | html %]">
@@ -169,110 +190,101 @@
     </div>
 [% END %]
 
-<form action="/cgi-bin/koha/admin/authorised_values.pl" method="post" id="category">
-  <label for="searchfield">Show category: </label>
-  <select name="searchfield" id="searchfield" size="1">
-  [% FOR c IN categories %]
-    [% IF c == searchfield %]
-      <option value="[% c | html %]" selected="selected">[% c | html %]</option>
-    [% ELSE %]
-      <option value="[% c | html %]">[% c | html %]</option>
-    [% END %]
-  [% END %]
-  <input type="submit" value="Submit" />
-</form>
-[% IF ( category == 'Bsort1' ) %]
-    <p>An authorized value attached to patrons, that can be used for stats purposes</p>
-[% END %]
-[% IF ( category == 'Bsort2' ) %]
-    <p>An authorized value attached to patrons, that can be used for stats purposes</p>
-[% END %]
-[% IF ( category == 'Asort1' ) %]
-    <p>An authorized value attached to acquisitions, that can be used for stats purposes</p>
-[% END %]
-[% IF ( category == 'Asort2' ) %]
-    <p>An authorized value attached to acquisitions, that can be used for stats purposes</p>
-[% END %]
-[% IF ( category == 'SUGGEST' ) %]
-    <p>Reasons to reject or accept patron suggestions</p>
-[% END %]
-[% IF ( category == 'DAMAGED' ) %]
-    <p>Statuses to describe a damaged item</p>
-[% END %]
-[% IF ( category == 'LOST' ) %]
-   <p>Statuses to describe a lost item</p>
-[% END %]
-[% IF ( category == 'MANUAL_INV' ) %]
-    <p>Additional values for manual invoice types</p>
-[% END %]
-[% IF ( category == 'BOR_NOTES' ) %]
-    <p>Values for custom patron notes</p>
-[% END %]
-[% IF ( category == 'LOC' ) %]
-    <p>Values for shelving locations</p>
-[% END %]
-[% IF ( category == 'CCODE' ) %]
-    <p>Values for collection codes</p>
- [% END %]
- [% IF ( category == 'NOT_LOAN' ) %]
-    <p>Statuses to describe why an item is not for loan</p>
- [% END %]
-<h3>Authorized values for category [% category | html %]:</h3>
+[% IF ( searchfield ) %]
 
-[% IF ( loop ) %]<div id="pagertable_authorized_values">
-</div>[% END %]
-
-[% IF ( loop ) %]<table id="table_authorized_values">
-<thead><tr>
-	<th>Authorized value</th>
-	<th>Description</th>
-	<th>Description (OPAC)</th>
-	<th>Icon</th>
-    <th>Branches limitations</th>
-    <th>Actions</th>
-	</tr>
-</thead><tbody>
-[% FOREACH loo IN loop %]
-[% UNLESS ( loop.odd ) %]
-<tr>
-[% ELSE %]
-<tr>
-[% END %]
-	<td>[% loo.authorised_value | html %]</td>
-    <td>[% loo.lib | html %]</td>
-    <td>[% loo.lib_opac | html %]</td>
-	<td>[% IF ( loo.imageurl ) %]<img src="[% loo.imageurl | html %]" alt=""/>[% ELSE %]&nbsp;[% END %]</td>
-    <td>
-        [% IF loo.branches.size > 0 %]
-            [% branches_str = "" %]
-            [% FOREACH branch IN loo.branches %]
-                [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
-            [% END %]
-            <span href="#" title="[% branches_str | html %]">
-                [% IF loo.branches.size > 1 %]
-                    [% loo.branches.size | html %] branches limitations
-                [% ELSE %]
-                    [% loo.branches.size | html %] branch limitation
+    <form action="/cgi-bin/koha/admin/authorised_values.pl" method="get" id="category">
+        <p>
+            <label for="searchfield">Show category: </label>
+            <select name="searchfield" id="searchfield" size="1">
+                [% FOR c IN categories %]
+                    [% IF c == searchfield %]
+                        <option value="[% c | html %]" selected="selected">[% c | html %]</option>
+                    [% ELSE %]
+                        <option value="[% c | html %]">[% c | html %]</option>
+                    [% END %]
                 [% END %]
-        [% ELSE %]
-            No limitation
-        [% END %]
-    </td>
-    <td class="actions"><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;id=[% loo.id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-    <a class="delete btn btn-default btn-xs" href="/cgi-bin/koha/admin/authorised_values.pl?op=delete&amp;searchfield=[% searchfield | url %]&amp;id=[% loo.id | html %]"><i class="fa fa-trash"></i> Delete</a></td>
-</tr>
-[% END %]
-</tbody></table>[% ELSE %]
-<div class="dialog message">There are no authorized values defined for [% category | html %]</div>
-[% END %]
+            </select>
+            <input type="submit" value="Submit" />
+        </p>
+    </form>
 
-[% IF ( isprevpage ) %]
-<form class="inline" action="/cgi-bin/koha/admin/authorised_values.pl" method="post">
-<input type="hidden" name="searchfield" value="[% searchfield | html %]" />
-	<input type="submit" value="&lt;&lt; Previous" /></form>
-[% END %] 
+    [% IF loop %]
 
-[% END %]
+    <table id="table_authorized_values" class="authorized_values_table">
+    <thead><tr>
+        <th>Authorized value</th>
+        <th>Description</th>
+        <th>Description (OPAC)</th>
+        <th>Icon</th>
+        <th>Branches limitations</th>
+        <th>Actions</th>
+        </tr>
+    </thead><tbody>
+    [% FOREACH loo IN loop %]
+    <tr>
+        <td>[% loo.authorised_value | html %]</td>
+        <td>[% loo.lib | html %]</td>
+        <td>[% loo.lib_opac | html %]</td>
+        <td>[% IF ( loo.imageurl ) %]<img src="[% loo.imageurl | url %]" alt=""/>[% ELSE %]&nbsp;[% END %]</td>
+        <td>
+            [% IF loo.branches.size > 0 %]
+                [% branches_str = "" %]
+                [% FOREACH branch IN loo.branches %]
+                    [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
+                [% END %]
+                <span href="#" title="[% branches_str | html %]">
+                    [% IF loo.branches.size > 1 %]
+                        [% loo.branches.size | html %] branches limitations
+                    [% ELSE %]
+                        [% loo.branches.size | html %] branch limitation
+                    [% END %]
+            [% ELSE %]
+                No limitation
+            [% END %]
+        </td>
+        <td class="actions"><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;id=[% loo.id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+        <a class="delete btn btn-default btn-xs" href="/cgi-bin/koha/admin/authorised_values.pl?op=delete&amp;searchfield=[% searchfield | uri %]&amp;id=[% loo.id | uri %]"><i class="fa fa-trash"></i> Delete</a></td>
+    </tr>
+    [% END # /FOREACH loop %]
+    </tbody></table>
+    [% ELSE %]
+        <div class="dialog message">
+            <p>There are no authorized values defined for [% category | html %]</p>
+            <form action="/cgi-bin/koha/admin/authorised_values.pl" method="get">
+                <input type="hidden" name="op" value="add_form" />
+                <input type="hidden" name="category" value="[% category | html %]" />
+                <button type="submit"><i class="fa fa-plus"></i> Add a new authorized value</button>
+            </form>
+        </div>
+    [% END %]
+
+[% ELSE # category was selected %]
+
+    <table id="categoriest" class="authorized_values_table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Description</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            [% FOR c IN categories %]
+                <tr>
+                    <td><a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% c | uri %]">[% c | html %]</a></td>
+                    <td>
+                        [% PROCESS category_descriptions code_category = c %]
+                    </td>
+                    <td>
+                        <a id="addauth" class="btn btn-default btn-xs" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% c | uri %]"><i class="fa fa-plus"> </i> Add</a>
+                    </td>
+                </tr>
+            [% END %]
+        </tbody>
+    </table>
+[% END # /IF ( searchfield  )%]
+
+[% END # /IF op == 'list' %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
@@ -289,11 +301,11 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {
-            $("#table_authorized_values").dataTable($.extend(true, {}, dataTablesDefaults, {
+            $(".authorized_values_table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
-                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 ],
-                "aaSorting": [[ 1, "asc" ]],
+                "aaSorting": [[ 0, "asc" ]],
                 "sPaginationType": "four_button"
             }));
 
@@ -305,14 +317,105 @@
             $("a.delete").click(function(){
                 return confirm(_("Are you sure you want to delete this authorized value?"));
             });
-            [% IF op == 'list' %]
-                $('#category').find("input:submit").hide();
-                $('#searchfield').change(function() {
-                    $('#category').submit();
-                });
-            [% END %]
+            $('#category').find("input:submit").hide();
+            $('#searchfield').change(function() {
+                $('#category').submit();
+            });
         });
     </script>
-
 [% END %]
+
+[% BLOCK category_descriptions %]
+    [% SWITCH code_category %]
+        [% CASE 'Asort1' %]
+            <p>Used for acquisitions statistical purposes</p>
+        [% CASE 'Asort2' %]
+            <p>Used for acquisitions statistical purposes</p>
+        [% CASE 'BOR_NOTES' %]
+            <p>Values for custom patron messages that appear on the circulation screen and the OPAC. The value in the description field should be the message text and is limited to 200 characters</p>
+        [% CASE 'branches' %]
+            <p></p>
+        [% CASE 'Bsort1' %]
+            <p>Values that can be entered to fill in the patron’s sort 2 field</p>
+        [% CASE 'Bsort2' %]
+            <p>An authorized value attached to patrons, that can be used for statistical purposes</p>
+        [% CASE 'CAND' %]
+            <p></p>
+        [% CASE 'CCODE' %]
+            <p>Collection codes (appears when cataloging and working with items)</p>
+        [% CASE 'cn_source' %]
+            <p></p>
+        [% CASE 'CONTROL_NUM_SEQUENCE' %]
+            <p></p>
+        [% CASE 'COUNTRY' %]
+            <p>Used in UNIMARC 102 $a</p>
+        [% CASE 'DAMAGED' %]
+            <p>Descriptions for items marked as damaged (appears when cataloging and working with items)</p>
+        [% CASE 'DEPARTMENT' %]
+            <p>Departments are required by and will be used in the Course Reserves module</p>
+        [% CASE 'ETAT' %]
+            <p>Used in French UNIMARC installations in field 995 $o to identify item status. Similar to NOT_LOAN</p>
+        [% CASE 'HINGS_AS' %]
+            <p>General holdings: acquisition status designator :: This data element specifies acquisition status for the unit at the time of the holdings report.</p>
+        [% CASE 'HINGS_C' %]
+            <p>General holdings: completeness designator</p>
+        [% CASE 'HINGS_PF' %]
+            <p>Physical form designators</p>
+        [% CASE 'HINGS_RD' %]
+            <p>General holdings: retention designator :: This data element specifies the retention policy for the unit at the time of the holdings report.</p>
+        [% CASE 'HINGS_UT' %]
+            <p>General holdings: type of unit designator</p>
+        [% CASE 'HSBND_FREQ' %]
+            <p>Frequencies used by the housebound module. They are displayed on the housebound tab in the patron account in staff.</p>
+        [% CASE 'ITEMTYPECAT' %]
+            <p>Allows multiple Item types to be searched in a category. Categories can be entered into the Authorized value ITEMTYPECAT. To combine Item types to this category, enter this Search category to any Item types</p>
+        [% CASE 'itemtypes' %]
+            <p></p>
+        [% CASE 'LANG' %]
+            <p>ISO 639-2 standard language codes</p>
+        [% CASE 'LOC' %]
+            <p>Shelving location (usually appears when adding or editing an item). LOC maps to items.location in the Koha database.</p>
+        [% CASE 'LOST' %]
+            <p>Descriptions for the items marked as lost (appears when adding or editing an item)</p>
+        [% CASE 'MANUAL_INV' %]
+            <p>Values for manual invoicing types</p>
+        [% CASE 'NOT_LOAN' %]
+            <p>Reasons why a title is not for loan</p>
+        [% CASE 'OPAC_SUG' %]
+            <p>A list of reasons displayed in the suggestion form on the OPAC.</p>
+        [% CASE 'ORDER_CANCELLATION_REASON' %]
+            <p>Reasons why an order might have been cancelled</p>
+        [% CASE 'PAYMENT_TYPE' %]
+            <p>Populates a dropdown list of custom payment types when paying fines</p>
+        [% CASE 'qualif' %]
+            <p>Function codes (author, editor, collaborator, etc.) used in UNIMARC 7XX $4 (French)</p>
+        [% CASE 'RELTERMS' %]
+            <p>French terms of relations</p>
+        [% CASE 'REPORT_GROUP' %]
+            <p>A way to sort and filter your reports, the default values in this category include the Koha modules (Accounts, Acquitisions, Catalog, Circulation, Patrons)</p>
+        [% CASE 'REPORT_SUBGROUP' %]
+            <p>Can be used to further sort and filter your reports. This category is empty by default. Values here need to include the authorized value code from REPORT_GROUP in the Description (OPAC) field to link the subgroup to the appropriate group.</p>
+        [% CASE 'RESTRICTED' %]
+            <p>Restricted status of an item</p>
+        [% CASE 'ROADTYPE' %]
+            <p>Road types to be used in patron addresses</p>
+        [% CASE 'SIP_MEDIA_TYPE' %]
+            <p>Used when creating or editing an item type to assign a SIP specific media type for devices like lockers and sorters.</p>
+        [% CASE 'STACK' %]
+            <p>Shelving control number</p>
+        [% CASE 'SUGGEST' %]
+            <p>List of patron suggestion reject or accept reasons (appears when managing suggestions)</p>
+        [% CASE 'SUGGEST_FORMAT' %]
+            <p>List of Item types to display in a drop down menu on the Purchase suggestion form on the OPAC. When creating the authorized values for SUGGEST_FORMAT, enter a description into this form so it is visible on the OPAC to patrons.</p>
+        [% CASE 'SUGGEST_STATUS' %]
+            <p>A list of additional custom status values for suggestions that can be used in addition to the default values.</p>
+        [% CASE 'TERM' %]
+            <p>Terms to be used in Course Reserves module. Enter terms that will show in the drop down menu when setting up a Course reserve. (For example: Spring, Summer, Winter, Fall).</p>
+        [% CASE 'WITHDRAWN' %]
+            <p>Description of a withdrawn item (appears when adding or editing an item)</p>
+        [% CASE 'YES_NO' %]
+            <p>A generic authorized value field that can be used anywhere you need a simple yes/no pull down menu.</p>
+    [% END %]
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
