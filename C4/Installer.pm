@@ -17,10 +17,11 @@ package C4::Installer;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 
 use Encode qw( encode is_utf8 );
+use File::Slurp;
+use SQL::SplitStatement;
 use C4::Context;
 use C4::Installer::PerlModules;
 use DBI;
@@ -428,46 +429,24 @@ with missing files, e.g.
 =cut
 
 sub load_sql {
+
     my $self = shift;
     my $filename = shift;
 
-    my $datadir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}";
-    my $error;
-    my $strcmd;
-    my $cmd;
-    if ( $self->{dbms} eq 'mysql' ) {
-        $cmd = qx(which mysql 2>/dev/null || whereis mysql 2>/dev/null);
-        chomp $cmd;
-        $cmd = $1 if ($cmd && $cmd =~ /^(.+?)[\r\n]+$/);
-        $cmd = 'mysql' if (!$cmd || !-x $cmd);
-        $strcmd = "$cmd "
-            . ( $self->{hostname} ? " -h $self->{hostname} " : "" )
-            . ( $self->{port}     ? " -P $self->{port} "     : "" )
-            . ( $self->{user}     ? " -u $self->{user} "     : "" )
-            . ( $self->{password} ? " -p'$self->{password}'"   : "" )
-            . " $self->{dbname} ";
-        $error = qx($strcmd --default-character-set=utf8 <$filename 2>&1 1>/dev/null);
-    } elsif ( $self->{dbms} eq 'Pg' ) {
-        $cmd = qx(which psql 2>/dev/null || whereis psql 2>/dev/null);
-        chomp $cmd;
-        $cmd = $1 if ($cmd && $cmd =~ /^(.+?)[\r\n]+$/);
-        $cmd = 'psql' if (!$cmd || !-x $cmd);
-        $strcmd = "$cmd "
-            . ( $self->{hostname} ? " -h $self->{hostname} " : "" )
-            . ( $self->{port}     ? " -p $self->{port} "     : "" )
-            . ( $self->{user}     ? " -U $self->{user} "     : "" )
-#            . ( $self->{password} ? " -W $self->{password}"   : "" )       # psql will NOT accept a password, but prompts...
-            . " $self->{dbname} ";                        # Therefore, be sure to run 'trust' on localhost in pg_hba.conf -fbcit
-        $error = qx($strcmd -f $filename 2>&1 1>/dev/null);
-        # Be sure to set 'client_min_messages = error' in postgresql.conf
-        # so that only true errors are returned to stderr or else the installer will
-        # report the import as a failure although it really succeeded -fbcit
+    my $dbh = $self->{ dbh };
+
+    my $sql = read_file( $filename, binmode => ':utf8');
+    my $sql_splitter = SQL::SplitStatement->new;
+    my @statements = $sql_splitter->split($sql);
+    my $error = "";
+
+    foreach my $statement ( @statements ) {
+        $dbh->do($statement);
+        if( $dbh->err) {
+            $error .= "$filename (" . $dbh->errstr . "): $statement\n";
+        }
     }
-#   errors thrown while loading installer data should be logged
-    if($error) {
-      warn "C4::Installer::load_sql returned the following errors while attempting to load $filename:\n";
-      warn "$error";
-    }
+
     return $error;
 }
 
