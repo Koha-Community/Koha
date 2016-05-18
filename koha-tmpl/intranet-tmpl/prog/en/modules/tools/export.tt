@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; MARC export</title>
+<title>Koha &rsaquo; Tools &rsaquo; Export data</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
@@ -17,15 +17,28 @@ $(document).ready(function() {
             $("#bibs li.csv_profiles").hide();
         }
     });
+    $("#checkall").on("click",function(e){
+        e.preventDefault();
+        $(".branch_select").prop("checked",1);
+    });
+    $("#checknone").on("click",function(e){
+        e.preventDefault();
+        $(".branch_select").prop("checked",0);
+    });
 });
 //]]>
 </script>
+<style type="text/css">
+    fieldset.rows fieldset.rows {
+        width: 90%;
+    }
+</style>
 </head>
 <body id="tools_export" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; MARC export</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Export data</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -52,7 +65,8 @@ $(document).ready(function() {
 <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/export.pl">
     <fieldset class="rows">
     <legend> Select records to export </legend>
-        <ol><li>
+        <ol>
+        <li>
             <label for="start">From biblio number: </label>
             <input id="start" type="text" name="StartingBiblionumber" size="5" />
         </li>
@@ -80,25 +94,36 @@ $(document).ready(function() {
             [% INCLUDE 'branch-selector.inc'
                 branches = branchloop %]
         </li>
-        <li>
-            <label for="startcn">From item call number: </label>
-            <input id="startcn" type="text" name="start_callnumber" size="5" />
-        </li>
-        <li>
-            <label for="endcn">To item call number: </label>
-            <input id="endcn" type="text" name="end_callnumber" size="5" />
-        </li>
-	<li>Accession date (inclusive):
-		<ul><li>
-        <label for="from">Start date:</label>
-        <input type="text" size="10" id="from" name="start_accession" value="[% from %]" class="datepickerfrom" />
-</li>
-<li><label for="to">
-    End date:
-</label>
-<input size="10" id="to" name="end_accession" value="[% end_accession %]" type="text" class="datepickerto" />
-</li>
-</ul></li></ol>
+    </ol>
+
+    <fieldset class="rows">
+        <legend>Call number range</legend>
+        <ol>
+            <li>
+                <label for="startcn">From item call number: </label>
+                <input id="startcn" type="text" name="start_callnumber" size="15" />
+            </li>
+            <li>
+                <label for="endcn">To item call number: </label>
+                <input id="endcn" type="text" name="end_callnumber" size="15" />
+            </li>
+        </ol>
+    </fieldset>
+
+    <fieldset class="rows">
+        <legend>Accession date (inclusive)</legend>
+        <ol>
+            <li>
+                    <label for="from">Start date:</label>
+                    <input type="text" size="10" id="from" name="start_accession" value="[% from %]" class="datepickerfrom" />
+            </li>
+            <li>
+                <label for="to">End date:</label>
+                <input size="10" id="to" name="end_accession" value="[% end_accession %]" type="text" class="datepickerto" />
+            </li>
+        </ol>
+    </fieldset>
+
     </fieldset>
     <fieldset class="rows">
     <legend>
