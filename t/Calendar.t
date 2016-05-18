@@ -29,7 +29,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 35;
+        plan tests => 38;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -85,6 +85,7 @@ fixtures_ok [
         [ 'MPL', 11, 11, 2012, '', '', 1 ],    # sunday exception
         [ 'MPL', 1,  6,  2011, '', '', 0 ],
         [ 'MPL', 4,  7,  2012, '', '', 0 ],
+        [ 'CPL', 6,  8,  2012, '', '', 0 ],
       ],
 ], "add fixtures";
 
@@ -144,6 +145,12 @@ my $day_after_christmas = DateTime->new(
     day     => 26
 );  # for testing negative addDate
 
+my $holiday_for_another_branch = DateTime->new(
+    year => 2012,
+    month => 8,
+    day => 6, # This is a monday
+);
+
 {   # Syspref-agnostic tests
     is ( $saturday->day_of_week, 6, '\'$saturday\' is actually a saturday (6th day of week)');
     is ( $sunday->day_of_week, 7, '\'$sunday\' is actually a sunday (7th day of week)');
@@ -155,6 +162,7 @@ my $day_after_christmas = DateTime->new(
     is ( $cal->is_holiday($single_holiday), 1, 'Single holiday closed day test' );
     is ( $cal->is_holiday($notspecial), 0, 'Fixed single date that is not a holiday test' );
     is ( $cal->is_holiday($sunday_exception), 0, 'Exception holiday is not a closed day test' );
+    is ( $cal->is_holiday($holiday_for_another_branch), 0, 'Holiday defined for another branch should not be defined as an holiday' );
 }
 
 {   # Bugzilla #8966 - is_holiday truncates referenced date
@@ -319,6 +327,12 @@ my $day_after_christmas = DateTime->new(
     cmp_ok( $cal->days_between( $later_dt, $test_dt )->in_units('days'),
                 '==', 40, 'Test parameter order not relevant (Days)' );
 
+}
+
+{
+    $cal = Koha::Calendar->new( branchcode => 'CPL' );
+    is ( $cal->is_holiday($single_holiday), 0, 'Single holiday for MPL, not CPL' );
+    is ( $cal->is_holiday($holiday_for_another_branch), 1, 'Holiday defined for CPL should be defined as an holiday' );
 }
 
 1;
