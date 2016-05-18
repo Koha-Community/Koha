@@ -20,8 +20,7 @@ package C4::Installer;
 use Modern::Perl;
 
 use Encode qw( encode is_utf8 );
-use File::Slurp;
-use SQL::SplitStatement;
+use DBIx::RunSQL;
 use C4::Context;
 use C4::Installer::PerlModules;
 use DBI;
@@ -435,17 +434,12 @@ sub load_sql {
 
     my $dbh = $self->{ dbh };
 
-    my $sql = read_file( $filename, binmode => ':utf8');
-    my $sql_splitter = SQL::SplitStatement->new;
-    my @statements = $sql_splitter->split($sql);
-    my $error = "";
+    my $error = DBIx::RunSQL->run_sql_file(
+        dbh     => $dbh,
+        sql     => $filename,
+    );
 
-    foreach my $statement ( @statements ) {
-        $dbh->do($statement);
-        if( $dbh->err) {
-            $error .= "$filename (" . $dbh->errstr . "): $statement\n";
-        }
-    }
+    $error = ( $error ) ? "ERROR: $filename" : "";
 
     return $error;
 }
