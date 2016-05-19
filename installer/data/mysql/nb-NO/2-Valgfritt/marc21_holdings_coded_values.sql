@@ -3,7 +3,8 @@
 -- Refer to http://www.niso.org/standards/index.html
 
 -- General Holdings: Type of Unit Designator
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','0','Information not available; Not applicable');INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','a','Basic bibliographic unit');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','0','Information not available; Not applicable');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','a','Basic bibliographic unit');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','c','Secondary bibliographic unit: supplements, special issues, accompanying material, other secondary bibliographic units');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','d','Indexes');
 
