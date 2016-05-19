@@ -39,11 +39,11 @@
         </div>
 
         <ul>
-            <li><a onclick="keep_text(0)" href="#addbooks_search">Cataloging search</a></li>
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a onclick="keep_text(1)" href="#circ_search">Check out</a></li>[% END %]
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a onclick="keep_text(2)" href="#checkin_search">Check in</a></li>[% END %]
-            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a onclick="keep_text(3)" href="#renew_search">Renew</a></li>[% END %]
-            <li><a onclick="keep_text(4)" href="#catalog_search">Search the catalog</a></li>
+            <li><a class="keep_text" href="#addbooks_search">Cataloging search</a></li>
+            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]
+            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#checkin_search">Check in</a></li>[% END %]
+            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#renew_search">Renew</a></li>[% END %]
+            <li><a class="keep_text" href="#catalog_search">Search the catalog</a></li>
         </ul>
     </div><!-- /header_search -->
 </div><!-- /gradient -->

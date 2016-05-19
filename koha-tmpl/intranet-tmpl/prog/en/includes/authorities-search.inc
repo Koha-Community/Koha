@@ -241,10 +241,10 @@
     </form>
     </div>
     <ul>
-        <li><a onclick="keep_text(0)" href="#mainmain_heading">Search main heading ($a only)</a></li>
-        <li><a onclick="keep_text(1)" href="#main_heading">Search main heading</a></li>
-        <li><a onclick="keep_text(2)" href="#matchheading_search">Search all headings</a></li>
-        <li><a onclick="keep_text(3)" href="#entire_record">Search entire record</a></li>
+        <li><a class="keep_text" href="#mainmain_heading">Search main heading ($a only)</a></li>
+        <li><a class="keep_text" href="#main_heading">Search main heading</a></li>
+        <li><a class="keep_text" href="#matchheading_search">Search all headings</a></li>
+        <li><a class="keep_text" href="#entire_record">Search entire record</a></li>
     </ul>
 </div><!-- /header_search -->
 </div><!-- /gradient -->
