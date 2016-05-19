@@ -3,7 +3,8 @@
 -- Voir to http://www.niso.org/standards/index.html
 
 -- Fonds général : Désignateur de type d'unité
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','0','Information non disponible; Non applicable');INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','a','Unité bibliographique de base');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','0','Information non disponible; Non applicable');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','a','Unité bibliographique de base');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','c','Unité bibliographique secondaire : suppléments, numéros spéciaux, matériel d\'accompagnement, autres unités bibliographiques secondaires');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','d','Index');
 
