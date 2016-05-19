@@ -373,7 +373,7 @@ canned reports and writing custom SQL reports.</p>
                                     <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Run%20this%20report"><i class="fa fa-play"></i> Run</a></li>
                                     <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id %]"><i class="fa fa-clock-o"></i> Schedule</a></li>
                                     [% IF ( CAN_user_reports_create_reports ) %]
-                                        <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Delete%20Saved"><i class="fa fa-remove"></i> Delete</a></li>
+                                        <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a></li>
                                     [% END %]
                                 </ul>
                             </div>
