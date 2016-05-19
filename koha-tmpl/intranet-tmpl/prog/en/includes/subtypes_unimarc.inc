@@ -1,11 +1,14 @@
-<a onclick="javascript:if (document.getElementsByName('Coded_Fields')[0].style.display=='none'){document.getElementsByName('Coded_Fields')[0].style.display='block';} else {document.getElementsByName('Coded_Fields')[0].style.display='none';}">Coded information filters</a>
-<div id="yui-b" style="display:none;" name="Coded_Fields" >
+<p>
+    <a id="show_coded_fields" class="toggle_element" data-element="#Coded_Fields,#show_coded_fields,#hide_coded_fields" href="#"><i class="fa fa-plus-square-o"></i> Show coded information filters</a>
+    <a id="hide_coded_fields" class="toggle_element" data-element="#Coded_Fields,#show_coded_fields,#hide_coded_fields" href="#" style="display:none;"><i class="fa fa-minus-square-o"></i> Hide coded information filters</a>
+</p>
+<div style="display:none;" id="Coded_Fields">
 <!-- SUBTYPE LIMITS -->
-		<fieldset>
-		<legend>Coded Fields</legend>
-		<p>
-		<label>Audience</label>
-		<select name="limit" class="subtype">
+        <fieldset>
+        <legend>Coded fields</legend>
+        <p>
+        <label for="audience">Audience: </label>
+        <select id="audience" name="limit" class="subtype">
             <option value="" selected="selected" >Any</option>
             <option value="ta:a">juvenile, general</option>
             <option value="ta:b">pre-primary (0-5)</option>
@@ -16,10 +19,10 @@
             <option value="ta:m">adult, General</option>
             <option value="ta:u">unknown</option>
 		</select>
-		</p>
+        </p>
 		<p>
-        <label>Physical presentation</label>
-        <select name="limit" class="subtype">
+        <label for="physical_presentation">Physical presentation: </label>
+        <select id="physical_presentation" name="limit" class="subtype">
             <option value="" selected="selected" >Any</option>
             <option value="ff8-23:r">regular print</option>
             <option value="ff8-23:d">large print</option>
@@ -33,10 +36,10 @@
             <option value="ff8-23:t">microform</option>
             <option value="ff8-23:z">other form of textual material</option>
 		</select>
-		</p>
+        </p>
 		<p>
-        <label>Literary genre</label>
-		<select name="limit" class="subtype">
+            <label for="literary_genre">Literary genre: </label>
+            <select id="literary_genre" name="limit" class="subtype">
 			<option value="" selected="selected" >Any</option>
             <option value="lf:a">fiction</option>
             <option value="lf:b">drama</option>
@@ -52,8 +55,8 @@
     </select>
     </p>
         <p>
-		<label>Biography</label>
-        <select name="limit" class="subtype" size="1">
+            <label for="biography">Biography: </label>
+            <select id="biography" name="limit" class="subtype">
             <option value="">Any</option>
                 <option value="bio:y">not a biography</option>
                 <option value="bio:a">autobiography</option>
@@ -63,8 +66,8 @@
 		</select>
         </p>
         <p>
-		<label>Illustration</label>
-        <select name="limit" class="subtype" size="1">
+            <label for="illustration">Illustration: </label>
+            <select id="illustration" name="limit" class="subtype">
             <option value="">Any</option>
                 <option value="ff8-18-21:a">illustrations</option>
                 <option value="ff8-18-21:b">maps</option>
@@ -85,8 +88,8 @@
         </select>
         </p>
 		<p>
-		<label>Content</label>
-		<select name="limit" class="subtype">
+            <label for="content">Content: </label>
+            <select id="content" name="limit" class="subtype">
 			<option value="" >Any</option>
             <option value="ctype:a" >bibliography</option>
             <option value="ctype:b" >catalogue</option>
@@ -114,8 +117,8 @@
 		</select>
         </p>
         <p>
-		<label>Video Types</label>
-		<select name="limit" class="subtype">
+            <label for="video_types">Video types: </label>
+            <select id="video_types" name="limit" class="subtype">
             <option value="">Any</option>
 			<option value="Video-mt:a">motion picture</option>
 			<option value="Video-mt:b">visual projection</option>
@@ -123,11 +126,12 @@
 		</select>
         </p>
 		</fieldset>
+
 		<fieldset>
-		<legend>Serials</legend><p>
+        <legend>Serials</legend>
 		<p>
-		<label>Serial Type</label>
-		<select name="limit" class="subtype">
+            <label for="serial_type">Serial type: </label>
+            <select id="serial_type" name="limit" class="subtype">
            <option value="">Any type</option>
             <option value="ff8-21:a">Periodical</option>
             <option value="ff8-21:b">Monographic series</option>
@@ -137,10 +141,10 @@
             <option value="ff8-21:g">Updating website</option>
             <option value="ff8-21:z">Other</option>
 		</select>
-		</p>
-		<p>
-		<label>Periodicity</label>
-		<select name="limit" class="subtype">
+        </p>
+        <p>
+            <label for="periodicity">Periodicity: </label>
+            <select id="periodicity" name="limit" class="subtype">
 			<option value="">Any</option>
             <option value="ff8-18:a">Daily</option>
             <option value="ff8-18:b">Semiweekly</option>
@@ -161,10 +165,10 @@
             <option value="ff8-18:u">Unknown</option>
             <option value="ff8-18:z">Other</option>
 		</select>
-		</p>
-		<p>
-		<label>Regularity</label>
-		<select name="limit" class="subtype">
+        </p>
+        <p>
+            <label for="regularity">Regularity: </label>
+            <select id="regularity" name="limit" class="subtype">
             <option value="">Any regularity</option>
             <option value="ff8-19:a">regular</option>
             <option value="ff8-19:b">normalised irregular</option>
@@ -172,10 +176,11 @@
             <option value="ff8-19:u">unknown</option>
 		</select>
         </p>
-
         </fieldset>
+
 		<fieldset>
-		<legend>Picture</legend><p>
+        <legend>Picture</legend>
+        <p>
 		<select name="limit" class="subtype">
 				<option value="">Any</option>
 				<option value="Graphics-type:a">collage</option>

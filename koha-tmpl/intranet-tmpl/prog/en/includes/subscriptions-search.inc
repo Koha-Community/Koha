@@ -1,7 +1,7 @@
 <div id="advsearch">
     <form action="" method="get">
         <fieldset class="brief">
-            <a id="unfold_advsearch" style="cursor:pointer" onclick="$('#advsearch_form').slideToggle(400);">Advanced search</a>
+        <a href="#" class="toggle_element" data-element="#advsearch_form">Advanced search</a>
             <div id="advsearch_form" style="display:none">
             <ol>
               <li>

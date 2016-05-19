@@ -17,6 +17,11 @@
                 mrform.hide();
                 e.preventDefault();
             });
+            $(".clear-date").on("click",function(e){
+                e.preventDefault();
+                var fieldID = this.id.replace("clear-date-","");
+                $("#" + fieldID).val("");
+            });
         })
     //]]>
 </script>
@@ -75,7 +80,7 @@
                 <ol>
                     <li><label for="rcomment">Comment:</label> <input type="text" id="rcomment" name="comment" /></li>
                     <li><label for="rexpiration">Expiration:</label> <input name="expiration" id="rexpiration" size="10" readonly="readonly" value="" class="datepicker" />
-                        <a href='#' onclick="document.getElementById('expiration').value='';">Clear date</a></li>
+                        <a href="#" class="clear-date" id="clear-date-rexpiration">Clear date</a></li>
                 </ol>
             <fieldset class="action"><input type="submit" value="Add restriction" /> <a href="#" class="cancel" id="cancel_manual_restriction">Cancel</a></fieldset>
             </fieldset>
