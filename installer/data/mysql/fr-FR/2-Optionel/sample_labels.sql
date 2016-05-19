@@ -10,7 +10,7 @@ INSERT INTO `creator_templates` VALUES
 (5,0,'Avery 8163',              '2colonnes x 5 colonnes',                                                       8.5,    11,     4,      2,      0,      0,      0.5,    0.17,   2,      5,      0.2,    0.01,   'INCH', 'Labels'),
 (6,0,'cards',                   'Avery 5160 | 1 x 2-5/8 : 1 x 2-5/8\"  [3x10] : equivalent: Gaylord JD-ML3000', 8.5,    11,     2.75,   1.05,   0,      0,      0.25,   0,      3,      10,     0.2,    0.01,   'INCH', 'Labels'),
 (7,0,'Demco WS14942260',        '1\" X 1.5\" Etiquettes de cotes',                                              8.5,    11,     1.5,    1,      0.236,  0,      0.4,    0.25,   5,      10,     0.0625, 0,      'INCH', 'Labels');
-UNLOCK TABLES; 
+UNLOCK TABLES;
 
 LOCK TABLES `creator_layouts` WRITE;
 INSERT INTO `creator_layouts` VALUES
