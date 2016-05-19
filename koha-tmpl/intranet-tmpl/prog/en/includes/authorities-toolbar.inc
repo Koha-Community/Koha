@@ -31,7 +31,7 @@
         <div class="btn-group"><a class="btn btn-small" id="editAuth" href="authorities.pl?authid=[% authid %]"><i class="fa fa-pencil"></i> Edit</a></div>
         <div class="btn-group"><a class="btn btn-small" id="dupAuth" href="authorities.pl?authid=[% authid %]&amp;op=duplicate"><i class="fa fa-copy"></i> Duplicate</a></div>
         [% UNLESS ( count ) %]
-            <div class="btn-group"><a href="#" class="btn btn-small" id="delAuth"><i class="fa fa-remove"></i> Delete</a></div>
+            <div class="btn-group"><a href="#" class="btn btn-small" id="delAuth"><i class="fa fa-trash"></i> Delete</a></div>
         [% END %]
     [% END %]
 
