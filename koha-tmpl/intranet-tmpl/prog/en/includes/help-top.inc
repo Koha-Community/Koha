@@ -10,7 +10,7 @@
 [% END %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery-2.2.3.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery-migrate-1.3.0.min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery-ui-1.11.4.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui-1.11.4.min.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut.js"></script>
 <!-- koha core js -->
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/staff-global.js"></script>
