@@ -14,8 +14,8 @@
         <label for="title">Title: </label> <input type="text" id="title" name="title" size="15" value="[% title %]" />
         <label for="searchsupplier">Vendor:</label> <input type="text" id="searchsupplier" name="name" size="15" value="[% name|html %]" />
         <input type="hidden" id="do_search" name="do_search" value="do" />
-        <span class="filteraction" id="filteraction_off" style="display:none"> <a href="#" onclick="$('#filters,.filteraction').toggle();">[-]</a></span>
-        <span class="filteraction" id="filteraction_on"> <a href="#" onclick="$('#filters,.filteraction').toggle();">[+]</a></span>
+        <span class="filteraction" id="filteraction_off" style="display:none"> <a href="#" class="toggle_element" data-element="#filters,.filteraction">[-]</a></span>
+        <span class="filteraction" id="filteraction_on"> <a href="#" class="toggle_element" data-element="#filters,.filteraction">[+]</a></span>
     <input value="Submit" class="submit" type="submit" /> <a href="/cgi-bin/koha/acqui/histsearch.pl">Advanced search</a>
     <p id="filters" style="display:none">
       <label for="basket">Basket: </label><input type="text" name="basket" id="basket" />

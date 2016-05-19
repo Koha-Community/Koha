@@ -5,12 +5,18 @@ $(document).ready(function(){
     $(".none").click(function(){
         if($(this).prop("checked")){
             var rowid = $(this).attr("id");
-            newid = Number(rowid.replace("none",""))
+            newid = Number(rowid.replace("none",""));
             $("#sms"+newid).prop("checked", false);
             $("#email"+newid).prop("checked", false);
             $("#phone"+newid).prop("checked", false);
             $("#digest"+newid).prop("checked", false);
             $("#rss"+newid).prop("checked", false);
+        }
+    });
+    $(".active_notify").on("change",function(){
+        var attr_id = $(this).data("attr-id");
+        if( $(this).prop("checked") ){
+            $("#none" + attr_id ).prop("checked", false);
         }
     });
     $("#info_digests").tooltip();
@@ -75,12 +81,12 @@ $(document).ready(function(){
                  <input type="checkbox"
                  id="sms[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="sms" checked="checked" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').prop('checked', false);" />
+                 value="sms" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id %]" />
               [% ELSE %]
                  <input type="checkbox"
                  id="sms[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="sms" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').prop('checked', false);" />
+                 value="sms" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id %]" />
               [% END %]
           [% END %]
       </td>[% END %]
@@ -103,12 +109,12 @@ $(document).ready(function(){
                  <input type="checkbox"
                  id="phone[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="phone" checked="checked" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').prop('checked', false);" />
+                 value="phone" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id %]" />
               [% ELSE %]
                  <input type="checkbox"
                  id="phone[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="phone" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').prop('checked', false);" />
+                 value="phone" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id %]" />
               [% END %]
           [% END %]
       </td>[% END %]
@@ -132,12 +138,12 @@ $(document).ready(function(){
             <input type="checkbox"
                  id="email[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="email" checked="checked" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').prop('checked', false);" />
+                 value="email" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id %]" />
               [% ELSE %]
             <input type="checkbox"
                  id="email[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="email" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').prop('checked', false);" />
+                 value="email" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id %]" />
               [% END %]
           [% END %]
       </td>
@@ -164,12 +170,12 @@ $(document).ready(function(){
                 <input type="checkbox"
                      id="digest[% messaging_preference.message_attribute_id %]"
                      value="[% messaging_preference.message_attribute_id %]"
-                     name="digest" checked="checked" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').prop('checked', false);" />
+                     name="digest" checked="checked" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id %]" />
               [% ELSE %]
                 <input type="checkbox"
                      id="digest[% messaging_preference.message_attribute_id %]"
                      value="[% messaging_preference.message_attribute_id %]"
-                     name="digest" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').prop('checked', false);" />
+                     name="digest" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id %]" />
               [% END %]
           [% END %]
       </td>
@@ -188,7 +194,7 @@ $(document).ready(function(){
             <input type="checkbox"
                  id="rss[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="rss"   [% messaging_preference.transport_rss %] onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').prop('checked', false);" />
+                 value="rss"   [% messaging_preference.transport_rss %] class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id %]" />
           [% END %]
       </td>
       [% ELSE %]

@@ -52,9 +52,15 @@ $.fn.selectTabByID = function (tabID) {
     $("body").on("keypress", ".noEnterSubmit", function(e){
         return checkEnter(e);
     });
+
     $(".keep_text").on("click",function(){
         var field_index = $(this).parent().index();
         keep_text( field_index );
+    });
+
+    $(".toggle_element").on("click",function(e){
+        e.preventDefault();
+        $( $(this).data("element") ).toggle();
     });
 });
 
