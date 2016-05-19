@@ -2226,6 +2226,45 @@ sub GetMarcHosts {
     return $marchostsarray;
 }
 
+=head2 UpsertMarcSubfield
+
+    my $record = C4::Biblio::UpsertMarcSubfield($MARC::Record, $fieldTag, $subfieldCode, $subfieldContent);
+
+=cut
+
+sub UpsertMarcSubfield {
+    my ($record, $tag, $code, $content) = @_;
+    my $f = $record->field($tag);
+
+    if ($f) {
+        $f->update( $code => $content );
+    }
+    else {
+        my $f = MARC::Field->new( $tag, '', '', $code => $content);
+        $record->insert_fields_ordered( $f );
+    }
+}
+
+=head2 UpsertMarcControlField
+
+    my $record = C4::Biblio::UpsertMarcControlField($MARC::Record, $fieldTag, $content);
+
+=cut
+
+sub UpsertMarcControlField {
+    my ($record, $tag, $content) = @_;
+    die "UpsertMarcControlField() \$tag '$tag' is not a control field\n" unless 0+$tag < 10;
+    my $f = $record->field($tag);
+
+    if ($f) {
+        $f->update( $content );
+    }
+    else {
+        my $f = MARC::Field->new($tag, $content);
+        $record->insert_fields_ordered( $f );
+    }
+}
+
 =head2 GetFrameworkCode
 
   $frameworkcode = GetFrameworkCode( $biblionumber )
@@ -3050,56 +3089,20 @@ the MARC XML.
 sub _koha_marc_update_bib_ids {
     my ( $record, $frameworkcode, $biblionumber, $biblioitemnumber ) = @_;
 
-    # we must add bibnum and bibitemnum in MARC::Record...
-    # we build the new field with biblionumber and biblioitemnumber
-    # we drop the original field
-    # we add the new builded field.
     my ( $biblio_tag,     $biblio_subfield )     = GetMarcFromKohaField( "biblio.biblionumber",          $frameworkcode );
     die qq{No biblionumber tag for framework "$frameworkcode"} unless $biblio_tag;
     my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber", $frameworkcode );
     die qq{No biblioitemnumber tag for framework "$frameworkcode"} unless $biblioitem_tag;
 
-    if ( $biblio_tag == $biblioitem_tag ) {
-
-        # biblionumber & biblioitemnumber are in the same field (can't be <10 as fields <10 have only 1 value)
-        my $new_field = MARC::Field->new(
-            $biblio_tag, '', '',
-            "$biblio_subfield"     => $biblionumber,
-            "$biblioitem_subfield" => $biblioitemnumber
-        );
-
-        # drop old field and create new one...
-        my $old_field = $record->field($biblio_tag);
-        $record->delete_field($old_field) if $old_field;
-        $record->insert_fields_ordered($new_field);
+    if ( $biblio_tag < 10 ) {
+        C4::Biblio::UpsertMarcControlField( $record, $biblio_tag, $biblionumber );
     } else {
-
-        # biblionumber & biblioitemnumber are in different fields
-
-        # deal with biblionumber
-        my ( $new_field, $old_field );
-        if ( $biblio_tag < 10 ) {
-            $new_field = MARC::Field->new( $biblio_tag, $biblionumber );
-        } else {
-            $new_field = MARC::Field->new( $biblio_tag, '', '', "$biblio_subfield" => $biblionumber );
-        }
-
-        # drop old field and create new one...
-        $old_field = $record->field($biblio_tag);
-        $record->delete_field($old_field) if $old_field;
-        $record->insert_fields_ordered($new_field);
-
-        # deal with biblioitemnumber
-        if ( $biblioitem_tag < 10 ) {
-            $new_field = MARC::Field->new( $biblioitem_tag, $biblioitemnumber, );
-        } else {
-            $new_field = MARC::Field->new( $biblioitem_tag, '', '', "$biblioitem_subfield" => $biblioitemnumber, );
-        }
-
-        # drop old field and create new one...
-        $old_field = $record->field($biblioitem_tag);
-        $record->delete_field($old_field) if $old_field;
-        $record->insert_fields_ordered($new_field);
+        C4::Biblio::UpsertMarcSubfield($record, $biblio_tag, $biblio_subfield, $biblionumber);
+    }
+    if ( $biblioitem_tag < 10 ) {
+        C4::Biblio::UpsertMarcControlField( $record, $biblioitem_tag, $biblioitemnumber );
+    } else {
+        C4::Biblio::UpsertMarcSubfield($record, $biblioitem_tag, $biblioitem_subfield, $biblioitemnumber);
     }
 }
 
