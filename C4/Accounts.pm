@@ -606,7 +606,7 @@ sub recordpayment_selectaccts {
     my $sql = 'SELECT * FROM accountlines WHERE (borrowernumber = ?) ' .
     'AND (amountoutstanding<>0) ';
     if (@{$accts} ) {
-        $sql .= ' AND accountno IN ( ' .  join ',', @{$accts};
+        $sql .= ' AND accountlines_id IN ( ' .  join ',', @{$accts};
         $sql .= ' ) ';
     }
     $sql .= ' ORDER BY date';
