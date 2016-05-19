@@ -34,16 +34,16 @@
 
         <ul>
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-                <li><a onclick="keep_text(0)" href="#circ_search">Check out</a></li>
+                <li><a class="keep_text" href="#circ_search">Check out</a></li>
             [% END %]
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-                <li><a onclick="keep_text(1)" href="#checkin_search">Check in</a></li>
+                <li><a class="keep_text" href="#checkin_search">Check in</a></li>
             [% END %]
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-                <li><a onclick="keep_text(2)" href="#renew_search">Renew</a></li>
+                <li><a class="keep_text" href="#renew_search">Renew</a></li>
             [% END %]
             [% IF ( CAN_user_borrowers ) %]
-                <li><a onclick="keep_text(3)" href="#patron_search">Search patrons</a></li>
+                <li><a class="keep_text" href="#patron_search">Search patrons</a></li>
             [% END %]
         </ul>
 
