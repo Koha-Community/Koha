@@ -36,7 +36,8 @@ function clone_block(block) {
     $(new_block).find('a.remove_block').show();
     var blocks = $(block).parent();
     $(blocks).append(new_block);
-    $(blocks).find('a.remove_block').click(function(){
+    $(blocks).find('a.remove_block').click(function(e){
+        e.preventDefault();
         remove_block_action($(this));
     }).show();
 }
@@ -91,7 +92,8 @@ $(document).ready(function() {
         if( $("#rules").find(".conditions > .condition").length > 1 ) {
 
         }
-        new_rule.find('.remove_rule').click(function(){
+        new_rule.find('.remove_rule').click(function(e){
+            e.preventDefault();
             remove_rule_action( $(this) );
         }).show();
         new_rule.find('.add_rule').remove();
