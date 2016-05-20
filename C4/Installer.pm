@@ -428,18 +428,24 @@ with missing files, e.g.
 =cut
 
 sub load_sql {
-
     my $self = shift;
     my $filename = shift;
+    my $error;
 
     my $dbh = $self->{ dbh };
 
-    my $error = DBIx::RunSQL->run_sql_file(
-        dbh     => $dbh,
-        sql     => $filename,
-    );
-
-    $error = ( $error ) ? "ERROR: $filename" : "";
+    eval {
+        DBIx::RunSQL->run_sql_file(
+            dbh     => $dbh,
+            sql     => $filename,
+        );
+    };
+    #   errors thrown while loading installer data should be logged
+    if( $@ ) {
+        warn "C4::Installer::load_sql returned the following errors while attempting to load $filename:\n";
+        warn "$@";
+        $error = "Error attempting to load $filename:\n$@";
+    }
 
     return $error;
 }
