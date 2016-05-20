@@ -10,9 +10,10 @@
     [% IF ( bormessagepref ) %]
         <li>Patron notification:
             [% FOREACH mtt IN bormessagepref.keys %]
-                [% IF ( mtt == 'email' ) %] Email. [% END %]
-                [% IF ( mtt == 'phone' ) %] Phone. [% END %]
-                [% IF ( mtt == 'sms' ) %] SMS. [% END %]
+                [%~ IF ( mtt == 'email' ) %] Email[% END ~%]
+                [%~ IF ( mtt == 'phone' ) %] Phone[% END ~%]
+                [%~ IF ( mtt == 'sms' ) %] SMS[% END ~%]
+                [%~ UNLESS loop.last %], [% ELSE %].[% END ~%]
             [% END %]
         </li>
            [% ELSE %]
