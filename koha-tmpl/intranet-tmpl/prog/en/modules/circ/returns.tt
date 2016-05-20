@@ -6,6 +6,20 @@
 [% USE AuthorisedValues %]
 [% USE ColumnsSettings %]
 
+[% BLOCK display_bormessagepref %]
+    [% IF ( bormessagepref ) %]
+        <li>Patron notification:
+            [% FOREACH mtt IN bormessagepref.keys %]
+                [% IF ( mtt == 'email' ) %] Email. [% END %]
+                [% IF ( mtt == 'phone' ) %] Phone. [% END %]
+                [% IF ( mtt == 'sms' ) %] SMS. [% END %]
+            [% END %]
+        </li>
+           [% ELSE %]
+        <li>Patron is not notified.</li>
+    [% END %]
+[% END %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Check in [% title |html %]</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
@@ -238,17 +252,7 @@ $(document).ready(function () {
             [% borcity %] [% borzip %]</li>
            [% IF ( borphone ) %]<li> [% borphone %]</li>[% END %]
 		   [% IF ( boremail ) %]<li><a id="boremail" href="mailto:[% boremail %]">[% boremail %]</a></li>[% END %]
-           [% IF ( bormessagepref ) %]
-               <li>Patron is notified:
-               [% FOREACH key IN bormessagepref.keys %]
-                   [% IF ( key == 'email' ) %] Email. [% END %]
-                   [% IF ( key == 'phone' ) %] Phone. [% END %]
-                   [% IF ( key == 'sms' ) %] SMS. [% END %]
-               [% END %]
-               </li>
-           [% ELSE %]
-               <li>Patron is not notified</li>
-           [% END %]
+            [% INCLUDE display_bormessagepref %]
 [% IF ( debarred ) %]<li class="error">Patron is RESTRICTED</li>[% END %]
 [% IF ( gonenoaddress ) %]<li class="error">Patron's address is in doubt</li>[% END %]</ul>
 		[% IF ( transfertodo ) %]
@@ -410,17 +414,7 @@ $(document).ready(function () {
             [% IF ( borphone ) %]<li>[% borphone %]</li>[% END %]
             [% IF ( boremail ) %]<li>[% IF ( transfertodo ) %][% boremail %][% ELSE %]<a id="boremail" href="mailto:[% boremail %]">[% boremail %]</a>[% END %]</li>[% END %]
             [% UNLESS ( transfertodo) %]
-                [% IF ( bormessagepref ) %]
-                   <li>Patron is notified:
-                   [% FOREACH key IN bormessagepref.keys %]
-                       [% IF ( key == 'email' ) %] Email. [% END %]
-                       [% IF ( key == 'phone' ) %] Phone. [% END %]
-                       [% IF ( key == 'sms' ) %] SMS. [% END %]
-                   [% END %]
-                   </li>
-               [% ELSE %]
-                   <li>Patron is not notified</li>
-               [% END %]
+                [% INCLUDE display_bormessagepref %]
             [% END %]
 [% IF ( debarred ) %]<li class="error">Patron is RESTRICTED</li>[% END %]
 [% IF ( gonenoaddress ) %]<li class="error">Patron's address is in doubt</li>[% END %]
