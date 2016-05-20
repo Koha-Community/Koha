@@ -41,7 +41,7 @@ my $id             = $cgi->param('id');
 my $title          = $cgi->param('title');
 my $new            = $cgi->param('new');
 my $expirationdate;
-if ( scalar $cgi->param('expirationdate') ) {
+if ( $cgi->param('expirationdate') ) {
     $expirationdate = output_pref({ dt => dt_from_string( scalar $cgi->param('expirationdate') ), dateformat => 'iso', dateonly => 1 });
 }
 my $timestamp      = output_pref({ dt => dt_from_string( scalar $cgi->param('timestamp') ), dateformat => 'iso', dateonly => 1 });

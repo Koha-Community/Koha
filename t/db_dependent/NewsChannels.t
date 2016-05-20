@@ -29,7 +29,6 @@ my $addcat = 'CAT1';
     my $sth = $dbh->prepare( q{ SELECT categorycode FROM categories WHERE categorycode = ? } );
     $sth->execute ( $addcat );
     if ( not defined $sth->fetchrow () ) {
-        diag("Category $addcat not found, inserting");
         $dbh->do( q{ INSERT INTO categories (categorycode,description) VALUES (?,?) },
             undef, ( $addcat, "$addcat description") );
     }
@@ -47,7 +46,6 @@ my $brwrnmbr;
 
     # Not found, let us insert it.
     if ( not defined $brwrnmbr ) {
-        diag("Borrower $addbrwr not found, inserting");
         $dbh->do( q{ INSERT INTO borrowers (surname, address, city, branchcode, categorycode) VALUES (?, ?, ?, ?, ?) },
             undef, ($addbrwr, '(test) address', '(test) city', $addbra, $addcat) );
 
@@ -65,7 +63,7 @@ ok ( defined $brwrnmbr );
 
 # Test add_opac_new
 my $rv = add_opac_new();    # intentionally bad
-ok( $rv == 0, 'Correctly failed on no parameter!' );
+is( $rv, 0, 'Correctly failed on no parameter!' );
 
 my $timestamp = '2000-01-01';
 my ( $timestamp1, $timestamp2 ) = ( $timestamp, $timestamp );
@@ -83,7 +81,7 @@ my $href_entry1 = {
 };
 
 $rv = add_opac_new($href_entry1);
-ok( $rv == 1, 'Successfully added the first dummy news item!' );
+is( $rv, 1, 'Successfully added the first dummy news item!' );
 
 my ( $title2, $new2, $lang2, $expirationdate2, $number2 ) =
   ( 'News Title2', '<p>We have some exciting news!</p>', q{}, '2999-12-31', 1 );
@@ -98,7 +96,7 @@ my $href_entry2 = {
     branchcode     => 'LIB1',
 };
 $rv = add_opac_new($href_entry2);
-ok( $rv == 1, 'Successfully added the second dummy news item!' );
+is( $rv, 1, 'Successfully added the second dummy news item!' );
 
 my ( $title3, $new3, $lang3, $number3 ) =
   ( 'News Title3', '<p>News without expiration date</p>', q{}, 1 );
@@ -112,36 +110,30 @@ my $href_entry3 = {
     branchcode     => 'LIB1',
 };
 $rv = add_opac_new($href_entry3);
-ok( $rv == 1, 'Successfully added the third dummy news item without expiration date!' );
+is( $rv, 1, 'Successfully added the third dummy news item without expiration date!' );
 
 # We need to determine the idnew in a non-MySQLism way.
 # This should be good enough.
 my $query =
 q{ SELECT idnew from opac_news WHERE timestamp='2000-01-01' AND expirationdate='2999-12-30'; };
-my $sth = $dbh->prepare($query);
-$sth->execute();
-my $idnew1 = $sth->fetchrow;
+my ( $idnew1 ) = $dbh->selectrow_array( $query );
 $query =
 q{ SELECT idnew from opac_news WHERE timestamp='2000-01-01' AND expirationdate='2999-12-31'; };
-$sth = $dbh->prepare($query);
-$sth->execute();
-my $idnew2 = $sth->fetchrow;
+my ( $idnew2 ) = $dbh->selectrow_array( $query );
 
 $query =
 q{ SELECT idnew from opac_news WHERE timestamp='2000-01-02'; };
-$sth = $dbh->prepare($query);
-$sth->execute();
-my $idnew3 = $sth->fetchrow;
+my ( $idnew3 ) = $dbh->selectrow_array( $query );
 
 # Test upd_opac_new
 $rv = upd_opac_new();    # intentionally bad parmeters
-ok( $rv == 0, 'Correctly failed on no parameter!' );
+is( $rv, 0, 'Correctly failed on no parameter!' );
 
 $new2                 = '<p>Update! There is no news!</p>';
 $href_entry2->{new}   = $new2;
 $href_entry2->{idnew} = $idnew2;
 $rv                   = upd_opac_new($href_entry2);
-ok( $rv == 1, 'Successfully updated second dummy news item!' );
+is( $rv, 1, 'Successfully updated second dummy news item!' );
 
 # Test get_opac_new (single news item)
 $timestamp1      = output_pref( { dt => dt_from_string( $timestamp1 ), dateonly => 1 } );
@@ -192,7 +184,7 @@ is_deeply(
 
 # Test get_opac_new (single news item without expiration date)
 my $news3 = get_opac_new($idnew3);
-ok (! $news3->{ expirationdate }, "Expiration date should be empty");
+is($news3->{ expirationdate }, undef, "Expiration date should be empty");
 
 # Test get_opac_news (multiple news items)
 my ( $opac_news_count, $arrayref_opac_news ) = get_opac_news( 0, q{}, 'LIB1' );
