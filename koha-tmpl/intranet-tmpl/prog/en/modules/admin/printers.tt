@@ -6,53 +6,27 @@
 [% IF ( delete_confirmed ) %] Printers &rsaquo; Printer deleted[% END %]
 [% IF ( else ) %]Printers[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% IF ( add_form ) %]<script type="text/javascript">
+[% IF ( loop ) %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript">
 //<![CDATA[
-        //
-        function isNotNull(f,noalert) {
-                if (f.value.length ==0) {
-   return false;
-                }
-                return true;
-        }
-        //
-        function isNum(v,maybenull) {
-        var n = new Number(v.value);
-        if (isNaN(n)) {
-                return false;
-                }
-        if (maybenull==0 && v.value=="") {
-                return false;
-        }
-        return true;
-        }
-        //
-        function Check(f) {
-                var ok=1;
-                var _alertString="";
-                var alertString2;
-                if (f.printername.value.length==0) {
-                        _alertString += "- printer name missing\n";
-                }
-                if (f.printqueue.value.length==0) {
-                        _alertString += "- Queue missing\n";
-                }
-                if (_alertString.length==0) {
-                        document.Aform.submit();
-                } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
-                        alertString2 += "------------------------------------------------------------------------------------\n\n";
-                        alertString2 += _alertString;
-                        alert(alertString2);
-                }
-        }
-        //]]>
+    $(document).ready(function() {
+        $("#printerst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+            ],
+            "aaSorting": [[ 0, "asc" ]],
+            "sPaginationType": "four_button"
+        }));
+    });
+//]]>
 </script>
-	[% END %]
+[% END %]
 </head>
 <body id="admin_printers" class="admin">
 [% INCLUDE 'header.inc' %]
-[% INCLUDE 'printers-admin-search.inc' %]
+[% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %][% IF ( searchfield ) %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Modify printer '[% searchfield %]'[% ELSE %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; New printer[% END %][% END %]
 [% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Printer added[% END %]
@@ -73,7 +47,7 @@
 	[% ELSE %]
 		<h1>New printer</h1>
 	[% END %]
-        <form action="[% script_name %]" name="Aform" method="post">
+        <form action="[% script_name %]" name="Aform" method="post" class="validated">
         <input type="hidden" name="op" value="add_validate" />
 	[% IF ( searchfield ) %]
 		<input type="hidden" name="add" value="0" />
@@ -88,20 +62,22 @@
 		</li>
 	[% ELSE %]
 		<li>
-            <label for="printername">Printer name: </label>
-				<input type="text" name="printername" id="printername" size="50" maxlength="50" />
+            <label for="printername" class="required">Printer name: </label>
+                <input type="text" name="printername" id="printername" size="40" maxlength="40" class="required" required="required" />
+                <span class="required">Required</span>
 		</li>
 	[% END %]
         	<li>
-			<label for="printqueue">Queue: </label>
-			<input type="text" name="printqueue" id="printqueue" size="50" maxlength="50" value="[% printqueue %]" /> 
+            <label for="printqueue" class="required">Queue: </label>
+            <input type="text" name="printqueue" id="printqueue" size="20" maxlength="20" value="[% printqueue %]"  class="required" required="required" />
+            <span class="required">Required</span>
 		</li>
         	<li>
 			<label for="printtype">Type: </label>
-			<input type="text" name="printtype" id="printtype" size="50" maxlength="50" value="[% printtype %]" /> 
+            <input type="text" name="printtype" id="printtype" size="20" maxlength="20" value="[% printtype %]" />
 		</li></ol>
         </fieldset>
-		<fieldset class="action"><input type="submit" value="Submit" onclick="Check(this.form);" /> <a class="cancel" href="/cgi-bin/koha/admin/printers.pl">Cancel</a></fieldset>
+        <fieldset class="action"><input type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/admin/printers.pl">Cancel</a></fieldset>
         </form>
 
 [% END %]
@@ -114,35 +90,40 @@
 [% END %]
 
 [% IF ( delete_confirm ) %]
-<h3>Confirm deletion of printer <em>[% searchfield %]</em></h3>
-<ul>
-		<li>
-			<strong>Printer: </strong>
-			[% searchfield %]
-		</li>
-		<li>
-			<strong>Queue: </strong>
-			[% printqueue %]
-		</li>
-        	<li>
-			<strong>Type: </strong>
-			[% printtype %]
-		</li>
-	</ul>
-    	<form action="[% script_name %]" method="post">
-			<input type="hidden" name="op" value="delete_confirmed" />
-			<input type="hidden" name="searchfield" value="[% searchfield %]" />
-			<input type="submit" value="Delete this printer" />
-			</form> <form action="[% script_name %]" method="post">
-				<input type="submit" value="Do not Delete" />
-			</form>
+    <div class="dialog alert">
+        <h3>Confirm deletion of printer <em>[% searchfield %]</em></h3>
+
+        <table>
+            <tr>
+                <th scope="row">Printer: </th><td>[% searchfield %]</td>
+            </tr>
+            <tr>
+                <th scope="row">Queue: </th><td>[% printqueue %]</td>
+            </tr>
+            <tr>
+                <th scope="row">Type: </th><td>[% printtype %]</td>
+            </tr>
+        </table>
+
+        <form action="[% script_name %]" method="post">
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="searchfield" value="[% searchfield %]" />
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+        </form>
+        <form action="/cgi-bin/koha/admin/printers.pl" method="get">
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        </form>
+    </div>
 [% END %]
 
 [% IF ( delete_confirmed ) %]
-<h3>Printer deleted</h3>
-<form action="[% script_name %]" method="post">
-		<fieldset class="action"><input type="submit" value="OK" /></fieldset>
-</form>
+    <div class="dialog message">
+        <h3>Printer deleted</h3>
+        <form action="[% script_name %]" method="post">
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
+        </form>
+    </div>
+
 [% END %]
 
 [% IF ( else ) %]
@@ -156,30 +137,27 @@
 		You searched for [% searchfield %]</span>
 	[% END %]
 
-[% IF ( loop ) %]<table>
-		<tr>
-			<th>Name</th>
-			<th>Queue</th>
-			<th>Type</th>
-			<th>&nbsp;</th>
-		</tr>
+[% IF ( loop ) %]
+    <table id="printerst">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Queue</th>
+                <th>Type</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
 		[% FOREACH loo IN loop %]
         <tr>
 			<td>[% loo.printername %]</td>
 			<td>[% loo.printqueue %]</td>
 			<td>[% loo.printtype %]</td>
-			<td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.printername %]">Edit</a> <a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.printername %]">Delete</a></td>
+            <td class="actions"><a class="btn btn-default btn-xs" href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.printername |uri %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.printername |uri %]"><i class="fa fa-trash"></i> Delete</a></td>
 		</tr>
 		[% END %]
-	</table>[% ELSE %]<div class="notice">No printers defined.</div>[% END %]
-
-	[% IF ( offsetgtzero ) %]
-		<a href="[% script_name %]?offset=[% prevpage %]">&lt;&lt; Previous</a>
-	[% END %]
-
-	[% IF ( ltcount ) %]
-		<a href="[% script_name %]?offset=[% nextpage %]">Next &gt;&gt;</a>	
-	[% END %]
+        </tbody>
+    </table>[% ELSE %]<div class="dialog message">No printers defined.</div>[% END %]
 [% END %]
 
 </div>
