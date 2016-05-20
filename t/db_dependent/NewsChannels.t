@@ -4,7 +4,7 @@ use Modern::Perl;
 use C4::Branch qw(GetBranchName);
 use Koha::DateUtils;
 
-use Test::More tests => 12;
+use Test::More tests => 14;
 
 BEGIN {
     use_ok('C4::NewsChannels');
@@ -69,6 +69,7 @@ ok( $rv == 0, 'Correctly failed on no parameter!' );
 
 my $timestamp = '2000-01-01';
 my ( $timestamp1, $timestamp2 ) = ( $timestamp, $timestamp );
+my $timestamp3 = '2000-01-02';
 my ( $title1, $new1, $lang1, $expirationdate1, $number1 ) =
   ( 'News Title', '<p>We have some exciting news!</p>', q{}, '2999-12-30', 1 );
 my $href_entry1 = {
@@ -99,6 +100,20 @@ my $href_entry2 = {
 $rv = add_opac_new($href_entry2);
 ok( $rv == 1, 'Successfully added the second dummy news item!' );
 
+my ( $title3, $new3, $lang3, $number3 ) =
+  ( 'News Title3', '<p>News without expiration date</p>', q{}, 1 );
+my $href_entry3 = {
+    title          => $title3,
+    new            => $new3,
+    lang           => $lang3,
+    timestamp      => $timestamp3,
+    number         => $number3,
+    borrowernumber => $brwrnmbr,
+    branchcode     => 'LIB1',
+};
+$rv = add_opac_new($href_entry3);
+ok( $rv == 1, 'Successfully added the third dummy news item without expiration date!' );
+
 # We need to determine the idnew in a non-MySQLism way.
 # This should be good enough.
 my $query =
@@ -111,6 +126,12 @@ q{ SELECT idnew from opac_news WHERE timestamp='2000-01-01' AND expirationdate='
 $sth = $dbh->prepare($query);
 $sth->execute();
 my $idnew2 = $sth->fetchrow;
+
+$query =
+q{ SELECT idnew from opac_news WHERE timestamp='2000-01-02'; };
+$sth = $dbh->prepare($query);
+$sth->execute();
+my $idnew3 = $sth->fetchrow;
 
 # Test upd_opac_new
 $rv = upd_opac_new();    # intentionally bad parmeters
@@ -168,6 +189,10 @@ is_deeply(
     },
     'got back expected news item via get_opac_new - ID 2'
 );
+
+# Test get_opac_new (single news item without expiration date)
+my $news3 = get_opac_new($idnew3);
+ok (! $news3->{ expirationdate }, "Expiration date should be empty");
 
 # Test get_opac_news (multiple news items)
 my ( $opac_news_count, $arrayref_opac_news ) = get_opac_news( 0, q{}, 'LIB1' );
