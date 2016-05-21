@@ -32,17 +32,15 @@ BEGIN {
     use_ok('C4::Barcodes');
 }
 
-my $schema  = Koha::Database->new->schema;
-$schema->storage->txn_begin;
-
 my $builder = t::lib::TestBuilder->new;
 
-my $dbh = C4::Context->dbh;
+my $schema  = Koha::Database->new->schema;
 
 subtest 'Test generation of annual barcodes from DB values' => sub {
 
     plan tests => 4;
 
+    $schema->storage->txn_begin;
     $builder->schema->resultset( 'Issue' )->delete_all;
     $builder->schema->resultset( 'Item' )->delete_all;
 
@@ -83,6 +81,7 @@ subtest 'Test generation of annual barcodes from DB values' => sub {
     $schema->storage->txn_rollback;
 };
 
+$schema->storage->txn_begin;
 
 $builder->schema->resultset( 'Issue' )->delete_all;
 $builder->schema->resultset( 'Item' )->delete_all;
@@ -171,3 +170,5 @@ foreach $format (@formats) {
         }
     }
 }
+
+$schema->storage->txn_rollback;
