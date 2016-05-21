@@ -412,18 +412,11 @@ sub set_version_syspref {
 
   my $error = $installer->load_sql($filename);
 
-Runs a the specified SQL using the DB's command-line
-SQL tool, and returns any strings sent to STDERR
-by the command-line tool.
+Runs a the specified SQL file using a sql loader DBIx::RunSQL
+Returns any strings sent to STDERR
 
-B<FIXME:> there has been a long-standing desire to
-replace this with an SQL loader that goes
-through DBI; partly for portability issues
-and partly to improve error handling.
-
-B<FIXME:> even using the command-line loader, some more
-basic error handling should be added - deal
-with missing files, e.g.
+# FIXME This should be improved: sometimes the caller and load_sql warn the same
+error.
 
 =cut
 
@@ -434,17 +427,23 @@ sub load_sql {
 
     my $dbh = $self->{ dbh };
 
-    eval {
-        DBIx::RunSQL->run_sql_file(
-            dbh     => $dbh,
-            sql     => $filename,
-        );
+    my $dup_stderr;
+    do {
+        local *STDERR;
+        open STDERR, ">>", \$dup_stderr;
+
+        eval {
+            DBIx::RunSQL->run_sql_file(
+                dbh     => $dbh,
+                sql     => $filename,
+            );
+        };
     };
     #   errors thrown while loading installer data should be logged
-    if( $@ ) {
+    if( $dup_stderr ) {
         warn "C4::Installer::load_sql returned the following errors while attempting to load $filename:\n";
-        warn "$@";
-        $error = "Error attempting to load $filename:\n$@";
+        $error = $dup_stderr;
+
     }
 
     return $error;
