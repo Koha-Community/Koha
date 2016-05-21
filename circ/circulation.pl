@@ -164,7 +164,7 @@ my $stickyduedate  = $query->param('stickyduedate') || $session->param('stickydu
 my $duedatespec    = $query->param('duedatespec')   || $session->param('stickyduedate');
 $duedatespec = eval { output_pref( { dt => dt_from_string( $duedatespec ), dateformat => 'iso' }); }
     if ( $duedatespec );
-my $restoreduedatespec  = $query->param('restoreduedatespec') || $session->param('stickyduedate') || $duedatespec;
+my $restoreduedatespec  = $query->param('restoreduedatespec') || $duedatespec || $session->param('stickyduedate');
 if ( $restoreduedatespec && $restoreduedatespec eq "highholds_empty" ) {
     undef $restoreduedatespec;
 }
