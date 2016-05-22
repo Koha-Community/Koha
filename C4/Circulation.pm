@@ -1046,12 +1046,19 @@ sub CanBookBeIssued {
         # issued to someone else
         my $currborinfo =    C4::Members::GetMember( borrowernumber => $issue->{borrowernumber} );
 
-#        warn "=>.$currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
-        $needsconfirmation{ISSUED_TO_ANOTHER} = 1;
-        $needsconfirmation{issued_firstname} = $currborinfo->{'firstname'};
-        $needsconfirmation{issued_surname} = $currborinfo->{'surname'};
-        $needsconfirmation{issued_cardnumber} = $currborinfo->{'cardnumber'};
-        $needsconfirmation{issued_borrowernumber} = $currborinfo->{'borrowernumber'};
+
+        my ( $can_be_returned, $message ) = CanBookBeReturned( $item, C4::Context->userenv->{branch} );
+
+        unless ( $can_be_returned ) {
+            $issuingimpossible{RETURN_IMPOSSIBLE} = 1;
+            $issuingimpossible{branch_to_return} = $message;
+        } else {
+            $needsconfirmation{ISSUED_TO_ANOTHER} = 1;
+            $needsconfirmation{issued_firstname} = $currborinfo->{'firstname'};
+            $needsconfirmation{issued_surname} = $currborinfo->{'surname'};
+            $needsconfirmation{issued_cardnumber} = $currborinfo->{'cardnumber'};
+            $needsconfirmation{issued_borrowernumber} = $currborinfo->{'borrowernumber'};
+        }
     }
 
     unless ( $ignore_reserves ) {
