@@ -535,6 +535,10 @@ $(document).ready(function() {
             <li>This item belongs to [% Branches.GetName( itemhomebranch ) %] and cannot be checked out from this location.</li>
         [% END %]
 
+        [% IF RETURN_IMPOSSIBLE %]
+            <li>This item must be return to [% Branches.GetName( branch_to_return ) %].</li>
+        [% END %]
+
         [% IF ( USERBLOCKEDWITHENDDATE ) %]
             <li>Patron has a restriction until [% USERBLOCKEDWITHENDDATE | $KohaDates %].</li>
         [% END %]
