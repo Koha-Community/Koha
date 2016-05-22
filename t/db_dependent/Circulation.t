@@ -30,7 +30,7 @@ use Koha::Database;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 85;
+use Test::More tests => 86;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -997,6 +997,80 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
 
     # TODO t::lib::Mocks::mock_preference('AllowReturnToBranch', 'homeorholdingbranch');
 };
+
+subtest 'AddIssue & AllowReturnToBranch' => sub {
+    plan tests => 9;
+
+    my $homebranch    = $builder->build( { source => 'Branch' } );
+    my $holdingbranch = $builder->build( { source => 'Branch' } );
+    my $otherbranch   = $builder->build( { source => 'Branch' } );
+    my $patron_1      = $builder->build( { source => 'Borrower' } );
+    my $patron_2      = $builder->build( { source => 'Borrower' } );
+
+    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
+    my $item = $builder->build(
+        {   source => 'Item',
+            value  => {
+                homebranch    => $homebranch->{branchcode},
+                holdingbranch => $holdingbranch->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem->{biblionumber}
+            }
+        }
+    );
+
+    set_userenv($holdingbranch);
+
+    my $ref_issue = 'Koha::Schema::Result::Issue'; # FIXME Should be Koha::Issue
+    my $issue = AddIssue( $patron_1, $item->{barcode} );
+
+    my ( $error, $question, $alerts );
+
+    # AllowReturnToBranch == homebranch
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
+    ## Can be issued from homebranch
+    set_userenv($homebranch);
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue );
+    set_userenv($holdingbranch); AddIssue( $patron_1, $item->{barcode} ); # Reinsert the original issue
+    ## Can be issued from holdinbranch
+    set_userenv($holdingbranch);
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue );
+    set_userenv($holdingbranch); AddIssue( $patron_1, $item->{barcode} ); # Reinsert the original issue
+    ## Can be issued from another branch
+    set_userenv($otherbranch);
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue );
+    set_userenv($holdingbranch); AddIssue( $patron_1, $item->{barcode} ); # Reinsert the original issue
+
+    # AllowReturnToBranch == holdinbranch
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'holdingbranch' );
+    ## Cannot be issued from homebranch
+    set_userenv($homebranch);
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '' );
+    ## Can be issued from holdingbranch
+    set_userenv($holdingbranch);
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue );
+    set_userenv($holdingbranch); AddIssue( $patron_1, $item->{barcode} ); # Reinsert the original issue
+    ## Cannot be issued from another branch
+    set_userenv($otherbranch);
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '' );
+
+    # AllowReturnToBranch == homebranch
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homebranch' );
+    ## Can be issued from homebranch
+    set_userenv($homebranch);
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue );
+    set_userenv($holdingbranch); AddIssue( $patron_1, $item->{barcode} ); # Reinsert the original issue
+    ## Cannot be issued from holdinbranch
+    set_userenv($holdingbranch);
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '' );
+    ## Cannot be issued from another branch
+    set_userenv($otherbranch);
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '' );
+    # TODO t::lib::Mocks::mock_preference('AllowReturnToBranch', 'homeorholdingbranch');
+};
+
 
 sub set_userenv {
     my ( $library ) = @_;
