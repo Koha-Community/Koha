@@ -1386,6 +1386,8 @@ sub AddIssue {
 			if ( $actualissue->{borrowernumber}) {
 				# This book is currently on loan, but not to the person
 				# who wants to borrow it now. mark it returned before issuing to the new borrower
+                my ( $allowed, $message ) = CanBookBeReturned( $item, C4::Context->userenv->{branch} );
+                return unless $allowed;
 				AddReturn(
 					$item->{'barcode'},
 					C4::Context->userenv->{'branch'}
