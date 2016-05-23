@@ -73,9 +73,9 @@
                 [% IF cardnumber_wrong_length || cardnumber_already_exists %]
                     <div class="alert alert-error">
                         [% IF cardnumber_wrong_length %]
-                        <strong>The entered <a href="#borrower_cardnumber">card number</a> is the wrong length.</strong>
+                        <a href="#borrower_cardnumber"><strong>The entered card number is the wrong length.</strong></a>
                         [% ELSIF cardnumber_already_exists %]
-                        <strong>The entered <a href="#borrower_cardnumber">card number</a> is already in use.</strong>
+                        <a href="#borrower_cardnumber"><strong>The entered card number is already in use.</strong></a>
                         [% END %]
                         Please correct this and resubmit.
                     </div>
