@@ -43,7 +43,8 @@ ok( $plugin->get_qualified_table_name('mytable') eq 'koha_plugin_test_mytable', 
 ok( $plugin->get_plugin_http_path() eq '/plugin/Koha/Plugin/Test', 'Test $plugin->get_plugin_http_path()' );
 
 my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins( 'report' );
-ok( $plugins[0]->get_metadata()->{'name'} eq 'Test Plugin', "Koha::Plugins::GetPlugins functions correctly" );
+my @names = map { $_->get_metadata()->{'name'} } @plugins;
+is( scalar grep( /^Test Plugin$/, @names), 1, "Koha::Plugins::GetPlugins functions correctly" );
 
 SKIP: {
     my $plugins_dir = C4::Context->config("pluginsdir");
