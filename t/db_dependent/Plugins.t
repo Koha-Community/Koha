@@ -34,13 +34,13 @@ ok( $plugin->can('configure'), 'Test plugin can configure' );
 ok( $plugin->can('install'), 'Test plugin can install' );
 ok( $plugin->can('uninstall'), 'Test plugin can install' );
 
-ok( Koha::Plugins::Handler->run({ class => "Koha::Plugin::Test", method => 'report', enable_plugins => 1 }) eq "Koha::Plugin::Test::report", 'Test run plugin report method' );
+is( Koha::Plugins::Handler->run({ class => "Koha::Plugin::Test", method => 'report', enable_plugins => 1 }), "Koha::Plugin::Test::report", 'Test run plugin report method' );
 
 my $metadata = $plugin->get_metadata();
-ok( $metadata->{'name'} eq 'Test Plugin', 'Test $plugin->get_metadata()' );
+is( $metadata->{'name'}, 'Test Plugin', 'Test $plugin->get_metadata()' );
 
-ok( $plugin->get_qualified_table_name('mytable') eq 'koha_plugin_test_mytable', 'Test $plugin->get_qualified_table_name()' );
-ok( $plugin->get_plugin_http_path() eq '/plugin/Koha/Plugin/Test', 'Test $plugin->get_plugin_http_path()' );
+is( $plugin->get_qualified_table_name('mytable'), 'koha_plugin_test_mytable', 'Test $plugin->get_qualified_table_name()' );
+is( $plugin->get_plugin_http_path(), '/plugin/Koha/Plugin/Test', 'Test $plugin->get_plugin_http_path()' );
 
 my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins( 'report' );
 my @names = map { $_->get_metadata()->{'name'} } @plugins;
