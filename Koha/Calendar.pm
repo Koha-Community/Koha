@@ -72,7 +72,7 @@ sub exception_holidays {
             day       => $day,
             month     => $month,
             year      => $year,
-            time_zone => C4::Context->tz()
+            time_zone => "floating",
           )->truncate( to => 'day' );
     }
     $self->{exception_holidays} =
@@ -118,7 +118,7 @@ sub single_holidays {
                     day       => $day,
                     month     => $month,
                     year      => $year,
-                    time_zone => C4::Context->tz()
+                    time_zone => 'floating',
                 )->truncate( to => 'day' );
                 push @ymd_arr, $dt->ymd('');
             }
@@ -235,6 +235,8 @@ sub is_holiday {
     my $day   = $localdt->day;
     my $month = $localdt->month;
 
+    #Change timezone to "floating" before doing any calculations or comparisons
+    $localdt->set_time_zone("floating");
     $localdt->truncate( to => 'day' );
 
 
