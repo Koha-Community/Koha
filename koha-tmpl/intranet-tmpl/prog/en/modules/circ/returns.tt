@@ -128,6 +128,10 @@ $(document).ready(function () {
         $("#barcode").removeClass("alert");
     });
     [% END %]
+    $('.openWin').on("click",function(e){
+        e.preventDefault();
+        Dopop( $(this).data("url") );
+    });
 });
 //]]>
 </script>
@@ -164,7 +168,7 @@ $(document).ready(function () {
         <h3>Please transfer item to: [% collectionBranchName %]</h3>
             <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
             <p>This item is part of a rotating collection.</p>
-            <p><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% collectionBranch %]&amp;op=slip'); return true;">Print slip</a></p>
+            <p><button type="button" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% collectionBranch %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button></p>
 </div>
 [% END %]
 
@@ -209,7 +213,8 @@ $(document).ready(function () {
         <!-- WrongTransfer -->
         <h3>Please return item to: [% Branches.GetName( TransferWaitingAt ) %]</h3>
             <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
-        <button type="submit" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% homebranch %]&amp;op=slip'); return true;"><i class="fa fa-print"></i> Print transfer slip</button><button type="submit" onclick="window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1'"><i class="fa fa-times"></i> Cancel transfer</button>
+        <button type="submit" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% homebranch %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
+        <button class="deny" type="submit" onclick="window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1'"><i class="fa fa-times"></i> Cancel transfer</button>
 [% IF ( wborcnum ) %]<h5>Hold for:</h5>
         <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
             [% borsurname %], [% borfirstname %]</a> ([% borcnum %])</li>
@@ -339,7 +344,7 @@ $(document).ready(function () {
         <div id="return1" class="dialog message audio-alert-action">
             <h3>Please return item to: [% Branches.GetName( returnbranch ) %]</h3>
             <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
-            <ul><li><a href="#" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;">Print slip</a></li></ul>
+            <p><button type="button" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber %]&amp;branchcode=[% returnbranch %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button></p>
         </div>
     [% END %]
 
@@ -349,7 +354,7 @@ $(document).ready(function () {
     Transfer now?<br />
     <form method="post" action="returns.pl" name="mainform" id="mainform">
     [% IF itemnumber %]
-        <button type="submit" name="dotransfer" class="print" onclick="Dopop('transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% returnbranch %]&amp;op=slip'); return true;"><i class="fa fa-print"></i> Yes, print slip</button>
+        <button type="submit" name="dotransfer" class="print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% returnbranch %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button>
     [% END %]
 	<button type="submit" name="dotransfer" class="submit"><i class="fa fa-check"></i> Yes</button>
 	<button type="submit" name="notransfer" class="submit"><i class="fa fa-times"></i> No</button>
