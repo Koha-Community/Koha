@@ -934,7 +934,7 @@ sub CanBookBeIssued {
             $needsconfirmation{current_loan_count} = $toomany->{count};
             $needsconfirmation{max_loans_allowed} = $toomany->{max_allowed};
         } else {
-            $needsconfirmation{TOO_MANY} = $toomany->{reason};
+            $issuingimpossible{TOO_MANY} = $toomany->{reason};
             $issuingimpossible{current_loan_count} = $toomany->{count};
             $issuingimpossible{max_loans_allowed} = $toomany->{max_allowed};
         }
