@@ -220,7 +220,9 @@ sub GetOverdueIssues {
                 JOIN biblio USING (biblionumber)
                 JOIN branches ON (issues.branchcode = branches.branchcode)
                 JOIN overduerules USING (categorycode)
+                JOIN overduerules_transport_types USING ( overduerules_id )
                 WHERE ( overduerules.branchcode = borrowers.branchcode or overduerules.branchcode = '')
+                AND overduerules_transport_types.message_transport_type = 'phone'
                 AND ( (TO_DAYS(NOW())-TO_DAYS(date_due) ) = delay1
                   OR  (TO_DAYS(NOW())-TO_DAYS(date_due) ) = delay2
                   OR  (TO_DAYS(NOW())-TO_DAYS(date_due) ) = delay3 )
