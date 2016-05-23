@@ -34,10 +34,10 @@
                             [% IF message == 'valid_payment' %]
                                 <p>Your payment of $[% message_value %] has been processed successfully!</p>
                             [% ELSIF message == 'duplicate_payment' %]
-                                <p>A payment with the transaction id <i>[% message_value %]</i> has already been posted to an account.</p>
+                                <p>A payment with the transaction id '[% message_value %]' has already been posted to an account.</p>
                                 <p>Please contact a librarian for details.</p>
                             [% ELSIF message == 'invalid_payment' %]
-                                <p>The transaction id <i>[% message_value %]</i> for this payment is invalid.</p>
+                                <p>The transaction id '[% message_value %]' for this payment is invalid.</p>
                                 <p>Please contact a librarian for details.</p>
                             [% END %]
                         </div>
