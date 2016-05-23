@@ -3577,6 +3577,7 @@ CREATE TABLE discharges (
 -- This table add the ability to add new fields for a record
 --
 
+DROP TABLE IF EXISTS additional_fields;
 CREATE TABLE `additional_fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT, -- primary key identifier
   `tablename` varchar(255) NOT NULL DEFAULT '', -- tablename of the new field
@@ -3593,6 +3594,7 @@ CREATE TABLE `additional_fields` (
 -- This table store values for additional fields
 --
 
+DROP TABLE IF EXISTS additional_field_values;
 CREATE TABLE `additional_field_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT, -- primary key identifier
   `field_id` int(11) NOT NULL, -- foreign key references additional_fields(id)
