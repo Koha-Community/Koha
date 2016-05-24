@@ -642,16 +642,18 @@ $template->param(
 
 $itemnumber = GetItemnumberFromBarcode( $barcode );
 if ( $itemnumber ) {
-   my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
-    $holdingBranch //= '';
-    $collectionBranch //= $returnbranch;
-    if ( ! ( $holdingBranch eq $collectionBranch ) ) {
-        $template->param(
-          collectionItemNeedsTransferred => 1,
-          collectionBranchName => GetBranchName($collectionBranch),
-          collectionBranch => $collectionBranch,
-          itemnumber => $itemnumber,
-        );
+    my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
+    if ( $holdingBranch and $collectionBranch ) {
+        $holdingBranch //= '';
+        $collectionBranch //= $returnbranch;
+        if ( ! ( $holdingBranch eq $collectionBranch ) ) {
+            $template->param(
+              collectionItemNeedsTransferred => 1,
+              collectionBranchName => GetBranchName($collectionBranch),
+              collectionBranch => $collectionBranch,
+              itemnumber => $itemnumber,
+            );
+        }
     }
 }
 
