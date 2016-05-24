@@ -796,7 +796,12 @@ our $PERL_DEPS = {
         'usage'    => 'Test code coverage',
         'required' => '0',
         'min_ver'  => '0.11',
-    }
+    },
+    'DBIx::RunSQL' => {
+        'usage'    => 'Load SQL files',
+        'required' => '1',
+        'min_ver'  => '0.14',
+    },
 };
 
 1;
