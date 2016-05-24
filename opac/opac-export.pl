@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::Record;
 use C4::Auth;
@@ -107,11 +106,15 @@ else {
             -charset    => 'utf-8',
             -attachment =>  "bib-$biblionumber.txt"
         );
-    }else{
+    } else {
+        binmode STDOUT, ':encoding(UTF-8)';
         print $query->header(
             -type => 'application/octet-stream',
-            -charset=>'utf-8',
-            -attachment=>"bib-$biblionumber.$format");
+            -charset => 'utf-8',
+            -attachment => "bib-$biblionumber.$format"
+        );
     }
     print $marc;
 }
+
+1;
