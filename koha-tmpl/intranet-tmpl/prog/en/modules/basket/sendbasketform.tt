@@ -7,7 +7,7 @@
 
 	[% IF ( SENT ) %]
         <h3>Message sent</h3>
-	    <p>The cart was sent to: [% email_add %]</p>
+        <p>The cart was sent to: [% email_add |html %]</p>
 		<p><a class="focus close" href="#">Close window</a></p>
 	[% END %]
 	[% IF ( error ) %]
