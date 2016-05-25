@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inlibro-fr-CA-i-staff-t-prog-v-30611\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-16 18:12-0300\n"
-"PO-Revision-Date: 2016-04-25 13:56+0000\n"
+"POT-Creation-Date: 2016-05-17 08:42-0300\n"
+"PO-Revision-Date: 2016-05-02 13:34+0000\n"
 "Last-Translator: François <francharb@gmail.com>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1461592590.000000\n"
+"X-POOTLE-MTIME: 1462196058.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -6575,17 +6575,21 @@ msgid ""
 "enter a list of those numbers in the box provided. Once you submit the form "
 "you will be presented with a summary of the records you are trying to delete."
 msgstr ""
+"Tout d'abord, vous devez indiquer à l'outil si vous souhaitez supprimer des "
+"notices bibliographiques ou d'autorité. Ensuite, vous pouvez soit charger un "
+"fichier de numéro de notice ou d'identifiant d'autorité, soit saisir ces "
+"identifiants dans le champ dédié. Dés que vous aurez soumis le formulaire, "
+"un résumé des notices que vous souhaitez supprimer vous sera présenté."
 
 #: intranet-tmpl/prog/en/modules/help/authorities/merge.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "First you will be asked which of the two records you would like to keep as "
 "your primary record and which will be deleted after the merge."
 msgstr ""
-"Une fois que vous avez sélectionné les notices que vous voulez fusionner, "
-"cliquez sur Fusionner. Vous devrez choisir laquelle des deux notices vous "
-"voudrez garder en tant que notice primaire at laquelle sera supprimée après "
-"la fusion."
+"Tout d'abord, vous devrez choisir laquelle des deux notices vous voudrez "
+"garder en tant que notice primaire et laquelle sera supprimée après la "
+"fusion."
 
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course-reserves.tt:11
 #, c-format
@@ -6593,6 +6597,8 @@ msgid ""
 "First you will need to enable course reserves by setting the "
 "UseCourseReserves preference to 'Use'."
 msgstr ""
+"Dans un premier temps, vous devrez activer les réserves de cours en "
+"paramétrant la préférence système UseCourseReserves avec l'option 'Utiliser'."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:11
 #, c-format
@@ -6662,6 +6668,10 @@ msgid ""
 "the call number subfield. Simply choose the cn_browser.pl plugin. Learn more "
 "in the cataloging section of the manual."
 msgstr ""
+"Pour les cotes, il y a une option qui permet d'ajouter un outil pour "
+"parcourir les cotes à côté de la sous-zone cote. Pour cela, il suffit "
+"d'utiliser le plugin 'cn_browser.pl'. Pour en savoir plus, consultez la "
+"section Catalogage du manuel. "
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:34
 #, c-format
@@ -6689,15 +6699,19 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:111
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid "For each subfield you can set the following Advanced constraint values "
-msgstr "Pour chaque sous-champ vous pouvez choisir&nbsp;: "
+msgstr ""
+"Pour chaque sous-champ vous pouvez paramétrer les contraintes avancées "
+"suivantes "
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:78
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "For each subfield you can set the following Basic constraint values "
-msgstr "Pour chaque sous-champ vous pouvez choisir&nbsp;: "
+msgstr ""
+"Pour chaque sous-zone vous pouvez paramétrer les contraintes de base "
+"suivantes "
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:146
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:92
@@ -6761,6 +6775,9 @@ msgid ""
 "you need to set up \"inner counter = 0\" But if it's \"vol. 4, no. 2, iss. "
 "797\", the inner counter should be \"1\"."
 msgstr ""
+"Par exemple : si le premier numéro à recevoir est \"vol. 4, no. 1, fasc. "
+"796\", vous devez paramétrer le compteur interne à \"0\". Mais si c'est le "
+"\"vol. 4, no. 2, fasc. 797\", le compteur interne doit être \"1\"."
 
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:5
 #, c-format
@@ -6853,6 +6870,7 @@ msgstr ""
 #, c-format
 msgid "Force: Will only allow patrons to choose an specific item"
 msgstr ""
+"Forcer : Ne permettra aux utilisateur que de choisir un exemplaire spécifique"
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:40
 #, c-format
@@ -6861,11 +6879,11 @@ msgstr "Format "
 
 #. %1$s:  themelang 
 #: intranet-tmpl/prog/en/modules/help/labels/spinelabel-home.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid "Format your label printing by editing spinelabel.css found in %s/css/"
 msgstr ""
-"Formatez l'impression de vos étiquettes en modifiant le fichier spinelabel."
-"css qui se trouve dans koha-tmpl/intranet-tmpl/prog/en/css/"
+"Formatez l'impression de vos étiquettes en modifiant le fichier \"spinelabel."
+"css\" qui se trouve dans %s/css/"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:59
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:5
@@ -6919,13 +6937,14 @@ msgstr ""
 "tard."
 
 #: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "From here you can add custom search fields to the item search option in the "
 "staff client."
 msgstr ""
-"Ici vous pouvez télécharger un fichier qui sera associé à la fiche de "
-"l'adhérent."
+"À partir de cette page, vous pouvez ajouter des zones personnalisées de "
+"recherche à l'option de recherche des exemplaires de l'interface "
+"professionnelle."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:7
 #, c-format
@@ -6950,6 +6969,16 @@ msgid ""
 "will look at the itemnumbers and barcodes to match on for items. Itemnumbers "
 "take precedence over barcodes), or Ignore items and not add them."
 msgstr ""
+"À partir de cette page, vous pouvez choisir de toujours ajouter les "
+"exemplaires sans égard pour le statut de correspondance, de les ajouter "
+"seulement si une notice bibliographique correspondante à été trouvée, "
+"d'ajouter les exemplaires seulement si aucune notice bibliographique "
+"correspondante n'a été trouvée, de remplacer les exemplaires si une notice "
+"bibliographique correspondante à été trouvée (La correspondance regardera "
+"les numéros internes d'exemplaire et les code à barres pour trouver une "
+"correspondance sur l'exemplaire. Les numéros internes d'exemplaire ont "
+"préséance sur les codes à barres.), ou d'ignorer les exemplaires et de ne "
+"pas les ajouter."
 
 #: intranet-tmpl/prog/en/modules/help/serials/serials-collection.tt:7
 #, c-format
@@ -6959,12 +6988,12 @@ msgstr ""
 "bien d'en recevoir de nouveaux."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-detail.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "From here you can edit your subscription, renew it and/or receive issues."
 msgstr ""
-"Vous pouvez ici modifier vos abonnement, le renouveler et/ou bulletiner des "
-"fascicules."
+"À partir de cette page, vous pouvez modifier vos abonnement, le renouveler "
+"et/ou pointer les fascicules reçus."
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:31
 #, c-format
@@ -7006,6 +7035,10 @@ msgid ""
 "you can also create a purchase suggestion on the patron's behalf by clicking "
 "the 'New purchase suggestion' button at the top."
 msgstr ""
+"À partir de cette page, vous pouvez voir toutes les suggestions qui ont été "
+"faites par les lecteurs ainsi que leurs statuts, vous pouvez également créer "
+"une suggestion d'achat au nom d'un utilisateur en utilisant le bouton en "
+"haut 'Nouvelle suggestion d'achat'."
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
@@ -7064,13 +7097,14 @@ msgstr ""
 "adhérent en utilisant les options au bas de la liste des réservations."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:48
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "From the list of files you are presented with, choose the 'Add orders' link "
 "to add the records in the staged file to your order."
 msgstr ""
-"Dans la liste des fichiers qui vous est présentée, choisissez le lien "
-"'Ajouter les commandes'. "
+"Dans la liste des fichiers qui vous est présentée, cliquez sur le lien "
+"'Ajouter les commandes' pour ajouter les notices du fichier importé à votre "
+"commande."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/addorderiso2709.tt:6
 #, c-format
@@ -7155,12 +7189,18 @@ msgid ""
 "of the collection you wish to transfer; choose the library you wish to "
 "transfer the collection to and click \"Transfer collection\"."
 msgstr ""
+"Depuis la page principale des collections tournantes, cliquer sur Transférer "
+"à côté du titre de la collection que vous souhaitez transférer; choisissez "
+"la bibliothèque vers laquelle vous souhaitez transférer la collection et "
+"cliquez sur \"Transférer la collection\"."
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "From the main Z39.50/SRU page, click 'New Z39.50 Server' or 'New SRU server'."
-msgstr "Dans la page principale Z39.50, cliquez sur 'Ajouter serveur Z39.50'. "
+msgstr ""
+"Dans la page principale Z39.50/SRU, cliquez sur 'Ajouter serveur Z39.50' ou "
+"'Ajouter serveur SRU'. "
 
 #: intranet-tmpl/prog/en/modules/help/course_reserves/course.tt:7
 #, c-format
@@ -7168,6 +7208,8 @@ msgid ""
 "From the main course reserves page you can add a new course by clicking the "
 "'New course' button at the top left."
 msgstr ""
+"Depuis la page d'accueil des resserves de cours, vous pouvez ajouter un "
+"nouveau cours en cliquant sur le bouton 'Nouveau cours' en haut à gauche."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:37
 #, c-format
@@ -7203,13 +7245,13 @@ msgstr ""
 "reporter dans votre notice bibliographique."
 
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "From the results you can choose the 'Import' link to the right of the record "
 "you would like to add to Koha"
 msgstr ""
-"Dans la page de résultats, vous pouvez avoir une vue MARC ou Carte des "
-"notices ou choisir de les importer dans Koha. "
+"Depuis la page des résultats, vous pouvez cliquer sur le lien 'Importer' à "
+"la droite de la notice que vous souhaitez ajouter à Koha"
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:105
 #, c-format
@@ -7413,14 +7455,14 @@ msgstr ""
 "corriger. Vous pouvez également l'accepter ou la rejeter."
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "From this list you can edit any custom report by clicking 'Actions' to the "
 "right of the report and choosing 'Edit' from the menu that appears."
 msgstr ""
 "A partir de cette liste, vous pouvez modifier n'importe quel rapport "
-"personnalisé en cliquant sur 'Modifier' dans la colonne 'Requête SQL "
-"sauvegardée'"
+"personnalisé en cliquant sur 'Actins' à la droite du rapport, puis sur "
+"'Modifier' dans le menu qui apparait."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:99
 #, c-format
@@ -7447,6 +7489,8 @@ msgid ""
 "From this page you can view all of the existing frequencies in your system "
 "and create new ones."
 msgstr ""
+"Depuis cette page, vous pouvez visualiser toutes les fréquences qui ont été "
+"paramétrées dans votre système et en créer de nouvelles."
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search-history.tt:7
 #, c-format
@@ -7454,12 +7498,15 @@ msgid ""
 "From this page you will see your bibliographic search history and your "
 "authority search history."
 msgstr ""
+"Depuis cette page, vous aurez votre historique de recherche de notice "
+"bibliographique et celui de recherche d'autorité. "
 
 #: intranet-tmpl/prog/en/modules/help/authorities/merge.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "From this screen you can choose to merge two authority records."
 msgstr ""
-"Finalement, vous pouvez choisir jusqu'à deux images à imprimer sur la carte. "
+"À partir de cet écran, vous pourrez choisir de fusionner deux notices "
+"d'autorité."
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/moredetail.tt:11
 #, c-format
@@ -7472,10 +7519,10 @@ msgstr ""
 "'Définir statut'."
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgets.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "Fund Code is a unique identifier for your fund"
 msgstr ""
-"Le 'Code du poste budgétaire' est un identifiant unique pour le poste "
+"Le code du poste budgétaire est un identifiant unique pour le poste "
 "budgétaire."
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgets.tt:3
@@ -7489,6 +7536,9 @@ msgid ""
 "Funds with children will show with a small arrow to the left. Clicking that "
 "will show you the children funds."
 msgstr ""
+"Les postes budgétaires avec des enfants apparaitront avec une petite flèche "
+"sur la gauche. En cliquant sur celle-ci, vous ferez apparaitre les postes "
+"budgétaires enfants."
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:21
 #, c-format
@@ -7590,9 +7640,9 @@ msgid "Granular Holds Permissions"
 msgstr "Permissions fines sur les réservations"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
-#, fuzzy, c-format
+#, c-format
 msgid "Granular Lists Permissions"
-msgstr "Permissions fines sur les rapports"
+msgstr "Permissions fines sur les listes "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:162
 #, c-format
@@ -7646,6 +7696,8 @@ msgstr ""
 msgid ""
 "Here are some other places to look for more information about how to proceed:"
 msgstr ""
+"Vous trouverez ici d'autres ressources pour obtenir plus d'information sur "
+"les procédures à suivre :"
 
 #: intranet-tmpl/prog/en/modules/help/admin/oai_set_mappings.tt:5
 #, c-format
@@ -7699,7 +7751,7 @@ msgid "Holds awaiting pickup"
 msgstr "Réservations mises de coté"
 
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:43
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Holds can be altered and cancelled from the Holds tab found on the left of "
 "the bibliographic record."
@@ -7730,7 +7782,7 @@ msgstr "Calendriers des fermetures"
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:58
 #, c-format
 msgid "Host"
-msgstr ""
+msgstr "Hôte"
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:13
 #, c-format
@@ -7745,7 +7797,7 @@ msgstr "Internationalisation&nbsp;:"
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:24
 #, c-format
 msgid "IMPORTANT:"
-msgstr ""
+msgstr "IMPORTANT :"
 
 #: intranet-tmpl/prog/en/modules/help/admin/admin-home.tt:13
 #, c-format
@@ -7763,6 +7815,9 @@ msgid ""
 "IP Address does not have be filled in unless you plan on limiting access to "
 "your staff client to a specific IP Address "
 msgstr ""
+"L'adresse IP n'a pas besoin d'être complétée sauf si vous avez l'intention "
+"de limiter l'accès à l'interface client en fonction d'un adresse IP "
+"spécifique "
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:67
 #, c-format
@@ -7792,13 +7847,13 @@ msgstr ""
 "cliqué."
 
 #: intranet-tmpl/prog/en/modules/help/admin/auth_subfields_structure.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If 'Repeatable' is checked, the field will have a plus sign next to it in "
 "the MARC cataloging module which allows you to add multiples of that tag."
 msgstr ""
-"Si vous cochez 'Répétable' en saisie, il y aura un signe plus à côté de ce "
-"champ MARC grâce auquel vous pourrez entrer des répétitions de ce champ."
+"Si vous cochez 'Répétable', il y aura un signe plus à côté de ce champ dans "
+"le module catalogage grâce auquel vous pourrez répéter ce champ."
 
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:30
 #, c-format
@@ -7818,6 +7873,10 @@ msgid ""
 "selected based on the item's library where HomeOrHoldingBranch chooses if "
 "item's home library is used or holding library is used."
 msgstr ""
+"Si CircControl est égale à \"la bibliothèque de l'exemplaire\", les règles "
+"de circulations seront paramétrées en fonction de celle-ci. La préférence "
+"sytème HomeOrHoldingBranch indiquera si la bibliothèque propriétaire ou "
+"dépositaire de l'exemplaire doit être utilisée."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:24
 #, c-format
@@ -7825,6 +7884,8 @@ msgid ""
 "If CircControl is set to \"the library the patron is from\" circ rules will "
 "be selected based on the patron's library"
 msgstr ""
+"Si CircControl est égale à \"la bibliothèque de l'utilisateur\", les règles "
+"de circulation seront paramétrées en fonction de celle-ci."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:23
 #, c-format
@@ -7832,6 +7893,8 @@ msgid ""
 "If CircControl is set to \"the library you are logged in at\" circ rules "
 "will be selected based on the library you are logged in at"
 msgstr ""
+"Si CircControl est égale à \"la bibliothèque à laquelle on est connecté\", "
+"les règles de circulation seront paramétrées en fonction de celle-ci."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:26
 #, c-format
@@ -7841,6 +7904,12 @@ msgid ""
 "If the item's home library does not match the logged in library, the item "
 "cannot be checked out unless you are a superlibrarian."
 msgstr ""
+"Si IndependentBranches est égale à 'Empêcher', la valeur de "
+"HomeOrHoldingBranch est alors utilisée pour déterminer si l'exemplaire peut "
+"être emprunté. Si la bibliothèque propriétaire de l'exemplaire est "
+"différente de la bibliothèque à laquelle vous êtes connectée, l'exemplaire "
+"ne pourra pas être prêté à moins que vous ayez les permissions "
+"'superlibrarian'."
 
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:17
 #, c-format
@@ -7848,9 +7917,9 @@ msgid ""
 "If RoutingListAddReserves is set to on then patrons listed in the routing "
 "list will automatically be added to the holds list for the issue."
 msgstr ""
-"Si la préférence système RoutingListAddReserves est activée, les adhérents "
-"de la liste de circulation seront ajoutés automatiquement à la liste des "
-"réservations du fascicule."
+"Si RoutingListAddReserves est activée, les adhérents de la liste de "
+"circulation seront ajoutés automatiquement à la liste des réservations de ce "
+"fascicule."
 
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:61
 #, c-format
@@ -7870,6 +7939,8 @@ msgstr ""
 #, c-format
 msgid "If a record you want to delete can't be deleted it will be highlighted."
 msgstr ""
+"Si une notice que vous souhaitez supprimer ne peut pas être supprimée, elle "
+"sera mise en évidence."
 
 #: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:33
 #, c-format
@@ -7879,6 +7950,11 @@ msgid ""
 "notifying library staff that the item is part of a rotating collection, also "
 "letting them know where the item needs to be sent."
 msgstr ""
+"Si un exemplaire d'une collection tournante est retourné dans une "
+"bibliothèque différente de celle dans laquelle il a été transféré, une "
+"notification indiquera au personnel de la bibliothèque que l'exemplaire fait "
+"parti d'une collection tournante et leur précisera dans quelle bibliothèque "
+"l'exemplaire doit être envoyé."
 
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:11
 #, c-format
@@ -7886,6 +7962,8 @@ msgid ""
 "If columns are hidden they will be checked off and hidden when you view the "
 "table."
 msgstr ""
+"Si des colonnes sont cachées, elles seront décochées et cachées quand le "
+"tableau sera affiché."
 
 #: intranet-tmpl/prog/en/modules/help/tools/cleanborrowers.tt:18
 #, c-format
@@ -7893,7 +7971,7 @@ msgid ""
 "If deleting patrons you can also choose to find patrons with a specific "
 "expiration date or category"
 msgstr ""
-"Lors de la suppression d'adhérents vous pouvez aussi choisir de les chercher "
+"Si vous supprimez des adhérents, vous pouvez aussi choisir de les chercher "
 "avec une date d'expiration précise ou une catégorie"
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:63
@@ -7902,14 +7980,15 @@ msgid ""
 "If everything seems correct click 'OK' and the unreceived orders and, if "
 "selected, unspent funds will be moved."
 msgstr ""
+"Si tout semble correct, cliquez sur 'OK' et les commandes non reçues et, si "
+"sélectionnés, les postes budgétaires non dépensés seront déplacés."
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:89
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:35
 #, c-format
 msgid "If left empty, the text for librarian is used instead"
 msgstr ""
-"S'il est vide, c'est le texte pour les bibliothécaires qui est utilisé  à la "
-"place"
+"Si laissé vide, le texte pour les bibliothécaires est utilisé  à la place"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:30
 #, c-format
@@ -7917,8 +7996,8 @@ msgid ""
 "If more than one library subscribes to this serial you will need to create a "
 "subscription for each library"
 msgstr ""
-"Si plus d'un site à un abonnement à ce périodique, il faut créer un "
-"abonnement par site."
+"Si plus d'un site s'abonnent à ce périodique, il faut créer un abonnement "
+"par site"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:51
 #, c-format
@@ -7927,6 +8006,9 @@ msgid ""
 "information the 'Default accounting details' tab can be used to apply values "
 "related to the accounting."
 msgstr ""
+"Si aucune information sur les budgets n'est importée depuis la notice MARC, "
+"l'onglet 'Détails financiers par défaut' peut être utilisé pour ajouter les "
+"détails financiers de la commande."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:47
 #, c-format
@@ -7945,6 +8027,8 @@ msgid ""
 "If not then you'll see an error explaining why you can't discharge the "
 "patron."
 msgstr ""
+"Sinon vous verrez un message d'erreur expliquant pourquoi le lecteur ne peut "
+"recevoir de quittance."
 
 #: intranet-tmpl/prog/en/modules/help/circ/offline.tt:5
 #, c-format
@@ -7953,6 +8037,9 @@ msgid ""
 "staff can continue to perform circulation actions within Koha when the "
 "system is offline. "
 msgstr ""
+"Si la préférence AllowOfflineCirculation est égale à 'Permettre', le "
+"personnel de la bibliothèque peut continuer à enregistrer des opérations de "
+"circulation dans Koha quand le système est hors-ligne. "
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:40
 #, c-format
@@ -7969,6 +8056,8 @@ msgid ""
 "If the URL field is populated then the library name will be linked in the "
 "holdings table on the OPAC"
 msgstr ""
+"Si le champ URL est saisi, il y aura alors un lien sur le nom de la "
+"bibliothèque dans les infos d'exemplaire à l'OPAC"
 
 #: intranet-tmpl/prog/en/modules/help/authorities/detail.tt:15
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities-home.tt:15
@@ -7989,6 +8078,9 @@ msgid ""
 "be presented with an error. Otherwise the item is renewed and you will "
 "receive a confirmation message."
 msgstr ""
+"Si le code à barres n'est pas trouvé ou si l'exemplaire n'est pas en prêt, "
+"un message d'erreur sera affiché. Sinon, l'exemplaire est renouvelé et vous "
+"aurez un message de confirmation."
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:15
 #, c-format
@@ -8097,6 +8189,8 @@ msgid ""
 "If the patron can have a discharge generated then it will have a button that "
 "says 'Generate discharge'"
 msgstr ""
+"Si une quittance peut être générée par un utilisatateur, un bouton indiquant "
+"'Générer quittance' apparaîtra"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:78
 #, c-format
@@ -8126,6 +8220,8 @@ msgid ""
 "If the patron has made any purchase suggestions you will see a purchase "
 "suggestions tab on the patron record."
 msgstr ""
+"Si le lecteur a fait des suggestions d'achat, vous verrez un onglet "
+"'Suggestion d'achat' dans son compte."
 
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:29
 #, c-format
@@ -8257,6 +8353,8 @@ msgid ""
 "If the staff member has the right permission they can override the "
 "restriction temporarily"
 msgstr ""
+"Si les membres du personnel a les bonnes permissions, ils pourront "
+"outrepasser les restrictions temporairement"
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:81
 #, c-format
@@ -8372,17 +8470,17 @@ msgstr ""
 "à la même date'"
 
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If this is your first time logging into Koha, you should now go to Koha "
 "Administration and set up all system preferences, patron categories, item "
 "types and libraries. You should also review the other settings found in "
 "Administration."
 msgstr ""
-"Si c'est votre première connexion à Koha, vous devriez maintenant aller dans "
-"la section administration et définir tous les paramètres qui vous "
-"intéressent, et plus particulièrement les catégories d'adhérents et les "
-"types de document. &nbsp;"
+"Si c'est votre première connexion à Koha, vous devriez aller maintenant dans "
+"le module Administration et paramétrer les préférences systèmes, les "
+"catégories d'adhérents, les types de document et les bibliothèques. Vous "
+"devriez également réviser les autres paramétrages disponibles dans le module."
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:37
 #, c-format
@@ -8471,15 +8569,16 @@ msgstr ""
 "vous devez passer la commande en utilisant ce lien."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you are a single library system choose your branch name before creating "
 "rules (sometimes having only rules for the 'all libraries' option can cause "
 "issues with holds)"
 msgstr ""
-"À savoir&nbsp;: Si vous ne gérez qu'un seul site, choisissez le nom de votre "
-"site avant de créer les règles. En effet, parfois, on peut avoir des "
-"problèmes avec les réservations quand on choisit l'option Tous les sites."
+"Si vous ne gérez qu'un seul site, choisissez le nom de votre site avant de "
+"créer les règles de circulation (parfois, on observe des problèmes avec les "
+"réservations quand les règles de circulation ne sont paramétrées qu'avec "
+"l'option 'Tous les sites')"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:66
 #, c-format
@@ -8545,17 +8644,18 @@ msgstr ""
 "vos mains."
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:18
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you are checking items in that were put in the book drop while the "
 "library was closed you can check the 'Book drop mode' box before scanning "
 "items. This will effectively roll back the returned date to the last date "
 "the library was open."
 msgstr ""
-"Si vous rendez les exemplaires qui ont été placés dans la boîte de retour "
-"alors que la bibliothèque été fermée, avant de scanner les codes à barres, "
-"cochez l'option 'Mode boîte de retour'. Ainsi la date de retour effective "
-"sera celle du dernier jour d'ouverture de la bibliothèque."
+"Si vous faites des retours sur les exemplaires qui ont été déposés dans la "
+"boîte de retour alors que la bibliothèque était fermée, cochez l'option "
+"'Mode boîte de retour' avant de scanner les codes à barres. Ainsi, la date "
+"de retour effective sera celle du dernier jour d'ouverture de la "
+"bibliothèque."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:5
 #, c-format
@@ -8574,6 +8674,8 @@ msgid ""
 "If you are looking for specific items you can use the item search engine in "
 "the staff client to find them."
 msgstr ""
+"Si vous recherchez des informations d'exemplaire, vous pouvez utiliser la "
+"recherche exemplaire dans l'interface professionnelle"
 
 #: intranet-tmpl/prog/en/modules/help/admin/admin-home.tt:11
 #, c-format
@@ -8620,6 +8722,9 @@ msgid ""
 "you'll have a report to view all items that are currently checked out on "
 "site."
 msgstr ""
+"Si vous utilisez la fonctionnalité du prêt sur place, vous aurez alors un "
+"rapport pour voir tous les exemplaires qui sont actuellement prêtés sur "
+"place."
 
 #: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:38
 #, c-format
@@ -8714,6 +8819,8 @@ msgid ""
 "If you checked out an item for on site use you will see that highlighted in "
 "red in the checkout summary."
 msgstr ""
+"Si vous prêtez un exemplaire sur place, vous le verrez surligné en rouge "
+"dans la liste des prêts."
 
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:35
 #, c-format
@@ -8758,14 +8865,15 @@ msgstr ""
 "commande."
 
 #: intranet-tmpl/prog/en/modules/help/authorities/authorities.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you choose to enter a new authority from scratch, the form that appears "
 "will allow you to enter all of the necessary details regarding your "
 "authority record."
 msgstr ""
-"Le formulaire qui s'affiche vous permet de saisir tous les détails "
-"nécessaires concernant votre notice autorité."
+"Si vous choisissez d'entrer une nouvelle autorité en partant de zéro, le "
+"formulaire qui s'affiche vous permet de saisir tous les détails nécessaires "
+"concernant votre notice autorité."
 
 #: intranet-tmpl/prog/en/modules/help/reports/issues_avg_stats.tt:7
 #: intranet-tmpl/prog/en/modules/help/reports/borrowers_out.tt:7
@@ -8803,6 +8911,9 @@ msgid ""
 "automatically remove that restriction with the "
 "AutoRemoveOverduesRestrictions preference."
 msgstr ""
+"Si vous choisissez de restreindre un utilisateur de cette manière, vous "
+"pouvez également paramétrer Koha pour que la restriction soit enlever "
+"automatiquement avec la préférence AutoRemoveOverduesRestriction."
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:27
 #, c-format
@@ -8820,6 +8931,8 @@ msgid ""
 "If you choose to search another library for the authority record you will be "
 "presented with a search box"
 msgstr ""
+"Si vous choisissez de rechercher la notice d'autorité dans une autre "
+"bibliothèque, une zone de recherche s'affichera"
 
 #: intranet-tmpl/prog/en/modules/help/admin/classsources.tt:14
 #, c-format
