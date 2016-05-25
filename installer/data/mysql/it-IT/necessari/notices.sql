@@ -6,10 +6,15 @@ VALUES ('circulation','ODUE','Avviso per i ritardi','Avviso per i ritardi','Salv
 ('circulation','DUE','Avviso restituzione (copia singola)','Avviso restituzione (copia singola)','Salve <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nQuesto prestito è ora in ritardo:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)', 'email'),
 ('circulation','DUEDGST','Avviso restituzione (digest)','Avviso restituzione (digest)','Hai <<count>> prestiti da retituire', 'email'),
 ('circulation','PREDUE','Preavviso scadenza prestito','Preavviso scadenza prestito','Salve <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nQuesti prestiti stanno per scadere:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)', 'email'),
-('circulation','PREDUEDGST','Preavviso scadenza prestiti (digest)','Preavviso scadenza prestiti (digest)','Hai <<count>> prestiti che scadranno tra poco', 'email'),
-('circulation','RENEWAL','Item Renewals','Item Renewals','The following items have been renewed:\r\n----\r\n<<
-biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.', 'email'),
-('reserves', 'HOLD', 'Prenotazione disponibile per il ritiro', 'Prenotazione disponibile per il ritiro a <<branches.branchname>>', 'Salve <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nHai una prenotazione disponibili per il ritiro fino al <<reserves.waitingdate>>:\r\n\r\nTitolo: <<biblio.title>>\r\nAutore: <<biblio.author>>\r\nCopia n. : <<items.copynumber>>\r\nPresso: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>\r\n<<branches.branchcity>> <<branches.branchzip>>', 'email'),
+('circulation','PREDUEDGST','Preavviso scadenza prestiti (digest)','Avviso copie in scadenza','Gentile <<borrowers.firstname>> <<borrowers.surname>>,
+Il prestito dei seguenti volumi sta per scadere:
+
+<<items.content>>
+
+<<branches.branchname>>', 'email'),
+('circulation','RENEWAL','Rinnovi','Rinnovi','Per le seguenti copie sono stati rinnovati i prestiti:\r\n----\r\n<<
+biblio.title>>\r\n----\r\nGrazie per aver visitaro <<branches.branchname>>.', 'email'),
+('reserves', 'HOLD', 'Prenotazione disponibile per il ritiro', 'Prenotazione disponibile per il ritiro a <<branches.branchname>>', 'Salve <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nHai una prenotazione disponibile per il ritiro fino al <<reserves.waitingdate>>:\r\n\r\nTitolo: <<biblio.title>>\r\nAutore: <<biblio.author>>\r\nCopia n. : <<items.copynumber>>\r\nPresso: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>\r\n<<branches.branchcity>> <<branches.branchzip>>', 'email'),
 ('reserves', 'HOLD', 'Prenotazione disponibile per il ritiro (stampa)', 'Prenotazione disponibile per il ritiro (stampa)', '<<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n\r\n\r\nPrenotazione disponibile per il ritiro\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>>\r\n<<borrowers.address>>\r\n<<borrowers.city>> <<borrowers.zipcode>>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>> <<borrowers.cardnumber>>\r\n\r\nHai una prenotazione disponibili per il ritiro fino al <<reserves.waitingdate>>:\r\n\r\nTitolo: <<biblio.title>>\r\nAutore: <<biblio.author>>\r\nCopia n. : <<items.copynumber>>\r\n', 'print'),
 ('circulation','CHECKIN','Restituzione (Digest)','Restituzione','Questi prestiti sono stati restituiti:\r\n----\r\n<<biblio.title>>\r\n----\r\nGrazie.', 'email'),
 ('circulation','CHECKOUT','Prestiti','Prestiti','Ti sono stati dati in prestito:\r\n----\r\n<<biblio.title>>\r\n----\r\nGrazie da parte di <<branches.branchname>>.', 'email'),
@@ -18,8 +23,8 @@ biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.', 'ema
 ('suggestions','AVAILABLE','Suggerimento d\'acquisto disponibile', 'Suggerimento d\'acquisto disponibile','Salve <<borrowers.firstname>> <<borrowers.surname>>,\n\nHai suggerito di acquistare <<suggestions.title>> di <<suggestions.author>>.\n\nTi informiamo che la copia è arrivata in biblioteca.\n\nSe hai domande, scrivici pure all\' email <<branches.branchemail>>.\n\nGrazie di tutto,\n\n<<branches.branchname>>', 'email'),
 ('suggestions','ORDERED','Suggerimento d\'acquisto ordinato', 'Suggerimento d\'acquisto ordinato','Salve <<borrowers.firstname>> <<borrowers.surname>>,\n\nHai suggerito di acquistare <<suggestions.title>> di <<suggestions.author>>.\n\nTi informiamo che l\'ordine è stata inviato al fornitore della biblioteca. Dovrebbe arrivare in poco tempo, poi verrà aggiunto alla collezione della biblioteca.\n\nRiceverai un\'altra email quando sarà disponibile.\n\nSe hai domande, scrivici pure all\' email <<branches.branchemail>>\n\nGrazie di tutto,\n\n<<branches.branchname>>', 'email'),
 ('suggestions','REJECTED','Suggerimento d\'acquisto rifiutato', 'Suggerimento d\'acquisto rifiutato','Salve <<borrowers.firstname>> <<borrowers.surname>>,\n\nHai suggerito di acquistare <<suggestions.title>> di <<suggestions.author>>.\n\na biblioteca ha revisionato il suggerimento oggi e ha deciso di non seguire il suggerimento.\n\nLa motivazione è: <<suggestions.reason>>\n\nSe hai domande, scrivici pure all\' email <<branches.branchemail>>.\n\nGrazie di tuttp,\n\n<<branches.branchname>>', 'email'),
-('suggestions','TO_PROCESS','Notify fund owner', 'A suggestion is ready to be processed','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nA new suggestion is ready to be processed: <<suggestions.title>> by <<suggestions.author>>.\n\nThank you,\n\n<<branches.branchname>>', 'email'),
-('members', 'DISCHARGE', 'Discharge', 'Discharge for <<borrowers.firstname>> <<borrowers.surname>>', '<h1>Discharge</h1>\r\n\r\nThe library <<borrowers.branchcode>> certifies that the following borrower :\r\n\r\n    <<borrowers.firstname>> <<borrowers.surname>>\r\n   Cardnumber : <<borrowers.cardnumber>>\r\n\r\nreturned all his documents.', 'email');
+('suggestions','TO_PROCESS','Notifica al proprietario del fondo', 'Un suggeerimento è pronto per essere lavorato','Caro bibliotecario <<borrowers.firstname>> <<borrowers.surname>>,\n\n c\'è un nuovo suggerimento pronto per essere lavorato: <<suggestions.title>> by <<suggestions.author>>.\n\n Grazie dell\'attenzione,\n\n<<branches.branchname>>', 'email'),
+('members', 'DISCHARGE', 'Liberatoria', 'Liberatoria per <<borrowers.firstname>> <<borrowers.surname>>', '<h1>Liberatoria</h1>\r\n\r\nLa biblioteca  <<borrowers.branchcode>> certifica che il seguente utente :\r\n\r\n    <<borrowers.firstname>> <<borrowers.surname>>\r\n   Numero tessera : <<borrowers.cardnumber>>\r\n\r\nha restituito tutti i documenti ricevuti.', 'email');
 
 INSERT INTO letter (module, code, name, title, content, is_html)
 VALUES ('circulation','ISSUESLIP','Ricevuta di prestito','Ricevuta di prestito', '<h3><<branches.branchname>></h3>
@@ -71,7 +76,7 @@ Codice a barre: <<items.barcode>><br />
 Data di scadenza: <<issues.date_due>><br />
 </p>
 </checkedout>', 1),
-('circulation','HOLD_SLIP','Hold Slip','Ricevuta (prenotazione)', '<h5>Data: <<today>></h5>
+('circulation','HOLD_SLIP','Ricevuta (prenotazione)','Ricevuta (prenotazione)', '<h5>Data: <<today>></h5>
 
 <h3> Trasferita a/Prenotata in <<branches.branchname>></h3>
 
@@ -112,13 +117,13 @@ Data di scadenza: <<issues.date_due>><br />
 </ul>', 1);
 INSERT INTO `letter` (`module`,`code`,`branchcode`,`name`,`is_html`,`title`,`content`)
 VALUES (
-'members',  'OPAC_REG_VERIFY',  '',  'Opac Self-Registration Verification Email',  '1',  'Verify Your Account',  'Hello!
+'members',  'OPAC_REG_VERIFY',  '',  'Email di verifica dell\'autoregistrazione',  '1',  'Verifica la tua autoregistrazione',  'Ciao!
 
-Your library account has been created. Please verify your email address by clicking this link to complete the signup process:
+Sei stato registrato tra gli utenti della biblioteca. Per favore verifica il tuo email cliccando questo link per finire il processo.
 
 <<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
 
-If you did not initiate this request, you may safely ignore this one-time message. The request will expire shortly.'
+Se non hai fatto tu la richiesta, puoi ignorare questo messaggio. La richciesta scadrà in posco tempo.'
 );
 
 INSERT INTO  letter (module, code, branchcode, name, is_html, title, content)
@@ -147,15 +152,15 @@ Lo staff della biblioteca.'
 );
 
 INSERT INTO letter(module, code, branchcode, name, title, content, message_transport_type)
-VALUES ('acquisition', 'ACQ_NOTIF_ON_RECEIV', '', 'Notification on receiving', 'Order received', 'Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\n The order <<aqorders.ordernumber>> (<<biblio.title>>) has been received.\n\nYour library.', 'email'),
-('members','MEMBERSHIP_EXPIRY','','Account expiration','Account expiration','Dear <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>,.\r\n\r\nYour library card will expire soon, on:\r\n\r\n<<borrowers.dateexpiry>>\r\n\r\nThank you,\r\n\r\nLibrarian\r\n\r\n<<branches.branchname>>','email');
+VALUES ('acquisition', 'ACQ_NOTIF_ON_RECEIV', '', 'Notifica alla ricezione', 'Ordine ricevutod', 'Caro <<borrowers.firstname>> <<borrowers.surname>>,\n\n L\' ordine <<aqorders.ordernumber>> (<<biblio.title>>) è stato ricevuto.\n\nLa tua biblioteca.', 'email'),
+('members','MEMBERSHIP_EXPIRY','','Account in scadenza','La tessera sta per scadere','Caro <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>,.\r\n\r\nLa tessera della biblioteca scadrà tra poco, il: :\r\n\r\n<<borrowers.dateexpiry>>\r\n\r\nGrazie dell\' attenzione,\r\n\r\n<<branches.branchname>>','email');
 
 INSERT INTO letter ( module, code, branchcode, name, is_html, title, content, message_transport_type )
-VALUES ( 'circulation', 'OVERDUES_SLIP', '', 'Overdues Slip', '0', 'OVERDUES_SLIP', 'The following item(s) is/are currently overdue:
+VALUES ( 'circulation', 'OVERDUES_SLIP', '', 'Ritardi (ricevuta)', '0', 'Ricevuta dei ritard', 'Le seguenti copie sono in ritardo:
 
-<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Fine: <<items.fine>></item>
+<item>"<<biblio.title>>" di <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Multa: <<items.fine>></item>
 ', 'print' );
 
 INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, message_transport_type)
-VALUES ('members','PASSWORD_RESET','','Online password reset',1,'Koha password recovery','<html>\r\n<p>This email has been sent in response to your password recovery request for the account <strong><<user>></strong>.\r\n</p>\r\n<p>\r\nYou can now create your new password using the following link:\r\n<br/><a href=\"<<passwordreseturl>>\"><<passwordreseturl>></a>\r\n</p>\r\n<p>This link will be valid for 2 days from this email\'s reception, then you must reapply if you do not change your password.</p>\r\n<p>Thank you.</p>\r\n</html>\r\n','email'
+VALUES ('members','PASSWORD_RESET','','Nuova password',1,'Nuova password','<html>\r\n<p>Questa email ti è stata mandata come risposta allaa tua richiesta di recupero pssword per l\'utente <strong><<user>></strong>.\r\n</p>\r\n<p>\r\nPuoi ora creare una nuova password usando questo link:\r\n<br/><a href=\"<<passwordreseturl>>\"><<passwordreseturl>></a>\r\n</p>\r\n<p>Queso link rimarrà valido per 2 giorni dalla ricezione dell\' email, successivamente dovrai rifare la procedura se non cambi la tua password.</p>\r\n<p>Grazie.</p>\r\n</html>\r\n','email'
 );
