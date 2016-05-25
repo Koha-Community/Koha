@@ -9,8 +9,7 @@ Standards-Version: 3.8.4
 # NOTA BENE: Build dependencies end up as runtime dependencies as well.
 # See debian/rules, the override_dh_gencontrol rules. 
 # There are some exceptions.
-Build-Depends: EEEK: unknown package for DBIx::RunSQL,
- libalgorithm-checkdigits-perl,
+Build-Depends: libalgorithm-checkdigits-perl,
  libanyevent-http-perl,
  libanyevent-perl,
  libarchive-zip-perl,
@@ -43,6 +42,7 @@ Build-Depends: EEEK: unknown package for DBIx::RunSQL,
  libdbd-sqlite2-perl,
  libdbi-perl,
  libdbix-class-schema-loader-perl,
+ libdbix-runsql-perl,
  libdevel-cover-perl,
  libdigest-sha-perl | perl,
  libemail-date-perl,
@@ -137,9 +137,10 @@ Build-Depends: EEEK: unknown package for DBIx::RunSQL,
  libyaml-perl,
  libyaml-syck-perl,
  perl,
- perl-modules, 
+ perl-modules,
  debhelper (>= 7.0.50), gettext, xsltproc, docbook-xsl,
- libxml2-utils, bash-completion, perl-modules (>= 5.14.2) | libtest-simple-perl (>= 0.98)
+ libxml2-utils, bash-completion, perl-modules (>= 5.14.2) | libtest-simple-perl (>= 0.98),
+ libreadonly-perl, libreadonly-xs-perl
 
 Package: koha-common
 Architecture: all
@@ -164,7 +165,7 @@ Depends: ${misc:Depends}, ${koha:Depends},
  yaz
 Suggests: mysql-server | virtual-mysql-server,
  memcached,
-letsencrypt
+ letsencrypt
 Homepage: http://koha-community.org/
 Description: integrated (physical) library management system
  Koha is an Integrated Library Management system for real-world libraries
@@ -255,6 +256,7 @@ Depends: EEEK: unknown package for DBIx::RunSQL,
  libdbd-sqlite2-perl,
  libdbi-perl,
  libdbix-class-schema-loader-perl,
+ libdbix-runsql-perl,
  libdevel-cover-perl,
  libdigest-sha-perl | perl,
  libemail-date-perl,
