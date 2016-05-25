@@ -58,6 +58,8 @@ is(
     'item that is not on loan can be deleted',
 );
 
+$schema->storage->txn_rollback;
+
 # C4::Context->userenv
 sub Mock_userenv {
     return { branch => $library->{branchcode} };
