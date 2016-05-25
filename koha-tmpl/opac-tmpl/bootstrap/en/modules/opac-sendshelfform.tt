@@ -13,7 +13,7 @@
                             [% IF ( SENT ) %]
                                 <h1>Message sent</h1>
                                 <div class="alert alert-success">
-                                    <p>The list was sent to: [% email %]</p>
+                                    <p>The list was sent to: [% email | html %]</p>
                                 </div>
                                 <p><a class="focus close" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelfid %]">Back to lists</a></p>
                             [% END %]
