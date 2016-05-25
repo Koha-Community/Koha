@@ -8,7 +8,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 18;
+use Test::More tests => 20;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -26,6 +26,29 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 my $dbh     = C4::Context->dbh;
+
+my $hash1 = hash_password('password');
+my $hash2 = hash_password('password');
+
+{ # tests no_set_userenv parameter
+    my $patron = $builder->build( { source => 'Borrower' } );
+    changepassword( $patron->{userid}, $patron->{borrowernumber}, $hash1 );
+    my $library = $builder->build(
+        {
+            source => 'Branch',
+        }
+    );
+
+    ok( checkpw( $dbh, $patron->{userid}, 'password', undef, undef, 1 ), 'checkpw returns true' );
+    is( C4::Context->userenv, undef, 'Userenv should be undef as required' );
+    C4::Context->_new_userenv('DUMMY SESSION');
+    C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, 'Library 1', 0, '', '');
+    is( C4::Context->userenv->{branch}, $library->{branchcode}, 'Userenv gives correct branch' );
+    ok( checkpw( $dbh, $patron->{userid}, 'password', undef, undef, 1 ), 'checkpw returns true' );
+    is( C4::Context->userenv->{branch}, $library->{branchcode}, 'Userenv branch is preserved if no_set_userenv is true' );
+    ok( checkpw( $dbh, $patron->{userid}, 'password', undef, undef, 0 ), 'checkpw still returns true' );
+    isnt( C4::Context->userenv->{branch}, $library->{branchcode}, 'Userenv branch is overwritten if no_set_userenv is false' );
+}
 
 # get_template_and_user tests
 
@@ -172,23 +195,5 @@ my ( $template2 );
 ok( ( any { 'OPACBaseURL' eq $_ } keys %{$template2->{VARS}} ),
     'OPACBaseURL is in Staff template' );
 
-my $hash1 = hash_password('password');
-my $hash2 = hash_password('password');
-
 ok(C4::Auth::checkpw_hash('password', $hash1), 'password validates with first hash');
 ok(C4::Auth::checkpw_hash('password', $hash2), 'password validates with second hash');
-
-my $patron = $builder->build( { source => 'Borrower' } );
-changepassword( $patron->{userid}, $patron->{borrowernumber}, $hash1 );
-my $library = $builder->build(
-    {
-        source => 'Branch',
-    }
-);
-
-C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, 'Library 1', 0, '', '');
-is( C4::Context->userenv->{branch}, $library->{branchcode}, 'Userenv gives correct branch' );
-ok( checkpw( $dbh, $patron->{userid}, 'password', undef, undef, 1 ), 'checkpw returns true' );
-is( C4::Context->userenv->{branch}, $library->{branchcode}, 'Userenv branch is preserved if no_set_userenv is true' );
-ok( checkpw( $dbh, $patron->{userid}, 'password', undef, undef, 0 ), 'checkpw still returns true' );
-isnt( C4::Context->userenv->{branch}, $library->{branchcode}, 'Userenv branch is overwritten if no_set_userenv is false' );
