@@ -69,6 +69,9 @@ if ($op eq "export") {
                 ($error, $marc) = marc2marc($marc, 'marcstd', C4::Context->preference('marcflavour'));
                 $format = "marcstd";
             }
+            if ( $format =~ /utf8/ or $format =~ /marcstd/ ) {
+                binmode STDOUT, ':encoding(UTF-8)';
+            }
             print $query->header(
                 -type => 'application/octet-stream',
                 -attachment=>"bib-$biblionumber.$format");
