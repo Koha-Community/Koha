@@ -27,7 +27,7 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES
 ('qualif', '727', 'Relatore di tesi'),
 ('qualif', '220', 'Compilatore'),
 ('qualif', '395', 'Fondatore'),
-('qualif', '100', 'Autore dell''opere che è stata adattata'),
+('qualif', '100', 'Autore dell''opere che Ã¨ stata adattata'),
 ('qualif', '230', 'Compositore'),
 ('qualif', '520', 'Paroliere'),
 ('qualif', '295', 'Istituzione garante della tesi'),

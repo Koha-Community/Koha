@@ -4,7 +4,7 @@
 -- License: GPL v.2 or sup.
 -- *********************************************************************
 
-SET FOREIGN_KEY_CHECKS=0; 
+SET FOREIGN_KEY_CHECKS=0;
 
 
 /*Data for the table `biblio_framework` */
