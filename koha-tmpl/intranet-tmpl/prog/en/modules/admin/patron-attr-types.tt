@@ -283,9 +283,9 @@ $(document).ready(function() {
                     No limitation
                 [% END %]
             </td>
-            <td>
-              <a href="[% item.script_name %]?op=edit_attribute_type&amp;code=[% item.code |html %]">Edit</a>
-              <a href="[% item.script_name %]?op=delete_attribute_type&amp;code=[% item.code |html %]">Delete</a>
+            <td class="actions">
+              <a class="btn btn-mini" href="[% item.script_name %]?op=edit_attribute_type&amp;code=[% item.code |html %]"><i class="fa fa-pencil"></i> Edit</a>
+              <a class="btn btn-mini" href="[% item.script_name %]?op=delete_attribute_type&amp;code=[% item.code |html %]"><i class="fa fa-trash"></i> Delete</a>
             </td>
           </tr>
         [% END %]
