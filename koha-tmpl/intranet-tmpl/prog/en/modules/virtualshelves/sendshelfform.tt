@@ -6,7 +6,7 @@
 
     [% IF ( SENT ) %]
         <h3>Message sent</h3>
-        <p>The list was sent to: [% email %]</p>
+        <p>The list was sent to: [% email | html %]</p>
         <p><a class="close focus" href="#">Close window</a></p>
     [% END %]
     [% IF ( error ) %]
