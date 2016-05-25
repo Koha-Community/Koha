@@ -210,7 +210,9 @@ if ($completedJobID) {
     if ( C4::Context->preference('UseKohaPlugins') &&
          C4::Context->config('enable_plugins') ) {
 
-        my @plugins = Koha::Plugins->new()->GetPlugins('to_marc');
+        my @plugins = Koha::Plugins->new()->GetPlugins({
+            method => 'to_marc',
+        });
         $template->param( plugins => \@plugins );
     }
 }

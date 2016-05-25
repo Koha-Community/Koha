@@ -50,7 +50,9 @@ if ($plugins_enabled) {
         method       => $method,
     );
 
-    my @plugins = Koha::Plugins->new()->GetPlugins($method);
+    my @plugins = Koha::Plugins->new()->GetPlugins({
+        method => $method,
+    });
 
     $template->param( plugins => \@plugins, );
 

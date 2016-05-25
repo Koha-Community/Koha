@@ -1,6 +1,6 @@
 package Koha::Plugin::Test;
 
-## It's good practive to use Modern::Perl
+## It's good practice to use Modern::Perl
 use Modern::Perl;
 
 ## Required for all plugins
@@ -16,6 +16,7 @@ our $metadata = {
     minimum_version => '3.11',
     maximum_version => undef,
     version         => $VERSION,
+    my_example_tag  => 'find_me',
 };
 
 ## This is the minimum code required for a plugin's 'new' method

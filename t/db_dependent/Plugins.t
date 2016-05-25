@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 22;
+use Test::More tests => 23;
 use File::Basename;
 use FindBin qw($Bin);
 use Archive::Extract;
@@ -42,9 +42,17 @@ is( $metadata->{'name'}, 'Test Plugin', 'Test $plugin->get_metadata()' );
 is( $plugin->get_qualified_table_name('mytable'), 'koha_plugin_test_mytable', 'Test $plugin->get_qualified_table_name()' );
 is( $plugin->get_plugin_http_path(), '/plugin/Koha/Plugin/Test', 'Test $plugin->get_plugin_http_path()' );
 
-my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins( 'report' );
+# testing GetPlugins
+my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
+    method => 'report'
+});
 my @names = map { $_->get_metadata()->{'name'} } @plugins;
 is( scalar grep( /^Test Plugin$/, @names), 1, "Koha::Plugins::GetPlugins functions correctly" );
+@plugins =  Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
+    metadata => { my_example_tag  => 'find_me' },
+});
+@names = map { $_->get_metadata()->{'name'} } @plugins;
+is( scalar grep( /^Test Plugin$/, @names), 1, "GetPlugins also found Test Plugin via a metadata tag" );
 
 SKIP: {
     my $plugins_dir = C4::Context->config("pluginsdir");

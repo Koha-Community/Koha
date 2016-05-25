@@ -57,7 +57,9 @@ if ( $op eq 'acct_form' ) {
     $template->param( plugins_enabled => $plugins_enabled );
 
     if ( $plugins_enabled ) {
-        my @plugins = Koha::Plugins->new()->GetPlugins('edifact');
+        my @plugins = Koha::Plugins->new()->GetPlugins({
+            method => 'edifact',
+        });
         $template->param( plugins => \@plugins );
     }
 }
