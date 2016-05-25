@@ -9,7 +9,8 @@ Standards-Version: 3.8.4
 # NOTA BENE: Build dependencies end up as runtime dependencies as well.
 # See debian/rules, the override_dh_gencontrol rules. 
 # There are some exceptions.
-Build-Depends: libalgorithm-checkdigits-perl,
+Build-Depends: EEEK: unknown package for DBIx::RunSQL,
+ libalgorithm-checkdigits-perl,
  libanyevent-http-perl,
  libanyevent-perl,
  libarchive-zip-perl,
@@ -81,6 +82,7 @@ Build-Depends: libalgorithm-checkdigits-perl,
  libmoo-perl,
  libnet-ldap-perl,
  libnet-server-perl,
+ libnet-sftp-foreign-perl,
  libnet-z3950-zoom-perl,
  libnumber-format-perl,
  libopenoffice-oodoc-perl,
@@ -117,6 +119,9 @@ Build-Depends: libalgorithm-checkdigits-perl,
  libtext-iconv-perl,
  libtext-pdf-perl,
  libtext-unaccent-perl,
+ libtext-unidecode-perl,
+ libtime-fake-perl,
+ libuniversal-can-perl,
  libuniversal-require-perl,
  liburi-perl,
  libuuid-perl,
@@ -132,7 +137,7 @@ Build-Depends: libalgorithm-checkdigits-perl,
  libyaml-perl,
  libyaml-syck-perl,
  perl,
- perl-modules,
+ perl-modules, 
  debhelper (>= 7.0.50), gettext, xsltproc, docbook-xsl,
  libxml2-utils, bash-completion, perl-modules (>= 5.14.2) | libtest-simple-perl (>= 0.98)
 
@@ -140,7 +145,7 @@ Package: koha-common
 Architecture: all
 Depends: ${misc:Depends}, ${koha:Depends},
  apache2,
- apache2-mpm-itk,
+ apache2-mpm-itk | libapache2-mpm-itk,
  at,
  cron-daemon,
  daemon,
@@ -158,7 +163,8 @@ Depends: ${misc:Depends}, ${koha:Depends},
  xmlstarlet,
  yaz
 Suggests: mysql-server | virtual-mysql-server,
- memcached
+ memcached,
+letsencrypt
 Homepage: http://koha-community.org/
 Description: integrated (physical) library management system
  Koha is an Integrated Library Management system for real-world libraries
@@ -188,7 +194,7 @@ Description: integrated (physical) library management system
 Package: koha-deps
 Depends: ${misc:Depends},
  apache2,
- apache2-mpm-itk,
+ apache2-mpm-itk | libapache2-mpm-itk,
  at,
  cron-daemon,
  daemon,
@@ -215,7 +221,8 @@ Description: Other dep. for koha
  daemon, debconf, etc.).
 
 Package: koha-perldeps
-Depends: libalgorithm-checkdigits-perl,
+Depends: EEEK: unknown package for DBIx::RunSQL,
+ libalgorithm-checkdigits-perl,
  libanyevent-http-perl,
  libanyevent-perl,
  libarchive-zip-perl,
@@ -225,7 +232,6 @@ Depends: libalgorithm-checkdigits-perl,
  libcache-fastmmap-perl,
  libcache-memcached-fast-perl,
  libcache-perl,
- libcapture-tiny-perl,
  libcgi-pm-perl | perl-modules,
  libcgi-session-driver-memcached-perl,
  libcgi-session-perl,
@@ -288,6 +294,7 @@ Depends: libalgorithm-checkdigits-perl,
  libmoo-perl,
  libnet-ldap-perl,
  libnet-server-perl,
+ libnet-sftp-foreign-perl,
  libnet-z3950-zoom-perl,
  libnumber-format-perl,
  libopenoffice-oodoc-perl,
@@ -324,6 +331,9 @@ Depends: libalgorithm-checkdigits-perl,
  libtext-iconv-perl,
  libtext-pdf-perl,
  libtext-unaccent-perl,
+ libtext-unidecode-perl,
+ libtime-fake-perl,
+ libuniversal-can-perl,
  libuniversal-require-perl,
  liburi-perl,
  libuuid-perl,
