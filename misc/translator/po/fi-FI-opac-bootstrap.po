@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-06 00:14-0300\n"
+"POT-Creation-Date: 2016-05-20 11:35-0300\n"
 "PO-Revision-Date: 2016-02-29 10:49+0000\n"
 "Last-Translator: Päivi <paivi.knuutinen@jns.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -834,14 +834,6 @@ msgstr ""
 "%s Niteestä on varauksia. Palauta aineisto, kiitos! %s Uusintakerrat täynnä. "
 "Palauta aineisto, kiitos! %s "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, c-format
@@ -1008,6 +1000,13 @@ msgstr "%s Sukunimi:"
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr ""
 "%s Näytä näin monta tagia muilta käyttäjiltä%s Näytä näin monta tagia%s: "
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -4262,17 +4261,17 @@ msgstr "Tyhjennä päiväys"
 msgid "Clear date to suspend indefinitely"
 msgstr "Jos kentässä ei ole päivämäärää, keskeytyvät varaukset toistaiseksi."
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, c-format
 msgid "Click here if you're not %s %s"
 msgstr "Valitse tästä jos et ole %s %s"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, fuzzy, c-format
+msgid "Click here to login."
+msgstr "kirjaudu tästä"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, c-format
@@ -5053,6 +5052,11 @@ msgstr ""
 msgid "Entry %s"
 msgstr "Tietue %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, fuzzy, c-format
+msgid "Error"
+msgstr "Virhe:"
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5409,6 +5413,11 @@ msgstr "Koko tilaushistoria nimekkeelle %s"
 #, c-format
 msgid "General"
 msgstr "Yleinen"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, c-format
@@ -5841,7 +5850,7 @@ msgstr "Jos itsepalvelulainaus on outo sinulle, tutustu tähän käyttöohjeesee
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
+msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
 
 #. %1$s:  SelfCheckTimeout 
@@ -7323,11 +7332,6 @@ msgstr ""
 "Teoksen nimi riittää. Toisalta, mitä paremmin perustelet ehdotuksesi, sitä "
 "helpompi kirjastonhoitajan on suostua siihen. Lisätietoa voit lisätä "
 "huomautuskenttään."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, fuzzy, c-format
@@ -11352,7 +11356,6 @@ msgstr ""
 msgid "has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11653,11 +11656,6 @@ msgstr "arvioinnit perustuvat arvosteluihin osoitteessa iDreamBooks.com"
 msgid "register here"
 msgstr "kirjaudu tästä"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, c-format
 msgid "request_location"
@@ -11871,7 +11869,7 @@ msgstr "käyttäjätunnnuksen aktivoi kirjaston henkilökunta)%s."
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "Virhe salasanassa"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -11879,11 +11877,6 @@ msgstr "Virhe salasanassa"
 #, c-format
 msgid "to create new lists."
 msgstr "tehdäksesi uusia listoja."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "Paikallinen kirjautuminen"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format

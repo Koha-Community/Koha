@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-06 00:10-0300\n"
+"POT-Creation-Date: 2016-05-20 14:10-0300\n"
 "PO-Revision-Date: 2015-11-29 09:22+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -811,14 +811,6 @@ msgstr "%s 不能续借 %s 不允许 "
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s 预约中 %s 无法续借 %s "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, c-format
@@ -981,6 +973,13 @@ msgstr "%s 姓："
 #, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "%s 标签来自其他读者%s 标签显示%s："
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -4203,17 +4202,17 @@ msgstr "清除日期"
 msgid "Clear date to suspend indefinitely"
 msgstr "无限延搁清除曰期"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, c-format
 msgid "Click here if you're not %s %s"
 msgstr "请点选，若您不是 %s %s"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, fuzzy, c-format
+msgid "Click here to login."
+msgstr "从这里登入"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, c-format
@@ -4986,6 +4985,11 @@ msgstr "输入您的帐号%s 及密码%s ，并且点选送出钮(或是按下En
 msgid "Entry %s"
 msgstr "款目 %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, fuzzy, c-format
+msgid "Error"
+msgstr "错误："
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5341,6 +5345,11 @@ msgstr "有关 %s 的订阅记录"
 #, c-format
 msgid "General"
 msgstr "一般"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, c-format
@@ -5778,7 +5787,7 @@ msgstr "第一次使用自助借出系统，或操作不顺手，可参考此手
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
+msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
 
 #. %1$s:  SelfCheckTimeout 
@@ -7254,11 +7263,6 @@ msgid ""
 msgstr ""
 "虽然祗需输入题名，但给的资讯愈多，图书馆员愈容易找到您的书。在\"Notes\" 栏位"
 "给予更多的资讯。"
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, fuzzy, c-format
@@ -11220,7 +11224,6 @@ msgstr ""
 msgid "has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11520,11 +11523,6 @@ msgstr "依 iDreamBooks.com 的评论评比"
 msgid "register here"
 msgstr "在此登记"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, c-format
 msgid "request_location"
@@ -11736,7 +11734,7 @@ msgstr "从线上申请重建帐号时，可能略有延迟) %s。"
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "您的送出有问题"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -11744,11 +11742,6 @@ msgstr "您的送出有问题"
 #, c-format
 msgid "to create new lists."
 msgstr "新增虚拟书架。"
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "在地登入"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format

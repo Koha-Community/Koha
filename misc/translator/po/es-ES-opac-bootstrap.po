@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14 staff\n"
-"POT-Creation-Date: 2016-05-05 23:58-0300\n"
-"PO-Revision-Date: 2016-05-04 15:33+0000\n"
+"POT-Creation-Date: 2016-05-20 11:26-0300\n"
+"PO-Revision-Date: 2016-05-20 19:35+0000\n"
 "Last-Translator: Bernardo <bgkriegel@gmail.com>\n"
-"Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
-"org>\n"
+"Language-Team: Koha Translation Team <koha-translate@lists.koha-"
+"community.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1462376034.000000\n"
+"X-POOTLE-MTIME: 1463772951.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:300
@@ -834,16 +834,6 @@ msgstr "%s No renovable %s No permitido "
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s En reserva %s No quedan renovaciones %s "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-"%s ¡Ups! Las contraseñas deben coincidir. %s La contraseña elegida es "
-"demasiada corta. "
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, c-format
@@ -1011,6 +1001,15 @@ msgstr "%s Apellido:"
 #, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "%s Etiquetas a mostrar de otros usuarios %s Etiquetas a mostrar %s: "
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
+"%s Las contraseñas no coinciden. %s La contraseña elegida es demasiada "
+"corta. "
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -4303,17 +4302,17 @@ msgstr "Limpiar fecha"
 msgid "Clear date to suspend indefinitely"
 msgstr "Borrar fecha para suspender indefinidamente"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr "Hacer clic "
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, c-format
 msgid "Click here if you're not %s %s"
 msgstr "Haga clic aquí si usted no es %s %s"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, c-format
+msgid "Click here to login."
+msgstr "Haga clic aquí para ingresar."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, c-format
@@ -5098,6 +5097,11 @@ msgstr ""
 msgid "Entry %s"
 msgstr "Entrada %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, c-format
+msgid "Error"
+msgstr "Error"
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5462,6 +5466,11 @@ msgstr "Historial completo de suscripción para %s"
 #, c-format
 msgid "General"
 msgstr "General"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
+msgstr "Obtenga un nuevo enlace de recuperación de contraseña"
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, c-format
@@ -5912,8 +5921,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
-msgstr "Si no recibe este correo electrónico, puede "
+msgid "If you did not receive this email, you can request a new one: "
+msgstr "Si no recibe este correo electrónico, puede requerir uno nuevo: "
 
 #. %1$s:  SelfCheckTimeout 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:49
@@ -7416,11 +7425,6 @@ msgstr ""
 "Solo se requiere el título, pero mientras más información provea, más fácil "
 "le resultará a los bibliotecarios encontrar el ejemplar requerido. El campo "
 "\"Notas\" puede utilizarse para proveer cualquier información adicional."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr "¡Ups!"
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, c-format
@@ -11531,7 +11535,6 @@ msgstr "para esté pago es inválida."
 msgid "has already been posted to an account."
 msgstr "ya ha sido publicado en una cuenta."
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11830,11 +11833,6 @@ msgstr "valoración basada en las reseñas de iDreamBooks.com"
 msgid "register here"
 msgstr "registrar aquí"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr "solicitar un nuevo enlace de recuperación de contraseña."
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, c-format
 msgid "request_location"
@@ -12062,7 +12060,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "hubo un problema al procesar su pago"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -12070,11 +12068,6 @@ msgstr "hubo un problema al procesar su pago"
 #, c-format
 msgid "to create new lists."
 msgstr "para crear nuevas listas."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, c-format
-msgid "to login. "
-msgstr "para iniciar sesión. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format

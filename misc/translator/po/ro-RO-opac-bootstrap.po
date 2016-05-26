@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-06 00:12-0300\n"
+"POT-Creation-Date: 2016-05-20 13:20-0300\n"
 "PO-Revision-Date: 2011-06-21 08:54+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -799,14 +799,6 @@ msgstr "Fără actualizări rămase"
 msgid "%s On hold %s No renewals left %s "
 msgstr "Fără actualizări rămase "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, fuzzy, c-format
@@ -970,6 +962,13 @@ msgstr "Prenume:"
 #, fuzzy, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "etichete de la alți utilizatori. "
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -4179,17 +4178,17 @@ msgstr "Eliberaţi Data"
 msgid "Clear date to suspend indefinitely"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, fuzzy, c-format
 msgid "Click here if you're not %s %s"
 msgstr "(<a1> Faceţi clic aici </ a>, dacă nu sunteţi% s% s% s)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, fuzzy, c-format
+msgid "Click here to login."
+msgstr "Clic aici pentru a accesa on-line"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, fuzzy, c-format
@@ -4980,6 +4979,11 @@ msgstr ""
 msgid "Entry %s"
 msgstr "at %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, fuzzy, c-format
+msgid "Error"
+msgstr "Eroare:"
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5346,6 +5350,11 @@ msgstr "Abonament de informaţii pentru %s"
 #, c-format
 msgid "General"
 msgstr "General"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, fuzzy, c-format
@@ -5798,7 +5807,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
+msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
 
 #. %1$s:  SelfCheckTimeout 
@@ -7299,11 +7308,6 @@ msgstr ""
 "Doar titlul este necesar, dar cu cât introduceți mai multă informație cu "
 "atât mai usor va fi pentru bibliotecar să găsească titlul căutat. Câmpul "
 "\"Note\" poate fi utilizat pentru a oferi orice informatie suplimentară."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, fuzzy, c-format
@@ -11335,7 +11339,6 @@ msgstr ""
 msgid "has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11658,11 +11661,6 @@ msgstr ""
 msgid "register here"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, c-format
 msgid "request_location"
@@ -11887,7 +11885,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "Nu a fost o problemă cu depunerea ta"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -11895,11 +11893,6 @@ msgstr "Nu a fost o problemă cu depunerea ta"
 #, fuzzy, c-format
 msgid "to create new lists."
 msgstr "<a1>Intraţi cont</ a> pentru a crea liste noi."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "Înregistrare locală"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format

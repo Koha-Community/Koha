@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-06 00:06-0300\n"
-"PO-Revision-Date: 2016-05-04 05:32+0000\n"
+"POT-Creation-Date: 2016-05-20 14:13-0300\n"
+"PO-Revision-Date: 2016-05-21 22:47+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1462339921.000000\n"
+"X-POOTLE-MTIME: 1463870840.000000\n"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:300
@@ -758,9 +758,9 @@ msgstr "%s 館藏被借出"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:126
-#, fuzzy, c-format
+#, c-format
 msgid "%s Library card number: "
-msgstr "請輸入讀者證號碼："
+msgstr "%s 輸入讀者證號碼："
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:114
@@ -810,14 +810,6 @@ msgstr "%s 不能續借 %s 不允許 "
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s 預約中 %s 無法續借 %s "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, c-format
@@ -861,9 +853,9 @@ msgstr "%s 電話："
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "%s Please correct this and resubmit. "
-msgstr "請更正錯誤並再送出。"
+msgstr "%s 請更正錯誤並再送出。"
 
 #. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:73
@@ -980,6 +972,13 @@ msgstr "%s 姓："
 #, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "%s 標籤來自其他讀者 %s 標籤顯示 %s："
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr "%s 密碼不合。%s 您選的密碼太短了。"
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -1103,6 +1102,8 @@ msgid ""
 "%s [%% INCLUDE \"openlibrary-readapi.inc\" bib = { normalized_isbn => "
 "normalized_isbn, lccn => lccn, normalized_oclc => normalized_oclc } %%] "
 msgstr ""
+"%s [%% INCLUDE \"openlibrary-readapi.inc\" bib = { normalized_isbn => "
+"normalized_isbn, lccn => lccn, normalized_oclc => normalized_oclc } %%] "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:546
@@ -1283,9 +1284,9 @@ msgstr "%s 在館內 %s 借出 %s "
 #. %5$s:  END 
 #. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:591
-#, fuzzy, c-format
+#, c-format
 msgid "%s since %s %s until %s %s %s "
-msgstr "%s %s %s %s %s 無題名 %s %s %s %s "
+msgstr "%s 從 %s %s 到 %s %s %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:55
@@ -1355,7 +1356,7 @@ msgstr "%s%s %s館藏%s館藏%s%s空白%s"
 msgid ""
 "%s%s - Forgotten password recovery%sKoha online%s catalog - Forgotten "
 "password recovery"
-msgstr ""
+msgstr "%s%s - 恢復忘記的密碼%sKoha 線上%s 目錄 - 恢復忘記的密碼"
 
 #. %1$s:  IF SeparateHoldings 
 #. %2$s:  LoginBranchname 
@@ -1394,9 +1395,9 @@ msgstr "%s%s 含評論 "
 #. %7$s:  BLOCK cssinclude 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%s%sKoha online%s catalog &rsaquo; Your payment %s %s%s "
-msgstr "%s%s%sKoha 線上%s 目錄 &rsaquo; 您的書目清單"
+msgstr "%s%s%s%sKoha 線上%s 目錄 &rsaquo; 您的付款 %s %s%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -2032,9 +2033,9 @@ msgstr "%s/cgi-bin/koha/opac-main.pl"
 #. %1$s:  OPACBaseURL 
 #. %2$s:  newsitem.idnew |html 
 #: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid "%s/cgi-bin/koha/opac-main.pl#newsitem%s"
-msgstr "%s/cgi-bin/koha/opac-main.pl"
+msgstr "%s/cgi-bin/koha/opac-main.pl#newsitem%s"
 
 #. %1$s:  OPACBaseURL 
 #. %2$s:  query_cgi |html 
@@ -2858,7 +2859,7 @@ msgstr "(%s 總計)"
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:127
 #, c-format
 msgid "(123) 456-7890"
-msgstr ""
+msgstr "(123) 456-7890"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -3083,7 +3084,7 @@ msgstr "...或是..."
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:160
 #, c-format
 msgid "0.00"
-msgstr ""
+msgstr "0.00"
 
 #: opac-tmpl/bootstrap/en/xslt/plainMARC.xsl:18
 #, c-format
@@ -3185,7 +3186,7 @@ msgstr "確認信即將送至電子郵件信箱 "
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:37
 #, c-format
 msgid "A payment with the transaction id "
-msgstr ""
+msgstr "依交易帳號付款"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:293
 #, c-format
@@ -3387,7 +3388,7 @@ msgstr "允許"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:93
 #, c-format
 msgid "Allow your guarantor to view your current checkouts?"
-msgstr ""
+msgstr "允許您的保證人檢視現在的借出？"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:62
 #, c-format
@@ -3426,13 +3427,13 @@ msgstr "待付總計"
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:159
 #, c-format
 msgid "Amount to pay: "
-msgstr ""
+msgstr "支付金額："
 
 #. %1$s:  email 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
 #, c-format
 msgid "An email has been sent to \"%s\". "
-msgstr ""
+msgstr "已送出電子郵件至 \"%s\"。"
 
 #. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
@@ -3456,16 +3457,16 @@ msgid "An error occurred when updating this list."
 msgstr "更新此虛擬書架時發生錯誤。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "An error occurred while processing your request."
 msgstr "處理您的請求時發生錯誤。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:52
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "An internal link in our catalog home page is broken and the page does not "
 "exist."
-msgstr "目錄首頁的內部連結無效此頁面不存在"
+msgstr "目錄首頁的內部連結無效此頁面不存在。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:70
 #, c-format
@@ -3493,9 +3494,9 @@ msgid "Any format"
 msgstr "任何格式"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:260
-#, fuzzy, c-format
+#, c-format
 msgid "Any item type"
-msgstr "所有館藏類型"
+msgstr "任何館藏類型"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:75
 #, c-format
@@ -3813,7 +3814,7 @@ msgstr "條碼號："
 msgid ""
 "Be sure you used the link from the email, or contact library staff for "
 "assistance. %s "
-msgstr ""
+msgstr "確認您用的是電子郵件內的連結，或請洽圖書館員。%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:56
@@ -3934,9 +3935,9 @@ msgstr "索書號"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:229
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:464
-#, fuzzy, c-format
+#, c-format
 msgid "Call no.:"
-msgstr "索書號"
+msgstr "索書號："
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:199
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:201
@@ -4204,17 +4205,17 @@ msgstr "清除日期"
 msgid "Clear date to suspend indefinitely"
 msgstr "無限延擱清除曰期"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, c-format
 msgid "Click here if you're not %s %s"
 msgstr "請點選，若您不是 %s %s"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, c-format
+msgid "Click here to login."
+msgstr "從這裡登入。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, c-format
@@ -4370,15 +4371,15 @@ msgid "Confirm holds for:%s %s (%s)"
 msgstr "確認以下的預約：%s %s (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm new password:"
-msgstr "新密碼："
+msgstr "確認新密碼："
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:846
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:856
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm password"
-msgstr "變更您的密碼"
+msgstr "確認密碼"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:459
 #, c-format
@@ -4855,7 +4856,7 @@ msgstr "下載虛擬書架 "
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:42
 #, c-format
 msgid "Dublin Core"
-msgstr ""
+msgstr "Dublin Core"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
@@ -4935,9 +4936,9 @@ msgid "Email address:"
 msgstr "電子郵件地址："
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:84
-#, fuzzy, c-format
+#, c-format
 msgid "Email:"
-msgstr "電子郵件"
+msgstr "電子郵件："
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:30
 #, c-format
@@ -4987,19 +4988,23 @@ msgstr "輸入您的帳號 %s 及密碼 %s ，並且點選送出鈕(或是按下
 msgid "Entry %s"
 msgstr "款目 %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, c-format
+msgid "Error"
+msgstr "錯誤"
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "Error %s"
-msgstr "錯誤："
+msgstr "錯誤 %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
-#, fuzzy
 msgid "Error searching OpenLibrary collection"
-msgstr "搜尋OverDrive館藏時錯誤"
+msgstr "搜尋 OpenLibrary 館藏時錯誤"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
@@ -5136,12 +5141,12 @@ msgstr "說明 "
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:105
 #, c-format
 msgid "Export"
-msgstr ""
+msgstr "匯出"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:86
 #, c-format
 msgid "Exporting to Dublin Core..."
-msgstr ""
+msgstr "匯出至 Dublin Core..."
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:676
 #, c-format
@@ -5266,15 +5271,15 @@ msgstr "永久有效：永久保留您的閱讀記錄。這是讀者自己的選
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:323
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:173
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid "Forgot your password?"
-msgstr "變更您的密碼"
+msgstr "忘記您的密碼嗎？"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:33
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:47
 #, c-format
 msgid "Forgotten password recovery"
-msgstr ""
+msgstr "恢復忘記的密碼"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -5341,6 +5346,11 @@ msgstr "有關 %s 的訂閱記錄"
 #, c-format
 msgid "General"
 msgstr "一般"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
+msgstr "取得新的密碼的連結"
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, c-format
@@ -5450,9 +5460,9 @@ msgid "GoToBibliographicRequestPage "
 msgstr "GoToBibliographicRequestPage "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:146
-#, fuzzy, c-format
+#, c-format
 msgid "Google login"
-msgstr "在地登入"
+msgstr "Google 登入"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:237
@@ -5660,7 +5670,7 @@ msgstr "所屬圖書館"
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:144
 msgid "How PayPal Works"
-msgstr ""
+msgstr "PayPal 運作"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:41
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:44
@@ -5778,8 +5788,8 @@ msgstr "第一次使用自助借出系統，或操作不順手，可參考此手
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
-msgstr ""
+msgid "If you did not receive this email, you can request a new one: "
+msgstr "若未收到此電子郵件，您可要求一個新的："
 
 #. %1$s:  SelfCheckTimeout 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:49
@@ -5797,11 +5807,11 @@ msgid ""
 msgstr "若沒有 CAS 帳號，還可使用本地帳號登入："
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:152
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you do not have a Google account, but do have a local account, you can "
 "still log in: "
-msgstr "若沒有 CAS 帳號，還可使用本地帳號登入："
+msgstr "若沒有 googel 帳號，還可使用本地帳號登入："
 
 #. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
@@ -5845,7 +5855,7 @@ msgstr "若您有 Shibboleth 帳號，請 "
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:149
 #, c-format
 msgid "If you want to, you can try to "
-msgstr ""
+msgstr " 若您喜歡，可以試著"
 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
@@ -6396,7 +6406,7 @@ msgstr "以您的帳號登入："
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:151
 #, c-format
 msgid "Log in with Google"
-msgstr ""
+msgstr "以 Google 帳號登入"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:189
 #, c-format
@@ -6409,9 +6419,9 @@ msgid "Login"
 msgstr "登入"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:61
-#, fuzzy, c-format
+#, c-format
 msgid "Login page"
-msgstr "目錄首頁"
+msgstr "登入首頁面"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:319
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:82
@@ -6425,7 +6435,7 @@ msgstr "登入："
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
 #, c-format
 msgid "Logout"
-msgstr ""
+msgstr "登出"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:452
 #, c-format
@@ -6570,9 +6580,9 @@ msgid "Make a "
 msgstr "做一個 "
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:158
-#, fuzzy, c-format
+#, c-format
 msgid "Make payment"
-msgstr "做一個 "
+msgstr "支付"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:313
 #, c-format
@@ -6715,9 +6725,9 @@ msgstr "不曾"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:569
-#, fuzzy, c-format
+#, c-format
 msgid "Never expires %s %s - %s "
-msgstr "永遠有效 %s "
+msgstr "永遠有效 %s %s - %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:44
 #, c-format
@@ -7192,7 +7202,7 @@ msgstr "已使用的記錄數：%s"
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:95
 #, c-format
 msgid "OAI-DC"
-msgstr ""
+msgstr "OAI-DC"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:39
@@ -7255,15 +7265,10 @@ msgstr ""
 "雖然祗需輸入題名，但給的資訊愈多，圖書館員愈容易找到您的書。在 \"Notes\" 欄位"
 "給予更多的資訊。"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
-#, fuzzy, c-format
+#, c-format
 msgid "Open Library: "
-msgstr "圖書館："
+msgstr "Open Library："
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:39
 #, c-format
@@ -7352,12 +7357,12 @@ msgstr "密碼"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:66
 #, c-format
 msgid "Password contains leading and/or trailing spaces! "
-msgstr ""
+msgstr "密碼前後有空格！"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:65
 #, c-format
 msgid "Password does not meet minimum requirements! "
-msgstr ""
+msgstr "密碼未符合最低要求！"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:66
 #, c-format
@@ -7374,9 +7379,9 @@ msgid "Password:"
 msgstr "密碼："
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:64
-#, fuzzy, c-format
+#, c-format
 msgid "Passwords do not match! "
-msgstr "更新密碼"
+msgstr "密碼不符！"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:332
 #, c-format
@@ -7390,24 +7395,24 @@ msgid "Patron comment on %s"
 msgstr "讀者對 %s 的評論"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:139
-#, fuzzy, c-format
+#, c-format
 msgid "Pay selected fines and charges"
-msgstr "您的罰款和收費"
+msgstr "支付選定的罰款和費用"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:144
 msgid "PayPal Acceptance Mark"
-msgstr ""
+msgstr "PayPal 接受標記"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:60
 #, c-format
 msgid "Payment applied:"
-msgstr ""
+msgstr "Payment 應用："
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:140
-#, fuzzy, c-format
+#, c-format
 msgid "Payment method"
-msgstr "專利文件"
+msgstr "支付方式"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:15
 #, c-format
@@ -7509,7 +7514,7 @@ msgstr "請選擇您的隱私規則："
 msgid ""
 "Please click the link in this email to finish the process of resetting your "
 "password. "
-msgstr ""
+msgstr "請按此電子郵件內的連結完成重設密碼的程序。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:38
 #, c-format
@@ -7530,32 +7535,32 @@ msgstr "請確認您的註冊資料"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:38
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:41
-#, fuzzy, c-format
+#, c-format
 msgid "Please contact a librarian for details."
-msgstr "，請與圖書館連絡取得詳情。"
+msgstr "請與圖書館員連繫取得詳情。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "Please contact a librarian to verify your payment."
-msgstr "，請與圖書館連絡取得詳情。"
+msgstr "請與圖書館員連繫確認您的支付。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:144
 #, c-format
 msgid ""
 "Please contact a library staff member if you are unsure of your mobile "
 "service provider, or you do not see your provider in this list."
-msgstr ""
+msgstr "若不確定電信服務商或未在清單看到您的服務商，請與圖書館員連繫。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid "Please contact the library if you need further assistance."
-msgstr "，請與圖書館連絡取得詳情。"
+msgstr "若需進一步協助請與圖書館連繫。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:34
-#, fuzzy, c-format
+#, c-format
 msgid "Please contact the library to verify your payment."
-msgstr "，請與圖書館連絡取得詳情。"
+msgstr "請與圖書館連繫確認您的支付。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:68
 #, c-format
@@ -7563,9 +7568,9 @@ msgid "Please correct the errors and resubmit. "
 msgstr "請更正錯誤並再送出。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:127
-#, fuzzy, c-format
+#, c-format
 msgid "Please enter numbers only. "
-msgstr "請輸入讀者證號碼："
+msgstr "請祗輸入數字。"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:298
 #, c-format
@@ -7580,9 +7585,9 @@ msgid ""
 msgstr "請填寫這個表格提出採訪建議。我們將以電子郵件回覆您"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:61
-#, fuzzy, c-format
+#, c-format
 msgid "Please log in to the catalog and try again. "
-msgstr "在資料庫找不到。請再試。"
+msgstr "請登入目錄並再試。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:46
 #, c-format
@@ -7596,7 +7601,7 @@ msgstr "仍在借出狀態的圖書資訊，不論您的選擇為何，仍由圖
 msgid ""
 "Please note that the Google login will only work if you are using the e-mail "
 "address registered with this library."
-msgstr ""
+msgstr "以電子郵件在本圖書館登錄後，才能以 Google 登入。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:14
@@ -7614,7 +7619,7 @@ msgstr ""
 msgid ""
 "Please note, the last person to return an item is tracked for the management "
 "of items returned damaged."
-msgstr ""
+msgstr "請注意，最後還回館藏的使用者需對館藏的損壞負責。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:74
@@ -7634,7 +7639,7 @@ msgstr "請注意："
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:31
 #, c-format
 msgid "Please try again later."
-msgstr ""
+msgstr "請稍後再試。"
 
 #. %1$s:  ELSIF (errNoBorrowerFound) 
 #. %2$s:  ELSIF (errAlreadyStartRecovery) 
@@ -7644,7 +7649,7 @@ msgid ""
 "Please try again later. %s No account was found with the provided "
 "information. %s The process of password recovery has already been started "
 "for this account (\""
-msgstr ""
+msgstr "請稍後再試。%s 以提供的資訊找不到帳號。%s 此帳號已啟動恢復密碼作業 (\""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -7752,7 +7757,7 @@ msgid "Priority:"
 msgstr "優先："
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid "Privacy"
 msgstr "私人"
 
@@ -7998,12 +8003,12 @@ msgstr "正常列印"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:347
 #, c-format
 msgid "Relative"
-msgstr ""
+msgstr "相關"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:115
-#, fuzzy, c-format
+#, c-format
 msgid "Relatives' checkouts"
-msgstr "現場借出"
+msgstr "相關的借出"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:1
 #, c-format
@@ -8108,14 +8113,14 @@ msgid "Renewed!"
 msgstr "續借！"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:67
-#, fuzzy, c-format
+#, c-format
 msgid "Report issues and broken links"
-msgstr "報告失效的連結"
+msgstr "報告問題與失效的連結"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:258
-#, fuzzy, c-format
+#, c-format
 msgid "Request specific item type:"
-msgstr "選擇特定的館藏："
+msgstr "要求特定的館藏類型："
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:237
@@ -8224,14 +8229,14 @@ msgid "Return to account summary"
 msgstr "返回帳號摘要"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:39
-#, fuzzy, c-format
+#, c-format
 msgid "Return to fine details"
-msgstr "回至 "
+msgstr "回到罰款詳情"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:65
-#, fuzzy, c-format
+#, c-format
 msgid "Return to the catalog home page."
-msgstr "目錄首頁"
+msgstr "回到目錄首頁。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:51
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:113
@@ -8240,9 +8245,9 @@ msgid "Return to the last advanced search"
 msgstr "回到上次的進階搜尋"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid "Return to the main page"
-msgstr "回至 "
+msgstr "回至首頁"
 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:53
 #, c-format
@@ -8321,12 +8326,12 @@ msgstr "簡訊號碼："
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:133
 #, c-format
 msgid "SMS provider:"
-msgstr ""
+msgstr "SMS 供應商："
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:98
 #, c-format
 msgid "SRW-DC"
-msgstr ""
+msgstr "SRW-DC"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -8485,9 +8490,8 @@ msgstr "SearchCourseReserves "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
-#, fuzzy
 msgid "Searching Open Library..."
-msgstr "搜尋 OverDrive..."
+msgstr "搜尋 Open Library..."
 
 #. For the first occurrence,
 #. SCRIPT
@@ -8621,9 +8625,9 @@ msgid "Send"
 msgstr "送出"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:70
-#, fuzzy, c-format
+#, c-format
 msgid "Send email"
-msgstr "%s 其他電子郵件："
+msgstr "送出電子郵件"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:171
 #, c-format
@@ -8858,7 +8862,7 @@ msgstr "相似館藏"
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:92
 #, c-format
 msgid "Simple DC-RDF"
-msgstr ""
+msgstr "Simple DC-RDF"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:103
 #, c-format
@@ -8870,7 +8874,7 @@ msgstr "因為您有 "
 msgid ""
 "Some charges for text messages may be incurred when using this service. "
 "Please check with your mobile service provider if you have questions."
-msgstr ""
+msgstr "使用此服務可能收取簡訊費用。詳情請洽您的電信服務商。"
 
 #. %1$s:  failaddress 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:73
@@ -8966,9 +8970,9 @@ msgid "Sorry, you cannot place more than %s holds. "
 msgstr "抱歉，您不能預約超過 %s 本。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:147
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, your Google login failed. "
-msgstr "抱歉，CAS 登入失敗。"
+msgstr "抱歉，您的 Google 登入失敗。"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:309
 #, c-format
@@ -9219,7 +9223,7 @@ msgid "Suggested for:"
 msgstr "建議於："
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:165
-#, fuzzy, c-format
+#, c-format
 msgid "Suggested on"
 msgstr "建議"
 
@@ -9278,7 +9282,7 @@ msgid "Switch languages"
 msgstr "切換語文"
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "System Maintenance"
 msgstr "系統維護"
 
@@ -9523,9 +9527,9 @@ msgstr "刪除閱讀記錄失敗，組態的錯誤。請告知圖書館，以便
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "The entered "
-msgstr "使用者帳號 "
+msgstr "鍵入的"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:38
 #, c-format
@@ -9585,14 +9589,14 @@ msgstr ""
 "虛擬書架。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "The link is broken and the page does not exist."
-msgstr "目錄首頁的內部連結無效此頁面不存在"
+msgstr "連結無效且此頁面不存在。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:41
 #, c-format
 msgid "The link is invalid."
-msgstr ""
+msgstr "此連結無效。"
 
 #. %1$s:  email 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:16
@@ -9608,15 +9612,15 @@ msgstr "不支援作業 %s。"
 
 #. %1$s:  username 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, fuzzy, c-format
+#, c-format
 msgid "The password has been changed for user \"%s\"."
-msgstr "您已變更密碼 "
+msgstr "密碼已被使用者  \"%s\" 變更。"
 
 #. %1$s:  minPassLength 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "The password must contain at least %s characters."
-msgstr "您的密碼長度至少應有 %s 字元。"
+msgstr "密碼長度至少應有 %s 字元。"
 
 #. %1$s:  minPassLength 
 #. %2$s:  ELSIF (errLinkNotValid) 
@@ -9625,7 +9629,7 @@ msgstr "您的密碼長度至少應有 %s 字元。"
 msgid ""
 "The password must contain at least %s characters. %s The link you clicked is "
 "either invalid, or expired. "
-msgstr ""
+msgstr "密碼長度度至少應有 %s 字元。%s 您點選的連結無效，或過期。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:118
 #, c-format
@@ -9666,7 +9670,7 @@ msgstr "此標籤新增為 &quot;%s&quot;。%s 說明：您的標籤為標示碼
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:40
 #, c-format
 msgid "The transaction id "
-msgstr ""
+msgstr "交易帳號"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:173
 #, c-format
@@ -9806,7 +9810,7 @@ msgstr "此館藏已經被他人預約。%s "
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "This link is valid for 2 days starting now. "
-msgstr ""
+msgstr "此連結僅從現在起兩天內有效。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:130
 #, c-format
@@ -9821,9 +9825,9 @@ msgid ""
 msgstr "此虛擬書架是空的。%s 可將搜尋結果加入您的虛擬書架 "
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:30
-#, fuzzy, c-format
+#, c-format
 msgid "This message can have the following reason(s):"
-msgstr "基於以下的理由出現此訊息"
+msgstr "基於以下的理由出現此訊息："
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
@@ -9952,9 +9956,9 @@ msgid "To make changes to your record please contact the library."
 msgstr "請與圖書館連繫，更新您的記錄。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "To report this error, please contact the Koha Administrator. "
-msgstr "請與圖書館連繫，更新您的記錄。"
+msgstr "請與 Koha 管理者連繫，報告此錯誤。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:191
 #, c-format
@@ -9962,9 +9966,9 @@ msgid "To report this error, you can "
 msgstr "為了報告此錯誤，您可以 "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "To reset your password, enter your login and email address. "
-msgstr "抱歉，您未鍵入有效的電子郵件地址。"
+msgstr "重設密碼時，請登入與電子郵件地址。"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -10059,21 +10063,20 @@ msgstr "不能新增標籤。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:51
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:30
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to connect to PayPal."
-msgstr "不能新增標籤。"
+msgstr "不能連結至 PayPal。"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:923
-#, fuzzy
 msgid "Unable to update your setting!"
-msgstr "不能新增標籤。"
+msgstr "不能更新您的設定！"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to verify payment."
-msgstr "不能新增標籤。"
+msgstr "不能確認付款。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:367
 #, c-format
@@ -10113,7 +10116,7 @@ msgstr "劃一題名："
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:135
 #, c-format
 msgid "Unknown"
-msgstr ""
+msgstr "不明"
 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:36
 #, c-format
@@ -10123,7 +10126,7 @@ msgstr "取消訂閱示警"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:103
 #, c-format
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:14
 #, c-format
@@ -10342,9 +10345,9 @@ msgid ""
 msgstr "您從不同的 IP 網址近用自助借出系統！請再登入。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:45
-#, fuzzy, c-format
+#, c-format
 msgid "You are forbidden to view this page."
-msgstr "您無權檢視此記錄。"
+msgstr "您被禁止檢視此頁面。"
 
 #. %1$s:  borrowername 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:167
@@ -10358,9 +10361,9 @@ msgid "You are logging from a different IP address. Please log in again."
 msgstr "您以不同的 IP 位址登入。請重新登入。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:155
-#, fuzzy, c-format
+#, c-format
 msgid "You are not allowed to call this page directly"
-msgstr "您無權檢視此記錄。"
+msgstr "您無權直接檢視此頁面"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:243
 #, c-format
@@ -10368,9 +10371,9 @@ msgid "You are not authorized to see pending purchase suggestions."
 msgstr "您無權查看待決的採訪建議。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid "You are not authorized to view this page."
-msgstr "您無權檢視此記錄。"
+msgstr "您無權檢視此頁面。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:19
 #, c-format
@@ -10390,10 +10393,10 @@ msgid "You can only share a list if you are the owner."
 msgstr "若您是擁有者祗能共享虛擬書架。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:64
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You can search our catalog using the search form at the top of this page."
-msgstr "您可使用此頁面上端的搜尋表格搜尋我們的目錄"
+msgstr "您可使用此頁面上端的搜尋表格搜尋我們的目錄。"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:192
 #, c-format
@@ -10401,9 +10404,9 @@ msgid "You can use OAI-PMH ListRecords instead of this service."
 msgstr "可以用 OAI-PMH ListRecords 取代此服務。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:63
-#, fuzzy, c-format
+#, c-format
 msgid "You can use the menu and links at the top of the page"
-msgstr "您可使用此頁面上端的搜尋表格搜尋我們的目錄"
+msgstr "您可使用此頁面上端的選單與連結"
 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:61
 #, c-format
@@ -10411,7 +10414,7 @@ msgid "You can't change your password."
 msgstr "不能修改您的密碼。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "You can't reset your password."
 msgstr "不能修改您的密碼。"
 
@@ -10497,9 +10500,9 @@ msgid ""
 msgstr "您輸入錯誤的帳號或密碼。請再次輸入！提醒您，帳號與密碼的大小寫有別。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "You followed an outdated link e.g. from a search engine or a bookmark."
-msgstr "您從搜尋引擎或書籤取得過時的連結"
+msgstr "您從搜尋引擎或書籤取得過時的連結。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:330
 #, c-format
@@ -10548,11 +10551,11 @@ msgid "You have unpaid fines. Amount: %s. "
 msgstr "您已付罰款。金額為：%s。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:49
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You made use of an external link to a catalog item that is no longer "
 "available."
-msgstr "您使用目錄之外已失效的連結"
+msgstr "您使用目錄之外已失效的連結。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:183
 #, c-format
@@ -10596,12 +10599,12 @@ msgstr "您尚積欠圖書館 %s，因此無法借出。%s "
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
-msgstr ""
+msgstr "您應收到含有重設密碼連結的電子郵件。"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:51
-#, fuzzy, c-format
+#, c-format
 msgid "You tried to access a page that needs authentication."
-msgstr "您想進入需要認證的頁面"
+msgstr "您試圖進入需要認證的頁面。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:85
 #, c-format
@@ -10755,9 +10758,9 @@ msgstr "您的罰款和收費"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:84
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:106
-#, fuzzy, c-format
+#, c-format
 msgid "Your guarantor is "
-msgstr "您的書目清單是空的。"
+msgstr "您的保證人是 "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:35
 #, c-format
@@ -10841,15 +10844,15 @@ msgid "Your password must be at least %s characters long."
 msgstr "您的密碼長度至少應有 %s 字元。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "Your payment"
-msgstr "您的評論"
+msgstr "您的付款"
 
 #. %1$s:  message_value 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:35
 #, c-format
 msgid "Your payment of $%s has been processed successfully!"
-msgstr ""
+msgstr "您支付的 $%s 已經成功了！"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:24
 #, c-format
@@ -10903,9 +10906,8 @@ msgstr "您的搜尋送回 %s 結果。"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:923
-#, fuzzy
 msgid "Your setting has been updated!"
-msgstr "您的閱讀記錄已經被刪除。"
+msgstr "您的設定已經更新了！"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:18
 #, c-format
@@ -11015,6 +11017,9 @@ msgid ""
 "OpenLibrarySearch && ( bib.normalized_isbn || bib.lccn || bib."
 "normalized_oclc ) %%] "
 msgstr ""
+"[%%# Input params: bib - search result biblio record %%] [%% IF "
+"OpenLibrarySearch && ( bib.normalized_isbn || bib.lccn || bib."
+"normalized_oclc ) %%] "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
@@ -11047,7 +11052,7 @@ msgstr "與"
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
 #, c-format
 msgid "and try again with a different user"
-msgstr ""
+msgstr "以不同使用者再試"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:20
 #, c-format
@@ -11119,9 +11124,9 @@ msgstr "著者 "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "card number"
-msgstr "讀者證號碼："
+msgstr "讀者證號碼"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:461
 #, c-format
@@ -11213,14 +11218,13 @@ msgstr "有關內容及組態的更多資訊。"
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:40
 #, c-format
 msgid "for this payment is invalid."
-msgstr ""
+msgstr "此支付不正確。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:37
 #, c-format
 msgid "has already been posted to an account."
-msgstr ""
+msgstr "已經貼給帳號了。"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11327,9 +11331,8 @@ msgstr "罰款 %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
-#, fuzzy
 msgid "in OpenLibrary collection"
-msgstr "在OverDrive館藏"
+msgstr "在 OpenLibrary 館藏"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
@@ -11362,9 +11365,9 @@ msgid "injecting OLD comment: "
 msgstr "提出舊的評論："
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "is already in use."
-msgstr "已經在您的書目清單"
+msgstr "已經使用中。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:52
 #, c-format
@@ -11374,7 +11377,7 @@ msgstr "是同樣的"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:76
 #, c-format
 msgid "is the wrong length."
-msgstr ""
+msgstr "長度不對。"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:119
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:126
@@ -11387,9 +11390,9 @@ msgstr "館藏"
 #. %3$s:  END 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:613
-#, fuzzy, c-format
+#, c-format
 msgid "item %s Pending %s %s %s "
-msgstr "%s %s %s %s %s 無題名 %s %s %s %s "
+msgstr "館藏 %s 待決 %s %s %s "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -11433,7 +11436,7 @@ msgstr "系統記錄辨識碼清單"
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:149
 #, c-format
 msgid "log in using a different account"
-msgstr ""
+msgstr "以其他帳號登入"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:712
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:743
@@ -11520,11 +11523,6 @@ msgstr "依 iDreamBooks.com 的評論評比"
 msgid "register here"
 msgstr "在此登記"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, c-format
 msgid "request_location"
@@ -11585,9 +11583,9 @@ msgid "see also:"
 msgstr "參見："
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:517
-#, fuzzy, c-format
+#, c-format
 msgid "show_attributes"
-msgstr "show_fines"
+msgstr "show_attributes"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:509
 #, c-format
@@ -11622,9 +11620,9 @@ msgstr "顯示您的帳號，請洽圖書館。"
 #. %6$s:  ELSE 
 #. %7$s:  IF RESERVE.itemtype 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:607
-#, fuzzy, c-format
+#, c-format
 msgid "since %s %s Suspended %s until %s %s %s %s Pending for next available "
-msgstr "自從 %s %s 暫停 %s 直到 %s %s %s 待決 %s %s "
+msgstr "自從 %s %s 暫停 %s 直到 %s %s %s %s 待決供下個參考"
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:34
 #, c-format
@@ -11735,20 +11733,15 @@ msgstr "從線上申請重建帳號時，可能略有延遲) %s。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
-#, fuzzy, c-format
-msgid "there was an problem processing your payment"
-msgstr "您的送出有問題"
+#, c-format
+msgid "there was a problem processing your payment"
+msgstr "處理您的支付有問題"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:726
 #, c-format
 msgid "to create new lists."
 msgstr "新增虛擬書架。"
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "在地登入"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format
@@ -11827,11 +11820,11 @@ msgid "was not found in the database. Please try again."
 msgstr "在資料庫找不到。請再試。"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:518
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "whether or not to return extended patron attributes information in the "
 "response"
-msgstr "是否送回讀者的連絡資訊"
+msgstr "是否送回讀者的其他屬性資訊"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:512
 #, c-format
@@ -11871,7 +11864,7 @@ msgstr "包括biblionumber"
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:127
 #, c-format
 msgid "would be entered as "
-msgstr ""
+msgstr "鍵入為"
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:89
 #, c-format
@@ -11910,7 +11903,7 @@ msgstr "您的訊息"
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:60
 #, c-format
 msgid "your payment of %s has been applied to your account"
-msgstr ""
+msgstr "對 %s 的支付已經納入您的帳號"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:25
 #, c-format

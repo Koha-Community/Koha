@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-05 23:58-0300\n"
+"POT-Creation-Date: 2016-05-20 12:06-0300\n"
 "PO-Revision-Date: 2013-12-24 04:05+0000\n"
 "Last-Translator: Andi <andi@opensuse-id.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -815,14 +815,6 @@ msgstr "Tidak ada perpanjangan yang diizinkan"
 msgid "%s On hold %s No renewals left %s "
 msgstr "%sSedang dipinjam %sTidak ada lagi perpanjangan %s "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, fuzzy, c-format
@@ -989,6 +981,13 @@ msgstr "%s Nama keluarga:"
 #, fuzzy, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "tag%s dari pengguna lain%s. "
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -4218,17 +4217,17 @@ msgstr "Hapus tanggal"
 msgid "Clear date to suspend indefinitely"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, fuzzy, c-format
 msgid "Click here if you're not %s %s"
 msgstr "jika anda tidak %s %s)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, fuzzy, c-format
+msgid "Click here to login."
+msgstr "klik di sini untuk log masuk"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, c-format
@@ -5017,6 +5016,11 @@ msgstr ""
 msgid "Entry %s"
 msgstr "Pembukuan %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, fuzzy, c-format
+msgid "Error"
+msgstr "Kesalahan:"
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5380,6 +5384,11 @@ msgstr "Abonemen informasi untuk %s"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:280
 #, c-format
 msgid "General"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
@@ -5833,7 +5842,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
+msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
 
 #. %1$s:  SelfCheckTimeout 
@@ -7343,11 +7352,6 @@ msgstr ""
 "Hanya judul yang dibutuhkan, tapi semakin banyak informasi yang dimasukkan "
 "semakin mudah bagi pustakawan untuk menemukan  judul yang anda minta. Sebuah "
 "kolom \"Catatan\" dapat digunakan untuk menyediakan semua informasi tambahan."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, fuzzy, c-format
@@ -11369,7 +11373,6 @@ msgstr ""
 msgid "has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11670,11 +11673,6 @@ msgstr ""
 msgid "register here"
 msgstr "Registrasi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, c-format
 msgid "request_location"
@@ -11896,7 +11894,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "Ada masalah dengan pengiriman anda"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -11904,11 +11902,6 @@ msgstr "Ada masalah dengan pengiriman anda"
 #, c-format
 msgid "to create new lists."
 msgstr "untuk membuat lis baru."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "Log masuk lokal"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format

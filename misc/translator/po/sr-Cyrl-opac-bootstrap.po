@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-06 00:10-0300\n"
+"POT-Creation-Date: 2016-05-20 13:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -791,14 +791,6 @@ msgstr "Nema vise obnavljanja"
 msgid "%s On hold %s No renewals left %s "
 msgstr "Nema vise obnavljanja "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, fuzzy, c-format
@@ -960,6 +952,13 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:77
 #, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
+msgstr ""
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
 msgstr ""
 
 #. %1$s:  IF error 
@@ -3909,17 +3908,17 @@ msgstr ""
 msgid "Clear date to suspend indefinitely"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, fuzzy, c-format
 msgid "Click here if you're not %s %s"
 msgstr "(<a1>Kliknite ovde</a> ukoliko niste %s %s %s)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, fuzzy, c-format
+msgid "Click here to login."
+msgstr "Kliknite ovde ako ste gotovi"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, fuzzy, c-format
@@ -4701,6 +4700,11 @@ msgstr ""
 msgid "Entry %s"
 msgstr "u/kod %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, fuzzy, c-format
+msgid "Error"
+msgstr "Greska:"
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5053,6 +5057,11 @@ msgstr "Informacije o pretplati za %s"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:280
 #, c-format
 msgid "General"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
@@ -5492,7 +5501,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
+msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
 
 #. %1$s:  SelfCheckTimeout 
@@ -6971,11 +6980,6 @@ msgid ""
 msgstr ""
 "Nijedno polje nije obavezno. Unesite informacije kojima raspolazete. "
 "Koristite polje \"Primedbe\" za dodatne informacije."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, fuzzy, c-format
@@ -10948,7 +10952,6 @@ msgstr ""
 msgid "has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11246,11 +11249,6 @@ msgstr ""
 msgid "register here"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, fuzzy, c-format
 msgid "request_location"
@@ -11461,7 +11459,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "Postoji problem sa vasom posiljkom"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -11469,11 +11467,6 @@ msgstr "Postoji problem sa vasom posiljkom"
 #, fuzzy, c-format
 msgid "to create new lists."
 msgstr "<a1>Ulogujte se</a> da kreirate novu listu."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "Lokacija"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format

@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inlibro-fr-CA-i-staff-t-prog-v-30611\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-06 00:13-0300\n"
-"PO-Revision-Date: 2016-04-01 12:47+0000\n"
-"Last-Translator: fcharbonnier <francois.charbonnier@inlibro.com>\n"
+"POT-Creation-Date: 2016-05-20 11:41-0300\n"
+"PO-Revision-Date: 2016-05-09 02:15+0000\n"
+"Last-Translator: François <francharb@gmail.com>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1459514849.000000\n"
+"X-POOTLE-MTIME: 1462760149.000000\n"
 
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:48
@@ -866,7 +866,7 @@ msgstr "45 tpm"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:14
 #, c-format
 msgid "5- Record status"
-msgstr "5- Statut notice"
+msgstr "5- Statut de la notice"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:279
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:281
@@ -1010,6 +1010,14 @@ msgid ""
 "@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
 "\"/> </xsl:for-each> "
 msgstr ""
+"<xsl:variable name=\"title\" select=\"marc:subfield[@code='a']\"/> <xsl:"
+"variable name=\"ntitle\" select=\"translate($title, '&#x0098;&#x009C;&#xC29C;"
+"&#xC29B;&#xC298;&#xC288;&#xC289;','')\"/> <xsl:value-of select=\"$ntitle\" /"
+"> <xsl:if test=\"marc:subfield[@code='e']\"> <xsl:text> : </xsl:text> <xsl:"
+"for-each select=\"marc:subfield[@code='e']\"> <xsl:value-of select=\".\"/> </"
+"xsl:for-each> </xsl:if> <xsl:for-each select=\"marc:subfield[@code='h' or "
+"@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
+"\"/> </xsl:for-each> "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:19
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:21
@@ -1303,7 +1311,7 @@ msgstr "Bibliographie : "
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:154
 #, c-format
 msgid "Biennial"
-msgstr "Biennial"
+msgstr "Biennal"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:151
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:149
@@ -2237,7 +2245,7 @@ msgstr "Homolosine de Goode"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100.tt:288
 #, c-format
 msgid "Government publication"
-msgstr "Government publication"
+msgstr "Publication gouvernementale"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:662
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:664
@@ -2883,7 +2891,7 @@ msgstr "Mollweide"
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:131
 #, c-format
 msgid "Monographic series"
-msgstr "Monographic series"
+msgstr "Collection monographique"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:633
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_122.tt:32
@@ -2998,7 +3006,7 @@ msgstr "Nature du contenu"
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:132
 #, c-format
 msgid "Newspaper"
-msgstr "Quotidien"
+msgstr "Journal"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_4XX.tt:159
 #, c-format
@@ -3642,13 +3650,13 @@ msgstr "Sélectionnez une collection&nbsp;:"
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:152
 #, c-format
 msgid "Semiannual"
-msgstr "Semiannuel"
+msgstr "Semestriel"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:149
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:147
 #, c-format
 msgid "Semimonthly"
-msgstr "semi-mensuel"
+msgstr "Bimensuel"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:146
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:144
@@ -4018,19 +4026,19 @@ msgstr "Thèses&nbsp;: "
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:157
 #, c-format
 msgid "Three times a month"
-msgstr "3 fois par mois"
+msgstr "Trimensuel (Trois fois par mois)"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:158
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:156
 #, c-format
 msgid "Three times a week"
-msgstr "3 fois par semaine"
+msgstr "Trois fois par semaine"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:153
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:151
 #, c-format
 msgid "Three times a year"
-msgstr "3 fois par an"
+msgstr "Trois fois par an"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_122.tt:36
 #, c-format
@@ -4143,7 +4151,7 @@ msgstr "Transparents 9 * 9 in. (22.5 * 22.5 cm)"
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:155
 #, c-format
 msgid "Triennial"
-msgstr "Triannuel"
+msgstr "Triennal"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:35
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:37
@@ -4604,7 +4612,7 @@ msgstr "Non précisé (instrument à bois)"
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:133
 #, c-format
 msgid "Updating loose-leaf"
-msgstr "Updating loose-leaf"
+msgstr "Mise à jour de feuilles mobiles"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:137
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:135
@@ -7672,7 +7680,7 @@ msgstr "i- partiellement conforme ISBD"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:160
 #, c-format
 msgid "i - Integrating resource"
-msgstr "i- Ressource intégrée"
+msgstr "i- Ressource intégratrice"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:104
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_leader.tt:106

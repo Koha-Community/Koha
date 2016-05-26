@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-06 00:12-0300\n"
+"POT-Creation-Date: 2016-05-20 13:54-0300\n"
 "PO-Revision-Date: 2012-06-23 09:35+0200\n"
 "Last-Translator: bunyarit <bun072@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -791,14 +791,6 @@ msgstr "ไม่สามารถยืมต่อได้แล้ว"
 msgid "%s On hold %s No renewals left %s "
 msgstr "ไม่สามารถยืมต่อได้แล้ว "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, fuzzy, c-format
@@ -961,6 +953,13 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "แท็กจากผู้ใช้อื่น "
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -4162,17 +4161,17 @@ msgstr "ปี"
 msgid "Clear date to suspend indefinitely"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, fuzzy, c-format
 msgid "Click here if you're not %s %s"
 msgstr "(<a1>คลิกที่นี่</a> ถ้าคุณไม่ใช่ %s %s %s)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, fuzzy, c-format
+msgid "Click here to login."
+msgstr "คลิกที่นี่หากดำเนินการเสร็จสิ้นแล้ว"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, fuzzy, c-format
@@ -4950,6 +4949,11 @@ msgstr "กรุณาใส่รหัสผู้ใช้ของคุณ
 msgid "Entry %s"
 msgstr "ที่ %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, fuzzy, c-format
+msgid "Error"
+msgstr "ข้อผิดพลาด:"
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5309,6 +5313,11 @@ msgstr "บอกรับข้อมูลของชื่อเรื่อ
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:280
 #, c-format
 msgid "General"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
@@ -5747,7 +5756,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
+msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
 
 #. %1$s:  SelfCheckTimeout 
@@ -7232,11 +7241,6 @@ msgid ""
 msgstr ""
 "ไม่มีฟิลด์ใดที่เป็นฟิลด์บังคับ คุณสามารถใส่ข้อมูลใดก็ได้ตามที่คุณมี และคุณสามารถใส่ข้อมูลเพิ่มเติมใดๆ "
 "ก็ได้ในฟิลด์ \"หมายเหตุ\""
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, fuzzy, c-format
@@ -11212,7 +11216,6 @@ msgstr ""
 msgid "has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11534,11 +11537,6 @@ msgstr ""
 msgid "register here"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, fuzzy, c-format
 msgid "request_location"
@@ -11749,7 +11747,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "มีปัญหากับการส่งข้อมูลของคุณ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -11757,11 +11755,6 @@ msgstr "มีปัญหากับการส่งข้อมูลขอ
 #, fuzzy, c-format
 msgid "to create new lists."
 msgstr "<a1>ล็อกอิน</a> เพื่อสร้างรายการข้อมูลใหม่"
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "สถานที่"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format

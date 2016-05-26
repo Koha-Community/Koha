@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: uk-UA-i-staff-t-prog-v-3002000\n"
-"POT-Creation-Date: 2016-05-06 00:10-0300\n"
+"POT-Creation-Date: 2016-05-20 14:02-0300\n"
 "PO-Revision-Date: 2016-04-28 17:15+0000\n"
 "Last-Translator: Synapse <synapse.ova@gmail.com>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
@@ -841,14 +841,6 @@ msgstr "Не дозволено більше продовжувати"
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s Зарезервовано %s Немає більше продовжень %s "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, c-format
@@ -1018,6 +1010,13 @@ msgstr "%s Прізвище: "
 #, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "%s Показувати міток від інших користувачів %s Показувати міток %s:  "
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -4481,17 +4480,17 @@ msgstr "Очистити дату"
 msgid "Clear date to suspend indefinitely"
 msgstr "Очистити дату для призупинення на невизначений термін"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, c-format
 msgid "Click here if you're not %s %s"
 msgstr "Клацніть тут якщо Ви не %s %s"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, fuzzy, c-format
+msgid "Click here to login."
+msgstr " клацніть тут щоб увійти"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, c-format
@@ -5282,6 +5281,11 @@ msgstr ""
 msgid "Entry %s"
 msgstr "Входження „%s“"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, fuzzy, c-format
+msgid "Error"
+msgstr "Помилка: "
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5651,6 +5655,11 @@ msgstr "Вся історія підписки для „%s“"
 #, c-format
 msgid "General"
 msgstr "для усіх"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, fuzzy, c-format
@@ -6114,7 +6123,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
+msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
 
 #. %1$s:  SelfCheckTimeout 
@@ -7628,11 +7637,6 @@ msgstr ""
 "надасте, тим легше буде бібліотекарям відшукати заголовок, про який Ви "
 "запитуєте. Поле „Нотатки“ може бути використане для надання будь-якої "
 "додаткової інформації."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, fuzzy, c-format
@@ -11731,7 +11735,6 @@ msgstr ""
 msgid "has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -12043,11 +12046,6 @@ msgstr "Більше оглядів книг на сайті iDreamBooks.com"
 msgid "register here"
 msgstr "зареєструватися тут"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 # змінна функції HoldTitle з ILS-DI
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, c-format
@@ -12284,7 +12282,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "Була якась проблема з Вашою подачею"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -12292,11 +12290,6 @@ msgstr "Була якась проблема з Вашою подачею"
 #, c-format
 msgid "to create new lists."
 msgstr " щоб створювати нові списки."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "Локальний вхід"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format

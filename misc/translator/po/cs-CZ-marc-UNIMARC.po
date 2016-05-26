@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-06 00:02-0300\n"
-"PO-Revision-Date: 2015-05-01 19:27+0000\n"
-"Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
+"POT-Creation-Date: 2016-05-20 10:55-0300\n"
+"PO-Revision-Date: 2016-05-17 05:50+0000\n"
+"Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
 ">\n"
 "Language: cs\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1430508467.000000\n"
+"X-POOTLE-MTIME: 1463464238.000000\n"
 
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:48
@@ -1000,6 +1000,14 @@ msgid ""
 "@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
 "\"/> </xsl:for-each> "
 msgstr ""
+"<xsl:variable name=\"title\" select=\"marc:subfield[@code='a']\"/> <xsl:"
+"variable name=\"ntitle\" select=\"translate($title, '&#x0098;&#x009C;&#xC29C;"
+"&#xC29B;&#xC298;&#xC288;&#xC289;','')\"/> <xsl:value-of select=\"$ntitle\" /"
+"> <xsl:if test=\"marc:subfield[@code='e']\"> <xsl:text> : </xsl:text> <xsl:"
+"for-each select=\"marc:subfield[@code='e']\"> <xsl:value-of select=\".\"/> </"
+"xsl:for-each> </xsl:if> <xsl:for-each select=\"marc:subfield[@code='h' or "
+"@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
+"\"/> </xsl:for-each> "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:19
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:21

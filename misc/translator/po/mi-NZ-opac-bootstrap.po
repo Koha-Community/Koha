@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-06 00:01-0300\n"
+"POT-Creation-Date: 2016-05-20 12:38-0300\n"
 "PO-Revision-Date: 2012-01-22 08:15+0200\n"
 "Last-Translator: chrisc <chris@bigballofwax.co.nz>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -788,14 +788,6 @@ msgstr "Kua pau ngā wā whakahōu"
 msgid "%s On hold %s No renewals left %s "
 msgstr "Kua pau ngā wā whakahōu "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, fuzzy, c-format
@@ -958,6 +950,13 @@ msgstr "Ingoa Tuatahi:"
 #, fuzzy, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "tohu mai i ērā atu kaiwhakamahi "
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -3917,17 +3916,17 @@ msgstr "Tiro M&#257;m&#257;"
 msgid "Clear date to suspend indefinitely"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, fuzzy, c-format
 msgid "Click here if you're not %s %s"
 msgstr "(<a1>Pāwhiria a konei ki te kore koe ko %s %s %s</a>)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, fuzzy, c-format
+msgid "Click here to login."
+msgstr "Pāwhiria a konei ina oti."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, fuzzy, c-format
@@ -4713,6 +4712,11 @@ msgstr ""
 msgid "Entry %s"
 msgstr "i te %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, fuzzy, c-format
+msgid "Error"
+msgstr "Hapa:"
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5073,6 +5077,11 @@ msgstr "Pārongo tangohanga mō %s"
 #, fuzzy, c-format
 msgid "General"
 msgstr "Pakeke, Whānui"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, fuzzy, c-format
@@ -5511,7 +5520,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
+msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
 
 #. %1$s:  SelfCheckTimeout 
@@ -7013,11 +7022,6 @@ msgid ""
 msgstr ""
 "Kāore he āpure whakahau. Tāurutia tāu pārongo. Ka taea te whakamahi i te "
 "āpure \"Tuhipoka\" hei hoatu i ētahi atu pārongo."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, fuzzy, c-format
@@ -11044,7 +11048,6 @@ msgstr ""
 msgid "has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11342,11 +11345,6 @@ msgstr ""
 msgid "register here"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, fuzzy, c-format
 msgid "request_location"
@@ -11557,7 +11555,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "Kua raru tō tukunga mai"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -11565,11 +11563,6 @@ msgstr "Kua raru tō tukunga mai"
 #, fuzzy, c-format
 msgid "to create new lists."
 msgstr "<a1>Taki Uru </a> hei hanga Rārangi hōu."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "Tauwāhi"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format

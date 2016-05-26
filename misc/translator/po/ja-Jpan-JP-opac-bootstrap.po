@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-06 00:11-0300\n"
+"POT-Creation-Date: 2016-05-20 12:20-0300\n"
 "PO-Revision-Date: 2013-02-18 04:51+0200\n"
 "Last-Translator: munro <munro@dsty.ac.jp>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -852,14 +852,6 @@ msgstr "続けて借りることができない"
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s Not renewable%s "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, fuzzy, c-format
@@ -1035,6 +1027,13 @@ msgstr "読者。"
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:77
 #, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
+msgstr ""
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
 msgstr ""
 
 # %1$s: IF category_type == 'I'
@@ -4542,17 +4541,17 @@ msgstr "全てを明らかに示す"
 msgid "Clear date to suspend indefinitely"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, fuzzy, c-format
 msgid "Click here if you're not %s %s"
 msgstr "(<a1>点はここを選ぶ</a> もしもあなたはそうではないなら %3$s %2$s %1$s)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, fuzzy, c-format
+msgid "Click here to login."
+msgstr "ここをクリックしてログイン"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, c-format
@@ -5337,6 +5336,11 @@ msgstr ""
 msgid "Entry %s"
 msgstr "ある %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, fuzzy, c-format
+msgid "Error"
+msgstr "あげる："
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5691,6 +5695,11 @@ msgstr "%s の購読の資料"
 #, fuzzy, c-format
 msgid "General"
 msgstr "成年、全般"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, fuzzy, c-format
@@ -6127,7 +6136,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
+msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
 
 #. %1$s:  SelfCheckTimeout 
@@ -7635,11 +7644,6 @@ msgstr ""
 " すべての資料はすべて埋めるとは限らなくて、しかしできるだけあなたの知ってい "
 "る 資料を書き込んでもらう。「付注」一欄は用いていかなるあなたの埋めたい資料"
 "を 書 き込むことができる。"
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, fuzzy, c-format
@@ -11633,7 +11637,6 @@ msgstr ""
 msgid "has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11931,11 +11934,6 @@ msgstr ""
 msgid "register here"
 msgstr "予約する"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, fuzzy, c-format
 msgid "request_location"
@@ -12155,7 +12153,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "表を手渡して途中誤りが現れる"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -12163,11 +12161,6 @@ msgstr "表を手渡して途中誤りが現れる"
 #, fuzzy, c-format
 msgid "to create new lists."
 msgstr "<a1>登って入る</a> Koha"
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "館所蔵"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format

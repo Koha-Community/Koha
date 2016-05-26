@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nn-NO-i-staff-prog-v-3000000\n"
-"POT-Creation-Date: 2016-05-06 00:01-0300\n"
+"POT-Creation-Date: 2016-05-20 13:02-0300\n"
 "PO-Revision-Date: 2011-11-04 09:04+0200\n"
 "Last-Translator: gangagiri <amsvrama@gmail.com>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.pping.uio.no>\n"
@@ -794,14 +794,6 @@ msgstr "Kan ikkje fornya fleire gonger"
 msgid "%s On hold %s No renewals left %s "
 msgstr "Kan ikkje fornya fleire gonger "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, fuzzy, c-format
@@ -964,6 +956,13 @@ msgstr "Etternamn:"
 #, fuzzy, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "taggar frå andre brukarar. "
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -3923,17 +3922,17 @@ msgstr "Bestillingsdato"
 msgid "Clear date to suspend indefinitely"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, fuzzy, c-format
 msgid "Click here if you're not %s %s"
 msgstr "(<a1>Trykk her</a> dersom du ikkje er %s %s %s)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, fuzzy, c-format
+msgid "Click here to login."
+msgstr "Trykk her dersom du er ferdig"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, fuzzy, c-format
@@ -4719,6 +4718,11 @@ msgstr ""
 msgid "Entry %s"
 msgstr "ved %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, fuzzy, c-format
+msgid "Error"
+msgstr "Feil:"
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5077,6 +5081,11 @@ msgstr "Abonnementsinformasjon for %s"
 #, fuzzy, c-format
 msgid "General"
 msgstr "g- Generelt"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, fuzzy, c-format
@@ -5515,7 +5524,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
+msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
 
 #. %1$s:  SelfCheckTimeout 
@@ -7017,11 +7026,6 @@ msgid ""
 msgstr ""
 "Ingen av felta er obligatoriske. Skriv inn den informasjonen du har. Bruk "
 "merknadsfeltet til tilleggsinformasjon."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, fuzzy, c-format
@@ -11027,7 +11031,6 @@ msgstr ""
 msgid "has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11324,11 +11327,6 @@ msgstr ""
 msgid "register here"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, fuzzy, c-format
 msgid "request_location"
@@ -11540,7 +11538,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "Det oppsto eit problem med sendinga di"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -11548,11 +11546,6 @@ msgstr "Det oppsto eit problem med sendinga di"
 #, fuzzy, c-format
 msgid "to create new lists."
 msgstr "<a1>Logg inn</a>  for å oppretta ei ny liste."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "Plassering"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format

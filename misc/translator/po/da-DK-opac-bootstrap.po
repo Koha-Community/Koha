@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Danish Koha Translation\n"
-"POT-Creation-Date: 2016-05-06 00:01-0300\n"
+"POT-Creation-Date: 2016-05-20 11:02-0300\n"
 "PO-Revision-Date: 2016-02-02 11:12+0000\n"
 "Last-Translator: Poul <poul@wachmann.dk>\n"
 "Language-Team: -\n"
@@ -827,14 +827,6 @@ msgstr "%s Kan ikke fornys %s Ikke tilladt "
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s Reserveret %s Ikke flere fornyelser tilbage %s "
 
-#. %1$s:  ELSIF (errPassNotMatch) 
-#. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid ""
-"%s Oops! The passwords must match. %s Your chosen password is too short. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:295
 #, c-format
@@ -1000,6 +992,13 @@ msgstr "%s Efternavn:"
 #, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
 msgstr "%s Synlige markeringer fra andre brugere %s Synlige markeringer %s: "
+
+#. %1$s:  ELSIF (errPassNotMatch) 
+#. %2$s:  ELSIF (errPassTooShort) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -4258,17 +4257,17 @@ msgstr "Slet dato"
 msgid "Clear date to suspend indefinitely"
 msgstr "Clear date to suspend indefinitely"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
-#, c-format
-msgid "Click "
-msgstr ""
-
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
 #, c-format
 msgid "Click here if you're not %s %s"
 msgstr "Klik her hvis du ikke er %s %s"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#, fuzzy, c-format
+msgid "Click here to login."
+msgstr "klik her for at logge ind"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, c-format
@@ -5054,6 +5053,11 @@ msgstr ""
 msgid "Entry %s"
 msgstr "Emne %s"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
+#, fuzzy, c-format
+msgid "Error"
+msgstr "Fejl:"
+
 #. For the first occurrence,
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
@@ -5420,6 +5424,11 @@ msgstr "Abonnementsinformation for %s"
 #, c-format
 msgid "General"
 msgstr "Generelt"
+
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#, c-format
+msgid "Get new password recovery link"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, fuzzy, c-format
@@ -5867,7 +5876,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
-msgid "If you did not receive this email, you can "
+msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
 
 #. %1$s:  SelfCheckTimeout 
@@ -7371,11 +7380,6 @@ msgstr ""
 "Kun titlen er obligatorisk. Men jo mere information, du giver, des nemmere "
 "er det for bibliotekarerne at finde den ønskede titel. \"Notefeltet\" kan "
 "bruges til yderligere oplysninger."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
-#, c-format
-msgid "Oops!"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
 #, fuzzy, c-format
@@ -11433,7 +11437,6 @@ msgstr ""
 msgid "has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
@@ -11734,11 +11737,6 @@ msgstr "Flere anmeldelser på iDreamBooks.com"
 msgid "register here"
 msgstr "registrer her"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
-#, c-format
-msgid "request a new password recovery link."
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, c-format
 msgid "request_location"
@@ -11960,7 +11958,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
-msgid "there was an problem processing your payment"
+msgid "there was a problem processing your payment"
 msgstr "Der opstod et problem med din indtastning"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -11968,11 +11966,6 @@ msgstr "Der opstod et problem med din indtastning"
 #, c-format
 msgid "to create new lists."
 msgstr "for at oprette nye lister."
-
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
-#, fuzzy, c-format
-msgid "to login. "
-msgstr "Lokalt login"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format
