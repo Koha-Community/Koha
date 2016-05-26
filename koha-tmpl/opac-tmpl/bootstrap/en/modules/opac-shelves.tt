@@ -549,7 +549,7 @@
                                 [% ELSE %]
                                     <legend>Editing <em>[% shelf.shelfname |html %]</em></legend>
                                     <input type="hidden" name="op" value="edit" />
-                                    <input type="hidden" name="referer" value="[% referer %]" />
+                                    <input type="hidden" name="referer" value="[% referer | html %]" />
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                 [% END %]
                                 <input type="hidden" name="owner" id="owner" value="[% loggedinusernumber %]" />
