@@ -32,7 +32,7 @@
         <div id="shareshelf" class="maincontent">
 
     [% IF errcode %]
-        [% IF errcode==1 && op %]<div class="alert">The operation [% op %] is not supported.</div>[% END %]
+        [% IF errcode==1 && op %]<div class="alert">The operation [% op | html %] is not supported.</div>[% END %]
         [% IF errcode==1 && !op %]<div class="alert">No operation parameter has been passed.</div>[% END %]
         [% IF errcode==2 %]<div class="alert">Invalid shelf number.</div>[% END %]
         [% IF errcode==3 %]<div class="alert">The feature of sharing lists is not in use in this library.</div>[% END %]
