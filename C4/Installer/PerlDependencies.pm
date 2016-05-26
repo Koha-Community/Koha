@@ -807,6 +807,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.07'
     },
+    'WWW::CSRF' => {
+        usage => 'Core',
+        required => 1,
+        min_ver => '1.00',
+    },
 };
 
 1;
