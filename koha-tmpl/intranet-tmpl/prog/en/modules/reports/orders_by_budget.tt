@@ -7,7 +7,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
     $(document).ready( function () {
@@ -17,10 +17,11 @@
         $('#budgetfilter .b_inactive').remove();
 
         $('#showbudgets').click(function(){
-            if ($(this).is(":checked"))
+            if ($(this).is(":checked")) {
                 $('#budgetfilter').html(showallbudgets);
-            else
+            } else {
                 $('#budgetfilter .b_inactive').remove();
+            }
         });
     } );
 </script>
@@ -61,7 +62,7 @@
         <th>Total RRP</th>
         <th>Total cost</th>
         <th>Entry date</th>
-        <th>Date deceived</th>
+        <th>Date received</th>
         <th>Internal note</th>
         <th>Vendor note</th>
         </tr>
@@ -90,7 +91,7 @@
             </tr>
         [% END %]
         </tbody>
-        <tfoot><tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>[% total_quantity  %]</th><th>[% total_rrp | $Price %]</th><th>[% total_ecost | $Price %]</th><th></th><th></th><th></th></tr></tfoot>
+        <tfoot><tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>[% total_quantity  %]</th><th>[% total_rrp | $Price %]</th><th>[% total_ecost | $Price %]</th><th></th><th></th><th></th><th></th></tr></tfoot>
         </table>
     [% END %]
     [% ELSE %]
