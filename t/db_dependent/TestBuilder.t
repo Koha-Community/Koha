@@ -52,8 +52,8 @@ subtest 'Start with some trivial tests' => sub {
         'Build should not accept a hash for this column';
 
     # return undef if a record exists
-    my $param = { source => 'Branch', value => { branchcode => 'MPL' } };
-    $builder->build( $param ); # at least it should exist now
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+    my $param = { source => 'Branch', value => { branchcode => $branchcode } };
     warning_like { $builder->build( $param ) }
         qr/Violation of unique constraint/,
         'Catch warn on adding existing record';
