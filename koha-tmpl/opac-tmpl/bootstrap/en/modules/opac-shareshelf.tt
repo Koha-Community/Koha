@@ -50,7 +50,7 @@
             <ol>
             <input type="hidden" name="op" value="conf_invite"/>
             <input type="hidden" name="shelfnumber" value="[% shelfnumber %]"/>
-            <li><label for="name">List name:</label> [% shelfname %]</li>
+            <li><label for="name">List name:</label> [% shelfname | html %]</li>
             <li>
                 <label for="invite_address">Email address:</label>
                 <input id="invite_address" name="invite_address" size="40" />
@@ -67,7 +67,7 @@
     [% ELSIF op=='conf_invite' %]
         <div id="conf_invite">
         [% IF approvedaddress %]
-        <p>An invitation to share list <i>[% shelfname %]</i> will be sent shortly to [% approvedaddress %].</p>
+        <p>An invitation to share list <i>[% shelfname | html %]</i> will be sent shortly to [% approvedaddress %].</p>
         [% END %]
         [% IF failaddress %]
             <p>Something went wrong while processing the following addresses. Please check them. These are: [% failaddress %]</p>
