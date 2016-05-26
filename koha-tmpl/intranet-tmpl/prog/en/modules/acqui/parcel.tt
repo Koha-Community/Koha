@@ -10,7 +10,7 @@
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
-[% INCLUDE 'greybox.inc' %]
+<style type="text/css">#dataPreview { width : 80%; margin-left : -40%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
 <script type="text/javascript">
 //<![CDATA[
 
@@ -103,6 +103,19 @@
         $.cookie("filter_parcel_basketgroupname", $("#basketgroupnamefilter").val());
         $.cookie("filter_parcel_ean", $("#eanfilter").val());
       });
+
+        $(".previewData").on("click", function(e){
+            e.preventDefault();
+            var ltitle = $(this).text();
+            var page = $(this).attr("href");
+            $("#dataPreviewLabel").text(ltitle);
+            $("#dataPreview .modal-body").load(page + " div");
+            $('#dataPreview').modal({show:true});
+        });
+        $("#dataPreview").on("hidden", function(){
+            $("#dataPreviewLabel").html("");
+            $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+        });
 
     });
 
@@ -275,7 +288,7 @@
                     [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=vendor">Add vendor note</a>]
                 [% END %]
                 </td>
-                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber %]" class="previewData">Card</a></td>
                 <td>[% loop_order.quantity %]</td>
                 <td>[% loop_order.ecost | $Price %]</td>
                 <td>[% loop_order.total | $Price %]</td>
@@ -411,7 +424,7 @@
                     (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% order.suggestionid %]&amp;op=show">suggestion #[% order.suggestionid %]</a>)
                 [% END %]
                 </td>
-                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% order.biblionumber %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% order.biblionumber %]" class="previewData">Card</a></td>
                 <td>[% order.quantityreceived %]</td>
                 <td>[% order.budget.budget_name %]</td>
                 <td>[% order.ecost | $Price %]</td>
@@ -446,7 +459,21 @@
 	</tbody>
     </table>
     </form>
+
 	[% ELSE %]There are no received orders.[% END %]
+</div>
+
+<div id="dataPreview" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="dataPreviewLabel">MARC preview</h3>
+    </div>
+    <div class="modal-body">
+        <div id="loading"> <img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /> Loading </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
 </div>
 
 [% IF (invoiceclosedate) %]
