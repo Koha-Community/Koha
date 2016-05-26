@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% IF ( fullpage ) %]
     [% INCLUDE 'doc-head-open.inc' %]
-    <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Download list [% shelf.shelfname %]</title>[% INCLUDE 'doc-head-close.inc' %]
+    <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Download list [% shelf.shelfname | html %]</title>[% INCLUDE 'doc-head-close.inc' %]
     [% BLOCK cssinclude %][% END %]
     </head>
     [% INCLUDE 'bodytag.inc' bodyid='opac-downloadlist' %]
@@ -20,7 +20,7 @@
                     [% END %]
                     <span class="divider">&rsaquo;</span>
                 </li>
-                <li>Download list <i>[% shelf.shelfname %]</i></li>
+                <li>Download list <i>[% shelf.shelfname | html %]</i></li>
             </ul>
             <div class="container-fluid">
                 <div class="row-fluid">
@@ -47,7 +47,7 @@
                                     <p>Your download should begin automatically.</p>
                                 </div>
                             [% ELSE %]
-                                <h1>Download list <i>[% shelf.shelfname %]</i></h1>
+                                <h1>Download list <i>[% shelf.shelfname | html %]</i></h1>
                                 <form method="post" action="/cgi-bin/koha/opac-downloadshelf.pl">
                                     <fieldset>
                                         <select name="format" id="dlformat" required="required">
