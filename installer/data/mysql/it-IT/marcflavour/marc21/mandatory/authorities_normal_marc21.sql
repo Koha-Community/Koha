@@ -1,7 +1,7 @@
 -- *******************************************************
 --   KOHA  MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS
 --
---        Revised to Update No. 21 (September 2015)
+--        Revised to Update No. 22 (April 2016)
 -- *******************************************************
 
 -- ******************************************************
@@ -273,7 +273,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('', '000', '@', 'campo di controllo lung. fissa', 'campo di controllo lung. fissa', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
 		('', '001', '@', 'campo di controllo', 'campo di controllo', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
-        ('', '003', '@', 'campo di controllo', 'campo di controllo', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
+		('', '003', '@', 'campo di controllo', 'campo di controllo', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
 		('', '005', '@', 'campo di controllo', 'campo di controllo', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
 		('', '008', '@', 'campo di controllo lung. fissa', 'campo di controllo lung. fissa', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
 		('', '010', 'a', 'Numero di controllo della LC', 'Numero di controllo della LC', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -351,7 +351,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '035', 'z', 'Numero di controllo del sistema cancellato o errato', 'Numero di controllo del sistema cancellato o errato', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '035', '6', 'Collegamento', 'Collegamento', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '035', '8', 'Numero di collegamento e di sequenza di campi', 'Numero di collegamento e di sequenza di campi', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
-        ('', '040', 'a', 'Agenzia catalografica originale', 'Agenzia catalografica originale', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
+		('', '040', 'a', 'Agenzia catalografica originale', 'Agenzia catalografica originale', 0, 1, 0, NULL, 'marc21_orgcode.pl', NULL, 0, 0, '', '', ''),
 		('', '040', 'b', 'Lingua della catalogazione', 'Lingua della catalogazione', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '040', 'c', 'Agenzia che fa la trascrizione', 'Agenzia che fa la trascrizione', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '040', 'd', 'Agenzia che fa la modifica', 'Agenzia che fa la modifica', 1, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
@@ -915,10 +915,12 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '382', 'a', 'Modalità dell\'esecuzione', 'Modalità dell\'esecuzione', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'b', 'Solista', 'Solista', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'd', 'Secondo strumento', 'Secondo strumento', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '382', 'e', 'Numero di complessi', 'Numero di complessi', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '382', 'e', 'Numero di complessi dello stesso tipo', 'Numero di complessi dello stesso tipo', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'n', 'Numero di esecutori con stesso strumento', 'Numero di esecutori con stesso strumento', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'p', 'Strumento alternativo', 'Strumento alternativo', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '382', 'r', 'Numero totale di persone che eseguono insieme ai complessi', 'Numero totale di persone che eseguono insieme ai complessi', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 's', 'Numero totale di esecutori', 'Numero totale di esecutori', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '382', 't', 'Numero totale di complessi', 'Numero totale di complessi', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', 'v', 'Nota', 'Nota', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', '0', 'Numero del record di authority o numero standard', 'Numero del record di authority o numero standard', 1, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '382', '2', 'Fonte', 'Fonte', 0, 0, 3, NULL, NULL, NULL, 0, 0, '', '', ''),
