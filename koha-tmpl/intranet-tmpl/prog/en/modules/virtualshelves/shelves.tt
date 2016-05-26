@@ -529,7 +529,7 @@ function placeHold () {
             <legend>Edit list <i>[% shelf.shelfname | html %]</i></legend>
             <input type="hidden" name="op" value="edit" />
         [% END %]
-        <input type="hidden" name="referer" value="[% referer %]" />
+        <input type="hidden" name="referer" value="[% referer | html %]" />
         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
         <ol>
             <li>
