@@ -169,7 +169,6 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         <th>Heading</th>
         <th>Authority Type</th>
         <th>MARC</th>
-        <!-- <th>Card</th> -->
         <th>&nbsp;</th>
     </tr></thead>
     <tbody>[% FOREACH breeding_loo IN breeding_loop %]
@@ -179,7 +178,6 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             <td>[% breeding_loo.heading %]</td>
             <td>[% breeding_loo.heading_code %]</td>
             <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewMARC">MARC</a></td>
-            <!-- <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td> -->
             <td><a href="#" onclick="Import([% breeding_loo.breedingid %],'[% breeding_loo.heading_code %]','[% breeding_loo.authid %]'); return false">Import</a></td>
         </tr>
         [% END %]
