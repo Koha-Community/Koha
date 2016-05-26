@@ -104,7 +104,8 @@ unless ( $loggedinuser ) {
         if ( @id ) {
             C4::Search::History::delete(
                 {
-                    id => [ $cgi->param('id') ],
+                    userid => $loggedinuser,
+                    id     => [ $cgi->param('id') ],
                 }
             );
         } else {

@@ -46,7 +46,8 @@ if ( $action eq 'delete' ) {
         : q{};
     C4::Search::History::delete(
         {
-            id => [ $cgi->param('id') ],
+            userid => $loggedinuser,
+            id     => [ $cgi->param('id') ],
         }
     );
     # Redirecting to this same url so the user won't see the search history link in the header
