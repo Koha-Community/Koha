@@ -86,7 +86,18 @@
 		                <tr class="oc-[% operation.action %]">
 		                    <td><input type="checkbox" name="operationid" value="[% operation.operationid %]" /></td>
 			                <td>[% operation.timestamp %]</td>
-			                <td>[% operation.action %]</td>
+                            <td>
+                                [% SWITCH ( operation.action ) -%]
+                                    [%   CASE "issue" -%]
+                                        Check out
+                                    [%   CASE "return" -%]
+                                        Check in
+                                    [%   CASE "payment" -%]
+                                        Payment
+                                    [%   CASE # default case -%]
+                                        [% operation.action %]
+                                [% END -%]
+                            </td>
 			                <td>
 			                    [% IF ( biblionumber ) %]
 			                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% operation.biblionumber %]" title="[% operation.bibliotitle %]">[% operation.barcode %]</a>
