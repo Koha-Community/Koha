@@ -31,8 +31,8 @@
                     <td><a href="/cgi-bin/koha/reserve/request.pl?borrowernumber=[% borrower.borrowernumber %]&amp;biblionumber=[% biblionumber %]">[% borrower.surname %], [% borrower.firstname %]</a></td>
             [% END %]
                 <td>[% borrower.cardnumber %]</td>
-                <td>[% borrower.categorycode %]</td>
-                <td>[% borrower.branchcode %]</td>
+                <td>[% Categories.GetName( borrower.categorycode ) %]</td>
+                <td>[% Branches.GetName( borrower.branchcode ) %]</td>
                 <td>[% borrower.address %]</td>
             </tr>
         [% END %]
