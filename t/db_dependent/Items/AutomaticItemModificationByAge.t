@@ -17,11 +17,11 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
-# this test assumes a CPL branch
 my $builder = t::lib::TestBuilder->new;
-if( !$builder->schema->resultset('Branch')->find('CPL') ) {
-    $builder->build( { source => 'Branch', value => { branchcode => 'CPL' }});
-}
+
+# create two branches
+my $library = $builder->build( { source => 'Branch' })->{branchcode};
+my $library2 = $builder->build( { source => 'Branch' })->{branchcode};
 
 $dbh->do(q|
     DELETE FROM marc_subfield_structure
@@ -44,8 +44,8 @@ my ($biblionumber, undef) = C4::Biblio::AddBiblio($record, '');
 
 my ($item_bibnum, $item_bibitemnum, $itemnumber) = C4::Items::AddItem(
     {
-        homebranch => 'CPL',
-        holdingbranch => 'CPL',
+        homebranch => $library,
+        holdingbranch => $library,
         new_status => 'new_value',
         ccode => 'FIC',
     },
@@ -194,7 +194,7 @@ is( $marc_item->subfield($tagfield, $new_tagfield), undef, q|ToggleNewStatus: Th
             },
             {
                 field => 'items.homebranch',
-                value => 'CPL',
+                value => $library,
             },
         ],
         substitutions => [
@@ -248,7 +248,7 @@ is( $modified_item->{new_status}, 'new_value', q|ToggleNewStatus: conditions mul
             },
             {
                 field => 'items.homebranch',
-                value => 'MPL|CPL',
+                value => "$library|$library2",
             },
         ],
         substitutions => [
