@@ -163,6 +163,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         [% IF ( marcflavour == 'MARC21' ) %]
             if ( tag == '000' ) {
                 return "http://www.loc.gov/marc/bibliographic/bdleader.html";
+            } else if ( tag >= '090' && tag < '100' ) {
+                return "http://www.loc.gov/marc/bibliographic/bd09x.html";
             } else if ( tag < '900' ) {
                 return "http://www.loc.gov/marc/bibliographic/bd" + tag + ".html";
             } else {
