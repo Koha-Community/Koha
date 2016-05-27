@@ -193,11 +193,11 @@ sub AUTOLOAD {
 sub check_password {
     my ( $self, $pwd ) = @_;
 
-    defined $pwd
-      or return 0;    # you gotta give me something (at least ''), or no deal
+    # you gotta give me something (at least ''), or no deal
+    return 0 unless defined $pwd;
 
-    return 1
-      if $pwd eq q{};    # if the record has a NULL password, accept '' as match
+    # If the record has a NULL password, accept '' as match
+    return $pwd eq q{} unless $self->{password};
 
     my $dbh = C4::Context->dbh;
     my $ret = 0;
