@@ -27,7 +27,8 @@ use Koha::Item;
 use Koha::DateUtils;
 use t::lib::TestBuilder;
 
-use Test::More tests => 31;
+use Test::More tests => 32;
+use Test::Warn;
 
 use_ok('Koha::Hold');
 
@@ -86,7 +87,8 @@ $hold->resume();
 is( $hold->suspend, 0, "Hold is not suspended" );
 is( $hold->suspend_until, undef, "Hold no longer has suspend_until date" );
 $hold->found('W');
-$hold->suspend_hold();
+warning_like { $hold->suspend_hold }
+    qr/Unable to suspend waiting hold!/, 'Catch warn about failed suspend';
 is( $hold->suspend, 0, "Waiting hold cannot be suspended" );
 
 $item = $hold->item();
