@@ -30,7 +30,7 @@ find({
     no_chdir => 1,
     wanted => sub {
         my $file = $_;
-        return unless $file =~ /(\.xml|\.xsl|\.xslt)$/i;
+        return unless $file =~ /(\.xml|\.xsl|\.xslt|\.xsd)$/i;
         my $dom;
         eval { $dom = $parser->parse_file($file); };
         if ($@) {
