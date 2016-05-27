@@ -25,6 +25,11 @@
     Details for [% title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]
   [% END %]
 </title>
+
+[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
+    <script type="text/javascript" src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
+[% END %]
+
 [% INCLUDE 'doc-head-close.inc' %]<script type="text/JavaScript">
 //<![CDATA[
 // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
@@ -196,6 +201,22 @@ function verify_images() {
         $("#marcPreview").on("hidden", function(){
             $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
         });
+     [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && ( normalized_isbn || normalized_upc ) ) %]
+         novSelect.loadContentForQuery(
+             {
+                 ClientIdentifier : '[% IF normalized_isbn %][% normalized_isbn %][% ELSE %][% normalized_upc %][% END %]',
+                 ISBN : '[% IF normalized_isbn %][% normalized_isbn %][% ELSE %][% normalized_upc %][% END %]',
+                 version : '2.1'
+             },
+             '[% Koha.Preference('NovelistSelectProfile') %]',
+             '[% Koha.Preference('NovelistSelectPassword') %]',
+             function(d){
+                 if ( d.length > 0 ){ //If no content
+                     $(".NovelistSelect").show();
+                 }
+             });
+     [% END %]
+
     });
 
      [% IF ( AmazonCoverImages || LocalCoverImages ) %]$(window).load(function() {
@@ -561,6 +582,9 @@ function verify_images() {
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
 [% IF ( LocalCoverImages ) %][% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]<li><a href="#images">Images</a></li>[% END %][% END %]
 [% IF ( HTML5MediaEnabled ) %][% IF ( HTML5MediaSets ) %]<li><a href="#html5media">Play media</a></li>[% END %][% END %]
+[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
+    <li class="NovelistSelect" style="display:none;"><a href="#NovelistSelect">NoveList Select</a></li>
+[% END %]
 </ul>
 
 [% items_table_block_iter = 0 %]
@@ -823,6 +847,14 @@ function verify_images() {
 [% END %][%# end of block items_table %]
 
 <div id="holdings">
+
+[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && Koha.Preference('NovelistSelectStaffView') == 'above' ) %]
+    <span class="results_summary NovelistSelect" style="display:none;">
+        <span class="label">Novelist Select: </span>
+        <div data-novelist-novelistselect=[% normalized_isbn %]></div>
+    </span>
+[% END %]
+
 [% IF ( count ) %]
     [% IF ( showncount ) %]
         [% PROCESS items_table tab="holdings" items=itemloop %]
@@ -846,6 +878,13 @@ function verify_images() {
     [% ELSE %]
     <div id="noitems">No physical items for this record</div>
     [% END %]
+[% END %]
+
+[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && Koha.Preference('NovelistSelectStaffView') == 'below' ) %]
+    <span class="results_summary NovelistSelect" style="display:none;">
+        <span class="label">Novelist Select: </span>
+        <div data-novelist-novelistselect=[% normalized_isbn %]></div>
+    </span>
 [% END %]
     </div>
 
@@ -1053,6 +1092,12 @@ function verify_images() {
 </div>
 [% END %]
 
+
+[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
+    <div id="NovelistSelect" class="novelistSelect">
+        <div data-novelist-novelistselect=[% normalized_isbn %]></div>
+    </div>
+[% END %]
 
 </div><!-- /bibliodetails -->
 

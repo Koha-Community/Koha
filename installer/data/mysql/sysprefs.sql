@@ -262,6 +262,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('NovelistSelectEnabled','0',NULL,'Enable Novelist Select content.  Requires Novelist Profile and Password','YesNo'),
 ('NovelistSelectPassword','',NULL,'Enable Novelist user Profile','free'),
 ('NovelistSelectProfile','',NULL,'Novelist Select user Password','free'),
+('NovelistSelectStaffEnabled','0',NULL,'Enable Novelist Select content in the staff client.  Requires Novelist Profile and Password','YesNo'),
+('NovelistSelectStaffView','tab','tab|above|below','Where to display Novelist Select content in the staff client','Choice'),
 ('NovelistSelectView','tab','tab|above|below|right','Where to display Novelist Select content','Choice'),
 ('numReturnedItemsToShow','20',NULL,'Number of returned items to show on the check-in page','Integer'),
 ('numSearchResults','20',NULL,'Specify the maximum number of results to display on a page of results','Integer'),
