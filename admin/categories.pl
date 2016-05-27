@@ -95,8 +95,14 @@ elsif ( $op eq 'add_validate' ) {
 
     my $is_a_modif = $input->param("is_a_modif");
 
-    if ( $enrolmentperioddate ) {
-        $enrolmentperioddate = output_pref({ dt => dt_from_string($enrolmentperioddate), dateformat => 'iso' });
+    if ($enrolmentperioddate) {
+        $enrolmentperioddate = output_pref(
+            {
+                dt         => dt_from_string($enrolmentperioddate),
+                dateformat => 'iso',
+                dateonly   => 1,
+            }
+        );
     }
 
     if ($is_a_modif) {
