@@ -238,7 +238,7 @@
         var fileType = evt.target.files[0].type || 'unknown';
         var fileSizeInK = Math.round(evt.target.files[0].size/1024);
 
-        if (!fileType.match(/comma-separated-values|csv|excel/i)) {
+        if (!fileType.match(/comma-separated-values|csv|excel|calc/i)) {
             alert(_("Uploads limited to csv. Incorrect filetype: %s").format(fileType));
             parent.location='quotes-upload.pl';
             return;
