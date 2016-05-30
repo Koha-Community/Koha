@@ -12599,6 +12599,12 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.056.00.000";
+if ( CheckVersion($DBversion) ) {
+        print "Upgrade to $DBversion done (Koha 16.06 - starting a new dev line at KohaCon16 in Thessaloniki, Greece! Koha is great!)\n";
+            SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
