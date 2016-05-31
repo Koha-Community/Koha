@@ -271,6 +271,7 @@ sub DeleteBorrowerAttributes {
 Delete a borrower attribute for the patron identified by C<$borrowernumber> and the attribute code of C<$attribute>
 
 =cut
+
 sub DeleteBorrowerAttribute {
     my ( $borrowernumber, $attribute ) = @_;
 
@@ -290,6 +291,7 @@ sub DeleteBorrowerAttribute {
 Update a borrower attribute C<$attribute> for the patron identified by C<$borrowernumber>,
 
 =cut
+
 sub UpdateBorrowerAttribute {
     my ( $borrowernumber, $attribute ) = @_;
 
