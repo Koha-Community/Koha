@@ -37,7 +37,6 @@ BEGIN {
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url);
 }
-my $context = C4::Context->new() or die 'C4::Context->new failed';
 my $defaultcasserver;
 my $casservers;
 my $yamlauthfile = C4::Context->config('intranetdir') . "/C4/Auth_cas_servers.yaml";
