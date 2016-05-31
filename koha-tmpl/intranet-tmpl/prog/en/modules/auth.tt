@@ -76,13 +76,12 @@
 <p>Sorry, the CAS login failed.</p>
 [% END %]
 
-<p>If you have a CAS account,
 [% IF ( casServerUrl ) %]
-    please <a href="[% casServerUrl %]">click here to login</a>.<p>
+    <p><a href="[% casServerUrl %]">If you have a CAS account, please click here to login</a>.<p>
 [% END %]
 
 [% IF ( casServersLoop ) %]
-please choose against which one you would like to authenticate: </p>
+    <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
 <ul>
     [% FOREACH casServer IN casServersLoop %]
         <li><a href="[% casServer.value %]">[% casServer.name %]</a></li>
