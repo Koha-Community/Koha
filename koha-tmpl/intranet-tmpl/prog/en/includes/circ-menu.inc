@@ -103,7 +103,7 @@
         [% IF ( suggestionsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/purchase-suggestions.pl?borrowernumber=[% borrowernumber %]">Purchase suggestions</a></li>
     [% END %]
     [% IF CAN_user_borrowers && useDischarge %]
-        [% IF dischargeview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% borrowernumber %]">Discharge</a></li>
+        [% IF dischargeview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% borrowernumber %]">Discharges</a></li>
     [% END %]
 </ul></div>
 [% END %]
