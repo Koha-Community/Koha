@@ -11631,6 +11631,18 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.22.07.001";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE accountlines
+        SET accounttype='HE', description=itemnumber
+        WHERE (description REGEXP '^Hold waiting too long [0-9]+')
+          AND accounttype='F';
+    });
+    print "Upgrade to $DBversion done (Bug 16200 - 'Hold waiting too long' fee has a translation problem)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
