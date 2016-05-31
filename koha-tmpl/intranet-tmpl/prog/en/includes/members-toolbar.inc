@@ -183,6 +183,9 @@ function searchToHold(){
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to set permissions" id="patronflags" href="#">Set permissions</a></li>
                 [% END %]
+                [% IF CAN_user_borrowers && useDischarge %]
+                    <li><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% borrowernumber %]">Discharge</a></li>
+                [% END %]
                 [% IF ( CAN_user_borrowers ) %]
                     [% IF ( NorwegianPatronDBEnable == 1 ) %]
                         <li><a id="deletepatronlocal" href="#">Delete local</a></li>
