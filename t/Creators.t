@@ -68,12 +68,17 @@ foreach my $font ( @$font_types ) {
 	$y += $pdf_creator->FontSize() * 1.2;
 }
 
-my  ($fh, $filename) = tempfile();
-open(  $fh, '>', $filename );
-select $fh;
+SKIP: {
+    skip "Skipping because without proper fonts these two tests fail",
+        2 if ! $ENV{KOHA_CONF};
 
-ok($pdf_creator->End(), "testing End() works");
+    my  ($fh, $filename) = tempfile();
+    open(  $fh, '>', $filename );
+    select $fh;
 
-close($fh);
-ok( -s $filename , "test file $filename created OK" );
-unlink $filename unless $ENV{KEEP_PDF};
+    ok($pdf_creator->End(), "testing End() works");
+
+    close($fh);
+    ok( -s $filename , "test file $filename created OK" );
+    unlink $filename unless $ENV{KEEP_PDF};
+}
