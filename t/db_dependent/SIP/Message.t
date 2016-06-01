@@ -62,7 +62,7 @@ $branchcode = $branch->{branchcode};
 # START testing
 subtest 'Testing Patron Status Request V2' => sub {
     $schema->storage->txn_begin;
-    plan tests => 12;
+    plan tests => 13;
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_status_v2();
     $schema->storage->txn_rollback;
@@ -70,7 +70,7 @@ subtest 'Testing Patron Status Request V2' => sub {
 
 subtest 'Testing Patron Info Request V2' => sub {
     $schema->storage->txn_begin;
-    plan tests => 15;
+    plan tests => 16;
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_info_v2();
     $schema->storage->txn_rollback;
@@ -123,6 +123,17 @@ sub test_request_patron_status_v2 {
     $respcode = substr( $response, 0, 2 );
     check_field( $respcode, $response, FID_VALID_PATRON_PWD, 'N', 'Verified code CQ for wrong pw' );
 
+    # Check empty password and verify CQ again
+    $siprequest = PATRON_STATUS_REQ. 'engYYYYMMDDZZZZHHMMSS'.
+        FID_INST_ID. $branchcode. '|'.
+        FID_PATRON_ID. $card1. '|'.
+        FID_PATRON_PWD. '|';
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    undef $response;
+    $msg->handle_patron_status( $server );
+    $respcode = substr( $response, 0, 2 );
+    check_field( $respcode, $response, FID_VALID_PATRON_PWD, 'N', 'code CQ should be N for empty AD' );
+
     # Finally, we send a wrong card number and check AE, BL
     # This is done by removing the new patron first
     $schema->resultset('Borrower')->search({ cardnumber => $card1 })->delete;
@@ -174,6 +185,17 @@ sub test_request_patron_info_v2 {
     check_field( $respcode, $response, FID_HOME_PHONE, $patron2->{phone}, 'Verified home phone in BF' );
     # No check for custom fields here (unofficial PB, PC and PI)
     check_field( $respcode, $response, FID_SCREEN_MSG, '.+', 'We have a screen msg', 'regex' );
+
+    # Check empty password and verify CQ again
+    $siprequest = PATRON_INFO. 'engYYYYMMDDZZZZHHMMSS'.'Y         '.
+        FID_INST_ID. $branchcode. '|'.
+        FID_PATRON_ID. $card. '|'.
+        FID_PATRON_PWD. '|';
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    undef $response;
+    $msg->handle_patron_info( $server );
+    $respcode = substr( $response, 0, 2 );
+    check_field( $respcode, $response, FID_VALID_PATRON_PWD, 'N', 'code CQ should be N for empty AD' );
 
     # Finally, we send a wrong card number
     $schema->resultset('Borrower')->search({ cardnumber => $card })->delete;
