@@ -16,7 +16,7 @@
     <style type="text/css">#custom-doc {width:47.23em; *width:46.04em; min-width:610px; margin:auto; margin-top:0.4em;}</style>
 </head>
 <body id="pcard_print" class="tools pcard">
-    <div id="custom-doc" class="yui-t2">
+    <div id="custom-doc">
         <div id="bd">
             [% IF ( batches ) %]
             <form>
@@ -62,7 +62,7 @@
                         [% IF ( multi_batch_count == 1 ) %][% multi_batch_count %] batch to export[% ELSE %][% multi_batch_count %] batches to export[% END %]
                     [% END %]
             </h3>
-            <form name="exporting" method="post" action="/cgi-bin/koha/patroncards/print.pl">
+            <form id="exportingf" name="exporting" method="post" action="/cgi-bin/koha/patroncards/print.pl">
                 <input type="hidden" name="op" value="export" />
                 <input type="hidden" name="referer" value="[% referer %]" />
                 [% FOREACH batch_id IN batch_ids %]
