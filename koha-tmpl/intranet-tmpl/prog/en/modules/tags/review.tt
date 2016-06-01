@@ -192,21 +192,21 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   [% END %]
   [% IF ( message_loop ) %]
   <div class="dialog alert" id="main_error">
-	[% FOREACH message_loo IN message_loop %]
-		[% IF ( message_loo.date_from ) %]ERROR: <em>Date from</em> is not a legal value ("[% message_loo.date_from %]").
-		[% ELSIF ( message_loo.date_to ) %]ERROR: <em>Date to</em> is not a legal value ("[% message_loo.date_to %]").
-		[% ELSIF ( message_loo.failed_ok ) %]ERROR: Failed to approve term ([% message_loo.failed_ok %]).
-		[% ELSIF ( message_loo.failed_rej ) %]ERROR: Failed to reject term ([% message_loo.failed_rej %]).
-		[% ELSIF ( message_loo.approver ) %]ERROR: No match for user ([% message_loo.approver %]). FILTER REQUIRES BORROWERNUMBER (not name).
-		[% ELSIF ( message_loo.approved_by ) %]ERROR: No match for borrowernumber ([% message_loo.approved_by %]).
-		[% ELSIF ( message_loo.op_zero ) %]ERROR: The root koha user in your KOHA_CONF file
-				(default: kohaadmin) is not a valid tag moderator.  These actions are logged 
-				by borrowernumber, so the moderator must exist in your borrowers table.
-				Please login as a different authorized staff user to moderate tags.  
-		[% ELSE %]					Unrecognized error! 
-		[% END %]
-		<br />
-	[% END %]
+    [% FOREACH message_loo IN message_loop %]
+        [% IF ( message_loo.date_from ) %]<strong>Error: </strong>"Date from" is not a legal value ("[% message_loo.date_from %]").
+        [% ELSIF ( message_loo.date_to ) %]<strong>Error: </strong>"Date to" is not a legal value ("[% message_loo.date_to %]").
+        [% ELSIF ( message_loo.failed_ok ) %]<strong>Error: </strong>Failed to approve term ([% message_loo.failed_ok %]).
+        [% ELSIF ( message_loo.failed_rej ) %]<strong>Error: </strong>Failed to reject term ([% message_loo.failed_rej %]).
+        [% ELSIF ( message_loo.approver ) %]No match for user ([% message_loo.approver %]). FILTER REQUIRES BORROWERNUMBER (not name).
+        [% ELSIF ( message_loo.approved_by ) %]<strong>Error: </strong>No match for borrowernumber ([% message_loo.approved_by %]).
+        [% ELSIF ( message_loo.op_zero ) %]<strong>Error: </strong> The root koha user in your KOHA_CONF file
+            (default: kohaadmin) is not a valid tag moderator. These actions are logged
+            by borrowernumber, so the moderator must exist in your borrowers table.
+            Please log in as a different authorized staff user to moderate tags.
+        [% ELSE %]Unrecognized error!
+        [% END %]
+            <br />
+        [% END %]
   </div>
   [% END %]
   [% IF ( pagination_bar ) %]
