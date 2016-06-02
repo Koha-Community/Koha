@@ -29,16 +29,13 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 
 use vars qw(@ISA);
 use vars qw($debug $cgi_debug);	# from C4::Debug, of course
-use vars qw($branch $width);
+our $branch = '';
+our $width = 4; # FIXME: 4 is too small for sizeable or multi-branch libraries.
 
 BEGIN {
     @ISA = qw(C4::Barcodes);
 }
 
-INIT {
-	$branch = '';
-	$width = 4;		# FIXME: 4 is too small for sizeable or multi-branch libraries.
-}
 # Generates barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number,
 # 	increment resets yearly -fbcit
 
