@@ -276,10 +276,10 @@ function validate1(date) {
         <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
             <fieldset class="brief">
             [% IF ( picture ) %]
-                <legend>Manage Patron Image</legend>
+                <legend>Manage patron image</legend>
                 <div class="hint">To update the image for [% title %] [% surname %], select a new image file and click 'Upload.' <br />Click the 'Delete' button to remove the current image.
             [% ELSE %]
-                <legend>Upload Patron Image</legend>
+                <legend>Upload patron image</legend>
                 <div class="hint">[% title %] [% firstname %] [% surname %] does not currently have an image available. To import an image for [% title %] [% surname %], enter the name of an image file to upload.
             [% END %]
                     <br />Only PNG, GIF, JPEG, XPM formats are supported.
