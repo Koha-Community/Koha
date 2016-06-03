@@ -53,6 +53,8 @@ use Koha::Patron::Debarments;
 use Koha::Database;
 use Koha::Libraries;
 use Koha::Holds;
+use Koha::RefundLostItemFeeRule;
+use Koha::RefundLostItemFeeRules;
 use Carp;
 use List::MoreUtils qw( uniq );
 use Scalar::Util qw( looks_like_number );
@@ -1450,12 +1452,17 @@ sub AddIssue {
                 UpdateTotalIssues( $item->{'biblionumber'}, 1 );
             }
 
-            ## If item was lost, it has now been found, reverse any list item charges if necessary.
-            if ( $item->{'itemlost'} ) {
-                if ( C4::Context->preference('RefundLostItemFeeOnReturn') ) {
-                    _FixAccountForLostAndReturned( $item->{'itemnumber'}, undef, $item->{'barcode'} );
-                }
+        ## If item was lost, it has now been found, reverse any list item charges if necessary.
+        if ( $item->{'itemlost'} ) {
+            if ( Koha::RefundLostItemFeeRules->should_refund(
+                    current_branch => C4::Context->userenv->{ branch },
+                    patron_branch  => $borrower->{ branchcode },
+                    item_home_branch => $item->{ homebranch },
+                    item_holding_branch => $item->{ holdingbranch }
+                 ) ) {
+                _FixAccountForLostAndReturned( $item->{'itemnumber'}, undef, $item->{'barcode'} );
             }
+        }
 
             ModItem(
                 {
@@ -2131,9 +2138,16 @@ sub AddReturn {
     if ( $item->{'itemlost'} ) {
         $messages->{'WasLost'} = 1;
 
-        if ( C4::Context->preference('RefundLostItemFeeOnReturn' ) ) {
-            _FixAccountForLostAndReturned($item->{'itemnumber'}, $borrowernumber, $barcode);    # can tolerate undef $borrowernumber
-            $messages->{'LostItemFeeRefunded'} = 1;
+        if ( $item->{'itemlost'} ) {
+            if ( Koha::RefundLostItemFeeRules->should_refund(
+                    current_branch => C4::Context->userenv->{ branch },
+                    patron_branch  => $borrower->{ branchcode },
+                    item_home_branch => $item->{ homebranch },
+                    item_holding_branch => $item->{ holdingbranch }
+                 ) ) {
+                _FixAccountForLostAndReturned( $item->{'itemnumber'}, $borrowernumber, $barcode );
+                $messages->{'LostItemFeeRefunded'} = 1;
+            }
         }
     }
 
