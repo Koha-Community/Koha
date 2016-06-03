@@ -4,6 +4,7 @@ use Modern::Perl;
 
 use Exception::Class (
 
+    # General exceptions
     'Koha::Exceptions::Exception' => {
         description => 'Something went wrong!',
     },
@@ -12,7 +13,15 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Exception',
         description => 'Same object already exists',
     },
-
+    'Koha::Exceptions::CannotDeleteDefault' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'The default value cannot be deleted'
+    },
+    'Koha::Exceptions::MissingParameter' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'A required parameter is missing'
+    },
+    # Virtualshelves exceptions
     'Koha::Exceptions::Virtualshelves::DuplicateObject' => {
         isa => 'Koha::Exceptions::DuplicateObject',
         description => "Duplicate shelf object",
