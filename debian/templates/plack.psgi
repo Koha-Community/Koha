@@ -54,15 +54,15 @@ use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
 
 my $intranet = Plack::App::CGIBin->new(
     root => '/usr/share/koha/intranet/cgi-bin'
-);
+)->to_app;
 
 my $opac = Plack::App::CGIBin->new(
     root => '/usr/share/koha/opac/cgi-bin/opac'
-);
+)->to_app;
 
 # my $api  = Plack::App::CGIBin->new(
 #     root => '/usr/share/koha/api/'
-# );
+# )->to_app;
 
 builder {
 
