@@ -73,6 +73,7 @@
                 <thead>
                     <tr>
                         <th class="antithe">Title</th>
+                        <th>Author</th>
                         <th>Barcode</th>
                         <th>Call number</th>
                         [% IF item_level_itypes %]<th>Item type</th>[% END %]
@@ -84,6 +85,7 @@
                         [% IF CAN_user_coursereserves_add_reserves %]<th class="NoSort">&nbsp;<!-- Edit --></th>[% END %]
                         [% IF CAN_user_coursereserves_delete_reserves %]<th class="NoSort">&nbsp;<!-- Remove --></th>[% END %]
                         <th class="NoSort">Other course reserves</th>
+                        <th>Link</th>
                     </tr>
                 </thead>
 
@@ -91,6 +93,7 @@
                     [% FOREACH cr IN course_reserves %]
                         <tr>
                             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cr.item.biblionumber %]">[% cr.item.title %]</a></td>
+                            <td>[% cr.item.author %]</td>
                             <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cr.item.itemnumber %]&amp;biblionumber=[% cr.item.biblionumber %]&amp;bi=[% cr.item.biblioitemnumber %]">[% cr.item.barcode %]</a></td>
                             <td>[% cr.item.itemcallnumber %]</td>
                             [% IF item_level_itypes %]
@@ -192,6 +195,13 @@
                                             </a>
                                         </p>
                                     [% END %]
+                                [% END %]
+                            </td>
+                            <td>
+                                [% IF (cr.item.uri) %]
+                                    <a href="[% cr.item.uri %]">Item URI</a>
+                                [% ELSIF (cr.item.url) %]
+                                    <a href="[% cr.item.url %]">Record URL</a>
                                 [% END %]
                             </td>
                         </tr>

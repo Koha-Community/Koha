@@ -50,6 +50,7 @@
                         <thead>
                             <tr>
                                 <th class="anti-the">Title</th>
+                                <th>Author</th>
                                 <th>Item type</th>
                                 <th>Location</th>
                                 <th>Collection</th>
@@ -58,6 +59,7 @@
                                 <th>Status</th>
                                 <th class="title-string">Date due</th>
                                 <th>Notes</th>
+                                <th>Link</th>
                             </tr>
                         </thead>
 
@@ -65,6 +67,7 @@
                             [% FOREACH cr IN course_reserves %]
                                 <tr>
                                     <td><a href="opac-detail.pl?biblionumber=[% cr.item.biblionumber %]">[% cr.item.title %]</a></td>
+                                    <td>[% cr.item.author %]</td>
                                     <td>[% ItemTypes.GetDescription( cr.item.itype ) %]</td>
                                     <td>[% Branches.GetName( cr.item.holdingbranch ) %] <br/> <i>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) %]</i></td>
                                     <td>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) %]</td>
@@ -76,6 +79,12 @@
                                             [% cr.public_note %]
                                         [% ELSIF ( cr.item.itemnotes ) %]
                                             [% cr.item.itemnotes %]
+                                        [% END %]
+                                    </td>
+                                    <td>[% IF (cr.item.uri) %]
+                                            <a href="[% cr.item.uri %]">Item URI</a>
+                                        [% ELSIF (cr.item.url) %]
+                                            <a href="[% cr.item.url %]">Record URL</a>
                                         [% END %]
                                     </td>
                                 </tr>
