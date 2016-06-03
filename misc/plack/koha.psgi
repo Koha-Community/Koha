@@ -67,7 +67,7 @@ sub watch_for_size {
 
 my $CGI_ROOT = $ENV{INTRANET} ? $ENV{INTRANETDIR} : $ENV{OPACDIR};
 warn "# using Koha ", $ENV{INTRANET} ? 'intranet' : 'OPAC', " CGI from $CGI_ROOT\n";
-my $app=Plack::App::CGIBin->new(root => $CGI_ROOT);
+my $app=Plack::App::CGIBin->new(root => $CGI_ROOT)->to_app;
 my $home = sub {
 	return [ 302, [ Location => '/cgi-bin/koha/' . ( $ENV{INTRANET} ? 'mainpage.pl' : 'opac-main.pl' ) ] ];
 };
