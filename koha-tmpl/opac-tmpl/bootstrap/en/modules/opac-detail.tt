@@ -510,7 +510,7 @@
 
                     [% IF ( NovelistSelectProfile && normalized_isbn ) %]
                         [% IF ( NovelistSelectView == 'above') %]
-                            <span class="results_summary">
+                            <span class="results_summary NovelistSelect" style="display:none;">
                             <span class="label">Novelist Select: </span>
                             <div data-novelist-novelistselect=[% normalized_isbn %]></div>
                             </span>
@@ -586,7 +586,7 @@
 
                         [% IF ( NovelistSelectProfile && normalized_isbn ) %]
                             [% IF ( NovelistSelectView == 'tab') %]
-                                <li id="tab_NovelistSelect"> <a href="#NovelistSelect">Novelist Select</a></li>
+                                <li id="tab_NovelistSelect" class="NovelistSelect" style="display:none;"> <a href="#NovelistSelect">Novelist Select</a></li>
                             [% END %]
                         [% END %]
 
@@ -784,9 +784,9 @@
                         [% END # / IF SyndeticsReviews && SYNDETICS_REVIEWS %]
                     [% END # / IF SyndeticsEnabled %]
 
-                    [% IF ( NovelistSelectProfile && NovelistSelectView == 'tab' && normalized_isbn ) %]
-                       <div id="NovelistSelect">
-                            <div data-novelist-novelistselect=[% normalized_isbn %]></div>
+                    [% IF ( NovelistSelectProfile && NovelistSelectView == 'tab' && (normalized_isbn || normalized_upc) ) %]
+                       <div id="NovelistSelect" >
+                            <div data-novelist-novelistselect=[% IF normalized_isbn %][% normalized_isbn %][% ELSE %][% normalized_upc %][% END %]></div>
                        </div>
                     [% END # / IF NovelistSelectProfile && NovelistSelectView == 'tab' %]
 
@@ -1022,10 +1022,10 @@
                         [% END %]
                 </div> <!-- / #bibliodescriptions -->
 
-                [% IF ( NovelistSelectProfile && NovelistSelectView == 'below' && normalized_isbn ) %]
+                [% IF ( NovelistSelectProfile && NovelistSelectView == 'below' && ( normalized_isbn || normalized_upc ) ) %]
                     <div id="NovelistSelect">
                         <h3>Novelist Select</h3>
-                        <div data-novelist-novelistselect="[% normalized_isbn %]"></div>
+                        <div data-novelist-novelistselect="[% IF normalized_isbn %][% normalized_isbn %][% ELSE %][% normalized_upc %][% END %]"></div>
                     </div>
                 [% END %]
 
@@ -1098,10 +1098,10 @@
 
                 [% INCLUDE 'opac-detail-sidebar.inc' %]
 
-                [% IF ( NovelistSelectProfile && NovelistSelectView == 'right' && normalized_isbn ) %]
+                [% IF ( NovelistSelectProfile && NovelistSelectView == 'right' && ( normalized_isbn || normalized_upc ) ) %]
                     <div id="NovelistSelect">
                         <h4>Novelist Select</h4>
-                        <div data-novelist-novelistselect=[% normalized_isbn %]></div>
+                        <div data-novelist-novelistselect=[% IF normalized_isbn %][% normalized_isbn %][% ELSE %][% normalized_upc %][% END %]></div>
                     </div>
                 [% END %]
 
@@ -1486,8 +1486,20 @@
     [% IF OPACLocalCoverImages %]
         KOHA.LocalCover.GetCoverFromBibnumber(true);
     [% END %]
-    [% IF ( NovelistSelectProfile && normalized_isbn ) %]
-        novSelect.loadContentForISBN('[% normalized_isbn %]','[% NovelistSelectProfile %]', '[% NovelistSelectPassword %]', function(d){});
+    [% IF ( NovelistSelectProfile && ( normalized_isbn || normalized_upc ) ) %]
+        novSelect.loadContentForQuery(
+            {
+                ClientIdentifier : '[% IF normalized_isbn %][% normalized_isbn %][% ELSE %][% normalized_upc %][% END %]',
+                ISBN : '[% IF normalized_isbn %][% normalized_isbn %][% ELSE %][% normalized_upc %][% END %]',
+                version : '2.1'
+            },
+            '[% NovelistSelectProfile %]',
+            '[% NovelistSelectPassword %]',
+            function(d){
+                if ( d.length > 0 ){ //If no content
+                    $(".NovelistSelect").show();
+                }
+            });
     [% END %]
 
     [% IF ( OpacBrowseResults && busc ) %]
