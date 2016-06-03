@@ -1,0 +1,1 @@
+INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('IntranetCatalogSearchPulldown','0',NULL,'Show a search field pulldown for \"Search the catalog\" boxes. ','YesNo');

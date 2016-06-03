@@ -1,3 +1,4 @@
+[% USE Koha %]
 <div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin z3950 Admin Resident Search Box -->
 <div id="header_search">
@@ -15,6 +16,7 @@
     <div id="catalog_search" class="residentsearch">
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
+            [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %][% INCLUDE 'search_indexes.inc' %][% END %]
             <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="head-searchbox form-text" />
 				<input type="submit" value="Submit"  class="submit" />
 		</form>
