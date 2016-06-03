@@ -30,6 +30,9 @@ use Koha::DateUtils;
 use Koha::Database;
 use Koha::IssuingRule;
 use Koha::IssuingRules;
+use Koha::Logger;
+use Koha::RefundLostItemFeeRule;
+use Koha::RefundLostItemFeeRules;
 use Koha::Libraries;
 
 my $input = CGI->new;
@@ -423,6 +426,37 @@ elsif ($op eq "add-branch-item") {
         }
     }
 }
+elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
+
+    my $refund = $input->param('refund');
+
+    if ( $refund eq '*' ) {
+        if ( $branch ne '*' ) {
+            # only do something for $refund eq '*' if branch-specific
+            eval {
+                # Delete it so it picks the default
+                Koha::RefundLostItemFeeRules->find({
+                    branchcode => $branch
+                })->delete;
+            };
+        }
+    } else {
+        my $refundRule =
+                Koha::RefundLostItemFeeRules->find({
+                    branchcode => $branch
+                }) // Koha::RefundLostItemFeeRule->new;
+        $refundRule->set({
+            branchcode => $branch,
+                refund => $refund
+        })->store;
+    }
+}
+
+my $refundLostItemFeeRule = Koha::RefundLostItemFeeRules->find({ branchcode => $branch });
+$template->param(
+    refundLostItemFeeRule => $refundLostItemFeeRule,
+    defaultRefundRule     => Koha::RefundLostItemFeeRules->_default_rule
+);
 
 my $branches = GetBranches();
 my @branchloop;

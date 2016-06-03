@@ -2,6 +2,7 @@
 <title>Koha &rsaquo; Administration &rsaquo; Circulation and fine rules</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+[% USE Branches %]
 <script type="text/javascript">
 //<![CDATA[
 
@@ -557,6 +558,86 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
         </form>
     </div>
     [% END %]
+
+    <div id="refund-lost-item-fee-on-return" class="container">
+  [% IF current_branch == '*' %]
+    <h3>Default lost item fee refund on return policy</h3>
+  [% ELSE %]
+    <h3>Lost item fee refund on return policy for [% Branches.GetName(current_branch) %]</h3>
+  [% END %]
+        <p>Specify the default policy for lost item fees on return.
+        </p>
+        <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+            <input type="hidden" name="op" value="mod-refund-lost-item-fee-rule" />
+            <input type="hidden" name="branch" value="[% current_branch %]" />
+            <table>
+                <tr>
+                    <th>Refund lost item fee</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select name="refund">
+                          [#% Default branch %#]
+                          [% IF ( current_branch == '*' ) %]
+                            [% IF ( refundLostItemFeeRule.refund ) %]
+                            <option value="1" selected="selected">
+                            [% ELSE %]
+                            <option value="1">
+                            [% END %]
+                                Yes
+                            </option>
+                            [% IF ( not refundLostItemFeeRule.refund ) %]
+                            <option value="0" selected="selected">
+                            [% ELSE %]
+                            <option value="0">
+                            [% END %]
+                                No
+                            </option>
+                          [% ELSE %]
+                          [#% Branch-specific %#]
+                            [% IF ( not refundLostItemFeeRule ) %]
+                                <option value="*" selected="selected">
+                            [% ELSE %]
+                                <option value="*">
+                            [% END %]
+                              [% IF defaultRefundRule %]
+                                Use default (Yes)
+                              [% ELSE %]
+                                Use default (No)
+                              [% END %]
+                                </option>
+                            [% IF ( not refundLostItemFeeRule ) %]
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            [% ELSE %]
+                                [% IF ( refundLostItemFeeRule.refund ) %]
+                                <option value="1" selected="selected">
+                                [% ELSE %]
+                                <option value="1">
+                                [% END %]
+                                    Yes
+                                </option>
+                                [% IF ( not refundLostItemFeeRule.refund ) %]
+                                <option value="0" selected="selected">
+                                [% ELSE %]
+                                <option value="0">
+                                [% END %]
+                                    No
+                                </option>
+                            [% END %]
+                          [% END %]
+                        </select>
+                    </td>
+                    <td class="actions">
+                        <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save</button>
+                    </td>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
     <div id="holds-policy-by-item-type" class="container">
     <h3>[% IF humanbranch %]Holds policy by item type for [% humanbranch %][% ELSE %]Default holds policy by item type[% END %]</h3>
         <p>
