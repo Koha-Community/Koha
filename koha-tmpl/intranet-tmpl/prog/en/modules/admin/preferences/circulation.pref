@@ -654,11 +654,12 @@ Circulation:
             - fines (when <code>misc/cronjobs/fines.pl</code> is being run).
             - <br><b>Note:</b> Fines can also be charged by the CalculateFinesOnReturn system preference.
         -
-            - pref: RefundLostItemFeeOnReturn
+            - If a lost item is returned, apply the refunding rules defined in the
+            - pref: RefundLostOnReturnControl
               choices:
-                  yes: Refund
-                  no: "Don't refund"
-            - lost item fees charged to a borrower when the lost item is returned.
+                  CheckinLibrary: "check-in library."
+                  ItemHomeBranch: "item home branch."
+                  ItemHoldingbranch: "item holding branch."
         -
             - pref: FinesIncludeGracePeriod
               choices:
