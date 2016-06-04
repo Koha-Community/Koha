@@ -79,6 +79,12 @@
             <input type="checkbox" name="mandatory" id="mandatory" value="1" />
         [% END %]
     </li>
+    <li><label for="ind1_defaultvalue">First indicator default value: </label>
+        <input id="ind1_defaultvalue" type="text" name="ind1_defaultvalue" value="[% ind1_defaultvalue |html %]" maxlength="1" size="1" />
+    </li>
+    <li><label for="ind2_defaultvalue">Second indicator default value: </label>
+        <input id="ind2_defaultvalue" type="text" name="ind2_defaultvalue" value="[% ind2_defaultvalue |html %]" maxlength="1" size="1" />
+    </li>
     <li><label for="authorised_value">Authorized value: </label>
         <select name="authorised_value" id="authorised_value" size="1">
             <option value=""></option>
@@ -170,6 +176,8 @@
         <th>Repeatable</th>
         <th>Mandatory</th>
         <th>Auth value</th>
+        <th>Indicator 1</th>
+        <th>Indicator 2</th>
         <th>&nbsp;</th>
         </tr>
     </thead>
@@ -190,6 +198,8 @@
             <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
             <td>[% IF ( loo.mandatory ) %]Yes[% ELSE %]No[% END %]</td>
             <td>[% loo.authorised_value %]</td>
+            <td>[% loo.ind1_defaultvalue %]</td>
+            <td>[% loo.ind2_defaultvalue %]</td>
             <td>
                 <div class="dropdown">
                     <a class="btn btn-default btn-xs dropdown-toggle" id="marctagactions[% loo.tagfield %]" role="button" data-toggle="dropdown" href="#">
@@ -211,6 +221,8 @@
         <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
         <td>[% IF ( loo.mandatory ) %]Yes[% ELSE %]No[% END %]</td>
         <td>[% loo.authorised_value %]</td>
+        <td>[% loo.ind1_defaultvalue %]</td>
+        <td>[% loo.ind2_defaultvalue %]</td>
         <td>
             <div class="dropdown">
                 <a class="btn btn-default btn-xs dropdown-toggle" id="marctagactions[% loo.tagfield %]" role="button" data-toggle="dropdown" href="#">

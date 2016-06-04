@@ -657,8 +657,8 @@ sub build_tabs {
                         tag_lib          => $tagslib->{$tag}->{lib},
                         repeatable       => $tagslib->{$tag}->{repeatable},
                         mandatory       => $tagslib->{$tag}->{mandatory},
-                        indicator1       => $indicator1,
-                        indicator2       => $indicator2,
+                        indicator1       => ( $indicator1 || $tagslib->{$tag}->{ind1_defaultvalue} ), #if not set, try to load the default value
+                        indicator2       => ( $indicator2 || $tagslib->{$tag}->{ind2_defaultvalue} ), #use short-circuit operator for efficiency
                         subfield_loop    => \@subfields_data,
                         tagfirstsubfield => $subfields_data[0],
                         fixedfield       => $tag < 10?1:0,

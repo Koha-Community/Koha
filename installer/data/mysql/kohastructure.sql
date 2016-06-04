@@ -1141,6 +1141,8 @@ CREATE TABLE `marc_tag_structure` (
   `repeatable` tinyint(4) NOT NULL default 0,
   `mandatory` tinyint(4) NOT NULL default 0,
   `authorised_value` varchar(10) default NULL,
+  `ind1_defaultvalue` varchar(1) NOT NULL default '',
+  `ind2_defaultvalue` varchar(1) NOT NULL default '',
   `frameworkcode` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`frameworkcode`,`tagfield`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
