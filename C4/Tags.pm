@@ -25,6 +25,7 @@ use Exporter;
 
 use C4::Context;
 use C4::Debug;
+use Module::Load::Conditional qw/check_install/;
 #use Data::Dumper;
 use constant TAG_FIELDS => qw(tag_id borrowernumber biblionumber term language date_created);
 use constant TAG_SELECT => "SELECT " . join(',', TAG_FIELDS) . "\n FROM   tags_all\n";
@@ -50,6 +51,10 @@ BEGIN {
     );
 	# %EXPORT_TAGS = ();
     my $ext_dict = C4::Context->preference('TagsExternalDictionary');
+    if ( $ext_dict && ! check_install( module => 'Lingua::Ispell' ) ) {
+        warn "Ignoring TagsExternalDictionary, because Lingua::Ispell is not installed.";
+        $ext_dict = q{};
+    }
 	if ($debug) {
 		require Data::Dumper;
 		import Data::Dumper qw(:DEFAULT);

@@ -802,6 +802,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.14',
     },
+    'Lingua::Ispell' => {
+        'usage'    => 'Enhanced Content - Tagging',
+        'required' => '0',
+        'min_ver'  => '0.07'
+    },
 };
 
 1;
