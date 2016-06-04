@@ -22,7 +22,11 @@ use Test::More tests => 1;
 use LWP::Simple;
 use JSON;
 my $content  = get("https://openlibrary.org/search.json?q=9780201038095");
-my $data     = from_json($content);
-my $numFound = $data->{numFound};
 
-ok( $numFound > 0, "The openlibrary ws should return at least 1 result" );
+SKIP: {
+    skip "json has not been retrieved from openlibrary.org", 1 unless defined $content;
+    my $data     = from_json($content);
+    my $numFound = $data->{numFound};
+
+    ok( $numFound > 0, "The openlibrary ws should return at least 1 result" );
+}
