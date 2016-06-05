@@ -125,8 +125,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     }
 );
 
-my $branches = GetBranches();
-
 my $force_allow_issue = $query->param('forceallow') || 0;
 if (!C4::Auth::haspermission( C4::Context->userenv->{id} , { circulate => 'force_checkout' } )) {
     $force_allow_issue = 0;
