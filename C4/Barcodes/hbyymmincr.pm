@@ -41,7 +41,7 @@ BEGIN {
 sub db_max {
 	my $self = shift;
     my $width = WIDTH;
-    my $query = "SELECT SUBSTRING(barcode,-$width) AS chunk, barcode FROM items WHERE barcode REGEXP ?  ORDER BY chunk DESC LIMIT 1";
+    my $query = "SELECT SUBSTRING(barcode,-$width) AS chunk, barcode FROM items WHERE barcode REGEXP ? ORDER BY chunk DESC LIMIT 1";
 	$debug and print STDERR "(hbyymmincr) db_max query: $query\n";
 	my $sth = C4::Context->dbh->prepare($query);
 	my ($iso);

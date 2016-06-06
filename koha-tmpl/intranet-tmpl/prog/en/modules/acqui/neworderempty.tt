@@ -658,22 +658,6 @@ $(document).ready(function()
     </div>
 </div>
 
-[% IF UniqueItemFields %]
-<div id="uniqueFieldsModal" class="modal hide fade" aria-labelledby="uniqueFieldsModal" aria-hidden="true">
-    <div class="modal-body">
-    <h3>The following fields are listed in the UniqueItemFields system preference and will not be copied</h3>
-    <ul id="uniqueItemFields">
-    [% FOREACH uniqueField IN UniqueItemFields.split(" ") %]
-        <li>[% uniqueField %]</li>
-    [% END %]
-    </ul>
-    [% UNLESS Koha.Preference('autoBarcode') == 'OFF' %]
-    <h3>If barcode is blank and/or listed in UniqueItemFields barcodes will be generate using the autoBarcode preference setting ([% Koha.Preference('autoBarcode') %]) when saved</h3>
-    [% END %]
-    </div>
-</div>
-[% END %]
-
 <div id="multiCountModal" class="modal hide fade" aria-labelledby="multiCountModal" aria-hidden="true">
     <h3>Invalid number of copies</h3>
     <p>Please enter a <b>number</b>, greater than or equal to 1</p>

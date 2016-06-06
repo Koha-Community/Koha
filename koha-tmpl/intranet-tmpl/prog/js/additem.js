@@ -180,8 +180,12 @@ function cloneItemBlock(index, unique_item_fields, callback) {
             var buttonPlus = "<fieldset class=\"action\">";
                 buttonPlus += '<input type="button" class="addItemControl" name="buttonPlus" style="cursor:pointer; margin:0 1em;" onclick="addItem(this,\'' + unique_item_fields + '\')" value="' + (window.MSG_ADDITEM_JS_ADDITEM || 'Add item')+ '" />';
                 buttonPlus += '<input type="button" class="addItemControl cancel" name="buttonClear" style="cursor:pointer;" onclick="clearItemBlock(this)" value="' + (window.MSG_ADDITEM_JS_CLEAR || 'Clear')+ '" />';
-                buttonPlus += '<input type="button" class="addItemControl" name="buttonPlusMulti" data-toggle="modal" data-target="#uniqueFieldsModal" onclick="javascript:this.nextSibling.style.visibility=\'visible\'; return false;" style="cursor:pointer; margin:0 1em;" value="' + (window.MSG_ADDITEM_JS_ADDMULTI || 'Add multiple items')+ '" />';
-                buttonPlus +='<span id="add_multiple_copies" style="visibility:hidden"><input type="number" class="addItemControl" id="multiValue" name="multiValue" placeholder="'+window.MSG_ADDITEM_JS_MULTIVAL+'" /><input type="button" class="addItemControl" name=buttonAddMulti" style="cursor:pointer; margin:0 1em;" onclick="checkCount( this ,\'' + unique_item_fields + '\')" value="' + (window.MSG_ADDITEM_JS_SUBMITMULTI || 'Add') + '" /></span>';
+                buttonPlus += '<input type="button" class="addItemControl" name="buttonPlusMulti" onclick="javascript:this.nextSibling.style.display=\'inline\'; return false;" style="cursor:pointer; margin:0 1em;" value="' + (window.MSG_ADDITEM_JS_ADDMULTI || 'Add multiple items')+ '" />';
+                buttonPlus += '<span id="add_multiple_copies" style="display:none">'
+                            +     '<input type="number" class="addItemControl" id="multiValue" name="multiValue" placeholder="'+window.MSG_ADDITEM_JS_MULTIVAL+'" />'
+                            +     '<input type="button" class="addItemControl" name=buttonAddMulti" style="cursor:pointer; margin:0 1em;" onclick="checkCount( this ,\'' + unique_item_fields + '\')" value="' + (window.MSG_ADDITEM_JS_SUBMITMULTI || 'Add') + '" />'
+                            +     '<div class="dialog message">' + window.MSG_ADDITEM_JS_MULTI_UNIQUE_NOTE + '</div>'
+                            + '</span>';
                 buttonPlus += "</fieldset>";
             $(clone).append(buttonPlus);
             /* Copy values from the original block (input) */
