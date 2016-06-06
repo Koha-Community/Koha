@@ -78,7 +78,8 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
                          Defaults to 30 days if no days specified.
     --all-restrictions   purge all expired patrons restrictions.
    --del-exp-selfreg  Delete expired self registration accounts
-   --del-unv-selfreg DAYS  Delete unverified self registrations older than DAYS
+   --del-unv-selfreg  DAYS  Delete unverified self registrations older than DAYS
+   --unique-holidays DAYS  Delete all unique holidays older than DAYS
 USAGE
     exit $_[0];
 }
@@ -100,25 +101,27 @@ my $allDebarments;
 my $pExpSelfReg;
 my $pUnvSelfReg;
 my $fees_days;
+my $special_holidays_days;
 
 GetOptions(
-    'h|help'          => \$help,
-    'sessions'        => \$sessions,
-    'sessdays:i'      => \$sess_days,
-    'v|verbose'       => \$verbose,
-    'm|mail:i'        => \$mail,
-    'zebraqueue:i'    => \$zebraqueue_days,
-    'merged'          => \$purge_merged,
-    'import:i'        => \$pImport,
-    'z3950'           => \$pZ3950,
-    'logs:i'          => \$pLogs,
-    'fees:i'          => \$fees_days,
-    'searchhistory:i' => \$pSearchhistory,
-    'list-invites:i'  => \$pListShareInvites,
-    'restrictions:i'  => \$pDebarments,
-    'all-restrictions' => \$allDebarments,
-    'del-exp-selfreg' => \$pExpSelfReg,
-    'del-unv-selfreg' => \$pUnvSelfReg,
+    'h|help'            => \$help,
+    'sessions'          => \$sessions,
+    'sessdays:i'        => \$sess_days,
+    'v|verbose'         => \$verbose,
+    'm|mail:i'          => \$mail,
+    'zebraqueue:i'      => \$zebraqueue_days,
+    'merged'            => \$purge_merged,
+    'import:i'          => \$pImport,
+    'z3950'             => \$pZ3950,
+    'logs:i'            => \$pLogs,
+    'fees:i'            => \$fees_days,
+    'searchhistory:i'   => \$pSearchhistory,
+    'list-invites:i'    => \$pListShareInvites,
+    'restrictions:i'    => \$pDebarments,
+    'all-restrictions'  => \$allDebarments,
+    'del-exp-selfreg'   => \$pExpSelfReg,
+    'del-unv-selfreg'   => \$pUnvSelfReg,
+    'unique-holidays:i' => \$special_holidays_days,
 ) || usage(1);
 
 # Use default values
@@ -149,6 +152,7 @@ unless ( $sessions
     || $allDebarments
     || $pExpSelfReg
     || $pUnvSelfReg
+    || $special_holidays_days
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -294,6 +298,10 @@ if( $pUnvSelfReg ) {
     DeleteUnverifiedSelfRegs( $pUnvSelfReg );
 }
 
+if ($special_holidays_days) {
+    DeleteSpecialHolidays($special_holidays_days);
+}
+
 exit(0);
 
 sub RemoveOldSessions {
@@ -390,4 +398,15 @@ sub DeleteExpiredSelfRegs {
 sub DeleteUnverifiedSelfRegs {
     my $cnt= C4::Members::DeleteUnverifiedOpacRegistrations( $_[0] );
     print "Removed $cnt unverified self-registrations\n" if $verbose;
+}
+
+sub DeleteSpecialHolidays {
+    my ( $days ) = @_;
+
+    my $sth = $dbh->prepare(q{
+        DELETE FROM special_holidays
+        WHERE DATE( CONCAT( year, '-', month, '-', day ) ) < DATE_SUB( CAST(NOW() AS DATE), INTERVAL ? DAY );
+    });
+    my $count = $sth->execute( $days ) + 0;
+    print "Removed $count unqiue holidays\n" if $verbose;
 }
