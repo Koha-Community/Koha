@@ -151,8 +151,18 @@
                                     [% END %]
                                 [% END %]
                             </td>
-                            <td>[% cr.staff_note %]</td>
-                            <td>[% cr.public_note %]</td>
+                            <td>[% IF (cr.staff_note) %]
+                                    [% cr.staff_note %]
+                                [% ELSIF (cr.item.itemnotes_nonpublic) %]
+                                    [% cr.item.itemnotes_nonpublic %]
+                                [% END %]
+                            </td>
+                            <td>[% IF (cr.public_note) %]
+                                    [% cr.public_note %]
+                                [% ELSIF (cr.item.itemnotes) %]
+                                    [% cr.item.itemnotes %]
+                                [% END %]
+                            </td>
 
                             [% IF CAN_user_coursereserves_add_reserves %]
                                 <td><a href="add_items.pl?course_id=[% course.course_id %]&amp;barcode=[% cr.item.barcode %]&amp;action=lookup&amp;return=[% course.course_id %]">Edit</a></td>
