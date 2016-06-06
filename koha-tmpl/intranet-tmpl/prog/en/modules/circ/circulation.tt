@@ -747,7 +747,12 @@ No patron matched <span class="ex">[% message %]</span>
                    [% END %]
 
                    [% IF ( debarredcomment ) %]
-                       with the explanation: <br/><i>[% debarredcomment | html_line_break %]</i>
+                       with the explanation: <br/><i>
+			   [% IF debarredcomment.search('OVERDUES_PROCESS') %]
+	                       Restriction added by overdues process [% debarredcomment.remove('OVERDUES_PROCESS ') | html_line_break %]
+	                   [% ELSE %]
+	                       [% debarredcomment | html_line_break %]
+	                   [% END %]
                    [% END %]
 
                    <br/>

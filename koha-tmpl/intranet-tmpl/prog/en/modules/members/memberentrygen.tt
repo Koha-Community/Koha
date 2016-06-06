@@ -946,7 +946,13 @@ $(document).ready(function() {
                             [% FOREACH d IN debarments %]
                                 <tr>
                                     <td>[% d.type %]</td>
-                                    <td>[% d.comment %]</td>
+                                    <td>
+                                    [% IF d.comment.search('OVERDUES_PROCESS') %]
+                                        Restriction added by overdues process [% d.comment.remove('OVERDUES_PROCESS ') %]
+                                    [% ELSE %]
+                                        [% d.comment %]
+                                    [% END %]
+                                    </td>
                                     <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
                                     [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                                       <td>

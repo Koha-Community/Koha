@@ -189,7 +189,12 @@ function validate1(date) {
                [% END %]
 
                [% IF ( debarredcomment ) %]
-                   with the explanation: <i>[% debarredcomment | html_line_break %]</i>
+                   with the explanation: <i>
+                   [% IF debarredcomment.search('OVERDUES_PROCESS') %]
+                       Restriction added by overdues process [% debarredcomment.remove('OVERDUES_PROCESS ') | html_line_break %]
+                   [% ELSE %]
+                       [% debarredcomment | html_line_break %]
+                   [% END %]
                [% END %]
                 <a href="#reldebarments" id="view_restrictions">View restrictions</a>
             </li>
