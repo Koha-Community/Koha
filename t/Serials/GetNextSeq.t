@@ -43,96 +43,96 @@ $subscription = {
     locale => 'C',
 };
 $pattern = {
-             add1 =>  1,          add2 =>  0,          add3 =>  0,
-           every1 =>  1,        every2 =>  0,        every3 =>  0,
-    whenmorethan1 =>  7, whenmorethan2 =>  0, whenmorethan3 =>  0,
-           setto1 =>  1,        setto2 =>  0,        setto3 =>  0,
-    numberingmethod => 'X: {X}',
+             add1 =>  1,          add2 =>  1,          add3 =>  0,
+           every1 =>  1,        every2 =>  1,        every3 =>  0,
+    whenmorethan1 =>  7, whenmorethan2 =>  7, whenmorethan3 =>  0,
+           setto1 =>  1,        setto2 =>  1,        setto3 =>  0,
+    numberingmethod => 'dayname: {X} | dayabrv: {Y}',
     numbering1 => 'dayname',
-    numbering2 => '',
+    numbering2 => 'dayabrv',
     numbering3 => '',
 };
 
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Tuesday');
+is($seq, 'dayname: Tuesday | dayabrv: Tue');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Wednesday');
+is($seq, 'dayname: Wednesday | dayabrv: Wed');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Thursday');
+is($seq, 'dayname: Thursday | dayabrv: Thu');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Friday');
+is($seq, 'dayname: Friday | dayabrv: Fri');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Saturday');
+is($seq, 'dayname: Saturday | dayabrv: Sat');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Sunday');
+is($seq, 'dayname: Sunday | dayabrv: Sun');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Monday');
+is($seq, 'dayname: Monday | dayabrv: Mon');
 
 # TEST CASE 3 - 1 variable, use 'monthname' numbering, from 0 to 11 by step of 2
 $subscription = {
-    lastvalue1 => 0, lastvalue2 => 1, lastvalue3 => 1,
+    lastvalue1 => 0, lastvalue2 => 0, lastvalue3 => 0,
     innerloop1 => 0, innerloop2 => 0, innerloop3 => 0,
     skip_serialseq => 0,
     irregularity => '',
     locale => 'C',  # locale set to 'C' to ensure we'll have english strings
 };
 $pattern = {
-             add1 =>  2,          add2 =>  0,          add3 =>  0,
-           every1 =>  1,        every2 =>  0,        every3 =>  0,
-    whenmorethan1 => 11, whenmorethan2 =>  0, whenmorethan3 =>  0,
-           setto1 =>  0,        setto2 =>  0,        setto3 =>  0,
-    numberingmethod => 'X: {X}',
+             add1 =>  2,          add2 =>  2,           add3 =>  0,
+           every1 =>  1,        every2 =>  1,         every3 =>  0,
+    whenmorethan1 => 11, whenmorethan2 =>  11, whenmorethan3 =>  0,
+           setto1 =>  0,        setto2 =>  0,         setto3 =>  0,
+    numberingmethod => 'monthname: {X} | monthabrv: {Y}',
     numbering1 => 'monthname',
-    numbering2 => '',
+    numbering2 => 'monthabrv',
     numbering3 => '',
 };
 
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: March');
+is($seq, 'monthname: March | monthabrv: Mar');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: May');
+is($seq, 'monthname: May | monthabrv: May');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: July');
+is($seq, 'monthname: July | monthabrv: Jul');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: September');
+is($seq, 'monthname: September | monthabrv: Sep');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: November');
+is($seq, 'monthname: November | monthabrv: Nov');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: January');
+is($seq, 'monthname: January | monthabrv: Jan');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: March');
+is($seq, 'monthname: March | monthabrv: Mar');
 
 # TEST CASE 4 - 1 variable, use 'season' numbering, from 0 to 3
 # Months starts at 0, this implies subscription's lastvalue1 should be 0,
 # together with setto1 and whenmorethan1 should be 11
 $subscription = {
-    lastvalue1 => 0, lastvalue2 => 1, lastvalue3 => 1,
+    lastvalue1 => 0, lastvalue2 => 0, lastvalue3 => 0,
     innerloop1 => 0, innerloop2 => 0, innerloop3 => 0,
     skip_serialseq => 0,
     irregularity => '',
     locale => 'C',  # locale set to 'C' to ensure we'll have english strings
 };
 $pattern = {
-             add1 =>  1,          add2 =>  0,          add3 =>  0,
-           every1 =>  1,        every2 =>  0,        every3 =>  0,
-    whenmorethan1 =>  3, whenmorethan2 =>  0, whenmorethan3 =>  0,
+             add1 =>  1,          add2 =>  1,          add3 =>  0,
+           every1 =>  1,        every2 =>  1,        every3 =>  0,
+    whenmorethan1 =>  3, whenmorethan2 =>  3, whenmorethan3 =>  0,
            setto1 =>  0,        setto2 =>  0,        setto3 =>  0,
-    numberingmethod => 'X: {X}',
+    numberingmethod => 'season: {X} | seasonabrv: {Y}',
     numbering1 => 'season',
-    numbering2 => '',
+    numbering2 => 'seasonabrv',
     numbering3 => '',
 };
 
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Summer');
+is($seq, 'season: Summer | seasonabrv: Sum');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Fall');
+is($seq, 'season: Fall | seasonabrv: Fal');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Winter');
+is($seq, 'season: Winter | seasonabrv: Win');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Spring');
+is($seq, 'season: Spring | seasonabrv: Spr');
 $seq = _next_seq($subscription, $pattern);
-is($seq, 'X: Summer');
+is($seq, 'season: Summer | seasonabrv: Sum');
 
 # TEST CASE 5 - 2 variables, from 1 to 12, and from 1 to 4
 $subscription = {

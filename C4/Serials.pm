@@ -2498,7 +2498,7 @@ sub _numeration {
     $num_type //= '';
     $locale ||= 'en';
     my $string;
-    if ( $num_type =~ /^dayname$/ ) {
+    if ( $num_type =~ /^dayname$/ or $num_type =~ /^dayabrv$/ ) {
         # 1970-11-01 was a Sunday
         $value = $value % 7;
         my $dt = DateTime->new(
@@ -2507,33 +2507,19 @@ sub _numeration {
             day     => $value + 1,
             locale  => $locale,
         );
-        $string = $dt->strftime("%A");
-    } elsif ( $num_type =~ /^dayabrv$/ ) {
-        # 1970-11-01 was a Sunday
-        $value = $value % 7;
-        my $dt = DateTime->new(
-            year    => 1970,
-            month   => 11,
-            day     => $value + 1,
-            locale  => $locale,
-        );
-        $string = $dt->strftime("%a");
-    } elsif ( $num_type =~ /^monthname$/ ) {
+        $string = $num_type =~ /^dayname$/
+            ? $dt->strftime("%A")
+            : $dt->strftime("%a");
+    } elsif ( $num_type =~ /^monthname$/ or $num_type =~ /^monthabrv$/ ) {
         $value = $value % 12;
         my $dt = DateTime->new(
             year    => 1970,
             month   => $value + 1,
             locale  => $locale,
         );
-        $string = $dt->strftime("%B");
-    } elsif ( $num_type =~ /^monthabrv$/ ) {
-        $value = $value % 12;
-        my $dt = DateTime->new(
-            year    => 1970,
-            month   => $value + 1,
-            locale  => $locale,
-        );
-        $string = $dt->strftime("%b");
+        $string = $num_type =~ /^monthname$/
+            ? $dt->strftime("%B")
+            : $dt->strftime("%b");
     } elsif ( $num_type =~ /^season$/ ) {
         my @seasons= qw( Spring Summer Fall Winter );
         $value = $value % 4;
