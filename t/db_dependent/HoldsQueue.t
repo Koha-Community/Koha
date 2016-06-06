@@ -61,8 +61,8 @@ my $borrower_branchcode = $borrower->{branchcode};
 my @branchcodes = ( $library1->{branchcode}, $library2->{branchcode}, $library3->{branchcode} );
 my @other_branches = ( $library2->{branchcode}, $library3->{branchcode} );
 my $least_cost_branch_code = pop @other_branches;
-my $itemtype = Koha::ItemTypes->search({ notforloan => 1 })->next;
-$itemtype or BAIL_OUT("No adequate itemtype"); #FIXME Should be $itemtype = $itemtype->itemtype
+my $itemtype = Koha::ItemTypes->search({ notforloan => 0 })->next->itemtype;
+$itemtype or BAIL_OUT("No adequate itemtype");
 
 #Set up the stage
 # Sysprefs and cost matrix
