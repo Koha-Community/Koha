@@ -17,8 +17,7 @@ package C4::Barcodes::hbyymmincr;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Carp;
 
@@ -27,10 +26,10 @@ use C4::Debug;
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 
+use constant WIDTH => 4; # FIXME: too small for sizeable or multi-branch libraries?
+
 use vars qw(@ISA);
 use vars qw($debug $cgi_debug);	# from C4::Debug, of course
-our $branch = '';
-our $width = 4; # FIXME: 4 is too small for sizeable or multi-branch libraries.
 
 BEGIN {
     @ISA = qw(C4::Barcodes);
@@ -41,6 +40,7 @@ BEGIN {
 
 sub db_max {
 	my $self = shift;
+    my $width = WIDTH;
     my $query = "SELECT SUBSTRING(barcode,-$width) AS chunk, barcode FROM items WHERE barcode REGEXP ?  ORDER BY chunk DESC LIMIT 1";
 	$debug and print STDERR "(hbyymmincr) db_max query: $query\n";
 	my $sth = C4::Context->dbh->prepare($query);
@@ -73,6 +73,7 @@ sub initial {
 	# FIXME: populated branch?
     my $iso = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }); # like "2008-07-02"
     warn "HBYYMM Barcode was not passed a branch, default is blank" if ( $self->branch eq '' );
+    my $width = WIDTH;
 	return $self->branch . substr($iso,2,2) . substr($iso,5,2) . sprintf('%' . "$width.$width" . 'd',1);
 }
 
@@ -93,11 +94,14 @@ sub branch {
 	(@_) and $self->{branch} = shift;
 	return $self->{branch};
 }
-sub width {
-	my $self = shift;
-	(@_) and $width = shift;	# hitting the class variable.
-	return $width;
-}
+
+# Commented out (BZ 16635)
+#sub width {
+#    my $self = shift;
+#    (@_) and $width = shift;  # hitting the class variable.
+#    return $width;
+#}
+
 sub process_head {	# (self,head,whole,specific)
 	my ($self,$head,$whole,$specific) = @_;
 	$specific and return $head;	# if this is built off an existing barcode, just return the head unchanged.
@@ -120,7 +124,7 @@ sub new_object {
       my $self = $class_or_object->default_self('hbyymmincr');
     bless $self, $type;
 
-    $self->branch( @_ ? shift : $from_obj ? $class_or_object->branch : $branch );
+    $self->branch( @_ ? shift : $from_obj ? $class_or_object->branch : '' );
     warn "HBYYMM Barcode created with no branchcode, default is blank" if ( $self->branch() eq '' );
 
     # take the branch from argument, or existing object, or default
