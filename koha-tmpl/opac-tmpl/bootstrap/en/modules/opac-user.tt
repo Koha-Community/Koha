@@ -91,7 +91,16 @@
                         <div class="alert">
                             <ul>
                                 [% IF ( userdebarred ) %]
-                                    <li id="userdebarred"><strong>Please note:</strong> Your account has been frozen[% IF ( BORROWER_INFO.userdebarreddate ) %] until <span id="userdebarred_date">[% BORROWER_INFO.userdebarreddate | $KohaDates %]</span>[% END %][% IF ( BORROWER_INFO.debarredcomment ) %] with the comment <span id="userdebarred_comment">"[% BORROWER_INFO.debarredcomment %]"</span>[% END %]. Usually the reason for freezing an account is old overdues or damage fees. If <a href="/cgi-bin/koha/opac-account.pl">your account page</a> shows your account to be clear, please contact the library.</li>
+                                    <li id="userdebarred"><strong>Please note:</strong> Your account has been frozen[% IF ( BORROWER_INFO.userdebarreddate ) %] until <span id="userdebarred_date">[% BORROWER_INFO.userdebarreddate | $KohaDates %]</span>[% END %]
+                                    [% IF ( BORROWER_INFO.debarredcomment ) %] with the comment
+                                    <span id="userdebarred_comment">
+                                        [% IF BORROWER_INFO.debarredcomment.search('OVERDUES_PROCESS') %]
+                                            "Restriction added by overdues process [% BORROWER_INFO.debarredcomment.remove('OVERDUES_PROCESS ') %]"
+                                        [% ELSE %]
+                                            [% BORROWER_INFO.debarredcomment %]
+                                        [% END %]
+                                    </span>
+                                    [% END %]. Usually the reason for freezing an account is old overdues or damage fees. If <a href="/cgi-bin/koha/opac-account.pl">your account page</a> shows your account to be clear, please contact the library.</li>
                                 [% END %]
                                 [% IF ( BORROWER_INFO.gonenoaddress ) %]
                                     <li id="gonenoaddress"><strong>Please note:</strong> According to our records, we don't have up-to-date [% UNLESS OPACPatronDetails %]<a href="/cgi-bin/koha/opac-memberentry.pl">contact information</a>[% ELSE %]contact information[% END %] on file.  Please contact the library[% IF OPACPatronDetails %] or use the <a href="/cgi-bin/koha/opac-memberentry.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)[% END %].</li>

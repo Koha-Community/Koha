@@ -598,8 +598,7 @@ END_SQL
                         {
                             borrowernumber => $borrowernumber,
                             type           => 'OVERDUES',
-                            comment => "Restriction added by overdues process "
-                              . output_pref( dt_from_string() ),
+                            comment => "OVERDUES_PROCESS " .  output_pref( dt_from_string() ),
                         }
                     );
                     $verbose and warn "debarring $borr\n";
