@@ -47,23 +47,27 @@ $(document).ready(function() {
         updateAllEvery();
     });
 
-    $("#new_action").on("click",function(){
+    $("#new_action").on("click",function(e){
+        e.preventDefault();
         cancelEditAction();
         $("#add_action").show();
         $("#action").focus();
     });
 
-    $(".duplicate_template").on("click",function(){
+    $(".duplicate_template").on("click",function(e){
+        e.preventDefault();
         var template_id = $(this).data("template_id");
         $("#duplicate_a_template").val(template_id);
         $("#duplicate_current_template").val(1);
     });
 
-    $('#createTemplate').on('shown', function () {
+    $('#createTemplate').on('shown', function (e) {
+        e.preventDefault();
         $("#template_name").focus();
     });
 
-    $("#duplicate_a_template").on("change",function(){
+    $("#duplicate_a_template").on("change",function(e){
+        e.preventDefault();
         if( this.value == '' ){
             $("#duplicate_current_template").val("");
         } else {
@@ -71,7 +75,8 @@ $(document).ready(function() {
         }
     });
 
-    $(".delete_template").on("click",function(){
+    $(".delete_template").on("click",function(e){
+        e.preventDefault();
         return confirmDelete();
     });
 
