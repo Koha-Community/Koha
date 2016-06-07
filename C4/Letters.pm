@@ -843,13 +843,13 @@ sub _parseletter {
                     $filter_string_used = $1 || q{};
                     $dateonly = $1 unless $dateonly;
                 }
-                eval {
-                    $replacedby = output_pref({ dt => dt_from_string( $replacedby ), dateonly => $dateonly });
+                my $replacedby_date = eval {
+                    output_pref({ dt => dt_from_string( $replacedby ), dateonly => $dateonly });
                 };
 
                 if ( $letter->{ $letter_field } ) {
-                    $letter->{ $letter_field } =~ s/\Q<<$table.$field$filter_string_used>>\E/$replacedby/g;
-                    $letter->{ $letter_field } =~ s/\Q<<$field$filter_string_used>>\E/$replacedby/g;
+                    $letter->{ $letter_field } =~ s/\Q<<$table.$field$filter_string_used>>\E/$replacedby_date/g;
+                    $letter->{ $letter_field } =~ s/\Q<<$field$filter_string_used>>\E/$replacedby_date/g;
                 }
             }
         }
