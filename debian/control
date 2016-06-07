@@ -59,6 +59,7 @@ Build-Depends: libalgorithm-checkdigits-perl,
  libhttp-cookies-perl,
  libhttp-message-perl,
  libhttp-oai-perl,
+ libio-socket-ip-perl,
  libjson-perl,
  liblibrary-callnumber-lc-perl,
  liblingua-stem-perl,
@@ -98,7 +99,7 @@ Build-Depends: libalgorithm-checkdigits-perl,
  libsms-send-perl,
  libsoap-lite-perl,
  libstring-random-perl,
- libswagger2-perl,
+ libswagger2-perl (>= 0.59),
  libtemplate-perl,
  libtemplate-plugin-htmltotext-perl,
  libtemplate-plugin-json-escape-perl,
@@ -165,7 +166,8 @@ Depends: ${misc:Depends}, ${koha:Depends},
  yaz
 Suggests: mysql-server | virtual-mysql-server,
  memcached,
- letsencrypt
+ letsencrypt,
+ libwww-youtube-download-perl
 Homepage: http://koha-community.org/
 Description: integrated (physical) library management system
  Koha is an Integrated Library Management system for real-world libraries
@@ -222,8 +224,7 @@ Description: Other dep. for koha
  daemon, debconf, etc.).
 
 Package: koha-perldeps
-Depends: EEEK: unknown package for DBIx::RunSQL,
- libalgorithm-checkdigits-perl,
+Depends: libalgorithm-checkdigits-perl,
  libanyevent-http-perl,
  libanyevent-perl,
  libarchive-zip-perl,
@@ -273,6 +274,7 @@ Depends: EEEK: unknown package for DBIx::RunSQL,
  libhttp-cookies-perl,
  libhttp-message-perl,
  libhttp-oai-perl,
+ libio-socket-ip-perl,
  libjson-perl,
  liblibrary-callnumber-lc-perl,
  liblingua-stem-perl,
@@ -312,7 +314,7 @@ Depends: EEEK: unknown package for DBIx::RunSQL,
  libsms-send-perl,
  libsoap-lite-perl,
  libstring-random-perl,
- libswagger2-perl,
+ libswagger2-perl (>= 0.59),
  libtemplate-perl,
  libtemplate-plugin-htmltotext-perl,
  libtemplate-plugin-json-escape-perl,
