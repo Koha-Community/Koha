@@ -597,10 +597,10 @@
                                                             [% END %]
                                                             <input type="hidden" name="pickup" value="[% RESERVE.branchcode %]" />
                                                         [% ELSE %]
-                                                            Item waiting to be pulled from <b> [% RESERVE.wbrname %]</b>
+                                                            Item waiting to be pulled from <b> [% Branches.GetName( RESERVE.branchcode ) %]</b>
                                                         [% END %]
                                                     [% ELSE %]
-                                                        Item in transit to <b> [% RESERVE.wbrname %]</b> <input type="hidden" name="pickup" value="[% RESERVE.wbrcd %]" />
+                                                        Item in transit to <b> [% Branches.GetName( RESERVE.branchcode ) %]</b> <input type="hidden" name="pickup" value="[% RESERVE.branchcode %]" />
                                                     [% END %]
                                                 [% ELSE %]
                                                     [% IF ( RESERVE.is_in_transit ) %]
