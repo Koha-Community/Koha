@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 72;
+use Test::More tests => 73;
 use Test::MockModule;
 use Test::Warn;
 
@@ -306,7 +306,7 @@ $prepared_letter = GetPreparedLetter((
 $my_content_letter = qq|This is a SMS for an $substitute->{status}|;
 is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns the content correctly' );
 
-$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('test_date','TEST_DATE','Test dates','Test dates','This one only contains the date: <<biblio.timestamp | dateonly>>.');});
+$dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('test_date','TEST_DATE','Test dates','A title with a timestamp: <<biblio.timestamp>>','This one only contains the date: <<biblio.timestamp | dateonly>>.');});
 $prepared_letter = GetPreparedLetter((
     module                 => 'test_date',
     branchcode             => '',
@@ -338,6 +338,20 @@ $prepared_letter = GetPreparedLetter((
     repeat                 => $repeat,
 ));
 is( $prepared_letter->{content}, q|And also this one:| . output_pref({ dt => $date, dateonly => 1 }) . q|.|, 'dateonly test 3' );
+
+t::lib::Mocks::mock_preference( 'TimeFormat', '12hr' );
+my $yesterday_night = $date->clone->add( days => -1 )->set_hour(22);
+$dbh->do(q|UPDATE biblio SET timestamp = ? WHERE biblionumber = ?|, undef, $yesterday_night, $biblionumber );
+$dbh->do(q{UPDATE letter SET content = 'And also this one:<<timestamp>>.' WHERE code = 'test_date';});
+$prepared_letter = GetPreparedLetter((
+    module                 => 'test_date',
+    branchcode             => '',
+    letter_code            => 'test_date',
+    tables                 => $tables,
+    substitute             => $substitute,
+    repeat                 => $repeat,
+));
+is( $prepared_letter->{content}, q|And also this one:| . output_pref({ dt => $yesterday_night }) . q|.|, 'dateonly test 3' );
 
 $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('claimacquisition','TESTACQCLAIM','Acquisition Claim','Item Not Received','<<aqbooksellers.name>>|<<aqcontacts.name>>|<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered)</order>');});
 
