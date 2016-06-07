@@ -17,11 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 17;
 use Test::Warn;
 
 use C4::Context;
 use Koha::Database;
+use Koha::DateUtils;
 
 BEGIN {
     use_ok('Koha::Objects');
@@ -57,17 +58,27 @@ my $b2 = Koha::Patron->new(
     }
 );
 $b2->store();
+my $three_days_ago = dt_from_string->add( days => -3 );
 my $b3 = Koha::Patron->new(
     {
         surname      => 'Test 3',
         branchcode   => $branchcode,
-        categorycode => $categorycode
+        categorycode => $categorycode,
+        updated_on   => $three_days_ago,
     }
 );
 $b3->store();
 
 my $b1_new = Koha::Patrons->find( $b1->borrowernumber() );
 is( $b1->surname(), $b1_new->surname(), "Found matching patron" );
+isnt( $b1_new->updated_on, undef, "borrowers.updated_on should be set" );
+is( dt_from_string($b1_new->updated_on), dt_from_string, "borrowers.updated_on should have been set to now on creating" );
+
+my $b3_new = Koha::Patrons->find( $b3->borrowernumber() );
+is( dt_from_string($b3_new->updated_on), $three_days_ago, "borrowers.updated_on should have been kept to what we set on creating" );
+$b3_new->set({ surname => 'another surname for Test 3' });
+$b3_new = Koha::Patrons->find( $b3->borrowernumber() );
+is( dt_from_string($b1_new->updated_on), dt_from_string, "borrowers.updated_on should have been set to now on updating" );
 
 my @patrons = Koha::Patrons->search( { branchcode => $branchcode } );
 is( @patrons, 3, "Found 3 patrons with Search" );
