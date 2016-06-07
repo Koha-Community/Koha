@@ -558,6 +558,7 @@ $clean_subtitle ||= q{};
 	## be written and designated. The field is free-form and resistant
 	## to all parsing efforts, so this information is lost on me
     }
+    return;
 }
 
 ##********************************************************************
@@ -590,6 +591,7 @@ sub print_stitle {
 	    }
 	}
     }
+    return;
 }
 
 ##********************************************************************
