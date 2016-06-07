@@ -11,13 +11,13 @@
     [% IF marcflavour == 'UNIMARC' %]
         [% SWITCH type %]
             [% CASE 'broader' %]
-              <span class="BT">BT: [% heading | html %]</span>
+              <span class="BT"><abbr title="Broader Term">BT</abbr>: [% heading | html %]</span>
             [% CASE 'narrower' %]
-              <span class="NT">NT: [% heading | html %]</span>
+              <span class="NT"><abbr title="Narrower Term">NT</abbr>: [% heading | html %]</span>
             [% CASE 'seefrom' %]
-              <span class="UF">UF: [% heading | html %]</span>
+              <span class="UF"><abbr title="Used For">UF</abbr>: [% heading | html %]</span>
             [% CASE 'seealso' %]
-              <span class="RT">RT: [% heading | html %]</span>
+              <span class="RT"><abbr title="Related Term">RT</abbr>: [% heading | html %]</span>
         [% END %]
     [% ELSE %]
         <span class="heading">
