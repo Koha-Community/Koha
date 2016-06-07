@@ -30,6 +30,8 @@
 use strict;
 use warnings;
 
+use feature 'say';
+
 # CPAN modules
 use DBI;
 use Getopt::Long;
@@ -45,6 +47,7 @@ use MARC::File::XML ( BinaryEncoding => 'utf8' );
 
 use File::Path qw[remove_tree]; # perl core module
 use File::Spec;
+use File::Slurp;
 
 # FIXME - The user might be installing a new database, so can't rely
 # on /etc/koha.conf anyway.
@@ -12917,7 +12920,9 @@ foreach my $file ( sort readdir $dirh ) {
         my $installer = C4::Installer->new();
         my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
     } elsif ( $file =~ /\.perl$/ ) {
-        do $update_dir . $file;
+        my $code = read_file( $update_dir . $file );
+        eval $code;
+        say "Atomic update generated errors: $@" if $@;
     }
 }
 
