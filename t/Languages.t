@@ -21,6 +21,7 @@ use Modern::Perl;
 use Test::More tests => 4;
 use Test::MockModule;
 use CGI qw ( -utf8 );
+use Koha::Cache::Memory::Lite;
 
 BEGIN {
     use_ok('C4::Languages');
@@ -51,8 +52,10 @@ my $query = CGI->new();
 @languages = ('de-DE', 'fr-FR');
 is(C4::Languages::getlanguage($query), 'de-DE', 'default to first language specified in syspref (bug 10560)');
 
+Koha::Cache::Memory::Lite->get_instance()->clear_from_cache('getlanguage');
 @languages = ();
 is(C4::Languages::getlanguage($query), 'en', 'default to English if no language specified in syspref (bug 10560)');
 
+Koha::Cache::Memory::Lite->get_instance()->clear_from_cache('getlanguage');
 $return_undef = 1;
 is(C4::Languages::getlanguage($query), 'en', 'default to English if no database');
