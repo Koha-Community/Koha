@@ -2,38 +2,36 @@ Administration:
 # Only used internally, omitted: FrameworksLoaded, Version
     Interface options:
         -
-            - Use
+            - "Email address for the administrator of Koha: "
             - pref: KohaAdminEmailAddress
               class: email
-            - "as the email address for the administrator of Koha. (This is the default From: address for emails unless there is one for the particular library, and is referred to when an internal error occurs.)"
+            - "(This is the default From: address for emails unless there is one for the particular library, and is referred to when an internal error occurs.)"
         -
-           - Use
-           - pref: ReplytoDefault
-             class: email
-           - "as the email address that will be set as the replyto in emails"
+            - "Email address to be set as the replyto in emails: "
+            - pref: ReplytoDefault
+              class: email
         -
-           - Use
-           - pref: ReturnpathDefault
-             class: email
-           - "as the return path or bounce address for undeliverable mail messages. If you leave this empty, the From address will be used (often defaulting to the admin address)."
+            - "Return path or bounce address for undeliverable mail messages: "
+            - pref: ReturnpathDefault
+              class: email
+            - "If you leave this empty, the From address will be used (often defaulting to the admin address)."
         -
-            - Show
+            - "How much debugging information to show in the browser when an internal error occurs: "
             - pref: DebugLevel
               default: 0
               choices:
-                  0: "no"
-                  1: some
-                  2: lots of
-            - debugging information in the browser when an internal error occurs.
+                  0: None
+                  1: Some
+                  2: All
         -
+            - "Show itemtype icons in the catalog: "
             - pref: noItemTypeImages
               default: 0
               choices:
-                  yes: "Don't show"
-                  no: Show
-            - itemtype icons in the catalog.
+                  yes: "No"
+                  no: "Yes"
         -
-            - Separate columns in an exported CSV file with
+            - "Default separator for columns in an exported CSV file: "
             - pref: delimiter
               default: ","
               choices:
@@ -43,147 +41,145 @@ Administration:
                   '/': slashes
                   '\': backslashes
                   '#': "#'s"
-            - by default.
         -
+            - "Allow staff and patrons to create and view saved lists of books: "
             - pref: virtualshelves
               choices:
-                  yes: Allow
-                  no: "Don't allow"
-            - staff and patrons to create and view saved lists of books.
+                  yes: "Yes"
+                  no: "No"
         -
-            - When editing circulation rules show the
+            - "Default view when editing circulation rules: "
             - pref: DefaultToLoggedInLibraryCircRules
               choices:
-                  yes: "logged in library's"
-                  no: "all libraries"
-            - rules by default.
+                  yes: "The logged-in library"
+                  no: "All libraries"
         -
-            - When editing notices and slips show the
+            - "Default view when editing notices and slips: "
             - pref: DefaultToLoggedInLibraryNoticesSlips
               choices:
-                  yes: "logged in library's"
-                  no: "all libraries"
-            - notices and slips by default.
+                  yes: "The logged-in library"
+                  no: "All libraries"
         -
-            - When editing overdue notice/status triggers show the
+            - "Default view when editing overdue notice/status triggers: "
             - pref: DefaultToLoggedInLibraryOverdueTriggers
               choices:
-                  yes: "logged in library's"
-                  no: "all libraries"
-            - rules by default.
+                  yes: "The logged-in library"
+                  no: "All libraries"
     Login options:
         -
-            - Automatically log out users after
+            - "Inactivity timeout in seconds to automatically log out users: "
             - pref: timeout
-            - seconds of inactivity. Adding d will specify it in days, e.g. 1d is timeout of one day.
+              class: integer
+            - Adding d will specify it in days, e.g. 1d is timeout of one day.
         -
+            - "Require staff to log in from a computer in the IP address range specified by their library (if any): "
             - pref: AutoLocation
               default: 0
               choices:
-                  yes: Require
-                  no: "Don't require"
-            - staff to log in from a computer in the IP address range <a href="/cgi-bin/koha/admin/branches.pl">specified by their library</a> (if any).
+                  yes: "Yes"
+                  no: "No"
+            - <a href="/cgi-bin/koha/admin/branches.pl">Link to library administration</a>
         -
+            - "Enable check for change in remote IP address for session security: "
             - pref: SessionRestrictionByIP
               default: 1
               choices:
-                  yes: Enable
-                  no: "Disable"
-            - check for change in remote IP address for session security. Disable only when remote IP address changes frequently.
+                  yes: "Yes"
+                  no: "No"
+            - (Disable only when remote IP address changes frequently.)
         # PostgreSQL is supported by CGI::Session but not by Koha.
         -
-            - Store login session information
+            - "Storage of login session information: "
             - pref: SessionStorage
               default: mysql
               choices:
-                  mysql: in the MySQL database.
-                  Pg: in the PostgreSQL database (not supported).
-                  tmp: as temporary files.
-                  memcached: in a memcached server.
+                  mysql: MySQL database
+                  Pg: PostgreSQL database (not supported)
+                  tmp: Temporary files
+                  memcached: Memcached server
         -
+            - "Prevent staff (but not superlibrarians) from modifying objects (holds, items, patrons, etc.) belonging to other libraries: "
             - pref: IndependentBranches
               default: 0
               choices:
-                  yes: Prevent
-                  no: "Don't prevent"
-            - staff (but not superlibrarians) from modifying objects (holds, items, patrons, etc.) belonging to other libraries.
+                  yes: "Yes"
+                  no: "No"
         -
+            - Prevent staff (but not superlibrarians) from viewing and approving/denying patron modification requests for patrons belonging to other libraries.
             - pref: IndependentBranchesPatronModifications
               default: 0
               choices:
-                  yes: Prevent
-                  no: "Don't prevent"
-            - staff (but not superlibrarians) from viewing and approving/denying patron modification requests for patrons belonging to other libraries.
+                  yes: "Yes"
+                  no: "No"
     CAS authentication:
         -
+            - "Use CAS for login authentication: "
             - pref: casAuthentication
               default: 0
               choices:
-                  yes: Use
-                  no: "Don't use"
-            - CAS for login authentication.
+                  yes: "Yes"
+                  no: "No"
         -
+            - "Logout of CAS when logging out of Koha: "
             - pref: casLogout
               default: 0
               choices:
-                  yes: Logout
-                  no: "Don't Logout"
-            - of CAS when logging out of Koha.
+                  yes: "Yes"
+                  no: "No"
         -
-            - The CAS Authentication Server can be found at
+            - "URL of the CAS Authentication Server: "
             - pref: casServerUrl
     SSL client certificate authentication:
         -
-            - Use
+            - "Field to use for SSL client certificate authentication: "
             - pref: AllowPKIAuth
               default: None
               choices:
-                  None: "no"
-                  Common Name: the Common Name
-                  emailAddress: the emailAddress
-            - field for SSL client certificate authentication
+                  None: "None"
+                  Common Name: Common Name
+                  emailAddress: emailAddress
     Google OpenID Connect:
         -
+            - "Use Google OpenID Connect login: "
             - pref: GoogleOpenIDConnect
               choices:
-                yes: Use
-                no: "Don't Use"
-            - Google OpenID Connect login.
+                yes: "Yes"
+                no: "No"
             - You will need to select OAuth2 when creating an app in the google cloud console, and set the web origin to your_opac_url and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect .
         -
-            - Google OAuth2 Client ID
+            - "Google OAuth2 Client ID: "
             - pref: GoogleOAuth2ClientID
         -
-            - Google OAuth2 Client Secret
+            - "Google OAuth2 Client Secret: "
             - pref: GoogleOAuth2ClientSecret
         -
-            - Google OpenID Connect Restrict to domain (or subdomain of this domain)
+            - "Google OpenID Connect Restrict to domain (or subdomain of this domain): "
             - pref: GoogleOpenIDConnectDomain
-            - . Leave blank for all google domains
+            - Leave blank for all google domains
     Mozilla Persona:
         -
+            - "Allow Mozilla persona for login: "
             - pref: Persona
               default: 0
               choices:
-                  yes: Allow
-                  no: "Don't Allow"
-            - Mozilla persona for login
+                  yes: "Yes"
+                  no: "No"
     Share anonymous usage statistics:
         -
+            - "Share anonymous Koha usage data with the Koha community: "
             - pref: UsageStats
               default: 0
               choices:
-                  yes: Share
-                  no: "Don't share"
-            - anonymous Koha usage data with the Koha community. You can see the data on the <a href="http://hea.koha-community.org">Hea Koha community website</a>. You have to run misc/cronjobs/share_usage_with_koha_community.pl in a cronjob.
+                  yes: "Yes"
+                  no: "No"
+            - "You have to run misc/cronjobs/share_usage_with_koha_community.pl in a cronjob. Note that the other \"UsageStats\" preferences have no effect if this preference is set to \"No\". Website where usage statistics are published: <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
         -
-            - The library name
+            - "Use the following library name to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryName
-            - will be shown on the <a href="http://hea.koha-community.org">Hea Koha community website</a>.
             - If this field is empty data will be sent anonymously.
             - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
         -
-            - "The country where your library is located:"
+            - "The country where your library is located to be shown on the Hea Community website: "
             - pref: UsageStatsCountry
               default: ""
               choices:
@@ -386,13 +382,11 @@ Administration:
             - This will be shown on the <a href="http://hea.koha-community.org">Hea Koha community website</a>.
             - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
         -
-            - The library URL
+            - "The library URL to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryUrl
-            - will be shown on the <a href="http://hea.koha-community.org">Hea Koha community website</a>.
             - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
-
         -
-            - The library type
+            - "The library type to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryType
               default: ""
               choices:
@@ -407,13 +401,12 @@ Administration:
                   government  : "government"
                   religiousOrg: "religious organization"
                   subscription: "subscription"
-            - will be shown on the <a href="http://hea.koha-community.org">Hea Koha community website</a>.
             - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
     Search Engine:
         -
+            - "Use following search engine: "
             - pref: SearchEngine
               default: Zebra
               choices:
                 Zebra: Zebra
                 Elasticsearch: Elasticsearch
-            - is the search engine used.
