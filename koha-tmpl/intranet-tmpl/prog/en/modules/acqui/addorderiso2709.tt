@@ -198,6 +198,7 @@
                             <span>
                                 <label for="matcher_id">Matching:</label>
                                     <select name="matcher_id" id="matcher_id">
+                                        <option value="_TITLE_AUTHOR_">Title and author</option>
                                         <option value="">Do not look for matching records</option>
                                         [% FOREACH available_matcher IN available_matchers %]
                                             [% IF ( available_matcher.code == current_matcher_code ) %]
