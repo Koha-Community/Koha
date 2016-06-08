@@ -51,10 +51,12 @@ $(document).ready(function() {
         $(toggle_from).each(function() {
             var input_label = $(this).attr('for');
             if ( input_label == 'sex-male' || input_label == 'sex-none' || input_label == 'sex-female' ) {
-            $(toggle_to+"[for='"+input_label+"']").next().prop('checked', $(this).next().prop('checked') );
-            return;
+                $(toggle_to+"[for='"+input_label+"']").next().prop('checked', $(this).next().prop('checked') );
+                return;
             }
-            if( $(this).next().val() != '' ) { $(toggle_to+"[for='"+input_label+"']").next().val(  $(this).next().val() );}
+            if( $(this).next().val() != '' ) {
+                $(toggle_to+"[for='"+input_label+"']").next().val(  $(this).next().val() );
+            }
         });
 
         $(".toggler").toggle();
@@ -1108,16 +1110,25 @@ $(document).ready(function() {
         $(document).ready(function () {
             $("#entryform").hide();
             [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') %]
-            var qaddfields = "[% FOREACH field IN q_add_f.unique %][% field %] [% END %]";
+            var qaddfields = [[% FOREACH field IN q_add_f.unique %]"[% field %]",[% END %]];
+            var skipped_fields = ["contactname","contactfirstname","relationship"]; //Guarantor form is pulled as a whole, ignore individual fields
             $("#entryform label").each(function () {
                 var input_label = $(this).attr('for');
-                if ( input_label == 'sex-female' ) { input_label='sex'; }
-                else if ( input_label == 'btitle' ) { input_label='title'; }
-                if( qaddfields.indexOf( input_label ) != -1 || $(this).attr('class') == 'required' ){
-                $(this).parent().clone().appendTo("#quick_add_list");
-                if( input_label == 'password') $("#entryform label[for='password2']").parent().clone().appendTo("#quick_add_list");
+                if ( input_label == 'sex-female' ) {
+                    input_label='sex';
                 }
-             });
+                else if ( input_label == 'btitle' ) {
+                    input_label='title';
+                }
+                if ( skipped_fields.indexOf( input_label ) != -1 ) { input_label=""; }
+                if( qaddfields.indexOf( input_label ) != -1 || $(this).attr('class') == 'required' ){
+                   $(this).parent().clone().appendTo("#quick_add_list");
+                   if( input_label == 'password') $("#entryform label[for='password2']").parent().clone().appendTo("#quick_add_list");
+                }
+            });
+                if( $("#memberentry_guarantor").length ) {
+                    $("#memberentry_guarantor").clone().appendTo("#quick_add_list").css("margin",0);
+                }
             $("#quick_add_form").show();
         });
     </script>
