@@ -145,10 +145,11 @@ elsif ( $step && $step == 2 ) {
                     $template->param( 'checkdatabasecreated' => 1 );
                 }
 
-                #Check if user have all necessary grants on this database.
-                my $rq =
-                  $dbh->prepare(
-                    "SHOW GRANTS FOR \'$info{user}\'\@'$info{hostname}'");
+                # Check if user have all necessary grants on this database.
+                # CURRENT_USER is ANSI SQL, and doesn't require mysql table
+                # privileges, making the % check pointless, since they
+                # couldn't even check GRANTS if they couldn't connect.
+                my $rq = $dbh->prepare('SHOW GRANTS FOR CURRENT_USER');
                 $rq->execute;
                 my $grantaccess;
                 while ( my ($line) = $rq->fetchrow ) {
@@ -166,27 +167,6 @@ elsif ( $step && $step == 2 ) {
                                 && ( index( $line, 'CREATE' ) > 0 )
                                 && ( index( $line, 'DROP' ) > 0 ) )
                           );
-                    }
-                }
-                unless ($grantaccess) {
-                    $rq =
-                      $dbh->prepare("SHOW GRANTS FOR \'$info{user}\'\@'\%'");
-                    $rq->execute;
-                    while ( my ($line) = $rq->fetchrow ) {
-                        my $dbname = $info{dbname};
-                        if ( $line =~ m/$dbname/ || index( $line, '*.*' ) > 0 )
-                        {
-                            $grantaccess = 1
-                              if (
-                                index( $line, 'ALL PRIVILEGES' ) > 0
-                                || (   ( index( $line, 'SELECT' ) > 0 )
-                                    && ( index( $line, 'INSERT' ) > 0 )
-                                    && ( index( $line, 'UPDATE' ) > 0 )
-                                    && ( index( $line, 'DELETE' ) > 0 )
-                                    && ( index( $line, 'CREATE' ) > 0 )
-                                    && ( index( $line, 'DROP' ) > 0 ) )
-                              );
-                        }
                     }
                 }
                 $template->param( "checkgrantaccess" => $grantaccess );
