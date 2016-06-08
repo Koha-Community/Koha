@@ -11495,7 +11495,10 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
             ## We cannot split on multiple values at once,
             ## so let's replace each of those values with __SPLIT__
             if (@splits) {
-                map( $serialseq =~ s/$_/__SPLIT__/, @splits );
+                for my $split_item (@splits) {
+                    my $quoted_split = quotemeta($split_item);
+                    $serialseq =~ s/$quoted_split/__SPLIT__/;
+                }
                 (
                     undef,
                     $enumeration_data{ $indexes[0] // q{} },
