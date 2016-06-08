@@ -1737,6 +1737,11 @@ sub get_session {
     return $session;
 }
 
+
+# FIXME no_set_userenv may be replaced with force_branchcode_for_userenv
+# (or something similar)
+# Currently it's only passed from C4::SIP::ILS::Patron::check_password, but
+# not having a userenv defined could cause a crash.
 sub checkpw {
     my ( $dbh, $userid, $password, $query, $type, $no_set_userenv ) = @_;
     $type = 'opac' unless $type;
