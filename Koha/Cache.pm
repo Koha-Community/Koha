@@ -38,9 +38,9 @@ The first, traditional OO interface provides the following functions:
 use strict;
 use warnings;
 use Carp;
-use Storable qw(freeze thaw);
 use Module::Load::Conditional qw(can_load);
 use Koha::Cache::Object;
+use Sereal;
 
 use base qw(Class::Accessor);
 
@@ -48,6 +48,8 @@ __PACKAGE__->mk_ro_accessors(
     qw( cache memcached_cache fastmmap_cache memory_cache ));
 
 our %L1_cache;
+our $L1_encoder = Sereal::Encoder->new;
+our $L1_decoder = Sereal::Decoder->new;
 
 =head2 get_instance
 
@@ -263,7 +265,7 @@ sub set_in_cache {
     my $flag = '-CF0'; # 0: scalar, 1: frozen data structure
     if (ref($value)) {
         # Set in L1 cache as a data structure, initially only in frozen form (for performance reasons)
-        $value = freeze($value);
+        $value = $L1_encoder->encode($value);
         $L1_cache{$key}->{frozen} = $value;
         $flag = '-CF1';
     } else {
@@ -325,10 +327,10 @@ sub get_from_cache {
     if ( exists $L1_cache{$key} ) {
         if (ref($L1_cache{$key})) {
             if ($unsafe) {
-                $L1_cache{$key}->{thawed} ||= thaw($L1_cache{$key}->{frozen});
+                $L1_cache{$key}->{thawed} ||= $L1_decoder->decode($L1_cache{$key}->{frozen});
                 return $L1_cache{$key}->{thawed};
             } else {
-                return thaw($L1_cache{$key}->{frozen});
+                return $L1_decoder->decode($L1_cache{$key}->{frozen});
             }
         } else {
             # No need to thaw if it's a scalar
@@ -350,7 +352,7 @@ sub get_from_cache {
     } elsif ($flag eq '-CF1') {
         # it's a frozen data structure
         my $thawed;
-        eval { $thawed = thaw($L2_value); };
+        eval { $thawed = $L1_decoder->decode($L2_value); };
         return if $@;
         $L1_cache{$key}->{frozen} = $L2_value;
         $L1_cache{$key}->{thawed} = $thawed if $unsafe;

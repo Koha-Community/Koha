@@ -807,6 +807,11 @@ our $PERL_DEPS = {
         required => 1,
         min_ver => '1.00',
     },
+    'Sereal' => {
+        'usage'    => 'Caching',
+        'required' => '1',
+        'min_ver'  => '3.0',
+    },
 };
 
 1;
