@@ -1600,7 +1600,7 @@ sub NewIssue {
 
     $subscription_history->recievedlist($recievedlist);
     $subscription_history->missinglist($missinglist);
-    $subscription_history->update();
+    $subscription_history->store();
 
     return $serialid;
 }
