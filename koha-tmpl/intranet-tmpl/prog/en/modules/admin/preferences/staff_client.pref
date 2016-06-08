@@ -56,6 +56,11 @@ Staff Client:
               class: url
             - for the Staff Client's favicon. (This should be a complete URL, starting with <code>http://</code>.)
         -
+            - 'Display lists in the staff client using XSLT stylesheet at: '
+            - pref: XSLTListsDisplay
+              class: file
+            - '<br />Options:<ul><li><a href="#" class="set_syspref" data-syspref="XSLTListsDisplay" data-value="">Leave empty</a> for the default stylesheet (picked from XSLTResultsDisplay).</li><li> put a path to define an xslt file.</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language'
+        -
             - 'Display results in the staff client using XSLT stylesheet at: '
             - pref: XSLTResultsDisplay
               class: file
