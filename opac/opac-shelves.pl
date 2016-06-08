@@ -248,7 +248,7 @@ if ( $op eq 'view' ) {
 
             my $borrower = GetMember( borrowernumber => $loggedinuser );
 
-            my $xslfile = C4::Context->preference('OPACXSLTResultsDisplay');
+            my $xslfile = C4::Context->preference('OPACXSLTListsDisplay');
             my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
             my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
 
@@ -259,7 +259,7 @@ if ( $op eq 'view' ) {
                 my $record       = GetMarcBiblio($biblionumber);
 
                 if ( $xslfile ) {
-                    $this_item->{XSLTBloc} = XSLTParse4Display( $biblionumber, $record, "OPACXSLTResultsDisplay",
+                    $this_item->{XSLTBloc} = XSLTParse4Display( $biblionumber, $record, "OPACXSLTListsDisplay",
                                                                 1, undef, $sysxml, $xslfile, $lang);
                 }
 

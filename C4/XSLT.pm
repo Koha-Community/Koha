@@ -217,6 +217,18 @@ sub XSLTParse4Display {
             $theme   = C4::Context->preference("opacthemes");
             $xslfile = C4::Context->preference('marcflavour') .
                        "slim2OPACResults.xsl";
+        } elsif ($xslsyspref eq 'XSLTListsDisplay') {
+            # Lists default to *Results.xslt
+            $htdocs  = C4::Context->config('intrahtdocs');
+            $theme   = C4::Context->preference("template");
+            $xslfile = C4::Context->preference('marcflavour') .
+                        "slim2intranetResults.xsl";
+        } elsif ($xslsyspref eq 'OPACXSLTListsDisplay') {
+            # Lists default to *Results.xslt
+            $htdocs  = C4::Context->config('opachtdocs');
+            $theme   = C4::Context->preference("opacthemes");
+            $xslfile = C4::Context->preference('marcflavour') .
+                       "slim2OPACResults.xsl";
         }
         $xslfilename = _get_best_default_xslt_filename($htdocs, $theme, $lang, $xslfile);
     }
