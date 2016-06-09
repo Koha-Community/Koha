@@ -22,6 +22,7 @@ use strict;
 use warnings;
 
 use CGI qw ( -utf8 );
+use URI::Escape;
 use C4::Auth;
 
 use C4::Context;
@@ -40,11 +41,10 @@ my $op           = $query->param('op') || '';
 my $authtypecode = $query->param('authtypecode') || '';
 my $dbh          = C4::Context->dbh;
 
-my $startfrom = $query->param('startfrom');
+my $startfrom = $query->param('startfrom') || 1;
+my $resultsperpage = $query->param('resultsperpage') || 20;
 my $authid    = $query->param('authid');
-$startfrom = 0 if ( !defined $startfrom );
 my ( $template, $loggedinuser, $cookie );
-my $resultsperpage;
 
 my $authority_types = Koha::Authority::Types->search({}, { order_by => ['authtypetext']});
 
@@ -57,8 +57,6 @@ if ( $op eq "do_search" ) {
     my @value = $query->multi_param('value');
     $value[0] ||= q||;
 
-    $resultsperpage = $query->param('resultsperpage');
-    $resultsperpage = 20 if ( !defined $resultsperpage );
     my @tags;
     my $builder = Koha::SearchEngine::QueryBuilder->new(
         { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
@@ -66,13 +64,8 @@ if ( $op eq "do_search" ) {
         { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
     my $search_query = $builder->build_authorities_query_compat( \@marclist, \@and_or,
         \@excluding, \@operator, \@value, $authtypecode, $orderby );
-#    use Data::Dumper;
-#    die Dumper(\@marclist, \@and_or,
-#        \@excluding, \@operator, \@value, $authtypecode, $orderby, $query);
-    # The searchengine API expects pages to start at page 1
-    $startfrom = $startfrom // 0;
     my ( $results, $total ) =
-      $searcher->search_auth_compat( $search_query, $startfrom+1, $resultsperpage );
+      $searcher->search_auth_compat( $search_query, $startfrom, $resultsperpage );
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-authoritiessearchresultlist.tt",
@@ -84,48 +77,44 @@ if ( $op eq "do_search" ) {
     );
 
     # multi page display gestion
-    my $displaynext = 0;
-    my $displayprev = $startfrom;
-    $total ||= 0;
-    if ( ( $total - ( ( $startfrom + 1 ) * ($resultsperpage) ) ) > 0 ) {
-        $displaynext = 1;
-    }
+    my $value_url = uri_escape_utf8($value[0]);
+    my $base_url = "opac-authorities-home.pl?"
+      ."marclist=$marclist[0]"
+      ."&amp;and_or=$and_or[0]"
+      ."&amp;excluding=$excluding[0]"
+      ."&amp;operator=$operator[0]"
+      ."&amp;value=$value_url"
+      ."&amp;resultsperpage=$resultsperpage"
+      ."&amp;type=opac"
+      ."&amp;op=do_search"
+      ."&amp;authtypecode=$authtypecode"
+      ."&amp;orderby=$orderby";
 
-    my @field_data = (
-        { term => "marclist",  val => $marclist[0] },
-        { term => "and_or",    val => $and_or[0] },
-        { term => "excluding", val => $excluding[0] },
-        { term => "operator",  val => $operator[0] },
-        { term => "value",     val => $value[0] },
-    );
-
-    my @numbers = ();
-
-    if ( $total > $resultsperpage ) {
-        for ( my $i = 1 ; $i < $total / $resultsperpage + 1 ; $i++ ) {
-            if ( $i < 16 ) {
-                my $highlight = 0;
-                ( $startfrom == ( $i - 1 ) ) && ( $highlight = 1 );
-                push @numbers,
-                  {
-                    number     => $i,
-                    highlight  => $highlight,
-                    searchdata => \@field_data,
-                    startfrom  => ( $i - 1 )
-                  };
-            }
-        }
-    }
-
-    my $from = $startfrom * $resultsperpage + 1;
+    my $from = ( $startfrom - 1 ) * $resultsperpage + 1;
     my $to;
+    if ( !defined $total ) {
+        $total = 0;
+    }
 
-    if ( $total < ( ( $startfrom + 1 ) * $resultsperpage ) ) {
+    if ( $total < $startfrom * $resultsperpage ) {
         $to = $total;
     }
     else {
-        $to = ( ( $startfrom + 1 ) * $resultsperpage );
+        $to = $startfrom * $resultsperpage;
     }
+
+    $template->param( result => $results ) if $results;
+
+    $template->param(
+        pagination_bar => pagination_bar(
+            $base_url,  int( $total / $resultsperpage ) + 1,
+            $startfrom, 'startfrom'
+        ),
+        total     => $total,
+        from      => $from,
+        to        => $to,
+    );
+
     unless (C4::Context->preference('OPACShowUnusedAuthorities')) {
 #        TODO implement usage counts
 #        my @usedauths = grep { $_->{used} > 0 } @$results;
@@ -162,22 +151,12 @@ if ( $op eq "do_search" ) {
         }
     }
 
-    $template->param( result => $results ) if $results;
     $template->param( orderby => $orderby );
     $template->param(
         startfrom      => $startfrom,
-        displaynext    => $displaynext,
-        displayprev    => $displayprev,
         resultsperpage => $resultsperpage,
-        startfromnext  => $startfrom + 1,
-        startfromprev  => $startfrom - 1,
-        searchdata     => \@field_data,
         countfuzzy     => !(C4::Context->preference('OPACShowUnusedAuthorities')),
-        total          => $total,
-        from           => $from,
-        to             => $to,
         resultcount    => scalar @$results,
-        numbers        => \@numbers,
         authtypecode   => $authtypecode,
         authtypetext   => $authority_types->find($authtypecode)->authtypetext,
         isEDITORS      => $authtypecode eq 'EDITORS',
