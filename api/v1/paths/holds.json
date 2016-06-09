@@ -1,0 +1,283 @@
+{
+  "/holds": {
+    "get": {
+      "operationId": "listHolds",
+      "tags": ["borrowers", "holds"],
+      "parameters": [
+        {
+          "name": "reserve_id",
+          "in": "query",
+          "description": "Internal reserve identifier",
+          "type": "integer"
+        },
+        {
+          "name": "borrowernumber",
+          "in": "query",
+          "description": "Internal borrower identifier",
+          "type": "integer"
+        },
+        {
+          "name": "reservedate",
+          "in": "query",
+          "description": "Reserve date",
+          "type": "string"
+        },
+        {
+          "name": "biblionumber",
+          "in": "query",
+          "description": "Internal biblio identifier",
+          "type": "integer"
+        },
+        {
+          "name": "branchcode",
+          "in": "query",
+          "description": "Branch code",
+          "type": "string"
+        },
+        {
+          "name": "notificationdate",
+          "in": "query",
+          "description": "Notification date",
+          "type": "string"
+        },
+        {
+          "name": "reminderdate",
+          "in": "query",
+          "description": "Reminder date",
+          "type": "string"
+        },
+        {
+          "name": "cancellationdate",
+          "in": "query",
+          "description": "Cancellation date",
+          "type": "string"
+        },
+        {
+          "name": "reservenotes",
+          "in": "query",
+          "description": "Reserve notes",
+          "type": "string"
+        },
+        {
+          "name": "priority",
+          "in": "query",
+          "description": "Priority",
+          "type": "integer"
+        },
+        {
+          "name": "found",
+          "in": "query",
+          "description": "Found status",
+          "type": "string"
+        },
+        {
+          "name": "timestamp",
+          "in": "query",
+          "description": "Time of latest update",
+          "type": "string"
+        },
+        {
+          "name": "itemnumber",
+          "in": "query",
+          "description": "Internal item identifier",
+          "type": "integer"
+        },
+        {
+          "name": "waitingdate",
+          "in": "query",
+          "description": "Date the item was marked as waiting for the patron",
+          "type": "string"
+        },
+        {
+          "name": "expirationdate",
+          "in": "query",
+          "description": "Date the hold expires",
+          "type": "string"
+        },
+        {
+          "name": "lowestPriority",
+          "in": "query",
+          "description": "Lowest priority",
+          "type": "integer"
+        },
+        {
+          "name": "suspend",
+          "in": "query",
+          "description": "Suspended",
+          "type": "integer"
+        },
+        {
+          "name": "suspend_until",
+          "in": "query",
+          "description": "Suspended until",
+          "type": "string"
+        }
+      ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "A list of holds",
+          "schema": {
+            "$ref": "../definitions.json#/holds"
+          }
+        },
+        "404": {
+          "description": "Borrower not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "post": {
+      "operationId": "addHold",
+      "tags": ["borrowers", "holds"],
+      "parameters": [{
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing informations about the new hold",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "borrowernumber": {
+                "description": "Borrower internal identifier",
+                "type": "integer"
+              },
+              "biblionumber": {
+                "description": "Biblio internal identifier",
+                "type": "integer"
+              },
+              "itemnumber": {
+                "description": "Item internal identifier",
+                "type": "integer"
+              },
+              "branchcode": {
+                "description": "Pickup location",
+                "type": "string"
+              },
+              "expirationdate": {
+                "description": "Hold end date",
+                "type": "string",
+                "format": "date"
+              }
+            }
+          }
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "201": {
+          "description": "Created hold",
+          "schema": {
+            "$ref": "../definitions.json#/hold"
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Hold not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Borrower not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/holds/{reserve_id}": {
+    "put": {
+      "operationId": "editHold",
+      "tags": ["holds"],
+      "parameters": [{
+          "$ref": "../parameters.json#/holdIdPathParam"
+        }, {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing fields to modify",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "priority": {
+                "description": "Position in waiting queue",
+                "type": "integer",
+                "minimum": 1
+              },
+              "branchcode": {
+                "description": "Pickup location",
+                "type": "string"
+              },
+              "suspend_until": {
+                "description": "Suspend until",
+                "type": "string",
+                "format": "date"
+              }
+            }
+          }
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Updated hold",
+          "schema": {
+            "$ref": "../definitions.json#/hold"
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Hold not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "delete": {
+      "operationId": "deleteHold",
+      "tags": ["holds"],
+      "parameters": [{
+          "$ref": "../parameters.json#/holdIdPathParam"
+        }
+      ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Successful deletion",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "404": {
+          "description": "Hold not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "/patrons": {
+    "get": {
+      "operationId": "listPatrons",
+      "tags": ["patrons"],
+      "produces": [
+          "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of patrons",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/patron"
+            }
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/patrons/{borrowernumber}": {
+    "get": {
+      "operationId": "getPatron",
+      "tags": ["patrons"],
+      "parameters": [{
+          "$ref": "../parameters.json#/borrowernumberPathParam"
+        }
+      ],
+      "produces": [
+          "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A patron",
+          "schema": {
+            "$ref": "../definitions.json#/patron"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Patron not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}
