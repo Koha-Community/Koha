@@ -1,31 +1,6 @@
 [% USE Koha %]
 [% PROCESS 'opac-authorities.inc' %]
 [% PROCESS 'authorities-search-results.inc' %]
-[% pagination = BLOCK %]
-    <div class="pagination">
-        <ul>
-            [% IF ( displayprev ) %]
-                <li>
-                    <a href="opac-authorities-home.pl?startfrom=[% startfromprev %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage |html %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby|html %]">
-                        &laquo;
-                    </a>
-                </li>
-            [% END %]
-            [% FOREACH number IN numbers %]
-                [% IF ( number.highlight ) %]
-                    <li class="active"><a href="#">[% number.number %]</a></li>
-                [% ELSE %]
-                    <li><a href="opac-authorities-home.pl?startfrom=[% number.startfrom %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage |html %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby|html %]">[% number.number %]</a></li>
-                [% END %]
-            [% END %]
-            [% IF ( displaynext ) %]
-                <li>
-                    <a href="opac-authorities-home.pl?startfrom=[% startfromnext %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]&amp;resultsperpage=[% resultsperpage |html %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby|html %]">&raquo;</a>
-                </li>
-            [% END %]
-        </ul>
-    </div> <!-- / #pages -->
-[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF ( total ) %]Authority search result[% ELSE %]No results found[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -56,14 +31,15 @@
                     <div id="userauthsearchresults" class="maincontent">
                         <h1>Authority search results</h1>
 
-                        [% pagination %]
-
+                        [% IF total %]
+                            <div class="pages">[% pagination_bar %]</div>
+                        [% END %]
                         <div id="results">
                             [% IF ( total ) %]
                                 [% IF ( countfuzzy ) %]
-                                    <b>Showing [% resultcount %] of about [% total %] results</b>
+                                    <p><b>Showing [% resultcount %] of about [% total %] results</b></p>
                                 [% ELSE %]
-                                    <b>Results [% from %] to [% to %] of [% total %]</b>
+                                    <p><b>Results [% from %] to [% to %] of [% total %]</b></p>
                                 [% END %]
                             [% ELSE %]
                                 No results found.
@@ -102,7 +78,7 @@
                                 </table>
                             </div> <!-- / .searchresults -->
 
-                            [% pagination %]
+                            <div class="pages">[% pagination_bar %]</div>
 
                         [% END # / IF total %]
                     </div> <!-- / #userauthsearchresults -->
