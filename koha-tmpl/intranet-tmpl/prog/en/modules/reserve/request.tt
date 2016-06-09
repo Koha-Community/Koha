@@ -295,19 +295,19 @@ function checkMultiHold() {
 [% IF ( expiry || diffbranch ) %]
 <div class="dialog message"><ul>
     [% IF ( expiry ) %]
-    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>'s <strong>account has expired</strong></li>
+    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Account has expired</strong></li>
     [% END %]
 
     [% IF restricted %]
-    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]#reldebarments">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>has restrictions</strong></li>
+    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]#reldebarments">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Patron has restrictions</strong></li>
     [% END %]
 
     [% IF amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') %]
-    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>owes [% amount_outstanding | format('%.2f') %]</strong></li>
+    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Patron has outstanding fines: [% amount_outstanding | format('%.2f') %]</strong></li>
     [% END %]
 
     [% IF ( diffbranch ) %]
-    <li> <strong>Pickup library is different</strong> than <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>'s home library ([% borrower_branchname %] / [% borrower_branchcode %] )</li>
+    <li> <strong>Pickup library is different. </strong>Patron: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> Patron's home library: ([% borrower_branchname %] / [% borrower_branchcode %] )</li>
     [% END %]
 
 </ul></div>
