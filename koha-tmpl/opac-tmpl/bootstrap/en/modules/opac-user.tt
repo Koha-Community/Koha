@@ -2,6 +2,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE ItemTypes %]
+[% USE Price %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home</title>
@@ -103,25 +104,22 @@ Using this account is not recommended because some parts of Koha will not functi
                         <div class="alert">
                             <ul>
                                 [% IF ( userdebarred ) %]
-                                    <li id="userdebarred"><strong>Please note:</strong> Your account has been frozen[% IF ( BORROWER_INFO.userdebarreddate ) %] until <span id="userdebarred_date">[% BORROWER_INFO.userdebarreddate | $KohaDates %]</span>[% END %]
-                                    [% IF ( BORROWER_INFO.debarredcomment ) %] with the comment
-                                    <span id="userdebarred_comment">
-                                        [% IF BORROWER_INFO.debarredcomment.search('OVERDUES_PROCESS') %]
-                                            "Restriction added by overdues process [% BORROWER_INFO.debarredcomment.remove('OVERDUES_PROCESS ') %]"
-                                        [% ELSE %]
-                                            [% BORROWER_INFO.debarredcomment %]
-                                        [% END %]
-                                    </span>
-                                    [% END %]. Usually the reason for freezing an account is old overdues or damage fees. If <a href="/cgi-bin/koha/opac-account.pl">your account page</a> shows your account to be clear, please contact the library.</li>
+                                    <li id="userdebarred"><strong>Please note:</strong> Your account has been frozen.
+                                    [% IF ( BORROWER_INFO.debarredcomment ) %] Comment: <span id="userdebarred_comment">"[% BORROWER_INFO.debarredcomment %]"</span>[% END %]
+                                    [% IF ( BORROWER_INFO.userdebarreddate ) %] End date: <span id="userdebarred_date">[% BORROWER_INFO.userdebarreddate | $KohaDates %]</span>[% END %]
+                                    <em>Usually the reason for freezing an account is old overdues or damage fees. If your account shows to be clear, please contact the library.</em> <a href="/cgi-bin/koha/opac-account.pl">Go to your account page</a></li>
                                 [% END %]
                                 [% IF ( BORROWER_INFO.gonenoaddress ) %]
-                                    <li id="gonenoaddress"><strong>Please note:</strong> According to our records, we don't have up-to-date [% UNLESS OPACPatronDetails %]<a href="/cgi-bin/koha/opac-memberentry.pl">contact information</a>[% ELSE %]contact information[% END %] on file.  Please contact the library[% IF OPACPatronDetails %] or use the <a href="/cgi-bin/koha/opac-memberentry.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)[% END %].</li>
+                                    <li id="gonenoaddress"><strong>Please note:</strong> According to our records, we don't have up-to-date contact information. Please contact the library.
+                                <a href="/cgi-bin/koha/opac-memberentry.pl">[% IF ( Koha.Preference('OPACPatronDetails') ) %]Update your contact information[% ELSE %]Go to your contact information[% END %]</a>
+                                [% IF ( Koha.Preference('OPACPatronDetails') ) %]<em>(Please note: there may be a delay in restoring your account if you submit online.)</em>[% END %]
+                                    </li>
                                 [% END %]
                                 [% IF ( BORROWER_INFO.lost ) %]
-                                    <li id="lost"><strong>Please note: </strong> Your library card has been marked as lost or stolen. If this is an error, please contact the library.</li>
+                                    <li id="lost"><strong>Please note: </strong> Your library card has been marked as lost or stolen. <em>If this is an error, please contact the library.</em></li>
                                 [% END %]
-                                [% IF ( renewal_blocked_fines ) && ( OpacRenewalAllowed ) %]
-                                    <li id="renewal_blocked_fines"><strong>Please note: </strong> Since you have <a href="/cgi-bin/koha/opac-account.pl">[% IF renewal_blocked_fines != "0.00" %] more than <span id="renewal_blocked_fines_amount">[% renewal_blocked_fines %]</span> in [% END %] fines</a>, you cannot renew your books online. Please pay your fines if you wish to renew your books.</li>
+                                [% IF ( renewal_blocked_fines.defined ) && ( OpacRenewalAllowed ) %]
+                                    <li id="renewal_blocked_fines"><strong>Please note: </strong>You cannot renew your books online. Reason: [% IF ( renewal_blocked_fines ) > 0  %]Your fines exceed <span id="renewal_blocked_fines_amount">[% renewal_blocked_fines | $Price %]</span>.[% ELSE %]You have fines.[% END %]
                                 [% END %]
                             </ul>
                         </div>
@@ -136,9 +134,9 @@ Using this account is not recommended because some parts of Koha will not functi
                             [% IF relatives %]<li><a href="#opac-user-relative-issues">Relatives' checkouts</a></li>[% END %]
                             [% IF ( overdues_count ) %]<li><a href="#opac-user-overdues">Overdue ([% overdues_count %])</a></li>[% END %]
                             [% IF ( OPACFinesTab ) %]
-                                [% IF ( BORROWER_INFO.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INFO.amountoutstanding %])</a></li>[% END %]
-                                [% IF ( BORROWER_INFO.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INFO.amountoutstanding %])</a></li>[% END %]
-                                [% IF ( BORROWER_INFO.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% BORROWER_INFO.amountoutstanding %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INFO.amountoutstanding | $Price %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INFO.amountoutstanding | $Price %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% BORROWER_INFO.amountoutstanding | $Price %])</a></li>[% END %]
                             [% END %]
                             [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count %])</a></li>[% END %]
                         </ul>
@@ -321,7 +319,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                         <tbody>
                                             <tr>
                                                 <td>You currently owe fines and charges amounting to:</td>
-                                                <td><a href="/cgi-bin/koha/opac-account.pl">[% BORROWER_INFO.amountoutstanding %]</a></td>
+                                                <td><a href="/cgi-bin/koha/opac-account.pl">[% BORROWER_INFO.amountoutstanding | $Price %]</a></td>
                                             </tr>
                                         </tbody>
                                     </table>

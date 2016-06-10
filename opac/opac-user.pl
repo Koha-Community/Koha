@@ -122,9 +122,8 @@ if (   C4::Context->preference('OpacRenewalAllowed')
     $borr->{'flagged'} = 1;
     $canrenew = 0;
     $template->param(
-        renewal_blocked_fines => sprintf( '%.02f', $no_renewal_amt ),
-        renewal_blocked_fines_amountoutstanding =>
-          sprintf( '%.02f', $borr->{amountoutstanding} ),
+        renewal_blocked_fines => $no_renewal_amt,
+        renewal_blocked_fines_amountoutstanding => $borr->{amountoutstanding},
     );
 }
 
@@ -132,8 +131,6 @@ if ( $borr->{'amountoutstanding'} < 0 ) {
     $borr->{'amountlessthanzero'} = 1;
     $borr->{'amountoutstanding'} = -1 * ( $borr->{'amountoutstanding'} );
 }
-
-$borr->{'amountoutstanding'} = sprintf "%.02f", $borr->{'amountoutstanding'};
 
 # Warningdate is the date that the warning starts appearing
 if ( $borr->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture') ) {
