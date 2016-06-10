@@ -832,25 +832,18 @@
                                                 <td>[% latestserial.serialseq %]</td>
                                                 <td>[% latestserial.planneddate %]</td>
                                                 <td>
-                                                    [% IF ( latestserial.status1 ) %]
-                                                        Awaited
-                                                    [% ELSE %]
-                                                        [% IF ( latestserial.status2 ) %]
-                                                            Arrived
-                                                        [% ELSE %]
-                                                            [% IF ( latestserial.status3 ) %]
-                                                                Late
-                                                            [% ELSE %]
-                                                                [% IF ( latestserial.status4 ) %]
-                                                                    Missing
-                                                                [% ELSE %]
-                                                                    [% IF ( latestserial.status5 ) %]
-                                                                        Not issued
-                                                                    [% END %]
-                                                                [% END %]
-                                                            [% END %]
-                                                        [% END %]
-                                                    [% END %]
+                                                    [% IF (latestserial.status1 ) %]Expected[% END %]
+                                                    [% IF (latestserial.status2 ) %]Arrived[% END %]
+                                                    [% IF (latestserial.status3 ) %]Late[% END %]
+                                                    [% IF (latestserial.status4 ) %]Missing[% END %]
+                                                        [% IF (latestserial.status41 ) %]Missing (never received)[% END %]
+                                                        [% IF (latestserial.status42 ) %]Missing (sold out)[% END %]
+                                                        [% IF (latestserial.status43 ) %]Missing (damaged)[% END %]
+                                                        [% IF (latestserial.status44 ) %]Missing (lost)[% END %]
+                                                    [% IF (latestserial.status5 ) %]Not issued[% END %]
+                                                    [% IF (latestserial.status6 ) %]Delete[% END %]
+                                                    [% IF (latestserial.status7 ) %]Claimed[% END %]
+                                                    [% IF (latestserial.status8 ) %]Stopped[% END %]
                                                 </td>
                                                 <td>[% latestserial.notes %]</td>
                                             </tr>
