@@ -21,7 +21,6 @@
 [% IF ( bidi ) %]
    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/right-to-left.css" />
 [% END %]
-[% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui.js"></script>
 <script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut.js"></script>
