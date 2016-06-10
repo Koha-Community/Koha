@@ -1,4 +1,5 @@
 package C4::External::BakerTaylor;
+
 # Copyright (C) 2008 LibLime
 # <jmf at liblime dot com>
 #
@@ -19,17 +20,14 @@ package C4::External::BakerTaylor;
 
 use XML::Simple;
 use LWP::Simple;
-# use LWP::UserAgent;
 use HTTP::Request::Common;
+
 use C4::Context;
 use C4::Debug;
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION);
-use vars qw($user $pass $agent $image_url $link_url);
-&initialize;
 
 BEGIN {
 	require Exporter;
@@ -39,7 +37,10 @@ BEGIN {
 	%EXPORT_TAGS = (all=>\@EXPORT_OK);
 }
 
-sub initialize {
+# These variables are plack safe: they are initialized each time
+my ( $user, $pass, $agent, $image_url, $link_url );
+
+sub _initialize {
 	$user     = (@_ ? shift : C4::Context->preference('BakerTaylorUsername')    ) || ''; # LL17984
 	$pass     = (@_ ? shift : C4::Context->preference('BakerTaylorPassword')    ) || ''; # CC82349
 	$link_url = (@_ ? shift : C4::Context->preference('BakerTaylorBookstoreURL'));
@@ -49,24 +50,31 @@ sub initialize {
 }
 
 sub image_url {
+    _initialize();
 	($user and $pass) or return;
 	my $isbn = (@_ ? shift : '');
 	$isbn =~ s/(p|-)//g;	# sanitize
 	return $image_url . $isbn;
 }
+
 sub link_url {
+    _initialize();
 	my $isbn = (@_ ? shift : '');
 	$isbn =~ s/(p|-)//g;	# sanitize
 	$link_url or return;
 	return $link_url . $isbn;
 }
+
 sub content_cafe_url {
+    _initialize();
 	($user and $pass) or return;
 	my $isbn = (@_ ? shift : '');
 	$isbn =~ s/(p|-)//g;	# sanitize
 	return "http://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=$user&Password=$pass&Options=Y&ItemKey=$isbn";
 }
+
 sub http_jacket_link {
+    _initialize();
 	my $isbn = shift or return;
 	$isbn =~ s/(p|-)//g;	# sanitize
 	my $image = availability($isbn);
@@ -78,6 +86,7 @@ sub http_jacket_link {
 }
 
 sub availability {
+    _initialize();
 	my $isbn = shift or return;
 	($user and $pass) or return;
 	$isbn =~ s/(p|-)//g;	# sanitize
