@@ -84,7 +84,7 @@ Full documentation.
 use autodie;
 use Getopt::Long;
 use C4::Context;
-use Koha::Authority;
+use Koha::MetadataRecord::Authority;
 use Koha::BiblioUtils;
 use Koha::ElasticSearch::Indexer;
 use MARC::Field;
@@ -144,11 +144,11 @@ if ($index_authorities) {
         $next = sub {
             my $r = shift @biblionumbers;
             return () unless defined $r;
-            my $a = Koha::Authority->get_from_authid($r);
+            my $a = Koha::MetadataRecord::Authority->get_from_authid($r);
             return ($r, $a->record);
         };
     } else {
-        my $records = Koha::Authority->get_all_authorities_iterator();
+        my $records = Koha::MetadataRecord::Authority->get_all_authorities_iterator();
         $next = sub {
             $records->next();
         }
