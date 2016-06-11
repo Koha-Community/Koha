@@ -54,7 +54,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
     #try with the main email
     $email ||= '';    # avoid undef
     my $borrower;
-    my $search_results;
+    my $search_results = [];
 
     # Find the borrower by his userid or email
     if ($username) {
