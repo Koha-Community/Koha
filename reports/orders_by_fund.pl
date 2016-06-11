@@ -25,17 +25,16 @@ This script displays all orders associated to a selected budget.
 
 =cut
 
-use strict;
-use warnings;
 use Modern::Perl;
 
-use CGI;
+use CGI qw( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Budgets;
 use C4::Biblio;
 use C4::Reports;
 use C4::Acquisition; #GetBasket()
+use Koha::DateUtils;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -110,8 +109,8 @@ if ( $get_orders ) {
         $order->{'total_ecost'} = $order->{'quantity'} * $order->{'ecost'};
 
         # Format the dates and currencies correctly
-        $order->{'datereceived'} = Koha::DateUtils::output_pref(Koha::DateUtils::dt_from_string($order->{'datereceived'}));
-        $order->{'entrydate'} = Koha::DateUtils::output_pref(Koha::DateUtils::dt_from_string($order->{'entrydate'}));
+        $order->{'datereceived'} = output_pref(dt_from_string($order->{'datereceived'}));
+        $order->{'entrydate'} = output_pref(dt_from_string($order->{'entrydate'}));
         $total_quantity += $order->{'quantity'};
         $total_rrp += $order->{'total_rrp'};
         $total_ecost += $order->{'total_ecost'};
@@ -137,8 +136,9 @@ if ( $get_orders ) {
         my $sep = $params->{"sep"};
         $sep = "\t" if ($sep eq 'tabulation');
 
+        # TODO Use Text::CSV to generate the CSV file
         print $query->header(
-           -type       => 'application/vnd.sun.xml.calc',
+           -type       => 'text/csv',
            -encoding    => 'utf-8',
            -attachment => "$basename.csv",
            -name       => "$basename.csv"
