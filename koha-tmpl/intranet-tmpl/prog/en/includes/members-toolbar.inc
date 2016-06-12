@@ -248,6 +248,7 @@ function searchToHold(){
                 </li>
             </ol>
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+            <input type="hidden" name="batch" value="[% batch %]" />
             <input type="hidden" name="branchcode" value="[% LoginBranchcode %]" />
         </fieldset>
     </div>

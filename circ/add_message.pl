@@ -41,6 +41,7 @@ my $borrowernumber   = $input->param('borrowernumber');
 my $branchcode       = $input->param('branchcode');
 my $message_type     = $input->param('message_type');
 my $borrower_message = $input->param('borrower_message');
+my $batch            = $input->param('batch');
 
 Koha::Patron::Message->new(
     {
@@ -51,5 +52,14 @@ Koha::Patron::Message->new(
     }
 )->store;
 
-my $url = $input->referer() // "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber";
+my $url = $input->referer;
+if ( $url ) {
+    if ( $url =~ m|circulation\.pl$| ) {
+        # Trick for POST form from batch checkouts
+        $url .= "?borrowernumber=$borrowernumber";
+        $url .= "&amp;batch=1" if $batch;
+    }
+} else {
+    $url = "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber";
+}
 print $input->redirect($url);
