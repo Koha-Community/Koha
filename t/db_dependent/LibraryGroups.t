@@ -74,6 +74,6 @@ is( $library->id, $groupA_library1->branchcode, 'Branchcode for fetched library 
 
 my @libraries_not_direct_children = $groupA->libraries_not_direct_children();
 $in_list = any { $_->id eq $groupA_library1->branchcode } @libraries_not_direct_children;
-ok( !$in_list, 'Method libraries_not_direct_children returns all libraries not direct decendents of group, library 1 is not in the list');
+ok( !$in_list, 'Method libraries_not_direct_children returns all libraries not direct descendants of group, library 1 is not in the list');
 $in_list = any { $_->id eq $groupA1_library2->branchcode } @libraries_not_direct_children;
-ok( $in_list, 'Method libraries_not_direct_children returns all libraries not direct decendents of group, library 2 is in the list');
+ok( $in_list, 'Method libraries_not_direct_children returns all libraries not direct descendants of group, library 2 is in the list');

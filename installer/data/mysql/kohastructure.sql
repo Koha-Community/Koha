@@ -4166,6 +4166,7 @@ CREATE TABLE illrequestattributes (
 -- Table structure for table 'library_groups'
 --
 
+DROP TABLE IF EXISTS `library_groups`;
 CREATE TABLE library_groups (
     id INT(11) NOT NULL auto_increment,    -- unique id for each group
     parent_id INT(11) NULL DEFAULT NULL,   -- if this is a child group, the id of the parent group
