@@ -43,10 +43,11 @@ my $inheritCatCode = $builder->build({
 });
 
 # Create context for some tests late on in the file.
+my $library = $builder->build({ source => 'Branch' });
 my $staff = $builder->build({source => 'Borrower'});
 my @USERENV = (
-    $staff->{borrowernumber}, 'test', 'MASTERTEST', 'firstname', 'CPL',
-    'CPL', 'email@example.org'
+    $staff->{borrowernumber}, 'test', 'MASTERTEST', 'firstname', $library->{branchcode},
+    $library->{branchcode}, 'email@example.org'
 );
 C4::Context->_new_userenv('DUMMY_SESSION_ID');
 C4::Context->set_userenv(@USERENV);
