@@ -199,6 +199,10 @@ $(document).ready(function() {
                         <li><i class="fa fa-li fa-warning"></i>This item is on hold for another patron. The hold will be overridden, but not cancelled.</li>
                       [% END %]
                   [% END %]
+
+                  [% IF checkout_info.PREVISSUE %]
+                      <li>This item has previously been checked out to this patron.</li>
+                  [% END %]
                 </ul>
               [% END %]
 
