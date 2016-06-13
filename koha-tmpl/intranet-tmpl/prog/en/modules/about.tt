@@ -139,9 +139,9 @@
                         You have set UseQueryParser but there was a problem inititializing QueryParser.
                     [% IF QueryParserError.fallback %]
                         The 'queryparser_config' entry is missing in your configuration file.
-                        <strong>[% QueryParserError.file %]</strong> was used instead without success.
+                        The following configuration file was used without success: [% QueryParserError.file %].
                     [% ELSE %]
-                        The following configuration file was used without success: <strong>[% QueryParserError.file %]</strong>.
+                        The following configuration file was used without success: [% QueryParserError.file %].
                     [% END %]
                         </td>
                     </tr>
@@ -167,71 +167,71 @@
                 <tr>
                     <th scope="row"><b>Warning</b></th>
                     <td>The &lt;zebra_bib_index_mode&gt; entry is missing in your configuration file.
-                        It should be set to <strong>dom</strong> or <strong>grs1</strong> (deprecated).
-                        It will default to <strong>dom</strong>.
+                        It should be set to 'dom' or 'grs1' (deprecated).
+                        It will default to 'dom'.
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'zebra_bib_mode_seems_grs1' %]
                 <tr>
                     <th scope="row"><b>Info</b></th>
-                    <td>Your configuration file still seems to be set up for <strong>grs1</strong>.</td>
+                    <td>Your configuration file still seems to be set up for 'grs1'.</td>
                 </tr>
                 [% ELSIF config_entry.error == 'zebra_bib_mode_seems_dom' %]
                 <tr>
                     <th scope="row"><b>Info</b></th>
-                    <td>Your configuration file seems to be set up for <strong>dom</strong>.</td>
+                    <td>Your configuration file seems to be set up for 'dom'.</td>
                 </tr>
                 [% ELSIF config_entry.error == 'zebra_auth_index_mode_warn' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
                     <td>The &lt;zebra_auth_index_mode&gt; entry is missing in your configuration file.
-                        It should be set to <strong>dom</strong> or <strong>grs1</strong> (deprecated).
-                        It will default to <strong>dom</strong>.
+                        It should be set to 'dom' or 'grs1' (deprecated).
+                        It will default to 'dom'.
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'zebra_auth_mode_seems_grs1' %]
                 <tr>
                     <th scope="row"><b>Info</b></th>
-                    <td>Your configuration file still seems to be set up for <strong>grs1</strong>.</td>
+                    <td>Your configuration file still seems to be set up for 'grs1'.</td>
                 </tr>
                 [% ELSIF config_entry.error == 'zebra_auth_mode_seems_dom' %]
                 <tr>
                     <th scope="row"><b>Info</b></th>
-                    <td>Your configuration file seems to be set up for <strong>dom</strong>.</td>
+                    <td>Your configuration file seems to be set up for 'dom'.</td>
                 </tr>
                 [% ELSIF config_entry.error == 'zebra_bib_grs_warn' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
-                    <td>The &lt;zebra_bib_index_mode&gt; entry is set to <strong>grs1</strong>.
+                    <td>The &lt;zebra_bib_index_mode&gt; entry is set to 'grs1'.
                         GRS-1 support is now deprecated and will be removed in future releases.
                         Please use DOM instead by setting &lt;zebra_bib_index_mode&gt; to
-                        <strong>dom</strong> (full reindex required).
+                        'dom' (full reindex required).
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'zebra_bib_index_mode_mismatch_warn' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
-                    <td>The &lt;zebra_bib_index_mode&gt; entry is set to <strong>dom</strong>, but your system still appears to be set up for <strong>grs1</strong> indexing.</td>
+                    <td>The &lt;zebra_bib_index_mode&gt; entry is set to 'dom', but your system still appears to be set up for 'grs1' indexing.</td>
                 </tr>
                 [% ELSIF config_entry.error == 'zebra_auth_grs_warn' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
-                    <td>The &lt;zebra_auth_index_mode&gt; entry is set to <strong>grs1</strong>.
+                    <td>The &lt;zebra_auth_index_mode&gt; entry is set to 'grs1'.
                         GRS-1 support is now deprecated and will be removed in future releases.
                         Please use DOM instead by setting &lt;zebra_auth_index_mode&gt; to
-                        <strong>dom</strong> (full reindex required).
+                        'dom' (full reindex required).
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'zebra_auth_index_mode_mismatch_warn' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
-                    <td>The &lt;zebra_auth_index_mode&gt; entry is set to <strong>dom</strong>, but your system still appears to be set up for <strong>grs1</strong> indexing.</td>
+                    <td>The &lt;zebra_auth_index_mode&gt; entry is set to 'dom', but your system still appears to be set up for 'grs1' indexing.</td>
                 </tr>
                 [% ELSIF config_entry.error == 'queryparser_entry_missing' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
                     <td>You have set UseQueryParser but the 'queryparser_config' entry is missing in your configuration
-                        file. <strong>[% config_entry.file %]</strong> is used as a fallback.
+                        file. [% config_entry.file %] is used as a fallback.
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'use_zebra_facets_entry_missing' %]
@@ -244,7 +244,7 @@
                 [% ELSIF config_entry.error == 'use_zebra_facets_needs_dom' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
-                    <td>You have set &lt;use_zebra_facets&gt; but the &lt;zebra_bib_index_mode&gt; is not set to <strong>dom</strong>. Falling back
+                    <td>You have set &lt;use_zebra_facets&gt; but the &lt;zebra_bib_index_mode&gt; is not set to 'dom'. Falling back
                         to legacy facet calculation.
                     </td>
                 </tr>
@@ -258,16 +258,16 @@
                 [% ELSIF config_entry.error == 'uploadpath_entry_missing' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
-                    <td>You are missing the <strong>&lt;upload_path&gt;</strong> entry in your koha-conf.xml file. Please
+                    <td>You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. Please
                         add it, pointing to the configured file upload directory for your Koha instance.
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'uploadpath_and_opacbaseurl_entry_missing' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
-                    <td>You are missing the <strong>&lt;upload_path&gt;</strong> entry in your koha-conf.xml file. Please
+                    <td>You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. Please
                         add it, pointing to the configured file upload directory for your Koha instance.
-                        Also note that you need to properly set the <strong>OPACBaseURL</strong> preference for the file upload plugin to work.
+                        Also note that you need to properly set the OPACBaseURL preference for the file upload plugin to work.
                     </td>
                 </tr>
                 [% END %]
