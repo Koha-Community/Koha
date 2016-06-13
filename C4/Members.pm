@@ -1321,7 +1321,7 @@ sub GetborCatFromCatType {
     my $dbh     = C4::Context->dbh;
 
     my $request = qq{
-        SELECT categories.categorycode, categories.description
+        SELECT DISTINCT categories.categorycode, categories.description
         FROM categories
     };
     $request .= qq{
@@ -1329,9 +1329,9 @@ sub GetborCatFromCatType {
     } if $branch_limit;
     if($action) {
         $request .= " $action ";
-        $request .= " AND (branchcode = ? OR branchcode IS NULL) GROUP BY description" if $branch_limit;
+        $request .= " AND (branchcode = ? OR branchcode IS NULL)" if $branch_limit;
     } else {
-        $request .= " WHERE branchcode = ? OR branchcode IS NULL GROUP BY description" if $branch_limit;
+        $request .= " WHERE branchcode = ? OR branchcode IS NULL" if $branch_limit;
     }
     $request .= " ORDER BY categorycode";
 
