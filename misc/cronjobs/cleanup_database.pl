@@ -299,7 +299,7 @@ if( $pUnvSelfReg ) {
 }
 
 if ($special_holidays_days) {
-    DeleteSpecialHolidays($special_holidays_days);
+    DeleteSpecialHolidays( abs($special_holidays_days) );
 }
 
 exit(0);
