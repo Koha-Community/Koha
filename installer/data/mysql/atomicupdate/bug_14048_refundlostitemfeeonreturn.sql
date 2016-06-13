@@ -14,7 +14,7 @@ VALUES( 'RefundLostOnReturnControl',
 INSERT INTO refund_lost_item_fee_rules (branchcode,refund)
     SELECT '*', COALESCE(value,'1') FROM systempreferences WHERE variable='RefundLostItemFeeOnReturn';
 
-DELETE IGNORE FROM systempreferences;
+DELETE FROM systempreferences WHERE variable = 'RefundLostItemFeeOnReturn';
 
 -- $DBversion = "16.06.00.XXX";
 -- if ( CheckVersion($DBversion) ) {
