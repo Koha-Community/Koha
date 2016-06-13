@@ -69,7 +69,8 @@ my $help_version = C4::Context->preference("Version");
 if ( $help_version =~ m|^(\d+)\.(\d{2}).*$| ) {
     my $version = $1;
     my $major = $2;
-    if ( $major % 2 ) { $major-- };
+    unless ( $major % 2 ) { $major-- };
+    $major = sprintf("%02d", $major);
     $help_version = "$version.$major";
 }
 $template->param( helpVersion => $help_version );
