@@ -1024,8 +1024,8 @@ sub GetAuthorisedValues {
     my @results;
     my $dbh      = C4::Context->dbh;
     my $query = qq{
-        SELECT *
-        FROM authorised_values
+        SELECT DISTINCT av.*
+        FROM authorised_values av
     };
     $query .= qq{
           LEFT JOIN authorised_values_branches ON ( id = av_id )
@@ -1043,7 +1043,6 @@ sub GetAuthorisedValues {
     if(@where_strings > 0) {
         $query .= " WHERE " . join(" AND ", @where_strings);
     }
-    $query .= " GROUP BY lib";
     $query .= ' ORDER BY category, ' . (
                 $opac ? 'COALESCE(lib_opac, lib)'
                       : 'lib, lib_opac'
