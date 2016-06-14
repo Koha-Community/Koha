@@ -84,7 +84,7 @@
                                     <td class="actions">
                                         <a class="btn btn-mini" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id %]&amp;op=select_template" ><i class="fa fa-fw fa-pencil"></i> Edit actions</a>
                                         <a class="btn btn-mini duplicate_template" href="#" data-toggle="modal" data-template_id="[% TemplatesLoo.template_id %]" data-target="#createTemplate"><i class="fa fa-fw fa-copy"></i> Duplicate</a>
-                                        <a class="btn btn-mini" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id %]&amp;op=delete_template" class="delete_template" onclick="return confirmDeleteAction();"><i class="fa fa-fw fa-trash"></i> Delete</a>
+                                        <a class="btn btn-mini delete_template" href="/cgi-bin/koha/tools/marc_modification_templates.pl?template_id=[% TemplatesLoo.template_id %]&amp;op=delete_template" onclick="return confirmDeleteAction();"><i class="fa fa-fw fa-trash"></i> Delete</a>
                                     </td>
                                 </tr>
                             [% END %]

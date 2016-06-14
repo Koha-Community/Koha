@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    window.modaction_legend_innerhtml = document.getElementById('modaction_legend').innerHTML;
-    window.action_submit_value = document.getElementById('action_submit').value;
+    window.modaction_legend_innerhtml = $("#modaction_legend").text();
+    window.action_submit_value = $("#action_submit").text();
 
     $('#select_template').find("input:submit").hide();
     $('#select_template').change(function() {
@@ -68,7 +68,7 @@ $(document).ready(function() {
 
     $("#duplicate_a_template").on("change",function(e){
         e.preventDefault();
-        if( this.value == '' ){
+        if( this.value === '' ){
             $("#duplicate_current_template").val("");
         } else {
             $("#duplicate_current_template").val(1);
