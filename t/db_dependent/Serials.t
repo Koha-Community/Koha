@@ -253,7 +253,7 @@ my ( $expected_serial ) = GetSerials2( $subscriptionid, [1] );
 my $serialexpected = (C4::Serials::findSerialsByStatus(1,$subscriptionid))[0];
 #delete serial with status Expected
 C4::Serials::ModSerialStatus( $serialexpected->{serialid},$serialexpected->{serialseq},$publisheddate,$publisheddate, $publisheddate,'1','an useless note');
-my @serialsByStatus = C4::Serials::findSerialsByStatus(1,$subscriptionid);
+@serialsByStatus = C4::Serials::findSerialsByStatus(1,$subscriptionid);
 is (@serialsByStatus,1,"ModSerialStatus delete corectly serial expected and create another if not exist");
 # add 1 serial with status=Expected 1
 C4::Serials::ModSerialStatus( $expected_serial->{serialid}, 'NO.20', $publisheddate, $publisheddate, $publisheddate, '1', 'an useless note' );
