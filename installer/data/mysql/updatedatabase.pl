@@ -11628,7 +11628,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.23.00.012";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-	INSERT IGNORE INTO systempreferences ( `variable`, `value`, `explanation`, `options`, `type` ) VALUES('MaxSearchResultsItemsPerRecordStatusCheck','20','Max number of items per record for which to check transit and hold status','','Integer')
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `explanation`, `options`, `type` ) VALUES('MaxSearchResultsItemsPerRecordStatusCheck','20','Max number of items per record for which to check transit and hold status','','Integer')
     });
 
     print "Upgrade to $DBversion done (Bug 15380 - Move the authority types related code to Koha::Authority::Type[s] - part 1)\n";
@@ -11638,7 +11638,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.23.00.013";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-	INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('StoreLastBorrower','0','','If ON, the last borrower to return an item will be stored in items.last_returned_by','YesNo')
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('StoreLastBorrower','0','','If ON, the last borrower to return an item will be stored in items.last_returned_by','YesNo')
     });
     $dbh->do(q{
 	CREATE TABLE IF NOT EXISTS `items_last_borrower` (
@@ -11662,7 +11662,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.23.00.014";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-        INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
 VALUES ('ClaimsBccCopy','0','','Bcc the ClaimAcquisition and ClaimIssues alerts','YesNo')
     });
 
@@ -11972,7 +11972,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 $DBversion = "3.23.00.036";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(q{
-    INSERT INTO systempreferences (variable,value,explanation,type) VALUES ('HoldsQueueSkipClosed', '0', 'If enabled, any libraries that are closed when the holds queue is built will be ignored for the purpose of filling holds.', 'YesNo');
+    INSERT IGNORE INTO systempreferences (variable,value,explanation,type) VALUES ('HoldsQueueSkipClosed', '0', 'If enabled, any libraries that are closed when the holds queue is built will be ignored for the purpose of filling holds.', 'YesNo');
     });
     print "Upgrade to $DBversion done (Bug 12803 - Add ability to skip closed libraries when generating the holds queue)\n";
     SetVersion($DBversion);
@@ -12006,7 +12006,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 $DBversion = "3.23.00.038";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(q{
-    INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('decreaseLoanHighHoldsControl', 'static', 'static|dynamic', "Chooses between static and dynamic high holds checking", 'Choice'), ('decreaseLoanHighHoldsIgnoreStatuses', '', 'damaged|itemlost|notforloan|withdrawn', "Ignore items with these statuses for dynamic high holds checking", 'Choice');
+    INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('decreaseLoanHighHoldsControl', 'static', 'static|dynamic', "Chooses between static and dynamic high holds checking", 'Choice'), ('decreaseLoanHighHoldsIgnoreStatuses', '', 'damaged|itemlost|notforloan|withdrawn', "Ignore items with these statuses for dynamic high holds checking", 'Choice');
     });
     print "Upgrade to $DBversion done (Bug 14694 - Make decreaseloanHighHolds more flexible)\n";
     SetVersion($DBversion);
@@ -12085,7 +12085,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 $DBversion = "3.23.00.044";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(q{
-            INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES
+            INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES
             ('GoogleOpenIDConnect', '0', NULL, 'if ON, allows the use of Google OpenID Connect for login', 'YesNo'),
             ('GoogleOAuth2ClientID', '', NULL, 'Client ID for the web app registered with Google', 'Free'),
             ('GoogleOAuth2ClientSecret', '', NULL, 'Client Secret for the web app registered with Google', 'Free'),
@@ -12473,7 +12473,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.23.00.056";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-        INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
         ('NoIssuesChargeGuarantees','','','Define maximum amount withstanding before check outs are blocked','Integer');
     });
 
