@@ -16,6 +16,6 @@ VALUES ('XSLTListsDisplay','','','Enable XSLT stylesheet control over lists page
 
 --     });
 
---     print "Upgrade to $DBversion done (Bug 12528 - Enable staff to deny message setting access to patrons on the OPAC)\n";
+--     print "Upgrade to $DBversion done (Bug 15485: Allow choosing different XSLTs for lists)\n";
 --     SetVersion($DBversion);
 -- }

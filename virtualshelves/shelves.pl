@@ -215,7 +215,9 @@ if ( $op eq 'view' ) {
 
             my $borrower = GetMember( borrowernumber => $loggedinuser );
 
-            my $xslfile = C4::Context->preference('XSLTListsDisplay') || 'default';
+            # Lists display falls back to search results configuration
+            my $xslfile = C4::Context->preference('XSLTListsDisplay') ||
+                          C4::Context->preference('XSLTResultsDisplay');
             my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
             my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
 
