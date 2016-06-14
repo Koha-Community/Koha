@@ -430,12 +430,14 @@ function validate1(date) {
     [% UNLESS ( I ) %]
  <div id="patron-alternate-address" style="padding-top: 1em;">
     <h3>Alternate address</h3>
-    <div class="rows">  <ol><li><span class="label">Address: </span>[% B_address %]</li>
-      <li><span class="label">Address 2: </span>[% B_address2 %]</li>
-      <li><span class="label">City: </span>[% B_city %]</li>
-      [% IF ( B_state ) %]<li><span class="label">State: </span>[% B_state %]</li>[% END %]
-      <li><span class="label">ZIP/Postal code: </span>[% B_zipcode %]</li>
-      [% IF ( B_country ) %]<li><span class="label">Country: </span>[% B_country %]</li>[% END %]
+
+    [% IF Koha.Preference( 'AddressFormat' ) %]
+        [% INCLUDE "member-display-alt-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+    [% ELSE %]
+        [% INCLUDE 'member-display-alt-address-style-us.inc' %]
+    [% END %]
+
+    <div class="rows">  <ol>
       [% IF ( B_phone ) %]<li><span class="label">Phone: </span><a href="tel:[% B_phone %]">[% B_phone %]</a></li>[% END %]
       [% IF ( B_email ) %]<li class="email"><span class="label">Email: </span><a title="[% B_email %]" href="mailto:[% B_email %]">[% B_email %]</a></li>[% END %]
       [% IF ( contactnote ) %]<li><span class="label">Contact note: </span> [% contactnote %]</li>[% END %]
