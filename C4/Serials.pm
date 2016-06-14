@@ -2679,9 +2679,9 @@ sub _can_do_on_subscription {
 
 =cut
 
-sub findSerialsByStatus{
-    my($status, $subscriptionid) = @_;
-    my $dbh = C4::Context->dbh;
+sub findSerialsByStatus {
+    my ( $status, $subscriptionid ) = @_;
+    my $dbh   = C4::Context->dbh;
     my $query = q| SELECT * from serial
                     WHERE status = ?
                     AND subscriptionid = ?
@@ -2689,6 +2689,7 @@ sub findSerialsByStatus{
     my $serials = $dbh->selectall_arrayref( $query, { Slice => {} }, $status, $subscriptionid );
     return @$serials;
 }
+
 1;
 __END__
 
