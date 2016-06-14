@@ -2,22 +2,19 @@
   "type": "object",
   "properties": {
     "reserve_id": {
-      "description": "Internal hold identifier"
+      "$ref": "../x-primitives.json#/reserve_id"
     },
     "borrowernumber": {
-      "type": "string",
-      "description": "internally assigned user identifier"
+      "$ref": "../x-primitives.json#/borrowernumber"
     },
     "reservedate": {
       "description": "the date the hold was placed"
     },
     "biblionumber": {
-      "type": "string",
-      "description": "internally assigned biblio identifier"
+      "$ref": "../x-primitives.json#/biblionumber"
     },
     "branchcode": {
-      "type": ["string", "null"],
-      "description": "internally assigned branch identifier"
+      "$ref": "../x-primitives.json#/branchcode"
     },
     "notificationdate": {
       "description": "currently unused"
@@ -41,8 +38,7 @@
       "description": "date and time the hold was last updated"
     },
     "itemnumber": {
-      "type": ["string", "null"],
-      "description": "internally assigned item identifier"
+      "$ref": "../x-primitives.json#/itemnumber"
     },
     "waitingdate": {
       "description": "the date the item was marked as waiting for the patron at the library"

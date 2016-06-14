@@ -2,20 +2,16 @@
   "type": "object",
   "properties": {
     "borrowernumber": {
-      "type": "string",
-      "description": "internally assigned user identifier"
+      "$ref": "../x-primitives.json#/borrowernumber"
     },
     "cardnumber": {
-      "type": ["string", "null"],
-      "description": "library assigned user identifier"
+      "$ref": "../x-primitives.json#/cardnumber"
     },
     "surname": {
-      "type": "string",
-      "description": "patron's last name"
+      "$ref": "../x-primitives.json#/surname"
     },
     "firstname": {
-      "type": ["string", "null"],
-      "description": "patron's first name"
+      "$ref": "../x-primitives.json#/firstname"
     },
     "title": {
       "type": ["string", "null"],
@@ -62,12 +58,10 @@
       "description": "country of patron's primary address"
     },
     "email": {
-      "type": ["string", "null"],
-      "description": "primary email address for patron's primary address"
+      "$ref": "../x-primitives.json#/email"
     },
     "phone": {
-      "type": ["string", "null"],
-      "description": "primary phone number for patron's primary address"
+      "$ref": "../x-primitives.json#/phone"
     },
     "mobile": {
       "type": ["string", "null"],
@@ -130,8 +124,7 @@
       "description": "patron's date of birth"
     },
     "branchcode": {
-      "type": "string",
-      "description": "code of patron's home branch"
+      "$ref": "../x-primitives.json#/branchcode"
     },
     "categorycode": {
       "type": "string",
