@@ -14,8 +14,11 @@
         <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cardnumber %]">Account summary: [% firstname %] [% surname %] ([% cardnumber %])</a></h3>
 
         <ul>
-            <li>[% address %]<br />[% address2 %]</li>
-            <li>[% city %], [% zipcode %]</li>
+            [% IF Koha.Preference( 'AddressFormat' ) %]
+                [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+            [% ELSE %]
+                [% INCLUDE 'member-display-address-style-us.inc' %]
+            [% END %]
             <li>[% IF ( phone ) %][% phone %][% ELSE %](no phone number on file)[% END %]</li>
             <li>[% IF ( email ) %][% email %][% ELSE %](no primary email on file)[% END %]</li>
             [% IF ( emailpro ) %]
