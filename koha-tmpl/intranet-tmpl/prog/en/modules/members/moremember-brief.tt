@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Check duplicate patron</title>
@@ -16,17 +17,13 @@
 	<div id="patron-information" style="padding: .5em;">
 
      [% UNLESS ( I ) %][% IF ( othernames ) %]&ldquo;[% othernames %]&rdquo;[% END %]
-
-	<p class="address">[% streetnumber %]
-        [% IF ( roaddetails ) %]
-         [% roaddetails %]
-        [% END %]
-        [% address %]<br />
-        [% IF ( address2 ) %][% address2 %]<br />[% END %]
-        [% IF ( city ) %][% city %][% END %]
-        [% IF ( zipcode ) %][% zipcode %]<br />[% END %]
-        [% IF ( country ) %][% country %][% END %]</p>
-
+        <div class = "address">
+            [% IF Koha.Preference( 'AddressFormat' ) %]
+                [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+            [% ELSE %]
+                [% INCLUDE 'member-display-address-style-us.inc' %]
+            [% END %]
+        </div>
 	<div class="rows">
 		<ol>
         [% IF ( I ) %]
