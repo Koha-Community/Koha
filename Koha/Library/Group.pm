@@ -37,7 +37,19 @@ Koha::Library::Group - Koha Library::Group object class
 
 =cut
 
-=head3 my @children = $self->get_children()
+=head3 my @parent = $self->parent()
+
+=cut
+
+sub parent {
+    my ($self) = @_;
+
+    $self->{_parent} ||= Koha::Library::Groups->find( $self->parent_id );
+
+    return $self->{_parent};
+}
+
+=head3 my @children = $self->children()
 
 =cut
 
@@ -63,7 +75,9 @@ sub library {
 
     return unless $self->branchcode;
 
-    return Koha::Libraries->find( $self->branchcode );
+    $self->{_library} ||= Koha::Libraries->find( $self->branchcode );
+
+    return $self->{_library};
 }
 
 =head3 libraries_not_direct_children
@@ -87,7 +101,14 @@ sub libraries_not_direct_children {
 
     my @branchcodes = map { $_->branchcode } @children;
 
-    return Koha::Libraries->search( { branchcode => { -not_in => \@branchcodes } } );
+    return Koha::Libraries->search(
+        {
+            branchcode => { -not_in => \@branchcodes }
+        },
+        {
+            order_by => 'branchname'
+        }
+    );
 }
 
 =head3 store
