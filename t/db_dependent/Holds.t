@@ -34,7 +34,7 @@ my $dbh     = C4::Context->dbh;
 my $branch_1 = $builder->build({ source => 'Branch' })->{ branchcode };
 my $branch_2 = $builder->build({ source => 'Branch' })->{ branchcode };
 
-my $category = $builder->build({ source => 'Category' })->{categorycode};
+my $category = $builder->build({ source => 'Category' });
 
 my $borrowers_count = 5;
 
@@ -60,7 +60,7 @@ foreach (1..$borrowers_count) {
     my $borrowernumber = AddMember(
         firstname =>  'my firstname',
         surname => 'my surname ' . $_,
-        categorycode => $category,
+        categorycode => $category->{categorycode},
         branchcode => $branch_1,
     );
     push @borrowernumbers, $borrowernumber;
