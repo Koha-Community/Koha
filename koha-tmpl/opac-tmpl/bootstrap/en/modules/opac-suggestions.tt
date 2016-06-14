@@ -28,6 +28,10 @@
                 <div class="span10">
                     <div id="usersuggestions" class="maincontent">
                         [% IF ( op_add ) %]
+                            [% IF ( Koha.Preference('MaxOpenSuggestions') && own_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
+                                    <h1 class="TooManySuggestions">You cannot place any more suggestions</h1>
+                                    <h2 class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') %]). Once the library has processed those suggestions you will be able to place more.</h2>
+                            [% ELSE %]
                             <h1>Enter a new purchase suggestion</h1>
 
                             <p>Please fill out this form to make a purchase suggestion. You will receive an email when the library processes your suggestion</p>
@@ -88,6 +92,7 @@
                                     <input type="submit" onclick="Check(this.form); return false;" class="btn" value="Submit your suggestion" /> <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a>
                                 </fieldset>
                             </form>
+                            [% END %]
                         [% END #  IF op_add %]
 
                         [% IF ( op_else ) %]
@@ -105,6 +110,8 @@
                             [% FOR m IN messages %]
                                 <div class="alert alert-[% m.type %]">
                                     [% SWITCH m.code %]
+                                    [% CASE 'too_many' %]
+                                        The suggestion has not been added. You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') %]). Once the library has processed those suggestions you will be able to place more.
                                     [% CASE 'already_exists' %]
                                         The suggestion has not been added. A suggestion with this title already exists.
                                     [% CASE 'success_on_inserted' %]
@@ -145,7 +152,11 @@
                                     <input type="hidden" name="op" value="delete_confirm" />
                                     [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                         <div id="toolbar" class="toolbar clearfix">
-                                            <a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>
+                                        [% IF ( Koha.Preference('MaxOpenSuggestions') && own_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
+                                                <p class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') %]).</br>Once the library has processed those suggestions you will be able to place more.</p>
+                                        [% ELSE %]
+                                                <a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>
+                                        [% END %]
                                         </div>
                                     [% END %]
 
@@ -245,7 +256,11 @@
                                     <p>There are no pending purchase suggestions.</p>
                                 [% END %]
                                 [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
-                                    <p><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a></p>
+                                    [% IF ( Koha.Preference('MaxOpenSuggestions') && own_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
+                                        <p class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time.</br>Once the library has processed those suggestions you will be able to place more</p>
+                                    [% ELSE %]
+                                        <p><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a></p>
+                                    [% END %]
                                 [% END %]
                             [% END # / IF suggestions_loop %]
 

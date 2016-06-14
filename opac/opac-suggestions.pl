@@ -115,7 +115,11 @@ if ( $op eq 'else' ) {
 my $suggestions_loop =
   &SearchSuggestion( $suggestion);
 if ( $op eq "add_confirm" ) {
-	if (@$suggestions_loop>=1){
+        my $count_own_suggestions = $borrowernumber ?  &SearchSuggestion( { suggestedby => $borrowernumber}) : 0;
+    if( @$count_own_suggestions >= C4::Context->preference("MaxOpenSuggestions") ){
+        push @messages, { type => 'error', code => 'too_many'};
+    }
+	elsif (@$suggestions_loop>=1){
 		#some suggestion are answering the request Donot Add
         for my $suggestion ( @$suggestions_loop ) {
             push @messages, { type => 'error', code => 'already_exists', id => $suggestion->{suggestionid} };
@@ -157,9 +161,13 @@ map{
     $library ? $s->{branchcodesuggestedby} = $library->branchname : ()
 } @$suggestions_loop;
 
+my $own_suggestions_count = 0;
 foreach my $suggestion(@$suggestions_loop) {
     if($suggestion->{'suggestedby'} == $borrowernumber) {
         $suggestion->{'showcheckbox'} = $borrowernumber;
+        if ( $suggestion->{'STATUS'} eq 'ASKED' ) {
+            $own_suggestions_count++;
+        }
     } else {
         $suggestion->{'showcheckbox'} = 0;
     }
@@ -195,6 +203,7 @@ $template->param(
     messages => \@messages,
     suggestionsview => 1,
     suggested_by_anyone => $suggested_by_anyone,
+    own_suggestions_count => $own_suggestions_count,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

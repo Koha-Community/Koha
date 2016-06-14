@@ -1,0 +1,1 @@
+INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('MaxOpenSuggestions','',NULL,'Limit the number of open suggestions a patron can have at once, unlimited if blank','Integer')

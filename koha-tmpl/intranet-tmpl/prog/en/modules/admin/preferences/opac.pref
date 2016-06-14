@@ -571,7 +571,11 @@ OPAC:
                 yes: "Block"
                 no: "Don't block"
             - expired patrons from OPAC actions such as placing a hold or renewing.  Note that the setting for a patron category takes priority over this system preference.
-
+        -
+            - Limit patrons to
+            - pref: MaxOpenSuggestions
+              class: integer
+            - "open suggestions. Leave empty for no limit. **Note: this setting does not affect anonymous suggestions"
     Privacy:
         -
             - pref: StoreLastBorrower
