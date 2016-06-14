@@ -221,7 +221,7 @@ for my $status ( @statuses ) {
 }
 # Here we have 15 serials with statuses : 2*2 + 5*3 + 2*4 + 1*41 + 1*42 + 1*43 + 1*44 + 1*5 + 1*1
 my @serialsByStatus = C4::Serials::findSerialsByStatus(2,$subscriptionid);
-is(@serialsByStatus,2,"findSerialByStatus returns all serials with chosen status");
+is(@serialsByStatus,2,"findSerialsByStatus returns all serials with chosen status");
 ( $total_issues, @serials ) = C4::Serials::GetSerials( $subscriptionid );
 is( $total_issues, @statuses + 1, "GetSerials returns total_issues" );
 my @arrived_missing = map { my $status = $_->{status}; ( grep { /^$status$/ } qw( 2 4 41 42 43 44 5 ) ) ? $_ : () } @serials;

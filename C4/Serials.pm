@@ -2689,7 +2689,7 @@ sub _can_do_on_subscription {
 
 =head2 findSerialsByStatus
 
-    @serials = findSerialByStatus($status, $subscriptionid);
+    @serials = findSerialsByStatus($status, $subscriptionid);
 
     Returns an array of serials matching a given status and subscription id.
 
