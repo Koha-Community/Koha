@@ -1,6 +1,6 @@
 $(document).ready(function() {
     window.modaction_legend_innerhtml = $("#modaction_legend").text();
-    window.action_submit_value = $("#action_submit").text();
+    window.action_submit_value = $("#action_submit").val();
 
     $('#select_template').find("input:submit").hide();
     $('#select_template').change(function() {
