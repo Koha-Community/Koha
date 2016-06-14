@@ -1,5 +1,40 @@
         <fieldset class="rows" id="memberentry_address">
         <legend id="alt_address_lgd">Alternate address</legend><ol>
+        [% UNLESS noB_streetnumber %]
+            <li>
+                [% IF ( mandatoryB_streetnumber ) %]
+                    <label for="B_streetnumber" class="required">
+                [% ELSE %]
+                    <label for="B_streetnumber">
+                [% END %]
+                Street Number: </label>
+                <input type="text" id="B_address" name="B_streetnumber" size="5" value="[% B_streetnumber %]" />
+               [% IF ( mandatoryB_streetnumber ) %]<span class="required">Required</span>[% END %]
+            </li>
+        [% END %]
+
+        [% IF roadtypes %]
+                <li>
+            [% IF ( mandatoryB_streettype ) %]
+                <label for="B_streettype" class="required">
+            [% ELSE %]
+                <label for="B_streettype">
+        [% END %]
+        Street type: </label>
+        <select name="B_streettype">
+        <option value=""></option>
+        [% FOR roadtype IN roadtypes %]
+            [% IF roadtype.authorised_value == B_streettype %]
+                <option value="[% roadtype.authorised_value %]" selected="selected">[% roadtype.lib %]</option>
+            [% ELSE %]
+                <option value="[% roadtype.authorised_value %]">[% roadtype.lib %]</option>
+            [% END %]
+        [% END %]
+        </select>
+        [% IF ( mandatoryB_streettype ) %]<span class="required">Required</span>[% END %]
+        </li>
+      [% END %]
+
         [% UNLESS noB_address %]
             <li>
                 [% IF ( mandatoryB_address ) %]
