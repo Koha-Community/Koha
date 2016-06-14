@@ -55,7 +55,7 @@ sub startup {
 
     $self->plugin(Swagger2 => {
         route => $route,
-        url => $self->home->rel_file("api/v1/swagger.json"),
+        url => $self->home->rel_file("api/v1/swagger.min.json"),
     });
 }
 
