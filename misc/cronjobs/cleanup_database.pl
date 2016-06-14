@@ -408,5 +408,5 @@ sub DeleteSpecialHolidays {
         WHERE DATE( CONCAT( year, '-', month, '-', day ) ) < DATE_SUB( CAST(NOW() AS DATE), INTERVAL ? DAY );
     });
     my $count = $sth->execute( $days ) + 0;
-    print "Removed $count unqiue holidays\n" if $verbose;
+    print "Removed $count unique holidays\n" if $verbose;
 }
