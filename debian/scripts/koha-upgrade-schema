@@ -16,16 +16,31 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 set -e
 
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
 
-update="/usr/share/koha/intranet/cgi-bin/installer/data/mysql/updatedatabase.pl"
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
+# Optionally use alternative paths for a dev install
+adjust_paths_dev_install $1
+if [ "$DEV_INSTALL" = "" ]; then
+    CGI_PATH=$KOHA_HOME/intranet/cgi-bin
+else
+    CGI_PATH=$KOHA_HOME
+fi
+
 for name in "$@"
 do
     echo "Upgrading database schema for $name"
     KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml" \
-    PERL5LIB="/usr/share/koha/lib" \
-    "$update"
+    PERL5LIB=$PERL5LIB \
+    "$CGI_PATH/installer/data/mysql/updatedatabase.pl"
 done
-

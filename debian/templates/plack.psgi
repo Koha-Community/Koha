@@ -17,9 +17,6 @@
 
 use Modern::Perl;
 
-use lib("/usr/share/koha/lib");
-use lib("/usr/share/koha/lib/installer");
-
 use Plack::Builder;
 use Plack::App::CGIBin;
 use Plack::App::Directory;
@@ -53,12 +50,13 @@ use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
     };
 }
 
+my $home = $ENV{KOHA_HOME};
 my $intranet = Plack::App::CGIBin->new(
-    root => '/usr/share/koha/intranet/cgi-bin'
+    root => $ENV{DEV_INSTALL}? $home: "$home/intranet/cgi-bin"
 )->to_app;
 
 my $opac = Plack::App::CGIBin->new(
-    root => '/usr/share/koha/opac/cgi-bin/opac'
+    root => $ENV{DEV_INSTALL}? "$home/opac": "$home/opac/cgi-bin/opac"
 )->to_app;
 
 my $apiv1  = builder {
