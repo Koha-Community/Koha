@@ -16,7 +16,7 @@
                     "[% data.category_description |html %] ([% data.category_type |html %])",
                 "dt_action":
                     [%- IF selection_type == 'select' -%]
-                        "<a href=\"#\" style='cursor:pointer' onclick='select_user(\"[% data.borrowernumber %]\", [% To.json(data) | html %] );'>Select</a>"
+                        "<a class=\"btn btn-mini select_user\" href=\"#\" data-borrowernumber=\"[% data.borrowernumber %]\" data-borrowerdata=\"[% To.json(data) | html %]\">Select</a><input type=\"hidden\" id=\"borrower_data[% data.borrowernumber %]\" name=\"borrower_data[% data.borrowernumber %]\" value=\"[% To.json(data) | html %]\" />"
                     [%- ELSE -%]
                         "<a href=\"#\" data-borrowernumber=\"[% data.borrowernumber %]\" data-firstname=\"[% data.firstname %]\" data-surname=\"[% data.surname %]\" class=\"btn btn-mini add_user\"><i class=\"fa fa-plus\"></i> Add</a>"
                     [%- END -%]

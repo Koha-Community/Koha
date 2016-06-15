@@ -112,8 +112,8 @@ $(document).ready(function(){
     $("body").on("click",".select_user",function(e){
         e.preventDefault();
         var borrowernumber = $(this).data("borrowernumber");
-        var guarantor_data = $("#guarantor_data"+borrowernumber).val();
-        select_user( borrowernumber, JSON.parse(guarantor_data) );
+        var borrower_data = $("#borrower_data"+borrowernumber).val();
+        select_user( borrowernumber, JSON.parse(borrower_data) );
     });
 
 });

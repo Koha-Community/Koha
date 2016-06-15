@@ -54,10 +54,10 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
         if(borrowernumber && ids.indexOf(borrowernumber) == -1) {
             var li = '<li id="user_' + borrowernumber + '">'
                 + '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='
-                + borrowernumber + '">' + borrowername
-                + '</a> [<a style="cursor:pointer"'
-                + 'onclick="del_user(' + borrowernumber +')">Remove</a>]</li>';
-            $(li).insertBefore("li#add_user_button");
+                + borrowernumber + '">' + borrowername + '</a> '
+                + ' &bull; <a data-borrowernumber=" + borrowernumber +" class="del_user" href="#"><i class="fa fa-trash"></i> Remove</a> '
+                + '</li>';
+            $("#budget_users").prepend(li);
             ids.push(borrowernumber);
             $("#budget_users_id").val(ids.join(':'));
         } else {
@@ -143,6 +143,29 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
             alert(alertString2);
         }
     }
+    $(document).ready(function(){
+        $("#remove_owner").on("click",function(e){
+            e.preventDefault();
+            ownerRemove();
+        });
+        $("#edit_owner").on("click",function(e){
+            e.preventDefault();
+            ownerPopup();
+        });
+        $("body").on("click",".del_user",function(e){
+            e.preventDefault();
+            var borrowernumber = $(this).data("borrowernumber");
+            del_user(borrowernumber);
+        });
+        $("#add_user_button").on("click",function(e){
+            e.preventDefault();
+            userPopup();
+        });
+        $("#edit_fund").on("submit",function(e){
+            e.preventDefault();
+            Check(this);
+        });
+    });
 //]]>
 </script>
 [% ELSIF op == 'list' %]
@@ -430,7 +453,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 <!-- ********************************************************************************************** -->
 <!-- create add/mod entry form -->
 [% IF op == 'add_form' && !error_not_authorised_to_modify %]
-<form action="/cgi-bin/koha/admin/aqbudgets.pl" name="Aform" method="post">
+<form action="/cgi-bin/koha/admin/aqbudgets.pl" id="edit_fund" name="Aform" method="post">
     <fieldset class="rows">
     <legend>[% IF ( budget_id ) %]Modify[% ELSE %]Add[% END %] Fund
     [% IF ( budget_period_description ) %]
@@ -478,19 +501,19 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 
     <li>
         <span class="label">Owner: </span>
-        <span  id="budget_owner_name">
-        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% budget_owner_id %]">
-            [% budget_owner_name %]
-        </a>
-        </span>
+        [% IF ( budget_owner_name ) %]
+            <span  id="budget_owner_name">
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% budget_owner_id %]">
+                    [% budget_owner_name %]
+                </a> |
+            </span>
+        [% END %]
+        <a id="edit_owner" class="new_window" href="#"><i class="fa fa-search"></i> Select owner</a>
+        <a id="remove_owner" href="#"><i class="fa fa-trash"></i> Remove owner</a>
         <input type="hidden" name="budget_owner_id" id="budget_owner_id"
             value="[% budget_owner_id %]" />
-
-        <input type="button" id="edit_owner" value="Edit owner"
-            onclick="ownerPopup(); return false;" />
-        <input type="button" id="remove_owner" value="Remove owner"
-            onclick="ownerRemove(); return false;" />
     </li>
+
 
     [% IF budget_has_children %]
         <li class="radio">
@@ -510,15 +533,13 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% user.borrowernumber %]">
                         [% user.firstname %] [% user.surname %]
                     </a>
-                    [<a style="cursor:pointer"
-                    onclick="del_user([% user.borrowernumber %])">Remove</a>]
+                    &bull; <a href="#" class="del_user" data-borrowernumber="[% user.borrowernumber %]"><i class="fa fa-trash"></i> Remove</a>
                 </li>
             [% END %]
-            <li id="add_user_button">
-                <input type="button" onclick="userPopup()" value="Add users" />
-            </li>
+            <li><a href="#" id="add_user_button"><i class="fa fa-plus"></i> Add users</a></li>
         </ul>
         <input type="hidden" name="budget_users_ids" id="budget_users_id" value="[% budget_users_ids %]" />
+    </li>
     <li>
     <label for="budget_branchcode">Library: </label>
     <select name="budget_branchcode" id="budget_branchcode">
@@ -611,7 +632,7 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
     </fieldset>
 
     <fieldset class="action">
-        <input type="submit" value="Submit" onclick="Check(this.form); return false;" /> <a class="cancel" href="/cgi-bin/koha/admin/aqbudgets.pl">Cancel</a>
+        <input type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/admin/aqbudgets.pl">Cancel</a>
         <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
     </fieldset>
 </form>

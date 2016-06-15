@@ -17,7 +17,7 @@
                 "dt_address":
                     "[% INCLUDE escape_address data=data %]",
                 "dt_action":
-                    "<a href=\"#\" class=\"btn btn-mini select_user\" data-borrowernumber=\"[% data.borrowernumber %]\">Select</a><input type=\"hidden\" id=\"guarantor_data[% data.borrowernumber %]\" name=\"guarantor_data\" value=\"[% To.json(data) | html %]\" />"
+                    "<a href=\"#\" class=\"btn btn-mini select_user\" data-borrowernumber=\"[% data.borrowernumber %]\">Select</a><input type=\"hidden\" id=\"borrower_data[% data.borrowernumber %]\" name=\"borrower_data[% data.borrowernumber %]\" value=\"[% To.json(data) | html %]\" />"
             }[% UNLESS loop.last %],[% END %]
         [% END %]
     ]
