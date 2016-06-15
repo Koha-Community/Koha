@@ -13,18 +13,16 @@
         ],
         "sPaginationType": "four_button"
     } ) );
+    $(".check_uncertain").on("change",function(){
+        var form = document.getElementById("uncertainprices");
+        var ordernumber = $(this).data("ordernumber");
+        uncheckbox( form, ordernumber );
+    });
  });
 var MSG_INVALIDPRICE = _("ERROR: Price is not a valid number, please check the price and try again!");
  //]]>
 </script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-function check(form) {
-    form.submit();
-}
-//]]>
-</script>
 </head>
 <body id="acq_uncertainprice" class="acq">
 [% INCLUDE 'header.inc' %]
@@ -75,10 +73,10 @@ function check(form) {
         [% END %]
 
         <h2>Orders with uncertain prices</h2>
-        <form action="[% scriptname %]" method="post" name="uncertainprices">
+        <form action="[% scriptname %]" method="post">
         <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
-        Orders from:
-        <select name="owner">
+        <label for="owner">Orders from:</label>
+        <select id="owner" name="owner">
             [% IF ( owner ) %]
             <option value="0">Everyone</option>
             <option value="1" selected="selected">me</option>
@@ -89,7 +87,7 @@ function check(form) {
         </select>
         <input type="submit" value="Filter" />
         </form>
-        <form action="[% scriptname %]" method="post" name="uncertainprices">
+        <form action="[% scriptname %]" method="post" id="uncertainprices">
         <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
         <input type="hidden" name="op" value="validate" />
         <table id="uncertainpricet">
@@ -122,24 +120,21 @@ function check(form) {
 	        <input type="checkbox" name="uncertainprice[% uncertainpriceorder.ordernumber %]" value="1" checked="checked" />
 	    </td>
 	    <td>
-	        <input type="text" size="10" name="price[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.listprice %]"
-	                                        onchange="uncheckbox(this.form, [% uncertainpriceorder.ordernumber %]);" />
+            <input class="check_uncertain" data-ordernumber="[% uncertainpriceorder.ordernumber %]" type="text" size="10" name="price[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.listprice %]" />
 	    </td>
 	    <td>
-	        
         [% IF Koha.Preference('AcqCreateItem') == 'ordering' %]
             [% uncertainpriceorder.quantity %]
             <input type="hidden" name="qty[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.quantity %]" />
         [% ELSE %]
-            <input type="text" size="10" name="qty[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.quantity %]"
-                    onchange="uncheckbox(this.form, [% uncertainpriceorder.ordernumber %]);" />
+            <input class="check_uncertain" data-ordernumber="[% uncertainpriceorder.ordernumber %]" type="text" size="10" name="qty[% uncertainpriceorder.ordernumber %]" value="[% uncertainpriceorder.quantity %]" />
         [% END %]
 	    </td>
 	    </tr>
 	    [% END %]
     </tbody>
 	</table>
-	<fieldset class="action"><input type="button" value="Save" onclick="check(this.form)" /></fieldset>
+    <fieldset class="action"><input type="submit" value="Save" /></fieldset>
 	</form>
 	[% END %]
 
