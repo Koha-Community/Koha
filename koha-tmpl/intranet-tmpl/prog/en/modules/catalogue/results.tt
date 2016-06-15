@@ -600,7 +600,11 @@ var holdForPatron = function () {
                           [% END %]
                           [% IF ( CAN_user_editcatalogue_edit_items ) %]
                           | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Edit items</a>
-                          [% END %]</p>
+                          [% END %]
+                          <span class="view-in-opac">
+                            | <a href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]" target="_blank">OPAC view</a>
+                          </span>
+                                </p>
                                 </td>
 
                                 <td><div class="availability">
