@@ -41,6 +41,7 @@ if ( !-e "/etc/koha/sites/$instance" ) {
 my $shell = $opts{shell} || $ENV{SHELL} || '/bin/sh';
 
 # Now we're set up, build the 'su' command
+my $perl5lib = read_perl5lib( $instance );
 my @su_args;
 push @su_args, '/usr/bin/sudo';
 push @su_args, '--preserve-env' if $opts{'preserve-environment'};
@@ -49,7 +50,7 @@ push @su_args, "-u", "$instance-koha";
 push @su_args,
     "env "
   . "KOHA_CONF=/etc/koha/sites/$instance/koha-conf.xml "
-  . "PERL5LIB=/usr/share/koha/lib $shell"
+  . "PERL5LIB=$perl5lib $shell"
   . ( $opts{command} ? " -c '$opts{command}'" : '' );
 
 print "Command: '".join("' '",@su_args)."'\n" if $opts{verbose};
@@ -68,6 +69,21 @@ sub show_help {
     my $fh = $err ? *STDERR : *STDOUT;
     say $fh "Error: " . $msg if $msg;
     print $fh $_ while <DATA>;
+}
+
+sub read_perl5lib {
+    my ( $instance ) = @_;
+
+    # This simulates what the debian shell scripts do:
+    # Read /etc/default/koha-common
+    # Check dev_install in koha-conf.xml
+
+    my $result = `grep "^PERL5LIB=" /etc/default/koha-common`;
+    chomp $result;
+    $result =~ s/^PERL5LIB=\s*//;
+    my $dev_install = `xmlstarlet sel -t -v 'yazgfs/config/dev_install' /etc/koha/sites/$instance/koha-conf.xml`;
+    chomp $dev_install;
+    return $dev_install || $result;
 }
 
 __DATA__
