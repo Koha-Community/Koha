@@ -56,12 +56,18 @@ run_rebuild_zebra()
        [     "${full_reindex}" = "yes" ] ||
        [            "${force}" = "yes" ] ; then
 
+        if [ "$DEV_INSTALL" = "" ]; then
+            KOHA_BINDIR=$KOHA_HOME/bin
+        else
+            KOHA_BINDIR=$KOHA_HOME/misc
+        fi
+
         # TODO: This comment is here to remind us that we should make
         # rebuild_zebra.pl return error codes on failure
         if sudo -u "$instancename-koha" -H \
-            env PERL5LIB=/usr/share/koha/lib \
+            env PERL5LIB=$PERL5LIB \
             KOHA_CONF="/etc/koha/sites/$instancename/koha-conf.xml" \
-            /usr/share/koha/bin/migration_tools/rebuild_zebra.pl $@ ; then
+            $KOHA_BINDIR/migration_tools/rebuild_zebra.pl $@ ; then
             return 0
         else
             return 1
@@ -141,6 +147,9 @@ while [ -n "$*" ]; do
 
     shift
 done
+
+# Optionally use alternative paths for a dev install
+adjust_paths_dev_install $1
 
 # Parse command line.
 if [ $# -lt 1 ]; then
