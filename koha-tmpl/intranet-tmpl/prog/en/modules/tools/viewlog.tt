@@ -23,6 +23,7 @@
 [%        CASE 'MEMBERS'      %]Patrons
 [%        CASE 'ACQUISITIONS' %]Acquisitions
 [%        CASE 'SERIAL'       %]Serials
+[%        CASE 'HOLDS'        %]Holds
 [%        CASE 'CIRCULATION'  %]Circulation
 [%        CASE 'LETTER'       %]Letter
 [%        CASE 'FINES'        %]Fines
@@ -41,6 +42,9 @@
 [%        CASE 'ISSUE'  %]Checkout
 [%        CASE 'RETURN' %]Return
 [%        CASE 'CREATE' %]Create
+[%        CASE 'CANCEL' %]Cancel
+[%        CASE 'RESUME' %]Resume
+[%        CASE 'SUSPEND' %]Suspend
 [%        CASE 'RENEW'  %]Renew
 [%        CASE 'CHANGE PASS' %]Change password
 [%        CASE 'ADDCIRCMESSAGE' %]Add circulation message
@@ -94,7 +98,7 @@
                                     [% ELSE %]
                                         <option value="">All</option>
                                     [% END %]
-                                    [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
+                                    [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
                                         [% IF modules.grep(modx).size %]
                                             <option value="[% modx %]" selected="selected">[% PROCESS translate_log_module module=modx %]</option>
                                         [% ELSE %]
@@ -112,7 +116,7 @@
                                         <option value="">All</option>
                                     [% END %]
 
-                                    [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'CHANGE PASS' 'Run' ] %]
+                                    [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'CHANGE PASS' 'Run' ] %]
                                         [% IF actions.grep(actx).size %]
                                             <option value="[% actx %]" selected="selected">[% PROCESS translate_log_action action=actx %]</option>
                                         [% ELSE %]

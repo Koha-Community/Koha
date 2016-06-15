@@ -34,6 +34,7 @@ use C4::Accounts;
 use C4::Members::Messaging;
 use C4::Members qw();
 use C4::Letters;
+use C4::Log;
 
 use Koha::DateUtils;
 use Koha::Calendar;
@@ -46,6 +47,7 @@ use Koha::ItemTypes;
 
 use List::MoreUtils qw( firstidx any );
 use Carp;
+use Data::Dumper;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -212,6 +214,10 @@ sub AddReserve {
             itemtype       => $itemtype,
         }
     )->store();
+
+    logaction( 'HOLDS', 'CREATE', $hold->id, Dumper($hold->unblessed) )
+        if C4::Context->preference('HoldsLog');
+
     my $reserve_id = $hold->id();
 
     # add a reserve fee if needed
@@ -1070,6 +1076,11 @@ sub CancelReserve {
 
     my $reserve = GetReserve( $reserve_id );
     if ($reserve) {
+
+        my $hold = Koha::Holds->find( $reserve_id );
+        logaction( 'HOLDS', 'CANCEL', $hold->reserve_id, Dumper($hold->unblessed) )
+            if C4::Context->preference('HoldsLog');
+
         my $query = "
             UPDATE reserves
             SET    cancellationdate = now(),
@@ -1166,6 +1177,8 @@ sub ModReserve {
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
         my $hold = Koha::Holds->find($reserve_id);
+        logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
+            if C4::Context->preference('HoldsLog');
 
         $hold->set(
             {
