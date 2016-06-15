@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE ColumnsSettings %]
 
 [% INCLUDE 'doc-head-open.inc' %]
@@ -207,6 +208,7 @@ function confirm_deletion() {
                               <li><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]&amp;searchid=[% searchid %]" onclick="return confirm_deletion();">Delete</a></li>
                           [% END %]
                         [% END %]
+                            <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">OPAC view</a></li>
                           </ul>
                           </div>
                       </td>
