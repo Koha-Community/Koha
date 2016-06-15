@@ -56,6 +56,15 @@
                             [% IF ( cannotedit ) %] <li class="disabled"> [% ELSE %]
                             <li> [% END %]
                             <a href="/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=[% subscriptionid %]">Edit as new (duplicate)</a></li>
+
+                            [% IF CAN_user_editcatalogue_edit_catalogue %]
+                                <li><a id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]">Edit record</a></li>
+                            [% END %]
+
+                            [% IF serialsadditems && CAN_user_editcatalogue_edit_items %]
+                                <li><a id="edititems" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]">Edit items</a></li>
+                            [% END %]
+
                             [% IF ( CAN_user_serials_delete_subscription ) %]
                             [% IF ( cannotedit ) %] <li class="disabled"> [% ELSE %]
                             <li> [% END %]
