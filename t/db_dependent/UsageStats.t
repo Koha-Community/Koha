@@ -399,7 +399,7 @@ sub mocking_systempreferences_to_a_set_value {
         finesCalendar
         FinesIncludeGracePeriod
         finesMode
-        RefundLostItemFeeOnReturn
+        RefundLostOnReturnControl
         WhenLostChargeReplacementFee
         WhenLostForgiveFine
         AllowHoldDateInFuture

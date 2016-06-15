@@ -147,7 +147,7 @@ sub BuildReport {
         finesCalendar
         FinesIncludeGracePeriod
         finesMode
-        RefundLostItemFeeOnReturn
+        RefundLostOnReturnControl
         WhenLostChargeReplacementFee
         WhenLostForgiveFine
         AllowHoldDateInFuture
