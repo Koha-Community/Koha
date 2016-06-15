@@ -31,9 +31,6 @@ do
         continue;
     fi
     echo "Stopping SIP server for $name"
-    KOHA_CONF=/etc/koha/sites/${name}/koha-conf.xml
-    PERL5LIB=/usr/share/koha/lib
-    export KOHA_CONF PERL5LIB
     daemon \
         --name="$name-koha-sip" \
         --errlog="/var/log/koha/$name/sip-error.log" \
@@ -44,9 +41,5 @@ do
         --delay=30 \
         --pidfiles="/var/run/koha/${name}" \
         --user="$name-koha.$name-koha" \
-        --stop \
-        -- \
-        perl \
-        "/usr/share/koha/lib/C4/SIP/SIPServer.pm" \
-        "/etc/koha/sites/${name}/SIPconfig.xml"
+        --stop
 done

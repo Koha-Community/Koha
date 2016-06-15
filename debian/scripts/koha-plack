@@ -231,6 +231,22 @@ set_action()
     fi
 }
 
+adjust_paths()
+{
+    # Optionally use alternative paths for a dev install
+    adjust_paths_dev_install $1
+
+    # PERL5LIB has been read from etc/default, add lib/installer
+    # export some vars (for plack.psgi)
+    export KOHA_HOME
+    if [ "$DEV_INSTALL" = "" ]; then
+        export PERL5LIB=$PERL5LIB:$KOHA_HOME/lib/installer
+    else
+        export DEV_INSTALL
+        export PERL5LIB=$PERL5LIB:$KOHA_HOME/installer
+    fi
+}
+
 STARMAN=$(which starman)
 op=""
 quiet="no"
@@ -268,12 +284,6 @@ while [ $# -gt 0 ]; do
 
 done
 
-if [ -z $PERL5LIB ]; then
-    PERL5LIB="/usr/share/koha/lib"
-fi
-
-export PERL5LIB
-
 [ "${quiet}" != "yes" ] && check_env_and_warn
 
 if [ $# -gt 0 ]; then
@@ -282,6 +292,7 @@ if [ $# -gt 0 ]; then
 
         if is_instance $name; then
 
+            adjust_paths $name
             case $op in
                 "start")
                     start_plack $name

@@ -15,8 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 set -e
+
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
+
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
 
 listopts=""
 while [ ! -z "$1" ]
@@ -39,11 +49,14 @@ done
             
 for name in $(koha-list $listopts)
 do
+    # Optionally use alternative paths for a dev install
+    adjust_paths_dev_install $name
+
     cmd=`echo "$@" | sed -e s/__instancename__/${name}/g`
     (
     exec 3>&1
     sudo -u "$name-koha" \
-    env PERL5LIB=/usr/share/koha/lib \
+    env PERL5LIB=$PERL5LIB \
         KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml" \
         ${cmd} 2>&1 >&3 | sed -e "s/^/$name: /" >&2 3>&-
     exec 3>&-

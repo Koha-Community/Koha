@@ -18,6 +18,17 @@
 
 set -e
 
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
+
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
 for name in "$@"
 do
     if [ ! -e /etc/koha/sites/${name}/koha-conf.xml ] ;
@@ -29,9 +40,17 @@ do
     echo "Starting SIP server for $name"
     mkdir -p /var/run/koha/${name}
     chown "${name}-koha:${name}-koha" /var/run/koha/${name}
+
+    adjust_paths_dev_install $name
     export KOHA_CONF PERL5LIB
     KOHA_CONF=/etc/koha/sites/${name}/koha-conf.xml
-    PERL5LIB="/usr/share/koha/lib"
+    # PERL5LIB has been read already
+    if [ "$DEV_INSTALL" = "" ]; then
+        LIBDIR=$KOHA_HOME/lib
+    else
+        LIBDIR=$KOHA_HOME
+    fi
+
     daemon \
         --name="$name-koha-sip" \
         --errlog="/var/log/koha/$name/sip-error.log" \
@@ -44,6 +63,6 @@ do
         --user="$name-koha.$name-koha" \
         -- \
         perl \
-        "/usr/share/koha/lib/C4/SIP/SIPServer.pm" \
+        "$LIBDIR/C4/SIP/SIPServer.pm" \
         "/etc/koha/sites/${name}/SIPconfig.xml"
 done
