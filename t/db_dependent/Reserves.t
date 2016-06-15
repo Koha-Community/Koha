@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 73;
+use Test::More tests => 74;
 use Test::Warn;
 
 use MARC::Record;
@@ -579,6 +579,9 @@ my $bz14464_reserve = AddReserve(
 ok( $bz14464_reserve, 'Bug 14464 - 1st reserve correctly created' );
 
 CancelReserve({ reserve_id => $bz14464_reserve, charge_cancel_fee => 1 });
+
+my $old_reserve = Koha::Database->new()->schema()->resultset('OldReserve')->find( $bz14464_reserve );
+is($old_reserve->get_column('found'), 'W', 'Bug 14968 - Keep found column from reserve');
 
 ( undef, undef, $bz14464_fines ) = GetMemberIssuesAndFines( $borrowernumber );
 is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines after cancelling reserve with no charge configured' );
