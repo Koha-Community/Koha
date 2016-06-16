@@ -158,7 +158,12 @@ foreach my $item (@{$items}) {
                 }
                 elsif ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'patronimages') {
                     my $patron_image = Koha::Patron::Images->find($borrower_number);
-                    warn sprintf('No image exists for borrower number %s.', $borrower_number) unless $patron_image;
+                    if ($patron_image) {
+                        $image_data->{'imagefile'} = $patron_image->imagefile;
+                    }
+                    else {
+                        warn sprintf('No image exists for borrower number %s.', $borrower_number);
+                    }
                     next PROCESS_IMAGES unless $patron_image;
                 }
                 elsif ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'creator_images') {
