@@ -589,8 +589,14 @@ function checkMultiHold() {
                     [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate | $KohaDates %][% ELSE %][% IF ( itemloo.reservedate ) %][% itemloo.reservedate %][% END %][% END %]. <a class="info" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber %]&amp;CancelBorrowerNumber=[% itemloo.ReservedForBorrowernumber %]&amp;CancelItemnumber=[% itemloo.itemnumber %]"  onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);">Cancel hold</a>
 
                     [% END %]
-                 [% ELSE %]
+                [% ELSE %]
                     Not on hold
+                [% END %]
+
+                [% IF itemloo.item_level_holds == "" %]
+                    <br/>Item level hold not allowed from OPAC
+                [% ELSIF itemloo.item_level_holds == "F" %]
+                    <br/>Item level hold forced from OPAC
                 [% END %]
                     </td>
                 </tr>

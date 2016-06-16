@@ -464,6 +464,8 @@ foreach my $biblionumber (@biblionumbers) {
             my $can_item_be_reserved = CanItemBeReserved( $borrowerinfo->{borrowernumber}, $itemnumber );
             $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
 
+            $item->{item_level_holds} = OPACItemHoldsAllowed( $item, $borrowerinfo );
+
             if (
                    !$item->{cantreserve}
                 && !$exceeded_maxreserves
