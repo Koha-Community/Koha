@@ -52,13 +52,13 @@ unless ($url) {
 }
 $url =~ s/\/*$//g;
 
-my $sitemaper = Koha::Sitemapper->new(
+my $sitemapper = Koha::Sitemapper->new(
     verbose => $verbose,
     url     => $url,
     dir     => $dir,
     short   => $short,
 );
-$sitemaper->run();
+$sitemapper->run();
 
 
 =head1 USAGE
