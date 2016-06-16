@@ -46,6 +46,13 @@ my $item_identifier;
 
 my $fee_acknowledged = 0;
 
+my $fee_type;
+my $payment_type;
+my $currency_type;
+my $fee_amount;
+my $fee_identifier;
+my $transaction_id;
+
 my $terminator = q{};
 
 my @messages;
@@ -65,6 +72,13 @@ GetOptions(
     "fa|fee-acknowledged" => \$fee_acknowledged,
 
     "s|summary=s" => \$summary,
+
+    "fee-type=s"       => \$fee_type,
+    "payment-type=s"   => \$payment_type,
+    "currency-type=s"  => \$currency_type,
+    "fee-amount=s"     => \$fee_amount,
+    "fee-identifier=s" => \$fee_identifier,
+    "transaction-id=s" => \$transaction_id,
 
     "t|terminator=s" => \$terminator,
 
@@ -216,6 +230,32 @@ my $handlers = {
             'terminal_password',
             'item_properties',
             'fee_acknowledged',
+        ],
+    },
+    fee_paid => {
+        name       => 'Fee Paid',
+        subroutine => \&build_fee_paid_command_message,
+        parameters => {
+            transaction_date  => $transaction_date,
+            fee_type          => $fee_type,
+            payment_type      => $payment_type,
+            currency_type     => $currency_type,
+            fee_amount        => $fee_amount,
+            institution_id    => $location_code,
+            patron_identifier => $patron_identifier,
+            terminal_password => $terminal_password,
+            patron_password   => $patron_password,
+            fee_identifier    => $fee_identifier,
+            transaction_id    => $transaction_id,
+        },
+        optional => [
+            'fee_type', # has default
+            'payment_type', # has default
+            'currency_type', #has default
+            'terminal_password',
+            'patron_password',
+            'fee_identifier',
+            'transaction_id',
         ],
     },
 };
@@ -457,6 +497,36 @@ sub build_renew_command_message {
       . build_field( FID_FEE_ACK,      $fee_acknowledged, { optional => 1 } );
 }
 
+sub build_fee_paid_command_message {
+    my ($params) = @_;
+
+    my $transaction_date  = $params->{transaction_date};
+    my $fee_type          = $params->{fee_type} || '01';
+    my $payment_type      = $params->{payment_type} || '00';
+    my $currency_type     = $params->{currency_type} || 'USD';
+    my $fee_amount        = $params->{fee_amount};
+    my $institution_id    = $params->{location_code};
+    my $patron_identifier = $params->{patron_identifier};
+    my $terminal_password = $params->{terminal_password};
+    my $patron_password   = $params->{patron_password};
+    my $fee_identifier    = $params->{fee_identifier};
+    my $transaction_id    = $params->{transaction_id};
+
+    return
+        FEE_PAID
+      . $transaction_date
+      . $fee_type
+      . $payment_type
+      . $currency_type
+      . build_field( FID_FEE_AMT,        $fee_amount )
+      . build_field( FID_INST_ID,        $institution_id )
+      . build_field( FID_PATRON_ID,      $patron_identifier )
+      . build_field( FID_TERMINAL_PWD,   $terminal_password, { optional => 1 } )
+      . build_field( FID_PATRON_PWD,     $patron_password, { optional => 1 } )
+      . build_field( FID_FEE_ID,         $fee_identifier, { optional => 1 } )
+      . build_field( FID_TRANSACTION_ID, $transaction_id, { optional => 1 } );
+}
+
 sub build_field {
     my ( $field_identifier, $value, $params ) = @_;
 
@@ -500,6 +570,13 @@ Options:
 
   -fa --fee-acknowledged Sends a confirmation of checkout fee
 
+  --fee-type        Fee type for Fee Paid message, defaults to '01'
+  --payment-type    Payment type for Fee Paid message, default to '00'
+  --currency-type   Currency type for Fee Paid message, defaults to 'USD'
+  --fee-amount      Fee amount for Fee Paid message, required
+  --fee-identifier  Fee identifier for Fee Paid message, optional
+  --transaction-id  Transaction id for Fee Paid message, optional
+
   -m --message     SIP2 message to execute
 
   Implemented Messages:
@@ -509,6 +586,6 @@ Options:
     checkout
     checkin
     renew
-
+    fee_paid
 /
 }
