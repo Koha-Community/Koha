@@ -21,10 +21,11 @@ use strict;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Koha::Account;
+use Koha::Account::Lines;
+
 use parent qw(C4::SIP::ILS::Transaction);
 
-
-our $debug   = 0;
+our $debug = 0;
 
 my %fields = ();
 
@@ -45,8 +46,26 @@ sub pay {
     my $borrowernumber = shift;
     my $amt            = shift;
     my $type           = shift;
+    my $fee_id         = shift;
+
     warn("RECORD:$borrowernumber::$amt");
-    Koha::Account->new( { patron_id => $borrowernumber } )->pay( { amount => $amt, sip => $type } );
+
+    my $account = Koha::Account->new( { patron_id => $borrowernumber } );
+
+    if ($fee_id) {
+        my $fee = Koha::Account::Lines->find($fee_id);
+        if ( $fee && $fee->amountoutstanding == $amt ) {
+            $account->pay( { amount => $amt, sip => $type, lines => [$fee] } );
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+    else {
+        $account->pay( { amount => $amt, sip => $type } );
+        return 1;
+    }
 }
 
 #sub DESTROY {

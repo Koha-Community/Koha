@@ -247,12 +247,10 @@ sub end_patron_session {
 }
 
 sub pay_fee {
-    my ($self, $patron_id, $patron_pwd, $fee_amt, $fee_type,
-	$pay_type, $fee_id, $trans_id, $currency) = @_;
+    my ($self, $patron_id, $patron_pwd, $fee_amt, $fee_type, $pay_type, $fee_id, $trans_id, $currency) = @_;
     my $trans;
 
     $trans = C4::SIP::ILS::Transaction::FeePayment->new();
-
 
     $trans->transaction_id($trans_id);
     my $patron;
@@ -261,8 +259,8 @@ sub pay_fee {
         $trans->screen_msg('Invalid patron barcode.');
         return $trans;
     }
-    $trans->pay($patron->{borrowernumber},$fee_amt, $pay_type);
-    $trans->ok(1);
+    my $ok =$trans->pay($patron->{borrowernumber},$fee_amt, $pay_type, $fee_id);
+    $trans->ok($ok);
 
     return $trans;
 }
