@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
 
 set -e
 
@@ -38,11 +40,11 @@ $scriptname
 This script lets you manage your Koha templates translations.
 
 Usage:
-$scriptname --list|-l [--available|-a]
-$scriptname --check|-c language_code
-$scriptname --install|-i language_code
-$scriptname --update|-u language_code
-$scriptname --remove|-r language_code
+$scriptname --list|-l [--available|-a]  [-d|--dev instance]
+$scriptname --check|-c language_code]   [-d|--dev instance]
+$scriptname --install|-i language_code] [-d|--dev instance]
+$scriptname --update|-u language_code]  [-d|--dev instance]
+$scriptname --remove|-r language_code]  [-d|--dev instance]
 $scriptname --help|-h
 
     -l | --list           List the installed or available (combined with -a)
@@ -54,6 +56,7 @@ $scriptname --help|-h
     -r | --remove         Remove the specified language translations
     -v | --verbose        Be more verbose on the translation process
     -h | --help           Display this help message
+    -d | --dev            Limit actions to a specific dev instance
 
 EOF
 }
@@ -80,8 +83,8 @@ print_available()
 
 print_installed()
 {
-    ( ls -1 $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/bootstrap/ ; \
-        ls -1 $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/prog/ 2> /dev/null ) | \
+    ( ls -1 $KOHA_HOME/$OPAC_TMPL/bootstrap/ ; \
+        ls -1 $KOHA_HOME/$OPAC_TMPL/prog/ 2> /dev/null ) | \
         sort | uniq | \
         grep -v -e images -e itemtypeimg -x -e en -e css -e js -e less -e lib
 }
@@ -107,7 +110,8 @@ install_lang()
             else
                 # Check po files are present
                 check_lang_po_files $lang
-                env PERL5LIB="$KOHA_LIB_DIR:$TRANSLATE_DIR" KOHA_CONF="$KOHA_CONF_FILE"\
+                env PERL5LIB="$PERL5LIB:$TRANSLATE_DIR" \
+                    KOHA_CONF="$KOHA_CONF" \
                     $PERL_CMD $TRANSLATE_DIR/translate install $translate_opts $lang
             fi
         else
@@ -153,10 +157,8 @@ remove_lang()
         fi
 
         if print_installed | grep -q $lang; then
-            rm -rf $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/prog/$lang
-            rm -rf $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/ccsr/$lang
-            rm -rf $KOHA_INSTALL_DIR/opac/htdocs/opac-tmpl/bootstrap/$lang
-            rm -rf $KOHA_INSTALL_DIR/intranet/htdocs/intranet-tmpl/prog/$lang
+            rm -rf $KOHA_HOME/$OPAC_TMPL/bootstrap/$lang
+            rm -rf $KOHA_HOME/$INTRANET_TMPL/prog/$lang
         else
             die "Error: the selected language is not installed."
         fi
@@ -198,21 +200,46 @@ set_action()
     fi
 }
 
-# Global PATH variables
-KOHA_INSTALL_DIR="/usr/share/koha"
-KOHA_LIB_DIR="/usr/share/koha/lib"
-KOHA_CONF_FILE="/etc/koha/koha-conf-site.xml.in"
-TRANSLATE_DIR="$KOHA_INSTALL_DIR/misc/translator"
-PO_DIR="$TRANSLATE_DIR/po"
-PERL_CMD=`which perl`
+set_dev()
+{
+    if echo $1 | egrep -q "^[^-]"; then
+        dev=$1
+    else
+        die "Error: dev parameter with wrong instance name"
+    fi
+}
+
+check_koha_conf()
+{
+    if [ "$dev" != "" ]; then
+        KOHA_CONF=/etc/koha/sites/$dev/koha-conf.xml
+    elif [ -z $KOHA_CONF ]; then
+        KOHA_CONF=/etc/koha/koha-conf-site.xml.in
+    fi
+}
+
+init_template_paths()
+{
+    # Template paths
+    if [ "$dev" = "" ]; then
+        OPAC_TMPL=opac/htdocs/opac-tmpl
+        INTRANET_TMPL=intranet/htdocs/intranet-tmpl
+    else
+        OPAC_TMPL=koha-tmpl/opac-tmpl
+        INTRANET_TMPL=koha-tmpl/intranet-tmpl
+    fi
+    TRANSLATE_DIR="$KOHA_HOME/misc/translator"
+    PO_DIR="$TRANSLATE_DIR/po"
+}
 
 # Control variables
 list_all=""
 op=""
 language=""
 verbose="no"
+dev=""
 
-# We accept at most 2 parameters
+# We accept at most 4 parameters
 [ $# -ge 1 ] && [ $# -le 4 ] || ( usage ; die "Error: wrong parameters" )
 
 # Read parameters
@@ -243,6 +270,13 @@ while [ $# -gt 0 ]; do
         -v|--verbose)
             verbose="yes"
             shift ;;
+        -d|--dev)
+            if [ $# -lt 2 ]; then
+                die "Error: dev parameter without instance"
+            fi
+            shift
+            set_dev $1
+            shift ;;
         -*)
             usage
             die "Error: unknown parameter $1." ;;
@@ -252,6 +286,11 @@ while [ $# -gt 0 ]; do
     esac
 
 done
+
+if [ "$dev" != "" ]; then adjust_paths_dev_install $dev; fi
+check_koha_conf
+init_template_paths
+PERL_CMD=`which perl`
 
 # Process the requested actions
 case $op in
