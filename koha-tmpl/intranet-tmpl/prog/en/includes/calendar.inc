@@ -125,6 +125,39 @@ jQuery(function($){
     $.datepicker.setDefaults($.datepicker.regional['']);
 });
 
+/*  jQuery Validator plugin custom method
+    This allows you to check that a given date falls after another.
+    It is required that a message be defined.
+
+   Syntax:
+       $("#form_id").validate({
+        rules: {
+            input_name_of_later_date_field: {
+                is_date_after: "#input_id_of_earlier_date_field"
+            },
+        },
+        messages: {
+            input_name_of_later_date_field: {
+                is_date_after: _("Validation error to be shown, i.e. End date must come after start date")
+            }
+        }
+    });
+*/
+
+jQuery.validator.addMethod("is_date_after",
+function(value, element, params) {
+    var from = Date_from_syspref( $(params).val() );
+    var to = Date_from_syspref(value);
+    return to > from;
+});
+
+jQuery.validator.addMethod("date_on_or_after",
+function(value, element, params) {
+    var from = Date_from_syspref( $(params).val() );
+    var to = Date_from_syspref(value);
+    return to >= from;
+});
+
 $(document).ready(function(){
 
 $.datepicker.setDefaults({
