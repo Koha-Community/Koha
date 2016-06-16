@@ -244,7 +244,7 @@ function confirm_deletion() {
 </div>
 <div class="yui-u">
 <div id="cataloguing_additem_newitem">
-    <form id="f" method="post" action="/cgi-bin/koha/cataloguing/additem.pl" name="f">
+    <form id="f" method="post" action="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber | html %]" name="f">
     <input type="hidden" name="op" value="[% op | html %]" />
     [% IF (popup) %]
         <input type="hidden" name="popup" value="1" />
