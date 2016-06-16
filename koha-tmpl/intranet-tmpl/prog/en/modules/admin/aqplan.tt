@@ -5,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; Planning for [% budget_period_description | html %] by [% authcat | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css">td.locked { background-image: url('[% interface | html %]/[% theme | html %]/img/locked.png'); padding-left : 20px; background-repeat: no-repeat; background-position: 5px 5px; } a.control { font-size:85%;text-decoration:none; }</style>
+<style>td.locked { background-image: url('[% interface | html %]/[% theme | html %]/img/locked.png'); padding-left : 20px; background-repeat: no-repeat; background-position: 5px 5px; } a.control { font-size:85%;text-decoration:none; } .plan_entry { text-align: right; width:90%; }</style>
 </head>
 
 <body id="admin_aqplan" class="admin">
@@ -99,7 +99,7 @@
                     [% line.estimated_amount | html %]&nbsp;
                     <input type="hidden" style="text-align: right;"  name="[% line.cell_name | html %]" value="[% line.estimated_amount | html %]"   />
                 [% ELSE %]
-                    <input type="text" style="text-align: right;  width:90%; " size="6" name="[% line.cell_name | html %]"  value="[% line.estimated_amount | html %]"  id="budget_[% line.budget_id | html %][% line.colnum | html %]" class="plan_entry_[% line.budget_id | html %]" onchange="calcTotalRow(this);" />
+                    <input type="text" size="6" name="[% line.cell_name | html %]"  value="[% line.estimated_amount | html %]"  id="budget_[% line.budget_id | html %][% line.colnum | html %]" class="plan_entry plan_entry_[% line.budget_id | html %]" />
                 [% END %]
 
                 </td></tr>
@@ -137,7 +137,7 @@
 
         <td>
              [% UNLESS ( budget_line.budget_lock ) %]
-                    <input type="button"  onclick="autoFillRow('[% budget_line.budget_id | html %]')" value="Auto-fill row"/>
+                    <input type="button" class="auto_fill_row" data-budget-id="[% budget_line.budget_id | html %]" value="Auto-fill row"/>
             [% ELSE %]
              <div style="color:red;">not owned</div>
             [% END %]
@@ -151,7 +151,7 @@
     [% IF ( budget_period_locked ) %]
         <!-- <input STYLE="background: gray;"   type="submit" value="Save" disabled="disabled"/> -->
     [% ELSE %]
-        <fieldset class="action"><input type="button"  onclick="Check(this.form)" value="Save"/></fieldset>
+        <fieldset class="action"><input type="submit" value="Save"/></fieldset>
     [% END %]
 
 
@@ -276,41 +276,10 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% Asset.js("js/acq.js") | $raw %]
     <script>
-    //<![CDATA[
-        function Check(f) {
-                var ok=1;
-                var _alertString="";
-                var alertString2;
-                var arr = document.getElementsByName('est_total')
-
-                for ( var i=0, len=arr.length; i<len; ++i ){
-                        var tot = arr[i].innerHTML;
-
-                        if (tot == 'NaN') {
-                            _alertString += "\n- " + _("One or more cell values is non-numeric");
-                        }
-                }
-
-                if (_alertString.length==0) {
-
-                    var op  = document.createElement('input');
-                    op.setAttribute("type","hidden");
-                    op.setAttribute("name","op");
-                    op.setAttribute("value","save");   //ohh the pain...
-
-                    document.Aform.appendChild(op);
-                    document.Aform.submit()
-
-                } else {
-                        alertString2  = _("Form not submitted because of the following problem(s)");
-                        alertString2 += "\n------------------------------------------------------------------------------------\n";
-                        alertString2 += _alertString;
-                        alert(alertString2);
-                }
-        }
+        jQuery.validator.addClassRules({ plan_entry: { pnumber: true } }); // require that input be a number in fields with the class 'plan_entry'
+        jQuery.validator.addMethod("pnumber", $.validator.methods.number, _("Please enter a valid number.") );
         $(document).ready(function() {
             $("#selections input").on("change",function(e){
                 var num = $(this).attr("id");
@@ -328,8 +297,15 @@
                     }
                 }
             });
+            $(".plan_entry").on("change",function(){
+                calcTotalRow( this );
+            });
+            $("#Aform").validate();
+            $(".auto_fill_row").on("click",function(){
+                var budget_id = $(this).data("budget-id");
+                autoFillRow( budget_id );
+            });
         });
-    //]]>
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

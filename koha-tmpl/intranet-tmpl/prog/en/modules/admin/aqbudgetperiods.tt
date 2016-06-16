@@ -119,13 +119,13 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-[% UNLESS close_form OR closed%]
+[% UNLESS close_form OR closed OR duplicate_form %]
   [% INCLUDE 'budgets-admin-toolbar.inc' %]
 [% END %]
 
 [% IF ( duplicate_form ) %]
 <h3>Duplicate budget</h3>
-<form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post">
+<form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
     <fieldset class="rows">
     <input type="hidden" name="op" value="duplicate_budget" />
     <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
@@ -135,18 +135,21 @@
     <li>
     <label class="required" for="from">Start date: </label>
     <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate | $KohaDates %]" class="datepickerfrom" />
-				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+        <span class="required">Required</span>
+        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li>
 
     <label class="required" for="to">End date: </label>
     <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate | $KohaDates %]" class="datepickerto" />
-				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+        <span class="required">Required</span>
+        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 
     <li>
     <label class="required" for="budget_period_description">Description</label>
     <input type="text" id="budget_period_description" name="budget_period_description" value="[% budgetperiod.budget_period_description | html %]" />
+        <span class="required">Required</span>
     </li>
 
     <li>
@@ -175,7 +178,8 @@
     </fieldset>
 
     <fieldset class="action">
-        <input type="button" value="Save Changes"  onclick="CheckDuplicateForm(this.form)" /> <a class="cancel" href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | html %]">Cancel</a>
+        <input type="submit" value="Save" />
+        <a class="cancel" href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | html %]">Cancel</a>
     </fieldset>
 
 </form>
@@ -190,7 +194,7 @@
     [% ELSE %]
         <h3>Add budget</h3>
 	[% END %]
-<form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post">
+<form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" id="add_modify_budget" name="f" method="post">
     <fieldset class="rows">
     <!-- ################################################################################# -->
     <!-- display information about the budget period that must be added or modified -->
@@ -201,13 +205,15 @@
     <li>
     <label class="required" for="from">Start date: </label>
     <input type="text" size="10" id="from" name="budget_period_startdate" value="[% budget_period_startdate | $KohaDates %]" class="datepickerfrom" />
-				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+        <span class="required">Required</span>
+        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
     <li>
 
     <label class="required" for="to">End date: </label>
     <input type="text" size="10" id="to" name="budget_period_enddate" value="[% budget_period_enddate | $KohaDates %]" class="datepickerto" />
-				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+        <span class="required">Required</span>
+        <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
 
     <li>
@@ -216,6 +222,7 @@
         <label class="required" for="budget_period_description">Description: </label>
         <input type="text" id="budget_period_description" name="budget_period_description"
         size="48" maxlength="80" value="[% budget_period_description | html %]" />
+            <span class="required">Required</span>
     </li>
 
     <li>
@@ -245,8 +252,7 @@
     <fieldset class="action">
         <!-- "save changes" button -->
         <!-- ###################################### -->
-        <input type="button" value="Save"  onclick="Check(this.form)" />
-        <!--             <input type="submit" value="Save Changes"  />  -->
+        <input type="submit" value="Save" />
         [% IF ( budget_period_id ) %]
             <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | html %]" class="cancel">Cancel</a>
         [% ELSE %]
@@ -504,70 +510,6 @@
     [% END %]
     [% Asset.js("js/acq.js") | $raw %]
     <script>
-    // #################################################################################
-    // Javascript
-    // #################################################################################
-        function CheckDuplicateForm(f){
-            var ok=1;
-            var _alertString="";
-            var alertString="";
-            if(!(isNotNull(f.budget_period_startdate,1))){
-              _alertString += "\n- " + _("Start date missing");
-            }
-            if (!(isNotNull(f.budget_period_enddate,1))){
-              _alertString += "\n- " + _("End date missing");
-            }
-            if( f.budget_period_startdate > f.budget_period_enddate ) {
-              _alertString += "\n- " + _("Start date must be before end date");
-            }
-            if (!(isNotNull(f.budget_period_description,1))){
-              _alertString += "\n- " + _("Budget description missing");
-            }
-
-            if(_alertString.length==0){
-              f.submit();
-            } else {
-              alertString += _("Form not submitted because of the following problem(s)");
-              alertString += "\n-----------------------------------------\n";
-              alertString += _alertString;
-              alert(alertString);
-            }
-        }
-        function Check(f) {
-            var ok=1;
-            var _alertString="";
-            var alertString2;
-
-            if (!(isNotNull(f.budget_period_startdate,1))) {
-                    _alertString += "\n- " + _("Start date missing");
-            }
-
-            if (!(isNotNull(f.budget_period_enddate,1))) {
-                    _alertString += "\n- " + _("End date missing");
-            }
-
-            if ( f.budget_period_startdate >   f.budget_period_enddate )  {
-                    _alertString += "\n- " + _("Start date must be before end date");
-            }
-
-            if (!(isNotNull(f.budget_period_description,1))) {
-                    _alertString += "\n- " + _("Description missing");
-            }
-
-            if (!(isNum(f.budget_period_total))) {
-                    _alertString += "\n- " + _("Amount must be a valid number, or empty");
-            }
-
-            if (_alertString.length==0) {
-                    f.submit();
-            } else {
-                    alertString2  = _("Form not submitted because of the following problem(s)");
-                    alertString2 += "\n------------------------------------------------------------------------------------\n";
-                    alertString2 += _alertString;
-                    alert(alertString2);
-            }
-        }
-
         $(document).ready(function() {
             var tabs = $('#budgetsTabs').tabs();
             [% IF ( tab ) %]
@@ -633,6 +575,24 @@
                 "sPaginationType": "full_numbers"
               }));
             [% END %]
+            $("#add_modify_budget").validate({
+                rules: {
+                    budget_period_startdate: "required",
+                    budget_period_enddate: {
+                        required: true,
+                        date_on_or_after: "#from"
+                    },
+                    budget_period_description: "required",
+                    budget_period_total: {
+                        number: true
+                    }
+                },
+                messages: {
+                    budget_period_enddate: {
+                        date_on_or_after: _("Budget end date must be on or after budget start date")
+                    }
+                }
+            });
         });
     </script>
 [% END %]

@@ -59,7 +59,7 @@
 [% END %]
 
                 [% IF ( add_form ) %]
-                    <form name="Aform" action="[% script_name | html %]" method="post">
+                    <form name="Aform" action="/cgi-bin/koha/admin/aqcontract.pl" id="add_modify_contract" method="post">
                         <input type="hidden" name="op" value="add_validate" />
                         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                         <input type="hidden" name="checked" value="0" />
@@ -76,24 +76,27 @@
                                             <input type="hidden" name="is_a_modif" value="1" />
                                         </li>
                                 [% END %]
-                                <li><label for="contractname" class="required">Name: *</label> &nbsp;
+                                <li><label for="contractname" class="required">Name:</label> &nbsp;
                                         <input type="text" name="contractname" id="contractname" size="40" maxlength="80" value="[% contractname | html %]" />
+                                        <span class="required">Required</span>
                                 </li>
                                 <li><label for="contractdescription">Description: </label> &nbsp;
                                         <input type="text" name="contractdescription" id="contractdescription" size="40" maxlength="80" value="[% contractdescription | html %]" />
                                 </li>
-                                <li><label for="from" class="required">Start date: *</label> &nbsp;
+                                <li><label for="from" class="required">Start date:</label> &nbsp;
                                         <input type="text" name="contractstartdate" id="from" value="[% contractstartdate | $KohaDates %]" maxlength="10" size="10" class="datepickerfrom" />
-				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                                        <span class="required">Required</span>
+                                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                 </li>
-                                <li><label for="to" class="required">End date: *</label> &nbsp;
+                                <li><label for="to" class="required">End date:</label> &nbsp;
                                         <input type="text" name="contractenddate" id="to" value="[% contractenddate | $KohaDates %]" maxlength="10"  size="10" class="datepickerto" />
-				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                                        <span class="required">Required</span>
+                                    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                                 </li>
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <input type="button" value="Save" onclick="Check(this.form);" /> <a class="cancel" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | html %]&amp;contractnumber=[% contractnumber | html %]">Cancel</a>
+                            <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | html %]&amp;contractnumber=[% contractnumber | html %]">Cancel</a>
                         </fieldset>
                     </form>
             [% END %]
@@ -184,43 +187,23 @@
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/acq.js") | $raw %]
     <script>
-    //<![CDATA[
-    // to check if the data are correctly entered.
-    function Check(ff) {
-        var ok=0;
-        var _alertString=_("Form not submitted because of the following problem(s)");
-        _alertString +="\n-------------------------------------------------------------------\n\n";
-        if (!(isNotNull(ff.contractname,0))){
-            ok=1;
-            _alertString += _("- Name missing") + "\n";
-        }
-        var startDate = Date_from_syspref($("#from").val());
-        var endDate   = Date_from_syspref($("#to").val());
-        if (!parseInt(startDate.getTime())) {
-            ok=1;
-            _alertString += _("- Start date missing or invalid.") + "\n";
-        }
-        if (!parseInt(endDate.getTime())) {
-            ok=1;
-            _alertString += _("- End date missing or invalid.") + "\n";
-        }
-
-        if (startDate > endDate) {
-            ok=1;
-            _alertString += _("Wrong date! start date cannot be after end date.") + "\n";
-        }
-        if (endDate < (new Date)) {
-            ok=1;
-            _alertString += _("End date before today, Invalid end date!") + "\n";
-        }
-        if (ok) { // if there is a problem
-            alert(_alertString);
-        return false;
-    }
-    // if all is good
-        ff.submit();
-    }
-    //]]>
+        $(document).ready(function(){
+            $("#add_modify_contract").validate({
+                rules: {
+                    contractstartdate: "required",
+                    contractname: "required",
+                    contractenddate: {
+                        required: true,
+                        date_on_or_after: "#from"
+                    }
+                },
+                messages: {
+                    contractenddate: {
+                        date_on_or_after: _("Contract end date must be on or after contract start date")
+                    }
+                }
+            });
+        });
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
