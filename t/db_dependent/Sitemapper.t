@@ -73,13 +73,13 @@ my $data = [
 ];
 fixtures($data);
 # Create a sitemap for a catalog containg 2 biblios, with option 'long url'
-my $sitemaper = Koha::Sitemapper->new(
+my $sitemapper = Koha::Sitemapper->new(
     verbose => 0,
     url     => 'http://www.mylibrary.org',
     dir     => $dir,
     short   => 0,
 );
-$sitemaper->run();
+$sitemapper->run();
 
 my $file = "$dir/sitemapindex.xml";
 ok( -e "$dir/sitemapindex.xml", "File sitemapindex.xml created");
@@ -120,13 +120,13 @@ is( $file_content, $expected_content, "Its content is valid" );
 
 # Create a sitemap for a catalog containg 2 biblios, with option 'short url'.
 # Test that 2 files are created.
-$sitemaper = Koha::Sitemapper->new(
+$sitemapper = Koha::Sitemapper->new(
     verbose => 0,
     url     => 'http://www.mylibrary.org',
     dir     => $dir,
     short   => 1,
 );
-$sitemaper->run();
+$sitemapper->run();
 
 $file = "$dir/sitemap0001.xml";
 ok( -e $file, "File sitemap0001.xml with short URLs created");
@@ -154,13 +154,13 @@ is( $file_content, $expected_content, "Its content is valid" );
 $data = [];
 push @$data, [ $_, '2015-08-31', '2015-08-31'] for 3..75000;
 fixtures($data);
-$sitemaper = Koha::Sitemapper->new(
+$sitemapper = Koha::Sitemapper->new(
     verbose => 0,
     url     => 'http://www.mylibrary.org',
     dir     => $dir,
     short   => 1,
 );
-$sitemaper->run();
+$sitemapper->run();
 
 $file = "$dir/sitemapindex.xml";
 ok( -e "$dir/sitemapindex.xml", "File sitemapindex.xml for 75000 bibs created");
