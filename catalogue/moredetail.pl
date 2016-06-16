@@ -40,7 +40,6 @@ use Koha::DateUtils;
 
 my $query=new CGI;
 
-# if its a subject we need to use the subject.tt
 my ($template, $loggedinuser, $cookie) = get_template_and_user(
     {
         template_name   => 'catalogue/moredetail.tt',
