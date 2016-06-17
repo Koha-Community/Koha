@@ -364,7 +364,8 @@ function CheckRuleForm(f) {
   [% ELSE %]<p id="addMatchCheck" style="display:none;"><a href="#" class="button" onclick="InsertMatchcheck('mc_1', 'mc_template'); return false;">Add match check</a></p>[% END %]
   [% IF ( edit_matching_rule ) %]
   [% FOREACH matchcheck IN matchchecks %]
-  <fieldset class="rows" id="mc_[% matchcheck.mc_num %]">
+  <div id="mc_[% matchcheck.mc_num %]" class="matchgroup">
+  <fieldset class="rows">
     <legend>Match check [% matchcheck.mc_num %]<a href="#" class="button" onclick="InsertMatchcheck('mc_[% matchcheck.mc_num %]', 'mc_template'); return false;">Add match check</a> | <a href="#" class="button" onclick="DeleteMatchcheck(this); return false;">Remove this match check</a></legend>
     <input type="hidden" id="mc_[% matchcheck.mc_num %]_id" name="mc_[% matchcheck.mc_num %]_id" value="1" />
       [% FOREACH src_component IN matchcheck.src_components %]
@@ -456,6 +457,8 @@ function CheckRuleForm(f) {
       </fieldset>
       [% END %]
   </fieldset>
+  <br style="clear:both;" />
+  </div>
   [% END %]
   [% ELSE %]
   <div id="mc_1" class="matchgroup">
