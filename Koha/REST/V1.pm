@@ -20,6 +20,10 @@ use Mojo::Base 'Mojolicious';
 
 use C4::Auth qw( check_cookie_auth get_session haspermission );
 use C4::Context;
+use Koha::Account::Lines;
+use Koha::Issues;
+use Koha::Holds;
+use Koha::OldIssues;
 use Koha::Patrons;
 
 sub startup {
@@ -68,30 +72,173 @@ sub authenticate_api_request {
             { error => "Authentication failure." },
             {},
             401
-        ) if $cookie and $action_spec->{'x-koha-permission'};
+        ) if $cookie and $action_spec->{'x-koha-authorization'};
     }
 
-    if ($action_spec->{'x-koha-permission'}) {
-        return $c->render_swagger(
-            { error => "Authentication required." },
-            {},
-            401
-        ) unless $user;
+    return $next->($c) unless $action_spec->{'x-koha-authorization'};
+    unless ($user) {
+        return $c->render_swagger({ error => "Authentication required." },{},401);
+    }
 
-        if (C4::Auth::haspermission($user->userid, $action_spec->{'x-koha-permission'})) {
-            return $next->($c);
-        }
-        else {
-            return $c->render_swagger(
-                { error => "Authorization failure. Missing required permission(s)." },
-                {},
-                403
-            );
+    my $authorization = $action_spec->{'x-koha-authorization'};
+    return $next->($c) if allow_owner($c, $authorization, $user);
+    return $next->($c) if allow_guarantor($c, $authorization, $user);
+
+    my $permissions = $authorization->{'permissions'};
+    return $next->($c) if C4::Auth::haspermission($user->userid, $permissions);
+    return $c->render_swagger(
+        { error => "Authorization failure. Missing required permission(s)." },
+        {},
+        403
+    );
+}
+
+=head3 allow_owner
+
+Allows access to object for its owner.
+
+There are endpoints that should allow access for the object owner even if they
+do not have the required permission, e.g. access an own reserve. This can be
+achieved by defining the operation as follows:
+
+"/holds/{reserve_id}": {
+    "get": {
+        ...,
+        "x-koha-authorization": {
+            "allow-owner": true,
+            "permissions": {
+                "borrowers": "1"
+            }
         }
     }
-    else {
-        return $next->($c);
+}
+
+=cut
+
+sub allow_owner {
+    my ($c, $authorization, $user) = @_;
+
+    return unless $authorization->{'allow-owner'};
+
+    return check_object_ownership($c, $user) if $user and $c;
+}
+
+=head3 allow_guarantor
+
+Same as "allow_owner", but checks if the object is owned by one of C<$user>'s
+guarantees.
+
+=cut
+
+sub allow_guarantor {
+    my ($c, $authorization, $user) = @_;
+
+    if (!$c || !$user || !$authorization || !$authorization->{'allow-guarantor'}){
+        return;
     }
+
+    my $guarantees = $user->guarantees->as_list;
+    foreach my $guarantee (@{$guarantees}) {
+        return 1 if check_object_ownership($c, $guarantee);
+    }
+}
+
+=head3 check_object_ownership
+
+Determines ownership of an object from request parameters.
+
+As introducing an endpoint that allows access for object's owner; if the
+parameter that will be used to determine ownership is not already inside
+$parameters, add a new subroutine that checks the ownership and extend
+$parameters to contain a key with parameter_name and a value of a subref to
+the subroutine that you created.
+
+=cut
+
+sub check_object_ownership {
+    my ($c, $user) = @_;
+
+    return if not $c or not $user;
+
+    my $parameters = {
+        accountlines_id => \&_object_ownership_by_accountlines_id,
+        borrowernumber  => \&_object_ownership_by_borrowernumber,
+        checkout_id     => \&_object_ownership_by_checkout_id,
+        reserve_id      => \&_object_ownership_by_reserve_id,
+    };
+
+    foreach my $param (keys $parameters) {
+        my $check_ownership = $parameters->{$param};
+        if ($c->stash($param)) {
+            return &$check_ownership($c, $user, $c->stash($param));
+        }
+        elsif ($c->param($param)) {
+            return &$check_ownership($c, $user, $c->param($param));
+        }
+        elsif ($c->req->json && $c->req->json->{$param}) {
+            return 1 if &$check_ownership($c, $user, $c->req->json->{$param});
+        }
+    }
+}
+
+=head3 _object_ownership_by_accountlines_id
+
+Finds a Koha::Account::Line-object by C<$accountlines_id> and checks if it
+belongs to C<$user>.
+
+=cut
+
+sub _object_ownership_by_accountlines_id {
+    my ($c, $user, $accountlines_id) = @_;
+
+    my $accountline = Koha::Account::Lines->find($accountlines_id);
+    return $accountline && $user->borrowernumber == $accountline->borrowernumber;
+}
+
+=head3 _object_ownership_by_borrowernumber
+
+Compares C<$borrowernumber> to currently logged in C<$user>.
+
+=cut
+
+sub _object_ownership_by_borrowernumber {
+    my ($c, $user, $borrowernumber) = @_;
+
+    return $user->borrowernumber == $borrowernumber;
+}
+
+=head3 _object_ownership_by_checkout_id
+
+First, attempts to find a Koha::Issue-object by C<$issue_id>. If we find one,
+compare its borrowernumber to currently logged in C<$user>. However, if an issue
+is not found, attempt to find a Koha::OldIssue-object instead and compare its
+borrowernumber to currently logged in C<$user>.
+
+=cut
+
+sub _object_ownership_by_checkout_id {
+    my ($c, $user, $issue_id) = @_;
+
+    my $issue = Koha::Issues->find($issue_id);
+    $issue = Koha::OldIssues->find($issue_id) unless $issue;
+    return $issue && $issue->borrowernumber
+            && $user->borrowernumber == $issue->borrowernumber;
+}
+
+=head3 _object_ownership_by_reserve_id
+
+Finds a Koha::Hold-object by C<$reserve_id> and checks if it
+belongs to C<$user>.
+
+TODO: Also compare against old_reserves
+
+=cut
+
+sub _object_ownership_by_reserve_id {
+    my ($c, $user, $reserve_id) = @_;
+
+    my $reserve = Koha::Holds->find($reserve_id);
+    return $reserve && $user->borrowernumber == $reserve->borrowernumber;
 }
 
 1;
