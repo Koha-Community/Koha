@@ -8,7 +8,7 @@ INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
 VALUES( 'RefundLostOnReturnControl',
         'CheckinLibrary',
         'If a lost item is returned, choose which branch to pick rules for refunding.',
-        'CheckinLibrary|PatronLibrary|ItemHomeBranch|ItemHoldingbranch',
+        'CheckinLibrary|PatronLibrary|ItemHomeBranch|ItemHoldingBranch',
         'Choice');
 
 INSERT INTO refund_lost_item_fee_rules (branchcode,refund)
