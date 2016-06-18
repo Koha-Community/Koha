@@ -29,17 +29,6 @@ use C4::Context;
 use Koha::Cache::Memory::Lite;
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
-eval {
-    if (C4::Context->ismemcached) {
-        require Memoize::Memcached;
-        import Memoize::Memcached qw(memoize_memcached);
-
-        memoize_memcached('getTranslatedLanguages', memcached => C4::Context->memcached);
-        memoize_memcached('getFrameworkLanguages' , memcached => C4::Context->memcached);
-        memoize_memcached('getAllLanguages',        memcached => C4::Context->memcached);
-    }
-};
-
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
