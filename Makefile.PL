@@ -1070,7 +1070,7 @@ PazPar2 port?);
     }
 
   $msg = q(
-Use memcached and memoize to cache the results of some function calls?
+Use memcached to cache the results of some function calls?
 This provides a signficant performance improvement.
 You will need a Memcached server running.);
   $msg .= _add_valid_values_disp('USE_MEMCACHED', $valid_values);
