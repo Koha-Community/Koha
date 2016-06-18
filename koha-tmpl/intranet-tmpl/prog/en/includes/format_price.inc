@@ -7,12 +7,19 @@
             decimal_point: ',',
             decimal_digits: 2
         };
+    [% ELSIF Koha.Preference("CurrencyFormat") == 'CH' %]
+        var default_value = {
+            thousands_sep: '\'',
+            decimal_point: '.',
+            decimal_digits: 2
+        };
     [% ELSE %]
         var default_value = {
             thousands_sep: ',',
             decimal_point: '.',
             decimal_digits: 2
         };
+
     [% END %]
     Number.prototype.format_price = function( value, params ) {
         params = params == undefined ? {} : params;
