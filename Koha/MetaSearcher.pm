@@ -172,7 +172,7 @@ sub search {
                     hits => $result->{hits},
                     num_fetched => $result->{num_fetched},
                     num_hits => $result->{num_hits},
-                }, $resultset_expiry );
+                }, { expiry => $resultset_expiry } );
             }
         }
     }

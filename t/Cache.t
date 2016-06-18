@@ -54,16 +54,16 @@ SKIP: {
     }
 
     # test expiry time in cache
-    $cache->set_in_cache( "timeout", "I AM DATA", 1 ); # expiry time of 1 second
+    $cache->set_in_cache( "timeout", "I AM DATA", { expiry => 1 } ); # expiry time of 1 second
     sleep 2;
     $cache->flush_L1_cache();
     is( $cache->get_from_cache("timeout"),
         undef, "fetching expired item from cache" );
 
     # test fetching a valid, non expired, item from cache
-    $cache->set_in_cache( "clear_me", "I AM MORE DATA", 1000 )
+    $cache->set_in_cache( "clear_me", "I AM MORE DATA", { expiry => 1000 } )
       ;    # overly large expiry time, clear below
-    $cache->set_in_cache( "dont_clear_me", "I AM MORE DATA22", 1000 )
+    $cache->set_in_cache( "dont_clear_me", "I AM MORE DATA22", { expiry => 1000 } )
       ;    # overly large expiry time, clear below
     is(
         $cache->get_from_cache("clear_me"),

@@ -244,14 +244,9 @@ instance of C<Cache::*> and follow the same interface as L<Cache::Memcache>.
 =cut
 
 sub set_in_cache {
-    my ( $self, $key, $value, $options, $_cache) = @_;
-    # This is a bit of a hack to support the old API in case things still use it
-    if (defined $options && (ref($options) ne 'HASH')) {
-        my $new_options;
-        $new_options->{expiry} = $options;
-        $new_options->{cache} = $_cache if defined $_cache;
-        $options = $new_options;
-    }
+    my ( $self, $key, $value, $options ) = @_;
+
+    my $unsafe = $options->{unsafe} || 0;
 
     # the key mustn't contain whitespace (or control characters) for memcache
     # but shouldn't be any harm in applying it globally.

@@ -125,7 +125,7 @@ sub single_holidays {
             $single_holidays->{$br} = \@ymd_arr;
         }    # br
         $cache->set_in_cache( 'single_holidays', $single_holidays,
-            76800 )    #24 hrs ;
+            { expiry => 76800 } )    #24 hrs ;
     }
     my $holidays  = ( $single_holidays->{$branchcode} );
     for my $hols  (@$holidays ) {
