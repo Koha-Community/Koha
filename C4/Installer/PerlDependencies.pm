@@ -252,11 +252,6 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.98'
     },
-    'Memoize::Memcached' => {
-        'usage'    => 'Memcached Feature (Experimental)',
-        'required' => '0',
-        'min_ver'  => '0.03'
-    },
     'Cache::Memcached::Fast' => {
         'usage'    => 'Caching',
         'required' => '0',
