@@ -105,6 +105,19 @@ sub _format_params {
         );
     }
 
+    if ( $currency_format eq 'CH' ) {
+        $int_curr_symbol = $currency->symbol if $with_symbol;
+        %format_params = (
+            decimal_fill      => '2',
+            decimal_point     => '.',
+            int_curr_symbol   => $int_curr_symbol,
+            mon_thousands_sep => '\'',
+            thousands_sep     => '\'',
+            mon_decimal_point => '.'
+        );
+    }
+
+
     $format_params{p_cs_precedes}  = $p_cs_precedes  if defined $p_cs_precedes;
     $format_params{p_sep_by_space} = ( $int_curr_symbol and defined $p_sep_by_space ) ? $p_sep_by_space : 0;
 
