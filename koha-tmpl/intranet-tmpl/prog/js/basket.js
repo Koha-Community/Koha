@@ -454,23 +454,16 @@ function hideCart(){
     $("#cartDetails").fadeOut("fast");
 }
 
-function updateLink(val,op,target){
-    if(target){
-        if(op == "add"){
-            target.$("#cart"+val).html(MSG_ITEM_IN_CART).addClass("incart");
-            target.$("#cartR"+val).show();
-        } else {
-            target.$("#cart"+val).html(MSG_ITEM_NOT_IN_CART).removeClass("incart").addClass("addtocart");
-            target.$("#cartR"+val).hide();
-        }
+function updateLink(val, op, target){
+    var cart = target ? target.$("#cart" + val) : $("#cart" + val);
+    var cartR = target ? target.$("#cartR" + val) : $("#cartR" + val);
+
+    if(op == "add"){
+        cart.html(MSG_ITEM_IN_CART).addClass("incart");
+        cartR.show();
     } else {
-        if(op == "add"){
-            $("#cart"+val).html(MSG_ITEM_IN_CART).addClass("incart");
-            $("#cartR"+val).show();
-        } else {
-            $("#cart"+val).html(MSG_ITEM_NOT_IN_CART).removeClass("incart").addClass("addtocart");
-            $("#cartR"+val).hide();
-        }
+        cart.html(MSG_ITEM_NOT_IN_CART).removeClass("incart").addClass("addtocart");
+        cartR.hide();
     }
 }
 
