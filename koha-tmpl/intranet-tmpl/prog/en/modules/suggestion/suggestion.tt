@@ -785,7 +785,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                         [% IF ( budgetid_loo.selected ) %] <option value="[% budgetid_loo.code %]" selected="selected">[% budgetid_loo.desc %]</option>[% ELSE %]<option value="[% budgetid_loo.code %]">[% budgetid_loo.desc %]</option>[% END %]
                         [% END %]
                     </select></li>
-                    <li><label for="branchcode"> For:</label>
+                    <li><label for="branchcode">Library:</label>
                     <select name="branchcode" id="branchcode">
                         <option value="__ANY__">Any</option>[% FOREACH branchloo IN branchloop %]
                             [% IF ( branchloo.selected ) %] <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %] <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
