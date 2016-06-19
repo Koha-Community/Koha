@@ -1,7 +1,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Circulation &rsaquo; Transfers to your library</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Transfers to receive</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
@@ -27,7 +27,7 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>  &rsaquo; Transfers to your library</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>  &rsaquo; Transfers to receive</div>
 
 <div id="doc" class="yui-t7">
 
@@ -35,7 +35,7 @@ $(document).ready(function() {
 	<div id="yui-main">
 	<div class="yui-g">
 
-	<h1>Transfers made to your library as of [% show_date %]</h1>
+        <h1>Transfers made to your library as of [% show_date | $KohaDates %]</h1>
 	[% IF ( branchesloop ) %]
         <p>Your library is the destination for the following transfer(s)</p>
 		[% IF ( latetransfers ) %]<p>Transfers are <span class="error">considered late</span> after [% TransfersMaxDaysWarning %] days.</p>[% END %]
