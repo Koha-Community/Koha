@@ -619,7 +619,7 @@
                                                         Suspended [% IF ( RESERVE.suspend_until ) %] until [% RESERVE.suspend_until %] [% END %]
                                                     [% ELSE %]
                                                         [% IF RESERVE.itemtype %]
-                                                            Pending for next available <i>[% ItemTypes.GetDescription( RESERVE.itemtype ) %]</i> item
+                                                            Pending for next available item of item type '[% ItemTypes.GetDescription( RESERVE.itemtype ) %]'
                                                         [% ELSE %]
                                                             Pending
                                                         [% END %]
