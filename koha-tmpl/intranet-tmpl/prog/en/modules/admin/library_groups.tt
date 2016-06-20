@@ -1,3 +1,4 @@
+[% USE KohaSpan %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Library groups</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -94,17 +95,17 @@
 [% IF added %]
     <div class="dialog message group-added">
         [% IF added.branchcode %]
-            <i>[% added.library.branchname %]</i> added to group.
+            [% added.library.branchname | $KohaSpan class = 'name' %] added to group.
         [% ELSE %]
-            Group <i>[% added.title %]</i> created.
+            Group [% added.title | $KohaSpan class = 'name' %] created.
         [% END %]
     </div>
 [% ELSIF deleted %]
     <div class="dialog message group-deleted">
         [% IF deleted.title %]
-            Group <i>[% deleted.title %]</i> has been deleted.
+            Group [% deleted.title | $KohaSpan class = 'name' %] has been deleted.
         [% ELSE %]
-            <i>[% deleted.library %]</i> has been removed from group.
+            [% deleted.library | $KohaSpan class = 'name' %] has been removed from group.
         [% END %]
     </div>
 [% END %]
