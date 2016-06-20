@@ -25,7 +25,7 @@ use Data::Dumper qw(Dumper);
 use C4::Context qw(preference);
 use C4::Log;
 
-use Koha::DateUtils qw(dt_from_string);
+use Koha::DateUtils qw(dt_from_string output_pref);
 use Koha::Patrons;
 use Koha::Biblios;
 use Koha::Items;
@@ -129,6 +129,46 @@ sub waiting_expires_on {
     $dt->add( days => $ReservesMaxPickUpDelay );
 
     return $dt;
+}
+
+=head3 set_waiting
+
+=cut
+
+sub set_waiting {
+    my ( $self, $transferToDo ) = @_;
+
+    $self->priority(0);
+
+    if ($transferToDo) {
+        $self->found('T')->store();
+        return $self;
+    }
+
+    my $today = dt_from_string();
+    my $values = {
+        found => 'W',
+        waitingdate => $today->ymd,
+    };
+
+    if ( C4::Context->preference("ExpireReservesMaxPickUpDelay") ) {
+        my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
+        my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
+        my $calendar = Koha::Calendar->new( branchcode => $self->branchcode );
+
+        my $expirationdate = $today->clone;
+        $expirationdate->add(days => $max_pickup_delay);
+
+        if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
+            $expirationdate = $calendar->days_forward( dt_from_string($self->waitingdate), $max_pickup_delay );
+        }
+
+        $values->{expirationdate} = $expirationdate->ymd;
+    }
+
+    $self->set($values)->store();
+
+    return $self;
 }
 
 =head3 is_found

@@ -296,6 +296,20 @@ sub prev_open_day {
     return $base_date;
 }
 
+sub days_forward {
+    my $self     = shift;
+    my $start_dt = shift;
+    my $num_days = shift;
+
+    my $base_dt = $start_dt->clone();
+
+    while ($num_days--) {
+        $base_dt = $self->next_open_day($base_dt);
+    }
+
+    return $base_dt;
+}
+
 sub days_between {
     my $self     = shift;
     my $start_dt = shift;

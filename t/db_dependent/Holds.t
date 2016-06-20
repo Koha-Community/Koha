@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 61;
+use Test::More tests => 58;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -431,43 +431,6 @@ is(CanItemBeReserved($borrowernumbers[0], $itemnumber),
     { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CAN' } , $bibnum);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber), 'OK',
     "CanItemBeReserved should returns 'OK'");
-
-
-# Test CancelExpiredReserves
-t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelay', 1);
-t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 1);
-
-my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) = localtime(time);
-$year += 1900;
-$mon += 1;
-my $reserves = $dbh->selectall_arrayref('SELECT * FROM reserves', { Slice => {} });
-$reserve = $reserves->[0];
-my $calendar = C4::Calendar->new(branchcode => $reserve->{branchcode});
-$calendar->insert_single_holiday(
-    day         => $mday,
-    month       => $mon,
-    year        => $year,
-    title       => 'Test',
-    description => 'Test',
-);
-$reserve_id = $reserve->{reserve_id};
-$dbh->do("UPDATE reserves SET waitingdate = DATE_SUB( NOW(), INTERVAL 5 DAY ), found = 'W', priority = 0 WHERE reserve_id = ?", undef, $reserve_id );
-t::lib::Mocks::mock_preference('ExpireReservesOnHolidays', 0);
-CancelExpiredReserves();
-my $count = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE reserve_id = ?", undef, $reserve_id );
-is( $count, 1, "Waiting reserve beyond max pickup delay *not* canceled on holiday" );
-t::lib::Mocks::mock_preference('ExpireReservesOnHolidays', 1);
-CancelExpiredReserves();
-$count = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE reserve_id = ?", undef, $reserve_id );
-is( $count, 0, "Waiting reserve beyond max pickup delay canceled on holiday" );
-
-# Test expirationdate
-$reserve = $reserves->[1];
-$reserve_id = $reserve->{reserve_id};
-$dbh->do("UPDATE reserves SET expirationdate = DATE_SUB( NOW(), INTERVAL 1 DAY ) WHERE reserve_id = ?", undef, $reserve_id );
-CancelExpiredReserves();
-$count = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE reserve_id = ?", undef, $reserve_id );
-is( $count, 0, "Reserve with manual expiration date canceled correctly" );
 
 # Bug 12632
 t::lib::Mocks::mock_preference( 'item-level_itypes',     1 );
