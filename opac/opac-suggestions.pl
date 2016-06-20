@@ -112,36 +112,46 @@ if ( $op eq 'else' ) {
     }
 }
 
-my $suggestions_loop =
-  &SearchSuggestion( $suggestion);
+my $suggestions_loop = &SearchSuggestion($suggestion);
 if ( $op eq "add_confirm" ) {
-        my $count_own_suggestions = $borrowernumber ?  &SearchSuggestion( { suggestedby => $borrowernumber}) : 0;
-    if( @$count_own_suggestions >= C4::Context->preference("MaxOpenSuggestions") ){
-        push @messages, { type => 'error', code => 'too_many'};
+    my $count_own_suggestions = $borrowernumber ? &SearchSuggestion( { suggestedby => $borrowernumber } ) : 0;
+    if ( @$count_own_suggestions >= C4::Context->preference("MaxOpenSuggestions") )
+    {
+        push @messages, { type => 'error', code => 'too_many' };
     }
-	elsif (@$suggestions_loop>=1){
-		#some suggestion are answering the request Donot Add
-        for my $suggestion ( @$suggestions_loop ) {
-            push @messages, { type => 'error', code => 'already_exists', id => $suggestion->{suggestionid} };
+    elsif ( @$suggestions_loop >= 1 ) {
+
+        #some suggestion are answering the request Donot Add
+        for my $suggestion (@$suggestions_loop) {
+            push @messages,
+              {
+                type => 'error',
+                code => 'already_exists',
+                id   => $suggestion->{suggestionid}
+              };
             last;
         }
-	}
-	else {
-		my $scrubber = C4::Scrubber->new();
-		foreach my $suggest (keys %$suggestion){
+    }
+    else {
+        my $scrubber = C4::Scrubber->new();
+        foreach my $suggest ( keys %$suggestion ) {
+
             # Don't know why the encode is needed for Perl v5.10 here
-            $suggestion->{$suggest} = Encode::encode("utf8", $scrubber->scrub($suggestion->{$suggest}) );
-		}
+            $suggestion->{$suggest} = Encode::encode( "utf8",
+                $scrubber->scrub( $suggestion->{$suggest} ) );
+        }
         $suggestion->{suggesteddate} = dt_from_string;
         $suggestion->{branchcode} = $input->param('branchcode') || C4::Context->userenv->{"branch"};
 
-		&NewSuggestion($suggestion);
-		# empty fields, to avoid filter in "SearchSuggestion"
-		$$suggestion{$_}='' foreach qw<title author publishercode copyrightdate place collectiontitle isbn STATUS>;
-		$suggestions_loop =
-		   &SearchSuggestion( $suggestion );
+        &NewSuggestion($suggestion);
+
+        # delete empty fields, to avoid filter in "SearchSuggestion"
+        foreach my $field ( qw( title author publishercode copyrightdate place collectiontitle isbn STATUS ) ) {
+            delete $suggestion->{$field} unless $suggestion->{$field};
+        }
+        $suggestions_loop = &SearchSuggestion($suggestion);
         push @messages, { type => 'info', code => 'success_on_inserted' };
-	}
+    }
     $op = 'else';
 }
 
@@ -161,13 +171,9 @@ map{
     $library ? $s->{branchcodesuggestedby} = $library->branchname : ()
 } @$suggestions_loop;
 
-my $own_suggestions_count = 0;
 foreach my $suggestion(@$suggestions_loop) {
     if($suggestion->{'suggestedby'} == $borrowernumber) {
         $suggestion->{'showcheckbox'} = $borrowernumber;
-        if ( $suggestion->{'STATUS'} eq 'ASKED' ) {
-            $own_suggestions_count++;
-        }
     } else {
         $suggestion->{'showcheckbox'} = 0;
     }
@@ -195,15 +201,19 @@ if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
 }
 
 $template->param(
-	%$suggestion,
-    suggestions_loop => $suggestions_loop,
-    patron_reason_loop => $patron_reason_loop,
-    "op_$op"         => 1,
-    $op => 1,
-    messages => \@messages,
-    suggestionsview => 1,
-    suggested_by_anyone => $suggested_by_anyone,
-    own_suggestions_count => $own_suggestions_count,
+    %$suggestion,
+    suggestions_loop      => $suggestions_loop,
+    patron_reason_loop    => $patron_reason_loop,
+    "op_$op"              => 1,
+    $op                   => 1,
+    messages              => \@messages,
+    suggestionsview       => 1,
+    suggested_by_anyone   => $suggested_by_anyone,
+    own_suggestions_count => scalar @{
+        SearchSuggestion(
+            { suggestedby => $borrowernumber, STATUS => 'ASKED' }
+        )
+    },
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
