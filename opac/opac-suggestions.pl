@@ -112,10 +112,12 @@ if ( $op eq 'else' ) {
     }
 }
 
+my $patrons_pending_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, STATUS => 'ASKED' } ) };
+
 my $suggestions_loop = &SearchSuggestion($suggestion);
 if ( $op eq "add_confirm" ) {
     my $count_own_suggestions = $borrowernumber ? &SearchSuggestion( { suggestedby => $borrowernumber } ) : 0;
-    if ( @$count_own_suggestions >= C4::Context->preference("MaxOpenSuggestions") )
+    if ( $patrons_pending_suggestions_count >= C4::Context->preference("MaxOpenSuggestions") )
     {
         push @messages, { type => 'error', code => 'too_many' };
     }
@@ -209,11 +211,7 @@ $template->param(
     messages              => \@messages,
     suggestionsview       => 1,
     suggested_by_anyone   => $suggested_by_anyone,
-    own_suggestions_count => scalar @{
-        SearchSuggestion(
-            { suggestedby => $borrowernumber, STATUS => 'ASKED' }
-        )
-    },
+    patrons_pending_suggestions_count => $patrons_pending_suggestions_count,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
