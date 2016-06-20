@@ -112,12 +112,14 @@ if ( $op eq 'else' ) {
     }
 }
 
-my $patrons_pending_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, STATUS => 'ASKED' } ) };
+my $patrons_pending_suggestions_count = 0;
+if ( $borrowernumber ) {
+    my $patrons_pending_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, STATUS => 'ASKED' } ) } ;
+}
 
 my $suggestions_loop = &SearchSuggestion($suggestion);
 if ( $op eq "add_confirm" ) {
-    my $count_own_suggestions = $borrowernumber ? &SearchSuggestion( { suggestedby => $borrowernumber } ) : 0;
-    if ( $patrons_pending_suggestions_count >= C4::Context->preference("MaxOpenSuggestions") )
+    if ( $patrons_pending_suggestions_count >= C4::Context->preference("MaxOpenSuggestions") ) #only check limit for signed in borrowers
     {
         push @messages, { type => 'error', code => 'too_many' };
     }
@@ -149,7 +151,7 @@ if ( $op eq "add_confirm" ) {
 
         # delete empty fields, to avoid filter in "SearchSuggestion"
         foreach my $field ( qw( title author publishercode copyrightdate place collectiontitle isbn STATUS ) ) {
-            delete $suggestion->{$field} unless $suggestion->{$field};
+            delete $suggestion->{$field}; #clear search filters (except borrower related) to show all suggestions after placing a new one
         }
         $suggestions_loop = &SearchSuggestion($suggestion);
         push @messages, { type => 'info', code => 'success_on_inserted' };
