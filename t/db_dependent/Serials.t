@@ -15,6 +15,7 @@ use C4::Bookseller;
 use C4::Biblio;
 use C4::Budgets;
 use Koha::DateUtils;
+use t::lib::Mocks;
 use Test::More tests => 48;
 
 BEGIN {
@@ -188,6 +189,7 @@ is(C4::Serials::GetLateOrMissingIssues(), undef, 'test getting last or missing i
 subtest 'test_updateClaim' => sub {
     plan tests => 11;
 
+    my $today = output_pref({ dt => dt_from_string, dateonly => 1 });
     # Given ... nothing much
     # When ... Then ...
     my $result_0 = C4::Serials::updateClaim(undef);
@@ -195,7 +197,7 @@ subtest 'test_updateClaim' => sub {
 
     # Given ... 3 serial. 2 of them updated.
     my $serialids_1   = [90980, 90981];
-    my $claimdate_1   = '2001/01/13'; # arbitrary date some time in the past.
+    my $claimdate_1   = dt_from_string('2001-01-13'); # arbitrary date some time in the past.
     my $claim_count_1 = 5;
     Koha::Serial->new( { serialid => $serialids_1->[0], serialseq => 'serialseq', subscriptionid => $subscriptionid, status => 3,
                          biblionumber => 12345, claimdate => $claimdate_1, claims_count => $claim_count_1, } )->store();
@@ -211,17 +213,17 @@ subtest 'test_updateClaim' => sub {
     is($result_1, 2, 'Got the expected 2 from update claim with 2 serial ids');
 
     my @late_or_missing_issues_1_0 = C4::Serials::GetLateOrMissingIssues(undef, $serialids_1->[0]);
-    isnt($late_or_missing_issues_1_0[0]->{claimdate}, $claimdate_1, 'Got the expected first different claim date from update claim');
+    is($late_or_missing_issues_1_0[0]->{claimdate}, $today, 'Got the expected first different claim date from update claim');
     is($late_or_missing_issues_1_0[0]->{claims_count}, $claim_count_1+1, 'Got the expected first claim count from update claim');
     is($late_or_missing_issues_1_0[0]->{status}, 7, 'Got the expected first claim status from update claim');
 
     my @late_or_missing_issues_1_1 = C4::Serials::GetLateOrMissingIssues(undef, $serialids_1->[1]);
-    isnt($late_or_missing_issues_1_1[0]->{claimdate}, $claimdate_1, 'Got the expected second different claim date from update claim');
+    is($late_or_missing_issues_1_1[0]->{claimdate}, $today, 'Got the expected second different claim date from update claim');
     is($late_or_missing_issues_1_1[0]->{claims_count}, $claim_count_1+1, 'Got the expected second claim count from update claim');
     is($late_or_missing_issues_1_1[0]->{status}, 7, 'Got the expected second claim status from update claim');
 
     my @late_or_missing_issues_1_2 = C4::Serials::GetLateOrMissingIssues(undef, 90982);
-    is($late_or_missing_issues_1_2[0]->{claimdate}, '13/01/2001', 'Got the expected unchanged claim date from update claim');
+    is($late_or_missing_issues_1_2[0]->{claimdate}, output_pref({ dt => $claimdate_1, dateonly => 1}), 'Got the expected unchanged claim date from update claim');
     is($late_or_missing_issues_1_2[0]->{claims_count}, $claim_count_1, 'Got the expected unchanged claim count from update claim');
     is($late_or_missing_issues_1_2[0]->{status}, 3, 'Got the expected unchanged claim status from update claim');
 };
