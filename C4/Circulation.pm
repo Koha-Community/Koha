@@ -2110,6 +2110,7 @@ sub AddReturn {
 
     # the holdingbranch is updated if the document is returned to another location.
     # this is always done regardless of whether the item was on loan or not
+    my $item_holding_branch = $item->{ holdingbranch };
     if ($item->{'holdingbranch'} ne $branch) {
         UpdateHoldingbranch($branch, $item->{'itemnumber'});
         $item->{'holdingbranch'} = $branch; # update item data holdingbranch too
@@ -2149,7 +2150,7 @@ sub AddReturn {
                     {
                         current_branch      => C4::Context->userenv->{branch},
                         item_home_branch    => $item->{homebranch},
-                        item_holding_branch => $item->{holdingbranch}
+                        item_holding_branch => $item_holding_branch
                     }
                 )
               )
