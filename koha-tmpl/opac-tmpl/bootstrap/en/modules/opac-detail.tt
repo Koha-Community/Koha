@@ -5,6 +5,11 @@
 [% USE AuthorisedValues %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail ) %]
+[% IF Koha.Preference('AmazonAssocTag') %]
+    [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
+[% ELSE %]
+    [% AmazonAssocTag = '' %]
+[% END %]
 
 [% ShowCourseReservesHeader = 0 %]
 [% IF Koha.Preference( 'UseCourseReserves' ) == 1 %]
@@ -55,9 +60,9 @@
                     [% END %]
                     [% IF ( OPACAmazonCoverImages ) %]
                         [% IF ( OPACURLOpenInNewWindow ) %]
-                            <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" target="_blank" rel="noreferrer">
+                            <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %][% AmazonAssocTag %]#reader-link" target="_blank" rel="noreferrer">
                         [% ELSE %]
-                            <a href="http://www.amazon[% AmazonTld %]/dp/[% normalized_isbn %]">
+                            <a href="http://www.amazon[% AmazonTld %]/dp/[% normalized_isbn %][% AmazonAssocTag %]">
                         [% END %]
                             <img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="Cover image" /></a>
                     [% END %]
