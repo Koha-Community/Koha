@@ -82,6 +82,8 @@
                                 </ul> <!-- / .dropdown-menu -->
                             </li> <!-- / .dropdown -->
                         [% END # / IF virtualshelves %]
+                        <!-- OPAC navigation preferences -->
+                        [% Koha.Preference( 'opacnavigation' )%]
                     </ul> <!-- / .nav -->
                     [% IF Koha.Preference( 'virtualshelves' ) == 1 %]<div id="listsDetails"></div>[% END %]
                     [% IF Koha.Preference( 'opacuserlogin' ) == 1 || opaclanguagesdisplay || EnableOpacSearchHistory %]
