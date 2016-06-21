@@ -80,7 +80,7 @@
                             <tr>
                                 <th>&nbsp;</th>
                                 <th>Precedence</th>
-                                <th>&nbsp;</th>
+                                <th>Change order</th>
                                 <th>Selector</th>
                                 <th>Sound</th>
                                 <th>&nbsp;</th>
@@ -94,19 +94,19 @@
                                     <td>[% a.precedence %]</td>
                                     <td style="white-space:nowrap;">
                                         <a title="Move alert up" href="audio_alerts.pl?action=move&amp;where=up&amp;id=[% a.id %]">
-                                            <img src="[% interface %]/[% theme %]/img/go-up.png" alt="Move alert up" />
+                                            <i class="fa fa-arrow-up fa-lg order-control"></i>
                                         </a>
 
                                         <a title="Move alert to top" href="audio_alerts.pl?action=move&amp;where=top&amp;id=[% a.id %]">
-                                            <img src="[% interface %]/[% theme %]/img/go-top.png" alt="Move alert to top" />
+                                            <i class="fa fa-arrow-up fa-lg overline order-control"></i>
                                         </a>
 
                                         <a title="Move alert to bottom" href="audio_alerts.pl?action=move&amp;where=bottom&amp;id=[% a.id %]">
-                                            <img src="[% interface %]/[% theme %]/img/go-bottom.png" alt="Move alert to bottom" />
+                                            <i class="fa fa-arrow-down fa-lg underline order-control"></i>
                                         </a>
 
                                         <a title="Move alert down" href="audio_alerts.pl?action=move&amp;where=down&amp;id=[% a.id %]">
-                                            <img src="[% interface %]/[% theme %]/img/go-down.png" alt="Move alert down" />
+                                            <i class="fa fa-arrow-down fa-lg order-control"></i>
                                         </a>
                                     </td>
                                     <td>[% a.selector %]</td>
