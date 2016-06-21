@@ -12,6 +12,12 @@
 [% INCLUDE 'bodytag.inc' bodyid='opac-user' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
+[% IF Koha.Preference('AmazonAssocTag') %]
+    [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
+[% ELSE %]
+    [% AmazonAssocTag = '' %]
+[% END %]
+
 <div class="main">
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
@@ -174,7 +180,7 @@ Using this account is not recommended because some parts of Koha will not functi
 
                                                     [% IF ( OPACAmazonCoverImages ) %]
                                                         [% IF ( ISSUE.normalized_isbn ) %]
-                                                            <a href="http://www.amazon.com/gp/reader/[% ISSUE.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" title="View on Amazon.com"><img src="https://images-na.ssl-images-amazon.com/images/P/[% ISSUE.normalized_isbn %].01.THUMBZZZ.jpg" alt="View on Amazon.com" class="item-thumbnail"/></a>
+                                                            <a href="http://www.amazon.com/gp/reader/[% ISSUE.normalized_isbn %][% AmazonAssocTag %]#reader-link" title="View on Amazon.com"><img src="https://images-na.ssl-images-amazon.com/images/P/[% ISSUE.normalized_isbn %].01.THUMBZZZ.jpg" alt="View on Amazon.com" class="item-thumbnail"/></a>
                                                         [% ELSE %]
                                                             <a href="#"><span class="no-image">No cover image available</span></a>
                                                         [% END %]
@@ -430,7 +436,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                                     <td class="jacketcell">
                                                     [% IF ( OPACAmazonCoverImages ) %]
                                                         [% IF ( OVERDUE.normalized_isbn ) %]
-                                                            <a href="http://www.amazon.com/gp/reader/[% OVERDUE.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link" title="View on Amazon.com"><img src="https://images-na.ssl-images-amazon.com/images/P/[% OVERDUE.normalized_isbn %].01.THUMBZZZ.jpg" alt="View on Amazon.com" class="item-thumbnail" /></a>
+                                                            <a href="http://www.amazon.com/gp/reader/[% OVERDUE.normalized_isbn %][% AmazonAssocTag %]#reader-link" title="View on Amazon.com"><img src="https://images-na.ssl-images-amazon.com/images/P/[% OVERDUE.normalized_isbn %].01.THUMBZZZ.jpg" alt="View on Amazon.com" class="item-thumbnail" /></a>
                                                         [% ELSE %]
                                                             <a href="#"><span class="no-image">No cover image available</span></a>
                                                         [% END %]

@@ -4,6 +4,12 @@
 [% USE Branches %]
 [% USE Biblio %]
 
+[% IF Koha.Preference('AmazonAssocTag') %]
+    [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
+[% ELSE %]
+    [% AmazonAssocTag = '' %]
+[% END %]
+
 [% ShowCourseReserves = 0 %]
 [% IF UseCourseReserves %]
     [% FOREACH item IN itemloop %]
@@ -434,7 +440,7 @@ function verify_images() {
         [% END %]
         [% IF ( AmazonCoverImages ) %]
             <div id="amazon-bookcoverimg">
-            <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link">
+            <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %][% AmazonAssocTag %]#reader-link">
                 <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" />
         </a></div>
         [% END %]
@@ -508,7 +514,7 @@ function verify_images() {
         [% END %]
         [% IF ( AmazonCoverImages ) %]
             <div id="amazon-bookcoverimg">
-            <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link">
+            <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %][% AmazonAssocTag %]#reader-link">
             <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" />
             </a>
         </div>
@@ -1045,7 +1051,7 @@ function verify_images() {
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]
 <div id="editions"><h4>Editions</h4>
 <table>
-[% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
+[% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn %][% AmazonAssocTag %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description %][% ELSE %]<img src="[% XISBN.imageurl %]" alt="[% XISBN.description %]" title="[% XISBN.description %]">[% END %]</td>[% END %]
 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber %]">[% XISBN.title |html %]</a> by [% XISBN.author | html %] &copy;[% XISBN.copyrightdate %]
   [% IF ( XISBN.publishercode ) %]
