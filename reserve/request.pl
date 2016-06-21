@@ -185,6 +185,8 @@ if ($borrowernumber_hold && !$action) {
     my $new_reserves_count = scalar( @biblionumbers );
 
     my $maxreserves = C4::Context->preference('maxreserves');
+    $template->param( maxreserves => $maxreserves );
+
     if ( $maxreserves
         && ( $reserves_count + $new_reserves_count > $maxreserves ) )
     {
@@ -287,6 +289,7 @@ if ($patron) {
 my $itemdata_enumchron = 0;
 my $itemdata_ccode = 0;
 my @biblioloop = ();
+my $no_reserves_allowed = 0;
 foreach my $biblionumber (@biblionumbers) {
     next unless $biblionumber =~ m|^\d+$|;
 
@@ -302,7 +305,10 @@ foreach my $biblionumber (@biblionumbers) {
 
                 #All is OK and we can continue
             }
-            elsif ( $canReserve->{status} eq 'tooManyReserves' ) {
+            elsif ( $canReserve eq 'noReservesAllowed') {
+                $no_reserves_allowed = 1;
+            }
+            elsif ( $canReserve eq 'tooManyReserves' ) {
                 $exceeded_maxreserves = 1;
                 $template->param( maxreserves => $canReserve->{limit} );
             }
@@ -729,6 +735,7 @@ foreach my $biblionumber (@biblionumbers) {
 
 $template->param( biblioloop => \@biblioloop );
 $template->param( biblionumbers => $biblionumbers );
+$template->param( no_reserves_allowed => $no_reserves_allowed );
 $template->param( exceeded_maxreserves => $exceeded_maxreserves );
 $template->param( exceeded_holds_per_record => $exceeded_holds_per_record );
 $template->param( subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber));

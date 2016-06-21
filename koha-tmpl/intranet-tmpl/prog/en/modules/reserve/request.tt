@@ -324,13 +324,15 @@
                     </div>
                 [% END %]
 
-                [% IF ( exceeded_maxreserves || exceeded_holds_per_record || alreadyreserved || none_available || alreadypossession || ageRestricted ) %]
+                [% IF ( no_reserves_allowed || exceeded_maxreserves || exceeded_holds_per_record || alreadyreserved || none_available || alreadypossession || ageRestricted ) %]
                     <div class="dialog alert">
 
                         [% UNLESS ( multi_hold ) %]
                             <h3>Cannot place hold</h3>
                             <ul>
-                                [% IF ( exceeded_maxreserves ) %]
+                                [% IF ( no_reserves_allowed ) %]
+                                    <li><strong>No holds allowed: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %] </a> cannot place a hold on any of these items.</li>
+                                [% ELSIF ( exceeded_maxreserves ) %]
                                     <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %] </a> can only place a maximum of [% maxreserves | html %] total holds.</li>
                                 [% ELSIF ( exceeded_holds_per_record ) %]
                                     <li><strong>Too many holds for this record: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %] </a> can only place a maximum of [% max_holds_for_record | html %] hold(s) on this record.</li>
@@ -348,7 +350,9 @@
                             </ul>
                         [% ELSE # UNLESS multi_hold %]
                             <h3>Cannot place hold on some items</h3>
-                            [% IF ( exceeded_maxreserves ) %]
+                            [% IF (no_reserves_allowed ) %]
+                                <li><strong>No holds allowed: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %] </a> cannot place holds on some of these title's items.</li>
+                            [% ELSIF ( exceeded_maxreserves ) %]
                                 <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %] </a> can place [% new_reserves_allowed | html %] of the requested [% new_reserves_count | html %] holds for a maximum of [% maxreserves | html %] total holds.</li>
                             [% ELSIF ( exceeded_holds_per_record ) %]
                                 [% FOREACH biblioloo IN biblioloop %]
@@ -609,6 +613,8 @@
                                                                         Cannot be transferred to pickup library
                                                                     [% ELSIF itemloo.not_holdable == 'pickupNotInHoldGroup' %]
                                                                         Only pickup locations within the same hold group are allowed
+                                                                    [% ELSIF itemloo.not_holdable == 'noReservesAllowed' %]
+                                                                        No reserves are allowed on this item
                                                                     [% ELSE %]
                                                                         [% itemloo.not_holdable | html %]
                                                                     [% END %]

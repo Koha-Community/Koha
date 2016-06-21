@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 72;
+use Test::More tests => 71;
 use MARC::Record;
 
 use C4::Biblio;
@@ -391,26 +391,225 @@ AddReserve(
     }
 );
 is(
-    CanItemBeReserved( $borrowernumbers[0], $item->itemnumber)->{status}, 'tooManyReserves',
+    CanItemBeReserved( $borrowernumbers[0], $item->itemnumber)->{status}, 'noReservesAllowed',
     "cannot request item if policy that matches on item-level item type forbids it"
 );
 is(
-    CanItemBeReserved( $borrowernumbers[0], $item->itemnumber, undef, { ignore_hold_counts => 1 })->{status}, 'tooManyReserves',
+    CanItemBeReserved( $borrowernumbers[0], $item->itemnumber, undef, { ignore_hold_counts => 1 })->{status}, 'noReservesAllowed',
     "cannot request item if policy that matches on item-level item type forbids it even if ignoring counts"
 );
 
-$item->itype('CAN')->store;
-ok(
-    CanItemBeReserved( $borrowernumbers[0], $item->itemnumber)->{status} eq 'OK',
-    "can request item if policy that matches on item type allows it"
-);
+subtest 'CanItemBeReserved' => sub {
+    plan tests => 2;
 
-t::lib::Mocks::mock_preference('item-level_itypes', 0);
-$item->itype(undef)->store;
-ok(
-    CanItemBeReserved( $borrowernumbers[0], $item->itemnumber)->{status} eq 'tooManyReserves',
-    "cannot request item if policy that matches on bib-level item type forbids it (bug 9532)"
-);
+    my $itemtype_can         = $builder->build({source => "Itemtype"})->{itemtype};
+    my $itemtype_cant        = $builder->build({source => "Itemtype"})->{itemtype};
+    my $itemtype_cant_record = $builder->build({source => "Itemtype"})->{itemtype};
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => $itemtype_cant,
+            rules        => {
+                reservesallowed  => 0,
+                holds_per_record => 99,
+            }
+        }
+    );
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => $itemtype_can,
+            rules        => {
+                reservesallowed  => 2,
+                holds_per_record => 2,
+            }
+        }
+    );
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => $itemtype_cant_record,
+            rules        => {
+                reservesallowed  => 0,
+                holds_per_record => 0,
+            }
+        }
+    );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => $branch_1,
+            itemtype   => $itemtype_cant,
+            rules => {
+                holdallowed => 0,
+                returnbranch => 'homebranch',
+            }
+        }
+    );
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => $branch_1,
+            itemtype   => $itemtype_can,
+            rules => {
+                holdallowed => 1,
+                returnbranch => 'homebranch',
+            }
+        }
+    );
+
+    subtest 'noReservesAllowed' => sub {
+        plan tests => 5;
+
+        my $biblionumber_cannot = $builder->build_sample_biblio({ itemtype => $itemtype_cant })->biblionumber;
+        my $biblionumber_can = $builder->build_sample_biblio({ itemtype => $itemtype_can })->biblionumber;
+        my $biblionumber_record_cannot = $builder->build_sample_biblio({ itemtype => $itemtype_cant_record })->biblionumber;
+
+        my $itemnumber_1_can = $builder->build_sample_item({ homebranch => $branch_1, holdingbranch => $branch_1, itype => $itemtype_can, biblionumber => $biblionumber_cannot })->itemnumber;
+        my $itemnumber_1_cannot = $builder->build_sample_item({ homebranch => $branch_1, holdingbranch => $branch_1, itype => $itemtype_cant, biblionumber => $biblionumber_cannot })->itemnumber;
+        my $itemnumber_2_can = $builder->build_sample_item({ homebranch => $branch_1, holdingbranch => $branch_1, itype => $itemtype_can, biblionumber => $biblionumber_can })->itemnumber;
+        my $itemnumber_2_cannot = $builder->build_sample_item({ homebranch => $branch_1, holdingbranch => $branch_1, itype => $itemtype_cant, biblionumber => $biblionumber_can })->itemnumber;
+        my $itemnumber_3_cannot = $builder->build_sample_item({ homebranch => $branch_1, holdingbranch => $branch_1, itype => $itemtype_cant_record, biblionumber => $biblionumber_record_cannot })->itemnumber;
+
+        Koha::Holds->search({borrowernumber => $borrowernumbers[0]})->delete;
+
+        t::lib::Mocks::mock_preference('item-level_itypes', 1);
+        is(
+            CanItemBeReserved( $borrowernumbers[0], $itemnumber_2_cannot)->{status}, 'noReservesAllowed',
+            "With item level set, rule from item must be picked (CANNOT)"
+        );
+        is(
+            CanItemBeReserved( $borrowernumbers[0], $itemnumber_1_can)->{status}, 'OK',
+            "With item level set, rule from item must be picked (CAN)"
+        );
+        t::lib::Mocks::mock_preference('item-level_itypes', 0);
+        is(
+            CanItemBeReserved( $borrowernumbers[0], $itemnumber_1_can)->{status}, 'noReservesAllowed',
+            "With biblio level set, rule from biblio must be picked (CANNOT)"
+        );
+        is(
+            CanItemBeReserved( $borrowernumbers[0], $itemnumber_2_cannot)->{status}, 'OK',
+            "With biblio level set, rule from biblio must be picked (CAN)"
+        );
+        is(
+            CanItemBeReserved( $borrowernumbers[0], $itemnumber_3_cannot)->{status}, 'noReservesAllowed',
+            "When no holds allowed and no holds per record allowed should return noReservesAllowed"
+        );
+    };
+
+    subtest 'tooManyHoldsForThisRecord + tooManyReserves + itemAlreadyOnHold' => sub {
+        plan tests => 7;
+
+        my $biblionumber_1 = $builder->build_sample_biblio({ itemtype => $itemtype_can })->biblionumber;
+        my $itemnumber_11 = $builder->build_sample_item({ homebranch => $branch_1, holdingbranch => $branch_1, itype => $itemtype_can, biblionumber => $biblionumber_1 })->itemnumber;
+        my $itemnumber_12 = $builder->build_sample_item({ homebranch => $branch_1, holdingbranch => $branch_1, itype => $itemtype_can, biblionumber => $biblionumber_1 })->itemnumber;
+        my $biblionumber_2 = $builder->build_sample_biblio({ itemtype => $itemtype_can })->biblionumber;
+        my $itemnumber_21 = $builder->build_sample_item({ homebranch => $branch_1, holdingbranch => $branch_1, itype => $itemtype_can, biblionumber => $biblionumber_2 })->itemnumber;
+        my $itemnumber_22 = $builder->build_sample_item({ homebranch => $branch_1, holdingbranch => $branch_1, itype => $itemtype_can, biblionumber => $biblionumber_2 })->itemnumber;
+
+        Koha::Holds->search({borrowernumber => $borrowernumbers[0]})->delete;
+
+        # Biblio-level hold
+        AddReserve({
+            branch => $branch_1,
+            borrowernumber => $borrowernumbers[0],
+            biblionumber => $biblionumber_1,
+        });
+        for my $item_level ( 0..1 ) {
+            t::lib::Mocks::mock_preference('item-level_itypes', $item_level);
+            is(
+                # FIXME This is not really correct, but CanItemBeReserved does not check if biblio-level holds already exist
+                CanItemBeReserved( $borrowernumbers[0], $itemnumber_11)->{status}, 'OK',
+                "A biblio-level hold already exists - another hold can be placed on a specific item item"
+            );
+        }
+
+        Koha::Holds->search({borrowernumber => $borrowernumbers[0]})->delete;
+        # Item-level hold
+        AddReserve({
+            branch => $branch_1,
+            borrowernumber => $borrowernumbers[0],
+            biblionumber => $biblionumber_1,
+            itemnumber => $itemnumber_11,
+        });
+
+        $dbh->do('DELETE FROM circulation_rules');
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                branchcode   => undef,
+                itemtype     => undef,
+                rules        => {
+                    reservesallowed  => 5,
+                    holds_per_record => 1,
+                }
+            }
+        );
+        is(
+            CanItemBeReserved( $borrowernumbers[0], $itemnumber_12)->{status}, 'tooManyHoldsForThisRecord',
+            "A item-level hold already exists and holds_per_record=1, another hold cannot be placed on this record"
+        );
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                branchcode   => undef,
+                itemtype     => undef,
+                rules        => {
+                    reservesallowed  => 1,
+                    holds_per_record => 1,
+                }
+            }
+        );
+        is(
+            CanItemBeReserved( $borrowernumbers[0], $itemnumber_12)->{status}, 'tooManyHoldsForThisRecord',
+            "A item-level hold already exists and holds_per_record=1 - tooManyHoldsForThisRecord has priority over tooManyReserves"
+        );
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                branchcode   => undef,
+                itemtype     => undef,
+                rules        => {
+                    reservesallowed  => 5,
+                    holds_per_record => 2,
+                }
+            }
+        );
+        is(
+            CanItemBeReserved( $borrowernumbers[0], $itemnumber_12)->{status}, 'OK',
+            "A item-level hold already exists but holds_per_record=2- another item-level hold can be placed on this record"
+        );
+
+        AddReserve({
+            branch => $branch_1,
+            borrowernumber => $borrowernumbers[0],
+            biblionumber => $biblionumber_2,
+            itemnumber => $itemnumber_21
+        });
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                branchcode   => undef,
+                itemtype     => undef,
+                rules        => {
+                    reservesallowed  => 2,
+                    holds_per_record => 2,
+                }
+            }
+        );
+        is(
+            CanItemBeReserved( $borrowernumbers[0], $itemnumber_21)->{status}, 'itemAlreadyOnHold',
+            "A item-level holds already exists on this item, itemAlreadyOnHold should be raised"
+        );
+        is(
+            CanItemBeReserved( $borrowernumbers[0], $itemnumber_22)->{status}, 'tooManyReserves',
+            "This patron has already placed reservesallowed holds, tooManyReserves should be raised"
+        );
+    };
+};
 
 
 # Test branch item rules

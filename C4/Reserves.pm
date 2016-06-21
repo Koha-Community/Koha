@@ -457,9 +457,13 @@ sub CanItemBeReserved {
     $search_params->{found} = undef if $params->{ignore_found_holds};
 
     my $holds = Koha::Holds->search($search_params);
-    if (!$params->{ignore_hold_counts} && defined $holds_per_record && $holds_per_record ne ''
-        && $holds->count() >= $holds_per_record ) {
-        return { status => "tooManyHoldsForThisRecord", limit => $holds_per_record };
+    if (   defined $holds_per_record && $holds_per_record ne '' ){
+        if ( $holds_per_record == 0 ) {
+            return { status => "noReservesAllowed" };
+        }
+        if ( !$params->{ignore_hold_counts} && $holds->count() >= $holds_per_record ) {
+            return { status => "tooManyHoldsForThisRecord", limit => $holds_per_record };
+        }
     }
 
     my $today_holds = Koha::Holds->search({
@@ -500,9 +504,13 @@ sub CanItemBeReserved {
     }
 
     # we check if it's ok or not
-    if ( defined  $allowedreserves && $allowedreserves ne ''
-        && $reservecount >= $allowedreserves && (!$params->{ignore_hold_counts} || $allowedreserves == 0 ) ) {
-        return { status => 'tooManyReserves', limit => $allowedreserves };
+    if ( defined $allowedreserves && $allowedreserves ne '' ){
+        if( $allowedreserves == 0 ){
+            return { status => 'noReservesAllowed' };
+        }
+        if ( !$params->{ignore_hold_counts} && $reservecount >= $allowedreserves ) {
+            return { status => 'tooManyReserves', limit => $allowedreserves };
+        }
     }
 
     # Now we need to check hold limits by patron category
@@ -526,7 +534,7 @@ sub CanItemBeReserved {
     my $reserves_control_branch =
       GetReservesControlBranch( $item->unblessed(), $borrower );
     my $branchitemrule =
-      C4::Circulation::GetBranchItemRule( $reserves_control_branch, $item->itype ); # FIXME Should not be item->effective_itemtype?
+      C4::Circulation::GetBranchItemRule( $reserves_control_branch, $item->effective_itemtype );
 
     if ( $branchitemrule->{holdallowed} eq 'not_allowed' ) {
         return { status => 'notReservable' };
