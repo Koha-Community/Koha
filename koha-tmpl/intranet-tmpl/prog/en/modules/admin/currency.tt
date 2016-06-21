@@ -52,7 +52,7 @@
 
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange rates</a> &rsaquo; [% IF ( add_form ) %][% IF ( searchfield ) %]Modify currency '[% searchfield %]'[% ELSE %]New currency[% END %][% END %]
-[% IF ( delete_confirm ) %]Confirm deletion of currency '<span class="ex">[% searchfield %]</span>'[% END %]
+[% IF ( delete_confirm ) %]Confirm deletion of currency '[% '<span class="ex">' _ searchfield _ '</span>' %]'[% END %]
 [% IF ( delete_confirmed ) %]Currency deleted[% END %]
 [% IF ( else ) %]Currencies[% END %]
 </div>
@@ -127,7 +127,7 @@
 [% IF ( delete_confirm ) %]
     [% IF ( nb_of_orders or nb_of_vendors ) %]
     <div class="dialog message">
-        <h3>Cannot delete currency <span class="ex">'[% searchfield %]'</span></h3>
+        <h3>Cannot delete currency '[% '<span class="ex">' _ searchfield _ '</span>' %]'</h3>
         <p>
             [% IF nb_of_orders %]
                 This currency is used by [% nb_of_orders %] orders.
@@ -142,7 +142,7 @@
     </div>
     [% ELSE %]
     <div class="dialog alert">
-        <h3>Confirm deletion of currency <span class="ex">'[% searchfield %]'</span></h3>
+        <h3>Confirm deletion of currency '[% '<span class="ex">' _ searchfield _ '</span>' %]'</h3>
         <table>
             <tr><th>Currency</th>
                 <td>[% searchfield %]</td>
