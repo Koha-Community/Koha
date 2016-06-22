@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 42;
+use Test::More tests => 43;
 use Test::Warn;
 
 my $destructorcount = 0;
@@ -254,6 +254,26 @@ subtest 'Koha::Cache::Memory::Lite' => sub {
         undef, "fetching flushed item from cache" );
     is( $memory_cache->get_from_cache("dont_clear_me"),
         undef, "fetching flushed item from cache" );
+};
+
+subtest 'Koha::Caches' => sub {
+    plan tests => 8;
+    my $default_cache = Koha::Cache->get_instance();
+    my $another_cache = Koha::Cache->get_instance('another_cache');
+    $default_cache->set_in_cache('key_a', 'value_a');
+    $default_cache->set_in_cache('key_b', 'value_b');
+    $another_cache->set_in_cache('key_a', 'another_value_a');
+    $another_cache->set_in_cache('key_b', 'another_value_b');
+    is( $default_cache->get_from_cache('key_a'), 'value_a' );
+    is( $another_cache->get_from_cache('key_a'), 'another_value_a' );
+    is( $default_cache->get_from_cache('key_b'), 'value_b' );
+    is( $another_cache->get_from_cache('key_b'), 'another_value_b' );
+    $another_cache->clear_from_cache('key_b');
+    is( $default_cache->get_from_cache('key_b'), 'value_b' );
+    is( $another_cache->get_from_cache('key_b'), undef );
+    $another_cache->flush_all();
+    is( $default_cache->get_from_cache('key_a'), 'value_a' );
+    is( $another_cache->get_from_cache('key_a'), undef );
 };
 
 END {
