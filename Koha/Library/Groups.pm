@@ -45,6 +45,29 @@ sub get_root_groups {
     return $self->search( { parent_id => undef }, { order_by => 'title' } );
 }
 
+=head3 my @search_groups = $self->get_search_groups({[interface => 'staff' || 'opac']}))
+
+Returns search groups for the specified interface.
+Defaults to OPAC if no interface is specified.
+
+=cut
+
+sub get_search_groups {
+    my ( $self, $params ) = @_;
+    my $interface = $params->{interface} || q{};
+
+    my $title = $interface eq 'staff' ? '__SEARCH_GROUPS__' : '__SEARCH_GROUPS_OPAC__';
+
+    my ($search_groups_root) =
+      $self->search( { parent_id => undef, title => $title } );
+
+    return unless $search_groups_root;
+
+    my $children = $search_groups_root->children();
+
+    return wantarray ? $children->as_list : $children;
+}
+
 =head3 type
 
 =cut

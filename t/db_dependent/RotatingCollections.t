@@ -57,7 +57,6 @@ $dbh->do(q|DELETE FROM collections_tracking |);
 $dbh->do(q|DELETE FROM collections |);
 $dbh->do(q|DELETE FROM branches |);
 $dbh->do(q|DELETE FROM categories|);
-$dbh->do(q|DELETE FROM branchcategories|);
 
 #Test CreateCollection
 my $collections     = GetCollections();

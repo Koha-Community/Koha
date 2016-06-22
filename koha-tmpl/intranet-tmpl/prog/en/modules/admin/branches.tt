@@ -1,12 +1,8 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Libraries and groups
-[% IF op == 'editcategory' %]
-    &rsaquo; [% IF category.categorycode %] Edit group [% category.categorycode%] [% ELSE %] New group [% END %]
-[% ELSIF op == 'delete_confirm_category' %]
-    &rsaquo; Confirm deletion of group [% category.categorycode %]
-[% ELSIF op == 'add_form' %]
-    &rsaquo; [% IF library %] Modify library [% library.branchcode | html %] [% ELSE %] New library [% END %]
+<title>Koha &rsaquo; Administration &rsaquo; Libraries
+[% IF op == 'add_form' %]
+    &rsaquo;[% IF library %]Modify library[% ELSE %]New library [% library.branchcode | html %][% END %]
 [% ELSIF op == 'delete_confirm' %]
     &rsaquo; Confirm deletion of library '[% library.branchcode | html %]'
 [% END %]
@@ -22,13 +18,9 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/branches.pl">Libraries and groups</a>
-[% IF op == 'add_form_category' %]
-&rsaquo; [% IF category.categorycode %] Edit group [% category.categorycode %] [% ELSE %] New group [% END %]
-[% ELSIF op == 'delete_confirm_category' %]
-&rsaquo; Confirm deletion of group [% category.categorycode %]
-[% ELSIF op == 'add_form'  %]
-&rsaquo; [% IF library %] Modify library [% library.branchcode | html %] [% ELSE %] New library [% END %]
+&rsaquo; <a href="/cgi-bin/koha/admin/branches.pl">Libraries</a>
+[% IF op == 'add_form'  %]
+&rsaquo; [% IF library %]Modify library[% ELSE %]New library [% library.branchcode | html %][% END %]
 [% ELSIF op == 'delete_confirm' %]
 &rsaquo; Confirm deletion of library '[% library.branchcode | html %]'
 [% END %]
@@ -87,7 +79,6 @@
 [% IF op == 'list' %]
     <div id="toolbar" class="btn-toolbar">
         <a class="btn btn-default btn-sm" id="newbranch" href="/cgi-bin/koha/admin/branches.pl?op=add_form"><i class="fa fa-plus"></i> New library</a>
-        <a class="btn btn-default btn-sm" id="newcategory" href="/cgi-bin/koha/admin/branches.pl?op=add_form_category"><i class="fa fa-plus"></i> New group</a>
     </div>
 [% END %]
 
@@ -247,119 +238,6 @@
     [% ELSE %]
         <div class="dialog message">There are no libraries defined. <a href="/cgi-bin/koha/admin/branches.pl?op=add_form">Start defining libraries</a>.</div>
     [% END %]
-
-    [% IF group_types %]
-        [% FOREACH group_type IN group_types %]
-            <h3>[% IF group_type.categorytype == 'properties' %]Properties[% ELSIF group_type.categorytype == 'searchdomain' %]Search domain[% END %]</h3>
-            [% IF group_type.categories.size %]
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Code</th>
-                            <th>Description</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        [% FOREACH category IN group_type.categories %]
-                            <tr>
-                                <td>[% category.categoryname |html %]</td>
-                                <td>[% category.categorycode %]</td>
-                                <td>[% category.codedescription |html %]</td>
-                                <td class="actions">
-                                  <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=add_form_category"><i class="fa fa-pencil"></i> Edit</a>
-                                  <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=delete_confirm_category"><i class="fa fa-trash"></i> Delete</a>
-                                </td>
-                            </tr>
-                        [% END %]
-                    </tbody>
-                </table>
-            [% ELSE %]
-                [% IF group_type.categorytype == 'properties' %]
-                    No properties defined.
-                [% ELSIF group_type.categorytype == 'searchdomain' %]
-                    No search domain defined.
-                [% END %]
-                <a href="/cgi-bin/koha/admin/branches.pl?op=add_form_category">Add a new group</a>.
-            [% END %]
-        [% END %]
-    [% ELSE %]
-        <p>No groups defined.</p>
-    [% END %]
-[% END %]
-
-[% IF op == 'add_form_category' %]
-    <h3>[% IF category.categorycode %]Edit group [% category.categorycode %][% ELSE %]Add group[% END %]</h3>
-    <form action="/cgi-bin/koha/admin/branches.pl" name="Aform" method="post" class="validated">
-        <input type="hidden" name="op" value="add_validate_category" />
-        [% IF category.categorycode %]
-            <input type="hidden" name="is_a_modif" value="1" />
-        [% END %]
-        <fieldset class="rows">
-            <ol>
-                <li>
-                    [% IF category.categorycode %]
-                        <span class="label">Category code: </span>
-                        <input type="hidden" name="categorycode" id="categorycode" value="[% category.categorycode |html %]" />
-                        [% category.categorycode %]
-                    [% ELSE %]
-                        <label for="categorycode" class="required">Category code:</label>
-                        <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" class="required" required="required" />
-                        <span class="required">Required</span>
-                    [% END %]
-                </li>
-                <li>
-                    <label for="categoryname" class="required">Name: </label>
-                    <input type="text" name="categoryname" id="categoryname" size="32" maxlength="32" value="[% category.categoryname |html %]" class="required" required="required" />
-                    <span class="required">Required</span>
-                </li>
-                <li>
-                    <label for="codedescription">Description: </label>
-                    <input type="text" name="codedescription" id="codedescription" size="70" value="[% category.codedescription |html %]" />
-                </li>
-                <li>
-                    <label for="categorytype">Category type: </label>
-                    <select id="categorytype" name="categorytype">
-                        [% IF category.categorytype == 'properties' %]
-                            <option value="searchdomain">Search domain</option>
-                            <option value="properties" selected="selected">Properties</option>
-                        [% ELSE %]
-                            <option value="searchdomain">Search domain</option>
-                            <option value="properties">Properties</option>
-
-                        [% END %]
-                    </select>
-                </li>
-                <li>
-                    <label for="show_in_pulldown">Show in search pulldown: </label>
-                    [% IF category.show_in_pulldown %]
-                        <input type="checkbox" name="show_in_pulldown" id="show_in_pulldown" checked="checked"/>
-                    [% ELSE %]
-                        <input type="checkbox" name="show_in_pulldown" id="show_in_pulldown" />
-                    [% END %]
-                </li>
-            </ol>
-        </fieldset>
-        <fieldset class="action">
-            <input type="submit" value="Submit" />
-            <a href="/cgi-bin/koha/admin/branches.pl" class="cancel">Cancel</a>
-        </fieldset>
-    </form>
-[% END %]
-
-[% IF op == 'delete_confirm_category' %]
-    <div class="dialog alert">
-    <h3>Are you sure you want to delete the group '[% category.codedescription |html %]' ([% category.categorycode %])?</h3>
-    <form action="/cgi-bin/koha/admin/branches.pl" method="post">
-        <input type="hidden" name="op" value="delete_confirmed_category" />
-        <input type="hidden" name="categorycode" value="[% category.categorycode |html %]" />
-        <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
-    </form>
-    <form action="/cgi-bin/koha/admin/branches.pl" method="get">
-        <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
-    </form>
-    </div>
 [% END %]
 
 </div>

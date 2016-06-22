@@ -59,7 +59,7 @@ sub children {
     my $children =
       Koha::Library::Groups->search( { parent_id => $self->id }, { order_by => [ 'title', 'branchcode' ] } );
 
-    return $children;
+    return wantarray ? $children->as_list : $children;
 }
 
 =head3 library
@@ -80,16 +80,22 @@ sub library {
     return $self->{_library};
 }
 
-=head3 libraries_not_direct_children
+=head3 libraries
 
-my @libraries = $group->libraries_not_direct_children();
+my @libraries = $group->libraries( { [invert => 1] } );
 
-Returns the libraries *not* set as direct children of this group
+Returns the libraries set as direct children of this group.
+
+If invert param is true, the returned list will be libraries
+that are *not* direct children of this group.
 
 =cut
 
-sub libraries_not_direct_children {
-    my ($self) = @_;
+sub libraries {
+    my ($self, $params) = @_;
+    my $invert = $params->{invert};
+
+    my $in_or_not = $invert ? '-not_in' : '-in';
 
     my @children = Koha::Library::Groups->search(
         {
@@ -103,12 +109,26 @@ sub libraries_not_direct_children {
 
     return Koha::Libraries->search(
         {
-            branchcode => { -not_in => \@branchcodes }
+            branchcode => { $in_or_not => \@branchcodes }
         },
         {
             order_by => 'branchname'
         }
     );
+}
+
+=head3 libraries_not_direct_children
+
+my @libraries = $group->libraries_not_direct_children();
+
+Returns the libraries *not* set as direct children of this group
+
+=cut
+
+sub libraries_not_direct_children {
+    my ($self) = @_;
+
+    return $self->libraries( { invert => 1 } );
 }
 
 =head3 store

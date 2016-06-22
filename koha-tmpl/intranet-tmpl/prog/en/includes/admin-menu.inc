@@ -9,7 +9,7 @@
 
 <h5>Basic parameters</h5>
 <ul>
-    <li><a href="/cgi-bin/koha/admin/branches.pl">Libraries and groups</a></li>
+    <li><a href="/cgi-bin/koha/admin/branches.pl">Libraries</a></li>
     <li><a href="/cgi-bin/koha/admin/library_groups.pl">Library groups</a></li>
     <li><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></li>
     <li><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a></li>

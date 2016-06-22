@@ -229,22 +229,22 @@
                                     <div class="input-append">
                                         <select name="branch_group_limit" id="select_library">
                                             <option value="">All libraries</option>
-                                            [% IF BranchCategoriesLoop %]<optgroup label="Libraries">[% END %]
-                                                [% FOREACH BranchesLoo IN Branches.all( selected => opac_name ) %]
-                                                    [% IF BranchesLoo.selected %]
-                                                        <option selected="selected" value="branch:[% BranchesLoo.branchcode %]">[% BranchesLoo.branchname %]</option>
-                                                    [% ELSE %]
-                                                        <option value="branch:[% BranchesLoo.branchcode %]">[% BranchesLoo.branchname %]</option>
-                                                    [% END %]
-                                                [% END %]
-                                            [% IF BranchCategoriesLoop %]
+
+                                            [% IF LibrarySearchGroups %]<optgroup label="Libraries">[% END %]
+
+                                            [% FOREACH BranchesLoo IN BranchesLoop %]
+                                                [% IF ( BranchesLoo.selected ) %]<option selected="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
+                                                [% ELSE %]<option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>[% END %]
+                                            [% END %]
+
+                                            [% IF LibrarySearchGroups %]
                                                 </optgroup>
                                                 <optgroup label="Groups">
-                                                    [% FOREACH bc IN BranchCategoriesLoop %]
-                                                        [% IF bc.categorycode == opac_name %]
-                                                            <option selected="selected" value="multibranchlimit-[% bc.categorycode %]">[% bc.categoryname %]</option>
+                                                    [% FOREACH lsg IN LibrarySearchGroups %]
+                                                        [% IF lsg.id == opac_name %]
+                                                            <option selected="selected" value="multibranchlimit-[% lsg.id %]">[% lsg.title %]</option>
                                                         [% ELSE %]
-                                                            <option value="multibranchlimit-[% bc.categorycode %]">[% bc.categoryname %]</option>
+                                                            <option value="multibranchlimit-[% lsg.id %]">[% lsg.title %]</option>
                                                         [% END # / bc.selected %]
                                                     [% END %]
                                                 </optgroup>

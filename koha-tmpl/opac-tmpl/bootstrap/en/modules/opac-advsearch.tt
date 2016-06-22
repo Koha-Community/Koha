@@ -223,13 +223,13 @@
                                         [% END %]
                                     [% END %]
                                     </select>
-                                    [% IF ( searchdomainloop && searchdomainloop.count > 0) %]
+                                    [% IF search_groups %]
                                         <p>OR</p>
                                         <label for="categoryloop">Groups of libraries</label>
                                         <select name="multibranchlimit" id="categoryloop">
                                             <option value=""> -- none -- </option>
-                                            [% FOREACH searchdomainloo IN searchdomainloop %]
-                                                <option value="[% searchdomainloo.categorycode %]">[% searchdomainloo.categoryname %]</option>
+                                            [% FOREACH sg IN search_groups %]
+                                                <option value="[% sg.id %]">[% sg.title %]</option>
                                             [% END %]
                                         </select>
                                     [% END %]

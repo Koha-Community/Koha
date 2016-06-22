@@ -150,7 +150,7 @@ use POSIX qw(ceil floor);
 use C4::Search::History;
 
 use Koha::ItemTypes;
-use Koha::LibraryCategories;
+use Koha::Library::Groups;
 use Koha::Patrons;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
@@ -209,12 +209,16 @@ if($cgi->cookie("intranet_bib_list")){
     @cart_list = split(/\//, $cart_list);
 }
 
-# load the branches
-my $categories = Koha::LibraryCategories->search( { categorytype => 'searchdomain' }, { order_by => [ 'categorytype', 'categorycode' ] } );
+my @search_groups_opac =
+  Koha::Library::Groups->get_search_groups( { interface => 'opac' } );
+my @search_groups_staff =
+  Koha::Library::Groups->get_search_groups( { interface => 'staff' } );
+my @search_groups = ( @search_groups_opac, @search_groups_staff );
+@search_groups = sort { $a->title cmp $b->title } @search_groups;
 
 $template->param(
     selected_branchcode => ( C4::Context->IsSuperLibrarian ? C4::Context->userenv : '' ),
-    searchdomainloop => $categories
+    search_groups    => \@search_groups,
 );
 
 # load the Type stuff
@@ -395,8 +399,8 @@ my %is_nolimit = map { $_ => 1 } @nolimits;
 @limits = grep { not $is_nolimit{$_} } @limits;
 
 if($params->{'multibranchlimit'}) {
-    my $library_category = Koha::LibraryCategories->find( $params->{multibranchlimit} );
-    my @libraries = $library_category->libraries;
+    my $search_group = Koha::Library::Groups->find( $params->{multibranchlimit} );
+    my @libraries = $search_group->libraries;
     my $multibranch = '('.join( " or ", map { 'branch: ' . $_->id } @libraries ) .')';
     push @limits, $multibranch if ($multibranch ne  '()');
 }

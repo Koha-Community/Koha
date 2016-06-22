@@ -15245,6 +15245,39 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 15707 - Add new table library_groups)\n";
 }
 
+$DBversion = '17.12.00.008';
+if ( CheckVersion($DBversion) ) {
+    require Koha::Library::Group;
+
+    my $search_groups_staff_root = Koha::Library::Group->new( { title => '__SEARCH_GROUPS__', description => "Library search groups - Staff only" } )->store();
+    my $search_groups_opac_root = Koha::Library::Group->new( { title => '__SEARCH_GROUPS_OPAC__', description => "Library search groups - OPAC & Staff" } )->store();
+
+    my $sth = $dbh->prepare("SELECT * FROM branchcategories");
+    $sth->execute();
+
+    while ( my $lc = $sth->fetchrow_hashref ) {
+        my $description = $lc->{categorycode};
+        $description .= " - " . $lc->{codedescription} if $lc->{codedescription};
+
+        my $subgroup = Koha::Library::Group->new(
+            {
+                parent_id   => $lc->{show_in_pulldown} ? $search_groups_opac_root->id : $search_groups_staff_root->id,
+                title       => $lc->{categoryname},
+                description => $description,
+            }
+        )->store();
+
+        my $sth2 = $dbh->prepare("SELECT * FROM branchrelations WHERE categorycode = ?");
+        $sth2->execute( $lc->{categorycode} );
+
+        while ( my $l = $sth2->fetchrow_hashref ) {
+            Koha::Library::Group->new( { parent_id => $subgroup->id, branchcode => $l->{branchcode} } )->store();
+        }
+    }
+
+    print "Upgrade to $DBversion done (Bug 16735 - Replace existing library search groups functionality with the new hierarchical groups system)\n";
+    SetVersion($DBversion);
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068

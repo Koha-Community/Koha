@@ -27,7 +27,6 @@ use C4::Koha;
 use Koha::Patrons;
 use Koha::Items;
 use Koha::Libraries;
-use Koha::LibraryCategories;
 
 my $input        = new CGI;
 my $branchcode   = $input->param('branchcode');
@@ -53,8 +52,6 @@ if ( $op eq 'add_form' ) {
 
     $template->param(
         library    => $library,
-        categories => [ Koha::LibraryCategories->search( {}, { order_by => [ 'categorytype', 'categoryname' ] } ) ],
-        $library ? ( selected_categorycodes => [ map { $_->categorycode } $library->get_categories ] ) : (),
     );
 } elsif ( $op eq 'add_validate' ) {
     my @fields = qw(
@@ -80,18 +77,11 @@ if ( $op eq 'add_form' ) {
     );
     my $is_a_modif = $input->param('is_a_modif');
 
-    my @categories;
-    for my $category ( Koha::LibraryCategories->search ) {
-        push @categories, $category
-          if $input->param( "selected_categorycode_" . $category->categorycode );
-    }
     if ($is_a_modif) {
         my $library = Koha::Libraries->find($branchcode);
         for my $field (@fields) {
             $library->$field( scalar $input->param($field) );
         }
-        $library->update_categories( \@categories );
-
         eval { $library->store; };
         if ($@) {
             push @messages, { type => 'alert', code => 'error_on_update' };
@@ -106,7 +96,6 @@ if ( $op eq 'add_form' ) {
             }
         );
         eval { $library->store; };
-        $library->add_to_categories( \@categories );
         if ($@) {
             push @messages, { type => 'alert', code => 'error_on_insert' };
         } else {
@@ -153,85 +142,13 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'message', code => 'success_on_delete' };
     }
     $op = 'list';
-} elsif ( $op eq 'add_form_category' ) {
-    my $category;
-    if ($categorycode) {
-        $category = Koha::LibraryCategories->find($categorycode);
-    }
-    $template->param( category => $category, );
-} elsif ( $op eq 'add_validate_category' ) {
-    my $is_a_modif = $input->param('is_a_modif');
-    my @fields     = qw(
-      categoryname
-      codedescription
-      categorytype
-    );
-    if ($is_a_modif) {
-        my $category = Koha::LibraryCategories->find($categorycode);
-        for my $field (@fields) {
-            $category->$field( scalar $input->param($field) );
-        }
-        $category->show_in_pulldown( scalar $input->param('show_in_pulldown') eq 'on' );
-        eval { $category->store; };
-        if ($@) {
-            push @messages, { type => 'alert', code => 'error_on_update_category' };
-        } else {
-            push @messages, { type => 'message', code => 'success_on_update_category' };
-        }
-    } else {
-        my $category = Koha::LibraryCategory->new(
-            {   categorycode => $categorycode,
-                ( map { $_ => scalar $input->param($_) || undef } @fields )
-            }
-        );
-        $category->show_in_pulldown( scalar $input->param('show_in_pulldown') eq 'on' );
-        eval { $category->store; };
-        if ($@) {
-            push @messages, { type => 'alert', code => 'error_on_insert_category' };
-        } else {
-            push @messages, { type => 'message', code => 'success_on_insert_category' };
-        }
-    }
-    $op = 'list';
-} elsif ( $op eq 'delete_confirm_category' ) {
-    my $category = Koha::LibraryCategories->find($categorycode);
-    if ( my $libraries_count = $category->libraries->count ) {
-        push @messages,
-          { type => 'alert',
-            code => 'cannot_delete_category',
-            data => { libraries_count => $libraries_count, },
-          };
-        $op = 'list';
-    } else {
-        $template->param( category => $category );
-    }
-} elsif ( $op eq 'delete_confirmed_category' ) {
-    my $category = Koha::LibraryCategories->find($categorycode);
-    my $deleted = eval { $category->delete; };
-
-    if ( $@ or not $deleted ) {
-        push @messages, { type => 'alert', code => 'error_on_delete_category' };
-    } else {
-        push @messages, { type => 'message', code => 'success_on_delete_category' };
-    }
-    $op = 'list';
 } else {
     $op = 'list';
 }
 
 if ( $op eq 'list' ) {
     my $libraries = Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
-    $template->param(
-        libraries   => $libraries,
-        group_types => [
-            {   categorytype => 'searchdomain',
-                categories   => [ Koha::LibraryCategories->search( { categorytype => 'searchdomain' } ) ],
-            },
-            {   categorytype => 'properties',
-                categories   => [ Koha::LibraryCategories->search( { categorytype => 'properties' } ) ],
-            },
-        ]
-    );
+    $template->param( libraries => $libraries, );
 }
 
 $template->param(

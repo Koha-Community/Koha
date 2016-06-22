@@ -33,8 +33,8 @@ use C4::Search::History;
 use Koha;
 use Koha::Caches;
 use Koha::AuthUtils qw(get_script_name hash_password);
+use Koha::Library::Groups;
 use Koha::Libraries;
-use Koha::LibraryCategories;
 use Koha::Patrons;
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
@@ -513,11 +513,11 @@ sub get_template_and_user {
             $opac_name = C4::Context->userenv->{'branch'};
         }
 
-        my $library_categories = Koha::LibraryCategories->search({categorytype => 'searchdomain', show_in_pulldown => 1}, { order_by => ['categorytype', 'categorycode']});
+        my $search_groups = Koha::Library::Groups->get_search_groups();
         $template->param(
             OpacAdditionalStylesheet                   => C4::Context->preference("OpacAdditionalStylesheet"),
             AnonSuggestions                       => "" . C4::Context->preference("AnonSuggestions"),
-            BranchCategoriesLoop                  => $library_categories,
+            LibrarySearchGroups                   => $search_groups,
             opac_name                             => $opac_name,
             LibraryName                           => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle                      => "" . $LibraryNameTitle,
