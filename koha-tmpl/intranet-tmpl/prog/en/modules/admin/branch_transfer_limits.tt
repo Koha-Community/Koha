@@ -69,7 +69,7 @@
     </form>
 
 <p class="help">Check the boxes for the libraries you accept to checkin items from.</p>
-<fieldset>[% IF ( limitType == 'ccode' ) %]<strong>For all collection codes: </strong>[% ELSE %]<strong>For all item types: </strong>[% END %]<a id="CheckAll" href="#">Check all</a> | <a id="UncheckAll" href="#">Uncheck all</a></fieldset>
+<fieldset>[% IF ( limitType == 'ccode' ) %]<strong>For all collection codes: </strong>[% ELSE %]<strong>For all item types: </strong>[% END %]<a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="UncheckAll" href="#"><i class="fa fa-remove"></i> Clear all</a></fieldset>
 
 
   <div id="transferlimit_tabs" class="toptabs">
@@ -82,7 +82,7 @@
 	[% FOREACH codes_loo IN codes_loop %]
 	<div id="[% codes_loo.code %]set">
 		<h4>Policy for [% codes_loo.limit_phrase %]: [% codes_loo.code %]</h4>
-    <p><a id="CheckAll[% codes_loo.code %]table" class="checkall" href="#">Check all</a> | <a id="UncheckAll[% codes_loo.code %]table" class="uncheckall" href="#">Uncheck all</a></p>
+    <p><a id="CheckAll[% codes_loo.code %]table" class="checkall" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="UncheckAll[% codes_loo.code %]table" class="uncheckall" href="#"><i class="fa fa-remove"></i> Clear all</a></p>
 	
 		<table id="[% codes_loo.code %]table" class="sorted">
 			<thead>
