@@ -78,7 +78,7 @@ sub new {
     $ENV{DEBUG} && carp "Default caching system: $self->{'default_type'}";
 
     $self->{'timeout'}   ||= 0;
-    $self->{'namespace'} ||= $ENV{MEMCACHED_NAMESPACE} || 'koha';
+    $self->{'namespace'} ||= $ENV{MEMCACHED_NAMESPACE} || C4::Context->config('memcached_namespace') || 'koha';
     $self->{namespace} .= ":$subnamespace:";
 
     if ( $self->{'default_type'} eq 'memcached'
@@ -116,11 +116,8 @@ sub new {
 
 sub _initialize_memcached {
     my ($self) = @_;
-    my @servers =
-      split /,/, $self->{'cache_servers'}
-      ? $self->{'cache_servers'}
-      : ($ENV{MEMCACHED_SERVERS} || '');
-    return if !@servers;
+    my @servers = split /,/, $ENV{MEMCACHED_SERVERS} || C4::Context->config('memcached_servers') || '';
+    return unless @servers;
 
     $ENV{DEBUG}
       && carp "Memcached server settings: "

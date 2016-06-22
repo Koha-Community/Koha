@@ -18,7 +18,7 @@ package C4::Context;
 
 use strict;
 use warnings;
-use vars qw($AUTOLOAD $context @context_stack $servers $memcached $ismemcached);
+use vars qw($AUTOLOAD $context @context_stack $servers);
 BEGIN {
 	if ($ENV{'HTTP_USER_AGENT'})	{
 		require CGI::Carp;
@@ -86,23 +86,6 @@ BEGIN {
             $CGI::LIST_CONTEXT_WARN = 0;
         }
     }  	# else there is no browser to send fatals to!
-
-    # Check if there are memcached servers set
-    $servers = $ENV{'MEMCACHED_SERVERS'};
-    if ($servers) {
-        # Load required libraries and create the memcached object
-        require Cache::Memcached;
-        $memcached = Cache::Memcached->new({
-        servers => [ $servers ],
-        debug   => 0,
-        compress_threshold => 10_000,
-        expire_time => 600,
-        namespace => $ENV{'MEMCACHED_NAMESPACE'} || 'koha'
-    });
-        # Verify memcached available (set a variable and test the output)
-    $ismemcached = $memcached->set('ismemcached','1');
-    }
-
 }
 
 use Encode;
@@ -242,36 +225,7 @@ Returns undef in case of error.
 sub read_config_file {		# Pass argument naming config file to read
     my $koha = XMLin(shift, keyattr => ['id'], forcearray => ['listen', 'server', 'serverinfo'], suppressempty => '');
 
-    if ($ismemcached) {
-      $memcached->set('kohaconf',$koha);
-    }
-
     return $koha;			# Return value: ref-to-hash holding the configuration
-}
-
-=head2 ismemcached
-
-Returns the value of the $ismemcached variable (0/1)
-
-=cut
-
-sub ismemcached {
-    return $ismemcached;
-}
-
-=head2 memcached
-
-If $ismemcached is true, returns the $memcache variable.
-Returns undef otherwise
-
-=cut
-
-sub memcached {
-    if ($ismemcached) {
-      return $memcached;
-    } else {
-      return;
-    }
 }
 
 =head2 db_scheme2dbi
@@ -355,22 +309,23 @@ sub new {
             return;
         }
     }
-    
-    if ($ismemcached) {
-        # retrieve from memcached
-        $self = $memcached->get('kohaconf');
-        if (not defined $self) {
-            # not in memcached yet
-            $self = read_config_file($conf_fname);
-        }
-    } else {
-        # non-memcached env, read from file
+
+    my $conf_cache = Koha::Caches->get_instance('config');
+    if ( $conf_cache ) {
+        $self = $conf_cache->get_from_cache('kohaconf');
+    }
+    unless ( %$self ) {
         $self = read_config_file($conf_fname);
     }
-
-    $self->{"config_file"} = $conf_fname;
-    warn "read_config_file($conf_fname) returned undef" if !defined($self->{"config"});
-    return if !defined($self->{"config"});
+    if ( $conf_cache ) {
+        # FIXME it may be better to use the memcached servers from the config file
+        # to cache it
+        $conf_cache->set_in_cache('koha_conf', $self)
+    }
+    unless ( exists $self->{config} or defined $self->{config} ) {
+        warn "read_config_file($conf_fname) returned undef";
+        return;
+    }
 
     $self->{"Zconn"} = undef;    # Zebra Connections
     $self->{"userenv"} = undef;        # User env
