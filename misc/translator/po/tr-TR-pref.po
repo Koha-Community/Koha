@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2016-04-18 10:42+0000\n"
-"Last-Translator: Ugur <ugurbulgan@sdu.edu.tr>\n"
+"PO-Revision-Date: 2016-05-26 07:58+0000\n"
+"Last-Translator: Onur <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1460976134.000000\n"
+"X-POOTLE-MTIME: 1464249510.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -258,6 +258,18 @@ msgstr "Engelle"
 msgid "admin.pref#IndependentBranches# staff (but not superlibrarians) from modifying objects (holds, items, patrons, etc.) belonging to other libraries."
 msgstr "personelin (superlibrarian hariç) diğer kütüphanelere ait olan (ayırmalar, materyaller, kullanıcılar, vb.) objeler üzerinde değişiklik yapmasını."
 
+# Administration > Login options
+msgid "admin.pref#IndependentBranchesPatronModifications# Don't prevent"
+msgstr "engelleme"
+
+# Administration > Login options
+msgid "admin.pref#IndependentBranchesPatronModifications# Prevent"
+msgstr "engelle"
+
+# Administration > Login options
+msgid "admin.pref#IndependentBranchesPatronModifications# staff (but not superlibrarians) from viewing and approving/denying patron modification requests for patrons belonging to other libraries."
+msgstr "personelin (superlibrarian personel hariç) diğer kütüphanelere ait olan kullanıcılardan gelen kullanıcı değişiklikleri isteklerini görebilmeleri ve onaylama/reddetmeleri."
+
 # Administration > Interface options
 msgid "admin.pref#KohaAdminEmailAddress# Use"
 msgstr "Kullan"
@@ -335,7 +347,7 @@ msgid "admin.pref#UsageStats# Share"
 msgstr "Paylaş"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStats# anonymous Koha usage data with the Koha community. You can see the data on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
+msgid "admin.pref#UsageStats# anonymous Koha usage data with the Koha community. You can see the data on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>. You have to run misc/cronjobs/share_usage_with_koha_community.pl in a cronjob."
 msgstr "Koha topluluğu içerisindeki anonim Koha kullanımı. İlgili verileri <a href=\"http://hea.koha-community.org\">Hea Koha topluluğu web sayfası</a> üzerinde görebilirsiniz. Bir cronjob içerisinde misc/cronjobs/share_usage_with_koha_community.pl çalıştırmalısınız."
 
 # Administration > Share anonymous usage statistics
@@ -682,6 +694,10 @@ msgstr "Kataloglama"
 msgid "cataloguing.pref Display"
 msgstr "Görüntüle"
 
+# Cataloging > Exporting
+msgid "cataloguing.pref Exporting"
+msgstr "Dışa aktarma"
+
 # Cataloging > Importing
 msgid "cataloguing.pref Importing"
 msgstr "İçe aktarılıyor"
@@ -745,6 +761,32 @@ msgstr "."
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
 msgstr "Birden çok olan yazarlar, seriler veya konuları bu işaretle ayırın"
+
+# Cataloging > Exporting
+# Cataloging > Exporting
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# <br/>"
+msgstr "<br/>"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# All values of repeating tags and subfields will be printed with the given BibTeX tag."
+msgstr "Yinelenen tag'lerin ve alt alanların tüm değerleri verilen BibTeX etiketi ile yazdırılacaktır."
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# Include following fields when exporting BibTeX,"
+msgstr "BibTeX dışa aktarılırken aşağıdaki alanlar dahil edilecektir,"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# To specificy multiple marc tags/subfields as targets for a repeating BibTex tag, use the following format: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )"
+msgstr "Yinelenen bir BibTex tag'i için hedef olarak birden fazla marc tag/alt alanı belirtmek için aşağıdaki biçimi kullanın: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# Use '@' ( with quotes ) as the BT_TAG to replace the bibtex record type with a field value of your choosing."
+msgstr "bibtex kayıt türünü seçtiğiniz bir alan değeri ile değiştirmek için, BT_TAG olarak '@' (tırnak işaretleri ile) kullanın."
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# Use one line per tag in the format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )"
+msgstr "BT_TAG formatında tag başına bir satır kullanın: TAG$SUBFIELD ( e.g. lccn: 010$a )"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -818,6 +860,34 @@ msgstr "Doldur <a href=\"http://www.loc.gov/marc/organizations/orgshome.html\">M
 msgid "cataloguing.pref#MARCOrgCode# by default in new MARC21 records (leave blank to disable)."
 msgstr "Yeni MARC21 kayıtlarında varsayılan olarak (devre dışı bırakmak için boş bırakın)."
 
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <br />example: '001,245ab,600'"
+msgstr "<br />örnek: '001,245ab,600'"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <li>all subfields of fields 600</li>"
+msgstr "<li>600 alanlarının tüm alt alanları</li>"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <li>subfields a and b of fields 245</li>"
+msgstr "<li>245 alanlarının a ve b alt alanları</li>"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <li>value of 001</li>"
+msgstr "<li>001 değeri</li>"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <ul>"
+msgstr "<ul>"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# displays:"
+msgstr "görüntüler:"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# fields to display for deleted records after merge"
+msgstr "Birleştirmeden sonra silinen kayıtlar için görüntülenecek alanlar"
+
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr "(bir yer kodu olmalı, ya da devredışı bırakmak için boş bırakın)."
@@ -881,6 +951,32 @@ msgstr "yeni materyal son oluşturulan materyal değerleriyle önceden doldurulm
 # Cataloging > Record Structure
 msgid "cataloguing.pref#PrefillItem# the new item is prefilled with last created item values."
 msgstr "yeni materyal son oluşturulan materyal değerleriyle önceden doldurulmuş."
+
+# Cataloging > Exporting
+# Cataloging > Exporting
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# <br/>"
+msgstr "<br/>"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# All values of repeating tags and subfields will be printed with the given RIS tag."
+msgstr "Yinelenen tag'ler ve alt alanların tüm değerleri verilen RIS tag'i ile yazdırılacaktır."
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# Include following fields when exporting RIS,"
+msgstr "RIS dışa aktarılırkan aşağıdaki alanlar dahil edilecektir,"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# To specificy multiple marc tags/subfields as targets for a repeating RIS tag, use the following format: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )"
+msgstr "Yinelenen bir RIS tag'i için hedef olarak birden fazla marc tag'i/alt alanı belirtmek için aşağıdaki biçimi kullanın: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# Use of TY ( record type ) as a key will <i>replace</i> the default TY with the field value of your choosing."
+msgstr "Bir anahtar olarak TY (kayıt türü) kullanılması, varsayılan TY'i seçtiğiniz alan değeri ile <i>değiştirecektir</i>."
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# Use one line per tag in the format RIS_TAG: TAG$SUBFIELD ( e.g. LC: 010$a )"
+msgstr "RIS_TAG formatında tag başına bir satır kullanın: TAG$SUBFIELD ( e.g. LC: 010$a )"
 
 # Cataloging > Display
 msgid "cataloguing.pref#SeparateHoldings# Don't separate"
@@ -1133,6 +1229,10 @@ msgstr "Z39.50. kullanarak bir kayıt aktarırken yazar etiketlerine kullanılan
 # Circulation
 msgid "circulation.pref"
 msgstr "Dolaşım"
+
+# Circulation > Batch checkout
+msgid "circulation.pref Batch checkout"
+msgstr "Toplu ödünç verme"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref Checkin Policy"
@@ -1438,6 +1538,26 @@ msgstr "Gerçekleştirme"
 msgid "circulation.pref#AutomaticItemReturn# automatically transfer items to their home library when they are returned."
 msgstr "İade edildiklerinde materyalleri otomatik olarak ana kütüphanelerine transfer et."
 
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckouts# Allow"
+msgstr "izin ver"
+
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckouts# Don't allow"
+msgstr "izin verme"
+
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckouts# batch checkouts"
+msgstr "toplu ödünç verilenler"
+
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckoutsValidCategories# (list of patron categories separated with a pipe '|')"
+msgstr "(kullanıcı kategorilerinin bir '|' boru işareti ile ayrılmış listesi)"
+
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckoutsValidCategories# Patron categories allowed to checkout in a batch"
+msgstr "Toplu olarak ödünç almaya izin verilen kullanıcı kategorileri"
+
 # Circulation > Checkin Policy
 msgid "circulation.pref#BlockReturnOfWithdrawnItems# Block"
 msgstr "Engelle"
@@ -1525,6 +1645,26 @@ msgstr "İleride yapılacak olan ayırma isteklerini onaylayın (En geç başlan
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# days from now) at checkin time. Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. But it does not interfere with issuing, renewing or transferring books."
 msgstr "(şu an itibariyle günler) iade zamanında. Gün sayılarının çekilecek ayırtılanlar raporunun varsayılan bitiş tarih hesaplamasında da kullanılacağını göz önünde bulundurunuz. Fakat bu işlem kitap ödünç vermeyi, yenilemeyi ya da aktarmayı kapsamaz."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# Consider"
+msgstr "Dikkate al"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# Don't consider"
+msgstr "Dikkate alma"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# If disabled, both values will be checked separately."
+msgstr "Devre dışı bırakırsanız, her iki değer ayrı ayrı kontrol edilecektir."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# If enabled, the number of checkouts allowed will be normal checkouts + on-site checkouts."
+msgstr "Etkinleştirilirse, izin verilen ödünç vermeler, normal ödünç vermeler + yerinde ödünç vermeler şeklinde olacaktır."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# on-site checkouts as normal checkouts."
+msgstr "Normal ödünç alma işlemleri olarak yerinde ödünç alma işlemleri"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
@@ -1696,18 +1836,6 @@ msgstr "materyalin bulunduğu kütüphane"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#HomeOrHoldingBranch# the library the item was checked out from."
-msgstr "materyalin ödünç alındığı kütüphane"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#HomeOrHoldingBranchReturn# On checkin route the returned item to"
-msgstr "materyalin bulunduğu kütüphane"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#HomeOrHoldingBranchReturn# the library the item is from."
-msgstr "materyalin bulunduğu kütüphane"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#HomeOrHoldingBranchReturn# the library the item was checked out from."
 msgstr "materyalin ödünç alındığı kütüphane"
 
 # Circulation > Checkout Policy
@@ -1884,6 +2012,22 @@ msgid "circulation.pref#OverduesBlockCirc# when checking out to a borrower that 
 msgstr "Ödenmemiş gecikme borcu olan kullanıcıya ödünç verirken"
 
 # Circulation > Checkout Policy
+msgid "circulation.pref#OverduesBlockRenewing# When a patron's checked out item is overdue,"
+msgstr "kullanıcının ödünç aldığı materyal geciktiğinde,"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OverduesBlockRenewing# allow renewing."
+msgstr "süre uzatılmasına izin ver."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OverduesBlockRenewing# block renewing for all the patron's items."
+msgstr "kullanıcının üzerindeki tüm materyaller için süre uzatılmasını engelle."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OverduesBlockRenewing# block renewing only for this item."
+msgstr "süre uzatmayı yalnızca bu materyal için engelle."
+
+# Circulation > Checkout Policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
 msgstr "kadar dahil"
 
@@ -2002,6 +2146,22 @@ msgstr "Otomatik değil"
 # Circulation > Holds Policy
 msgid "circulation.pref#ReservesNeedReturns# mark a hold as found and waiting when a hold is placed on a specific item and that item is already checked in."
 msgstr "Bir ayırma işlemi belirli bir materyal üzerine konulmuş ise ve bu materyal halihazırda ödünç verilmiş durumda ise, ayırma işlemini bulundu ve bekliyor olarak işaretleyin."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#RestrictionBlockRenewing# Allow"
+msgstr "İzin ver"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#RestrictionBlockRenewing# Block"
+msgstr "Engelle"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#RestrictionBlockRenewing# If patron is restricted,"
+msgstr "Eğer kullanıcı kısıtlanmış ise,"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#RestrictionBlockRenewing# renewing of items."
+msgstr "materyallerin süresinin uzatılması."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
@@ -2476,18 +2636,6 @@ msgid "circulation.pref#previousIssuesDefaultSortOrder# latest to earliest"
 msgstr "uzak tarihten yakın tarihe"
 
 # Circulation > Interface
-msgid "circulation.pref#soundon# Don't enable"
-msgstr "Etkinleştirme"
-
-# Circulation > Interface
-msgid "circulation.pref#soundon# Enable"
-msgstr "Etkinleştir"
-
-# Circulation > Interface
-msgid "circulation.pref#soundon# circulation sounds during checkin and checkout in the staff interface.  Not supported by all web browsers yet."
-msgstr "iade ve ödünç verme işlemleri esnasında personel ara yüzünde çıkan dolaşım sesleri. Henüz tüm web tarayıcılarıyla desteklenmiyor."
-
-# Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on the circulation page from"
 msgstr "Dolaşım sayfasındaki bugünkü ödünç verme işlemlerini sıralayınız"
 
@@ -2792,8 +2940,8 @@ msgid "enhanced_content.pref#IDreamBooksReadometer# Don't add"
 msgstr "Ekleme"
 
 # Enhanced Content > IDreamLibraries
-msgid "enhanced_content.pref#IDreamBooksReadometer# a \"Readometer\" that summarizes the reviews gathered by <a href='http://idreambooks.com/'>IDreamBooks.com</a> to the OPAC details page."
-msgstr "\"Readometer\" <a href='http://idreambooks.com/'>IDreamBooks.com</a> tarafından toplanan incelemeleri OPAC detay sayfasına özetler."
+msgid "enhanced_content.pref#IDreamBooksReadometer# a \"Readometer\" that summarizes the reviews gathered by <a href='https://idreambooks.com/'>IDreamBooks.com</a> to the OPAC details page."
+msgstr "<a href='https://idreambooks.com/'>IDreamBooks.com</a> tarafından derlenen yorumları OPAC ayrıntıları sayfasında özetleyen bir \"Readometer\""
 
 # Enhanced Content > IDreamLibraries
 msgid "enhanced_content.pref#IDreamBooksResults# Add"
@@ -2804,8 +2952,8 @@ msgid "enhanced_content.pref#IDreamBooksResults# Don't add"
 msgstr "Ekleme"
 
 # Enhanced Content > IDreamLibraries
-msgid "enhanced_content.pref#IDreamBooksResults# the rating from <a href='http://idreambooks.com/'>IDreamBooks.com</a> to OPAC search results."
-msgstr "<a href='http://idreambooks.com/'>IDreamBooks.com</a>den OPAC arama sonuçlarına derecelendirme."
+msgid "enhanced_content.pref#IDreamBooksResults# the rating from <a href='https://idreambooks.com/'>IDreamBooks.com</a> to OPAC search results."
+msgstr "<a href='https://idreambooks.com/'>IDreamBooks.com</a> sayfasından OPAC arama sonuçlarına aktarılan değerlendirmeler."
 
 # Enhanced Content > IDreamLibraries
 msgid "enhanced_content.pref#IDreamBooksReviews# Add"
@@ -2816,8 +2964,8 @@ msgid "enhanced_content.pref#IDreamBooksReviews# Don't add"
 msgstr "Ekleme"
 
 # Enhanced Content > IDreamLibraries
-msgid "enhanced_content.pref#IDreamBooksReviews# a tab on the OPAC details with book reviews from critics aggregated by <a href='http://idreambooks.com/'>IDreamBooks.com</a>."
-msgstr "<a href='http://idreambooks.com/'>IDreamBooks.com</a> tarafınca toplanan eleştirmen kitap incelemelerinin OPAC detaylarındaki sekmesi."
+msgid "enhanced_content.pref#IDreamBooksReviews# a tab on the OPAC details with book reviews from critics aggregated by <a href='https://idreambooks.com/'>IDreamBooks.com</a>."
+msgstr "<a href='https://idreambooks.com/'>IDreamBooks.com</a> tarafından toplanan eleştirmenlerden gelen kitap değerlendirmelerinin OPAC ayrıntıları sayfasındaki bir sekmesi."
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesEnabled# <a href=\"http://www.librarything.com/forlibraries/\">sign up</a>, then enter in your ID below."
@@ -3264,16 +3412,36 @@ msgid "i18n_l10n.pref#AddressFormat# US style ([Street number], [Address] - [Cit
 msgstr "ABD tarzı ([Cadde numarası], [Adres] - [İl], [ZIP/Posta Kodu], [Eyalet])"
 
 # I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Friday"
+msgstr "Cuma"
+
+# I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Monday"
 msgstr "Pazartesi"
+
+# I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Saturday"
+msgstr "Cumartesi"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Sunday"
 msgstr "Pazar"
 
 # I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Thursday"
+msgstr "Perşembe"
+
+# I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Tuesday"
+msgstr "Salı"
+
+# I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Use"
 msgstr "Kullan"
+
+# I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Wednesday"
+msgstr "Çarşamba"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# as the first day of week in the calendar."
@@ -3316,6 +3484,10 @@ msgid "i18n_l10n.pref#dateformat# Format dates like"
 msgstr "Tarihleri şu şekilde biçimlendiriniz"
 
 # I18N/L10N
+msgid "i18n_l10n.pref#dateformat# dd.mm.yyyy"
+msgstr "gg.aa.yyyy"
+
+# I18N/L10N
 msgid "i18n_l10n.pref#dateformat# dd/mm/yyyy"
 msgstr "gg/aa/yyyy"
 
@@ -3347,6 +3519,34 @@ msgstr "İzin verme"
 msgid "i18n_l10n.pref#opaclanguagesdisplay# patrons to change the language they see on the OPAC."
 msgstr "OPAC’da gördükleri dili değiştirecek kullanıcılar."
 
+# Labs
+msgid "labs.pref"
+msgstr "labs.pref"
+
+# Labs > All
+msgid "labs.pref All"
+msgstr "Tümü"
+
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# <br/> NOTE:"
+msgstr "<br/> NOT:"
+
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# Don't enable"
+msgstr "Etkinleştirme"
+
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# Enable"
+msgstr "Etkinleştir"
+
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# This feature is currently experimental, and may have bugs that cause corruption of records. It also does not include any support for UNIMARC or NORMARC fixed fields. Please help us test it and report any bugs, but do so at your own risk."
+msgstr "Bu özellik şu anda deneyseldir ve kayıtların bozulmasına neden olabilecek hataları olabilir. Ayrıca UNIMARC ya NORMARC sabit alanları için herhangi bir destek içermez. Lütfen bunu test etmemize yardımcı olun ve karşılaştığınız program hatalarını bize gönderin, ancak tüm risklerin size ait olduğunu unutmayın."
+
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# the advanced cataloging editor."
+msgstr "Gelişmiş kataloglama editörü"
+
 # Local Use
 msgid "local_use.pref"
 msgstr "Yerel Kullanım"
@@ -3359,111 +3559,155 @@ msgstr "Henüz hiçbir şey tanımlanmamış."
 msgid "logs.pref"
 msgstr "Günlük"
 
-# Logging
+# Logging > Debugging
+msgid "logs.pref Debugging"
+msgstr "Hata ayıklama"
+
+# Logging > Logging
+msgid "logs.pref Logging"
+msgstr "Sistem günlüğü oluşturmak"
+
+# Logging > Logging
 msgid "logs.pref#AuthoritiesLog# Don't log"
 msgstr "Sistem günlüğü tutma"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#AuthoritiesLog# Log"
 msgstr "Sistem günlüğü"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#AuthoritiesLog# changes to authority records."
 msgstr "otorite kayıtlarındaki değişiklikler."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#BorrowersLog# Don't log"
 msgstr "Sistem günlüğü tutma"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#BorrowersLog# Log"
 msgstr "Sistem günlüğü"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#BorrowersLog# changes to patron records."
 msgstr "üye kayıtlarındaki değişiklikler."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CataloguingLog# Don't log"
 msgstr "Sistem günlüğü tutma"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CataloguingLog# Log"
 msgstr "Sistem günlüğü"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CataloguingLog# any changes to bibliographic or item records. Since this occurs whenever a book is checked in or out as well, it is not advisable to turn this on."
 msgstr "bibliyografik ya da materyal kayıtlarındaki herhangi bir değişiklik. Bu, herhangi bir kitap iade edildiğinde ya da ödünç verildiğinde de meydana geleceği için, bu seçeneği devreye sokmanız önerilmez."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CronjobLog# Don't log"
 msgstr "Sistem günlüğüne kaydetme"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CronjobLog# Log"
 msgstr "Sistem günlüğüne kaydet"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CronjobLog# information from cron jobs."
 msgstr "cron job'lardan gelen bilgiler."
 
-# Logging
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsIntranet# Do"
+msgstr "Yap"
+
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsIntranet# Don't"
+msgstr "Yapma"
+
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsIntranet# dump all Template Toolkit variable to a comment in the html source for the staff intranet."
+msgstr "Tüm şablon araç seti değişkenlerinin personel intranet için html kaynağındaki bir yoruma dökümü."
+
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsOpac# Do"
+msgstr "Yap"
+
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsOpac# Don't"
+msgstr "Yapma"
+
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsOpac# dump all Template Toolkit variable to a comment in the html source for the OPAC."
+msgstr "Tüm Şablon Araç Takımı değişkenlerini OPAC html kaynağındaki bir yoruma at."
+
+# Logging > Logging
 msgid "logs.pref#FinesLog# Don't log"
 msgstr "Sistem günlüğü tutma"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#FinesLog# Log"
 msgstr "Sistem günlüğü"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#FinesLog# when fines are charged, paid, or forgiven."
 msgstr "cezalar tahsil edildiğinde, ödendiğinde ya da bağışlandığında."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#IssueLog# Don't log"
 msgstr "Sistem günlüğü tutma"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#IssueLog# Log"
 msgstr "Sistem günlüğü"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "Materyaller ödünç verildiğinde."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#LetterLog# Don't log"
 msgstr "Sistem günlüğü tutma"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#LetterLog# Log"
 msgstr "Sistem günlüğü"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#LetterLog# when an automatic claim notice is sent."
 msgstr "Otomatik claim mesajı gönderildiğinde."
 
-# Logging
+# Logging > Logging
+msgid "logs.pref#ReportsLog# Don't log"
+msgstr "Sistem günlüğüne alma"
+
+# Logging > Logging
+msgid "logs.pref#ReportsLog# Log"
+msgstr "Sistem günlüğüne al"
+
+# Logging > Logging
+msgid "logs.pref#ReportsLog# when reports are added, deleted or changed."
+msgstr "raporlar eklendiğinde, silindiğinde ya da değiştirildiğinde."
+
+# Logging > Logging
 msgid "logs.pref#ReturnLog# Don't log"
 msgstr "Sistem günlüğü tutma"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#ReturnLog# Log"
 msgstr "Sistem günlüğü"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#ReturnLog# when items are returned."
 msgstr "Materyaller iade edildiğinde."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#SubscriptionLog# Don't log"
 msgstr "Sistem günlüğü tutma"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#SubscriptionLog# Log"
 msgstr "Sistem günlüğü"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#SubscriptionLog# when serials are added, deleted or changed."
 msgstr "süreli yayınlar eklendiğinde, silindiğinde ya da değiştirildiğinde."
 
@@ -3490,6 +3734,10 @@ msgstr "Politika"
 # OPAC > Privacy
 msgid "opac.pref Privacy"
 msgstr "Gizlilik"
+
+# OPAC > Restricted page
+msgid "opac.pref Restricted page"
+msgstr "Kısıtlı sayfa"
 
 # OPAC > Self Registration
 msgid "opac.pref Self Registration"
@@ -3891,6 +4139,10 @@ msgstr "web sitesini yeni bir pencerede aç."
 msgid "opac.pref#OPACUserCSS# Include the following CSS on all pages in the OPAC:"
 msgstr "OPAC’ın tüm sayfalarında yer alan aşağıdaki stil şablonlarını (CSS) dahil ediniz:"
 
+# OPAC > Appearance
+msgid "opac.pref#OPACUserJS# Include the following JavaScript on all pages in the OPAC:"
+msgstr "OPAC'ta tüm sayfalarda aşağıdaki JavaScript'i ekleyin:"
+
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# Don't show"
 msgstr "Gösterme"
@@ -4112,6 +4364,22 @@ msgid "opac.pref#OpacKohaUrl# Show"
 msgstr "Göster"
 
 # OPAC > Appearance
+msgid "opac.pref#OpacLangSelectorMode# Display language selector on "
+msgstr "üzerinde dil seçiciyi görüntüle"
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLangSelectorMode# both top and footer"
+msgstr "Hem alt bilgi hem üst bilgi"
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLangSelectorMode# only footer"
+msgstr "yalnızca alt bilgi"
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLangSelectorMode# top"
+msgstr "üst"
+
+# OPAC > Appearance
 msgid "opac.pref#OpacLocationBranchToDisplay# Display the"
 msgstr "Görüntüle"
 
@@ -4208,8 +4476,8 @@ msgid "opac.pref#OpacPublic# Enable"
 msgstr "Etkinleştir"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentification before accessing the OPAC."
-msgstr "Genel olarak Koha OPAC. Giriş yapmadan önce, OPAC özel ayarlarının kimlik doğrulamasının olması gerekmektedir."
+msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC."
+msgstr "Koha OPAC genel olarak. Özel OPAC, OPAC'a erişmeden önce kimlik doğrulaması gerektirir."
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -4415,6 +4683,26 @@ msgstr "İzin verme"
 msgid "opac.pref#RequestOnOpac# patrons to place holds on items from the OPAC."
 msgstr "OPAC’tan materyallere ayırma yapacak kullanıcılar."
 
+# OPAC > Restricted page
+msgid "opac.pref#RestrictedPageContent# HTML content of your restricted page"
+msgstr "Kısıtlanmış sayfanızın HTML içeriği"
+
+# OPAC > Restricted page
+msgid "opac.pref#RestrictedPageLocalIPs# Access from IP addresses beginning with"
+msgstr "Şu IP numaraları ile başlayan adreslerden erişim"
+
+# OPAC > Restricted page
+msgid "opac.pref#RestrictedPageLocalIPs# do not need to be authenticated (comma separated - ex: '127.0.0,127.0.1')"
+msgstr "kimlik doğrulaması gerekmez (virgülle ayrılmış - ex: '127.0.0,127.0.1')"
+
+# OPAC > Restricted page
+msgid "opac.pref#RestrictedPageTitle# Use"
+msgstr "Kullan"
+
+# OPAC > Restricted page
+msgid "opac.pref#RestrictedPageTitle# as title of your restricted page (appears in the breadcrumb and on the top of the restricted page)"
+msgstr "kısıtlanmış sayfanızın başlığı olarak (yer göstergeçlerinde ve kısıtlanmış sayfanın en üstünde görünür)"
+
 # OPAC > Policy
 msgid "opac.pref#SearchMyLibraryFirst# Don't limit"
 msgstr "Sınırlama"
@@ -4603,10 +4891,6 @@ msgstr "Kullan"
 msgid "opac.pref#opacthemes# theme on the OPAC."
 msgstr "OPAC teması."
 
-# OPAC > Appearance
-msgid "opac.pref#opacuserjs# Include the following JavaScript on all pages in the OPAC:"
-msgstr "OPAC'ta tüm sayfalarda aşağıdaki JavaScript'i ekleyin:"
-
 # OPAC > Features
 msgid "opac.pref#opacuserlogin# Allow"
 msgstr "İzin ver"
@@ -4792,6 +5076,18 @@ msgid "patrons.pref#ExtendedPatronAttributes# searching, editing and display of 
 msgstr "Özel kullanıcı niteliklerinin aranması, düzeltilmesi ve gösterilmesi."
 
 # Patrons > General
+msgid "patrons.pref#FeeOnChangePatronCategory# Do"
+msgstr "Yap"
+
+# Patrons > General
+msgid "patrons.pref#FeeOnChangePatronCategory# Don't"
+msgstr "Yapma"
+
+# Patrons > General
+msgid "patrons.pref#FeeOnChangePatronCategory# charge a fee when a patron changes to a category with an enrollment fee."
+msgstr "bir kullanıcı kayıt ücreti olan bir kategoriye değiştiğinde ücret uygula."
+
+# Patrons > General
 msgid "patrons.pref#MaxFine# Empty value means no limit. Single item caps are specified in the circulation rules matrix."
 msgstr "Boş değer limitsiz anlamına gelir. Tek materyal başlıkları dolaşım kuralları matrisinde belirtilmiştir."
 
@@ -4802,6 +5098,14 @@ msgstr "Tüm ödünç verme işlemleri için gecikme cezalarının üst limiti e
 # Patrons > General
 msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr "[% local_currency %]."
+
+# Patrons > General
+msgid "patrons.pref#MembershipExpiryDaysNotice# Send an account expiration notice when a patron's card will expire in"
+msgstr "Bir kullanıcının kartının süresinin dolmasından önce bir hesap sona erme bildirimi gönder"
+
+# Patrons > General
+msgid "patrons.pref#MembershipExpiryDaysNotice# days."
+msgstr "günler."
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBEnable# Disable"
@@ -4876,8 +5180,8 @@ msgid "patrons.pref#SMSSendDriver# driver to send SMS messages."
 msgstr "SMS mesajı göndermek için sürücü."
 
 # Patrons > General
-msgid "patrons.pref#StatisticsFields# (separate fields with |)"
-msgstr "( Alanları | ile ayırınız)"
+msgid "patrons.pref#StatisticsFields# (separate fields with |, without trailing |). Default if empty: location|itype|ccode"
+msgstr "(alanları | ile ayırın, izleyen | olmadan ). Boş bırakılmışsa varsayılan: location|itype|ccode"
 
 # Patrons > General
 msgid "patrons.pref#StatisticsFields# Show the following fields from the items database table as columns on the statistics tab on the patron record: "
@@ -5101,9 +5405,7 @@ msgstr "<br/>Eğer bir kayıt üzerinde bu sayıdan daha fazla materyal varsa, k
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty for no limit on the number of items for which to check the status."
-msgstr ""
-"<br/>Durumu kontol edilecek materyallerin sayısına herhangi bir sınır "
-"koymamak için boş bırakın."
+msgstr "<br/>Durumu kontrol edilecek materyallerin sayısına herhangi bir sınır koymamak için boş bırakın."
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# For records with many items, only check the availability status for the first"
@@ -5549,6 +5851,18 @@ msgstr "Görünüm"
 msgid "staff_client.pref Options"
 msgstr "Seçenekler"
 
+# Staff Client > Options
+msgid "staff_client.pref#AudioAlerts# Don't enable"
+msgstr "Etkinleştirme"
+
+# Staff Client > Options
+msgid "staff_client.pref#AudioAlerts# Enable"
+msgstr "Etkinleştir"
+
+# Staff Client > Options
+msgid "staff_client.pref#AudioAlerts# audio alerts for events defined in the audio alerts section of administration."
+msgstr "yönetimin sesli uyarılar bölümünde tanımlanmış olaylar için sesli uyarılar."
+
 # Staff Client > Appearance
 msgid "staff_client.pref#Display856uAsImage# . Note: The corresponding XSLT option must be turned on."
 msgstr ". Not: İlgili XSLT seçeneği açık olmalıdır."
@@ -5618,6 +5932,10 @@ msgid "staff_client.pref#IntranetUserCSS# Include the following CSS on all pages
 msgstr "Personel istemcinin tüm sayfalarındaki takip eden stil şablonunu(CSS) dahil ediniz:"
 
 # Staff Client > Appearance
+msgid "staff_client.pref#IntranetUserJS# Include the following JavaScript on all pages in the staff client:"
+msgstr "Personel istemcideki tüm sayfalara aşağıdaki JavaScript'i ekleyin:"
+
+# Staff Client > Appearance
 msgid "staff_client.pref#IntranetmainUserblock# Show the following HTML in its own column on the main page of the staff client:"
 msgstr "Personel istemcinin ana sayfasındaki takip eden HTML’yi kendi sütununda gösteriniz:"
 
@@ -5652,6 +5970,18 @@ msgstr "Etkinleştir"
 # Staff Client > Options
 msgid "staff_client.pref#StaffDetailItemSelection# item selection in record detail page."
 msgstr "kayıt detayları sayfasında materyal seçimi."
+
+# Staff Client > Options
+msgid "staff_client.pref#UseWYSIWYGinSystemPreferences# Don't show"
+msgstr "Gösterme"
+
+# Staff Client > Options
+msgid "staff_client.pref#UseWYSIWYGinSystemPreferences# Show"
+msgstr "Göster"
+
+# Staff Client > Options
+msgid "staff_client.pref#UseWYSIWYGinSystemPreferences# WYSIWYG editor when editing certain HTML system preferences."
+msgstr "Belirli HTML sistem tercihlerini düzenlerken WYSIWYG editörü."
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the default one</li><li>put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language"
@@ -5704,10 +6034,6 @@ msgstr "CSS stilini kullan"
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetstylesheet# on all pages in the staff interface, instead of the default css (used when leaving this field blank). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
 msgstr "Varsayılan css yerine (bu alan boş bırakıldığında kullanılır) personel arayüzdeki tüm sayfalarda. Sadece bir dosya ismi, tam yerel yol ya da <code>http://</code>  ile başlayan tam URL giriniz ( eğer dosya uzak bir sunucuda yer alıyorsa). Sadece dosya ismi girdiğinizi, dosyanın her aktif tema ve dil için Koha şablon dizinindeki css altdizininde olması gerektiğini göz önünde bulundurunuz. Tam yerel yolun HTTP belge kökünden başlaması gerekir."
-
-# Staff Client > Appearance
-msgid "staff_client.pref#intranetuserjs# Include the following JavaScript on all pages in the staff client:"
-msgstr "Personel istemcinin tüm sayfalarındaki takip eden stil şablonunu(CSS) dahil ediniz:"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#staffClientBaseURL# . Do not include a trailing slash in the URL."
@@ -5769,6 +6095,10 @@ msgstr "tools.pref"
 msgid "tools.pref Batch item modification"
 msgstr "Toplu materyal değiştirme"
 
+# Tools > News
+msgid "tools.pref News"
+msgstr "Yenilikler"
+
 # Tools > Patron cards
 msgid "tools.pref Patron cards"
 msgstr "Kullanıcı kartları"
@@ -5788,6 +6118,26 @@ msgstr "Süreci için"
 # Tools > Batch item modification
 msgid "tools.pref#MaxItemsForBatch# items in a single modification or deletion batch."
 msgstr "Tek modifikasyon içindeki yada toplu silme içerisindeki materyaller."
+
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Both OPAC and staff client"
+msgstr "Hem OPAC hem de personel istemci"
+
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Not at all"
+msgstr "Katiyen"
+
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# OPAC only"
+msgstr "yalnızca OPAC"
+
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Show the author for news items:"
+msgstr "Yeni materyaller için yazar bilgilerini göster:"
+
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Staff client only"
+msgstr "Yalnızca personel istemci"
 
 # Web services
 msgid "web_services.pref"
@@ -5818,8 +6168,8 @@ msgid "web_services.pref#ILS-DI# Enable"
 msgstr "Etkinleştir"
 
 # Web services > ILS-DI
-msgid "web_services.pref#ILS-DI# ILS-DI services for OPAC users"
-msgstr "OPAC kullanıcıları için ILS-DI servisleri"
+msgid "web_services.pref#ILS-DI# ILS-DI services for OPAC users (available at: /cgi-bin/koha/ilsdi.pl)"
+msgstr "OPAC kullanıcıları için ILS-DI hizmetleri (burada mevcut: /cgi-bin/koha/ilsdi.pl)"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# Allow IP addresses"
@@ -5882,6 +6232,26 @@ msgid "web_services.pref#OAI-PMH:ConfFile# YAML OAI Koha server configuration fi
 msgstr "YAML OAI Koha sunucu yapılandırma dosyası:"
 
 # Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:DeletedRecord# ."
+msgstr "."
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:DeletedRecord# Koha's deletedbiblio table"
+msgstr "Koha'nın silinen bibliyolar tablosu"
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:DeletedRecord# might be emptied or truncated at some point (transient)"
+msgstr "bir noktada boşaltılabilir veya kesilebilir (geçici)"
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:DeletedRecord# will never be emptied or truncated (persistent)"
+msgstr "asla boşaltılmayacak ya da kesilmeyecek (kalıcı)"
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:DeletedRecord# will never have any data in it (no)"
+msgstr "asla içinde herhangi bir veri olmayacak (hayır)"
+
+# Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:MaxCount# Only return"
 msgstr "Sadece dönüş"
 
@@ -5904,3 +6274,4 @@ msgstr "Sadece geri dönen"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "raporlar web hizmeti yoluyla talep edilen bir raporun satırları"
+

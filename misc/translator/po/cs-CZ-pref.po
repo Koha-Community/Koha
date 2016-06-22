@@ -3,16 +3,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2015-09-02 16:36+0000\n"
+"PO-Revision-Date: 2016-06-20 18:39+0000\n"
 "Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
-"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>\n"
+"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1441211765.000000\n"
+"X-POOTLE-MTIME: 1466447991.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -172,7 +173,7 @@ msgstr "Administrace"
 
 # Administration > CAS authentication
 msgid "admin.pref CAS authentication"
-msgstr ""
+msgstr "Ověřování přes CAS"
 
 # Administration > Interface options
 msgid "admin.pref Interface options"
@@ -188,7 +189,7 @@ msgstr "Mozilla Persona"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref SSL client certificate authentication"
-msgstr ""
+msgstr "Ověřování pomocí klientského SSL certifikátu"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref Share anonymous usage statistics"
@@ -196,23 +197,23 @@ msgstr "Sdílet anonymní statistiky využití"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# Use"
-msgstr ""
+msgstr "Použít pole"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# field for SSL client certificate authentication"
-msgstr ""
+msgstr "pro ověřování pomocí klientského SSL certifikátu"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# no"
-msgstr ""
+msgstr "žádné"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# the Common Name"
-msgstr ""
+msgstr "jméno"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# the emailAddress"
-msgstr ""
+msgstr "e-mailová adresa"
 
 # Administration > Login options
 msgid "admin.pref#AutoLocation# Don't require"
@@ -257,6 +258,18 @@ msgstr "Zabránit"
 # Administration > Login options
 msgid "admin.pref#IndependentBranches# staff (but not superlibrarians) from modifying objects (holds, items, patrons, etc.) belonging to other libraries."
 msgstr "knihovníkům (netýká se superknihovníků) v editaci dat (rezervací, jednotek, čtenářů atd.), která náležejí ostatním knihovnám."
+
+# Administration > Login options
+msgid "admin.pref#IndependentBranchesPatronModifications# Don't prevent"
+msgstr "Nezabraňovat"
+
+# Administration > Login options
+msgid "admin.pref#IndependentBranchesPatronModifications# Prevent"
+msgstr "Zabránit"
+
+# Administration > Login options
+msgid "admin.pref#IndependentBranchesPatronModifications# staff (but not superlibrarians) from viewing and approving/denying patron modification requests for patrons belonging to other libraries."
+msgstr "knihovníkům (kromě superknihovníků) zobrazovat a schvalovat/odmítat žádosti čtenářů z jiných knihoven o změny osobních údajů."
 
 # Administration > Interface options
 msgid "admin.pref#KohaAdminEmailAddress# Use"
@@ -335,8 +348,8 @@ msgid "admin.pref#UsageStats# Share"
 msgstr "Sdílet"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStats# anonymous Koha usage data with the Koha community. You can see the data on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
-msgstr "anonymní data o používání systému s komunitou Koha. Data si můžete prohlédnout na webových stránkách <a href=\"http://hea.koha-community.org\">Hea Koha community</a>."
+msgid "admin.pref#UsageStats# anonymous Koha usage data with the Koha community. You can see the data on the <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>. You have to run misc/cronjobs/share_usage_with_koha_community.pl in a cronjob."
+msgstr "anonymní data o využívání Kohy s komunitou. Všechna data nalezenete na webu <a href=\"http://hea.koha-community.org\">Hea Koha community</a>. Aby vše fungovalo, je třeba mít nastavenu úlohu misc/cronjobs/share_usage_with_koha_community.pl v systému."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
@@ -460,7 +473,7 @@ msgstr "Ověřovací server CAS se nachází na adrese"
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# #'s"
-msgstr "znaku \"#\""
+msgstr "znaku #"
 
 # Administration > Interface options
 msgid "admin.pref#delimiter# Separate columns in an exported CSV file with"
@@ -682,6 +695,10 @@ msgstr "Katalogizace"
 msgid "cataloguing.pref Display"
 msgstr "Zobrazení"
 
+# Cataloging > Exporting
+msgid "cataloguing.pref Exporting"
+msgstr "Export"
+
 # Cataloging > Importing
 msgid "cataloguing.pref Importing"
 msgstr "Import"
@@ -745,6 +762,32 @@ msgstr "."
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
 msgstr "Oddělovat více najednou zobrazovaných autorů, předmětových hesel, atd. znakem "
+
+# Cataloging > Exporting
+# Cataloging > Exporting
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# <br/>"
+msgstr "<br/>"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# All values of repeating tags and subfields will be printed with the given BibTeX tag."
+msgstr "Všechny hodnoty opakujících se polí a podpolí se vloží do daného pole formátu BibTeX."
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# Include following fields when exporting BibTeX,"
+msgstr "Při exportu do BibTeX vložit tato pole,"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# To specificy multiple marc tags/subfields as targets for a repeating BibTex tag, use the following format: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )"
+msgstr "Pokud chcete zapsat více polí/podpolí jako cíl opakovaného tagu BibTex, použijte tento formát: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( např. notes: [501$a, 505$g] )"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# Use '@' ( with quotes ) as the BT_TAG to replace the bibtex record type with a field value of your choosing."
+msgstr "Použijte '@' (s uvozovkama) jako BT_TAG pro nahrazení typu záznamu BibTeX polem, které si zvolíte."
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#BibtexExportAdditionalFields# Use one line per tag in the format BT_TAG: TAG$SUBFIELD ( e.g. lccn: 010$a )"
+msgstr "Vložte jedno pole na každý řádek ve formátu: BT_TAG: TAG$SUBFIELD (např. lccn: 010$a )"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# Use"
@@ -818,6 +861,34 @@ msgstr "Předvyplnit <a href=\"http://www.loc.gov/marc/organizations/orgshome.ht
 msgid "cataloguing.pref#MARCOrgCode# by default in new MARC21 records (leave blank to disable)."
 msgstr "v nových záznamech MARC (pro zakázání teto funkce ponechte prázdné)."
 
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <br />example: '001,245ab,600'"
+msgstr "<br />například: '001,245ab,600'"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <li>all subfields of fields 600</li>"
+msgstr "<li>všechna podpole pole 600</li>"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <li>subfields a and b of fields 245</li>"
+msgstr "<li>podpole 'a' a 'b' pole 245</li>"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <li>value of 001</li>"
+msgstr "<li>hodnota pole 001</li>"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# <ul>"
+msgstr "<ul>"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# displays:"
+msgstr "zobrazí:"
+
+# Cataloging > Display
+msgid "cataloguing.pref#MergeReportFields# fields to display for deleted records after merge"
+msgstr "pole, která se mají zobrazit pro záznamy odstraněné po sloučení"
+
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr "(vyplňte kód lokace, nebo ponechte prázdné pro zakázání této funkce)."
@@ -860,15 +931,15 @@ msgstr "Skrýt"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# an explanatory page ('This record is blocked')."
-msgstr "vysvětlující stránku (\"Záznam je skrytý\")."
+msgstr "vysvětlující stránku ('Záznam je skrytý')."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# items marked as suppressed from OPAC search results."
-msgstr ""
+msgstr "odepsané jednotky z výsledků vyhledávání v on-line katalogu."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# the 404 error page ('Not found')."
-msgstr "stránku s chybou 404 (\"Nenalezeno\")."
+msgstr "stránku s chybou 404 ('Nenalezeno')."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#PrefillItem# When a new item is added,"
@@ -881,6 +952,32 @@ msgstr "nepředvyplňovat formulář hodnotami poslední vytvořené jednotky."
 # Cataloging > Record Structure
 msgid "cataloguing.pref#PrefillItem# the new item is prefilled with last created item values."
 msgstr "předvyplnit formulář hodnotami poslední vytvořené jednotky."
+
+# Cataloging > Exporting
+# Cataloging > Exporting
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# <br/>"
+msgstr "<br/>"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# All values of repeating tags and subfields will be printed with the given RIS tag."
+msgstr "Do daného tagu formátu RIS budou vloženy všechny hodnoty opakujících se polí a podpolí."
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# Include following fields when exporting RIS,"
+msgstr "Při exportu do formátu RIS Zahrnout tato pole:"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# To specificy multiple marc tags/subfields as targets for a repeating RIS tag, use the following format: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )"
+msgstr "Pokud chcete zapsat více polí/podpolí jako cíl opakovaného tagu RIS, použijte tento formát: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( např. NT: [501$a, 505$g] )"
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# Use of TY ( record type ) as a key will <i>replace</i> the default TY with the field value of your choosing."
+msgstr "Použití TY ( typ záznamu ) jako klíče <i>nahradí</i> nahradí výchozí hodnotu TY obsahem pole, které zvolíte."
+
+# Cataloging > Exporting
+msgid "cataloguing.pref#RisExportAdditionalFields# Use one line per tag in the format RIS_TAG: TAG$SUBFIELD ( e.g. LC: 010$a )"
+msgstr "Vložte každé pole na vlastní řádek ve formátu RIS_TAG: TAG$SUBFIELD ( např. LC: 010$a )"
 
 # Cataloging > Display
 msgid "cataloguing.pref#SeparateHoldings# Don't separate"
@@ -1133,6 +1230,10 @@ msgstr "polí (oddělených čárkou) do správných autoritních polí během i
 # Circulation
 msgid "circulation.pref"
 msgstr "Výpůjčky"
+
+# Circulation > Batch checkout
+msgid "circulation.pref Batch checkout"
+msgstr "Dávková výpůjčka"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref Checkin Policy"
@@ -1438,6 +1539,26 @@ msgstr "Neposlat"
 msgid "circulation.pref#AutomaticItemReturn# automatically transfer items to their home library when they are returned."
 msgstr "automaticky vrácené výtisky do jejich domovské knihovny."
 
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckouts# Allow"
+msgstr "Povolit"
+
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckouts# Don't allow"
+msgstr "Nepovolit"
+
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckouts# batch checkouts"
+msgstr "dávkové výpůjčky"
+
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckoutsValidCategories# (list of patron categories separated with a pipe '|')"
+msgstr "(seznam kódů kategorií čtenářů  oddělených znakem '|')"
+
+# Circulation > Batch checkout
+msgid "circulation.pref#BatchCheckoutsValidCategories# Patron categories allowed to checkout in a batch"
+msgstr "Kategorie čtenářů, u kterých jsou povolené dávkové výpůjčky"
+
 # Circulation > Checkin Policy
 msgid "circulation.pref#BlockReturnOfWithdrawnItems# Block"
 msgstr "Blokovat"
@@ -1525,6 +1646,26 @@ msgstr "Vyřizovat při vracení i rezervace, které mají platnost v budoucnost
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# days from now) at checkin time. Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. But it does not interfere with issuing, renewing or transferring books."
 msgstr "dní). Poznámka: Tento počet dní bude použit i ve výchozím filtru, při vyhledávání rezervací, které je třeba najít na regále. Toto nastavení nemá vliv na půjčování, prodlužování ani přesun jendotek."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# Consider"
+msgstr "Započítávat"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# Don't consider"
+msgstr "Nezapočítávat"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# If disabled, both values will be checked separately."
+msgstr "Pokud nastavení zakážete, oba typy výpůjček se budou počítat zvlášť."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# If enabled, the number of checkouts allowed will be normal checkouts + on-site checkouts."
+msgstr "Pokud toto nastavení povolíte, počet povolených výpůjček se bude počítat podle součtu absenčních a prezenčních výpůjček."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# on-site checkouts as normal checkouts."
+msgstr "prezenční výpůjčky stejně jako absenční výpůjčky."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
@@ -1697,18 +1838,6 @@ msgstr "knihovny, z které pochází výtisk."
 # Circulation > Checkout Policy
 msgid "circulation.pref#HomeOrHoldingBranch# the library the item was checked out from."
 msgstr "z knihovny, která vydala výtisk."
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#HomeOrHoldingBranchReturn# On checkin route the returned item to"
-msgstr "Při příjmu, poslat vrácený výtisk do"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#HomeOrHoldingBranchReturn# the library the item is from."
-msgstr "knihovny, která ho vlastní."
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#HomeOrHoldingBranchReturn# the library the item was checked out from."
-msgstr "knihovna, kterrá půjčila výtisk"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#InProcessingToShelvingCart# Don't move"
@@ -1884,6 +2013,22 @@ msgid "circulation.pref#OverduesBlockCirc# when checking out to a borrower that 
 msgstr "výpůjčky čtenáři, který má překročené(ných) výpůjčky(ček)"
 
 # Circulation > Checkout Policy
+msgid "circulation.pref#OverduesBlockRenewing# When a patron's checked out item is overdue,"
+msgstr "Pokud je výpůjčka po termínu,"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OverduesBlockRenewing# allow renewing."
+msgstr "povolit prodloužení."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OverduesBlockRenewing# block renewing for all the patron's items."
+msgstr "zablokovat prodloužení pro všechny výpůjčky daného čtenáře."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OverduesBlockRenewing# block renewing only for this item."
+msgstr "zablokovat prodloužení této výpůjčky."
+
+# Circulation > Checkout Policy
 msgid "circulation.pref#PrintNoticesMaxLines# Include up to"
 msgstr "Vypsat až"
 
@@ -2004,6 +2149,22 @@ msgid "circulation.pref#ReservesNeedReturns# mark a hold as found and waiting wh
 msgstr "označení rezervace jako čekající, pokud je rezervace přiřazena ke konkrétní jednotce a ta je právě vypůjčena."
 
 # Circulation > Checkout Policy
+msgid "circulation.pref#RestrictionBlockRenewing# Allow"
+msgstr "Povolit"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#RestrictionBlockRenewing# Block"
+msgstr "Blokovat"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#RestrictionBlockRenewing# If patron is restricted,"
+msgstr "Pokud má čtenář omezené služby,"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#RestrictionBlockRenewing# renewing of items."
+msgstr "prodloužení výpůjček."
+
+# Circulation > Checkout Policy
 msgid "circulation.pref#ReturnBeforeExpiry# Don't require"
 msgstr "Nepožadovat"
 
@@ -2073,15 +2234,15 @@ msgstr "Uživatelského jména a hesla"
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Do not show"
-msgstr ""
+msgstr "Nezobrazovat"
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# Show"
-msgstr ""
+msgstr "Zobrazovat"
 
 # Circulation > Interface
 msgid "circulation.pref#ShowAllCheckins# all items in the \"Checked-in items\" list, even items that were not checked out."
-msgstr ""
+msgstr "všechny jednotky v seznamu vrácených, včetně těch, které nebyly vypůjčeny."
 
 # Circulation > Self Checkout
 msgid "circulation.pref#ShowPatronImageInWebBasedSelfCheck# Don't show"
@@ -2461,47 +2622,35 @@ msgstr "posledně vrácené jednotky na obrazovce příjmu."
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# Sort previous checkouts on the circulation page from"
-msgstr "Setřídit předchozí výpůjčky na výpůjční obrazovce podle"
+msgstr "Přehled předchozích výpůjček řadit podle termínu vrácení"
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# due date."
-msgstr "datumu vrácení."
+msgstr "."
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# earliest to latest"
-msgstr "nejstaršího k nejnovějšímu"
+msgstr "vzestupně"
 
 # Circulation > Interface
 msgid "circulation.pref#previousIssuesDefaultSortOrder# latest to earliest"
-msgstr "nejnovějšího k nejstaršímu"
-
-# Circulation > Interface
-msgid "circulation.pref#soundon# Don't enable"
-msgstr "Neumožnit"
-
-# Circulation > Interface
-msgid "circulation.pref#soundon# Enable"
-msgstr "Umožnit"
-
-# Circulation > Interface
-msgid "circulation.pref#soundon# circulation sounds during checkin and checkout in the staff interface.  Not supported by all web browsers yet."
-msgstr "zvuky při příjmu nebo výdeji na pracovišti obsluhy. Zatím není podporováno všemi prohlížeči."
+msgstr "sestupně"
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# Sort today's checkouts on the circulation page from"
-msgstr "Seřadit dnes načtené výpůjčky v přehledu výpůjček podle"
+msgstr "Přehled dnešních výpůjček řadit podle termínu vrácení"
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# due date."
-msgstr "termínu vrácení."
+msgstr "."
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# earliest to latest"
-msgstr "nejstarší po nejnovější"
+msgstr "vzestupně"
 
 # Circulation > Interface
 msgid "circulation.pref#todaysIssuesDefaultSortOrder# latest to earliest"
-msgstr "nejnovější po nejstarší"
+msgstr "sestupně"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# Calculate the due date using"
@@ -2792,8 +2941,8 @@ msgid "enhanced_content.pref#IDreamBooksReadometer# Don't add"
 msgstr "Nepřidávat"
 
 # Enhanced Content > IDreamLibraries
-msgid "enhanced_content.pref#IDreamBooksReadometer# a \"Readometer\" that summarizes the reviews gathered by <a href='http://idreambooks.com/'>IDreamBooks.com</a> to the OPAC details page."
-msgstr "\"Readometer\" , který sumarizuje hodnocení sbírané od <a href='http://idreambooks.com/'>IDreamBooks.com</a> na stránku detailů v OPACu."
+msgid "enhanced_content.pref#IDreamBooksReadometer# a \"Readometer\" that summarizes the reviews gathered by <a href='https://idreambooks.com/'>IDreamBooks.com</a> to the OPAC details page."
+msgstr "na podrobný záznam dokumentu v on-line katalogu \"Čtenářometr\", který shrnuje recenze ze serveru <a href='https://idreambooks.com/'>IDreamBooks.com</a>."
 
 # Enhanced Content > IDreamLibraries
 msgid "enhanced_content.pref#IDreamBooksResults# Add"
@@ -2804,8 +2953,8 @@ msgid "enhanced_content.pref#IDreamBooksResults# Don't add"
 msgstr "Nepřidávat"
 
 # Enhanced Content > IDreamLibraries
-msgid "enhanced_content.pref#IDreamBooksResults# the rating from <a href='http://idreambooks.com/'>IDreamBooks.com</a> to OPAC search results."
-msgstr "hodnocení z <a href='http://idreambooks.com/'>IDreamBooks.com</a> do výsledků vyhledání na OPACu."
+msgid "enhanced_content.pref#IDreamBooksResults# the rating from <a href='https://idreambooks.com/'>IDreamBooks.com</a> to OPAC search results."
+msgstr "na stránku s výsledky hledání v on-line katalogu hodnocení ze serveru <a href='https://idreambooks.com/'>IDreamBooks.com</a>."
 
 # Enhanced Content > IDreamLibraries
 msgid "enhanced_content.pref#IDreamBooksReviews# Add"
@@ -2816,8 +2965,8 @@ msgid "enhanced_content.pref#IDreamBooksReviews# Don't add"
 msgstr "Nepřidávat"
 
 # Enhanced Content > IDreamLibraries
-msgid "enhanced_content.pref#IDreamBooksReviews# a tab on the OPAC details with book reviews from critics aggregated by <a href='http://idreambooks.com/'>IDreamBooks.com</a>."
-msgstr "záložku na detailu v OPACu u hodnocení knih podle <a href='http://idreambooks.com/'>IDreamBooks.com</a>."
+msgid "enhanced_content.pref#IDreamBooksReviews# a tab on the OPAC details with book reviews from critics aggregated by <a href='https://idreambooks.com/'>IDreamBooks.com</a>."
+msgstr "na podrobný záznam dokumentu v on-line katalogu záložku s recenzemi ze serveru <a href='https://idreambooks.com/'>IDreamBooks.com</a>."
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesEnabled# <a href=\"http://www.librarything.com/forlibraries/\">sign up</a>, then enter in your ID below."
@@ -3257,23 +3406,43 @@ msgstr "Použít tento styl pro formátování poštovní adresy:"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# German style ([Address] [Street number] - [ZIP/Postal Code] [City] - [Country])"
-msgstr ""
+msgstr "Německý ([Ulice] [Číslo popisné]- [PSČ] [Město] - [Země])"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# US style ([Street number], [Address] - [City], [ZIP/Postal Code], [Country])"
-msgstr ""
+msgstr "Americký ([Číslo popisné], [Ulice] - [Město], [PSČ], [Země])"
+
+# I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Friday"
+msgstr "Pátek"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Monday"
 msgstr "Pondělí"
 
 # I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Saturday"
+msgstr "Sobota"
+
+# I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Sunday"
 msgstr "Neděle"
 
 # I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Thursday"
+msgstr "Čtvrtek"
+
+# I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Tuesday"
+msgstr "Úterý"
+
+# I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Use"
 msgstr "Použít"
+
+# I18N/L10N
+msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# Wednesday"
+msgstr "Středa"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#CalendarFirstDayOfWeek# as the first day of week in the calendar."
@@ -3316,6 +3485,10 @@ msgid "i18n_l10n.pref#dateformat# Format dates like"
 msgstr "Formátovat datum podle vzoru"
 
 # I18N/L10N
+msgid "i18n_l10n.pref#dateformat# dd.mm.yyyy"
+msgstr "dd.mm.yyyy"
+
+# I18N/L10N
 msgid "i18n_l10n.pref#dateformat# dd/mm/yyyy"
 msgstr "dd/mm/rrrr"
 
@@ -3347,6 +3520,34 @@ msgstr "Nepovolit"
 msgid "i18n_l10n.pref#opaclanguagesdisplay# patrons to change the language they see on the OPAC."
 msgstr "čtenářům měnit jazyky rozhraní on-line katalogu."
 
+# Labs
+msgid "labs.pref"
+msgstr "labs.pref"
+
+# Labs > All
+msgid "labs.pref All"
+msgstr "Vše"
+
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# <br/> NOTE:"
+msgstr "<br /> POZOR:"
+
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# Don't enable"
+msgstr "Nepovolit"
+
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# Enable"
+msgstr "Povolit"
+
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# This feature is currently experimental, and may have bugs that cause corruption of records. It also does not include any support for UNIMARC or NORMARC fixed fields. Please help us test it and report any bugs, but do so at your own risk."
+msgstr "Pokročilý katalogizační editor."
+
+# Labs > All
+msgid "labs.pref#EnableAdvancedCatalogingEditor# the advanced cataloging editor."
+msgstr "Tato funkce je experimentální a může obsahovat chyby. Také nepodporuje pole pevné délky formátů UNIMARC a NORMARC. Prosíme o testování a případné hlášení chyb."
+
 # Local Use
 msgid "local_use.pref"
 msgstr "Místní nastavení"
@@ -3359,111 +3560,155 @@ msgstr "Zatím nebylo nic definováno."
 msgid "logs.pref"
 msgstr "Provozní záznamy"
 
-# Logging
+# Logging > Debugging
+msgid "logs.pref Debugging"
+msgstr "Ladění"
+
+# Logging > Logging
+msgid "logs.pref Logging"
+msgstr "Logování"
+
+# Logging > Logging
 msgid "logs.pref#AuthoritiesLog# Don't log"
 msgstr "Nelogovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#AuthoritiesLog# Log"
 msgstr "Logovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#AuthoritiesLog# changes to authority records."
 msgstr "změny v autoritních záznamech."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#BorrowersLog# Don't log"
 msgstr "Nelogovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#BorrowersLog# Log"
 msgstr "Logovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#BorrowersLog# changes to patron records."
 msgstr "změny v záznamech o čtenářích."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CataloguingLog# Don't log"
 msgstr "Nelogovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CataloguingLog# Log"
 msgstr "Logovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CataloguingLog# any changes to bibliographic or item records. Since this occurs whenever a book is checked in or out as well, it is not advisable to turn this on."
 msgstr "jakékoliv změny v bibliografickém záznamu nebo záznamu o jednotkách. Vzhledem k tomu, že se za změny se považuje i půjčování a vracení, nedoporučuje se tuto volbu zapínat."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CronjobLog# Don't log"
 msgstr "Nelogovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CronjobLog# Log"
 msgstr "Logovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#CronjobLog# information from cron jobs."
 msgstr "informace o provádění naplánovaných úloh (cron)."
 
-# Logging
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsIntranet# Do"
+msgstr "Vypisovat"
+
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsIntranet# Don't"
+msgstr "Nevypisovat"
+
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsIntranet# dump all Template Toolkit variable to a comment in the html source for the staff intranet."
+msgstr "všechny proměnné Template Toolkitu do komentáře v html zdroji stránek intranetu."
+
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsOpac# Do"
+msgstr "Vypisovat"
+
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsOpac# Don't"
+msgstr "Nevypisovat"
+
+# Logging > Debugging
+msgid "logs.pref#DumpTemplateVarsOpac# dump all Template Toolkit variable to a comment in the html source for the OPAC."
+msgstr "všechny proměnné Template Toolkitu do komentáře v html zdroji stránek on-line katalogu."
+
+# Logging > Logging
 msgid "logs.pref#FinesLog# Don't log"
 msgstr "Nelogovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#FinesLog# Log"
 msgstr "Logovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#FinesLog# when fines are charged, paid, or forgiven."
 msgstr "účtování, placení a promíjení poplatků."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#IssueLog# Don't log"
 msgstr "Nelogovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#IssueLog# Log"
 msgstr "Logovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#IssueLog# when items are checked out."
 msgstr "výpůjčky."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#LetterLog# Don't log"
 msgstr "Nelogovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#LetterLog# Log"
 msgstr "Logovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#LetterLog# when an automatic claim notice is sent."
 msgstr "automatické odesílání upomínek."
 
-# Logging
+# Logging > Logging
+msgid "logs.pref#ReportsLog# Don't log"
+msgstr "Nelogovat"
+
+# Logging > Logging
+msgid "logs.pref#ReportsLog# Log"
+msgstr "Logovat"
+
+# Logging > Logging
+msgid "logs.pref#ReportsLog# when reports are added, deleted or changed."
+msgstr "vytváření, mazaní a změny výstupů."
+
+# Logging > Logging
 msgid "logs.pref#ReturnLog# Don't log"
 msgstr "Nelogovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#ReturnLog# Log"
 msgstr "Logovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#ReturnLog# when items are returned."
 msgstr "vracení výpůjček."
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#SubscriptionLog# Don't log"
 msgstr "Nelogovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#SubscriptionLog# Log"
 msgstr "Logovat"
 
-# Logging
+# Logging > Logging
 msgid "logs.pref#SubscriptionLog# when serials are added, deleted or changed."
 msgstr "přidání, vymazání a změny v periodikách."
 
@@ -3490,6 +3735,10 @@ msgstr "Politika"
 # OPAC > Privacy
 msgid "opac.pref Privacy"
 msgstr "Soukromí"
+
+# OPAC > Restricted page
+msgid "opac.pref Restricted page"
+msgstr "Stránka s omezeným přístupem"
 
 # OPAC > Self Registration
 msgid "opac.pref Self Registration"
@@ -3891,6 +4140,10 @@ msgstr "stránku v novém okně."
 msgid "opac.pref#OPACUserCSS# Include the following CSS on all pages in the OPAC:"
 msgstr "Vložit následující CSS na všechny stránky OPACu:"
 
+# OPAC > Appearance
+msgid "opac.pref#OPACUserJS# Include the following JavaScript on all pages in the OPAC:"
+msgstr "Vložit následující javaskriptový kód na všechny stránky on-line katalogu:"
+
 # OPAC > Policy
 msgid "opac.pref#OPACViewOthersSuggestions# Don't show"
 msgstr "Nezobrazovat"
@@ -4112,6 +4365,22 @@ msgid "opac.pref#OpacKohaUrl# Show"
 msgstr "Zobrazovat"
 
 # OPAC > Appearance
+msgid "opac.pref#OpacLangSelectorMode# Display language selector on "
+msgstr "Zobrazit výběr jazyků v "
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLangSelectorMode# both top and footer"
+msgstr "záhlaví i zápatí"
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLangSelectorMode# only footer"
+msgstr "pouze v zápatí"
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLangSelectorMode# top"
+msgstr "záhlaví"
+
+# OPAC > Appearance
 msgid "opac.pref#OpacLocationBranchToDisplay# Display the"
 msgstr "Zobrazit"
 
@@ -4201,15 +4470,15 @@ msgstr "čtenářům měnit jejich vlastní heslo do OPACu. Pozn: musí být př
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Disable"
-msgstr "Neumožnit"
+msgstr "Nezpřístupňovat"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Enable"
-msgstr "Umožnit"
+msgstr "Zpřístupnit"
 
 # OPAC > Appearance
-msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentification before accessing the OPAC."
-msgstr "Koha OPAC jako veřejný. Privátní OPAC vyžaduje autentifikaci před jeho zobrazením."
+msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC."
+msgstr "on-line katalog veřejně. Pokud není katalog zpřístupněný veřejně, bude pro použití vždy vyžadovat přihlášení."
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -4415,6 +4684,26 @@ msgstr "Nepovolit"
 msgid "opac.pref#RequestOnOpac# patrons to place holds on items from the OPAC."
 msgstr "čtenářům rezervace v on-line katalogu."
 
+# OPAC > Restricted page
+msgid "opac.pref#RestrictedPageContent# HTML content of your restricted page"
+msgstr "HTML zdroj stránky s omezeným přístupem"
+
+# OPAC > Restricted page
+msgid "opac.pref#RestrictedPageLocalIPs# Access from IP addresses beginning with"
+msgstr "Pro přístupy z IP adres začínajících na"
+
+# OPAC > Restricted page
+msgid "opac.pref#RestrictedPageLocalIPs# do not need to be authenticated (comma separated - ex: '127.0.0,127.0.1')"
+msgstr "nevyžadovat přihlášení (jednotlivé adresy oddělte čárkou - např.: \"127.0.0,127.0.1\""
+
+# OPAC > Restricted page
+msgid "opac.pref#RestrictedPageTitle# Use"
+msgstr "Použít"
+
+# OPAC > Restricted page
+msgid "opac.pref#RestrictedPageTitle# as title of your restricted page (appears in the breadcrumb and on the top of the restricted page)"
+msgstr "jako titulek stránky s omezeným přístupem (objeví se v drobečkové navigaci i jako nadpis stránky)"
+
 # OPAC > Policy
 msgid "opac.pref#SearchMyLibraryFirst# Don't limit"
 msgstr "Neomezovat"
@@ -4603,10 +4892,6 @@ msgstr "Používat"
 msgid "opac.pref#opacthemes# theme on the OPAC."
 msgstr "styly na OPACu."
 
-# OPAC > Appearance
-msgid "opac.pref#opacuserjs# Include the following JavaScript on all pages in the OPAC:"
-msgstr "Vlož následující JavaScript na všechny stránky v OPACu:"
-
 # OPAC > Features
 msgid "opac.pref#opacuserlogin# Allow"
 msgstr "Povolit"
@@ -4792,6 +5077,18 @@ msgid "patrons.pref#ExtendedPatronAttributes# searching, editing and display of 
 msgstr "vyhledávání, editaci a zobrazení uživatelských vlastností čtenářů."
 
 # Patrons > General
+msgid "patrons.pref#FeeOnChangePatronCategory# Do"
+msgstr "Účtovat"
+
+# Patrons > General
+msgid "patrons.pref#FeeOnChangePatronCategory# Don't"
+msgstr "Neúčtovat"
+
+# Patrons > General
+msgid "patrons.pref#FeeOnChangePatronCategory# charge a fee when a patron changes to a category with an enrollment fee."
+msgstr "registrační poplatek při změně kategorie čtenáře."
+
+# Patrons > General
 msgid "patrons.pref#MaxFine# Empty value means no limit. Single item caps are specified in the circulation rules matrix."
 msgstr "Prázdná hodnota znamená Bez omezení. Písmena pro jednotlivé jednotky jsou specifikována v matici pravidel výpůjček."
 
@@ -4802,6 +5099,16 @@ msgstr "Zpozdné pro všechny výpůjčky půjdou až do"
 # Patrons > General
 msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr "[% local_currency %]."
+
+# Patrons > General
+msgid "patrons.pref#MembershipExpiryDaysNotice# Send an account expiration notice when a patron's card will expire in"
+msgstr ""
+"Poslat informaci o vypršení registrace, pokud má tato skončit během "
+"následujících "
+
+# Patrons > General
+msgid "patrons.pref#MembershipExpiryDaysNotice# days."
+msgstr "dní před vypršením."
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#NorwegianPatronDBEnable# Disable"
@@ -4861,7 +5168,7 @@ msgstr "výsledků vyhledání na stránku v intranetu."
 
 # Patrons > General
 msgid "patrons.pref#SMSSendDriver# Define a username/login"
-msgstr ""
+msgstr "Nastavit uživatelské/přihlašovací jméno"
 
 # Patrons > General
 msgid "patrons.pref#SMSSendDriver# Use the SMS::Send::"
@@ -4869,15 +5176,15 @@ msgstr "Používat SMS::Send::"
 
 # Patrons > General
 msgid "patrons.pref#SMSSendDriver# and a password"
-msgstr ""
+msgstr "a heslo"
 
 # Patrons > General
 msgid "patrons.pref#SMSSendDriver# driver to send SMS messages."
 msgstr "driver pro posílání SMS zpráv."
 
 # Patrons > General
-msgid "patrons.pref#StatisticsFields# (separate fields with |)"
-msgstr "(oddělit pole svislítkem |)"
+msgid "patrons.pref#StatisticsFields# (separate fields with |, without trailing |). Default if empty: location|itype|ccode"
+msgstr "(pole oddělte znakem \"|\"). Výchozí hodnota: location|itype|ccode"
 
 # Patrons > General
 msgid "patrons.pref#StatisticsFields# Show the following fields from the items database table as columns on the statistics tab on the patron record: "
@@ -4937,7 +5244,7 @@ msgstr "Nepovolit"
 
 # Patrons > General
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout history (reading history is still stored, regardless of staff being allowed access or not)."
-msgstr ""
+msgstr "zaměstnancům zobrazovat historii výpůjček čtenářů (ta je stále ukládána, bez ohledu na to, jestli ji někdo vidí nebo ne)."
 
 # Patrons > General
 msgid "patrons.pref#minPasswordLength# Login passwords for staff and patrons must be at least"
@@ -5097,19 +5404,19 @@ msgstr "používat"
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>If a record has more than this number of items, they availability statuses may be incorrect in the search results, but will be correct in the record details."
-msgstr ""
+msgstr "<br/>Pokud má záznam více jednotek, než je definováno v tomto nastavení, může být status dostupnosti zobrazen ve výsledcích vyhledávání nesprávně. Na podrobném záznamu ale bude tato informace správná vždy."
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty for no limit on the number of items for which to check the status."
-msgstr ""
+msgstr "<br/>Pokud nechce toto zjišťování nijak limitovat, nechte toto nastavení prázdné."
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# For records with many items, only check the availability status for the first"
-msgstr ""
+msgstr "U záznamů s více jednotkami zjišťovat status dostupnosti podle prvních"
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# items."
-msgstr ""
+msgstr "jednotek."
 
 # Searching > Results Display
 msgid "searching.pref#OPACItemsResultsDisplay# Don't show"
@@ -5547,6 +5854,18 @@ msgstr "Vzhled"
 msgid "staff_client.pref Options"
 msgstr "Volby"
 
+# Staff Client > Options
+msgid "staff_client.pref#AudioAlerts# Don't enable"
+msgstr "Zakázat"
+
+# Staff Client > Options
+msgid "staff_client.pref#AudioAlerts# Enable"
+msgstr "Povolit"
+
+# Staff Client > Options
+msgid "staff_client.pref#AudioAlerts# audio alerts for events defined in the audio alerts section of administration."
+msgstr "zvuková upozornění pro události definované v sekci \"zvuková upozornění\" v administraci."
+
 # Staff Client > Appearance
 msgid "staff_client.pref#Display856uAsImage# . Note: The corresponding XSLT option must be turned on."
 msgstr "Poznámka: Musí být povoleno také odpovídají nastavení XSLT šablon."
@@ -5581,7 +5900,7 @@ msgstr "Zobrazovat"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the staff client."
-msgstr "formát, cílovou skupinu, a typ materiálu v XSLT MARC21 výsledcích a na detailních stránkách v inferfejsu obsluhy."
+msgstr "formát, cílovou skupinu a typ materiálu v XSLT MARC21 výsledcích a na stránkách s podrobným záznamem v intranetu."
 
 # Staff Client > Options
 msgid "staff_client.pref#HidePatronName# Don't show"
@@ -5614,6 +5933,10 @@ msgstr "Uživat následující JavaScript pro tisk lístků. Nutno definovat ale
 # Staff Client > Appearance
 msgid "staff_client.pref#IntranetUserCSS# Include the following CSS on all pages in the staff client:"
 msgstr "Vložit následující CSS na všechny stránky intranetu:"
+
+# Staff Client > Appearance
+msgid "staff_client.pref#IntranetUserJS# Include the following JavaScript on all pages in the staff client:"
+msgstr "Vložit následující javaskriptový kód na všechny stránky intranetu:"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#IntranetmainUserblock# Show the following HTML in its own column on the main page of the staff client:"
@@ -5650,6 +5973,18 @@ msgstr "Povolit"
 # Staff Client > Options
 msgid "staff_client.pref#StaffDetailItemSelection# item selection in record detail page."
 msgstr "výběr jednotky na stránce s podrobným záznamem dokumentu."
+
+# Staff Client > Options
+msgid "staff_client.pref#UseWYSIWYGinSystemPreferences# Don't show"
+msgstr "Nepoužívat"
+
+# Staff Client > Options
+msgid "staff_client.pref#UseWYSIWYGinSystemPreferences# Show"
+msgstr "Používat"
+
+# Staff Client > Options
+msgid "staff_client.pref#UseWYSIWYGinSystemPreferences# WYSIWYG editor when editing certain HTML system preferences."
+msgstr "WYSIWYG editor pro systémová nastavení, která vyžadují vložení HTML kódu."
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTDetailsDisplay# <br />Options:<ul><li><a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"\">Leave empty</a> for \"no xslt\"</li><li>enter \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the default one</li><li>put a path to define a xslt file</li><li>put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language"
@@ -5702,10 +6037,6 @@ msgstr "Použít CSS styl"
 # Staff Client > Appearance
 msgid "staff_client.pref#intranetstylesheet# on all pages in the staff interface, instead of the default css (used when leaving this field blank). Enter just a filename, a full local path or a complete URL starting with <code>http://</code> (if the file lives on a remote server). Please note that if you just enter a filename, the file should be in the css subdirectory for each active theme and language within the Koha templates directory. A full local path is expected to start from your HTTP document root."
 msgstr "na všech stránkách intranetu místo výchozího CSS. Vložte buď název souboru, celou cestu k souboru, nebo URL začínající <code>http://</code>. Poznámka: pokud vložíte pouze název souboru, měl by se tento soubor nacházet v adresáři css v každém z používaných témat, a to včetně všech jazykových verzí. Úplná cesta by měla být relativní k hlavnímu adresáři webového serveru (document root)."
-
-# Staff Client > Appearance
-msgid "staff_client.pref#intranetuserjs# Include the following JavaScript on all pages in the staff client:"
-msgstr "Vložit následující JavaScript na všechny stránky intranetu:"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#staffClientBaseURL# . Do not include a trailing slash in the URL."
@@ -5767,6 +6098,10 @@ msgstr "Nástroje"
 msgid "tools.pref Batch item modification"
 msgstr "Hromadná úprava jednotek"
 
+# Tools > News
+msgid "tools.pref News"
+msgstr "Novinky"
+
 # Tools > Patron cards
 msgid "tools.pref Patron cards"
 msgstr "Průkazky čtenářů"
@@ -5786,6 +6121,26 @@ msgstr "Zpracovat maximálně"
 # Tools > Batch item modification
 msgid "tools.pref#MaxItemsForBatch# items in a single modification or deletion batch."
 msgstr "jednotek v jedné dávce při hromadném mazání nebo úpravě jednotek."
+
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Both OPAC and staff client"
+msgstr "V on-line katalogu i intranetu."
+
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Not at all"
+msgstr "Nikde"
+
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# OPAC only"
+msgstr "Pouze v on-line katalogu"
+
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Show the author for news items:"
+msgstr "Zobrazit autora novinky:"
+
+# Tools > News
+msgid "tools.pref#NewsAuthorDisplay# Staff client only"
+msgstr "Pouze v intranetu"
 
 # Web services
 msgid "web_services.pref"
@@ -5816,8 +6171,10 @@ msgid "web_services.pref#ILS-DI# Enable"
 msgstr "Povolit"
 
 # Web services > ILS-DI
-msgid "web_services.pref#ILS-DI# ILS-DI services for OPAC users"
-msgstr "uživatelům on-line katalogu služby ILS-DI."
+msgid "web_services.pref#ILS-DI# ILS-DI services for OPAC users (available at: /cgi-bin/koha/ilsdi.pl)"
+msgstr ""
+"službu ILS-DI pro uživatele on-line katalogu (dostupné na: /cgi-"
+"bin/koha/ilsdi.pl)"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# Allow IP addresses"
@@ -5880,6 +6237,26 @@ msgid "web_services.pref#OAI-PMH:ConfFile# YAML OAI Koha server configuration fi
 msgstr "Konfigurační soubor OAI serveru:"
 
 # Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:DeletedRecord# ."
+msgstr "."
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:DeletedRecord# Koha's deletedbiblio table"
+msgstr "Tabulka deletedbiblio systému Koha"
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:DeletedRecord# might be emptied or truncated at some point (transient)"
+msgstr "může být vymazána (transient)"
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:DeletedRecord# will never be emptied or truncated (persistent)"
+msgstr "nebude nikdy vymazána (persistent)"
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:DeletedRecord# will never have any data in it (no)"
+msgstr "nikdy nebude obsahovat žádná data (no)"
+
+# Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:MaxCount# Only return"
 msgstr "Vracet maximálně"
 
@@ -5902,4 +6279,3 @@ msgstr "Vracet maximálně"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "řádků z výstupů vyžádaných pomocí webové služby."
-
