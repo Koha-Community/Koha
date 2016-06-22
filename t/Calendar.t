@@ -89,7 +89,7 @@ fixtures_ok [
       ],
 ], "add fixtures";
 
-my $cache = Koha::Cache->get_instance();
+my $cache = Koha::Caches->get_instance();
 $cache->clear_from_cache( 'single_holidays') ;
 
 # 'MPL' branch is arbitrary, is not used at all but is needed for initialization

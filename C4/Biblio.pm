@@ -1122,7 +1122,7 @@ sub GetMarcStructure {
     $frameworkcode = "" unless $frameworkcode;
 
     $forlibrarian = $forlibrarian ? 1 : 0;
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
     my $cache_key = "MarcStructure-$forlibrarian-$frameworkcode";
     my $cached = $cache->get_from_cache($cache_key);
     return $cached if $cached;
@@ -1230,7 +1230,7 @@ sub GetMarcSubfieldStructure {
 
     $frameworkcode //= '';
 
-    my $cache     = Koha::Cache->get_instance();
+    my $cache     = Koha::Caches->get_instance();
     my $cache_key = "MarcSubfieldStructure-$frameworkcode";
     my $cached    = $cache->get_from_cache($cache_key);
     return $cached if $cached;

@@ -77,7 +77,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-my $cache = Koha::Cache->get_instance();
+my $cache = Koha::Caches->get_instance();
 
 my $op       = $input->param('op') || "";
 $tagfield =~ s/\,//g;

@@ -35,7 +35,7 @@ sub new {
     }
     else {
         require Koha::Cache;
-        $cache = Koha::Cache->get_instance();
+        $cache = Koha::Caches->get_instance();
     }
     my $self = bless {
         CACHE   => $cache,

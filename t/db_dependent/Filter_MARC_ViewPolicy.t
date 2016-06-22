@@ -71,7 +71,7 @@ sub run_hiding_tests {
 
         $sth->execute($hidden_value);
 
-        my $cache = Koha::Cache->get_instance();
+        my $cache = Koha::Caches->get_instance();
         $cache->flush_all();    # easy way to ensure DB is queried again.
 
         my $processor = Koha::RecordProcessor->new(

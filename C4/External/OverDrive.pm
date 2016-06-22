@@ -99,7 +99,7 @@ sub GetOverDriveToken {
 
     my $cache;
 
-    eval { $cache = Koha::Cache->get_instance() };
+    eval { $cache = Koha::Caches->get_instance() };
 
     my $token;
     $cache and $token = $cache->get_from_cache( "overdrive_token" ) and return $token;

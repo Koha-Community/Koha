@@ -59,7 +59,7 @@ else {
 }
 
 my $dbh = C4::Context->dbh;
-my $cache = Koha::Cache->get_instance();
+my $cache = Koha::Caches->get_instance();
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record

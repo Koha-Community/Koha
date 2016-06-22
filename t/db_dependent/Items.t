@@ -380,7 +380,7 @@ subtest 'SearchItems test' => sub {
     $dbh->do('INSERT INTO marc_subfield_structure (tagfield, tagsubfield, frameworkcode) VALUES (?, "z", ?)', undef, $itemfield, $frameworkcode);
 
     # Clear cache
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
@@ -644,7 +644,7 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
     |, undef, $framework->{frameworkcode} );
 
     # And make sure the caches are cleared
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache("MarcStructure-0-" . $framework->{frameworkcode});
     $cache->clear_from_cache("MarcStructure-1-" . $framework->{frameworkcode});
     $cache->clear_from_cache("default_value_for_mod_marc-" . $framework->{frameworkcode});

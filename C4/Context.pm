@@ -511,7 +511,7 @@ with this method.
 
 =cut
 
-my $syspref_cache = Koha::Cache->get_instance();
+my $syspref_cache = Koha::Caches->get_instance();
 my $use_syspref_cache = 1;
 sub preference {
     my $self = shift;

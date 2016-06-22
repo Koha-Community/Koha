@@ -46,7 +46,7 @@ my $pagesize = 20;
 my $script_name = "/cgi-bin/koha/admin/marctagstructure.pl";
 
 my $dbh = C4::Context->dbh;
-my $cache = Koha::Cache->get_instance();
+my $cache = Koha::Caches->get_instance();
 
 # open template
 my ($template, $loggedinuser, $cookie)

@@ -276,7 +276,7 @@ sub insert_single_holiday {
 
 
     # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
     $cache->clear_from_cache( 'exception_holidays') ;
 
@@ -321,7 +321,7 @@ sub insert_exception_holiday {
     $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
 
     # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
     $cache->clear_from_cache( 'exception_holidays') ;
 
@@ -422,7 +422,7 @@ UPDATE special_holidays SET title = ?, description = ?
     $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
 
     # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
     $cache->clear_from_cache( 'exception_holidays') ;
 
@@ -465,7 +465,7 @@ UPDATE special_holidays SET title = ?, description = ?
     $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
 
     # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
     $cache->clear_from_cache( 'exception_holidays') ;
 
@@ -546,7 +546,7 @@ sub delete_holiday {
     }
 
     # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
     $cache->clear_from_cache( 'exception_holidays') ;
 
@@ -577,7 +577,7 @@ sub delete_holiday_range {
     $sth->execute($self->{branchcode}, $options{day}, $options{month}, $options{year});
 
     # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
     $cache->clear_from_cache( 'exception_holidays') ;
 
@@ -631,7 +631,7 @@ sub delete_exception_holiday_range {
     $sth->execute($self->{branchcode}, $options{day}, $options{month}, $options{year});
 
     # changed the 'single_holidays' table, lets force/reset its cache
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache( 'single_holidays') ;
     $cache->clear_from_cache( 'exception_holidays') ;
 }
