@@ -108,7 +108,7 @@ BEGIN {
 use Encode;
 use ZOOM;
 use XML::Simple;
-use Koha::Cache;
+use Koha::Caches;
 use POSIX ();
 use DateTime::TimeZone;
 use Module::Load::Conditional qw(can_load);

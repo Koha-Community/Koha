@@ -54,20 +54,13 @@ our $L1_decoder = Sereal::Decoder->new;
 
 =head2 get_instance
 
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
 
 This gets a shared instance of the cache, set up in a very default way. This is
 the recommended way to fetch a cache object. If possible, it'll be
 persistent across multiple instances.
 
 =cut
-
-our $singleton_cache;
-sub get_instance {
-    my ($class) = @_;
-    $singleton_cache = $class->new() unless $singleton_cache;
-    return $singleton_cache;
-}
 
 =head2 new
 
@@ -76,7 +69,7 @@ Create a new Koha::Cache object. This is required for all cache-related function
 =cut
 
 sub new {
-    my ( $class, $self ) = @_;
+    my ( $class, $self, $subnamespace ) = @_;
     $self->{'default_type'} =
          $self->{cache_type}
       || $ENV{CACHING_SYSTEM}
@@ -86,6 +79,7 @@ sub new {
 
     $self->{'timeout'}   ||= 0;
     $self->{'namespace'} ||= $ENV{MEMCACHED_NAMESPACE} || 'koha';
+    $self->{namespace} .= ":$subnamespace:";
 
     if ( $self->{'default_type'} eq 'memcached'
         && can_load( modules => { 'Cache::Memcached::Fast' => undef } )
@@ -267,11 +261,11 @@ sub set_in_cache {
     if (ref($value)) {
         # Set in L1 cache as a data structure, initially only in frozen form (for performance reasons)
         $value = $L1_encoder->encode($value);
-        $L1_cache{$key}->{frozen} = $value;
+        $L1_cache{$self->{namespace}}{$key}->{frozen} = $value;
         $flag = '-CF1';
     } else {
         # Set in L1 cache as a scalar; exit if we are caching an undef
-        $L1_cache{$key} = $value;
+        $L1_cache{$self->{namespace}}{$key} = $value;
         return if !defined $value;
     }
 
@@ -325,17 +319,17 @@ sub get_from_cache {
     return unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
 
     # Return L1 cache value if exists
-    if ( exists $L1_cache{$key} ) {
-        if (ref($L1_cache{$key})) {
+    if ( exists $L1_cache{$self->{namespace}}{$key} ) {
+        if (ref($L1_cache{$self->{namespace}}{$key})) {
             if ($unsafe) {
-                $L1_cache{$key}->{thawed} ||= $L1_decoder->decode($L1_cache{$key}->{frozen});
-                return $L1_cache{$key}->{thawed};
+                $L1_cache{$self->{namespace}}{$key}->{thawed} ||= $L1_decoder->decode($L1_cache{$self->{namespace}}{key}->{frozen});
+                return $L1_cache{$self->{namespace}}{$key}->{thawed};
             } else {
-                return $L1_decoder->decode($L1_cache{$key}->{frozen});
+                return $L1_decoder->decode($L1_cache{$self->{namespace}}{$key}->{frozen});
             }
         } else {
             # No need to thaw if it's a scalar
-            return $L1_cache{$key};
+            return $L1_cache{$self->{namespace}}{$key};
         }
     }
 
@@ -348,15 +342,15 @@ sub get_from_cache {
     my $flag = substr($L2_value, -4, 4, '');
     if ($flag eq '-CF0') {
         # it's a scalar
-        $L1_cache{$key} = $L2_value;
+        $L1_cache{$self->{namespace}}{$key} = $L2_value;
         return $L2_value;
     } elsif ($flag eq '-CF1') {
         # it's a frozen data structure
         my $thawed;
         eval { $thawed = $L1_decoder->decode($L2_value); };
         return if $@;
-        $L1_cache{$key}->{frozen} = $L2_value;
-        $L1_cache{$key}->{thawed} = $thawed if $unsafe;
+        $L1_cache{$self->{namespace}}{$key}->{frozen} = $L2_value;
+        $L1_cache{$self->{namespace}}{$key}->{thawed} = $thawed if $unsafe;
         return $thawed;
     }
 
@@ -380,7 +374,7 @@ sub clear_from_cache {
     return unless ( $self->{$cache} && ref( $self->{$cache} ) =~ m/^Cache::/ );
 
     # Clear from L1 cache
-    delete $L1_cache{$key};
+    delete $L1_cache{$self->{namespace}}{$key};
 
     return $self->{$cache}->delete($key)
       if ( ref( $self->{$cache} ) =~ m'^Cache::Memcached' );
@@ -409,7 +403,7 @@ sub flush_all {
 
 sub flush_L1_cache {
     my( $self ) = @_;
-    %L1_cache = ();
+    $L1_cache{$self->{namespace}} = ();
 }
 
 =head1 TIED INTERFACE

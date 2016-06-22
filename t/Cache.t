@@ -17,13 +17,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 43;
+use Test::More tests => 44;
 use Test::Warn;
 
 my $destructorcount = 0;
 
 BEGIN {
     use_ok('Koha::Cache');
+    use_ok('Koha::Caches');
     use_ok('Koha::Cache::Object');
     use_ok('Koha::Cache::Memory::Lite');
     use_ok('C4::Context');
@@ -33,7 +34,7 @@ SKIP: {
     # Set a special namespace for testing, to avoid breaking
     # if test is run with a different user than Apache's.
     $ENV{ MEMCACHED_NAMESPACE } = 'unit_tests';
-    my $cache = Koha::Cache->get_instance();
+    my $cache = Koha::Caches->get_instance();
 
     skip "Cache not enabled", 36
       unless ( $cache->is_cache_active() && defined $cache );
@@ -258,8 +259,8 @@ subtest 'Koha::Cache::Memory::Lite' => sub {
 
 subtest 'Koha::Caches' => sub {
     plan tests => 8;
-    my $default_cache = Koha::Cache->get_instance();
-    my $another_cache = Koha::Cache->get_instance('another_cache');
+    my $default_cache = Koha::Caches->get_instance();
+    my $another_cache = Koha::Caches->get_instance('another_cache');
     $default_cache->set_in_cache('key_a', 'value_a');
     $default_cache->set_in_cache('key_b', 'value_b');
     $another_cache->set_in_cache('key_a', 'another_value_a');
@@ -279,7 +280,7 @@ subtest 'Koha::Caches' => sub {
 END {
   SKIP: {
         $ENV{ MEMCACHED_NAMESPACE } = 'unit_tests';
-        my $cache = Koha::Cache->get_instance();
+        my $cache = Koha::Caches->get_instance();
         skip "Cache not enabled", 1
           unless ( $cache->is_cache_active() );
         is( $destructorcount, 1, 'Destructor run exactly once' );

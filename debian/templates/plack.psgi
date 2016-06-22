@@ -36,7 +36,7 @@ use C4::Languages;
 use C4::Letters;
 use C4::Members;
 use C4::XSLT;
-use Koha::Cache;
+use Koha::Caches;
 use Koha::Cache::Memory::Lite;
 use Koha::Database;
 use Koha::DateUtils;
@@ -48,7 +48,7 @@ use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
     *CGI::new = sub {
         my $q = $old_new->( @_ );
         $CGI::PARAM_UTF8 = 1;
-        Koha::Cache->flush_L1_cache();
+        Koha::Caches->flush_L1_caches();
         Koha::Cache::Memory::Lite->flush();
         return $q;
     };
