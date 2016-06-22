@@ -360,7 +360,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('opacuserlogin','1',NULL,'Enable or disable display of user login features','YesNo'),
 ('OPACViewOthersSuggestions','0',NULL,'If ON, allows all suggestions to be displayed in the OPAC','YesNo'),
 ('OPACXSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on OPAC','Free'),
-('OPACXSLTListsDisplay','','','Enable XSLT stylesheet control over lists pages display on OPAC','Free'),
+('OPACXSLTListsDisplay','default','','Enable XSLT stylesheet control over lists pages display on OPAC','Free'),
 ('OPACXSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on OPAC','Free'),
 ('OpenLibraryCovers','0',NULL,'If ON Openlibrary book covers will be show','YesNo'),
 ('OpenLibrarySearch','0',NULL,'If Yes Open Library search results will show in OPAC','YesNo'),
@@ -535,7 +535,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('XISBN','0','','Use with FRBRizeEditions. If ON, Koha will use the OCLC xISBN web service in the Editions tab on the detail pages. See: http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp','YesNo'),
 ('XISBNDailyLimit','999','','The xISBN Web service is free for non-commercial use when usage does not exceed 1000 requests per day','Integer'),
 ('XSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on intranet','Free'),
-('XSLTListsDisplay','','','Enable XSLT stylesheet control over lists pages display on intranet','Free'),
+('XSLTListsDisplay','default','','Enable XSLT stylesheet control over lists pages display on intranet','Free'),
 ('XSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on intranet','Free'),
 ('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
 ('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
