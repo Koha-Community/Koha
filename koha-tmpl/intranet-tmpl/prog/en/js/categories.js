@@ -59,7 +59,7 @@ $(document).ready(function() {
                 required: function(element){
                     return $("#enrolmentperioddate").val() === "";
                 },
-                number: true,
+                digits: true,
                 enrollment_period: true
             },
             enrolmentperioddate: {
@@ -69,10 +69,10 @@ $(document).ready(function() {
                 enrollment_period: true
             },
             dateofbirthrequired: {
-                number: true
+                digits: true
             },
             upperagelimit: {
-                number: true
+                digits: true
             },
             enrolmentfee: {
                 number: true
