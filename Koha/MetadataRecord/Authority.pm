@@ -157,10 +157,10 @@ sub authorized_heading {
 
 =head2 get_all_authorities_iterator
 
-    my $it = Koha::Authority->get_all_authorities_iterator();
+    my $it = Koha::MetadataRecord::Authority->get_all_authorities_iterator();
 
 This will provide an iterator object that will, one by one, provide the
-Koha::Authority of each authority.
+Koha::MetadataRecord::Authority of each authority.
 
 The iterator is a Koha::MetadataIterator object.
 
