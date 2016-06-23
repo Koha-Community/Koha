@@ -240,21 +240,6 @@ CREATE TABLE IF NOT EXISTS `borrower_password_recovery` ( -- holds information a
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Table structure for table `branchcategories`
---
-
-DROP TABLE IF EXISTS `branchcategories`;
-CREATE TABLE `branchcategories` ( -- information related to library/branch groups
-  `categorycode` varchar(10) NOT NULL default '', -- unique identifier for the library/branch group
-  `categoryname` varchar(32), -- name of the library/branch group
-  `codedescription` mediumtext, -- longer description of the library/branch group
-  `categorytype` varchar(16), -- says whether this is a search group or a properties group
-  `show_in_pulldown` tinyint(1) NOT NULL DEFAULT '0', -- says this group should be in the opac libararies pulldown if it is enabled
-  PRIMARY KEY  (`categorycode`),
-  KEY `show_in_pulldown` (`show_in_pulldown`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
 -- Table structure for table `branches`
 --
 
@@ -283,21 +268,6 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
   `geolocation` VARCHAR(255) default NULL, -- geolocation of your library
   `marcorgcode` VARCHAR(16) default NULL, -- MARC Organization Code, see http://www.loc.gov/marc/organizations/orgshome.html, when empty defaults to syspref MARCOrgCode
   PRIMARY KEY (`branchcode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Table structure for table `branchrelations`
---
-
-DROP TABLE IF EXISTS `branchrelations`;
-CREATE TABLE `branchrelations` ( -- this table links libraries/branches to groups
-  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table to identify the branch
-  `categorycode` varchar(10) NOT NULL default '', -- foreign key from the branchcategories table to identify the group
-  PRIMARY KEY  (`branchcode`,`categorycode`),
-  KEY `branchcode` (`branchcode`),
-  KEY `categorycode` (`categorycode`),
-  CONSTRAINT `branchrelations_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `branchrelations_ibfk_2` FOREIGN KEY (`categorycode`) REFERENCES `branchcategories` (`categorycode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
