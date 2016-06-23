@@ -601,9 +601,13 @@ var holdForPatron = function () {
                           [% IF ( CAN_user_editcatalogue_edit_items ) %]
                           | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Edit items</a>
                           [% END %]
-                          <span class="view-in-opac">
-                            | <a href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]" target="_blank">OPAC view</a>
-                          </span>
+
+                          [% IF ( OPACBaseURL ) %]
+                              <span class="view-in-opac">
+                                | <a href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]" target="_blank">OPAC view</a>
+                              </span>
+                          [% END %]
+
                                 </p>
                                 </td>
 

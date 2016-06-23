@@ -89,10 +89,12 @@ $(document).ready(function() {
         <li><span class="label">Librarian identity:</span> [% librarian %]</li>
         <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid %]">[% aqbooksellername %]</a></li>
         <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view %].pl?biblionumber=[% bibnum %]">[% bibliotitle %]</a> <i>([% bibnum %])</i></li>
-        <li>
-            <span class="label">OPAC view:</span>
-            <a id="view-subscription-in-opac" target="_blank" href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Open in new window.</a>
-        </li>
+        [% IF ( OPACBaseURL ) %]
+            <li>
+                <span class="label">OPAC view:</span>
+                <a id="view-subscription-in-opac" target="_blank" href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Open in new window.</a>
+            </li>
+        [% END %]
 [% IF ( branchcode ) %]<li><span class="label">Library:</span> [% Branches.GetName( branchcode ) %]</li>[% END %]
         [% IF ( serialsadditems ) %]
             <li><span class="label">Items:</span> Serial receipt creates an item record.</li>
