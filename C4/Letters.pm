@@ -314,21 +314,20 @@ sub delalert {
 sub getalert {
     my ( $borrowernumber, $type, $externalid ) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "SELECT a.*, b.branchcode FROM alert a JOIN borrowers b USING(borrowernumber) WHERE";
+    my $query = "SELECT a.*, b.branchcode FROM alert a JOIN borrowers b USING(borrowernumber) WHERE 1";
     my @bind;
     if ($borrowernumber and $borrowernumber =~ /^\d+$/) {
-        $query .= " borrowernumber=? AND ";
+        $query .= " AND borrowernumber=?";
         push @bind, $borrowernumber;
     }
     if ($type) {
-        $query .= " type=? AND ";
+        $query .= " AND type=?";
         push @bind, $type;
     }
     if ($externalid) {
-        $query .= " externalid=? AND ";
+        $query .= " AND externalid=?";
         push @bind, $externalid;
     }
-    $query =~ s/ AND $//;
     my $sth = $dbh->prepare($query);
     $sth->execute(@bind);
     return $sth->fetchall_arrayref({});

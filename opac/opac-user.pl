@@ -80,6 +80,10 @@ my $canrenew = 1;
 
 $template->param( shibbolethAuthentication => C4::Context->config('useshibboleth') );
 
+if (!$borrowernumber) {
+    $template->param( adminWarning => 1 );
+}
+
 # get borrower information ....
 my ( $borr ) = GetMemberDetails( $borrowernumber );
 

@@ -27,6 +27,18 @@
             </div>
             <div class="span10">
                 <div id="userdetails" class="maincontent">
+
+                    [% IF adminWarning %]
+                        <div id="adminwarning" class="dialog alert">
+                            <p>
+<strong><i class="fa fa-exclamation-triangle"> </i> Warning:</strong>
+Using this account is not recommended because some parts of Koha will not function as expected. Instead, please log in with a different account.
+<a class="btn btn-small" href="/cgi-bin/koha/opac-main.pl?logout.x=1">
+<i class="fa fa-sign-out"> </i> Log out</a>
+                            </p>
+                        </div>
+                    [% END %]
+
                     [% IF ( bor_messages ) %]
                         <div class="alert alert-info">
                             <h3>Messages for you</h3>
