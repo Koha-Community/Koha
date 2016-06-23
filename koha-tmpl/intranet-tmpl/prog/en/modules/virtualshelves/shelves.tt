@@ -116,8 +116,8 @@ $(document).ready(function(){
 [% IF op == 'view' %]
 $(document).ready(function(){
     [% IF ( itemsloop ) %]$('#searchheader').fixFloat();[% END %]
-    $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">"+_("Clear all")+"<\/a>");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">"+_("Select all")+"<\/a>");
+    $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-remove\"></i>"+_(" Clear all")+"<\/a>");
+    $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-check\"></i>"+_(" Select all")+"<\/a>");
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
         return false;
