@@ -90,7 +90,6 @@ BEGIN {
 
 use Encode;
 use ZOOM;
-use XML::Simple;
 use Koha::Caches;
 use POSIX ();
 use DateTime::TimeZone;
@@ -100,6 +99,7 @@ use Carp;
 use C4::Boolean;
 use C4::Debug;
 use Koha;
+use Koha::Config;
 use Koha::Config::SysPref;
 use Koha::Config::SysPrefs;
 
@@ -168,65 +168,8 @@ environment variable to the pathname of a configuration file to use.
 # Zconn
 #     A connection object for the Zebra server
 
-# Koha's main configuration file koha-conf.xml
-# is searched for according to this priority list:
-#
-# 1. Path supplied via use C4::Context '/path/to/koha-conf.xml'
-# 2. Path supplied in KOHA_CONF environment variable.
-# 3. Path supplied in INSTALLED_CONFIG_FNAME, as long
-#    as value has changed from its default of 
-#    '__KOHA_CONF_DIR__/koha-conf.xml', as happens
-#    when Koha is installed in 'standard' or 'single'
-#    mode.
-# 4. Path supplied in CONFIG_FNAME.
-#
-# The first entry that refers to a readable file is used.
-
-use constant CONFIG_FNAME => "/etc/koha/koha-conf.xml";
-                # Default config file, if none is specified
-                
-my $INSTALLED_CONFIG_FNAME = '__KOHA_CONF_DIR__/koha-conf.xml';
-                # path to config file set by installer
-                # __KOHA_CONF_DIR__ is set by rewrite-confg.PL
-                # when Koha is installed in 'standard' or 'single'
-                # mode.  If Koha was installed in 'dev' mode, 
-                # __KOHA_CONF_DIR__ is *not* rewritten; instead
-                # developers should set the KOHA_CONF environment variable 
-
 $context = undef;        # Initially, no context is set
 @context_stack = ();        # Initially, no saved contexts
-
-
-=head2 read_config_file
-
-Reads the specified Koha config file. 
-
-Returns an object containing the configuration variables. The object's
-structure is a bit complex to the uninitiated ... take a look at the
-koha-conf.xml file as well as the XML::Simple documentation for details. Or,
-here are a few examples that may give you what you need:
-
-The simple elements nested within the <config> element:
-
-    my $pass = $koha->{'config'}->{'pass'};
-
-The <listen> elements:
-
-    my $listen = $koha->{'listen'}->{'biblioserver'}->{'content'};
-
-The elements nested within the <server> element:
-
-    my $ccl2rpn = $koha->{'server'}->{'biblioserver'}->{'cql2rpn'};
-
-Returns undef in case of error.
-
-=cut
-
-sub read_config_file {		# Pass argument naming config file to read
-    my $koha = XMLin(shift, keyattr => ['id'], forcearray => ['listen', 'server', 'serverinfo'], suppressempty => '');
-
-    return $koha;			# Return value: ref-to-hash holding the configuration
-}
 
 =head2 db_scheme2dbi
 
@@ -292,38 +235,32 @@ sub new {
     undef $conf_fname unless 
         (defined $conf_fname && -s $conf_fname);
     # Figure out a good config file to load if none was specified.
-    if (!defined($conf_fname))
-    {
-        # If the $KOHA_CONF environment variable is set, use
-        # that. Otherwise, use the built-in default.
-        if (exists $ENV{"KOHA_CONF"} and $ENV{'KOHA_CONF'} and -s  $ENV{"KOHA_CONF"}) {
-            $conf_fname = $ENV{"KOHA_CONF"};
-        } elsif ($INSTALLED_CONFIG_FNAME !~ /__KOHA_CONF_DIR/ and -s $INSTALLED_CONFIG_FNAME) {
-            # NOTE: be careful -- don't change __KOHA_CONF_DIR in the above
-            # regex to anything else -- don't want installer to rewrite it
-            $conf_fname = $INSTALLED_CONFIG_FNAME;
-        } elsif (-s CONFIG_FNAME) {
-            $conf_fname = CONFIG_FNAME;
-        } else {
+    unless ( defined $conf_fname ) {
+        $conf_fname = Koha::Config->guess_koha_conf;
+        unless ( $conf_fname ) {
             warn "unable to locate Koha configuration file koha-conf.xml";
             return;
         }
     }
 
     my $conf_cache = Koha::Caches->get_instance('config');
-    if ( $conf_cache ) {
-        $self = $conf_cache->get_from_cache('kohaconf');
+    my $config_from_cache;
+    if ( $conf_cache->cache ) {
+        $config_from_cache = $conf_cache->get_from_cache('koha_conf');
     }
     unless ( %$self ) {
-        $self = read_config_file($conf_fname);
+        $self = Koha::Config->read_from_file($conf_fname);
     }
-    if ( $conf_cache ) {
+
+    if ( $config_from_cache ) {
+        $self = $config_from_cache;
+    } elsif ( $conf_cache->memcached_cache ) {
         # FIXME it may be better to use the memcached servers from the config file
         # to cache it
         $conf_cache->set_in_cache('koha_conf', $self)
     }
     unless ( exists $self->{config} or defined $self->{config} ) {
-        warn "read_config_file($conf_fname) returned undef";
+        warn "The config file ($conf_fname) has not been parsed correctly";
         return;
     }
 
@@ -466,7 +403,7 @@ with this method.
 
 =cut
 
-my $syspref_cache = Koha::Caches->get_instance();
+my $syspref_cache = Koha::Caches->get_instance('syspref');
 my $use_syspref_cache = 1;
 sub preference {
     my $self = shift;

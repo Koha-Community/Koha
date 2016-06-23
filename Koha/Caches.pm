@@ -7,7 +7,7 @@ our $singleton_caches;
 sub get_instance {
     my ($class, $subnamespace) = @_;
     $subnamespace //= '';
-    $singleton_caches->{$subnamespace} = Koha::Cache->new({}, $subnamespace) unless $singleton_caches->{$subnamespace};
+    $singleton_caches->{$subnamespace} = Koha::Cache->new({}, { subnamespace => $subnamespace } ) unless $singleton_caches->{$subnamespace};
     return $singleton_caches->{$subnamespace};
 }
 

@@ -39,9 +39,11 @@ use strict;
 use warnings;
 use Carp;
 use Module::Load::Conditional qw(can_load);
-use Koha::Cache::Object;
 use Sereal::Encoder;
 use Sereal::Decoder;
+
+use Koha::Cache::Object;
+use Koha::Config;
 
 use base qw(Class::Accessor);
 
@@ -69,21 +71,30 @@ Create a new Koha::Cache object. This is required for all cache-related function
 =cut
 
 sub new {
-    my ( $class, $self, $subnamespace ) = @_;
+    my ( $class, $self, $params ) = @_;
     $self->{'default_type'} =
          $self->{cache_type}
-      || $ENV{CACHING_SYSTEM}
+      || $ENV{CACHING_SYSTEM} # DELME What about this?
       || 'memcached';
+
+    my $subnamespace = $params->{subnamespace} // '';
 
     $ENV{DEBUG} && carp "Default caching system: $self->{'default_type'}";
 
     $self->{'timeout'}   ||= 0;
-    $self->{'namespace'} ||= $ENV{MEMCACHED_NAMESPACE} || C4::Context->config('memcached_namespace') || 'koha';
+    # Should we continue to support MEMCACHED ENV vars?
+    $self->{'namespace'} ||= $ENV{MEMCACHED_NAMESPACE};
+    my @servers = split /,/, $ENV{MEMCACHED_SERVERS} || '';
+    unless ( $self->{namespace} and @servers ) {
+        my $koha_config = Koha::Config->read_from_file( Koha::Config->guess_koha_conf() );
+        $self->{namespace} ||= $koha_config->{config}{memcached_namespace} || 'koha';
+        @servers ||= split /,/, $koha_config->{config}{memcached_servers};
+    }
     $self->{namespace} .= ":$subnamespace:";
 
     if ( $self->{'default_type'} eq 'memcached'
         && can_load( modules => { 'Cache::Memcached::Fast' => undef } )
-        && _initialize_memcached($self)
+        && _initialize_memcached($self, @servers)
         && defined( $self->{'memcached_cache'} ) )
     {
         $self->{'cache'} = $self->{'memcached_cache'};
@@ -115,8 +126,8 @@ sub new {
 }
 
 sub _initialize_memcached {
-    my ($self) = @_;
-    my @servers = split /,/, $ENV{MEMCACHED_SERVERS} || C4::Context->config('memcached_servers') || '';
+    my ($self, @servers) = @_;
+
     return unless @servers;
 
     $ENV{DEBUG}
