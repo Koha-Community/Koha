@@ -92,6 +92,8 @@ Using this account is not recommended because some parts of Koha will not functi
                                         Your account has expired. Please contact the library for more information.
                                     [% ELSIF error == 'too_many' %]
                                         You have renewed this item the maximum number of times allowed.
+                                    [% ELSIF error == 'too_soon' %]
+                                        It is too soon after the checkout date for this item to be renewed.
                                     [% ELSIF error == 'on_reserve' %]
                                         This item is on hold for another patron.
                                     [% END %]
