@@ -1,5 +1,3 @@
--- INSERT INTO branchcategories ( `categorycode`,`categoryname`,`codedescription`) VALUES
-
 INSERT INTO branches ( `branchcode`,`branchname`,`branchaddress1`) VALUES
 
 ('MPL','Midway','372 Forest Street'),
@@ -15,5 +13,3 @@ INSERT INTO branches ( `branchcode`,`branchname`,`branchaddress1`) VALUES
 ('LPL','Liberty','East Hills'),
 ('UPL','Union','Chestnut Hollow')
 ;
-
--- INSERT INTO branchrelations ( `branchcode`,`categorycode`) VALUES
