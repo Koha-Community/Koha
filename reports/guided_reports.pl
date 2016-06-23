@@ -31,6 +31,7 @@ use C4::Debug;
 use C4::Koha qw/GetFrameworksLoop/;
 use C4::Branch;
 use C4::Context;
+use Koha::Caches;
 use C4::Log;
 use Koha::DateUtils qw/dt_from_string output_pref/;
 use Koha::AuthorisedValue;
@@ -47,7 +48,7 @@ Script to control the guided report creation
 =cut
 
 my $input = new CGI;
-my $usecache = C4::Context->ismemcached;
+my $usecache = Koha::Caches->get_instance->memcached_cache;
 
 my $phase = $input->param('phase') // '';
 my $flagsrequired;

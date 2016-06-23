@@ -32,6 +32,7 @@ use C4::Languages;
 use C4::Branch;       # GetBranches
 use C4::Search::History;
 use Koha;
+use Koha::Caches;
 use Koha::AuthUtils qw(get_script_name hash_password);
 use Koha::LibraryCategories;
 use Koha::Libraries;
@@ -1727,7 +1728,7 @@ sub get_session {
     elsif ( $storage_method eq 'Pg' ) {
         $session = new CGI::Session( "driver:PostgreSQL;serializer:yaml;id:md5", $sessionID, { Handle => $dbh } );
     }
-    elsif ( $storage_method eq 'memcached' && C4::Context->ismemcached ) {
+    elsif ( $storage_method eq 'memcached' && Koha::Caches->get_instance->memcached_cache ) {
         $session = new CGI::Session( "driver:memcached;serializer:yaml;id:md5", $sessionID, { Memcached => C4::Context->memcached } );
     }
     else {
