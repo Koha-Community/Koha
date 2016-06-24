@@ -12659,6 +12659,25 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.05.02.002";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type )
+        SELECT 'MaxItemsToProcessForBatchMod', value, NULL, 'Process up to a given number of items in a single item modification batch.', 'Integer' FROM systempreferences WHERE variable='MaxItemsForBatch';
+    });
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type )
+        SELECT 'MaxItemsToDisplayForBatchDel', value, NULL, 'Display up to a given number of items in a single item deletionbatch.', 'Integer' FROM systempreferences WHERE variable='MaxItemsForBatch';
+    });
+    $dbh->do(q{
+        DELETE FROM systempreferences WHERE variable="MaxItemsForBatch";
+    });
+
+    print "Upgrade to $DBversion done (Bug 11490 - MaxItemsForBatch should be split into two new prefs)\n";
+    SetVersion($DBversion);
+}
+
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
