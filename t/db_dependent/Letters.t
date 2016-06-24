@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 73;
+use Test::More tests => 74;
 use Test::MockModule;
 use Test::Warn;
 
@@ -210,14 +210,16 @@ my $externalid = 'my external id';
 my $alert_id = C4::Letters::addalert($borrowernumber, $type, $externalid);
 isnt( $alert_id, undef, 'addalert does not return undef' );
 
-my $alerts = C4::Letters::getalert($borrowernumber);
+
+# getalert
+my $alerts = C4::Letters::getalert();
+is( @$alerts, 1, 'addalert should not fail without parameter' );
+$alerts = C4::Letters::getalert($borrowernumber);
 is( @$alerts, 1, 'addalert adds an alert' );
 is( $alerts->[0]->{alertid}, $alert_id, 'addalert returns the alert id correctly' );
 is( $alerts->[0]->{type}, $type, 'addalert stores the type correctly' );
 is( $alerts->[0]->{externalid}, $externalid, 'addalert stores the externalid correctly' );
 
-
-# getalert
 $alerts = C4::Letters::getalert($borrowernumber, $type);
 is( @$alerts, 1, 'getalert returns the correct number of alerts' );
 $alerts = C4::Letters::getalert($borrowernumber, $type, $externalid);
