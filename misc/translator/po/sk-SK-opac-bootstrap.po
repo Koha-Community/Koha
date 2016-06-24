@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOHA 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 10:16-0300\n"
+"POT-Creation-Date: 2016-06-20 01:43-0300\n"
 "PO-Revision-Date: 2016-05-17 12:05+0200\n"
 "Last-Translator: Paul <paul.vilhan@gmail.com>\n"
 "Language-Team: Paul Vilhan\n"
@@ -69,16 +69,6 @@ msgstr "%s %s %s %s %s Bez názvu %s %s %s %s "
 #, c-format
 msgid "%s %s %s %s %s No title %s %s , %s %s"
 msgstr "%s %s %s %s %s Bez názvu %s %s , %s %s"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  IF ( casAuthentication ) 
-#. %4$s:  IF ( shibbolethAuthentication ) 
-#. %5$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:93
-#, c-format
-msgid "%s %s %s %s %s please "
-msgstr "%s %s %s %s %s prosím "
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
 #. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS 
@@ -197,20 +187,6 @@ msgstr "%s %s %s Žiadne ďalšie exempláre. %s %s "
 #, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "%s %s %s Poznámka: toto okno sa o 5 sekúnd automaticky zavrie. %s "
-
-#. %1$s:  USE Koha 
-#. %2$s:  INCLUDE 'doc-head-open.inc' 
-#. %3$s:  IF ( LibraryNameTitle ) 
-#. %4$s:  LibraryNameTitle 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#. %7$s:  INCLUDE 'doc-head-close.inc' 
-#. %8$s:  BLOCK cssinclude 
-#. %9$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:1
-#, c-format
-msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Discharge %s %s%s "
-msgstr "%s %s %s%s%sKoha online%s katalóg &rsaquo; Uvoľnenie %s %s%s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -357,15 +333,6 @@ msgstr "%s %s od %s %s "
 msgid "%s %s by %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 msgstr "%s %s od %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 
-#. For the first occurrence,
-#. %1$s:  END 
-#. %2$s:  IF ( casServersLoop ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:101
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:122
-#, c-format
-msgid "%s %s please choose against which one you would like to authenticate: "
-msgstr "%s %s zvoľte prosím, voči ktorému chcete robiť overenie: "
-
 #. %1$s:  firstname 
 #. %2$s:  surname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:12
@@ -462,30 +429,31 @@ msgstr ""
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
 #. %12$s:  CASE 'FU' 
-#. %13$s:  CASE 'Rent' 
-#. %14$s:  CASE 'FOR' 
-#. %15$s:  CASE 'LR' 
-#. %16$s:  CASE 'PAY' 
-#. %17$s:  CASE 'WO' 
-#. %18$s:  CASE 'C' 
-#. %19$s:  CASE 'CR' 
-#. %20$s:  CASE 
-#. %21$s:  ACCOUNT_LINE.accounttype 
-#. %22$s: - END -
-#. %23$s: - IF ACCOUNT_LINE.description 
-#. %24$s:  ACCOUNT_LINE.description 
-#. %25$s:  END 
-#. %26$s:  IF ACCOUNT_LINE.title 
-#. %27$s:  ACCOUNT_LINE.title 
-#. %28$s:  END 
+#. %13$s:  CASE 'HE' 
+#. %14$s:  CASE 'Rent' 
+#. %15$s:  CASE 'FOR' 
+#. %16$s:  CASE 'LR' 
+#. %17$s:  CASE 'PAY' 
+#. %18$s:  CASE 'WO' 
+#. %19$s:  CASE 'C' 
+#. %20$s:  CASE 'CR' 
+#. %21$s:  CASE 
+#. %22$s:  ACCOUNT_LINE.accounttype 
+#. %23$s: - END -
+#. %24$s: - IF ACCOUNT_LINE.description 
+#. %25$s:  ACCOUNT_LINE.description 
+#. %26$s:  END 
+#. %27$s:  IF ACCOUNT_LINE.title 
+#. %28$s:  ACCOUNT_LINE.title 
+#. %29$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:53
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
 "(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
 "%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
-"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
-"%sCredit %s%s %s %s, %s%s %s(%s)%s "
+"%sHold waiting too long %sRental fee %sForgiven %sLost item fee refund "
+"%sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 "%s %sZaplatené, ďakujeme %sZaplatené, ďakujeme (hotovosť cez SIP2) "
 "%sZaplatené, ďakujeme (VISA cez SIP2) %sZaplatené, ďakujeme (kreditná karta "
@@ -729,19 +697,6 @@ msgstr "%s Meno:"
 #, c-format
 msgid "%s Home library:"
 msgstr "%s Domovská knižnica:"
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
-#, c-format
-msgid ""
-"%s If you have a CAS account, you may use that below. %s %s If you have a "
-"local account, you may use that below. %s "
-msgstr ""
-"%s Ak máte CAS účet, môžete použiť ten nižšie. %s %s Ak máte lokálny účet, "
-"môžete použiť ten nižšie. %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
@@ -1263,14 +1218,6 @@ msgstr "%s zost"
 msgid "%s more than "
 msgstr "%s viac než "
 
-#. %1$s:  IF issue.onsite_checkout 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:82
-#, c-format
-msgid "%s onsite %s checkout %s "
-msgstr "%s na mieste %s vypožičať %s "
-
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
 #. %3$s:  END 
@@ -1704,6 +1651,15 @@ msgstr "%s%s%sKoha online%s katalóg &rsaquo; Podrobnosti pre: %s%s%s,%s %s%s"
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:3
+#, fuzzy, c-format
+msgid "%s%s%sKoha online%s catalog &rsaquo; Discharge"
+msgstr "%s%s%sKoha online%s katalóg &rsaquo; Menovky"
+
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:2
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download cart"
@@ -1713,7 +1669,7 @@ msgstr "%s%s%sKoha online%s katalóg &rsaquo; Stiahnuť košík"
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  shelf.shelfname 
+#. %5$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:4
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download list %s"
@@ -2855,7 +2811,7 @@ msgstr "(%s celkom)"
 msgid "(All)"
 msgstr "(Všetko)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:149
 #, c-format
 msgid "(Checked out)"
 msgstr "(Vypožičaný)"
@@ -3857,8 +3813,8 @@ msgstr "Prezrieť výsledky"
 msgid "Browse shelf"
 msgstr "Náhľad do police"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:89
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:108
 #, c-format
 msgid "CAS login"
 msgstr "Prihlásenie CAS"
@@ -3932,7 +3888,7 @@ msgstr "Signatúra (0-9 po A-Z)"
 msgid "Call number (Z-A to 9-0)"
 msgstr "Signatúra (Z-A po 9-0)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:142
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:227
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:456
 #, c-format
@@ -4065,13 +4021,13 @@ msgstr "Výpožička"
 msgid "Check out%s, return%s or renew an item: "
 msgstr "Výpožička%s, návrat%s alebo obnova exemplára: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:146
 #, c-format
 msgid "Check-in date:"
 msgstr "Dátum návratu:"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:37
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:149
 #, c-format
 msgid "Checked out"
 msgstr "Vypožičaný"
@@ -4769,12 +4725,12 @@ msgid ""
 "arrives?"
 msgstr "Želáte si dostať E-mail, keď dôjde nové číslo tohto periodika?"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:160
 #, c-format
 msgid "Don't have a library card?"
 msgstr "Nemáte čitateľský preukaz?"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:158
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "Nemáte ešte heslo?"
@@ -4876,6 +4832,7 @@ msgid "Editions"
 msgstr "Vydania"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:173
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
 #, c-format
 msgid "Email"
@@ -5756,7 +5713,7 @@ msgstr ""
 "Ak nekliknete na tlačidlo 'Skončiť', Vaše prihlásenie automaticky vyprší o "
 "%s sekúnd."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:133
 #, c-format
 msgid ""
 "If you do not have a CAS account, but do have a local account, you can still "
@@ -5764,30 +5721,30 @@ msgid ""
 msgstr ""
 "Ak nemáte účet CAS, ale len lokálny účet, ešte vždy sa môžete prihlásiť: "
 
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
-#, c-format
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:85
+#, fuzzy, c-format
 msgid ""
-"If you do not have a Shibboleth account, but you do have a CAS account, %s "
+"If you do not have a Shibboleth account, but you do have a CAS account, you "
+"can use CAS."
 msgstr "Ak nemáte účet Shibboleth, ale máte CAS účet, %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:93
-#, c-format
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:88
+#, fuzzy, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a local login, then "
-"you may login below:"
+"you may login below."
 msgstr ""
 "Ak nemáte účet Shibboleth, ale máte miestny prístup, môžete sa prihlásiť "
 "nižšie:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:161
 #, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
 msgstr ""
 "Ak ešte nemáte čitateľský preukaz, príďte sa zaregistrovať do knižnice."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:159
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -5796,17 +5753,39 @@ msgstr ""
 "Ak ešte nemáte heslo, zastavte sa najbližšie v knižnici. Radi Vám ho "
 "nastavíme."
 
-#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:120
-#, c-format
-msgid "If you have a CAS account, %s please "
+#, fuzzy, c-format
+msgid ""
+"If you have a CAS account, please choose against which one you would like to "
+"authenticate:"
+msgstr "%s %s zvoľte prosím, voči ktorému chcete robiť overenie: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:116
+#, fuzzy, c-format
+msgid "If you have a CAS account, please click here to log in."
+msgstr "Ak máte CAS účet, prosím %s "
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
+#, fuzzy, c-format
+msgid "If you have a CAS account, you may use that below."
 msgstr "Ak máte CAS účet, prosím %s "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:311
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:85
 #, c-format
 msgid "If you have a Shibboleth account, please "
 msgstr "Ak máte účet Shibboleth, prosím "
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:81
+#, fuzzy, c-format
+msgid "If you have a Shibboleth account, please click here to log in."
+msgstr "Ak máte účet Shibboleth, prosím "
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:76
+#, fuzzy, c-format
+msgid "If you have a local account, you may use that below."
+msgstr ""
+"Prepáčte, prihlásenie CAS takisto zlyhalo, ak však máte lokálne prihlásenie, "
+"môžete ho použiť nižšie."
 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:618
@@ -5940,7 +5919,7 @@ msgstr "Stratený exemplár"
 msgid "Item type"
 msgstr "Typ exemplára"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:45
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:214
 #, c-format
@@ -6276,8 +6255,8 @@ msgstr "Načítavam..."
 msgid "Local Login"
 msgstr "Lokálne prihlásenie"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:92
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:138
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:132
 #, c-format
 msgid "Local login"
 msgstr "Lokálne prihlásenie"
@@ -6310,7 +6289,7 @@ msgstr "Lokácie"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:328
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:159
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:153
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:726
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:84
@@ -6353,12 +6332,17 @@ msgstr "Prihláste sa do svojho účtu"
 msgid "Log in to your account:"
 msgstr "Prihláste sa do svojho účtu:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:173
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
+#, fuzzy, c-format
+msgid "Log out and try again with a different user."
+msgstr "a skúste znova s iným užívateľom"
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:171
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "Knižnica neumožnila prihlasovanie do katalógu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:154
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:148
 #, c-format
 msgid "Login"
 msgstr "Prihlásiť sa"
@@ -6370,11 +6354,6 @@ msgstr "Prihlásiť sa"
 #, c-format
 msgid "Login:"
 msgstr "Meno:"
-
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
-#, c-format
-msgid "Logout"
-msgstr "Odhláste sa"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:452
 #, c-format
@@ -6779,9 +6758,9 @@ msgstr "Neboli vykonané žiadne zmeny."
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:183
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:193
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:202
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:102
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:111
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:93
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:110
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:120
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:145
@@ -7091,7 +7070,7 @@ msgstr "Poznámky/Recenzie"
 msgid "Notes:"
 msgstr "Poznámky:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:136
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:130
 #, c-format
 msgid "Nothing"
 msgstr "Nič"
@@ -7288,7 +7267,7 @@ msgstr "Po termíne "
 msgid "Parameters"
 msgstr "Parametre"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:156
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:150
 #, c-format
 msgid "Password"
 msgstr "Heslo"
@@ -7415,10 +7394,20 @@ msgstr ""
 msgid "Please choose a download format"
 msgstr "Zvoľte si prosím formát na stiahnutie"
 
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:100
+#, fuzzy, c-format
+msgid "Please choose against which one you would like to authenticate: "
+msgstr "%s %s zvoľte prosím, voči ktorému chcete robiť overenie: "
+
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:51
 #, c-format
 msgid "Please choose your privacy rule:"
 msgstr "Zvoľte si prosím pravidlo Vášho súkromia:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:96
+#, fuzzy, c-format
+msgid "Please click here to log in."
+msgstr "pre prihlásenie kliknite sem"
 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:38
 #, c-format
@@ -8315,7 +8304,7 @@ msgstr "Sekcia:"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:345
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:177
@@ -8557,7 +8546,7 @@ msgid "Shelving location"
 msgstr "Lokácia v polici"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:310
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:83
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:80
 #, c-format
 msgid "Shibboleth Login"
 msgstr "Prihlásenie Shibboleth"
@@ -8643,7 +8632,7 @@ msgstr "Zobrazuje sa posledných 50 exemplárov. "
 msgid "Showing only available items"
 msgstr "Zobrazujú sa len dostupné exempláre"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:181
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:179
 #, c-format
 msgid "Sign in with your Email"
 msgstr "Prihláste sa s vaším E-mailom"
@@ -8715,16 +8704,16 @@ msgstr "Prepáčte, jednoduchý náhľad je dočasne nedostupný"
 msgid "Sorry, tags are not enabled on this system."
 msgstr "Ľutujeme, v tomto systéme menovky nie sú povolené."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
-#, c-format
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:71
+#, fuzzy, c-format
 msgid ""
-"Sorry, the CAS login also failed, if you have a local login you may use that "
+"Sorry, the CAS login also failed. If you have a local login you may use that "
 "below."
 msgstr ""
 "Prepáčte, prihlásenie CAS takisto zlyhalo, ak však máte lokálne prihlásenie, "
 "môžete ho použiť nižšie."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:112
 #, c-format
 msgid "Sorry, the CAS login failed."
 msgstr "Prepáčte, prihlásenie CAS sa nevydarilo."
@@ -8766,6 +8755,14 @@ msgstr "Prepáčte, ste príliš mladý na rezerváciu tohto materiálu."
 #, c-format
 msgid "Sorry, you cannot place more than %s holds. "
 msgstr "Ľutujeme, nemôžete žiadať viac než %s rezervácií. "
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:67
+#, fuzzy, c-format
+msgid ""
+"Sorry, your Shibboleth identity does not match a valid library identity."
+msgstr ""
+"Prepáčte, vaša identita Shibboleth sa nezhoduje s platnou identitou "
+"knižnice. Ak máte lokálne prihlásenie, môžete ho použiť nižšie."
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:307
 #, c-format
@@ -9387,7 +9384,7 @@ msgstr ""
 msgid "The list was sent to: %s"
 msgstr "Zoznam bol odoslaný na: %s"
 
-#. %1$s:  op 
+#. %1$s:  op | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:35
 #, c-format
 msgid "The operation %s is not supported."
@@ -9750,7 +9747,6 @@ msgstr ""
 "Pre nahlásenie nefunkčného odkazu alebo akéhokoľvek iného problému, pošlite "
 "prosím "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:32
 #: opac-tmpl/bootstrap/en/modules/errors/402.tt:32
 #: opac-tmpl/bootstrap/en/modules/errors/401.tt:33
@@ -9758,6 +9754,11 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/errors/403.tt:32
 #, c-format
 msgid "To report this error, you can "
+msgstr "Pre nahlásenie tejto chyby, môžete "
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:173
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator."
 msgstr "Pre nahlásenie tejto chyby, môžete "
 
 #. SCRIPT
@@ -9901,7 +9902,7 @@ msgstr "Odhláste sa z upozornení o predplatnom"
 msgid "Updates to your record"
 msgstr "Aktualizácie pre váš záznam"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:176
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:174
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "Použite hornú ponukovú lištu k prístupu do inej časti knižnice."
@@ -10184,10 +10185,10 @@ msgid "You can't change your password."
 msgstr "Nemôžete zmeniť heslo."
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:42
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"You cannot be discharged, you have issues. Please return items before asking "
-"for a discharge."
+"You cannot be discharged, you have checked out items. Please return items "
+"before asking for a discharge."
 msgstr ""
 "Nemožno vás uvoľniť, máte stále výpožičky. Vráťte, prosím, exempláre skôr, "
 "ako požiadate o uvoľnenie."
@@ -10291,7 +10292,7 @@ msgstr "Tento titul ste už vyžiadali."
 msgid "You have checked out too many items and can't check out any more. %s "
 msgstr "Vypožičali ste si už priveľa exemplárov a viac vypožičať nemôžete. %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:87
 #, c-format
 msgid "You have no fines or charges"
 msgstr "Nemáte žiadne pokuty alebo poplatky"
@@ -10333,10 +10334,10 @@ msgid ""
 msgstr ""
 "Použili ste externý odkaz na exemplár katalógu, ktorý už nie je k dispozícii"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:167
-#, c-format
-msgid "You may "
-msgstr "Smiete "
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:164
+#, fuzzy, c-format
+msgid "You may register here."
+msgstr "tu sa zaregistrujte"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -10807,11 +10808,6 @@ msgstr "identifikátor používaný na vyhľadávanie čitateľa v Koha"
 msgid "and"
 msgstr "a"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
-#, c-format
-msgid "and try again with a different user"
-msgstr "a skúste znova s iným užívateľom"
-
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:20
 #, c-format
 msgid "anyone else to add entries."
@@ -10915,9 +10911,6 @@ msgid "change your password"
 msgstr "zmeňte svoje heslo"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:311
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:101
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:122
 #, c-format
 msgid "click here to login"
 msgstr "pre prihlásenie kliknite sem"
@@ -10983,7 +10976,6 @@ msgstr "želaný_dátum_návratu"
 msgid "email address"
 msgstr "E-mailová adresa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:33
 #: opac-tmpl/bootstrap/en/modules/errors/402.tt:33
 #: opac-tmpl/bootstrap/en/modules/errors/401.tt:34
@@ -11263,11 +11255,6 @@ msgstr "návrh na nákup"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "hodnotenie podľa recenzií na iDreamBooks.com"
-
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:167
-#, c-format
-msgid "register here"
-msgstr "tu sa zaregistrujte"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:706
 #, c-format

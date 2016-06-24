@@ -121,7 +121,7 @@ msgstr "<br/>Zum Beispiel:<br/>price: 947$a|947$c<br/>quantity: 969$h<br/>budget
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcFieldsToOrder# Set the mapping values for a new order line created from a MARC record in a staged file."
-msgstr "Mapping-Werte festlegen für neue Bestellposten aus MARC-Datensätzen einer zwischengespeicherten Datei ."
+msgstr "Mapping-Werte festlegen für neue Bestellposten aus MARC-Datensätzen einer zwischengespeicherten Datei."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcFieldsToOrder# You can use the following fields: price, quantity, budget_code, discount, sort1, sort2"
@@ -795,7 +795,7 @@ msgstr "Verwende"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# as the default classification source."
-msgstr "als voreingestellte Klassifikation."
+msgstr "als voreingestellte Klassifikationsquelle."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#DefaultLanguageField008#  Empty defaults to eng."
@@ -1649,11 +1649,11 @@ msgstr " Tage ab heute) zum Zeitpunkt der Rückgabe. Bitte beachten Sie, dass da
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# Consider"
-msgstr "Betrachte Lesesaalausleihen"
+msgstr "Betrachte Vor-Ort-Ausleihen"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# Don't consider"
-msgstr "Betrachte Lesesaalausleihen nicht"
+msgstr "Betrachte Vor-Ort-Ausleihen nicht"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# If disabled, both values will be checked separately."
@@ -1661,7 +1661,7 @@ msgstr "Wenn diese nicht als normale Ausleihen betrachtet werden, wird die erlau
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# If enabled, the number of checkouts allowed will be normal checkouts + on-site checkouts."
-msgstr "Wenn diese als normale Ausleihen betrachtet werden, ist die erlaubte Gesamtanzahl = normale Ausleihen + Lesesaalausleihen."
+msgstr "Wenn diese als normale Ausleihen betrachtet werden, ist die erlaubte Gesamtanzahl = normale Ausleihen + Vor-Ort-Ausleihen."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# on-site checkouts as normal checkouts."
@@ -3374,7 +3374,7 @@ msgstr "Aktiviere"
 
 # Enhanced Content > Plugins
 msgid "enhanced_content.pref#UseKohaPlugins# the ability to use Koha Plugins. Note, the plugin system must also be enabled in the Koha configuration file to be fully enabled."
-msgstr "das Plugin-System von Koha. Hinweis: Um das Plugin-System vollständig zu aktivieren, muss dies aussrdem in der Koha-Konfigurationsdatei erfolgen."
+msgstr "das Plugin-System von Koha. Hinweis: Um das Plugin-System vollständig zu aktivieren, muss dies ausserdem in der Koha-Konfigurationsdatei erfolgen."
 
 # Enhanced Content > OCLC
 msgid "enhanced_content.pref#XISBN# Don't use"
@@ -4478,10 +4478,7 @@ msgstr "Aktiviere"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC."
-msgstr ""
-"opac.pref#OpacPublic# den öffentlichen Zugriff auf Koha. Wenn der OPAC nicht "
-"öffentlich ist, ist eine Anmeldung erforderlich, bevor der Katalog genutzt "
-"werden kann."
+msgstr " den öffentlichen OPAC. Ein privater OPAC erfordert die Anmeldung des Benutzers bevor der Zugriff möglich ist. "
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -5104,8 +5101,8 @@ msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr "[% local_currency %] berechnet."
 
 # Patrons > General
-msgid "patrons.pref#MembershipExpiryDaysNotice# Send an account expiration notice when a patron's card will expire in."
-msgstr "Verschicke eine Benachrichtigung, dass das Benutzerkonto in"
+msgid "patrons.pref#MembershipExpiryDaysNotice# Send an account expiration notice when a patron's card will expire in"
+msgstr " Benachrichtigung an Benutzer senden vor Ablauf der Benutzerkarte in"
 
 # Patrons > General
 msgid "patrons.pref#MembershipExpiryDaysNotice# days."
@@ -5185,7 +5182,7 @@ msgstr "-Treiber für den Versand von SMS-Benachrichtigungen."
 
 # Patrons > General
 msgid "patrons.pref#StatisticsFields# (separate fields with |, without trailing |). Default if empty: location|itype|ccode"
-msgstr " (Felder trennen mit |, ohne abschliessendes |). Vorbelegung wenn leer: location|itype|ccode"
+msgstr "(Felder mit | trennen, ohne abschliessendes |). Standardwert wenn leer: location|itype|ccode"
 
 # Patrons > General
 msgid "patrons.pref#StatisticsFields# Show the following fields from the items database table as columns on the statistics tab on the patron record: "
@@ -5237,11 +5234,11 @@ msgstr "der Ausweisnummern im Katipo-Stil. Dieser Parameter überschreibt <code>
 
 # Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Allow"
-msgstr "Erlaube,"
+msgstr "Erlaube"
 
 # Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Don't allow"
-msgstr "Erlaube nicht,"
+msgstr "Erlaube nicht"
 
 # Patrons > General
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout history (reading history is still stored, regardless of staff being allowed access or not)."
@@ -6172,8 +6169,8 @@ msgid "web_services.pref#ILS-DI# Enable"
 msgstr "Aktiviere"
 
 # Web services > ILS-DI
-msgid "web_services.pref#ILS-DI# ILS-DI services for OPAC users"
-msgstr "den ILS-DI Service."
+msgid "web_services.pref#ILS-DI# ILS-DI services for OPAC users (available at: /cgi-bin/koha/ilsdi.pl)"
+msgstr "ILS-DI Services für OPAC-Benutzer (erreichbar unter: /cgi-bin/koha/ilsdi.pl)"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# Allow IP addresses"
@@ -6278,3 +6275,4 @@ msgstr "Zeige maximal"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "Zeilen für einen Report, der über den Reports Web Service ausgeführt wird."
+

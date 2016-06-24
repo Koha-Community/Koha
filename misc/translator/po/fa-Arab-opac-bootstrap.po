@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0\n"
-"POT-Creation-Date: 2016-05-17 08:35-0300\n"
+"POT-Creation-Date: 2016-06-19 23:31-0300\n"
 "PO-Revision-Date: 2015-09-27 06:30+0000\n"
 "Last-Translator: niknia <massoomeh.niknia@gmail.com>\n"
 "Language-Team: Pendar <ebrahimi_info@yahoo.com>\n"
@@ -67,16 +67,6 @@ msgstr "%s %s %s%s%sبدون عنوان%s %s %s%s"
 #, fuzzy, c-format
 msgid "%s %s %s %s %s No title %s %s , %s %s"
 msgstr "%s %s %s%s%sبدون عنوان%s %s, %s%s"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  IF ( casAuthentication ) 
-#. %4$s:  IF ( shibbolethAuthentication ) 
-#. %5$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:93
-#, fuzzy, c-format
-msgid "%s %s %s %s %s please "
-msgstr "%s %s %s %s %s %s "
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
 #. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS 
@@ -192,20 +182,6 @@ msgstr "%s %s %s هیچ منبع دیگری. %s %s "
 #, fuzzy, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "%s %sتوجه: این پنجره به صورت خودکار در عرض 5 ثانیه بسته خواهد شد%s "
-
-#. %1$s:  USE Koha 
-#. %2$s:  INCLUDE 'doc-head-open.inc' 
-#. %3$s:  IF ( LibraryNameTitle ) 
-#. %4$s:  LibraryNameTitle 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#. %7$s:  INCLUDE 'doc-head-close.inc' 
-#. %8$s:  BLOCK cssinclude 
-#. %9$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:1
-#, fuzzy, c-format
-msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Discharge %s %s%s "
-msgstr "%s%s%s%sكوها آنلاین%s فهرست &rsaquo; نمایش ISBD %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -352,15 +328,6 @@ msgstr "%s%s توسط %s%s"
 msgid "%s %s by %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 msgstr "%s %s توسط %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 
-#. For the first occurrence,
-#. %1$s:  END 
-#. %2$s:  IF ( casServersLoop ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:101
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:122
-#, c-format
-msgid "%s %s please choose against which one you would like to authenticate: "
-msgstr "%s %s  لطفا انتخاب نمائید که تمایل دارید کدام یک را اعتبار دهید : "
-
 #. %1$s:  firstname 
 #. %2$s:  surname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:12
@@ -455,30 +422,31 @@ msgstr ""
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
 #. %12$s:  CASE 'FU' 
-#. %13$s:  CASE 'Rent' 
-#. %14$s:  CASE 'FOR' 
-#. %15$s:  CASE 'LR' 
-#. %16$s:  CASE 'PAY' 
-#. %17$s:  CASE 'WO' 
-#. %18$s:  CASE 'C' 
-#. %19$s:  CASE 'CR' 
-#. %20$s:  CASE 
-#. %21$s:  ACCOUNT_LINE.accounttype 
-#. %22$s: - END -
-#. %23$s: - IF ACCOUNT_LINE.description 
-#. %24$s:  ACCOUNT_LINE.description 
-#. %25$s:  END 
-#. %26$s:  IF ACCOUNT_LINE.title 
-#. %27$s:  ACCOUNT_LINE.title 
-#. %28$s:  END 
+#. %13$s:  CASE 'HE' 
+#. %14$s:  CASE 'Rent' 
+#. %15$s:  CASE 'FOR' 
+#. %16$s:  CASE 'LR' 
+#. %17$s:  CASE 'PAY' 
+#. %18$s:  CASE 'WO' 
+#. %19$s:  CASE 'C' 
+#. %20$s:  CASE 'CR' 
+#. %21$s:  CASE 
+#. %22$s:  ACCOUNT_LINE.accounttype 
+#. %23$s: - END -
+#. %24$s: - IF ACCOUNT_LINE.description 
+#. %25$s:  ACCOUNT_LINE.description 
+#. %26$s:  END 
+#. %27$s:  IF ACCOUNT_LINE.title 
+#. %28$s:  ACCOUNT_LINE.title 
+#. %29$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:53
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
 "(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
 "%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
-"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
-"%sCredit %s%s %s %s, %s%s %s(%s)%s "
+"%sHold waiting too long %sRental fee %sForgiven %sLost item fee refund "
+"%sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
 "(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
@@ -721,19 +689,6 @@ msgstr "%s نام کوچک:"
 #, fuzzy, c-format
 msgid "%s Home library:"
 msgstr "%s کتابخانه اصلی:"
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
-#, fuzzy, c-format
-msgid ""
-"%s If you have a CAS account, you may use that below. %s %s If you have a "
-"local account, you may use that below. %s "
-msgstr ""
-"چنانچه شما حساب کاربری CAS ندارید، امات حساب کاربری محلی دارید، می توانید "
-"وارد شوید :"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:208
@@ -1241,14 +1196,6 @@ msgstr "%s نزولی"
 msgid "%s more than "
 msgstr "%s بیش از  "
 
-#. %1$s:  IF issue.onsite_checkout 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:82
-#, fuzzy, c-format
-msgid "%s onsite %s checkout %s "
-msgstr "%s%s %s %sليس معاراً %s "
-
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
 #. %3$s:  END 
@@ -1675,6 +1622,15 @@ msgstr "%s %s%s%sكوها آنلاین%s فهرست &rsaquo; تصاویر برا
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:3
+#, fuzzy, c-format
+msgid "%s%s%sKoha online%s catalog &rsaquo; Discharge"
+msgstr "%s%s%sكوها على الخط المباشر%s الفهرس &rsaquo; سَلَّتُك"
+
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:2
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download cart"
@@ -1684,7 +1640,7 @@ msgstr "%s%s%s%sكوها آنلاین%s فهرست &rsaquo; سبد دانلود%
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  shelf.shelfname 
+#. %5$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:4
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download list %s"
@@ -2824,7 +2780,7 @@ msgstr "(%s مجموع)"
 msgid "(All)"
 msgstr "(كل)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:149
 #, c-format
 msgid "(Checked out)"
 msgstr "(امانت گرفته شده)"
@@ -3825,8 +3781,8 @@ msgstr "مرور نتایج"
 msgid "Browse shelf"
 msgstr "مرور قفسه ها"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:89
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:108
 #, fuzzy, c-format
 msgid "CAS login"
 msgstr "ورود Cas"
@@ -3900,7 +3856,7 @@ msgstr "شماره بازیابی (0-9 به الف تا ی)"
 msgid "Call number (Z-A to 9-0)"
 msgstr "شماره بازیابی (ی-الف به 9-0)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:142
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:227
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:456
 #, c-format
@@ -4033,13 +3989,13 @@ msgstr "الإعارة"
 msgid "Check out%s, return%s or renew an item: "
 msgstr "به امانت گرفتن%s, بازگشت%s یا تمدید یک منبع: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:146
 #, fuzzy, c-format
 msgid "Check-in date:"
 msgstr "تاریخ بازگشت از:"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:37
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:149
 #, c-format
 msgid "Checked out"
 msgstr "به امانت گرفته شده ("
@@ -4740,12 +4696,12 @@ msgid ""
 msgstr ""
 "آیا تمایل دارید به محض رسیدن شماره جدید این اشتراک ایمیلی دریافت نمائید؟"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:160
 #, c-format
 msgid "Don't have a library card?"
 msgstr "سبد کتابخانه ندارید؟"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:158
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "هنوز کلمه عبوری ندارید؟"
@@ -4847,6 +4803,7 @@ msgid "Editions"
 msgstr "ویرایش ها"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:173
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
 #, c-format
 msgid "Email"
@@ -5735,7 +5692,7 @@ msgstr ""
 "چنانچه روی دکمه پایان کلیک نکنید، نشست شما به طور خودکار در %s ثانیه منقضی "
 "خواهد شد."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:133
 #, fuzzy, c-format
 msgid ""
 "If you do not have a CAS account, but do have a local account, you can still "
@@ -5744,31 +5701,31 @@ msgstr ""
 "چنانچه شما حساب کاربری CAS ندارید، امات حساب کاربری محلی دارید، می توانید "
 "وارد شوید :"
 
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:85
 #, fuzzy, c-format
 msgid ""
-"If you do not have a Shibboleth account, but you do have a CAS account, %s "
+"If you do not have a Shibboleth account, but you do have a CAS account, you "
+"can use CAS."
 msgstr ""
 "چنانچه شما حساب کاربری CAS ندارید، امات حساب کاربری محلی دارید، می توانید "
 "وارد شوید :"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:93
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:88
 #, fuzzy, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a local login, then "
-"you may login below:"
+"you may login below."
 msgstr ""
 "چنانچه شما حساب کاربری CAS ندارید، امات حساب کاربری محلی دارید، می توانید "
 "وارد شوید :"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:161
 #, fuzzy, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
 msgstr "اگر کارت عضویت کتابخانه ندارید، در کتابخانه محله تان ثبت نام کنید%s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:159
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -5777,17 +5734,37 @@ msgstr ""
 "چنانچه هنوز کلمه عبوری ندارید، تا زمان مراجعه بعدی به میز امانت کتابخانه صبر "
 "کنید. ما با خرسندی کلمه عبوری برای شما تنظیم خواهیم کرد."
 
-#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:120
 #, fuzzy, c-format
-msgid "If you have a CAS account, %s please "
+msgid ""
+"If you have a CAS account, please choose against which one you would like to "
+"authenticate:"
+msgstr "%s %s  لطفا انتخاب نمائید که تمایل دارید کدام یک را اعتبار دهید : "
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:116
+#, fuzzy, c-format
+msgid "If you have a CAS account, please click here to log in."
+msgstr "حساب کاربری, %s لطفا"
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
+#, fuzzy, c-format
+msgid "If you have a CAS account, you may use that below."
 msgstr "حساب کاربری, %s لطفا"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:311
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:85
 #, c-format
 msgid "If you have a Shibboleth account, please "
 msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:81
+#, fuzzy, c-format
+msgid "If you have a Shibboleth account, please click here to log in."
+msgstr "حساب کاربری, %s لطفا"
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:76
+#, fuzzy, c-format
+msgid "If you have a local account, you may use that below."
+msgstr "حساب کاربری, %s لطفا"
 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:618
@@ -5921,7 +5898,7 @@ msgstr "مواد مفقودة"
 msgid "Item type"
 msgstr "نوع منبع:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:45
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:214
 #, c-format
@@ -6257,8 +6234,8 @@ msgstr "بارگذاری..."
 msgid "Local Login"
 msgstr "ورود محلی"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:92
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:138
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:132
 #, c-format
 msgid "Local login"
 msgstr "ورود محلی"
@@ -6291,7 +6268,7 @@ msgstr "محل نگهداری"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:328
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:159
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:153
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:726
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:84
@@ -6334,12 +6311,17 @@ msgstr "ورود به حساب کاربری شما"
 msgid "Log in to your account:"
 msgstr "ورود به حساب کاربری شما:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:173
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
+#, c-format
+msgid "Log out and try again with a different user."
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:171
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "ورود به فهرست توسط کتابخانه فعال نشده است."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:154
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:148
 #, c-format
 msgid "Login"
 msgstr "ورود"
@@ -6351,11 +6333,6 @@ msgstr "ورود"
 #, c-format
 msgid "Login:"
 msgstr "ورود:"
-
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
-#, c-format
-msgid "Logout"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:452
 #, c-format
@@ -6759,9 +6736,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:183
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:193
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:202
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:102
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:111
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:93
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:110
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:120
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:145
@@ -7072,7 +7049,7 @@ msgstr "یادداشتها/نظرات"
 msgid "Notes:"
 msgstr "یادداشت ها:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:136
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:130
 #, fuzzy, c-format
 msgid "Nothing"
 msgstr "رسم"
@@ -7268,7 +7245,7 @@ msgstr "تاخیرها"
 msgid "Parameters"
 msgstr "پارامترها"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:156
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:150
 #, c-format
 msgid "Password"
 msgstr "کلمه عبور"
@@ -7398,10 +7375,20 @@ msgstr ""
 msgid "Please choose a download format"
 msgstr "رجاءاً اختر مورداً."
 
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:100
+#, fuzzy, c-format
+msgid "Please choose against which one you would like to authenticate: "
+msgstr "%s %s  لطفا انتخاب نمائید که تمایل دارید کدام یک را اعتبار دهید : "
+
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:51
 #, c-format
 msgid "Please choose your privacy rule:"
 msgstr "لطفا قوانین حریم خصوصی خود را انتخاب کنید:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:96
+#, fuzzy, c-format
+msgid "Please click here to log in."
+msgstr "برای ورود اینجا کلیک کنید"
 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:38
 #, fuzzy, c-format
@@ -8305,7 +8292,7 @@ msgstr "الإجراء:"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:345
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:177
@@ -8547,7 +8534,7 @@ msgid "Shelving location"
 msgstr "محل قفسه"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:310
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:83
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:80
 #, c-format
 msgid "Shibboleth Login"
 msgstr ""
@@ -8634,7 +8621,7 @@ msgstr "نمایش 50 منبع آخر"
 msgid "Showing only available items"
 msgstr "منبعی در دسترس نیست."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:181
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:179
 #, c-format
 msgid "Sign in with your Email"
 msgstr "با ایمیل خود وارد شوید"
@@ -8702,14 +8689,16 @@ msgstr "پوزش، نمایش ساده موقتا در دسترس نیست"
 msgid "Sorry, tags are not enabled on this system."
 msgstr "پوزش، برچسب ها در این سیستم فعال نشده است."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
-#, c-format
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:71
+#, fuzzy, c-format
 msgid ""
-"Sorry, the CAS login also failed, if you have a local login you may use that "
+"Sorry, the CAS login also failed. If you have a local login you may use that "
 "below."
 msgstr ""
+"چنانچه شما حساب کاربری CAS ندارید، امات حساب کاربری محلی دارید، می توانید "
+"وارد شوید :"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:112
 #, c-format
 msgid "Sorry, the CAS login failed."
 msgstr "پوزش، ورود CAS ناموفق بود"
@@ -8749,6 +8738,12 @@ msgstr "هل أنتَ متأكد من أنك تريد حذف هذه القائم
 #, c-format
 msgid "Sorry, you cannot place more than %s holds. "
 msgstr "پوزش، شما نمی توانید بیش از  %s رزرو کنید."
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:67
+#, c-format
+msgid ""
+"Sorry, your Shibboleth identity does not match a valid library identity."
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:307
 #, c-format
@@ -9368,7 +9363,7 @@ msgstr ""
 msgid "The list was sent to: %s"
 msgstr "فهرست ارسال شد به: %s"
 
-#. %1$s:  op 
+#. %1$s:  op | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:35
 #, fuzzy, c-format
 msgid "The operation %s is not supported."
@@ -9719,7 +9714,6 @@ msgstr "برای ایجاد تغییرات در رکورد خود لطفا با 
 msgid "To report a broken link or any other issue please send an "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:32
 #: opac-tmpl/bootstrap/en/modules/errors/402.tt:32
 #: opac-tmpl/bootstrap/en/modules/errors/401.tt:33
@@ -9727,6 +9721,11 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/errors/403.tt:32
 #, c-format
 msgid "To report this error, you can "
+msgstr "برای گزارش این خطا، شما می توانید"
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:173
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator."
 msgstr "برای گزارش این خطا، شما می توانید"
 
 #. SCRIPT
@@ -9870,7 +9869,7 @@ msgstr "شماره های یک اشتراک"
 msgid "Updates to your record"
 msgstr "&#8674; روزآمدسازی برای رکورد شما"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:176
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:174
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "از منوی بالا برای حرکت به بخش دیگری از کوها استفاده نمائید."
@@ -10153,8 +10152,8 @@ msgstr "شما نمی توانید کلمه عبور خود را تغییر ده
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:42
 #, c-format
 msgid ""
-"You cannot be discharged, you have issues. Please return items before asking "
-"for a discharge."
+"You cannot be discharged, you have checked out items. Please return items "
+"before asking for a discharge."
 msgstr ""
 
 #. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
@@ -10256,7 +10255,7 @@ msgstr ""
 "شما منابع زیادی را به امانت برده اید و نمی توانید منیع دیگری را به امانت "
 "ببرید. %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:87
 #, c-format
 msgid "You have no fines or charges"
 msgstr "شما جریمه یا هزینه ای ندارید."
@@ -10297,10 +10296,10 @@ msgid ""
 "available"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:164
 #, fuzzy, c-format
-msgid "You may "
-msgstr "يجب عليك"
+msgid "You may register here."
+msgstr "اینجا ثبت نام کنید"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -10751,11 +10750,6 @@ msgstr "یک شناسگر مورد استفاده برای یافتن کاربر
 msgid "and"
 msgstr "و"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
-#, c-format
-msgid "and try again with a different user"
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:20
 #, fuzzy, c-format
 msgid "anyone else to add entries."
@@ -10860,9 +10854,6 @@ msgid "change your password"
 msgstr "تغییر کلمه عبور من"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:311
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:101
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:122
 #, c-format
 msgid "click here to login"
 msgstr "برای ورود اینجا کلیک کنید"
@@ -10928,7 +10919,6 @@ msgstr "تاریخ_بازگشت_موردنظر"
 msgid "email address"
 msgstr "آدرس پست الکترونیکی"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
 #: opac-tmpl/bootstrap/en/modules/errors/400.tt:33
 #: opac-tmpl/bootstrap/en/modules/errors/402.tt:33
 #: opac-tmpl/bootstrap/en/modules/errors/401.tt:34
@@ -11212,11 +11202,6 @@ msgstr "پیشنهاد خرید"
 #, fuzzy
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "نقدهای کتاب بیشتر در  iDreamBooks.com"
-
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:167
-#, c-format
-msgid "register here"
-msgstr "اینجا ثبت نام کنید"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:706
 #, c-format

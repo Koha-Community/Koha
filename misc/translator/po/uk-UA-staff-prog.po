@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: uk-UA-i-staff-t-prog-v-3002000\n"
-"POT-Creation-Date: 2016-05-17 10:46-0300\n"
-"PO-Revision-Date: 2016-03-24 15:59+0000\n"
+"POT-Creation-Date: 2016-06-20 02:32-0300\n"
+"PO-Revision-Date: 2016-06-02 12:30+0000\n"
 "Last-Translator: Synapse <synapse.ova@gmail.com>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -21,7 +21,7 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1458835144.000000\n"
+"X-POOTLE-MTIME: 1464870654.000000\n"
 
 #. %1$s:  UNLESS loop.last 
 #. %2$s:  END 
@@ -132,6 +132,20 @@ msgstr "%s за автором %s за роком %s за шифром збер�
 #, c-format
 msgid "\", %s \"dt_cardnumber\": \"%s\", \"dt_name\": \""
 msgstr ""
+
+#. %1$s:  message_loo.date_from 
+#. %2$s:  ELSIF ( message_loo.date_to ) 
+#: intranet-tmpl/prog/en/modules/tags/review.tt:196
+#, fuzzy, c-format
+msgid "\"Date from\" is not a legal value (\"%s\"). %s"
+msgstr "ПОМИЛКА: <em>„Дата по“</em> не є правильною датою („%s“)."
+
+#. %1$s:  message_loo.date_to 
+#. %2$s:  ELSIF ( message_loo.failed_ok ) 
+#: intranet-tmpl/prog/en/modules/tags/review.tt:197
+#, fuzzy, c-format
+msgid "\"Date to\" is not a legal value (\"%s\"). %s"
+msgstr "ПОМИЛКА: <em>„Дата по“</em> не є правильною датою („%s“)."
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:397
 #, c-format
@@ -709,7 +723,7 @@ msgstr "%s %s %s %s (%s)"
 #. %1$s:  END 
 #. %2$s:  IF close_form 
 #. %3$s:  IF budget_periods.size == 0 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:409
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:413
 #, c-format
 msgid ""
 "%s %s %s You cannot move funds of this budget, there is no active budget. "
@@ -803,7 +817,7 @@ msgstr "%s / %s%s %s; %s %s %s, %s%s / ш.-к. "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:939
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:943
 #, fuzzy, c-format
 msgid "%s %s %sYes%sNo%s %s "
 msgstr "%sТак%sНі%s %s "
@@ -1044,6 +1058,18 @@ msgid ""
 "successfully. %s Patron category inserted successfully. %s Patron category "
 "deleted successfully. %s This patron category already exists. %s %s %s "
 msgstr ""
+
+#. %1$s:  SWITCH ( operation.action ) -
+#. %2$s:    CASE "issue" -
+#. %3$s:    CASE "return" -
+#. %4$s:    CASE "payment" -
+#. %5$s:    CASE # default case -
+#. %6$s:  operation.action 
+#. %7$s:  END -
+#: intranet-tmpl/prog/en/modules/offline_circ/list.tt:89
+#, fuzzy, c-format
+msgid "%s %s Check out %s Check in %s Payment %s %s %s "
+msgstr "%s %s %s %s %s %s %s %s %s "
 
 #. %1$s:  SWITCH loopfilte.crit -
 #. %2$s:  CASE "Issue From" -
@@ -1551,7 +1577,7 @@ msgstr "резервування, що очікують та отримання 
 
 #. %1$s:  borrower.firstname 
 #. %2$s:  borrower.surname 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:168
+#: intranet-tmpl/prog/en/modules/members/pay.tt:169
 #, c-format
 msgid "%s %s has no outstanding fines."
 msgstr "%s %s не має несплачених штрафів."
@@ -1596,13 +1622,6 @@ msgstr "%s %s місяці(в) %s до %s %s "
 #, fuzzy, c-format
 msgid "%s %s on "
 msgstr "%s - %s"
-
-#. %1$s:  END 
-#. %2$s:  IF ( casServersLoop ) 
-#: intranet-tmpl/prog/en/modules/auth.tt:81
-#, fuzzy, c-format
-msgid "%s %s please choose against which one you would like to authenticate: "
-msgstr "%s %s Будь ласка, виберіть через який Ви хотіли б автентифікуватися: "
 
 #. %1$s:  IF ( looptable.looptable_count ) 
 #. %2$s:  looptable.looptable_first 
@@ -1658,7 +1677,7 @@ msgstr ""
 #. %3$s:  IF r.unspent_moved 
 #. %4$s:  r.unspent_moved | $Price 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:504
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:508
 #, c-format
 msgid "%s %s%s (%s remaining has been moved)%s"
 msgstr ""
@@ -1786,13 +1805,6 @@ msgid ""
 "%s %sDue date %sPatron %sBarcode %sTitle %sDue date desc %sPatron desc "
 "%sBarcode desc %sTitle desc %s%s %sdesc%s %s "
 msgstr ""
-
-#. %1$s:  FOREACH message_loo IN message_loop 
-#. %2$s:  IF ( message_loo.date_from ) 
-#: intranet-tmpl/prog/en/modules/tags/review.tt:194
-#, c-format
-msgid "%s %sERROR: "
-msgstr "%s %s ПОМИЛКА: "
 
 #. %1$s:  IF ( use_heading_flags_p ) 
 #. %2$s:  IF ( heading_edit_subfields_p ) 
@@ -1950,30 +1962,31 @@ msgstr ""
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
 #. %12$s:  CASE 'FU' 
-#. %13$s:  CASE 'Rent' 
-#. %14$s:  CASE 'FOR' 
-#. %15$s:  CASE 'LR' 
-#. %16$s:  CASE 'PAY' 
-#. %17$s:  CASE 'WO' 
-#. %18$s:  CASE 'C' 
-#. %19$s:  CASE 'CR' 
-#. %20$s:  CASE 
-#. %21$s:  line.accounttype 
-#. %22$s: - END -
-#. %23$s: - IF line.description 
-#. %24$s:  line.description 
-#. %25$s:  END 
-#. %26$s:  IF line.title 
-#. %27$s:  line.title 
-#. %28$s:  END 
+#. %13$s:  CASE 'HE' 
+#. %14$s:  CASE 'Rent' 
+#. %15$s:  CASE 'FOR' 
+#. %16$s:  CASE 'LR' 
+#. %17$s:  CASE 'PAY' 
+#. %18$s:  CASE 'WO' 
+#. %19$s:  CASE 'C' 
+#. %20$s:  CASE 'CR' 
+#. %21$s:  CASE 
+#. %22$s:  line.accounttype 
+#. %23$s: - END -
+#. %24$s: - IF line.description 
+#. %25$s:  line.description 
+#. %26$s:  END 
+#. %27$s:  IF line.title 
+#. %28$s:  line.title 
+#. %29$s:  END 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:117
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
 "(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
 "%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
-"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
-"%sCredit %s%s %s %s, %s%s %s(%s)%s "
+"%sHold waiting too long %sRental fee %sForgiven %sLost item fee refund "
+"%sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 "%s %s Оплата, дякуємо %s Оплата, дякуємо (готівка через SIP2) %s Оплата, "
 "дякуємо (VISA через SIP2) %s Оплата, дякуємо (кредитна картка через SIP2) %s "
@@ -1994,29 +2007,36 @@ msgstr ""
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
 #. %12$s:  CASE 'FU' 
-#. %13$s:  CASE 'Rent' 
-#. %14$s:  CASE 'FOR' 
-#. %15$s:  CASE 'LR' 
-#. %16$s:  CASE 'PAY' 
-#. %17$s:  CASE 'WO' 
-#. %18$s:  CASE 'C' 
-#. %19$s:  CASE 'CR' 
-#. %20$s:  CASE 
-#. %21$s:  account.accounttype 
-#. %22$s: - END -
-#. %23$s: - IF account.description 
-#. %24$s:  account.description 
-#. %25$s:  END 
-#. %26$s:  IF ( account.itemnumber ) 
+#. %13$s:  CASE 'HE' 
+#. %14$s:  CASE 'Rent' 
+#. %15$s:  CASE 'FOR' 
+#. %16$s:  CASE 'LR' 
+#. %17$s:  CASE 'PAY' 
+#. %18$s:  CASE 'WO' 
+#. %19$s:  CASE 'C' 
+#. %20$s:  CASE 'CR' 
+#. %21$s:  CASE 
+#. %22$s:  account.accounttype 
+#. %23$s: - END -
+#. %24$s: - IF account.description 
+#. %25$s:  account.description 
+#. %26$s:  END 
+#. %27$s:  IF ( account.itemnumber ) 
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:80
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
 "(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
 "%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
-"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
-"%sCredit %s%s %s %s, %s%s &nbsp;%s"
+"%sHold waiting too long %sRental fee %sForgiven %sLost item fee refund "
+"%sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s &nbsp;%s"
 msgstr ""
+"%s %s Оплата, дякуємо %s Оплата, дякуємо (готівка через SIP2) %s Оплата, "
+"дякуємо (VISA через SIP2) %s Оплата, дякуємо (кредитна картка через SIP2) %s "
+"Новий квиток %s Пеня %s Плата за обслуговування облікового запису %s Різне "
+"%s Втрачений примірник %s Списання  %s Нарахування пені %s Орендна плата %s "
+"Прощено %s Відшкодована плата за втрачений примірник %s Оплата %s Списання "
+"%s Кредит %s Кредит %s%s %s %s, %s%s %s(%s)%s "
 
 #. %1$s:  IF ( suggestion.suggestiontypelabel ) 
 #. %2$s:  IF (suggestion.suggestiontypelabel == "Pending") 
@@ -2356,7 +2376,7 @@ msgstr "%s (прострочений)"
 
 #. %1$s:  r.budget.budget_name 
 #. %2$s:  r.budget.budget_id 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:495
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:499
 #, fuzzy, c-format
 msgid "%s (id=%s)"
 msgstr "%s (%s)"
@@ -2367,7 +2387,7 @@ msgstr "%s (%s)"
 #. %4$s:  IF r.unspent_moved 
 #. %5$s:  r.unspent_moved | $Price 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:487
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:491
 #, c-format
 msgid "%s (id=%s) Amount=%s%s (%s remaining has been moved)%s"
 msgstr ""
@@ -2657,7 +2677,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:617
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:621
 #, c-format
 msgid "%s Card number: "
 msgstr "%s Номер читацького квитка: "
@@ -2708,7 +2728,7 @@ msgid "%s Checkout(s)"
 msgstr "Видачі (%s)"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:785
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:789
 #, c-format
 msgid "%s Circulation note: "
 msgstr "%s Примітка для обігу: "
@@ -2768,7 +2788,7 @@ msgid "%s Closed on %s %s Open %s "
 msgstr "Закрито %s"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:877
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:881
 #, c-format
 msgid "%s Confirm password: "
 msgstr "%s Підтвердіть пароль: "
@@ -2881,13 +2901,13 @@ msgid "%s Error: "
 msgstr "%s Помилка: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:747
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:751
 #, c-format
 msgid "%s Expiry date (leave blank for auto calc) "
 msgstr "%s Дата закінчення терміну (для авто-підрахунку залишити пустим) "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:575
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:579
 #, c-format
 msgid "%s Fax: "
 msgstr "%s Факс: "
@@ -3192,7 +3212,7 @@ msgstr "Не визначається ще"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:561
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:565
 #, fuzzy, c-format
 msgid "%s No active budgets %s "
 msgstr "Штрих-код %s"
@@ -3224,7 +3244,7 @@ msgstr "%s резервування не дозволені "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:594
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:598
 #, fuzzy, c-format
 msgid "%s No inactive budgets %s "
 msgstr "Не задіяно"
@@ -3329,7 +3349,7 @@ msgstr ""
 "можуть бути об’єднані за один раз. %s %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:772
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:776
 #, c-format
 msgid "%s OPAC note: "
 msgstr "%s Повідомлення для електронного каталогу: "
@@ -3357,7 +3377,7 @@ msgid "%s Other name: "
 msgstr "%s Інше ім’я: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:538
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:542
 #, fuzzy, c-format
 msgid "%s Other phone: "
 msgstr "%s Інше ім’я: "
@@ -3400,7 +3420,7 @@ msgid "%s Page %s / %s %s "
 msgstr "%s %s %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:834
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:838
 #, c-format
 msgid "%s Password: "
 msgstr "%s Пароль: "
@@ -3439,13 +3459,13 @@ msgid "%s Phone: "
 msgstr "%s Телефон: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:550
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:554
 #, c-format
 msgid "%s Primary email: "
 msgstr "%s Електронна пошта (основна): "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:513
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:517
 #, c-format
 msgid "%s Primary phone: "
 msgstr "%s Основний телефон: "
@@ -3476,7 +3496,7 @@ msgid "%s Receive orders from %s %s "
 msgstr "Отримання пакета для %s"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:726
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:730
 #, c-format
 msgid "%s Registration date: "
 msgstr "%s Дата реєстрації: "
@@ -3533,20 +3553,20 @@ msgstr "%s Привітання: "
 #. %1$s:  IF searchfield 
 #. %2$s:  searchfield 
 #. %3$s:  END 
-#. %4$s:  IF cities 
+#. %4$s:  IF cities.count 
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:144
 #, fuzzy, c-format
 msgid "%s Searching: %s %s %s "
 msgstr "Пошук: %s"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:563
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:567
 #, c-format
 msgid "%s Secondary email: "
 msgstr "%s Електронна пошта (додаткова): "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:526
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:530
 #, c-format
 msgid "%s Secondary phone: "
 msgstr "%s Додатковий телефон: "
@@ -3586,13 +3606,13 @@ msgid "%s Single patron cards"
 msgstr "Керування партіями карток відвідувачів"
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:685
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:689
 #, c-format
 msgid "%s Sort 1: "
 msgstr "%s Сортувальне поле 1: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:697
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:701
 #, c-format
 msgid "%s Sort 2: "
 msgstr "%s Сортувальне поле 2: "
@@ -3808,16 +3828,10 @@ msgid ""
 msgstr ""
 
 #. %1$s:  ELSIF number_of_unreceived_orders == 0 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:420
 #, fuzzy, c-format
 msgid "%s There are no unreceived orders for this budget. "
 msgstr "Немає затриманих замовлень."
-
-#. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/admin/cities.tt:173
-#, fuzzy, c-format
-msgid "%s There is no city defined. "
-msgstr "Не означено жодного набору."
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -3913,7 +3927,7 @@ msgid "%s Unlimited %s %s %s "
 msgstr "%s необмежено %s %s %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:805
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:809
 #, c-format
 msgid "%s Username: "
 msgstr "%s Ім’я користувача: "
@@ -4564,14 +4578,6 @@ msgstr "%s з %s до %s"
 #, c-format
 msgid "%s on loan:"
 msgstr "%s видано: "
-
-#. %1$s:  IF issue.onsite_checkout 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:88
-#, fuzzy, c-format
-msgid "%s onsite_checkout %s standard_checkout %s "
-msgstr " (читацький № %s). Виконати повернення та провести видачу?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:1
@@ -5805,7 +5811,7 @@ msgstr "Місце доставки: "
 #. %2$s:  END 
 #. %3$s:  IF ( flagloo.key == 'lost' ) 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:924
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:928
 #, c-format
 msgid "%sGone no address:%s %sLost card:%s "
 msgstr "%s Адреса не вказана чи не дійсна: %s %s Втрачений квиток: %s "
@@ -7459,6 +7465,11 @@ msgstr "&rsaquo; Помилка 405"
 msgid "&rsaquo; Error 500"
 msgstr "&rsaquo; Помилка № 500"
 
+#: intranet-tmpl/prog/en/modules/tools/export.tt:41
+#, fuzzy, c-format
+msgid "&rsaquo; Export data"
+msgstr "&rsaquo; Звіти "
+
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:32
 #, fuzzy, c-format
 msgid "&rsaquo; Files"
@@ -7545,11 +7556,6 @@ msgid "&rsaquo; MARC check %s: %s errors found%s : Configuration OK!%s"
 msgstr ""
 "&rsaquo; Перевірка МАРК-структури%s: знайдено помилок — %s%s: з "
 "налаштуванням усе гаразд!%s"
-
-#: intranet-tmpl/prog/en/modules/tools/export.tt:28
-#, fuzzy, c-format
-msgid "&rsaquo; MARC export"
-msgstr "&rsaquo; Експорт у MARC"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:310
 #, fuzzy, c-format
@@ -8342,8 +8348,8 @@ msgid "(Database) Documentation manager:"
 msgstr " (відповідальний за підготовку документації до Коха)"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:353
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:735
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:764
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:739
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:768
 #, c-format
 msgid "(Error)"
 msgstr "(Помилка)"
@@ -8896,8 +8902,8 @@ msgstr ""
 msgid "- upperagelimit is not a number"
 msgstr " — верхня вікова межа не є числом"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:67
-#: intranet-tmpl/prog/en/modules/tools/export.tt:174
+#: intranet-tmpl/prog/en/modules/tools/export.tt:81
+#: intranet-tmpl/prog/en/modules/tools/export.tt:199
 #, c-format
 msgid "-- All --"
 msgstr "-- Усі --"
@@ -8953,7 +8959,7 @@ msgstr "Хронологія випусків"
 msgid ". %sPlease "
 msgstr ". %sБудь ласка, "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:388
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:392
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:278
 #, c-format
 msgid ". Deletion is not possible."
@@ -9079,7 +9085,7 @@ msgstr "000 "
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:78
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:83
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:524
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:120
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:145
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:191
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:214
@@ -9357,9 +9363,9 @@ msgstr "Доступитися до звіту зі: "
 msgid "Access to all librarian functions"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:91
-#, c-format
-msgid "Accession date (inclusive): "
+#: intranet-tmpl/prog/en/modules/tools/export.tt:114
+#, fuzzy, c-format
+msgid "Accession date (inclusive)"
 msgstr "Дата надходження (включно): "
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:201
@@ -9571,10 +9577,11 @@ msgstr "Дія, якщо відповідності не знайдено: "
 #: intranet-tmpl/prog/en/modules/serials/add_fields.tt:95
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:166
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:282
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:184
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:566
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:297
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:540
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:577
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:544
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:581
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:193
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:304
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:316
@@ -9585,6 +9592,7 @@ msgstr "Дія, якщо відповідності не знайдено: "
 #: intranet-tmpl/prog/en/modules/tags/review.tt:227
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:226
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:637
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:366
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:345
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:166
 #, c-format
@@ -9635,7 +9643,7 @@ msgstr "Активна: "
 msgid "Active"
 msgstr "Задіяно"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:526
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:530
 #, fuzzy, c-format
 msgid "Active budgets"
 msgstr "Кошториси"
@@ -9717,7 +9725,7 @@ msgstr "Додати та здублювати"
 msgid "Add a basket to %s"
 msgstr "Додаємо кошик замовлень для постачальника: „%s“"
 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:203
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:205
 #, fuzzy, c-format
 msgid "Add a contract"
 msgstr "Договір"
@@ -9927,8 +9935,8 @@ msgstr "Вводимо штрих-код одиниці: "
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:69
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:74
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:987
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:990
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:991
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:994
 #, c-format
 msgid "Add manual restriction"
 msgstr "Додати обмеження вручну"
@@ -10248,7 +10256,7 @@ msgstr "Додаємо авторитетне джерело „%s“"
 msgid "Additional SRU options: "
 msgstr "Додаткові інструменти"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1009
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1013
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:299
 #, c-format
 msgid "Additional attributes and identifiers"
@@ -10439,7 +10447,7 @@ msgstr "Адрієн Сора {Adrien Saurat}"
 # advsearch.tt: „для дорослих“ 008.22=e (http://marc21.rsl.ru/index.php?doc=1050)
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:224
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:172
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:661
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:665
 #, c-format
 msgid "Adult"
 msgstr "дорослий"
@@ -11920,6 +11928,13 @@ msgstr "Дія: "
 msgid "Attila Kinali"
 msgstr ""
 
+#. %1$s:  ERROR_extended_unique_id_failed_value 
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:247
+#, fuzzy, c-format
+msgid "Attribute value \"%s\" is already in use by another patron record."
+msgstr ""
+"Значення атрибуту „%s“ вже використовується у записі іншого відвідувача."
+
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:350
 #, fuzzy, c-format
 msgid "Attribute: "
@@ -12215,7 +12230,7 @@ msgstr "Тип авторитетного джерела "
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:65
-#: intranet-tmpl/prog/en/modules/tools/export.tt:172
+#: intranet-tmpl/prog/en/modules/tools/export.tt:197
 #, c-format
 msgid "Authority type: "
 msgstr "Тип авторитетного джерела: "
@@ -12390,9 +12405,9 @@ msgstr "Ліцензія BSD"
 msgid "BT: %s"
 msgstr "ШТ: %s "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:419
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:515
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:420
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:423
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:519
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:117
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:85
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:139
@@ -12606,7 +12621,7 @@ msgid "Basic parameters"
 msgstr "Основні параметри"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:18
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:476
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:480
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:942
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:98
@@ -12623,6 +12638,7 @@ msgstr "Кошик замовлень"
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:30
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:88
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:205
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:44
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:10
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:156
 #, c-format
@@ -13405,13 +13421,13 @@ msgstr ""
 msgid "Budget description missing"
 msgstr " — опис відсутній"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:475
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:479
 #, fuzzy, c-format
 msgid "Budget id"
 msgstr "Кошторис"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:535
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:572
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:539
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:576
 #, fuzzy, c-format
 msgid "Budget name"
 msgstr "Назва кошторису"
@@ -13448,7 +13464,7 @@ msgid "Budgets"
 msgstr "Кошториси"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:248
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:520
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:524
 #, c-format
 msgid "Budgets administration"
 msgstr "Керування кошторисами"
@@ -13621,7 +13637,7 @@ msgstr ""
 msgid "CSV - %s"
 msgstr "CSV — „%s“"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:141
+#: intranet-tmpl/prog/en/modules/tools/export.tt:166
 #, fuzzy, c-format
 msgid "CSV profile: "
 msgstr "Профілі форматування CSV"
@@ -13744,6 +13760,7 @@ msgid "Call number (Z-A to 9-0)"
 msgstr "Шифр зберігання (від Я-А,Z-A до 9-0)"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
+#: intranet-tmpl/prog/en/modules/tools/export.tt:100
 #, fuzzy, c-format
 msgid "Call number range"
 msgstr "Діапазон шифрів зберігання"
@@ -13897,9 +13914,10 @@ msgstr "Неможливо зберегти цей запис, бо наступ
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:246
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:110
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:301
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:373
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:406
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:465
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:374
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:376
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:410
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:469
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:87
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:364
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:457
@@ -13956,15 +13974,15 @@ msgstr "Неможливо зберегти цей запис, бо наступ
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:128
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:550
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:164
-#: intranet-tmpl/prog/en/modules/members/pay.tt:164
+#: intranet-tmpl/prog/en/modules/members/pay.tt:165
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:52
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:154
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:194
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:117
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:998
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1118
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1120
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1002
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1122
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1124
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:159
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:82
@@ -14218,7 +14236,7 @@ msgstr "Одиниці оформлені при отриманні"
 msgid "Cannot delete"
 msgstr "Невдається вилучити"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:387
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:391
 #, c-format
 msgid "Cannot delete budget"
 msgstr "Не вдається вилучити кошторис"
@@ -14257,7 +14275,7 @@ msgstr "Невдається вилучити"
 
 #: intranet-tmpl/prog/en/modules/members/discharge.tt:32
 #, c-format
-msgid "Cannot edit discharge: borrower has issues."
+msgid "Cannot edit discharge: the patron has checked out items."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:175
@@ -14386,7 +14404,7 @@ msgid "Card number : %s"
 msgstr "Номер читацького квитка:  %s"
 
 #. %1$s:  maxlength_cardnumber 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:631
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:635
 #, fuzzy, c-format
 msgid "Card number can be up to %s characters."
 msgstr ". Пароль повинен складатися принаймні з %s символів."
@@ -14398,13 +14416,13 @@ msgstr "Використовуєм файл зі штрих-кодами"
 
 #. %1$s:  minlength_cardnumber 
 #. %2$s:  maxlength_cardnumber 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:627
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:631
 #, fuzzy, c-format
 msgid "Card number must be between %s and %s characters."
 msgstr ". Пароль повинен складатися принаймні з %s символів."
 
 #. %1$s:  minlength_cardnumber 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:623
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:627
 #, fuzzy, c-format
 msgid "Card number must be exactly %s characters."
 msgstr ". Пароль повинен складатися принаймні з %s символів."
@@ -14667,7 +14685,7 @@ msgstr "Категорія: "
 #: intranet-tmpl/prog/en/includes/patron-search.inc:99
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:83
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:209
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:655
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:659
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:73
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:346
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:553
@@ -14712,7 +14730,7 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:7
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:487
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:491
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:303
 msgid "Change"
 msgstr "Змінити"
@@ -14746,7 +14764,7 @@ msgid "Change item status"
 msgstr "Стан одиниці"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1062
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1066
 #, fuzzy
 msgid "Change messaging preferences to default for this category?"
 msgstr ""
@@ -15100,7 +15118,7 @@ msgstr "Повернуті примірники"
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:88
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:127
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:126
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:35
 #, c-format
 msgid "Checked out"
@@ -15317,7 +15335,7 @@ msgstr ""
 "помилок у Ваших означеннях."
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:225
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:660
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:664
 #, c-format
 msgid "Child"
 msgstr "Дитина"
@@ -15366,8 +15384,8 @@ msgstr "Чи Ви справді хочете вилучити цей запис
 msgid "Choose Order Of Text Fields to Print"
 msgstr "Визначення порядку текстових полів для друку"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:229
-#: intranet-tmpl/prog/en/modules/tools/export.tt:255
+#: intranet-tmpl/prog/en/modules/tools/export.tt:254
+#: intranet-tmpl/prog/en/modules/tools/export.tt:280
 #, fuzzy, c-format
 msgid "Choose a file "
 msgstr "Вибираємо файл *.koc: "
@@ -15888,7 +15906,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:668
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:542
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1043
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1047
 #: intranet-tmpl/prog/en/modules/members/member.tt:508
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:501
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:223
@@ -15898,6 +15916,7 @@ msgstr ""
 msgid "Clear"
 msgstr "Очистити"
 
+#: intranet-tmpl/prog/en/includes/branch-selector.inc:9
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:197
 #: intranet-tmpl/prog/en/modules/labels/result.tt:65
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:136
@@ -15940,7 +15959,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:417
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:424
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:827
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:994
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:998
 #, c-format
 msgid "Clear date"
 msgstr "Очистити дату"
@@ -16551,7 +16570,7 @@ msgstr "Текст, відокремлений комами"
 
 #: intranet-tmpl/prog/en/columns.def:63
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:32
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:959
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:963
 #, c-format
 msgid "Comment"
 msgstr "Коментар "
@@ -16568,7 +16587,7 @@ msgstr "Коментар "
 msgid "Comment:"
 msgstr "Коментар: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:992
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:996
 #, c-format
 msgid "Comment: "
 msgstr "Коментар: "
@@ -16849,7 +16868,7 @@ msgstr "Вказівки"
 msgid "Constraints"
 msgstr "Вказівки"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:507
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:511
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:348
 #, c-format
 msgid "Contact"
@@ -17398,7 +17417,7 @@ msgstr "Новий звіт з коду SQL"
 msgid "Create a new category"
 msgstr "Створити нову категорію"
 
-#: intranet-tmpl/prog/en/modules/admin/cities.tt:175
+#: intranet-tmpl/prog/en/modules/admin/cities.tt:176
 #, fuzzy, c-format
 msgid "Create a new city"
 msgstr "Створюємо новий список"
@@ -18037,11 +18056,6 @@ msgstr "Очікується на дату: %s"
 msgid "Date formats: "
 msgstr "Формат файлу: "
 
-#: intranet-tmpl/prog/en/modules/tags/review.tt:196
-#, fuzzy, c-format
-msgid "Date from"
-msgstr "Дата: з"
-
 #: intranet-tmpl/prog/en/columns.def:76
 #, fuzzy, c-format
 msgid "Date last checked out"
@@ -18133,11 +18147,6 @@ msgstr "Дата отримання"
 #, fuzzy, c-format
 msgid "Date received: "
 msgstr "Дата отримання: "
-
-#: intranet-tmpl/prog/en/modules/tags/review.tt:197
-#, fuzzy, c-format
-msgid "Date to"
-msgstr "Дата"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:220
 #, fuzzy, c-format
@@ -18593,7 +18602,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:38
 #, fuzzy, c-format
 msgid ""
-"Delay is the number of days after an checkout is due before an action is "
+"Delay is the number of days after a checkout is due before an action is "
 "triggered. "
 msgstr ""
 "Затримка - число днів після того, як результат повинен перед тим, як позов "
@@ -18618,7 +18627,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:82
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:168
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:239
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:195
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:196
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:69
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:484
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:98
@@ -18633,7 +18642,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:225
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:230
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:14
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:402
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:406
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:74
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:122
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:134
@@ -18661,7 +18670,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:237
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:472
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:552
-#: intranet-tmpl/prog/en/modules/offline_circ/list.tt:114
+#: intranet-tmpl/prog/en/modules/offline_circ/list.tt:125
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:259
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:142
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:682
@@ -18682,7 +18691,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:136
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:191
 #: intranet-tmpl/prog/en/modules/members/files.tt:47
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:491
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:495
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:286
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:51
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:72
@@ -18790,7 +18799,7 @@ msgstr "Вилучити список"
 #. For the first occurrence,
 #. %1$s:  budget_period_description 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:233
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:392
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:396
 #, c-format
 msgid "Delete budget '%s'?"
 msgstr "Вилучити кошторис „%s“?"
@@ -19349,7 +19358,7 @@ msgstr "Цільовий запис"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:74
 #: intranet-tmpl/prog/en/includes/members-menu.inc:5
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:478
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:482
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:678
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:79
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:36
@@ -19717,8 +19726,8 @@ msgstr ""
 msgid "Don't check out and print slip (P)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:123
-#: intranet-tmpl/prog/en/modules/tools/export.tt:199
+#: intranet-tmpl/prog/en/modules/tools/export.tt:148
+#: intranet-tmpl/prog/en/modules/tools/export.tt:224
 #, c-format
 msgid "Don't export fields"
 msgstr "Не експортувати поля"
@@ -19728,7 +19737,7 @@ msgstr "Не експортувати поля"
 msgid "Don't export fields:"
 msgstr "Не експортувати поля"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:115
+#: intranet-tmpl/prog/en/modules/tools/export.tt:140
 #, c-format
 msgid "Don't export items"
 msgstr "Не експортувати примірники"
@@ -19818,13 +19827,13 @@ msgid "Download cart"
 msgstr "Звантаження возика"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:270
+#: intranet-tmpl/prog/en/modules/tools/export.tt:295
 #, fuzzy
 msgid "Download configuration"
 msgstr "Налаштування друкарки"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:244
+#: intranet-tmpl/prog/en/modules/tools/export.tt:269
 #, fuzzy
 msgid "Download database"
 msgstr "Звантаження возика"
@@ -20096,7 +20105,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/add_fields.tt:108
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:167
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:238
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:194
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:195
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:68
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:483
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:241
@@ -20607,8 +20616,8 @@ msgstr "Кінцева дата: "
 
 #: intranet-tmpl/prog/en/columns.def:149
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:183
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:537
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:574
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:541
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:578
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:365
 #, c-format
 msgid "End date"
@@ -20633,6 +20642,7 @@ msgstr "відсутнє значення"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:330
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:116
+#: intranet-tmpl/prog/en/modules/tools/export.tt:121
 #, fuzzy, c-format
 msgid "End date:"
 msgstr "Кінцева дата: "
@@ -20640,7 +20650,6 @@ msgstr "Кінцева дата: "
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:277
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:331
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:188
-#: intranet-tmpl/prog/en/modules/tools/export.tt:96
 #, c-format
 msgid "End date: "
 msgstr "Кінцева дата: "
@@ -20747,12 +20756,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:188
 #, c-format
 msgid "Enter any authority field:"
-msgstr "Введіть будь-яке поле авторитетного джерела: "
+msgstr "Введіть будь-яке поле авторитетного джерела:"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:134
 #, c-format
 msgid "Enter any heading:"
-msgstr "Введіть будь-який заголовок: "
+msgstr "Введіть будь-який заголовок:"
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:148
 #, c-format
@@ -20795,14 +20804,14 @@ msgid "Enter item barcode: "
 msgstr "Вводимо штрих-код одиниці: "
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:22
-#, fuzzy, c-format
+#, c-format
 msgid "Enter main heading ($a only):"
-msgstr "Введіть будь-який заголовок: "
+msgstr "Введіть основний заголовок (лише $a):"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:78
-#, fuzzy, c-format
+#, c-format
 msgid "Enter main heading:"
-msgstr "Введіть будь-який заголовок: "
+msgstr "Введіть основний заголовок:"
 
 #. %1$s:  name 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:773
@@ -21017,6 +21026,12 @@ msgstr "Помилка: "
 #: intranet-tmpl/prog/en/modules/auth.tt:31
 #: intranet-tmpl/prog/en/modules/auth.tt:35
 #: intranet-tmpl/prog/en/modules/auth.tt:39
+#: intranet-tmpl/prog/en/modules/tags/review.tt:196
+#: intranet-tmpl/prog/en/modules/tags/review.tt:197
+#: intranet-tmpl/prog/en/modules/tags/review.tt:198
+#: intranet-tmpl/prog/en/modules/tags/review.tt:199
+#: intranet-tmpl/prog/en/modules/tags/review.tt:201
+#: intranet-tmpl/prog/en/modules/tags/review.tt:202
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:15
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:19
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:23
@@ -21256,7 +21271,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:949
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:676
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:960
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:964
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:490
 #, c-format
 msgid "Expiration"
@@ -21290,7 +21305,7 @@ msgstr "Дата закінчення: "
 msgid "Expiration:"
 msgstr "Термін дії: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:993
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:997
 #, c-format
 msgid "Expiration: "
 msgstr "Термін дії: "
@@ -21381,8 +21396,8 @@ msgstr "Структура %s"
 msgid "Export as CSV"
 msgstr "Експортувати"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:39
-#: intranet-tmpl/prog/en/modules/tools/export.tt:220
+#: intranet-tmpl/prog/en/modules/tools/export.tt:52
+#: intranet-tmpl/prog/en/modules/tools/export.tt:245
 #, fuzzy, c-format
 msgid "Export authority records"
 msgstr "n — повний авторитетний запис"
@@ -21392,8 +21407,8 @@ msgstr "n — повний авторитетний запис"
 msgid "Export bibliographic and holdings data"
 msgstr "Редагування бібліографічного запису"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:38
-#: intranet-tmpl/prog/en/modules/tools/export.tt:155
+#: intranet-tmpl/prog/en/modules/tools/export.tt:51
+#: intranet-tmpl/prog/en/modules/tools/export.tt:180
 #, fuzzy, c-format
 msgid "Export bibliographic records"
 msgstr "Редагування бібліографічного запису"
@@ -21415,7 +21430,7 @@ msgstr "Експорт партії"
 msgid "Export checkouts using format:"
 msgstr "Видач загалом: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:44
+#: intranet-tmpl/prog/en/modules/tools/export.tt:57
 #, fuzzy, c-format
 msgid "Export configuration"
 msgstr "Налаштування друкарки"
@@ -21426,7 +21441,7 @@ msgstr "Налаштування друкарки"
 msgid "Export data"
 msgstr "Експорт даних"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:41
+#: intranet-tmpl/prog/en/modules/tools/export.tt:54
 #, fuzzy, c-format
 msgid "Export database"
 msgstr "Експорт даних"
@@ -21581,10 +21596,28 @@ msgstr "Невдало, щоб додати плановане завдання"
 msgid "Failed to apply different matching rule"
 msgstr "Не вдалося застосувати інше правило відповідності"
 
+#. %1$s:  message_loo.failed_ok 
+#. %2$s:  ELSIF ( message_loo.failed_rej ) 
+#: intranet-tmpl/prog/en/modules/tags/review.tt:198
+#, fuzzy, c-format
+msgid "Failed to approve term (%s). %s"
+msgstr "Засобу AJAX не вдалося схвалити мітку: "
+
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:33
 #, fuzzy, c-format
 msgid "Failed to delete field."
 msgstr "Так, вилучити це підполе"
+
+#. %1$s:  message_loo.failed_rej 
+#. %2$s:  ELSIF ( message_loo.approver ) 
+#. %3$s:  message_loo.approver 
+#. %4$s:  ELSIF ( message_loo.approved_by ) 
+#: intranet-tmpl/prog/en/modules/tags/review.tt:199
+#, c-format
+msgid ""
+"Failed to reject term (%s). %sNo match for user (%s). FILTER REQUIRES "
+"BORROWERNUMBER (not name). %s"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:57
 #, fuzzy, c-format
@@ -21793,20 +21826,20 @@ msgstr ""
 msgid "Fields to display in report:"
 msgstr "Виберіть — відображати чи ні: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:109
-#: intranet-tmpl/prog/en/modules/tools/export.tt:192
+#: intranet-tmpl/prog/en/modules/tools/export.tt:134
+#: intranet-tmpl/prog/en/modules/tools/export.tt:217
 #, fuzzy, c-format
 msgid "File : "
 msgstr "Файл: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:191
+#: intranet-tmpl/prog/en/modules/tools/export.tt:216
 #, c-format
 msgid ""
 "File containing a list of authids with one authid per line. This list works "
 "as a filter: it is compatible with other parameters."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:108
+#: intranet-tmpl/prog/en/modules/tools/export.tt:133
 #, c-format
 msgid ""
 "File containing a list of biblio numbers with one biblio number per line. "
@@ -21830,8 +21863,8 @@ msgstr "%s зображень переміщено до бази даних."
 msgid "File could not be read."
 msgstr "Рядок заголовку не вдалося проаналізувати"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:133
-#: intranet-tmpl/prog/en/modules/tools/export.tt:207
+#: intranet-tmpl/prog/en/modules/tools/export.tt:158
+#: intranet-tmpl/prog/en/modules/tools/export.tt:232
 #, c-format
 msgid "File format: "
 msgstr "Формат файлу: "
@@ -21849,8 +21882,8 @@ msgstr "Було надіслане повідомлення на електро
 msgid "File name"
 msgstr "Назва файлу"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:214
+#: intranet-tmpl/prog/en/modules/tools/export.tt:174
+#: intranet-tmpl/prog/en/modules/tools/export.tt:239
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:236
 #, c-format
 msgid "File name:"
@@ -22144,7 +22177,7 @@ msgstr "Дата публікації першого випуску: "
 msgid "First name"
 msgstr "Ім’я"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:459
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:463
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:411
 #, c-format
 msgid "First name: "
@@ -22226,7 +22259,7 @@ msgstr "Усі типи одиниць"
 msgid "For large catalogs this can result in unexpected behavior"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/offline_circ/list.tt:112
+#: intranet-tmpl/prog/en/modules/offline_circ/list.tt:123
 #, fuzzy, c-format
 msgid "For the selected operations: "
 msgstr "Позначаємо виділене як: "
@@ -22550,12 +22583,12 @@ msgstr "з будь-якої бібліотеки"
 msgid "From any library:"
 msgstr "З будь-якої бібліотеки: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:164
+#: intranet-tmpl/prog/en/modules/tools/export.tt:189
 #, fuzzy, c-format
 msgid "From authid: "
 msgstr "Формат"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:56
+#: intranet-tmpl/prog/en/modules/tools/export.tt:70
 #, c-format
 msgid "From biblio number: "
 msgstr "Від бібліотечного запису №: "
@@ -22581,7 +22614,7 @@ msgstr "з джерельної бібліотеки"
 msgid "From home library:"
 msgstr "З джерельної бібліотеки: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:84
+#: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, fuzzy, c-format
 msgid "From item call number: "
 msgstr "Від шифру зберігання примірника: "
@@ -22665,7 +22698,7 @@ msgstr ""
 msgid "Fund amount:"
 msgstr "Сума коштів: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:427
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:431
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:295
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:152
 #, c-format
@@ -22683,12 +22716,12 @@ msgstr "Код коштів: "
 msgid "Fund filters"
 msgstr "Відбір коштів"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:426
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:430
 #, fuzzy, c-format
 msgid "Fund id"
 msgstr "Кошти: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:421
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:425
 #, fuzzy, c-format
 msgid "Fund list of budget "
 msgstr "Редагувати кошторис"
@@ -22699,7 +22732,7 @@ msgstr "Редагувати кошторис"
 msgid "Fund locked"
 msgstr "Код коштів"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:428
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:432
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:110
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:296
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:153
@@ -22911,7 +22944,7 @@ msgid "Get help on current subfield"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid "Get it!"
 msgstr "Отримати це!"
 
@@ -23095,7 +23128,7 @@ msgstr "Гарантії: "
 msgid "Guarantor borrower number"
 msgstr "Номер абонента бібліотеки"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:418
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:422
 #, c-format
 msgid "Guarantor information"
 msgstr "Дані про поручителя"
@@ -23187,7 +23220,7 @@ msgstr "заголовки за алфавітом"
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:227
 #, c-format
 msgid "Heading A-Z"
-msgstr "заголовки за алфавітом"
+msgstr "Заголовки за алфавітом"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:232
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:234
@@ -23201,7 +23234,7 @@ msgstr "заголовки за алфавітом"
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:232
 #, c-format
 msgid "Heading Z-A"
-msgstr "заголовки зворотньо за алфавітом"
+msgstr "Заголовки зворотньо за алфавітом"
 
 #: intranet-tmpl/prog/en/includes/header.inc:95
 #: intranet-tmpl/prog/en/includes/header.inc:102
@@ -23889,7 +23922,7 @@ msgstr "Ряд святкових днів повторюється щорічн
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:97
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:49
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:77
-#: intranet-tmpl/prog/en/modules/tools/export.tt:28
+#: intranet-tmpl/prog/en/modules/tools/export.tt:41
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:72
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:79
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:151
@@ -24468,10 +24501,16 @@ msgid ""
 "If you delete this fund, all orders linked to this fund will be deleted! "
 msgstr ""
 
-#. %1$s:  IF ( casServerUrl ) 
-#: intranet-tmpl/prog/en/modules/auth.tt:79
+#: intranet-tmpl/prog/en/modules/auth.tt:84
 #, fuzzy, c-format
-msgid "If you have a CAS account, %s please "
+msgid ""
+"If you have a CAS account, please choose against which one you would like to "
+"authenticate:"
+msgstr "%s %s Будь ласка, виберіть через який Ви хотіли б автентифікуватися: "
+
+#: intranet-tmpl/prog/en/modules/auth.tt:80
+#, fuzzy, c-format
+msgid "If you have a CAS account, please click here to login"
 msgstr ", %s будь ласка, "
 
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:39
@@ -24868,7 +24907,7 @@ msgstr "На переміщенні від: %s до: %s, починаючи з %
 msgid "Inactive"
 msgstr "Не задіяно"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:527
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:531
 #, fuzzy, c-format
 msgid "Inactive budgets"
 msgstr "Не задіяно"
@@ -24904,7 +24943,7 @@ msgid "Incorrect syntax, cannot save"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:55
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:972
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:976
 #, c-format
 msgid "Indefinite"
 msgstr "Не визначено"
@@ -25176,7 +25215,10 @@ msgstr "Нове авторитетне значення для „%s“"
 msgid "Invalid year entered in field %s"
 msgstr "Невірно внесено рік у поле "
 
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
+#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:145
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:97
+#: intranet-tmpl/prog/en/modules/tools/inventory.tt:104
 #, fuzzy, c-format
 msgid "Inventory"
 msgstr "Основне входження "
@@ -25196,17 +25238,6 @@ msgstr "Основне входження "
 #, fuzzy, c-format
 msgid "Inventory number"
 msgstr "Номер рахунку-фактури"
-
-#: intranet-tmpl/prog/en/modules/tools/inventory.tt:104
-#, c-format
-msgid "Inventory/Stocktaking"
-msgstr "Наявні фонди/інвентаризація"
-
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
-#: intranet-tmpl/prog/en/modules/tools/tools-home.tt:145
-#, c-format
-msgid "Inventory/stocktaking"
-msgstr "Наявні фонди/інвентаризація"
 
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:44
 #, fuzzy, c-format
@@ -25823,7 +25854,7 @@ msgstr "Тип одиниці: "
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:121
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:112
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:65
+#: intranet-tmpl/prog/en/modules/tools/export.tt:79
 #, c-format
 msgid "Item type: "
 msgstr "Тип одиниці: "
@@ -28350,6 +28381,11 @@ msgstr ""
 "Коха &rsaquo; Інструменти &rsaquo; Коментарі &rsaquo; %s Схвалені коментарі "
 "%s Коментарі очікують на схвалення %s"
 
+#: intranet-tmpl/prog/en/modules/tools/export.tt:2
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Tools &rsaquo; Export data"
+msgstr "Коха &rsaquo; Інструменти &rsaquo; Вивантаження зображень "
+
 #. %1$s:  IF ( uploadborrowers ) 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:3
@@ -28432,11 +28468,6 @@ msgid ""
 msgstr ""
 "Коха &rsaquo; Інструменти &rsaquo; Утворювач квитків відвідувачів &rsaquo; "
 "Шаблони"
-
-#: intranet-tmpl/prog/en/modules/tools/export.tt:2
-#, fuzzy, c-format
-msgid "Koha &rsaquo; Tools &rsaquo; MARC export"
-msgstr "Коха &rsaquo; Інструменти &rsaquo; Експорт у MARC"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:2
 #, fuzzy, c-format
@@ -29510,7 +29541,7 @@ msgstr "Бібліотеку вилучено"
 msgid "Library is invalid."
 msgstr "Бібліотека вказана некоректно."
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:611
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:615
 #, c-format
 msgid "Library management"
 msgstr "Бібліотечне завідування"
@@ -29532,7 +29563,7 @@ msgstr "Бібліотека відвідувача: "
 msgid "Library saved"
 msgstr "Бібліотеку збережено"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:720
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:724
 #, c-format
 msgid "Library set-up"
 msgstr "Бібліотечні встановлення"
@@ -29566,7 +29597,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/auth.tt:57
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:281
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:410
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:641
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:645
 #: intranet-tmpl/prog/en/modules/members/member.tt:490
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:283
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:348
@@ -29595,7 +29626,7 @@ msgstr "Бібліотека: "
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:183
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:136
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:140
-#: intranet-tmpl/prog/en/modules/tools/export.tt:79
+#: intranet-tmpl/prog/en/modules/tools/export.tt:93
 #, c-format
 msgid "Library: "
 msgstr "Бібліотека: "
@@ -29983,10 +30014,10 @@ msgstr "Розташування"
 msgid "Lock budget: "
 msgstr "Заблокувати кошторис"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:538
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:551
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:575
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:586
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:542
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:555
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:579
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:590
 #, c-format
 msgid "Locked"
 msgstr "Замкнено"
@@ -30493,11 +30524,6 @@ msgstr "Керування шаблонами"
 msgid "Manage OAI Sets"
 msgstr "Керування наборами OAI"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:267
-#, c-format
-msgid "Manage Patron Image"
-msgstr "Керування зображеннями відвідувача"
-
 #: intranet-tmpl/prog/en/includes/permissions.inc:46
 #, fuzzy, c-format
 msgid "Manage all budgets"
@@ -30577,6 +30603,11 @@ msgstr "Управління замовленнями"
 #, fuzzy, c-format
 msgid "Manage orders & basketgroups"
 msgstr "змінити статус"
+
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:267
+#, fuzzy, c-format
+msgid "Manage patron image"
+msgstr "Керування зображеннями відвідувача"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:11
 #, fuzzy, c-format
@@ -31239,7 +31270,7 @@ msgstr "Мінімальна версія Коха"
 #. For the first occurrence,
 #. %1$s:  minPasswordLength 
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:102
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:871
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:875
 #, c-format
 msgid "Minimum password length: %s"
 msgstr "Довжина найкоротшого пароля: %s"
@@ -31766,7 +31797,7 @@ msgstr "Перемістити резервування на самий верх
 msgid "Move hold up"
 msgstr "Перемістити резервування вище"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:456
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:460
 #, c-format
 msgid "Move remaining unspent funds"
 msgstr ""
@@ -31787,12 +31818,12 @@ msgid "Move to previous position"
 msgstr "Повернутися до результатів"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:464
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:468
 #, fuzzy
 msgid "Move unreceived orders"
 msgstr "Немає затриманих замовлень."
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:490
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:494
 #, fuzzy, c-format
 msgid "Moved!"
 msgstr "Перемістити вище"
@@ -32060,7 +32091,7 @@ msgstr "Ніколи"
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:207
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:52
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:183
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1045
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1049
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:95
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:359
@@ -32604,15 +32635,15 @@ msgid "No"
 msgstr "ні"
 
 # ні (memberentrygen)
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:935
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:939
 #, c-format
 msgid "No "
 msgstr "ні "
 
 #. For the first occurrence,
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:709
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:712
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:713
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:716
 #, fuzzy, c-format
 msgid "No %s "
 msgstr " до підрозділу „%s“ "
@@ -32941,6 +32972,13 @@ msgstr "Немає відображень для структури „%s"
 #, fuzzy
 msgid "No match"
 msgstr "Нова партія"
+
+#. %1$s:  message_loo.approved_by 
+#. %2$s:  ELSIF ( message_loo.op_zero ) 
+#: intranet-tmpl/prog/en/modules/tags/review.tt:201
+#, fuzzy, c-format
+msgid "No match for borrowernumber (%s). %s"
+msgstr "Номер користувача АБІС: "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:14
@@ -33369,7 +33407,7 @@ msgstr "Непублічна нотатка: "
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:161
 #, c-format
 msgid "None"
-msgstr "немає"
+msgstr "Немає"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:13
@@ -33543,15 +33581,15 @@ msgstr "Загалом підлягає платежу"
 msgid "Note"
 msgstr "Нотатка"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:49
+#: intranet-tmpl/prog/en/modules/tools/export.tt:62
 #, c-format
 msgid "Note : The items are exported by this tool unless specified."
 msgstr ""
 "Примітка: примірники будуть експортовані цим інструментом якщо не зазначено "
 "інше."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:227
-#: intranet-tmpl/prog/en/modules/tools/export.tt:253
+#: intranet-tmpl/prog/en/modules/tools/export.tt:252
+#: intranet-tmpl/prog/en/modules/tools/export.tt:278
 #, c-format
 msgid "Note : This export file will be very large, and is generated nightly."
 msgstr ""
@@ -34206,7 +34244,7 @@ msgstr "Повідомлення для електронного каталог�
 msgid "OPAC view:"
 msgstr "Вигляд в ЕК: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:799
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:803
 #, c-format
 msgid "OPAC/Staff login"
 msgstr "Вхід в електронний каталог, інтерфейс бібліотекаря"
@@ -34602,8 +34640,8 @@ msgid "Optional module missing"
 msgstr "Відсутній необов’язковий модуль"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:556
-#: intranet-tmpl/prog/en/modules/tools/export.tt:113
-#: intranet-tmpl/prog/en/modules/tools/export.tt:196
+#: intranet-tmpl/prog/en/modules/tools/export.tt:138
+#: intranet-tmpl/prog/en/modules/tools/export.tt:221
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:139
 #, c-format
 msgid "Options"
@@ -34756,7 +34794,7 @@ msgstr "Дата замовлення"
 msgid "Ordering information"
 msgstr "Інформація для замовлення"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:477
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:481
 #, fuzzy, c-format
 msgid "Ordernumber"
 msgstr "Номер читацького квитка"
@@ -34794,12 +34832,12 @@ msgid "Orders with uncertain prices for vendor "
 msgstr "Замовлення з сумнівними цінами постачальника: "
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:227
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:663
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:667
 #, c-format
 msgid "Organization"
 msgstr "Колектив"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:426
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:430
 #, c-format
 msgid "Organization #:"
 msgstr "Колектив №: "
@@ -34810,7 +34848,7 @@ msgstr "Колектив №: "
 msgid "Organization email: "
 msgstr "Електронна пошта колективу: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:429
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:433
 #, c-format
 msgid "Organization name: "
 msgstr "Назва колективу: "
@@ -34917,12 +34955,12 @@ msgstr "Інше…"
 msgid "Output"
 msgstr "Виведення"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:205
+#: intranet-tmpl/prog/en/modules/tools/export.tt:230
 #, fuzzy, c-format
 msgid "Output format"
 msgstr "Формат виводу "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:129
+#: intranet-tmpl/prog/en/modules/tools/export.tt:154
 #, c-format
 msgid "Output format "
 msgstr "Формат виводу "
@@ -35177,7 +35215,7 @@ msgstr "Пароль оновлено"
 msgid "Password contains leading and/or trailing spaces."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:870
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:874
 #, c-format
 msgid "Password is too short"
 msgstr "Пароль надто короткий"
@@ -35190,7 +35228,7 @@ msgstr "Пароль повинен складатися принаймні з %
 
 #: intranet-tmpl/prog/en/modules/auth.tt:51
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:111
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1040
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1044
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:44
 #, c-format
 msgid "Password:"
@@ -35206,7 +35244,7 @@ msgstr "Пароль: "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:4
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:913
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:917
 #, c-format
 msgid "Passwords do not match"
 msgstr "Паролі не збігаються"
@@ -35250,12 +35288,12 @@ msgstr "патентний документ"
 msgid "Patron"
 msgstr "Відвідувач"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:444
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:448
 #, c-format
 msgid "Patron #:"
 msgstr "Відвідувач №: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:921
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:925
 #, c-format
 msgid "Patron account flags"
 msgstr "Позначки облікового запису відвідувача"
@@ -35505,7 +35543,7 @@ msgid "Patron is an adult"
 msgstr "Відвідувач дорослий"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:26
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:983
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:987
 #, c-format
 msgid "Patron is currently unrestricted."
 msgstr "Відвідувач на даний час не заблокований."
@@ -35540,7 +35578,7 @@ msgstr "Списки відвідувачів"
 msgid "Patron lists:"
 msgstr "Списки відвідувачів: "
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1057
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1061
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:328
 #, c-format
 msgid "Patron messaging preferences"
@@ -35583,7 +35621,7 @@ msgstr "Сповіщення відвідувача: "
 msgid "Patron records were last synced on: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:952
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:956
 #, c-format
 msgid "Patron restrictions"
 msgstr "Обмеження відвідувача"
@@ -35901,7 +35939,7 @@ msgid "Pay all fines"
 msgstr "Оплатити штрафи"
 
 #. INPUT type=submit name=paycollect
-#: intranet-tmpl/prog/en/modules/members/pay.tt:161
+#: intranet-tmpl/prog/en/modules/members/pay.tt:162
 #, fuzzy
 msgid "Pay amount"
 msgstr "Тип: "
@@ -35944,7 +35982,7 @@ msgid "Pay fines for %s %s"
 msgstr "&rsaquo; Оплатити штрафи — %s %s"
 
 #. INPUT type=submit name=payselected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:163
+#: intranet-tmpl/prog/en/modules/members/pay.tt:164
 #, fuzzy
 msgid "Pay selected"
 msgstr "Вибір"
@@ -36060,8 +36098,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:66
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:146
-#, c-format
-msgid "Perform inventory (stocktaking) of your catalog"
+#, fuzzy, c-format
+msgid "Perform inventory of your catalog"
 msgstr "Виконання інвентаризації (переобліку) Вашого каталогу"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:32
@@ -37358,8 +37396,8 @@ msgstr "Електронна пошта (основна): "
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:244
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:42
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:71
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:118
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:120
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:119
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:381
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:135
 #, c-format
@@ -37591,7 +37629,7 @@ msgid "Problems"
 msgstr ""
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/offline_circ/list.tt:113
+#: intranet-tmpl/prog/en/modules/offline_circ/list.tt:124
 #, fuzzy
 msgid "Process"
 msgstr "Член колективу"
@@ -37626,7 +37664,7 @@ msgid "Processing..."
 msgstr "Опрацювання триває…"
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:228
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:664
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:668
 #, c-format
 msgid "Professional"
 msgstr "Член колективу"
@@ -37787,11 +37825,6 @@ msgstr "Дата публікації № 1"
 #, fuzzy, c-format
 msgid "Publication date: "
 msgstr "Дата публікації № 1"
-
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:598
-#, c-format
-msgid "Publication details"
-msgstr "Відомості про публікацію"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:213
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:334
@@ -38456,7 +38489,7 @@ msgstr "Взаємовідношення: "
 msgid "Relationship information"
 msgstr "Відомості про взаємозв’язок"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:470
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:474
 #, c-format
 msgid "Relationship: "
 msgstr "Взаємовідношення: "
@@ -38602,7 +38635,7 @@ msgstr "Вилучити грань „[% facet.facet_link_value | html %]“"
 msgid "Remove item from collection"
 msgstr "Вилучити примірник із зібрання"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:119
+#: intranet-tmpl/prog/en/modules/tools/export.tt:144
 #, c-format
 msgid "Remove non-local items"
 msgstr "Вилучати нелокальні примірники"
@@ -38656,7 +38689,7 @@ msgstr "Перемістіть цю перевірку матчу"
 msgid "Remove this match point"
 msgstr "Вибрати цього патрона"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:962
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:966
 #, c-format
 msgid "Remove?"
 msgstr "Вилучити?"
@@ -38909,7 +38942,7 @@ msgstr "Додатки звітування"
 #. %4$s:  to_budget_period.budget_period_description 
 #. %5$s:  to_budget_period.budget_period_startdate | $KohaDates 
 #. %6$s:  to_budget_period.budget_period_enddate | $KohaDates
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:470
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:474
 #, c-format
 msgid ""
 "Report after moving unreceived orders from budget %s (%s - %s) to %s (%s - "
@@ -39120,27 +39153,27 @@ msgstr "Відсутній обов’язковий модуль"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:352
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:366
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:379
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:517
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:530
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:542
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:554
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:567
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:579
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:622
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:521
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:534
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:546
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:558
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:571
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:583
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:626
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:630
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:634
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:651
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:678
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:689
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:701
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:734
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:763
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:777
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:790
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:826
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:870
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:913
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:638
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:655
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:682
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:693
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:705
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:738
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:767
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:781
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:794
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:830
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:874
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:917
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:532
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:181
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:50
@@ -39457,7 +39490,7 @@ msgstr ""
 msgid "Returns"
 msgstr "Повернення"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:110
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:111
 #, c-format
 msgid "Reverse"
 msgstr "Скасування оплати"
@@ -39723,7 +39756,7 @@ msgstr "Служба SMS-повідомлень"
 msgid "SMS alert number"
 msgstr "Номер для SMS:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1107
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1111
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:331
 #, c-format
 msgid "SMS number:"
@@ -39819,6 +39852,7 @@ msgstr "По суботах"
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:157
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:240
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:243
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:371
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:75
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:211
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:197
@@ -39849,7 +39883,7 @@ msgstr "По суботах"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:549
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:163
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:117
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1116
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1120
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:159
 #: intranet-tmpl/prog/en/modules/members/member.tt:374
@@ -39953,7 +39987,6 @@ msgstr "Скинути схему"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:109
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:371
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:364
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:47
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:269
@@ -40233,9 +40266,9 @@ msgid "Search all headings"
 msgstr "Пошук усіх заголовків"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:175
-#, fuzzy, c-format
+#, c-format
 msgid "Search all headings: "
-msgstr "Пошук усіх заголовків"
+msgstr "Шукати усі заголовки:"
 
 #: intranet-tmpl/prog/en/modules/reports/stats_screen.tt:20
 #, c-format
@@ -40302,14 +40335,14 @@ msgid "Search currencies"
 msgstr "Пошук за грошовою одиницею"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:247
-#, fuzzy, c-format
+#, c-format
 msgid "Search entire record"
-msgstr "Шукаємо постачальника"
+msgstr "Пошук всього запису"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:199
-#, fuzzy, c-format
+#, c-format
 msgid "Search entire record: "
-msgstr "Шукаємо постачальника"
+msgstr "Шукати весь запис: "
 
 #: intranet-tmpl/prog/en/includes/letters-search.inc:5
 #, c-format
@@ -40458,19 +40491,19 @@ msgid "Search main heading"
 msgstr "Пошук основного заголовку"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:244
-#, fuzzy, c-format
+#, c-format
 msgid "Search main heading ($a only)"
-msgstr "Пошук основного заголовку"
+msgstr "Пошук основного заголовку (лише $a)"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:124
-#, fuzzy, c-format
+#, c-format
 msgid "Search main heading ($a only): "
-msgstr "Пошук основного заголовку"
+msgstr "Шукати основний заголовок (лише $a): "
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:150
-#, fuzzy, c-format
+#, c-format
 msgid "Search main heading: "
-msgstr "Пошук основного заголовку"
+msgstr "Пошук основного заголовку (лише $a): "
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:173
@@ -40865,7 +40898,7 @@ msgstr ""
 msgid "Select a borrower category"
 msgstr "Вибір позичальника"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:447
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:451
 #, fuzzy, c-format
 msgid "Select a budget"
 msgstr "виберіть кошти"
@@ -40935,6 +40968,7 @@ msgstr "Вилучити список"
 msgid "Select a template to be applied: "
 msgstr "Виберіть файл для імпорту: "
 
+#: intranet-tmpl/prog/en/includes/branch-selector.inc:9
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:194
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:14
 #: intranet-tmpl/prog/en/modules/labels/result.tt:65
@@ -41050,8 +41084,8 @@ msgstr "Виберіть файл для імпорту: "
 msgid "Select planning type:"
 msgstr "виберіть тип категорії"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:54
-#: intranet-tmpl/prog/en/modules/tools/export.tt:162
+#: intranet-tmpl/prog/en/modules/tools/export.tt:67
+#: intranet-tmpl/prog/en/modules/tools/export.tt:187
 #, fuzzy, c-format
 msgid "Select records to export "
 msgstr "Вибираємо записи для експорту "
@@ -41306,6 +41340,11 @@ msgstr "Інформація про зібрання серіального ви
 msgid "Serial edition "
 msgstr "Зібрання серіального видання"
 
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:598
+#, fuzzy, c-format
+msgid "Serial enumeration / chronology"
+msgstr "Нум-ція серіаль.вид.: "
+
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:224
 #, c-format
 msgid "Serial enumeration:"
@@ -41532,7 +41571,7 @@ msgstr "„modify_holds_priority“ "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:7
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:489
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:493
 msgid "Set to patron"
 msgstr "Встановити для відвідувача"
 
@@ -41700,12 +41739,6 @@ msgstr "Дата початку"
 #, fuzzy, c-format
 msgid "Shipping fund: "
 msgstr "Дата початку"
-
-#. %1$s:  basketno 
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:44
-#, fuzzy, c-format
-msgid "Shopping Basket %s"
-msgstr "Пакунок № %s"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:241
 #, c-format
@@ -41918,8 +41951,8 @@ msgstr "Показуються"
 # slip - картка, бланк;
 # circulation slip - амер. формуляр документу;
 # charge-out slip - формуляр документа.
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:517
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:554
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:521
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:558
 #, c-format
 msgid "Shows on transit slips"
 msgstr "відображатиметься на формулярі видачі/переміщення"
@@ -42322,7 +42355,7 @@ msgid "Stacey Walker"
 msgstr "Стейсі Уокер {Stacey Walker}"
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:226
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:662
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:666
 #, c-format
 msgid "Staff"
 msgstr "Працівник бібліотеки"
@@ -42467,8 +42500,8 @@ msgstr "Дата початку: "
 
 #: intranet-tmpl/prog/en/columns.def:148
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:182
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:536
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:573
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:540
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:577
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:364
 #, c-format
 msgid "Start date"
@@ -42488,7 +42521,7 @@ msgstr "Дата початку повинна передувати кінцев
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:329
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:111
-#: intranet-tmpl/prog/en/modules/tools/export.tt:93
+#: intranet-tmpl/prog/en/modules/tools/export.tt:117
 #, c-format
 msgid "Start date:"
 msgstr "Дата початку: "
@@ -42602,7 +42635,7 @@ msgid "Statistic 2: "
 msgstr "Поле статистики № 2: "
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:229
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:665
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:669
 #, c-format
 msgid "Statistical"
 msgstr "Квиток статистики"
@@ -42908,7 +42941,7 @@ msgstr "Класифікація"
 msgid "Sub total "
 msgstr "Часткова сума"
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:153
+#: intranet-tmpl/prog/en/modules/members/pay.tt:154
 #, fuzzy, c-format
 msgid "Sub total:"
 msgstr "Часткова сума"
@@ -43554,7 +43587,7 @@ msgstr "Бібліотека сполучення клавіш OpenJS"
 msgid "Surname"
 msgstr "Прізвище"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:448
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:452
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:410
 #, c-format
 msgid "Surname: "
@@ -43607,7 +43640,7 @@ msgstr "Знак: "
 msgid "Sync status: "
 msgstr "Стан"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:706
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:710
 #, c-format
 msgid "Sync with the Norwegian national patron database:"
 msgstr ""
@@ -44740,6 +44773,22 @@ msgstr ""
 msgid "The record you requested does not exist (%s)."
 msgstr "Запис, який Ви запросили, не існує (%s)."
 
+#. %1$s:  ELSE 
+#. %2$s:  END 
+#: intranet-tmpl/prog/en/modules/tags/review.tt:202
+#, fuzzy, c-format
+msgid ""
+"The root koha user in your KOHA_CONF file (default: kohaadmin) is not a "
+"valid tag moderator. These actions are logged by borrowernumber, so the "
+"moderator must exist in your borrowers table. Please log in as a different "
+"authorized staff user to moderate tags. %sUnrecognized error! %s "
+msgstr ""
+"ПОМИЛКА: базовий адміністратор Коха, що заданий у файлі KOHA_CONF (зазвичай "
+"це „kohaadmin“), не є дійсним модератором міток. Ці дії записуються з "
+"номером відвідувача „borrowernumber“, отож модератор повинен існувати в "
+"таблиці відвідувачів „borrowers“. Будь ласка, увійдіть як інший користувач "
+"бібліотечного інтерфейсу з привілеями на модерування міток."
+
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:109
 #, c-format
 msgid ""
@@ -44819,7 +44868,7 @@ msgid ""
 "value by one or more virtual hosts."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:421
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:425
 #, c-format
 msgid "The unreceived orders from the following funds will be moved"
 msgstr ""
@@ -44870,13 +44919,18 @@ msgstr "Лише одиниці доступні зараз "
 msgid "There are no authorized values defined for %s"
 msgstr "Не означено жодного авторитетного значення для „%s“"
 
+#: intranet-tmpl/prog/en/modules/admin/cities.tt:175
+#, fuzzy, c-format
+msgid "There are no cities defined. "
+msgstr "Наразі не означено жодної бібліотеки/підрозділу. "
+
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:59
 #, fuzzy, c-format
 msgid "There are no collections currently defined."
 msgstr "Наразі не визначено жодного зібрання."
 
 #. %1$s:  IF active 
-#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:200
+#: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:202
 #, fuzzy, c-format
 msgid "There are no contracts with this vendor. %s "
 msgstr "З цим постачальником немає жодного договору."
@@ -44979,7 +45033,7 @@ msgstr "отримання випусків для цієї підписки"
 msgid "There are no pending discharge requests."
 msgstr "Немає жодних, очікуючих на рішення, пропозицій для придбання."
 
-#: intranet-tmpl/prog/en/modules/offline_circ/list.tt:120
+#: intranet-tmpl/prog/en/modules/offline_circ/list.tt:131
 #, fuzzy, c-format
 msgid "There are no pending offline operations."
 msgstr "Немає затриманих замовлень."
@@ -45031,7 +45085,7 @@ msgstr ""
 msgid "There is no defined frequency."
 msgstr "Не означено жодного набору."
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:635
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:639
 #, c-format
 msgid "There is no minimum or maximum character length."
 msgstr ""
@@ -45071,7 +45125,7 @@ msgstr ""
 msgid "There were %s barcodes that were too long."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:498
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:502
 #, fuzzy, c-format
 msgid "There were no unreceived orders for this fund."
 msgstr "Немає затриманих замовлень."
@@ -45210,7 +45264,7 @@ msgid ""
 "delete it? "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:507
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:511
 #, c-format
 msgid "This fund code does not exist in the destination budget."
 msgstr ""
@@ -45384,13 +45438,13 @@ msgstr "Цей відвідувач не існує."
 msgid "This member has no email"
 msgstr "Цей відвідувач не має електронної пошти"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:776
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:780
 #, c-format
 msgid "This message appears on this patron's user page in the OPAC"
 msgstr ""
 "це повідомлення з’явиться на сторінці облікового запису відвідувача в ЕК"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:789
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:793
 #, c-format
 msgid "This message displays when checking out to this patron"
 msgstr "це повідомлення відображається при видачі цьому відвідувачу"
@@ -45496,7 +45550,7 @@ msgstr "Цей запис використовується "
 
 #. For the first occurrence,
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:388
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:392
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:278
 #, c-format
 msgid "This record is used %s times"
@@ -45985,12 +46039,12 @@ msgstr "до файлу: "
 msgid "To a file: "
 msgstr "до файлу: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:168
+#: intranet-tmpl/prog/en/modules/tools/export.tt:193
 #, fuzzy, c-format
 msgid "To authid: "
 msgstr "Дата: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:60
+#: intranet-tmpl/prog/en/modules/tools/export.tt:74
 #, c-format
 msgid "To biblio number: "
 msgstr "До бібліотечного запису №: "
@@ -46016,7 +46070,7 @@ msgstr ""
 "„UseKohaPlugins“ а також прапорець „enable_plugins“ повинен бути "
 "встановлений у файлі налаштувань Коха."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:88
+#: intranet-tmpl/prog/en/modules/tools/export.tt:107
 #, fuzzy, c-format
 msgid "To item call number: "
 msgstr "До шифру замовлення примірника: "
@@ -46251,7 +46305,7 @@ msgstr "Додатки інструментів"
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:97
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:50
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:78
-#: intranet-tmpl/prog/en/modules/tools/export.tt:28
+#: intranet-tmpl/prog/en/modules/tools/export.tt:41
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:73
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:79
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:151
@@ -46305,8 +46359,8 @@ msgstr "Верхнє поле сторінки: "
 msgid "Topics"
 msgstr "Рубрики"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:539
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:576
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:543
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:580
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:296
 #: intranet-tmpl/prog/en/modules/tags/review.tt:297
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:199
@@ -46438,7 +46492,7 @@ msgstr "Загальна поточна дозволена кількість в
 msgid "Total current on-site checkouts allowed"
 msgstr "Загальна поточна дозволена кількість видач"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:128
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:129
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:97
 #, c-format
 msgid "Total due"
@@ -46747,7 +46801,7 @@ msgstr "Тюмер Ґарп {Tumer Garip}"
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:172
 #: intranet-tmpl/prog/en/modules/members/files.tt:33
 #: intranet-tmpl/prog/en/modules/members/notices.tt:50
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:958
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:962
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:73
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:630
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:54
@@ -46921,8 +46975,8 @@ msgstr "Не визначено"
 msgid "Undo import into catalog"
 msgstr "Скасувати імпорт до каталогу"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:237
-#: intranet-tmpl/prog/en/modules/tools/export.tt:263
+#: intranet-tmpl/prog/en/modules/tools/export.tt:262
+#: intranet-tmpl/prog/en/modules/tools/export.tt:288
 #, fuzzy, c-format
 msgid "Unfortunately, no backups are available."
 msgstr "Немає доступних примірників"
@@ -47083,7 +47137,7 @@ msgstr "невідомо"
 msgid "Unpacking completed"
 msgstr "Розпаковування завершилося"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:429
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:433
 #, fuzzy, c-format
 msgid "Unreceived orders"
 msgstr "Відміна"
@@ -47231,11 +47285,6 @@ msgstr "Вивантажити зображення"
 msgid "Upload New File"
 msgstr "Вивантажуємо новий файл"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:270
-#, c-format
-msgid "Upload Patron Image"
-msgstr "Вивантажуємо зображення відвідувача"
-
 #: intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:26
 #, fuzzy, c-format
 msgid "Upload another KOC file"
@@ -47298,6 +47347,11 @@ msgstr "Вивантажуємо дані автономного обігу"
 #, c-format
 msgid "Upload offline circulation file (.koc)"
 msgstr "Вивантаження файлу автономного обігу (*.koc)"
+
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:270
+#, fuzzy, c-format
+msgid "Upload patron image"
+msgstr "Вивантаження зображень відвідувачів"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:48
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:64
@@ -47416,8 +47470,8 @@ msgstr "Використовуєм файл зі штрих-кодами"
 msgid "Use a file"
 msgstr "Використовуєм файл зі штрих-кодами"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:104
-#: intranet-tmpl/prog/en/modules/tools/export.tt:187
+#: intranet-tmpl/prog/en/modules/tools/export.tt:129
+#: intranet-tmpl/prog/en/modules/tools/export.tt:212
 #, fuzzy, c-format
 msgid "Use a file "
 msgstr "Використовуєм файл зі штрих-кодами"
@@ -47931,14 +47985,14 @@ msgid "View final record"
 msgstr "Переглянути результуючий запис"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:546
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:550
 #, fuzzy
 msgid "View funds for [% period_active.budget_period_description %]"
 msgstr ""
 "Перегляд коштів на „<!-- TMPL_VAR name=\"budget_period_description\" -->“"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:583
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:587
 #, fuzzy
 msgid "View funds for [% period_loo.budget_period_description %]"
 msgstr ""
@@ -47949,7 +48003,7 @@ msgstr ""
 msgid "View invoice"
 msgstr "Накладна постачальника"
 
-#: intranet-tmpl/prog/en/modules/members/boraccount.tt:103
+#: intranet-tmpl/prog/en/modules/members/boraccount.tt:104
 #, c-format
 msgid "View item"
 msgstr "Переглянути примірник"
@@ -48513,7 +48567,7 @@ msgid "Write off"
 msgstr "Автор"
 
 #. INPUT type=submit name=woall
-#: intranet-tmpl/prog/en/modules/members/pay.tt:162
+#: intranet-tmpl/prog/en/modules/members/pay.tt:163
 #, fuzzy
 msgid "Write off all"
 msgstr "Автор"
@@ -48628,9 +48682,9 @@ msgid "Yes"
 msgstr "так"
 
 # так (memberentrygen)
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:708
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:711
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:929
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:712
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:715
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:933
 #, c-format
 msgid "Yes "
 msgstr "так "
@@ -49597,8 +49651,8 @@ msgid ""
 msgstr "[% IF ( enrolmentperiod ) %][% enrolmentperiod %][% END %]"
 
 #. INPUT type=text name=dateexpiry
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:752
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:758
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:756
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:762
 #, fuzzy
 msgid "[% UNLESS opduplicate %][% dateexpiry %][% END %]"
 msgstr "[% IF ( opduplicate ) %][% ELSE %][% dateofbirth %][% END %]"
@@ -49720,7 +49774,7 @@ msgid ""
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError %%] %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:79
+#: intranet-tmpl/prog/en/modules/tools/export.tt:93
 #, c-format
 msgid "[%% INCLUDE 'branch-selector.inc' branches = branchloop %%] "
 msgstr ""
@@ -49795,7 +49849,7 @@ msgstr "[Редагувати примірник]"
 msgid "[Fewer options]"
 msgstr "[Менше параметрів]"
 
-#: intranet-tmpl/prog/en/modules/auth.tt:95
+#: intranet-tmpl/prog/en/modules/auth.tt:94
 #, fuzzy, c-format
 msgid "[Main page]"
 msgstr "Основна адреса"
@@ -49817,7 +49871,7 @@ msgstr "[Новий пошук]"
 msgid "[Overridden] "
 msgstr "Прострочення"
 
-#: intranet-tmpl/prog/en/modules/auth.tt:94
+#: intranet-tmpl/prog/en/modules/auth.tt:93
 #, fuzzy, c-format
 msgid "[Previous page]"
 msgstr "Попередня сторінка"
@@ -50081,11 +50135,6 @@ msgid ""
 "the template. %s "
 msgstr "Не визначається ще"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:247
-#, fuzzy, c-format
-msgid "attribute value "
-msgstr "Атрибути відвідувача"
-
 #. A
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:168
 msgid "basket"
@@ -50342,11 +50391,6 @@ msgstr "Так, вилучити це підполе"
 msgid "choose"
 msgstr "вибрати"
 
-#: intranet-tmpl/prog/en/modules/auth.tt:81
-#, c-format
-msgid "click here to login"
-msgstr " клацніть тут щоб увійти"
-
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:15
 #, c-format
 msgid "click to log out"
@@ -50425,7 +50469,7 @@ msgid "critical.ogg"
 msgstr "critical.ogg"
 
 # Canadian Subject Headings
-#: intranet-tmpl/prog/en/modules/tools/export.tt:137
+#: intranet-tmpl/prog/en/modules/tools/export.tt:162
 #, fuzzy, c-format
 msgid "csv"
 msgstr "csh"
@@ -51001,12 +51045,6 @@ msgstr "Дост."
 msgid "is already in possession"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:247
-#, fuzzy, c-format
-msgid "is already in use by another patron record."
-msgstr ""
-"Значення атрибуту „%s“ вже використовується у записі іншого відвідувача."
-
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 msgid "is duplicated"
@@ -51049,43 +51087,6 @@ msgstr " поширюється на умовах "
 #, fuzzy, c-format
 msgid "is not"
 msgstr "Примітка для обігу"
-
-#. %1$s:  message_loo.date_from 
-#. %2$s:  ELSIF ( message_loo.date_to ) 
-#: intranet-tmpl/prog/en/modules/tags/review.tt:196
-#, fuzzy, c-format
-msgid "is not a legal value (\"%s\"). %sERROR: "
-msgstr "ПОМИЛКА: <em>„Дата по“</em> не є правильною датою („%s“)."
-
-#. %1$s:  message_loo.date_to 
-#. %2$s:  ELSIF ( message_loo.failed_ok ) 
-#. %3$s:  message_loo.failed_ok 
-#. %4$s:  ELSIF ( message_loo.failed_rej ) 
-#. %5$s:  message_loo.failed_rej 
-#. %6$s:  ELSIF ( message_loo.approver ) 
-#. %7$s:  message_loo.approver 
-#. %8$s:  ELSIF ( message_loo.approved_by ) 
-#. %9$s:  message_loo.approved_by 
-#. %10$s:  ELSIF ( message_loo.op_zero ) 
-#. %11$s:  ELSE 
-#. %12$s:  END 
-#: intranet-tmpl/prog/en/modules/tags/review.tt:197
-#, fuzzy, c-format
-msgid ""
-"is not a legal value (\"%s\"). %sERROR: Failed to approve term (%s). "
-"%sERROR: Failed to reject term (%s). %sERROR: No match for user (%s). FILTER "
-"REQUIRES BORROWERNUMBER (not name). %sERROR: No match for borrowernumber "
-"(%s). %sERROR: The root koha user in your KOHA_CONF file (default: "
-"kohaadmin) is not a valid tag moderator. These actions are logged by "
-"borrowernumber, so the moderator must exist in your borrowers table. Please "
-"login as a different authorized staff user to moderate tags. %s Unrecognized "
-"error! %s "
-msgstr ""
-"ПОМИЛКА: базовий адміністратор Коха, що заданий у файлі KOHA_CONF (зазвичай "
-"це „kohaadmin“), не є дійсним модератором міток. Ці дії записуються з "
-"номером відвідувача „borrowernumber“, отож модератор повинен існувати в "
-"таблиці відвідувачів „borrowers“. Будь ласка, увійдіть як інший користувач "
-"бібліотечного інтерфейсу з привілеями на модерування міток."
 
 #. %1$s:  errmsgloo.debarred | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:480
@@ -51259,8 +51260,8 @@ msgid "koha-conf.xml"
 msgstr "koha-conf.xml"
 
 #. INPUT type=text name=filename
-#: intranet-tmpl/prog/en/modules/tools/export.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:214
+#: intranet-tmpl/prog/en/modules/tools/export.tt:174
+#: intranet-tmpl/prog/en/modules/tools/export.tt:239
 msgid "koha.mrc"
 msgstr ""
 
@@ -51372,8 +51373,8 @@ msgstr "/"
 msgid "manage circulation rules"
 msgstr "Попередження при обігу примірників"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:135
-#: intranet-tmpl/prog/en/modules/tools/export.tt:209
+#: intranet-tmpl/prog/en/modules/tools/export.tt:160
+#: intranet-tmpl/prog/en/modules/tools/export.tt:234
 #, fuzzy, c-format
 msgid "marc"
 msgstr "Марк"
@@ -51833,8 +51834,8 @@ msgstr "розділ, секція"
 msgid "selector"
 msgstr "селектор"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:124
-#: intranet-tmpl/prog/en/modules/tools/export.tt:200
+#: intranet-tmpl/prog/en/modules/tools/export.tt:149
+#: intranet-tmpl/prog/en/modules/tools/export.tt:225
 #, c-format
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr " відокремлювати пробілом (наприклад, 100a 200 606)"
@@ -52328,8 +52329,8 @@ msgstr ""
 " — додаток від Йована Поповича {Jovan Popovic} на умовах ліцензій BSD та GPL "
 "вер. 2."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:136
-#: intranet-tmpl/prog/en/modules/tools/export.tt:210
+#: intranet-tmpl/prog/en/modules/tools/export.tt:161
+#: intranet-tmpl/prog/en/modules/tools/export.tt:235
 #, c-format
 msgid "xml"
 msgstr "xml"

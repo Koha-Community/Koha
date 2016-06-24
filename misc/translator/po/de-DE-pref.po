@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: German Koha Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2016-05-18 03:47+0000\n"
-"Last-Translator: Marc <veron@veron.ch>\n"
+"PO-Revision-Date: 2016-06-23 05:54+0000\n"
+"Last-Translator: Katrin <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1463543237.000000\n"
+"X-POOTLE-MTIME: 1466661259.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -121,7 +121,7 @@ msgstr "<br/>Zum Beispiel:<br/>price: 947$a|947$c<br/>quantity: 969$h<br/>budget
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcFieldsToOrder# Set the mapping values for a new order line created from a MARC record in a staged file."
-msgstr "Mapping-Werte festlegen für neue Bestellposten aus MARC-Datensätzen einer zwischengespeicherten Datei ."
+msgstr "Mapping-Werte festlegen für neue Bestellposten aus MARC-Datensätzen einer zwischengespeicherten Datei."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcFieldsToOrder# You can use the following fields: price, quantity, budget_code, discount, sort1, sort2"
@@ -795,7 +795,7 @@ msgstr "Verwende"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# as the default classification source."
-msgstr "als voreingestellte Klassifikation."
+msgstr "als voreingestellte Klassifikationsquelle."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#DefaultLanguageField008#  Empty defaults to eng."
@@ -819,7 +819,7 @@ msgstr "die Funktion zur einfachen Erstellung von Verknüpfungen zwischen Titeld
 
 # Cataloging > Display
 msgid "cataloguing.pref#ISBD# Use the following as the ISBD template:"
-msgstr "Verwende folgende Vorlage als ISBD-Template:"
+msgstr "Verwende in der Dienstoberfläche folgende Vorlage als ISBD-Template:"
 
 # Cataloging > Display
 msgid "cataloguing.pref#IntranetBiblioDefaultView# By default, display biblio records in"
@@ -2298,7 +2298,7 @@ msgstr "(Bibliothekscodes, getrennt mit Komma; wenn leer, werden alle Bibliothek
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# Satisfy holds from the libraries"
-msgstr "Wähle Bibliotheken für die Erfüllung von Vormerkungen"
+msgstr "Vormerkungen mit Exemplaren von folgenden Bibliotheken bedienen"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# in random order."
@@ -3374,7 +3374,7 @@ msgstr "Aktiviere"
 
 # Enhanced Content > Plugins
 msgid "enhanced_content.pref#UseKohaPlugins# the ability to use Koha Plugins. Note, the plugin system must also be enabled in the Koha configuration file to be fully enabled."
-msgstr "das Plugin-System von Koha. Hinweis: Um das Plugin-System vollständig zu aktivieren, muss dies außrdem in der Koha-Konfigurationsdatei erfolgen."
+msgstr "das Plugin-System von Koha. Hinweis: Um das Plugin-System vollständig zu aktivieren, muss dies außerdem in der Koha-Konfigurationsdatei erfolgen."
 
 # Enhanced Content > OCLC
 msgid "enhanced_content.pref#XISBN# Don't use"
@@ -3780,11 +3780,11 @@ msgstr "Verwende die Benutzernummer"
 msgid "opac.pref#AnonymousPatron# as the Anonymous Patron (for anonymous suggestions and reading history)"
 msgstr "als anonymen Benutzer (für anonyme Anschaffungsvorschläge und Lesehistorien)"
 
-# OPAC > Appearance
+# OPAC > Features
 msgid "opac.pref#AuthorisedValueImages# Don't show"
-msgstr "Zeige keine"
+msgstr "Zeige kein"
 
-# OPAC > Appearance
+# OPAC > Features
 msgid "opac.pref#AuthorisedValueImages# Show"
 msgstr "Zeige"
 
@@ -4470,17 +4470,15 @@ msgstr "dass Benutzer ihr Passwort im OPAC ändern. Dieser Parameter muss deakti
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Disable"
-msgstr "Erlaube nicht"
+msgstr "Deaktiviere"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Enable"
-msgstr "Erlaube"
+msgstr "Aktiviere"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacPublic# Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC."
-msgstr ""
-"den öffentlichen Zugriff auf Koha. Wenn der OPAC nicht öffentlich ist, ist "
-"eine Anmeldung erforderlich, bevor der Katalog genutzt werden kann."
+msgstr " den öffentlichen OPAC. Ein privater OPAC erfordert die Anmeldung des Benutzers bevor der Zugriff möglich ist. "
 
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalAllowed# Allow"
@@ -4612,7 +4610,9 @@ msgstr "Erlaube nicht,"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistration# library patrons to register an account via the OPAC."
-msgstr "dass Benutzer über den OPAC ein neues Benutzerkonto eröffnen."
+msgstr ""
+"opac.pref#PatronSelfRegistration# dass Benutzer sich selbst über den OPAC "
+"ein Benutzerkonto anlegen können."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
@@ -4632,7 +4632,10 @@ msgstr "(Spalten mit | trennen)"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
-msgstr "Die folgenden <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>Datenbankfelder</a> werden nicht in der Anmeldemaske angezeigt:"
+msgstr ""
+"Folgende <a href='http://schema.koha-community.org/tables/borrowers.html' "
+"target='blank'>Datenbankfelder</a> werden bei der Selbstanmeldung nicht im "
+"OPAC angezeigt:"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -4918,11 +4921,11 @@ msgstr "Erlaube nicht,"
 msgid "opac.pref#reviewson# patrons to make comments on items on the OPAC."
 msgstr "dass Benutzer eigene Rezensionen und Kommentare im OPAC verfassen."
 
-# OPAC > Policy
+# OPAC > Features
 msgid "opac.pref#singleBranchMode# Allow"
 msgstr "Erlaube,"
 
-# OPAC > Policy
+# OPAC > Features
 msgid "opac.pref#singleBranchMode# Don't allow"
 msgstr "Erlaube nicht,"
 
@@ -5064,7 +5067,9 @@ msgstr "Erlaube nicht,"
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# patrons to choose which notices they receive and when they receive them. Note that this only applies to certain kinds of notices."
-msgstr "dass Benutzer konfigurieren können, wann und welche Benachrichtigungen Sie erhalten. Hinweis: Dies trifft nur auf bestimmte Benachrichtigungen zu."
+msgstr ""
+"dem Benutzer auszuwählen welche Benachrichtigungen er/sie erhählt. Hinweis: "
+"Dies trifft nur auf bestimmte Benachrichtigungen zu."
 
 # Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
@@ -5103,8 +5108,8 @@ msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr "[% local_currency %] berechnet."
 
 # Patrons > General
-msgid "patrons.pref#MembershipExpiryDaysNotice# Send an account expiration notice when a patron's card will expire in."
-msgstr "Verschicke eine Benachrichtigung, dass das Benutzerkonto in"
+msgid "patrons.pref#MembershipExpiryDaysNotice# Send an account expiration notice when a patron's card will expire in"
+msgstr "Benutzer benachrichtigen bevor Benutzerkarte in"
 
 # Patrons > General
 msgid "patrons.pref#MembershipExpiryDaysNotice# days."
@@ -5184,7 +5189,7 @@ msgstr "-Treiber für den Versand von SMS-Benachrichtigungen."
 
 # Patrons > General
 msgid "patrons.pref#StatisticsFields# (separate fields with |, without trailing |). Default if empty: location|itype|ccode"
-msgstr " (Felder trennen mit |, ohne abschließendes |). Vorbelegung wenn leer: location|itype|ccode"
+msgstr "(Felder mit | trennen, ohne abschliessendes |). Standardwert wenn leer: location|itype|ccode"
 
 # Patrons > General
 msgid "patrons.pref#StatisticsFields# Show the following fields from the items database table as columns on the statistics tab on the patron record: "
@@ -5236,11 +5241,11 @@ msgstr "der Ausweisnummern im Katipo-Stil. Dieser Parameter überschreibt <code>
 
 # Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Allow"
-msgstr "Erlaube,"
+msgstr "Erlaube"
 
 # Patrons > General
 msgid "patrons.pref#intranetreadinghistory# Don't allow"
-msgstr "Erlaube nicht,"
+msgstr "Erlaube nicht"
 
 # Patrons > General
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout history (reading history is still stored, regardless of staff being allowed access or not)."
@@ -5948,13 +5953,15 @@ msgstr "Verwende das Stylesheet unter"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#SlipCSS# on Issue and Reserve Slips. (This should be a complete URL, starting with <code>http://</code>.)"
-msgstr "für Ausleih- und Rückgabequittungen. (komplette URL, beginnend mit <code>http://</code>)"
+msgstr ""
+"für Ausleih- und Bereitstellungsbenachrichtigungen. (Komplette URL, "
+"beginnend mit <code>http://</code>) "
 
-# Staff Client > Appearance
+# Staff Client > Options
 msgid "staff_client.pref#StaffAuthorisedValueImages# Don't show"
 msgstr "Zeige keine"
 
-# Staff Client > Appearance
+# Staff Client > Options
 msgid "staff_client.pref#StaffAuthorisedValueImages# Show"
 msgstr "Zeige"
 
@@ -6171,8 +6178,8 @@ msgid "web_services.pref#ILS-DI# Enable"
 msgstr "Aktiviere"
 
 # Web services > ILS-DI
-msgid "web_services.pref#ILS-DI# ILS-DI services for OPAC users"
-msgstr "den ILS-DI Service."
+msgid "web_services.pref#ILS-DI# ILS-DI services for OPAC users (available at: /cgi-bin/koha/ilsdi.pl)"
+msgstr " ILS-DI Services für OPAC-Benutzer (erreichbar unter: /cgi-bin/koha/ilsdi.pl)"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# Allow IP addresses"
