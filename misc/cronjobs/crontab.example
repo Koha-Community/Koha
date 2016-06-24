@@ -48,7 +48,7 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 
 # AUTOMATIC RENEWAL + FINES + OVERDUE NOTICES
 # Sequence is important - renew what can be renewed, charge fines for the rest, print fine amount into overdue notices
-5    1 * * *  __KOHA_USER__ $KOHA_CRON_PATH/automatic_renewals.pl && $KOHA_CRON_PATH/fines.pl && $KOHA_CRON_PATH/overdue_notices.pl -t
+5    1 * * *  __KOHA_USER__ $KOHA_CRON_PATH/automatic_renewals.pl; $KOHA_CRON_PATH/fines.pl; $KOHA_CRON_PATH/overdue_notices.pl -t
 
 # ADVANCE NOTICES
 10   1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/advance_notices.pl -c
