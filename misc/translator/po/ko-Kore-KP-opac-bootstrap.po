@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-20 12:30-0300\n"
+"POT-Creation-Date: 2016-06-19 20:16-0300\n"
 "PO-Revision-Date: 2015-10-08 08:45+0000\n"
 "Last-Translator: Vinea-SP_Hwang <snowfox8629@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -65,17 +65,6 @@ msgstr "%s %s %s %s %s 제목없음 %s %s %s %s "
 #, c-format
 msgid "%s %s %s %s %s No title %s %s , %s %s"
 msgstr "%s %s %s %s %s 제목없음 %s %s , %s %s"
-
-# 이런건 번역하기 난감하네요...
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  IF ( casAuthentication ) 
-#. %4$s:  IF ( shibbolethAuthentication ) 
-#. %5$s:  IF ( casServerUrl ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:93
-#, c-format
-msgid "%s %s %s %s %s please "
-msgstr "%s %s %s %s %s 제발"
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
 #. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS 
@@ -193,20 +182,6 @@ msgstr "%s %s %s 다른 자료는 없습니다. %s %s "
 #, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "%s %s %s 알림: 이 창은 5초 후에 자동으로 닫힙니다. %s "
-
-#. %1$s:  USE Koha 
-#. %2$s:  INCLUDE 'doc-head-open.inc' 
-#. %3$s:  IF ( LibraryNameTitle ) 
-#. %4$s:  LibraryNameTitle 
-#. %5$s:  ELSE 
-#. %6$s:  END 
-#. %7$s:  INCLUDE 'doc-head-close.inc' 
-#. %8$s:  BLOCK cssinclude 
-#. %9$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:1
-#, c-format
-msgid "%s %s %s%s%sKoha online%s catalog &rsaquo; Discharge %s %s%s "
-msgstr "%s %s %s%s%sKoha 온라인%s 도서목록 &rsaquo; 반출 %s %s%s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -361,15 +336,6 @@ msgstr "%s %s 저자 %s %s "
 msgid "%s %s by %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 msgstr "%s %s 리뷰어 %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 
-#. For the first occurrence,
-#. %1$s:  END 
-#. %2$s:  IF ( casServersLoop ) 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:101
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:122
-#, c-format
-msgid "%s %s please choose against which one you would like to authenticate: "
-msgstr "%s %s 원하시는 인증 방법을 선택해 주시기 바랍니다: "
-
 #. %1$s:  firstname 
 #. %2$s:  surname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:12
@@ -463,30 +429,31 @@ msgstr ""
 #. %10$s:  CASE 'L' 
 #. %11$s:  CASE 'W' 
 #. %12$s:  CASE 'FU' 
-#. %13$s:  CASE 'Rent' 
-#. %14$s:  CASE 'FOR' 
-#. %15$s:  CASE 'LR' 
-#. %16$s:  CASE 'PAY' 
-#. %17$s:  CASE 'WO' 
-#. %18$s:  CASE 'C' 
-#. %19$s:  CASE 'CR' 
-#. %20$s:  CASE 
-#. %21$s:  ACCOUNT_LINE.accounttype 
-#. %22$s: - END -
-#. %23$s: - IF ACCOUNT_LINE.description 
-#. %24$s:  ACCOUNT_LINE.description 
-#. %25$s:  END 
-#. %26$s:  IF ACCOUNT_LINE.title 
-#. %27$s:  ACCOUNT_LINE.title 
-#. %28$s:  END 
+#. %13$s:  CASE 'HE' 
+#. %14$s:  CASE 'Rent' 
+#. %15$s:  CASE 'FOR' 
+#. %16$s:  CASE 'LR' 
+#. %17$s:  CASE 'PAY' 
+#. %18$s:  CASE 'WO' 
+#. %19$s:  CASE 'C' 
+#. %20$s:  CASE 'CR' 
+#. %21$s:  CASE 
+#. %22$s:  ACCOUNT_LINE.accounttype 
+#. %23$s: - END -
+#. %24$s: - IF ACCOUNT_LINE.description 
+#. %25$s:  ACCOUNT_LINE.description 
+#. %26$s:  END 
+#. %27$s:  IF ACCOUNT_LINE.title 
+#. %28$s:  ACCOUNT_LINE.title 
+#. %29$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:104
 #, fuzzy, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
 "(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
 "%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
-"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
-"%sCredit %s%s %s %s, %s%s %s(%s)%s "
+"%sHold waiting too long %sRental fee %sForgiven %sLost item fee refund "
+"%sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 "%s %s결제 %s결제 (SIP2에서 현금 결제) %s결제 (SIP2에서 VISA카드 결제) %결제 "
 "(SIP2에서 일반 신용카드 결제) %s새 카드 %s연체료 %s계정 관리 수수료 %s기타 수"
@@ -733,19 +700,6 @@ msgstr "%s 이름:"
 #, c-format
 msgid "%s Home library:"
 msgstr "%s 도서관 본관:"
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
-#, fuzzy, c-format
-msgid ""
-"%s If you have a CAS account, you may use that below. %s %s If you have a "
-"local account, you may use that below. %s "
-msgstr ""
-"사용하실 수 있는 계정입니다. %s %s 지역 도서관 계정이 있으시다면 해당 계정을 "
-"사용하실 수 있습니다. %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:281
@@ -1289,14 +1243,6 @@ msgstr "%s 내림차순"
 msgid "%s more than "
 msgstr "%s 보다 많이"
 
-#. %1$s:  IF issue.onsite_checkout 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:82
-#, c-format
-msgid "%s onsite %s checkout %s "
-msgstr "%s 현장 %s 대출 %s "
-
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
 #. %3$s:  IF RESERVE.waiting_expires_on 
@@ -1750,6 +1696,15 @@ msgstr "%s%s%sKoha 온라인%s 도서목록 &rsaquo; 상세보기: %s%s, %s%s"
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:3
+#, fuzzy, c-format
+msgid "%s%s%sKoha online%s catalog &rsaquo; Discharge"
+msgstr "%s%s%sKoha 온라인%s 도서목록 &rsaquo; 태그"
+
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle 
+#. %3$s:  ELSE 
+#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:2
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download cart"
@@ -1759,7 +1714,7 @@ msgstr "%s%s%sKoha 온라인%s 도서목록 &rsaquo; 책바구니 다운로드"
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  shelf.shelfname 
+#. %5$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:4
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download list %s"
@@ -2908,7 +2863,7 @@ msgstr ""
 msgid "(All)"
 msgstr "(전체)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:149
 #, c-format
 msgid "(Checked out)"
 msgstr "(대출됨)"
@@ -3126,7 +3081,7 @@ msgstr ". 더 많은 정보를 원하시면 도서관에 문의하시기 바랍�
 msgid "...or..."
 msgstr "...혹은..."
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:160
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:161
 #, c-format
 msgid "0.00"
 msgstr ""
@@ -3229,9 +3184,11 @@ msgstr ""
 msgid "A confirmation email will be sent shortly to the email address "
 msgstr "확인 메일이 곧바로 귀하의 메일 주소로 전송됩니다. "
 
+#. %1$s:  message_value 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:37
 #, c-format
-msgid "A payment with the transaction id "
+msgid ""
+"A payment with the transaction id '%s' has already been posted to an account."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:293
@@ -3472,7 +3429,7 @@ msgstr "총계"
 msgid "Amount outstanding"
 msgstr "미입수 총계"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:159
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:160
 #, c-format
 msgid "Amount to pay: "
 msgstr ""
@@ -3940,8 +3897,8 @@ msgstr "찾아보기 결과"
 msgid "Browse shelf"
 msgstr "책장 보기"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:89
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:108
 #, c-format
 msgid "CAS login"
 msgstr "CAS 로그인"
@@ -4018,7 +3975,7 @@ msgstr "청구기호 (0-9, A-Z로 정렬)"
 msgid "Call number (Z-A to 9-0)"
 msgstr "청구기호( Z-A, 9-0으로 정렬)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:142
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:141
 #, c-format
 msgid "Call number:"
 msgstr "청구기호: "
@@ -4151,14 +4108,14 @@ msgstr "대출"
 msgid "Check out%s, return%s or renew an item: "
 msgstr "대출%s, 반납%s 혹은 자료 대출기간 연장: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:146
 #, c-format
 msgid "Check-in date:"
 msgstr "반납일:"
 
 # 그냥 '대출'로 통일해서 번역하는게 나을 것 같습니다.
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:33
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:149
 #, c-format
 msgid "Checked out"
 msgstr "대출됨"
@@ -4873,12 +4830,12 @@ msgid ""
 "arrives?"
 msgstr "구독신청한 새 간행물이 도착했을 때 이메일로 알림을 받으시겠습니까? "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:181
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:176
 #, c-format
 msgid "Don't have a library card?"
 msgstr "도서관 카드가 없습니까?"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:180
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:174
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "아직 비밀번호가 없습니까?"
@@ -4986,6 +4943,7 @@ msgid "Editions"
 msgstr "판"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:189
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
 #, c-format
 msgid "Email"
@@ -5344,7 +5302,7 @@ msgstr ""
 "속 보존하고 싶어하는 유저를 위한 옵션 기능입니다"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:323
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:173
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:167
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:90
 #, fuzzy, c-format
 msgid "Forgot your password?"
@@ -5539,7 +5497,7 @@ msgstr "내 계정 페이지"
 msgid "GoToBibliographicRequestPage "
 msgstr "GoToBibliographicRequestPage "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:146
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:140
 #, fuzzy, c-format
 msgid "Google login"
 msgstr "지역 도서관 로그인"
@@ -5748,7 +5706,7 @@ msgid "Home library"
 msgstr "도서관 본관"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:144
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:145
 msgid "How PayPal Works"
 msgstr ""
 
@@ -5885,7 +5843,7 @@ msgstr ""
 "만약 '끝내기' 버튼을 누르지 않았다면, 귀하의 세션은  %s 초 후에 자동으로 종료"
 "됩니다 ."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:133
 #, c-format
 msgid ""
 "If you do not have a CAS account, but do have a local account, you can still "
@@ -5894,7 +5852,7 @@ msgstr ""
 "만약 CAS 계정은 없지만 지역 도서관 계정을 가지고 있으시다면, 계속 로그인이 가"
 "능합니다"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:152
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:146
 #, fuzzy, c-format
 msgid ""
 "If you do not have a Google account, but do have a local account, you can "
@@ -5903,29 +5861,29 @@ msgstr ""
 "만약 CAS 계정은 없지만 지역 도서관 계정을 가지고 있으시다면, 계속 로그인이 가"
 "능합니다"
 
-#. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:85
 #, fuzzy, c-format
 msgid ""
-"If you do not have a Shibboleth account, but you do have a CAS account, %s "
+"If you do not have a Shibboleth account, but you do have a CAS account, you "
+"can use CAS."
 msgstr "만약 예전 계정은 없지만 다음을 가지고 계시다면:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:93
-#, c-format
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:88
+#, fuzzy, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a local login, then "
-"you may login below:"
+"you may login below."
 msgstr ""
 "만약 예전 계정은 없지만 지역 도서관 계정을 가지고 있다면, 아래와 같이 로그인"
 "이 가능합니다: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:181
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:177
 #, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
 msgstr "만약 도서관 카드가 없으시다면, 가까운 지역 도서관에 가서 신청하세요."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:180
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -5934,19 +5892,41 @@ msgstr ""
 "아직 비밀번호가 없으시다면, 다음번 도서관 방문시 데스크에 들려 주세요. 저희"
 "가 친절하게 설정을 도와드리겠습니다."
 
-#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:120
 #, fuzzy, c-format
-msgid "If you have a CAS account, %s please "
+msgid ""
+"If you have a CAS account, please choose against which one you would like to "
+"authenticate:"
+msgstr "%s %s 원하시는 인증 방법을 선택해 주시기 바랍니다: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:116
+#, fuzzy, c-format
+msgid "If you have a CAS account, please click here to log in."
+msgstr "만약 예전 계정을 가지고 계시다면, 다음과 같이 해주세요:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
+#, fuzzy, c-format
+msgid "If you have a CAS account, you may use that below."
 msgstr "만약 예전 계정을 가지고 계시다면, 다음과 같이 해주세요:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:313
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:85
 #, c-format
 msgid "If you have a Shibboleth account, please "
 msgstr "만약 예전 계정을 가지고 계시다면, 다음과 같이 해주세요:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:149
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:81
+#, fuzzy, c-format
+msgid "If you have a Shibboleth account, please click here to log in."
+msgstr "만약 예전 계정을 가지고 계시다면, 다음과 같이 해주세요:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:76
+#, fuzzy, c-format
+msgid "If you have a local account, you may use that below."
+msgstr ""
+"죄송합니다, CAS 로그인이 실패했습니다. 만약 지역 도서관 계정이 있으시다면, "
+"그 계정으로 로그인해 보시기 바랍니다."
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:143
 #, c-format
 msgid "If you want to, you can try to "
 msgstr ""
@@ -6083,7 +6063,7 @@ msgstr "자료 분실"
 msgid "Item type"
 msgstr "자료 유형"
 
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:216
 #, c-format
@@ -6419,8 +6399,8 @@ msgstr "불러오는 중..."
 msgid "Local Login"
 msgstr "지역 도서관 로그인"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:92
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:138
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:132
 #, c-format
 msgid "Local login"
 msgstr "지역 도서관 로그인"
@@ -6453,7 +6433,7 @@ msgstr "위치"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:335
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:170
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:164
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:726
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:84
@@ -6497,17 +6477,22 @@ msgstr "귀하의 계정으로 로그인 하세요"
 msgid "Log in to your account:"
 msgstr "귀하의 계정으로 로그인하세요"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:151
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:145
 #, c-format
 msgid "Log in with Google"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:189
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
+#, c-format
+msgid "Log out and try again with a different user."
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:187
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "도서관에서의 도서목록 로그인이 사용 가능하지 않습니다."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:159
 #, c-format
 msgid "Login"
 msgstr "로그인"
@@ -6525,11 +6510,6 @@ msgstr "도서목록 메인 페이지"
 #, c-format
 msgid "Login:"
 msgstr "로그인:"
-
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
-#, c-format
-msgid "Logout"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:452
 #, c-format
@@ -6673,7 +6653,7 @@ msgstr "기본 주소"
 msgid "Make a "
 msgstr "Make a "
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:158
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:159
 #, fuzzy, c-format
 msgid "Make payment"
 msgstr "Make a "
@@ -6944,9 +6924,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:183
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:193
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:202
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:94
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:102
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:111
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:93
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:110
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:120
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:136
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:145
@@ -7248,7 +7228,7 @@ msgstr "참고/설명"
 msgid "Notes:"
 msgstr "알림："
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:136
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:130
 #, c-format
 msgid "Nothing"
 msgstr "없음"
@@ -7452,7 +7432,7 @@ msgstr "연체"
 msgid "Parameters"
 msgstr "매개변수"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:161
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:828
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:842
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:853
@@ -7500,13 +7480,13 @@ msgstr "특허 문서"
 msgid "Patron comment on %s"
 msgstr "이용자 의견 등록 %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:140
 #, fuzzy, c-format
 msgid "Pay selected fines and charges"
 msgstr "내 연체료 및 수수료"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:144
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:145
 msgid "PayPal Acceptance Mark"
 msgstr ""
 
@@ -7515,7 +7495,7 @@ msgstr ""
 msgid "Payment applied:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:141
 #, fuzzy, c-format
 msgid "Payment method"
 msgstr "특허 문서"
@@ -7612,10 +7592,20 @@ msgstr ""
 msgid "Please choose a download format"
 msgstr "다운로드 형식을 선택하시기 바랍니다"
 
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:100
+#, fuzzy, c-format
+msgid "Please choose against which one you would like to authenticate: "
+msgstr "%s %s 원하시는 인증 방법을 선택해 주시기 바랍니다: "
+
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:51
 #, c-format
 msgid "Please choose your privacy rule:"
 msgstr "개인정보 규정을 선택하시기 바랍니다:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:96
+#, fuzzy, c-format
+msgid "Please click here to log in."
+msgstr "여기를 눌러 로그인하세요"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:111
 #, c-format
@@ -7710,7 +7700,7 @@ msgstr ""
 "Please note that information on any book still checked-out must be kept by "
 "the library no matter which privacy option you choose."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:142
 #, c-format
 msgid ""
 "Please note that the Google login will only work if you are using the e-mail "
@@ -8633,7 +8623,7 @@ msgstr "영역:"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
-#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:345
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:179
@@ -8881,7 +8871,7 @@ msgid "Shelving location"
 msgstr "배가 위치"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:312
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:83
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:80
 #, c-format
 msgid "Shibboleth Login"
 msgstr "예전 계정 로그인"
@@ -8968,7 +8958,7 @@ msgstr "마지막 50개 항목을 보여줍니다."
 msgid "Showing only available items"
 msgstr "이용가능한 자료가 없습니다."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:197
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:195
 #, c-format
 msgid "Sign in with your Email"
 msgstr "이메일로 가입하기"
@@ -9052,16 +9042,16 @@ msgstr "죄송합니다, 일반 뷰가 일시적으로 사용 불가능합니다
 msgid "Sorry, tags are not enabled on this system."
 msgstr "죄송합니다, 이 시스템에서 사용 불가능한 태그입니다."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
-#, c-format
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:71
+#, fuzzy, c-format
 msgid ""
-"Sorry, the CAS login also failed, if you have a local login you may use that "
+"Sorry, the CAS login also failed. If you have a local login you may use that "
 "below."
 msgstr ""
 "죄송합니다, CAS 로그인이 실패했습니다. 만약 지역 도서관 계정이 있으시다면, "
 "그 계정으로 로그인해 보시기 바랍니다."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:112
 #, c-format
 msgid "Sorry, the CAS login failed."
 msgstr "죄송합니다, CAS 로그인이 실패했습니다."
@@ -9102,10 +9092,18 @@ msgstr "죄송합니다, 이 자료를 예약하기에는 너무 어립니다."
 msgid "Sorry, you cannot place more than %s holds. "
 msgstr "미안합니다. 당신은 이 %s예약보다더 많이 할 수 없습니다. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:141
 #, fuzzy, c-format
 msgid "Sorry, your Google login failed. "
 msgstr "죄송합니다, CAS 로그인이 실패했습니다."
+
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:67
+#, fuzzy, c-format
+msgid ""
+"Sorry, your Shibboleth identity does not match a valid library identity."
+msgstr ""
+"죄송합니다, 귀하의 예전 계정이 현재 유효한 도서관 계정과 다릅니다. 만약 지역 "
+"도서관 계정으로 로그인을 하신다면 서비스 이용이 가능할 것 같습니다. "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:309
 #, c-format
@@ -9585,7 +9583,7 @@ msgstr ""
 "브라우저 표가 비었습니다. 각 기능의 설정이 완료되지 않았습니다. 다음을 참조하"
 "세요"
 
-#. %1$s:  email_add 
+#. %1$s:  email_add | html 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:17
 #, c-format
 msgid "The cart was sent to: %s"
@@ -9671,11 +9669,15 @@ msgstr ""
 "the configuration of this feature. Please help to fix the system by "
 "informing your library of this error."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:78
 #, fuzzy, c-format
-msgid "The entered "
-msgstr "이용자 ID"
+msgid "The entered card number is already in use."
+msgstr "이미 내 책바구니에 있는 도서"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:76
+#, c-format
+msgid "The entered card number is the wrong length."
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:38
 #, c-format
@@ -9745,13 +9747,13 @@ msgstr ""
 msgid "The link is invalid."
 msgstr ""
 
-#. %1$s:  email 
+#. %1$s:  email | html 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:16
 #, c-format
 msgid "The list was sent to: %s"
 msgstr "이 목록이 다음 메일 주소로 전송되었습니다: %s"
 
-#. %1$s:  op 
+#. %1$s:  op | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:35
 #, c-format
 msgid "The operation %s is not supported."
@@ -9816,9 +9818,10 @@ msgstr ""
 "The tag was added as &quot;%s&quot;. %s Note: your tag was entirely markup "
 "code. It was NOT added. "
 
+#. %1$s:  message_value 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:40
 #, c-format
-msgid "The transaction id "
+msgid "The transaction id '%s' for this payment is invalid."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:173
@@ -10119,10 +10122,10 @@ msgstr "귀하의 정보를 바꾸기 위해서는 도서관에 문의하시기 
 msgid "To report this error, please contact the Koha Administrator. "
 msgstr "귀하의 정보를 바꾸기 위해서는 도서관에 문의하시기 바랍니다."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:191
-#, c-format
-msgid "To report this error, you can "
-msgstr "이 에러를 신고하려면 다음과 같이 하실 수 있습니다"
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:189
+#, fuzzy, c-format
+msgid "To report this error, you can email the Koha Administrator."
+msgstr "귀하의 정보를 바꾸기 위해서는 도서관에 문의하시기 바랍니다."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:81
 #, fuzzy, c-format
@@ -10293,7 +10296,7 @@ msgstr ""
 msgid "Updates to your record"
 msgstr "내 레코드에 업데이트"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:192
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:190
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "Koha의 다른 페이지로 이동하려면 상단의 메뉴바를 사용하세요."
@@ -10595,8 +10598,8 @@ msgstr "패스워드변경"
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:42
 #, fuzzy, c-format
 msgid ""
-"You cannot be discharged, you have issues. Please return items before asking "
-"for a discharge."
+"You cannot be discharged, you have checked out items. Please return items "
+"before asking for a discharge."
 msgstr ""
 "You cannot be discharged, you have issues. Please return items before asking "
 "for a discharge."
@@ -10700,7 +10703,7 @@ msgstr "이 자료는 이미 예약 신청하셨습니다."
 msgid "You have checked out too many items and can't check out any more. %s "
 msgstr "도서대출 한도를 초과하여 더이상 대출할 수 없습니다. %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:168
 #, c-format
 msgid "You have no fines or charges"
 msgstr "귀하의 연체료나 수수료는 없습니다"
@@ -10741,10 +10744,10 @@ msgid ""
 msgstr ""
 "귀하가 생성하신, 도서목록으로 연결하는 외부 링크가 더이상 사용이 불가능합니다"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:183
-#, c-format
-msgid "You may "
-msgstr "You may "
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:180
+#, fuzzy, c-format
+msgid "You may register here."
+msgstr "여기서 등록하세요"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -11254,11 +11257,6 @@ msgstr "Koha에서 이용자를 조회할 때 사용하는 식별기호"
 msgid "and"
 msgstr "and"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
-#, c-format
-msgid "and try again with a different user"
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:20
 #, fuzzy, c-format
 msgid "anyone else to add entries."
@@ -11327,12 +11325,6 @@ msgstr "by"
 msgid "by "
 msgstr "by "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:76
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:78
-#, fuzzy, c-format
-msgid "card number"
-msgstr "카드 번호"
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:461
 #, c-format
 msgid "cardnumber"
@@ -11344,9 +11336,6 @@ msgid "change your password"
 msgstr "비밀번호를 변경하세요"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:313
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:101
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:122
 #, c-format
 msgid "click here to login"
 msgstr "여기를 눌러 로그인하세요"
@@ -11411,25 +11400,10 @@ msgstr "desired_due_date"
 msgid "email address"
 msgstr "이메일 주소:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:191
-#, c-format
-msgid "email the Koha Administrator"
-msgstr "Koha 관리자 이메일"
-
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:65
 #, c-format
 msgid "for more information on what it does and how to configure it."
 msgstr "기능 및 설정 방법에 대한 더 자세한 정보입니다."
-
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:40
-#, c-format
-msgid "for this payment is invalid."
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:37
-#, c-format
-msgid "has already been posted to an account."
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:558
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
@@ -11573,20 +11547,10 @@ msgstr "새 코멘트 추가: "
 msgid "injecting OLD comment: "
 msgstr "오래된 코멘트 보기:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:78
-#, fuzzy, c-format
-msgid "is already in use."
-msgstr "이미 내 책바구니에 있습니다"
-
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:52
 #, c-format
 msgid "is exactly"
 msgstr "정확하게"
-
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:76
-#, c-format
-msgid "is the wrong length."
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:119
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:126
@@ -11643,7 +11607,7 @@ msgstr "각각의 서지정보 혹은 자료 식별기호 목록"
 msgid "list of system record identifiers"
 msgstr "시스템 레코드 식별기호 목록"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:149
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:143
 #, c-format
 msgid "log in using a different account"
 msgstr ""
@@ -11727,11 +11691,6 @@ msgstr "구매희망자료 신청"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "iDreamBooks.com 리뷰에 기반한 순위"
-
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:183
-#, c-format
-msgid "register here"
-msgstr "여기서 등록하세요"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
 #, fuzzy, c-format
