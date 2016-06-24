@@ -746,21 +746,7 @@ if ($frameworkcode eq 'FA'){
 }
 
 
-# Getting the list of all frameworks
-# get framework list
-my $frameworks = getframeworks;
-my @frameworkcodeloop;
-foreach my $thisframeworkcode ( keys %$frameworks ) {
-	my %row = (
-		value         => $thisframeworkcode,
-		frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-	);
-	if ($frameworkcode eq $thisframeworkcode){
-		$row{'selected'} = 1;
-		}
-	push @frameworkcodeloop, \%row;
-} 
-$template->param( frameworkcodeloop => \@frameworkcodeloop,
+$template->param( frameworkcodeloop => GetFrameworksLoop( $frameworkcode ) ,
 	breedingid => $breedingid );
 
 # ++ Global
