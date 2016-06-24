@@ -12673,6 +12673,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '16.06.00.005';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE `systempreferences` set options = 'US|FR|CH' where variable = 'CurrencyFormat';
+    });
+
+    print "Upgrade to $DBversion done (Bug 16768 - Add official number format for Switzerland: 1'234'567.89)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
