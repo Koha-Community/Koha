@@ -2574,18 +2574,19 @@ sub TransformHtmlToMarc {
             if ( $tag < 10 ) {                              # no code for theses fields
                                                             # in MARC editor, 000 contains the leader.
                 next if $tag == $biblionumbertagfield;
+                my $fval= $cgi->param($params[$j+1]);
                 if ( $tag eq '000' ) {
                     # Force a fake leader even if not provided to avoid crashing
                     # during decoding MARC record containing UTF-8 characters
                     $record->leader(
-                        length( $cgi->param($params[$j+1]) ) == 24
-                        ? $cgi->param( $params[ $j + 1 ] )
+                        length( $fval ) == 24
+                        ? $fval
                         : '     nam a22        4500'
 			)
                     ;
                     # between 001 and 009 (included)
-                } elsif ( $cgi->param( $params[ $j + 1 ] ) ne '' ) {
-                    $newfield = MARC::Field->new( $tag, $cgi->param( $params[ $j + 1 ] ), );
+                } elsif ( $fval ne '' ) {
+                    $newfield = MARC::Field->new( $tag, $fval, );
                 }
 
                 # > 009, deal with subfields
@@ -2599,13 +2600,14 @@ sub TransformHtmlToMarc {
                     #if next param ne subfield, then it was probably empty
                     #try next param by incrementing j
                     if($params[$j+1]!~/_subfield_/) {$j++; next; }
+                    my $fkey= $cgi->param($params[$j]);
                     my $fval= $cgi->param($params[$j+1]);
                     #check if subfield value not empty and field exists
                     if($fval ne '' && $newfield) {
-                        $newfield->add_subfields( $cgi->param($params[$j]) => $fval);
+                        $newfield->add_subfields( $fkey => $fval);
                     }
                     elsif($fval ne '') {
-                        $newfield = MARC::Field->new( $tag, $ind1, $ind2, $cgi->param($params[$j]) => $fval );
+                        $newfield = MARC::Field->new( $tag, $ind1, $ind2, $fkey => $fval );
                     }
                     $j += 2;
                 } #end-of-while
