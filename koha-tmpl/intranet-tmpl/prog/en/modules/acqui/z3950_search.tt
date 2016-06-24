@@ -17,25 +17,6 @@
         "aaSorting": [[ 1, "asc" ]],
         "bPaginate": false
     } ) );
-
-    $("#CheckAll").click(function(){
-        $(".checkboxed").checkCheckboxes();
-        return false;
-    });
-    $("#CheckNone").click(function(){
-        $(".checkboxed").unCheckCheckboxes();
-        return false;
-    });
-
-    $("#closemenu").click(function(e){
-        $(".linktools").hide();
-        $("tr").removeClass("selected");
-    });
-    $("#resetZ3950Search").click(function(e) {
-        e.preventDefault();
-        $("form[name='f']").find("input[type=text]").val("");
-    });
-
         /* Inline edit/delete links */
         $("td").click(function(event){
             var $tgt = $(event.target);
@@ -52,39 +33,13 @@
                 $(".linktools",row).show().css("position","absolute").css("top",top).css("left",left);
             }
         });
-    $(".previewData").on("click", function(e){
-        e.preventDefault();
-        var ltitle = $(this).text();
-        var page = $(this).attr("href");
-        $("#dataPreviewLabel").text(ltitle);
-        $("#dataPreview .modal-body").load(page + " div");
-        $('#dataPreview').modal({show:true});
-    });
-    $("#dataPreview").on("hidden", function(){
-        $("#dataPreviewLabel").html("");
-        $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-    });
-});
 
-[% IF ( total_pages ) %]
-function validate_goto_page(){
-    var page = $('#goto_page').val();
-    if(isNaN(page)) {
-        alert(_("The page entered is not a number."));
-        return false;
-    }
-    else if(page < 1 || page > [% total_pages %] ) {
-        alert(_("The page should be a number between 1 and %s.").format([% total_pages %]));
-        return false;
-    }
-    else {
-        return true;
-    }
-}
-[% END %]
+});
 
 //]]>
 </script>
+[% INCLUDE 'z3950_search.inc' %]
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/z3950_search.js"></script>
 <style type="text/css">
 .linktools { background-color:#FFF;border-top:1px solid #DDD; border-left: 1px solid #DDD; border-right: 1px solid #666; border-bottom:1px solid #666;display: none; white-space: nowrap;}
 .linktools a { font-size : 85%; text-decoration:none; padding:.3em;;background-color:#FFF; display:block;float:left;border-right:1px solid #DDD;}
@@ -128,15 +83,15 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                  [% END %]
               </select>
               </li>
+              <li><a id="resetZ3950Search" href="#"><i class="fa fa-trash"></i> Clear search form</a></li>
          </ol>
-        <p><a id="resetZ3950Search" href="#">Clear search form</a></p>
     </fieldset>
     <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
     <input type="hidden" name="basketno" value="[% basketno %]" />
     <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
 	    </div>
 <div class="yui-u second">
-<h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select all</a></span><span class="clearall"><a id="CheckNone" href="#">Clear all</a></span></span></h2>
+<h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></span></span></h2>
     <div id="z3950_search_targets_acq">
     [% FOREACH serverloo IN serverloop %]
         <p>
@@ -153,7 +108,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
   </div>
 </div>
 
-    <fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a></fieldset>
+    <fieldset class="action"><input type="submit"  class="submit" value="Search" /> <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a></fieldset>
 </form>
 
 
@@ -233,13 +188,13 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         [% END %]
 
         [% IF ( show_prevbutton ) %]
-            <input type="button" name="changepage_prev" value="Previous Page" onclick="$('#current_page').val([% current_page %]-1);$('#page_form').submit();" />
+            <input type="button" name="changepage_prev" value="Previous page" data-currentpage="[% current_page %]" />
         [% END %]
         Page [% current_page %] / [% total_pages %]
         [% IF ( show_nextbutton ) %]
-            <input type="button" name="changepage_next" value="Next Page" onclick="$('#current_page').val([% current_page %]+1);$('#page_form').submit();" />
+            <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page %]" />
         [% END %]
-        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page %]" size="4" /><input type="submit" name="changepage_goto" onclick="return validate_goto_page();" value="Go" />
+        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page %]" size="4" /><input type="submit" name="changepage_goto" value="Go" />
     </form>
 
     [% ELSE %]
