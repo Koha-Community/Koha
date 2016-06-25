@@ -106,9 +106,7 @@ sub _choose_branch {
     my $self = shift;
     my $param = shift;
 
-    my $behaviour = Koha::Config::SysPrefs
-                        ->find( 'RefundLostOnReturnControl' )
-                        ->value // 'CheckinLibrary';
+    my $behaviour = C4::Context->preference( 'RefundLostOnReturnControl' ) // 'CheckinLibrary';
 
     my $param_mapping = {
            CheckinLibrary => 'current_branch',
