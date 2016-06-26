@@ -175,22 +175,20 @@ subtest 'Koha::RefundLostItemFeeRules::_choose_branch() tests' => sub {
         item_home_branch => 'item_home_branch_code'
     };
 
-    my $syspref = Koha::Config::SysPrefs->find_or_create({
-                        variable => 'RefundLostOnReturnControl',
-                        value => 'CheckinLibrary' });
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'CheckinLibrary' );
 
     is( Koha::RefundLostItemFeeRules->_choose_branch( $params ),
         'current_branch_code', 'CheckinLibrary is honoured');
 
-    $syspref->value( 'ItemHomeBranch' )->store;
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'ItemHomeBranch' );
     is( Koha::RefundLostItemFeeRules->_choose_branch( $params ),
         'item_home_branch_code', 'ItemHomeBranch is honoured');
 
-    $syspref->value( 'ItemHoldingBranch' )->store;
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'ItemHoldingBranch' );
     is( Koha::RefundLostItemFeeRules->_choose_branch( $params ),
         'item_holding_branch_code', 'ItemHoldingBranch is honoured');
 
-    $syspref->value( 'CheckinLibrary' )->store;
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'CheckinLibrary' );
     eval {
         Koha::RefundLostItemFeeRules->_choose_branch();
     };
@@ -199,7 +197,7 @@ subtest 'Koha::RefundLostItemFeeRules::_choose_branch() tests' => sub {
     is( $@->message, 'CheckinLibrary requires the current_branch param',
         'Exception message is correct' );
 
-    $syspref->value( 'ItemHomeBranch' )->store;
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'ItemHomeBranch' );
     eval {
         Koha::RefundLostItemFeeRules->_choose_branch();
     };
@@ -208,7 +206,7 @@ subtest 'Koha::RefundLostItemFeeRules::_choose_branch() tests' => sub {
     is( $@->message, 'ItemHomeBranch requires the item_home_branch param',
         'Exception message is correct' );
 
-    $syspref->value( 'ItemHoldingBranch' )->store;
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'ItemHoldingBranch' );
     eval {
         Koha::RefundLostItemFeeRules->_choose_branch();
     };
@@ -228,9 +226,7 @@ subtest 'Koha::RefundLostItemFeeRules::should_refund() tests' => sub {
     # Start transaction
     $schema->storage->txn_begin;
 
-    my $syspref = Koha::Config::SysPrefs->find_or_create({
-                        variable => 'RefundLostOnReturnControl',
-                        value => 'CheckinLibrary' });
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'CheckinLibrary' );
 
     $schema->resultset('RefundLostItemFeeRule')->search()->delete;
 
@@ -269,17 +265,17 @@ subtest 'Koha::RefundLostItemFeeRules::should_refund() tests' => sub {
         item_home_branch => $branch_without_rule
     };
 
-    $syspref->value( 'CheckinLibrary' )->store;
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'CheckinLibrary' );
     is( Koha::RefundLostItemFeeRules->should_refund( $params ),
           1,'Specific rule is applied (true)');
 
-    $syspref->value( 'ItemHomeBranch' )->store;
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'ItemHomeBranch' );
     is( Koha::RefundLostItemFeeRules->should_refund( $params ),
          1,'No rule for branch, global rule applied (true)');
 
     # Change the default value just to try
     Koha::RefundLostItemFeeRules->find({ branchcode => '*' })->refund(0)->store;
-    $syspref->value( 'ItemHoldingBranch' )->store;
+    t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'ItemHoldingBranch' );
     is( Koha::RefundLostItemFeeRules->should_refund( $params ),
          0,'No rule for branch, global rule applied (false)');
 
