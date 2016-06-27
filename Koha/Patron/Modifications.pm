@@ -29,18 +29,6 @@ use C4::Debug;
 
 use base qw(Koha::Objects);
 
-sub new {
-    my ( $self, %args ) = @_;
-
-    $self = $self->SUPER::new(@_);
-
-    foreach my $key ( keys %args ) {
-        $self->{$key} = $args{$key};
-    }
-
-    return $self;
-}
-
 =head2 AddModifications
 
 Koha::Patron::Modifications->AddModifications( $data );
