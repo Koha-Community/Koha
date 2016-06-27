@@ -1,0 +1,183 @@
+{
+  "type": "object",
+  "properties": {
+    "item_id": {
+      "type": "integer",
+      "description": "Internal item identifier"
+    },
+    "biblio_id": {
+      "type": "integer",
+      "description": "Internal identifier for the parent bibliographic record"
+    },
+    "external_id": {
+      "type": ["string", "null"],
+      "description": "The item's barcode"
+    },
+    "acquisition_date": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "The date the item was acquired"
+    },
+    "acquisition_source": {
+      "type": ["string", "null"],
+      "description": "Information about the acquisition source (it is not really a vendor id)"
+    },
+    "home_library_id": {
+      "type": ["string", "null"],
+      "description": "Internal library id for the library the item belongs to"
+    },
+    "purchase_price": {
+      "type": ["number", "null"],
+      "description": "Purchase price"
+    },
+    "replacement_price": {
+      "type": ["number", "null"],
+      "description": "Cost the library charges to replace the item (e.g. if lost)"
+    },
+    "replacement_price_date": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "The date the replacement price is effective from"
+    },
+    "last_checkout_date": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "The date the item was last checked out"
+    },
+    "last_seen_date": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "The date the item barcode was last scanned"
+    },
+    "not_for_loan_status": {
+      "type": "integer",
+      "description": "Authorized value defining why this item is not for loan"
+    },
+    "damaged_status": {
+      "type": "integer",
+      "description": "Authorized value defining this item as damaged"
+    },
+    "damaged_date": {
+      "type": ["string", "null"],
+      "description": "The date and time an item was last marked as damaged, NULL if not damaged"
+    },
+    "lost_status": {
+      "type": "integer",
+      "description": "Authorized value defining this item as lost"
+    },
+    "lost_date": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "The date and time an item was last marked as lost, NULL if not lost"
+    },
+    "withdrawn": {
+      "type": "integer",
+      "description": "Authorized value defining this item as withdrawn"
+    },
+    "withdrawn_date": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "The date and time an item was last marked as withdrawn, NULL if not withdrawn"
+    },
+    "callnumber": {
+      "type": ["string", "null"],
+      "description": "Call number for this item"
+    },
+    "coded_location_qualifier": {
+      "type": ["string", "null"],
+      "description": "Coded location qualifier"
+    },
+    "checkouts_count": {
+      "type": ["integer", "null"],
+      "description": "Number of times this item has been checked out/issued"
+    },
+    "renewals_count": {
+      "type": ["integer", "null"],
+      "description": "Number of times this item has been renewed"
+    },
+    "holds_count": {
+      "type": ["integer", "null"],
+      "description": "Number of times this item has been placed on hold/reserved"
+    },
+    "restricted_status": {
+      "type": ["integer", "null"],
+      "description": "Authorized value defining use restrictions for this item"
+    },
+    "public_notes": {
+      "type": ["string", "null"],
+      "description": "Public notes on this item"
+    },
+    "internal_notes": {
+      "type": ["string", "null"],
+      "description": "Non-public notes on this item"
+    },
+    "holding_library_id": {
+      "type": ["string", "null"],
+      "description": "Library that is currently in possession item"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time this item was last altered"
+    },
+    "location": {
+      "type": ["string", "null"],
+      "description": "Authorized value for the shelving location for this item"
+    },
+    "permanent_location": {
+      "type": ["string", "null"],
+      "description": "Linked to the CART and PROC temporary locations feature, stores the permanent shelving location"
+    },
+    "checked_out_date": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "Defines if item is checked out (NULL for not checked out, and checkout date for checked out)"
+    },
+    "call_number_source": {
+      "type": ["string", "null"],
+      "description": "Classification source used on this item"
+    },
+    "call_number_sort": {
+      "type": ["string", "null"],
+      "description": "?"
+    },
+    "collection_code": {
+      "type": ["string", "null"],
+      "description": "Authorized value for the collection code associated with this item"
+    },
+    "materials_notes": {
+      "type": ["string", "null"],
+      "description": "Materials specified"
+    },
+    "uri": {
+      "type": ["string", "null"],
+      "description": "URL for the item"
+    },
+    "item_type": {
+      "type": ["string", "null"],
+      "description": "Itemtype defining the type for this item"
+    },
+    "extended_subfields": {
+      "type": ["string", "null"],
+      "description": "Additional 952 subfields in XML format"
+    },
+    "serial_issue_number": {
+      "type": ["string", "null"],
+      "description": "serial enumeration/chronology for the item"
+    },
+    "copy_number": {
+      "type": ["string", "null"],
+      "description": "Copy number"
+    },
+    "inventory_number": {
+      "type": ["string", "null"],
+      "description": "Inventory number"
+    },
+    "new_status": {
+      "type": ["string", "null"],
+      "description": "'new' value, whatever free-text information."
+    }
+  },
+  "additionalProperties": false,
+  "required": ["item_id", "biblio_id", "not_for_loan_status", "damaged_status", "lost_status", "withdrawn"]
+}
