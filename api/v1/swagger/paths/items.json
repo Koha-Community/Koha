@@ -1,0 +1,34 @@
+{
+  "/items/{itemnumber}": {
+    "get": {
+      "operationId": "getItem",
+      "tags": ["items"],
+      "parameters": [{
+          "$ref": "../parameters.json#/itemnumberPathParam"
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "An item",
+          "schema": {
+            "$ref": "../definitions.json#/item"
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Item not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}

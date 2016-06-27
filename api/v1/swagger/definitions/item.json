@@ -1,0 +1,177 @@
+{
+  "type": "object",
+  "properties": {
+    "itemnumber": {
+      "type": "string",
+      "description": "internally assigned item identifier"
+    },
+    "biblionumber": {
+      "type": "string",
+      "description": "internally assigned biblio identifier"
+    },
+    "biblioitemnumber": {
+      "type": "string",
+      "description": "internally assigned biblio item identifier"
+    },
+    "barcode": {
+      "type": ["string", "null"],
+      "description": "item barcode"
+    },
+    "dateaccessioned": {
+      "type": ["string", "null"],
+      "description": "date the item was acquired or added to Koha"
+    },
+    "booksellerid": {
+      "type": ["string", "null"],
+      "description": "where the item was purchased"
+    },
+    "homebranch": {
+      "type": ["string", "null"],
+      "description": "library that owns this item"
+    },
+    "price": {
+      "type": ["string", "null"],
+      "description": "purchase price"
+    },
+    "replacementprice": {
+      "type": ["string", "null"],
+      "description": "cost the library charges to replace the item if it has been marked lost"
+    },
+    "replacementpricedate": {
+      "type": ["string", "null"],
+      "description": "the date the price is effective from"
+    },
+    "datelastborrowed": {
+      "type": ["string", "null"],
+      "description": "the date the item was last checked out/issued"
+    },
+    "datelastseen": {
+      "type": ["string", "null"],
+      "description": "the date the item was last see (usually the last time the barcode was scanned or inventory was done)"
+    },
+    "stack": {
+      "type": ["string", "null"],
+      "description": "?"
+    },
+    "notforloan": {
+      "type": "string",
+      "description": "authorized value defining why this item is not for loan"
+    },
+    "damaged": {
+      "type": "string",
+      "description": "authorized value defining this item as damaged"
+    },
+    "itemlost": {
+      "type": "string",
+      "description": "authorized value defining this item as lost"
+    },
+    "itemlost_on": {
+      "type": ["string", "null"],
+      "description": "the date and time an item was last marked as lost, NULL if not lost"
+    },
+    "withdrawn": {
+      "type": "string",
+      "description": "authorized value defining this item as withdrawn"
+    },
+    "withdrawn_on": {
+      "type": ["string", "null"],
+      "description": "the date and time an item was last marked as withdrawn, NULL if not withdrawn"
+    },
+    "itemcallnumber": {
+      "type": ["string", "null"],
+      "description": "call number for this item"
+    },
+    "coded_location_qualifier": {
+      "type": ["string", "null"],
+      "description": "coded location qualifier"
+    },
+    "issues": {
+      "type": ["string", "null"],
+      "description": "number of times this item has been checked out/issued"
+    },
+    "renewals": {
+      "type": ["string", "null"],
+      "description": "number of times this item has been renewed"
+    },
+    "reserves": {
+      "type": ["string", "null"],
+      "description": "number of times this item has been placed on hold/reserved"
+    },
+    "restricted": {
+      "type": ["string", "null"],
+      "description": "authorized value defining use restrictions for this item"
+    },
+    "itemnotes": {
+      "type": ["string", "null"],
+      "description": "public notes on this item"
+    },
+    "itemnotes_nonpublic": {
+      "type": ["string", "null"],
+      "description": "non-public notes on this item"
+    },
+    "holdingbranch": {
+      "type": ["string", "null"],
+      "description": "library that is currently in possession item"
+    },
+    "paidfor": {
+      "type": ["string", "null"],
+      "description": "?"
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "date and time this item was last altered"
+    },
+    "location": {
+      "type": ["string", "null"],
+      "description": "authorized value for the shelving location for this item"
+    },
+    "permanent_location": {
+      "type": ["string", "null"],
+      "description": "linked to the CART and PROC temporary locations feature, stores the permanent shelving location"
+    },
+    "onloan": {
+      "type": ["string", "null"],
+      "description": "defines if item is checked out (NULL for not checked out, and checkout date for checked out)"
+    },
+    "cn_source": {
+      "type": ["string", "null"],
+      "description": "classification source used on this item"
+    },
+    "cn_sort": {
+      "type": ["string", "null"],
+      "description": "?"
+    },
+    "ccode": {
+      "type": ["string", "null"],
+      "description": "authorized value for the collection code associated with this item"
+    },
+    "materials": {
+      "type": ["string", "null"],
+      "description": "materials specified"
+    },
+    "uri": {
+      "type": ["string", "null"],
+      "description": "URL for the item"
+    },
+    "itype": {
+      "type": ["string", "null"],
+      "description": "itemtype defining the type for this item"
+    },
+    "more_subfields_xml": {
+      "type": ["string", "null"],
+      "description": "additional 952 subfields in XML format"
+    },
+    "enumchron": {
+      "type": ["string", "null"],
+      "description": "serial enumeration/chronology for the item"
+    },
+    "copynumber": {
+      "type": ["string", "null"],
+      "description": "copy number"
+    },
+    "stocknumber": {
+      "type": ["string", "null"],
+      "description": "inventory number"
+    }
+  }
+}
