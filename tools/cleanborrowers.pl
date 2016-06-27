@@ -188,7 +188,7 @@ sub _skip_borrowers_with_nonzero_balance {
     my $balance;
     @$borrowers = map {
         (undef, undef, $balance) = GetMemberIssuesAndFines( $_->{borrowernumber} );
-        ($balance != 0) ? (): ($_);
+        (defined $balance && $balance != 0) ? (): ($_);
     } @$borrowers;
 }
 
