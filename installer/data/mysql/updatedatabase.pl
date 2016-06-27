@@ -47,7 +47,7 @@ use MARC::File::XML ( BinaryEncoding => 'utf8' );
 
 use File::Path qw[remove_tree]; # perl core module
 use File::Spec;
-use File::Slurp;
+use Path::Tiny;
 
 # FIXME - The user might be installing a new database, so can't rely
 # on /etc/koha.conf anyway.
@@ -12920,7 +12920,7 @@ foreach my $file ( sort readdir $dirh ) {
         my $installer = C4::Installer->new();
         my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
     } elsif ( $file =~ /\.perl$/ ) {
-        my $code = read_file( $update_dir . $file );
+        my $code = path( $update_dir . $file )->slurp_utf8;
         eval $code;
         say "Atomic update generated errors: $@" if $@;
     }
