@@ -35,7 +35,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'Koha::RefundLostItemFeeRule::delete() tests' => sub {
 
-    plan tests => 7;
+    plan tests => 5;
 
     # Start transaction
     $schema->storage->txn_begin;
@@ -68,21 +68,13 @@ subtest 'Koha::RefundLostItemFeeRule::delete() tests' => sub {
     $other_rule->delete;
     ok( !$other_rule->in_storage, 'Other rule deleted from storage' );
 
-    # deleting the default rule
-    eval {
-        $default_rule->delete;
-    };
-    is( ref($@), 'Koha::Exceptions::CannotDeleteDefault',
-        'Exception on deleting default' );
-    ok( $default_rule->in_storage, 'Default rule still in storage' );
-
     # Rollback transaction
     $schema->storage->txn_rollback;
 };
 
 subtest 'Koha::RefundLostItemFeeRules::_default_rule() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     # Start transaction
     $schema->storage->txn_begin;
@@ -114,6 +106,11 @@ subtest 'Koha::RefundLostItemFeeRules::_default_rule() tests' => sub {
     $default_rule = Koha::RefundLostItemFeeRules->find({
             branchcode => '*' });
     ok( !Koha::RefundLostItemFeeRules->_default_rule, 'Default rule is set to not refund' );
+
+    $default_rule->delete;
+    ok( !$default_rule->in_storage, 'Default rule effectively deleted from storage' );
+
+    ok( Koha::RefundLostItemFeeRules->_default_rule, 'Default rule is set to refund if no default rule is present' );
 
     # Rollback transaction
     $schema->storage->txn_rollback;

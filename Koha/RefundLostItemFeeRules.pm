@@ -130,14 +130,18 @@ sub _choose_branch {
 =head3 _default_rule (internal)
 
 This function returns the default rule defined for refunding lost
-item fees on return.
+item fees on return. It defaults to 1 if no rule is defined.
 
 =cut
 
 sub _default_rule {
-    my $self = shift;
 
-    return $self->find({ branchcode => '*' })->refund;
+    my $self = shift;
+    my $default_rule = $self->find({ branchcode => '*' });
+
+    return (defined $default_rule)
+                ? $default_rule->refund
+                : 1;
 }
 
 1;

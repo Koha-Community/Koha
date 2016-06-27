@@ -42,22 +42,4 @@ sub _type {
     return 'RefundLostItemFeeRule';
 }
 
-=head3 delete
-
-This is an overloaded delete method. It throws an exception if the wildcard
-branch is passed (it can only be modified, but not deleted).
-
-=cut
-
-sub delete {
-    my ($self) = @_;
-
-    if ( $self->branchcode eq '*' ) {
-        Koha::Exceptions::CannotDeleteDefault->throw;
-    }
-
-    return $self->SUPER::delete($self);
-}
-
-
 1;
