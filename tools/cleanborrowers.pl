@@ -31,9 +31,8 @@ This script allows to do 2 things.
 
 =cut
 
-use strict;
+use Modern::Perl;
 
-#use warnings; FIXME - Bug 2505
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
@@ -78,6 +77,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $branch = $params->{ branch } || '*';
+$template->param( current_branch => $branch );
+
 if ( $step == 2 ) {
 
     my %checkboxes = map { $_ => 1 } split /\0/, $params->{'checkbox'};
@@ -90,6 +92,7 @@ if ( $step == 2 ) {
                   $borrower_dateexpiry,
                   $borrower_categorycode,
                   $patron_list_id,
+                  $branch
              )
         );
     }
@@ -97,13 +100,17 @@ if ( $step == 2 ) {
 
     my $members_to_anonymize;
     if ( $checkboxes{issue} ) {
-        $members_to_anonymize = GetBorrowersWithIssuesHistoryOlderThan($last_issue_date);
+        if ( $branch eq '*' ) {
+            $members_to_anonymize = GetBorrowersWithIssuesHistoryOlderThan($last_issue_date);
+        } else {
+            $members_to_anonymize = GetBorrowersWithIssuesHistoryOlderThan($last_issue_date, $branch);
+        }
     }
 
     $template->param(
         patrons_to_delete    => $patrons_to_delete,
         patrons_to_anonymize => $members_to_anonymize,
-        patron_list_id          => $patron_list_id,
+        patron_list_id       => $patron_list_id
     );
 }
 
@@ -117,8 +124,11 @@ elsif ( $step == 3 ) {
     if ($do_delete) {
         my $patrons_to_delete = GetBorrowersToExpunge(
                 _get_selection_params(
-                    $not_borrowed_since, $borrower_dateexpiry,
-                    $borrower_categorycode, $patron_list_id
+                    $not_borrowed_since,
+                    $borrower_dateexpiry,
+                    $borrower_categorycode,
+                    $patron_list_id,
+                    $branch
                 )
             );
         _skip_borrowers_with_nonzero_balance($patrons_to_delete);
@@ -183,7 +193,8 @@ sub _skip_borrowers_with_nonzero_balance {
 }
 
 sub _get_selection_params {
-    my ($not_borrowed_since, $borrower_dateexpiry, $borrower_categorycode, $patron_list_id) = @_;
+    my ($not_borrowed_since, $borrower_dateexpiry,
+        $borrower_categorycode, $patron_list_id, $branch) = @_;
 
     my $params = {};
     $params->{not_borrowed_since} = output_pref({
@@ -198,6 +209,10 @@ sub _get_selection_params {
     }) if $borrower_dateexpiry;
     $params->{category_code} = $borrower_categorycode if $borrower_categorycode;
     $params->{patron_list_id} = $patron_list_id if $patron_list_id;
+
+    if ( defined $branch and $branch ne '*' ) {
+        $params->{ branchcode } = $branch;
+    }
 
     return $params;
 };

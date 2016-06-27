@@ -54,6 +54,10 @@ sub GetURL {
     return $b->{branchurl};
 }
 
+sub OnlyMine {
+    return C4::Branch::onlymine;
+}
+
 sub all {
     my ( $self, $params ) = @_;
     my $selected = $params->{selected};
