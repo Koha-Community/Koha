@@ -1,0 +1,52 @@
+{
+  "/items/{item_id}": {
+    "get": {
+      "x-mojo-to": "Items#get",
+      "operationId": "getItem",
+      "tags": ["items"],
+      "parameters": [{
+          "$ref": "../parameters.json#/item_id_pp"
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "An item",
+          "schema": {
+            "$ref": "../definitions.json#/item"
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Item not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "catalogue": "1"
+        }
+      }
+    }
+  }
+}
