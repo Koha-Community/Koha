@@ -39,6 +39,10 @@ C4::Context->clear_syspref_cache();
 $OPACBaseURL = C4::Context->preference('OPACBaseURL');
 is($OPACBaseURL,'http://junk2','OPACBaseURL saved with http:// as specified');
 
+C4::Context->set_preference('OPACBaseURL', '');
+$OPACBaseURL = C4::Context->preference('OPACBaseURL');
+is($OPACBaseURL,'','OPACBaseURL saved empty as specified');
+
 C4::Context->set_preference('SillyPreference','random');
 C4::Context->clear_syspref_cache();
 my $SillyPeference = C4::Context->preference('SillyPreference');
