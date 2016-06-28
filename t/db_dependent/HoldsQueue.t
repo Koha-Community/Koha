@@ -17,11 +17,8 @@ use C4::Context;
 use C4::Members;
 use Koha::Database;
 use Koha::DateUtils;
-use Koha::ItemType;
 
 use t::lib::TestBuilder;
-
-use Koha::ItemTypes;
 
 BEGIN {
     use FindBin;
@@ -178,7 +175,7 @@ $dbh->do("DELETE FROM default_circ_rules");
 
 C4::Context->set_preference('UseTransportCostMatrix', 0);
 
-$itemtype = Koha::ItemTypes->search->next->itemtype;
+$itemtype = $builder->build({ source => 'Itemtype', value => { notforloan => 0 } })->{itemtype};
 
 $library1 = $builder->build({
     source => 'Branch',
@@ -337,7 +334,7 @@ is( scalar( @$holds_queue ), 2, "Holds not filled with items from closed librari
 C4::Context->set_preference( 'HoldsQueueSkipClosed', 0 );
 
 # Bug 14297
-$itemtype = Koha::ItemTypes->search->next->itemtype;
+$itemtype = $builder->build({ source => 'Itemtype', value => { notforloan => 0 } })->{itemtype};
 $borrowernumber = $borrower3->{borrowernumber};
 my $library_A = $library1->{branchcode};
 my $library_B = $library2->{branchcode};
@@ -394,7 +391,7 @@ is( @$holds_queue, 1, "Bug 14297 - Holds Queue building ignoring holds where pic
 # End Bug 14297
 
 # Bug 15062
-$itemtype = Koha::ItemTypes->search->next->itemtype;
+$itemtype = $builder->build({ source => 'Itemtype', value => { notforloan => 0 } })->{itemtype};
 $borrowernumber = $borrower2->{borrowernumber};
 $library_A = $library1->{branchcode};
 $library_B = $library2->{branchcode};
@@ -555,9 +552,8 @@ CancelReserve( { reserve_id => $reserve_id } );
 
 # Test hold itemtype limit
 C4::Context->set_preference( "UseTransportCostMatrix", 0 );
-my @itemtypes = Koha::ItemTypes->search();
-my $wrong_itemtype = $itemtypes[0]->itemtype;
-my $right_itemtype = $itemtypes[1]->itemtype;
+my $wrong_itemtype = $builder->build({ source => 'Itemtype', value => { notforloan => 0 } })->{itemtype};
+my $right_itemtype = $builder->build({ source => 'Itemtype', value => { notforloan => 0 } })->{itemtype};
 $borrowernumber = $borrower3->{borrowernumber};
 my $branchcode = $library1->{branchcode};
 $dbh->do("DELETE FROM reserves");
