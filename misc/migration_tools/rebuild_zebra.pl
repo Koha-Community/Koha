@@ -99,7 +99,7 @@ if (not $result or $want_help) {
 }
 
 if ( $as_xml ) {
-    warn "Warning: You passed -x which is already the default and is now deprecated·\n";
+    warn "Warning: You passed -x which is already the default and is now deprecated\n";
     undef $as_xml; # Should not be used later
 }
 
