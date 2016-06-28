@@ -62,13 +62,18 @@ $(document).ready(function() {
         $(".toggler").toggle();
     });
 
-    $(".save_quick_add").click(function(){
+    $("#save_quick_add").click(function(){
         $("#quick_add_form").validate();
         if( $("#quick_add_form").valid()){
             $('.toggle_quick_add').click();
-            $('#entryform button[name="save"]').click();
+            $('#saverecord').click();
         }
         else {return false;}
+    });
+    $("#saverecord").click(function(){
+        if( check_form_borrowers() ){
+            $("#entryform").submit();
+        }
     });
 
 });
@@ -201,6 +206,22 @@ $(document).ready(function() {
 	[% END %]
 
 
+<div id="toolbar" class="btn-toolbar">
+[% UNLESS ( check_member ) %]
+    [% IF quickadd && opadd %]
+        <button class="btn btn-small toggler" id="save_quick_add" name="save"><i class="fa fa-save"></i> Save</button>
+    [% END %]
+    <button class="btn btn-small toggler" id="saverecord" name="save" ><i class="fa fa-save"></i> Save</button>
+    [% IF opadd %]
+        <a class="btn btn-small" href="/cgi-bin/koha/members/member.pl" class="toggler save_entryform">
+    [% ELSE %]
+        <a class="btn btn-small" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
+    [% END %]
+        <i class="fa fa-times"></i> Cancel
+    </a>
+[% END %]
+</div>
+
 [% UNLESS ( check_member ) %]<form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off" class="toggler" >
 <input type="hidden" name="nodouble"  value="[% nodouble %]" /> [% END %]
 <!--    field always hidden in different form (1,2,3) -->
@@ -224,18 +245,6 @@ $(document).ready(function() {
 [% END %]
 [% END %]
 [% END %]
-<div id="toolbar" class="btn-toolbar">
-[% UNLESS ( check_member ) %]
-    <button class="btn btn-small" id="saverecord" type="submit" name="save" onclick="return check_form_borrowers();"><i class="fa fa-save"></i> Save</button>
-    [% IF opadd %]
-        <a class="btn btn-small" href="/cgi-bin/koha/members/member.pl">
-    [% ELSE %]
-        <a class="btn btn-small" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
-    [% END %]
-        <i class="fa fa-times"></i> Cancel
-    </a>
-[% END %]
-</div>
 
 [% IF ( step_1 ) %]
 [%UNLESS notitle && nosurname && nofirstname && nodateofbirth && noinitials && noothernames &&nosex %]
@@ -1096,19 +1105,10 @@ $(document).ready(function() {
             <ol id="quick_add_list">
             </ol>
         </fieldset>
-        <fieldset class="rows" id="qa-save">
-        <fieldset class="action">
-            <button type="button" class="save_quick_add"  name="QA-Save">
-                <i class="fa fa-save"></i> Save
-            </button>
-           <a class="cancel" href="/cgi-bin/koha/members/member.pl">Cancel</a>
-        </fieldset>
-        </fieldset>
-
     </form>
     <script>
         $(document).ready(function () {
-            $("#entryform").hide();
+            $("#entryform,#saverecord").hide();
             [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') %]
             var qaddfields = [[% FOREACH field IN q_add_f.unique %]"[% field %]",[% END %]];
             var skipped_fields = ["contactname","contactfirstname","relationship"]; //Guarantor form is pulled as a whole, ignore individual fields
