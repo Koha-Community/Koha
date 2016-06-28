@@ -17,11 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 77;
+use Test::More tests => 79;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
 use Koha::Database;
+use Koha::Holds;
 use Koha::List::Patron;
 
 
@@ -167,10 +168,20 @@ ModMember(borrowernumber => $member->{'borrowernumber'}, dateexpiry => '2001-01-
 $member = GetMemberDetails($member->{'borrowernumber'});
 ok($member->{is_expired}, "GetMemberDetails() indicates that patron is expired");
 
-# clean up 
+# Create a reserve for the patron
+$builder->build({
+    source => 'Reserve',
+    value  => {
+        borrowernumber => $member->{ borrowernumber }
+    }
+});
+is( Koha::Holds->search({ borrowernumber => $member->{borrowernumber} })->count,
+    1, 'Hold created correctly' );
 DelMember($member->{borrowernumber});
 my $borrower = GetMember( cardnumber => $CARDNUMBER );
 is( $borrower, undef, 'DelMember should remove the patron' );
+is( Koha::Holds->search({ borrowernumber => $member->{borrowernumber} })->count,
+    0, 'Hold deleted correctly' );
 
 # Check_Userid tests
 %data = (
