@@ -90,17 +90,17 @@
 
         $("select[name='all_budget_id']").change();
 
-        $("#records_to_import fieldset.rows ol").hide();
+        $("#records_to_import fieldset.rows div").hide();
         $('input:checkbox[name="import_record_id"]').change(function(){
             var container = $(this).parents("fieldset");
             if ( $(this).is(':checked') ) {
                 $(container).addClass("selected");
                 $(container).removeClass("unselected");
-                $(container).find("ol").toggle(true);
+                $(container).find("div").toggle(true);
             } else {
                 $(container).addClass("unselected");
                 $(container).removeClass("selected");
-                $(container).find("ol").toggle(false);
+                $(container).find("div").toggle(false);
             }
         } );
 
@@ -133,6 +133,17 @@
             });
             if ( error > 0 ) {
                 alert(error + " " + _("quantity values are not filled in or are not numbers"));
+                return false;
+
+            }
+            var error = 0;
+            $("select[name='budget_code']").each(function() {
+                if (!$(this).val()) {
+                    error++;
+                }
+            });
+            if ( error > 0 ) {
+                alert(_("Some budgets are not defined in item records"));
                 return false;
             }
 
@@ -238,6 +249,7 @@
                               ( <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio.import_record_id %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% biblio.import_record_id %]" class="previewData">Card</a> | <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;breedingid=[% biblio.import_record_id %]&amp;import_batch_id=[% biblio.import_batch_id %]&amp;biblionumber=[% biblio.match_biblionumber %]">Add order</a> )
                             </span>
                           </legend>
+                          <div style="float:left">
                           <ol>
                             <li class="status">
                               <span class="match">
@@ -300,6 +312,80 @@
                                 <input id="sort2_record_[% biblio.import_record_id %]" type="text" id="sort2" size="20" name="sort2" value="[% biblio.sort2 %]" />
                             </li>
                           </ol>
+                        </div>
+                        <div style="float:right">
+                        [% IF item_error %]Item records could not be processed because the number of item fields was uneven.[% END %]
+                        [% FOREACH item IN biblio.iteminfos %]
+                        <fieldset>
+                        <legend>Item Record [% item.item_id %]</legend>
+                        <ol>
+                        <li>
+                        <label for="homebranch_item_[% item.item_id %]">homebranch</label><select id="homebranch_item_[% item.item_id %]" name="homebranch">
+                        [% FOREACH branchloo IN branchloop %]
+                          [% IF ( branchloo.value ) == ( item.homebranch )  %]
+                            <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                          [% ELSE %]
+                            <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+                          [% END %]
+                        [% END %]
+                        </select>
+                        </li>
+
+                        <li><label for="holdingbranch_item_[% item.item_id %]">holdingbranch</label><select id="holdingbranch_item_[% item.item_id %]" name="holdingbranch">
+                        [% FOREACH branchloo IN branchloop %]
+                          [% IF ( branchloo.value ) == ( item.holdingbranch ) %]
+                            <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                          [% ELSE %]
+                            <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+                          [% END %]
+                        [% END %]
+                        </select>
+                        </li>
+                        <li><label for="itype_item_[% item.item_id %]">itype</label><select id="itype_item_[% item.item_id %]" name="itype">
+                        [% FOREACH itypeloo IN itypeloop %]
+                          [% IF ( itypeloo.value ) == ( item.itype ) %]
+                            <option value="[% itypeloo.itemtype %]" selected="selected">[% itypeloo.description |html %]</option>
+                          [% ELSE %]
+                            <option value="[% itypeloo.itemtype %]">[% itypeloo.description |html %]</option>
+                          [% END %]
+                        [% END %]
+                        </select>
+                        </li>
+
+                        <li><label for="nonpublic_note_item_[% item.item_id %]">nonpublic_note</label><input type="text" id="nonpublic_note_item_[% item.item_id %]" name="nonpublic_note" value="[% item.nonpublic_note %]"></li>
+                        <li><label for="public_note_item_[% item.item_id %]">public_note</label><input type="text" id="public_note_item_[% item.item_id %]" name="public_note" value="[% item.public_note %]"></li>
+                        <li><label for="loc_item_[% item.item_id %]">loc</label><select id="loc_item_[% item.item_id %]" name="loc">
+                        <option value=""> </option>
+                        [% FOREACH locationloo IN locationloop %]
+                            [% IF ( locationloo.code ) == (item.loc) %]<option value="[% locationloo.code %]" selected="selected">[% locationloo.description %]</option>[% ELSE %]<option value="[% locationloo.code %]">[% locationloo.description %]</option>[% END %]
+                        [% END %]
+                       </select>
+                        </li>
+
+                        <li><label for="ccode_item_[% item.item_id %]">ccode</label><select id="ccode_item_[% item.item_id %]" name="ccode">
+                        [% FOREACH ccodeloo IN ccodeloop %]
+                            [% IF ( ccodeloo.code ) == (item.ccode) %]<option value="[% ccodeloo.code %]" selected="selected">[% ccodeloo.description %]</option>[% ELSE %]<option value="[% ccodeloo.code %]">[% ccodeloo.description %]</option>[% END %]
+                        [% END %]
+                        </select>
+                        </li>
+
+                        <li><label for="notforloan_item_[% item.item_id %]">notforloan</label><input type="text" id="notforloan_item_[% item.item_id %]" name="notforloan" value="[% item.notforloan %]"></li>
+                        <li><label for="uri_item_[% item.item_id %]">uri</label><input type="text" id="uri_item_[% item.item_id %]" name="uri" value="[% item.uri %]"></li>
+                        <li><label for="copyno_item_[% item.item_id %]">copyno</label><input type="text" id="copyno_item_[% item.item_id %]" name="copyno" value="[% item.copyno %]"></li>
+                        <li><label for="budget_code_item_[% item.item_id %]">budget_code</label><select id="budget_code_item_[% item.item_id %]" name="budget_code">
+                        <option value="">Select a fund</option>
+                        [% FOREACH budget_loo IN budget_loop %]
+                            [% IF ( budget_loo.b_code ) == ( item.budget_code ) %]<option value="[% budget_loo.b_id %]" selected="selected">[% budget_loo.b_txt %]</option>
+                            [% ELSE %]<option value="[% budget_loo.b_id %]">[% budget_loo.b_txt %]</option>
+                            [% END %]
+                        [% END %]
+                        </select>
+                        </li>
+                        <li><label for="price_item_[% item.item_id %]">price</label><input type="text" id="price_item_[% item.item_id %]" name="itemprice" value="[% item.itemprice %]"></li>
+                        </ol>
+                        </fieldset>
+                        [% END %]
+                        </div>
                         </fieldset>
                             <div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
                                 <div class="modal-dialog">

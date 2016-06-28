@@ -25,6 +25,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Carp;
 use YAML qw/Load/;
+use List::MoreUtils qw/uniq/;
 
 use C4::Context;
 use C4::Auth;
@@ -194,55 +195,143 @@ if ($op eq ""){
         } else {
             SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
         }
-        # 3rd add order
-        my $patron = C4::Members::GetMember( borrowernumber => $loggedinuser );
-        # get quantity in the MARC record (1 if none)
-        my $quantity = GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour')) || 1;
-        my %orderinfo = (
-            biblionumber       => $biblionumber,
-            basketno           => $cgiparams->{'basketno'},
-            quantity           => $c_quantity,
-            branchcode         => $patron->{branchcode},
-            budget_id          => $c_budget_id,
-            uncertainprice     => 1,
-            sort1              => $c_sort1,
-            sort2              => $c_sort2,
-            order_internalnote => $cgiparams->{'all_order_internalnote'},
-            order_vendornote   => $cgiparams->{'all_order_vendornote'},
-            currency           => $cgiparams->{'all_currency'},
-        );
-        # get the price if there is one.
-        my $price= shift( @prices ) || GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
-        if ($price){
-            # in France, the cents separator is the , but sometimes, ppl use a .
-            # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
-            $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
-            $price = Koha::Number::Price->new($price)->unformat;
-            $orderinfo{tax_rate} = $bookseller->tax_rate;
-            my $c = $c_discount ? $c_discount : $bookseller->discount / 100;
-            if ( $bookseller->listincgst ) {
-                if ( $c_discount ) {
-                    $orderinfo{ecost} = $price;
-                    $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );
-                } else {
-                    $orderinfo{ecost} = $price * ( 1 - $c );
-                    $orderinfo{rrp}   = $price;
-                }
-            } else {
-                if ( $c_discount ) {
-                    $orderinfo{ecost} = $price / ( 1 + $orderinfo{tax_rate} );
-                    $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );
-                } else {
-                    $orderinfo{rrp}   = $price / ( 1 + $orderinfo{tax_rate} );
-                    $orderinfo{ecost} = $orderinfo{rrp} * ( 1 - $c );
+
+        # Add items from MarcItemFieldsToOrder
+        my @homebranches = $input->multi_param('homebranch');
+        my $count = scalar @homebranches;
+        my @holdingbranches = $input->multi_param('holdingbranch');
+        my @itypes = $input->multi_param('itype');
+        my @nonpublic_notes = $input->multi_param('nonpublic_note');
+        my @public_notes = $input->multi_param('public_note');
+        my @locs = $input->multi_param('loc');
+        my @ccodes = $input->multi_param('ccodes');
+        my @notforloans = $input->multi_param('notforloans');
+        my @uris = $input->multi_param('uri');
+        my @copynos = $input->multi_param('copyno');
+        my @budget_codes = $input->multi_param('budget_code');
+        my @itemprices = $input->multi_param('itemprice');
+        my $itemcreation = 0;
+        for (my $i = 0; $i < $count; $i++) {
+            $itemcreation = 1;
+            my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({
+                homebranch => $homebranches[$i],
+                holdingbranch => $holdingbranches[$i],
+                itemnotes_nonpublic => $nonpublic_notes[$i],
+                itemnotes => $public_notes[$i],
+                location => $locs[$i],
+                ccode => $ccodes[$i],
+                notforloan => $notforloans[$i],
+                uri => $uris[$i],
+                copynumber => $copynos[$i],
+                price => $itemprices[$i],
+            }, $biblionumber);
+        }
+        if ($itemcreation == 1) {
+            # Group orderlines from MarcItemFieldsToOrder
+            my $budget_hash;
+            for (my $i = 0; $i < $count; $i++) {
+                $budget_hash->{$budget_codes[$i]}->{quantity} += 1;
+                $budget_hash->{$budget_codes[$i]}->{price} = $itemprices[$i];
+            }
+
+            # Create orderlines from MarcItemFieldsToOrder
+            while(my ($budget_id, $infos) = each $budget_hash) {
+                if ($budget_id) {
+                    my %orderinfo = (
+                        biblionumber       => $biblionumber,
+                        basketno           => $cgiparams->{'basketno'},
+                        quantity           => $infos->{quantity},
+                        budget_id          => $budget_id,
+                        currency           => $cgiparams->{'all_currency'},
+                    );
+
+                    my $price = $infos->{price};
+                    if ($price){
+                        # in France, the cents separator is the , but sometimes, ppl use a .
+                        # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
+                        $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
+                        $price = Koha::Number::Price->new($price)->unformat;
+                        $orderinfo{gstrate} = $bookseller->{gstrate};
+                        my $c = $c_discount ? $c_discount : $bookseller->{discount} / 100;
+                        if ( $bookseller->{listincgst} ) {
+                            if ( $c_discount ) {
+                                $orderinfo{ecost} = $price;
+                                $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );
+                            } else {
+                                $orderinfo{ecost} = $price * ( 1 - $c );
+                                $orderinfo{rrp}   = $price;
+                            }
+                        } else {
+                            if ( $c_discount ) {
+                                $orderinfo{ecost} = $price / ( 1 + $orderinfo{gstrate} );
+                                $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );
+                            } else {
+                                $orderinfo{rrp}   = $price / ( 1 + $orderinfo{gstrate} );
+                                $orderinfo{ecost} = $orderinfo{rrp} * ( 1 - $c );
+                            }
+                        }
+                        $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
+                        $orderinfo{unitprice} = $orderinfo{ecost};
+                        $orderinfo{total} = $orderinfo{ecost} * $infos->{quantity};
+                    } else {
+                        $orderinfo{listprice} = 0;
+                    }
+
+                    # remove uncertainprice flag if we have found a price in the MARC record
+                    $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
+                    my $order = Koha::Acquisition::Order->new( \%orderinfo )->insert;
                 }
             }
-            $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
-            $orderinfo{unitprice} = $orderinfo{ecost};
-            $orderinfo{total} = $orderinfo{ecost} * $c_quantity;
         } else {
-            $orderinfo{listprice} = 0;
-        }
+            # 3rd add order
+            my $patron = C4::Members::GetMember( borrowernumber => $loggedinuser );
+            # get quantity in the MARC record (1 if none)
+            my $quantity = GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour')) || 1;
+            my %orderinfo = (
+                biblionumber       => $biblionumber,
+                basketno           => $cgiparams->{'basketno'},
+                quantity           => $c_quantity,
+                branchcode         => $patron->{branchcode},
+                budget_id          => $c_budget_id,
+                uncertainprice     => 1,
+                sort1              => $c_sort1,
+                sort2              => $c_sort2,
+                order_internalnote => $cgiparams->{'all_order_internalnote'},
+                order_vendornote   => $cgiparams->{'all_order_vendornote'},
+                currency           => $cgiparams->{'all_currency'},
+            );
+            # get the price if there is one.
+            my $price= shift( @prices ) || GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
+            if ($price){
+                # in France, the cents separator is the , but sometimes, ppl use a .
+                # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
+                $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
+                $price = Koha::Number::Price->new($price)->unformat;
+                $orderinfo{gstrate} = $bookseller->{gstrate};
+                my $c = $c_discount ? $c_discount : $bookseller->{discount} / 100;
+                if ( $bookseller->{listincgst} ) {
+                    if ( $c_discount ) {
+                        $orderinfo{ecost} = $price;
+                        $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );
+                    } else {
+                        $orderinfo{ecost} = $price * ( 1 - $c );
+                        $orderinfo{rrp}   = $price;
+                    }
+                } else {
+                    if ( $c_discount ) {
+                        $orderinfo{ecost} = $price / ( 1 + $orderinfo{gstrate} );
+                        $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );
+                    } else {
+                        $orderinfo{rrp}   = $price / ( 1 + $orderinfo{gstrate} );
+                        $orderinfo{ecost} = $orderinfo{rrp} * ( 1 - $c );
+                    }
+                }
+                $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
+                $orderinfo{unitprice} = $orderinfo{ecost};
+                $orderinfo{total} = $orderinfo{ecost} * $c_quantity;
+            } else {
+                $orderinfo{listprice} = 0;
+            }
 
         # remove uncertainprice flag if we have found a price in the MARC record
         $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
@@ -282,9 +371,10 @@ if ($op eq ""){
             for (my $qtyloop=1;$qtyloop <= $c_quantity;$qtyloop++) {
                 my ( $biblionumber, $bibitemnum, $itemnumber ) = AddItemFromMarc( $record, $biblionumber );
                 $order->add_item( $itemnumber );
+	    }
+            } else {
+                SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
             }
-        } else {
-            SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
         }
         $imported++;
     }
@@ -315,6 +405,7 @@ foreach my $r ( @{$budgets_hierarchy} ) {
     push @{$budget_loop},
       { b_id  => $r->{budget_id},
         b_txt => $r->{budget_name},
+        b_code => $r->{budget_code},
         b_sort1_authcat => $r->{'sort1_authcat'},
         b_sort2_authcat => $r->{'sort2_authcat'},
         b_active => $r->{budget_period_active},
@@ -366,6 +457,22 @@ sub import_biblios_list {
     return () unless $batch and $batch->{import_status} =~ /^staged$|^reverted$/;
     my $biblios = GetImportRecordsRange($import_batch_id,'','',$batch->{import_status});
     my @list = ();
+    my $item_id = 1;
+    my $item_error = 0;
+
+    my $ccodes    = GetKohaAuthorisedValues("items.ccode");
+    my $locations = GetKohaAuthorisedValues("items.location");
+    # location list
+    my @locations;
+    foreach (sort keys %$locations) {
+        push @locations, { code => $_, description => "$_ - " . $locations->{$_} };
+    }
+    my @ccodes;
+    foreach (sort {$ccodes->{$a} cmp $ccodes->{$b}} keys %$ccodes) {
+        push @ccodes, { code => $_, description => $ccodes->{$_} };
+    }
+
+
 
     foreach my $biblio (@$biblios) {
         my $citation = $biblio->{'title'};
@@ -389,7 +496,8 @@ sub import_biblios_list {
         );
         my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
         my $marcrecord = MARC::Record->new_from_usmarc($marcblob) || die "couldn't translate marc information";
-        my $infos = get_infos_syspref($marcrecord, ['price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2']);
+
+        my $infos = get_infos_syspref('MarcFieldsToOrder', $marcrecord, ['price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2']);
         my $price = $infos->{price};
         my $quantity = $infos->{quantity};
         my $budget_code = $infos->{budget_code};
@@ -403,19 +511,74 @@ sub import_biblios_list {
                 $budget_id = $biblio_budget->{budget_id};
             }
         }
-        $cellrecord{price} = $price || '';
-        $cellrecord{quantity} = $quantity || '';
-        $cellrecord{budget_id} = $budget_id || '';
-        $cellrecord{discount} = $discount || '';
-        $cellrecord{sort1} = $sort1 || '';
-        $cellrecord{sort2} = $sort2 || '';
 
+        # Items
+        my @itemlist = ();
+        my $all_items_quantity = 0;
+        my $alliteminfos = get_infos_syspref_on_item('MarcItemFieldsToOrder', $marcrecord, ['homebranch', 'holdingbranch', 'itype', 'nonpublic_note', 'public_note', 'loc', 'ccode', 'notforloan', 'uri', 'copyno', 'price', 'quantity', 'budget_code']);
+        if ($alliteminfos != -1) {
+            foreach my $iteminfos (@$alliteminfos) {
+                my $item_homebranch = $iteminfos->{homebranch};
+                my $item_holdingbranch = $iteminfos->{holdingbranch};
+                my $item_itype = $iteminfos->{itype};
+                my $item_nonpublic_note = $iteminfos->{nonpublic_note};
+                my $item_public_note = $iteminfos->{public_note};
+                my $item_loc = $iteminfos->{loc};
+                my $item_ccode = $iteminfos->{ccode};
+                my $item_notforloan = $iteminfos->{notforloan};
+                my $item_uri = $iteminfos->{uri};
+                my $item_copyno = $iteminfos->{copyno};
+                my $item_quantity = $iteminfos->{quantity} || 1;
+                my $item_budget_code = $iteminfos->{budget_code};
+                my $item_price = $iteminfos->{price};
+
+                for (my $i = 0; $i < $item_quantity; $i++) {
+
+                    my %itemrecord = (
+                        'item_id' => $item_id++,
+                        'homebranch' => $item_homebranch,
+                        'holdingbranch' => $item_holdingbranch,
+                        'itype' => $item_itype,
+                        'nonpublic_note' => $item_nonpublic_note,
+                        'public_note' => $item_public_note,
+                        'loc' => $item_loc,
+                        'ccode' => $item_ccode,
+                        'notforloan' => $item_notforloan,
+                        'uri' => $item_uri,
+                        'copyno' => $item_copyno,
+                        'quantity' => $item_quantity,
+                        'budget_code' => $item_budget_code || $budget_code,
+                        'itemprice' => $item_price || $price,
+                    );
+                    $all_items_quantity++;
+                    push @itemlist, \%itemrecord;
+
+                }
+            }
+
+            $cellrecord{'iteminfos'} = \@itemlist;
+        } else {
+            $item_error = 1;
+        }
         push @list, \%cellrecord;
+
+        if ($alliteminfos == -1 || scalar(@$alliteminfos) == 0) {
+            $cellrecord{price} = $price || '';
+            $cellrecord{quantity} = $quantity || '';
+            $cellrecord{budget_id} = $budget_id || '';
+            $cellrecord{discount} = $discount || '';
+            $cellrecord{sort1} = $sort1 || '';
+            $cellrecord{sort2} = $sort2 || '';
+        } else {
+            $cellrecord{quantity} = $all_items_quantity;
+        }
+
     }
     my $num_records = $batch->{'num_records'};
     my $overlay_action = GetImportBatchOverlayAction($import_batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($import_batch_id);
     my $item_action = GetImportBatchItemAction($import_batch_id);
+    my @itypes = Koha::ItemTypes->search;
     $template->param(biblio_list => \@list,
                         num_results => $num_records,
                         import_batch_id => $import_batch_id,
@@ -424,7 +587,12 @@ sub import_biblios_list {
                         "nomatch_action_${nomatch_action}" => 1,
                         nomatch_action => $nomatch_action,
                         "item_action_${item_action}" => 1,
-                        item_action => $item_action
+                        item_action => $item_action,
+                        item_error => $item_error,
+                        branchloop => GetBranchesLoop(),
+                        locationloop => \@locations,
+                        itypeloop => \@itypes,
+                        ccodeloop => \@ccodes,
                     );
     batch_info($template, $batch);
 }
@@ -471,14 +639,14 @@ sub add_matcher_list {
 }
 
 sub get_infos_syspref {
-    my ($record, $field_list) = @_;
-    my $syspref = C4::Context->preference('MarcFieldsToOrder');
+    my ($syspref_name, $record, $field_list) = @_;
+    my $syspref = C4::Context->preference($syspref_name);
     $syspref = "$syspref\n\n"; # YAML is anal on ending \n. Surplus does not hurt
     my $yaml = eval {
         YAML::Load($syspref);
     };
     if ( $@ ) {
-        warn "Unable to parse MarcFieldsToOrder syspref : $@";
+        warn "Unable to parse $syspref syspref : $@";
         return ();
     }
     my $r;
@@ -495,4 +663,78 @@ sub get_infos_syspref {
         }
     }
     return $r;
+}
+
+sub equal_number_of_fields {
+    my ($tags_list, $record) = @_;
+    my $refcount = 0;
+    my $count = 0;
+    for my $tag (@$tags_list) {
+        return -1 if $count != $refcount;
+        $count = 0;
+        for my $field ($record->field($tag)) {
+            $count++;
+        }
+        $refcount = $count if ($refcount == 0);
+    }
+    return -1 if $count != $refcount;
+    return $count;
+}
+
+sub get_infos_syspref_on_item {
+    my ($syspref_name, $record, $field_list) = @_;
+    my $syspref = C4::Context->preference($syspref_name);
+    $syspref = "$syspref\n\n"; # YAML is anal on ending \n. Surplus does not hurt
+    my $yaml = eval {
+        YAML::Load($syspref);
+    };
+    if ( $@ ) {
+        warn "Unable to parse $syspref syspref : $@";
+        return ();
+    }
+    my @result;
+    my @tags_list;
+
+    # Check tags in syspref definition
+    for my $field_name ( @$field_list ) {
+        next unless exists $yaml->{$field_name};
+        my @fields = split /\|/, $yaml->{$field_name};
+        for my $field ( @fields ) {
+            my ( $f, $sf ) = split /\$/, $field;
+            next unless $f and $sf;
+            push @tags_list, $f;
+        }
+    }
+    @tags_list = List::MoreUtils::uniq(@tags_list);
+
+    my $tags_count = equal_number_of_fields(\@tags_list, $record);
+    # Return if the number of theses fields in the record is not the same.
+    return -1 if $tags_count == -1;
+
+    # Gather the fields
+    my $fields_hash;
+    foreach my $tag (@tags_list) {
+        my @tmp_fields;
+        foreach my $field ($record->field($tag)) {
+            push @tmp_fields, $field;
+        }
+        $fields_hash->{$tag} = \@tmp_fields;
+    }
+
+    for (my $i = 0; $i < $tags_count; $i++) {
+        my $r;
+        for my $field_name ( @$field_list ) {
+            next unless exists $yaml->{$field_name};
+            my @fields = split /\|/, $yaml->{$field_name};
+            for my $field ( @fields ) {
+                my ( $f, $sf ) = split /\$/, $field;
+                next unless $f and $sf;
+                my $v = $fields_hash->{$f}[$i]->subfield( $sf );
+                $r->{$field_name} = $v if (defined $v);
+                last if $yaml->{$field};
+            }
+        }
+        push @result, $r;
+    }
+    return \@result;
 }

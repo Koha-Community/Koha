@@ -1,0 +1,1 @@
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('MarcItemFieldsToOrder','','Set the mapping values for new item records created from a MARC record in a staged file. In a YAML format.', NULL, 'textarea');
