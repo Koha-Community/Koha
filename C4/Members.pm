@@ -41,6 +41,7 @@ use Koha::Patron::Debarments qw(IsDebarred);
 use Text::Unaccent qw( unac_string );
 use Koha::AuthUtils qw(hash_password);
 use Koha::Database;
+use Koha::Holds;
 use Koha::List::Patron;
 
 our (@ISA,@EXPORT,@EXPORT_OK,$debug);
@@ -1660,18 +1661,16 @@ sub DelMember {
     my $borrowernumber = shift;
     #warn "in delmember with $borrowernumber";
     return unless $borrowernumber;    # borrowernumber is mandatory.
+    # Delete Patron's holds
+    my @holds = Koha::Holds->search({ borrowernumber => $borrowernumber });
+    map { $_->delete } @holds;
 
-    my $query = qq|DELETE 
-          FROM  reserves 
-          WHERE borrowernumber=?|;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
-    $query = "
+    my $query = "
        DELETE
        FROM borrowers
        WHERE borrowernumber = ?
    ";
-    $sth = $dbh->prepare($query);
+    my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
     logaction("MEMBERS", "DELETE", $borrowernumber, "") if C4::Context->preference("BorrowersLog");
     return $sth->rows;
