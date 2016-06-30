@@ -605,7 +605,7 @@
                         [% END %]
 
                         [% IF ( HTML5MediaEnabled && HTML5MediaSets ) %]
-                            <li id="tab_html5media"><a href="#html5media">Play media</a></li>
+                            [% IF ( defaulttab == 'media' ) %]<li id="tab_html5media" class="ui-tabs-active">[% ELSE %]<li id="tab_html5media">[% END %]<a href="#html5media">Play media</a></li>
                         [% END %]
 
                         [% IF ( IDreamBooksReviews ) %]
