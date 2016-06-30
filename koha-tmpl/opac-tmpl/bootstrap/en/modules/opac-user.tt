@@ -651,8 +651,8 @@ Using this account is not recommended because some parts of Koha will not functi
                                                             Item waiting at <b> [% RESERVE.branch.branchname %]</b>
                                                             [% IF ( RESERVE.waitingdate ) %]
                                                                 since [% RESERVE.waitingdate | $KohaDates %]
-                                                                [% IF RESERVE.waiting_expires_on %]
-                                                                    until [% RESERVE.waiting_expires_on | $KohaDates %]
+                                                                [% IF RESERVE.expirationdate %]
+                                                                    until [% RESERVE.expirationdate | $KohaDates %]
                                                                 [% END %]
                                                             [% END %]
                                                             <input type="hidden" name="pickup" value="[% RESERVE.branchcode %]" />

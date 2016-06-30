@@ -107,30 +107,6 @@ sub delete {
     return $deleted;
 }
 
-=head3 waiting_expires_on
-
-Returns a DateTime for the date a waiting holds expires on.
-Returns undef if the system peference ReservesMaxPickUpDelay is not set.
-Returns undef if the hold is not waiting ( found = 'W' ).
-
-=cut
-
-sub waiting_expires_on {
-    my ($self) = @_;
-
-    my $found = $self->found;
-    return unless $found && $found eq 'W';
-
-    my $ReservesMaxPickUpDelay = C4::Context->preference('ReservesMaxPickUpDelay');
-    return unless $ReservesMaxPickUpDelay;
-
-    my $dt = dt_from_string( $self->waitingdate() );
-
-    $dt->add( days => $ReservesMaxPickUpDelay );
-
-    return $dt;
-}
-
 =head3 set_waiting
 
 =cut

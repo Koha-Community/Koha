@@ -575,7 +575,6 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'surname'}        = $res->borrower()->surname();
         $reserve{'notes'}          = $res->reservenotes();
         $reserve{'waiting_date'}   = $res->waitingdate();
-        $reserve{'waiting_until'}  = $res->is_waiting() ? $res->waiting_expires_on() : undef;
         $reserve{'ccode'}          = $res->item() ? $res->item()->ccode() : undef;
         $reserve{'barcode'}        = $res->item() ? $res->item()->barcode() : undef;
         $reserve{'priority'}       = $res->priority();

@@ -119,11 +119,6 @@ while ( my $h = $holds_rs->next() ) {
         : q{},
     };
 
-    if ( my $e = $h->waiting_expires_on() ) {
-        $hold->{expirationdate} = $e->ymd();
-        $hold->{expirationdate_formatted} = output_pref( { dt => $e, dateonly => 1 });
-    }
-
     $hold->{transfered}     = 0;
     $hold->{not_transfered} = 0;
 

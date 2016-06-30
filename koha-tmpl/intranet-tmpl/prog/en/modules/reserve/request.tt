@@ -783,13 +783,7 @@ function checkMultiHold() {
         </td>
         <td>[% reserveloo.notes %]</td>
         <td>[% reserveloo.date %]</td>
-        <td>
-            [% IF reserveloo.waiting_until %]
-                [% reserveloo.waiting_until | $KohaDates %]
-            [% ELSE %]
-                [% reserveloo.expirationdate %]
-            [% END %]
-        </td>
+        <td>[% reserveloo.expirationdate %]</td>
         <td>
     [% IF ( reserveloo.found ) %]
     	[% IF ( reserveloo.atdestination ) %]
