@@ -1,0 +1,65 @@
+#!/usr/bin/perl
+
+# Copyright 2015 ByWater Solutions
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+use Modern::Perl;
+
+use CGI;
+use JSON qw(to_json);
+
+use C4::Context;
+use C4::Output qw(output_with_http_headers);
+use C4::Auth qw(check_cookie_auth);
+use C4::Reserves qw(ModReserve);
+use Koha::DateUtils qw(dt_from_string);
+use Koha::Holds;
+
+my $input = new CGI;
+
+my ( $auth_status, $sessionID ) =
+  check_cookie_auth( $input->cookie('CGISESSID'), { circulate => 'circulate_remaining_permissions' } );
+
+if ( $auth_status ne "ok" ) {
+    print $input->header(-type => 'text/plain', -status => '403 Forbidden');
+    exit 0;
+}
+
+my $reserve_id = $input->param('reserve_id');
+my $updated_branch = $input->param('updated_branch');
+
+my $hold = Koha::Holds->find( $reserve_id );
+
+unless ( $hold ) {
+    my $json = to_json( { success => 0, error => "HOLD_NOT_FOUND" } );
+    output_with_http_headers( $input, undef, $json, "json" );
+    exit;
+}
+
+ModReserve( {
+                rank => $hold->priority,
+                reserve_id => $hold->reserve_id,
+                branchcode => $updated_branch,
+                itemnumber => $hold->itemnumber,
+                borrowernumber => $hold->borrowernumber,
+                biblionumber => $hold->biblionumber
+            });
+
+$hold = Koha::Holds->find( $reserve_id );
+
+my $json = to_json( { success => ( $hold->branchcode eq $updated_branch )  } );
+output_with_http_headers( $input, undef, $json, "json" );

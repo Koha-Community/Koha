@@ -100,7 +100,17 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function( oObj ) {
-                            return oObj.branchcode || "";
+                            if( oObj.branches.length > 1 && oObj.found !== 'W' && oObj.found !== 'T' ){
+                                var branchSelect='<select class="hold_location_select" reserve_id="'+oObj.reserve_id+'" name="pick-location">';
+                                for ( var i=0; i < oObj.branches.length; i++ ){
+                                    var selectedbranch;
+                                    if( oObj.branches[i].selected ){selectedbranch=" selected='selected' "}else{selectedbranch=''}
+                                    branchSelect += '<option value="'+ oObj.branches[i].value +'"'+selectedbranch+'>'+oObj.branches[i].branchname+'</option>';
+                                }
+                                branchSelect +='</select>';
+                                return branchSelect;
+                            }
+                            else { return oObj.branchcode || ""; }
                         }
                     },
                     { "mDataProp": "expirationdate_formatted" },
@@ -176,6 +186,23 @@ $(document).ready(function() {
                       }
                     });
                 });
+
+                $(".hold_location_select").change(function(){
+                    if( confirm( _("Do you want to change the pickup location?") ) ){
+                        $.post('/cgi-bin/koha/svc/hold/update_location', { "reserve_id": $(this).attr('reserve_id'), "updated_branch": $(this).val() }, function( data ){
+                            if ( data.success ) {
+                                holdsTable.api().ajax.reload();
+                            }
+                        else {
+                            if ( data.error == "HOLD_NOT_FOUND" ) {
+                                alert ( RESUME_HOLD_ERROR_NOT_FOUND );
+                                holdsTable.api().ajax.reload();
+                            }
+                        }
+                      });
+                    }
+                });
+
             });
 
             if ( $("#holds-table").length ) {
