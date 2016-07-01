@@ -50,6 +50,16 @@
 [%    END %]
 [% END %]
 
+[% BLOCK translate_log_interface %]
+[%    SWITCH interface %]
+[%        CASE 'INTRANET'    %]Intranet
+[%        CASE 'OPAC'        %]OPAC
+[%        CASE 'SIP'         %]SIP
+[%        CASE 'COMMANDLINE' %]Command-line
+[%        CASE %][% interface %]
+[%    END %]
+[% END %]
+
 <div id="breadcrumbs">
 	<a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
 	[% IF ( do_it ) %]
@@ -119,6 +129,24 @@
 								<label for="info">Info:</label>
                                 <input type="text" id="info" name="info" value="[% info | html %]" />
 							</li>
+                            <li>
+                                <label for="interfaces">Interface:</label>
+                                <select name="interfaces" id="interfaces" multiple="multiple">
+                                    [% UNLESS interfaces %]
+                                        <option value="" selected="selected">All</option>
+                                    [% ELSE %]
+                                        <option value="">All</option>
+                                    [% END %]
+
+                                    [% FOREACH interf IN [ 'INTRANET' 'OPAC' 'SIP' 'COMMANDLINE' ] %]
+                                        [% IF interfaces.grep(interf).size %]
+                                            <option value="[% interf %]" selected="selected">[% PROCESS translate_log_interface interface=interf %]</option>
+                                        [% ELSE %]
+                                            <option value="[% interf %]">[% PROCESS translate_log_interface interface=interf %]</option>
+                                        [% END %]
+                                    [% END %]
+                                </select>
+                            </li>
 							<li>
                                 <label for="from"> Display from: </label> <input type="text" size="10" id="from" name="from" value="[% datefrom | html %]" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
@@ -167,6 +195,7 @@
                                     <th>Action</th>
                                     <th>Object</th>
                                     <th>Info</th>
+                                    <th>Interface</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -210,6 +239,7 @@
                                             [% loopro.info |html %]
                                         [% END %]
                                     </td>
+                                    <td>[% PROCESS translate_log_interface interface=loopro.interface %]</td>
                                 </tr>
                             [% END %]
                             </tbody>

@@ -48,6 +48,7 @@ my $do_it    = $input->param('do_it');
 my @modules  = $input->multi_param("modules");
 my $user     = $input->param("user") // '';
 my @actions  = $input->multi_param("actions");
+my @interfaces  = $input->multi_param("interfaces");
 my $object   = $input->param("object");
 my $info     = $input->param("info");
 my $datefrom = $input->param("from");
@@ -105,10 +106,11 @@ $template->param(
 if ($do_it) {
 
     my @data;
-    my ( $results, $modules, $actions );
+    my ( $results, $modules, $actions, $interfaces );
     if ( defined $actions[0] && $actions[0] ne '' ) { $actions  = \@actions; }     # match All means no limit
     if ( $modules[0] ne '' ) { $modules = \@modules; }    # match All means no limit
-    $results = GetLogs( $datefrom, $dateto, $user, $modules, $actions, $object, $info );
+    if ( defined $interfaces[0] && $interfaces[0] ne '' ) { $interfaces = \@interfaces; }    # match All means no limit
+    $results = GetLogs( $datefrom, $dateto, $user, $modules, $actions, $object, $info, $interfaces );
     @data = @$results;
     foreach my $result (@data) {
 
@@ -170,6 +172,7 @@ if ($do_it) {
             src      => $src,
             modules  => \@modules,
             actions  => \@actions,
+            interfaces => \@interfaces
         );
 
         # Used modules
