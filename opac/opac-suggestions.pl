@@ -148,14 +148,16 @@ if ( $op eq "add_confirm" ) {
         $suggestion->{branchcode} = $input->param('branchcode') || C4::Context->userenv->{"branch"};
 
         &NewSuggestion($suggestion);
+
+        # delete empty fields, to avoid filter in "SearchSuggestion"
+        foreach my $field ( qw( title author publishercode copyrightdate place collectiontitle isbn STATUS ) ) {
+            delete $suggestion->{$field}; #clear search filters (except borrower related) to show all suggestions after placing a new one
+        }
+        $suggestions_loop = &SearchSuggestion($suggestion);
+
         push @messages, { type => 'info', code => 'success_on_inserted' };
 
     }
-    # delete empty fields, to avoid filter in "SearchSuggestion" and load all suggestions for display
-    foreach my $field ( qw( title author publishercode copyrightdate place collectiontitle isbn STATUS ) ) {
-        delete $suggestion->{$field}; #clear search filters (except borrower related) to show all suggestions after placing a new one
-    }
-    $suggestions_loop = &SearchSuggestion($suggestion);
     $op = 'else';
 }
 
