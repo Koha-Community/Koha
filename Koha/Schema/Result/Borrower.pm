@@ -395,6 +395,13 @@ __PACKAGE__->table("borrowers");
   default_value: 1
   is_nullable: 0
 
+=head2 updated_on
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -560,6 +567,13 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "privacy",
   { data_type => "integer", default_value => 1, is_nullable => 0 },
+  "updated_on",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -1153,8 +1167,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-10-21 19:50:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QafovaRBnm36nyoyQTGIgQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-07-01 08:14:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MhjMGmwPebVT85zsQtgKmg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
