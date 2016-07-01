@@ -2715,13 +2715,15 @@ CREATE TABLE `action_logs` ( -- logs of actions taken in Koha (requires that the
   `action` text, -- the action (includes things like DELETED, ADDED, MODIFY, etc)
   `object` int(11) default NULL, -- the object that the action was taken against (could be a borrowernumber, itemnumber, etc)
   `info` text, -- information about the action (usually includes SQL statement)
+  `interface` VARCHAR(30) DEFAULT NULL, -- the context this action was taken in
   PRIMARY KEY (`action_id`),
   KEY `timestamp_idx` (`timestamp`),
   KEY `user_idx` (`user`),
   KEY `module_idx` (`module`(255)),
   KEY `action_idx` (`action`(255)),
   KEY `object_idx` (`object`),
-  KEY `info_idx` (`info`(255))
+  KEY `info_idx` (`info`(255)),
+  KEY `interface` (`interface`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
