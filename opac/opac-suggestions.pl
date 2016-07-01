@@ -114,7 +114,7 @@ if ( $op eq 'else' ) {
 
 my $patrons_pending_suggestions_count = 0;
 if ( $borrowernumber ) {
-    my $patrons_pending_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, STATUS => 'ASKED' } ) } ;
+    $patrons_pending_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, STATUS => 'ASKED' } ) } ;
 }
 
 my $suggestions_loop = &SearchSuggestion($suggestion);
