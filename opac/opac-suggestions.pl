@@ -148,6 +148,7 @@ if ( $op eq "add_confirm" ) {
         $suggestion->{branchcode} = $input->param('branchcode') || C4::Context->userenv->{"branch"};
 
         &NewSuggestion($suggestion);
+        $patrons_pending_suggestions_count++;
 
         # delete empty fields, to avoid filter in "SearchSuggestion"
         foreach my $field ( qw( title author publishercode copyrightdate place collectiontitle isbn STATUS ) ) {
