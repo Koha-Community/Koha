@@ -113,7 +113,7 @@ if ( $op eq 'else' ) {
 }
 
 my $patrons_pending_suggestions_count = 0;
-if ( $borrowernumber ) {
+if ( $borrowernumber && C4::Context->preference("MaxOpenSuggestions") ne '' ) {
     $patrons_pending_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, STATUS => 'ASKED' } ) } ;
 }
 
