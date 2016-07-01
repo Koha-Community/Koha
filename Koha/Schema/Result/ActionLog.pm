@@ -62,6 +62,12 @@ __PACKAGE__->table("action_logs");
   data_type: 'text'
   is_nullable: 1
 
+=head2 interface
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 30
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -84,6 +90,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "info",
   { data_type => "text", is_nullable => 1 },
+  "interface",
+  { data_type => "varchar", is_nullable => 1, size => 30 },
 );
 
 =head1 PRIMARY KEY
@@ -99,8 +107,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("action_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KRt26bXGF2SqTrf5u8MSig
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-06-25 13:10:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Wmjd736WUdPfIn581rXTzw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
