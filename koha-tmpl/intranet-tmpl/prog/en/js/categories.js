@@ -23,7 +23,7 @@ jQuery.validator.addMethod( "enrollment_period", function(){
 $(document).ready(function() {
     $("#table_categorie").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [{
-            "aTargets": [-1, -2],
+            "aTargets": [-1],
             "bSortable": false,
             "bSearchable": false
         }, {
