@@ -625,8 +625,9 @@ Using this account is not recommended because some parts of Koha will not functi
                                                     [% END %]
                                                 [% ELSE %]
                                                     [% IF ( RESERVE.is_in_transit ) %]
-                                                        Item in transit from <b> [% RESERVE.frombranch %]</b> since
-                                                        [% RESERVE.datesent | $KohaDates %]
+                                                        [% SET transfer = RESERVE.item.transfer %]
+                                                        Item in transit from <b> [% transfer.frombranch.branchname %]</b> since
+                                                        [% transfer.datesent | $KohaDates %]
                                                     [% ELSIF ( RESERVE.suspend ) %]
                                                         Suspended [% IF ( RESERVE.suspend_until ) %] until [% RESERVE.suspend_until %] [% END %]
                                                     [% ELSE %]
