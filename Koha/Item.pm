@@ -74,6 +74,11 @@ sub holding_branch {
     return $self->{_holding_branch};
 }
 
+sub transfer {
+    my ( $self ) = @_;
+    return $self->_result->branchtransfers->first;
+}
+
 =head3 last_returned_by
 
 Gets and sets the last borrower to return an item.
