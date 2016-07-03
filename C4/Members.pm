@@ -1663,7 +1663,7 @@ sub DelMember {
     return unless $borrowernumber;    # borrowernumber is mandatory.
     # Delete Patron's holds
     my @holds = Koha::Holds->search({ borrowernumber => $borrowernumber });
-    map { $_->delete } @holds;
+    $_->delete for @holds;
 
     my $query = "
        DELETE
