@@ -17,6 +17,7 @@ use C4::Auth qw(checkpw);
 use C4::Members;
 use Koha::AuthUtils qw/hash_password/;
 use Koha::Database;
+use Koha::Patrons;
 
 BEGIN {
     use_ok('C4::Auth');
@@ -32,7 +33,7 @@ my $hash2 = hash_password('password');
 
 { # tests no_set_userenv parameter
     my $patron = $builder->build( { source => 'Borrower' } );
-    changepassword( $patron->{userid}, $patron->{borrowernumber}, $hash1 );
+    Koha::Patrons->find( $patron->{borrowernumber} )->update_password( $patron->{userid}, $hash1 );
     my $library = $builder->build(
         {
             source => 'Branch',

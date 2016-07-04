@@ -814,35 +814,6 @@ sub Generate_Userid {
    return $newuid;
 }
 
-sub changepassword {
-    my ( $uid, $member, $digest ) = @_;
-    my $dbh = C4::Context->dbh;
-
-#Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
-#Then we need to tell the user and have them create a new one.
-    my $resultcode;
-    my $sth =
-      $dbh->prepare(
-        "SELECT * FROM borrowers WHERE userid=? AND borrowernumber != ?");
-    $sth->execute( $uid, $member );
-    if ( ( $uid ne '' ) && ( my $row = $sth->fetchrow_hashref ) ) {
-        $resultcode=0;
-    }
-    else {
-        #Everything is good so we can update the information.
-        $sth =
-          $dbh->prepare(
-            "update borrowers set userid=?, password=? where borrowernumber=?");
-        $sth->execute( $uid, $digest, $member );
-        $resultcode=1;
-    }
-    
-    logaction("MEMBERS", "CHANGE PASS", $member, "") if C4::Context->preference("BorrowersLog");
-    return $resultcode;    
-}
-
-
-
 =head2 fixup_cardnumber
 
 Warning: The caller is responsible for locking the members table in write

@@ -19,13 +19,15 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
+use Test::Warn;
 
 use Koha::Patron;
 use Koha::Patrons;
 use Koha::Database;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -40,6 +42,7 @@ my $new_patron_1  = Koha::Patron->new(
         categorycode => $category->{categorycode},
         surname => 'surname for patron1',
         firstname => 'firstname for patron1',
+        userid => 'a_nonexistent_userid_1',
     }
 )->store;
 my $new_patron_2  = Koha::Patron->new(
@@ -48,6 +51,7 @@ my $new_patron_2  = Koha::Patron->new(
         categorycode => $category->{categorycode},
         surname => 'surname for patron2',
         firstname => 'firstname for patron2',
+        userid => 'a_nonexistent_userid_2',
     }
 )->store;
 
@@ -96,6 +100,31 @@ subtest 'siblings' => sub {
     is( $guarantee_3->{borrowernumber}, $siblings->next->borrowernumber, 'guarantee_3 should exist in the guarantees' );
     $_->delete for $retrieved_guarantee_1->siblings;
     $retrieved_guarantee_1->delete;
+};
+
+subtest 'update_password' => sub {
+    plan tests => 7;
+
+    t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
+    my $original_userid   = $new_patron_1->userid;
+    my $original_password = $new_patron_1->password;
+    warning_like { $retrieved_patron_1->update_password( $new_patron_2->userid, 'another_password' ) }
+    qr{Duplicate entry},
+      'Koha::Patron->update_password should warn if the userid is already used by another patron';
+    is( Koha::Patrons->find( $new_patron_1->borrowernumber )->userid,   $original_userid,   'Koha::Patron->update_password should not have updated the userid' );
+    is( Koha::Patrons->find( $new_patron_1->borrowernumber )->password, $original_password, 'Koha::Patron->update_password should not have updated the userid' );
+
+    $retrieved_patron_1->update_password( 'another_nonexistent_userid_1', 'another_password' );
+    is( Koha::Patrons->find( $new_patron_1->borrowernumber )->userid,   'another_nonexistent_userid_1', 'Koha::Patron->update_password should have updated the userid' );
+    is( Koha::Patrons->find( $new_patron_1->borrowernumber )->password, 'another_password',             'Koha::Patron->update_password should have updated the password' );
+
+    my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $new_patron_1->borrowernumber } )->count;
+    is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->update_password should have logged' );
+
+    t::lib::Mocks::mock_preference( 'BorrowersLog', 0 );
+    $retrieved_patron_1->update_password( 'yet_another_nonexistent_userid_1', 'another_password' );
+    $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $new_patron_1->borrowernumber } )->count;
+    is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->update_password should not have logged' );
 };
 
 $retrieved_patron_1->delete;

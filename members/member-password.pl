@@ -66,7 +66,7 @@ if ( $newpassword && !scalar(@errors) ) {
     my $digest = Koha::AuthUtils::hash_password( $input->param('newpassword') );
     my $uid    = $input->param('newuserid');
     my $dbh    = C4::Context->dbh;
-    if ( changepassword( $uid, $member, $digest ) ) {
+    if ( Koha::Patrons->find( $member )->update_password($uid, $digest) ) {
         $template->param( newpassword => $newpassword );
         if ( $destination eq 'circ' ) {
             print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");

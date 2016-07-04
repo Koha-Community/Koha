@@ -23,6 +23,7 @@ use Modern::Perl;
 use Carp;
 
 use C4::Context;
+use C4::Log;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Issues;
@@ -186,6 +187,25 @@ sub is_debarred {
       if $self->debarred =~ '^9999'
       or dt_from_string( $self->debarred ) > dt_from_string;
     return;
+}
+
+=head2 update_password
+
+my $updated = $patron->update_password( $userid, $password );
+
+Update the userid and the password of a patron.
+If the userid already exists, returns and let DBIx::Class warns
+This will add an entry to action_logs if BorrowersLog is set.
+
+=cut
+
+sub update_password {
+    my ( $self, $userid, $password ) = @_;
+    eval { $self->userid($userid)->store; };
+    return if $@; # Make sure the userid is not already in used by another patron
+    $self->password($password)->store;
+    logaction( "MEMBERS", "CHANGE PASS", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
+    return 1;
 }
 
 =head3 type

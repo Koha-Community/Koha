@@ -23,11 +23,12 @@ use Carp;
 
 use C4::Debug;
 use C4::Context;
-use C4::Members qw(AddMember changepassword);
+use C4::Members qw(AddMember);
 use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
 use C4::Members::Messaging;
 use C4::Auth qw(checkpw_internal);
+use Koha::Patrons;
 use Koha::AuthUtils qw(hash_password);
 use List::MoreUtils qw( any );
 use Net::LDAP;
@@ -334,7 +335,7 @@ sub _do_changepassword {
     my $digest = hash_password($password);
 
     $debug and print STDERR "changing local password for borrowernumber=$borrowerid to '$digest'\n";
-    changepassword($userid, $borrowerid, $digest);
+    Koha::Patrons->find($borrowerid)->update_password( $userid, $digest );
 
     my ($ok, $cardnum) = checkpw_internal(C4::Context->dbh, $userid, $password);
     return $cardnum if $ok;

@@ -5,11 +5,11 @@ use CGI;
 
 use C4::Auth;
 use C4::Koha;
-use C4::Members qw(changepassword);
 use C4::Output;
 use C4::Context;
 use Koha::Patron::Password::Recovery
   qw(SendPasswordRecoveryEmail ValidateBorrowernumber GetValidLinkInfo CompletePasswordRecovery);
+use Koha::Patrons;
 use Koha::AuthUtils qw(hash_password);
 use Koha::Patrons;
 my $query = new CGI;
@@ -135,7 +135,7 @@ elsif ( $query->param('passwordReset') ) {
         && ( $password eq $repeatPassword )
         && ( length($password) >= $minPassLength ) )
     {    #apply changes
-        changepassword( $username, $borrower_number, hash_password($password) );
+        Koha::Patrons->find($borrower_number)->update_password( $username, hash_password($password) );
         CompletePasswordRecovery($uniqueKey);
         $template->param(
             password_reset_done => 1,
