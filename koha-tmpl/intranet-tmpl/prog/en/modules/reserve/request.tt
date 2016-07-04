@@ -292,7 +292,7 @@ function checkMultiHold() {
     </div>
 [% END %]
 
-[% IF ( expiry || diffbranch ) %]
+[% IF ( expiry || diffbranch || restricted || ( amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') ) ) %]
 <div class="dialog message"><ul>
     [% IF ( expiry ) %]
     <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Account has expired</strong></li>
