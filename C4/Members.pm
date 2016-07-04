@@ -78,8 +78,6 @@ BEGIN {
         &GetMemberAccountRecords
         &GetBorNotifyAcctRecord
 
-        GetBorrowerCategorycode
-
         &GetBorrowersToExpunge
         &GetBorrowersWhoHaveNeverBorrowed
         &GetBorrowersWithIssuesHistoryOlderThan
@@ -522,7 +520,7 @@ sub ModMember {
         }
     }
 
-    my $old_categorycode = GetBorrowerCategorycode( $data{borrowernumber} );
+    my $old_categorycode = Koha::Patrons->find( $data{borrowernumber} )->categorycode;
 
     # get only the columns of a borrower
     my $schema = Koha::Database->new()->schema;
@@ -1211,26 +1209,6 @@ sub GetUpcomingMembershipExpires {
     $sth->execute( @pars );
     my $results = $sth->fetchall_arrayref( {} );
     return $results;
-}
-
-=head2 GetBorrowerCategorycode
-
-    $categorycode = &GetBorrowerCategoryCode( $borrowernumber );
-
-Given the borrowernumber, the function returns the corresponding categorycode
-
-=cut
-
-sub GetBorrowerCategorycode {
-    my ( $borrowernumber ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( qq{
-        SELECT categorycode
-        FROM borrowers
-        WHERE borrowernumber = ?
-    } );
-    $sth->execute( $borrowernumber );
-    return $sth->fetchrow;
 }
 
 =head2 GetAge

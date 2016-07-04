@@ -38,6 +38,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::List::Patron;
 use Koha::Libraries;
 use Koha::Patron::Categories;
+use Koha::Patrons;
 
 my $input = new CGI;
 my $op = $input->param('op') || 'show_form';
@@ -294,8 +295,7 @@ if ( $op eq 'do' ) {
             }
         }
 
-        #
-        my $borrower_categorycode = GetBorrowerCategorycode $borrowernumber;
+        my $borrower_categorycode = Koha::Patrons->find( $borrowernumber )->categorycode;
         my $i=0;
         for ( @attributes ) {
             my $attribute;
