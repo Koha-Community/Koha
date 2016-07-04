@@ -60,7 +60,6 @@ BEGIN {
     push @EXPORT, qw(
         &Search
         &GetMemberDetails
-        &GetMemberRelatives
         &GetMember
 
         &GetMemberIssuesAndFines
