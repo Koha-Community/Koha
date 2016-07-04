@@ -75,7 +75,6 @@ BEGIN {
 
         &GetHideLostItemsPreference
 
-        &IsMemberBlocked
         &GetMemberAccountRecords
         &GetBorNotifyAcctRecord
 
@@ -459,49 +458,6 @@ sub GetMember {
     }
 
     return;
-}
-
-=head2 IsMemberBlocked
-
-  my ($block_status, $count) = IsMemberBlocked( $borrowernumber );
-
-Returns whether a patron is restricted or has overdue items that may result
-in a block of circulation privileges.
-
-C<$block_status> can have the following values:
-
-1 if the patron is currently restricted, in which case
-C<$count> is the expiration date (9999-12-31 for indefinite)
-
--1 if the patron has overdue items, in which case C<$count> is the number of them
-
-0 if the patron has no overdue items or outstanding fine days, in which case C<$count> is 0
-
-Existing active restrictions are checked before current overdue items.
-
-=cut
-
-sub IsMemberBlocked {
-    my $borrowernumber = shift;
-    my $dbh            = C4::Context->dbh;
-
-    my $blockeddate = Koha::Patrons->find( $borrowernumber )->is_debarred;
-
-    return ( 1, $blockeddate ) if $blockeddate;
-
-    # if he have late issues
-    my $sth = $dbh->prepare(
-        "SELECT COUNT(*) as latedocs
-         FROM issues
-         WHERE borrowernumber = ?
-         AND date_due < now()"
-    );
-    $sth->execute($borrowernumber);
-    my $latedocs = $sth->fetchrow_hashref->{'latedocs'};
-
-    return ( -1, $latedocs ) if $latedocs > 0;
-
-    return ( 0, 0 );
 }
 
 =head2 GetMemberIssuesAndFines

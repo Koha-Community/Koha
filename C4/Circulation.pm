@@ -800,26 +800,25 @@ sub CanBookBeIssued {
         $alerts{OTHER_CHARGES} = sprintf( "%.2f", $other_charges );
     }
 
-    my ($blocktype, $count) = C4::Members::IsMemberBlocked($borrower->{'borrowernumber'});
-    if ($blocktype == -1) {
-        ## patron has outstanding overdue loans
-	    if ( C4::Context->preference("OverduesBlockCirc") eq 'block'){
-	        $issuingimpossible{USERBLOCKEDOVERDUE} = $count;
-	    }
-	    elsif ( C4::Context->preference("OverduesBlockCirc") eq 'confirmation'){
-	        $needsconfirmation{USERBLOCKEDOVERDUE} = $count;
-	    }
-    } elsif($blocktype == 1) {
-        # patron has accrued fine days or has a restriction. $count is a date
-        if ($count eq '9999-12-31') {
-            $issuingimpossible{USERBLOCKEDNOENDDATE} = $count;
+    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+    if ( my $debarred_date = $patron->is_debarred ) {
+         # patron has accrued fine days or has a restriction. $count is a date
+        if ($debarred_date eq '9999-12-31') {
+            $issuingimpossible{USERBLOCKEDNOENDDATE} = $debarred_date;
         }
         else {
-            $issuingimpossible{USERBLOCKEDWITHENDDATE} = $count;
+            $issuingimpossible{USERBLOCKEDWITHENDDATE} = $debarred_date;
+        }
+    } elsif ( my $num_overdues = $patron->has_overdues ) {
+        ## patron has outstanding overdue loans
+        if ( C4::Context->preference("OverduesBlockCirc") eq 'block'){
+            $issuingimpossible{USERBLOCKEDOVERDUE} = $num_overdues;
+        }
+        elsif ( C4::Context->preference("OverduesBlockCirc") eq 'confirmation'){
+            $needsconfirmation{USERBLOCKEDOVERDUE} = $num_overdues;
         }
     }
 
-#
     # JB34 CHECKS IF BORROWERS DON'T HAVE ISSUE TOO MANY BOOKS
     #
     my $switch_onsite_checkout =
@@ -847,7 +846,7 @@ sub CanBookBeIssued {
     #
     # CHECKPREVCHECKOUT: CHECK IF ITEM HAS EVER BEEN LENT TO PATRON
     #
-    my $patron = Koha::Patrons->find($borrower->{borrowernumber});
+    $patron = Koha::Patrons->find($borrower->{borrowernumber});
     my $wants_check = $patron->wants_check_for_previous_checkout;
     $needsconfirmation{PREVISSUE} = 1
         if ($wants_check and $patron->do_check_for_previous_checkout($item));
