@@ -33,7 +33,6 @@ our @EXPORT = qw(
   AddUniqueDebarment
   DelUniqueDebarment
 
-  IsDebarred
 );
 
 =head1 Koha::Patron::Debarments
@@ -167,28 +166,6 @@ sub ModDebarment {
     _UpdateBorrowerDebarmentFlags( _GetBorrowernumberByDebarmentId($borrower_debarment_id) );
 
     return $r;
-}
-
-=head2 IsDebarred
-
-my $debarment_expiration = IsDebarred( $borrowernumber );
-
-Returns the date a borrowers debarment will expire, or
-undef if the patron is not debarred
-
-=cut
-
-sub IsDebarred {
-    my ($borrowernumber) = @_;
-
-    return unless ($borrowernumber);
-
-    my $sql = "SELECT debarred FROM borrowers WHERE borrowernumber = ? AND debarred > CURRENT_DATE()";
-    my $sth = C4::Context->dbh->prepare($sql);
-    $sth->execute($borrowernumber);
-    my ($debarred) = $sth->fetchrow_array();
-
-    return $debarred;
 }
 
 =head2 AddUniqueDebarment

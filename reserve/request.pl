@@ -44,7 +44,6 @@ use C4::Utils::DataTables::Members;
 use C4::Members;
 use C4::Search;		# enabled_staff_search_views
 use Koha::DateUtils;
-use Koha::Patron::Debarments qw(IsDebarred);
 use Koha::Holds;
 use Koha::Libraries;
 
@@ -181,6 +180,7 @@ if ($borrowernumber_hold && !$action) {
         $diffbranch = 1;
     }
 
+    my $is_debarred = Koha::Patrons->find( $borrowerinfo->{borrowernumber} )->is_debarred;
     $template->param(
                 borrowernumber      => $borrowerinfo->{'borrowernumber'},
                 borrowersurname     => $borrowerinfo->{'surname'},
@@ -199,7 +199,7 @@ if ($borrowernumber_hold && !$action) {
                 diffbranch          => $diffbranch,
                 messages            => $messages,
                 warnings            => $warnings,
-                restricted          => IsDebarred($borrowerinfo->{'borrowernumber'}),
+                restricted          => $is_debarred,
                 amount_outstanding  => GetMemberAccountRecords($borrowerinfo->{borrowernumber}),
     );
 }

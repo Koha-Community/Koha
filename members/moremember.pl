@@ -51,7 +51,7 @@ use C4::Branch; # GetBranchName
 use C4::Form::MessagingPreferences;
 use List::MoreUtils qw/uniq/;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
-use Koha::Patron::Debarments qw(GetDebarments IsDebarred);
+use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::Patron::Images;
 use Module::Load;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
@@ -144,7 +144,7 @@ for (qw(gonenoaddress lost borrowernotes)) {
 	 $data->{$_} and $template->param(flagged => 1) and last;
 }
 
-if ( IsDebarred($borrowernumber) ) {
+if ( Koha::Patrons->find( $borrowernumber )->is_debarred ) {
     $template->param( 'userdebarred' => 1, 'flagged' => 1 );
     my $debar = $data->{'debarred'};
     if ( $debar ne "9999-12-31" ) {

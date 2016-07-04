@@ -44,7 +44,7 @@ use C4::Context;
 use CGI::Session;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patron;
-use Koha::Patron::Debarments qw(GetDebarments IsDebarred);
+use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::Patron::Messages;
@@ -297,7 +297,7 @@ if ($borrowernumber) {
         finetotal    => $fines
     );
 
-    if ( IsDebarred($borrowernumber) ) {
+    if ( Koha::Patrons->find( $borrowernumber )->is_debarred ) {
         $template->param(
             'userdebarred'    => $borrower->{debarred},
             'debarredcomment' => $borrower->{debarredcomment},

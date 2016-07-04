@@ -37,12 +37,12 @@ use C4::NewsChannels; #get slip news
 use DateTime;
 use Koha::Database;
 use Koha::DateUtils;
-use Koha::Patron::Debarments qw(IsDebarred);
 use Text::Unaccent qw( unac_string );
 use Koha::AuthUtils qw(hash_password);
 use Koha::Database;
 use Koha::Holds;
 use Koha::List::Patron;
+use Koha::Patrons;
 
 our (@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -491,7 +491,7 @@ sub IsMemberBlocked {
     my $borrowernumber = shift;
     my $dbh            = C4::Context->dbh;
 
-    my $blockeddate = Koha::Patron::Debarments::IsDebarred($borrowernumber);
+    my $blockeddate = Koha::Patrons->find( $borrowernumber )->is_debarred;
 
     return ( 1, $blockeddate ) if $blockeddate;
 

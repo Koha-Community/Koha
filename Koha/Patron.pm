@@ -24,6 +24,7 @@ use Carp;
 
 use C4::Context;
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::Issues;
 use Koha::OldIssues;
 use Koha::Patron::Categories;
@@ -166,6 +167,25 @@ sub do_check_for_previous_checkout {
     # Check old issues table
     my $old_issues = Koha::OldIssues->search($criteria);
     return $old_issues->count;  # 0 || N
+}
+
+=head2 is_debarred
+
+my $debarment_expiration = $patron->is_debarred;
+
+Returns the date a patron debarment will expire, or undef if the patron is not
+debarred
+
+=cut
+
+sub is_debarred {
+    my ($self) = @_;
+
+    return unless $self->debarred;
+    return $self->debarred
+      if $self->debarred =~ '^9999'
+      or dt_from_string( $self->debarred ) > dt_from_string;
+    return;
 }
 
 =head3 type

@@ -11,6 +11,7 @@ use C4::Reserves qw( GetReservesFromBorrowernumber CancelReserve );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Patrons;
 
 my $rs = Koha::Database->new->schema->resultset('Discharge');
 
@@ -50,8 +51,7 @@ sub is_discharged {
     return unless $params->{borrowernumber};
     my $borrowernumber = $params->{borrowernumber};
 
-
-    my $restricted = Koha::Patron::Debarments::IsDebarred($borrowernumber);
+    my $restricted = Koha::Patrons->find( $borrowernumber )->is_debarred;
     my $validated = get_validated({borrowernumber => $borrowernumber});
 
     if ($restricted && $validated) {

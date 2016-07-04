@@ -90,12 +90,12 @@ Koha::Patron::Discharge::discharge( { borrowernumber => $patron->{borrowernumber
 Koha::Patron::Discharge::discharge( { borrowernumber => $patron2->{borrowernumber} } );
 Koha::Patron::Discharge::discharge( { borrowernumber => $patron3->{borrowernumber} } );
 is( Koha::Patron::Discharge::is_discharged( { borrowernumber => $patron->{borrowernumber} } ), 1, 'The patron has been discharged' );
-is( Koha::Patron::Debarments::IsDebarred( $patron->{borrowernumber} ), '9999-12-31', 'The patron has been debarred after discharge' );
+is( Koha::Patrons->find( $patron->{borrowernumber} )->is_debarred, '9999-12-31', 'The patron has been debarred after discharge' );
 is( scalar( @{ Koha::Patron::Discharge::get_validated() } ),             3,            'There are 3 validated discharges' );
 is( scalar( @{ Koha::Patron::Discharge::get_validated( { borrowernumber => $patron->{borrowernumber} } ) } ), 1, 'There is 1 validated discharge for a given patron' );
 is( scalar( @{ Koha::Patron::Discharge::get_validated( { branchcode => $library->{branchcode} } ) } ), 2, 'There is 2 validated discharges for a given branchcode' );    # This is not used in the code yet
 Koha::Patron::Debarments::DelUniqueDebarment( { 'borrowernumber' => $patron->{borrowernumber}, 'type' => 'DISCHARGE' } );
-ok( !Koha::Patron::Debarments::IsDebarred( $patron->{borrowernumber} ), 'The debarment has been lifted' );
+ok( !Koha::Patrons->find( $patron->{borrowernumber} )->is_debarred, 'The debarment has been lifted' );
 ok( !Koha::Patron::Discharge::is_discharged( { borrowernumber => $patron->{borrowernumber} } ), 'The patron is not discharged after the restriction has been lifted' );
 
 # Verify that the discharge works multiple times

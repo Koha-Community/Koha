@@ -35,7 +35,6 @@ use C4::Items;
 use C4::Letters;
 use C4::Branch; # GetBranches
 use Koha::DateUtils;
-use Koha::Patron::Debarments qw(IsDebarred);
 use Koha::Holds;
 use Koha::Database;
 use Koha::Patron::Messages;
@@ -90,7 +89,7 @@ my ( $borr ) = GetMemberDetails( $borrowernumber );
 my (  $today_year,   $today_month,   $today_day) = Today();
 my ($warning_year, $warning_month, $warning_day) = split /-/, $borr->{'dateexpiry'};
 
-my $debar = IsDebarred($borrowernumber);
+my $debar = Koha::Patrons->find( $borrowernumber )->is_debarred;
 my $userdebarred;
 
 if ($debar) {

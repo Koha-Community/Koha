@@ -35,7 +35,7 @@ use C4::Overdues;
 use C4::Debug;
 use Koha::DateUtils;
 use Koha::Libraries;
-use Koha::Patron::Debarments qw(IsDebarred);
+use Koha::Patrons;
 use Date::Calc qw/Today Date_to_Days/;
 use List::MoreUtils qw/uniq/;
 
@@ -333,7 +333,7 @@ if ( $borr->{lost} && ($borr->{lost} == 1) ) {
     );
 }
 
-if ( IsDebarred($borrowernumber) ) {
+if ( Koha::Patrons->find( $borrowernumber )->is_debarred ) {
     $noreserves = 1;
     $template->param(
         message          => 1,

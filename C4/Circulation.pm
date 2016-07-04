@@ -2412,8 +2412,9 @@ sub _debar_user_on_return {
                 type           => 'SUSPENSION',
             });
             # if borrower was already debarred but does not get an extra debarment
-            if ( $borrower->{debarred} eq Koha::Patron::Debarments::IsDebarred($borrower->{borrowernumber}) ) {
-                    return ($borrower->{debarred},1);
+            my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+            if ( $borrower->{debarred} eq $patron->is_debarred ) {
+                return ($borrower->{debarred},1);
             }
             return $new_debar_dt->ymd();
         }
@@ -2975,7 +2976,7 @@ sub CanBookBeRenewed {
 
     my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
     my $restrictionblockrenewing = C4::Context->preference('RestrictionBlockRenewing');
-    my $restricted = Koha::Patron::Debarments::IsDebarred($borrowernumber);
+    my $restricted = Koha::Patrons->find( $borrowernumber )->is_debarred;
     my $hasoverdues = C4::Members::HasOverdues($borrowernumber);
 
     if ( $restricted and $restrictionblockrenewing ) {
