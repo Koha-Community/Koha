@@ -235,6 +235,20 @@ sub renew_account {
     return dt_from_string( $expiry_date )->truncate( to => 'day' );
 }
 
+=head2 has_overdues
+
+my $has_overdues = $patron->has_overdues;
+
+Returns the number of patron's overdues
+
+=cut
+
+sub has_overdues {
+    my ($self) = @_;
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    return $self->_result->issues->search({ date_due => { '<' => $dtf->format_datetime( dt_from_string() ) } })->count;
+}
+
 =head3 type
 
 =cut

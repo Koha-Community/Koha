@@ -2091,7 +2091,7 @@ sub AddReturn {
     if ( $borrowernumber
       && $borrower->{'debarred'}
       && C4::Context->preference('AutoRemoveOverduesRestrictions')
-      && !C4::Members::HasOverdues( $borrowernumber )
+      && !Koha::Patrons->find( $borrowernumber )->has_overdues
       && @{ GetDebarments({ borrowernumber => $borrowernumber, type => 'OVERDUES' }) }
     ) {
         DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
@@ -2824,8 +2824,9 @@ sub CanBookBeRenewed {
 
     my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
     my $restrictionblockrenewing = C4::Context->preference('RestrictionBlockRenewing');
-    my $restricted = Koha::Patrons->find( $borrowernumber )->is_debarred;
-    my $hasoverdues = C4::Members::HasOverdues($borrowernumber);
+    my $patron      = Koha::Patrons->find($borrowernumber);
+    my $restricted  = $patron->is_debarred;
+    my $hasoverdues = $patron->has_overdues;
 
     if ( $restricted and $restrictionblockrenewing ) {
         return ( 0, 'restriction');
@@ -2998,7 +2999,7 @@ sub AddRenewal {
     $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
     if ( $borrowernumber
       && $borrower->{'debarred'}
-      && !C4::Members::HasOverdues( $borrowernumber )
+      && !Koha::Patrons->find( $borrowernumber )->has_overdues
       && @{ GetDebarments({ borrowernumber => $borrowernumber, type => 'OVERDUES' }) }
     ) {
         DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });

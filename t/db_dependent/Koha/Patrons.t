@@ -22,6 +22,7 @@ use Modern::Perl;
 use Test::More tests => 7;
 use Test::Warn;
 
+use C4::Circulation;
 use Koha::Patron;
 use Koha::Patrons;
 use Koha::Database;
@@ -56,6 +57,9 @@ my $new_patron_2  = Koha::Patron->new(
         userid => 'a_nonexistent_userid_2',
     }
 )->store;
+
+C4::Context->_new_userenv('xxx');
+C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, 'Midway Public Library', '', '', '');
 
 is( Koha::Patrons->search->count, $nb_of_patrons + 2, 'The 2 patrons should have been added' );
 
@@ -102,6 +106,36 @@ subtest 'siblings' => sub {
     is( $guarantee_3->{borrowernumber}, $siblings->next->borrowernumber, 'guarantee_3 should exist in the guarantees' );
     $_->delete for $retrieved_guarantee_1->siblings;
     $retrieved_guarantee_1->delete;
+};
+
+subtest 'has_overdues' => sub {
+    plan tests => 3;
+
+    my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
+    my $item_1 = $builder->build(
+        {   source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem_1->{biblionumber}
+            }
+        }
+    );
+    my $retrieved_patron = Koha::Patrons->find( $new_patron_1->borrowernumber );
+    is( $retrieved_patron->has_overdues, 0, );
+
+    my $tomorrow = DateTime->today( time_zone => C4::Context->tz() )->add( days => 1 );
+    my $issue = AddIssue( $new_patron_1->unblessed, $item_1->{barcode} );
+    is( $retrieved_patron->has_overdues, 0, );
+    AddReturn( $item_1->{barcode} );
+    my $yesterday = DateTime->today(time_zone => C4::Context->tz())->add( days => -1 );
+    $issue = AddIssue( $new_patron_1->unblessed, $item_1->{barcode}, $yesterday );
+    $retrieved_patron = Koha::Patrons->find( $new_patron_1->borrowernumber );
+    is( $retrieved_patron->has_overdues, 1, );
+    AddReturn( $item_1->{barcode} );
 };
 
 subtest 'update_password' => sub {

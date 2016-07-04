@@ -54,7 +54,7 @@ sub HasOverdues {
 
     return unless $borrowernumber;
 
-    return C4::Members::HasOverdues($borrowernumber);
+    return Koha::Patrons->find( $borrowernumber )->has_overdues;
 }
 
 

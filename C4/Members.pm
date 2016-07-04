@@ -90,7 +90,6 @@ BEGIN {
         &IssueSlip
         GetBorrowersWithEmail
 
-        HasOverdues
         GetOverduesForPatron
     );
 
@@ -1863,21 +1862,6 @@ sub AddEnrolmentFeeIfNeeded {
         # insert fee in patron debts
         C4::Accounts::manualinvoice( $borrowernumber, '', '', 'A', $enrolmentfee );
     }
-}
-
-=head2 HasOverdues
-
-=cut
-
-sub HasOverdues {
-    my ( $borrowernumber ) = @_;
-
-    my $sql = "SELECT COUNT(*) FROM issues WHERE date_due < NOW() AND borrowernumber = ?";
-    my $sth = C4::Context->dbh->prepare( $sql );
-    $sth->execute( $borrowernumber );
-    my ( $count ) = $sth->fetchrow_array();
-
-    return $count;
 }
 
 =head2 DeleteExpiredOpacRegistrations
