@@ -203,7 +203,7 @@
                                 <legend id="identity_legend">Identity</legend>
 
                                 <ol>
-                                    [% UNLESS hidden.defined('title') || !member_titles %]
+                                    [% UNLESS hidden.defined('title') || !Koha.Preference('BorrowersTitles') %]
                                         <li>
                                             [% IF mandatory.defined('title') %]
                                                 <label for="borrower_title" class="required">
@@ -213,7 +213,7 @@
                                             Salutation:</label>
 
                                             <select id="borrower_title" name="borrower_title">
-                                                [% FOREACH mt IN member_titles %]
+                                                [% FOREACH mt IN Koha.Preference('BorrowersTitles').split('\|') %]
                                                     [% IF mt == borrower.title %]
                                                         <option value="[% mt %]" selected="selected">[% mt %]</option>
                                                     [% ELSE %]
