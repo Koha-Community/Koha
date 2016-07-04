@@ -267,7 +267,7 @@ $(document).ready(function() {
             <td>[% item.code |html %]</td>
             <td>[% item.description %]</td>
             <td>
-                [% IF item.branches.size > 0 %]
+                [% IF ( item.branches.size && item.branches.size > 0 ) %]
                     [% branches_str = "" %]
                     [% FOREACH branch IN item.branches %]
                         [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
