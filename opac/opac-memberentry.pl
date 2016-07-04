@@ -68,7 +68,6 @@ $template->param(
     action            => $action,
     hidden            => GetHiddenFields( $mandatory, 'registration' ),
     mandatory         => $mandatory,
-    member_titles     => GetTitles() || undef,
     branches          => GetBranchesLoop(),
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
 );

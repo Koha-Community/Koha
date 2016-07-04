@@ -546,14 +546,6 @@ $template->param(
 
 my $default_borrowertitle = '';
 unless ( $op eq 'duplicate' ) { $default_borrowertitle=$data{'title'} }
-my($borrowertitle)=GetTitles();
-$template->param( title_cgipopup => 1) if ($borrowertitle);
-my $borrotitlepopup = CGI::popup_menu(-name=>'title',
-        -id => 'btitle',
-        -values=>$borrowertitle,
-        -override => 1,
-        -default=>$default_borrowertitle
-        );    
 
 my @relationships = split /,|\|/, C4::Context->preference('borrowerRelationship');
 my @relshipdata;
@@ -681,7 +673,7 @@ $template->param(
   borrowernumber  => $borrowernumber, #register number
   guarantorid => ($borrower_data->{'guarantorid'} || $guarantorid),
   relshiploop => \@relshipdata,
-  borrotitlepopup => $borrotitlepopup,
+  btitle=> $default_borrowertitle,
   guarantorinfo   => $guarantorinfo,
   flagloop  => \@flagdata,
   category_type =>$category_type,

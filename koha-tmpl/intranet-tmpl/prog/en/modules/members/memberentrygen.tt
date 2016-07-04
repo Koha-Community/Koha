@@ -254,7 +254,7 @@ $(document).ready(function() {
 		<ol>
 		[% UNLESS ( I ) %]
         [% UNLESS notitle %]
-		[% IF ( title_cgipopup ) %]
+        [% IF Koha.Preference('BorrowersTitles') %]
             <li>
             [% IF ( mandatorytitle ) %]
                 <label for="btitle" class="required">
@@ -262,7 +262,16 @@ $(document).ready(function() {
                 <label for="btitle">
             [% END %]
             Salutation: </label>
-            [% borrotitlepopup %]
+            <select id="btitle" name="title">
+                <option value=""></option>
+                [% FOREACH t IN Koha.Preference('BorrowersTitles').split('\|') %]
+                    [% IF btitle == t %]
+                        <option value="[% t %]" selected="selected">[% t %]</option>
+                    [% ELSE %]
+                        <option value="[% t %]">[% t %]</option>
+                    [% END %]
+                [% END %]
+            </select>
             [% IF ( mandatorytitle ) %]<span class="required">Required</span>[% END %]
             </li>
 		[% END %]

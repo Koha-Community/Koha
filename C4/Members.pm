@@ -71,7 +71,6 @@ BEGIN {
 
         &GetAge
         &GetSortDetails
-        &GetTitles
 
         &GetHideLostItemsPreference
 
@@ -1638,26 +1637,6 @@ EOF
     logaction("MEMBERS", "RENEW", $borrower->{'borrowernumber'}, "Membership renewed")if C4::Context->preference("BorrowersLog");
     return $date if ($sth);
     return 0;
-}
-
-=head2 GetTitles (OUEST-PROVENCE)
-
-  ($borrowertitle)= &GetTitles();
-
-Looks up the different title . Returns array  with all borrowers title
-
-=cut
-
-sub GetTitles {
-    my @borrowerTitle = split (/,|\|/,C4::Context->preference('BorrowersTitles'));
-    unshift( @borrowerTitle, "" );
-    my $count=@borrowerTitle;
-    if ($count == 1){
-        return ();
-    }
-    else {
-        return ( \@borrowerTitle);
-    }
 }
 
 =head2 GetHideLostItemsPreference
