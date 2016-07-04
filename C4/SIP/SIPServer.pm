@@ -124,25 +124,38 @@ sub process_request {
 
 sub raw_transport {
     my $self = shift;
-    my ($input);
+    my $input;
     my $service = $self->{service};
+    # If using Net::Server::PreFork you may already have account set from a previous session
+    # Ensure you dont
+    if ($self->{account}) {
+        delete $self->{account};
+    }
 
+    # Timeout the while loop if we get stuck in it
+    # In practice it should only iterate once but be prepared
+    local $SIG{ALRM} = sub { die 'raw transport Timed Out!' }
+    syslog('LOG_DEBUG', "raw_transport: timeout is $service->{timeout}");
+    alarm $service->{timeout};
     while (!$self->{account}) {
-    local $SIG{ALRM} = sub { die "raw_transport Timed Out!\n"; };
-    syslog("LOG_DEBUG", "raw_transport: timeout is %d", $service->{timeout});
-    $input = read_request();
-    if (!$input) {
-        # EOF on the socket
-        syslog("LOG_INFO", "raw_transport: shutting down: EOF during login");
-        return;
+        $input = read_request();
+        if (!$input) {
+            # EOF on the socket
+            syslog("LOG_INFO", "raw_transport: shutting down: EOF during login");
+            return;
+        }
+        $input =~ s/[\r\n]+$//sm;	# Strip off trailing line terminator(s)
+        last if C4::SIP::Sip::MsgType::handle($input, $self, LOGIN);
     }
-    $input =~ s/[\r\n]+$//sm;	# Strip off trailing line terminator(s)
-    last if C4::SIP::Sip::MsgType::handle($input, $self, LOGIN);
-    }
+    alarm 0;
 
     syslog("LOG_DEBUG", "raw_transport: uname/inst: '%s/%s'",
-	   $self->{account}->{id},
-	   $self->{account}->{institution});
+        $self->{account}->{id},
+        $self->{account}->{institution});
+    if (! $self->{account}->{id}) {
+        syslog("LOG_ERR","Login failed shutting down");
+        return;
+    }
 
     $self->sip_protocol_loop();
     syslog("LOG_INFO", "raw_transport: shutting down");
