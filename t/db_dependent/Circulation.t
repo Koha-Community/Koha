@@ -1088,6 +1088,67 @@ subtest 'AddIssue & AllowReturnToBranch' => sub {
     # TODO t::lib::Mocks::mock_preference('AllowReturnToBranch', 'homeorholdingbranch');
 };
 
+subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
+    plan tests => 8;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron  = $builder->build( { source => 'Borrower' } );
+
+    my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
+    my $item_1 = $builder->build(
+        {   source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem_1->{biblionumber}
+            }
+        }
+    );
+    my $biblioitem_2 = $builder->build( { source => 'Biblioitem' } );
+    my $item_2 = $builder->build(
+        {   source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem_2->{biblionumber}
+            }
+        }
+    );
+
+    my ( $error, $question, $alerts );
+
+    # Patron cannot issue item_1, he has overdues
+    my $yesterday = DateTime->today( time_zone => C4::Context->tz() )->add( days => -1 );
+    my $issue = AddIssue( $patron, $item_1->{barcode}, $yesterday );    # Add an overdue
+
+    t::lib::Mocks::mock_preference( 'OverduesBlockCirc', 'confirmation' );
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
+    is( keys(%$error) + keys(%$alerts),  0 );
+    is( $question->{USERBLOCKEDOVERDUE}, 1 );
+
+    t::lib::Mocks::mock_preference( 'OverduesBlockCirc', 'block' );
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
+    is( keys(%$question) + keys(%$alerts), 0 );
+    is( $error->{USERBLOCKEDOVERDUE},      1 );
+
+    # Patron cannot issue item_1, he is debarred
+    my $tomorrow = DateTime->today( time_zone => C4::Context->tz() )->add( days => 1 );
+    Koha::Patron::Debarments::AddDebarment( { borrowernumber => $patron->{borrowernumber}, expiration => $tomorrow } );
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
+    is( keys(%$question) + keys(%$alerts), 0 );
+    is( $error->{USERBLOCKEDWITHENDDATE}, output_pref( { dt => $tomorrow, dateformat => 'sql', dateonly => 1 } ) );
+
+    Koha::Patron::Debarments::AddDebarment( { borrowernumber => $patron->{borrowernumber} } );
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
+    is( keys(%$question) + keys(%$alerts), 0 );
+    is( $error->{USERBLOCKEDNOENDDATE},    '9999-12-31' );
+};
 
 sub set_userenv {
     my ( $library ) = @_;
