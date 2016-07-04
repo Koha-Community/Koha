@@ -213,6 +213,7 @@
                                             Salutation:</label>
 
                                             <select id="borrower_title" name="borrower_title">
+                                                <option value=""></option>
                                                 [% FOREACH mt IN Koha.Preference('BorrowersTitles').split('\|') %]
                                                     [% IF mt == borrower.title %]
                                                         <option value="[% mt %]" selected="selected">[% mt %]</option>
