@@ -1990,27 +1990,6 @@ sub GetBorrowersNamesAndLatestIssue {
     return $results;
 }
 
-=head2 ModPrivacy
-
-  my $success = ModPrivacy( $borrowernumber, $privacy );
-
-Update the privacy of a patron.
-
-return :
-true on success, false on failure
-
-=cut
-
-sub ModPrivacy {
-    my $borrowernumber = shift;
-    my $privacy = shift;
-    return unless defined $borrowernumber;
-    return unless $borrowernumber =~ /^\d+$/;
-
-    return ModMember( borrowernumber => $borrowernumber,
-                      privacy        => $privacy );
-}
-
 =head2 IssueSlip
 
   IssueSlip($branchcode, $borrowernumber, $quickslip)
