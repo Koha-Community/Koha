@@ -100,15 +100,15 @@ sub siblings {
     );
 }
 
-=head3 wantsCheckPrevCheckout
+=head3 wants_check_for_previous_checkout
 
-    $wantsCheckPrevCheckout = $patron->wantsCheckPrevCheckout;
+    $wants_check = $patron->wants_check_for_previous_checkout;
 
 Return 1 if Koha needs to perform PrevIssue checking, else 0.
 
 =cut
 
-sub wantsCheckPrevCheckout {
+sub wants_check_for_previous_checkout {
     my ( $self ) = @_;
     my $syspref = C4::Context->preference("checkPrevCheckout");
 
@@ -134,16 +134,16 @@ sub wantsCheckPrevCheckout {
     }
 }
 
-=head3 doCheckPrevCheckout
+=head3 do_check_for_previous_checkout
 
-    $checkPrevCheckout = $patron->doCheckPrevCheckout($item);
+    $do_check = $patron->do_check_for_previous_checkout($item);
 
 Return 1 if the bib associated with $ITEM has previously been checked out to
 $PATRON, 0 otherwise.
 
 =cut
 
-sub doCheckPrevCheckout {
+sub do_check_for_previous_checkout {
     my ( $self, $item ) = @_;
 
     # Find all items for bib and extract item numbers.

@@ -54,7 +54,7 @@ C4::Context->set_userenv(@USERENV);
 BAIL_OUT("No userenv") unless C4::Context->userenv;
 
 
-# wantsCheckPrevCheckout
+# wants_check_for_previous_checkout
 
 # We expect the following result matrix:
 #
@@ -203,7 +203,7 @@ map {
             });
             my $patron = Koha::Patrons->find($kpatron->{borrowernumber});
             is(
-                $patron->wantsCheckPrevCheckout, $_->{result},
+                $patron->wants_check_for_previous_checkout, $_->{result},
                 "Predicate with syspref " . $syspref . ", cat " . $code
                     . ", patron " . $_->{setting}
               );
@@ -211,7 +211,7 @@ map {
     } @{$_->{categories}};
 } @{$mappings};
 
-# doCheckPrevCheckout
+# do_check_for_previous_checkout
 
 # We want to test:
 # - DESCRIPTION [RETURNVALUE (0/1)]
@@ -254,7 +254,7 @@ sub test_it {
     map {
         my $patron = Koha::Patrons->find($_->{patron}->{borrowernumber});
         is(
-            $patron->doCheckPrevCheckout($_->{item}),
+            $patron->do_check_for_previous_checkout($_->{item}),
             $_->{result}, $stage . ": " . $_->{msg}
         );
     } @{$mapping};
@@ -358,20 +358,20 @@ test_it($cpvPmappings, "PostReturn");
 
 # Finally test C4::Circulation::CanBookBeIssued
 
-# We have already tested ->wantsCheckPrevCheckout and ->doCheckPrevCheckout,
-# so all that remains to be tested is whetherthe different combinational
-# outcomes of the above return values in CanBookBeIssued result in the
-# approriate $needsconfirmation.
+# We have already tested ->wants_check_for_previous_checkout and
+# ->do_check_for_previous_checkout, so all that remains to be tested is
+# whetherthe different combinational outcomes of the above return values in
+# CanBookBeIssued result in the approriate $needsconfirmation.
 
 # We want to test:
 # - DESCRIPTION [RETURNVALUE (0/1)]
-# - patron, !wantsCheckPrevCheckout, !doCheckPrevCheckout
+# - patron, !wants_check_for_previous_checkout, !do_check_for_previous_checkout
 #   [!$issuingimpossible,!$needsconfirmation->{PREVISSUE}]
-# - patron, wantsCheckPrevCheckout, !doCheckPrevCheckout
+# - patron, wants_check_for_previous_checkout, !do_check_for_previous_checkout
 #   [!$issuingimpossible,!$needsconfirmation->{PREVISSUE}]
-# - patron, !wantsCheckPrevCheckout, doCheckPrevCheckout
+# - patron, !wants_check_for_previous_checkout, do_check_for_previous_checkout
 #   [!$issuingimpossible,!$needsconfirmation->{PREVISSUE}]
-# - patron, wantsCheckPrevCheckout, doCheckPrevCheckout
+# - patron, wants_check_for_previous_checkout, do_check_for_previous_checkout
 #   [!$issuingimpossible,$needsconfirmation->{PREVISSUE}]
 
 # Needs:
@@ -410,26 +410,26 @@ my $CBBI_mappings = [
         syspref => 'hardno',
         item    => $new_item,
         result  => undef,
-        msg     => "patron, !wantsCheckPrevCheckout, !doCheckPrevCheckout"
+        msg     => "patron, !wants_check_for_previous_checkout, !do_check_for_previous_checkout"
 
     },
     {
         syspref => 'hardyes',
         item    => $new_item,
         result  => undef,
-        msg     => "patron, wantsCheckPrevCheckout, !doCheckPrevCheckout"
+        msg     => "patron, wants_check_for_previous_checkout, !do_check_for_previous_checkout"
     },
     {
         syspref => 'hardno',
         item    => $prev_item,
         result  => undef,
-        msg     => "patron, !wantsCheckPrevCheckout, doCheckPrevCheckout"
+        msg     => "patron, !wants_check_for_previous_checkout, do_check_for_previous_checkout"
     },
     {
         syspref => 'hardyes',
         item    => $prev_item,
         result  => 1,
-        msg     => "patron, wantsCheckPrevCheckout, doCheckPrevCheckout"
+        msg     => "patron, wants_check_for_previous_checkout, do_check_for_previous_checkout"
     },
 ];
 

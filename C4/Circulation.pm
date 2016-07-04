@@ -946,9 +946,9 @@ sub CanBookBeIssued {
     # CHECKPREVCHECKOUT: CHECK IF ITEM HAS EVER BEEN LENT TO PATRON
     #
     my $patron = Koha::Patrons->find($borrower->{borrowernumber});
-    my $wantsCheckPrevCheckout = $patron->wantsCheckPrevCheckout;
+    my $wants_check = $patron->wants_check_for_previous_checkout;
     $needsconfirmation{PREVISSUE} = 1
-        if ($wantsCheckPrevCheckout and $patron->doCheckPrevCheckout($item));
+        if ($wants_check and $patron->do_check_for_previous_checkout($item));
 
     #
     # ITEM CHECKING
