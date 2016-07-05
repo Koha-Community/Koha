@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 
 use CGI qw ( -utf8 );
 use Date::Manip;
@@ -45,7 +45,7 @@ Plugin that shows circulation stats
 =cut
 
 # my $debug = 1;	# override for now.
-my $input = new CGI;
+my $input = CGI->new;
 my $fullreportname = "reports/issues_stats.tt";
 my $do_it    = $input->param('do_it');
 my $line     = $input->param("Line");
@@ -70,19 +70,19 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
 	flagsrequired => {reports => '*'},
 	debug => 0,
 });
-our $sep     = $input->param("sep");
+our $sep     = $input->param("sep") // '';
 $sep = "\t" if ($sep eq 'tabulation');
 $template->param(do_it => $do_it,
 );
 
-my $itemtypes = GetItemTypes();
-my $categoryloop = GetBorrowercategoryList;
+our $itemtypes = GetItemTypes();
+our $categoryloop = GetBorrowercategoryList;
 
-my $ccodes    = GetKohaAuthorisedValues("items.ccode");
-my $locations = GetKohaAuthorisedValues("items.location");
+our $ccodes    = GetKohaAuthorisedValues("items.ccode");
+our $locations = GetKohaAuthorisedValues("items.location");
 
-my $Bsort1 = GetAuthorisedValues("Bsort1");
-my $Bsort2 = GetAuthorisedValues("Bsort2");
+our $Bsort1 = GetAuthorisedValues("Bsort1");
+our $Bsort2 = GetAuthorisedValues("Bsort2");
 my ($hassort1,$hassort2);
 $hassort1=1 if $Bsort1;
 $hassort2=1 if $Bsort2;
@@ -219,8 +219,8 @@ sub calculate {
 	push @loopfilter,{crit=>"Select Month",filter=>$monthsel} if ($monthsel);
 
 	my @linefilter;
-	$debug and warn "filtres ". join "|", @filters;
-	my ($colsource, $linesource);
+	$debug and warn "filtres ". join "|", @$filters;
+	my ($colsource, $linesource) = ('', '');
 	$linefilter[1] = @$filters[1] if ($line =~ /datetime/);
 	$linefilter[0] = 
 	    ( $line =~ /datetime/ ) ? @$filters[0]
