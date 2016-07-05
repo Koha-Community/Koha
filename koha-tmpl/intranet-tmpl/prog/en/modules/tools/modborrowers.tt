@@ -172,6 +172,12 @@
                 </form>
                 [% END %]
 
+                [% IF ( op == 'show') && (!borrowers) && (!notfoundcardnumbers) # Alert if no patrons given%]
+                    [% op = 'noshow' # Change op to prevent display in code below %]
+                    <h1>Batch patrons modification</h1>
+                    <div class="dialog alert">No patron card numbers given. <a href="/cgi-bin/koha/tools/modborrowers.pl" class="btn btn-mini">Back</a></div>
+                [% END #Alert if no patrons %]
+
                 [% IF ( op == 'show' or op == 'show_results' ) %]
                     [% IF ( op == 'show' ) %]
                         <h1>Batch patrons modification</h1>
