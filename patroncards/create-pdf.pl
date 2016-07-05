@@ -45,8 +45,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
                                                                      flagsrequired   => { tools => 'label_creator' },
                                                                      debug           => 1,
                                                                      });
-
-
 my $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $template_id = $cgi->param('template_id') || undef;
 my $layout_id   = $cgi->param('layout_id') || undef;
@@ -58,13 +56,17 @@ my $patronlist_id = $cgi->param('patronlist_id');
 my $items = undef; # items = cards
 my $new_page = 0;
 
-my $pdf_file = (@label_ids || @borrower_numbers ? "card_single_" . scalar(@label_ids || @borrower_numbers) : "card_batch_$batch_id");
-print $cgi->header( -type       => 'application/pdf',
-                    -encoding   => 'utf-8',
-                    -attachment => "$pdf_file.pdf",
-                  );
+# Wrap pdf creation part into an eval, some vars need scope outside eval
+my $pdf_ok;
+my $pdf;
+my $pdf_file;
+my $cardscount = 0;
 
-my $pdf = C4::Creators::PDF->new(InitVars => 0);
+#Note fo bug 14138: Indenting follows in separate patch to ease review
+eval {
+$pdf_file = (@label_ids || @borrower_numbers ? "card_single_" . scalar(@label_ids || @borrower_numbers) : "card_batch_$batch_id");
+
+$pdf = C4::Creators::PDF->new(InitVars => 0);
 my $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
 my $pc_template = C4::Patroncards::Template->retrieve(template_id => $template_id, profile_id => 1);
 my $layout = C4::Patroncards::Layout->retrieve(layout_id => $layout_id);
@@ -125,6 +127,7 @@ if ($layout_xml->{'page_side'} eq 'B') { # rearrange items on backside of page t
 CARD_ITEMS:
 foreach my $item (@{$items}) {
     if ($item) {
+        $cardscount ++;
         my $borrower_number = $item->{'borrower_number'};
         my $card_number = GetMember(borrowernumber => $borrower_number)->{'cardnumber'};
 
@@ -231,9 +234,29 @@ foreach my $item (@{$items}) {
     ($llx, $lly, $new_page) = $pc_template->get_next_label_pos();
     $pdf->Page() if $new_page;
 }
+# No errors occurred within eval, we can issue the pdf
+$pdf_ok = 1 if ($cardscount > 0);
+}; # end of eval block
 
-$pdf->End();
+if ($pdf_ok) {
+    #issue the pdf
+    print $cgi->header( -type       => 'application/pdf',
+                    -encoding   => 'utf-8',
+                    -attachment => "$pdf_file.pdf",
+                  );
+    $pdf->End();
+}
+else {
+    # warn user that pdf is not created
+    my $errparams = '&pdferr=1';
+    $errparams .= "&errba=$batch_id" if $batch_id;
+    $errparams .= "&errpl=$patronlist_id" if $patronlist_id;
+    $errparams =  $errparams.'&errpt='.$cgi->param('borrower_number') if $cgi->param('borrower_number');
+    $errparams .= "&errlo=$layout_id" if $layout_id;
+    $errparams .= "&errtpl=$template_id" if $template_id;
+    $errparams .= "&errnocards=1" if !$cardscount;
 
-# FIXME: Possibly do a redirect here if there were error encountered during PDF creation.
+    print $cgi->redirect("/cgi-bin/koha/patroncards/manage.pl?card_element=batch$errparams");
+}
 
 1;

@@ -1,7 +1,18 @@
-[% IF ( error ) %]
+[% IF ( error || CGI.param('pdferr') )  %]
 <div class="dialog alert">
   <p>
     <strong>WARNING:</strong>
+        [% IF CGI.param('pdferr') %]
+        Error while creating PDF file.
+        [% IF CGI.param('errnocards') %]No cards created (empty batch or list?)[% END %]
+        [% IF CGI.param('errba') %]Batch: [% '<span class="ex">' _ CGI.param('errba') _ '</span>' %][% END %]
+        [% IF CGI.param('errpl') %]Patron list: [% '<span class="ex">' _ CGI.param('errpl') _ '</span>' %][% END %]
+        [% IF CGI.param('errpt') %]Patron number: [% '<span class="ex">' _ CGI.param('errpt') _ '</span>' %][% END %]
+        [% IF CGI.param('errlo') %]Layout: [% '<span class="ex">' _ CGI.param('errlo') _ '</span>' %][% END %]
+        [% IF CGI.param('errtpl') %]Template: [% '<span class="ex">' _ CGI.param('errtpl') _ '</span>' %][% END %]
+
+        Please have your system administrator check the error log for details.
+        [% END %]
         [% IF ( error == 101 ) %]
         The database returned an error while [% IF ( card_element ) %]saving [% card_element %] [% element_id %][% ELSE %]attempting a save operation[% END %]. Please have your system administrator check the error log for details.
         [% ELSIF ( error == 102 ) %]
