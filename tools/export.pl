@@ -148,7 +148,7 @@ if ( $op eq "export" ) {
                     ),
 
                 };
-                my $biblioitems = Koha::Biblioitems->search( $conditions, { join => 'items' } );
+                my $biblioitems = Koha::Biblioitems->search( $conditions, { join => 'items', columns => 'biblionumber' } );
                 while ( my $biblioitem = $biblioitems->next ) {
                     push @record_ids, $biblioitem->biblionumber;
                 }
