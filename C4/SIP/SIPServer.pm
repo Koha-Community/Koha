@@ -134,7 +134,7 @@ sub raw_transport {
 
     # Timeout the while loop if we get stuck in it
     # In practice it should only iterate once but be prepared
-    local $SIG{ALRM} = sub { die 'raw transport Timed Out!' }
+    local $SIG{ALRM} = sub { die 'raw transport Timed Out!' };
     syslog('LOG_DEBUG', "raw_transport: timeout is $service->{timeout}");
     alarm $service->{timeout};
     while (!$self->{account}) {
@@ -253,14 +253,14 @@ sub telnet_transport {
 # telnet transport.  From that point on, both the raw and the telnet
 # processes are the same:
 sub sip_protocol_loop {
-	my $self = shift;
-	my $service = $self->{service};
-	my $config  = $self->{config};
+    my $self = shift;
+    my $service = $self->{service};
+    my $config  = $self->{config};
     my $timeout = $self->{service}->{timeout} || $config->{timeout} || 30;
 
     # The spec says the first message will be:
-	# 	SIP v1: SC_STATUS
-	# 	SIP v2: LOGIN (or SC_STATUS via telnet?)
+    #     SIP v1: SC_STATUS
+    #     SIP v2: LOGIN (or SC_STATUS via telnet?)
     # But it might be SC_REQUEST_RESEND.  As long as we get
     # SC_REQUEST_RESEND, we keep waiting.
 
@@ -268,9 +268,9 @@ sub sip_protocol_loop {
     # constraint, so we'll relax about it too.
     # Using the SIP "raw" login process, rather than telnet,
     # requires the LOGIN message and forces SIP 2.00.  In that
-	# case, the LOGIN message has already been processed (above).
-	# 
-	# In short, we'll take any valid message here.
+    # case, the LOGIN message has already been processed (above).
+
+    # In short, we'll take any valid message here.
     eval {
         local $SIG{ALRM} = sub {
             syslog( 'LOG_DEBUG', 'Inactive: timed out' );
