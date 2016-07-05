@@ -715,41 +715,21 @@ function verify_images() {
 
                         [% IF ( item.reservedate ) %]
                             [% IF ( item.waitingdate ) %]
-                                Waiting
+                                Waiting at [% item.ExpectedAtLibrary %] since [% item.waitingdate | $KohaDates %].
                             [% ELSE %]
-                                Item-level hold
+                                Item-level hold (placed [% item.reservedate | $KohaDates %]) for delivery at [% item.ExpectedAtLibrary %].
                             [% END %]
                             [% IF ( canreservefromotherbranches ) %]
-                                for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.ReservedForBorrowernumber %]">
+                                Hold for: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.ReservedForBorrowernumber %]">
                                     [% IF ( item.hidepatronname ) %]
                                         [% item.Reservedcardnumber %]
                                     [% ELSE %]
-                                        [% item.ReservedForFirstname %] [% item.ReservedForSurname %]
+                                        [% item.ReservedForFirstname _ item.ReservedForSurname _ " (" _ item.Reservedcardnumber _ ")" %]
                                     [% END %]
                                 </a>
                             [% END %]
-                            [% IF ( item.waitingdate ) %]
-                                at[% ELSE %]for delivery at
-                            [% END %]
-                            [% item.ExpectedAtLibrary %]
-                            [% IF ( item.waitingdate ) %]
-                                since [% item.waitingdate | $KohaDates %]
-                            [% ELSE %]
-                                [% IF ( item.reservedate ) %]
-                                    (placed [% item.reservedate | $KohaDates %])
-                                [% END %]
-                            [% END %]
                         [% END %]
-                        [% UNLESS (
-                               item.itemnotforloan
-                            or item.notforloan_per_itemtype
-                            or item.onloan
-                            or item.itemlost
-                            or item.withdrawn
-                            or item.damaged
-                            or item.transfertwhen
-                            or item.reservedate
-                        ) %]
+                        [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || item.reservedate ) %]
                             Available
                         [% END %]
 
