@@ -87,7 +87,7 @@ sub logaction {
             category  => "ActionLogs.$modulename.$actionname"
         }
     );
-    $logger->info(
+    $logger->debug(
         sub {
             "ACTION LOG: " . to_json(
                 {
