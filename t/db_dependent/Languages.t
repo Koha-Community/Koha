@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 use List::Util qw(first);
 use Data::Dumper;
 use Test::Warn;
@@ -24,7 +24,11 @@ isnt(C4::Languages::_get_themes(), undef, 'testing _get_themes doesnt return und
 
 ok(C4::Languages::_get_language_dirs(), 'test getting _get_language_dirs');
 
-is(C4::Languages::accept_language(),undef, 'test that accept_languages returns undef when nothing is entered');
+my $result;
+warning_is { $result = C4::Languages::accept_language(); }
+    q{accept_language(x,y) called with no clientPreferences (x).},
+    'accept_language() generated expected warning';
+is($result,undef, 'test that accept_languages returns undef when nothing is entered');
 
 ok(C4::Languages::getAllLanguages(), 'test get all languages');
 
