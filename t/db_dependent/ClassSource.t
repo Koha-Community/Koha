@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 24;
+use Test::More tests => 25;
+use Test::Warn;
 
 use C4::Context;
 
@@ -126,8 +127,12 @@ is_deeply(
 );
 
 #Test GetClassSort
-my $getclassSort = GetClassSort( 'source1', 'sortrule1', 'item1' )
-  ; #Note: Create a warning:" attempting to use non-existent class sorting routine $sort_routine"
+my $getclassSort;
+#Note: Create a warning:" attempting to use non-existent class sorting routine $sort_routine"
+warning_like
+    { $getclassSort = GetClassSort( 'source1', 'sortrule1', 'item1' ) }
+    qr/attempting to use non-existent class sorting routine/,
+    'Non-existent class warning caught';
 is( $getclassSort, "SORTRULE1_ITEM1",
 " the sort key corresponding to Source1 and sortrule1 and item1 is SORTRULE1_ITEM1"
 );
