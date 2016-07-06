@@ -138,11 +138,9 @@ my $id_import_batch3 = C4::ImportBatch::AddImportBatch($sample_import_batch3);
 # Test CleanBatch
 C4::ImportBatch::CleanBatch( $id_import_batch3 );
 my $batch3_clean = $dbh->do('SELECT * FROM import_records WHERE import_batch_id = "$id_import_batch3"');
-is_deeply( $batch3_clean, "0E0",
-    "Batch 3 has been cleaned" );
+is( $batch3_clean, "0E0", "Batch 3 has been cleaned" );
 
 # Test DeleteBatch
 C4::ImportBatch::DeleteBatch( $id_import_batch3 );
 my $batch3_results = $dbh->do('SELECT * FROM import_batches WHERE import_batch_id = "$id_import_batch3"');
-is_deeply( $batch3_results, "0E0", # 0E0 == 0
-    "Batch 3 has been deleted");
+is( $batch3_results, "0E0", "Batch 3 has been deleted");
