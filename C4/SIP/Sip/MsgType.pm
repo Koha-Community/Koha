@@ -1505,13 +1505,8 @@ sub send_acs_status {
     $ACS_renewal_policy = sipbool( $policy->{renewal} );
     $status_update_ok   = sipbool( $ils->status_update_ok );
     $offline_ok         = sipbool( $ils->offline_ok );
-    $timeout            = sprintf( "%03d", $policy->{timeout} );
+    $timeout            = $server->get_timeout({ policy => 1 });
     $retries            = sprintf( "%03d", $policy->{retries} );
-
-    if ( length($timeout) != 3 ) {
-        syslog( "LOG_ERR", "handle_acs_status: timeout field wrong size: '%s'", $timeout );
-        $timeout = '000';
-    }
 
     if ( length($retries) != 3 ) {
         syslog( "LOG_ERR", "handle_acs_status: retries field wrong size: '%s'", $retries );
