@@ -16,22 +16,18 @@ use IO::Handle;
 use C4::SIP::Sip::Constants qw(SIP_DATETIME FID_SCREEN_MSG);
 use C4::SIP::Sip::Checksum qw(checksum);
 
-use vars qw(@ISA @EXPORT_OK %EXPORT_TAGS);
+use base qw(Exporter);
 
-BEGIN {
-	@ISA = qw(Exporter);
+our @EXPORT_OK = qw(y_or_n timestamp add_field maybe_add add_count
+    denied sipbool boolspace write_msg
+    $error_detection $protocol_version $field_delimiter
+    $last_response);
 
-	@EXPORT_OK = qw(y_or_n timestamp add_field maybe_add add_count
-		    denied sipbool boolspace write_msg
-		    $error_detection $protocol_version $field_delimiter
-		    $last_response);
-
-	%EXPORT_TAGS = (
-		    all => [qw(y_or_n timestamp add_field maybe_add
-			       add_count denied sipbool boolspace write_msg
-			       $error_detection $protocol_version
-			       $field_delimiter $last_response)]);
-}
+our %EXPORT_TAGS = (
+    all => [qw(y_or_n timestamp add_field maybe_add
+        add_count denied sipbool boolspace write_msg
+        $error_detection $protocol_version
+        $field_delimiter $last_response)]);
 
 our $error_detection = 0;
 our $protocol_version = 1;
