@@ -135,8 +135,9 @@ sub raw_transport {
     # Timeout the while loop if we get stuck in it
     # In practice it should only iterate once but be prepared
     local $SIG{ALRM} = sub { die 'raw transport Timed Out!' };
-    syslog('LOG_DEBUG', "raw_transport: timeout is $service->{timeout}");
-    alarm $service->{timeout};
+    my $timeout = $self->get_timeout({ transport => 1 });
+    syslog('LOG_DEBUG', "raw_transport: timeout is $timeout");
+    alarm $timeout;
     while (!$self->{account}) {
         $input = read_request();
         if (!$input) {
@@ -193,8 +194,8 @@ sub telnet_transport {
     my $account = undef;
     my $input;
     my $config  = $self->{config};
-	my $timeout = $self->{service}->{timeout} || $config->{timeout} || 30;
-	syslog("LOG_DEBUG", "telnet_transport: timeout is %s", $timeout);
+    my $timeout = $self->get_timeout({ transport => 1 });
+    syslog("LOG_DEBUG", "telnet_transport: timeout is $timeout");
 
     eval {
 	local $SIG{ALRM} = sub { die "telnet_transport: Timed Out ($timeout seconds)!\n"; };
@@ -256,7 +257,7 @@ sub sip_protocol_loop {
     my $self = shift;
     my $service = $self->{service};
     my $config  = $self->{config};
-    my $timeout = $self->{service}->{timeout} || $config->{timeout} || 30;
+    my $timeout = $self->get_timeout({ client => 1 });
 
     # The spec says the first message will be:
     #     SIP v1: SC_STATUS
@@ -343,5 +344,49 @@ sub read_request {
       syslog( 'LOG_INFO', "INPUT MSG: '$buffer'" );
       return $buffer;
 }
+
+# $server->get_timeout({ $type => 1, fallback => $fallback });
+#     where $type is transport | client | policy
+#
+# Centralizes all timeout logic.
+# Transport refers to login process, client to active connections.
+# Policy timeout is transaction timeout (used in ACS status message).
+#
+# Fallback is optional. If you do not pass transport, client or policy,
+# you will get fallback or hardcoded default.
+
+sub get_timeout {
+    my ( $server, $params ) = @_;
+    my $fallback = $params->{fallback} || 30;
+    my $service = $server->{service} // {};
+    my $config = $server->{config} // {};
+
+    if( $params->{transport} ||
+        ( $params->{client} && !exists $service->{client_timeout} )) {
+        # We do not allow zero values here.
+        # Note: config/timeout seems to be deprecated.
+        return $service->{timeout} || $config->{timeout} || $fallback;
+
+    } elsif( $params->{client} ) {
+        # We know that client_timeout exists now.
+        # We do allow zero values here to indicate no timeout.
+        return 0 if $service->{client_timeout} =~ /^0+$|\D/;
+        return $service->{client_timeout};
+
+    } elsif( $params->{policy} ) {
+        my $policy = $server->{policy} // {};
+        my $rv = sprintf( "%03d", $policy->{timeout} // 0 );
+        if( length($rv) != 3 ) {
+            syslog( "LOG_ERR", "Policy timeout has wrong size: '%s'", $rv );
+            return '000';
+        }
+        return $rv;
+
+    } else {
+        return $fallback;
+    }
+}
+
 1;
+
 __END__
