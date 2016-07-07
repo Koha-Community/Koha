@@ -46,7 +46,7 @@
                         <h1>[% summary.mainentry %][% IF authtypetext %] ([% authtypetext %])[% END %]</h1>
 
                         <div class="usedin">
-                            <a href="opac-search.pl?type=opac&amp;q=[% authid %]&amp;idx=an,phr">Number of records used in: [% count %]</a>
+                            [% IF count > 0 %]<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;q=[% authid %]&amp;idx=an,phr">Number of records used in: [% count %]</a>[% ELSE %]This authority is not used in any records.[% END %]
                         </div>
 
                         <div class="authstanza">
