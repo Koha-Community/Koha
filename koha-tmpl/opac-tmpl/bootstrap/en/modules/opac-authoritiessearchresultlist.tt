@@ -51,27 +51,24 @@
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Authorized headings</th>
+                                            <th colspan="2">Authorized headings</th>
                                             <th>Type of heading</th>
                                             [% UNLESS ( isEDITORS ) %]
                                                 <th>Biblio records</th>
                                             [% END %]
-                                            <th>Full heading</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         [% FOREACH resul IN result %]
                                             <tr>
                                                 <td>[% PROCESS authresult summary=resul.summary %]</td>
+                                                <td><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% resul.authid %]">Details</a>
                                                 <td>[% resul.authtype %]</td>
                                                 [% UNLESS ( resul.isEDITORS ) %]
                                                     <td>
                                                          <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an=[% resul.authid %]">[% resul.used %] biblios</a>
                                                     </td>
                                                 [% END %]
-                                                <td>
-                                                    <a href="opac-authoritiesdetail.pl?authid=[% resul.authid %]">View full heading</a>
-                                                </td>
                                             </tr>
                                         [% END %]
                                     </tbody>
