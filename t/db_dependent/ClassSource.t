@@ -128,7 +128,6 @@ is_deeply(
 
 #Test GetClassSort
 my $getclassSort;
-#Note: Create a warning:" attempting to use non-existent class sorting routine $sort_routine"
 warning_like
     { $getclassSort = GetClassSort( 'source1', 'sortrule1', 'item1' ) }
     qr/attempting to use non-existent class sorting routine/,
