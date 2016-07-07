@@ -405,7 +405,7 @@ sub BatchStageMarcRecords {
             method => 'to_marc',
             params => { data => $marc_records }
         }
-    ) if $to_marc_plugin;
+    ) if $to_marc_plugin && @$marc_records;
 
     my $marc_type = C4::Context->preference('marcflavour');
     $marc_type .= 'AUTH' if ($marc_type eq 'UNIMARC' && $record_type eq 'auth');
@@ -1492,11 +1492,13 @@ Reads ISO2709 binary porridge from the given file and creates MARC::Record-objec
 @PARAM2, String, see stage_file.pl
 @PARAM3, String, should be utf8
 
+Returns two array refs.
+
 =cut
 
 sub RecordsFromISO2709File {
     my ($input_file, $record_type, $encoding) = @_;
-    my $errors;
+    my @errors;
 
     my $marc_type = C4::Context->preference('marcflavour');
     $marc_type .= 'AUTH' if ($marc_type eq 'UNIMARC' && $record_type eq 'auth');
@@ -1512,40 +1514,37 @@ sub RecordsFromISO2709File {
         my ($marc_record, $charset_guessed, $char_errors) = MarcToUTF8Record($_, $marc_type, $encoding);
         push @marc_records, $marc_record;
         if ($charset_guessed ne $encoding) {
-            $errors = '' unless $errors;
-            $errors .= "Unexpected charset $charset_guessed, expecting $encoding\n";
+            push @errors,
+                "Unexpected charset $charset_guessed, expecting $encoding";
         }
     }
     close IN;
-    return ($errors, \@marc_records);
+    return ( \@errors, \@marc_records );
 }
 
 =head2 RecordsFromMARCXMLFile
 
     my ($errors, $records) = C4::ImportBatch::RecordsFromMARCXMLFile($input_file, $encoding);
 
-
-
 Creates MARC::Record-objects out of the given MARCXML-file.
 
 @PARAM1, String, absolute path to the ISO2709 file.
 @PARAM2, String, should be utf8
+
+Returns two array refs.
 
 =cut
 
 sub RecordsFromMARCXMLFile {
     my ( $filename, $encoding ) = @_;
     my $batch = MARC::File::XML->in( $filename );
-    my @marcRecords;
-    my @errors;
+    my ( @marcRecords, @errors, $record );
     do {
-        eval {
-            my $record = $batch->next($encoding);
-            push @marcRecords, $record if $record;
-        };
+        eval { $record = $batch->next( $encoding ); };
         if ($@) {
             push @errors, $@;
         }
+        push @marcRecords, $record if $record;
     } while( $record );
     return (\@errors, \@marcRecords);
 }

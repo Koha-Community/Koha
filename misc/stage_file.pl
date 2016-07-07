@@ -37,7 +37,7 @@ $| = 1;
 
 # command-line parameters
 my $record_type = "biblio";
-my $encoding = "";
+my $encoding = "UTF-8";
 my $authorities = 0;
 my $match = 0;
 my $add_items = 0;
@@ -65,10 +65,6 @@ my $result = GetOptions(
 
 $record_type = 'auth' if ($authorities);
 
-if ($encoding eq "") {
-    $encoding = "utf8";
-}
-
 if (not $result or $input_file eq "" or $want_help) {
     print_usage();
     exit 0;
@@ -93,9 +89,10 @@ exit 0;
 sub process_batch {
     my ($format, $input_file, $record_type, $match, $add_items, $batch_comment) = @_;
 
-    my ($errors, $marc_records) = C4::ImportBatch::RecordsFromISO2709File($input_file, $record_type, $encoding) if $format eq 'ISO2709';
-    warn $errors if $errors;
-    $marc_records = C4::ImportBatch::RecordsFromMARCXMLFile($input_file, $encoding) if $format eq 'MARCXML';
+    my ( $errors, $marc_records );
+    ( $errors, $marc_records ) = C4::ImportBatch::RecordsFromISO2709File($input_file, $record_type, $encoding) if $format eq 'ISO2709';
+    ( $errors, $marc_records ) = C4::ImportBatch::RecordsFromMARCXMLFile($input_file, $encoding) if $format eq 'MARCXML';
+    warn ( join ',', @$errors ) if @$errors;
     my $num_input_records = ($marc_records) ? scalar(@$marc_records) : 0;
 
     print "... staging MARC records -- please wait\n";
@@ -176,7 +173,7 @@ records into the main Koha database.
 Parameters:
     --file <file_name>      name of input MARC bib file
     --authorities           stage authority records instead of bibs
-    --encoding <encoding>   encoding of MARC records, default is utf8.
+    --encoding <encoding>   encoding of MARC records, default is UTF-8.
                             Other possible options are: MARC-8,
                             ISO_5426, ISO_6937, ISO_8859-1, EUC-KR
     --format                The MARC transport format to use?

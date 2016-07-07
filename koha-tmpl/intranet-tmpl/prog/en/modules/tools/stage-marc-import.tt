@@ -66,6 +66,10 @@ function cbUpload( status, fileid ) {
         $('#fileuploadbutton').prop('disabled',true);
         $('#fileuploadbutton').show();
         $("#fileuploadcancel").hide();
+        var filename=$('#fileToUpload').prop('files')[0].name;
+        if( filename.match( new RegExp(/\.[^.]+xml$/) ) ) {
+            $('#format').val('MARCXML');
+        }
         $("#processfile").show();
     } else {
         $('#fileuploadbutton').show();
@@ -181,7 +185,7 @@ function cbUpload( status, fileid ) {
 	<li>
 		<label for="encoding">Character encoding: </label>
             <select name="encoding" id="encoding">
-                <option value="utf8" selected="selected">UTF-8 (Default)</option>
+                <option value="UTF-8" selected="selected">UTF-8 (Default)</option>
                 <option value="MARC-8">MARC 8</option>
                 <option value="ISO_5426">ISO 5426</option>
                 <option value="ISO_6937">ISO 6937</option>
@@ -189,6 +193,13 @@ function cbUpload( status, fileid ) {
                 <option value="EUC-KR">EUC-KR</option>
             </select>
 	</li>
+    <li>
+        <label for='format'>Format:</label>
+        <select name='format' id='format'>
+            <option value='ISO2709'>MARC</option>
+            <option value='MARCXML'>MARCXML</option>
+        </select>
+    </li>
 </ol></fieldset>
 
   [% IF plugins %]

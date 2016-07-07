@@ -56,7 +56,7 @@ my $parse_items                = $input->param('parse_items');
 my $item_action                = $input->param('item_action');
 my $comments                   = $input->param('comments');
 my $record_type                = $input->param('record_type');
-my $encoding                   = $input->param('encoding') || 'utf8';
+my $encoding                   = $input->param('encoding') || 'UTF-8';
 my $format                     = $input->param('format') || 'ISO2709';
 my $to_marc_plugin             = $input->param('to_marc_plugin');
 my $marc_modification_template = $input->param('marc_modification_template_id');
@@ -86,9 +86,16 @@ if ($completedJobID) {
     $template->param(map { $_ => $results->{$_} } keys %{ $results });
 } elsif ($fileID) {
     my $upload = Koha::Upload->new->get({ id => $fileID });
-    my $filename = $upload->{path};
-	my $marcrecord='';
-    my ($errors, $marcrecords) = C4::ImportBatch::RecordsFromISO2709File($uploaded_file->filename(), $record_type, $encoding);
+    my ( $file, $filename ) = ( $upload->{path}, $upload->{name} );
+    my ( $errors, $marcrecords );
+    if( $format eq 'MARCXML' ) {
+        ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromMARCXMLFile( $file, $encoding);
+    } else {
+        ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromISO2709File( $file, $record_type, $encoding );
+    }
+    warn "$filename: " . ( join ',', @$errors ) if @$errors;
+        # no need to exit if we have no records (or only errors) here
+        # BatchStageMarcRecords can handle that
 
     my $job = undef;
     my $dbh;
