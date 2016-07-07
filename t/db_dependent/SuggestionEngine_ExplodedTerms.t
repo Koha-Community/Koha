@@ -7,12 +7,45 @@ use File::Basename;
 use File::Spec;
 use Test::More;
 use Test::MockModule;
+use Test::Warn;
 
-BEGIN {
-        use_ok('Koha::SuggestionEngine');
+my $contextModule = new Test::MockModule('C4::Context');
+$contextModule->mock('preference', sub {
+    return '';
+});
+$contextModule->mock('config', sub {
+    my ($self,$key) = @_;
+    if ($key eq 'opachtdocs') {
+        return get_where() . '/koha-tmpl/opac-tmpl';
+    } elsif ($key eq 'intrahtdocs') {
+        return get_where() . '/koha-tmpl/intranet-tmpl';
+    } else {
+        return '';
+    }
+});
+
+use_ok('Koha::SuggestionEngine');
+
+sub get_where {
+    my $location = File::Spec->rel2abs(dirname(__FILE__));
+    if ($location =~ /db_dependent/) {
+        $location .= '/../..';
+    }
+    else {
+        $location .= '/..';
+    }
+    return $location;
 }
 
-my $langModule = new Test::MockModule('C4::Languages');
+my $langModule;
+if (! defined $ENV{KOHA_CONF}) {
+    warning_like { $langModule = new Test::MockModule('C4::Languages'); }
+        qr /unable to locate Koha configuration file koha-conf.xml/,
+        'Expected warning for unset $KOHA_CONF';
+}
+else {
+    $langModule = new Test::MockModule('C4::Languages');
+}
 $langModule->mock('regex_lang_subtags', sub {
     return {
         'extension' => undef,
@@ -53,20 +86,20 @@ $langModule->mock('getTranslatedLanguages', sub {
        }
    ];
 });
-my $tmplModule = new Test::MockModule('C4::Templates');
+my $tmplModule;
+if (! defined $ENV{KOHA_CONF}) {
+    warning_like { $tmplModule = new Test::MockModule('C4::Templates'); }
+        qr /unable to locate Koha configuration file koha-conf.xml/,
+        'Expected warning for unset $KOHA_CONF';
+}
+else {
+    $tmplModule = new Test::MockModule('C4::Templates');
+}
 $tmplModule->mock('_get_template_file', sub {
     my ($tmplbase, $interface, $query) = @_;
-    my $opactmpl = File::Spec->rel2abs(dirname(__FILE__) . '/../../koha-tmpl/opac-tmpl');
+    my $opactmpl = get_where() . '/koha-tmpl/opac-tmpl';
     return ($opactmpl, 'bootstrap', 'en', "$opactmpl/bootstrap/en/modules/$tmplbase");
 });
-my $contextModule = new Test::MockModule('C4::Context');
-$contextModule->mock('preference', sub {
-    return '';
-});
-$contextModule->mock('config', sub {
-    return '';
-});
-
 
 my $suggestor = Koha::SuggestionEngine->new( { plugins => [ 'ExplodedTerms' ] } );
 is(ref($suggestor), 'Koha::SuggestionEngine', 'Created suggestion engine');
