@@ -175,6 +175,7 @@ if ($completedJobID) {
     };
     if ($runinbackground) {
         $job->finish($results);
+        exit 0;
     } else {
 	    $template->param(staged => $num_valid,
  	                     matched => $num_with_matches,
