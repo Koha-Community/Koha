@@ -12729,7 +12729,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = '16.06.00.008';
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-        INSERT INTO systempreferences (variable,value,options,explanation,type)
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
         VALUES('CheckPrevCheckout','hardno','hardyes|softyes|softno|hardno','By default, for every item checked out, should we warn if the patron has checked out that item in the past?','Choice');
     });
     $dbh->do(q{
@@ -12748,7 +12748,7 @@ if ( CheckVersion($DBversion) ) {
         AFTER `privacy_guarantor_checkouts`;
     });
 
-    print "Upgrade to $DBversion done (Bug 6906 - show 'Borrower has previously issued $ITEM' alert on checkout)\n";
+    print "Upgrade to $DBversion done (Bug 6906 - show 'Borrower has previously issued \$ITEM' alert on checkout)\n";
     SetVersion($DBversion);
 }
 
