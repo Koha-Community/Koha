@@ -116,6 +116,13 @@ __PACKAGE__->table("categories");
   extra: {list => ["default","never","forever"]}
   is_nullable: 0
 
+=head2 checkprevcheckout
+
+  data_type: 'varchar'
+  default_value: 'inherit'
+  is_nullable: 0
+  size: 7
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -160,6 +167,13 @@ __PACKAGE__->add_columns(
     default_value => "default",
     extra => { list => ["default", "never", "forever"] },
     is_nullable => 0,
+  },
+  "checkprevcheckout",
+  {
+    data_type => "varchar",
+    default_value => "inherit",
+    is_nullable => 0,
+    size => 7,
   },
 );
 
@@ -253,8 +267,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:T4i7vp1kAZFXy6DiV1dqyw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-07-08 13:37:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LH3DdDDYXaGsNsILAUZzng
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

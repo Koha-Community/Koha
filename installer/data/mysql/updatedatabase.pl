@@ -12726,6 +12726,32 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '16.06.00.008';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO systempreferences (variable,value,options,explanation,type)
+        VALUES('CheckPrevCheckout','hardno','hardyes|softyes|softno|hardno','By default, for every item checked out, should we warn if the patron has checked out that item in the past?','Choice');
+    });
+    $dbh->do(q{
+        ALTER TABLE categories
+        ADD COLUMN `checkprevcheckout` varchar(7) NOT NULL default 'inherit'
+        AFTER `default_privacy`;
+    });
+    $dbh->do(q{
+        ALTER TABLE borrowers
+        ADD COLUMN `checkprevcheckout` varchar(7) NOT NULL default 'inherit'
+        AFTER `privacy_guarantor_checkouts`;
+    });
+    $dbh->do(q{
+        ALTER TABLE deletedborrowers
+        ADD COLUMN `checkprevcheckout` varchar(7) NOT NULL default 'inherit'
+        AFTER `privacy_guarantor_checkouts`;
+    });
+
+    print "Upgrade to $DBversion done (Bug 6906 - show 'Borrower has previously issued $ITEM' alert on checkout)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068

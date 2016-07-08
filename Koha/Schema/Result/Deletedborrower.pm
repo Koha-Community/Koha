@@ -404,6 +404,13 @@ __PACKAGE__->table("deletedborrowers");
   default_value: 0
   is_nullable: 0
 
+=head2 checkprevcheckout
+
+  data_type: 'varchar'
+  default_value: 'inherit'
+  is_nullable: 0
+  size: 7
+
 =head2 updated_on
 
   data_type: 'timestamp'
@@ -568,6 +575,13 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 1, is_nullable => 0 },
   "privacy_guarantor_checkouts",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "checkprevcheckout",
+  {
+    data_type => "varchar",
+    default_value => "inherit",
+    is_nullable => 0,
+    size => 7,
+  },
   "updated_on",
   {
     data_type => "timestamp",
@@ -578,8 +592,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-06-14 16:35:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wmWyqDcbofgVoIbvRy7j6w
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-07-08 13:37:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Cunir7NU2+WyAmwi3U7mvA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
