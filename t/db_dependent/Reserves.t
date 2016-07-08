@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 74;
+use Test::MockModule;
 use Test::Warn;
 
 use MARC::Record;
@@ -39,9 +40,10 @@ BEGIN {
 }
 
 # a very minimal mack of userenv for use by the test of DelItemCheck
-*C4::Context::userenv = sub {
-    return {};
-};
+my $module = new Test::MockModule('C4::Context');
+$module->mock('userenv', sub {
+    { }
+});
 
 my $dbh = C4::Context->dbh;
 
