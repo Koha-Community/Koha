@@ -87,7 +87,7 @@ foreach my $biblioitem (@biblioitems) {
         foreach my $item ( $biblioitem->items() ) {
             my $itemnumber = $item->itemnumber();
 
-            my $error = $test ? "Test mode enabled" : DelItemCheck( undef, $biblionumber, $itemnumber );
+            my $error = $test ? "Test mode enabled" : DelItemCheck( $biblionumber, $itemnumber );
             $error = undef if $error eq '1';
 
             if ($error) {
