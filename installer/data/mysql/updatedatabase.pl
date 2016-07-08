@@ -12752,6 +12752,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '16.06.00.009';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) 
+        VALUES ('IntranetCatalogSearchPulldown','0',NULL,'Show a search field pulldown for \"Search the catalog\" boxes. ','YesNo');
+    });
+
+    print "Upgrade to $DBversion done (Bug 14902 - Add qualifier menu to staff side 'Search the Catalog')\n";
+    SetVersion($DBversion);
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
