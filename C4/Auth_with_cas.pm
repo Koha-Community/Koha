@@ -22,6 +22,7 @@ use warnings;
 
 use C4::Debug;
 use C4::Context;
+use Koha::AuthUtils qw(get_script_name);
 use Authen::CAS::Client;
 use CGI qw ( -utf8 );
 use FindBin;
@@ -203,7 +204,7 @@ sub _url_with_get_params {
     my $type = shift;
 
     my $uri_base_part = ($type eq 'opac') ?
-                        C4::Context->preference('OPACBaseURL') . $query->script_name():
+                        C4::Context->preference('OPACBaseURL') . get_script_name() :
                         C4::Context->preference('staffClientBaseURL');
 
     my $uri_params_part = '';

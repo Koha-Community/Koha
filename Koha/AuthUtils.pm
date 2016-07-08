@@ -21,10 +21,11 @@ use Modern::Perl;
 use Crypt::Eksblowfish::Bcrypt qw(bcrypt en_base64);
 use Encode qw( encode is_utf8 );
 use Fcntl qw/O_RDONLY/; # O_RDONLY is used in generate_salt
+use List::MoreUtils qw/ any /;
 
 use base 'Exporter';
 
-our @EXPORT_OK   = qw(hash_password);
+our @EXPORT_OK   = qw(hash_password get_script_name);
 
 =head1 NAME
 
@@ -132,6 +133,25 @@ sub generate_salt {
     close SOURCE;
     return $string;
 }
+
+=head2 get_script_name
+
+This returns the correct script name, for use in redirecting back to the correct page after showing
+the login screen. It depends on details of the package Plack configuration, and should not be used
+outside this context.
+
+=cut
+
+sub get_script_name {
+    # This is the method about.pl uses to detect Plack; now that two places use it, it MUST be
+    # right.
+    if ( ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) && $ENV{SCRIPT_NAME} =~ m,^/(intranet|opac)(.*), ) {
+        return '/cgi-bin/koha' . $2;
+    } else {
+        return $ENV{SCRIPT_NAME};
+    }
+}
+
 1;
 
 __END__
