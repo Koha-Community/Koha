@@ -18,15 +18,15 @@ $(document).ready(function() {
             { "bSortable": false, "bSearchable": false, "aTargets": [-1] }
         ]
     }));
-    $("#filter_c").html('<p><a href="#" id="filter_transacs">'+txtActivefilter+'</a>');
+    $("#filter_c").html('<p><a href="#" id="filter_transacs"><i class="fa fa-filter"></i> '+txtActivefilter+'</a>');
     $('#filter_transacs').click(function(e) {
         e.preventDefault();
         if ($(this).hasClass('filtered')) {
             var filteredValue = '';
-            $(this).text(txtActivefilter);
+            $(this).html('<i class="fa fa-filter"></i> '+txtActivefilter);
         } else { //Not filtered. Let's do it!
             var filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
-            $(this).text(txtInactivefilter);
+            $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
         }
         table_account_fines.fnFilter(filteredValue, 4, true, false);
         $(this).toggleClass('filtered');
