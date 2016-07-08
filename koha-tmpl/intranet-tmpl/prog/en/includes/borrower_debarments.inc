@@ -66,8 +66,8 @@
                         <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
                         [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                             <td>
-                                <a class="remove_restriction" href="/cgi-bin/koha/members/mod_debarment.pl?borrowernumber=[% borrowernumber %]&amp;borrower_debarment_id=[% d.borrower_debarment_id %]&amp;action=del">
-                                    Remove
+                                <a class="remove_restriction btn btn-mini" href="/cgi-bin/koha/members/mod_debarment.pl?borrowernumber=[% borrowernumber %]&amp;borrower_debarment_id=[% d.borrower_debarment_id %]&amp;action=del">
+                                    <i class="fa fa-trash"></i> Remove
                                 </a>
                             </td>
                         [% END %]
@@ -77,12 +77,12 @@
         </table>
     [% END %]
     [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
-        <p><a href="#" id="add_manual_restriction">Add manual restriction</a></p>
+        <p><a href="#" id="add_manual_restriction"><i class="fa fa-plus"></i> Add manual restriction</a></p>
         <form method="post" action="/cgi-bin/koha/members/mod_debarment.pl" class="clearfix">
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             <input type="hidden" name="action" value="add" />
             <fieldset class="rows" id="manual_restriction_form">
-                <legend>Add manual restriction</legend>
+                <legend><i class="fa fa-ban"></i> Add manual restriction</legend>
                 <ol>
                     <li><label for="rcomment">Comment:</label> <input type="text" id="rcomment" name="comment" /></li>
                     <li><label for="rexpiration">Expiration:</label> <input name="expiration" id="rexpiration" size="10" readonly="readonly" value="" class="datepicker" />
