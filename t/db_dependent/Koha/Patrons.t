@@ -19,10 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Warn;
 
 use C4::Circulation;
+
+use C4::Members;
+
 use Koha::Patron;
 use Koha::Patrons;
 use Koha::Database;
@@ -205,6 +208,19 @@ subtest 'renew_account' => sub {
     is( $number_of_logs, 1, 'Without BorrowerLogs, Koha::Patron->renew_account should not have logged' );
 
     $retrieved_patron->delete;
+};
+
+subtest "move_to_deleted" => sub {
+    plan tests => 2;
+    my $patron = $builder->build( { source => 'Borrower' } );
+    my $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    is( ref( $retrieved_patron->move_to_deleted ), 'Koha::Schema::Result::Deletedborrower', 'Koha::Patron->move_to_deleted should return the Deleted patron' )
+      ;    # FIXME This should be Koha::Deleted::Patron
+    my $deleted_patron = $schema->resultset('Deletedborrower')
+        ->search( { borrowernumber => $patron->{borrowernumber} }, { result_class => 'DBIx::Class::ResultClass::HashRefInflator' } )
+        ->next;
+    is_deeply( $deleted_patron, $patron, 'Koha::Patron->move_to_deleted should have correctly moved the patron to the deleted table' );
+    C4::Members::DelMember( $patron->{borrowernumber} );    # Cleanup
 };
 
 $retrieved_patron_1->delete;

@@ -107,7 +107,6 @@ BEGIN {
     push @EXPORT, qw(
         &AddMember
         &AddMember_Opac
-        &MoveMemberToDeleted
     );
 
     #Check data
@@ -1308,29 +1307,6 @@ sub SetAge{
 
     return $borrower;
 }    # sub SetAge
-
-=head2 MoveMemberToDeleted
-
-  $result = &MoveMemberToDeleted($borrowernumber);
-
-Copy the record from borrowers to deletedborrowers table.
-The routine returns 1 for success, undef for failure.
-
-=cut
-
-sub MoveMemberToDeleted {
-    my ($member) = shift or return;
-
-    my $schema       = Koha::Database->new()->schema();
-    my $borrowers_rs = $schema->resultset('Borrower');
-    $borrowers_rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
-    my $borrower = $borrowers_rs->find($member);
-    return unless $borrower;
-
-    my $deleted = $schema->resultset('Deletedborrower')->create($borrower);
-
-    return $deleted ? 1 : undef;
-}
 
 =head2 DelMember
 

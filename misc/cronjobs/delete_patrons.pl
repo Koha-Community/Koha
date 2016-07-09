@@ -7,6 +7,7 @@ use Getopt::Long;
 
 use C4::Members;
 use Koha::DateUtils;
+use Koha::Patrons;
 use C4::Log;
 
 my ( $help, $verbose, $not_borrowed_since, $expired_before, $last_seen,
@@ -76,23 +77,24 @@ for my $member (@$members) {
         next;
     }
 
-    eval {
-        C4::Members::MoveMemberToDeleted( $borrowernumber )
-          if $confirm;
-    };
-    if ($@) {
-        say "Failed to delete patron $borrowernumber, cannot move it: ($@)";
-        $dbh->rollback;
-        next;
-    }
-    eval {
-        C4::Members::HandleDelBorrower( $borrowernumber )
-          if $confirm;
-    };
-    if ($@) {
-        say "Failed to delete patron $borrowernumber, error handling its lists: ($@)";
-        $dbh->rollback;
-        next;
+    if ( $confirm ) {
+        my $deleted = eval {
+            Koha::Patrons->find( $borrowernumber )->move_to_deleted;
+        };
+        if ($@ or not $deleted) {
+            say "Failed to delete patron $borrowernumber, cannot move it" . ( $@ ? ": ($@)" : "" );
+            $dbh->rollback;
+            next;
+        }
+
+        eval {
+            C4::Members::HandleDelBorrower( $borrowernumber );
+        };
+        if ($@) {
+            say "Failed to delete patron $borrowernumber, error handling its lists: ($@)";
+            $dbh->rollback;
+            next;
+        }
     }
     eval { C4::Members::DelMember( $borrowernumber ) if $confirm; };
     if ($@) {

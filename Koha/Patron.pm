@@ -267,6 +267,21 @@ sub track_login {
     $self->lastseen( dt_from_string() )->store;
 }
 
+=head2 move_to_deleted
+
+my $is_moved = $patron->move_to_deleted;
+
+Move a patron to the deletedborrowers table.
+This can be done before deleting a patron, to make sure the data are not completely deleted.
+
+=cut
+
+sub move_to_deleted {
+    my ($self) = @_;
+    my $patron_infos = $self->unblessed;
+    return Koha::Database->new->schema->resultset('Deletedborrower')->create($patron_infos);
+}
+
 =head3 type
 
 =cut

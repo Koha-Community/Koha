@@ -31,6 +31,7 @@ use C4::Output;
 use C4::Auth;
 use C4::Members;
 use Module::Load;
+use Koha::Patrons;
 use Koha::Patron::Images;
 use Koha::Token;
 
@@ -160,7 +161,8 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_
             secret => md5_base64( C4::Context->config('pass') ),
             token  => scalar $input->param('csrf_token'),
         });
-    MoveMemberToDeleted($member);
+    my $patron = Koha::Patrons->find( $member );
+    $patron->move_to_deleted;
     C4::Members::HandleDelBorrower($member);
     DelMember($member);
     # TODO Tell the user everything went ok
