@@ -19,9 +19,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Koha::Authority::Types;
+use Koha::Patrons;
 use Koha::Database;
 
 use t::lib::TestBuilder;
@@ -30,6 +31,10 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 is( ref(Koha::Authority::Types->find('')), 'Koha::Authority::Type', 'Koha::Objects->find should work if the primary key is an empty string' );
+
+my @columns = Koha::Patrons->columns;
+my $borrowernumber_exists = grep { /^borrowernumber$/ } @columns;
+is( $borrowernumber_exists, 1, 'Koha::Objects->columns should return the table columns' );
 
 $schema->storage->txn_rollback;
 1;

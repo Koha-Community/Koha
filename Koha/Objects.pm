@@ -254,6 +254,21 @@ sub _resultset {
     }
 }
 
+=head3 columns
+
+my @columns = Koha::Objects->columns
+
+Return the table columns
+
+=cut
+
+sub columns {
+    my ( $class ) = @_;
+    return Koha::Database->new->schema->resultset( $class->_type )->result_source->columns;
+}
+
+
+
 =head3 _type
 
 The _type method must be set for all child classes.
