@@ -48,6 +48,7 @@ use C4::Members::Messaging;
 use C4::Reports::Guided;
 use C4::Templates;
 use Koha::Patron::Debarments;
+use Koha::Patrons;
 use Koha::DateUtils;
 
 use Text::CSV;
@@ -61,7 +62,7 @@ use CGI qw ( -utf8 );
 my (@errors, @feedback);
 my $extended = C4::Context->preference('ExtendedPatronAttributes');
 my $set_messaging_prefs = C4::Context->preference('EnhancedMessagingPreferences');
-my @columnkeys = C4::Members::columns();
+my @columnkeys = Koha::Patrons->columns();
 @columnkeys = map { $_ ne 'borrowernumber' ? $_ : () } @columnkeys;
 if ($extended) {
     push @columnkeys, 'patron_attributes';

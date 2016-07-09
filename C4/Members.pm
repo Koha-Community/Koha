@@ -551,41 +551,6 @@ sub GetMemberIssuesAndFines {
 }
 
 
-=head2 columns
-
-  my @columns = C4::Member::columns();
-
-Returns an array of borrowers' table columns on success,
-and an empty array on failure.
-
-=cut
-
-sub columns {
-
-    # Pure ANSI SQL goodness.
-    my $sql = 'SELECT * FROM borrowers WHERE 1=0;';
-
-    # Get the database handle.
-    my $dbh = C4::Context->dbh;
-
-    # Run the SQL statement to load STH's readonly properties.
-    my $sth = $dbh->prepare($sql);
-    my $rv = $sth->execute();
-
-    # This only fails if the table doesn't exist.
-    # This will always be called AFTER an install or upgrade,
-    # so borrowers will exist!
-    my @data;
-    if ($sth->{NUM_OF_FIELDS}>0) {
-        @data = @{$sth->{NAME}};
-    }
-    else {
-        @data = ();
-    }
-    return @data;
-}
-
-
 =head2 ModMember
 
   my $success = ModMember(borrowernumber => $borrowernumber,
