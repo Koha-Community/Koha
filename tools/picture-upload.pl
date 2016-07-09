@@ -46,9 +46,9 @@ my ($template, $loggedinuser, $cookie)
 					debug => 0,
 					});
 
-my $filetype       = $input->param('filetype');
+our $filetype      = $input->param('filetype') || '';
 my $cardnumber     = $input->param('cardnumber');
-my $uploadfilename = $input->param('uploadfile');
+our $uploadfilename = $input->param('uploadfile') || '';
 my $uploadfile     = $input->upload('uploadfile');
 my $borrowernumber = $input->param('borrowernumber');
 my $op             = $input->param('op') || '';
@@ -76,7 +76,9 @@ Files greater than 100K will be refused. Images should be 140x200 pixels. If the
 
 $debug and warn "Operation requested: $op";
 
-my ( $total, $handled, @counts, $tempfile, $tfh, %errors );
+my ( $total, $handled, $tempfile, $tfh );
+our @counts = ();
+our %errors = ();
 
 # Case is important in these operational values as the template must use case to be visually pleasing!
 if ( ( $op eq 'Upload' ) && $uploadfile ) {
