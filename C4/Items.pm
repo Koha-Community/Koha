@@ -37,7 +37,7 @@ use Data::Dumper; # used as part of logging item record changes, not just for
 use Koha::DateUtils qw/dt_from_string/;
 use Koha::Database;
 
-use Koha::Database;
+use Koha::Items;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 
@@ -3046,20 +3046,6 @@ sub PrepareItemrecordDisplay {
     };
 }
 
-=head2 columns
-
-  my @columns = C4::Items::columns();
-
-Returns an array of items' table columns on success,
-and an empty array on failure.
-
-=cut
-
-sub columns {
-    my $rs = Koha::Database->new->schema->resultset('Item');
-    return $rs->result_source->columns;
-}
-
 =head2 biblioitems_columns
 
   my @columns = C4::Items::biblioitems_columns();
@@ -3081,7 +3067,7 @@ sub ToggleNewStatus {
 
     my $dbh = C4::Context->dbh;
     my @errors;
-    my @item_columns = map { "items.$_" } C4::Items::columns;
+    my @item_columns = map { "items.$_" } Koha::Items->columns;
     my @biblioitem_columns = map { "biblioitems.$_" } C4::Items::biblioitems_columns;
     my $report;
     for my $rule ( @rules ) {

@@ -40,6 +40,8 @@ use C4::Items;
 use C4::Output;
 use C4::Koha;
 
+use Koha::Items;
+
 my $cgi = new CGI;
 
 # open template
@@ -106,7 +108,7 @@ if ( $@ ) {
     exit;
 }
 
-my @item_fields = map { "items.$_" } C4::Items::columns;
+my @item_fields = map { "items.$_" } Koha::Items->columns;
 my @biblioitem_fields = map { "biblioitems.$_" } C4::Items::biblioitems_columns;
 $template->param(
     op => $op,
