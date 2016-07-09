@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Warn;
 use Data::Dumper qw(Dumper);
 
@@ -319,6 +319,17 @@ subtest 'Auto-increment values tests' => sub {
             value  => { biblionumber => 123 },
         }) } qr/^Value not allowed for auto_incr/,
         'Build should not overwrite an auto_incr column';
+};
+
+subtest 'Date handling' => sub {
+    plan tests => 2;
+
+    $builder = t::lib::TestBuilder->new;
+
+    my $patron = $builder->build( { source => 'Borrower' } );
+    is( length( $patron->{updated_on} ),  19, 'A timestamp column value should be YYYY-MM-DD HH:MM:SS' );
+    is( length( $patron->{dateofbirth} ), 10, 'A date column value should be YYYY-MM-DD' );
+
 };
 
 $schema->storage->txn_rollback;

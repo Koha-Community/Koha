@@ -325,8 +325,8 @@ sub _gen_type {
         decimal          => \&_gen_real,
         double_precision => \&_gen_real,
 
-        timestamp => \&_gen_date,
-        datetime  => \&_gen_date,
+        timestamp => \&_gen_datetime,
+        datetime  => \&_gen_datetime,
         date      => \&_gen_date,
 
         char       => \&_gen_text,
@@ -379,6 +379,11 @@ sub _gen_real {
 }
 
 sub _gen_date {
+    my ($self, $params) = @_;
+    return $self->schema->storage->datetime_parser->format_date(DateTime->now())
+}
+
+sub _gen_datetime {
     my ($self, $params) = @_;
     return $self->schema->storage->datetime_parser->format_datetime(DateTime->now());
 }
