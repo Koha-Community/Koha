@@ -42,18 +42,23 @@ sub new {
 }
 
 sub pay {
-    my $self           = shift;
-    my $borrowernumber = shift;
-    my $amt            = shift;
-    my $sip_type       = shift;
-    my $fee_id         = shift;
-    my $is_writeoff    = shift;
+    my $self                 = shift;
+    my $borrowernumber       = shift;
+    my $amt                  = shift;
+    my $sip_type             = shift;
+    my $fee_id               = shift;
+    my $is_writeoff          = shift;
+    my $disallow_overpayment = shift;
 
     my $type = $is_writeoff ? 'writeoff' : undef;
 
     warn("RECORD:$borrowernumber::$amt");
 
     my $account = Koha::Account->new( { patron_id => $borrowernumber } );
+
+    if ($disallow_overpayment) {
+        return 0 if $account->balance < $amt;
+    }
 
     if ($fee_id) {
         my $fee = Koha::Account::Lines->find($fee_id);
