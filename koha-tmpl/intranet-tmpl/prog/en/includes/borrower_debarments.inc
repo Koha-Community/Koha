@@ -82,7 +82,7 @@
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             <input type="hidden" name="action" value="add" />
             <fieldset class="rows" id="manual_restriction_form">
-                <legend><i class="fa fa-ban"></i> Add manual restriction</legend>
+                <legend>Add manual restriction</legend>
                 <ol>
                     <li><label for="rcomment">Comment:</label> <input type="text" id="rcomment" name="comment" /></li>
                     <li><label for="rexpiration">Expiration:</label> <input name="expiration" id="rexpiration" size="10" readonly="readonly" value="" class="datepicker" />
