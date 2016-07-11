@@ -19,10 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 8;
 
 use C4::Context;
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
 use t::lib::TestBuilder;
@@ -57,27 +58,26 @@ my $retrieved_category_2 = Koha::Patron::Categories->find( $new_category_2->cate
 is( $retrieved_category_1->checkprevcheckout, 'inherit', 'Koha::Patron::Category->store should default checkprevcheckout to inherit' );
 is( $retrieved_category_2->checkprevcheckout, 'inherit', 'Koha::Patron::Category->store should default checkprevcheckout to inherit' );
 
-my $another_branch = $builder->build( { source => 'Branch', } );
-C4::Context->_new_userenv('my_new_userenv');
-C4::Context->set_userenv( 0, 0, 'usercnum', 'firstname', 'surname', $another_branch->{branchcode}, 'My wonderful library', '', '', '' );
-my $new_category_3 = Koha::Patron::Category->new(
-    {   categorycode => 'mycatcodeZ',
+subtest 'get_expiry_date' => sub {
+    plan tests => 4;
+    my $next_month = dt_from_string->add( months => 1 );
+    my $next_year = dt_from_string->add( months => 12 );
+    my $yesterday = dt_from_string->add( days => -1 );
+    my $category = Koha::Patron::Category->new({
+        categorycode => 'mycat',
         category_type => 'A',
-        description  => 'mycatdescZ',
-    }
-)->store;
-$new_category_3->add_branch_limitation( $another_branch->{branchcode} );
-is( Koha::Patron::Categories->search->count, $nb_of_categories + 3, 'The 3rd patron category should have been added' );
-my @limited_categories = Koha::Patron::Categories->search_limited;
-my @limited_category_codes = map { $_->categorycode } @limited_categories;
-is( scalar( grep { $_ eq $new_category_1->categorycode } @limited_category_codes ), 0, 'The first category is limited to another branch' );
-is( scalar( grep { $_ eq $new_category_2->categorycode } @limited_category_codes ), 1, 'The second category is not limited' );
-is( scalar( grep { $_ eq $new_category_3->categorycode } @limited_category_codes ), 1, 'The third category is limited to my branch ' );
+        description  => 'mycatdesc',
+        enrolmentperiod => undef,
+        enrolmentperioddate => $next_month,
+    })->store;
+    is( $category->get_expiry_date, $next_month, 'Without enrolmentperiod and parameter, ->get_expiry_date should return enrolmentperioddate' );
+    is( $category->get_expiry_date( $next_year ), $next_month, 'Without enrolmentperiod, ->get_expiry_date should return enrolmentperiodadate even if a parameter is given' );
 
-my @limited_categories_for_A = Koha::Patron::Categories->search_limited({ category_type => 'A' });
-my @limited_category_codes_for_A = map { $_->categorycode } @limited_categories_for_A;
-is( scalar( grep { $_ eq $new_category_2->categorycode } @limited_category_codes_for_A ), 0, 'The second category is not limited but has a category_type S' );
-is( scalar( grep { $_ eq $new_category_3->categorycode } @limited_category_codes_for_A ), 1, 'The third category is limited to my branch and has a category_type A' );
+    $category->enrolmentperiod( 12 )->store;
+    is( $category->get_expiry_date, $next_year, 'With enrolmentperiod defined and no parameter, ->get_expiry_date should return today + enrolmentperiod' );
+    is( $category->get_expiry_date( $yesterday ), $next_year->clone->add( days => -1 ), 'With enrolmentperiod defined and a date given in parameter, ->get_expiry_date should take this date + enrolmentperiod' );
+    $category->delete;
+};
 
 $retrieved_category_1->delete;
 is( Koha::Patron::Categories->search->count, $nb_of_categories + 2, 'Delete should have deleted the patron category' );
