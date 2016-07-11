@@ -496,26 +496,6 @@ function placeHold () {
    </div>
 [% END %]
 
-[% IF can_add_biblios %]
-<div class="yui-g">
-<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
- <fieldset class="brief noprint">
-    <legend>Add an item to <i>[% shelf.shelfname | html %]</i></legend>
-        <ol>
-            <li>
-                <label for="barcode">Barcode:</label>
-                <input name="barcode" type="text" id="barcode" size="14" />
-                <input type="hidden" name="op" value="add_biblio" />
-                <input type="hidden" name="referer" value="view" />
-                <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
-                <input type="submit" value="Add" />
-            </li>
-        </ol>
- </fieldset>
-</form>
-</div>
-[% END %]
-
 [% IF op == 'add_form' OR op == 'edit_form' %]
 <div class="yui-ge">
     <div class="yui-u first">
@@ -675,17 +655,18 @@ function placeHold () {
 </div>
 </div>
 
-[% IF ( allowaddingitem ) %]
+[% IF ( can_add_biblios ) %]
 <div class="yui-b">
   <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
-    <fieldset class="brief">
+    <fieldset class="brief noprint">
       <legend>Add an item</legend>
       <ol>
         <li>
-          <label for="addbarcode">Barcode:</label>
-          <input name="addbarcode" type="text" id="addbarcode" class="focus" />
-          <input type="hidden" name="viewshelf" value="[% shelfnumber %]" />
-          <input type="hidden" name="modifyshelfcontents" value="1" />
+          <label for="barcode">Barcode:</label>
+          <input name="barcode" type="text" id="barcode" class="focus" autocomplete="off" />
+          <input type="hidden" name="op" value="add_biblio" />
+          <input type="hidden" name="referer" value="view" />
+          <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
         </li>
       </ol>
       <fieldset class="action">
@@ -694,7 +675,7 @@ function placeHold () {
     </fieldset>
   </form>
 </div>
-[% END %]<!-- /allowaddingitem -->
+[% END %]
 
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
