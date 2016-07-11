@@ -133,11 +133,11 @@ $(document).ready(function() {
                             if ( oObj.found ) {
                                 return "";
                             } else if ( oObj.suspend == 1 ) {
-                                return "<a class='hold-resume btn btn-link' id='resume" + oObj.reserve_id + "' style='display: inline; white-space: nowrap;'>"
-                                     + "<i class='icon-play'></i> " + RESUME + "</a>";
+                                return "<a class='hold-resume btn btn-mini' id='resume" + oObj.reserve_id + "'>"
+                                     + "<i class='fa fa-play'></i> " + RESUME + "</a>";
                             } else {
-                                return "<a class='hold-suspend btn btn-link' id='suspend" + oObj.reserve_id + "' style='display: inline; white-space: nowrap;'>"
-                                     + "<i class='icon-pause'></i> " + SUSPEND + "</a>";
+                                return "<a class='hold-suspend btn btn-mini' id='suspend" + oObj.reserve_id + "'>"
+                                     + "<i class='fa fa-pause'></i> " + SUSPEND + "</a>";
                             }
                         }
                     }
