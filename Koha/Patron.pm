@@ -23,6 +23,7 @@ use Modern::Perl;
 use Carp;
 
 use C4::Context;
+use C4::Members;
 use C4::Log;
 use Koha::Database;
 use Koha::DateUtils;
@@ -206,6 +207,32 @@ sub update_password {
     $self->password($password)->store;
     logaction( "MEMBERS", "CHANGE PASS", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
     return 1;
+}
+
+=head3 extend_subscription
+
+my $new_expiry_date = $patron->extend_subscription
+
+Extending the subscription to the expiry date.
+
+=cut
+
+sub extend_subscription {
+    my ($self) = @_;
+
+    my $date =
+      C4::Context->preference('BorrowerRenewalPeriodBase') eq 'dateexpiry'
+      ? dt_from_string( $self->dateexpiry )
+      : dt_from_string;
+    my $patron_category = Koha::Patron::Categories->find( $self->categorycode );    # FIXME Should be $self->category
+    my $expiry_date     = $patron_category->get_expiry_date($date);
+
+    $self->dateexpiry($expiry_date)->store;
+
+    C4::Members::AddEnrolmentFeeIfNeeded( $self->categorycode, $self->borrowernumber );
+
+    logaction( "MEMBERS", "RENEW", $self->borrowernumber, "Membership renewed" ) if C4::Context->preference("BorrowersLog");
+    return dt_from_string( $expiry_date )->truncate( to => 'day' );
 }
 
 =head3 type

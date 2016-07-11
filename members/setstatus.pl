@@ -30,6 +30,7 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Members;
 use C4::Auth;
+use Koha::Patrons;
 
 
 my $input = new CGI;
@@ -45,8 +46,8 @@ my $dbh = C4::Context->dbh;
 my $dateexpiry;
 
 if ( $reregistration eq 'y' ) {
-	# re-reregistration function to automatic calcul of date expiry
-	$dateexpiry = ExtendMemberSubscriptionTo( $borrowernumber );
+    # re-reregistration function to automatic calcul of date expiry
+    $dateexpiry = Koha::Patrons->find( $borrowernumber )->extend_subscription;
 } else {
     my $sth = $dbh->prepare("UPDATE borrowers SET debarred = ?, debarredcomment = '' WHERE borrowernumber = ?");
     $sth->execute( $status, $borrowernumber );

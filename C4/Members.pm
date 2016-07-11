@@ -110,7 +110,6 @@ BEGIN {
         &AddMember
         &AddMember_Opac
         &MoveMemberToDeleted
-        &ExtendMemberSubscriptionTo
     );
 
     #Check data
@@ -1464,39 +1463,6 @@ sub HandleDelBorrower {
     #The current table constraints support that idea now.
     #This pref should then govern the results of other routines/methods such as
     #Koha::Virtualshelf->new->delete too.
-}
-
-=head2 ExtendMemberSubscriptionTo (OUEST-PROVENCE)
-
-    $date = ExtendMemberSubscriptionTo($borrowerid, $date);
-
-Extending the subscription to a given date or to the expiry date calculated on ISO date.
-Returns ISO date.
-
-=cut
-
-sub ExtendMemberSubscriptionTo {
-    my ( $borrowerid,$date) = @_;
-    my $dbh = C4::Context->dbh;
-    my $borrower = GetMember('borrowernumber'=>$borrowerid);
-    unless ($date){
-      $date = (C4::Context->preference('BorrowerRenewalPeriodBase') eq 'dateexpiry') ?
-                                        eval { output_pref( { dt => dt_from_string( $borrower->{'dateexpiry'}  ), dateonly => 1, dateformat => 'iso' } ); }
-                                        :
-                                        output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
-      $date = Koha::Patron::Categories->find( $borrower->{categorycode} )->get_expiry_date( $date );
-    }
-    my $sth = $dbh->do(<<EOF);
-UPDATE borrowers 
-SET  dateexpiry='$date' 
-WHERE borrowernumber='$borrowerid'
-EOF
-
-    AddEnrolmentFeeIfNeeded( $borrower->{categorycode}, $borrower->{borrowernumber} );
-
-    logaction("MEMBERS", "RENEW", $borrower->{'borrowernumber'}, "Membership renewed")if C4::Context->preference("BorrowersLog");
-    return $date if ($sth);
-    return 0;
 }
 
 =head2 GetHideLostItemsPreference
