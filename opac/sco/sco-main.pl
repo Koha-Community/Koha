@@ -31,8 +31,7 @@
 #
 # FIXME: inputfocus not really used in TMPL
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Digest::MD5 qw(md5_base64);
@@ -143,7 +142,7 @@ elsif ( $op eq "checkout" ) {
             $barcode,
             undef,
             0,
-            C4::Context->preference("AllowItemsOnHoldCheckout")
+            C4::Context->preference("AllowItemsOnHoldCheckoutSCO")
         );
     }
     $confirm_required = scalar keys %$needconfirm;
@@ -232,7 +231,7 @@ if ($borrower->{cardnumber}) {
             $it->{'barcode'},
             undef,
             0,
-            C4::Context->preference("AllowItemsOnHoldCheckout")
+            C4::Context->preference("AllowItemsOnHoldCheckoutSCO")
         );
         $it->{'norenew'} = 1 if $renewokay->{'NO_MORE_RENEWALS'};
         $it->{date_due}  = $it->{date_due_sql};
