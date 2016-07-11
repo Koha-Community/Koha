@@ -757,8 +757,8 @@ No patron matched <span class="ex">[% message %]</span>
 	                   [% ELSE %]
 	                       [% debarredcomment | html_line_break %]
 	                   [% END %]
+                    </i>
                    [% END %]
-
                    <br/>
                    <a class="btn btn-small" href="#reldebarments" onclick="$('#debarments-tab-link').click()"><i class="fa fa-ban"></i> View restrictions</a>
                     [% IF (noissues && borrowernumber && CAN_user_circulate_force_checkout) %]
