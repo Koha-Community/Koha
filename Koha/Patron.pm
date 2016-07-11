@@ -26,6 +26,7 @@ use C4::Context;
 use C4::Log;
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Holds;
 use Koha::Issues;
 use Koha::OldIssues;
 use Koha::Patron::Categories;
@@ -43,6 +44,31 @@ Koha::Patron - Koha Patron Object class
 =head2 Class Methods
 
 =cut
+
+=head3 delete
+
+$patron->delete
+
+Delete a patron.
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    my $deleted;
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            # Delete Patron's holds
+            # FIXME Should be $patron->get_holds
+            $_->delete for Koha::Holds->search( { borrowernumber => $self->borrowernumber } );
+
+            logaction( "MEMBERS", "DELETE", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
+            $deleted = $self->SUPER::delete;
+        }
+    );
+    return $deleted;
+}
 
 =head3 guarantor
 

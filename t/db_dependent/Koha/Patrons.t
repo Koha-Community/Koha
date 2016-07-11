@@ -19,13 +19,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Warn;
-
-use C4::Circulation;
 
 use C4::Members;
 
+use Koha::Holds;
 use Koha::Patron;
 use Koha::Patrons;
 use Koha::Database;
@@ -220,7 +219,27 @@ subtest "move_to_deleted" => sub {
         ->search( { borrowernumber => $patron->{borrowernumber} }, { result_class => 'DBIx::Class::ResultClass::HashRefInflator' } )
         ->next;
     is_deeply( $deleted_patron, $patron, 'Koha::Patron->move_to_deleted should have correctly moved the patron to the deleted table' );
-    C4::Members::DelMember( $patron->{borrowernumber} );    # Cleanup
+    $retrieved_patron->delete( $patron->{borrowernumber} );    # Cleanup
+};
+
+subtest "delete" => sub {
+    plan tests => 4;
+    t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
+    my $patron           = $builder->build( { source => 'Borrower' } );
+    my $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    my $hold             = $builder->build(
+        {   source => 'Reserve',
+            value  => { borrowernumber => $patron->{borrowernumber} }
+        }
+    );
+    my $deleted = $retrieved_patron->delete;
+    is( $deleted, 1, 'Koha::Patron->delete should return 1 if the patron has been correctly deleted' );
+    is( Koha::Patrons->find( $patron->{borrowernumber} ), undef, 'Koha::Patron->delete should have deleted the patron');
+
+    is( Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } )->count, 0, q|Koha::Patron->delete should have deleted patron's holds| );
+
+    my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'DELETE', object => $retrieved_patron->borrowernumber } )->count;
+    is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->delete should have logged' );
 };
 
 $retrieved_patron_1->delete;

@@ -25,6 +25,8 @@ use Test::Warn;
 
 use C4::Context;
 
+use Koha::Patrons;
+
 my $dbh = C4::Context->dbh;
 
 # Start transaction
@@ -179,7 +181,7 @@ subtest 'checkpw_ldap tests' => sub {
 
         $update               = 0;
         $desired_count_result = 0;    # user auth problem
-        C4::Members::DelMember( $borrower->{borrowernumber} );
+        Koha::Patrons->find( $borrower->{borrowernumber} )->delete;
         reload_ldap_module();
         is(
             C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola', password => 'hey' ),

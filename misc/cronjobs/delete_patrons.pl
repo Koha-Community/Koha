@@ -78,9 +78,8 @@ for my $member (@$members) {
     }
 
     if ( $confirm ) {
-        my $deleted = eval {
-            Koha::Patrons->find( $borrowernumber )->move_to_deleted;
-        };
+        my $patron = Koha::Patrons->find( $borrowernumber );
+        my $deleted = eval { $patron->move_to_deleted; };
         if ($@ or not $deleted) {
             say "Failed to delete patron $borrowernumber, cannot move it" . ( $@ ? ": ($@)" : "" );
             $dbh->rollback;
@@ -95,12 +94,12 @@ for my $member (@$members) {
             $dbh->rollback;
             next;
         }
-    }
-    eval { C4::Members::DelMember( $borrowernumber ) if $confirm; };
-    if ($@) {
-        say "Failed to delete patron $borrowernumber: $@)";
-        $dbh->rollback;
-        next;
+        eval { $patron->delete if $confirm; };
+        if ($@) {
+            say "Failed to delete patron $borrowernumber: $@)";
+            $dbh->rollback;
+            next;
+        }
     }
     $dbh->commit;
     $deleted++;

@@ -29,7 +29,6 @@ BEGIN {
 }
 
 use C4::Context;
-use C4::Members qw/ DelMember /;
 
 my $help;
 my $confirm;

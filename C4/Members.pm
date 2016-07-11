@@ -98,11 +98,6 @@ BEGIN {
         &changepassword
     );
 
-    #Delete data
-    push @EXPORT, qw(
-        &DelMember
-    );
-
     #Insert data
     push @EXPORT, qw(
         &AddMember
@@ -1308,40 +1303,11 @@ sub SetAge{
     return $borrower;
 }    # sub SetAge
 
-=head2 DelMember
-
-    DelMember($borrowernumber);
-
-This function remove directly a borrower whitout writing it on deleteborrower.
-+ Deletes reserves for the borrower
-
-=cut
-
-sub DelMember {
-    my $dbh            = C4::Context->dbh;
-    my $borrowernumber = shift;
-    #warn "in delmember with $borrowernumber";
-    return unless $borrowernumber;    # borrowernumber is mandatory.
-    # Delete Patron's holds
-    my @holds = Koha::Holds->search({ borrowernumber => $borrowernumber });
-    $_->delete for @holds;
-
-    my $query = "
-       DELETE
-       FROM borrowers
-       WHERE borrowernumber = ?
-   ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
-    logaction("MEMBERS", "DELETE", $borrowernumber, "") if C4::Context->preference("BorrowersLog");
-    return $sth->rows;
-}
-
 =head2 HandleDelBorrower
 
      HandleDelBorrower($borrower);
 
-When a member is deleted (DelMember in Members.pm), you should call me first.
+When a member is deleted, you should call me first.
 This routine deletes/moves lists and entries for the deleted member/borrower.
 Lists owned by the borrower are deleted, but entries from the borrower to
 other lists are kept.
@@ -1800,7 +1766,7 @@ WHERE categorycode = ? AND DATEDIFF( NOW(), dateenrolled ) > ? |;
     $sth->execute( $category_code, $delay );
     my $cnt=0;
     while ( my ($borrowernumber) = $sth->fetchrow_array() ) {
-        DelMember($borrowernumber);
+        Koha::Patrons->find($borrowernumber)->delete;
         $cnt++;
     }
     return $cnt;
