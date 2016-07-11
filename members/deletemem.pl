@@ -163,7 +163,6 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_
         });
     my $patron = Koha::Patrons->find( $member );
     $patron->move_to_deleted;
-    C4::Members::HandleDelBorrower($member);
     $patron->delete;
     # TODO Tell the user everything went ok
     print $input->redirect("/cgi-bin/koha/members/members-home.pl");

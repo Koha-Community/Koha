@@ -60,11 +60,6 @@ unless ($confirm) {
 
 say scalar(@$members) . " patrons to delete";
 
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{PrintError} = 0;
-
-$dbh->{AutoCommit} = 0; # use transactions to avoid partial deletes
 my $deleted = 0;
 for my $member (@$members) {
     print "Trying to delete patron $member->{borrowernumber}... "
@@ -82,26 +77,15 @@ for my $member (@$members) {
         my $deleted = eval { $patron->move_to_deleted; };
         if ($@ or not $deleted) {
             say "Failed to delete patron $borrowernumber, cannot move it" . ( $@ ? ": ($@)" : "" );
-            $dbh->rollback;
             next;
         }
 
-        eval {
-            C4::Members::HandleDelBorrower( $borrowernumber );
-        };
-        if ($@) {
-            say "Failed to delete patron $borrowernumber, error handling its lists: ($@)";
-            $dbh->rollback;
-            next;
-        }
-        eval { $patron->delete if $confirm; };
+        eval { $patron->delete };
         if ($@) {
             say "Failed to delete patron $borrowernumber: $@)";
-            $dbh->rollback;
             next;
         }
     }
-    $dbh->commit;
     $deleted++;
     say "OK" if $verbose;
 }

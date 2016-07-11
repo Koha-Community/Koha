@@ -32,6 +32,7 @@ use Koha::OldIssues;
 use Koha::Patron::Categories;
 use Koha::Patron::Images;
 use Koha::Patrons;
+use Koha::Virtualshelves;
 
 use base qw(Koha::Object);
 
@@ -49,7 +50,10 @@ Koha::Patron - Koha Patron Object class
 
 $patron->delete
 
-Delete a patron.
+Delete patron's holds, lists and finally the patron.
+
+Lists owned by the borrower are deleted, but entries from the borrower to
+other lists are kept.
 
 =cut
 
@@ -62,6 +66,22 @@ sub delete {
             # Delete Patron's holds
             # FIXME Should be $patron->get_holds
             $_->delete for Koha::Holds->search( { borrowernumber => $self->borrowernumber } );
+
+            # Delete all lists and all shares of this borrower
+            # Consistent with the approach Koha uses on deleting individual lists
+            # Note that entries in virtualshelfcontents added by this borrower to
+            # lists of others will be handled by a table constraint: the borrower
+            # is set to NULL in those entries.
+            # NOTE:
+            # We could handle the above deletes via a constraint too.
+            # But a new BZ report 11889 has been opened to discuss another approach.
+            # Instead of deleting we could also disown lists (based on a pref).
+            # In that way we could save shared and public lists.
+            # The current table constraints support that idea now.
+            # This pref should then govern the results of other routines/methods such as
+            # Koha::Virtualshelf->new->delete too.
+            # FIXME Could be $patron->get_lists
+            $_->delete for Koha::Virtualshelves->search( { owner => $self->borrowernumber } );
 
             logaction( "MEMBERS", "DELETE", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
             $deleted = $self->SUPER::delete;

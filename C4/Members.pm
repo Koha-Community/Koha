@@ -1303,40 +1303,6 @@ sub SetAge{
     return $borrower;
 }    # sub SetAge
 
-=head2 HandleDelBorrower
-
-     HandleDelBorrower($borrower);
-
-When a member is deleted, you should call me first.
-This routine deletes/moves lists and entries for the deleted member/borrower.
-Lists owned by the borrower are deleted, but entries from the borrower to
-other lists are kept.
-
-=cut
-
-sub HandleDelBorrower {
-    my ($borrower)= @_;
-    my $query;
-    my $dbh = C4::Context->dbh;
-
-    #Delete all lists and all shares of this borrower
-    #Consistent with the approach Koha uses on deleting individual lists
-    #Note that entries in virtualshelfcontents added by this borrower to
-    #lists of others will be handled by a table constraint: the borrower
-    #is set to NULL in those entries.
-    $query="DELETE FROM virtualshelves WHERE owner=?";
-    $dbh->do($query,undef,($borrower));
-
-    #NOTE:
-    #We could handle the above deletes via a constraint too.
-    #But a new BZ report 11889 has been opened to discuss another approach.
-    #Instead of deleting we could also disown lists (based on a pref).
-    #In that way we could save shared and public lists.
-    #The current table constraints support that idea now.
-    #This pref should then govern the results of other routines/methods such as
-    #Koha::Virtualshelf->new->delete too.
-}
-
 =head2 GetHideLostItemsPreference
 
   $hidelostitemspref = &GetHideLostItemsPreference($borrowernumber);

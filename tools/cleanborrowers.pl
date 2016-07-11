@@ -149,7 +149,6 @@ elsif ( $step == 3 ) {
             my $borrowernumber = $patrons_to_delete->[$i]->{'borrowernumber'};
             my $patron = Koha::Patrons->find($borrowernumber);
             $radio eq 'trash' && $patron->move_to_deleted;
-            C4::Members::HandleDelBorrower($borrowernumber);
             $patron->delete;
         }
         $template->param(
