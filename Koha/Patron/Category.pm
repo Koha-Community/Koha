@@ -22,6 +22,7 @@ use Carp;
 use C4::Members::Messaging;
 
 use Koha::Database;
+use Koha::DateUtils;
 
 use base qw(Koha::Object);
 
@@ -182,6 +183,16 @@ sub _catb_resultset {
       Koha::Database->new->schema->resultset('CategoriesBranch');
 
     return $self->{_catb_resultset};
+}
+
+sub get_expiry_date {
+    my ($self, $date ) = @_;
+    if ( $self->enrolmentperiod ) {
+        $date ||= dt_from_string;
+        return $date->add( months => $self->enrolmentperiod );
+    } else {
+        return $self->enrolmentperioddate;
+    }
 }
 
 =head3 type

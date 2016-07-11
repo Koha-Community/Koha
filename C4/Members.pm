@@ -25,7 +25,7 @@ use strict;
 use C4::Context;
 use String::Random qw( random_string );
 use Scalar::Util qw( looks_like_number );
-use Date::Calc qw/Today Add_Delta_YM check_date Date_to_Days/;
+use Date::Calc qw/Today check_date Date_to_Days/;
 use C4::Log; # logaction
 use C4::Overdues;
 use C4::Reserves;
@@ -43,6 +43,7 @@ use Koha::Database;
 use Koha::Holds;
 use Koha::List::Patron;
 use Koha::Patrons;
+use Koha::Patron::Categories;
 
 our (@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -84,7 +85,6 @@ BEGIN {
         &GetBorrowersWhoHaveNeverBorrowed
         &GetBorrowersWithIssuesHistoryOlderThan
 
-        &GetExpiryDate
         &GetUpcomingMembershipExpires
 
         &IssueSlip
@@ -654,9 +654,7 @@ sub AddMember {
       if ( $data{'userid'} eq '' || !Check_Userid( $data{'userid'} ) );
 
     # add expiration date if it isn't already there
-    unless ( $data{'dateexpiry'} ) {
-        $data{'dateexpiry'} = GetExpiryDate( $data{'categorycode'}, output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } ) );
-    }
+    $data{dateexpiry} ||= Koha::Patron::Categories->find( $data{categorycode} )->get_expiry_date;
 
     # add enrollment date if it isn't already there
     unless ( $data{'dateenrolled'} ) {
@@ -1220,33 +1218,6 @@ sub GetNoticeEmailAddress {
     return $data->{'primaryemail'} || '';
 }
 
-=head2 GetExpiryDate 
-
-  $expirydate = GetExpiryDate($categorycode, $dateenrolled);
-
-Calculate expiry date given a categorycode and starting date.  Date argument must be in ISO format.
-Return date is also in ISO format.
-
-=cut
-
-sub GetExpiryDate {
-    my ( $categorycode, $dateenrolled ) = @_;
-    my $enrolments;
-    if ($categorycode) {
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("SELECT enrolmentperiod,enrolmentperioddate FROM categories WHERE categorycode=?");
-        $sth->execute($categorycode);
-        $enrolments = $sth->fetchrow_hashref;
-    }
-    # die "GetExpiryDate: for enrollmentperiod $enrolmentperiod (category '$categorycode') starting $dateenrolled.\n";
-    my @date = split (/-/,$dateenrolled);
-    if($enrolments->{enrolmentperiod}){
-        return sprintf("%04d-%02d-%02d", Add_Delta_YM(@date,0,$enrolments->{enrolmentperiod}));
-    }else{
-        return $enrolments->{enrolmentperioddate};
-    }
-}
-
 =head2 GetUpcomingMembershipExpires
 
     my $expires = GetUpcomingMembershipExpires({
@@ -1513,7 +1484,7 @@ sub ExtendMemberSubscriptionTo {
                                         eval { output_pref( { dt => dt_from_string( $borrower->{'dateexpiry'}  ), dateonly => 1, dateformat => 'iso' } ); }
                                         :
                                         output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
-      $date = GetExpiryDate( $borrower->{'categorycode'}, $date );
+      $date = Koha::Patron::Categories->find( $borrower->{categorycode} )->get_expiry_date( $date );
     }
     my $sth = $dbh->do(<<EOF);
 UPDATE borrowers 

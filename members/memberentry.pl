@@ -371,8 +371,8 @@ if ($op eq 'save' || $op eq 'insert'){
 
 if ( ($op eq 'modify' || $op eq 'insert' || $op eq 'save'|| $op eq 'duplicate') and ($step == 0 or $step == 3 )){
     unless ($newdata{'dateexpiry'}){
-        my $arg2 = $newdata{'dateenrolled'} || output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-        $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
+        my $patron_category = Koha::Patron::Categories->find( $newdata{categorycode} );
+        $newdata{'dateexpiry'} = $patron_category->get_expiry_date( $newdata{dateenrolled} );
     }
 }
 
@@ -636,7 +636,8 @@ if (!defined($data{'dateenrolled'}) or $data{'dateenrolled'} eq ''){
 }
 if ( $op eq 'duplicate' ) {
     $data{'dateenrolled'} = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-    $data{'dateexpiry'} = GetExpiryDate( $data{'categorycode'}, $data{'dateenrolled'} );
+    my $patron_category = Koha::Patron::Categories->find( $data{categorycode} );
+    $data{dateexpiry} = $patron_category->get_expiry_date( $data{dateenrolled} );
 }
 if (C4::Context->preference('uppercasesurnames')) {
     $data{'surname'} &&= uc( $data{'surname'} );

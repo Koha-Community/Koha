@@ -149,7 +149,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
     }
 
     push @feedback, {feedback=>1, name=>'headerrow', value=>join(', ', @csvcolumns)};
-    my $today_iso = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' });
+    my $today = output_pref;
     my @criticals = qw(surname branchcode categorycode);    # there probably should be others
     my @bad_dates;  # I've had a few.
     LINE: while ( my $borrowerline = <$handle> ) {
@@ -225,8 +225,8 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                 push @missing_criticals, {key=>$_, line=>$. , lineraw=>$borrowerline, bad_date=>1};
             }
         }
-	$borrower{dateenrolled} = $today_iso unless $borrower{dateenrolled};
-	$borrower{dateexpiry} = GetExpiryDate($borrower{categorycode},$borrower{dateenrolled}) unless $borrower{dateexpiry}; 
+        $borrower{dateenrolled} ||= $today;
+        $borrower{dateexpiry}   ||= Koha::Patron::Categories->find( $borrower{categorycode} )->get_expiry_date( $borrower{dateenrolled} );
         my $borrowernumber;
         my $member;
         if ( ($matchpoint eq 'cardnumber') && ($borrower{'cardnumber'}) ) {
