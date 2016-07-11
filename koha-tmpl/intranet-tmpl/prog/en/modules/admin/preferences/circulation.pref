@@ -169,6 +169,12 @@ Circulation:
                   no: "Don't allow"
             - checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items.
         -
+            - pref: AllowItemsOnHoldCheckoutSCO
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items.
+        -
             - pref: AllFinesNeedOverride
               choices:
                   yes: Require
