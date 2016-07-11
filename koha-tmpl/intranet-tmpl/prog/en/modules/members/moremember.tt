@@ -395,8 +395,8 @@ function validate1(date) {
         [% END %]
     </li>
 
-    [% IF ( sort1 ) %]<li><span class="label">Sort field 1:</span>[% lib1 %]</li>[% END %]
-    [% IF ( sort2 ) %]<li><span class="label">Sort field 2:</span>[% lib2 %]</li>[% END %]
+    [% IF ( sort1 ) %]<li><span class="label">Sort field 1:</span>[% AuthorisedValues.GetByCode('Bsort1', sort1) %]</li>[% END %]
+    [% IF ( sort2 ) %]<li><span class="label">Sort field 2:</span>[% AuthorisedValues.GetByCode('Bsort2', sort2) %]</li>[% END %]
     <li><span class="label">Username: </span>[% userid %]</li>
     <li><span class="label">Password: </span>
     [% IF ( password ) %]

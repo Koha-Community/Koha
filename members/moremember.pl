@@ -207,10 +207,6 @@ my $library = Koha::Libraries->find( $data->{branchcode})->unblessed;
 @{$data}{keys %$library} = values %$library; # merge in all branch columns
 
 my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
-my $lib1 = &GetSortDetails( "Bsort1", $data->{'sort1'} );
-my $lib2 = &GetSortDetails( "Bsort2", $data->{'sort2'} );
-$template->param( lib1 => $lib1 ) if ($lib1);
-$template->param( lib2 => $lib2 ) if ($lib2);
 
 # If printing a page, send the account informations to the template
 if ($print eq "page") {

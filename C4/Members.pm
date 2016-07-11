@@ -71,7 +71,7 @@ BEGIN {
         &GetNoticeEmailAddress
 
         &GetAge
-        &GetSortDetails
+        &GetTitles
 
         &GetHideLostItemsPreference
 
@@ -1352,31 +1352,6 @@ sub SetAge{
 
     return $borrower;
 }    # sub SetAge
-
-=head2 GetSortDetails (OUEST-PROVENCE)
-
-  ($lib) = &GetSortDetails($category,$sortvalue);
-
-Returns the authorized value  details
-C<&$lib>return value of authorized value details
-C<&$sortvalue>this is the value of authorized value 
-C<&$category>this is the value of authorized value category
-
-=cut
-
-sub GetSortDetails {
-    my ( $category, $sortvalue ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|SELECT lib 
-        FROM authorised_values 
-        WHERE category=?
-        AND authorised_value=? |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $category, $sortvalue );
-    my $lib = $sth->fetchrow;
-    return ($lib) if ($lib);
-    return ($sortvalue) unless ($lib);
-}
 
 =head2 MoveMemberToDeleted
 

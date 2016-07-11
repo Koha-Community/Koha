@@ -21,7 +21,7 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 subtest 'Authorized Values Tests' => sub {
-    plan tests => 7;
+    plan tests => 4;
 
     my $data = {
         category            => 'CATEGORY',
@@ -46,18 +46,9 @@ subtest 'Authorized Values Tests' => sub {
 
 # Tests
     SKIP: {
-        skip "INSERT failed", 4 unless $insert_success;
+        skip "INSERT failed", 1 unless $insert_success;
 
         is ( GetAuthorisedValueByCode($data->{category}, $data->{authorised_value}), $data->{lib}, "GetAuthorisedValueByCode" );
-
-        my $sortdet=C4::Members::GetSortDetails("lost", "3");
-        is ($sortdet, "Lost and Paid For", "lost and paid works");
-
-        my $sortdet2=C4::Members::GetSortDetails("loc", "child");
-        is ($sortdet2, "Children's Area", "Child area works");
-
-        my $sortdet3=C4::Members::GetSortDetails("withdrawn", "1");
-        is ($sortdet3, "Withdrawn", "Withdrawn works");
     }
 
 # Clean up
