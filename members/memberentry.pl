@@ -220,22 +220,18 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
     }
 }
 
-#############test for member being unique #############
+# Test uniqueness of surname, firstname and dateofbirth
 if ( ( $op eq 'insert' ) and !$nodouble ) {
-    my $category_type_send;
-    if ( $category_type eq 'I' ) {
-        $category_type_send = $category_type;
+    my $conditions;
+    $conditions->{surname} = $newdata{surname} if $newdata{surname};
+    if ( $category_type ne 'I' ) {
+        $conditions->{firstname} = $newdata{firstname} if $newdata{firstname};
+        $conditions->{dateofbirth} = $newdata{dateofbirth} if $newdata{dateofbirth};
     }
-    my $check_category;    # recover the category code of the doublon suspect borrowers
-     #   ($result,$categorycode) = checkuniquemember($collectivity,$surname,$firstname,$dateofbirth)
-    ( $check_member, $check_category ) = checkuniquemember(
-        $category_type_send,
-        ( $newdata{surname}     ? $newdata{surname}     : $data{surname} ),
-        ( $newdata{firstname}   ? $newdata{firstname}   : $data{firstname} ),
-        ( $newdata{dateofbirth} ? $newdata{dateofbirth} : $data{dateofbirth} )
-    );
-    if ( !$check_member ) {
+    my $patrons = Koha::Patrons->search($conditions);
+    if ( $patrons->count > 0) {
         $nodouble = 1;
+        $check_member = $patrons->next->borrowernumber;
     }
 }
 

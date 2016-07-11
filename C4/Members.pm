@@ -1111,45 +1111,6 @@ sub GetBorNotifyAcctRecord {
     return ( $total, \@acctlines, $numlines );
 }
 
-=head2 checkuniquemember (OUEST-PROVENCE)
-
-  ($result,$categorycode)  = &checkuniquemember($collectivity,$surname,$firstname,$dateofbirth);
-
-Checks that a member exists or not in the database.
-
-C<&result> is nonzero (=exist) or 0 (=does not exist)
-C<&categorycode> is from categorycode table
-C<&collectivity> is 1 (= we add a collectivity) or 0 (= we add a physical member)
-C<&surname> is the surname
-C<&firstname> is the firstname (only if collectivity=0)
-C<&dateofbirth> is the date of birth in ISO format (only if collectivity=0)
-
-=cut
-
-# FIXME: This function is not legitimate.  Multiple patrons might have the same first/last name and birthdate.
-# This is especially true since first name is not even a required field.
-
-sub checkuniquemember {
-    my ( $collectivity, $surname, $firstname, $dateofbirth ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $request = ($collectivity) ?
-        "SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? " :
-            ($dateofbirth) ?
-            "SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? and firstname=?  and dateofbirth=?" :
-            "SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? and firstname=?";
-    my $sth = $dbh->prepare($request);
-    if ($collectivity) {
-        $sth->execute( uc($surname) );
-    } elsif($dateofbirth){
-        $sth->execute( uc($surname), ucfirst($firstname), $dateofbirth );
-    }else{
-        $sth->execute( uc($surname), ucfirst($firstname));
-    }
-    my @data = $sth->fetchrow;
-    ( $data[0] ) and return $data[0], $data[1];
-    return 0;
-}
-
 sub checkcardnumber {
     my ( $cardnumber, $borrowernumber ) = @_;
 
