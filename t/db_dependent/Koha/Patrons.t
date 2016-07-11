@@ -19,12 +19,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Warn;
 
 use Koha::Patron;
 use Koha::Patrons;
 use Koha::Database;
+use Koha::DateUtils;
+use Koha::Virtualshelves;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -125,6 +127,50 @@ subtest 'update_password' => sub {
     $retrieved_patron_1->update_password( 'yet_another_nonexistent_userid_1', 'another_password' );
     $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $new_patron_1->borrowernumber } )->count;
     is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->update_password should not have logged' );
+};
+
+subtest 'extend_subscription' => sub {
+    plan tests => 6;
+    my $a_month_ago                = dt_from_string->add( months => -1 )->truncate( to => 'day' );
+    my $a_year_later               = dt_from_string->add( months => 12 )->truncate( to => 'day' );
+    my $a_year_later_minus_a_month = dt_from_string->add( months => 11 )->truncate( to => 'day' );
+    my $patron_category = $builder->build(
+        {   source => 'Category',
+            value  => {
+                enrolmentperiod     => 12,
+                enrolmentperioddate => undef,
+            }
+        }
+    );
+    my $patron = $builder->build(
+        {   source => 'Borrower',
+            value  => {
+                dateexpiry   => $a_month_ago,
+                categorycode => $patron_category->{categorycode},
+            }
+        }
+    );
+    my $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
+
+    t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'dateexpiry' );
+    t::lib::Mocks::mock_preference( 'BorrowersLog',              1 );
+    my $expiry_date = $retrieved_patron->extend_subscription;
+    is( $expiry_date, $a_year_later_minus_a_month, );
+    my $retrieved_expiry_date = Koha::Patrons->find( $patron->{borrowernumber} )->dateexpiry;
+    is( dt_from_string($retrieved_expiry_date), $a_year_later_minus_a_month );
+    my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
+    is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->extend_subscription should have logged' );
+
+    t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'now' );
+    t::lib::Mocks::mock_preference( 'BorrowersLog',              0 );
+    $expiry_date = $retrieved_patron->extend_subscription;
+    is( $expiry_date, $a_year_later, );
+    $retrieved_expiry_date = Koha::Patrons->find( $patron->{borrowernumber} )->dateexpiry;
+    is( dt_from_string($retrieved_expiry_date), $a_year_later );
+    $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
+    is( $number_of_logs, 1, 'Without BorrowerLogs, Koha::Patron->extend_subscription should not have logged' );
+
+    $retrieved_patron->delete;
 };
 
 $retrieved_patron_1->delete;
