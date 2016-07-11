@@ -45,8 +45,11 @@ sub pay {
     my $self           = shift;
     my $borrowernumber = shift;
     my $amt            = shift;
-    my $type           = shift;
+    my $sip_type       = shift;
     my $fee_id         = shift;
+    my $is_writeoff    = shift;
+
+    my $type = $is_writeoff ? 'writeoff' : undef;
 
     warn("RECORD:$borrowernumber::$amt");
 
@@ -55,7 +58,14 @@ sub pay {
     if ($fee_id) {
         my $fee = Koha::Account::Lines->find($fee_id);
         if ( $fee && $fee->amountoutstanding == $amt ) {
-            $account->pay( { amount => $amt, sip => $type, lines => [$fee] } );
+            $account->pay(
+                {
+                    amount => $amt,
+                    sip    => $sip_type,
+                    type   => $type,
+                    lines  => [$fee],
+                }
+            );
             return 1;
         }
         else {
@@ -63,7 +73,13 @@ sub pay {
         }
     }
     else {
-        $account->pay( { amount => $amt, sip => $type } );
+        $account->pay(
+            {
+                amount => $amt,
+                sip    => $sip_type,
+                type   => $type,
+            }
+        );
         return 1;
     }
 }
