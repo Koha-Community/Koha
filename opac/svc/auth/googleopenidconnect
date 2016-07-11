@@ -34,7 +34,9 @@ use Modern::Perl;
 use CGI qw ( -utf8 escape );
 use C4::Auth qw{ checkauth get_session get_template_and_user };
 use C4::Context;
+use C4::Members;
 use C4::Output;
+use Koha::Patrons;
 
 use LWP::UserAgent;
 use HTTP::Request::Common qw{ POST };
@@ -179,6 +181,29 @@ elsif ( defined $query->param('code') ) {
                       . ' .' );
             }
             else {
+                my $auto_registration = C4::Context->preference('GoogleOpenIDConnectAutoRegister') // q{0};
+                my $borrower = Koha::Patrons->find( { email => $email } );
+                if (! $borrower && $auto_registration==1) {
+                    my $cardnumber = fixup_cardnumber();
+                    my $firstname = $claims_json->{'given_name'} // q{};
+                    my $surname = $claims_json->{'family_name'} // q{};
+                    my $delimiter = $firstname ? q{.} : q{};
+                    my $userid = $firstname . $delimiter . $surname;
+                    my $categorycode = C4::Context->preference('GoogleOpenIDConnectDefaultCategory') // q{};
+                    my $branchcode = C4::Context->preference('GoogleOpenIDConnectDefaultBranch') // q{};
+                    my $password = undef;
+                    $borrower = Koha::Patron->new( {
+                        cardnumber   => $cardnumber,
+                        firstname    => $firstname,
+                        surname      => $surname,
+                        email        => $email,
+                        categorycode => $categorycode,
+                        branchcode   => $branchcode,
+                        userid       => $userid,
+                        password     => $password,
+                    } );
+                    $borrower->store();
+                }
                 my ( $userid, $cookie, $session_id ) =
                   checkauth( $query, 1, {}, 'opac', $email );
                 if ($userid) {    # A user with this email is registered in koha

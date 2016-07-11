@@ -156,6 +156,18 @@ Administration:
             - "Google OpenID Connect Restrict to domain (or subdomain of this domain): "
             - pref: GoogleOpenIDConnectDomain
             - Leave blank for all google domains
+        -
+            - pref: GoogleOpenIDConnectAutoRegister
+              choices:
+                yes: Allow
+                no: "Don't Allow"
+            - users logging in with Google Open ID to automatically register.
+        -
+            - pref: GoogleOpenIDConnectDefaultCategory
+            - Use this category code when automatically registering a Google Open ID patron.
+        -
+            - pref: GoogleOpenIDConnectDefaultBranch
+            - Use this branch code when automatically registering a Google Open ID patron.
     Share anonymous usage statistics:
         -
             - "Share anonymous Koha usage data with the Koha community: "
