@@ -145,7 +145,7 @@ sub raw_transport {
             syslog("LOG_INFO", "raw_transport: shutting down: EOF during login");
             return;
         }
-        $input =~ s/[\r\n]+$//sm;	# Strip off trailing line terminator(s)
+        $input =~ s/[\r\n]+$//sm; # Strip off trailing line terminator(s)
         last if C4::SIP::Sip::MsgType::handle($input, $self, LOGIN);
     }
     alarm 0;
