@@ -87,7 +87,7 @@ $("#delColumn").on("click",function(){
 [% IF (saved1) %]
     var rtable = $("#table_reports").dataTable($.extend(true, {}, dataTablesDefaults, {
         'bAutoWidth': false,
-        'sDom': 't<"bottom pager"ilpf>',
+        'sDom': '<"top pager"ilpf>t<"bottom pager"ilpf>',
         'sPaginationType': 'four_button',
         'aaSorting': [[ 1, "asc" ]],
         'aoColumnDefs': [
