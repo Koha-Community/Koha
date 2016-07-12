@@ -81,32 +81,50 @@ unless (-r $input_file) {
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
-process_batch($format, $input_file, $record_type, $match, $add_items, $batch_comment);
+process_batch({
+    format        => $format,
+    input_file    => $input_file,
+    record_type   => $record_type,
+    match         => $match,
+    add_items     => $add_items,
+    batch_comment => $batch_comment,
+    encoding      => $encoding,
+    no_replace    => $no_replace,
+    no_create     => $no_create,
+    item_action   => $item_action,
+});
 $dbh->commit();
 
 exit 0;
 
 sub process_batch {
-    my ($format, $input_file, $record_type, $match, $add_items, $batch_comment) = @_;
+    my ( $params ) = @_;  #Possible params are: format input_file record_type match add_items batch_comment encoding no_replace no_create item_action
+    my $format = $params->{format} // '';
+    my $record_type = $params->{record_type} // 'biblio';
 
     my ( $errors, $marc_records );
-    ( $errors, $marc_records ) = C4::ImportBatch::RecordsFromISO2709File($input_file, $record_type, $encoding) if $format eq 'ISO2709';
-    ( $errors, $marc_records ) = C4::ImportBatch::RecordsFromMARCXMLFile($input_file, $encoding) if $format eq 'MARCXML';
+    if( $format eq 'ISO2709' ) {
+        ( $errors, $marc_records ) = C4::ImportBatch::RecordsFromISO2709File(
+            $params->{input_file}, $record_type, $params->{encoding} );
+    } elsif( $format eq 'MARCXML' ) {
+        ( $errors, $marc_records ) = C4::ImportBatch::RecordsFromMARCXMLFile(
+            $params->{input_file}, $params->{encoding} );
+    }
     warn ( join ',', @$errors ) if @$errors;
     my $num_input_records = ($marc_records) ? scalar(@$marc_records) : 0;
 
     print "... staging MARC records -- please wait\n";
     #FIXME: We should really allow the use of marc modification frameworks and to_marc plugins here if possible
     my ($batch_id, $num_valid_records, $num_items, @import_errors) =
-        BatchStageMarcRecords($record_type, $encoding, $marc_records, $input_file, undef, undef, $batch_comment, '', $add_items, 0,
+        BatchStageMarcRecords($record_type, $params->{encoding}, $marc_records, $params->{input_file}, undef, undef, $params->{batch_comment}, '', $params->{add_items}, 0,
                               100, \&print_progress_and_commit);
     print "... finished staging MARC records\n";
 
     my $num_with_matches = 0;
-    if ($match) {
-        my $matcher = C4::Matcher->fetch($match) ;
+    if ( $params->{match} ) {
+        my $matcher = C4::Matcher->fetch( $params->{match} );
         if (defined $matcher) {
-            SetImportBatchMatcher($batch_id, $match);
+            SetImportBatchMatcher( $batch_id, $params->{match} );
         } elsif ($record_type eq 'biblio')  {
             $matcher = C4::Matcher->new($record_type);
             $matcher->add_simple_matchpoint('isbn', 1000, '020', 'a', -1, 0, '');
@@ -114,9 +132,9 @@ sub process_batch {
                                             '245', 'a', -1, 0, '');
         }
         # set default record overlay behavior
-        SetImportBatchOverlayAction($batch_id, ($no_replace) ? 'ignore' : 'replace');
-        SetImportBatchNoMatchAction($batch_id, ($no_create) ? 'ignore' : 'create_new');
-        SetImportBatchItemAction($batch_id, $item_action);
+        SetImportBatchOverlayAction( $batch_id, $params->{no_replace} ? 'ignore' : 'replace' );
+        SetImportBatchNoMatchAction( $batch_id, $params->{no_create} ? 'ignore' : 'create_new' );
+        SetImportBatchItemAction( $batch_id, $params->{item_action} );
         print "... looking for matches with records already in database\n";
         $num_with_matches = BatchFindDuplicates($batch_id, $matcher, 10, 100, \&print_progress_and_commit);
         print "... finished looking for matches\n";
@@ -127,19 +145,19 @@ sub process_batch {
 
 MARC record staging report
 ------------------------------------
-Input file:                 $input_file
+Input file:                 $params->{input_file}
 Record type:                $record_type
 Number of input records:    $num_input_records
 Number of valid records:    $num_valid_records
 Number of invalid records:  $num_invalid_records
 _SUMMARY_
-    if ($match) {
+    if( $params->{match} ) {
         print "Number of records matched:  $num_with_matches\n";
     } else {
         print "Incoming records not matched against existing records (--match option not supplied)\n";
     }
     if ($record_type eq 'biblio') {
-        if ($add_items) {
+        if ( $params->{add_items} ) {
             print "Number of items parsed:  $num_items\n";
         } else {
             print "No items parsed (--add-items option not supplied)\n";
