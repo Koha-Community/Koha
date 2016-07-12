@@ -37,7 +37,7 @@
     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#circ_search">Check out</a></li>[% END %]
     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#checkin_search">Check in</a></li>[% END %]
     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a class="keep_text" href="#renew_search">Renew</a></li>[% END %]
-    [% IF ( CAN_user_catalogue ) %]<li class="keep_text" class="ui-tabs-active"><a href="#catalog_search">Search the catalog</a></li>[% END %]
+    [% IF ( CAN_user_catalogue ) %]<li class="keep_text ui-tabs-active"><a href="#catalog_search">Search the catalog</a></li>[% END %]
 </ul>
 
 </div><!-- /header_search -->
