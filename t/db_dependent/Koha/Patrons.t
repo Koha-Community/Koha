@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Warn;
 
 use C4::Members;
@@ -249,6 +249,58 @@ subtest "delete" => sub {
 
     my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'DELETE', object => $retrieved_patron->borrowernumber } )->count;
     is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->delete should have logged' );
+};
+
+subtest 'add_enrolment_fee_if_needed' => sub {
+    plan tests => 4;
+
+    my $enrolmentfee_K  = 5;
+    my $enrolmentfee_J  = 10;
+    my $enrolmentfee_YA = 20;
+
+    $builder->build( { source => 'Category', value => { categorycode => 'K',  enrolmentfee => $enrolmentfee_K } } );
+    $builder->build( { source => 'Category', value => { categorycode => 'J',  enrolmentfee => $enrolmentfee_J } } );
+    $builder->build( { source => 'Category', value => { categorycode => 'YA', enrolmentfee => $enrolmentfee_YA } } );
+
+    my %borrower_data = (
+        firstname    => 'my firstname',
+        surname      => 'my surname',
+        categorycode => 'K',
+        branchcode   => $library->{branchcode},
+    );
+
+    my $borrowernumber = C4::Members::AddMember(%borrower_data);
+    $borrower_data{borrowernumber} = $borrowernumber;
+
+    my ($total) = C4::Members::GetMemberAccountRecords($borrowernumber);
+    is( $total, $enrolmentfee_K, "New kid pay $enrolmentfee_K" );
+
+    t::lib::Mocks::mock_preference( 'FeeOnChangePatronCategory', 0 );
+    $borrower_data{categorycode} = 'J';
+    C4::Members::ModMember(%borrower_data);
+    ($total) = C4::Members::GetMemberAccountRecords($borrowernumber);
+    is( $total, $enrolmentfee_K, "Kid growing and become a juvenile, but shouldn't pay for the upgrade " );
+
+    $borrower_data{categorycode} = 'K';
+    C4::Members::ModMember(%borrower_data);
+    t::lib::Mocks::mock_preference( 'FeeOnChangePatronCategory', 1 );
+
+    $borrower_data{categorycode} = 'J';
+    C4::Members::ModMember(%borrower_data);
+    ($total) = C4::Members::GetMemberAccountRecords($borrowernumber);
+    is( $total, $enrolmentfee_K + $enrolmentfee_J, "Kid growing and become a juvenile, he should pay " . ( $enrolmentfee_K + $enrolmentfee_J ) );
+
+    # Check with calling directly Koha::Patron->get_enrolment_fee_if_needed
+    my $patron = Koha::Patrons->find($borrowernumber);
+    $patron->categorycode('YA')->store;
+    my $fee = $patron->add_enrolment_fee_if_needed;
+    ($total) = C4::Members::GetMemberAccountRecords($borrowernumber);
+    is( $total,
+        $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA,
+        "Juvenile growing and become an young adult, he should pay " . ( $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA )
+    );
+
+    $patron->delete;
 };
 
 $retrieved_patron_1->delete;
