@@ -82,8 +82,7 @@ elsif ( $rating_value and !$rating_old_value ) {
 }
 
 elsif ( $rating_value ne $rating_old_value ) {
-#### mod
-    $rating = ModRating( $biblionumber, $loggedinuser, $rating_value );
+    $rating = Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser })->rating_value($rating_value)->store;
 }
 
 my %js_reply = (

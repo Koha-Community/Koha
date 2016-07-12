@@ -45,7 +45,6 @@ my $loggedinuser = C4::Context->userenv->{'number'};
 my $biblionumber     = $query->param('biblionumber');
 my $rating_old_value = $query->param('rating_value');
 my $rating_value     = $query->param('rating');
-my $rating;
 
 # If JS is disabled and a user click on "Rate me" without selecting a rate
 unless ( $biblionumber and $rating_value ) {
@@ -58,7 +57,7 @@ if ( !$rating_old_value ) {
     Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $loggedinuser, rating_value => $rating_value, })->store;
 }
 else {
-    $rating = ModRating( $biblionumber, $loggedinuser, $rating_value );
+    Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser })->rating_value($rating_value)->store;
 }
 print $query->redirect(
     "/cgi-bin/koha/opac-detail.pl?biblionumber=$biblionumber");
