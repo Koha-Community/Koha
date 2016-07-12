@@ -35,7 +35,6 @@ BEGIN {
 
     @EXPORT = qw(
       &GetRating
-      &DelRating
     );
 }
 
@@ -56,9 +55,6 @@ The rating can be from 1 to 5 stars, (5 stars being the highest rating)
 Get a rating for a bib
  my $rating_hashref = GetRating( $biblionumber, undef );
  my $rating_hashref = GetRating( $biblionumber, $borrowernumber );
-
-Delete a rating for a bib
- my $rating_hashref = DelRating( $biblionumber, $borrowernumber );
 
 
 All subroutines in Ratings.pm return a hashref which contain 4 keys
@@ -182,29 +178,6 @@ sub GetRating {
     }
 
     return \%rating_hash;
-}
-
-=head2 DelRating
-
-    my $rating_hashref = DelRating( $biblionumber, $borrowernumber );
-
-Delete a rating for a bib
-
-=cut
-
-sub DelRating {
-    my ( $biblionumber, $borrowernumber ) = @_;
-
-    my $rating = Koha::Database->new()->schema->resultset('Rating')->find(
-        {
-            borrowernumber => $borrowernumber,
-            biblionumber   => $biblionumber
-        }
-    );
-
-    $rating->delete() if $rating;
-
-    return GetRating($biblionumber);
 }
 
 1;

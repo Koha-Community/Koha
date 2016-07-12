@@ -73,8 +73,8 @@ my $rating;
 $rating_value //= '';
 
 if ( $rating_value eq '' ) {
-#### delete
-    $rating = DelRating( $biblionumber, $loggedinuser );
+    Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser } )->delete;
+    $rating = Koha::Ratings->search({ biblionumber => $biblionumber })->get_rating;
 }
 
 elsif ( $rating_value and !$rating_old_value ) {
