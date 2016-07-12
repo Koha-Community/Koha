@@ -1860,32 +1860,6 @@ sub GetBorrowersWithIssuesHistoryOlderThan {
     return \@results;
 }
 
-=head2 GetBorrowersNamesAndLatestIssue
-
-  $results = &GetBorrowersNamesAndLatestIssueList(@borrowernumbers)
-
-this function get borrowers Names and surnames and Issue information.
-
-I<@borrowernumbers> is an array which all elements are borrowernumbers.
-This hashref is containt the number of time this borrowers has borrowed before I<$date> and the borrowernumber.
-
-=cut
-
-sub GetBorrowersNamesAndLatestIssue {
-    my $dbh  = C4::Context->dbh;
-    my @borrowernumbers=@_;  
-    my $query = "
-       SELECT surname,lastname, phone, email,max(timestamp)
-       FROM borrowers 
-         LEFT JOIN issues ON borrowers.borrowernumber=issues.borrowernumber
-       GROUP BY borrowernumber
-   ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute;
-    my $results = $sth->fetchall_arrayref({});
-    return $results;
-}
-
 =head2 IssueSlip
 
   IssueSlip($branchcode, $borrowernumber, $quickslip)
