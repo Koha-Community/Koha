@@ -27,6 +27,7 @@ use C4::Stats qw( UpdateStats );
 
 use Koha::Account::Line;
 use Koha::Account::Lines;
+use Koha::Account::Offset;
 use Koha::DateUtils qw( dt_from_string );
 
 =head1 NAME
@@ -49,11 +50,14 @@ This method allows payments to be made against fees/fines
 
 Koha::Account->new( { patron_id => $borrowernumber } )->pay(
     {
-        amount     => $amount,
-        sip        => $sipmode,
-        note       => $note,
-        library_id => $branchcode,
-        lines      => $lines, # Arrayref of Koha::Account::Line objects to pay
+        amount      => $amount,
+        sip         => $sipmode,
+        note        => $note,
+        description => $description,
+        library_id  => $branchcode,
+        lines        => $lines, # Arrayref of Koha::Account::Line objects to pay
+        account_type => $type,  # accounttype code
+        offset_type => $offset_type,    # offset type code
     }
 );
 
@@ -62,12 +66,15 @@ Koha::Account->new( { patron_id => $borrowernumber } )->pay(
 sub pay {
     my ( $self, $params ) = @_;
 
-    my $amount          = $params->{amount};
-    my $sip             = $params->{sip};
-    my $note            = $params->{note} || q{};
-    my $library_id      = $params->{library_id};
-    my $lines           = $params->{lines};
-    my $type            = $params->{type} || 'payment';
+    my $amount       = $params->{amount};
+    my $sip          = $params->{sip};
+    my $description  = $params->{description};
+    my $note         = $params->{note} || q{};
+    my $library_id   = $params->{library_id};
+    my $lines        = $params->{lines};
+    my $type         = $params->{type} || 'payment';
+    my $account_type = $params->{account_type};
+    my $offset_type  = $params->{offset_type} || $type eq 'writeoff' ? 'Writeoff' : 'Payment';
 
     my $userenv = C4::Context->userenv;
 
@@ -89,6 +96,8 @@ sub pay {
     my $balance_remaining = $amount; # Set it now so we can adjust the amount if necessary
     $balance_remaining ||= 0;
 
+    my @account_offsets;
+
     # We were passed a specific line to pay
     foreach my $fine ( @$lines ) {
         my $amount_to_pay =
@@ -105,6 +114,15 @@ sub pay {
         {
             C4::Circulation::ReturnLostItem( $self->{patron_id}, $fine->itemnumber );
         }
+
+        my $account_offset = Koha::Account::Offset->new(
+            {
+                debit_id => $fine->id,
+                type     => $offset_type,
+                amount   => $amount_to_pay * -1,
+            }
+        );
+        push( @account_offsets, $account_offset );
 
         if ( C4::Context->preference("FinesLog") ) {
             logaction(
@@ -149,6 +167,15 @@ sub pay {
         $fine->amountoutstanding( $old_amountoutstanding - $amount_to_pay );
         $fine->store();
 
+        my $account_offset = Koha::Account::Offset->new(
+            {
+                debit_id => $fine->id,
+                type     => $offset_type,
+                amount   => $amount_to_pay * -1,
+            }
+        );
+        push( @account_offsets, $account_offset );
+
         if ( C4::Context->preference("FinesLog") ) {
             logaction(
                 "FINES", 'MODIFY',
@@ -174,12 +201,12 @@ sub pay {
         last unless $balance_remaining > 0;
     }
 
-    my $account_type =
+    $account_type ||=
         $type eq 'writeoff' ? 'W'
       : defined($sip)       ? "Pay$sip"
       :                       'Pay';
 
-    my $description = $type eq 'writeoff' ? 'Writeoff' : q{};
+    $description ||= $type eq 'writeoff' ? 'Writeoff' : q{};
 
     my $payment = Koha::Account::Line->new(
         {
@@ -194,6 +221,11 @@ sub pay {
             note              => $note,
         }
     )->store();
+
+    foreach my $o ( @account_offsets ) {
+        $o->credit_id( $payment->id() );
+        $o->store();
+    }
 
     $library_id ||= $userenv ? $userenv->{'branch'} : undef;
 

@@ -54,6 +54,9 @@ use Koha::Libraries;
 use Koha::Holds;
 use Koha::RefundLostItemFeeRule;
 use Koha::RefundLostItemFeeRules;
+use Koha::Account::Lines;
+use Koha::Account::Line;
+use Koha::Account::Offset;
 use Carp;
 use List::MoreUtils qw( uniq );
 use Scalar::Util qw( looks_like_number );
@@ -2318,39 +2321,65 @@ sub _FixOverduesOnReturn {
     my $dbh = C4::Context->dbh;
 
     # check for overdue fine
-    my $sth = $dbh->prepare(
-"SELECT * FROM accountlines WHERE (borrowernumber = ?) AND (itemnumber = ?) AND (accounttype='FU' OR accounttype='O')"
-    );
-    $sth->execute( $borrowernumber, $item );
-
-    # alter fine to show that the book has been returned
-    my $data = $sth->fetchrow_hashref;
-    return 0 unless $data;    # no warning, there's just nothing to fix
+    my $accountline = Koha::Account::Lines->search(
+        {
+            borrowernumber => $borrowernumber,
+            itemnumber     => $item,
+            -or            => [
+                accounttype => 'FU',
+                accounttype => 'O',
+            ],
+        }
+    )->next();
+    return 0 unless $accountline;    # no warning, there's just nothing to fix
 
     my $uquery;
-    my @bind = ($data->{'accountlines_id'});
     if ($exemptfine) {
-        $uquery = "update accountlines set accounttype='FFOR', amountoutstanding=0";
+        my $amountoutstanding = $accountline->amountoutstanding;
+
+        $accountline->accounttype('FFOR');
+        $accountline->amountoutstanding(0);
+
+        Koha::Account::Offset->new(
+            {
+                debit_id => $accountline->id,
+                type => 'Forgiven',
+                amount => $amountoutstanding * -1,
+            }
+        );
+
         if (C4::Context->preference("FinesLog")) {
             &logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");
         }
-    } elsif ($dropbox && $data->{lastincrement}) {
-        my $outstanding = $data->{amountoutstanding} - $data->{lastincrement} ;
-        my $amt = $data->{amount} - $data->{lastincrement} ;
-        if (C4::Context->preference("FinesLog")) {
-            &logaction("FINES", 'MODIFY',$borrowernumber,"Dropbox adjustment $amt, item $item");
+    } elsif ($dropbox && $accountline->lastincrement) {
+        my $outstanding = $accountline->amountoutstanding - $accountline->lastincrement;
+        my $amt = $accountline->amount - $accountline->lastincrement;
+
+        Koha::Account::Offset->new(
+            {
+                debit_id => $accountline->id,
+                type => 'Dropbox',
+                amount => $accountline->lastincrement * -1,
+            }
+        );
+
+        if ( C4::Context->preference("FinesLog") ) {
+            &logaction( "FINES", 'MODIFY', $borrowernumber,
+                "Dropbox adjustment $amt, item $item" );
         }
-         $uquery = "update accountlines set accounttype='F' ";
-         if($outstanding  >= 0 && $amt >=0) {
-            $uquery .= ", amount = ? , amountoutstanding=? ";
-            unshift @bind, ($amt, $outstanding) ;
+
+        $accountline->accounttype('F');
+
+        if ( $outstanding >= 0 && $amt >= 0 ) {
+            $accountline->amount($amt);
+            $accountline->amountoutstanding($outstanding);
         }
+
     } else {
-        $uquery = "update accountlines set accounttype='F' ";
+        $accountline->accounttype('F');
     }
-    $uquery .= " where (accountlines_id = ?)";
-    my $usth = $dbh->prepare($uquery);
-    return $usth->execute(@bind);
+
+    return $accountline->store();
 }
 
 =head2 _FixAccountForLostAndReturned
@@ -2361,83 +2390,45 @@ Calculates the charge for a book lost and returned.
 
 Internal function, not exported, called only by AddReturn.
 
-FIXME: This function reflects how inscrutable fines logic is.  Fix both.
-FIXME: Give a positive return value on success.  It might be the $borrowernumber who received credit, or the amount forgiven.
-
 =cut
 
 sub _FixAccountForLostAndReturned {
     my $itemnumber     = shift or return;
     my $borrowernumber = @_ ? shift : undef;
     my $item_id        = @_ ? shift : $itemnumber;  # Send the barcode if you want that logged in the description
-    my $dbh = C4::Context->dbh;
-    # check for charge made for lost book
-    my $sth = $dbh->prepare("SELECT * FROM accountlines WHERE itemnumber = ? AND accounttype IN ('L', 'Rep', 'W') ORDER BY date DESC, accountno DESC");
-    $sth->execute($itemnumber);
-    my $data = $sth->fetchrow_hashref;
-    $data or return;    # bail if there is nothing to do
-    $data->{accounttype} eq 'W' and return;    # Written off
 
-    # writeoff this amount
-    my $offset;
-    my $amount = $data->{'amount'};
-    my $acctno = $data->{'accountno'};
-    my $amountleft;                                             # Starts off undef/zero.
-    if ($data->{'amountoutstanding'} == $amount) {
-        $offset     = $data->{'amount'};
-        $amountleft = 0;                                        # Hey, it's zero here, too.
-    } else {
-        $offset     = $amount - $data->{'amountoutstanding'};   # Um, isn't this the same as ZERO?  We just tested those two things are ==
-        $amountleft = $data->{'amountoutstanding'} - $amount;   # Um, isn't this the same as ZERO?  We just tested those two things are ==
-    }
-    my $usth = $dbh->prepare("UPDATE accountlines SET accounttype = 'LR',amountoutstanding='0'
-        WHERE (accountlines_id = ?)");
-    $usth->execute($data->{'accountlines_id'});      # We might be adjusting an account for some OTHER borrowernumber now.  Not the one we passed in.
-    #check if any credit is left if so writeoff other accounts
-    my $nextaccntno = getnextacctno($data->{'borrowernumber'});
-    $amountleft *= -1 if ($amountleft < 0);
-    if ($amountleft > 0) {
-        my $msth = $dbh->prepare("SELECT * FROM accountlines WHERE (borrowernumber = ?)
-                            AND (amountoutstanding >0) ORDER BY date");     # might want to order by amountoustanding ASC (pay smallest first)
-        $msth->execute($data->{'borrowernumber'});
-        # offset transactions
-        my $newamtos;
-        my $accdata;
-        while (($accdata=$msth->fetchrow_hashref) and ($amountleft>0)){
-            if ($accdata->{'amountoutstanding'} < $amountleft) {
-                $newamtos = 0;
-                $amountleft -= $accdata->{'amountoutstanding'};
-            }  else {
-                $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
-                $amountleft = 0;
-            }
-            my $thisacct = $accdata->{'accountlines_id'};
-            # FIXME: move prepares outside while loop!
-            my $usth = $dbh->prepare("UPDATE accountlines SET amountoutstanding= ?
-                    WHERE (accountlines_id = ?)");
-            $usth->execute($newamtos,$thisacct);
-            $usth = $dbh->prepare("INSERT INTO accountoffsets
-                (borrowernumber, accountno, offsetaccount,  offsetamount)
-                VALUES
-                (?,?,?,?)");
-            $usth->execute($data->{'borrowernumber'},$accdata->{'accountno'},$nextaccntno,$newamtos);
+    # check for charge made for lost book
+    my $accountline = Koha::Account::Lines->search(
+        {
+            itemnumber  => $itemnumber,
+            accounttype => { -in => [ 'L', 'Rep', 'W' ] },
+        },
+        {
+            order_by => { -desc => [ 'date', 'accountno' ] }
         }
-    }
-    $amountleft *= -1 if ($amountleft > 0);
-    my $desc = "Item Returned " . $item_id;
-    $usth = $dbh->prepare("INSERT INTO accountlines
-        (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
-        VALUES (?,?,now(),?,?,'CR',?)");
-    $usth->execute($data->{'borrowernumber'},$nextaccntno,0-$amount,$desc,$amountleft);
-    if ($borrowernumber) {
-        # FIXME: same as query above.  use 1 sth for both
-        $usth = $dbh->prepare("INSERT INTO accountoffsets
-            (borrowernumber, accountno, offsetaccount,  offsetamount)
-            VALUES (?,?,?,?)");
-        $usth->execute($borrowernumber, $data->{'accountno'}, $nextaccntno, $offset);
-    }
-    ModItem({ paidfor => '' }, undef, $itemnumber);
-    return;
+    )->next();
+
+    return unless $accountline;
+    return if $accountline->accounttype eq 'W';    # Written off
+
+    $accountline->accounttype('LR');
+    $accountline->store();
+
+    my $account = Koha::Account->new( { patron_id => $accountline->borrowernumber } );
+    my $credit_id = $account->pay(
+        {
+            amount       => $accountline->amount,
+            description  => "Item Returned " . $item_id,
+            account_type => 'CR',
+            offset_type  => 'Lost Item Return',
+            accounlines  => [$accountline],
+
+        }
+    );
+
+    ModItem( { paidfor => '' }, undef, $itemnumber );
+
+    return $credit_id;
 }
 
 =head2 _GetCircControlBranch
