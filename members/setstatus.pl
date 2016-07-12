@@ -47,7 +47,7 @@ my $dateexpiry;
 
 if ( $reregistration eq 'y' ) {
     # re-reregistration function to automatic calcul of date expiry
-    $dateexpiry = Koha::Patrons->find( $borrowernumber )->extend_subscription;
+    $dateexpiry = Koha::Patrons->find( $borrowernumber )->renew_account;
 } else {
     my $sth = $dbh->prepare("UPDATE borrowers SET debarred = ?, debarredcomment = '' WHERE borrowernumber = ?");
     $sth->execute( $status, $borrowernumber );

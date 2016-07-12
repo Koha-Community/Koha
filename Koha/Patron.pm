@@ -209,15 +209,15 @@ sub update_password {
     return 1;
 }
 
-=head3 extend_subscription
+=head3 renew_account
 
-my $new_expiry_date = $patron->extend_subscription
+my $new_expiry_date = $patron->renew_account
 
 Extending the subscription to the expiry date.
 
 =cut
 
-sub extend_subscription {
+sub renew_account {
     my ($self) = @_;
 
     my $date =
