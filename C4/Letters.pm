@@ -49,7 +49,7 @@ BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT = qw(
-        &GetLetters &GetLettersAvailableForALibrary &GetLetterTemplates &DelLetter &GetPreparedLetter &GetWrappedLetter &SendAlerts &GetPrintMessages &GetMessageTransportTypes
+        &EnqueueLetter &GetLetters &GetLettersAvailableForALibrary &GetLetterTemplates &DelLetter &GetPreparedLetter &GetWrappedLetter &SendAlerts &GetPrintMessages &GetMessageTransportTypes
     );
 }
 

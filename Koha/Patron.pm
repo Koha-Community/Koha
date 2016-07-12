@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Log;
 use Koha::Account;
 use Koha::ArticleRequests;
+use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 use Koha::AuthUtils;
 use Koha::Checkouts;
 use Koha::Club::Enrollments;
@@ -1807,6 +1808,75 @@ sub to_api_mapping {
         altcontactstate     => 'altcontact_state',
         altcontactzipcode   => 'altcontact_postal_code'
     };
+}
+
+=head3 send_notice
+
+    Koha::Patrons->send_notice({ letter_params => $letter_params, message_name => 'DUE'});
+    Koha::Patrons->send_notice({ letter_params => $letter_params, message_transports => \@message_transports });
+    Koha::Patrons->send_notice({ letter_params => $letter_params, message_transports => \@message_transports, test_mode => 1 });
+
+    Queue messages to a patron. Can pass a message that is part of the message_attributes
+    table or supply the transport to use.
+
+    If passed a message name we retrieve the patrons preferences for transports
+    Otherwise we use the supplied transport. In the case of email or sms we fall back to print if
+    we have no address/number for sending
+
+    $letter_params is a hashref of the values to be passed to GetPreparedLetter
+
+    test_mode will only report which notices would be sent, but nothign will be queued
+
+=cut
+
+sub send_notice {
+    my ( $self, $params ) = @_;
+    my $letter_params = $params->{letter_params};
+    my $test_mode = $params->{test_mode};
+
+    return unless $letter_params;
+    return unless exists $params->{message_name} xor $params->{message_transports}; # We only want one of these
+
+    my $library = Koha::Libraries->find( $letter_params->{branchcode} )->unblessed;
+    my $admin_email_address = $library->{branchemail} || C4::Context->preference('KohaAdminEmailAddress');
+
+    my @message_transports;
+    my $letter_code;
+    $letter_code = $letter_params->{letter_code};
+    if( $params->{message_name} ){
+        my $messaging_prefs = C4::Members::Messaging::GetMessagingPreferences( {
+                borrowernumber => $letter_params->{borrowernumber},
+                message_name => $params->{message_name}
+        } );
+        @message_transports = ( keys %{ $messaging_prefs->{transports} } );
+        $letter_code = $messaging_prefs->{transports}->{$message_transports[0]} unless $letter_code;
+    } else {
+        @message_transports = @{$params->{message_transports}};
+    }
+    return unless defined $letter_code;
+    $letter_params->{letter_code} = $letter_code;
+    my $print_sent = 0;
+    my %return;
+    foreach my $mtt (@message_transports){
+        next if ($mtt eq 'phone' and C4::Context->preference('TalkingTechItivaPhoneNotification') );
+        # Phone notices are handled by TalkingTech_itiva_outbound.pl
+        if( ($mtt eq 'email' and not $self->notice_email_address) or ($mtt eq 'sms' and not $self->smsalertnumber) ){
+            push @{$return{fallback}}, $mtt;
+            $mtt = 'print';
+        }
+        next if $mtt eq 'print' && $print_sent;
+        $letter_params->{message_transport_type} = $mtt;
+        my $letter = C4::Letters::GetPreparedLetter( %$letter_params );
+        C4::Letters::EnqueueLetter({
+            letter => $letter,
+            borrowernumber => $self->borrowernumber,
+            from_address   => $admin_email_address,
+            message_transport_type => $mtt
+        }) unless $test_mode;
+        push @{$return{sent}}, $mtt;
+        $print_sent = 1 if $mtt eq 'print';
+    }
+    return \%return;
 }
 
 =head2 Internal methods

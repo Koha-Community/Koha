@@ -44,6 +44,7 @@ use Koha::Patron::Relationship;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Virtualshelves;
+use Koha::Notice::Messages;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -1979,4 +1980,96 @@ subtest 'anonymize' => sub {
     $patron2->discard_changes; # refresh
     is( $patron2->firstname, undef, 'First name patron2 cleared' );
 };
+
+subtest 'send_notice' => sub {
+    plan tests => 11;
+
+    my $dbh = C4::Context->dbh;
+    t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'email' );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $branch = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $letter_e = $builder->build_object( {
+        class => 'Koha::Notice::Templates',
+        value => {
+            branchcode => $branch->branchcode,
+            message_transport_type => 'email',
+            lang => 'default'
+        }
+    });
+    my $letter_p = $builder->build_object( {
+        class => 'Koha::Notice::Templates',
+        value => {
+            code => $letter_e->code,
+            module => $letter_e->module,
+            branchcode => $branch->branchcode,
+            message_transport_type => 'print',
+            lang => 'default'
+        }
+    });
+    my $letter_s = $builder->build_object( {
+        class => 'Koha::Notice::Templates',
+        value => {
+            code => $letter_e->code,
+            module => $letter_e->module,
+            branchcode => $branch->branchcode,
+            message_transport_type => 'sms',
+            lang => 'default'
+        }
+    });
+
+    my $letter_params = {
+        letter_code => $letter_e->code,
+        branchcode  => $letter_e->branchcode,
+        module      => $letter_e->module,
+        borrowernumber => $patron->borrowernumber,
+        tables => {
+            borrowers => $patron->borrowernumber,
+        }
+    };
+    my @mtts = ('email');
+
+    is( $patron->send_notice(), undef, "Nothing is done if no params passed");
+    is( $patron->send_notice({ letter_params => $letter_params }),undef, "Nothing done if only letter");
+    is_deeply(
+        $patron->send_notice({ letter_params => $letter_params, message_transports => \@mtts }),
+        {sent => ['email'] }, "Email sent"
+    );
+    $patron->email("")->store;
+    is_deeply(
+        $patron->send_notice({ letter_params => $letter_params, message_transports => \@mtts }),
+        {sent => ['print'],fallback => ['email']}, "Email fallsback to print if no email"
+    );
+    push @mtts, 'sms';
+    is_deeply(
+        $patron->send_notice({ letter_params => $letter_params, message_transports => \@mtts }),
+        {sent => ['print','sms'],fallback => ['email']}, "Email fallsback to print if no email, sms sent"
+    );
+    $patron->smsalertnumber("")->store;
+    my $counter = Koha::Notice::Messages->search({borrowernumber => $patron->borrowernumber })->count;
+    is_deeply(
+        $patron->send_notice({ letter_params => $letter_params, message_transports => \@mtts }),
+        {sent => ['print'],fallback => ['email','sms']}, "Email fallsback to print if no emai, sms fallsback to print if no sms, only one print sent"
+    );
+    is( Koha::Notice::Messages->search({borrowernumber => $patron->borrowernumber })->count, $counter+1,"Count of queued notices went up by one");
+
+    # Enable notification for Hold_Filled - Things are hardcoded here but should work with default data
+    $dbh->do(q|INSERT INTO borrower_message_preferences( borrowernumber, message_attribute_id ) VALUES ( ?, ?)|, undef, $patron->borrowernumber, 4 );
+    my $borrower_message_preference_id = $dbh->last_insert_id(undef, undef, "borrower_message_preferences", undef);
+    $dbh->do(q|INSERT INTO borrower_message_transport_preferences( borrower_message_preference_id, message_transport_type) VALUES ( ?, ? )|, undef, $borrower_message_preference_id, 'email' );
+
+    is( $patron->send_notice({ letter_params => $letter_params, message_transports => \@mtts, message_name => 'Hold_Filled' }),undef, "Nothing done if transports and name sent");
+
+    $patron->email(q|awesome@ismymiddle.name|)->store;
+    is_deeply(
+        $patron->send_notice({ letter_params => $letter_params, message_name => 'Hold_Filled' }),
+        {sent => ['email'] }, "Email sent when using borrower preferences"
+    );
+    $counter = Koha::Notice::Messages->search({borrowernumber => $patron->borrowernumber })->count;
+    is_deeply(
+        $patron->send_notice({ letter_params => $letter_params, message_name => 'Hold_Filled', test_mode => 1 }),
+        {sent => ['email'] }, "Report that email sent when using borrower preferences in test_mode"
+    );
+    is( Koha::Notice::Messages->search({borrowernumber => $patron->borrowernumber })->count, $counter,"Count of queued notices not increased in test mode");
+};
+
 $schema->storage->txn_rollback;
