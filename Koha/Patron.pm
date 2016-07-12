@@ -305,7 +305,7 @@ sub renew_account {
 
     $self->dateexpiry($expiry_date)->store;
 
-    C4::Members::AddEnrolmentFeeIfNeeded( $self->categorycode, $self->borrowernumber );
+    $self->add_enrolment_fee_if_needed;
 
     logaction( "MEMBERS", "RENEW", $self->borrowernumber, "Membership renewed" ) if C4::Context->preference("BorrowersLog");
     return dt_from_string( $expiry_date )->truncate( to => 'day' );
@@ -424,6 +424,25 @@ sub article_requests_finished {
     );
 
     return $self->{_article_requests_finished};
+}
+
+=head3 add_enrolment_fee_if_needed
+
+my $enrolment_fee = $patron->add_enrolment_fee_if_needed;
+
+Add enrolment fee for a patron if needed.
+
+=cut
+
+sub add_enrolment_fee_if_needed {
+    my ($self) = @_;
+    my $patron_category = Koha::Patron::Categories->find( $self->categorycode );
+    my $enrolment_fee = $patron_category->enrolmentfee;
+    if ( $enrolment_fee && $enrolment_fee > 0 ) {
+        # insert fee in patron debts
+        C4::Accounts::manualinvoice( $self->borrowernumber, '', '', 'A', $enrolment_fee );
+    }
+    return $enrolment_fee || 0;
 }
 
 =head3 type

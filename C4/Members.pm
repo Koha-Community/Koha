@@ -535,19 +535,19 @@ sub ModMember {
     $new_borrower->{dateexpiry}      ||= undef if exists $new_borrower->{dateexpiry};
     $new_borrower->{debarred}        ||= undef if exists $new_borrower->{debarred};
     $new_borrower->{sms_provider_id} ||= undef if exists $new_borrower->{sms_provider_id};
+    $new_borrower->{guarantorid}     ||= undef if exists $new_borrower->{guarantorid};
 
-    my $rs = $schema->resultset('Borrower')->search({
-        borrowernumber => $new_borrower->{borrowernumber},
-     });
+    my $patron = Koha::Patrons->find( $new_borrower->{borrowernumber} );
 
     delete $new_borrower->{userid} if exists $new_borrower->{userid} and not $new_borrower->{userid};
 
-    my $execute_success = $rs->update($new_borrower);
-    if ($execute_success ne '0E0') { # only proceed if the update was a success
+    my $execute_success = $patron->store if $patron->set($new_borrower);
+
+    if ($execute_success) { # only proceed if the update was a success
         # If the patron changes to a category with enrollment fee, we add a fee
         if ( $data{categorycode} and $data{categorycode} ne $old_categorycode ) {
             if ( C4::Context->preference('FeeOnChangePatronCategory') ) {
-                AddEnrolmentFeeIfNeeded( $data{categorycode}, $data{borrowernumber} );
+                $patron->add_enrolment_fee_if_needed;
             }
         }
 
@@ -651,10 +651,9 @@ sub AddMember {
         });
     }
 
-    # mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
     logaction("MEMBERS", "CREATE", $data{'borrowernumber'}, "") if C4::Context->preference("BorrowersLog");
 
-    AddEnrolmentFeeIfNeeded( $data{categorycode}, $data{borrowernumber} );
+    $patron->add_enrolment_fee_if_needed;
 
     return $data{borrowernumber};
 }
@@ -1678,35 +1677,6 @@ sub AddMember_Opac {
     my $borrowernumber = AddMember(%borrower);
 
     return ( $borrowernumber, $borrower{'password'} );
-}
-
-=head2 AddEnrolmentFeeIfNeeded
-
-    AddEnrolmentFeeIfNeeded( $borrower->{categorycode}, $borrower->{borrowernumber} );
-
-Add enrolment fee for a patron if needed.
-
-=cut
-
-sub AddEnrolmentFeeIfNeeded {
-    my ( $categorycode, $borrowernumber ) = @_;
-    # check for enrollment fee & add it if needed
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(q{
-        SELECT enrolmentfee
-        FROM categories
-        WHERE categorycode=?
-    });
-    $sth->execute( $categorycode );
-    if ( $sth->err ) {
-        warn sprintf('Database returned the following error: %s', $sth->errstr);
-        return;
-    }
-    my ($enrolmentfee) = $sth->fetchrow;
-    if ($enrolmentfee && $enrolmentfee > 0) {
-        # insert fee in patron debts
-        C4::Accounts::manualinvoice( $borrowernumber, '', '', 'A', $enrolmentfee );
-    }
 }
 
 =head2 DeleteExpiredOpacRegistrations
