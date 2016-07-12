@@ -25,6 +25,15 @@
         $("#delete_course").click(function(){
             return confirm( _("Are you sure you want to delete this course?") );
         });
+        $(".disabled").tooltip().on("click", function(e){
+            e.preventDefault();
+            if( $(this).hasClass("checkedout") ){
+                alert(_("This item cannot be removed. It is checked out"));
+            }
+            if( $(this).hasClass("itemlost") ) {
+                alert(_("This item cannot be removed. It is lost"));
+            }
+        });
     });
 
 //]]>
@@ -82,10 +91,11 @@
                         <th>Library</th>
                         <th>Staff note</th>
                         <th>Public note</th>
-                        [% IF CAN_user_coursereserves_add_reserves %]<th class="NoSort">&nbsp;<!-- Edit --></th>[% END %]
-                        [% IF CAN_user_coursereserves_delete_reserves %]<th class="NoSort">&nbsp;<!-- Remove --></th>[% END %]
-                        <th class="NoSort">Other course reserves</th>
                         <th>Link</th>
+                        <th class="NoSort">Other course reserves</th>
+                        [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
+                            <th class="NoSort">Actions</th>
+                        [% END %]
                     </tr>
                 </thead>
 
@@ -167,22 +177,13 @@
                                 [% END %]
                             </td>
 
-                            [% IF CAN_user_coursereserves_add_reserves %]
-                                <td><a href="add_items.pl?course_id=[% course.course_id %]&amp;barcode=[% cr.item.barcode %]&amp;action=lookup&amp;return=[% course.course_id %]">Edit</a></td>
-                            [% END %]
-
-                            [% IF CAN_user_coursereserves_delete_reserves %]
-                                <td>
-                                    [% IF cr.item.onloan %]
-                                        Checked out
-                                    [% ELSIF cr.item.itemlost %]
-                                        Item lost
-                                    [% ELSE %]
-                                        <a href="course-details.pl?course_id=[% course.course_id %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id %]" class="delete_item" >Remove</a>
-                                    [% END %]
-
-                                </td>
-                            [% END %]
+                            <td>
+                                [% IF (cr.item.uri) %]
+                                    <a href="[% cr.item.uri %]">Item URI</a>
+                                [% ELSIF (cr.item.url) %]
+                                    <a href="[% cr.item.url %]">Record URL</a>
+                                [% END %]
+                            </td>
 
                             <td>
                                 [% FOREACH c IN cr.courses %]
@@ -197,13 +198,26 @@
                                     [% END %]
                                 [% END %]
                             </td>
-                            <td>
-                                [% IF (cr.item.uri) %]
-                                    <a href="[% cr.item.uri %]">Item URI</a>
-                                [% ELSIF (cr.item.url) %]
-                                    <a href="[% cr.item.url %]">Record URL</a>
-                                [% END %]
-                            </td>
+
+                            [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
+                                <td class="actions">
+                                    [% IF CAN_user_coursereserves_add_reserves %]
+                                        <a class="btn btn-mini" href="add_items.pl?course_id=[% course.course_id %]&amp;barcode=[% cr.item.barcode %]&amp;action=lookup&amp;return=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit</a>
+                                    [% END %]
+
+                                    [% IF CAN_user_coursereserves_delete_reserves %]
+                                        [% IF cr.item.onloan %]
+                                            <a class="btn btn-mini disabled checkedout" href="#" class="delete_item" data-toggle="tooltip" data-placement="left" title="This item is checked out">
+                                        [% ELSIF cr.item.itemlost %]
+                                            <a class="btn btn-mini disabled itemlost" href="#" class="delete_item" data-toggle="tooltip" data-placement="left" title="This item is lost">
+                                        [% ELSE %]
+                                            <a class="btn btn-mini" href="course-details.pl?course_id=[% course.course_id %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id %]" class="delete_item" >
+                                        [% END %]
+                                        <i class="fa fa-trash"></i> Remove</a>
+                                    [% END %]
+                                </td>
+                            [% END %]
+
                         </tr>
                     [% END %]
                 </tbody>
