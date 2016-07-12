@@ -34,6 +34,9 @@ use C4::Context;
 use C4::Debug;
 use C4::Output qw(:html :ajax pagination_bar);
 use C4::Ratings;
+
+use Koha::Ratings;
+
 use JSON;
 
 my $is_ajax = is_ajax();
@@ -75,8 +78,7 @@ if ( $rating_value eq '' ) {
 }
 
 elsif ( $rating_value and !$rating_old_value ) {
-#### insert
-    $rating = AddRating( $biblionumber, $loggedinuser, $rating_value );
+    $rating = Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $loggedinuser, rating_value => $rating_value, })->store;
 }
 
 elsif ( $rating_value ne $rating_old_value ) {

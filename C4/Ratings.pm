@@ -35,7 +35,6 @@ BEGIN {
 
     @EXPORT = qw(
       &GetRating
-      &AddRating
       &ModRating
       &DelRating
     );
@@ -58,9 +57,6 @@ The rating can be from 1 to 5 stars, (5 stars being the highest rating)
 Get a rating for a bib
  my $rating_hashref = GetRating( $biblionumber, undef );
  my $rating_hashref = GetRating( $biblionumber, $borrowernumber );
-
-Add a rating for a bib
- my $rating_hashref = AddRating( $biblionumber, $borrowernumber, $rating_value );
 
 Mod a rating for a bib
  my $rating_hashref = ModRating( $biblionumber, $borrowernumber, $rating_value );
@@ -190,32 +186,6 @@ sub GetRating {
     }
 
     return \%rating_hash;
-}
-
-=head2 AddRating
-
-    my $rating_hashref = AddRating( $biblionumber, $borrowernumber, $rating_value );
-
-Add a rating for a bib
-
-This adds or updates a rating for a particular user on a biblio. If the value
-is 0, then the rating will be deleted. If the value is out of the range of
-0-5, nothing will happen.
-
-=cut
-
-sub AddRating {
-    my ( $biblionumber, $borrowernumber, $rating_value ) = @_;
-
-    my $rating = Koha::Database->new()->schema->resultset('Rating')->create(
-        {
-            biblionumber   => $biblionumber,
-            borrowernumber => $borrowernumber,
-            rating_value   => $rating_value
-        }
-    );
-
-    return GetRating( $biblionumber, $borrowernumber );
 }
 
 =head2 ModRating

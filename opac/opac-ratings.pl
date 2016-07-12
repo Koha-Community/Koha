@@ -34,6 +34,8 @@ use C4::Context;
 use C4::Ratings;
 use C4::Debug;
 
+use Koha::Ratings;
+
 my $query = CGI->new();
 
 # auth required to add ratings
@@ -53,7 +55,7 @@ unless ( $biblionumber and $rating_value ) {
 }
 
 if ( !$rating_old_value ) {
-    $rating = AddRating( $biblionumber, $loggedinuser, $rating_value );
+    Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $loggedinuser, rating_value => $rating_value, })->store;
 }
 else {
     $rating = ModRating( $biblionumber, $loggedinuser, $rating_value );
