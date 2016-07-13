@@ -726,6 +726,7 @@ sub AddMember {
     # get only the columns of Borrower
     my @columns = $schema->source('Borrower')->columns;
     my $new_member = { map { join(' ',@columns) =~ /$_/ ? ( $_ => $data{$_} )  : () } keys(%data) } ;
+    $new_member->{checkprevcheckout} ||= 'inherit';
     delete $new_member->{borrowernumber};
 
     my $rs = $schema->resultset('Borrower');
