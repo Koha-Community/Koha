@@ -146,7 +146,9 @@ sub raw_transport {
             return;
         }
         $input =~ s/[\r\n]+$//sm; # Strip off trailing line terminator(s)
-        last if C4::SIP::Sip::MsgType::handle($input, $self, LOGIN);
+        my $reg = qr/^${\(LOGIN)}/;
+        last if $input !~ $reg ||
+            C4::SIP::Sip::MsgType::handle($input, $self, LOGIN);
     }
     alarm 0;
 
