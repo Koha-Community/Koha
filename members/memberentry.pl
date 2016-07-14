@@ -228,9 +228,10 @@ if ( ( $op eq 'insert' ) and !$nodouble ) {
         $conditions->{firstname} = $newdata{firstname} if $newdata{firstname};
         $conditions->{dateofbirth} = $newdata{dateofbirth} if $newdata{dateofbirth};
     }
+    $nodouble = 1;
     my $patrons = Koha::Patrons->search($conditions);
     if ( $patrons->count > 0) {
-        $nodouble = 1;
+        $nodouble = 0;
         $check_member = $patrons->next->borrowernumber;
     }
 }
