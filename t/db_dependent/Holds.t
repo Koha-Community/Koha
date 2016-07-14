@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 53;
+use Test::More tests => 54;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -121,6 +121,7 @@ ok( $hold_branch == $hold->branch(), "branch method returns stashed branch" );
 my $hold_found = $hold->found();
 $hold->set({ found => 'W'})->store();
 is( Koha::Holds->waiting()->count(), 1, "Koha::Holds->waiting returns waiting holds" );
+is( Koha::Holds->unfilled()->count(), 4, "Koha::Holds->unfilled returns unfilled holds" );
 
 my $patron = Koha::Patrons->find( $borrowernumbers[0] );
 $holds = $patron->holds;

@@ -39,7 +39,7 @@ Koha::Holds - Koha Hold object set class
 
 =head3 waiting
 
-Returns a set of holds that are waiting from an existing set
+returns a set of holds that are waiting from an existing set
 
 =cut
 
@@ -47,6 +47,18 @@ sub waiting {
     my ( $self ) = @_;
 
     return $self->search( { found => 'W' } );
+}
+
+=head3 unfilled
+
+returns a set of holds that are unfilled from an existing set
+
+=cut
+
+sub unfilled {
+    my ( $self ) = @_;
+
+    return $self->search( { found => undef } );
 }
 
 =head3 forced_hold_level

@@ -32,6 +32,7 @@ use Koha::Biblios;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Old::Holds;
+use Koha::Calendar;
 
 use base qw(Koha::Object);
 
@@ -44,6 +45,34 @@ Koha::Hold - Koha Hold object class
 =head2 Class Methods
 
 =cut
+
+=head3 age
+
+returns the number of days since a hold was placed, optionally
+using the calendar
+
+my $age = $hold->age( $use_calendar );
+
+=cut
+
+sub age {
+    my ( $self, $use_calendar ) = @_;
+
+    my $today = DateTime->now(time_zone => C4::Context->tz );
+    my $age;
+
+    if ( $use_calendar ) {
+        my $calendar = Koha::Calendar->new( branchcode => $self->branchcode );
+        $age = $calendar->days_between( dt_from_string( $self->reservedate ), $today );
+    }
+    else {
+        $age = $today->delta_days( dt_from_string( $self->reservedate ) );
+    }
+
+    $age = $age->in_units( 'days' );
+
+    return $age;
+}
 
 =head3 suspend_hold
 
