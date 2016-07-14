@@ -276,6 +276,7 @@ $(document).ready(function() {
                 },
                 { "mDataProp": "itemtype_description" },
                 { "mDataProp": "location" },
+                { "mDataProp": "homebranch" },
                 { "mDataProp": "issuedate_formatted" },
                 { "mDataProp": "branchname" },
                 { "mDataProp": "itemcallnumber" },

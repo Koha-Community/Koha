@@ -78,13 +78,14 @@ my $sql = '
 
         itemnumber,
         barcode,
+        branches2.branchname AS homebranch,
         itemnotes,
         itemnotes_nonpublic,
         itemcallnumber,
         replacementprice,
 
         issues.branchcode,
-        branchname,
+        branches.branchname,
 
         items.itype,
         biblioitems.itemtype,
@@ -106,6 +107,7 @@ my $sql = '
         LEFT JOIN biblioitems USING ( biblionumber )
         LEFT JOIN borrowers USING ( borrowernumber )
         LEFT JOIN branches ON ( issues.branchcode = branches.branchcode )
+        LEFT JOIN branches branches2 ON ( items.homebranch = branches2.branchcode )
     WHERE borrowernumber
 ';
 
@@ -155,6 +157,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         itemtype             => $item_level_itypes ? $c->{itype} : $c->{itemtype},
         itemtype_description => $itemtype->{translated_description},
         location             => $c->{location} ? GetAuthorisedValueByCode( 'LOC', $c->{location} ) : q{},
+        homebranch           => $c->{homebranch},
         itemnotes            => $c->{itemnotes},
         itemnotes_nonpublic  => $c->{itemnotes_nonpublic},
         branchcode           => $c->{branchcode},
