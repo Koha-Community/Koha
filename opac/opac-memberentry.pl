@@ -20,7 +20,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Digest::MD5 qw( md5_base64 md5_hex );
 use String::Random qw( random_string );
-use WWW::CSRF qw(generate_csrf_token check_csrf_token CSRF_OK);
 use HTML::Entities;
 
 use C4::Auth;
@@ -34,6 +33,7 @@ use C4::Scrubber;
 use Email::Valid;
 use Koha::DateUtils;
 use Koha::Patron::Images;
+use Koha::Token;
 
 my $cgi = new CGI;
 my $dbh = C4::Context->dbh;
@@ -182,8 +182,13 @@ if ( $action eq 'create' ) {
 elsif ( $action eq 'update' ) {
 
     my $borrower = GetMember( borrowernumber => $borrowernumber );
-    my $csrf_status = check_csrf_token($borrower->{userid}, md5_base64(C4::Context->config('pass')), scalar $cgi->param('csrf_token'));
-    die "Wrong CSRF token" unless ($csrf_status == CSRF_OK);
+    die "Wrong CSRF token"
+        unless Koha::Token->new->check({
+            CSRF   => 1,
+            id     => $borrower->{userid},
+            secret => md5_base64( C4::Context->config('pass') ),
+            token  => scalar $cgi->param('csrf_token'),
+        });
 
     my %borrower = ParseCgiForBorrower($cgi);
 
@@ -197,7 +202,11 @@ elsif ( $action eq 'update' ) {
             empty_mandatory_fields => \@empty_mandatory_fields,
             invalid_form_fields    => $invalidformfields,
             borrower               => \%borrower,
-            csrf_token             => generate_csrf_token($borrower->{userid}, md5_base64(C4::Context->config('pass'))),
+            csrf_token             => Koha::Token->new->generate({
+                CSRF   => 1,
+                id     => $borrower->{userid},
+                secret => md5_base64( C4::Context->config('pass') ),
+            }),
         );
 
         $template->param( action => 'edit' );
@@ -229,7 +238,11 @@ elsif ( $action eq 'update' ) {
                 action => 'edit',
                 nochanges => 1,
                 borrower => GetMember( borrowernumber => $borrowernumber ),
-                csrf_token => generate_csrf_token($borrower->{userid}, md5_base64(C4::Context->config('pass')))
+                csrf_token => Koha::Token->new->generate({
+                    CSRF   => 1,
+                    id     => $borrower->{userid},
+                    secret => md5_base64( C4::Context->config('pass') ),
+                }),
             );
         }
     }
@@ -249,7 +262,11 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
         borrower  => $borrower,
         guarantor => scalar Koha::Patrons->find($borrowernumber)->guarantor(),
         hidden => GetHiddenFields( $mandatory, 'modification' ),
-        csrf_token => generate_csrf_token($borrower->{userid}, md5_base64(C4::Context->config('pass')))
+        csrf_token => Koha::Token->new->generate({
+            CSRF   => 1,
+            id     => $borrower->{userid},
+            secret => md5_base64( C4::Context->config('pass') ),
+        }),
     );
 
     if (C4::Context->preference('OPACpatronimages')) {
