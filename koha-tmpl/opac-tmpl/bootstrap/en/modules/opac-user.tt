@@ -221,6 +221,7 @@ Using this account is not recommended because some parts of Koha will not functi
 
                                                 <td class="title">
                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title |html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield %][% END %]</a>
+                                                    [% IF ( ISSUE.enumchron ) %] [% ISSUE.enumchron %][% END %]
                                                     <span class="item-details">[% ISSUE.author %]</span>
                                                 </td>
                                                 [% IF ( ISSUE.overdue ) %]
@@ -382,7 +383,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                                 <tr>
                                                     <td>
                                                         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.item.biblio.biblionumber %]">
-                                                            [% i.item.biblio.title %]
+                                                            [% i.item.biblio.title %][% IF ( i.item.enumchron ) %] [% i.item.enumchron %][% END %]
                                                         </a>
                                                     </td>
 

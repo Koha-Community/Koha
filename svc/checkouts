@@ -97,6 +97,7 @@ my $sql = '
         itemlost,
         damaged,
         location,
+        items.enumchron,
 
         DATEDIFF( issuedate, CURRENT_DATE() ) AS not_issued_today
     FROM issues
@@ -173,6 +174,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         date_due_overdue    => $c->{date_due_overdue} ? JSON::true : JSON::false,
         timestamp           => $c->{timestamp},
         onsite_checkout     => $c->{onsite_checkout},
+        enumchron           => $c->{enumchron},
         renewals_count      => $renewals_count,
         renewals_allowed    => $renewals_allowed,
         renewals_remaining  => $renewals_remaining,
