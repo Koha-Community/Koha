@@ -60,7 +60,20 @@
 
             $('select[name="patron_attributes"]').change();
 
-        } );
+            $(".clear-date").on("click",function(e){
+                e.preventDefault();
+                var fieldID = this.id.replace("clear-date-","");
+                $("#" + fieldID).val("");
+            });
+            $("#cataloguing_additem_newitem").on("click",".add_attributes",function(e){
+                e.preventDefault();
+                add_attributes();
+            });
+            $("#cataloguing_additem_newitem").on("click",".del_attributes",function(e){
+                e.preventDefault();
+                del_attributes(this);
+            });
+        });
 
         function updateAttrValues (select_attr) {
             var attr_code = $(select_attr).val();
@@ -86,8 +99,8 @@
         function add_attributes() {
             var li_node = $("li.attributes:last");
             var li_clone = $(li_node).clone();
-            if ( $(li_clone).find("a.delete").length == 0 ) {
-                $(li_clone).append('<a href="#" title="Delete" class="delete" onclick="del_attributes(this);return false;"><i class="fa fa-fw fa-trash"></i> Delete</a>');
+            if ( $(li_clone).find("a.del_attributes").length == 0 ) {
+                $(li_clone).append('<a href="#" title="Delete" class="del_attributes"><i class="fa fa-fw fa-trash"></i> Delete</a>');
             }
             $(li_clone).find('select[name="patron_attributes"]').change(function() {
                 updateAttrValues(this);
@@ -337,7 +350,7 @@
                                             [% END %]
                                             </label>
                                             [% IF field.mandatory %]
-                                                <input type="checkbox" title="This field is mandatory" name="disable_input" value="[% field.name %]" onclick="return false;" />
+                                                <input type="checkbox" title="This field is mandatory" name="disable_input" value="[% field.name %]" disabled="disabled" readonly="readonly" />
                                             [% ELSE %]
                                                 <input type="checkbox" title="Check to delete this field" name="disable_input" value="[% field.name %]" />
                                             [% END %]
@@ -357,7 +370,7 @@
                                             [% END %]
                                             [% IF ( field.type == 'date' ) %]
                                                 <input type="text" name="[% field.name %]" id="[% field.name %]" value="" size="10" maxlength="10" class="datepicker" />
-                                                <a href="#" onclick="clearDate('[% field.name %]');return false;"><i class="fa fa-fw fa-trash"></i> Clear</a>
+                                                <a href="#"  class="clear-date" id="clear-date-[% field.name %]" ><i class="fa fa-fw fa-trash"></i> Clear</a>
                                             [% END %]
                                             [% IF field.mandatory %]
                                                 <span class="required">Required fields cannot be cleared</span>
@@ -375,7 +388,7 @@
                                                 </label>
                                                 <input type="checkbox" title="check to delete this field" name="disable_input" value="attr0_value" />
                                                 <span class="patron_attributes_value"></span>
-                                                <a href="#" title="Add an attribute" onclick="add_attributes(); return false;"><i class="fa fa-fw fa-plus"></i> New</a>
+                                                <a href="#" class="add_attributes" title="Add an attribute"><i class="fa fa-fw fa-plus"></i> New</a>
                                                 <span class="information_category hint" style="width:25%;float:right;"></span>
                                             </li>
                                         [% END %]
