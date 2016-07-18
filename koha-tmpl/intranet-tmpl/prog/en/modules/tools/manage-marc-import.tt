@@ -37,10 +37,6 @@
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-var MSG_CONFIRM_CLEAN = _("Clear all reservoir records staged in this batch?  This cannot be undone.");
-var MSG_CONFIRM_UNDO_IMPORT = _("Are you sure you want to undo the import of this batch into the catalog?");
-var MSG_CONFIRM_DELETE = _("Are you sure you want to permanently delete this batch?");
-
 $(document).ready(function(){
   $("#staged-record-matching-rules select").change(function(){
       var str = $(this).attr("id");
@@ -134,6 +130,12 @@ $(document).ready(function(){
             );
           },
       }));
+        $("#import_batch_form").on("submit",function(){
+            return submitBackgroundJob( document.getElementById("import_batch_form") );
+        });
+        $("#revert_batch_form").on("submit",function(){
+            return confirm( _("Are you sure you want to undo the import of this batch into the catalog?") ) &&   submitBackgroundJob( document.getElementById("revert_batch_form") );
+        });
     [% END %]
     $("body").on("click",".previewMARC", function(e){
         e.preventDefault();
@@ -146,6 +148,13 @@ $(document).ready(function(){
     $("#marcPreview").on("hidden", function(){
         $("#marcPreviewLabel").html("");
         $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+    });
+    $(".batch_form").on("submit",function(){
+        if( $(this).hasClass("batch_delete") ){
+            return confirm( _("Are you sure you want to permanently delete this batch?") );
+        } else {
+            return confirm( _("Clear all reservoir records staged in this batch?  This cannot be undone.") );
+        }
     });
 });
 
@@ -339,13 +348,13 @@ $(document).ready(function(){
 
 <div>
   [% IF ( can_commit ) %]
-  <form action="[% script_name %]" method="post">
+  <form action="[% script_name %]" method="post" id="import_batch_form">
     <input type="hidden" name="op" value="commit-batch" />
     <input type="hidden" name="runinbackground" value="" />
     <input type="hidden" name="completedJobID" value="" />
     <input type="hidden" name="import_batch_id" value="[% import_batch_id %]" />
     <fieldset class="action">
-    <input type="submit" class="button" name="mainformsubmit" value="Import this batch into the catalog" onclick="return submitBackgroundJob(this.form);" />
+    <input type="submit" class="button" name="mainformsubmit" value="Import this batch into the catalog" />
     <br/>
     [% IF ( record_type != 'auth' ) %]
     Add new bibliographic records into this framework:
@@ -362,12 +371,12 @@ $(document).ready(function(){
      <div id="jobfailed"></div></div>
   [% END %]
   [% IF ( can_revert ) %]
-  <form action="[% script_name %]" method="post">
+  <form action="[% script_name %]" method="post" id="revert_batch_form">
     <input type="hidden" name="op" value="revert-batch" />
     <input type="hidden" name="runinbackground" value="" />
     <input type="hidden" name="completedJobID" value="" />
     <input type="hidden" name="import_batch_id" value="[% import_batch_id %]" />
-    <fieldset class="action"><input type="submit" class="button" name="mainformsubmit" value="Undo import into catalog" onclick="return confirm(MSG_CONFIRM_UNDO_IMPORT) && submitBackgroundJob(this.form);" /></fieldset>
+    <fieldset class="action"><input type="submit" class="button" name="mainformsubmit" value="Undo import into catalog" /></fieldset>
   </form>
   <div id="jobpanel"><div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
      <div id="jobfailed"></div></div>
@@ -454,16 +463,16 @@ Page
     <td>[% batch_lis.num_items %][% IF ( batch_lis.num_items ) %] <a href="[% batch_lis.script_name %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;op=create_labels">(Create label batch)</a>[% END %]</td>
     <td class="actions">
         [% IF ( batch_lis.can_clean ) %]
-          <form method="post" action="[% batch_lis.script_name %]" name="clean_batch_[% batch_lis.import_batch_id %]" id="clean_batch_[% batch_lis.import_batch_id %]" >
+          <form method="post" action="[% batch_lis.script_name %]" name="clean_batch_[% batch_lis.import_batch_id %]" id="clean_batch_[% batch_lis.import_batch_id %]" class="batch_form batch_clean" >
             <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id %]" />
             <input type="hidden" name="op" value="clean-batch" />
-            <button class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_CLEAN);"><i class="fa fa-eraser"></i> Clean</button>
+            <button type="submit" class="btn btn-mini"><i class="fa fa-eraser"></i> Clean</button>
           </form>
         [% ELSIF ( batch_lis.import_status == 'cleaned' ) %]
-          <form method="post" action="/cgi-bin/koha/tools/manage-marc-import.pl" name="delete_batch_[% batch_lis.import_batch_id %]" id="delete_batch_[% batch_lis.import_batch_id %]">
+          <form method="post" action="/cgi-bin/koha/tools/manage-marc-import.pl" name="delete_batch_[% batch_lis.import_batch_id %]" id="delete_batch_[% batch_lis.import_batch_id %]" class="batch_form batch_delete">
             <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id %]" />
             <input type="hidden" name="op" value="delete-batch" />
-            <button class="btn btn-mini" onclick="return confirm(MSG_CONFIRM_DELETE);"><i class="fa fa-trash"></i> Delete</button>
+            <button type="submit" class="btn btn-mini"><i class="fa fa-trash"></i> Delete</button>
           </form>
         [% END %]
     </td>
