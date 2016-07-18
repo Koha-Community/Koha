@@ -1077,6 +1077,13 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             return false;
         } );
 
+        window.onbeforeunload = function() {
+            if(editor.modified )
+                { return 1; }
+            else
+                { return undef; }
+        };
+
         // Start editor
         Preferences.Load( [% USER_INFO.borrowernumber || 0 %] );
         displayPreferences(editor);
