@@ -1,10 +1,11 @@
 [% USE KohaDates %]
+[% USE Price %]
+[% USE ItemTypes %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Cash register statistics &rsaquo; Results[% ELSE %]&rsaquo; Cash register statistics[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'datatables-strings.inc' %]
 <script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" id="js">
  $(document).ready(function() {
@@ -276,10 +277,10 @@ $(document).ready(function() {
                     [% END %]
                 </td>
                 <td>[% loopresul.note %]</td>
-                <td style="text-align:right;">[% loopresul.amount %]</td>
+                <td style="text-align:right;">[% loopresul.amount | $Price %]</td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber %]">[% loopresul.title %]</a></td>
                 <td>[% loopresul.barcode %]</td>
-                <td>[% loopresul.itype %]</td>
+                <td>[% ItemTypes.GetDescription(loopresul.itype) %]</td>
             </tr>
         [% END %]
         <tfoot>

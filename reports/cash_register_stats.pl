@@ -144,9 +144,8 @@ if ($do_it) {
         my $reportfilename = $reportname ? "$reportname.$format" : "reportresults.$format" ;
         #my $reportfilename = "$reportname.html" ;
         my $delimiter = C4::Context->preference('delimiter') || ',';
-        my ( $type, $content );
+        my ( $content );
         if ( $format eq 'csv' ) {
-            my $type = 'application/csv';
             my $csv = Text::CSV::Encoded->new({ encoding_out => 'UTF-8', sep_char => $delimiter});
             $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
             my @headers = ();
@@ -175,7 +174,7 @@ if ($do_it) {
                         $row->{accounttype},
                         $row->{amount},
                         $row->{title},
-                        $row->{barcode};
+                        $row->{barcode},
                         $row->{itype};
                 if ($csv->combine(@rowValues)) {
                     $content .= Encode::decode('UTF-8',$csv->string()) . "\n";
@@ -185,7 +184,7 @@ if ($do_it) {
             }
         }
         print $input->header(
-            -type => $type,
+            -type => 'text/csv',
             -attachment=> $reportfilename
         );
         print $content;
