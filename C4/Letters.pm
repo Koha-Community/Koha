@@ -1485,7 +1485,15 @@ sub _get_tt_params {
                 my $id = ref $ref eq 'HASH' ? $tables->{$table}->{$pk} : $tables->{$table};
                 my $object;
                 if ( $fk ) { # Using a foreign key for lookup
-                    $object = $module->search( { $fk => $id } )->next();
+                    if ( ref( $fk ) eq 'ARRAY' ) { # Foreign key is multi-column
+                        my $search;
+                        foreach my $key ( @$fk ) {
+                            $search->{$key} = $id->{$key};
+                        }
+                        $object = $module->search( $search )->next();
+                    } else { # Foreign key is single column
+                        $object = $module->search( { $fk => $id } )->next();
+                    }
                 } else { # using the table's primary key for lookup
                     $object = $module->find($id);
                 }
