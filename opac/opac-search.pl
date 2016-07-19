@@ -51,7 +51,7 @@ use C4::Koha;
 use C4::Tags qw(get_tags);
 use C4::SocialData;
 use C4::External::OverDrive;
-use C4::Borrowers qw(GetMember);
+use C4::Members qw(GetMember);
 
 use Koha::ItemTypes;
 use Koha::Ratings;
