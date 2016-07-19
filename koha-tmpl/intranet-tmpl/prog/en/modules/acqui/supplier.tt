@@ -13,7 +13,7 @@
         <li><label for="contact_fax[% contact.id %]">Fax: </label>
             <input type="text" size="20" id="contact_fax[% contact.id %]" name="contact_fax" value="[% contact.fax %]" /></li>
         <li><label for="contact_email[% contact.id %]">Email: </label>
-            <input type="text" size="40" id="contact_email[% contact.id %]" name="contact_email" value="[% contact.email %]" /></li>
+            <input type="text" size="40" id="contact_email[% contact.id %]" name="contact_email" value="[% contact.email %]" class="email" /></li>
         <li><label for="contact_notes[% contact.id %]">Notes: </label>
             <textarea id="contact_notes[% contact.id %]" name="contact_notes" cols="40" rows="4">[% contact.notes %]</textarea></li>
         <li><label for="contact_acqprimary[% contact.id %]">Primary acquisitions contact:</label>
@@ -188,7 +188,7 @@ function delete_contact(ev) {
             <li><label for="company_fax">Fax: </label>
                 <input type="text" size="20" id="company_fax" name="company_fax" value="[% fax %]" /></li>
             <li><label for="website">Website: </label>
-                <input type="text" size="40" id="website" name="website" value="[% url %]" /></li>
+                <input type="text" size="40" id="website" name="website" value="[% url %]" class="url" /></li>
             <li><label for="accountnumber">Account number: </label>
                 <input type="text" size="40" id="accountnumber" name="accountnumber" value="[% accountnumber %]" /></li></ol>
         </fieldset>
