@@ -1,0 +1,14 @@
+[% USE ItemTypes %]
+[% INCLUDE csv_headers/reports/cash_register_stats.tt %]
+[%- FOREACH row IN rows %]
+    [%- FOREACH field IN row;
+       field IF !loop.last;
+       ItemTypes.GetDescription(field) IF loop.last;
+       sep IF !loop.last;
+    END %]
+[% END -%]
+TOTAL
+[%- FOREACH field IN total;
+    field;
+    sep IF !loop.last;
+END %]

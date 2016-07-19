@@ -137,7 +137,6 @@ if ($do_it) {
             total => $grantotal,
         );
     } else{
-        binmode STDOUT, ':encoding(UTF-8)';
         my $q_errors;
         my $format = 'csv';
         my $reportname = $input->param('basename');
@@ -145,27 +144,9 @@ if ($do_it) {
         #my $reportfilename = "$reportname.html" ;
         my $delimiter = C4::Context->preference('delimiter') || ',';
         my ( $content );
-        if ( $format eq 'csv' ) {
-            my $csv = Text::CSV::Encoded->new({ encoding_out => 'UTF-8', sep_char => $delimiter});
-            $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
-            my @headers = ();
-            push @headers, "mfirstname",
-                        "cardnumber",
-                        "bfirstname",
-                        "branchname",
-                        "date",
-                        "accounttype",
-                        "amount",
-                        "title",
-                        "barcode",
-                        "itype";
-            if ($csv->combine(@headers)) {
-                $content .= Encode::decode('UTF-8', $csv->string()) . "\n";
-            } else {
-                push @$q_errors, { combine => 'HEADER ROW: ' . $csv->error_diag() } ;
-            }
+            my @rows;
             foreach my $row (@loopresult) {
-                my @rowValues = ();
+                my @rowValues;
                 push @rowValues, $row->{mfirstname},
                         $row->{cardnumber},
                         $row->{bfirstname},
@@ -176,24 +157,20 @@ if ($do_it) {
                         $row->{title},
                         $row->{barcode},
                         $row->{itype};
-                if ($csv->combine(@rowValues)) {
-                    $content .= Encode::decode('UTF-8',$csv->string()) . "\n";
-                } else {
-                    push @$q_errors, { combine => $csv->error_diag() } ;
+                    push (@rows, \@rowValues) ;
                 }
-            }
-        }
+                my @total;
+                for (1..6){push(@total,"")};
+                push(@total, $grantotal);
         print $input->header(
-            -type => 'text/csv',
-            -attachment=> $reportfilename
-        );
-        print $content;
-
-        print $delimiter x 6;
-        print $grantotal."\n";
-        foreach my $err (@$q_errors) {
-            print "# ERROR: " . (map {$_ . ": " . $err->{$_}} keys %$err) . "\n";
-        }   # here we print all the non-fatal errors at the end.  Not super smooth, but better than nothing.
+            -type       => 'text/csv',
+            -encoding    => 'utf-8',
+            -attachment => $reportfilename,
+            -name       => $reportfilename
+         );
+        my $csvTemplate = C4::Templates::gettemplate('reports/csv/cash_register_stats.tt', 'intranet', $input);
+            $csvTemplate->param(sep => $delimiter, rows => \@rows, total => \@total );
+        print $csvTemplate->output;
         exit(1);
     }
 
