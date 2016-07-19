@@ -92,8 +92,20 @@
                       [% END %]
                   </ul>
             </td>
-            <td>[% IF ( reserveloo.thisratio_atleast1 ) %]<p>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.ratiocalc | uri %] --><a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;rr_quantity_to_order=[% reserveloo.ratiocalc | uri %]">[% END %]<b>[% reserveloo.ratiocalc | html %] to order</b>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]</a>[% END %]
-            [% IF ( reserveloo.pendingorders ) %]<br><b>[% reserveloo.pendingorders | html %] pending</b>[% END %]</p>[% END %]</td>
+            <td class="actions">
+                <p>
+                    [% IF ( reserveloo.thisratio_atleast1 ) %]
+                        [% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.ratiocalc | html %] -->
+                            <a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;rr_quantity_to_order=[% reserveloo.ratiocalc | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% reserveloo.ratiocalc | html %] to order</a>
+                        [% ELSE %]
+                            <b>[% reserveloo.ratiocalc | html %] to order</b>
+                        [% END %]
+                        [% IF ( reserveloo.pendingorders ) %]<br><b>[% reserveloo.pendingorders | html %] pending</b>[% END %]
+                    [% ELSE %]
+                        0 to order
+                    [% END %]
+                </p>
+            </td>
         </tr>
       [% END %]
       </tbody>

@@ -43,8 +43,7 @@
          <th>Summary</th>
          <th>Publisher</th>
          <th>Copyright</th>
-         <th>&nbsp;</th>
-         <th>&nbsp;</th>
+         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -67,13 +66,9 @@
             <td>
                 [% biblio.copyrightdate | html %]
             </td>
-        <td>
-        <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber | uri %]&amp;viewas=html" class="btn btn-default btn-xs previewMARC">View MARC</a>
-        </td>
-            <td>
-            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]" class="btn btn-default btn-xs" title="Order this one">
-                Order
-            </a>
+            <td class="actions">
+                <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber | uri %]&amp;viewas=html" class="previewMARC btn btn-default btn-xs"><i class="fa fa-eye"></i> View MARC</a>
+                <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="Order this one" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Order</a>
             </td>
         </tr>
       [% END %]
