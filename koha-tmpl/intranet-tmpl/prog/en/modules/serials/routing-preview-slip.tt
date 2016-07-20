@@ -1,7 +1,15 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials  &rsaquo; Routing slip preview</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#print_slip").on("click",function(e){
+            e.preventDefault();
+            window.print();
+            self.close();
+        });
+    });
+</script>
 <style type="text/css">
    #custom-doc { width:38.46em;*width:37.53em;min-width:500px; margin:auto; text-align:left; }
 </style>
@@ -38,9 +46,7 @@
     <p id="routingnote">[% routingnotes %]</p>
 </div>
 
-   <div id="slip-block-links" class="noprint">
-   <a class="button" href="javascript:window.print();self.close()">Print</a> &nbsp; <a class="button" href="javascript:self.close()">Close</a>
-   </div>
+    <div id="closewindow" class="noprint"><a class="btn btn-default" id="print_slip" href="#"><i class="fa fa-print"></i> Print</a> <a class="btn btn-default close" href="#">Close</a></div>
 
    </div>
 

@@ -2,14 +2,17 @@
 <title>Koha &rsaquo; Serials &rsaquo; Preview routing list</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
-<!--
-
+    $(document).ready(function(){
+        $("#save_and_preview").on("click",function(e){
+            e.preventDefault();
+            print_slip( $("#subscriptionid").val(), $("#issue_escaped").val() );
+        });
+    });
 function print_slip(subscriptionid,issue){
     var myurl = 'routing-preview.pl?ok=1&subscriptionid='+subscriptionid+'&issue='+issue;
     window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
     window.location.href='subscription-detail.pl?subscriptionid=' + subscriptionid;
 }
-//-->
 </script>
 </head>
 <body id="ser_routing-preview" class="ser">
@@ -27,7 +30,8 @@ function print_slip(subscriptionid,issue){
 <h2>Preview routing list for <i>[% title |html %]</i></h2>
 
 <form method="post" action="routing-preview.pl">
-<input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
+<input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid %]" />
+    <input type="hidden" id="issue_escaped" name="issue_escaped" value="[% issue_escaped %]" />
 <fieldset class="rows">
 	<ol>
 		<li><span class="label">Issue:</span>[% issue %]</li>
@@ -42,7 +46,7 @@ function print_slip(subscriptionid,issue){
 </fieldset>
 
 <fieldset class="action">
-<input type="submit" name="ok" class="button" value="Save and preview routing slip" onclick="print_slip([% subscriptionid %],'[% issue_escaped %]'); return false" />
+    <input type="submit" name="ok" id="save_and_preview" class="button" value="Save and preview routing slip" />
 <input type="submit" name="edit" class="button" value="Edit" />
 <input type="submit" name="delete" class="button" value="Delete" /></fieldset>
 </form>

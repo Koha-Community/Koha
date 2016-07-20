@@ -52,7 +52,21 @@
         location.href = url;
         return false;
         });
-
+        $("#filterByDate").on("click",function(e){
+            e.preventDefault();
+            filterByDate();
+        });
+        $("#clearfilter").on("click",function(e){
+            e.preventDefault();
+            $("#from,#to").val("");
+            $("table#claimst tbody tr").show();
+        });
+        $("#claims_form").on("submit",function(){
+             return checkForm();
+        });
+        $("#filter_claims_form").on("submit",function(){
+            return false;
+        });
 	 });
 
 	// Checks if the form can be sent (at least one checkbox must be checked)
@@ -107,11 +121,6 @@
 	    });
 	}
 
-	// Clears filters : shows everything
-	function clearFilters() {
-	    $("table#claimst tbody tr").show();
-
-	}
 
 //]]>
 </script>
@@ -132,11 +141,11 @@
 
     [% IF error_claim %]
         [% IF error_claim == 'no_vendor_email' %]
-            <div class="error">This vendor has no email defined for late issues.</div>
+            <div class="dialog alert">This vendor has no email defined for late issues.</div>
         [% ELSIF error_claim == 'no_loggedin_user_email' %]
-            <div class="error">No email is configured for your user.</div>
+            <div class="dialog alert">No email is configured for your user.</div>
         [% ELSE %]
-            <div class="error">[% error_claim %]</div>
+            <div class="dialog alert">[% error_claim %]</div>
         [% END %]
     [% END %]
     [% IF info_claim %]
@@ -170,7 +179,7 @@
 
    [% IF ( missingissues ) %]	
     <h3>Missing issues</h3>
-    <form action="claims.pl" onsubmit="return false;">
+    <form action="claims.pl" id="filter_claims_form">
 	<fieldset class="rows">
 	<legend>Filters :</legend>
 	
@@ -181,18 +190,15 @@
         <label for="to" style="float:none;">To:</label>
         <input type="text" name="enddate" id="to" value="[% enddate %]" size="10" maxlength="10" class="datepickerto" />
         <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-	    <input type="button" value="OK" onclick="filterByDate();" />
+        <input id="filterByDate" type="button" value="OK" />
+        <a href="#" id="clearfilter"><i class="fa fa-remove"></i> Clear filter</a>
     </li>
-
-	<li>
-        <input type="reset" value="Clear filters" onclick="clearFilters();" />
-	</li>
 	</ol>
 	</fieldset>
     </form>
 
     <fieldset>
-        <form action="claims.pl" method="post" class="checkboxed" onsubmit="return checkForm()">
+        <form action="claims.pl" method="post" id="claims_form">
             <table id="claimst">
                 <thead>
                     <tr>

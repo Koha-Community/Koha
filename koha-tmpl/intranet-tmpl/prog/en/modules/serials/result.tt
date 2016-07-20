@@ -3,13 +3,19 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 //<![CDATA[
-function GetIt(bibno,title)
-{
-    title = title.parents('tr').find('.title').text();
-    opener.document.f.biblionumber.value = bibno;
-    opener.document.f.title.value = title;
-    window.close();
-}
+    $(document).ready(function(){
+        $(".select_title").on("click",function(e){
+            e.preventDefault();
+            var biblionumber = $(this).data("biblionumber");
+            GetIt( biblionumber, $(this) );
+        });
+    });
+    function GetIt(bibno,title) {
+        title = title.parents('tr').find('.title').text();
+        opener.document.f.biblionumber.value = bibno;
+        opener.document.f.title.value = title;
+        window.close();
+    }
 //]]>
 </script>
 </head>
@@ -46,22 +52,31 @@ function GetIt(bibno,title)
             <td>
                 [% resultsloo.issn |html %]
             </td>
-
-			<td><a href="#" onclick="GetIt('[% resultsloo.biblionumber %]',$(this));" title="Choose this record">Choose</a></td>
+            <td><a class="btn btn-mini select_title" data-biblionumber="[% resultsloo.biblionumber %]" href="#" title="Choose this record">Choose</a></td>
         </tr>
     [% END %]
     </table>
 [% ELSE %]
-<h2>No results found for <b>[% query %]</b></h2>
+
+    <div class="dialog message">
+        <p>No results found for <b>[% query %]</b></p>
+    </div>
+
 [% END %]
-[% IF ( displayprev ) %]
-<a href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=[% startfromprev |url %]&amp;q=[% query |url %]">&lt;&lt;</a>
-[% END %]
-[% IF ( displaynext ) %]
-<a href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=[% startfromnext |url %]&amp;q=[% query |url %]">&gt;&gt;</a>
-[% END %]
+
+<div class="pages">
+    [% IF ( displayprev ) %]
+        <a class="nav" href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=[% startfromprev |url %]&amp;q=[% query |url %]">&lt;&lt; Previous</a>
+    [% END %]
+    [% IF ( displaynext ) %]
+        <a class="nav" href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=[% startfromnext |url %]&amp;q=[% query |url %]">Next  &gt;&gt;</a>
+    [% END %]
+</div>
+
 <p><a href="subscription-bib-search.pl">Search for another record</a></p>
-<fieldset class="action"><a class="button close" href="#">Close</a></fieldset>
+
+<div id="closewindow"><a class="btn btn-default close" href="#">Close</a></div>
+
 </div>
 
 [% INCLUDE 'intranet-bottom.inc' %]

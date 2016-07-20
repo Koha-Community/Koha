@@ -2,8 +2,17 @@
 <title>Koha &rsaquo; Serials &rsaquo; [% title |html %] &rsaquo; [% IF ( op ) %]Create Routing List[% ELSE %]Edit routing list[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
-<!--
-
+    $(document).ready(function(){
+        $("#add_recipients").on("click",function(e){
+            e.preventDefault();
+            userPopup();
+        });
+        $(".itemrank").on("change",function(){
+            var subscriptionid = $(this).data("subscriptionid");
+            var routingid = $(this).data("routingid");
+            reorder_item( subscriptionid, routingid, $(this).val());
+        });
+    });
 function reorder_item(sid,rid,rank){
     var mylocation = 'reorder_members.pl?subscriptionid='+sid+'&routingid='+rid+'&rank='+rank;
     window.location.href=mylocation; 
@@ -21,8 +30,6 @@ function reorder_item(sid,rid,rank){
         var myurl = "routing.pl?subscriptionid="+[% subscriptionid %]+"&borrowernumber="+borrowernumber+"&op=add";
         window.location.href = myurl;
     }
-
-//-->
 </script>
 </head>
 <body id="ser_routing" class="ser">
@@ -68,7 +75,7 @@ function reorder_item(sid,rid,rank){
             [% FOREACH member IN m_loop %]
             <tr><td>[% member.name %]</td>
                 <td>
-                    <select name="itemrank" onchange="reorder_item([%- subscriptionid -%], [%- member.routingid -%], this.value)">
+                    <select name="itemrank" class="itemrank" data-subscriptionid="[% subscriptionid %]" data-routingid="[% member.routingid %]">
                     [% rankings = [1 .. m_loop.size] %]
                     [% FOREACH r IN rankings %]
                         [% IF r == member.ranking %]
@@ -79,16 +86,16 @@ function reorder_item(sid,rid,rank){
                     [% END %]
                     </select>
                 </td>
-                <td><a href="/cgi-bin/koha/serials/routing.pl?routingid=[% member.routingid %]&amp;subscriptionid=[% subscriptionid %]&amp;op=delete">Delete</a></td>
+                <td><a class="btn btn-mini" href="/cgi-bin/koha/serials/routing.pl?routingid=[% member.routingid %]&amp;subscriptionid=[% subscriptionid %]&amp;op=delete"><i class="fa fa-trash"></i> Delete</a></td>
             </tr>
             [% END %]
         </table>
     [% END %]
 
     <p style="margin-left:10em;">
-        <input type="button" onclick="userPopup()" value="Add recipients" />
+        <a href="#" id="add_recipients"><i class="fa fa-plus"></i> Add recipients</a>
         [% IF memberloop %]
-            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid %]&amp;op=delete" class="button">Delete all</a>
+            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid %]&amp;op=delete"><i class="fa fa-trash"></i> Delete all</a>
         [% END %]
     </p>
 </li>

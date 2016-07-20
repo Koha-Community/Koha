@@ -6,21 +6,13 @@
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" language="JavaScript">
 // <![CDATA[
-    /**
-     *  Function CheckForm
-     *  This function checks the form before submit
-     */
-     function CheckForm(form){
-        if(form.date.value){
-            return true;
-        }
-        else {
-            alert(_("You must enter a date!"));
-            document.f.date.focus();
-            return false;
-        }
-     }
-
+    $(document).ready(function(){
+        $(".renew_subscription").on("click",function(e){
+            e.preventDefault();
+            var subscriptionid = $(this).data("subscriptionid");
+            popup( subscriptionid );
+        });
+    });
 	function popup(subscriptionid) {
 	   newin=window.open("subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
 	}
@@ -43,7 +35,7 @@
 
 <h1>Check expiration</h1>
 
-    <form name="f" action="/cgi-bin/koha/serials/checkexpiration.pl" method="post" onsubmit="return CheckForm(this);">
+    <form name="f" action="/cgi-bin/koha/serials/checkexpiration.pl" method="post" class="validated">
 <fieldset class="rows">
     <legend>Filter results:</legend>
     
@@ -62,8 +54,8 @@
         </li>
         [% END %]
 
-        <li><label for="date" class="required" title="Required field">Expiring before:</label>
-        <input id="date" type="text" name="date" size="10" value="[% date | $KohaDates %]" class="focus datepicker" />
+        <li><label for="date" class="required">Expiring before:</label>
+            <input id="date" type="text" name="date" size="10" value="[% date | $KohaDates %]" class="required focus datepicker" required="required" />
         <span class="required">Required</span>
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div></li>
 			</ol>
@@ -120,7 +112,7 @@
             </td>
             <td class="actions">
                 <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid %]" class="btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
-                <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid %]" onclick="popup([% subscriptions_loo.subscriptionid %]); return false;" class="btn btn-mini"><i class="fa fa-refresh"></i> Renew</a>
+                <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid %]" data-subscriptionid="[% subscriptions_loo.subscriptionid %]" class="btn btn-mini renew_subscription"><i class="fa fa-refresh"></i> Renew</a>
             </td>
         </tr>
     [% END %]
