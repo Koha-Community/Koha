@@ -60,6 +60,26 @@ $(document).ready(function() {
     "aaSorting": [],
     "bPaginate": false
   }));
+
+  function Checkbox(){
+    var form = document.getElementById('selectrecords');
+    var inputs = form.getElementsByTagName('input');
+    var checked = false;
+    for (var i=0; i<inputs.length; i++) {
+      if (inputs[i].type == 'checkbox' && inputs[i].name == 'record_id') {
+        checked = inputs[i].checked;
+        if (checked) return true;
+      }
+    }
+    return false;
+  }
+
+  $("#selectrecords").on("submit",function(){
+    if (Checkbox() == false){
+      alert(_("No records have been selected."));
+      return false;
+    }
+  });
 });
 //]]>
 </script>
@@ -150,7 +170,7 @@ $(document).ready(function() {
           | <a id="selectwithoutitems" href="#">Select without items</a>
           | <a id="selectnotreserved" href="#">Select without holds</a>
         </div>
-        <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post">
+        <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post" id="selectrecords">
           <table id="biblios" class="records">
             <thead>
               <tr>
