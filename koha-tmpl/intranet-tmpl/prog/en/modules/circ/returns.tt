@@ -252,6 +252,7 @@ $(document).ready(function () {
                 <div class="modal-header">
                     <h3>
                         Hold found (item is already waiting):
+                        <br/>
                         <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">
                             [% itembarcode |html %]: [% title |html %]
                         </a>
@@ -320,17 +321,18 @@ $(document).ready(function () {
 
                 <div class="modal-footer">
                     <input type="hidden" name="cancel_reserve" value="0" />
-                    <button type="submit" class="btn btn-danger deny" onclick="this.form.cancel_reserve.value = 1; this.form.submit();">
-                        <i class="fa fa-times"></i> Cancel hold
-                    </button>
 
                     <button type="submit" class="btn approve">
                         <i class="fa fa-check"></i> Confirm
                     </button>
 
                     <input type="hidden" name="print_slip" value="0" />
-                    <button type="submit" class="btn btn-primary print" onclick="this.form.print_slip.value = 1; this.form.submit();">
+                    <button type="submit" class="btn print" onclick="this.form.print_slip.value = 1; this.form.submit();">
                         <i class="fa fa-print"></i> Print and confirm
+                    </button>
+
+                    <button type="submit" class="btn deny" onclick="this.form.cancel_reserve.value = 1; this.form.submit();">
+                        <i class="fa fa-times"></i> Cancel hold
                     </button>
                 </div>
             </form>
@@ -452,6 +454,7 @@ $(document).ready(function () {
                 <div class="modal-header">
                     <h3>
                         Hold found:
+                        <br/>
                         <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">
                             [% itembarcode |html %]: [% title |html %]
                         </a>
@@ -585,14 +588,14 @@ $(document).ready(function () {
                         <button type="submit" class="btn approve">
                             <i class="fa fa-check"></i> Confirm hold and transfer
                         </button>
-                        <button type="submit" class="btn btn-primary print" onclick="this.form.print_slip.value = 1; this.form.submit()">
+                        <button type="submit" class="btn print" onclick="this.form.print_slip.value = 1; this.form.submit()">
                             <i class="fa fa-print"></i> Print slip, transfer, and confirm
                         </button>
                     [% ELSE %]
                         <button type="submit" class="btn approve">
                             <i class="fa fa-check"></i> Confirm hold
                         </button>
-                        <button type="submit" class="btn btn-primary print" onclick="this.form.print_slip.value = 1; this.form.submit();">
+                        <button type="submit" class="btn print" onclick="this.form.print_slip.value = 1; this.form.submit();">
                             <i class="fa fa-print"></i> Print slip and confirm
                         </button>
                     [% END %]
