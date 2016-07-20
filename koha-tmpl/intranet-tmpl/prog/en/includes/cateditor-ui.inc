@@ -77,12 +77,21 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                         return $result[0];
                     },
                     postCreate: function() {
-                        this.setText( defaultvalue );
+                        var value = defaultvalue;
+                        var widget = this;
+
+                        $.each( authvals, function() {
+                            if ( this.value == widget.text ) {
+                                value = this.value;
+                            }
+                        } );
+
+                        this.setText( value );
 
                         $( '<select></select>' ).appendTo( this.node );
                         var $node = $( this.node ).find( 'select' );
                         $.each( authvals, function( undef, authval ) {
-                            $node.append( '<option value="' + authval.value + '"' + (authval.value == defaultvalue ? ' selected="selected"' : '') + '>' + authval.lib + '</option>' );
+                            $node.append( '<option value="' + authval.value + '"' + (authval.value == value ? ' selected="selected"' : '') + '>' + authval.lib + '</option>' );
                         } );
                         $node.val( this.text );
 
