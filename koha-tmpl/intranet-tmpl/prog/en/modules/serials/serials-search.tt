@@ -52,7 +52,12 @@
       <div class="yui-b">
       [% INCLUDE 'serials-toolbar.inc' %]
 
-      <h2>Serials subscriptions ([% total %] found)</h2>
+      [% IF ( done_searched ) %]
+        <h2>Serials subscriptions ([% total %] found)</h2>
+      [% ELSE %]
+        <h2>Serials subscriptions search</h2>
+      [% END %]
+
       [% UNLESS ( done_searched ) %]
       <div id="advsearch" style="padding-bottom:3em;">
         <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
