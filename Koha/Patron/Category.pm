@@ -189,6 +189,7 @@ sub get_expiry_date {
     my ($self, $date ) = @_;
     if ( $self->enrolmentperiod ) {
         $date ||= dt_from_string;
+        $date = dt_from_string( $date ) unless ref $date;
         return $date->add( months => $self->enrolmentperiod );
     } else {
         return $self->enrolmentperioddate;

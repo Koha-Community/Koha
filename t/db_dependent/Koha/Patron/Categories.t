@@ -59,7 +59,7 @@ is( $retrieved_category_1->checkprevcheckout, 'inherit', 'Koha::Patron::Category
 is( $retrieved_category_2->checkprevcheckout, 'inherit', 'Koha::Patron::Category->store should default checkprevcheckout to inherit' );
 
 subtest 'get_expiry_date' => sub {
-    plan tests => 4;
+    plan tests => 5;
     my $next_month = dt_from_string->add( months => 1 );
     my $next_year = dt_from_string->add( months => 12 );
     my $yesterday = dt_from_string->add( days => -1 );
@@ -76,6 +76,10 @@ subtest 'get_expiry_date' => sub {
     $category->enrolmentperiod( 12 )->store;
     is( $category->get_expiry_date, $next_year, 'With enrolmentperiod defined and no parameter, ->get_expiry_date should return today + enrolmentperiod' );
     is( $category->get_expiry_date( $yesterday ), $next_year->clone->add( days => -1 ), 'With enrolmentperiod defined and a date given in parameter, ->get_expiry_date should take this date + enrolmentperiod' );
+
+    my $hardcoded_date = '2000-01-31';
+    is( $category->get_expiry_date( $hardcoded_date ), dt_from_string( $hardcoded_date )->add( months => 12 ), 'get_expiry_date accepts strings as well'  );
+
     $category->delete;
 };
 
