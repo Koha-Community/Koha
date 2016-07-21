@@ -107,7 +107,7 @@ if ( $op eq 'add_form' ) {
         $field = Koha::AdditionalField->new( { id => $field_id } )->fetch;
     }
 
-    $tablename = $field->{tablename};
+    $tablename = $field->{tablename} if $field;
 
     $template->param(
         field => $field,
