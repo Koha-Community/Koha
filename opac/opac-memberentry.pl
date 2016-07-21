@@ -183,8 +183,7 @@ elsif ( $action eq 'update' ) {
 
     my $borrower = GetMember( borrowernumber => $borrowernumber );
     die "Wrong CSRF token"
-        unless Koha::Token->new->check({
-            CSRF   => 1,
+        unless Koha::Token->new->check_csrf({
             id     => $borrower->{userid},
             secret => md5_base64( C4::Context->config('pass') ),
             token  => scalar $cgi->param('csrf_token'),
@@ -205,8 +204,7 @@ elsif ( $action eq 'update' ) {
             empty_mandatory_fields => \@empty_mandatory_fields,
             invalid_form_fields    => $invalidformfields,
             borrower               => \%borrower,
-            csrf_token             => Koha::Token->new->generate({
-                CSRF   => 1,
+            csrf_token             => Koha::Token->new->generate_csrf({
                 id     => $borrower->{userid},
                 secret => md5_base64( C4::Context->config('pass') ),
             }),
@@ -241,8 +239,7 @@ elsif ( $action eq 'update' ) {
                 action => 'edit',
                 nochanges => 1,
                 borrower => GetMember( borrowernumber => $borrowernumber ),
-                csrf_token => Koha::Token->new->generate({
-                    CSRF   => 1,
+                csrf_token => Koha::Token->new->generate_csrf({
                     id     => $borrower->{userid},
                     secret => md5_base64( C4::Context->config('pass') ),
                 }),
@@ -265,8 +262,7 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
         borrower  => $borrower,
         guarantor => scalar Koha::Patrons->find($borrowernumber)->guarantor(),
         hidden => GetHiddenFields( $mandatory, 'modification' ),
-        csrf_token => Koha::Token->new->generate({
-            CSRF   => 1,
+        csrf_token => Koha::Token->new->generate_csrf({
             id     => $borrower->{userid},
             secret => md5_base64( C4::Context->config('pass') ),
         }),

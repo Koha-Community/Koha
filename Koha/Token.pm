@@ -31,12 +31,12 @@ Koha::Token - Tokenizer
 
     # safely generate a CSRF token (nonblocking)
     my $csrf_token = $tokenizer->generate({
-        CSRF => 1, id => $id, secret => $secret,
+        type => 'CSRF', id => $id, secret => $secret,
     });
 
     # or check a CSRF token
-    my $result = $tokenizer->check({
-        CSRF => 1, id => $id, secret => $secret, token => $token,
+    my $result = $tokenizer->check_csrf({
+        id => $id, secret => $secret, token => $token,
     });
 
 =head1 DESCRIPTION
@@ -48,6 +48,9 @@ Koha::Token - Tokenizer
 =cut
 
 use Modern::Perl;
+use Bytes::Random::Secure ();
+use String::Random ();
+use WWW::CSRF ();
 use base qw(Class::Accessor);
 use constant HMAC_SHA1_LENGTH => 20;
 
@@ -68,7 +71,7 @@ sub new {
 
     my $token = $tokenizer->generate({ length => 20 });
     my $csrf_token = $tokenizer->generate({
-        CSRF => 1, id => $id, secret => $secret,
+        type => 'CSRF', id => $id, secret => $secret,
     });
 
     Generate several types of tokens. Now includes CSRF.
@@ -78,7 +81,7 @@ sub new {
 
 sub generate {
     my ( $self, $params ) = @_;
-    if( $params->{CSRF} ) {
+    if( $params->{type} && $params->{type} eq 'CSRF' ) {
         $self->{lasttoken} = _gen_csrf( $params );
     } else {
         $self->{lasttoken} = _gen_rand( $params );
@@ -86,10 +89,21 @@ sub generate {
     return $self->{lasttoken};
 }
 
+=head2 generate_csrf
+
+    Shortcut for: generate({ type => 'CSRF', ... })
+
+=cut
+
+sub generate_csrf {
+    my ( $self, $params ) = @_;
+    return $self->generate({ %$params, type => 'CSRF' });
+}
+
 =head2 check
 
     my $result = $tokenizer->check({
-        CSRF => 1, id => $id, secret => $secret, token => $token,
+        type => 'CSRF', id => $id, secret => $secret, token => $token,
     });
 
     Check several types of tokens. Now includes CSRF.
@@ -99,10 +113,21 @@ sub generate {
 
 sub check {
     my ( $self, $params ) = @_;
-    if( $params->{CSRF} ) {
+    if( $params->{type} && $params->{type} eq 'CSRF' ) {
         return _chk_csrf( $params );
     }
     return;
+}
+
+=head2 check_csrf
+
+    Shortcut for: check({ type => 'CSRF', ... })
+
+=cut
+
+sub check_csrf {
+    my ( $self, $params ) = @_;
+    return $self->check({ %$params, type => 'CSRF' });
 }
 
 # --- Internal routines ---
@@ -116,8 +141,6 @@ sub _gen_csrf {
     my ( $params ) = @_;
     return if !$params->{id} || !$params->{secret};
 
-    require Bytes::Random::Secure;
-    require WWW::CSRF;
 
     my $randomizer = Bytes::Random::Secure->new( NonBlocking => 1 );
         # this is most fundamental: do not use /dev/random since it is
@@ -134,7 +157,6 @@ sub _chk_csrf {
     my ( $params ) = @_;
     return if !$params->{id} || !$params->{secret} || !$params->{token};
 
-    require WWW::CSRF;
     my $csrf_status = WWW::CSRF::check_csrf_token(
         $params->{id},
         $params->{secret},
@@ -148,7 +170,6 @@ sub _gen_rand {
     my $length = $params->{length} || 1;
     $length = 1 unless $length > 0;
 
-    require String::Random;
     return String::Random::random_string( '.' x $length );
 }
 

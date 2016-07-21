@@ -30,16 +30,16 @@ is( length($token), 20, "Token $token has 20 chars" );
 
 my $id = $tokenizer->generate({ length => 8 });
 my $secr = $tokenizer->generate({ length => 32 });
-my $csrftoken = $tokenizer->generate({ CSRF => 1, id => $id, secret => $secr });
+my $csrftoken = $tokenizer->generate_csrf({ id => $id, secret => $secr });
 isnt( length($csrftoken), 0, "Token $csrftoken should not be empty" );
 
 is( $tokenizer->check, undef, "Check without any parameters" );
-my $result = $tokenizer->check({
-    CSRF => 1, id => $id, secret => $secr, token => $csrftoken,
+my $result = $tokenizer->check_csrf({
+    id => $id, secret => $secr, token => $csrftoken,
 });
 is( $result, 1, "CSRF token verified" );
 
 $result = $tokenizer->check({
-    CSRF => 1, id => $id, secret => $secr, token => $token,
+    type => 'CSRF', id => $id, secret => $secr, token => $token,
 });
 isnt( $result, 1, "This token is no CSRF token" );
