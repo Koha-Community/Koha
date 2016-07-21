@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 87;
+use Test::More tests => 88;
 use Koha::Database;
 
 BEGIN {
@@ -920,5 +920,12 @@ ok((defined $order4->{datecancellationprinted}), "order is cancelled");
 ok(($order4->{cancellationreason} eq "foobar"), "order has cancellation reason \"foobar\"");
 ok((not defined GetBiblio($order4->{biblionumber})), "biblio does not exist anymore");
 # End of tests for DelOrder
+
+subtest 'ModOrder' => sub {
+    plan tests => 1;
+    ModOrder( { ordernumber => $order1->{ordernumber}, unitprice => 42 } );
+    my $order = GetOrder( $order1->{ordernumber} );
+    is( int($order->{unitprice}), 42, 'ModOrder should work even if biblionumber if not passed');
+};
 
 $schema->storage->txn_rollback();
