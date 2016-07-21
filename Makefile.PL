@@ -475,7 +475,7 @@ my %valid_config_values = (
   'AUTH_INDEX_MODE' => { 'grs1' => 1, 'dom' => 1 },
   'BIB_INDEX_MODE'  => { 'grs1' => 1, 'dom' => 1 },
   'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'normarc' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
-  'ZEBRA_LANGUAGE'    => { 'en' => 1, 'es' => 1, 'fr' => 1, 'gr' => 1, 'nb' => 1, 'ru' => 1, 'uk' => 1 }, # FIXME should generate from contents of distribution
+  'ZEBRA_LANGUAGE'    => { 'cs' => 1, 'en' => 1, 'es' => 1, 'fr' => 1, 'gr' => 1, 'nb' => 1, 'ru' => 1, 'uk' => 1 }, # FIXME should generate from contents of distribution
   'ZEBRA_TOKENIZER' => { chr => 1, icu => 1 },
   'RUN_DATABASE_TESTS' => { 'yes' => 1, 'no' => 1 },
   'USE_MEMCACHED'      => { 'yes' => 1, 'no' => 1 },
