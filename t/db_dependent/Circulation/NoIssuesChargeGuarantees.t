@@ -17,13 +17,15 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 6;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use C4::Accounts qw( manualinvoice );
 use C4::Circulation qw( CanBookBeIssued );
+use Koha::Account::Lines;
+use Koha::Account::Offsets;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -63,6 +65,14 @@ is( $issuingimpossible->{DEBT_GUARANTEES}, undef, "Patron can check out item" );
 manualinvoice( $guarantee->{borrowernumber}, undef, undef, 'L', 10.00 );
 ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->{barcode} );
 is( $issuingimpossible->{DEBT_GUARANTEES} + 0, '10.00' + 0, "Patron cannot check out item due to debt for guarantee" );
+
+my $accountline = Koha::Account::Lines->search({ borrowernumber => $guarantee->{borrowernumber} })->next();
+is( $accountline->amountoutstanding, "10.000000", "Found 10.00 amount outstanding" );
+is( $accountline->accounttype, "L", "Account type is L" );
+
+my $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id })->next();
+is( $offset->type, 'Manual Debit', 'Got correct offset type' );
+is( $offset->amount, '10.000000', 'Got amount of $10.00' );
 
 $schema->storage->txn_rollback;
 

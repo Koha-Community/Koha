@@ -37,6 +37,8 @@ use Koha::IssuingRules;
 use Koha::Checkouts;
 use Koha::Patrons;
 use Koha::Subscriptions;
+use Koha::Account::Lines;
+use Koha::Account::Offsets;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -766,6 +768,17 @@ C4::Context->dbh->do("DELETE FROM accountlines");
             due            => Koha::DateUtils::output_pref($datedue)
         }
     );
+
+    my $line = Koha::Account::Lines->search({ borrowernumber => $renewing_borrower->{borrowernumber} })->next();
+    is( $line->accounttype, 'FU', 'Account line type is FU' );
+    is( $line->lastincrement, '15.000000', 'Account line last increment is 15.00' );
+    is( $line->amountoutstanding, '15.000000', 'Account line amount outstanding is 15.00' );
+    is( $line->amount, '15.000000', 'Account line amount is 15.00' );
+    is( $line->issue_id, $issue->id, 'Account line issue id matches' );
+
+    my $offset = Koha::Account::Offsets->search({ debit_id => $line->id })->next();
+    is( $offset->type, 'Fine', 'Account offset type is Fine' );
+    is( $offset->amount, '15.000000', 'Account offset amount is 15.00' );
 
     LostItem( $itemnumber, 1 );
 
