@@ -817,6 +817,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.01'
     },
+    'HTML::Entities' => {
+        usage => 'Core',
+        required => 1,
+        min_ver => '3.69', # same for Wheezy/Jessie
+    },
 };
 
 1;
