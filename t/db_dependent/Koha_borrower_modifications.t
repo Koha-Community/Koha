@@ -1,133 +1,92 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 14;
+use Test::More tests => 8;
 
 use C4::Context;
 use t::lib::TestBuilder;
 use C4::Members;
 
-use Koha::Patron::Modifications;
+BEGIN {
+    use_ok('Koha::Patron::Modification');
+    use_ok('Koha::Patron::Modifications');
+}
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
-
 $dbh->do("DELETE FROM borrower_modifications");
 
 ## Create new pending modification
-Koha::Patron::Modifications->new( verification_token => '1234567890' )
-  ->AddModifications( { surname => 'Hall', firstname => 'Kyle' } );
+Koha::Patron::Modification->new(
+    {
+        verification_token => '1234567890',
+        surname            => 'Hall',
+        firstname          => 'Kyle'
+    }
+)->store();
 
 ## Get the new pending modification
-my $borrower = Koha::Patron::Modifications->GetModifications(
-    { verification_token => '1234567890' } );
+my $borrower =
+  Koha::Patron::Modifications->find( { verification_token => '1234567890' } );
 
 ## Verify we get the same data
-ok( $borrower->{'surname'} = 'Hall',
-    'Test AddModifications() and GetModifications()' );
-
-## Check the Verify method
-ok(
-    Koha::Patron::Modifications->Verify('1234567890'),
-    'Test that Verify() succeeds with a valid token'
-);
-
-## Delete the pending modification
-$borrower = Koha::Patron::Modifications->DelModifications(
-    { verification_token => '1234567890' } );
-
-## Verify it's no longer in the database
-$borrower = Koha::Patron::Modifications->GetModifications(
-    { verification_token => '1234567890' } );
-ok( !defined( $borrower->{'surname'} ), 'Test DelModifications()' );
-
-## Check the Verify method
-ok(
-    !Koha::Patron::Modifications->Verify('1234567890'),
-    'Test that Verify() method fails for a bad token'
-);
+is( $borrower->surname, 'Hall', 'Found modification has matching surname' );
 
 ## Create new pending modification for a patron
 my $builder = t::lib::TestBuilder->new;
-my $borr1 = $builder->build({ source => 'Borrower' })->{borrowernumber};
-Koha::Patron::Modifications->new( borrowernumber => $borr1 )
-  ->AddModifications( { surname => 'Hall', firstname => 'Kyle' } );
+my $borr1 = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+
+my $m1 = Koha::Patron::Modification->new(
+    {
+        borrowernumber => $borr1,
+        surname        => 'Hall',
+        firstname      => 'Kyle'
+    }
+)->store();
 
 ## Test the counter
-ok( Koha::Patron::Modifications->GetPendingModificationsCount() == 1,
-    'Test GetPendingModificationsCount()' );
+is( Koha::Patron::Modifications->pending_count,
+    1, 'Test pending_count()' );
 
 ## Create new pending modification for another patron
-my $borr2 = $builder->build({ source => 'Borrower' })->{borrowernumber};
-Koha::Patron::Modifications->new( borrowernumber => $borr2 )
-  ->AddModifications( { surname => 'Smith', firstname => 'Sandy' } );
+my $borr2 = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+my $m2 = Koha::Patron::Modification->new(
+    {
+        borrowernumber => $borr2,
+        surname        => 'Smith',
+        firstname      => 'Sandy'
+    }
+)->store();
 
 ## Test the counter
-ok(
-    Koha::Patron::Modifications->GetPendingModificationsCount() == 2,
-'Add a new pending modification and test GetPendingModificationsCount() again'
+is(
+    Koha::Patron::Modifications->pending_count(), 2,
+'Add a new pending modification and test pending_count() again'
 );
 
 ## Check GetPendingModifications
-my $pendings = Koha::Patron::Modifications->GetPendingModifications();
-my @firstnames_mod = sort ( $pendings->[0]->{firstname}, $pendings->[1]->{firstname} );
-ok( $firstnames_mod[0] eq 'Kyle', 'Test GetPendingModifications()' );
-ok( $firstnames_mod[1] eq 'Sandy', 'Test GetPendingModifications() again' );
+my $pendings = Koha::Patron::Modifications->pending;
+my @firstnames_mod =
+  sort ( $pendings->[0]->{firstname}, $pendings->[1]->{firstname} );
+ok( $firstnames_mod[0] eq 'Kyle',  'Test pending()' );
+ok( $firstnames_mod[1] eq 'Sandy', 'Test pending() again' );
 
 ## This should delete the row from the table
-Koha::Patron::Modifications->DenyModifications( $borr2 );
-
-## Test the counter
-ok( Koha::Patron::Modifications->GetPendingModificationsCount() == 1,
-    'Test DenyModifications()' );
+$m2->delete();
 
 ## Save a copy of the borrowers original data
 my $old_borrower = GetMember( borrowernumber => $borr1 );
 
 ## Apply the modifications
-Koha::Patron::Modifications->ApproveModifications( $borr1 );
-
-## Test the counter
-ok(
-    Koha::Patron::Modifications->GetPendingModificationsCount() == 0,
-    'Test ApproveModifications() removes pending modification from db'
-);
+$m1->approve();
 
 ## Get a copy of the borrowers current data
 my $new_borrower = GetMember( borrowernumber => $borr1 );
 
 ## Check to see that the approved modifications were saved
 ok( $new_borrower->{'surname'} eq 'Hall',
-    'Test ApproveModifications() applys modification to borrower' );
-
-## Now let's put it back the way it was
-Koha::Patron::Modifications->new( borrowernumber => $borr1 )->AddModifications(
-    {
-        surname   => $old_borrower->{'surname'},
-        firstname => $old_borrower->{'firstname'}
-    }
-);
-
-## Test the counter
-ok( Koha::Patron::Modifications->GetPendingModificationsCount() == 1,
-    'Test GetPendingModificationsCount()' );
-
-## Apply the modifications
-Koha::Patron::Modifications->ApproveModifications( $borr1 );
-
-## Test the counter
-ok(
-    Koha::Patron::Modifications->GetPendingModificationsCount() == 0,
-    'Test ApproveModifications() removes pending modification from db, again'
-);
-
-$new_borrower = GetMember( borrowernumber => $borr1 );
-
-## Test to verify the borrower has been updated with the original values
-ok(
-    $new_borrower->{'surname'} eq $old_borrower->{'surname'},
-    'Test ApproveModifications() applys modification to borrower, again'
-);
+    'Test approve() applys modification to borrower' );
 
 $dbh->rollback();

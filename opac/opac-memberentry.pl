@@ -27,6 +27,7 @@ use C4::Output;
 use C4::Members;
 use C4::Form::MessagingPreferences;
 use Koha::Patrons;
+use Koha::Patron::Modification;
 use Koha::Patron::Modifications;
 use C4::Branch qw(GetBranchesLoop);
 use C4::Scrubber;
@@ -127,11 +128,11 @@ if ( $action eq 'create' ) {
             $template->param( 'email' => $borrower{'email'} );
 
             my $verification_token = md5_hex( \%borrower );
-            $borrower{'password'} = random_string("..........");
 
-            Koha::Patron::Modifications->new(
-                verification_token => $verification_token )
-              ->AddModifications(\%borrower);
+            $borrower{password}           = random_string("..........");
+            $borrower{verification_token} = $verification_token;
+
+            Koha::Patron::Modification->new( \%borrower )->store();
 
             #Send verification email
             my $letter = C4::Letters::GetPreparedLetter(
@@ -224,12 +225,10 @@ elsif ( $action eq 'update' ) {
                 }
             );
 
-            my $m =
-              Koha::Patron::Modifications->new(
-                borrowernumber => $borrowernumber );
+            $borrower_changes{borrowernumber} = $borrowernumber;
 
-            $m->DelModifications;
-            $m->AddModifications(\%borrower_changes);
+            my $m = Koha::Patron::Modification->new( \%borrower_changes )->store();
+
             $template->param(
                 borrower => GetMember( borrowernumber => $borrowernumber ),
             );

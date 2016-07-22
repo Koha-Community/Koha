@@ -49,7 +49,7 @@ my $branch =
   : undef;
 
 my $pending_modifications =
-  Koha::Patron::Modifications->GetPendingModifications($branch);
+  Koha::Patron::Modifications->pending($branch);
 
 my $borrowers;
 foreach my $pm (@$pending_modifications) {

@@ -34,10 +34,10 @@ unless ( C4::Context->preference('PatronSelfRegistration') ) {
 }
 
 my $token = $cgi->param('token');
-my $m = Koha::Patron::Modifications->new( verification_token => $token );
+my $m = Koha::Patron::Modifications->find( { verification_token => $token } );
 
 my ( $template, $borrowernumber, $cookie );
-if ( $m->Verify() ) {
+if ( $m ) {
     ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-registration-confirmation.tt",
@@ -50,13 +50,13 @@ if ( $m->Verify() ) {
     $template->param(
         OpacPasswordChange => C4::Context->preference('OpacPasswordChange') );
 
-    my $borrower = Koha::Patron::Modifications->GetModifications({ verification_token => $token });
+    my $borrower = $m->unblessed();
 
     my $password;
     ( $borrowernumber, $password ) = AddMember_Opac(%$borrower);
 
     if ($borrowernumber) {
-        Koha::Patron::Modifications->DelModifications({ verification_token => $token });
+        $m->delete();
         C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
 
         $template->param( password_cleartext => $password );

@@ -27,13 +27,43 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Item - Koha Item object class
-
-=head1 API
+Koha::Patron::Modification - Class represents a requrest to modify or create a patron
 
 =head2 Class Methods
 
 =cut
+
+=head2 approve
+
+$m->approve();
+
+Commits the pending modifications to the borrower record and removes
+them from the modifications table.
+
+=cut
+
+sub approve {
+    my ($self) = @_;
+
+    my $data = $self->unblessed();
+
+    delete $data->{timestamp};
+    delete $data->{verification_token};
+
+    foreach my $key ( keys %$data ) {
+        delete $data->{$key} unless ( defined( $data->{$key} ) );
+    }
+
+    my $patron = Koha::Patrons->find( $self->borrowernumber );
+
+    return unless $patron;
+
+    $patron->set($data);
+
+    if ( $patron->store() ) {
+        return $self->delete();
+    }
+}
 
 =head3 type
 

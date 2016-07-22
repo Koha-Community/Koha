@@ -25,80 +25,20 @@ Koha::Patron::Modifications
 use Modern::Perl;
 
 use C4::Context;
-use C4::Debug;
+
+use Koha::Patron::Modification;
 
 use base qw(Koha::Objects);
 
-=head2 AddModifications
+=head2 pending_count
 
-Koha::Patron::Modifications->AddModifications( $data );
+$count = Koha::Patron::Modifications->pending_count();
 
-Adds or updates modifications for a patron
-
-Requires either the key borrowernumber, or verification_token
-to be part of the passed in hash.
+Returns the number of pending modifications for existing patrons.
 
 =cut
 
-sub AddModifications {
-    my ( $self, $data ) = @_;
-
-    delete $data->{borrowernumber};
-    if( $self->{borrowernumber} ) {
-        return if( not keys %$data );
-        $data->{borrowernumber} = $self->{borrowernumber};
-        $data->{verification_token} = '';
-    }
-    elsif( $self->{verification_token} ) {
-        $data->{verification_token} = $self->{verification_token};
-        $data->{borrowernumber} = 0;
-    }
-    else {
-        return;
-    }
-
-    my $rs = Koha::Database->new()->schema->resultset('BorrowerModification');
-    return $rs->update_or_create($data, { key => 'primary' } );
-}
-
-=head2 Verify
-
-$verified = Koha::Patron::Modifications->Verify( $verification_token );
-
-Returns true if the passed in token is valid.
-
-=cut
-
-sub Verify {
-    my ( $self, $verification_token ) = @_;
-
-    $verification_token =
-      ($verification_token)
-      ? $verification_token
-      : $self->{'verification_token'};
-
-    my $dbh   = C4::Context->dbh;
-    my $query = "
-        SELECT COUNT(*) AS count
-        FROM borrower_modifications
-        WHERE verification_token = ?
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($verification_token);
-    my $result = $sth->fetchrow_hashref();
-
-    return $result->{'count'};
-}
-
-=head2 GetPendingModificationsCount
-
-$count = Koha::Patron::Modifications->GetPendingModificationsCount();
-
-Returns the number of pending modifications for existing patron.
-
-=cut
-
-sub GetPendingModificationsCount {
+sub pending_count {
     my ( $self, $branchcode ) = @_;
 
     my $dbh   = C4::Context->dbh;
@@ -119,18 +59,18 @@ sub GetPendingModificationsCount {
     $sth->execute(@params);
     my $result = $sth->fetchrow_hashref();
 
-    return $result->{'count'};
+    return $result->{count};
 }
 
-=head2 GetPendingModifications
+=head2 pending
 
-$arrayref = Koha::Patron::Modifications->GetPendingModifications();
+$arrayref = Koha::Patron::Modifications->pending();
 
 Returns an arrayref of hashrefs for all pending modifications for existing patrons.
 
 =cut
 
-sub GetPendingModifications {
+sub pending {
     my ( $self, $branchcode ) = @_;
 
     my $dbh   = C4::Context->dbh;
@@ -160,144 +100,6 @@ sub GetPendingModifications {
     }
 
     return \@m;
-}
-
-=head2 ApproveModifications
-
-Koha::Patron::Modifications->ApproveModifications( $borrowernumber );
-
-Commits the pending modifications to the borrower record and removes
-them from the modifications table.
-
-=cut
-
-sub ApproveModifications {
-    my ( $self, $borrowernumber ) = @_;
-
-    $borrowernumber =
-      ($borrowernumber) ? $borrowernumber : $self->{'borrowernumber'};
-
-    return unless $borrowernumber;
-
-    my $data = $self->GetModifications( { borrowernumber => $borrowernumber } );
-    delete $data->{timestamp};
-    delete $data->{verification_token};
-
-    my $rs = Koha::Database->new()->schema->resultset('Borrower')->search({
-        borrowernumber => $data->{borrowernumber},
-    });
-    if( $rs->update($data) ) {
-        $self->DelModifications( { borrowernumber => $borrowernumber } );
-    }
-}
-
-=head2 DenyModifications
-
-Koha::Patron::Modifications->DenyModifications( $borrowernumber );
-
-Removes the modifications from the table for the given patron,
-without committing the changes to the patron record.
-
-=cut
-
-sub DenyModifications {
-    my ( $self, $borrowernumber ) = @_;
-
-    $borrowernumber =
-      ($borrowernumber) ? $borrowernumber : $self->{'borrowernumber'};
-
-    return unless $borrowernumber;
-
-    return $self->DelModifications( { borrowernumber => $borrowernumber } );
-}
-
-=head2 DelModifications
-
-Koha::Patron::Modifications->DelModifications({
-  [ borrowernumber => $borrowernumber ],
-  [ verification_token => $verification_token ]
-});
-
-Deletes the modifications for the given borrowernumber or verification token.
-
-=cut
-
-sub DelModifications {
-    my ( $self, $params ) = @_;
-
-    my ( $field, $value );
-
-    if ( $params->{'borrowernumber'} ) {
-        $field = 'borrowernumber';
-        $value = $params->{'borrowernumber'};
-    }
-    elsif ( $params->{'verification_token'} ) {
-        $field = 'verification_token';
-        $value = $params->{'verification_token'};
-    }
-
-    return unless $value;
-
-    my $dbh = C4::Context->dbh;
-
-    $field = $dbh->quote_identifier($field);
-
-    my $query = "
-        DELETE
-        FROM borrower_modifications
-        WHERE $field = ?
-    ";
-
-    my $sth = $dbh->prepare($query);
-    return $sth->execute($value);
-}
-
-=head2 GetModifications
-
-$hashref = Koha::Patron::Modifications->GetModifications({
-  [ borrowernumber => $borrowernumber ],
-  [ verification_token => $verification_token ]
-});
-
-Gets the modifications for the given borrowernumber or verification token.
-
-=cut
-
-sub GetModifications {
-    my ( $self, $params ) = @_;
-
-    my ( $field, $value );
-
-    if ( defined( $params->{'borrowernumber'} ) ) {
-        $field = 'borrowernumber';
-        $value = $params->{'borrowernumber'};
-    }
-    elsif ( defined( $params->{'verification_token'} ) ) {
-        $field = 'verification_token';
-        $value = $params->{'verification_token'};
-    }
-
-    return unless $value;
-
-    my $dbh = C4::Context->dbh;
-
-    $field = $dbh->quote_identifier($field);
-
-    my $query = "
-        SELECT *
-        FROM borrower_modifications
-        WHERE $field = ?
-    ";
-
-    my $sth = $dbh->prepare($query);
-    $sth->execute($value);
-    my $data = $sth->fetchrow_hashref();
-
-    foreach my $key ( keys %$data ) {
-        delete $data->{$key} unless ( defined( $data->{$key} ) );
-    }
-
-    return $data;
 }
 
 sub _type {

@@ -89,7 +89,7 @@ else {
 
 
 my $pending_borrower_modifications =
-  Koha::Patron::Modifications->GetPendingModificationsCount( $branch );
+  Koha::Patron::Modifications->pending_count( $branch );
 
 $template->param( 
         no_add => $no_add,

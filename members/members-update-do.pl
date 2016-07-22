@@ -50,14 +50,14 @@ foreach my $param (@params) {
         my $action = $query->param($param);
 
         if ( $action eq 'approve' ) {
-            Koha::Patron::Modifications->ApproveModifications( $borrowernumber );
+            my $m = Koha::Patron::Modifications->find( { borrowernumber => $borrowernumber } );
+            $m->approve() if $m;
         }
         elsif ( $action eq 'deny' ) {
-            Koha::Patron::Modifications->DenyModifications( $borrowernumber );
+            my $m = Koha::Patron::Modifications->find( { borrowernumber => $borrowernumber } );
+            $m->delete() if $m;
         }
-        elsif ( $action eq 'ignore' ) {
-
-        }
+        # elsif ( $action eq 'ignore' ) { }
     }
 }
 
