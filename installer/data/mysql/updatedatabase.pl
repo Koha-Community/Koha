@@ -10387,7 +10387,7 @@ $DBversion = "3.19.00.038";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
         ALTER TABLE virtualshelves
-        ADD COLUMN created_on TIMESTAMP NOT NULL AFTER lastmodified
+        ADD COLUMN created_on DATETIME NOT NULL AFTER lastmodified
     |);
     # Set created_on = lastmodified
     # I would say it's better than 0000-00-00
