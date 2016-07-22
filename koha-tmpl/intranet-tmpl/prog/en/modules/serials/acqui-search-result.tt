@@ -1,7 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Select vendor</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" language="Javascript">
+<script type="text/javascript">
 
 function GetIt(aqbooksellerid,name)
 {
@@ -9,6 +9,14 @@ function GetIt(aqbooksellerid,name)
   opener.document.f.aqbooksellername.value = name;
   window.close();
 }
+$(document).ready(function(){
+    $(".select_vendor").on("click",function(e){
+        e.preventDefault();
+        var vendorname = $(this).data("vendorname");
+        var vendorid = $(this).data("vendorid");
+        GetIt( vendorid, vendorname );
+    });
+});
 </script>
 </head>
 <body id="ser_acqui-search-result" class="ser">
@@ -29,13 +37,15 @@ function GetIt(aqbooksellerid,name)
 	[% FOREACH loop_supplier IN loop_suppliers %]
         <tr>
 			<td>[% loop_supplier.name %]</td>
-			<td><a href="#" onclick="GetIt([% loop_supplier.aqbooksellerid %],$(this).parent().prev().text())">Choose</a></td>
+            <td><a class="btn btn-mini select_vendor" href="#" data-vendorid="[% loop_supplier.aqbooksellerid %]" data-vendorname="[% loop_supplier.name |html%]">Choose</a></td>
 		</tr>
 	[% END %]
 </table>
 [% END %]
 
-    <p><a href="/cgi-bin/koha/serials/acqui-search.pl">Perform a new search</a>  <a class="button" href="#" onclick="window.close()">Close</a></p>
+    <p><a href="/cgi-bin/koha/serials/acqui-search.pl">Perform a new search</a></p>
+
+    <div id="closewindow"><a href="#" class="btn btn-default close">Cancel</a></div>
 
 </div>
 
