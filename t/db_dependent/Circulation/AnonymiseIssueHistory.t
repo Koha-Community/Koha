@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use C4::Context;
 use C4::Circulation;
@@ -56,9 +56,10 @@ t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous->{borrowernumber} 
 
 subtest 'patron privacy is 1 (default)' => sub {
     plan tests => 4;
+    t::lib::Mocks::mock_preference('IndependentBranches', 0);
     my $patron = $builder->build(
         {   source => 'Borrower',
-            value  => { privacy => 1, }
+            value  => { privacy => 1, branchcode => $userenv_patron->{branchcode} }
         }
     );
     my $item = $builder->build(
@@ -94,10 +95,11 @@ subtest 'patron privacy is 1 (default)' => sub {
 
 subtest 'patron privacy is 0 (forever)' => sub {
     plan tests => 3;
+    t::lib::Mocks::mock_preference('IndependentBranches', 0);
 
     my $patron = $builder->build(
         {   source => 'Borrower',
-            value  => { privacy => 0, }
+            value  => { privacy => 0, branchcode => $userenv_patron->{branchcode} }
         }
     );
     my $item = $builder->build(
@@ -133,9 +135,10 @@ t::lib::Mocks::mock_preference( 'AnonymousPatron', '' );
 
 subtest 'AnonymousPatron is not defined' => sub {
     plan tests => 4;
+    t::lib::Mocks::mock_preference('IndependentBranches', 0);
     my $patron = $builder->build(
         {   source => 'Borrower',
-            value  => { privacy => 1, }
+            value  => { privacy => 1, branchcode => $userenv_patron->{branchcode} }
         }
     );
     my $item = $builder->build(
@@ -166,6 +169,37 @@ subtest 'AnonymousPatron is not defined' => sub {
         SELECT borrowernumber FROM old_issues where itemnumber = ?
     |, undef, $item->{itemnumber});
     is( $borrowernumber_used_to_anonymised, undef, 'With AnonymousPatron is not defined, the issue should have been anonymised anyway' );
+};
+
+subtest 'Logged in librarian is not superlibrarian & IndependentBranches' => sub {
+    plan tests => 1;
+    t::lib::Mocks::mock_preference('IndependentBranches', 1);
+    my $patron = $builder->build(
+        {   source => 'Borrower',
+            value  => { privacy => 1 } # Another branchcode than the logged in librarian
+        }
+    );
+    my $item = $builder->build(
+        {   source => 'Item',
+            value  => {
+                itemlost  => 0,
+                withdrawn => 0,
+            },
+        }
+    );
+    my $issue = $builder->build(
+        {   source => 'Issue',
+            value  => {
+                borrowernumber => $patron->{borrowernumber},
+                itemnumber     => $item->{itemnumber},
+            },
+        }
+    );
+
+    my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, undef, '2010-10-10' );
+    my $patrons_to_anonymise = C4::Members::GetBorrowersWithIssuesHistoryOlderThan( '2010-10-11' );
+    my ( $rows_affected, $err ) = C4::Circulation::AnonymiseIssueHistory('2010-10-11');
+    is( scalar(@$patrons_to_anonymise), $rows_affected, , 'AnonymiseIssueHistory should affect at least 1 row' );
 };
 
 subtest 'Test StoreLastBorrower' => sub {
