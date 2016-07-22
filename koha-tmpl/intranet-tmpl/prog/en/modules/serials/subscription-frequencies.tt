@@ -44,10 +44,6 @@ function check_form() {
     return false;
 }
 
-function show_blocking_subs() {
-    $("#blocking_subs").show();
-}
-
 $(document).ready(function() {
     $("#issuesperunit").change(function() {
         var value = $(this).val();
@@ -63,6 +59,13 @@ $(document).ready(function() {
     });
     $(".delete_frequency").on("click",function(){
         return confirmDelete();
+    });
+    $("#add_frequency_form").on("submit",function(){
+        return check_form();
+    });
+    $("#show_blocking_subs").on("click",function(e){
+        e.preventDefault();
+        $("#blocking_subs").show();
     });
 });
 //]]>
@@ -99,7 +102,7 @@ $(document).ready(function() {
         [% ELSE %]
           <h1>Edit frequency: [% description %]</h1>
         [% END %]
-        <form action="/cgi-bin/koha/serials/subscription-frequencies.pl" method="post" onsubmit="return check_form();">
+        <form action="/cgi-bin/koha/serials/subscription-frequencies.pl" id="add_frequency_form" method="post">
           [% IF (modify) %]
             <input type="hidden" name="id" value="[% id %]" />
             <input type="hidden" name="op" value="savemod" />
@@ -168,7 +171,7 @@ $(document).ready(function() {
                     This frequency is still used by [% subscriptions.size %]
                     subscription(s). Do you still want to delete it?
                 </p>
-                <p><a href="#" onclick="show_blocking_subs(); return false;">Show subscriptions</a></p>
+                <p><a href="#" id="show_blocking_subs">Show subscriptions</a></p>
                 <ul id="blocking_subs" style="display:none">
                     [% FOREACH sub IN subscriptions %]
                         <li style="list-style-type:none">

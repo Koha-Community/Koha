@@ -66,6 +66,13 @@ $(document).ready(function(){
     $(".delete_pattern").on("click",function(){
         return confirmDelete();
     });
+    $("#show_blocking_subs").on("click",function(e){
+        e.preventDefault();
+        $("#blocking_subs").show();
+    });
+    $("#test_pattern").on("click",function(){
+         testPattern();
+    });
 });
 //]]>
 </script>
@@ -284,7 +291,7 @@ $(document).ready(function(){
                 </tbody>
               </table>
               <fieldset class="action">
-              <input type="button" value="Test pattern" onclick="testPattern();" />
+              <input type="button" id="test_pattern" value="Test pattern" />
               </fieldset>
               <div id="predictionpattern"></div>
             </fieldset>
@@ -298,7 +305,7 @@ $(document).ready(function(){
                     This pattern is still used by [% subscriptions.size %]
                     subscription(s). Do you still want to delete it?
                 </p>
-                <p><a href="#" onclick="show_blocking_subs(); return false;">Show subscriptions</a></p>
+                <p><a href="#" id="show_blocking_subs">Show subscriptions</a></p>
                 <ul id="blocking_subs" style="display:none">
                     [% FOREACH sub IN subscriptions %]
                         <li style="list-style-type:none">
