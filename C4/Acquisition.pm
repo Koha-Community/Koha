@@ -38,7 +38,6 @@ use MARC::Field;
 use MARC::Record;
 
 use Time::localtime;
-use HTML::Entities;
 
 use vars qw($VERSION @ISA @EXPORT);
 
