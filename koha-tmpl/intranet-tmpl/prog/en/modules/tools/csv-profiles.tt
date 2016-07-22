@@ -199,15 +199,19 @@ function reloadPage(p) {
 
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
-        <h3>Delete CSV Profile "[% csv_profile.profile %]?"</h3>
-        <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="post">
-            <input type="hidden" name="op" value="delete_confirmed" />
-            <input type="hidden" name="export_format_id" value="[% csv_profile.export_format_id %]" />
-            <input type="submit" class="approve" value="Yes, delete" />
-        </form>
-        <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="get">
-            <input type="submit" class="deny" value="No, do not Delete" />
-        </form>
+        [% IF csv_profile %]
+            <h3>Delete CSV Profile "[% csv_profile.profile %]?"</h3>
+            <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="post">
+                <input type="hidden" name="op" value="delete_confirmed" />
+                <input type="hidden" name="export_format_id" value="[% csv_profile.export_format_id %]" />
+                <input type="submit" class="approve" value="Yes, delete" />
+            </form>
+            <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="get">
+                <input type="submit" class="deny" value="No, do not Delete" />
+            </form>
+        [% ELSE %]
+            This CSV Profile does not exist.
+        [% END %]
     </div>
 [% END %]
 
