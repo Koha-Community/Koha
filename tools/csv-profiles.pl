@@ -82,7 +82,8 @@ if ( $op eq 'add_form' ) {
     my $encoding           = $input->param("encoding");
 
     if ($export_format_id) {
-        my $csv_profile = Koha::CsvProfiles->find($export_format_id);
+        my $csv_profile = Koha::CsvProfiles->find($export_format_id)
+            or die "Something went wrong! This export_format_id does not match any existing CSV profile.";
         $csv_profile->profile($profile);
         $csv_profile->description($description);
         $csv_profile->content($content);
