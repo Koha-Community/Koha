@@ -217,8 +217,8 @@
                 <h4>No patron records have been removed</h4>
             [% END %]
         [% END %]
-        [% IF ( do_anonym ) %]
-            <h4>All checkouts older than [% last_issue_date | $KohaDates %] have been anonymized</h4>
+        [% IF do_anonym %]
+            <h4>All checkouts ([% do_anonym %]) older than [% last_issue_date | $KohaDates %] have been anonymized</h4>
         [% ELSE %]
             <h4>No patron records have been anonymized</h4>
         [% END %]

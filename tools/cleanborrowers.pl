@@ -42,6 +42,7 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patron::Categories;
 use Koha::Patrons;
 use Date::Calc qw/Today Add_Delta_YM/;
+use Koha::Patrons;
 use Koha::List::Patron;
 
 my $cgi = new CGI;
@@ -106,19 +107,17 @@ if ( $step == 2 ) {
     }
     _skip_borrowers_with_nonzero_balance($patrons_to_delete);
 
-    my $members_to_anonymize;
-    if ( $checkboxes{issue} ) {
-        if ( $branch eq '*' ) {
-            $members_to_anonymize = GetBorrowersWithIssuesHistoryOlderThan($last_issue_date);
-        } else {
-            $members_to_anonymize = GetBorrowersWithIssuesHistoryOlderThan($last_issue_date, $branch);
-        }
-    }
+    my $patrons_to_anonymize =
+        $checkboxes{issue}
+      ? $branch eq '*'
+          ? Koha::Patrons->search_patrons_to_anonymise($last_issue_date)
+          : Koha::Patrons->search_patrons_to_anonymise( $last_issue_date, $branch )
+      : undef;
 
     $template->param(
         patrons_to_delete    => $patrons_to_delete,
-        patrons_to_anonymize => $members_to_anonymize,
-        patron_list_id       => $patron_list_id
+        patrons_to_anonymize => $patrons_to_anonymize,
+        patron_list_id       => $patron_list_id,
     );
 }
 
@@ -160,9 +159,9 @@ elsif ( $step == 3 ) {
     # Anonymising all members
     if ($do_anonym) {
         #FIXME: anonymisation errors are not handled
-        ($totalAno,my $anonymisation_error) = AnonymiseIssueHistory($last_issue_date);
+        my $rows = Koha::Patrons->search_patrons_to_anonymise( $last_issue_date )->anonymise_issue_history( $last_issue_date );
         $template->param(
-            do_anonym   => '1',
+            do_anonym   => $rows,
         );
     }
 

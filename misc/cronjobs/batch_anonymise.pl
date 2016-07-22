@@ -30,7 +30,7 @@ BEGIN {
 }
 
 use C4::Context;
-use C4::Circulation;
+use Koha::Patrons;
 use Date::Calc qw(
   Today
   Add_Delta_Days
@@ -74,8 +74,7 @@ my ($newyear,$newmonth,$newday) = Add_Delta_Days ($year,$month,$day,(-1)*$days);
 my $formatdate = sprintf "%4d-%02d-%02d",$newyear,$newmonth,$newday;
 $verbose and print "Checkouts before $formatdate will be anonymised.\n";
 
-my ($rows, $err_history_not_deleted) = AnonymiseIssueHistory($formatdate);
-carp "Anonymisation of reading history failed." if ($err_history_not_deleted);
-$verbose and print "$rows checkouts anonymised.\n";
+my $rows = Koha::Patrons->search_patrons_to_anonymise( $formatdate )->anonymise_issue_history( $formatdate );
+$verbose and print int($rows) . " checkouts anonymised.\n";
 
 exit(0);

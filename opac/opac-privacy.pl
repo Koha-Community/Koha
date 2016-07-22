@@ -21,7 +21,6 @@ use CGI qw ( -utf8 );
 
 use C4::Auth;    # checkauth, getborrowernumber.
 use C4::Context;
-use C4::Circulation;
 use C4::Members;
 use C4::Output;
 use Koha::Patrons;
@@ -62,16 +61,12 @@ elsif ( $op eq "delete_record" ) {
 
     # delete all reading records for items returned
     # uses a hardcoded date ridiculously far in the future
-    my ( $rows, $err_history_not_deleted ) =
-      AnonymiseIssueHistory( '2999-12-12', $borrowernumber );
 
-    # confirm the user the deletion has been done
-    if ( !$err_history_not_deleted ) {
-        $template->param( 'deleted' => 1 );
-    }
-    else {
-        $template->param( 'err_history_not_deleted' => 1 );
-    }
+    my $rows = eval {
+        Koha::Patrons->search({ 'me.borrowernumber' => $borrowernumber })->anonymise_issue_history( '2999-12-12' );
+    };
+    $rows = $@ ? 0 : int($rows);
+    $template->param( 'deleted' => $rows );
 }
 
 # get borrower privacy ....

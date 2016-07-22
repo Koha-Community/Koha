@@ -25,10 +25,10 @@
                 <div id="userprivacy">
                     <h3>Your privacy management</h3>
 
-                    [% IF ( deleted ) %]
+                    [% IF deleted %]
                         <div class="alert alert-success">Your reading history has been deleted.</div>
-                    [% ELSIF ( err_history_not_deleted ) %]
-                        <div class="alert">The deletion of your reading history failed, because there is a problem with the configuration of this feature. Please help to fix the system by informing your library of this error.</div>
+                    [% ELSE %]
+                        <div class="alert">No reading history to delete</div>
                     [% END %]
 
                     [% IF ( privacy_updated ) %]

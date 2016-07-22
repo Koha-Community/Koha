@@ -72,7 +72,6 @@ BEGIN {
         &GetBorNotifyAcctRecord
 
         &GetBorrowersToExpunge
-        &GetBorrowersWithIssuesHistoryOlderThan
 
         &IssueSlip
         GetBorrowersWithEmail
@@ -1107,51 +1106,6 @@ sub GetBorrowersToExpunge {
     }
     
     my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @results, $data;
-    }
-    return \@results;
-}
-
-=head2 GetBorrowersWithIssuesHistoryOlderThan
-
-  $results = &GetBorrowersWithIssuesHistoryOlderThan($date)
-
-this function get all borrowers who has an issue history older than I<$date> given on input arg.
-
-I<$result> is a ref to an array which all elements are a hashref.
-This hashref is containt the number of time this borrowers has borrowed before I<$date> and the borrowernumber.
-
-=cut
-
-sub GetBorrowersWithIssuesHistoryOlderThan {
-    my $dbh  = C4::Context->dbh;
-    my $date = shift ||POSIX::strftime("%Y-%m-%d",localtime());
-    my $filterbranch = shift || 
-                        ((C4::Context->preference('IndependentBranches')
-                             && C4::Context->userenv 
-                             && !C4::Context->IsSuperLibrarian()
-                             && C4::Context->userenv->{branch})
-                         ? C4::Context->userenv->{branch}
-                         : "");  
-    my $query = "
-       SELECT count(borrowernumber) as n,borrowernumber
-       FROM old_issues
-       WHERE returndate < ?
-         AND borrowernumber IS NOT NULL 
-    "; 
-    my @query_params;
-    push @query_params, $date;
-    if ($filterbranch){
-        $query.="   AND branchcode = ?";
-        push @query_params, $filterbranch;
-    }    
-    $query.=" GROUP BY borrowernumber ";
-    warn $query if $debug;
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@query_params);
-    my @results;
-
     while ( my $data = $sth->fetchrow_hashref ) {
         push @results, $data;
     }

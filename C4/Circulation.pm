@@ -94,7 +94,6 @@ BEGIN {
         &GetBranchItemRule
 		&GetBiblioIssues
 		&GetOpenIssue
-		&AnonymiseIssueHistory
         &CheckIfIssuedToPatron
         &IsItemIssued
         GetTopIssues
@@ -3268,49 +3267,6 @@ sub DeleteTransfer {
          AND datearrived IS NULL "
     );
     return $sth->execute($itemnumber);
-}
-
-=head2 AnonymiseIssueHistory
-
-  ($rows,$err_history_not_deleted) = AnonymiseIssueHistory($date,$borrowernumber)
-
-This function write NULL instead of C<$borrowernumber> given on input arg into the table issues.
-if C<$borrowernumber> is not set, it will delete the issue history for all borrower older than C<$date>.
-
-If c<$borrowernumber> is set, it will delete issue history for only that borrower, regardless of their opac privacy
-setting (force delete).
-
-return the number of affected rows and a value that evaluates to true if an error occurred deleting the history.
-
-=cut
-
-sub AnonymiseIssueHistory {
-    my $date           = shift;
-    my $borrowernumber = shift;
-    my $dbh            = C4::Context->dbh;
-    my $query          = "
-        UPDATE old_issues
-        SET    borrowernumber = ?
-        WHERE  returndate < ?
-          AND borrowernumber IS NOT NULL
-    ";
-
-    # The default of 0 does not work due to foreign key constraints
-    # The anonymisation should not fail quietly if AnonymousPatron is not a valid entry
-    # Set it to undef (NULL)
-    my $anonymouspatron = C4::Context->preference('AnonymousPatron') || undef;
-    my @bind_params = ($anonymouspatron, $date);
-    if (defined $borrowernumber) {
-       $query .= " AND borrowernumber = ?";
-       push @bind_params, $borrowernumber;
-    } else {
-       $query .= " AND (SELECT privacy FROM borrowers WHERE borrowers.borrowernumber=old_issues.borrowernumber) <> 0";
-    }
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@bind_params);
-    my $anonymisation_err = $dbh->err;
-    my $rows_affected = $sth->rows;  ### doublecheck row count return function
-    return ($rows_affected, $anonymisation_err);
 }
 
 =head2 SendCirculationAlert
