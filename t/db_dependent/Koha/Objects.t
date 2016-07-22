@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Warn;
 
 use Koha::Authority::Types;
@@ -79,6 +79,17 @@ subtest 'delete' => sub {
 subtest 'not_covered_yet' => sub {
     plan tests => 1;
     warning_is { Koha::Patrons->search->not_covered_yet } { carped => 'The method not_covered_yet is not covered by tests' }, "If a method is not covered by tests, the AUTOLOAD method won't execute the method";
+};
+
+subtest 'search_related' => sub {
+    plan tests => 3;
+    my $builder   = t::lib::TestBuilder->new;
+    my $patron_1  = $builder->build( { source => 'Borrower' } );
+    my $patron_2  = $builder->build( { source => 'Borrower' } );
+    my $libraries = Koha::Patrons->search( { -or => { borrowernumber => [ $patron_1->{borrowernumber}, $patron_2->{borrowernumber} ] } } )->search_related('branchcode');
+    is( $libraries->count,            2,                       'Koha::Objects->search_related should work as expected' );
+    is( $libraries->next->branchcode, $patron_1->{branchcode}, 'Koha::Objects->search_related should work as expected' );
+    is( $libraries->next->branchcode, $patron_2->{branchcode}, 'Koha::Objects->search_related should work as expected' );
 };
 
 $schema->storage->txn_rollback;

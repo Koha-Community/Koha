@@ -130,6 +130,19 @@ sub search {
     }
 }
 
+=head3 search_related
+
+    my @objects = Koha::Objects->search_related( $rel_name, $cond?, \%attrs? );
+
+Searches the specified relationship, optionally specifying a condition and attributes for matching records.
+
+=cut
+
+sub search_related {
+    my ( $self, @params ) = @_;
+    return $self->_resultset->search_related( @params );
+}
+
 =head3 Koha::Objects->next();
 
 my $object = Koha::Objects->next();
