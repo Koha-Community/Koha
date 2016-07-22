@@ -12774,6 +12774,18 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '16.06.00.011';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES
+        ('NovelistSelectStaffEnabled','0',NULL,'Enable  Novelist Select content to the Staff Interface (requires that you have entered in a user profile and password, which can be seen in image links)','YesNo'),
+        ('NovelistSelectStaffView','tab','tab|above|below','Where to display Novelist Select content','Choice');
+    });
+
+    print "Upgrade to $DBversion done (Bug 11606 - Novelist Select in Staff Client)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
