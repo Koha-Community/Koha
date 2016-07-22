@@ -20,7 +20,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Digest::MD5 qw( md5_base64 md5_hex );
 use String::Random qw( random_string );
-
+use HTML::Entities;
 use C4::Auth;
 use C4::Output;
 use C4::Members;
@@ -328,7 +328,7 @@ sub ParseCgiForBorrower {
     foreach ( $cgi->param ) {
         if ( $_ =~ '^borrower_' ) {
             my ($key) = substr( $_, 9 );
-            $borrower{$key} = $scrubber->scrub( $cgi->param($_) );
+            $borrower{$key} = HTML::Entities::encode( $scrubber->scrub( $cgi->param($_) ) );
         }
     }
 
