@@ -19,9 +19,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Koha::Authority::Types;
+use Koha::Cities;
 use Koha::Patrons;
 use Koha::Database;
 
@@ -35,6 +36,20 @@ is( ref(Koha::Authority::Types->find('')), 'Koha::Authority::Type', 'Koha::Objec
 my @columns = Koha::Patrons->columns;
 my $borrowernumber_exists = grep { /^borrowernumber$/ } @columns;
 is( $borrowernumber_exists, 1, 'Koha::Objects->columns should return the table columns' );
+
+subtest 'update' => sub {
+    plan tests => 2;
+    my $builder = t::lib::TestBuilder->new;
+    $builder->build( { source => 'City', value => { city_country => 'UK' } } );
+    $builder->build( { source => 'City', value => { city_country => 'UK' } } );
+    $builder->build( { source => 'City', value => { city_country => 'UK' } } );
+    $builder->build( { source => 'City', value => { city_country => 'France' } } );
+    $builder->build( { source => 'City', value => { city_country => 'France' } } );
+    $builder->build( { source => 'City', value => { city_country => 'Germany' } } );
+    Koha::Cities->search( { city_country => 'UK' } )->update( { city_country => 'EU' } );
+    is( Koha::Cities->search( { city_country => 'EU' } )->count, 3, 'Koha::Objects->update should have updated the 3 rows' );
+    is( Koha::Cities->search( { city_country => 'UK' } )->count, 0, 'Koha::Objects->update should have updated the 3 rows' );
+};
 
 $schema->storage->txn_rollback;
 1;
