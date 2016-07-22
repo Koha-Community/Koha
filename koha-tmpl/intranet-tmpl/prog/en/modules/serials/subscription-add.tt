@@ -38,12 +38,12 @@ function addbiblioPopup(biblionumber) {
     window.open(destination,'AddBiblioPopup','width=1024,height=768,toolbar=no,scrollbars=yes');
 }
 
-function Plugin(f)
+function Plugin()
 {
     window.open('subscription-bib-search.pl','FindABibIndex','width=800,height=400,toolbar=no,scrollbars=yes');
 }
 
-function FindAcqui(f)
+function FindAcqui()
 {
     window.open('acqui-search.pl','FindASupplier','width=800,height=400,toolbar=no,scrollbars=yes');
 }
@@ -191,10 +191,6 @@ function displaymoreoptions() {
         $("#lastvaluetemp3").val('');
         $("#innerlooptemp3").val('');
     }
-}
-
-function toggleAdvancedPattern() {
-    $("#advancedpredictionpattern").toggle();
 }
 
 function modifyAdvancedPattern() {
@@ -461,6 +457,54 @@ $(document).ready(function() {
     [% END %]
 
     show_page_1();
+    $("#subscription_add_form").on("submit",function(){
+        return Check_page2();
+    });
+    $("#vendor_search").on("click",function(e){
+        e.preventDefault();
+        FindAcqui();
+    });
+    $("#record_search").on("click",function(e){
+        e.preventDefault();
+        Plugin();
+    });
+    $("#biblio_add_edit").on("click",function(e){
+        e.preventDefault();
+        if( $(this).data("biblionumber") ){
+            addbiblioPopup( $(this).data("biblionumber") );
+        } else {
+            addbiblioPopup();
+        }
+    });
+    $("#subscription_add_next").on("click",function(){
+        if ( Check_page1() ){
+            show_page_2();
+        }
+    });
+    $("#subscription_add_previous").on("click",function(){
+        show_page_1();
+    });
+    $(".toggle_advanced_pattern").on("click",function(e){
+        e.preventDefault();
+        $("#advancedpredictionpattern").toggle();
+        $(".toggle_advanced_pattern").toggle();
+    });
+    $("#modifyadvancedpatternbutton").on("click",function(e){
+        e.preventDefault();
+        modifyAdvancedPattern();
+    });
+    $("#restoreadvancedpatternbutton").on("click",function(e){
+        e.preventDefault();
+        restoreAdvancedPattern();
+    });
+    $("#saveadvancedpatternbutton").on("click",function(e){
+        e.preventDefault();
+        saveAdvancedPattern();
+    });
+    $("#testpatternbutton").on("click",function(e){
+        e.preventDefault();
+        testPredictionPattern();
+    });
 });
 //]]>
 </script>
@@ -475,7 +519,7 @@ $(document).ready(function() {
     <div id="bd">
         <div class="yui-g">
             <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle |html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
-            <form method="post" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated" onsubmit="return Check_page2();" >
+            <form method="post" id="subscription_add_form" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated">
                 [% IF ( modify ) %]
                     <input type="hidden" name="op" value="modsubscription" />
                     <input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
@@ -495,18 +539,18 @@ $(document).ready(function() {
                                 [% END %]
                                 <li>
                                     <label for="aqbooksellerid">Vendor: </label>
-                                    <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid %]" size="8" /> (<input type="text" name="aqbooksellername" id="aqbooksellername" value="[% aqbooksellername %]" disabled="disabled" readonly="readonly" />) <a href="#" onclick="FindAcqui(f)">Search for a vendor</a>
+                                    <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid %]" size="8" /> (<input type="text" name="aqbooksellername" id="aqbooksellername" value="[% aqbooksellername %]" disabled="disabled" readonly="readonly" />) <a href="#" id="vendor_search"><i class="fa fa-search"></i> Search for a vendor</a>
                                 </li>
                                 <li>
                                     <label for="biblionumber" class="required" title="Subscriptions must be associated with a bibliographic record">Record:</label>
                                     <input type="text" name="biblionumber" id="biblionumber" value="[% bibnum %]" size="8" />
                                     (<input type="text" name="title" value="[% bibliotitle %]" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
-                                    <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for record</a>
+                                    <div class="inputnote"> <a href="#" id="record_search"><i class="fa fa-search"></i> Search for record</a>
                                         [% IF ( CAN_user_editcatalogue ) %]
                                             [% IF ( modify ) %]
-                                            | <a href="#" onclick="addbiblioPopup([% bibnum %]); return false;">Edit record</a>
+                                            | <a href="#" id="biblio_add_edit" data-biblionumber="[% bibnum %]"><i class="fa fa-pencil"></i> Edit record</a>
                                             [% ELSE %]
-                                            | <a href="#" onclick="addbiblioPopup(); return false;">Create record</a>
+                                            | <a href="#" id="biblio_add_edit"><i class="fa fa-plus"></i> Create record</a>
                                             [% END %]
                                         [% END %]
                                     </div>
@@ -622,7 +666,7 @@ $(document).ready(function() {
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <input type="button" value="Next >>" onclick="if ( Check_page1() ) show_page_2();" style="float:right;" />
+                            <input type="button" value="Next &gt;&gt;" id="subscription_add_next" style="float:right;" />
                         </fieldset>
                     </div>
                 </div>
@@ -766,7 +810,10 @@ $(document).ready(function() {
                                             </tbody>
                                         </table>
                                     </li>
-                                    <li><a style="cursor:pointer" onclick="toggleAdvancedPattern();">Show/Hide advanced pattern</a></li>
+                                    <li>
+                                        <a href="#" class="toggle_advanced_pattern show_advanced_pattern"><i class="fa fa-plus-square"></i> Show advanced pattern</a>
+                                        <a href="#" style="display:none;" class="toggle_advanced_pattern hide_advanced_pattern"><i class="fa fa-minus-square"></i> Hide advanced pattern</a>
+                                    </li>
                                     <div id="advancedpredictionpattern" style="display:none">
                                       <li>
                                         <label for="patternname" class="required">Pattern name:</label>
@@ -850,9 +897,9 @@ $(document).ready(function() {
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <input id="modifyadvancedpatternbutton" type="button" value="Modify pattern" onclick="modifyAdvancedPattern();" />
-                                        <input id="restoreadvancedpatternbutton" type="button" value="Cancel modifications" onclick="restoreAdvancedPattern();" style="display:none" />
-                                        <input id="saveadvancedpatternbutton" type="button" value="Save as new pattern" onclick="saveAdvancedPattern();" style="display:none" />
+                                        <input id="modifyadvancedpatternbutton" type="button" value="Modify pattern" />
+                                        <input id="restoreadvancedpatternbutton" type="button" value="Cancel modifications" style="display:none" />
+                                        <input id="saveadvancedpatternbutton" type="button" value="Save as new pattern" style="display:none" />
                                     </div>
                                 </ol>
                             </fieldset>
@@ -891,8 +938,8 @@ $(document).ready(function() {
                             [% END %]
 
                             <fieldset class="action">
-                                <input type="button" value="<< Previous" onclick="show_page_1();" style="float:left;"/>
-                                <input id="testpatternbutton" type="button" value="Test prediction pattern" onclick="testPredictionPattern();" />
+                                <input type="button" id="subscription_add_previous" value="&lt;&lt; Previous" style="float:left;"/>
+                                <input id="testpatternbutton" type="button" value="Test prediction pattern" />
                                 <input type="submit" value="Save subscription" style="float:right;" accesskey="w" />
                             </fieldset>
                         </div>
