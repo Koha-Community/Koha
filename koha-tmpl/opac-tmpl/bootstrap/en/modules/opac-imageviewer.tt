@@ -84,7 +84,7 @@
                         <div class="span9">
                             <div id="imageviewer">
                                 <div id="largeCover">
-                                    <img id="largeCoverImg" alt="" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% imagenumber %]" />
+                                    <img id="largeCoverImg" alt="" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% imagenumber | url %]" />
                                 </div>
                             </div> <!-- / #imageviewer -->
                         </div> <!-- / .span12 -->
@@ -94,7 +94,7 @@
                                 <div id="thumbnails">
                                     [% FOREACH img IN images %]
                                         [% IF img %]
-                                            <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber %]&amp;imagenumber=[% img %]" onclick="showCover([% img %]); return false;">
+                                            <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber | url %]&amp;imagenumber=[% img %]" onclick="showCover([% img %]); return false;">
                                             [% IF ( imagenumber == img ) %]
                                                 <img class="thumbnail selected" id="[% img %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img %]&amp;thumbnail=1" alt="Thumbnail"/>
                                             [% ELSE %]
@@ -120,7 +120,7 @@
     //<![CDATA[
         $(document).ready(function(){
             $("#largeCoverImg").attr("src","[% interface %]/[% theme %]/images/loading.gif");
-            showCover([% imagenumber %]);
+            showCover([% imagenumber | html %]);
         });
 
         function showCover(img) {
