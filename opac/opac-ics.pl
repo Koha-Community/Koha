@@ -27,19 +27,19 @@ use Data::ICal;
 use Data::ICal::Entry::Event;
 use DateTime;
 use DateTime::Format::ICal;
-use Date::Calc qw (Parse_Date);
-use DateTime;
 use DateTime::Event::ICal;
+use URI;
 
 use C4::Auth;
 use C4::Koha;
 use C4::Circulation;
 use C4::Members;
+use Koha::DateUtils;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-user.tt",
+        template_name   => "opac-ics.tt",
         query           => $query,
         type            => "opac",
         authnotrequired => 0,
@@ -55,39 +55,49 @@ my $issues = GetPendingIssues($borrowernumber);
 
 foreach my $issue ( @$issues ) {
     my $vevent = Data::ICal::Entry::Event->new();
-    my ($year,$month,$day)=Parse_Date($issue->{'date_due'});
-    ($year,$month,$day)=split /-|\/|\.|:/,$issue->{'date_due'} unless ($year && $month);
-#    Decode_Date_EU2($string))
-    my $datestart = DateTime->new(
-        day    => $day,
-        month  => $month,
-        year   => $year,
-        hour   => 9,
-        minute => 0,
-        second => 0
+    my $timestamp = DateTime->now(); # Defaults to UTC
+    # Send some values to the template to generate summary and description
+    $template->param(
+        overdue => $issue->{'overdue'},
+        title   => $issue->{'title'},
+        barcode => $issue->{'barcode'},
     );
-    my $dateend = DateTime->new(
-        day    => $day,
-        month  => $month,
-        year   => $year,
-        hour   => 10,
-        minute => 0,
-        second => 0
-    );
+    # Catch the result of the template and split on newline
+    my ($summary,$description) = split /\n/, $template->output;
+    my $datestart;
+    if ($issue->{'overdue'} && $issue->{'overdue'} == 1) {
+        # Not much use adding an event in the past for a book that is overdue
+        # so we set datestart = now
+        $datestart = $timestamp;
+    } else {
+        $datestart = dt_from_string($issue->{'date_due'});
+        $datestart->set_time_zone('UTC');
+    }
+    # Create a UID that includes the issue number and the domain
+    my $domain = '';
+    my $baseurl = C4::Context->preference('OPACBaseURL');
+    if ( $baseurl ne '' ) {
+        my $url = URI->new($baseurl);
+        $domain = $url->host;
+    } else {
+        warn "Make sure the systempreference OPACBaseURL is set!";
+    }
+    my $uid = 'issue-' . $issue->{'issue_id'} . '@' . $domain;
+    # Create the event
     $vevent->add_properties(
-        summary => "$issue->{'title'} Due",
-        description =>
-"Your copy of $issue->{'title'} barcode $issue->{'barcode'} is due back at the library today",
-        dtstart => DateTime::Format::ICal->format_datetime($datestart),
-        dtend   => DateTime::Format::ICal->format_datetime($dateend),
+        summary     => $summary,
+        description => $description,
+        dtstamp     => DateTime::Format::ICal->format_datetime($timestamp),
+        dtstart     => DateTime::Format::ICal->format_datetime($datestart),
+        uid         => $uid,
     );
+    # Add it to the calendar
     $calendar->add_entry($vevent);
 }
 
 print $query->header(
-    -type        => 'application/octet-stream',
+    -type       => 'application/octet-stream',
     -attachment => 'koha.ics'
 );
-
 
 print $calendar->as_string;
