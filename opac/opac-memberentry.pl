@@ -374,7 +374,7 @@ sub ParseCgiForBorrower {
     foreach ( $cgi->param ) {
         if ( $_ =~ '^borrower_' ) {
             my ($key) = substr( $_, 9 );
-            $borrower{$key} = HTML::Entities::encode( $scrubber->scrub( $cgi->param($_) ) );
+            $borrower{$key} = HTML::Entities::encode( $scrubber->scrub( scalar $cgi->param($_) ) );
         }
     }
 
