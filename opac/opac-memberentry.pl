@@ -299,7 +299,7 @@ sub ParseCgiForBorrower {
     foreach ( $cgi->param ) {
         if ( $_ =~ '^borrower_' ) {
             my ($key) = substr( $_, 9 );
-            $borrower{$key} = $scrubber->scrub( $cgi->param($_) );
+            $borrower{$key} = $scrubber->scrub( scalar $cgi->param($_) );
         }
     }
 
