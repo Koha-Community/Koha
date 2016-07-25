@@ -133,14 +133,29 @@ sub search {
 =head3 search_related
 
     my @objects = Koha::Objects->search_related( $rel_name, $cond?, \%attrs? );
+    my $objects = Koha::Objects->search_related( $rel_name, $cond?, \%attrs? );
 
 Searches the specified relationship, optionally specifying a condition and attributes for matching records.
 
 =cut
 
 sub search_related {
-    my ( $self, @params ) = @_;
-    return $self->_resultset->search_related( @params );
+    my ( $self, $rel_name, @params ) = @_;
+
+    if (wantarray) {
+        my @dbic_rows = $self->_resultset()->search_related($rel_name, @params);
+        my $object_class = get_object_class( $dbic_rows[0]->result_class )->[1];
+
+        eval "require $object_class";
+        return $object_class->_wrap(@dbic_rows);
+
+    } else {
+        my $rs = $self->_resultset()->search_related($rel_name, @params);
+        my $object_class = get_object_class( $rs->result_class )->[1];
+
+        eval "require $object_class";
+        return $object_class->_new_from_dbic($rs);
+    }
 }
 
 =head3 Koha::Objects->next();
@@ -202,7 +217,7 @@ wraps the DBIC object in a corresponding Koha object
 sub _wrap {
     my ( $self, @dbic_rows ) = @_;
 
-    my @objects = map { $self->object_class()->_new_from_dbic( $_ ) } @dbic_rows;
+    my @objects = map { $self->object_class->_new_from_dbic( $_ ) } @dbic_rows;
 
     return @objects;
 }
@@ -225,6 +240,18 @@ sub _resultset {
     else {
         return Koha::Database->new()->schema()->resultset( $self->_type() );
     }
+}
+
+sub get_object_class {
+    my ( $type ) = @_;
+    return unless $type;
+    $type =~ s|^Koha::Schema::Result::||;
+    my $mappings = {
+        Branch => [ qw( Koha::Library Koha::Libraries ) ],
+        Borrower => [ qw( Koha::Patron Koha::Patrons ) ],
+        OldIssue => [ qw( Koha::OldIssue Koha::OldIssues ) ],
+    };
+    return $mappings->{$type};
 }
 
 =head3 columns

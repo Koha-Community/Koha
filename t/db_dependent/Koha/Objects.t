@@ -82,14 +82,21 @@ subtest 'not_covered_yet' => sub {
 };
 
 subtest 'search_related' => sub {
-    plan tests => 3;
+    plan tests => 8;
     my $builder   = t::lib::TestBuilder->new;
     my $patron_1  = $builder->build( { source => 'Borrower' } );
     my $patron_2  = $builder->build( { source => 'Borrower' } );
     my $libraries = Koha::Patrons->search( { -or => { borrowernumber => [ $patron_1->{borrowernumber}, $patron_2->{borrowernumber} ] } } )->search_related('branchcode');
+    is( ref( $libraries ), 'Koha::Libraries', 'Koha::Objects->search_related should return an instanciated Koha::Objects-based object' );
     is( $libraries->count,            2,                       'Koha::Objects->search_related should work as expected' );
     is( $libraries->next->branchcode, $patron_1->{branchcode}, 'Koha::Objects->search_related should work as expected' );
     is( $libraries->next->branchcode, $patron_2->{branchcode}, 'Koha::Objects->search_related should work as expected' );
+
+    my @libraries = Koha::Patrons->search( { -or => { borrowernumber => [ $patron_1->{borrowernumber}, $patron_2->{borrowernumber} ] } } )->search_related('branchcode');
+    is( ref( $libraries[0] ),      'Koha::Library',         'Koha::Objects->search_related should return a list of Koha::Object-based objects' );
+    is( scalar(@libraries),        2,                       'Koha::Objects->search_related should work as expected' );
+    is( $libraries[0]->branchcode, $patron_1->{branchcode}, 'Koha::Objects->search_related should work as expected' );
+    is( $libraries[1]->branchcode, $patron_2->{branchcode}, 'Koha::Objects->search_related should work as expected' );
 };
 
 $schema->storage->txn_rollback;
