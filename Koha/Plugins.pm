@@ -27,6 +27,7 @@ use C4::Output;
 
 BEGIN {
     push @INC, C4::Context->config("pluginsdir");
+    pop @INC if $INC[-1] eq '.';
 }
 
 =head1 NAME
