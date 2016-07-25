@@ -25,5 +25,7 @@ my $query    = new CGI;
 my $language = $query->param('language');
 my $url      = $query->referer();
 
-#warn "Language : $query // $language // $url";
+$url =~ s|(.)language=[\w-]*&?|$1|;
+$url =~ s|(&\|\?)$||; # Remove extraneous ? or &
+
 C4::Templates::setlanguagecookie( $query, $language, $url );

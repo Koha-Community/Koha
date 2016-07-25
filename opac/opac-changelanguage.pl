@@ -25,4 +25,11 @@ my $language = $query->param('language');
 my $url      = $query->referer() || '/';
 
 # warn "Language : $query // $language // $url";
+
+# If language was set by an external URL the parameter
+# 'language=' should be removed from url string, otherwise
+# the language picker will not work
+$url =~ s|(.)language=[\w-]*&?|$1|;
+$url =~ s|(&\|\?)$||; # Remove extraneous ? or &
+
 C4::Templates::setlanguagecookie( $query, $language, $url );
