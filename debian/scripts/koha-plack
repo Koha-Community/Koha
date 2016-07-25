@@ -72,6 +72,8 @@ start_plack()
         PSGIFILE="/etc/koha/sites/${instancename}/plack.psgi"
     fi # else stick with the default one
 
+    _check_and_fix_perms $instancename
+
     STARMANOPTS="-M FindBin --max-requests 50 --workers 2 \
                  --user=${instancename}-koha --group ${instancename}-koha \
                  --pid ${PIDFILE} \
@@ -202,6 +204,22 @@ You can install them with:
 EOM
 
     fi
+}
+
+_check_and_fix_perms()
+{
+    local instance=$1
+
+    local files="/var/log/koha/${instance}/plack.log \
+                 /var/log/koha/${instance}/plack-error.log"
+
+    for file in ${files}
+    do
+        if [ ! -e "${file}" ]; then
+            touch ${file}
+        fi
+        chown "${instance}-koha":"${instance}-koha" ${file}
+    done
 }
 
 set_action()
