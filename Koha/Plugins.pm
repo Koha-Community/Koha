@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Module::Load::Conditional qw(can_load);
 use Module::Pluggable search_path => ['Koha::Plugin'], except => qr/::Edifact(|::Line|::Message|::Order|::Segment|::Transport)$/;
+use List::MoreUtils qw( any );
 
 use C4::Context;
 use C4::Output;
@@ -77,17 +78,12 @@ sub GetPlugins {
             my $plugin = $plugin_class->new({ enable_plugins => $self->{'enable_plugins'} });
 
             # Limit results by method or metadata
-            my $ok = 1;
             next if $method && !$plugin->can($method);
             my $plugin_metadata = $plugin->get_metadata;
-            foreach my $key ( keys %$req_metadata ) {
-                if( !$plugin_metadata->{$key} ||
-                  $plugin_metadata->{$key} ne $req_metadata->{$key} ) {
-                    $ok = 0;
-                    last;
-                }
-            }
-            push( @plugins, $plugin ) if $ok;
+            next if $plugin_metadata
+                and %$req_metadata
+                and any { !$plugin_metadata->{$_} || $plugin_metadata->{$_} ne $req_metadata->{$_} } keys %$req_metadata;
+            push @plugins, $plugin;
         }
     }
     return @plugins;
