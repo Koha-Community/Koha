@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 23;
+use Test::More tests => 24;
 use File::Basename;
 use FindBin qw($Bin);
 use Archive::Extract;
@@ -53,6 +53,12 @@ is( scalar grep( /^Test Plugin$/, @names), 1, "Koha::Plugins::GetPlugins functio
 });
 @names = map { $_->get_metadata()->{'name'} } @plugins;
 is( scalar grep( /^Test Plugin$/, @names), 1, "GetPlugins also found Test Plugin via a metadata tag" );
+# Test two metadata conditions; one does not exist for Test.pm
+# Since it is a required key, we should not find the same results
+my @plugins2 = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
+    metadata => { my_example_tag  => 'find_me', not_there => '1' },
+});
+isnt( scalar @plugins2, scalar @plugins, 'GetPlugins with two metadata conditions' );
 
 SKIP: {
     my $plugins_dir = C4::Context->config("pluginsdir");
