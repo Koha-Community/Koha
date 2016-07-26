@@ -57,7 +57,7 @@ do_start()
     koha-create-dirs $(koha-list)
     koha-start-zebra $(koha-list --enabled)
     koha-start-sip $(koha-list --enabled)
-    koha-plack --start --quiet $(koha-list --enabled --plack)
+    koha-plack --start $(koha-list --enabled --plack)
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         koha-indexer --start --quiet $(koha-list --enabled)
