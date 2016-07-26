@@ -11,5 +11,7 @@
     [% END %]
     [% IF CAN_user_acquisition_edi_manage %]
      <li><a href="/cgi-bin/koha/acqui/edifactmsgs.pl">EDIFACT messages</a></li>
+     <li><a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a></li>
+     <li><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a></li>
     [% END %]
 </ul>
