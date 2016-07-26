@@ -2026,7 +2026,7 @@ sub _koha_notify_reserve {
             'biblio'         => $biblionumber,
             'biblioitems'    => $biblionumber,
             'reserves'       => $reserve,
-            'items', $reserve->{'itemnumber'},
+            'items'          => $reserve->{'itemnumber'},
         },
         substitute => { today => output_pref( { dt => dt_from_string, dateonly => 1 } ) },
     );

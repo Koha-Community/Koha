@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 use MARC::Record;
 
@@ -184,6 +184,23 @@ $prepared_letter = GetPreparedLetter(
         tables      => {
             reserves => [ $patron->{borrowernumber}, $biblio->id() ]
         },
+    )
+);
+is( $prepared_letter->{content}, $hold->id(), 'Hold object used correctly' );
+
+# Bug 16942
+$prepared_letter = GetPreparedLetter(
+    (
+        module      => 'test',
+        letter_code => 'TEST_HOLD',
+        tables      => {
+            'branches'    => $library,
+            'borrowers'   => $patron,
+            'biblio'      => $biblio->id,
+            'biblioitems' => $biblioitem->id,
+            'reserves'    => $hold->unblessed,
+            'items'       => $hold->itemnumber,
+        }
     )
 );
 is( $prepared_letter->{content}, $hold->id(), 'Hold object used correctly' );
