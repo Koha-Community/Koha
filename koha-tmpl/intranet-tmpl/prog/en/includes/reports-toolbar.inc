@@ -25,7 +25,7 @@
             </div>
         [% END %]
 
-        [% IF ( CAN_user_reports_create_reports ) %]
+        [% IF ( CAN_user_reports_delete_reports ) %]
             <div class="btn-group">
                 <a class="delete btn btn-small" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&phase=Delete%20Saved">
                     <i class="fa fa-trash"></i> Delete

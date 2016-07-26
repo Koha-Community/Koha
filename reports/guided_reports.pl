@@ -53,12 +53,16 @@ my $usecache = Koha::Caches->get_instance->memcached_cache;
 
 my $phase = $input->param('phase') // '';
 my $flagsrequired;
-if ( $phase eq 'Build new' or $phase eq 'Delete Saved' ) {
+if ( $phase eq 'Build new' ) {
     $flagsrequired = 'create_reports';
 }
 elsif ( $phase eq 'Use saved' ) {
     $flagsrequired = 'execute_reports';
-} else {
+}
+elsif ( $phase eq 'Delete Saved' ) {
+    $flagsrequired = 'delete_reports';
+}
+else {
     $flagsrequired = '*';
 }
 

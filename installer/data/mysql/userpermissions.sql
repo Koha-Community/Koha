@@ -68,6 +68,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (15, 'superserials', 'Manage subscriptions from any branch (only applies when IndependentBranches is used)'),
    (16, 'execute_reports', 'Execute SQL reports'),
    (16, 'create_reports', 'Create SQL reports'),
+   (16, 'delete_reports', 'Delete SQL reports'),
    (18, 'manage_courses', 'Add, edit and delete courses'),
    (18, 'add_reserves', 'Add course reserves'),
    (18, 'delete_reserves', 'Remove course reserves'),

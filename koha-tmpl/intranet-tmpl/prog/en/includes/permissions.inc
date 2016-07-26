@@ -90,6 +90,7 @@
     [%- CASE 'renew_subscription' -%]<span>Renew a subscription</span>
     [%- CASE 'routing' -%]<span>Routing</span>
     [%- CASE 'superserials' -%]<span>Manage subscriptions from any branch (only applies when IndependentBranches is used)</span>
+    [%- CASE 'delete_reports' -%]<span>Delete SQL reports</span>
     [%- CASE 'create_reports' -%]<span>Create SQL reports</span>
     [%- CASE 'execute_reports' -%]<span>Execute SQL reports</span>
     [%- CASE 'add_reserves' -%]<span>Add course reserves</span>

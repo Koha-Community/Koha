@@ -335,7 +335,11 @@ canned reports and writing custom SQL reports.</p>
             <tbody>
                 [% FOREACH savedreport IN savedreports %]
                     [% UNLESS ( loop.odd ) %]<tr class="odd">[% ELSE %]<tr>[% END %]
-                        <td><input type="checkbox" name="ids" value="[% savedreport.id %]" /></td>
+                        <td>
+                            [% IF ( CAN_user_reports_delete_reports ) %] <!-- not break CSS -->
+                                <input type="checkbox" name="ids" value="[% savedreport.id %]" />
+                            [% END %]
+                        </td>
                         <td><label for="ids">[% savedreport.id %]</label></td>
                         <td>
                             [% IF ( savedreport.report_name ) %]
@@ -371,7 +375,7 @@ canned reports and writing custom SQL reports.</p>
                                     [% END %]
                                     <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Run%20this%20report"><i class="fa fa-play"></i> Run</a></li>
                                     <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id %]"><i class="fa fa-clock-o"></i> Schedule</a></li>
-                                    [% IF ( CAN_user_reports_create_reports ) %]
+                                    [% IF ( CAN_user_reports_delete_reports ) %]
                                         <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a></li>
                                     [% END %]
                                 </ul>
@@ -381,9 +385,11 @@ canned reports and writing custom SQL reports.</p>
                 [% END %]
             </tbody>
         </table>
+        [% IF ( CAN_user_reports_delete_reports ) %]
         <fieldset class="action">
             <input type="submit" value="Delete selected" />
         </fieldset>
+        [% END %]
     </form>
     </div>
 </div>
