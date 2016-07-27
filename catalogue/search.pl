@@ -811,8 +811,8 @@ sub prepare_adv_search_types {
             my @itypesloop;
             foreach my $thisitemtype (
                 sort {
-                    $itemtypes->{$a}->{'description'}
-                      cmp $itemtypes->{$b}->{'description'}
+                    $itemtypes->{$a}->{'translated_description'}
+                      cmp $itemtypes->{$b}->{'translated_description'}
                 } keys %$itemtypes
               )
             {
@@ -820,7 +820,7 @@ sub prepare_adv_search_types {
                     number      => $cnt++,
                     ccl         => "$itype_or_itemtype,phr",
                     code        => $thisitemtype,
-                    description => $itemtypes->{$thisitemtype}->{'description'},
+                    description => $itemtypes->{$thisitemtype}->{'translated_description'},
                     imageurl    => getitemtypeimagelocation(
                         'intranet', $itemtypes->{$thisitemtype}->{'imageurl'}
                     ),
