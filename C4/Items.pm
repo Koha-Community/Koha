@@ -2860,10 +2860,10 @@ sub PrepareItemrecordDisplay {
     $frameworkcode = &GetFrameworkCode($bibnum) if $bibnum;
     my ( $itemtagfield, $itemtagsubfield ) = &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
 
-    # it would be perhaps beneficial (?) to call GetMarcStructure with 'unsafe' parameter
-    # for performance reasons, but $tagslib may be passed to $plugin->build(), and there
-    # is no way to ensure that this structure is not getting corrupted somewhere in there
-    my $tagslib = &GetMarcStructure( 1, $frameworkcode );
+    # Note: $tagslib obtained from GetMarcStructure() in 'unsafe' mode is
+    # a shared data structure. No plugin (including custom ones) should change
+    # its contents. See also GetMarcStructure.
+    my $tagslib = &GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
 
     # return nothing if we don't have found an existing framework.
     return q{} unless $tagslib;
@@ -2887,13 +2887,13 @@ sub PrepareItemrecordDisplay {
     $query .= qq{ ORDER BY lib};
     my $authorised_values_sth = $dbh->prepare( $query );
     foreach my $tag ( sort keys %{$tagslib} ) {
-        my $previous_tag = '';
         if ( $tag ne '' ) {
 
             # loop through each subfield
             my $cntsubf;
             foreach my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
                 next if IsMarcStructureInternal($tagslib->{$tag}{$subfield});
+                next unless ( $tagslib->{$tag}->{$subfield}->{'tab'} );
                 next if ( $tagslib->{$tag}->{$subfield}->{'tab'} ne "10" );
                 my %subfield_data;
                 $subfield_data{tag}           = $tag;
