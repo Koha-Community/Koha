@@ -809,9 +809,11 @@ function checkMultiHold() {
             <input type="button" value="[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;reserve_id=[% reserveloo.reserve_id %]&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]&amp;suspend_until=' + $('#suspend_until_[% reserveloo.reserve_id %]').val()" />
 
             [% IF AutoResumeSuspendedHolds %]
-        <label for="suspend_until_[% reserveloo.reserve_id %]">[% IF ( reserveloo.suspend ) %] on [% ELSE %] until [% END %]</label>
-            <input name="suspend_until" id="suspend_until_[% reserveloo.reserve_id %]" size="10" readonly="readonly" value="[% reserveloo.suspend_until | $KohaDates %]" class="datepicker suspend_until_datepicker" />
-            <a href='#' onclick="document.getElementById('suspend_until_[% reserveloo.reserve_id %]').value='';">Clear date</a>
+                <label for="suspend_until_[% reserveloo.reserve_id %]">[% IF ( reserveloo.suspend ) %] on [% ELSE %] until [% END %]</label>
+                <input name="suspend_until" id="suspend_until_[% reserveloo.reserve_id %]" size="10" readonly="readonly" value="[% reserveloo.suspend_until | $KohaDates %]" class="datepicker suspend_until_datepicker" />
+                <a href='#' onclick="document.getElementById('suspend_until_[% reserveloo.reserve_id %]').value='';">Clear date</a>
+            [% ELSE %]
+                <input type="hidden" name="suspend_until" id="suspend_until_[% reserveloo.reserve_id %]" value=""/>
             [% END %]
 	[% ELSE %]
 		<input type="hidden" name="suspend_until" value="" />
