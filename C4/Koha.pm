@@ -984,7 +984,7 @@ sub GetAuthorisedValues {
     }
     $sth->finish;
 
-    $cache->set_in_cache( $cache_key, \@results, { deepcopy => 1, expiry => 5 } );
+    $cache->set_in_cache( $cache_key, \@results, { expiry => 5 } );
     return \@results;
 }
 
