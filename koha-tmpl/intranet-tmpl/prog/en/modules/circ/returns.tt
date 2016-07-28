@@ -282,7 +282,7 @@ $(document).ready(function () {
                 <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
                 <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
                 <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
-                <input type="hidden" name="resbarcode" value="[% barcode %]" />
+                <input type="hidden" name="resbarcode" value="[% barcode | html %]" />
                 <input type="hidden" name="diffBranch" value="[% destbranch %]" />
                 <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
                 <input type="hidden" name="dropboxmode" value="[% dropboxmode %]" />
@@ -447,7 +447,7 @@ $(document).ready(function () {
             <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
-            <input type="hidden" name="resbarcode" value="[% barcode %]" />
+            <input type="hidden" name="resbarcode" value="[% barcode | html %]" />
             <input type="hidden" name="diffBranch" value="[% destbranch %]" />
             <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
             <input type="hidden" name="dropboxmode" value="[% dropboxmode %]" />
@@ -484,7 +484,7 @@ $(document).ready(function () {
                         </p>
                     [% END %]
                     [% IF ( errmsgloo.badbarcode ) %]
-                        <p class="problem">No item with barcode: [% errmsgloo.msg %]</p>
+                        <p class="problem">No item with barcode: [% errmsgloo.msg | html %]</p>
                     [% END %]
                     [% IF ( errmsgloo.ispermanent ) %]
                         <p class="problem">Please return item to: [% errmsgloo.msg %]</p>
