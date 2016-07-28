@@ -533,4 +533,9 @@ __PACKAGE__->many_to_many("categorycodes", "branchrelations", "categorycode");
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+
+sub koha_objects_class {
+    'Koha::Libraries';
+}
+
 1;

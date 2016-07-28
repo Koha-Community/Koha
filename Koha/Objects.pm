@@ -142,19 +142,22 @@ Searches the specified relationship, optionally specifying a condition and attri
 sub search_related {
     my ( $self, $rel_name, @params ) = @_;
 
+    return if !$rel_name;
     if (wantarray) {
         my @dbic_rows = $self->_resultset()->search_related($rel_name, @params);
-        my $object_class = get_object_class( $dbic_rows[0]->result_class )->[1];
+        return if !@dbic_rows;
+        my $object_class = _get_objects_class( $dbic_rows[0]->result_class );
 
         eval "require $object_class";
-        return $object_class->_wrap(@dbic_rows);
+        return _wrap( $object_class, @dbic_rows );
 
     } else {
         my $rs = $self->_resultset()->search_related($rel_name, @params);
-        my $object_class = get_object_class( $rs->result_class )->[1];
+        return if !$rs;
+        my $object_class = _get_objects_class( $rs->result_class );
 
         eval "require $object_class";
-        return $object_class->_new_from_dbic($rs);
+        return _new_from_dbic( $object_class, $rs );
     }
 }
 
@@ -242,16 +245,15 @@ sub _resultset {
     }
 }
 
-sub get_object_class {
+sub _get_objects_class {
     my ( $type ) = @_;
     return unless $type;
-    $type =~ s|^Koha::Schema::Result::||;
-    my $mappings = {
-        Branch => [ qw( Koha::Library Koha::Libraries ) ],
-        Borrower => [ qw( Koha::Patron Koha::Patrons ) ],
-        OldIssue => [ qw( Koha::OldIssue Koha::OldIssues ) ],
-    };
-    return $mappings->{$type};
+
+    if( $type->can('koha_objects_class') ) {
+        return $type->koha_objects_class;
+    }
+    $type =~ s|Schema::Result::||;
+    return "${type}s";
 }
 
 =head3 columns

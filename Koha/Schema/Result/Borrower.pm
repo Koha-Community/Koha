@@ -1253,4 +1253,8 @@ __PACKAGE__->belongs_to(
     { borrowernumber => "guarantorid" },
 );
 
+sub koha_objects_class {
+    'Koha::Patrons';
+}
+
 1;
