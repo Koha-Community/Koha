@@ -17,6 +17,7 @@ use C4::Circulation;
 use CGI qw ( -utf8 );
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patron::Images;
+use Koha::Token;
 
 use Digest::MD5 qw(md5_base64);
 
@@ -63,6 +64,14 @@ my $minpw = C4::Context->preference('minPasswordLength');
 push( @errors, 'SHORTPASSWORD' ) if ( $newpassword && $minpw && ( length($newpassword) < $minpw ) );
 
 if ( $newpassword && !scalar(@errors) ) {
+
+    die "Wrong CSRF token"
+        unless Koha::Token->new->check_csrf({
+            id     => C4::Context->userenv->{id},
+            secret => md5_base64( C4::Context->config('pass') ),
+            token  => scalar $input->param('csrf_token'),
+        });
+
     my $digest = Koha::AuthUtils::hash_password( $input->param('newpassword') );
     my $uid    = $input->param('newuserid') || $bor->{userid};
     my $dbh    = C4::Context->dbh;
@@ -141,6 +150,10 @@ $template->param(
     activeBorrowerRelationship => ( C4::Context->preference('borrowerRelationship') ne '' ),
     minPasswordLength          => $minpw,
     RoutingSerials             => C4::Context->preference('RoutingSerials'),
+    csrf_token                 => Koha::Token->new->generate_csrf({
+        id     => C4::Context->userenv->{id},
+        secret => md5_base64( C4::Context->config('pass') ),
+    }),
 );
 
 if ( scalar(@errors) ) {
