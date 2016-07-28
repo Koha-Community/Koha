@@ -137,13 +137,11 @@ if ($do_it) {
             total => $grantotal,
         );
     } else{
-        my $q_errors;
         my $format = 'csv';
         my $reportname = $input->param('basename');
         my $reportfilename = $reportname ? "$reportname.$format" : "reportresults.$format" ;
         #my $reportfilename = "$reportname.html" ;
         my $delimiter = C4::Context->preference('delimiter') || ',';
-        my ( $content );
             my @rows;
             foreach my $row (@loopresult) {
                 my @rowValues;
