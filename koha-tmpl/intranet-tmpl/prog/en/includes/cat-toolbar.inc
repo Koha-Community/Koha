@@ -127,8 +127,6 @@
 
 <div id="toolbar" class="btn-toolbar">
 
-<form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();">
-
 [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ||
 CAN_user_serials_create_subscription ) %]
     <div class="btn-group">
@@ -263,7 +261,6 @@ CAN_user_serials_create_subscription ) %]
     [% END %]
 [% END %]
 
-</form>
 </div>
 
     <!--Modal for Dublin Core-->
