@@ -3010,7 +3010,7 @@ If the field does not exist, it will be created too.
 
 sub FillWithDefaultValues {
     my ($record) = @_;
-    my $tagslib = C4::Biblio::GetMarcStructure( 1, 'ACQ' );
+    my $tagslib = C4::Biblio::GetMarcStructure( 1, 'ACQ', { unsafe => 1 } );
     if ($tagslib) {
         my ($itemfield) =
           C4::Biblio::GetMarcFromKohaField( 'items.itemnumber', '' );

@@ -111,7 +111,7 @@ unless ( $results and @$results) {
 my $order = $results->[0];
 
 # Check if ACQ framework exists
-my $acq_fw = GetMarcStructure(1, 'ACQ');
+my $acq_fw = GetMarcStructure( 1, 'ACQ', { unsafe => 1 } );
 unless($acq_fw) {
     $template->param('NoACQframework' => 1);
 }

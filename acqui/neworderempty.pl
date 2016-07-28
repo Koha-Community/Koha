@@ -246,7 +246,7 @@ $template->param( sort2 => $data->{'sort2'} );
 
 if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordernumber) {
     # Check if ACQ framework exists
-    my $marc = GetMarcStructure(1, 'ACQ');
+    my $marc = GetMarcStructure(1, 'ACQ', { unsafe => 1 } );
     unless($marc) {
         $template->param('NoACQframework' => 1);
     }
