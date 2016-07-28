@@ -624,7 +624,6 @@ if ($restoreduedatespec || $stickyduedate) {
 $template->param(
     librarian_messages => $librarian_messages,
     patron_messages   => $patron_messages,
-    findborrower      => $findborrower,
     borrower          => $borrower,
     borrowernumber    => $borrowernumber,
     categoryname      => $borrower->{'description'},
