@@ -24,8 +24,8 @@ use warnings;
 
 # external modules
 use CGI qw ( -utf8 );
-# use Digest::MD5 qw(md5_base64);
 use List::MoreUtils qw/uniq/;
+use Digest::MD5 qw(md5_base64);
 
 # internal modules
 use C4::Auth;
@@ -42,6 +42,7 @@ use C4::Form::MessagingPreferences;
 use Koha::Patron::Debarments;
 use Koha::Cities;
 use Koha::DateUtils;
+use Koha::Token;
 use Email::Valid;
 use Module::Load;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
@@ -687,7 +688,7 @@ $template->param(
   category_type =>$category_type,
   modify          => $modify,
   nok     => $nok,#flag to know if an error
-  NoUpdateLogin =>  $NoUpdateLogin
+  NoUpdateLogin =>  $NoUpdateLogin,
   );
 
 # Generate CSRF token
