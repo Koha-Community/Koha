@@ -268,7 +268,10 @@ sub set_in_cache {
 
     my $flag = '-CF0'; # 0: scalar, 1: frozen data structure
     if (ref($value)) {
-        # Set in L1 cache as a data structure, initially only in frozen form (for performance reasons)
+        # Set in L1 cache as a data structure
+        # We only save the frozen form: we do want to save $value in L1
+        # directly in order to protect it. And thawing now may not be
+        # needed, so improves performance.
         $value = $L1_encoder->encode($value);
         $L1_cache{$self->{namespace}}{$key}->{frozen} = $value;
         $flag = '-CF1';
@@ -279,7 +282,7 @@ sub set_in_cache {
     }
 
     $value .= $flag;
-    # We consider an expiry of 0 to be inifinite
+    # We consider an expiry of 0 to be infinite
     if ( $expiry ) {
         return $set_sub
           ? $set_sub->( $key, $value, $expiry )
@@ -331,6 +334,7 @@ sub get_from_cache {
     if ( exists $L1_cache{$self->{namespace}}{$key} ) {
         if (ref($L1_cache{$self->{namespace}}{$key})) {
             if ($unsafe) {
+                # ONLY use thawed for unsafe calls !!!
                 $L1_cache{$self->{namespace}}{$key}->{thawed} ||= $L1_decoder->decode($L1_cache{$self->{namespace}}{$key}->{frozen});
                 return $L1_cache{$self->{namespace}}{$key}->{thawed};
             } else {
@@ -359,6 +363,7 @@ sub get_from_cache {
         eval { $thawed = $L1_decoder->decode($L2_value); };
         return if $@;
         $L1_cache{$self->{namespace}}{$key}->{frozen} = $L2_value;
+        # ONLY save thawed for unsafe calls !!!
         $L1_cache{$self->{namespace}}{$key}->{thawed} = $thawed if $unsafe;
         return $thawed;
     }
