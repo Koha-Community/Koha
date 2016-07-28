@@ -144,12 +144,14 @@ $(document).ready(function() {
                 <form action="/cgi-bin/koha/members/memberentry.pl" method="get">
                     <input type="hidden" name="op" value="modify" />
                     <input type="hidden" name="borrowernumber" value="[% check_member %]" />
+                    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                     <button type="submit" class="new"><i class="fa fa-pencil"></i> It is a duplicate.
                     Edit existing record</button>
                 </form>
 
                 <form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off">
 				<input type="hidden" name="nodouble" value="1" />
+                <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                 <button type="submit" class="new"><i class="fa fa-plus"></i> Not a duplicate.
                 Save as new record</button>
 			</div>
@@ -233,6 +235,7 @@ $(document).ready(function() {
 <input type="hidden" name="check_member" value="[% check_member %]" />
 <input type="hidden" name="borrowernumber" value="[% UNLESS opduplicate %][% borrowernumber %][% END %]" />
 <input type="hidden" name="nodouble"  value="[% UNLESS opduplicate %][% nodouble %][% END %]" />
+<input type="hidden" name="csrf_token" value="[% csrf_token %]" />
 [% IF ( step ) %]<input type="hidden" name="step"  value="[% step %]" />[% END %]
 [% IF ( opadd ) %]<input type="hidden" name="op" value="insert" />
 [% ELSIF ( opduplicate ) %]

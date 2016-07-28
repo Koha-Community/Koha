@@ -24,8 +24,8 @@ use warnings;
 
 # external modules
 use CGI qw ( -utf8 );
-# use Digest::MD5 qw(md5_base64);
 use List::MoreUtils qw/uniq/;
+use Digest::MD5 qw(md5_base64);
 
 # internal modules
 use C4::Auth;
@@ -42,6 +42,7 @@ use C4::Form::MessagingPreferences;
 use Koha::Patron::Debarments;
 use Koha::Cities;
 use Koha::DateUtils;
+use Koha::Token;
 use Email::Valid;
 use Module::Load;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
@@ -281,6 +282,14 @@ if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_Borrow
 $debug and warn join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
 my $extended_patron_attributes = ();
 if ($op eq 'save' || $op eq 'insert'){
+
+    die "Wrong CSRF token"
+        unless Koha::Token->new->check_csrf({
+            id     => C4::Context->userenv->{id},
+            secret => md5_base64( C4::Context->config('pass') ),
+            token  => scalar $input->param('csrf_token'),
+        });
+
     # If the cardnumber is blank, treat it as null.
     $newdata{'cardnumber'} = undef if $newdata{'cardnumber'} =~ /^\s*$/;
 
@@ -679,8 +688,17 @@ $template->param(
   category_type =>$category_type,
   modify          => $modify,
   nok     => $nok,#flag to know if an error
-  NoUpdateLogin =>  $NoUpdateLogin
+  NoUpdateLogin =>  $NoUpdateLogin,
   );
+
+# Generate CSRF token
+$template->param(
+    csrf_token => Koha::Token->new->generate_csrf(
+        {   id     => C4::Context->userenv->{id},
+            secret => md5_base64( C4::Context->config('pass') ),
+        }
+    ),
+);
 
 if(defined($data{'flags'})){
   $template->param(flags=>$data{'flags'});
