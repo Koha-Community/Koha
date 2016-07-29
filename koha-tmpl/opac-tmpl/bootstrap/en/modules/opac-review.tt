@@ -18,6 +18,12 @@
                         [% IF ( ERRORS ) %]
                             <div class="alert">
                                 [% FOREACH ERROR IN ERRORS %]
+                                    [% IF ( ERROR.nobiblio ) %]
+                                        <p>Error: we cannot find this bibliographic record.</p>
+                                    [% END %]
+                                    [% IF ( ERROR.unauthorized ) %]
+                                        <p>Sorry, only the creator of this comment is allowed to change it.</p>
+                                    [% END %]
                                     [% IF ( ERROR.scrubbed ) %]
                                         <p>Note: your comment contained illegal markup code. It has been saved with the markup removed, as below. You can edit the comment further, or cancel to retain the comment as is.</p>
                                     [% END %]

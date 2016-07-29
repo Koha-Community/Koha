@@ -32,6 +32,7 @@ use Koha::Reviews;
 my $query        = new CGI;
 my $biblionumber = $query->param('biblionumber');
 my $review       = $query->param('review');
+my $reviewid     = $query->param('reviewid');
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-review.tt",
@@ -43,11 +44,21 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 # FIXME: need to allow user to delete their own comment(s)
 
+my ( $clean, @errors, $savedreview );
 my $biblio = GetBiblioData($biblionumber);
-# FIXME biblionumber, borrowernumber should be a unique key of reviews
-my $savedreview = Koha::Reviews->search({ biblionumber => $biblionumber, borrowernumber => $borrowernumber })->next;
-my ($clean, @errors);
-if (defined $review) {
+
+if( !$biblio ) {
+    push @errors, { nobiblio => 1 };
+} elsif( $reviewid ) { # edit existing one, check on creator
+    $savedreview = Koha::Reviews->search({ reviewid => $reviewid, borrowernumber => $borrowernumber })->next;
+    push @errors, { unauthorized => 1 } if !$savedreview;
+} else { # this check prevents adding multiple comments
+    # FIXME biblionumber, borrowernumber should be a unique key of reviews
+    $savedreview = Koha::Reviews->search({ biblionumber => $biblionumber, borrowernumber => $borrowernumber })->next;
+    $review = $savedreview? $savedreview->review: $review;
+}
+
+if( !@errors && defined $review ) {
 	if ($review !~ /\S/) {
 		push @errors, {empty=>1};
 	} else {
@@ -70,12 +81,12 @@ if (defined $review) {
                     }
                 )->store;
             } else {
-                Koha::Review->new(
+                $reviewid = Koha::Review->new(
                     {   biblionumber   => $biblionumber,
                         borrowernumber => $borrowernumber,
                         review         => $clean,
                     }
-                )->store;
+                )->store->reviewid;
             }
 			unless (@errors){ $template->param(WINDOW_CLOSE=>1); }
 		}
@@ -89,9 +100,8 @@ $template->param(
     'biblionumber'   => $biblionumber,
     'borrowernumber' => $borrowernumber,
     'review'         => $review,
-	'reviewid'       => scalar $query->param('reviewid') || 0,
+    'reviewid'       => $reviewid || 0,
     'title'          => $biblio->{'title'},
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
-
