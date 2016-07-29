@@ -832,6 +832,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.01'
     },
+    'Bytes::Random::Secure' => {
+        usage => 'Core',
+        required => 1,
+        min_ver => '0.28',
+    },
 };
 
 1;
