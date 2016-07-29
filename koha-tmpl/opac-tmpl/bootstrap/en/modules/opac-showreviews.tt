@@ -154,21 +154,21 @@
                             <div class="pages">
                                 <!-- Row of numbers corresponding to showreviews result pages -->
                                 [% IF ( previous_page_offset ) %]
-                                    <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% previous_page_offset %]">&lt;&lt; Previous</a>
+                                    <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% previous_page_offset %]&count=[% results_per_page %]">&lt;&lt; Previous</a>
                                 [% ELSE %]
                                     [% IF ( previous_page_first ) %]
-                                        <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=0">&lt;&lt; Previous</a>
+                                        <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=0&count=[% results_per_page %]">&lt;&lt; Previous</a>
                                     [% END %]
                                 [% END %]
                                 [% FOREACH PAGE_NUMBER IN PAGE_NUMBERS %]
                                     [% IF ( PAGE_NUMBER.highlight ) %]
                                         <span class="currentPage">[% PAGE_NUMBER.pg %]</span>
                                     [% ELSE %]
-                                        <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% PAGE_NUMBER.offset %]">[% PAGE_NUMBER.pg %]</a>
+                                        <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% PAGE_NUMBER.offset %]&count=[% results_per_page %]">[% PAGE_NUMBER.pg %]</a>
                                     [% END %]
                                 [% END %]
                                 [% IF ( next_page_offset ) %]
-                                    <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% next_page_offset %]">Next &gt;&gt;</a>
+                                    <a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% next_page_offset %]&count=[% results_per_page %]">Next &gt;&gt;</a>
                                 [% END %]
                             </div>
                         [% END # / IF PAGE_NUMBERS %]

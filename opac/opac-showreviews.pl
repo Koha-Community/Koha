@@ -30,7 +30,7 @@ use C4::Biblio;
 use C4::Members qw/GetMemberDetails/;
 use Koha::DateUtils;
 use Koha::Reviews;
-use POSIX qw(ceil strftime);
+use POSIX qw(ceil floor strftime);
 
 my $template_name;
 my $query = new CGI;
@@ -38,7 +38,7 @@ my $format = $query->param("format") || '';
 my $count = C4::Context->preference('OPACnumSearchResults') || 20;
 my $results_per_page = $query->param('count') || $count;
 my $offset = $query->param('offset') || 0;
-my $page = $offset / $results_per_page + 1;
+my $page = floor( $offset / $results_per_page ) + 1;
 
 if ($format eq "rss") {
     $template_name = "opac-showreviews-rss.tt";
@@ -180,6 +180,7 @@ $template->param(next_page_offset => $next_page_offset) unless $pages eq $curren
 
 $template->param(
     reviews => $reviews,
+    results_per_page => $results_per_page,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
