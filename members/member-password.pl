@@ -64,7 +64,7 @@ push( @errors, 'SHORTPASSWORD' ) if ( $newpassword && $minpw && ( length($newpas
 
 if ( $newpassword && !scalar(@errors) ) {
     my $digest = Koha::AuthUtils::hash_password( $input->param('newpassword') );
-    my $uid    = $input->param('newuserid');
+    my $uid    = $input->param('newuserid') || $bor->{userid};
     my $dbh    = C4::Context->dbh;
     if ( Koha::Patrons->find( $member )->update_password($uid, $digest) ) {
         $template->param( newpassword => $newpassword );
