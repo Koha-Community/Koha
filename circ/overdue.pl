@@ -29,6 +29,7 @@ use C4::Debug;
 use Text::CSV_XS;
 use Koha::DateUtils;
 use DateTime;
+use DateTime::Format::MySQL;
 
 my $input = new CGI;
 my $order           = $input->param('order') || '';
@@ -321,8 +322,8 @@ if ($noreport) {
     $template->param(sql=>$strsth);
     my $sth=$dbh->prepare($strsth);
     $sth->execute(
-        ($dateduefrom ? output_pref({ dt => $dateduefrom, dateformat => 'iso' }) : ()),
-        ($datedueto ? output_pref({ dt => $datedueto, dateformat => 'iso' }) : ()),
+        ($dateduefrom ? DateTime::Format::MySQL->format_datetime($dateduefrom) : ()),
+        ($datedueto ? DateTime::Format::MySQL->format_datetime($datedueto) : ()),
     );
 
     my @overduedata;
