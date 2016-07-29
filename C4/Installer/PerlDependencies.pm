@@ -852,6 +852,11 @@ our $PERL_DEPS = {
         required => 1,
         min_ver => '0.28',
     },
+    'WebService::ILS' => {
+        'usage'    => 'Interface third party systems',
+        'required' => '0',
+        'min_ver'  => '0.07',
+    },
 };
 
 1;
