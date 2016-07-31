@@ -1,0 +1,362 @@
+{
+  "/libraries": {
+    "get": {
+      "x-mojo-to": "Library#list",
+      "operationId": "listLibrary",
+      "tags": ["library"],
+      "parameters": [{
+        "name": "branchname",
+        "in": "query",
+        "description": "Case insensitive 'starts-with' search on name",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchaddress1",
+        "in": "query",
+        "description": "Case insensitive 'starts-with' search on address1",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchaddress2",
+        "in": "query",
+        "description": "Case insensitive 'starts-with' search on address2",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchaddress3",
+        "in": "query",
+        "description": "Case insensitive 'starts-with' search on address3",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchzip",
+        "in": "query",
+        "description": "Case insensitive 'starts-with' search on zipcode",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchcity",
+        "in": "query",
+        "description": "Case insensitive 'starts-with' search on city",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchstate",
+        "in": "query",
+        "description": "Case insensitive 'starts-with' search on state",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchcountry",
+        "in": "query",
+        "description": "Case insensitive 'starts_with' search on country",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchphone",
+        "in": "query",
+        "description": "Case insensitive 'starts_with' search on phone number",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchfax",
+        "in": "query",
+        "description": "Case insensitive 'starts_with' search on fax number",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchemail",
+        "in": "query",
+        "description": "Case insensitive 'starts_with' search on email address",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchreplyto",
+        "in": "query",
+        "description": "Case insensitive 'starts_with' search on Reply-To email address",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchreturnpath",
+        "in": "query",
+        "description": "Case insensitive 'starts_with' search on Return-Path email address",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchurl",
+        "in": "query",
+        "description": "Case insensitive 'starts_with' search on website URL",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "issuing",
+        "in": "query",
+        "description": "Unused in Koha",
+        "required": false,
+        "type": "integer"
+      }, {
+        "name": "branchip",
+        "in": "query",
+        "description": "Case insensitive 'starts_with' search on IP address",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchprinter",
+        "in": "query",
+        "description": "Unused in Koha",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "branchnotes",
+        "in": "query",
+        "description": "Case insensitive 'starts_with' search on notes",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "opac_info",
+        "in": "query",
+        "description": "Case insensitive 'starts-with' search on OPAC info",
+        "required": false,
+        "type": "string"
+      }],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of libraries",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/library"
+            }
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "post": {
+      "x-mojo-to": "Library#add",
+      "operationId": "addLibrary",
+      "tags": ["library"],
+      "parameters": [{
+        "name": "body",
+        "in": "body",
+        "description": "A JSON object containing informations about the new library",
+        "required": true,
+        "schema": {
+          "$ref": "../definitions.json#/library"
+        }
+      }],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "201": {
+          "description": "Library added",
+          "schema": {
+            "$ref": "../definitions.json#/library"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "parameters_remaining_permissions"
+        }
+      }
+    }
+  },
+  "/libraries/{branchcode}": {
+    "get": {
+      "x-mojo-to": "Library#get",
+      "operationId": "getLibrary",
+      "tags": ["library"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/branchcodePathParam"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A library",
+          "schema": {
+            "$ref": "../definitions.json#/library"
+          }
+        },
+        "404": {
+          "description": "Library not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "put": {
+      "x-mojo-to": "Library#update",
+      "operationId": "updateLibrary",
+      "tags": ["library"],
+      "parameters": [{
+        "$ref": "../parameters.json#/branchcodePathParam"
+      }, {
+        "name": "body",
+        "in": "body",
+        "description": "A JSON object containing information on the library",
+        "required": true,
+        "schema": {
+          "$ref": "../definitions.json#/library"
+        }
+      }],
+      "consumes": [
+        "application/json"
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A library",
+          "schema": {
+            "$ref": "../definitions.json#/library"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Library not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "parameters_remaining_permissions"
+        }
+      }
+    },
+    "delete": {
+      "x-mojo-to": "Library#delete",
+      "operationId": "deleteLibrary",
+      "tags": ["library"],
+      "parameters": [{
+        "$ref": "../parameters.json#/branchcodePathParam"
+      }],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "204": {
+          "description": "Library deleted",
+          "schema": { "type": "string" }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Library not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "parameters_remaining_permissions"
+        }
+      }
+    }
+  }
+}
