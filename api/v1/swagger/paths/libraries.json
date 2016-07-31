@@ -1,0 +1,47 @@
+{
+  "/libraries": {
+    "get": {
+      "operationId": "listLibrary",
+      "tags": ["libraries"],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of libraries",
+          "schema": {
+            "$ref": "../definitions.json#/libraries"
+          }
+        }
+      }
+    }
+  },
+  "/libraries/{branchcode}": {
+    "get": {
+      "operationId": "getLibrary",
+      "tags": ["libraries"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/branchcodePathParam"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A library",
+          "schema": {
+            "$ref": "../definitions.json#/library"
+          }
+        },
+        "404": {
+          "description": "Library not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}
