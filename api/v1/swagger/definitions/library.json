@@ -1,0 +1,86 @@
+{
+  "type": "object",
+  "properties": {
+    "branchcode": {
+      "$ref": "../x-primitives.json#/branchcode"
+    },
+    "branchname": {
+      "type": "string",
+      "description": "Printable name of library"
+    },
+    "branchaddress1": {
+      "type": ["string", "null"],
+      "description": "the first address line of the library"
+    },
+    "branchaddress2": {
+      "type": ["string", "null"],
+      "description": "the second address line of the library"
+    },
+    "branchaddress3": {
+      "type": ["string", "null"],
+      "description": "the third address line of the library"
+    },
+    "branchzip": {
+      "type": ["string", "null"],
+      "description": "the zip or postal code of the library"
+    },
+    "branchcity": {
+      "type": ["string", "null"],
+      "description": "the city or province of the library"
+    },
+    "branchstate": {
+      "type": ["string", "null"],
+      "description": "the reqional state of the library"
+    },
+    "branchcountry": {
+      "type": ["string", "null"],
+      "description": "the county of the library"
+    },
+    "branchphone": {
+      "type": ["string", "null"],
+      "description": "the primary phone of the library"
+    },
+    "branchfax": {
+      "type": ["string", "null"],
+      "description": "the fax number of the library"
+    },
+    "branchemail": {
+      "type": ["string", "null"],
+      "description": "the primary email address of the library"
+    },
+    "branchreplyto": {
+      "type": ["string", "null"],
+      "description": "the email to be used as a Reply-To"
+    },
+    "branchreturnpath": {
+      "type": ["string", "null"],
+      "description": "the email to be used as Return-Path"
+    },
+    "branchurl": {
+      "type": ["string", "null"],
+      "description": "the URL for your library or branch's website"
+    },
+    "issuing": {
+      "type": ["integer", "null"],
+      "description": "unused in Koha"
+    },
+    "branchip": {
+      "type": ["string", "null"],
+      "description": "the IP address for your library or branch"
+    },
+    "branchprinter": {
+      "type": ["string", "null"],
+      "description": "unused in Koha"
+    },
+    "branchnotes": {
+      "type": ["string", "null"],
+      "description": "notes related to your library or branch"
+    },
+    "opac_info": {
+      "type": ["string", "null"],
+      "description": "HTML that displays in OPAC"
+    }
+  },
+  "additionalProperties": false,
+  "required": ["branchcode", "branchname"]
+}
