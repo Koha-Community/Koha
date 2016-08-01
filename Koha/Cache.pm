@@ -40,7 +40,8 @@ use warnings;
 use Carp;
 use Module::Load::Conditional qw(can_load);
 use Koha::Cache::Object;
-use Sereal;
+use Sereal::Encoder;
+use Sereal::Decoder;
 
 use base qw(Class::Accessor);
 
