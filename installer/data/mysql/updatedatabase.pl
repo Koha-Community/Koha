@@ -12637,6 +12637,12 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.05.01.001";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done. (Bug 15006: Distinguish SIP2 client timeout from login timeout.)\nWarning to Koha System Administrators: If you're using SIP2 Server, and encounter 'instability' after upgrade, you may have to tweak your SIP2 config file, and use 'client_timeout' new parameter.";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
