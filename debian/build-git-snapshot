@@ -27,15 +27,17 @@ use warnings;
 use Getopt::Long;
 use POSIX qw/strftime/;
 
+my $basetgz;
 my $buildresult;
 my $distribution='squeeze-dev';
 my $git_checks='all';
-my $version='3.23~git';
+my $version='16.06~git';
 my $auto_version=1;
 my $need_help;
 my $debug;
 
 GetOptions(
+    'basetgz|b=s'      => \$basetgz,
     'buildresult|r=s'   => \$buildresult,
     'distribution|D=s'  => \$distribution,
     'git-checks|g=s'    => \$git_checks,
@@ -137,7 +139,8 @@ sub build_package {
     sys_command_output( qq{git archive --format=tar --prefix="koha-$newversion/" HEAD | gzip -9 > "../koha_$newversion.tar.gz"} );
 
     my $pdebuildopts = $buildresult ? "--buildresult $buildresult" : "";
-    sys_command_output_screen( "pdebuild $pdebuildopts" );
+    my $pdebuildbasetgz = $basetgz ? "-- --basetgz /var/cache/pbuilder/" . $basetgz . ".tgz" : "";
+    sys_command_output_screen( "pdebuild $pdebuildbasetgz $pdebuildopts" );
 }
 
 everything_is_committed() or die "cannot build: uncommited changes";
