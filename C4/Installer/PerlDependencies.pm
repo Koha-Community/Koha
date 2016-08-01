@@ -802,6 +802,21 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.07'
     },
+    'IO::Socket::IP' => {
+        'usage'    => 'Rest API',
+        'required' => '0',
+        'min_ver'  => '0.16'
+    },
+    'Readonly' => {
+        'usage'    => 'No idea',
+        'required' => '0',
+        'min_ver'  => '0.01'
+    },
+    'Readonly::XS' => {
+        'usage'    => 'No idea',
+        'required' => '0',
+        'min_ver'  => '0.01'
+    },
 };
 
 1;
