@@ -18,6 +18,9 @@
             ],
             "sPaginationType": "four_button"
         }));
+        $("#authtypecode").on("blur",function(){
+            toUC(this);
+        });
     });
 //]]>
 </script>
@@ -85,7 +88,7 @@
                             <input type="hidden" name="authtypecode" value="[% authority_type.authtypecode %]" />[% authority_type.authtypecode %]
                     [% ELSE %]
                             <label for="authtypecode" class="required">Authority type: </label>
-                            <input id="authtypecode" type="text" class="required" required="required" name="authtypecode" size="10" maxlength="10" onblur="toUC(this)" />
+                            <input id="authtypecode" type="text" class="required" required="required" name="authtypecode" size="10" maxlength="10" />
                             <span class="required">Required</span>
                     [% END %]
                 </li>
