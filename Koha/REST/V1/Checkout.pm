@@ -24,6 +24,7 @@ use C4::Auth qw( haspermission );
 use C4::Context;
 use C4::Circulation;
 use Koha::Checkouts;
+use Koha::Old::Checkouts;
 
 sub list {
     my ($c, $args, $cb) = @_;
@@ -119,6 +120,44 @@ sub renewability {
 
     return $c->$cb({ renewable => Mojo::JSON->true, error => undef }, 200) if $can_renew;
     return $c->$cb({ renewable => Mojo::JSON->false, error => $error }, 200);
+}
+
+sub listhistory {
+    my ($c, $args, $cb) = @_;
+
+    my $borrowernumber = $c->param('borrowernumber');
+
+    my %attributes = ( itemnumber => { "!=", undef } );
+    if ($borrowernumber) {
+        return $c->$cb({
+            error => "Patron doesn't exist"
+        }, 404) unless Koha::Patrons->find($borrowernumber);
+
+        $attributes{borrowernumber} = $borrowernumber;
+    }
+
+    # Retrieve all the issues in the history, but only the issue_id due to possible perfomance issues
+    my $checkouts = Koha::Old::Checkouts->search(
+      \%attributes,
+      { columns => [qw/issue_id/]}
+    );
+
+    $c->$cb($checkouts->unblessed, 200);
+}
+
+sub gethistory {
+    my ($c, $args, $cb) = @_;
+
+    my $checkout_id = $args->{checkout_id};
+    my $checkout = Koha::Old::Checkouts->find($checkout_id);
+
+    if (!$checkout) {
+        return $c->$cb({
+            error => "Checkout doesn't exist"
+        }, 404);
+    }
+
+    return $c->$cb($checkout->unblessed, 200);
 }
 
 1;

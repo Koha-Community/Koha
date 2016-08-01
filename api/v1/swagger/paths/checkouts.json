@@ -121,5 +121,73 @@
         }
       }
     }
+  },
+  "/checkouts/history": {
+    "get": {
+      "operationId": "listhistoryCheckouts",
+      "tags": ["patrons", "checkouts"],
+      "parameters": [
+        { "$ref": "../parameters.json#/borrowernumberQueryParam" }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of checkouts history",
+          "schema": {
+            "$ref": "../definitions.json#/checkouts"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "404": {
+          "description": "Borrower not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "circulate_remaining_permissions": "1"
+        }
+      }
+    }
+  },
+  "/checkouts/history/{checkout_id}": {
+    "get": {
+      "operationId": "gethistoryCheckout",
+      "tags": ["patrons", "checkouts"],
+      "parameters": [
+        { "$ref": "../parameters.json#/checkoutIdPathParam" }
+      ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Got borrower's checkout",
+          "schema": { "$ref": "../definitions.json#/checkout" }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "404": {
+          "description": "Checkout not found",
+          "schema": { "$ref": "../definitions.json#/error" }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "circulate_remaining_permissions": "1"
+        }
+      }
+    }
   }
 }
