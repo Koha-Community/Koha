@@ -21,6 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON;
 
 use C4::Auth qw( haspermission );
+use C4::Items qw( GetHiddenItemnumbers );
 
 use Koha::Items;
 
@@ -36,6 +37,14 @@ sub get {
     # Hide non-public itemnotes if user has no staff access
     my $user = $c->stash('koha.user');
     unless ($user && haspermission($user->userid, {catalogue => 1})) {
+
+        my @hiddenitems = C4::Items::GetHiddenItemnumbers( ({ itemnumber => $itemnumber}) );
+        my %hiddenitems = map { $_ => 1 } @hiddenitems;
+
+        # Pretend it was not found as it's hidden from OPAC to regular users
+        return $c->$cb({error => "Item not found"}, 404)
+          if $hiddenitems{$itemnumber};
+
         $item->set({ itemnotes_nonpublic => undef });
     }
 
