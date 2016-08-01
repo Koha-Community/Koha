@@ -1,12 +1,11 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Print Receipt for [% cardnumber %]</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
+<title>Print receipt for [% cardnumber %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/printreceiptinvoice.css" />
 [% INCLUDE 'slip-print.inc' #printThenClose %]
 </head>
-<body id="printinvoice" class="pat" onload="printThenClose();">
+<body id="printinvoice" class="pat">
 
 <div id="receipt">
 <!-- The table with the account items -->

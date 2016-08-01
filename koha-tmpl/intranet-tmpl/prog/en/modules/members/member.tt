@@ -109,6 +109,9 @@ $(document).ready(function() {
         e.preventDefault();
         clearFilters(true);
     });
+    $("#searchform").on("submit",function(){
+        return filter();
+    });
 });
 
 var dtMemberResults;
@@ -409,7 +412,7 @@ function filterByFirstLetterSurname(letter) {
       </div>
     </div>
     <div class="yui-b">
-      <form onsubmit="return filter();" id="searchform">
+      <form method="get" id="searchform">
         <input type="hidden" id="firstletter_filter" value="" />
         <fieldset class="brief">
           <h3>Filters</h3>

@@ -7,11 +7,11 @@
 //<![CDATA[
 $(document).ready(function() {
     $('#payindivfine, #woindivfine, #payfine').preventDoubleFormSubmit();
+    $("#paid").on("change",function(){
+        moneyFormat( this );
+    });
 });
-//]]>
-</script>
-<script type= "text/javascript">
-//<![CDATA[
+
 function moneyFormat(textObj) {
     var newValue = textObj.value;
     var decAmount = "";
@@ -100,7 +100,7 @@ function moneyFormat(textObj) {
 [% END %]
 
 [% IF ( pay_individual ) %]
-    <form name="payindivfine" id="payindivfine" onsubmit="return validatePayment(this);" method="post" action="/cgi-bin/koha/members/paycollect.pl">
+    <form name="payindivfine" id="payindivfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber %]" />
@@ -146,7 +146,7 @@ function moneyFormat(textObj) {
     <li>
         <label for="paid">Collect from patron: </label>
             <!-- default to paying all -->
-        <input name="paid" id="paid" value="[% amountoutstanding | format('%.2f') %]" onchange="moneyFormat(document.payindivfine.paid)"/>
+        <input name="paid" id="paid" value="[% amountoutstanding | format('%.2f') %]" />
     </li>
 </ol>
 </fieldset>
@@ -196,7 +196,7 @@ function moneyFormat(textObj) {
     </form>
 [% ELSE %]
 
-    <form name="payfine" id="payfine" onsubmit="return validatePayment(this);" method="post" action="/cgi-bin/koha/members/paycollect.pl">
+    <form name="payfine" id="payfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
     <input type="hidden" name="selected_accts" id="selected_accts" value="[% selected_accts %]" />
     <input type="hidden" name="total" id="total" value="[% total %]" />
@@ -211,7 +211,7 @@ function moneyFormat(textObj) {
     <li>
         <label for="paid">Collect from patron: </label>
         <!-- default to paying all -->
-        <input name="paid" id="paid" value="[% total | format('%.2f') %]" onchange="moneyFormat(document.payfine.paid)"/>
+        <input name="paid" id="paid" value="[% total | format('%.2f') %]" />
     </li>
     <li>
         <label for="selected_accts_notes">Note: </label>
