@@ -43,6 +43,9 @@ Data deleted
                 rentalcharge: { number: true }
             }
         });
+        $("#itemtype").on("blur",function(){
+            toUC(this);
+        });
      });
 //]]>
 </script>
@@ -134,7 +137,7 @@ Item types administration
                 [% ELSE %]
                     <li>
                         <label for="itemtype" class="required">Item type: </label>
-                        <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" onblur="toUC(this)" required="required" /> <span class="required">Required</span>
+                        <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" required="required" /> <span class="required">Required</span>
                     </li>
                 [% END %]
                 <li>

@@ -73,4 +73,7 @@
             obj.css("background-color","white");
             return false;
         });
+        $("#frameworkcode").on("blur",function(){
+            toUC(this);
+        });
     });
