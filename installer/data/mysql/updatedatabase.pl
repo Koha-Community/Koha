@@ -12786,6 +12786,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '16.06.00.012';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE virtualshelves MODIFY COLUMN created_on DATETIME not NULL;
+    });
+
+    print "Upgrade to $DBversion done (Bug 16573 - Web installer fails to load structure and sample data on MySQL 5.7)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
