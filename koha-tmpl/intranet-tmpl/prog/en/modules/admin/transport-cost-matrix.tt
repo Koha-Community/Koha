@@ -52,6 +52,9 @@ $(document).ready(function(){
     $("body").on("change",".disable_transport_cost",function(){
         disable_transport_cost_chg(this);
     });
+    $("#cost_matrix_form").on("submit",function(){
+        return form_submit(this);
+    });
 })
 //]]>
 </script>
@@ -89,7 +92,7 @@ $(document).ready(function(){
         </ul>
     </div>[% END %]
 
-        <form method="post" action="?" onsubmit="return form_submit(this);">
+        <form method="post" action="/cgi-bin/koha/admin/transport-cost-matrix.pl" id="cost_matrix_form">
             <input type="hidden" name="op" value="set-cost-matrix" />
             <fieldset id="transport-cost-matrix">
                 <div class="help">

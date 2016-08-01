@@ -25,6 +25,10 @@
             countSelected: _("# of % selected"),
             noMatchesFound: _("No matches found")
         } );
+        $(".force_reload").on("click",function(e){
+            e.preventDefault();
+            window.location.reload(true);
+        });
     });
     // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
     var to_highlight = "[% searchfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
@@ -179,7 +183,7 @@
             [% IF ( loop.last ) %]</tbody></table>[% END %]
             [% END %]
         [% END %]
-        <fieldset class="action"><button class="save-all submit" type="submit">Save all [% TAB.tab_title %] preferences</button> <a href="#" onclick="window.location.reload(true);" class="cancel">Cancel</a></fieldset>
+        <fieldset class="action"><button class="save-all submit" type="submit">Save all [% TAB.tab_title %] preferences</button> <a href="/cgi-bin/koha/admin/preferences.pl" class="force_reload cancel">Cancel</a></fieldset>
     </form>
     </div>
     [% END %]

@@ -19,6 +19,11 @@ $(document).ready(function() {
         ],
         "sPaginationType": "four_button"
     }));
+    $("#select_display").on("change",function(){
+        var checked = $(this).prop("checked") ? 1: 0;
+        $.cookie('marctagstructure_selectdisplay', checked);
+        this.form.submit();
+    });
 });
 
 //]]>
@@ -174,9 +179,9 @@ $(document).ready(function() {
     <input type="submit" value="Search" />
 <p>        <label for="select_display">Display only used tags/subfields</label>
         [% IF ( select_display ) %]
-            <input type="checkbox" name="select_display" id="select_display" value="True" checked="checked"  onchange="$.cookie('marctagstructure_selectdisplay', 0); this.form.submit();" />
+            <input type="checkbox" name="select_display" id="select_display" value="True" checked="checked" />
         [% ELSE %]
-            <input type="checkbox" name="select_display" id="select_display" value="True" onchange="$.cookie('marctagstructure_selectdisplay', 1); this.form.submit();" />
+            <input type="checkbox" name="select_display" id="select_display" value="True" />
         [% END %]</p>
 </fieldset>
 </form>

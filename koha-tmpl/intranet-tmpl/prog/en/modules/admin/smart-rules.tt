@@ -101,6 +101,10 @@ $(document).ready(function() {
             $("#default-circulation-rules tr:last td:eq(1) select").prop('disabled', true);
             return false;
         });
+        $(".clear_edit").on("click",function(e){
+            e.preventDefault();
+            clear_edit();
+        });
 });
 //]]>
 </script>
@@ -355,7 +359,7 @@ $(document).ready(function() {
                     <td class="actions">
                         <input type="hidden" name="branch" value="[% current_branch %]"/>
                         <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save</button>
-                        <button name="cancel" onclick="clear_edit();return false;" class="btn btn-mini"><i class="fa fa-undo"></i> Clear</button>
+                        <button name="cancel" class="clear_edit btn btn-mini"><i class="fa fa-undo"></i> Clear</button>
                     </td>
                 </tr>
                 <tfoot>

@@ -29,6 +29,14 @@
                     .addClass( "ui-widget-header ui-corner-all" )
                     .end()
             .find( ".plugindesc" );
+        $(".save-all").on("click",function(e){
+            e.preventDefault();
+            yesimeant();
+        });
+        $(".force_reload").on("click",function(e){
+            e.preventDefault();
+            window.location.reload(true);
+        });
     });
 
     function yesimeant() {
@@ -93,7 +101,7 @@
                 <legend>Intranet</legend>
                 [% PROCESS pluginlist plugins=INTRApluginlist type='intranet' %]
             </fieldset>
-            <fieldset class="action"><button class="save-all submit" onclick="yesimeant();return false;" type="submit">Save configuration</button> <a href="#" onclick="window.location.reload(true);" class="cancel">Cancel</a></fieldset>
+            <fieldset class="action"><button class="save-all submit" type="submit">Save configuration</button> <a href="/cgi-bin/koha/admin/didyoumean.pl" class="force_reload cancel">Cancel</a></fieldset>
         </form>
 
         </div>

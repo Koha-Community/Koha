@@ -20,6 +20,10 @@ $(document).ready(function() {
             delete_provider( providerid );
         }
     });
+    $(".cancel_edit").on("click",function(e){
+        e.preventDefault();
+        cancel_edit();
+    });
 });
 
 function clear_form(){
