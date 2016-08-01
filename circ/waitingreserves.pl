@@ -160,9 +160,10 @@ $template->param(
     overcount   => $overcount,
     show_date   => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
     ReservesMaxPickUpDelay => $max_pickup_delay,
+    tab => $tab,
 );
 
-if ($item && $tab eq 'holdsover') {
+if ($item && $tab eq 'holdsover' && !@cancel_result) {
     print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl#holdsover");
 } elsif ($cancelall) {
     print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl");
