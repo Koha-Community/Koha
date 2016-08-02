@@ -9,12 +9,12 @@
         <input type="hidden" name="routing" value="[% routing %]" />
       [% END %]
       <input type="hidden" name="searched" value="1" />
-      <label for="ISSN_filter">ISSN:</label> <input type="text" size="10" maxlength="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter %]" />
+      <label for="ISSN_filter">ISSN:</label> <input type="text" size="10" maxlength="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter | html %]" />
 
       [% IF (UNIMARC) %]
-        <label for="EAN_filter">EAN:</label> <input type="text" size="20" maxlength="40" name="EAN_filter" id="EAN_filter" value="[% EAN_filter %]" />
+        <label for="EAN_filter">EAN:</label> <input type="text" size="20" maxlength="40" name="EAN_filter" id="EAN_filter" value="[% EAN_filter | html %]" />
       [% END %]
-      <label for="title_filter">Title:</label> <input type="text" size="20" maxlength="40" name="title_filter" id="title_filter" value="[% title_filter %]" />
+      <label for="title_filter">Title:</label> <input type="text" size="20" maxlength="40" name="title_filter" id="title_filter" value="[% title_filter | html %]" />
       <input value="Submit" class="submit" type="submit" /> <a href="/cgi-bin/koha/serials/serials-search.pl">Advanced search</a>
     </form>
     </div>
