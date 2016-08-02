@@ -355,8 +355,5 @@ sub duplicate_framework {
 	while ( my ($frameworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $kohafield, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso,$hidden) = $sth->fetchrow) {
 	    $sth_insert->execute($newframeworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $kohafield, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso, $hidden);
 	}
-    $cache->clear_from_cache("MarcStructure-0-$newframeworkcode");
-    $cache->clear_from_cache("MarcStructure-1-$newframeworkcode");
-    $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
 }
 
