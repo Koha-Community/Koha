@@ -22,7 +22,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    Details for [% title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]
+    Details for [% title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield | html %][% END %]
   [% END %]
 </title>
 
@@ -346,7 +346,7 @@ function verify_images() {
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    Details for <i>[% title |html %]  [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</i>
+    Details for <i>[% title |html %]  [% FOREACH subtitl IN subtitle %] [% subtitl.subfield | html %][% END %]</i>
   [% END %]
 </div>
 

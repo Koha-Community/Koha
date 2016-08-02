@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; Item details for [% title %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo; Item details for [% title | html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">h3{padding-top: 1em; border-top: 2px solid #CCCCCC;}#exportLabelexportModal_{border-top: 0px;}</style>
 [% INCLUDE 'browser-strings.inc' %]
