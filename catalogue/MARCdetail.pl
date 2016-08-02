@@ -45,11 +45,12 @@ the items attached to the biblio
 
 use strict;
 #use warnings; FIXME - Bug 2505
+use CGI qw ( -utf8 );
+use HTML::Entities;
 
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use CGI qw ( -utf8 );
 use C4::Koha;
 use MARC::Record;
 use C4::Biblio;
@@ -64,6 +65,7 @@ use List::MoreUtils qw( uniq );
 my $query        = new CGI;
 my $dbh          = C4::Context->dbh;
 my $biblionumber = $query->param('biblionumber');
+$biblionumber = HTML::Entities::encode($biblionumber);
 my $frameworkcode = $query->param('frameworkcode');
 $frameworkcode = GetFrameworkCode( $biblionumber ) unless ($frameworkcode);
 my $popup        =

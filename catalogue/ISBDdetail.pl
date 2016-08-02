@@ -36,6 +36,7 @@ This script needs a biblionumber as parameter
 use strict;
 #use warnings; FIXME - Bug 2505
 
+use HTML::Entities;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
@@ -56,6 +57,7 @@ my $query = new CGI;
 my $dbh = C4::Context->dbh;
 
 my $biblionumber = $query->param('biblionumber');
+$biblionumber = HTML::Entities::encode($biblionumber);
 
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

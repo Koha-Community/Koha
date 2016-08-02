@@ -23,6 +23,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Koha;
 use CGI qw ( -utf8 );
+use HTML::Entities;
 use C4::Biblio;
 use C4::Items;
 use C4::Branch;
@@ -66,6 +67,7 @@ my $hidepatronname = C4::Context->preference("HidePatronName");
 # get variables
 
 my $biblionumber=$query->param('biblionumber');
+$biblionumber = HTML::Entities::encode($biblionumber);
 my $title=$query->param('title');
 my $bi=$query->param('bi');
 $bi = $biblionumber unless $bi;
