@@ -40,7 +40,7 @@
                     <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
                     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
                     [% IF ( waiting ) %]
-                        <input type="hidden" name="barcode" value="[% barcode %]" />
+                        <input type="hidden" name="barcode" value="[% barcode | html %]" />
                         <input type="hidden" name="request" value="KillWaiting" />
                         <input type="submit" value="Cancel" />
                     [% END %]
@@ -64,7 +64,7 @@
                             <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
                             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
                             <input type="hidden" name="tobranchcd" value="[% tobranchcd %]" />
-                            <input type="hidden" name="barcode" value="[% barcode %]" />
+                            <input type="hidden" name="barcode" value="[% barcode | html %]" />
                             <input type="hidden" name="request" value="KillReserved" />
                             <input type="submit" value="Cancel" />
                         </form>
@@ -107,7 +107,7 @@
                             <ul>
                              [% FOREACH errmsgloo IN errmsgloop %]
                               [% IF ( errmsgloo.errbadcode ) %]
-                                  <li>No Item with barcode: [% errmsgloo.msg %]</li>
+                                  <li>No Item with barcode: [% errmsgloo.msg | html %]</li>
                               [% END %]
                               [% IF ( errmsgloo.errispermanent ) %]
                                   <li>Please return item to home library: [% errmsgloo.msg %]</li>
