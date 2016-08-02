@@ -51,7 +51,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketno %]</a> &rsaquo; [% IF ( opsearch ) %]Order from external source[% ELSE %]<a href="/cgi-bin/koha/acqui/z3950_search.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Order from external source</a> &rsaquo; Search results[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | uri %]">Basket [% basketno | html %]</a> &rsaquo; [% IF ( opsearch ) %]Order from external source[% ELSE %]<a href="/cgi-bin/koha/acqui/z3950_search.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order from external source</a> &rsaquo; Search results[% END %]</div>
 
 <div id="doc3" class="yui-t7">
       <div id="bd">
@@ -64,11 +64,11 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 	    <fieldset class="rows">
          <ol>
              <li><label for="searchtitle">Title: </label> <input type="text" id="searchtitle"  name="title" value="[% title |html %]" class="focus" /></li>
-             <li><label for="isbn">ISBN: </label> <input type="text" id="isbn" name="isbn" value="[% isbn %]" /></li>
+             <li><label for="isbn">ISBN: </label> <input type="text" id="isbn" name="isbn" value="[% isbn | html %]" /></li>
              <li><label for="lccall">LC call number: </label> <input type="text" id="lccall" name="lccall" value="" /></li>
              <li><label for="controlnumber">Control no.: </label> <input type="text" id="controlnumber" name="controlnumber" value="" /></li>
-             <li><label for="author">Author: </label> <input type="text" id="author" name="author" value="[% author %]" /></li>
-             <li><label for="issn">ISSN: </label> <input type="text" id="issn" name="issn" value="[% issn %]" /></li>
+             <li><label for="author">Author: </label> <input type="text" id="author" name="author" value="[% author | html %]" /></li>
+             <li><label for="issn">ISSN: </label> <input type="text" id="issn" name="issn" value="[% issn | html %]" /></li>
              <li><label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
              <li><label for="dewey">Dewey: </label> <input type="text" id="dewey" name="dewey" value="" /></li>
              <li><label for="frameworkcode" >Select MARC framework:</label>
@@ -86,9 +86,9 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
               <li><a id="resetZ3950Search" href="#"><i class="fa fa-trash"></i> Clear search form</a></li>
          </ol>
     </fieldset>
-    <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-    <input type="hidden" name="basketno" value="[% basketno %]" />
-    <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+    <input type="hidden" name="basketno" value="[% basketno | html %]" />
+    <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
 	    </div>
 <div class="yui-u second">
 <h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></span></span></h2>
@@ -108,7 +108,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
   </div>
 </div>
 
-    <fieldset class="action"><input type="submit"  class="submit" value="Search" /> <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Cancel</a></fieldset>
+    <fieldset class="action"><input type="submit"  class="submit" value="Search" /> <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% url %]">Cancel</a></fieldset>
 </form>
 
 
@@ -116,14 +116,14 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
     <h2>Search results</h2>
 
     <p>You searched for:
-        [% IF ( title ) %]<em>Title: </em><span class=term>[% title %]</span> [% END %]
-        [% IF ( author ) %]<em>Author: </em><span class=term>[% author %]</span> [% END %]
-        [% IF ( isbn ) %]<em>ISBN: </em><span class=term>[% isbn %]</span> [% END %]
-        [% IF ( issn ) %]<em>ISSN: </em><span class=term>[% issn %]</span> [% END %]
-        [% IF ( lccall ) %]<em>LC call number: </em><span class=term>[% lccall %]</span> [% END %]
-        [% IF ( subject ) %]<em>Subject heading: </em><span class=term>[% subject %]</span> [% END %]
-        [% IF ( controlnumber ) %]<em>Control no: </em><span class=term>[% controlnumber %]</span> [% END %]
-        [% IF ( dewey ) %]<em>Dewey: </em><span class=term>[% dewey %]</span> [%END %]
+        [% IF ( title ) %]<em>Title: </em><span class=term>[% title | html %]</span> [% END %]
+        [% IF ( author ) %]<em>Author: </em><span class=term>[% author | html %]</span> [% END %]
+        [% IF ( isbn ) %]<em>ISBN: </em><span class=term>[% isbn | html %]</span> [% END %]
+        [% IF ( issn ) %]<em>ISSN: </em><span class=term>[% issn | html %]</span> [% END %]
+        [% IF ( lccall ) %]<em>LC call number: </em><span class=term>[% lccall | html %]</span> [% END %]
+        [% IF ( subject ) %]<em>Subject heading: </em><span class=term>[% subject | html %]</span> [% END %]
+        [% IF ( controlnumber ) %]<em>Control no: </em><span class=term>[% controlnumber | html %]</span> [% END %]
+        [% IF ( dewey ) %]<em>Dewey: </em><span class=term>[% dewey | html %]</span> [%END %]
     </p>
 
     [% IF ( breeding_loop ) %]
@@ -141,13 +141,13 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         [% IF ( breeding_loo.breedingid ) %]
 
         <tr>
-            <td>[% breeding_loo.server %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewData">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" class="previewData">Preview card</a> <a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode %]&amp;breedingid=[% breeding_loo.breedingid %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Order</a> <a href="#" id="closemenu" title="Close this menu"> X </a></div></td>
+            <td>[% breeding_loo.server %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewData">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" class="previewData">Preview card</a> <a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri  %]&amp;breedingid=[% breeding_loo.breedingid %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order</a> <a href="#" id="closemenu" title="Close this menu"> X </a></div></td>
             <td>[% breeding_loo.title |html %]</td>
             <td>[% breeding_loo.author %]</td>
             <td>[% breeding_loo.isbn %]</td>
             <td>[% breeding_loo.lccn %]</td>
             <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" title="MARC" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" title="Card" class="previewData">Card</a></td>
-			<td><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode %]&amp;breedingid=[% breeding_loo.breedingid %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Order</a></td>
+            <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order</a></td>
 
         </tr>
         [% END %]
@@ -172,16 +172,16 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         <input type="hidden" name="op" id="op" value="do_search" />
         <input type="hidden" name="current_page" id="current_page" value="[% current_page %]" />
         <input type="hidden" id="searchtitle"  name="title" value="[% title |html %]" />
-        <input type="hidden" id="isbn" name="isbn" value="[% isbn %]" />
-        <input type="hidden" id="lccall" name="lccall" value="[% lccall %]" />
-        <input type="hidden" id="author" name="author" value="[% author %]" />
-        <input type="hidden" id="subject" name="subject" value="[% subject %]" />
-        <input type="hidden" id="dewey" name="dewey" value="[% dewey %]" />
-        <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
-        <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-        <input type="hidden" name="controlnumber" value="[% controlnumber %]" />
-        <input type="hidden" name="basketno" value="[% basketno %]" />
-        <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+        <input type="hidden" id="isbn" name="isbn" value="[% isbn | html %]" />
+        <input type="hidden" id="lccall" name="lccall" value="[% lccall | html %]" />
+        <input type="hidden" id="author" name="author" value="[% author | html %]" />
+        <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
+        <input type="hidden" id="dewey" name="dewey" value="[% dewey | html %]" />
+        <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]" />
+        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+        <input type="hidden" name="controlnumber" value="[% controlnumber | html %]" />
+        <input type="hidden" name="basketno" value="[% basketno | html %]" />
+        <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
 
         [% FOREACH server IN servers %]
         <input type="hidden" name="id" id="z3950_[% server.id %]" value="[% server.id %]" />
