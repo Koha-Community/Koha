@@ -20,6 +20,7 @@
 use strict;
 use warnings;
 use CGI qw ( -utf8 ); 
+use HTML::Entities;
 use MARC::Record;
 use C4::Auth;
 use C4::Context;
@@ -34,6 +35,7 @@ use C4::Koha qw( GetFrameworksLoop );
 my $query        = new CGI;
 my $dbh          = C4::Context->dbh;
 my $biblionumber = $query->param('biblionumber');
+$biblionumber = HTML::Entities::encode($biblionumber);
 my $frameworkcode = $query->param('frameworkcode');
 $frameworkcode = GetFrameworkCode( $biblionumber ) unless ($frameworkcode);
 my $popup        =
