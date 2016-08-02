@@ -20,6 +20,7 @@ use strict;
 use warnings;
 
 use CGI qw ( -utf8 );
+use HTML::Entities;
 use C4::Acquisition qw( GetHistory );
 use C4::Auth;
 use C4::Koha;
@@ -60,6 +61,7 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
 );
 
 my $biblionumber = $query->param('biblionumber');
+$biblionumber = HTML::Entities::encode($biblionumber);
 my $record       = GetMarcBiblio($biblionumber);
 
 if ( not defined $record ) {
