@@ -6,25 +6,25 @@
             <ol>
               <li>
                 <label for="issn">ISSN:</label>
-                <input type="text" id="issn" name="ISSN_filter" value="[% ISSN_filter %]" />
+                <input type="text" id="issn" name="ISSN_filter" value="[% ISSN_filter | html %]" />
               </li>
               <li>
                 <label for="title">Title:</label>
-                <input type="text" id="title" name="title_filter" value="[% title_filter %]" />
+                <input type="text" id="title" name="title_filter" value="[% title_filter | html %]" />
               </li>
               [% IF Koha.Preference( 'marcflavour' ) == "UNIMARC" %]
               <li>
                 <label for="ean">EAN:</label>
-                <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter %]" />
+                <input type="text" id="ean" name="EAN_filter" value="[% EAN_filter | html %]" />
               </li>
               [% END %]
               <li>
                 <label for="publisher">Publisher:</label>
-                <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter %]" />
+                <input type="text" id="publisher" name="publisher_filter" value="[% publisher_filter | html %]" />
               </li>
               <li>
                 <label for="supplier">Vendor:</label>
-                <input type="text" id="supplier" name="supplier_filter" value="[% supplier_filter %]" />
+                <input type="text" id="supplier" name="supplier_filter" value="[% supplier_filter | html %]" />
               </li>
               <li>
                 <label for="branch">Library:</label>
@@ -42,10 +42,10 @@
             </ol>
             <input type="hidden" name="searched" value="1" />
             [% IF (booksellerid) %]
-                <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+                <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
             [% END %]
             [% IF (basketno) %]
-                <input type="hidden" name="basketno" value="[% basketno %]" />
+                <input type="hidden" name="basketno" value="[% basketno | html %]" />
             [% END %]
             <fieldset class="action">
               <input type="submit" value="Search" />
