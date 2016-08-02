@@ -49,10 +49,10 @@
     
          <ol>
         <li><label for="title">Title:</label>
-        <input id="title" type="text" name="title" size="15" value="[% title %]" /></li>
+        <input id="title" type="text" name="title" size="15" value="[% title | html %]" /></li>
 
         <li><label for="issn">ISSN:</label>
-        <input id="issn" type="text" name="issn" size="15" value="[% issn %]" /></li>
+        <input id="issn" type="text" name="issn" size="15" value="[% issn | html %]" /></li>
         [% IF (branches_loop.size) %]
         <li><label for="branch">Library:</label>
         <select id="branch" name="branch">
@@ -84,11 +84,11 @@
 <p>
     <b>[% numsubscription %]</b> subscription(s)
         [% IF ( title ) %]
-        with title matching <span class="title">[% title %]</class>
+        with title matching <span class="title">[% title | html %]</class>
         [% IF ( issn ) %]and [% END %]
     [% END %]
     [% IF ( issn ) %]
-        with ISSN matching <b>[% issn %]</b>
+        with ISSN matching <b>[% issn | html %]</b>
     [% END %]
         will expire before <b>[% date | $KohaDates %]</b>
 </p>
