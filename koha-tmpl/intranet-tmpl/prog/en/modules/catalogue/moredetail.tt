@@ -41,7 +41,7 @@
         <li><span class="label">Item type:</span> [% itemtypename %]&nbsp;</li>
         [% END %]
         [% IF ( rentalcharge ) %]<li><span class="label">Rental charge:</span>[% rentalcharge %]&nbsp;</li>[% END %]
-        <li><span class="label">ISBN:</span> [% isbn %]&nbsp;</li>
+        <li><span class="label">ISBN:</span> [% isbn | html %]&nbsp;</li>
         <li><span class="label">Publisher:</span>[% place %] [% publishercode |html %] [% publicationyear %]&nbsp;</li>
         [% IF ( volumeddesc ) %]<li><span class="label">Volume:</span> [% volumeddesc %]</li>[% END %]
         <li><span class="label">Physical details:</span> [% pages %] [% illus %] [% size %]&nbsp;</li>

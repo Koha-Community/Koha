@@ -500,7 +500,7 @@ function verify_images() {
         <div class="yui-u" style="margin-top: 1em;">
         <ul>
         [% IF ( MARCISBNS ) %]
-            <li><strong>ISBN:</strong><ul>[% FOREACH MARCISBN IN MARCISBNS %]<li>[% MARCISBN %]</li>[% END %]</ul></li>
+            <li><strong>ISBN:</strong><ul>[% FOREACH MARCISBN IN MARCISBNS %]<li>[% MARCISBN | html %]</li>[% END %]</ul></li>
         [% ELSE %]
             [% IF ( normalized_isbn ) %]
                 <li><strong>ISBN:</strong> [% normalized_isbn %]</li>
