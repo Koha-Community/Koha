@@ -69,12 +69,12 @@
 					[% IF ( do_it ) %]
 						<input type="hidden" name="do_it" value="[% do_it %]" />
 					[% END %]
-					<input type="hidden" name="src" value="[% src %]" />
+                    <input type="hidden" name="src" value="[% src | html %]" />
 					<fieldset class="rows">
 						<ol>
 							<li>
 								<label for="user">Librarian:</label>
-								<input type="text" name="user" id="user" value="[% user %]" />
+                                <input type="text" name="user" id="user" value="[% user | html %]" />
 							</li>
                         <li>
                                 <label for="modules">Modules:</label>
@@ -113,18 +113,18 @@
                             </li>
 							<li>
 								<label for="object">Object: </label>
-								<input type="text" id="object" name="object" value="[% object %]" />
+                                <input type="text" id="object" name="object" value="[% object | html %]" />
 							</li>
 							<li>
 								<label for="info">Info:</label>
-								<input type="text" id="info" name="info" value="[% info %]" />
+                                <input type="text" id="info" name="info" value="[% info | html %]" />
 							</li>
 							<li>
-                                <label for="from"> Display from: </label> <input type="text" size="10" id="from" name="from" value="[% datefrom %]" class="datepickerfrom" />
+                                <label for="from"> Display from: </label> <input type="text" size="10" id="from" name="from" value="[% datefrom | html %]" class="datepickerfrom" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 							</li>
 							<li>
-                                <label for="to">Display to: </label> <input size="10" id="to" name="to" type="text" value="[% dateto %]" class="datepickerto" />
+                                <label for="to">Display to: </label> <input size="10" id="to" name="to" type="text" value="[% dateto | html %]" class="datepickerto" />
 				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 							</li>
 						</ol>
@@ -218,10 +218,10 @@
                         <div class="dialog alert">
                             No log found
                             [% IF ( CATALOGUING ) %]
-                                for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% object %]">Bibliographic record [% object %]</a>
+                                for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% object | url %]">Bibliographic record [% object | html %]</a>
                             [% END %]
                             [% IF ( MEMBERS ) %]
-                                for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% object %]">[% INCLUDE 'patron-title.inc' %]</a>
+                                for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% object | url %]">[% INCLUDE 'patron-title.inc' %]</a>
                             [% END %]
                             .
                         </div>
