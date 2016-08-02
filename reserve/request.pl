@@ -195,6 +195,7 @@ if ($multihold) {
 my $itemdata_enumchron = 0;
 my @biblioloop = ();
 foreach my $biblionumber (@biblionumbers) {
+    next unless $biblionumber =~ m|^\d+$|;
 
     my %biblioloopiter = ();
 
