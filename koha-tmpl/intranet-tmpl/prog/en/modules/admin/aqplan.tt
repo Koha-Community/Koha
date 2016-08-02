@@ -6,6 +6,8 @@
 <title>Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; Planning for [% budget_period_description | html %] by [% authcat | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>td.locked { background-image: url('[% interface | html %]/[% theme | html %]/img/locked.png'); padding-left : 20px; background-repeat: no-repeat; background-position: 5px 5px; } a.control { font-size:85%;text-decoration:none; } .plan_entry { text-align: right; width:90%; }</style>
+<script>
+</script>
 </head>
 
 <body id="admin_aqplan" class="admin">
@@ -63,13 +65,14 @@
     [% authvals_ro.code | html %]</th>
     [% END %]
 
-    <th class="remaining">Fund remaining</th><th>&nbsp;</th>
+    <th class="remaining">Fund remaining</th>
+    <th>Actions</th>
     </tr>
     </thead>
 
     <tbody>
     [% FOREACH budget_line IN budget_lines %]
-    <tr>
+    <tr id="[% budget_line.budget_id | html %]">
         [% IF ( budget_line.budget_lock ) %]
             <td class="locked" title="Fund locked">
         [% ELSE %]
@@ -135,9 +138,10 @@
         </table>
         </td>
 
-        <td>
+        <td class="actions">
              [% UNLESS ( budget_line.budget_lock ) %]
                     <input type="button" class="auto_fill_row" data-budget-id="[% budget_line.budget_id | html %]" value="Auto-fill row"/>
+                    <input type="button" class="clear_fields" data-budget-id="[% budget_line.budget_id | html %]" value="Clear">
             [% ELSE %]
              <div style="color:red;">not owned</div>
             [% END %]
@@ -304,6 +308,22 @@
             $(".auto_fill_row").on("click",function(){
                 var budget_id = $(this).data("budget-id");
                 autoFillRow( budget_id );
+            });
+            $(".clear_fields").on("click",function(){
+                var budget_id = $(this).data("budget-id");
+                var edit_row = $("#"+budget_id);
+                $(edit_row).find("input").each(function(){
+                    var type = $(this).attr("type");
+                    if (type != "button" && type != "submit" ) {
+                      $(this).val("");
+                      $(this).prop('disabled', false);
+                    }
+                    if ( type == "checkbox" ) {
+                      $(this).prop('checked', false);
+                    }
+                });
+                $("#budget_est_"+budget_id).text($("#budget_tot_"+budget_id).prev().text());
+                $("#budget_est_"+budget_id).css("color","green");
             });
         });
     </script>
