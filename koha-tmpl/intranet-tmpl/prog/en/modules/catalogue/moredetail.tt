@@ -34,7 +34,7 @@
 
     <h2>[% title |html %]</h2>
     [% IF ( subtitle ) %]<h4>[% FOREACH subtitl IN subtitle %] [% subtitl.subfield|html %][% END %]</h4>[% END %]
-    [% IF ( author ) %]<h4>by [% author %]</h4>[% END %]
+    [% IF ( author ) %]<h4>by [% author | html %]</h4>[% END %]
     <ol class="bibliodetails">
         <li><span class="label">Biblionumber:</span> [% biblionumber %]&nbsp;</li>
         [% UNLESS ( item_level_itypes ) %]

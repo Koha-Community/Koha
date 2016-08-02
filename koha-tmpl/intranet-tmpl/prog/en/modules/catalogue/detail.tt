@@ -428,12 +428,12 @@ function verify_images() {
     [% END %]
             [% UNLESS ( item_level_itypes ) %]<img src="[% imageurl %]" alt="[% translated_description %]" title="[% translated_description %]">[% END %]
             [% IF ( unititle ) %]<p>[% unititle |html %]</p>[% END %]
-            [% IF ( author ) %]<p>By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:[% author |url %]">[% author %]</a></p>[% END %]
+            [% IF ( author ) %]<p>By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:[% author |url %]">[% author | html %]</a></p>[% END %]
         <ul>
         [% IF ( MARCAUTHORS ) %]
             <li><strong>Additional authors:</strong><ul>
             [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
-                <li>[% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% MARCAUTHOR_SUBFIELDS_LOO.separator %]<a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value |url %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>[% END %]</li>
+                <li>[% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% MARCAUTHOR_SUBFIELDS_LOO.separator %]<a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value |url %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value | html %]</a>[% END %]</li>
                 [% END %]
 
         </ul>
@@ -1028,7 +1028,7 @@ function verify_images() {
 <table>
 [% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description %][% ELSE %]<img src="[% XISBN.imageurl %]" alt="[% XISBN.description %]" title="[% XISBN.description %]">[% END %]</td>[% END %]
-<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber %]">[% XISBN.title |html %]</a> by [% XISBN.author %] &copy;[% XISBN.copyrightdate %]
+<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber %]">[% XISBN.title |html %]</a> by [% XISBN.author | html %] &copy;[% XISBN.copyrightdate %]
   [% IF ( XISBN.publishercode ) %]
 [% XISBN.publishercode %] [% IF ( XISBN.place ) %]([% XISBN.place %])[% END %] [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear %][% END %] [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement %][% END %] [% IF ( XISBN.editionresponsability ) %][% XISBN.editionresponsability %][% END %]
     [% END %]
