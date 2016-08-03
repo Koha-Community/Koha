@@ -822,6 +822,16 @@ our $PERL_DEPS = {
         required => 1,
         min_ver => '3.69', # same for Wheezy/Jessie
     },
+    'Readonly' => {
+        'usage'    => 'Make script happy',
+        'required' => '0',
+        'min_ver'  => '0.01'
+    },
+    'Readonly::XS' => {
+        'usage'    => 'Make script happy',
+        'required' => '0',
+        'min_ver'  => '0.01'
+    },
 };
 
 1;
