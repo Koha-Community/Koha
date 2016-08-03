@@ -27,6 +27,8 @@ use C4::Installer::PerlDependencies;
 # debian one.
 my %overrides = (
     'LWP::Protocol::https' => 'liblwp-protocol-https-perl|libwww-perl (<6.02), libio-socket-ssl-perl',
+    'IO::Socket::IP'       => 'perl-modules (>= 5.20.0) | libio-socket-ip-perl',
+    'Swagger2'             => 'libswagger2-perl (>= 0.59)',
 );
 
 # These are packages we're going to ignore
@@ -38,7 +40,7 @@ my %ignore = (
 
 my $deps = $C4::Installer::PerlDependencies::PERL_DEPS;
 
-my $prefix = "^/usr/((lib|share)/perl5|(lib|share)/perl/[0-9.]+)";
+my $prefix = "^/usr/((lib|share)/perl5|(lib|share)/perl/[0-9.]+|(lib|share)/.*-linux-gnu.*/perl/[0-9.]+|(lib|share)/.*-linux-gnu.*/perl5/[0-9.]+)";
 
 foreach my $module ( keys %$deps ) {
     next if $ignore{$module};
