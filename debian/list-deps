@@ -40,7 +40,7 @@ my %ignore = (
 
 my $deps = $C4::Installer::PerlDependencies::PERL_DEPS;
 
-my $prefix = "^/usr/((lib|share)/perl5|(lib|share)/perl/[0-9.]+)";
+my $prefix = "^/usr/((lib|share)/perl5|(lib|share)/perl/[0-9.]+|(lib|share)/.*-linux-gnu.*/perl/[0-9.]+|(lib|share)/.*-linux-gnu.*/perl5/[0-9.]+)";
 
 foreach my $module ( keys %$deps ) {
     next if $ignore{$module};
