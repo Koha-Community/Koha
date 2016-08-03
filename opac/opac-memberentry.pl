@@ -196,6 +196,9 @@ elsif ( $action eq 'update' ) {
       CheckMandatoryFields( \%borrower_changes, $action );
     my $invalidformfields = CheckForInvalidFields(\%borrower);
 
+    # Send back the data to the template
+    %borrower = ( %$borrower, %borrower );
+
     if (@empty_mandatory_fields || @$invalidformfields) {
         $template->param(
             empty_mandatory_fields => \@empty_mandatory_fields,
