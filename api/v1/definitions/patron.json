@@ -268,6 +268,14 @@
         "privacy_guarantor_checkouts": {
           "type": "string",
           "description": "controls if relatives can see this patron's checkouts"
+        },
+        "checkprevcheckout": {
+          "type": "string",
+          "description": "produce a warning for this patron if this item has previously been checked out to this patron if 'yes', not if 'no', defer to category setting if 'inherit'"
+        },
+        "updated_on": {
+          "type": "string",
+          "description": "time of last change could be useful for synchronization with external systems (among others)"
         }
       }
 }
