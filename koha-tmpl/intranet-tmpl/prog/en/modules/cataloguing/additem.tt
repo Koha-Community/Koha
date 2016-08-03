@@ -37,8 +37,10 @@ $(document).ready(function(){
                     var rowid = $(this).parent().attr("id");
                     num_rowid = rowid.replace("row","");
                     $(".linktools").remove();
-                    var edit_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber='+num_rowid+'&searchid=[% searchid %]#edititem">' + _("Edit item") + '</a>');
-                    var delete_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber='+num_rowid+'&searchid=[% searchid %]">' + _("Delete item") + '</a></span>');
+                    var edit_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber='+num_rowid+'&searchid=[% searchid %]#edititem"></a>');
+                    $(edit_link).text(_("Edit item"));
+                    var delete_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=[% frameworkcode %]&biblionumber=[% biblionumber %]&itemnumber='+num_rowid+'&searchid=[% searchid %]"></a>');
+                    $(delete_link).text(_("Delete item"));
                     $(delete_link).on('click', function(e) {
                         return confirm_deletion();
                     });
