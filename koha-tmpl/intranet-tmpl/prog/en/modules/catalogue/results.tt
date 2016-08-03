@@ -152,7 +152,7 @@ $('#sort_by').change(function() {
     $(".selection").show();
     [% IF ( query_desc ) %]
     toHighlight = $("p,span.results_summary,a.title");
-        var query_desc = "[% query_desc |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+        var query_desc = "[% query_desc |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
         q_array = query_desc.split(" ");
         // ensure that we don't have "" at the end of the array, which can
         // break the highlighter
