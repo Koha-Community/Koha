@@ -30,24 +30,15 @@ stop_zebra_instance()
 {
     local instancename=$1
 
+    local PIDFILE="/var/run/koha/${instancename}/${instancename}-koha-zebra.pid"
     echo "Stopping Zebra server for $instancename"
-    daemon \
-        --name="$instancename-koha-zebra" \
-        --pidfiles="/var/run/koha/$instancename/" \
-        --errlog="/var/log/koha/$instancename/zebra-error.log" \
-        --stdout="/var/log/koha/$instancename/zebra.log" \
-        --output="/var/log/koha/$instancename/zebra-output.log" \
-        --verbose=1 \
-        --respawn \
-        --delay=30 \
-        --user="$instancename-koha.$instancename-koha" \
-        --stop \
-        -- \
-        zebrasrv \
-        -v none,fatal,warn \
-        -f "/etc/koha/sites/$instancename/koha-conf.xml" && \
-        return 0 || \
-        return 1
+
+    if start-stop-daemon --pidfile ${PIDFILE} --stop --quiet --retry=TERM/30/KILL/5; then
+        return 0;
+    else
+        return 1;
+    fi
+
 }
 
 usage()
