@@ -19,6 +19,11 @@
 	//<![CDATA[
         var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
         browser.show();
+        $(document).ready(function() {
+            $("#Frameworks").on("change",function(){
+                Changefwk(this);
+            });
+        });
 		function Changefwk(FwkList)
 		{
 			var fwk = FwkList.options[FwkList.selectedIndex].value;

@@ -19,6 +19,9 @@
 
 	 $(document).ready(function() {
         $('#bibliotabs').tabs();
+        $("#Frameworks").on("change",function(){
+            Changefwk(this);
+        });
 	 });
 
 function Changefwk(FwkList) {
@@ -58,7 +61,7 @@ function Changefwk(FwkList) {
 
 [% END %]
 
-    <p><b>With framework : <select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
+    <p><b>With framework : <select name="Frameworks" id="Frameworks">
                             <option value="">Default</option>
                             [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
                             [% IF ( frameworkcodeloo.selected ) %]<option value="[% frameworkcodeloo.value %]" selected="selected">[% frameworkcodeloo.frameworktext %]</option>[% ELSE %]<option value="[% frameworkcodeloo.value %]">[% frameworkcodeloo.frameworktext %]</option>[% END %]
