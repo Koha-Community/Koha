@@ -104,6 +104,7 @@ while ( my $hold = $holds->next ) {
         title             => $biblio->title,
         itemnumber        => $item->itemnumber,
         waitingdate       => $hold->waitingdate,
+        reservedate       => $hold->reservedate,
         borrowernum       => $patron->borrowernumber,
         biblionumber      => $biblio->biblionumber,
         barcode           => $item->barcode,
