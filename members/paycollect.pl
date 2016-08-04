@@ -149,6 +149,7 @@ $template->param(%$borrower);
 $template->param(
     borrowernumber => $borrowernumber,    # some templates require global
     borrower      => $borrower,
+    categoryname  => $borrower->{description},
     total         => $total_due,
     activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
