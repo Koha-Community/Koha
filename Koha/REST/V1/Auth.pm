@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use CGI;
+
 use C4::Auth qw( check_cookie_auth get_session haspermission );
 
 use Koha::Account::Lines;
@@ -96,6 +98,78 @@ sub under {
     };
 
     return $status;
+}
+
+sub login {
+    my ($c, $args, $cb) = @_;
+
+    my $userid = $args->{userid} || $args->{cardnumber};
+    my $password = $args->{password};
+    my $patron;
+
+    return $c->$cb({ error => "Either userid or cardnumber is required "
+                             ."- neither given." }, 403) unless ($userid);
+
+    my $cgi = CGI->new;
+    $cgi->param(userid => $userid);
+    $cgi->param(password => $password);
+    my ($status, $cookie, $sessionid) = C4::Auth::check_api_auth($cgi);
+
+    return $c->$cb({ error => "Login failed." }, 401) if $status eq "failed";
+    return $c->$cb({ error => "Session expired." }, 401) if $status eq "expired";
+    return $c->$cb({ error => "Database is under maintenance." }, 401) if $status eq "maintenance";
+    return $c->$cb({ error => "Login failed." }, 401) unless $status eq "ok";
+
+    $patron = Koha::Patrons->find({ userid => $userid }) unless $patron;
+    $patron = Koha::Patrons->find({ cardnumber => $userid }) unless $patron;
+
+    my $session = _swaggerize_session($sessionid, $patron);
+
+    $c->cookie(CGISESSID => $sessionid, { path => "/" });
+
+    return $c->$cb($session, 201);
+}
+
+sub logout {
+    my ($c, $args, $cb) = @_;
+
+    my $sessionid = $args->{session}->{sessionid};
+    $sessionid = $c->cookie('CGISESSID') unless $sessionid;
+
+    my ($status, $sid) = C4::Auth::check_cookie_auth($sessionid);
+    unless ($status eq "ok") {
+        return $c->$cb({ error => "Invalid session id."}, 401);
+    }
+
+    $c->cookie(CGISESSID => $sessionid, { path => "/", expires => 1 });
+
+    my $session = C4::Auth::get_session($sessionid);
+    $session->delete;
+    $session->flush;
+    return $c->$cb({}, 200);
+}
+
+sub _swaggerize_session {
+    my ($sessionid, $patron) = @_;
+
+    return unless ref($patron) eq 'Koha::Patron';
+
+    my $rawPermissions = C4::Auth::haspermission($patron->userid); # defaults to all permissions
+    my @permissions;
+
+    # delete all empty permissions
+    while ( my ($key, $val) = each %{$rawPermissions} ) {
+        push @permissions, $key if $val;
+    }
+
+    return {
+        borrowernumber => $patron->borrowernumber,
+        firstname => $patron->firstname,
+        surname  => $patron->surname,
+        email     => $patron->email,
+        sessionid => $sessionid,
+	permissions => \@permissions,
+    };
 }
 
 =head3 authenticate_api_request
