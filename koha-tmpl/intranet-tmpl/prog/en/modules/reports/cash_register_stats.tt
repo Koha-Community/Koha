@@ -6,7 +6,6 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% themelang %]/js/datatables.js"></script>
 <script type="text/javascript" id="js">
  $(document).ready(function() {
     $("#tbl_cash_register_stats").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -106,9 +105,9 @@ $(document).ready(function() {
                         [% END %]
 
                         [% IF transaction_type == "ACT" %]
-                        <option value="ACT" selected="selected">Active transactions</option>
+                        <option value="ACT" selected="selected">All payments to the library</option>
                         [% ELSE %]
-                        <option value="ACT">Active transactions</option>
+                        <option value="ACT">All payments to the library</option>
                         [% END %]
 
                         [% IF transaction_type == "C" %]
@@ -226,7 +225,7 @@ $(document).ready(function() {
         <thead>
         <tr>
             <th>Manager name</th>
-            <th>Patron cardnumber</th>
+            <th>Patron card number</th>
             <th>Patron name</th>
             <th>Transaction branch</th>
             <th>Transaction date</th>
@@ -247,7 +246,7 @@ $(document).ready(function() {
                 <td>[% loopresul.date | $KohaDates %]</td>
                 <td>
                     [% IF loopresul.accounttype == "ACT" %]
-                        <span>Active transactions</span>
+                        <span>All payments to the library</span>
                     [% ELSIF loopresul.accounttype == "C" || loopresul.accounttype == "CR" %]
                         <span>Credit</span>
                     [% ELSIF loopresul.accounttype == "FORW" || loopresul.accounttype == "W" %]

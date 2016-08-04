@@ -71,7 +71,7 @@ if ($do_it) {
     if ($transaction_type eq 'ALL') { #All Transactons
         $whereTType = '';
     } elsif ($transaction_type eq 'ACT') { #Active
-        $whereTType = " accounttype NOT IN ('F', 'FU', 'FOR', 'M', 'L') AND ";
+        $whereTType = " accounttype IN ('Pay','C') AND ";
     } else { #Single transac type
         if ($transaction_type eq 'FORW') {
             $whereTType = " accounttype = 'FOR' OR accounttype = 'W' AND ";
