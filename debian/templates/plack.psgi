@@ -25,6 +25,8 @@ use Plack::App::CGIBin;
 use Plack::App::Directory;
 use Plack::App::URLMap;
 
+use Mojo::Server::PSGI;
+
 # Pre-load libraries
 use C4::Boolean;
 use C4::Branch;
@@ -60,16 +62,18 @@ my $opac = Plack::App::CGIBin->new(
     root => '/usr/share/koha/opac/cgi-bin/opac'
 )->to_app;
 
-# my $api  = Plack::App::CGIBin->new(
-#     root => '/usr/share/koha/api/'
-# )->to_app;
+my $apiv1  = builder {
+    my $server = Mojo::Server::PSGI->new;
+    $server->load_app('/usr/share/koha/api/v1/app.pl');
+    $server->to_psgi_app;
+};
 
 builder {
 
     enable "ReverseProxy";
     enable "Plack::Middleware::Static";
 
-    mount '/opac'     => $opac;
-    mount '/intranet' => $intranet;
-    # mount '/api'       => $api;
+    mount '/opac'          => $opac;
+    mount '/intranet'      => $intranet;
+    mount '/api/v1/app.pl' => $apiv1;
 };
