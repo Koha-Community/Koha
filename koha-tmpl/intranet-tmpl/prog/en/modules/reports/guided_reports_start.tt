@@ -227,6 +227,9 @@ $("#delColumn").on("click",function(){
     });
     $("#select_group").change();
     $("#select_subgroup").change();
+    $("#group_select").on("change",function(){
+        load_group_subgroups();
+    });
 [% END %]
 });
 //]]>
@@ -1087,7 +1090,7 @@ $("#column_submit").submit(function() {
         <input type="radio" name="select_or_create_group"
             id="select_group" checked="checked" />
         <label for="select_group" style="float:none">Select</label>
-        <select name="group" onChange="load_group_subgroups();" id="group_select">
+        <select name="group" id="group_select">
             <option value="">(None)</option>
             [% FOREACH group IN groups_with_subgroups %]
                 [% IF (group.selected) %]

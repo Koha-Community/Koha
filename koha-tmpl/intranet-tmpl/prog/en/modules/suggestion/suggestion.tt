@@ -167,7 +167,12 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
 [% IF ( op_save )  %]
     <script type="text/javascript">
         // <![CDATA[
-        $(document).ready(function() { calcNewsuggTotal(); });
+        $(document).ready(function(){
+            calcNewsuggTotal();
+            $("#quantity,#price,#currency").on("change",function(){
+                calcNewsuggTotal();
+            });
+        });
         // ]]>
     </script>
 [% END %]
@@ -435,7 +440,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                 [% IF ( budgetsloo.selected ) %]<option value="[% budgetsloo.budget_id %]" selected="selected">[% budgetsloo.budget_name %]</option>[% ELSE %]<option value="[% budgetsloo.budget_id %]">[% budgetsloo.budget_name %]</option>[% END %][% END %]
             </select>
 		</li><li><label for="quantity">Copies:</label>
-			<input type="text" size="10" id="quantity" name="quantity" value="[% quantity %]" onchange="calcNewsuggTotal();" />
+            <input type="text" size="10" id="quantity" name="quantity" value="[% quantity %]" />
                 </li>
                 <li>
                     <label for="currency">Currency:</label>
@@ -444,7 +449,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                         <input type="hidden" id="[% c.currency %]" name="[% c.currency %]" value="[% c.rate %]" />
                     [% END %]
 
-                    <select name="currency" id="currency" onchange="calcNewsuggTotal();">
+                    <select name="currency" id="currency">
                         [% FOREACH c IN currencies %]
                             [% IF suggestionid and suggestion.currency == c.currency or not suggestionid and c.active %]
                                 <option value="[% c.currency %]" selected="selected">[% c.currency %]</option>
@@ -455,7 +460,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                     </select>
                 </li>
                 <li><label for="price">Price:</label>
-			<input type="text" size="20" name="price" id="price" value="[% price %]" onchange="calcNewsuggTotal();" />
+            <input type="text" size="20" name="price" id="price" value="[% price %]" />
                 </li><li><label for="total">Total: </label>
 			<input type="text" readonly="readonly" id="total" name="total" size="10" value="[% total %]"/>
                 </li></ol>
