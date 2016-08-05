@@ -87,6 +87,6 @@ my $new_borrower = GetMember( borrowernumber => $borr1 );
 
 ## Check to see that the approved modifications were saved
 ok( $new_borrower->{'surname'} eq 'Hall',
-    'Test approve() applys modification to borrower' );
+    'Test approve() applies modification to borrower' );
 
 $dbh->rollback();

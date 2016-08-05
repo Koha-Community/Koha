@@ -27,7 +27,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Patron::Modification - Class represents a requrest to modify or create a patron
+Koha::Patron::Modification - Class represents a request to modify or create a patron
 
 =head2 Class Methods
 
