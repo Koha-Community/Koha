@@ -41,7 +41,7 @@ my $api_spec = $swagger->api_spec->data;
 #           columns to properties of the object defined in Swagger.
 #             --> If columns match properties, definition is ok.
 #             --> If columns do not match properties, definition is not ok.
-my @definition_names = keys $api_spec->{definitions};
+my @definition_names = keys %{ $api_spec->{definitions} };
 
 subtest 'api/v1/definitions/*.json up-to-date with corresponding Koha-object' => sub {
     plan tests => scalar(@definition_names);
