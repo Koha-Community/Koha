@@ -29,7 +29,9 @@ sub startup {
         cb => sub {
             my $c = shift;
 
-            my ($status, $sessionID) = check_cookie_auth($c->cookie('CGISESSID'));
+            # ENV{REMOTE_ADDR} is not set here, we need to read the headers
+            my $remote_addr = $c->req->headers->header('x-forwarded-for');
+            my ($status, $sessionID) = check_cookie_auth($c->cookie('CGISESSID'), undef, { remote_addr => $remote_addr });
             if ($status eq "ok") {
                 my $session = get_session($sessionID);
                 my $user = Koha::Patrons->find($session->param('number'));

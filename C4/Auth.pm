@@ -1614,7 +1614,9 @@ Possible return values in C<$status> are:
 sub check_cookie_auth {
     my $cookie        = shift;
     my $flagsrequired = shift;
+    my $params        = shift;
 
+    my $remote_addr = $params->{remote_addr} || $ENV{REMOTE_ADDR};
     my $dbh     = C4::Context->dbh;
     my $timeout = _timeout_syspref();
 
@@ -1671,7 +1673,7 @@ sub check_cookie_auth {
             $userid    = undef;
             $sessionID = undef;
             return ("expired", undef);
-        } elsif ( C4::Context->preference('SessionRestrictionByIP') && $ip ne $ENV{'REMOTE_ADDR'} ) {
+        } elsif ( C4::Context->preference('SessionRestrictionByIP') && $ip ne $remote_addr ) {
 
             # IP address changed
             $session->delete();
