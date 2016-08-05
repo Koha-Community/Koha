@@ -660,9 +660,9 @@ $(document).ready(function () {
                 </a>
             [% ELSE %]Not checked out[% END %]</td>
             <td class="ci-note">
-                [% IF ( riloo.bornote ) %]<p><span class="circ-hlt">[% riloo.bornote %]</p></span>[% END %]
-                [% IF ( riloo.itemnote ) %]<p><span class="circ-hlt">[% riloo.itemnote %]</p></span>[% END %]
-                [% IF ( riloo.itemnotes_nonpublic ) %]<p><span class="circ-hlt">[% riloo.itemnotes_nonpublic %]</p></span>[% END %]
+                [% IF ( riloo.bornote ) %]<p><span class="circ-hlt patron-note">[% riloo.bornote %]</p></span>[% END %]
+                [% IF ( riloo.itemnote ) %]<p><span class="circ-hlt item-note-public">[% riloo.itemnote %]</p></span>[% END %]
+                [% IF ( riloo.itemnotes_nonpublic ) %]<p><span class="circ-hlt item-note-nonpublic">[% riloo.itemnotes_nonpublic %]</p></span>[% END %]
             </td>
            </tr>
         [% END %]
