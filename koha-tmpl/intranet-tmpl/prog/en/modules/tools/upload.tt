@@ -138,7 +138,7 @@
 [% BLOCK newsearch %]
     <form id="newsearch">
         <fieldset class="action">
-            <button onclick="SubmitMe('new'); return false;">New search</button>
+            <button id="new_search">New search</button>
         </fieldset>
     </form>
     [% IF plugin %]
@@ -336,6 +336,10 @@ $(document).ready(function() {
         e.preventDefault();
         var record_id = $(this).data("record-id");
         DeleteEntry( record_id );
+    });
+    $("#new_search").on("click",function(e){
+        e.preventDefault();
+        SubmitMe('new');
     });
 });
 //]]>

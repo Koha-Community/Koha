@@ -6,7 +6,11 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
-// <![CDATA[
+    $(document).ready(function(){
+        $("#delete_patrons_form").on("submit",function(){
+            return checkForm( this );
+        });
+    });
         /**
          *  checkForm(form)
          *  This function check the form is correctly filled.
@@ -20,7 +24,7 @@
               }
               if((form.checkbox[1].checked)){
                   if(!(form.date2.value)){
-                      alert(_("please enter a date!"));
+                      alert(_("Please enter a date!"));
                       return false;
                   }
               }
@@ -30,22 +34,6 @@
               }
               return true;
           }
-
-        /**
-         *  checkForm2(form)
-         *  This function check the form2 is correctly filled.
-         */
-          function checkForm2(form) {
-              return true;
-          }
-
-          $(document).ready(function() {
-              $('#selectlibrary').find("input:submit").hide();
-              $('#branch').change(function() {
-                $('#selectlibrary').submit();
-              });
-          });
-     // ]]>
 </script>
 
 </head>
@@ -90,7 +78,7 @@
     <p>This tool allows you to delete patrons and anonymize checkout history. For deleting patrons, any combination of limits can be used.</p>
 </div>
 <div id="step1">
-    <form name="f1" onsubmit="return checkForm(this);" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
+    <form name="f1" id="delete_patrons_form" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
     <fieldset>
     <legend>Delete patrons</legend>
         <h3><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" /><label for="checkborrower"> Verify you want to delete patrons</label></h3>
@@ -167,7 +155,7 @@
 [% IF step == 2 %]
 <!-- STEP 2 START -->
 <div id="step2">
-        <form name="f2" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post" onsubmit="return checkForm2(this);">
+        <form name="f2" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
     <fieldset>
         <legend>Warnings</legend>
         <ul>

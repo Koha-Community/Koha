@@ -86,6 +86,9 @@ $(document).ready(function(){
             $(".checkboxed").unCheckCheckboxes();
             return false;
         });
+    $("#inventory_form").on("submit",function(){
+        return checkForm();
+    });
 });
 //]]>
 </script>
@@ -120,7 +123,7 @@ $(document).ready(function(){
     [% END %]
        [% UNLESS op %]
     <div class="yui-g">
-    <form method="post" action="/cgi-bin/koha/tools/inventory.pl" enctype="multipart/form-data" onsubmit="return checkForm()">
+    <form method="post" id="inventory_form" action="/cgi-bin/koha/tools/inventory.pl" enctype="multipart/form-data">
         <fieldset class="rows">
             <legend>Use a barcode file</legend>
      <ol>
@@ -231,7 +234,7 @@ $(document).ready(function(){
     <input type="hidden" name="datelastseen" value="[% datelastseen %]" />
 
     [% UNLESS compareinv2barcd %]
-      <div><a href="#" class="checkall">[Select all]</a> <a href="#" class="clearall">[Clear all]</a></div>
+      <div><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-remove"></i> Clear all</a></div>
     [% END %]
 
     <table id="inventoryt">
@@ -299,7 +302,7 @@ $(document).ready(function(){
     </table>
     <div class="spacer"></div>
     [% UNLESS compareinv2barcd %]
-      <div style="padding : .3em 0"><a href="#" class="checkall">[Select all]</a> <a href="#" class="clearall">[Clear all]</a></div>
+      <div style="padding : .3em 0"><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-remove"></i> Clear all</a></div>
       <input type="submit" id="markseenandquit" value="Mark seen and quit" />
       <input type="submit" value="Mark seen and continue &gt;&gt;" id="markseenandcontinuebutton" />
       <input type="submit" value="Continue without marking &gt;&gt;" id="continuewithoutmarkingbutton" class="submit" />

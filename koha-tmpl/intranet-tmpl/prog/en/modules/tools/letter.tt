@@ -27,6 +27,15 @@ $(document).ready(function() {
       });
     [% END %]
 
+    $("#newmodule").on("change",function(){
+        if( $("#branch").val() == ""){
+            var branchcode = "*";
+        } else {
+            var branchcode = $("#branch").val();
+        }
+        window.location.href = "/cgi-bin/koha/tools/letter.pl?op=add_form&module=" + $(this).val() + "&branchcode=" + branchcode;
+    });
+
     $("#submit_form").click( function(event) {
         event.preventDefault();
         var at_least_one_exists = 0;
@@ -291,7 +300,7 @@ $(document).ready(function() {
 				<label for="module">Koha module:</label>
 				<input type="hidden" name="oldmodule" value="[% module %]" />
                 [% IF adding  %]
-                  <select name="module" id="module" onchange="javascript:window.location.href = unescape(window.location.pathname)+'?op=add_form&amp;module='+this.value+'&amp;content='+window.document.forms['Aform'].elements['content'].value;">
+                  <select name="module" id="newmodule">
                 [% ELSE %]
                   <select name="module" id="module">
                 [% END %]

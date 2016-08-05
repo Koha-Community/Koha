@@ -10,11 +10,14 @@
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Layouts &rsaquo; [% IF ( layout_id ) %]Edit ([% layout_id %])[% ELSE %]New[% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    <script type="text/JavaScript" language="JavaScript">
+    <script type="text/JavaScript">
         //<![CDATA[
             $(document).ready(function() {
                 $("input[name='layout_choice']").change( function() { layout_method() } );
                 layout_method();
+                $("#font").on("change",function(){
+                     checkOblique();
+                });
             });
             function layout_method() {
                 if( $("input[name='layout_choice']:checked").val() == 'layout_string' ) {
@@ -173,7 +176,7 @@
                                 </li>
                                 <li>
                                     <label for="font">Font: </label>
-                                    <select name="font" id="font" onchange="checkOblique()">
+                                    <select name="font" id="font">
                                         [% FOREACH font_type IN font_types %]
                                         [% IF ( font_type.selected ) %]
                                         <option value="[% font_type.type %]" selected="selected">[% font_type.name %]</option>
