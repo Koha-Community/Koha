@@ -554,6 +554,21 @@ OPAC:
                   yes: Allow
             - patrons to select library when making a purchase suggestion
         -
+            - "Fields that should be mandatory for patron purchase suggestions:"
+            - pref: OPACSuggestionMandatoryFields
+              multiple:
+                title: Title
+                author: Author
+                copyrightdate: Copyright or publication date
+                isbn: ISBN, ISSN or other standard number
+                publishercode: Publisher name
+                collectiontitle: Collection title
+                place: Publication place
+                itemtype: Item type
+                patronreason: Patron reason
+                note: Note
+            - "<br />Note: if none of the above options are selected, 'Title' field would be mandatory anyway, by default."
+        -
             - pref: OpacHiddenItems
               type: textarea
               class: code
