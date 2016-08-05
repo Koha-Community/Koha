@@ -35,14 +35,14 @@
                             <h1>Enter a new purchase suggestion</h1>
 
                             <p>Please fill out this form to make a purchase suggestion. You will receive an email when the library processes your suggestion</p>
-                            <p>Only the title is required, but the more information you enter the easier it will be for the librarians to find the title you're requesting. The "Notes" field can be used to provide any additional information.</p>
+                            <p>Only certain fields (marked in red) are required, but the more information you enter the easier it will be for the librarians to find the title you're requesting. The "Notes" field can be used to provide any additional information.</p>
 
-                            <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+                            <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="add_suggestion_form">
                                 <fieldset class="rows">
                                     <ol>
-                                        <li><label class="required" for="title">Title:</label><input type="text" id="title" name="title" class="span6" maxlength="255" /></li>
+                                        <li><label for="title">Title:</label><input type="text" id="title" name="title" class="span6" maxlength="255" /></li>
                                         <li><label for="author">Author:</label><input type="text" id="author" name="author" class="span6" maxlength="80" /></li>
-                                        <li><label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" /></li>
+                                        <li><label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" pattern="[12][0-9\-\?]{3}" size="4" maxlength="4" /></li>
                                         <li><label for="isbn">Standard number (ISBN, ISSN or other):</label><input type="text" id="isbn" name="isbn"  maxlength="80" /></li>
                                         <li><label for="publishercode">Publisher:</label><input type="text" id="publishercode" name="publishercode" class="span6" maxlength="80" /></li>
                                         <li><label for="collectiontitle">Collection title:</label><input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" /></li>
@@ -89,7 +89,7 @@
                                 <fieldset class="action">
                                     <input type="hidden" name="suggested_by_anyone" value="[% suggested_by_anyone %]" />
                                     <input type="hidden" name="op" value="add_confirm" />
-                                    <input type="submit" onclick="Check(this.form); return false;" class="btn" value="Submit your suggestion" /> <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a>
+                                    <input type="submit" class="btn" value="Submit your suggestion" /> <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a>
                                 </fieldset>
                             </form>
                             [% END %]
@@ -337,25 +337,20 @@
           return true;
         });
         [% END %]
+        [% IF ( op_add && mandatoryfields ) %]
+        {
+            var FldsRequired = [[% mandatoryfields %]];
+            for (var i = 0; i < FldsRequired.length; i++) {
+                var rq_input = $('#' + FldsRequired[i]);
+                if (rq_input.length != 1) continue;
+                $(rq_input).attr("required", "required");
+                var rq_label = $("label[for=" + rq_input.attr("id") + "]");
+                if (rq_label.length != 1) continue;
+                $(rq_label).addClass('required');
+            }
+        }
+        [% END %]
     });
-
-    function Check(f) {
-        var _alertString="";
-        var alertString2;
-
-        if(f.title.value.length ==0){
-            _alertString += _("- You must enter a Title") + "\n";
-        }
-
-        if (_alertString.length==0) {
-            f.submit();
-        } else {
-            alertString2 = _("Form not submitted because of the following problem(s)");
-            alertString2 += "\n------------------------------------------------------------------------------------\n\n";
-            alertString2 += _alertString;
-            alert(alertString2);
-        }
-    }
 //]]>
 </script>
 [% END %]
