@@ -73,7 +73,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $session = $cookie ? get_session($cookie->value) : undef;
 
 my $filter;
-if ( $input->param("filter_set") ) {
+if ( $input->param("filter_set") or $input->param('clear_filters') ) {
     $filter = {};
     $filter->{$_} = $input->param("filter_$_") foreach qw/date author keyword group subgroup/;
     $session->param('report_filter', $filter) if $session;
