@@ -489,6 +489,7 @@ my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit
 ## parse the query_cgi string and put it into a form suitable for <input>s
 my @query_inputs;
 my $scan_index_to_use;
+my $scan_search_term_to_use;
 
 for my $this_cgi ( split('&',$query_cgi) ) {
     next unless $this_cgi;
@@ -499,9 +500,13 @@ for my $this_cgi ( split('&',$query_cgi) ) {
     if ($input_name eq 'idx') {
         $scan_index_to_use = $input_value; # unless $scan_index_to_use;
     }
+    if ($input_name eq 'q') {
+        $scan_search_term_to_use = $input_value;
+    }
 }
 $template->param ( QUERY_INPUTS => \@query_inputs,
-                   scan_index_to_use => $scan_index_to_use );
+                   scan_index_to_use => $scan_index_to_use,
+                   scan_search_term_to_use => $scan_search_term_to_use );
 
 ## parse the limit_cgi string and put it into a form suitable for <input>s
 my @limit_inputs;
