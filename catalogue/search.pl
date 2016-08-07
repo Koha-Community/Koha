@@ -504,7 +504,7 @@ for my $this_cgi ( split('&',$query_cgi) ) {
         $scan_index_to_use = $input_value; # unless $scan_index_to_use;
     }
     if ($input_name eq 'q') {
-        $scan_search_term_to_use = $input_value;
+        $scan_search_term_to_use = Encode::decode_utf8( uri_unescape( $input_value ));
     }
 }
 $template->param ( QUERY_INPUTS => \@query_inputs,
