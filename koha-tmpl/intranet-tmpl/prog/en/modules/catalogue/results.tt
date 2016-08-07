@@ -421,7 +421,11 @@ var holdForPatron = function () {
             <table>
                 <tr>
                     <td>
-                        Scan Index for: <input type="text" name="q" id="scan-index" size="35" value="" />
+                        [% IF ( scan_search_term_to_use ) %]
+                            Scan Index for: <input type="text" name="q" id="scan-index" size="35" value="[% scan_search_term_to_use %]" />
+                        [% ELSE %]
+                            Scan Index for: <input type="text" name="q" id="scan-index" size="35" value="" />
+                        [% END %]
                     </td>
                 </tr>
                 <tr>
@@ -467,7 +471,7 @@ var holdForPatron = function () {
                 [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                     <tr>
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=[% SEARCH_RESULT.scan_index_to_use %]&amp;q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title %]&quot;">[% SEARCH_RESULT.title |html %]</a>
+                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=[% scan_index_to_use %]&amp;q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title %]&quot;">[% SEARCH_RESULT.title |html %]</a>
                         </td>
                         <td>
                             [% SEARCH_RESULT.author %]
