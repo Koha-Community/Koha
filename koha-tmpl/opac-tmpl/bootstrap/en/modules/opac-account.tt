@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Price %]
 [% SET ENABLE_OPAC_PAYMENTS = Koha.Preference('EnablePayPalOpacPayments') %]
 [% SET DISPLAY_PAYMENT_BLOCK = 0 %]
 
@@ -84,7 +85,7 @@
                                     [%- SET COLSPAN = 3 -%]
                                 [%- END -%]
                                 <th class="sum" colspan="[% COLSPAN %]">Total due</th>
-                                <td class="sum">[% total %]</td>
+                                <td class="sum">[% total | $Price %]</td>
                             </tr>
                             </tfoot>
 
@@ -127,8 +128,8 @@
                                           [%- IF ACCOUNT_LINE.description %], [% ACCOUNT_LINE.description %][% END %]
                                           [% IF ACCOUNT_LINE.title %]([% ACCOUNT_LINE.title %])[% END %]
                                         </td>
-                                        [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount %]</td>
-                                        [% IF ( ACCOUNT_LINE.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amountoutstanding %]</td>
+                                        [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount | $Price %]</td>
+                                        [% IF ( ACCOUNT_LINE.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amountoutstanding | $Price %]</td>
                                     </tr>
                                 [% END %]
                             </tbody>
