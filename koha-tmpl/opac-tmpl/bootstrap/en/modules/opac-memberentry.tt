@@ -171,6 +171,7 @@
 
                                         [% IF borrower %]
                                             [% Categories.GetName( borrower.categorycode ) %]
+                                            <input type="hidden" name="borrower_categorycode" value="[% borrower.categorycode %]" />
                                         [% ELSE %]
                                             <select id="borrower_categorycode" name="borrower_categorycode">
                                                 [% FOREACH c IN Categories.all() %]
