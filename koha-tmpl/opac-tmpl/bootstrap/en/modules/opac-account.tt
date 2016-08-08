@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Price %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your fines and charges</title>
@@ -42,7 +43,7 @@
                             <tfoot>
                             <tr>
                                 <th class="sum" colspan="3">Total due</th>
-                                <td class="sum">[% total %]</td>
+                                <td class="sum">[% total | $Price %]</td>
                             </tr>
                             </tfoot>
 
@@ -76,8 +77,8 @@
                                           [%- IF ACCOUNT_LINE.description %], [% ACCOUNT_LINE.description %][% END %]
                                           [% IF ACCOUNT_LINE.title %]([% ACCOUNT_LINE.title %])[% END %]
                                         </td>
-                                        [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount %]</td>
-                                        [% IF ( ACCOUNT_LINE.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amountoutstanding %]</td>
+                                        [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount | $Price %]</td>
+                                        [% IF ( ACCOUNT_LINE.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amountoutstanding | $Price %]</td>
                                     </tr>
                                 [% END %]
                             </tbody>
