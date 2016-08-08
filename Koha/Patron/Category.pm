@@ -35,6 +35,13 @@ Koha::Patron;;Category - Koha Patron;;Category Object class
 
 =cut
 
+sub store {
+    my ( $self ) = @_;
+    $self->checkprevcheckout('inherit')
+        unless defined $self->checkprevcheckout;
+    return $self->SUPER::store;
+}
+
 =head3 default_messaging
 
 my $messaging = $category->default_messaging();
