@@ -1,6 +1,7 @@
 [% USE To %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
+[% USE Price %]
 {
     "sEcho": [% sEcho %],
     "iTotalRecords": [% iTotalRecords %],
@@ -27,7 +28,7 @@
                 "dt_od_checkouts":
                     "[% IF data.overdues %]<span class='overdue'><strong>[% data.overdues %]</strong></span>[% ELSE %][% data.overdues %][% END %] / [% data.issues %]",
                 "dt_fines":
-                    "<span style='text-align: right; display: block;'>[% IF data.fines < 0 %]<span class='credit'>[% data.fines |html %]</span> [% ELSIF data.fines > 0 %] <span class='debit'><strong>[% data.fines |html %]</strong></span> [% ELSE %] [% data.fines |html%] [% END %]</span>",
+                    "<span style='text-align: right; display: block;'>[% IF data.fines < 0 %]<span class='credit'>[% data.fines | $Price %]</span> [% ELSIF data.fines > 0 %] <span class='debit'><strong>[% data.fines | $Price %]</strong></span> [% ELSE %] [% data.fines | $Price %] [% END %]</span>",
                 "dt_borrowernotes":
                     "[% data.borrowernotes.replace('\\\\' , '\\\\') |html |html_line_break |collapse %]",
                 "dt_action":
