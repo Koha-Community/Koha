@@ -10790,13 +10790,13 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$$DBversion = "3.20.12.000";
+$DBversion = "3.20.12.000";
 if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Koha 3.20.12)\n";
     SetVersion($DBversion);
 }
 
-DBversion = "3.20.13.000";
+$DBversion = "3.20.13.000";
 if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Koha 3.20.13)\n";
     SetVersion($DBversion);
