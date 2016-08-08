@@ -635,8 +635,8 @@ sub AddMember {
     $new_member->{checkprevcheckout} ||= 'inherit';
     delete $new_member->{borrowernumber};
 
-    my $rs = $schema->resultset('Borrower');
-    $data{borrowernumber} = $rs->create($new_member)->id;
+    my $patron = Koha::Patron->new( $new_member )->store;
+    $data{borrowernumber} = $patron->borrowernumber;
 
     # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
     # cronjob will use for syncing with NL
