@@ -57,8 +57,17 @@ sub new {
     my $self = {};
 
     if ($attributes) {
-        $self->{_result} =
-          Koha::Database->new()->schema()->resultset( $class->_type() )
+        my $schema = Koha::Database->new->schema;
+
+        # Remove the arguments which exist, are not defined but NOT NULL to use the default value
+        my $columns_info = $schema->resultset( $class->_type )->result_source->columns_info;
+        for my $column_name ( keys %$attributes ) {
+            my $c_info = $columns_info->{$column_name};
+            next if $c_info->{is_nullable};
+            next if not exists $attributes->{$column_name} or defined $attributes->{$column_name};
+            delete $attributes->{$column_name};
+        }
+        $self->{_result} = $schema->resultset( $class->_type() )
           ->new($attributes);
     }
 

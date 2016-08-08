@@ -24,6 +24,8 @@ use Test::Warn;
 
 use Koha::Authority::Types;
 use Koha::Cities;
+use Koha::Patron::Category;
+use Koha::Patron::Categories;
 use Koha::Patrons;
 use Koha::Database;
 
@@ -79,6 +81,16 @@ subtest 'delete' => sub {
 subtest 'not_covered_yet' => sub {
     plan tests => 1;
     warning_is { Koha::Patrons->search->not_covered_yet } { carped => 'The method not_covered_yet is not covered by tests' }, "If a method is not covered by tests, the AUTOLOAD method won't execute the method";
+};
+subtest 'new' => sub {
+    plan tests => 2;
+    my $a_cat_code = 'A_CAT_CODE';
+    my $patron_category = Koha::Patron::Category->new( { categorycode => $a_cat_code } )->store;
+    is( Koha::Patron::Categories->find($a_cat_code)->category_type, 'A', 'Koha::Object->new should set the default value' );
+    Koha::Patron::Categories->find($a_cat_code)->delete;
+    $patron_category = Koha::Patron::Category->new( { categorycode => $a_cat_code, category_type => undef } )->store;
+    is( Koha::Patron::Categories->find($a_cat_code)->category_type, 'A', 'Koha::Object->new should set the default value even if the argument exists but is not defined' );
+    Koha::Patron::Categories->find($a_cat_code)->delete;
 };
 
 subtest 'search_related' => sub {
