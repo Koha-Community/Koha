@@ -630,9 +630,10 @@ sub AddMember {
     $data{'sms_provider_id'} = undef if ( not $data{'sms_provider_id'} );
 
     # get only the columns of Borrower
+    # FIXME Do we really need this check?
     my @columns = $schema->source('Borrower')->columns;
     my $new_member = { map { join(' ',@columns) =~ /$_/ ? ( $_ => $data{$_} )  : () } keys(%data) } ;
-    $new_member->{checkprevcheckout} ||= 'inherit';
+
     delete $new_member->{borrowernumber};
 
     my $patron = Koha::Patron->new( $new_member )->store;
