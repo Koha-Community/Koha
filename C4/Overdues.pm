@@ -55,10 +55,7 @@ BEGIN {
       &UpdateFine
       &GetFine
       &get_chargeable_units
-      &CheckItemNotify
       &GetOverduesForBranch
-      &RemoveNotifyLine
-      &AddNotifyLine
       &GetOverdueMessageTransportTypes
       &parse_overdues_letter
     );
@@ -808,27 +805,6 @@ sub GetBranchcodesWithOverdueRules {
     return @$branchcodes;
 }
 
-=head2 CheckItemNotify
-
-Sql request to check if the document has alreday been notified
-this function is not exported, only used with GetOverduesForBranch
-
-=cut
-
-sub CheckItemNotify {
-    my ($notify_id,$notify_level,$itemnumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("
-    SELECT COUNT(*)
-     FROM notifys
-    WHERE notify_id    = ?
-     AND  notify_level = ? 
-     AND  itemnumber   = ? ");
-    $sth->execute($notify_id,$notify_level,$itemnumber);
-    my $notified = $sth->fetchrow;
-    return ($notified);
-}
-
 =head2 GetOverduesForBranch
 
 Sql request for display all information for branchoverdues.pl
@@ -881,78 +857,13 @@ sub GetOverduesForBranch {
       AND (issues.branchcode =  ?   )
       AND (issues.date_due  < NOW())
     ";
-    my @getoverdues;
-    my $i = 0;
-    my $sth;
     if ($location) {
-        $sth = $dbh->prepare("$select AND items.location = ? ORDER BY borrowers.surname, borrowers.firstname");
-        $sth->execute($branch, $location);
+        my $q = "$select AND items.location = ? ORDER BY borrowers.surname, borrowers.firstname";
+        return @{ $dbh->selectall_arrayref($q, { Slice => {} }, $branch, $location ) };
     } else {
-        $sth = $dbh->prepare("$select ORDER BY borrowers.surname, borrowers.firstname");
-        $sth->execute($branch);
+        my $q = "$select ORDER BY borrowers.surname, borrowers.firstname";
+        return @{ $dbh->selectall_arrayref($q, { Slice => {} }, $branch ) };
     }
-    while ( my $data = $sth->fetchrow_hashref ) {
-    #check if the document has already been notified
-        my $countnotify = CheckItemNotify($data->{'notify_id'}, $data->{'notify_level'}, $data->{'itemnumber'});
-        if ($countnotify eq '0') {
-            $getoverdues[$i] = $data;
-            $i++;
-        }
-    }
-    return (@getoverdues);
-}
-
-
-=head2 AddNotifyLine
-
-    &AddNotifyLine($borrowernumber, $itemnumber, $overduelevel, $method, $notifyId)
-
-Create a line into notify, if the method is phone, the notification_send_date is implemented to
-
-=cut
-
-sub AddNotifyLine {
-    my ( $borrowernumber, $itemnumber, $overduelevel, $method, $notifyId ) = @_;
-    my $dbh = C4::Context->dbh;
-    if ( $method eq "phone" ) {
-        my $sth = $dbh->prepare(
-            "INSERT INTO notifys (borrowernumber,itemnumber,notify_date,notify_send_date,notify_level,method,notify_id)
-        VALUES (?,?,now(),now(),?,?,?)"
-        );
-        $sth->execute( $borrowernumber, $itemnumber, $overduelevel, $method,
-            $notifyId );
-    }
-    else {
-        my $sth = $dbh->prepare(
-            "INSERT INTO notifys (borrowernumber,itemnumber,notify_date,notify_level,method,notify_id)
-        VALUES (?,?,now(),?,?,?)"
-        );
-        $sth->execute( $borrowernumber, $itemnumber, $overduelevel, $method,
-            $notifyId );
-    }
-    return 1;
-}
-
-=head2 RemoveNotifyLine
-
-    &RemoveNotifyLine( $borrowernumber, $itemnumber, $notify_date );
-
-Cancel a notification
-
-=cut
-
-sub RemoveNotifyLine {
-    my ( $borrowernumber, $itemnumber, $notify_date ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "DELETE FROM notifys 
-            WHERE
-            borrowernumber=?
-            AND itemnumber=?
-            AND notify_date=?"
-    );
-    $sth->execute( $borrowernumber, $itemnumber, $notify_date );
-    return 1;
 }
 
 =head2 GetOverdueMessageTransportTypes

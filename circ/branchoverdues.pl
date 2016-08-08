@@ -22,7 +22,7 @@ use C4::Context;
 use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Auth;
-use C4::Overdues;    # AddNotifyLine
+use C4::Overdues;
 use C4::Biblio;
 use C4::Koha;
 use C4::Debug;
@@ -34,7 +34,6 @@ use Data::Dumper;
 
  this module is a new interface, allow to the librarian to check all items on overdues (based on the acountlines type 'FU' )
  this interface is filtered by branches (automatically), and by location (optional) ....
- all informations are stocked in the notifys BDD
 
  FIXME for this time, we have only four methods to notify :
  	- mail : work with a batch programm
@@ -83,18 +82,6 @@ my $location       = $input->param('location');
 
 # FIXME: better check that borrowernumber is defined and valid.
 # FIXME: same for itemnumber and other variables passed in here.
-
-# now create the line in bdd (notifys)
-if ( $input->param('action') eq 'add' ) {
-    my $addnotify =
-      AddNotifyLine( $borrowernumber, $itemnumber, $overduelevel, $method,
-        $notifyId )    # FIXME: useless variable, no TMPL code for "action" exists.;
-}
-elsif ( $input->param('action') eq 'remove' ) {
-    my $notify_date  = $input->param('notify_date');
-    my $removenotify =
-      RemoveNotifyLine( $borrowernumber, $itemnumber, $notify_date );    # FIXME: useless variable, no TMPL code for "action" exists.
-}
 
 my @overduesloop;
 my @getoverdues = GetOverduesForBranch( $default, $location );

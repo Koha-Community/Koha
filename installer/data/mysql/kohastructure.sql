@@ -1281,21 +1281,6 @@ CREATE TABLE `need_merge_authorities` ( -- keeping track of authority records st
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Table structure for table `notifys`
---
-
-DROP TABLE IF EXISTS `notifys`;
-CREATE TABLE `notifys` (
-  `notify_id` int(11) NOT NULL default 0,
-  `borrowernumber` int(11) NOT NULL default 0,
-  `itemnumber` int(11) NOT NULL default 0,
-  `notify_date` date default NULL,
-  `notify_send_date` date default NULL,
-  `notify_level` int(1) NOT NULL default 0,
-  `method` varchar(20) NOT NULL default ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
 -- Table structure for table `oai_sets`
 --
 
