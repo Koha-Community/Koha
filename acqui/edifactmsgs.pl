@@ -39,7 +39,7 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
 
 my $schema = Koha::Database->new()->schema();
 my $cmd    = $q->param('op');
-if ( $cmd && $cmd == 'delete' ) {
+if ( $cmd && $cmd eq 'delete' ) {
     my $id  = $q->param('message_id');
     my $msg = $schema->resultset('EdifactMessage')->find($id);
     $msg->deleted(1);
