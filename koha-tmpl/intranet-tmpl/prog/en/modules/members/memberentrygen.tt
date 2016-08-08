@@ -125,9 +125,7 @@ $(document).ready(function() {
         <div class="dialog message">Email has been sent.</div>
     [% END %]
 
-	[% IF ( no_add ) %]<div class="dialog alert"><h3>Cannot add patron</h3>
-            [% IF ( no_branches ) %]<p><strong>There are no libraries defined.</strong> [% IF ( CAN_user_parameters ) %]<a href="/cgi-bin/koha/admin/branches.pl">Please add a library.</a>[% ELSE %]An administrator must define at least one library.[% END %]</p>[% END %]
-            [% IF ( no_categories ) %]<p><strong>There are no patron categories defined.</strong> [% IF ( CAN_user_parameters ) %]<a href="/cgi-bin/koha/admin/categories.pl">Please add a patron category.</a>[% ELSE %]An administrator must define at least one patron category.</p>[% END %][% END %]</div>[% END %]
+    [% INCLUDE 'noadd-warnings.inc' %]
 
 	[% UNLESS ( no_add ) %]
     <h1>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</h1>
