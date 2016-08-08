@@ -51,6 +51,11 @@ if ( $m ) {
         OpacPasswordChange => C4::Context->preference('OpacPasswordChange') );
 
     my $borrower = $m->unblessed();
+    # Avoid "Column 'column' cannot be null" errors
+    # FIXME should be done at the Koha::Object level
+    for my $key ( keys %$borrower ) {
+        delete $borrower->{$key} if not defined $borrower->{$key}
+    }
 
     my $password;
     ( $borrowernumber, $password ) = AddMember_Opac(%$borrower);
