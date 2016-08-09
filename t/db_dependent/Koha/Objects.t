@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Warn;
 
 use Koha::Authority::Types;
@@ -65,6 +65,15 @@ subtest 'reset' => sub {
     my $first_borrowernumber = $patrons->next->borrowernumber;
     my $second_borrowernumber = $patrons->next->borrowernumber;
     is( $patrons->reset->next->borrowernumber, $first_borrowernumber, 'Koha::Objects->reset should work as expected');
+};
+
+subtest 'delete' => sub {
+    plan tests => 2;
+    my $builder   = t::lib::TestBuilder->new;
+    my $patron_1 = $builder->build({source => 'Borrower'});
+    my $patron_2 = $builder->build({source => 'Borrower'});
+    is( Koha::Patrons->search({ -or => { borrowernumber => [ $patron_1->{borrowernumber}, $patron_2->{borrowernumber}]}})->delete, 2, '');
+    is( Koha::Patrons->search({ -or => { borrowernumber => [ $patron_1->{borrowernumber}, $patron_2->{borrowernumber}]}})->count, 0, '');
 };
 
 subtest 'not_covered_yet' => sub {

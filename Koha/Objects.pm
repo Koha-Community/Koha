@@ -233,14 +233,14 @@ The autoload method is used call DBIx::Class method on a resultset.
 
 Important: If you plan to use one of the DBIx::Class methods you must provide
 relevant tests in t/db_dependent/Koha/Objects.t
-Currently count, pager, reset and update are covered.
+Currently count, pager, reset, update and delete are covered.
 
 =cut
 
 sub AUTOLOAD {
     my ( $self, @params ) = @_;
 
-    my @known_methods = qw( count pager reset update );
+    my @known_methods = qw( count pager reset update delete );
     my $method = our $AUTOLOAD;
     $method =~ s/.*:://;
 
