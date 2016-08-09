@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Koha::Authority::Types;
 use Koha::Cities;
@@ -49,6 +49,12 @@ subtest 'update' => sub {
     Koha::Cities->search( { city_country => 'UK' } )->update( { city_country => 'EU' } );
     is( Koha::Cities->search( { city_country => 'EU' } )->count, 3, 'Koha::Objects->update should have updated the 3 rows' );
     is( Koha::Cities->search( { city_country => 'UK' } )->count, 0, 'Koha::Objects->update should have updated the 3 rows' );
+};
+
+subtest 'pager' => sub {
+    plan tests => 1;
+    my $pager = Koha::Patrons->search( {}, { page => 1, rows => 2 } )->pager;
+    is( ref($pager), 'DBIx::Class::ResultSet::Pager', 'Koha::Objects->pager returns a valid DBIx::Class object' );
 };
 
 $schema->storage->txn_rollback;

@@ -130,17 +130,6 @@ sub search {
     }
 }
 
-=head3 Koha::Objects->pager();
-
-my $pager = Koha::Objects->pager;
-
-=cut
-
-sub pager {
-    my ( $self ) = @_;
-    return $self->_resultset->pager;
-}
-
 =head3 Koha::Objects->next();
 
 my $object = Koha::Objects->next();
