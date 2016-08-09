@@ -234,19 +234,6 @@ sub _wrap {
     return @objects;
 }
 
-=head3 update
-
-    Koha::Objects->search({ $key => $value})->update( \%values );
-
-Sets the specified columns in the resultset to the supplied values in a single query.
-
-=cut
-
-sub update {
-    my ( $self, $params ) = @_;
-    return $self->_resultset()->update($params);
-}
-
 =head3 Koha::Objects->_resultset
 
 Returns the internal resultset or creates it if undefined
