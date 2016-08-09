@@ -280,7 +280,29 @@ sub columns {
     return Koha::Database->new->schema->resultset( $class->_type )->result_source->columns;
 }
 
+=head3 AUTOLOAD
 
+The autoload method is used call DBIx::Class method on a resultset.
+
+Important: If you plan to use one of the DBIx::Class methods you must provide
+relevant tests in t/db_dependent/Koha/Objects.t
+Currently count, pager, reset and update are covered.
+
+=cut
+
+sub AUTOLOAD {
+    my ( $self, @params ) = @_;
+
+    my $method = our $AUTOLOAD;
+    $method =~ s/.*:://;
+
+    my $r = eval { $self->_resultset->$method(@params) };
+    if ( $@ ) {
+        carp "No method $method found for " . ref($self) . " " . $@;
+        return
+    }
+    return $r;
+}
 
 =head3 _type
 
