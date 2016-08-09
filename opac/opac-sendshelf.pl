@@ -86,7 +86,7 @@ if ( $email ) {
     my @results;
 
     while ( my $content = $contents->next ) {
-        my $biblionumber = $content->biblionumber->biblionumber;
+        my $biblionumber = $content->biblionumber;
         my $fw               = GetFrameworkCode($biblionumber);
         my $dat              = GetBiblioData($biblionumber);
         my $record           = GetMarcBiblio($biblionumber, 1);

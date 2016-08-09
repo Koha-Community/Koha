@@ -27,6 +27,8 @@ use C4::Members;
 use C4::Output;
 use C4::XSLT;
 
+use Koha::Biblios;
+use Koha::Biblioitems;
 use Koha::CsvProfiles;
 use Koha::Virtualshelves;
 
@@ -223,7 +225,7 @@ if ( $op eq 'view' ) {
             my @items;
             while ( my $content = $contents->next ) {
                 my $this_item;
-                my $biblionumber = $content->biblionumber->biblionumber;
+                my $biblionumber = $content->biblionumber;
                 my $record       = GetMarcBiblio($biblionumber);
 
                 if ( $xslfile ) {
@@ -232,9 +234,11 @@ if ( $op eq 'view' ) {
                 }
 
                 my $marcflavour = C4::Context->preference("marcflavour");
-                my $itemtypeinfo = getitemtypeinfo( $content->biblionumber->biblioitems->first->itemtype, 'intranet' );
-                $this_item->{title}             = $content->biblionumber->title;
-                $this_item->{author}            = $content->biblionumber->author;
+                my $itemtype = Koha::Biblioitems->search({ biblionumber => $content->biblionumber })->next->itemtype;
+                my $itemtypeinfo = getitemtypeinfo( $itemtype, 'intranet' );
+                my $biblio = Koha::Biblios->find( $content->biblionumber );
+                $this_item->{title}             = $biblio->title;
+                $this_item->{author}            = $biblio->author;
                 $this_item->{dateadded}         = $content->dateadded;
                 $this_item->{imageurl}          = $itemtypeinfo->{imageurl};
                 $this_item->{description}       = $itemtypeinfo->{description};

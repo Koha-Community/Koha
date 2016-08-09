@@ -28,6 +28,8 @@ use C4::Members;
 use C4::Output;
 use C4::Tags qw( get_tags );
 use C4::XSLT;
+
+use Koha::Biblioitems;
 use Koha::Virtualshelves;
 use Koha::RecordProcessor;
 
@@ -258,7 +260,7 @@ if ( $op eq 'view' ) {
             my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
             my @items;
             while ( my $content = $contents->next ) {
-                my $biblionumber = $content->biblionumber->biblionumber;
+                my $biblionumber = $content->biblionumber;
                 my $this_item    = GetBiblioData($biblionumber);
                 my $record = GetMarcBiblio($biblionumber);
                 my $framework = GetFrameworkCode( $biblionumber );
@@ -274,7 +276,8 @@ if ( $op eq 'view' ) {
                 }
 
                 my $marcflavour = C4::Context->preference("marcflavour");
-                my $itemtypeinfo = getitemtypeinfo( $content->biblionumber->biblioitems->first->itemtype, 'opac' );
+                my $itemtype = Koha::Biblioitems->search({ biblionumber => $content->biblionumber })->next->itemtype;
+                my $itemtypeinfo = getitemtypeinfo( $itemtype, 'opac' );
                 $this_item->{imageurl}          = $itemtypeinfo->{imageurl};
                 $this_item->{description}       = $itemtypeinfo->{description};
                 $this_item->{notforloan}        = $itemtypeinfo->{notforloan};

@@ -64,13 +64,13 @@ if ($shelfid && $format) {
             if ($format =~ /^\d+$/) {
                 my @biblios;
                 while ( my $content = $contents->next ) {
-                    push @biblios, $content->biblionumber->biblionumber;
+                    push @biblios, $content->biblionumber;
                 }
                 $output = marc2csv(\@biblios, $format);
             }
             else { #Other formats
                 while ( my $content = $contents->next ) {
-                    my $biblionumber = $content->biblionumber->biblionumber;
+                    my $biblionumber = $content->biblionumber;
                     my $record = GetMarcBiblio($biblionumber, 1);
                     if ($format eq 'iso2709') {
                         $output .= $record->as_usmarc();

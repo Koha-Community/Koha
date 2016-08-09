@@ -28,6 +28,7 @@ use Koha::Exceptions;
 use Koha::Virtualshelfshare;
 use Koha::Virtualshelfshares;
 use Koha::Virtualshelfcontent;
+use Koha::Virtualshelfcontents;
 
 use base qw(Koha::Object);
 
@@ -105,13 +106,15 @@ sub is_shelfname_valid {
 
 sub get_shares {
     my ( $self ) = @_;
-    my $shares = $self->{_result}->virtualshelfshares;
+    my $rs = $self->{_result}->virtualshelfshares;
+    my $shares = Koha::Virtualshelfshares->_new_from_dbic( $rs );
     return $shares;
 }
 
 sub get_contents {
     my ( $self ) = @_;
-    my $contents = $self->{_result}->virtualshelfcontents;
+    my $rs = $self->{_result}->virtualshelfcontents;
+    my $contents = Koha::Virtualshelfcontents->_new_from_dbic( $rs );
     return $contents;
 }
 
