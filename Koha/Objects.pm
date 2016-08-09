@@ -130,18 +130,6 @@ sub search {
     }
 }
 
-=head3 Koha::Objects->count();
-
-my @objects = Koha::Objects->count($params);
-
-=cut
-
-sub count {
-    my ( $self, $params ) = @_;
-
-    return $self->_resultset()->count($params);
-}
-
 =head3 Koha::Objects->pager();
 
 my $pager = Koha::Objects->pager;
