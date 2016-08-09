@@ -101,13 +101,10 @@ if (C4::Context->preference("IndependentBranches")) {
     }
 }
 
+my $op = $input->param('op') || 'delete_confirm';
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Select * from borrowers where guarantorid=?");
-$sth->execute($member);
-my $data=$sth->fetchrow_hashref;
-if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'} or $deletelocal == 0){
-    #   print $input->header;
-
+my $is_guarantor = $dbh->selectrow_array("SELECT COUNT(*) FROM borrowers WHERE guarantorid=?", undef, $member);
+if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_guarantor or $deletelocal == 0){
     my $patron_image = Koha::Patron::Images->find($bor->{borrowernumber});
     $template->param( picture => 1 ) if $patron_image;
 
@@ -137,19 +134,23 @@ if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'} or $de
     if ($flags->{'CHARGES'} ne '') {
         $template->param(charges => $flags->{'CHARGES'}->{'amount'});
     }
-    if ($data->{'borrowernumber'}) {
+    if ($is_guarantor) {
         $template->param(guarantees => 1);
     }
     if ($deletelocal == 0) {
         $template->param(keeplocal => 1);
     }
-output_html_with_http_headers $input, $cookie, $template->output;
-
-} else {
+    # This is silly written but reflect the same conditions as above
+    if ( not $countissues > 0 and not $flags->{CHARGES} ne '' and not $is_guarantor and not $deletelocal == 0 ) {
+        $template->param( op => 'delete_confirm' );
+    }
+}elsif ( $op eq 'delete_confirmed' ) {
     MoveMemberToDeleted($member);
     C4::Members::HandleDelBorrower($member);
     DelMember($member);
+    # TODO Tell the user everything went ok
     print $input->redirect("/cgi-bin/koha/members/members-home.pl");
 }
 
+output_html_with_http_headers $input, $cookie, $template->output;
 

@@ -28,6 +28,20 @@
             [% END %]
             </ul>
     </div>
+    [% ELSIF op == 'delete_confirm' and borrowernumber %]
+        [%# TODO add "patron does not exist" unless borrowernumber %]
+        <div class="dialog alert">
+            <h3>Are you sure you want to delete the patron [% firstname %] [% surname %]? This cannot be undone.</h3>
+            <form action="/cgi-bin/koha/members/deletemem.pl">
+                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]"/>
+                <input type="hidden" name="op" value="delete_confirmed" />
+                <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+            </form>
+            <form action="/cgi-bin/koha/members/moremember.pl">
+                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]"/>
+                <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+            </form>
+        </div>
     [% END %]
     [% IF ( keeplocal ) %]
         <div class="dialog message">
