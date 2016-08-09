@@ -23,9 +23,7 @@ $(document).ready(function(){
             });
         [% ELSE %]
             $("#deletepatron").click(function(){
-                confirm_deletion();
-                $(".btn-group").removeClass("open");
-                return false;
+                window.location='/cgi-bin/koha/members/deletemem.pl?member=[% borrowernumber | url%]';
             });
         [% END %]
         $("#renewpatron").click(function(){
@@ -69,12 +67,6 @@ $(document).ready(function(){
         return false;
     })
 });
-function confirm_deletion() {
-    var is_confirmed = window.confirm(_("Are you sure you want to delete this patron? This cannot be undone."));
-    if (is_confirmed) {
-        window.location='/cgi-bin/koha/members/deletemem.pl?member=[% borrowernumber %]';
-    }
-}
 function confirm_local_deletion() {
     var is_confirmed = window.confirm(_("Are you sure you want to delete this patron from the local database? This cannot be undone."));
     if (is_confirmed) {
