@@ -36,6 +36,7 @@ use C4::Letters;
 use C4::Branch; # GetBranches
 use Koha::DateUtils;
 use Koha::Borrower::Debarments qw(IsDebarred);
+use Koha::Borrower::Discharge;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
@@ -96,6 +97,11 @@ if ($debar) {
     if ( $debar ne "9999-12-31" ) {
         $borr->{'userdebarreddate'} = $debar;
     }
+    my $available = Koha::Borrower::Discharge::count({
+        borrowernumber => $borrowernumber,
+        validated      => 1,
+    });
+    $template->param( 'discharge_available' => $available && Koha::Borrower::Discharge::is_discharged({borrowernumber => $borrowernumber}) );
 }
 
 if ( $userdebarred || $borr->{'gonenoaddress'} || $borr->{'lost'} ) {
