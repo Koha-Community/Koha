@@ -99,10 +99,12 @@ $hold->delete();
 sub delete {
     my ( $self ) = @_;
 
+    my $deleted = $self->SUPER::delete($self);
+
     logaction( 'HOLDS', 'DELETE', $self->reserve_id, Dumper($self->unblessed) )
         if C4::Context->preference('HoldsLog');
 
-    return $self->SUPER::delete($self);
+    return $deleted;
 }
 
 =head3 waiting_expires_on
