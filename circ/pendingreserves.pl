@@ -31,6 +31,7 @@ use C4::Context;
 use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Auth;
+use Koha::Biblios;
 use C4::Debug;
 use Koha::DateUtils;
 use DateTime::Duration;
@@ -152,6 +153,10 @@ if ( $run_report ) {
     $sth->execute(@query_params);
 
     while ( my $data = $sth->fetchrow_hashref ) {
+        my $record = Koha::Biblios->find($data->{biblionumber});
+        if ($record){
+            $data->{subtitle} = [ $record->subtitles ];
+        }
         push(
             @reservedata,
             {
@@ -159,6 +164,7 @@ if ( $run_report ) {
                 priority        => $data->{priority},
                 name            => $data->{l_patron},
                 title           => $data->{title},
+                subtitle        => $data->{subtitle},
                 author          => $data->{author},
                 borrowernumber  => $data->{borrowernumber},
                 itemnum         => $data->{itemnumber},
