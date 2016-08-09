@@ -25,6 +25,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 use CGI qw ( -utf8 );
+use Digest::MD5 qw(md5_base64);
 use C4::Context;
 use C4::Output;
 use C4::Auth;
@@ -32,6 +33,8 @@ use C4::Members;
 use C4::Branch; # GetBranches
 use Module::Load;
 use Koha::Patron::Images;
+use Koha::Token;
+
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLMarkForDeletion NLSync );
 }
@@ -142,9 +145,23 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_
     }
     # This is silly written but reflect the same conditions as above
     if ( not $countissues > 0 and not $flags->{CHARGES} ne '' and not $is_guarantor and not $deletelocal == 0 ) {
-        $template->param( op => 'delete_confirm' );
+        $template->param(
+            op         => 'delete_confirm',
+            csrf_token => Koha::Token->new->generate_csrf(
+                {   id     => C4::Context->userenv->{id},
+                    secret => md5_base64( C4::Context->config('pass') ),
+                }
+            ),
+        );
     }
 }elsif ( $op eq 'delete_confirmed' ) {
+
+    die "Wrong CSRF token"
+        unless Koha::Token->new->check_csrf({
+            id     => C4::Context->userenv->{id},
+            secret => md5_base64( C4::Context->config('pass') ),
+            token  => scalar $input->param('csrf_token'),
+        });
     MoveMemberToDeleted($member);
     C4::Members::HandleDelBorrower($member);
     DelMember($member);
