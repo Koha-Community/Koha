@@ -114,7 +114,7 @@ $(document).ready(function() {
             <td>
             <p>
                 [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
-                [% reserveloo.title |html %]</a></p>
+                [% reserveloo.title |html %] [% FOREACH s IN reserveloo.subtitle %] [% s %][% END %]</a></p>
                 [% IF ( reserveloo.author ) %]<p> by [% reserveloo.author %]</p>[% END %]
             </td>
         [% ELSE %]
