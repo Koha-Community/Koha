@@ -33,6 +33,21 @@ Koha::Rating - Koha Rating Object class
 
 =cut
 
+=head3 store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+    if ( $self->rating_value > 5 ) {
+        $self->rating_value(5);
+    }
+    elsif ( $self->rating_value < 0 ) {
+        $self->rating_value(0);
+    }
+    return $self->SUPER::store;
+}
+
 =head3 type
 
 =cut

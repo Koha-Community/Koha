@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 
 use Koha::Database;
 use Koha::Rating;
@@ -42,6 +42,14 @@ is( Koha::Ratings->search( { biblionumber => $biblionumber } )->get_avg_rating, 
 $rating_1->rating_value(5)->store;
 
 is( Koha::Ratings->search( { biblionumber => $biblionumber } )->get_avg_rating, 4.5, );
+
+$rating_1->rating_value(42)->store;
+is( Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber} } )->rating_value,
+    5, 'Koha::Ratings->store should mark out the boundaries of the rating values, 5 is max' );
+
+$rating_1->rating_value(-42)->store;
+is( Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber} } )->rating_value,
+    0, 'Koha::Ratings->store should mark out the boundaries of the rating values, 0 is min' );
 
 Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_1->{borrowernumber} } )->delete;
 Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $patron_2->{borrowernumber} } )->delete;
