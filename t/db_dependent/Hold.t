@@ -23,11 +23,12 @@ use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Holds;
 use Koha::Item;
 use Koha::DateUtils;
 use t::lib::TestBuilder;
 
-use Test::More tests => 32;
+use Test::More tests => 33;
 use Test::Warn;
 
 use_ok('Koha::Hold');
@@ -143,5 +144,44 @@ $item->holdingbranch( $branches[1]->{branchcode} );
 ok( $hold->is_at_destination(), "Waiting hold where hold branchcode is the same as the item's holdingbranch is at destination" );
 
 $schema->storage->txn_rollback();
+
+subtest "delete() tests" => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin();
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog', 0 );
+
+    my $hold = $builder->build({ source => 'Reserve' });
+
+    my $hold_object = Koha::Holds->find( $hold->{ reserve_id } );
+    my $deleted = $hold_object->delete;
+    is( $deleted, 1, 'Koha::Hold->delete should return 1 if the hold has been correctly deleted' );
+    is( Koha::Holds->search({ reserve_id => $hold->{ reserve_id } })->count, 0,
+        "Koha::Hold->delete should have deleted the hold" );
+
+    my $number_of_logs = $schema->resultset('ActionLog')->search(
+            { module => 'HOLDS', action => 'DELETE', object => $hold->{ reserve_id } } )->count;
+    is( $number_of_logs, 0, 'With HoldsLogs, Koha::Hold->delete shouldn\'t have been logged' );
+
+    # Enable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog', 1 );
+
+    $hold = $builder->build({ source => 'Reserve' });
+
+    $hold_object = Koha::Holds->find( $hold->{ reserve_id } );
+    $deleted = $hold_object->delete;
+    is( $deleted, 1, 'Koha::Hold->delete should return 1 if the hold has been correctly deleted' );
+    is( Koha::Holds->search({ reserve_id => $hold->{ reserve_id } })->count, 0,
+        "Koha::Hold->delete should have deleted the hold" );
+
+    $number_of_logs = $schema->resultset('ActionLog')->search(
+            { module => 'HOLDS', action => 'DELETE', object => $hold->{ reserve_id } } )->count;
+    is( $number_of_logs, 1, 'With HoldsLogs, Koha::Hold->delete should have been logged' );
+
+    $schema->storage->txn_rollback();
+ };
 
 1;
