@@ -72,7 +72,8 @@ my $rating;
 $rating_value //= '';
 
 if ( $rating_value eq '' ) {
-    Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser } )->delete;
+    my $rating = Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser } );
+    $rating->delete if $rating;
 }
 
 elsif ( $rating_value and !$rating_old_value ) {
@@ -80,7 +81,8 @@ elsif ( $rating_value and !$rating_old_value ) {
 }
 
 elsif ( $rating_value ne $rating_old_value ) {
-    Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser })->rating_value($rating_value)->store;
+    my $rating = Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser });
+    $rating->rating_value($rating_value)->store if $rating
 }
 
 my $ratings = Koha::Ratings->search({ biblionumber => $biblionumber });
@@ -91,7 +93,7 @@ my %js_reply = (
     rating_total   => $ratings->count,
     rating_avg     => $avg,
     rating_avg_int => sprintf("%.0f", $avg),
-    rating_value   => $my_rating->rating_value,
+    rating_value   => $my_rating ? $my_rating->rating_value : undef,
     auth_status    => $auth_status,
 
 );

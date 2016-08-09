@@ -53,10 +53,12 @@ unless ( $biblionumber and $rating_value ) {
 }
 
 if ( !$rating_old_value ) {
-    Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $loggedinuser, rating_value => $rating_value, })->store;
+    my $rating = Koha::Rating->new( { biblionumber => $biblionumber, borrowernumber => $loggedinuser, rating_value => $rating_value, });
+    $rating->store if $rating;
 }
 else {
-    Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser })->rating_value($rating_value)->store;
+    my $rating = Koha::Ratings->find( { biblionumber => $biblionumber, borrowernumber => $loggedinuser });
+    $rating->rating_value($rating_value)->store if $rating;
 }
 print $query->redirect(
     "/cgi-bin/koha/opac-detail.pl?biblionumber=$biblionumber");
