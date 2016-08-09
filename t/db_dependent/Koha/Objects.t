@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
+use Test::Warn;
 
 use Koha::Authority::Types;
 use Koha::Cities;
@@ -64,6 +65,11 @@ subtest 'reset' => sub {
     my $first_borrowernumber = $patrons->next->borrowernumber;
     my $second_borrowernumber = $patrons->next->borrowernumber;
     is( $patrons->reset->next->borrowernumber, $first_borrowernumber, 'Koha::Objects->reset should work as expected');
+};
+
+subtest 'not_covered_yet' => sub {
+    plan tests => 1;
+    warning_is { Koha::Patrons->search->not_covered_yet } { carped => 'The method not_covered_yet is not covered by tests' }, "If a method is not covered by tests, the AUTOLOAD method won't execute the method";
 };
 
 $schema->storage->txn_rollback;

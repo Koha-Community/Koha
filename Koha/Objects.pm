@@ -240,9 +240,11 @@ Currently count, pager, reset and update are covered.
 sub AUTOLOAD {
     my ( $self, @params ) = @_;
 
+    my @known_methods = qw( count pager reset update );
     my $method = our $AUTOLOAD;
     $method =~ s/.*:://;
 
+    carp "The method $method is not covered by tests" and return unless grep {/^$method$/} @known_methods;
     my $r = eval { $self->_resultset->$method(@params) };
     if ( $@ ) {
         carp "No method $method found for " . ref($self) . " " . $@;
