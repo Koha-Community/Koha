@@ -106,10 +106,16 @@ Using this account is not recommended because some parts of Koha will not functi
                         <div class="alert">
                             <ul>
                                 [% IF ( userdebarred ) %]
-                                    <li id="userdebarred"><strong>Please note:</strong> Your account has been frozen.
-                                    [% IF ( BORROWER_INFO.debarredcomment ) %] Comment: <span id="userdebarred_comment">"[% BORROWER_INFO.debarredcomment %]"</span>[% END %]
-                                    [% IF ( BORROWER_INFO.userdebarreddate ) %] End date: <span id="userdebarred_date">[% BORROWER_INFO.userdebarreddate | $KohaDates %]</span>[% END %]
-                                    <em>Usually the reason for freezing an account is old overdues or damage fees. If your account shows to be clear, please contact the library.</em> <a href="/cgi-bin/koha/opac-account.pl">Go to your account page</a></li>
+                                    [% IF ( discharge_available ) %]
+                                        <li id="discharged">
+                                            <strong>Please note:</strong> Your account is frozen because it has been discharged. <a href="/cgi-bin/koha/opac-discharge.pl?op=get">Get your discharge</a>
+                                        </li>
+                                    [% ELSE %]
+                                        <li id="userdebarred"><strong>Please note:</strong> Your account has been frozen.
+                                        [% IF ( BORROWER_INFO.debarredcomment ) %] Comment: <span id="userdebarred_comment">"[% BORROWER_INFO.debarredcomment %]"</span>[% END %]
+                                        [% IF ( BORROWER_INFO.userdebarreddate ) %] End date: <span id="userdebarred_date">[% BORROWER_INFO.userdebarreddate | $KohaDates %]</span>[% END %]
+                                        <em>Usually the reason for freezing an account is old overdues or damage fees. If your account shows to be clear, please contact the library.</em> <a href="/cgi-bin/koha/opac-account.pl">Go to your account page</a></li>
+                                    [% END %]
                                 [% END %]
                                 [% IF ( BORROWER_INFO.gonenoaddress ) %]
                                     <li id="gonenoaddress"><strong>Please note:</strong> According to our records, we don't have up-to-date contact information. Please contact the library.
