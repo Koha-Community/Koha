@@ -660,7 +660,7 @@ our $PERL_DEPS = {
     'Test::WWW::Mechanize' => {
         'usage'    => 'Testing suite',
         'required' => '0',
-        'min_ver'  => '1.44',
+        'min_ver'  => '1.42',
     },
     'Library::CallNumber::LC' => {
         'usage'    => 'Core',
