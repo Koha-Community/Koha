@@ -468,19 +468,18 @@
 
                                                 [% IF ( OpacStarRatings == 'all' ) %]
                                                     <div class="results_summary ratings">
+                                                      [% SET rating_avg = SEARCH_RESULT.ratings.get_avg_rating() %]
+                                                      [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
                                                         [% FOREACH i  IN [ 1 2 3 4 5  ] %]
-                                                            [% IF ( SEARCH_RESULT.rating_avg == i ) %]
+                                                            [% IF rating_avg_int == i %]
                                                                 <input class="star" type="radio"  name="rating-[% SEARCH_RESULT.biblionumber %]" value="[% i %]" checked="checked" disabled="disabled"   />
-                                                            [% ELSE   %]
+                                                            [% ELSE %]
                                                                 <input class="star" type="radio"  name="rating-[% SEARCH_RESULT.biblionumber %]" value="[% i %]" disabled="disabled"   />
                                                             [% END %]
                                                         [% END %]
 
-                                                        <input type="hidden" name="biblionumber"  value="[% SEARCH_RESULT.biblionumber %]" />
-                                                        <input type="hidden" name="loggedinuser"  value="[% loggedinuser %]" />
-
-                                                        [% IF SEARCH_RESULT.rating_total && SEARCH_RESULT.rating_total > 0  %]
-                                                            <span id="rating_total_[% SEARCH_RESULT.biblionumber %]">&nbsp;&nbsp;([% SEARCH_RESULT.rating_total %] votes)</span>
+                                                        [% IF SEARCH_RESULT.ratings.count > 0  %]
+                                                            <span id="rating_total_[% SEARCH_RESULT.biblionumber %]">&nbsp;&nbsp;([% SEARCH_RESULT.ratings.count %] votes)</span>
                                                         [% ELSE %]
                                                             <br />
                                                         [% END %]

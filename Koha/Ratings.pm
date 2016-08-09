@@ -35,6 +35,25 @@ Koha::Ratings - Koha Rating Object set class
 
 =cut
 
+=head3 get_avg_rating
+
+=cut
+
+sub get_avg_rating {
+    my ( $self ) = @_;
+
+    my $sum   = $self->_resultset->get_column('rating_value')->sum();
+    my $total = $self->count();
+
+    my $avg = 0;
+    if ( $sum and $total ) {
+        eval { $avg = $sum / $total };
+    }
+    $avg = sprintf( "%.1f", $avg );
+
+    return $avg;
+}
+
 =head3 type
 
 =cut

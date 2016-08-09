@@ -31,7 +31,6 @@ use CGI qw ( -utf8 );
 
 use C4::Auth;
 use C4::Context;
-use C4::Ratings;
 use C4::Debug;
 
 use Koha::Ratings;

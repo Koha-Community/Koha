@@ -50,10 +50,10 @@ use C4::Biblio;  # GetBiblioData
 use C4::Koha;
 use C4::Tags qw(get_tags);
 use C4::SocialData;
-use C4::Ratings;
 use C4::External::OverDrive;
 
 use Koha::LibraryCategories;
+use Koha::Ratings;
 
 use POSIX qw(ceil floor strftime);
 use URI::Escape;
@@ -693,11 +693,9 @@ for (my $i=0;$i<@servers;$i++) {
             }
 
             if ( C4::Context->preference('OpacStarRatings') eq 'all' ) {
-                my $rating = GetRating( $res->{'biblionumber'}, $borrowernumber );
-                $res->{'rating_value'}  = $rating->{'rating_value'};
-                $res->{'rating_total'}  = $rating->{'rating_total'};
-                $res->{'rating_avg'}    = $rating->{'rating_avg'};
-                $res->{'rating_avg_int'} = $rating->{'rating_avg_int'};
+                my $ratings = Koha::Ratings->search({ biblionumber => $res->{biblionumber} });
+                $res->{ratings} = $ratings;
+                $res->{my_rating} = $borrowernumber ? $ratings->search({ borrowernumber => $borrowernumber })->next : undef;
             }
         }
 

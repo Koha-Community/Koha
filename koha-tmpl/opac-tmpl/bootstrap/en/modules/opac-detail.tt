@@ -1,3 +1,4 @@
+[% USE Math %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -468,10 +469,12 @@
                         <form method="post" action="/cgi-bin/koha/opac-ratings.pl">
                             <div class="results_summary ratings">
 
+                                [% SET rating_avg = ratings.get_avg_rating() %]
+                                [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
                                 [% FOREACH i  IN [ 1 2 3 4 5  ] %]
-                                    [% IF rating_avg == i && borrowernumber %]
+                                    [% IF rating_avg_int == i && borrowernumber %]
                                         <input class="auto-submit-star" type="radio" name="rating"  value="[% i %]"  checked="checked" />
-                                    [% ELSIF rating_avg == i %]
+                                    [% ELSIF rating_avg_int == i %]
                                         <input class="auto-submit-star" type="radio" name="rating" value="[% i %]" checked="checked" disabled="disabled" />
                                     [% ELSIF borrowernumber  %]
                                         <input class="auto-submit-star" type="radio" name="rating" value="[% i %]" />
@@ -483,19 +486,17 @@
                                 <!-- define some hidden vars for ratings -->
 
                                 <input  type="hidden" name='biblionumber'  value="[% biblionumber %]" />
-                                <input  type="hidden" name='rating_value' id='rating_value' value="[% rating_value %]" />
-                                <input  type="hidden" name='rating_total' id='rating_total' value="[% rating_total %]" />
-                                <input  type="hidden" name='rating_avg_int' id='rating_avg_int' value="[% rating_avg_int %]" />
+                                <input  type="hidden" name='rating_value' id='rating_value' value="[% my_rating.rating_value %]" />
 
                                 [% UNLESS ( rating_readonly ) %]&nbsp;  <input name="rate_button" type="submit" value="Rate me" />[% END %]&nbsp;
 
-                                [% IF ( rating_value ) %]
-                                    <span id="rating_value_text">your rating: [% rating_value %], </span>
+                                [% IF my_rating %]
+                                    <span id="rating_value_text">your rating: [% my_rating.rating_value %], </span>
                                 [% ELSE %]
                                     <span id="rating_value_text"></span>
                                 [% END %]
 
-                                <span id="rating_text">average rating: [% rating_avg_int %] ([% rating_total %] votes)</span>
+                                <span id="rating_text">average rating: [% rating_avg %] ([% ratings.count %] votes)</span>
                             </div>
                         </form>
                     [% END # / IF OpacStarRatings != 'disable' %]
@@ -1597,7 +1598,7 @@
                     $("#rating_value_text").text('');
                   }
 
-                  $("#rating_text").text(_("average rating: ") + data.rating_avg_int + " (" + data.rating_total + ' ' + _("votes") + ")");
+                  $("#rating_text").text(_("average rating: ") + data.rating_avg + " (" + data.rating_total + ' ' + _("votes") + ")");
 
                 }
               }, "json");

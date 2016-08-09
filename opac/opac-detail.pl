@@ -36,7 +36,6 @@ use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
 use C4::External::Amazon;
 use C4::External::Syndetics qw(get_syndetics_index get_syndetics_summary get_syndetics_toc get_syndetics_excerpt get_syndetics_reviews get_syndetics_anotes );
 use C4::Review;
-use C4::Ratings;
 use C4::Members;
 use C4::XSLT;
 use C4::ShelfBrowser;
@@ -51,6 +50,7 @@ use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use Koha::RecordProcessor;
 use Koha::Virtualshelves;
+use Koha::Ratings;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -1080,12 +1080,11 @@ if (C4::Context->preference("OPACURLOpenInNewWindow")) {
 }
 
 if ( C4::Context->preference('OpacStarRatings') !~ /disable/ ) {
-    my $rating = GetRating( $biblionumber, $borrowernumber );
+    my $ratings = Koha::Ratings->search({ biblionumber => $biblionumber });
+    my $my_rating = $borrowernumber ? $ratings->search({ borrowernumber => $borrowernumber })->next : undef;
     $template->param(
-        rating_value   => $rating->{'rating_value'},
-        rating_total   => $rating->{'rating_total'},
-        rating_avg     => $rating->{'rating_avg'},
-        rating_avg_int => $rating->{'rating_avg_int'},
+        ratings => $ratings,
+        my_rating => $my_rating,
         borrowernumber => $borrowernumber
     );
 }
