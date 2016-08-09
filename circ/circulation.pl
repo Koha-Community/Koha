@@ -297,7 +297,8 @@ if ($borrowernumber) {
         finetotal    => $fines
     );
 
-    if ( Koha::Patrons->find( $borrowernumber )->is_debarred ) {
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    if ( $patron and $patron->is_debarred ) {
         $template->param(
             'userdebarred'    => $borrower->{debarred},
             'debarredcomment' => $borrower->{debarredcomment},
