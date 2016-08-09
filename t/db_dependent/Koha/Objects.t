@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Koha::Authority::Types;
 use Koha::Cities;
@@ -55,6 +55,15 @@ subtest 'pager' => sub {
     plan tests => 1;
     my $pager = Koha::Patrons->search( {}, { page => 1, rows => 2 } )->pager;
     is( ref($pager), 'DBIx::Class::ResultSet::Pager', 'Koha::Objects->pager returns a valid DBIx::Class object' );
+};
+
+subtest 'reset' => sub {
+    plan tests => 1;
+    my $builder   = t::lib::TestBuilder->new;
+    my $patrons = Koha::Patrons->search;
+    my $first_borrowernumber = $patrons->next->borrowernumber;
+    my $second_borrowernumber = $patrons->next->borrowernumber;
+    is( $patrons->reset->next->borrowernumber, $first_borrowernumber, 'Koha::Objects->reset should work as expected');
 };
 
 $schema->storage->txn_rollback;
