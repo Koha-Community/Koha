@@ -83,8 +83,9 @@ sub delete {
             # FIXME Could be $patron->get_lists
             $_->delete for Koha::Virtualshelves->search( { owner => $self->borrowernumber } );
 
-            logaction( "MEMBERS", "DELETE", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
             $deleted = $self->SUPER::delete;
+
+            logaction( "MEMBERS", "DELETE", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
         }
     );
     return $deleted;
