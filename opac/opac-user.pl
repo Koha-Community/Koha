@@ -38,6 +38,7 @@ use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Database;
 use Koha::Patron::Messages;
+use Koha::Patron::Discharge;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
@@ -98,6 +99,11 @@ if ($debar) {
     if ( $debar ne "9999-12-31" ) {
         $borr->{'userdebarreddate'} = $debar;
     }
+    my $available = Koha::Patron::Discharge::count({
+        borrowernumber => $borrowernumber,
+        validated      => 1,
+    });
+    $template->param( 'discharge_available' => $available && Koha::Patron::Discharge::is_discharged({borrowernumber => $borrowernumber}) );
 }
 
 if ( $userdebarred || $borr->{'gonenoaddress'} || $borr->{'lost'} ) {
