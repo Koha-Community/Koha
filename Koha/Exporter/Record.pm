@@ -27,6 +27,8 @@ sub _get_record_for_export {
         return;
     }
 
+    return unless $record;
+
     if ($dont_export_fields) {
         for my $f ( split / /, $dont_export_fields ) {
             if ( $f =~ m/^(\d{3})(.)?$/ ) {
@@ -128,6 +130,7 @@ sub export {
         print "\n";
         for my $record_id (@$record_ids) {
             my $record = _get_record_for_export( { %$params, record_id => $record_id } );
+            next unless $record;
             print MARC::File::XML::record($record);
             print "\n";
         }
