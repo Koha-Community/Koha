@@ -1,7 +1,7 @@
 #!/usr/bin/perl;
 
 use Modern::Perl;
-use Test::More tests => 9;
+use Test::More tests => 11;
 use Test::MockModule;
 use MARC::Record;
 use MARC::Field;
@@ -11,14 +11,18 @@ use C4::Biblio qw( AddBiblio );
 use C4::Context;
 use C4::Record;
 
+use t::lib::TestBuilder;
+
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
+my $builder = t::lib::TestBuilder->new;
 my $module_biblio = Test::MockModule->new('C4::Biblio');
 
 my $record = new_record();
-my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, q|| );
+my $frameworkcode = q||;
+my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, $frameworkcode );
 $module_biblio->mock( 'GetMarcBiblio', sub{ $record } );
 
 my $csv_content = q(Title=245$a|Author=245$c|Subject=650$a);
@@ -88,6 +92,35 @@ is( $csv_output, q[Title
 ], q|TT way: display first subfield a for first field 245 if indicator 1 == 1 for field 100 is set| );
 
 
+my $authorised_value_1 =
+  $builder->build( { source => 'AuthorisedValue', value => { category => 'MY_AV_1', authorised_value => 1, lib => 'This is an AV', lib_opac => 'This is an AV (opac)' } } );
+my $authorised_value_2 = $builder->build(
+    { source => 'AuthorisedValue', value => { category => 'MY_AV_2', authorised_value => 2, lib => 'This is another AV', lib_opac => 'This is another AV (opac)' } } );
+$dbh->do(q|DELETE FROM marc_subfield_structure WHERE tagfield=998 and ( tagsubfield='8' or tagsubfield='9')|);
+$builder->build(
+    { source => 'MarcSubfieldStructure', value => { authorised_value => $authorised_value_1->{category}, tagfield => 998, tagsubfield => '8', frameworkcode => $frameworkcode } }
+);
+$builder->build(
+    { source => 'MarcSubfieldStructure', value => { authorised_value => $authorised_value_2->{category}, tagfield => 998, tagsubfield => '9', frameworkcode => $frameworkcode } }
+);
+$csv_content = q(Title=245$a|AV1=998$8|AV2=998$9);
+my $csv_profile_id_8 = insert_csv_profile( { csv_content => $csv_content } );
+$csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_8, 1, $csv );
+is( $csv_output, q[Title|AV1|AV2
+"The art of computer programming,The art of another title"|"This is an AV"|"This is another AV"
+], q|TT way: display first subfield a for first field 245 if indicator 1 == 1 for field 100 is set|
+);
+
+$csv_content = q(Title=245$a|AVs=998);
+my $csv_profile_id_9 = insert_csv_profile( { csv_content => $csv_content } );
+$csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_9, 1, $csv );
+is( $csv_output, q[Title|AVs
+"The art of computer programming,The art of another title"|"This is an AV,This is another AV"
+], q|TT way: display first subfield a for first field 245 if indicator 1 == 1 for field 100 is set|
+);
+
+
+
 sub insert_csv_profile {
     my ( $params ) = @_;
     my $csv_content = $params->{csv_content};
@@ -138,6 +171,11 @@ sub new_record {
             y => 'BK',
             c => 'GEN',
             d => '2001-06-25',
+        ),
+        MARC::Field->new(
+            998, ' ', ' ',
+            8 => 1,
+            9 => 2,
         ),
     );
     $record->append_fields(@fields);
