@@ -43,11 +43,6 @@ my $data = GetMember( 'borrowernumber' => $borrowernumber );
 
 my ( $total, $accts, $numaccts ) = GetMemberAccountRecords($borrowernumber);
 foreach my $accountline (@$accts) {
-    $accountline->{amount} = sprintf( '%.2f', $accountline->{amount} )
-        if ( $accountline->{amount} ) ;
-    $accountline->{amountoutstanding} = sprintf( '%.2f', $accountline->{amountoutstanding} )
-        if ( $accountline->{amountoutstanding} );
-
     if (   $accountline->{accounttype} ne 'F'
         && $accountline->{accounttype} ne 'FU' )
     {
@@ -56,8 +51,6 @@ foreach my $accountline (@$accts) {
 }
 
 our $totalprice = 0;
-my $total_format = '';
-$total_format = sprintf( "%.2f", $total ) if ($total);
 
 $template->param(
     %$data,
@@ -65,7 +58,7 @@ $template->param(
     borrowernumber => $borrowernumber,
 
     accounts => $accts,
-    totaldue => $total_format,
+    totaldue => $total,
 
     issues     => build_issue_data( GetPendingIssues($borrowernumber) ),
     totalprice => $totalprice,
