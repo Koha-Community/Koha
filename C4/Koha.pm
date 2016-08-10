@@ -28,6 +28,7 @@ use C4::Branch; # Can be removed?
 use Koha::Cache;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Libraries;
+use Koha::MarcSubfieldStructures;
 use DateTime::Format::MySQL;
 use Business::ISBN;
 use autouse 'Data::cselectall_arrayref' => qw(Dumper);
