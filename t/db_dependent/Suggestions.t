@@ -28,12 +28,11 @@ use Koha::Library;
 use Koha::Libraries;
 
 use DateTime::Duration;
-use Test::More tests => 106;
+use Test::More tests => 102;
 use Test::Warn;
 
 BEGIN {
     use_ok('C4::Suggestions');
-    use_ok('C4::Koha');
 }
 
 my $dbh = C4::Context->dbh;
@@ -348,17 +347,6 @@ is( $suggestion, 1, 'DelSuggestion deletes one suggestion' );
 $suggestions = GetSuggestionByStatus('CHECKED');
 is( @$suggestions, 1, 'DelSuggestion deletes one suggestion' );
 is( $suggestions->[0]->{title}, $del_suggestion->{title}, 'DelSuggestion deletes the correct suggestion' );
-
-## Bug 11466, making sure GetSupportList() returns itemtypes, even if AdvancedSearchTypes has multiple values
-t::lib::Mocks::mock_preference("AdvancedSearchTypes", 'itemtypes|loc|ccode');
-my $itemtypes1 = C4::Koha::GetSupportList();
-is(@$itemtypes1, 8, "Purchase suggestion itemtypes collected, multiple AdvancedSearchTypes");
-
-t::lib::Mocks::mock_preference("AdvancedSearchTypes", 'itemtypes');
-my $itemtypes2 = C4::Koha::GetSupportList();
-is(@$itemtypes2, 8, "Purchase suggestion itemtypes collected, default AdvancedSearchTypes");
-
-is_deeply($itemtypes1, $itemtypes2, 'same set of purchase suggestion formats retrieved');
 
 # Test budgetid fk
 $my_suggestion->{budgetid} = ''; # If budgetid == '', NULL should be set in DB
