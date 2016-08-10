@@ -36,6 +36,7 @@ use C4::Circulation;
 use C4::Reports::Guided;    #_get_column_defs
 use C4::Charset;
 use Koha::DateUtils;
+use Koha::AuthorisedValues;
 use List::MoreUtils qw( none );
 
 
@@ -297,7 +298,9 @@ foreach my $item ( @scanned_items ) {
         my ($f, $sf) = GetMarcFromKohaField("items.$field", $fc);
         if ($f and $sf) {
             # We replace the code with it's description
-            my $authvals = C4::Koha::GetKohaAuthorisedValuesFromField($f, $sf, $fc);
+            my $av = Koha::AuthorisedValues->search_by_marc_field({ frameworkcode => $fc, tagfield => $f, tagsubfield => $sf, });
+            $av = $av->count ? $av->unblessed : [];
+            my $authvals = { map { ( $_->{authorised_value} => $_->{lib} ) } @$av };
             if ($authvals and defined $item->{$field} and defined $authvals->{$item->{$field}}) {
               $item->{$field} = $authvals->{$item->{$field}};
             }

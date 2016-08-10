@@ -20,6 +20,8 @@
 use Modern::Perl;
 use Test::More tests => 6;
 
+use Koha::AuthorisedValues;
+
 $| = 1;
 
 BEGIN {
@@ -143,7 +145,9 @@ sub OldWay {
             my ($f, $sf) = C4::Biblio::GetMarcFromKohaField("items.$field", $row->{'frameworkcode'});
             if (defined($f) and defined($sf)) {
                 # We replace the code with it's description
-                my $authvals = C4::Koha::GetKohaAuthorisedValuesFromField($f, $sf, $row->{'frameworkcode'});
+                my $av = Koha::AuthorisedValues->search_by_marc_field({ frameworkcode => $row->{frameworkcode}, tagfield => $f, tagsubfield => $sf, });
+                $av = $av->count ? $av->unblessed : [];
+                my $authvals = { map { ( $_->{authorised_value} => $_->{lib} ) } @$av };
                 $row->{$field} = $authvals->{$row->{$field}} if defined $authvals && defined $row->{$field} && defined $authvals->{$row->{$field}};
             }
         }
