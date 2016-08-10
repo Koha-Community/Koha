@@ -27,6 +27,8 @@ use C4::Output;
 use C4::Suggestions;
 use C4::Koha;
 use C4::Scrubber;
+
+use Koha::AuthorisedValues;
 use Koha::Libraries;
 
 use Koha::DateUtils qw( dt_from_string );
@@ -184,7 +186,8 @@ foreach my $suggestion(@$suggestions_loop) {
         $suggestion->{'showcheckbox'} = 0;
     }
     if($suggestion->{'patronreason'}){
-        $suggestion->{'patronreason'} = GetKohaAuthorisedValueLib("OPAC_SUG",$suggestion->{'patronreason'},1);
+        my $av = Koha::AuthorisedValues->search({ category => 'OPAC_SUG', authorised_value => $suggestion->{patronreason} });
+        $suggestion->{'patronreason'} = $av->count ? $av->next->opac_description : '';
     }
 }
 

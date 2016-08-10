@@ -42,6 +42,7 @@ use Koha::Holds;
 use C4::Context;
 use CGI::Session;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::AuthorisedValues;
 use Koha::Patron;
 use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::DateUtils;
@@ -391,7 +392,8 @@ if (@$barcodes) {
             my $materials = $iteminfo->{'materials'};
             my $avcode = GetAuthValCode('items.materials');
             if ($avcode) {
-                $materials = GetKohaAuthorisedValueLib($avcode, $materials);
+                my $av = Koha::AuthorisedValues->search({ category => $avcode, authorised_value => $materials });
+                $materials = $av->count ? $av->next->lib : '';
             }
             $template_params->{additional_materials} = $materials;
             $template_params->{itemhomebranch} = $iteminfo->{'homebranch'};

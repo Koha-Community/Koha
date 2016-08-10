@@ -34,6 +34,8 @@ use YAML qw/Load/;
 use DateTime::Format::MySQL;
 use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
+
+use Koha::AuthorisedValues;
 use Koha::DateUtils qw/dt_from_string/;
 use Koha::Database;
 
@@ -1381,19 +1383,24 @@ sub GetItemsInfo {
 
         # get notforloan complete status if applicable
         if ( my $code = C4::Koha::GetAuthValCode( 'items.notforloan', $data->{frameworkcode} ) ) {
-            $data->{notforloanvalue}     = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{itemnotforloan} );
-            $data->{notforloanvalueopac} = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{itemnotforloan}, 1 );
+            my $av = Koha::AuthorisedValues->search({ category => $code, authorised_value => $data->{itemnotforloan} });
+            $av = $av->count ? $av->next : undef;
+            $data->{notforloanvalue}     = $av ? $av->lib : '';
+            $data->{notforloanvalueopac} = $av ? $av->opac_description : '';
         }
 
         # get restricted status and description if applicable
         if ( my $code = C4::Koha::GetAuthValCode( 'items.restricted', $data->{frameworkcode} ) ) {
-            $data->{restrictedopac} = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{restricted}, 1 );
-            $data->{restricted}     = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{restricted} );
+            my $av = Koha::AuthorisedValues->search({ category => $code, authorised_value => $data->{restricted} });
+            $av = $av->count ? $av->next : undef;
+            $data->{restricted}     = $av ? $av->lib : '';
+            $data->{restrictedopac} = $av ? $av->opac_description : '';
         }
 
         # my stack procedures
         if ( my $code = C4::Koha::GetAuthValCode( 'items.stack', $data->{frameworkcode} ) ) {
-            $data->{stack}          = C4::Koha::GetKohaAuthorisedValueLib( $code, $data->{stack} );
+            my $av = Koha::AuthorisedValues->search({ category => $code, authorised_value => $data->{stack} });
+            $data->{stack}          = $av->count ? $av->next->lib : '';
         }
 
         # Find the last 3 people who borrowed this item.
@@ -1478,8 +1485,10 @@ sub GetItemsLocationInfo {
         $sth->execute($biblionumber);
 
         while ( my $data = $sth->fetchrow_hashref ) {
-             $data->{location_intranet} = GetKohaAuthorisedValueLib('LOC', $data->{location});
-             $data->{location_opac}= GetKohaAuthorisedValueLib('LOC', $data->{location}, 1);
+             my $av = Koha::AuthorisedValues->search({ category => 'LOC', authorised_value => $data->{location} });
+             $av = $av->count ? $av->next : undef;
+             $data->{location_intranet} = $av ? $av->lib : '';
+             $data->{location_opac}     = $av ? $av->opac_description : '';
 	     push @results, $data;
 	}
 	return @results;

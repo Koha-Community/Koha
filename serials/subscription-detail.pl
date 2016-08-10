@@ -25,8 +25,9 @@ use C4::Serials;
 use C4::Output;
 use C4::Context;
 use C4::Search qw/enabled_staff_search_views/;
-use Koha::DateUtils;
 
+use Koha::AuthorisedValues;
+use Koha::DateUtils;
 use Koha::Acquisition::Bookseller;
 
 use Date::Calc qw/Today Day_of_Year Week_of_Year Add_Delta_Days/;
@@ -103,7 +104,8 @@ for my $date ( qw(startdate enddate firstacquidate histstartdate histenddate) ) 
     $subs->{$date} = output_pref( { str => $subs->{$date}, dateonly => 1 } )
         if $subs->{$date};
 }
-$subs->{location} = GetKohaAuthorisedValueLib("LOC",$subs->{location});
+my $av = Koha::AuthorisedValues->search({ category => 'LOC', authorised_value => $subs->{location} });
+$subs->{location} = $av->count ? $av->next->lib : '';
 $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
 $template->param(%{ $subs });
 $template->param(biblionumber_for_new_subscription => $subs->{bibnum});

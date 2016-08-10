@@ -28,6 +28,8 @@ use C4::Koha;
 use C4::Output;
 use Koha::Libraries;
 
+use Koha::AuthorisedValues;
+
 my $cgi = new CGI;
 
 my ( $status, $cookie, $sessionID ) = C4::Auth::check_api_auth( $cgi, { acquisition => 'order_receive' } );
@@ -54,23 +56,28 @@ if($itemnumber) {
     }
 
     if(my $code = GetAuthValCode("items.notforloan", $fw)) {
-        $item->{notforloan} = GetKohaAuthorisedValueLib($code, $item->{notforloan});
+        my $av = Koha::AuthorisedValues->search({ category => $code, authorised_values => $item->{notforloan} });
+        $item->{notforloan} = $av->count ? $av->next->lib : '';
     }
 
     if(my $code = GetAuthValCode("items.restricted", $fw)) {
-        $item->{restricted} = GetKohaAuthorisedValueLib($code, $item->{restricted});
+        my $av = Koha::AuthorisedValues->search({ category => $code, authorised_values => $item->{restricted} });
+        $item->{restricted} = $av->count ? $av->next->lib : '';
     }
 
     if(my $code = GetAuthValCode("items.location", $fw)) {
-        $item->{location} = GetKohaAuthorisedValueLib($code, $item->{location});
+        my $av = Koha::AuthorisedValues->search({ category => $code, authorised_values => $item->{location} });
+        $item->{location} = $av->count ? $av->next->lib : '';
     }
 
     if(my $code = GetAuthValCode("items.ccode", $fw)) {
-        $item->{collection} = GetKohaAuthorisedValueLib($code, $item->{ccode});
+        my $av = Koha::AuthorisedValues->search({ category => $code, authorised_values => $item->{collection} });
+        $item->{collection} = $av->count ? $av->next->lib : '';
     }
 
     if(my $code = GetAuthValCode("items.materials", $fw)) {
-        $item->{materials} = GetKohaAuthorisedValueLib($code, $item->{materials});
+        my $av = Koha::AuthorisedValues->search({ category => $code, authorised_values => $item->{materials} });
+        $item->{materials} = $av->count ? $av->next->lib : '';
     }
 
     my $itemtype = getitemtypeinfo($item->{itype});

@@ -37,7 +37,6 @@ use C4::Log; # logaction
 use C4::Koha qw(
     GetAuthorisedValueByCode
     GetAuthValCode
-    GetKohaAuthorisedValueLib
 );
 use C4::Overdues qw(CalcFine UpdateFine get_chargeable_units);
 use C4::RotatingCollections qw(GetCollectionItemBranches);

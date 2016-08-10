@@ -32,6 +32,8 @@ use C4::Auth qw/:DEFAULT get_session/;
 use C4::Koha;
 use C4::Members;
 
+use Koha::AuthorisedValues;
+
 ###############################################
 #  Getting state
 
@@ -127,7 +129,8 @@ if ($barcode) {
         $item{'itemtype'}              = $iteminformation->{'itemtype'};
         $item{'ccode'}                 = $iteminformation->{'ccode'};
         $item{'itemcallnumber'}        = $iteminformation->{'itemcallnumber'};
-        $item{'location'}              = GetKohaAuthorisedValueLib("LOC",$iteminformation->{'location'});
+        my $av = Koha::AuthorisedValues->search({ category => 'LOC', authorised_value => $iteminformation->{location} });
+        $item{'location'}              = $av->count ? $av->next->lib : '';
 #         }
         $item{counter}  = 0;
         $item{barcode}  = $barcode;
@@ -158,7 +161,8 @@ foreach ( $query->param ) {
     $item{'itemtype'}              = $iteminformation->{'itemtype'};
     $item{'ccode'}                 = $iteminformation->{'ccode'};
     $item{'itemcallnumber'}        = $iteminformation->{'itemcallnumber'};
-    $item{'location'}              = GetKohaAuthorisedValueLib("LOC",$iteminformation->{'location'});
+    my $av = Koha::AuthorisedValues->search({ category => 'LOC', authorised_value => $iteminformation->{location} });
+    $item{'location'}              = $av->count ? $av->next->lib : '';
     push( @trsfitemloop, \%item );
 }
 

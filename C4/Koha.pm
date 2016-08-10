@@ -55,7 +55,6 @@ BEGIN {
 		&GetKohaAuthorisedValues
 		&GetKohaAuthorisedValuesFromField
     &GetKohaAuthorisedValuesMapping
-    &GetKohaAuthorisedValueLib
     &GetAuthorisedValueByCode
 		&GetAuthValCode
 		&GetNormalizedUPC
@@ -1151,27 +1150,6 @@ sub xml_escape {
     $str =~ s/'/&apos;/g;
     $str =~ s/"/&quot;/g;
     return $str;
-}
-
-=head2 GetKohaAuthorisedValueLib
-
-Takes $category, $authorised_value as parameters.
-
-If $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
-
-Returns authorised value description
-
-=cut
-
-sub GetKohaAuthorisedValueLib {
-  my ($category,$authorised_value,$opac) = @_;
-  my $value;
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare("select lib, lib_opac from authorised_values where category=? and authorised_value=?");
-  $sth->execute($category,$authorised_value);
-  my $data = $sth->fetchrow_hashref;
-  $value = ($opac && $$data{'lib_opac'}) ? $$data{'lib_opac'} : $$data{'lib'};
-  return $value;
 }
 
 =head2 display_marc_indicators

@@ -47,6 +47,7 @@ use C4::Members;
 use C4::Members::Messaging;
 use C4::Koha;   # FIXME : is it still useful ?
 use C4::RotatingCollections;
+use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Calendar;
 
@@ -280,7 +281,8 @@ if ($barcode) {
     my $materials = $biblio->{'materials'};
     my $avcode = GetAuthValCode('items.materials');
     if ($avcode) {
-        $materials = GetKohaAuthorisedValueLib($avcode, $materials);
+        my $av = Koha::AuthorisedValues->search({ category => $avcode, authorised_value => $materials });
+        $materials = $av->count ? $av->next->lib : '';
     }
 
     $template->param(
