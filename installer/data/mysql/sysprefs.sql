@@ -13,6 +13,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AgeRestrictionMarker','',NULL,'Markers for age restriction indication, e.g. FSK|PEGI|Age|','free'),
 ('AgeRestrictionOverride','0',NULL,'Allow staff to check out an item with age restriction.','YesNo'),
 ('AggressiveMatchOnISBN','0', NULL,'If enabled, attempt to match aggressively by trying all variations of the ISBNs in the imported record as a phrase in the ISBN fields of already cataloged records when matching on ISBN with the record import tool','YesNo'),
+('AggressiveMatchOnISSN','0', NULL,'If enabled, attempt to match aggressively by trying all variations of the ISSNs in the imported record as a phrase in the ISSN fields of already cataloged records when matching on ISSN with the record import tool','YesNo'),
 ('AllFinesNeedOverride','1','0','If on, staff will be asked to override every fine, even if it is below noissuescharge.','YesNo'),
 ('AllowAllMessageDeletion','0','','Allow any Library to delete any message','YesNo'),
 ('AllowFineOverride','0','0','If on, staff will be able to issue books to patrons with fines greater than noissuescharge.','YesNo'),
