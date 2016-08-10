@@ -54,7 +54,6 @@ BEGIN {
 		&GetAuthorisedValues
 		&GetAuthorisedValueCategories
 		&GetKohaAuthorisedValues
-		&GetKohaAuthorisedValuesFromField
     &GetKohaAuthorisedValuesMapping
     &GetAuthorisedValueByCode
 		&GetAuthValCode
@@ -1047,37 +1046,6 @@ sub GetKohaAuthorisedValues {
   my %values;
   my $dbh = C4::Context->dbh;
   my $avcode = GetAuthValCode($kohafield,$fwcode);
-  if ($avcode) {  
-	my $sth = $dbh->prepare("select authorised_value, lib, lib_opac from authorised_values where category=? ");
-   	$sth->execute($avcode);
-	while ( my ($val, $lib, $lib_opac) = $sth->fetchrow_array ) { 
-		$values{$val} = ($opac && $lib_opac) ? $lib_opac : $lib;
-   	}
-   	return \%values;
-  } else {
-	return;
-  }
-}
-
-=head2 GetKohaAuthorisedValuesFromField
-
-Takes $field, $subfield, $fwcode as parameters.
-
-If $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
-$subfield can be undefined
-
-Returns hashref of Code => description
-
-Returns undef if no authorised value category is defined for the given field and subfield 
-
-=cut
-
-sub GetKohaAuthorisedValuesFromField {
-  my ($field, $subfield, $fwcode,$opac) = @_;
-  $fwcode='' unless $fwcode;
-  my %values;
-  my $dbh = C4::Context->dbh;
-  my $avcode = GetAuthValCodeFromField($field, $subfield, $fwcode);
   if ($avcode) {  
 	my $sth = $dbh->prepare("select authorised_value, lib, lib_opac from authorised_values where category=? ");
    	$sth->execute($avcode);
