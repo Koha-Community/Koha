@@ -221,7 +221,7 @@ sub calculate {
         			($process == 3) ? "(COUNT(DISTINCT reserves.itemnumber)) calculation"      : 
         			($process == 4) ? "(COUNT(DISTINCT reserves.biblionumber)) calculation"    : '*';
 	$strcalc .= "
-        FROM reserves
+        FROM (select * from reserves union select * from old_reserves) reserves
         LEFT JOIN borrowers USING (borrowernumber)
 	";
 	$strcalc .= "LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber "
@@ -266,14 +266,11 @@ sub calculate {
 	$strcalc .= " WHERE ".join(" AND ",@sqlwhere) if (@sqlwhere);
 	$strcalc .= " AND (".join(" OR ",@sqlor).")" if (@sqlor);
 	$strcalc .= " GROUP BY line, col )";
-	my $strcalc_old=$strcalc;
-	$strcalc_old=~s/reserves/old_reserves/g;
-	$strcalc.=qq{ UNION $strcalc_old ORDER BY line, col};
 	($debug) and print STDERR $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	push @loopfilter, {crit=>'SQL =', sql=>1, filter=>$strcalc};
 	@sqlparams=(@sqlparams,@sqlorparams);
-	$dbcalc->execute(@sqlparams,@sqlparams);
+	$dbcalc->execute(@sqlparams);
 	my ($emptycol,$emptyrow); 
 	my $data = $dbcalc->fetchall_hashref([qw(line col)]);
 	my %cols_hash;
