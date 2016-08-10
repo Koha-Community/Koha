@@ -12677,6 +12677,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '16.05.02.003';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT INTO systempreferences (variable, value, options, explanation, type) VALUES
+        ('OPACResultsLibrary', 'homebranch', 'homebranch|holdingbranch', 'Defines whether the OPAC displays the holding or home branch in search results when using XSLT', 'Choice');
+    });
+
+    print "Upgrade to $DBversion done (Bug 7441 - Search results showing wrong branch)\n";
+    SetVersion($DBversion);
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
