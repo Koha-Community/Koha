@@ -1,12 +1,13 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use C4::Context;
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValues;
 use Koha::AuthorisedValueCategories;
+use Koha::MarcSubfieldStructures;
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
@@ -99,3 +100,34 @@ my @categories = Koha::AuthorisedValues->new->categories;
 is( @categories, 2, 'There should have 2 categories inserted' );
 is( $categories[0], $av4->category, 'The first category should be correct (ordered by category name)' );
 is( $categories[1], $av1->category, 'The second category should be correct (ordered by category name)' );
+
+subtest 'search_by_*_field' => sub {
+    plan tests => 1;
+    my $loc_cat = Koha::AuthorisedValueCategories->find('LOC');
+    $loc_cat->delete if $loc_cat;
+    my $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => 'c', frameworkcode => '' } );
+    $mss->delete if $mss;
+    $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => 'd', frameworkcode => '' } );
+    $mss->delete if $mss;
+    Koha::AuthorisedValueCategory->new( { category_name => 'LOC' } )->store;
+    Koha::AuthorisedValueCategory->new( { category_name => 'ANOTHER_4_TESTS' } )->store;
+    Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'c', frameworkcode => '', authorised_value => 'LOC', kohafield => 'items.location' } )->store;
+    Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'c', frameworkcode => 'ACQ', authorised_value => 'LOC', kohafield => 'items.location' } )->store;
+    Koha::MarcSubfieldStructure->new( { tagfield => 952, tagsubfield => 'd', frameworkcode => '', authorised_value => 'ANOTHER_4_TESTS', kohafield => 'items.another_field' } )->store;
+    Koha::AuthorisedValue->new( { category => 'LOC', authorised_value => 'location_1' } )->store;
+    Koha::AuthorisedValue->new( { category => 'LOC', authorised_value => 'location_2' } )->store;
+    Koha::AuthorisedValue->new( { category => 'LOC', authorised_value => 'location_3' } )->store;
+    Koha::AuthorisedValue->new( { category => 'ANOTHER_4_TESTS', authorised_value => 'an_av' } )->store;
+    Koha::AuthorisedValue->new( { category => 'ANOTHER_4_TESTS', authorised_value => 'another_av' } )->store;
+    subtest 'search_by_marc_field' => sub {
+        plan tests => 4;
+        my $avs;
+        $avs = Koha::AuthorisedValues->search_by_marc_field();
+        is ( $avs, undef );
+        $avs = Koha::AuthorisedValues->search_by_marc_field({ frameworkcode => '' });
+        is ( $avs, undef );
+        $avs = Koha::AuthorisedValues->search_by_marc_field({ tagfield => 952, tagsubfield => 'c'});
+        is( $avs->count, 3, 'default fk');
+        is( $avs->next->authorised_value, 'location_1', );
+    };
+};

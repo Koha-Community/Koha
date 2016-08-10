@@ -27,6 +27,7 @@ use C4::Context;
 use Koha::Caches;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Libraries;
+use Koha::MarcSubfieldStructures;
 use DateTime::Format::MySQL;
 use Business::ISBN;
 use autouse 'Data::cselectall_arrayref' => qw(Dumper);
