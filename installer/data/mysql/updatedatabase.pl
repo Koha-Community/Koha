@@ -12799,7 +12799,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = '16.06.00.013';
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-        INSERT INTO systempreferences (variable, value, options, explanation, type) VALUES
+        INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES
         ('OPACResultsLibrary', 'homebranch', 'homebranch|holdingbranch', 'Defines whether the OPAC displays the holding or home branch in search results when using XSLT', 'Choice');
     });
 
