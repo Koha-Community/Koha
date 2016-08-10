@@ -26,6 +26,7 @@ use strict;
 use C4::Context;
 use Koha::Caches;
 use Koha::DateUtils qw(dt_from_string);
+use Koha::AuthorisedValues;
 use Koha::Libraries;
 use Koha::MarcSubfieldStructures;
 use DateTime::Format::MySQL;
@@ -54,7 +55,6 @@ BEGIN {
 		&GetAuthorisedValues
 		&GetAuthorisedValueCategories
 		&GetKohaAuthorisedValues
-    &GetKohaAuthorisedValuesMapping
     &GetAuthorisedValueByCode
 		&GetNormalizedUPC
 		&GetNormalizedISBN
@@ -1012,50 +1012,6 @@ sub GetKohaAuthorisedValues {
         $values->{ $av->authorised_value } = $opac ? $av->opac_description : $av->lib;
     }
     return $values;
-}
-
-=head2 GetKohaAuthorisedValuesMapping
-
-Takes a hash as a parameter. The interface key indicates the
-description to use in the mapping.
-
-Returns hashref of:
- "{kohafield},{frameworkcode},{authorised_value}" => "{description}"
-for all the kohafields, frameworkcodes, and authorised values.
-
-Returns undef if nothing is found.
-
-=cut
-
-sub GetKohaAuthorisedValuesMapping {
-    my ($parameter) = @_;
-    my $interface = $parameter->{'interface'} // '';
-
-    my $query_mapping = q{
-SELECT TA.kohafield,TA.authorised_value AS category,
-       TA.frameworkcode,TB.authorised_value,
-       IF(TB.lib_opac>'',TB.lib_opac,TB.lib) AS OPAC,
-       TB.lib AS Intranet,TB.lib_opac
-FROM marc_subfield_structure AS TA JOIN
-     authorised_values as TB ON
-     TA.authorised_value=TB.category
-WHERE TA.kohafield>'' AND TA.authorised_value>'';
-    };
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query_mapping);
-    $sth->execute();
-    my $avmapping;
-    if ($interface eq 'opac') {
-        while (my $row = $sth->fetchrow_hashref) {
-            $avmapping->{$row->{kohafield}.",".$row->{frameworkcode}.",".$row->{authorised_value}} = $row->{OPAC};
-        }
-    }
-    else {
-        while (my $row = $sth->fetchrow_hashref) {
-            $avmapping->{$row->{kohafield}.",".$row->{frameworkcode}.",".$row->{authorised_value}} = $row->{Intranet};
-        }
-    }
-    return $avmapping;
 }
 
 =head2 xml_escape

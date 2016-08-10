@@ -1045,7 +1045,6 @@ sub GetLostItems {
   offset       => $offset,
   size         => $size,
   statushash   => $statushash,
-  interface    => $interface,
 } );
 
 Retrieve a list of title/authors/barcode/callnumber, for biblio inventory.
@@ -1076,7 +1075,6 @@ sub GetItemsForInventory {
     my $offset       = $parameters->{'offset'}       // '';
     my $size         = $parameters->{'size'}         // '';
     my $statushash   = $parameters->{'statushash'}   // '';
-    my $interface    = $parameters->{'interface'}    // '';
 
     my $dbh = C4::Context->dbh;
     my ( @bind_params, @where_strings );
@@ -1156,9 +1154,19 @@ sub GetItemsForInventory {
     $sth->execute( @bind_params );
     my ($iTotalRecords) = $sth->fetchrow_array();
 
-    my $avmapping = C4::Koha::GetKohaAuthorisedValuesMapping( {
-                      interface => $interface
-                    } );
+    my @avs = Koha::AuthorisedValues->search(
+        {   'marc_subfield_structures.kohafield' => { '>' => '' },
+            'me.authorised_value'                => { '>' => '' },
+        },
+        {   join     => { category => 'marc_subfield_structures' },
+            distinct => ['marc_subfield_structures.kohafield, me.category, frameworkcode, me.authorised_value'],
+            '+select' => [ 'marc_subfield_structures.kohafield', 'marc_subfield_structures.frameworkcode', 'me.authorised_value', 'me.lib' ],
+            '+as'     => [ 'kohafield',                          'frameworkcode',                          'authorised_value',    'lib' ],
+        }
+    );
+
+    my $avmapping = { map { $_->get_column('kohafield') . ',' . $_->get_column('frameworkcode') . ',' . $_->get_column('authorised_value') => $_->get_column('lib') } @avs };
+
     foreach my $row (@$tmpresults) {
 
         # Auth values

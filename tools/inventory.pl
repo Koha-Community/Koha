@@ -246,7 +246,6 @@ if ( $markseen or $op ) {
       offset       => 0,
       size         => undef,
       statushash   => $staton,
-      interface    => 'staff',
     } );
 
     # For the items that may be marked as "wrong place", we only check the location (callnumbers, location and branch)
@@ -262,7 +261,6 @@ if ( $markseen or $op ) {
       offset       => 0,
       size         => undef,
       statushash   => undef,
-      interface    => 'staff',
     } );
 
 }

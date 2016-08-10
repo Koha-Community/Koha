@@ -38,7 +38,7 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 my ($oldResults, $oldCount) = OldWay($dbh);
-my ($newResults, $newCount) = GetItemsForInventory( { interface => 'staff' } );
+my ($newResults, $newCount) = GetItemsForInventory;
 
 is_deeply($newResults,$oldResults,"Inventory results unchanged.");
 
@@ -58,7 +58,6 @@ sub OldWay {
     my $offset       = '';
     my $size         = '';
     my $statushash   = '';
-    my $interface    = '';
 
     my ( @bind_params, @where_strings );
 

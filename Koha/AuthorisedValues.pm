@@ -45,7 +45,7 @@ my @objects = Koha::AuthorisedValues->search($params);
 =cut
 
 sub search {
-    my ( $self, $params ) = @_;
+    my ( $self, $params, $attributes ) = @_;
 
     my $branchcode = $params->{branchcode};
     delete( $params->{branchcode} );
@@ -60,7 +60,9 @@ sub search {
       }
       : {};
     my $join = $branchcode ? { join => 'authorised_values_branches' } : {};
-    return $self->SUPER::search( { %$params, %$or, }, $join );
+    $attributes //= {};
+    $attributes = { %$attributes, %$join };
+    return $self->SUPER::search( { %$params, %$or, }, $attributes );
 }
 
 sub search_by_marc_field {
