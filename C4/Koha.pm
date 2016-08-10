@@ -896,30 +896,6 @@ sub GetAuthValCode {
 	return $authvalcode;
 }
 
-=head2 GetAuthValCodeFromField
-
-  $authvalcode = GetAuthValCodeFromField($field,$subfield,$frameworkcode);
-
-C<$subfield> can be undefined
-
-=cut
-
-sub GetAuthValCodeFromField {
-	my ($field,$subfield,$fwcode) = @_;
-	my $dbh = C4::Context->dbh;
-	$fwcode='' unless $fwcode;
-	my $sth;
-	if (defined $subfield) {
-	    $sth = $dbh->prepare('select authorised_value from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?');
-	    $sth->execute($field,$subfield,$fwcode);
-	} else {
-	    $sth = $dbh->prepare('select authorised_value from marc_tag_structure where tagfield=? and frameworkcode=?');
-	    $sth->execute($field,$fwcode);
-	}
-	my ($authvalcode) = $sth->fetchrow_array;
-	return $authvalcode;
-}
-
 =head2 GetAuthorisedValues
 
   $authvalues = GetAuthorisedValues([$category]);
