@@ -340,8 +340,9 @@ if (@$barcodes) {
 
     #  Get the item title for more information
     my $getmessageiteminfo = GetBiblioFromItemNumber(undef,$barcode);
-    $template_params->{authvalcode_notforloan} =
-        C4::Koha::GetAuthValCode('items.notforloan', $getmessageiteminfo->{'frameworkcode'});
+
+    my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $getmessageiteminfo->{frameworkcode}, kohafield => 'items.notforloan' });
+    $template_params->{authvalcode_notforloan} = $mss->count ? $mss->next->authorisedvalue : undef;
 
     # Fix for bug 7494: optional checkout-time fallback search for a book
 
@@ -390,11 +391,8 @@ if (@$barcodes) {
         unless($issueconfirmed){
             #  Get the item title for more information
             my $materials = $iteminfo->{'materials'};
-            my $avcode = GetAuthValCode('items.materials');
-            if ($avcode) {
-                my $av = Koha::AuthorisedValues->search({ category => $avcode, authorised_value => $materials });
-                $materials = $av->count ? $av->next->lib : '';
-            }
+            my $av = Koha::AuthorisedValues->search_by_koha_field({ frameworkcode => $getmessageiteminfo->{frameworkcode}, kohafield => 'items.materials', authorised_value => $materials });
+            $materials = $av->count ? $av->next->lib : '';
             $template_params->{additional_materials} = $materials;
             $template_params->{itemhomebranch} = $iteminfo->{'homebranch'};
 

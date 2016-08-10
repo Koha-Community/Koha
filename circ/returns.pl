@@ -279,11 +279,8 @@ if ($barcode) {
     $returnbranch = $biblio->{$hbr};
 
     my $materials = $biblio->{'materials'};
-    my $avcode = GetAuthValCode('items.materials');
-    if ($avcode) {
-        my $av = Koha::AuthorisedValues->search({ category => $avcode, authorised_value => $materials });
-        $materials = $av->count ? $av->next->lib : '';
-    }
+    my $av = Koha::AuthorisedValues->search_by_koha_field({frameworkcode => '', kohafield =>'items.materials', authorised_value => $materials });
+    $materials = $av->count ? $av->next->lib : '';
 
     $template->param(
         title            => $biblio->{'title'},

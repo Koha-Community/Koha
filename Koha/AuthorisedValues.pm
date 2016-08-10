@@ -80,6 +80,28 @@ sub search_by_marc_field {
     );
 }
 
+sub search_by_koha_field {
+    my ( $self, $params ) = @_;
+    my $frameworkcode    = $params->{frameworkcode} || '';
+    my $kohafield        = $params->{kohafield};
+    my $category         = $params->{category};
+    my $authorised_value = $params->{authorised_value};
+
+    return unless $kohafield;
+
+    return $self->SUPER::search(
+        {   'marc_subfield_structures.frameworkcode' => $frameworkcode,
+            'marc_subfield_structures.kohafield'     => $kohafield,
+            ( defined $category ? ( category_name    => $category )         : () ),
+            ( $authorised_value ? ( authorised_value => $authorised_value ) : () ),
+        },
+        {   join     => { category => 'marc_subfield_structures' },
+            select   => ['authorised_value'],
+            distinct => 1,
+        }
+    );
+}
+
 sub categories {
     my ( $self ) = @_;
     my $rs = $self->_resultset->search(

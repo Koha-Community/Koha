@@ -41,6 +41,7 @@ use Koha::DateUtils;
 use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use C4::Acquisition qw(GetOrdersByBiblionumber);
+use Koha::AuthorisedValues;
 use Koha::Virtualshelves;
 
 my $query = CGI->new();
@@ -194,17 +195,19 @@ my $copynumbers    = GetKohaAuthorisedValues('items.copynumber', $fw);
 my (@itemloop, @otheritemloop, %itemfields);
 my $norequests = 1;
 
-if ( my $lost_av = GetAuthValCode('items.itemlost', $fw) ) {
-    $template->param( itemlostloop => GetAuthorisedValues( $lost_av ) );
+my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.itemlost' });
+if ( $mss->count ) {
+    $template->param( itemlostloop => GetAuthorisedValues( $mss->next->authorised_value ) );
 }
-if ( my $damaged_av = GetAuthValCode('items.damaged', $fw) ) {
-    $template->param( itemdamagedloop => GetAuthorisedValues( $damaged_av ) );
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.damaged' });
+if ( $mss->count ) {
+    $template->param( itemdamagedloop => GetAuthorisedValues( $mss->next->authorised_value ) );
 }
 
-my $materials_authvalcode = GetAuthValCode('items.materials', $fw);
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.materials' });
 my %materials_map;
-if ($materials_authvalcode) {
-    my $materials_authvals = GetAuthorisedValues($materials_authvalcode);
+if ($mss->count) {
+    my $materials_authvals = GetAuthorisedValues($mss->next->authorised_value);
     if ($materials_authvals) {
         foreach my $value (@$materials_authvals) {
             $materials_map{$value->{authorised_value}} = $value->{lib};

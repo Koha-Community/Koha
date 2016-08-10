@@ -102,7 +102,7 @@ is( $categories[0], $av4->category, 'The first category should be correct (order
 is( $categories[1], $av1->category, 'The second category should be correct (ordered by category name)' );
 
 subtest 'search_by_*_field' => sub {
-    plan tests => 1;
+    plan tests => 2;
     my $loc_cat = Koha::AuthorisedValueCategories->find('LOC');
     $loc_cat->delete if $loc_cat;
     my $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => 'c', frameworkcode => '' } );
@@ -128,6 +128,15 @@ subtest 'search_by_*_field' => sub {
         is ( $avs, undef );
         $avs = Koha::AuthorisedValues->search_by_marc_field({ tagfield => 952, tagsubfield => 'c'});
         is( $avs->count, 3, 'default fk');
+        is( $avs->next->authorised_value, 'location_1', );
+    };
+    subtest 'search_by_koha_field' => sub {
+        plan tests => 3;
+        my $avs;
+        $avs = Koha::AuthorisedValues->search_by_koha_field();
+        is ( $avs, undef );
+        $avs = Koha::AuthorisedValues->search_by_koha_field( { kohafield => 'items.location', tagfield => 952, tagsubfield => 'c' } );
+        is( $avs->count,                  3, );
         is( $avs->next->authorised_value, 'location_1', );
     };
 };

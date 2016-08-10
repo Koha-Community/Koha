@@ -36,6 +36,7 @@ use C4::Members qw/GetHideLostItemsPreference/;
 use C4::Reserves qw(GetReservesFromBiblionumber);
 
 use Koha::Acquisition::Bookseller;
+use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Items;
 
@@ -193,14 +194,17 @@ foreach my $item (@items){
 
 }
 
-if ( my $lost_av = GetAuthValCode('items.itemlost', $fw) ) {
-    $template->param( itemlostloop => GetAuthorisedValues( $lost_av ) );
+my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.itemlost' });
+if ( $mss->count ) {
+    $template->param( itemlostloop => GetAuthorisedValues( $mss->next->authorisedvalue ) );
 }
-if ( my $damaged_av = GetAuthValCode('items.damaged', $fw) ) {
-    $template->param( itemdamagedloop => GetAuthorisedValues( $damaged_av ) );
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.damaged' });
+if ( $mss->count ) {
+    $template->param( itemdamagedloop => GetAuthorisedValues( $mss->next->authorisedvalue ) );
 }
-if ( my $withdrawn_av = GetAuthValCode('items.withdrawn', $fw) ) {
-    $template->param( itemwithdrawnloop => GetAuthorisedValues( $withdrawn_av ) );
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.withdrawn' });
+if ( $mss->count ) {
+    $template->param( itemwithdrawnloop => GetAuthorisedValues( $mss->next->authorisedvalue) );
 }
 
 $template->param(count => $data->{'count'},

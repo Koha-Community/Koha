@@ -1852,7 +1852,8 @@ sub searchResults {
     my $shelflocations =GetKohaAuthorisedValues('items.location','');
 
     # get notforloan authorised value list (see $shelflocations  FIXME)
-    my $notforloan_authorised_value = GetAuthValCode('items.notforloan','');
+    my $av = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.notforloan' });
+    my $notforloan_authorised_value = $av->count ? $av->next->authorised_value : undef;
 
     #Get itemtype hash
     my %itemtypes = %{ GetItemTypes() };

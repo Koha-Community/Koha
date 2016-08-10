@@ -56,7 +56,6 @@ BEGIN {
 		&GetKohaAuthorisedValues
     &GetKohaAuthorisedValuesMapping
     &GetAuthorisedValueByCode
-		&GetAuthValCode
 		&GetNormalizedUPC
 		&GetNormalizedISBN
 		&GetNormalizedEAN
@@ -880,22 +879,6 @@ SELECT lib,
     return \%notforloan_label_of;
 }
 
-=head2 GetAuthValCode
-
-  $authvalcode = GetAuthValCode($kohafield,$frameworkcode);
-
-=cut
-
-sub GetAuthValCode {
-	my ($kohafield,$fwcode) = @_;
-	my $dbh = C4::Context->dbh;
-	$fwcode='' unless $fwcode;
-	my $sth = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield=? and frameworkcode=?');
-	$sth->execute($kohafield,$fwcode);
-	my ($authvalcode) = $sth->fetchrow_array;
-	return $authvalcode;
-}
-
 =head2 GetAuthorisedValues
 
   $authvalues = GetAuthorisedValues([$category]);
@@ -1017,21 +1000,18 @@ Returns undef if no authorised value category is defined for the kohafield.
 =cut
 
 sub GetKohaAuthorisedValues {
-  my ($kohafield,$fwcode,$opac) = @_;
-  $fwcode='' unless $fwcode;
-  my %values;
-  my $dbh = C4::Context->dbh;
-  my $avcode = GetAuthValCode($kohafield,$fwcode);
-  if ($avcode) {  
-	my $sth = $dbh->prepare("select authorised_value, lib, lib_opac from authorised_values where category=? ");
-   	$sth->execute($avcode);
-	while ( my ($val, $lib, $lib_opac) = $sth->fetchrow_array ) { 
-		$values{$val} = ($opac && $lib_opac) ? $lib_opac : $lib;
-   	}
-   	return \%values;
-  } else {
-	return;
-  }
+    my ( $kohafield, $fwcode, $opac ) = @_;
+    $fwcode = '' unless $fwcode;
+    my %values;
+    my $dbh = C4::Context->dbh;
+
+    my $avs = Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $fwcode, kohafield => $kohafield } );
+    return {} unless $avs->count;
+    my $values;
+    while ( my $av = $avs->next ) {
+        $values->{ $av->authorised_value } = $opac ? $av->opac_description : $av->lib;
+    }
+    return $values;
 }
 
 =head2 GetKohaAuthorisedValuesMapping
