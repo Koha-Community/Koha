@@ -210,7 +210,7 @@ $params is a hashref with some keys:
 
 =item searchtype
 
-  Can be 'contain' or 'start_with' (default value). Used for the searchmember parameter.
+  Can be 'start_with' or 'contain' (default value). Used for the searchmember parameter.
 
 =item searchfieldstype
 
