@@ -22,6 +22,11 @@
             "$ref": "../definitions.json#/error"
           }
         }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "1"
+        }
       }
     }
   },
@@ -54,6 +59,13 @@
           "schema": {
             "$ref": "../definitions.json#/error"
           }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "borrowers": "1"
         }
       }
     }

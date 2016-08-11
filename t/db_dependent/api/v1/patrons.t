@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 19;
 use Test::Mojo;
 use t::lib::TestBuilder;
 
@@ -38,19 +38,66 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
 my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
+my $guarantor = $builder->build({
+    source => 'Borrower',
+    value => {
+        branchcode   => $branchcode,
+        categorycode => $categorycode,
+        flags        => 0,
+    }
+});
 my $borrower = $builder->build({
     source => 'Borrower',
     value => {
         branchcode   => $branchcode,
-        categorycode => $categorycode
+        categorycode => $categorycode,
+        flags        => 0,
+        guarantorid    => $guarantor->{borrowernumber},
     }
 });
 
 $t->get_ok('/api/v1/patrons')
-  ->status_is(403);
+  ->status_is(401);
 
 $t->get_ok("/api/v1/patrons/" . $borrower->{ borrowernumber })
+  ->status_is(401);
+
+my $session = C4::Auth::get_session('');
+$session->param('number', $borrower->{ borrowernumber });
+$session->param('id', $borrower->{ userid });
+$session->param('ip', '127.0.0.1');
+$session->param('lasttime', time());
+$session->flush;
+
+my $session2 = C4::Auth::get_session('');
+$session2->param('number', $guarantor->{ borrowernumber });
+$session2->param('id', $guarantor->{ userid });
+$session2->param('ip', '127.0.0.1');
+$session2->param('lasttime', time());
+$session2->flush;
+
+my $tx = $t->ua->build_tx(GET => '/api/v1/patrons');
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
   ->status_is(403);
+
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . ($borrower->{ borrowernumber }-1));
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(403);
+
+# User without permissions, but is the owner of the object
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $borrower->{borrowernumber});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200);
+
+# User without permissions, but is the guarantor of the owner of the object
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $borrower->{borrowernumber});
+$tx->req->cookies({name => 'CGISESSID', value => $session2->id});
+$t->request_ok($tx)
+  ->status_is(200)
+  ->json_is('/guarantorid', $guarantor->{borrowernumber});
 
 my $loggedinuser = $builder->build({
     source => 'Borrower',
@@ -61,14 +108,14 @@ my $loggedinuser = $builder->build({
     }
 });
 
-my $session = C4::Auth::get_session('');
+$session = C4::Auth::get_session('');
 $session->param('number', $loggedinuser->{ borrowernumber });
 $session->param('id', $loggedinuser->{ userid });
 $session->param('ip', '127.0.0.1');
 $session->param('lasttime', time());
 $session->flush;
 
-my $tx = $t->ua->build_tx(GET => '/api/v1/patrons');
+$tx = $t->ua->build_tx(GET => '/api/v1/patrons');
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
 $t->request_ok($tx)

@@ -124,6 +124,13 @@
             "$ref": "../definitions.json#/error"
           }
         }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "borrowers": "1"
+        }
       }
     },
     "post": {
@@ -195,6 +202,12 @@
             "$ref": "../definitions.json#/error"
           }
         }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "permissions": {
+          "reserveforothers": "1"
+        }
       }
     }
   },
@@ -251,6 +264,13 @@
             "$ref": "../definitions.json#/error"
           }
         }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "reserveforothers": "1"
+        }
       }
     },
     "delete": {
@@ -273,6 +293,11 @@
           "schema": {
             "$ref": "../definitions.json#/error"
           }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "reserveforothers": "1"
         }
       }
     }
