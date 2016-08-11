@@ -20,15 +20,18 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Encode qw(encode);
 use Carp;
+use Digest::MD5 qw(md5_base64);
 use Mail::Sendmail;
 use MIME::QuotedPrint;
 use MIME::Base64;
+
 use C4::Biblio;
 use C4::Items;
 use C4::Auth;
 use C4::Output;
 use C4::Templates ();
 use Koha::Email;
+use Koha::Token;
 
 my $query = new CGI;
 
@@ -42,11 +45,12 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     }
 );
 
-my $bib_list     = $query->param('bib_list');
+my $bib_list     = $query->param('bib_list') || '';
 my $email_add    = $query->param('email_add');
 
 my $dbh          = C4::Context->dbh;
 
+my $csrf_err;
 if ( $email_add ) {
     die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
         session_id => scalar $query->cookie('CGISESSID'),
@@ -168,8 +172,8 @@ END_OF_BODY
     output_html_with_http_headers $query, $cookie, $template->output;
 }
 else {
-    $template->param( bib_list => $bib_list );
     $template->param(
+        bib_list       => $bib_list,
         url            => "/cgi-bin/koha/basket/sendbasket.pl",
         suggestion     => C4::Context->preference("suggestion"),
         virtualshelves => C4::Context->preference("virtualshelves"),
