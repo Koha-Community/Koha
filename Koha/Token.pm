@@ -56,6 +56,7 @@ use Digest::MD5 qw(md5_base64);
 use Encode qw( encode );
 use base qw(Class::Accessor);
 use constant HMAC_SHA1_LENGTH => 20;
+use constant CSRF_EXPIRY_HOURS => 8; # 8 hours instead of 7 days..
 
 =head1 METHODS
 
