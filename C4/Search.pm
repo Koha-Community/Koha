@@ -1136,6 +1136,8 @@ sub getIndexes{
                     'Heading-use-subject-added-entry',
                     'Host-item',
                     'id-other',
+                    'ident',
+                    'Identifier-standard',
                     'Illustration-code',
                     'Index-term-genre',
                     'Index-term-uncontrolled',
