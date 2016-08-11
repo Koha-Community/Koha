@@ -258,6 +258,8 @@ Using this account is not recommended because some parts of Koha will not functi
                                                             <input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a>
                                                         [% END %]
                                                         <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
+                                                    [% ELSIF ( ISSUE.on_reserve ) %]
+                                                        Not renewable <span class="renewals">(on hold)</span>
                                                     [% ELSIF ( ISSUE.too_many ) %]
                                                         Not renewable
                                                     [% ELSIF ( ISSUE.norenew_overdue ) %]
@@ -268,8 +270,6 @@ Using this account is not recommended because some parts of Koha will not functi
                                                     [% ELSIF ( ISSUE.too_soon ) %]
                                                         No renewal before [% ISSUE.soonestrenewdate %]
                                                         <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
-                                                    [% ELSIF ( ISSUE.on_reserve ) %]
-                                                        <span class="renewals">(On hold)</span>
                                                     [% END %]
                                                     </td>
                                                 [% END %]
