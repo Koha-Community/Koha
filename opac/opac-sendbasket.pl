@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Encode qw(encode);
@@ -31,8 +30,8 @@ use C4::Biblio;
 use C4::Items;
 use C4::Auth;
 use C4::Output;
-use C4::Biblio;
 use C4::Members;
+use C4::Templates ();
 use Koha::Email;
 
 my $query = new CGI;
@@ -67,14 +66,12 @@ if ( $email_add ) {
     });
     $mail{'X-Abuse-Report'} = C4::Context->preference('KohaAdminEmailAddress');
 
-    my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
-        {
-            template_name   => "opac-sendbasket.tt",
-            query           => $query,
-            type            => "opac",
-            authnotrequired => 0,
-        }
+    # Since we are already logged in, no need to check credentials again
+    # We only need to add OPACBaseURL
+    my $template2 = C4::Templates::gettemplate(
+        'opac-sendbasket.tt', 'opac', $query,
     );
+    $template2->param( OPACBaseURL => C4::Context->preference('OPACBaseURL') );
 
     my @bibs = split( /\//, $bib_list );
     my @results;
