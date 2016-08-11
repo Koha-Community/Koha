@@ -19,6 +19,10 @@
                                 <p><a class="focus close" href="#">Close window</a></p>
                             [% END %]
 
+                            [% IF csrf_error %]
+                                <p>No valid CSRF token!</p>
+                                <p><a class="focus close" href="#">Close window</a></p>
+                            [% END %]
                             [% IF ( error ) %]
                                 <div class="alert">
                                     <p>There was an error sending the cart.</p>
@@ -34,6 +38,7 @@
                                     <label for="comment">Comment:</label>
                                     <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
                                     <input type="hidden" name="bib_list" value="[% bib_list %]" />
+                                    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                                 </fieldset>
                                 <fieldset class="action">
                                     <input type="submit" class="btn" value="Send" />

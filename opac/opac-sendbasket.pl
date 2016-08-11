@@ -22,10 +22,11 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Encode qw(encode);
 use Carp;
-
+use Digest::MD5 qw(md5_base64);
 use Mail::Sendmail;
 use MIME::QuotedPrint;
 use MIME::Base64;
+
 use C4::Biblio;
 use C4::Items;
 use C4::Auth;
@@ -33,6 +34,7 @@ use C4::Output;
 use C4::Members;
 use C4::Templates ();
 use Koha::Email;
+use Koha::Token;
 
 my $query = new CGI;
 
@@ -45,12 +47,24 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     }
 );
 
-my $bib_list     = $query->param('bib_list');
+my $bib_list     = $query->param('bib_list') || '';
 my $email_add    = $query->param('email_add');
 
 my $dbh          = C4::Context->dbh;
 
+my $csrf_err;
 if ( $email_add ) {
+    $csrf_err = 1 unless Koha::Token->new->check_csrf({
+        id     => C4::Context->userenv->{id},
+        secret => md5_base64( C4::Context->config('pass') ),
+        token  => scalar $query->param('csrf_token'),
+    });
+}
+
+if( $csrf_err ) {
+    $template->param( csrf_error => 1, email_add => 1 );
+    output_html_with_http_headers $query, $cookie, $template->output;
+} elsif ( $email_add ) {
     my $email = Koha::Email->new();
     my $user = GetMember(borrowernumber => $borrowernumber);
     my $user_email = GetFirstValidEmailAddress($borrowernumber)
@@ -185,11 +199,16 @@ END_OF_BODY
     output_html_with_http_headers $query, $cookie, $template->output;
 }
 else {
-    $template->param( bib_list => $bib_list );
     $template->param(
+        bib_list       => $bib_list,
         url            => "/cgi-bin/koha/opac-sendbasket.pl",
         suggestion     => C4::Context->preference("suggestion"),
         virtualshelves => C4::Context->preference("virtualshelves"),
+        csrf_token     => Koha::Token->new->generate_csrf(
+            {   id     => C4::Context->userenv->{id},
+                secret => md5_base64( C4::Context->config('pass') ),
+            }
+        ),
     );
     output_html_with_http_headers $query, $cookie, $template->output;
 }
