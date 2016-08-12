@@ -107,7 +107,7 @@ if (C4::Context->preference("IndependentBranches")) {
 my $op = $input->param('op') || 'delete_confirm';
 my $dbh = C4::Context->dbh;
 my $is_guarantor = $dbh->selectrow_array("SELECT COUNT(*) FROM borrowers WHERE guarantorid=?", undef, $member);
-if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_guarantor or $deletelocal == 0){
+if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_guarantor or $deletelocal == 0) {
     my $patron_image = Koha::Patron::Images->find($bor->{borrowernumber});
     $template->param( picture => 1 ) if $patron_image;
 
@@ -154,7 +154,7 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_
             ),
         );
     }
-}elsif ( $op eq 'delete_confirmed' ) {
+} elsif ( $op eq 'delete_confirmed' ) {
 
     die "Wrong CSRF token"
         unless Koha::Token->new->check_csrf({
@@ -167,7 +167,7 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_
     DelMember($member);
     # TODO Tell the user everything went ok
     print $input->redirect("/cgi-bin/koha/members/members-home.pl");
+    exit 1;
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
-
