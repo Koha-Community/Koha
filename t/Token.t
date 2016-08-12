@@ -20,7 +20,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::More tests => 8;
+use Time::HiRes qw|usleep|;
 use Koha::Token;
 
 my $tokenizer = Koha::Token->new;
@@ -43,3 +44,15 @@ $result = $tokenizer->check({
     type => 'CSRF', id => $id, secret => $secr, token => $token,
 });
 isnt( $result, 1, "This token is no CSRF token" );
+
+# Test MaxAge parameter
+my $age = 1; # 1 second
+$result = $tokenizer->check_csrf({
+    id => $id, secret => $secr, token => $csrftoken, MaxAge => $age,
+});
+is( $result, 1, "CSRF token still valid within one second" );
+usleep $age * 1000000 * 2; # micro (millionth) seconds + 100%
+$result = $tokenizer->check_csrf({
+    id => $id, secret => $secr, token => $csrftoken, MaxAge => $age,
+});
+isnt( $result, 1, "CSRF token expired after one second" );
