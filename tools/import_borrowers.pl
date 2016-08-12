@@ -50,6 +50,7 @@ use C4::Templates;
 use Koha::Patron::Debarments;
 use Koha::Patrons;
 use Koha::DateUtils;
+use Koha::Token;
 
 use Text::CSV;
 # Text::CSV::Unicode, even in binary mode, fails to parse lines with these diacriticals:
@@ -58,6 +59,7 @@ use Text::CSV;
 
 use CGI qw ( -utf8 );
 # use encoding 'utf8';    # don't do this
+use Digest::MD5 qw(md5_base64);
 
 my (@errors, @feedback);
 my $extended = C4::Context->preference('ExtendedPatronAttributes');
@@ -110,6 +112,13 @@ my $overwrite_cardnumber = $input->param('overwrite_cardnumber');
 $template->param( SCRIPT_NAME => '/cgi-bin/koha/tools/import_borrowers.pl' );
 
 if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
+    die "Wrong CSRF token"
+        unless Koha::Token->new->check_csrf({
+            id     => C4::Context->userenv->{id},
+            secret => md5_base64( C4::Context->config('pass') ),
+            token  => scalar $input->param('csrf_token'),
+        });
+
     push @feedback, {feedback=>1, name=>'filename', value=>$uploadborrowers, filename=>$uploadborrowers};
     my $handle = $input->upload('uploadborrowers');
     my $uploadinfo = $input->uploadInfo($uploadborrowers);
@@ -381,6 +390,15 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         }
         $template->param(matchpoints => \@matchpoints);
     }
+
+    $template->param(
+        csrf_token => Koha::Token->new->generate_csrf(
+            {   id     => C4::Context->userenv->{id},
+                secret => md5_base64( C4::Context->config('pass') ),
+            }
+        ),
+    );
+
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
