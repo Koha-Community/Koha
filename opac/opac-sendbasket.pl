@@ -74,11 +74,10 @@ if ( $email_add ) {
     $mail{'X-Abuse-Report'} = C4::Context->preference('KohaAdminEmailAddress');
 
     # Since we are already logged in, no need to check credentials again
-    # We only need to add OPACBaseURL
+    # when loading a second template.
     my $template2 = C4::Templates::gettemplate(
         'opac-sendbasket.tt', 'opac', $query,
     );
-    $template2->param( OPACBaseURL => C4::Context->preference('OPACBaseURL') );
 
     my @bibs = split( /\//, $bib_list );
     my @results;
