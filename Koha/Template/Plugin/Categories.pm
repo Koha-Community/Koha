@@ -26,6 +26,12 @@ sub all {
     return Koha::Patron::Categories->search_limited;
 }
 
+sub GetName {
+    my ( $self, $categorycode ) = @_;
+
+    return Koha::Patron::Categories->find( $categorycode )->description;
+}
+
 1;
 
 =head1 NAME
