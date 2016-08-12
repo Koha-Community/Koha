@@ -49,6 +49,7 @@ use C4::Reports::Guided;
 use C4::Templates;
 use Koha::Patron::Debarments;
 use Koha::DateUtils;
+use Koha::Token;
 
 use Text::CSV;
 # Text::CSV::Unicode, even in binary mode, fails to parse lines with these diacriticals:
@@ -56,6 +57,8 @@ use Text::CSV;
 # č
 
 use CGI qw ( -utf8 );
+# use encoding 'utf8';    # don't do this
+use Digest::MD5 qw(md5_base64);
 
 my (@errors, @feedback);
 my $extended = C4::Context->preference('ExtendedPatronAttributes');
