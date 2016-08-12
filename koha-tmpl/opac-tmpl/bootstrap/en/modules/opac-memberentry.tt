@@ -113,7 +113,10 @@
 
                 <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form">
 
-                [% UNLESS hidden.defined('branchcode') %]
+                [% UNLESS
+                    ( hidden.defined('cardnumber') || ( !borrower && Koha.Preference('autoMemberNum') ) ) &&
+                    hidden.defined('dateexpiry') && hidden.defined('branchcode') && hidden.defined('categorycode')
+                %]
                     <fieldset class="rows" id="memberentry_library">
 
                         <legend id="library_legend">Library</legend>
