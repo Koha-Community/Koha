@@ -1,8 +1,9 @@
+[% USE HtmlToText %]
+[% USE Koha %]
+
 <SUBJECT>
 Your cart
 <END_SUBJECT>
-
-[% USE HtmlToText %]
 
 <HEADER>
 
@@ -130,6 +131,7 @@ Your cart
             [% END %]
             </p>
 
+            [% SET OPACBaseURL = Koha.Preference('OPACBaseURL') %]
             [% IF ( OPACBaseURL ) %]
             <p>
                 In online catalog: [% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% BIBLIO_RESULT.biblionumber %]

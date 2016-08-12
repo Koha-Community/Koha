@@ -68,11 +68,10 @@ if( $csrf_err ) {
     my $comment    = $query->param('comment');
 
     # Since we are already logged in, no need to check credentials again
-    # We only need to add OPACBaseURL
+    # when loading a second template.
     my $template2 = C4::Templates::gettemplate(
         'basket/sendbasket.tt', 'intranet', $query,
     );
-    $template2->param( OPACBaseURL => C4::Context->preference('OPACBaseURL') );
 
     my @bibs = split( /\//, $bib_list );
     my @results;
