@@ -260,7 +260,12 @@ sub calculate {
         $linefield = $line;
     }
     my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['categorycode']});
-    push @loopfilter, {debug=>1, crit=>"\%cathash", filter=>join(", ", map { $_->categorycode . ' (' . ( $_->description || 'NO_DESCRIPTION' ) . ')'} $patron_categories->as_list )};
+    push @loopfilter,
+        {
+            debug  => 1,
+            crit   => "Patron category",
+            filter => join( ", ", map { $_->categorycode . ' (' . ( $_->description || 'NO_DESCRIPTION' ) . ')' } $patron_categories->as_list ),
+        };
 
     my $strsth;
     my @strparams; # bind parameters for the query
