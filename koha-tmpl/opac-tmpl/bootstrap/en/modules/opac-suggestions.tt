@@ -42,7 +42,11 @@
                                     <ol>
                                         <li><label for="title">Title:</label><input type="text" id="title" name="title" class="span6" maxlength="255" /></li>
                                         <li><label for="author">Author:</label><input type="text" id="author" name="author" class="span6" maxlength="80" /></li>
-                                        <li><label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" pattern="[12][0-9\-\?]{3}" size="4" maxlength="4" /></li>
+                                        <li>
+                                            <div title="Copyright or publication year, for example: 2016">
+                                            <label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="4" maxlength="4" />
+                                            </div>
+                                        </li>
                                         <li><label for="isbn">Standard number (ISBN, ISSN or other):</label><input type="text" id="isbn" name="isbn"  maxlength="80" /></li>
                                         <li><label for="publishercode">Publisher:</label><input type="text" id="publishercode" name="publishercode" class="span6" maxlength="80" /></li>
                                         <li><label for="collectiontitle">Collection title:</label><input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" /></li>
