@@ -38,11 +38,11 @@ use YAML;
 
 =head1 NAME
 
-plugin that shows circulation stats
+    reports/reserve_stats.pl
 
 =head1 DESCRIPTION
 
-=over 2
+    Plugin that shows circulation stats
 
 =cut
 
