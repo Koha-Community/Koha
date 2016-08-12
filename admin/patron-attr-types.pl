@@ -271,12 +271,12 @@ sub edit_attribute_type_form {
         category_description => $attr_type->category_description,
     );
 
-    my @patron_categories = Koha::Patron::Categories->search({}, {order_by => ['description']});
+    my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['description']});
     $template->param(
         attribute_type_form => 1,
         edit_attribute_type => 1,
         confirm_op => 'edit_attribute_type_confirmed',
-        categories => \@patron_categories,
+        categories => $patron_categories,
     );
 
 }
