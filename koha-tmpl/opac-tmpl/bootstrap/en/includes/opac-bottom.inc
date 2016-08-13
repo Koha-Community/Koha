@@ -209,7 +209,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     </script>
 [% END %]
 [% IF ( GoogleIndicTransliteration ) %]
-    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/googleindictransliteration.js"></script>
 [% END %]
 [% IF persona %]
