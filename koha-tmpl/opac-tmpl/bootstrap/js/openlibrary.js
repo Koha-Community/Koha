@@ -120,7 +120,7 @@ var ol_button_classname = 'ol_readapi_button';
 // Find all book divs and concatenate ids from them to create a read
 // API query url
 function create_query() {
-    var q = 'http://openlibrary.org/api/volumes/brief/json/';
+    var q = 'https://openlibrary.org/api/volumes/brief/json/';
 
     function add_el(i, el) {
         // tag with number found so it's easy to discover later
