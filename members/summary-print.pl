@@ -60,14 +60,15 @@ $template->param(
     accounts => $accts,
     totaldue => $total,
 
-    issues     => build_issue_data( GetPendingIssues($borrowernumber) ),
+    issues     => build_issue_data( $borrowernumber ),
     totalprice => $totalprice,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub build_issue_data {
-    my $issues = shift;
+    my ( $borrowernumber ) = @_;
+    my $issues = GetPendingIssues( $borrowernumber );
 
     my $return = [];
 
