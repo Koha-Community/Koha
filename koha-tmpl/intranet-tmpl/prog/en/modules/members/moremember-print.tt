@@ -94,7 +94,7 @@
             [% END %]
         </table>
     [% END %]
-    [% IF accounts && ( totaldue < 0 || totaldue > 0 ) %]
+    [% IF accounts && totaldue != 0 %]
         <table>
             <caption>Account fines and payments</caption>
             <tr>
@@ -105,18 +105,17 @@
             </tr>
 
             [% FOREACH account IN accounts %]
-                [% IF ( account.amountoutstanding < 0 ) || ( account.amountoutstanding > 0 ) %]
-                    <tr>
-                        <td>
-                            [% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% END %]
-                            [% account.description %]&nbsp;[% IF ( account.printtitle ) %] [% account.title |html %][% END %]
-                            [% IF ( account.itemnumber ) %]</a>[% END %]
-                        </td>
-                        <td>[% account.date | $KohaDates %]</td>
-                        <td style="text-align:right;">[% account.amount | $Price %]</td>
-                        <td style="text-align:right;">[% account.amountoutstanding | $Price %]</td>
-                    </tr>
-                [% END %]
+                [% NEXT IF account.amountoutstanding == 0 %]
+                <tr>
+                    <td>
+                        [% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% END %]
+                        [% account.description %]&nbsp;[% IF ( account.printtitle ) %] [% account.title |html %][% END %]
+                        [% IF ( account.itemnumber ) %]</a>[% END %]
+                    </td>
+                    <td>[% account.date | $KohaDates %]</td>
+                    <td style="text-align:right;">[% account.amount | $Price %]</td>
+                    <td style="text-align:right;">[% account.amountoutstanding | $Price %]</td>
+                </tr>
             [% END %]
 
             <tfoot>
