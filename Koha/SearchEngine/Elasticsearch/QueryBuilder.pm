@@ -741,7 +741,7 @@ sub _fix_limit_special_cases {
             push @new_lim, "copydate:$date";
         }
         elsif ( $l =~ /^available$/ ) {
-            push @new_lim, 'onloan:false';
+            push @new_lim, 'onloan:0';
         }
         else {
             push @new_lim, $l;
