@@ -108,7 +108,7 @@ C4::Context->set_preference( 'decreaseLoanHighHoldsControl',        'static' );
 C4::Context->set_preference( 'decreaseLoanHighHoldsIgnoreStatuses', 'damaged,itemlost,notforloan,withdrawn' );
 
 my $item_hr = { itemnumber => $item->id, biblionumber => $biblio->id, homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, barcode => $item->barcode };
-my $patron_hr = { borrower => $patron->id, branchcode => $library->{branchcode} };
+my $patron_hr = { borrowernumber => $patron->id, branchcode => $library->{branchcode} };
 
 my $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
 is( $data->{exceeded},        1,          "Static mode should exceed threshold" );
