@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE AudioAlerts %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha [% END %] &rsaquo; Self checkout </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -315,6 +316,8 @@
             </div> <!-- / .row-fluid -->
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
+    <span id="audio-alert"></span>
+</body>
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
@@ -353,6 +356,26 @@
             }
             return true;
         }
+        [% IF Koha.Preference('AudioAlerts') %]
+            var AUDIO_ALERTS = JSON.parse( '[% AudioAlerts.AudioAlerts | replace( "'", "\\'" ) | replace( '"', '\\"' ) %]' );
+            $( document ).ready(function() {
+                if ( AUDIO_ALERTS ) {
+                    for ( var k in AUDIO_ALERTS ) {
+                        var alert = AUDIO_ALERTS[k];
+                        if ( $( alert.selector ).length ) {
+                            playSound( alert.sound );
+                            break;
+                        }
+                    }
+                }
+            });
+            function playSound( sound ) {
+                if (  ( sound.indexOf('http://') == 0 || sound.indexOf('https://') == 0 )  ) {
+                    document.getElementById("audio-alert").innerHTML = '<audio src="' + sound + '" autoplay="autoplay" autobuffer="autobuffer"></audio>';
+                }
+            }
+        [% END %]
+
 
         $(document).ready(function() {
             dofocus();
