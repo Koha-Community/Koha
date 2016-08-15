@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% USE Biblio %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -16,9 +17,9 @@
 [% END %]
 
 <!--[if lt IE 9]>
-<script type="text/javascript" src="[% interface %]/lib/shims/json2.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/shims/json2.min_[% KOHA_VERSION %].js"></script>
 <![endif]-->
-<script type="text/javascript" src="[% interface %]/js/browser.js"></script>
+<script type="text/javascript" src="[% interface %]/js/browser_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript">
 //<![CDATA[
 var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");

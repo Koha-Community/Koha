@@ -1,7 +1,9 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Manage staged MARC records &rsaquo; Compare matched records</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jsdiff/jsdiff.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jsdiff/jsdiff.min_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
       var diff1 = $("#col1 pre").text();

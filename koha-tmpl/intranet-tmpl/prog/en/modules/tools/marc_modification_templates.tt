@@ -1,3 +1,5 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; MARC modification templates</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -17,7 +19,7 @@
     var MSG_MMT_UPDATE_ACTION = _("Update action");
     //]]>
 </script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/marc_modification_templates.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/marc_modification_templates_[% KOHA_VERSION %].js"></script>
 <style type="text/css">
     #add_action { display: none; }
 </style>

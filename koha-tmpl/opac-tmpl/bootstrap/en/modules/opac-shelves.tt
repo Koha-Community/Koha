@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% SET PRIVATE = 1 %]
 [% SET PUBLIC = 2 %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && Koha.Preference('TagsShowOnList') ) %]
@@ -732,7 +733,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript">
 //<![CDATA[
 var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");

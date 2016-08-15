@@ -1,8 +1,10 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Label creator</title>
     [% INCLUDE 'doc-head-close.inc' %]
     [% IF ( bidi ) %]
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left.css" />
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left_[% KOHA_VERSION %].css" />
     [% END %]
 </head>
 <body id="labels_label-home" class="tools labels">

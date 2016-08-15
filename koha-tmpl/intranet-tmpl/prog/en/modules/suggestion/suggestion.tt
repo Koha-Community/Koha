@@ -1,3 +1,5 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
@@ -30,9 +32,9 @@
 </script>
 [% END %]
 [% IF ( op_else ) %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript">
 // <![CDATA[
 /**
@@ -176,7 +178,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
         // ]]>
     </script>
 [% END %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq_[% KOHA_VERSION %].js"></script>
 </head>
 <body id="acq_suggestion" class="acq">
 [% INCLUDE 'header.inc' %]

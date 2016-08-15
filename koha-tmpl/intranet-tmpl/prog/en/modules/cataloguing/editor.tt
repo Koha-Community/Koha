@@ -1,3 +1,5 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; Editor</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -7,7 +9,7 @@
 <link rel="stylesheet" href="[% interface %]/[% theme %]/css/humanmsg.css" />
 <script src="[% interface %]/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
 [% IF ( bidi ) %]
-   <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left.css" />
+   <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left_[% KOHA_VERSION %].css" />
 [% END %]
 </head>
 <body id="cat_addbiblio" class="cat">

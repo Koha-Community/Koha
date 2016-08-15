@@ -1,3 +1,5 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% BLOCK translate_label_element %]
 [%-  SWITCH element -%]
 [%-  CASE 'layout'    -%]layout
@@ -75,7 +77,7 @@
         //]]>
     </script>
 
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript" id="js">
  $(document).ready(function() {

@@ -1,3 +1,5 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Price %]
@@ -6,9 +8,9 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 [% INCLUDE 'additem.js.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/additem.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/cataloging.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/prevent_submit.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/additem_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/cataloging_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/prevent_submit_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript">
 //<![CDATA[
     function Check(form) {

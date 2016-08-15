@@ -1,3 +1,5 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Authority MARC framework [% IF ( add_form ) %][% IF ( use_heading_flags_p ) %]
@@ -6,7 +8,7 @@
     [% ELSE %]&rsaquo; [% action %][% END %][% END %][% IF ( delete_confirm ) %]&rsaquo; [% IF ( authtypecode ) %][% authtypecode %] Framework[% ELSE %]Default framework[% END %] &rsaquo; Confirm deletion[% END %][% IF ( delete_confirmed ) %]&rsaquo; [% IF ( authtypecode ) %][% authtypecode %] Framework[% ELSE %]Default framework[% END %] &rsaquo; Data deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[

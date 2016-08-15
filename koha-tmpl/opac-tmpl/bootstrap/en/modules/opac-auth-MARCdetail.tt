@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% PROCESS 'opac-authorities.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;  Entry [% authtypetext %]</title>
@@ -63,7 +64,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-<script type="text/javascript" src="/opac-tmpl/lib/jquery/plugins/jquery.jstree.js"></script>
+<script type="text/javascript" src="/opac-tmpl/lib/jquery/plugins/jquery.jstree_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript">
     //<![CDATA[
         $(document).ready(function() {

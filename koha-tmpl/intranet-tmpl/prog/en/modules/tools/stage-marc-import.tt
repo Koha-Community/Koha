@@ -1,9 +1,11 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Stage MARC records for import</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload_[% KOHA_VERSION %].js"></script>
 
 <style type="text/css">
     #fileuploadstatus,#fileuploadfailed,#fileuploadcancel,#jobpanel,#jobstatus,#jobfailed { display : none; }

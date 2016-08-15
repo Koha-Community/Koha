@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% USE KohaDates %]
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -7,14 +8,14 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
     var MSG_CATEGORYCODE_CHARS = _("Category code can only contain the following characters: letters, numbers, - and _.");
     var MSG_BOTH_ENROLLMENTPERIODS = _("Please choose only one enrollment period setting.");
     var MSG_ONE_ENROLLMENTPERIOD = ("Please choose an enrollment period in months OR by date.");
 </script>
-<script type="text/javascript" src="[% themelang %]/js/categories.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/categories_[% KOHA_VERSION %].js"></script>
 <style type="text/css">#enrolmentmessage.hint { display : none; }</style>
 </head>
 <body id="admin_categorie" class="admin">
