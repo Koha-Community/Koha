@@ -101,7 +101,7 @@ if (scalar keys %params > 0) {
         filters => [],
     };
 
-    foreach my $p (qw(homebranch location itype ccode issues datelastborrowed notforloan)) {
+    foreach my $p (qw(homebranch holdingbranch location itype ccode issues datelastborrowed notforloan)) {
         if (my @q = $cgi->multi_param($p)) {
             if ($q[0] ne '') {
                 my $f = {

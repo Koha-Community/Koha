@@ -14,6 +14,7 @@
     [% CASE 'isbn' %]<span>ISBN</span>
     [% CASE 'issn' %]<span>ISSN</span>
     [% CASE 'homebranch' %]<span>Home library</span>
+    [% CASE 'holdingbranch' %]<span>Current location</span>
     [% CASE 'All libraries' %]<span>All libraries</span>
     [% CASE 'location' %]<span>Shelving location</span>
     [% CASE 'All locations' %]<span>All locations</span>
@@ -378,6 +379,11 @@
           <fieldset>
             [% INCLUDE form_field_select
               name="homebranch"
+              options = branches
+              empty_option = "All libraries"
+            %]
+            [% INCLUDE form_field_select
+              name="holdingbranch"
               options = branches
               empty_option = "All libraries"
             %]
