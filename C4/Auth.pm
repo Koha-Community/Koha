@@ -1051,7 +1051,7 @@ sub checkauth {
                         $branchname = $library? $library->branchname: '';
                     }
                     my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search };
-                    if ( C4::Context->boolean_preference('IndependentBranches') && C4::Context->boolean_preference('Autolocation') ) {
+                    if ( C4::Context->boolean_preference('AutoLocation') ) {
 
                         # we have to check they are coming from the right ip range
                         my $domain = $branches->{$branchcode}->{'branchip'};
