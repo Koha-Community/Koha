@@ -124,7 +124,8 @@
       "description": "patron's date of birth"
     },
     "branchcode": {
-      "$ref": "../x-primitives.json#/branchcode"
+      "type": "string",
+      "description": "code of patron's home branch"
     },
     "categorycode": {
       "type": "string",
@@ -139,11 +140,11 @@
       "description": "date the patron's card is set to expire"
     },
     "gonenoaddress": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "set to 1 if library marked this patron as having an unconfirmed address"
     },
     "lost": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "set to 1 if library marked this patron as having lost his card"
     },
     "debarred": {
@@ -167,7 +168,7 @@
       "description": "used for children to include title of guarantor"
     },
     "guarantorid": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "borrowernumber used for children or professionals to link them to guarantor or organizations"
     },
     "borrowernotes": {
@@ -187,7 +188,7 @@
       "description": "patron's encrypted password"
     },
     "flags": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "a number associated with the patron's permissions"
     },
     "userid": {
@@ -251,15 +252,15 @@
       "description": "the mobile phone number where the patron would like to receive notices (if SMS turned on)"
     },
     "sms_provider_id": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "the provider of the mobile phone number defined in smsalertnumber"
     },
     "privacy": {
-      "type": "string",
+      "type": "integer",
       "description": "patron's privacy settings related to their reading history"
     },
     "privacy_guarantor_checkouts": {
-      "type": "string",
+      "type": "integer",
       "description": "controls if relatives can see this patron's checkouts"
     },
     "checkprevcheckout": {

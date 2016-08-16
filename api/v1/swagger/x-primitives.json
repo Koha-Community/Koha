@@ -1,15 +1,11 @@
 {
   "biblionumber": {
-    "type": "string",
+    "type": "integer",
     "description": "internally assigned biblio identifier"
   },
   "borrowernumber": {
-    "type": "string",
+    "type": "integer",
     "description": "internally assigned user identifier"
-  },
-  "branchcode": {
-    "type": ["string", "null"],
-    "description": "code of patron's home branch"
   },
   "cardnumber": {
     "type": ["string", "null"],
@@ -29,7 +25,7 @@
     "description": "patron's first name"
   },
   "itemnumber": {
-    "type": ["string", "null"],
+    "type": ["integer", "null"],
     "description": "internally assigned item identifier"
   },
   "phone": {
@@ -37,6 +33,7 @@
     "description": "primary phone number for patron's primary address"
   },
   "reserve_id": {
+    "type": "integer",
     "description": "Internal hold identifier"
   },
   "surname": {

@@ -8,51 +8,65 @@
       "$ref": "../x-primitives.json#/borrowernumber"
     },
     "reservedate": {
+      "type": ["string", "null"],
       "description": "the date the hold was placed"
     },
     "biblionumber": {
       "$ref": "../x-primitives.json#/biblionumber"
     },
     "branchcode": {
-      "$ref": "../x-primitives.json#/branchcode"
+      "type": ["string", "null"],
+      "description": "code of patron's home branch"
     },
     "notificationdate": {
+      "type": ["string", "null"],
       "description": "currently unused"
     },
     "reminderdate": {
+      "type": ["string", "null"],
       "description": "currently unused"
     },
     "cancellationdate": {
+      "type": ["string", "null"],
       "description": "the date the hold was cancelled"
     },
     "reservenotes": {
+      "type": ["string", "null"],
       "description": "notes related to this hold"
     },
     "priority": {
+      "type": ["integer", "null"],
       "description": "where in the queue the patron sits"
     },
     "found": {
+      "type": ["string", "null"],
       "description": "a one letter code defining what the status of the hold is after it has been confirmed"
     },
     "timestamp": {
+      "type": "string",
       "description": "date and time the hold was last updated"
     },
     "itemnumber": {
       "$ref": "../x-primitives.json#/itemnumber"
     },
     "waitingdate": {
+      "type": ["string", "null"],
       "description": "the date the item was marked as waiting for the patron at the library"
     },
     "expirationdate": {
+      "type": ["string", "null"],
       "description": "the date the hold expires"
     },
     "lowestPriority": {
+      "type": "integer",
       "description": ""
     },
     "suspend": {
+      "type": "integer",
       "description": ""
     },
     "suspend_until": {
+      "type": ["string", "null"],
       "description": ""
     },
     "itemtype": {
