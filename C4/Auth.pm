@@ -1084,6 +1084,7 @@ sub checkauth {
 
                         # we have to check they are coming from the right ip range
                         my $domain = $branches->{$branchcode}->{'branchip'};
+                        $domain =~ s|\.\*||g;
                         if ( $ip !~ /^$domain/ ) {
                             $loggedin = 0;
                             $info{'wrongip'} = 1;
