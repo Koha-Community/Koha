@@ -57,9 +57,9 @@ $GLOBAL->{sth}->{target_items}->execute();
 
 DELITEM: while ( my $item = $GLOBAL->{sth}->{target_items}->fetchrow_hashref() ) {
 
-    my $status = C4::Items::ItemSafeToDelete( $item->{itemnumber}, $item->{biblionumber} );
+    my $status = C4::Items::ItemSafeToDelete( $item->{biblionumber}, $item->{itemnumber} );
     if( $status eq '1' )  {
-        C4::Items::DelItemCheck( $item->{itemnumber}, $item->{biblionumber} );
+        C4::Items::DelItemCheck( $item->{biblionumber}, $item->{itemnumber} );
         verbose "Deleting '$item->{itemnumber}'";
     } else {
         verbose "Item '$item->{itemnumber}' not deletd: $status";
