@@ -10,10 +10,6 @@
         <p>The cart was sent to: [% email_add |html %]</p>
 		<p><a class="focus close" href="#">Close window</a></p>
 	[% END %]
-    [% IF csrf_error %]
-        <p>No valid CSRF token!</p>
-        <p><a class="focus close" href="#">Close window</a></p>
-    [% END %]
 	[% IF ( error ) %]
 	<p>Problem sending the cart...</p>
 	[% END %]

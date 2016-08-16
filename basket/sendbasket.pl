@@ -50,7 +50,6 @@ my $email_add    = $query->param('email_add');
 
 my $dbh          = C4::Context->dbh;
 
-my $csrf_err;
 if ( $email_add ) {
     die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
         session_id => scalar $query->cookie('CGISESSID'),
