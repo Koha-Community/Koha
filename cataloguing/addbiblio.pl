@@ -35,6 +35,7 @@ use C4::Branch;    # XXX subfield_is_koha_internal_p
 use C4::ClassSource;
 use C4::ImportBatch;
 use C4::Charset;
+use Koha::DateUtils;
 
 use Date::Calc qw(Today);
 use MARC::File::USMARC;
@@ -293,15 +294,17 @@ sub create_input {
     if ( $value eq '' ) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
 
-        # get today date & replace YYYY, MM, DD if provided in the default value
-        my ( $year, $month, $day ) = Today();
-        $month = sprintf( "%02d", $month );
-        $day   = sprintf( "%02d", $day );
-        $value =~ s/YYYY/$year/g;
-        $value =~ s/MM/$month/g;
-        $value =~ s/DD/$day/g;
-        my $username=(C4::Context->userenv?C4::Context->userenv->{'surname'}:"superlibrarian");    
-        $value=~s/user/$username/g;
+        # get today date & replace <<YYYY>>, <<MM>>, <<DD>> if provided in the default value
+        my $today_dt = dt_from_string;
+        my $year = $today_dt->year;
+        my $month = $today_dt->month;
+        my $day = $today_dt->day;
+        $value =~ s/<<YYYY>>/$year/g;
+        $value =~ s/<<MM>>/$month/g;
+        $value =~ s/<<DD>>/$day/g;
+        # And <<USER>> with surname (?)
+        my $username=(C4::Context->userenv?C4::Context->userenv->{'surname'}:"superlibrarian");
+        $value=~s/<<USER>>/$username/g;
     
     }
     my $dbh = C4::Context->dbh;
