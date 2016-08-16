@@ -147,11 +147,6 @@ $findborrower =~ s|,| |g;
 
 my $branch = C4::Context->userenv->{'branch'};
 
-# If AutoLocation is not activated, we show the Circulation Parameters to chage settings of librarian
-if (C4::Context->preference("AutoLocation") != 1) {
-    $template->param(ManualLocation => 1);
-}
-
 if (C4::Context->preference("DisplayClearScreenButton")) {
     $template->param(DisplayClearScreenButton => 1);
 }
