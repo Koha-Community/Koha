@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::More tests => 8;
 use C4::Context;
 
 use C4::Biblio;
@@ -117,8 +117,23 @@ my $another_item = $builder->build({
 });
 
 C4::Circulation::AddIssue( $patron, $another_item->{barcode}, dt_from_string, undef, dt_from_string, undef, { onsite_checkout => 1 } );
-( undef, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $another_item->{barcode} );
+( $impossible, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $another_item->{barcode} );
 is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1, '' );
+is( exists $impossible->{TOO_MANY}, '', '' );
+
+$dbh->do(q|DELETE FROM issuingrules|);
+my $borrower_circ_rule = $builder->build({
+    source => 'DefaultCircRule',
+    value => {
+        branchcode         => $branch->{branchcode},
+        categorycode       => '*',
+        maxissueqty        => 2,
+        maxonsiteissueqty  => 1,
+    },
+});
+( $impossible, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $another_item->{barcode} );
+is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1, '' );
+is( exists $impossible->{TOO_MANY}, '', '' );
 
 $schema->storage->txn_rollback;
 

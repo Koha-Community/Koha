@@ -532,7 +532,8 @@ sub TooMany {
             }
         }
         if ( C4::Context->preference('ConsiderOnSiteCheckoutsAsNormalCheckouts') ) {
-            if ( $checkout_count >= $max_checkouts_allowed ) {
+            my $delta = $switch_onsite_checkout ? 1 : 0;
+            if ( $checkout_count >= $max_checkouts_allowed + $delta ) {
                 return {
                     reason => 'TOO_MANY_CHECKOUTS',
                     count => $checkout_count,
