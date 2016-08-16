@@ -1,27 +1,52 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
 use C4::Circulation;
+use Koha::Database;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Test::More tests => 9;
-
-*C4::Context::userenv = \&Mock_userenv;
+use Test::MockModule;
 
 BEGIN {
     use_ok('C4::Items');
 }
 
-my $dbh = C4::Context->dbh;
-
 my $builder = t::lib::TestBuilder->new();
+my $schema = Koha::Database->new->schema;
+# Begin transaction
+$schema->storage->txn_begin;
 
 my $branch = $builder->build(
     {
         source => 'Branch',
     }
 );
+
+my $module = new Test::MockModule('C4::Context');
+$module->mock('userenv', sub {
+    {  flags  => 0,
+       branch => $branch->{branchcode}
+    }
+});
 
 my $branch2 = $builder->build(
     {
@@ -140,9 +165,6 @@ is( $test_item->{itemnumber}, undef,
     "DelItemCheck should delete item if ItemSafeToDelete returns true"
 );
 
-# End of testing
+$schema->storage->txn_rollback;
 
-# C4::Context->userenv
-sub Mock_userenv {
-    return { flags => 0, branch => $branch->{branchcode} };
-}
+1;
