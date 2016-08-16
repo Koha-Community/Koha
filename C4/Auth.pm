@@ -1076,7 +1076,7 @@ sub checkauth {
                         $branchname = GetBranchName($branchcode);
                     }
                     my $branches = GetBranches();
-                    if ( C4::Context->boolean_preference('IndependentBranches') && C4::Context->boolean_preference('Autolocation') ) {
+                    if ( C4::Context->boolean_preference('Autolocation') ) {
 
                         # we have to check they are coming from the right ip range
                         my $domain = $branches->{$branchcode}->{'branchip'};
