@@ -50,19 +50,12 @@ my $email_add    = $query->param('email_add');
 
 my $dbh          = C4::Context->dbh;
 
-my $csrf_err;
 if ( $email_add ) {
-    $csrf_err = 1 unless Koha::Token->new->check_csrf({
+    die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
         id     => C4::Context->userenv->{id},
         secret => md5_base64( C4::Context->config('pass') ),
         token  => scalar $query->param('csrf_token'),
     });
-}
-
-if( $csrf_err ) {
-    $template->param( csrf_error => 1, email_add => 1 );
-    output_html_with_http_headers $query, $cookie, $template->output;
-} elsif ( $email_add ) {
     my $email = Koha::Email->new();
     my %mail = $email->create_message_headers({ to => $email_add });
     my $comment    = $query->param('comment');
