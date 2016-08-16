@@ -128,12 +128,17 @@ sub generate_subfield_form {
         $value =~ s/"/&quot;/g;
         if ( ! defined( $value ) || $value eq '')  {
             $value = $subfieldlib->{defaultvalue};
-            # get today date & replace YYYY, MM, DD if provided in the default value
-            my $today_iso = output_pref( { dt=>dt_from_string, dateonly => 1, dateformat => 'iso' } );
-            my ( $year, $month, $day ) = split ('-', $today_iso);
-            $value =~ s/YYYY/$year/g;
-            $value =~ s/MM/$month/g;
-            $value =~ s/DD/$day/g;
+            # get today date & replace <<YYYY>>, <<MM>>, <<DD>> if provided in the default value
+            my $today_dt = dt_from_string;
+            my $year = $today_dt->year;
+            my $month = $today_dt->month;
+            my $day = $today_dt->day;
+            $value =~ s/<<YYYY>>/$year/g;
+            $value =~ s/<<MM></$month/g;
+            $value =~ s/<<DD>>/$day/g;
+            # And <<USER>> with surname (?)
+            my $username=(C4::Context->userenv?C4::Context->userenv->{'surname'}:"superlibrarian");
+            $value=~s/<<USER>>/$username/g;
         }
         
         $subfield_data{visibility} = "display:none;" if (($subfieldlib->{hidden} > 4) || ($subfieldlib->{hidden} <= -4));
