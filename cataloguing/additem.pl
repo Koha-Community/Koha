@@ -161,14 +161,6 @@ sub generate_subfield_form {
 	    $value = $input->param('barcode');
 	}
 
-        # Getting list of subfields to keep when restricted editing is enabled
-        my $subfieldsToAllowForRestrictedEditing = C4::Context->preference('SubfieldsToAllowForRestrictedEditing');
-        my $allowAllSubfields = (
-            not defined $subfieldsToAllowForRestrictedEditing
-              or $subfieldsToAllowForRestrictedEditing == q||
-        ) ? 1 : 0;
-        my @subfieldsToAllow = split(/ /, $subfieldsToAllowForRestrictedEditing);
-
         if ( $subfieldlib->{authorised_value} ) {
             my @authorised_values;
             my %authorised_lib;
@@ -238,13 +230,6 @@ sub generate_subfield_form {
                     labels   => \%authorised_lib,
                     default  => $value,
                 };
-                # If we're on restricted editing, and our field is not in the list of subfields to allow,
-                # then it is read-only
-                $subfield_data{marc_value}->{readonlyselect} = (
-                    not $allowAllSubfields
-                    and $restrictededition
-                    and !grep { $tag . '$' . $subfieldtag  eq $_ } @subfieldsToAllow
-                ) ? 1: 0;
             }
         }
             # it's a thesaurus / authority field
@@ -330,7 +315,23 @@ sub generate_subfield_form {
                 value       => $value,
             };
         }
-        
+
+        # Getting list of subfields to keep when restricted editing is enabled
+        my $subfieldsToAllowForRestrictedEditing = C4::Context->preference('SubfieldsToAllowForRestrictedEditing');
+        my $allowAllSubfields = (
+            not defined $subfieldsToAllowForRestrictedEditing
+              or $subfieldsToAllowForRestrictedEditing == q||
+        ) ? 1 : 0;
+        my @subfieldsToAllow = split(/ /, $subfieldsToAllowForRestrictedEditing);
+
+        # If we're on restricted editing, and our field is not in the list of subfields to allow,
+        # then it is read-only
+        $subfield_data{marc_value}->{readonly} = (
+            not $allowAllSubfields
+            and $restrictededition
+            and !grep { $tag . '$' . $subfieldtag  eq $_ } @subfieldsToAllow
+        ) ? 1: 0;
+
         return \%subfield_data;
 }
 
