@@ -222,7 +222,7 @@
                                         [% END %]
                                     [% END %]
                                     </select>
-                                    [% IF ( searchdomainloop ) %]
+                                    [% IF ( searchdomainloop && searchdomainloop.count > 0) %]
                                         <p>OR</p>
                                         <label for="categoryloop">Groups of libraries</label>
                                         <select name="multibranchlimit" id="categoryloop">
