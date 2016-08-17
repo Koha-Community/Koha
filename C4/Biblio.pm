@@ -2558,9 +2558,9 @@ sub TransformHtmlToMarc {
         # if we are on biblionumber, store it in the MARC::Record (it may not be in the edited fields)
         if ( $param eq 'biblionumber' ) {
             if ( $biblionumbertagfield < 10 ) {
-                $newfield = MARC::Field->new( $biblionumbertagfield, $cgi->param($param), );
+                $newfield = MARC::Field->new( $biblionumbertagfield, scalar $cgi->param($param), );
             } else {
-                $newfield = MARC::Field->new( $biblionumbertagfield, '', '', "$biblionumbertagsubfield" => $cgi->param($param), );
+                $newfield = MARC::Field->new( $biblionumbertagfield, '', '', "$biblionumbertagsubfield" => scalar $cgi->param($param), );
             }
             push @fields, $newfield if ($newfield);
         } elsif ( $param =~ /^tag_(\d*)_indicator1_/ ) {    # new field start when having 'input name="..._indicator1_..."
