@@ -73,9 +73,15 @@
       <h1>Invoice: [% invoicenumber %]</h1>
 
       <p>Vendor: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% suppliername %]</a></p>
-        <form action="/cgi-bin/koha/acqui/invoice.pl" method="post">
+        <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
         <fieldset class="rows">
             <ol>
+            <li>
+                <label for="shipmentdate">Invoice number:</label>
+                <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber %]" class="required" required="required"/>
+                <span class="required">Required</span>
+            </li>
+
             <li><label for="shipmentdate">Shipment date:</label>
                     <input type="text" size="10" id="shipmentdate" name="shipmentdate" value="[% shipmentdate | $KohaDates %]" class="datepicker" /></li>
 

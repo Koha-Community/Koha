@@ -80,8 +80,10 @@ elsif ( $op && $op eq 'reopen' ) {
 elsif ( $op && $op eq 'mod' ) {
     my $shipmentcost       = $input->param('shipmentcost');
     my $shipment_budget_id = $input->param('shipment_budget_id');
+    my $invoicenumber      = $input->param('invoicenumber');
     ModInvoice(
         invoiceid             => $invoiceid,
+        invoicenumber         => $invoicenumber,
         shipmentdate          => output_pref( { str => scalar $input->param('shipmentdate'), dateformat => 'iso', dateonly => 1 } ),
         billingdate           => output_pref( { str => scalar $input->param('billingdate'),  dateformat => 'iso', dateonly => 1 } ),
         shipmentcost          => $shipmentcost,
