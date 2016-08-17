@@ -36,7 +36,7 @@ use Koha::EDI qw( process_quote process_invoice process_ordrsp);
 use Koha::Edifact::Transport;
 use Fcntl qw( :DEFAULT :flock :seek );
 
-my $logdir = C4::Context->context('logdir');
+my $logdir = C4::Context->config('logdir');
 
 # logging set to trace as this may be what you
 # want on implementation
