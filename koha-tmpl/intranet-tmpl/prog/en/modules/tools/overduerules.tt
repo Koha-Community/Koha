@@ -1,6 +1,7 @@
 [% USE Koha %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Notice triggers</title>
+<title>Koha &rsaquo; Tools &rsaquo; Overdue notice/status triggers</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <script type="text/javascript">
@@ -25,7 +26,7 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Notice triggers</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Overdue notice/status triggers</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -33,7 +34,7 @@ $(document).ready(function() {
     <div id="yui-main">
     <div class="yui-b">
 
-        <h1>Defining [% IF ( branch ) %]overdue actions for [% branch %][% ELSE %]default overdue actions[% END %]</h1>
+        <h1>Defining [% IF ( branch ) %]overdue actions for [% Branches.GetName( branch ) %][% ELSE %]default overdue actions[% END %]</h1>
         <div class="help">
             <p>Delay is the number of days after a checkout is due before an action is triggered. </p>
             <p>If you want Koha to trigger an action (send a letter or restrict a member), a delay value is required.</p>
@@ -74,7 +75,7 @@ $(document).ready(function() {
             <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
                 <input type="hidden" name="op" value="save" />
                 <input type="hidden" name="branch" value="[% branch %]" />
-				<h3>Rules for overdue actions: [% IF ( branch ) %][% branch %][% ELSE %] default library [% END %]</h3>
+                <h3>Rules for overdue actions: [% IF ( branch ) %][% Branches.GetName( branch ) %][% ELSE %] default library [% END %]</h3>
                     [% IF ( datasaved ) %]<div class="dialog message">Changes saved.</div> [% END %]
 
   <div id="rulestabs" class="toptabs">
