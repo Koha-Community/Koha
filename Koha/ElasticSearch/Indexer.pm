@@ -177,8 +177,10 @@ sub _sanitise_records {
         # the Tannhauser gate. MARC records where 999$c doesn't match the
         # biblionumber column. All those moments will be lost in time... like
         # tears in rain...
-        $rec->delete_fields($rec->field('999'));
-        $rec->append_fields(MARC::Field->new('999','','','c' => $bibnum, 'd' => $bibnum));
+        if ( $rec ) {
+            $rec->delete_fields($rec->field('999'));
+            $rec->append_fields(MARC::Field->new('999','','','c' => $bibnum, 'd' => $bibnum));
+        }
     }
 }
 
