@@ -25,9 +25,10 @@ use C4::Output;
 use Koha::Database;
 use Koha::Plugins;
 
-my $input = CGI->new();
+our $input = CGI->new();
+our $schema = Koha::Database->new()->schema();
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => 'admin/edi_accounts.tt',
         query           => $input,
@@ -39,7 +40,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $op = $input->param('op');
 $op ||= 'display';
-my $schema = Koha::Database->new()->schema();
 
 if ( $op eq 'acct_form' ) {
     show_account();
