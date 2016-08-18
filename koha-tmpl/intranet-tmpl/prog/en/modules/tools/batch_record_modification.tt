@@ -91,35 +91,42 @@ $(document).ready(function() {
 <div id="yui-main">
 <div class="yui-b">
   <h1>Batch record modification</h1>
-  [% FOREACH message IN messages %]
-    [% IF message.type == 'success' %]
-      <div class="dialog message">
-    [% ELSIF message.type == 'warning' %]
-      <div class="dialog alert">
-    [% ELSIF message.type == 'error' %]
-      <div class="dialog error" style="margin:auto;">
+
+    [% IF ( messages ) %]
+        <div class="dialog message">
+
+            [% FOREACH message IN messages %]
+                [% IF message.type == 'success' %]
+                    <div><i class="fa fa-check success"></i>
+                [% ELSIF message.type == 'warning' %]
+                    <div><i class="fa fa-warning warn"></i>
+                [% ELSIF message.type == 'error' %]
+                    <div><i class="fa fa-exclamation error"></i>
+                [% END %]
+                [% IF message.code == 'no_action_defined_for_the_template' %]
+                    The selected template (id=[% message.mmtid%]) does not exist or no action is defined.
+                [% ELSIF message.code == 'biblio_not_exists' %]
+                    Bibliographic record [% message.biblionumber %] does not exist in the database.
+                [% ELSIF message.code == 'authority_not_exists' %]
+                    Authority record [% message.authid %] does not exist in the database.
+                [% ELSIF message.code == 'biblio_not_modified' %]
+                    Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% message.biblionumber %]">[% message.biblionumber %]</a> has not been modified. An error occurred on modifying it.
+                [% ELSIF message.code == 'authority_not_modified' %]
+                    Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid %]">[% message.authid %]</a> has not been modified. An error occurred on modifying it.
+                [% ELSIF message.code == 'biblio_modified' %]
+                    Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% message.biblionumber %]">[% message.biblionumber %]</a> has successfully been modified.
+                [% ELSIF message.code == 'authority_modified' %]
+                    Bibliographic record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid %]">[% message.authid %]</a> has successfully been modified.
+                [% END %]
+                [% IF message.error %]
+                    (The error was: [% message.error%]. See the Koha logfile for more information).
+                [% END %]
+                </div>
+            [% END %]
+
+        </div>
     [% END %]
-                  <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]">[% biblio.title %]</a></td>
-    [% IF message.code == 'no_action_defined_for_the_template' %]
-      The selected template (id=[% message.mmtid%]) does not exist or no action is defined.
-    [% ELSIF message.code == 'biblio_not_exists' %]
-      The biblionumber [% message.biblionumber %] does not exist in the database.
-    [% ELSIF message.code == 'authority_not_exists' %]
-      The authority id [% message.authid %] does not exist in the database.
-    [% ELSIF message.code == 'biblio_not_modified' %]
-      The biblio <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% message.biblionumber %]">[% message.biblionumber %]</a> has not been modified. An error occurred on modifying it.
-    [% ELSIF message.code == 'authority_not_modified' %]
-      The authority <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid %]">[% message.authid %]</a> has not been modified. An error occurred on modifying it.
-    [% ELSIF message.code == 'biblio_modified' %]
-      The biblio <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% message.biblionumber %]">[% message.biblionumber %]</a> has successfully been modified.
-    [% ELSIF message.code == 'authority_modified' %]
-      The authority <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid %]">[% message.authid %]</a> has successfully been modified.
-    [% END %]
-    [% IF message.error %]
-      (The error was: [% message.error%], see the Koha logfile for more information).
-    [% END %]
-    </div>
-  [% END %]
+
   [% IF view == 'form' %]
     <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_record_modification.pl">
       <fieldset class="rows">
@@ -259,24 +266,32 @@ $(document).ready(function() {
         </div>
       </form>
     [% ELSE %]
-      There is no record ids defined.
+        <div class="dialog message">
+            No records were modified. <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
+        </div>
     [% END %]
   [% ELSIF view == 'report' %]
     [% IF report.total_records == report.total_success %]
-      All records have successfully been modified!
+        <div class="dialog message">
+            All records have successfully been modified! <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
+        </div>
     [% ELSE %]
-      [% report.total_success %] / [% report.total_records %] records have successfully been modified.
-      Some errors occurred.
+        <div class="dialog message">
+            [% report.total_success %] / [% report.total_records %] records have successfully been modified. Some errors occurred. <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
+        </div>
     [% END %]
-    <p><a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a></p>
   [% ELSIF view == 'errors' %]
     [% FOR error IN errors %]
       [% IF error == 'no_template_defined' %]
-        No MARC modification template is defined. You have <a href="/cgi-bin/koha/tools/marc_modification_templates.pl">to create</a> at least one template for using this tool.
+        <div class="dialog alert">
+            No MARC modification template is defined. You have <a href="/cgi-bin/koha/tools/marc_modification_templates.pl">to create</a> at least one template for using this tool.
+        </div>
       [% END %]
     [% END %]
   [% ELSE %]
-    No action defined for the template.
+        <div class="dialog alert">
+            No action defined for the template.
+        </div>
   [% END %]
 </div>
 </div>
