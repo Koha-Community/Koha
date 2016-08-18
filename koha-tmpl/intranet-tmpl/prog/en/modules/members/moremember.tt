@@ -305,9 +305,10 @@ function validate1(date) {
                     </li>
                 </ol>
                 <fieldset class="action">
+                    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                     <input type="submit" value="Upload" class="submit" />
                     <input name="op" type="hidden" value="Upload" />
-                    [% IF ( picture ) %]<a id="delpicture" href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&amp;borrowernumber=[% borrowernumber %]" class="delete">Delete</a>[% END %]
+                    [% IF ( picture ) %]<a id="delpicture" href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&amp;borrowernumber=[% borrowernumber %]&amp;csrf_token=[% csrf_token %]" class="delete">Delete</a>[% END %]
                 </fieldset>
             </fieldset>
         </form>
