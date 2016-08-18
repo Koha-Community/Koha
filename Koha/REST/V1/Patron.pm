@@ -21,6 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::Account;
 use Koha::AuthUtils qw(hash_password);
 use C4::Auth qw( haspermission checkpw_internal );
+use C4::Context;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Libraries;
@@ -190,6 +191,14 @@ sub changepassword {
 
     my $user = $c->stash('koha.user');
     my $patron = Koha::Patrons->find($args->{borrowernumber});
+
+    my $OpacPasswordChange = C4::Context->preference("OpacPasswordChange");
+    unless ( $user
+        && ( ($OpacPasswordChange && $user->borrowernumber == $args->{borrowernumber})
+            || haspermission($user->userid, {borrowers => 1}) ) )
+    {
+        return $c->$cb({ error => "OPAC password change is disabled" }, 403);
+    }
     return $c->$cb({ error => "Patron not found." }, 404) unless $patron;
 
     my $pw = $args->{'body'};

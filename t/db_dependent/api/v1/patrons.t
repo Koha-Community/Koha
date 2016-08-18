@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 107;
+use Test::More tests => 112;
 use Test::Mojo;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -62,7 +62,8 @@ my $patron = $builder->build({
         categorycode => $categorycode,
         flags        => 0,
         lost         => 1,
-        guarantorid  => $guarantor->{borrowernumber},
+        guarantorid    => $guarantor->{borrowernumber},
+        password     => Koha::AuthUtils::hash_password($password),
     }
 });
 
@@ -151,6 +152,13 @@ $session->param('id', $loggedinuser->{ userid });
 $session->param('ip', '127.0.0.1');
 $session->param('lasttime', time());
 $session->flush;
+
+my $session_nopermission = C4::Auth::get_session('');
+$session_nopermission->param('number', $patron->{ borrowernumber });
+$session_nopermission->param('id', $patron->{ userid });
+$session_nopermission->param('ip', '127.0.0.1');
+$session_nopermission->param('lasttime', time());
+$session_nopermission->flush;
 
 $tx = $t->ua->build_tx(GET => '/api/v1/patrons');
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
@@ -378,5 +386,21 @@ $t->request_ok($tx)
   ->status_is(400)
   ->json_is('/error', "Password cannot contain trailing whitespaces.");
 
+$password_obj = {
+    current_password    => $password,
+    new_password        => "new password",
+};
+t::lib::Mocks::mock_preference("OpacPasswordChange", 0);
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$patron->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+$t->request_ok($tx)
+  ->status_is(403)
+  ->json_is('/error', "OPAC password change is disabled");
+
+t::lib::Mocks::mock_preference("OpacPasswordChange", 1);
+$tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$patron->{borrowernumber}.'/password' => json => $password_obj);
+$tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+$t->request_ok($tx)
+  ->status_is(200);
 
 $schema->storage->txn_rollback;
