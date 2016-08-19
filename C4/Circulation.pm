@@ -4086,15 +4086,28 @@ sub _CalculateAndUpdateFine {
 
     if ( C4::Context->preference('finesMode') eq 'production' ) {
         if ( $amount > 0 ) {
-            C4::Overdues::UpdateFine( $issue->{itemnumber}, $issue->{borrowernumber},
-                $amount, $type, output_pref($datedue) );
+            C4::Overdues::UpdateFine({
+                issue_id       => $issue->{issue_id},
+                itemnumber     => $issue->{itemnumber},
+                borrowernumber => $issue->{borrowernumber},
+                amount         => $amount,
+                type           => $type,
+                due            => output_pref($datedue),
+            });
         }
         elsif ($return_date) {
 
             # Backdated returns may have fines that shouldn't exist,
             # so in this case, we need to drop those fines to 0
 
-            C4::Overdues::UpdateFine( $issue->{itemnumber}, $issue->{borrowernumber}, 0, $type, output_pref($datedue) );
+            C4::Overdues::UpdateFine({
+                issue_id       => $issue->{issue_id},
+                itemnumber     => $issue->{itemnumber},
+                borrowernumber => $issue->{borrowernumber},
+                amount         => 0,
+                type           => $type,
+                due            => output_pref($datedue),
+            });
         }
     }
 }
