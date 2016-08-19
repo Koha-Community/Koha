@@ -227,6 +227,14 @@ elsif ( $action eq 'update' ) {
 
             $borrower_changes{borrowernumber} = $borrowernumber;
 
+            # FIXME update the following with
+            # Koha::Patron::Modifications->search({ borrowernumber => $borrowernumber })->delete;
+            # when bug 17091 will be pushed
+            my $patron_modifications = Koha::Patron::Modifications->search({ borrowernumber => $borrowernumber });
+            while ( my $patron_modification = $patron_modifications->next ) {
+                $patron_modification->delete;
+            }
+
             my $m = Koha::Patron::Modification->new( \%borrower_changes )->store();
 
             $template->param(
