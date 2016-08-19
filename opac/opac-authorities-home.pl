@@ -64,8 +64,9 @@ if ( $op eq "do_search" ) {
         { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
     my $search_query = $builder->build_authorities_query_compat( \@marclist, \@and_or,
         \@excluding, \@operator, \@value, $authtypecode, $orderby );
+    my $offset = ( $startfrom - 1 ) * $resultsperpage + 1;
     my ( $results, $total ) =
-      $searcher->search_auth_compat( $search_query, $startfrom, $resultsperpage );
+      $searcher->search_auth_compat( $search_query, $offset, $resultsperpage );
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-authoritiessearchresultlist.tt",
