@@ -101,11 +101,19 @@ $(document).ready(function() {
                     {
                         "mDataProp": function( oObj ) {
                             if( oObj.branches.length > 1 && oObj.found !== 'W' && oObj.found !== 'T' ){
-                                var branchSelect='<select class="hold_location_select" reserve_id="'+oObj.reserve_id+'" name="pick-location">';
+                                var branchSelect='<select priority='+oObj.priority+' class="hold_location_select" reserve_id="'+oObj.reserve_id+'" name="pick-location">';
                                 for ( var i=0; i < oObj.branches.length; i++ ){
                                     var selectedbranch;
-                                    if( oObj.branches[i].selected ){selectedbranch=" selected='selected' "}else{selectedbranch=''}
-                                    branchSelect += '<option value="'+ oObj.branches[i].value +'"'+selectedbranch+'>'+oObj.branches[i].branchname+'</option>';
+                                    var setbranch;
+                                    if( oObj.branches[i].selected ){
+                                        selectedbranch = " selected='selected' ";
+                                        setbranch = " (set) ";
+                                    }
+                                    else{
+                                        selectedbranch = '';
+                                        setbranch = '';
+                                    }
+                                    branchSelect += '<option value="'+ oObj.branches[i].value +'"'+selectedbranch+'>'+oObj.branches[i].branchname+setbranch+'</option>';
                                 }
                                 branchSelect +='</select>';
                                 return branchSelect;
@@ -189,17 +197,26 @@ $(document).ready(function() {
 
                 $(".hold_location_select").change(function(){
                     if( confirm( _("Do you want to change the pickup location?") ) ){
-                        $.post('/cgi-bin/koha/svc/hold/update_location', { "reserve_id": $(this).attr('reserve_id'), "updated_branch": $(this).val() }, function( data ){
-                            if ( data.success ) {
-                                holdsTable.api().ajax.reload();
-                            }
-                        else {
-                            if ( data.error == "HOLD_NOT_FOUND" ) {
-                                alert ( RESUME_HOLD_ERROR_NOT_FOUND );
-                                holdsTable.api().ajax.reload();
-                            }
-                        }
-                      });
+                        $(this).prop("disabled",true);
+                        var cur_select = $(this);
+                        $(this).after('<i id="holdwaiter" class="fa fa-circle-o-notch fa-spin fa-lg fa-fw"></i>');
+                        var api_url = '/api/v1/holds/'+$(this).attr('reserve_id');
+                        var update_info = JSON.stringify({ branchcode: $(this).val(), priority: parseInt($(this).attr("priority"),10) });
+                        $.ajax({
+                            method: "PUT",
+                            url: api_url,
+                            data: update_info ,
+                            success: function( data ){ holdsTable.api().ajax.reload(); },
+                            error: function( jqXHR, textStatus, errorThrown) {
+                                alert('There was an error:'+textStatus+" "+errorThrown);
+                                cur_select.prop("disabled",false);
+                                $("#holdwaiter").remove();
+                                cur_select.val( cur_select.children('option[selected="selected"]').val() );
+                            },
+                        });
+                    }
+                    else{
+                        $(this).val( $(this).children('option[selected="selected"]').val()  );
                     }
                 });
 
