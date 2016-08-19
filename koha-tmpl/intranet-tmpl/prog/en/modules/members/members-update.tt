@@ -108,6 +108,9 @@
                                                             [% IF ( key == "dateofbirth" ) %]
                                                                 <td>[% borrowers.$borrowernumber.$key | $KohaDates %]</td>
                                                                 <td>[% pm.$key | $KohaDates %]</td>
+                                                            [% ELSIF key == 'branchcode' %]
+                                                                <td>[% Branches.GetName( borrowers.$borrowernumber.$key )  %]</td>
+                                                                <td>[% Branches.GetName( pm.$key ) %]</td>
                                                             [% ELSE %]
                                                                 <td>[% borrowers.$borrowernumber.$key %]</td>
                                                                 <td>[% pm.$key %]</td>
