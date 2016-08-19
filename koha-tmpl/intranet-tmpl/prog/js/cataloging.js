@@ -384,6 +384,8 @@ function UnCloneField(index) {
                 this.checked = false;
             } else if (tag == 'select') {
                 this.selectedIndex = -1;
+                // required for Select2 to be able to update its control
+                $(this).trigger('change');
             }
         });
         $(":input.indicator", original).val("");
