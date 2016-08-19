@@ -641,37 +641,37 @@
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="$controlField008-33='0'">
-                    not fiction
+                    Not fiction
                 </xsl:when>
                 <xsl:when test="$controlField008-33='1'">
-                    fiction
-                </xsl:when>
-                <xsl:when test="$controlField008-33='e'">
-                    essay
+                    Fiction
                 </xsl:when>
                 <xsl:when test="$controlField008-33='d'">
-                    drama
+                    Dramas
                 </xsl:when>
-                <xsl:when test="$controlField008-33='c'">
-                    comic strip
-                </xsl:when>
-                <xsl:when test="$controlField008-33='l'">
-                    fiction
-                </xsl:when>
-                <xsl:when test="$controlField008-33='h'">
-                    humor, satire
-                </xsl:when>
-                <xsl:when test="$controlField008-33='i'">
-                    letter
+                <xsl:when test="$controlField008-33='e'">
+                    Essays
                 </xsl:when>
                 <xsl:when test="$controlField008-33='f'">
-                    novel
+                    Novels
+                </xsl:when>
+                <xsl:when test="$controlField008-33='h'">
+                    Humor, satires, etc.
+                </xsl:when>
+                <xsl:when test="$controlField008-33='i'">
+                    Letters
                 </xsl:when>
                 <xsl:when test="$controlField008-33='j'">
-                    short story
+                    Short stories
+                </xsl:when>
+                <xsl:when test="$controlField008-33='m'">
+                    Mixed forms
+                </xsl:when>
+                <xsl:when test="$controlField008-33='p'">
+                    Poetry
                 </xsl:when>
                 <xsl:when test="$controlField008-33='s'">
-                    speech
+                    Speeches
                 </xsl:when>
             </xsl:choose>
         </span>
