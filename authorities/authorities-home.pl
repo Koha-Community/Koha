@@ -87,9 +87,9 @@ if ( $op eq "do_search" ) {
         [$marclist], [$and_or], [$excluding], [$operator],
         [$value], $authtypecode, $orderby
     );
-    $startfrom = $startfrom // 0;
+    my $offset = ( $startfrom - 1 ) * $resultsperpage + 1;
     my ( $results, $total ) =
-      $searcher->search_auth_compat( $search_query, $startfrom,
+      $searcher->search_auth_compat( $search_query, $offset,
         $resultsperpage );
     #my ( $results, $total ) = SearchAuthorities(
     #    [$marclist],  [$and_or],
