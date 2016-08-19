@@ -58,14 +58,6 @@ my $authid       = $query->param('authid');
 my $index        = $query->param('index');
 my $tagid        = $query->param('tagid');
 my $relationship = $query->param('relationship');
-my $authtypecode = Koha::Authorities->find($authid)->authtypecode;
-my $tagslib      = &GetTagsLabels( 1, $authtypecode );
-
-my $auth_type = Koha::Authority::Types->find($authtypecode);
-my $record;
-if ($authid) {
-    $record = GetAuthority($authid);
-}
 
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -82,6 +74,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my @subfield_loop;
 my ($indicator1, $indicator2);
 if ($authid) {
+    my $authtypecode = Koha::Authorities->find($authid)->authtypecode;
+    my $auth_type = Koha::Authority::Types->find($authtypecode);
+    my $record = GetAuthority($authid);
     my @fields = $record->field( $auth_type->auth_tag_to_report );
     my $repet = ($query->param('repet') || 1) - 1;
     my $field = $fields[$repet];
