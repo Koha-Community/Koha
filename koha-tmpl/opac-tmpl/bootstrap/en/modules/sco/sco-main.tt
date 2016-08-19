@@ -250,21 +250,26 @@
                                                     <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
                                                         <input type="hidden" name="patronid" value="[% patronid %]" />
                                                         <input type="hidden" name="barcode" value="[% ISSUE.barcode %]" />
-                                                        [% IF ( ISSUE.norenew ) %]
-                                                            [% IF ( AllowSelfCheckReturns ) %]
-                                                                <input type="submit" value="Check in item" name="confirm" class="btn return" />
-                                                                <input type="hidden" name="op" value="returnbook" />
-                                                                <input type="hidden" name="confirmed" value=""  />
-                                                            [% ELSE %]
-                                                                <span>No renewals allowed</span>
-                                                            [% END %]
-                                                        [% ELSE %]
+                                                        [% IF ISSUE.can_be_renewed %]
                                                             <input type="hidden" name="op" value="checkout" />
                                                             <input type="hidden" name="confirmed" value="1" />
                                                             [% UNLESS ( ISSUE.renew ) %]
                                                                 <input type="submit" value="Renew item"  name="confirm  " class="btn renew" />
                                                             [% ELSE %]
                                                                 <input type="submit" value="Renew item" class="btn renew" />
+                                                            [% END %]
+                                                        [% ELSE %]
+                                                            [% IF ISSUE.renew_error == 'auto_renew' OR ISSUE.renew_error == 'auto_too_soon' %]
+                                                                <span>This item has been scheduled for automatic renewal and cannot be renewed</span>
+                                                            [% ELSIF ISSUE.renew_error == 'onsite_checkout' %]
+                                                                <span>This is a on-site checkout, it cannot be renewed.</span>
+                                                            [% ELSE %]
+                                                                <span>No renewals allowed</span>
+                                                            [% END %]
+                                                            [% IF AllowSelfCheckReturns %]
+                                                                <input type="submit" value="Check in item" name="confirm" class="btn return" />
+                                                                <input type="hidden" name="op" value="returnbook" />
+                                                                <input type="hidden" name="confirmed" value=""  />
                                                             [% END %]
                                                         [% END %]
                                                     </form>

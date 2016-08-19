@@ -226,14 +226,12 @@ if ($borrower->{cardnumber}) {
     my @issues;
     my ($issueslist) = GetPendingIssues( $borrower->{'borrowernumber'} );
     foreach my $it (@$issueslist) {
-        my ($renewokay, $renewerror) = CanBookBeIssued(
-            $borrower,
-            $it->{'barcode'},
-            undef,
-            0,
-            C4::Context->preference("AllowItemsOnHoldCheckoutSCO")
+        my ($can_be_renewed, $renew_error) = CanBookBeRenewed(
+            $borrower->{borrowernumber},
+            $it->{itemnumber},
         );
-        $it->{'norenew'} = 1 if $renewokay->{'NO_MORE_RENEWALS'};
+        $it->{can_be_renewed} = $can_be_renewed;
+        $it->{renew_error} = $renew_error;
         $it->{date_due}  = $it->{date_due_sql};
         push @issues, $it;
     }
