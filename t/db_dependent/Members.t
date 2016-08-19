@@ -17,14 +17,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 82;
+use Test::More tests => 84;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
 use Koha::Database;
 use Koha::Holds;
 use Koha::List::Patron;
-
+use Koha::Patrons;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -387,6 +387,12 @@ $patstodel = GetBorrowersToExpunge( { last_seen => '2016-02-15' });
 is( scalar @$patstodel, 2, 'TrackLastPatronActivity - 2 patrons must be deleted' );
 $patstodel = GetBorrowersToExpunge( { last_seen => '2016-04-04' });
 is( scalar @$patstodel, 3, 'TrackLastPatronActivity - 3 patrons must be deleted' );
+my $patron2 = $builder->build({ source => 'Borrower', value => { lastseen => undef } });
+t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '0' );
+Koha::Patrons->find( $patron2->{borrowernumber} )->track_login;
+is( Koha::Patrons->find( $patron2->{borrowernumber} )->lastseen, undef, 'Lastseen should not be changed' );
+Koha::Patrons->find( $patron2->{borrowernumber} )->track_login({ force => 1 });
+isnt( Koha::Patrons->find( $patron2->{borrowernumber} )->lastseen, undef, 'Lastseen should be changed now' );
 
 # Regression tests for BZ13502
 ## Remove all entries with userid='' (should be only 1 max)

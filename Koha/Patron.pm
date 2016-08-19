@@ -248,6 +248,25 @@ sub has_overdues {
     return $self->_result->issues->search({ date_due => { '<' => $dtf->format_datetime( dt_from_string() ) } })->count;
 }
 
+=head2 track_login
+
+    $patron->track_login;
+    $patron->track_login({ force => 1 });
+
+    Tracks a (successful) login attempt.
+    The preference TrackLastPatronActivity must be enabled. Or you
+    should pass the force parameter.
+
+=cut
+
+sub track_login {
+    my ( $self, $params ) = @_;
+    return if
+        !$params->{force} &&
+        !C4::Context->preference('TrackLastPatronActivity');
+    $self->lastseen( dt_from_string() )->store;
+}
+
 =head3 type
 
 =cut

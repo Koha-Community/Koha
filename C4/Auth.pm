@@ -35,6 +35,7 @@ use Koha::Caches;
 use Koha::AuthUtils qw(get_script_name hash_password);
 use Koha::Libraries;
 use Koha::LibraryCategories;
+use Koha::Patrons;
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
 use Encode qw( encode is_utf8);
@@ -1183,11 +1184,9 @@ sub checkauth {
         }
 
         if ( $userid ) {
-            $dbh->do(q|
-                UPDATE borrowers
-                SET lastseen = NOW()
-                WHERE userid = ?
-            |, undef, $userid);
+            # track_login also depends on pref TrackLastPatronActivity
+            my $patron = Koha::Patrons->search({ userid => $userid })->next;
+            $patron->track_login if $patron;
         }
 
         return ( $userid, $cookie, $sessionID, $flags );
