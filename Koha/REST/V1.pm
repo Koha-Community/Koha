@@ -28,10 +28,13 @@ sub startup {
     my $route = $self->routes->under->to(
         cb => sub {
             my $c = shift;
+            # Mojo doesn't use %ENV the way CGI apps do
+            # Manually pass the remote_address to check_auth_cookie
+            my $remote_addr = $c->tx->remote_address;
+            my ($status, $sessionID) = check_cookie_auth(
+                                            $c->cookie('CGISESSID'), undef,
+                                            { remote_addr => $remote_addr });
 
-            # ENV{REMOTE_ADDR} is not set here, we need to read the headers
-            my $remote_addr = $c->req->headers->header('x-forwarded-for');
-            my ($status, $sessionID) = check_cookie_auth($c->cookie('CGISESSID'), undef, { remote_addr => $remote_addr });
             if ($status eq "ok") {
                 my $session = get_session($sessionID);
                 my $user = Koha::Patrons->find($session->param('number'));
