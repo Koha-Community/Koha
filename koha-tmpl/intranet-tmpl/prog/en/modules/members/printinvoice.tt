@@ -13,23 +13,23 @@
 <table>
 [% IF ( LibraryName ) %]
   <tr>
-    <th colspan="4" class="centerednames">
+    <th colspan="5" class="centerednames">
 		<h3>[% LibraryName %]</h3>
 	</th>
   </tr>
 [% END %]
   <tr>
-    <th colspan="4" class="centerednames">
+    <th colspan="5" class="centerednames">
 		<h2><u>INVOICE</u></h2>
 	</th>
   </tr>
   <tr>
-    <th colspan="4" class="centerednames">
+    <th colspan="5" class="centerednames">
 		[% IF ( branchname ) %]<h2>[% branchname %]</h2>[% END %]
 	</th>
   </tr>
   <tr>
-    <th colspan="4" >
+    <th colspan="5" >
         Bill to: [% firstname %] [% surname %] <br />
         Card number: [% cardnumber %]<br />
 	</th>
@@ -37,6 +37,7 @@
   <tr>
 	<th>Date</th>
     <th>Description of charges</th>
+    <th>Note</th>
     <th style="text-align:right;">Amount</th>
     <th style="text-align:right;">Amount outstanding</th>
  </tr>
@@ -60,6 +61,7 @@
         [%- END -%]
         [%- IF account.description %], [% account.description %][% END %]
       </td>
+      <td>[% account.note %]</td>
       [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount %]</td>
       [% IF ( account.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amountoutstanding %]</td>
     </tr>
@@ -67,7 +69,7 @@
   [% END %]
 <tfoot>
   <tr>
-    <td colspan="3">Total outstanding dues as on date: </td>
+    <td colspan="4">Total outstanding dues as on date: </td>
     [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total %]</td>
   </tr>
   </tfoot>
