@@ -107,7 +107,7 @@ $(document).ready(function() {
                                     var setbranch;
                                     if( oObj.branches[i].selected ){
                                         selectedbranch = " selected='selected' ";
-                                        setbranch = " (set) ";
+                                        setbranch = CURRENT;
                                     }
                                     else{
                                         selectedbranch = '';
@@ -196,28 +196,24 @@ $(document).ready(function() {
                 });
 
                 $(".hold_location_select").change(function(){
-                    if( confirm( _("Do you want to change the pickup location?") ) ){
-                        $(this).prop("disabled",true);
-                        var cur_select = $(this);
-                        $(this).after('<i id="holdwaiter" class="fa fa-circle-o-notch fa-spin fa-lg fa-fw"></i>');
-                        var api_url = '/api/v1/holds/'+$(this).attr('reserve_id');
-                        var update_info = JSON.stringify({ branchcode: $(this).val(), priority: parseInt($(this).attr("priority"),10) });
-                        $.ajax({
-                            method: "PUT",
-                            url: api_url,
-                            data: update_info ,
-                            success: function( data ){ holdsTable.api().ajax.reload(); },
-                            error: function( jqXHR, textStatus, errorThrown) {
-                                alert('There was an error:'+textStatus+" "+errorThrown);
-                                cur_select.prop("disabled",false);
-                                $("#holdwaiter").remove();
-                                cur_select.val( cur_select.children('option[selected="selected"]').val() );
-                            },
-                        });
-                    }
-                    else{
-                        $(this).val( $(this).children('option[selected="selected"]').val()  );
-                    }
+                    $(this).prop("disabled",true);
+                    var cur_select = $(this);
+                    var res_id = $(this).attr('reserve_id');
+                    $(this).after('<div id="updating_reserveno'+res_id+'" class="waiting"><img src="/intranet-tmpl/prog/img/loading-small.gif" alt="" /><span class="waiting_msg"></span></div>');
+                    var api_url = '/api/v1/holds/'+res_id;
+                    var update_info = JSON.stringify({ branchcode: $(this).val(), priority: parseInt($(this).attr("priority"),10) });
+                    $.ajax({
+                        method: "PUT",
+                        url: api_url,
+                        data: update_info ,
+                        success: function( data ){ holdsTable.api().ajax.reload(); },
+                        error: function( jqXHR, textStatus, errorThrown) {
+                            alert('There was an error:'+textStatus+" "+errorThrown);
+                            cur_select.prop("disabled",false);
+                            $("#updating_reserveno"+res_id).remove();
+                            cur_select.val( cur_select.children('option[selected="selected"]').val() );
+                        },
+                    });
                 });
 
             });
