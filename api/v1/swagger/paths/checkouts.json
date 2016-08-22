@@ -96,5 +96,36 @@
         }
       }
     }
+  },
+  "/checkouts/{checkout_id}/renewability": {
+    "get": {
+      "operationId": "renewabilityCheckout",
+      "tags": ["patrons", "checkouts"],
+      "parameters": [{
+        "$ref": "../parameters.json#/checkoutIdPathParam"
+      }],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Checkout renewability",
+          "schema": { "$ref": "../definitions.json#/renewability" }
+        },
+        "403": {
+          "description": "Forbidden",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "404": {
+          "description": "Checkout not found",
+          "schema": { "$ref": "../definitions.json#/error" }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "circulate": "circulate_remaining_permissions"
+        }
+      }
+    }
   }
 }
