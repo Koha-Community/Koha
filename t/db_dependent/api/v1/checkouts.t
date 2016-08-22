@@ -169,6 +169,12 @@ $t->post_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->i
               required_permissions => { circulate => "circulate_remaining_permissions" }
             });
 
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue2->issue_id . "/renewability");
+$tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
+$t->request_ok($tx)
+  ->status_is(200)
+  ->json_is({ renewable => Mojo::JSON->true, error => undef });
+
 $t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/renewal" )
   ->status_is(201)
   ->json_is('/due_date' => output_pref({ dateformat => "rfc3339", dt => $expected_datedue}) )
@@ -179,3 +185,8 @@ $t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/re
   ->status_is(403)
   ->json_is({ error => 'Renewal not authorized (too_many)' });
 
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue2->issue_id . "/renewability");
+$tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
+$t->request_ok($tx)
+  ->status_is(200)
+  ->json_is({ renewable => Mojo::JSON->false, error => 'too_many' });
