@@ -16,7 +16,7 @@
             [% END %]
             [% IntranetNav %]
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
+                <a href="/cgi-bin/koha/mainpage.pl" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
                     [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ) %]
