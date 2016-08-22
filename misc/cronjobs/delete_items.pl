@@ -42,7 +42,7 @@ my @where = @{ $OPTIONS->{where} };
 
 pod2usage( -verbose => 2 ) if  $OPTIONS->{flags}->{manual};
 pod2usage( -verbose => 1 ) if  $OPTIONS->{flags}->{help};
-pod2usage( -verbose => 1 -msg => 'You must supply at least one --where option' ) if  scalar @where == 0;
+pod2usage( -verbose => 1 -msg => 'You must supply at least one --where option' ) if scalar @where == 0;
 
 sub verbose {
     say @_ if $OPTIONS->{flags}->{verbose};
@@ -59,7 +59,8 @@ DELITEM: while ( my $item = $GLOBAL->{sth}->{target_items}->fetchrow_hashref() )
 
     my $status = C4::Items::ItemSafeToDelete( $item->{biblionumber}, $item->{itemnumber} );
     if( $status eq '1' )  {
-        C4::Items::DelItemCheck( $item->{biblionumber}, $item->{itemnumber} );
+        C4::Items::DelItemCheck( $item->{biblionumber}, $item->{itemnumber} )
+            if $OPTIONS->{flags}->{commit};
         verbose "Deleting '$item->{itemnumber}'";
     } else {
         verbose "Item '$item->{itemnumber}' not deletd: $status";
