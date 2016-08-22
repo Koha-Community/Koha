@@ -35,9 +35,11 @@ my $biblionumber = $query->param("bib")||0;
 $biblionumber = int($biblionumber);
 my $error = q{};
 
-my $marc_unfiltered;
-$marc_unfiltered = GetMarcBiblio($biblionumber, 1) if $biblionumber;
-if(!$marc_unfiltered) {
+my $include_items = ($format =~ /bibtex/) ? 0 : 1;
+my $marc = GetMarcBiblio($biblionumber, $include_items)
+    if $biblionumber;
+
+if(!$marc) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
@@ -45,12 +47,7 @@ if(!$marc_unfiltered) {
 # ASSERT: There is a biblionumber, because GetMarcBiblio returned something.
 
 my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
-my $marc_filtered    = $marc_unfiltered->clone();
-my $marc             = $record_processor->process($marc_filtered);
-
-my $marc_noitems_unfiltered = GetMarcBiblio($biblionumber);
-my $marc_noitems_filtered   = $marc_noitems_unfiltered->clone();
-my $marc_noitems            = $record_processor->process($marc_noitems_filtered);
+$record_processor->process($marc);
 
 if ($format =~ /endnote/) {
     $marc = marc2endnote($marc);
@@ -69,7 +66,7 @@ elsif ($format =~ /ris/) {
     $format = 'ris';
 }
 elsif ($format =~ /bibtex/) {
-    $marc = marc2bibtex($marc_noitems,$biblionumber);
+    $marc = marc2bibtex($marc,$biblionumber);
     $format = 'bibtex';
 }
 elsif ($format =~ /dc$/) {

@@ -92,14 +92,13 @@ if (scalar @items >= 1) {
     }
 }
 
-my $record_unfiltered = GetMarcBiblio($biblionumber,1);
-if ( ! $record_unfiltered ) {
+my $record = GetMarcBiblio($biblionumber,1);
+if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
-my $record_filtered  = $record_unfiltered->clone();
-my $record           = $record_processor->process($record_filtered);
+$record_processor->process($record);
 
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in

@@ -39,34 +39,29 @@ $biblionumber   = int($biblionumber);
 my $importid= $input->param('importid');
 my $view= $input->param('viewas') || 'marc';
 
-my $record_unfiltered;
+my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
+
+my $record;
 if ($importid) {
     my ($marc) = GetImportRecordMarc($importid);
-    $record_unfiltered = MARC::Record->new_from_usmarc($marc);
+    $record = MARC::Record->new_from_usmarc($marc);
 }
 else {
-    $record_unfiltered = GetMarcBiblio($biblionumber);
+    $record = GetMarcBiblio($biblionumber);
+    my $frameworkcode = GetFrameworkCode($biblionumber);
+    $record_processor->options({ frameworkcode => $frameworkcode});
 }
-if(!ref $record_unfiltered) {
+
+if(!ref $record) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
-my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
-my $record_filtered  = $record_unfiltered->clone();
-my $record           = $record_processor->process($record_filtered);
+$record_processor->process($record);
 
 if ($view eq 'card' || $view eq 'html') {
-    # FIXME: GetXmlBiblio needs filtering later.
-    my $xml = $importid ? $record->as_xml(): GetXmlBiblio($biblionumber);
-    if (!$importid && $view eq 'html') {
-        my $unfiltered_record = MARC::Record->new_from_xml($xml);
-        my $frameworkcode = GetFrameworkCode($biblionumber);
-        $record_processor->options({ frameworkcode => $frameworkcode});
-        my $filtered_record = $record_processor->process($unfiltered_record);
-        $xml = $filtered_record->as_xml();
-    }
-    my $xsl =  $view eq 'card' ? 'compact.xsl' : 'plainMARC.xsl';
+    my $xml = $record->as_xml;
+    my $xsl = $view eq 'card' ? 'compact.xsl' : 'plainMARC.xsl';
     my $htdocs = C4::Context->config('opachtdocs');
     my ($theme, $lang) = C4::Templates::themelanguage($htdocs, $xsl, 'opac', $input);
     $xsl = "$htdocs/$theme/$lang/xslt/$xsl";

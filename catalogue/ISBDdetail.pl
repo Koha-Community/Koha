@@ -33,8 +33,7 @@ This script needs a biblionumber as parameter
 
 =cut
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 
 use HTML::Entities;
 use C4::Auth;
@@ -49,9 +48,6 @@ use C4::Serials;    # CountSubscriptionFromBiblionumber
 use C4::Search;		# enabled_staff_search_views
 use C4::Acquisition qw(GetOrdersByBiblionumber);
 use Koha::RecordProcessor;
-
-
-#---- Internal function
 
 
 my $query = new CGI;
@@ -80,15 +76,14 @@ if ( not defined $biblionumber ) {
        exit;
 }
 
-my $record_unfiltered = GetMarcBiblio($biblionumber,1);
+my $record = GetMarcBiblio($biblionumber,1);
 my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',
     options => {
         interface => 'intranet',
     },
 });
-my $record_filtered  = $record_unfiltered->clone();
-my $record           = $record_processor->process($record_filtered);
+$record_processor->process($record);
 
 if ( not defined $record ) {
        # biblionumber invalid -> report and exit

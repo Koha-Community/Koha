@@ -18,6 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Biblio;
@@ -259,9 +260,8 @@ if ( $op eq 'view' ) {
             while ( my $content = $contents->next ) {
                 my $biblionumber = $content->biblionumber->biblionumber;
                 my $this_item    = GetBiblioData($biblionumber);
-                my $record_unfiltered = GetMarcBiblio($biblionumber);
-                my $record_filtered   = $record_unfiltered->clone();
-                my $record       = $record_processor->process($record_filtered);
+                my $record = GetMarcBiblio($biblionumber);
+                $record_processor->process($record);
 
                 if ( $xslfile ) {
                     $this_item->{XSLTBloc} = XSLTParse4Display( $biblionumber, $record, "OPACXSLTListsDisplay",

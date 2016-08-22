@@ -84,14 +84,13 @@ if (scalar @all_items >= 1) {
     }
 }
 
-my $record_unfiltered = GetMarcBiblio($biblionumber);
-if ( ! $record_unfiltered ) {
+my $record = GetMarcBiblio($biblionumber);
+if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
     exit;
 }
 my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
-my $record_filtered  = $record_unfiltered->clone();
-my $record           = $record_processor->process($record_filtered);
+$record_processor->process($record);
 
 # redirect if opacsuppression is enabled and biblio is suppressed
 if (C4::Context->preference('OpacSuppression')) {

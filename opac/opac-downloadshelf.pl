@@ -62,7 +62,7 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
 
 
         my $contents = $shelf->get_contents;
-        my $marcflavour         = C4::Context->preference('marcflavour');
+        my $marcflavour = C4::Context->preference('marcflavour');
         my $output;
         my $extension;
         my $type;
@@ -82,9 +82,8 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
             while ( my $content = $contents->next ) {
                 my $biblionumber = $content->biblionumber->biblionumber;
 
-                my $record_unfiltered = GetMarcBiblio($biblionumber, 1);
-                my $record_filtered   = $record_unfiltered->clone();
-                my $record = $record_processor->process($record_filtered);
+                my $record = GetMarcBiblio($biblionumber, 1);
+                $record_processor->process($record);
                 next unless $record;
 
                 if ($format eq 'iso2709') {

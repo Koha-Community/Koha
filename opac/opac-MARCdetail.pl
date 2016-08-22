@@ -85,14 +85,13 @@ my $tagslib      = &GetMarcStructure( 0, $itemtype );
 my ($tag_itemnumber,$subtag_itemnumber) = &GetMarcFromKohaField('items.itemnumber',$itemtype);
 my $biblio = GetBiblioData($biblionumber);
 $biblionumber = $biblio->{biblionumber};
-my $record_unfiltered = GetMarcBiblio($biblionumber, 1);
-if ( ! $record_unfiltered ) {
+my $record = GetMarcBiblio($biblionumber, 1);
+if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
-my $record_filtered  = $record_unfiltered->clone();
-my $record           = $record_processor->process($record_filtered);
+$record_processor->process($record);
 
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

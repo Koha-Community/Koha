@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+use Modern::Perl;
 
-use strict;
-use warnings;
 use CGI qw ( -utf8 );
 use C4::Koha;
 use C4::Biblio;
@@ -64,9 +63,8 @@ foreach my $biblionumber ( @bibs ) {
 
     my $dat              = &GetBiblioData($biblionumber);
     next unless $dat;
-    my $record_unfiltered = &GetMarcBiblio($biblionumber);
-    my $record_filtered   = $record_unfiltered->clone();
-    my $record            = $record_processor->process($record_filtered);
+    my $record = &GetMarcBiblio($biblionumber);
+    $record_processor->process($record);
     next unless $record;
     my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );

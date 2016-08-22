@@ -68,10 +68,8 @@ if ($bib_list && $format) {
         });
         foreach my $biblio (@bibs) {
 
-            my $record_unfiltered = GetMarcBiblio($biblio, 1);
-            my $record_filtered   = $record_unfiltered->clone();
-            my $record            =
-                $record_processor->process($record_filtered);
+            my $record = GetMarcBiblio($biblio, 1);
+            $record_processor->process($record);
 
             next unless $record;
 
