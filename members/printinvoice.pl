@@ -101,6 +101,7 @@ for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
         'amountoutstanding'       => sprintf( "%.2f", $accts->[$i]{'amountoutstanding'} ),
         'accountno'               => $accts->[$i]{'accountno'},
         accounttype               => $accts->[$i]{accounttype},
+        'note'                    => $accts->[$i]{'note'},
     );
 
     if ( $accts->[$i]{'accounttype'} ne 'F' && $accts->[$i]{'accounttype'} ne 'FU' ) {
