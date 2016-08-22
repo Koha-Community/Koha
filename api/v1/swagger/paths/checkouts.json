@@ -93,5 +93,33 @@
         }
       }
     }
+  },
+  "/checkouts/{checkout_id}/renewability": {
+    "get": {
+      "operationId": "renewabilityCheckout",
+      "tags": ["patrons", "checkouts"],
+      "parameters": [{
+          "name": "checkout_id",
+          "in": "path",
+          "description": "Internal checkout identifier",
+          "required": true,
+          "type": "integer"
+      }],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Checkout renewability",
+          "schema": { "$ref": "../definitions.json#/renewability" }
+        },
+        "403": {
+          "description": "Forbidden",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "404": {
+          "description": "Checkout not found",
+          "schema": { "$ref": "../definitions.json#/error" }
+        }
+      }
+    }
   }
 }
