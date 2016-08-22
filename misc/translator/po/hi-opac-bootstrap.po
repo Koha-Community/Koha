@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2016-07-15 20:04-0300\n"
+"POT-Creation-Date: 2016-08-16 20:08-0300\n"
 "PO-Revision-Date: 2011-11-04 11:04+0200\n"
 "Last-Translator: gangagiri <amsvrama@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,11 +16,31 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.6\n"
 
+#. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
+#. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
+#. %3$s:  ELSE 
+#. %4$s:  debarred_comment | html_line_break 
+#. %5$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:43
+#, c-format
+msgid "\" %s Restriction added by overdues process %s %s %s %s "
+msgstr ""
+
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:304
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:306
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 msgstr "$[% उपक्षेत्र.कोड %] [% उपक्षेत्र.मूल्य %]"
+
+#. %1$s:  IF BORROWER_INFO.debarredcomment.search('OVERDUES_PROCESS') 
+#. %2$s:  BORROWER_INFO.debarredcomment.remove('OVERDUES_PROCESS ') 
+#. %3$s:  ELSE 
+#. %4$s:  BORROWER_INFO.debarredcomment 
+#. %5$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:106
+#, c-format
+msgid "%s \"Restriction added by overdues process %s\" %s %s %s "
+msgstr ""
 
 #. %1$s:  IF holds_count.defined 
 #. %2$s:  ITEM_RESULT.holds_count 
@@ -32,7 +52,7 @@ msgstr "$[% उपक्षेत्र.कोड %] [% उपक्षेत्
 #. %8$s:  ITEM_RESULT.priority 
 #. %9$s:  END 
 #. %10$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1303
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1296
 #, fuzzy, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -125,7 +145,7 @@ msgstr "सदस्यता नए मुद्दों पर अधिस�
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.intransit ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:585
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:606
 #, fuzzy, c-format
 msgid "%s %s %s Item in transit from "
 msgstr "आइटम पारगमन में <b>%s</b> "
@@ -133,7 +153,7 @@ msgstr "आइटम पारगमन में <b>%s</b> "
 #. %1$s:  IF ( RESERVE.wait ) 
 #. %2$s:  IF ( RESERVE.atdestination ) 
 #. %3$s:  IF ( RESERVE.found ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:575
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:596
 #, fuzzy, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "आइटम (%s) पर इंतज़ार कर "
@@ -202,14 +222,14 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF debarred_date && debarred_date != '9999-12-31' 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:43
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:49
 #, c-format
 msgid "%s %s End date: "
 msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:603
 #, fuzzy, c-format
 msgid "%s %s Item in transit to "
 msgstr "आइटम पारगमन में <b>%s</b> "
@@ -338,6 +358,13 @@ msgstr "%s %s हमारे ऑनलाइन केटालॉग से �
 #, fuzzy, c-format
 msgid "%s %s tag%stags%s successfully added."
 msgstr "सफलतापूर्वक जोड़ा गया."
+
+#. %1$s:  END 
+#. %2$s:  IF ( BORROWER_INFO.debarredcomment ) 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
+#, fuzzy, c-format
+msgid "%s %s with the comment "
+msgstr "%s%s टिप्पणी के साथ "
 
 #. %1$s:  SWITCH type 
 #. %2$s:  CASE 'earlier' 
@@ -472,7 +499,7 @@ msgstr "(संबंधित खोजों: "
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:466
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:487
 #, fuzzy, c-format
 msgid "%s Account frozen %s %s "
 msgstr "खाता अवरुद्ध "
@@ -507,31 +534,10 @@ msgstr ""
 "व्यवस्थापक से संपर्क करें."
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:241
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:262
 #, fuzzy, c-format
 msgid "%s Automatic renewal "
 msgstr "नवीकरण नहीं छोड़ा "
-
-#. %1$s:  IF ( latestserial.status1 ) 
-#. %2$s:  ELSE 
-#. %3$s:  IF ( latestserial.status2 ) 
-#. %4$s:  ELSE 
-#. %5$s:  IF ( latestserial.status3 ) 
-#. %6$s:  ELSE 
-#. %7$s:  IF ( latestserial.status4 ) 
-#. %8$s:  ELSE 
-#. %9$s:  IF ( latestserial.status5 ) 
-#. %10$s:  END 
-#. %11$s:  END 
-#. %12$s:  END 
-#. %13$s:  END 
-#. %14$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:843
-#, fuzzy, c-format
-msgid ""
-"%s Awaited %s %s Arrived %s %s Late %s %s Missing %s %s Not issued %s %s %s "
-"%s %s "
-msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  IF ( GROUP_RESULT.onloancount ) 
 #. %2$s:  GROUP_RESULT.onloancount 
@@ -679,13 +685,13 @@ msgid "%s Internet user critics"
 msgstr "%s इंटरनेट उपयोगकर्ता आलोचक"
 
 #. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:580
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:601
 #, fuzzy, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "आइटम इंतजार खींचा जाना "
 
 #. %1$s:  issues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:129
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:150
 #, fuzzy, c-format
 msgid "%s Item(s) checked out"
 msgstr "%s आइटम जाँच"
@@ -698,7 +704,7 @@ msgstr "लॉग आउट"
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:244
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:265
 #, fuzzy, c-format
 msgid "%s No renewal before %s "
 msgstr "नवीकरण नहीं छोड़ा "
@@ -718,14 +724,14 @@ msgid "%s No results, try to change filters. %s "
 msgstr "कोई परिणाम नहीं मिला. "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:473
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
 #, fuzzy, c-format
 msgid "%s Not allowed"
 msgstr "अनुमति नहीं रखता"
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:237
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:258
 #, fuzzy, c-format
 msgid "%s Not renewable %s Not allowed "
 msgstr "नवीकरण नहीं छोड़ा"
@@ -733,7 +739,7 @@ msgstr "नवीकरण नहीं छोड़ा"
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:475
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:496
 #, fuzzy, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "नवीकरण नहीं छोड़ा "
@@ -957,7 +963,7 @@ msgstr "%s वीडियो उद्धरण"
 #. %12$s:  itemLoo.reservedate 
 #. %13$s:  END 
 #. %14$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:366
 #, fuzzy, c-format
 msgid ""
 "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
@@ -970,8 +976,8 @@ msgstr ""
 #. %1$s:  IF ( ISSUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:255
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:485
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:276
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:506
 #, fuzzy, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s %s %s %s (%s) "
@@ -1145,7 +1151,7 @@ msgstr "%s %s %s %s (%s) "
 #. %5$s:  XISBN.copyrightdate 
 #. %6$s:  END 
 #. %7$s:  IF ( XISBN.publishercode ) 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:987
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:980
 #, fuzzy, c-format
 msgid "%s by %s%s %s &copy;%s%s %s "
 msgstr "%s द्वारा %s%s%s &प्रति;%s%s%s "
@@ -1159,7 +1165,7 @@ msgid "%s desc"
 msgstr "%s, %s"
 
 #. %1$s:  IF renewal_blocked_fines != "0.00" 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
 #, fuzzy, c-format
 msgid "%s more than "
 msgstr "% की तुलना में अधिक "
@@ -1167,7 +1173,7 @@ msgstr "% की तुलना में अधिक "
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:579
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:600
 #, fuzzy, c-format
 msgid "%s since %s%s "
 msgstr "%s %s %s %s (%s) "
@@ -1252,13 +1258,6 @@ msgstr "होल्डिंग्स (%s)"
 #, fuzzy, c-format
 msgid "%s%s tag%stags%s successfully deleted."
 msgstr "सफलतापूर्वक नष्ट कर दिया."
-
-#. %1$s:  END 
-#. %2$s:  IF ( BORROWER_INFO.debarredcomment ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
-#, c-format
-msgid "%s%s with the comment "
-msgstr "%s%s टिप्पणी के साथ "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -1857,13 +1856,13 @@ msgstr ""
 #. %1$s:  IF ( bibitemloo.author ) 
 #. %2$s:  bibitemloo.author 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:151
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:159
 #, fuzzy, c-format
 msgid "%s, by %s%s "
 msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:112
 #, fuzzy, c-format
 msgid ""
 "%s. Usually the reason for freezing an account is old overdues or damage "
@@ -1964,19 +1963,60 @@ msgstr "संग्रह: %s"
 #. %6$s:  END 
 #. %7$s:  IF ( serial.status4 ) 
 #. %8$s:  END 
-#. %9$s:  IF ( serial.status5 ) 
+#. %9$s:  IF ( serial.status41 ) 
 #. %10$s:  END 
-#. %11$s:  IF ( serial.status6 ) 
+#. %11$s:  IF ( serial.status42 ) 
 #. %12$s:  END 
-#. %13$s:  IF ( serial.status7 ) 
+#. %13$s:  IF ( serial.status43 ) 
 #. %14$s:  END 
-#. %15$s:  IF ( serial.status8 ) 
+#. %15$s:  IF ( serial.status44 ) 
 #. %16$s:  END 
+#. %17$s:  IF ( serial.status5 ) 
+#. %18$s:  END 
+#. %19$s:  IF ( serial.status6 ) 
+#. %20$s:  END 
+#. %21$s:  IF ( serial.status7 ) 
+#. %22$s:  END 
+#. %23$s:  IF ( serial.status8 ) 
+#. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
 #, c-format
 msgid ""
-"%sExpected%s %sArrived%s %sLate%s %sMissing%s %sNot available%s %sDelete%s "
-"%sClaimed%s %sStopped%s "
+"%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
+"%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
+"available%s %sDelete%s %sClaimed%s %sStopped%s "
+msgstr ""
+
+#. %1$s:  IF (latestserial.status1 ) 
+#. %2$s:  END 
+#. %3$s:  IF (latestserial.status2 ) 
+#. %4$s:  END 
+#. %5$s:  IF (latestserial.status3 ) 
+#. %6$s:  END 
+#. %7$s:  IF (latestserial.status4 ) 
+#. %8$s:  END 
+#. %9$s:  IF (latestserial.status41 ) 
+#. %10$s:  END 
+#. %11$s:  IF (latestserial.status42 ) 
+#. %12$s:  END 
+#. %13$s:  IF (latestserial.status43 ) 
+#. %14$s:  END 
+#. %15$s:  IF (latestserial.status44 ) 
+#. %16$s:  END 
+#. %17$s:  IF (latestserial.status5 ) 
+#. %18$s:  END 
+#. %19$s:  IF (latestserial.status6 ) 
+#. %20$s:  END 
+#. %21$s:  IF (latestserial.status7 ) 
+#. %22$s:  END 
+#. %23$s:  IF (latestserial.status8 ) 
+#. %24$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:843
+#, c-format
+msgid ""
+"%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
+"%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
+"%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
 
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
@@ -2069,14 +2109,14 @@ msgstr "एक सूची में"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  IF OPACPatronDetails 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:116
 #, fuzzy, c-format
 msgid ""
 "%scontact information%s on file. Please contact the library%s or use the "
 msgstr "पुस्तकालय में उपलब्ध "
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:5
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1067
 #, fuzzy, c-format
 msgid "&laquo; Previous"
 msgstr "&lt;&lt; पिछला"
@@ -2477,18 +2517,18 @@ msgstr "(%s biblios)"
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft 
 #. %2$s:  ISSUE.renewsallowed 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:237
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:244
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:247
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:473
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:258
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:265
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s %s नवीकरण के शेष)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:379
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:504
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:400
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:525
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:214
 #, c-format
 msgid "(%s total)"
@@ -2496,7 +2536,7 @@ msgstr "(%s कुल)"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:136
+#: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:140
 msgid "(All)"
 msgstr ""
 
@@ -2519,7 +2559,7 @@ msgstr ""
 msgid "(Not supported yet)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:249
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:270
 #, c-format
 msgid "(On hold)"
 msgstr "पकड़ पर"
@@ -2624,8 +2664,8 @@ msgstr ""
 msgid "(modified on %s)"
 msgstr "(%s पर) संशोधित"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:241
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:475
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:496
 #, fuzzy, c-format
 msgid "(overdue)"
 msgstr "अतिदेय राशि "
@@ -2655,7 +2695,7 @@ msgstr "(संबंधित खोजों:"
 msgid "(remove)"
 msgstr "समीक्षा"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:109
 #, c-format
 msgid ", none of these items can be placed on hold. "
 msgstr ""
@@ -2665,7 +2705,7 @@ msgstr ""
 msgid ", you cannot place holds."
 msgstr "क्षमा करें, आप %s से अधिक जगह नहीं हो सकती है. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
 #, c-format
 msgid ""
 ", you cannot renew your books online. Please pay your fines if you wish to "
@@ -2704,7 +2744,7 @@ msgstr "\\ - कोई नहीं -- "
 msgid ". Once you've confirmed the deletion, no one can retrieve the list!"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:59
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:71
 #, fuzzy, c-format
 msgid ". Please contact the library for more information."
 msgstr "संपर्क करने संबंधी जानकारी"
@@ -2796,7 +2836,7 @@ msgstr ""
 #. %3$s:  HTML5MediaSet.srcblock 
 #. %4$s:  HTML5MediaSet.typeblock 
 #. %5$s:  HTML5MediaParent 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1007
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1000
 #, c-format
 msgid ""
 "<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
@@ -2808,7 +2848,7 @@ msgstr ""
 msgid "A confirmation email will be sent shortly to the email address "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:276
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:284
 #, fuzzy, c-format
 msgid "A specific item"
 msgstr "एक विशिष्ट कॉपी पर एक पकड़ प्लेस "
@@ -2830,7 +2870,7 @@ msgid "Access denied"
 msgstr "पहुँच अस्वीकृत"
 
 #. %1$s:  UNLESS OPACPatronDetails 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:116
 #, c-format
 msgid "According to our records, we don't have up-to-date %s"
 msgstr ""
@@ -3005,7 +3045,7 @@ msgstr "सभी पुस्तकालयों"
 msgid "Allow"
 msgstr "सब"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:72
 #, c-format
 msgid ""
 "Also note that you must return all checked out items before your card "
@@ -3027,9 +3067,9 @@ msgstr "वैकल्पिक पता"
 msgid "Alternate contact"
 msgstr "वैकल्पिक संपर्क"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:297
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:325
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:318
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:346
 #, c-format
 msgid "Amount"
 msgstr "मात्रा"
@@ -3134,7 +3174,7 @@ msgid "April"
 msgstr "अप्रैल"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 #, fuzzy
 msgid "Are you sure you want to cancel this hold?"
 msgstr "क्या आप इस अभिलेख को हटाना चाहते हैं?"
@@ -3186,13 +3226,13 @@ msgid "Are you sure you want to remove this share?"
 msgstr "क्या आप चयनित मदों को दूर करना चाहते हैं?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 #, fuzzy
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "क्या आप अपनी गाड़ी खाली करना चाहते हैं?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 #, fuzzy
 msgid "Are you sure you want to suspend all holds?"
 msgstr "क्या आप अपनी गाड़ी खाली करना चाहते हैं?"
@@ -3389,11 +3429,10 @@ msgstr ""
 msgid "BE CAREFUL"
 msgstr ""
 
-#. %1$s:  heading | html 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:14
-#, fuzzy, c-format
-msgid "BT: %s"
-msgstr "टैग: %s"
+#, c-format
+msgid "BT"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:30
@@ -3401,28 +3440,28 @@ msgstr "टैग: %s"
 msgid "Back to lists"
 msgstr "पिछला biblio करने के लिए"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1080
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 #, fuzzy, c-format
 msgid "Back to results"
 msgstr "पिछला biblio करने के लिए"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1080
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 #, fuzzy
 msgid "Back to the results search list"
 msgstr "पिछला biblio करने के लिए"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:294
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:302
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:91
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:139
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:386
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1183
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:160
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:407
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
 #, c-format
 msgid "Barcode"
 msgstr "बारकोड"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:222
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:451
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:243
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:472
 #, c-format
 msgid "Barcode:"
 msgstr "बारकोड:"
@@ -3479,6 +3518,11 @@ msgstr "प्रदर्शन"
 msgid "Brief history"
 msgstr "निर्देशिका"
 
+#. ABBR
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:14
+msgid "Broader Term"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:272
 #, fuzzy, c-format
 msgid "Browse by hierarchy"
@@ -3489,14 +3533,14 @@ msgstr "ब्राउज़ करें पदानुक्रम द्व
 msgid "Browse our catalog"
 msgstr "ब्राउज़ करें हमारे सूचीपत्र"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1066
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1068
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1059
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1061
 #, fuzzy, c-format
 msgid "Browse results"
 msgstr "(<a1>आगे बढ़नेवाला भाग ब्राउज़ करें</a>)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1267
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1269
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1260
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1262
 #, fuzzy, c-format
 msgid "Browse shelf"
 msgstr "(<a1>आगे बढ़नेवाला भाग ब्राउज़ करें</a>)"
@@ -3530,7 +3574,7 @@ msgstr "CGI डिबग पर है."
 msgid "CSV - %s"
 msgstr "%s - %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
 #, c-format
 msgid "Call No."
 msgstr "कॉल नहीं"
@@ -3541,7 +3585,7 @@ msgid "Call Number"
 msgstr "फोन नंबर"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:387
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:408
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:220
 #, c-format
 msgid "Call no."
@@ -3551,7 +3595,7 @@ msgstr "किसी को बुलाओ."
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:199
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:203
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:205
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:307
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:228
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:230
@@ -3559,7 +3603,7 @@ msgstr "किसी को बुलाओ."
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:581
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:59
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1169
 #, fuzzy, c-format
 msgid "Call number"
 msgstr "Callnumber"
@@ -3577,8 +3621,8 @@ msgid "Call number (Z-A to 9-0)"
 msgstr "फोन नंबर (गल्प Z-एक गैर करने के लिए कल्पना 9-0)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:141
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:227
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:456
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:248
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:477
 #, fuzzy, c-format
 msgid "Call number:"
 msgstr "Callnumber"
@@ -3601,8 +3645,8 @@ msgstr "फोन नंबर"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:630
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:649
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:651
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:670
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:169
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:294
@@ -3646,7 +3690,7 @@ msgid "Cancels an active hold request for the patron."
 msgstr ""
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:322
 #, fuzzy
 msgid "Cannot be put on hold"
 msgstr "पकड़ो प्लेस नहीं कर सकते"
@@ -3725,7 +3769,7 @@ msgid "Checked out"
 msgstr "बाहर चेक"
 
 #. %1$s:  issues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:112
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
 #, fuzzy, c-format
 msgid "Checked out (%s)"
 msgstr "बाहर चेक"
@@ -3806,21 +3850,21 @@ msgstr "सभी साफ करें"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:414
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:195
 #, fuzzy, c-format
 msgid "Clear date"
 msgstr "आदेश तिथि"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:625
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:666
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:646
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:687
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr ""
 
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:46
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:58
 #, fuzzy, c-format
 msgid "Click here if you're not %s %s"
 msgstr "(<a1>यहाँ क्लिक करें</a>अगर तुम नहीं कर रहे हैं %s %s %s)"
@@ -3830,7 +3874,7 @@ msgstr "(<a1>यहाँ क्लिक करें</a>अगर तुम �
 msgid "Click here to view them all."
 msgstr "यहाँ क्लिक करें यदि किया."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1019
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1012
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr ""
@@ -3847,7 +3891,7 @@ msgid "Click to expand this role"
 msgstr "पर क्लिक करें इस टैग का विस्तार करने के लिए"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 #, fuzzy
 msgid "Click to forward the list to"
 msgstr "पर क्लिक करें गाड़ी में जोड़ने के लिए"
@@ -3865,18 +3909,18 @@ msgid "Click to open in new window"
 msgstr "पर क्लिक करें Google Books में देखने के लिए"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 #, fuzzy
 msgid "Click to rewind the list to"
 msgstr "पर क्लिक करें Google Books में देखने के लिए"
 
 #. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:168
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:412
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:433
 msgid "Click to view in Google Books"
 msgstr "पर क्लिक करें Google Books में देखने के लिए"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1085
 #, c-format
 msgid "Close"
 msgstr "बंद करना"
@@ -3909,7 +3953,7 @@ msgstr "आप जाँच करना चाहते हैं चुने�
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1175
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1168
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:74
 #, c-format
 msgid "Collection"
@@ -3935,16 +3979,16 @@ msgstr "संग्रह: "
 
 #. For the first occurrence,
 #. %1$s:  review.firstname 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:924
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:926
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:930
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:917
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:919
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:923
 #, fuzzy, c-format
 msgid "Comment by %s"
 msgstr "%s द्वारा टिप्पणी %s %s"
 
 #. %1$s:  review.firstname 
 #. %2$s:  review.surname|truncate(2,'.') 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:928
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:921
 #, fuzzy, c-format
 msgid "Comment by %s %s"
 msgstr "%s द्वारा टिप्पणी %s %s"
@@ -3952,7 +3996,7 @@ msgstr "%s द्वारा टिप्पणी %s %s"
 #. %1$s:  review.title 
 #. %2$s:  review.firstname 
 #. %3$s:  review.surname 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:922
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:915
 #, fuzzy, c-format
 msgid "Comment by %s %s %s"
 msgstr "%s द्वारा टिप्पणी %s %s"
@@ -3977,7 +4021,7 @@ msgstr "टिप्पणियाँ "
 #. %1$s:  USER_INFO.firstname 
 #. %2$s:  USER_INFO.surname 
 #. %3$s:  USER_INFO.cardnumber 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:117
 #, c-format
 msgid "Confirm holds for:%s %s (%s)"
 msgstr ""
@@ -4013,9 +4057,9 @@ msgstr "सामग्री"
 msgid "Contents of "
 msgstr "सामग्री "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:290
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1179
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1172
 #, fuzzy, c-format
 msgid "Copy number"
 msgstr "फोन नंबर"
@@ -4067,7 +4111,7 @@ msgstr "कार्ड संख्या:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:271
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:20
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1189
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1182
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:18
 #, fuzzy, c-format
 msgid "Course reserves"
@@ -4115,18 +4159,18 @@ msgid ""
 "bibliographic record Koha."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:323
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
 #, c-format
 msgid "Credits"
 msgstr "Credits"
 
 #. %1$s:  BORROWER_INFO.amountoutstanding 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:138
 #, fuzzy, c-format
 msgid "Credits (%s)"
 msgstr "Credits"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1168
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1161
 #, fuzzy, c-format
 msgid "Current location"
 msgstr "वर्तमान स्थिति:"
@@ -4190,14 +4234,14 @@ msgid "Date added:"
 msgstr "तिथि जोड़ी गई"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1182
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1175
 #, c-format
 msgid "Date due"
 msgstr "दिनांक कारण"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:207
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:461
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:221
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:482
 #, c-format
 msgid "Date due:"
 msgstr "दिनांक कारण"
@@ -4303,7 +4347,7 @@ msgstr "हटाएँ इस सूची"
 msgid "Delete your search history"
 msgstr "के लिए खोजें:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
 #, c-format
 msgid "Delicious"
 msgstr ""
@@ -4460,38 +4504,38 @@ msgstr "डाउनलोड"
 msgid "Download list "
 msgstr "डाउनलोड "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:134
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:388
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:155
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:409
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Due"
 msgstr "देय"
 
 #. %1$s:  itemLoo.dateDue 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:344
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:352
 #, c-format
 msgid "Due %s"
 msgstr "कारण %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:94
 #, c-format
 msgid "ERROR: Internal error: incomplete hold request. "
 msgstr ""
 
 #. %1$s:  bad_biblionumber 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:70
 #, fuzzy, c-format
 msgid "ERROR: No record found for record id %s. "
 msgstr "त्रुटि: कोई biblio रिकार्ड biblionumber के लिए %s. मिला"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:80
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:88
 #, fuzzy, c-format
 msgid "ERROR: No record id specified. "
 msgstr "त्रुटि: कोई biblionumber प्राप्त की."
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:685
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:911
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:904
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:61
 #, c-format
 msgid "Edit"
@@ -4526,7 +4570,7 @@ msgstr "संस्करण"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:173
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
 #, c-format
 msgid "Email"
 msgstr "ईमेल"
@@ -4732,7 +4776,7 @@ msgid "Excerpt provided by Syndetics"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:414
 msgid "Expecting a specific item selection."
 msgstr ""
 
@@ -4741,13 +4785,13 @@ msgstr ""
 msgid "Expiration date:"
 msgstr "निश्वासन:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:556
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:560
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:577
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:581
 #, c-format
 msgid "Expiration:"
 msgstr "निश्वासन:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:510
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:531
 #, c-format
 msgid "Expires on"
 msgstr "समाप्त हो पर"
@@ -4762,7 +4806,7 @@ msgstr "योजनाएँ "
 msgid "Extends the due date for a patron's existing loan."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
 #, fuzzy, c-format
 msgid "Facebook"
 msgstr "हैंडबुक"
@@ -4807,8 +4851,8 @@ msgstr "Filmographies"
 msgid "Fine amount"
 msgstr "ठीक राशि"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:146
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:393
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:414
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:224
 #, c-format
 msgid "Fines"
@@ -4816,21 +4860,21 @@ msgstr "जुर्माना"
 
 #. For the first occurrence,
 #. %1$s:  BORROWER_INFO.amountoutstanding 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:115
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:136
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:137
 #, fuzzy, c-format
 msgid "Fines (%s)"
 msgstr "जुर्माना"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:29
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:295
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:309
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:316
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:330
 #, fuzzy, c-format
 msgid "Fines and charges"
 msgstr "जुर्माना और शुल्क"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:255
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:485
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:276
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:506
 #, fuzzy, c-format
 msgid "Fines:"
 msgstr "जुर्माना"
@@ -5033,12 +5077,12 @@ msgstr "जाना"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 #, fuzzy
 msgid "Go to detail"
 msgstr "संपर्क विवरण"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:45
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:53
 #, fuzzy, c-format
 msgid "Go to your account page"
 msgstr "सामग्री कैफे"
@@ -5094,7 +5138,7 @@ msgid "Heading descendant"
 msgstr "वंश शीर्षक"
 
 #. %1$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:43
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:55
 #, fuzzy, c-format
 msgid "Hello, %s "
 msgstr "नमस्कार, %s %s "
@@ -5111,7 +5155,7 @@ msgid "Hi,"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:414
 #, fuzzy
 msgid "Hide options"
 msgstr "[अतिरिक्त विकल्प]"
@@ -5128,28 +5172,28 @@ msgstr "विंडो बंद करें"
 msgid "Highlight"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:343
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:364
 #, c-format
 msgid "Hold date"
 msgstr "तिथि पकड़ो"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:359
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:549
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:380
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:570
 #, fuzzy, c-format
 msgid "Hold date:"
 msgstr "तिथि पकड़ो"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:246
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:254
 #, fuzzy, c-format
 msgid "Hold not needed after:"
 msgstr "तिथि पकड़ो"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:254
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:262
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "होल्डिंग्स (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:239
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:247
 #, fuzzy, c-format
 msgid "Hold starts on date:"
 msgstr "इतिहास प्रारम्भ तिथि"
@@ -5184,18 +5228,18 @@ msgstr "होल्डिंग्स"
 msgid "Holdings:"
 msgstr "होल्डिंग्स"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:504
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:525
 #, fuzzy, c-format
 msgid "Holds "
 msgstr "Holds "
 
 #. %1$s:  reserves_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:141
 #, fuzzy, c-format
 msgid "Holds (%s)"
 msgstr "Holds "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:339
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:360
 #, fuzzy, c-format
 msgid "Holds waiting"
 msgstr "Holds प्रतीक्षालय"
@@ -5260,8 +5304,8 @@ msgstr "घर"
 msgid "Home libraries"
 msgstr "होम लाइब्रेरी"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:296
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1172
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:304
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1165
 #, fuzzy, c-format
 msgid "Home library"
 msgstr "होम लाइब्रेरी"
@@ -5494,7 +5538,7 @@ msgstr "10; url =/cgi-bin/koha/mainpage.pl"
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:44
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:346
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:354
 #, fuzzy, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "परिणाम %s %s %s के लिए"
@@ -5517,7 +5561,7 @@ msgstr "में क्रमाँक:"
 msgid "Indexes"
 msgstr "Indexes"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:303
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:311
 #, c-format
 msgid "Information"
 msgstr "जानकारी"
@@ -5568,12 +5612,12 @@ msgstr "आइटम बाहर की जाँच नहीं की जा
 msgid "Item damaged"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1187
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1180
 #, c-format
 msgid "Item hold queue priority"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1185
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
 #, fuzzy, c-format
 msgid "Item holds"
 msgstr "जगह पकड़ो"
@@ -5584,11 +5628,11 @@ msgid "Item lost"
 msgstr "जगह पकड़ो"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:71
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:136
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:385
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1166
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:157
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:406
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1159
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:77
 #, c-format
 msgid "Item type"
@@ -5596,12 +5640,12 @@ msgstr "आइटम के प्रकार"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:45
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:214
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
 #, c-format
 msgid "Item type:"
 msgstr "आइटम के प्रकार:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:180
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:188
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:327
 #, fuzzy, c-format
 msgid "Item type: "
@@ -5758,7 +5802,7 @@ msgstr "बड़े प्रिंट"
 msgid "Last"
 msgstr "देर"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:297
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:305
 #, fuzzy, c-format
 msgid "Last location"
 msgstr "अंतिम स्थान"
@@ -5852,19 +5896,19 @@ msgstr "सीमित करने के लिए: "
 msgid "Limit to: "
 msgstr "सीमित करने के लिए: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1282
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1284
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1275
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1277
 #, fuzzy, c-format
 msgid "Link to resource "
 msgstr "ऑनलाइन संसाधन: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
 #, fuzzy, c-format
 msgid "LinkedIn"
 msgstr "जुर्माना"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:75
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:149
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
 #, fuzzy, c-format
 msgid "Links"
 msgstr "जुर्माना"
@@ -6002,7 +6046,7 @@ msgstr "<a1> में प्रवेश करें</a> के अपने �
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:94
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:299
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:40
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:955
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:948
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:288
 #, fuzzy, c-format
 msgid "Log in to your account"
@@ -6013,6 +6057,11 @@ msgstr "अपने खाते में प्रवेश करें"
 #, fuzzy, c-format
 msgid "Log in to your account:"
 msgstr "अपने खाते में प्रवेश करें"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:35
+#, fuzzy, c-format
+msgid "Log out"
+msgstr "लॉग आउट"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
 #, c-format
@@ -6226,7 +6275,7 @@ msgstr "मुझे"
 msgid "Message sent"
 msgstr "संदेश विषय:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:30
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:42
 #, fuzzy, c-format
 msgid "Messages for you"
 msgstr "%s के लिए मुद्दे"
@@ -6243,7 +6292,7 @@ msgstr "गुम मुद्दों "
 msgid "Mo"
 msgstr "नहीं"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:519
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
 #, c-format
 msgid "Modify"
 msgstr "संशोधित"
@@ -6259,13 +6308,13 @@ msgstr "नहीं"
 msgid "Monday"
 msgstr "सोमवार"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1024
 #, c-format
 msgid "More book reviews at iDreamBooks.com"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:23
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:870
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:863
 #, c-format
 msgid "More details"
 msgstr "अधिक जानकारी"
@@ -6301,16 +6350,20 @@ msgstr "सर्वाधिक लोकप्रिय किताबों 
 msgid "Musical recording"
 msgstr "संगीत रिकॉर्डिंग"
 
-#. %1$s:  heading | html 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:16
-#, fuzzy, c-format
-msgid "NT: %s"
-msgstr "टैग: %s"
+#, c-format
+msgid "NT"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:30
 #, c-format
 msgid "Name"
 msgstr "नाम"
+
+#. ABBR
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:16
+msgid "Narrower Term"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:67
@@ -6319,7 +6372,7 @@ msgid "Never"
 msgstr "समीक्षा"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:560
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:581
 #, fuzzy, c-format
 msgid "Never expires %s "
 msgstr "समाप्त हो: "
@@ -6391,7 +6444,7 @@ msgstr "पुस्तकालय की ओर से संदेश"
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1085
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1078
 #, c-format
 msgid "Next"
 msgstr "अगला"
@@ -6403,12 +6456,12 @@ msgid "Next &gt;&gt;"
 msgstr "अगला &gt; पाउंड"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:15
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1083
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 #, fuzzy, c-format
 msgid "Next &raquo;"
 msgstr "Catalog &rsaquo;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:268
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:276
 #, fuzzy, c-format
 msgid "Next available item"
 msgstr "प्रतियों में उपलब्ध है:"
@@ -6419,7 +6472,7 @@ msgstr "प्रतियों में उपलब्ध है:"
 msgid "No"
 msgstr "नहीं"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:171
 #, fuzzy, c-format
 msgid "No available items."
 msgstr "प्रतियों में उपलब्ध है:"
@@ -6449,14 +6502,14 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:329
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:337
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:347
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:179
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:406
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:414
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:423
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:183
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:427
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:435
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:444
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:77
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:979
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:972
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:249
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:261
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:269
@@ -6554,7 +6607,7 @@ msgstr "त्रुटि: कोई biblionumber प्राप्त की.
 msgid "No renewals allowed"
 msgstr "नवीकरण नहीं छोड़ा"
 
-#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:83
+#: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:88
 #, c-format
 msgid "No reserves have been selected for this course."
 msgstr ""
@@ -6634,12 +6687,12 @@ msgid "Not for loan %s"
 msgstr "नहीं ऋण के लिए (%s)"
 
 #. %1$s:  itemLoo.notforloanvalue 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:354
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:362
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "नहीं ऋण के लिए (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:380
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:388
 #, c-format
 msgid "Not on hold"
 msgstr "नहीं पकड़ पर"
@@ -6723,7 +6776,7 @@ msgstr "नोट: आपके टैग हटा दिया गया ह�
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:151
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1181
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1174
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:112
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:36
 #, c-format
@@ -6755,12 +6808,12 @@ msgid "Nothing"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:64
 #, c-format
 msgid "Notice:"
 msgstr ""
@@ -6772,8 +6825,8 @@ msgid "Nov"
 msgstr "नहीं"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1038
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1107
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1031
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
 #, c-format
 msgid "Novelist Select"
 msgstr ""
@@ -6793,7 +6846,7 @@ msgstr "नवम्बर"
 msgid "Number"
 msgstr "संख्या"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:196
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:204
 #, c-format
 msgid "Number of holds: "
 msgstr ""
@@ -6843,7 +6896,7 @@ msgstr "आदेश पर (%s),"
 msgid "On-site checkouts"
 msgstr "कुल Checkouts:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:65
 #, c-format
 msgid "One or more holds were not placed due to existing holds."
 msgstr ""
@@ -6883,7 +6936,7 @@ msgstr "आदेश के द्वारा:"
 msgid "Order by: "
 msgstr "आदेश के द्वारा: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:962
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:955
 #, fuzzy, c-format
 msgid "Other editions of this work"
 msgstr "इस कार्य के अन्य संस्करणों"
@@ -6918,12 +6971,12 @@ msgid "OverDrive search for '%s'"
 msgstr ""
 
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:134
 #, fuzzy, c-format
 msgid "Overdue (%s)"
 msgstr "अतिदेय राशि "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:379
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:400
 #, fuzzy, c-format
 msgid "Overdues "
 msgstr "अतिदेय राशि "
@@ -6969,7 +7022,7 @@ msgid "Patent document"
 msgstr "पेटेंट दस्तावेज़"
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:934
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:927
 #, fuzzy, c-format
 msgid "Patron comment on %s"
 msgstr "टिप्पणियाँ"
@@ -6989,41 +7042,41 @@ msgstr "फोन"
 msgid "Physical details:"
 msgstr "शारीरिक विवरण:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:365
 #, fuzzy, c-format
 msgid "Pick up library"
 msgstr "लाइब्रेरी उठाओ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:511
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:532
 #, fuzzy, c-format
 msgid "Pick up location"
 msgstr "स्थान उठाओ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:205
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:565
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:586
 #, fuzzy, c-format
 msgid "Pick up location:"
 msgstr "स्थान उठाओ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:414
 #, fuzzy
 msgid "Place a hold on"
 msgstr "जगह पकड़ो"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:148
 #, fuzzy, c-format
 msgid "Place a hold on "
 msgstr "जगह पकड़ो"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:414
 #, fuzzy
 msgid "Place a hold on: "
 msgstr "जगह पकड़ो"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:395
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:231
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:437
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:440
@@ -7037,7 +7090,7 @@ msgstr "जगह पकड़ो"
 msgid "Place hold"
 msgstr "जगह पकड़ो"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:509
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:530
 #, c-format
 msgid "Placed on"
 msgstr "पर रखा"
@@ -7140,17 +7193,17 @@ msgid ""
 "Reference Manager or ProCite."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:59
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:71
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:116
 #, c-format
 msgid "Please note:"
 msgstr "कृपया ध्यान दें:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:66
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:78
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
 #, fuzzy, c-format
 msgid "Please note: "
 msgstr "कृपया ध्यान दें: "
@@ -7185,7 +7238,7 @@ msgstr "लोकप्रियता (कम से कम करने के
 msgid "Popularity (most to least)"
 msgstr "लोकप्रियता कम से कम करने के लिए) अधिकतर ("
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:950
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:943
 #, fuzzy, c-format
 msgid "Post or edit your comments on this item. "
 msgstr "इस मद पर पोस्ट या संपादित अपनी टिप्पणियां. "
@@ -7225,7 +7278,7 @@ msgstr "पूर्वावलोकन"
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1069
 #, c-format
 msgid "Previous"
 msgstr "पिछला"
@@ -7252,12 +7305,12 @@ msgstr "प्रिंट"
 msgid "Print list"
 msgstr "प्रिंट पर्ची"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:513
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:534
 #, c-format
 msgid "Priority"
 msgstr "प्राथमिकता"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:570
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:591
 #, c-format
 msgid "Priority:"
 msgstr "प्राथमिकता:"
@@ -7413,11 +7466,10 @@ msgstr "नहीं सार्वजनिक सूचियों."
 msgid "RSS feed for public list %s"
 msgstr "नहीं सार्वजनिक सूचियों."
 
-#. %1$s:  heading | html 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
-#, fuzzy, c-format
-msgid "RT: %s"
-msgstr "टैग: %s"
+#, c-format
+msgid "RT"
+msgstr ""
 
 #. INPUT type=submit name=rate_button
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:505
@@ -7427,7 +7479,7 @@ msgstr "दिनांक के कारण"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 msgid "Rating based on reviews of "
 msgstr ""
@@ -7505,6 +7557,11 @@ msgstr "विधान"
 msgid "Regular print"
 msgstr "नियमित प्रिंट"
 
+#. ABBR
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
+msgid "Related Term"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:1
 #, c-format
 msgid "Relevance"
@@ -7570,18 +7627,18 @@ msgstr "आइटम निकालें का चयन"
 msgid "Remove share"
 msgstr "कोडित फील्ड्स"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:143
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:390
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:471
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:256
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:411
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:492
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:222
 #, c-format
 msgid "Renew"
 msgstr "नवीनीकृत"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:282
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:303
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 msgid "Renew all"
 msgstr "सभी को नवीनीकृत"
 
@@ -7594,8 +7651,8 @@ msgid "Renew item"
 msgstr "नवीनीकृत आइटम"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:271
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:714
 #, fuzzy
 msgid "Renew selected"
 msgstr "हटाएँ चयनित आइटम"
@@ -7607,7 +7664,7 @@ msgstr "हटाएँ चयनित आइटम"
 msgid "RenewLoan"
 msgstr "नवीनीकृत"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:232
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:253
 #, fuzzy, c-format
 msgid "Renewed!"
 msgstr "नवीनीकृत"
@@ -7695,17 +7752,17 @@ msgstr "परिणाम %s %s %s के लिए"
 msgid "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "&nbsp; सीमा के साथ (ओं ):&nbsp;'%s'"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:604
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:625
 #, c-format
 msgid "Resume"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:694
 #, c-format
 msgid "Resume all suspended holds"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:615
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:636
 #, fuzzy, c-format
 msgid "Resume your hold on "
 msgstr "जगह पकड़ो"
@@ -7775,13 +7832,13 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 #, fuzzy
 msgid "Review date: "
 msgstr "समीक्षा"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 #, fuzzy
 msgid "Review result: "
 msgstr "समीक्षा"
@@ -7993,8 +8050,8 @@ msgstr "कार्य:"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:345
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:177
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:421
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:198
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:442
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:100
@@ -8010,20 +8067,20 @@ msgid "See also:"
 msgstr "चुनें एक सूची"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 #, fuzzy
 msgid "See biblio"
 msgstr "%s Biblios"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1083
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
 msgid ""
 "See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END "
 "%]"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1067
 msgid ""
 "See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous "
 "biblio[% END %]"
@@ -8034,7 +8091,7 @@ msgstr ""
 msgid "Select a list"
 msgstr "चुनें एक सूची"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:288
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:296
 #, fuzzy, c-format
 msgid "Select a specific item:"
 msgstr "एक विशिष्ट कॉपी पर एक पकड़ प्लेस"
@@ -8185,7 +8242,7 @@ msgid "Settings updated"
 msgstr "सेटिंग्स अद्यतन"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:698
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1114
 #, fuzzy, c-format
 msgid "Share"
 msgstr "बचाना"
@@ -8201,7 +8258,7 @@ msgid "Share a list with another patron"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1125
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
 #, fuzzy
 msgid "Share by email"
 msgstr "ईमेल:"
@@ -8212,17 +8269,17 @@ msgid "Share list"
 msgstr "आपकी सूचियाँ "
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
 msgid "Share on Delicious"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1122
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
 msgid "Share on Facebook"
 msgstr ""
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
 msgid "Share on LinkedIn"
 msgstr ""
 
@@ -8269,14 +8326,14 @@ msgstr "खोज सूची मे: &nbsp;"
 msgid "Show more"
 msgstr "दिखाएँ अतिरिक्त"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:232
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:240
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:414
 #, fuzzy, c-format
 msgid "Show more options"
 msgstr "[अतिरिक्त विकल्प]"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1066
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1059
 msgid ""
 "Show pagination list ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])"
 msgstr ""
@@ -8334,7 +8391,7 @@ msgstr ""
 msgid "Similar items"
 msgstr "इसी प्रकार के आइटम"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
 #, c-format
 msgid "Since you have "
 msgstr ""
@@ -8348,13 +8405,13 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:23
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:109
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:172
 #, c-format
 msgid "Sorry"
 msgstr "खेद"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:128
 #, fuzzy, c-format
 msgid "Sorry,"
 msgstr "खेद"
@@ -8425,13 +8482,13 @@ msgstr ""
 "क्षमा करें, यह स्व-चेकआउट स्टेशन प्रमाणीकरण खो दिया है. कृपया इस समस्या को हल करने के लिए "
 "व्यवस्थापक से संपर्क करें."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:157
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:165
 #, fuzzy, c-format
 msgid "Sorry, you are too young to reserve this material."
 msgstr "क्या आप चयनित मदों को दूर करना चाहते हैं?"
 
 #. %1$s:  too_many_reserves 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:56
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:64
 #, fuzzy, c-format
 msgid "Sorry, you cannot place more than %s holds. "
 msgstr "क्षमा करें, आप %s से अधिक जगह नहीं हो सकती है. "
@@ -8498,15 +8555,15 @@ msgstr "सांख्यिकी"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:515
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:536
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:836
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1180
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1173
 #, c-format
 msgid "Status"
 msgstr "स्थिति"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:215
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:575
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:596
 #, fuzzy, c-format
 msgid "Status:"
 msgstr "स्थिति"
@@ -8721,26 +8778,26 @@ msgstr "रविवार"
 msgid "Surveys"
 msgstr "सर्वेक्षण"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:517
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:608
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:626
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:538
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:629
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:637
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:647
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:650
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:658
 #, c-format
 msgid "Suspend"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:660
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:681
 #, fuzzy, c-format
 msgid "Suspend all holds"
 msgstr "लंबित holds सहायता"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:622
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:643
 #, c-format
 msgid "Suspend until:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:617
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:638
 #, c-format
 msgid "Suspend your hold on "
 msgstr ""
@@ -8862,7 +8919,7 @@ msgstr "इस"
 msgid "Thank you"
 msgstr "धन्यवाद&gt;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:60
 #, c-format
 msgid "Thank you!"
 msgstr "धन्यवाद&gt;"
@@ -9109,7 +9166,7 @@ msgstr "Theses "
 msgid "There are %s subscription(s) associated with this title."
 msgstr "(वहाँ %s सदस्यताएँ इस शीर्षक से संबद्ध) हैं."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:945
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:938
 #, c-format
 msgid "There are no comments for this item."
 msgstr "इस मद के लिए कोई टिप्पणी नहीं कर रहे हैं."
@@ -9120,7 +9177,7 @@ msgid "There are no pending purchase suggestions."
 msgstr "कोई सुझाव लंबित खरीद रहे हैं."
 
 #. %1$s:  RESERVE_CHARGE 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:121
 #, c-format
 msgid "There is a charge of %s for placing this hold "
 msgstr ""
@@ -9271,8 +9328,8 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:573
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:576
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1137
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1141
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1134
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -9290,18 +9347,18 @@ msgstr "यह रिकार्ड में कोई आइटम नही�
 msgid "This subscription is closed."
 msgstr "(%s) सदस्यता (ओं)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:166
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:174
 #, c-format
 msgid "This title cannot be requested because it's already in your possession."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:176
 #, c-format
 msgid "This title cannot be requested."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:406
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:414
 msgid ""
 "This title consists of multiple volumes/parts. Please indicate which part "
 "you need. Clicking on specific item information may be helpful."
@@ -9343,10 +9400,10 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:566
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:342
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:384
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:508
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:154
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:363
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:405
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:529
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:52
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:219
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:119
@@ -9464,7 +9521,7 @@ msgstr "Orgue"
 msgid "Tuesday"
 msgstr "मंगलवार"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1127
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1120
 #, c-format
 msgid "Tweet"
 msgstr ""
@@ -9492,11 +9549,10 @@ msgstr "खोज शब्द दर्ज करें"
 msgid "Type:"
 msgstr "प्रकार:"
 
-#. %1$s:  heading | html 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
-#, fuzzy, c-format
-msgid "UF: %s"
-msgstr "फ़िल्टर"
+#, c-format
+msgid "UF"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:196
 #, c-format
@@ -9516,7 +9572,7 @@ msgstr "टैग: %s"
 msgid "Unable to add one or more tags."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:350
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "अनुपलब्ध (खो या लापता)"
@@ -9566,6 +9622,11 @@ msgstr "अपना पासवर्ड बदलें"
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "इस्तेमाल शीर्ष मेनू बार Koha के दूसरे भाग में नेविगेट करने के लिए."
 
+#. ABBR
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
+msgid "Used For"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:64
 #, c-format
 msgid "Used for/see from:"
@@ -9576,7 +9637,14 @@ msgstr ""
 msgid "Username:"
 msgstr "प्रयोक्ता नाम:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:45
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:32
+#, c-format
+msgid ""
+"Using this account is not recommended because some parts of Koha will not "
+"function as expected. Instead, please log in with a different account. "
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:53
 #, fuzzy, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
@@ -9629,8 +9697,8 @@ msgid "View full heading"
 msgstr "देखें पूर्ण शीर्षक"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:160
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:404
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:181
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:425
 #, fuzzy
 msgid "View on Amazon.com"
 msgstr "देखें Amazon.com पर"
@@ -9641,19 +9709,19 @@ msgstr "देखें Amazon.com पर"
 msgid "View your search history"
 msgstr "के लिए खोजें:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:301
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1177
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:309
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1170
 #, fuzzy, c-format
 msgid "Vol info"
 msgstr "Vol जानकारी"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:363
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:384
 #, c-format
 msgid "Waiting"
 msgstr "प्रतीक्षा कर रहा है"
 
 #. %1$s:  waiting_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:140
 #, fuzzy, c-format
 msgid "Waiting (%s)"
 msgstr "प्रतीक्षा कर रहा है"
@@ -9661,6 +9729,11 @@ msgstr "प्रतीक्षा कर रहा है"
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:46
 #, fuzzy, c-format
 msgid "Warning"
+msgstr "चेतावनी"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:32
+#, fuzzy, c-format
+msgid "Warning:"
 msgstr "चेतावनी"
 
 #. SCRIPT
@@ -9757,7 +9830,7 @@ msgstr ""
 
 #. %1$s:  bor_messages_loo.message_date | $KohaDates 
 #. %2$s:  bor_messages_loo.branchname 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:35
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:47
 #, c-format
 msgid "Written on %s by %s"
 msgstr ""
@@ -9864,8 +9937,8 @@ msgstr ""
 msgid "You currently have nothing checked out."
 msgstr "आप वर्तमान में कुछ भी नहीं है बाहर की जाँच की."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:300
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:321
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:335
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "आप वर्तमान में जुर्माना और शुल्क की राशि देने हैं:"
@@ -9929,12 +10002,12 @@ msgstr ""
 msgid "You followed an outdated link e.g. from a search engine or a bookmark"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:328
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:349
 #, c-format
 msgid "You have a credit of:"
 msgstr "आप में से एक क्रेडिट है:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:160
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:168
 #, c-format
 msgid "You have already requested this title."
 msgstr ""
@@ -9957,7 +10030,7 @@ msgid ""
 "fields and resubmit."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:308
 #, c-format
 msgid "You have nothing checked out"
 msgstr "तुम कुछ भी नहीं है बाहर की जाँच"
@@ -9970,7 +10043,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  too_much_oweing | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:50
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:58
 #, fuzzy, c-format
 msgid "You have unpaid fines. Amount: %s. "
 msgstr "तुम्हारे पास कोई जुर्माना या शुल्क"
@@ -10007,12 +10080,12 @@ msgstr "में अपनी खुद की सूची बनाएँ म
 msgid "You must be logged in to create or add to lists"
 msgstr "में अपनी खुद की सूची बनाएँ में प्रवेश करें"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:82
 #, fuzzy, c-format
 msgid "You must select a library for pickup. "
 msgstr "आप पिक के लिए एक पुस्तकालय का चयन करना होगा. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:68
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:76
 #, fuzzy, c-format
 msgid "You must select at least one item. "
 msgstr "आपको कम से कम एक आइटम का चयन करना होगा. "
@@ -10044,14 +10117,14 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
 msgstr ""
 
 #. %1$s:  IF ( BORROWER_INFO.userdebarreddate ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
 #, fuzzy, c-format
 msgid "Your account has been frozen%s until "
 msgstr "</em>संदेश १२:</em> आपका खता रद्द  किया गया है "
@@ -10069,7 +10142,7 @@ msgid "Your account has been suspended. %s "
 msgstr "</em>संदेश १२:</em> आपका खता रद्द  किया गया है "
 
 #. %1$s:  BORROWER_INFO.warnexpired | $KohaDates 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:66
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:78
 #, fuzzy, c-format
 msgid ""
 "Your account has expired as of %s. Please contact the library if you wish to "
@@ -10099,7 +10172,7 @@ msgstr ""
 msgid "Your authority search history is empty."
 msgstr "प्राधिकरण खोज परिणाम"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:59
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:71
 #, c-format
 msgid "Your card will expire on "
 msgstr ""
@@ -10135,7 +10208,7 @@ msgstr ""
 msgid "Your checkout history"
 msgstr "चेकआउट इतिहास"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:905
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:898
 #, fuzzy, c-format
 msgid "Your comment"
 msgstr "आपकी टिप्पणी"
@@ -10145,7 +10218,7 @@ msgstr "आपकी टिप्पणी"
 msgid "Your comment (preview, pending approval)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:60
 #, c-format
 msgid ""
 "Your corrections have been submitted to the library, and a staff member will "
@@ -10188,7 +10261,7 @@ msgstr ""
 ", आप जगह नहीं कर सकते क्योंकि आपके पुस्तकालय कार्ड चिह्नित किया गया है के रूप में खो दिया "
 "है या चोरी है."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
 #, fuzzy, c-format
 msgid ""
 "Your library card has been marked as lost or stolen. If this is an error, "
@@ -10198,7 +10271,7 @@ msgstr ""
 "त्रुटि, कृपया संचलन डेस्क के लिए अपने स्थानीय पुस्तकालय में और आपके कार्ड ले त्रुटि को सही "
 "किया जाएगा."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:100
 #, fuzzy, c-format
 msgid ""
 "Your library card has expired. Please contact your librarian if you wish to "
@@ -10233,7 +10306,7 @@ msgstr "आपकी सूचियाँ"
 #. %4$s:  ELSIF error == 'on_reserve' 
 #. %5$s:  END 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:73
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
 #, c-format
 msgid ""
 "Your loan renewal failed because of the following reason(s): %s %s Your "
@@ -10269,7 +10342,7 @@ msgstr "अपना पासवर्ड %s अक्षरों में �
 msgid "Your personal details"
 msgstr "मेरा व्यक्तिगत विवरण"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:189
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:197
 #, fuzzy, c-format
 msgid "Your priority: "
 msgstr "होल्डिंग्स (%s) "
@@ -10454,13 +10527,13 @@ msgstr ""
 #. %3$s:  WAITIN.holdingbranch 
 #. %4$s:  WAITIN.branch 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:363
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:384
 #, fuzzy, c-format
 msgid "at %s %s In transit from %s to %s %s "
 msgstr "%s %s से पारगमन में "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 #, fuzzy
 msgid "average rating: "
 msgstr "अपनी सूची: %s "
@@ -10498,12 +10571,12 @@ msgstr "आपका कार्ड संख्या"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 msgid "by"
 msgstr "के द्वारा"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:119
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 #, fuzzy, c-format
 msgid "by "
@@ -10538,7 +10611,7 @@ msgstr "अपना कूटशब्द परिवर्तन"
 msgid "click here to login"
 msgstr "यहाँ क्लिक करें यदि किया."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:116
 #, fuzzy, c-format
 msgid "contact information"
 msgstr "संपर्क करने संबंधी जानकारी"
@@ -10611,14 +10684,14 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:573
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:576
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1138
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1143
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1136
 #, fuzzy, c-format
 msgid "here"
 msgstr "कहीं भी"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 msgid "iDreamBooks.com rating"
 msgstr ""
 
@@ -10703,7 +10776,7 @@ msgid "ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1 "
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
 #, fuzzy, c-format
 msgid "in %s fines"
 msgstr "मेरी जुर्माना"
@@ -10807,7 +10880,7 @@ msgstr ""
 msgid "not"
 msgstr "नहीं"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:116
 #, c-format
 msgid "online update form"
 msgstr ""
@@ -10864,7 +10937,7 @@ msgid "purchase suggestion"
 msgstr "नई खरीद सुझाव"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr ""
 
@@ -10947,7 +11020,7 @@ msgstr ""
 msgid "show_loans"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
 #, fuzzy, c-format
 msgid "shows your account to be clear, please contact the library."
 msgstr "पुस्तकालय में उपलब्ध"
@@ -10960,7 +11033,7 @@ msgstr "पुस्तकालय में उपलब्ध"
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #. %8$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:589
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
 #, fuzzy, c-format
 msgid "since %s %s Suspended %s until %s %s %s Pending %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -11065,7 +11138,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:116
 #, c-format
 msgid "there may be a delay in restoring your account if you submit online)%s."
 msgstr ""
@@ -11076,12 +11149,12 @@ msgstr ""
 msgid "to create new lists."
 msgstr "<a1> प्रवेश करें</a> नई सूची बनाने के लिए."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:955
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:948
 #, c-format
 msgid "to post a comment."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:116
 #, fuzzy, c-format
 msgid "to submit current information ("
 msgstr "संपर्क करने संबंधी जानकारी"
@@ -11091,7 +11164,7 @@ msgstr "संपर्क करने संबंधी जानकारी
 msgid "unAPI"
 msgstr "unAPI"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:664
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:685
 #, fuzzy, c-format
 msgid "until "
 msgstr "किशोर "
@@ -11101,7 +11174,7 @@ msgstr "किशोर "
 msgid "up to "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1171
 #, fuzzy, c-format
 msgid "url"
 msgstr "जुलाई"
@@ -11139,7 +11212,7 @@ msgid "view plain"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 #, fuzzy
 msgid "votes"
 msgstr "नोट्स"
@@ -11185,7 +11258,7 @@ msgid "will be sent shortly to %s."
 msgstr "इस गाड़ी के लिए भेजा गया था: %s"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 msgid "with biblionumber"
 msgstr ""
 
@@ -11195,14 +11268,14 @@ msgid "you"
 msgstr ""
 
 #. %1$s:  new_reserves_allowed 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:128
 #, c-format
 msgid ""
 "you can only place %s more holds. Please uncheck the checkboxes for the "
 "items you wish to not place holds on. "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
 #, fuzzy, c-format
 msgid "your account page"
 msgstr "सामग्री कैफे"
@@ -11238,7 +11311,7 @@ msgid "your purchase suggestions"
 msgstr "अपनी खरीद सुझाव"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1345
 #, fuzzy
 msgid "your rating: "
 msgstr "अपनी सूची: %s "
@@ -11270,7 +11343,7 @@ msgid "your tags"
 msgstr "मेरे टैग"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:298
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:613
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:634
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:139
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:266
 #, c-format
