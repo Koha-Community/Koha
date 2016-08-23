@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
-"POT-Creation-Date: 2016-07-15 21:31-0300\n"
+"POT-Creation-Date: 2016-08-16 23:26-0300\n"
 "PO-Revision-Date: 2015-12-17 23:47+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -755,7 +755,7 @@ msgstr "%s %s %s [ 无名称 ] %s "
 #. %4$s:  title 
 #. %5$s:  surname 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:271
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:276
 #, c-format
 msgid ""
 "%s %s %s does not currently have an image available. To import an image for "
@@ -1479,7 +1479,7 @@ msgstr ""
 #. %4$s:  IF waiting_expires_on 
 #. %5$s:  waiting_expires_on | $KohaDates 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:829
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:838
 #, c-format
 msgid "%s %s Waiting at %s %s until %s %s "
 msgstr "%s %s 等待于 %s %s 直到 %s %s "
@@ -2386,7 +2386,7 @@ msgstr "%s (%s 日)"
 #. %1$s:  issue.item.biblioitemnumber.biblionumber.title 
 #. %2$s:  issue.item.barcode 
 #. %3$s:  issue.date_due | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:698
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
 #, c-format
 msgid "%s (%s). Due on %s"
 msgstr "%s (%s)。到期日 %s"
@@ -2724,7 +2724,7 @@ msgstr "%s 类型 %s 使用中。不能删除！%s 确认删除类型 %s%s "
 #. %1$s:  IF cr.item.onloan 
 #. %2$s:  ELSIF cr.item.itemlost 
 #. %3$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:162
+#: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:172
 #, c-format
 msgid "%s Checked out %s Item lost %s "
 msgstr "%s 借出 %s 馆藏遗失 %s "
@@ -2746,8 +2746,8 @@ msgstr "%s 借出给 %s %s "
 
 #. For the first occurrence,
 #. %1$s:  issuecount 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:888
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:428
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:897
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:433
 #, c-format
 msgid "%s Checkout(s)"
 msgstr "%s 借出"
@@ -3019,8 +3019,8 @@ msgstr "%s 基金供 '%s' %s 全部基金 %s "
 
 #. For the first occurrence,
 #. %1$s:  holds_count 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:900
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:435
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:909
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:440
 #, c-format
 msgid "%s Hold(s)"
 msgstr "%s 预约"
@@ -3557,9 +3557,34 @@ msgid "%s Reserve found for %s ("
 msgstr "%s 找到预约 %s ("
 
 #. For the first occurrence,
+#. %1$s:  IF d.comment.search('OVERDUES_PROCESS') 
+#. %2$s:  d.comment.remove('OVERDUES_PROCESS ') 
+#. %3$s:  ELSE 
+#. %4$s:  d.comment 
+#. %5$s:  END 
+#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:54
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:975
+#, c-format
+msgid "%s Restriction added by overdues process %s %s %s %s "
+msgstr ""
+
+#. For the first occurrence,
+#. %1$s:  IF debarredcomment.search('OVERDUES_PROCESS') 
+#. %2$s:  debarredcomment.remove('OVERDUES_PROCESS ') | html_line_break 
+#. %3$s:  ELSE 
+#. %4$s:  debarredcomment | html_line_break 
+#. %5$s:  END 
+#. %6$s:  END 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:785
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:186
+#, c-format
+msgid "%s Restriction added by overdues process %s %s %s %s %s "
+msgstr ""
+
+#. For the first occurrence,
 #. %1$s:  debarments.size 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:905
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:440
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:914
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:445
 #, c-format
 msgid "%s Restrictions"
 msgstr "%s 限制"
@@ -4532,13 +4557,6 @@ msgstr "%s 不能输入，因为读者表内已有，且不能覆盖 %s(最后�
 msgid ""
 "%s not imported because they are not in the expected format %s(last was %s)%s"
 msgstr "%s 不能输入，因为格式不符 %s(最后一笔是 %s)%s"
-
-#. %1$s:  endat 
-#. %2$s:  numrecords 
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:22
-#, c-format
-msgid "%s of %s"
-msgstr "%s 里的%s"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
@@ -5750,7 +5768,7 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  sex 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:52
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:49
 #, c-format
 msgid "%sFemale%sMale%s%s%s"
 msgstr "%s女性%s男性%s%s%s"
@@ -5760,7 +5778,7 @@ msgstr "%s女性%s男性%s%s%s"
 #. %3$s:  ELSE 
 #. %4$s:  sex 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:234
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:239
 #, c-format
 msgid "%sFemale%sMale%s%s%s "
 msgstr "%s女性%s男性%s%s%s "
@@ -5780,7 +5798,7 @@ msgstr "%s强制%s允许%s不允许%s"
 #. %4$s:  END 
 #. %5$s:  IF ( privacy2 ) 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:359
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:364
 #, c-format
 msgid "%sForever%s %sDefault%s %sNever%s "
 msgstr "%s永久%s %s缺省%s %s永不%s "
@@ -6474,12 +6492,6 @@ msgstr "&lt;&lt; 前一个"
 #, c-format
 msgid "&lt;a href=\"[856u]\"&gt;open site&lt;/a&gt;"
 msgstr "&lt;a href=\"[856u]\"&gt;打开网站&lt;/a&gt;"
-
-#: intranet-tmpl/prog/en/modules/about.tt:261
-#: intranet-tmpl/prog/en/modules/about.tt:268
-#, c-format
-msgid "&lt;upload_path&gt;"
-msgstr "&lt;upload_path&gt;"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:908
 #, c-format
@@ -7980,11 +7992,6 @@ msgstr "&rsaquo; Spent - %s"
 msgid "&rsaquo; Subfield deleted %s %sTag %s Subfield structure%s "
 msgstr "&rsaquo; 删除分栏 %s %s标签 %s 分栏结构%s "
 
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:10
-#, c-format
-msgid "&rsaquo; Subject search results"
-msgstr "&rsaquo; 主题寻找结果"
-
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:11
 #, c-format
@@ -8032,9 +8039,9 @@ msgid "&rsaquo; Transfers"
 msgstr "&rsaquo; 转移"
 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:30
-#, c-format
-msgid "&rsaquo; Transfers to your library"
-msgstr "&rsaquo; 转转到您的图书馆"
+#, fuzzy, c-format
+msgid "&rsaquo; Transfers to receive"
+msgstr "转转到收到"
 
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:54
 #, c-format
@@ -8135,18 +8142,6 @@ msgstr "' ~%%] [%%~ action_block = action_block _ '"
 msgid "'%s %sCurrency deleted%s %sCurrencies%s "
 msgstr "'%s %s删除币别%s %s币别%s "
 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:335
-#, c-format
-msgid "'s "
-msgstr "'s "
-
-#. %1$s:  borrower_branchname 
-#. %2$s:  borrower_branchcode 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:347
-#, c-format
-msgid "'s home library (%s / %s )"
-msgstr "'所属图书馆 (%s / %s )"
-
 #. For the first occurrence,
 #. %1$s:  rescardnumber 
 #. %2$s:  resbranchname 
@@ -8207,7 +8202,7 @@ msgstr "(%s) 给 "
 #. %6$s:  w.item.itemcallnumber 
 #. %7$s:  END 
 #. %8$s:  w.reservedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:822
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
 #, c-format
 msgid "(%s), %s by %s %s %s [%s] %s Hold placed on %s. "
 msgstr "(%s), %s 着者 %s %s %s [%s] %s 馆藏位于 %s。"
@@ -8406,12 +8401,6 @@ msgstr "(还入)"
 msgid "(default if none is defined)"
 msgstr "(若没有设置则取用缺省值)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:170
-#: intranet-tmpl/prog/en/modules/about.tt:188
-#, c-format
-msgid "(deprecated). It will default to "
-msgstr "(不宜使用)。将缺省为 "
-
 #: intranet-tmpl/prog/en/modules/sms/sms-home.tt:23
 #, c-format
 msgid "(e.g., 5338644143)"
@@ -8445,12 +8434,6 @@ msgstr "(快速编目)"
 #: intranet-tmpl/prog/en/includes/datatables.inc:3
 msgid "(filtered from _MAX_ total entries)"
 msgstr "(筛选自 _MAX_ total 款目)"
-
-#: intranet-tmpl/prog/en/modules/about.tt:208
-#: intranet-tmpl/prog/en/modules/about.tt:222
-#, c-format
-msgid "(full reindex required). "
-msgstr "(需完整重新索引)。"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-history.tt:37
 #, c-format
@@ -8690,12 +8673,6 @@ msgstr ", Pascale Nalon (ENSMP), 及其它 "
 msgid ", Please transfer this item. "
 msgstr ", 请转移此馆藏。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:214
-#: intranet-tmpl/prog/en/modules/about.tt:228
-#, c-format
-msgid ", but your system still appears to be set up for "
-msgstr ", 但您的系统看来仍被设置为 "
-
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:15
 msgid "- Budget amount cannot be blank"
@@ -8851,7 +8828,7 @@ msgid "-- please choose --"
 msgstr "-- 请选择 --"
 
 #. %1$s:  IF ( charges_is_blocker ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:799
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
 #, c-format
 msgid ". %s Checkouts are "
 msgstr "。%s 借出是 "
@@ -8875,29 +8852,6 @@ msgstr "。不可能删除。"
 msgid ". Deletion not possible "
 msgstr "。不可能删除 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:247
-#, c-format
-msgid ". Falling back to legacy facet calculation. "
-msgstr "。回到层面分类法。"
-
-#: intranet-tmpl/prog/en/modules/about.tt:219
-#, c-format
-msgid ""
-". GRS-1 support is now deprecated and will be removed in future releases. "
-"Please use DOM instead by setting &lt;zebra_auth_index_mode&gt; to "
-msgstr ""
-"。GRS-1 支持已废弃且将在未来的版本里删除。请使用 DOM 设置&lt;"
-"zebra_auth_index_mode&gt; 为 "
-
-#: intranet-tmpl/prog/en/modules/about.tt:205
-#, c-format
-msgid ""
-". GRS-1 support is now deprecated and will be removed in future releases. "
-"Please use DOM instead by setting &lt;zebra_bib_index_mode&gt; to "
-msgstr ""
-"。GRS-1 支持已废弃且将在未来的版本里删除。请使用 DOM 设置&lt;"
-"zebra_bib_index_mode&gt; 为 "
-
 #. %1$s:  minPasswordLength 
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:83
 #, c-format
@@ -8915,7 +8869,7 @@ msgstr "。请再键入新口令。"
 msgid ". Please retain this item and check it in to process the hold. "
 msgstr "。请保留此馆藏并还入以备预约。"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
 #, c-format
 msgid ". See highlighted items "
 msgstr "。见强调的馆藏 "
@@ -8959,13 +8913,13 @@ msgstr "...与："
 msgid "...to "
 msgstr "...至 "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:890
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:899
 #, c-format
 msgid "0 Checkouts"
 msgstr "0 借出"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:902
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:437
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:911
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:442
 #, c-format
 msgid "0 Holds"
 msgstr "0 预约"
@@ -9290,6 +9244,11 @@ msgstr "帐户"
 msgid "Account fines and payments"
 msgstr "帐户罚款与付款"
 
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:335
+#, fuzzy, c-format
+msgid "Account has expired"
+msgstr "帐号已过期"
+
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:62
 #, c-format
 msgid "Account management fee"
@@ -9485,7 +9444,7 @@ msgstr "若找不到映射书目时，则："
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:166
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:282
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:184
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:566
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:569
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:297
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:544
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:581
@@ -9536,8 +9495,8 @@ msgstr "动作："
 msgid "Activate filters"
 msgstr "运作中的筛选器"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:378
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:382
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:383
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:387
 #, c-format
 msgid "Activate sync: "
 msgstr "引导同步："
@@ -9836,18 +9795,18 @@ msgstr "使用文字区上方或通过馆藏寻找空白均可新增馆藏。"
 msgid "Add items: scan barcode"
 msgstr "新增馆藏：扫瞄条码"
 
-#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:69
-#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:74
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:991
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:994
+#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:75
+#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:80
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:997
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1000
 #, c-format
 msgid "Add manual restriction"
 msgstr "新增人工限制"
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:363
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:364
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:368
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:463
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:369
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:466
 #, c-format
 msgid "Add match check"
 msgstr "新增符合检查"
@@ -9982,7 +9941,7 @@ msgid "Add reserves"
 msgstr "新增指定用书"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:80
+#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:86
 msgid "Add restriction"
 msgstr "新增限制"
 
@@ -10132,7 +10091,7 @@ msgid "Added patron attribute type &quot;%s&quot;"
 msgstr "新增读者属性类型&quot;%s&quot;"
 
 #. %1$s:  added_matching_rule 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:553
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:556
 #, c-format
 msgid "Added record matching rule &quot;%s&quot;"
 msgstr "新增纪录匹配规则 &quot;%s&quot;"
@@ -10153,8 +10112,8 @@ msgstr "新增权威 %s"
 msgid "Additional SRU options: "
 msgstr "其它 SRU 选项："
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1013
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:299
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1019
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:304
 #, c-format
 msgid "Additional attributes and identifiers"
 msgstr "其它属性与辨识码"
@@ -10214,7 +10173,7 @@ msgstr "人工收据类型的其它值"
 #: intranet-tmpl/prog/en/columns.def:13
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:202
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:116
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:579
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:583
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:274
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:26
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:220
@@ -10234,8 +10193,8 @@ msgstr "地址 2"
 msgid "Address 2:"
 msgstr "地址 2："
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:394
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:413
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:399
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:418
 #, c-format
 msgid "Address 2: "
 msgstr "地址 2："
@@ -10261,15 +10220,15 @@ msgstr "地址 2："
 msgid "Address line 3: "
 msgstr "地址 3："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:765
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:95
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:102
 #, c-format
 msgid "Address:"
 msgstr "地址："
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:393
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:412
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:398
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:417
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:48
 #, c-format
 msgid "Address: "
@@ -10725,7 +10684,7 @@ msgstr "已经不是读者了"
 
 #: intranet-tmpl/prog/en/includes/member-alt-address-style-de.inc:2
 #: intranet-tmpl/prog/en/includes/member-alt-address-style-us.inc:2
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:392
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:397
 #, c-format
 msgid "Alternate address"
 msgstr "其它地址"
@@ -10864,7 +10823,7 @@ msgstr "其它连络：头衔"
 msgid "Alternate contact: ZIP/Postal code"
 msgstr "其它连络：邮递区号"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:409
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:414
 #, c-format
 msgid "Alternative contact"
 msgstr "其它连络"
@@ -11740,7 +11699,7 @@ msgstr "附加馆藏"
 msgid "Attach this basket to a new basket group with the same name"
 msgstr "此采购单以同样的名称附加在新的采购单群组"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:731
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:735
 #, c-format
 msgid "Attention:"
 msgstr "动作："
@@ -12131,7 +12090,7 @@ msgstr "自动填入列"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:159
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:649
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:653
 #, c-format
 msgid "Automatic renewal"
 msgstr "自动续借"
@@ -12200,7 +12159,7 @@ msgstr "平均借出期间"
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:801
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "BLOCKED"
@@ -12211,11 +12170,10 @@ msgstr "禁止"
 msgid "BSD License"
 msgstr "BSD License"
 
-#. %1$s:  heading | html 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:15
 #, c-format
-msgid "BT: %s"
-msgstr "广义词：%s"
+msgid "BT"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:420
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:423
@@ -12259,7 +12217,7 @@ msgstr "回到书目"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:62
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:76
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:61
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:947
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:956
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:715
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:733
@@ -12274,7 +12232,7 @@ msgstr "回到书目"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:465
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:372
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:488
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:493
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:78
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:427
@@ -12330,7 +12288,7 @@ msgstr "条码号清单(每个条码号一列)："
 msgid "Barcode not found"
 msgstr "找不到条码号"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1006
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1015
 #, c-format
 msgid "Barcode submitted"
 msgstr "条码号已送出"
@@ -13053,8 +13011,8 @@ msgstr "借阅者姓名"
 msgid "Borrower number"
 msgstr "借阅者号码"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:345
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:69
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:350
 #, c-format
 msgid "Borrowernumber: "
 msgstr "读者编号："
@@ -13158,6 +13116,12 @@ msgstr "简短显示"
 #, c-format
 msgid "Brig C. McCoy"
 msgstr "Brig C. McCoy"
+
+#. ABBR
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:15
+#, fuzzy
+msgid "Broader Term"
+msgstr "%sg - 广义词"
 
 #: intranet-tmpl/prog/en/modules/about.tt:661
 #, c-format
@@ -13501,10 +13465,10 @@ msgid "Call Number (0-9 to A-Z)"
 msgstr "索书号(0-9 to A-Z)"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:924
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:719
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:737
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:457
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:462
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:39
 #, c-format
 msgid "Call no"
@@ -13526,7 +13490,7 @@ msgstr "索书号"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:45
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:77
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:58
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:946
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:955
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:158
@@ -13535,7 +13499,7 @@ msgstr "索书号"
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:594
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:7
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:487
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:492
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:427
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:551
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:650
@@ -13706,7 +13670,7 @@ msgid "Can't save this record because the following field aren't filled:"
 msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:266
-#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:80
+#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:86
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:155
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:206
 #: intranet-tmpl/prog/en/modules/serials/add_fields.tt:164
@@ -13718,7 +13682,7 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:119
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:87
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:206
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:529
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:532
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:157
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:246
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:110
@@ -13789,9 +13753,9 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:194
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:117
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1002
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1122
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1124
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1008
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1128
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1130
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:159
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:82
@@ -13896,8 +13860,8 @@ msgid "Cancel hold and return to : [% reserveloo.branchname %]"
 msgstr "取消预约并返回：[% reserveloo.branchname %]"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:498
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:966
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:503
 msgid "Cancel marked holds"
 msgstr "取消预约"
 
@@ -14023,7 +13987,7 @@ msgid "Cannot check out"
 msgstr "不能借出"
 
 #. %1$s:  IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:723
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:727
 #, c-format
 msgid "Cannot check out! %s "
 msgstr "不能借出！%s "
@@ -14233,8 +14197,8 @@ msgstr "。口令至少应有 %s 字符。"
 msgid "Card number:"
 msgstr "读者证号码："
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:71
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:344
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:68
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:349
 #, c-format
 msgid "Card number: "
 msgstr "读者证号码："
@@ -14260,7 +14224,7 @@ msgstr "书标模板"
 msgid "Card width:"
 msgstr "读者证宽度："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:576
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:580
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:271
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:121
 #, c-format
@@ -14322,7 +14286,6 @@ msgstr "卡带录音"
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:92
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:316
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:10
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:37
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:292
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:37
@@ -14418,7 +14381,7 @@ msgstr "Catalyst IT，纽西兰"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:85
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:117
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:577
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:581
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:272
 #: intranet-tmpl/prog/en/modules/members/member.tt:388
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:235
@@ -14484,8 +14447,8 @@ msgstr "类型："
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:83
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:209
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:659
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:73
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:346
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:70
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:351
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:553
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:49
 #, c-format
@@ -14560,7 +14523,7 @@ msgid "Change item status"
 msgstr "改变馆藏状态"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1066
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1072
 msgid "Change messaging preferences to default for this category?"
 msgstr "修改此类型的缺省消息首选吗？"
 
@@ -14635,10 +14598,10 @@ msgstr "字符编码："
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:314
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:925
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:934
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:720
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:738
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:458
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:463
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:43
 #, c-format
 msgid "Charge"
@@ -14676,8 +14639,8 @@ msgstr "还入"
 msgid "Check Out"
 msgstr "借出"
 
-#: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:73
-#: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:86
+#. For the first occurrence,
+#. SCRIPT
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:5
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:495
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:115
@@ -14754,7 +14717,7 @@ msgstr "详情请查看纪录。"
 #: intranet-tmpl/prog/en/includes/patron-search.inc:138
 #: intranet-tmpl/prog/en/includes/checkin-search.inc:15
 #: intranet-tmpl/prog/en/includes/patrons-admin-search.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:639
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:643
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:605
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:96
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:21
@@ -14922,21 +14885,21 @@ msgid "Checked out %s times"
 msgstr "借出 %s 次"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:923
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:718
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:736
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:456
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:461
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:81
 #, c-format
 msgid "Checked out from"
 msgstr "借出自"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:20
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:922
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:717
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:735
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:455
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:460
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:80
 #, c-format
 msgid "Checked out on"
@@ -14947,7 +14910,7 @@ msgstr "借出于"
 msgid "Checked out today"
 msgstr "今天借出"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:698
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
 #, c-format
 msgid "Checked out: "
 msgstr "借出："
@@ -14990,8 +14953,8 @@ msgstr "借出给 "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:630
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:720
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:634
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:724
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:75
 #, c-format
 msgid "Checking out to %s"
@@ -15082,7 +15045,7 @@ msgstr "借出状态："
 msgid "Checkouts"
 msgstr "借出"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:530
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:534
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:251
 #, c-format
 msgid "Checkouts are BLOCKED because patron has overdue items."
@@ -15430,7 +15393,7 @@ msgstr "流通纪录"
 msgid "Circulation note"
 msgstr "流通说明"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:374
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:379
 #, c-format
 msgid "Circulation note: "
 msgstr "流通说明："
@@ -15512,8 +15475,8 @@ msgstr "县市："
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:134
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:82
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:395
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:414
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:400
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:419
 #, c-format
 msgid "City: "
 msgstr "县市："
@@ -15666,10 +15629,10 @@ msgstr "清除批次输入#%s"
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:315
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:118
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:668
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:672
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:542
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1047
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1053
 #: intranet-tmpl/prog/en/modules/members/member.tt:508
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:501
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:223
@@ -15681,6 +15644,8 @@ msgstr "清除"
 
 #: intranet-tmpl/prog/en/includes/branch-selector.inc:9
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:197
+#: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:73
+#: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:86
 #: intranet-tmpl/prog/en/modules/labels/result.tt:65
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:136
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:131
@@ -15715,11 +15680,11 @@ msgid ""
 "Clear all reservoir records staged in this batch? This cannot be undone."
 msgstr "从此批次清除所有存储记录吗？不能恢复。"
 
-#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:78
+#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:84
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:417
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:424
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:827
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:998
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1004
 #, c-format
 msgid "Clear date"
 msgstr "清除日期"
@@ -15740,7 +15705,7 @@ msgid "Clear on loan"
 msgstr "清除借阅"
 
 #. A
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:625
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:629
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:685
 msgid "Clear screen"
 msgstr "清除画面"
@@ -15871,7 +15836,7 @@ msgid ""
 msgstr "勾选 \"选择文件\" 钮并选择上传的 CSV 文件。"
 
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:268
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:273
 #, c-format
 msgid "Click the 'Delete' button to remove the current image. %s "
 msgstr "勾选 '删除' 钮，以删除现在的照片。%s "
@@ -16042,7 +16007,7 @@ msgid "Close this window."
 msgstr "关闭此窗口。"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:89
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:86
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:10
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:11
 #, c-format
@@ -16086,7 +16051,7 @@ msgstr "关闭于："
 
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:164
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:382
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:564
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:567
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:294
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:216
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:116
@@ -16318,14 +16283,14 @@ msgstr "评论"
 msgid "Comment "
 msgstr "评论 "
 
-#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:76
+#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:82
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:27
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:28
 #, c-format
 msgid "Comment:"
 msgstr "评论："
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:996
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1002
 #, c-format
 msgid "Comment: "
 msgstr "评论："
@@ -16499,7 +16464,7 @@ msgstr "确认删除读者属性类型 "
 msgid "Confirm deletion of printer "
 msgstr "确认删除打印机 "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:535
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:538
 #, c-format
 msgid "Confirm deletion of record matching rule "
 msgstr "确认删除匹配规则 "
@@ -16632,7 +16597,7 @@ msgstr "联络信息"
 msgid "Contact name: "
 msgstr "联络名称："
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:401
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:406
 #, c-format
 msgid "Contact note: "
 msgstr "联络说明："
@@ -17064,8 +17029,8 @@ msgstr "国家："
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:137
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:94
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:398
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:417
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:403
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:422
 #, c-format
 msgid "Country: "
 msgstr "国家："
@@ -17344,7 +17309,7 @@ msgstr "额度类型："
 msgid "Credits"
 msgstr "额度"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:809
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
 #, c-format
 msgid "Credits:"
 msgstr "额度："
@@ -17797,8 +17762,8 @@ msgid "Date of birth is invalid."
 msgstr "生日不对。"
 
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:84
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:51
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:233
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:48
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:238
 #, c-format
 msgid "Date of birth:"
 msgstr "生日："
@@ -18315,7 +18280,7 @@ msgstr "延迟是逾期后天数，届时才启发逾期通知。"
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:98
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:111
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:243
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:575
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:578
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:256
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:286
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:324
@@ -18374,7 +18339,7 @@ msgstr "延迟是逾期后天数，届时才启发逾期通知。"
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:191
 #: intranet-tmpl/prog/en/modules/members/files.tt:47
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:495
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:286
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:291
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:51
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:72
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:120
@@ -18610,7 +18575,7 @@ msgid "Delete record"
 msgstr "删除纪录"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:539
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:542
 msgid "Delete record matching rule"
 msgstr "删除纪录映射规则"
 
@@ -18768,9 +18733,9 @@ msgstr "删除用户"
 msgid "Delete vendor"
 msgstr "删除代理商"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:951
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:960
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:671
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:492
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:497
 #, c-format
 msgid "Delete?"
 msgstr "删除吗？"
@@ -18801,7 +18766,7 @@ msgid "Deleted patron attribute type &quot;%s&quot;"
 msgstr "删除读者属性类型 &quot;%s&quot;"
 
 #. %1$s:  deleted_matching_rule 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:559
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:562
 #, c-format
 msgid "Deleted record matching rule &quot;%s&quot;"
 msgstr "删除纪录匹配规则 &quot;%s&quot;"
@@ -18898,7 +18863,7 @@ msgstr "系所"
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:316
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:165
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:181
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:565
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:568
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:251
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:295
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:283
@@ -19572,23 +19537,23 @@ msgstr "到期日 %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:361
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:918
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:927
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:713
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:731
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:102
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:49
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:451
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:456
 #, c-format
 msgid "Due date"
 msgstr "到期日"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:917
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:926
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr "到期日 (未格式化，隐藏)"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:450
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:455
 #, c-format
 msgid "Due date hidden not formatted"
 msgstr "隐藏到期日未格式化"
@@ -19770,7 +19735,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:68
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:483
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:241
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:574
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:577
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:255
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:285
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:323
@@ -19798,7 +19763,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:291
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:235
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:142
-#: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:158
+#: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:168
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:184
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:201
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:181
@@ -19807,13 +19772,13 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:87
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:189
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:37
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:252
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:254
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:322
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:335
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:388
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:405
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:421
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:257
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:259
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:327
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:340
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:393
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:410
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:426
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:31
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:40
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:379
@@ -19839,8 +19804,8 @@ msgstr "编辑"
 msgid "Edit "
 msgstr "编辑 "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:746
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:759
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
 #, c-format
 msgid "Edit Details"
 msgstr "编辑详情"
@@ -20215,7 +20180,7 @@ msgid "Email:"
 msgstr "电子邮件："
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:140
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:400
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:405
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:59
 #, c-format
@@ -20435,7 +20400,7 @@ msgid "Enter cover biblionumber: "
 msgstr "键入封面书目号："
 
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:44
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:632
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:636
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:687
 #, c-format
 msgid "Enter item barcode:"
@@ -20655,7 +20620,7 @@ msgid "Error saving items"
 msgstr "错误存储馆藏"
 
 #: intranet-tmpl/prog/en/modules/auth.tt:20
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:606
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:610
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:124
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:126
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:389
@@ -20909,10 +20874,10 @@ msgid "Experimental features"
 msgstr "实验中的功能"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:949
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:958
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:676
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:964
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:490
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:495
 #, c-format
 msgid "Expiration"
 msgstr "过期"
@@ -20925,8 +20890,8 @@ msgstr "过期"
 msgid "Expiration date"
 msgstr "到期日"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:75
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:349
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:354
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:135
 #, c-format
 msgid "Expiration date: "
@@ -20938,14 +20903,14 @@ msgstr "到期日："
 msgid "Expiration date: %s"
 msgstr "到期日：%s"
 
-#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:77
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:745
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:758
+#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:83
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:762
 #, c-format
 msgid "Expiration:"
 msgstr "到期日"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:997
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1003
 #, c-format
 msgid "Expiration: "
 msgstr "到期日："
@@ -21304,8 +21269,8 @@ msgid "Fax"
 msgstr "传真"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:139
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:45
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:227
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:42
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:232
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:13
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:57
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:188
@@ -21345,7 +21310,7 @@ msgstr "费用收条"
 msgid "Feedback:"
 msgstr "反馈："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:799
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
 #, c-format
 msgid "Fees &amp; Charges:"
 msgstr "费用&amp;收费"
@@ -21687,7 +21652,7 @@ msgstr "筛选器"
 msgid "Filters :"
 msgstr "筛选器："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:992
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1001
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:172
 #, fuzzy, c-format
@@ -21695,9 +21660,9 @@ msgid "Find another patron?"
 msgstr "新增另一个条件"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:926
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:61
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:459
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:464
 #, c-format
 msgid "Fine"
 msgstr "罚款"
@@ -21732,7 +21697,7 @@ msgstr "罚款宽限期"
 msgid "Fines"
 msgstr "罚款"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:432
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:437
 #, c-format
 msgid "Fines &amp; Charges"
 msgstr "罚款&amp;计算"
@@ -21803,7 +21768,7 @@ msgid "First name"
 msgstr "名"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:463
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:411
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:416
 #, c-format
 msgid "First name: "
 msgstr "名："
@@ -21900,11 +21865,6 @@ msgid ""
 "For this library, you can specify the maximum number of loans that a patron "
 "of a given category can make, regardless of the item type. "
 msgstr "对此图书馆而言，可指定读者借出馆藏的最大量，而不必理会馆藏的类型。"
-
-#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:767
-#, c-format
-msgid "For:"
-msgstr "给："
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:308
 #, c-format
@@ -22496,8 +22456,8 @@ msgid "Gender"
 msgstr "性别"
 
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:83
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:52
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:234
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:49
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:239
 #, c-format
 msgid "Gender:"
 msgstr "性别："
@@ -22724,8 +22684,8 @@ msgstr "群组：%s属性%s%s寻找范围%s%s"
 msgid "Groups of libraries: "
 msgstr "图书馆群组："
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:55
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:239
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:52
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:244
 #, c-format
 msgid "Guarantees:"
 msgstr "被保证人"
@@ -22740,9 +22700,9 @@ msgstr "保证人的借阅者号码"
 msgid "Guarantor information"
 msgstr "保证人信息"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:59
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:243
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:245
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:56
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:248
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:250
 #, c-format
 msgid "Guarantor:"
 msgstr "保证人："
@@ -23019,8 +22979,8 @@ msgstr "预约日期"
 msgid "Hold at"
 msgstr "预约于"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:944
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:485
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:953
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:490
 #, c-format
 msgid "Hold date"
 msgstr "预约日期"
@@ -23234,7 +23194,7 @@ msgstr "预约到馆待提取"
 msgid "Holds to pull%s placed between %s and %s%s"
 msgstr "预约待提取 %s 置于 %s 与 %s%s之间"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:827
 #, c-format
 msgid "Holds waiting:"
 msgstr "待预约："
@@ -23417,7 +23377,6 @@ msgstr "每年的此段时间都是假日"
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:25
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:316
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:10
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:36
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:291
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:37
@@ -23941,7 +23900,7 @@ msgstr "馆藏"
 msgid "ITEMS"
 msgstr "馆藏"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
 #, c-format
 msgid "ITEMS OVERDUE"
 msgstr "逾期馆藏"
@@ -24506,8 +24465,8 @@ msgstr "包括网域部份，但 URL 的路径应指向数据库。"
 msgid "Incorrect syntax, cannot save"
 msgstr "语法不正确，不能存储"
 
-#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:55
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:976
+#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:61
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:982
 #, c-format
 msgid "Indefinite"
 msgstr "无限期"
@@ -24574,8 +24533,8 @@ msgstr "信息 "
 msgid "Initials"
 msgstr "缩写"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:50
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:232
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:47
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:237
 #, c-format
 msgid "Initials: "
 msgstr "缩写："
@@ -25060,7 +25019,7 @@ msgstr "馆藏索书号介于："
 msgid "Item callnumber:"
 msgstr "馆藏索书号"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:548
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:552
 #, c-format
 msgid "Item checked out"
 msgstr "馆藏借出"
@@ -25333,14 +25292,14 @@ msgstr "当前不能存储馆藏号"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:651
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:653
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:57
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:920
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:929
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:716
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:734
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:590
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:20
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:463
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:572
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:453
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:458
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:40
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:408
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:437
@@ -26949,11 +26908,6 @@ msgstr "Koha &rsaquo; 目录 &rsaquo; 馆藏寻找"
 msgid "Koha &rsaquo; Catalog &rsaquo; Search history"
 msgstr "Koha &rsaquo; 目录 &rsaquo; 寻找纪录"
 
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:2
-#, c-format
-msgid "Koha &rsaquo; Catalog &rsaquo; Subject search results"
-msgstr "Koha &rsaquo; 目录 &rsaquo; 主题寻找结果"
-
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:3
 #, c-format
 msgid "Koha &rsaquo; Cataloging"
@@ -27019,7 +26973,7 @@ msgstr "Koha &rsaquo; 编目权威外挂程序"
 msgid "Koha &rsaquo; Cataloguing &rsaquo; Framework plugin example"
 msgstr "Koha &rsaquo; 编目 &rsaquo; 框架外挂程序样例"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:3
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:4
 #, c-format
 msgid "Koha &rsaquo; Check duplicate patron"
 msgstr "Koha &rsaquo; 检查重复的读者"
@@ -27156,9 +27110,9 @@ msgid "Koha &rsaquo; Circulation &rsaquo; Transfers print receipt"
 msgstr "Koha &rsaquo; 流通 &rsaquo; 转移打印收条"
 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:4
-#, c-format
-msgid "Koha &rsaquo; Circulation &rsaquo; Transfers to your library"
-msgstr "Koha &rsaquo; 流通 &rsaquo; 转转到您的图书馆"
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Circulation &rsaquo; Transfers to receive"
+msgstr "Koha &rsaquo; 流通 &rsaquo; 转移打印收条"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:3
 #: intranet-tmpl/prog/en/modules/course_reserves/invalid-course.tt:2
@@ -28628,7 +28582,7 @@ msgstr "最后看到"
 msgid "Last seen:"
 msgstr "最后看到："
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:380
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:385
 #, c-format
 msgid "Last sync: "
 msgstr "上次同步于："
@@ -28753,13 +28707,13 @@ msgstr "立法"
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:289
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:344
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:396
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:440
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:481
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:507
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:615
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:648
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:673
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:397
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:441
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:484
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:510
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:618
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:651
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:676
 #, c-format
 msgid "Length: "
 msgstr "长度："
@@ -28841,7 +28795,7 @@ msgstr "图书馆限制："
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:646
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:648
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:118
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:578
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:582
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:37
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:104
@@ -28965,8 +28919,8 @@ msgstr "图书馆设置"
 msgid "Library transfer limits"
 msgstr "图书馆转移限制"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:68
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:341
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:65
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:346
 #, c-format
 msgid "Library use"
 msgstr "图书馆使用"
@@ -28986,6 +28940,7 @@ msgstr "图书馆代码已存在 &mdash; 请键入该代码"
 #: intranet-tmpl/prog/en/modules/auth.tt:57
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:281
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:410
+#: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:767
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:645
 #: intranet-tmpl/prog/en/modules/members/member.tt:490
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:283
@@ -29004,8 +28959,8 @@ msgstr "图书馆："
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:521
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:654
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:118
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:82
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:357
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:79
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:362
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:92
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:114
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:91
@@ -29354,7 +29309,7 @@ msgstr "地区设置："
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:277
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:80
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:130
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:921
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:61
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:84
@@ -29363,7 +29318,7 @@ msgstr "地区设置："
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:108
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:473
 #: intranet-tmpl/prog/en/modules/tags/list.tt:45
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:454
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:459
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:432
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:182
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:225
@@ -29521,7 +29476,7 @@ msgstr "遗失状态："
 msgid "Lost status: "
 msgstr "遗失状态："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #, c-format
 msgid "Lost: "
 msgstr "遗失："
@@ -29851,7 +29806,7 @@ msgstr ""
 msgid "Make budget active: "
 msgstr "引导预算："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:147
 #, c-format
 msgid "Make payment"
@@ -29981,7 +29936,7 @@ msgstr "管理订单与预算篮"
 msgid "Manage orders & basketgroups"
 msgstr "改变订单与预算篮群组"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:267
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:272
 #, fuzzy, c-format
 msgid "Manage patron image"
 msgstr "管理读者照片"
@@ -30282,18 +30237,18 @@ msgstr "主要："
 msgid "Match applied"
 msgstr "采用的映射规则"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:630
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:633
 #, c-format
 msgid "Match check "
 msgstr "检查映射 "
 
 #. %1$s:  matchcheck.mc_num 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:368
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:369
 #, c-format
 msgid "Match check %s"
 msgstr "检查映射 %s"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:463
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:466
 #, c-format
 msgid "Match check 1 | "
 msgstr "检查映射1 | "
@@ -30308,7 +30263,7 @@ msgstr "映射详情"
 msgid "Match found"
 msgstr "找到映射"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:590
 #, c-format
 msgid "Match point "
 msgstr "映射点 "
@@ -30386,7 +30341,7 @@ msgstr "映射规则代码："
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:265
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:329
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:600
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:603
 #, c-format
 msgid "Matchpoint components"
 msgstr "映射点组成"
@@ -30569,7 +30524,7 @@ msgstr "送出消息"
 msgid "Message subject:"
 msgstr "消息主旨："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:849
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:858
 #, c-format
 msgid "Messages:"
 msgstr "消息："
@@ -30793,7 +30748,7 @@ msgid "Modified patron attribute type &quot;%s&quot;"
 msgstr "修改读者属性类型 &quot;%s&quot;"
 
 #. %1$s:  edited_matching_rule 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:556
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:559
 #, c-format
 msgid "Modified record matching rule &quot;%s&quot;"
 msgstr "修改纪录映射规则 &quot;%s&quot;"
@@ -31256,11 +31211,10 @@ msgstr ""
 "说明：改变此表单内容后，请您的管理器执行 misc/batchRebuildBiblioTables.pl 脚"
 "本。"
 
-#. %1$s:  heading | html 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:17
 #, c-format
-msgid "NT: %s"
-msgstr "狭义词：%s"
+msgid "NT"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:537
 #, c-format
@@ -31286,7 +31240,7 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:64
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:49
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:56
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:575
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:579
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:270
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:123
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
@@ -31396,6 +31350,12 @@ msgstr "命名："
 msgid "Named: "
 msgstr "命名："
 
+#. ABBR
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:17
+#, fuzzy
+msgid "Narrower Term"
+msgstr "%sh - 狭义词"
+
 #: intranet-tmpl/prog/en/modules/about.tt:373
 #, c-format
 msgid "Natalie Bennison"
@@ -31437,7 +31397,7 @@ msgstr "不曾"
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:207
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:52
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:183
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1049
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1055
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:95
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:359
@@ -31763,7 +31723,7 @@ msgstr "新增纪录"
 msgid "New record "
 msgstr "新增纪录 "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:548
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:551
 #, c-format
 msgid "New record matching rule"
 msgstr "新增纪录匹配规则"
@@ -31918,11 +31878,6 @@ msgstr "下期出版日期："
 msgid "Next page"
 msgstr "下一页"
 
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:36
-#, c-format
-msgid "Next records"
-msgstr "下一笔纪录"
-
 #: intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "Nicholas Rosasco (Documentation Compiler)"
@@ -31962,7 +31917,7 @@ msgstr "Nicole C. Engard (3.0+ 文件经理)"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:300
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:327
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:153
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:382
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:387
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:244
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:247
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:342
@@ -32355,7 +32310,7 @@ msgstr "还没有选择订单"
 msgid "No orders yet"
 msgstr "还没有订单"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:472
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:477
 #, c-format
 msgid "No outstanding charges"
 msgstr "没有待缴罚款"
@@ -32365,7 +32320,7 @@ msgstr "没有待缴罚款"
 msgid "No patron cardnumber in offline database (proceeding anyway): %s"
 msgstr "在脱机数据库无此读者证号码(不管它继续执行)：%s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:553
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:557
 #, c-format
 msgid "No patron matched "
 msgstr "无匹配的读者 "
@@ -32573,7 +32528,7 @@ msgstr "不，不要删除"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:164
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:541
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:544
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:258
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:126
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:101
@@ -32753,13 +32708,13 @@ msgstr "一般文字"
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:297
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:348
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:404
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:448
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:485
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:511
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:619
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:652
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:677
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:405
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:449
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:488
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:514
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:622
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:655
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:680
 #, c-format
 msgid "Normalization rule: "
 msgstr "常规化规则："
@@ -33010,7 +32965,7 @@ msgstr "说明/评论"
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:96
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:225
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:342
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:841
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:850
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:46
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:397
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:698
@@ -33510,7 +33465,7 @@ msgstr "OPAC 说明："
 msgid "OPAC note"
 msgstr "OPAC 说明"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:375
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:380
 #, c-format
 msgid "OPAC note:"
 msgstr "OPAC 说明："
@@ -33524,11 +33479,6 @@ msgstr "查看 OPAC："
 #, c-format
 msgid "OPAC/Staff login"
 msgstr "登录联机公共目录/馆员界面"
-
-#: intranet-tmpl/prog/en/modules/about.tt:270
-#, c-format
-msgid "OPACBaseURL"
-msgstr "OPACBaseURL"
 
 #: intranet-tmpl/prog/en/modules/about.tt:293
 #, c-format
@@ -33567,7 +33517,7 @@ msgstr ""
 msgid "OS version ('uname -a'): "
 msgstr "作业系统版本 ('uname -a')："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:801
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "OVER THE LIMIT"
@@ -33638,13 +33588,13 @@ msgstr "位移："
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:282
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:340
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:389
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:433
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:477
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:503
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:611
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:644
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:669
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:390
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:434
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:480
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:506
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:614
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:647
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:672
 #, c-format
 msgid "Offset: "
 msgstr "位移："
@@ -33713,7 +33663,7 @@ msgstr "在题名 "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:682
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:686
 #, c-format
 msgid "On-site checkout"
 msgstr "现场借出"
@@ -33723,7 +33673,7 @@ msgstr "现场借出"
 msgid "On-site checkouts"
 msgstr "现场借出"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:677
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:681
 #, c-format
 msgid "On-site checkouts only. Automatic due date: "
 msgstr "祗限现场借出。自动缺省到期日："
@@ -33798,7 +33748,7 @@ msgstr "祗支持 KPZ 格式文件。"
 msgid "Only PNG, GIF, JPEG, XPM formats are supported."
 msgstr "祗支持PNG、GIF、JPEG、XPM等格式。"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:273
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:278
 #, c-format
 msgid "Only PNG, GIF, JPEG, XPM formats are supported. "
 msgstr "祗支持PNG、GIF、JPEG、XPM等格式。"
@@ -33818,7 +33768,7 @@ msgstr "祗有馆藏 "
 msgid "Only items currently available"
 msgstr "祗有现在可用的馆藏"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:726
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:730
 #, c-format
 msgid "Only on-site checkouts are allowed"
 msgstr "祗限现场借出"
@@ -34113,8 +34063,8 @@ msgstr "机构"
 msgid "Organization #:"
 msgstr "机构 #："
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:34
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:216
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:31
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:221
 #, c-format
 msgid "Organization email: "
 msgstr "机构电子邮件："
@@ -34124,8 +34074,8 @@ msgstr "机构电子邮件："
 msgid "Organization name: "
 msgstr "机构名称："
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:33
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:215
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:30
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:220
 #, c-format
 msgid "Organization phone: "
 msgstr "机构电话："
@@ -34197,10 +34147,10 @@ msgstr "其它选项(选一个)"
 msgid "Other phone"
 msgstr "其它电话"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:38
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:43
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:220
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:35
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:40
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:225
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:230
 #, c-format
 msgid "Other phone: "
 msgstr "其它电话："
@@ -34259,7 +34209,7 @@ msgstr "待处理"
 #. %1$s:  IF ( chargesamount ) 
 #. %2$s:  chargesamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:799
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
 #, c-format
 msgid "Outstanding fees &amp; charges%s of %s%s"
 msgstr "待付罚款 &amp; 收取%s 的 %s%s"
@@ -34308,7 +34258,7 @@ msgstr "逾期"
 msgid "Overdues with fines"
 msgstr "逾期罚款"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
 #, c-format
 msgid "Overdues:"
 msgstr "逾期："
@@ -34336,7 +34286,7 @@ msgstr "强制限制与续借"
 msgid "Override renewal limit:"
 msgstr "取消续借限制："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:788
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:797
 #, c-format
 msgid "Override restriction temporarily"
 msgstr "取代暂时的限制"
@@ -34496,14 +34446,14 @@ msgstr "口令至少应有 %s 字符。"
 
 #: intranet-tmpl/prog/en/modules/auth.tt:51
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:111
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1044
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1050
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:44
 #, c-format
 msgid "Password:"
 msgstr "口令："
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:135
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:367
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:372
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:219
 #, c-format
 msgid "Password: "
@@ -34538,7 +34488,7 @@ msgid "Patent document"
 msgstr "专利文件"
 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:62
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:937
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:83
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:145
@@ -34548,7 +34498,7 @@ msgstr "专利文件"
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:673
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:20
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:461
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:466
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:109
 #, c-format
 msgid "Patron"
@@ -34669,8 +34619,8 @@ msgstr "读者的罚款超过上限：%s"
 msgid "Patron flags:"
 msgstr "读者标志："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:799
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
 #, c-format
 msgid "Patron has "
 msgstr "读者有 "
@@ -34704,13 +34654,13 @@ msgstr "读者已逾期 %s 个馆藏。%s 仍要借出吗？%s "
 #. %1$s:  IF ( creditsamount ) 
 #. %2$s:  creditsamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:809
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
 #, c-format
 msgid "Patron has a credit%s of %s%s "
 msgstr "读者已用了 %s 额度，总共有 %s%s 额度 "
 
 #. %1$s:  USERBLOCKEDWITHENDDATE | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:522
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:526
 #, c-format
 msgid "Patron has a restriction until %s."
 msgstr "读者被停权至 %s。"
@@ -34724,7 +34674,7 @@ msgid ""
 "anyway? %s "
 msgstr "读者已借出此记录的其它馆藏。%s 仍要借出吗？%s "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:526
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:530
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:486
 #, c-format
 msgid "Patron has an indefinite restriction."
@@ -34746,8 +34696,8 @@ msgstr "有逾期馆藏的读者被停权至：%s"
 msgid "Patron has nothing checked out."
 msgstr "读者没有借出。"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:987
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:527
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:996
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:532
 #, c-format
 msgid "Patron has nothing on hold."
 msgstr "无预约的读者。"
@@ -34758,16 +34708,24 @@ msgstr "无预约的读者。"
 msgid "Patron has outstanding fines of %s."
 msgstr "读者有待缴罚款 %s。"
 
+#. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:343
+#, c-format
 msgid "Patron has outstanding fines: %s"
 msgstr "读者有罚款待缴：%s"
 
 #. %1$s:  IF CAN_user_borrowers && ( !Koha.Preference('IndependentBranchesPatronModifications') || borrower.branch == branch ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:737
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
 #, fuzzy, c-format
 msgid "Patron has pending modifications. %s "
 msgstr "读者请求修改"
+
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:339
+#, fuzzy, c-format
+msgid "Patron has restrictions"
+msgstr "读者限制"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:155
@@ -34805,7 +34763,7 @@ msgid "Patron is an adult"
 msgstr "读者是成人"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:26
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:987
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:993
 #, c-format
 msgid "Patron is currently unrestricted."
 msgstr "读者当前没有被限制。"
@@ -34840,8 +34798,8 @@ msgstr "读者清单"
 msgid "Patron lists:"
 msgstr "读者清单："
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1061
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:328
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1067
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:333
 #, c-format
 msgid "Patron messaging preferences"
 msgstr "读者消息首选"
@@ -34892,7 +34850,7 @@ msgstr "读者限制"
 msgid "Patron search: "
 msgstr "读者寻找："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:564
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:568
 #, c-format
 msgid "Patron selection"
 msgstr "选择读者"
@@ -34945,13 +34903,13 @@ msgstr "读者帐号更新至 %s"
 #. %2$s:  userdebarreddate | $KohaDates 
 #. %3$s:  END 
 #. %4$s:  IF ( debarredcomment ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:774
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:180
 #, c-format
 msgid "Patron's account is restricted %s until %s %s %s with the explanation: "
 msgstr "读者帐号被管制 %s 直到 %s %s %s 其说明为："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:765
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
 #, c-format
 msgid "Patron's address in doubt"
 msgstr "读者地址有问题"
@@ -34970,7 +34928,7 @@ msgid "Patron's address is in doubt (proceeding anyway)"
 msgstr "读者地址有问题(依然继续)"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:230
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:191
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:196
 #, c-format
 msgid "Patron's address is in doubt."
 msgstr "读者地址有问题。"
@@ -34982,7 +34940,7 @@ msgstr "读者地址有问题。"
 msgid "Patron's age is incorrect for their category. Ages allowed are %s-%s."
 msgstr "读者年龄不符此类型的要求。必须在 %s-%s 之间。"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:192
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:197
 #, c-format
 msgid "Patron's card has been reported lost."
 msgstr "读者证已通报为遗失。"
@@ -34990,7 +34948,7 @@ msgstr "读者证已通报为遗失。"
 #. %1$s:  IF ( expiry ) 
 #. %2$s:  expiry | $KohaDates 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:758
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:762
 #, c-format
 msgid "Patron's card has expired. %sPatron's card expired on %s%s "
 msgstr "读者证过期。%s读者证有效期为 %s%s "
@@ -35011,7 +34969,7 @@ msgid "Patron's card is expired."
 msgstr "读者证过期"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:490
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "Patron's card is lost"
@@ -35023,10 +34981,17 @@ msgid "Patron's card is lost."
 msgstr "读者证遗失"
 
 #. %1$s:  expiry | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:745
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
 #, c-format
 msgid "Patron's card will expire soon. Patron's card expires on %s "
 msgstr "读者证将过期。读者证将在 %s 到期 "
+
+#. %1$s:  borrower_branchname 
+#. %2$s:  borrower_branchcode 
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:347
+#, fuzzy, c-format
+msgid "Patron's home library: (%s / %s )"
+msgstr "'所属图书馆 (%s / %s )"
 
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:27
 #, c-format
@@ -35039,6 +35004,7 @@ msgid "Patron:"
 msgstr "读者："
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:258
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:347
 #, c-format
 msgid "Patron: "
 msgstr "读者："
@@ -35182,7 +35148,7 @@ msgstr "Pawel Skuza (Polish for 1.2)"
 msgid "Pay"
 msgstr "支付"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:804
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:813
 #, c-format
 msgid "Pay all fines"
 msgstr "支付全部罚款"
@@ -35276,7 +35242,7 @@ msgstr "待决"
 msgid "Pending discharge requests"
 msgstr "待决的推荐"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:737
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
 #, fuzzy, c-format
 msgid "Pending modifications:"
 msgstr "送出通知"
@@ -35483,8 +35449,8 @@ msgid "Phone:"
 msgstr "电话："
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:138
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:399
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:418
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:404
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:423
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:56
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:9
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:55
@@ -35510,8 +35476,8 @@ msgstr "详情："
 msgid "Pick"
 msgstr "提取"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:948
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:489
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:494
 #, c-format
 msgid "Pickup at"
 msgstr "提取地点"
@@ -35528,8 +35494,8 @@ msgid "Pickup library"
 msgstr "提取图书馆"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:347
-#, c-format
-msgid "Pickup library is different"
+#, fuzzy, c-format
+msgid "Pickup library is different. "
 msgstr "提取图书馆不同"
 
 #: intranet-tmpl/prog/en/modules/about.tt:448
@@ -36484,11 +36450,6 @@ msgstr "稍早的借出"
 msgid "Previous page"
 msgstr "前页"
 
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:36
-#, c-format
-msgid "Previous records"
-msgstr "借一笔纪录"
-
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:133
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:211
 #, c-format
@@ -36497,9 +36458,9 @@ msgstr "前一个作业"
 
 #: intranet-tmpl/prog/en/columns.def:73
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:25
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:927
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:936
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:108
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:460
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:465
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:44
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:102
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:62
@@ -36554,8 +36515,8 @@ msgstr "主要连续性出版品连络人"
 msgid "Primary email"
 msgstr "主要电子邮件"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:47
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:229
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:44
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:234
 #, c-format
 msgid "Primary email:"
 msgstr "主要电子邮件："
@@ -36566,10 +36527,10 @@ msgstr "主要电子邮件："
 msgid "Primary phone"
 msgstr "主要电话"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:36
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:42
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:218
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:224
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:33
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:39
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:223
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:229
 #, c-format
 msgid "Primary phone: "
 msgstr "主要电话："
@@ -36750,15 +36711,15 @@ msgstr "打印机："
 msgid "Printers"
 msgstr "打印机"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:950
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:959
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:574
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:668
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:491
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:496
 #, c-format
 msgid "Priority"
 msgstr "优先"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:359
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:364
 #, c-format
 msgid "Privacy Pref:"
 msgstr "隐私首选："
@@ -37286,11 +37247,10 @@ msgstr "RRP 不含税"
 msgid "RRP tax inc."
 msgstr "RRP 含税"
 
-#. %1$s:  heading | html 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:21
 #, c-format
-msgid "RT: %s"
-msgstr "相关词：%s"
+msgid "RT"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:425
 #, c-format
@@ -37495,7 +37455,7 @@ msgstr "纪录匹配规则："
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:46
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:175
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:551
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:554
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:83
 #, c-format
 msgid "Record matching rules"
@@ -37588,8 +37548,8 @@ msgstr "RegEx"
 msgid "Registration date"
 msgstr "登记日期"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:74
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:347
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:71
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:352
 #, c-format
 msgid "Registration date: "
 msgstr "登记日期："
@@ -37637,6 +37597,11 @@ msgstr "拒绝"
 msgid "Rejected tags"
 msgstr "拒绝的标签"
 
+#. ABBR
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:21
+msgid "Related Term"
+msgstr ""
+
 #: intranet-tmpl/prog/en/columns.def:9
 #, c-format
 msgid "Relationship"
@@ -37652,8 +37617,8 @@ msgstr "关系信息"
 msgid "Relationship: "
 msgstr "关系："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:895
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:430
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:904
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:435
 #, c-format
 msgid "Relatives' checkouts"
 msgstr "相关的借出"
@@ -37693,7 +37658,7 @@ msgstr "待处理系统首选权限"
 msgid "Remember for next check in:"
 msgstr "记住供下个还入使用："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:662
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:666
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:694
 #, c-format
 msgid "Remember for session:"
@@ -37754,7 +37719,7 @@ msgstr "删除远程记录，保留在地记录"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:512
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:70
-#: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:168
+#: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:178
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:7
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:10
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:12
@@ -37765,7 +37730,7 @@ msgstr "删除远程记录，保留在地记录"
 msgid "Remove"
 msgstr "删除"
 
-#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:58
+#: intranet-tmpl/prog/en/includes/borrower_debarments.inc:64
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:133
 #, c-format
 msgid "Remove "
@@ -37831,16 +37796,16 @@ msgstr "删除选定的读者"
 msgid "Remove tag"
 msgstr "删除标签"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:368
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:463
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:630
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:369
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:466
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:633
 #, c-format
 msgid "Remove this match check"
 msgstr "删除此映射检查"
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:246
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:316
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:590
 #, c-format
 msgid "Remove this match point"
 msgstr "删除此映射点"
@@ -37855,8 +37820,8 @@ msgstr "删除吗？"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:146
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:148
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:130
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:746
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:759
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:23
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:140
 #, c-format
@@ -38452,17 +38417,17 @@ msgstr "限制"
 msgid "Restricted [until] flag"
 msgstr "限制 [直到] 标志"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:774
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
 #, c-format
 msgid "Restricted:"
 msgstr "限制："
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:541
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:545
 #, c-format
 msgid "Restriction overridden temporarily"
 msgstr "暂时限制重置"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:535
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:539
 #, c-format
 msgid "Restriction overridden temporarily."
 msgstr "暂时限制重置。"
@@ -38484,11 +38449,6 @@ msgstr "结果"
 #, c-format
 msgid "Results"
 msgstr "结果"
-
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:22
-#, c-format
-msgid "Results "
-msgstr "结果 "
 
 #. %1$s:  from 
 #. %2$s:  to 
@@ -38532,8 +38492,8 @@ msgid "Results per page :"
 msgstr "每页结果数："
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:981
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:522
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:990
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:527
 msgid "Resume all suspended holds"
 msgstr "恢复所有待决预约"
 
@@ -38904,8 +38864,8 @@ msgstr "简讯"
 msgid "SMS alert number"
 msgstr "简讯提示号码"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1111
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:331
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1117
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:336
 #, c-format
 msgid "SMS number:"
 msgstr "简信号码："
@@ -38995,8 +38955,8 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:119
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:86
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:206
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:523
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:526
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:529
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:157
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:240
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:243
@@ -39031,7 +38991,7 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:549
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:163
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:117
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1120
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1126
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:159
 #: intranet-tmpl/prog/en/modules/members/member.tt:374
@@ -39313,7 +39273,7 @@ msgstr "调度工具"
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:256
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:324
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:595
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:598
 #, c-format
 msgid "Score: "
 msgstr "分数："
@@ -39587,7 +39547,7 @@ msgstr "寻找打算设为假日的日子。"
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:249
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:319
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:590
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:593
 #, c-format
 msgid "Search index: "
 msgstr "寻找索引："
@@ -39888,8 +39848,8 @@ msgstr "第二"
 msgid "Secondary email"
 msgstr "其它电子邮件"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:48
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:230
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:45
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:235
 #, c-format
 msgid "Secondary email: "
 msgstr "次要电子邮件："
@@ -39900,8 +39860,8 @@ msgstr "次要电子邮件："
 msgid "Secondary phone"
 msgstr "其它电话"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:37
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:219
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:34
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:224
 #, c-format
 msgid "Secondary phone: "
 msgstr "次要电话："
@@ -39952,7 +39912,7 @@ msgstr "看见"
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:27
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:247
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:51
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:595
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:599
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:291
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:228
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:178
@@ -40080,6 +40040,8 @@ msgstr "选定使用的模板："
 
 #: intranet-tmpl/prog/en/includes/branch-selector.inc:9
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:194
+#: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:73
+#: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:86
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:14
 #: intranet-tmpl/prog/en/modules/labels/result.tt:65
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:136
@@ -40240,7 +40202,7 @@ msgstr "选定待处理的文件："
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:41
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:77
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:280
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:285
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:119
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:98
 #, c-format
@@ -40613,7 +40575,7 @@ msgstr "所有基金设置为零"
 msgid "Set back to"
 msgstr "设置回"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:752
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:756
 #, c-format
 msgid "Set due date to expiry:"
 msgstr "设置馆藏到期日为读者证到期日："
@@ -41239,8 +41201,8 @@ msgstr "排序："
 msgid "Sort field 1"
 msgstr "排序字段1"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:84
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:364
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:81
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:369
 #, c-format
 msgid "Sort field 1:"
 msgstr "排序字段1："
@@ -41253,8 +41215,8 @@ msgstr "排序字段1："
 msgid "Sort field 2"
 msgstr "排序字段2"
 
-#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:85
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:365
+#: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:82
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:370
 #, c-format
 msgid "Sort field 2:"
 msgstr "排序字段2："
@@ -41314,9 +41276,9 @@ msgstr "音效"
 msgid "Source"
 msgstr "来源"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:372
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:466
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:633
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:373
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:469
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:636
 #, c-format
 msgid "Source (incoming) record check field"
 msgstr "来源纪录检查字段"
@@ -41381,15 +41343,15 @@ msgstr "特别的"
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:512
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:980
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:517
 #, c-format
 msgid "Specify date on which to resume %s: "
 msgstr "指定恢复的日期%s："
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:656
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:660
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:692
 #, c-format
 msgid "Specify due date %s: "
@@ -41692,8 +41654,8 @@ msgstr "州"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:135
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:86
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:396
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:415
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:401
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:420
 #, c-format
 msgid "State: "
 msgstr "州："
@@ -42079,13 +42041,13 @@ msgstr "分栏"
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:275
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:336
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:382
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:426
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:473
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:499
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:607
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:640
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:665
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:383
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:427
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:476
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:502
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:610
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:643
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:668
 #, c-format
 msgid "Subfields: "
 msgstr "分栏："
@@ -42128,21 +42090,11 @@ msgstr "主题"
 msgid "Subject heading: "
 msgstr "主题标目："
 
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:26
-#, c-format
-msgid "Subject headings"
-msgstr "主题标目"
-
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:418
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:419
 #, c-format
 msgid "Subject phrase"
 msgstr "主题片语"
-
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:20
-#, c-format
-msgid "Subject search results"
-msgstr "主题寻找结果"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:128
 #, c-format
@@ -42663,7 +42615,7 @@ msgid "Surname"
 msgstr "姓氏"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:452
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:410
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:415
 #, c-format
 msgid "Surname: "
 msgstr "姓："
@@ -42674,8 +42626,8 @@ msgid "Surveys"
 msgstr "调查"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:966
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:507
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:975
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:512
 msgid "Suspend all holds"
 msgstr "暂停所有预约"
 
@@ -42710,7 +42662,7 @@ msgstr "币别符号"
 msgid "Symbol: "
 msgstr "币别符号："
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:379
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:384
 #, c-format
 msgid "Sync status: "
 msgstr "同步的状态："
@@ -42976,13 +42928,13 @@ msgstr "栏号："
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:268
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:332
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:375
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:419
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:469
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:495
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:603
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:636
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:661
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:376
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:420
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:472
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:498
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:606
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:639
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:664
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:75
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:88
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:94
@@ -43030,9 +42982,9 @@ msgstr "坦米尔，法国"
 msgid "Target"
 msgstr "目标"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:416
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:492
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:658
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:417
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:495
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:661
 #, c-format
 msgid "Target (database) record check field"
 msgstr "目标 (数据库) 数据勾选字段"
@@ -43288,30 +43240,56 @@ msgstr ""
 "&lt;zebra_auth_index_mode&gt; 款目不在您的组态档内。退回至原来的层面计算。"
 
 #: intranet-tmpl/prog/en/modules/about.tt:187
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry is missing in your configuration "
-"file. It should be set to "
+"file. It should be set to 'dom' or 'grs1' (deprecated). It will default to "
+"'dom'. "
+msgstr "&lt;zebra_auth_index_mode&gt; 款目不在您的组态档内。它应该设置为 "
+
+#: intranet-tmpl/prog/en/modules/about.tt:228
+#, fuzzy, c-format
+msgid ""
+"The &lt;zebra_auth_index_mode&gt; entry is set to 'dom', but your system "
+"still appears to be set up for 'grs1' indexing."
 msgstr "&lt;zebra_auth_index_mode&gt; 款目不在您的组态档内。它应该设置为 "
 
 #: intranet-tmpl/prog/en/modules/about.tt:219
-#: intranet-tmpl/prog/en/modules/about.tt:228
-#, c-format
-msgid "The &lt;zebra_auth_index_mode&gt; entry is set to "
-msgstr "&lt;zebra_auth_index_mode&gt; 款目应设置为 "
+#, fuzzy, c-format
+msgid ""
+"The &lt;zebra_auth_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
+"now deprecated and will be removed in future releases. Please use DOM "
+"instead by setting &lt;zebra_auth_index_mode&gt; to 'dom' (full reindex "
+"required). "
+msgstr ""
+"。GRS-1 支持已废弃且将在未来的版本里删除。请使用 DOM 设置&lt;"
+"zebra_auth_index_mode&gt; 为 "
 
 #: intranet-tmpl/prog/en/modules/about.tt:169
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry is missing in your configuration "
-"file. It should be set to "
+"file. It should be set to 'dom' or 'grs1' (deprecated). It will default to "
+"'dom'. "
+msgstr "&lt;zebra_bib_index_mode&gt; 款目不在您的组态档内。它应该设置为 "
+
+#: intranet-tmpl/prog/en/modules/about.tt:214
+#, fuzzy, c-format
+msgid ""
+"The &lt;zebra_bib_index_mode&gt; entry is set to 'dom', but your system "
+"still appears to be set up for 'grs1' indexing."
 msgstr "&lt;zebra_bib_index_mode&gt; 款目不在您的组态档内。它应该设置为 "
 
 #: intranet-tmpl/prog/en/modules/about.tt:205
-#: intranet-tmpl/prog/en/modules/about.tt:214
-#, c-format
-msgid "The &lt;zebra_bib_index_mode&gt; entry is set to "
-msgstr "&lt;zebra_bib_index_mode&gt; 款目应设置为 "
+#, fuzzy, c-format
+msgid ""
+"The &lt;zebra_bib_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
+"now deprecated and will be removed in future releases. Please use DOM "
+"instead by setting &lt;zebra_bib_index_mode&gt; to 'dom' (full reindex "
+"required). "
+msgstr ""
+"。GRS-1 支持已废弃且将在未来的版本里删除。请使用 DOM 设置&lt;"
+"zebra_bib_index_mode&gt; 为 "
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:621
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:370
@@ -44089,7 +44067,7 @@ msgstr "没有待处理的脱机作业。"
 msgid "There are no pending patron modifications."
 msgstr "没有待处理的修改读者。"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:579
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:582
 #, c-format
 msgid "There are no saved matching rules."
 msgstr "无存储的映射规则。"
@@ -44445,6 +44423,12 @@ msgstr "此馆藏已到馆待预约者提取。"
 msgid "This item must be checked in at following library: "
 msgstr "此馆藏必须还入所属图书馆。"
 
+#. %1$s:  Branches.GetName( branch_to_return ) 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:522
+#, fuzzy, c-format
+msgid "This item must be returned to %s."
+msgstr "此馆藏须转移到 %s"
+
 #. %1$s:  Branches.GetName( returnbranch ) 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:320
 #, c-format
@@ -44496,7 +44480,7 @@ msgstr "根据图书馆流通政称，此读者不能借出此馆藏"
 msgid "This patron can't check out this item per library circulation policy."
 msgstr "根据图书馆流通政称，此读者不能借出此馆藏"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:992
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1001
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:172
 #, fuzzy, c-format
@@ -44518,7 +44502,7 @@ msgstr "此读者没有相关的文件。"
 msgid "This patron has not submitted any purchase suggestions"
 msgstr "此人未提出任何采访推荐"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:606
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:610
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:124
 #, c-format
 msgid ""
@@ -44843,8 +44827,8 @@ msgstr "TinyMCE WYSIWYG 编辑器 v3.5.8 "
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:212
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:40
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:919
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:945
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:954
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:714
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:732
@@ -44867,8 +44851,8 @@ msgstr "TinyMCE WYSIWYG 编辑器 v3.5.8 "
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:570
 #: intranet-tmpl/prog/en/modules/tags/list.tt:44
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:452
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:486
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:457
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:491
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:75
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:21
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:37
@@ -45143,7 +45127,7 @@ msgstr "进入浏览器："
 
 #. %1$s:  title 
 #. %2$s:  surname 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:268
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:273
 #, c-format
 msgid ""
 "To update the image for %s %s, select a new image file and click 'Upload.' "
@@ -45503,7 +45487,7 @@ msgid "Total due:"
 msgstr "总计欠款："
 
 #. %1$s:  totaldue 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:470
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:475
 #, c-format
 msgid "Total due: %s"
 msgstr "总共欠款：%s"
@@ -45683,7 +45667,7 @@ msgstr "转转到采购篮："
 msgid "Transfers are "
 msgstr "转移者是 "
 
-#. %1$s:  show_date 
+#. %1$s:  show_date | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:38
 #, c-format
 msgid "Transfers made to your library as of %s"
@@ -45823,11 +45807,10 @@ msgstr "类型："
 msgid "Type: "
 msgstr "类型："
 
-#. %1$s:  heading | html 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:19
 #, c-format
-msgid "UF: %s"
-msgstr "UF: %s"
+msgid "UF"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:153
 #, c-format
@@ -45938,8 +45921,8 @@ msgstr "价格未定"
 msgid "Unchanged"
 msgstr "未改变"
 
-#: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:73
-#: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:86
+#. For the first occurrence,
+#. SCRIPT
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:5
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:495
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:115
@@ -45948,7 +45931,7 @@ msgstr "未改变"
 msgid "Uncheck all"
 msgstr "全部取消"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:371
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:376
 #, c-format
 msgid "Undefined"
 msgstr "没有定义"
@@ -46231,7 +46214,7 @@ msgstr "更新数据库结构"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:259
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:47
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:91
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:284
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:289
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:127
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:23
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:80
@@ -46320,7 +46303,7 @@ msgstr "上传脱机流通数据"
 msgid "Upload offline circulation file (.koc)"
 msgstr "上传脱机流通文件 (*.koc)"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:270
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:275
 #, fuzzy, c-format
 msgid "Upload patron image"
 msgstr "上传读者照片"
@@ -46558,6 +46541,12 @@ msgstr "使用上端的选单列，浏览Koha的其它部份。"
 msgid "Used"
 msgstr "使用"
 
+#. ABBR
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:19
+#, fuzzy
+msgid "Used For"
+msgstr "使用于"
+
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:606
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:70
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:192
@@ -46622,7 +46611,7 @@ msgstr "用户帐号/口令已存在。"
 msgid "Username:"
 msgstr "用户名称："
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:366
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:371
 #, c-format
 msgid "Username: "
 msgstr "用户名称："
@@ -46912,7 +46901,7 @@ msgstr "依馆藏类型查看图书馆的馆藏数量"
 msgid "View all libraries"
 msgstr "查看所有图书馆"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:739
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:743
 #, fuzzy, c-format
 msgid "View all pending patron modifications"
 msgstr "没有待处理的修改读者。"
@@ -46975,8 +46964,8 @@ msgstr "查看脱机流通工作"
 msgid "View record"
 msgstr "查看纪录"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:785
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:188
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:193
 #, c-format
 msgid "View restrictions"
 msgstr "查看限制"
@@ -47602,7 +47591,7 @@ msgstr "每年重复的假日：%s"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:301
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:326
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:151
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:378
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:383
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:243
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:246
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:340
@@ -47745,12 +47734,6 @@ msgid ""
 msgstr ""
 "以数据库管理器身份登录。不推荐这么做，部份 Koha 功能在此身份下，不能运作。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:261
-#: intranet-tmpl/prog/en/modules/about.tt:268
-#, c-format
-msgid "You are missing the "
-msgstr "您错过了 "
-
 #: intranet-tmpl/prog/en/modules/about.tt:254
 #, c-format
 msgid ""
@@ -47759,6 +47742,26 @@ msgid ""
 msgstr ""
 "在 koha-conf.xml 文件内少了 &lt;log4perl_conf&gt; 款目。请增加它，并将 "
 "log4perl.conf 文件指向您的 Koha 样例。"
+
+#: intranet-tmpl/prog/en/modules/about.tt:261
+#, fuzzy, c-format
+msgid ""
+"You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
+"Please add it, pointing to the configured file upload directory for your "
+"Koha instance. "
+msgstr ""
+"在 koha-conf.xml 文件内的款目。请新增它，指向 Koha 样例内上传数据夹的组态档。"
+
+#: intranet-tmpl/prog/en/modules/about.tt:268
+#, fuzzy, c-format
+msgid ""
+"You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
+"Please add it, pointing to the configured file upload directory for your "
+"Koha instance. Also note that you need to properly set the OPACBaseURL "
+"preference for the file upload plugin to work. "
+msgstr ""
+"键入您的 koha-conf.xml 文件。请新增它，指向 Koha 样例上传目录的组态档。请注意"
+"必须适当的设置 "
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:64
 #, c-format
@@ -47966,7 +47969,7 @@ msgid ""
 "using Koha"
 msgstr "在 MARC 组态里有 %s 个错误。请修正它再执行 Koha"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1010
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1019
 #, c-format
 msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
@@ -48023,32 +48026,39 @@ msgid "You have not selected any patrons to add to a list!"
 msgstr "您未选择任何读者加入此清单！"
 
 #: intranet-tmpl/prog/en/modules/about.tt:247
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "You have set &lt;use_zebra_facets&gt; but the &lt;zebra_bib_index_mode&gt; "
-"is not set to "
+"is not set to 'dom'. Falling back to legacy facet calculation. "
 msgstr ""
 "您已设置 &lt;use_zebra_facets&gt; 但 &lt;zebra_bib_index_mode&gt; 还没有设置 "
 
+#. %1$s:  config_entry.file 
 #: intranet-tmpl/prog/en/modules/about.tt:233
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "You have set UseQueryParser but the 'queryparser_config' entry is missing in "
-"your configuration file. "
+"your configuration file. %s is used as a fallback. "
 msgstr "您已设置 UseQueryParser 但 'queryparser_config' 款目不在您的组态档内。"
 
 #. %1$s:  IF QueryParserError.fallback 
+#. %2$s:  QueryParserError.file 
+#. %3$s:  ELSE 
+#. %4$s:  QueryParserError.file 
+#. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/about.tt:138
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "You have set UseQueryParser but there was a problem inititializing "
 "QueryParser. %s The 'queryparser_config' entry is missing in your "
-"configuration file. "
+"configuration file. The following configuration file was used without "
+"success: %s. %s The following configuration file was used without success: "
+"%s. %s "
 msgstr ""
 "您已设置 UseQueryParser 但启始化 QueryParser 有问题。%s 'queryparser_config' "
 "款目不在您的组态档内。"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:752
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:756
 #, c-format
 msgid ""
 "You have the ReturnBeforeExpiry system preference enabled this means if the "
@@ -48303,14 +48313,14 @@ msgstr "您的目录寻找记录是空的。"
 
 #: intranet-tmpl/prog/en/modules/about.tt:182
 #: intranet-tmpl/prog/en/modules/about.tt:200
-#, c-format
-msgid "Your configuration file seems to be set up for "
+#, fuzzy, c-format
+msgid "Your configuration file seems to be set up for 'dom'."
 msgstr "您的组态文件似乎是设置供 "
 
 #: intranet-tmpl/prog/en/modules/about.tt:177
 #: intranet-tmpl/prog/en/modules/about.tt:195
-#, c-format
-msgid "Your configuration file still seems to be set up for "
+#, fuzzy, c-format
+msgid "Your configuration file still seems to be set up for 'grs1'."
 msgstr "您的组态文件似乎还是设置供 "
 
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:75
@@ -48477,8 +48487,8 @@ msgstr "邮递区号"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:136
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:90
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:397
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:416
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:402
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:421
 #, fuzzy, c-format
 msgid "ZIP/Postal code: "
 msgstr "邮递区号："
@@ -48738,10 +48748,10 @@ msgstr ""
 msgid "[Clear all]"
 msgstr "[全部清除]"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:859
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:862
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:868
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:870
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:871
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:877
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:879
 #, c-format
 msgid "[Delete]"
 msgstr "[删除]"
@@ -48843,11 +48853,6 @@ msgstr "_ 祗匹配单个字符"
 #: intranet-tmpl/prog/en/includes/datatables.inc:3
 msgid "a an the"
 msgstr "a an the"
-
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:335
-#, c-format
-msgid "account has expired"
-msgstr "帐号已过期"
 
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:102
 #, c-format
@@ -49076,7 +49081,7 @@ msgstr "映射至一个 MARC 分栏, "
 msgid "be mapped to the same tag,"
 msgstr "映射至相同的栏号，"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:801
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "because fine balance is "
@@ -49092,7 +49097,7 @@ msgstr "beep.ogg"
 msgid "begins with "
 msgstr "开头为 "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
 #, c-format
 msgid "below"
 msgstr "之下"
@@ -49529,21 +49534,6 @@ msgstr "不匹配"
 msgid "doesn't match any existing record."
 msgstr "未符合任何既有记录。"
 
-#: intranet-tmpl/prog/en/modules/about.tt:170
-#: intranet-tmpl/prog/en/modules/about.tt:171
-#: intranet-tmpl/prog/en/modules/about.tt:182
-#: intranet-tmpl/prog/en/modules/about.tt:188
-#: intranet-tmpl/prog/en/modules/about.tt:189
-#: intranet-tmpl/prog/en/modules/about.tt:200
-#: intranet-tmpl/prog/en/modules/about.tt:208
-#: intranet-tmpl/prog/en/modules/about.tt:214
-#: intranet-tmpl/prog/en/modules/about.tt:222
-#: intranet-tmpl/prog/en/modules/about.tt:228
-#: intranet-tmpl/prog/en/modules/about.tt:247
-#, c-format
-msgid "dom"
-msgstr "数位对象标识号"
-
 #. INPUT type=reset
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/macles.tt:40
 msgid "déselectionner tout"
@@ -49605,24 +49595,6 @@ msgstr "en-us"
 #, c-format
 msgid "ending.ogg"
 msgstr "ending.ogg"
-
-#: intranet-tmpl/prog/en/modules/about.tt:261
-#, c-format
-msgid ""
-"entry in your koha-conf.xml file. Please add it, pointing to the configured "
-"file upload directory for your Koha instance. "
-msgstr ""
-"在 koha-conf.xml 文件内的款目。请新增它，指向 Koha 样例内上传数据夹的组态档。"
-
-#: intranet-tmpl/prog/en/modules/about.tt:268
-#, c-format
-msgid ""
-"entry in your koha-conf.xml file. Please add it, pointing to the configured "
-"file upload directory for your Koha instance. Also note that you need to "
-"properly set the "
-msgstr ""
-"键入您的 koha-conf.xml 文件。请新增它，指向 Koha 样例上传目录的组态档。请注意"
-"必须适当的设置 "
 
 #: intranet-tmpl/prog/en/modules/about.tt:773
 #, c-format
@@ -49730,18 +49702,6 @@ msgstr "群组方式"
 msgid "group by "
 msgstr "群组方式 "
 
-#: intranet-tmpl/prog/en/modules/about.tt:170
-#: intranet-tmpl/prog/en/modules/about.tt:177
-#: intranet-tmpl/prog/en/modules/about.tt:188
-#: intranet-tmpl/prog/en/modules/about.tt:195
-#: intranet-tmpl/prog/en/modules/about.tt:205
-#: intranet-tmpl/prog/en/modules/about.tt:214
-#: intranet-tmpl/prog/en/modules/about.tt:219
-#: intranet-tmpl/prog/en/modules/about.tt:228
-#, c-format
-msgid "grs1"
-msgstr "grs1"
-
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:747
 #, c-format
 msgid "has "
@@ -49770,11 +49730,6 @@ msgstr "已经修改了。修改时发生错误。%s 权威 "
 msgid ""
 "has not been modified. An error occurred on modifying it. %s The biblio "
 msgstr "还未修改。修改时发生错误。%s 书目 "
-
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:339
-#, c-format
-msgid "has restrictions"
-msgstr "使用限制"
 
 #. %1$s:  END 
 #. %2$s:  IF message.error 
@@ -49907,12 +49862,6 @@ msgstr "在图书馆 "
 msgid "incoming_call.ogg"
 msgstr "incoming_call.ogg"
 
-#: intranet-tmpl/prog/en/modules/about.tt:214
-#: intranet-tmpl/prog/en/modules/about.tt:228
-#, c-format
-msgid "indexing."
-msgstr "索引。"
-
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:221
 #, c-format
 msgid "install basic configuration settings"
@@ -49997,11 +49946,6 @@ msgstr "以 MIT 授权被 Ludo van den Boom释出。"
 #, c-format
 msgid "is restricted. Please verify this patron should still be restricted. "
 msgstr "受封锁的。请确认此读者仍应被封锁。"
-
-#: intranet-tmpl/prog/en/modules/about.tt:234
-#, c-format
-msgid "is used as a fallback. "
-msgstr "做为恢复之用。"
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:46
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
@@ -50427,11 +50371,9 @@ msgstr "opening.ogg"
 msgid "or"
 msgstr "或"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:746
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:759
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
-#: intranet-tmpl/prog/en/modules/about.tt:170
-#: intranet-tmpl/prog/en/modules/about.tt:188
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "or "
 msgstr "或 "
@@ -50451,12 +50393,6 @@ msgstr "或任何可取得"
 #, c-format
 msgid "or create"
 msgstr "或新增"
-
-#. %1$s:  amount_outstanding | format('%.2f') 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:343
-#, c-format
-msgid "owes %s"
-msgstr "拥有 %s"
 
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:110
 #, c-format
@@ -50525,11 +50461,6 @@ msgstr "Jovan Popovic 的外挂程序采取 BSD 与 GPL v2 许可证。"
 msgid "popup.ogg"
 msgstr "popup.ogg"
 
-#: intranet-tmpl/prog/en/modules/about.tt:270
-#, c-format
-msgid "preference for the file upload plugin to work. "
-msgstr "上传文件外挂的首选。"
-
 #. INPUT type=image
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:319
 msgid "previous"
@@ -50574,11 +50505,6 @@ msgstr "以多种编码方式记录它。选择一个)："
 #, c-format
 msgid "records in various format. Choose one): "
 msgstr "以多种格式记录它。选择一个)："
-
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:22
-#, c-format
-msgid "records."
-msgstr "纪录。"
 
 #. INPUT type=text name=to_regex_search
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:493
@@ -50867,11 +50793,6 @@ msgstr "栏号 %s 分栏 %s %s 在分页 %s"
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:347
-#, c-format
-msgid "than "
-msgstr "然后 "
-
 #. %1$s:  ELSIF ( error == 301 ) 
 #. %2$s:  ELSIF ( error == 302 ) 
 #. %3$s:  ELSIF ( error == 303 ) 
@@ -50952,11 +50873,6 @@ msgstr "框架代码是空的。检查以下的表单"
 msgid "this record has no items attached. %s "
 msgstr "此记录没有附加的馆藏。%s </ div> %s %s "
 
-#: intranet-tmpl/prog/en/modules/catalogue/subject.tt:22
-#, c-format
-msgid "through "
-msgstr "通过 "
-
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:95
 #, c-format
 msgid "times"
@@ -51011,8 +50927,8 @@ msgstr "除非"
 msgid "unrecognized command"
 msgstr "不能辨识的命令"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:969
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:510
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:978
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:515
 #, c-format
 msgid "until"
 msgstr "直到"
@@ -51094,14 +51010,6 @@ msgstr "查看"
 #, c-format
 msgid "warning.ogg"
 msgstr "warning.ogg"
-
-#. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/about.tt:142
-#, c-format
-msgid ""
-"was used instead without success. %s The following configuration file was "
-"used without success: "
-msgstr "未成功时使用它。%s 未成功时使用以下的组态档："
 
 #: intranet-tmpl/prog/en/modules/admin/categorie.tt:291
 #, c-format
