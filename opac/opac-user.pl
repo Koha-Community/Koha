@@ -97,6 +97,8 @@ if ($debar) {
     if ( $debar ne "9999-12-31" ) {
         $borr->{'userdebarreddate'} = $debar;
     }
+    # FIXME looks like $available is not needed
+    # If a patron is discharged he has a validated discharge available
     my $available = Koha::Borrower::Discharge::count({
         borrowernumber => $borrowernumber,
         validated      => 1,
