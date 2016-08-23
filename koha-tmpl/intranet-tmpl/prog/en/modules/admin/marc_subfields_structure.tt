@@ -255,8 +255,7 @@
     <th>Subfield</th>
     <th>Text</th>
     <th>Constraints</th>
-    <th>Edit</th>
-    <th>Delete</th>
+    <th>Actions</th>
 </tr>
 [% FOREACH loo IN loop %]
 <tr>
@@ -285,8 +284,10 @@
             [% IF ( loo.link ) %] | Link:[% loo.link %],[% END %]
         [% END %]
     </td>
-    <td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield %]&amp;frameworkcode=[% frameworkcode %]#sub[% loo.tagsubfield %]field">Edit</a></td>
-    <td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield %]&amp;tagsubfield=[% loo.tagsubfield %]&amp;frameworkcode=[% frameworkcode %]">Delete</a></td>
+    <td class="actions">
+        <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield %]&amp;frameworkcode=[% frameworkcode %]#sub[% loo.tagsubfield %]field" class="btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
+        <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield %]&amp;tagsubfield=[% loo.tagsubfield %]&amp;frameworkcode=[% frameworkcode %]" class="btn btn-mini"><i class="fa fa-trash"></i> Delete</a>
+    </td>
 </tr>
 [% END %]
 </table>
