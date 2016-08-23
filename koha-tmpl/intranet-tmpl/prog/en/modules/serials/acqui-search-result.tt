@@ -26,7 +26,13 @@ $(document).ready(function(){
 	
 
 <h1>Vendor search results</h1>
-<h2>You searched on <b>vendor [% supplier %],</b> [% count %] results found</h2>
+[% UNLESS count %]
+    <h2>Your search returned no results.</h2>
+[% ELSIF ( supplier.length < 1 ) %]
+    <h2>Vendor search: [% count %] result(s) found</h2>
+[% ELSE %]
+    <h2>Vendor search: [% count %] result(s) found for '[% supplier %]'</h2>
+[% END %]
 
 [% IF ( loop_suppliers ) %]
 <table>
