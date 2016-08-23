@@ -537,8 +537,9 @@ sub UpdateFine {
     #   "REF" is Cash Refund
     my $sth = $dbh->prepare(
         "SELECT * FROM accountlines
-        WHERE borrowernumber=?
-        AND   accounttype IN ('FU','O','F','M')"
+        WHERE borrowernumber=? AND
+        (( accounttype IN ('O','F','M') AND amountoutstanding<>0 ) OR
+           accounttype = 'FU' )"
     );
     $sth->execute( $borrowernumber );
     my $data;
@@ -549,9 +550,10 @@ sub UpdateFine {
     # - accumulate fines for other items
     # so we can update $itemnum fine taking in account fine caps
     while (my $rec = $sth->fetchrow_hashref) {
-        if ( $rec->{issue_id} == $issue_id ) {
+        if ( $rec->{issue_id} == $issue_id && $rec->{accounttype} eq 'FU' ) {
             if ($data) {
                 warn "Not a unique accountlines record for issue_id $issue_id";
+                #FIXME Should we still count this one in total_amount ??
             }
             else {
                 $data = $rec;
