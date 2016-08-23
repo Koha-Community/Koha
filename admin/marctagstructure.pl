@@ -285,6 +285,12 @@ if ($op eq 'add_form') {
 		$template->param(select_display => "True",
 						loop => \@loop_data);
 	} else {
+        # Hidden feature: If search was field$subfield, redirect to the subfield edit form
+        my ( $tagfield, $tagsubfield ) = split /\$/, $searchfield;
+        if ( $tagsubfield ) {
+            print $input->redirect('/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&tagfield='.$tagfield.'&frameworkcode='.$frameworkcode.'#sub'.$tagsubfield.'field');
+            exit;
+        }
 		#here, normal old style : display every tags
 		my ($count,$results)=StringSearch($searchfield,$frameworkcode);
 		$cnt = $count;
