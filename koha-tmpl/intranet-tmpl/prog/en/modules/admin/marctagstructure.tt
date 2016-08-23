@@ -15,7 +15,7 @@
 $(document).ready(function() {
     $("#table_marctagstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
-            { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
         ],
         "sPaginationType": "four_button"
     }));
@@ -194,9 +194,7 @@ $(document).ready(function() {
         <th>Repeatable</th>
         <th>Mandatory</th>
         <th>Auth value</th>
-        <th>Subfields</th>
-        <th>Edit</th>
-        <th>Delete</th>
+        <th>&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -216,9 +214,17 @@ $(document).ready(function() {
             <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
             <td>[% IF ( loo.mandatory ) %]Yes[% ELSE %]No[% END %]</td>
             <td>[% loo.authorised_value %]</td>
-            <td><a href="[% loo.subfield_link %]">subfields</a></td>
-            <td><a href="[% loo.edit %]">Edit</a></td>
-            <td><a href="[% loo.delete %]">Delete</a></td>
+            <td>
+                <div class="dropdown">
+                    <a class="btn btn-mini dropdown-toggle" id="marctagactions[% loo.tagfield %]" role="button" data-toggle="dropdown" href="#">
+                        Actions <b class="caret"></b></a>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="marctagactions[% loo.tagfield %]">
+                        <li><a href="[% loo.subfield_link %]"><i class="fa fa-eye"></i> Subfields</a></li>
+                        <li><a href="[% loo.edit %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                        <li><a href="[% loo.delete %]"><i class="fa fa-trash"></i> Delete</a></li>
+                    </ul>
+                </div>
+            </td>
         </tr>
         [% END %]
     [% ELSE %]
@@ -229,9 +235,17 @@ $(document).ready(function() {
         <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
         <td>[% IF ( loo.mandatory ) %]Yes[% ELSE %]No[% END %]</td>
         <td>[% loo.authorised_value %]</td>
-        <td><a href="[% loo.subfield_link %]">Subfields</a></td>
-        <td><a href="[% loo.edit %]">Edit</a></td>
-        <td><a href="[% loo.delete %]">Delete</a></td>
+        <td>
+            <div class="dropdown">
+                <a class="btn btn-mini dropdown-toggle" id="marctagactions[% loo.tagfield %]" role="button" data-toggle="dropdown" href="#">
+                    Actions <b class="caret"></b></a>
+                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="marctagactions[% loo.tagfield %]">
+                    <li><a href="[% loo.subfield_link %]"><i class="fa fa-eye"></i> Subfields</a></li>
+                    <li><a href="[% loo.edit %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                    <li><a href="[% loo.delete %]"><i class="fa fa-trash"></i> Delete</a></li>
+                </ul>
+            </div>
+        </td>
     </tr>
     [% END %]
     [% END %]
