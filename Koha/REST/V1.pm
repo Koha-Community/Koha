@@ -87,7 +87,8 @@ sub authenticate_api_request {
     my $permissions = $authorization->{'permissions'};
     return $next->($c) if C4::Auth::haspermission($user->userid, $permissions);
     return $c->render_swagger(
-        { error => "Authorization failure. Missing required permission(s)." },
+        { error => "Authorization failure. Missing required permission(s).",
+          required_permissions => $permissions },
         {},
         403
     );
