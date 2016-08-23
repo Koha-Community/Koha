@@ -12,7 +12,7 @@ $(document).ready(function(){
     $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
         "sDom": 't',
         "aoColumnDefs": [
-            { "aTargets": [ -1,-2,-3 ], "bSortable": false, "bSearchable": false },
+            { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false },
         ],
         "aaSorting": [[ 1, "asc" ]],
         "bPaginate": false
@@ -114,8 +114,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         <th>Server</th>
         <th>Heading</th>
         <th>Authority Type</th>
-        <th>MARC</th>
-        <th>&nbsp;</th>
+        <th>Actions</th>
     </tr></thead>
     <tbody>[% FOREACH breeding_loo IN breeding_loop %]
         [% IF ( breeding_loo.breedingid ) %]
@@ -123,8 +122,10 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             <td>[% breeding_loo.server %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewMARC">Preview MARC</a> <a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid %]" data-heading_code="[% breeding_loo.heading_code %]" data-authid="[% breeding_loo.authid %]">Import</a><a href="#" id="close_menu" title="Close this menu"> X </a></div> </td>
             <td>[% breeding_loo.heading %]</td>
             <td>[% breeding_loo.heading_code %]</td>
-            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewMARC">MARC</a></td>
-            <td><a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid %]" data-heading_code="[% breeding_loo.heading_code %]" data-authid="[% breeding_loo.authid %]">Import</a></td>
+            <td class="actions">
+                <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewMARC btn btn-mini"><i class="fa fa-eye"></i> Show MARC</a>
+                <a href="#" class="import_record btn btn-mini" data-breedingid="[% breeding_loo.breedingid %]" data-heading_code="[% breeding_loo.heading_code %]" data-authid="[% breeding_loo.authid %]"><i class="fa fa-download"></i> Import</a>
+            </td>
         </tr>
         [% END %]
     [% END %]</tbody>
