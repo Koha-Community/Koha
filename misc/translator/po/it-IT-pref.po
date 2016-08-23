@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha Staff\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2016-06-21 10:43+0000\n"
+"PO-Revision-Date: 2016-08-23 05:33+0000\n"
 "Last-Translator: Zeno <z.tajoli@cineca.it>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1466505828.000000\n"
+"X-POOTLE-MTIME: 1471930433.000000\n"
 "X-Poedit-Basepath: ../../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -4878,8 +4878,12 @@ msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "Non permettere"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "gli utenti a registrarsi o a modificare i loro dati attraverso l'Opac"
+msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC. Note: This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
+msgstr ""
+"agli utenti della biblioteca di registrarsi o  di modifcare i propri dati "
+"attraverso l'Opac. Attenzione: questo comporta che la preferenza "
+"PatronSelfRegistrationDefaultCategory deve contenere un codice di tipo "
+"utente valido."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
@@ -5710,12 +5714,15 @@ msgid "searching.pref#IntranetNumbersPreferPhrase# use"
 msgstr "usa"
 
 # Searching > Results Display
-msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>If a record has more than this number of items, they availability statuses may be incorrect in the search results, but will be correct in the record details."
-msgstr "<br/>Se un record ha più copie di questo numero, i numeri della disponibilità potrebbero essere errati nei risultati di ricerca, ma saranno corretti nel dettaglio del record."
+msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Availability statuses may show incorrectly in search results if a record has more items than the limit set. Statuses will display correctly in the record details."
+msgstr ""
+"<br/>Gli status di disponibilità posso essere scorretti nei risultati di "
+"ricerca se il record ha più copie del limite qui impostato. Gli status "
+"saranno corretti nei dettagli del record."
 
 # Searching > Results Display
-msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty for no limit on the number of items for which to check the status."
-msgstr "<br/>Lascia vuoto per non mettere limiti al numero di copie di cui vuoi controllare lo status."
+msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty for no limit."
+msgstr "<br/>Lascia vuoto per nessun limite."
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# For records with many items, only check the availability status for the first"
@@ -6397,9 +6404,9 @@ msgstr "di vedere i record in formato MARC normale nell'interfaccia dello staff.
 msgid "tools.pref"
 msgstr "Strumenti"
 
-# Tools > Batch item modification
-msgid "tools.pref Batch item modification"
-msgstr "Modifica batch delle copie"
+# Tools > Batch item
+msgid "tools.pref Batch item"
+msgstr "Copia batch"
 
 # Tools > News
 msgid "tools.pref News"
@@ -6417,13 +6424,21 @@ msgstr "Limita il  numero di immagini (non quelle degli utenti) per il creatore 
 msgid "tools.pref#ImageLimit# images."
 msgstr "immagini."
 
-# Tools > Batch item modification
-msgid "tools.pref#MaxItemsForBatch# Process up to"
-msgstr "Lavora fino a un massimo di"
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToDisplayForBatchDel# Display up to"
+msgstr "Mostra fino a "
 
-# Tools > Batch item modification
-msgid "tools.pref#MaxItemsForBatch# items in a single modification or deletion batch."
-msgstr "copie in una singola iterazione di un batch che modifica o cancella."
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToDisplayForBatchDel# items in a single item deletion batch."
+msgstr "copie in una singola cancellazione batch."
+
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToProcessForBatchMod# Process up to"
+msgstr "Lavora fino a "
+
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToProcessForBatchMod# items in a single item modification batch."
+msgstr "in una singola modifica batch."
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# Both OPAC and staff client"
@@ -6580,4 +6595,3 @@ msgstr "Invia solamente"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "linee di un report se richiesto attraverso il web service per i reports."
-

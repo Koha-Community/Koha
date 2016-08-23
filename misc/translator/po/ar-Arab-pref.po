@@ -3,16 +3,17 @@ msgstr ""
 "Project-Id-Version: Koha 3.14\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2016-06-11 18:22+0000\n"
+"PO-Revision-Date: 2016-08-19 19:17+0000\n"
 "Last-Translator: KnowledgeWare <massoudalshareef@kwareict.com>\n"
 "Language-Team: za\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1465669347.000000\n"
+"X-POOTLE-MTIME: 1471634227.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -4876,8 +4877,10 @@ msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "عدم السماح"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "مستفيدو المكتبة من تسجيل أو تعديل حسابهم عبر الأوباك"
+msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC. Note: This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
+msgstr ""
+"مستفيدي المكتبة بالتسجيل أو تعديل حسابهم عبر الأوباك. ملاحظة: يجب ضبط "
+"التفضيل PatronSelfRegistrationDefaultCategory  إلى رمز فئة مستفيد صحيح"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
@@ -5409,7 +5412,7 @@ msgstr "[% local_currency %]."
 
 # Patrons > General
 msgid "patrons.pref#MembershipExpiryDaysNotice# Send an account expiration notice when a patron's card will expire in"
-msgstr ""
+msgstr "إرسال إخطار بانتهاء لحساب عند قرب انتهاء بطاقة المستفيد"
 
 # Patrons > General
 msgid "patrons.pref#MembershipExpiryDaysNotice# days."
@@ -5708,12 +5711,15 @@ msgid "searching.pref#IntranetNumbersPreferPhrase# use"
 msgstr "استخدام"
 
 # Searching > Results Display
-msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>If a record has more than this number of items, they availability statuses may be incorrect in the search results, but will be correct in the record details."
-msgstr "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/ ، اذا وصل عددالمواد في العنوان الى أكثر من هذا الرقم ، عندها قد تكون حالات الاتاحة في نتائج البحث غير صحيحة ، ولكنها صحيحة في تفاصيل تسجيلة العنوان."
+msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Availability statuses may show incorrectly in search results if a record has more items than the limit set. Statuses will display correctly in the record details."
+msgstr ""
+"<br/>قد تظهر حالات الإتاحة بشكل غير صحيح في نتائج البحث إذا كان في التسجيلة "
+"عدد من المواد أكثر من الحد الأقصى. الحالات ستعرض بشكل صحيح في تفاصيل "
+"التسجيلة."
 
 # Searching > Results Display
-msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty for no limit on the number of items for which to check the status."
-msgstr "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/> أترك هذه الخانة فارغةفي حال لا حدود في عدد المواد التي ترغب معرفة حالتها."
+msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty for no limit."
+msgstr "<br/> اترك خاليا لكي لا يكون هناك حد"
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# For records with many items, only check the availability status for the first"
@@ -6395,9 +6401,9 @@ msgstr "للموظفين بعرض التسجيلات بشكل مارك بسيط 
 msgid "tools.pref"
 msgstr "tools.pref"
 
-# Tools > Batch item modification
-msgid "tools.pref Batch item modification"
-msgstr "تعديل دفعة المواد"
+# Tools > Batch item
+msgid "tools.pref Batch item"
+msgstr "دفعة المواد"
 
 # Tools > News
 msgid "tools.pref News"
@@ -6415,13 +6421,21 @@ msgstr "تحديد عدد صور المنشئ المخزنة في قاعدة ا�
 msgid "tools.pref#ImageLimit# images."
 msgstr "صور."
 
-# Tools > Batch item modification
-msgid "tools.pref#MaxItemsForBatch# Process up to"
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToDisplayForBatchDel# Display up to"
+msgstr "اعرض حتى"
+
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToDisplayForBatchDel# items in a single item deletion batch."
+msgstr "المواد في دفعة حذف واحدة للمواد"
+
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToProcessForBatchMod# Process up to"
 msgstr "معالجة حتى"
 
-# Tools > Batch item modification
-msgid "tools.pref#MaxItemsForBatch# items in a single modification or deletion batch."
-msgstr "المواد بتعديل واحد أو حذف الدفعة"
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToProcessForBatchMod# items in a single item modification batch."
+msgstr "المواد في دفعة تعديل واحدة للمواد"
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# Both OPAC and staff client"
@@ -6473,7 +6487,7 @@ msgstr " تفعيل"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI# ILS-DI services for OPAC users (available at: /cgi-bin/koha/ilsdi.pl)"
-msgstr ""
+msgstr "خدمات ILS-DI لمستخدمي الأوباك (متاح في: /cgi-bin/koha/ilsdi.pl)"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI:AuthorizedIPs# Allow IP addresses"
@@ -6578,4 +6592,3 @@ msgstr "الإعادة فقط"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "صفوف التقارير قد طلبت عبر خدمة تقارير ويب."
-

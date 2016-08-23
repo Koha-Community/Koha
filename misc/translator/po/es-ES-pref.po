@@ -2,9 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14 staff\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2016-06-21 15:01+0000\n"
+"PO-Revision-Date: 2016-08-19 14:57+0000\n"
 "Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
-"Language-Team: Koha Translation Team <koha-translate@lists.koha-community.org>\n"
+"Language-Team: Koha Translation Team <koha-translate@lists.koha-"
+"community.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1466521304.000000\n"
+"X-POOTLE-MTIME: 1471618639.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -4876,8 +4877,11 @@ msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "No permitir"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr "a usuarios el registrar o modificar sus cuentas a través del OPAC."
+msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC. Note: This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
+msgstr ""
+"que los usuarios de biblioteca registres o modifiquen su cuenta a través del "
+"OPAC. Nota: Esto necesita que PatronSelfRegistrationDefaultCategory este "
+"configurado con un código de categoría de usuario válido."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
@@ -5708,16 +5712,22 @@ msgid "searching.pref#IntranetNumbersPreferPhrase# use"
 msgstr "utilizar"
 
 # Searching > Results Display
-msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>If a record has more than this number of items, they availability statuses may be incorrect in the search results, but will be correct in the record details."
-msgstr "<br/>Si un registro tiene más que este número de ítems, el estado de disponibilidad puede ser incorrecto en los resultados de búsquedas, pero será correcto en los detalles del registro."
+msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Availability statuses may show incorrectly in search results if a record has more items than the limit set. Statuses will display correctly in the record details."
+msgstr ""
+"<br/>Los estados de disponibilidad pueden mostrarse de forma incorrecta en "
+"los resultados de búsqueda si un registro tiene más ítems que el límite "
+"establecido. Los estados se mostrarán correctamente en los detalles del "
+"registro."
 
 # Searching > Results Display
-msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty for no limit on the number of items for which to check the status."
-msgstr "<br/>Deje vacío para no limitar el número de ítems para el cual verificar el estado."
+msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty for no limit."
+msgstr " <br/>Deje en blanco para no establecer límite."
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# For records with many items, only check the availability status for the first"
-msgstr "Para registros con mucho ítems, solamente verificar el estado de disponibilidad para el primero"
+msgstr ""
+"Para registros con mucho ítems, solamente verificar el estado de "
+"disponibilidad para los primeros"
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# items."
@@ -6395,9 +6405,9 @@ msgstr "al personal ver registros MARC sin formato en la interfaz administrativa
 msgid "tools.pref"
 msgstr "tools.pref"
 
-# Tools > Batch item modification
-msgid "tools.pref Batch item modification"
-msgstr "Modificación de ítems en lote"
+# Tools > Batch item
+msgid "tools.pref Batch item"
+msgstr "Ítems en lote"
 
 # Tools > News
 msgid "tools.pref News"
@@ -6415,13 +6425,21 @@ msgstr "Limite el número del creador de imágenes almacenadas en la base de dat
 msgid "tools.pref#ImageLimit# images."
 msgstr "imágenes."
 
-# Tools > Batch item modification
-msgid "tools.pref#MaxItemsForBatch# Process up to"
-msgstr "Procesar hasta"
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToDisplayForBatchDel# Display up to"
+msgstr "Muestre hasta"
 
-# Tools > Batch item modification
-msgid "tools.pref#MaxItemsForBatch# items in a single modification or deletion batch."
-msgstr "ítems en una sola modificación o supresión por lotes."
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToDisplayForBatchDel# items in a single item deletion batch."
+msgstr "ítems para un proceso de borrado de ítems en lote."
+
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToProcessForBatchMod# Process up to"
+msgstr "Procese hasta"
+
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToProcessForBatchMod# items in a single item modification batch."
+msgstr "ítems en un proceso de modificación de ítems en lote."
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# Both OPAC and staff client"
@@ -6578,4 +6596,3 @@ msgstr "Solo devolver"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "filas del informe solicitado a través del servicio web de informes."
-
