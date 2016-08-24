@@ -501,7 +501,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('template','prog','','Define the preferred staff interface template','Themes'),
 ('ThingISBN','0','','Use with FRBRizeEditions. If ON, Koha will use the ThingISBN web service in the Editions tab on the detail pages.','YesNo'),
 ('TimeFormat','24hr','12hr|24hr','Defines the global time format for visual output.','Choice'),
-('timeout','12000000',NULL,'Inactivity timeout for cookies authentication (in seconds)','Integer'),
+('timeout','1d',NULL,'Inactivity timeout for cookies authentication','Free'),
 ('todaysIssuesDefaultSortOrder','desc','asc|desc','Specify the sort order of Todays Issues on the circulation page','Choice'),
 ('TraceCompleteSubfields','0','0','Force subject tracings to only match complete subfields.','YesNo'),
 ('TraceSubjectSubdivisions','0','1','Create searches on all subdivisions for subject tracings.','YesNo'),
