@@ -46,14 +46,18 @@ unless ($authenticated) {
     exit 0;
 }
 
-my $frameworkcode = $input->param('frameworkcode') || '';
+my $frameworkcode = $input->param('frameworkcode') || 'default';
 my $action = $input->param('action') || 'export';
 
 ## Exporting
 if ($action eq 'export' && $input->request_method() eq 'GET') {
     my $strXml = '';
     my $format = $input->param('type_export_' . $frameworkcode);
-    ExportFramework($frameworkcode, \$strXml, $format);
+    if ($frameworkcode == 'default') {
+        ExportFramework('', \$strXml, $format);
+    } else {
+        ExportFramework($frameworkcode, \$strXml, $format);
+    }
 
     if ($format eq 'csv') {
         # CSV file
