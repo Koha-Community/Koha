@@ -258,9 +258,10 @@ subtest 'add_enrolment_fee_if_needed' => sub {
     my $enrolmentfee_J  = 10;
     my $enrolmentfee_YA = 20;
 
-    $builder->build( { source => 'Category', value => { categorycode => 'K',  enrolmentfee => $enrolmentfee_K } } );
-    $builder->build( { source => 'Category', value => { categorycode => 'J',  enrolmentfee => $enrolmentfee_J } } );
-    $builder->build( { source => 'Category', value => { categorycode => 'YA', enrolmentfee => $enrolmentfee_YA } } );
+    my $dbh = C4::Context->dbh;
+    $dbh->do(q|UPDATE categories set enrolmentfee=? where categorycode=?|, undef, $enrolmentfee_K, 'K');
+    $dbh->do(q|UPDATE categories set enrolmentfee=? where categorycode=?|, undef, $enrolmentfee_J, 'J');
+    $dbh->do(q|UPDATE categories set enrolmentfee=? where categorycode=?|, undef, $enrolmentfee_YA, 'YA');
 
     my %borrower_data = (
         firstname    => 'my firstname',
