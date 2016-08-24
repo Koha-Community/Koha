@@ -20,8 +20,26 @@
         $(".delete_news").on("click", function(){
             return confirmDelete( _("Are you sure you want to delete this news item? This cannot be undone.") );
         });
+
+        function Checkbox(){
+            var form = document.getElementById('del_form');
+            var inputs = form.getElementsByTagName('input');
+            var checked = false;
+            for (var i=0; i<inputs.length; i++) {
+                if (inputs[i].type == 'checkbox' && inputs[i].name == 'ids') {
+                    checked = inputs[i].checked;
+                    if (checked) return true;
+                }
+            }
+        }
+
         $("#del_form").on("submit",function(){
-            return confirmDelete( _("Are you sure you want to delete the selected news?") );
+            if ( Checkbox() ) {
+                return confirmDelete( _("Are you sure you want to delete the selected news?") );
+            } else {
+                alert(_("Please select a news item to delete."));
+                return false;
+            }
         });
     });
     //]]>
