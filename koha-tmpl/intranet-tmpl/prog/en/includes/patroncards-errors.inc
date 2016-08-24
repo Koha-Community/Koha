@@ -24,7 +24,7 @@
         [% ELSIF ( error == 203 ) %]
         A non-existent or invalid library code was supplied. Please <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">verify</a> that you have a library selected.
         [% ELSIF ( error == 301 ) %]
-        An error has occurred while attempting to upload the image file. Please ask you system administrator to check the error log for more details.
+        An error has occurred while attempting to upload the image file. Please ask your system administrator to check the error log for more details.
         [% ELSIF ( error == 302 ) %]
         Image exceeds 500KB. Please resize and import again.
         [% ELSIF ( error == 303 ) %]
