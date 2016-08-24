@@ -72,6 +72,7 @@ ON     message_attributes.message_attribute_id = borrower_message_preferences.me
 LEFT JOIN message_transports
 ON     message_transports.message_attribute_id = message_attributes.message_attribute_id
 AND    message_transports.message_transport_type = borrower_message_transport_preferences.message_transport_type
+AND    message_transports.is_digest = borrower_message_preferences.wants_digest
 WHERE  message_attributes.message_name = ?
 END_SQL
 
