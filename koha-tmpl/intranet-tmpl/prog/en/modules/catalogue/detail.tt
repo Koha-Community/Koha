@@ -538,7 +538,7 @@ function verify_images() {
             </li>
         [% END %]
         <!--This grabs all of the lists a bib record appears in -->
-        [% IF shelves %]
+        [% IF shelves.count %]
             <li><strong>Lists that include this title: </strong>
             <ul>
             [% FOREACH s IN shelves %]
