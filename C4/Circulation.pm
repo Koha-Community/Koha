@@ -2779,12 +2779,12 @@ sub CanBookBeRenewed {
             # by pushing all the elements onto an array and removing the duplicates.
             my @reservable;
             foreach my $b (@borrowernumbers) {
-                my ($borr) = C4::Members::GetMemberDetails($b);
+                my ($borr) = C4::Members::GetMember( borrowernumber => $b);
                 foreach my $i (@itemnumbers) {
                     my $item = GetItem($i);
-                    if (   IsAvailableForItemLevelRequest( $item, $borr )
-                        && CanItemBeReserved( $b, $i )
-                        && !IsItemOnHoldAndFound($i) )
+                    if (  !IsItemOnHoldAndFound($i)
+                        && IsAvailableForItemLevelRequest( $item, $borr )
+                        && CanItemBeReserved( $b, $i ) )
                     {
                         push( @reservable, $i );
                     }
