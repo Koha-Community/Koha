@@ -599,7 +599,7 @@ sub TooMany {
 
 =head2 CanBookBeIssued
 
-  ( $issuingimpossible, $needsconfirmation ) =  CanBookBeIssued( $borrower, 
+  ( $issuingimpossible, $needsconfirmation, [ $alerts ] ) =  CanBookBeIssued( $borrower,
                       $barcode, $duedate, $inprocess, $ignore_reserves, $params );
 
 Check if a book can be issued.
@@ -695,6 +695,12 @@ sticky due date is invalid or due date in the past
 =head3 TOO_MANY
 
 if the borrower borrows to much things
+
+=head3 NB
+
+The assumption by users of the routine is that causes blocking
+the issue are keyed by uppercase labels and other returned
+data is keyed in lower case
 
 =cut
 

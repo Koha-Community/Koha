@@ -59,19 +59,17 @@ sub do_checkout {
 	$debug and warn "do_checkout: patron (" . $patron_barcode . ")";
 	my $borrower = $self->{patron}->getmemberdetails_object();
 	$debug and warn "do_checkout borrower: . " . Dumper $borrower;
-	my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued(
-        $borrower,
-        $barcode,
-        undef,
-        0,
+    my ($issuingimpossible, $needsconfirmation) = _can_we_issue($borrower, $barcode,
         C4::Context->preference("AllowItemsOnHoldCheckout")
     );
-	my $noerror=1;
-    if (scalar keys %$issuingimpossible) {
-        foreach (keys %$issuingimpossible) {
+
+    my $noerror=1;  # If set to zero we block the issue
+    if (keys %{$issuingimpossible}) {
+        foreach (keys %{$issuingimpossible}) {
             # do something here so we pass these errors
-            $self->screen_msg($_ . ': ' . $issuingimpossible->{$_});
+            $self->screen_msg("Issue failed : $_");
             $noerror = 0;
+            last;
         }
     } else {
         foreach my $confirmation (keys %{$needsconfirmation}) {
@@ -84,7 +82,7 @@ sub do_checkout {
                     $self->screen_msg("Item was reserved for you.");
                 } else {
                     $self->screen_msg("Item is reserved for another patron upon return.");
-                    # $noerror = 0;
+                    $noerror = 0;
                 }
                 last;
             } elsif ($confirmation eq 'ISSUED_TO_ANOTHER') {
@@ -102,12 +100,15 @@ sub do_checkout {
             } elsif ($confirmation eq 'RENTALCHARGE') {
                 if ($self->{fee_ack} ne 'Y') {
                     $noerror = 0;
+                    last;
                 }
                 last;
             } else {
-                $self->screen_msg($needsconfirmation->{$confirmation});
+                # We've been returned a case other than those above
+                $self->screen_msg("Item cannot be issued: $confirmation");
                 $noerror = 0;
                 $logger->debug("Blocking checkout Reason:$confirmation");
+                last;
             }
         }
     }
@@ -143,6 +144,23 @@ sub do_checkout {
 
 	$self->ok(1);
 	return $self;
+}
+
+sub _can_we_issue {
+    my ( $borrower, $barcode, $pref ) = @_;
+
+    my ( $issuingimpossible, $needsconfirmation, $alerts ) =
+      CanBookBeIssued( $borrower, $barcode, undef, 0, $pref );
+    for my $href ( $issuingimpossible, $needsconfirmation ) {
+
+        # some data is returned using lc keys we only
+        foreach my $key ( keys %{$href} ) {
+            if ( $key =~ m/[^A-Z_]/ ) {
+                delete $href->{$key};
+            }
+        }
+    }
+    return ( $issuingimpossible, $needsconfirmation );
 }
 
 1;
