@@ -58,16 +58,44 @@ if ( ! $result || $show_help ) {
 
 my $dbh = C4::Context->dbh;
 
-my $count_sth = $dbh->prepare( 'SELECT COUNT(biblionumber) FROM biblio CROSS JOIN biblioitems USING (biblionumber) WHERE ExtractValue(marcxml,\'//datafield[@tag="440"]/subfield[@code="a"]\') OR ExtractValue(marcxml,\'//datafield[@tag="440"]/subfield[@code="v"]\') OR ExtractValue(marcxml,\'//datafield[@tag="440"]/subfield[@code="n"]\') OR ExtractValue(marcxml,\'//datafield[@tag="490"]/subfield[@code="a"]\') OR ExtractValue(marcxml,\'//datafield[@tag="490"]/subfield[@code="v"]\')' );
+my $count_sth = $dbh->prepare(
+    q|
+    SELECT COUNT(biblionumber)
+    FROM biblio_metadata
+    WHERE format='marcxml'
+        AND marcflavour=?
+        AND (
+            ExtractValue(metadata,'//datafield[@tag="440"]/subfield[@code="a"]')
+                OR ExtractValue(metadata,'//datafield[@tag="440"]/subfield[@code="v"]')
+                OR ExtractValue(metadata,'//datafield[@tag="440"]/subfield[@code="n"]')
+                OR ExtractValue(metadata,'//datafield[@tag="490"]/subfield[@code="a"]')
+                OR ExtractValue(metadata,'//datafield[@tag="490"]/subfield[@code="v"]')
+            )
+    |
+);
 
-my $bibs_sth = $dbh->prepare( 'SELECT biblionumber FROM biblio CROSS JOIN biblioitems USING (biblionumber) WHERE ExtractValue(marcxml,\'//datafield[@tag="440"]/subfield[@code="a"]\') OR ExtractValue(marcxml,\'//datafield[@tag="440"]/subfield[@code="v"]\') OR ExtractValue(marcxml,\'//datafield[@tag="440"]/subfield[@code="n"]\') OR ExtractValue(marcxml,\'//datafield[@tag="490"]/subfield[@code="a"]\') OR ExtractValue(marcxml,\'//datafield[@tag="490"]/subfield[@code="v"]\')' );
+my $bibs_sth = $dbh->prepare(
+    q|
+    SELECT biblionumber
+    FROM biblio_metadata
+    WHERE format='marcxml'
+        AND marcflavour=?
+        AND (
+            ExtractValue(metadata,'//datafield[@tag="440"]/subfield[@code="a"]')
+                OR ExtractValue(metadata,'//datafield[@tag="440"]/subfield[@code="v"]')
+                OR ExtractValue(metadata,'//datafield[@tag="440"]/subfield[@code="n"]')
+                OR ExtractValue(metadata,'//datafield[@tag="490"]/subfield[@code="a"]')
+                OR ExtractValue(metadata,'//datafield[@tag="490"]/subfield[@code="v"]')
+            )
+    |
+);
 
 unless ( $commit ) {
     print_usage();
 }
 
 print "Examining MARC records...\n";
-$count_sth->execute();
+$count_sth->execute( C4::Context->preference('marcflavour') );
 my ( $num_records ) = $count_sth->fetchrow;
 
 unless ( $commit ) {
@@ -105,7 +133,7 @@ my %fields = (
     },
     );
 
-$bibs_sth->execute();
+$bibs_sth->execute( C4::Context->preference('marcflavour') );
 while ( my ( $biblionumber ) = $bibs_sth->fetchrow ) {
     my $framework = GetFrameworkCode( $biblionumber ) || '';
     my ( @newfields );
