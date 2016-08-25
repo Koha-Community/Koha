@@ -69,8 +69,9 @@ This script has the following parameters :
 }
 
 my $schema = Koha::Database->new()->schema();
-my @biblioitems =
-  $schema->resultset('Biblioitem')->search( { marc => { LIKE => '_____d%' } } );
+my @biblioitems = # Should be replaced by a call to C4::Search on zebra index
+                  # Record-status when bug 15537 will be pushed
+  $schema->resultset('Biblioitem')->search( { marcxml => { LIKE => '<leader>_____d%' } } );
 
 my $total_records_count   = @biblioitems;
 my $deleted_records_count = 0;
