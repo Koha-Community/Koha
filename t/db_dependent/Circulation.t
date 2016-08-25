@@ -838,6 +838,10 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
     my $patron_1      = $builder->build( { source => 'Borrower' } );
     my $patron_2      = $builder->build( { source => 'Borrower' } );
 
+    # CanBookBeIssued needs its $borrower parameter to come from
+    # GetMemberDetails
+    $patron_2 = GetMemberDetails($patron_2->{borrowernumber});
+
     my $biblioitem = $builder->build( { source => 'Biblioitem' } );
     my $item = $builder->build(
         {   source => 'Item',
