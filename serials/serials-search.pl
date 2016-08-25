@@ -38,6 +38,7 @@ use C4::Serials;
 use Koha::AdditionalField;
 
 use Koha::DateUtils;
+use Koha::SharedContent;
 
 my $query         = new CGI;
 my $title         = $query->param('title_filter') || '';
@@ -52,6 +53,7 @@ my $location      = $query->param('location_filter') || '';
 my $expiration_date = $query->param('expiration_date_filter') || '';
 my $routing       = $query->param('routing') || C4::Context->preference("RoutingSerials");
 my $searched      = $query->param('searched') || 0;
+my $mana      = $query->param('mana') || 0;
 my @subscriptionids = $query->multi_param('subscriptionid');
 my $op            = $query->param('op');
 
@@ -95,7 +97,17 @@ for my $field ( @$additional_fields ) {
 my $expiration_date_dt = $expiration_date ? dt_from_string( $expiration_date ) : undef;
 my @subscriptions;
 if ($searched){
-    @subscriptions = SearchSubscriptions(
+    if ($mana) {
+        my $result = Koha::SharedContent::manaGetRequest("subscription",{
+            title        => $title,
+            issn         => $ISSN,
+            ean          => $EAN,
+            publisher    => $publisher
+        });
+        @subscriptions = @{ $result->{data} };
+    }
+    else {
+        @subscriptions = SearchSubscriptions(
         {
             biblionumber => $biblionumber,
             title        => $title,
@@ -108,46 +120,84 @@ if ($searched){
             additional_fields => [ map{ { name => $_, value => $additional_field_filters->{$_}{value}, authorised_value_category => $additional_field_filters->{$_}{authorised_value_category} } } keys %$additional_field_filters ],
             location     => $location,
             expiration_date => $expiration_date_dt,
-        }
+        });
+    }
+}
+
+if ($mana) {
+    $template->param(
+        subscriptions => \@subscriptions,
+        total         => scalar @subscriptions,
+        title_filter  => $title,
+        ISSN_filter   => $ISSN,
+        EAN_filter    => $EAN,
+        callnumber_filter => $callnumber,
+        publisher_filter => $publisher,
+        bookseller_filter  => $bookseller,
+        branch_filter => $branch,
+        location_filter => $location,
+        expiration_date_filter => $expiration_date_dt,
+        done_searched => $searched,
+        routing       => $routing,
+        additional_field_filters => $additional_field_filters,
+        additional_fields_for_subscription => $additional_fields,
+        marcflavour   => (uc(C4::Context->preference("marcflavour"))),
+        mana => $mana,
+        search_only => 1
     );
 }
-
-# to toggle between create or edit routing list options
-if ($routing) {
-    for my $subscription ( @subscriptions) {
-        $subscription->{routingedit} = check_routing( $subscription->{subscriptionid} );
+else
+{
+    # to toggle between create or edit routing list options
+    if ($routing) {
+        for my $subscription ( @subscriptions) {
+            $subscription->{routingedit} = check_routing( $subscription->{subscriptionid} );
+        }
     }
-}
 
-my (@openedsubscriptions, @closedsubscriptions);
-for my $sub ( @subscriptions ) {
-    unless ( $sub->{closed} ) {
-        push @openedsubscriptions, $sub
-            unless $sub->{cannotdisplay};
-    } else {
-        push @closedsubscriptions, $sub
-            unless $sub->{cannotdisplay};
+    my (@openedsubscriptions, @closedsubscriptions);
+    for my $sub ( @subscriptions ) {
+        unless ( $sub->{closed} ) {
+            push @openedsubscriptions, $sub
+                unless $sub->{cannotdisplay};
+        } else {
+            push @closedsubscriptions, $sub
+                unless $sub->{cannotdisplay};
+        }
     }
+
+    my @branches = Koha::Libraries->search( {}, { order_by => ['branchcode'] } );
+    my @branches_loop;
+    foreach my $b ( @branches ) {
+        my $selected = 0;
+        $selected = 1 if( defined $branch and $branch eq $b->branchcode );
+        push @branches_loop, {
+            branchcode  => $b->branchcode,
+            branchname  => $b->branchname,
+            selected    => $selected,
+        };
+    }
+
+    $template->param(
+        openedsubscriptions => \@openedsubscriptions,
+        closedsubscriptions => \@closedsubscriptions,
+        total         => @openedsubscriptions + @closedsubscriptions,
+        title_filter  => $title,
+        ISSN_filter   => $ISSN,
+        EAN_filter    => $EAN,
+        callnumber_filter => $callnumber,
+        publisher_filter => $publisher,
+        bookseller_filter  => $bookseller,
+        branch_filter => $branch,
+        location_filter => $location,
+        expiration_date_filter => $expiration_date_dt,
+        branches_loop => \@branches_loop,
+        done_searched => $searched,
+        routing       => $routing,
+        additional_field_filters => $additional_field_filters,
+        additional_fields_for_subscription => $additional_fields,
+        marcflavour   => (uc(C4::Context->preference("marcflavour"))),
+        mana => $mana
+    );
 }
-
-$template->param(
-    openedsubscriptions => \@openedsubscriptions,
-    closedsubscriptions => \@closedsubscriptions,
-    total         => @openedsubscriptions + @closedsubscriptions,
-    title_filter  => $title,
-    ISSN_filter   => $ISSN,
-    EAN_filter    => $EAN,
-    callnumber_filter => $callnumber,
-    publisher_filter => $publisher,
-    bookseller_filter  => $bookseller,
-    branch_filter => $branch,
-    location_filter => $location,
-    expiration_date_filter => $expiration_date_dt,
-    done_searched => $searched,
-    routing       => $routing,
-    additional_field_filters => $additional_field_filters,
-    additional_fields_for_subscription => $additional_fields,
-    marcflavour   => (uc(C4::Context->preference("marcflavour")))
-);
-
 output_html_with_http_headers $query, $cookie, $template->output;

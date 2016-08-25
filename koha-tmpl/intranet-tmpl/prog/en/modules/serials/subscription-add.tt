@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; [% IF ( modify ) %][% bibliotitle | html %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</title>
@@ -213,6 +214,9 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 
                 <div id="page_2">
                     <div class="col-md-6">
+                        <div id="mana_search" class="dialog message">
+                            <p>Frequency and Numbering pattern have been already proposed for this subscription on Mana. To show results, click <a style="cursor:pointer" data-toggle="modal" data-target="#mana_search_result">Here</a></p>
+                        </div>
                         <div id="subscription_form_planning">
                             <fieldset class="rows">
                                 <legend>Serials planning</legend>
@@ -477,10 +481,16 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                               </div>
                             [% END %]
 
+                            <input type="hidden" id="mana_id"  name="mana_id" value=""/>
+                            <input type="hidden" id="sndescription"  name="sndescription" value=""/>
+                            <input type="hidden" id="sfdescription"  name="sfdescription" value=""/>
+                            <input type="hidden" id="unit"  name="unit" value=""/>
+                            <input type="hidden" id="unitsperissue"  name="unitsperissue" value=""/>
+                            <input type="hidden" id="issuesperunit"  name="issuesperunit" value=""/>
                             <fieldset class="action">
                                 <input type="button" id="subscription_add_previous" value="&lt;&lt; Previous" style="float:left;"/>
                                 <input id="testpatternbutton" type="button" value="Test prediction pattern" />
-                                <input type="submit" value="Save subscription" style="float:right;" accesskey="w" />
+                                <input type="submit" onclick="removeDisabledAttr()" value="Save subscription" style="float:right;" accesskey="w"/>
                             </fieldset>
                         </div>
                     </div>
@@ -489,6 +499,20 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                     </div>
                 </div>
             </form>
+        </div>
+        <div id="mana_search_result" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label" style="width: 90%; left:5%; margin-left: auto; display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="mana_search_result_label"></h3>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
 [% MACRO jsinclude BLOCK %]

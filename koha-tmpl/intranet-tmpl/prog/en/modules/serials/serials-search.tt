@@ -4,6 +4,7 @@
 [% USE Branches %]
 [% USE CGI %]
 [% USE KohaDates %]
+[% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials [% biblionumber | html %]</title>
@@ -275,6 +276,7 @@
                 [% END %]
               </ol>
               <input type="hidden" name="searched" value="1" />
+              [% IF ( mana ) %]<input type="hidden" name="mana" value="1" />[% END %]
               <fieldset class="action">
                 <input type="submit" value="Search" />
               </fieldset>
@@ -286,9 +288,18 @@
         [% IF ( total ) %]
           <div id="serialstabs" class="toptabs" style="clear:both;">
             <ul class="ui-tabs-nav">
-              <li><a href="#opened">Open ([% openedsubscriptions.size || 0 | html %])</a></li>
-              <li><a href="#closed">Closed ([% closedsubscriptions.size || 0 | html %])</a></li>
+              [% IF mana %]
+                <li><a href="#mana">Mana ([% total || 0 | html %])</a></li>
+              [% ELSE %]
+                <li><a href="#opened">Open ([% openedsubscriptions.size || 0 | html %])</a></li>
+                <li><a href="#closed">Closed ([% closedsubscriptions.size || 0 | html %])</a></li>
+              [% END %]
             </ul>
+            [% IF mana %]
+                <div id="mana">
+                    [% INCLUDE 'mana-subscription-search-result.inc' %]
+                </div>
+            [% ELSE %]
             <div id="opened">
               [% IF openedsubscriptions %]
                   [% INCLUDE subscriptions_table subscriptions = openedsubscriptions %]
@@ -307,6 +318,7 @@
                 </div>
               [% END %]
             </div>
+            [% END %]
           </div>
         [% ELSE %]
             <div class="dialog message">
@@ -323,6 +335,7 @@
 
     [% INCLUDE 'serials-menu.inc' %]
     [% IF ( done_searched ) %]
+    [% UNLESS ( mana ) %]
     <div id="advsearch">
         <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
           <fieldset class="brief">
@@ -395,15 +408,15 @@
               <fieldset class="action">
                 <input type="submit" value="Search" />
               </fieldset>
+
             </div>
           </fieldset>
         </form>
       [% END %]
-
+      [% END %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
-
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
@@ -461,8 +474,18 @@
                 ]
             }));
 
+            var manarlt = $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sPaginationType": "four_button",
+                "aoColumnDefs": [
+                    { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] },
+                    { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
+                ]
+            }));
+
             osrlt.fnAddFilters("dt-filter", 750);
             csrlt.fnAddFilters("dt-filter", 750);
+            manarlt.fnAddFilters("dt-filter", 750);
 
             $('#serialstabs').tabs();
             $("#reopensub").click(function(){
@@ -484,6 +507,17 @@
                 itemSelectionBuildActionLinks(div);
             });
 
+            [% IF ( mana ) %]
+                $("label[for=callnumber], input#callnumber").hide();
+                $("label[for=bookseller], input#bookseller").hide();
+                $("label[for=branch], select#branch").hide();
+                $("label[for=to], input#to").hide();
+                $(".ui-datepicker-trigger").hide();
+                $("label[for=location], select#location_filter").hide();
+                [% FOR field IN additional_fields_for_subscription %]
+                      $("label[for=additional_field_[% field.id %]], input#additional_field_[% field.id %]").hide();
+                [% END %]
+            [% END %]
         });
     </script>
 [% END %]

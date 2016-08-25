@@ -44,16 +44,16 @@ my $subscription = {
 };
 my $publisheddate = $subscription->{firstacquidate};
 
-my $seq = _next_seq($subscription, $pattern, $publisheddate);
+my $seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: 2');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: 4');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: 2');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: 3');
 
 # TEST CASE 2 - 1 variable, use 'dayname' numbering, from 1 to 7
@@ -80,19 +80,19 @@ $pattern = {
 
 $publisheddate = $subscription->{firstacquidate};
 
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: Tuesday');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: Friday');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: Sunday');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: Monday');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: Tuesday');
 
 # TEST CASE 3 - 1 variable, use 'monthname' numbering, from 0 to 11 by step of 2
@@ -119,19 +119,19 @@ $pattern = {
 
 $publisheddate = $subscription->{firstacquidate};
 
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: March');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: September');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: January');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: March');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: May');
 
 # TEST CASE 4 - 1 variable, use 'season' numbering, from 0 to 3
@@ -158,19 +158,19 @@ $pattern = {
 
 $publisheddate = $subscription->{firstacquidate};
 
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: Summer');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: Spring');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: Fall');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: Winter');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'X: Spring');
 
 # TEST CASE 5 - 2 variables, from 1 to 12, and from 1 to 4
@@ -197,19 +197,19 @@ $pattern = {
 
 $publisheddate = $subscription->{firstacquidate};
 
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Y: 1, X: 2');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Y: 2, X: 1');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Y: 2, X: 3');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Y: 2, X: 4');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Y: 3, X: 1');
 
 # TEST CASE 6 - 3 variables, from 1 to 12, from 1 to 8, and from 1 to 4
@@ -236,41 +236,41 @@ $pattern = {
 
 $publisheddate = $subscription->{firstacquidate};
 
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Z: 1, Y: 1, X: 2');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Z: 1, Y: 2, X: 1');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Z: 1, Y: 2, X: 3');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Z: 1, Y: 2, X: 4');
 for (1..100) {
-    $publisheddate = GetNextDate($subscription, $publisheddate);
-    $seq = _next_seq($subscription, $pattern, $publisheddate);
+    $publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+    $seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 }
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Z: 4, Y: 4, X: 1');
 # 110th is here
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Z: 4, Y: 4, X: 3');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Z: 4, Y: 4, X: 4');
-$publisheddate = GetNextDate($subscription, $publisheddate);
-$seq = _next_seq($subscription, $pattern, $publisheddate);
+$publisheddate = GetNextDate($subscription, $publisheddate, $frequency);
+$seq = _next_seq($subscription, $pattern, $frequency, $publisheddate);
 is($seq, 'Z: 4, Y: 5, X: 1');
 
 sub _next_seq {
-    my ($subscription, $pattern, $publisheddate) = @_;
+    my ($subscription, $pattern, $frequency, $publisheddate) = @_;
     my $seq;
     ($seq, $subscription->{lastvalue1}, $subscription->{lastvalue2},
         $subscription->{lastvalue3}, $subscription->{innerloop1},
         $subscription->{innerloop2}, $subscription->{innerloop3}) =
-            GetNextSeq($subscription, $pattern, $publisheddate);
+            GetNextSeq($subscription, $pattern, $frequency, $publisheddate);
     return $seq;
 }

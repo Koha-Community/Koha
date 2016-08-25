@@ -829,19 +829,20 @@ sub GetPreviousSerialid {
     my (
         $nextseq,       $newlastvalue1, $newlastvalue2, $newlastvalue3,
         $newinnerloop1, $newinnerloop2, $newinnerloop3
-    ) = GetNextSeq( $subscription, $pattern, $planneddate );
+    ) = GetNextSeq( $subscription, $pattern, $frequency, $planneddate );
 
 $subscription is a hashref containing all the attributes of the table
 'subscription'.
 $pattern is a hashref containing all the attributes of the table
 'subscription_numberpatterns'.
+$frequency is a hashref containing all the attributes of the table 'subscription_frequencies'
 $planneddate is a date string in iso format.
 This function get the next issue for the subscription given on input arg
 
 =cut
 
 sub GetNextSeq {
-    my ($subscription, $pattern, $planneddate) = @_;
+    my ($subscription, $pattern, $frequency, $planneddate) = @_;
 
     return unless ($subscription and $pattern);
 
@@ -854,7 +855,7 @@ sub GetNextSeq {
         if(@irreg > 0) {
             my $irregularities = {};
             $irregularities->{$_} = 1 foreach(@irreg);
-            my $issueno = GetFictiveIssueNumber($subscription, $planneddate) + 1;
+            my $issueno = GetFictiveIssueNumber($subscription, $planneddate, $frequency) + 1;
             while($irregularities->{$issueno}) {
                 $count++;
                 $issueno++;
@@ -997,7 +998,7 @@ sub GetExpirationDate {
 
             #calculate the date of the last issue.
             for ( my $i = 1 ; $i <= $length ; $i++ ) {
-                $enddate = GetNextDate( $subscription, $enddate );
+                $enddate = GetNextDate( $subscription, $enddate, $frequency );
             }
         } elsif ( $subscription->{monthlength} ) {
             if ( $$subscription{startdate} ) {
@@ -1149,16 +1150,17 @@ sub ModSerialStatus {
     if ( !$otherIssueExpected && $oldstatus == EXPECTED && $status != EXPECTED ) {
         my $subscription = GetSubscription($subscriptionid);
         my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscription->{numberpattern});
+        my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subscription->{periodicity});
 
         # next issue number
         my (
             $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
             $newinnerloop1, $newinnerloop2, $newinnerloop3
           )
-          = GetNextSeq( $subscription, $pattern, $publisheddate );
+          = GetNextSeq( $subscription, $pattern, $frequency, $publisheddate );
 
         # next date (calculated from actual date & frequency parameters)
-        my $nextpublisheddate = GetNextDate($subscription, $publisheddate, 1);
+        my $nextpublisheddate = GetNextDate($subscription, $publisheddate, $frequency, 1);
         my $nextpubdate = $nextpublisheddate;
         $query = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
                     WHERE  subscriptionid = ?";
@@ -1367,7 +1369,7 @@ sub NewSubscription {
     $innerloop3, $status, $notes, $letter, $firstacquidate, $irregularity,
     $numberpattern, $locale, $callnumber, $manualhistory, $internalnotes,
     $serialsadditems, $staffdisplaycount, $opacdisplaycount, $graceperiod,
-    $location, $enddate, $skip_serialseq, $itemtype, $previousitemtype
+    $location, $enddate, $skip_serialseq, $itemtype, $previousitemtype, $mana_id
     ) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -1381,8 +1383,8 @@ sub NewSubscription {
             irregularity, numberpattern, locale, callnumber,
             manualhistory, internalnotes, serialsadditems, staffdisplaycount,
             opacdisplaycount, graceperiod, location, enddate, skip_serialseq,
-            itemtype, previousitemtype)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            itemtype, previousitemtype, mana_id)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?)
         |;
     my $sth = $dbh->prepare($query);
     $sth->execute(
@@ -1393,7 +1395,7 @@ sub NewSubscription {
         $firstacquidate, $irregularity, $numberpattern, $locale, $callnumber,
         $manualhistory, $internalnotes, $serialsadditems, $staffdisplaycount,
         $opacdisplaycount, $graceperiod, $location, $enddate, $skip_serialseq,
-        $itemtype, $previousitemtype
+        $itemtype, $previousitemtype, $mana_id
     );
 
     my $subscriptionid = $dbh->{'mysql_insertid'};
@@ -2107,7 +2109,7 @@ sub abouttoexpire {
         my $expirationdate = GetExpirationDate($subscriptionid);
 
         my ($res) = $dbh->selectrow_array('select max(planneddate) from serial where subscriptionid = ?', undef, $subscriptionid);
-        my $nextdate = GetNextDate($subscription, $res);
+        my $nextdate = GetNextDate($subscription, $res, $frequency);
 
         # only compare dates if both dates exist.
         if ($nextdate and $expirationdate) {
@@ -2128,7 +2130,7 @@ sub abouttoexpire {
 
 =head2 GetFictiveIssueNumber
 
-$issueno = GetFictiveIssueNumber($subscription, $publishedate);
+$issueno = GetFictiveIssueNumber($subscription, $publishedate, $frequency);
 
 Get the position of the issue published at $publisheddate, considering the
 first issue (at firstacquidate) is at position 1, the next is at position 2, etc...
@@ -2147,9 +2149,8 @@ date (in GetNextDate) or the next issue number (in GetNextSeq).
 =cut
 
 sub GetFictiveIssueNumber {
-    my ($subscription, $publisheddate) = @_;
+    my ($subscription, $publisheddate, $frequency) = @_;
 
-    my $frequency = GetSubscriptionFrequency($subscription->{'periodicity'});
     my $unit = $frequency->{unit} ? lc $frequency->{'unit'} : undef;
     return if !$unit;
     my $issueno;
@@ -2293,12 +2294,13 @@ sub _get_next_date_year {
 
 =head2 GetNextDate
 
-$resultdate = GetNextDate($publisheddate,$subscription)
+$resultdate = GetNextDate($publisheddate,$subscription,$freqdata,$updatecount)
 
 this function it takes the publisheddate and will return the next issue's date
 and will skip dates if there exists an irregularity.
 $publisheddate has to be an ISO date
-$subscription is a hashref containing at least 'periodicity', 'firstacquidate', 'irregularity', and 'countissuesperunit'
+$subscription is a hashref containing at least 'firstacquidate', 'irregularity', and 'countissuesperunit'
+$frequency is a hashref containing frequency informations
 $updatecount is a boolean value which, when set to true, update the 'countissuesperunit' in database
 - eg if periodicity is monthly and $publisheddate is 2007-02-10 but if March and April is to be
 skipped then the returned date will be 2007-05-10
@@ -2311,11 +2313,10 @@ Return undef if subscription is irregular
 =cut
 
 sub GetNextDate {
-    my ( $subscription, $publisheddate, $updatecount ) = @_;
+    my ( $subscription, $publisheddate, $freqdata, $updatecount ) = @_;
 
     return unless $subscription and $publisheddate;
 
-    my $freqdata = GetSubscriptionFrequency($subscription->{'periodicity'});
 
     if ($freqdata->{'unit'}) {
         my ( $year, $month, $day ) = split /-/, $publisheddate;
@@ -2335,7 +2336,7 @@ sub GetNextDate {
 
         # Get the 'fictive' next issue number
         # It is used to check if next issue is an irregular issue.
-        my $issueno = GetFictiveIssueNumber($subscription, $publisheddate) + 1;
+        my $issueno = GetFictiveIssueNumber($subscription, $publisheddate, $freqdata) + 1;
 
         # Then get the next date
         my $unit = lc $freqdata->{'unit'};

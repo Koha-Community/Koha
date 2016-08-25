@@ -283,7 +283,8 @@ my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscrip
 ( $total_issues, @serials ) = C4::Serials::GetSerials( $subscriptionid );
 my $publisheddate = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 ( $total_issues, @serials ) = C4::Serials::GetSerials( $subscriptionid );
-my $nextpublisheddate = C4::Serials::GetNextDate($subscription, $publisheddate, 1);
+my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subscription->{periodicity});
+my $nextpublisheddate = C4::Serials::GetNextDate($subscription, $publisheddate, $frequency, 1);
 my @statuses = qw( 2 2 3 3 3 3 3 4 4 41 42 43 44 5 );
 # Add 14 serials
 my $counter = 0;

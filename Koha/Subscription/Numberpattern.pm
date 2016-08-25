@@ -1,5 +1,7 @@
-package Koha::Subscription::Frequencies;
+package Koha::Subscription::Numberpattern;
 
+# Copyright 2016 BibLibre Morgane Alonso
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -16,18 +18,12 @@ package Koha::Subscription::Frequencies;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
-
-use Carp;
-
 use Koha::Database;
-
-use Koha::Subscription::Frequency;
-
-use base qw(Koha::Objects);
+use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Subscription::Frequencies - Koha Subscription Frequency Object set class
+Koha::SubscriptionNumberpattern - Koha SubscriptionNumberpattern Object class
 
 =head1 API
 
@@ -40,15 +36,13 @@ Koha::Subscription::Frequencies - Koha Subscription Frequency Object set class
 =cut
 
 sub _type {
-    return 'SubscriptionFrequency';
+    return 'SubscriptionNumberpattern';
 }
 
-=head3 object_class
+=head1 AUTHOR
+
+Morgane Alonso <morgane.alonso@biblibre.com>
 
 =cut
-
-sub object_class {
-    return 'Koha::Subscription::Frequency';
-}
 
 1;

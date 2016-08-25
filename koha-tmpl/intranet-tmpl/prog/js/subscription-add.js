@@ -2,6 +2,9 @@
 
 var globalnumpatterndata;
 var globalfreqdata;
+var mananumpatterndata;
+var manafreqdata;
+var manaid;
 var advancedpatternlocked;
 var patternneedtobetested = 0;
 if ( irregularity !== "" ){
@@ -85,31 +88,57 @@ function Check_page2(){
 }
 
 function frequencyload(){
-    $.getJSON("subscription-frequency.pl",{"frequency_id":document.f.frequency.value,ajax:'true'},
-        function(freqdata){
-            globalfreqdata=freqdata;
-            if ( globalfreqdata.unit && globalfreqdata.unit.length == 0 ) {
-                var option = $("#subtype option[value='issues']");
-                $(option).attr('selected', 'selected');
-                $("#subtype option[value!='issues']").prop('disabled', true)
-            } else {
-                $("#subtype option").prop('disabled', false)
-            }
+    if ($("#frequency option:selected").val() === "mana"){
+        globalfreqdata=manafreqdata;
+        $("input[name='sfdescription']").val(manafreqdata.description);
+        $("input[name='unit']").val(manafreqdata.unit);
+        $("input[name='unitsperissue']").val(manafreqdata.unitsperissue);
+        $("input[name='issuesperunit']").val(manafreqdata.issuesperunit);
+        if ($( "#numberpattern option:selected" ).val() === "mana" ) {
+            $("input[name='mana_id']").val(manaid);
         }
-    )
+    } else {
+        $.getJSON("subscription-frequency.pl",{"frequency_id":document.f.frequency.value,ajax:'true'},
+            function(freqdata){
+                globalfreqdata=freqdata;
+                if ( globalfreqdata.unit && globalfreqdata.unit.length == 0 ) {
+                    var option = $("#subtype option[value='issues']");
+                    $(option).attr('selected', 'selected');
+                    $("#subtype option[value!='issues']").prop('disabled', true);
+                } else {
+                    $("#subtype option").prop('disabled', false);
+                }
+            }
+        );
+        $("input[name='mana_id']").val("");
+    }
 }
 
 function numberpatternload(){
-    $.getJSON("subscription-numberpattern.pl",{"numberpattern_id":document.f.numbering_pattern.value,ajax:'true'},
-        function(numpatterndata){
-            globalnumpatterndata=numpatterndata;
-            if (globalnumpatterndata==undefined){
-                return false;
-            }
-            displaymoreoptions();
-            restoreAdvancedPattern();
+    if($("#numberpattern option:selected" ).val() === "mana"){
+        globalnumpatterndata=mananumpatterndata;
+        $("input[name='sndescription']").val(mananumpatterndata.description);
+        if($("#frequency option:selected" ).val() === "mana"){
+            $("input[name='mana_id']").val(manaid);
         }
-    );
+        if (globalnumpatterndata==undefined){
+            return false;
+        }
+        displaymoreoptions();
+        restoreAdvancedPattern();
+    } else {
+        $.getJSON("subscription-numberpattern.pl",{"numberpattern_id":document.f.numbering_pattern.value,ajax:'true'},
+            function(numpatterndata){
+                globalnumpatterndata=numpatterndata;
+                if (globalnumpatterndata==undefined){
+                    return false;
+                }
+                displaymoreoptions();
+                restoreAdvancedPattern();
+            }
+        );
+        $("input[name='mana_id']").val("");
+    }
 }
 
 function displaymoreoptions() {
@@ -275,7 +304,8 @@ function testPredictionPattern() {
         'lastvalue1', 'lastvalue2', 'lastvalue3', 'add1', 'add2', 'add3',
         'every1', 'every2', 'every3', 'innerloop1', 'innerloop2', 'innerloop3',
         'setto1', 'setto2', 'setto3', 'numbering1', 'numbering2', 'numbering3',
-        'whenmorethan1', 'whenmorethan2', 'whenmorethan3', 'locale'
+        'whenmorethan1', 'whenmorethan2', 'whenmorethan3', 'locale',
+        'sfdescription', 'unitsperissue', 'issuesperunit', 'unit'
     ];
     for(i in ajaxParams) {
         var param = ajaxParams[i];
@@ -288,7 +318,7 @@ function testPredictionPattern() {
         url:"/cgi-bin/koha/serials/showpredictionpattern.pl",
         data: ajaxData,
         success: function(data) {
-            $("#displayexample").html(data);
+            $("#displayexample").html(data).show();
             patternneedtobetested = 0;
         }
     });
@@ -362,8 +392,113 @@ function show_page_2() {
     displaymoreoptions();
 }
 
+function mana_search() {
+    $.ajax({
+        type: "POST",
+        url: "/cgi-bin/koha/svc/mana/search",
+        data: {biblionumber : $("#biblionumber").val()},
+        dataType: "html",
+    })
+    .done( function( result ) {
+    $("#mana_search_result .modal-body").html(result);
+        $("#mana_search_result_label").text("Results from Mana");
+        $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sPaginationType": "four_button",
+            "aoColumnDefs": [
+                { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] },
+                { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
+            ]
+        }));
+        if($("td.dataTables_empty").length == 0){
+            $("#mana_search").show();
+        }
+    }).fail(function(result){
+    });
+}
+
+function mana_use(mana_id){
+    $("tr").removeClass("selected");
+    $("#row"+mana_id).addClass("selected");
+    $.ajax( {
+        type: "POST",
+        url: "/cgi-bin/koha/svc/mana/use",
+        data: {id : mana_id},
+        dataType: "json",
+    })
+    .done(function(result){
+        var select = document.getElementById('numberpattern');
+        for(i = 0; i < select.length; i++){
+            if(select[i].value === "mana"){
+                select.remove(i);
+            }
+        }
+        var optionnumpattern = document.createElement("option");
+        optionnumpattern.text = result.label + " (mana)";
+        optionnumpattern.selected = true;
+        optionnumpattern.value="mana";
+        select.add(optionnumpattern);
+
+        mananumpatterndata = {
+            id:"mana",
+            add1:result.add1,
+            add2:result.add2,
+            add3:result.add3,
+            description:result.sndescription,
+            displayorder:result.displayorder,
+            every1:result.every1,
+            every2:result.every2,
+            every3:result.every3,
+            label:result.label,
+            label1:result.label1,
+            label2:result.label2,
+            label3:result.label3,
+            numbering1:result.numbering1,
+            numbering2:result.numbering2,
+            numbering3:result.numbering3,
+            numberingmethod:result.numberingmethod,
+            setto1:result.setto1,
+            setto2:result.setto2,
+            setto3:result.setto3,
+            whenmorethan1:result.whenmorethan1,
+            whenmorethan2:result.whenmorethan2,
+            whenmorethan3:result.whenmorethan3,
+        };
+        select = document.getElementById("frequency");
+        for(i = 0; i < select.length; i++){
+            if(select[i].value === "mana"){
+                select.remove(i);
+            }
+        }
+        var optionfreq = document.createElement("option");
+        optionfreq.text = result.sfdescription + " (mana)";
+        optionfreq.selected = true;
+        optionfreq.value="mana";
+        select.add(optionfreq);
+        manafreqdata = {
+            id:"mana",
+            description:result.sfdescription,
+            displayorder:result.displayorder,
+            issuesperunit:result.issuesperunit,
+            unit:result.unit,
+            unitsperissue:result.unitsperissue,
+        };
+        manaid = result.id;
+        $("input[name='mana_id']").val(manaid);
+        $("#mana_search_result").modal("hide");
+        frequencyload();
+        numberpatternload();
+    }).fail( function( result ){
+    });
+}
+
+function removeDisabledAttr() {
+    $('select:disabled').removeAttr('disabled');
+}
 
 $(document).ready(function() {
+    $("#displayexample").hide();
+    $("#mana_search_result").modal("hide");
     $("#aqbooksellerid").on('keypress', function(e) {
         if (e.keyCode == 13) {
             e.preventDefault();
@@ -447,6 +582,8 @@ $(document).ready(function() {
         });
     }
 
+    $("#mana_search").hide();
+
     show_page_1();
     $("#subscription_add_form").on("submit",function(){
         return Check_page2();
@@ -469,6 +606,9 @@ $(document).ready(function() {
     });
     $("#subscription_add_next").on("click",function(){
         if ( Check_page1() ){
+            [% IF Koha.Preference('Mana') %]
+                mana_search();
+            [% END %]
             show_page_2();
         }
     });

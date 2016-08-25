@@ -33,6 +33,7 @@ use C4::Debug;
 use C4::Serials;
 use C4::Log;
 use Koha::DateUtils;
+use C4::Serials::Frequency;
 
 use Date::Calc qw/Date_to_Days check_date/;
 use Getopt::Long;
@@ -118,7 +119,8 @@ while ( my $issue = $sth->fetchrow_hashref ) {
     my $publisheddate  = $issue->{publisheddate};
 
     if ( $subscription && $publisheddate && $publisheddate ne "0000-00-00" ) {
-        my $nextpublisheddate = GetNextDate( $subscription, $publisheddate );
+        my $freqdata = GetSubscriptionFrequency($subscription->{'periodicity'});
+        my $nextpublisheddate = GetNextDate( $subscription, $publisheddate, $freqdata );
         my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 
         if ( $nextpublisheddate && $today ) {

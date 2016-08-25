@@ -1,0 +1,62 @@
+#!/usr/bin/perl
+
+# Copyright 2016 BibLibre Morgane Alonso
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+#
+
+use strict;
+use warnings;
+
+use Koha::SharedContent;
+use Koha::Subscription;
+use C4::Auth qw(check_cookie_auth), qw(get_template_and_user);
+use C4::Output qw( output_with_http_headers );
+
+use CGI;
+use JSON;
+
+my $input = new CGI;
+
+my ( $auth_status, $sessionID ) =
+  check_cookie_auth( $input->cookie('CGISESSID'),
+    { serials => 'create_subscription' } );
+
+if ( $auth_status ne "ok" ) {
+    exit 0;
+}
+
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "serials/mana-subscription-search-result.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+
+        # flagsrequired   => { serials => $permission },
+        flagsrequired => { serials => 'create_subscription' },
+        debug         => 1,
+    }
+);
+
+my $biblionumber = $input->param('biblionumber');
+
+my $sub_mana_info = Koha::Subscription::get_search_info($biblionumber);
+my $result =
+  Koha::SharedContent::manaGetRequest( "subscription", $sub_mana_info );
+$template->param( subscriptions => $result->{data} );
+
+output_with_http_headers $input, $cookie, $template->output, 'json';

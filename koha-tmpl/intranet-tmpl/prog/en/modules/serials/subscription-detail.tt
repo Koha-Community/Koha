@@ -29,7 +29,7 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-	[% INCLUDE 'serials-toolbar.inc' %]
+    [% INCLUDE 'serials-toolbar.inc' mana_id = mana_id %]
 
     <h1>Subscription for [% bibliotitle | html %] [% IF closed %](closed)[% END %]</h1>
     [% IF ( abouttoexpire ) %]
@@ -58,7 +58,18 @@
 			</form>
 
 	</div>
-	[% END %] <!-- NEEDSCONFIRMATION -->
+    [% END %] <!-- NEEDSCONFIRMATION -->
+    [% IF mana_code.defined %]
+        <div id="alert-community" class="dialog message">
+            <p>
+                [% IF (mana_code == 201) %]
+                    The export is done, thank you for your contribution.
+                [% ELSIF (mana_code == 200) %]
+                    The model already exists on Mana, thank you for your contribution.
+                [% END %]
+            </p>
+        </div>
+    [% END %]
 
 <div id="subscription_description" class="toptabs">
 <ul class="ui-tabs-nav">
