@@ -39,7 +39,7 @@ Koha::Serial::Item - Koha Serial Item Object class
 
 =cut
 
-sub type {
+sub _type {
     return 'Serialitem';
 }
 

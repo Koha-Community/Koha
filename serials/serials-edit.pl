@@ -257,7 +257,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
             my $previous = GetPreviousSerialid($subscriptionids[$i]);
             if ($previous) {
 
-                my $serialitem = Koha::Serial::Items->find( $previous );
+                my $serialitem = Koha::Serial::Items->search( {serialid => $previous} )->next;
                 my $itemnumber = $serialitem ? $serialitem->itemnumber : undef;
                 if ($itemnumber) {
 
