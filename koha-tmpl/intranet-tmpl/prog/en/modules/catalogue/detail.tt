@@ -724,7 +724,7 @@ function verify_images() {
                                     [% IF ( item.hidepatronname ) %]
                                         [% item.Reservedcardnumber %]
                                     [% ELSE %]
-                                        [% item.ReservedForFirstname _ item.ReservedForSurname _ " (" _ item.Reservedcardnumber _ ")" %]
+                                        [% item.ReservedForFirstname _ " " _ item.ReservedForSurname _ " (" _ item.Reservedcardnumber _ ")" %]
                                     [% END %]
                                 </a>
                             [% END %]
