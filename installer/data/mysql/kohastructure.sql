@@ -185,7 +185,6 @@ CREATE TABLE `biblioitems` ( -- information related to bibliographic records in 
   `size` varchar(255) default NULL, -- material size (MARC21 300$c)
   `place` varchar(255) default NULL, -- publication place (MARC21 260$a)
   `lccn` varchar(25) default NULL, -- library of congress control number (MARC21 010$a)
-  `marc` longblob, -- full bibliographic MARC record
   `url` text default NULL, -- url (MARC21 856$u)
   `cn_source` varchar(10) default NULL, -- classification source (MARC21 942$2)
   `cn_class` varchar(30) default NULL,
@@ -540,7 +539,6 @@ CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records t
   `size` varchar(255) default NULL, -- material size (MARC21 300$c)
   `place` varchar(255) default NULL, -- publication place (MARC21 260$a)
   `lccn` varchar(25) default NULL, -- library of congress control number (MARC21 010$a)
-  `marc` longblob, -- full bibliographic MARC record
   `url` text default NULL, -- url (MARC21 856$u)
   `cn_source` varchar(10) default NULL, -- classification source (MARC21 942$2)
   `cn_class` varchar(30) default NULL,
