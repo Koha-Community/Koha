@@ -425,7 +425,6 @@ my @base_expectedfields = qw(
   ordernumber
   ecost
   uncertainprice
-  marc
   url
   isbn
   copyrightdate
