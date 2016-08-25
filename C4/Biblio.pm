@@ -3332,7 +3332,6 @@ sub _koha_add_biblioitem {
         size            = ?,
         place           = ?,
         lccn            = ?,
-        marc            = ?,
         url             = ?,
         cn_source       = ?,
         cn_class        = ?,
@@ -3350,7 +3349,7 @@ sub _koha_add_biblioitem {
         $biblioitem->{'volumedate'},       $biblioitem->{'volumedesc'},       $biblioitem->{'collectiontitle'},       $biblioitem->{'collectionissn'},
         $biblioitem->{'collectionvolume'}, $biblioitem->{'editionstatement'}, $biblioitem->{'editionresponsibility'}, $biblioitem->{'illus'},
         $biblioitem->{'pages'},            $biblioitem->{'bnotes'},           $biblioitem->{'size'},                  $biblioitem->{'place'},
-        $biblioitem->{'lccn'},             $biblioitem->{'marc'},             $biblioitem->{'url'},                   $biblioitem->{'biblioitems.cn_source'},
+        $biblioitem->{'lccn'},             $biblioitem->{'url'},                   $biblioitem->{'biblioitems.cn_source'},
         $biblioitem->{'cn_class'},         $biblioitem->{'cn_item'},          $biblioitem->{'cn_suffix'},             $cn_sort,
         $biblioitem->{'totalissues'},      $biblioitem->{'ean'},              $biblioitem->{'agerestriction'}
     );
@@ -3469,7 +3468,7 @@ sub _koha_delete_biblioitems {
 
   &ModBiblioMarc($newrec,$biblionumber,$frameworkcode);
 
-Add MARC data for a biblio to koha 
+Add MARC XML data for a biblio to koha
 
 Function exported, but should NOT be used, unless you really know what you're doing
 
@@ -3477,7 +3476,7 @@ Function exported, but should NOT be used, unless you really know what you're do
 
 sub ModBiblioMarc {
     # pass the MARC::Record to this function, and it will create the records in
-    # the marc field
+    # the marcxml field
     my ( $record, $biblionumber, $frameworkcode ) = @_;
     if ( !$record ) {
         carp 'ModBiblioMarc passed an undefined record';
@@ -3524,8 +3523,8 @@ sub ModBiblioMarc {
       $f005->update(sprintf("%4d%02d%02d%02d%02d%04.1f",@a)) if $f005;
     }
 
-    $sth = $dbh->prepare("UPDATE biblioitems SET marc=?,marcxml=? WHERE biblionumber=?");
-    $sth->execute( $record->as_usmarc(), $record->as_xml_record($encoding), $biblionumber );
+    $sth = $dbh->prepare("UPDATE biblioitems SET marcxml=? WHERE biblionumber=?");
+    $sth->execute( $record->as_xml_record($encoding), $biblionumber );
     $sth->finish;
     ModZebra( $biblionumber, "specialUpdate", "biblioserver", $record );
     return $biblionumber;
