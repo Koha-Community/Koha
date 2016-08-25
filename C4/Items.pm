@@ -112,6 +112,7 @@ This module contains an API for manipulating item
 records in Koha, and is used by cataloguing, circulation,
 acquisitions, and serials management.
 
+# FIXME This POD is not up-to-date
 A Koha item record is stored in two places: the
 items table and embedded in a MARC tag in the XML
 version of the associated bib record in C<biblioitems.marcxml>.
@@ -1304,7 +1305,6 @@ If this is set, it is set to C<One Order>.
 sub GetItemsInfo {
     my ( $biblionumber ) = @_;
     my $dbh   = C4::Context->dbh;
-    # note biblioitems.* must be avoided to prevent large marc and marcxml fields from killing performance.
     require C4::Languages;
     my $language = C4::Languages::getlanguage();
     my $query = "
@@ -2659,7 +2659,7 @@ sub _SearchItems_build_where_fragment {
                         $sqlfield = 'more_subfields_xml';
                         $xpath = '//record/datafield/subfield[@code="' . $marcsubfield . '"]';
                     } else {
-                        $sqlfield = 'marcxml';
+                        $sqlfield = 'metadata'; # From biblio_metadata
                         if ($marcfield < 10) {
                             $xpath = "//record/controlfield[\@tag=\"$marcfield\"]";
                         } else {
@@ -2768,10 +2768,15 @@ sub SearchItems {
         FROM items
           LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
           LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
+          LEFT JOIN biblio_metadata ON biblio_metadata.biblionumber = biblio.biblionumber
+          WHERE 1
     };
     if (defined $where_str and $where_str ne '') {
-        $query .= qq{ WHERE $where_str };
+        $query .= qq{ AND $where_str };
     }
+
+    $query .= q{ AND biblio_metadata.format = 'marcxml' AND biblio_metadata.marcflavour = ? };
+    push @where_args, C4::Context->preference('marcflavour');
 
     my @columns = Koha::Database->new()->schema()->resultset('Item')->result_source->columns;
     push @columns, Koha::Database->new()->schema()->resultset('Biblio')->result_source->columns;
