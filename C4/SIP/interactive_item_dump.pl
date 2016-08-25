@@ -19,7 +19,7 @@ while (1) {
         print "No item ($in)";
         next;
     }
-    for (qw(marc marcxml)) {
+    for (qw(marc marcxml)) { # Letting it just in case but should not longer be useful
         $item->{$_} = 'suppressed...';
     }
     my $queue = $item->hold_queue();

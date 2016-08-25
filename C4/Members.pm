@@ -694,7 +694,7 @@ Looks up what the patron with the given borrowernumber has borrowed.
 C<&GetPendingIssues> returns a
 reference-to-array where each element is a reference-to-hash; the
 keys are the fields from the C<issues>, C<biblio>, and C<items> tables.
-The keys include C<biblioitems> fields except marc and marcxml.
+The keys include C<biblioitems> fields.
 
 =cut
 
@@ -714,7 +714,6 @@ sub GetPendingIssues {
         }
     }
 
-    # must avoid biblioitems.* to prevent large marc and marcxml fields from killing performance
     # FIXME: namespace collision: each table has "timestamp" fields.  Which one is "timestamp" ?
     # FIXME: circ/ciculation.pl tries to sort by timestamp!
     # FIXME: namespace collision: other collisions possible.

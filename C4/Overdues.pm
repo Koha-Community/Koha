@@ -158,7 +158,6 @@ Returns a count and a list of overdueitems for a given borrowernumber
 
 sub checkoverdues {
     my $borrowernumber = shift or return;
-    # don't select biblioitems.marcxml... too slow on large systems
     my $sth = C4::Context->dbh->prepare(
         "SELECT biblio.*, items.*, issues.*,
                 biblioitems.volume,

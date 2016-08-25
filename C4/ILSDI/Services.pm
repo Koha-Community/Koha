@@ -421,7 +421,6 @@ sub GetPatronInfo {
             my $branchname = $library ? $library->branchname : '';
 
             # Remove unwanted fields
-            delete $item->{'marcxml'};
             delete $item->{'more_subfields_xml'};
 
             # Add additional fields

@@ -43,14 +43,14 @@ sub new {
     }
     my $max = $repository->{koha_max_count};
     my $sql = "
-        (SELECT biblioitems.biblionumber, biblioitems.timestamp, marcxml
+        (SELECT biblioitems.biblionumber, biblioitems.timestamp
         FROM biblioitems
     ";
     $sql .= " JOIN oai_sets_biblios ON biblioitems.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
     $sql .= " WHERE timestamp >= ? AND timestamp <= ? ";
     $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
     $sql .= ") UNION
-        (SELECT deletedbiblio.biblionumber, null as marcxml, timestamp FROM deletedbiblio";
+        (SELECT deletedbiblio.biblionumber, timestamp FROM deletedbiblio";
     $sql .= " JOIN oai_sets_biblios ON deletedbiblio.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
     $sql .= " WHERE DATE(timestamp) >= ? AND DATE(timestamp) <= ? ";
     $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;

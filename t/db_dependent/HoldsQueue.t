@@ -87,8 +87,8 @@ $dbh->do("INSERT INTO biblio (frameworkcode, author, title, datecreated)
           VALUES             ('SER', 'Koha test', '$TITLE', '2011-02-01')");
 my $biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE title = '$TITLE'")
   or BAIL_OUT("Cannot find newly created biblio record");
-$dbh->do("INSERT INTO biblioitems (biblionumber, marcxml, itemtype)
-          VALUES                  ($biblionumber, '', '$itemtype')");
+$dbh->do("INSERT INTO biblioitems (biblionumber, itemtype)
+          VALUES                  ($biblionumber, '$itemtype')");
 my $biblioitemnumber = $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")
   or BAIL_OUT("Cannot find newly created biblioitems record");
 
@@ -227,11 +227,9 @@ $biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE tit
 $dbh->do(qq{
     INSERT INTO biblioitems (
         biblionumber, 
-        marcxml, 
         itemtype
     ) VALUES (
         $biblionumber, 
-        '', 
         '$itemtype'
     )
 });
@@ -439,7 +437,7 @@ $dbh->do("
 $biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE title = '$TITLE'")
   or BAIL_OUT("Cannot find newly created biblio record");
 
-$dbh->do("INSERT INTO biblioitems (biblionumber, marcxml, itemtype) VALUES ($biblionumber, '', '$itemtype')");
+$dbh->do("INSERT INTO biblioitems (biblionumber, itemtype) VALUES ($biblionumber, '$itemtype')");
 
 $biblioitemnumber =
   $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")
@@ -501,7 +499,7 @@ $dbh->do("
 $biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE title = '$TITLE'")
   or BAIL_OUT("Cannot find newly created biblio record");
 
-$dbh->do("INSERT INTO biblioitems (biblionumber, marcxml, itemtype) VALUES ($biblionumber, '', '$itemtype')");
+$dbh->do("INSERT INTO biblioitems (biblionumber, itemtype) VALUES ($biblionumber, '$itemtype')");
 
 $biblioitemnumber =
   $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")
@@ -542,7 +540,7 @@ $dbh->do("INSERT INTO biblio (frameworkcode, author, title, datecreated) VALUES 
 $biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE title = '$TITLE'")
   or BAIL_OUT("Cannot find newly created biblio record");
 
-$dbh->do("INSERT INTO biblioitems (biblionumber, marcxml, itemtype) VALUES ($biblionumber, '', '$itemtype')");
+$dbh->do("INSERT INTO biblioitems (biblionumber, itemtype) VALUES ($biblionumber, '$itemtype')");
 
 $biblioitemnumber =
   $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")
@@ -654,7 +652,7 @@ $dbh->do("INSERT INTO biblio (frameworkcode, author, title, datecreated) VALUES 
 $biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE title = '$TITLE'")
   or BAIL_OUT("Cannot find newly created biblio record");
 
-$dbh->do("INSERT INTO biblioitems (biblionumber, marcxml, itemtype) VALUES ($biblionumber, '', '$itemtype')");
+$dbh->do("INSERT INTO biblioitems (biblionumber, itemtype) VALUES ($biblionumber, '$itemtype')");
 
 $biblioitemnumber =
   $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")

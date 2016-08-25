@@ -90,8 +90,9 @@ foreach my $issue ( @{$issues} ) {
           getitemtypeimagelocation( 'opac',
             $itemtypes->{ $issue->{$itype_attribute} }->{imageurl} );
     }
-    if ( $issue->{marcxml} ) {
-        my $marcxml = StripNonXmlChars( $issue->{marcxml} );
+    my $marcxml = C4::Biblio::GetXmlBiblio( $issue->{biblionumber} );
+    if ( $marcxml ) {
+        $marcxml = StripNonXmlChars( $marcxml );
         my $marc_rec =
           MARC::Record::new_from_xml( $marcxml, 'utf8',
             C4::Context->preference('marcflavour') );

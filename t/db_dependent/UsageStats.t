@@ -241,14 +241,14 @@ sub construct_objects_needed {
     # ---------- 3 biblio items  -------------------------
     $query = '
     INSERT INTO biblioitems
-      (biblionumber, itemtype, marcxml)
-    VALUES (?,?,?)';
+      (biblionumber, itemtype)
+    VALUES (?,?)';
     $insert_sth = $dbh->prepare($query);
-    $insert_sth->execute( $biblionumber1, 'Book', '' );
+    $insert_sth->execute( $biblionumber1, 'Book' );
     my $biblioitemnumber1 = $dbh->last_insert_id( undef, undef, 'biblioitems', undef );
-    $insert_sth->execute( $biblionumber2, 'Music', '' );
+    $insert_sth->execute( $biblionumber2, 'Music' );
     my $biblioitemnumber2 = $dbh->last_insert_id( undef, undef, 'biblioitems', undef );
-    $insert_sth->execute( $biblionumber3, 'Book', '' );
+    $insert_sth->execute( $biblionumber3, 'Book' );
     my $biblioitemnumber3 = $dbh->last_insert_id( undef, undef, 'biblioitems', undef );
 
     # ---------- 3 items  -------------------------

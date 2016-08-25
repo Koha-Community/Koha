@@ -58,7 +58,7 @@ $dbh->do("INSERT INTO biblio (frameworkcode, author, title, datecreated) VALUES 
 my $biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE title = '$bib_title'")
   or BAIL_OUT("Cannot find newly created biblio record");
 
-$dbh->do("INSERT INTO biblioitems (biblionumber, marcxml, itemtype) VALUES ($biblionumber, '', '$itemtype')");
+$dbh->do("INSERT INTO biblioitems (biblionumber, itemtype) VALUES ($biblionumber, '$itemtype')");
 
 my $biblioitemnumber =
   $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")
