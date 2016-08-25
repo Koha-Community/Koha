@@ -205,9 +205,6 @@ sub GetRecords {
             $biblioitem->{marcxml} = $record->as_xml_record();
         }
 
-        # We don't want MARC to be displayed
-        delete $biblioitem->{'marc'};
-
         # Get most of the needed data
         my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
         my $reserves         = GetReservesFromBiblionumber({ biblionumber => $biblionumber });
@@ -414,7 +411,6 @@ sub GetPatronInfo {
             my $branchname = $library ? $library->branchname : '';
 
             # Remove unwanted fields
-            delete $item->{'marc'};
             delete $item->{'marcxml'};
             delete $item->{'more_subfields_xml'};
 
