@@ -150,11 +150,12 @@ sub biblios_to_sanitize {
     my $dbh   = C4::Context->dbh;
     my $query = q{
         SELECT biblionumber
-        FROM biblioitems
-        WHERE marcxml
-        LIKE "%&amp;amp;%"
-    };
-    return @{ $dbh->selectcol_arrayref( $query, { Slice => {} }, ) };
+        FROM biblio_metadata
+        WHERE format = 'marcxml'
+            AND marcflavour = ?
+            AND metadata LIKE "%&amp;amp;%"
+        };
+    return @{ $dbh->selectcol_arrayref( $query, { Slice => {} }, C4::Context->preference('marcflavour') ) };
 }
 
 =head1 NAME
@@ -194,7 +195,7 @@ commas.
 
 Give a biblionumber list using a filename. One biblionumber by line or separate them with a whitespace character.
 
-=item B<--auto_search>
+=item B<--auto-search>
 
 Automatically search records containing "&amp;" in biblioitems.marcxml or in the specified fields.
 
