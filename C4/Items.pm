@@ -335,8 +335,8 @@ embedded item fields.  This routine is suitable for batch jobs.
 
 This API assumes that the bib record has already been
 saved to the C<biblio> and C<biblioitems> tables.  It does
-not expect that C<biblioitems.marc> and C<biblioitems.marcxml>
-are populated, but it will do so via a call to ModBibiloMarc.
+not expect that C<biblioitems.marcxml> are populated, but it
+will do so via a call to ModBibiloMarc.
 
 The goal of this API is to have a similar effect to using AddBiblio
 and AddItems in succession, but without inefficient repeated

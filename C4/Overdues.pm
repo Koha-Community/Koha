@@ -160,7 +160,7 @@ Returns a count and a list of overdueitems for a given borrowernumber
 
 sub checkoverdues {
     my $borrowernumber = shift or return;
-    # don't select biblioitems.marc or biblioitems.marcxml... too slow on large systems
+    # don't select biblioitems.marcxml... too slow on large systems
     my $sth = C4::Context->dbh->prepare(
         "SELECT biblio.*, items.*, issues.*,
                 biblioitems.volume,
@@ -197,7 +197,6 @@ sub checkoverdues {
             WHERE issues.borrowernumber  = ?
             AND   issues.date_due < NOW()"
     );
-    # FIXME: SELECT * across 4 tables?  do we really need the marc AND marcxml blobs??
     $sth->execute($borrowernumber);
     my $results = $sth->fetchall_arrayref({});
     return ( scalar(@$results), $results);  # returning the count and the results is silly

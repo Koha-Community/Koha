@@ -159,7 +159,7 @@ Biblio.pm contains functions for managing storage and editing of bibliographic d
 
 =item 2. as raw MARC in the Zebra index and storage engine
 
-=item 3. as raw MARC the biblioitems.marc and biblioitems.marcxml
+=item 3. as MARC XML in biblioitems.marcxml
 
 =back
 
@@ -183,7 +183,7 @@ Because of this design choice, the process of managing storage and editing is a 
 
 =item 2. _koha_* - low-level internal functions for managing the koha tables
 
-=item 3. Marc management function : as the MARC record is stored in biblioitems.marc(xml), some subs dedicated to it's management are in this package. They should be used only internally by Biblio.pm, the only official entry points being AddBiblio, AddItem, ModBiblio, ModItem.
+=item 3. Marc management function : as the MARC record is stored in biblioitems.marcxml, some subs dedicated to it's management are in this package. They should be used only internally by Biblio.pm, the only official entry points being AddBiblio, AddItem, ModBiblio, ModItem.
 
 =item 4. Zebra functions used to update the Zebra index
 
@@ -211,7 +211,7 @@ When dealing with items, we must :
 
 =item 2. add the itemnumber to the item MARC field
 
-=item 3. overwrite the MARC record (with the added item) into biblioitems.marc(xml)
+=item 3. overwrite the MARC record (with the added item) into biblioitems.marcxml
 
 When modifying a biblio or an item, the behaviour is quite similar.
 
@@ -232,8 +232,8 @@ framework code.
 This function also accepts a third, optional argument: a hashref
 to additional options.  The only defined option is C<defer_marc_save>,
 which if present and mapped to a true value, causes C<AddBiblio>
-to omit the call to save the MARC in C<bibilioitems.marc>
-and C<biblioitems.marcxml>  This option is provided B<only>
+to omit the call to save the MARC in C<bibilioitems.marcxml>
+This option is provided B<only>
 for the use of scripts such as C<bulkmarcimport.pl> that may need
 to do some manipulation of the MARC record for item parsing before
 saving it and which cannot afford the performance hit of saving
