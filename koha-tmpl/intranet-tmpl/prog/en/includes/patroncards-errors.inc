@@ -6,7 +6,6 @@
         Error while creating PDF file.
         [% IF CGI.param('errnocards') %]No cards created (empty batch or list?)[% END %]
         [% IF CGI.param('errba') %]Batch: [% '<span class="ex">' _ CGI.param('errba') _ '</span>' %][% END %]
-        [% IF CGI.param('errpl') %]Patron list: [% '<span class="ex">' _ CGI.param('errpl') _ '</span>' %][% END %]
         [% IF CGI.param('errpt') %]Patron number: [% '<span class="ex">' _ CGI.param('errpt') _ '</span>' %][% END %]
         [% IF CGI.param('errlo') %]Layout: [% '<span class="ex">' _ CGI.param('errlo') _ '</span>' %][% END %]
         [% IF CGI.param('errtpl') %]Template: [% '<span class="ex">' _ CGI.param('errtpl') _ '</span>' %][% END %]

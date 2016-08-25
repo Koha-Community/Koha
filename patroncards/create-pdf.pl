@@ -234,7 +234,6 @@ else {
     # warn user that pdf is not created
     my $errparams = '&pdferr=1';
     $errparams .= "&errba=$batch_id" if $batch_id;
-    $errparams .= "&errpl=$patronlist_id" if $patronlist_id;
     $errparams =  $errparams.'&errpt='.$cgi->param('borrower_number') if $cgi->param('borrower_number');
     $errparams .= "&errlo=$layout_id" if $layout_id;
     $errparams .= "&errtpl=$template_id" if $template_id;
