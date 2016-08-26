@@ -31,9 +31,23 @@ function is_valid_date(date) {
     return 1;
 }
 
+function get_dateformat_str(dateformat) {
+    var dateformat_str;
+    if ( dateformat == 'us' ) {
+        dateformat_str = 'mm/dd/yyyy';
+    } else if ( dateformat == 'metric' ) {
+        dateformat_str = 'dd/mm/yyyy';
+    } else if (dateformat == 'iso' ) {
+        dateformat_str = 'yyyy-mm-dd';
+    } else if ( dateformat == 'dmydot' ) {
+        dateformat_str = 'dd.mm.yyyy';
+    }
+    return dateformat_str;
+}
+
 function validate_date (dateText, inst) {
     if ( !is_valid_date(dateText) ) {
-        var dateformat_str = '[% Koha.Preference('dateformat') %]';
+        var dateformat_str = get_dateformat_str( '[% Koha.Preference('dateformat') %]' );
         alert(MSG_PLEASE_ENTER_A_VALID_DATE.format(dateformat_str));
         $('#'+inst.id).val('');
     }
