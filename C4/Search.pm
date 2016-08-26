@@ -31,7 +31,6 @@ use C4::XSLT;
 use C4::Reserves;    # GetReserveStatus
 use C4::Debug;
 use C4::Charset;
-use Koha::Libraries;
 use YAML;
 use URI::Escape;
 use Business::ISBN;

@@ -377,13 +377,15 @@ sub GetBasketGroupAsCSV {
                 booksellerpostal => $bookseller->{postal},
                 contractnumber => $contract->{contractnumber},
                 contractname => $contract->{contractname},
+            };
+            my $temp = {
                 basketgroupdeliveryplace => $basketgroup->{deliveryplace},
                 basketgroupbillingplace  => $basketgroup->{billingplace},
                 basketdeliveryplace      => $basket->{deliveryplace},
                 basketbillingplace       => $basket->{billingplace},
             };
             for my $place (qw( basketgroupdeliveryplace basketgroupbillingplace basketdeliveryplace basketbillingplace )) {
-                if ( my $library = Koha::Libraries->find( $row->{deliveryplace} ) ) {
+                if ( my $library = Koha::Libraries->find( $temp->{$place} ) ) {
                     $row->{$place} = $library->branchname;
                 }
             }

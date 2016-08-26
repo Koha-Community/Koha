@@ -35,7 +35,6 @@ use Koha::Caches;
 use Koha::AuthUtils qw(get_script_name hash_password);
 use Koha::Libraries;
 use Koha::LibraryCategories;
-use Koha::Libraries;
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
 use Encode qw( encode is_utf8);
@@ -1076,7 +1075,8 @@ sub checkauth {
                     # if they specify at login, use that
                     if ( $query->param('branch') ) {
                         $branchcode = $query->param('branch');
-                        $branchname = Koha::Libraries->find($branchcode)->branchname;
+                        my $library = Koha::Libraries->find($branchcode);
+                        $branchname = $library? $library->branchname: '';
                     }
                     my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search };
                     if ( C4::Context->boolean_preference('IndependentBranches') && C4::Context->boolean_preference('Autolocation') ) {
@@ -1526,7 +1526,8 @@ sub check_api_auth {
                 # if they specify at login, use that
                 if ( $query->param('branch') ) {
                     $branchcode = $query->param('branch');
-                    $branchname = Koha::Libraries->find($branchcode)->branchname;
+                    my $library = Koha::Libraries->find($branchcode);
+                    $branchname = $library? $library->branchname: '';
                 }
                 my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search };
                 foreach my $br ( keys %$branches ) {
