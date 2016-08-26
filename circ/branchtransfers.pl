@@ -128,7 +128,6 @@ if ($barcode) {
         $item{'ccode'}                 = $iteminformation->{'ccode'};
         $item{'itemcallnumber'}        = $iteminformation->{'itemcallnumber'};
         $item{'location'}              = GetKohaAuthorisedValueLib("LOC",$iteminformation->{'location'});
-        $item{'tobrname'}              = $tobranchcd;
 #         }
         $item{counter}  = 0;
         $item{barcode}  = $barcode;
@@ -160,7 +159,6 @@ foreach ( $query->param ) {
     $item{'ccode'}                 = $iteminformation->{'ccode'};
     $item{'itemcallnumber'}        = $iteminformation->{'itemcallnumber'};
     $item{'location'}              = GetKohaAuthorisedValueLib("LOC",$iteminformation->{'location'});
-    $item{'tobrname'}              = $tobcd;
     push( @trsfitemloop, \%item );
 }
 

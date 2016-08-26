@@ -187,7 +187,7 @@
                     <td class="tf-itemcallnumber">[% trsfitemloo.itemcallnumber %]</td>
                     <td class="tf-itemtype">[% ItemTypes.GetDescription( trsfitemloo.itemtype ) %]</td>
                     <td class="tf-ccode">[% AuthorisedValues.GetByCode( 'CCODE', trsfitemloo.ccode ) %]</td>
-                    <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrname ) %]</td>
+                    <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrcd ) %]</td>
                 </tr>
             [% END %]
         </table>
