@@ -854,8 +854,7 @@ sub pazGetRecords {
         $results_per_page, $offset,       $expanded_facet, $branches,
         $query_type,       $scan
     ) = @_;
-
-    $branches ||= { map { $_->branchcode => $_->branchname } Koha::Libraries->search };
+    #NOTE: Parameter $branches is not used here !
 
     my $paz = C4::Search::PazPar2->new(C4::Context->config('pazpar2url'));
     $paz->init();

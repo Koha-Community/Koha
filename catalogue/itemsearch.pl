@@ -247,7 +247,7 @@ if (scalar keys %params > 0) {
 if ($format eq 'html') {
     # Retrieve data required for the form.
 
-    my @branches = map { value => $_->branchcode => label => $_->branchname }, Koha::Libraries->search( {}, { order_by => 'branchname' } );
+    my @branches = map { value => $_->branchcode, label => $_->branchname }, Koha::Libraries->search( {}, { order_by => 'branchname' } );
     my @locations;
     foreach my $location (@$location_values) {
         push @locations, {
