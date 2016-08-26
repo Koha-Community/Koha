@@ -144,48 +144,51 @@ $contextmodule->mock('queryparser', sub {
     return $QParser;
 });
 
-sub mock_marcfromkohafield {
+our $bibliomodule = new Test::MockModule('C4::Biblio');
+
+sub mock_GetMarcSubfieldStructure {
     my $marc_type = shift;
     if ($marc_type eq 'marc21') {
-        $contextmodule->mock('marcfromkohafield', sub {
+        $bibliomodule->mock('GetMarcSubfieldStructure', sub {
             return {
-                '' => {
-                    'biblio.biblionumber' => [ '999', 'c' ],
-                    'items.barcode' => ['952', 'p' ],
-                    'items.booksellerid' => ['952', 'e' ],
-                    'items.ccode' => ['952', '8' ],
-                    'items.cn_sort' => ['952', '6' ],
-                    'items.cn_source' => ['952', '2' ],
-                    'items.coded_location_qualifier' => ['952', 'f' ],
-                    'items.copynumber' => ['952', 't' ],
-                    'items.damaged' => ['952', '4' ],
-                    'items.dateaccessioned' => ['952', 'd' ],
-                    'items.datelastborrowed' => ['952', 's' ],
-                    'items.datelastseen' => ['952', 'r' ],
-                    'items.enumchron' => ['952', 'h' ],
-                    'items.holdingbranch' => ['952', 'b' ],
-                    'items.homebranch' => ['952', 'a' ],
-                    'items.issues' => ['952', 'l' ],
-                    'items.itemcallnumber' => ['952', 'o' ],
-                    'items.itemlost' => ['952', '1' ],
-                    'items.itemnotes' => ['952', 'z' ],
-                    'items.itemnumber' => ['952', '9' ],
-                    'items.itype' => ['952', 'y' ],
-                    'items.location' => ['952', 'c' ],
-                    'items.materials' => ['952', '3' ],
-                    'items.nonpublicnote' => ['952', 'x' ],
-                    'items.notforloan' => ['952', '7' ],
-                    'items.onloan' => ['952', 'q' ],
-                    'items.price' => ['952', 'g' ],
-                    'items.renewals' => ['952', 'm' ],
-                    'items.replacementprice' => ['952', 'v' ],
-                    'items.replacementpricedate' => ['952', 'w' ],
-                    'items.reserves' => ['952', 'n' ],
-                    'items.restricted' => ['952', '5' ],
-                    'items.stack' => ['952', 'j' ],
-                    'items.uri' => ['952', 'u' ],
-                    'items.withdrawn' => ['952', '0' ]
-                    }
+                    'biblio.biblionumber' => { tagfield =>  '999', tagsubfield => 'c' },
+                    'biblio.isbn' => { tagfield => '020', tagsubfield => 'a' },
+                    'biblio.title' => { tagfield => '245', tagsubfield => 'a' },
+                    'biblio.notes' => { tagfield => '500', tagsubfield => 'a' },
+                    'items.barcode' => { tagfield => '952', tagsubfield => 'p' },
+                    'items.booksellerid' => { tagfield => '952', tagsubfield => 'e' },
+                    'items.ccode' => { tagfield => '952', tagsubfield => '8' },
+                    'items.cn_sort' => { tagfield => '952', tagsubfield => '6' },
+                    'items.cn_source' => { tagfield => '952', tagsubfield => '2' },
+                    'items.coded_location_qualifier' => { tagfield => '952', tagsubfield => 'f' },
+                    'items.copynumber' => { tagfield => '952', tagsubfield => 't' },
+                    'items.damaged' => { tagfield => '952', tagsubfield => '4' },
+                    'items.dateaccessioned' => { tagfield => '952', tagsubfield => 'd' },
+                    'items.datelastborrowed' => { tagfield => '952', tagsubfield => 's' },
+                    'items.datelastseen' => { tagfield => '952', tagsubfield => 'r' },
+                    'items.enumchron' => { tagfield => '952', tagsubfield => 'h' },
+                    'items.holdingbranch' => { tagfield => '952', tagsubfield => 'b' },
+                    'items.homebranch' => { tagfield => '952', tagsubfield => 'a' },
+                    'items.issues' => { tagfield => '952', tagsubfield => 'l' },
+                    'items.itemcallnumber' => { tagfield => '952', tagsubfield => 'o' },
+                    'items.itemlost' => { tagfield => '952', tagsubfield => '1' },
+                    'items.itemnotes' => { tagfield => '952', tagsubfield => 'z' },
+                    'items.itemnumber' => { tagfield => '952', tagsubfield => '9' },
+                    'items.itype' => { tagfield => '952', tagsubfield => 'y' },
+                    'items.location' => { tagfield => '952', tagsubfield => 'c' },
+                    'items.materials' => { tagfield => '952', tagsubfield => '3' },
+                    'items.nonpublicnote' => { tagfield => '952', tagsubfield => 'x' },
+                    'items.notforloan' => { tagfield => '952', tagsubfield => '7' },
+                    'items.onloan' => { tagfield => '952', tagsubfield => 'q' },
+                    'items.price' => { tagfield => '952', tagsubfield => 'g' },
+                    'items.renewals' => { tagfield => '952', tagsubfield => 'm' },
+                    'items.replacementprice' => { tagfield => '952', tagsubfield => 'v' },
+                    'items.replacementpricedate' => { tagfield => '952', tagsubfield => 'w' },
+                    'items.reserves' => { tagfield => '952', tagsubfield => 'n' },
+                    'items.restricted' => { tagfield => '952', tagsubfield => '5' },
+                    'items.stack' => { tagfield => '952', tagsubfield => 'j' },
+                    'items.uri' => { tagfield => '952', tagsubfield => 'u' },
+                    'items.withdrawn' => { tagfield => '952', tagsubfield => '0' },
                 };
         });
     }
@@ -196,7 +199,7 @@ sub run_marc21_search_tests {
     $datadir = tempdir();
     system(dirname(__FILE__) . "/zebra_config.pl $datadir marc21 $indexing_mode");
 
-    mock_marcfromkohafield('marc21');
+    mock_GetMarcSubfieldStructure('marc21');
     my $context = new C4::Context("$datadir/etc/koha-conf.xml");
     $context->set_context();
 
@@ -219,32 +222,6 @@ sub run_marc21_search_tests {
     is(scalar(grep(/^ti$/, @$indexes)), 1, "Title index supported");
 
     my $bibliomodule = new Test::MockModule('C4::Biblio');
-    $bibliomodule->mock('_get_inverted_marc_field_map', sub {
-        my %hash = (
-            '' => {
-                '245' => { 'sfs' => { 'a' => [ [ 'biblio', 'title' ] ], 'b' => [ [ 'bibliosubtitle', 'subtitle' ] ] },
-                    'list' => [ [ 'a', 'biblio', 'title' ], [ 'b', 'bibliosubtitle', 'subtitle' ] ]
-                },
-                '100' => {
-                    'sfs' => { 'a' => [ [ 'biblio', 'author' ] ] },
-                    'list' => [ [ 'a', 'biblio', 'author' ] ]
-                },
-                '999' => {
-                    'sfs' => { 'c' => [ [ 'biblio', 'biblionumber' ] ], 'd' => [ [ 'biblioitems', 'biblioitemnumber' ] ] },
-                    'list' => [ [ 'd', 'biblioitems', 'biblioitemnumber' ], [ 'c', 'biblio', 'biblionumber' ] ]
-                },
-                '020' => {
-                    'sfs' => { 'a' => [ [ 'biblioitems', 'isbn' ] ] },
-                    'list' => [ [ 'a', 'biblioitems', 'isbn' ] ]
-                },
-                '500' => {
-                    'sfs' => { 'a' => [ [ 'biblioitems', 'notes' ] ] },
-                    'list' => [ [ 'a', 'biblioitems', 'notes' ] ]
-                },
-            }
-        );
-        return \%hash;
-    });
 
     my %branches = (
         'CPL' => { 'branchaddress1' => 'Jefferson Summit', 'branchcode' => 'CPL', 'branchname' => 'Centerville', },
@@ -883,7 +860,7 @@ sub run_unimarc_search_tests {
     $datadir = tempdir();
     system(dirname(__FILE__) . "/zebra_config.pl $datadir unimarc $indexing_mode");
 
-    mock_marcfromkohafield('unimarc');
+    mock_GetMarcSubfieldStructure('unimarc');
     my $context = new C4::Context("$datadir/etc/koha-conf.xml");
     $context->set_context();
 
