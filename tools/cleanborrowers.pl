@@ -80,6 +80,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $branch = $params->{ branch } || '*';
 $template->param( current_branch => $branch );
+$template->param( OnlyMine => C4::Context->only_my_library );
 
 if ( $step == 2 ) {
 

@@ -1035,6 +1035,16 @@ sub mybranch {
     C4::Context->userenv           or return '';
     return C4::Context->userenv->{branch} || '';
 }
+
+=head2 only_my_library
+
+    my $test = C4::Context->only_my_library;
+
+    Returns true if you enabled IndependentBranches and the current user
+    does not have superlibrarian permissions.
+
+=cut
+
 sub only_my_library {
     return
          C4::Context->preference('IndependentBranches')
@@ -1043,9 +1053,8 @@ sub only_my_library {
       && C4::Context->userenv->{branch};
 }
 
-
-
 1;
+
 __END__
 
 =head1 ENVIRONMENT
