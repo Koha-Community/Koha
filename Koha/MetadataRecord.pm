@@ -35,6 +35,7 @@ and authority) records in Koha.
 use Modern::Perl;
 
 use Carp;
+use C4::Biblio;
 use Koha::Util::MARC;
 
 use base qw(Class::Accessor);
@@ -112,12 +113,13 @@ sub getKohaField {
     my ($self, $kohafield) = @_;
 
     if ($self->schema =~ m/marc/) {
-        my $relations = C4::Context->marcfromkohafield->{''};
-        my $tagfield = $relations->{$kohafield};
+        my $frameworkcode = ""; # FIXME Why do we use the default framework?
+        my $mss = C4::Biblio::GetMarcSubfieldStructure( $frameworkcode );
+        my $tagfield = $mss->{$kohafield};
 
-        return '' if ref($tagfield) ne 'ARRAY';
+        return '' if ref($tagfield) ne 'HASH';
 
-        my ($tag, $subfield) = @$tagfield;
+        my ($tag, $subfield) = ( $tagfield->{tagfield}, $tagfield->{tagsubfield} );
         my @kohafield;
         foreach my $field ( $self->record->field($tag) ) {
             if ( $field->tag() < 10 ) {
