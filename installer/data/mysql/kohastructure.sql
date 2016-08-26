@@ -193,7 +193,6 @@ CREATE TABLE `biblioitems` ( -- information related to bibliographic records in 
   `cn_sort` varchar(255) default NULL, -- normalized version of the call number used for sorting
   `agerestriction` varchar(255) default NULL, -- target audience/age restriction from the bib record (MARC21 521$a)
   `totalissues` int(10),
-  `marcxml` longtext, -- full bibliographic MARC record in MARCXML
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
@@ -547,7 +546,6 @@ CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records t
   `cn_sort` varchar(255) default NULL, -- normalized version of the call number used for sorting
   `agerestriction` varchar(255) default NULL, -- target audience/age restriction from the bib record (MARC21 521$a)
   `totalissues` int(10),
-  `marcxml` longtext, -- full bibliographic MARC record in MARCXML
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
@@ -3922,6 +3920,34 @@ CREATE TABLE `article_requests` (
   CONSTRAINT `article_requests_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `article_requests_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `article_requests_ibfk_4` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table `biblio_metadata`
+--
+
+CREATE TABLE biblio_metadata (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `biblionumber` INT(11) NOT NULL,
+    `format` VARCHAR(16) NOT NULL,
+    `marcflavour` VARCHAR(16) NOT NULL,
+    `metadata` LONGTEXT NOT NULL,
+    PRIMARY KEY(id),
+    CONSTRAINT `record_metadata_fk_1` FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table `deletedbiblio_metadata`
+--
+
+CREATE TABLE deletedbiblio_metadata (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `biblionumber` INT(11) NOT NULL,
+    `format` VARCHAR(16) NOT NULL,
+    `marcflavour` VARCHAR(16) NOT NULL,
+    `metadata` LONGTEXT NOT NULL,
+    PRIMARY KEY(id),
+    CONSTRAINT `deletedrecord_metadata_fk_1` FOREIGN KEY (biblionumber) REFERENCES deletedbiblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
