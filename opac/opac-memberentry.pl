@@ -179,6 +179,7 @@ if ( $action eq 'create' ) {
 }
 elsif ( $action eq 'update' ) {
 
+    my $borrower = GetMember( borrowernumber => $borrowernumber );
     my %borrower = ParseCgiForBorrower($cgi);
 
     my %borrower_changes = DelEmptyFields(%borrower);
