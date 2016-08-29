@@ -1120,7 +1120,7 @@ CREATE TABLE `marc_subfield_structure` (
   `mandatory` tinyint(4) NOT NULL default 0,
   `kohafield` varchar(40) default NULL,
   `tab` tinyint(1) default NULL,
-  `authorised_value` varchar(20) default NULL,
+  `authorised_value` varchar(32) default NULL,
   `authtypecode` varchar(20) default NULL,
   `value_builder` varchar(80) default NULL,
   `isurl` tinyint(1) default NULL,
@@ -1133,7 +1133,8 @@ CREATE TABLE `marc_subfield_structure` (
   PRIMARY KEY  (`frameworkcode`,`tagfield`,`tagsubfield`),
   KEY `kohafield_2` (`kohafield`),
   KEY `tab` (`frameworkcode`,`tab`),
-  KEY `kohafield` (`frameworkcode`,`kohafield`)
+  KEY `kohafield` (`frameworkcode`,`kohafield`),
+  CONSTRAINT `marc_subfield_structure_ibfk_1` FOREIGN KEY (`authorised_value`) REFERENCES `authorised_value_categories` (`category_name`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
