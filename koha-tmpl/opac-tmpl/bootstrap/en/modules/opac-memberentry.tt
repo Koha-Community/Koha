@@ -265,7 +265,7 @@
 
                                             [% UNLESS action == 'edit' && !OPACPatronDetails %]
                                                 [% UNLESS ( mandatory.defined('dateofbirth') ) %]
-                                                    <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('borrower_dateofbirth').value='';return false;">Clear date</a>
+                                                    <a href="#" style="font-size:85%;text-decoration:none;" class="cleardate">Clear date</a>
                                                 [% END %]
                                             [% END %]
 
@@ -983,6 +983,11 @@
                 });
             [% END %]
         });
+
+    $(".cleardate").on("click", function(){
+        document.getElementById('borrower_dateofbirth').value='';
+        return false;
+    });
     //]]>
     </script>
 [% INCLUDE 'calendar.inc' %]
