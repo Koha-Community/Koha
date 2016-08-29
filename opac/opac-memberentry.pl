@@ -70,6 +70,13 @@ my @libraries = Koha::Libraries->search;
 if ( my @libraries_to_display = split '\|', C4::Context->preference('PatronSelfRegistrationLibraryList') ) {
     @libraries = map { my $b = $_; my $branchcode = $_->branchcode; grep( /^$branchcode$/, @libraries_to_display ) ? $b : () } @libraries;
 }
+my ( $min, $max ) = C4::Members::get_cardnumber_length();
+if ( defined $min ) {
+     $template->param(
+         minlength_cardnumber => $min,
+         maxlength_cardnumber => $max
+     );
+ }
 
 $template->param(
     action            => $action,

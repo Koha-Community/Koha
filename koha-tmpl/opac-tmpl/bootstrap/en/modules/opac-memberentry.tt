@@ -137,8 +137,23 @@
                                     [% IF borrower && !(cardnumber_wrong_length || cardnumber_already_exists) %]
                                         [% borrower.cardnumber %]
                                     [% ELSE %]
-                                        <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" value="[% borrower.cardnumber %]" />
-                                        [% IF mandatory.defined('cardnumber') %]<span class="required">Required</span>[% END %]
+                                        [% IF minlength_cardnumber == maxlength_cardnumber %]
+                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                                            [% IF ( mandatory.defined('cardnumber') ) %]<span class="required">Required</span>[% END %]
+                                            <div class="hint">Card number must be exactly [% minlength_cardnumber %] characters.</div>
+                                        [% ELSIF minlength_cardnumber && maxlength_cardnumber %]
+                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                                            [% IF ( mandatory.defined('cardnumber') ) %]<span class="required">Required</span>[% END %]
+                                            <div class="hint">Card number must be between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters.</div>
+                                        [% ELSIF maxlength_cardnumber %]
+                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                                            [% IF ( mandatory.defined('cardnumber') ) %]<span class="required">Required</span>[% END %]
+                                            <div class="hint">Card number can be up to [% maxlength_cardnumber %] characters.</div>
+                                        [% ELSE %]
+                                            <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" size="20" value="[% borrower.cardnumber %]" />
+                                            [% IF ( mandatory.defined('cardnumber') ) %]<span class="required">Required</span>[% END %]
+                                            <div class="hint">There is no minimum or maximum character length.</div>
+                                        [% END %]
                                     [% END %]
                                 </li>
                                 [% END %]
