@@ -134,7 +134,7 @@
                                     [% END %]
                                     Library card number:
                                     </label>
-                                    [% IF borrower %]
+                                    [% IF borrower && !(cardnumber_wrong_length || cardnumber_already_exists) %]
                                         [% borrower.cardnumber %]
                                     [% ELSE %]
                                         <input type="text" id="borrower_cardnumber" name="borrower_cardnumber" value="[% borrower.cardnumber %]" />
