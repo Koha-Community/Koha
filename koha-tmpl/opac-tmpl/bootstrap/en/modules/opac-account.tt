@@ -143,7 +143,7 @@
                                         <div class="control-group">
                                             <label class="radio">
                                                 <input type="radio" name="payment_method" id="payment_method-paypal" value="paypal" checked="checked">
-                                                <!-- PayPal Logo --><a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark"></a><!-- PayPal Logo -->
+                                                <!-- PayPal Logo --><a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" class="paypal"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark"></a><!-- PayPal Logo -->
                                             </label>
                                         </div>
                                         <!-- look to the future
@@ -178,6 +178,12 @@
 [% BLOCK jsinclude %]
 <script type="text/javascript">
 $( document ).ready(function() {
+
+    $(".paypal").on("click", function() {
+        window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700');
+        return false;
+    });
+
     $(".pay-online").removeClass("hidden");
 
     $("#amount-to-pay-label").hide();
