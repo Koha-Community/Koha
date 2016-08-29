@@ -52,7 +52,7 @@ __PACKAGE__->table("items_search_fields");
   data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 1
-  size: 32
+  size: 80
 
 =cut
 
@@ -66,7 +66,7 @@ __PACKAGE__->add_columns(
   "tagsubfield",
   { data_type => "char", is_nullable => 1, size => 1 },
   "authorised_values_category",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 32 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 80 },
 );
 
 =head1 PRIMARY KEY
@@ -87,14 +87,14 @@ __PACKAGE__->set_primary_key("name");
 
 Type: belongs_to
 
-Related object: L<Koha::Schema::Result::AuthorisedValue>
+Related object: L<Koha::Schema::Result::AuthorisedValueCategory>
 
 =cut
 
 __PACKAGE__->belongs_to(
   "authorised_values_category",
-  "Koha::Schema::Result::AuthorisedValue",
-  { category => "authorised_values_category" },
+  "Koha::Schema::Result::AuthorisedValueCategory",
+  { category_name => "authorised_values_category" },
   {
     is_deferrable => 1,
     join_type     => "LEFT",
@@ -104,8 +104,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-02-05 15:20:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oHoTxnECC/702vwFO4vdqw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-29 11:50:45
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5iB4gfxlZLHw2fqwoK/Wtg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
