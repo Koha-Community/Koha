@@ -149,7 +149,6 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
             verify_images();
          });
     [% END %]
-
     $(".print-large").on("click",function(){
         window.print();
         return false;
@@ -165,6 +164,9 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     $(".cartRemove").on("click",function(){
         delSingleRecord('[% biblionumber %]');
         return false;
+    });
+    $(".clearsh").on("click", function(){
+        return confirmDelete(MSG_DELETE_SEARCH_HISTORY);
     });
     //]]>
 </script>
@@ -249,6 +251,10 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         onlogout: function () {
             window.location = '/cgi-bin/koha/opac-main.pl?logout.x=1';
         }
+    });
+
+    $(".logout").on("click",function(){
+        navigator.id.logout();
     });
 
     var signinLink = document.getElementById('browserid');
