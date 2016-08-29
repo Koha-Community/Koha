@@ -31,6 +31,15 @@ INSERT IGNORE INTO authorised_value_categories( category_name )
     ('itemtypes'),
     ('cn_source');
 
+INSERT IGNORE INTO authorised_value_categories( category_name )
+    VALUES
+    ('WITHDRAWN'),
+    ('RESTRICTED'),
+    ('NOT_LOAN'),
+    ('CCODE'),
+    ('LOC'),
+    ('STACK');
+
 -- Update the FK
 ALTER TABLE items_search_fields
     DROP FOREIGN KEY items_search_fields_authorised_values_category;

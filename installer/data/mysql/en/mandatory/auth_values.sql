@@ -20,3 +20,12 @@ INSERT IGNORE INTO authorised_value_categories( category_name )
     ('branches'),
     ('itemtypes'),
     ('cn_source');
+
+INSERT IGNORE INTO authorised_value_categories( category_name )
+    VALUES
+    ('WITHDRAWN'),
+    ('RESTRICTED'),
+    ('NOT_LOAN'),
+    ('CCODE'),
+    ('LOC'),
+    ('STACK');
