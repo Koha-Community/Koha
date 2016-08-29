@@ -92,6 +92,17 @@ CREATE TABLE `auth_tag_structure` (
   CONSTRAINT `auth_tag_structure_ibfk_1` FOREIGN KEY (`authtypecode`) REFERENCES `auth_types` (`authtypecode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+
+--
+-- Table structure for table `authorised_value_categories`
+--
+
+DROP TABLE IF EXISTS `authorised_value_categories`;
+CREATE TABLE `authorised_value_categories` (
+  `category_name` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (`category_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 --
 -- Table structure for table `authorised_values`
 --
@@ -3576,7 +3587,7 @@ CREATE TABLE items_search_fields (
   authorised_values_category VARCHAR(32) NULL DEFAULT NULL,
   PRIMARY KEY(name),
   CONSTRAINT items_search_fields_authorised_values_category
-    FOREIGN KEY (authorised_values_category) REFERENCES authorised_values (category)
+    FOREIGN KEY (authorised_values_category) REFERENCES authorised_value_categories (category_name)
     ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
