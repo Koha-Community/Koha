@@ -26,6 +26,7 @@ use C4::Koha;
 use C4::Output;
 
 use Koha::AuthorisedValues;
+use Koha::AuthorisedValueCategories;
 use Koha::Libraries;
 
 my $input = new CGI;
@@ -112,6 +113,9 @@ if ($op eq 'add_form') {
     if ( $already_exists and ( not $id or $already_exists->id != $id ) ) {
         push @messages, {type => 'error', code => 'already_exists' };
     }
+    elsif ( $new_category eq 'branches' or $new_category eq 'itemtypes' or $new_category eq 'cn_source' ) {
+        push @messages, {type => 'error', code => 'invalid_category_name' };
+    }
     elsif ( $id ) { # Update
         my $av = Koha::AuthorisedValues->new->find( $id );
 
@@ -153,6 +157,36 @@ if ($op eq 'add_form') {
 
     $op = 'list';
     $searchfield = $new_category;
+} elsif ($op eq 'add_category' ) {
+    my $new_category = $input->param('category');
+
+    my $already_exists = Koha::AuthorisedValueCategories->find(
+        {
+            category_name => $new_category,
+        }
+    );
+
+    if ( $already_exists ) {
+        push @messages, {type => 'error', code => 'cat_already_exists' };
+    }
+    else { # Insert
+        my $av = Koha::AuthorisedValueCategory->new( {
+            category_name => $new_category,
+        } );
+
+        eval {
+            $av->store;
+        };
+
+        if ( $@ ) {
+            push @messages, {type => 'error', code => 'error_on_insert_cat' };
+        } else {
+            push @messages, { type => 'message', code => 'success_on_insert_cat' };
+        }
+    }
+
+    $op = 'list';
+    $searchfield = $new_category;
 } elsif ($op eq 'delete') {
     my $av = Koha::AuthorisedValues->new->find( $input->param('id') );
     my $deleted = eval {$av->delete};
@@ -174,21 +208,11 @@ $template->param(
 
 if ( $op eq 'list' ) {
     # build categories list
-    my @categories = Koha::AuthorisedValues->new->categories;
+    my @categories = Koha::AuthorisedValueCategories->search({}, { order_by => ['category_name'] } );
     my @category_list;
-    my %categories;    # a hash, to check that some hardcoded categories exist.
     for my $category ( @categories ) {
-        push( @category_list, $category );
-        $categories{$category} = 1;
+        push( @category_list, $category->category_name );
     }
-
-    # push koha system categories
-    foreach (qw(Asort1 Asort2 Bsort1 Bsort2 SUGGEST DAMAGED LOST REPORT_GROUP REPORT_SUBGROUP DEPARTMENT TERM SUGGEST_STATUS ITEMTYPECAT)) {
-        push @category_list, $_ unless $categories{$_};
-    }
-
-    #reorder the list
-    @category_list = sort {$a cmp $b} @category_list;
 
     $searchfield ||= $category_list[0];
 

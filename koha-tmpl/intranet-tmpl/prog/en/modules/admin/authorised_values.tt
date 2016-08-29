@@ -77,25 +77,24 @@ $(document).ready(function() {
     [% IF ( action_modify ) %]<div class="note"><i class="fa fa-exclamation"></i> <strong>NOTE:</strong> If you change an authorized value code, existing records using it won't be updated. Changes to value descriptions will show immediately.</div>[% END %]
 
  <form action="/cgi-bin/koha/admin/authorised_values.pl" name="Aform" method="post" class="validated">
-    <input type="hidden" name="op" value="add" />
         <fieldset class="rows"><ol>
-        <li>
-        [% IF ( action_add_category ) %]
-            <label for="category" class="required">Category: </label>
-            <input type="text" name="category"  id="category" size="32" maxlength="32" class="focus required" />
-            <span class="required">Required</span>
-			 [% ELSE %]<span class="label">Category</span>
-		<input type="hidden" name="category" value="[% category %]" />	 [% category %]
-			 [% END %]
-        </li>
+        [% IF action_add_category %]
+            <li>
+                <label for="category" class="required">Category: </label>
+                <input type="text" name="category"  id="category" size="32" maxlength="32" class="focus required" />
+                <span class="required">Required</span>
+                <input type="hidden" name="op" value="add_category" />
+            </li>
+        [% ELSE %]
+            <li>
+                <span class="label">Category</span>
+                <input type="hidden" name="op" value="add" />
+                <input type="hidden" name="category" value="[% category %]" /> [% category %]
+            </li>
         <li>
             <label for="authorised_value">Authorized value: </label>
-     [% IF ( action_modify ) %]<input type="hidden" id="id" name="id" value="[% id %]" />[% END %]
-            [% IF ( action_add_category ) %]
-            <input type="text" id="authorised_value" name="authorised_value" value="[% authorised_value %]" maxlength="80" />
-            [% ELSE %]
+            [% IF ( action_modify ) %]<input type="hidden" id="id" name="id" value="[% id %]" />[% END %]
             <input type="text" id="authorised_value" name="authorised_value" value="[% authorised_value %]" maxlength="80" class="focus" />
-            [% END %]
         </li>
         <li>
             <label for="lib">Description: </label>
@@ -154,6 +153,7 @@ $(document).ready(function() {
   </div>
   [% END %]
   </div>
+        [% END %]
         </fieldset>
        <fieldset class="action"> <input type="hidden" name="id" value="[% id %]" />
         <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% category %]">Cancel</a></fieldset>
@@ -178,16 +178,24 @@ $(document).ready(function() {
             An error occurred when updating this authorized value. Perhaps the value already exists.
         [% CASE 'error_on_insert' %]
             An error occurred when inserting this authorized value. Perhaps the value or the category already exists.
+        [% CASE 'error_on_insert_cat' %]
+            An error occurred when inserting this authorized value category. Perhaps the category name already exists.
         [% CASE 'error_on_delete' %]
             An error occurred when deleting this authorized value. Check the logs.
         [% CASE 'success_on_update' %]
             Authorized value updated successfully.
         [% CASE 'success_on_insert' %]
             Authorized value added successfully.
+        [% CASE 'success_on_insert_cat' %]
+            Authorized value category added successfully.
         [% CASE 'success_on_delete' %]
             Authorized value deleted successfully.
         [% CASE 'already_exists' %]
             This authorized value already exists.
+        [% CASE 'cat_already_exists' %]
+            This authorized value category already exists.
+        [% CASE 'invalid_category_name' %]
+            The authorized value category 'branches', 'itemtypes' and 'cn_source' are used internally by Koha and are not valid.
         [% CASE %]
             [% m.code %]
         [% END %]
