@@ -24,6 +24,7 @@ use CGI qw ( -utf8 );
 use C4::Context;
 
 use Koha::Authority::Types;
+use Koha::AuthorisedValueCategories;
 
 use List::MoreUtils qw( uniq );
 
@@ -128,14 +129,8 @@ if ( $op eq 'add_form' ) {
     $sth2->finish;
     $sth2 = $dbh->prepare("select distinct category from authorised_values");
     $sth2->execute;
-    my @authorised_values;
-    push @authorised_values, "";
-    while ( ( my $category ) = $sth2->fetchrow_array ) {
-        push @authorised_values, $category;
-    }
-    push( @authorised_values, "branches" );
-    push( @authorised_values, "itemtypes" );
-    push( @authorised_values, "cn_source" );
+    my @av_cat = Koha::AuthorisedValueCategories->search;
+    my @authorised_values = map { $_->category_name } @av_cat;
 
     # build thesaurus categories list
     my @authtypes = uniq( "", map { $_->authtypecode } Koha::Authority::Types->search );

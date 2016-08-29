@@ -163,6 +163,7 @@
                             <li>
                                 <label for="authorised_value[% loo.row %]">Authorized value:</label>
                                 <select name="authorised_value" id="authorised_value[% loo.row %]" size="1">
+                                <option value=""></option>
                                 [% FOREACH value IN loo.authorised_values %]
                                     [% IF ( value == loo.authorised_value ) %]
                                     <option value="[% value %]" selected="selected">[% value %]</option>
