@@ -77,13 +77,6 @@ if ( not defined $biblionumber ) {
 }
 
 my $record = GetMarcBiblio($biblionumber,1);
-my $record_processor = Koha::RecordProcessor->new({
-    filters => 'ViewPolicy',
-    options => {
-        interface => 'intranet',
-    },
-});
-$record_processor->process($record);
 
 if ( not defined $record ) {
        # biblionumber invalid -> report and exit
@@ -95,6 +88,15 @@ if ( not defined $record ) {
 }
 
 my $framework = GetFrameworkCode( $biblionumber );
+my $record_processor = Koha::RecordProcessor->new({
+    filters => 'ViewPolicy',
+    options => {
+        interface => 'intranet',
+        frameworkcode => $framework
+    },
+});
+$record_processor->process($record);
+
 my $res = GetISBDView({
     'record'    => $record,
     'template'  => 'intranet',

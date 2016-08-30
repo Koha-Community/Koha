@@ -97,7 +97,14 @@ if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
-my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
+my $framework = GetFrameworkCode( $biblionumber );
+my $record_processor = Koha::RecordProcessor->new({
+    filters => 'ViewPolicy',
+    options => {
+        interface => 'opac',
+        frameworkcode => $framework
+    }
+});
 $record_processor->process($record);
 
 # some useful variables for enhanced content;
@@ -149,7 +156,6 @@ $template->param(
 
 my $norequests = 1;
 my $allow_onshelf_holds;
-my $framework = GetFrameworkCode( $biblionumber );
 my $res = GetISBDView({
     'record'    => $record,
     'template'  => 'opac',

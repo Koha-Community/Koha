@@ -69,6 +69,11 @@ if ($bib_list && $format) {
         foreach my $biblio (@bibs) {
 
             my $record = GetMarcBiblio($biblio, 1);
+            my $framework = &GetFrameworkCode( $biblio );
+            $record_processor->options({
+                interface => 'opac',
+                frameworkcode => $framework
+            });
             $record_processor->process($record);
 
             next unless $record;

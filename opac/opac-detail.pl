@@ -89,7 +89,14 @@ if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
     exit;
 }
-my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
+my $framework = &GetFrameworkCode( $biblionumber );
+my $record_processor = Koha::RecordProcessor->new({
+    filters => 'ViewPolicy',
+    options => {
+        interface => 'opac',
+        frameworkcode => $framework
+    }
+});
 $record_processor->process($record);
 
 # redirect if opacsuppression is enabled and biblio is suppressed

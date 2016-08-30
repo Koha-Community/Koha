@@ -48,8 +48,11 @@ if ($importid) {
 }
 else {
     $record = GetMarcBiblio($biblionumber);
-    my $frameworkcode = GetFrameworkCode($biblionumber);
-    $record_processor->options({ frameworkcode => $frameworkcode});
+    my $framework = GetFrameworkCode($biblionumber);
+    $record_processor->options({
+        interface => 'opac',
+        frameworkcode => $framework
+    });
 }
 
 if(!ref $record) {

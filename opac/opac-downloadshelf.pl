@@ -53,7 +53,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
 my $shelfnumber = $query->param('shelfnumber');
 my $format  = $query->param('format');
 my $context = $query->param('context');
-my $dbh     = C4::Context->dbh;
 
 my $shelf = Koha::Virtualshelves->find( $shelfnumber );
 if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
@@ -83,6 +82,11 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
                 my $biblionumber = $content->biblionumber->biblionumber;
 
                 my $record = GetMarcBiblio($biblionumber, 1);
+                my $framework = &GetFrameworkCode( $biblionumber );
+                $record_processor->options({
+                    interface => 'opac',
+                    frameworkcode => $framework
+                });
                 $record_processor->process($record);
                 next unless $record;
 
@@ -96,7 +100,6 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
                     $output .= marc2bibtex($record, $biblionumber);
                 }
                 elsif ( $format eq 'isbd' ) {
-                    my $framework = GetFrameworkCode( $biblionumber );
                     $output   .= GetISBDView({
                         'record'    => $record,
                         'template'  => 'opac',

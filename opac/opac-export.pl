@@ -45,8 +45,14 @@ if(!$marc) {
 }
 
 # ASSERT: There is a biblionumber, because GetMarcBiblio returned something.
-
-my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
+my $framework = GetFrameworkCode( $biblionumber );
+my $record_processor = Koha::RecordProcessor->new({
+    filters => 'ViewPolicy',
+    options => {
+        interface => 'opac',
+        frameworkcode => $framework
+    }
+});
 $record_processor->process($marc);
 
 if ($format =~ /endnote/) {
@@ -90,7 +96,6 @@ elsif ($format =~ /marcstd/) {
     $format = 'marcstd';
 }
 elsif ( $format =~ /isbd/ ) {
-    my $framework = GetFrameworkCode( $biblionumber );
     $marc   = GetISBDView({
         'record'    => $marc,
         'template'  => 'opac',

@@ -261,6 +261,11 @@ if ( $op eq 'view' ) {
                 my $biblionumber = $content->biblionumber->biblionumber;
                 my $this_item    = GetBiblioData($biblionumber);
                 my $record = GetMarcBiblio($biblionumber);
+                my $framework = GetFrameworkCode( $biblionumber );
+                $record_processor->options({
+                    interface => 'opac',
+                    frameworkcode => $framework
+                });
                 $record_processor->process($record);
 
                 if ( $xslfile ) {

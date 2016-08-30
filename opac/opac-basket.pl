@@ -63,7 +63,13 @@ foreach my $biblionumber ( @bibs ) {
 
     my $dat              = &GetBiblioData($biblionumber);
     next unless $dat;
-    my $record = &GetMarcBiblio($biblionumber);
+
+    my $record = &GetMarcBiblio( $biblionumber );
+    my $framework = &GetFrameworkCode( $biblionumber );
+    $record_processor->options({
+        interface => 'opac',
+        frameworkcode => $framework
+    });
     $record_processor->process($record);
     next unless $record;
     my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
