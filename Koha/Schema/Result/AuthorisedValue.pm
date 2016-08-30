@@ -33,6 +33,7 @@ __PACKAGE__->table("authorised_values");
 
   data_type: 'varchar'
   default_value: (empty string)
+  is_foreign_key: 1
   is_nullable: 0
   size: 32
 
@@ -67,7 +68,13 @@ __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "category",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 32 },
+  {
+    data_type => "varchar",
+    default_value => "",
+    is_foreign_key => 1,
+    is_nullable => 0,
+    size => 32,
+  },
   "authorised_value",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 80 },
   "lib",
@@ -107,9 +114,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 category
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-29 11:50:45
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VtpTwYpCMG3VVmsrQspdxw
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::AuthorisedValueCategory>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "category",
+  "Koha::Schema::Result::AuthorisedValueCategory",
+  { category_name => "category" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-30 11:52:45
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LOArv8JQ0aiTZgcy+jb7pA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

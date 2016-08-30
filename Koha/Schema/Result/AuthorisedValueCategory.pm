@@ -26,14 +26,15 @@ __PACKAGE__->table("authorised_value_categories");
 =head2 category_name
 
   data_type: 'varchar'
+  default_value: (empty string)
   is_nullable: 0
-  size: 80
+  size: 32
 
 =cut
 
 __PACKAGE__->add_columns(
   "category_name",
-  { data_type => "varchar", is_nullable => 0, size => 80 },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 32 },
 );
 
 =head1 PRIMARY KEY
@@ -49,6 +50,21 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("category_name");
 
 =head1 RELATIONS
+
+=head2 authorised_values
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AuthorisedValue>
+
+=cut
+
+__PACKAGE__->has_many(
+  "authorised_values",
+  "Koha::Schema::Result::AuthorisedValue",
+  { "foreign.category" => "self.category_name" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 =head2 items_search_fields
 
@@ -66,8 +82,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-29 11:50:45
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fF91wGF5/xHvp8JX5fAAtw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-30 11:54:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:T8LzWM/O8zSGpRhTZbzvJA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
