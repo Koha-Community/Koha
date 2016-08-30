@@ -11,17 +11,17 @@ var MSG_PLEASE_ENTER_A_VALID_DATE = _("Please enter a valid date (should match %
 function is_valid_date(date) {
     var dateformat = dateformat_str = '[% Koha.Preference('dateformat') %]';
     if ( dateformat == 'us' ) {
+        if ( date.search(/\d{2}\/\d{2}\/\d{4}/) == -1 ) return 0;
         dateformat = 'mm/dd/yy';
-        dateformat_str = 'mm/dd/yyyy';
     } else if ( dateformat == 'metric' ) {
+        if ( date.search(/\d{2}\/\d{2}\/\d{4}/) == -1 ) return 0;
         dateformat = 'dd/mm/yy';
-        dateformat_str = 'dd/mm/yyyy';
     } else if (dateformat == 'iso' ) {
+        if ( date.search(/\d{2}-\d{2}-\d{4}/) == -1 ) return 0;
         dateformat = 'yy-mm-dd';
-        dateformat_str = 'yyyy-mm-dd';
     } else if ( dateformat == 'dmydot' ) {
+        if ( date.search(/\d{2}\.\d{2}\.\d{4}/) == -1 ) return 0;
         dateformat = 'dd.mm.yy';
-        dateformat_str = 'dd.mm.yyyy';
     }
     try {
         $.datepicker.parseDate(dateformat, date);
