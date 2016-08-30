@@ -45,3 +45,5 @@ ALTER TABLE items_search_fields
     DROP FOREIGN KEY items_search_fields_authorised_values_category;
 ALTER TABLE items_search_fields
     ADD CONSTRAINT `items_search_fields_authorised_values_category` FOREIGN KEY (`authorised_values_category`) REFERENCES `authorised_value_categories` (`category_name`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE authorised_values
+    ADD CONSTRAINT `authorised_values_authorised_values_category` FOREIGN KEY (`category`) REFERENCES `authorised_value_categories` (`category_name`) ON DELETE CASCADE ON UPDATE CASCADE;
