@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Warn;
 
 use C4::Context;
@@ -84,4 +84,9 @@ subtest 'id' => sub {
     is( $patron->id, $patron->borrowernumber );
 };
 
+subtest 'get_column' => sub {
+    plan tests => 1;
+    my $patron = Koha::Patron->new({categorycode => $categorycode, branchcode => $branchcode })->store;
+    is( $patron->get_column('borrowernumber'), $patron->borrowernumber, 'get_column should retrieve the correct value' );
+};
 1;

@@ -237,7 +237,7 @@ sub AUTOLOAD {
         }
     }
 
-    my @known_methods = qw( is_changed id in_storage );
+    my @known_methods = qw( is_changed id in_storage get_column );
 
     carp "The method $method is not covered by tests or does not exist!" and return unless grep {/^$method$/} @known_methods;
 
