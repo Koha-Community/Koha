@@ -7,6 +7,7 @@ use Modern::Perl;
 use C4::Context;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::AuthorisedValue;
+use Koha::AuthorisedValueCategories;
 
 use Test::More tests => 9;
 use DateTime::Format::MySQL;
@@ -31,7 +32,8 @@ subtest 'Authorized Values Tests' => sub {
         imageurl            => 'IMAGEURL'
     };
 
-
+    my $avc = Koha::AuthorisedValueCategories->find($data->{category});
+    Koha::AuthorisedValueCategory->new({ category_name => $data->{category} })->store unless $avc;
 # Insert an entry into authorised_value table
     my $insert_success = Koha::AuthorisedValue->new(
         {   category         => $data->{category},
@@ -61,6 +63,7 @@ subtest 'Authorized Values Tests' => sub {
     SKIP: {
         eval { require Test::Deep; import Test::Deep; };
         skip "Test::Deep required to run the GetAuthorisedValues() tests.", 2 if $@;
+        Koha::AuthorisedValueCategory->new({ category_name => 'BUG10656' })->store;
         Koha::AuthorisedValue->new(
             {   category         => 'BUG10656',
                 authorised_value => 'ZZZ',
@@ -289,6 +292,8 @@ subtest 'GetFrameworksLoop() tests' => sub {
 subtest 'GetItemTypesByCategory GetItemTypesCategorized test' => sub{
     plan tests => 7;
 
+    my $avc = Koha::AuthorisedValueCategories->find('ITEMTYPECAT');
+    Koha::AuthorisedValueCategory->new({ category_name => 'ITEMTYPECAT' })->store unless $avc;
     my $insertGroup = Koha::AuthorisedValue->new(
         {   category         => 'ITEMTYPECAT',
             authorised_value => 'Quertyware',
