@@ -316,7 +316,7 @@ $(document).ready(function() {
                 [% END %]
                 Date of birth: </label>
 
-                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="write_age();" value="[% UNLESS opduplicate %][% dateofbirth %][% END %]" />
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="write_age();" value="[% UNLESS opduplicate %][% dateofbirth %][% END %]" class="datepicker" />
 
         [% IF ( mandatorydateofbirth ) %]<span class="required">Required</span>[% END %]
         [% IF ( ERROR_dateofbirth ) %]<span class="required">(Error)</span>[% END %]
