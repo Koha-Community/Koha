@@ -30,6 +30,7 @@ use C4::Output;
 use C4::Koha;
 use C4::Members::AttributeTypes;
 
+use Koha::AuthorisedValues;
 use Koha::Libraries;
 use Koha::Patron::Categories;
 
@@ -298,7 +299,8 @@ sub patron_attribute_type_list {
             $attr->{branches} = $attr_type->branches;
             push @items, $attr;
         }
-        my $lib = GetAuthorisedValueByCode( 'PA_CLASS', $class ) || $class;
+        my $av = Koha::AuthorisedValues->search({ category => 'PA_CLASS', authorised_value => $class });
+        my $lib = $av->count ? $av->next->lib : $class;
         push @attributes_loop, {
             class => $class,
             items => \@items,

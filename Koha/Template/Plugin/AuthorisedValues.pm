@@ -25,7 +25,12 @@ use C4::Koha;
 
 sub GetByCode {
     my ( $self, $category, $code, $opac ) = @_;
-    return GetAuthorisedValueByCode( $category, $code, $opac );
+    my $av = Koha::AuthorisedValues->search({ category => $category, authorised_value => $code });
+    return $av->count
+            ? $opac
+                ? $av->next->opac_description
+                : $av->next->lib
+            : '';
 }
 
 sub Get {
@@ -58,13 +63,6 @@ Koha::Template::Plugin::AuthorisedValues - TT Plugin for authorised values
 
 In a template, you can get the description for an authorised value with
 the following TT code: [% AuthorisedValues.GetByCode( 'CATEGORY', 'AUTHORISED_VALUE_CODE', 'IS_OPAC' ) %]
-
-The parameters are identical to those used by the subroutine C4::Koha::GetAuthorisedValueByCode.
-
-sub GetByCode {
-    my ( $self, $category, $code, $opac ) = @_;
-    return GetAuthorisedValueByCode( $category, $code, $opac );
-}
 
 =head2 GetAuthValueDropbox
 

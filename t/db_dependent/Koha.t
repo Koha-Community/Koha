@@ -9,7 +9,7 @@ use Koha::DateUtils qw(dt_from_string);
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValueCategories;
 
-use Test::More tests => 9;
+use Test::More tests => 8;
 use DateTime::Format::MySQL;
 
 BEGIN {
@@ -45,13 +45,6 @@ subtest 'Authorized Values Tests' => sub {
     )->store;
     ok( $insert_success, "Insert data in database" );
 
-
-# Tests
-    SKIP: {
-        skip "INSERT failed", 1 unless $insert_success;
-
-        is ( GetAuthorisedValueByCode($data->{category}, $data->{authorised_value}), $data->{lib}, "GetAuthorisedValueByCode" );
-    }
 
 # Clean up
     if($insert_success){

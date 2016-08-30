@@ -31,6 +31,7 @@ use C4::Members;
 use C4::Debug;
 
 use Koha::DateUtils qw( dt_from_string );
+use Koha::AuthorisedValues;
 use Koha::Acquisition::Currencies;
 use Koha::Libraries;
 
@@ -56,13 +57,17 @@ sub GetCriteriumDesc{
     my ($criteriumvalue,$displayby)=@_;
     if ($displayby =~ /status/i) {
         unless ( grep { /$criteriumvalue/ } qw(ASKED ACCEPTED REJECTED CHECKED ORDERED AVAILABLE) ) {
-            return GetAuthorisedValueByCode('SUGGEST_STATUS', $criteriumvalue ) || "Unknown";
+            my $av = Koha::AuthorisedValues->search({ category => 'SUGGEST_STATUS', authorised_value => $criteriumvalue });
+            return $av->count ? $av->next->lib : 'Unkown';
         }
         return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     }
     return Koha::Libraries->find($criteriumvalue)->branchname
         if $displayby =~ /branchcode/;
-    return GetAuthorisedValueByCode('SUGGEST_FORMAT', $criteriumvalue) || "Unknown" if ($displayby =~/itemtype/);
+    if ( $displayby =~ /itemtype/ ) {
+        my $av = Koha::AuthorisedValues->search({ category => 'SUGGEST_FORMAT', authorised_value => $criteriumvalue });
+        return $av->count ? $av->next->lib : 'Unkown';
+    }
     if ($displayby =~/suggestedby/||$displayby =~/managedby/||$displayby =~/acceptedby/){
         my $borr=C4::Members::GetMember(borrowernumber=>$criteriumvalue);
         return "" unless $borr;

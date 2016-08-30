@@ -609,7 +609,8 @@ my $relatives_issues_count =
   Koha::Database->new()->schema()->resultset('Issue')
   ->count( { borrowernumber => \@relatives } );
 
-my $roadtype = C4::Koha::GetAuthorisedValueByCode( 'ROADTYPE', $borrower->{streettype} );
+my $av = Koha::AuthorisedValues->search({ category => 'ROADTYPE', authorised_value => $borrower->{streettype} });
+my $roadtype = $av->count ? $av->next->lib : '';
 
 $template->param(%$borrower);
 

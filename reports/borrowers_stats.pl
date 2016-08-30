@@ -24,13 +24,14 @@ use List::MoreUtils qw/uniq/;
 use C4::Auth;
 use C4::Context;
 use C4::Koha;
-use Koha::DateUtils;
 use C4::Acquisition;
 use C4::Output;
 use C4::Reports;
 use C4::Circulation;
 use C4::Members::AttributeTypes;
 
+use Koha::AuthorisedValues;
+use Koha::DateUtils;
 use Koha::Libraries;
 use Koha::Patron::Categories;
 
@@ -533,7 +534,8 @@ sub patron_attributes_form {
 
     my @attribute_loop;
     foreach my $class ( sort keys %items_by_class ) {
-        my $lib = GetAuthorisedValueByCode( 'PA_CLASS', $class ) || $class;
+        my $av = Koha::AuthorisedValues->search({ category => 'PA_CLASS', authorised_value => $class });
+        my $lib = $av->count ? $av->next->lib : $class;
         push @attribute_loop, {
             class => $class,
             items => $items_by_class{$class},

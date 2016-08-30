@@ -28,7 +28,6 @@ use Carp;
 use Template;
 use Module::Load::Conditional qw(can_load);
 
-use C4::Koha qw(GetAuthorisedValueByCode);
 use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Log;
@@ -841,7 +840,10 @@ sub _parseletter {
             #Therefore adding the test on biblio. This includes biblioitems,
             #but excludes items. Removed unneeded global and lookahead.
 
-        $val = GetAuthorisedValueByCode ('ROADTYPE', $val, 0) if $table=~/^borrowers$/ && $field=~/^streettype$/;
+        if ( $table=~/^borrowers$/ && $field=~/^streettype$/ ) {
+            my $av = Koha::AuthorisedValues->search({ category => 'ROADTYPE', authorised_value => $val });
+            $val = $av->count ? $av->next->lib : '';
+        }
 
         # Dates replacement
         my $replacedby   = defined ($val) ? $val : '';
