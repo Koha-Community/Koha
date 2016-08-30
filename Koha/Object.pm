@@ -1,6 +1,7 @@
 package Koha::Object;
 
 # Copyright ByWater Solutions 2014
+# Copyright 2016 Koha Development Team
 #
 # This file is part of Koha.
 #
@@ -109,31 +110,6 @@ sub store {
     return $self->_result()->update_or_insert() ? $self : undef;
 }
 
-=head3 $object->in_storage();
-
-Returns true if the object has been previously stored.
-
-=cut
-
-sub in_storage {
-    my ($self) = @_;
-
-    return $self->_result()->in_storage();
-}
-
-=head3 $object->is_changed();
-
-Returns true if the object has properties that are different from
-the properties of the object in storage.
-
-=cut
-
-sub is_changed {
-    my ( $self, @columns ) = @_;
-
-    return $self->_result()->is_changed(@columns);
-}
-
 =head3 $object->delete();
 
 Removes the object from storage.
@@ -191,20 +167,6 @@ sub set {
     }
 
     return $self->_result()->set_columns($properties) ? $self : undef;
-}
-
-=head3 $object->id();
-
-Returns the id of the object if it has one.
-
-=cut
-
-sub id {
-    my ($self) = @_;
-
-    my ( $id ) = $self->_result()->id();
-
-    return $id;
 }
 
 =head3 $object->unblessed();
@@ -275,8 +237,16 @@ sub AUTOLOAD {
         }
     }
 
-    carp "No method $method!";
-    return;
+    my @known_methods = qw( is_changed id in_storage );
+
+    carp "The method $method is not covered by tests or does not exist!" and return unless grep {/^$method$/} @known_methods;
+
+    my $r = eval { $self->_result->$method(@_) };
+    if ( $@ ) {
+        carp "No method $method found for " . ref($self) . " " . $@;
+        return
+    }
+    return $r;
 }
 
 =head3 _type
@@ -293,6 +263,8 @@ sub DESTROY { }
 =head1 AUTHOR
 
 Kyle M Hall <kyle@bywatersolutions.com>
+
+Jonathan Druart <jonathan.druart@bugs.koha-community.org>
 
 =cut
 
