@@ -81,9 +81,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 marc_subfield_structures
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-30 11:54:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:T8LzWM/O8zSGpRhTZbzvJA
+Type: has_many
+
+Related object: L<Koha::Schema::Result::MarcSubfieldStructure>
+
+=cut
+
+__PACKAGE__->has_many(
+  "marc_subfield_structures",
+  "Koha::Schema::Result::MarcSubfieldStructure",
+  { "foreign.authorised_value" => "self.category_name" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-30 11:59:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6vToj9pUcIv8Jio38rNE4g
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -77,8 +77,9 @@ __PACKAGE__->table("marc_subfield_structure");
 =head2 authorised_value
 
   data_type: 'varchar'
+  is_foreign_key: 1
   is_nullable: 1
-  size: 20
+  size: 32
 
 =head2 authtypecode
 
@@ -152,7 +153,7 @@ __PACKAGE__->add_columns(
   "tab",
   { data_type => "tinyint", is_nullable => 1 },
   "authorised_value",
-  { data_type => "varchar", is_nullable => 1, size => 20 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 32 },
   "authtypecode",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "value_builder",
@@ -189,9 +190,31 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("frameworkcode", "tagfield", "tagsubfield");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4JgqkPKFNSQ90hTeeb30ow
+=head2 authorised_value
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::AuthorisedValueCategory>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "authorised_value",
+  "Koha::Schema::Result::AuthorisedValueCategory",
+  { category_name => "authorised_value" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-30 11:59:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/gnyZuGje+sg82HfxMLI0g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
