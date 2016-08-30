@@ -6,14 +6,18 @@ use Test::More tests => 14;
 use C4::Context;
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValues;
+use Koha::AuthorisedValueCategories;
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 $dbh->do("DELETE FROM authorised_values");
+$dbh->do("DELETE FROM authorised_value_categories");
 
 # insert
+Koha::AuthorisedValueCategory->new({ category_name => 'av_for_testing' })->store;
+Koha::AuthorisedValueCategory->new({ category_name => 'aaav_for_testing' })->store;
 my $av1 = Koha::AuthorisedValue->new(
     {
         category         => 'av_for_testing',
