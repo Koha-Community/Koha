@@ -98,18 +98,20 @@ sub gethtml5media {
         # src
         if ( $HTML5Media_field->subfield('u') ) {
             $HTML5Media{srcblock} = $HTML5Media_field->subfield('u');
-            if (grep /youtube/, $HTML5Media_field->subfield('u') ) { # TODO is there an official YT URL shortener? Can we use that too?
+            if (grep /youtube|youtu[.]be/, $HTML5Media_field->subfield('u') ) {
                 if ($HTML5MediaYouTube == 1) {
                     require WWW::YouTube::Download;
                     import  WWW::YouTube::Download qw(playback_url);
                     my $youtube           = WWW::YouTube::Download->new;
-                    $HTML5Media{srcblock} = $youtube->playback_url(
-                        $HTML5Media_field->subfield('u'), {
-                            'fmt' => '43' #webm is the only format compatible to all modern browsers. maybe check for available qualities
-                        }
-                    );
-                    # TODO handle error if format not available. Does that ever occur?
-                    $isyoutube = 1;
+                    eval {
+                        $HTML5Media{srcblock} = $youtube->playback_url(
+                            $HTML5Media_field->subfield('u'), {
+                                'fmt' => '43' #webm is the only format compatible to all modern browsers. maybe check for available qualities
+                            }
+                        );
+                    };
+                    if ($@) { warn $@; }
+                    else  { $isyoutube = 1;}
                 }
                else {
                    next; # do not embed youtube videos
