@@ -25,13 +25,14 @@ use C4::Log qw/logaction/;
 use Koha::DateUtils;
 use Getopt::Long;
 
-my ($help, $verbose, $confirm, $log);
+my ($help, $verbose, $confirm, $log, $stdout_log);
 
 GetOptions(
     'h|help'    => \$help,
     'v|verbose' => \$verbose,
     'l|log'     => \$log,
-    'c|confirm' => \$confirm
+    'c|confirm' => \$confirm,
+    'p|print'   => \$stdout_log
 );
 
 my $usage = << 'ENDUSAGE';
@@ -44,6 +45,7 @@ This script has the following parameters :
     -h --help: this message
     -l --log: log changes to the system logs
     -c --confirm: commit changes (test only mode if not present)
+    -p --print: output affected fine records details to the STDOUT
     -v --verbose
 
 ENDUSAGE
@@ -55,7 +57,8 @@ ENDUSAGE
     }
 
     Bug_17135_fix({
-        'verbose' => $verbose, 'log' => $log, 'confirm' => $confirm
+        'verbose' => $verbose, 'log' => $log,
+        'confirm' => $confirm, 'stdout_log' => $stdout_log
     });
 
     exit 0;
@@ -67,6 +70,7 @@ sub Bug_17135_fix {
     my $verbose = $params->{'verbose'};
     my $log = $params->{'log'};
     my $confirm = $params->{'confirm'};
+    my $stdout_log = $params->{'stdout_log'};
 
     my $control = C4::Context->preference('CircControl');
     my $mode = C4::Context->preference('finesMode');
@@ -170,28 +174,31 @@ sub Bug_17135_fix {
         };
     }
 
-    Warn("Fine records with mismatched old vs current due dates: $different_dates_cnt") if $verbose;
-    Warn("Non-accruing accountlines FU records (item not due): ".$not_due_not_accruning_cnt);
-    Warn("Non-accruing accountlines FU records (item due): ".$due_not_accruning_cnt);
+    if ($verbose) {
+        Warn("Fine records with mismatched old vs current due dates: $different_dates_cnt");
+        Warn("Non-accruing accountlines FU records (item not due): ".$not_due_not_accruning_cnt);
+        Warn("Non-accruing accountlines FU records (item due): ".$due_not_accruning_cnt);
+    }
 
+    if (@$forfixing > 0) {
+        Warn("Dry run (test only mode), skipping ".scalar(@$forfixing)." database changes.") unless ($confirm);
+    }
+    my $updated_cnt = 0;
     my $update_sql = "UPDATE accountlines SET accounttype = 'F' WHERE accounttype = 'FU' AND accountlines_id = ? LIMIT 1";
     for my $fine (@$forfixing) {
         my $logentry = "Closing old FU fine (Bug 17135); accountlines_id=".$fine->{accountlines_id};
         $logentry .= " issue_id=".$fine->{issue_id}." amount=".$fine->{amount};
         $logentry .= "; due dates (old, current): '".$fine->{old_date_due}."', '".$fine->{current_due_date}."'";
         $logentry .= "; reason: ".$fine->{log_entry};
+        print($logentry."\n") if ($stdout_log);
 
-        unless ($mode eq 'production') {
-            print $logentry."\n"; ## FIXME?
-            next;
-        }
-        unless ($confirm) {
-            Warn("Dry run (test only mode), skipping database changes.");
-            last;
-        }
-
-        $dbh->do($update_sql, undef, $fine->{accountlines_id});
+        next unless ($confirm && $mode eq 'production');
+        my $rows_affected = $dbh->do($update_sql, undef, $fine->{accountlines_id});
+        $updated_cnt += $rows_affected;
         logaction("FINES", "FU", $fine->{borrowernumber}, $logentry) if ($log);
+    }
+    if (@$forfixing > 0 && $confirm && $mode eq 'production') {
+        Warn("Database update done, $updated_cnt".((@$forfixing == $updated_cnt)? "": "/".scalar(@$forfixing))." fine records closed successfully.");
     }
 }
 
@@ -203,6 +210,8 @@ sub getFinesForChecking {
         LEFT JOIN issues iss USING (issue_id)
         WHERE accounttype = 'FU'
         AND iss.issue_id IS NOT NULL
+        AND iss.borrowernumber = acc.borrowernumber
+        AND iss.itemnumber = acc.itemnumber
         ORDER BY acc.borrowernumber, acc.issue_id
     ";
 
@@ -212,5 +221,5 @@ sub getFinesForChecking {
 }
 
 sub Warn {
-    print STDERR join("\n", @_, '');
+    print join("\n", @_, '');
 }
