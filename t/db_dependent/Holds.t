@@ -43,7 +43,12 @@ my $dbh     = C4::Context->dbh;
 my $branch_1 = $builder->build({ source => 'Branch' })->{ branchcode };
 my $branch_2 = $builder->build({ source => 'Branch' })->{ branchcode };
 
-my $category = $builder->build({ source => 'Category' });
+my $category = $builder->build({
+    source => 'Category',
+    value => {
+        BlockExpiredPatronOpacActions => -1,
+    },
+});
 
 my $borrowers_count = 5;
 
@@ -127,6 +132,19 @@ my $patron = Koha::Patrons->find( $borrowernumbers[0] );
 $holds = $patron->holds;
 is( $holds->next->borrowernumber, $borrowernumbers[0], "Test Koha::Patron->holds");
 
+my $expired_borrowernumber = Koha::Patron->new({
+        firstname =>  'Expired',
+        surname => 'Patron',
+        categorycode => $category->{categorycode},
+        branchcode => $branch_1,
+	dateexpiry => '2000-01-01',
+    })->store->borrowernumber;
+
+t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 1);
+ok(
+    CanItemBeReserved($expired_borrowernumber, $itemnumber)->{status} eq 'patronExpired',
+    'Expired patron cannot reserve'
+);
 
 $holds = $item->current_holds;
 $first_hold = $holds->next;
