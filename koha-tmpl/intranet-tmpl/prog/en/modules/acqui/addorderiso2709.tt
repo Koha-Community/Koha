@@ -320,7 +320,7 @@
                         <legend>Item Record [% item.item_id %]</legend>
                         <ol>
                         <li>
-                        <label for="homebranch_item_[% item.item_id %]">homebranch</label><select id="homebranch_item_[% item.item_id %]" name="homebranch">
+                        <label for="homebranch_item_[% item.item_id %]">homebranch</label><select id="homebranch_item_[% item.item_id %]" name="homebranch_[% item.biblio_count %]">
                         [% FOREACH branchloo IN branchloop %]
                           [% IF ( branchloo.value ) == ( item.homebranch )  %]
                             <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
@@ -331,7 +331,7 @@
                         </select>
                         </li>
 
-                        <li><label for="holdingbranch_item_[% item.item_id %]">holdingbranch</label><select id="holdingbranch_item_[% item.item_id %]" name="holdingbranch">
+                        <li><label for="holdingbranch_item_[% item.item_id %]">holdingbranch</label><select id="holdingbranch_item_[% item.item_id %]" name="holdingbranch_[% item.biblio_count %]">
                         [% FOREACH branchloo IN branchloop %]
                           [% IF ( branchloo.value ) == ( item.holdingbranch ) %]
                             <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
@@ -341,7 +341,7 @@
                         [% END %]
                         </select>
                         </li>
-                        <li><label for="itype_item_[% item.item_id %]">itype</label><select id="itype_item_[% item.item_id %]" name="itype">
+                        <li><label for="itype_item_[% item.item_id %]">itype</label><select id="itype_item_[% item.item_id %]" name="itype_[% item.biblio_count %]">
                         [% FOREACH itypeloo IN itypeloop %]
                           [% IF ( itypeloo.value ) == ( item.itype ) %]
                             <option value="[% itypeloo.itemtype %]" selected="selected">[% itypeloo.description |html %]</option>
@@ -352,9 +352,9 @@
                         </select>
                         </li>
 
-                        <li><label for="nonpublic_note_item_[% item.item_id %]">nonpublic_note</label><input type="text" id="nonpublic_note_item_[% item.item_id %]" name="nonpublic_note" value="[% item.nonpublic_note %]"></li>
-                        <li><label for="public_note_item_[% item.item_id %]">public_note</label><input type="text" id="public_note_item_[% item.item_id %]" name="public_note" value="[% item.public_note %]"></li>
-                        <li><label for="loc_item_[% item.item_id %]">loc</label><select id="loc_item_[% item.item_id %]" name="loc">
+                        <li><label for="nonpublic_note_item_[% item.item_id %]">nonpublic_note</label><input type="text" id="nonpublic_note_item_[% item.item_id %]" name="nonpublic_note_[% item.biblio_count %]" value="[% item.nonpublic_note %]"></li>
+                        <li><label for="public_note_item_[% item.item_id %]">public_note</label><input type="text" id="public_note_item_[% item.item_id %]" name="public_note_[% item.biblio_count %]" value="[% item.public_note %]"></li>
+                        <li><label for="loc_item_[% item.item_id %]">loc</label><select id="loc_item_[% item.item_id %]" name="loc_[% item.biblio_count %]">
                         <option value=""> </option>
                         [% FOREACH locationloo IN locationloop %]
                             [% IF ( locationloo.code ) == (item.loc) %]<option value="[% locationloo.code %]" selected="selected">[% locationloo.description %]</option>[% ELSE %]<option value="[% locationloo.code %]">[% locationloo.description %]</option>[% END %]
@@ -362,17 +362,17 @@
                        </select>
                         </li>
 
-                        <li><label for="ccode_item_[% item.item_id %]">ccode</label><select id="ccode_item_[% item.item_id %]" name="ccode">
+                        <li><label for="ccode_item_[% item.item_id %]">ccode</label><select id="ccode_item_[% item.item_id %]" name="ccode_[% item.biblio_count %]">
                         [% FOREACH ccodeloo IN ccodeloop %]
                             [% IF ( ccodeloo.code ) == (item.ccode) %]<option value="[% ccodeloo.code %]" selected="selected">[% ccodeloo.description %]</option>[% ELSE %]<option value="[% ccodeloo.code %]">[% ccodeloo.description %]</option>[% END %]
                         [% END %]
                         </select>
                         </li>
 
-                        <li><label for="notforloan_item_[% item.item_id %]">notforloan</label><input type="text" id="notforloan_item_[% item.item_id %]" name="notforloan" value="[% item.notforloan %]"></li>
-                        <li><label for="uri_item_[% item.item_id %]">uri</label><input type="text" id="uri_item_[% item.item_id %]" name="uri" value="[% item.uri %]"></li>
-                        <li><label for="copyno_item_[% item.item_id %]">copyno</label><input type="text" id="copyno_item_[% item.item_id %]" name="copyno" value="[% item.copyno %]"></li>
-                        <li><label for="budget_code_item_[% item.item_id %]">budget_code</label><select id="budget_code_item_[% item.item_id %]" name="budget_code">
+                        <li><label for="notforloan_item_[% item.item_id %]">notforloan</label><input type="text" id="notforloan_item_[% item.item_id %]" name="notforloan_[% item.biblio_count %]" value="[% item.notforloan %]"></li>
+                        <li><label for="uri_item_[% item.item_id %]">uri</label><input type="text" id="uri_item_[% item.item_id %]" name="uri_[% item.biblio_count %]" value="[% item.uri %]"></li>
+                        <li><label for="copyno_item_[% item.item_id %]">copyno</label><input type="text" id="copyno_item_[% item.item_id %]" name="copyno_[% item.biblio_count %]" value="[% item.copyno %]"></li>
+                        <li><label for="budget_code_item_[% item.item_id %]">budget_code</label><select id="budget_code_item_[% item.item_id %]" name="budget_code_[% item.biblio_count %]">
                         <option value="">Select a fund</option>
                         [% FOREACH budget_loo IN budget_loop %]
                             [% IF ( budget_loo.b_code ) == ( item.budget_code ) %]<option value="[% budget_loo.b_id %]" selected="selected">[% budget_loo.b_txt %]</option>
@@ -381,7 +381,7 @@
                         [% END %]
                         </select>
                         </li>
-                        <li><label for="price_item_[% item.item_id %]">price</label><input type="text" id="price_item_[% item.item_id %]" name="itemprice" value="[% item.itemprice %]"></li>
+                        <li><label for="price_item_[% item.item_id %]">price</label><input type="text" id="price_item_[% item.item_id %]" name="itemprice_[% item.biblio_count %]" value="[% item.itemprice %]"></li>
                         </ol>
                         </fieldset>
                         [% END %]

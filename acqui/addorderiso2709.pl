@@ -143,7 +143,9 @@ if ($op eq ""){
     my @sort2 = $input->multi_param('sort2');
     my $matcher_id = $input->param('matcher_id');
     my $active_currency = Koha::Acquisition::Currencies->get_active;
+    my $biblio_count = 0;
     for my $biblio (@$biblios){
+        $biblio_count++;
         # Check if this import_record_id was selected
         next if not grep { $_ eq $$biblio{import_record_id} } @import_record_id_selected;
         my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
@@ -197,19 +199,19 @@ if ($op eq ""){
         }
 
         # Add items from MarcItemFieldsToOrder
-        my @homebranches = $input->multi_param('homebranch');
+        my @homebranches = $input->multi_param('homebranch_' . $biblio_count);
         my $count = scalar @homebranches;
-        my @holdingbranches = $input->multi_param('holdingbranch');
-        my @itypes = $input->multi_param('itype');
-        my @nonpublic_notes = $input->multi_param('nonpublic_note');
-        my @public_notes = $input->multi_param('public_note');
-        my @locs = $input->multi_param('loc');
-        my @ccodes = $input->multi_param('ccodes');
-        my @notforloans = $input->multi_param('notforloans');
-        my @uris = $input->multi_param('uri');
-        my @copynos = $input->multi_param('copyno');
-        my @budget_codes = $input->multi_param('budget_code');
-        my @itemprices = $input->multi_param('itemprice');
+        my @holdingbranches = $input->multi_param('holdingbranch_' . $biblio_count);
+        my @itypes = $input->multi_param('itype_' . $biblio_count);
+        my @nonpublic_notes = $input->multi_param('nonpublic_note_' . $biblio_count);
+        my @public_notes = $input->multi_param('public_note_' . $biblio_count);
+        my @locs = $input->multi_param('loc_' . $biblio_count);
+        my @ccodes = $input->multi_param('ccodes_' . $biblio_count);
+        my @notforloans = $input->multi_param('notforloans_' . $biblio_count);
+        my @uris = $input->multi_param('uri_' . $biblio_count);
+        my @copynos = $input->multi_param('copyno_' . $biblio_count);
+        my @budget_codes = $input->multi_param('budget_code_' . $biblio_count);
+        my @itemprices = $input->multi_param('itemprice_' . $biblio_count);
         my $itemcreation = 0;
         for (my $i = 0; $i < $count; $i++) {
             $itemcreation = 1;
@@ -457,7 +459,6 @@ sub import_biblios_list {
     return () unless $batch and $batch->{import_status} =~ /^staged$|^reverted$/;
     my $biblios = GetImportRecordsRange($import_batch_id,'','',$batch->{import_status});
     my @list = ();
-    my $item_id = 1;
     my $item_error = 0;
 
     my $ccodes    = GetKohaAuthorisedValues("items.ccode");
@@ -473,8 +474,10 @@ sub import_biblios_list {
     }
 
 
-
+    my $biblio_count = 0;
     foreach my $biblio (@$biblios) {
+        my $item_id = 1;
+        $biblio_count++;
         my $citation = $biblio->{'title'};
         $citation .= " $biblio->{'author'}" if $biblio->{'author'};
         $citation .= " (" if $biblio->{'issn'} or $biblio->{'isbn'};
@@ -536,6 +539,7 @@ sub import_biblios_list {
 
                     my %itemrecord = (
                         'item_id' => $item_id++,
+                        'biblio_count' => $biblio_count,
                         'homebranch' => $item_homebranch,
                         'holdingbranch' => $item_holdingbranch,
                         'itype' => $item_itype,
