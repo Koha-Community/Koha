@@ -17,7 +17,7 @@
 
   <listeners>
 <!-- vestigial HTTP, never implemented: just use the OPAC!
-	<service
+    <service
       port="0:8080/tcp"
       transport="http"
       protocol="NCIP/1.0" />
@@ -32,16 +32,29 @@
       port="127.0.0.1:6001/tcp"
       transport="RAW"
       protocol="SIP/2.00"
+      client_timeout="600"
       timeout="60" />
+<!--- client_timeout times out active connections which have not received
+     input from the client. Many persistent connections will send a status request
+     every 5-7 mins so setting this to less than that will add instability to the connection
+     if explicitly set to zero, no timeout is applied to the connection.
+     NB the parameter timeout applies to the login process only and should be set to a lower value
+     to time out failed connections
+-->
   </listeners>
 
   <accounts>
-      <login id="term1"  password="term1" delimiter="|" error-detect="enabled" institution="CPL" />
-      <login id="koha"   password="koha"  delimiter="|" error-detect="enabled" institution="kohalibrary" />
-      <login id="koha2"  password="koha" institution="kohalibrary2" />
+      <login id="term1"  password="term1" delimiter="|" error-detect="enabled" institution="CPL" encoding="ascii" checked_in_ok="1" />
+      <login id="koha"   password="koha"  delimiter="|" error-detect="enabled" institution="kohalibrary" encoding="utf8" />
+      <login id="koha2"  password="koha" institution="kohalibrary2" terminator="CR" />
       <login id="lpl-sc" password="1234" institution="LPL" />
       <login id="lpl-sc-beacock" password="xyzzy"
-             delimiter="|" error-detect="enabled" institution="LPL" />
+             delimiter="|" error-detect="enabled" institution="LPL"
+             send_patron_home_library_in_af="1"
+             av_field_template="[% accountline.description %] [% accountline.amountoutstanding | format('%.2f') %]" >
+          <screen_msg_regex find="Greetings from Koha." replace="Welcome to your library!" />
+          <screen_msg_regex find="Invalid patron barcode." replace="Barcode not found, are you sure this is your library card?" />
+      </login>
   </accounts>
 
 <!--
@@ -54,31 +67,31 @@ in our case "ILS".
 <institutions>
     <institution id="MAIN" implementation="ILS" parms="">
           <policy checkin="true" renewal="true" checkout="true"
-		  status_update="false" offline="false"
-		  timeout="100"
-		  retries="5" />
+            status_update="false" offline="false"
+          timeout="100"
+            retries="5" />
     </institution>
     <institution id="CPL" implementation="ILS" parms="">
           <policy checkin="true" renewal="true" checkout="true"
-		  status_update="false" offline="false"
-		  timeout="25"
-		  retries="5" />
+            status_update="false" offline="false"
+          timeout="25"
+            retries="5" />
     </institution>
     <institution id="kohalibrary" implementation="ILS" parms="">
           <policy checkin="true" renewal="false" checkout="true"
-		  status_update="false" offline="false"
-		  timeout="100"
-		  retries="5" />
+            status_update="false" offline="false"
+          timeout="100"
+            retries="5" />
     </institution>
     <institution id="kohalibrary2" implementation="ILS" parms="">
           <policy checkin="true" renewal="false" checkout="true"
-		  timeout="100"
-		  retries="3" />
+          timeout="100"
+            retries="3" />
     </institution>
     <institution id="LPL" implementation="ILS">
           <policy checkin="true" renewal="false" checkout="true"
-		  timeout="100"
-		  retries="5" />
+          timeout="100"
+            retries="5" />
     </institution>
 </institutions>
 </acsconfig>
