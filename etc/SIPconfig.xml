@@ -3,21 +3,21 @@
   <error-detect enabled="true" />
 
 <!--
-  Set Net::Server::PreFork runtime parameters 
+  Set Net::Server::PreFork runtime parameters
   syslog_ident will identify SIP2 Koha server entries in syslog
   For OpenSolaris, add: syslog_logsock=stream
 -->
   <server-params
     min_servers='1'
-    min_spare_servers='0' 
+    min_spare_servers='0'
     log_file='Sys::Syslog'
     syslog_ident='koha_sip'
     syslog_facility='local6'
   />
-  
+
   <listeners>
 <!-- vestigial HTTP, never implemented: just use the OPAC!
-	<service
+    <service
       port="0:8080/tcp"
       transport="http"
       protocol="NCIP/1.0" />
@@ -30,7 +30,7 @@
 
     <service
       port="127.0.0.1:6001/tcp"
-      transport="RAW" 
+      transport="RAW"
       protocol="SIP/2.00"
       client_timeout="600"
       timeout="60" />
@@ -67,31 +67,31 @@ in our case "ILS".
 <institutions>
     <institution id="MAIN" implementation="ILS" parms="">
           <policy checkin="true" renewal="true" checkout="true"
-	  	  status_update="false" offline="false"
-		  timeout="100"
-	  	  retries="5" />
+            status_update="false" offline="false"
+          timeout="100"
+            retries="5" />
     </institution>
     <institution id="CPL" implementation="ILS" parms="">
           <policy checkin="true" renewal="true" checkout="true"
-	  	  status_update="false" offline="false"
-		  timeout="25"
-	  	  retries="5" />
+            status_update="false" offline="false"
+          timeout="25"
+            retries="5" />
     </institution>
     <institution id="kohalibrary" implementation="ILS" parms="">
           <policy checkin="true" renewal="false" checkout="true"
-	  	  status_update="false" offline="false"
-		  timeout="100"
-	  	  retries="5" />
+            status_update="false" offline="false"
+          timeout="100"
+            retries="5" />
     </institution>
     <institution id="kohalibrary2" implementation="ILS" parms="">
           <policy checkin="true" renewal="false" checkout="true"
-		  timeout="100"
-	  	  retries="3" />
+          timeout="100"
+            retries="3" />
     </institution>
     <institution id="LPL" implementation="ILS">
           <policy checkin="true" renewal="false" checkout="true"
-		  timeout="100"
-	  	  retries="5" />
+          timeout="100"
+            retries="5" />
     </institution>
 </institutions>
 </acsconfig>
