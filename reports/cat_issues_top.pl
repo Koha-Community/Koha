@@ -36,8 +36,6 @@ plugin that shows a stats on borrowers
 
 =head1 DESCRIPTION
 
-=over 2
-
 =cut
 
 my $input = new CGI;
