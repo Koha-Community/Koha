@@ -81,11 +81,10 @@ sub authenticate_api_request {
     }
 
     my $authorization = $action_spec->{'x-koha-authorization'};
-    return $next->($c) if allow_owner($c, $authorization, $user);
-    return $next->($c) if allow_guarantor($c, $authorization, $user);
-
     my $permissions = $authorization->{'permissions'};
     return $next->($c) if C4::Auth::haspermission($user->userid, $permissions);
+    return $next->($c) if allow_owner($c, $authorization, $user);
+    return $next->($c) if allow_guarantor($c, $authorization, $user);
     return $c->render_swagger(
         { error => "Authorization failure. Missing required permission(s).",
           required_permissions => $permissions },
