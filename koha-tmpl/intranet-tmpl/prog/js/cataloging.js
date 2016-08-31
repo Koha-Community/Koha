@@ -255,7 +255,6 @@ function CloneSubfield(index, advancedMARCEditor){
     var original = document.getElementById(index); //original <div>
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
-
     // set the attribute for the new 'div' subfields
     var inputs     = clone.getElementsByTagName('input');
     var selects    = clone.getElementsByTagName('select');
@@ -270,6 +269,7 @@ function CloneSubfield(index, advancedMARCEditor){
         inputs[i].setAttribute('name',inputs[i].getAttribute('name')+new_key);
         linkid = id_input;
     }
+
     // Plugin input
     if( $(inputs[1]).hasClass('framework_plugin') ) {
         var oldcontrol= original.getElementsByTagName('input')[1];
@@ -326,6 +326,8 @@ function CloneSubfield(index, advancedMARCEditor){
     }
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
+    // delete data of cloned subfield
+    document.getElementById(linkid).value = "";
 }
 
 function AddEventHandlers (oldcontrol, newcontrol, newinputid ) {
