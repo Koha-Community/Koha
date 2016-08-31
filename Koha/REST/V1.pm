@@ -26,6 +26,20 @@ use Koha::Holds;
 use Koha::OldIssues;
 use Koha::Patrons;
 
+=head1 NAME
+
+Koha::REST::V1 - Main v.1 REST api class
+
+=head1 API
+
+=head2 Class Methods
+
+=head3 startup
+
+Overloaded Mojolicious->startup method. It is called at application startup.
+
+=cut
+
 sub startup {
     my $self = shift;
 
@@ -167,7 +181,7 @@ sub check_object_ownership {
         reserve_id      => \&_object_ownership_by_reserve_id,
     };
 
-    foreach my $param (keys $parameters) {
+    foreach my $param ( keys %{ $parameters } ) {
         my $check_ownership = $parameters->{$param};
         if ($c->stash($param)) {
             return &$check_ownership($c, $user, $c->stash($param));
