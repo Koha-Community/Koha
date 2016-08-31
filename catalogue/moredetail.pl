@@ -119,8 +119,10 @@ $data->{'count'}=$totalcount;
 $data->{'showncount'}=$showncount;
 $data->{'hiddencount'}=$hiddencount;  # can be zero
 
-my $ccodes= GetKohaAuthorisedValues('items.ccode',$fw);
-my $copynumbers = GetKohaAuthorisedValues('items.copynumber',$fw);
+my $ccodes =
+  { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $fw, kohafield => 'items.ccode' } ) };
+my $copynumbers =
+  { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $fw, kohafield => 'items.copynumber' } ) };
 my $itemtypes = GetItemTypes;
 
 $data->{'itemtypename'} = $itemtypes->{$data->{'itemtype'}}->{'translated_description'};

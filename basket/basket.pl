@@ -24,6 +24,7 @@ use C4::Items;
 use C4::Auth;
 use C4::Output;
 
+use Koha::AuthorisedValues;
 use Koha::CsvProfiles;
 
 my $query = new CGI;
@@ -75,8 +76,8 @@ foreach my $biblionumber ( @bibs ) {
       $hasauthors = 1;
     }
 	
-    my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'});
-    my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'});
+    my $shelflocations =
+      { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.location' } ) };
 
 	for my $itm (@items) {
 	    if ($itm->{'location'}){

@@ -54,7 +54,6 @@ BEGIN {
 		&getitemtypeimagelocation
 		&GetAuthorisedValues
 		&GetAuthorisedValueCategories
-		&GetKohaAuthorisedValues
 		&GetNormalizedUPC
 		&GetNormalizedISBN
 		&GetNormalizedEAN
@@ -963,33 +962,6 @@ sub GetAuthorisedValueCategories {
         push @results, $category;
     }
     return \@results;
-}
-
-=head2 GetKohaAuthorisedValues
-
-Takes $kohafield, $fwcode as parameters.
-
-If $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
-
-Returns hashref of Code => description
-
-Returns undef if no authorised value category is defined for the kohafield.
-
-=cut
-
-sub GetKohaAuthorisedValues {
-    my ( $kohafield, $fwcode, $opac ) = @_;
-    $fwcode = '' unless $fwcode;
-    my %values;
-    my $dbh = C4::Context->dbh;
-
-    my $avs = Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $fwcode, kohafield => $kohafield } );
-    return {} unless $avs->count;
-    my $values;
-    while ( my $av = $avs->next ) {
-        $values->{ $av->authorised_value } = $opac ? $av->opac_description : $av->lib;
-    }
-    return $values;
 }
 
 =head2 xml_escape

@@ -48,6 +48,7 @@ use Koha::DateUtils;
 use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use Koha::RecordProcessor;
+use Koha::AuthorisedValues;
 use Koha::Virtualshelves;
 use Koha::Ratings;
 use Koha::Reviews;
@@ -543,9 +544,13 @@ if ( $itemtype ) {
     $dat->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{$itemtype}->{'imageurl'} );
     $dat->{'description'} = $itemtypes->{$itemtype}->{translated_description};
 }
-my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'}, 'opac');
-my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'}, 'opac');
-my $copynumbers = GetKohaAuthorisedValues('items.copynumber',$dat->{'frameworkcode'}, 'opac');
+
+my $shelflocations =
+  { map { $_->authorised_value => $_->opac_description } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.location' } ) };
+my $collections =
+  { map { $_->authorised_value => $_->opac_description } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.ccode' } ) };
+my $copynumbers =
+  { map { $_->authorised_value => $_->opac_description } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.copynumber' } ) };
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);

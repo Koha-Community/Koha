@@ -551,7 +551,8 @@ $template->param( errmsgloop => \@errmsgloop );
 my $returned_counter = ( C4::Context->preference('numReturnedItemsToShow') ) ? C4::Context->preference('numReturnedItemsToShow') : 8;
 my $count = 0;
 my @riloop;
-my $shelflocations = GetKohaAuthorisedValues('items.location','');
+my $shelflocations =
+  { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.location' } ) };
 foreach ( sort { $a <=> $b } keys %returneditems ) {
     my %ri;
     if ( $count++ < $returned_counter ) {

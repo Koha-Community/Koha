@@ -1849,7 +1849,8 @@ sub searchResults {
 # FIXME - We build an authorised values hash here, using the default framework
 # though it is possible to have different authvals for different fws.
 
-    my $shelflocations =GetKohaAuthorisedValues('items.location','');
+    my $shelflocations =
+      { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.location' } ) };
 
     # get notforloan authorised value list (see $shelflocations  FIXME)
     my $av = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.notforloan', authorised_value => { not => undef } });

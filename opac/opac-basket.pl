@@ -26,6 +26,8 @@ use C4::Auth;
 use C4::Output;
 use Koha::RecordProcessor;
 
+use Koha::AuthorisedValues;
+
 my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
@@ -83,8 +85,10 @@ foreach my $biblionumber ( @bibs ) {
     if($dat->{'author'} || @$marcauthorsarray) {
       $hasauthors = 1;
     }
-    my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'}, 'opac');
-    my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'}, 'opac');
+    my $collections =
+      { map { $_->authorised_value => $_->opac_description } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.ccode' } ) };
+    my $shelflocations =
+      { map { $_->authorised_value => $_->opac_description } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.location' } ) };
 
 	# COinS format FIXME: for books Only
         my $coins_format;

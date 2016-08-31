@@ -29,6 +29,7 @@ use C4::Reports;
 use C4::Circulation;
 use C4::Biblio qw/GetMarcSubfieldStructureFromKohaField/;
 
+use Koha::AuthorisedValues;
 use Koha::DateUtils;
 
 =head1 NAME
@@ -121,17 +122,8 @@ if ($do_it) {
 
     my $itemtypes = GetItemTypes( style => 'array' );
 
-    my $authvals = GetKohaAuthorisedValues("items.ccode");
-    my @authvals;
-    foreach ( sort { $authvals->{$a} cmp $authvals->{$b} || $a cmp $b } keys %$authvals ) {
-        push @authvals, { code => $_, description => $authvals->{$_} };
-    }
-
-    my $locations = GetKohaAuthorisedValues("items.location");
-    my @locations;
-    foreach ( sort keys %$locations ) {
-        push @locations, { code => $_, description => "$_ - " . $locations->{$_} };
-    }
+    my @authvals = map { { code => $_->authorised_value, description => $_->lib } } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } );
+    my @locations = map { { code => $_->authorised_value, description => $_->lib } } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } );
 
     foreach my $kohafield (qw(items.notforloan items.materials)) {
         my $subfield_structure = GetMarcSubfieldStructureFromKohaField($kohafield);
@@ -322,7 +314,7 @@ sub calculate {
     } else {
         $sth->execute();
     }
-    my $rowauthvals = GetKohaAuthorisedValues($origline);
+    my $rowauthvals = { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => $origline } ) };
     while ( my ($celvalue) = $sth->fetchrow ) {
         my %cell;
         if (defined $celvalue and $celvalue ne '') {
@@ -385,7 +377,7 @@ sub calculate {
     } else {
         $sth2->execute();
     }
-    my $colauthvals = GetKohaAuthorisedValues($origcolumn);
+    my $colauthvals = { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => $origcolumn } ) };
     while ( my ($celvalue) = $sth2->fetchrow ) {
         my %cell;
         if (defined $celvalue and $celvalue ne '') {

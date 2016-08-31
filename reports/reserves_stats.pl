@@ -30,6 +30,7 @@ use C4::Koha;
 use C4::Output;
 use C4::Reports;
 use C4::Members;
+use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Libraries;
 use Koha::Patron::Categories;
@@ -83,9 +84,8 @@ $template->param(do_it => $do_it,
 my $itemtypes = GetItemTypes();
 my @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
 
-my $ccodes    = GetKohaAuthorisedValues("items.ccode");
-my $locations = GetKohaAuthorisedValues("items.location");
-my $authvalue = GetKohaAuthorisedValues("items.authvalue");
+my $locations = { map { ( $_->authorised_value => $_->lib ) } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
+my $ccodes = { map { ( $_->authorised_value => $_->lib ) } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };
 
 my $Bsort1 = GetAuthorisedValues("Bsort1");
 my $Bsort2 = GetAuthorisedValues("Bsort2");
@@ -330,10 +330,9 @@ sub null_to_zzempty ($) {
 }
 sub display_value {
     my ( $crit, $value ) = @_;
-    my $ccodes    = GetKohaAuthorisedValues("items.ccode");
-    my $locations = GetKohaAuthorisedValues("items.location");
+    my $locations = { map { ( $_->authorised_value => $_->lib ) } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
+    my $ccodes = { map { ( $_->authorised_value => $_->lib ) } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };
     my $itemtypes = GetItemTypes();
-    my $authvalue = GetKohaAuthorisedValues("items.authvalue");
     my $Bsort1 = GetAuthorisedValues("Bsort1");
     my $Bsort2 = GetAuthorisedValues("Bsort2");
     my $display_value =

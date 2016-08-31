@@ -63,7 +63,7 @@ use warnings;
 
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Koha;   # GetKohaAuthorisedValues GetItemTypes
+use C4::Koha;   # GetItemTypes
 use C4::Acquisition;
 use C4::Auth;
 use C4::Output;
