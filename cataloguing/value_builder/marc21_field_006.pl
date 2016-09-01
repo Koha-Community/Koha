@@ -66,6 +66,17 @@ my $launcher = sub {
         }
     );
     $result = "a|||||r|||| 00| 0 " unless $result;
+    my $material_form_mapping = {
+        a => 'BKS', t => 'BKS',
+        c => 'MU', d => 'MU', i => 'MU', j => 'MU',
+        e => 'MP', f => 'MP',
+        g => 'VM', k => 'VM', o => 'VM', r => 'VM',
+        m => 'CF',
+        p => 'MX',
+        s => 'CR',
+    };
+    my $material_code = substr(($result // ' '), 0, 1);
+    my $material_configuration = $material_form_mapping->{$material_code};
 
     my $errorXml = '';
     # Check if the xml, xsd exists and is validated
@@ -86,6 +97,7 @@ my $launcher = sub {
             index => $index,
             result => $result,
             errorXml => $errorXml,
+            material_configuration => $material_configuration,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 };
