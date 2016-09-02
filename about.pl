@@ -36,6 +36,7 @@ use C4::Installer;
 use Koha;
 use Koha::Acquisition::Currencies;
 use Koha::Patrons;
+use Koha::Config::SysPrefs;
 use C4::Members::Statistics;
 
 #use Smart::Comments '####';
