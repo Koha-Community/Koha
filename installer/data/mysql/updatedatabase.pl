@@ -12848,7 +12848,7 @@ if ( CheckVersion($DBversion) ) {
         INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('OPACSuggestionMandatoryFields','title','','Define the mandatory fields for a patron purchase suggestions made via OPAC.','multiple');
     });
 
-    print "Upgrade to $DBversion done (Bug 7045 - Default-value substitution inconsistent)\n";
+    print "Upgrade to $DBversion done (Bug 10848 - Allow configuration of mandatory/required fields on the suggestion form in OPAC)\n";
     SetVersion($DBversion);
 }
 
