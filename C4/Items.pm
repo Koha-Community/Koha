@@ -1644,36 +1644,42 @@ references on array of itemnumbers.
 
 
 sub get_hostitemnumbers_of {
-	my ($biblionumber) = @_;
-	my $marcrecord = GetMarcBiblio($biblionumber);
-        my (@returnhostitemnumbers,$tag, $biblio_s, $item_s);
-	
-	my $marcflavor = C4::Context->preference('marcflavour');
-	if ($marcflavor eq 'MARC21' || $marcflavor eq 'NORMARC') {
-        $tag='773';
-        $biblio_s='0';
-        $item_s='9';
-    } elsif ($marcflavor eq 'UNIMARC') {
-        $tag='461';
-        $biblio_s='0';
-        $item_s='9';
+    my ($biblionumber) = @_;
+    my $marcrecord = GetMarcBiblio($biblionumber);
+
+    return unless $marcrecord;
+
+    my ( @returnhostitemnumbers, $tag, $biblio_s, $item_s );
+
+    my $marcflavor = C4::Context->preference('marcflavour');
+    if ( $marcflavor eq 'MARC21' || $marcflavor eq 'NORMARC' ) {
+        $tag      = '773';
+        $biblio_s = '0';
+        $item_s   = '9';
+    }
+    elsif ( $marcflavor eq 'UNIMARC' ) {
+        $tag      = '461';
+        $biblio_s = '0';
+        $item_s   = '9';
     }
 
     foreach my $hostfield ( $marcrecord->field($tag) ) {
         my $hostbiblionumber = $hostfield->subfield($biblio_s);
         my $linkeditemnumber = $hostfield->subfield($item_s);
         my @itemnumbers;
-        if (my $itemnumbers = get_itemnumbers_of($hostbiblionumber)->{$hostbiblionumber})
+        if ( my $itemnumbers =
+            get_itemnumbers_of($hostbiblionumber)->{$hostbiblionumber} )
         {
             @itemnumbers = @$itemnumbers;
         }
-        foreach my $itemnumber (@itemnumbers){
-            if ($itemnumber eq $linkeditemnumber){
-                push (@returnhostitemnumbers,$itemnumber);
+        foreach my $itemnumber (@itemnumbers) {
+            if ( $itemnumber eq $linkeditemnumber ) {
+                push( @returnhostitemnumbers, $itemnumber );
                 last;
             }
         }
     }
+
     return @returnhostitemnumbers;
 }
 
