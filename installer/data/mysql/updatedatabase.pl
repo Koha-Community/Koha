@@ -10423,13 +10423,13 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.19.00.041";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
-        ALTER IGNORE TABLE suggestions ADD KEY status (STATUS)
+        ALTER TABLE suggestions ADD KEY status (STATUS)
     |);
     $dbh->do(q|
-        ALTER IGNORE TABLE suggestions ADD KEY biblionumber (biblionumber)
+        ALTER TABLE suggestions ADD KEY biblionumber (biblionumber)
     |);
     $dbh->do(q|
-        ALTER IGNORE TABLE suggestions ADD KEY branchcode (branchcode)
+        ALTER TABLE suggestions ADD KEY branchcode (branchcode)
     |);
     print "Upgrade to $DBversion done (Bug 14132: suggestions table is missing indexes)\n";
     SetVersion ($DBversion);
@@ -10445,7 +10445,7 @@ if ( CheckVersion($DBversion) ) {
     });
 
     $dbh->do(q{
-        ALTER IGNORE TABLE auth_subfield_structure
+        ALTER TABLE auth_subfield_structure
         ADD CONSTRAINT auth_subfield_structure_ibfk_1
         FOREIGN KEY (authtypecode) REFERENCES auth_types(authtypecode)
         ON DELETE CASCADE ON UPDATE CASCADE
@@ -10566,15 +10566,15 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.21.00.007";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q|
-        ALTER IGNORE TABLE aqbasket
+        ALTER TABLE aqbasket
             ADD KEY authorisedby (authorisedby)
     |);
     $dbh->do(q|
-        ALTER IGNORE TABLE aqbooksellers
+        ALTER TABLE aqbooksellers
             ADD KEY name (name(255))
     |);
     $dbh->do(q|
-        ALTER IGNORE TABLE aqbudgets
+        ALTER TABLE aqbudgets
             ADD KEY budget_parent_id (budget_parent_id),
             ADD KEY budget_code (budget_code),
             ADD KEY budget_branchcode (budget_branchcode),
@@ -10582,11 +10582,11 @@ if ( CheckVersion($DBversion) ) {
             ADD KEY budget_owner_id (budget_owner_id)
     |);
     $dbh->do(q|
-        ALTER IGNORE TABLE aqbudgets_planning
+        ALTER TABLE aqbudgets_planning
             ADD KEY budget_period_id (budget_period_id)
     |);
     $dbh->do(q|
-        ALTER IGNORE TABLE aqorders
+        ALTER TABLE aqorders
             ADD KEY parent_ordernumber (parent_ordernumber),
             ADD KEY orderstatus (orderstatus)
     |);
@@ -10823,7 +10823,7 @@ if ( CheckVersion($DBversion) ) {
     $dbh->{PrintError} = $print_error;
 
     $dbh->do(q{
-        ALTER IGNORE TABLE course_reserves
+        ALTER TABLE course_reserves
             ADD CONSTRAINT course_reserves_ibfk_2
                 FOREIGN KEY (ci_id) REFERENCES course_items (ci_id)
                 ON DELETE CASCADE ON UPDATE CASCADE
@@ -10936,7 +10936,7 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.21.00.029";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-        ALTER IGNORE TABLE discharges
+        ALTER TABLE discharges
             ADD COLUMN discharge_id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
     });
     print "Upgrade to $DBversion done (Bug 14368: Add discharges history)\n";
