@@ -481,59 +481,6 @@ $(document).ready(function () {
                             [% borcity %] [% borzip %]
                         </li>
 
-<<<<<<< HEAD
-    <div id="hold-found2" class="dialog message audio-alert-action">
-      <h3>Hold found</h3>
-          <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
-        [% IF ( reservenotes ) %]<h4>Notes: [% reservenotes %]</h4>[% END %]
-        <h5>Hold for:</h5>
-		<ul>
-            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
-                [% borsurname %], [% borfirstname %]
-            </a> ([% borcnum %])</li>
-            <li>[% borstnum %] [% boraddress %]<br />
-			[% IF ( boraddress2 ) %][% boraddress2 %]<br />[% END %]
-			[% borcity %] [% borzip %]</li>
-            [% IF ( borphone ) %]<li>[% borphone %]</li>[% END %]
-            [% IF ( boremail ) %]<li>[% IF ( transfertodo ) %][% boremail %][% ELSE %]<a id="boremail" href="mailto:[% boremail %]">[% boremail %]</a>[% END %]</li>[% END %]
-            [% UNLESS ( transfertodo) %]
-                [% INCLUDE display_bormessagepref %]
-            [% END %]
-[% IF ( debarred ) %]<li class="error">Patron is RESTRICTED</li>[% END %]
-[% IF ( gonenoaddress ) %]<li class="error">Patron's address is in doubt</li>[% END %]
-        </ul>
-        [% IF ( transfertodo ) %]
-            <h4><strong>Transfer to:</strong> [% destbranchname %]</h4>
-		[% ELSE %]
-		<h4><strong>Hold at</strong> [% destbranchname %]</h4>
-        [% END %]
-        <form method="post" action="returns.pl" class="confirm">
-            <input type="hidden" name="print_slip" value="0" />
-            [% IF ( transfertodo ) %]
-                <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm hold and transfer</button>
-                <button type="submit" class="print" onclick="this.form.print_slip.value = 1; this.form.submit()"><i class="fa fa-print"></i> Print slip, transfer, and confirm</button>
-            [% ELSE %]
-                <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm hold</button>
-                <button type="submit" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();"><i class="fa fa-print"></i> Print slip and confirm</button>
-            [% END %]
-                <button type="submit" class="deny" onclick="$('.dialog:visible').hide('slow'); $('#barcode').focus(); return false;"><i class="fa fa-times"></i> Ignore</button>
-            [% FOREACH inputloo IN inputloop %]
-	<input type="hidden" name="ri-[% inputloo.counter %]" value="[% inputloo.barcode %]" />
-	<input type="hidden" name="dd-[% inputloo.counter %]" value="[% inputloo.duedate %]" />
-	<input type="hidden" name="bn-[% inputloo.counter %]" value="[% inputloo.borrowernumber %]" />[% END %]
-            <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
-            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-            <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
-            <input type="hidden" name="resbarcode" value="[% barcode | html %]" />
-            <input type="hidden" name="diffBranch" value="[% destbranch %]" />
-            <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
-            <input type="hidden" name="dropboxmode" value="[% dropboxmode %]" />
-            <input type="hidden" name="forgivemanualholdsexpire" value="[% forgivemanualholdsexpire %]" />
-            <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
-            <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember %]" />
-        </form>
-	</div>
-=======
                         [% IF ( borphone ) %]
                             <li>[% borphone %]</li>
                         [% END %]
@@ -546,6 +493,10 @@ $(document).ready(function () {
                                     <a id="boremail" href="mailto:[% boremail %]">[% boremail %]</a>
                                 [% END %]
                             </li>
+                        [% END %]
+
+                        [% UNLESS ( transfertodo) %]
+                            [% INCLUDE display_bormessagepref %]
                         [% END %]
 
                         [% IF ( debarred ) %]
@@ -606,7 +557,6 @@ $(document).ready(function () {
                 </div>
             </form>
         </div>
->>>>>>> Bug 11360 - Disable barcode field and submit button when a hold is found
     [% END %]
 [% END %]
 
