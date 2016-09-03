@@ -519,7 +519,7 @@ sub CanItemBeReserved {
         $ruleitemtype = '*';
     }
 
-    my $item = Koha::Items->find( $itemnumber );
+    $item = Koha::Items->find( $itemnumber );
     my $holds = Koha::Holds->search(
         {
             borrowernumber => $borrowernumber,

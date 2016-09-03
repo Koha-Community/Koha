@@ -65,6 +65,7 @@ Finally, if the patron has no holds, it will return
 undef which indicateds the patron may select either
 record or item level holds, barring any other rules
 that would prevent one or the other.
+
 =cut
 
 sub forced_hold_level {
