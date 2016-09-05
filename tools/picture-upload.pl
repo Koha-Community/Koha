@@ -173,6 +173,13 @@ elsif ( ( $op eq 'Upload' ) && !$uploadfile ) {
     $template->param( filetype   => $filetype );
 }
 elsif ( $op eq 'Delete' ) {
+    die "Wrong CSRF token"
+        unless Koha::Token->new->check_csrf({
+            id     => C4::Context->userenv->{id},
+            secret => md5_base64( C4::Context->config('pass') ),
+            token  => scalar $input->param('csrf_token'),
+        });
+
     my $deleted = eval {
         Koha::Patron::Images->find( $borrowernumber )->delete;
     };
