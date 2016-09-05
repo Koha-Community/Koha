@@ -9,6 +9,9 @@ if (debug > 1) {alert("dateformat: " + dformat + "\ndebug is on (level " + debug
 var MSG_PLEASE_ENTER_A_VALID_DATE = _("Please enter a valid date (should match %s).");
 
 function is_valid_date(date) {
+    // An empty string is considered as a valid date for convenient reasons.
+    if ( date === '' ) return 1;
+
     var dateformat = dateformat_str = '[% Koha.Preference('dateformat') %]';
     if ( dateformat == 'us' ) {
         if ( date.search(/\d{2}\/\d{2}\/\d{4}/) == -1 ) return 0;
