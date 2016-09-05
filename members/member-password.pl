@@ -73,7 +73,7 @@ if ( $newpassword && !scalar(@errors) ) {
             token  => scalar $input->param('csrf_token'),
         });
 
-    my $digest = Koha::AuthUtils::hash_password( $input->param('newpassword') );
+    my $digest = Koha::AuthUtils::hash_password( scalar $input->param('newpassword') );
     my $uid    = $input->param('newuserid') || $bor->{userid};
     my $dbh    = C4::Context->dbh;
     if ( Koha::Patrons->find( $member )->update_password($uid, $digest) ) {
