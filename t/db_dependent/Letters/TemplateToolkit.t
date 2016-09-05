@@ -18,7 +18,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 14;
+use Test::More tests => 15;
+use Test::Warn;
 
 use MARC::Record;
 
@@ -182,11 +183,25 @@ $prepared_letter = GetPreparedLetter(
         module      => 'test',
         letter_code => 'TEST_HOLD',
         tables      => {
-            reserves => [ $patron->{borrowernumber}, $biblio->id() ]
+            reserves => { borrowernumber => $patron->{borrowernumber}, biblionumber => $biblio->id() },
         },
     )
 );
 is( $prepared_letter->{content}, $hold->id(), 'Hold object used correctly' );
+
+eval {
+    $prepared_letter = GetPreparedLetter(
+        (
+            module      => 'test',
+            letter_code => 'TEST_HOLD',
+            tables      => {
+                reserves => [ $patron->{borrowernumber}, $biblio->id() ],
+            },
+        )
+    )
+};
+my $croak = $@;
+like( $croak, qr{^Multiple foreign keys \(table reserves\) should be passed using an hashref.*}, "GetPreparedLetter should not be called with arrayref for multiple FK" );
 
 # Bug 16942
 $prepared_letter = GetPreparedLetter(
