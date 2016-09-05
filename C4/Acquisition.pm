@@ -1400,10 +1400,18 @@ sub ModReceiveOrder {
             $order->{ordernumber}
         );
 
+        # Recalculate tax_value
+        $dbh->do(q|
+            UPDATE aqorders
+            SET tax_value = quantity * ecost_tax_excluded * tax_rate
+            WHERE ordernumber = ?
+        |, undef, $order->{ordernumber});
+
         delete $order->{ordernumber};
         $order->{budget_id} = ( $budget_id || $order->{budget_id} );
         $order->{quantity} = $quantrec;
         $order->{quantityreceived} = $quantrec;
+        $order->{tax_value} = $order->{quantity} * $order->{unitprice_tax_excluded} * $order->{tax_rate};
         $order->{datereceived} = $datereceived;
         $order->{invoiceid} = $invoice->{invoiceid};
         $order->{orderstatus} = 'complete';
@@ -1556,6 +1564,14 @@ sub CancelReceipt {
                 " receipt";
             return;
         }
+
+        # Recalculate tax_value
+        $dbh->do(q|
+            UPDATE aqorders
+            SET tax_value = quantity * ecost_tax_excluded * tax_rate
+            WHERE ordernumber = ?
+        |, undef, $parent_ordernumber);
+
         _cancel_items_receipt( $ordernumber, $parent_ordernumber );
         # Delete order line
         $query = qq{
