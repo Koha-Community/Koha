@@ -43,6 +43,32 @@ get_apache_config_for()
     fi
 }
 
+get_memcached_servers_for()
+{
+    local instance=$1
+
+    local apache_file=$(get_apache_config_for $instance)
+    local memcached_servers=$(
+        grep 'MEMCACHED_SERVERS' ${apache_file} |
+        awk '{print $3}' | uniq
+    )
+
+    echo "${memcached_servers}"
+}
+
+get_memcached_namespace_for()
+{
+    local instance=$1
+
+    local apache_file=$(get_apache_config_for $instance)
+    local memcached_namespace=$(
+        grep 'MEMCACHED_NAMESPACE' ${apache_file} |
+        awk '{print $3}' | uniq
+    )
+
+    echo "${memcached_namespace}"
+}
+
 is_enabled()
 {
     local site=$1
