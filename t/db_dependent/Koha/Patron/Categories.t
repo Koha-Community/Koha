@@ -103,6 +103,16 @@ subtest 'BlockExpiredPatronOpacActions' => sub {
 $retrieved_category_1->delete;
 is( Koha::Patron::Categories->search->count, $nb_of_categories + 1, 'Delete should have deleted the patron category' );
 
+my $new_category_4 = Koha::Patron::Category->new(
+    {   categorycode => 'mycatcodeW',
+        category_type => 'A',
+        description  => 'mycatdescW',
+        upperagelimit => '',
+        dateofbirthrequired => '',
+    }
+)->store;
+is( Koha::Patron::Categories->search->count, $nb_of_categories + 2, 'upperagelimit and dateofbirthrequired should have a default value if empty string is passed' );
+
 $schema->storage->txn_rollback;
 
 1;
