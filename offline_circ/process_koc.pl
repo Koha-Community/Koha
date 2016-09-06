@@ -37,6 +37,7 @@ use C4::Stats;
 use C4::BackgroundJob;
 use Koha::Upload;
 use Koha::Account;
+use Koha::Patrons;
 
 use Date::Calc qw( Add_Delta_Days Date_to_Days );
 
@@ -364,7 +365,7 @@ sub kocMakePayment {
     my $cardnumber = $circ->{cardnumber};
     my $amount = $circ->{amount};
 
-    my $patron = Koha::Borrowers->find( { cardnumber => $cardnumber } );
+    my $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
 
     Koha::Account->new( { patron_id => $patron->id } )
       ->pay( { amount => $amount } );
