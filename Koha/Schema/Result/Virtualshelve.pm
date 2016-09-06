@@ -63,9 +63,8 @@ __PACKAGE__->table("virtualshelves");
 
 =head2 created_on
 
-  data_type: 'timestamp'
+  data_type: 'datetime'
   datetime_undef_if_invalid: 1
-  default_value: '0000-00-00 00:00:00'
   is_nullable: 0
 
 =head2 allow_add
@@ -113,9 +112,8 @@ __PACKAGE__->add_columns(
   },
   "created_on",
   {
-    data_type => "timestamp",
+    data_type => "datetime",
     datetime_undef_if_invalid => 1,
-    default_value => "0000-00-00 00:00:00",
     is_nullable => 0,
   },
   "allow_add",
@@ -191,8 +189,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-11-05 10:39:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:O3y89+0IUoePtcIHAqR+oA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-06 09:35:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wfAdz7LrmH49vdJ3f5rsmA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

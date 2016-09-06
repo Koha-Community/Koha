@@ -284,9 +284,9 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("branchcode", "categorycode", "itemtype");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-12-28 16:26:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/3xm7W/T/nWlYVlokMTgjQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-06 09:35:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HkvNR2YHTkqN2PnQk5XGAA
 
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
