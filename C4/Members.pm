@@ -640,6 +640,7 @@ sub AddMember {
     $data{'dateofbirth'}     = undef if ( not $data{'dateofbirth'} );
     $data{'debarred'}        = undef if ( not $data{'debarred'} );
     $data{'sms_provider_id'} = undef if ( not $data{'sms_provider_id'} );
+    $data{'guarantorid'}     = undef if ( not $data{'guarantorid'} );
 
     # get only the columns of Borrower
     # FIXME Do we really need this check?
