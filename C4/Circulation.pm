@@ -3836,7 +3836,7 @@ sub ProcessOfflineIssue {
 sub ProcessOfflinePayment {
     my $operation = shift;
 
-    my $patron = Koha::Borrowers->find( { cardnumber => $operation->{cardnumber} });
+    my $patron = Koha::Patrons->find( { cardnumber => $operation->{cardnumber} });
     my $amount = $operation->{amount};
 
     Koha::Account->new( { patron_id => $patron->id } )->pay( { amount => $amount } );
