@@ -51,6 +51,19 @@
           [% IF (is_psgi) %]
             <tr><th scope="row">PSGI: </th><td>[% psgi_server |html %]</td></tr>
           [% END %]
+            <tr><th scope="row">Memcached: </th>
+                <td>Servers: [% IF memcached_servers %][% memcached_servers | html %]
+                             [% ELSE %]<span>undefined</span>[% END %]|
+                    Namespace: [% IF memcached_namespace %][% memcached_namespace | html %]
+                               [% ELSE %]<span>undefined</span>[% END %] |
+                    Status: [% IF memcached_servers %]
+                                [% IF memcached_running %]<span class="status_ok">running</span>
+                                [% ELSE %]<span class="status_warn">not running</span>[% END %]
+                            [% ELSE %]
+                                <span>unknown</span>
+                            [% END %]
+                </td>
+            </tr>
             <tr><th scope="row">Zebra version: </th><td>[% zebraVersion |html %]</td></tr>
             [% IF (errZebraConnection == 10000) %]
             <tr><th scope="row"><b>Error</b> </th><td>Zebra server seems not to be available. Is it started?</td></tr>

@@ -70,6 +70,18 @@ if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
     );
 }
 
+# Memcached configuration
+
+my $memcached_servers = $ENV{ MEMCACHED_SERVERS };
+my $memcached_namespace = $ENV{ MEMCACHED_NAMESPACE };
+my $memcached_running = C4::Context->ismemcached;
+
+$template->param(
+    memcached_servers   => $ENV{ MEMCACHED_SERVERS },
+    memcached_namespace => $ENV{ MEMCACHED_NAMESPACE },
+    memcached_running   => C4::Context->ismemcached
+);
+
 # Additional system information for warnings
 
 my $warnStatisticsFieldsError;
