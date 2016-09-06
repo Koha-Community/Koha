@@ -246,18 +246,15 @@ sub new {
     my $conf_cache = Koha::Caches->get_instance('config');
     my $config_from_cache;
     if ( $conf_cache->cache ) {
-        $config_from_cache = $conf_cache->get_from_cache('koha_conf');
+        $self = $conf_cache->get_from_cache('koha_conf');
     }
-    unless ( %$self ) {
+    unless ( $self and %$self ) {
         $self = Koha::Config->read_from_file($conf_fname);
-    }
-
-    if ( $config_from_cache ) {
-        $self = $config_from_cache;
-    } elsif ( $conf_cache->memcached_cache ) {
-        # FIXME it may be better to use the memcached servers from the config file
-        # to cache it
-        $conf_cache->set_in_cache('koha_conf', $self)
+        if ( $conf_cache->memcached_cache ) {
+            # FIXME it may be better to use the memcached servers from the config file
+            # to cache it
+            $conf_cache->set_in_cache('koha_conf', $self)
+        }
     }
     unless ( exists $self->{config} or defined $self->{config} ) {
         warn "The config file ($conf_fname) has not been parsed correctly";
