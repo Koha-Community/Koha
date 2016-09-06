@@ -50,6 +50,27 @@ sub effective_BlockExpiredPatronOpacActions {
     return $self->BlockExpiredPatronOpacActions
 }
 
+=head3 store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    $self->dateofbirthrequired(undef)
+      if not defined $self->dateofbirthrequired
+      or $self->dateofbirthrequired eq '';
+
+    $self->upperagelimit(undef)
+      if not defined $self->upperagelimit
+      or $self->upperagelimit eq '';
+
+    $self->checkprevcheckout('inherit')
+      unless defined $self->checkprevcheckout;
+
+    return $self->SUPER::store;
+}
+
 =head3 default_messaging
 
 my $messaging = $category->default_messaging();
