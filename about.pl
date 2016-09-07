@@ -36,6 +36,7 @@ use C4::Installer;
 use Koha;
 use Koha::Acquisition::Currencies;
 use Koha::Patrons;
+use Koha::Caches;
 use Koha::Config::SysPrefs;
 use C4::Members::Statistics;
 
@@ -71,15 +72,16 @@ if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
 }
 
 # Memcached configuration
+my $memcached_servers   = $ENV{MEMCACHED_SERVERS} // C4::Context->config('memcached_servers');
+my $memcached_namespace = $ENV{MEMCACHED_NAMESPACE} // C4::Context->config('memcached_namespace');
 
-my $memcached_servers = $ENV{ MEMCACHED_SERVERS };
-my $memcached_namespace = $ENV{ MEMCACHED_NAMESPACE };
-my $memcached_running = C4::Context->ismemcached;
+my $effective_caching_method = ref(Koha::Caches->get_instance->cache);
 
 $template->param(
-    memcached_servers   => $ENV{ MEMCACHED_SERVERS },
-    memcached_namespace => $ENV{ MEMCACHED_NAMESPACE },
-    memcached_running   => C4::Context->ismemcached
+    effective_caching_method => $effective_caching_method,
+    memcached_servers   => $memcached_servers,
+    memcached_namespace => $memcached_namespace,
+    memcached_running   => Koha::Caches->get_instance->memcached_cache
 );
 
 # Additional system information for warnings

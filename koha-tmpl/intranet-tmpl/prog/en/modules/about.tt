@@ -52,9 +52,10 @@
             <tr><th scope="row">PSGI: </th><td>[% psgi_server |html %]</td></tr>
           [% END %]
             <tr><th scope="row">Memcached: </th>
-                <td>Servers: [% IF memcached_servers %][% memcached_servers | html %]
+                <td>
+                    Servers: [% IF memcached_servers %]<span>[% memcached_servers | html %]</span>
                              [% ELSE %]<span>undefined</span>[% END %]|
-                    Namespace: [% IF memcached_namespace %][% memcached_namespace | html %]
+                    Namespace: [% IF memcached_namespace %]<span>[% memcached_namespace | html %]</span>
                                [% ELSE %]<span>undefined</span>[% END %] |
                     Status: [% IF memcached_servers %]
                                 [% IF memcached_running %]<span class="status_ok">running</span>
@@ -62,6 +63,9 @@
                             [% ELSE %]
                                 <span>unknown</span>
                             [% END %]
+                  [% IF effective_caching_method != 'Cache::Memcached::Fast' %]
+                    | Effective caching method: [% effective_caching_method %]
+                  [% END %]
                 </td>
             </tr>
             <tr><th scope="row">Zebra version: </th><td>[% zebraVersion |html %]</td></tr>
