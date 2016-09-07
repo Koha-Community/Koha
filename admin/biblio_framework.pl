@@ -26,7 +26,7 @@ use C4::Output;
 use Koha::Biblios;
 use Koha::BiblioFramework;
 use Koha::BiblioFrameworks;
-use Koha::Cache;
+use Koha::Caches;
 
 my $input         = new CGI;
 my $frameworkcode = $input->param('frameworkcode') || q||;

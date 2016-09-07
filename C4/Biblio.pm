@@ -39,7 +39,7 @@ use C4::Linker;
 use C4::OAI::Sets;
 use C4::Debug;
 
-use Koha::Cache;
+use Koha::Caches;
 use Koha::Authority::Types;
 use Koha::Acquisition::Currencies;
 use Koha::SearchEngine;

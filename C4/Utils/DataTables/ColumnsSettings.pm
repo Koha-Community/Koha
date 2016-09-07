@@ -5,7 +5,7 @@ use List::Util qw( first );
 use YAML;
 use C4::Context;
 use Koha::Database;
-use Koha::Cache;
+use Koha::Caches;
 
 sub get_yaml {
     my $yml_path = C4::Context->config('intranetdir') . '/admin/columns_settings.yml';

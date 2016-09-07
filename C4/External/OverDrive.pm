@@ -22,7 +22,7 @@ use warnings;
 
 use Koha;
 use JSON;
-use Koha::Cache;
+use Koha::Caches;
 use HTTP::Request;
 use HTTP::Request::Common;
 use LWP::Authen::Basic;

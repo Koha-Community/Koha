@@ -27,7 +27,7 @@ use C4::Context;
 use C4::Output;
 use C4::Context;
 
-use Koha::Cache;
+use Koha::Caches;
 
 # retrieve parameters
 my $input = new CGI;

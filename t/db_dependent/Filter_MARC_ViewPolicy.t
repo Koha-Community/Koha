@@ -30,7 +30,7 @@ use MARC::Record;
 use MARC::Field;
 use C4::Context;
 use C4::Biblio;
-use Koha::Cache qw/flush_all/;
+use Koha::Caches;
 use Koha::Database;
 
 BEGIN {

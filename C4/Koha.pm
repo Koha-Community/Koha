@@ -25,7 +25,7 @@ use strict;
 
 use C4::Context;
 use C4::Branch; # Can be removed?
-use Koha::Cache;
+use Koha::Caches;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Libraries;
 use DateTime::Format::MySQL;

@@ -10,7 +10,7 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 
-use Koha::Cache;
+use Koha::Caches;
 
 use C4::Calendar;
 use DateTime;

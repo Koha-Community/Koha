@@ -22,7 +22,7 @@ use Test::MockModule;
 
 use DateTime;
 use DateTime::Duration;
-use Koha::Cache;
+use Koha::Caches;
 use Koha::DateUtils;
 
 use Module::Load::Conditional qw/check_install/;

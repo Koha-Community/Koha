@@ -23,7 +23,7 @@ use Carp;
 use Date::Calc qw( Date_to_Days Today);
 
 use C4::Context;
-use Koha::Cache;
+use Koha::Caches;
 
 use constant ISO_DATE_FORMAT => "%04d-%02d-%02d";
 

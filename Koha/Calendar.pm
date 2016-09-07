@@ -7,7 +7,7 @@ use DateTime;
 use DateTime::Set;
 use DateTime::Duration;
 use C4::Context;
-use Koha::Cache;
+use Koha::Caches;
 use Carp;
 
 sub new {
