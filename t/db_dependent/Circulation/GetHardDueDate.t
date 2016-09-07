@@ -142,6 +142,7 @@ my $sampleissuingrule1 = {
     onshelfholds       => 0,
     opacitemholds      => 'N',
     cap_fine_to_replacement_price => 0,
+    holds_per_record   => 1,
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
@@ -173,6 +174,7 @@ my $sampleissuingrule2 = {
     onshelfholds       => 1,
     opacitemholds      => 'Y',
     cap_fine_to_replacement_price => 0,
+    holds_per_record   => 1,
 };
 my $sampleissuingrule3 = {
     branchcode         => $samplebranch1->{branchcode},
@@ -204,6 +206,7 @@ my $sampleissuingrule3 = {
     onshelfholds       => 1,
     opacitemholds      => 'F',
     cap_fine_to_replacement_price => 0,
+    holds_per_record   => 1,
 };
 
 $query = 'INSERT INTO issuingrules (
