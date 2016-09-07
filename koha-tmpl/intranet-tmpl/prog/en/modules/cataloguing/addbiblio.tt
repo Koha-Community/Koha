@@ -122,7 +122,7 @@
         $(".change-framework").on("click", function(){
             var frameworkcode = $(this).data("frameworkcode");
             $("#frameworkcode").val( frameworkcode );
-            Changefwk( frameworkcode );
+            Changefwk();
         });
     });
 
@@ -370,7 +370,7 @@ function GetZ3950Terms(){
     return strQuery;
 }
 
-function Changefwk(FwkList) {
+function Changefwk() {
     var f = document.f;
     f.op.value = "[% op %]";
     f.biblionumber.value = "[% biblionumberdata %]";

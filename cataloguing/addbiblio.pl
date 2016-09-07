@@ -710,7 +710,7 @@ my $userflags = 'edit_catalogue';
 
 my $changed_framework = $input->param('changed_framework');
 $frameworkcode = &GetFrameworkCode($biblionumber)
-  if ( $biblionumber and not($frameworkcode) and $op ne 'addbiblio' );
+  if ( $biblionumber and not( defined $frameworkcode) and $op ne 'addbiblio' );
 
 if ($frameworkcode eq 'FA'){
     $userflags = 'fast_cataloging';
