@@ -403,7 +403,7 @@ sub flush_all {
 
 sub flush_L1_cache {
     my( $self ) = @_;
-    $L1_cache{$self->{namespace}} = ();
+    delete $L1_cache{$self->{namespace}};
 }
 
 =head1 TIED INTERFACE
