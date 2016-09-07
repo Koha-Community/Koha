@@ -25,7 +25,7 @@ use C4::Charset qw( MarcToUTF8Record );
 use C4::Search qw(); # Purely for new_record_from_zebra
 use DBIx::Class::ResultClass::HashRefInflator;
 use IO::Select;
-use Koha::Cache;
+use Koha::Caches;
 use Koha::Database;
 use Koha::MetadataRecord;
 use MARC::File::XML;
@@ -91,8 +91,7 @@ sub search {
 
     my $resultset_expiry = 300;
 
-    my $cache;
-    eval { $cache = Koha::Cache->new(); };
+    my $cache = Koha::Caches->get_instance();
     my $schema = Koha::Database->new->schema;
     my $stats = {
         num_fetched => {
