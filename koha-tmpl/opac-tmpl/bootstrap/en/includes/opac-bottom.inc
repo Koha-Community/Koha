@@ -152,6 +152,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 
     $(".print-large").on("click",function(){
         window.print();
+        return false;
     });
     $(".addtoshelf").on("click",function(){
         Dopop('opac-addbybiblionumber.pl?biblionumber=[% biblionumber %]');
