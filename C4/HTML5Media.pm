@@ -98,7 +98,7 @@ sub gethtml5media {
         # src
         if ( $HTML5Media_field->subfield('u') ) {
             $HTML5Media{srcblock} = $HTML5Media_field->subfield('u');
-            if (grep /youtube|youtu[.]be/, $HTML5Media_field->subfield('u') ) {
+            if (grep /youtu\.?be/, $HTML5Media_field->subfield('u') ) {
                 if ($HTML5MediaYouTube == 1) {
                     require WWW::YouTube::Download;
                     import  WWW::YouTube::Download qw(playback_url);
