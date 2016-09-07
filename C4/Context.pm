@@ -1,4 +1,5 @@
 package C4::Context;
+
 # Copyright 2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -16,9 +17,9 @@ package C4::Context;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
-use vars qw($AUTOLOAD $context @context_stack $servers);
+use Modern::Perl;
+
+use vars qw($AUTOLOAD $context @context_stack);
 BEGIN {
 	if ($ENV{'HTTP_USER_AGENT'})	{
 		require CGI::Carp;

@@ -88,7 +88,8 @@ sub new {
     unless ( $self->{namespace} and @servers ) {
         my $koha_config = Koha::Config->read_from_file( Koha::Config->guess_koha_conf() );
         $self->{namespace} ||= $koha_config->{config}{memcached_namespace} || 'koha';
-        @servers = split /,/, $koha_config->{config}{memcached_servers} unless @servers;
+        @servers = split /,/, $koha_config->{config}{memcached_servers} // ''
+            unless @servers;
     }
     $self->{namespace} .= ":$subnamespace:";
 
