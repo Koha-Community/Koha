@@ -8,7 +8,7 @@ use t::lib::TestBuilder;
 use C4::Context;
 use C4::Branch;
 
-use Test::More tests => 60;
+use Test::More tests => 61;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -339,6 +339,19 @@ ModItem({ damaged => 1 }, $item_bibnum, $itemnumber);
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 1 );
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber), 'OK', "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
 ok( defined( ( CheckReserves($itemnumber) )[1] ), "Hold can be trapped for damaged item with AllowHoldsOnDamagedItems enabled" );
+
+$hold = Koha::Hold->new(
+    {
+        borrowernumber => $borrowernumbers[0],
+        itemnumber     => $itemnumber,
+        biblionumber   => $item_bibnum,
+    }
+)->store();
+is( CanItemBeReserved( $borrowernumbers[0], $itemnumber ),
+    'itemAlreadyOnHold',
+    "Patron cannot place a second item level hold for a given item" );
+$hold->delete();
+
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 0 );
 ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'damaged', "Patron cannot reserve damaged item with AllowHoldsOnDamagedItems disabled" );
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for damaged item with AllowHoldsOnDamagedItems disabled" );

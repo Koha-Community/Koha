@@ -276,13 +276,13 @@ function checkMultiHold() {
         [% ELSIF ( exceeded_holds_per_record ) %]
           <li><strong>Too many holds for this record: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
         [% ELSIF ( alreadypossession ) %]
-          <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>is already in possession</strong> of one item</lie
+          <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>is already in possession</strong> of one item.</li>
         [% ELSIF ( alreadyreserved ) %]
-          <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
+          <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item.</li>
         [% ELSIF ( ageRestricted ) %]
           <li><strong>Age restricted</strong></li>
         [% ELSIF ( none_available ) %]
-          <li> <strong>No items are available</strong> to be placed on hold</li>
+          <li> <strong>No items are available</strong> to be placed on hold.</li>
         [% ELSIF ( maxreserves ) %]
           <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> has too many holds.</li>
         [% END %]

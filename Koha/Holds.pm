@@ -71,15 +71,9 @@ that would prevent one or the other.
 sub forced_hold_level {
     my ($self) = @_;
 
-    my $force_hold_level;
-
-    if ( $self->count() ) {
-        my $has_item_level_holds;
-        map { $has_item_level_holds ||= $_->itemnumber } $self->as_list();
-        $force_hold_level = $has_item_level_holds ? 'item' : 'record';
-    }
-
-    return $force_hold_level;
+    return $self->search( { itemnumber => { '!=' => undef } } )->count()
+      ? 'item'
+      : 'record';
 }
 
 =head3 type

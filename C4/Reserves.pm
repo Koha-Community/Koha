@@ -2332,6 +2332,8 @@ sub GetReserveId {
 
     my $hold = Koha::Holds->search( $params )->next();
 
+    return unless $hold;
+
     return $hold->id();
 }
 
