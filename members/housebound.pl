@@ -47,17 +47,37 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $patron = Koha::Patrons->new->find($input->param('borrowernumber'));
+my @messages;                   # For error messages.
 my $method = $input->param('method') // q{};
 my $visit_id = $input->param('visit_id') // q{};
-my $branch = Koha::Libraries->new->find($patron->branchcode);
-my $category = Koha::Patron::Categories->new->find($patron->categorycode);
-my $houseboundprofile = $patron->housebound_profile;
 
+# Get patron
+my $patron = eval {
+    return Koha::Patrons->new->find($input->param('borrowernumber'));
+};
+push @messages, { type => 'error', code => 'error_on_patron_load' }
+    if ( $@ or !$patron );
+
+# Get supporting cast
+my ( $branch, $category, $houseboundprofile, $visit );
+if ( $patron ) {
+    $branch = Koha::Libraries->new->find($patron->branchcode);
+    $category = Koha::Patron::Categories->new->find($patron->categorycode);
+    $houseboundprofile = $patron->housebound_profile;
+}
+if ( $visit_id ) {
+    $visit = eval {
+        return Koha::Patron::HouseboundVisits->find($visit_id);
+    };
+    push @messages, { type => 'error', code => 'error_on_visit_load' }
+        if ( $@ or !$visit );
+}
+
+# Main processing
 my ( $houseboundvisits, $deliverers, $choosers );
 my ( $houseboundvisit, $deliverer, $chooser );
 
-if ( $method eq 'updateconfirm' ) {
+if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     # We have received the input from the profile edit form.  We must save the
     # changes, and return to simple display.
     $houseboundprofile->set({
@@ -69,8 +89,9 @@ if ( $method eq 'updateconfirm' ) {
         referral      => $input->param('referral')      // q{},
         notes         => $input->param('notes')         // q{},
     });
-    die("Unable to store edited profile")
-        unless ( $houseboundprofile->store );
+    my $success = eval { return $houseboundprofile->store };
+    push @messages, { type => 'error', code => 'error_on_profile_store' }
+        if ( $@ or !$success );
     $method = undef;
 } elsif ( $method eq 'createconfirm' ) {
     # We have received the input necessary to create a new profile.  We must
@@ -85,24 +106,24 @@ if ( $method eq 'updateconfirm' ) {
         referral       => $input->param('referral')      // q{},
         notes          => $input->param('notes')         // q{},
     });
-    die("Unable to store new profile")
-        unless ( $houseboundprofile->store );
+    my $success = eval { return $houseboundprofile->store };
+    push @messages, { type => 'error', code => 'error_on_profile_create' }
+        if ( $@ or !$success );
     $method = undef;
 } elsif ( $method eq 'visit_update_or_create' ) {
     # We want to edit, edit a visit, so we must pass its details.
     $deliverers = Koha::Patrons->new->housebound_deliverers;
     $choosers = Koha::Patrons->new->housebound_choosers;
-    $houseboundvisit = Koha::Patron::HouseboundVisits->find($visit_id)
-        if ( $visit_id );
-} elsif ( $method eq 'visit_delete' ) {
+    $houseboundvisit = $visit;
+} elsif ( $method eq 'visit_delete' and $visit ) {
     # We want ot delete a specific visit.
-    my $visit = Koha::Patron::HouseboundVisits->find($visit_id);
-    die("Unable to delete visit") unless ( $visit->delete );
+    my $success = eval { return $visit->delete };
+    push @messages, { type => 'error', code => 'error_on_visit_delete' }
+        if ( $@ or !$success );
     $method = undef;
-} elsif ( $method eq 'editvisitconfirm' ) {
+} elsif ( $method eq 'editvisitconfirm' and $visit ) {
     # We have received input for editing a visit.  We must store and return to
     # simple display.
-    my $visit = Koha::Patron::HouseboundVisits->find($visit_id);
     $visit->set({
         borrowernumber      => $input->param('borrowernumber') // q{},
         appointment_date    => $input->param('date')           // q{},
@@ -110,9 +131,11 @@ if ( $method eq 'updateconfirm' ) {
         chooser_brwnumber   => $input->param('chooser')        // q{},
         deliverer_brwnumber => $input->param('deliverer')      // q{},
     });
-    die("Unable to store edited visit") unless ( $visit->store );
+    my $success = eval { return $visit->store };
+    push @messages, { type => 'error', code => 'error_on_visit_store' }
+        if ( $@ or !$success );
     $method = undef;
-} elsif ( $method eq 'addvisitconfirm' ) {
+} elsif ( $method eq 'addvisitconfirm' and !$visit ) {
     # We have received input for creating a visit.  We must store and return
     # to simple display.
     my $visit = Koha::Patron::HouseboundVisit->new({
@@ -122,7 +145,9 @@ if ( $method eq 'updateconfirm' ) {
         chooser_brwnumber   => $input->param('chooser')        // q{},
         deliverer_brwnumber => $input->param('deliverer')      // q{},
     });
-    die("Unable to store new visit") unless ( $visit->store );
+    my $success = eval { return $visit->store };
+    push @messages, { type => 'error', code => 'error_on_visit_create' }
+        if ( $@ or !$success );
     $method = undef;
 }
 
@@ -135,6 +160,7 @@ $template->param(
     visit              => $houseboundvisit,
     branch             => $branch,
     category           => $category,
+    messages           => \@messages,
     method             => $method,
     choosers           => $choosers,
     deliverers         => $deliverers,

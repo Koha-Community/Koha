@@ -48,6 +48,30 @@ $(document).ready(function() {
           <h3>Housebound details for [% patron.title %] [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</h3>
           <div class="yui-u first">
 
+            [% FOR m IN messages %]
+                <div class="dialog [% m.type %]">
+                    [% SWITCH m.code %]
+                    [% CASE 'error_on_patron_load' %]
+                        An error occurred whilst loading the patron details.
+                    [% CASE 'error_on_profile_store' %]
+                        An error occurred whilst updating this housebound profile.
+                    [% CASE 'error_on_profile_create' %]
+                        An error occurred whilst creating this housebound profile.
+                    [% CASE 'error_on_visit_load' %]
+                        An error occurred whilst loading the housebound visit.
+                    [% CASE 'error_on_visit_delete' %]
+                        An error occurred whilst deleting a housebound visit.
+                    [% CASE 'error_on_visit_store' %]
+                        An error occurred whilst updating a housebound visit.
+                    [% CASE 'error_on_visit_create' %]
+                        An error occurred whilst creating a new housebound visit.
+                    [% CASE %]
+                        [% m.code %]
+                    [% END %]
+                    Please try again later.
+                </div>
+            [% END %]
+
             <!-- Create or edit housebound_profile -->
             [% IF ( method == 'update_or_create' ) %]
               <h4>Manage housebound profile</h4>
