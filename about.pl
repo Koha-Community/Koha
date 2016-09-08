@@ -72,8 +72,8 @@ if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
 }
 
 # Memcached configuration
-my $memcached_servers   = $ENV{MEMCACHED_SERVERS} // C4::Context->config('memcached_servers');
-my $memcached_namespace = $ENV{MEMCACHED_NAMESPACE} // C4::Context->config('memcached_namespace');
+my $memcached_servers   = $ENV{MEMCACHED_SERVERS} || C4::Context->config('memcached_servers');
+my $memcached_namespace = $ENV{MEMCACHED_NAMESPACE} || C4::Context->config('memcached_namespace') // 'koha';
 
 my $effective_caching_method = ref(Koha::Caches->get_instance->cache);
 
