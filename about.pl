@@ -75,12 +75,17 @@ if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
 my $memcached_servers   = $ENV{MEMCACHED_SERVERS} || C4::Context->config('memcached_servers');
 my $memcached_namespace = $ENV{MEMCACHED_NAMESPACE} || C4::Context->config('memcached_namespace') // 'koha';
 
-my $effective_caching_method = ref(Koha::Caches->get_instance->cache);
+my $cache = Koha::Caches->get_instance;
+my $effective_caching_method = ref($cache->cache);
+# Memcached may have been running when plack has been initialized but could have been stopped since
+# FIXME What are the consequences of that??
+my $is_memcached_still_active = $cache->set_in_cache('test_for_about_page', "just a simple value");
 
 $template->param(
     effective_caching_method => $effective_caching_method,
     memcached_servers   => $memcached_servers,
     memcached_namespace => $memcached_namespace,
+    is_memcached_still_active => $is_memcached_still_active,
     memcached_running   => Koha::Caches->get_instance->memcached_cache
 );
 

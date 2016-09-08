@@ -58,8 +58,15 @@
                     Namespace: [% IF memcached_namespace %]<span>[% memcached_namespace | html %]</span>
                                [% ELSE %]<span>undefined</span>[% END %] |
                     Status: [% IF memcached_servers %]
-                                [% IF memcached_running %]<span class="status_ok">running</span>
-                                [% ELSE %]<span class="status_warn">not running</span>[% END %]
+                                [% IF memcached_running %]
+                                    [% IF is_memcached_still_active %]
+                                        <span class="status_ok">running</span>
+                                    [% ELSE %]
+                                        <span class="status_warn">no longer running</span><span>, restart memcached!</span>
+                                    [% END %]
+                                [% ELSE %]
+                                    <span class="status_warn">not running</span>
+                                [% END %]
                             [% ELSE %]
                                 <span>unknown</span>
                             [% END %]
