@@ -25,18 +25,28 @@
     <cmdsynopsis>
       <command>koha-remove</command>
       <arg><option>--keep-mysql</option></arg>
+      <arg><option>--purge-all</option></arg>
       <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 
   <refsect1><title>Options</title>
   <variablelist>
+
     <varlistentry>
       <term><option>--keep-mysql</option></term>
       <listitem>
         <para>Leave the MySQL database and user when removing the Koha instance.</para>
       </listitem>
     </varlistentry>
+
+    <varlistentry>
+      <term><option>--purge-all</option></term>
+      <listitem>
+        <para>Removes all instance files in /var/lib/koha and /var/spool/koha.</para>
+      </listitem>
+    </varlistentry>
+
   </variablelist>
   </refsect1>
 
