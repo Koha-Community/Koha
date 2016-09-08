@@ -18,6 +18,7 @@ package Koha::Patron::HouseboundVisit;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Patron;
 
 use base qw(Koha::Object);
 
@@ -49,7 +50,8 @@ Returns the prefetched chooser for this visit.
 
 sub chooser {
     my ( $self ) = @_;
-    return $self->_result->chooser_brwnumber;
+    my $rs = $self->_result->chooser_brwnumber;
+    return Koha::Patron->_new_from_dbic( $rs );
 }
 
 =head3 deliverer
@@ -62,7 +64,8 @@ Returns the prefetched deliverer for this visit.
 
 sub deliverer {
     my ( $self ) = @_;
-    return $self->_result->deliverer_brwnumber;
+    my $rs = $self->_result->deliverer_brwnumber;
+    return Koha::Patron->_new_from_dbic( $rs );
 
 }
 

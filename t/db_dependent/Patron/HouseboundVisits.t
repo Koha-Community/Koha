@@ -81,11 +81,8 @@ is( $result->deliverer->borrowernumber, $visit->{deliverer_brwnumber} );
 
 is( $result->chooser->borrowernumber, $visit->{chooser_brwnumber} );
 
-TODO: {
-    local $TODO = "We want our results here to be Koha::Patron objects, but they by default return DBIC Schema objects.  The currently accepted solution to this (use the _from_dbic method), is defined for Koha::Objects, but not for Koha::Object.  We do not resolve this issue here";
-    isa_ok( $result->deliverer, "Koha::Patron");
-    isa_ok( $result->chooser, "Koha::Patron");
-}
+isa_ok( $result->deliverer, "Koha::Patron");
+isa_ok( $result->chooser, "Koha::Patron");
 
 $schema->storage->txn_rollback;
 
