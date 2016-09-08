@@ -33,4 +33,4 @@ mysqluser="$( xmlstarlet sel -t -v 'yazgfs/config/user' $kohaconfig )"
 mysqlpass="$( xmlstarlet sel -t -v 'yazgfs/config/pass' $kohaconfig )"
 mysqldump --databases --host="$mysqlhost" --user="$mysqluser" \
     --password="$mysqlpass" "$mysqldb" |
-    sed "s/$name/__KOHASITE__/g"
+    sed "s/koha_$name/__KOHASITE__/g"
