@@ -331,7 +331,7 @@ sub get_from_cache {
     if ( exists $L1_cache{$self->{namespace}}{$key} ) {
         if (ref($L1_cache{$self->{namespace}}{$key})) {
             if ($unsafe) {
-                $L1_cache{$self->{namespace}}{$key}->{thawed} ||= $L1_decoder->decode($L1_cache{$self->{namespace}}{key}->{frozen});
+                $L1_cache{$self->{namespace}}{$key}->{thawed} ||= $L1_decoder->decode($L1_cache{$self->{namespace}}{$key}->{frozen});
                 return $L1_cache{$self->{namespace}}{$key}->{thawed};
             } else {
                 return $L1_decoder->decode($L1_cache{$self->{namespace}}{$key}->{frozen});
