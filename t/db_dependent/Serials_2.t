@@ -254,7 +254,6 @@ is( GetPreviousSerialid( $subscriptionid_from_my_branch, 2 ), $serialid1, "get p
 is( GetPreviousSerialid( $subscriptionid_from_my_branch, 3 ), undef, "get previous serialid with 3, does not exist" );
 
 $schema->storage->txn_rollback;
-$dbh->rollback;
 
 # C4::Context->userenv
 sub Mock_userenv {
