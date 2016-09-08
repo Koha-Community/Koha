@@ -100,6 +100,13 @@
     </varlistentry>
 
     <varlistentry>
+      <term><option>--adminuser</option></term>
+      <listitem>
+        <para>Specify the borrowernumber of the user that should have a new, random password set as part of setting up the new instance. The password will be reported as part of the output of the current script. If --adminuser is not specified, the user with borrowernumber = 1 will be updated. If an SQL file is not used to populate the database of the newly created instance, no admin user will be created.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
       <term><option>--marcflavor</option></term>
       <listitem>
         <para>Specifies format of MARC records to be indexed by Zebra. Corresponds to the ZEBRA_MARC_FORMAT config file variable.</para>
@@ -258,6 +265,7 @@
         <term><option>DEFAULTSQL</option></term>
         <listitem>
           <para>An SQL file (compressed with gzip) that can be fed  to  mysql(1) to  initialize the database after it has been created.  Might be created using koha-dump-defaults(8).</para>
+          <para>If the SQL file contains users, the user with borrowernumber = 1 will have a new, random password set. This password will be reported in the output of the script. If another user than borrowernumber 1 should have its password set, the borrowernumber of this user can be set with the --adminuser command line option.</para>
         </listitem>
       </varlistentry>
 
