@@ -305,6 +305,9 @@ sub AddItem {
     }
 
 	my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
+    if( $error ) {
+        return;
+    }
     $item->{'itemnumber'} = $itemnumber;
 
     ModZebra( $item->{biblionumber}, "specialUpdate", "biblioserver" );
