@@ -785,12 +785,14 @@ sub BatchCommitItems {
             $num_items_errored++;
         } else {
             my ( $item_biblionumber, $biblioitemnumber, $itemnumber ) = AddItemFromMarc( $item_marc, $biblionumber );
-            $updsth->bind_param( 1, 'imported' );
-            $updsth->bind_param( 2, $itemnumber );
-            $updsth->bind_param( 3, $row->{'import_items_id'} );
-            $updsth->execute();
-            $updsth->finish();
-            $num_items_added++;
+            if( $itemnumber ) {
+                $updsth->bind_param( 1, 'imported' );
+                $updsth->bind_param( 2, $itemnumber );
+                $updsth->bind_param( 3, $row->{'import_items_id'} );
+                $updsth->execute();
+                $updsth->finish();
+                $num_items_added++;
+            }
         }
     }
 
