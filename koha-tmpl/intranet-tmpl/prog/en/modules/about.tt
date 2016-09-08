@@ -68,7 +68,18 @@
                                 [% END %]
                             [% ELSE %]
                                 <span>unknown</span>
-                            [% END %]
+                            [% END %] |
+                    Config read from:
+                    [% SWITCH where_is_memcached_config %]
+                        [% CASE 'config_only' %]
+                            <span class="status_ok">koha-conf.xml</span>
+                        [% CASE 'ENV_only' %]
+                            <span class="status_warn">ENV</span> Note that the right place to define the memcached config is in your $KOHA_CONF file
+                        [% CASE 'both' %]
+                            <span class="status_warn">ENV and koha-conf.xml</span> Note that the right place to define the memcached config is in your $KOHA_CONF file. To avoid any misunderstanding you whould not export the memcached config from ENV.
+                        [% CASE # nowhere %]
+                            <span class="status_warn">Nowhere</span> Note that the right place to define the memcached config is in your $KOHA_CONF file. Currently you do not have a valid memcached configuration defined.
+                    [% END %]
                   [% IF effective_caching_method != 'Cache::Memcached::Fast' %]
                     | Effective caching method: [% effective_caching_method %]
                   [% END %]

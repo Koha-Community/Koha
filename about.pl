@@ -81,12 +81,22 @@ my $effective_caching_method = ref($cache->cache);
 # FIXME What are the consequences of that??
 my $is_memcached_still_active = $cache->set_in_cache('test_for_about_page', "just a simple value");
 
+my $where_is_memcached_config = 'nowhere';
+if ( $ENV{MEMCACHED_SERVERS} and C4::Context->config('memcached_servers') ) {
+    $where_is_memcached_config = 'both';
+} elsif ( $ENV{MEMCACHED_SERVERS} and not C4::Context->config('memcached_servers') ) {
+    $where_is_memcached_config = 'ENV_only';
+} elsif ( C4::Context->config('memcached_servers') ) {
+    $where_is_memcached_config = 'config_only';
+}
+
 $template->param(
     effective_caching_method => $effective_caching_method,
     memcached_servers   => $memcached_servers,
     memcached_namespace => $memcached_namespace,
     is_memcached_still_active => $is_memcached_still_active,
-    memcached_running   => Koha::Caches->get_instance->memcached_cache
+    where_is_memcached_config => $where_is_memcached_config,
+    memcached_running   => Koha::Caches->get_instance->memcached_cache,
 );
 
 # Additional system information for warnings
