@@ -12835,7 +12835,16 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "16.06.00.016";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
-        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('OPACSuggestionMandatoryFields','title','','Define the mandatory fields for a patron purchase suggestions made via OPAC.','multiple');
+        update marc_subfield_structure set defaultvalue=REPLACE(defaultvalue, 'YYYY', '<<YYYY>>') where defaultvalue like "%YYYY%" and defaultvalue not like "%<<YYYY>>%";
+    });
+    $dbh->do(q{
+        update marc_subfield_structure set defaultvalue=REPLACE(defaultvalue, 'MM', '<<MM>>') where defaultvalue like "%MM%" and defaultvalue not like "%<<MM>>%";
+    });
+    $dbh->do(q{
+        update marc_subfield_structure set defaultvalue=REPLACE(defaultvalue, 'DD', '<<DD>>') where defaultvalue like "%DD%" and defaultvalue not like "%<<DD>>%";
+    });
+    $dbh->do(q{
+        update marc_subfield_structure set defaultvalue=REPLACE(defaultvalue, 'user', '<<USER>>') where defaultvalue like "%user%" and defaultvalue not like "%<<USER>>%";
     });
 
     print "Upgrade to $DBversion done (Bug 7045 - Default-value substitution inconsistent)\n";
