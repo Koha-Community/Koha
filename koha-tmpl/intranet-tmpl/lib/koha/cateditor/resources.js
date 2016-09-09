@@ -34,6 +34,7 @@ define( [ 'module' ], function( module ) {
     switch ( module.config().marcflavour ) {
         case 'MARC21':
             _res( 'marc21/xml/006', $.get( module.config().themelang + '/data/marc21_field_006.xml' ) );
+            _res( 'marc21/xml/007', $.get( module.config().themelang + '/data/marc21_field_007.xml' ) );
             _res( 'marc21/xml/008', $.get( module.config().themelang + '/data/marc21_field_008.xml' ) );
             break;
     }

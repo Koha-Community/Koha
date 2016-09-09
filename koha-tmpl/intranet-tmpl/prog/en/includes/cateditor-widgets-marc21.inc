@@ -139,6 +139,36 @@ require( [ 'widget' ], function( Widget ) {
         }
     } );
 
+    Widget.Register( '006@', {
+        makeTemplate: function() {
+            var now = new Date();
+            return "a    g           ";
+        },
+        init: function() {
+            var $result = $( '<span class="subfield-widget fixed-widget">' + _("Fixed data:") + '<span class="hint widget-loading">' + _("Loading...") + '</span></span>' );
+
+            return $result[0];
+        },
+        postCreate: function( node, mark ) {
+            this.createFromXML( 'marc21/xml/006' );
+        }
+    } );
+
+    Widget.Register( '007@', {
+        makeTemplate: function() {
+            var now = new Date();
+            return "a       ";
+        },
+        init: function() {
+            var $result = $( '<span class="subfield-widget fixed-widget">' + _("Fixed data:") + '<span class="hint widget-loading">' + _("Loading...") + '</span></span>' );
+
+            return $result[0];
+        },
+        postCreate: function( node, mark ) {
+            this.createFromXML( 'marc21/xml/007' );
+        }
+    } );
+
     Widget.Register( '008@', {
         makeTemplate: function() {
             var now = new Date();
