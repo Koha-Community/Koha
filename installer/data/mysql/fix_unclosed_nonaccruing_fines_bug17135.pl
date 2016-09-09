@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Copyright 2016 Jacek Ablewicz
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -97,10 +99,9 @@ sub Bug_17135_fix {
         ## which does not require any correction
         next if ($fine->{description} =~ /$due_qr/);
 
-        {
+        if( !$old_date_pattern ) {
             ## for extracting old due date from fine description
             ## not used for fixing anything, logging/debug purposes only
-            last if $old_date_pattern;
             $old_date_pattern = $due;
             $old_date_pattern =~ s/[A-Za-z]/\[A-Za-z\]/g;
             $old_date_pattern =~ s/[0-9]/\\d/g;
@@ -174,15 +175,12 @@ sub Bug_17135_fix {
         };
     }
 
-    if ($verbose) {
-        Warn("Fine records with mismatched old vs current due dates: $different_dates_cnt");
-        Warn("Non-accruing accountlines FU records (item not due): ".$not_due_not_accruning_cnt);
-        Warn("Non-accruing accountlines FU records (item due): ".$due_not_accruning_cnt);
+    if( $verbose ) {
+        Warn( "Fine records with mismatched old vs current due dates: $different_dates_cnt" );
+        Warn( "Non-accruing accountlines FU records (item not due): ".$not_due_not_accruning_cnt );
+        Warn( "Non-accruing accountlines FU records (item due): ".$due_not_accruning_cnt );
     }
 
-    if (@$forfixing > 0) {
-        Warn("Dry run (test only mode), skipping ".scalar(@$forfixing)." database changes.") unless ($confirm);
-    }
     my $updated_cnt = 0;
     my $update_sql = "UPDATE accountlines SET accounttype = 'F' WHERE accounttype = 'FU' AND accountlines_id = ? LIMIT 1";
     for my $fine (@$forfixing) {
@@ -197,8 +195,19 @@ sub Bug_17135_fix {
         $updated_cnt += $rows_affected;
         logaction("FINES", "FU", $fine->{borrowernumber}, $logentry) if ($log);
     }
-    if (@$forfixing > 0 && $confirm && $mode eq 'production') {
-        Warn("Database update done, $updated_cnt".((@$forfixing == $updated_cnt)? "": "/".scalar(@$forfixing))." fine records closed successfully.");
+
+    # Regardless of verbose, we report at least a number here
+    if( @$forfixing > 0 ) {
+        if( $confirm && $mode eq 'production') {
+            Warn( "Database update done, $updated_cnt".
+                ( @$forfixing == $updated_cnt? "": ( "/". @$forfixing )).
+                " fine records closed successfully." );
+        } else {
+            Warn( "Dry run (test only mode), skipping ". @$forfixing.
+                " fine records." );
+        }
+    } else {
+        Warn( "No fine records needed to be fixed" );
     }
 }
 
