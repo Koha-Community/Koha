@@ -34,7 +34,24 @@ my $INSTALLED_CONFIG_FNAME = '__KOHA_CONF_DIR__/koha-conf.xml';
 # use C4::Context->config instead
 sub read_from_file {
     my ( $class, $file ) = @_;
-    return XMLin($file, keyattr => ['id'], forcearray => ['listen', 'server', 'serverinfo'], suppressempty => '');
+
+    return if not defined $file;
+
+    my $xml;
+    eval {
+        $xml = XMLin(
+            $file,
+            keyattr => ['id'],
+            forcearray => ['listen', 'server', 'serverinfo'],
+            suppressempty => ''
+        );
+    };
+
+    if ($@) {
+        warn "Error reading file $file";
+    }
+
+    return $xml;
 }
 
 # Koha's main configuration file koha-conf.xml
