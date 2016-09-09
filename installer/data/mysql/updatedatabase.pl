@@ -12926,6 +12926,27 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.06.00.023";
+if ( CheckVersion($DBversion) ) {
+    my $pref = C4::Context->preference('timeout');
+    if( !$pref || $pref eq '12000000' ) {
+        # update if pref is null or equals old default value
+        $dbh->do(q|
+            UPDATE systempreferences SET value = '1d', type = 'Free'
+            WHERE variable = 'timeout'
+        |);
+        print "Upgrade to $DBversion done (Bug 17187)\nNote: Pref value for timeout has been adjusted.\n";
+    } else {
+        # only update pref type
+        $dbh->do(q|
+            UPDATE systempreferences SET type = 'Free'
+            WHERE variable = 'timeout'
+        |);
+        print "Upgrade to $DBversion done (Bug 17187)\nNote: Pref value for timeout has not been adjusted.\n";
+    }
+    SetVersion($DBversion); #FIXME
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
