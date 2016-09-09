@@ -285,7 +285,8 @@ elsif ( $op eq 'add_validate' ) {
         my $maxlength = $maxlength[$i] ? $maxlength[$i] : 9999;
         
         if (defined($liblibrarian) && $liblibrarian ne "") {
-            unless ( C4::Context->config('demo') or C4::Context->config('demo') eq 1 ) {
+            my $is_demo = C4::Context->config('demo') || '';
+            if ( $is_demo ne '1' ) {
                 if (marc_subfield_structure_exists($tagfield, $tagsubfield, $frameworkcode)) {
                     $sth_update->execute(
                         $tagfield,
@@ -376,7 +377,8 @@ elsif ( $op eq 'delete_confirm' ) {
 }
 elsif ( $op eq 'delete_confirmed' ) {
     my $dbh = C4::Context->dbh;
-    unless ( C4::Context->config('demo') or C4::Context->config('demo') eq 1 ) {
+    my $is_demo = C4::Context->config('demo') || '';
+    if ( $is_demo ne '1' ) {
         my $sth =
           $dbh->prepare(
 "delete from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?"
