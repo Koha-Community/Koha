@@ -12871,6 +12871,19 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.06.00.019";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE reviews CHANGE COLUMN approved approved tinyint(4) DEFAULT 0;
+    });
+    $dbh->do(q{
+        UPDATE reviews SET approved=0 WHERE approved IS NULL;
+    });
+
+    print "Upgrade to $DBversion done (Bug 15839 - Move the reviews related code to Koha::Reviews)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.

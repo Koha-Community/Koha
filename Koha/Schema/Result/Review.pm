@@ -49,6 +49,7 @@ __PACKAGE__->table("reviews");
 =head2 approved
 
   data_type: 'tinyint'
+  default_value: 0
   is_nullable: 1
 
 =head2 datereviewed
@@ -69,7 +70,7 @@ __PACKAGE__->add_columns(
   "review",
   { data_type => "text", is_nullable => 1 },
   "approved",
-  { data_type => "tinyint", is_nullable => 1 },
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "datereviewed",
   {
     data_type => "datetime",
@@ -133,8 +134,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:u+R08bCdVQA697aPo9zEUA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-09 10:38:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZjW8uHIL0m7+pwOTE0pcxQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
