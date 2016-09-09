@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Warn;
 
 use C4::Circulation;
@@ -128,14 +128,14 @@ subtest 'has_overdues' => sub {
     is( $retrieved_patron->has_overdues, 0, );
 
     my $tomorrow = DateTime->today( time_zone => C4::Context->tz() )->add( days => 1 );
-    my $issue = AddIssue( $new_patron_1->unblessed, $item_1->{barcode} );
+    my $issue = Koha::Issue->new({ borrowernumber => $new_patron_1->id, itemnumber => $item_1->{itemnumber}, date_due => $tomorrow, branchcode => $library->{branchcode} })->store();
     is( $retrieved_patron->has_overdues, 0, );
-    AddReturn( $item_1->{barcode} );
+    $issue->delete();
     my $yesterday = DateTime->today(time_zone => C4::Context->tz())->add( days => -1 );
-    $issue = AddIssue( $new_patron_1->unblessed, $item_1->{barcode}, $yesterday );
+    $issue = Koha::Issue->new({ borrowernumber => $new_patron_1->id, itemnumber => $item_1->{itemnumber}, date_due => $yesterday, branchcode => $library->{branchcode} })->store();
     $retrieved_patron = Koha::Patrons->find( $new_patron_1->borrowernumber );
     is( $retrieved_patron->has_overdues, 1, );
-    AddReturn( $item_1->{barcode} );
+    $issue->delete();
 };
 
 subtest 'update_password' => sub {
