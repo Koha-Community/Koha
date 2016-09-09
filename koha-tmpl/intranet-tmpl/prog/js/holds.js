@@ -106,6 +106,7 @@ $(document).ready(function() {
                                     var selectedbranch;
                                     var setbranch;
                                     if( oObj.branches[i].selected ){
+
                                         selectedbranch = " selected='selected' ";
                                         setbranch = CURRENT;
                                     }
@@ -113,7 +114,7 @@ $(document).ready(function() {
                                         selectedbranch = '';
                                         setbranch = '';
                                     }
-                                    branchSelect += '<option value="'+ oObj.branches[i].value +'"'+selectedbranch+'>'+oObj.branches[i].branchname+setbranch+'</option>';
+                                    branchSelect += '<option value="'+ oObj.branches[i].branchcode +'"'+selectedbranch+'>'+oObj.branches[i].branchname+setbranch+'</option>';
                                 }
                                 branchSelect +='</select>';
                                 return branchSelect;
