@@ -23,7 +23,6 @@ use Modern::Perl;
 use Carp;
 
 use C4::Context;
-use C4::Members;
 use C4::Log;
 use Koha::Database;
 use Koha::DateUtils;
