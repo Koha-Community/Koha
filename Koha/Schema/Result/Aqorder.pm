@@ -83,6 +83,18 @@ __PACKAGE__->table("aqorders");
   is_nullable: 1
   size: [28,6]
 
+=head2 unitprice_tax_excluded
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
+=head2 unitprice_tax_included
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
 =head2 quantityreceived
 
   data_type: 'smallint'
@@ -134,13 +146,43 @@ __PACKAGE__->table("aqorders");
   is_nullable: 1
   size: [13,2]
 
+=head2 rrp_tax_excluded
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
+=head2 rrp_tax_included
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
 =head2 ecost
 
   data_type: 'decimal'
   is_nullable: 1
   size: [13,2]
 
-=head2 gstrate
+=head2 ecost_tax_excluded
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
+=head2 ecost_tax_included
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
+=head2 tax_rate
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [6,4]
+
+=head2 tax_value
 
   data_type: 'decimal'
   is_nullable: 1
@@ -269,6 +311,10 @@ __PACKAGE__->add_columns(
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "unitprice",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "unitprice_tax_excluded",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "unitprice_tax_included",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "quantityreceived",
   { data_type => "smallint", default_value => 0, is_nullable => 0 },
   "datecancellationprinted",
@@ -292,9 +338,19 @@ __PACKAGE__->add_columns(
   },
   "rrp",
   { data_type => "decimal", is_nullable => 1, size => [13, 2] },
+  "rrp_tax_excluded",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "rrp_tax_included",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "ecost",
   { data_type => "decimal", is_nullable => 1, size => [13, 2] },
-  "gstrate",
+  "ecost_tax_excluded",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "ecost_tax_included",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "tax_rate",
+  { data_type => "decimal", is_nullable => 1, size => [6, 4] },
+  "tax_value",
   { data_type => "decimal", is_nullable => 1, size => [6, 4] },
   "discount",
   { data_type => "float", is_nullable => 1, size => [6, 4] },
@@ -537,8 +593,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-05-06 18:07:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SQC7q+ZeARRBGvdzzWgSkw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-09 13:43:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R2a+DkXI1AaEVnpb1YKu5Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

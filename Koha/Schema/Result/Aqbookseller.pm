@@ -142,7 +142,7 @@ __PACKAGE__->table("aqbooksellers");
   data_type: 'tinyint'
   is_nullable: 1
 
-=head2 gstrate
+=head2 tax_rate
 
   data_type: 'decimal'
   is_nullable: 1
@@ -212,7 +212,7 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", is_nullable => 1 },
   "invoiceincgst",
   { data_type => "tinyint", is_nullable => 1 },
-  "gstrate",
+  "tax_rate",
   { data_type => "decimal", is_nullable => 1, size => [6, 4] },
   "discount",
   { data_type => "float", is_nullable => 1, size => [6, 4] },
@@ -382,8 +382,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-10 19:36:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mNH0CKfuRQqoOLXieV43DQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-09 13:43:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:b3aUNZsdvNzEuKScGD7ZPQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
