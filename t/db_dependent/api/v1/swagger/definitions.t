@@ -27,9 +27,9 @@ use Swagger2;
 
 use C4::Context;
 
-my $swaggerPath = C4::Context->config('intranetdir')."/api/v1";
-my $swagger = Swagger2->new($swaggerPath."/swagger.json")->expand;
-my $api_spec = $swagger->api_spec->data;
+my $swaggerPath = C4::Context->config('intranetdir') . "/api/v1/swagger";
+my $swagger     = Swagger2->new( $swaggerPath . "/swagger.json" )->expand;
+my $api_spec    = $swagger->api_spec->data;
 
 # The basic idea of this test:
 # 1. Find all definitions in Swagger under api/v1/definitions
