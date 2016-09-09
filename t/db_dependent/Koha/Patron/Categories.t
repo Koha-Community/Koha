@@ -84,7 +84,7 @@ subtest 'get_expiry_date' => sub {
 };
 
 $retrieved_category_1->delete;
-is( Koha::Patron::Categories->search->count, $nb_of_categories + 2, 'Delete should have deleted the patron category' );
+is( Koha::Patron::Categories->search->count, $nb_of_categories + 1, 'Delete should have deleted the patron category' );
 
 $schema->storage->txn_rollback;
 
