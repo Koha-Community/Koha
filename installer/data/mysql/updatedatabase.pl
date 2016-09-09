@@ -12884,6 +12884,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.06.00.020";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('SwitchOnSiteCheckouts', '0', 'Automatically switch an on-site checkout to a normal checkout', NULL, 'YesNo');
+    });
+
+    print "Upgrade to $DBversion done (Bug 16272 - Transform checkout from on-site checkout to regular checkout)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
