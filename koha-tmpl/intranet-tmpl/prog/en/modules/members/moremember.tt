@@ -33,7 +33,7 @@
 var interface = "[% interface %]";
 var theme = "[% theme %]";
 var borrowernumber = "[% borrowernumber %]";
-var branchcode = "[% branch %]";
+var branchcode = "[% Branches.GetLoggedInBranchcode() %]";
 var exports_enabled = "[% exports_enabled %]";
 var AllowCirculate = [% (CAN_user_circulate_circulate_remaining_permissions)? 1 : 0 %]
 var AllowRenewalLimitOverride = [% (CAN_user_circulate_override_renewals && Koha.Preference('AllowRenewalLimitOverride') )? 1: 0 %];

@@ -269,8 +269,6 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
 my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
 $template->param( picture => 1 ) if $patron_image;
 
-my $branch=C4::Context->userenv->{'branch'};
-
 $template->param(%$data);
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
@@ -319,8 +317,6 @@ $template->param(
     othernames      => $data->{'othernames'},
     categoryname    => $data->{'description'},
     was_renewed     => scalar $input->param('was_renewed') ? 1 : 0,
-    branch          => $branch,
-    branchcode      => $branch,
     todaysdate      => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
     totalprice      => sprintf("%.2f", $totalprice),
     totaldue        => sprintf("%.2f", $total),
