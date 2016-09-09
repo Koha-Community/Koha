@@ -861,7 +861,7 @@ INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
 VALUES ( 'ro','rum');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'ro', 'language', 'ro', 'Român');
+VALUES ( 'ro', 'language', 'ro', 'Română');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'ro', 'language', 'en', 'Romanian');
