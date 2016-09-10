@@ -74,7 +74,7 @@
       [% FOREACH biblio IN resultsloop %]
         <tr>
             <td>
-                <p><span class="title">[% biblio.title |html %]</span>
+                <p><span class="title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]">[% biblio.title | html %]</a></span>
                 [% IF ( biblio.author ) %]  by <span class="author">[% biblio.author %]</span>,[% END %]</p>
                 <p>[% IF ( biblio.isbn ) %] [% biblio.isbn %][% END %]
                 [% IF ( biblio.pages ) %] - [% biblio.pages %][% END %]
