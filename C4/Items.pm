@@ -283,43 +283,44 @@ the biblio items tag for display and indexing.
 =cut
 
 sub AddItem {
-    my $item = shift;
+    my $item         = shift;
     my $biblionumber = shift;
 
     my $dbh           = @_ ? shift : C4::Context->dbh;
-    my $frameworkcode = @_ ? shift : GetFrameworkCode( $biblionumber );
-    my $unlinked_item_subfields;  
+    my $frameworkcode = @_ ? shift : GetFrameworkCode($biblionumber);
+    my $unlinked_item_subfields;
     if (@_) {
-        $unlinked_item_subfields = shift
-    };
+        $unlinked_item_subfields = shift;
+    }
 
     # needs old biblionumber and biblioitemnumber
     $item->{'biblionumber'} = $biblionumber;
     my $sth = $dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=?");
     $sth->execute( $item->{'biblionumber'} );
-    ($item->{'biblioitemnumber'}) = $sth->fetchrow;
+    ( $item->{'biblioitemnumber'} ) = $sth->fetchrow;
 
     _set_defaults_for_add($item);
     _set_derived_columns_for_add($item);
     $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
+
     # FIXME - checks here
-    unless ( $item->{itype} ) {  # default to biblioitem.itemtype if no itype
+    unless ( $item->{itype} ) {    # default to biblioitem.itemtype if no itype
         my $itype_sth = $dbh->prepare("SELECT itemtype FROM biblioitems WHERE biblionumber = ?");
         $itype_sth->execute( $item->{'biblionumber'} );
         ( $item->{'itype'} ) = $itype_sth->fetchrow_array;
     }
 
-	my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
-    if( $error ) {
-        return;
-    }
+    my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
+    return if $error;
+
     $item->{'itemnumber'} = $itemnumber;
 
     ModZebra( $item->{biblionumber}, "specialUpdate", "biblioserver" );
-   
-    logaction("CATALOGUING", "ADD", $itemnumber, "item") if C4::Context->preference("CataloguingLog");
-    
-    return ($item->{biblionumber}, $item->{biblioitemnumber}, $itemnumber);
+
+    logaction( "CATALOGUING", "ADD", $itemnumber, "item" )
+      if C4::Context->preference("CataloguingLog");
+
+    return ( $item->{biblionumber}, $item->{biblioitemnumber}, $itemnumber );
 }
 
 =head2 AddItemBatchFromMarc
