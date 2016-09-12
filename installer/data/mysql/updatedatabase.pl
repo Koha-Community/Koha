@@ -12953,7 +12953,7 @@ if ( CheckVersion($DBversion) ) {
         UPDATE language_descriptions SET description = 'Română' WHERE subtag = 'ro' AND type = 'language' AND lang = 'ro';
     });
 
-    print "Upgrade to $DBversion done (Bug 17187)\nNote: Pref value for timeout has not been adjusted.\n";
+    print "Upgrade to $DBversion done (Bug 16311 - Advanced search language limit typo for Romanian)\n";
     SetVersion($DBversion);
 }
 
