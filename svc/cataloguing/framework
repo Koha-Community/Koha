@@ -32,7 +32,7 @@ my $authorised_values = {};
 my $branches = { map { $_->branchcode => $_->branchname } Koha::Libraries->search_filtered };
 $authorised_values->{branches} = [];
 foreach my $thisbranch ( sort keys %$branches ) {
-    push @{ $authorised_values->{branches} }, { value => $thisbranch, lib => $branches->{$thisbranch}->{'branchname'} };
+    push @{ $authorised_values->{branches} }, { value => $thisbranch, lib => $branches->{$thisbranch} };
 }
 
 $authorised_values->{itemtypes} = [ $schema->resultset( "Itemtype" )->search( undef, {
