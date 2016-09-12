@@ -259,6 +259,18 @@ __PACKAGE__->table("subscription");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 itemtype
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
+=head2 previousitemtype
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -342,6 +354,10 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "reneweddate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "itemtype",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
+  "previousitemtype",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
 );
 
 =head1 PRIMARY KEY
@@ -429,8 +445,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:57kc1/B3eNKQXAk9tlOy0A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-12 09:39:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jAZGa1b6DkY8Sr12reD4nw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
