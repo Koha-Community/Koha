@@ -12944,7 +12944,17 @@ if ( CheckVersion($DBversion) ) {
         |);
         print "Upgrade to $DBversion done (Bug 17187)\nNote: Pref value for timeout has not been adjusted.\n";
     }
-    SetVersion($DBversion); #FIXME
+    SetVersion($DBversion);
+}
+
+$DBversion = "16.06.00.024";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE language_descriptions SET description = 'Română' WHERE subtag = 'ro' AND type = 'language' AND lang = 'ro';
+    });
+
+    print "Upgrade to $DBversion done (Bug 17187)\nNote: Pref value for timeout has not been adjusted.\n";
+    SetVersion($DBversion);
 }
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
