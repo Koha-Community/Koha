@@ -1,2 +1,0 @@
-ALTER TABLE `subscription` ADD `itemtype` VARCHAR( 10 ) NULL AFTER reneweddate, ADD `previousitemtype` VARCHAR( 10 ) NULL AFTER itemtype;
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('makePreviousSerialAvailable','0','make previous serial automatically available when collecting a new serial. Please note that the item-level_itypes syspref must be set to specific item.','','YesNo');
