@@ -61,7 +61,7 @@ my $opac = Plack::App::CGIBin->new(
 
 my $apiv1  = builder {
     my $server = Mojo::Server::PSGI->new;
-    $server->load_app('/usr/share/koha/api/v1/app.pl');
+    $server->load_app("$home/api/v1/app.pl");
     $server->to_psgi_app;
 };
 
