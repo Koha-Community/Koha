@@ -11469,13 +11469,19 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
         ADD serialseq_z VARCHAR( 100 ) NULL DEFAULT NULL AFTER serialseq_y
    ");
 
-    my $schema        = Koha::Database->new()->schema();
-    my @subscriptions = $schema->resultset('Subscription')->all();
+    my $sth = $dbh->prepare("SELECT * FROM subscription");
+    $sth->execute();
 
-    foreach my $subscription (@subscriptions) {
+    my $sth2 = $dbh->prepare("SELECT * FROM subscription_numberpatterns WHERE id = ?");
+
+    my $sth3 = $dbh->prepare("UPDATE serials SET serialseq_x = ?, serialseq_y = ?, serialseq_z = ? WHERE serialid = ?");
+
+    foreach my $subscription ( $sth->fetchrow_hashref() ) {
         my $number_pattern = $subscription->numberpattern();
+        $sth2->execute( $subscription->{numberpattern} );
+        my $number_pattern = $sth2->fetchrow_hashref();
 
-        my $numbering_method = $number_pattern->numberingmethod();
+        my $numbering_method = $number_pattern->{numberingmethod};
         # Get all the data between the enumeration values, we need
         # to split each enumeration string based on these values.
         my @splits = split( /\{[XYZ]\}/, $numbering_method );
@@ -11487,12 +11493,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
         }
         my @indexes = sort { $indexes{$a} <=> $indexes{$b} } keys(%indexes);
 
-        my @serials =
-          $schema->resultset('Serial')
-          ->search( { subscriptionid => $subscription->subscriptionid() } );
+        my @serials = @{
+            $dbh->selectall_arrayref(
+                "SELECT * FROM serial WHERE subscriptionid = $subscription->{subscriptionid}",
+                { Slice => {} }
+            )
+        };
 
         foreach my $serial (@serials) {
-            my $serialseq = $serial->serialseq();
+            my $serialseq = $serial->{serialseq};
             my %enumeration_data;
 
             ## We cannot split on multiple values at once,
@@ -11514,12 +11523,11 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
                 $enumeration_data{ $indexes[0] } = $serialseq;
             }
 
-            $serial->update(
-                {
-                    serialseq_x => $enumeration_data{'X'},
-                    serialseq_y => $enumeration_data{'Y'},
-                    serialseq_z => $enumeration_data{'Z'},
-                }
+            $sth3->execute(
+                    $enumeration_data{'X'},
+                    $enumeration_data{'Y'},
+                    $enumeration_data{'Z'},
+                    $serial->{serialid},
             );
         }
     }
