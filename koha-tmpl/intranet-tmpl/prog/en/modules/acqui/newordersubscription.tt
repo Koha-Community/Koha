@@ -60,6 +60,7 @@
                                 <th>ISSN</th>
                                 <th class="anti-the">Title</th>
                                 <th> Notes </th>
+                                <th>Vendor</th>
                                 <th>Library</th>
                                 <th>Call number</th>
                                 <th class="title-string">Expiration date</th>
@@ -76,6 +77,9 @@
                                 </td>
                                 <td>[% IF (sub.publicnotes) %][% sub.publicnotes %][% END %]
                                     [% IF (sub.internalnotes) %]([% sub.internalnotes %])[% END %]
+                                </td>
+                                <td>
+                                    [% IF (sub.vendorname) %][% sub.vendorname %][% END %]
                                 </td>
                                 <td>
                                     [% IF (sub.branchcode) %][% Branches.GetName( sub.branchcode ) %][% END %]

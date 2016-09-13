@@ -553,6 +553,7 @@ sub SearchSubscriptions {
             biblio.title,
             biblio.author,
             biblio.biblionumber,
+            aqbooksellers.name AS vendorname,
             biblioitems.issn
         FROM subscription
             LEFT JOIN subscriptionhistory USING(subscriptionid)
