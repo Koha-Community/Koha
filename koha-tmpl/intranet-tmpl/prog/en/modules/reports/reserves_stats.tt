@@ -212,7 +212,7 @@
            <td><select name="filter_categorycode" id="borcat">
                <option value=""> </option>
                [% FOREACH categoryloo IN categoryloop %]
-                 [% IF ( categoryloo.selected ) %]<option value="[% categoryloo.categorycode %]" selected="selected">[% categoryloo.description %]</option>[% ELSE %]<option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>[% END %]
+                 <option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>
                [% END %]
                </select>
              </td> 
