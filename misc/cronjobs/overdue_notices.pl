@@ -69,6 +69,7 @@ overdue_notices.pl
    -borcat       <categorycode>   category code that must be included
    -borcatout    <categorycode>   category code that must be excluded
    -t                             only include triggered overdues
+   --test                         Run in test mode. No changes will be made on the DB.
    -list-all                      list all overdues
    -date         <yyyy-mm-dd>     emulate overdues run for this date
    -email        <email_type>     type of email that will be used. Can be 'email', 'emailpro' or 'B_email'. Repeatable.
@@ -158,6 +159,13 @@ less frequent run cron script, but requires syncing notice triggers with
 the  cron schedule to ensure proper behavior.
 Add the --triggered option for daily cron, at the risk of no notice 
 being generated if the cron fails to run on time.
+
+=item B<-test>
+
+This option makes the script run in test mode.
+
+In test mode, the script won't make any changes on the DB. This is useful
+for debugging configuration.
 
 =item B<-list-all>
 
@@ -813,7 +821,7 @@ END_SQL
                 attachments            => [$attachment],
                 to_address             => $admin_email_address,
             }
-        );
+        ) unless $test_mode;
     }
 
 }
