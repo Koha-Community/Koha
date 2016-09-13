@@ -632,9 +632,9 @@ elsif ($phase eq 'Run this report'){
         'report_id' => $report_id,
     );
 
-    my ( $sql, $type, $name, $notes );
+    my ( $sql, $original_sql, $type, $name, $notes );
     if (my $report = get_saved_report($report_id)) {
-        $sql   = $report->{savedsql};
+        $sql   = $original_sql = $report->{savedsql};
         $name  = $report->{report_name};
         $notes = $report->{notes};
 
@@ -789,6 +789,7 @@ elsif ($phase eq 'Run this report'){
             $template->param(
                 'results' => \@rows,
                 'sql'     => $sql,
+                original_sql => $original_sql,
                 'id'      => $report_id,
                 'execute' => 1,
                 'name'    => $name,
