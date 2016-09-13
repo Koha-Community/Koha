@@ -421,6 +421,12 @@ __PACKAGE__->table("borrowers");
   default_value: current_timestamp
   is_nullable: 0
 
+=head2 lastseen
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -603,6 +609,12 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
     is_nullable => 0,
+  },
+  "lastseen",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
   },
 );
 
@@ -1232,8 +1244,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-07-08 13:37:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GiEcKBFRhzHwXPekj6fSPg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-13 17:32:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:23Yg0CXG1z8f5Bx92JCVoQ
 
 __PACKAGE__->belongs_to(
     "guarantor",
