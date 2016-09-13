@@ -59,6 +59,7 @@ sub process {
 
     my $import_batch_id = $args->{import_batch_id};
     my $frameworkcode = $args->{frameworkcode};
+    my $overlay_frameworkcode = $args->{overlay_framework};
 
     my @messages;
     my $job_progress = 0;
@@ -70,11 +71,15 @@ sub process {
         $self->size($size)->store;
         ( $num_added, $num_updated, $num_items_added,
           $num_items_replaced, $num_items_errored, $num_ignored ) =
-          BatchCommitRecords(
-            $import_batch_id, $frameworkcode, 50,
-            sub { my $job_progress = shift; $self->progress( $job_progress )->store },
-            { skip_intermediate_commit => 1 },
-        );
+          BatchCommitRecords({
+            batch_id => $import_batch_id,
+            framework => $frameworkcode,
+            overlay_framework => $overlay_frameworkcode,
+            progress_interval => 50,
+            progress_callback =>
+                sub { my $job_progress = shift; $self->progress( $job_progress )->store },
+            skip_intermediate_commit => 1,
+            });
         my $count = $num_added + $num_updated;
         if( $count ) {
             $self->set({ progress => $count, size => $count });

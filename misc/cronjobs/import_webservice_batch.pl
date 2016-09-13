@@ -46,4 +46,7 @@ EOF
 my $batch_ids = GetStagedWebserviceBatches() or exit;
 
 $framework ||= '';
-BatchCommitRecords($_, $framework) foreach @$batch_ids;
+BatchCommitRecords({
+    batch_id  => $_,
+    framework => $framework
+}) foreach @$batch_ids;

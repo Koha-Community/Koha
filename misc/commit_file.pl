@@ -83,7 +83,12 @@ sub process_batch {
 
     print "... importing MARC records -- please wait\n";
     my ($num_added, $num_updated, $num_items_added, $num_items_replaced, $num_items_errored, $num_ignored) =
-        BatchCommitRecords($import_batch_id, $framework, 100, \&print_progress);
+        BatchCommitRecords({
+            batch_id => $import_batch_id,
+            framework => $framework,
+            progress_interval => 100,
+            progress_callback => \&print_progress
+        });
     print "... finished importing MARC records\n";
 
     print <<_SUMMARY_;
