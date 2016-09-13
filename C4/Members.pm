@@ -1102,6 +1102,7 @@ sub get_cardnumber_length {
         }
 
     }
+    $min = 16 if $min > 16;
     return ( $min, $max );
 }
 
