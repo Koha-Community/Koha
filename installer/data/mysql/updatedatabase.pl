@@ -12981,6 +12981,22 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.06.00.027";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER IGNORE TABLE borrowers ADD COLUMN lastseen datetime default NULL AFTER updated_on;
+    });
+    $dbh->do(q{
+        ALTER IGNORE TABLE deletedborrowers ADD COLUMN lastseen datetime default NULL AFTER updated_on;
+    });
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('TrackLastPatronActivity', '0', 'If set, the field borrowers.lastseen will be updated everytime a patron is seen', NULL, 'YesNo');
+    });
+
+    print "Upgrade to $DBversion done (Bug 16274 - Make the selfregistration branchcode selection configurable)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
