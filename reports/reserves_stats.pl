@@ -334,6 +334,12 @@ sub null_to_zzempty ($) {
 }
 sub display_value {
     my ( $crit, $value ) = @_;
+    my $ccodes    = GetKohaAuthorisedValues("items.ccode");
+    my $locations = GetKohaAuthorisedValues("items.location");
+    my $itemtypes = GetItemTypes();
+    my $authvalue = GetKohaAuthorisedValues("items.authvalue");
+    my $Bsort1 = GetAuthorisedValues("Bsort1");
+    my $Bsort2 = GetAuthorisedValues("Bsort2");
     my $display_value =
         ( $crit =~ /ccode/ )         ? $ccodes->{$value}
       : ( $crit =~ /location/ )      ? $locations->{$value}
