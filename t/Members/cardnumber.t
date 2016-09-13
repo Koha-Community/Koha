@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 use Modern::Perl;
-use Test::More tests => 23;
+use Test::More tests => 25;
 
 use t::lib::Mocks;
 
@@ -67,5 +67,13 @@ is( C4::Members::checkcardnumber( q{1234567890123456} ), 2, "1234567890123456 is
 $dbh->{mock_add_resultset} = $rs;
 is( C4::Members::checkcardnumber( q{1234567890} ), 2, "1234567890 is longer than $pref");
 
+$pref = q|,40|; # max 40 chars, not allowed
+t::lib::Mocks::mock_preference('CardnumberLength', $pref);
+is_deeply( [ C4::Members::get_cardnumber_length() ], [ 0, 16 ], ',40 => min=0 and max=16');
+$dbh->{mock_add_resultset} = $rs;
+is( C4::Members::checkcardnumber( q{12345678901234567890} ), 2, "12345678901234567890 is longer than $pref => 16 is max!");
+
+$pref = q|,8|; # max 8 chars
+t::lib::Mocks::mock_preference('CardnumberLength', $pref);
 t::lib::Mocks::mock_preference('BorrowerMandatoryField', 'cardnumber');
 is_deeply( [ C4::Members::get_cardnumber_length() ], [ 1, 8 ], ',8 => min=1 and max=8 if cardnumber is mandatory');
