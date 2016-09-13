@@ -54,18 +54,17 @@
             <tr><th scope="row">Memcached: </th>
                 <td>
                     Servers: [% IF memcached_servers %]<span>[% memcached_servers | html %]</span>
-                             [% ELSE %]<span>undefined</span>[% END %]|
+                             [% ELSE %]<span>undefined</span>[% END %] |
                     Namespace: [% IF memcached_namespace %]<span>[% memcached_namespace | html %]</span>
                                [% ELSE %]<span>undefined</span>[% END %] |
                     Status: [% IF memcached_servers %]
-                                [% IF memcached_running %]
-                                    [% IF is_memcached_still_active %]
-                                        <span class="status_ok">running</span>
-                                    [% ELSE %]
-                                        <span class="status_warn">no longer running</span><span>, restart memcached!</span>
-                                    [% END %]
+                                [% IF memcached_running and is_memcached_still_active %]
+                                    <span class="status_ok">running</span>.
                                 [% ELSE %]
-                                    <span class="status_warn">not running</span>
+                                    <span class="status_warn">not running</span>.
+                                    [% IF is_psgi %]
+                                        <span>Remember memcached needs to be started before Plack.</span>
+                                    [% END %]
                                 [% END %]
                             [% ELSE %]
                                 <span>unknown</span>
