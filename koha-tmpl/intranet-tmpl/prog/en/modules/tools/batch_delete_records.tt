@@ -61,21 +61,9 @@ $(document).ready(function() {
     "bPaginate": false
   }));
 
-  function Checkbox(){
-    var form = document.getElementById('selectrecords');
-    var inputs = form.getElementsByTagName('input');
-    var checked = false;
-    for (var i=0; i<inputs.length; i++) {
-      if (inputs[i].type == 'checkbox' && inputs[i].name == 'record_id') {
-        checked = inputs[i].checked;
-        if (checked) return true;
-      }
-    }
-    return false;
-  }
-
   $("#selectrecords").on("submit",function(){
-    if (Checkbox() == false){
+    var nb_checked = $("#selectrecords").find("input[type='checkbox'][name='record_id']:checked").size();
+    if (nb_checked == 0){
       alert(_("No records have been selected."));
       return false;
     }
