@@ -149,7 +149,6 @@ my @previoustypearg =
     map { { code => $_, value => $typeloop->{$_}{'description'}, selected => ( ( $subs->{previousitemtype} and $_ eq $subs->{previousitemtype} ) ? "selected=\"selected\"" : "" ), } } sort keys %{$typeloop};
 
 $template->param(
-    branchloop               => $branchloop,
     typeloop                 => \@typearg,
     previoustypeloop         => \@previoustypearg,
     locations_loop=>$locations_loop,
