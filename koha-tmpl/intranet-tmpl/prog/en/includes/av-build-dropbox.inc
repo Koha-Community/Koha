@@ -17,7 +17,7 @@
 
 [% IF avs %]
   <select id="[% name %]" name="[% name %]" class="[% class %]" >
-  [% IF all %]<option value="All">All</option>[% END %]
+  [% IF all %]<option value="">All</option>[% END %]
   [% FOR av IN avs %]
     [% IF av.default %]
       <option value="[% av.value %]" selected="selected">[% av.label | html_entity %]</option>
