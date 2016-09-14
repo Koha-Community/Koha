@@ -20,11 +20,13 @@ use Modern::Perl;
 use Test::More;
 use Test::MockModule;
 
+use MARC::Record;
+
 use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 11;
+        plan tests => 12;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -81,5 +83,164 @@ is( $testmatcher->code(), 'match on ISBN', 'testing code accessor' );
 $testmatcher->description('match on ISSN');
 
 is( $testmatcher->description(), 'match on ISSN', 'testing code accessor' );
+
+subtest '_get_match_keys() tests' => sub {
+
+    plan tests => 8;
+
+    my $matchpoint = get_title_matchpoint({
+        length => 0,
+        norms  => [],
+        offset => 0
+    });
+
+    my $record = MARC::Record->new();
+    $record->append_fields(
+        MARC::Field->new('100', '1', ' ',
+                            a => 'King, Stephen',
+                            d => 'd1947-'),
+        MARC::Field->new('245', ' ', ' ',
+                            a => '  .; thE t[]:,aliS(m)/An\'"',
+                            c => 'Stephen King, Peter Straub.' ),
+        MARC::Field->new('700', ' ', ' ',
+                            a => 'Straub, Peter',
+                            d => '1943-')
+    );
+
+    my @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+
+    is( $keys[0], 'THE TALISMAN STEPHEN KING PETER STRAUB',
+        'Match key correctly calculated with no $norms');
+
+    $matchpoint = get_title_matchpoint({
+        length => 9,
+        norms  => [],
+        offset => 0
+    });
+    @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+    is( $keys[0], 'THE',
+        'Match key correctly calculated with length 9');
+
+    $matchpoint = get_title_matchpoint({
+        length => 9,
+        norms  => [],
+        offset => 1
+    });
+    @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+    is( $keys[0], 'THE',
+        'Match key correctly calculated with length 9 and offset 1');
+
+    $matchpoint = get_title_matchpoint({
+        length => 9,
+        norms  => [],
+        offset => 2
+    });
+    @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+    is( $keys[0], 'THE T',
+        'Match key correctly calculated with length 9 and offset 2, should not remove space');
+
+    $matchpoint = get_authors_matchpoint({
+        length => 0,
+        norms  => [],
+        offset => 0
+    });
+    @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+    is( $keys[0], 'STRAUB PETER KING STEPHEN',
+        'Match key correctly calculated with multiple components');
+
+    $matchpoint = get_authors_matchpoint({
+        length => 9,
+        norms  => [],
+        offset => 0
+    });
+    @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+    is( $keys[0], 'STRAUB KING ST',
+        'Match key correctly calculated with multiple components, length 9');
+
+    $matchpoint = get_authors_matchpoint({
+        length => 10,
+        norms  => [],
+        offset => 0
+    });
+    @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+    is( $keys[0], 'STRAUB P KING STE',
+        'Match key correctly calculated with multiple components, length 10');
+
+    $matchpoint = get_authors_matchpoint({
+        length => 10,
+        norms  => [],
+        offset => 2
+    });
+    @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+    is( $keys[0], 'TRAUB PET ING STEPH',
+        'Match key correctly calculated with multiple components, length 10, offset 1');
+};
+
+sub get_title_matchpoint {
+
+    my $params = shift;
+
+    my $length = $params->{length} // 0;
+    my $norms  = $params->{norms}  // [];
+    my $offset = $params->{offset} // 0;
+
+    my $matchpoint = {
+        components =>  [
+            {
+                length    => $length,
+                norms     => $norms,
+                offset    => $offset,
+                subfields =>
+                    {
+                        a => 1,
+                        c => 1
+                    },
+                tag => '245'
+            }
+        ],
+        index => "title",
+        score => 1000
+    };
+
+    return $matchpoint;
+}
+
+sub get_authors_matchpoint {
+
+    my $params = shift;
+
+    my $length = $params->{length} // 0;
+    my $norms  = $params->{norms}  // [];
+    my $offset = $params->{offset} // 0;
+
+    my $matchpoint = {
+        components =>  [
+            {
+                length    => $length,
+                norms     => $norms,
+                offset    => $offset,
+                subfields =>
+                    {
+                        a => 1
+                    },
+                tag => '700'
+            },
+            {
+                length    => $length,
+                norms     => $norms,
+                offset    => $offset,
+                subfields =>
+                    {
+                        a => 1
+                    },
+                tag => '100'
+            }
+        ],
+        index => "author",
+        score => 1000
+    };
+
+    return $matchpoint;
+}
 
 1;
