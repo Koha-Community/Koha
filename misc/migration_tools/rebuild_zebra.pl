@@ -26,6 +26,7 @@ use C4::Biblio;
 use C4::AuthoritiesMarc;
 use C4::Items;
 use Koha::RecordProcessor;
+use Koha::Caches;
 use XML::LibXML;
 
 use constant LOCK_FILENAME => 'rebuild..LCK';
@@ -62,6 +63,7 @@ my $run_user = (getpwuid($<))[0];
 my $wait_for_lock = 0;
 my $use_flock;
 my $table = 'biblioitems';
+my $is_memcached = Koha::Caches->get_instance('syspref')->memcached_cache;
 
 my $verbose_logging = 0;
 my $zebraidx_log_opt = " -v none,fatal,warn ";
@@ -127,6 +129,9 @@ if ($daemon_mode) {
         my $msg = "Cannot specify -s, -k, -I, -where, -length, or -offset with -daemon.\n";
         $msg   .= "Please do '$0 --help' to see usage.\n";
         die $msg;
+    }
+    unless ($is_memcached) {
+        warn "Warning: script running in daemon mode, without recommended caching system (memcached).\n";
     }
     $authorities = 1;
     $biblios = 1;
@@ -237,7 +242,10 @@ if ($daemon_mode) {
         if (_flock($LockFH, LOCK_EX|LOCK_NB)) {
             eval {
                 $dbh = C4::Context->dbh;
-                do_one_pass() if ( zebraqueue_not_empty() );
+                if( zebraqueue_not_empty() ) {
+                    Koha::Caches->flush_L1_caches() if $is_memcached;
+                    do_one_pass();
+                }
             };
             if ($@ && $verbose_logging) {
                 warn "Warning : $@\n";
