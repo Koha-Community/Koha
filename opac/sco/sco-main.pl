@@ -234,6 +234,7 @@ if ($borrower->{cardnumber}) {
             C4::Context->preference("AllowItemsOnHoldCheckout")
         );
         $it->{'norenew'} = 1 if $renewokay->{'NO_MORE_RENEWALS'};
+        $it->{date_due}  = $it->{date_due_sql};
         push @issues, $it;
     }
 
