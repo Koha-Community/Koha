@@ -44,6 +44,7 @@ use Koha::Holds;
 use Koha::List::Patron;
 use Koha::Patrons;
 use Koha::Patron::Categories;
+use Koha::Schema;
 
 our (@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -1102,7 +1103,9 @@ sub get_cardnumber_length {
         }
 
     }
-    $min = 16 if $min > 16;
+    my $borrower = Koha::Schema->resultset('Borrower');
+    my $field_size = $borrower->result_source->column_info('cardnumber')->{size};
+    $min = $field_size if $min > $field_size;
     return ( $min, $max );
 }
 
