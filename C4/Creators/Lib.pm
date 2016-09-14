@@ -298,7 +298,7 @@ sub get_label_summary {
     my %params = @_;
     my $label_number = 0;
     my @label_summaries = ();
-    my $query = "     SELECT b.title, b.author, bi.itemtype, i.barcode, i.biblionumber, i.itype
+    my $query = "     SELECT b.title, b.author, bi.itemtype, i.barcode, i.itemcallnumber, i.biblionumber, i.itype
                       FROM creator_batches AS c LEFT JOIN items AS i ON (c.item_number=i.itemnumber)
                       LEFT JOIN biblioitems AS bi ON (i.biblioitemnumber=bi.biblioitemnumber)
                       LEFT JOIN biblio AS b ON (bi.biblionumber=b.biblionumber)
@@ -324,6 +324,7 @@ sub get_label_summary {
         $label_summary->{'_item_type'} = C4::Context->preference("item-level_itypes") ? $record->{'itype'} : $record->{'itemtype'};
         $label_summary->{'_barcode'} = $record->{'barcode'};
         $label_summary->{'_item_number'} = $item->{'item_number'};
+        $label_summary->{'_item_cn'} = $record->{'itemcallnumber'};
         $label_summary->{'_label_id'} = $item->{'label_id'};
         push (@label_summaries, $label_summary);
     }
