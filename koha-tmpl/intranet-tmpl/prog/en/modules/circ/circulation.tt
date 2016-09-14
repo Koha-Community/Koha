@@ -896,6 +896,13 @@ No patron matched <span class="ex">[% message | html %]</span>
         [% ELSE %]
             <a href="#reserves" id="holds-tab">0 Holds</a>
         [% END %]
+    </li>
+
+    [% IF Koha.Preference('ArticleRequests') %]
+        <li>
+            <a href="#article-requests" id="article-requests-tab"> [% patron.article_requests_current.count %] Article requests</a>
+        </li>
+    [% END %]
 
     <li><a id="debarments-tab-link" href="#reldebarments">[% debarments.size %] Restrictions</a></li>
 </ul>
@@ -983,6 +990,10 @@ No patron matched <span class="ex">[% message | html %]</span>
 	<p>Patron has nothing on hold.</p>
 [% END %]
 </div> <!-- reservesloop -->
+
+[% IF Koha.Preference('ArticleRequests') %]
+    [% INCLUDE 'patron-article-requests.inc' %]
+[% END %]
 
 [% ELSIF borrowernumber %]
     <div class="dialog message">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>

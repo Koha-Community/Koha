@@ -513,6 +513,11 @@ function validate1(date) {
                 <a href="#reserves" id="holds-tab">0 Holds</a>
             [% END %]
         </li>
+        [% IF Koha.Preference('ArticleRequests') %]
+            <li>
+                <a href="#article-requests" id="article-requests-tab"> [% patron.article_requests_current.count %] Article requests</a>
+            </li>
+        [% END %]
         <li><a id="debarments-tab-link" href="#reldebarments">[% debarments.size %] Restrictions</a></li>
     </ul>
 
@@ -603,6 +608,11 @@ function validate1(date) {
 
     [% ELSE %]<p>Patron has nothing on hold.</p>[% END %]
 	</div>
+
+
+[% IF Koha.Preference('ArticleRequests') %]
+    [% INCLUDE 'patron-article-requests.inc' %]
+[% END %]
 
 </div>
 [% END %] <!-- unknowuser -->

@@ -261,7 +261,9 @@ if ($findborrower) {
 }
 
 # get the borrower information.....
+my $patron;
 if ($borrowernumber) {
+    $patron = Koha::Patrons->find( $borrowernumber );
     $borrower = GetMemberDetails( $borrowernumber, 0 );
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
 
@@ -299,7 +301,6 @@ if ($borrowernumber) {
         finetotal    => $fines
     );
 
-    my $patron = Koha::Patrons->find( $borrowernumber );
     if ( $patron and $patron->is_debarred ) {
         $template->param(
             'userdebarred'    => $borrower->{debarred},
@@ -596,7 +597,7 @@ my $view = $batch
 
 my @relatives;
 if ( $borrowernumber ) {
-    if ( my $patron = Koha::Patrons->find( $borrower->{borrowernumber} ) ) {
+    if ( $patron ) {
         if ( my $guarantor = $patron->guarantor ) {
             push @relatives, $guarantor->borrowernumber;
             push @relatives, $_->borrowernumber for $patron->siblings;
@@ -626,6 +627,7 @@ if ($restoreduedatespec || $stickyduedate) {
 }
 
 $template->param(
+    patron            => $patron,
     librarian_messages => $librarian_messages,
     patron_messages   => $patron_messages,
     borrower          => $borrower,

@@ -323,9 +323,10 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 }
 
 # in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children) 
-$template->param( $data->{'categorycode'} => 1 ); 
+$template->param( $data->{'categorycode'} => 1 );
 $template->param(
-    detailview => 1,
+    patron          => $patron,
+    detailview      => 1,
     borrowernumber  => $borrowernumber,
     othernames      => $data->{'othernames'},
     categoryname    => $data->{'description'},
