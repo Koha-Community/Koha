@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use t::lib::TestBuilder;
 
 use MARC::Record;
@@ -174,6 +174,18 @@ subtest 'export iso2709' => sub {
     my $title = $second_record->subfield(245, 'a');
     $title = Encode::encode('UTF-8', $title);
     is( $title, $biblio_2_title, 'Export ISO2709: The title is correctly encoded' );
+};
+
+subtest 'export without record_type' => sub {
+    plan tests => 1;
+
+    my $rv = Koha::Exporter::Record::export({
+            record_ids => [ $biblionumber_1, $biblionumber_2 ],
+            format => 'iso2709',
+            output_filepath => 'does_not_matter_here',
+    });
+    is( $rv, undef, 'export returns undef' );
+    #Depending on your logger config, you might have a warn in your logs
 };
 
 $schema->storage->txn_rollback;
