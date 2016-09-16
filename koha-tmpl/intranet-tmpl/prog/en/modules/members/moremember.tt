@@ -272,8 +272,8 @@ function validate1(date) {
 </ol>
 </div>
       <div class="action">
-        [% IF ( guarantorborrowernumber ) %]
-        <a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=1&amp;guarantorid=[% guarantorborrowernumber %]">Edit</a>
+        [% IF ( guarantor.borrowernumber ) %]
+        <a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=1&amp;guarantorid=[% guarantor.borrowernumber %]">Edit</a>
         [% ELSE %]
         <a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=1">Edit</a>
         [% END %]</div>
