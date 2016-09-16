@@ -20,11 +20,15 @@ package Koha::Logger;
 
 =head1 NAME
 
-Koha::Log
+Koha::Logger
 
 =head1 SYNOPSIS
 
-  use Koha::Log;
+    use Koha::Logger;
+
+    my $logger = Koha::Logger->get;
+    $logger->warn( 'WARNING: Serious error encountered' );
+    $logger->debug( 'I thought that this code was not used' );
 
 =head1 FUNCTIONS
 
