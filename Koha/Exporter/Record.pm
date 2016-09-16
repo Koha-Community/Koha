@@ -8,6 +8,7 @@ use C4::AuthoritiesMarc;
 use C4::Biblio;
 use C4::Record;
 use Koha::CsvProfiles;
+use Koha::Logger;
 
 sub _get_record_for_export {
     my ($params)           = @_;
@@ -22,11 +23,8 @@ sub _get_record_for_export {
     } elsif ( $record_type eq 'bibs' ) {
         $record = _get_biblio_for_export( { %$params, biblionumber => $record_id } );
     } else {
-
-        # TODO log "record_type not supported"
-        return;
+        Koha::Logger->get->warn( "Record_type $record_type not supported." );
     }
-
     return unless $record;
 
     if ($dont_export_fields) {
@@ -99,7 +97,10 @@ sub export {
     my $csv_profile_id     = $params->{csv_profile_id};
     my $output_filepath    = $params->{output_filepath};
 
-    return unless $record_type;
+    if( !$record_type ) {
+        Koha::Logger->get->warn( "No record_type given." );
+        return;
+    }
     return unless @$record_ids;
 
     my $fh;
@@ -116,8 +117,10 @@ sub export {
             my $record = _get_record_for_export( { %$params, record_id => $record_id } );
             my $errorcount_on_decode = eval { scalar( MARC::File::USMARC->decode( $record->as_usmarc )->warnings() ) };
             if ( $errorcount_on_decode or $@ ) {
-                warn $@ if $@;
-                warn "record (number $record_id) is invalid and therefore not exported because its reopening generates warnings above";
+                my $msg = "Record $record_id could not be exported. " .
+                    ( $@ // '' );
+                chomp $msg;
+                Koha::Logger->get->info( $msg );
                 next;
             }
             print $record->as_usmarc();
@@ -130,7 +133,10 @@ sub export {
         print "\n";
         for my $record_id (@$record_ids) {
             my $record = _get_record_for_export( { %$params, record_id => $record_id } );
-            next unless $record;
+            if( !$record ) {
+                Koha::Logger->get->info( "Record $record_id could not be exported." );
+                next;
+            }
             print MARC::File::XML::record($record);
             print "\n";
         }
