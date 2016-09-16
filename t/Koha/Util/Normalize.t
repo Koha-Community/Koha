@@ -17,11 +17,29 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
+use Test::Warn;
 
 BEGIN {
     use_ok('Koha::Util::Normalize');
 }
+
+subtest 'pass undef' => sub {
+    plan tests => 8;
+
+    is( legacy_default(), undef, 'legacy_default returns undef' );
+    warning_is { legacy_default() } undef, 'no warn from legacy_default';
+
+    is( remove_spaces(), undef, 'remove_spaces returns undef' );
+    warning_is { remove_spaces() } undef, 'no warn from remove_spaces';
+
+    is( upper_case(), undef, 'upper_case returns undef' );
+    warning_is { upper_case() } undef, 'no warn from upper_case';
+
+    is( lower_case(), undef, 'lower_case returns undef' );
+    warning_is { lower_case() } undef, 'no warn from lower_case';
+};
+
 
 subtest 'legacy_default() normalizer' => sub {
 

@@ -41,8 +41,10 @@ Default normalization function
 =cut
 
 sub legacy_default {
+    my ( $string ) = @_;
+    return if !defined( $string );
 
-    my $string = uc shift;
+    $string = uc $string;
 
     $string =~ s/[.;:,\]\[\)\(\/'"]//g;
     $string =~ s/^\s+//;
@@ -59,8 +61,8 @@ Normalization function removing spaces
 =cut
 
 sub remove_spaces {
-
-    my $string = shift;
+    my ( $string ) = @_;
+    return if !defined( $string );
 
     $string =~ s/\s+//g;
 
@@ -74,8 +76,10 @@ Normalization function converting characters into upper-case
 =cut
 
 sub upper_case {
+    my ( $string ) = @_;
+    return if !defined( $string );
 
-    my $string = uc shift;
+    $string = uc $string;
 
     return $string;
 }
@@ -87,8 +91,10 @@ Normalization function converting characters into lower-case
 =cut
 
 sub lower_case {
+    my ( $string ) = @_;
+    return if !defined( $string );
 
-    my $string = lc shift;
+    $string = lc $string;
 
     return $string;
 }
