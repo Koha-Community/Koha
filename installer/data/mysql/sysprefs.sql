@@ -345,6 +345,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACFRBRizeEditions','0','','If ON, the OPAC will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo'),
 ('opacheader','','70|10','Add HTML to be included as a custom header in the OPAC','Textarea'),
 ('OpacHiddenItems','','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','Textarea'),
+('OpacHiddenItemsExceptions','',NULL,'List of borrower categories, separated by |, that can see items otherwise hidden by OpacHiddenItems','Textarea'),
 ('OpacHighlightedWords','1','','If Set, then queried words are higlighted in OPAC','YesNo'),
 ('OPACHoldingsDefaultSortField','first_column','first_column|homebranch|holdingbranch','Default sort field for the holdings table at the OPAC','choice'),
 ('OPACHoldsIfAvailableAtPickup','1','','Allow to pickup up holds at libraries where the item is available','YesNo'),

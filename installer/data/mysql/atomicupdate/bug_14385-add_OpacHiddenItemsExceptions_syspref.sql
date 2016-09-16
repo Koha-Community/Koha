@@ -1,0 +1,1 @@
+INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('OpacHiddenItemsExceptions','',NULL,'List of borrower categories, separated by |, that can see items otherwise hidden by OpacHiddenItems','Textarea');
