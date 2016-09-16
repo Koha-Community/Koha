@@ -86,10 +86,10 @@ sub add_attribute_type_form {
 
     my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
     my @branches_loop;
-    foreach my $branch (sort keys %$branches) {
+    foreach my $branch (@$branches) {
         push @branches_loop, {
-            branchcode => $$branches{$branch}{branchcode},
-            branchname => $$branches{$branch}{branchname},
+            branchcode => $branch->{branchcode},
+            branchname => $branch->{branchname},
         };
     }
 
