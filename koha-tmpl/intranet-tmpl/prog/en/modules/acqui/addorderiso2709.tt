@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Order staged MARC records
 [% IF ( batch_details ) %]
@@ -321,22 +322,22 @@
                         <ol>
                         <li>
                         <label for="homebranch_item_[% item.item_id %]">homebranch</label><select id="homebranch_item_[% item.item_id %]" name="homebranch_[% item.biblio_count %]">
-                        [% FOREACH branchloo IN branchloop %]
-                          [% IF ( branchloo.value ) == ( item.homebranch )  %]
-                            <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                        [% FOREACH l IN libraries %]
+                          [% IF l.branchcode == item.homebranch %]
+                            <option value="[% l.branchcode %]" selected="selected">[% l.branchname %]</option>
                           [% ELSE %]
-                            <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+                            <option value="[% l.branchcode %]">[% l.branchname %]</option>
                           [% END %]
                         [% END %]
                         </select>
                         </li>
 
                         <li><label for="holdingbranch_item_[% item.item_id %]">holdingbranch</label><select id="holdingbranch_item_[% item.item_id %]" name="holdingbranch_[% item.biblio_count %]">
-                        [% FOREACH branchloo IN branchloop %]
-                          [% IF ( branchloo.value ) == ( item.holdingbranch ) %]
-                            <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                        [% FOREACH l IN libraries %]
+                          [% IF l.branchcode == item.holdingbranch %]
+                            <option value="[% l.branchcode %]" selected="selected">[% l.branchname %]</option>
                           [% ELSE %]
-                            <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+                            <option value="[% l.branchcode %]">[% l.branchname %]</option>
                           [% END %]
                         [% END %]
                         </select>

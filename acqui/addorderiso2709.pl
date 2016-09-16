@@ -43,6 +43,7 @@ use C4::Suggestions;    # GetSuggestion
 use C4::Members;
 
 use Koha::Number::Price;
+use Koha::Libraries;
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Booksellers;
@@ -593,7 +594,7 @@ sub import_biblios_list {
                         "item_action_${item_action}" => 1,
                         item_action => $item_action,
                         item_error => $item_error,
-                        branchloop => GetBranchesLoop(),
+                        libraries => scalar Koha::Libraries->search(),
                         locationloop => \@locations,
                         itypeloop => \@itypes,
                         ccodeloop => \@ccodes,
