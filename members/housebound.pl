@@ -55,7 +55,8 @@ my $visit_id = $input->param('visit_id') // q{};
 
 # Get patron
 my $patron = eval {
-    return Koha::Patrons->new->find($input->param('borrowernumber'));
+    my $borrowernumber = $input->param('borrowernumber') // q{};
+    return Koha::Patrons->new->find($borrowernumber);
 };
 push @messages, { type => 'error', code => 'error_on_patron_load' }
     if ( $@ or !$patron );
