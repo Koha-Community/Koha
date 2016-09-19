@@ -372,7 +372,7 @@ if ($op eq 'save' || $op eq 'insert'){
 if ( ($op eq 'modify' || $op eq 'insert' || $op eq 'save'|| $op eq 'duplicate') and ($step == 0 or $step == 3 )){
     unless ($newdata{'dateexpiry'}){
         my $patron_category = Koha::Patron::Categories->find( $newdata{categorycode} );
-        $newdata{'dateexpiry'} = $patron_category->get_expiry_date( $newdata{dateenrolled} );
+        $newdata{'dateexpiry'} = $patron_category->get_expiry_date( $newdata{dateenrolled} ) if $patron_category;
     }
 }
 
