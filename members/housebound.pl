@@ -77,8 +77,7 @@ if ( $visit_id ) {
 }
 
 # Main processing
-my ( $houseboundvisits, $deliverers, $choosers );
-my ( $houseboundvisit, $deliverer, $chooser );
+my ( $deliverers, $choosers, $houseboundvisit );
 
 if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     # We have received the input from the profile edit form.  We must save the
