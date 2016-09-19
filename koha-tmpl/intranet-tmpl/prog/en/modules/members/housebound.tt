@@ -14,14 +14,6 @@
 <title>Koha &rsaquo; Housebound &rsaquo; Details for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-  $("#date").datepicker({ minDate: 0, dateFormat: "yy-mm-dd" });
-});
-//]]>
-</script>
-
 </head>
 <body>
 [% INCLUDE 'header.inc' %]
@@ -46,7 +38,7 @@ $(document).ready(function() {
 
           <!-- Title -->
           <h3>Housebound details for [% patron.title %] [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</h3>
-          <div class="yui-u first">
+          <div class="first">
 
             [% FOR m IN messages %]
                 <div class="dialog [% m.type %]">
@@ -216,7 +208,7 @@ $(document).ready(function() {
             <!-- Create or edit housebound_visit -->
             [% ELSIF ( method == 'visit_update_or_create' ) %]
               <h4>Manage housebound deliveries</h4>
-              <form name="form" id="instance_form" method="post"
+              <form name="form" id="instance_form" method="post" class="toggler"
                     action="/cgi-bin/koha/members/housebound.pl">
                 [% IF ( visit ) %]
                   <input type="hidden" name="method" value="editvisitconfirm" />
@@ -229,15 +221,16 @@ $(document).ready(function() {
                   <legend>Delivery details</legend>
                   <ol>
                     <li>
-                      <label for="date">Date: </label>
+                      <label for="date" class="required">Date: </label>
                       [% IF ( visit ) %]
-                        <input type="text" id="date" name="date" size="20"
-                               value="[% visit.appointment_date %]"
-                               required="required"/>
+                        <input type="text" id="date" class="datepicker"
+                               value="[% visit.appointment_date | $KohaDates %]"
+                               name="date" size="20" required="required"/>
                       [% ELSE %]
-                        <input type="text" id="date" name="date" size="20"
-                               value="" required="required"/>
+                        <input type="text" id="date" class="datepicker"
+                               value="" name="date" size="20" required="required"/>
                       [% END %]
+                      <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                     </li>
                     <li>
                       <label for="segment">Time:</label>
@@ -418,7 +411,7 @@ $(document).ready(function() {
                     [% FOREACH entry IN housebound_visits %]
                     <tr>
                       <td>[% entry.id %]</td>
-                      <td>[% entry.appointment_date %] ([% entry.day_segment %])</td>
+                      <td>[% entry.appointment_date | $KohaDates %] ([% entry.day_segment %])</td>
                       <td>
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.chooser.borrowernumber %]">
                           [% INCLUDE 'patron-title.inc' borrowernumber = entry.chooser.borrowernumber category_type = entry.chooser.categorycode firstname = entry.chooser.firstname surname = entry.chooser.surname othernames = entry.chooser.othernames cardnumber = entry.chooser.cardnumber invert_name = 0 %]

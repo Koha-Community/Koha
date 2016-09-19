@@ -28,6 +28,8 @@ use Modern::Perl;
 use CGI;
 use C4::Auth;
 use C4::Output;
+use DateTime;
+use Koha::DateUtils;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Patron::Categories;
@@ -125,11 +127,11 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     # We have received input for editing a visit.  We must store and return to
     # simple display.
     $visit->set({
-        borrowernumber      => $input->param('borrowernumber') // q{},
-        appointment_date    => $input->param('date')           // q{},
-        day_segment         => $input->param('segment')        // q{},
-        chooser_brwnumber   => $input->param('chooser')        // q{},
-        deliverer_brwnumber => $input->param('deliverer')      // q{},
+        borrowernumber      => $input->param('borrowernumber')      // q{},
+        appointment_date    => dt_from_string($input->param('date') // q{}),
+        day_segment         => $input->param('segment')             // q{},
+        chooser_brwnumber   => $input->param('chooser')             // q{},
+        deliverer_brwnumber => $input->param('deliverer')           // q{},
     });
     my $success = eval { return $visit->store };
     push @messages, { type => 'error', code => 'error_on_visit_store' }
@@ -139,11 +141,11 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     # We have received input for creating a visit.  We must store and return
     # to simple display.
     my $visit = Koha::Patron::HouseboundVisit->new({
-        borrowernumber      => $input->param('borrowernumber') // q{},
-        appointment_date    => $input->param('date')           // q{},
-        day_segment         => $input->param('segment')        // q{},
-        chooser_brwnumber   => $input->param('chooser')        // q{},
-        deliverer_brwnumber => $input->param('deliverer')      // q{},
+        borrowernumber      => $input->param('borrowernumber')      // q{},
+        appointment_date    => dt_from_string($input->param('date') // q{}),
+        day_segment         => $input->param('segment')             // q{},
+        chooser_brwnumber   => $input->param('chooser')             // q{},
+        deliverer_brwnumber => $input->param('deliverer')           // q{},
     });
     my $success = eval { return $visit->store };
     push @messages, { type => 'error', code => 'error_on_visit_create' }
