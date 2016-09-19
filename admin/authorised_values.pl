@@ -208,7 +208,7 @@ $template->param(
 
 if ( $op eq 'list' ) {
     # build categories list
-    my @categories = Koha::AuthorisedValueCategories->search({ category_name => { -not_in => ['branches', 'itemtypes', 'cn_source']}}, { order_by => ['category_name'] } );
+    my @categories = Koha::AuthorisedValueCategories->search({ category_name => { -not_in => ['', 'branches', 'itemtypes', 'cn_source']}}, { order_by => ['category_name'] } );
     my @category_list;
     for my $category ( @categories ) {
         push( @category_list, $category->category_name );
