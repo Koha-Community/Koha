@@ -11477,9 +11477,10 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     my $sth3 = $dbh->prepare("UPDATE serials SET serialseq_x = ?, serialseq_y = ?, serialseq_z = ? WHERE serialid = ?");
 
     foreach my $subscription ( $sth->fetchrow_hashref() ) {
+        next if !defined($subscription);
         my $number_pattern = $subscription->numberpattern();
         $sth2->execute( $subscription->{numberpattern} );
-        my $number_pattern = $sth2->fetchrow_hashref();
+        $number_pattern = $sth2->fetchrow_hashref();
 
         my $numbering_method = $number_pattern->{numberingmethod};
         # Get all the data between the enumeration values, we need
