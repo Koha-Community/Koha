@@ -17,14 +17,13 @@ package C4::Matcher;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use C4::Context;
 use MARC::Record;
 
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
+use Koha::Util::Normalize qw/legacy_default remove_spaces upper_case lower_case/;
 
 =head1 NAME
 
@@ -774,6 +773,7 @@ sub _passes_required_checks {
 }
 
 sub _get_match_keys {
+
     my $source_record = shift;
     my $matchpoint = shift;
     my $check_only_first_repeat = @_ ? shift : 0;
@@ -792,7 +792,7 @@ sub _get_match_keys {
     # If there are two 003s and two 001s, there will be two keys:
     #    first 003 + first 001
     #    second 003 + second 001
-    
+
     my @keys = ();
     for (my $i = 0; $i <= $#{ $matchpoint->{'components'} }; $i++) {
         my $component = $matchpoint->{'components'}->[$i];
@@ -801,24 +801,45 @@ sub _get_match_keys {
             $j++;
             last FIELD if $j > 0 and $check_only_first_repeat;
             last FIELD if $i > 0 and $j > $#keys;
-            my $key = "";
-			my $string;
-            if ($field->is_control_field()) {
-				$string=$field->data();
+
+            my $string;
+            if ( $field->is_control_field() ) {
+                $string = $field->data();
             } else {
-                foreach my $subfield ($field->subfields()) {
-                    if (exists $component->{'subfields'}->{$subfield->[0]}) {
-                        $string .= " " . $subfield->[1]; #FIXME: It would be better to create an array and join with a space later...
-                    }
-                }
-			}
-            if ($component->{'length'}>0) {
-                    $string= substr($string, $component->{'offset'}, $component->{'length'});
-                            # FIXME normalize, substr
-            } elsif ($component->{'offset'}) {
-                    $string= substr($string, $component->{'offset'});
+                $string = $field->as_string(
+                    join('', keys %{ $component->{ subfields } }), ' ' # ' ' as separator
+                );
             }
-            $key = _normalize($string);
+
+            if ($component->{'length'}>0) {
+                $string= substr($string, $component->{'offset'}, $component->{'length'});
+            } elsif ($component->{'offset'}) {
+                $string= substr($string, $component->{'offset'});
+            }
+
+            my $norms = $component->{'norms'};
+            my $key = $string;
+
+            foreach my $norm ( @{ $norms } ) {
+                if ( grep { $norm eq $_ } valid_normalization_routines() ) {
+                    if ( $norm eq 'remove_spaces' ) {
+                        $key = remove_spaces($key);
+                    }
+                    elsif ( $norm eq 'upper_case' ) {
+                        $key = upper_case($key);
+                    }
+                    elsif ( $norm eq 'lower_case' ) {
+                        $key = lower_case($key);
+                    }
+                    elsif ( $norm eq 'legacy_default' ) {
+                        $key = legacy_default($key);
+                    }
+                } else {
+                    warn "Invalid normalization routine required ($norm)"
+                        unless $norm eq 'none';
+                }
+            }
+
             if ($i == 0) {
                 push @keys, $key if $key;
             } else {
@@ -843,16 +864,14 @@ sub _parse_match_component {
     return $component;
 }
 
-# FIXME - default normalizer
-sub _normalize {
-    my $value = uc shift;
-    $value =~ s/[.;:,\]\[\)\(\/'"]//g;
-    $value =~ s/^\s+//;
-    #$value =~ s/^\s+$//;
-    $value =~ s/\s+$//;
-    $value =~ s/\s+/ /g;
-    #$value =~ s/[.;,\]\[\)\(\/"']//g;
-    return $value;
+sub valid_normalization_routines {
+
+    return (
+        'remove_spaces',
+        'upper_case',
+        'lower_case',
+        'legacy_default'
+    );
 }
 
 1;
