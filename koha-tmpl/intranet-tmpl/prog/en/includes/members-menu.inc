@@ -20,6 +20,9 @@
     [% IF CAN_user_borrowers && useDischarge %]
         [% IF dischargeview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% borrowernumber %]">Discharge</a></li>
     [% END %]
+    [% IF Koha.Preference('HouseboundModule') %]
+        [% IF houseboundview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% borrowernumber %]">Housebound</a></li>
+    [% END %]
   </ul>
 </div>
 [% END %]
