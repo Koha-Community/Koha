@@ -2,12 +2,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 25;
+use Test::More tests => 26;
 use Test::Warn;
 use URI::Escape;
 use List::Util qw( shuffle );
 
 use C4::Context;
+use Koha::DateUtils;
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
@@ -196,6 +197,21 @@ C4::Search::History::delete({
 });
 $all = C4::Search::History::get({userid => $userid});
 is( scalar(@$all), 0, 'There is no search after calling delete with an interval = -1 days' );
+
+# If time is null, it must be set to NOW()
+my $query_desc_b1_p = q{first previous biblio search};
+C4::Search::History::add( {
+    userid => $userid,
+    sessionid => $previous_sessionid,
+    query_desc => $query_desc_b1_p,
+    query_cgi => $query_cgi_b,
+    total => $total,
+    type => 'biblio',
+});
+my $search_history_id = $dbh->last_insert_id( undef, undef, 'search_history', undef );
+my $search_history = C4::Search::History::get({ id => $search_history_id });
+is( output_pref({ dt => dt_from_string($search_history->[0]->{time}), dateonly => 1 }), output_pref({ dt => dt_from_string, dateonly => 1 }), "Inserting a new search history should handle undefined time" );
+
 
 delete_all( $userid );
 

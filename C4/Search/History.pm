@@ -25,14 +25,14 @@ sub add {
     # Add the request the user just made
     my $query = q{
         INSERT INTO search_history(
-            userid, sessionid, query_desc, query_cgi, type, total, time
+            userid, sessionid, query_desc, query_cgi, type, total} . ( $time ? ', time' : '' ) . q{
         ) VALUES(
-            ?, ?, ?, ?, ?, ?, ?
+            ?, ?, ?, ?, ?, ?} . ( $time ? ', ?' : '' ) . q{
         )
     };
     my $sth = $dbh->prepare($query);
     $sth->execute( $userid, $sessionid, $query_desc, $query_cgi, $type,
-        $total, $time );
+        $total, ( $time ? $time : () ) );
 }
 
 sub add_to_session {
