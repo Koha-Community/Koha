@@ -29,7 +29,7 @@
 <div id="toolbar" class="btn-toolbar">
     <div class="btn-group"><a id="newshelf" class="btn btn-small" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=add_form&amp;referer=[% op %]"><i class="fa fa-plus"></i> New list</a></div>
 
-    [% IF op == 'view' %]
+    [% IF shelf AND op == 'view' %]
         [% IF can_manage_shelf %]
         <div class="btn-group">
             <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
