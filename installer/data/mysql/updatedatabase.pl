@@ -11607,6 +11607,9 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = "3.22.06.004";
 if ( CheckVersion($DBversion) ) {
     $dbh->do(q{
+        UPDATE letter SET branchcode='' WHERE branchcode IS NULL;
+    });
+    $dbh->do(q{
         ALTER TABLE letter MODIFY COLUMN branchcode varchar(10) NOT NULL DEFAULT ''
     });
     $dbh->do(q{
