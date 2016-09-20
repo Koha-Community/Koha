@@ -113,7 +113,7 @@ $(document).ready(function(){
 });
 [% END %]
 
-[% IF op == 'view' %]
+[% IF shelf AND op == 'view' %]
 $(document).ready(function(){
     [% IF ( itemsloop ) %]$('#searchheader').fixFloat();[% END %]
     $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-remove\"></i>"+_(" Clear all")+"<\/a>");
