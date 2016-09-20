@@ -153,7 +153,7 @@
                     </div>
                 [% END %]
 
-                    [% IF op == 'view' %]
+                    [% IF shelf AND op == 'view' %]
                         <h3>
                             [% shelf.shelfname |html %]
                             <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber %]" class="rss-list-link noprint">
