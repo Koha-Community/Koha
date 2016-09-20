@@ -339,6 +339,7 @@ if ( $op eq 'view' ) {
             }
         } else {
             push @messages, { type => 'error', code => 'unauthorized_on_view' };
+            undef $shelf;
         }
     } else {
         push @messages, { type => 'error', code => 'does_not_exist' };
