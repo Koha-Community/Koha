@@ -136,19 +136,32 @@ sub GetAvailability {
             my $msg;
             my $biblioitem = ( GetBiblioItemByBiblioNumber( $id, undef ) )[0];
             if ($biblioitem) {
+                my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
+                my $items            = (GetItemsByBiblioitemnumber($biblioitemnumber))[0];
 
+                # We loop over the items to clean them
+                my $itemnumber;
+                foreach my $item (@$items) {
+                    $itemnumber=$item->{'itemnumber'};
+                    my ( $biblionumber, $status, $msg, $location ) = _availability($itemnumber);
+                    $out .= "  <dlf:record>\n";
+                    $out .= "    <dlf:bibliographic id=\"" . ( $biblionumber || $itemnumber ) . "\" />\n";
+                    $out .= "    <dlf:items>\n";
+                    $out .= "      <dlf:item id=\"" . $itemnumber . "\">\n";
+                    $out .= "        <dlf:simpleavailability>\n";
+                    $out .= "          <dlf:identifier>" . $itemnumber . "</dlf:identifier>\n";
+                    $out .= "          <dlf:availabilitystatus>" . $status . "</dlf:availabilitystatus>\n";
+                    if ($msg)      { $out .= "          <dlf:availabilitymsg>" . $msg . "</dlf:availabilitymsg>\n"; }
+                    if ($location) { $out .= "          <dlf:location>" . $location . "</dlf:location>\n"; }
+                    $out .= "        </dlf:simpleavailability>\n";
+                    $out .= "      </dlf:item>\n";
+                    $out .= "    </dlf:items>\n";
+                    $out .= "  </dlf:record>\n";
+                }
             } else {
                 $status = "unknown";
                 $msg    = "Error: could not retrieve availability for this ID";
             }
-            $out .= "  <dlf:record>\n";
-            $out .= "    <dlf:bibliographic id=\"" . $id . "\" />\n";
-            $out .= "    <dlf:simpleavailability>\n";
-            $out .= "      <dlf:identifier>" . $id . "</dlf:identifier>\n";
-            $out .= "      <dlf:availabilitystatus>" . $status . "</dlf:availabilitystatus>\n";
-            $out .= "      <dlf:availabilitymsg>" . $msg . "</dlf:availabilitymsg>\n";
-            $out .= "    </dlf:simpleavailability>\n";
-            $out .= "  </dlf:record>\n";
         }
     }
     $out .= "</dlf:collection>\n";
