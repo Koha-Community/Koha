@@ -154,7 +154,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         window.print();
         return false;
     });
-    $(".addtoshelf").on("click",function(){
+    $("#ulactioncontainer > ul > li > a.addtoshelf").on("click",function(){
         Dopop('opac-addbybiblionumber.pl?biblionumber=[% biblionumber %]');
         return false;
     });
