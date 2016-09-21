@@ -26,6 +26,7 @@ use Koha::Auth::Challenge::Password;
 
 use Scalar::Util qw( blessed );
 use Try::Tiny;
+use C4::SelfService;
 
 # NOTE
 #
@@ -75,6 +76,50 @@ sub status {
             }
         }
         Koha::Exceptions::rethrow_exception($_);
+    };
+}
+
+sub get_self_service_status {
+    my $c = shift->openapi->valid_input or return;
+
+    my $payload;
+    try {
+        my $patron = Koha::Patrons->cast($c->validation->param('cardnumber'));
+        my $ilsPatron = C4::SIP::ILS::Patron->new($patron->cardnumber);
+        C4::SelfService::CheckSelfServicePermission($ilsPatron, $patron->branchcode, 'accessMainDoor');
+        #If we didn't get any exceptions, we succeeded
+        $payload = {permission => Mojo::JSON->true};
+        return $c->render(status => 200, openapi => $payload);
+
+    } catch {
+        if (not(blessed($_) && $_->can('rethrow'))) {
+            return $c->render( status => 500, openapi => { error => "$_" } );
+        }
+        elsif ($_->isa('Koha::Exception::UnknownObject')) {
+            return $c->render( status => 404, openapi => { error => "No such cardnumber" } );
+        }
+        elsif ($_->isa('Koha::Exception::SelfService::OpeningHours')) {
+            $payload = {
+                permission => Mojo::JSON->false,
+                error => ref($_),
+                startTime => $_->startTime,
+                endTime => $_->endTime,
+            };
+            return $c->render( status => 200, openapi => $payload );
+        }
+        elsif ($_->isa('Koha::Exception::SelfService')) {
+            $payload = {
+                permission => Mojo::JSON->false,
+                error => ref($_),
+            };
+            return $c->render( status => 200, openapi => $payload );
+        }
+        elsif ($_->isa('Koha::Exception::FeatureUnavailable')) {
+            return $c->render( status => 501, openapi => { error => "$_" } );
+        }
+        else {
+            return $c->render( status => 501, openapi => { error => $_->trace->as_string } );
+        }
     };
 }
 

@@ -29,6 +29,12 @@ use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Library;
 
+use YAML::XS;
+use DateTime;
+use Data::Dumper;
+
+use Koha::Logger;
+
 use base qw(Koha::Objects);
 
 =head1 NAME
@@ -122,6 +128,101 @@ sub search_filtered {
     }
 
     return $self->SUPER::search( $params, $attributes );
+}
+
+=head2 isOpen
+
+  my $open = Koha::Libraries::isOpen($branchcode || 'CPL' [, $DateTime]);
+
+@PARAM1 String, branchcode
+@PARAM2 DateTime, OPTIONAL time to check for openness. Defaults to current time | now().
+@RETURNS Boolean, Library is open or not
+@THROWS from _getOpeningHoursFromSyspref()
+
+=cut
+
+sub isOpen {
+    my ($branchcode, $dt) = @_;
+
+    $dt = DateTime->now(time_zone => C4::Context->tz()) unless $dt;
+    my $hm = sprintf("%02d:%02d", $dt->hour,$dt->minute);
+    my $openingHours = getOpeningHours($branchcode, $dt);
+    return 1 if ($openingHours->[0] le $hm && $hm lt $openingHours->[1]);
+    return undef;
+}
+
+=head2 getOpeningHours
+
+Gets opening hours for the given branchcode. Opening hours are an array of
+weekdays, with arrays of start time and ending time
+
+@PARAM1 String, branchcode
+@PARAM2 DateTime, OPTIONAL weekday to check for openness. Defaults to current time | now()
+@RETURNS ARRAYRef of HH:MM, ex.
+        [
+          '12:22', #opening time
+          '22:00', #closing time
+        ]
+
+@THROWS from _getOpeningHoursFromSyspref()
+
+=cut
+
+sub getOpeningHours {
+    my ($branchcode, $dt) = @_;
+    #Should cache the syspref de-yaml-ization, but no Koha::Cache here yet.
+
+    $dt = DateTime->now(time_zone => C4::Context->tz()) unless $dt;
+    my $openingHours = _getOpeningHoursFromSyspref();
+    my $branchOpeningHours = $openingHours->{$branchcode};
+    Koha::Exception::FeatureUnavailable->throw(error => "System preference 'OpeningHours' is missing opening hours for branch '$branchcode'")
+        unless $branchOpeningHours;
+
+                                                #Array starts from 0, DateTime->day_of_week start from 1
+    my $dailyOpeningHours = $branchOpeningHours->[ $dt->day_of_week()-1 ];
+    Koha::Exception::FeatureUnavailable->throw(error => "System preference 'OpeningHours' is missing opening hours for branch '$branchcode' and weekday '".$dt->day_of_week()."'")
+        unless $dailyOpeningHours;
+
+    return $dailyOpeningHours;
+}
+
+=head2 _getOpeningHoursFromSyspref
+
+@DEPRECATED use Bug 17015 when it comes out
+
+@RETURNS HASHRef of ARRAYRef of ARRAYRef of HH:MM, ex.
+  {
+    CPL => [
+      ['12:22', #opening time
+       '22:00', #closing time
+      ],
+      ['12:23',
+       '21:30',
+      ],
+      ...
+    ],
+    FPL => [
+      ...
+    ],
+    ...
+  }
+
+@THROWS Koha::Exception::FeatureUnavailable if syspref "OpeningHours" is not properly set
+
+=cut
+
+sub _getOpeningHoursFromSyspref {
+    my $logger = Koha::Logger->get({category => __PACKAGE__});
+    my $sp = C4::Context->preference('OpeningHours');
+    Koha::Exception::NoSystemPreference->throw(error => 'System preference "OpeningHours" not set. Cannot get opening hours!')
+        unless $sp;
+    eval {
+        $sp = YAML::XS::Load( $sp );
+    };
+    Koha::Exception::BadSystemPreference->throw(error => 'System preference "OpeningHours" is not valid YAML. Validate it using yamllint! or '.$@)
+        if $@;
+    $logger->debug("'OpeningHours'-syspref: ".Data::Dumper::Dumper($sp)) if $logger->is_debug;
+    return $sp;
 }
 
 =head3 type

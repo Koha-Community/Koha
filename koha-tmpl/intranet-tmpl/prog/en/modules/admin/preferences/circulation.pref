@@ -809,6 +809,44 @@ Circulation:
                   yes: Show
                   no: "Don't show"
             - "the print receipt popup dialog when self checkout is finished"
+    Self-Service API:
+        -
+            - "Self-service resource usage rules<br/>"
+            - pref: SSRules
+            - "Example: '15:ST PT'<br/>"
+            - "First digits are the minimum age needed to access the self-service resources<br/>"
+            - "separated by a colon ':'<br/>"
+            - "followed by a list of borrower categorycodes allowed to access the self-service resources.<br/>"
+            - "How the codes are separated in thelist, is not important. The list is scanned from left to right for text matching the users categorycode. If a match is found somewhere in the list, user passes the categorycode check."
+            - "You MUST set the OpeningHours-syspref as well or the /borrowers/ssstatus-endpoint (self-service access check) wont work"
+        -
+            - "Self-service opening hours<br/>"
+            - "A gargantuan YAML list of branchcodes, weekdays and times"
+            - pref: OpeningHours
+              type: textarea
+              class: yaml
+            - "<p>Example:<br/>"
+            - "<pre>---</pre>"
+            - "<pre>CPL:</pre>"
+            - "<pre>  - #Monday</pre>"
+            - "<pre>    - 07:00 #Opening hour</pre>"
+            - "<pre>    - 20:00 #Closing hour</pre>"
+            - "<pre>  - #Tuesday</pre>"
+            - "<pre>    - 07:00 #Opening hour</pre>"
+            - "<pre>    - 20:00 #Closing hour</pre>"
+            - "<pre>...</pre>"
+            - "<pre>  - #Sunday</pre>"
+            - "<pre>    - 12:00 #Opening hour</pre>"
+            - "<pre>    - 18:00 #Closing hour</pre>"
+            - "<pre>FPL:</pre>"
+            - "<pre>...</pre>"
+            - "<br/>"
+            - "</code></p>"
+            - "This is a YAML-configuration document.<br/>"
+            - "Root keys are branchcodes, then each branchcode MUST define a list of weekdays, starting from monday - to - sunday.<br/>"
+            - "Then each weekday has a list of opening hour and closing hour."
+            - "If you make changes, remember to validate the YAML using https://www.yamllint.com"
+            - "Trying to use the self-service REST API /borrowers/ssstatus without this syspref set will make the API return with configuration errors.<br/>"
     Course Reserves:
         -
             - pref: UseCourseReserves

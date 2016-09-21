@@ -287,6 +287,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.04'
     },
+    'DateTime::Format::ISO8601' => {
+        'usage'    => 'Core',
+        'required' => '0',
+        'min_ver'  => '0.08'
+    },
     'DateTime::Set' => {
         'usage'    => 'Core',
         'required' => '1',

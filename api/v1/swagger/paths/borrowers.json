@@ -42,5 +42,62 @@
         }
       }
     }
+  },
+  "/borrowers/ssstatus": {
+    "get": {
+      "x-mojo-to": "Borrower#get_self_service_status",
+      "x-koha-permission": {
+        "borrowers": "get_self_service_status"
+      },
+      "operationId": "getSelfServiceStatus",
+      "tags": ["borrowers"],
+      "summary": "Check if a borrower is allowed to access self-service resources",
+      "description": "This endpoint is intended to be used by barcode readers to quickly check for self-service permissions and availability. The self-service device is expected to authenticate using it's own credentials and itäs own default library location. <p>See the description of response with status '200 OK' for expected access restrictions.</p>",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "cardnumber",
+          "description": "The barcode of the library card the Borrower uses to authenticate",
+          "in": "formData",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "branchcode",
+          "description": "The branchcode of the library to check for permissions",
+          "in": "formData",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Permission granted/denied",
+          "schema": {
+            "$ref": "../definitions.json#/borrowerSelfServiceStatus"
+          }
+        },
+        "404": {
+          "description": "No such barcode in use",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "501": {
+          "description": "Feature not configured properly. Notify the API maintainer.",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Unexpected exception happened?!??.",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
   }
 }

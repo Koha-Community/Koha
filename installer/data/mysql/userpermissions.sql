@@ -10,6 +10,7 @@ INSERT INTO permissions (module, code, description) VALUES
    ( 'parameters',      'manage_circ_rules', 'manage circulation rules'),
    ( 'borrowers',       'view_borrowers', 'Show borrower details and search for borrowers.'),
    ( 'borrowers',       'manage_api_keys', "Manage Borrowers' REST API keys"),
+   ( 'borrowers',       'get_self_service_status', 'Allow the user to get the self-service status of a borrower. Eg. can the borrower access self-service resources'),
    ( 'permissions',     'set_permissions', 'Set user permissions'),
    ( 'reserveforothers','place_holds', 'Place holds for patrons'),
    ( 'reserveforothers','modify_holds_priority', 'Modify holds priority'),
