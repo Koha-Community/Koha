@@ -20,7 +20,7 @@
 use Carp::Always;
 use Modern::Perl;
 
-use Test::More tests => 37;
+use Test::More tests => 38;
 use t::lib::TestBuilder;
 
 use C4::Reserves qw( GetMaxPatronHoldsForRecord AddReserve CanBookBeReserved );
@@ -231,6 +231,9 @@ $rule3->delete();
 $rule4->delete();
 $rule5->delete();
 
+my $holds = Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } );
+is( $holds->forced_hold_level, undef, "No holds does not force an item or record level hold" );
+
 # Test Koha::Holds::forced_hold_level
 my $hold = Koha::Hold->new({
     borrowernumber => $patron->{borrowernumber},
@@ -240,7 +243,7 @@ my $hold = Koha::Hold->new({
     priority => 1,
 })->store();
 
-my $holds = Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } );
+$holds = Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } );
 is( $holds->forced_hold_level, 'record', "Record level hold forces record level holds" );
 
 $hold->itemnumber( $item1->{itemnumber} );
