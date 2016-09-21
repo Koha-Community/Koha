@@ -85,7 +85,9 @@
                     <th class="title-string">Available since</th>
                     <th class="anti-the">Title</th>
                     <th>Patron</th>
-                    <th>Location</th>
+                    <th>Home branch</th>
+                    <th>Current location</th>
+                    <th>Call number</th>
                     <th>Copy number</th>
                     <th>Enumeration</th>
                     <th>Action</th>
@@ -104,7 +106,9 @@
                         [% IF ( reserveloo.borrowermail ) %]<br /><a href="mailto:[% reserveloo.borrowermail %]?subject=Hold waiting: [% reserveloo.title %]">
                         [% reserveloo.borrowermail %]</a>[% END %]
                     </td>
-                    <td>[% Branches.GetName( reserveloo.homebranch ) %]<br />[% reserveloo.itemcallnumber %]</td>
+                    <td>[% Branches.GetName( reserveloo.homebranch ) %]</td>
+                    <td>[% Branches.GetName( reserveloo.holdingbranch ) %]</td>
+                    <td>[% reserveloo.itemcallnumber %]</td>
                     <td>[% reserveloo.copynumber %]</td>
                     <td>[% reserveloo.enumchron %]</td>
                     <td>
@@ -147,7 +151,9 @@
                     <th class="title-string">Available since</th>
                     <th class="anti-the">Title</th>
                     <th>Patron</th>
-                    <th>Location</th>
+                    <th>Home branch</th>
+                    <th>Current location</th>
+                    <th>Call number</th>
                     <th>Copy number</th>
                     <th>Enumeration</th>
                     <th>Action</th>
@@ -165,7 +171,9 @@
                         [% IF ( overloo.borrowermail ) %]<a href="mailto:[% overloo.borrowermail %]?subject=Reservation: [% overloo.title |url %]">
         [% overloo.borrowermail %]</a>[% END %]
                     </td>
-                    <td>[% Branches.GetName( overloo.homebranch ) %] [% overloo.itemcallnumber %]</td>
+                    <td>[% Branches.GetName( overloo.homebranch ) %]</td>
+                    <td>[% Branches.GetName( overloo.holdingbranch ) %]</td>
+                    <td>[% overloo.itemcallnumber %]</td>
                     <td>[% overloo.copynumber %]</td>
                     <td>[% overloo.enumchron %]</td>
                     <td><form name="cancelReserve" action="waitingreserves.pl" method="post">
