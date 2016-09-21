@@ -13,6 +13,39 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 
+[% BLOCK norms_text %]
+[%    SWITCH norm %]
+[%        CASE 'none'           %]None
+[%        CASE 'remove_spaces'  %]Remove spaces
+[%        CASE 'upper_case'     %]Uppercase
+[%        CASE 'lower_case'     %]Lowercase
+[%        CASE 'legacy_default' %]Legacy default
+[%        CASE %][% norm %]
+[%    END %]
+[% END %]
+
+[% BLOCK norms_options %]
+[%# PARAMS: selected_norm %]
+[%    FOREACH norm IN valid_norms %]
+[%        IF ( norm == selected_norm ) %]
+        <option value="[% norm %]" selected="selected">[% PROCESS norms_text norm=norm %]</option>
+[%        ELSE %]
+        <option value="[% norm %]">[% PROCESS norms_text norm=norm %]</option>
+[%        END %]
+[%    END %]
+[% END %]
+
+[% BLOCK norms_select %]
+[%# PARAMS: selected_norm, id, name %]
+[%    UNLESS valid_norms.grep(selected_norm).size %]
+[%#       Fallback to 'none' %]
+[%        selected_norm = 'none' %]
+[%    END %]
+    <select id="[% id %]" name="[% name %]">
+[%    PROCESS norms_options selected_norm=selected_norm %]
+    </select>
+[% END %]
+
 <script type="text/javascript">
 //<![CDATA[
 
@@ -295,10 +328,11 @@ function CheckRuleForm(f) {
               [% FOREACH norm IN component.norms %]
               <li id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_n_[% norm.norm_num %]">
                 <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_n__[% norm.norm_num %]_norm">Normalization rule: </label>
-                <input type="text" id="mp_[% norm.mp_num %]_c_[% component.comp_num %]_n__[% norm.norm_num %]_norm" 
-                       name="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_n_[% norm.norm_num %]_norm" 
-                       value="[% norm.norm |html %]"
-                       size="20" maxlength="50" />
+                [% PROCESS norms_select
+                     selected_norm=norm.norm
+                     id="mp_${norm.mp_num}_c_${component.comp_num}_n__${norm.norm_num}_norm"
+                     name="mp_${matchpoint.mp_num}_c_${component.comp_num}_n_${norm.norm_num}_norm"
+                %]
               </li>
               [% END %]
         </ol>
@@ -346,7 +380,11 @@ function CheckRuleForm(f) {
           </li>
             <li id="mp_1_c_1_n_1">
               <label for="mp_1_c_1_n_1_norm">Normalization rule: </label>
-              <input type="text" id="mp_1_c_1_n_1_norm" name="mp_1_c_1_n_1_norm" size="20" maxlength="50" />
+                [% PROCESS norms_select
+                     selected_norm="none"
+                     id="mp_1_c_1_n_1_norm"
+                     name="mp_1_c_1_n_1_norm"
+                %]
             </li>
         </ol>
     </fieldset>
@@ -403,10 +441,11 @@ function CheckRuleForm(f) {
           [% FOREACH norm IN src_component.norms %]
             <li id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]">
               <label for="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
-              <input type="text" id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]_norm" 
-                     name="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]_norm" 
-                    value="[% norm.norm |html %]"
-                    size="20" maxlength="50" />
+               [% PROCESS norms_select
+                     selected_norm=norm.norm
+                     id="mc_${matchcheck.mc_num}_src_c_${src_component.comp_num}_n_${norm.norm_num}_norm"
+                     name="mc_${matchcheck.mc_num}_src_c_${src_component.comp_num}_n_${norm.norm_num}_norm"
+                %]
             </li>
           [% END %]
         </ol>
@@ -447,10 +486,11 @@ function CheckRuleForm(f) {
           [% FOREACH norm IN tgt_component.norms %]
             <li id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]">
               <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
-              <input type="text" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]_norm" 
-                     name="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]_norm" 
-                    value="[% norm.norm |html %]"
-                    size="20" maxlength="50" />
+               [% PROCESS norms_select
+                     selected_norm=norm.norm
+                     id="mc_${matchcheck.mc_num}_tgt_c_${tgt_component.comp_num}_n_${norm.norm_num}_norm"
+                     name="mc_${matchcheck.mc_num}_tgt_c_${tgt_component.comp_num}_n_${norm.norm_num}_norm"
+                %]
             </li>
           [% END %]
         </ol>
@@ -486,7 +526,11 @@ function CheckRuleForm(f) {
           </li>
             <li id="mc_1_src_c_1_n_1">
               <label for="mc_1_src_c_1_n_1_norm">Normalization rule: </label>
-              <input type="text" id="mc_1_src_c_1_n_1_norm" name="mc_1_src_c_1_n_1_norm" size="20" maxlength="50" />
+               [% PROCESS norms_select
+                     selected_norm="none"
+                     id="mc_1_src_c_1_n_1_norm"
+                     name="mc_1_src_c_1_n_1_norm"
+                %]
             </li>
         </ol>
       </fieldset>
@@ -512,7 +556,11 @@ function CheckRuleForm(f) {
           </li>
             <li id="mc_1_tgt_c_1_n_1">
               <label for="mc_1_tgt_c_1_n_1_norm">Normalization rule: </label>
-              <input type="text" id="mc_1_tgt_c_1_n_1_norm" name="mc_1_tgt_c_1_n_1_norm" size="20" maxlength="50" />
+               [% PROCESS norms_select
+                     selected_norm="none"
+                     id="mc_1_tgt_c_1_n_1_norm"
+                     name="mc_1_tgt_c_1_n_1_norm"
+                %]
             </li>
         </ol>
       </fieldset>
@@ -623,7 +671,11 @@ function CheckRuleForm(f) {
           </li>
             <li id="mp_num_c_1_n_1">
               <label for="mp_num_c_1_n_1_norm">Normalization rule: </label>
-              <input type="text" id="mp_num_c_1_n_1_norm" name="mp_num_c_1_n_1_norm" size="20" maxlength="50" />
+               [% PROCESS norms_select
+                     selected_norm="none"
+                     id="mp_num_c_1_n_1_norm"
+                     name="mp_num_c_1_n_1_norm"
+                %]
             </li>
         </ol>
       </fieldset>
@@ -656,7 +708,11 @@ function CheckRuleForm(f) {
         </li>
           <li id="mc_num_src_c_1_n_1">
             <label for="mc_num_src_c_1_n_1_norm">Normalization rule: </label>
-            <input type="text" id="mc_num_src_c_1_n_1_norm" name="mc_num_src_c_1_n_1_norm" size="20" maxlength="50" />
+               [% PROCESS norms_select
+                     selected_norm="none"
+                     id="mc_num_src_c_1_n_1_norm"
+                     name="mc_num_src_c_1_n_1_norm"
+                %]
           </li>
       </ol>
     </fieldset>
@@ -681,7 +737,11 @@ function CheckRuleForm(f) {
         </li>
           <li id="mc_num_tgt_c_1_n_1">
             <label for="mc_num_tgt_c_1_n_1_norm">Normalization rule: </label>
-            <input type="text" id="mc_num_tgt_c_1_n_1_norm" name="mc_num_tgt_c_1_n_1_norm" size="20" maxlength="50" />
+               [% PROCESS norms_select
+                     selected_norm="none"
+                     id="mc_num_tgt_c_1_n_1_norm"
+                     name="mc_num_tgt_c_1_n_1_norm"
+                %]
           </li>
       </ol>
     </fieldset>
