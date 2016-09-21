@@ -62,7 +62,7 @@ This method will return 'item' if the patron has
 at least one item level hold. It will return 'record'
 if the patron has holds but none are item level,
 Finally, if the patron has no holds, it will return
-undef which indicateds the patron may select either
+undef which indicates the patron may select either
 record or item level holds, barring any other rules
 that would prevent one or the other.
 
@@ -71,9 +71,13 @@ that would prevent one or the other.
 sub forced_hold_level {
     my ($self) = @_;
 
-    return $self->search( { itemnumber => { '!=' => undef } } )->count()
-      ? 'item'
-      : 'record';
+    my $item_level_count = $self->search( { itemnumber => { '!=' => undef } } )->count();
+    return 'item' if $item_level_count > 0;
+
+    my $record_level_count = $self->search( { itemnumber => undef } )->count();
+    return 'record' if $record_level_count > 0;
+
+    return undef;
 }
 
 =head3 type
