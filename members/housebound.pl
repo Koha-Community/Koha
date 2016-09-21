@@ -27,6 +27,8 @@
 use Modern::Perl;
 use CGI;
 use C4::Auth;
+use C4::Context;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Output;
 use DateTime;
 use Koha::DateUtils;
@@ -56,14 +58,15 @@ my $visit_id = $input->param('visit_id') // q{};
 # Get patron
 my $patron = eval {
     my $borrowernumber = $input->param('borrowernumber') // q{};
-    return Koha::Patrons->new->find($borrowernumber);
+    return Koha::Patrons->find($borrowernumber);
 };
 push @messages, { type => 'error', code => 'error_on_patron_load' }
     if ( $@ or !$patron );
 
 # Get supporting cast
-my ( $branch, $category, $houseboundprofile, $visit );
+my ( $branch, $category, $houseboundprofile, $visit, $patron_image );
 if ( $patron ) {
+    $patron_image = Koha::Patron::Images->find($patron->borrowernumber);
     $branch = Koha::Libraries->new->find($patron->branchcode);
     $category = Koha::Patron::Categories->new->find($patron->categorycode);
     $houseboundprofile = $patron->housebound_profile;
@@ -156,8 +159,20 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
 # We don't have any profile information, so we must display a creation form.
 $method = 'update_or_create' if ( !$houseboundprofile );
 
+# Ensure template has all patron details.
+$template->param(%{$patron->unblessed}) if ( $patron );
+
+# Load extended patron attributes if necessary (taken from members/files.pl).
+if ( C4::Context->preference('ExtendedPatronAttributes') and $patron ) {
+    my $attributes = GetBorrowerAttributes($patron->borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
+
 $template->param(
-    patron             => $patron,
+    picture            => $patron_image,
     housebound_profile => $houseboundprofile,
     visit              => $houseboundvisit,
     branch             => $branch,

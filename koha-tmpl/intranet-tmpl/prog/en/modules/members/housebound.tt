@@ -1,15 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
-[% borrowernumber = patron.borrowernumber %]
-[% branchname = branch.branchname %]
-[% categoryname = category.description %]
-[% categorycode = category.categorycode %]
-[% category_type = category.category_type %]
-[% firstname = patron.firstname %]
-[% surname = patron.surname %]
-[% othernames = patron.othernames %]
-[% invert_name = 0 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Housebound &rsaquo; Details for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -37,7 +28,7 @@
         <div class="yui-g">
 
           <!-- Title -->
-          <h3>Housebound details for [% patron.title %] [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</h3>
+          <h3>Housebound details for [% INCLUDE 'patron-title.inc' %]</h3>
           <div class="first">
 
             [% FOR m IN messages %]
