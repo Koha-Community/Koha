@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14 staff\n"
-"POT-Creation-Date: 2016-08-16 17:33-0300\n"
-"PO-Revision-Date: 2016-08-18 15:32+0000\n"
+"POT-Creation-Date: 2016-09-17 18:19-0300\n"
+"PO-Revision-Date: 2016-09-20 16:56+0000\n"
 "Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1471534339.000000\n"
+"X-POOTLE-MTIME: 1474390608.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -125,6 +125,15 @@ msgid "%s %s %s %s 1 item is on order. %s %s items are on order. %s %s %s "
 msgstr "%s %s %s %s 1 ítem esta pedido. %s %s ítems están pedidos. %s %s %s "
 
 #. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  IF ( RESERVE.is_in_transit ) 
+#. %4$s:  SET transfer = RESERVE.item.get_transfer 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:631
+#, c-format
+msgid "%s %s %s %s Item in transit from "
+msgstr "%s %s %s %s Ejemplar en tránsito desde "
+
+#. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
 #. %3$s:  IF ( loggedinusername ) 
 #. %4$s:  IF ( subscription_LOO.hasalert ) 
@@ -135,18 +144,10 @@ msgstr ""
 "%s %s %s %s Se ha suscrito a notificación por correo electrónico sobre "
 "nuevos ejemplares "
 
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  IF ( RESERVE.is_in_transit ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:622
-#, c-format
-msgid "%s %s %s Item in transit from "
-msgstr "%s %s %s Ejemplar en tránsito desde "
-
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
 #. %3$s:  IF ( RESERVE.found ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:606
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:615
 #, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "%s %s %s Ítem esperando en "
@@ -192,6 +193,26 @@ msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr ""
 "%s %s %s Nota: esta ventana se cerrará automáticamente en 5 segundos. %s "
 
+#. %1$s: # First line will be summary, second line will be description. Avoid indenting. -
+#. %2$s: - IF overdue == 1 -
+#. %3$s:  title 
+#. %4$s:  title 
+#. %5$s:  barcode 
+#. %6$s: - ELSE -
+#. %7$s:  title 
+#. %8$s:  title 
+#. %9$s:  barcode 
+#. %10$s: - END -
+#: opac-tmpl/bootstrap/en/modules/opac-ics.tt:1
+#, c-format
+msgid ""
+"%s %s %s is overdue Your copy of %s (barcode %s) is overdue %s %s is due "
+"Your copy of %s (barcode %s) is due back at the library today %s "
+msgstr ""
+"%s %s %s esta en retraso Su copia de %s (código de barras %s) esta en "
+"retraso %s %s esta vencida Su copia de %s (barcode %s) esta vencida se debe "
+"volver a la biblioteca hoy %s "
+
 #. %1$s:  END 
 #. %2$s:  END 
 #. %3$s:  IF ( review.title ) 
@@ -218,7 +239,7 @@ msgstr "%s %s (no aprobado) %s "
 #. %1$s:  END 
 #. %2$s:  IF debarred_date && debarred_date != '9999-12-31' 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:50
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:115
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Fecha final: "
@@ -226,7 +247,7 @@ msgstr "%s %s Fecha final: "
 #. %1$s:  END 
 #. %2$s:  UNLESS mandatory.defined('password') 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:837
 #, c-format
 msgid ""
 "%s %s If you do not enter a password a system generated password will be "
@@ -237,7 +258,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:619
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:628
 #, c-format
 msgid "%s %s Item in transit to "
 msgstr "%s %s Ejemplar en tránsito a "
@@ -424,7 +445,7 @@ msgstr "%s %s, ISSN %s %s %s; %s %s "
 #. %9$s:  CASE 'ris' 
 #. %10$s:  CASE 'isbd' 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:45
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:43
 #, c-format
 msgid ""
 "%s %sBIBTEX %sEndNote %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC (Unicode/"
@@ -462,7 +483,7 @@ msgstr ""
 #. %27$s:  IF ACCOUNT_LINE.title 
 #. %28$s:  ACCOUNT_LINE.title 
 #. %29$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:104
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:105
 #, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
@@ -517,25 +538,25 @@ msgstr "%s (búsquedas relacionadas: %s %s %s ). %s "
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:493
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:502
 #, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s Cuenta congelada %s %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:386
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:578
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:745
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:390
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:749
 #, c-format
 msgid "%s Address 2:"
 msgstr "%s Dirección 2:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:372
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:564
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:731
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:735
 #, c-format
 msgid "%s Address:"
 msgstr "%s Dirección:"
@@ -560,7 +581,7 @@ msgstr ""
 "póngase en contacto con el personal para resolver este problema. %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:272
 #, c-format
 msgid "%s Automatic renewal "
 msgstr "%s Renovación automática "
@@ -627,15 +648,15 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:400
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:592
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:759
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:404
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:596
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:763
 #, c-format
 msgid "%s City:"
 msgstr "%s Ciudad:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:676
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:680
 #, c-format
 msgid "%s Contact note:"
 msgstr "%s Nota de contacto:"
@@ -654,15 +675,15 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:442
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:634
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:801
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:446
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:638
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:805
 #, c-format
 msgid "%s Country:"
 msgstr "%s País:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:261
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:265
 #, c-format
 msgid "%s Date of birth:"
 msgstr "%s Fecha de nacimiento:"
@@ -674,33 +695,33 @@ msgid "%s Did you mean: "
 msgstr "%s Quiso decir: "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:662
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:666
 #, c-format
 msgid "%s Email:"
 msgstr "%s Email:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:538
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:542
 #, c-format
 msgid "%s Fax:"
 msgstr "%s Fax:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:247
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:717
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:251
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:721
 #, c-format
 msgid "%s First name:"
 msgstr "%s Nombre:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:151
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:154
 #, c-format
 msgid "%s Home library:"
 msgstr "%s Biblioteca de origen:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:282
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:286
 #, c-format
 msgid "%s Initials:"
 msgstr "%s Iniciales:"
@@ -712,19 +733,19 @@ msgid "%s Internet user critics"
 msgstr "%s Críticas de usuarios de Internet"
 
 #. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:617
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:626
 #, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "%s Ejemplar esperando a ser retirado de "
 
 #. %1$s:  issues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:158
 #, c-format
 msgid "%s Item(s) checked out"
 msgstr "%s Ejemplar(es) prestado(s)"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:126
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:129
 #, c-format
 msgid "%s Library card number: "
 msgstr "%s Número de carné de biblioteca: "
@@ -737,7 +758,7 @@ msgstr "%s Salir"
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:265
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:275
 #, c-format
 msgid "%s No renewal before %s "
 msgstr "%s No renovable antes de %s "
@@ -757,14 +778,20 @@ msgid "%s No results, try to change filters. %s "
 msgstr "%s No hay resultados, intente cambiar los filtros. %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:509
 #, c-format
 msgid "%s Not allowed"
 msgstr "%s No permitido"
 
+#. %1$s:  ELSIF ( ISSUE.on_reserve ) 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:266
+#, c-format
+msgid "%s Not renewable "
+msgstr "%s No renovable "
+
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:258
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
 #, c-format
 msgid "%s Not renewable %s Not allowed "
 msgstr "%s No renovable %s No permitido "
@@ -772,19 +799,19 @@ msgstr "%s No renovable %s No permitido "
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:502
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:511
 #, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s En reserva %s No quedan renovaciones %s "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:296
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:300
 #, c-format
 msgid "%s Other names:"
 msgstr "%s Otros nombres:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:500
 #, c-format
 msgid "%s Other phone:"
 msgstr "%s Otro teléfono:"
@@ -815,8 +842,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:648
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:815
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:652
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:819
 #, c-format
 msgid "%s Phone:"
 msgstr "%s Teléfono:"
@@ -834,13 +861,13 @@ msgid "%s Please see a member of the library staff. "
 msgstr "%s Por favor vea a un miembro del personal de biblioteca. "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:510
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:514
 #, c-format
 msgid "%s Primary email:"
 msgstr "%s Email principal:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:472
 #, c-format
 msgid "%s Primary phone:"
 msgstr "%s Teléfono principal:"
@@ -873,7 +900,7 @@ msgid "%s Quotations"
 msgstr "%s Citas"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:211
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:215
 #, c-format
 msgid "%s Salutation:"
 msgstr "%s Saludo:"
@@ -897,13 +924,13 @@ msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Buscar %spara '%s'%s%s&nbsp;con límite(s):&nbsp;'%s'%s"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:524
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:528
 #, c-format
 msgid "%s Secondary email:"
 msgstr "%s Email secundario:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:482
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:486
 #, c-format
 msgid "%s Secondary phone:"
 msgstr "%s Teléfono secundario:"
@@ -916,23 +943,23 @@ msgstr "%s Sistema de auto-préstamo"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:414
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:606
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:773
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:418
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:777
 #, c-format
 msgid "%s State:"
 msgstr "%s Estado:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:358
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:362
 #, c-format
 msgid "%s Street number:"
 msgstr "%s Número de calle:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:233
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:703
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:237
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:707
 #, c-format
 msgid "%s Surname:"
 msgstr "%s Apellido:"
@@ -1031,8 +1058,8 @@ msgstr ""
 #. %1$s:  IF ( ISSUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:276
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:512
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:521
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s Si %s No %s "
@@ -1053,9 +1080,9 @@ msgstr "%s Usted nunca ha pedido prestado algo de esta biblioteca. %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:428
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:620
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:787
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:432
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:624
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:791
 #, c-format
 msgid "%s ZIP/Postal code:"
 msgstr "%s ZIP/Código postal:"
@@ -1085,7 +1112,7 @@ msgstr ""
 "normalized_isbn, lccn => lccn, normalized_oclc => normalized_oclc } %%] "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:547
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:551
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
@@ -1101,7 +1128,7 @@ msgstr ""
 "defined('contactnote') %%] "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:686
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:690
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('altcontactsurname') && hidden."
@@ -1119,7 +1146,7 @@ msgstr ""
 "%%] "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:452
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:456
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
@@ -1131,7 +1158,7 @@ msgstr ""
 "defined('emailpro') && hidden.defined('fax') %%] "
 
 #. %1$s:  END # /UNLESS fields hidden 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:341
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:345
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
@@ -1145,7 +1172,7 @@ msgstr ""
 "%%] "
 
 #. %1$s:  END # / defined 'branchcode' 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:188
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
@@ -1251,7 +1278,7 @@ msgstr "%s desc"
 #. %4$s:  RESERVE.waiting_expires_on | $KohaDates 
 #. %5$s:  END 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:619
 #, c-format
 msgid "%s since %s %s until %s %s %s "
 msgstr "%s desde %s %s hasta %s %s %s "
@@ -1903,7 +1930,7 @@ msgstr "%s%s%sCatálogo en línea%s Koha &rsaquo; Su historial de préstamo"
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:7
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:8
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your fines and charges"
 msgstr "%s%s%sCatálogo en línea%s Koha &rsaquo; Sus multas y cargos"
@@ -2053,6 +2080,13 @@ msgstr "%s/cgi-bin/koha/opac-shelves.pl?rss=1&amp;viewshelf=%s"
 #, c-format
 msgid "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
+
+#. %1$s:  ELSE 
+#. %2$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:69
+#, c-format
+msgid "%s0 biblios%s "
+msgstr "%s0 biblios%s "
 
 #. %1$s:  IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch 
@@ -2213,6 +2247,13 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:49
+#, c-format
+msgid "%sThis authority is not used in any records.%s "
+msgstr "%sEsta autoridad no está utilizada en ningún registro.%s "
+
+#. %1$s:  ELSE 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:289
 #, c-format
 msgid "%sThis record has no items.%s "
@@ -2223,7 +2264,7 @@ msgstr "%sEste registro no tiene ítems.%s "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:29
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:114
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
 #, c-format
 msgid "%sUpdate your contact information%sGo to your contact information%s"
 msgstr ""
@@ -2874,18 +2915,18 @@ msgstr "(%s registros bibliográficos)"
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft 
 #. %2$s:  ISSUE.renewsallowed 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:258
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:265
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:266
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:275
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:278
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:509
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s de %s renovaciones restantes)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:406
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:531
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:415
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:214
 #, c-format
 msgid "(%s total)"
@@ -2921,11 +2962,6 @@ msgstr "(Sin soporte por Koha)"
 msgid "(Not supported yet)"
 msgstr "(No soportado todavía)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:270
-#, c-format
-msgid "(On hold)"
-msgstr "(Reservado)"
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:122
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:129
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:197
@@ -2955,7 +2991,7 @@ msgid "(Optional, default 1)"
 msgstr "(Opcional, por defecto 1)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:30
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:115
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:123
 #, c-format
 msgid ""
 "(Please note: there may be a delay in restoring your account if you submit "
@@ -3030,8 +3066,13 @@ msgstr "(filtrado de _MAX_ entradas totales)"
 msgid "(modified on %s)"
 msgstr "(modificado el %s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:262
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:502
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
+#, c-format
+msgid "(on hold)"
+msgstr "(reservado)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:272
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:511
 #, c-format
 msgid "(overdue)"
 msgstr "(con retraso)"
@@ -3051,8 +3092,8 @@ msgstr "(publicado en  %s%s por "
 msgid "(related searches: %s%s%s)"
 msgstr "(búsquedas relacionadas: %s%s%s)"
 
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:19
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:21
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:476
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:522
@@ -3111,7 +3152,7 @@ msgstr ". Por favor contacte la biblioteca para más información."
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #, c-format
 msgid ".%sYou have fines.%s %s "
 msgstr ".%sUsted tiene multas.%s %s "
@@ -3121,7 +3162,7 @@ msgstr ".%sUsted tiene multas.%s %s "
 msgid "...or..."
 msgstr "...o..."
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:161
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:162
 #, c-format
 msgid "0.00"
 msgstr "0.00"
@@ -3228,7 +3269,7 @@ msgstr ""
 "de correo electrónico "
 
 #. %1$s:  message_value 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:37
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:38
 #, c-format
 msgid ""
 "A payment with the transaction id '%s' has already been posted to an account."
@@ -3257,7 +3298,7 @@ msgid "Access denied"
 msgstr "Acceso denegado"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:27
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:121
 #, c-format
 msgid ""
 "According to our records, we don't have up-to-date contact information. "
@@ -3343,7 +3384,7 @@ msgstr "Agregar al carrito"
 msgid "Add to list:"
 msgstr "Agregar a la lista:"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:21
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #, c-format
 msgid "Add to your cart"
@@ -3371,7 +3412,7 @@ msgstr "Autores adicionales:"
 msgid "Additional content types for books/printed materials"
 msgstr "Tipos de contenido adicionales para libros/material impreso"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:883
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:887
 #, c-format
 msgid "Additional information"
 msgstr "Información adicional"
@@ -3441,7 +3482,7 @@ msgid ""
 "expires."
 msgstr "Note que debe retornar todos sus préstamos antes que expire su carné."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:560
 #, c-format
 msgid "Alternate address"
 msgstr "Dirección alternativa"
@@ -3451,24 +3492,24 @@ msgstr "Dirección alternativa"
 msgid "Alternate address information: "
 msgstr "Información de dirección alternativa: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:695
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:699
 #, c-format
 msgid "Alternate contact"
 msgstr "Contacto alternativo"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:318
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:346
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:327
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:341
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
 #, c-format
 msgid "Amount"
 msgstr "Monto"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:75
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:76
 #, c-format
 msgid "Amount outstanding"
 msgstr "Monto pendiente"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:160
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:161
 #, c-format
 msgid "Amount to pay: "
 msgstr "Monto a pagar: "
@@ -3571,7 +3612,7 @@ msgid "April"
 msgstr "Abril"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid "Are you sure you want to cancel this hold?"
 msgstr "¿Está seguro que desea cancelar esta reserva?"
 
@@ -3616,12 +3657,12 @@ msgid "Are you sure you want to remove this share?"
 msgstr "¿Está seguro de querer eliminar lo que compartió?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "¿Está seguro de querer cancelar todas las reservas suspendidas?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid "Are you sure you want to suspend all holds?"
 msgstr "¿Está seguro de querer suspender todas las reservas?"
 
@@ -3845,16 +3886,16 @@ msgstr "Volver a la lista de resultados de búsqueda"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:317
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:91
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:160
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:364
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:413
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:373
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:422
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1174
 #, c-format
 msgid "Barcode"
 msgstr "Código de barras"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:243
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:478
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:251
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:487
 #, c-format
 msgid "Barcode:"
 msgstr "Código de barras:"
@@ -3983,16 +4024,16 @@ msgid "Call Number"
 msgstr "Signatura"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:365
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:414
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:423
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:220
 #, c-format
 msgid "Call no."
 msgstr "Signatura"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:248
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:483
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:256
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:492
 #, c-format
 msgid "Call no.:"
 msgstr "Signatura no.:"
@@ -4039,7 +4080,7 @@ msgstr "Signatura:"
 msgid "Call number: %s"
 msgstr "Signatura topográfica: %s"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:106
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:104
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:336
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:150
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
@@ -4050,8 +4091,8 @@ msgstr "Signatura topográfica: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:88
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:671
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:690
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:681
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:700
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:165
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:290
@@ -4125,7 +4166,7 @@ msgid "Catalogs"
 msgstr "Catálogos"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:169
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:81
 #, c-format
 msgid "Category:"
@@ -4170,7 +4211,7 @@ msgid "Checked out"
 msgstr "Prestado"
 
 #. %1$s:  issues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:141
 #, c-format
 msgid "Checked out (%s)"
 msgstr "Prestado (%s)"
@@ -4252,13 +4293,13 @@ msgstr "Limpiar todo"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:429
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:273
 #, c-format
 msgid "Clear date"
 msgstr "Limpiar fecha"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:666
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:676
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "Borrar fecha para suspender indefinidamente"
@@ -4318,8 +4359,8 @@ msgid "Click to rewind the list to"
 msgstr "Haga clic para retroceder la lista a"
 
 #. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:439
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:197
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:448
 msgid "Click to view in Google Books"
 msgstr "Haga clic para ver en Google Books"
 
@@ -4420,6 +4461,11 @@ msgstr "Comentarios ( %s )"
 msgid "Comments on "
 msgstr "Comentarios sobre "
 
+#. INPUT type=submit
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
+msgid "Confirm hold"
+msgstr "Confirmar reserva"
+
 #. %1$s:  USER_INFO.firstname 
 #. %2$s:  USER_INFO.surname 
 #. %3$s:  USER_INFO.cardnumber 
@@ -4433,13 +4479,13 @@ msgstr "Confirmar reservas para:%s %s (%s)"
 msgid "Confirm new password:"
 msgstr "Confirmar nueva contraseña:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:847
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:857
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:851
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:861
 #, c-format
 msgid "Confirm password"
 msgstr "Confirmar contraseña"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:464
 #, c-format
 msgid "Contact information"
 msgstr "Información de contacto"
@@ -4502,7 +4548,7 @@ msgid "Copyright year: %s "
 msgstr "Año de copyright: %s "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:217
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:234
 msgid ""
 "Could not login, perhaps your Persona email does not match your Koha one"
 msgstr ""
@@ -4575,13 +4621,13 @@ msgstr ""
 "Crea, para un usuario, una petición de reserva a nivel de ítem en un ítem en "
 "específico de un registro bibliográfico de Koha."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:353
 #, c-format
 msgid "Credits"
 msgstr "Créditos"
 
 #. %1$s:  BORROWER_INFO.amountoutstanding | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:147
 #, c-format
 msgid "Credits (%s)"
 msgstr "Créditos (%s)"
@@ -4629,7 +4675,7 @@ msgstr "Vídeo en DVD / Videodisco"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:73
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:72
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:73
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:101
@@ -4655,9 +4701,9 @@ msgstr "Añadido en fecha:"
 msgid "Date due"
 msgstr "Fecha de vencimiento"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:221
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:488
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:229
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:236
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:497
 #, c-format
 msgid "Date due:"
 msgstr "Fecha de vencimiento:"
@@ -4784,7 +4830,7 @@ msgstr "Depto."
 msgid "Descending"
 msgstr "Descendente"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:73
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:74
 #, c-format
 msgid "Description"
 msgstr "Descripción"
@@ -4906,6 +4952,11 @@ msgstr "Hecho"
 msgid "Download"
 msgstr "Bajar"
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
+#, c-format
+msgid "Download as iCal/.ics file"
+msgstr "Descargar archivo como iCal/.ics"
+
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:12
 #, c-format
 msgid "Download cart"
@@ -4922,18 +4973,18 @@ msgstr "Descargar lista"
 msgid "Download list "
 msgstr "Descargar lista "
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:42
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:40
 #, c-format
 msgid "Dublin Core"
 msgstr "Dublin Core"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:155
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:363
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:415
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:424
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Due"
-msgstr "Devolución"
+msgstr "Vence"
 
 #. %1$s:  itemLoo.dateDue 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:367
@@ -5126,7 +5177,7 @@ msgstr ""
 "nuevamente con texto plano."
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:35
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
 #, c-format
@@ -5193,18 +5244,18 @@ msgstr "Extracto provisto por Syndetics"
 msgid "Expecting a specific item selection."
 msgstr "Esperando una selección de un ítem específico."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:144
 #, c-format
 msgid "Expiration date:"
 msgstr "Fecha de vencimiento:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:584
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:593
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:597
 #, c-format
 msgid "Expiration:"
 msgstr "Vencimiento:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:537
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:546
 #, c-format
 msgid "Expires on"
 msgstr "Vence el"
@@ -5214,12 +5265,12 @@ msgstr "Vence el"
 msgid "Explain "
 msgstr "Explique "
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:105
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:103
 #, c-format
 msgid "Export"
 msgstr "Exportar"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:86
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:84
 #, c-format
 msgid "Exporting to Dublin Core..."
 msgstr "Exportando a Dublin Core..."
@@ -5245,7 +5296,7 @@ msgstr "Feb"
 msgid "February"
 msgstr "Febrero"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:307
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:311
 #, c-format
 msgid "Female:"
 msgstr "Femenino:"
@@ -5270,13 +5321,13 @@ msgstr "Nota de Ficción:"
 msgid "Filmographies"
 msgstr "Filmografías"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:75
 #, c-format
 msgid "Fine amount"
 msgstr "Monto de la multa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:420
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:429
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:224
 #, c-format
 msgid "Fines"
@@ -5284,21 +5335,21 @@ msgstr "Multas"
 
 #. For the first occurrence,
 #. %1$s:  BORROWER_INFO.amountoutstanding | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:137
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:138
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:145
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:146
 #, c-format
 msgid "Fines (%s)"
 msgstr "Multas (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:316
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:330
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:65
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:325
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:339
 #, c-format
 msgid "Fines and charges"
 msgstr "Multas y cargos"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:276
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:512
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:521
 #, c-format
 msgid "Fines:"
 msgstr "Multas:"
@@ -5430,6 +5481,7 @@ msgstr "General"
 msgid "Get new password recovery link"
 msgstr "Obtenga un nuevo enlace de recuperación de contraseña"
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, c-format
 msgid "Get your discharge"
@@ -5536,7 +5588,7 @@ msgid "Go to detail"
 msgstr "Ir a detalles"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:54
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, c-format
 msgid "Go to your account page"
 msgstr "Ir a la página de su cuenta"
@@ -5623,14 +5675,14 @@ msgstr "Ocultar opciones"
 msgid "Hide window"
 msgstr "Ocultar ventana"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:29
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:27
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:144
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:142
 #, c-format
 msgid "Highlight"
 msgstr "Resaltar"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:576
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:585
 #, c-format
 msgid "Hold date:"
 msgstr "Fecha de reserva:"
@@ -5680,13 +5732,13 @@ msgstr "Existencias"
 msgid "Holdings:"
 msgstr "Existencias:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:531
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
 #, c-format
 msgid "Holds "
 msgstr "Reservas "
 
 #. %1$s:  RESERVES.count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:149
 #, c-format
 msgid "Holds (%s)"
 msgstr "Reservas (%s)"
@@ -5712,7 +5764,7 @@ msgstr "Reservas (%s)"
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-restrictedpage.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:17
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:11
@@ -5755,7 +5807,7 @@ msgid "Home library"
 msgstr "Biblioteca de origen"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:145
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:146
 msgid "How PayPal Works"
 msgstr "¿Cómo funciona PayPal?"
 
@@ -5853,12 +5905,12 @@ msgstr "ISSN:"
 msgid "IdRef"
 msgstr "IdRef"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:203
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:207
 #, c-format
 msgid "Identity"
 msgstr "Identidad"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
 #, c-format
 msgid "If this is an error, please contact the library."
 msgstr "Si esto es un error, por favor, contacte a la biblioteca."
@@ -6030,7 +6082,7 @@ msgstr ""
 msgid "In transit from %s to %s since %s"
 msgstr "En tránsito de %s a %s desde %s"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:21
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:19
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:522
@@ -6122,8 +6174,8 @@ msgstr "Ítem dañado"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:315
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:54
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:157
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:412
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:421
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1157
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:77
 #, c-format
@@ -6132,7 +6184,7 @@ msgstr "Tipo de ítem"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:46
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:243
 #, c-format
 msgid "Item type:"
 msgstr "Tipo de ítem:"
@@ -6341,7 +6393,7 @@ msgstr "Bibliotecas"
 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:620
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:122
 #, c-format
 msgid "Library"
 msgstr "Biblioteca"
@@ -6400,7 +6452,7 @@ msgid "LinkedIn"
 msgstr "Compartir en LinkedIn"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:75
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:178
 #, c-format
 msgid "Links"
 msgstr "Enlaces"
@@ -6717,7 +6769,7 @@ msgstr "MENSAJE 8:"
 msgid "MESSAGE 9:"
 msgstr "MENSAJE 9:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:350
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:354
 #, c-format
 msgid "Main address"
 msgstr "Dirección principal"
@@ -6730,12 +6782,12 @@ msgstr "Dirección principal"
 msgid "Make a "
 msgstr "Hacer una "
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:159
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:160
 #, c-format
 msgid "Make payment"
 msgstr "Hacer una pago"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:318
 #, c-format
 msgid "Male:"
 msgstr "Masculino:"
@@ -6799,7 +6851,7 @@ msgstr "Ejemplares faltantes: %s "
 msgid "Mo"
 msgstr "Lu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:546
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:555
 #, c-format
 msgid "Modify"
 msgstr "Modificar"
@@ -6835,7 +6887,7 @@ msgstr "Más listas"
 msgid "More options"
 msgstr "Más opciones"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:71
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:69
 #, c-format
 msgid "More searches "
 msgstr "Más búsquedas "
@@ -6880,7 +6932,7 @@ msgstr "Nunca"
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:597
 #, c-format
 msgid "Never expires %s %s - %s "
 msgstr "Nunca expira %s %s - %s "
@@ -7001,11 +7053,11 @@ msgstr "No se han realizaron cambios."
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:53
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:65
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:104
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:166
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:174
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:183
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:193
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:202
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:191
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:200
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:210
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:219
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:93
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:101
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:110
@@ -7016,12 +7068,12 @@ msgstr "No se han realizaron cambios."
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:329
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:337
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:347
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:183
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:191
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:433
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:441
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:199
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:208
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:442
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:450
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:459
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:73
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:963
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:234
@@ -7164,7 +7216,7 @@ msgstr "Grabación sonora no musical"
 msgid "None"
 msgstr "Ninguno"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:321
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:325
 #, c-format
 msgid "None specified: "
 msgstr "Ninguna especificada: "
@@ -7316,7 +7368,7 @@ msgid "Nothing"
 msgstr "Nada"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -7327,7 +7379,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:67
 #, c-format
 msgid "Notice:"
-msgstr "Aviso: "
+msgstr "Aviso:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7369,7 +7421,7 @@ msgstr "Número de reservas: "
 msgid "Number of records used in: %s"
 msgstr "Número de registros utilizados en: %s"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:95
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:93
 #, c-format
 msgid "OAI-DC"
 msgstr "OAI-DC"
@@ -7491,12 +7543,12 @@ msgid "OverDrive search for '%s'"
 msgstr "Búsqueda OverDrive para '%s'"
 
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:143
 #, c-format
 msgid "Overdue (%s)"
 msgstr "Retrasos (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:406
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:415
 #, c-format
 msgid "Overdues "
 msgstr "Retrasos "
@@ -7518,9 +7570,9 @@ msgid "Parameters"
 msgstr "Parámetros"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:161
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:829
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:843
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:854
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:847
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:858
 #, c-format
 msgid "Password"
 msgstr "Contraseña"
@@ -7565,22 +7617,22 @@ msgstr "Documento de patente"
 msgid "Patron comment on %s"
 msgstr "Comentarios de usuario sobre %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:141
 #, c-format
 msgid "Pay selected fines and charges"
 msgstr "Pague las multas y cargos seleccionados"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:145
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:146
 msgid "PayPal Acceptance Mark"
 msgstr "Marca de aceptación de PayPal"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:61
 #, c-format
 msgid "Payment applied:"
 msgstr "Aplicación del pago:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:142
 #, c-format
 msgid "Payment method"
 msgstr "Método de pago"
@@ -7600,13 +7652,13 @@ msgstr "Teléfono"
 msgid "Physical details:"
 msgstr "Detalles físicos:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:538
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:547
 #, c-format
 msgid "Pick up location"
 msgstr "Ubicación de retiro"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:214
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:596
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:605
 #, c-format
 msgid "Pick up location:"
 msgstr "Lugar de retiro:"
@@ -7627,7 +7679,6 @@ msgid "Place a hold on: "
 msgstr "Hacer una reserva de: "
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:231
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:437
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:440
@@ -7641,7 +7692,7 @@ msgstr "Hacer una reserva de: "
 msgid "Place hold"
 msgstr "Hacer reserva"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:536
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:545
 #, c-format
 msgid "Placed on"
 msgstr "Puesto en"
@@ -7720,14 +7771,14 @@ msgstr "Por favor confirme el préstamo:"
 msgid "Please confirm your registration"
 msgstr "Por favor confirme su registro"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:38
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:41
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:42
 #, c-format
 msgid "Please contact a librarian for details."
 msgstr "Por favor, póngase contacte a un bibliotecario para más información."
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:55
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:56
 #, c-format
 msgid "Please contact a librarian to verify your payment."
 msgstr ""
@@ -7822,15 +7873,16 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:107
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:114
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:121
 #, c-format
 msgid "Please note:"
 msgstr "Por favor, tenga en cuenta:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #, c-format
 msgid "Please note: "
 msgstr "Por favor, tenga en cuenta: "
@@ -7860,7 +7912,7 @@ msgstr ""
 msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr "Por favor trate nuevamente con texto plano. %s Error desconocido. %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:875
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:879
 #, c-format
 msgid "Please type the following characters into the preceding box: "
 msgstr "Por favor ingrese los siguientes caracteres en el cuadro precedente: "
@@ -7914,7 +7966,7 @@ msgid "Prev"
 msgstr "Prev"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:183
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:200
 msgid "Preview"
 msgstr "Vista previa"
 
@@ -7948,12 +8000,12 @@ msgstr "Imprimir"
 msgid "Print list"
 msgstr "Imprimir lista"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:549
 #, c-format
 msgid "Priority"
 msgstr "Prioridad"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:601
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
 #, c-format
 msgid "Priority:"
 msgstr "Prioridad:"
@@ -8212,12 +8264,12 @@ msgstr "Impresión normal"
 msgid "Related Term"
 msgstr "Término relacionado"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:366
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
 #, c-format
 msgid "Relative"
 msgstr "Relativo"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:142
 #, c-format
 msgid "Relatives' checkouts"
 msgstr "Préstamos de relativos"
@@ -8283,18 +8335,18 @@ msgstr "Elimine búsquedas seleccionadas"
 msgid "Remove share"
 msgstr "Remover lo compartido"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:164
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:256
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:417
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:426
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:507
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:222
 #, c-format
 msgid "Renew"
 msgstr "Renovar"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:303
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid "Renew all"
 msgstr "Renovar todos"
 
@@ -8307,8 +8359,8 @@ msgid "Renew item"
 msgstr "Renovar ítem"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:292
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid "Renew selected"
 msgstr "Renovar seleccionados"
 
@@ -8319,7 +8371,7 @@ msgstr "Renovar seleccionados"
 msgid "RenewLoan"
 msgstr "RenewLoan"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:253
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:261
 #, c-format
 msgid "Renewed!"
 msgstr "¡Renovado!"
@@ -8334,46 +8386,46 @@ msgstr "Informar sobre problemas y enlaces rotos"
 msgid "Request specific item type:"
 msgstr "Requerir un tipo de ítem específico:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:238
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:252
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:273
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:287
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:301
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:328
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:363
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:377
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:391
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:405
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:419
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:433
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:447
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:473
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:487
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:501
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:515
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:529
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:543
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:569
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:583
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:597
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:611
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:625
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:639
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:653
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:667
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:681
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:708
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:722
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:736
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:750
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:764
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:778
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:792
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:806
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:820
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:845
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:242
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:256
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:277
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:291
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:305
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:332
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:367
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:381
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:395
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:409
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:423
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:437
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:451
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:477
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:491
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:505
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:519
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:547
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:573
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:587
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:601
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:615
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:629
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:643
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:657
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:671
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:685
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:712
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:726
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:740
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:768
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:782
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:796
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:810
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:824
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:849
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:853
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:63
 #, c-format
 msgid "Required"
@@ -8414,17 +8466,17 @@ msgstr "Resultados %s a %s de %s"
 msgid "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "Resultados de búsqueda %spara '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:655
 #, c-format
 msgid "Resume"
 msgstr "Reanudar"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:714
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:724
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "Reanudar todas las reservas suspendidas"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:656
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:666
 #, c-format
 msgid "Resume your hold on "
 msgstr "Reanudar su reserva en "
@@ -8543,7 +8595,7 @@ msgstr "Número SMS:"
 msgid "SMS provider:"
 msgstr "Proveedor de SMS:"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:98
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:96
 #, c-format
 msgid "SRW-DC"
 msgstr "SRW-DC"
@@ -8573,7 +8625,7 @@ msgstr "Sábado"
 msgid "Save"
 msgstr "Guardar"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:38
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:36
 #, c-format
 msgid "Save record "
 msgstr "Guardar registro "
@@ -8590,8 +8642,8 @@ msgstr "Guardar en otra lista"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:14
 #, c-format
-msgid "Save to your lists "
-msgstr "Guardar en sus listas "
+msgid "Save to your lists"
+msgstr "Guardar en sus listas"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
 #, c-format
@@ -8652,7 +8704,7 @@ msgstr "Buscar "
 msgid "Search %s %s (in %s only) %s %s "
 msgstr "Buscar %s %s (en %s solamente) %s %s "
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:73
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:71
 #, c-format
 msgid "Search for this title in:"
 msgstr "Buscar para este título en:"
@@ -8732,8 +8784,8 @@ msgstr "Sección:"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:345
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:198
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:448
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:206
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:457
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:91
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:93
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:96
@@ -9081,7 +9133,7 @@ msgstr "Ingrese con su email"
 msgid "Similar items"
 msgstr "Ítems similares"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:92
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:90
 #, c-format
 msgid "Simple DC-RDF"
 msgstr "DC-RDF simple"
@@ -9272,7 +9324,7 @@ msgstr "Estadísticas"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:169
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:542
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:551
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:827
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1171
 #, c-format
@@ -9280,7 +9332,7 @@ msgid "Status"
 msgstr "Estado"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:220
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:606
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:615
 #, c-format
 msgid "Status:"
 msgstr "Estado:"
@@ -9351,7 +9403,7 @@ msgstr "Materia: %s "
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:909
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:913
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:186
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:300
 #, c-format
@@ -9370,7 +9422,7 @@ msgid "Submit changes"
 msgstr "Enviar cambios"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:903
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:907
 msgid "Submit update request"
 msgstr "Enviar pedido de actualización"
 
@@ -9494,26 +9546,26 @@ msgstr "Domingo"
 msgid "Surveys"
 msgstr "Informe"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:649
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:667
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:670
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:678
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:553
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:659
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:677
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:680
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:688
 #, c-format
 msgid "Suspend"
 msgstr "Suspender"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:701
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:711
 #, c-format
 msgid "Suspend all holds"
-msgstr "Suspendeer todas la reservas"
+msgstr "Suspender todas la reservas"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, c-format
 msgid "Suspend until:"
 msgstr "Suspender hasta:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:658
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:668
 #, c-format
 msgid "Suspend your hold on "
 msgstr "Suspender su reserva en "
@@ -9933,7 +9985,7 @@ msgstr ""
 "estaba completamente compuesta por código. NO fue agregada. "
 
 #. %1$s:  message_value 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:41
 #, c-format
 msgid "The transaction id '%s' for this payment is invalid."
 msgstr "El id de transacción '%s' para este pago no es válido."
@@ -10181,10 +10233,10 @@ msgstr "Tiempo límite mientras se esperaba la confirmación de la impresión"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:566
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:251
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:154
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:362
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:411
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:371
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:420
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:52
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:219
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:119
@@ -10271,7 +10323,7 @@ msgstr "Nivel principal"
 msgid "Topics"
 msgstr "Tópicos"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:87
 #, c-format
 msgid "Total due"
 msgstr "Deuda total"
@@ -10347,18 +10399,18 @@ msgstr "URL: %s "
 msgid "Unable to add one or more tags."
 msgstr "No se pudo agregar una o más etiquetas."
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:30
 #, c-format
 msgid "Unable to connect to PayPal."
 msgstr "No se puede conectar a PayPal."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:924
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:928
 msgid "Unable to update your setting!"
 msgstr "No se pudo actualizar su configuración!"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:33
 #, c-format
 msgid "Unable to verify payment."
@@ -10374,7 +10426,7 @@ msgstr "No disponible (perdido o extraviado)"
 msgid "Unavailable issues"
 msgstr "Números no disponibles"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:28
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:26
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:141
 #, c-format
@@ -10460,7 +10512,7 @@ msgstr ""
 "multas por daños. Si se muestra en su cuenta, por favor, póngase en contacto "
 "con la biblioteca."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
@@ -10475,7 +10527,7 @@ msgstr ""
 msgid "VHS tape / Videocassette"
 msgstr "Casete VHS/Videocasete"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:870
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:874
 #, c-format
 msgid "Verification:"
 msgstr "Verificación:"
@@ -10509,8 +10561,8 @@ msgid "View details for this title"
 msgstr "Ver detalles para este título"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:181
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:431
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:440
 msgid "View on Amazon.com"
 msgstr "Ver en Amazon.com"
 
@@ -10762,7 +10814,7 @@ msgid "You cannot renew this item again. %s "
 msgstr "Usted no puede renovar este ítem otra vez. %s "
 
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #, c-format
 msgid "You cannot renew your books online. Reason: %sYour fines exceed "
 msgstr ""
@@ -10778,8 +10830,8 @@ msgstr "Usted no puede compartir una lista pública."
 msgid "You currently have nothing checked out."
 msgstr "En este momento no tiene nada prestado."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:321
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:335
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:330
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "Usted debe actualmente multas y cargos que ascienden a:"
@@ -10845,7 +10897,7 @@ msgstr ""
 "Ha seguido un enlace antiguo, ejemplo, a partir de un motor de búsqueda o un "
 "marcador."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:349
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:358
 #, c-format
 msgid "You have a credit of:"
 msgstr "Usted tiene un crédito de:"
@@ -10863,7 +10915,7 @@ msgstr ""
 "Usted ya tiene prestados demasiados ítems y no se le puede prestar ninguno "
 "más. %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:169
 #, c-format
 msgid "You have no fines or charges"
 msgstr "No tiene multas o cargos"
@@ -10877,7 +10929,7 @@ msgstr ""
 "No llenado todos los campos requeridos. Por favor complete todos los campos "
 "faltantes y reenvíe."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:317
 #, c-format
 msgid "You have nothing checked out"
 msgstr "No tiene préstamos"
@@ -10986,7 +11038,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  IF debarred_comment 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:42
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:107
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:114
 #, c-format
 msgid "Your account has been frozen. %s Comment: "
 msgstr "Su cuenta ha sido congelada. %s Observación: "
@@ -11012,6 +11064,11 @@ msgstr ""
 #, c-format
 msgid "Your account has expired. %s "
 msgstr "Su cuenta ha expirado. %s "
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
+#, c-format
+msgid "Your account is frozen because it has been discharged. "
+msgstr "Su cuenta está congelada, ya que ha sido dado de alta. "
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:3
 #, c-format
@@ -11114,7 +11171,7 @@ msgstr "Su descarga comenzará automáticamente."
 msgid "Your edited comment (preview, pending approval)"
 msgstr "Su comentario editado (previsualización, aprobación pendiente)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:19
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:20
 #, c-format
 msgid "Your fines and charges"
 msgstr "Sus multas y cargos"
@@ -11130,7 +11187,7 @@ msgstr "Su garante es "
 msgid "Your library card has been marked as lost or stolen."
 msgstr "Su carné de biblioteca ha sido marcado como perdido o robado."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
 #, c-format
 msgid "Your library card has been marked as lost or stolen. "
 msgstr "Su carné de biblioteca ha sido marcado como perdido o robado. "
@@ -11168,22 +11225,25 @@ msgstr "Sus listas:"
 #. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
 #. %2$s:  IF error == 'card_expired' 
 #. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'on_reserve' 
-#. %5$s:  END 
+#. %4$s:  ELSIF error == 'too_soon' 
+#. %5$s:  ELSIF error == 'on_reserve' 
 #. %6$s:  END 
+#. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
 #, c-format
 msgid ""
 "Your loan renewal failed because of the following reason(s): %s %s Your "
 "account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s This item is "
-"on hold for another patron. %s %s "
+"have renewed this item the maximum number of times allowed. %s It is too "
+"soon after the checkout date for this item to be renewed. %s This item is on "
+"hold for another patron. %s %s "
 msgstr ""
 "Su renovación del préstamo fracasó debido a la(s) siguiente(s) razón(es): %s "
 "%s Tu cuenta ha caducado. Por favor, póngase en contacto con la biblioteca "
 "para obtener más información. %s Usted ha renovado este ítem, el número "
-"máximo de veces permitidas. %s Este ítem está reservado por otro usuario. %s "
-"%s "
+"máximo de veces permitidas. %s Es demasiado pronto después de la fecha de "
+"préstamo para que este ítem sea renovado. %s Este ítem está reservado por "
+"otro usuario. %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
@@ -11204,7 +11264,7 @@ msgstr "Su contraseña ha sido cambiada "
 #. For the first occurrence,
 #. %1$s:  minpasslen 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:837
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Su contraseña debe tener al menos %s caracteres de largo."
@@ -11215,7 +11275,7 @@ msgid "Your payment"
 msgstr "Su pago"
 
 #. %1$s:  message_value 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:35
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:36
 #, c-format
 msgid "Your payment of $%s has been processed successfully!"
 msgstr "¡Su pago de $%s ha sido procesado satisfactoriamente!"
@@ -11271,7 +11331,7 @@ msgid "Your search returned %s results."
 msgstr "Su búsqueda retornó %s resultados."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:924
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:928
 msgid "Your setting has been updated!"
 msgstr "¡Su configuración ha sido actualizada!"
 
@@ -11377,6 +11437,17 @@ msgid ""
 msgstr ""
 "[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
 "type=seefro.type %%] "
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:114
+#, c-format
+msgid ""
+"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
+"Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
+"defined('branchcode') && hidden.defined('categorycode') %%] "
+msgstr ""
+"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && "
+"Koha.Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && "
+"hidden.defined('branchcode') && hidden.defined('categorycode') %%] "
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:1
 #, c-format
@@ -11916,7 +11987,7 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#. %1$s:  RESERVE.datesent | $KohaDates 
+#. %1$s:  transfer.datesent | $KohaDates 
 #. %2$s:  ELSIF ( RESERVE.suspend ) 
 #. %3$s:  IF ( RESERVE.suspend_until ) 
 #. %4$s:  RESERVE.suspend_until 
@@ -11928,7 +11999,7 @@ msgstr "show_loans"
 #. %10$s:  END 
 #. %11$s:  END 
 #. %12$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:626
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:636
 #, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
@@ -12046,7 +12117,7 @@ msgstr ""
 "el identificador único de usuario en el ILS; el mismo identificador devuelto "
 "por LookupPatron o AuthenticatePatron"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, c-format
 msgid "there was a problem processing your payment"
@@ -12068,7 +12139,7 @@ msgstr "para colocar un comentario."
 msgid "unAPI"
 msgstr "unAPI"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:705
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:715
 #, c-format
 msgid "until "
 msgstr "hasta "
@@ -12209,7 +12280,7 @@ msgid "your messaging"
 msgstr "Su mensajería"
 
 #. %1$s:  payment 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:61
 #, c-format
 msgid "your payment of %s has been applied to your account"
 msgstr "su pago de %s ha sido aplicado a su cuenta"
@@ -12261,7 +12332,7 @@ msgid "your tags"
 msgstr "Sus etiquetas"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:300
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:654
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:664
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:135
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:262
 #, c-format

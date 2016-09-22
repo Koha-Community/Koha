@@ -5,18 +5,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-08-16 17:24-0300\n"
-"PO-Revision-Date: 2016-07-06 13:53+0000\n"
-"Last-Translator: ivisek <ivus.freibus@gmail.com>\n"
-"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
-">\n"
+"POT-Creation-Date: 2016-09-17 18:13-0300\n"
+"PO-Revision-Date: 2016-09-22 11:19+0000\n"
+"Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
+"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1467813224.000000\n"
+"X-POOTLE-MTIME: 1474543185.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -774,10 +774,12 @@ msgstr "(! znamená 'neviditelný' nebo v případě zhrouceno 'nezhrouceno')"
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -899,6 +901,7 @@ msgstr "(! znamená 'neviditelný' nebo v případě zhrouceno 'nezhrouceno')"
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
@@ -1402,6 +1405,14 @@ msgstr ""
 "Rozložení se používá, aby se definovala pole, které chcete zobrazit na "
 "vašich štítcích."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:5
+#, c-format
+msgid ""
+"A library EAN is the identifier the vendor gives the library to send back to "
+"them so they know which account to use when billing. One EDI account can "
+"have multiple EANs."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:20
 #, c-format
 msgid "A list can also be created from the catalog search results"
@@ -1423,6 +1434,13 @@ msgid ""
 msgstr ""
 "Seznam všech kolovacích seznamů které náleží určitému čtenáři bude dostupný "
 "pomocí záložky 'Kolovací seznamy' v záznamu čtenáře."
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:5
+#, c-format
+msgid ""
+"A log of all messages sent and received via EDIFACT can be found under "
+"EDIFACT Messages."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:52
 #, c-format
@@ -5401,6 +5419,11 @@ msgstr ""
 msgid "Duration: 7 days"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:3
+#, c-format
+msgid "EDIFACT messages"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:21
 #, c-format
 msgid ""
@@ -5527,6 +5550,11 @@ msgid ""
 msgstr ""
 "Každá sekce předvoleb může být řazena abecedně kliknutím na malou šipku "
 "napravo od slova \"Předvolby\" v záhlaví"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:13
+#, c-format
+msgid "Each vendor will have one account."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:106
 #, c-format
@@ -5941,6 +5969,11 @@ msgstr ""
 msgid "Enter your tax rate if your library is charged taxes on orders."
 msgstr ""
 "Zadejte daňovou sazbu, pokud vaše knihovna platí daň z dodaných dokumentů."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:11
+#, c-format
+msgid "Enter your vendor information in the form that appears."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:19
 #, c-format
@@ -6661,12 +6694,12 @@ msgstr "Formát"
 #. %1$s:  interface 
 #. %2$s:  theme 
 #: intranet-tmpl/prog/en/modules/help/labels/spinelabel-home.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Format your label printing by editing spinelabel.css found in %s/%s/css/"
 msgstr ""
 "Formát tisku etiket můžete nastavit editací souboru spinelabel.css, který "
-"najdete v adresáři %s/css/"
+"najdete v adresáři %s/%s/css/"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:59
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:5
@@ -6801,6 +6834,13 @@ msgstr ""
 "Na této stránce můžete vidět všechny zadané návrhy na nákup a také stav "
 "jejich zpracování. Nové návrhy podle požadavkuů čtenářů můžete vytvářet "
 "kliknutím na tlačítko \"Nový návrh na nákup\"."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:5
+#, c-format
+msgid ""
+"From here you can set up the information needed to connect to your "
+"acquisitions vendors"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
@@ -10596,6 +10636,13 @@ msgid "In the form that appears you want to enter the basics about your fund."
 msgstr ""
 "Do formuláře, který se objeví zadejte základní informace o fondu knihovny."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:9
+#, fuzzy, c-format
+msgid ""
+"In the form that appears, enter the information provided by your vendor."
+msgstr ""
+"Do formuláře, který se objeví zadejte základní informace o fondu knihovny."
+
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:41
 #, c-format
 msgid ""
@@ -11344,6 +11391,11 @@ msgstr ""
 "katalogizaci, ačkoli samostatný bibliografický záznam je vytvořen pro název, "
 "není fyzicky oddělen od hostitelského výtisku. Další informace Analytice viz "
 "v kapitole 13 AACR2."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:3
+#, c-format
+msgid "Library EANs"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:74
 #, c-format
@@ -12209,6 +12261,13 @@ msgstr ""
 "Poznámka: Podmínka bude platná, pokud se hodnota v odpovídajícím podpoli "
 "bude přesně shodovat s definicí sady. Např. záznam s 999$9 = \"XXX YYY\" "
 "nebude vybrán, je-li podmínka definována jako  999$9 =\"XXX \"."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, fuzzy, c-format
+msgid "Note: Before you begin, you must set up at least one "
+msgstr ""
+"Předtím než začnete vytvářet objednávky, musíte vložit alespoň jednoho "
+"dodavatele."
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:41
 #, c-format
@@ -14429,6 +14488,16 @@ msgstr "Úplnou dokumentaci ke správě měn a směnných kurzů naleznete v "
 msgid "See the full documentation for Custom Reports in the "
 msgstr "Viz úplnou dokumentaci pro Uživatelské výstupy v "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
+#, fuzzy, c-format
+msgid "See the full documentation for EDI accounts in the "
+msgstr "Viz úplnou dokumentaci pro fondy v "
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
+#, fuzzy, c-format
+msgid "See the full documentation for EDIFACT messages in the "
+msgstr "Úplnou dokumentaci ke schvalování komentářů naleznete v "
+
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
 #, c-format
 msgid "See the full documentation for Editing Patrons in the "
@@ -14553,6 +14622,11 @@ msgstr "Viz úplnou dokumentaci pro šablony popisek v "
 #, c-format
 msgid "See the full documentation for Libraries &amp; Groups in the "
 msgstr "Viz úplnou dokumentaci pro knihovny &amp; skupiny v "
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
+#, fuzzy, c-format
+msgid "See the full documentation for Library EANs in the "
+msgstr "Viz úplnou dokumentaci pro seznamy v "
 
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #, c-format
@@ -18736,6 +18810,12 @@ msgstr ""
 "Chcete-li přidat dodavatele, klikněte na tlačítko \"Nový dodavatel\" na "
 "akviziční stránce."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:9
+#, fuzzy, c-format
+msgid "To add account information, click the 'New account' button."
+msgstr ""
+"Pro vytvoření seznamu čtenářů klikněte na tlačítko \"Nový seznam čtenářů\""
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:9
 #, c-format
 msgid ""
@@ -18744,6 +18824,13 @@ msgid ""
 msgstr ""
 "Chcete-li přidat další hodnoty do druhu dokladu v rozbalovacím menu, "
 "přidejte je do MANUAL_INV Authorizovaných hodnot"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:7
+#, fuzzy, c-format
+msgid "To add an EAN, click the 'New EAN' button."
+msgstr ""
+"Chcete-li přidat dodavatele, klikněte na tlačítko \"Nový dodavatel\" na "
+"akviziční stránce."
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:57
 #, c-format
@@ -20087,6 +20174,16 @@ msgstr "Hodnoty, které jsou přednastavené v Koha jsou:"
 #, c-format
 msgid "Vendor Contracts"
 msgstr "Smlouvy dodavatele"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:3
+#, fuzzy, c-format
+msgid "Vendor EDI accounts"
+msgstr "Smlouvy dodavatele"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, fuzzy, c-format
+msgid "Vendor in Acquisitions"
+msgstr "4 = Akvizice"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:13
 #, c-format
@@ -22604,10 +22701,12 @@ msgstr "management (správa) "
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -22728,6 +22827,7 @@ msgstr "management (správa) "
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-16 18:17-0300\n"
+"POT-Creation-Date: 2016-09-17 18:49-0300\n"
 "PO-Revision-Date: 2015-11-11 12:51+0000\n"
 "Last-Translator: KristerAndreason <krister.andreason@molndal.se>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -124,6 +124,15 @@ msgid "%s %s %s %s 1 item is on order. %s %s items are on order. %s %s %s "
 msgstr "%s %s %s %s 1 objekt är beställt. %s %s objekt är beställda. %s %s %s "
 
 #. %1$s:  END 
+#. %2$s:  ELSE 
+#. %3$s:  IF ( RESERVE.is_in_transit ) 
+#. %4$s:  SET transfer = RESERVE.item.get_transfer 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:631
+#, fuzzy, c-format
+msgid "%s %s %s %s Item in transit from "
+msgstr "%s %s %s Objektet är under förflyttning från "
+
+#. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
 #. %3$s:  IF ( loggedinusername ) 
 #. %4$s:  IF ( subscription_LOO.hasalert ) 
@@ -132,18 +141,10 @@ msgstr "%s %s %s %s 1 objekt är beställt. %s %s objekt är beställda. %s %s %
 msgid "%s %s %s %s You have subscribed to email notification on new issues "
 msgstr "%s %s %s %s Du prenumererar på e-postmeddelande om nya nummer/häften "
 
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  IF ( RESERVE.is_in_transit ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:622
-#, c-format
-msgid "%s %s %s Item in transit from "
-msgstr "%s %s %s Objektet är under förflyttning från "
-
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
 #. %3$s:  IF ( RESERVE.found ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:606
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:615
 #, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "%s %s %s Objekt väntar i "
@@ -188,6 +189,23 @@ msgstr "%s %s %s Inga andra objekt. %s %s "
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "%s %s %s Obs! Det här fönstret stängs automatiskt om 5 sekunder. %s "
 
+#. %1$s: # First line will be summary, second line will be description. Avoid indenting. -
+#. %2$s: - IF overdue == 1 -
+#. %3$s:  title 
+#. %4$s:  title 
+#. %5$s:  barcode 
+#. %6$s: - ELSE -
+#. %7$s:  title 
+#. %8$s:  title 
+#. %9$s:  barcode 
+#. %10$s: - END -
+#: opac-tmpl/bootstrap/en/modules/opac-ics.tt:1
+#, c-format
+msgid ""
+"%s %s %s is overdue Your copy of %s (barcode %s) is overdue %s %s is due "
+"Your copy of %s (barcode %s) is due back at the library today %s "
+msgstr ""
+
 #. %1$s:  END 
 #. %2$s:  END 
 #. %3$s:  IF ( review.title ) 
@@ -214,7 +232,7 @@ msgstr "%s %s (inte godkänd) %s"
 #. %1$s:  END 
 #. %2$s:  IF debarred_date && debarred_date != '9999-12-31' 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:50
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:115
 #, c-format
 msgid "%s %s End date: "
 msgstr ""
@@ -222,7 +240,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  UNLESS mandatory.defined('password') 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:837
 #, c-format
 msgid ""
 "%s %s If you do not enter a password a system generated password will be "
@@ -231,7 +249,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:619
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:628
 #, c-format
 msgid "%s %s Item in transit to "
 msgstr "%s %s Boken/mediet är under förflyttning och på väg till "
@@ -417,7 +435,7 @@ msgstr "%s %s, ISSN %s %s %s; %s %s "
 #. %9$s:  CASE 'ris' 
 #. %10$s:  CASE 'isbd' 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:45
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:43
 #, fuzzy, c-format
 msgid ""
 "%s %sBIBTEX %sEndNote %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC (Unicode/"
@@ -456,7 +474,7 @@ msgstr ""
 #. %27$s:  IF ACCOUNT_LINE.title 
 #. %28$s:  ACCOUNT_LINE.title 
 #. %29$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:104
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:105
 #, fuzzy, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
@@ -511,25 +529,25 @@ msgstr "%s (relaterade sökningar: %s %s %s ). %s "
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:493
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:502
 #, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s Kontot är låst %s %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:386
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:578
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:745
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:390
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:749
 #, c-format
 msgid "%s Address 2:"
 msgstr "%s Adress 2:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:372
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:564
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:731
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:376
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:735
 #, c-format
 msgid "%s Address:"
 msgstr "%s Adress:"
@@ -552,7 +570,7 @@ msgstr ""
 "problemet. %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:272
 #, fuzzy, c-format
 msgid "%s Automatic renewal "
 msgstr "%s Kan ej omlånas %s Automatiskt omlån "
@@ -618,15 +636,15 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:400
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:592
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:759
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:404
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:596
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:763
 #, c-format
 msgid "%s City:"
 msgstr "%s Ort:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:676
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:680
 #, fuzzy, c-format
 msgid "%s Contact note:"
 msgstr "%s Kontaktmeddelande:"
@@ -645,15 +663,15 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:442
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:634
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:801
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:446
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:638
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:805
 #, c-format
 msgid "%s Country:"
 msgstr "%s Land:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:261
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:265
 #, c-format
 msgid "%s Date of birth:"
 msgstr "%s Födelsedatum:"
@@ -665,33 +683,33 @@ msgid "%s Did you mean: "
 msgstr "%s Menade du: "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:662
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:666
 #, c-format
 msgid "%s Email:"
 msgstr "%s E-post:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:538
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:542
 #, c-format
 msgid "%s Fax:"
 msgstr "%s Fax:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:247
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:717
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:251
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:721
 #, c-format
 msgid "%s First name:"
 msgstr "%s Förnamn:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:151
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:154
 #, c-format
 msgid "%s Home library:"
 msgstr "%s Hembibliotek:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:282
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:286
 #, c-format
 msgid "%s Initials:"
 msgstr "%s Initialer:"
@@ -703,19 +721,19 @@ msgid "%s Internet user critics"
 msgstr "%s Kritiker, Internet-användare"
 
 #. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:617
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:626
 #, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "%s Exemplaret väntar på att tas från "
 
 #. %1$s:  issues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:158
 #, c-format
 msgid "%s Item(s) checked out"
 msgstr "%s Utlånade artiklar"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:126
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:129
 #, fuzzy, c-format
 msgid "%s Library card number: "
 msgstr "Ange ditt lånekortsnummer:"
@@ -728,7 +746,7 @@ msgstr "%s Logga ut"
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:265
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:275
 #, fuzzy, c-format
 msgid "%s No renewal before %s "
 msgstr "%s Kan ej omlånas innan %s "
@@ -748,14 +766,20 @@ msgid "%s No results, try to change filters. %s "
 msgstr "%s %s Inga träffar. %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:509
 #, fuzzy, c-format
 msgid "%s Not allowed"
 msgstr "Tillåt inte"
 
+#. %1$s:  ELSIF ( ISSUE.on_reserve ) 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:266
+#, fuzzy, c-format
+msgid "%s Not renewable "
+msgstr "%s Kan ej omlånas %s Automatiskt omlån "
+
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:258
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
 #, fuzzy, c-format
 msgid "%s Not renewable %s Not allowed "
 msgstr "Inga förnyelser tillåts"
@@ -763,19 +787,19 @@ msgstr "Inga förnyelser tillåts"
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:502
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:511
 #, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s Reserverad %s Inga förnyelser kvar %s "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:296
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:300
 #, c-format
 msgid "%s Other names:"
 msgstr "%s Andra namn:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:500
 #, fuzzy, c-format
 msgid "%s Other phone:"
 msgstr "%s Annan telefon:"
@@ -805,8 +829,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:648
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:815
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:652
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:819
 #, c-format
 msgid "%s Phone:"
 msgstr "%s Telefon:"
@@ -824,13 +848,13 @@ msgid "%s Please see a member of the library staff. "
 msgstr "%s Vänligen kontakta någon i bibliotekspersonalen. "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:510
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:514
 #, c-format
 msgid "%s Primary email:"
 msgstr "%s Primär e-postadress:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:472
 #, c-format
 msgid "%s Primary phone:"
 msgstr "%s Primärt telefonnummer:"
@@ -861,7 +885,7 @@ msgid "%s Quotations"
 msgstr "%s Citat"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:211
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:215
 #, c-format
 msgid "%s Salutation:"
 msgstr "%s Hälsning:"
@@ -885,13 +909,13 @@ msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Sök %sefter '%s'%s%s&nbsp;med gränserna:&nbsp;'%s'%s"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:524
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:528
 #, c-format
 msgid "%s Secondary email:"
 msgstr "%s Sekundär e-post:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:482
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:486
 #, c-format
 msgid "%s Secondary phone:"
 msgstr "%s Sekundär telefon:"
@@ -904,23 +928,23 @@ msgstr "%s Självutlåningsautomat"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:414
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:606
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:773
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:418
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:777
 #, c-format
 msgid "%s State:"
 msgstr "%s Delstat:"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:358
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:362
 #, c-format
 msgid "%s Street number:"
 msgstr "%s Gatunummer:"
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:233
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:703
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:237
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:707
 #, c-format
 msgid "%s Surname:"
 msgstr "%s Efternamn:"
@@ -1015,8 +1039,8 @@ msgstr ""
 #. %1$s:  IF ( ISSUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:276
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:512
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:521
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s Ja %s Nej %s"
@@ -1037,9 +1061,9 @@ msgstr "%s Du har aldrig lånat något från det här biblioteket. %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:428
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:620
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:787
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:432
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:624
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:791
 #, fuzzy, c-format
 msgid "%s ZIP/Postal code:"
 msgstr "%s Postnummer:"
@@ -1067,7 +1091,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:547
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:551
 #, fuzzy, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
@@ -1083,7 +1107,7 @@ msgstr ""
 "defined('contactnote') %%] "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:686
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:690
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('altcontactsurname') && hidden."
@@ -1101,7 +1125,7 @@ msgstr ""
 "%%] "
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:452
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:456
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
@@ -1113,7 +1137,7 @@ msgstr ""
 "defined('emailpro') && hidden.defined('fax') %%] "
 
 #. %1$s:  END # /UNLESS fields hidden 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:341
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:345
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
@@ -1127,7 +1151,7 @@ msgstr ""
 "%%] "
 
 #. %1$s:  END # / defined 'branchcode' 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:188
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:192
 #, c-format
 msgid ""
 "%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
@@ -1229,7 +1253,7 @@ msgstr "%s beskr"
 #. %4$s:  RESERVE.waiting_expires_on | $KohaDates 
 #. %5$s:  END 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:619
 #, fuzzy, c-format
 msgid "%s since %s %s until %s %s %s "
 msgstr "%s %s %s %s %s Ingen titel %s %s %s %s "
@@ -1893,7 +1917,7 @@ msgstr ""
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:7
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:8
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your fines and charges"
 msgstr ""
@@ -2047,6 +2071,13 @@ msgstr "%s/cgi-bin/koha/opac-shelves.pl?rss=1&amp;viewshelf=%s"
 #, c-format
 msgid "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
+
+#. %1$s:  ELSE 
+#. %2$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:69
+#, fuzzy, c-format
+msgid "%s0 biblios%s "
+msgstr "%s biblios"
 
 #. %1$s:  IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch 
@@ -2203,6 +2234,13 @@ msgstr "%sBegär prenumerationsnotis %s Avanmälan för prenumerationsnotis %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:49
+#, c-format
+msgid "%sThis authority is not used in any records.%s "
+msgstr ""
+
+#. %1$s:  ELSE 
+#. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:289
 #, c-format
 msgid "%sThis record has no items.%s "
@@ -2213,7 +2251,7 @@ msgstr "%sDenna post har inga objekt.%s "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:29
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:114
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
 #, c-format
 msgid "%sUpdate your contact information%sGo to your contact information%s"
 msgstr ""
@@ -2866,18 +2904,18 @@ msgstr "(%s biblios)"
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft 
 #. %2$s:  ISSUE.renewsallowed 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:258
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:265
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:266
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:275
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:278
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:509
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s av %s återstående förnyelser)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:406
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:531
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:415
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:214
 #, c-format
 msgid "(%s total)"
@@ -2913,11 +2951,6 @@ msgstr "(Stöds inte av Koha)"
 msgid "(Not supported yet)"
 msgstr "(Stöds inte än)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:270
-#, c-format
-msgid "(On hold)"
-msgstr "(Reserverad)"
-
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:122
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:129
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:197
@@ -2947,7 +2980,7 @@ msgid "(Optional, default 1)"
 msgstr "(Valfritt, förvalt: 1)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:30
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:115
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:123
 #, fuzzy, c-format
 msgid ""
 "(Please note: there may be a delay in restoring your account if you submit "
@@ -3020,8 +3053,13 @@ msgstr "(filtrerat från _MAX_ totalt antal poster)"
 msgid "(modified on %s)"
 msgstr "(modifierad den %s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:262
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:502
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
+#, fuzzy, c-format
+msgid "(on hold)"
+msgstr "(Reserverad)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:272
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:511
 #, fuzzy, c-format
 msgid "(overdue)"
 msgstr "Förseningar (%s)"
@@ -3041,8 +3079,8 @@ msgstr "(publicerad %s)"
 msgid "(related searches: %s%s%s)"
 msgstr "(relaterade sökningar: %s%s%s)"
 
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:19
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:21
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:476
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:522
@@ -3100,7 +3138,7 @@ msgstr ". Kontakta biblioteket om du vill ha mer information."
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #, fuzzy, c-format
 msgid ".%sYou have fines.%s %s "
 msgstr "Du har inga förseningsavgifter eller andra avgifter"
@@ -3110,7 +3148,7 @@ msgstr "Du har inga förseningsavgifter eller andra avgifter"
 msgid "...or..."
 msgstr "...eller..."
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:161
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:162
 #, c-format
 msgid "0.00"
 msgstr ""
@@ -3214,7 +3252,7 @@ msgid "A confirmation email will be sent shortly to the email address "
 msgstr "En bekräftelse kommer att skickas till e-postadressen "
 
 #. %1$s:  message_value 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:37
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:38
 #, c-format
 msgid ""
 "A payment with the transaction id '%s' has already been posted to an account."
@@ -3242,7 +3280,7 @@ msgid "Access denied"
 msgstr "Åtkomst nekad"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:27
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:121
 #, fuzzy, c-format
 msgid ""
 "According to our records, we don't have up-to-date contact information. "
@@ -3326,7 +3364,7 @@ msgstr "Lägg till i vagn"
 msgid "Add to list:"
 msgstr "Lägg till i en lista:"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:21
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #, c-format
 msgid "Add to your cart"
@@ -3354,7 +3392,7 @@ msgstr "Ytterligare författare:"
 msgid "Additional content types for books/printed materials"
 msgstr "Ytterligare innehållstyper för böcker/tryckt material"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:883
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:887
 #, fuzzy, c-format
 msgid "Additional information"
 msgstr "Ytterligare information"
@@ -3426,7 +3464,7 @@ msgstr ""
 "Observera också att du måste återlämna alla utlånade artiklar innan ditt "
 "kort går ut."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:560
 #, c-format
 msgid "Alternate address"
 msgstr "Alternativ adress"
@@ -3436,24 +3474,24 @@ msgstr "Alternativ adress"
 msgid "Alternate address information: "
 msgstr "Alternativ adress"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:695
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:699
 #, c-format
 msgid "Alternate contact"
 msgstr "Alternativ kontakt"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:318
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:332
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:346
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:327
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:341
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
 #, c-format
 msgid "Amount"
 msgstr "Belopp"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:75
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:76
 #, c-format
 msgid "Amount outstanding"
 msgstr "Utestående belopp"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:160
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:161
 #, c-format
 msgid "Amount to pay: "
 msgstr ""
@@ -3554,7 +3592,7 @@ msgid "April"
 msgstr "April"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Är du säker på att du vill annullera den här reservationen?"
 
@@ -3600,12 +3638,12 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Är du säker på att du vill ta bort den här delningen?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "Är du säker på att du vill återta alla avaktiverade reservationer?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Är du säker på att du vill avaktivera alla reservationer?"
 
@@ -3826,16 +3864,16 @@ msgstr "Tillbaka till resultatsöklistan"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:317
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:91
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:160
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:364
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:413
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:373
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:422
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1174
 #, c-format
 msgid "Barcode"
 msgstr "Streckkod"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:243
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:478
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:251
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:487
 #, c-format
 msgid "Barcode:"
 msgstr "Streckkod:"
@@ -3962,16 +4000,16 @@ msgid "Call Number"
 msgstr "Hyllsignatur"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:72
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:365
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:414
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:423
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:220
 #, c-format
 msgid "Call no."
 msgstr "Hyllsig."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:248
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:483
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:256
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:492
 #, fuzzy, c-format
 msgid "Call no.:"
 msgstr "Hyllsig."
@@ -4018,7 +4056,7 @@ msgstr "Hyllsignatur:"
 msgid "Call number: %s"
 msgstr "Hyllsignatur: %s"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:106
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:104
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:336
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:150
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
@@ -4029,8 +4067,8 @@ msgstr "Hyllsignatur: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:88
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:671
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:690
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:681
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:700
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:165
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:290
@@ -4104,7 +4142,7 @@ msgid "Catalogs"
 msgstr "Kataloger"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:169
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:81
 #, c-format
 msgid "Category:"
@@ -4149,7 +4187,7 @@ msgid "Checked out"
 msgstr "Utlånad"
 
 #. %1$s:  issues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:141
 #, c-format
 msgid "Checked out (%s)"
 msgstr "Utlånad till (%s)"
@@ -4231,13 +4269,13 @@ msgstr "Rensa alla"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:429
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:269
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:273
 #, c-format
 msgid "Clear date"
 msgstr "Rensa datum"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:666
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:676
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "Rensa datumet för att spärra utan slutdatum"
@@ -4298,8 +4336,8 @@ msgid "Click to rewind the list to"
 msgstr "Klicka för att gå tillbaka i listan till"
 
 #. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:439
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:197
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:448
 msgid "Click to view in Google Books"
 msgstr "Klicka för att visa i Google Books"
 
@@ -4401,6 +4439,12 @@ msgstr "Kommentarer ( %s )"
 msgid "Comments on "
 msgstr "Kommentarer om "
 
+#. INPUT type=submit
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
+#, fuzzy
+msgid "Confirm hold"
+msgstr "Ändra ditt lösenord"
+
 #. %1$s:  USER_INFO.firstname 
 #. %2$s:  USER_INFO.surname 
 #. %3$s:  USER_INFO.cardnumber 
@@ -4414,13 +4458,13 @@ msgstr "Bekräfta reservationer för: %s %s %s (%s) %s "
 msgid "Confirm new password:"
 msgstr "Nytt lösenord:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:847
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:857
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:851
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:861
 #, fuzzy, c-format
 msgid "Confirm password"
 msgstr "Ändra ditt lösenord"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:464
 #, c-format
 msgid "Contact information"
 msgstr "Kontaktinformation"
@@ -4483,7 +4527,7 @@ msgid "Copyright year: %s "
 msgstr "Copyrightår: %s "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:217
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:234
 msgid ""
 "Could not login, perhaps your Persona email does not match your Koha one"
 msgstr ""
@@ -4557,14 +4601,14 @@ msgstr ""
 "Skapar en reservation för en låntagare på ett specifikt exemplar knutet till "
 "en bibliografisk post."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:353
 #, c-format
 msgid "Credits"
 msgstr "Krediter"
 
 # Interpreted as credit on an account, not as e.g. author credits
 #. %1$s:  BORROWER_INFO.amountoutstanding | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:147
 #, c-format
 msgid "Credits (%s)"
 msgstr "Upphovsuppgifter (%s)"
@@ -4612,7 +4656,7 @@ msgstr "DVD video / Videodisc"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:73
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:72
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:73
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:101
@@ -4638,9 +4682,9 @@ msgstr "Tillagt den:"
 msgid "Date due"
 msgstr "Förfallodatum"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:221
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:488
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:229
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:236
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:497
 #, c-format
 msgid "Date due:"
 msgstr "Förfallodatum:"
@@ -4766,7 +4810,7 @@ msgstr "Avd."
 msgid "Descending"
 msgstr "Fallande"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:73
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:74
 #, c-format
 msgid "Description"
 msgstr "Beskrivning"
@@ -4889,6 +4933,11 @@ msgstr "Klart"
 msgid "Download"
 msgstr "Ladda ned"
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
+#, fuzzy, c-format
+msgid "Download as iCal/.ics file"
+msgstr "Ladda ner lista "
+
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:12
 #, c-format
 msgid "Download cart"
@@ -4905,15 +4954,15 @@ msgstr "Ladda ner lista"
 msgid "Download list "
 msgstr "Ladda ner lista "
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:42
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:40
 #, c-format
 msgid "Dublin Core"
 msgstr ""
 
 # This is due date for a book, not for a fee
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:155
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:363
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:415
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:424
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "Due"
@@ -5112,7 +5161,7 @@ msgstr ""
 "igen med text."
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:35
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
 #, c-format
@@ -5179,18 +5228,18 @@ msgstr "Utdrag levererade av Syndetics"
 msgid "Expecting a specific item selection."
 msgstr "Ett särskilt exemplar förväntas."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:144
 #, fuzzy, c-format
 msgid "Expiration date:"
 msgstr "Utgång:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:584
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:593
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:597
 #, c-format
 msgid "Expiration:"
 msgstr "Utgång:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:537
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:546
 #, c-format
 msgid "Expires on"
 msgstr "Utgår den"
@@ -5200,12 +5249,12 @@ msgstr "Utgår den"
 msgid "Explain "
 msgstr "Förklara "
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:105
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:103
 #, c-format
 msgid "Export"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:86
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:84
 #, c-format
 msgid "Exporting to Dublin Core..."
 msgstr ""
@@ -5230,7 +5279,7 @@ msgstr "Feb"
 msgid "February"
 msgstr "Februari"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:307
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:311
 #, c-format
 msgid "Female:"
 msgstr "Kvinna:"
@@ -5255,13 +5304,13 @@ msgstr "Anmärkningar skönlitteratur:"
 msgid "Filmographies"
 msgstr "Filmographies"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:75
 #, c-format
 msgid "Fine amount"
 msgstr "Bötesbelopp"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:420
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:429
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:224
 #, c-format
 msgid "Fines"
@@ -5269,21 +5318,21 @@ msgstr "Böter"
 
 #. For the first occurrence,
 #. %1$s:  BORROWER_INFO.amountoutstanding | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:137
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:138
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:145
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:146
 #, c-format
 msgid "Fines (%s)"
 msgstr "Övertidsavgifter (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:316
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:330
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:65
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:325
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:339
 #, c-format
 msgid "Fines and charges"
 msgstr "Avgifter för övertid och annat"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:276
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:512
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:521
 #, c-format
 msgid "Fines:"
 msgstr "Övertidsavgifter:"
@@ -5414,6 +5463,7 @@ msgstr "Allmänt"
 msgid "Get new password recovery link"
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:38
 #, fuzzy, c-format
 msgid "Get your discharge"
@@ -5519,7 +5569,7 @@ msgid "Go to detail"
 msgstr "Gå till detaljvy"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:54
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, fuzzy, c-format
 msgid "Go to your account page"
 msgstr "din kontosida"
@@ -5606,14 +5656,14 @@ msgstr "Dölj alternativ"
 msgid "Hide window"
 msgstr "Dölj fönster"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:29
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:27
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:144
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:142
 #, c-format
 msgid "Highlight"
 msgstr "Markera"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:576
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:585
 #, c-format
 msgid "Hold date:"
 msgstr "Reservationsdatum:"
@@ -5663,13 +5713,13 @@ msgstr "Reservationer"
 msgid "Holdings:"
 msgstr "Reservationer:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:531
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
 #, c-format
 msgid "Holds "
 msgstr "Reservationer "
 
 #. %1$s:  RESERVES.count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:149
 #, c-format
 msgid "Holds (%s)"
 msgstr "Reservationer (%s)"
@@ -5695,7 +5745,7 @@ msgstr "Reservationer (%s)"
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-restrictedpage.tt:23
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:17
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:11
@@ -5738,7 +5788,7 @@ msgid "Home library"
 msgstr "Hembibliotek"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:145
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:146
 msgid "How PayPal Works"
 msgstr ""
 
@@ -5836,13 +5886,13 @@ msgstr "ISSN:"
 msgid "IdRef"
 msgstr "IdRef"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:203
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:207
 #, c-format
 msgid "Identity"
 msgstr "Identitet"
 
 # Uncertain what "clear" can refer to in this context - it's hardly the banking term
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
 #, fuzzy, c-format
 msgid "If this is an error, please contact the library."
 msgstr ""
@@ -6010,7 +6060,7 @@ msgstr "I online-katalogen %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 msgid "In transit from %s to %s since %s"
 msgstr "På väg från %s till %s sedan %s"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:21
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:19
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:522
@@ -6102,8 +6152,8 @@ msgstr "Objekt förlorat"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:315
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:54
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:157
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:412
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:421
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1157
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:77
 #, c-format
@@ -6112,7 +6162,7 @@ msgstr "Objekttyp"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:46
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:235
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:243
 #, c-format
 msgid "Item type:"
 msgstr "Objekttyp:"
@@ -6321,7 +6371,7 @@ msgstr "Bibliotek"
 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:620
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:122
 #, c-format
 msgid "Library"
 msgstr "Bibliotek"
@@ -6380,7 +6430,7 @@ msgid "LinkedIn"
 msgstr "LinkedIn"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:75
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:170
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:178
 #, c-format
 msgid "Links"
 msgstr "Länkar"
@@ -6698,7 +6748,7 @@ msgstr "MEDDELANDE 8:"
 msgid "MESSAGE 9:"
 msgstr "MEDDELANDE 9:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:350
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:354
 #, c-format
 msgid "Main address"
 msgstr "Huvudadress"
@@ -6711,12 +6761,12 @@ msgstr "Huvudadress"
 msgid "Make a "
 msgstr "Gör "
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:159
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:160
 #, fuzzy, c-format
 msgid "Make payment"
 msgstr "Gör "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:318
 #, c-format
 msgid "Male:"
 msgstr "Man:"
@@ -6780,7 +6830,7 @@ msgstr "Saknar nummer: %s "
 msgid "Mo"
 msgstr "Må"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:546
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:555
 #, c-format
 msgid "Modify"
 msgstr "Modifiera"
@@ -6816,7 +6866,7 @@ msgstr "Fler listor"
 msgid "More options"
 msgstr "Fler alternativ"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:71
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:69
 #, c-format
 msgid "More searches "
 msgstr "Fler sökningar "
@@ -6860,7 +6910,7 @@ msgstr "Aldrig"
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:597
 #, fuzzy, c-format
 msgid "Never expires %s %s - %s "
 msgstr "Upphör aldrig %s "
@@ -6981,11 +7031,11 @@ msgstr "Inga ändringar gjorda. "
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:53
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:65
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:104
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:166
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:174
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:183
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:193
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:202
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:191
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:200
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:210
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:219
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:93
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:101
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:110
@@ -6996,12 +7046,12 @@ msgstr "Inga ändringar gjorda. "
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:329
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:337
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:347
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:183
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:191
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:433
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:441
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:199
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:208
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:442
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:450
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:459
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:73
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:963
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:234
@@ -7143,7 +7193,7 @@ msgstr "Ej musikalisk inspelning"
 msgid "None"
 msgstr "Ingen"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:321
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:325
 #, fuzzy, c-format
 msgid "None specified: "
 msgstr "Ingen tagg har angetts."
@@ -7294,7 +7344,7 @@ msgid "Nothing"
 msgstr "Inget"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -7346,7 +7396,7 @@ msgstr "Antal reservationer: "
 msgid "Number of records used in: %s"
 msgstr "Antal reservationer: "
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:95
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:93
 #, c-format
 msgid "OAI-DC"
 msgstr ""
@@ -7469,12 +7519,12 @@ msgid "OverDrive search for '%s'"
 msgstr "OverDrive-sökning efter '%s'"
 
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:143
 #, c-format
 msgid "Overdue (%s)"
 msgstr "Förseningar (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:406
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:415
 #, c-format
 msgid "Overdues "
 msgstr "Förseningar "
@@ -7496,9 +7546,9 @@ msgid "Parameters"
 msgstr "Parametrar"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:161
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:829
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:843
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:854
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:847
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:858
 #, c-format
 msgid "Password"
 msgstr "Lösenord"
@@ -7543,22 +7593,22 @@ msgstr "Patentdokument"
 msgid "Patron comment on %s"
 msgstr "Låntagarkommentar om %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:141
 #, fuzzy, c-format
 msgid "Pay selected fines and charges"
 msgstr "Dina övertidsavgifter och avgifter"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:145
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:146
 msgid "PayPal Acceptance Mark"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:61
 #, c-format
 msgid "Payment applied:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:141
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:142
 #, fuzzy, c-format
 msgid "Payment method"
 msgstr "Patentdokument"
@@ -7578,13 +7628,13 @@ msgstr "Telefon"
 msgid "Physical details:"
 msgstr "Fysisk information:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:538
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:547
 #, c-format
 msgid "Pick up location"
 msgstr "Hämtningsplats"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:214
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:596
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:605
 #, c-format
 msgid "Pick up location:"
 msgstr "Hämtningsplats:"
@@ -7605,7 +7655,6 @@ msgid "Place a hold on: "
 msgstr "Reservera:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:6
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:231
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:437
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:440
@@ -7619,7 +7668,7 @@ msgstr "Reservera:"
 msgid "Place hold"
 msgstr "Reservera"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:536
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:545
 #, c-format
 msgid "Placed on"
 msgstr "Lades den"
@@ -7696,14 +7745,14 @@ msgstr "Bekräfta lån:"
 msgid "Please confirm your registration"
 msgstr "Bekräfta din registrering"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:38
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:41
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:42
 #, fuzzy, c-format
 msgid "Please contact a librarian for details."
 msgstr ". Kontakta biblioteket om du vill ha mer information."
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:55
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:56
 #, fuzzy, c-format
 msgid "Please contact a librarian to verify your payment."
 msgstr ". Kontakta biblioteket om du vill ha mer information."
@@ -7791,15 +7840,16 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:107
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:114
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:121
 #, c-format
 msgid "Please note:"
 msgstr "Lägg märke till:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #, c-format
 msgid "Please note: "
 msgstr "Lägg märke till: "
@@ -7826,7 +7876,7 @@ msgstr ""
 msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr "Försök igen, med oformaterad text. %sOkänt fel. %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:875
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:879
 #, fuzzy, c-format
 msgid "Please type the following characters into the preceding box: "
 msgstr "Skriv in de följande tecknen i föregående ruta: "
@@ -7880,7 +7930,7 @@ msgid "Prev"
 msgstr "Förh."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:183
+#: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:200
 msgid "Preview"
 msgstr "Förhandsvisning"
 
@@ -7914,12 +7964,12 @@ msgstr "Skriv ut"
 msgid "Print list"
 msgstr "Skriv ut lista"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:540
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:549
 #, c-format
 msgid "Priority"
 msgstr "Prioritet"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:601
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
 #, c-format
 msgid "Priority:"
 msgstr "Prioritet:"
@@ -8178,12 +8228,12 @@ msgstr "Regelbunden utskrift"
 msgid "Related Term"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:366
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
 #, c-format
 msgid "Relative"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:142
 #, fuzzy, c-format
 msgid "Relatives' checkouts"
 msgstr "Lån på plats"
@@ -8250,18 +8300,18 @@ msgstr "Ta bort markerade sökningar"
 msgid "Remove share"
 msgstr "Ta bort delning"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:164
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:256
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:417
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:426
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:507
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:222
 #, c-format
 msgid "Renew"
 msgstr "Låna om"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:303
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid "Renew all"
 msgstr "Låna om alla"
 
@@ -8274,8 +8324,8 @@ msgid "Renew item"
 msgstr "Förnya artikel"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:292
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 msgid "Renew selected"
 msgstr "Förnya markerade"
 
@@ -8286,7 +8336,7 @@ msgstr "Förnya markerade"
 msgid "RenewLoan"
 msgstr "RenewLoan"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:253
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:261
 #, fuzzy, c-format
 msgid "Renewed!"
 msgstr "Förnyat!"
@@ -8301,46 +8351,46 @@ msgstr "Rapportera felaktiga länkar"
 msgid "Request specific item type:"
 msgstr "Välj ett särskilt exemplar:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:134
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:238
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:252
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:273
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:287
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:301
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:328
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:363
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:377
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:391
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:405
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:419
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:433
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:447
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:473
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:487
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:501
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:515
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:529
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:543
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:569
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:583
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:597
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:611
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:625
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:639
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:653
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:667
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:681
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:708
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:722
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:736
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:750
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:764
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:778
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:792
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:806
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:820
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:845
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:242
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:256
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:277
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:291
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:305
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:332
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:367
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:381
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:395
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:409
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:423
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:437
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:451
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:477
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:491
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:505
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:519
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:547
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:573
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:587
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:601
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:615
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:629
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:643
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:657
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:671
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:685
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:712
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:726
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:740
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:768
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:782
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:796
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:810
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:824
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:849
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:853
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:63
 #, c-format
 msgid "Required"
@@ -8382,17 +8432,17 @@ msgid "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr ""
 "Resultat av sökning %sefter '%s'%s%s&nbsp;med avgränsning(arna):&nbsp;'%s'%s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:655
 #, c-format
 msgid "Resume"
 msgstr "Återuppta"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:714
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:724
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "Återta alla avaktiverade reservationer"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:656
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:666
 #, c-format
 msgid "Resume your hold on "
 msgstr "Återuppta din reservation den "
@@ -8514,7 +8564,7 @@ msgstr "SMS-nummer:"
 msgid "SMS provider:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:98
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:96
 #, c-format
 msgid "SRW-DC"
 msgstr ""
@@ -8544,7 +8594,7 @@ msgstr "Lördag"
 msgid "Save"
 msgstr "Spara"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:38
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:36
 #, c-format
 msgid "Save record "
 msgstr "Spara posten"
@@ -8560,8 +8610,8 @@ msgid "Save to another list"
 msgstr "Spara till en annan lista"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:14
-#, c-format
-msgid "Save to your lists "
+#, fuzzy, c-format
+msgid "Save to your lists"
 msgstr "Spara till dina listor "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
@@ -8622,7 +8672,7 @@ msgstr "Sök "
 msgid "Search %s %s (in %s only) %s %s "
 msgstr "Sök %s %s (endast i %s) %s %s "
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:73
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:71
 #, c-format
 msgid "Search for this title in:"
 msgstr "Sök efter denna titel i:"
@@ -8703,8 +8753,8 @@ msgstr "Avsnitt:"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:345
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:198
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:448
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:206
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:457
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:91
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:93
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:96
@@ -9049,7 +9099,7 @@ msgstr "Logga in med din e-postadress"
 msgid "Similar items"
 msgstr "Liknande artiklar"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:92
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:90
 #, c-format
 msgid "Simple DC-RDF"
 msgstr ""
@@ -9235,7 +9285,7 @@ msgstr "Statistik"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:169
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:542
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:551
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:827
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1171
 #, c-format
@@ -9243,7 +9293,7 @@ msgid "Status"
 msgstr "Status"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:220
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:606
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:615
 #, c-format
 msgid "Status:"
 msgstr "Status:"
@@ -9314,7 +9364,7 @@ msgstr "Ämne: %s "
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:909
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:913
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:186
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:300
 #, c-format
@@ -9333,7 +9383,7 @@ msgid "Submit changes"
 msgstr "Skicka ändringarna"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:903
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:907
 msgid "Submit update request"
 msgstr "Skicka ditt uppdateringsförslag"
 
@@ -9459,26 +9509,26 @@ msgstr "Söndagar"
 msgid "Surveys"
 msgstr "Översikter"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:649
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:667
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:670
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:678
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:553
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:659
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:677
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:680
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:688
 #, c-format
 msgid "Suspend"
 msgstr "Stäng av"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:701
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:711
 #, c-format
 msgid "Suspend all holds"
 msgstr "Stoppa alla reservationer"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #, c-format
 msgid "Suspend until:"
 msgstr "Stäng av tills:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:658
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:668
 #, c-format
 msgid "Suspend your hold on "
 msgstr "Pausa reservationen from "
@@ -9890,7 +9940,7 @@ msgstr ""
 "Den har inte lagts till. "
 
 #. %1$s:  message_value 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:41
 #, c-format
 msgid "The transaction id '%s' for this payment is invalid."
 msgstr ""
@@ -10135,10 +10185,10 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:566
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:251
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:154
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:362
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:411
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:535
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:371
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:420
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:52
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:219
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:119
@@ -10219,7 +10269,7 @@ msgstr "Översta nivån"
 msgid "Topics"
 msgstr "Ämnen"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:87
 #, c-format
 msgid "Total due"
 msgstr "Totalt skyldig"
@@ -10294,19 +10344,19 @@ msgstr "Webbadress: %s "
 msgid "Unable to add one or more tags."
 msgstr "Det går inte att lägga till en eller flera taggar."
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:30
 #, fuzzy, c-format
 msgid "Unable to connect to PayPal."
 msgstr "Det går inte att lägga till en eller flera taggar."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:924
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:928
 #, fuzzy
 msgid "Unable to update your setting!"
 msgstr "Det går inte att lägga till en eller flera taggar."
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:54
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:33
 #, fuzzy, c-format
 msgid "Unable to verify payment."
@@ -10322,7 +10372,7 @@ msgstr "Ej tillgänglig (förlorad eller saknad)"
 msgid "Unavailable issues"
 msgstr "Ej tillgängliga utgåvor"
 
-#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:28
+#: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:26
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:141
 #, c-format
@@ -10403,7 +10453,7 @@ msgstr ""
 "Det vanligaste skälet till att konton stängs av är obetalda avgifter för "
 "förseningar eller skadade medier. Om "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, fuzzy, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
@@ -10417,7 +10467,7 @@ msgstr ""
 msgid "VHS tape / Videocassette"
 msgstr "VHS-band / videokassett"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:870
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:874
 #, c-format
 msgid "Verification:"
 msgstr "Verifiering:"
@@ -10451,8 +10501,8 @@ msgid "View details for this title"
 msgstr "Visa information om den här titeln"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:181
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:431
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:440
 msgid "View on Amazon.com"
 msgstr "Visa på Amazon.com"
 
@@ -10698,7 +10748,7 @@ msgid "You cannot renew this item again. %s "
 msgstr "Det går inte att förnya lånet igen. %s "
 
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #, fuzzy, c-format
 msgid "You cannot renew your books online. Reason: %sYour fines exceed "
 msgstr ""
@@ -10715,8 +10765,8 @@ msgstr "Du kan inte dela en publik lista. "
 msgid "You currently have nothing checked out."
 msgstr "Du har inte lånat något."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:321
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:335
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:330
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "Du är skyldig förseningsavgifter om totalt:"
@@ -10780,7 +10830,7 @@ msgstr ""
 msgid "You followed an outdated link e.g. from a search engine or a bookmark."
 msgstr "Du följde en gammal länk från t.ex. en sökmotor eller ett bokmärke"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:349
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:358
 #, c-format
 msgid "You have a credit of:"
 msgstr "Ditt aktuella tillgodobelopp är:"
@@ -10796,7 +10846,7 @@ msgstr "Du har redan beställt den här titeln."
 msgid "You have checked out too many items and can't check out any more. %s "
 msgstr "Du har lånat för många artiklar och kan inte låna fler. %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:169
 #, c-format
 msgid "You have no fines or charges"
 msgstr "Du har inga förseningsavgifter eller andra avgifter"
@@ -10810,7 +10860,7 @@ msgstr ""
 "Du har inte fyllt i alla fält som krävs. Fyll i alla tomma fält och skicka "
 "in igen."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:317
 #, c-format
 msgid "You have nothing checked out"
 msgstr "Du har just nu inga lån"
@@ -10915,7 +10965,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  IF debarred_comment 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:42
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:107
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:114
 #, fuzzy, c-format
 msgid "Your account has been frozen. %s Comment: "
 msgstr "Ditt konto är avstängt%s tills "
@@ -10941,6 +10991,11 @@ msgstr ""
 #, c-format
 msgid "Your account has expired. %s "
 msgstr "Ditt konto har upphört att gälla. %s "
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
+#, c-format
+msgid "Your account is frozen because it has been discharged. "
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:3
 #, c-format
@@ -11041,7 +11096,7 @@ msgstr "Nedladdningen ska börja automatiskt."
 msgid "Your edited comment (preview, pending approval)"
 msgstr "Din redigerade kommentar (förhandsgranskning - inväntar godkännande)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:19
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:20
 #, c-format
 msgid "Your fines and charges"
 msgstr "Dina övertidsavgifter och avgifter"
@@ -11059,7 +11114,7 @@ msgstr ""
 ", reservationer kan inte göras eftersom ditt lånekort har markerats som "
 "stulet/förkommet."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
 #, fuzzy, c-format
 msgid "Your library card has been marked as lost or stolen. "
 msgstr ""
@@ -11097,16 +11152,18 @@ msgstr "Dina listor:"
 #. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
 #. %2$s:  IF error == 'card_expired' 
 #. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'on_reserve' 
-#. %5$s:  END 
+#. %4$s:  ELSIF error == 'too_soon' 
+#. %5$s:  ELSIF error == 'on_reserve' 
 #. %6$s:  END 
+#. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Your loan renewal failed because of the following reason(s): %s %s Your "
 "account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s This item is "
-"on hold for another patron. %s %s "
+"have renewed this item the maximum number of times allowed. %s It is too "
+"soon after the checkout date for this item to be renewed. %s This item is on "
+"hold for another patron. %s %s "
 msgstr ""
 "Ditt omlån kunde inte genomföras av följande skäl: %s %s Ditt konto har gått "
 "ut. Vänligen kontakta biblioteket för mer information. %s Du har förnyat "
@@ -11132,7 +11189,7 @@ msgstr "Ditt lösenord har ändrats"
 #. For the first occurrence,
 #. %1$s:  minpasslen 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:837
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Ditt lösenord måste innehålla minst %s tecken."
@@ -11143,7 +11200,7 @@ msgid "Your payment"
 msgstr "Din kommentar"
 
 #. %1$s:  message_value 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:35
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:36
 #, c-format
 msgid "Your payment of $%s has been processed successfully!"
 msgstr ""
@@ -11199,7 +11256,7 @@ msgid "Your search returned %s results."
 msgstr "Din sökning returnerade %s resultat."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:924
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:928
 #, fuzzy
 msgid "Your setting has been updated!"
 msgstr "Din lånehistorik har tagits bort."
@@ -11305,6 +11362,17 @@ msgid ""
 msgstr ""
 "[%% PROCESS show reference heading=seefro.heading linkType='see from' "
 "type=seefro.type %%] "
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:114
+#, fuzzy, c-format
+msgid ""
+"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
+"Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
+"defined('branchcode') && hidden.defined('categorycode') %%] "
+msgstr ""
+"%s [%% UNLESS hidden.defined('phone') && hidden.defined('phone pro') && "
+"hidden.defined('mobile') && hidden.defined('email') && hidden."
+"defined('emailpro') && hidden.defined('fax') %%] "
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:1
 #, c-format
@@ -11848,7 +11916,7 @@ msgstr "show_holds"
 msgid "show_loans"
 msgstr "show_loans"
 
-#. %1$s:  RESERVE.datesent | $KohaDates 
+#. %1$s:  transfer.datesent | $KohaDates 
 #. %2$s:  ELSIF ( RESERVE.suspend ) 
 #. %3$s:  IF ( RESERVE.suspend_until ) 
 #. %4$s:  RESERVE.suspend_until 
@@ -11860,7 +11928,7 @@ msgstr "show_loans"
 #. %10$s:  END 
 #. %11$s:  END 
 #. %12$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:626
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:636
 #, fuzzy, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
@@ -11970,7 +12038,7 @@ msgstr ""
 "den unika låntagaridentifieraren i ILS; samma identifierare som returneras "
 "av LookupPatron och AuthenticatePatron"
 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, fuzzy, c-format
 msgid "there was a problem processing your payment"
@@ -11992,7 +12060,7 @@ msgstr "för att skicka en kommentar."
 msgid "unAPI"
 msgstr "unAPI"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:705
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:715
 #, c-format
 msgid "until "
 msgstr "tills "
@@ -12131,7 +12199,7 @@ msgid "your messaging"
 msgstr "dina meddelanden"
 
 #. %1$s:  payment 
-#: opac-tmpl/bootstrap/en/modules/opac-account.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-account.tt:61
 #, c-format
 msgid "your payment of %s has been applied to your account"
 msgstr ""
@@ -12183,7 +12251,7 @@ msgid "your tags"
 msgstr "dina taggar"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:300
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:654
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:664
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:135
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:262
 #, c-format

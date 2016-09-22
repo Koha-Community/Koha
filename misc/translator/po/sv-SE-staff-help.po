@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION.\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-16 18:17-0300\n"
+"POT-Creation-Date: 2016-09-17 18:49-0300\n"
 "PO-Revision-Date: 2015-05-22 09:29+0100\n"
 "Last-Translator: Viktor Sarge <viktor.sarge@regionhalland.se>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -774,10 +774,12 @@ msgstr "(! betyder 'inte synlig' eller vid minimering 'inte minimerad')"
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -899,6 +901,7 @@ msgstr "(! betyder 'inte synlig' eller vid minimering 'inte minimerad')"
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
@@ -1396,6 +1399,14 @@ msgid ""
 msgstr ""
 "En layout används för att definiera de fält du vill visa på dina etiketter."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:5
+#, c-format
+msgid ""
+"A library EAN is the identifier the vendor gives the library to send back to "
+"them so they know which account to use when billing. One EDI account can "
+"have multiple EANs."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:20
 #, c-format
 msgid "A list can also be created from the catalog search results"
@@ -1417,6 +1428,13 @@ msgid ""
 msgstr ""
 "En lista över alla mottagarlistor för periodika som låntagaren hör till "
 "kommer att vara tillgängliga via fliken 'Mottagarlistor' i låntagarposten."
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:5
+#, c-format
+msgid ""
+"A log of all messages sent and received via EDIFACT can be found under "
+"EDIFACT Messages."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:52
 #, c-format
@@ -5385,6 +5403,11 @@ msgstr ""
 msgid "Duration: 7 days"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:3
+#, c-format
+msgid "EDIFACT messages"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:21
 #, c-format
 msgid ""
@@ -5510,6 +5533,11 @@ msgstr ""
 "Varje sektion med inställningar kan sorteras alfabetiskt genom att klicka på "
 "den lilla nedåtriktade pilen till höger om ordet 'Inställning' i "
 "kolumnrubriken"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:13
+#, c-format
+msgid "Each vendor will have one account."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:106
 #, c-format
@@ -5921,6 +5949,11 @@ msgstr "Ange värdet 'EBOK' (eller din kod för objekttypen e-bok)"
 #, c-format
 msgid "Enter your tax rate if your library is charged taxes on orders."
 msgstr "Ange skattesatsen om biblioteket måste betala skatt för beställningar."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:11
+#, c-format
+msgid "Enter your vendor information in the form that appears."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:19
 #, c-format
@@ -6779,6 +6812,13 @@ msgstr ""
 "Här kan du se alla förslag som låntagaren gjort och deras status, du kan "
 "även skapa inköpsförslag i låntagarens namn genom att klicka på knappen "
 "'Nytt inköpsförslag' längst upp."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:5
+#, c-format
+msgid ""
+"From here you can set up the information needed to connect to your "
+"acquisitions vendors"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
@@ -10593,6 +10633,12 @@ msgstr "I formuläret som visas måste du ange minst ett datum att söka efter."
 msgid "In the form that appears you want to enter the basics about your fund."
 msgstr "I formuläret som visas anger du basinformation om budgetstället."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:9
+#, fuzzy, c-format
+msgid ""
+"In the form that appears, enter the information provided by your vendor."
+msgstr "I formuläret som visas anger du basinformation om budgetstället."
+
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:41
 #, c-format
 msgid ""
@@ -11342,6 +11388,11 @@ msgstr ""
 "posten som skapas vid analytisk katalogisering är inte fysiskt åtskild från "
 "huvudobjektet. Mer information om Analytisk katalogisering finns i kapitel "
 "13 i AACR2."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:3
+#, c-format
+msgid "Library EANs"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:74
 #, c-format
@@ -12204,6 +12255,11 @@ msgstr ""
 "'lika med' eller 'inte lika med' det som definieras om 'Värde'. En post med "
 "999$9 = 'XXX YYY' kommer inte att höra till en resultatuppsättning där "
 "villkoret är 999$9 = 'XXX'."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, fuzzy, c-format
+msgid "Note: Before you begin, you must set up at least one "
+msgstr "Innan beställningar kan göras måste du ange minst en leverantör."
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:41
 #, c-format
@@ -14429,6 +14485,16 @@ msgstr "Se den fullständiga dokumentationen för Valutor och växelkurser i "
 msgid "See the full documentation for Custom Reports in the "
 msgstr "Se den fullständiga dokumentationen för Anpassade rapporter i "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
+#, fuzzy, c-format
+msgid "See the full documentation for EDI accounts in the "
+msgstr "Se den fullständiga dokumentationen för Tillgångar i "
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
+#, fuzzy, c-format
+msgid "See the full documentation for EDIFACT messages in the "
+msgstr "Se den fullständiga dokumentationen för Kommentarer i "
+
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
 #, c-format
 msgid "See the full documentation for Editing Patrons in the "
@@ -14557,6 +14623,11 @@ msgstr "Se den fullständiga dokumentationen för Etikettmallar i "
 #, c-format
 msgid "See the full documentation for Libraries &amp; Groups in the "
 msgstr "Se den fullständiga dokumentationen för Bibliotek &amp; grupper i "
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
+#, fuzzy, c-format
+msgid "See the full documentation for Library EANs in the "
+msgstr "Se den fullständiga dokumentationen för Listor i "
 
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #, c-format
@@ -18783,6 +18854,13 @@ msgstr ""
 "För att lägga till en leverantör klickar du på knappen 'Ny leverantör' på "
 "inköpssidan."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:9
+#, fuzzy, c-format
+msgid "To add account information, click the 'New account' button."
+msgstr ""
+"För att skapa en ny lista med låntagare klickar du på knappen 'Ny "
+"låntagarlista'"
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:9
 #, c-format
 msgid ""
@@ -18791,6 +18869,13 @@ msgid ""
 msgstr ""
 "För att lägga till ytterligare värden i rullgardinsmenyn för manuell "
 "faktura, lägger du till dem till det auktoriserade värdet MANUAL_INV"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:7
+#, fuzzy, c-format
+msgid "To add an EAN, click the 'New EAN' button."
+msgstr ""
+"För att lägga till en leverantör klickar du på knappen 'Ny leverantör' på "
+"inköpssidan."
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:57
 #, c-format
@@ -20145,6 +20230,16 @@ msgstr "Värden som är fördefinierade i Koha är:"
 #, c-format
 msgid "Vendor Contracts"
 msgstr "Leverantörsavtal"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:3
+#, fuzzy, c-format
+msgid "Vendor EDI accounts"
+msgstr "Leverantörsavtal"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, fuzzy, c-format
+msgid "Vendor in Acquisitions"
+msgstr "4 = Inköp"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:13
 #, c-format
@@ -22657,10 +22752,12 @@ msgstr "hantering "
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -22781,6 +22878,7 @@ msgstr "hantering "
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17

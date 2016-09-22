@@ -17,11 +17,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha\n"
-"POT-Creation-Date: 2016-08-16 17:39-0300\n"
+"POT-Creation-Date: 2016-09-17 18:23-0300\n"
 "PO-Revision-Date: 2016-08-19 15:33+0000\n"
 "Last-Translator: simone <pascale.nalon@mines-paristech.fr>\n"
-"Language-Team: French (France) "
-"(http://www.transifex.com/projects/p/koha/language/fr_FR/)\n"
+"Language-Team: French (France) (http://www.transifex.com/projects/p/koha/"
+"language/fr_FR/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -815,10 +815,12 @@ msgstr "(! signifie \"non visible\" ou \"non replié\")"
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -940,6 +942,7 @@ msgstr "(! signifie \"non visible\" ou \"non replié\")"
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
@@ -1085,11 +1088,11 @@ msgid ""
 "title b Remainder of title My remainder 245 ## - TITLE STATEMENT a Title My "
 "third title "
 msgstr ""
-"008 - FIXED-LENGTH DATA ELEMENTS--GENERAL INFORMATION @ 140211b xxu||||| ||||"
-" 00| 0 eng d 100 ## - MAIN ENTRY--PERSONAL NAME un Nom Propre Mon auteur 245 "
-"## - TITLE STATEMENT un Titre Mon premier titre un Titre Mon second titre b "
-"Reste du titre Mon Reste 245 ## - TITLE STATEMENT un Titre Mon troisième "
-"titre"
+"008 - FIXED-LENGTH DATA ELEMENTS--GENERAL INFORMATION @ 140211b xxu||||| "
+"|||| 00| 0 eng d 100 ## - MAIN ENTRY--PERSONAL NAME un Nom Propre Mon auteur "
+"245 ## - TITLE STATEMENT un Titre Mon premier titre un Titre Mon second "
+"titre b Reste du titre Mon Reste 245 ## - TITLE STATEMENT un Titre Mon "
+"troisième titre"
 
 #: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:44
 #, c-format
@@ -1462,6 +1465,14 @@ msgstr ""
 "Une disposition est utilisée pour définir les champs que vous voulez voir "
 "sur les étiquettes."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:5
+#, c-format
+msgid ""
+"A library EAN is the identifier the vendor gives the library to send back to "
+"them so they know which account to use when billing. One EDI account can "
+"have multiple EANs."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:20
 #, c-format
 msgid "A list can also be created from the catalog search results"
@@ -1486,6 +1497,13 @@ msgid ""
 msgstr ""
 "Toutes les listes de routages auxquelles un adhérent appartient sont "
 "consultables dans l'onglet 'Listes de routage' de sa fiche."
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:5
+#, c-format
+msgid ""
+"A log of all messages sent and received via EDIFACT can be found under "
+"EDIFACT Messages."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:52
 #, c-format
@@ -5609,6 +5627,11 @@ msgstr "Durée : 10 jours"
 msgid "Duration: 7 days"
 msgstr "Durée : 7 jours"
 
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:3
+#, c-format
+msgid "EDIFACT messages"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:21
 #, c-format
 msgid ""
@@ -5738,6 +5761,11 @@ msgid ""
 msgstr ""
 "Chaque section de préférences peut être triée en cliquant sur la petite "
 "flèche qui se trouve sur la droite du mot Préférence de l'en-tête de colonne."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:13
+#, c-format
+msgid "Each vendor will have one account."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:106
 #, c-format
@@ -6163,6 +6191,11 @@ msgid "Enter your tax rate if your library is charged taxes on orders."
 msgstr ""
 "Entrer le taux de votre TVA si votre bibliothèque est soumise à une taxe sur "
 "les commandes."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:11
+#, c-format
+msgid "Enter your vendor information in the form that appears."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:19
 #, c-format
@@ -7075,6 +7108,13 @@ msgstr ""
 "De là vous pouvez voir toutes les suggestions faites par l'adhérent et leur "
 "statut, vous pouvez aussi créer une suggestion d'achat au nom de l'adhérent "
 "en cliquant sur le bouton 'Nouvelle suggestion d'achat' en haut de la page."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:5
+#, c-format
+msgid ""
+"From here you can set up the information needed to connect to your "
+"acquisitions vendors"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
@@ -8188,8 +8228,8 @@ msgid ""
 "If the items are checked out you will be presented with an error after "
 "clicking 'Delete selected items' and the items will not be deleted."
 msgstr ""
-"Si les exemplaires sont en prêt, une erreur s'affichera après le clic sur \""
-"Supprimer les exemplaires sélectionnés\" et les exemplaires ne seront pas "
+"Si les exemplaires sont en prêt, une erreur s'affichera après le clic sur "
+"\"Supprimer les exemplaires sélectionnés\" et les exemplaires ne seront pas "
 "supprimés"
 
 #: intranet-tmpl/prog/en/modules/help/tools/batchMod.tt:31
@@ -10756,8 +10796,8 @@ msgid ""
 msgstr ""
 "Dans UNIMARC il y a des plug-ins pour chaque champ 1xx qui sont des champs "
 "codés. Le plug-in est une aide énorme pour le catalogueur! Il y a aussi deux "
-"plug-ins (unimarc_plugin_210c et unimarc_plugin_225a qui peut \"magiquement\""
-" trouver l'éditeur à partir d'un ISBN et la liste des collections pour "
+"plug-ins (unimarc_plugin_210c et unimarc_plugin_225a qui peut \"magiquement"
+"\" trouver l'éditeur à partir d'un ISBN et la liste des collections pour "
 "l'éditeur)"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:28
@@ -11038,6 +11078,14 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgets.tt:15
 #, fuzzy, c-format
 msgid "In the form that appears you want to enter the basics about your fund."
+msgstr ""
+"Dans le formulaire qui s'affiche, entrez les informations de base concernant "
+"votre poste budgétaire."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:9
+#, fuzzy, c-format
+msgid ""
+"In the form that appears, enter the information provided by your vendor."
 msgstr ""
 "Dans le formulaire qui s'affiche, entrez les informations de base concernant "
 "votre poste budgétaire."
@@ -11706,7 +11754,8 @@ msgstr "Créateur d'étiquette"
 #: intranet-tmpl/prog/en/modules/help/admin/items_search_fields.tt:12
 #, fuzzy, c-format
 msgid "Label is what will appear on the item search page"
-msgstr "L'étiquette est ce qui apparaîtra sur la page de recherche d'exemplaire"
+msgstr ""
+"L'étiquette est ce qui apparaîtra sur la page de recherche d'exemplaire"
 
 #. %1$s:  fields.008.0.substr( 28, 3 ) 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:128
@@ -11809,6 +11858,11 @@ msgstr ""
 "bibliographiques de dépouillement distinctes pour les articles, chapitres, "
 "sections, etc., inclus dans un livre ou un périodique. Pour en savoir plus "
 "sur le catalogage analytique consultez le chapitre 13 des AACR2"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:3
+#, c-format
+msgid "Library EANs"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:74
 #, c-format
@@ -12714,6 +12768,13 @@ msgstr ""
 "strictement égal au contenu de 'Valeur', ou strictement différent. Une "
 "notice ayant 999$9 = 'XXX YYY' ne sera pas placée dans un jeu de données "
 "dont la condition est 999$9 = 'XXX'."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, fuzzy, c-format
+msgid "Note: Before you begin, you must set up at least one "
+msgstr ""
+"Avant de saisir une commande, vous devez d'abord saisir au moins un "
+"fournisseur."
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:41
 #, c-format
@@ -15040,6 +15101,16 @@ msgstr ""
 msgid "See the full documentation for Custom Reports in the "
 msgstr "Pour plus d'information, voir le "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
+#, fuzzy, c-format
+msgid "See the full documentation for EDI accounts in the "
+msgstr "Voir la documentation complète sur les Postes budgétaires dans le "
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
+#, fuzzy, c-format
+msgid "See the full documentation for EDIFACT messages in the "
+msgstr "Voir la documentation complète sur les Commentaires dans le "
+
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
 #, c-format
 msgid "See the full documentation for Editing Patrons in the "
@@ -15171,6 +15242,11 @@ msgstr "Voir la documentation complète sur les Modèles d'étiquette dans le "
 #, c-format
 msgid "See the full documentation for Libraries &amp; Groups in the "
 msgstr "Voir la documentation complète sur les Sites &amp; Groupes dans le "
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
+#, fuzzy, c-format
+msgid "See the full documentation for Library EANs in the "
+msgstr "Voir la documentation complète sur les Listes dans le "
 
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #, c-format
@@ -17140,8 +17216,8 @@ msgid ""
 "record via Z39.50/SRU' from the 'Edit' menu."
 msgstr ""
 "L'autre option consiste à recherche par Z39.50 une notice plus complète qui "
-"remplacera votre notice. Choisissez dans le menu \"Modifier\" l'option \""
-"Remplacer la notice\" par Z39.50/SRU."
+"remplacera votre notice. Choisissez dans le menu \"Modifier\" l'option "
+"\"Remplacer la notice\" par Z39.50/SRU."
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:25
 #, c-format
@@ -19586,6 +19662,13 @@ msgstr ""
 "Pour ajouter un fournisseur, cliquez sur le bouton \"Ajouter un fournisseur"
 "\" de la page d'accueil des Acquisitions"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:9
+#, fuzzy, c-format
+msgid "To add account information, click the 'New account' button."
+msgstr ""
+"Pour créer une nouvelle liste, cliquez sur le bouton 'Nouvelle liste "
+"d'adhérents'"
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:9
 #, c-format
 msgid ""
@@ -19594,6 +19677,13 @@ msgid ""
 msgstr ""
 "Pour ajouter des valeurs à la liste déroulante des types de facture, ajoutez-"
 "les à la liste de valeurs autorisées MANUAL_INV."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:7
+#, fuzzy, c-format
+msgid "To add an EAN, click the 'New EAN' button."
+msgstr ""
+"Pour ajouter un fournisseur, cliquez sur le bouton \"Ajouter un fournisseur"
+"\" de la page d'accueil des Acquisitions"
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:57
 #, c-format
@@ -19762,9 +19852,9 @@ msgid ""
 "collections home\" to return to the main Rotating Collections management "
 "page (or click Rotating Collections in the sidebar)."
 msgstr ""
-"Pour créer une nouvelle collection tournante, cliquez sur le bouton \""
-"Nouvelle Collection\", complétez le Titre et la Description et cliquez sur \""
-"Valider\". Une fois soumis, vous verrez \"Collection ... ajoutée avec "
+"Pour créer une nouvelle collection tournante, cliquez sur le bouton "
+"\"Nouvelle Collection\", complétez le Titre et la Description et cliquez sur "
+"\"Valider\". Une fois soumis, vous verrez \"Collection ... ajoutée avec "
 "succès\"; cliquez sur \"Retour au module collections tournantes\" pour "
 "retourner à la page de gestion principale des Collections Tournantes  (ou "
 "cliquez sur \"Collections Tournantes\" sur la barre latérale)."
@@ -19920,8 +20010,8 @@ msgid ""
 "To edit the subfields associated with the tag, click 'Subfields' to the "
 "right of the tag on the 'MARC Structure' listing"
 msgstr ""
-"Pour modifier les sous-champs associés à une zone, cliquer sur \"Sous-champs'"
-"\" à droite de la zone dans la liste \"Structure MARC\""
+"Pour modifier les sous-champs associés à une zone, cliquer sur \"Sous-"
+"champs'\" à droite de la zone dans la liste \"Structure MARC\""
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:77
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:23
@@ -20997,6 +21087,16 @@ msgstr "Les valeurs prédéfinies dans Koha sont :"
 msgid "Vendor Contracts"
 msgstr "Contrats"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:3
+#, fuzzy, c-format
+msgid "Vendor EDI accounts"
+msgstr "Contrats"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, fuzzy, c-format
+msgid "Vendor in Acquisitions"
+msgstr "4 = Acquisitions"
+
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:13
 #, c-format
 msgid "Vendor information is not required"
@@ -21122,8 +21222,8 @@ msgid ""
 msgstr ""
 "Attention&nbsp;: Cette valeur ne devrait pas changer après que des données "
 "aient été ajoutées à votre catalogue. Si vous deviez changer cette valeur "
-"vous devrez demander à votre administrateur système d'exécuter "
-"misc/batchRebuildBiblioTables.pl."
+"vous devrez demander à votre administrateur système d'exécuter misc/"
+"batchRebuildBiblioTables.pl."
 
 #: intranet-tmpl/prog/en/modules/help/admin/preferences.tt:32
 #, c-format
@@ -23608,10 +23708,12 @@ msgstr "management "
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -23732,6 +23834,7 @@ msgstr "management "
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17

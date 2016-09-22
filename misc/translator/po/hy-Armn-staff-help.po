@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-08-16 17:44-0300\n"
+"POT-Creation-Date: 2016-09-17 18:27-0300\n"
 "PO-Revision-Date: 2016-06-16 12:30+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -793,10 +793,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -918,6 +920,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
@@ -1436,6 +1439,14 @@ msgstr ""
 "Ուրվագիծը օգտագործվում է որպեսզի դու սահմանես այն դաշտերը, որ ցանկանում ես "
 "որ հայտնվեն պիտակների վրա։"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:5
+#, c-format
+msgid ""
+"A library EAN is the identifier the vendor gives the library to send back to "
+"them so they know which account to use when billing. One EDI account can "
+"have multiple EANs."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:20
 #, c-format
 msgid "A list can also be created from the catalog search results"
@@ -1458,6 +1469,13 @@ msgstr ""
 "Պարբերականների բոլոր շրջաբերական ցուցակները որոնց պատկանում է օգտատերը "
 "հասանելի կլինեն 'Շրջաբերական ցուցակներ' տաբից, որը գտնվում է օգտատերերի "
 "գրառման մեջ։"
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:5
+#, c-format
+msgid ""
+"A log of all messages sent and received via EDIFACT can be found under "
+"EDIFACT Messages."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:52
 #, c-format
@@ -5514,6 +5532,11 @@ msgstr "Տևողությունը: 10 օր"
 msgid "Duration: 7 days"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:3
+#, c-format
+msgid "EDIFACT messages"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:21
 #, c-format
 msgid ""
@@ -5641,6 +5664,11 @@ msgstr ""
 "Նախապատվությունների յուրաքանչյուր սեկցիա կարող է տեսակավորվել այբենական "
 "կարգով սեղմելով առաջնորդողի սյունակի 'Նախապատվություններ' բառից աջ ընկած "
 "ներքև ուղղված փոքրիկ սլաքի վրա"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:13
+#, c-format
+msgid "Each vendor will have one account."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:106
 #, c-format
@@ -6053,6 +6081,11 @@ msgstr "Մուտք արա 'EBOOK' արժեքը (կամ քո էլ. գրքի նյ�
 msgid "Enter your tax rate if your library is charged taxes on orders."
 msgstr ""
 "Մուտք արա հարկի փոխարժեքը եթե քո գրադարանը պատվերներից գումար է գանձում։"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:11
+#, c-format
+msgid "Enter your vendor information in the form that appears."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:19
 #, c-format
@@ -6930,6 +6963,13 @@ msgstr ""
 "Այստեղից դու կարող ես տեսնել օգտատերի կողմից արված բոլոր առաջարկենրը և դրանց "
 "կարգավիճակները, դու կարող ես նաև ստեղծել գնման առաջարկ կախված օգտատիրոջ "
 "պահվածքից, սեղմելով վրին մասում գտնվող 'Նոր գնման առաջարկի' կոճակը։"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:5
+#, c-format
+msgid ""
+"From here you can set up the information needed to connect to your "
+"acquisitions vendors"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
@@ -10805,6 +10845,12 @@ msgstr ""
 msgid "In the form that appears you want to enter the basics about your fund."
 msgstr "Հայտնվող ձևանմուշում մուտք արա քո դրամագլխի հիմնական մասերը։"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:9
+#, fuzzy, c-format
+msgid ""
+"In the form that appears, enter the information provided by your vendor."
+msgstr "Հայտնվող ձևանմուշում մուտք արա քո դրամագլխի հիմնական մասերը։"
+
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:41
 #, c-format
 msgid ""
@@ -11563,6 +11609,11 @@ msgstr ""
 "մատեն գրառում է ստեղծվում վերնագրի համար, այն ֆիզիկապես չի տարանջատված "
 "հիմնական նյութից։ Սովորիր ավելին Վերլուծականի մասին Անգլո Ամերիկյան "
 "քարտագրման օրենքների (AACR2) գլուխ 13-ում։"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:3
+#, c-format
+msgid "Library EANs"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:74
 #, c-format
@@ -12449,6 +12500,12 @@ msgstr ""
 "ճշգրտտրեն 'հավասար է' կամ 'հավասար չէ' նրան ինչ որ սահմանված է 'Արժեքում'։ "
 "Գրառումը որ ունի 999$9 = 'XXX YYY' չի պատկանի այն բազմությանը որտեղ պայմանն "
 "է 999$9 = 'XXX'."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, fuzzy, c-format
+msgid "Note: Before you begin, you must set up at least one "
+msgstr ""
+"Մինչ որևէ պատվեր տեղադրելը դու պետք է մուտք անես առնվազն մեկ մատակարար։"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:41
 #, c-format
@@ -14722,6 +14779,16 @@ msgstr "Տես լրիվ փաստաթղթերը Արտարժույթների և �
 msgid "See the full documentation for Custom Reports in the "
 msgstr "Տես լրիվ փաստաթղթերը Մասնավորեցված հաշվետվությունների համար "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
+#, fuzzy, c-format
+msgid "See the full documentation for EDI accounts in the "
+msgstr "Տես լրիվ փաստաթղթերը Բյուջեների համար "
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
+#, fuzzy, c-format
+msgid "See the full documentation for EDIFACT messages in the "
+msgstr "Տես լրիվ փաստաթղթերը Մեկնաբանությունների համար "
+
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
 #, c-format
 msgid "See the full documentation for Editing Patrons in the "
@@ -14846,6 +14913,11 @@ msgstr "Տես լրիվ փաստաթղթերը Պիտակների ձևերի հ�
 #, c-format
 msgid "See the full documentation for Libraries &amp; Groups in the "
 msgstr "Տես լրիվ փաստաթղթերը Գրադարանների &amp; Խմբերի համար "
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
+#, fuzzy, c-format
+msgid "See the full documentation for Library EANs in the "
+msgstr "Տես լրիվ փաստաթղթերը Ցուցակների համար "
 
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #, c-format
@@ -19153,6 +19225,12 @@ msgid ""
 msgstr ""
 "Մատակարար ավելացնելու համար Համալրում էջից սեղմիր 'Նոր Մատակարար'-ի վրա։"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:9
+#, fuzzy, c-format
+msgid "To add account information, click the 'New account' button."
+msgstr ""
+"Ընթերցողների նոր ցուցակ ստեղծելու համար սեղմիր 'Ընթերցողի նոր ցուցակ' կոճակը"
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:9
 #, c-format
 msgid ""
@@ -19161,6 +19239,12 @@ msgid ""
 msgstr ""
 "Ձեռքով գրվող ինվոյսին տեսակին լրացուցիչ տվյալներ ավելացնելու համար բաց "
 "ընտրացանկը, ավելացրու դրանք MANUAL_INV թույլատրված արժեքին"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:7
+#, fuzzy, c-format
+msgid "To add an EAN, click the 'New EAN' button."
+msgstr ""
+"Մատակարար ավելացնելու համար Համալրում էջից սեղմիր 'Նոր Մատակարար'-ի վրա։"
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:57
 #, c-format
@@ -20542,6 +20626,16 @@ msgstr "Կոհայում նախապես կարգաբերված տվյալներ�
 #, c-format
 msgid "Vendor Contracts"
 msgstr "Մատակարարի կոնտրակտներ"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:3
+#, fuzzy, c-format
+msgid "Vendor EDI accounts"
+msgstr "Մատակարարի կոնտրակտներ"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, fuzzy, c-format
+msgid "Vendor in Acquisitions"
+msgstr "4 = Համալրում"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:13
 #, c-format
@@ -23118,10 +23212,12 @@ msgstr "Կառավարում "
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -23242,6 +23338,7 @@ msgstr "Կառավարում "
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
