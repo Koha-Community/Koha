@@ -228,7 +228,7 @@ $(document).ready(function() {
                         });
 
                         if ( oObj.enumchron ) {
-                            title += ' ' + oObj.enumchron;
+                            title += " (" + oObj.enumchron + ")";
                         }
 
                         title += "</a></span>";
@@ -504,7 +504,7 @@ $(document).ready(function() {
                             });
 
                             if ( oObj.enumchron ) {
-                                title += ' ' + oObj.enumchron;
+                                title += " (" + oObj.enumchron + ")";
                             }
 
                             title += "</a></span>";
