@@ -998,9 +998,12 @@ $template->{VARS}->{IDreamBooksReviews} = C4::Context->preference('IDreamBooksRe
 $template->{VARS}->{IDreamBooksReadometer} = C4::Context->preference('IDreamBooksReadometer');
 $template->{VARS}->{IDreamBooksResults} = C4::Context->preference('IDreamBooksResults');
 
-if ($offset == 0 && IsOverDriveEnabled()) {
-    $template->param(OverDriveEnabled => 1);
-    $template->param(OverDriveLibraryID => C4::Context->preference('OverDriveLibraryID'));
+if ($offset == 0) {
+    if (IsOverDriveEnabled()) {
+        $template->param(OverDriveEnabled => 1);
+        $template->param(OverDriveLibraryID => C4::Context->preference('OverDriveLibraryID'));
+    }
+    $template->param(RecordedBooksEnabled => C4::Context->preference( 'RecordedBooksClientSecret' ) && C4::Context->preference( 'RecordedBooksLibraryID' ));
 }
 
     $template->param( borrowernumber    => $borrowernumber);

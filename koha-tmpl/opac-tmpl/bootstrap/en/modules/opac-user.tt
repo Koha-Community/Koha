@@ -163,9 +163,14 @@
                             [% IF ( OverDriveCirculation ) %]
                             <li><a href="#opac-user-overdrive">OverDrive Account</a></li>
                             [% END %]
+                            [% IF ( RecordedBooksCirculation ) %]
+                            <li><a href="#opac-user-recordedbooks">RecordedBooks Account</a></li>
+                            [% END %]
                         </ul>
 
                         <div id="opac-user-overdrive">
+                        </div>
+                        <div id="opac-user-recordedbooks">
                         </div>
                         <div id="opac-user-checkouts">
                             [% IF ( issues_count ) %]
@@ -893,6 +898,9 @@
 [% IF ( OverDriveCirculation ) %]
 [% INCLUDE 'overdrive-checkout.inc' %]
 [% END %]
+[% IF ( RecordedBooksCirculation ) %]
+[% INCLUDE 'recordedbooks-checkout.inc' %]
+[% END %]
 
 [% INCLUDE 'opac-bottom.inc' %]
 
@@ -1065,4 +1073,20 @@
     });
     </script>
     [% END %]
+    [% IF RecordedBooksCirculation %]
+    <script type="text/javascript" src="[% interface %]//[% theme %]/js/recordedbooks.js"></script>
+    <script type="text/JavaScript">
+    $(document).ready(function() {
+    [% IF ( recordedbooks_error ) %]
+        KOHA.RecordedBooks.display_error("#opac-user-recordedbooks", "[% recordedbooks_error.dquote %]");
+    [% END %]
+    [% IF ( recordedbooks_tab ) %]
+        $("#opac-user-views").tabs("select", "#opac-user-recordedbooks");
+    [% END %]
+        $("#opac-user-recordedbooks").each( function() {
+            KOHA.RecordedBooks.display_account_details(this);
+        } );
+    });
+    [% END %]
+    </script>
 [% END %]

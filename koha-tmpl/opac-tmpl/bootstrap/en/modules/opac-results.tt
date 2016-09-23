@@ -590,6 +590,7 @@
 [% END %]
 [% IF ( OpacStarRatings == 'all' || Koha.Preference('Babeltheque') ) %][% Asset.js("lib/jquery/plugins/jquery.rating.js") | $raw %][% END %]
 [% IF ( OverDriveEnabled ) %][% Asset.js("js/overdrive.js") | $raw %][% END %]
+[% IF ( RecordedBooksEnabled ) %][% Asset.js("js/recordedbooks.js") | $raw %][% END %]
 [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 [% Asset.js("js/authtoresults.js") | $raw %]
 [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %]
@@ -899,6 +900,23 @@ $(document).ready(function(){
                 $overdrive_results.html( _( 'Found' ) + ' <a href="/cgi-bin/koha/opac-overdrive-search.pl?q=' + escape( querystring ) + '">' + data.totalItems + ' ' + _( 'results' ) + '</a> ' + _( 'in OverDrive collection' ) );
             } else {
                 $overdrive_results.remove();
+            }
+        } );
+    [% END %]
+    [% IF ( RecordedBooksEnabled ) %]
+        var $recordedbooks_results = $( '<div id="recordedbooks-results">' + _( 'Searching RecordedBooks...' ) + ' <img class="throbber" src="[% interface %]/lib/jquery/plugins/themes/classic/throbber.gif" /></div>' );
+        $( '#numresults' ) .append( ' ' )
+            .append( $recordedbooks_results );
+        KOHA.RecordedBooks.search( querystring, [% OPACnumSearchResults || "null" %], null, function( data ) {
+            if ( data.error ) {
+                $recordedbooks_results.html( _( 'Error searching RecordedBooks collection' )  + ': ' + data.error);
+                return;
+            }
+
+            if ( data.total > 0 ) {
+                $recordedbooks_results.html( _( 'Found' ) + ' <a href="/cgi-bin/koha/opac-recordedbooks-search.pl?q=' + escape( querystring ) + '">' + data.total + ' ' + _( 'results' ) + '</a> ' + _( 'in RecordedBooks collection' ) );
+            } else {
+                $recordedbooks_results.remove();
             }
         } );
     [% END %]

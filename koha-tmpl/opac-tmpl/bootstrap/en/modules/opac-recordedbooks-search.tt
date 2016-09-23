@@ -1,0 +1,168 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; RecordedBooks search for '[% q | html %]'</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/jquery.rating.css" />
+<style>
+.actions a.addtocart {
+    display: inline;
+}
+</style>
+[% END %]
+</head>
+[% INCLUDE 'bodytag.inc' bodyid='recordedbooks-results-page' bodyclass='scrollto' %]
+[% INCLUDE 'masthead.inc' %]
+
+    <div class="main">
+        <ul class="breadcrumb">
+            <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="#">RecordedBooks search for '[% q | html %]'</a></li>
+        </ul>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span2">
+                    [% IF ( OpacNav || OpacNavBottom ) %]
+                        [% INCLUDE 'navigation.inc' %]
+                    [% END %]
+                </div>
+                <div class="span10">
+                    <div id="recordedbooks-results-content" class="maincontent searchresults">
+                        <h1>RecordedBooks search for '[% q | html %]'</h1>
+                            <div id="breadcrumbs">
+                                <p></p>
+                            </div>
+
+                            <div id="top-pages">
+                                <div class="pagination pagination-small">
+                                </div>
+                            </div>
+
+                            <table id="recordedbooks-results-list" class="table table-striped">
+                                <tbody>
+                                </tbody>
+                            </table>
+
+                            <div id="bottom-pages">
+                                <div class="pagination pagination-small">
+                                </div>
+                            </div>
+
+                    </div> <!-- / #recordedbooks-results-content -->
+                </div> <!-- / .span10 -->
+            </div> <!-- / .row-fluid -->
+        </div> <!-- / .container-fluid -->
+    </div> <!-- / .main -->
+
+[% INCLUDE 'recordedbooks-checkout.inc' %]
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/recordedbooks.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.rating.js"></script>
+<script type="text/javascript">
+var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) |html %]";
+var results_per_page = [% OPACnumSearchResults || 20 %];
+
+function search( page ) {
+    $( '#recordedbooks-status' ).html( _("Searching RecordedBooks...") + ' <img class="throbber" src="[% interface %]/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
+
+    KOHA.RecordedBooks.search( querystring, results_per_page, page, function( data ) {
+        if ( data.error ) {
+            $( '#recordedbooks-status' ).html( '<strong class="unavailable">' + _("Error searching RecordedBooks collection") + ': ' + data.error + '</strong>' );
+            return;
+        }
+
+        if ( !data.total ) {
+            $( '#recordedbooks-status' ).html( '<strong>' + _("No results found in the library's RecordedBooks collection.") + '</strong>' );
+            return;
+        }
+
+        $( '#recordedbooks-results-list tbody' ).empty();
+
+        $( '#recordedbooks-status' ).html( '<strong>' + _("Found") + ' ' + data.total + ' ' + _("results in the library's RecordedBooks collection.") + '</strong>' );
+
+        for ( var i = 0; data.items[i]; i++ ) {
+            var prod = data.items[i];
+            var results = [];
+
+            results.push( '<tr>' );
+
+            results.push( '<td class="info"><span class="title">' );
+            if (prod.url) results.push( '<a href="', prod.url, '" target="recordedbooks">' );
+            results.push( prod.title );
+            if (prod.url) results.push( '</a>' );
+            results.push( '</span>' );
+            results.push( '<p>' + _("by") + ' ', prod.author, '</p>' );
+            if (prod.description) results.push( '<p>' + prod.description, '</p>' );
+            results.push( '<span class="results_summary mediatype"><span class="label">' + _("Type:") + ' </span>', prod.media, '</span>' );
+
+            results.push( '</td>' );
+
+            results.push( '<td>' );
+            if ( prod.images && prod.images.medium ) {
+                if (prod.url) results.push( '<a href="', prod.url, '" target="recordedbooks">' );
+                results.push( '<img class="thumbnail" src="', prod.images.medium, '" />' );
+                if (prod.url) results.push( '</a>' );
+            }
+            results.push( '</td>' );
+
+            results.push( '</tr>' );
+            var $tr = $( results.join( '' ));
+            $( '#recordedbooks-results-list tbody' ).append( $tr );
+
+            $tr.find( '.info' ).each(function() {
+                KOHA.RecordedBooks.add_actions(this, prod.isbn);
+            });
+        }
+
+        $( '#recordedbooks-results-list tr:odd' ).addClass( 'highlight' );
+
+        var pages = [];
+
+        var max_page = Math.floor( data.total / results_per_page );
+        if (data.total == page*results_per_page) max_page++;
+
+        if ( page != 1 ) {
+            pages.push( '<li><a class="od-nav" href="#" data-page="' + (page - 1) + '">&laquo; ' + _("Previous") + '</a></li>' );
+        }
+
+        for ( var p = Math.max( 0, page - 9 ); p <= Math.min( max_page, p + 9 ); p++ ) {
+            if ( p == page ) {
+                pages.push( ' <li class="active"><a href="#">' + ( p + 1 ) + '</a></li>' );
+            } else {
+                pages.push( ' <li><a class="od-nav" href="#" data-page="' +  p + '">' + p + '</a></li>' );
+            }
+        }
+
+        if ( page < max_page ) {
+            pages.push( ' <li><a class="od-nav" href="#" data-page="' + (page + 1) + '">' + _("Next") + ' &raquo;</a></li>' );
+        }
+
+        if ( pages.length > 1 ) $( '#top-pages, #bottom-pages' ).find( '.pagination' ).html( '<ul>' + pages.join( '' ) + '</ul>');
+
+        $( '#recordedbooks-results-list input.star' ).rating();
+    } );
+}
+
+$( document ).ready( function() {
+    $( '#breadcrumbs p' )
+        .append( ' ' )
+        .append( '<span id="recordedbooks-status"></span>' );
+
+    $( document ).on( 'click', 'a.od-nav', function() {
+        search( $( this ).data( 'page' ) );
+        return false;
+    });
+
+    [% IF ( loggedinusername ) %]
+    KOHA.RecordedBooks.with_account_details("#breadcrumbs", function() {
+        search( 1 );
+    });
+    [% ELSE %]
+        search( 1 );
+    [% END %]
+} );
+</script>
+[% END %]
