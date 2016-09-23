@@ -105,6 +105,7 @@ generate_config_file() {
         -e "s/__END_BIBLIOS_RETRIEVAL_INFO__/`echo $END_BIBLIOS_RETRIEVAL_INFO`/g" \
         -e "s/__START_AUTHORITIES_RETRIEVAL_INFO__/`echo $START_AUTHORITIES_RETRIEVAL_INFO`/g" \
         -e "s/__END_AUTHORITIES_RETRIEVAL_INFO__/`echo $END_AUTHORITIES_RETRIEVAL_INFO`/g" \
+        -e "s/__API_SECRET__/$API_SECRET/g" \
         -e "s/__DB_NAME__/$mysqldb/g" \
         -e "s/__DB_HOST__/$mysqlhost/g" \
         -e "s/__DB_USER__/$mysqluser/g" \
@@ -403,7 +404,8 @@ DEFAULT_MEMCACHED_PREFIX="koha_"
 UPLOAD_PATH_BASE="/var/lib/koha"
 UPLOAD_DIR="uploads"
 UPLOAD_PATH=""
-
+# Generate a randomizaed API secret
+API_SECRET="$(pwgen -s 64 1)"
 # SRU server variables
 ENABLE_SRU="no"
 SRU_SERVER_PORT=""
