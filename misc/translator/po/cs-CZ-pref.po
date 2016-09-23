@@ -3,16 +3,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2016-06-20 18:39+0000\n"
+"PO-Revision-Date: 2016-09-22 06:02+0000\n"
 "Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
-"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>\n"
+"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1466447991.000000\n"
+"X-POOTLE-MTIME: 1474524137.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -4040,6 +4041,22 @@ msgid "opac.pref#OPACPrivacy# patrons to choose their own privacy settings for t
 msgstr "čtenářům volbu jejich osobních nastavení pro historii výpůjček.  Toto vyžaduje nastavit historii výpůjček a anonymního čtenáře"
 
 # OPAC > Appearance
+msgid "opac.pref#OPACResultsLibrary# . Please note that this feature is currently available for MARC21 and UNIMARC."
+msgstr "Tato možnost je dostupná pro formáty  MARC21 a UNIMARC."
+
+# OPAC > Appearance
+msgid "opac.pref#OPACResultsLibrary# For search results in the OPAC, show the item's"
+msgstr "Ve výsledcích vyhledávání v on-line katalogu zobrazit "
+
+# OPAC > Appearance
+msgid "opac.pref#OPACResultsLibrary# current location"
+msgstr "aktuální knihovnu"
+
+# OPAC > Appearance
+msgid "opac.pref#OPACResultsLibrary# home library"
+msgstr "domovskou knihovnu"
+
+# OPAC > Appearance
 msgid "opac.pref#OPACResultsSidebar# Include the following HTML under the facets in OPAC search results:"
 msgstr "Vložit následující HTML pod fasety ve výsledcích vyledání v OPACu."
 
@@ -5001,7 +5018,7 @@ msgstr "Následující <a href='http://schema.koha-community.org/tables/borrower
 
 # Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the new expiry date on"
-msgstr "Při prodloužování, nový výpůjční termín odvodit z"
+msgstr "Při prodlužování odvodit datum konce registrace z"
 
 # Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current date."
@@ -5009,7 +5026,7 @@ msgstr "aktuálního data."
 
 # Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current membership expiry date."
-msgstr "datumu ukončení registrace."
+msgstr "původního data platnosti."
 
 # Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# (separate columns with |)"
@@ -5401,11 +5418,11 @@ msgstr "používat"
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Availability statuses may show incorrectly in search results if a record has more items than the limit set. Statuses will display correctly in the record details."
-msgstr ""
+msgstr "<br/>Pokud má záznam více jednotek, než je definováno v tomto nastavení, může být status dostupnosti zobrazen ve výsledcích vyhledávání nesprávně. Na podrobném záznamu ale bude tato informace správná vždy."
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Leave empty for no limit."
-msgstr ""
+msgstr "<br/>Pokud nechcete toto zjišťování nijak limitovat, nechte toto nastavení prázdné."
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# For records with many items, only check the availability status for the first"
@@ -5897,7 +5914,7 @@ msgstr "Zobrazovat"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#DisplayIconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the staff client."
-msgstr "formát, cílovou skupinu a typ materiálu v XSLT MARC21 výsledcích a na stránkách s podrobným záznamem v intranetu."
+msgstr "v rozhraní obsluhy ikonky formátu, cílové skupiny a typu materiálu ve výsledcích XSLT MARC21 a na stránkách s detaily."
 
 # Staff Client > Options
 msgid "staff_client.pref#HidePatronName# Don't show"
@@ -6091,9 +6108,9 @@ msgstr "obsluze, aby viděla záznamy v prostém MARC formátu."
 msgid "tools.pref"
 msgstr "Nástroje"
 
-# Tools > Batch item modification
-msgid "tools.pref Batch item modification"
-msgstr "Hromadná úprava jednotek"
+# Tools > Batch item
+msgid "tools.pref Batch item"
+msgstr "Dávkové zpracování"
 
 # Tools > News
 msgid "tools.pref News"
@@ -6111,13 +6128,21 @@ msgstr "Omezit počet obrázku pro tvorbu průkazek uložených v databázi na"
 msgid "tools.pref#ImageLimit# images."
 msgstr "obrazků."
 
-# Tools > Batch item modification
-msgid "tools.pref#MaxItemsForBatch# Process up to"
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToDisplayForBatchDel# Display up to"
+msgstr "Zobrazit maximálně"
+
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToDisplayForBatchDel# items in a single item deletion batch."
+msgstr "jednotek v dávkovém mazání jednotek."
+
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToProcessForBatchMod# Process up to"
 msgstr "Zpracovat maximálně"
 
-# Tools > Batch item modification
-msgid "tools.pref#MaxItemsForBatch# items in a single modification or deletion batch."
-msgstr "jednotek v jedné dávce při hromadném mazání nebo úpravě jednotek."
+# Tools > Batch item
+msgid "tools.pref#MaxItemsToProcessForBatchMod# items in a single item modification batch."
+msgstr "jednotek v dávkové úpravě jednotek."
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# Both OPAC and staff client"
@@ -6274,4 +6299,3 @@ msgstr "Vracet maximálně"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "řádků z výstupů vyžádaných pomocí webové služby."
-
