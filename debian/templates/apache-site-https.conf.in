@@ -30,8 +30,6 @@
 
    ServerName __OPACSERVER__
    SetEnv KOHA_CONF "/etc/koha/sites/__KOHASITE__/koha-conf.xml"
-   SetEnv MEMCACHED_SERVERS "__MEMCACHED_SERVERS__"
-   SetEnv MEMCACHED_NAMESPACE "__MEMCACHED_NAMESPACE__"
    AssignUserID __UNIXUSER__ __UNIXGROUP__
 
    ErrorLog    /var/log/koha/__KOHASITE__/opac-error.log
@@ -60,8 +58,6 @@
 
    ServerName __INTRASERVER__
    SetEnv KOHA_CONF "/etc/koha/sites/__KOHASITE__/koha-conf.xml"
-   SetEnv MEMCACHED_SERVERS "__MEMCACHED_SERVERS__"
-   SetEnv MEMCACHED_NAMESPACE "__MEMCACHED_NAMESPACE__"
    AssignUserID __UNIXUSER__ __UNIXGROUP__
 
    ErrorLog    /var/log/koha/__KOHASITE__/intranet-error.log
