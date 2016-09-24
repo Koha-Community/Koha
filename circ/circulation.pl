@@ -139,6 +139,8 @@ my @failedreturns = $query->multi_param('failedreturn');
 our %return_failed = ();
 for (@failedreturns) { $return_failed{$_} = 1; }
 
+my $searchtype = $query->param('searchtype') || q{contain};
+
 my $findborrower = $query->param('findborrower') || q{};
 $findborrower =~ s|,| |g;
 
@@ -239,8 +241,8 @@ if ($findborrower) {
         my $results = C4::Utils::DataTables::Members::search(
             {
                 searchmember => $findborrower,
-                searchtype => 'contain',
-                dt_params => $dt_params,
+                searchtype   => $searchtype,
+                dt_params    => $dt_params,
             }
         );
         my $borrowers = $results->{patrons};
