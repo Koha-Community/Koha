@@ -1,1 +1,0 @@
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('PatronSelfRegistrationPrefillForm', '1', 'Display password and prefill login form after a patron has self registered', NULL, 'YesNo');
