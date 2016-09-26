@@ -64,7 +64,7 @@ sub search {
         borrowers.borrowernotes, borrowers.branchcode, borrowers.email,
         borrowers.userid, borrowers.dateofbirth, borrowers.categorycode,
         categories.description AS category_description, categories.category_type,
-        branches.branchname";
+        branches.branchname, borrowers.phone";
     my $from = "FROM borrowers
         LEFT JOIN branches ON borrowers.branchcode = branches.branchcode
         LEFT JOIN categories ON borrowers.categorycode = categories.categorycode";

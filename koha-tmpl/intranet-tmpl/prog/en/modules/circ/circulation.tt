@@ -1009,7 +1009,8 @@ No patron matched <span class="ex">[% message | html %]</span>
         var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
         var MSG_CONFIRM_DELETE_MESSAGE = _("Are you sure you want to delete this message? This cannot be undone.");
 
-        columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'issues-table', 'json' ) | $raw %]
+        columns_settings_issues_table = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'issues-table', 'json' ) | $raw %]
+        columns_settings_borrowers_table = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %]
 
         [% IF borrowernumber and patron %]
             if($.cookie("holdfor") != [% patron.borrowernumber | html %]){

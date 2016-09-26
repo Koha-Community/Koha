@@ -546,7 +546,7 @@ $(document).ready(function() {
                     .append(ul)
                     .insertBefore(oSettings.nTableWrapper)
             },
-        }, columns_settings).rowGrouping(
+        }, columns_settings_issues_table).rowGrouping(
             {
                 iGroupingColumnIndex: 1,
                 iGroupingOrderByColumnIndex: 0,

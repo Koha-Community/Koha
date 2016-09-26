@@ -9,6 +9,7 @@
             <th>Category</th>
             <th>Library</th>
             <th>Address</th>
+            <th>Primary phone</th>
         </tr>
     </thead>
     <tbody>
@@ -30,6 +31,7 @@
                 <td>[% Categories.GetName( borrower.categorycode ) | html %]</td>
                 <td>[% Branches.GetName( borrower.branchcode ) | html %]</td>
                 <td>[% borrower.address | html %]</td>
+                <td>[% borrower.phone | html %]</td>
             </tr>
         [% END %]
     </tbody>
