@@ -77,7 +77,7 @@ sub forced_hold_level {
     my $record_level_count = $self->search( { itemnumber => undef } )->count();
     return 'record' if $record_level_count > 0;
 
-    return undef;
+    return;
 }
 
 =head3 type
