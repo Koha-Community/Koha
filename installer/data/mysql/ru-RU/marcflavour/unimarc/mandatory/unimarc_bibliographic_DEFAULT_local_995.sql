@@ -315,7 +315,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '995', '', '', 'Данные о экземплярах и расположение (Koha)', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '995', '0', 0, 0, 'Статус изъятия', '',                       10, 0, 'items.withdrawn',  'WTHDRAWN',   '', 0, '', '', NULL),
+ ('', '', '995', '0', 0, 0, 'Статус изъятия', '',                       10, 0, 'items.withdrawn',  'WITHDRAWN',   '', 0, '', '', NULL),
  ('', '', '995', '1', 0, 0, 'Статус повреждения', '',                   10, 0, 'items.damaged',   'DAMAGED',    '', 0, '', '', NULL),
  ('', '', '995', '2', 0, 0, 'Статус потери/отсутствия', '',             10, 0, 'items.itemlost',  'LOST',       '', 0, '', '', NULL),
  ('', '', '995', '3', 0, 0, 'Статус ограничения доступа', '',           10, 0, 'items.restricted','RESTRICTED', '', 0, '', '', NULL),
