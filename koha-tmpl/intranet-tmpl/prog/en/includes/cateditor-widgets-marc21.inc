@@ -141,8 +141,7 @@ require( [ 'widget' ], function( Widget ) {
 
     Widget.Register( '006@', {
         makeTemplate: function() {
-            var now = new Date();
-            return "a                ";
+            return "a                 ";
         },
         init: function() {
             var $result = $( '<span class="subfield-widget fixed-widget">' + _("Fixed data:") + '<span class="hint widget-loading">' + _("Loading...") + '</span></span>' );
@@ -156,7 +155,6 @@ require( [ 'widget' ], function( Widget ) {
 
     Widget.Register( '007@', {
         makeTemplate: function() {
-            var now = new Date();
             return "a       ";
         },
         init: function() {
