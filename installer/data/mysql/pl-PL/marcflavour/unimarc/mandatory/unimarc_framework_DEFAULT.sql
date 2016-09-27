@@ -118,7 +118,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 -- 		('995', 'Location and Item Information (Koha)', 'Location and Item Information (Koha)', 0, 0, '', '');
 
 -- INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
--- 		('995', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WTHDRAWN', '', '', 0, 0, '', '', '', NULL),
+-- 		('995', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, '', '', '', NULL),
 -- 		('995', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, '', '', '', NULL),
 -- 		('995', '2', 'System code (specific classification or other scheme and edition)', 'System code (specific classification or other scheme and edition)', 0, 0, '', 10, '', '', 'unimarc_en_classcodes.pl', NULL, 0, '', '', '', NULL),
 -- 		('995', '3', 'Classification part', 'Classification part', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
@@ -171,7 +171,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('995', 'Location and Item Information (Koha)', 'Location and Item Information (Koha)', 0, 0, '', '');
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
-               ('995', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WTHDRAWN', '', '', 0, 0, '', '', '', NULL),
+               ('995', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, '', '', '', NULL),
 		('995', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, '', '', '', NULL),
 		('995', '2', 'System code (specific classification or other scheme and edition)', 'System code (specific classification or other scheme and edition)', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
 		('995', '3', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, '', '', '', NULL),
