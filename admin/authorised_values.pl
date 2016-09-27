@@ -167,7 +167,11 @@ if ($op eq 'add_form') {
     );
 
     if ( $already_exists ) {
-        push @messages, {type => 'error', code => 'cat_already_exists' };
+        if ( $new_category eq 'branches' or $new_category eq 'itemtypes' or $new_category eq 'cn_source' ) {
+            push @messages, {type => 'error', code => 'invalid_category_name' };
+        } else {
+            push @messages, {type => 'error', code => 'cat_already_exists' };
+        }
     }
     else { # Insert
         my $av = Koha::AuthorisedValueCategory->new( {
@@ -182,11 +186,11 @@ if ($op eq 'add_form') {
             push @messages, {type => 'error', code => 'error_on_insert_cat' };
         } else {
             push @messages, { type => 'message', code => 'success_on_insert_cat' };
+            $searchfield = $new_category;
         }
     }
 
     $op = 'list';
-    $searchfield = $new_category;
 } elsif ($op eq 'delete') {
     my $av = Koha::AuthorisedValues->new->find( $input->param('id') );
     my $deleted = eval {$av->delete};
