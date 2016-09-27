@@ -301,6 +301,9 @@ sub load_sql_in_order {
     # Make sure subtag_registry.sql is loaded second
     my $subtag_registry = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/mandatory/subtag_registry.sql";
     unshift(@fnames, $subtag_registry);
+    # Make sure authorised value categories are loaded at the beginning
+    my $av_cat = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/mandatory/auth_val_cat.sql";
+    unshift(@fnames, $av_cat);
     # Make sure the global sysprefs.sql file is loaded first
     my $globalsysprefs = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/sysprefs.sql";
     unshift(@fnames, $globalsysprefs);

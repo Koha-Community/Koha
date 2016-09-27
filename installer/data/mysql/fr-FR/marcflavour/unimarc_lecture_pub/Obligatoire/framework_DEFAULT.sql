@@ -31,6 +31,12 @@ INSERT INTO `biblio_framework` (`frameworkcode`, `frameworktext`) VALUES ('MULT'
 INSERT INTO `biblio_framework` (`frameworkcode`, `frameworktext`) VALUES ('PERI', 'Périodique');
 INSERT INTO `biblio_framework` (`frameworkcode`, `frameworktext`) VALUES ('WEB', 'Ressource web');
 
+--
+-- Add some AV categories specific to this file
+--
+
+INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES ('statut'), ('genre'), ('public'), ('local'), ('pcdm');
+
 -- 
 -- Contenu de la table `marc_tag_structure`
 -- 
