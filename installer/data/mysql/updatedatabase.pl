@@ -13885,29 +13885,4 @@ sub CheckVersion {
     }
 }
 
-sub constraint_exists {
-    my ( $table_name, $key_name ) = @_;
-    my $dbh = C4::Context->dbh;
-    my ($exists) = $dbh->selectrow_array(
-        qq|
-        SHOW INDEX FROM $table_name
-        WHERE key_name = ?
-        |, undef, $key_name
-    );
-    return $exists;
-}
-
-sub column_exists {
-    my ( $table_name, $column_name ) = @_;
-    my $dbh = C4::Context->dbh;
-    my ($exists) = $dbh->selectrow_array(
-        qq|
-        SHOW COLUMNS FROM $table_name
-        WHERE Field = ?
-        |, undef, $column_name
-    );
-    return $exists;
-
-}
-
 exit;
