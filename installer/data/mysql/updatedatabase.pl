@@ -13585,6 +13585,7 @@ my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/ato
 opendir( my $dirh, $update_dir );
 foreach my $file ( sort readdir $dirh ) {
     next if $file !~ /\.(sql|perl)$/;  #skip other files
+    next if $file eq 'skeleton.perl'; # skip the skeleton file
     print "DEV atomic update: $file\n";
     if ( $file =~ /\.sql$/ ) {
         my $installer = C4::Installer->new();
