@@ -200,7 +200,7 @@
             <!-- Create or edit housebound_visit -->
             [% ELSIF ( method == 'visit_update_or_create' ) %]
               <h4>Manage housebound deliveries</h4>
-              <form name="form" id="instance_form" method="post" class="toggler"
+              <form name="form" id="instance_form" method="post"
                     action="/cgi-bin/koha/members/housebound.pl">
                 [% IF ( visit ) %]
                   <input type="hidden" name="method" value="editvisitconfirm" />
@@ -322,17 +322,6 @@
 
             <!-- Display a housebound_profile -->
             [% ELSIF ( housebound_profile ) %]
-              <div>
-                <ul class="toolbar">
-                  <li>
-                    <span class="yui-button yui-link-button first-child">
-                      <a href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% borrowernumber %]&method=update_or_create">
-                        Edit
-                      </a>
-                    </span>
-                  </li>
-                </ul>
-              </div>
               <div class="rows">
                 <ol>
                   <li>
@@ -381,20 +370,14 @@
                     [% housebound_profile.notes %]
                   </li>
                 </ol>
+                <div class="action">
+                  <a href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% borrowernumber %]&method=update_or_create">
+                    Edit
+                  </a>
+                </div>
               </div>
               <div>
-                <h4>Deliveries</h4>
-                <div>
-                  <ul class="toolbar">
-                    <li>
-                      <span class="yui-button yui-link-button first-child">
-                        <a href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&borrowernumber=[% borrowernumber %]">
-                          Add a new delivery
-                        </a>
-                      </span>
-                    </li>
-                  </ul>
-                </div>
+                <h3>Deliveries</h3>
                 [% housebound_visits = housebound_profile.housebound_visits %]
                 [% IF  housebound_visits.size > 0 %]
                 <table border="0" width="100%" cellpadding="3" cellspacing="0">
@@ -416,11 +399,13 @@
                         </a>
                       </td>
                       <td align="center">
-                        <a href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&visit_id=[% entry.id %]&borrowernumber=[% borrowernumber %]">
+                        <a href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&visit_id=[% entry.id %]&borrowernumber=[% borrowernumber %]"
+                           class="btn btn-small">
                           Edit
                         </a>
                         |
-                        <a href="/cgi-bin/koha/members/housebound.pl?method=visit_delete&visit_id=[% entry.id %]&borrowernumber=[% borrowernumber %]">
+                        <a href="/cgi-bin/koha/members/housebound.pl?method=visit_delete&visit_id=[% entry.id %]&borrowernumber=[% borrowernumber %]"
+                           class="btn btn-small">
                           Delete
                         </a>
                       </td>
@@ -428,6 +413,12 @@
                     [% END %]
                 </table>
                 [% END %]
+                <div class="action">
+                  <a href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&borrowernumber=[% borrowernumber %]"
+                  class="btn btn-small">
+                  Add a new delivery
+                  </a>
+                </div>
               </div>
 
             [% END %]
