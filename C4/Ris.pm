@@ -41,6 +41,7 @@ package C4::Ris;
 # Modified 2008 by BibLibre for Koha
 # Modified 2011 by Catalyst
 # Modified 2011 by Equinox Software, Inc.
+# Modified 2016 by Universidad de El Salvador
 #
 # This file is part of Koha.
 #
@@ -349,41 +350,43 @@ sub print_typetag {
     ## of the leader of a MARC record, the values are the RIS types
     ## that might appropriately represent these types.
     my %ustypehash = (
-		    "a" => "BOOK",
-		    "c" => "MUSIC",
-		    "d" => "MUSIC",
-		    "e" => "MAP",
-		    "f" => "MAP",
-		    "g" => "ADVS",
-		    "i" => "SOUND",
-		    "j" => "SOUND",
-		    "k" => "ART",
-		    "m" => "DATA",
-		    "o" => "GEN",
-		    "p" => "GEN",
-		    "r" => "ART",
-		    "t" => "GEN",
-		);
-    
+            "a" => "BOOK",
+            "c" => "MUSIC",
+            "d" => "MUSIC",
+            "e" => "MAP",
+            "f" => "MAP",
+            "g" => "ADVS",
+            "i" => "SOUND",
+            "j" => "SOUND",
+            "k" => "ART",
+            "m" => "DATA",
+            "o" => "GEN",
+            "p" => "GEN",
+            "r" => "ART",
+            "t" => "MANSCPT",
+            );
+
     my %unitypehash = (
-		    "a" => "BOOK",
-		    "b" => "BOOK",
-		    "c" => "MUSIC",
-		    "d" => "MUSIC",
-		    "e" => "MAP",
-		    "f" => "MAP",
-		    "g" => "ADVS",
-		    "i" => "SOUND",
-		    "j" => "SOUND",
-		    "k" => "ART",
-		    "l" => "ELEC",
-		    "m" => "ADVS",
-		    "r" => "ART",
-		);
-    
+            "a" => "BOOK",
+            "b" => "MANSCPT",
+            "c" => "MUSIC",
+            "d" => "MUSIC",
+            "e" => "MAP",
+            "f" => "MAP",
+            "g" => "ADVS",
+            "i" => "SOUND",
+            "j" => "SOUND",
+            "k" => "ART",
+            "l" => "ELEC",
+            "m" => "GEN",
+            "r" => "ART",
+            );
+
     ## The type of a MARC record is found at position 06 of the leader
     my $typeofrecord = defined($leader) && length $leader >=6 ?
                        substr($leader, 6, 1): undef;
+    my $typeofrecord2 = defined($leader) && length $leader >=6 ?
+                       substr($leader, 7, 1): undef;
 
     ## ToDo: for books, field 008 positions 24-27 might have a few more
     ## hints
@@ -399,11 +402,22 @@ sub print_typetag {
     }
 
     if (!defined $typeofrecord || !exists $typehash{$typeofrecord}) {
-	print "TY  - BOOK\r\n"; ## most reasonable default
-	warn ("no type found - assume BOOK") if $marcprint;
-    }
-    else {
-	print "TY  - $typehash{$typeofrecord}\r\n";
+        print "TY  - GEN\r\n"; ## most reasonable default
+        warn ("no type found - assume GEN") if $marcprint;
+    } elsif ( $typeofrecord =~ "a" ) {
+        if ( $typeofrecord2 =~ "a" ) {
+            print "TY  - GEN\r\n"; ## monographic component part
+        } elsif ( $typeofrecord2 =~ "b" || $typeofrecord2 =~ "s" ) {
+            print "TY  - SER\r\n"; ## serial or serial component part
+        } elsif ( $typeofrecord2 =~ "m" ) {
+            print "TY  - $typehash{$typeofrecord}\r\n"; ## book
+        } elsif ( $typeofrecord2 =~ "c" || $typeofrecord2 =~ "d" ) {
+            print "TY  - GEN\r\n"; ## collections, part of collections or made-up collections
+        } elsif ( $typeofrecord2 =~ "i" ) {
+            print "TY  - DATA\r\n"; ## updating loose-leafe as Dataset
+        }
+    } else {
+        print "TY  - $typehash{$typeofrecord}\r\n";
     }
 
     ## use $typeofrecord as the return value, just in case
