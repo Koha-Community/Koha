@@ -215,18 +215,20 @@
                     <li>
                       <label for="date" class="required">Date: </label>
                       [% IF ( visit ) %]
-                        <input type="text" id="date" class="datepicker"
+                        <input type="text" id="date" class="datepicker required"
                                value="[% visit.appointment_date | $KohaDates %]"
                                name="date" size="20" required="required"/>
                       [% ELSE %]
-                        <input type="text" id="date" class="datepicker"
+                        <input type="text" id="date" class="datepicker required"
                                value="" name="date" size="20" required="required"/>
                       [% END %]
+                      <span class="required">Required</span>
                       <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                     </li>
                     <li>
-                      <label for="segment">Time:</label>
-                      <select id="segment" name="segment" required="required">
+                      <label for="segment" class="required">Time:</label>
+                      <select id="segment" name="segment" required="required"
+                              class="required">
                         <option value="">Select a time</option>
                         [% IF ( visit ) %]
                           [% IF ( visit.day_segment == 'morning' ) %]
@@ -256,6 +258,7 @@
                           <option value="evening">Evening</option>
                         [% END %]
                       </select>
+                      <span class="required">Required</span>
                     </li>
                     <li>
                       <label for="chooser" class="required"> Chooser:</label>
