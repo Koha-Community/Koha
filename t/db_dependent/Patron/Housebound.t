@@ -37,8 +37,8 @@ is(
 # patron_choosers and patron_deliverers Tests
 
 # Current Patron Chooser / Deliverer count
-my $orig_del_count = Koha::Patrons->housebound_deliverers->count;
-my $orig_cho_count = Koha::Patrons->housebound_choosers->count;
+my $orig_del_count = Koha::Patrons->search_housebound_deliverers->count;
+my $orig_cho_count = Koha::Patrons->search_housebound_choosers->count;
 
 # We add one, just in case the above is 0, so we're guaranteed one of each.
 my $patron_chooser = $builder->build({ source => 'Borrower' });
@@ -63,12 +63,12 @@ $builder->build({
     },
 });
 
-# Test housebound_choosers
-is(Koha::Patrons->housebound_choosers->count, $orig_cho_count + 1, "Correct count of choosers.");
-is(Koha::Patrons->housebound_deliverers->count, $orig_del_count + 1, "Correct count of deliverers");
+# Test search_housebound_choosers
+is(Koha::Patrons->search_housebound_choosers->count, $orig_cho_count + 1, "Correct count of choosers.");
+is(Koha::Patrons->search_housebound_deliverers->count, $orig_del_count + 1, "Correct count of deliverers");
 
-isa_ok(Koha::Patrons->housebound_choosers->next, "Koha::Patron");
-isa_ok(Koha::Patrons->housebound_deliverers->next, "Koha::Patron");
+isa_ok(Koha::Patrons->search_housebound_choosers->next, "Koha::Patron");
+isa_ok(Koha::Patrons->search_housebound_deliverers->next, "Koha::Patron");
 
 $schema->storage->txn_rollback;
 

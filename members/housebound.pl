@@ -117,8 +117,8 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     $method = undef;
 } elsif ( $method eq 'visit_update_or_create' ) {
     # We want to edit, edit a visit, so we must pass its details.
-    $deliverers = Koha::Patrons->new->housebound_deliverers;
-    $choosers = Koha::Patrons->new->housebound_choosers;
+    $deliverers = Koha::Patrons->new->search_housebound_deliverers;
+    $choosers = Koha::Patrons->new->search_housebound_choosers;
     $houseboundvisit = $visit;
 } elsif ( $method eq 'visit_delete' and $visit ) {
     # We want ot delete a specific visit.
