@@ -15,9 +15,10 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 545;
+use Test::More tests => 57;
 use t::lib::Mocks qw(mock_preference);
 use POSIX qw(strftime);
+use Data::Dumper;
 
 BEGIN {
     use_ok('C4::UsageStats');
@@ -372,6 +373,7 @@ sub mocking_systempreferences_to_a_set_value {
         AllFinesNeedOverride
         AllowFineOverride
         AllowItemsOnHoldCheckout
+        AllowItemsOnHoldCheckoutSCO
         AllowNotForLoanOverride
         AllowRenewalLimitOverride
         AllowReturnToBranch
@@ -586,8 +588,17 @@ sub mocking_systempreferences_to_a_set_value {
 sub verif_systempreferences_values {
     my ( $report, $value_to_test ) = @_;
 
+    my @missings;
     foreach my $key ( keys %{$report->{systempreferences}} ) {
-        is( $report->{systempreferences}->{$key}, $value_to_test, "\$report->{systempreferences}->{$key} = $value_to_test" );
+        if ( $report->{systempreferences}->{$key} ne $value_to_test ) {
+            warn $key;
+            push @missings, $key;
+        }
+    }
+    unless ( @missings ) {
+        ok(1, 'All prefs are present');
+    } else {
+        ok(0, 'Some prefs are missing: ' . Dumper(\@missings));
     }
 }
 
