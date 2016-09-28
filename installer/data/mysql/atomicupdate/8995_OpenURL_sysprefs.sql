@@ -1,4 +1,4 @@
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES
   ('OpenURLResolverURL', '', 'URL of OpenURL Resolver', NULL, 'Free'),
   ('OpenURLText', '', 'Text of OpenURL links (or image title if OpenURLImageLocation is defined)', NULL, 'Free'),
   ('OpenURLImageLocation', '', 'Location of image for OpenURL links', NULL, 'Free'),
