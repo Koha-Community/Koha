@@ -70,8 +70,8 @@
                   <legend>Housebound details</legend>
                   <ol>
                     <li>
-                      <label for="day">Delivery day:</label>
-                      <select id="day" name="day" required="required">
+                      <label for="day" class="required">Delivery day:</label>
+                      <select id="day" name="day" class="required" required="required">
                         <option value="">Select a day</option>
                         [% IF ( housebound_profile ) %]
                           [% IF ( housebound_profile.day == 'any' ) %]
@@ -125,10 +125,11 @@
                           <option value="sunday">Sunday</option>
                         [% END %]
                       </select>
+                      <span class="required">Required</span>
                     </li>
                     <li>
-                      <label for="frequency">Frequency:</label>
-                      <select id="frequency" name="frequency" required="required">
+                      <label for="frequency" class="required">Frequency:</label>
+                      <select id="frequency" name="frequency" class="required" required="required">
                         <option value="">Select a frequency</option>
                         [% FOREACH frequency IN AuthorisedValues.GetAuthValueDropbox('HSBND_FREQ') %]
                           [% IF housebound_profile.frequency == frequency.value %]
@@ -138,6 +139,7 @@
                           [% END %]
                         [% END %]
                       </select>
+                      <span class="required">Required</span>
                     </li>
                     <li>
                       <label for="fav_itemtypes">Preferred materials:</label>
@@ -256,8 +258,8 @@
                       </select>
                     </li>
                     <li>
-                      <label for="chooser">Chooser:</label>
-                      <select id="chooser" name="chooser" required="required">
+                      <label for="chooser" class="required"> Chooser:</label>
+                      <select id="chooser" name="chooser" class="required" required="required">
                         <option value="">Select a chooser</option>
                         [% IF ( visit ) %]
                           [% FOREACH chooser IN choosers %]
@@ -279,10 +281,11 @@
                           [% END %]
                         [% END %]
                       </select>
+                      <span class="required">Required</span>
                     </li>
                     <li>
-                      <label for="deliverer">Deliverer:</label>
-                      <select id="deliverer" name="deliverer" required="required">
+                      <label for="deliverer" class="required">Deliverer:</label>
+                      <select id="deliverer" name="deliverer" class="required" required="required">
                         <option value="">Select a deliverer</option>
                         [% IF ( visit ) %]
                           [% FOREACH deliverer IN deliverers %]
@@ -304,6 +307,7 @@
                           [% END %]
                         [% END %]
                       </select>
+                      <span class="required">Required</span>
                     </li>
                   </ol>
                 </fieldset>
@@ -332,7 +336,7 @@
               <div class="rows">
                 <ol>
                   <li>
-                    <span class="label">Delivery day:</span>
+                    <span class="label" class="required"> Delivery day:</span>
                     [% hpd = housebound_profile.day %]
                     [% IF hpd == 'any' %]
                       Any
@@ -353,7 +357,7 @@
                     [% END %]
                   </li>
                   <li>
-                    <span class="label">Frequency:</span>
+                    <span class="label" class="required">Frequency:</span>
                     [% AuthorisedValues.GetByCode( 'HSBND_FREQ', housebound_profile.frequency, 0 ) || housebound_profile.frequency %]
                   </li>
                   <li>
