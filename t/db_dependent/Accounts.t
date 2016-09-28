@@ -155,8 +155,6 @@ subtest "recordpayment() tests" => sub {
 
     my $line1 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 100 })->store();
     my $line2 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 200 })->store();
-    $line1->_result->discard_changes;
-    $line2->_result->discard_changes;
 
     $sth = $dbh->prepare("SELECT count(*) FROM accountlines");
     $sth->execute;
