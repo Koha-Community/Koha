@@ -86,7 +86,7 @@ use Getopt::Long;
 use C4::Context;
 use Koha::MetadataRecord::Authority;
 use Koha::BiblioUtils;
-use Koha::ElasticSearch::Indexer;
+use Koha::SearchEngine::Elasticsearch::Indexer;
 use MARC::Field;
 use MARC::Record;
 use Modern::Perl;
@@ -136,7 +136,7 @@ if ($index_biblios) {
             $records->next();
         }
     }
-    do_reindex($next, $Koha::ElasticSearch::BIBLIOS_INDEX);
+    do_reindex($next, $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX);
 }
 if ($index_authorities) {
     _log(1, "Indexing authorities\n");
@@ -153,13 +153,13 @@ if ($index_authorities) {
             $records->next();
         }
     }
-    do_reindex($next, $Koha::ElasticSearch::AUTHORITIES_INDEX);
+    do_reindex($next, $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX);
 }
 
 sub do_reindex {
     my ( $next, $index_name ) = @_;
 
-    my $indexer = Koha::ElasticSearch::Indexer->new( { index => $index_name } );
+    my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new( { index => $index_name } );
     if ($delete) {
 
         # We know it's safe to not recreate the indexer because update_index

@@ -21,11 +21,11 @@ use Test::More tests => 5;
 
 use MARC::Record;
 
-use_ok('Koha::ElasticSearch::Indexer');
+use_ok('Koha::SearchEngine::Elasticsearch::Indexer');
 
 my $indexer;
 ok(
-    $indexer = Koha::ElasticSearch::Indexer->new({ 'index' => 'biblio' }),
+    $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblio' }),
     'Creating new indexer object'
 );
 

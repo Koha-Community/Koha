@@ -29,7 +29,7 @@ ok(
     my $searcher = Koha::SearchEngine::Elasticsearch::Search->new(
         { 'nodes' => ['localhost:9200'], 'index' => 'mydb' }
     ),
-    'Creating a Koha::ElasticSearch::Search object'
+    'Creating a Koha::SearchEngine::Elasticsearch::Search object'
 );
 
 is( $searcher->index, 'mydb', 'Testing basic accessor' );

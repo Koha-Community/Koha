@@ -82,7 +82,7 @@ sub is_testable {
         @needed_module_names =
           ( 'SOAP::Lite', 'Crypt::GCrypt', 'Digest::SHA', 'Convert::BaseN' );
     }
-    elsif ( $module_name =~ /Koha::ElasticSearch::Indexer/xsm ) {
+    elsif ( $module_name =~ /Koha::SearchEngine::Elasticsearch::Indexer/xsm ) {
         @needed_module_names =
           ( 'Catmandu::Importer::MARC', 'Catmandu::Store::ElasticSearch' );
     }

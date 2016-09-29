@@ -19,12 +19,12 @@ package Koha::SearchEngine::Elasticsearch::Search;
 
 =head1 NAME
 
-Koha::SearchEngine::ElasticSearch::Search - search functions for Elasticsearch
+Koha::SearchEngine::Elasticsearch::Search - search functions for Elasticsearch
 
 =head1 SYNOPSIS
 
     my $searcher =
-      Koha::SearchEngine::ElasticSearch::Search->new( { index => $index } );
+      Koha::SearchEngine::Elasticsearch::Search->new( { index => $index } );
     my $builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new(
         { index => $index } );
     my $query = $builder->build_query('perl');
@@ -40,7 +40,7 @@ Koha::SearchEngine::ElasticSearch::Search - search functions for Elasticsearch
 
 use Modern::Perl;
 
-use base qw(Koha::ElasticSearch);
+use base qw(Koha::SearchEngine::Elasticsearch);
 use C4::Context;
 use Koha::ItemTypes;
 use Koha::AuthorisedValues;
