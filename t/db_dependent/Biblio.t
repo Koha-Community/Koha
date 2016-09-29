@@ -66,29 +66,22 @@ $biblio_module->mock(
     sub {
         my ($self) = shift;
 
-        if (   C4::Context->preference('marcflavour') eq 'MARC21'
-            || C4::Context->preference('marcflavour') eq 'NORMARC' ) {
+        my ( $title_field,            $title_subfield )            = get_title_field();
+        my ( $isbn_field,             $isbn_subfield )             = get_isbn_field();
+        my ( $issn_field,             $issn_subfield )             = get_issn_field();
+        my ( $biblionumber_field,     $biblionumber_subfield )     = ( '999', 'c' );
+        my ( $biblioitemnumber_field, $biblioitemnumber_subfield ) = ( '999', '9' );
+        my ( $itemnumber_field,       $itemnumber_subfield )       = get_itemnumber_field();
 
-            return {
-                'biblio.title'                 => { tagfield => '245', tagsubfield => 'a' },
-                'biblio.biblionumber'          => { tagfield => '999', tagsubfield => 'c' },
-                'biblioitems.isbn'             => { tagfield => '020', tagsubfield => 'a' },
-                'biblioitems.issn'             => { tagfield => '022', tagsubfield => 'a' },
-                'biblioitems.biblioitemnumber' => { tagfield => '999', tagsubfield => 'd' },
-                'items.itemnumber'             => { tagfield => '952', tagsubfield => '9' },
-            };
-        } elsif ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
-
-            return {
-                'biblio.title'                 => { tagfield => '200', tagsubfield => 'a' },
-                'biblio.biblionumber'          => { tagfield => '999', tagsubfield => 'c' },
-                'biblioitems.isbn'             => { tagfield => '010', tagsubfield => 'a' },
-                'biblioitems.issn'             => { tagfield => '011', tagsubfield => 'a' },
-                'biblioitems.biblioitemnumber' => { tagfield => '090', tagsubfield => 'a' },
-                'items.itemnumber'             => { tagfield => '995', tagsubfield => '9' },
-            };
-        }
-    }
+        return {
+            'biblio.title'                 => { tagfield => $title_field,            tagsubfield => $title_subfield },
+            'biblio.biblionumber'          => { tagfield => $biblionumber_field,     tagsubfield => $biblionumber_subfield },
+            'biblioitems.isbn'             => { tagfield => $isbn_field,             tagsubfield => $isbn_subfield },
+            'biblioitems.issn'             => { tagfield => $issn_field,             tagsubfield => $issn_subfield },
+            'biblioitems.biblioitemnumber' => { tagfield => $biblioitemnumber_field, tagsubfield => $biblioitemnumber_subfield },
+            'items.itemnumber'             => { tagfield => $itemnumber_subfield,    tagsubfield => $itemnumber_subfield },
+        };
+      }
 );
 
 my $currency = new Test::MockModule('Koha::Acquisition::Currencies');
@@ -275,11 +268,31 @@ sub run_tests {
         'Check the number of returned notes of GetMarcNotes' );
 }
 
+sub get_title_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '200', 'a' ) : ( '245', 'a' );
+}
+
+sub get_isbn_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '010', 'a' ) : ( '020', 'a' );
+}
+
+sub get_issn_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '011', 'a' ) : ( '022', 'a' );
+}
+
+sub get_itemnumber_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '995', '9' ) : ( '952', '9' );
+}
+
 sub create_title_field {
     my ( $title, $marcflavour ) = @_;
 
-    my $title_field = ( $marcflavour eq 'UNIMARC' ) ? '200' : '245';
-    my $field = MARC::Field->new( $title_field,'','','a' => $title);
+    my ( $title_field, $title_subfield ) = get_title_field();
+    my $field = MARC::Field->new( $title_field, '', '', $title_subfield => $title );
 
     return $field;
 }
@@ -287,10 +300,11 @@ sub create_title_field {
 sub create_isbn_field {
     my ( $isbn, $marcflavour ) = @_;
 
-    my $isbn_field = ( $marcflavour eq 'UNIMARC' ) ? '010' : '020';
-    my $field = MARC::Field->new( $isbn_field,'','','a' => $isbn);
+    my ( $isbn_field, $isbn_subfield ) = get_isbn_field();
+    my $field = MARC::Field->new( $isbn_field, '', '', $isbn_subfield => $isbn );
+
     # Add the price subfield
-    my $price_subfield = ( $marcflavour eq 'UNIMARC' ) ? 'd' : 'c' ;
+    my $price_subfield = ( $marcflavour eq 'UNIMARC' ) ? 'd' : 'c';
     $field->add_subfields( $price_subfield => '$100' );
 
     return $field;
@@ -299,8 +313,8 @@ sub create_isbn_field {
 sub create_issn_field {
     my ( $issn, $marcflavour ) = @_;
 
-    my $issn_field = ( $marcflavour eq 'UNIMARC' ) ? '011' : '022';
-    my $field = MARC::Field->new( $issn_field,'','','a' => $issn);
+    my ( $issn_field, $issn_subfield ) = get_issn_field();
+    my $field = MARC::Field->new( $issn_field, '', '', $issn_subfield => $issn );
 
     return $field;
 }
