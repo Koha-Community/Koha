@@ -647,5 +647,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('XSLTListsDisplay','default','','Enable XSLT stylesheet control over lists pages display on intranet','Free'),
 ('XSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on intranet','Free'),
 ('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
-('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
-;
+('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo'),
+('LibrisKey', '', 'This key must be obtained at http://api.libris.kb.se/. It is unique for the IP of the server.', NULL, 'Free'),
+('LibrisURL', 'http://api.libris.kb.se/bibspell/', 'This it the base URL for the Libris spellchecking API.',NULL,'Free');

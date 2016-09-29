@@ -29,9 +29,9 @@ sub NAME {
 sub get_suggestions {
     my ($self, $query) = @_;
     my $key = C4::Context->preference('LibrisKey');
-
+    my $base = C4::Context->preference('LibrisURL');
     my $search = $query->{'search'};
-    my $response = LWP::UserAgent->new->get("http://api.libris.kb.se/bibspell/spell?query={$search}&key=$key");
+    my $response = LWP::UserAgent->new->get($base."spell?query={$search}&key=$key");
     my $xml = XMLin($response->content, NoAttr => 1, ForceArray => qr/term/);
 
     my @terms;

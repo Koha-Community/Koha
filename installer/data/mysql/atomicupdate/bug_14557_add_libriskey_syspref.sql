@@ -1,1 +1,2 @@
-INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('LibrisKey', '', 'This key must be obtained at http://api.libris.kb.se/. It is unique for the IP of the server.', NULL, 'Free');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('LibrisKey', '', 'This key must be obtained at http://api.libris.kb.se/. It is unique for the IP of the server.', NULL, 'Free');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('LibrisURL', 'http://api.libris.kb.se/bibspell/', 'This it the base URL for the Libris spellchecking API.',NULL,'Free');
