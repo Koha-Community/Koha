@@ -21,6 +21,7 @@ use C4::Koha;
 use C4::Output;
 use C4::Auth;
 
+use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchMarcMaps;
 use Koha::SearchFields;
 
@@ -94,6 +95,14 @@ if ( $op eq 'edit' ) {
     } else {
         push @messages, { type => 'message', code => 'success_on_update' };
         $schema->storage->txn_commit;
+    }
+}
+elsif( $op eq 'reset' ) {
+    # TODO Move this feature to the interface
+    my $sure = $input->param('i_know_what_i_am_doing');
+    if ( $sure ) {
+        Koha::SearchMarcMaps->search->delete;
+        Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
     }
 }
 
