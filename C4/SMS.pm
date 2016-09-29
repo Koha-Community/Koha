@@ -1,6 +1,8 @@
 package C4::SMS;
 
 # Copyright 2007 Liblime
+# Copyright 2015 Biblibre
+# Copyright 2016 Catalyst
 #
 # This file is part of Koha.
 #
@@ -28,7 +30,23 @@ my $success = C4::SMS->send_sms({ message     => 'This is my text message',
 
 =head1 DESCRIPTION
 
+A wrapper for SMS::Send.
 
+Can use a yaml file for config, the path to which is in the koha-conf.xml
+<sms_send_config>__KOHA_CONF_DIR__/sms_send/</sms_send_config>
+
+Each file needs to be in the format of
+__KOHA_CONF_DIR__/sms_send/<driver>.yaml
+
+For example for SMS::Send::UK::Kapow the config would be
+
+/etc/koha/sites/instancename/sms_send/UK/Kapow.yaml for package install
+or
+/etc/koha/sms_send/UK/Kapow.yaml for tarball
+
+A underscore character is prepended to all parameter names so they are
+treated as driver-specific options (leading underscore must not appear
+in config file).
 
 =cut
 
@@ -77,10 +95,9 @@ sub send_sms {
     my $subpath = $driver;
     $subpath =~ s|::|/|;
 
-    my $conf_file = File::Spec->catfile(
-        C4::Context->config('installdir'),
-        'etc', 'sms', 'driver', $subpath
-    ) . q{.yaml};
+    my $conf_file =
+      File::Spec->catfile( C4::Context->config('sms_send_config'), $subpath )
+      . q{.yaml};
     my %args;
     if ( -f $conf_file ) {
         require YAML;
