@@ -1,0 +1,153 @@
+{
+  "/biblios/{biblionumber}": {
+    "get": {
+      "operationId": "getBiblio",
+      "tags": ["biblios"],
+      "parameters": [
+        { "$ref": "../parameters.json#/biblionumberPathParam" }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A biblio record",
+          "schema": { "$ref": "../definitions.json#/biblio" }
+
+        },
+        "404": {
+          "description": "Biblio not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "put": {
+      "operationId": "updateBiblio",
+      "tags": ["biblios"],
+      "parameters": [
+        { "$ref": "../parameters.json#/biblionumberPathParam" }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "An updated biblio record"
+        },
+        "400": {
+          "description": "Biblio update failed",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "404": {
+          "description": "Biblio not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "editcatalogue": "1"
+        }
+      }
+    },
+    "delete": {
+      "operationId": "deleteBiblio",
+      "tags": ["biblios"],
+      "parameters": [
+        { "$ref": "../parameters.json#/biblionumberPathParam" }
+      ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Biblio record deleted successfully",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "400": {
+          "description": "Biblio deletion failed",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "404": {
+          "description": "Biblio not found",
+          "schema": { "$ref": "../definitions.json#/error" }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "editcatalogue": "1"
+        }
+      }
+    }
+  },
+  "/biblios/{biblionumber}/items": {
+    "get": {
+      "operationId": "getitemsByBiblio",
+      "tags": ["biblios", "items"],
+      "parameters": [
+        { "$ref": "../parameters.json#/biblionumberPathParam" }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A biblio record with items"
+        },
+        "404": {
+          "description": "Biblio not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/biblios/{biblionumber}/expanded": {
+    "get": {
+      "operationId": "getexpandedByBiblio",
+      "tags": ["biblios", "items", "item status"],
+      "parameters": [
+        { "$ref": "../parameters.json#/biblionumberPathParam" }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A biblio record with items and item statuses"
+        },
+        "404": {
+          "description": "Biblio not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/biblios": {
+    "post": {
+      "operationId": "addBiblio",
+      "tags": ["biblios"],
+      "produces": ["application/json"],
+      "responses": {
+        "201": {
+          "description": "A new biblio record"
+        },
+        "400": {
+          "description": "Unable to create biblio record",
+          "schema": { "$ref": "../definitions.json#/error" }
+        }
+      }
+    },
+    "x-koha-authorization": {
+      "permissions": {
+        "editcatalogue": "1"
+      }
+    }
+  }
+}

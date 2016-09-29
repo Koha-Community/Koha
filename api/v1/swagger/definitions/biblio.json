@@ -1,0 +1,52 @@
+{
+  "type": "object",
+    "properties": {
+    "biblionumber": {
+      "$ref": "../x-primitives.json#/biblionumber"
+    },
+    "author": {
+      "type": ["string", "null"],
+      "description": "statement of responsibility from MARC record (100$a in MARC21)"
+    },
+    "title": {
+      "type": ["string", "null"],
+      "description": "title (without the subtitle) from the MARC record (245$a in MARC21)"
+    },
+    "unititle": {
+      "type": ["string", "null"],
+      "description": "uniform title (without the subtitle) from the MARC record (240$a in MARC21)"
+    },
+    "notes": {
+      "type": ["string", "null"],
+      "description": "values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)"
+    },
+    "serial": {
+      "type": ["string", "null"],
+      "description": "Boolean indicating whether biblio is for a serial"
+    },
+    "seriestitle": {
+      "type": ["string", "null"],
+      "description": ""
+    },
+    "copyrightdate": {
+      "type": ["string", "null"],
+      "description": "publication or copyright date from the MARC record"
+    },
+    "timestamp": {
+      "type": ["string", "null"],
+      "description": "date and time this record was last touched"
+    },
+    "datecreated": {
+      "type": ["string", "null"],
+      "description": "the date this record was added to Koha"
+    },
+    "abstract": {
+      "type": ["string", "null"],
+      "description": "summary from the MARC record (520$a in MARC21)"
+    },
+    "frameworkcode": {
+      "type": ["string", "null"],
+      "description": "framework used in cataloging this record"
+    }
+  }
+}
