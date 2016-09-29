@@ -358,14 +358,22 @@ sub json2marc {
 
     # fields are like:
     # [ '245', '1', '2', 'a' => 'Title', 'b' => 'Subtitle' ]
+    # or
+    # [ '001', undef, undef, '_', 'a value' ]
     # conveniently, this is the form that MARC::Field->new() likes
     foreach my $field (@$marcjson) {
-        next if @$field < 5;    # Shouldn't be possible, but...
+        next if @$field < 5;
         if ( $field->[0] eq 'LDR' ) {
             $marc->leader( $field->[4] );
         }
         else {
-            my $marc_field = MARC::Field->new(@$field);
+            my $tag = $field->[0];
+            my $marc_field;
+            if ( MARC::Field->is_controlfield_tag( $field->[0] ) ) {
+                $marc_field = MARC::Field->new($field->[0], $field->[4]);
+            } else {
+                $marc_field = MARC::Field->new(@$field);
+            }
             $marc->append_fields($marc_field);
         }
     }
