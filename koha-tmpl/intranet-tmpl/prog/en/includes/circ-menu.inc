@@ -8,9 +8,9 @@
 <ul class="patronbriefinfo">
     [% IF ( patronimages ) %]
         [% IF ( picture ) %]
-            <li><img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% borrowernumber | uri %]" id="patronimage" alt="[% firstname %] [% surname %] ([% cardnumber %])" border="0" style="max-width : 140px; margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC; width:auto !important; width:130px;" /></li>
+            <li><img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% borrowernumber | uri %]" id="patronimage" alt="[% firstname | html %] [% surname | html %] ([% cardnumber | html %])" border="0" style="max-width : 140px; margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC; width:auto !important; width:130px;" /></li>
         [% ELSE %]
-            <li id="patronbasics"><img src="[% interface %]/[% theme %]/img/patron-blank.png" alt="[% firstname %] [% surname %] ([% cardnumber %])" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
+            <li id="patronbasics"><img src="[% interface %]/[% theme %]/img/patron-blank.png" alt="[% firstname | html %] [% surname | html %] ([% cardnumber | html %])" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
         [% END %]
     [% END %]
     [% IF Koha.Preference( 'AddressFormat' ) %]
@@ -20,21 +20,21 @@
     [% END %]
 
     [% IF ( phone ) %]<li class="patronphone">
-        [% phone %]
+        [% phone | html %]
     [% ELSE %]
         [% IF ( mobile ) %]
-            [% mobile %]
+            [% mobile | html %]
         [% ELSE %]
             [% IF ( phonepro ) %]
-                [% phonepro %]
+                [% phonepro | html %]
             [% END %]
         [% END %]</li>
     [% END %]
     [% IF ( email ) %]
-        <li class="email"> <a href="mailto:[% email %]" title="[% email %]">[% email %]</a></li>
+        <li class="email"> <a href="mailto:[% email | url %]" title="[% email | html %]">[% email | html %]</a></li>
     [% ELSE %]
         [% IF ( emailpro ) %]
-            <li class="email"> <a href="mailto:[% emailpro %]" title="[% emailpro %]">[% emailpro %]</a></li>
+            <li class="email"> <a href="mailto:[% emailpro | url %]" title="[% emailpro | html %]">[% emailpro | html %]</a></li>
         [% END %]
     [% END %]
 
