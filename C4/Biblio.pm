@@ -3506,6 +3506,7 @@ sub ModBiblioMarc {
     # FIXME To replace with ->find_or_create?
     if ( my $m_rs = Koha::Biblio::Metadatas->find($metadata) ) {
         $m_rs->metadata( $record->as_xml_record($encoding) );
+        $m_rs->store;
     } else {
         my $m_rs = Koha::Biblio::Metadata->new($metadata);
         $m_rs->metadata( $record->as_xml_record($encoding) );

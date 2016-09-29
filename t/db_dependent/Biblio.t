@@ -108,8 +108,7 @@ sub run_tests {
 
     # Generate a record with just the ISBN
     my $marc_record = MARC::Record->new;
-    my $isbn_field  = create_isbn_field( $isbn, $marcflavour );
-    $marc_record->append_fields( $isbn_field );
+    $marc_record->append_fields( create_isbn_field( $isbn, $marcflavour ) );
 
     # Add the record to the DB
     my( $biblionumber, $biblioitemnumber ) = AddBiblio( $marc_record, '' );
@@ -119,6 +118,10 @@ sub run_tests {
     is( $data->{ title }, undef,
         '(GetBiblioData) Title field is empty in fresh biblio.');
 
+    my ( $isbn_field, $isbn_subfield ) = get_isbn_field();
+    my $marc = GetMarcBiblio( $biblionumber );
+    is( $marc->subfield( $isbn_field, $isbn_subfield ), $isbn, );
+
     # Add title
     my $field = create_title_field( $title, $marcflavour );
     $marc_record->append_fields( $field );
@@ -127,6 +130,9 @@ sub run_tests {
     is( $data->{ title }, $title,
         'ModBiblio correctly added the title field, and GetBiblioData.');
     is( $data->{ isbn }, $isbn, '(ModBiblio) ISBN is still there after ModBiblio.');
+    $marc = GetMarcBiblio( $biblionumber );
+    my ( $title_field, $title_subfield ) = get_title_field();
+    is( $marc->subfield( $title_field, $title_subfield ), $title, );
 
     my $itemdata = GetBiblioItemData( $biblioitemnumber );
     is( $itemdata->{ title }, $title,
@@ -320,19 +326,19 @@ sub create_issn_field {
 }
 
 subtest 'MARC21' => sub {
-    plan tests => 29;
+    plan tests => 31;
     run_tests('MARC21');
     $dbh->rollback;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 29;
+    plan tests => 31;
     run_tests('UNIMARC');
     $dbh->rollback;
 };
 
 subtest 'NORMARC' => sub {
-    plan tests => 29;
+    plan tests => 31;
     run_tests('NORMARC');
     $dbh->rollback;
 };
