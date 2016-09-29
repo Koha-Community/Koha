@@ -107,7 +107,7 @@ $(document).ready(function() {
 [% INCLUDE 'patron-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo;
-[% IF (firstname || surname ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]</a>  &rsaquo;[% END %]
+[% IF (firstname || surname ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% IF (firstname) %][% firstname | html %] [% END %][% IF (surname) %][% surname | html %] [% END %]</a>  &rsaquo;[% END %]
 <strong>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron ([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</strong>
 </div>
 [% IF ( opadd ) %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
@@ -129,7 +129,7 @@ $(document).ready(function() {
     [% INCLUDE 'noadd-warnings.inc' %]
 
 	[% UNLESS ( no_add ) %]
-    <h1>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</h1>
+    <h1>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname | html %] [% END %][% IF (surname) %][% surname | html %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</h1>
 
     [% IF quickadd && opadd && !check_member %]
         <a href="#" class="toggle_quick_add"><i class="fa fa-plus-square"></i> Show full form</a>
@@ -304,7 +304,7 @@ $(document).ready(function() {
                 <label for="firstname">
                 [% END %]
                 First name: </label>
-                <input type="text" id="firstname" name="firstname" size="20"  value="[% UNLESS opduplicate %][% firstname %][% END %]" />
+                <input type="text" id="firstname" name="firstname" size="20"  value="[% UNLESS opduplicate %][% firstname | html %][% END %]" />
                 [% IF ( mandatoryfirstname ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -332,7 +332,7 @@ $(document).ready(function() {
                     <label for="initials">
                 [% END %]
                 Initials: </label>
-                <input type="text" id="initials" name="initials" size="20"  value="[% UNLESS opduplicate %][% initials %][% END %]" />
+                <input type="text" id="initials" name="initials" size="20"  value="[% UNLESS opduplicate %][% initials | html %][% END %]" />
                 [% IF ( mandatoryinitials ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -345,7 +345,7 @@ $(document).ready(function() {
 			<label for="othernames">
 			[% END %]
             Other name: </label>
-            <input type="text" id="othernames" name="othernames" size="20"  value="[% UNLESS opduplicate %][% othernames %][% END %]" />
+            <input type="text" id="othernames" name="othernames" size="20"  value="[% UNLESS opduplicate %][% othernames | html %][% END %]" />
 [% IF ( mandatoryothernames ) %]<span class="required">Required</span>[% END %]
 		[% IF ( I ) %]<input type="hidden" name="sex" value="N" />[% END %]
 		</li>
@@ -403,9 +403,9 @@ $(document).ready(function() {
 	            <label for="contactname">Organization name: </label>
 	            [% IF ( guarantorid ) %]
 	            <span>[% contactname %]</span>
-	            <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname %]" />
+	            <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname | html %]" />
 	            [% ELSE %]
-                    <input name="contactname" id="contactname" type="text" size="20" value="[% contactname %]" />
+                    <input name="contactname" id="contactname" type="text" size="20" value="[% contactname | html %]" />
 	            [% END %]
 	        </li>
 [% ELSE %]
@@ -422,9 +422,9 @@ $(document).ready(function() {
      <label for="contactname">Surname: </label>
      [% IF ( guarantorid ) %]
      <span>[% contactname %]</span>
-     <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname %]" />
+     <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname | html %]" />
      [% ELSE %]
-        <input name="contactname" id="contactname" type="text" size="20" value="[% contactname %]" />
+        <input name="contactname" id="contactname" type="text" size="20" value="[% contactname | html %]" />
      [% END %]
  </li>
         [% END %]
@@ -433,9 +433,9 @@ $(document).ready(function() {
      <label for="contactfirstname">First name: </label>
      [% IF ( guarantorid ) %]
      <span>[% contactfirstname %]</span>
-     <input name="contactfirstname" id="contactfirstname" type="hidden" size="20" value="[% contactfirstname %]" />
+     <input name="contactfirstname" id="contactfirstname" type="hidden" size="20" value="[% contactfirstname | html %]" />
      [% ELSE %]
-        <input name="contactfirstname" id="contactfirstname" type="text" size="20" value="[% contactfirstname %]" />
+        <input name="contactfirstname" id="contactfirstname" type="text" size="20" value="[% contactfirstname | html %]" />
      [% END %]
  </li>
         [% END %]
@@ -502,7 +502,7 @@ $(document).ready(function() {
       <label for="phone">
       [% END %]
       Primary phone: </label>
-        <input type="text" id="phone" name="phone" value="[% phone %]" />
+        <input type="text" id="phone" name="phone" value="[% phone | html %]" />
 	  [% IF ( mandatoryphone ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
 
     </li>
@@ -515,7 +515,7 @@ $(document).ready(function() {
       <label for="phonepro">
       [% END %]
       Secondary phone: </label>
-    <input type="text" id="phonepro" name="phonepro" value="[% phonepro %]" />
+    <input type="text" id="phonepro" name="phonepro" value="[% phonepro | html %]" />
 	  [% IF ( mandatoryphonepro ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
@@ -527,7 +527,7 @@ $(document).ready(function() {
       <label for="mobile">
       [% END %]
       Other phone: </label>
-        <input type="text" id="mobile" name="mobile" value="[% mobile %]" />
+        <input type="text" id="mobile" name="mobile" value="[% mobile | html %]" />
 	  [% IF ( mandatorymobile ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
@@ -539,7 +539,7 @@ $(document).ready(function() {
       <label for="email">
       [% END %]
       Primary email: </label>
-        <input type="text" id="email" name="email" size="45" value="[% email %]" />
+        <input type="text" id="email" name="email" size="45" value="[% email | html %]" />
 	  [% IF ( mandatoryemail ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
 
     </li>
@@ -552,7 +552,7 @@ $(document).ready(function() {
       <label for="emailpro">
       [% END %]
       Secondary email: </label>
-        <input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro %]" />
+        <input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro | html %]" />
 	  [% IF ( mandatoryemailpro ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
@@ -564,7 +564,7 @@ $(document).ready(function() {
       <label for="fax">
       [% END %]
       Fax: </label>
-        <input type="text" id="fax" name="fax" value="[% fax %]" />
+        <input type="text" id="fax" name="fax" value="[% fax | html %]" />
 	  [% IF ( mandatoryfax ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
@@ -607,19 +607,19 @@ $(document).ready(function() {
           [% END %]
           Card number: </label>
           [% IF minlength_cardnumber == maxlength_cardnumber %]
-                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
                 [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]
                 <div class="hint">Card number must be exactly [% minlength_cardnumber %] characters.</div>
           [% ELSIF minlength_cardnumber && maxlength_cardnumber %]
-                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
                 [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]
                 <div class="hint">Card number must be between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters.</div>
           [% ELSIF maxlength_cardnumber %]
-                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
+                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" maxlength="[% maxlength_cardnumber %]" />
                 [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]
                 <div class="hint">Card number can be up to [% maxlength_cardnumber %] characters.</div>
           [% ELSE %]
-                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" />
+                <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" />
                 [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]
                 <div class="hint">There is no minimum or maximum character length.</div>
           [% END %]
@@ -774,7 +774,7 @@ $(document).ready(function() {
 				<label for="opacnote">
             [% END %]
 			OPAC note: </label>
-            <textarea id="opacnote" name="opacnote" cols="55" rows="5">[% UNLESS opduplicate %][% opacnote %][% END %]</textarea>
+            <textarea id="opacnote" name="opacnote" cols="55" rows="5">[% UNLESS opduplicate %][% opacnote | html %][% END %]</textarea>
 			<div class="hint">This message appears on this patron's user page in the OPAC</div>
 	  [% IF ( mandatoryopacnote ) %]<span class="required">Required</span>[% END %]
 		</li>
@@ -787,7 +787,7 @@ $(document).ready(function() {
 				<label for="borrowernotes">
 			[% END %]
 			Circulation note: </label>
-            <textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% UNLESS opduplicate %][% borrowernotes %][% END %]</textarea>
+            <textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% UNLESS opduplicate %][% borrowernotes | html %][% END %]</textarea>
 			<div class="hint">This message displays when checking out to this patron</div>
 	  [% IF ( mandatoryborrowernotes ) %]<span class="required">Required</span>[% END %]
 		</li>

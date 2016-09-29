@@ -223,7 +223,7 @@ function searchToHold(){
                     <label for="message_type">Add a message for:</label>
                     <select name="message_type" id="message_type">
                         <option value="L">Staff - Internal note</option>
-                        <option value="B">OPAC - [% firstname %] [% surname %]</option>
+                        <option value="B">OPAC - [% firstname | html %] [% surname | html %]</option>
                     </select>
                 </li>
                 [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]

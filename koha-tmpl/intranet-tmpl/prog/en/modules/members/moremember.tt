@@ -211,11 +211,11 @@ function validate1(date) {
     [% END %]
 
 <h3>[% UNLESS ( I ) %]
-   [% title %] [% firstname %] [% END %] [% surname %] ([% cardnumber %])</h3>
+   [% title | html %] [% firstname | html %] [% END %] [% surname | html %] ([% cardnumber | html %])</h3>
  <div class="yui-u first">
 <div id="patron-information" style="padding : .5em;">
 
-     [% UNLESS ( I ) %][% IF ( othernames ) %]&ldquo;[% othernames %]&rdquo;[% END %]
+     [% UNLESS ( I ) %][% IF ( othernames ) %]&ldquo;[% othernames | html %]&rdquo;[% END %]
 
     <div class = "address">
         [% IF Koha.Preference( 'AddressFormat' ) %]
@@ -228,22 +228,22 @@ function validate1(date) {
 	<div class="rows">
 		<ol>
         [% IF ( I ) %]
-            [% IF ( phonepro ) %]<li><span class="label">Organization phone: </span><a href="tel:[% phonepro %]">[% phonepro %]</a></li>[% END %]
-            [% IF ( emailpro ) %]<li class="email"><span class="label">Organization email: </span>[% emailpro %]</li>[% END %]
+            [% IF ( phonepro ) %]<li><span class="label">Organization phone: </span><a href="tel:[% phonepro %]">[% phonepro | html %]</a></li>[% END %]
+            [% IF ( emailpro ) %]<li class="email"><span class="label">Organization email: </span>[% emailpro | html %]</li>[% END %]
         [% ELSE %]
-            [% IF ( phone ) %]<li><span class="label">Primary phone: </span><a href="tel:[% phone %]">[% phone %]</a></li>[% END %]
-            [% IF ( phonepro ) %]<li><span class="label">Secondary phone: </span><a href="tel:[% phonepro %]">[% phonepro %]</a></li>[% END %]
-            [% IF ( mobile ) %]<li><span class="label">Other phone: </span><a href="tel:[% mobile %]">[% mobile %]</a></li>[% END %]
+            [% IF ( phone ) %]<li><span class="label">Primary phone: </span><a href="tel:[% phone %]">[% phone | html %]</a></li>[% END %]
+            [% IF ( phonepro ) %]<li><span class="label">Secondary phone: </span><a href="tel:[% phonepro %]">[% phonepro | html %]</a></li>[% END %]
+            [% IF ( mobile ) %]<li><span class="label">Other phone: </span><a href="tel:[% mobile %]">[% mobile | html %]</a></li>[% END %]
         [% END %]
 
     [% IF ( P ) %]
-        [% IF ( phone ) %]<li><span class="label">Primary phone: </span><a href="tel:[% phone %]">[% phone %]</a></li>[% END %]
-        [% IF ( mobile ) %]<li><span class="label">Other phone: </span><a href="tel:[% mobile %]">[% mobile %]</a></li>[% END %]
+        [% IF ( phone ) %]<li><span class="label">Primary phone: </span><a href="tel:[% phone %]">[% phone | html %]</a></li>[% END %]
+        [% IF ( mobile ) %]<li><span class="label">Other phone: </span><a href="tel:[% mobile %]">[% mobile | html %]</a></li>[% END %]
     [% END %]   	
 	[% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax %]</li>[% END %]
     [% UNLESS ( I ) %]
-        [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a title="[% email %]" href="mailto:[% email %]">[% email %]</a></li>[% END %]
-        [% IF ( emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a title="[% emailpro %]" href="mailto:[% emailpro %]">[% emailpro %]</a></li>[% END %]
+        [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a title="[% email %]" href="mailto:[% email | url %]">[% email | html %]</a></li>[% END %]
+        [% IF ( emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a title="[% emailpro %]" href="mailto:[% emailpro | url %]">[% emailpro | html %]</a></li>[% END %]
     [% END %]
     [% IF ( initials ) %]<li><span class="label">Initials: </span>[% initials %]</li>[% END %]
     [% IF ( dateofbirth ) %]<li><span class="label">Date of birth:</span>[% dateofbirth | $KohaDates %] ([% age %] years)</li>[% END %]
@@ -255,7 +255,7 @@ function validate1(date) {
             <span class="label">Guarantees:</span>
             <ul>
                 [% FOREACH guarantee IN guarantees %]
-                    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber %]">[% guarantee.firstname %] [% guarantee.surname %]</a></li>
+                    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
                 [% END %]
             </ul>
         </li>
@@ -263,9 +263,9 @@ function validate1(date) {
         <li>
             <span class="label">Guarantor:</span>
             [% IF guarantor.borrowernumber %]
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber %]">[% guarantor.firstname %] [% guarantor.surname %]</a>
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a>
             [% ELSE %]
-                [% guarantor.firstname %] [% guarantor.surname %]
+                [% guarantor.firstname | html %] [% guarantor.surname | html %]
             [% END %]
         </li>
     [% END %]
@@ -289,15 +289,15 @@ function validate1(date) {
             <fieldset class="brief">
             [% IF ( picture ) %]
                 <legend>Manage patron image</legend>
-                <div class="hint">To update the image for [% title %] [% surname %], select a new image file and click 'Upload.' <br />Click the 'Delete' button to remove the current image.
+                <div class="hint">To update the image for [% title | html %] [% surname | html %], select a new image file and click 'Upload.' <br />Click the 'Delete' button to remove the current image.
             [% ELSE %]
                 <legend>Upload patron image</legend>
-                <div class="hint">[% title %] [% firstname %] [% surname %] does not currently have an image available. To import an image for [% title %] [% surname %], enter the name of an image file to upload.
+                <div class="hint">[% title %] [% firstname | html %] [% surname | html %] does not currently have an image available. To import an image for [% title %] [% surname | html %], enter the name of an image file to upload.
             [% END %]
                     <br />Only PNG, GIF, JPEG, XPM formats are supported.
                 </div>
                 <input type="hidden" id="image" name="filetype" value="image" />
-                <input type="hidden" id="cardnumber" name="cardnumber" value="[% cardnumber %]" />
+                <input type="hidden" id="cardnumber" name="cardnumber" value="[% cardnumber | html %]" />
                 <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
                 <ol>
                     <li>
@@ -455,15 +455,15 @@ function validate1(date) {
 
  <div id="patron-alternative-contact" style="padding-top: 1em;">
  <h3>Alternative contact</h3>
-   <div class="rows"> <ol><li><span class="label">Surname: </span>[% altcontactsurname %]</li>
-    <li><span class="label">First name: </span>[% altcontactfirstname %]</li>    
-    <li><span class="label">Address: </span>[% altcontactaddress1 %]</li>
-    <li><span class="label">Address 2: </span>[% altcontactaddress2 %]</li>
-	<li><span class="label">City: </span>[% altcontactaddress3 %]</li>
-    [% IF ( altcontactstate ) %]<li><span class="label">State: </span>[% altcontactstate %]</li>[% END %]
-    <li><span class="label">ZIP/Postal code: </span>[% altcontactzipcode %]</li>
-	[% IF ( altcontactcountry ) %]<li><span class="label">Country: </span>[% altcontactcountry %]</li>[% END %]
-    [% IF ( altcontactphone ) %]<li><span class="label">Phone: </span><a href="tel:[% altcontactphone %]">[% altcontactphone %]</a></li>[% END %]
+   <div class="rows"> <ol><li><span class="label">Surname: </span>[% altcontactsurname | html %]</li>
+    <li><span class="label">First name: </span>[% altcontactfirstname | html %]</li>
+    <li><span class="label">Address: </span>[% altcontactaddress1 | html %]</li>
+    <li><span class="label">Address 2: </span>[% altcontactaddress2 | html %]</li>
+	<li><span class="label">City: </span>[% altcontactaddress3 | html %]</li>
+    [% IF ( altcontactstate ) %]<li><span class="label">State: </span>[% altcontactstate | html %]</li>[% END %]
+    <li><span class="label">ZIP/Postal code: </span>[% altcontactzipcode | html %]</li>
+	[% IF ( altcontactcountry ) %]<li><span class="label">Country: </span>[% altcontactcountry | html %]</li>[% END %]
+    [% IF ( altcontactphone ) %]<li><span class="label">Phone: </span><a href="tel:[% altcontactphone | url %]">[% altcontactphone | html %]</a></li>[% END %]
     </ol></div>
 </div>
 <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=2">Edit</a></div>
