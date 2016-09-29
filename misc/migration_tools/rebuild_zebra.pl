@@ -164,7 +164,6 @@ my $kohadir = C4::Context->config('intranetdir');
 my $bib_index_mode  = C4::Context->config('zebra_bib_index_mode')  // 'dom';
 my $auth_index_mode = C4::Context->config('zebra_auth_index_mode') // 'dom';
 
-my $dbh = C4::Context->dbh;
 my ($biblionumbertagfield,$biblionumbertagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
 my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaField("biblioitems.biblioitemnumber","");
 
@@ -216,6 +215,7 @@ if ( $verbose_logging ) {
 }
 
 my $tester = XML::LibXML->new();
+my $dbh;
 
 # The main work is done here by calling do_one_pass().  We have added locking
 # avoid race conditions between full rebuilds and incremental updates either from
@@ -232,7 +232,13 @@ if ($daemon_mode) {
     while (1) {
         # For incremental updates, skip the update if the updates are locked
         if (_flock($LockFH, LOCK_EX|LOCK_NB)) {
-            do_one_pass() if ( zebraqueue_not_empty() );
+            eval {
+                $dbh = C4::Context->dbh;
+                do_one_pass() if ( zebraqueue_not_empty() );
+            };
+            if ($@ && $verbose_logging) {
+                warn "Warning : $@\n";
+            }
             _flock($LockFH, LOCK_UN);
         }
         sleep $daemon_sleep;
@@ -241,6 +247,7 @@ if ($daemon_mode) {
     # all one-off invocations
     my $lock_mode = ($wait_for_lock) ? LOCK_EX : LOCK_EX|LOCK_NB;
     if (_flock($LockFH, $lock_mode)) {
+        $dbh = C4::Context->dbh;
         do_one_pass();
         _flock($LockFH, LOCK_UN);
     } else {
