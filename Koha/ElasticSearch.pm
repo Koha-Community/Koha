@@ -22,11 +22,14 @@ use base qw(Class::Accessor);
 use C4::Context;
 
 use Koha::Database;
+use Koha::SearchFields;
+use Koha::SearchMarcMaps;
 
 use Carp;
 use JSON;
 use Modern::Perl;
 use Readonly;
+use YAML::Syck;
 
 use Data::Dumper;    # TODO remove
 
@@ -248,6 +251,24 @@ sub get_elasticsearch_mappings {
     );
     $self->sort_fields(\%sort_fields);
     return $mappings;
+}
+
+sub reset_elasticsearch_mappings {
+    my $mappings_yaml = C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/mappings.yaml';
+    my $indexes = LoadFile( $mappings_yaml );
+
+    while ( my ( $index_name, $fields ) = each %$indexes ) {
+        while ( my ( $field_name, $data ) = each %$fields ) {
+            my $field_type = $data->{type};
+            my $field_label = $data->{label};
+            my $mappings = $data->{mappings};
+            my $search_field = Koha::SearchFields->find_or_create({ name => $field_name, label => $field_label, type => $field_type }, { key => 'name' });
+            for my $mapping ( @$mappings ) {
+                my $marc_field = Koha::SearchMarcMaps->find_or_create({ index_name => $index_name, marc_type => $mapping->{marc_type}, marc_field => $mapping->{marc_field} });
+                $search_field->add_to_search_marc_maps($marc_field, { facet => $mapping->{facet}, suggestible => $mapping->{suggestible}, sort => $mapping->{sort} } );
+            }
+        }
+    }
 }
 
 # This overrides the accessor provided by Class::Accessor so that if

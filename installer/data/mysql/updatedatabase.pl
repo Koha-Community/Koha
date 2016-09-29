@@ -12274,9 +12274,9 @@ if ( $column_has_been_used ) {
 
 $DBversion = "3.23.00.050";
 if ( CheckVersion($DBversion) ) {
-    use YAML::Syck;
     use Koha::SearchMarcMaps;
     use Koha::SearchFields;
+    use Koha::ElasticSearch;
 
     $dbh->do(q|INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
                     VALUES('SearchEngine','Zebra','Choose Search Engine','','Choice')|);
@@ -12338,21 +12338,8 @@ $dbh->do(q|
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
         |);
 
-my $mappings_yaml = C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/mappings.yaml';
-my $indexes = LoadFile( $mappings_yaml );
-
-while ( my ( $index_name, $fields ) = each %$indexes ) {
-        while ( my ( $field_name, $data ) = each %$fields ) {
-            my $field_type = $data->{type};
-            my $field_label = $data->{label};
-            my $mappings = $data->{mappings};
-            my $search_field = Koha::SearchFields->find_or_create({ name => $field_name, label => $field_label, type => $field_type }, { key => 'name' });
-            for my $mapping ( @$mappings ) {
-                my $marc_field = Koha::SearchMarcMaps->find_or_create({ index_name => $index_name, marc_type => $mapping->{marc_type}, marc_field => $mapping->{marc_field} });
-                $search_field->add_to_search_marc_maps($marc_field, { facet => $mapping->{facet}, suggestible => $mapping->{suggestible}, sort => $mapping->{sort} } );
-            }
-        }
-}
+        # Insert default mappings
+        Koha::ElasticSearch->reset_elasticsearch_mappings;
 
 print "Upgrade to $DBversion done (Bug 12478 - Elasticsearch support for Koha)\n";
     SetVersion($DBversion);
