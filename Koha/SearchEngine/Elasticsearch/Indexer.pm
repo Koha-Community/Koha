@@ -1,4 +1,4 @@
-package Koha::ElasticSearch::Indexer;
+package Koha::SearchEngine::Elasticsearch::Indexer;
 
 # Copyright 2013 Catalyst IT
 #
@@ -19,22 +19,22 @@ package Koha::ElasticSearch::Indexer;
 
 use Carp;
 use Modern::Perl;
-use base qw(Koha::ElasticSearch);
+use base qw(Koha::SearchEngine::Elasticsearch);
 use Data::Dumper;
 
 # For now just marc, but we can do anything here really
 use Catmandu::Importer::MARC;
 use Catmandu::Store::ElasticSearch;
 
-Koha::ElasticSearch::Indexer->mk_accessors(qw( store ));
+Koha::SearchEngine::Elasticsearch::Indexer->mk_accessors(qw( store ));
 
 =head1 NAME
 
-Koha::ElasticSearch::Indexer - handles adding new records to the index
+Koha::SearchEngine::Elasticsearch::Indexer - handles adding new records to the index
 
 =head1 SYNOPSIS
 
-    my $indexer = Koha::ElasticSearch::Indexer->new(
+    my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new(
         { index => Koha::SearchEngine::BIBLIOS_INDEX } );
     $indexer->drop_index();
     $indexer->update_index(\@biblionumbers, \@records);

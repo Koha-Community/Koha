@@ -2974,8 +2974,8 @@ sub ModZebra {
     if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
 
         # TODO abstract to a standard API that'll work for whatever
-        require Koha::ElasticSearch::Indexer;
-        my $indexer = Koha::ElasticSearch::Indexer->new(
+        require Koha::SearchEngine::Elasticsearch::Indexer;
+        my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new(
             {
                 index => $server eq 'biblioserver'
                 ? $Koha::SearchEngine::BIBLIOS_INDEX

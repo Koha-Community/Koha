@@ -39,7 +39,7 @@ provides something that can be given to elasticsearch to get answers.
 
 =cut
 
-use base qw(Koha::ElasticSearch);
+use base qw(Koha::SearchEngine::Elasticsearch);
 use Carp;
 use JSON;
 use List::MoreUtils qw/ each_array /;
@@ -143,7 +143,7 @@ sub build_browse_query {
 
     return { query => '*' } if !defined $query;
 
-    # TODO this should come from Koha::Elasticsearch
+    # TODO this should come from Koha::SearchEngine::Elasticsearch
     my %field_whitelist = (
         title  => 1,
         author => 1,

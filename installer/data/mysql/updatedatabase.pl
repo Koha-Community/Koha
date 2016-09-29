@@ -12276,7 +12276,7 @@ $DBversion = "3.23.00.050";
 if ( CheckVersion($DBversion) ) {
     use Koha::SearchMarcMaps;
     use Koha::SearchFields;
-    use Koha::ElasticSearch;
+    use Koha::SearchEngine::Elasticsearch;
 
     $dbh->do(q|INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
                     VALUES('SearchEngine','Zebra','Choose Search Engine','','Choice')|);
@@ -12339,7 +12339,7 @@ $dbh->do(q|
         |);
 
         # Insert default mappings
-        Koha::ElasticSearch->reset_elasticsearch_mappings;
+        Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
 
 print "Upgrade to $DBversion done (Bug 12478 - Elasticsearch support for Koha)\n";
     SetVersion($DBversion);

@@ -1,4 +1,4 @@
-package Koha::ElasticSearch;
+package Koha::SearchEngine::Elasticsearch;
 
 # Copyright 2015 Catalyst IT
 #
@@ -42,7 +42,7 @@ Readonly our $AUTHORITIES_INDEX => 'authorities';
 
 =head1 NAME
 
-Koha::ElasticSearch - Base module for things using elasticsearch
+Koha::SearchEngine::Elasticsearch - Base module for things using elasticsearch
 
 =head1 ACCESSORS
 
@@ -465,6 +465,8 @@ __END__
 =item Chris Cormack C<< <chrisc@catalyst.net.nz> >>
 
 =item Robin Sheat C<< <robin@catalyst.net.nz> >>
+
+=item Jonathan Druart C<< <jonathan.druart@bugs.koha-community.org> >>
 
 =back
 
