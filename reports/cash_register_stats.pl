@@ -178,7 +178,7 @@ $template->param(
     beginDate        => $fromDate,
     endDate          => $toDate,
     transaction_type => $transaction_type,
-    branchloop       => C4::Branch::GetBranchesLoop($manager_branchcode),
+    branchloop       => Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed,
     manualinv_types  => $manualinv_types,
     CGIsepChoice => GetDelimiterChoices,
 );
