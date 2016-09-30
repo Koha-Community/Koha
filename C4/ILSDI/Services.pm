@@ -134,19 +134,15 @@ sub GetAvailability {
         } else {
             my $status;
             my $msg;
-            my $biblioitem = ( GetBiblioItemByBiblioNumber( $id, undef ) )[0];
-            if ($biblioitem) {
-                my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
-                my $items            = (GetItemsByBiblioitemnumber($biblioitemnumber))[0];
-
+            my $items = GetItemnumbersForBiblio($id);
+            if ($items) {
+                # Open XML
+                $out .= "  <dlf:record>\n";
+                $out .= "    <dlf:bibliographic id=\"" .$id. "\" />\n";
+                $out .= "    <dlf:items>\n";
                 # We loop over the items to clean them
-                my $itemnumber;
-                foreach my $item (@$items) {
-                    $itemnumber=$item->{'itemnumber'};
+                foreach my $itemnumber (@$items) {
                     my ( $biblionumber, $status, $msg, $location ) = _availability($itemnumber);
-                    $out .= "  <dlf:record>\n";
-                    $out .= "    <dlf:bibliographic id=\"" . ( $biblionumber || $itemnumber ) . "\" />\n";
-                    $out .= "    <dlf:items>\n";
                     $out .= "      <dlf:item id=\"" . $itemnumber . "\">\n";
                     $out .= "        <dlf:simpleavailability>\n";
                     $out .= "          <dlf:identifier>" . $itemnumber . "</dlf:identifier>\n";
@@ -155,9 +151,10 @@ sub GetAvailability {
                     if ($location) { $out .= "          <dlf:location>" . $location . "</dlf:location>\n"; }
                     $out .= "        </dlf:simpleavailability>\n";
                     $out .= "      </dlf:item>\n";
-                    $out .= "    </dlf:items>\n";
-                    $out .= "  </dlf:record>\n";
                 }
+                # Close XML
+                $out .= "    </dlf:items>\n";
+                $out .= "  </dlf:record>\n";
             } else {
                 $status = "unknown";
                 $msg    = "Error: could not retrieve availability for this ID";
