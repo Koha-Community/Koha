@@ -524,7 +524,6 @@ my $no_add;
 foreach my $category_type (qw(C A S P I X)) {
     my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => $category_type }, {order_by => ['categorycode']});
     $no_categories = 0 if $patron_categories->count > 0;
-    $template->param( 'catcode' => $patron_categories->next ) if $patron_categories->count == 1;
 
     my @categoryloop;
     while ( my $patron_category = $patron_categories->next ) {
