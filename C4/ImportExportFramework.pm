@@ -278,9 +278,10 @@ sub _export_table_csv
         $sth->execute($frameworkcode);
         my $data;
         while (my $hashRef = $sth->fetchrow_hashref) {
-            for (@fields) {
-                $hashRef->{$_} =~ s/[\r\n]//g;
-                $$strCSV .= '"' . $hashRef->{$_} . '",';
+            for my $field (@fields) {
+                my $value = $hashRef->{$field} // q||;
+                $value =~ s/[\r\n]//g;
+                $$strCSV .= '"' . $value . '",';
             }
             chop $$strCSV;
             $$strCSV .= chr(10);
