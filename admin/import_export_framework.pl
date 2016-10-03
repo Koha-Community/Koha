@@ -53,7 +53,7 @@ my $action = $input->param('action') || 'export';
 if ($action eq 'export' && $input->request_method() eq 'GET') {
     my $strXml = '';
     my $format = $input->param('type_export_' . $frameworkcode);
-    if ($frameworkcode == 'default') {
+    if ($frameworkcode eq 'default') {
         ExportFramework('', \$strXml, $format);
     } else {
         ExportFramework($frameworkcode, \$strXml, $format);
