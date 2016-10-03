@@ -1473,6 +1473,10 @@ sub buildQuery {
         # this happens when selecting a subject on the opac-detail page
         @limits = grep {!/^$/} @limits;
         my $original_q = $q; # without available part
+        unless ( grep { /^available$/ } @limits ) {
+            $q =~ s| and \( \( allrecords,AlwaysMatches:'' not onloan,AlwaysMatches:''\) and \(lost,st-numeric=0\) \)||;
+            $original_q = $q;
+        }
         if ( @limits ) {
             if ( grep { /^available$/ } @limits ) {
                 $q .= q| and ( ( allrecords,AlwaysMatches:'' not onloan,AlwaysMatches:'') and (lost,st-numeric=0) )|;
