@@ -50,7 +50,7 @@ get_memcached_servers_for()
     local apache_file=$(get_apache_config_for $instance)
     local memcached_servers=$(
         grep 'MEMCACHED_SERVERS' ${apache_file} |
-        awk '{print $3}' | uniq
+        awk -F'[\t "]+' '{print $4}' | head -n 1
     )
 
     echo "${memcached_servers}"
@@ -63,7 +63,7 @@ get_memcached_namespace_for()
     local apache_file=$(get_apache_config_for $instance)
     local memcached_namespace=$(
         grep 'MEMCACHED_NAMESPACE' ${apache_file} |
-        awk '{print $3}' | uniq
+        awk -F'[\t "]+' '{print $4}' | head -n 1
     )
 
     echo "${memcached_namespace}"
