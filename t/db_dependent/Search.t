@@ -603,6 +603,12 @@ if ( $indexing_mode eq 'dom' ) {
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, undef, "Search for 'pressed' returns no matches when stemming is off");
 
+    ( $error, $query, $simple_query, $query_cgi,
+    $query_desc, $limit, $limit_cgi, $limit_desc,
+    $query_type ) = buildQuery([], [ 'ccl=an:42' ], [], ['available'], [], 0, 'en');
+    is( $query, 'an:42 and ( ( allrecords,AlwaysMatches:'' not onloan,AlwaysMatches:'') and (lost,st-numeric=0) )', 'buildQuery should add the available part to the query if requested with ccl' );
+    is( $query_desc, 'an:42', 'buildQuery should remove the available part from the query' );
+
     # Let's see what happens when we pass bad data into these routines.
     # We have to catch warnings since we're not very good about returning errors.
 
@@ -948,12 +954,12 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + GRS-1' => sub {
-    plan tests => 107;
+    plan tests => 109;
     run_marc21_search_tests('grs1');
 };
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 107;
+    plan tests => 109;
     run_marc21_search_tests('dom');
 };
 

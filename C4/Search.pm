@@ -1472,10 +1472,15 @@ sub buildQuery {
         # This is needed otherwise ccl= and &limit won't work together, and
         # this happens when selecting a subject on the opac-detail page
         @limits = grep {!/^$/} @limits;
+        my $original_q = $q; # without available part
         if ( @limits ) {
-            $q .= ' and '.join(' and ', @limits);
+            if ( grep { /^available$/ } @limits ) {
+                $q .= q| and ( ( allrecords,AlwaysMatches:'' not onloan,AlwaysMatches:'') and (lost,st-numeric=0) )|;
+                delete $limits['available'];
+            }
+            $q .= ' and '.join(' and ', @limits) if @limits;
         }
-        return ( undef, $q, $q, "q=ccl=".uri_escape_utf8($q), $q, '', '', '', 'ccl' );
+        return ( undef, $q, $q, "q=ccl=".uri_escape_utf8($q), $original_q, '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
         return ( undef, $', $', "q=cql=".uri_escape_utf8($'), $', '', '', '', 'cql' );
