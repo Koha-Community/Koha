@@ -49,6 +49,9 @@ sub store {
               and $self->message_type
               and $self->branchcode;
 
+    my $userenv = C4::Context->userenv;
+    $self->manager_id($userenv ? $userenv->{number} : 0);
+
     C4::Log::logaction( "MEMBERS", "ADDCIRCMESSAGE", $self->borrowernumber, $self->message )
         if C4::Context->preference("BorrowersLog");
 

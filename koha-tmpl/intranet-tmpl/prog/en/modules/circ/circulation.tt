@@ -850,23 +850,22 @@ No patron matched <span class="ex">[% message | html %]</span>
     <div id="messages" class="circmessage">
         <h4>Messages:</h4>
         <ul>
-            [% FOREACH message IN librarian_messages %]
+            [% FOREACH message IN messages %]
                 <li>
-                    <span class="circ-hlt">
+                    [% IF(message.message_type == "L") %]
+                        <span class="circ-hlt">
+                    [% ELSE %]
+                        <span>
+                    [% END %]>
                         [% message.message_date | $KohaDates %]
                         [% Branches.GetName( message.branchcode ) %]
+                        ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% message.manager_id %]">[% message.name %]</a> )
                         <i>"[% message.message %]"</i>
                     </span>
                     [% IF message.branchcode == branch OR Koha.Preference('AllowAllMessageDeletion') %]
                         [<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% message.message_id %]&amp;borrowernumber=[% message.borrowernumber %]" onclick="return confirm(MSG_CONFIRM_DELETE_MESSAGE);"><i class="fa fa-trash"></i> Delete</a>]
                     [% END %]
                 </li>
-            [% END %]
-            [% FOREACH message IN patron_messages %]
-                <li><span class="">[% message.message_date | $KohaDates %] [% Branches.GetName( message.branchcode )%] <i>"[% message.message %]"</i></span>
-                [% IF message.branchcode == branch OR Koha.Preference('AllowAllMessageDeletion') %]
-                    [<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% message.message_id %]&amp;borrowernumber=[% message.borrowernumber %]"><i class="fa fa-trash"></i> Delete</a>]
-                [% END %]</li>
             [% END %]
         </ul>
         <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal"><i class="fa fa-plus"></i> Add a new message</a>

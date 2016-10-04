@@ -2671,7 +2671,9 @@ CREATE TABLE `messages` ( -- circulation messages left via the patron's check ou
   `message_type` varchar(1) NOT NULL, -- whether the message is for the librarians (L) or the patron (B)
   `message` text NOT NULL, -- the text of the message
   `message_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- the date and time the message was written
-  PRIMARY KEY (`message_id`)
+  `manager_id` int(11) default NULL, -- creator of message
+  PRIMARY KEY (`message_id`),
+  CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`manager_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --

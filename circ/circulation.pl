@@ -566,19 +566,32 @@ if ( $borrowernumber && $borrower->{'category_type'} eq 'C') {
     $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
 }
 
-my $librarian_messages = Koha::Patron::Messages->search(
+my $all_messages = Koha::Patron::Messages->search(
     {
-        borrowernumber => $borrowernumber,
-        message_type => 'L',
+        'me.borrowernumber' => $borrowernumber,
+    },
+    {
+       join => 'manager',
+       '+select' => ['manager.surname', 'manager.firstname' ],
+       '+as' => ['manager_surname', 'manager_firstname'],
     }
 );
 
-my $patron_messages = Koha::Patron::Messages->search(
-    {
-        borrowernumber => $borrowernumber,
-        message_type => 'B',
-    }
-);
+my @messages;
+while ( my $content = $all_messages->next ) {
+    my $this_item;
+
+    $this_item->{borrowernumber} = $content->borrowernumber;
+    $this_item->{message_id}     = $content->message_id;
+    $this_item->{branchcode}     = $content->branchcode;
+    $this_item->{message_type}   = $content->message_type;
+    $this_item->{message_date}   = $content->message_date;
+    $this_item->{message}        = $content->message;
+    $this_item->{manager_id}     = $content->manager_id;
+    $this_item->{name}           = $content->_result->get_column('manager_firstname') . ' ' . $content->_result->get_column('manager_surname');
+
+    push @messages, $this_item;
+}
 
 my $fast_cataloging = 0;
 if ( Koha::BiblioFrameworks->find('FA') ) {
@@ -629,8 +642,7 @@ if ($restoreduedatespec || $stickyduedate) {
 
 $template->param(
     patron            => $patron,
-    librarian_messages => $librarian_messages,
-    patron_messages   => $patron_messages,
+    messages           => \@messages,
     borrower          => $borrower,
     borrowernumber    => $borrowernumber,
     categoryname      => $borrower->{'description'},
