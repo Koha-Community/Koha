@@ -50,8 +50,7 @@ $(document).ready(function() {
         if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
     });
     $("#export_submit").on("click",function(){
-        var output_format = $("#output_format").val();
-        export_checkouts(output_format);
+        export_checkouts($("#issues-table-output-format").val());
         return false;
     });
 

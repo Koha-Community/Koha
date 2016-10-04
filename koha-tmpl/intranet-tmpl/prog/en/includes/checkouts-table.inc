@@ -51,8 +51,8 @@
 
                 [% IF ( exports_enabled ) %]
                     <fieldset>
-                        <label for="output_format"><b>Export checkouts using format:</b></label>
-                        <select name="output_format" id="output_format">
+                        <label for="issues-table-output-format"><b>Export checkouts using format:</b></label>
+                        <select name="issues-table-output-format" id="issues-table-output-format">
                             <option value="iso2709_995">ISO2709 with items</option>
                             <option value="iso2709">ISO2709 without items</option>
                             [% IF Koha.Preference('ExportWithCsvProfile') %]
