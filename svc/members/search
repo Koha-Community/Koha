@@ -47,10 +47,6 @@ my $searchfieldstype = $input->param('searchfieldstype') || 'standard';
 my $has_permission = $input->param('has_permission');
 my $selection_type = $input->param('selection_type');
 
-if ( $searchfieldstype eq "dateofbirth" ) {
-    $searchmember = output_pref({dt => dt_from_string($searchmember), dateformat => 'iso', dateonly => 1});
-}
-
 # variable information for DataTables (id)
 my $sEcho = $input->param('sEcho');
 
