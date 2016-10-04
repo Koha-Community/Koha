@@ -41,8 +41,7 @@ $(document).ready(function() {
         minute: 59
     });
     $("#export_submit").on("click",function(){
-        var output_format = $("#output_format").val();
-        export_checkouts(output_format);
+        export_checkouts($("#issues-table-output-format").val());
         return false;
     });
 });
