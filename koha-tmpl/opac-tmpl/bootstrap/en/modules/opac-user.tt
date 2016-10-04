@@ -40,9 +40,8 @@ Using this account is not recommended because some parts of Koha will not functi
                         </div>
                     [% END %]
 
-                    [% IF ( bor_messages ) %]
-                        [% INCLUDE 'opac-note.inc' %]
-                    [% END %]
+                    [% INCLUDE 'opac-note.inc' %]
+
                     <h2>Hello, [% INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber %]
                     </h2>
 

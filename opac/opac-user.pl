@@ -308,16 +308,6 @@ my $patron_messages = Koha::Patron::Messages->search(
         message_type => 'B',
     }
 );
-if ( $patron_messages->count ) {
-    $template->param( bor_messages => 1 );
-}
-
-if ( $borr->{'opacnote'} ) {
-  $template->param( 
-    bor_messages => 1,
-    opacnote => $borr->{'opacnote'},
-  );
-}
 
 if (   C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor')
     || C4::Context->preference('AllowStaffToSetCheckoutsVisibilityForGuarantor') )
@@ -336,6 +326,7 @@ if (   C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor'
 $template->param(
     borrower                 => $borr,
     patron_messages          => $patron_messages,
+    opacnote                 => $borr->{opacnote},
     patronupdate             => $patronupdate,
     OpacRenewalAllowed       => C4::Context->preference("OpacRenewalAllowed"),
     userview                 => 1,

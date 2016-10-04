@@ -166,9 +166,7 @@
                         [% IF ( patronid ) %]
                             [% IF ( validuser ) %]
                                 <div class="alert alert-info">You are logged in as [% borrowername %].</div>
-                                [% IF ( bor_messages ) %]
-                                    [% INCLUDE 'opac-note.inc' %]
-                                [% END %]
+                                [% INCLUDE 'opac-note.inc' %]
                             [% END %]
 
                             [% IF ( nouser ) %]

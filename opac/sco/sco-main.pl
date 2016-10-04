@@ -257,18 +257,10 @@ if ($borrower->{cardnumber}) {
             message_type => 'B',
         }
     );
-    if ( $patron_messages->count ) {
-        $template->param( bor_messages => 1,
-            patron_messages => $patron_messages,
-        );
-    }
-
-    if ( $borrower->{'opacnote'} ) {
-        $template->param(
-            bor_messages => 1,
-            opacnote => $borrower->{'opacnote'},
-        );
-    }
+    $template->param(
+        patron_messages => $patron_messages,
+        opacnote => $borrower->{opacnote},
+    );
 
     my $inputfocus = ($return_only      == 1) ? 'returnbook' :
                      ($confirm_required == 1) ? 'confirm'    : 'barcode' ;
