@@ -214,42 +214,40 @@ function searchToHold(){
 
 <!-- Modal -->
 <div id="add_message_form" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="addnewmessageLabel" aria-hidden="true">
-    <div class="modal-body">
-        <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
-        <fieldset id="borrower_messages" class="brief">
-            <legend>Leave a message</legend>
-            <ol>
-                <li>
-                    <label for="message_type">Add a message for:</label>
-                    <select name="message_type" id="message_type">
-                        <option value="L">Staff - Internal note</option>
-                        <option value="B">OPAC - [% firstname | html %] [% surname | html %]</option>
-                    </select>
-                </li>
-                [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]
-                [% IF bor_notes %]
-                    <li>
-                        <label for="select_patron_messages">Predefined notes: </label>
-                        <select name="type" id="select_patron_messages">
-                            <option value="">Select note</option>
-                            [% FOREACH bor_note IN bor_notes %]
-                                <option value="[% bor_note.lib %]">[% bor_note.lib %]</option>
-                            [% END %]
-                        </select>
-                    </li>
-                [% END %]
-                <li>
-                    <textarea rows="3" cols="60" name="borrower_message" id="borrower_message" ></textarea>
-                </li>
-            </ol>
+    <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
+        <div class="modal-header">
+            <h3>Leave a message</h3>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="message_type">Add a message for:</label>
+                <select name="message_type" id="message_type">
+                    <option value="L">Staff - Internal note</option>
+                    <option value="B">OPAC - [% firstname | html %] [% surname | html %]</option>
+                </select>
+            </div>
+            [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]
+            [% IF bor_notes %]
+            <div class="form-group">
+                <label for="select_patron_messages">Predefined notes: </label>
+                <select name="type" id="select_patron_messages">
+                    <option value="">Select note</option>
+                    [% FOREACH bor_note IN bor_notes %]
+                        <option value="[% bor_note.lib %]">[% bor_note.lib %]</option>
+                    [% END %]
+                </select>
+            </div>
+            [% END %]
+            <div class="form-group">
+                <textarea rows="3" class="modal-textarea" name="borrower_message" id="borrower_message" ></textarea>
+            </div>
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             <input type="hidden" name="batch" value="[% batch %]" />
             <input type="hidden" name="branchcode" value="[% LoginBranchcode %]" />
-        </fieldset>
-    </div>
-    <div class="modal-footer">
-        <fieldset class="action">
-            <input type="submit" value="Save" /> </form><a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
-        </fieldset>
-    </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn approve" type="submit"><i class="fa fa-check"></i> Save</button>
+            <button class="btn deny" href="#" class="cancel" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
+        </div>
+    </form>
 </div>
