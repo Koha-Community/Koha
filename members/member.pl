@@ -64,10 +64,6 @@ if ( $quicksearch and $searchmember ) {
 
 my $searchfieldstype = $input->param('searchfieldstype') || 'standard';
 
-if ( $searchfieldstype eq "dateofbirth" ) {
-    $searchmember = output_pref({dt => dt_from_string($searchmember), dateformat => 'iso', dateonly => 1});
-}
-
 $template->param( 'alphabet' => C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' );
 
 my $view = $input->request_method() eq "GET" ? "show_form" : "show_results";
