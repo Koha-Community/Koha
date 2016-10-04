@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 4;
+use Test::Warn;
 use t::lib::TestBuilder;
 
 use MARC::Record;
@@ -54,6 +55,9 @@ $biblio_2->append_fields(
 );
 my ($biblionumber_2, $biblioitemnumber_2) = AddBiblio($biblio_2, '');
 
+my ($bad_biblionumber, $bad_biblioitemnumber) = AddBiblio($biblio_1, '');
+Koha::Biblioitems->find( $bad_biblionumber )->marcxml("something wrong")->store;
+
 my $builder = t::lib::TestBuilder->new;
 my $item_1_1 = $builder->build({
     source => 'Item',
@@ -76,24 +80,33 @@ my $item_2_1 = $builder->build({
         more_subfields_xml => '',
     }
 });
+my $bad_item = $builder->build({
+    source => 'Item',
+    value => {
+        biblionumber => $bad_biblionumber,
+        more_subfields_xml => '',
+    }
+});
 
 subtest 'export csv' => sub {
-    plan tests => 2;
+    plan tests => 3;
     my $csv_content = q{Title=245$a|Barcode=952$p};
     $dbh->do(q|INSERT INTO export_format(profile, description, content, csv_separator, field_separator, subfield_separator, encoding, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)|, {}, "TEST_PROFILE_Records.t", "my useless desc", $csv_content, '|', ';', ',', 'utf8', 'marc');
     my $csv_profile_id = $dbh->last_insert_id( undef, undef, 'export_format', undef );
     my $generated_csv_file = '/tmp/test_export_1.csv';
 
     # Get all item infos
-    Koha::Exporter::Record::export(
-        {
-            record_type => 'bibs',
-            record_ids => [ $biblionumber_1, $biblionumber_2 ],
-            format => 'csv',
-            csv_profile_id => $csv_profile_id,
-            output_filepath => $generated_csv_file,
-        }
-    );
+    warning_like {
+        Koha::Exporter::Record::export(
+            {   record_type     => 'bibs',
+                record_ids      => [ $biblionumber_1, $bad_biblionumber, $biblionumber_2 ],
+                format          => 'csv',
+                csv_profile_id  => $csv_profile_id,
+                output_filepath => $generated_csv_file,
+            }
+        );
+    }
+    qr|.*Start tag expected.*|, "Export csv with wrong marcxml should raise a warning";
     my $expected_csv = <<EOF;
 Title|Barcode
 "$biblio_1_title"|$item_1_1->{barcode},$item_1_2->{barcode}
@@ -124,16 +137,19 @@ EOF
 };
 
 subtest 'export xml' => sub {
-    plan tests => 2;
+    plan tests => 3;
     my $generated_xml_file = '/tmp/test_export.xml';
-    Koha::Exporter::Record::export(
-        {
-            record_type => 'bibs',
-            record_ids => [ $biblionumber_1, $biblionumber_2 ],
-            format => 'xml',
-            output_filepath => $generated_xml_file,
-        }
-    );
+    warning_like {
+        Koha::Exporter::Record::export(
+            {   record_type     => 'bibs',
+                record_ids      => [ $biblionumber_1, $bad_biblionumber, $biblionumber_2 ],
+                format          => 'xml',
+                output_filepath => $generated_xml_file,
+            }
+        );
+    }
+    qr|.*Start tag expected.*|, "Export xml with wrong marcxml should raise a warning";
+
     my $generated_xml_content = read_file( $generated_xml_file );
     $MARC::File::XML::_load_args{BinaryEncoding} = 'utf-8';
     open my $fh, '<', $generated_xml_file;
@@ -153,17 +169,20 @@ subtest 'export xml' => sub {
 };
 
 subtest 'export iso2709' => sub {
-    plan tests => 2;
+    plan tests => 3;
     my $generated_mrc_file = '/tmp/test_export.mrc';
     # Get all item infos
-    Koha::Exporter::Record::export(
-        {
-            record_type => 'bibs',
-            record_ids => [ $biblionumber_1, $biblionumber_2 ],
-            format => 'iso2709',
-            output_filepath => $generated_mrc_file,
-        }
-    );
+    warning_like {
+        Koha::Exporter::Record::export(
+            {   record_type     => 'bibs',
+                record_ids      => [ $biblionumber_1, $bad_biblionumber, $biblionumber_2 ],
+                format          => 'iso2709',
+                output_filepath => $generated_mrc_file,
+            }
+        );
+    }
+    qr|.*Start tag expected.*|, "Export iso2709 with wrong marcxml should raise a warning";
+
     my $records = MARC::File::USMARC->in( $generated_mrc_file );
     my @records;
     while ( my $record = $records->next ) {
