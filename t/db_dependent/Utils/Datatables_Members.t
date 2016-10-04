@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 27;
+use Test::More tests => 29;
 
 use C4::Context;
 use C4::Members;
@@ -61,7 +61,7 @@ my %john_doe = (
     surname      => 'Doe',
     categorycode => $categorycode,
     branchcode   => $branchcode,
-    dateofbirth  => '',
+    dateofbirth  => '2010-10-15',
     dateexpiry   => '9999-12-31',
     userid       => 'john.doe'
 );
@@ -72,7 +72,7 @@ my %john_smith = (
     surname      => 'Smith',
     categorycode => $categorycode,
     branchcode   => $branchcode,
-    dateofbirth  => '',
+    dateofbirth  => '2010-01-31',
     dateexpiry   => '9999-12-31',
     userid       => 'john.smith'
 );
@@ -362,6 +362,23 @@ $search_results = C4::Utils::DataTables::Members::search({
 
 is( $search_results->{ iTotalDisplayRecords }, 1,
     "Jean Paul Dupont is found using contains and two terms search 'Jea Pau' (Bug 15252)");
+
+# Date of birth formatting
+t::lib::Mocks::mock_preference('dateformat', 'metric');
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "15/10/2010",
+    searchfieldstype => 'dateofbirth',
+    dt_params        => \%dt_params
+});
+is( $search_results->{ iTotalDisplayRecords }, 1,
+    "Sarching by date of birth should handle date formatted given the dateformat pref");
+$search_results = C4::Utils::DataTables::Members::search({
+    searchmember     => "2010-10-15",
+    searchfieldstype => 'dateofbirth',
+    dt_params        => \%dt_params
+});
+is( $search_results->{ iTotalDisplayRecords }, 1,
+    "Sarching by date of birth should handle date formatted in iso");
 
 # End
 $dbh->rollback;
