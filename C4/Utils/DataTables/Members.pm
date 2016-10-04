@@ -76,7 +76,7 @@ sub search {
     }
 
     my $searchfields = {
-        standard => C4::Context->preference('DefaultPatronSearchFields'),
+        standard => C4::Context->preference('DefaultPatronSearchFields') || 'surname,firstname,othernames,cardnumber,userid',
         surname => 'surname',
         email => 'email,emailpro,B_email',
         borrowernumber => 'borrowernumber',
