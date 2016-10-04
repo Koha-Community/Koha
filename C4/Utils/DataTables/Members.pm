@@ -21,7 +21,25 @@ sub search {
         $searchmember = $dt_params->{sSearch} // '';
     }
 
-    my ($iTotalRecords, $iTotalDisplayRecords);
+    my ($sth, $query, $iTotalRecords, $iTotalDisplayRecords);
+    my $dbh = C4::Context->dbh;
+    # Get the iTotalRecords DataTable variable
+    $query = "SELECT COUNT(borrowers.borrowernumber) FROM borrowers";
+    $sth = $dbh->prepare($query);
+    $sth->execute;
+    ($iTotalRecords) = $sth->fetchrow_array;
+
+    if ( $searchfieldstype eq 'dateofbirth' ) {
+        # Return an empty list if the date of birth is not correctly formatted
+        $searchmember = eval { output_pref( { str => $searchmember, dateformat => 'iso', dateonly => 1 } ); };
+        if ( $@ or not $searchmember ) {
+            return {
+                iTotalRecords        => 0,
+                iTotalDisplayRecords => 0,
+                patrons              => [],
+            };
+        }
+    }
 
     # If branches are independent and user is not superlibrarian
     # The search has to be only on the user branch
@@ -31,7 +49,6 @@ sub search {
 
     }
 
-    my $dbh = C4::Context->dbh;
     my $select = "SELECT
         borrowers.borrowernumber, borrowers.surname, borrowers.firstname,
         borrowers.streetnumber, borrowers.streettype, borrowers.address,
@@ -127,7 +144,7 @@ sub search {
         $limit = "LIMIT $dt_params->{iDisplayStart},$dt_params->{iDisplayLength}";
     }
 
-    my $query = join(
+    $query = join(
         " ",
         ($select ? $select : ""),
         ($from ? $from : ""),
@@ -135,7 +152,7 @@ sub search {
         ($orderby ? $orderby : ""),
         ($limit ? $limit : "")
     );
-    my $sth = $dbh->prepare($query);
+    $sth = $dbh->prepare($query);
     $sth->execute(@where_args);
     my $patrons = $sth->fetchall_arrayref({});
 
@@ -144,12 +161,6 @@ sub search {
     $sth = $dbh->prepare($query);
     $sth->execute(@where_args);
     ($iTotalDisplayRecords) = $sth->fetchrow_array;
-
-    # Get the iTotalRecords DataTable variable
-    $query = "SELECT COUNT(borrowers.borrowernumber) FROM borrowers";
-    $sth = $dbh->prepare($query);
-    $sth->execute;
-    ($iTotalRecords) = $sth->fetchrow_array;
 
     # Get some information on patrons
     foreach my $patron (@$patrons) {
