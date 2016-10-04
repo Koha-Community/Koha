@@ -39,7 +39,7 @@ my $record_type       = $query->param("record_type");
 my $op                = $query->param("op") || '';
 my $output_format     = $query->param("format") || $query->param("output_format") || 'iso2709';
 my $backupdir         = C4::Context->config('backupdir');
-my $filename          = $query->param("filename") || 'koha.mrc';
+my $filename          = $query->param("filename") || ( $output_format eq 'csv' ? 'koha.csv' : 'koha.mrc' );
 $filename =~ s/(\r|\n)//;
 
 my $dbh = C4::Context->dbh;
