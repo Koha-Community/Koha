@@ -60,8 +60,10 @@ if ( !IsOverDriveEnabled() || !( $token = GetOverDriveToken() ) ) {
 
     exit;
 }
+my $fixed_query = $query->query_string;
+$fixed_query =~ tr/;/&/;
 
-my $request = HTTP::Request::Common::GET( "https://api.overdrive.com/v1" . $query->path_info . '?' . $query->query_string );
+my $request = HTTP::Request::Common::GET( "https://api.overdrive.com/v1" . $query->path_info . '?' . $fixed_query );
 $request->header( Authorization => $token );
 
 my $ua = LWP::UserAgent->new( "Koha " . Koha::version() );
