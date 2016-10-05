@@ -55,7 +55,7 @@ my $member       = $input->param('member');
 #Do not delete yourself...
 if ($borrowernumber == $member ) {
     print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_YOURSELF");
-    exit 1;
+    exit 0; # Exit without error
 }
 
 # Handle deletion from the Norwegian national patron database, if it is enabled
@@ -84,12 +84,12 @@ my $userenv = C4::Context->userenv;
 if ($bor->{category_type} eq "S") {
     unless(C4::Auth::haspermission($userenv->{'id'},{'staffaccess'=>1})) {
         print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_STAFF");
-        exit 1;
+        exit 0; # Exit without error
     }
 } else {
     unless(C4::Auth::haspermission($userenv->{'id'},{'borrowers'=>1})) {
 	print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE");
-	exit 1;
+        exit 0; # Exit without error
     }
 }
 
@@ -98,7 +98,7 @@ if (C4::Context->preference("IndependentBranches")) {
     if ( !C4::Context->IsSuperLibrarian() && $bor->{'branchcode'}){
         unless ($userenv->{branch} eq $bor->{'branchcode'}){
             print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_OTHERLIBRARY");
-            exit;
+            exit 0; # Exit without error
         }
     }
 }
@@ -165,7 +165,7 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_
     DelMember($member);
     # TODO Tell the user everything went ok
     print $input->redirect("/cgi-bin/koha/members/members-home.pl");
-    exit 1;
+    exit 0; # Exit without error
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
