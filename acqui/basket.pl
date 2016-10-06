@@ -233,7 +233,7 @@ elsif ( $op eq 'ediorder' ) {
               || ( $basket->{branch}  eq '' );
             unless ($validtest) {
                 print $query->redirect("../mainpage.pl");
-                exit 1;
+                exit 0;
             }
         }
         if (!defined $basket->{branch} or $basket->{branch} eq $userenv->{branch}) {
