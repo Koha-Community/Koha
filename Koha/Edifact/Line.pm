@@ -683,6 +683,10 @@ sub extract_gir {
         LSZ => 'size_code',
         LVC => 'coded_servicing_instruction',
         LVT => 'servicing_instruction',
+        LHC => 'library_holding_code',
+        LRP => 'library_rotation_plan',
+        LSC => 'statistical_category',
+        RIC => 'reader_interest_category',
     );
 
     my $set_qualifier = $s->elem( 0, 0 );    # copy number
