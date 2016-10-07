@@ -173,8 +173,8 @@ sub redirect_to_paycollect {
     $redirect .= get_for_redirect( 'amount', "amount$line_no", 1 );
     $redirect .=
       get_for_redirect( 'amountoutstanding', "amountoutstanding$line_no", 1 );
-    $redirect .= get_for_redirect( 'description',    "description$line_no",    0 );
-    $redirect .= get_for_redirect( 'title',        "title$line_no",        0 );
+    $redirect .= uri_escape_utf8( get_for_redirect( 'description', "description$line_no", 0 ) );
+    $redirect .= uri_escape_utf8( get_for_redirect( 'title', "title$line_no", 0 ) );
     $redirect .= get_for_redirect( 'itemnumber',   "itemnumber$line_no",   0 );
     $redirect .= get_for_redirect( 'notify_id',    "notify_id$line_no",    0 );
     $redirect .= get_for_redirect( 'notify_level', "notify_level$line_no", 0 );
