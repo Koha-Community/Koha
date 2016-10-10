@@ -313,7 +313,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     C4::Form::MessagingPreferences::set_form_values({ borrowernumber => $borrowernumber }, $template);
     $template->param(messaging_form_inactive => 1);
     $template->param(SMSSendDriver => C4::Context->preference("SMSSendDriver"));
-    $template->param(SMSnumber     => defined $data->{'smsalertnumber'} ? $data->{'smsalertnumber'} : $data->{'mobile'});
+    $template->param(SMSnumber     => $data->{'smsalertnumber'});
     $template->param(TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"));
 }
 
