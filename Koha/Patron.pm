@@ -30,7 +30,8 @@ use Koha::Holds;
 use Koha::Issues;
 use Koha::OldIssues;
 use Koha::Patron::Categories;
-use Koha::Patron::HouseboundProfiles;
+use Koha::Patron::HouseboundProfile;
+use Koha::Patron::HouseboundRole;
 use Koha::Patron::Images;
 use Koha::Patrons;
 use Koha::Virtualshelves;
@@ -132,8 +133,24 @@ Returns the HouseboundProfile associated with this patron.
 
 sub housebound_profile {
     my ( $self ) = @_;
+    my $profile = $self->_result->housebound_profile;
+    return Koha::Patron::HouseboundProfile->_new_from_dbic($profile)
+        if ( $profile );
+    return 0;
+}
 
-    return Koha::Patron::HouseboundProfiles->find($self->borrowernumber);
+=head3 housebound_role
+
+Returns the HouseboundRole associated with this patron.
+
+=cut
+
+sub housebound_role {
+    my ( $self ) = @_;
+
+    my $role = $self->_result->housebound_role;
+    return Koha::Patron::HouseboundRole->_new_from_dbic($role) if ( $role );
+    return 0;
 }
 
 =head3 siblings

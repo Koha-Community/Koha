@@ -45,10 +45,9 @@ Returns all Patrons which are Housebound choosers.
 
 sub search_housebound_choosers {
     my ( $self ) = @_;
-    my $cho = $self->_resultset->search
-        ->search_related('borrower_attributes', {
-            code => 'HSBND',
-            attribute => 'CHO',
+    my $cho = $self->_resultset
+        ->search_related('housebound_role', {
+            housebound_chooser => 1,
         })->search_related('borrowernumber');
     return Koha::Patrons->_new_from_dbic($cho);
 }
@@ -61,10 +60,9 @@ Returns all Patrons which are Housebound deliverers.
 
 sub search_housebound_deliverers {
     my ( $self ) = @_;
-    my $del = $self->_resultset->search
-        ->search_related('borrower_attributes', {
-            code => 'HSBND',
-            attribute => 'DEL',
+    my $del = $self->_resultset
+        ->search_related('housebound_role', {
+            housebound_deliverer => 1,
         })->search_related('borrowernumber');
     return Koha::Patrons->_new_from_dbic($del);
 }
