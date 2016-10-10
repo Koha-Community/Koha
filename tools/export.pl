@@ -139,7 +139,7 @@ if ( $op eq "export" ) {
                         ?
                           C4::Context->preference('item-level_itypes')
                             ? ( 'items.itype' => $itemtype )
-                            : ( 'biblioitems.itemtype' => $itemtype )
+                            : ( 'me.itemtype' => $itemtype )
                         : ()
                     ),
 
