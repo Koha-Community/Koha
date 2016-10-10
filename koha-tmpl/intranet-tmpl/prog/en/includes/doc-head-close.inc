@@ -21,4 +21,6 @@
 [% END %]
 [% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
 
-[% INCLUDE js_includes.inc %]
+[% UNLESS ( footerjs ) %]
+    [% INCLUDE js_includes.inc %]
+[% END %]
