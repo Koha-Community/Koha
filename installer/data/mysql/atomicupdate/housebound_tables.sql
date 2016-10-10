@@ -36,17 +36,21 @@ CREATE TABLE IF NOT EXISTS `housebound_visit` (
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `housebound_role` (
+  `borrowernumber_id` int(11) NOT NULL, -- borrowernumber link
+  `housebound_chooser` tinyint(1) NOT NULL DEFAULT 0, -- set to 1 to indicate this patron is a housebound chooser volunteer
+  `housebound_deliverer` tinyint(1) NOT NULL DEFAULT 0, -- set to 1 to indicate this patron is a housebound deliverer volunteer
+  PRIMARY KEY (`borrowernumber_id`),
+  CONSTRAINT `houseboundrole_bnfk`
+    FOREIGN KEY (`borrowernumber_id`)
+    REFERENCES `borrowers` (`borrowernumber`)
+    ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 INSERT IGNORE INTO systempreferences
        (variable,value,options,explanation,type) VALUES
        ('HouseboundModule',0,'',
        'If ON, enable housebound module functionality.','YesNo');
 
 INSERT IGNORE INTO authorised_values (category, authorised_value, lib) VALUES
-       ('HSBND_FREQ','EW','Every week'),
-       ('HSBND_ROLE','CHO','Chooser'),
-       ('HSBND_ROLE','DEL','Deliverer');
-
-INSERT IGNORE INTO borrower_attribute_types
-       (code, description, repeatable, opac_display, staff_searchable,
-       authorised_value_category, display_checkout) values
-       ('HSBND', 'Housebound role', 1, 1, 1, 'HSBND_ROLE', 1);
+       ('HSBND_FREQ','EW','Every week');

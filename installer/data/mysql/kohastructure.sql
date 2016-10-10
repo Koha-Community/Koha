@@ -3856,6 +3856,22 @@ CREATE TABLE `housebound_visit` (
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Table structure for table `housebound_role`
+--
+
+DROP TABLE IF EXISTS `housebound_role`;
+CREATE TABLE IF NOT EXISTS `housebound_role` (
+  `borrowernumber_id` int(11) NOT NULL, -- borrowernumber link
+  `housebound_chooser` tinyint(1) NOT NULL DEFAULT 0, -- set to 1 to indicate this patron is a housebound chooser volunteer
+  `housebound_deliverer` tinyint(1) NOT NULL DEFAULT 0, -- set to 1 to indicate this patron is a housebound deliverer volunteer
+  PRIMARY KEY (`borrowernumber_id`),
+  CONSTRAINT `houseboundvisit_bnfk`
+    FOREIGN KEY (`borrowernumber_id`)
+    REFERENCES `borrowers` (`borrowernumber`)
+    ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
