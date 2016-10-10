@@ -50,13 +50,13 @@ is( $object2->surname(), "Test Patron Surname 3", "Bad Set does not set field" )
 is( $ret, 0, "Set returns 0 when passed a bad property" );
 
 warning_is { $ret = $object->bork() }
-            "No method bork!",
-            "Expected 'No method bork!' caught for getter.";
+            "The method bork is not covered by tests or does not exist!",
+            "Expected 'The method bork is not covered by tests or does not exist!' caught for getter.";
 ok( ! defined $ret, 'Bad getter returns undef' );
 
 warning_is { $ret = $object->bork('bork') }
-            "No method bork!",
-            "Expected 'No method bork!' caught for setter.";
+            "The method bork is not covered by tests or does not exist!",
+            "Expected 'The method bork is not covered by tests or does not exist!' caught for setter.";
 ok( ! defined $ret, 'Bad setter returns undef' );
 
 my $patron = Koha::Patron->new(
