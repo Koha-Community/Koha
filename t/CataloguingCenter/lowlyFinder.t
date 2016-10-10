@@ -17,7 +17,9 @@
 
 use Modern::Perl;
 use Test::More;
+use Carp;
 
+use DateTime;
 use C4::Search;
 use C4::BatchOverlay::LowlyFinder;
 
@@ -34,6 +36,29 @@ my $lowlyRecords = t::CataloguingCenter::localMARCRecords::create_lowlyRecords($
 C4::Context->flushZconns(); #ZOOM connection has cached the previous result, so flush all connections to drop all caches.
 my $output = C4::Search::reindexZebraChanges();
 
+
+subtest "_prepareMonthsSearchQuery", \&_prepareMonthsSearchQuery;
+sub _prepareMonthsSearchQuery {
+    eval {
+
+    my $monthsPast = 30;
+    my $now = DateTime->now(time_zone => C4::Context->tz());
+    my @pastMonths;
+    foreach my $i (0..$monthsPast) {
+        my $before = $now->clone->subtract(months => $i);
+        push(@pastMonths, $before->year().'-'.sprintf("%02d",$before->month())."'");
+    }
+
+    my $query = C4::BatchOverlay::LowlyFinder::_prepareMonthsSearchQuery($monthsPast);
+    foreach my $test (@pastMonths) {
+        ok($query =~ /$test/, "$test found");
+    }
+
+    };
+    if ($@) {
+        ok(0, $@);
+    }
+}
 
 
 subtest "Test fetching a limited amount of chunks", \&testLimiter;

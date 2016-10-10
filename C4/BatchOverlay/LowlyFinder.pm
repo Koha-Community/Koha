@@ -21,6 +21,7 @@ use Modern::Perl;
 use Scalar::Util qw(blessed);
 use Try::Tiny;
 
+use DateTime;
 use MARC::Record;
 use MARC::File::XML;
 
@@ -99,8 +100,9 @@ sub getLowlyEncodingLevels {
 =head2 new
 
     my $lowlyFinder = C4::BatchOverlay::LowlyFinder->new({
-        chunk => 500 #Default bibliographic records chunk size
-        chunks => 1 #Default, how many chunks can nextLowlyCataloguedRecords() return, eg. how many times can nextLowlyCataloguedRecords() be called?
+        chunk        => 500,        #Default bibliographic records chunk size
+        chunks       => 1,         #Default, how many chunks can nextLowlyCataloguedRecords() return, eg. how many times can nextLowlyCataloguedRecords() be called?
+        monthsPast   => 6,     #How many months maximum to look behind? Defaults to undef
     });
 
 =cut
@@ -110,6 +112,7 @@ sub new {
     $self = {} unless(ref($self) eq 'HASH');
     bless($self, $class);
 
+    $self->{monthsPast} = undef unless $self->{monthsPast};
     $self->{chunk} = 500 unless $self->{chunk};
     $self->{chunksFetched} = 0;
     $self->{chunks} = 1 unless $self->{chunks};
@@ -117,25 +120,6 @@ sub new {
     $self->{levelsNotSearched} = getLowlyEncodingLevels(); #Which encoding levels have already been searched and added to the recordBuffer
 
     return $self;
-}
-sub _validateNew {
-    my ($class, $params) = @_;
-    return @_ unless $params;
-    unless (ref $params eq 'HASH') {
-        my @cc = caller(1);
-        Koha::Exception::BadParameter->throw(error => $cc[3]."():> \$params is not a HashRef?");
-    }
-
-    while (my ($key, $value) = each(%$params)) {
-        if ($key eq 'chunk' || $key eq 'chunk') { #allow keys here
-
-        }
-        else { #Unallowed key detected
-            my @cc = caller(1);
-            Koha::Exception::BadParameter->throw(error => $cc[3]."():> \$params \$key '$key' with \$value '$value' is not allowed");
-        }
-    }
-    return @_;
 }
 
 =head2 nextLowlyCataloguedRecords
@@ -157,7 +141,7 @@ sub nextLowlyCataloguedRecords {
     while (scalar(@{$self->{recordBuffer}}) < $self->{chunk}) {
         my $nextEncodingLevel = pop(@{$self->{levelsNotSearched}});
         last unless $nextEncodingLevel;
-        my ($records, $resultSetSize) = searchByEncodingLevel($nextEncodingLevel, undef, 999999999); #no limit!
+        my ($records, $resultSetSize) = searchByEncodingLevel($nextEncodingLevel, undef, $self->{monthsPast}); #no limit!
         push(@$records, @{$self->{recordBuffer}}); #Make sure the more lowly catalogued records are in the tail so we can splice more efficiently
         $self->{recordBuffer} = $records;
     }
@@ -198,9 +182,11 @@ The returning slim biblio has the following keys:
 =cut
 
 sub searchByEncodingLevel {
-    my ($encodingLevel, $limit) = (@_);
+    my ($encodingLevel, $limit, $monthsPast) = (@_);
 
     my $search = "Enc-level='$encodingLevel'";
+    $search .= ' and '._prepareMonthsSearchQuery($monthsPast) if $monthsPast;
+
     $logger->debug("Searching with $search");
     my ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $search, undef, $limit );
     if ($error) {
@@ -216,6 +202,18 @@ sub searchByEncodingLevel {
     }
     $logger->debug("Returning '$resultSetSize' results");
     return ($results, $resultSetSize);
+}
+
+sub _prepareMonthsSearchQuery {
+    my ($monthsPast) = @_;
+
+    my $now = DateTime->now(time_zone => C4::Context->tz());
+    my @pastMonths;
+    foreach my $i (0..$monthsPast) {
+        my $before = $now->clone()->subtract(months => $i);
+        push(@pastMonths, "Date-of-acquisition,rtrn='".$before->year().'-'.sprintf("%02d",$before->month())."'");
+    }
+    return '( '.join(' or ', @pastMonths). ' )';
 }
 
 return 1;
