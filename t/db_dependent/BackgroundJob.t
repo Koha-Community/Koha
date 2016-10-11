@@ -12,7 +12,7 @@ my $query = new CGI;
 
 # Generate a session id
 my $dbh     = C4::Context->dbh;
-$dbh->{AutoCommit} = 1;
+$dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 my $session = C4::Auth::get_session;
