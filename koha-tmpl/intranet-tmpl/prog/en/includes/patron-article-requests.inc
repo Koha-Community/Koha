@@ -3,18 +3,18 @@
     <table id="article-requests-table" class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th class="anti-the">Record title</th>
-                <th class="psort">Placed on</th>
-                <th class="anti-the">Title</th>
-                <th>Author</th>
-                <th>Volume</th>
-                <th>Issue</th>
-                <th>Date</th>
-                <th>Pages</th>
-                <th>Chapters</th>
-                <th>Notes</th>
-                <th>Status</th>
-                <th>Pickup library</th>
+                <th class="article-request-title anti-the">Record title</th>
+                <th class="article-request-created_on psort">Placed on</th>
+                <th class="article-request-title anti-the">Title</th>
+                <th class="article-request-author">Author</th>
+                <th class="article-request-volume">Volume</th>
+                <th class="article-request-issue">Issue</th>
+                <th class="article-request-date">Date</th>
+                <th class="article-request-pages">Pages</th>
+                <th class="article-request-chapters">Chapters</th>
+                <th class="article-request-notes">Notes</th>
+                <th class="article-request-status">Status</th>
+                <th class="article-request-branchcode">Pickup library</th>
             </tr>
         </thead>
 
