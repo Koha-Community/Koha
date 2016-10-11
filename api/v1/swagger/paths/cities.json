@@ -1,0 +1,217 @@
+{
+  "/cities": {
+    "get": {
+      "x-mojo-controller": "Koha::REST::V1::Cities",
+      "operationId": "list",
+      "tags": ["cities"],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of cities",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/city"
+            }
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+            "description": "Internal error",
+            "schema": {
+                "$ref": "../definitions.json#/error"
+            }
+        }
+      }
+    },
+    "post": {
+      "x-mojo-controller": "Koha::REST::V1::Cities",
+      "operationId": "add",
+      "tags": ["cities"],
+      "parameters": [{
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing informations about the new hold",
+          "required": true,
+          "schema": {
+            "$ref": "../definitions.json#/city"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "City added",
+          "schema": {
+            "$ref": "../definitions.json#/city"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+            "description": "Internal error",
+            "schema": {
+                "$ref": "../definitions.json#/error"
+            }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "parameters_remaining_permissions"
+        }
+      }
+    }
+  },
+  "/cities/{cityid}": {
+    "get": {
+      "x-mojo-controller": "Koha::REST::V1::Cities",
+      "operationId": "get",
+      "tags": ["cities"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/cityidPathParam"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A city",
+          "schema": {
+            "$ref": "../definitions.json#/city"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "City not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+        ,
+        "500": {
+            "description": "Internal error",
+            "schema": {
+                "$ref": "../definitions.json#/error"
+            }
+        }
+      }
+    },
+    "put": {
+      "x-mojo-controller": "Koha::REST::V1::Cities",
+      "operationId": "update",
+      "tags": ["cities"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/cityidPathParam"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing informations about the new hold",
+          "required": true,
+          "schema": {
+            "$ref": "../definitions.json#/city"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A city",
+          "schema": {
+            "$ref": "../definitions.json#/city"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "City not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+            "description": "Internal error",
+            "schema": {
+                "$ref": "../definitions.json#/error"
+            }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "parameters_remaining_permissions"
+        }
+      }
+    },
+    "delete": {
+      "x-mojo-controller": "Koha::REST::V1::Cities",
+      "operationId": "delete",
+      "tags": ["cities"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/cityidPathParam"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "City deleted",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "City not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+            "description": "Internal error",
+            "schema": {
+                "$ref": "../definitions.json#/error"
+            }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "parameters_remaining_permissions"
+        }
+      }
+    }
+  }
+}
