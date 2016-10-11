@@ -146,7 +146,6 @@ sub search_compat {
         $servers,  $results_per_page, $offset,       $expanded_facet,
         $branches, $query_type,       $scan
     ) = @_;
-
     my %options;
     $options{offset} = $offset;
     $options{expanded_facet} = $expanded_facet;
@@ -408,6 +407,7 @@ sub _convert_facets {
         'su-geo' => { order => 4, label => 'Places', },
         se       => { order => 5, label => 'Series', },
         subject  => { order => 6, label => 'Topics', },
+        ccode    => { order => 7, label => 'CollectionCodes',},
         holdingbranch => { order => 8, label => 'HoldingLibrary' },
         homebranch => { order => 9, label => 'HomeLibrary' }
     );

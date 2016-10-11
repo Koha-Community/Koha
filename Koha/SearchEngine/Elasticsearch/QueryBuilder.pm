@@ -118,6 +118,7 @@ sub build_query {
         location => { terms => { field => "location__facet" } },
         'su-geo' => { terms => { field => "su-geo__facet" } },
         se       => { terms => { field => "se__facet" } },
+        ccode    => { terms => { field => "ccode__facet" } },
     };
 
     my $display_library_facets = C4::Context->preference('DisplayLibraryFacets');
