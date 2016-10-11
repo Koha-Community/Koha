@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Warn;
 use MARC::Record;
 
@@ -118,15 +118,8 @@ else {
           "Expected failure because of missing PDF::FromHTML.";
 }
 
-# FIXME
-# At this point, there is a problem with the AutoCommit off
-# The transaction is bloked into DBIx::Class::Storage::DBI::_dbh_execute
-# line my $rv = $sth->execute();
-# We are using 2 connections and the one used by Koha::Schema has the AutoCommit set to 1
-# Even if we switch off this flag, the connection will be blocked.
-# The error is:
-# DBIx::Class::ResultSet::create(): DBI Exception: DBD::mysql::st execute failed: Lock wait timeout exceeded; try restarting transaction [for Statement "INSERT INTO discharges ( borrower, needed, validated) VALUES ( ?, ?, ? )" with ParamValues: 0='121', 1='2014-01-08T16:38:29', 2=undef] at /home/koha/src/Koha/DataObject/Discharge.pm line 33
-#is( Koha::Service::Borrower::Discharge::request({ borrowernumber => $patron->{borrowernumber} }), 1, 'Discharge request sent' );
+# FIXME Should be a Koha::Object object
+is( ref(Koha::Patron::Discharge::request({ borrowernumber => $patron->{borrowernumber} })), 'Koha::Schema::Result::Discharge', 'Discharge request sent' );
 
 $schema->storage->txn_rollback;
 
