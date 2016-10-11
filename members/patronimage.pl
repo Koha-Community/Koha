@@ -48,7 +48,7 @@ This script, when called from within HTML and passed a valid patron borrowernumb
 
 =cut
 
-my ($status, $cookie, $sessionID) = check_api_auth($query, { borrowers => 1} );
+my ($status, $cookie, $sessionID) = check_api_auth($query, { catalogue => 1 } );
 
 unless ( $status eq 'ok' ) {
     print $query->header(-type => 'text/plain', -status => '403 Forbidden');
