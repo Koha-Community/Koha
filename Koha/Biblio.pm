@@ -258,7 +258,7 @@ Returns the related Koha::Biblioitem object for this Biblio object
 
 =cut
 
-sub _biblioitem {
+sub biblioitem {
     my ($self) = @_;
 
     $self->{_biblioitem} ||= Koha::Biblioitems->find( { biblionumber => $self->biblionumber() } );
