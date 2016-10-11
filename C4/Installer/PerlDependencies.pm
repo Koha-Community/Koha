@@ -4,6 +4,11 @@ use warnings;
 use strict;
 
 our $PERL_DEPS = {
+    'Try::Tiny' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.22'
+    },
     'Plack::Middleware::ReverseProxy' => {
         'usage'    => 'Plack',
         'required' => '1',
