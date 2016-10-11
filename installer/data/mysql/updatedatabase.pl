@@ -13083,6 +13083,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.06.00.032";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE marc_subfield_structure SET authorised_value="WITHDRAWN" WHERE authorised_value="WTHDRAWN";
+    });
+
+    print "Upgrade to $DBversion done (Bug 17357 - WTHDRAWN is still used in installer files)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
