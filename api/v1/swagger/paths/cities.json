@@ -7,6 +7,31 @@
       "produces": [
         "application/json"
       ],
+      "parameters": [{
+        "name": "city_name",
+        "in": "query",
+        "description": "Case insensative 'starts-with' search on city name",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "city_state",
+        "in": "query",
+        "description": "Case insensative 'starts-with' search on city state",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "city_country",
+        "in": "query",
+        "description": "Case insensative 'starts_with' search on city country",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "city_zipcode",
+        "in": "query",
+        "description": "Case Insensative 'starts-with' search on zipcode",
+        "required": false,
+        "type": "string"
+      }],
       "responses": {
         "200": {
           "description": "A list of cities",
@@ -24,10 +49,10 @@
           }
         },
         "500": {
-            "description": "Internal error",
-            "schema": {
-                "$ref": "../definitions.json#/error"
-            }
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       }
     },
@@ -36,15 +61,14 @@
       "operationId": "add",
       "tags": ["cities"],
       "parameters": [{
-          "name": "body",
-          "in": "body",
-          "description": "A JSON object containing informations about the new hold",
-          "required": true,
-          "schema": {
-            "$ref": "../definitions.json#/city"
-          }
+        "name": "body",
+        "in": "body",
+        "description": "A JSON object containing informations about the new hold",
+        "required": true,
+        "schema": {
+          "$ref": "../definitions.json#/city"
         }
-      ],
+      }],
       "produces": [
         "application/json"
       ],
@@ -62,10 +86,10 @@
           }
         },
         "500": {
-            "description": "Internal error",
-            "schema": {
-                "$ref": "../definitions.json#/error"
-            }
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       },
       "x-koha-authorization": {
@@ -80,11 +104,9 @@
       "x-mojo-controller": "Koha::REST::V1::Cities",
       "operationId": "get",
       "tags": ["cities"],
-      "parameters": [
-        {
-          "$ref": "../parameters.json#/cityidPathParam"
-        }
-      ],
+      "parameters": [{
+        "$ref": "../parameters.json#/cityidPathParam"
+      }],
       "produces": [
         "application/json"
       ],
@@ -106,13 +128,12 @@
           "schema": {
             "$ref": "../definitions.json#/error"
           }
-        }
-        ,
+        },
         "500": {
-            "description": "Internal error",
-            "schema": {
-                "$ref": "../definitions.json#/error"
-            }
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       }
     },
@@ -120,20 +141,17 @@
       "x-mojo-controller": "Koha::REST::V1::Cities",
       "operationId": "update",
       "tags": ["cities"],
-      "parameters": [
-        {
-          "$ref": "../parameters.json#/cityidPathParam"
-        },
-        {
-          "name": "body",
-          "in": "body",
-          "description": "A JSON object containing informations about the new hold",
-          "required": true,
-          "schema": {
-            "$ref": "../definitions.json#/city"
-          }
+      "parameters": [{
+        "$ref": "../parameters.json#/cityidPathParam"
+      }, {
+        "name": "body",
+        "in": "body",
+        "description": "A JSON object containing informations about the new hold",
+        "required": true,
+        "schema": {
+          "$ref": "../definitions.json#/city"
         }
-      ],
+      }],
       "produces": [
         "application/json"
       ],
@@ -157,10 +175,10 @@
           }
         },
         "500": {
-            "description": "Internal error",
-            "schema": {
-                "$ref": "../definitions.json#/error"
-            }
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       },
       "x-koha-authorization": {
@@ -173,11 +191,9 @@
       "x-mojo-controller": "Koha::REST::V1::Cities",
       "operationId": "delete",
       "tags": ["cities"],
-      "parameters": [
-        {
-          "$ref": "../parameters.json#/cityidPathParam"
-        }
-      ],
+      "parameters": [{
+        "$ref": "../parameters.json#/cityidPathParam"
+      }],
       "produces": [
         "application/json"
       ],
@@ -201,10 +217,10 @@
           }
         },
         "500": {
-            "description": "Internal error",
-            "schema": {
-                "$ref": "../definitions.json#/error"
-            }
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       },
       "x-koha-authorization": {

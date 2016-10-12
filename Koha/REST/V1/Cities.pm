@@ -29,10 +29,14 @@ sub list {
     my ( $c, $args, $cb ) = @_;
 
     my $cities;
+    my $filter;
+
+    for my $filter_param ( keys $args ) {
+        $filter->{$filter_param} = { LIKE => $args->{$filter_param} . "%" };
+    }
 
     return try {
-        $cities =
-          Koha::Cities->search( $c->req->query_params->to_hash )->unblessed;
+        $cities = Koha::Cities->search($filter)->unblessed;
         return $c->$cb( $cities, 200 );
     }
     catch {
@@ -60,7 +64,7 @@ sub get {
 sub add {
     my ( $c, $args, $cb ) = @_;
 
-    my $city = Koha::City->new( $c->req->json );
+    my $city = Koha::City->new( $args->{body} );
 
     return try {
         $city->store;
@@ -84,10 +88,8 @@ sub update {
 
     return try {
         $city = Koha::Cities->find( $args->{cityid} );
-        while ( my ( $k, $v ) = each %{ $c->req->json } ) {
-            $city->$k($v);
-        }
-        $city->store;
+        $city->set( $args->{body} );
+        $city->store();
         return $c->$cb( $city->unblessed, 200 );
     }
     catch {
