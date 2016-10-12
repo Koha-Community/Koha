@@ -52,7 +52,9 @@ sub startup {
     }
 
     $self->plugin(Swagger2 => {
-        url => $self->home->rel_file("api/v1/swagger/swagger.min.json"),
+        url => $self->home->rel_file("api/v1/swagger/swagger.json"),
+        validate => 1,
+        spec_path => '/spec'
     });
 }
 
