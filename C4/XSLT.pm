@@ -311,6 +311,7 @@ sub buildKohaItemsNamespace {
         $location = $item->{location}? xml_escape($shelflocations->{$item->{location}}||$item->{location}):'';
         $ccode = $item->{ccode}? xml_escape($ccodes->{$item->{ccode}}||$item->{ccode}):'';
         my $itemcallnumber = xml_escape($item->{itemcallnumber});
+        my $stocknumber = $item->{stocknumber}? xml_escape($item->{stocknumber}):'';
         $xml .=
             "<item>"
           . "<homebranch>$homebranch</homebranch>"
@@ -319,6 +320,7 @@ sub buildKohaItemsNamespace {
           . "<ccode>$ccode</ccode>"
           . "<status>$status</status>"
           . "<itemcallnumber>$itemcallnumber</itemcallnumber>"
+          . "<stocknumber>$stocknumber</stocknumber>"
           . "</item>";
     }
     $xml = "<items xmlns=\"http://www.koha-community.org/items\">".$xml."</items>";
