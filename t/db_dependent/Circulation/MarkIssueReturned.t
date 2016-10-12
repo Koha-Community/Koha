@@ -20,22 +20,24 @@ use Modern::Perl;
 use Test::More tests => 2;
 use Test::Warn;
 
+use t::lib::Mocks;
+use t::lib::TestBuilder;
+
 use C4::Circulation;
 use C4::Members;
 use Koha::Library;
-use t::lib::Mocks;
 
+my $schema = Koha::Database->schema;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+
+$schema->storage->txn_begin;
+
+my $builder = t::lib::TestBuilder->new;
 
 t::lib::Mocks::mock_preference('AnonymousPatron', '');
 
-my $branchcode = 'B';
-Koha::Library->new({ branchcode => $branchcode, branchname => 'Branch' })->store;
-
-my $categorycode = 'C';
-$dbh->do("INSERT INTO categories(categorycode) VALUES(?)", undef, $categorycode);
+my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
+my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
 
 my %item_branch_infos = (
     homebranch => $branchcode,
@@ -53,3 +55,7 @@ t::lib::Mocks::mock_preference('AnonymousPatron', $anonymous_borrowernumber);
 $dbh->{PrintError} = 0;
 eval { C4::Circulation::MarkIssueReturned( $borrowernumber, 'itemnumber', 'dropbox_branch', 'returndate', 2 ) };
 unlike ( $@, qr<Fatal error: the patron \(\d+\) .* AnonymousPatron>, );
+
+$schema->storage->txn_rollback;
+
+1;
