@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use Modern::Perl;
-use Test::More tests => 137;
+use Test::More tests => 142;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -428,7 +428,11 @@ $budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
 $budget_hierarchy        = GetBudgetHierarchy($budget_period_id);
 is( $budget_hierarchy->[0]->{children}->[0]->{budget_name}, 'budget_11', 'GetBudgetHierarchy should return budgets ordered by name, first child is budget_11' );
 is( $budget_hierarchy->[0]->{children}->[1]->{budget_name}, 'budget_12', 'GetBudgetHierarchy should return budgets ordered by name, second child is budget_12' );
-
+is($budget_hierarchy->[0]->{budget_name},'budget_1','GetBudgetHierarchy should return budgets ordered by name, first budget is budget_1');
+is($budget_hierarchy->[0]->{budget_level},'0','budget_level of budget (budget_1)  should be 0');
+is($budget_hierarchy->[0]->{children}->[0]->{budget_level},'1','budget_level of first fund(budget_11)  should be 1');
+is($budget_hierarchy->[0]->{children}->[1]->{budget_level},'1','budget_level of second fund(budget_12)  should be 1');
+is($budget_hierarchy->[0]->{children}->[0]->{children}->[0]->{budget_level},'2','budget_level of  child fund budget_11 should be 2');
 $budget_hierarchy        = GetBudgetHierarchy($budget_period_id);
 $budget_hierarchy_cloned = GetBudgetHierarchy($budget_period_id_cloned);
 
