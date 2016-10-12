@@ -110,6 +110,9 @@ $session3->flush;
 my $biblionumber = create_biblio('RESTful Web APIs');
 my $itemnumber = create_item($biblionumber, 'TEST000001');
 
+my $biblionumber2 = create_biblio('RESTful Web APIs');
+my $itemnumber2 = create_item($biblionumber2, 'TEST000002');
+
 $dbh->do('DELETE FROM reserves');
 
 my $reserve_id = C4::Reserves::AddReserve($branchcode, $borrowernumber,
@@ -204,7 +207,7 @@ subtest "Test endpoints without permission, but accessing own object" => sub {
 };
 
 subtest "Test endpoints with permission" => sub {
-    plan tests => 42;
+    plan tests => 45;
 
     $tx = $t->ua->build_tx(GET => '/api/v1/holds');
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
@@ -286,6 +289,14 @@ subtest "Test endpoints with permission" => sub {
       ->json_is('/0/expirationdate', $expirationdate)
       ->json_is('/0/branchcode', $branchcode);
 
+    $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
+    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
+    $t->request_ok($tx)
+      ->status_is(403)
+      ->json_like('/error', qr/itemAlreadyOnHold/);
+
+    $post_data->{biblionumber} = int($biblionumber2);
+    $post_data->{itemnumber} = int($itemnumber2);
     $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
     $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
     $t->request_ok($tx)
