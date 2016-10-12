@@ -21,6 +21,8 @@ use Modern::Perl;
 use Scalar::Util qw(blessed);
 use Try::Tiny;
 
+use C4::Biblio::Diff::Change;
+
 use Koha::Exception::BadParameter;
 
 =head SYNOPSIS
@@ -305,6 +307,56 @@ sub _valuesDiff {
         }
     }
     return 0;
+}
+
+=head2 grepChangedElements
+
+@PARAM1 HASHMonster from diffRecords()
+@PARAM2 ARRAYRef of HASHRefs, the MARC field-subfield tuples to search for,
+            [
+                {
+                    f => '084',
+                    sf => 'a'
+                },
+                ...
+            ]
+@RETURNS Arrayref of Arrayrefs,
+            [
+                [
+                    '084', #Field
+                    'a',   #Subfield
+                    'YKL', #Old value
+                    'AKT'  #New value
+                ],
+                ...
+            ]
+
+=cut
+
+sub grepChangedElements {
+    my ($diff, $selectors) = @_;
+
+    my @changes;
+
+    foreach my $n (@$selectors) { #$n as in the "needle in the haystack"
+        if (int($n->{f}) < 10) { #Control fields
+            my $fieldDiffs = $diff->{$n->{f}};
+            push(@changes, C4::Biblio::Diff::Change->new($n->{f}, $n->{sf}, @$fieldDiffs));
+        }
+        else { #Data fields
+            my $fieldReps = $diff->{$n->{f}}; #fieldReps as in Field Repetitons, not all Fields but the repetitions of a selected MARC Field
+            next unless $fieldReps;
+            foreach my $field (@$fieldReps) {
+
+                my $subfieldReps = $field->{$n->{sf}};
+                next unless $subfieldReps;
+                foreach my $subfieldDiffs (@$subfieldReps) {
+                    push(@changes, C4::Biblio::Diff::Change->new($n->{f}, $n->{sf}, @$subfieldDiffs));
+                }
+            }
+        }
+    }
+    return \@changes;
 }
 
 1;

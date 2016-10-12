@@ -230,4 +230,48 @@ sub biblioDiffUndefIndexes {
     t::lib::TestObjects::ObjectFactory->tearDownTestContext($testContext);
 }
 
+
+
+subtest "Grep changes", \&grepChanges;
+sub grepChanges {
+    my $testContext = {};
+    eval {
+        my $records = t::db_dependent::Biblio::Diff::localRecords::create($testContext);
+        my @recKeys = sort(keys(%$records));
+
+        my $diff = C4::Biblio::Diff->new(
+                        {excludedFields => ['999', '942', '952']},
+                        $records->{ $recKeys[0] },
+                        $records->{ $recKeys[1] },
+                        $records->{ $recKeys[2] },
+                    );
+        my $d = $diff->diffRecords();
+
+        my $changes = C4::Biblio::Diff::grepChangedElements($d, [{f=>'020', sf=>'a'},
+                                                                 {f=>'041', sf=>'a'},
+                                                                 {f=>'003'}]);
+        is(@$changes, 5, "Got five separate changes");
+        ok(blessed($changes->[0]) && $changes->[0]->isa('C4::Biblio::Diff::Change'), "Change is of correct type");
+        is($changes->[0]->getFieldCode, '020', "Field");
+        is($changes->[0]->getSubfieldCode, 'a', "Subfield");
+        is($changes->[0]->getVal(0), '9510108303', "Val1");
+        is($changes->[0]->getVal(1), '9510108304', "Val2");
+        is($changes->[0]->getVal(2), '9510108305', "Val3");
+        ok(blessed($changes->[4]) && $changes->[4]->isa('C4::Biblio::Diff::Change'), "Change is of correct type");
+        is($changes->[4]->getFieldCode, '003', "Field");
+        is($changes->[4]->getSubfieldCode, undef, "No subfield");
+        is($changes->[4]->getVal(0), 'KYYTI', "Val1");
+        is($changes->[4]->getVal(1), 'OUTI',  "Val2");
+        is($changes->[4]->getVal(2), undef,   "Val3");
+
+
+    };
+    if ($@) {
+        ok(0, $@);
+    }
+    t::lib::TestObjects::ObjectFactory->tearDownTestContext($testContext);
+}
+
+
+
 done_testing();
