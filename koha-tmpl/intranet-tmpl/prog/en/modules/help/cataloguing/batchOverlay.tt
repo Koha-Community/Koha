@@ -152,6 +152,8 @@ default:
     componentPartMatcherCode: COM_PART
     remoteFieldsDropped: [biblio.biblionumber, 952]
     diffExcludedFields: [999, items.barcode]
+    notifyOnChangeSubfields: [084a, items.itemcallnumber, 110]
+    notificationEmails: [koha@example.com, cataloguing@example.com]
     searchAlgorithms: [Control_number_identifier, Standard_identifier]
     dryRun: 0
 
@@ -187,6 +189,12 @@ _excludeExceptions: [RemoteSearchNoResults DuplicateSearchTerm]
                 </li>
                 <li>
                     'diffExcludedFields' <span class="hint">#These fields are excluded from the comparison. Useful since Koha stores system data fields and item fields in the record so they would clutter up the diff report badly.</span>
+                </li>
+                <li>
+                    'notifyOnChangeSubfields' <span class="hint">#If there is even a tiny change in one of these fields/subfields/KohaToMarcMappings, an email is sent to the the given email-address.</span>
+                </li>
+                <li>
+                    'notificationEmails' <span class="hint">#If there is something to notify, notifications are sent to these email addresses.</span>
                 </li>
                 <li>
                     'searchAlgorithms' <span class="hint">#The order of different searching algorithms to try. These algorithm must be defined in C4::BatchOverlay::SearchAlgorithms</span>

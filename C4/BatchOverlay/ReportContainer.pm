@@ -26,6 +26,7 @@ use DateTime;
 
 use C4::Biblio::Diff;
 use C4::BatchOverlay::Report::Report;
+use C4::BatchOverlay::Notifier;
 use C4::Context;
 use C4::Members;
 use Koha::DateUtils;
@@ -53,6 +54,8 @@ sub new {
         }
     }
     $self->{reports} = [];
+
+    $self->setNotifier( C4::BatchOverlay::Notifier->new() );
 
     return $self;
 }
@@ -91,6 +94,18 @@ sub _validateDBRow {
     }
 }
 
+sub setNotifier {
+    my ($self, $notifier ) = @_;
+    unless (blessed($notifier) && $notifier->isa('C4::BatchOverlay::Notifier')) {
+        my @cc = caller(0);
+        Koha::Exception::BadParameter->throw(error => $cc[3]."($notifier):> Param \$notifier '$notifier' is not of proper class");
+    }
+    $self->{notifier} = $notifier;
+}
+sub getNotifier {
+    return shift->{notifier};
+}
+
 =head addReport
 
     my $report = $reportBuilder->addReport($params);
@@ -119,6 +134,7 @@ sub addReport {
     }
 
     push(@{$self->{reports}}, $report);
+    $self->getNotifier()->detectNotifiableFieldChanges($report);
     return $self;
 }
 
@@ -128,6 +144,9 @@ sub getReports {
 
 sub persist {
     my ($self) = @_;
+
+    $self->getNotifier->queueTriggeredNotifications();
+
     my $reports = $self->getReports();
 
     my $borc = C4::BatchOverlay::ReportManager->_insertReportContainerToDB($self->getTimestamp(), $self->getBorrowernumber());

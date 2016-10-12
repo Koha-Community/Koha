@@ -43,6 +43,38 @@ default:
     remoteFieldsDropped: [biblio.biblionumber, 952]
     diffExcludedFields: [999, items.barcode]
     searchAlgorithms: [Control_number_identifier, Standard_identifier]
+    notifyOnChangeSubfields:
+    notificationEmails:
+    dryRun: 0
+
+_excludeExceptions: [UnknownMatcher]
+
+VALUE
+                    }
+                , undef, $testContext);
+
+return $spref;
+} #EO createBatchOverlayRules()
+
+
+sub createBatchOverlayNotificationRules {
+my ($testContext) = @_;
+
+my $spref = t::lib::TestObjects::SystemPreferenceFactory->createTestGroup(
+                    {
+                        preference => 'BatchOverlayRules',
+                        value => <<VALUE,
+---
+default:
+    remoteTargetCode: CATALOGUING_CENTER
+    mergeMatcherCode: MERGER
+    componentPartMergeMatcherCode: MERGER
+    componentPartMatcherCode: COM_PART
+    remoteFieldsDropped: [biblio.biblionumber, 952]
+    diffExcludedFields: [999, items.barcode]
+    searchAlgorithms: [Control_number_identifier, Standard_identifier]
+    notifyOnChangeSubfields: [biblio.title, biblio.author, biblioitems.isbn]
+    notificationEmails: [koha\@example.com]
     dryRun: 0
 
 _excludeExceptions: [UnknownMatcher]

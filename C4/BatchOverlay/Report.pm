@@ -256,8 +256,13 @@ sub getTimestamp {
 sub getOperation {
     return shift->{operation};
 }
+sub getOverlayRule {
+    return shift->{overlayRule};
+}
 sub getRuleName {
-    return shift->{ruleName};
+    my ($self) = @_;
+    my $or = $self->getOverlayRule();
+    return ($or) ? $or->getRuleName() : $self->{ruleName};
 }
 sub getDiff {
     return shift->{diff};

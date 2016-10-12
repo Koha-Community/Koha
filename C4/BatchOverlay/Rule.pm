@@ -23,6 +23,7 @@ use Try::Tiny;
 use Data::Dumper;
 
 use C4::Biblio;
+use Koha::Validation;
 
 use Koha::Z3950Servers;
 
@@ -38,6 +39,8 @@ sub new {
     bless $self, $class;
     $self->setRemoteFieldsDropped( $self->{remoteFieldsDropped} );
     $self->setDiffExcludedFields( $self->{diffExcludedFields} );
+    $self->setNotifyOnChangeSubfields( $self->{notifyOnChangeSubfields} );
+    $self->setNotificationEmails( $self->{notificationEmails} );
     return $self;
 }
 
@@ -80,6 +83,10 @@ sub _validateRule {
         Koha::Exception::FeatureUnavailable->throw(error => $cc1[3]."():> System preference 'BatchOverlayRules' is missing directive 'dryRun'. This is used to define if overlay actions should persist to DB. This must be either 1 or 0.");
     }
     return $rule;
+}
+
+sub getRuleName {
+    return shift->{ruleName};
 }
 
 =head getMergeMatcher
@@ -180,6 +187,38 @@ sub isDryRun {
     return 1 if shift->{dryRun} == 1;
     return 0;
 }
+sub setNotifyOnChangeSubfields {
+    my ($self, $notifySubfieldsArray) = @_;
+
+    if($notifySubfieldsArray && not(ref($notifySubfieldsArray) eq 'ARRAY')) {
+        my @cc1 = caller(1);
+        Koha::BadParameter->throw(error => $cc1[3]." is setNotifyOnChangeFields, but param \$notifySubfieldsArray '$notifySubfieldsArray' is not an ARRAYref");
+    }
+    unless ($notifySubfieldsArray) {
+        $self->{notifySubfieldsArray} = [];
+        return $self;
+    }
+    for( my $i=0 ; $i<scalar(@$notifySubfieldsArray) ; $i++) {
+        Koha::Validation->tries('notifyOnChangeSubfields', $notifySubfieldsArray->[$i], 'marcSelector');
+        $notifySubfieldsArray->[$i] = Koha::Validation::getMARCSelectorCache();
+    }
+    $self->{notifySubfieldsArray} = $notifySubfieldsArray;
+
+    unless ($self->{notificationEmails}) {
+        my @cc1 = caller(1);
+        Koha::Exception::FeatureUnavailable->throw(error => $cc1[3]."():> System preference 'BatchOverlayRules' is missing directive 'notificationEmails'. This is mandatory if 'notifyOnChangeSubfields' is defined.");
+    }
+
+    return $notifySubfieldsArray;
+}
+sub setNotificationEmails {
+    my ($self, $emails) = @_;
+    Koha::Validation->tries('notificationEmails', $emails, 'email', 'a') if $emails;
+    $self->{notificationEmails} = $emails;
+}
+sub getNotificationEmails {
+    return shift->{notificationEmails};
+}
 sub setRemoteFieldsDropped {
     my ($self, $remoteFieldsDropped) = @_;
     if($remoteFieldsDropped && not(ref($remoteFieldsDropped) eq 'ARRAY')) {
@@ -195,6 +234,9 @@ sub setRemoteFieldsDropped {
     }
     $self->{remoteFieldsDropped} = $remoteFieldsDropped;
     return $self;
+}
+sub getNotifyOnChangeSubfields {
+    return shift->{notifySubfieldsArray}
 }
 sub getRemoteFieldsDropped {
     return shift->{remoteFieldsDropped};
@@ -231,6 +273,20 @@ sub _getFieldFromSelector {
             Koha::Exception::BadParameter->throw(error => $cc2[3]." is turning selector '$selector' to a MARC field code, but selector is not mapped to KohaToMARCMapping-table");
         }
         return $selectorTag;
+    }
+}
+sub _getFieldSubfieldFromSelector {
+    my ($self, $selector) = @_;
+    if ($selector =~ /^([0-9.]{3})(\w)$/) { #a MARC field tag
+        return ($1, $2);
+    }
+    else {
+        my ($selectorTag, $subfieldCode) = C4::Biblio::GetMarcFromKohaField($selector, '');
+        unless ($selectorTag && $subfieldCode) {
+            my @cc2 = caller(2);
+            Koha::Exception::BadParameter->throw(error => $cc2[3]." is turning selector '$selector' to a MARC field + sufield code, but selector is not mapped to KohaToMARCMapping-table");
+        }
+        return ($selectorTag, $subfieldCode);
     }
 }
 

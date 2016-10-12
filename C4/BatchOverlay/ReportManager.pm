@@ -24,6 +24,7 @@ use Data::Dumper;
 use DateTime;
 
 use Koha::Logger;
+use Koha::Validation;
 
 use C4::Biblio::Diff;
 use C4::BatchOverlay::Report;
@@ -69,18 +70,9 @@ sub removeReports {
         Koha::Exception::BadParameter->throw(error => $cc1[3]." is trying to delete all batch_overlay_reports without any parameters. For safety reasons preventing removal of all reports. Pass a parameter HASH with some keys to pass this safety check, for ex '{do => 1}'");
     }
 
-    if($from && not(blessed($from) && $from->isa('DateTime'))) {
-        my @cc = caller(0);
-        Koha::Exception::BadParameter->throw(error => $cc[3]."($params)> Param 'from' '$from' is not a DateTime-object");
-    }
-    if($to && not(blessed($to) && $to->isa('DateTime'))) {
-        my @cc = caller(0);
-        Koha::Exception::BadParameter->throw(error => $cc[3]."($params)> Param 'to' '$to' is not a DateTime-object");
-    }
-    if ($borrowernumber && not($borrowernumber =~ /^\d+$/)) {
-        my @cc = caller(0);
-        Koha::Exception::BadParameter->throw(error => $cc[3]."($params)> Param 'borrowernumber' '$borrowernumber' is not a digit");
-    }
+    Koha::Validation->tries('from', $from, 'DateTime') if $from;
+    Koha::Validation->tries('to', $to, 'DateTime') if $to;
+    Koha::Validation->tries('borrowernumber', $borrowernumber, 'digit') if $borrowernumber;
 
     my @params;
     my $sql = "DELETE FROM batch_overlay_reports WHERE 1 ";

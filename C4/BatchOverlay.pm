@@ -43,6 +43,7 @@ use C4::BatchOverlay::ErrorBuilder;
 use C4::BatchOverlay::ReportContainer;
 use C4::BatchOverlay::RuleManager;
 use C4::BatchOverlay::SearchAlgorithms;
+use C4::BatchOverlay::Notifier;
 use Koha::Deduplicator;
 
 use Koha::Exception;
@@ -200,8 +201,8 @@ sub getRuleManager {
     return shift->{ruleManager};
 }
 sub getRule {
-    my ($self, $localRecord) = @_;
-    return $self->getRuleManager()->getRule($localRecord);
+    my ($self, $record) = @_;
+    return $self->getRuleManager()->getRule($record || $self->getActiveRecord());
 }
 
 =head isDryRun
@@ -254,7 +255,7 @@ sub overlay {
             my $newRecord = $self->fetchRecordFromRemoteTarget($localBiblio, $localRecord);
 
             # 3 # Merge records with given merging rules # 3 #
-            my $mergedRecord = $self->_mergeMARCData($localRecord, $newRecord, $self->getRule($localRecord)->getMergeMatcher());
+            my $mergedRecord = $self->_mergeMARCData($localRecord, $newRecord, $self->getRule()->getMergeMatcher());
 
             ### Mod the old biblio-record ###
             #Yikes, no way of knowing if the operation succeeded or not.
@@ -266,7 +267,7 @@ sub overlay {
                     mergedRecord => $mergedRecord,
                     operation => $operationName,
                     timestamp => DateTime->now( time_zone => C4::Context->tz() ),
-                    overlayRule => $self->getRule($localRecord),
+                    overlayRule => $self->getRule(),
                 }
             );
 
