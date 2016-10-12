@@ -61,7 +61,6 @@ my $rodsp = $input->param("ReturnDisplay");
 my $calc = $input->param("Cellvalue");
 my $output = $input->param("output");
 my $basename = $input->param("basename");
-my $itype = C4::Context->preference('item-level_itypes') ? "items.itype" : "biblioitems.itemtype";
 
 #warn "calcul : ".$calc;
 my ($template, $borrowernumber, $cookie)
@@ -178,6 +177,7 @@ sub calculate {
     my @looprow;
     my %globalline;
     my $grantotal =0;
+    my $itype = C4::Context->preference('item-level_itypes') ? "items.itype" : "biblioitems.itemtype";
 # extract parameters
     my $dbh = C4::Context->dbh;
 
