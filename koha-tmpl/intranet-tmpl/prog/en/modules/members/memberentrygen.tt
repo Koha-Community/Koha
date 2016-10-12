@@ -917,6 +917,55 @@ $(document).ready(function() {
 		</ol>
 		</fieldset>
         [% END # hide fieldset %][% END %]
+        [% IF ( HouseboundModule ) %]
+        <fieldset class="rows" id="memberentry_housebound_roles">
+          <legend id="housebound_roles">Housebound roles</legend>
+          <ol class="radio">
+            <li>
+              <label class="radio" for="housebound_chooser">
+                Chooser:
+              </label>
+              [% IF ( housebound_role.housebound_chooser == 1 ) %]
+              <label for="yes_housebound_chooser">Yes </label>
+              <input type="radio" id="yes_housebound_chooser"
+                     name="housebound_chooser" value="1"
+                     checked="checked" />
+              <label for="no_housebound_chooser">No </label>
+              <input type="radio" id="no_housebound_chooser"
+                     name="housebound_chooser" value="0" />
+              [% ELSE %]
+              <label for="yes_housebound_chooser">Yes </label>
+              <input type="radio" id="yes_housebound_chooser"
+                     name="housebound_chooser" value="1" />
+              <label for="no_housebound_chooser">No </label>
+              <input type="radio" id="no_housebound_chooser"
+                     name="housebound_chooser" value="0"
+                     checked="checked" />
+              [% END %]
+            </li>
+            <li>
+              <label class="radio" for="housebound_deliverer">Deliverer:</label>
+              [% IF ( housebound_role.housebound_deliverer == 1 ) %]
+              <label for="yes_housebound_deliverer">Yes </label>
+              <input type="radio" id="yes_housebound_deliverer"
+                     name="housebound_deliverer" value="1"
+                     checked="checked" />
+              <label for="no_housebound_deliverer">No </label>
+              <input type="radio" id="no_housebound_deliverer"
+                     name="housebound_deliverer" value="0" />
+              [% ELSE %]
+              <label for="yes_housebound_deliverer">Yes </label>
+              <input type="radio" id="yes_housebound_deliverer"
+                     name="housebound_deliverer" value="1" />
+              <label for="no_housebound_deliverer">No </label>
+              <input type="radio" id="no_housebound_deliverer"
+                     name="housebound_deliverer" value="0"
+                     checked="checked" />
+              [% END %]
+            </li>
+          </ol>
+        </fieldset>
+        [% END # hide fieldset %]
 		<!--this zones are not necessary in modif mode -->
         [% UNLESS ( opadd || opduplicate ) %]
         <fieldset class="rows" id="memberentry_account_flags">
