@@ -88,10 +88,10 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
     flagsrequired   => { catalogue => 1 },
 });
 
-my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.notforloan' });
+my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.notforloan', authorised_value => { not => undef } });
 my $notforloan_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
 
-$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.location' });
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.location', authorised_value => { not => undef } });
 my $location_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
 
 if (scalar keys %params > 0) {
@@ -264,7 +264,7 @@ if ($format eq 'html') {
         };
     }
 
-    my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.ccode' });
+    my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.ccode', authorised_value => { not => undef } });
     my $ccode_avcode = $mss->count ? $mss->next->authorised_value : 'CCODE';
     my $ccodes = GetAuthorisedValues($ccode_avcode);
     my @ccodes;

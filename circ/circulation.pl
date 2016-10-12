@@ -341,8 +341,8 @@ if (@$barcodes) {
     #  Get the item title for more information
     my $getmessageiteminfo = GetBiblioFromItemNumber(undef,$barcode);
 
-    my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $getmessageiteminfo->{frameworkcode}, kohafield => 'items.notforloan' });
-    $template_params->{authvalcode_notforloan} = $mss->count ? $mss->next->authorisedvalue : undef;
+    my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $getmessageiteminfo->{frameworkcode}, kohafield => 'items.notforloan', authorised_value => { not => undef } });
+    $template_params->{authvalcode_notforloan} = $mss->count ? $mss->next->authorised_value : undef;
 
     # Fix for bug 7494: optional checkout-time fallback search for a book
 
