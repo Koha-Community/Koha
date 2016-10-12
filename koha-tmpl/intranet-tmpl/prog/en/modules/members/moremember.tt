@@ -348,6 +348,32 @@ function validate1(date) {
 [% END %]
 [% END %]
 
+[% IF ( HouseboundModule ) %]
+<div id="houseboundroles">
+<h3>Housebound roles</h3>
+<div class="rows">
+  <ol>
+    <li>
+      <span class="label">Chooser:</span>
+      [% IF ( housebound_role.housebound_chooser == 1 ) %]
+        Yes
+      [% ELSE %]
+        No
+      [% END %]
+    </li>
+    <li>
+      <span class="label">Deliverer:</span>
+      [% IF ( housebound_role.housebound_deliverer == 1 ) %]
+        Yes
+      [% ELSE %]
+        No
+      [% END %]
+    </li>
+  </ol>
+</div>
+</div>
+[% END %]
+
 [% IF ( EnhancedMessagingPreferences ) %]
 <div id="patron-messaging-prefs" style="padding-top: 1em;">
 <h3>Patron messaging preferences</h3>
