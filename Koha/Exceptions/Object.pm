@@ -14,7 +14,11 @@ use Exception::Class (
     'Koha::Exceptions::Object::PropertyNotFound' => {
         isa => 'Koha::Exceptions::Object',
         description => "Invalid property",
-    }
+    },
+    'Koha::Exceptions::Object::MethodNotCoveredByTests' => {
+        isa => 'Koha::Exceptions::Object',
+        description => "Method not covered by tests",
+    },
 );
 
 1;

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Warn;
 
 use Koha::Authority::Types;
@@ -123,8 +123,8 @@ subtest 'Exceptions' => sub {
     try {
         $patron->blah('blah');
     } catch {
-        ok( $_->isa('Koha::Exceptions::Object::MethodNotFound'),
-            'Calling a non-existent method should raise a Koha::Exceptions::Object::MethodNotFound exception' );
+        ok( $_->isa('Koha::Exceptions::Object::MethodNotCoveredByTests'),
+            'Calling a non-covered method should raise a Koha::Exceptions::Object::MethodNotCoveredByTests exception' );
     };
 
     try {
