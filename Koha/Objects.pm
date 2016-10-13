@@ -282,7 +282,7 @@ Currently count, pager, reset, update and delete are covered.
 sub AUTOLOAD {
     my ( $self, @params ) = @_;
 
-    my @known_methods = qw( count pager reset update delete );
+    my @known_methods = qw( count pager reset update delete result_class );
     my $method = our $AUTOLOAD;
     $method =~ s/.*:://;
 
