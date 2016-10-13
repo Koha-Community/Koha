@@ -14,6 +14,11 @@ use Exception::Class (
         description => 'A bad parameter was given',
         fields => ['parameter'],
     },
+    'Koha::Exceptions::BadSystemPreference' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'System preference value is incomprehensible',
+        fields => ['preference'],
+    },
     'Koha::Exceptions::DuplicateObject' => {
         isa => 'Koha::Exceptions::Exception',
         description => 'Same object already exists',

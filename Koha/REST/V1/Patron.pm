@@ -22,6 +22,8 @@ use Koha::Account;
 use Koha::AuthUtils qw(hash_password);
 use C4::Auth qw( haspermission checkpw_internal );
 use C4::Context;
+use Koha::Exceptions;
+use Koha::Exceptions::Password;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Libraries;
@@ -189,29 +191,54 @@ sub pay {
 sub changepassword {
     my ($c, $args, $cb) = @_;
 
-    my $user = $c->stash('koha.user');
-    my $patron = Koha::Patrons->find($args->{borrowernumber});
+    my $patron;
+    my $user;
+    try {
+        $patron = Koha::Patrons->find($args->{borrowernumber});
+        $user = $c->stash('koha.user');
 
-    my $OpacPasswordChange = C4::Context->preference("OpacPasswordChange");
-    my $haspermission = haspermission($user->userid, {borrowers => 1});
-    unless ($OpacPasswordChange && $user->borrowernumber == $args->{borrowernumber}
-            || $haspermission) {
-        return $c->$cb({ error => "OPAC password change is disabled" }, 403);
-    }
-    return $c->$cb({ error => "Patron not found." }, 404) unless $patron;
+        my $OpacPasswordChange = C4::Context->preference("OpacPasswordChange");
+        my $haspermission = haspermission($user->userid, {borrowers => 1});
+        unless ($OpacPasswordChange && $user->borrowernumber == $args->{borrowernumber}) {
+            Koha::Exceptions::BadSystemPreference->throw(
+                preference => 'OpacPasswordChange'
+            ) unless $haspermission;
+        }
 
-    my $pw = $args->{'body'};
-    my $dbh = C4::Context->dbh;
-    unless ($haspermission
-            || checkpw_internal($dbh, $patron->userid, $pw->{'current_password'})) {
-        return $c->$cb({ error => "Wrong current password." }, 400);
+        my $pw = $args->{'body'};
+        my $dbh = C4::Context->dbh;
+        unless ($haspermission || checkpw_internal($dbh, $patron->userid, $pw->{'current_password'})) {
+            Koha::Exceptions::Password::Invalid->throw;
+        }
+        $patron->change_password_to($pw->{'new_password'});
+        return $c->$cb({}, 200);
     }
+    catch {
+        if (not defined $patron) {
+            return $c->$cb({ error => "Patron not found." }, 404);
+        }
+        elsif (not defined $user) {
+            return $c->$cb({ error => "User must be defined." }, 500);
+        }
 
-    my ($success, $errmsg) = $patron->change_password_to($pw->{'new_password'});
-    if ($errmsg) {
-        return $c->$cb({ error => $errmsg }, 400);
+        die $_ unless blessed $_ && $_->can('rethrow');
+        if ($_->isa('Koha::Exceptions::Password::Invalid')) {
+            return $c->$cb({ error => "Wrong current password." }, 400);
+        }
+        elsif ($_->isa('Koha::Exceptions::Password::TooShort')) {
+            return $c->$cb({ error => $_->error }, 400);
+        }
+        elsif ($_->isa('Koha::Exceptions::Password::TrailingWhitespaces')) {
+            return $c->$cb({ error => $_->error }, 400);
+        }
+        elsif ($_->isa('Koha::Exceptions::BadSystemPreference')
+               && $_->preference eq 'OpacPasswordChange') {
+            return $c->$cb({ error => "OPAC password change is disabled" }, 403);
+        }
+        else {
+            return $c->$cb({ error => "Something went wrong. $_" }, 500);
+        }
     }
-    return $c->$cb({}, 200);
 }
 
 1;
