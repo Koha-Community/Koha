@@ -318,6 +318,33 @@ function validate1(date) {
 
 <!-- End Upload Patron Image Section -->
 
+[% IF ( HouseboundModule ) %]
+<div id="houseboundroles">
+<h3>Housebound roles</h3>
+<div class="rows">
+  <ol>
+    <li>
+      <span class="label">Chooser:</span>
+      [% IF ( housebound_role.housebound_chooser == 1 ) %]
+        Yes
+      [% ELSE %]
+        No
+      [% END %]
+    </li>
+    <li>
+      <span class="label">Deliverer:</span>
+      [% IF ( housebound_role.housebound_deliverer == 1 ) %]
+        Yes
+      [% ELSE %]
+        No
+      [% END %]
+    </li>
+  </ol>
+</div>
+</div>
+<div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=4">Edit</a></div>
+[% END %]
+
 [% IF ( ExtendedPatronAttributes ) %]
 [% UNLESS ( no_patron_attribute_types ) %]
 <div id="patron-extended-attributes" style="padding-top: 1em;">
@@ -348,31 +375,6 @@ function validate1(date) {
 [% END %]
 [% END %]
 
-[% IF ( HouseboundModule ) %]
-<div id="houseboundroles">
-<h3>Housebound roles</h3>
-<div class="rows">
-  <ol>
-    <li>
-      <span class="label">Chooser:</span>
-      [% IF ( housebound_role.housebound_chooser == 1 ) %]
-        Yes
-      [% ELSE %]
-        No
-      [% END %]
-    </li>
-    <li>
-      <span class="label">Deliverer:</span>
-      [% IF ( housebound_role.housebound_deliverer == 1 ) %]
-        Yes
-      [% ELSE %]
-        No
-      [% END %]
-    </li>
-  </ol>
-</div>
-</div>
-[% END %]
 
 [% IF ( EnhancedMessagingPreferences ) %]
 <div id="patron-messaging-prefs" style="padding-top: 1em;">
