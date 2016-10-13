@@ -25,7 +25,7 @@ $(document).ready(function() {
     // DataTables removes hidden rows from the DOM, so we can't expect a
     // "regular" submit to work and we need to build another form containing
     // all form elements, and then submit this form.
-    $('form').submit(function(e) {
+    $('#tabs form').submit(function(e) {
         e.preventDefault();
 
         var form = $(this);
@@ -49,19 +49,17 @@ $(document).ready(function() {
     $(".CheckNone").click(function(e){
         e.preventDefault();
         var form = $(this).parents("form").first();
-        var table = form.find('table').dataTable();
-        table.$('input[type="checkbox"]').attr('checked', false);
+        form.find('table input[type="checkbox"]').prop('checked', false);
         enableCheckboxActions(form);
     });
     $(".CheckAll").click(function(e){
         e.preventDefault();
         var form = $(this).parents("form").first();
-        var table = form.find('table').dataTable();
-        table.$('input[type="checkbox"]').attr('checked', true);
+        form.find('table input[type="checkbox"]').prop('checked', true);
         enableCheckboxActions(form);
     });
 
-    $("input:checkbox").click(function(){
+    $('#tabs table').on('click', 'input:checkbox', function() {
         var form = $(this).parents("form").first();
         enableCheckboxActions(form);
     });
@@ -88,6 +86,9 @@ $(document).ready(function() {
         return false;
     });
 
+    $('#tabs form').each(function() {
+        enableCheckboxActions($(this));
+    });
 });
 
 function enableCheckboxActions(form){
@@ -136,8 +137,9 @@ function enableCheckboxActions(form){
             <h2>Current session</h2>
             <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
               <div class="selections-toolbar">
-                <a class="CheckAll" href="#">Select all</a>
-                <a class="CheckNone" href="#">Clear all</a>
+                <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+                <span class="sep">|</span>
+                <a class="CheckNone" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
                 <span class="sep">|</span>
                 <span class="links">
                   <span class="selections">Select searches to: </span>
@@ -172,8 +174,9 @@ function enableCheckboxActions(form){
             <h2>Previous sessions</h2>
             <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
               <div class="selections-toolbar">
-                <a class="CheckAll" href="#">Select all</a>
-                <a class="CheckNone" href="#">Clear all</a>
+                <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+                <span class="sep">|</span>
+                <a class="CheckNone" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
                 <span class="sep">|</span>
                 <span class="links">
                   <span class="selections">Select searches to: </span>
@@ -214,8 +217,9 @@ function enableCheckboxActions(form){
             <h2>Current session</h2>
             <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
               <div class="selections-toolbar">
-                <a class="CheckAll" href="#">Select all</a>
-                <a class="CheckNone" href="#">Clear all</a>
+                <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+                <span class="sep">|</span>
+                <a class="CheckNone" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
                 <span class="sep">|</span>
                 <span class="links">
                   <span class="selections">Select searches to: </span>
@@ -250,8 +254,9 @@ function enableCheckboxActions(form){
             <h2>Previous sessions</h2>
             <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
               <div class="selections-toolbar">
-                <a class="CheckAll" href="#">Select all</a>
-                <a class="CheckNone" href="#">Clear all</a>
+                <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
+                <span class="sep">|</span>
+                <a class="CheckNone" href="#"><i class="fa fa-remove"></i> Clear selection on visible rows</a>
                 <span class="sep">|</span>
                 <span class="links">
                   <span class="selections">Select searches to: </span>
