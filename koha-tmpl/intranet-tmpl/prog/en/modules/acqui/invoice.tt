@@ -188,7 +188,7 @@
             <tfoot>
               [% FOR tf IN foot_loop %]
                 <tr>
-                    <th colspan='3'>Total (GST [% tf.tax_rate * 100 | $Price %] %)</th>
+                    <th colspan="2">Total (GST [% tf.tax_rate * 100 | $Price %] %)</th>
                     <th class="tax_excluded"/><th class="tax_included"/>
                     <th>[% tf.quantity %]</th>
                     <th class="tax_excluded">[% tf.total_tax_excluded | $Price %]</th>
