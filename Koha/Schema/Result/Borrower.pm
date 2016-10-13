@@ -419,7 +419,7 @@ __PACKAGE__->table("borrowers");
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
   default_value: current_timestamp
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 lastseen
 
@@ -608,7 +608,7 @@ __PACKAGE__->add_columns(
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
     default_value => \"current_timestamp",
-    is_nullable => 0,
+    is_nullable => 1,
   },
   "lastseen",
   {
@@ -895,6 +895,66 @@ __PACKAGE__->has_many(
   "hold_fill_targets",
   "Koha::Schema::Result::HoldFillTarget",
   { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 housebound_profile
+
+Type: might_have
+
+Related object: L<Koha::Schema::Result::HouseboundProfile>
+
+=cut
+
+__PACKAGE__->might_have(
+  "housebound_profile",
+  "Koha::Schema::Result::HouseboundProfile",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 housebound_role
+
+Type: might_have
+
+Related object: L<Koha::Schema::Result::HouseboundRole>
+
+=cut
+
+__PACKAGE__->might_have(
+  "housebound_role",
+  "Koha::Schema::Result::HouseboundRole",
+  { "foreign.borrowernumber_id" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 housebound_visit_chooser_brwnumbers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::HouseboundVisit>
+
+=cut
+
+__PACKAGE__->has_many(
+  "housebound_visit_chooser_brwnumbers",
+  "Koha::Schema::Result::HouseboundVisit",
+  { "foreign.chooser_brwnumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 housebound_visit_deliverer_brwnumbers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::HouseboundVisit>
+
+=cut
+
+__PACKAGE__->has_many(
+  "housebound_visit_deliverer_brwnumbers",
+  "Koha::Schema::Result::HouseboundVisit",
+  { "foreign.deliverer_brwnumber" => "self.borrowernumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
@@ -1244,8 +1304,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-13 17:32:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:23Yg0CXG1z8f5Bx92JCVoQ
+# Created by DBIx::Class::Schema::Loader v0.07039 @ 2016-10-13 07:29:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gTAVqirjg5ZckpVtRTXHOQ
 
 __PACKAGE__->belongs_to(
     "guarantor",
