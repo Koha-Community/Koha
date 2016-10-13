@@ -36,8 +36,6 @@ Koha::Middleware::SetEnv - Plack middleware to allow SetEnv through proxied head
   }
 
 
-  SetEnv MEMCACHED_NAMESPACE "localhost:11211"
-  RequestHeader add X-Koha-SetEnv "MEMCACHED_NAMESPACE localhost:11211"
 
 =head1 DESCRIPTION
 
@@ -66,8 +64,6 @@ name.
 =cut
 
 my $allowed_setenvs = qr/^(
-    MEMCACHED_SERVERS |
-    MEMCACHED_NAMESPACE |
     OVERRIDE_SYSPREF_(\w+) |
     OVERRIDE_SYSPREF_NAMES |
     OPAC_CSS_OVERRIDE |
@@ -103,12 +99,6 @@ sub call {
         %$env,
         %setenvs
     };
-
-    # We also add the MEMCACHED_ settings to the actual environment, to make sure any early
-    # initialization of Koha::Cache correctly sets up a memcached connection.
-    foreach my $special_var ( qw( MEMCACHED_SERVERS MEMCACHED_NAMESPACE ) ) {
-        $ENV{$special_var} = $setenvs{$special_var} if defined $setenvs{$special_var};
-    }
 
     return $self->app->($env);
 }
