@@ -52,5 +52,12 @@ INSERT IGNORE INTO systempreferences
        ('HouseboundModule',0,'',
        'If ON, enable housebound module functionality.','YesNo');
 
+-- Install in new authorised value category table
+
+INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
+    ('HSBND_FREQ');
+
+-- Then add mandatory authorised values
+
 INSERT IGNORE INTO authorised_values (category, authorised_value, lib) VALUES
        ('HSBND_FREQ','EW','Every week');

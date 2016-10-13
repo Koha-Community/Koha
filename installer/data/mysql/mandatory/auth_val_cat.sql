@@ -49,3 +49,8 @@ INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
     ('CAND'),
     ('COUNTRY'),
     ('qualif');
+
+-- For Housebound
+
+INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
+    ('HSBND_FREQ');
