@@ -98,7 +98,6 @@ sub search_by_koha_field {
             ( $authorised_value ? ( authorised_value => $authorised_value ) : () ),
         },
         {   join     => { category => 'marc_subfield_structures' },
-            select   => ['authorised_value'],
             distinct => 1,
         }
     );
