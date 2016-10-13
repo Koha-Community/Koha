@@ -555,6 +555,7 @@ sub SendAlerts {
                 . " Content="
                 . $letter->{content}
         ) if C4::Context->preference("LetterLog");
+        1;
     }
    # send an "account details" notice to a newly created user
     elsif ( $type eq 'members' ) {
