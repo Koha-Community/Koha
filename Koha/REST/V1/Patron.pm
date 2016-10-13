@@ -193,21 +193,21 @@ sub changepassword {
     my $patron = Koha::Patrons->find($args->{borrowernumber});
 
     my $OpacPasswordChange = C4::Context->preference("OpacPasswordChange");
-    unless ( $user
-        && ( ($OpacPasswordChange && $user->borrowernumber == $args->{borrowernumber})
-            || haspermission($user->userid, {borrowers => 1}) ) )
-    {
+    my $haspermission = haspermission($user->userid, {borrowers => 1});
+    unless ($OpacPasswordChange && $user->borrowernumber == $args->{borrowernumber}
+            || $haspermission) {
         return $c->$cb({ error => "OPAC password change is disabled" }, 403);
     }
     return $c->$cb({ error => "Patron not found." }, 404) unless $patron;
 
     my $pw = $args->{'body'};
     my $dbh = C4::Context->dbh;
-    unless (checkpw_internal($dbh, $user->userid, $pw->{'current_password'})) {
+    unless ($haspermission
+            || checkpw_internal($dbh, $patron->userid, $pw->{'current_password'})) {
         return $c->$cb({ error => "Wrong current password." }, 400);
     }
 
-    my ($success, $errmsg) = $user->change_password_to($pw->{'new_password'});
+    my ($success, $errmsg) = $patron->change_password_to($pw->{'new_password'});
     if ($errmsg) {
         return $c->$cb({ error => $errmsg }, 400);
     }
