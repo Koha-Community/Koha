@@ -295,11 +295,15 @@ Extending the subscription to the expiry date.
 
 sub renew_account {
     my ($self) = @_;
-
-    my $date =
-      C4::Context->preference('BorrowerRenewalPeriodBase') eq 'dateexpiry'
-      ? dt_from_string( $self->dateexpiry )
-      : dt_from_string;
+    my $date;
+    if ( C4::Context->preference('BorrowerRenewalPeriodBase') eq 'combination' ) {
+        $date = ( dt_from_string gt dt_from_string( $self->dateexpiry ) ) ? dt_from_string : dt_from_string( $self->dateexpiry );
+    } else {
+        $date =
+            C4::Context->preference('BorrowerRenewalPeriodBase') eq 'dateexpiry'
+            ? dt_from_string( $self->dateexpiry )
+            : dt_from_string;
+    }
     my $patron_category = Koha::Patron::Categories->find( $self->categorycode );    # FIXME Should be $self->category
     my $expiry_date     = $patron_category->get_expiry_date($date);
 
