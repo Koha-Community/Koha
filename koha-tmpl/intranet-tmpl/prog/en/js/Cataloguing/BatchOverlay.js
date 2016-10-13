@@ -2,6 +2,7 @@ var BatchOverlay = {};
 
 var reportsDataTable;
 $(function() {
+  $(document).scrollTop(0);
 
   $( "#toptabs" ).tabs();
 
