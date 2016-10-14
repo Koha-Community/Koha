@@ -1,14 +1,16 @@
 #!/usr/bin/perl
+
 use Modern::Perl;
+
 use Getopt::Long;
+use MARC::Field;
+use MARC::Record;
+use Pod::Usage;
+use Time::HiRes qw(gettimeofday);
+
 use C4::Context;
 use C4::Biblio;
 use C4::Items;
-use MARC::Record;
-use MARC::Field;
-use Data::Dumper;
-use Time::HiRes qw(gettimeofday);
-use Pod::Usage;
 
 =head1 NAME
 
@@ -41,7 +43,7 @@ GetOptions(
     'where:s' => \$where,
 ) or pod2usage(2);
 
-pod2usage(1) if ( $help || ( !$confirm ) );
+pod2usage(1) if $help || ( !$confirm && !$test_parameter );
 print "### Database will not be modified ###\n" if $test_parameter;
 
 #dbh
@@ -68,12 +70,9 @@ $sth->execute();
 while ( my ( $biblionumber, $biblioitemnumber, $frameworkcode ) = $sth->fetchrow ) {
     $count++;
     warn $count unless $count % 1000;
-    my $extkey;
     my $record = GetMarcBiblio( $biblionumber, 1 );
     unless ($record) { push @errors, "bad record biblionumber $biblionumber"; next; }
-    my ( $tmptestfields, $tmptestdirectory, $reclen, $tmptestbaseaddress ) = MARC::File::USMARC::_build_tag_directory($record);
 
-    #print "\n################################ record before ##################################\n".$record->as_formatted;#!test
     unless ($test_parameter) {
         my $rqitemnumber = $dbh->prepare("SELECT itemnumber, biblionumber from items where itemnumber = ? and biblionumber = ?");
         foreach my $itemfield ( $record->field($itemfield) ) {
@@ -109,5 +108,7 @@ if ( scalar(@errors) > 0 ) {
     print "Some biblionumber could not be processed though: ", join( " ", @errors );
 }
 
-sub defnonull { my $var = shift; defined $var and $var ne "" }
-__END__
+sub defnonull {
+    my $var = shift;
+    defined $var and $var ne "";
+}
