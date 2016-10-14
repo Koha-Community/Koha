@@ -91,6 +91,15 @@ sub authenticate_api_request {
         ) if $cookie and $action_spec->{'x-koha-authorization'};
     }
 
+    # Check for malformed query parameters
+    my @errors;
+    my %valid_parameters = map { $_->{name} => 1 if $_->{in} eq 'query' } @{$action_spec->{parameters}};
+    my $existing_params = $c->req->query_params->to_hash;
+    for my $param ( keys %{$existing_params} ) {
+      push @errors, { path => "/query/".$param, message => 'Malformed query string' } unless exists $valid_parameters{$param};
+    }
+    return $c->render_swagger({},\@errors,400) if @errors;
+
     return $next->($c) unless $action_spec->{'x-koha-authorization'};
     unless ($user) {
         return $c->render_swagger({ error => "Authentication required." },{},401);
