@@ -115,8 +115,8 @@ if ($op and $op eq "send_alert"){
         $template->param(error_claim => $@);
     } elsif ( ref $err and exists $err->{error} and $err->{error} eq "no_email" ) {
         $template->{VARS}->{'error_claim'} = "no_email";
-    } elsif ( ref $err and exists $err->{error} and $err->{error} eq "no_order_seleted"){
-        $template->{VARS}->{'error_claim'} = "no_order_seleted";
+    } elsif ( ref $err and exists $err->{error} and $err->{error} eq "no_order_selected"){
+        $template->{VARS}->{'error_claim'} = "no_order_selected";
     } else {
         $template->{VARS}->{'info_claim'} = 1;
     }

@@ -474,7 +474,7 @@ sub SendAlerts {
             };
 
         if (!@$externalid){
-            carp "No Order seleted";
+            carp "No Order selected";
             return { error => "no_order_selected" };
         }
 
