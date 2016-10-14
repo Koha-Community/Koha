@@ -70,6 +70,12 @@ __PACKAGE__->table("aqcontacts");
   data_type: 'mediumtext'
   is_nullable: 1
 
+=head2 orderacquisition
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =head2 claimacquisition
 
   data_type: 'tinyint'
@@ -119,6 +125,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 100 },
   "notes",
   { data_type => "mediumtext", is_nullable => 1 },
+  "orderacquisition",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "claimacquisition",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "claimissues",
@@ -161,8 +169,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-26 11:53:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sIT7PzDxqInviUSe7wuzow
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-14 07:14:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9sJ0ALCjIsvdUcqgpej1JA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
