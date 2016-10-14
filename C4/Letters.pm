@@ -372,6 +372,9 @@ sub findrelatedto {
 
     send an alert to all borrowers having put an alert on a given subject.
 
+    Returns undef or { error => 'message } on failure.
+    Returns true on success.
+
 =cut
 
 sub SendAlerts {
@@ -441,7 +444,10 @@ sub SendAlerts {
                                     : 'text/plain; charset="utf-8"',
                 }
             );
-            sendmail(%mail) or carp $Mail::Sendmail::error;
+            unless( sendmail(%mail) ) {
+                carp $Mail::Sendmail::error;
+                return { error => $Mail::Sendmail::error };
+            }
         }
     }
     elsif ( $type eq 'claimacquisition' or $type eq 'claimissues' ) {
@@ -469,7 +475,7 @@ sub SendAlerts {
 
         if (!@$externalid){
             carp "No Order seleted";
-            return { error => "no_order_seleted" };
+            return { error => "no_order_selected" };
         }
 
         $strsth .= join( ",", @$externalid ) . ")";
@@ -555,7 +561,6 @@ sub SendAlerts {
                 . " Content="
                 . $letter->{content}
         ) if C4::Context->preference("LetterLog");
-        1;
     }
    # send an "account details" notice to a newly created user
     elsif ( $type eq 'members' ) {
@@ -589,8 +594,14 @@ sub SendAlerts {
                                 : 'text/plain; charset="utf-8"',
             }
         );
-        sendmail(%mail) or carp $Mail::Sendmail::error;
+        unless( sendmail(%mail) ) {
+            carp $Mail::Sendmail::error;
+            return { error => $Mail::Sendmail::error };
+        }
     }
+
+    # If we come here, return an OK status
+    return 1;
 }
 
 =head2 GetPreparedLetter( %params )
