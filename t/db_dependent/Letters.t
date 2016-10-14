@@ -467,7 +467,7 @@ warning_is {
 $err2 = SendAlerts( 'issue', $serial->{serialid}, 'RLIST' ) }
     "Fake sendmail",
     "SendAlerts is using the mocked sendmail routine";
-is($err2, "", "Successfully sent serial notification");
+is($err2, 1, "Successfully sent serial notification");
 is($mail{'To'}, 'john.smith@test.de', "mailto correct in sent serial notification");
 is($mail{'Message'}, 'Silence in the library,'.$subscriptionid.',No. 0', 'Serial notification text constructed successfully');
 }
