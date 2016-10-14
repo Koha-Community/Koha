@@ -91,21 +91,36 @@ sub authenticate_api_request {
         ) if $cookie and $action_spec->{'x-koha-authorization'};
     }
 
-    my @errors = validate_parameters( $c, $action_spec );
-    return $c->render_swagger({}, \@errors, 400) if @errors;
 
-    return $next->($c) unless $action_spec->{'x-koha-authorization'};
+    # Then check the parameters
+    my @query_errors = validate_query_parameters( $c, $action_spec );
+
+    # We do not need any authorization
+    unless ( $action_spec->{'x-koha-authorization'} ) {
+        return @query_errors
+            ? $c->render_swagger({}, \@query_errors, 400)
+            : $next->($c);
+    }
+
     unless ($user) {
         return $c->render_swagger({ error => "Authentication required." },{},401);
     }
 
     my $authorization = $action_spec->{'x-koha-authorization'};
     my $permissions = $authorization->{'permissions'};
+
+    # Check if the user is authorized
     if ( C4::Auth::haspermission($user->userid, $permissions)
         or allow_owner($c, $authorization, $user)
         or allow_guarantor($c, $authorization, $user) ) {
+
+        # Return the query errors if exist
+        return $c->render_swagger({}, \@query_errors, 400) if @query_errors;
+
+        # Everything is ok
         return $next->($c)
     }
+
     return $c->render_swagger(
         { error => "Authorization failure. Missing required permission(s).",
           required_permissions => $permissions },
@@ -114,7 +129,7 @@ sub authenticate_api_request {
     );
 }
 
-sub validate_parameters {
+sub validate_query_parameters {
     my ( $c, $action_spec ) = @_;
 
     # Check for malformed query parameters
