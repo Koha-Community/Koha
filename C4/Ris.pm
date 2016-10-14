@@ -385,10 +385,11 @@ sub print_typetag {
     ## The type of a MARC record is found at position 06 of the leader
     my $typeofrecord = defined($leader) && length $leader >=6 ?
                        substr($leader, 6, 1): undef;
-    my $typeofrecord2 = defined($leader) && length $leader >=6 ?
-                       substr($leader, 7, 1): undef;
+    ## Pos 07 == Bibliographic level
+    my $biblevel = defined($leader) && length $leader >=7 ?
+                       substr($leader, 7, 1): '';
 
-    ## ToDo: for books, field 008 positions 24-27 might have a few more
+    ## TODO: for books, field 008 positions 24-27 might have a few more
     ## hints
 
     my %typehash;
@@ -405,15 +406,15 @@ sub print_typetag {
         print "TY  - GEN\r\n"; ## most reasonable default
         warn ("no type found - assume GEN") if $marcprint;
     } elsif ( $typeofrecord =~ "a" ) {
-        if ( $typeofrecord2 =~ "a" ) {
+        if ( $biblevel eq 'a' ) {
             print "TY  - GEN\r\n"; ## monographic component part
-        } elsif ( $typeofrecord2 =~ "b" || $typeofrecord2 =~ "s" ) {
+        } elsif ( $biblevel eq 'b' || $biblevel eq 's' ) {
             print "TY  - SER\r\n"; ## serial or serial component part
-        } elsif ( $typeofrecord2 =~ "m" ) {
+        } elsif ( $biblevel eq 'm' ) {
             print "TY  - $typehash{$typeofrecord}\r\n"; ## book
-        } elsif ( $typeofrecord2 =~ "c" || $typeofrecord2 =~ "d" ) {
+        } elsif ( $biblevel eq 'c' || $biblevel eq 'd' ) {
             print "TY  - GEN\r\n"; ## collections, part of collections or made-up collections
-        } elsif ( $typeofrecord2 =~ "i" ) {
+        } elsif ( $biblevel eq 'i' ) {
             print "TY  - DATA\r\n"; ## updating loose-leafe as Dataset
         }
     } else {
