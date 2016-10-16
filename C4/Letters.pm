@@ -365,18 +365,19 @@ sub findrelatedto {
 
     my $err = &SendAlerts($type, $externalid, $letter_code);
 
-Parameters:
- - $type : the type of alert
- - $externalid : the id of the "object" to query
- - $letter_code : the notice template to use
+    Parameters:
+      - $type : the type of alert
+      - $externalid : the id of the "object" to query
+      - $letter_code : the notice template to use
 
-C<&SendAlerts> sends an email notice directly to a patron or a vendor.
-Currently it supports ($type):
-- claim serial issues (claimissues)
-- claim acquisition orders (claimacquisition)
-- send acquisition orders to the vendor (orderacquisition)
-- notify patrons about newly received serial issues (issue)
-- notify patrons when their account is created (members)
+    C<&SendAlerts> sends an email notice directly to a patron or a vendor.
+
+    Currently it supports ($type):
+      - claim serial issues (claimissues)
+      - claim acquisition orders (claimacquisition)
+      - send acquisition orders to the vendor (orderacquisition)
+      - notify patrons about newly received serial issues (issue)
+      - notify patrons when their account is created (members)
 
     Returns undef or { error => 'message } on failure.
     Returns true on success.
