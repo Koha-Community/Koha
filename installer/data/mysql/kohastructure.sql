@@ -3866,7 +3866,7 @@ CREATE TABLE IF NOT EXISTS `housebound_role` (
   `housebound_chooser` tinyint(1) NOT NULL DEFAULT 0, -- set to 1 to indicate this patron is a housebound chooser volunteer
   `housebound_deliverer` tinyint(1) NOT NULL DEFAULT 0, -- set to 1 to indicate this patron is a housebound deliverer volunteer
   PRIMARY KEY (`borrowernumber_id`),
-  CONSTRAINT `houseboundvisit_bnfk`
+  CONSTRAINT `houseboundrole_bnfk`
     FOREIGN KEY (`borrowernumber_id`)
     REFERENCES `borrowers` (`borrowernumber`)
     ON UPDATE CASCADE ON DELETE CASCADE
