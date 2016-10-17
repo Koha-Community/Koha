@@ -189,7 +189,7 @@
                   </ol>
                 </fieldset>
                 <fieldset class="action">
-                  <input type="submit" value="Save changes" name="save" />
+                  <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save changes</button>
                   <a class="cancel"
                      href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% borrowernumber %]">
                     Cancel
@@ -315,7 +315,7 @@
                   </ol>
                 </fieldset>
                 <fieldset class="action">
-                  <input type="submit" value="Save" name="save" />
+                  <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save</button>
                   <a class="cancel"
                      href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% borrowernumber %]">
                     Cancel
@@ -374,9 +374,7 @@
                   </li>
                 </ol>
                 <div class="action">
-                  <a href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% borrowernumber %]&method=update_or_create">
-                    Edit
-                  </a>
+                  <a class="btn btn-mini" href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% borrowernumber %]&method=update_or_create"><i class="fa fa-pencil"></i> Edit</a>
                 </div>
               </div>
               <div>
@@ -401,16 +399,9 @@
                           [% INCLUDE 'patron-title.inc' borrowernumber = entry.deliverer.borrowernumber category_type = entry.deliverer.categorycode firstname = entry.deliverer.firstname surname = entry.deliverer.surname othernames = entry.deliverer.othernames cardnumber = entry.deliverer.cardnumber invert_name = 0 %]
                         </a>
                       </td>
-                      <td align="center">
-                        <a href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&visit_id=[% entry.id %]&borrowernumber=[% borrowernumber %]"
-                           class="btn btn-small">
-                          Edit
-                        </a>
-                        |
-                        <a href="/cgi-bin/koha/members/housebound.pl?method=visit_delete&visit_id=[% entry.id %]&borrowernumber=[% borrowernumber %]"
-                           class="btn btn-small">
-                          Delete
-                        </a>
+                      <td class="actions">
+                        <a class="btn btn-mini" href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&visit_id=[% entry.id %]&borrowernumber=[% borrowernumber %]"><i class="fa fa-pencil"></i> Edit</a>
+                        <a class="delete btn btn-mini" href="/cgi-bin/koha/members/housebound.pl?method=visit_delete&visit_id=[% entry.id %]&borrowernumber=[% borrowernumber %]"><i class="fa fa-trash"></i> Delete</a>
                       </td>
                     </tr>
                     [% END %]
