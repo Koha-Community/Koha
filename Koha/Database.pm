@@ -90,6 +90,10 @@ sub _new_schema {
     my $dbh = $schema->storage->dbh;
     eval {
         $dbh->{RaiseError} = 1;
+        if ( $ENV{KOHA_DB_DO_NOT_RAISE_OR_PRINT_ERROR} ) {
+            $dbh->{RaiseError} = 0;
+            $dbh->{PrintError} = 0;
+        }
         $dbh->do(q|
             SELECT * FROM systempreferences WHERE 1 = 0 |
         );
