@@ -28,9 +28,8 @@
     </p>
     <h4>Using the "Encoding level" -report</h4>
     <p>
-        The "Encoding level" -report is used to find records still pending fully catalogued record overlay. The recommended levels are something
-        less than 4. The acquisition records are of level 8 and the fully catalogued records are of level 4. The limit-input can be used to limit
-        the returned results to make the report run faster. On large result sets the report might timeout the connection and fail.
+        The "Encoding level" -report is used to find records still pending fully catalogued record overlay. In the MARC21-format, the leader's (Field 000) character 17 contains the encoding level.<br/>
+        The limit-input can be used to limit the returned results to make the report run faster. On large result sets the report might timeout the connection and fail.
     </p>
     <h4>Simple diagnostics</h4>
     <p>
@@ -63,6 +62,77 @@
             to automerge them to the new component part</li>
         <li>Finally a report is persisted about the actions taken and for easy verification of correctness.</li>
     </ol>
+</p>
+<p>
+    <h3>Encoding levels of lowly vs. fully catalogued record</h3>
+    <p>
+        Using the manual BatchOverlay-tool, the operator chooses the records that need to be automatically overlayed with the search terms per line.
+        When the automatic BatchOverlay-tool is activated, depending on the configuration of the tool, all records in the database can be considered candidates for automatic overlaying.<br/>
+        Automated BatchOverlay then looks for records with a low cataloguing level, and tries to find fully catalogued counterparts from the remote repositories to overlay with.
+    </p>
+    <table border=1 style="border: 1px solid black; text-align: center;">
+      <caption><i>Here is a table of mappings for all the valid encoding level values</i></caption>
+      <tr>
+        <th>Encoding level</th>
+        <th>Low or Full</th>
+        <th>Rank</th>
+      </tr>
+      <tr>
+        <td>#</td>
+        <td>full</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>full</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>full</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>full</td>
+        <td>4</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>low</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>low</td>
+        <td>6</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>low</td>
+        <td>7</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>full</td>
+        <td>8</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>low</td>
+        <td>9</td>
+      </tr>
+      <tr>
+        <td>u</td>
+        <td>low</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>z</td>
+        <td>low</td>
+        <td>11</td>
+      </tr>
+    </table>
 </p>
 <p>
     <h3>Dealing with errors</h3>
