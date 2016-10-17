@@ -340,7 +340,6 @@ $template->param(
     samebranch      => $samebranch,
     quickslip       => $quickslip,
     housebound_role => $patron->housebound_role,
-    HouseboundModule => C4::Context->preference('HouseboundModule'),
     privacy_guarantor_checkouts => $data->{'privacy_guarantor_checkouts'},
     activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),

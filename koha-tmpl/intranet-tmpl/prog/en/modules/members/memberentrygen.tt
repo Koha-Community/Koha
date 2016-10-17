@@ -1013,7 +1013,7 @@ $(document).ready(function() {
 [% END %]
 
 [% IF ( step_4 ) %]
-[% IF ( HouseboundModule ) %]
+[% IF Koha.Preference('HouseboundModule') %]
   <fieldset class="rows" id="memberentry_housebound_roles">
     <legend id="housebound_roles">Housebound roles</legend>
     <ol class="radio">

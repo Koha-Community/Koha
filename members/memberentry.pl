@@ -750,7 +750,6 @@ $template->param(
 
 # HouseboundModule data
 $template->param(
-    HouseboundModule => C4::Context->preference("HouseboundModule"),
     housebound_role  => Koha::Patron::HouseboundRoles->find($borrowernumber),
 );
 
