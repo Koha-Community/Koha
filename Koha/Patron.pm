@@ -136,7 +136,7 @@ sub housebound_profile {
     my $profile = $self->_result->housebound_profile;
     return Koha::Patron::HouseboundProfile->_new_from_dbic($profile)
         if ( $profile );
-    return 0;
+    return;
 }
 
 =head3 housebound_role
@@ -150,7 +150,7 @@ sub housebound_role {
 
     my $role = $self->_result->housebound_role;
     return Koha::Patron::HouseboundRole->_new_from_dbic($role) if ( $role );
-    return 0;
+    return;
 }
 
 =head3 siblings
