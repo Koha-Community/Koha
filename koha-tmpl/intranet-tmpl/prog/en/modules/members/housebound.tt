@@ -5,6 +5,15 @@
 <title>Koha &rsaquo; Housebound &rsaquo; Details for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        $("a.delete").click(function(){
+            return confirm(_("Are you sure you want to delete this delivery?"));
+        });
+    });
+//]]>
+</script>
 </head>
 <body>
 [% INCLUDE 'header.inc' %]
