@@ -20,4 +20,5 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (21, 'clubs', 'Patron clubs', '0'),
 (22,'ill','The Interlibrary Loans Module',0),
 (23,'self_check','Self check modules',0)
+(24, 'stockrotation', 'Manage stockrotation operations', 0)
 ;
