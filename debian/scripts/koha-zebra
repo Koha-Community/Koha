@@ -186,6 +186,26 @@ set_action()
 op=""
 verbose="no"
 
+# Backwards compatible with old koha-*-zebra scripts
+# TODO: Remove once there's consensus to remove the legacy scripts
+used_script_name=$(basename $0)
+
+if [ "$used_script_name" != "koha-zebra" ]; then
+    warn "Deprecated script used (${used_script_name})"
+
+    case "$used_script_name" in
+        koha-start-zebra)
+            set_action "start" ;;
+        koha-stop-zebra)
+            set_action "stop" ;;
+        koha-restart-zebra)
+            set_action "restart" ;;
+        *)
+            break ;;
+    esac
+fi
+# / Backwards compatible handling code
+
 # Read command line parameters
 while [ $# -gt 0 ]; do
 
