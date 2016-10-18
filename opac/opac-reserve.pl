@@ -278,6 +278,10 @@ if ( $query->param('place_reserve') ) {
             $canreserve = 0;
         }
 
+        unless ( C4::Context->preference('OPACHoldsIfAvailableAtPickup') ) {
+            $canreserve = 0 if Koha::Items->search({ biblionumber => $biblioNum, holdingbranch => $branch })->count;
+        }
+
         my $itemtype = $query->param('itemtype') || undef;
         $itemtype = undef if $itemNum;
 
@@ -378,6 +382,7 @@ $template->param('item_level_itypes' => $itemLevelTypes);
 
 foreach my $biblioNum (@biblionumbers) {
 
+    my @not_available_at = ();
     my $record = GetMarcBiblio($biblioNum);
     # Init the bib item with the choices for branch pickup
     my %biblioLoopIter;
@@ -520,6 +525,10 @@ foreach my $biblioNum (@biblionumbers) {
                 $biblioLoopIter{force_hold} = 1 if $hold_allowed eq 'F';
             }
             $numCopiesAvailable++;
+
+            if ( not C4::Context->preference('OPACHoldsIfAvailableAtPickup') ) {
+                push @not_available_at, $itemInfo->{holdingbranch};
+            }
         }
 
         $itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemTypes->{ $itemInfo->{itype} }{imageurl} );
@@ -546,6 +555,20 @@ foreach my $biblioNum (@biblionumbers) {
     if(not C4::Context->preference('AllowHoldsOnPatronsPossessions') and CheckIfIssuedToPatron($borrowernumber,$biblioNum)) {
         $biblioLoopIter{holdable} = undef;
         $biblioLoopIter{already_patron_possession} = 1;
+    }
+
+    if ( $biblioLoopIter{holdable} ) {
+        @not_available_at = uniq @not_available_at;
+        $biblioLoopIter{not_available_at} = \@not_available_at ;
+    }
+
+    unless ( C4::Context->preference('OPACHoldsIfAvailableAtPickup') ) {
+        @not_available_at = uniq @not_available_at;
+        $biblioLoopIter{not_available_at} = \@not_available_at ;
+        # The record is not holdable is not available at any of the libraries
+        if ( Koha::Libraries->search->count == @not_available_at ) {
+            $biblioLoopIter{holdable} = 0;
+        }
     }
 
     $biblioLoopIter{holdable} &&= CanBookBeReserved($borrowernumber,$biblioNum) eq 'OK';
