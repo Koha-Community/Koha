@@ -75,6 +75,8 @@ if ( $help ) {
     pod2usage;
 }
 
+$marcflavour = uc($marcflavour);
+
 if (     $marcflavour ne 'MARC21'
      and $marcflavour ne 'UNIMARC' ) {
     say "Invalid MARC flavour '$marcflavour' passed.";
