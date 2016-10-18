@@ -38,6 +38,10 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Exception',
         description => 'General problem adding a library limit'
     },
+    'Koha::Exceptions::UnblessedReference' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'Calling unblessed reference'
+    },
     'Koha::Exceptions::UnderMaintenance' => {
         isa => 'Koha::Exceptions::Exception',
         description => 'Koha is under maintenance.'

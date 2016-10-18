@@ -2,6 +2,7 @@ package Koha::Patron;
 
 # Copyright ByWater Solutions 2014
 # Copyright PTFS Europe 2016
+# Copyright Koha-Suomi Oy 2016
 #
 # This file is part of Koha.
 #
@@ -27,7 +28,12 @@ use C4::Log;
 use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Exceptions;
+use Koha::Exceptions::Category;
+use Koha::Exceptions::Library;
+use Koha::Exceptions::Patron;
 use Koha::Holds;
+use Koha::Libraries;
 use Koha::Old::Checkouts;
 use Koha::Patron::Categories;
 use Koha::Patron::HouseboundProfile;
@@ -651,6 +657,59 @@ sub account_locked {
     return ( $FailedLoginAttempts
           and $self->login_attempts
           and $self->login_attempts >= $FailedLoginAttempts )? 1 : 0;
+}
+
+=head3 validate
+
+my $patron = $patron->new($body)->validate->store;
+   $patron = $patron->set($body)->validate->store;
+
+Validates Koha::Patron object and throws Koha::Exceptions if validation issues
+are found.
+
+Throws Koha::Exceptions::UnblessedReference if validate() is called
+       on an unblessed reference.
+Throws Koha::Exceptions::Patron::DuplicateObject if trying to add a duplicate.
+Throws Koha::Exceptions::Library::BranchcodeNotFound if branchcode is not found.
+Throws Koha::Exceptions::Category::CategorycodeNotFound if categorycode is not
+       found.
+
+=cut
+
+sub validate {
+    my ($self) = @_;
+
+    Koha::Exceptions::UnblessedReference->throw(
+        error => 'validate() must be called on a blessed Koha::Patron object'
+    ) unless $self && ref($self) eq "Koha::Patron";
+
+    # patron cardnumber and/or userid unique?
+    if ($self->cardnumber || $self->userid) {
+        my $patron = Koha::Patrons->find({cardnumber => $self->cardnumber, userid => $self->userid});
+        if ($patron && (!$self->in_storage || $self->in_storage
+            && $self->borrowernumber ne $patron->borrowernumber)) {
+            Koha::Exceptions::Patron::DuplicateObject->throw(
+                error => "Patron cardnumber and userid must be unique",
+                conflict => { cardnumber => $patron->cardnumber, userid => $patron->userid }
+            );
+        }
+    }
+
+    my $branch = Koha::Libraries->find({branchcode => $self->branchcode });
+    unless ($branch) {
+        Koha::Exceptions::Library::BranchcodeNotFound->throw(
+            error => "Library does not exist",
+            branchcode => $self->branchcode,
+        );
+    }
+    my $category = Koha::Patron::Categories->find({ categorycode => $self->categorycode });
+    unless ($category) {
+        Koha::Exceptions::Category::CategorycodeNotFound->throw(
+            error => "Patron category does not exist",
+            categorycode => $self->categorycode,
+        );
+    }
+    return $self;
 }
 
 =head3 type

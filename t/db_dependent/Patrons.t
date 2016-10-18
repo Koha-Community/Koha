@@ -17,8 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 22;
 use Test::Warn;
+use Test::Fatal;
+use t::lib::TestBuilder;
 
 use C4::Context;
 use Koha::Database;
@@ -44,7 +46,7 @@ my $b1 = Koha::Patron->new(
     {
         surname      => 'Test 1',
         branchcode   => $branchcode,
-        categorycode => $categorycode
+        categorycode => $categorycode,
     }
 );
 $b1->store();
@@ -96,6 +98,29 @@ $b = $patrons->next();
 is( $b->surname(), 'Test 3', "Next returns third patron" );
 $b = $patrons->next();
 is( $b, undef, "Next returns undef" );
+
+is($b1->validate, $b1, "Patron b1 validates");
+isa_ok(exception { $b1->set({ categorycode => "nonexistent" })->validate },
+   "Koha::Exceptions::Category::CategorycodeNotFound",
+   "Invalid categorycode");
+isa_ok(exception { $b1->set({ branchcode => "nonexistent" })->validate },
+   "Koha::Exceptions::Library::BranchcodeNotFound",
+   "Invalid branchcode");
+
+# test validation for duplicate cardnumber & userid
+my $patron = $builder->build({
+    source => 'Borrower',
+    value => {
+        branchcode   => $branchcode,
+        categorycode => $categorycode,
+        flags        => 0,
+    }
+});
+my $duplicate = $patron;
+isa_ok(exception { Koha::Patron->new($duplicate)->validate },
+    "Koha::Exceptions::Patron::DuplicateObject",
+    "Duplicate patron");
+
 
 # Test Reset and iteration in concert
 $patrons->reset();

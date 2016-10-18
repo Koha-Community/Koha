@@ -171,7 +171,7 @@ $newpatron->{ branchcode } = "nonexistent"; # Test invalid branchcode
 $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
-  ->status_is(404)
+  ->status_is(400)
   ->json_is('/error' => "Library with branchcode \"nonexistent\" does not exist");
 
 $newpatron->{ branchcode } = $branchcode;
@@ -179,7 +179,7 @@ $newpatron->{ categorycode } = "nonexistent"; # Test invalid patron category
 $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
-  ->status_is(404)
+  ->status_is(400)
   ->json_is('/error' => "Patron category \"nonexistent\" does not exist");
 $newpatron->{ categorycode } = $categorycode;
 
@@ -188,7 +188,7 @@ $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(500)
-  ->json_is('/error' => "Something went wrong, check Koha logs for details");
+  ->json_is('/error' => "Something went wrong, check Koha logs for details.");
 
 delete $newpatron->{ falseproperty };
 $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
@@ -215,16 +215,16 @@ $t->request_ok($tx)
   ->status_is(404)
   ->json_has('/error', 'Fails when trying to PUT nonexistent patron');
 
-$tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => {categorycode => "nonexistent"});
+$tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => {branchcode => $branchcode, categorycode => "nonexistent"});
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
-  ->status_is(404)
+  ->status_is(400)
   ->json_is('/error' => "Patron category \"nonexistent\" does not exist");
 
 $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => {branchcode => "nonexistent"});
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
-  ->status_is(404)
+  ->status_is(400)
   ->json_is('/error' => "Library with branchcode \"nonexistent\" does not exist");
 
 $newpatron->{ falseproperty } = "Non existent property";
@@ -232,7 +232,7 @@ $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber 
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(500)
-  ->json_is('/error' => "Something went wrong, check Koha logs for details");
+  ->json_is('/error' => "Something went wrong, check Koha logs for details.");
 delete $newpatron->{ falseproperty };
 
 $newpatron->{ cardnumber } = $patron-> { cardnumber };

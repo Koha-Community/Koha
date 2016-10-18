@@ -23,6 +23,9 @@ use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Libraries;
 
+use Scalar::Util qw(blessed);
+use Try::Tiny;
+
 sub list {
     my $c = shift->openapi->valid_input or return;
 
@@ -57,104 +60,68 @@ sub get {
 sub add {
     my ($c, $args, $cb) = @_;
 
-    my $body = $c->req->json;
+    return try {
+        my $body = $c->req->json;
 
-    # patron cardnumber and/or userid unique?
-    if ($body->{cardnumber} || $body->{userid}) {
-        my $patron = Koha::Patrons->find({cardnumber => $body->{cardnumber}, userid => $body->{userid} });
-        if ($patron) {
-            return $c->$cb({
-                error => "Patron cardnumber and userid must be unique",
-                conflict => { cardnumber => $patron->cardnumber, userid => $patron->userid }
-            }, 409);
+        if ($body->{password}) { $body->{password} = hash_password($body->{password}) }; # bcrypt password if given
+
+        my $patron = Koha::Patron->new($body)->validate->store;
+        return $c->$cb($patron, 201);
+    }
+    catch {
+        unless (blessed $_ && $_->can('rethrow')) {
+            return $c->$cb({error => "Something went wrong, check Koha logs for details."}, 500);
         }
-    }
-
-    my $branch = Koha::Libraries->find({branchcode => $body->{branchcode} });
-    unless ($branch) {
-        return $c->$cb({error => "Library with branchcode \"" . $body->{branchcode} . "\" does not exist"}, 404);
-    }
-    my $category = Koha::Patron::Categories->find({ categorycode => $body->{categorycode} });
-    unless ($category) {
-        return $c->$cb({error => "Patron category \"" . $body->{categorycode} . "\" does not exist"}, 404);
-    }
-    # All OK - save new patron
-
-    if ($body->{password}) { $body->{password} = hash_password($body->{password}) }; # bcrypt password if given
-
-    my $patron = eval {
-        Koha::Patron->new($body)->store;
+        if ($_->isa('Koha::Exceptions::Patron::DuplicateObject')) {
+            return $c->$cb({ error => $_->error, conflict => $_->conflict }, 409);
+        }
+        elsif ($_->isa('Koha::Exceptions::Library::BranchcodeNotFound')) {
+            return $c->$cb({ error => "Library with branchcode \"".$_->branchcode."\" does not exist" }, 400);
+        }
+        elsif ($_->isa('Koha::Exceptions::Category::CategorycodeNotFound')) {
+            return $c->$cb({error => "Patron category \"".$_->categorycode."\" does not exist"}, 400);
+        }
+        else {
+            return $c->$cb({error => "Something went wrong, check Koha logs for details."}, 500);
+        }
     };
-
-    unless ($patron) {
-        return $c->$cb({error => "Something went wrong, check Koha logs for details"}, 500);
-    }
-
-    return $c->$cb($patron, 201);
 }
 
 sub edit {
     my ($c, $args, $cb) = @_;
 
-    my $patron = Koha::Patrons->find($args->{borrowernumber});
-    unless ($patron) {
-        return $c->$cb({error => "Patron not found"}, 404);
-    }
+    my $patron;
+    return try {
+        $patron = Koha::Patrons->find($args->{borrowernumber});
+        my $body = $c->req->json;
 
-    my $body = $c->req->json;
+        if ($body->{password}) { $body->{password} = hash_password($body->{password}) }; # bcrypt password if given
 
-    # Can we change userid and/or cardnumber? in that case check that they are altered first
-    if ($body->{cardnumber} || $body->{userid}) {
-        if ( ($body->{cardnumber} && $body->{cardnumber} ne $patron->cardnumber) || ($body->{userid} && $body->{userid} ne $patron->userid) ) {
-            my $conflictingPatron = Koha::Patrons->find({cardnumber => $body->{cardnumber}, userid => $body->{userid} });
-            if ($conflictingPatron) {
-                return $c->$cb({
-                    error => "Patron cardnumber and userid must be unique",
-                    conflict => { cardnumber => $conflictingPatron->cardnumber, userid => $conflictingPatron->userid }
-                }, 409);
-            }
+        die unless $patron->set($body)->validate;
+
+        return $c->$cb({}, 204) unless $patron->is_changed; # No Content = No changes made
+        $patron->store;
+        return $c->$cb($patron, 200);
+    } catch {
+        unless ($patron) {
+            return $c->$cb({error => "Patron not found"}, 404);
         }
-    }
-
-    if ($body->{branchcode}) {
-        my $branch = Koha::Libraries->find({branchcode => $body->{branchcode} });
-        unless ($branch) {
-            return $c->$cb({error => "Library with branchcode \"" . $body->{branchcode} . "\" does not exist"}, 404);
+        unless (blessed $_ && $_->can('rethrow')) {
+            return $c->$cb({error => "Something went wrong, check Koha logs for details."}, 500);
         }
-    }
-
-    if ($body->{categorycode}) {
-        my $category = Koha::Patron::Categories->find({ categorycode => $body->{categorycode} });
-        unless ($category) {
-            return $c->$cb({error => "Patron category \"" . $body->{categorycode} . "\" does not exist"}, 404);
+        if ($_->isa('Koha::Exceptions::Patron::DuplicateObject')) {
+            return $c->$cb({ error => $_->error, conflict => $_->conflict }, 409);
         }
-    }
-    # ALL OK - Update patron
-    # Perhaps limit/validate what should be updated here? flags, et.al.
-    if ($body->{password}) { $body->{password} = hash_password($body->{password}) }; # bcrypt password if given
-
-    my $updatedpatron = eval {
-        $patron->set($body);
+        elsif ($_->isa('Koha::Exceptions::Library::BranchcodeNotFound')) {
+            return $c->$cb({ error => "Library with branchcode \"".$_->branchcode."\" does not exist" }, 400);
+        }
+        elsif ($_->isa('Koha::Exceptions::Category::CategorycodeNotFound')) {
+            return $c->$cb({error => "Patron category \"".$_->categorycode."\" does not exist"}, 400);
+        }
+        else {
+            return $c->$cb({error => "Something went wrong, check Koha logs for details."}, 500);
+        }
     };
-
-    if ($updatedpatron) {
-        if ($updatedpatron->is_changed) {
-
-            my $res = eval {
-                $updatedpatron->store;
-            };
-
-            unless ($res) {
-                return $c->$cb({error => "Something went wrong, check Koha logs for details"}, 500);
-            }
-            return $c->$cb($res, 200);
-
-        } else {
-            return $c->$cb({}, 204); # No Content = No changes made
-        }
-    } else {
-        return $c->$cb({error => "Something went wrong, check Koha logs for details"}, 500);
-    }
 }
 
 sub delete {
