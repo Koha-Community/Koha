@@ -866,7 +866,6 @@ sub GetItemStatus {
                 $itemstatus{$authorisedvalue} = $lib;
             }
             return \%itemstatus;
-            exit 1;
         }
         else {
 
@@ -952,7 +951,6 @@ sub GetItemLocation {
                 $itemlocation{$authorisedvalue} = $lib;
             }
             return \%itemlocation;
-            exit 1;
         }
         else {
 

@@ -50,7 +50,7 @@ if ($action eq 'add') {
     $sth->execute($params->{'source'}, $params->{'text'});
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        exit 1;
+        exit 0;
     }
     my $new_quote_id = $dbh->{q{mysql_insertid}}; # ALERT: mysqlism here
     $sth = $dbh->prepare('SELECT * FROM quotes WHERE id = ?;');
