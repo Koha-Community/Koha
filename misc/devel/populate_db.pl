@@ -19,9 +19,67 @@
 
 use Modern::Perl;
 
+use Getopt::Long;
+use Pod::Usage;
+
 use C4::Installer;
 use C4::Context;
 use t::lib::Mocks;
+
+=head1 NAME
+
+populate_db.pl - Load included sample data into the DB
+
+=head1 SYNOPSIS
+
+populate_db.pl [--marcflavour MARCFLAVOUR]
+
+ Options:
+   --help            Brief help message
+   --marcflavour m   Specify the MARC flavour to use (MARC21|UNIMARC). Defaults
+                                to MARC21.
+   -v                Be verbose.
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--help>
+
+Prints a brief help message and exits.
+
+=item B<--marcflavour>
+
+Lets you choose the desired MARC flavour for the sample data. Valid options are MARC21 and UNIMARC.
+It defaults to MARC21.
+
+=item B<--verbose>
+
+Make the output more verbose.
+
+=back
+
+=cut
+
+my $help;
+my $verbose;
+my $marcflavour = 'MARC21';
+
+GetOptions(
+    'help|?'        => \$help,
+    'verbose'       => \$verbose,
+    'marcflavour=s' => \$marcflavour
+) or pod2usage;
+
+if ( $help ) {
+    pod2usage;
+}
+
+if (     $marcflavour ne 'MARC21'
+     and $marcflavour ne 'UNIMARC' ) {
+    say "Invalid MARC flavour '$marcflavour' passed.";
+    pod2usage;
+}
 
 $ENV{KOHA_DB_DO_NOT_RAISE_OR_PRINT_ERROR} = 1;
 my $dbh = C4::Context->dbh; # At the beginning to die if DB does not exist.
@@ -57,7 +115,8 @@ initialize_data();
 update_database();
 
 sub initialize_data {
-    say "Inserting koha db structure...";
+    say "Inserting koha db structure..."
+        if $verbose;
     my $error = $installer->load_db_schema;
     die $error if $error;
 
@@ -73,31 +132,39 @@ sub initialize_data {
         execute_sqlfile($f);
     }
 
-    for my $f (@marc21_sample_files_mandatory) {
-        execute_sqlfile($f);
+    if ( $marcflavour eq 'UNIMARC' ) {
+        for my $f (@unimarc_sample_files_mandatory) {
+            execute_sqlfile($f);
+        }
+    } else {
+        for my $f (@marc21_sample_files_mandatory) {
+            execute_sqlfile($f);
+        }
     }
 
     # set marcflavour (MARC21)
     my $dbh = C4::Context->dbh;
-    $dbh->do(
-        q{
+
+    say "Setting the MARC flavour on the sysprefs..."
+        if $verbose;
+    $dbh->do(qq{
         INSERT INTO `systempreferences` (variable,value,explanation,options,type)
-        VALUES ('marcflavour','MARC21','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice')
-    }
-    );
+        VALUES ('marcflavour',?,'Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice')
+    },undef,$marcflavour);
 
     # set version
-    $dbh->do(
-        qq{
+    say "Setting Koha version to $version..."
+        if $verbose;
+    $dbh->do(qq{
         INSERT INTO systempreferences(variable, value, options, explanation, type)
         VALUES ('Version', '$version', NULL, 'The Koha database version. WARNING: Do not change this value manually, it is maintained by the webinstaller', NULL)
-    }
-    );
+    });
 }
 
 sub execute_sqlfile {
     my ($filepath) = @_;
-    say "Inserting $filepath...";
+    say "Inserting $filepath..."
+        if $verbose;
     my $error = $installer->load_sql($filepath);
     die $error if $error;
 }
@@ -111,7 +178,8 @@ sub get_version {
 
 sub update_database {
     my $update_db_path = $root . '/installer/data/mysql/updatedatabase.pl';
-
+    say "Updating database..."
+        if $verbose;
     my $file = `cat $update_db_path`;
     $file =~ s/exit;//;
     eval $file;
