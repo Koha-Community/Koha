@@ -647,6 +647,12 @@ Circulation:
               choices:
                   homebranch: "home library"
                   holdingbranch: "holding library"
+        -
+            - pref: OPACHoldsIfAvailableAtPickup
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - to pickup up holds at libraries where the item is available.
     Fines Policy:
         -
             - Calculate fines based on days overdue
