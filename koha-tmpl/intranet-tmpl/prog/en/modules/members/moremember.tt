@@ -236,10 +236,6 @@ function validate1(date) {
             [% IF ( mobile ) %]<li><span class="label">Other phone: </span><a href="tel:[% mobile %]">[% mobile | html %]</a></li>[% END %]
         [% END %]
 
-    [% IF ( P ) %]
-        [% IF ( phone ) %]<li><span class="label">Primary phone: </span><a href="tel:[% phone %]">[% phone | html %]</a></li>[% END %]
-        [% IF ( mobile ) %]<li><span class="label">Other phone: </span><a href="tel:[% mobile %]">[% mobile | html %]</a></li>[% END %]
-    [% END %]   	
 	[% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax %]</li>[% END %]
     [% UNLESS ( I ) %]
         [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a title="[% email %]" href="mailto:[% email | url %]">[% email | html %]</a></li>[% END %]
