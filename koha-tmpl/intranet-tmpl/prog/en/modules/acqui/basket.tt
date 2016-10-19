@@ -301,6 +301,8 @@
                 This vendor has no contact selected for sending orders to or is missing an e-mail address.
             [% ELSIF ( email_error == "no_basketno" ) %]
                 No basket given.
+            [% ELSIF ( email_error == "no_letter" ) %]
+                There is no notice template with code ACQORDER defined.
             [% ELSE %]
                 ERROR! - [% email_error %]
             [% END %]

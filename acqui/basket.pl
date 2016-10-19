@@ -178,10 +178,8 @@ if ( $op eq 'delete_confirm' ) {
     };
     if ( $@ ) {
     $redirect_url .= '&email_error='.$@;
-    } elsif ( ref $err and exists $err->{error} and $err->{error} eq "no_email" ) {
-        $redirect_url .= '&email_error=no_email';
-    } elsif ( ref $err and exists $err->{error} and $err->{error} eq "no_basketno" ) {
-        $redirect_url .= '&email_error=no_basketno';
+    } elsif ( ref $err and exists $err->{error} ) {
+        $redirect_url .= '&email_error=' . $err->{error};
     } else {
         $redirect_url .= '&email_ok=1';
     }

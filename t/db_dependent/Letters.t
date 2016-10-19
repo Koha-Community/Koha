@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 78;
+use Test::More tests => 80;
 use Test::MockModule;
 use Test::Warn;
 
@@ -431,6 +431,13 @@ warning_is {
 is($err, 1, "Successfully sent order.");
 is($mail{'To'}, 'testemail@mydomain.com', "mailto correct in sent order");
 is($mail{'Message'}, 'my vendor|John Smith|Ordernumber ' . $ordernumber . ' (Silence in the library) (1 ordered)', 'Order notice text constructed successfully');
+
+$dbh->do(q{DELETE FROM letter WHERE code = 'TESTACQORDER';});
+warning_like {
+    $err = SendAlerts( 'orderacquisition', $basketno , 'TESTACQORDER' ) }
+    qr/No orderacquisition TESTACQORDER letter transported by email/,
+    "GetPreparedLetter warns about missing notice template";
+is($err->{'error'}, 'no_letter', "No TESTACQORDER letter was defined.");
 }
 
 

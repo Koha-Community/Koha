@@ -566,7 +566,7 @@ sub SendAlerts {
             },
             repeat => $dataorders,
             want_librarian => 1,
-        ) or return;
+        ) or return { error => "no_letter" };
 
         # Remove the order tag
         $letter->{content} =~ s/<order>(.*?)<\/order>/$1/gxms;
