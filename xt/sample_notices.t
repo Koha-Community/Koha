@@ -25,6 +25,7 @@ my $root_dir = 'installer/data/mysql';
 my $base_notices_file = "en/mandatory/sample_notices.sql";
 my @trans_notices_files = qw(
     fr-FR/1-Obligatoire/sample_notices.sql
+    fr-CA/obligatoire/sample_notices.sql
     de-DE/mandatory/sample_notices.sql
     es-ES/mandatory/sample_notices.sql
     it-IT/necessari/notices.sql
