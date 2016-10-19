@@ -316,6 +316,7 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
                                     'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my ($barcodefield,$barcodesubfield) = GetMarcFromKohaField('items.barcode');
+            next unless ( defined $barcodefield && defined $barcodesubfield );
             my $barcode = $record->subfield($barcodefield,$barcodesubfield) || '';
             my $aBpref = C4::Context->preference('autoBarcode');
             if( $barcode eq '' && $aBpref ne 'OFF'){
