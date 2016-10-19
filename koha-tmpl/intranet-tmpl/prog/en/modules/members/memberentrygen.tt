@@ -391,7 +391,11 @@ $(document).ready(function() {
 			<label for="othernames">
 			[% END %]
             Holds identifier / Other name: </label>
-            <input type="text" id="othernames" name="othernames" size="20"  value="[% othernames | html UNLESS opduplicate %]" />
+            [% IF (anonymizeothernames) %]
+                <input type="text" id="anonothernames" name="othernames" size="20"  value="[% othernames | html UNLESS opduplicate %]" />
+            [% ELSE %]
+                <input type="text" id="othernames" name="othernames" size="20"  value="[% othernames | html UNLESS opduplicate %]" />
+            [% END %]
 [% IF ( mandatoryothernames ) %]<span class="required">Required</span>[% END %]
 		[% IF ( I ) %]<input type="hidden" name="sex" value="N" />[% END %]
 		</li>

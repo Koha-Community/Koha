@@ -290,9 +290,18 @@ function updateOthername() {
     $("#othernames").val(  surname.val() + ", " + firstname.val()  );
 }
 
-function checkUniqueOthernames(borrno) {
+function updateAnonOthername() {
+    // KD#1452, use unix time epoch as anonymous holds identifier
+
+    var unixepoch = Math.round( (new Date()).getTime() / 10 ).toString();
+    var epochdashed = unixepoch.replace( /(....)/g, '$1-').replace(/-$/,'' );
+
+    $("#anonothernames").val( epochdashed );
+}
+
+function checkUniqueOthernames(borrno, id) {
     var params = {};
-    params.othernames = $("#othernames").val();
+    params.othernames = $(id).val();
     if (borrno) {
         params.borrowernumber = borrno;
     }
@@ -307,7 +316,7 @@ function checkUniqueOthernames(borrno) {
                 uniqueelement.remove();
             }
             //We havent yet checked for uniqueness
-            $("#othernames").after('<span id="othernames_uniquecheck" class="required">'+MSG_OTHERNAMES_NOT_UNIQUE+' <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='+sjson.borrowernumber+'">'+sjson.borrowernumber+'</a> - </span>');
+            $(id).after('<span id="othernames_uniquecheck" class="required">'+MSG_OTHERNAMES_NOT_UNIQUE+' <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='+sjson.borrowernumber+'">'+sjson.borrowernumber+'</a> - </span>');
         }
         else {
             uniqueelement.remove();
@@ -356,7 +365,12 @@ $(document).ready(function(){
 
     $("#othernames").focus(updateOthername);
     $("#othernames").on('change', function() {
-        checkUniqueOthernames();
+        checkUniqueOthernames(null, '#othernames');
+    });
+
+    $("#anonothernames").focus(updateAnonOthername);
+    $("#anonothernames").on('change', function() {
+        checkUniqueOthernames(null, '#anonothernames');
     });
 
     $("#dateofbirth").datepicker({ maxDate: "-1D", yearRange: "c-120:" });

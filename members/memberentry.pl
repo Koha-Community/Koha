@@ -166,6 +166,11 @@ $category_type="A" unless $category_type; # FIXME we should display a error mess
 # if a add or modify is requested => check validity of data.
 %data = %$borrower_data if ($borrower_data);
 
+# KD-1452, tell memberentrygen.tt to anonymize holds identifiers if 'AnonymizeOthernames' syspref says so.
+if (C4::Context->preference('AnonymizeOthernames') == 1) {
+    $template->param( anonymizeothernames => 1 );
+}
+
 ##KD-258, making sure CGI parameters are defined if the same info is available in the borrowers-hash (%data) WTF is that variable name? 'data'? noNIIIN, whole Koha is about data.
 $guarantorid = $data{guarantorid} unless $guarantorid;
 
