@@ -767,6 +767,9 @@ $(document).ready(function () {
                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% riloo.borrowernumber %]">
                     [% riloo.borsurname %], [% riloo.borfirstname %] ([% riloo.borcategorycode %])
                 </a>
+                [% IF riloo.borissuescount %]
+                    <a class="btn btn-mini" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% riloo.borrowernumber %]">Issues: [% riloo.borissuescount %]</a>
+                [% END %]
             [% ELSE %]Not checked out[% END %]</td>
             <td class="ci-note">
                 [% IF ( riloo.bornote ) %]<p><span class="circ-hlt patron-note">[% riloo.bornote %]</p></span>[% END %]
