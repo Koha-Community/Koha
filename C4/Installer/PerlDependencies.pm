@@ -597,6 +597,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.05',
     },
+    'Test::Fatal' => {
+        'usage'    => 'Testing suite',
+        'required' => '1',
+        'min_ver'  => '0.014',
+    },
     'Test::MockObject' => {
         'usage'    => 'Core',
         'required' => '0',
