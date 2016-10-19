@@ -41,8 +41,8 @@ $ENV{REMOTE_ADDR} = '127.0.0.1';
 my $t = Test::Mojo->new('Koha::REST::V1');
 my $tx;
 
-my $categorycode = Koha::Database->new()->schema()->resultset('Category')->first()->categorycode();
-my $branchcode = Koha::Database->new()->schema()->resultset('Branch')->first()->branchcode();
+my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
+my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
 
 # User without any permissions
 my $nopermission = $builder->build({
