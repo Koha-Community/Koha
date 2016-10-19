@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 75;
+use Test::More tests => 78;
 use Test::Mojo;
 use t::lib::TestBuilder;
 
@@ -87,6 +87,12 @@ $t->request_ok($tx)
   ->status_is(403);
 
 $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . ($patron->{ borrowernumber }-1));
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(403)
+  ->json_is('/required_permissions', {"borrowers" => "1"});
+
+$tx = $t->ua->build_tx(DELETE => "/api/v1/patrons/" . $patron->{ borrowernumber });
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403)
