@@ -1,0 +1,20 @@
+<!-- You need to change the response-url's to match your koha-server's address.
+     Also remember to change https://testitunnistus.suomi.fi to https://tunnistus.suomi.fi
+     once you go live with this. -->
+
+<vetuma>
+    <settings>
+        <request_url>https://testitunnistus.suomi.fi/VETUMAPayment/</request_url>
+        <shared_secret>TESTIASIAKAS11-873C992B8C4C01EC8355500CAA709B37EA43BC2E591ABF29FEE5EAFE4DCBFA35</shared_secret>
+        <rcvid>TESTIASIAKAS11</rcvid>
+        <ap>TESTIASIAKAS1</ap>
+        <appid>TESTAPP</appid>
+        <so>P</so>
+        <solist>P</solist>
+        <returl>[kohaserver]/cgi-bin/koha/vetuma/response.pl</returl>
+        <canurl>[kohaserver]/cgi-bin/koha/vetuma/response.pl</canurl>
+        <errurl>[kohaserver]/cgi-bin/koha/vetuma/response.pl</errurl>
+        <min_amount>0</min_amount> <!-- replaced with syspref OnlinePaymentMinTotal, not in use -->
+        <library_reference_code>43</library_reference_code>
+    </settings>
+</vetuma>

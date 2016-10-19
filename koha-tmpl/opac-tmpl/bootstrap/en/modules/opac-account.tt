@@ -99,6 +99,16 @@
                     <h3>Fines and charges</h3>
 
                     [% IF ( ACCOUNT_LINES ) %]
+                        [% IF vetuma_enabled %]
+                            [% IF total >= minimumSum && total > 0 %]
+                                <button type="button" class="btn has-spinner vetuma-top vetuma-request-init">
+                                <span class="spinner"><i class="icon-spin icon-refresh"></i></span>
+                                <span>Proceed to payment</span>
+                                </button>
+                            [% ELSE %]
+                            <p>Online payment can be used after your fines and charges exceed a total due of [% minimumSum %] [% currency.currency %].</p>
+                            [% END %]
+                        [% END %]
                         <form method="post" action="opac-account-pay.pl" class="form-horizontal">
                         <table class="table table-bordered table-striped" id="finestable">
                             <thead>
@@ -169,6 +179,14 @@
                             </tbody>
 
                         </table>
+                        [% IF vetuma_enabled %]
+                            [% IF total >= minimumSum && total > 0 %]
+                                <button type="button" class="btn has-spinner vetuma-bottom vetuma-request-init">
+                                <span class="spinner"><i class="icon-spin icon-refresh"></i></span>
+                                <span>Proceed to payment</span>
+                                </button>
+                            [% END %]
+                        [% END %]
 
                             [% IF ENABLE_OPAC_PAYMENTS && DISPLAY_PAYMENT_BLOCK %]
                                 <fieldset class="pay-online hidden">
@@ -246,5 +264,11 @@ $( document ).ready(function() {
         }
     });
 });
+//<![CDATA[
+    vetumaMessages = "[% messages_json %]";
+    vetumaRequestInitAjaxUrl = "/cgi-bin/koha/vetuma/request/init.pl";
+    requestedAmount = "[% total %]";
+//]]>
 </script>
+<script type="text/javascript" src="/opac-tmpl/bootstrap/lib/vetuma/vetuma.js"></script>
 [% END %]

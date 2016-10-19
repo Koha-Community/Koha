@@ -28,6 +28,8 @@ use warnings;
 
 use Koha::Acquisition::Currencies;
 use Koha::Payment::Online;
+use Koha::Vetuma::Config;
+use Koha::Vetuma::Message;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -65,6 +67,30 @@ foreach my $row (@$accts) {
     $row->{'odd'}  = 1 if $num % 2 == 1;
     $num++;
 }
+
+# Vetuma on-line payments related stuff KD#1446 (if Vetuma is configured, use it)
+
+my $vetumaConfig = Koha::Vetuma::Config->new()->loadConfigXml();
+
+# minAmount is replaced with C4::Context->preference("OnlinePaymentsMinTotal")
+
+# my $minAmount = 0;
+# if(defined $vetumaConfig->{settings}->{min_amount} && $vetumaConfig->{settings}->{min_amount} > 0){
+#    $minAmount = $vetumaConfig->{settings}->{min_amount};
+# }
+
+if (defined $vetumaConfig->{settings}->{request_url}) {
+  my $messages = Koha::Vetuma::Message->new();
+  $messages->setSession($query->cookie("CGISESSID"));
+  my $messagesJson = $messages->getMessages();
+  $template->param (
+    messages_json => $messagesJson,
+    vetuma_enabled => 1
+  );
+}
+
+# Vetuma stuff ends.
+
 
 $template->param(
     ACCOUNT_LINES => $accts,
