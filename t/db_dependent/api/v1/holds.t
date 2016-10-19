@@ -114,6 +114,11 @@ my $biblionumber2 = create_biblio('RESTful Web APIs');
 my $itemnumber2 = create_item($biblionumber2, 'TEST000002');
 
 $dbh->do('DELETE FROM reserves');
+$dbh->do('DELETE FROM issuingrules');
+    $dbh->do(q{
+        INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
+        VALUES (?, ?, ?, ?)
+    }, {}, '*', '*', '*', 1);
 
 my $reserve_id = C4::Reserves::AddReserve($branchcode, $borrowernumber,
     $biblionumber, undef, 1, undef, undef, undef, '', $itemnumber);
@@ -262,12 +267,6 @@ subtest "Test endpoints with permission" => sub {
     $t->request_ok($tx)
       ->status_is(200)
       ->json_is([]);
-
-    $dbh->do('DELETE FROM issuingrules');
-    $dbh->do(q{
-        INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-        VALUES (?, ?, ?, ?)
-    }, {}, '*', '*', '*', 1);
 
     $tx = $t->ua->build_tx(DELETE => "/api/v1/holds/$reserve_id2");
     $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
