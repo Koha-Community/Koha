@@ -571,7 +571,7 @@ sub import_biblios_list {
 
             $cellrecord{'iteminfos'} = \@itemlist;
         } else {
-            $item_error = 1;
+            $cellrecord{'item_error'} = 1;
         }
         push @list, \%cellrecord;
 

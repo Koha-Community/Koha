@@ -315,7 +315,7 @@
                           </ol>
                         </div>
                         <div style="float:right">
-                        [% IF item_error %]Item records could not be processed because the number of item fields was uneven.[% END %]
+                        [% IF biblio.item_error %]Item records could not be processed because the number of item fields was uneven.[% END %]
                         [% FOREACH item IN biblio.iteminfos %]
                         <fieldset>
                         <legend>Item Record [% item.item_id %]</legend>
