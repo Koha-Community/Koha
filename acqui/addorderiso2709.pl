@@ -213,6 +213,8 @@ if ($op eq ""){
         my @copynos = $input->multi_param('copyno_' . $biblio_count);
         my @budget_codes = $input->multi_param('budget_code_' . $biblio_count);
         my @itemprices = $input->multi_param('itemprice_' . $biblio_count);
+        my @replacementprices = $input->multi_param('replacementprice_' . $biblio_count);
+        my @itemcallnumbers = $input->multi_param('itemcallnumber_' . $biblio_count);
         my $itemcreation = 0;
         for (my $i = 0; $i < $count; $i++) {
             $itemcreation = 1;
@@ -227,6 +229,8 @@ if ($op eq ""){
                 uri => $uris[$i],
                 copynumber => $copynos[$i],
                 price => $itemprices[$i],
+                replacementprice => $replacementprices[$i],
+                itemcallnumber => $itemcallnumbers[$i],
             }, $biblionumber);
         }
         if ($itemcreation == 1) {
@@ -519,7 +523,7 @@ sub import_biblios_list {
         # Items
         my @itemlist = ();
         my $all_items_quantity = 0;
-        my $alliteminfos = get_infos_syspref_on_item('MarcItemFieldsToOrder', $marcrecord, ['homebranch', 'holdingbranch', 'itype', 'nonpublic_note', 'public_note', 'loc', 'ccode', 'notforloan', 'uri', 'copyno', 'price', 'quantity', 'budget_code']);
+        my $alliteminfos = get_infos_syspref_on_item('MarcItemFieldsToOrder', $marcrecord, ['homebranch', 'holdingbranch', 'itype', 'nonpublic_note', 'public_note', 'loc', 'ccode', 'notforloan', 'uri', 'copyno', 'price', 'replacementprice', 'itemcallnumber', 'quantity', 'budget_code']);
         if ($alliteminfos != -1) {
             foreach my $iteminfos (@$alliteminfos) {
                 my $item_homebranch = $iteminfos->{homebranch};
@@ -535,6 +539,8 @@ sub import_biblios_list {
                 my $item_quantity = $iteminfos->{quantity} || 1;
                 my $item_budget_code = $iteminfos->{budget_code};
                 my $item_price = $iteminfos->{price};
+                my $item_replacement_price = $iteminfos->{replacementprice};
+                my $item_callnumber = $iteminfos->{itemcallnumber};
 
                 for (my $i = 0; $i < $item_quantity; $i++) {
 
@@ -554,6 +560,8 @@ sub import_biblios_list {
                         'quantity' => $item_quantity,
                         'budget_code' => $item_budget_code || $budget_code,
                         'itemprice' => $item_price || $price,
+                        'replacementprice' => $item_replacement_price,
+                        'itemcallnumber' => $item_callnumber,
                     );
                     $all_items_quantity++;
                     push @itemlist, \%itemrecord;
