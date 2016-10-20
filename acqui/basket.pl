@@ -108,17 +108,12 @@ unless (CanUserManageBasket($loggedinuser, $basket, $userflags)) {
 # FIXME : the query->param('booksellerid') below is probably useless. The bookseller is always known from the basket
 # if no booksellerid in parameter, get it from basket
 # warn "=>".$basket->{booksellerid};
-my $op = $query->param('op');
-if (!defined $op) {
-    $op = q{};
-}
+my $op = $query->param('op') // 'list';
 
 my $confirm_pref= C4::Context->preference("BasketConfirmations") || '1';
 $template->param( skip_confirm_reopen => 1) if $confirm_pref eq '2';
 
-$template->param( email_ok => 1 ) if defined $query->param('email_ok');
-$template->param( email_error => $query->param('email_error') ) if defined $query->param('email_error');
-
+my @messages;
 
 if ( $op eq 'delete_confirm' ) {
     my $basketno = $query->param('basketno');
@@ -170,22 +165,18 @@ if ( $op eq 'delete_confirm' ) {
     print GetBasketAsCSV($query->param('basketno'), $query);
     exit;
 } elsif ($op eq 'email') {
-    my $redirect_url = '/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'};
-    my $err;
-
-    eval {
-        $err = SendAlerts( 'orderacquisition', $query->param('basketno'), 'ACQORDER' );
+    my $err = eval {
+        SendAlerts( 'orderacquisition', $query->param('basketno'), 'ACQORDER' );
     };
     if ( $@ ) {
-    $redirect_url .= '&email_error='.$@;
+        push @messages, { type => 'error', code => $@ };
     } elsif ( ref $err and exists $err->{error} ) {
-        $redirect_url .= '&email_error=' . $err->{error};
+        push @messages, { type => 'error', code => $err->{error} };
     } else {
-        $redirect_url .= '&email_ok=1';
+        push @messages, { type => 'message', code => 'email_sent' };
     }
 
-    print $query->redirect($redirect_url)
-
+    $op = 'list';
 } elsif ($op eq 'close') {
     my $confirm = $query->param('confirm') || $confirm_pref eq '2';
     if ($confirm) {
@@ -242,7 +233,9 @@ elsif ( $op eq 'ediorder' ) {
     });
     print $query->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=$basketno");
     exit;
-} else {
+}
+
+if ( $op eq 'list' ) {
     my @branches_loop;
     # get librarian branch...
     if ( C4::Context->preference("IndependentBranches") ) {
@@ -427,6 +420,9 @@ elsif ( $op eq 'ediorder' ) {
     );
 }
 
+$template->param( messages => \@messages );
+output_html_with_http_headers $query, $cookie, $template->output;
+
 sub get_order_infos {
     my $order = shift;
     my $bookseller = shift;
@@ -501,9 +497,6 @@ sub get_order_infos {
 
     return \%line;
 }
-
-output_html_with_http_headers $query, $cookie, $template->output;
-
 
 sub edi_close_and_order {
     my $confirm = $query->param('confirm') || $confirm_pref eq '2';

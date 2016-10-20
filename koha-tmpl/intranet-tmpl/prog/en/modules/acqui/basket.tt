@@ -295,21 +295,21 @@
             [% END %]
         [% ELSE %]
 
-        [% IF email_error %]
-            <div class="dialog alert">
-            [% IF ( email_error == "no_email" ) %]
-                This vendor has no contact selected for sending orders to or is missing an e-mail address.
-            [% ELSIF ( email_error == "no_basketno" ) %]
-                No basket given.
-            [% ELSIF ( email_error == "no_letter" ) %]
-                There is no notice template with code ACQORDER defined.
-            [% ELSE %]
-                ERROR! - [% email_error %]
-            [% END %]
+        [% FOR m IN messages %]
+            <div class="dialog [% m.type %]">
+                [% SWITCH m.code %]
+                [% CASE 'no_email' %]
+                    This vendor has no contact selected for sending orders to or is missing an e-mail address.
+                [% CASE 'no_basketno' %]
+                    No basket given.
+                [% CASE 'no_letter' %]
+                    There is no notice template with code ACQORDER defined.
+                [% CASE 'email_sent' %]
+                    Order e-mail was sent to the vendor.
+                [% CASE %]
+                    ERROR! - [% m.code %]
+                [% END %]
             </div>
-        [% END %]
-        [% IF ( email_ok ) %]
-            <div class="dialog message">Order e-mail was sent to the vendor.</div>
         [% END %]
         <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno %]) for <a href="supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a></h1>
         [% IF ( basketno ) %]
