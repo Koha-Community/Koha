@@ -225,6 +225,9 @@ while [ $# -gt 0 ]; do
         --restart)
             set_action "restart"
             shift ;;
+        --status)
+            set_action "status"
+            shift ;;
         -*)
             die "Error: invalid option switch ($1)" ;;
         *)
