@@ -75,9 +75,19 @@ DROP DATABASE IF EXISTS \`koha_$name\`;
 FLUSH PRIVILEGES;
 eof
     fi #`
-    
-    # If the daemon is not running already, we don't want to fail this loop. So bin the result code if this fails.
-    koha-stop-zebra $name || /bin/true
+
+    # Stop the Zebra server if needed
+    if is_zebra_running $name; then
+        koha-stop-zebra $name || /bin/true
+    fi
+    # Stop the indexer daemon if needed
+    if is_indexer_running $name; then
+        koha-indexer --stop $name || /bin/true
+    fi
+    # Stop the Plack server if needed
+    if is_plack_running $name; then
+        koha-plack --stop $name || /bin/true
+    fi
 
     instancefile=$(get_apache_config_for $name)
     le_opacdomain=$(letsencrypt_get_opacdomain_for $name)
