@@ -32,7 +32,7 @@ use Data::Dumper;
 sub get {
     my ($c, $args, $cb) = @_;
 
-    my $biblio = &GetBiblioData($args->{biblionumber});
+    my $biblio = Koha::Biblios->find($args->{biblionumber});
     unless ($biblio) {
         return $c->$cb({error => "Biblio not found"}, 404);
     }
@@ -46,7 +46,7 @@ sub getitems {
     unless ($biblio) {
         return $c->$cb({error => "Biblio not found"}, 404);
     }
-    return $c->$cb({ biblio => $biblio->unblessed, items => $biblio->items->unblessed }, 200);
+    return $c->$cb({ biblio => $biblio, items => $biblio->items }, 200);
 }
 
 sub getexpanded {
@@ -56,7 +56,7 @@ sub getexpanded {
     unless ($biblio) {
         return $c->$cb({error => "Biblio not found"}, 404);
     }
-    my $expanded = $biblio->items->unblessed;
+    my $expanded = $biblio->items;
     for my $item (@{$expanded}) {
 
         # we assume item is available by default
@@ -83,7 +83,7 @@ sub getexpanded {
         }
     }
 
-    return $c->$cb({ biblio => $biblio->unblessed, items => $expanded }, 200);
+    return $c->$cb({ biblio => $biblio, items => $expanded }, 200);
 }
 
 sub add {
@@ -107,7 +107,7 @@ sub add {
         $c->res->headers->location($c->url_for('/api/v1/biblios/')->to_abs . $biblionumber);
         my ( $itemnumbers, $errors ) = &AddItemBatchFromMarc( $record, $biblionumber, $biblioitemnumber, '' );
         unless (@{$errors}) {
-            return $c->$cb({biblionumber => $biblionumber, items => join(",", @{$itemnumbers})}, 201);
+            return $c->$cb({biblionumber => 0+$biblionumber, items => join(",", @{$itemnumbers})}, 201);
         } else {
             warn Dumper($errors);
             return $c->$cb({error => "Error creating items, see Koha Logs for details.", biblionumber => $biblionumber, items => join(",", @{$itemnumbers})}, 400);
@@ -138,7 +138,7 @@ sub update {
     }
     if ($success) {
         $c->res->headers->location($c->url_for('/api/v1/biblios/')->to_abs . $biblionumber);
-        return $c->$cb({biblio => Koha::Biblios->find($biblionumber)->unblessed}, 200);
+        return $c->$cb({biblio => Koha::Biblios->find($biblionumber)}, 200);
     } else {
         return $c->$cb({error => "unable to update record"}, 400);
     }

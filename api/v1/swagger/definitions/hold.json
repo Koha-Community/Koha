@@ -47,7 +47,8 @@
       "description": "date and time the hold was last updated"
     },
     "itemnumber": {
-      "$ref": "../x-primitives.json#/itemnumber"
+      "type": ["integer", "null"],
+      "description": "foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with"
     },
     "waitingdate": {
       "type": ["string", "null"],

@@ -24,7 +24,7 @@ sub list {
     my ($c, $args, $cb) = @_;
 
     my $libraries = Koha::Libraries->search;
-    return $c->$cb($libraries->unblessed, 200);
+    return $c->$cb($libraries, 200);
 }
 
 sub get {
@@ -36,7 +36,7 @@ sub get {
         return $c->$cb({error => "Library with branchcode \"$branchcode\" not found"}, 404);
     }
 
-    return $c->$cb($library->unblessed, 200);
+    return $c->$cb($library, 200);
 }
 
 1;

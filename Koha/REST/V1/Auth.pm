@@ -163,7 +163,7 @@ sub _swaggerize_session {
     }
 
     return {
-        borrowernumber => $patron->borrowernumber,
+        borrowernumber => 0+$patron->borrowernumber,
         firstname => $patron->firstname,
         surname  => $patron->surname,
         email     => $patron->email,

@@ -48,7 +48,7 @@ sub get {
         $item->set({ itemnotes_nonpublic => undef });
     }
 
-    return $c->$cb($item->unblessed, 200);
+    return $c->$cb($item, 200);
 }
 
 1;

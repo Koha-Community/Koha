@@ -2,15 +2,15 @@
   "type": "object",
   "properties": {
     "itemnumber": {
-      "type": "string",
+      "type": "integer",
       "description": "internally assigned item identifier"
     },
     "biblionumber": {
-      "type": "string",
+      "type": "integer",
       "description": "internally assigned biblio identifier"
     },
     "biblioitemnumber": {
-      "type": "string",
+      "type": "integer",
       "description": "internally assigned biblio item identifier"
     },
     "barcode": {
@@ -30,11 +30,11 @@
       "description": "library that owns this item"
     },
     "price": {
-      "type": ["string", "null"],
+      "type": ["number", "null"],
       "description": "purchase price"
     },
     "replacementprice": {
-      "type": ["string", "null"],
+      "type": ["number", "null"],
       "description": "cost the library charges to replace the item if it has been marked lost"
     },
     "replacementpricedate": {
@@ -50,19 +50,19 @@
       "description": "the date the item was last see (usually the last time the barcode was scanned or inventory was done)"
     },
     "stack": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "?"
     },
     "notforloan": {
-      "type": "string",
+      "type": "integer",
       "description": "authorized value defining why this item is not for loan"
     },
     "damaged": {
-      "type": "string",
+      "type": "integer",
       "description": "authorized value defining this item as damaged"
     },
     "itemlost": {
-      "type": "string",
+      "type": "integer",
       "description": "authorized value defining this item as lost"
     },
     "itemlost_on": {
@@ -70,7 +70,7 @@
       "description": "the date and time an item was last marked as lost, NULL if not lost"
     },
     "withdrawn": {
-      "type": "string",
+      "type": "integer",
       "description": "authorized value defining this item as withdrawn"
     },
     "withdrawn_on": {
@@ -86,19 +86,19 @@
       "description": "coded location qualifier"
     },
     "issues": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "number of times this item has been checked out/issued"
     },
     "renewals": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "number of times this item has been renewed"
     },
     "reserves": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "number of times this item has been placed on hold/reserved"
     },
     "restricted": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "authorized value defining use restrictions for this item"
     },
     "itemnotes": {

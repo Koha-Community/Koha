@@ -109,6 +109,9 @@ $session3->param('ip', '127.0.0.1');
 $session3->param('lasttime', time());
 $session3->flush;
 
+$dbh->do('DELETE FROM issues');
+$dbh->do('DELETE FROM items');
+
 my $biblionumber = create_biblio('RESTful Web APIs');
 my $itemnumber = create_item($biblionumber, 'TEST000001');
 

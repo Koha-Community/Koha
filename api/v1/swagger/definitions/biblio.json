@@ -21,7 +21,7 @@
       "description": "values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)"
     },
     "serial": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "Boolean indicating whether biblio is for a serial"
     },
     "seriestitle": {
@@ -29,15 +29,15 @@
       "description": ""
     },
     "copyrightdate": {
-      "type": ["string", "null"],
+      "type": ["integer", "null"],
       "description": "publication or copyright date from the MARC record"
     },
     "timestamp": {
-      "type": ["string", "null"],
+      "type": "string",
       "description": "date and time this record was last touched"
     },
     "datecreated": {
-      "type": ["string", "null"],
+      "type": "string",
       "description": "the date this record was added to Koha"
     },
     "abstract": {
@@ -45,7 +45,7 @@
       "description": "summary from the MARC record (520$a in MARC21)"
     },
     "frameworkcode": {
-      "type": ["string", "null"],
+      "type": "string",
       "description": "framework used in cataloging this record"
     }
   }

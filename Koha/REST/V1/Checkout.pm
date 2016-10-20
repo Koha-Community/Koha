@@ -30,7 +30,7 @@ sub list {
     my ($c, $args, $cb) = @_;
 
     my $borrowernumber = $c->param('borrowernumber');
-    my $checkouts = C4::Circulation::GetIssues({
+    my $checkouts = Koha::Checkouts->search({
         borrowernumber => $borrowernumber
     });
 
@@ -49,7 +49,7 @@ sub get {
         }, 404);
     }
 
-    return $c->$cb($checkout->unblessed, 200);
+    return $c->$cb($checkout, 200);
 }
 
 sub renew {
@@ -85,7 +85,7 @@ sub renew {
     AddRenewal($borrowernumber, $itemnumber, $checkout->branchcode);
     $checkout = Koha::Checkouts->find($checkout_id);
 
-    return $c->$cb($checkout->unblessed, 200);
+    return $c->$cb($checkout, 200);
 }
 
 sub renewability {
@@ -142,7 +142,7 @@ sub listhistory {
       { columns => [qw/issue_id/]}
     );
 
-    $c->$cb($checkouts->unblessed, 200);
+    $c->$cb($checkouts, 200);
 }
 
 sub gethistory {
@@ -157,7 +157,7 @@ sub gethistory {
         }, 404);
     }
 
-    return $c->$cb($checkout->unblessed, 200);
+    return $c->$cb($checkout, 200);
 }
 
 1;

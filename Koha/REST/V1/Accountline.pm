@@ -33,7 +33,7 @@ sub list {
     my $params  = $c->req->params->to_hash;
     my $accountlines = Koha::Account::Lines->search($params);
 
-    return $c->$cb($accountlines->unblessed, 200);
+    return $c->$cb($accountlines, 200);
 }
 
 
@@ -50,7 +50,7 @@ sub edit {
     $accountline->set( $body );
     $accountline->store();
 
-    return $c->$cb($accountline->unblessed(), 200);
+    return $c->$cb($accountline, 200);
 }
 
 
@@ -80,7 +80,7 @@ sub pay {
           );
 
         $accountline = Koha::Account::Lines->find($args->{accountlines_id});
-        return $c->$cb($accountline->unblessed(), 200);
+        return $c->$cb($accountline, 200);
     } catch {
         if ($_->isa('DBIx::Class::Exception')) {
             return $c->$cb({ error => $_->msg }, 500);

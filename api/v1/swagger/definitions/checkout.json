@@ -2,47 +2,58 @@
   "type": "object",
   "properties": {
     "issue_id": {
-      "type": "string",
+      "type": "integer",
       "description": "internally assigned checkout identifier"
     },
     "borrowernumber": {
-      "$ref": "../x-primitives.json#/borrowernumber"
+      "type": ["integer", "null"],
+      "description": "internally assigned user identifier"
     },
     "itemnumber": {
-      "$ref": "../x-primitives.json#/itemnumber"
+      "type": ["integer", "null"],
+      "description": "internally assigned item identifier"
     },
     "date_due": {
+      "type": ["string", "null"],
       "description": "Due date"
     },
     "branchcode": {
       "type": ["string", "null"],
-      "description": "foreign key, linking to the branches table for the location the item was checked out"
+      "description": "code of patron's home branch"
     },
     "issuingbranch": {
       "description": "Code of the branch where issue was made"
     },
     "returndate": {
+      "type": ["string", "null"],
       "description": "Date the item was returned"
     },
     "lastreneweddate": {
+      "type": ["string", "null"],
       "description": "Date the item was last renewed"
     },
     "return": {
+      "type": ["string", "null"],
       "description": "?"
     },
     "renewals": {
+      "type": ["integer", "null"],
       "description": "Number of renewals"
     },
     "auto_renew": {
+      "type": ["integer", "null"],
       "description": "Auto renewal"
     },
     "timestamp": {
+      "type": "string",
       "description": "Last update time"
     },
     "issuedate": {
+      "type": ["string", "null"],
       "description": "Date the item was issued"
     },
     "onsite_checkout": {
+      "type": "integer",
       "description": "On site checkout"
     }
   }
