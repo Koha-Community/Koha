@@ -288,6 +288,7 @@ function CloneSubfield(index, advancedMARCEditor){
         id_input = textareas[i].getAttribute('id')+new_key;
         textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
         textareas[i].setAttribute('name',textareas[i].getAttribute('name')+new_key);
+        linkid = id_input;
     }
 
     // Handle click event on buttonDot for plugin
