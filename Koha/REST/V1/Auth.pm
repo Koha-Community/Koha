@@ -227,11 +227,16 @@ sub authenticate_api_request {
 
     my $permissions = $authorization->{'permissions'};
     # Check if the user is authorized
+    my ($owner_access, $guarantor_access);
     if ( haspermission($user->userid, $permissions)
-        or allow_owner($c, $authorization, $user)
-        or allow_guarantor($c, $authorization, $user) ) {
+        or $owner_access = allow_owner($c, $authorization, $user)
+        or $guarantor_access = allow_guarantor($c, $authorization, $user) ) {
 
         validate_query_parameters( $c, $spec );
+
+        # Store information on owner/guarantor access
+        $c->stash('is_owner_access', 1) if $owner_access;
+        $c->stash('is_guarantor_access', 1) if $guarantor_access;
 
         # Everything is ok
         return 1;
