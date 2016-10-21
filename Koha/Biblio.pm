@@ -218,8 +218,6 @@ sub article_requests_finished {
 
 =head3 items
 
-=head3 items
-
 my @items = $biblio->items();
 my $items = $biblio->items();
 

@@ -3,7 +3,7 @@
     <table id="article-requests-table" class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th class="article-request-title anti-the">Record title</th>
+                <th class="article-request-record-title anti-the">Record title</th>
                 <th class="article-request-created_on psort">Placed on</th>
                 <th class="article-request-title anti-the">Title</th>
                 <th class="article-request-author">Author</th>
@@ -21,7 +21,7 @@
         <tbody>
             [% FOREACH ar IN patron.article_requests_current %]
                 <tr>
-                    <td class="article-request-title">
+                    <td class="article-request-record-title">
                         <a class="article-request-title" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber %]">
                             [% ar.biblio.title %]
                             [% ar.item.enumchron %]
