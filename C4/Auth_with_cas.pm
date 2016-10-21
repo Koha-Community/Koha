@@ -66,7 +66,6 @@ sub getMultipleAuth {
 sub logout_cas {
     my ($query, $type) = @_;
     my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
-    print $query->redirect( $cas->logout_url($uri));
     print $query->redirect( $cas->logout_url(url => $uri));
 }
 
