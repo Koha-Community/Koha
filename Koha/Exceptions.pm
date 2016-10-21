@@ -50,6 +50,10 @@ use Exception::Class (
         description => 'A required parameter is missing',
         fields => ['parameter'],
     },
+    'Koha::Exceptions::TooManyParameters' => {
+        isa => 'Koha::Exception',
+        description => 'Too many parameters given',
+    },
     'Koha::Exceptions::ParameterTooHigh' => {
         isa => 'Koha::Exception',
         description => 'A passed parameter value is too high'

@@ -50,6 +50,7 @@ use Koha::Patron::HouseboundRole;
 use Koha::Patron::Images;
 use Koha::Patron::Messages;
 use Koha::Patron::Modifications;
+use Koha::Patron::Message::Preferences;
 use Koha::Patron::Relationships;
 use Koha::Patron::Restrictions;
 use Koha::Patrons;
@@ -2074,6 +2075,47 @@ sub get_extended_attribute {
     my $attribute = $rs->search({ code => $code, ( $value ? ( attribute => $value ) : () ) });
     return unless $attribute->count;
     return $attribute->next;
+}
+
+=head3 set_default_messaging_preferences
+
+    $patron->set_default_messaging_preferences
+
+Sets default messaging preferences on patron.
+
+See Koha::Patron::Message::Preference(s) for more documentation, especially on
+thrown exceptions.
+
+=cut
+
+sub set_default_messaging_preferences {
+    my ($self, $categorycode) = @_;
+
+    my $options = Koha::Patron::Message::Preferences->get_options;
+
+    foreach my $option (@$options) {
+        # Check that this option has preference configuration for this category
+        unless (Koha::Patron::Message::Preferences->search({
+            message_attribute_id => $option->{message_attribute_id},
+            categorycode         => $categorycode || $self->categorycode,
+        })->count) {
+            next;
+        }
+
+        # Delete current setting
+        Koha::Patron::Message::Preferences->search({
+             borrowernumber => $self->borrowernumber,
+             message_attribute_id => $option->{message_attribute_id},
+        })->delete;
+
+        Koha::Patron::Message::Preference->new_from_default({
+            borrowernumber => $self->borrowernumber,
+            categorycode   => $categorycode || $self->categorycode,
+            message_attribute_id => $option->{message_attribute_id},
+        });
+    }
+
+    return $self;
 }
 
 =head3 to_api
