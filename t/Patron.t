@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 11;
 use Test::Warn;
 use t::lib::Mocks;
 
@@ -42,22 +42,6 @@ $ret = $object2->set( { surname => "Test Patron Surname 3", firstname => "Test F
 ok( ref($ret) eq 'Koha::Patron', "Set returns object on success" );
 is( $object2->surname(),   "Test Patron Surname 3", "Set sets first field correctly" );
 is( $object2->firstname(), "Test Firstname",          "Set sets second field correctly" );
-
-warning_is { $ret = $object->set({ surname => "Test Patron Surname 4", bork => "bork" }) }
-            "No property bork!",
-            "Expected 'No property bork!' caught";
-is( $object2->surname(), "Test Patron Surname 3", "Bad Set does not set field" );
-is( $ret, 0, "Set returns 0 when passed a bad property" );
-
-warning_is { $ret = $object->bork() }
-            "The method bork is not covered by tests or does not exist!",
-            "Expected 'The method bork is not covered by tests or does not exist!' caught for getter.";
-ok( ! defined $ret, 'Bad getter returns undef' );
-
-warning_is { $ret = $object->bork('bork') }
-            "The method bork is not covered by tests or does not exist!",
-            "Expected 'The method bork is not covered by tests or does not exist!' caught for setter.";
-ok( ! defined $ret, 'Bad setter returns undef' );
 
 my $patron = Koha::Patron->new(
     {
