@@ -157,11 +157,6 @@ __PACKAGE__->table("biblioitems");
   is_nullable: 1
   size: 25
 
-=head2 marc
-
-  data_type: 'longblob'
-  is_nullable: 1
-
 =head2 url
 
   data_type: 'text'
@@ -274,8 +269,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "lccn",
   { data_type => "varchar", is_nullable => 1, size => 25 },
-  "marc",
-  { data_type => "longblob", is_nullable => 1 },
   "url",
   { data_type => "text", is_nullable => 1 },
   "cn_source",
@@ -341,8 +334,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-02-24 14:19:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:A/4lKYlKWWd8TcMVzMRtCg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-21 14:37:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sIIeEpbe61VNkEYpUXNDkw
 
 __PACKAGE__->belongs_to( biblio => "Koha::Schema::Result::Biblio", "biblionumber" );
 

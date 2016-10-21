@@ -13181,6 +13181,20 @@ if ( CheckVersion($DBversion) ) {
       SetVersion($DBversion);
 }
 
+$DBversion = "16.06.00.034";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE biblioitems DROP COLUMN marc;
+    });
+    $dbh->do(q{
+        ALTER TABLE deletedbiblioitems DROP COLUMN marc;
+    });
+
+    print "Upgrade to $DBversion done (Bug 10455 - remove redundant 'biblioitems.marc' field)\n";
+    SetVersion($DBversion);
+}
+
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068

@@ -156,11 +156,6 @@ __PACKAGE__->table("deletedbiblioitems");
   is_nullable: 1
   size: 25
 
-=head2 marc
-
-  data_type: 'longblob'
-  is_nullable: 1
-
 =head2 url
 
   data_type: 'text'
@@ -268,8 +263,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "lccn",
   { data_type => "varchar", is_nullable => 1, size => 25 },
-  "marc",
-  { data_type => "longblob", is_nullable => 1 },
   "url",
   { data_type => "text", is_nullable => 1 },
   "cn_source",
@@ -303,8 +296,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("biblioitemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-02-24 14:19:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RTMXhtMKvih1zhllHwwwYQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-21 14:37:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Rijc/QK/Kdh3bMcbOTF8Tg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
