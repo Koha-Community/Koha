@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 119;
+use Test::More tests => 120;
 use Test::Mojo;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -62,8 +62,12 @@ my $patron = $builder->build({
         categorycode => $categorycode,
         flags        => 0,
         lost         => 1,
+        gonenoaddress => 0,
         guarantorid    => $guarantor->{borrowernumber},
         password     => Koha::AuthUtils::hash_password($password),
+        email => 'nobody@example.com',
+        emailpro => 'nobody@example.com',
+        B_email => 'nobody@example.com',
     }
 });
 
@@ -300,6 +304,31 @@ $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber 
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(204, 'No changes - patron NOT updated');
+
+subtest 'Test OPACPatronDetails preference' => sub {
+    plan tests => 7;
+    t::lib::Mocks::mock_preference("OPACPatronDetails", 0);
+    $patron = Koha::Patrons->find({ borrowernumber => $patron->{borrowernumber} })->TO_JSON;
+    $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $patron->{ borrowernumber } => json => $patron);
+    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+    $t->request_ok($tx)
+      ->status_is(403, 'OPACPatronDetails off - modifications not allowed.');
+
+    t::lib::Mocks::mock_preference("OPACPatronDetails", 1);
+    $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $patron->{ borrowernumber } => json => $patron);
+    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+    $t->request_ok($tx)
+      ->status_is(204, 'Updating myself with my current data'); # no modifications
+
+    $patron->{'firstname'} = "noob";
+    $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $patron->{ borrowernumber } => json => $patron);
+    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+    $t->request_ok($tx)
+      ->status_is(202, 'Updating myself with my current data'); # update my first name
+    Koha::Patron::Modifications->find({ borrowernumber => $patron->{borrowernumber}, firstname => "noob" })->approve;
+    is(Koha::Patrons->find({ borrowernumber => $patron->{borrowernumber}})->firstname, "noob", "Changes approved");
+};
+
 
 $newpatron->{ cardnumber } = "234567";
 $newpatron->{ userid } = "updatedtestuser";

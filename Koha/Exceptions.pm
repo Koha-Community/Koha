@@ -19,6 +19,10 @@ use Exception::Class (
         description => 'System preference value is incomprehensible',
         fields => ['preference'],
     },
+    'Koha::Exceptions::NoChanges' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'No changes were made',
+    },
     'Koha::Exceptions::DuplicateObject' => {
         isa => 'Koha::Exceptions::Exception',
         description => 'Same object already exists',

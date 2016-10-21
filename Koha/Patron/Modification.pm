@@ -1,6 +1,7 @@
 package Koha::Patron::Modification;
 
 # Copyright ByWater Solutions 2014
+# Copyright Koha-Suomi Oy 2016
 #
 # This file is part of Koha.
 #
@@ -20,8 +21,13 @@ package Koha::Patron::Modification;
 use Modern::Perl;
 
 use Carp;
+use Email::Valid;
 
 use Koha::Database;
+use Koha::Exceptions;
+use Koha::Patrons;
+
+use Koha::Patron::Modifications;
 use Koha::Exceptions::Patron::Modification;
 use Koha::Patron::Attribute;
 use Koha::Patron::Attributes;
@@ -153,6 +159,101 @@ sub approve {
     );
 
     return $self->delete();
+}
+
+=head2 validate_changes
+
+my $patron_modifications = Koha::Patron::Modifications->new->validate_changes($body)->store;
+
+Validates patron modifications
+
+Throws Koha::Exceptions::MissingParameter if missing mandatory parameters
+Throws Koha::Exceptions::BadParameter if modifications contain invalid parameters
+Throws Koha::Exceptions::NoChanges if no changes have been made
+
+=cut
+
+sub validate_changes {
+    my ($self, $changed_patron, $action) = @_;
+
+    # delete empty fields
+    $changed_patron = $changed_patron->unblessed if ref($changed_patron) eq "Koha::Patron";
+    foreach my $key ( keys %{$changed_patron} ) {
+        delete $changed_patron->{$key} unless $changed_patron->{$key};
+        # delete fields that are not modifiable
+        eval { $self->_result->get_column($key) };
+        delete $changed_patron->{$key} if $@;
+    }
+
+    my $mandatory_fields;
+    my $BorrowerMandatoryField =
+      C4::Context->preference("PatronSelfRegistrationBorrowerMandatoryField");
+
+    my @fields = split( /\|/, $BorrowerMandatoryField );
+    foreach (@fields) {
+        $mandatory_fields->{$_} = 1;
+    }
+
+    if ( $action eq 'create' || $action eq 'new' ) {
+        $mandatory_fields->{'email'} = 1
+          if C4::Context->boolean_preference(
+            'PatronSelfRegistrationVerifyByEmail');
+    }
+
+    my @empty_mandatory_fields;
+    delete $mandatory_fields->{'cardnumber'};
+
+    foreach my $key ( keys %$mandatory_fields ) {
+        push( @empty_mandatory_fields, $key )
+          unless ( defined( $changed_patron->{$key} ) && $changed_patron->{$key} );
+    }
+    Koha::Exceptions::MissingParameter->throw(
+        error => "Missing mandatory parameter",
+        parameter => [@empty_mandatory_fields],
+    ) if @empty_mandatory_fields;
+
+    my $minpw = C4::Context->preference('minPasswordLength');
+    my @invalidFields;
+    if ($changed_patron->{'email'}) {
+        unless ( Email::Valid->address($changed_patron->{'email'}) ) {
+            push(@invalidFields, "email");
+        } elsif ( C4::Context->preference("PatronSelfRegistrationEmailMustBeUnique") ) {
+            my $patrons_with_same_email = Koha::Patrons->search( { email => $changed_patron->{email} })->count;
+            if ( $patrons_with_same_email ) {
+                push @invalidFields, "duplicate_email";
+            }
+        }
+    }
+    if ($changed_patron->{'emailpro'}) {
+        push(@invalidFields, "emailpro") if (!Email::Valid->address($changed_patron->{'emailpro'}));
+    }
+    if ($changed_patron->{'B_email'}) {
+        push(@invalidFields, "B_email") if (!Email::Valid->address($changed_patron->{'B_email'}));
+    }
+    if ($changed_patron->{'password'}  && $minpw && (length($changed_patron->{'password'}) < $minpw) ) {
+       push(@invalidFields, "password_invalid");
+    }
+    if ($changed_patron->{'password'} ) {
+       push(@invalidFields, "password_spaces") if ($changed_patron->{'password'} =~ /^\s/ or $changed_patron->{'password'} =~ /\s$/);
+    }
+    Koha::Exceptions::BadParameter->throw(
+        error => "Invalid fields",
+        parameter => [@invalidFields],
+    ) if @invalidFields;
+
+    my $current_data = Koha::Patrons->find({ borrowernumber => $changed_patron->{borrowernumber} })->unblessed;
+    foreach my $key ( keys %{$changed_patron} ) {
+        if ( $current_data->{$key} eq $changed_patron->{$key} ) {
+            delete $changed_patron->{$key};
+        }
+    }
+
+    Koha::Exceptions::NoChanges->throw(
+        error => "No changes has been made",
+    ) unless keys %{$changed_patron};
+
+    $self->set($changed_patron)->borrowernumber($current_data->{borrowernumber});
+    return $self;
 }
 
 =head3 type

@@ -27,6 +27,7 @@ use Koha::Exceptions;
 use Koha::Exceptions::Password;
 use Koha::Patrons;
 use Koha::Patron::Categories;
+use Koha::Patron::Modifications;
 use Koha::Libraries;
 
 use Scalar::Util qw(blessed looks_like_number);
@@ -102,15 +103,27 @@ sub edit {
     return try {
         $patron = Koha::Patrons->find($args->{borrowernumber});
         my $body = $c->req->json;
+        $body->{borrowernumber} = $args->{borrowernumber};
 
-        if ($body->{password}) { $body->{password} = hash_password($body->{password}) }; # bcrypt password if given
-
-        die unless $patron->set($body)->validate;
-
-        return $c->$cb({}, 204) unless $patron->is_changed; # No Content = No changes made
-        $patron->store;
-        return $c->$cb($patron, 200);
-    } catch {
+        if ($c->stash('is_owner_access') || $c->stash('is_guarantor_access')){
+            if (C4::Context->preference('OPACPatronDetails')) {
+                die unless $patron->set($body)->validate;
+                my $m = Koha::Patron::Modification->new->validate_changes($body, "edit")->store();
+                return $c->$cb({}, 202);
+            } else {
+                return $c->$cb({ error => "You need a permission to change Your personal details"}, 403);
+            }
+        }
+        else {
+            if ($body->{password}) { $body->{password} = hash_password($body->{password}) }; # bcrypt password if given
+            delete $body->{borrowernumber};
+            die unless $patron->set($body)->validate;
+            return $c->$cb({}, 204) unless $patron->is_changed; # No Content = No changes made
+            $patron->store;
+            return $c->$cb($patron, 200);
+        }
+    }
+    catch {
         unless ($patron) {
             return $c->$cb({error => "Patron not found"}, 404);
         }
@@ -125,6 +138,15 @@ sub edit {
         }
         elsif ($_->isa('Koha::Exceptions::Category::CategorycodeNotFound')) {
             return $c->$cb({error => "Patron category \"".$_->categorycode."\" does not exist"}, 400);
+        }
+        elsif ($_->isa('Koha::Exceptions::MissingParameter')) {
+            return $c->$cb({error => "Missing mandatory parameter(s)", parameters => $_->parameter }, 400);
+        }
+        elsif ($_->isa('Koha::Exceptions::BadParameter')) {
+            return $c->$cb({error => "Invalid parameter(s)", parameters => $_->parameter }, 400);
+        }
+        elsif ($_->isa('Koha::Exceptions::NoChanges')) {
+            return $c->$cb({error => "No changes have been made"}, 204);
         }
         else {
             return $c->$cb({error => "Something went wrong, check Koha logs for details."}, 500);
