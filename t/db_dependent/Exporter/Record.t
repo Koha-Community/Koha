@@ -32,6 +32,7 @@ use C4::Biblio;
 use C4::Context;
 use Koha::Database;
 use Koha::Exporter::Record;
+use Koha::Biblioitems;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
