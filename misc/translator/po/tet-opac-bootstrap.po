@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-09-17 18:51-0300\n"
-"PO-Revision-Date: 2016-05-21 05:44+0000\n"
+"POT-Creation-Date: 2016-10-20 15:09-0300\n"
+"PO-Revision-Date: 2016-09-26 06:38+0000\n"
 "Last-Translator: kaz <karenmyers1@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: tet\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1463809472.000000\n"
+"X-POOTLE-MTIME: 1474871922.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -132,9 +132,9 @@ msgstr ""
 #. %3$s:  IF ( RESERVE.is_in_transit ) 
 #. %4$s:  SET transfer = RESERVE.item.get_transfer 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:631
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s Item in transit from "
-msgstr "%s %s %s Item iha tranzitu husi "
+msgstr "%s %s %s %s Item iha tranzitu husi "
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -145,6 +145,26 @@ msgstr "%s %s %s Item iha tranzitu husi "
 msgid "%s %s %s %s You have subscribed to email notification on new issues "
 msgstr ""
 "%s %s %s %s Ita asina ona ba notifikasaun liu husi email kona-ba kopia foun "
+
+#. %1$s: # First line will be summary, second line will be description. Avoid indenting. Var newline added to avoid translating problems. -
+#. %2$s: - newline="\n" -
+#. %3$s: - IF overdue == 1 -
+#. %4$s:  title 
+#. %5$s: - newline -
+#. %6$s:  title 
+#. %7$s:  barcode 
+#. %8$s: - ELSE -
+#. %9$s:  title 
+#. %10$s: - newline -
+#. %11$s:  title 
+#. %12$s:  barcode 
+#. %13$s: - END -
+#: opac-tmpl/bootstrap/en/modules/opac-ics.tt:1
+#, c-format
+msgid ""
+"%s %s %s %s is overdue %sYour copy of %s (barcode %s) is overdue %s %s is "
+"due %sYour copy of %s (barcode %s) is due back at the library today %s "
+msgstr ""
 
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
@@ -193,23 +213,6 @@ msgstr "%s %s %s La iha item seluk. %s %s "
 #, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "%s %s %s Avisu: janela ne'e sei taka iha segundu 5. %s "
-
-#. %1$s: # First line will be summary, second line will be description. Avoid indenting. -
-#. %2$s: - IF overdue == 1 -
-#. %3$s:  title 
-#. %4$s:  title 
-#. %5$s:  barcode 
-#. %6$s: - ELSE -
-#. %7$s:  title 
-#. %8$s:  title 
-#. %9$s:  barcode 
-#. %10$s: - END -
-#: opac-tmpl/bootstrap/en/modules/opac-ics.tt:1
-#, c-format
-msgid ""
-"%s %s %s is overdue Your copy of %s (barcode %s) is overdue %s %s is due "
-"Your copy of %s (barcode %s) is due back at the library today %s "
-msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -431,7 +434,7 @@ msgstr "%s %s, ISSN %s %s %s; %s %s "
 #. %10$s:  CASE 'isbd' 
 #. %11$s:  END 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:43
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %sBIBTEX %sEndNote %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC (Unicode/"
 "UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) %sRIS %sISBD %s "
@@ -762,9 +765,9 @@ msgstr "%s La husik"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:266
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable "
-msgstr "%s Hafoun automaticante "
+msgstr "%s Labele hafoun "
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
@@ -1688,9 +1691,9 @@ msgstr "%s%s%sKoha online%s katalogu &rsaquo; Detalle ba: %s%s%s,%s %s%s"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Discharge"
-msgstr "%s%s%sKoha online%s katalogu &rsaquo; Etiketa"
+msgstr "%s%s%sKoha online%s katalogu &rsaquo; Kuitasaun"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -2044,9 +2047,9 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "%s0 biblios%s "
-msgstr "%s biblios"
+msgstr "%s0 biblios%s "
 
 #. %1$s:  IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch 
@@ -2099,14 +2102,15 @@ msgstr "%sKolesaun%sTipu item%s"
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sHein hela%s %sMai ona%s %sTarde%s %sFalta%s %sLa Disponivel%s %sApaga%s "
-"%sReklama ona%s %sHapara ona%s "
+"%sHein hela%s %sMai ona%s %sTarde%s %sFalta%s %sFalta (la simu)%s %sFalta "
+"(hotu ona)%s %sFalta (aat tiona)%s %sFalta (lakon)%s %sLa Disponivel%s "
+"%sApaga%s %sReklama ona%s %sHapara ona%s "
 
 #. %1$s:  IF (latestserial.status1 ) 
 #. %2$s:  END 
@@ -2133,13 +2137,14 @@ msgstr ""
 #. %23$s:  IF (latestserial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:834
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
 "%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sHein hela%s %sMai ona%s %sTarde%s %sFalta%s %sLa Disponivel%s %sApaga%s "
+"%sHein hela%s %sMai ona%s %sTarde%s %sFalta%s %sFalta (la simu)%s %sFalta "
+"(hotu)%s %sFalta (aat tiona)%s %sFalta (lakon)%s %sLa Disponivel%s %sApaga%s "
 "%sReklama ona%s %sHapara ona%s "
 
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
@@ -3021,9 +3026,9 @@ msgid "(modified on %s)"
 msgstr "(modifika ona iha %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
-#, fuzzy, c-format
+#, c-format
 msgid "(on hold)"
-msgstr "(Rezerva iha ona)"
+msgstr "(rezerva iha ona)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:272
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:511
@@ -3106,9 +3111,9 @@ msgstr ". Faz favor kontakta biblioteka ne'e atu hetan informasaun tan."
 #. %2$s:  END 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
-#, fuzzy, c-format
+#, c-format
 msgid ".%sYou have fines.%s %s "
-msgstr "Ita iha multa. Montante: %s. "
+msgstr ".%sIta iha multa.%s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:57
 #, c-format
@@ -3490,7 +3495,7 @@ msgid "An error occurred when updating this list."
 msgstr "Sala akontese durante prosesu atualizasaun lista."
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "An error occurred while processing your request."
 msgstr "Sala akontese durante prosesu nia laran."
 
@@ -3527,9 +3532,9 @@ msgid "Any format"
 msgstr "Kualkér formatu"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:268
-#, fuzzy, c-format
+#, c-format
 msgid "Any item type"
-msgstr "Item tipu hotu hotu"
+msgstr "Kualker tipu item"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:75
 #, c-format
@@ -4404,9 +4409,8 @@ msgstr "Komentariu sira "
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
-#, fuzzy
 msgid "Confirm hold"
-msgstr "Troka ita nia password"
+msgstr "Konfirma rezerva"
 
 #. %1$s:  USER_INFO.firstname 
 #. %2$s:  USER_INFO.surname 
@@ -4417,15 +4421,15 @@ msgid "Confirm holds for:%s %s (%s)"
 msgstr "Konfirma rezerva ba:%s %s (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm new password:"
-msgstr "Password foun:"
+msgstr "Konfirma password foun:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:851
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:861
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm password"
-msgstr "Troka ita nia password"
+msgstr "Konfirma password"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:464
 #, c-format
@@ -4891,9 +4895,9 @@ msgid "Download"
 msgstr "Download"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
-#, fuzzy, c-format
+#, c-format
 msgid "Download as iCal/.ics file"
-msgstr "Download lista "
+msgstr "Download as iCal/.ics file"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:12
 #, c-format
@@ -5516,9 +5520,9 @@ msgid "GoToBibliographicRequestPage "
 msgstr "GoToBibliographicRequestPage "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:140
-#, fuzzy, c-format
+#, c-format
 msgid "Google login"
-msgstr "Login lokal"
+msgstr "Login google"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:237
@@ -5828,11 +5832,9 @@ msgid "Identity"
 msgstr "Identidade"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
-#, fuzzy, c-format
+#, c-format
 msgid "If this is an error, please contact the library."
-msgstr ""
-"hatudu katak ita nia konta ne'e mos ona, faz favor kontakta lai staf "
-"biblioteka."
+msgstr "Se ida ne'e sala karik, faz favor kontaktu lai staf biblioteka."
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:37
 #, c-format
@@ -5875,27 +5877,28 @@ msgid ""
 msgstr "Se la iha konta CAS, maibe iha ona konta lokal, ita bele sei log in: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:146
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you do not have a Google account, but do have a local account, you can "
 "still log in: "
-msgstr "Se la iha konta CAS, maibe iha ona konta lokal, ita bele sei log in: "
+msgstr ""
+"Se la iha konta Google, maibe iha ona konta lokal, ita bele sei log in: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:85
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a CAS account, you "
 "can use CAS."
-msgstr "Se la iha konta Shibboleth, maibe iha ona konta CAS, %s "
+msgstr "Se la iha konta Shibboleth, maibe iha ona konta CAS, ita bele uza CAS."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a local login, then "
 "you may login below."
 msgstr ""
-"Se la iha konta Shibboleth, maibe iha ona login lokal, ita bele sei log in "
-"iha kraik:"
+"Se la iha konta Shibboleth, maibe iha ona login lokal, ita bele log in iha "
+"kraik."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:177
 #, c-format
@@ -5914,21 +5917,21 @@ msgstr ""
 "halo password ida."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:120
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you have a CAS account, please choose against which one you would like to "
 "authenticate:"
-msgstr "%s %s faz favor hili ida atu hatebes: "
+msgstr "Iha ona konta CAS, faz favor hili ida atu hatebes:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:116
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a CAS account, please click here to log in."
-msgstr "Se iha ona konta CAS, %s faz favor "
+msgstr "Se iha ona konta CAS, faz favor klik iha ne'e hodi log in."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a CAS account, you may use that below."
-msgstr "Se iha ona konta CAS, %s faz favor "
+msgstr "Se iha ona konta CAS, ita bele uza ida ne'e iha kraik."
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:313
 #, c-format
@@ -5936,14 +5939,14 @@ msgid "If you have a Shibboleth account, please "
 msgstr "Se iha ona konta Shibboleth, faz favor "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a Shibboleth account, please click here to log in."
-msgstr "Se iha ona konta Shibboleth, faz favor "
+msgstr "Se iha ona konta Shibboleth, faz favor klik iha ne'e hodi log in."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a local account, you may use that below."
-msgstr "Se iha ona konta CAS, %s faz favor "
+msgstr "Se iha ona konta lokal, bele uza ne'e iha kraik."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:143
 #, c-format
@@ -6042,9 +6045,9 @@ msgid "Issues summary"
 msgstr "Rezumu kopia sira"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
-#, fuzzy, c-format
+#, c-format
 msgid "Item URI"
-msgstr "Items: "
+msgstr "Item URI"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:622
 #, c-format
@@ -6341,7 +6344,7 @@ msgid "Limit to: "
 msgstr "Limita ba: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "Link"
 msgstr "Ligasaun"
 
@@ -6512,9 +6515,9 @@ msgid "Log in with Google"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "Log out"
-msgstr "%s Log out"
+msgstr "Log out"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
 #, c-format
@@ -7105,7 +7108,7 @@ msgid "No tags from this library for this title."
 msgstr "La iha etiketa ida ba titulu ne'e husi biblioteka ida ne'e."
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:292
-#, fuzzy, c-format
+#, c-format
 msgid "Non-fiction"
 msgstr "La fiksaun"
 
@@ -7390,9 +7393,9 @@ msgstr ""
 "atu aumenta informasaun seluk."
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
-#, fuzzy, c-format
+#, c-format
 msgid "Open Library: "
-msgstr "Biblioteka: "
+msgstr "Biblioteka Nakloke: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:39
 #, c-format
@@ -7519,9 +7522,9 @@ msgid "Patron comment on %s"
 msgstr "Komentariu konaba %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:141
-#, fuzzy, c-format
+#, c-format
 msgid "Pay selected fines and charges"
-msgstr "Multa ho propina"
+msgstr "Selu multa ho propina ne'ebe marka tiona"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:146
@@ -7534,9 +7537,9 @@ msgid "Payment applied:"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:142
-#, fuzzy, c-format
+#, c-format
 msgid "Payment method"
-msgstr "Dokumentu patente"
+msgstr "Métodu pagamentu"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:15
 #, c-format
@@ -7630,9 +7633,9 @@ msgid "Please choose a download format"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:100
-#, fuzzy, c-format
+#, c-format
 msgid "Please choose against which one you would like to authenticate: "
-msgstr "%s %s faz favor hili ida atu hatebes: "
+msgstr "Faz favor hili ida atu hatebes: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:51
 #, c-format
@@ -7640,9 +7643,9 @@ msgid "Please choose your privacy rule:"
 msgstr "Faz favor hili ita-nia regra privasidade:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:96
-#, fuzzy, c-format
+#, c-format
 msgid "Please click here to log in."
-msgstr "klik iha-ne'e atu login"
+msgstr "Faz favor klik iha-ne'e atu login."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:111
 #, c-format
@@ -7901,9 +7904,9 @@ msgid "Priority:"
 msgstr "Prioridade:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid "Privacy"
-msgstr "Privadu"
+msgstr "Privasidade"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:592
@@ -8097,9 +8100,9 @@ msgid "Recent comments "
 msgstr "Komentariu sira foin daudauk "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:87
-#, fuzzy, c-format
+#, c-format
 msgid "Record URL"
-msgstr "GetRecords"
+msgstr "Rejistu URL"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:157
 #, c-format
@@ -8271,9 +8274,9 @@ msgid "Report issues and broken links"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:266
-#, fuzzy, c-format
+#, c-format
 msgid "Request specific item type:"
-msgstr "Hili item espesifiku:"
+msgstr "Husu tipu item espesifiku:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:137
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:242
@@ -8531,9 +8534,9 @@ msgid "Save to another list"
 msgstr "Rai ba lista seluk"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:14
-#, fuzzy, c-format
+#, c-format
 msgid "Save to your lists"
-msgstr "Rai ba ita nia lista "
+msgstr "Rai ba ita nia lista"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
 #, c-format
@@ -8648,9 +8651,8 @@ msgstr "SearchCourseReserves "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
-#, fuzzy
 msgid "Searching Open Library..."
-msgstr "Buka hela iha OverDrive..."
+msgstr "Buka hela iha Open Library..."
 
 #. For the first occurrence,
 #. SCRIPT
@@ -9389,9 +9391,9 @@ msgid "Suggested for:"
 msgstr "Sujestaun ba:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:165
-#, fuzzy, c-format
+#, c-format
 msgid "Suggested on"
-msgstr "Sujestaun ba"
+msgstr "Sujestaun iha"
 
 #: opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:30
 #, c-format
@@ -9448,9 +9450,9 @@ msgid "Switch languages"
 msgstr "Troka lian"
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "System Maintenance"
-msgstr "Mainteinasaun sistema"
+msgstr "Manutensaun Sistema"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:546
 #, c-format
@@ -9697,9 +9699,9 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "The entered card number is already in use."
-msgstr "Item ida ne'e iha ona iha ita nia kareta"
+msgstr "Numeru ne'ebe hatama tiona uza hela."
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:76
 #, c-format
@@ -9793,9 +9795,9 @@ msgstr "Password troka tiona husi utilizador \"%s\"."
 
 #. %1$s:  minPassLength 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "The password must contain at least %s characters."
-msgstr "Ita nia password tenke liu pelumenus karakter %s."
+msgstr "Ita nia password tenke liu pelumenus %s karakter."
 
 #. %1$s:  minPassLength 
 #. %2$s:  ELSIF (errLinkNotValid) 
@@ -10144,10 +10146,10 @@ msgstr ""
 "Atu fo hatena konaba sala ne'e, faz favor halo kontaktu ba staf biblioteka. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:189
-#, fuzzy, c-format
+#, c-format
 msgid "To report this error, you can email the Koha Administrator."
 msgstr ""
-"Atu fo hatena konaba sala ne'e, faz favor halo kontaktu ba staf biblioteka. "
+"Atu fo hatena konaba sala ne'e, faz favor halo kontaktu ba staf biblioteka."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:81
 #, c-format
@@ -10246,9 +10248,9 @@ msgstr "La konsege atu aumenta etiketa ida ka liu."
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:30
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to connect to PayPal."
-msgstr "La konsege atu aumenta etiketa ida ka liu."
+msgstr "La konsege atu liga ba PayPal."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:928
@@ -10257,9 +10259,9 @@ msgstr "La konsege atu atualiza konfigurasaun!"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to verify payment."
-msgstr "La konsege atu aumenta etiketa ida ka liu."
+msgstr "La konsege atu verifika pagamentu."
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:373
 #, c-format
@@ -10344,18 +10346,22 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
 "If shows your account to be clear, please contact the library."
-msgstr "Baibain konta ida taka tanba Ita iha multa nafatin. Se."
+msgstr ""
+"Baibain konta ida taka tanba Ita iha multa nafatin. Se la loos, faz favor "
+"kontaktu staf biblioteka nian."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
 "If your account shows to be clear, please contact the library."
-msgstr "Baibain konta ida taka tanba Ita iha multa nafatin. Se."
+msgstr ""
+"Baibain konta ida taka tanba Ita iha multa nafatin. Se la loos, faz favor "
+"kontaktu staf biblioteka nian."
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
 #, c-format
@@ -10418,9 +10424,9 @@ msgid "Warning"
 msgstr "Avisu"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "Warning:"
-msgstr "Avisu"
+msgstr "Avisu:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -10552,9 +10558,9 @@ msgstr ""
 "ida tan."
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:45
-#, fuzzy, c-format
+#, c-format
 msgid "You are forbidden to view this page."
-msgstr "Ita la iha lisensa atu haree lista ne'e."
+msgstr "Ita la iha lisensa atu haree pajina ne'e."
 
 #. %1$s:  borrowername 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:167
@@ -10573,14 +10579,14 @@ msgid "You are not allowed to call this page directly"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:243
-#, fuzzy, c-format
+#, c-format
 msgid "You are not authorized to see pending purchase suggestions."
-msgstr "La iha sujesaun atu sosa livru foun."
+msgstr "Ita la iha lisensa atu haree sujestaun ne'e."
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid "You are not authorized to view this page."
-msgstr "La iha sujesaun atu sosa livru foun."
+msgstr "Ita la iha lisensa atu haree pajina ne'e."
 
 #: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:19
 #, c-format
@@ -10621,7 +10627,7 @@ msgid "You can't change your password."
 msgstr "Labele troka ita-nia password."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "You can't reset your password."
 msgstr "Labele troka ita-nia password."
 
@@ -10640,11 +10646,11 @@ msgstr "Labele empresta item ne'e fali. %s "
 
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
-#, fuzzy, c-format
+#, c-format
 msgid "You cannot renew your books online. Reason: %sYour fines exceed "
 msgstr ""
-", labele hafoun livru online. Faz favor selu ona ita nia multa molok "
-"empresta fali."
+"Ita labele hafoun livru ita nian online. Razaun mak ne'e: %sIta nia multa "
+"liu "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:40
 #, c-format
@@ -10733,7 +10739,7 @@ msgstr "Ita rezerva ona titulu ida ne'e."
 
 #. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:47
-#, fuzzy, c-format
+#, c-format
 msgid "You have checked out too many items and can't check out any more. %s "
 msgstr "Ita empresta ona livru demais no labele empresta liutan. %s "
 
@@ -10775,9 +10781,9 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:180
-#, fuzzy, c-format
+#, c-format
 msgid "You may register here."
-msgstr "rejista iha ne'e"
+msgstr "Ita bele rejistu iha ne'e."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -10990,9 +10996,9 @@ msgid "Your library card has been marked as lost or stolen."
 msgstr "Ita-nia kartaun biblioteka marka ona hanesan lakon ka na’ok ona."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
-#, fuzzy, c-format
+#, c-format
 msgid "Your library card has been marked as lost or stolen. "
-msgstr "Ita-nia kartaun biblioteka marka ona hanesan lakon ka na’ok ona."
+msgstr "Ita-nia kartaun biblioteka marka tiona hanesan lakon ka na’ok ona. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:101
 #, c-format
@@ -11066,9 +11072,9 @@ msgid "Your password must be at least %s characters long."
 msgstr "Ita nia password tenke liu pelumenus karakter %s."
 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "Your payment"
-msgstr "Ita nia komentariu"
+msgstr "Ita nia pagamentu"
 
 #. %1$s:  message_value 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:36
@@ -11160,7 +11166,6 @@ msgstr "[ Lista foun ]"
 
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
-#, fuzzy
 msgid ""
 "[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% "
 "END %] catalog recent comments"
@@ -11234,15 +11239,15 @@ msgstr ""
 "type=seefro.type %%] "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
 "Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
 "defined('branchcode') && hidden.defined('categorycode') %%] "
 msgstr ""
-"%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
-"hidden.defined('mobile') && hidden.defined('email') && hidden."
-"defined('emailpro') && hidden.defined('fax') %%] "
+"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
+"Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
+"defined('branchcode') && hidden.defined('categorycode') %%] "
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:1
 #, c-format
@@ -11525,9 +11530,8 @@ msgstr "ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1 "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
-#, fuzzy
 msgid "in OpenLibrary collection"
-msgstr "iha kolesaun OverDrive"
+msgstr "iha kolesaun OpenLibrary"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
@@ -11752,9 +11756,9 @@ msgid "see also:"
 msgstr "haree mos:"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:517
-#, fuzzy, c-format
+#, c-format
 msgid "show_attributes"
-msgstr "show_fines"
+msgstr "show_attributes"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:509
 #, c-format
@@ -11789,13 +11793,13 @@ msgstr "show_loans"
 #. %11$s:  END 
 #. %12$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:636
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
 "of item type '%s' %s Pending %s %s %s "
 msgstr ""
 "dezde %s %s Taka lai %s to'o %s %s %s %s Pendente ba ida ne'ebe disponival "
-"depois "
+"depois '%s' %s Pendente %s %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:34
 #, c-format
@@ -11982,11 +11986,11 @@ msgid "was not found in the database. Please try again."
 msgstr "la hetan ita nia userid iha database. Faz favor tenta fali."
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:518
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "whether or not to return extended patron attributes information in the "
 "response"
-msgstr "inklui informasaun kontaktu kliente nian iha resposta ka"
+msgstr "iklui informasaun kontaktu kliente nian iha resposta ka lae"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:512
 #, c-format

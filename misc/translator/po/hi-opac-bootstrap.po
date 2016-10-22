@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2016-09-17 18:25-0300\n"
-"PO-Revision-Date: 2016-09-18 10:05+0000\n"
+"POT-Creation-Date: 2016-10-20 14:42-0300\n"
+"PO-Revision-Date: 2016-10-20 09:38+0000\n"
 "Last-Translator: Nikunj <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1474193155.000000\n"
+"X-POOTLE-MTIME: 1476956287.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -143,6 +143,28 @@ msgstr "%s %s %s %s से पारगमन में आइटम"
 msgid "%s %s %s %s You have subscribed to email notification on new issues "
 msgstr "%s %s %s %s आप नए मुद्दों पर ईमेल अधिसूचना सब्स्क्राइब्ड की है "
 
+#. %1$s: # First line will be summary, second line will be description. Avoid indenting. Var newline added to avoid translating problems. -
+#. %2$s: - newline="\n" -
+#. %3$s: - IF overdue == 1 -
+#. %4$s:  title 
+#. %5$s: - newline -
+#. %6$s:  title 
+#. %7$s:  barcode 
+#. %8$s: - ELSE -
+#. %9$s:  title 
+#. %10$s: - newline -
+#. %11$s:  title 
+#. %12$s:  barcode 
+#. %13$s: - END -
+#: opac-tmpl/bootstrap/en/modules/opac-ics.tt:1
+#, c-format
+msgid ""
+"%s %s %s %s is overdue %sYour copy of %s (barcode %s) is overdue %s %s is "
+"due %sYour copy of %s (barcode %s) is due back at the library today %s "
+msgstr ""
+"%s %s %s %s अतिदेय है %sआपके प्रति का %s (बारकोड %s) अतिदेय हैं %s %s है देय %sआपकी "
+"प्रति का %s (बारकोड %s) पुस्तकालय में आज वापसी देय हैं %s "
+
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
 #. %3$s:  IF ( RESERVE.found ) 
@@ -191,25 +213,6 @@ msgstr "%s %s %s अन्य मद नही %s %s"
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
 msgstr "%s %s %s नोट: इस विंडो स्वतः 5 सेकंड में बंद हो जाएगा . %s "
 
-#. %1$s: # First line will be summary, second line will be description. Avoid indenting. -
-#. %2$s: - IF overdue == 1 -
-#. %3$s:  title 
-#. %4$s:  title 
-#. %5$s:  barcode 
-#. %6$s: - ELSE -
-#. %7$s:  title 
-#. %8$s:  title 
-#. %9$s:  barcode 
-#. %10$s: - END -
-#: opac-tmpl/bootstrap/en/modules/opac-ics.tt:1
-#, c-format
-msgid ""
-"%s %s %s is overdue Your copy of %s (barcode %s) is overdue %s %s is due "
-"Your copy of %s (barcode %s) is due back at the library today %s "
-msgstr ""
-"%s %s %s अतिदेय का आपके प्रति है %s (बारकोड %s) अतिदेय हैं %s %sहै देय आपकी "
-"प्रति का %s (बारकोड %s)पुस्तकालय में आज वापसी देय हैं %s "
-
 #. %1$s:  END 
 #. %2$s:  END 
 #. %3$s:  IF ( review.title ) 
@@ -249,7 +252,7 @@ msgstr "%s %s अंतिम तिथि: "
 msgid ""
 "%s %s If you do not enter a password a system generated password will be "
 "created. %s "
-msgstr "%s %s आप एक पासवर्ड दर्ज नहीं करते हैं एक सिस्टमजेनरेटट पासवर्ड बन जाएगा.%s "
+msgstr "%s %s आप एक पासवर्ड दर्ज नहीं करते हैं एक सिस्टमजेनरेटट पासवर्ड बन जाएगा. %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -422,7 +425,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:238
 #, c-format
 msgid "%s %s, ISSN %s %s %s; %s %s "
-msgstr "%s %s, ISSN %s %s %s; %s %s "
+msgstr "%s %s, आईएसएसएन %s %s %s; %s %s "
 
 #. %1$s:  SWITCH option 
 #. %2$s:  CASE 'bibtex' 
@@ -441,8 +444,8 @@ msgid ""
 "%s %sBIBTEX %sEndNote %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC (Unicode/"
 "UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) %sRIS %sISBD %s "
 msgstr ""
-"%s %sBIBTEX %sEndNote %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC (Unicode/"
-"UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) %sRIS %sISBD %s "
+"%s %sबिबटैक्स %sएंडनोट %sमार्कएक्सएमएल %sमार्क (गैर-यूनिकोड/मार्क-8) %sमार्क (यूनिकोड/"
+"मार्क-8) %sमार्क(यूनिकोड/मार्क-8, मानक) %sमोडस (एक्सएमएल) %sआरआईएस%sआईएसबीडी %s "
 
 #. %1$s:  SWITCH ACCOUNT_LINE.accounttype 
 #. %2$s:  CASE 'Pay' 
@@ -505,7 +508,7 @@ msgstr "%s %sसाझा %sनिजी%s %s सार्वजनिक %s "
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:34
 #, c-format
 msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
-msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
+msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s और %s "
 
 #. %1$s:  bibliotitle 
 #. %2$s:  biblionumber 
@@ -1131,9 +1134,9 @@ msgid ""
 "hidden.defined('mobile') && hidden.defined('email') && hidden."
 "defined('emailpro') && hidden.defined('fax') %%] "
 msgstr ""
-"%s [%% यदि नहीं छिपा.परिभाषित('फोन') && छिपा.परिभाषित('फोनप्रो') && छिपा."
-"परिभाषित('मोबाइल') && छिपा.परिभाषित('ईमेल') && छिपा.परिभाषित('ईमेलप्रो') && "
-"छिपा.परिभाषित('फैक्स') %%] "
+"%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
+"hidden.defined('mobile') && hidden.defined('email') && hidden."
+"defined('emailpro') && hidden.defined('fax') %%] "
 
 #. %1$s:  END # /UNLESS fields hidden 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:345
@@ -1209,7 +1212,7 @@ msgstr "%s asc"
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:69
 #, c-format
 msgid "%s biblios"
-msgstr "%s Biblios"
+msgstr "%s बिब्लियोज"
 
 #. For the first occurrence,
 #. %1$s:  IF ( review.author ) 
@@ -2045,7 +2048,7 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:69
 #, c-format
 msgid "%s0 biblios%s "
-msgstr "%s0 biblios%s "
+msgstr "%s0 बिब्लियोज%s "
 
 #. %1$s:  IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch 
@@ -2061,7 +2064,7 @@ msgstr "%s0 biblios%s "
 msgid ""
 "%sBrowsing %s Shelves%s %s, Shelving location: %s%s %s, Collection code: %s"
 "%s "
-msgstr "%sब्राउजिग %s अलमारियों %s %s,शैल्विग स्थान: %s%s %s, संग्रह कोड: %s%s  "
+msgstr "%sब्राउजिग %s अलमारियों%s %s, शैल्विग स्थान: %s%s %s, संग्रह कोड: %s%s  "
 
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
@@ -2102,9 +2105,9 @@ msgid ""
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
-"%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
-"available%s %sDelete%s %sClaimed%s %sStopped%s "
+"%sअनुमानित%s %sआगमन%s %sविलंभ%s %sलापता%s %sलापता (कभी प्राप्त नही)%s "
+"%sलापता(बेचा गया)%s %sलापता (क्षतिग्रस्त)%s %sलापता (गुम)%s %sउपलब्ध नही%s "
+"%sमिटाया गया%s %sदावा किया%s %sरोका गया%s"
 
 #. %1$s:  IF (latestserial.status1 ) 
 #. %2$s:  END 
@@ -2137,9 +2140,9 @@ msgid ""
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
 "%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
-"%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
-"%s %sDelete%s %sClaimed%s %sStopped%s "
+"%sअनुमानित%s %sआगमन%s %sलेट%s %sगायब%s %sगायब (कभी प्राप्त नही)%s %sगायब (बेचे "
+"हुए)%s %sगायब (क्षतिग्रस्त)%s %sगायब (गुम)%s %sनिर्गम नहा%s %sमिटाए हुए%s %s दावे "
+"वाले %s %sरोके हुए%s"
 
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
 #. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
@@ -2155,8 +2158,8 @@ msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
 "%sItem checkout %sUnknown %s"
 msgstr ""
-"%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
-"%sItem checkout %sUnknown %s"
+"%sआइटम देय %sअग्रिम नोटिस %sआनेवाली घटना %sहोल्ड भरा गया %sआइटम चैकइन %sआइटम चैकआउट"
+"%sअंजान %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -2250,7 +2253,7 @@ msgstr "&laquo; पिछला"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:160
 #, c-format
 msgid "&lt;&lt; Previous"
-msgstr "&lt; &lt; पिछला"
+msgstr "&lt;&lt; पिछला"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:493
 #, c-format
@@ -2800,7 +2803,7 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; सम्मेलन का नाम"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:68
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Conference name phrase"
-msgstr "&nbsp; &nbsp; &nbsp; &nbsp; सम्मेलन नाम वाक्यांश"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; सम्मेलन नाम वाक्यांश"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:66
 #, c-format
@@ -2815,7 +2818,7 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; आईऍसबीऍन"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:87
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; आईएसएसएन"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:69
 #, c-format
@@ -2825,7 +2828,7 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; व्यक्तिगत नाम"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:70
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Personal name phrase"
-msgstr "&nbsp; &nbsp; &nbsp; &nbsp; व्यक्तिगत नाम वाक्यांश"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; व्यक्तिगत नाम वाक्यांश"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:48
 #, c-format
@@ -2845,12 +2848,12 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; विषय और संबंधित श�
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:47
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Subject phrase"
-msgstr "&nbsp; &nbsp; &nbsp; &nbsp; विषय वाक्यांश"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; विषय वाक्यांश"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:54
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Title phrase"
-msgstr "&nbsp; &nbsp; &nbsp; &nbsp; शीर्षक वाक्यांश"
+msgstr "&nbsp;&nbsp;&nbsp;&nbs; शीर्षक वाक्यांश"
 
 #. %1$s:  SEARCH_RESULT.rating_total 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:483
@@ -2862,7 +2865,7 @@ msgstr "&nbsp;&nbsp;(%s वोटस)"
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:51
 #, c-format
 msgid "(%s biblios)"
-msgstr "(%s biblios)"
+msgstr "(%s बिब्लियोज)"
 
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft 
@@ -3016,7 +3019,7 @@ msgstr "(कुल प्रविष्टियों_MAX_ से फ़िल
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:355
 #, c-format
 msgid "(modified on %s)"
-msgstr "(%s पर) संशोधित"
+msgstr "(संशोधित पर %s) "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
 #, c-format
@@ -3072,7 +3075,7 @@ msgstr "- आपको शीर्षक प्रविष्ट करना 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 msgid "- You must enter a list name"
-msgstr "आपको अवश्य एक सूची दर्ज करनी होगा"
+msgstr "- आपको अवश्य एक सूची नाम दर्ज करनी होगा"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:66
 #, c-format
@@ -3093,12 +3096,12 @@ msgstr "-- कोई नहीं --"
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:96
 #, c-format
 msgid ". Once you've confirmed the deletion, no one can retrieve the list!"
-msgstr ", एक बार जब आप विलोपन की पुष्टि की है, कोई भी सूची प्राप्त कर सकते हैं!"
+msgstr ". एक बार जब आप विलोपन की पुष्टि की है, कोई भी सूची प्राप्त नही कर सकते हैं!"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:74
 #, c-format
 msgid ". Please contact the library for more information."
-msgstr ", अधिक जानकारी के लिए पुस्तकालय से संपर्क करें."
+msgstr ". अधिक जानकारी के लिए पुस्तकालय से संपर्क करें."
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -3111,7 +3114,7 @@ msgstr ".%sआप पर जुर्माना देय.%s %s "
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:57
 #, c-format
 msgid "...or..."
-msgstr "... या ..."
+msgstr "...या..."
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:162
 #, c-format
@@ -3856,7 +3859,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:56
 #, c-format
 msgid "BibTeX"
-msgstr "BibTeX"
+msgstr "बिबटैक्स"
 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:57
 #, c-format
@@ -3866,7 +3869,7 @@ msgstr "Biblio रिकॉर्ड"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:325
 #, c-format
 msgid "Bibliographies"
-msgstr "Bibliographies"
+msgstr "ग्रन्थसूचीयाँ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:293
 #, c-format
@@ -3958,7 +3961,7 @@ msgstr "CGI डिबग पर है."
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:60
 #, c-format
 msgid "CSV - %s"
-msgstr "CSV - %s"
+msgstr "सीएसवी - %s"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:26
@@ -4100,7 +4103,7 @@ msgstr "कैसेट रिकॉर्डिंग"
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:38
 #, c-format
 msgid "Catalog"
-msgstr "Catalog"
+msgstr "केटलॉग"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:326
 #, c-format
@@ -4139,7 +4142,7 @@ msgstr "निर्गम"
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:182
 #, c-format
 msgid "Check out%s, return%s or renew an item: "
-msgstr "निर्गम करना%s,वापसी %sया एक आइटम नवीनीकृत:"
+msgstr "निर्गम करना%s, वापसी %s या एक आइटम नवीनीकृत:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:146
 #, c-format
@@ -4182,7 +4185,7 @@ msgstr "चेकआउट इतिहास"
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:54
 #, c-format
 msgid "Checkouts"
-msgstr "Checkouts"
+msgstr "चेकआउट"
 
 #. %1$s:  borrowername 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:214
@@ -4565,7 +4568,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:353
 #, c-format
 msgid "Credits"
-msgstr "Credits"
+msgstr "क्रेडिट्स"
 
 #. %1$s:  BORROWER_INFO.amountoutstanding | $Price 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:147
@@ -4612,7 +4615,7 @@ msgstr "पाठ्यचर्या"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:312
 #, c-format
 msgid "DVD video / Videodisc"
-msgstr "डीवीडी वीडियो/Videodisc"
+msgstr "डीवीडी वीडियो / Videodisc"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:73
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
@@ -4841,7 +4844,7 @@ msgstr "डिस्चार्ज "
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:333
 #, c-format
 msgid "Discographies"
-msgstr "Discographies"
+msgstr "डिस्कोग्राफ्रीज"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:25
@@ -5243,7 +5246,7 @@ msgstr "कम विकल्प"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:291
 #, c-format
 msgid "Fiction"
-msgstr "Fiction"
+msgstr "गल्प"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:446
 #, c-format
@@ -5253,7 +5256,7 @@ msgstr "फिक्शन नोट्स:"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "Filmographies"
-msgstr "Filmographies"
+msgstr "फिल्मोग्राफीज"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:75
 #, c-format
@@ -5369,7 +5372,7 @@ msgstr "मिला"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Fr"
-msgstr "Fr"
+msgstr "शुक्र"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -5767,7 +5770,7 @@ msgstr "आईपी पते जहां अंत उपयोगकर्�
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:57
 #, c-format
 msgid "ISBD"
-msgstr "ISBD"
+msgstr "आईएसबीडी"
 
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:22
@@ -5775,7 +5778,7 @@ msgstr "ISBD"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:109
 #, c-format
 msgid "ISBD view"
-msgstr "ISBD देखें"
+msgstr "आईएसबीडी देखें"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:188
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:190
@@ -5790,23 +5793,23 @@ msgstr "आईऍसबीऍन"
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:37
 #, c-format
 msgid "ISBN %s"
-msgstr "ISBN %s"
+msgstr "आईएसबीएन %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:226
 #, c-format
 msgid "ISBN:"
-msgstr "ISBN:"
+msgstr "आईएसबीएन:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:229
 #, c-format
 msgid "ISBN: "
-msgstr "ISBN: "
+msgstr "आईएसबीएन: "
 
 #. %1$s:  BIBLIO_RESULT.ISBN 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:53
 #, c-format
 msgid "ISBN: %s "
-msgstr "ISBN: %s"
+msgstr "आईएसबीएन: %s"
 
 #. %1$s:  FOREACH isbn IN BIBLIO_RESULT.ISBN 
 #. %2$s:  isbn 
@@ -5816,17 +5819,17 @@ msgstr "ISBN: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:58
 #, c-format
 msgid "ISBN: %s %s %s; %s %s "
-msgstr "ISBN: %s %s %s; %s %s "
+msgstr "आईएसबीएन: %s %s %s; %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:86
 #, c-format
 msgid "ISSN"
-msgstr "ISSN"
+msgstr "आईएसएसएन"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:234
 #, c-format
 msgid "ISSN:"
-msgstr "ISSN:"
+msgstr "आईएसएसएन:"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:187
@@ -5937,13 +5940,13 @@ msgid ""
 "If you have a CAS account, please choose against which one you would like to "
 "authenticate:"
 msgstr ""
-"आप एक CAS  खाता है, तो कृपया चुनें जो एक के खिलाफ आपको प्रमाणित करने के लिए करना चाहते "
+"आप एक CAS खाता है, तो कृपया चुनें जो एक के खिलाफ आपको प्रमाणित करने के लिए करना चाहते "
 "हैं:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:116
 #, c-format
 msgid "If you have a CAS account, please click here to log in."
-msgstr "यदि आप एक CAS खाता रखते है, कृपया ल़ॉगिन के लिए यहां क्लिक करें।"
+msgstr "यदि आप एक CAS खाता रखते है, कृपया ल़ॉगिन के लिए यहां क्लिक करें."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
 #, c-format
@@ -5980,7 +5983,7 @@ msgstr "छवियाँ"
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:69
 #, c-format
 msgid "Images for %s "
-msgstr "छवियाँ  के लिए %s"
+msgstr "छवियाँ के लिए %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:93
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:97
@@ -6005,7 +6008,7 @@ msgstr "ऑनलाइन केटलॉग में: %s/cgi-bin/koha/opac-de
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
 #, c-format
 msgid "In transit from %s to %s since %s"
-msgstr "पारगमन में %s से  %s के बाद से %s"
+msgstr "पारगमन में %sसे %s के बाद से %s"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:19
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -6023,7 +6026,7 @@ msgstr "में क्रमाँक:"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:331
 #, c-format
 msgid "Indexes"
-msgstr "Indexes"
+msgstr "अनुक्रमणिका"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:326
 #, c-format
@@ -6200,7 +6203,7 @@ msgstr "खोजशब्द"
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:38
 #, c-format
 msgid "Koha"
-msgstr "Koha"
+msgstr "कोहा"
 
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:11
@@ -6234,7 +6237,7 @@ msgstr "LCCN:"
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:122
 #, c-format
 msgid "LCCN: %s "
-msgstr "LCCN: %s"
+msgstr "एलसीसीएन: %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:185
 #, c-format
@@ -6309,7 +6312,7 @@ msgstr "स्तर 3: प्राथमिक ओपेक विकल्प
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:815
 #, c-format
 msgid "Level 4: Robust/domain specific discovery platforms"
-msgstr "स्तर 4: मजबूत / डोमेन विशिष्ट खोज के प्लेटफार्मों"
+msgstr "स्तर 4: मजबूत/डोमेन विशिष्ट खोज के प्लेटफार्मों"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:230
@@ -6374,7 +6377,7 @@ msgstr "संसाधन से लिंक: "
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1114
 #, c-format
 msgid "LinkedIn"
-msgstr "LinkedIn"
+msgstr "लिंकडइन"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:178
@@ -6774,7 +6777,7 @@ msgstr "गुम इश्यूज : %s "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Mo"
-msgstr "Mo"
+msgstr "सो"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:555
 #, c-format
@@ -7442,7 +7445,7 @@ msgstr "अन्य रूप:"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:540
 #, c-format
 msgid "Other holdings ( %s )"
-msgstr "अन्य होल्डिंग्स (%s )"
+msgstr "अन्य होल्डिंग्स ( %s )"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:799
 #, c-format
@@ -8071,7 +8074,7 @@ msgstr "RIS (Zotero, EndNote, अन्य)"
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
 #, c-format
 msgid "RSS feed for %s%s "
-msgstr "RSS feed for %s%s "
+msgstr "आरएसएस फीड के लिए %s%s "
 
 #. %1$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
@@ -8187,7 +8190,7 @@ msgstr "संबंधी"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:142
 #, c-format
 msgid "Relatives' checkouts"
-msgstr "Relatives' checkouts"
+msgstr "संबंधी' चैकआउट"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:1
 #, c-format
@@ -8516,7 +8519,7 @@ msgstr "SRW-DC"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Sa"
-msgstr "Sa"
+msgstr "शनि"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -8722,7 +8725,8 @@ msgid ""
 "See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END "
 "%]"
 msgstr ""
-"देखे: [% यदि (अगलाशीर्षक ) %][% अगलाशीर्षक |html %][% ELSE %]अगलाबिबलियो[% END %]"
+"देखे: [% यदि (अगलाशीर्षक ) %][% अगलाशीर्षक |html %][% ELSE %]अगला बिबलियो[% END "
+"%]"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1065
@@ -9251,12 +9255,12 @@ msgstr "तीन कदम: 'समाप्त' बटन पर क्लि�
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:43
 #, c-format
 msgid "Step two: Scan the barcode for each item, one at a time"
-msgstr "तीन कदम: 'समाप्त' बटन पर क्लिक करें"
+msgstr "चरण दो: एक समय में, प्रत्येक आइटम के लिए स्कैन एक बारकोड"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Su"
-msgstr "Su"
+msgstr "रवि"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:183
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:185
@@ -9398,7 +9402,7 @@ msgstr "सदस्यताएँ"
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:39
 #, c-format
 msgid "Sudoc"
-msgstr "Sudoc"
+msgstr "सुडोक"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:127
 #, c-format
@@ -9578,7 +9582,7 @@ msgstr "टर्मः"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Th"
-msgstr "Th"
+msgstr "गुरू"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:27
 #, c-format
@@ -9947,7 +9951,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:335
 #, c-format
 msgid "Theses"
-msgstr "Theses"
+msgstr "शोधपत्र"
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:35
 #, c-format
@@ -10208,7 +10212,7 @@ msgstr "संधियाँ"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Tu"
-msgstr "Tu"
+msgstr "मंगल"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -10263,7 +10267,7 @@ msgstr "यूआरएल (ओं)"
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:127
 #, c-format
 msgid "URL: %s "
-msgstr "URL: %s "
+msgstr "यूआरएल: : %s "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -10392,7 +10396,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
 #, c-format
 msgid "VHS tape / Videocassette"
-msgstr "VHS टेप/विडेओकसेट"
+msgstr "वीएचएस टेप / विडेओकसेट"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:874
 #, c-format
@@ -10462,7 +10466,7 @@ msgstr "चेतावनी: पूर्ववत नहीं किया �
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "We"
-msgstr "We"
+msgstr "बु"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:39
 #, c-format
@@ -10538,7 +10542,7 @@ msgstr "चुने गए शीर्षक के साथ: "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Wk"
-msgstr "Wk"
+msgstr "सप्ताह"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:322
@@ -11081,11 +11085,10 @@ msgid ""
 "soon after the checkout date for this item to be renewed. %s This item is on "
 "hold for another patron. %s %s "
 msgstr ""
-"आपका ऋण नवीकरण निम्नलिखित कारण(ओं) की वजह से असफल: %s%s आपका खाता समाप्त हो "
-"गया है। अधिक जानकारी के लिए पुस्तकालय से संपर्क करें. %s आपके पास इस आइटम की "
-"अनुमति दी समय की अधिकतम संख्या नवीनीकरण किया है. %s यह भी जल्द ही होने के बा"
-"द इस मद के लिए चेकआउट तारीख नए सिरे से किया जा रहा है. %s इस मद में एक और "
-"संरक्षक के लिए होल्ड पर है. %s %s"
+"आपका ऋण नवीकरण निम्नलिखित कारण(ओं) की वजह से असफल: %s%s आपका खाता समाप्त हो गया "
+"है। अधिक जानकारी के लिए पुस्तकालय से संपर्क करें. %s आपके पास इस आइटम की अनुमति दी समय "
+"की अधिकतम संख्या नवीनीकरण किया है. %s यह भी जल्द ही होने के बाद इस मद के लिए चेकआउट "
+"तारीख नए सिरे से किया जा रहा है. %s इस मद में एक और संरक्षक के लिए होल्ड पर है. %s %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
@@ -11287,9 +11290,9 @@ msgid ""
 "Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
 "defined('branchcode') && hidden.defined('categorycode') %%] "
 msgstr ""
-"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && "
-"Koha.Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && "
-"hidden.defined('branchcode') && hidden.defined('categorycode') %%] "
+"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
+"Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
+"defined('branchcode') && hidden.defined('categorycode') %%] "
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:1
 #, c-format
@@ -11493,7 +11496,7 @@ msgstr "iDreamBooks.com रेटिंग"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:456
 #, c-format
 msgid "id"
-msgstr "id"
+msgstr "आईडी"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:115
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:197
@@ -11980,7 +11983,7 @@ msgstr "तक"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1169
 #, c-format
 msgid "url"
-msgstr "url"
+msgstr "यूआरएल"
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:93
 #, c-format
