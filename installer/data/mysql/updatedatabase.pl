@@ -12776,6 +12776,24 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.05.04.002";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        update marc_subfield_structure set defaultvalue=REPLACE(defaultvalue, 'YYYY', '<<YYYY>>') where defaultvalue like "%YYYY%" and defaultvalue not like "%<<YYYY>>%";
+    });
+    $dbh->do(q{
+        update marc_subfield_structure set defaultvalue=REPLACE(defaultvalue, 'MM', '<<MM>>') where defaultvalue like "%MM%" and defaultvalue not like "%<<MM>>%";
+    });
+    $dbh->do(q{
+        update marc_subfield_structure set defaultvalue=REPLACE(defaultvalue, 'DD', '<<DD>>') where defaultvalue like "%DD%" and defaultvalue not like "%<<DD>>%";
+    });
+    $dbh->do(q{
+        update marc_subfield_structure set defaultvalue=REPLACE(defaultvalue, 'user', '<<USER>>') where defaultvalue like "%user%" and defaultvalue not like "%<<USER>>%";
+    });
+    print "Upgrade to $DBversion done (Bug 7045 - Default-value substitution inconsistent)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
