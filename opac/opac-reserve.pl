@@ -73,6 +73,14 @@ sub get_out {
 my ( $borr ) = GetMember( borrowernumber => $borrowernumber );
 my $patron = Koha::Patrons->find( $borrowernumber );
 
+my $can_place_hold_if_available_at_pickup = C4::Context->preference('OPACHoldsIfAvailableAtPickup');
+unless ( $can_place_hold_if_available_at_pickup ) {
+    my @patron_categories = split '\|', C4::Context->preference('OPACHoldsIfAvailableAtPickupExceptions');
+    if ( @patron_categories ) {
+        $can_place_hold_if_available_at_pickup = grep /$borr->{categorycode}/, @patron_categories;
+    }
+}
+
 # check if this user can place a reserve, -1 means use sys pref, 0 means dont block, 1 means block
 if ( $patron->category->effective_BlockExpiredPatronOpacActions ) {
 
@@ -278,7 +286,7 @@ if ( $query->param('place_reserve') ) {
             $canreserve = 0;
         }
 
-        unless ( C4::Context->preference('OPACHoldsIfAvailableAtPickup') ) {
+        unless ( $can_place_hold_if_available_at_pickup ) {
             $canreserve = 0 if Koha::Items->search({ biblionumber => $biblioNum, holdingbranch => $branch })->count;
         }
 
@@ -526,7 +534,7 @@ foreach my $biblioNum (@biblionumbers) {
             }
             $numCopiesAvailable++;
 
-            if ( not C4::Context->preference('OPACHoldsIfAvailableAtPickup') ) {
+            unless ( $can_place_hold_if_available_at_pickup ) {
                 push @not_available_at, $itemInfo->{holdingbranch};
             }
         }
@@ -562,7 +570,7 @@ foreach my $biblioNum (@biblionumbers) {
         $biblioLoopIter{not_available_at} = \@not_available_at ;
     }
 
-    unless ( C4::Context->preference('OPACHoldsIfAvailableAtPickup') ) {
+    unless ( $can_place_hold_if_available_at_pickup ) {
         @not_available_at = uniq @not_available_at;
         $biblioLoopIter{not_available_at} = \@not_available_at ;
         # The record is not holdable is not available at any of the libraries
