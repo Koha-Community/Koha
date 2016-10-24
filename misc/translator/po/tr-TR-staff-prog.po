@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2016-09-17 22:41-0300\n"
+"POT-Creation-Date: 2016-10-20 15:54-0300\n"
 "PO-Revision-Date: 2016-07-25 06:59+0000\n"
 "Last-Translator: Ugur <ugurbulgan@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
@@ -831,7 +831,7 @@ msgstr ""
 #. %2$s:  prediction.publicationdate | $KohaDates 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:72
+#: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:80
 #, c-format
 msgid "%s %s %s unknown %s "
 msgstr "%s %s %s bilinmiyor %s"
@@ -1552,7 +1552,7 @@ msgstr ""
 #. %4$s:  IF waiting_expires_on 
 #. %5$s:  waiting_expires_on | $KohaDates 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:838
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:842
 #, c-format
 msgid "%s %s Waiting at %s %s until %s %s "
 msgstr "%s %s Bekliyor %s %s kadar %s %s "
@@ -1636,7 +1636,7 @@ msgstr "%s %s yazar %s%s"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:120
@@ -2169,13 +2169,27 @@ msgstr "%s %sÜzgünüm, bu listeye materyal eklemek için izniniz yok."
 #. %10$s:  ELSIF ( matches = serial.serialseq.match('(.*)Winter(.*)') ) 
 #. %11$s:  matches.0 
 #. %12$s:  matches.1 
-#. %13$s:  ELSE 
-#. %14$s:  serial.serialseq 
-#. %15$s:  END 
+#. %13$s:  ELSIF ( matches = prediction.number.match('(.*)Spr(.*)') ) 
+#. %14$s:  matches.0 
+#. %15$s:  matches.1 
+#. %16$s:  ELSIF ( matches = prediction.number.match('(.*)Sum(.*)') ) 
+#. %17$s:  matches.0 
+#. %18$s:  matches.1 
+#. %19$s:  ELSIF ( matches = prediction.number.match('(.*)Fal(.*)') ) 
+#. %20$s:  matches.0 
+#. %21$s:  matches.1 
+#. %22$s:  ELSIF ( matches = prediction.number.match('(.*)Win(.*)') ) 
+#. %23$s:  matches.0 
+#. %24$s:  matches.1 
+#. %25$s:  ELSE 
+#. %26$s:  serial.serialseq 
+#. %27$s:  END 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:271
 #: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:59
-#, c-format
-msgid "%s %sSpring%s %s %sSummer%s %s %sFall%s %s %sWinter%s %s %s %s "
+#, fuzzy, c-format
+msgid ""
+"%s %sSpring%s %s %sSummer%s %s %sFall%s %s %sWinter%s %s %sSpr%s %s %sSum%s "
+"%s %sFal%s %s %sWin%s %s %s %s "
 msgstr "%s %sİlkbahar%s %s %sYaz%s %s %sSonbahar%s %s %sKış%s %s %s %s"
 
 #. %1$s:  IF ( use_heading_flags_p ) 
@@ -2438,7 +2452,7 @@ msgstr "%s (%s gün) "
 #. %1$s:  issue.item.biblioitemnumber.biblionumber.title 
 #. %2$s:  issue.item.barcode 
 #. %3$s:  issue.date_due | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:706
 #, c-format
 msgid "%s (%s). Due on %s"
 msgstr "%s (%s). Tarihinde süresi doluyor %s"
@@ -2813,7 +2827,7 @@ msgstr "%s %s adlı kullanıcıya ödünç verildi %s "
 
 #. For the first occurrence,
 #. %1$s:  issuecount 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:897
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:901
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:434
 #, c-format
 msgid "%s Checkout(s)"
@@ -3102,7 +3116,7 @@ msgstr "%s için Ödenekler '%s' %s Tüm ödenekler %s"
 
 #. For the first occurrence,
 #. %1$s:  holds_count 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:909
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:913
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:441
 #, c-format
 msgid "%s Hold(s)"
@@ -3665,7 +3679,7 @@ msgstr "%s için rezerv bulundu %s ("
 #. %4$s:  d.comment 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:54
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:785
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:789
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:975
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:186
 #, c-format
@@ -3674,7 +3688,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  debarments.size 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:914
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:918
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:446
 #, c-format
 msgid "%s Restrictions"
@@ -4124,10 +4138,11 @@ msgstr "%s ZIP/Posta Kodu: "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/about.tt:111
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
-"warnPrefAnonymousPatron || warnNoActiveCurrency || QueryParserError || "
+"warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
+"warnNoActiveCurrency || QueryParserError || "
 "AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError%%] "
 msgstr ""
@@ -5851,7 +5866,7 @@ msgstr ""
 #. %22$s:  END 
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:284
+#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:292
 #: intranet-tmpl/prog/en/modules/serials/serial-issues-full.tt:70
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:888
 #, c-format
@@ -8430,7 +8445,7 @@ msgstr "(%s) - "
 #. %6$s:  w.item.itemcallnumber 
 #. %7$s:  END 
 #. %8$s:  w.reservedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:835
 #, c-format
 msgid "(%s), %s by %s %s %s [%s] %s Hold placed on %s. "
 msgstr "(%s), %s tarafından %s%s %s [%s] %s Üzerinde Ayırtma yapıldı %s."
@@ -9073,7 +9088,7 @@ msgid "-- please choose --"
 msgstr "-- lütfen seçin --"
 
 #. %1$s:  IF ( charges_is_blocker ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid ". %s Checkouts are "
 msgstr ". %s İadeler…-dir "
@@ -9114,7 +9129,7 @@ msgstr ". Lütfen tekrar kullanıcı adınızı ve şifrenizi giriniz."
 msgid ". Please retain this item and check it in to process the hold. "
 msgstr ". Lütfen bu materyali saklayınız ve ayırma işlemi için iade ediniz. "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid ". See highlighted items "
 msgstr ". İşaretlenmiş olan materyallere bakın "
@@ -9158,12 +9173,12 @@ msgstr "...ve: "
 msgid "...to "
 msgstr "...e "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:899
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:903
 #, c-format
 msgid "0 Checkouts"
 msgstr "0 Ödünç alınanlar"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:911
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:915
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:443
 #, c-format
 msgid "0 Holds"
@@ -10182,6 +10197,11 @@ msgstr "Alıcıları ekle"
 msgid "Add record matching rule"
 msgstr "Eşleştirme kuralı ekle"
 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:438
+#, fuzzy, c-format
+msgid "Add record using fast cataloging"
+msgstr "(Hızlı kataloglama)"
+
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:48
 #, c-format
 msgid "Add reserves"
@@ -10467,7 +10487,7 @@ msgstr "Adres satırı 2: "
 msgid "Address line 3: "
 msgstr "Adres satırı 3: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:95
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:102
 #, c-format
@@ -11975,7 +11995,7 @@ msgstr "Materyal ekle"
 msgid "Attach this basket to a new basket group with the same name"
 msgstr "Bu sepeti diğer bir yeni sepet grubuyla aynı isimle birleştir."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:735
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:739
 #, c-format
 msgid "Attention:"
 msgstr "Dikkat:"
@@ -12370,7 +12390,7 @@ msgstr "Satırı otomatik-doldur"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:159
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:653
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:657
 #, c-format
 msgid "Automatic renewal"
 msgstr "Otomatik süre uzatma"
@@ -12439,7 +12459,7 @@ msgstr "Ortalama ödünç verme zamanı"
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "BLOCKED"
@@ -12497,7 +12517,7 @@ msgstr "Bibliyografik kayda dön"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:62
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:76
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:61
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:956
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:960
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:715
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:733
@@ -12568,7 +12588,7 @@ msgstr "Barkod listesi (her satırda bir barkod): "
 msgid "Barcode not found"
 msgstr "Barkod bulunamadı"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1015
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1019
 #, c-format
 msgid "Barcode submitted"
 msgstr "Barkod gönderildi"
@@ -13759,7 +13779,7 @@ msgid "Call Number (0-9 to A-Z)"
 msgstr "Yer Numarası (0-9 dan A-Z)"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:937
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:719
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:737
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:463
@@ -13784,7 +13804,7 @@ msgstr "Yer no"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:45
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:77
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:58
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:955
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:959
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:158
@@ -14159,7 +14179,7 @@ msgid "Cancel hold and return to : [% reserveloo.branchname %]"
 msgstr "Ayırmayı iptal edin : [% reserveloo.branchname %]"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:966
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:970
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:504
 msgid "Cancel marked holds"
 msgstr "İşaretli ayırtma işlemlerini iptal et"
@@ -14286,7 +14306,7 @@ msgid "Cannot check out"
 msgstr "Ödünç verilemiyor"
 
 #. %1$s:  IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:727
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:731
 #, c-format
 msgid "Cannot check out! %s "
 msgstr "Ödünç verilemiyor! %s"
@@ -14905,7 +14925,7 @@ msgstr "Karakter kodlaması: "
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:314
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:934
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:938
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:720
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:738
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:464
@@ -15024,7 +15044,7 @@ msgstr "Daha fazla ayrıntı için sistem günlüklerine bakın."
 #: intranet-tmpl/prog/en/includes/patron-search.inc:138
 #: intranet-tmpl/prog/en/includes/checkin-search.inc:15
 #: intranet-tmpl/prog/en/includes/patrons-admin-search.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:643
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:647
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:605
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:96
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:21
@@ -15200,7 +15220,7 @@ msgid "Checked out %s times"
 msgstr "%s kere ödünç alınmış"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:936
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:718
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:736
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
@@ -15211,7 +15231,7 @@ msgid "Checked out from"
 msgstr "Ödünç Veren"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:20
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:717
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:735
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:461
@@ -15225,7 +15245,7 @@ msgstr "tarihinde ödünç verildi"
 msgid "Checked out today"
 msgstr "Bugün ödünç verildi"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:706
 #, c-format
 msgid "Checked out: "
 msgstr "Ödünç verildi:"
@@ -15269,7 +15289,7 @@ msgstr "Ödünç veriliyor "
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:634
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:724
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:728
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:75
 #, c-format
 msgid "Checking out to %s"
@@ -15956,7 +15976,7 @@ msgstr "İçe aktarım toplu dosya #%s temizlendi"
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:315
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:118
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:672
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:676
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:542
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1053
@@ -17679,7 +17699,7 @@ msgstr "Kredi türü:"
 msgid "Credits"
 msgstr "Krediler"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:822
 #, c-format
 msgid "Credits:"
 msgstr "Krediler:"
@@ -19131,7 +19151,7 @@ msgstr "Kullanıcıyı sil"
 msgid "Delete vendor"
 msgstr "Sağlayıcı sil"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:960
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:964
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:671
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:498
 #, c-format
@@ -19942,7 +19962,7 @@ msgstr "İade %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:361
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:927
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:713
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:731
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
@@ -19953,7 +19973,7 @@ msgstr "İade %s"
 msgid "Due date"
 msgstr "İade tarihi"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:926
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr "İade tarihi ((biçimlendirilmemiş, gizli)"
@@ -20211,8 +20231,8 @@ msgstr "Düzenle"
 msgid "Edit "
 msgstr "Düzenle "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
 #, c-format
 msgid "Edit Details"
 msgstr "Ayrıntıları düzenle"
@@ -20816,8 +20836,13 @@ msgstr "Materyal numarasına göre girin"
 msgid "Enter cover biblionumber: "
 msgstr "Kapak bibliyografik kayıt numarasını girin: "
 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:637
+#, fuzzy, c-format
+msgid "Enter item barcode or keyword:"
+msgstr "Materyal barkodunu girin:"
+
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:44
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:636
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:639
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:687
 #, c-format
 msgid "Enter item barcode:"
@@ -21291,7 +21316,7 @@ msgid "Experimental features"
 msgstr "Deneysel özellikler"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:958
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:962
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:676
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:964
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:496
@@ -21321,8 +21346,8 @@ msgid "Expiration date: %s"
 msgstr "Sona erme tarihi: %s"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:83
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:762
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:766
 #, c-format
 msgid "Expiration:"
 msgstr "Sona erme tarihi:"
@@ -21680,7 +21705,6 @@ msgid "Famfamfam iconset"
 msgstr "Famfamfam iconset"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:41
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:438
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:30
 #, c-format
 msgid "Fast cataloging"
@@ -21734,7 +21758,7 @@ msgstr "Alındı makbuzu"
 msgid "Feedback:"
 msgstr "Geri bildirim:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Fees &amp; Charges:"
 msgstr "Ücretler &amp; Cezalar:"
@@ -22083,7 +22107,7 @@ msgstr "Filtreler"
 msgid "Filters :"
 msgstr "Filtreler:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1001
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1005
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:172
 #, c-format
@@ -22091,7 +22115,7 @@ msgid "Find another patron?"
 msgstr "Diğer bir kullanıcı bulunsun mu?"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:939
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:61
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:465
 #, c-format
@@ -23428,7 +23452,7 @@ msgstr "Ayırma tarihi"
 msgid "Hold at"
 msgstr "Ayrılmış"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:953
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:491
 #, c-format
 msgid "Hold date"
@@ -23602,7 +23626,7 @@ msgstr "İzin verilen ayırtmalar (sayı)"
 msgid "Holds awaiting pickup"
 msgstr "Ayırtanın alması için bekletilenler"
 
-#. %1$s:  show_date 
+#. %1$s:  show_date | $KohaDates 
 #. %2$s:  IF ( all_branches_link ) 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:40
 #, c-format
@@ -23645,7 +23669,7 @@ msgstr "Ayırmadan çekilecekler"
 msgid "Holds to pull%s placed between %s and %s%s"
 msgstr "Çekilecek ayırmalar %s arasında yer alan  %s ve %s%s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:827
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
 #, c-format
 msgid "Holds waiting:"
 msgstr "Bekleyen ayırmalar:"
@@ -24353,7 +24377,7 @@ msgstr "MATERYAL"
 msgid "ITEMS"
 msgstr "MATERYALLER"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "ITEMS OVERDUE"
 msgstr "GECİKMİŞ MATERYALLER"
@@ -25799,7 +25823,7 @@ msgstr "Materyal tag'leri şu anda kaydedilemiyor"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:651
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:653
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:57
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:929
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:716
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:734
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:590
@@ -25946,7 +25970,7 @@ msgstr "Beklenen materyaller"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:129
@@ -27357,7 +27381,7 @@ msgstr "Koha &rsaquo; Kullanıcı Silinemiyor"
 #. %2$s:  ELSE 
 #. %3$s:  title |html 
 #. %4$s:  FOREACH subtitl IN subtitle 
-#. %5$s:  subtitl.subfield 
+#. %5$s:  subtitl.subfield | html 
 #. %6$s:  END 
 #. %7$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:21
@@ -27371,7 +27395,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  title 
+#. %3$s:  title | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:2
 #, c-format
@@ -27383,7 +27407,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  bibliotitle 
+#. %3$s:  bibliotitle | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:3
 #, c-format
@@ -27396,7 +27420,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  bibliotitle 
+#. %3$s:  bibliotitle | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:2
 #, c-format
@@ -27444,9 +27468,9 @@ msgstr "Koha &rsaquo; Katalog &rsaquo; %s için Ödünç Alma Geçmişi"
 msgid "Koha &rsaquo; Catalog &rsaquo; Details for %s %s %s%s"
 msgstr "Koha &rsaquo; Katalog &rsaquo; %s %s %s%s için materyal ayrıntıları"
 
-#. %1$s:  title 
+#. %1$s:  title | html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield 
+#. %3$s:  subtitl.subfield | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:2
 #, c-format
@@ -27475,7 +27499,7 @@ msgstr "Koha &rsaquo; Kataloglama &rsaquo;"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:4
@@ -29081,7 +29105,7 @@ msgid "Labeled MARC"
 msgstr "Etiketli MARC"
 
 #. %1$s:  biblionumber 
-#. %2$s:  bibliotitle 
+#. %2$s:  bibliotitle | html 
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:58
 #, c-format
 msgid "Labeled MARC biblio : %s ( %s )"
@@ -29944,7 +29968,7 @@ msgstr "Yerel ayarlar:"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:282
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:80
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:130
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:934
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:61
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:84
@@ -30111,7 +30135,7 @@ msgstr "Kayıp durumu:"
 msgid "Lost status: "
 msgstr "Kayıp durumu: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:777
 #, c-format
 msgid "Lost: "
 msgstr "Kayıp: "
@@ -30446,7 +30470,7 @@ msgstr ""
 msgid "Make budget active: "
 msgstr "Bütçeyi etkinleştir: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:816
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:147
 #, c-format
 msgid "Make payment"
@@ -31177,7 +31201,7 @@ msgstr "Mesaj gönderildi"
 msgid "Message subject:"
 msgstr "Mesaj konusu:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:858
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:862
 #, c-format
 msgid "Messages:"
 msgstr "Mesajlar:"
@@ -33658,7 +33682,7 @@ msgstr "Notlar/Yorumlar"
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:96
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:225
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:342
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:850
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:854
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:46
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:397
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:698
@@ -34215,7 +34239,7 @@ msgstr ""
 msgid "OS version ('uname -a'): "
 msgstr "OS versiyonu ('uname -a'): "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "OVER THE LIMIT"
@@ -34364,7 +34388,7 @@ msgstr "Başlıkta "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:686
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:690
 #, c-format
 msgid "On-site checkout"
 msgstr "Yerinde ödünç alma"
@@ -34374,7 +34398,7 @@ msgstr "Yerinde ödünç alma"
 msgid "On-site checkouts"
 msgstr "Yerinde ödünç alımlar"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:681
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:685
 #, c-format
 msgid "On-site checkouts only. Automatic due date: "
 msgstr "Yalnızca yerinde ödünç alımlar. Otomatik iade tarihi:"
@@ -34471,7 +34495,7 @@ msgstr "Sadece materyal "
 msgid "Only items currently available"
 msgstr "Sadece şu anda kullanılabilir materyaller"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:730
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:734
 #, c-format
 msgid "Only on-site checkouts are allowed"
 msgstr "Yalnızca yerinde ödünç alımlara izin veriliyor"
@@ -34912,7 +34936,7 @@ msgstr "Ödenmemiş"
 #. %1$s:  IF ( chargesamount ) 
 #. %2$s:  chargesamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Outstanding fees &amp; charges%s of %s%s"
 msgstr "Ödenmemiş cezalar &amp; ücretlendirmeler %s -nin %s%s"
@@ -34962,7 +34986,7 @@ msgstr "Gecikmişler"
 msgid "Overdues with fines"
 msgstr "Cezaya kalan gecikmiş materyaller"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "Overdues:"
 msgstr "Gecikmişler:"
@@ -34990,7 +35014,7 @@ msgstr "Kısıtlamayı geçersiz kıl ve süresini uzat"
 msgid "Override renewal limit:"
 msgstr "Uzatma limitini geçersiz kıl:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:797
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:801
 #, c-format
 msgid "Override restriction temporarily"
 msgstr "Kısıtlamayı geçici olarak devre dışı bırak"
@@ -35192,7 +35216,7 @@ msgid "Patent document"
 msgstr "Patent dokümanı"
 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:62
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:937
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:941
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:83
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:145
@@ -35323,8 +35347,8 @@ msgstr "Kullanıcı para cezaları limitin üzerinde: %s"
 msgid "Patron flags:"
 msgstr "Kullanıcı işaretleri:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Patron has "
 msgstr "Kullanıcıda "
@@ -35360,7 +35384,7 @@ msgstr ""
 #. %1$s:  IF ( creditsamount ) 
 #. %2$s:  creditsamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:822
 #, c-format
 msgid "Patron has a credit%s of %s%s "
 msgstr "Kullanıcının %s %s%s kredisi mevcuttur "
@@ -35407,7 +35431,7 @@ msgstr ""
 msgid "Patron has nothing checked out."
 msgstr "Kullanıcı hiçbir şey ödünç almamıştır."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:996
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1000
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:533
 #, c-format
 msgid "Patron has nothing on hold."
@@ -35428,7 +35452,7 @@ msgid "Patron has outstanding fines: %s"
 msgstr "Kullanıcının ödenmemiş para cezası var: %s"
 
 #. %1$s:  IF CAN_user_borrowers && ( !Koha.Preference('IndependentBranchesPatronModifications') || borrower.branch == branch ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:745
 #, c-format
 msgid "Patron has pending modifications. %s "
 msgstr "Kullanıcının beklemekte olan değişiklikleri var. %s"
@@ -35616,13 +35640,13 @@ msgstr "Kullanıcının hesabı %s tarihine kadar yenilenmiştir"
 #. %2$s:  userdebarreddate | $KohaDates 
 #. %3$s:  END 
 #. %4$s:  IF ( debarredcomment ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:782
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:180
 #, c-format
 msgid "Patron's account is restricted %s until %s %s %s with the explanation: "
 msgstr "Kullanıcının hesabı kısıtlı %s tarihine kadar %s %s %s açıklaması ile:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #, c-format
 msgid "Patron's address in doubt"
 msgstr "Kullanıcının adresinde belirsizlik var"
@@ -35663,7 +35687,7 @@ msgstr "Kullanıcının kartının kaybolduğu bildirilmiştir."
 #. %1$s:  IF ( expiry ) 
 #. %2$s:  expiry | $KohaDates 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:762
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:766
 #, c-format
 msgid "Patron's card has expired. %sPatron's card expired on %s%s "
 msgstr ""
@@ -35686,7 +35710,7 @@ msgid "Patron's card is expired."
 msgstr "Kullanıcı kartının süresi dolmuş."
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:490
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:777
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "Patron's card is lost"
@@ -35698,7 +35722,7 @@ msgid "Patron's card is lost."
 msgstr "Kullanıcı kartı kaybolmuş."
 
 #. %1$s:  expiry | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
 #, c-format
 msgid "Patron's card will expire soon. Patron's card expires on %s "
 msgstr ""
@@ -35867,7 +35891,7 @@ msgstr "Pawel Skuza (1.2 için Lehçe)"
 msgid "Pay"
 msgstr "Öde"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:813
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:817
 #, c-format
 msgid "Pay all fines"
 msgstr "Tüm cezaları öde"
@@ -35961,7 +35985,7 @@ msgstr "Bekliyor"
 msgid "Pending discharge requests"
 msgstr "Beklemekte olan ilişik kesme istekleri"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:745
 #, c-format
 msgid "Pending modifications:"
 msgstr "Beklemekte olan değişiklikler:"
@@ -36199,7 +36223,7 @@ msgstr "Fiziksel Ayrıntılar:"
 msgid "Pick"
 msgstr "Seç"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:961
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:495
 #, c-format
 msgid "Pickup at"
@@ -37206,7 +37230,7 @@ msgstr "Önceki oturumlar"
 
 #: intranet-tmpl/prog/en/columns.def:73
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:25
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:936
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:940
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:108
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:466
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:45
@@ -37341,7 +37365,7 @@ msgid "Print label"
 msgstr "Etiket yazdır"
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:55
-#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:306
+#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:314
 #, c-format
 msgid "Print list"
 msgstr "Liste yazdır"
@@ -37459,7 +37483,7 @@ msgstr "Yazıcı: "
 msgid "Printers"
 msgstr "Yazıcılar"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:959
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:963
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:574
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:668
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:497
@@ -38365,7 +38389,7 @@ msgstr "İlişkili bilgiler"
 msgid "Relationship: "
 msgstr "İlişki: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:904
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:908
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:436
 #, c-format
 msgid "Relatives' checkouts"
@@ -38406,7 +38430,7 @@ msgstr "Kalan sistem parametreleri izinleri"
 msgid "Remember for next check in:"
 msgstr "Bir sonraki iade işlemi için hatırla:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:666
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:670
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:694
 #, c-format
 msgid "Remember for session:"
@@ -38571,8 +38595,8 @@ msgstr "Kaldırılsın mı?"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:146
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:148
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:130
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:23
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:140
 #, c-format
@@ -39172,7 +39196,7 @@ msgstr "Kısıtlı"
 msgid "Restricted [until] flag"
 msgstr "Kısıtlı [until] flag"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:782
 #, c-format
 msgid "Restricted:"
 msgstr "Kısıtlı:"
@@ -39247,7 +39271,7 @@ msgid "Results per page :"
 msgstr "Her sayfada gösterilen sonuç sayısı :"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:990
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:994
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:528
 msgid "Resume all suspended holds"
 msgstr "Tüm askıya alınan ayırmaları devam ettir"
@@ -41340,7 +41364,7 @@ msgstr "Tüm fonları sıfırlayın"
 msgid "Set back to"
 msgstr "Ayarına dön"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:756
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
 #, c-format
 msgid "Set due date to expiry:"
 msgstr "Üyelik tarihinin bitişini belirle:"
@@ -42114,7 +42138,7 @@ msgstr "Özelleştirilmiş"
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:980
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:984
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:518
 #, c-format
 msgid "Specify date on which to resume %s: "
@@ -42122,7 +42146,7 @@ msgstr "Devam edeceğiniz tarihi belirleyin %s: "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:660
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:664
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:692
 #, c-format
 msgid "Specify due date %s: "
@@ -43402,7 +43426,7 @@ msgid "Surveys"
 msgstr "Anketler"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:975
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:979
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:513
 msgid "Suspend all holds"
 msgstr "Tüm ayırmaları beklet"
@@ -43427,6 +43451,12 @@ msgstr "Gelişmiş düzenleyiciye geç"
 #, c-format
 msgid "Switch to basic editor"
 msgstr "Temel düzenleyiciye geç"
+
+#: intranet-tmpl/prog/en/modules/about.tt:208
+#: intranet-tmpl/prog/en/modules/about.tt:222
+#, fuzzy, c-format
+msgid "Switching to dom indexing"
+msgstr "Gelişmiş düzenleyiciye geç"
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:189
 #, c-format
@@ -44043,8 +44073,7 @@ msgstr ""
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
 "now deprecated and will be removed in future releases. Please use DOM "
-"instead by setting &lt;zebra_auth_index_mode&gt; to 'dom' (full reindex "
-"required). "
+"instead. To switch follow this page of wiki: "
 msgstr ""
 ". GRS-1 desteği artık önerilmiyor ve gelecek sürümlerde kaldırılacaktır. "
 "Lütfen bunun yerine &lt;zebra_auth_index_mode&gt; to ayarlayarak DOM kullanın"
@@ -44073,8 +44102,7 @@ msgstr ""
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
 "now deprecated and will be removed in future releases. Please use DOM "
-"instead by setting &lt;zebra_bib_index_mode&gt; to 'dom' (full reindex "
-"required). "
+"instead. To switch follow this page of wiki: "
 msgstr ""
 ". GRS-1 desteği artık önerilmiyor ve gelecek sürümlerde kaldırılacaktır. "
 "Lütfen bunun yerine &lt;zebra_bib_index_mode&gt; to ayarlayarak DOM kullanın"
@@ -45360,7 +45388,7 @@ msgstr ""
 "Kütüphanenin dolaşım politikasına göre bu kullanıcı bu materyali ödünç "
 "alamaz."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1001
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1005
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:172
 #, c-format
@@ -45734,8 +45762,8 @@ msgstr "TinyMCE WYSIWYG editor v3.5.8"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:212
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:40
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:954
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:958
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:714
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:732
@@ -47836,7 +47864,7 @@ msgstr ""
 msgid "View all libraries"
 msgstr "Tüm Kütüphaneleri gör"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:743
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:747
 #, c-format
 msgid "View all pending patron modifications"
 msgstr "Beklemekte olan tüm kullanıcı değişikliklerini gör"
@@ -47899,7 +47927,7 @@ msgstr "Bekleyen çevrim dışı dolaşım işlemlerini görün"
 msgid "View record"
 msgstr "Kaydı Gör"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:798
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:194
 #, c-format
 msgid "View restrictions"
@@ -48946,7 +48974,7 @@ msgid ""
 "using Koha"
 msgstr "MARC yapılandırmanızda %s hata var. Kohayı kullanmadan önce düzeltiniz"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1019
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1023
 #, c-format
 msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
@@ -49049,7 +49077,7 @@ msgstr ""
 "UseQueryParser ayarlanmış ancak başlatılmasında bir sorun meydana geldi. %s "
 "The 'queryparser_config' girişi yapılandırma dosyanızda eksik."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:756
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
 #, c-format
 msgid ""
 "You have the ReturnBeforeExpiry system preference enabled this means if the "
@@ -49680,12 +49708,12 @@ msgstr ""
 
 #. %1$s:  IF (warnIsRootUser) 
 #: intranet-tmpl/prog/en/modules/about.tt:105
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "[%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
-"warnPrefAnonymousPatron || warnNoActiveCurrency || QueryParserError || "
-"warnIsRootUser || xml_config_warnings.size || "
-"AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
+"warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
+"warnNoActiveCurrency || QueryParserError || warnIsRootUser || "
+"xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError %%] %s "
 msgstr ""
 "[%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
@@ -49763,10 +49791,10 @@ msgstr ""
 msgid "[Clear all]"
 msgstr "[Tümünü Temizle]"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:868
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:871
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:877
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:879
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:872
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:881
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:883
 #, c-format
 msgid "[Delete]"
 msgstr "[Sil]"
@@ -50098,7 +50126,7 @@ msgstr "MARC alt alanına eşlenecek, "
 msgid "be mapped to the same tag,"
 msgstr "aynı alan koduna eşleştirilir,"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "because fine balance is "
@@ -50114,7 +50142,7 @@ msgstr "beep.ogg"
 msgid "begins with "
 msgstr "bununla başlar"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "below"
 msgstr "aşağıda"
@@ -50158,7 +50186,7 @@ msgstr "vasıtasıyla "
 msgid "by %s"
 msgstr "%s yazar"
 
-#. %1$s:  XISBN.author 
+#. %1$s:  XISBN.author | html 
 #. %2$s:  XISBN.copyrightdate 
 #. %3$s:  IF ( XISBN.publishercode ) 
 #. %4$s:  XISBN.publishercode 
@@ -51407,9 +51435,9 @@ msgstr "opening.ogg"
 msgid "or"
 msgstr "veya"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:816
 #, c-format
 msgid "or "
 msgstr "veya "
@@ -51981,7 +52009,7 @@ msgstr "değilse"
 msgid "unrecognized command"
 msgstr "tanınmayan komut"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:978
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:982
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:516
 #, c-format
 msgid "until"

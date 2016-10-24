@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0\n"
-"POT-Creation-Date: 2016-09-17 19:51-0300\n"
+"POT-Creation-Date: 2016-10-20 15:24-0300\n"
 "PO-Revision-Date: 2015-09-26 15:02-0300\n"
 "Last-Translator: Mahdi Ebrahimi <ebrahimi_info@yahoo.com>\n"
 "Language-Team: Pendar <ebrahimi_info@yahoo.com>\n"
@@ -803,7 +803,7 @@ msgstr ""
 #. %2$s:  prediction.publicationdate | $KohaDates 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:72
+#: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:80
 #, fuzzy, c-format
 msgid "%s %s %s unknown %s "
 msgstr "%s %s %s | %s "
@@ -1474,7 +1474,7 @@ msgstr ""
 #. %4$s:  IF waiting_expires_on 
 #. %5$s:  waiting_expires_on | $KohaDates 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:838
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:842
 #, fuzzy, c-format
 msgid "%s %s Waiting at %s %s until %s %s "
 msgstr "%s %s شهور %s حتى %s %s "
@@ -1553,7 +1553,7 @@ msgstr "%s %sلـِ %s%s"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:120
@@ -2064,13 +2064,27 @@ msgstr "%s %sعذراً ، أنت لا تمتلك التصريح لإضافة م
 #. %10$s:  ELSIF ( matches = serial.serialseq.match('(.*)Winter(.*)') ) 
 #. %11$s:  matches.0 
 #. %12$s:  matches.1 
-#. %13$s:  ELSE 
-#. %14$s:  serial.serialseq 
-#. %15$s:  END 
+#. %13$s:  ELSIF ( matches = prediction.number.match('(.*)Spr(.*)') ) 
+#. %14$s:  matches.0 
+#. %15$s:  matches.1 
+#. %16$s:  ELSIF ( matches = prediction.number.match('(.*)Sum(.*)') ) 
+#. %17$s:  matches.0 
+#. %18$s:  matches.1 
+#. %19$s:  ELSIF ( matches = prediction.number.match('(.*)Fal(.*)') ) 
+#. %20$s:  matches.0 
+#. %21$s:  matches.1 
+#. %22$s:  ELSIF ( matches = prediction.number.match('(.*)Win(.*)') ) 
+#. %23$s:  matches.0 
+#. %24$s:  matches.1 
+#. %25$s:  ELSE 
+#. %26$s:  serial.serialseq 
+#. %27$s:  END 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:271
 #: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:59
 #, fuzzy, c-format
-msgid "%s %sSpring%s %s %sSummer%s %s %sFall%s %s %sWinter%s %s %s %s "
+msgid ""
+"%s %sSpring%s %s %sSummer%s %s %sFall%s %s %sWinter%s %s %sSpr%s %s %sSum%s "
+"%s %sFal%s %s %sWin%s %s %s %s "
 msgstr "%s %s %s %s %s %s%s %s %s%s %s "
 
 #. %1$s:  IF ( use_heading_flags_p ) 
@@ -2328,7 +2342,7 @@ msgstr "(%s) %s (%s أيام) "
 #. %1$s:  issue.item.biblioitemnumber.biblionumber.title 
 #. %2$s:  issue.item.barcode 
 #. %3$s:  issue.date_due | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:706
 #, fuzzy, c-format
 msgid "%s (%s). Due on %s"
 msgstr "%s (%s)%s"
@@ -2690,7 +2704,7 @@ msgstr "%s تم إستعارتة لـ %s %s "
 
 #. For the first occurrence,
 #. %1$s:  issuecount 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:897
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:901
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:434
 #, c-format
 msgid "%s Checkout(s)"
@@ -2976,7 +2990,7 @@ msgstr "&rsaquo; %sأموال لـِ '%s'%s%s "
 
 #. For the first occurrence,
 #. %1$s:  holds_count 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:909
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:913
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:441
 #, c-format
 msgid "%s Hold(s)"
@@ -3519,7 +3533,7 @@ msgstr "%s وجِدَ أن الحجز لـِ %s ("
 #. %4$s:  d.comment 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:54
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:785
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:789
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:975
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:186
 #, c-format
@@ -3528,7 +3542,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  debarments.size 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:914
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:918
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:446
 #, fuzzy, c-format
 msgid "%s Restrictions"
@@ -3963,7 +3977,8 @@ msgstr "%s الرمز البريدى: "
 #, c-format
 msgid ""
 "%s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
-"warnPrefAnonymousPatron || warnNoActiveCurrency || QueryParserError || "
+"warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
+"warnNoActiveCurrency || QueryParserError || "
 "AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError%%] "
 msgstr ""
@@ -5670,7 +5685,7 @@ msgstr ""
 #. %22$s:  END 
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:284
+#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:292
 #: intranet-tmpl/prog/en/modules/serials/serial-issues-full.tt:70
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:888
 #, fuzzy, c-format
@@ -8225,7 +8240,7 @@ msgstr "(%s) لـ"
 #. %6$s:  w.item.itemcallnumber 
 #. %7$s:  END 
 #. %8$s:  w.reservedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:835
 #, fuzzy, c-format
 msgid "(%s), %s by %s %s %s [%s] %s Hold placed on %s. "
 msgstr "(%s), %sبواسطة %s%s تم حجزها %s. %s "
@@ -8867,7 +8882,7 @@ msgid "-- please choose --"
 msgstr "-- من فضلك اختر --"
 
 #. %1$s:  IF ( charges_is_blocker ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid ". %s Checkouts are "
 msgstr ". %s الإعارات إلى "
@@ -8908,7 +8923,7 @@ msgstr "من فضلك أدخل اسم المستخدم وكلمة المرور �
 msgid ". Please retain this item and check it in to process the hold. "
 msgstr ".الرجاء الابقاء على هذه المادة وإعادتها لمعالجة الحجز."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid ". See highlighted items "
 msgstr ". أنظر إلى المواد المميزة "
@@ -8952,12 +8967,12 @@ msgstr "...و:"
 msgid "...to "
 msgstr "...إلى"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:899
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:903
 #, c-format
 msgid "0 Checkouts"
 msgstr "0 الإعارات "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:911
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:915
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:443
 #, c-format
 msgid "0 Holds"
@@ -9987,6 +10002,11 @@ msgstr "المستلمون"
 msgid "Add record matching rule"
 msgstr "أضف تسجيلة تتوافق مع القاعدة"
 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:438
+#, fuzzy, c-format
+msgid "Add record using fast cataloging"
+msgstr "(الفهرسة السريعة)"
+
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:48
 #, fuzzy, c-format
 msgid "Add reserves"
@@ -10276,7 +10296,7 @@ msgstr "خطّ عنوان  2"
 msgid "Address line 3: "
 msgstr "خطّ عنوان 3"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:95
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:102
 #, c-format
@@ -11810,7 +11830,7 @@ msgstr "اربط مادة"
 msgid "Attach this basket to a new basket group with the same name"
 msgstr "نعلق هذه السلة لفريق سلة جديد يحمل نفس الاسم"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:735
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:739
 #, fuzzy, c-format
 msgid "Attention:"
 msgstr "الإجراء:"
@@ -12202,7 +12222,7 @@ msgstr "الملئ التلقائي للصف"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:159
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:653
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:657
 #, fuzzy, c-format
 msgid "Automatic renewal"
 msgstr "إجمالي المستويات الثانوية"
@@ -12272,7 +12292,7 @@ msgstr "متوسط وقت الإعارة"
 msgid "BIBTEX"
 msgstr "متن کتابشناسی"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "BLOCKED"
@@ -12330,7 +12350,7 @@ msgstr "العودة الى التسجيلة الببليوجرافية"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:62
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:76
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:61
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:956
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:960
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:715
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:733
@@ -12401,7 +12421,7 @@ msgstr "قائمة الباركود (واحد باركود في كل سطر):"
 msgid "Barcode not found"
 msgstr "لم يتم إيجاد الباركود"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1015
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1019
 #, fuzzy, c-format
 msgid "Barcode submitted"
 msgstr "الباركود %s"
@@ -13571,7 +13591,7 @@ msgid "Call Number (0-9 to A-Z)"
 msgstr "رقم الطلب (0-9 to A-Z)"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:937
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:719
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:737
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:463
@@ -13596,7 +13616,7 @@ msgstr "شماره بازیابی"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:45
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:77
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:58
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:955
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:959
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:158
@@ -13968,7 +13988,7 @@ msgid "Cancel hold and return to : [% reserveloo.branchname %]"
 msgstr "إلغاء الحجز والعودة ل : [% reserveloo.branchname %]"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:966
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:970
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:504
 msgid "Cancel marked holds"
 msgstr "إلغاء الحجوزات المحددة"
@@ -14097,7 +14117,7 @@ msgid "Cannot check out"
 msgstr "الإعارة غير مكنة"
 
 #. %1$s:  IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:727
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:731
 #, fuzzy, c-format
 msgid "Cannot check out! %s "
 msgstr "الإعارة غير مكنة"
@@ -14712,7 +14732,7 @@ msgstr "ترميز الأحرف:"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:314
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:934
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:938
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:720
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:738
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:464
@@ -14831,7 +14851,7 @@ msgstr "رجاءاً راجع سجل الأخطاء لمزيد من التفاص
 #: intranet-tmpl/prog/en/includes/patron-search.inc:138
 #: intranet-tmpl/prog/en/includes/checkin-search.inc:15
 #: intranet-tmpl/prog/en/includes/patrons-admin-search.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:643
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:647
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:605
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:96
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:21
@@ -15006,7 +15026,7 @@ msgid "Checked out %s times"
 msgstr "تم إعارته %s أوقات"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:936
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:718
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:736
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
@@ -15017,7 +15037,7 @@ msgid "Checked out from"
 msgstr "الإعارة من"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:20
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:717
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:735
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:461
@@ -15031,7 +15051,7 @@ msgstr "الإعارة في"
 msgid "Checked out today"
 msgstr "أعير اليوم"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:706
 #, fuzzy, c-format
 msgid "Checked out: "
 msgstr "أعير"
@@ -15075,7 +15095,7 @@ msgstr "عملية الإعارة ل %s"
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:634
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:724
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:728
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:75
 #, c-format
 msgid "Checking out to %s"
@@ -15755,7 +15775,7 @@ msgstr "دفعة الاستراد قد مسحت #%s"
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:315
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:118
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:672
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:676
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:542
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1053
@@ -17462,7 +17482,7 @@ msgstr "نوع اعتبار:"
 msgid "Credits"
 msgstr "اعتبارات مالی"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:822
 #, c-format
 msgid "Credits:"
 msgstr "اعتبارات:"
@@ -18905,7 +18925,7 @@ msgstr "حذف المجموعة"
 msgid "Delete vendor"
 msgstr "حذف التسجيلة"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:960
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:964
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:671
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:498
 #, c-format
@@ -19714,7 +19734,7 @@ msgstr "بازگشت %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:361
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:927
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:713
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:731
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
@@ -19725,7 +19745,7 @@ msgstr "بازگشت %s"
 msgid "Due date"
 msgstr "تاريخ الإستحقاق"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:926
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr ""
@@ -19984,8 +20004,8 @@ msgstr "ویرایش"
 msgid "Edit "
 msgstr "تعديل"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
 #, c-format
 msgid "Edit Details"
 msgstr "تعديل التفاصيل"
@@ -20590,8 +20610,13 @@ msgstr "إدخال الرقم الببليوجرافي:"
 msgid "Enter cover biblionumber: "
 msgstr "أدخل رقم التسجيلة للغلاف:"
 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:637
+#, fuzzy, c-format
+msgid "Enter item barcode or keyword:"
+msgstr "إدخل باركود المادة:"
+
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:44
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:636
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:639
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:687
 #, c-format
 msgid "Enter item barcode:"
@@ -21068,7 +21093,7 @@ msgid "Experimental features"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:958
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:962
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:676
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:964
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:496
@@ -21098,8 +21123,8 @@ msgid "Expiration date: %s"
 msgstr "تاريخ الإنتهاء"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:83
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:762
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:766
 #, c-format
 msgid "Expiration:"
 msgstr "إنتهاء: "
@@ -21457,7 +21482,6 @@ msgid "Famfamfam iconset"
 msgstr " مجموعة ايقونات Famfamfam "
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:41
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:438
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:30
 #, c-format
 msgid "Fast cataloging"
@@ -21511,7 +21535,7 @@ msgstr "رسم الاستلام"
 msgid "Feedback:"
 msgstr "التغذية الراجعة:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Fees &amp; Charges:"
 msgstr "رسوم &amp; مصاريف:"
@@ -21856,7 +21880,7 @@ msgstr "مرشحات"
 msgid "Filters :"
 msgstr "مرشحات:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1001
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1005
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:172
 #, fuzzy, c-format
@@ -21864,7 +21888,7 @@ msgid "Find another patron?"
 msgstr "أضف حقل آخر"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:939
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:61
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:465
 #, c-format
@@ -23202,7 +23226,7 @@ msgstr "تاريخ حجز"
 msgid "Hold at"
 msgstr "حجز في"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:953
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:491
 #, c-format
 msgid "Hold date"
@@ -23376,7 +23400,7 @@ msgstr "الحجوزات المسموحة (عدد)"
 msgid "Holds awaiting pickup"
 msgstr "حجز ينتظر الالتقاط"
 
-#. %1$s:  show_date 
+#. %1$s:  show_date | $KohaDates 
 #. %2$s:  IF ( all_branches_link ) 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:40
 #, c-format
@@ -23417,7 +23441,7 @@ msgstr "حجوزات للسحب"
 msgid "Holds to pull%s placed between %s and %s%s"
 msgstr "حجوزات للسحب%s وضع بين %s و %s%s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:827
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
 #, c-format
 msgid "Holds waiting:"
 msgstr "حجوزات في الانتظار:"
@@ -24128,7 +24152,7 @@ msgstr "المادة"
 msgid "ITEMS"
 msgstr "المواد"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "ITEMS OVERDUE"
 msgstr "مواد متأخرة"
@@ -25562,7 +25586,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:651
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:653
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:57
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:929
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:716
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:734
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:590
@@ -25708,7 +25732,7 @@ msgstr "مواد متوقعة"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:129
@@ -27099,7 +27123,7 @@ msgstr "كوها &rsaquo; لا يمكن حذف المستفيد"
 #. %2$s:  ELSE 
 #. %3$s:  title |html 
 #. %4$s:  FOREACH subtitl IN subtitle 
-#. %5$s:  subtitl.subfield 
+#. %5$s:  subtitl.subfield | html 
 #. %6$s:  END 
 #. %7$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:21
@@ -27113,7 +27137,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  title 
+#. %3$s:  title | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:2
 #, c-format
@@ -27125,7 +27149,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  bibliotitle 
+#. %3$s:  bibliotitle | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:3
 #, c-format
@@ -27138,7 +27162,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  bibliotitle 
+#. %3$s:  bibliotitle | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:2
 #, c-format
@@ -27185,9 +27209,9 @@ msgstr "كوها &rsaquo; الفهرس &rsaquo; تاريخ إعاراة ل %s"
 msgid "Koha &rsaquo; Catalog &rsaquo; Details for %s %s %s%s"
 msgstr "كوها &rsaquo; الفهرس &rsaquo; التفاصيل لـِ %s %s %s%s"
 
-#. %1$s:  title 
+#. %1$s:  title | html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield 
+#. %3$s:  subtitl.subfield | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:2
 #, c-format
@@ -27217,7 +27241,7 @@ msgstr "كوها &rsaquo; الفهرسة &rsaquo; إستيراد مارك"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:4
@@ -28772,7 +28796,7 @@ msgid "Labeled MARC"
 msgstr "مارك بالملصق"
 
 #. %1$s:  biblionumber 
-#. %2$s:  bibliotitle 
+#. %2$s:  bibliotitle | html 
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:58
 #, c-format
 msgid "Labeled MARC biblio : %s ( %s )"
@@ -29628,7 +29652,7 @@ msgstr "l- محلى"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:282
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:80
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:130
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:934
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:61
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:84
@@ -29795,7 +29819,7 @@ msgstr "حالات مفقودة:"
 msgid "Lost status: "
 msgstr "حالات مفقودة:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:777
 #, c-format
 msgid "Lost: "
 msgstr "مفقود:"
@@ -30128,7 +30152,7 @@ msgstr ""
 msgid "Make budget active: "
 msgstr "جعل الميزانية نشطة"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:816
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:147
 #, c-format
 msgid "Make payment"
@@ -30858,7 +30882,7 @@ msgstr "پیام ارسال شد"
 msgid "Message subject:"
 msgstr "موضوع الرسالة:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:858
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:862
 #, c-format
 msgid "Messages:"
 msgstr "رسائل :"
@@ -33361,7 +33385,7 @@ msgstr "یادداشتها/نظرات"
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:96
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:225
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:342
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:850
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:854
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:46
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:397
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:698
@@ -33916,7 +33940,7 @@ msgstr ""
 msgid "OS version ('uname -a'): "
 msgstr "إصدار نظام التشغيل ('إسم المستخدم -a'):"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "OVER THE LIMIT"
@@ -34062,7 +34086,7 @@ msgstr "في العنوان "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:686
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:690
 #, fuzzy, c-format
 msgid "On-site checkout"
 msgstr "خود بازگشت"
@@ -34072,7 +34096,7 @@ msgstr "خود بازگشت"
 msgid "On-site checkouts"
 msgstr "اجمالي الإعارات"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:681
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:685
 #, c-format
 msgid "On-site checkouts only. Automatic due date: "
 msgstr ""
@@ -34167,7 +34191,7 @@ msgstr "فقط المادة "
 msgid "Only items currently available"
 msgstr "فقط المواد المتوفرة حالياً"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:730
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:734
 #, fuzzy, c-format
 msgid "Only on-site checkouts are allowed"
 msgstr "الإعارات الحالية المسموحة"
@@ -34613,7 +34637,7 @@ msgstr "الغير مسدد"
 #. %1$s:  IF ( chargesamount ) 
 #. %2$s:  chargesamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Outstanding fees &amp; charges%s of %s%s"
 msgstr "الرسوم الغير مسددة &amp; التغييرات%s من %s%s"
@@ -34663,7 +34687,7 @@ msgstr "متأخرات"
 msgid "Overdues with fines"
 msgstr "التأخيرات مع غرامات"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "Overdues:"
 msgstr "متأخرات:"
@@ -34693,7 +34717,7 @@ msgstr "تجاوز التجديدات المحظورة"
 msgid "Override renewal limit:"
 msgstr "تجاوز حد التجديد:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:797
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:801
 #, c-format
 msgid "Override restriction temporarily"
 msgstr ""
@@ -34895,7 +34919,7 @@ msgid "Patent document"
 msgstr "سند پروانه ثبت اختراع"
 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:62
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:937
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:941
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:83
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:145
@@ -35027,8 +35051,8 @@ msgstr "مستخدم مقّيد"
 msgid "Patron flags:"
 msgstr "إشارات المستفيد:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Patron has "
 msgstr "المستفيد لديه "
@@ -35062,7 +35086,7 @@ msgstr "المستفيد لديه %s مادة(مواد) متأخرة. هل تو�
 #. %1$s:  IF ( creditsamount ) 
 #. %2$s:  creditsamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:822
 #, c-format
 msgid "Patron has a credit%s of %s%s "
 msgstr "المستفيد المالي لديه اعتماد مالي %s من %s%s "
@@ -35105,7 +35129,7 @@ msgstr "المستفيدون عليهم مواد متأخرة ومحظورون �
 msgid "Patron has nothing checked out."
 msgstr "المستفيد ليس لديه شيء مُعار."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:996
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1000
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:533
 #, c-format
 msgid "Patron has nothing on hold."
@@ -35126,7 +35150,7 @@ msgid "Patron has outstanding fines: %s"
 msgstr "المستفيد لديه غرامات غير مسددة"
 
 #. %1$s:  IF CAN_user_borrowers && ( !Koha.Preference('IndependentBranchesPatronModifications') || borrower.branch == branch ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:745
 #, fuzzy, c-format
 msgid "Patron has pending modifications. %s "
 msgstr "إعلام المستفيد"
@@ -35315,13 +35339,13 @@ msgstr "حساب مستخدم تم تجديدة حتى %s"
 #. %2$s:  userdebarreddate | $KohaDates 
 #. %3$s:  END 
 #. %4$s:  IF ( debarredcomment ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:782
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:180
 #, fuzzy, c-format
 msgid "Patron's account is restricted %s until %s %s %s with the explanation: "
 msgstr "حساب المستفيد موقوف %s حتى %s %s %s مع التعليق \"%s\"%s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #, c-format
 msgid "Patron's address in doubt"
 msgstr "عنوان المستخدم مشكوك فيه"
@@ -35361,7 +35385,7 @@ msgstr "بطاقة المستخدم تم الابلاغ انها مفقودة."
 #. %1$s:  IF ( expiry ) 
 #. %2$s:  expiry | $KohaDates 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:762
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:766
 #, c-format
 msgid "Patron's card has expired. %sPatron's card expired on %s%s "
 msgstr "بطاقة المستفيد منتهية صلاحيتها %sبطاقة المستفيد تنتهي صلاحيتها في %s%s"
@@ -35383,7 +35407,7 @@ msgid "Patron's card is expired."
 msgstr "بطاقة المستخدم تم إنتهائها"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:490
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:777
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "Patron's card is lost"
@@ -35395,7 +35419,7 @@ msgid "Patron's card is lost."
 msgstr "بطاقة المستخدم مفقودة"
 
 #. %1$s:  expiry | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
 #, c-format
 msgid "Patron's card will expire soon. Patron's card expires on %s "
 msgstr "بطاقة المستفيد ستنتهي صلاحيتها قريباً. بطاقة المستفيد تنتهي في %s"
@@ -35562,7 +35586,7 @@ msgstr "Pawel Skuza (Polish for 1.2)"
 msgid "Pay"
 msgstr "دفع"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:813
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:817
 #, fuzzy, c-format
 msgid "Pay all fines"
 msgstr "دفع الغرامات"
@@ -35656,7 +35680,7 @@ msgstr "في الانتظار"
 msgid "Pending discharge requests"
 msgstr "إقتراحات في الانتظار"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:745
 #, fuzzy, c-format
 msgid "Pending modifications:"
 msgstr "إرسال الإشعار"
@@ -35890,7 +35914,7 @@ msgstr "جزئیات فیزیکی:"
 msgid "Pick"
 msgstr "السحب"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:961
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:495
 #, fuzzy, c-format
 msgid "Pickup at"
@@ -36925,7 +36949,7 @@ msgstr "نشست های پیشین"
 
 #: intranet-tmpl/prog/en/columns.def:73
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:25
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:936
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:940
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:108
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:466
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:45
@@ -37060,7 +37084,7 @@ msgid "Print label"
 msgstr "اطبع اللصاقة"
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:55
-#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:306
+#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:314
 #, c-format
 msgid "Print list"
 msgstr "فهرست چاپ"
@@ -37178,7 +37202,7 @@ msgstr "طابعة:"
 msgid "Printers"
 msgstr "طابعات"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:959
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:963
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:574
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:668
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:497
@@ -38085,7 +38109,7 @@ msgstr "معلومات العلاقة"
 msgid "Relationship: "
 msgstr "علاقة: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:904
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:908
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:436
 #, c-format
 msgid "Relatives' checkouts"
@@ -38126,7 +38150,7 @@ msgstr ""
 msgid "Remember for next check in:"
 msgstr "تذكير بالجلسة التدريبية:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:666
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:670
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:694
 #, c-format
 msgid "Remember for session:"
@@ -38290,8 +38314,8 @@ msgstr "حذف کردن"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:146
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:148
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:130
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:23
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:140
 #, c-format
@@ -38891,7 +38915,7 @@ msgstr "محدود"
 msgid "Restricted [until] flag"
 msgstr "محدود:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:782
 #, c-format
 msgid "Restricted:"
 msgstr "محدودة:"
@@ -38966,7 +38990,7 @@ msgid "Results per page :"
 msgstr "نتائج لكلّ صفحة: "
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:990
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:994
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:528
 msgid "Resume all suspended holds"
 msgstr "باز گرداندن همه منابع رزرو شده از حالت تعلیق"
@@ -41077,7 +41101,7 @@ msgstr ""
 msgid "Set back to"
 msgstr "أعد الضبط"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:756
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
 #, c-format
 msgid "Set due date to expiry:"
 msgstr "اضبط تاريخ الاستحقاق لانتهاء الصلاحية:"
@@ -41847,7 +41871,7 @@ msgstr "تخصصی"
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:980
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:984
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:518
 #, c-format
 msgid "Specify date on which to resume %s: "
@@ -41855,7 +41879,7 @@ msgstr "حدد التاريخ الذي سيتم به الإستئناف %s:  "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:660
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:664
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:692
 #, c-format
 msgid "Specify due date %s: "
@@ -43136,7 +43160,7 @@ msgid "Surveys"
 msgstr "نظرسنجی ها"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:975
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:979
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:513
 msgid "Suspend all holds"
 msgstr "به تعلیق در آوردن همه منابع رزرو شده"
@@ -43161,6 +43185,12 @@ msgstr "جستجوی پیشرفته"
 #, c-format
 msgid "Switch to basic editor"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:208
+#: intranet-tmpl/prog/en/modules/about.tt:222
+#, fuzzy, c-format
+msgid "Switching to dom indexing"
+msgstr "جستجوی پیشرفته"
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:189
 #, c-format
@@ -43770,8 +43800,7 @@ msgstr ""
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
 "now deprecated and will be removed in future releases. Please use DOM "
-"instead by setting &lt;zebra_auth_index_mode&gt; to 'dom' (full reindex "
-"required). "
+"instead. To switch follow this page of wiki: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:169
@@ -43794,8 +43823,7 @@ msgstr ""
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
 "now deprecated and will be removed in future releases. Please use DOM "
-"instead by setting &lt;zebra_bib_index_mode&gt; to 'dom' (full reindex "
-"required). "
+"instead. To switch follow this page of wiki: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:621
@@ -45025,7 +45053,7 @@ msgstr "هذا المستفيد لا يمكنه استعارة هذه الماد
 msgid "This patron can't check out this item per library circulation policy."
 msgstr "هذا المستفيد لا يمكنه استعارة هذه المادة في سياسة إعارة المكتبة"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1001
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1005
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:172
 #, fuzzy, c-format
@@ -45387,8 +45415,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:212
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:40
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:954
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:958
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:714
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:732
@@ -47476,7 +47504,7 @@ msgstr "اعرض عدداً من المواد المحجوزة في مكتبتك
 msgid "View all libraries"
 msgstr "إعرض كل المكتبات"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:743
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:747
 #, fuzzy, c-format
 msgid "View all pending patron modifications"
 msgstr "لا يوجد أي عمليات معلقة حاليا."
@@ -47539,7 +47567,7 @@ msgstr "رفع بيانات الإعارة دون إتصال"
 msgid "View record"
 msgstr "عرض التسجيلة"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:798
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:194
 #, fuzzy, c-format
 msgid "View restrictions"
@@ -48567,7 +48595,7 @@ msgid ""
 "using Koha"
 msgstr "لديك %s خطأ فى تهيئة مارك الخاصة بك. الرجاء إصلاحها قبل استخدام كوها"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1019
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1023
 #, c-format
 msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
@@ -48654,7 +48682,7 @@ msgid ""
 "%s. %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:756
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
 #, c-format
 msgid ""
 "You have the ReturnBeforeExpiry system preference enabled this means if the "
@@ -49280,9 +49308,9 @@ msgstr ""
 #, c-format
 msgid ""
 "[%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
-"warnPrefAnonymousPatron || warnNoActiveCurrency || QueryParserError || "
-"warnIsRootUser || xml_config_warnings.size || "
-"AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
+"warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
+"warnNoActiveCurrency || QueryParserError || warnIsRootUser || "
+"xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError %%] %s "
 msgstr ""
 
@@ -49338,10 +49366,10 @@ msgstr ""
 msgid "[Clear all]"
 msgstr "[مسح الكل]"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:868
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:871
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:877
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:879
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:872
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:881
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:883
 #, c-format
 msgid "[Delete]"
 msgstr "[حذف]"
@@ -49674,7 +49702,7 @@ msgstr "سيتم تخطيطه لحقل مارك الفرعي،"
 msgid "be mapped to the same tag,"
 msgstr "سيتم تخطيطه لنفس الوسيمة"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "because fine balance is "
@@ -49691,7 +49719,7 @@ msgstr ""
 msgid "begins with "
 msgstr "إبدأ الطلب"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "below"
 msgstr "أدنى"
@@ -49733,7 +49761,7 @@ msgstr "توسط"
 msgid "by %s"
 msgstr "بواسطة %s"
 
-#. %1$s:  XISBN.author 
+#. %1$s:  XISBN.author | html 
 #. %2$s:  XISBN.copyrightdate 
 #. %3$s:  IF ( XISBN.publishercode ) 
 #. %4$s:  XISBN.publishercode 
@@ -50974,9 +51002,9 @@ msgstr ""
 msgid "or"
 msgstr "یا"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:816
 #, c-format
 msgid "or "
 msgstr "یا"
@@ -51549,7 +51577,7 @@ msgstr ""
 msgid "unrecognized command"
 msgstr "تجديد الممستفيد"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:978
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:982
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:516
 #, c-format
 msgid "until"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-09-17 22:50-0300\n"
+"POT-Creation-Date: 2016-10-20 15:56-0300\n"
 "PO-Revision-Date: 2014-10-08 03:44+0000\n"
 "Last-Translator: dhoang <dung.hoang@dlcorp.com.vn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -812,7 +812,7 @@ msgstr ""
 #. %2$s:  prediction.publicationdate | $KohaDates 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:72
+#: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:80
 #, fuzzy, c-format
 msgid "%s %s %s unknown %s "
 msgstr "%s %s %s không rõ %s "
@@ -1495,7 +1495,7 @@ msgstr ""
 #. %4$s:  IF waiting_expires_on 
 #. %5$s:  waiting_expires_on | $KohaDates 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:838
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:842
 #, fuzzy, c-format
 msgid "%s %s Waiting at %s %s until %s %s "
 msgstr "%s %s tháng %s Ngày hết hạn: %s %s "
@@ -1576,7 +1576,7 @@ msgstr "%s %s Tác giả: %s%s"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:120
@@ -2110,13 +2110,27 @@ msgstr ""
 #. %10$s:  ELSIF ( matches = serial.serialseq.match('(.*)Winter(.*)') ) 
 #. %11$s:  matches.0 
 #. %12$s:  matches.1 
-#. %13$s:  ELSE 
-#. %14$s:  serial.serialseq 
-#. %15$s:  END 
+#. %13$s:  ELSIF ( matches = prediction.number.match('(.*)Spr(.*)') ) 
+#. %14$s:  matches.0 
+#. %15$s:  matches.1 
+#. %16$s:  ELSIF ( matches = prediction.number.match('(.*)Sum(.*)') ) 
+#. %17$s:  matches.0 
+#. %18$s:  matches.1 
+#. %19$s:  ELSIF ( matches = prediction.number.match('(.*)Fal(.*)') ) 
+#. %20$s:  matches.0 
+#. %21$s:  matches.1 
+#. %22$s:  ELSIF ( matches = prediction.number.match('(.*)Win(.*)') ) 
+#. %23$s:  matches.0 
+#. %24$s:  matches.1 
+#. %25$s:  ELSE 
+#. %26$s:  serial.serialseq 
+#. %27$s:  END 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:271
 #: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:59
 #, fuzzy, c-format
-msgid "%s %sSpring%s %s %sSummer%s %s %sFall%s %s %sWinter%s %s %s %s "
+msgid ""
+"%s %sSpring%s %s %sSummer%s %s %sFall%s %s %sWinter%s %s %sSpr%s %s %sSum%s "
+"%s %sFal%s %s %sWin%s %s %s %s "
 msgstr "%s Mùa xuân%s %s Mùa hè%s %s Mùa thu%s %s Mùa đông%s %s %s %s "
 
 #. %1$s:  IF ( use_heading_flags_p ) 
@@ -2378,7 +2392,7 @@ msgstr "%s (%s ngày)"
 #. %1$s:  issue.item.biblioitemnumber.biblionumber.title 
 #. %2$s:  issue.item.barcode 
 #. %3$s:  issue.date_due | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:706
 #, fuzzy, c-format
 msgid "%s (%s). Due on %s"
 msgstr "%s %s vào ngày  "
@@ -2747,7 +2761,7 @@ msgstr "%s Ghi mượn cho bạn đọc %s %s "
 
 #. For the first occurrence,
 #. %1$s:  issuecount 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:897
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:901
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:434
 #, c-format
 msgid "%s Checkout(s)"
@@ -3036,7 +3050,7 @@ msgstr "%s Quỹ của '%s' %s Tất cả quỹ %s "
 
 #. For the first occurrence,
 #. %1$s:  holds_count 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:909
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:913
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:441
 #, c-format
 msgid "%s Hold(s)"
@@ -3591,7 +3605,7 @@ msgstr "%s Tài liệu đang được bạn đọc %s ("
 #. %4$s:  d.comment 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:54
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:785
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:789
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:975
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:186
 #, c-format
@@ -3600,7 +3614,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  debarments.size 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:914
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:918
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:446
 #, c-format
 msgid "%s Restrictions"
@@ -4043,7 +4057,8 @@ msgstr "%s Mã bưu chính: "
 #, c-format
 msgid ""
 "%s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
-"warnPrefAnonymousPatron || warnNoActiveCurrency || QueryParserError || "
+"warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
+"warnNoActiveCurrency || QueryParserError || "
 "AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError%%] "
 msgstr ""
@@ -5764,7 +5779,7 @@ msgstr ""
 #. %22$s:  END 
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:284
+#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:292
 #: intranet-tmpl/prog/en/modules/serials/serial-issues-full.tt:70
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:888
 #, c-format
@@ -8366,7 +8381,7 @@ msgstr "(%s) tới bạn đọc "
 #. %6$s:  w.item.itemcallnumber 
 #. %7$s:  END 
 #. %8$s:  w.reservedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:835
 #, fuzzy, c-format
 msgid "(%s), %s by %s %s %s [%s] %s Hold placed on %s. "
 msgstr "(%s), %s_Tác giả: %s%s %s[%s] %sĐặt mượn ngày %s. %s "
@@ -9011,7 +9026,7 @@ msgid "-- please choose --"
 msgstr "-- Chọn tại đây --"
 
 #. %1$s:  IF ( charges_is_blocker ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid ". %s Checkouts are "
 msgstr ". %s Chức năng ghi mượn tài liệu tới bạn đọc "
@@ -9054,7 +9069,7 @@ msgstr ""
 "đặt mượn. Vui lòng lưu lại các tài liệu này và kiểm tra chúng để xử lý đặt "
 "mượn."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid ". See highlighted items "
 msgstr ". Xem tài liệu được đánh dấu "
@@ -9098,12 +9113,12 @@ msgstr "...đến: "
 msgid "...to "
 msgstr "Đến ngày: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:899
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:903
 #, c-format
 msgid "0 Checkouts"
 msgstr "0 Ghi mượn"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:911
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:915
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:443
 #, c-format
 msgid "0 Holds"
@@ -10127,6 +10142,11 @@ msgstr "Thêm bạn đọc"
 msgid "Add record matching rule"
 msgstr "Tạo quy tắc kiểm soát biểu ghi"
 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:438
+#, fuzzy, c-format
+msgid "Add record using fast cataloging"
+msgstr "(biên mục nhanh)"
+
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:48
 #, c-format
 msgid "Add reserves"
@@ -10413,7 +10433,7 @@ msgstr "Địa chỉ 2: "
 msgid "Address line 3: "
 msgstr "Địa chỉ 3: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:95
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:102
 #, c-format
@@ -11931,7 +11951,7 @@ msgstr "Lấy tài liệu từ biểu ghi khác"
 msgid "Attach this basket to a new basket group with the same name"
 msgstr "Chuyển giỏ đặt hàng tới một nhóm giỏ đặt hàng cùng tên"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:735
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:739
 #, fuzzy, c-format
 msgid "Attention:"
 msgstr "Thao tác:"
@@ -12323,7 +12343,7 @@ msgstr "Chia đều"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:159
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:653
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:657
 #, fuzzy, c-format
 msgid "Automatic renewal"
 msgstr "Tổng số gia hạn"
@@ -12392,7 +12412,7 @@ msgstr "Thời gian ghi mượn trung bình"
 msgid "BIBTEX"
 msgstr "BibTex"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "BLOCKED"
@@ -12450,7 +12470,7 @@ msgstr "Quay lại bản ghi"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:62
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:76
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:61
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:956
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:960
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:715
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:733
@@ -12521,7 +12541,7 @@ msgstr "Danh sách ĐKCB (mỗi ĐKCB một dòng): "
 msgid "Barcode not found"
 msgstr "Không tìm thấy đăng cá biệt"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1015
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1019
 #, fuzzy, c-format
 msgid "Barcode submitted"
 msgstr "Đăng ký cá biệt %s"
@@ -13709,7 +13729,7 @@ msgid "Call Number (0-9 to A-Z)"
 msgstr "Ký hiệu phân loại (0-9 tới A-Z)"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:937
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:719
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:737
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:463
@@ -13734,7 +13754,7 @@ msgstr "Ký hiệu phân loại"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:45
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:77
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:58
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:955
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:959
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:158
@@ -14121,7 +14141,7 @@ msgid "Cancel hold and return to : [% reserveloo.branchname %]"
 msgstr "Hủy đặt mượn/Chuyển tài liệu tới : [% reserveloo.branchname %]"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:966
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:970
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:504
 msgid "Cancel marked holds"
 msgstr "Hủy đặt mượn"
@@ -14249,7 +14269,7 @@ msgid "Cannot check out"
 msgstr "Hủy bỏ ghi mượn"
 
 #. %1$s:  IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:727
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:731
 #, fuzzy, c-format
 msgid "Cannot check out! %s "
 msgstr "Hủy bỏ ghi mượn"
@@ -14864,7 +14884,7 @@ msgstr "Mã hóa ký tự: "
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:314
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:934
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:938
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:720
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:738
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:464
@@ -14984,7 +15004,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/patron-search.inc:138
 #: intranet-tmpl/prog/en/includes/checkin-search.inc:15
 #: intranet-tmpl/prog/en/includes/patrons-admin-search.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:643
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:647
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:605
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:96
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:21
@@ -15160,7 +15180,7 @@ msgid "Checked out %s times"
 msgstr "Hiện tại tài liệu được ghi mượn %s lần"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:936
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:718
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:736
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
@@ -15171,7 +15191,7 @@ msgid "Checked out from"
 msgstr "Nơi ghi mượn"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:20
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:717
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:735
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:461
@@ -15185,7 +15205,7 @@ msgstr "Ngày ghi mượn"
 msgid "Checked out today"
 msgstr "Ghi mượn trong ngày"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:706
 #, fuzzy, c-format
 msgid "Checked out: "
 msgstr "Được ghi mượn "
@@ -15229,7 +15249,7 @@ msgstr "Ghi mượn tới bạn đọc "
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:634
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:724
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:728
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:75
 #, c-format
 msgid "Checking out to %s"
@@ -15916,7 +15936,7 @@ msgstr "Đã xóa dữ liệu lô dữ liệu số %s"
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:315
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:118
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:672
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:676
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:542
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1053
@@ -17626,7 +17646,7 @@ msgstr "Kiểu thanh toán: "
 msgid "Credits"
 msgstr "Tài khoản trả trước"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:822
 #, c-format
 msgid "Credits:"
 msgstr "Số dư:"
@@ -19075,7 +19095,7 @@ msgstr "Loại bỏ"
 msgid "Delete vendor"
 msgstr "Xóa nhà cung cấp"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:960
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:964
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:671
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:498
 #, c-format
@@ -19886,7 +19906,7 @@ msgstr "Ngày hết hạn: %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:361
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:927
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:713
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:731
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
@@ -19897,7 +19917,7 @@ msgstr "Ngày hết hạn: %s"
 msgid "Due date"
 msgstr "Ngày hết hạn"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:926
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr ""
@@ -20156,8 +20176,8 @@ msgstr "Chỉnh sửa"
 msgid "Edit "
 msgstr "Chỉnh sửa "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
 #, c-format
 msgid "Edit Details"
 msgstr "Sửa thông tin bạn đọc"
@@ -20764,8 +20784,13 @@ msgstr "Nhập số biểu ghi:"
 msgid "Enter cover biblionumber: "
 msgstr "Tải lên biểu ghi số: "
 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:637
+#, fuzzy, c-format
+msgid "Enter item barcode or keyword:"
+msgstr "Nhập đăng ký cá biệt:"
+
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:44
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:636
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:639
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:687
 #, c-format
 msgid "Enter item barcode:"
@@ -21240,7 +21265,7 @@ msgid "Experimental features"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:958
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:962
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:676
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:964
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:496
@@ -21270,8 +21295,8 @@ msgid "Expiration date: %s"
 msgstr "Ngày hết hạn: %s"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:83
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:762
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:766
 #, c-format
 msgid "Expiration:"
 msgstr "Tài khoản hết hạn:"
@@ -21631,7 +21656,6 @@ msgid "Famfamfam iconset"
 msgstr "Famfamfam iconset"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:41
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:438
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:30
 #, c-format
 msgid "Fast cataloging"
@@ -21685,7 +21709,7 @@ msgstr "Biên lai thanh toán"
 msgid "Feedback:"
 msgstr "Thông tin phản hồi:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Fees &amp; Charges:"
 msgstr "Tiền phạt &amp; Phí:"
@@ -22031,7 +22055,7 @@ msgstr "Bộ lọc dữ liệu"
 msgid "Filters :"
 msgstr "Lọc kết quả tìm kiếm :"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1001
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1005
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:172
 #, fuzzy, c-format
@@ -22039,7 +22063,7 @@ msgid "Find another patron?"
 msgstr "Thêm điều kiện khác"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:939
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:61
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:465
 #, c-format
@@ -23379,7 +23403,7 @@ msgstr "Ngày đặt mượn"
 msgid "Hold at"
 msgstr "Đặt mượn tại"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:953
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:491
 #, c-format
 msgid "Hold date"
@@ -23555,7 +23579,7 @@ msgstr "Số lần đặt mượn"
 msgid "Holds awaiting pickup"
 msgstr "Đặt mượn chờ bạn đọc nhận tài liệu"
 
-#. %1$s:  show_date 
+#. %1$s:  show_date | $KohaDates 
 #. %2$s:  IF ( all_branches_link ) 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:40
 #, c-format
@@ -23598,7 +23622,7 @@ msgstr "Đặt mượn chờ đáp ứng"
 msgid "Holds to pull%s placed between %s and %s%s"
 msgstr "Tài liệu được đặt mượn %s từ ngày %s đến ngày %s%s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:827
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
 #, c-format
 msgid "Holds waiting:"
 msgstr "Đặt mượn:"
@@ -24306,7 +24330,7 @@ msgstr "Tài liệu"
 msgid "ITEMS"
 msgstr "Tài liệu"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "ITEMS OVERDUE"
 msgstr "tài liệu quá hạn"
@@ -25757,7 +25781,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:651
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:653
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:57
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:929
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:716
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:734
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:590
@@ -25906,7 +25930,7 @@ msgstr "Tài liệu dự kiến"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:129
@@ -27333,7 +27357,7 @@ msgstr "Koha &rsaquo; Không thể xóa bạn đọc"
 #. %2$s:  ELSE 
 #. %3$s:  title |html 
 #. %4$s:  FOREACH subtitl IN subtitle 
-#. %5$s:  subtitl.subfield 
+#. %5$s:  subtitl.subfield | html 
 #. %6$s:  END 
 #. %7$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:21
@@ -27347,7 +27371,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  title 
+#. %3$s:  title | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:2
 #, c-format
@@ -27359,7 +27383,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  bibliotitle 
+#. %3$s:  bibliotitle | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:3
 #, c-format
@@ -27372,7 +27396,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  bibliotitle 
+#. %3$s:  bibliotitle | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:2
 #, c-format
@@ -27420,9 +27444,9 @@ msgstr "Koha &rsaquo; Tìm kiếm &rsaquo; Lịch sử ghi mượn của %s"
 msgid "Koha &rsaquo; Catalog &rsaquo; Details for %s %s %s%s"
 msgstr "Koha &rsaquo; Tìm kiếm &rsaquo; Hiển thị chi tiết biểu ghi: %s %s %s%s"
 
-#. %1$s:  title 
+#. %1$s:  title | html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield 
+#. %3$s:  subtitl.subfield | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:2
 #, c-format
@@ -27453,7 +27477,7 @@ msgstr "Koha &rsaquo; Phân hệ biên mục &rsaquo; Nhập biểu ghi MARC"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:4
@@ -29073,7 +29097,7 @@ msgid "Labeled MARC"
 msgstr "Nhãn MARC"
 
 #. %1$s:  biblionumber 
-#. %2$s:  bibliotitle 
+#. %2$s:  bibliotitle | html 
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:58
 #, c-format
 msgid "Labeled MARC biblio : %s ( %s )"
@@ -29929,7 +29953,7 @@ msgstr "Địa điểm:"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:282
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:80
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:130
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:934
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:61
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:84
@@ -30096,7 +30120,7 @@ msgstr "Trạng thái mất tài liệu:"
 msgid "Lost status: "
 msgstr "Trạng thái mất: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:777
 #, c-format
 msgid "Lost: "
 msgstr "Mất thẻ: "
@@ -30429,7 +30453,7 @@ msgstr ""
 msgid "Make budget active: "
 msgstr "Kích hoạt: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:816
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:147
 #, c-format
 msgid "Make payment"
@@ -31158,7 +31182,7 @@ msgstr "Gửi tin nhắn cho bạn đọc"
 msgid "Message subject:"
 msgstr "Tên thông báo gửi tới bạn đọc:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:858
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:862
 #, c-format
 msgid "Messages:"
 msgstr "Tin nhắn:"
@@ -33665,7 +33689,7 @@ msgstr "Ghi chú/Bình luận"
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:96
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:225
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:342
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:850
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:854
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:46
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:397
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:698
@@ -34222,7 +34246,7 @@ msgstr ""
 msgid "OS version ('uname -a'): "
 msgstr "OS version ('uname -a'): "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "OVER THE LIMIT"
@@ -34371,7 +34395,7 @@ msgstr "Nhan đề bình luận "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:686
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:690
 #, fuzzy, c-format
 msgid "On-site checkout"
 msgstr "Tài liệu không được ghi mượn."
@@ -34381,7 +34405,7 @@ msgstr "Tài liệu không được ghi mượn."
 msgid "On-site checkouts"
 msgstr "Tổng số ghi mượn"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:681
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:685
 #, c-format
 msgid "On-site checkouts only. Automatic due date: "
 msgstr ""
@@ -34479,7 +34503,7 @@ msgstr "Tài liệu duy nhất "
 msgid "Only items currently available"
 msgstr "Chỉ tìm kiếm tài liệu sẵn sàng cho bạn đọc mượn"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:730
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:734
 #, fuzzy, c-format
 msgid "Only on-site checkouts are allowed"
 msgstr "Số tài liệu được mượn"
@@ -34924,7 +34948,7 @@ msgstr "Còn nợ"
 #. %1$s:  IF ( chargesamount ) 
 #. %2$s:  chargesamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Outstanding fees &amp; charges%s of %s%s"
 msgstr "tiền phạt chưa thanh toán &amp; với %s số lượng %s%s"
@@ -34974,7 +34998,7 @@ msgstr "Quá hạn"
 msgid "Overdues with fines"
 msgstr "Tiền phạt quá hạn"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "Overdues:"
 msgstr "Quá hạn:"
@@ -35002,7 +35026,7 @@ msgstr "Ghi đè chính sách và gia hạn"
 msgid "Override renewal limit:"
 msgstr "Ghi đè chính sách:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:797
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:801
 #, c-format
 msgid "Override restriction temporarily"
 msgstr ""
@@ -35204,7 +35228,7 @@ msgid "Patent document"
 msgstr "Tài liệu sáng chế"
 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:62
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:937
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:941
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:83
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:145
@@ -35336,8 +35360,8 @@ msgstr "Tiền phạt bạn đọc quá giới hạn: "
 msgid "Patron flags:"
 msgstr "Tình trạng bạn đọc:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Patron has "
 msgstr "Bạn đọc có "
@@ -35373,7 +35397,7 @@ msgstr ""
 #. %1$s:  IF ( creditsamount ) 
 #. %2$s:  creditsamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:822
 #, c-format
 msgid "Patron has a credit%s of %s%s "
 msgstr "Tài khoản bạn đọc có số dư%s là %s%s "
@@ -35418,7 +35442,7 @@ msgstr "Bạn đọc có tài liệu quá hạn và bị khóa tài khoản tớ
 msgid "Patron has nothing checked out."
 msgstr "Hiện tại bạn đọc không mượn tài liệu của thư viện."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:996
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1000
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:533
 #, c-format
 msgid "Patron has nothing on hold."
@@ -35439,7 +35463,7 @@ msgid "Patron has outstanding fines: %s"
 msgstr "Bạn đọc có khoản tiền phạt là: "
 
 #. %1$s:  IF CAN_user_borrowers && ( !Koha.Preference('IndependentBranchesPatronModifications') || borrower.branch == branch ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:745
 #, fuzzy, c-format
 msgid "Patron has pending modifications. %s "
 msgstr "Bạn đọc yêu cầu thay đổi thông tin"
@@ -35625,13 +35649,13 @@ msgstr "Tài khoản bạn đọc được gia hạn tới ngày %s"
 #. %2$s:  userdebarreddate | $KohaDates 
 #. %3$s:  END 
 #. %4$s:  IF ( debarredcomment ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:782
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:180
 #, c-format
 msgid "Patron's account is restricted %s until %s %s %s with the explanation: "
 msgstr "Tài khoản của bạn đọc bị hạn chế %s cho đến ngày %s %s %s với lý do: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #, c-format
 msgid "Patron's address in doubt"
 msgstr "Địa chỉ bạn đọc không đúng"
@@ -35672,7 +35696,7 @@ msgstr "Bạn đọc bị mất thẻ thư viện."
 #. %1$s:  IF ( expiry ) 
 #. %2$s:  expiry | $KohaDates 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:762
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:766
 #, c-format
 msgid "Patron's card has expired. %sPatron's card expired on %s%s "
 msgstr "Tài khoản bạn đọc đã hết hạn. %sTài khoản bạn đọc đã hết hạn vào %s%s "
@@ -35694,7 +35718,7 @@ msgid "Patron's card is expired."
 msgstr "Thẻ bạn đọc đã hết hạn"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:490
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:777
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "Patron's card is lost"
@@ -35706,7 +35730,7 @@ msgid "Patron's card is lost."
 msgstr "Bạn đọc bị mất thẻ"
 
 #. %1$s:  expiry | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
 #, c-format
 msgid "Patron's card will expire soon. Patron's card expires on %s "
 msgstr "Tài khoản bạn đọc sắp hết hạn. Tài khoản bạn đọc hết hạn vào ngày %s "
@@ -35873,7 +35897,7 @@ msgstr "Pawel Skuza (Polish for 1.2)"
 msgid "Pay"
 msgstr "Thanh toán"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:813
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:817
 #, fuzzy, c-format
 msgid "Pay all fines"
 msgstr "Thanh toán"
@@ -35967,7 +35991,7 @@ msgstr "Chờ duyệt"
 msgid "Pending discharge requests"
 msgstr "Đề xuất mua chờ duyệt"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:745
 #, fuzzy, c-format
 msgid "Pending modifications:"
 msgstr "Gửi thông báo"
@@ -36201,7 +36225,7 @@ msgstr "Thông tin vật lý:"
 msgid "Pick"
 msgstr "Chọn"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:961
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:495
 #, fuzzy, c-format
 msgid "Pickup at"
@@ -37221,7 +37245,7 @@ msgstr "Phiên trước đây"
 
 #: intranet-tmpl/prog/en/columns.def:73
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:25
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:936
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:940
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:108
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:466
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:45
@@ -37356,7 +37380,7 @@ msgid "Print label"
 msgstr "In nhãn gáy"
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:55
-#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:306
+#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:314
 #, c-format
 msgid "Print list"
 msgstr "In"
@@ -37474,7 +37498,7 @@ msgstr "Máy in: "
 msgid "Printers"
 msgstr "Máy in"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:959
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:963
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:574
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:668
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:497
@@ -38381,7 +38405,7 @@ msgstr "Thông tin liên quan"
 msgid "Relationship: "
 msgstr "Mối quan hệ: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:904
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:908
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:436
 #, c-format
 msgid "Relatives' checkouts"
@@ -38422,7 +38446,7 @@ msgstr ""
 msgid "Remember for next check in:"
 msgstr "Ghi nhớ cho lần ghi trả tiếp theo:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:666
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:670
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:694
 #, c-format
 msgid "Remember for session:"
@@ -38584,8 +38608,8 @@ msgstr "Loại bỏ?"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:146
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:148
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:130
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:23
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:140
 #, c-format
@@ -39185,7 +39209,7 @@ msgstr "Bị khóa tài khoản"
 msgid "Restricted [until] flag"
 msgstr "Bị hạn chế [until] flag"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:782
 #, c-format
 msgid "Restricted:"
 msgstr "Hạn chế:"
@@ -39260,7 +39284,7 @@ msgid "Results per page :"
 msgstr "Kết quả hiển thị :"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:990
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:994
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:528
 msgid "Resume all suspended holds"
 msgstr "Khôi phục tất cả"
@@ -41371,7 +41395,7 @@ msgstr ""
 msgid "Set back to"
 msgstr "Thiết lập lại"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:756
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
 #, c-format
 msgid "Set due date to expiry:"
 msgstr "Thiết lập ngày hết hạn:"
@@ -42149,7 +42173,7 @@ msgstr "Chuyên ngành"
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:980
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:984
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:518
 #, c-format
 msgid "Specify date on which to resume %s: "
@@ -42157,7 +42181,7 @@ msgstr "Ngày mở lại đặt mượn %s: "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:660
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:664
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:692
 #, c-format
 msgid "Specify due date %s: "
@@ -43440,7 +43464,7 @@ msgid "Surveys"
 msgstr "Tài liệu điều tra"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:975
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:979
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:513
 msgid "Suspend all holds"
 msgstr "Tạm dừng tất cả"
@@ -43465,6 +43489,12 @@ msgstr "Tìm kiếm nâng cao"
 #, c-format
 msgid "Switch to basic editor"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:208
+#: intranet-tmpl/prog/en/modules/about.tt:222
+#, fuzzy, c-format
+msgid "Switching to dom indexing"
+msgstr "Tìm kiếm nâng cao"
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:189
 #, c-format
@@ -44081,8 +44111,7 @@ msgstr ""
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
 "now deprecated and will be removed in future releases. Please use DOM "
-"instead by setting &lt;zebra_auth_index_mode&gt; to 'dom' (full reindex "
-"required). "
+"instead. To switch follow this page of wiki: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:169
@@ -44109,8 +44138,7 @@ msgstr ""
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
 "now deprecated and will be removed in future releases. Please use DOM "
-"instead by setting &lt;zebra_bib_index_mode&gt; to 'dom' (full reindex "
-"required). "
+"instead. To switch follow this page of wiki: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:621
@@ -45360,7 +45388,7 @@ msgid "This patron can't check out this item per library circulation policy."
 msgstr ""
 "Bạn đọc không được mượn tài liệu này theo chính sách lưu thông của thư viện"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1001
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1005
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:172
 #, fuzzy, c-format
@@ -45730,8 +45758,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:212
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:40
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:954
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:958
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:714
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:732
@@ -47835,7 +47863,7 @@ msgstr "Xem số tài liệu tại thư viện của bạn theo kiểu tài li�
 msgid "View all libraries"
 msgstr "Thống kê tất cả thư viện"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:743
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:747
 #, fuzzy, c-format
 msgid "View all pending patron modifications"
 msgstr "Không có bạn đọc yêu cầu thay đổi thông tin tài khoản."
@@ -47898,7 +47926,7 @@ msgstr "Xem thao tác lưu thông ngoại tuyến chờ xử lý"
 msgid "View record"
 msgstr "Hiển thị biểu ghi"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:798
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:194
 #, c-format
 msgid "View restrictions"
@@ -48952,7 +48980,7 @@ msgstr ""
 "Bạn có tất cả %s lỗi trong cấu hình khung mẫu biên mục MARC của bạn. Bạn hãy "
 "kiểm tra lại chúng trước khi sử dụng."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1019
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1023
 #, c-format
 msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
@@ -49048,7 +49076,7 @@ msgid ""
 "%s. %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:756
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
 #, c-format
 msgid ""
 "You have the ReturnBeforeExpiry system preference enabled this means if the "
@@ -49680,9 +49708,9 @@ msgstr ""
 #, c-format
 msgid ""
 "[%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
-"warnPrefAnonymousPatron || warnNoActiveCurrency || QueryParserError || "
-"warnIsRootUser || xml_config_warnings.size || "
-"AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
+"warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
+"warnNoActiveCurrency || QueryParserError || warnIsRootUser || "
+"xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError %%] %s "
 msgstr ""
 
@@ -49742,10 +49770,10 @@ msgstr ""
 msgid "[Clear all]"
 msgstr "[Bỏ tất cả]"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:868
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:871
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:877
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:879
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:872
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:881
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:883
 #, c-format
 msgid "[Delete]"
 msgstr "[Xóa]"
@@ -50081,7 +50109,7 @@ msgstr "được ánh xạ tới một trường con MARC, "
 msgid "be mapped to the same tag,"
 msgstr "phải được ánh xạ tới trường tương tự,"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "because fine balance is "
@@ -50098,7 +50126,7 @@ msgstr ""
 msgid "begins with "
 msgstr "Bắt đầu với"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "below"
 msgstr "bên dưới"
@@ -50140,7 +50168,7 @@ msgstr "Tác giả "
 msgid "by %s"
 msgstr ", Tác giả: %s"
 
-#. %1$s:  XISBN.author 
+#. %1$s:  XISBN.author | html 
 #. %2$s:  XISBN.copyrightdate 
 #. %3$s:  IF ( XISBN.publishercode ) 
 #. %4$s:  XISBN.publishercode 
@@ -51389,9 +51417,9 @@ msgstr ""
 msgid "or"
 msgstr "Hoặc"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:816
 #, c-format
 msgid "or "
 msgstr "hoặc "
@@ -51964,7 +51992,7 @@ msgstr "trừ khi"
 msgid "unrecognized command"
 msgstr "Không tìm thấy bạn đọc (%s) trong cơ sở dữ liệu"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:978
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:982
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:516
 #, c-format
 msgid "until"

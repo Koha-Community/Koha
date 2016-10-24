@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-09-17 19:32-0300\n"
+"POT-Creation-Date: 2016-10-20 15:21-0300\n"
 "PO-Revision-Date: 2016-05-28 21:46+0000\n"
 "Last-Translator: Dimitris <dimantonak@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -830,7 +830,7 @@ msgstr ""
 #. %2$s:  prediction.publicationdate | $KohaDates 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:72
+#: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:80
 #, c-format
 msgid "%s %s %s unknown %s "
 msgstr "%s %s %s άγνωστο %s "
@@ -1529,7 +1529,7 @@ msgstr ""
 #. %4$s:  IF waiting_expires_on 
 #. %5$s:  waiting_expires_on | $KohaDates 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:838
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:842
 #, fuzzy, c-format
 msgid "%s %s Waiting at %s %s until %s %s "
 msgstr "%s %s μήνες %s μέχρι %s %s "
@@ -1610,7 +1610,7 @@ msgstr "%s %s από %s%s"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:120
@@ -2146,13 +2146,27 @@ msgstr ""
 #. %10$s:  ELSIF ( matches = serial.serialseq.match('(.*)Winter(.*)') ) 
 #. %11$s:  matches.0 
 #. %12$s:  matches.1 
-#. %13$s:  ELSE 
-#. %14$s:  serial.serialseq 
-#. %15$s:  END 
+#. %13$s:  ELSIF ( matches = prediction.number.match('(.*)Spr(.*)') ) 
+#. %14$s:  matches.0 
+#. %15$s:  matches.1 
+#. %16$s:  ELSIF ( matches = prediction.number.match('(.*)Sum(.*)') ) 
+#. %17$s:  matches.0 
+#. %18$s:  matches.1 
+#. %19$s:  ELSIF ( matches = prediction.number.match('(.*)Fal(.*)') ) 
+#. %20$s:  matches.0 
+#. %21$s:  matches.1 
+#. %22$s:  ELSIF ( matches = prediction.number.match('(.*)Win(.*)') ) 
+#. %23$s:  matches.0 
+#. %24$s:  matches.1 
+#. %25$s:  ELSE 
+#. %26$s:  serial.serialseq 
+#. %27$s:  END 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:271
 #: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:59
 #, fuzzy, c-format
-msgid "%s %sSpring%s %s %sSummer%s %s %sFall%s %s %sWinter%s %s %s %s "
+msgid ""
+"%s %sSpring%s %s %sSummer%s %s %sFall%s %s %sWinter%s %s %sSpr%s %s %sSum%s "
+"%s %sFal%s %s %sWin%s %s %s %s "
 msgstr "%s %s %s%s -- %s %s %s%s (%s)%s %s "
 
 #. %1$s:  IF ( use_heading_flags_p ) 
@@ -2415,7 +2429,7 @@ msgstr "%s (%s ημέρες)"
 #. %1$s:  issue.item.biblioitemnumber.biblionumber.title 
 #. %2$s:  issue.item.barcode 
 #. %3$s:  issue.date_due | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:706
 #, fuzzy, c-format
 msgid "%s (%s). Due on %s"
 msgstr "%s %s σε "
@@ -2790,7 +2804,7 @@ msgstr "%s Δανεισμένο στο μέλος %s %s "
 
 #. For the first occurrence,
 #. %1$s:  issuecount 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:897
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:901
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:434
 #, c-format
 msgid "%s Checkout(s)"
@@ -3081,7 +3095,7 @@ msgstr "%s Κεφάλαια για '%s' %s Όλα τα κεφάλαια %s "
 
 #. For the first occurrence,
 #. %1$s:  holds_count 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:909
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:913
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:441
 #, c-format
 msgid "%s Hold(s)"
@@ -3651,7 +3665,7 @@ msgstr "%s Βρέθηκε κράτηση για %s ("
 #. %4$s:  d.comment 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:54
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:785
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:789
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:975
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:186
 #, c-format
@@ -3660,7 +3674,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  debarments.size 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:914
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:918
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:446
 #, c-format
 msgid "%s Restrictions"
@@ -4107,7 +4121,8 @@ msgstr "%s Ταχυδρομικός κώδικας: "
 #, c-format
 msgid ""
 "%s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
-"warnPrefAnonymousPatron || warnNoActiveCurrency || QueryParserError || "
+"warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
+"warnNoActiveCurrency || QueryParserError || "
 "AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError%%] "
 msgstr ""
@@ -5833,7 +5848,7 @@ msgstr ""
 #. %22$s:  END 
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:284
+#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:292
 #: intranet-tmpl/prog/en/modules/serials/serial-issues-full.tt:70
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:888
 #, c-format
@@ -8425,7 +8440,7 @@ msgstr "(%s) σε "
 #. %6$s:  w.item.itemcallnumber 
 #. %7$s:  END 
 #. %8$s:  w.reservedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:835
 #, fuzzy, c-format
 msgid "(%s), %s by %s %s %s [%s] %s Hold placed on %s. "
 msgstr "(%s), %sαπό %s%s Η κράτηση έγινε στις %s. %s "
@@ -9071,7 +9086,7 @@ msgid "-- please choose --"
 msgstr "-- παρακαλούμε επιλέξτε --"
 
 #. %1$s:  IF ( charges_is_blocker ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid ". %s Checkouts are "
 msgstr ". %s Οι δανεισμοί είναι "
@@ -9115,7 +9130,7 @@ msgstr ""
 ". Παρακαλώ κρατήστε το αντίτυπο και επιστρέψτε το για να διεκπεραιωθεί η "
 "κράτηση. "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid ". See highlighted items "
 msgstr ". Βλέπε τα τονισμένα τεκμήρια "
@@ -9159,12 +9174,12 @@ msgstr "...και: "
 msgid "...to "
 msgstr "...σε "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:899
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:903
 #, c-format
 msgid "0 Checkouts"
 msgstr "0 Δανεισμοί"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:911
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:915
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:443
 #, c-format
 msgid "0 Holds"
@@ -10184,6 +10199,11 @@ msgstr "Προσθήκη παραληπτών"
 msgid "Add record matching rule"
 msgstr "Προσθήκη κανόνα ταύτισης εγγραφής"
 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:438
+#, fuzzy, c-format
+msgid "Add record using fast cataloging"
+msgstr "(γρήγορη καταλογοράφηση)"
+
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:48
 #, c-format
 msgid "Add reserves"
@@ -10469,7 +10489,7 @@ msgstr "Γραμμή διεύθυνσης 2: "
 msgid "Address line 3: "
 msgstr "Γραμμή Διεύθυνσης 3: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:95
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:102
 #, c-format
@@ -12010,7 +12030,7 @@ msgstr "Προσάρτηση αντιτύπου"
 msgid "Attach this basket to a new basket group with the same name"
 msgstr "Προσαρτήστε αυτό το καλάθι σε μία νέα ομάδα καλαθιών με το ίδιο όνομα"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:735
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:739
 #, c-format
 msgid "Attention:"
 msgstr "Προσοχή:"
@@ -12405,7 +12425,7 @@ msgstr "Αυτοσυμπληρούμενη σειρά"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:159
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:653
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:657
 #, c-format
 msgid "Automatic renewal"
 msgstr "Αυτόματη ανανέωση"
@@ -12474,7 +12494,7 @@ msgstr "Μέσος όρος χρόνου δανεισμού"
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "BLOCKED"
@@ -12532,7 +12552,7 @@ msgstr "Επιστροφή στο biblio"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:62
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:76
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:61
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:956
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:960
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:715
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:733
@@ -12603,7 +12623,7 @@ msgstr "Λίστα barcode (ένα σε κάθε γραμμή): "
 msgid "Barcode not found"
 msgstr "Δε βρέθηκαν barcodes"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1015
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1019
 #, fuzzy, c-format
 msgid "Barcode submitted"
 msgstr "Barcode %s"
@@ -13795,7 +13815,7 @@ msgid "Call Number (0-9 to A-Z)"
 msgstr "Ταξιθετικός Αριθμός (0-9 έως Α-Ω)"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:937
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:719
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:737
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:463
@@ -13820,7 +13840,7 @@ msgstr "Ταξιθετικός Αρ."
 #: intranet-tmpl/prog/en/modules/labels/search.tt:45
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:77
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:58
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:955
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:959
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:158
@@ -14207,7 +14227,7 @@ msgid "Cancel hold and return to : [% reserveloo.branchname %]"
 msgstr "Ακύρωση κράτησης και επιστροφή σε : [% reserveloo.branchname %]"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:966
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:970
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:504
 msgid "Cancel marked holds"
 msgstr "Ακύρωση επιλεγμένων κρατήσεων"
@@ -14334,7 +14354,7 @@ msgid "Cannot check out"
 msgstr "Αδυναμία δανεισμού"
 
 #. %1$s:  IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:727
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:731
 #, c-format
 msgid "Cannot check out! %s "
 msgstr "Αδυναμία δανεισμού! %s "
@@ -14957,7 +14977,7 @@ msgstr "Κωδικοποίηση χαρακτήρα: "
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:314
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:934
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:938
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:720
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:738
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:464
@@ -15076,7 +15096,7 @@ msgstr "Έλεγχος ιστορικού για περισσότερες λεπ
 #: intranet-tmpl/prog/en/includes/patron-search.inc:138
 #: intranet-tmpl/prog/en/includes/checkin-search.inc:15
 #: intranet-tmpl/prog/en/includes/patrons-admin-search.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:643
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:647
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:605
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:96
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:21
@@ -15256,7 +15276,7 @@ msgid "Checked out %s times"
 msgstr "Το έχουν δανειστεί %s φορές"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:936
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:718
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:736
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
@@ -15267,7 +15287,7 @@ msgid "Checked out from"
 msgstr "Δανεισμένο σε"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:20
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:717
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:735
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:461
@@ -15281,7 +15301,7 @@ msgstr "Δανεισμένο σε"
 msgid "Checked out today"
 msgstr "Δανεισμένο σήμερα"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:706
 #, fuzzy, c-format
 msgid "Checked out: "
 msgstr "Δανεισμένο "
@@ -15325,7 +15345,7 @@ msgstr "Δανεισμός σε "
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:634
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:724
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:728
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:75
 #, c-format
 msgid "Checking out to %s"
@@ -16011,7 +16031,7 @@ msgstr "Καθαρισμός εισαγωγής παρτίδας #%s"
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:315
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:118
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:672
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:676
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:696
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:542
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1053
@@ -17738,7 +17758,7 @@ msgstr "Τύπος πίστωσης: "
 msgid "Credits"
 msgstr "Πιστώσεις"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:822
 #, c-format
 msgid "Credits:"
 msgstr "Πιστώσεις:"
@@ -19199,7 +19219,7 @@ msgstr "Διαγραφή χρήστη"
 msgid "Delete vendor"
 msgstr "Διαγραφή προμηθευτή"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:960
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:964
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:671
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:498
 #, c-format
@@ -20008,7 +20028,7 @@ msgstr "Επιστροφή %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:361
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:927
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:713
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:731
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
@@ -20019,7 +20039,7 @@ msgstr "Επιστροφή %s"
 msgid "Due date"
 msgstr "Ημερομηνία επιστροφής"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:926
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr "Ημερομηνία επιστροφής (αμορφοποίητη, κρυμμένη)"
@@ -20280,8 +20300,8 @@ msgstr "Επεξεργασία"
 msgid "Edit "
 msgstr "Επεξεργασία "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
 #, c-format
 msgid "Edit Details"
 msgstr "Επεξεργασία Στοιχείων"
@@ -20888,8 +20908,13 @@ msgstr "Εισαγωγή αριθμού biblio:"
 msgid "Enter cover biblionumber: "
 msgstr "Εισαγωγή αριθμού εγγραφής εξωφύλλου: "
 
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:637
+#, fuzzy, c-format
+msgid "Enter item barcode or keyword:"
+msgstr "Εισάγετε το barcode του τεκμηρίου:"
+
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:44
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:636
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:639
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:687
 #, c-format
 msgid "Enter item barcode:"
@@ -21364,7 +21389,7 @@ msgid "Experimental features"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:958
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:962
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:676
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:964
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:496
@@ -21394,8 +21419,8 @@ msgid "Expiration date: %s"
 msgstr "Ημερομηνία λήξης: %s"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:83
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:762
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:766
 #, c-format
 msgid "Expiration:"
 msgstr "Λήξη:"
@@ -21755,7 +21780,6 @@ msgid "Famfamfam iconset"
 msgstr "Famfamfam iconset"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:41
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:438
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:30
 #, c-format
 msgid "Fast cataloging"
@@ -21809,7 +21833,7 @@ msgstr "Απόδειξη χρέωσης"
 msgid "Feedback:"
 msgstr "Feedback:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Fees &amp; Charges:"
 msgstr "Τέλη &amp; Χρεώσεις"
@@ -22159,7 +22183,7 @@ msgstr "Φίλτρα"
 msgid "Filters :"
 msgstr "Φίλτρα :"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1001
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1005
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:172
 #, fuzzy, c-format
@@ -22167,7 +22191,7 @@ msgid "Find another patron?"
 msgstr "Προσθήκη ενός άλλου πεδίου"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:939
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:61
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:465
 #, c-format
@@ -23507,7 +23531,7 @@ msgstr "Ημερομηνία Κράτησης"
 msgid "Hold at"
 msgstr "Κράτηση σε"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:953
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:491
 #, c-format
 msgid "Hold date"
@@ -23681,7 +23705,7 @@ msgstr "Επιτρεπόμενες κρατήσεις (πλήθος)"
 msgid "Holds awaiting pickup"
 msgstr "Κρατήσεις σε αναμονή για παραλαβή"
 
-#. %1$s:  show_date 
+#. %1$s:  show_date | $KohaDates 
 #. %2$s:  IF ( all_branches_link ) 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:40
 #, c-format
@@ -23724,7 +23748,7 @@ msgstr "Εκκρεμείς κρατήσεις"
 msgid "Holds to pull%s placed between %s and %s%s"
 msgstr "Κρατήσεις για ανάσυρση%s μεταξύ %s και %s%s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:827
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
 #, c-format
 msgid "Holds waiting:"
 msgstr "Κρατήσεις σε αναμονή:"
@@ -24432,7 +24456,7 @@ msgstr "ΤΕΚΜΗΡΙΟ"
 msgid "ITEMS"
 msgstr "ΤΕΚΜΗΡΙΑ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "ITEMS OVERDUE"
 msgstr "ΕΚΠΡΟΘΕΣΜΑ ΤΕΚΜΗΡΙΑ"
@@ -25883,7 +25907,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:651
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:653
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:57
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:929
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:716
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:734
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:590
@@ -26031,7 +26055,7 @@ msgstr "Αναμενόμενα τεκμήρια"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:129
@@ -27466,7 +27490,7 @@ msgstr "Koha &rsaquo; Αδυναμία Διαγραφής Μέλους"
 #. %2$s:  ELSE 
 #. %3$s:  title |html 
 #. %4$s:  FOREACH subtitl IN subtitle 
-#. %5$s:  subtitl.subfield 
+#. %5$s:  subtitl.subfield | html 
 #. %6$s:  END 
 #. %7$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:21
@@ -27480,7 +27504,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  title 
+#. %3$s:  title | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:2
 #, c-format
@@ -27492,7 +27516,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  bibliotitle 
+#. %3$s:  bibliotitle | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:3
 #, c-format
@@ -27505,7 +27529,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#. %3$s:  bibliotitle 
+#. %3$s:  bibliotitle | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:2
 #, c-format
@@ -27553,9 +27577,9 @@ msgstr "Σύστημα &rsaquo; Κατάλογος &rsaquo; Ιστορικό Δ�
 msgid "Koha &rsaquo; Catalog &rsaquo; Details for %s %s %s%s"
 msgstr "Σύστημα &rsaquo; Κατάλογος &rsaquo; Λεπτομέρειες για %s %s %s%s"
 
-#. %1$s:  title 
+#. %1$s:  title | html 
 #. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  subtitl.subfield 
+#. %3$s:  subtitl.subfield | html 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:2
 #, c-format
@@ -27585,7 +27609,7 @@ msgstr "Koha &rsaquo; Καταλογογράφηση &rsaquo;"
 
 #. %1$s:  title |html 
 #. %2$s:  IF ( author ) 
-#. %3$s:  author 
+#. %3$s:  author | html 
 #. %4$s:  END 
 #. %5$s:  biblionumber 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:4
@@ -29208,7 +29232,7 @@ msgid "Labeled MARC"
 msgstr "MARC Με Ετικέτες"
 
 #. %1$s:  biblionumber 
-#. %2$s:  bibliotitle 
+#. %2$s:  bibliotitle | html 
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:58
 #, c-format
 msgid "Labeled MARC biblio : %s ( %s )"
@@ -30073,7 +30097,7 @@ msgstr "l- Τοπικό"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:282
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:80
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:130
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:934
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:61
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:84
@@ -30240,7 +30264,7 @@ msgstr "Κατάσταση χαμένου:"
 msgid "Lost status: "
 msgstr "Κατάσταση χαμένου: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:777
 #, c-format
 msgid "Lost: "
 msgstr "Απολεσθέν: "
@@ -30576,7 +30600,7 @@ msgstr ""
 msgid "Make budget active: "
 msgstr "Ενεργοποίηση προυπολογισμού: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:816
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:147
 #, c-format
 msgid "Make payment"
@@ -31303,7 +31327,7 @@ msgstr "Το μήνυμα απεστάλη"
 msgid "Message subject:"
 msgstr "Θέμα μηνύματος:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:858
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:862
 #, c-format
 msgid "Messages:"
 msgstr "Μηνύματα:"
@@ -33804,7 +33828,7 @@ msgstr "Σημειώσεις/Σχόλια"
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:96
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:225
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:342
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:850
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:854
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:46
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:397
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:698
@@ -34362,7 +34386,7 @@ msgstr ""
 msgid "OS version ('uname -a'): "
 msgstr "OS version ('uname -a'): "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "OVER THE LIMIT"
@@ -34513,7 +34537,7 @@ msgstr "Στον Τίτλο  "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:686
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:690
 #, c-format
 msgid "On-site checkout"
 msgstr "Επιτόπιος δανεισμός"
@@ -34523,7 +34547,7 @@ msgstr "Επιτόπιος δανεισμός"
 msgid "On-site checkouts"
 msgstr "Επιτόπιοι δανεισμοί"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:681
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:685
 #, c-format
 msgid "On-site checkouts only. Automatic due date: "
 msgstr "Επιτόπιοι δανεισμοί μόνο. Αυτόματη ημερομηνία λήξης προθεσμίας:"
@@ -34620,7 +34644,7 @@ msgstr "Μόνο το τεκμήριο "
 msgid "Only items currently available"
 msgstr "Μόνο τα διαθέσιμα τεκμήρια"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:730
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:734
 #, c-format
 msgid "Only on-site checkouts are allowed"
 msgstr "Μόνο οι επιτόπιοι δανεισμοί επιτρέπονται"
@@ -35066,7 +35090,7 @@ msgstr "Εκκρεμεί"
 #. %1$s:  IF ( chargesamount ) 
 #. %2$s:  chargesamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Outstanding fees &amp; charges%s of %s%s"
 msgstr "Εκκρεμή τέλη &amp; χρεώσεις%s από %s%s"
@@ -35116,7 +35140,7 @@ msgstr "Εκπρόθεσμα"
 msgid "Overdues with fines"
 msgstr "Εκπρόθεσμα με πρόστιμα"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "Overdues:"
 msgstr "Εκπρόθεσμα:"
@@ -35144,7 +35168,7 @@ msgstr "Παράβλεψη ορίου και ανανέωση"
 msgid "Override renewal limit:"
 msgstr "Παράβλεψη ορίου ανανέωσης:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:797
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:801
 #, c-format
 msgid "Override restriction temporarily"
 msgstr "Προσωρινή παράβλεψη περιορισμού"
@@ -35347,7 +35371,7 @@ msgid "Patent document"
 msgstr "Έγγραφο διπλωμάτων ευρεσιτεχνίας"
 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:62
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:937
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:941
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:83
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:145
@@ -35478,8 +35502,8 @@ msgstr "Τα πρόστιμα του μέλους είναι άνω του ορ�
 msgid "Patron flags:"
 msgstr "Σημαίες Μέλους:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:808
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
 #, c-format
 msgid "Patron has "
 msgstr "Το μέλος έχει "
@@ -35515,7 +35539,7 @@ msgstr ""
 #. %1$s:  IF ( creditsamount ) 
 #. %2$s:  creditsamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:822
 #, c-format
 msgid "Patron has a credit%s of %s%s "
 msgstr "Το μέλος έχει μία πίστωση%s από %s%s "
@@ -35560,7 +35584,7 @@ msgstr "Το μέλος έχει εκπρόθεσμα τεκμήρια και έ
 msgid "Patron has nothing checked out."
 msgstr "Το μέλος δεν έχει δανεισμούς."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:996
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1000
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:533
 #, c-format
 msgid "Patron has nothing on hold."
@@ -35581,7 +35605,7 @@ msgid "Patron has outstanding fines: %s"
 msgstr "Το μέλος έχει πρόστιμα που εκκρεμούν: %s"
 
 #. %1$s:  IF CAN_user_borrowers && ( !Koha.Preference('IndependentBranchesPatronModifications') || borrower.branch == branch ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:745
 #, fuzzy, c-format
 msgid "Patron has pending modifications. %s "
 msgstr "Ειδοποίηση μέλους:"
@@ -35770,7 +35794,7 @@ msgstr "Ο λογαριασμός του μέλους έχει ανανεωθε�
 #. %2$s:  userdebarreddate | $KohaDates 
 #. %3$s:  END 
 #. %4$s:  IF ( debarredcomment ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:782
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:180
 #, c-format
 msgid "Patron's account is restricted %s until %s %s %s with the explanation: "
@@ -35778,7 +35802,7 @@ msgstr ""
 "Ο λογαριασμός του μέλους υπόκειται σε περιορισμούς %s μέχρι %s %s %s με την "
 "αιτιολογία: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
 #, c-format
 msgid "Patron's address in doubt"
 msgstr "Διεύθυνση μέλους σε αμφιβολία"
@@ -35819,7 +35843,7 @@ msgstr "Η κάρτα μέλους έχει δηλωθεί ως χαμένη."
 #. %1$s:  IF ( expiry ) 
 #. %2$s:  expiry | $KohaDates 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:762
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:766
 #, c-format
 msgid "Patron's card has expired. %sPatron's card expired on %s%s "
 msgstr "Η κάρτα μέλους έχει λήξει. %sΗ κάρτα μέλους έληξε στις %s%s "
@@ -35840,7 +35864,7 @@ msgid "Patron's card is expired."
 msgstr "Η κάρτα μέλους είναι ληγμένη"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:490
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:777
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "Patron's card is lost"
@@ -35852,7 +35876,7 @@ msgid "Patron's card is lost."
 msgstr "Η κάρτα μέλους είναι χαμένη"
 
 #. %1$s:  expiry | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
 #, c-format
 msgid "Patron's card will expire soon. Patron's card expires on %s "
 msgstr "Η κάρτα μέλους θα λήξει σύντομα. Η κάρτα μέλους λήγει στις %s "
@@ -36021,7 +36045,7 @@ msgstr "Pawel Skuza (Πολωνικά για 1.2)"
 msgid "Pay"
 msgstr "Πληρωμή"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:813
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:817
 #, fuzzy, c-format
 msgid "Pay all fines"
 msgstr "Πληρωμή προστίμων"
@@ -36115,7 +36139,7 @@ msgstr "Εκκρεμείς"
 msgid "Pending discharge requests"
 msgstr "Εκκρεμείς προτάσεις"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:745
 #, fuzzy, c-format
 msgid "Pending modifications:"
 msgstr "Αποστολή ειδοποίησης"
@@ -36349,7 +36373,7 @@ msgstr "Φυσικά στοιχεία:"
 msgid "Pick"
 msgstr "Επιλογή"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:961
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:495
 #, fuzzy, c-format
 msgid "Pickup at"
@@ -37371,7 +37395,7 @@ msgstr "Προηγούμενες περίοδοι χρήσης"
 
 #: intranet-tmpl/prog/en/columns.def:73
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:25
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:936
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:940
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:108
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:466
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:45
@@ -37506,7 +37530,7 @@ msgid "Print label"
 msgstr "Εκτύπωση ετικέτας"
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:55
-#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:306
+#: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:314
 #, c-format
 msgid "Print list"
 msgstr "Εκτύπωση λίστας"
@@ -37624,7 +37648,7 @@ msgstr "Εκτυπωτής: "
 msgid "Printers"
 msgstr "Εκτυπωτές"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:959
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:963
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:574
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:668
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:497
@@ -38533,7 +38557,7 @@ msgstr "Πληροφορίες σχέσης"
 msgid "Relationship: "
 msgstr "Σχέση: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:904
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:908
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:436
 #, c-format
 msgid "Relatives' checkouts"
@@ -38574,7 +38598,7 @@ msgstr ""
 msgid "Remember for next check in:"
 msgstr "Θυμηθείτε για επόμενη επιστροφή:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:666
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:670
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:694
 #, c-format
 msgid "Remember for session:"
@@ -38741,8 +38765,8 @@ msgstr "Αφαίρεση;"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:146
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:148
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:130
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:23
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:140
 #, c-format
@@ -39342,7 +39366,7 @@ msgstr "Περιορισμένο"
 msgid "Restricted [until] flag"
 msgstr "Σήμανση περιορισμού [έως]"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:782
 #, c-format
 msgid "Restricted:"
 msgstr "Απαγορευμένο:"
@@ -39417,7 +39441,7 @@ msgid "Results per page :"
 msgstr "Αποτελέσματα ανά σελίδα :"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:990
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:994
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:528
 msgid "Resume all suspended holds"
 msgstr "Περίληψη όλων των κρατήσεων που έχουν ανασταλεί"
@@ -41527,7 +41551,7 @@ msgstr "Ρυθμίστε όλες τις επιχορηγήσεις στο μη�
 msgid "Set back to"
 msgstr "Ρύθμιση πίσω σε"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:756
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
 #, c-format
 msgid "Set due date to expiry:"
 msgstr "Καθορισμός ημερομηνίας επιστροφής πριν την λήξη:"
@@ -42297,7 +42321,7 @@ msgstr "Εξειδικευμένο"
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:980
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:984
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:518
 #, c-format
 msgid "Specify date on which to resume %s: "
@@ -42305,7 +42329,7 @@ msgstr "Προσδιορίστε ημερομηνία για να συνεχίσ
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:660
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:664
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:692
 #, c-format
 msgid "Specify due date %s: "
@@ -43584,7 +43608,7 @@ msgid "Surveys"
 msgstr "Έρευνες"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:975
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:979
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:513
 msgid "Suspend all holds"
 msgstr "Αναστολή όλων των κρατήσεων"
@@ -43609,6 +43633,12 @@ msgstr "Σύνθετη Αναζήτηση"
 #, c-format
 msgid "Switch to basic editor"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:208
+#: intranet-tmpl/prog/en/modules/about.tt:222
+#, fuzzy, c-format
+msgid "Switching to dom indexing"
+msgstr "Σύνθετη Αναζήτηση"
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:189
 #, c-format
@@ -44227,8 +44257,7 @@ msgstr ""
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
 "now deprecated and will be removed in future releases. Please use DOM "
-"instead by setting &lt;zebra_auth_index_mode&gt; to 'dom' (full reindex "
-"required). "
+"instead. To switch follow this page of wiki: "
 msgstr ""
 ". Η υποστήριξη GRS-1 έχει λήξει και θα απομακρυνθεί στις επόμενες εκδόσεις. "
 "Παρακαλούμε χρησιμοποιήστε το DOM ρυθμίζοντας &lt;zebra_auth_index_mode&gt; "
@@ -44258,8 +44287,7 @@ msgstr ""
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
 "now deprecated and will be removed in future releases. Please use DOM "
-"instead by setting &lt;zebra_bib_index_mode&gt; to 'dom' (full reindex "
-"required). "
+"instead. To switch follow this page of wiki: "
 msgstr ""
 ". Η υποστήριξη GRS-1 έχει λήξει και θα απομακρυνθεί στις επόμενες εκδόσεις. "
 "Παρακαλούμε χρησιμοποιήστε το DOM ρυθμίζοντας &lt;zebra_bib_index_mode&gt; "
@@ -45541,7 +45569,7 @@ msgstr ""
 "Αυτό το μέλος δεν μπορεί να δανειστεί αυτό το τεκμήριο λόγω της πολιτικής "
 "κυκλοφορίας υλικού της βιβλιοθήκης"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1001
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1005
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:288
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:172
 #, fuzzy, c-format
@@ -45916,8 +45944,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:212
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:40
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:954
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:958
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:667
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:714
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:732
@@ -48022,7 +48050,7 @@ msgstr ""
 msgid "View all libraries"
 msgstr "Προβολή όλων των βιβλιοθηκών"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:743
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:747
 #, fuzzy, c-format
 msgid "View all pending patron modifications"
 msgstr "%sΔεν υπάρχουν εκκρεμείς παραγγελίες.%s"
@@ -48085,7 +48113,7 @@ msgstr "Προβολή εκκρεμών ενεργειών διακίνησης 
 msgid "View record"
 msgstr "Προβολή εγγραφής"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:798
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:194
 #, c-format
 msgid "View restrictions"
@@ -49144,7 +49172,7 @@ msgstr ""
 "Έχετε %s σφάλμα(τα) στη διαμόρφωση MARC. Παρακαλώ διορθώστε τα πριν "
 "χρησιμοποιήσετε το Koha"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1019
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1023
 #, c-format
 msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
@@ -49249,7 +49277,7 @@ msgstr ""
 "QueryParser. %s Η 'queryparser_config' καταχώρηση λείπει από το αρχείο "
 "παραμετροποίησή σας."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:756
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
 #, c-format
 msgid ""
 "You have the ReturnBeforeExpiry system preference enabled this means if the "
@@ -49879,9 +49907,9 @@ msgstr ""
 #, c-format
 msgid ""
 "[%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
-"warnPrefAnonymousPatron || warnNoActiveCurrency || QueryParserError || "
-"warnIsRootUser || xml_config_warnings.size || "
-"AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
+"warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
+"warnNoActiveCurrency || QueryParserError || warnIsRootUser || "
+"xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError %%] %s "
 msgstr ""
 
@@ -49953,10 +49981,10 @@ msgstr ""
 msgid "[Clear all]"
 msgstr "[Καθαρισμός όλων]"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:868
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:871
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:877
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:879
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:872
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:881
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:883
 #, c-format
 msgid "[Delete]"
 msgstr "[Διαγραφή]"
@@ -50290,7 +50318,7 @@ msgstr "χαρτογράφηση σε ένα υποπεδίο MARC, "
 msgid "be mapped to the same tag,"
 msgstr "να χαρτογραφηθεί στο ίδιο πεδίο,"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:810
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:69
 #, c-format
 msgid "because fine balance is "
@@ -50307,7 +50335,7 @@ msgstr ""
 msgid "begins with "
 msgstr "Bound with':"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "below"
 msgstr "πιο κάτω"
@@ -50349,7 +50377,7 @@ msgstr "κατά "
 msgid "by %s"
 msgstr "από %s"
 
-#. %1$s:  XISBN.author 
+#. %1$s:  XISBN.author | html 
 #. %2$s:  XISBN.copyrightdate 
 #. %3$s:  IF ( XISBN.publishercode ) 
 #. %4$s:  XISBN.publishercode 
@@ -51601,9 +51629,9 @@ msgstr ""
 msgid "or"
 msgstr "ή"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:763
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:816
 #, c-format
 msgid "or "
 msgstr "ή "
@@ -52178,7 +52206,7 @@ msgstr "εκτός αν"
 msgid "unrecognized command"
 msgstr "Ανανέωση Μέλους"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:978
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:982
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:516
 #, c-format
 msgid "until"
