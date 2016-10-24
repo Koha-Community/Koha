@@ -376,6 +376,13 @@ $(document).ready(function() {
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
+                        } else if ( oObj.can_renew_error == "auto_too_much_oweing" ) {
+                            content += "<span class='renewals-disabled'>"
+                                    + NOT_RENEWABLE_AUTO_TOO_MUCH_OWEING
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_renew" ) {
                             content += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE_AUTO_RENEW
