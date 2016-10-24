@@ -119,6 +119,14 @@ if ( my $guarantor = $patron->guarantor ) {
 my $relatives_issues_count =
     Koha::Checkouts->count({ borrowernumber => \@relatives });
 
+# Calculate and display patron's age
+if ( !$patron->is_category_valid ) {
+    $template->param( age_limitations => 1 );
+    $template->param( age_low => $patron->category->dateofbirthrequired );
+    $template->param( age_high => $patron->category->upperagelimit );
+}
+$template->param( age => $patron->get_age );
+
 # Generate CSRF token for upload and delete image buttons
 $template->param(
     csrf_token => Koha::Token->new->generate_csrf({ session_id => $input->cookie('CGISESSID'),}),

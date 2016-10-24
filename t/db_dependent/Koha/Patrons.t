@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 39;
+use Test::More tests => 40;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -637,6 +637,64 @@ subtest 'get_age' => sub {
     is( $patron->get_age, 0, 'Patron is a newborn child' );
 
     $patron->delete;
+};
+
+subtest 'is_category_valid' => sub {
+    plan tests => 10;
+
+    my $today = dt_from_string;
+
+    my $category = $builder->build({
+        source => 'Category',
+        value => {
+            categorycode        => 'AGE_5_10',
+            dateofbirthrequired => 5,
+            upperagelimit       => 10
+        }
+    });
+    $category = Koha::Patron::Categories->find( $category->{categorycode} );
+
+    my $patron = $builder->build({
+        source => 'Borrower',
+        value => {
+            categorycode        => 'AGE_5_10'
+        }
+    });
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+
+
+    $patron->dateofbirth( undef );
+    is( $patron->is_category_valid, 1, 'Patron with no dateofbirth is always valid for any category');
+
+    $patron->dateofbirth( $today->clone->add( years => -12, months => -6, days => -1 ) );
+    is( $patron->is_category_valid, 0, 'Patron is 12, so the age is above allowed range 5-10 years');
+
+    $patron->dateofbirth( $today->clone->add( years => -3, months => -6, days => -1 ) );
+    is( $patron->is_category_valid, 0, 'Patron is 3, so the age is below allowed range 5-10 years');
+
+    $patron->dateofbirth( $today->clone->add( years => -7, months => -6, days => -1 ) );
+    is( $patron->is_category_valid, 1, 'Patron is 7, so the age perfectly suits allowed range 5-10 years');
+
+    $patron->dateofbirth( $today->clone->add( years => -5, months => 0, days => 0 ) );
+    is( $patron->is_category_valid, 1, 'Patron celebrates the 5th birthday today, so the age is allowed for this category');
+
+    $patron->dateofbirth( $today->clone->add( years => -5, months => 0, days => 1 ) );
+    is( $patron->is_category_valid, 0, 'Patron will celebrate the 5th birthday tomorrow, so the age is NOT allowed for this category');
+
+    $patron->dateofbirth( $today->clone->add( years => -5, months => 0, days => -1 ) );
+    is( $patron->is_category_valid, 1, 'Patron celebrated the 5th birthday yesterday, so the age is allowed for this category');
+
+    $patron->dateofbirth( $today->clone->add( years => -11, months => 0, days => 0 ) );
+    is( $patron->is_category_valid, 0, 'Patron celebrate the 11th birthday today, so the age is NOT allowed for this category');
+
+    $patron->dateofbirth( $today->clone->add( years => -11, months => 0, days => 1 ) );
+    is( $patron->is_category_valid, 1, 'Patron will celebrate the 11th birthday tomorrow, so the age is allowed for this category');
+
+    $patron->dateofbirth( $today->clone->add( years => -11, months => 0, days => -1 ) );
+    is( $patron->is_category_valid, 0, 'Patron celebrated the 11th birthday yesterday, so the age is NOT allowed for this category');
+
+    $patron->delete;
+    $category->delete;
 };
 
 subtest 'account' => sub {

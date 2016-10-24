@@ -71,10 +71,15 @@
                             </div>
                         [% END %]
 
-                        [% IF fines %]
+                        [% IF fines || age_limitations %]
                             <div id="circmessages" class="circmessage attention">
                                 <ul>
-                                    [% INCLUDE 'blocked-fines.inc' %]
+                                    [% IF fines %]
+                                        [% INCLUDE 'blocked-fines.inc' %]
+                                    [% END %]
+                                    [% IF age_limitations %]
+                                        [% INCLUDE 'category-out-of-age-limit.inc' %]
+                                    [% END %]
                                 </ul>
                             </div>
                         [% END %]

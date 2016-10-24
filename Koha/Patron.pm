@@ -977,6 +977,24 @@ sub get_age {
     return $age;
 }
 
+=head3 is_category_valid
+
+my $is_valid = $patron->is_category_valid
+
+Return 1 if patron's age is between allowed limits, returns 0 if it's not.
+
+=cut
+
+sub is_category_valid {
+    my ($self) = @_;
+    my $age = $self->get_age;
+
+    my $patroncategory = $self->category;
+    my ($low,$high) = ($patroncategory->dateofbirthrequired, $patroncategory->upperagelimit);
+
+    return (defined($age) && (($high && ($age > $high)) or ($age < $low))) ? 0 : 1;
+}
+
 =head3 account
 
 my $account = $patron->account
