@@ -29,7 +29,7 @@ use Koha::Database;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 87;
+use Test::More tests => 88;
 
 BEGIN {
     use_ok('C4::Circulation');
