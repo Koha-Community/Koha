@@ -30,8 +30,9 @@ sub list {
 
     my $cities;
     my $filter;
+    $args //= {};
 
-    for my $filter_param ( keys $args ) {
+    for my $filter_param ( keys %$args ) {
         $filter->{$filter_param} = { LIKE => $args->{$filter_param} . "%" };
     }
 
