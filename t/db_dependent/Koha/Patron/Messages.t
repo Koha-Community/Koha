@@ -19,12 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 11;
 
 use C4::Context;
 use C4::Log;
 use Koha::Patron::Message;
 use Koha::Patron::Messages;
+use Koha::Patrons;
 use Koha::Database;
 
 use t::lib::Mocks;
@@ -36,6 +37,7 @@ $schema->storage->txn_begin;
 my $builder        = t::lib::TestBuilder->new;
 my $library        = $builder->build( { source => 'Branch' } );
 my $patron         = $builder->build( { source => 'Borrower', values => { branchcode => $library->{branchcode} } } );
+my $patron_2       = Koha::Patrons->search->next;
 my $nb_of_logaction = get_nb_of_logactions();
 my $nb_of_messages = Koha::Patron::Messages->search->count;
 
@@ -48,6 +50,13 @@ my $new_message_1  = Koha::Patron::Message->new(
     }
 )->store;
 is( get_nb_of_logactions(), $nb_of_logaction, 'With BorrowersLog off, no new log should have been added' );
+
+my $context = new Test::MockModule('C4::Context');
+$context->mock( 'userenv', sub {
+    return {
+        number => $patron_2->{borrowernumber},
+    };
+});
 
 t::lib::Mocks::mock_preference('BorrowersLog', 1);
 my $new_message_2  = Koha::Patron::Message->new(
@@ -64,6 +73,9 @@ is( Koha::Patron::Messages->search->count, $nb_of_messages + 2, 'The 2 messages 
 
 my $retrieved_message_1 = Koha::Patron::Messages->find( $new_message_1->message_id );
 is( $retrieved_message_1->message, $new_message_1->message, 'Find a message by id should return the correct message' );
+is( $retrieved_message_1->manager_id, undef, 'Manager id should not be filled in when it is not defined in userenv' );
+my $retrieved_message_2 = Koha::Patron::Messages->find( $new_message_2->message_id );
+is( $retrieved_message_2->manager_id, $patron_2->{borrowernumber}, 'Manager id should be filled in when it is defined in userenv' );
 
 t::lib::Mocks::mock_preference('BorrowersLog', 0);
 $retrieved_message_1->delete;
