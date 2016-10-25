@@ -134,7 +134,7 @@
            <td><select name="Filter" id="borcat">
                <option value=""> </option>
                [% FOREACH categoryloo IN categoryloop %]
-                 [% IF ( categoryloo.selected ) %]<option value="[% categoryloo.categorycode %]" selected="selected">[% categoryloo.description %]</option>[% ELSE %]<option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>[% END %]
+                 <option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>
                [% END %]
                </select>
              </td> 
@@ -146,7 +146,7 @@
            <td><select name="Filter" id="itemtype">
                <option value=""> </option>
                [% FOREACH itemtypeloo IN itemtypeloop %]
-                 [% IF ( itemtypeloo.selected ) %]<option value="[% itemtypeloo.code %]" selected="selected">[% itemtypeloo.description %]</option>[% ELSE %]<option value="[% itemtypeloo.code %]">[% itemtypeloo.description %]</option>[% END %]
+                 <option value="[% itemtypeloo.code %]">[% itemtypeloo.description %]</option>
                [% END %]
                </select>
              </td> 
@@ -168,7 +168,7 @@
             <td><select name="Filter" id="ccode">
                 <option value=""> </option>
                 [% FOREACH ccodeloo IN ccodeloop %]
-					[% IF ( ccodeloo.selected ) %] <option value="[% ccodeloo.code %]" selected="selected">[% ccodeloo.description %]</option>[% ELSE %]<option value="[% ccodeloo.code %]">[% ccodeloo.description %]</option>[% END %]
+                    <option value="[% ccodeloo.code %]">[% ccodeloo.description %]</option>
                 [% END %]
                 </select>
             </td>
@@ -180,8 +180,8 @@
             <td><select name="Filter" id="location">
                 <option value=""> </option>
                 [% FOREACH locationloo IN locationloop %]
-					[% IF ( locationloo.selected ) %]<option value="[% locationloo.code %]" selected="selected">[% locationloo.description %]</option>[% ELSE %]<option value="[% locationloo.code %]">[% locationloo.description %]</option>[% END %]
-				[% END %]
+                    <option value="[% locationloo.code %]">[% locationloo.description %]</option>
+                [% END %]
                </select>
             </td> 
         </tr>
@@ -198,7 +198,7 @@
 			<td><select name="Filter" id="sort1">
                <option value=""> </option>
                [% FOREACH Bsort IN Bsort1 %]
-			   [% IF ( Bsort.selected ) %]<option value="[% Bsort.authorised_value %]" selected="selected">[% Bsort.lib %]</option>[% ELSE %]<option value="[% Bsort.authorised_value %]" >[% Bsort.lib %]</option>[% END %]
+                <option value="[% Bsort.authorised_value %]" >[% Bsort.lib %]</option>
                [% END %]
                </select>
             </td> 
@@ -211,7 +211,7 @@
            	<td><select name="Filter" id="sort2">
                <option value=""> </option>
                [% FOREACH Bsort IN Bsort2 %]
-			   [% IF ( Bsort.selected ) %]<option value="[% Bsort.authorised_value %]" selected="selected">[% Bsort.lib %]</option>[% ELSE %]<option value="[% Bsort.authorised_value %]" >[% Bsort.lib %]</option>[% END %]
+                   <option value="[% Bsort.authorised_value %]" >[% Bsort.lib %]</option>
                [% END %]
                </select>
             </td> 
