@@ -166,10 +166,12 @@ subtest 'update_password' => sub {
 };
 
 subtest 'renew_account' => sub {
-    plan tests => 6;
+    plan tests => 10;
     my $a_month_ago                = dt_from_string->add( months => -1 )->truncate( to => 'day' );
     my $a_year_later               = dt_from_string->add( months => 12 )->truncate( to => 'day' );
     my $a_year_later_minus_a_month = dt_from_string->add( months => 11 )->truncate( to => 'day' );
+    my $a_month_later              = dt_from_string->add( months => 1  )->truncate( to => 'day' );
+    my $a_year_later_plus_a_month  = dt_from_string->add( months => 13 )->truncate( to => 'day' );
     my $patron_category = $builder->build(
         {   source => 'Category',
             value  => {
@@ -186,7 +188,25 @@ subtest 'renew_account' => sub {
             }
         }
     );
+    my $patron_2 = $builder->build(
+        {  source => 'Borrower',
+           value  => {
+               dateexpiry => $a_month_ago,
+               categorycode => $patron_category->{categorycode},
+            }
+        }
+    );
+    my $patron_3 = $builder->build(
+        {  source => 'Borrower',
+           value  => {
+               dateexpiry => $a_month_later,
+               categorycode => $patron_category->{categorycode},
+           }
+        }
+    );
     my $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    my $retrieved_patron_2 = Koha::Patrons->find( $patron_2->{borrowernumber} );
+    my $retrieved_patron_3 = Koha::Patrons->find( $patron_3->{borrowernumber} );
 
     t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'dateexpiry' );
     t::lib::Mocks::mock_preference( 'BorrowersLog',              1 );
@@ -206,7 +226,20 @@ subtest 'renew_account' => sub {
     $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
     is( $number_of_logs, 1, 'Without BorrowerLogs, Koha::Patron->renew_account should not have logged' );
 
+    t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'combination' );
+    $expiry_date = $retrieved_patron_2->renew_account;
+    is( $expiry_date, $a_year_later );
+    $retrieved_expiry_date = Koha::Patrons->find( $patron_2->{borrowernumber} )->dateexpiry;
+    is( dt_from_string($retrieved_expiry_date), $a_year_later );
+
+    $expiry_date = $retrieved_patron_3->renew_account;
+    is( $expiry_date, $a_year_later_plus_a_month );
+    $retrieved_expiry_date = Koha::Patrons->find( $patron_3->{borrowernumber} )->dateexpiry;
+    is( dt_from_string($retrieved_expiry_date), $a_year_later_plus_a_month );
+
     $retrieved_patron->delete;
+    $retrieved_patron_2->delete;
+    $retrieved_patron_3->delete;
 };
 
 subtest "move_to_deleted" => sub {
