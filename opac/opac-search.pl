@@ -506,11 +506,7 @@ $template->param(available => $available);
 
 # append year limits if they exist
 if ($params->{'limit-yr'}) {
-    if ($params->{'limit-yr'} =~ /\d{4}-\d{4}/) {
-        my ($yr1,$yr2) = split(/-/, $params->{'limit-yr'});
-        push @limits, "yr,st-numeric,ge=$yr1 and yr,st-numeric,le=$yr2";
-    }
-    elsif ($params->{'limit-yr'} =~ /\d{4}/) {
+    if ($params->{'limit-yr'} =~ /\d{4}/) {
         push @limits, "yr,st-numeric=$params->{'limit-yr'}";
     }
     else {

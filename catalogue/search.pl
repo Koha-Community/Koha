@@ -416,12 +416,7 @@ $template->param(available => $available);
 my $limit_yr;
 my $limit_yr_value;
 if ($params->{'limit-yr'}) {
-    if ($params->{'limit-yr'} =~ /\d{4}-\d{4}/) {
-        my ($yr1,$yr2) = split(/-/, $params->{'limit-yr'});
-        $limit_yr = "yr,st-numeric,ge=$yr1 and yr,st-numeric,le=$yr2";
-        $limit_yr_value = "$yr1-$yr2";
-    }
-    elsif ($params->{'limit-yr'} =~ /\d{4}/) {
+    if ($params->{'limit-yr'} =~ /\d{4}/) {
         $limit_yr = "yr,st-numeric=$params->{'limit-yr'}";
         $limit_yr_value = $params->{'limit-yr'};
     }
