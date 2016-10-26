@@ -80,6 +80,10 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Exception',
         description => 'Koha is under maintenance.'
     },
+    'Koha::Exceptions::UnknownObject' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'Object cannot be found or is not known',
+    },
     # Virtualshelves exceptions
     'Koha::Exceptions::Virtualshelves::DuplicateObject' => {
         isa => 'Koha::Exceptions::DuplicateObject',

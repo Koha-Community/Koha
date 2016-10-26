@@ -41,6 +41,7 @@ use Koha::Patron::Categories;
 use Koha::Patron::HouseboundProfile;
 use Koha::Patron::HouseboundRole;
 use Koha::Patron::Images;
+use Koha::Patron::Message::Preferences;
 use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::Club::Enrollments;
@@ -804,6 +805,40 @@ sub status_not_ok {
     push @problems, $ex if $ex = $patron_checks->lost;
 
     return @problems;
+}
+
+=head3 set_default_messaging_preferences
+
+    $patron->set_default_messaging_preferences
+
+Sets default messaging preferences on patron.
+
+See Koha::Patron::Message::Preference(s) for more documentation, especially on
+thrown exceptions.
+
+=cut
+
+sub set_default_messaging_preferences {
+    my ($self, $categorycode) = @_;
+
+    my $options = Koha::Patron::Message::Preferences->get_options;
+
+    foreach my $option (@$options) {
+        # Check that this option has preference configuration for this category
+        unless (Koha::Patron::Message::Preferences->search({
+            message_attribute_id => $option->{message_attribute_id},
+            categorycode         => $categorycode || $self->categorycode,
+        })->count) {
+            next;
+        }
+        Koha::Patron::Message::Preference->new_from_default({
+            borrowernumber => $self->borrowernumber,
+            categorycode   => $categorycode || $self->categorycode,
+            message_attribute_id => $option->{message_attribute_id},
+        })->store;
+    }
+
+    return $self;
 }
 
 =head3 type

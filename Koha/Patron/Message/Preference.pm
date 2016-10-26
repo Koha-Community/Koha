@@ -23,6 +23,8 @@ use Koha::Database;
 use Koha::Exceptions;
 use Koha::Patron::Categories;
 use Koha::Patron::Message::Attributes;
+use Koha::Patron::Message::Preferences;
+use Koha::Patron::Message::Transport::Preferences;
 use Koha::Patron::Message::Transports;
 use Koha::Patrons;
 
@@ -66,6 +68,78 @@ sub new {
     my ($class, $params) = shift;
 
     my $self = $class->SUPER::new(@_);
+
+    return $self;
+}
+
+=head3 new_from_default
+
+my $preference = Koha::Patron::Message::Preference->new_from_default({
+    borrowernumber => 123,
+    categorycode   => 'ABC',   # if not given, patron's categorycode will be used
+    message_attribute_id => 1,
+});
+
+NOTE: This subroutine initializes and STORES the object (in order to set
+message transport types for the preference), so no need to call ->store when
+preferences are initialized via this method.
+
+Stores default messaging preference for C<categorycode> to patron for given
+C<message_attribute_id>.
+
+Throws Koha::Exceptions::MissingParameter if any of following is missing:
+- borrowernumber
+- message_attribute_id
+
+Throws Koha::Exceptions::UnknownObject if default preferences are not found.
+
+=cut
+
+sub new_from_default {
+    my ($class, $params) = @_;
+
+    my @required = qw(borrowernumber message_attribute_id);
+    foreach my $p (@required) {
+        Koha::Exceptions::MissingParameter->throw(
+            error => 'Missing required parameter.',
+            parameter => $p,
+        ) unless exists $params->{$p};
+    }
+    unless ($params->{'categorycode'}) {
+        my $patron = Koha::Patrons->find($params->{borrowernumber});
+        $params->{'categorycode'} = $patron->categorycode;
+    }
+
+    my $default = Koha::Patron::Message::Preferences->find({
+        categorycode => $params->{'categorycode'},
+        message_attribute_id => $params->{'message_attribute_id'},
+    });
+    Koha::Exceptions::UnknownObject->throw(
+        error => 'Default messaging preference for given categorycode and'
+        .' message_attribute_id cannot be found.',
+    ) unless $default;
+    $default = $default->unblessed;
+
+    # Add a new messaging preference for patron
+    my $self = $class->SUPER::new({
+        borrowernumber => $params->{'borrowernumber'},
+        message_attribute_id => $default->{'message_attribute_id'},
+        days_in_advance => $default->{'days_in_advance'},
+        wants_digest => $default->{'wants_digest'},
+    })->store;
+
+    # Set default messaging transport types
+    my $default_transport_types =
+    Koha::Patron::Message::Transport::Preferences->search({
+        borrower_message_preference_id =>
+                    $default->{'borrower_message_preference_id'}
+    });
+    while (my $transport = $default_transport_types->next) {
+        Koha::Patron::Message::Transport::Preference->new({
+            borrower_message_preference_id => $self->borrower_message_preference_id,
+            message_transport_type => $transport->message_transport_type,
+        })->store;
+    }
 
     return $self;
 }

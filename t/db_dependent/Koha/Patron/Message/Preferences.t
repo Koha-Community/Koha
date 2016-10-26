@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -146,6 +146,31 @@ subtest 'Test Koha::Patron::Message::Preferences->get_options' => sub {
 
         $schema->storage->txn_rollback;
     };
+};
+
+subtest 'Add preferences from defaults' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = build_a_test_patron();
+    my ($default, $mtt1, $mtt2) = build_a_test_category_preference({
+        patron => $patron,
+    });
+    ok(Koha::Patron::Message::Preference->new_from_default({
+        borrowernumber       => $patron->borrowernumber,
+        categorycode         => $patron->categorycode,
+        message_attribute_id => $default->message_attribute_id,
+    })->store, 'Added a default preference to patron.');
+    ok(my $pref = Koha::Patron::Message::Preferences->find({
+        borrowernumber       => $patron->borrowernumber,
+        message_attribute_id => $default->message_attribute_id,
+    }), 'Found the default preference from patron.');
+    is(Koha::Patron::Message::Transport::Preferences->search({
+        borrower_message_preference_id => $pref->borrower_message_preference_id
+    })->count, 2, 'Found the two transport types that we set earlier');
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Test adding a new preference with invalid parameters' => sub {
@@ -280,6 +305,28 @@ sub build_a_test_category {
     return Koha::Patron::Categories->find($categorycode);
 }
 
+sub build_a_test_letter {
+    my ($params) = @_;
+
+    my $mtt = $params->{mtt} ? $params->{mtt} : 'email';
+    my $branchcode     = $builder->build({
+        source => 'Branch' })->{branchcode};
+    my $letter = $builder->build({
+        source => 'Letter',
+        value => {
+            branchcode => '',
+            is_html => 0,
+            message_transport_type => $mtt
+        }
+    });
+
+    return Koha::Notice::Templates->find({
+        module     => $letter->{module},
+        code       => $letter->{code},
+        branchcode => $letter->{branchcode},
+    });
+}
+
 sub build_a_test_patron {
     my $categorycode   = $builder->build({
         source => 'Category' })->{categorycode};
@@ -289,6 +336,63 @@ sub build_a_test_patron {
         source => 'Borrower' })->{borrowernumber};
 
     return Koha::Patrons->find($borrowernumber);
+}
+
+sub build_a_test_transport_type {
+    my $mtt = $builder->build({
+        source => 'MessageTransportType' });
+
+    return Koha::Patron::Message::Transport::Types->find(
+        $mtt->{message_transport_type}
+    );
+}
+
+sub build_a_test_category_preference {
+    my ($params) = @_;
+
+    my $patron = $params->{patron};
+    my $attr = $params->{attr}
+                    ? $params->{attr}
+                    : build_a_test_attribute($params->{days_in_advance});
+
+    my $letter = $params->{letter} ? $params->{letter} : build_a_test_letter();
+    my $mtt1 = $params->{mtt1} ? $params->{mtt1} : build_a_test_transport_type();
+    my $mtt2 = $params->{mtt2} ? $params->{mtt2} : build_a_test_transport_type();
+
+    Koha::Patron::Message::Transport->new({
+        message_attribute_id   => $attr->message_attribute_id,
+        message_transport_type => $mtt1->message_transport_type,
+        is_digest              => $params->{digest} ? 1 : 0,
+        letter_module          => $letter->module,
+        letter_code            => $letter->code,
+    })->store;
+
+    Koha::Patron::Message::Transport->new({
+        message_attribute_id   => $attr->message_attribute_id,
+        message_transport_type => $mtt2->message_transport_type,
+        is_digest              => $params->{digest} ? 1 : 0,
+        letter_module          => $letter->module,
+        letter_code            => $letter->code,
+    })->store;
+
+    my $default = Koha::Patron::Message::Preference->new({
+        categorycode         => $patron->categorycode,
+        message_attribute_id => $attr->message_attribute_id,
+        wants_digest         => $params->{digest} ? 1 : 0,
+        days_in_advance      => $params->{days_in_advance}
+                                 ? $params->{days_in_advance} : 0,
+    })->store;
+
+    Koha::Patron::Message::Transport::Preference->new({
+        borrower_message_preference_id => $default->borrower_message_preference_id,
+        message_transport_type         => $mtt1->message_transport_type,
+    })->store;
+    Koha::Patron::Message::Transport::Preference->new({
+        borrower_message_preference_id => $default->borrower_message_preference_id,
+        message_transport_type         => $mtt2->message_transport_type,
+    })->store;
+
+    return ($default, $mtt1, $mtt2);
 }
 
 1;
