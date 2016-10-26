@@ -176,7 +176,7 @@ INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
 VALUES ( 'cs','cze');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'cs', 'language', 'cs', 'Ceština');
+VALUES ( 'cs', 'language', 'cs', 'Čeština');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'cs', 'language', 'en', 'Czech');
