@@ -9,7 +9,7 @@
 <style type="text/css"> p { margin-top: 0; }</style>
 </head>
 
-<body id="circ_view_holdsqueue" class="circ">
+<body id="circ_article-requests" class="circ">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
 
@@ -31,7 +31,7 @@
         }
 
         function Cancel( id, a ) {
-            notes = prompt(_("Reason for cancelation:"));
+            notes = prompt(_("Reason for cancellation:"));
             if ( notes == null ) {
                 return;
             }

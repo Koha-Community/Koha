@@ -724,25 +724,25 @@ Using this account is not recommended because some parts of Koha will not functi
                                     <caption>Article requests <span class="count">([% borrower.article_requests_current.count %] total)</span></caption>
                                     <thead>
                                         <tr>
-                                            <th class="anti-the">Record title</th>
-                                            <th class="psort">Placed on</th>
-                                            <th class="anti-the">Title</th>
-                                            <th>Author</th>
-                                            <th>Volume</th>
-                                            <th>Issue</th>
-                                            <th>Date</th>
-                                            <th>Pages</th>
-                                            <th>Chapters</th>
-                                            <th>Notes</th>
-                                            <th>Status</th>
-                                            <th>Pickup library</th>
-                                            <th class="nosort">&nbsp;</th>
+                                            <th class="anti-the article-request-record-title">Record title</th>
+                                            <th class="psort article-request-created-on">Placed on</th>
+                                            <th class="anti-the article-request-title">Title</th>
+                                            <th class="article-request-author">Author</th>
+                                            <th class="article-request-volume">Volume</th>
+                                            <th class="article-request-issue">Issue</th>
+                                            <th class="article-request-date">Date</th>
+                                            <th class="article-request-pages">Pages</th>
+                                            <th class="article-request-chapters">Chapters</th>
+                                            <th class="article-request-patron-notes">Notes</th>
+                                            <th class="article-request-status">Status</th>
+                                            <th class="article-request-branchcode">Pickup library</th>
+                                            <th class="nosort article-request-cancel">&nbsp;</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
                                     [% FOREACH ar IN borrower.article_requests_current %]
-                                            <td class="article-request-title">
+                                            <td class="article-request-record-title">
                                                 <a class="article-request-title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ar.biblionumber %]">
                                                     [% ar.biblio.title %]
                                                     [% ar.item.enumchron %]
