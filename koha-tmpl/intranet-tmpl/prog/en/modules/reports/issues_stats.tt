@@ -38,17 +38,17 @@
                     [% CASE 1 %]Period To
                     [% CASE 2 %]Patron Category =
                     [% CASE 3 %]Item Type =
-                    [% CASE 4 %]Library =
+                    [% CASE 4 %]Issuing library =
                     [% CASE 5 %]Collection =
                     [% CASE 6 %]Location =
-                    [% CASE 7 %]Item callnumber &gt;=
-                    [% CASE 8 %]Item callnumber &lt;
-                    [% CASE 9 %]sort1 =
-                    [% CASE 10 %]sort2 =
-                    [% CASE 11 %]Home branch =
-                    [% CASE 12 %]Holding branch =
-                    [% CASE 13 %]Patron branch =
-                    [% CASE 14 %]Issuing branch =
+                    [% CASE 7 %]Item call number &gt;=
+                    [% CASE 8 %]Item call number &lt;
+                    [% CASE 9 %]Patron sort1 =
+                    [% CASE 10 %]Patron sort2 =
+                    [% CASE 11 %]Home library =
+                    [% CASE 12 %]Holding library =
+                    [% CASE 13 %]Patron library =
+                    [% CASE 14 %]Issuing library =
                     [% CASE %][% loopfilte.crit %] =
                 [% END %]
                 [% loopfilte.filter %]
@@ -174,7 +174,7 @@
              </td> 
         </tr>
         <tr>
-            <td>Library</td>
+            <td>Issuing library</td>
             <td><input type="radio" name="Line" value="branch" /></td>
             <td><input type="radio" name="Column" value="branch" /></td>
             <td><select name="Filter" id="branch">
@@ -259,7 +259,7 @@
             </td>
         </tr>
         <tr>
-            <td>Patron branch</td>
+            <td>Patron library</td>
             <td><input type="radio" name="Line" value="borrowers.branchcode" /></td>
             <td><input type="radio" name="Column" value="borrowers.branchcode" /></td>
             <td>
