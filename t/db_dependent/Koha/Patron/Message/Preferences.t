@@ -49,7 +49,7 @@ subtest 'Test Koha::Patron::Message::Preferences' => sub {
     my $attribute = build_a_test_attribute();
 
     subtest 'Test for a patron' => sub {
-        plan tests => 2;
+        plan tests => 3;
 
         my $patron = build_a_test_patron();
         Koha::Patron::Message::Preference->new({
@@ -65,6 +65,17 @@ subtest 'Test Koha::Patron::Message::Preferences' => sub {
         });
         ok($preference->borrower_message_preference_id > 0,
            'Added a new messaging preference for patron.');
+
+        subtest 'Test set not throwing an exception on duplicate object' => sub {
+            plan tests => 1;
+
+            Koha::Patron::Message::Attributes->find({
+                message_attribute_id => $attribute->message_attribute_id
+            })->set({ takes_days => 1 })->store;
+            $preference->set({ days_in_advance => 1 })->store;
+            is(ref($preference), 'Koha::Patron::Message::Preference',
+             'Updating the preference does not cause duplicate object exception');
+        };
 
         $preference->delete;
         is(Koha::Patron::Message::Preferences->search({
@@ -100,7 +111,7 @@ subtest 'Test Koha::Patron::Message::Preferences' => sub {
 };
 
 subtest 'Test adding a new preference with invalid parameters' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     subtest 'Missing parameters' => sub {
         plan tests => 1;
@@ -175,6 +186,34 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
             .' => Koha::Exceptions::BadParameter');
         is($@->parameter, 'days_in_advance', 'The previous exception tells us it'
             .' was the days_in_advance.');
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'Duplicate object' => sub {
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $attribute = build_a_test_attribute();
+        my $patron    = build_a_test_patron();
+        my $preference = Koha::Patron::Message::Preference->new({
+            borrowernumber => $patron->borrowernumber,
+            message_attribute_id => $attribute->message_attribute_id,
+            wants_digest => 0,
+            days_in_advance => undef,
+        })->store;
+        ok($preference->borrower_message_preference_id,
+           'Added a new messaging preference for patron.');
+        eval { Koha::Patron::Message::Preference->new({
+            borrowernumber => $patron->borrowernumber,
+            message_attribute_id => $attribute->message_attribute_id,
+            wants_digest => 0,
+            days_in_advance => undef,
+        })->store };
+        is(ref $@, 'Koha::Exceptions::DuplicateObject',
+                'Adding a duplicate preference'
+                .' => Koha::Exceptions::DuplicateObject');
 
         $schema->storage->txn_rollback;
     };

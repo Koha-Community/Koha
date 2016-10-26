@@ -38,6 +38,38 @@ Koha::Patron::Message::Preference - Koha Patron Message Preference object class
 
 =cut
 
+=head3 new
+
+my $preference = Koha::Patron::Message::Preference->new({
+   borrowernumber => 123,
+   #categorycode => 'ABC',
+   message_attribute_id => 4,
+   wants_digest => 1,
+   days_in_advance => 7,
+});
+
+Takes either borrowernumber or categorycode, but not both.
+
+days_in_advance may not be available. See message_attributes table for takes_days
+configuration.
+
+wants_digest may not be available. See message_transports table for is_digest
+configuration.
+
+You can instantiate a new object without custom validation errors, but when
+storing, validation may throw exceptions. See C<validate()> for more
+documentation.
+
+=cut
+
+sub new {
+    my ($class, $params) = shift;
+
+    my $self = $class->SUPER::new(@_);
+
+    return $self;
+}
+
 =head3 store
 
 Makes a validation before actual Koha::Object->store so that proper exceptions
@@ -61,6 +93,8 @@ Throws following exceptions regarding parameters.
 - Koha::Exceptions::BadParameter
 
 See $_->parameter to identify the parameter causing the exception.
+
+Throws Koha::Exceptions::DuplicateObject if this preference already exists.
 
 Returns Koha::Patron::Message::Preference object.
 
@@ -92,6 +126,20 @@ sub validate {
             error => 'Category not found.',
             parameter => 'categorycode',
         ) unless Koha::Patron::Categories->find($self->categorycode);
+    }
+
+    if (!$self->in_storage) {
+        my $previous = Koha::Patron::Message::Preferences->search({
+            borrowernumber => $self->borrowernumber,
+            categorycode   => $self->categorycode,
+            message_attribute_id => $self->message_attribute_id,
+        });
+        if ($previous->count) {
+            Koha::Exceptions::DuplicateObject->throw(
+                error => 'A preference for this borrower/category and'
+                .' message_attribute_id already exists',
+            );
+        }
     }
 
     my $attr;
