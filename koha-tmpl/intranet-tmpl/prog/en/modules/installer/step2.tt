@@ -20,8 +20,15 @@
         [% IF ( checkgrantaccess ) %]
   <p>User <code>[% user %]</code> has all required privileges on database <code>[% dbname %]</code>.</p>
         [% ELSE %]
-  <p class="error">user <code>[% user %]</code> doesn't have enough privilege on database <code>[% dbname %]</code> </p>
-  <p class="tip"> Ask for or make a change in the user's privileges. Need help? See [% IF ( mysql ) %]<a href=http://dev.mysql.com/doc/refman/4.1/en/grant.html>[% ELSE %]http://www.postgresql.org/docs/8.2/interactive/sql-createrole.html[% END %]this page</a>. User <code>[% user %]</code> must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on <code>[% dbname %]</code></p>
+  <p class="error">user <code>[% user %]</code> doesn't have enough privilege on database <code>[% dbname %]</code></p>
+  <p class="tip">Ask for or make a change in the user's privileges. Need help? See
+    [% IF dbms == 'mysql' %]<a href="https://dev.mysql.com/doc/refman/5.5/en/grant.html">
+    [% ELSE %]<a href="http://www.postgresql.org/docs/8.2/interactive/sql-createrole.html">
+    [% END %]this page</a>.
+  </p>
+  <p class="tip">
+    User <code>[% user %]</code> must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on <code>[% dbname %]</code>
+  </p>
         [% END %]
       [% ELSE %]
   <p class="error">No database named <code>[% dbname %]</code> detected.</p>
