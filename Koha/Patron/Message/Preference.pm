@@ -20,6 +20,11 @@ package Koha::Patron::Message::Preference;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Exceptions;
+use Koha::Patron::Categories;
+use Koha::Patron::Message::Attributes;
+use Koha::Patron::Message::Transports;
+use Koha::Patrons;
 
 use base qw(Koha::Object);
 
@@ -32,6 +37,98 @@ Koha::Patron::Message::Preference - Koha Patron Message Preference object class
 =head2 Class Methods
 
 =cut
+
+=head3 store
+
+Makes a validation before actual Koha::Object->store so that proper exceptions
+can be thrown. See C<validate()> for documentation about exceptions.
+
+=cut
+
+sub store {
+    my $self = shift;
+
+    return $self->validate->SUPER::store(@_);
+}
+
+=head3 validate
+
+Makes a basic validation for object.
+
+Throws following exceptions regarding parameters.
+- Koha::Exceptions::MissingParameter
+- Koha::Exceptions::TooManyParameters
+- Koha::Exceptions::BadParameter
+
+See $_->parameter to identify the parameter causing the exception.
+
+Returns Koha::Patron::Message::Preference object.
+
+=cut
+
+sub validate {
+    my ($self) = @_;
+
+    if ($self->borrowernumber && $self->categorycode) {
+        Koha::Exceptions::TooManyParameters->throw(
+            error => 'Both borrowernumber and category given, only one accepted',
+            parameter => ['borrowernumber', 'categorycode'],
+        );
+    }
+    if (!$self->borrowernumber && !$self->categorycode) {
+        Koha::Exceptions::MissingParameter->throw(
+            error => 'borrowernumber or category required, none given',
+            parameter => ['borrowernumber', 'categorycode'],
+        );
+    }
+    if ($self->borrowernumber) {
+        Koha::Exceptions::BadParameter->throw(
+            error => 'Patron not found.',
+            parameter => 'borrowernumber',
+        ) unless Koha::Patrons->find($self->borrowernumber);
+    }
+    if ($self->categorycode) {
+        Koha::Exceptions::BadParameter->throw(
+            error => 'Category not found.',
+            parameter => 'categorycode',
+        ) unless Koha::Patron::Categories->find($self->categorycode);
+    }
+
+    my $attr;
+    if ($self->days_in_advance || $self->wants_digest) {
+        $attr = Koha::Patron::Message::Attributes->find(
+            $self->message_attribute_id
+        );
+    }
+    if ($self->days_in_advance) {
+        if ($attr && $attr->takes_days == 0) {
+            Koha::Exceptions::BadParameter->throw(
+                error => 'days_in_advance cannot be defined for '.
+                $attr->message_name . ' .',
+                parameter => 'days_in_advance',
+            );
+        }
+        elsif ($self->days_in_advance < 0 || $self->days_in_advance > 30) {
+            Koha::Exceptions::BadParameter->throw(
+                error => 'days_in_advance has to be a value between 0-30 for '.
+                $attr->message_name . ' .',
+                parameter => 'days_in_advance',
+            );
+        }
+    }
+    if ($self->wants_digest) {
+        my $transports = Koha::Patron::Message::Transports->search({
+            message_attribute_id => $self->message_attribute_id,
+            is_digest            => 1,
+        });
+        Koha::Exceptions::BadParameter->throw(
+            error => 'Digest not available for '.$attr->message_name.' .',
+            parameter => 'wants_digest',
+        ) if $transports->count == 0;
+    }
+
+    return $self;
+}
 
 =head3 type
 

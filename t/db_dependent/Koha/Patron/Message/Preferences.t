@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -97,6 +97,87 @@ subtest 'Test Koha::Patron::Message::Preferences' => sub {
     };
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'Test adding a new preference with invalid parameters' => sub {
+    plan tests => 3;
+
+    subtest 'Missing parameters' => sub {
+        plan tests => 1;
+
+        eval { Koha::Patron::Message::Preference->new->store };
+        is(ref $@, 'Koha::Exceptions::MissingParameter',
+            'Adding a message preference without parameters'
+            .' => Koha::Exceptions::MissingParameter');
+    };
+
+    subtest 'Too many parameters' => sub {
+        plan tests => 1;
+
+        $schema->storage->txn_begin;
+
+        my $patron = build_a_test_patron();
+        eval { Koha::Patron::Message::Preference->new({
+            borrowernumber => $patron->borrowernumber,
+            categorycode   => $patron->categorycode,
+        })->store };
+        is(ref $@, 'Koha::Exceptions::TooManyParameters',
+            'Adding a message preference for both borrowernumber and categorycode'
+            .' => Koha::Exceptions::TooManyParameters');
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'Bad parameter' => sub {
+        plan tests => 8;
+
+        $schema->storage->txn_begin;
+
+        eval { Koha::Patron::Message::Preference->new({
+                borrowernumber => -999,
+            })->store };
+        is(ref $@, 'Koha::Exceptions::BadParameter',
+            'Adding a message preference with invalid borrowernumber'
+            .' => Koha::Exceptions::BadParameter');
+        is ($@->parameter, 'borrowernumber', 'The previous exception tells us it'
+            .' was the borrowernumber.');
+
+        eval { Koha::Patron::Message::Preference->new({
+                categorycode => 'nonexistent',
+            })->store };
+        is(ref $@, 'Koha::Exceptions::BadParameter',
+            'Adding a message preference with invalid categorycode'
+            .' => Koha::Exceptions::BadParameter');
+        is($@->parameter, 'categorycode', 'The previous exception tells us it'
+            .' was the categorycode.');
+
+        my $attribute = build_a_test_attribute({ takes_days => 0 });
+        my $patron    = build_a_test_patron();
+        eval { Koha::Patron::Message::Preference->new({
+                borrowernumber => $patron->borrowernumber,
+                message_attribute_id => $attribute->message_attribute_id,
+                days_in_advance => 10,
+            })->store };
+        is(ref $@, 'Koha::Exceptions::BadParameter',
+            'Adding a message preference with days in advance option when not'
+            .' available => Koha::Exceptions::BadParameter');
+        is($@->parameter, 'days_in_advance', 'The previous exception tells us it'
+            .' was the days_in_advance.');
+
+        $attribute->set({ takes_days => 1 })->store;
+        eval { Koha::Patron::Message::Preference->new({
+                borrowernumber => $patron->borrowernumber,
+                message_attribute_id => $attribute->message_attribute_id,
+                days_in_advance => 31,
+            })->store };
+        is(ref $@, 'Koha::Exceptions::BadParameter',
+            'Adding a message preference with days in advance option too large'
+            .' => Koha::Exceptions::BadParameter');
+        is($@->parameter, 'days_in_advance', 'The previous exception tells us it'
+            .' was the days_in_advance.');
+
+        $schema->storage->txn_rollback;
+    };
 };
 
 sub build_a_test_attribute {
