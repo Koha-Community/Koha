@@ -338,7 +338,7 @@ sub calculate {
         $linefilter[0] =~ s/\*/%/g;
         $strsth .= " AND $line LIKE ? ";
     }
-    $strsth .= " group by $linefield collate utf8_bin order by $lineorder ";
+    $strsth .= " group by $linefield order by $lineorder ";
     $debug and warn $strsth;
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth };
     my $sth = $dbh->prepare($strsth);
@@ -427,7 +427,7 @@ sub calculate {
         $strsth2 .= " AND $column LIKE ? " ;
     }
 
-    $strsth2 .= " group by $colfield collate utf8_bin order by $colorder ";
+    $strsth2 .= " group by $colfield order by $colorder ";
     $debug and warn $strsth2;
     push @loopfilter, { crit => 'SQL =', sql => 1, filter => $strsth2 };
     my $sth2 = $dbh->prepare($strsth2);
@@ -556,7 +556,6 @@ sub calculate {
     } else {
         $strcalc .= " $colfield ";
     }
-    $strcalc .= " collate utf8_bin ";
 
     $strcalc .= " ORDER BY ";
     if($line_attribute_type) {
