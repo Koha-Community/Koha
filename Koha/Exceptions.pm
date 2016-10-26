@@ -59,6 +59,11 @@ use Exception::Class (
         description => 'A subroutine is not implemented',
         fields => ["subroutine"]
     },
+    'Koha::Exceptions::TooManyParameters' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'Too many parameters given',
+        fields => ['parameter'],
+    },
     'Koha::Exceptions::WrongParameter' => {
         isa => 'Koha::Exceptions::Exception',
         description => 'One or more parameters are wrong',
