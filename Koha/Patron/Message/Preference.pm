@@ -25,6 +25,7 @@ use Koha::Patron::Categories;
 use Koha::Patron::Message::Attributes;
 use Koha::Patron::Message::Preferences;
 use Koha::Patron::Message::Transport::Preferences;
+use Koha::Patron::Message::Transport::Types;
 use Koha::Patron::Message::Transports;
 use Koha::Patrons;
 
@@ -46,6 +47,7 @@ my $preference = Koha::Patron::Message::Preference->new({
    borrowernumber => 123,
    #categorycode => 'ABC',
    message_attribute_id => 4,
+   message_transport_types => ['email', 'sms'], # see documentation below
    wants_digest => 1,
    days_in_advance => 7,
 });
@@ -62,12 +64,22 @@ You can instantiate a new object without custom validation errors, but when
 storing, validation may throw exceptions. See C<validate()> for more
 documentation.
 
+C<message_transport_types> is a parameter that is not actually a column in this
+Koha-object. Given this parameter, the message transport types will be added as
+related transport types for this object. For get and set, you can access them via
+subroutine C<message_transport_types()> in this class.
+
 =cut
 
 sub new {
-    my ($class, $params) = shift;
+    my ($class, $params) = @_;
 
-    my $self = $class->SUPER::new(@_);
+    my $types = $params->{'message_transport_types'};
+    delete $params->{'message_transport_types'};
+
+    my $self = $class->SUPER::new($params);
+
+    $self->_set_message_transport_types($types);
 
     return $self;
 }
@@ -144,6 +156,64 @@ sub new_from_default {
     return $self;
 }
 
+=head3 message_transport_types
+
+$preference->message_transport_types
+Returns a HASHREF of message transport types for this messaging preference, e.g.
+if ($preference->message_transport_types->{'email'}) {
+    # email is one of the transport preferences
+}
+
+$preference->message_transport_types('email', 'sms');
+Sets the given message transport types for this messaging preference
+
+=cut
+
+sub message_transport_types {
+    my $self = shift;
+
+    unless (@_) {
+        if ($self->{'_message_transport_types'}) {
+            return $self->{'_message_transport_types'};
+        }
+        map { $self->{'_message_transport_types'}->{$_->message_transport_type} =
+                Koha::Patron::Message::Transports->find({
+                    message_attribute_id => $self->message_attribute_id,
+                    message_transport_type => $_->message_transport_type,
+                    is_digest => $self->wants_digest})->letter_code }
+        Koha::Patron::Message::Transport::Preferences->search({
+            borrower_message_preference_id => $self->borrower_message_preference_id,
+        })->as_list;
+        return $self->{'_message_transport_types'} || {};
+    }
+    else {
+        $self->_set_message_transport_types(@_);
+        return $self;
+    }
+}
+
+=head3 set
+
+$preference->set({
+    message_transport_types => ['sms', 'phone'],
+    wants_digest => 0,
+})->store;
+
+Sets preference object values and additionally message_transport_types if given.
+
+=cut
+
+sub set {
+    my ($self, $params) = @_;
+
+    if ($params && $params->{'message_transport_types'}) {
+        $self->message_transport_types($params->{'message_transport_types'});
+        delete $params->{'message_transport_types'};
+    }
+
+    return $self->SUPER::set($params) if $params;
+}
+
 =head3 store
 
 Makes a validation before actual Koha::Object->store so that proper exceptions
@@ -154,7 +224,24 @@ can be thrown. See C<validate()> for documentation about exceptions.
 sub store {
     my $self = shift;
 
-    return $self->validate->SUPER::store(@_);
+    $self->validate->SUPER::store(@_);
+
+    # store message transport types
+    if (exists $self->{'_message_transport_types'}) {
+        Koha::Patron::Message::Transport::Preferences->search({
+            borrower_message_preference_id =>
+                $self->borrower_message_preference_id,
+        })->delete;
+        foreach my $type (keys %{$self->{'_message_transport_types'}}) {
+            Koha::Patron::Message::Transport::Preference->new({
+                borrower_message_preference_id =>
+                    $self->borrower_message_preference_id,
+                message_transport_type => $type,
+            })->store;
+        }
+    }
+
+    return $self;
 }
 
 =head3 validate
@@ -250,6 +337,62 @@ sub validate {
     }
 
     return $self;
+}
+
+sub _set_message_transport_types {
+    my $self = shift;
+
+    return unless $_[0];
+
+    $self->{'_message_transport_types'} = undef;
+    my $types = ref $_[0] eq "ARRAY" ? $_[0] : [@_];
+    return unless $types;
+    $self->_validate_message_transport_types({ message_transport_types => $types });
+    foreach my $type (@$types) {
+        unless (exists $self->{'_message_transport_types'}->{$type}) {
+            $self->{'_message_transport_types'}->{$type} =
+            Koha::Patron::Message::Transports->find({
+                message_attribute_id => $self->message_attribute_id,
+                message_transport_type => $type,
+                is_digest => $self->wants_digest})->letter_code;
+        }
+    }
+    return $self;
+}
+
+sub _validate_message_transport_types {
+    my ($self, $params) = @_;
+
+    if (ref($params) eq 'HASH' && $params->{'message_transport_types'}) {
+        if (ref($params->{'message_transport_types'}) ne 'ARRAY') {
+            $params->{'message_transport_types'} = [$params->{'message_transport_types'}];
+        }
+        my $types = $params->{'message_transport_types'};
+
+        foreach my $type (@{$types}) {
+            unless (Koha::Patron::Message::Transport::Types->find({
+                message_transport_type => $type
+            })) {
+                Koha::Exceptions::BadParameter->throw(
+                    error => "Message transport type '$type' does not exist",
+                    parameter => 'message_transport_type',
+                );
+            }
+            my $tmp = (ref($self) eq __PACKAGE__) ? $self->unblessed : $params;
+            unless (Koha::Patron::Message::Transports->find({
+                    message_transport_type => $type,
+                    message_attribute_id => $tmp->{'message_attribute_id'},
+                    is_digest => $tmp->{'wants_digest'},
+            })) {
+                Koha::Exceptions::BadParameter->throw(
+                    error => "Message transport option for '$type' (".
+                    ($tmp->{'wants_digest'} ? 'digest':'no digest').") does not exist",
+                    parameter => 'message_transport_type',
+                );
+            }
+        }
+        return $types;
+    }
 }
 
 =head3 type

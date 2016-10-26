@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+
+use Test::More tests => 6;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -173,6 +174,152 @@ subtest 'Add preferences from defaults' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'Test Koha::Patron::Message::Preference->message_transport_types' => sub {
+    plan tests => 4;
+
+    ok(Koha::Patron::Message::Preference->can('message_transport_types'),
+       'Method message_transport_types available');
+
+    subtest 'get message_transport_types' => sub {
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        my $patron = build_a_test_patron();
+        my ($preference, $mtt1, $mtt2) = build_a_test_complete_preference({
+            patron => $patron
+        });
+        Koha::Patron::Message::Transport::Preferences->search({
+            borrower_message_preference_id => $preference->borrower_message_preference_id,
+        })->delete;
+        Koha::Patron::Message::Transport::Preference->new({
+            borrower_message_preference_id => $preference->borrower_message_preference_id,
+            message_transport_type => $mtt1->message_transport_type,
+        })->store;
+        Koha::Patron::Message::Transport::Preference->new({
+            borrower_message_preference_id => $preference->borrower_message_preference_id,
+            message_transport_type => $mtt2->message_transport_type,
+        })->store;
+        my $stored_transports = Koha::Patron::Message::Transport::Preferences->search({
+            borrower_message_preference_id => $preference->borrower_message_preference_id,
+        });
+        my $transport1 = Koha::Patron::Message::Transports->find({
+            message_attribute_id => $preference->message_attribute_id,
+            message_transport_type => $mtt1->message_transport_type,
+        });
+        my $transport2 = Koha::Patron::Message::Transports->find({
+            message_attribute_id => $preference->message_attribute_id,
+            message_transport_type => $mtt2->message_transport_type,
+        });
+        my $transports = $preference->message_transport_types;
+        is(keys %{$transports}, $stored_transports->count,
+           '->message_transport_types gets correct amount of transport types.');
+        is($transports->{$stored_transports->next->message_transport_type},
+           $transport1->letter_code, 'Found correct message transport type and letter code.');
+        is($transports->{$stored_transports->next->message_transport_type},
+           $transport2->letter_code, 'Found correct message transport type and letter code.');
+        ok(!$preference->message_transport_types->{'nonexistent'},
+           'Didn\'t find nonexistent transport type.');
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'set message_transport_types' => sub {
+        plan tests => 6;
+
+        $schema->storage->txn_begin;
+
+        my $patron = build_a_test_patron();
+        my ($preference, $mtt1, $mtt2) = build_a_test_complete_preference({
+            patron => $patron
+        });
+
+        my $mtt1_str = $mtt1->message_transport_type;
+        my $mtt2_str = $mtt2->message_transport_type;
+        # 1/3, use message_transport_types(list)
+        Koha::Patron::Message::Transport::Preferences->search({
+            borrower_message_preference_id => $preference->borrower_message_preference_id,
+        })->delete;
+        ok($preference->message_transport_types($mtt1_str, $mtt2_str)->store,
+           '1/3 Set returned true.');
+        my $stored_transports = Koha::Patron::Message::Transport::Preferences->search({
+            borrower_message_preference_id => $preference->borrower_message_preference_id,
+            '-or' => [
+                message_transport_type => $mtt1_str,
+                message_transport_type => $mtt2_str
+            ]
+        });
+        is($stored_transports->count, 2, 'Two transports selected');
+
+        # 2/3, use message_transport_types(ARRAYREF)
+        Koha::Patron::Message::Transport::Preferences->search({
+            borrower_message_preference_id => $preference->borrower_message_preference_id,
+        })->delete;
+        ok($preference->message_transport_types([$mtt1_str, $mtt2_str])->store,
+           '2/3 Set returned true.');
+        $stored_transports = Koha::Patron::Message::Transport::Preferences->search({
+            borrower_message_preference_id => $preference->borrower_message_preference_id,
+            '-or' => [
+                message_transport_type => $mtt1_str,
+                message_transport_type => $mtt2_str
+            ]
+        });
+        is($stored_transports->count, 2, 'Two transports selected');
+
+        # 3/3, use set({ message_transport_types => ARRAYREF })
+        Koha::Patron::Message::Transport::Preferences->search({
+            borrower_message_preference_id => $preference->borrower_message_preference_id,
+        })->delete;
+        ok($preference->set({
+            message_transport_types => [$mtt1_str, $mtt2_str]})->store,
+           '3/3 Set returned true.');
+        $stored_transports = Koha::Patron::Message::Transport::Preferences->search({
+            borrower_message_preference_id => $preference->borrower_message_preference_id,
+            '-or' => [
+                message_transport_type => $mtt1_str,
+                message_transport_type => $mtt2_str
+            ]
+        });
+        is($stored_transports->count, 2, 'Two transports selected');
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'new message_transport_types' => sub {
+        plan tests => 3;
+
+        $schema->storage->txn_begin;
+
+        my $patron    = build_a_test_patron();
+        my $letter    = build_a_test_letter();
+        my $attribute = build_a_test_attribute();
+        my $mtt       = build_a_test_transport_type();
+        Koha::Patron::Message::Transport->new({
+            message_attribute_id   => $attribute->message_attribute_id,
+            message_transport_type => $mtt->message_transport_type,
+            is_digest              => 0,
+            letter_module          => $letter->module,
+            letter_code            => $letter->code,
+        })->store;
+        ok(my $preference = Koha::Patron::Message::Preference->new({
+            borrowernumber => $patron->borrowernumber,
+            message_attribute_id => $attribute->message_attribute_id,
+            wants_digest => 0,
+            days_in_advance => undef,
+            message_transport_types => $mtt->message_transport_type,
+        })->store, 'Added a new messaging preference and transport types to patron.');
+        ok($preference->message_transport_types->{$mtt->message_transport_type},
+           'The transport type is stored in the object.');
+        my $stored_transports = Koha::Patron::Message::Transport::Preferences->search({
+            borrower_message_preference_id => $preference->borrower_message_preference_id,
+        });
+        is($stored_transports->next->message_transport_type, $mtt->message_transport_type,
+           'The transport type is stored in the database.');
+
+        $schema->storage->txn_rollback;
+    };
+};
+
 subtest 'Test adding a new preference with invalid parameters' => sub {
     plan tests => 4;
 
@@ -203,7 +350,7 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
     };
 
     subtest 'Bad parameter' => sub {
-        plan tests => 8;
+        plan tests => 13;
 
         $schema->storage->txn_begin;
 
@@ -249,6 +396,30 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
             .' => Koha::Exceptions::BadParameter');
         is($@->parameter, 'days_in_advance', 'The previous exception tells us it'
             .' was the days_in_advance.');
+
+        eval { Koha::Patron::Message::Preference->new({
+                borrowernumber => $patron->{'borrowernumber'},
+                message_transport_types => ['nonexistent']
+            })->store };
+        is (ref $@, 'Koha::Exceptions::BadParameter',
+            'Adding a message preference with invalid message_transport_type'
+            .' => Koha::Exceptions::BadParameter');
+        is ($@->parameter, 'message_transport_type', 'The previous exception tells us it'
+            .' was the message_transport_type.');
+        eval {
+            Koha::Patron::Message::Preference->new({
+                borrowernumber => $patron->{'borrowernumber'},
+                message_attribute_id => $attribute->message_attribute_id,
+                message_transport_types => ['sms'],
+                wants_digest => 1,
+            })->store };
+        is (ref $@, 'Koha::Exceptions::BadParameter',
+            'Adding a message preference with invalid message_transport_type'
+            .' => Koha::Exceptions::BadParameter');
+        is ($@->parameter, 'message_transport_type', 'The previous exception tells us it'
+            .' was the message_transport_type.');
+        like ($@->error, qr/^Message transport option/, 'Exception s because of given'
+            .' message_transport_type is not a valid option.');
 
         $schema->storage->txn_rollback;
     };
@@ -393,6 +564,17 @@ sub build_a_test_category_preference {
     })->store;
 
     return ($default, $mtt1, $mtt2);
+}
+
+sub build_a_test_complete_preference {
+    my ($params) = @_;
+
+    my ($default, $mtt1, $mtt2) = build_a_test_category_preference($params);
+    my $patron = $params->{patron};
+    $patron->set_default_messaging_preferences;
+    return (Koha::Patron::Message::Preferences->search({
+        borrowernumber => $patron->borrowernumber
+    })->next, $mtt1, $mtt2);
 }
 
 1;
