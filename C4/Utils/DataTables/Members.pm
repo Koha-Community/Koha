@@ -85,15 +85,10 @@ sub search {
 
     my $searchfields = {
         standard => C4::Context->preference('DefaultPatronSearchFields') || 'surname,firstname,othernames,cardnumber,userid',
-        surname => 'surname',
         email => 'email,emailpro,B_email',
         borrowernumber => 'borrowernumber',
-        userid => 'userid',
         phone => 'phone,phonepro,B_phone,altcontactphone,mobile',
         address => 'streetnumber,streettype,address,address2,city,state,zipcode,country',
-        dateofbirth => 'dateofbirth',
-        sort1 => 'sort1',
-        sort2 => 'sort2',
     };
 
     # * is replaced with % for sql
@@ -124,10 +119,16 @@ sub search {
         }
 
         my @where_strs_or;
-        for my $searchfield ( split /,/, $searchfields->{$searchfieldstype} ) {
-            push @where_strs_or, "borrowers." . $dbh->quote_identifier($searchfield) . " LIKE ?";
+        if ( defined $searchfields->{$searchfieldstype} ) {
+            for my $searchfield ( split /,/, $searchfields->{$searchfieldstype} ) {
+                push @where_strs_or, "borrowers." . $dbh->quote_identifier($searchfield) . " LIKE ?";
+                push @where_args, $term;
+            }
+        } else {
+            push @where_strs_or, "borrowers." . $dbh->quote_identifier($searchfieldstype) . " LIKE ?";
             push @where_args, $term;
         }
+
 
         if ( $searchfieldstype eq 'standard' and C4::Context->preference('ExtendedPatronAttributes') and $searchmember ) {
             my $matching_borrowernumbers = C4::Members::Attributes::SearchIdMatchingAttribute($searchmember);

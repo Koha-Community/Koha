@@ -1,7 +1,9 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE Categories %]
+[% USE raw %]
 [% PROCESS 'html_helpers.inc' %]
+[% PROCESS 'patronfields.inc' %]
 <div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin Patrons Resident Search Box -->
 <div id="header_search">
@@ -17,62 +19,24 @@
     </div>
 
 
+
     <div id="filters">
         <p><label for="searchfieldstype">Search fields:</label>
             <select name="searchfieldstype" id="searchfieldstype">
-              [% IF searchfieldstype == "standard" %]
-                <option selected="selected" value='standard'>Standard</option>
-              [% ELSE %]
-                <option value='standard'>Standard</option>
-              [% END %]
-              [% IF searchfieldstype == "surname" %]
-                <option selected="selected" value='surname'>Surname</option>
-              [% ELSE %]
-                <option value='surname'>Surname</option>
-              [% END %]
-              [% IF searchfieldstype == "email" %]
-                <option selected="selected" value='email'>Email</option>
-              [% ELSE %]
-                <option value='email'>Email</option>
-              [% END %]
-              [% IF searchfieldstype == "borrowernumber" %]
-                <option selected="selected" value='borrowernumber'>Borrower number</option>
-              [% ELSE %]
-                <option value='borrowernumber'>Borrower number</option>
-              [% END %]
-              [% IF searchfieldstype == "userid" %]
-                <option selected="selected" value='userid'>Username</option>
-              [% ELSE %]
-                <option value='userid'>Username</option>
-              [% END %]
-              [% IF searchfieldstype == "phone" %]
-                <option selected="selected" value='phone'>Phone number</option>
-              [% ELSE %]
-                <option value='phone'>Phone number</option>
-              [% END %]
-              [% IF searchfieldstype == "address" %]
-                <option selected="selected" value='address'>Street address</option>
-              [% ELSE %]
-                <option value='address'>Street address</option>
-              [% END %]
-              [% IF searchfieldstype == "dateofbirth" %]
-                <option selected="selected" value='dateofbirth'>Date of birth</option>
-              [% ELSE %]
-                <option value='dateofbirth'>Date of birth</option>
-              [% END %]
-              [% IF searchfieldstype == "sort1" %]
-                <option selected="selected" value='sort1'>Sort field 1</option>
-              [% ELSE %]
-                <option value='sort1'>Sort field 1</option>
-              [% END %]
-              [% IF searchfieldstype == "sort2" %]
-                <option selected="selected" value='sort2'>Sort field 2</option>
-              [% ELSE %]
-                <option value='sort2'>Sort field 2</option>
+              [% pref_fields = Koha.Preference('DefaultPatronSearchFields').split(',') %]
+              [% default_fields = [ 'standard', 'surname', 'cardnumber', 'email', 'borrowernumber', 'userid', 'phone', 'address', 'dateofbirth', 'sort1', 'sort2' ] %]
+              [% search_options = default_fields.merge(pref_fields).unique %]
+              [% FOREACH s_o IN search_options %]
+                  [% display_name = PROCESS patron_fields name=s_o %]
+                  [% NEXT IF display_name.length == 5 %]
+                  [% IF searchfieldstype == s_o %]
+                      <option selected="selected" value=[% s_o | html %]>[% display_name | $raw %]</option>
+                  [% ELSE %]
+                      <option value=[% s_o | html %]>[% display_name | $raw %]</option>
+                  [% END %]
               [% END %]
             </select>
         </p>
-
         <p>
             <label for="searchtype">Search type:</label>
             <select name="searchtype" id="searchtype">
