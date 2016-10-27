@@ -37,69 +37,6 @@ This module lets you modify a patron's messaging preferences.
 
 =head1 FUNCTIONS
 
-=head2 GetMessagingPreferences
-
-  my $preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrower->{'borrowernumber'},
-                                                                       message_name   => 'DUE' } );
-
-  my $preferences = C4::Members::Messaging::GetMessagingPreferences( { categorycode => 'LIBRARY',
-                                                                       message_name   => 'DUE' } );
-
-returns: a hashref of messaging preferences for a borrower or patron category for a particlar message_name
-
-Requires either a borrowernumber or a categorycode key, but not both.
-
-=cut
-
-sub GetMessagingPreferences {
-    my $params = shift;
-
-    return unless exists $params->{message_name};
-    return unless exists $params->{borrowernumber} xor exists $params->{categorycode}; # yes, xor
-    my $sql = <<'END_SQL';
-SELECT borrower_message_preferences.*,
-       borrower_message_transport_preferences.message_transport_type,
-       message_attributes.message_name,
-       message_attributes.takes_days,
-       message_transports.is_digest,
-       message_transports.letter_module,
-       message_transports.letter_code
-FROM   borrower_message_preferences
-LEFT JOIN borrower_message_transport_preferences
-ON     borrower_message_transport_preferences.borrower_message_preference_id = borrower_message_preferences.borrower_message_preference_id
-LEFT JOIN message_attributes
-ON     message_attributes.message_attribute_id = borrower_message_preferences.message_attribute_id
-LEFT JOIN message_transports
-ON     message_transports.message_attribute_id = message_attributes.message_attribute_id
-AND    message_transports.message_transport_type = borrower_message_transport_preferences.message_transport_type
-AND    message_transports.is_digest = borrower_message_preferences.wants_digest
-WHERE  message_attributes.message_name = ?
-END_SQL
-
-    my @bind_params = ( $params->{'message_name'} );
-    if ( exists $params->{'borrowernumber'} ) {
-        $sql .= " AND borrower_message_preferences.borrowernumber = ? ";
-        push @bind_params, $params->{borrowernumber};
-    } else {
-        $sql .= " AND borrower_message_preferences.categorycode = ? ";
-        push @bind_params, $params->{categorycode};
-    }
-
-    my $sth = C4::Context->dbh->prepare($sql);
-    $sth->execute(@bind_params);
-    my $return;
-    my %transports; # helps build a list of unique message_transport_types
-    ROW: while ( my $row = $sth->fetchrow_hashref() ) {
-        next ROW unless $row->{'message_attribute_id'};
-        $return->{'days_in_advance'} = $row->{'days_in_advance'} if defined $row->{'days_in_advance'};
-        $return->{'wants_digest'}    = $row->{'wants_digest'}    if defined $row->{'wants_digest'};
-        $return->{'letter_code'}     = $row->{'letter_code'};
-        next unless defined $row->{'message_transport_type'};
-        $return->{'transports'}->{ $row->{'message_transport_type'} } = $row->{'letter_code'};
-    }
-    return $return;
-}
-
 =head2 SetMessagingPreference
 
 This method defines how a user (or a default for a patron category) wants to get a certain 

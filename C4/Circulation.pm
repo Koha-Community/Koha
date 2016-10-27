@@ -50,6 +50,7 @@ use Koha::IssuingRules;
 use Koha::Items;
 use Koha::Patrons;
 use Koha::Patron::Debarments;
+use Koha::Patron::Message::Preferences;
 use Koha::Database;
 use Koha::Libraries;
 use Koha::Holds;
@@ -3524,14 +3525,15 @@ sub SendCirculationAlert {
         CHECKOUT => 'Item_Checkout',
         RENEWAL  => 'Item_Checkout',
     );
-    my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences({
+    return unless my $borrower_preferences = Koha::Patron::Message::Preferences->find_with_message_name({
         borrowernumber => $borrower->{borrowernumber},
         message_name   => $message_name{$type},
     });
+
     my $issues_table = ( $type eq 'CHECKOUT' || $type eq 'RENEWAL' ) ? 'issues' : 'old_issues';
 
     my $schema = Koha::Database->new->schema;
-    my @transports = keys %{ $borrower_preferences->{transports} };
+    my @transports = keys %{ $borrower_preferences->message_transport_types };
 
     # From the MySQL doc:
     # LOCK TABLES is not transaction-safe and implicitly commits any active transaction before attempting to lock the tables.

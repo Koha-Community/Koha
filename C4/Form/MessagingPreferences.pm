@@ -177,21 +177,22 @@ sub set_form_values {
     # walk through the options and update them with these borrower_preferences
     my $messaging_options = Koha::Patron::Message::Preferences->get_options;
     PREF: foreach my $option ( @$messaging_options ) {
-        my $pref = C4::Members::Messaging::GetMessagingPreferences( { %{ $target_params }, message_name => $option->{'message_name'} } );
+        my $pref = Koha::Patron::Message::Preferences->find( { %{ $target_params }, message_attribute_id => $option->{'message_attribute_id'} } );
         $option->{ $option->{'message_name'} } = 1;
         # make a hashref of the days, selecting one.
         if ( $option->{'takes_days'} ) {
-            my $days_in_advance = $pref->{'days_in_advance'} ? $pref->{'days_in_advance'} : 0;
+            my $days_in_advance = $pref && $pref->days_in_advance ? $pref->days_in_advance : 0;
             $option->{days_in_advance} = $days_in_advance;
             @{$option->{'select_days'}} = map { {
                 day        => $_,
                 selected   => $_ == $days_in_advance  }
             } ( 0..MAX_DAYS_IN_ADVANCE );
         }
-        foreach my $transport ( keys %{$pref->{'transports'}} ) {
+        next unless $pref;
+        foreach my $transport ( keys %{$pref->message_transport_types} ) {
             $option->{'transports_'.$transport} = 1;
         }
-        $option->{'digest'} = 1 if $pref->{'wants_digest'};
+        $option->{'digest'} = 1 if $pref->wants_digest;
     }
     $template->param(messaging_preferences => $messaging_options);
 }

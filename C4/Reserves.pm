@@ -46,6 +46,7 @@ use Koha::Libraries;
 use Koha::IssuingRules;
 use Koha::Items;
 use Koha::ItemTypes;
+use Koha::Patron::Message::Preferences;
 use Koha::Patrons;
 
 use DateTime;
@@ -2017,10 +2018,10 @@ sub _koha_notify_reserve {
     # Try to get the borrower's email address
     my $to_address = C4::Members::GetNoticeEmailAddress($borrowernumber);
 
-    my $messagingprefs = C4::Members::Messaging::GetMessagingPreferences( {
-            borrowernumber => $borrowernumber,
-            message_name => 'Hold_Filled'
-    } );
+    my $messagingpref = Koha::Patron::Message::Preferences->find_with_message_name({
+        borrowernumber => $borrowernumber,
+        message_name   => 'Hold_Filled',
+    });
 
     my $library = Koha::Libraries->find( $hold->branchcode )->unblessed;
 
@@ -2063,7 +2064,9 @@ sub _koha_notify_reserve {
         } );
     };
 
-    while ( my ( $mtt, $letter_code ) = each %{ $messagingprefs->{transports} } ) {
+    my $transports = $messagingpref->message_transport_types if $messagingpref;
+    foreach my $mtt (keys %{$transports}) {
+        my $letter_code = $transports->{$mtt};
         next if (
                ( $mtt eq 'email' and not $to_address ) # No email address
             or ( $mtt eq 'sms'   and not $borrower->{smsalertnumber} ) # No SMS number

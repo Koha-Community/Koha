@@ -22,12 +22,12 @@ use Modern::Perl;
 use Test::More tests => 11;
 
 use C4::Context;
-use C4::Members::Messaging;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Patron;
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
+use Koha::Patron::Message::Preferences;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -122,13 +122,13 @@ subtest 'default_messaging tests' => sub {
             is_digest => 1,
         }
     });
-    C4::Members::Messaging::SetMessagingPreference({
+    Koha::Patron::Message::Preference->new({
         categorycode            => $category->categorycode,
         message_attribute_id    => $attr->{'message_attribute_id'},
         message_transport_types => [ qw( email ) ],
         days_in_advance         => 5,
         wants_digest            => 1
-    });
+    })->store;
     my $default_messaging = $category->default_messaging;
     is(@$default_messaging, 1, "One default messaging found.");
     $default_messaging = $default_messaging->[0];

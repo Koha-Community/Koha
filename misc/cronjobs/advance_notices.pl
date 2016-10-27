@@ -59,6 +59,7 @@ use Koha::DateUtils;
 use C4::Log;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Patron::Message::Preferences;
 
 =head1 NAME
 
@@ -282,11 +283,13 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
     my $borrower_preferences;
     if ( 0 == $upcoming->{'days_until_due'} ) {
         # This item is due today. Send an 'item due' message.
-        $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $upcoming->{'borrowernumber'},
-                                                                                   message_name   => 'item_due' } );
+        $borrower_preferences = Koha::Patron::Message::Preferences->find_with_message_name({
+            borrowernumber => $upcoming->{'borrowernumber'},
+            message_name   => 'item_due',
+        });
         next unless $borrower_preferences;
         
-        if ( $borrower_preferences->{'wants_digest'} ) {
+        if ( $borrower_preferences->wants_digest ) {
             # cache this one to process after we've run through all of the items.
             $due_digest->{ $upcoming->{borrowernumber} }->{email} = $from_address;
             $due_digest->{ $upcoming->{borrowernumber} }->{count}++;
@@ -301,7 +304,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             }
 
             ## Get branch info for borrowers home library.
-            foreach my $transport ( keys %{$borrower_preferences->{'transports'}} ) {
+            foreach my $transport ( keys %{$borrower_preferences->message_transport_types} ) {
                 my $letter = parse_letter( { letter_code    => $letter_type,
                                       borrowernumber => $upcoming->{'borrowernumber'},
                                       branchcode     => $upcoming->{'branchcode'},
@@ -315,19 +318,21 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             }
         }
     } else {
-        $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $upcoming->{'borrowernumber'},
-                                                                                   message_name   => 'advance_notice' } );
-        next UPCOMINGITEM unless $borrower_preferences && exists $borrower_preferences->{'days_in_advance'};
-        next UPCOMINGITEM unless $borrower_preferences->{'days_in_advance'} == $upcoming->{'days_until_due'};
+        $borrower_preferences = Koha::Patron::Message::Preferences->find_with_message_name({
+            borrowernumber => $upcoming->{'borrowernumber'},
+            message_name   => 'advance_notice',
+        });
+        next UPCOMINGITEM unless $borrower_preferences && $borrower_preferences->days_in_advance;
+        next UPCOMINGITEM unless $borrower_preferences->days_in_advance == $upcoming->{'days_until_due'};
 
-        if ( $borrower_preferences->{'wants_digest'} ) {
+        if ( $borrower_preferences->wants_digest ) {
             # cache this one to process after we've run through all of the items.
             $upcoming_digest->{ $upcoming->{borrowernumber} }->{email} = $from_address;
             $upcoming_digest->{ $upcoming->{borrowernumber} }->{count}++;
         } else {
             my $biblio = C4::Biblio::GetBiblioFromItemNumber( $upcoming->{'itemnumber'} );
             my $letter_type = 'PREDUE';
-            $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},$date_in_history,$borrower_preferences->{'days_in_advance'});
+            $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},$date_in_history,$borrower_preferences->days_in_advance);
             my $titles = "";
             while ( my $item_info = $sth->fetchrow_hashref()) {
               my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
@@ -335,7 +340,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             }
 
             ## Get branch info for borrowers home library.
-            foreach my $transport ( keys %{$borrower_preferences->{'transports'}} ) {
+            foreach my $transport ( keys %{$borrower_preferences->message_transport_types} ) {
                 my $letter = parse_letter( { letter_code    => $letter_type,
                                       borrowernumber => $upcoming->{'borrowernumber'},
                                       branchcode     => $upcoming->{'branchcode'},
@@ -386,14 +391,16 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
     my $count = $digest->{count};
     my $from_address = $digest->{email};
 
-    my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber,
-                                                                                  message_name   => 'advance_notice' } );
+    my $borrower_preferences = Koha::Patron::Message::Preferences->find_with_message_name({
+            borrowernumber => $borrowernumber,
+            message_name   => 'advance_notice',
+        });
     next PATRON unless $borrower_preferences; # how could this happen?
 
 
     my $letter_type = 'PREDUEDGST';
 
-    $sth->execute($borrowernumber,$date_in_history,$borrower_preferences->{'days_in_advance'});
+    $sth->execute($borrowernumber,$date_in_history,$borrower_preferences->days_in_advance);
     my $titles = "";
     while ( my $item_info = $sth->fetchrow_hashref()) {
       my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
@@ -403,7 +410,7 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
     ## Get branch info for borrowers home library.
     my %branch_info = get_branch_info( $borrowernumber );
 
-    foreach my $transport ( keys %{ $borrower_preferences->{'transports'} } ) {
+    foreach my $transport ( keys %{ $borrower_preferences->message_transport_types } ) {
         my $letter = parse_letter(
             {
                 letter_code    => $letter_type,
@@ -445,8 +452,10 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
     my $count = $digest->{count};
     my $from_address = $digest->{email};
 
-    my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber,
-                                                                                  message_name   => 'item_due' } );
+    my $borrower_preferences = Koha::Patron::Message::Preferences->find_with_message_name({
+            borrowernumber => $borrowernumber,
+            message_name   => 'item_due',
+        });
     next PATRON unless $borrower_preferences; # how could this happen?
 
     my $letter_type = 'DUEDGST';
@@ -460,7 +469,7 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
     ## Get branch info for borrowers home library.
     my %branch_info = get_branch_info( $borrowernumber );
 
-    for my $transport ( keys %{ $borrower_preferences->{'transports'} } ) {
+    for my $transport ( keys %{ $borrower_preferences->message_transport_types } ) {
         my $letter = parse_letter(
             {
                 letter_code    => $letter_type,

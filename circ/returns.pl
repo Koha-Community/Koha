@@ -53,6 +53,7 @@ use Koha::Calendar;
 use Koha::BiblioFrameworks;
 use Koha::Checkouts;
 use Koha::Patrons;
+use Koha::Patron::Message::Preferences;
 
 my $query = new CGI;
 
@@ -442,7 +443,10 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
 if ( $messages->{'ResFound'}) {
     my $reserve    = $messages->{'ResFound'};
     my $borr = C4::Members::GetMember( borrowernumber => $reserve->{'borrowernumber'} );
-    my $holdmsgpreferences =  C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $reserve->{'borrowernumber'}, message_name   => 'Hold_Filled' } );
+    my $holdmsgpreferences =  Koha::Patron::Message::Preferences->find_with_message_name({
+            borrowernumber => $reserve->{'borrowernumber'},
+            message_name   => 'Hold_Filled',
+        });
     if ( $reserve->{'ResFound'} eq "Waiting" or $reserve->{'ResFound'} eq "Reserved" ) {
         if ( $reserve->{'ResFound'} eq "Waiting" ) {
             $template->param(
@@ -485,7 +489,7 @@ if ( $messages->{'ResFound'}) {
             itemnumber     => $reserve->{'itemnumber'},
             reservenotes   => $reserve->{'reservenotes'},
             reserve_id     => $reserve->{reserve_id},
-            bormessagepref => $holdmsgpreferences->{'transports'},
+            bormessagepref => $holdmsgpreferences->message_transport_types,
         );
     } # else { ; }  # error?
 }
