@@ -110,7 +110,7 @@ if ( $action eq 'create' ) {
             );
             $template->param( 'email' => $borrower{'email'} );
 
-            my $verification_token = md5_hex( \%borrower );
+            my $verification_token = md5_hex( time().{}.rand().{}.$$ );
             $borrower{'password'} = random_string("..........");
 
             Koha::Borrower::Modifications->new(
