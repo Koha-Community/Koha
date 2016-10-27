@@ -26,6 +26,7 @@ use C4::Context;
 use C4::Members::Messaging;
 use C4::Debug;
 use Koha::Patron::Message::Preferences;
+use Koha::Patrons;
 
 use constant MAX_DAYS_IN_ADVANCE => 30;
 
@@ -147,8 +148,9 @@ sub handle_form_action {
     }
     if (! $prefs_set && $insert){
         # this is new borrower, and we have no preferences set, use the defaults
-	$target_params->{categorycode} = $categorycode;
-        C4::Members::Messaging::SetMessagingPreferencesFromDefaults( $target_params );
+        $target_params->{categorycode} = $categorycode;
+        my $patron = Koha::Patron->find($target_params->{'borrowernumber'});
+        $patron->set_default_messaging_preferences if $patron;
     }
     # show the success message
     $template->param( settings_updated => 1 );

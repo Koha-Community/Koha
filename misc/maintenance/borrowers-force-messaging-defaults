@@ -28,6 +28,7 @@ BEGIN {
 
 use C4::Context;
 use C4::Members::Messaging;
+use Koha::Patrons;
 use Getopt::Long;
 use Pod::Usage;
 
@@ -59,10 +60,7 @@ sub force_borrower_messaging_defaults {
     while ( my ($borrowernumber, $categorycode) = $sth->fetchrow ) {
         print "$borrowernumber: $categorycode\n";
         next unless $doit;
-        C4::Members::Messaging::SetMessagingPreferencesFromDefaults( {
-            borrowernumber => $borrowernumber,
-            categorycode   => $categorycode,
-        } );
+        Koha::Patrons->find($borrowernumber)->set_default_messaging_preferences;
     }
     $dbh->commit();
 }

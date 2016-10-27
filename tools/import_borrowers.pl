@@ -349,8 +349,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                 }
 
                 if ($set_messaging_prefs) {
-                    C4::Members::Messaging::SetMessagingPreferencesFromDefaults({ borrowernumber => $borrowernumber,
-                                                                                  categorycode => $borrower{categorycode} });
+                    Koha::Patrons->find($borrowernumber)->set_default_messaging_preferences;
                 }
 
                 $imported++;
