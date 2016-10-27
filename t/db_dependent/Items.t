@@ -26,7 +26,7 @@ use Koha::Library;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use Test::Warn;
 
@@ -730,6 +730,56 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
     is ( $item->{barcode}, $a_barcode, 'items.barcode is not mapped anymore, so the DB column has not been updated' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest '_mod_item_dates' => sub {
+    plan tests => 11;
+
+    is( C4::Items::_mod_item_dates(), undef, 'Call without parameters' );
+    is( C4::Items::_mod_item_dates(1), undef, 'Call without hashref' );
+
+    my $orgitem;
+    my $item = {
+        itemcallnumber  => 'V II 149 1963',
+        barcode         => '109304',
+    };
+    $orgitem = { %$item };
+    C4::Items::_mod_item_dates($item);
+    is_deeply( $item, $orgitem, 'No dates passed to _mod_item_dates' );
+
+    # add two correct dates
+    t::lib::Mocks::mock_preference('dateformat', 'us');
+    $item->{dateaccessioned} = '01/31/2016';
+    $item->{onloan} =  $item->{dateaccessioned};
+    $orgitem = { %$item };
+    C4::Items::_mod_item_dates($item);
+    is( $item->{dateaccessioned}, '2016-01-31', 'dateaccessioned is fine' );
+    is( $item->{onloan}, '2016-01-31', 'onloan is fine too' );
+
+
+    # add some invalid dates
+    $item->{notexistingcolumndate} = '13/1/2015'; # wrong format
+    $item->{anotherdate} = 'tralala'; # even worse
+    $item->{myzerodate} = '0000-00-00'; # wrong too
+    C4::Items::_mod_item_dates($item);
+    is( $item->{notexistingcolumndate}, undef, 'Invalid date became NULL' );
+    is( $item->{anotherdate}, undef, 'Second invalid date became NULL too' );
+    is( $item->{myzerodate}, undef, '0000-00-00 became NULL too' );
+
+    # check if itemlost_on was not touched
+    $item->{itemlost_on} = '12345678';
+    $item->{withdrawn_on} = '12/31/2015 23:59:00';
+    $orgitem = { %$item };
+    C4::Items::_mod_item_dates($item);
+    is_deeply( $item, $orgitem, 'Colums with _on are not touched' );
+
+    t::lib::Mocks::mock_preference('dateformat', 'metric');
+    $item->{dateaccessioned} = '01/31/2016'; #wrong
+    $item->{yetanotherdatetime} = '20/01/2016 13:58:00'; #okay
+    C4::Items::_mod_item_dates($item);
+    is( $item->{dateaccessioned}, undef, 'dateaccessioned wrong format' );
+    is( $item->{yetanotherdatetime}, '2016-01-20 13:58:00',
+        'yetanotherdatetime is ok' );
 };
 
 # Helper method to set up a Biblio.
