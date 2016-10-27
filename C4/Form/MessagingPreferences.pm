@@ -138,7 +138,18 @@ sub handle_form_action {
             }
         }
 
-        C4::Members::Messaging::SetMessagingPreference( $updater );
+        $updater->{'days_in_advance'} = undef unless exists $updater->{'days_in_advance'};
+        $updater->{'wants_digest'} = 0 unless exists $updater->{'wants_digest'};
+        my $preference = Koha::Patron::Message::Preferences->find({
+            borrowernumber => $updater->{'borrowernumber'},
+            message_attribute_id => $option->{'message_attribute_id'},
+            categorycode => $categorycode || $updater->{'categorycode'},
+        });
+        unless ($preference) {
+            Koha::Patron::Message::Preference->new($updater)->store;
+        } else {
+            $preference->set($updater)->store;
+        }
 
         _pushToActionLogBuffer($logEntries, $updater, $option);
 
