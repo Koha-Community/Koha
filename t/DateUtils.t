@@ -4,7 +4,7 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 60;
+use Test::More tests => 63;
 
 use Test::MockModule;
 use Test::Warn;
@@ -221,6 +221,13 @@ is( output_pref( { dt => $dt, dateonly => 1 } ), '01/01/1900', 'dt_from_string s
 # fallback
 $dt = dt_from_string('2015-01-31 01:02:03');
 is( output_pref( {dt => $dt} ), '31/01/2015 01:02', 'dt_from_string should fallback to sql format' );
+
+# output_pref with no parameters, single parameter (no hash)
+is( output_pref(), undef, 'output_pref without parameters' );
+is( output_pref( 'no_dt' ), undef, 'Passed single invalid dt to output_pref' );
+
+# pass invalid dt via hash
+is( output_pref({ dt => 'no_dt' }), undef, 'Passed invalid dt in hash to output_pref' );
 
 # output_pref with str parameter
 is( output_pref( { 'str' => $testdate_iso, dateformat => 'iso', dateonly => 1 } ), $testdate_iso, 'output_pref should handle correctly the iso parameter' );

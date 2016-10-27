@@ -219,7 +219,7 @@ sub output_pref {
         carp "Invalid date '$str' passed to output_pref\n" if $@;
     }
 
-    return unless defined $dt;
+    return unless defined $dt && ref($dt) eq 'DateTime';
 
     # FIXME: see bug 13242 => no TZ for dates 'infinite'
     if ( $dt->ymd !~ /^9999/ ) {
