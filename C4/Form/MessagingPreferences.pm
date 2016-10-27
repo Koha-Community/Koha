@@ -25,6 +25,7 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Members::Messaging;
 use C4::Debug;
+use Koha::Patron::Message::Preferences;
 
 use constant MAX_DAYS_IN_ADVANCE => 30;
 
@@ -74,7 +75,7 @@ adds a settings_updated template variable.
 
 sub handle_form_action {
     my ($query, $target_params, $template, $insert, $categorycode) = @_;
-    my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
+    my $messaging_options = Koha::Patron::Message::Preferences->get_options;
     # TODO: If a "NONE" box and another are checked somehow (javascript failed), we should pay attention to the "NONE" box
     my $prefs_set = 0;
     my $borrowernumber;
@@ -172,7 +173,7 @@ C<$template> is the Template::Toolkit object for the response.
 sub set_form_values {
     my ($target_params, $template) = @_;
     # walk through the options and update them with these borrower_preferences
-    my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
+    my $messaging_options = Koha::Patron::Message::Preferences->get_options;
     PREF: foreach my $option ( @$messaging_options ) {
         my $pref = C4::Members::Messaging::GetMessagingPreferences( { %{ $target_params }, message_name => $option->{'message_name'} } );
         $option->{ $option->{'message_name'} } = 1;

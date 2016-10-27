@@ -23,6 +23,7 @@ use C4::Members::Messaging;
 
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Patron::Message::Preferences;
 
 use base qw(Koha::Object);
 
@@ -79,7 +80,7 @@ my $messaging = $category->default_messaging();
 
 sub default_messaging {
     my ( $self ) = @_;
-    my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
+    my $messaging_options = Koha::Patron::Message::Preferences->get_options;
     my @messaging;
     foreach my $option (@$messaging_options) {
         my $pref = C4::Members::Messaging::GetMessagingPreferences(

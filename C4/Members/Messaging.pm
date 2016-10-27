@@ -184,42 +184,6 @@ END_SQL
     return;    
 }
 
-=head2 GetMessagingOptions
-
-  my $messaging_options = C4::Members::Messaging::GetMessagingOptions()
-
-returns a hashref of messaging options available.
-
-=cut
-
-sub GetMessagingOptions {
-
-    my $sql = <<'END_SQL';
-select message_attributes.message_attribute_id, takes_days, message_name, message_transport_type, is_digest
-  FROM message_attributes
-  LEFT JOIN message_transports
-    ON message_attributes.message_attribute_id = message_transports.message_attribute_id
-END_SQL
-
-    my $sth = C4::Context->dbh->prepare($sql);
-    $sth->execute();
-    my $choices;
-    while ( my $row = $sth->fetchrow_hashref() ) {
-        $choices->{ $row->{'message_name'} }->{'message_attribute_id'} = $row->{'message_attribute_id'};
-        $choices->{ $row->{'message_name'} }->{'message_name'}         = $row->{'message_name'};
-        $choices->{ $row->{'message_name'} }->{'takes_days'}           = $row->{'takes_days'};
-        $choices->{ $row->{'message_name'} }->{'has_digest'}           = 1 if $row->{'is_digest'};
-        $choices->{ $row->{'message_name'} }->{'transport_' . $row->{'message_transport_type'}} = ' ';
-    }
-
-    my @return = values %$choices;
-
-    @return = sort { $a->{message_attribute_id} <=> $b->{message_attribute_id} } @return;
-
-    # warn( Data::Dumper->Dump( [ \@return ], [ 'return' ] ) );
-    return \@return;
-}
-
 =head2 SetMessagingPreferencesFromDefaults
 
   C4::Members::Messaging::SetMessagingPreferencesFromDefaults( { borrowernumber => $borrower->{'borrowernumber'}
@@ -240,7 +204,7 @@ sub SetMessagingPreferencesFromDefaults {
         }
     }
 
-    my $messaging_options = GetMessagingOptions();
+    my $messaging_options = Koha::Patron::Message::Preferences->get_options;
     OPTION: foreach my $option ( @$messaging_options ) {
         my $default_pref = GetMessagingPreferences( { categorycode => $params->{categorycode},
                                                       message_name => $option->{'message_name'} } );

@@ -52,7 +52,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
-my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
 
 my $validate_phone = C4::Context->preference('ValidatePhoneNumber');
 
