@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -108,6 +108,44 @@ subtest 'Test Koha::Patron::Message::Preferences' => sub {
     };
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'Test Koha::Patron::Message::Preferences->get_options' => sub {
+    plan tests => 2;
+
+    subtest 'Test method availability and return value' => sub {
+        plan tests => 3;
+
+        ok(Koha::Patron::Message::Preferences->can('get_options'),
+            'Method get_options is available.');
+        ok(my $options = Koha::Patron::Message::Preferences->get_options,
+            'Called get_options successfully.');
+        is(ref($options), 'ARRAY', 'get_options returns a ARRAYref');
+    };
+
+    subtest 'Make sure options are correct' => sub {
+        $schema->storage->txn_begin;
+        my $options = Koha::Patron::Message::Preferences->get_options;
+
+        foreach my $option (@$options) {
+            my $n = $option->{'message_name'};
+            my $attr = Koha::Patron::Message::Attributes->find($option->{'message_attribute_id'});
+            is($option->{'message_attribute_id'}, $attr->message_attribute_id,
+               '$n: message_attribute_id is set');
+            is($option->{'message_name'}, $attr->message_name, '$n: message_name is set');
+            is($option->{'takes_days'}, $attr->takes_days, '$n: takes_days is set');
+            my $transports = Koha::Patron::Message::Transports->search({
+                message_attribute_id => $option->{'message_attribute_id'},
+                is_digest => $option->{'has_digest'} || 0,
+            });
+            while (my $trnzport = $transports->next) {
+                is($option->{'has_digest'} || 0, $trnzport->is_digest, '$n: has_digest is set for '.$trnzport->message_transport_type);
+                is($option->{'transport_'.$trnzport->message_transport_type}, ' ', '$n: transport_'.$trnzport->message_transport_type.' is set');
+            }
+        }
+
+        $schema->storage->txn_rollback;
+    };
 };
 
 subtest 'Test adding a new preference with invalid parameters' => sub {

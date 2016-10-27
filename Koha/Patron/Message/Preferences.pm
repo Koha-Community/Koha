@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Koha::Database;
 use Koha::Patron::Message::Preference;
+use Koha::Patron::Message::Transports;
 
 use base qw(Koha::Objects);
 
@@ -33,6 +34,40 @@ Koha::Patron::Message::Preferences - Koha Patron Message Preferences object clas
 =head2 Class Methods
 
 =cut
+
+=head3 get_options
+
+my $messaging_options = Koha::Patron::Message::Preferences->get_options
+
+Returns an ARRAYref of HASHrefs on available messaging options.
+
+=cut
+
+sub get_options {
+    my ($self) = @_;
+
+    my $transports = Koha::Patron::Message::Transports->search(undef,
+        {
+            join => ['message_attribute'],
+            '+select' => ['message_attribute.message_name', 'message_attribute.takes_days'],
+            '+as' => ['message_name', 'takes_days'],
+        });
+
+    my $choices;
+    while (my $transport = $transports->next) {
+        my $name = $transport->get_column('message_name');
+        $choices->{$name}->{'message_attribute_id'} = $transport->message_attribute_id;
+        $choices->{$name}->{'message_name'}         = $name;
+        $choices->{$name}->{'takes_days'}           = $transport->get_column('takes_days');
+        $choices->{$name}->{'has_digest'}           = 1 if $transport->is_digest;
+        $choices->{$name}->{'transport_'.$transport->get_column('message_transport_type')} = ' ';
+    }
+
+    my @return = values %$choices;
+    @return = sort { $a->{message_attribute_id} <=> $b->{message_attribute_id} } @return;
+
+    return \@return;
+}
 
 =head3 type
 
