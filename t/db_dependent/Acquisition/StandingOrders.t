@@ -56,13 +56,26 @@ is( $basket->{is_standing}, 1, 'basket correctly created as standing order baske
 
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( MARC::Record->new, '' );
 
+
 my $ordernumber = Koha::Acquisition::Order->new(
     {
-        basketno         => $basketno,
-        biblionumber     => $biblionumber,
-        budget_id        => $budget->{budget_id},
-        currency         => 'USD',
-        quantity         => 0,
+        basketno                 => $basketno,
+        biblionumber             => $biblionumber,
+        budget_id                => $budget->{budget_id},
+        currency                 => 'USD',
+        quantity                 => 0,
+        rrp                      => 42,
+        rrp_tax_included         => 42,
+        rrp_tax_excluded         => 42,
+        ecost                    => 22,
+        ecost_tax_included       => 22,
+        ecost_tax_excluded       => 22,
+        unitprice                => 12,
+        unitprice_tax_included   => 12,
+        unitprice_tax_excluded   => 12,
+        tax_rate                 => 0,
+        tax_rate_on_ordering     => 0,
+        tax_rate_on_receiving    => 0,
     }
 )->insert->{ordernumber};
 
@@ -85,21 +98,21 @@ my $invoiceid = AddInvoice(
     unknown       => "unknown"
 );
 
+my $order = Koha::Acquisition::Order->fetch( { ordernumber => $ordernumber } );
+
 my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber,
-        ordernumber      => $ordernumber,
+        order            => $order,
         quantityreceived => 2,
-        cost             => 12,
-        ecost            => 22,
         invoiceid        => $invoiceid,
-        rrp              => 42,
     }
 );
 
 isnt( $ordernumber, $new_ordernumber, "standing order split on receive" );
 
-my $order = Koha::Acquisition::Order->fetch( { ordernumber => $ordernumber } );
+#order has been updated, refetch
+$order = Koha::Acquisition::Order->fetch( { ordernumber => $ordernumber } );
 my $neworder = Koha::Acquisition::Order->fetch( { ordernumber => $new_ordernumber } );
 
 is( $order->{orderstatus}, 'partial', 'original order set to partially received' );

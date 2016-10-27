@@ -1380,8 +1380,14 @@ sub ModReceiveOrder {
                         );
     }
 
+    my $result_set = $dbh->selectrow_arrayref(
+            q{SELECT aqbasket.is_standing
+            FROM aqbasket
+            WHERE basketno=?},{ Slice => {} }, $order->{basketno});
+    my $is_standing = $result_set->[0];  # we assume we have a unique basket
+
     my $new_ordernumber = $order->{ordernumber};
-    if ( $order->{quantity} > $quantrec ) {
+    if ( $is_standing || $order->{quantity} > $quantrec ) {
         # Split order line in two parts: the first is the original order line
         # without received items (the quantity is decreased),
         # the second part is a new order line with quantity=quantityrec
@@ -1395,7 +1401,7 @@ sub ModReceiveOrder {
         my $sth = $dbh->prepare($query);
 
         $sth->execute(
-            $order->{quantity} - $quantrec,
+            ( $is_standing ? 1 : ($order->{quantity} - $quantrec) ),
             ( defined $order->{order_internalnote} ? $order->{order_internalnote} : () ),
             $order->{ordernumber}
         );
