@@ -402,7 +402,7 @@ sub DESTROY { }
 
 =head1 SEE ALSO
 
-L<C4::Circulation>, L<C4::Letters>, L<C4::Members::Messaging>
+L<C4::Circulation>, L<C4::Letters>, L<Koha::Patron::Message::Preference>
 
 =head1 AUTHOR
 

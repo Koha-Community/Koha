@@ -31,7 +31,6 @@ use C4::Circulation;
 use C4::Accounts;
 
 # for _koha_notify_reserve
-use C4::Members::Messaging;
 use C4::Members qw();
 use C4::Letters;
 use C4::Log;

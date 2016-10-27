@@ -53,7 +53,6 @@ use C4::Biblio;
 use C4::Context;
 use C4::Letters;
 use C4::Members;
-use C4::Members::Messaging;
 use C4::Overdues;
 use Koha::DateUtils;
 use C4::Log;

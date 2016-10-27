@@ -43,7 +43,6 @@ use C4::Context;
 use C4::Members;
 use C4::Members::Attributes qw(:all);
 use C4::Members::AttributeTypes;
-use C4::Members::Messaging;
 use C4::Reports::Guided;
 use C4::Templates;
 use Koha::Patron::Debarments;

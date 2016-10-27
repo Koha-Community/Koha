@@ -23,7 +23,6 @@ use warnings;
 use Data::Dumper;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Members::Messaging;
 use C4::Debug;
 use Koha::Patron::Message::Preferences;
 use Koha::Patrons;
@@ -273,7 +272,7 @@ sub _writeActionLogBuffer {
 
 =head1 SEE ALSO
 
-L<C4::Members::Messaging>, F<admin/categories.pl>, F<opac/opac-messaging.pl>, F<members/messaging.pl>
+L<Koha::Patron::Message::Preference>, F<admin/categories.pl>, F<opac/opac-messaging.pl>, F<members/messaging.pl>
 
 =head1 AUTHOR
 

@@ -44,7 +44,6 @@ use C4::Reserves;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
-use C4::Members::Messaging;
 use C4::Koha;   # FIXME : is it still useful ?
 use C4::RotatingCollections;
 use Koha::AuthorisedValues;

@@ -19,8 +19,6 @@ use Modern::Perl;
 
 use Carp;
 
-use C4::Members::Messaging;
-
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Patron::Message::Preferences;
