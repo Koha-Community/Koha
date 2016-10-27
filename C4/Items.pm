@@ -2071,6 +2071,7 @@ sub _koha_new_item {
     my $dbh=C4::Context->dbh;  
     my $error;
     $item->{permanent_location} //= $item->{location};
+    _mod_item_dates( $item );
     my $query =
            "INSERT INTO items SET
             biblionumber        = ?,
@@ -2334,6 +2335,7 @@ sub _koha_modify_item {
 
     my $query = "UPDATE items SET ";
     my @bind;
+    _mod_item_dates( $item );
     for my $key ( keys %$item ) {
         next if ( $key eq 'itemnumber' );
         $query.="$key=?,";
@@ -2349,6 +2351,34 @@ sub _koha_modify_item {
         warn $error;
     }
     return ($item->{'itemnumber'},$error);
+}
+
+sub _mod_item_dates { # date formatting for date fields in item hash
+    my ( $item ) = @_;
+    return if !$item || ref($item) ne 'HASH';
+
+    my @keys = grep
+        { $_ =~ /^onloan$|^date|date$|datetime$/ }
+        keys %$item;
+    # Incl. dateaccessioned,replacementpricedate,datelastborrowed,datelastseen
+    # NOTE: We do not (yet) have items fields ending with datetime
+    # Fields with _on$ have been handled already
+
+    foreach my $key ( @keys ) {
+        next if !defined $item->{$key}; # skip undefs
+        my $dt = eval { dt_from_string( $item->{$key} ) };
+            # eval: dt_from_string will die on us if we pass illegal dates
+
+        my $newstr;
+        if( defined $dt  && ref($dt) eq 'DateTime' ) {
+            if( $key =~ /datetime/ ) {
+                $newstr = DateTime::Format::MySQL->format_datetime($dt);
+            } else {
+                $newstr = DateTime::Format::MySQL->format_date($dt);
+            }
+        }
+        $item->{$key} = $newstr; # might be undef to clear garbage
+    }
 }
 
 =head2 _koha_delete_item
