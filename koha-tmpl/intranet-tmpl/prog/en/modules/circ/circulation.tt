@@ -859,7 +859,9 @@ No patron matched <span class="ex">[% message | html %]</span>
                     [% END %]>
                         [% message.message_date | $KohaDates %]
                         [% Branches.GetName( message.branchcode ) %]
-                        ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% message.manager_id %]">[% message.get_column('manager_firstname') %] [% message.get_column('manager_surname') %]</a> )
+                        [% IF message.manager_id %]
+                            ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% message.manager_id %]">[% message.get_column('manager_firstname') %] [% message.get_column('manager_surname') %]</a> )
+                        [% END %]
                         <i>"[% message.message %]"</i>
                     </span>
                     [% IF message.branchcode == branch OR Koha.Preference('AllowAllMessageDeletion') %]
