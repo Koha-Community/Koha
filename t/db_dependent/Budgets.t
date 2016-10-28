@@ -331,14 +331,12 @@ for my $infos (@order_infos) {
                 order_internalnote => "internal note",
                 order_vendornote   => "vendor note",
                 quantity           => 2,
-                cost               => $item_price,
-                rrp                => $item_price,
+                cost_tax_included  => $item_price,
+                rrp_tax_included   => $item_price,
                 listprice          => $item_price,
-                ecost              => $item_price,
-                rrp                => $item_price,
+                ecost_tax_include  => $item_price,
                 discount           => 0,
                 uncertainprice     => 0,
-                tax_rate            => 0,
             }
         )->insert;
         my $ordernumber = $order->{ordernumber};
@@ -355,13 +353,11 @@ for my $infos (@order_infos) {
                 order_vendornote   => "vendor note",
                 quantity           => $item_quantity,
                 cost               => $item_price,
-                rrp                => $item_price,
+                rrp_tax_included   => $item_price,
                 listprice          => $item_price,
-                ecost              => $item_price,
-                rrp                => $item_price,
+                ecost_tax_included => $item_price,
                 discount           => 0,
                 uncertainprice     => 0,
-                tax_rate            => 0,
             }
         )->insert;
         my $ordernumber = $order->{ordernumber};
