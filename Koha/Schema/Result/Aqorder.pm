@@ -176,17 +176,41 @@ __PACKAGE__->table("aqorders");
   is_nullable: 1
   size: [28,6]
 
-=head2 tax_rate
+=head2 tax_rate_bak
 
   data_type: 'decimal'
   is_nullable: 1
   size: [6,4]
 
-=head2 tax_value
+=head2 tax_rate_on_ordering
 
   data_type: 'decimal'
   is_nullable: 1
   size: [6,4]
+
+=head2 tax_rate_on_receiving
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [6,4]
+
+=head2 tax_value_bak
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
+=head2 tax_value_on_ordering
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
+=head2 tax_value_on_receiving
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
 
 =head2 discount
 
@@ -348,10 +372,18 @@ __PACKAGE__->add_columns(
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "ecost_tax_included",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
-  "tax_rate",
+  "tax_rate_bak",
   { data_type => "decimal", is_nullable => 1, size => [6, 4] },
-  "tax_value",
+  "tax_rate_on_ordering",
   { data_type => "decimal", is_nullable => 1, size => [6, 4] },
+  "tax_rate_on_receiving",
+  { data_type => "decimal", is_nullable => 1, size => [6, 4] },
+  "tax_value_bak",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "tax_value_on_ordering",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "tax_value_on_receiving",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "discount",
   { data_type => "float", is_nullable => 1, size => [6, 4] },
   "budget_id",
@@ -593,8 +625,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-09 13:43:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R2a+DkXI1AaEVnpb1YKu5Q
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-28 15:05:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FyZsBWGJ8wsPkFdYUAetmg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
