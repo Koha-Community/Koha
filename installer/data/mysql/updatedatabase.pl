@@ -13577,6 +13577,18 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '16.06.00.044';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        ALTER TABLE `messages`
+        ADD `manager_id` int(11) NULL,
+        ADD FOREIGN KEY (`manager_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL;
+    });
+
+    print "Upgrade to $DBversion done (Bug 17397 - Show name of librarian who created circulation message)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
