@@ -1,1 +1,0 @@
-UPDATE systempreferences SET options = "now|dateexpiry|combination", explanation = "Set whether the borrower renewal date should be counted from the dateexpiry, from the current date or by combination: if the dateexpiry is in future use dateexpiry, else use current date " WHERE variable = "BorrowerRenewalPeriodBase";
