@@ -11836,8 +11836,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-
-$DBversion = "XXX";
+$DBversion = '3.22.12.002';
 if ( CheckVersion($DBversion) ) {
 
     my $sth = $dbh->prepare(q{
