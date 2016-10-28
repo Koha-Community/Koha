@@ -22,7 +22,7 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 subtest 'Authorized Values Tests' => sub {
-    plan tests => 4;
+    plan tests => 3;
 
     my $data = {
         category            => 'CATEGORY',
