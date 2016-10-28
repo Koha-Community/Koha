@@ -11837,10 +11837,10 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
-$DBversion = "3.23.00.XXX";
+$DBversion = "XXX";
 if ( CheckVersion($DBversion) ) {
 
-    $sth = $dbh->prepare(q{
+    my $sth = $dbh->prepare(q{
         SELECT s.itemnumber, i.itype, b.itemtype
         FROM
          ( SELECT DISTINCT itemnumber

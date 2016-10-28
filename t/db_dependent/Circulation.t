@@ -17,8 +17,18 @@
 
 use Modern::Perl;
 
+use Test::More tests => 85;
+
+BEGIN {
+    require_ok('C4::Circulation');
+}
+
 use DateTime;
+
 use t::lib::Mocks;
+use t::lib::TestBuilder;
+
+use C4::Circulation;
 use C4::Biblio;
 use C4::Branch;
 use C4::Items;
@@ -28,13 +38,6 @@ use C4::Overdues qw(UpdateFine CalcFine);
 use Koha::DateUtils;
 use Koha::Database;
 
-use t::lib::TestBuilder;
-
-use Test::More tests => 85;
-
-BEGIN {
-    use_ok('C4::Circulation');
-}
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
