@@ -23,6 +23,9 @@ use Carp;
 
 use Koha::Database;
 
+use Koha::Patron::Modifications;
+use Koha::Exceptions::Patron::Modification;
+
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -31,7 +34,23 @@ Koha::AudioAlert - Koha Audio Alert object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    if ( $self->verification_token ) {
+        if ( Koha::Patron::Modifications->search( { verification_token => $self->verification_token } )->count() ) {
+            Koha::Exceptions::Koha::Patron::Modification::DuplicateVerificationToken->throw;
+        }
+    }
+
+    return $self->SUPER::store();
+}
+
+=head2 approve
 
 =head3 store
 
