@@ -139,6 +139,9 @@ if ( $action eq 'create' ) {
             $template->param( 'email' => $borrower{'email'} );
 
             my $verification_token = md5_hex( time().{}.rand().{}.$$ );
+            while ( Koha::Patron::Modifications->search( { verification_token => $verification_token } )->count() ) {
+                $verification_token = md5_hex( time().{}.rand().{}.$$ );
+            }
 
             $borrower{password}           = random_string("..........");
             $borrower{verification_token} = $verification_token;

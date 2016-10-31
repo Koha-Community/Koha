@@ -23,6 +23,9 @@ use Carp;
 
 use Koha::Database;
 
+use Koha::Patron::Modifications;
+use Koha::Exceptions::Patron::Modification;
+
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -32,6 +35,22 @@ Koha::Patron::Modification - Class represents a request to modify or create a pa
 =head2 Class Methods
 
 =cut
+
+=head2 store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    if ( $self->verification_token ) {
+        if ( Koha::Patron::Modifications->search( { verification_token => $self->verification_token } )->count() ) {
+            Koha::Exceptions::Koha::Patron::Modification::DuplicateVerificationToken->throw;
+        }
+    }
+
+    return $self->SUPER::store();
+}
 
 =head2 approve
 
