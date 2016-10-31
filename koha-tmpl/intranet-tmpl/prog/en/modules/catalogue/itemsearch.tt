@@ -228,7 +228,8 @@
         + '</table>';
       var results_heading = "<h1>" + _("Item search results") + "</h1>";
       results_heading += "<p><a href=\"/cgi-bin/koha/catalogue/search.pl\">" + _("Go to advanced search") + "</a></p>";
-      results_heading += "<p><a class=\"editsearchlink\" href=\"#\">" + _("Edit search") + "</a></p>";
+      results_heading += "<p><a class=\"editsearchlink\" href=\"#\">" + _("Edit search") + "</a>";
+      results_heading += " | <a class=\"resultstocsv\" href=\"#\">" + _("Output results to csv") + "</a></p>";
       $('#results-wrapper').empty().html(results_heading + table);
 
       var params = [];
@@ -351,6 +352,15 @@
         e.preventDefault();
         $('#item-search-block').show();
         $(this).hide();
+        return false;
+      });
+
+      $("body").on("click",".resultstocsv",function(e) {
+        e.preventDefault();
+        $('#format-csv').prop("checked",true);
+        $('#itemsearchform').submit();
+        hideForm();
+        $('#format-html').prop("checked",true);
         return false;
       });
     });
