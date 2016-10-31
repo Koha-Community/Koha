@@ -20,7 +20,7 @@ function is_valid_date(date) {
         if ( date.search(/^\d{2}\/\d{2}\/\d{4}($|\s)/) == -1 ) return 0;
         dateformat = 'dd/mm/yy';
     } else if (dateformat == 'iso' ) {
-        if ( date.search(/^\d{2}-\d{2}-\d{4}($|\s)/) == -1 ) return 0;
+        if ( date.search(/^\d{4}-\d{2}-\d{2}($|\s)/) == -1 ) return 0;
         dateformat = 'yy-mm-dd';
     } else if ( dateformat == 'dmydot' ) {
         if ( date.search(/^\d{2}\.\d{2}\.\d{4}($|\s)/) == -1 ) return 0;
