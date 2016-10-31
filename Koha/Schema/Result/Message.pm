@@ -58,6 +58,12 @@ __PACKAGE__->table("messages");
   default_value: current_timestamp
   is_nullable: 0
 
+=head2 manager_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -78,6 +84,8 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable => 0,
   },
+  "manager_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -92,9 +100,31 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("message_id");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:iq+Uo9eMnkDgUQsRR6VFUA
+=head2 manager
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "manager",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "manager_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "RESTRICT",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-31 10:39:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Lmkl/u8Lr1cQumfZvn5D4A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
