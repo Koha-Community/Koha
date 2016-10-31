@@ -305,8 +305,17 @@ if ($op eq 'save' || $op eq 'insert'){
                 : ()
     }
 
-    if ( $newdata{dateofbirth} ) {
-        my $age = GetAge($newdata{dateofbirth});
+    my $dateofbirth;
+    if ($op eq 'save' && $step == 3) {
+        my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
+        $dateofbirth = $borrower->{dateofbirth};
+    }
+    else {
+        $dateofbirth = $newdata{dateofbirth};
+    }
+
+    if ( $dateofbirth ) {
+        my $age = GetAge($dateofbirth);
         my $borrowercategory = Koha::Patron::Categories->find($categorycode);
         my ($low,$high) = ($borrowercategory->dateofbirthrequired, $borrowercategory->upperagelimit);
         if (($high && ($age > $high)) or ($age < $low)) {
