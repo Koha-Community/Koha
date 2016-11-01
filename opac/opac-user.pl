@@ -212,6 +212,7 @@ if ($issues){
             $issue->{'norenew_overdue'} = 1 if $renewerror eq 'overdue';
             $issue->{'auto_renew'}     = 1 if $renewerror eq 'auto_renew';
             $issue->{'auto_too_soon'}  = 1 if $renewerror eq 'auto_too_soon';
+            $issue->{'auto_too_late'}  = 1 if $renewerror eq 'auto_too_late';
 
             if ( $renewerror eq 'too_soon' ) {
                 $issue->{'too_soon'}         = 1;
