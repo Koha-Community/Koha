@@ -325,7 +325,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 }
 
 if ( C4::Context->preference("ExportCircHistory") ) {
-    $template->param(csv_profiles => [ Koha::CsvProfiles->search ]);
+    $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ]);
 }
 
 # in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children)

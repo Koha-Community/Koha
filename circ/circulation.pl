@@ -648,7 +648,7 @@ my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
 $template->param( picture => 1 ) if $patron_image;
 
 if ( C4::Context->preference("ExportCircHistory") ) {
-    $template->param(csv_profiles => [ Koha::CsvProfiles->search ]);
+    $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ]);
 }
 
 my $has_modifications = Koha::Patron::Modifications->search( { borrowernumber => $borrowernumber } )->count;
