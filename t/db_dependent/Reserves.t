@@ -50,8 +50,9 @@ $module->mock('userenv', sub {
 my $dbh = C4::Context->dbh;
 
 # Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $database = Koha::Database->new();
+my $schema = $database->schema();
+$schema->storage->txn_begin();
 
 # Somewhat arbitrary field chosen for age restriction unit tests. Must be added to db before the framework is cached
 $dbh->do("update marc_subfield_structure set kohafield='biblioitems.agerestriction' where tagfield='521' and tagsubfield='a'");
@@ -678,7 +679,7 @@ is( $status, 'Reserved', 'MoveReserve did not fill future hold of 3 days');
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
 
 # we reached the finish
-$dbh->rollback;
+$schema->storage->txn_rollback();
 
 sub count_hold_print_messages {
     my $message_count = $dbh->selectall_arrayref(q{
