@@ -25,6 +25,7 @@ use MARC::Record;
 use DateTime::Duration;
 
 use C4::Biblio;
+use C4::Reserves;
 use C4::Items;
 use C4::Members;
 use C4::Circulation;
@@ -37,7 +38,7 @@ use Koha::Patron::Categories;
 
 use Data::Dumper;
 BEGIN {
-    use_ok('C4::Reserves');
+    require_ok('C4::Reserves');
 }
 
 # a very minimal mack of userenv for use by the test of DelItemCheck
