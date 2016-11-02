@@ -161,7 +161,8 @@ sub test06 { #some extra tests for get
 sub test07 { #simple test for httpheaders and getCategories
     my @hdrs = Koha::Upload->httpheaders('does_not_matter_yet');
     is( @hdrs == 4 && $hdrs[1] =~ /application\/octet-stream/, 1, 'Simple test for httpheaders');
-    $dbh->do("INSERT INTO authorised_values (category, authorised_value, lib) VALUES (?,?,?) ", undef, ( 'UPLOAD', 'HAVE_AT_LEAST_ONE', 'Hi there' ));
+    my $builder = t::lib::TestBuilder->new;
+    $builder->build({ source => 'AuthorisedValue', value => { category => 'UPLOAD', authorised_value => 'HAVE_AT_LEAST_ONE', lib => 'Hi there' } });
     my $cat = Koha::Upload->getCategories;
     is( @$cat >= 1, 1, 'getCategories returned at least one category' );
 }
