@@ -19,11 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use C4::Context;
+use C4::Members::Messaging;
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Patron;
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
 use t::lib::TestBuilder;
@@ -98,6 +100,43 @@ subtest 'BlockExpiredPatronOpacActions' => sub {
     $category->BlockExpiredPatronOpacActions(24)->store;
     is( $category->effective_BlockExpiredPatronOpacActions, 24 );
     $category->delete;
+};
+
+subtest 'default_messaging tests' => sub {
+    plan tests => 5;
+
+    my $next_month = dt_from_string->add( months => 1 );
+    my $category = Koha::Patron::Category->new({
+        categorycode => 'my2ndcat',
+        category_type => 'A',
+        description  => 'mycatdesc',
+        enrolmentperiod => undef,
+        enrolmentperioddate => $next_month,
+    })->store;
+    my $attr = $builder->build({ source => 'MessageAttribute', });
+    my $transport = $builder->build({
+        source => 'MessageTransport',
+        value => {
+            message_attribute_id => $attr->{'message_attribute_id'},
+            message_transport_type => 'email',
+            is_digest => 1,
+        }
+    });
+    C4::Members::Messaging::SetMessagingPreference({
+        categorycode            => $category->categorycode,
+        message_attribute_id    => $attr->{'message_attribute_id'},
+        message_transport_types => [ qw( email ) ],
+        days_in_advance         => 5,
+        wants_digest            => 1
+    });
+    my $default_messaging = $category->default_messaging;
+    is(@$default_messaging, 1, "One default messaging found.");
+    $default_messaging = $default_messaging->[0];
+    is($default_messaging->{'message_attribute_id'}, $attr->{'message_attribute_id'}, "Default attribute id is correct.");
+    is($default_messaging->{'message_name'}, $attr->{'message_name'}, "Default message_name is correct.");
+    ok($default_messaging->{$attr->{'message_name'}}, "Found message_name as a key.");
+    is($default_messaging->{'transports'}->[0]->{'transport'}, "email", "Email found as transport type");
+    $category->delete; # finally, delete the category in order not to fail last delete test
 };
 
 $retrieved_category_1->delete;
