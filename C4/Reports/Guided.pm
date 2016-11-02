@@ -632,6 +632,7 @@ sub get_saved_reports_base_query {
 SELECT s.*, $area_name_sql_snippet, av_g.lib AS groupname, av_sg.lib AS subgroupname,
 b.firstname AS borrowerfirstname, b.surname AS borrowersurname
 FROM saved_sql s
+LEFT JOIN saved_reports r ON r.report_id = s.id
 LEFT OUTER JOIN authorised_values av_g ON (av_g.category = 'REPORT_GROUP' AND av_g.authorised_value = s.report_group)
 LEFT OUTER JOIN authorised_values av_sg ON (av_sg.category = 'REPORT_SUBGROUP' AND av_sg.lib_opac = s.report_group AND av_sg.authorised_value = s.report_subgroup)
 LEFT OUTER JOIN borrowers b USING (borrowernumber)
