@@ -1,3 +1,4 @@
+[% PROCESS 'html_helpers.inc' %]
 <div id="advsearch">
     <form action="" method="get">
         <fieldset class="brief">

@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE Branches %]
+[% PROCESS 'html_helpers.inc' %]
 
 <div id="search-facets">
     <form method="get" action="/cgi-bin/koha/opac-topissues.pl">

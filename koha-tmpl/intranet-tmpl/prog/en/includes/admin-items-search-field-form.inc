@@ -1,3 +1,4 @@
+[% PROCESS 'html_helpers.inc' %]
 <ol>
   <li>
       [% IF field %]
