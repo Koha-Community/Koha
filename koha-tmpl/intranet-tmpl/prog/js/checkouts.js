@@ -37,12 +37,12 @@ $(document).ready(function() {
     });
 
     $("#output_format > option:first-child").attr("selected", "selected");
-    $("select[name='csv_profile']").hide();
+    $("select[name='csv_profile_id']").hide();
     $(document).on("change", '#output_format', function(){
         if ( $(this).val() == 'csv' ) {
-            $("select[name='csv_profile']").show();
+            $("select[name='csv_profile_id']").show();
         } else {
-            $("select[name='csv_profile']").hide();
+            $("select[name='csv_profile_id']").hide();
         }
     });
 
