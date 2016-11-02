@@ -232,6 +232,14 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/googleindictransliteration.js"></script>
 [% END %]
 
+[% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
+<script type="text/javascript">
+    $("#news-branch-select").change(function() {
+        $( "#news-branch-select" ).submit();
+    });
+</script>
+[% END %]
+
 <script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {

@@ -37,8 +37,22 @@
     [% ELSE %]
         <div class="span9">
     [% END %]
+            [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
+                <form id="news-branch-select" class="form-inline" name="news-branch-select" method="get" action="/cgi-bin/koha/opac-main.pl">
+                <label for="news-branch">Display news for: </label>
+                <select id="news-branch" name="branch">
+                [% IF ( branchcode == "" ) %]
+                <option value="" selected="selected">system-wide only</option>
+                [% ELSE %]
+                <option value=""         >system-wide only</option>
+                [% END %]
+                [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
+                </select>
+                </form>
+            [% END %]
 
         [% IF ( koha_news_count ) %]
+
             <div id="news" class="newscontainer">
                 [% SET newsdisp = ( Koha.Preference('NewsAuthorDisplay') ) %]
                 [% FOREACH koha_new IN koha_news %]
@@ -54,7 +68,16 @@
                 <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode %]"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png"></a>
                 RSS feed for [% IF ( branchcode ) %][% Branches.GetName( branchcode ) %] <i>and</i> [% END %] system-wide library news.
             </div>
-        [% END %]
+            [% ELSE %]
+                [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
+                    <div id="news" class="newscontainer">
+                        <div class="newsitem">
+                            <div class="newsbody">No news to display.</div>
+                            <div class="newsfooter"></div>
+                        </div>
+                    </div>
+                [% END %]
+            [% END %]
 
         [% IF ( display_daily_quote && daily_quote ) %]
             <div id="daily-quote">

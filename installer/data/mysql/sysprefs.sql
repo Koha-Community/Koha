@@ -288,6 +288,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OAI-PMH:MaxCount','50',NULL,'OAI-PMH maximum number of records by answer to ListRecords and ListIdentifiers queries','Integer'),
 ('OCLCAffiliateID','','','Use with FRBRizeEditions and XISBN. You can sign up for an AffiliateID here: http://www.worldcat.org/wcpa/do/AffiliateUserServices?method=initSelfRegister','free'),
 ('OPACAcquisitionDetails','0','','Show the acquisition details at the OPAC','YesNo'),
+('OpacNewsLibrarySelect','0','','Show selector for branches on OPAC news page','YesNo'),
 ('OpacAddMastheadLibraryPulldown','0','','Adds a pulldown menu to select the library to search on the opac masthead.','YesNo'),
 ('OpacAdvSearchMoreOptions','pubdate,itemtype,language,subtype,sorting,location','Show search options for the expanded view (More options)','pubdate|itemtype|language|subtype|sorting|location','multiple'),
 ('OpacAdvSearchOptions','pubdate,itemtype,language,sorting,location','Show search options','pubdate|itemtype|language|subtype|sorting|location','multiple'),
