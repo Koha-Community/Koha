@@ -101,6 +101,7 @@ my %data = (
     categorycode => 'S',
     branchcode => 'CPL',
 );
+Koha::Patron::Categories->find('S')->set({ enrolmentfee => 0})->store;
 my $borrowernumber = AddMember(%data);
 my $borrower = GetMember( borrowernumber => $borrowernumber );
 my $biblionumber   = $bibnum;
