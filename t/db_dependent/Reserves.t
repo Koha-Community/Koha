@@ -38,6 +38,7 @@ use Koha::Holds;
 use Koha::Libraries;
 use Koha::Notice::Templates;
 use Koha::Patron::Categories;
+use Koha::Patron::Message::Preference;
 
 BEGIN {
     require_ok('C4::Reserves');
@@ -724,19 +725,6 @@ subtest '_koha_notify_reserve() tests' => sub {
 
     plan tests => 2;
 
-    my $wants_hold_and_email = {
-        wants_digest => '0',
-        transports => {
-            sms => 'HOLD',
-            email => 'HOLD',
-            },
-        letter_code => 'HOLD'
-    };
-
-    my $mp = Test::MockModule->new( 'C4::Members::Messaging' );
-
-    $mp->mock("GetMessagingPreferences",$wants_hold_and_email);
-
     $dbh->do('DELETE FROM letter');
 
     my $email_hold_notice = $builder->build({
@@ -775,6 +763,16 @@ subtest '_koha_notify_reserve() tests' => sub {
                borrowernumber=>$hold_borrower
             }
         });
+
+    my $message_attr_id = Koha::Patron::Message::Attributes->find({
+        message_name => 'Hold_Filled'
+    })->message_attribute_id;
+    Koha::Patron::Message::Preference->new({
+        borrowernumber => $hold_borrower,
+        message_attribute_id   => $message_attr_id,
+        message_transport_types => ['sms', 'email'],
+        wants_digest   => 0,
+    })->store;
 
     ModReserveAffect($hold->{itemnumber}, $hold->{borrowernumber}, 0);
     my $sms_message_address = $schema->resultset('MessageQueue')->search({

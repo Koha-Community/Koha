@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 95;
+use Test::More tests => 96;
 
 use DateTime;
 
@@ -29,11 +29,14 @@ use C4::Biblio;
 use C4::Items;
 use C4::Log;
 use C4::Members;
+use C4::Message;
 use C4::Reserves;
 use C4::Overdues qw(UpdateFine CalcFine);
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::IssuingRules;
+use Koha::Patron::Message::Attributes;
+use Koha::Patron::Message::Preferences;
 use Koha::Subscriptions;
 
 my $schema = Koha::Database->schema;
@@ -1532,6 +1535,7 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
             }
         }
     );
+
     my $biblioitem_2 = $builder->build( { source => 'Biblioitem' } );
     my $item_2 = $builder->build(
         {
@@ -1638,6 +1642,49 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
         }
     );
     is( $debarments->[0]->{expiration}, $expected_expiration );
+};
+
+subtest 'SendCirculationAlert test' => sub {
+    plan tests => 4;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron  = $builder->build( { source => 'Borrower' } );
+    my $attribute = Koha::Patron::Message::Attributes->find({
+        message_name => 'Item_Checkout',
+    });
+    Koha::Patron::Message::Preference->new({
+        borrowernumber => $patron->{'borrowernumber'},
+        message_attribute_id => $attribute->message_attribute_id,
+        days_in_advance => 0,
+        wants_digest => 0,
+        message_transport_types => ['email'],
+    })->store;
+    my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
+    my $item_1 = $builder->build(
+        {   source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem_1->{biblionumber}
+            }
+        }
+    );
+
+    my $old_message = C4::Message->find_last_message($patron, 'CHECKOUT', 'email');
+    $old_message->{'message_id'} = 0 unless $old_message;
+    is(C4::Circulation::SendCirculationAlert({
+        type     => 'CHECKOUT',
+        item     => $item_1,
+        borrower => $patron,
+        branch   => $library->{'branchcode'},
+    }), undef, "SendCirculationAlert called.");
+    my $new_message = C4::Message->find_last_message($patron, 'CHECKOUT', 'email');
+    ok($old_message->{'message_id'} != $new_message->{'message_id'}, "New message has appeared.");
+    is($new_message->{'letter_code'}, 'CHECKOUT', "New message letter code is CHECKOUT.");
+    is($new_message->{'borrowernumber'}, $patron->{'borrowernumber'}, "New message is to our test patron.");
 };
 
 sub set_userenv {
