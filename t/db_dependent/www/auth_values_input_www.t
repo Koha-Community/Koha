@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More tests => 28;
+use Test::More tests => 33;
 use Test::WWW::Mechanize;
 use XML::Simple;
 use JSON;
@@ -71,18 +71,32 @@ $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'load main page' );
 
 $category = '学協会μμ';
 $dbh->do(q|DELETE FROM authorised_values WHERE category = ?|, undef, $category);
+$dbh->do(q|DELETE FROM authorised_value_categories WHERE category_name = ?|, undef, $category);
 
+$expected_base = q|authorised_values.pl|;
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl", 'Connect to Authorized values page' );
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form", 'Open to create a new category' );
+$agent->form_name('Aform');
+$agent->field('category', $category);
+$agent->click_ok( '', "Create new AV category " );
+
+$agent->base_like(qr|$expected_base|, "check base");
+$add_form_link_exists = 0;
+for my $link ( $agent->links() ) {
+    if ( $link->url =~ m|authorised_values.pl\?op=add_form&category=$category| ) {
+        $add_form_link_exists = 1;
+    }
+}
+is( $add_form_link_exists, 1, 'Add a new category button should be displayed');
+$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=$category", 'Open to create a new AV for this category' );
+
 $agent->form_name('Aform');
 $agent->field('authorised_value', 'επιμεq');
 $agent->field('lib_opac', 'autdesc2');
 $agent->field('lib', 'desc1');
-$agent->field('category', $category);
 $agent->field('branches', '');
-$agent->click_ok( '', "Create new auth category and value" );
+$agent->click_ok( '', "Create a new value for the category" );
 
-$expected_base = q|authorised_values.pl|;
 $agent->base_like(qr|$expected_base|, "check base");
 $add_form_link_exists = 0;
 $delete_form_link_exists = 0;
@@ -93,8 +107,8 @@ for my $link ( $agent->links() ) {
         $delete_form_link_exists = 1;
     }
 }
-is( $add_form_link_exists, 1, );
-is( $delete_form_link_exists, 1, );
+is( $add_form_link_exists, 1, 'Add a new category button should be displayed');
+is( $delete_form_link_exists, 1, '');
 
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl", 'Return to Authorized values page' );
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?searchfield=学協会μμ&offset=0", 'Search the values inserted' );
@@ -122,20 +136,23 @@ if ($id_to_del) {
 
 $category = 'tòmas';
 $dbh->do(q|DELETE FROM authorised_values WHERE category = ?|, undef, $category);
+$dbh->do(q|DELETE FROM authorised_value_categories WHERE category_name = ?|, undef, $category);
 
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl", 'Connect to Authorized values page' );
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form", 'Open to create a new category' );
 $agent->form_name('Aform');
+$agent->field('category', $category);
+$agent->click_ok( '', "Create new AV category" );
+
+$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=$category", 'Open to create a new AV for this category' );
+$agent->form_name('Aform');
 $agent->field('authorised_value', 'ràmen');
 $agent->field('lib_opac', 'autdesc2');
 $agent->field('lib', 'desc1');
-$agent->field('category', $category);
 $agent->field('branches', '');
-$agent->click_ok( '', "Create new auth category and value" );
-$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?searchfield=tòmas&offset=0", 'Search the values inserted' );
+$agent->click_ok( '', "Create a new value for the category" );
 
-$expected_base = q|authorised_values.pl\?searchfield=| . uri_escape_utf8( $category );
-#$expected_base = q|authorised_values.pl\?searchfield=| . $category;
+$expected_base = q|authorised_values.pl|;
 $agent->base_like(qr|$expected_base|, "check base");
 $add_form_link_exists = 0;
 $delete_form_link_exists = 0;
