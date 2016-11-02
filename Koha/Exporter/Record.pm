@@ -143,12 +143,8 @@ sub export {
         print MARC::File::XML::footer();
         print "\n";
     } elsif ( $format eq 'csv' ) {
-        unless ( $csv_profile_id ) {
-            # FIXME export_format.profile should be a unique key
-            my $csv_profiles = Koha::CsvProfiles->search({ profile => C4::Context->preference('ExportWithCsvProfile') });
-            die "The ExportWithCsvProfile system preference is not defined or does not match a valid csv profile" unless $csv_profiles->count;
-            $csv_profile_id = $csv_profiles->next->export_format_id;
-        }
+        die 'There is no valid csv profile defined for this export'
+            unless Koha::CsvProfiles->find( $csv_profile_id );
         print marc2csv( $record_ids, $csv_profile_id, $itemnumbers );
     }
 
@@ -208,7 +204,7 @@ It will displays on STDOUT the generated file.
 
 =item csv_profile_id
 
-  If the format is csv, a csv_profile_id can be provide to overwrite the default value (syspref ExportWithCsvProfile).
+  If the format is csv, you have to define a csv_profile_id.
 
 =cut
 

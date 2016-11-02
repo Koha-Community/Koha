@@ -200,12 +200,6 @@ if ( $op eq "export" ) {
         );
 
         my $csv_profile_id = $query->param('csv_profile_id');
-        unless ( $csv_profile_id ) {
-            # FIXME export_format.profile should be a unique key
-            my $default_csv_profiles = Koha::CsvProfiles->search({ profile => C4::Context->preference('ExportWithCsvProfile') });
-            $csv_profile_id = $default_csv_profiles->count ? $default_csv_profiles->next->export_format_id : undef;
-        }
-
         Koha::Exporter::Record::export(
             {   record_type        => $record_type,
                 record_ids         => \@record_ids,

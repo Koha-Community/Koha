@@ -43,6 +43,7 @@ use C4::Context;
 use CGI::Session;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::AuthorisedValues;
+use Koha::CsvProfiles;
 use Koha::Patron;
 use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::DateUtils;
@@ -645,6 +646,10 @@ $template->param(
 
 my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
 $template->param( picture => 1 ) if $patron_image;
+
+if ( C4::Context->preference("ExportCircHistory") ) {
+    $template->param(csv_profiles => [ Koha::CsvProfiles->search ]);
+}
 
 my $has_modifications = Koha::Patron::Modifications->search( { borrowernumber => $borrowernumber } )->count;
 $template->param(

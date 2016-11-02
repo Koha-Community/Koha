@@ -3,9 +3,6 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE ColumnsSettings %]
-[% IF Koha.Preference('ExportRemoveFields') OR Koha.Preference('ExportWithCsvProfile') %]
-   [% SET exports_enabled = 1 %]
-[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo;
 [% IF ( unknowuser ) %]
@@ -34,7 +31,7 @@ var interface = "[% interface %]";
 var theme = "[% theme %]";
 var borrowernumber = "[% borrowernumber %]";
 var branchcode = "[% Branches.GetLoggedInBranchcode() %]";
-var exports_enabled = "[% exports_enabled %]";
+var exports_enabled = "[% Koha.Preference('ExportCircHistory') %]";
 var AllowCirculate = [% (CAN_user_circulate_circulate_remaining_permissions)? 1 : 0 %]
 var AllowRenewalLimitOverride = [% (CAN_user_circulate_override_renewals && Koha.Preference('AllowRenewalLimitOverride') )? 1: 0 %];
 var script = "moremember";

@@ -71,6 +71,9 @@ if ( $output_format eq 'csv' and $record_type eq 'auths' ) {
     pod2usage(q|CSV output is only available for biblio records|);
 }
 
+if ( $output_format eq 'csv' and not $csv_profile_id ) {
+    pod2usage(q|Define a csv profile to export in CSV|);
+}
 
 if ( $timestamp and $record_type ne 'bibs' ) {
     pod2usage(q|--timestamp can only be used with biblios|);
@@ -193,11 +196,6 @@ if ($deleted_barcodes) {
     }
 }
 else {
-    unless ( $csv_profile_id ) {
-        # FIXME export_format.profile should be a unique key
-        my $default_csv_profiles = Koha::CsvProfiles->search({ profile => C4::Context->preference('ExportWithCsvProfile') });
-        $csv_profile_id = $default_csv_profiles->count ? $default_csv_profiles->next->export_format_id : undef;
-    }
     Koha::Exporter::Record::export(
         {   record_type        => $record_type,
             record_ids         => \@record_ids,
@@ -249,7 +247,6 @@ Print a brief help message.
 =item B<--csv_profile_id>
 
  --csv_profile_id=ID    Generate a CSV file with the given CSV profile id (see tools/csv-profiles.pl)
-                        Unless provided, the one defined in the system preference 'ExportWithCsvProfile' will be used.
                         This can only be used to export biblio records.
 
 =item B<--deleted_barcodes>

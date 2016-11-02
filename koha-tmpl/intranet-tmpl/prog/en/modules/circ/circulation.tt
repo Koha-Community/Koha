@@ -5,9 +5,6 @@
 [% USE ColumnsSettings %]
 [% USE ItemTypes %]
 [% USE Price %]
-[% IF Koha.Preference('ExportRemoveFields') OR Koha.Preference('ExportWithCsvProfile') %]
-   [% SET exports_enabled = 1 %]
-[% END %]
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET destination = "circ" %]
@@ -38,7 +35,7 @@ var interface = "[% interface %]";
 var theme = "[% theme %]";
 var borrowernumber = "[% borrowernumber %]";
 var branchcode = "[% branch %]";
-var exports_enabled = "[% exports_enabled %]";
+var exports_enabled = "[% Koha.Preference('ExportCircHistory') %]";
 var AllowRenewalLimitOverride = [% (CAN_user_circulate_override_renewals && Koha.Preference('AllowRenewalLimitOverride') )? 1: 0 %];
 var AllowCirculate = [% (CAN_user_circulate_circulate_remaining_permissions)? 1 : 0 %];
 var script = "circulation";

@@ -36,6 +36,16 @@ $(document).ready(function() {
         }
     });
 
+    $("#output_format > option:first-child").attr("selected", "selected");
+    $("select[name='csv_profile']").hide();
+    $(document).on("change", '#output_format', function(){
+        if ( $(this).val() == 'csv' ) {
+            $("select[name='csv_profile']").show();
+        } else {
+            $("select[name='csv_profile']").hide();
+        }
+    });
+
     // Clicking the table cell checks the checkbox inside it
     $(document).on("click", 'td', function(e){
         if(e.target.tagName.toLowerCase() == 'td'){

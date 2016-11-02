@@ -51,6 +51,7 @@ use C4::Form::MessagingPreferences;
 use List::MoreUtils qw/uniq/;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::AuthorisedValues;
+use Koha::CsvProfiles;
 use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::Patron::Images;
 use Module::Load;
@@ -321,6 +322,10 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     $template->param(SMSSendDriver => C4::Context->preference("SMSSendDriver"));
     $template->param(SMSnumber     => $data->{'smsalertnumber'});
     $template->param(TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"));
+}
+
+if ( C4::Context->preference("ExportCircHistory") ) {
+    $template->param(csv_profiles => [ Koha::CsvProfiles->search ]);
 }
 
 # in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children)
