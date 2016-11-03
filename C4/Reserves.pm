@@ -219,8 +219,10 @@ sub AddReserve {
     my $reserve_id = $hold->id();
 
     # add a reserve fee if needed
-    my $fee = GetReserveFee( $borrowernumber, $biblionumber );
-    ChargeReserveFee( $borrowernumber, $fee, $title );
+    if ( C4::Context->preference('HoldFeeMode') ne 'any_time_is_collected' ) {
+        my $reserve_fee = GetReserveFee( $borrowernumber, $biblionumber );
+        ChargeReserveFee( $borrowernumber, $reserve_fee, $title );
+    }
 
     _FixPriority({ biblionumber => $biblionumber});
 
@@ -1180,6 +1182,11 @@ sub ModReserveFill {
     Koha::Old::Hold->new( $hold->unblessed() )->store();
 
     $hold->delete();
+
+    if ( C4::Context->preference('HoldFeeMode') eq 'any_time_is_collected' ) {
+        my $reserve_fee = GetReserveFee( $hold->borrowernumber );
+        ChargeReserveFee( $hold->borrowernumber, $reserve_fee, $hold->biblio->title );
+    }
 
     # now fix the priority on the others (if the priority wasn't
     # already sorted!)....
