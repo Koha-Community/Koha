@@ -8,7 +8,7 @@
                     <label for="B_streetnumber">
                 [% END %]
                 Street Number: </label>
-                <input type="text" id="B_address" name="B_streetnumber" size="5" value="[% B_streetnumber %]" />
+                <input type="text" id="B_streetnumber" name="B_streetnumber" size="5" value="[% B_streetnumber %]" />
                [% IF ( mandatoryB_streetnumber ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
