@@ -24,7 +24,6 @@ use Pod::Usage;
 
 use C4::Installer;
 use C4::Context;
-use t::lib::Mocks;
 
 =head1 NAME
 
