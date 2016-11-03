@@ -344,7 +344,7 @@
                         </li>
                         <li><label for="itype_item_[% item.item_id %]">itype</label><select id="itype_item_[% item.item_id %]" name="itype_[% item.biblio_count %]">
                         [% FOREACH itypeloo IN itypeloop %]
-                          [% IF ( itypeloo.value ) == ( item.itype ) %]
+                          [% IF ( itypeloo.itemtype ) == ( item.itype ) %]
                             <option value="[% itypeloo.itemtype %]" selected="selected">[% itypeloo.description |html %]</option>
                           [% ELSE %]
                             <option value="[% itypeloo.itemtype %]">[% itypeloo.description |html %]</option>

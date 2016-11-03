@@ -207,8 +207,8 @@ if ($op eq ""){
         my @nonpublic_notes = $input->multi_param('nonpublic_note_' . $biblio_count);
         my @public_notes = $input->multi_param('public_note_' . $biblio_count);
         my @locs = $input->multi_param('loc_' . $biblio_count);
-        my @ccodes = $input->multi_param('ccodes_' . $biblio_count);
-        my @notforloans = $input->multi_param('notforloans_' . $biblio_count);
+        my @ccodes = $input->multi_param('ccode_' . $biblio_count);
+        my @notforloans = $input->multi_param('notforloan_' . $biblio_count);
         my @uris = $input->multi_param('uri_' . $biblio_count);
         my @copynos = $input->multi_param('copyno_' . $biblio_count);
         my @budget_codes = $input->multi_param('budget_code_' . $biblio_count);
@@ -225,6 +225,7 @@ if ($op eq ""){
                 itemnotes => $public_notes[$i],
                 location => $locs[$i],
                 ccode => $ccodes[$i],
+                itype => $itypes[$i],
                 notforloan => $notforloans[$i],
                 uri => $uris[$i],
                 copynumber => $copynos[$i],
