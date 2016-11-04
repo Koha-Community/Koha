@@ -45,6 +45,7 @@ use C4::Search;		# enabled_staff_search_views
 use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Libraries;
+use Koha::Patrons;
 
 my $dbh = C4::Context->dbh;
 my $input = new CGI;
@@ -200,6 +201,8 @@ $template->param( messageborrower => $messageborrower );
 
 # FIXME launch another time GetMember perhaps until
 my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
+
+my $logged_in_patron = Koha::Patrons->find( $borrowernumber );
 
 my $itemdata_enumchron = 0;
 my @biblioloop = ();
@@ -412,7 +415,7 @@ foreach my $biblionumber (@biblionumbers) {
                     : $item->{itemlost} == 2 ? "(long overdue)"
                       : "";
                 $item->{backgroundcolor} = 'other';
-                if (GetHideLostItemsPreference($borrowernumber) && !$showallitems) {
+                if ($logged_in_patron->category->hidelostitems && !$showallitems) {
                     $item->{hide} = 1;
                     $hiddencount++;
                 }

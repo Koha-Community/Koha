@@ -26,13 +26,13 @@ use Koha::Libraries;
 use Lingua::Stem;
 use C4::Search::PazPar2;
 use XML::Simple;
-use C4::Members qw(GetHideLostItemsPreference);
 use C4::XSLT;
 use C4::Reserves;    # GetReserveStatus
 use C4::Debug;
 use C4::Charset;
 use Koha::AuthorisedValues;
 use Koha::Libraries;
+use Koha::Patrons;
 use YAML;
 use URI::Escape;
 use Business::ISBN;
@@ -2089,7 +2089,8 @@ sub searchResults {
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
             my $userenv = C4::Context->userenv;
             if ( $item->{onloan}
-                && !( C4::Members::GetHideLostItemsPreference( $userenv->{'number'} ) && $item->{itemlost} ) )
+                && $userenv
+                && !( Koha::Patrons->find($userenv->{number})->category->hidelostitems && $item->{itemlost} ) )
             {
                 $onloan_count++;
                 my $key = $prefix . $item->{onloan} . $item->{barcode};

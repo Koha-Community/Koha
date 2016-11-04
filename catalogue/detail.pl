@@ -42,6 +42,7 @@ use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use C4::Acquisition qw(GetOrdersByBiblionumber);
 use Koha::AuthorisedValues;
+use Koha::Patrons;
 use Koha::Virtualshelves;
 
 my $query = CGI->new();
@@ -132,8 +133,9 @@ my $dbh = C4::Context->dbh;
 
 my @all_items = GetItemsInfo( $biblionumber );
 my @items;
+my $patron = Koha::Patrons->find( $borrowernumber );
 for my $itm (@all_items) {
-    push @items, $itm unless ( $itm->{itemlost} && GetHideLostItemsPreference($borrowernumber) && !$showallitems);
+    push @items, $itm unless ( $itm->{itemlost} && $patron->category->hidelostitems && !$showallitems);
 }
 
 # flag indicating existence of at least one item linked via a host record

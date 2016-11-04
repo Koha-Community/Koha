@@ -32,13 +32,13 @@ use C4::Auth;
 use C4::Serials;
 use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
-use C4::Members qw/GetHideLostItemsPreference/;
 use C4::Reserves qw(GetReservesFromBiblionumber);
 
 use Koha::Acquisition::Bookseller;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Items;
+use Koha::Patrons;
 
 my $query=new CGI;
 
@@ -93,9 +93,10 @@ my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my $fw = GetFrameworkCode($biblionumber);
 my @all_items= GetItemsInfo($biblionumber);
 my @items;
+my $patron = Koha::Patrons->find( $loggedinuser );
 for my $itm (@all_items) {
     push @items, $itm unless ( $itm->{itemlost} && 
-                               GetHideLostItemsPreference($loggedinuser) &&
+                               $patron->category->hidelostitems &&
                                !$showallitems && 
                                ($itemnumber != $itm->{itemnumber}));
 }
