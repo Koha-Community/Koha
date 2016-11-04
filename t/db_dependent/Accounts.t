@@ -56,7 +56,7 @@ $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
 my $builder = t::lib::TestBuilder->new;
-my $library = $builder->build({ source => 'Branch' });
+my $library = $builder->build( { source => 'Branch' } );
 
 $dbh->do(q|DELETE FROM accountlines|);
 $dbh->do(q|DELETE FROM issues|);
@@ -138,7 +138,7 @@ $dbh->do(q|DELETE FROM accountlines|);
 
 subtest "Koha::Account::pay tests" => sub {
 
-    plan tests => 10;
+    plan tests => 12;
 
     # Create a borrower
     my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
@@ -225,6 +225,7 @@ subtest "Koha::Account::pay tests" => sub {
         $amountleft += $line;
     }
     is($amountleft, 160, 'The account has $160 as expected' );
+
     # Is the payment note well registered
     $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
     $sth->execute($borrower->borrowernumber);
@@ -244,11 +245,19 @@ subtest "Koha::Account::pay tests" => sub {
         $amountleft += $line;
     }
     is($amountleft, -40, 'The account has -$40 as expected, (credit situation)' );
+
     # Is the payment note well registered
     $sth = $dbh->prepare("SELECT note FROM accountlines WHERE borrowernumber=? ORDER BY accountlines_id DESC LIMIT 1");
     $sth->execute($borrower->borrowernumber);
     $note = $sth->fetchrow_array;
     is($note,'$200.00 payment note', '$200.00 payment note is registered');
+
+    my $line3 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 42 })->store();
+    my $payment_id = $account->pay( { accountlines_id => $line3->id, amount => 42 } );
+    my $payment = Koha::Account::Lines->find( $payment_id );
+    is( $payment->amount(), '-42.000000', "Payment paid the specified fine" );
+    $line3 = Koha::Account::Lines->find( $line3->id );
+    is( $line3->amountoutstanding, '0.000000', "Specified fine is paid" );
 };
 
 subtest "makepayment() tests" => sub {
