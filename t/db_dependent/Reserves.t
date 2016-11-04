@@ -47,12 +47,11 @@ $module->mock('userenv', sub {
     { }
 });
 
-my $dbh = C4::Context->dbh;
-
 # Start transaction
 my $database = Koha::Database->new();
 my $schema = $database->schema();
 $schema->storage->txn_begin();
+my $dbh = C4::Context->dbh;
 
 my $builder = t::lib::TestBuilder->new;
 
