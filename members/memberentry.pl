@@ -307,7 +307,7 @@ if ($op eq 'save' || $op eq 'insert'){
 
     if ( $newdata{dateofbirth} ) {
         my $age = GetAge($newdata{dateofbirth});
-        my $borrowercategory = Koha::Patron::Categories->find($newdata{categorycode});
+        my $borrowercategory = Koha::Patron::Categories->find($categorycode);
         my ($low,$high) = ($borrowercategory->dateofbirthrequired, $borrowercategory->upperagelimit);
         if (($high && ($age > $high)) or ($age < $low)) {
             push @errors, 'ERROR_age_limitations';
