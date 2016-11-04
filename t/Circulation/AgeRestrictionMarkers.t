@@ -39,8 +39,7 @@ subtest 'Patron tests - 15 years old' => sub {
     plan tests => 5;
     ##Testing age restriction for a borrower.
     my $now = DateTime->now();
-    my $borrower = {};
-    C4::Members::SetAge( $borrower, '0015-00-00' );
+    my $borrower = { dateofbirth => $now->add( years => -15 )->strftime("%Y-%m-%d") };
     TestPatron($borrower,0);
 };
 
@@ -57,8 +56,7 @@ subtest 'Patron tests - 15 years old (Time Zone shifts)' => sub {
 
             ##Testing age restriction for a borrower.
             my $now = DateTime->now();
-            my $borrower = {};
-            C4::Members::SetAge( $borrower, '0015-00-00' );
+            my $borrower = { dateofbirth => $now->add( years => -15 )->strftime("%Y-%m-%d") };
             TestPatron($borrower,$offset);
 
             $offset++;

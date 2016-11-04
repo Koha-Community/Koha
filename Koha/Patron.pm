@@ -519,6 +519,30 @@ sub get_overdues {
     return $issues;
 }
 
+=head3 get_age
+
+my $age = $patron->get_age
+
+Return the age of the patron
+
+=cut
+
+sub get_age {
+    my ($self)    = @_;
+    my $today_str = dt_from_string->strftime("%Y-%m-%d");
+    my $dob_str   = dt_from_string( $self->dateofbirth )->strftime("%Y-%m-%d");
+
+    my ( $dob_y,   $dob_m,   $dob_d )   = split /-/, $dob_str;
+    my ( $today_y, $today_m, $today_d ) = split /-/, $today_str;
+
+    my $age = $today_y - $dob_y;
+    if ( $dob_m . $dob_d > $today_m . $today_d ) {
+        $age--;
+    }
+
+    return $age;
+}
+
 =head3 type
 
 =cut

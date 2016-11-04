@@ -316,7 +316,8 @@ if ($op eq 'save' || $op eq 'insert'){
     }
 
     if ( $dateofbirth ) {
-        my $age = GetAge($dateofbirth);
+        my $patron = Koha::Patron->new({ dateofbirth => $dateofbirth });
+        my $age = $patron->get_age;
         my $borrowercategory = Koha::Patron::Categories->find($categorycode);
         my ($low,$high) = ($borrowercategory->dateofbirthrequired, $borrowercategory->upperagelimit);
         if (($high && ($age > $high)) or ($age < $low)) {

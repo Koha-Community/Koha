@@ -237,9 +237,7 @@ my $overdues_exist = 0;
 my $totalprice = 0;
 
 # Calculate and display patron's age
-my $dateofbirth = $data->{ 'dateofbirth' };
-my $age = GetAge($dateofbirth);
-$template->param( age => $age );
+$template->param( age => Koha::Patron->new({ dateofbirth => $data->{dateofbirth} })->get_age );
 
 ### ###############################################################################
 # BUILD HTML
