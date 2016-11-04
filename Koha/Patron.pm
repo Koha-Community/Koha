@@ -93,6 +93,20 @@ sub delete {
     return $deleted;
 }
 
+
+=head3 category
+
+my $patron_category = $patron->category
+
+Return the patron category for this patron
+
+=cut
+
+sub category {
+    my ( $self ) = @_;
+    return Koha::Patron::Category->_new_from_dbic( $self->_result->categorycode );
+}
+
 =head3 guarantor
 
 Returns a Koha::Patron object for this patron's guarantor
@@ -200,8 +214,7 @@ sub wants_check_for_previous_checkout {
     return 0 if ($self->checkprevcheckout eq 'no');
 
     # More complex: patron inherits -> determine category preference
-    my $checkPrevCheckoutByCat = Koha::Patron::Categories
-        ->find($self->categorycode)->checkprevcheckout;
+    my $checkPrevCheckoutByCat = $self->category->checkprevcheckout;
     return 1 if ($checkPrevCheckoutByCat eq 'yes');
     return 0 if ($checkPrevCheckoutByCat eq 'no');
 
@@ -304,8 +317,7 @@ sub renew_account {
             ? dt_from_string( $self->dateexpiry )
             : dt_from_string;
     }
-    my $patron_category = Koha::Patron::Categories->find( $self->categorycode );    # FIXME Should be $self->category
-    my $expiry_date     = $patron_category->get_expiry_date($date);
+    my $expiry_date = $self->category->get_expiry_date($date);
 
     $self->dateexpiry($expiry_date)->store;
 
@@ -440,8 +452,7 @@ Add enrolment fee for a patron if needed.
 
 sub add_enrolment_fee_if_needed {
     my ($self) = @_;
-    my $patron_category = Koha::Patron::Categories->find( $self->categorycode );
-    my $enrolment_fee = $patron_category->enrolmentfee;
+    my $enrolment_fee = $self->category->enrolmentfee;
     if ( $enrolment_fee && $enrolment_fee > 0 ) {
         # insert fee in patron debts
         C4::Accounts::manualinvoice( $self->borrowernumber, '', '', 'A', $enrolment_fee );

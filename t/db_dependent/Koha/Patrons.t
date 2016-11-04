@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Warn;
 
 use C4::Members;
@@ -87,6 +87,13 @@ subtest 'guarantees' => sub {
     is( ref(\@guarantees), 'ARRAY', 'Koha::Patron->guarantees should return an array in a list context' );
     is( scalar(@guarantees), 2, 'new_patron_1 should have 2 guarantees' );
     $_->delete for @guarantees;
+};
+
+subtest 'category' => sub {
+    plan tests => 2;
+    my $patron_category = $new_patron_1->category;
+    is( ref( $patron_category), 'Koha::Patron::Category', );
+    is( $patron_category->categorycode, $category->{categorycode}, );
 };
 
 subtest 'siblings' => sub {
