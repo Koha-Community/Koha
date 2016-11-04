@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 79;
+use Test::More tests => 66;
 use Test::MockModule;
 use Data::Dumper;
 use C4::Context;
@@ -92,8 +92,6 @@ my %data = (
     dateexpiry => '9999-12-31',
     userid => 'tomasito'
 );
-
-testAgeAccessors(\%data); #Age accessor tests don't touch the db so it is safe to run them with just the object.
 
 my $addmem=AddMember(%data);
 ok($addmem, "AddMember()");
@@ -502,84 +500,6 @@ is( $password eq "Nexus-6", 1, 'Test password used if submitted');
 $borrower = GetMember(borrowernumber => $borrowernumber);
 my $hashed_up =  Koha::AuthUtils::hash_password("Nexus-6", $borrower->{password});
 is( $borrower->{password} eq $hashed_up, 1, 'Check password hash equals hash of submitted password' );
-
-
-
-### ------------------------------------- ###
-### Testing GetAge() / SetAge() functions ###
-### ------------------------------------- ###
-#USES the package $member-variable to mock a koha.borrowers-object
-sub testAgeAccessors {
-    my ($member) = @_;
-    my $original_dateofbirth = $member->{dateofbirth};
-
-    ##Testing GetAge()
-    my $age=GetAge("1992-08-14", "2011-01-19");
-    is ($age, "18", "Age correct");
-
-    $age=GetAge("2011-01-19", "1992-01-19");
-    is ($age, "-19", "Birthday In the Future");
-
-    ##Testing SetAge() for now()
-    my $dt_now = DateTime->now();
-    $age = DateTime::Duration->new(years => 12, months => 6, days => 1);
-    C4::Members::SetAge( $member, $age );
-    $age = C4::Members::GetAge( $member->{dateofbirth} );
-    is ($age, '12', "SetAge 12 years");
-
-    $age = DateTime::Duration->new(years => 18, months => 12, days => 31);
-    C4::Members::SetAge( $member, $age );
-    $age = C4::Members::GetAge( $member->{dateofbirth} );
-    is ($age, '19', "SetAge 18+1 years"); #This is a special case, where months=>12 and days=>31 constitute one full year, hence we get age 19 instead of 18.
-
-    $age = DateTime::Duration->new(years => 18, months => 12, days => 30);
-    C4::Members::SetAge( $member, $age );
-    $age = C4::Members::GetAge( $member->{dateofbirth} );
-    is ($age, '19', "SetAge 18 years");
-
-    $age = DateTime::Duration->new(years => 0, months => 1, days => 1);
-    C4::Members::SetAge( $member, $age );
-    $age = C4::Members::GetAge( $member->{dateofbirth} );
-    is ($age, '0', "SetAge 0 years");
-
-    $age = '0018-12-31';
-    C4::Members::SetAge( $member, $age );
-    $age = C4::Members::GetAge( $member->{dateofbirth} );
-    is ($age, '19', "SetAge ISO_Date 18+1 years"); #This is a special case, where months=>12 and days=>31 constitute one full year, hence we get age 19 instead of 18.
-
-    $age = '0018-12-30';
-    C4::Members::SetAge( $member, $age );
-    $age = C4::Members::GetAge( $member->{dateofbirth} );
-    is ($age, '19', "SetAge ISO_Date 18 years");
-
-    $age = '18-1-1';
-    eval { C4::Members::SetAge( $member, $age ); };
-    is ((length $@ > 1), '1', "SetAge ISO_Date $age years FAILS");
-
-    $age = '0018-01-01';
-    eval { C4::Members::SetAge( $member, $age ); };
-    is ((length $@ == 0), '1', "SetAge ISO_Date $age years succeeds");
-
-    ##Testing SetAge() for relative_date
-    my $relative_date = DateTime->new(year => 3010, month => 3, day => 15);
-
-    $age = DateTime::Duration->new(years => 10, months => 3);
-    C4::Members::SetAge( $member, $age, $relative_date );
-    $age = C4::Members::GetAge( $member->{dateofbirth}, $relative_date->ymd() );
-    is ($age, '10', "SetAge, 10 years and 3 months old person was born on ".$member->{dateofbirth}." if todays is ".$relative_date->ymd());
-
-    $age = DateTime::Duration->new(years => 112, months => 1, days => 1);
-    C4::Members::SetAge( $member, $age, $relative_date );
-    $age = C4::Members::GetAge( $member->{dateofbirth}, $relative_date->ymd() );
-    is ($age, '112', "SetAge, 112 years, 1 months and 1 days old person was born on ".$member->{dateofbirth}." if today is ".$relative_date->ymd());
-
-    $age = '0112-01-01';
-    C4::Members::SetAge( $member, $age, $relative_date );
-    $age = C4::Members::GetAge( $member->{dateofbirth}, $relative_date->ymd() );
-    is ($age, '112', "SetAge ISO_Date, 112 years, 1 months and 1 days old person was born on ".$member->{dateofbirth}." if today is ".$relative_date->ymd());
-
-    $member->{dateofbirth} = $original_dateofbirth; #It is polite to revert made changes in the unit tests.
-} #sub testAgeAccessors
 
 # regression test for bug 16009
 my $patron;

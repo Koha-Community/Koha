@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::Warn;
 use DateTime;
 
@@ -468,6 +468,27 @@ subtest 'get_overdues' => sub {
 
     # Clean stuffs
     Koha::Issues->search( { borrowernumber => $patron->borrowernumber } )->delete;
+    $patron->delete;
+};
+
+subtest 'get_age' => sub {
+    plan tests => 6;
+    my $patron = $builder->build( { source => 'Borrower' } );
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    my $today = dt_from_string;
+    $patron->dateofbirth( $today->clone->add( years => -12, months => -6, days => -1 ) );
+    is( $patron->get_age, 12, 'Patron should be 12' );
+    $patron->dateofbirth( $today->clone->add( years => -18, months => 0, days => 1 ) );
+    is( $patron->get_age, 17, 'Patron should be 17, happy birthday tomorrow!' );
+    $patron->dateofbirth( $today->clone->add( years => -18, months => 0, days => 0 ) );
+    is( $patron->get_age, 18, 'Patron should be 18' );
+    $patron->dateofbirth( $today->clone->add( years => -18, months => -12, days => -31 ) );
+    is( $patron->get_age, 19, 'Patron should be 19' );
+    $patron->dateofbirth( $today->clone->add( years => -18, months => -12, days => -30 ) );
+    is( $patron->get_age, 19, 'Patron should be 19 again' );
+    $patron->dateofbirth( $today->clone->add( years => 0,   months => -1, days => -1 ) );
+    is( $patron->get_age, 0, 'Patron is a newborn child' );
+
     $patron->delete;
 };
 
