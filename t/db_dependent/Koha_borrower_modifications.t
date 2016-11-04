@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Try::Tiny;
 
 use t::lib::TestBuilder;
@@ -31,8 +31,9 @@ try {
         }
     )->store();
 } catch {
-    ok( $_->isa('Koha::Exceptions::Koha::Patron::Modification::DuplicateVerificationToken'),
+    ok( $_->isa('Koha::Exceptions::Patron::Modification::DuplicateVerificationToken'),
         'Attempting to add a duplicate verification token to the database should raise a Koha::Exceptions::Koha::Patron::Modification::DuplicateVerificationToken exception' );
+    is( $_->message, "Duplicate verification token 1234567890", 'Exception carries the right message' );
 };
 
 ## Get the new pending modification
