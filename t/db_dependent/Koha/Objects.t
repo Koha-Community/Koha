@@ -64,11 +64,13 @@ subtest 'pager' => sub {
 };
 
 subtest 'reset' => sub {
-    plan tests => 1;
+    plan tests => 3;
 
     my $patrons = Koha::Patrons->search;
     my $first_borrowernumber = $patrons->next->borrowernumber;
     my $second_borrowernumber = $patrons->next->borrowernumber;
+    is( ref( $patrons->reset ), 'Koha::Patrons', 'Koha::Objects->reset should allow chaining' );
+    is( ref( $patrons->reset->next ), 'Koha::Patron', 'Koha::Objects->reset should allow chaining' );
     is( $patrons->reset->next->borrowernumber, $first_borrowernumber, 'Koha::Objects->reset should work as expected');
 };
 
