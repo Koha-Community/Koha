@@ -45,14 +45,14 @@ sub new {
 
 =head2 pay
 
-This method allows payments to be made against feees
+This method allows payments to be made against fees/fines
 
 Koha::Account->new( { patron_id => $borrowernumber } )->pay(
     {
         amount     => $amount,
         sip        => $sipmode,
         note       => $note,
-        id         => $accountlines_id,
+        accountlines_id => $accountlines_id,
         library_id => $branchcode,
     }
 );
