@@ -995,12 +995,12 @@ sub checkauth {
                         # doesn't have a userid. So if there is none, we pass along the
                         # borrower number, and the bits of code that need to know the user
                         # ID will have to be smart enough to handle that.
-                        require C4::Members;
-                        my @users_info = C4::Members::GetBorrowersWithEmail($value);
-                        if (@users_info) {
+                        my $patrons = Koha::Patrons->search({ email => $value });
+                        if ($patrons->count) {
 
                             # First the userid, then the borrowernum
-                            $value = $users_info[0][1] || $users_info[0][0];
+                            my $patron = $patrons->next;
+                            $value = $patron->userid || $patron->borrowernumber;
                         } else {
                             undef $value;
                         }

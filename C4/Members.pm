@@ -74,7 +74,6 @@ BEGIN {
         &GetBorrowersToExpunge
 
         &IssueSlip
-        GetBorrowersWithEmail
 
         GetOverduesForPatron
     );
@@ -1245,33 +1244,6 @@ sub IssueSlip {
         },
         repeat => \%repeat,
     );
-}
-
-=head2 GetBorrowersWithEmail
-
-    ([$borrnum,$userid], ...) = GetBorrowersWithEmail('me@example.com');
-
-This gets a list of users and their basic details from their email address.
-As it's possible for multiple user to have the same email address, it provides
-you with all of them. If there is no userid for the user, there will be an
-C<undef> there. An empty list will be returned if there are no matches.
-
-=cut
-
-sub GetBorrowersWithEmail {
-    my $email = shift;
-
-    my $dbh = C4::Context->dbh;
-
-    my $query = "SELECT borrowernumber, userid FROM borrowers WHERE email=?";
-    my $sth=$dbh->prepare($query);
-    $sth->execute($email);
-    my @result = ();
-    while (my $ref = $sth->fetch) {
-        push @result, $ref;
-    }
-    die "Failure searching for borrowers by email address: $sth->errstr" if $sth->err;
-    return @result;
 }
 
 =head2 AddMember_Auto
