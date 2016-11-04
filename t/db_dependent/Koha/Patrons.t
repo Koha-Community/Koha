@@ -27,6 +27,7 @@ use JSON;
 
 use C4::Biblio;
 use C4::Circulation;
+
 use C4::Members;
 use C4::Circulation;
 
@@ -1117,6 +1118,74 @@ subtest 'is_child | is_adult' => sub {
     $patron_adult_i->delete;
     $patron_child->delete;
     $patron_other->delete;
+};
+
+subtest 'get_overdues' => sub {
+    plan tests => 7;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
+    my $item_1 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                biblionumber  => $biblionumber_1
+            }
+        }
+    );
+    my $item_2 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                biblionumber  => $biblionumber_1
+            }
+        }
+    );
+    my ($biblionumber_2) = AddBiblio( MARC::Record->new, '' );
+    my $item_3 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                biblionumber  => $biblionumber_2
+            }
+        }
+    );
+    my $patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { branchcode => $library->{branchcode} }
+        }
+    );
+
+    my $module = new Test::MockModule('C4::Context');
+    $module->mock( 'userenv', sub { { branch => $library->{branchcode} } } );
+
+    AddIssue( $patron, $item_1->{barcode}, DateTime->now->subtract( days => 1 ) );
+    AddIssue( $patron, $item_2->{barcode}, DateTime->now->subtract( days => 5 ) );
+    AddIssue( $patron, $item_3->{barcode} );
+
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    my $overdues = $patron->get_overdues;
+    is( $overdues->count, 2, 'Patron should have 2 overdues');
+    is( $overdues->next->itemnumber, $item_1->{itemnumber}, 'The issue should be returned in the same order as they have been done, first is correct' );
+    is( $overdues->next->itemnumber, $item_2->{itemnumber}, 'The issue should be returned in the same order as they have been done, second is correct' );
+
+    my $o = $overdues->reset->next;
+    my $unblessed_overdue = $o->unblessed_all_relateds;
+    is( exists( $unblessed_overdue->{issuedate} ), 1, 'Fields from the issues table should be filled' );
+    is( exists( $unblessed_overdue->{itemcallnumber} ), 1, 'Fields from the items table should be filled' );
+    is( exists( $unblessed_overdue->{title} ), 1, 'Fields from the biblio table should be filled' );
+    is( exists( $unblessed_overdue->{itemtype} ), 1, 'Fields from the biblioitems table should be filled' );
+
+    # Clean stuffs
+    $patron->checkouts->delete;
+    $patron->delete;
 };
 
 $retrieved_patron_1->delete;
