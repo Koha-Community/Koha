@@ -181,6 +181,23 @@ sub next {
     return $object;
 }
 
+=head3 Koha::Objects->reset();
+
+Koha::Objects->reset();
+
+resets iteration so the next call to next() will start agein
+with the first object in a set.
+
+=cut
+
+sub reset {
+    my ( $self ) = @_;
+
+    $self->_resultset()->reset();
+
+    return $self;
+}
+
 =head3 Koha::Objects->as_list();
 
 Koha::Objects->as_list();
