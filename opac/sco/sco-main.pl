@@ -44,6 +44,7 @@ use C4::Output;
 use C4::Members;
 use C4::Biblio;
 use C4::Items;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Currencies;
 use Koha::Patron::Images;
 use Koha::Patron::Messages;
@@ -199,13 +200,23 @@ elsif ( $op eq "checkout" ) {
         }
     } else {
         if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.
-            # warn "issuing book?";
+            my $hold_existed;
+            if ( C4::Context->preference('HoldFeeMode') eq 'any_time_is_collected' ) {
+                # There is no easy way to know if the patron has been charged for this item.
+                # So we check if a hold existed for this item before the check in
+                my $item = Koha::Items->find({ barcode => $barcode });
+                $hold_existed = Koha::Holds->search({ -or => { 'biblionumber' => $item->biblionumber, 'itemnumber' => $item->itemnumber}})->count;
+            }
             AddIssue( $borrower, $barcode );
-            # ($borrower, $flags) = getpatroninformation(undef,undef, $patronid);
-            # $template->param(
-            #   patronid => $patronid,
-            #   validuser => 1,
-            # );
+
+            if ( $hold_existed ) {
+                my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+                $template->param(
+                    # If the hold existed before the check in, let's confirm that the charge line exists
+                    # Note that this should not be needed but since we do not have proper exception handling here we do it this way
+                    patron_has_hold_fee => Koha::Account::Lines->search({ borrowernumber => $borrower->{borrowernumber}, accounttype => 'Res', date => $dtf->format_date( dt_from_string ) })->count,
+                );
+            }
         } else {
             $confirm_required = 1;
             #warn "issue confirmation";

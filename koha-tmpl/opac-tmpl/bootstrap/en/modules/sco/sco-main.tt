@@ -167,6 +167,9 @@
                             [% IF ( validuser ) %]
                                 <div class="alert alert-info">You are logged in as [% borrowername %].</div>
                                 [% INCLUDE 'opac-note.inc' %]
+                                [% IF patron_has_hold_fee %]
+                                    <div class="alert">You have been charged for collecting this item.</div>
+                                [% END %]
                             [% END %]
 
                             [% IF ( nouser ) %]
