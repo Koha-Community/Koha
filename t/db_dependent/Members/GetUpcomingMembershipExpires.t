@@ -26,81 +26,48 @@ use Test::More tests => 6;
 
 use C4::Members qw|GetUpcomingMembershipExpires|;
 use Koha::Database;
+use Koha::DateUtils;
 use t::lib::TestBuilder;
 use t::lib::Mocks qw( mock_preference );
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $date_time = new Test::MockModule('DateTime');
-$date_time->mock(
-    'now', sub {
-        return DateTime->new(
-            year      => 2015,
-            month     => 6,
-            day       => 15,
-        );
-});
-
-t::lib::Mocks::mock_preference( 'MembershipExpiryDaysNotice', 15 );
+my $expiry_days = 15;
+t::lib::Mocks::mock_preference( 'MembershipExpiryDaysNotice', $expiry_days );
+my $nb_of_days_before = 1;
+my $nb_of_days_after = 2;
 
 my $builder = t::lib::TestBuilder->new();
-$builder->build({
-    source => 'Category',
-    value  => {
-        categorycode            => 'AD',
-        description             => 'Adult',
-        enrolmentperiod         => 18,
-        upperagelimit           => 99,
-        category_type           => 'A',
-    },
-});
 
-my $branch = $builder->build({
-    source => 'Branch',
-    value  => {
-        branchname              => 'My branch',
-    },
-});
-my $branchcode = $branch->{branchcode};
+my $library = $builder->build({ source => 'Branch' });
+
 # before we add borrowers to this branch, add the expires we have now
 # note that this pertains to the current mocked setting of the pref
 # for this reason we add the new branchcode to most of the tests
 my $expires = scalar @{ GetUpcomingMembershipExpires() };
 
-$builder->build({
+my $patron_1 = $builder->build({
     source => 'Borrower',
     value  => {
-        firstname               => 'Vincent',
-        surname                 => 'Martin',
-        cardnumber              => '80808081',
-        categorycode            => 'AD',
-        branchcode              => $branchcode,
-        dateexpiry              => '2015-06-30'
+        branchcode              => $library->{branchcode},
+        dateexpiry              => dt_from_string->add( days => $expiry_days )
     },
 });
 
-$builder->build({
+my $patron_2 = $builder->build({
     source => 'Borrower',
     value  => {
-        firstname               => 'Claude',
-        surname                 => 'Dupont',
-        cardnumber              => '80808082',
-        categorycode            => 'AD',
-        branchcode              => $branchcode,
-        dateexpiry              => '2015-06-29'
+        branchcode              => $library->{branchcode},
+        dateexpiry              => dt_from_string->add( days => $expiry_days - $nb_of_days_before )
     },
 });
 
-$builder->build({
+my $patron_3 = $builder->build({
     source => 'Borrower',
     value  => {
-        firstname               => 'Gilles',
-        surname                 => 'Dupond',
-        cardnumber              => '80808083',
-        categorycode            => 'AD',
-        branchcode              => $branchcode,
-        dateexpiry              => '2015-07-02'
+        branchcode              => $library->{branchcode},
+        dateexpiry              => dt_from_string->add( days => $expiry_days + $nb_of_days_after )
     },
 });
 
@@ -109,26 +76,26 @@ my $upcoming_mem_expires = GetUpcomingMembershipExpires();
 is( scalar(@$upcoming_mem_expires), $expires + 1, 'Get upcoming membership expires should return one new borrower.' );
 
 # Test with branch
-$upcoming_mem_expires = GetUpcomingMembershipExpires({ branch => $branchcode });
-is( @$upcoming_mem_expires==1 && $upcoming_mem_expires->[0]{surname} eq 'Martin',1 , 'Get upcoming membership expires should return borrower "Martin".' );
+$upcoming_mem_expires = GetUpcomingMembershipExpires({ branch => $library->{branchcode} });
+is( @$upcoming_mem_expires==1 && $upcoming_mem_expires->[0]{surname} eq $patron_1->{surname},1 , 'Get upcoming membership expires should return the correct patron.' );
 
 # Test MembershipExpiryDaysNotice == 0
 t::lib::Mocks::mock_preference( 'MembershipExpiryDaysNotice', 0 );
-$upcoming_mem_expires = GetUpcomingMembershipExpires({ branch => $branchcode });
+$upcoming_mem_expires = GetUpcomingMembershipExpires({ branch => $library->{branchcode} });
 is( scalar(@$upcoming_mem_expires), 0, 'Get upcoming membership expires with MembershipExpiryDaysNotice==0 should not return new records.' );
 
 # Test MembershipExpiryDaysNotice == undef
 t::lib::Mocks::mock_preference( 'MembershipExpiryDaysNotice', undef );
-$upcoming_mem_expires = GetUpcomingMembershipExpires({ branch => $branchcode });
+$upcoming_mem_expires = GetUpcomingMembershipExpires({ branch => $library->{branchcode} });
 is( scalar(@$upcoming_mem_expires), 0, 'Get upcoming membership expires without MembershipExpiryDaysNotice should not return new records.' );
 
 # Test the before parameter
 t::lib::Mocks::mock_preference( 'MembershipExpiryDaysNotice', 15 );
-$upcoming_mem_expires = GetUpcomingMembershipExpires({ branch => $branchcode, before => 1 });
+$upcoming_mem_expires = GetUpcomingMembershipExpires({ branch => $library->{branchcode}, before => $nb_of_days_before });
 # Expect 29/6 and 30/6
 is( scalar(@$upcoming_mem_expires), 2, 'Expect two results for before==1');
 # Test after parameter also
-$upcoming_mem_expires = GetUpcomingMembershipExpires({ branch => $branchcode, before => 1, after => 2 });
+$upcoming_mem_expires = GetUpcomingMembershipExpires({ branch => $library->{branchcode}, before => $nb_of_days_before, after => $nb_of_days_after });
 # Expect 29/6, 30/6 and 2/7
 is( scalar(@$upcoming_mem_expires), 3, 'Expect three results when adding after' );
 
