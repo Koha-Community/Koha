@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::Warn;
 use DateTime;
 
@@ -70,6 +70,12 @@ is( Koha::Patrons->search->count, $nb_of_patrons + 2, 'The 2 patrons should have
 
 my $retrieved_patron_1 = Koha::Patrons->find( $new_patron_1->borrowernumber );
 is( $retrieved_patron_1->cardnumber, $new_patron_1->cardnumber, 'Find a patron by borrowernumber should return the correct patron' );
+
+subtest 'library' => sub {
+    plan tests => 2;
+    is( $retrieved_patron_1->library->branchcode, $library->{branchcode}, 'Koha::Patron->library should return the correct library' );
+    is( ref($retrieved_patron_1->library), 'Koha::Library', 'Koha::Patron->library should return a Koha::Library object' );
+};
 
 subtest 'guarantees' => sub {
     plan tests => 8;
