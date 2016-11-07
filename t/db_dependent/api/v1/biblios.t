@@ -25,7 +25,7 @@ use Data::Dumper;
 use C4::Auth;
 use C4::Context;
 use Koha::Database;
-use MARC::File::XML ( BinaryEncoding => 'utf8', RecordFormat => 'UNIMARC' );
+use MARC::File::XML ( BinaryEncoding => 'utf8', RecordFormat => 'MARC21' );
 
 BEGIN {
     use_ok('Koha::Biblios');
