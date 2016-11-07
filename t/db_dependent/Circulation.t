@@ -764,7 +764,8 @@ C4::Context->dbh->do("DELETE FROM accountlines");
             issue_id       => $issue->id(),
             itemnumber     => $itemnumber,
             borrowernumber => $borrowernumber,
-            amount         => 0
+            amount         => 0,
+            type           => q{}
         }
     );
 
@@ -931,6 +932,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
             itemnumber     => $itemnumber,
             borrowernumber => $patron->{borrowernumber},
             amount         => 1,
+            type           => q{}
         }
     );
     UpdateFine(
@@ -939,6 +941,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
             itemnumber     => $itemnumber,
             borrowernumber => $patron->{borrowernumber},
             amount         => 2,
+            type           => q{}
         }
     );
     is( Koha::Account::Lines->search({ issue_id => $issue->id })->count, 1, 'UpdateFine should not create a new accountline when updating an existing fine');
