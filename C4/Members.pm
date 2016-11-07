@@ -59,7 +59,6 @@ BEGIN {
     @ISA = qw(Exporter);
     #Get data
     push @EXPORT, qw(
-        &Search
         &GetMemberDetails
         &GetMember
 
