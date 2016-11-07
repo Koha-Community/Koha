@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::Warn;
 use DateTime;
 
@@ -520,6 +520,80 @@ subtest 'account' => sub {
     is( ref($account),   'Koha::Account', 'account should return a Koha::Account object' );
 
     $patron->delete;
+};
+
+subtest 'search_upcoming_membership_expires' => sub {
+    plan tests => 9;
+
+    my $expiry_days = 15;
+    t::lib::Mocks::mock_preference( 'MembershipExpiryDaysNotice', $expiry_days );
+    my $nb_of_days_before = 1;
+    my $nb_of_days_after = 2;
+
+    my $builder = t::lib::TestBuilder->new();
+
+    my $library = $builder->build({ source => 'Branch' });
+
+    # before we add borrowers to this branch, add the expires we have now
+    # note that this pertains to the current mocked setting of the pref
+    # for this reason we add the new branchcode to most of the tests
+    my $nb_of_expires = Koha::Patrons->search_upcoming_membership_expires->count;
+
+    my $patron_1 = $builder->build({
+        source => 'Borrower',
+        value  => {
+            branchcode              => $library->{branchcode},
+            dateexpiry              => dt_from_string->add( days => $expiry_days )
+        },
+    });
+
+    my $patron_2 = $builder->build({
+        source => 'Borrower',
+        value  => {
+            branchcode              => $library->{branchcode},
+            dateexpiry              => dt_from_string->add( days => $expiry_days - $nb_of_days_before )
+        },
+    });
+
+    my $patron_3 = $builder->build({
+        source => 'Borrower',
+        value  => {
+            branchcode              => $library->{branchcode},
+            dateexpiry              => dt_from_string->add( days => $expiry_days + $nb_of_days_after )
+        },
+    });
+
+    # Test without extra parameters
+    my $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires();
+    is( $upcoming_mem_expires->count, $nb_of_expires + 1, 'Get upcoming membership expires should return one new borrower.' );
+
+    # Test with branch
+    $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires({ 'me.branchcode' => $library->{branchcode} });
+    is( $upcoming_mem_expires->count, 1, );
+    my $expired = $upcoming_mem_expires->next;
+    is( $expired->surname, $patron_1->{surname}, 'Get upcoming membership expires should return the correct patron.' );
+    is( $expired->library->branchemail, $library->{branchemail}, 'Get upcoming membership expires should return the correct patron.' );
+    is( $expired->branchcode, $patron_1->{branchcode}, 'Get upcoming membership expires should return the correct patron.' );
+
+    t::lib::Mocks::mock_preference( 'MembershipExpiryDaysNotice', 0 );
+    $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires({ 'me.branchcode' => $library->{branchcode} });
+    is( $upcoming_mem_expires->count, 0, 'Get upcoming membership expires with MembershipExpiryDaysNotice==0 should not return new records.' );
+
+    # Test MembershipExpiryDaysNotice == undef
+    t::lib::Mocks::mock_preference( 'MembershipExpiryDaysNotice', undef );
+    $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires({ 'me.branchcode' => $library->{branchcode} });
+    is( $upcoming_mem_expires->count, 0, 'Get upcoming membership expires without MembershipExpiryDaysNotice should not return new records.' );
+
+    # Test the before parameter
+    t::lib::Mocks::mock_preference( 'MembershipExpiryDaysNotice', 15 );
+    $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires({ 'me.branchcode' => $library->{branchcode}, before => $nb_of_days_before });
+    # Expect 29/6 and 30/6
+    is( $upcoming_mem_expires->count, 2, 'Expect two results for before==1');
+    # Test after parameter also
+    $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires({ 'me.branchcode' => $library->{branchcode}, before => $nb_of_days_before, after => $nb_of_days_after });
+    # Expect 29/6, 30/6 and 2/7
+    is( $upcoming_mem_expires->count, 3, 'Expect three results when adding after' );
+    Koha::Patrons->search({ borrowernumber => { in => [ $patron_1->{borrowernumber}, $patron_2->{borrowernumber}, $patron_3->{borrowernumber} ] } })->delete;
 };
 
 $retrieved_patron_1->delete;
