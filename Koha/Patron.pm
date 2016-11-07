@@ -279,6 +279,22 @@ sub is_debarred {
     return;
 }
 
+=head2 is_expired
+
+my $is_expired = $patron->is_expired;
+
+Returns 1 if the patron is expired or 0;
+
+=cut
+
+sub is_expired {
+    my ($self) = @_;
+    return 0 unless $self->dateexpiry;
+    return 0 if $self->dateexpiry eq '0000-00-00';
+    return 1 if dt_from_string( $self->dateexpiry ) < dt_from_string;
+    return 0;
+}
+
 =head2 update_password
 
 my $updated = $patron->update_password( $userid, $password );

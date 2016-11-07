@@ -172,6 +172,24 @@ subtest 'update_password' => sub {
     is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->update_password should not have logged' );
 };
 
+subtest 'is_expired' => sub {
+    plan tests => 5;
+    my $patron = $builder->build({ source => 'Borrower' });
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    $patron->dateexpiry( undef )->store;
+    is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is not set');
+    $patron->dateexpiry( '0000-00-00' )->store;
+    is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is not 0000-00-00');
+    $patron->dateexpiry( dt_from_string )->store;
+    is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is today');
+    $patron->dateexpiry( dt_from_string->add( days => 1 ) )->store;
+    is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is tomorrow');
+    $patron->dateexpiry( dt_from_string->add( days => -1 ) )->store;
+    is( $patron->is_expired, 1, 'Patron should be considered expired if dateexpiry is yesterday');
+
+    $patron->delete;
+};
+
 subtest 'renew_account' => sub {
     plan tests => 10;
     my $a_month_ago                = dt_from_string->add( months => -1 )->truncate( to => 'day' );
