@@ -36,6 +36,20 @@ Koha::Patron;;Category - Koha Patron;;Category Object class
 
 =cut
 
+=head3 effective_BlockExpiredPatronOpacActions
+
+my $BlockExpiredPatronOpacActions = $category->effective_BlockExpiredPatronOpacActions
+
+Return the effective BlockExpiredPatronOpacActions value.
+
+=cut
+
+sub effective_BlockExpiredPatronOpacActions {
+    my( $self) = @_;
+    return C4::Context->preference('BlockExpiredPatronOpacActions') if $self->BlockExpiredPatronOpacActions == -1;
+    return $self->BlockExpiredPatronOpacActions
+}
+
 =head3 default_messaging
 
 my $messaging = $category->default_messaging();

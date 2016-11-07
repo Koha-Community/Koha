@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use C4::Context;
 use Koha::Database;
@@ -27,6 +27,7 @@ use Koha::DateUtils;
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -80,6 +81,22 @@ subtest 'get_expiry_date' => sub {
     my $hardcoded_date = '2000-01-31';
     is( $category->get_expiry_date( $hardcoded_date ), dt_from_string( $hardcoded_date )->add( months => 12 ), 'get_expiry_date accepts strings as well'  );
 
+    $category->delete;
+};
+
+subtest 'BlockExpiredPatronOpacActions' => sub {
+    plan tests => 2;
+    t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 42);
+    my $category = Koha::Patron::Category->new({
+        categorycode => 'ya_cat',
+        category_type => 'A',
+        description  => 'yacatdesc',
+        enrolmentperiod => undef,
+        BlockExpiredPatronOpacActions => -1,
+    })->store;
+    is( $category->effective_BlockExpiredPatronOpacActions, 42 );
+    $category->BlockExpiredPatronOpacActions(24)->store;
+    is( $category->effective_BlockExpiredPatronOpacActions, 24 );
     $category->delete;
 };
 
