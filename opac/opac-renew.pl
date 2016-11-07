@@ -30,6 +30,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Items;
 use C4::Members;
+use Koha::Patrons;
 use Date::Calc qw( Today Date_to_Days );
 my $query = new CGI;
 
@@ -49,9 +50,10 @@ my $opacrenew = C4::Context->preference("OpacRenewalAllowed");
 my $errorstring = q{};
 my $renewed     = q{};
 
+my $patron = Koha::Patrons->find( $borrowernumber );
 my $member_details = GetMemberDetails($borrowernumber);
 
-if (   $member_details->{'BlockExpiredPatronOpacActions'}
+if (   $patron->category->effective_BlockExpiredPatronOpacActions
     && $member_details->{'is_expired'} )
 {
     $errorstring = 'card_expired';

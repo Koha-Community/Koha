@@ -164,7 +164,6 @@ sub GetMemberDetails {
             SELECT borrowers.*,
                    category_type,
                    categories.description,
-                   categories.BlockExpiredPatronOpacActions,
                    reservefee,
                    enrolmentperiod
             FROM borrowers
@@ -178,7 +177,6 @@ sub GetMemberDetails {
             SELECT borrowers.*,
                    category_type,
                    categories.description,
-                   categories.BlockExpiredPatronOpacActions,
                    reservefee,
                    enrolmentperiod
             FROM borrowers
@@ -207,11 +205,6 @@ sub GetMemberDetails {
     }
     $borrower->{'flags'}     = $flags;
     $borrower->{'authflags'} = $accessflagshash;
-
-    # Handle setting the true behavior for BlockExpiredPatronOpacActions
-    $borrower->{'BlockExpiredPatronOpacActions'} =
-      C4::Context->preference('BlockExpiredPatronOpacActions')
-      if ( $borrower->{'BlockExpiredPatronOpacActions'} == -1 );
 
     $borrower->{'is_expired'} = 0;
     $borrower->{'is_expired'} = 1 if
