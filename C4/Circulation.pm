@@ -725,14 +725,16 @@ sub CanBookBeIssued {
         ModDateLastSeen( $item->{'itemnumber'} );
         return( { STATS => 1 }, {});
     }
-    if ( ref $borrower->{flags} ) {
-        if ( $borrower->{flags}->{GNA} ) {
+
+    my $flags = C4::Members::patronflags( $borrower );
+    if ( ref $flags ) {
+        if ( $flags->{GNA} ) {
             $issuingimpossible{GNA} = 1;
         }
-        if ( $borrower->{flags}->{'LOST'} ) {
+        if ( $flags->{'LOST'} ) {
             $issuingimpossible{CARD_LOST} = 1;
         }
-        if ( $borrower->{flags}->{'DBARRED'} ) {
+        if ( $flags->{'DBARRED'} ) {
             $issuingimpossible{DEBARRED} = 1;
         }
     }

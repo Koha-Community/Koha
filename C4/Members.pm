@@ -133,18 +133,6 @@ number.
 
 C<$borrower> is a reference-to-hash whose keys are the fields of the
 borrowers table in the Koha database. In addition,
-C<$borrower-E<gt>{flags}> is a hash giving more detailed information
-about the patron. Its keys act as flags :
-
-    if $borrower->{flags}->{LOST} {
-        # Patron's card was reported lost
-    }
-
-If the state of a flag means that the patron should not be
-allowed to borrow any more books, then it will have a C<noissues> key
-with a true value.
-
-See patronflags for more details.
 
 =cut
 
@@ -184,9 +172,6 @@ sub GetMemberDetails {
     }
     my $borrower = $sth->fetchrow_hashref;
     return unless $borrower;
-
-    my $flags = patronflags( $borrower);
-    $borrower->{'flags'}     = $flags;
 
     $borrower->{'is_expired'} = 0;
     $borrower->{'is_expired'} = 1 if
@@ -496,7 +481,6 @@ sub ModMember {
     my $schema = Koha::Database->new()->schema;
     my @columns = $schema->source('Borrower')->columns;
     my $new_borrower = { map { join(' ', @columns) =~ /$_/ ? ( $_ => $data{$_} ) : () } keys(%data) };
-    delete $new_borrower->{flags};
 
     $new_borrower->{dateofbirth}     ||= undef if exists $new_borrower->{dateofbirth};
     $new_borrower->{dateenrolled}    ||= undef if exists $new_borrower->{dateenrolled};

@@ -40,9 +40,9 @@ sub new {
     $kp = GetMemberDetails($kp->{borrowernumber});
     $debug and warn "new Patron (GetMemberDetails): " . Dumper($kp);
     my $pw        = $kp->{password};
-    my $flags     = $kp->{flags};     # or warn "Warning: No flags from patron object for '$patron_id'";
-    my $debarred  = defined($kp->{flags}->{DBARRED});
-    $debug and warn sprintf("Debarred = %s : ", ($debarred||'undef')) . Dumper(%{$kp->{flags}});
+    my $flags     = C4::Members::patronflags( $kp );
+    my $debarred  = defined($flags->{DBARRED});
+    $debug and warn sprintf("Debarred = %s : ", ($debarred||'undef')) . Dumper(%$flags);
     my ($day, $month, $year) = (localtime)[3,4,5];
     my $today    = sprintf '%04d-%02d-%02d', $year+1900, $month+1, $day;
     my $expired  = ($today gt $kp->{dateexpiry}) ? 1 : 0;

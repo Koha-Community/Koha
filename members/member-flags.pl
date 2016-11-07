@@ -86,7 +86,7 @@ if ($input->param('newflags')) {
     print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
 } else {
 
-    my $flags = $bor->{'flags'};
+    my $flags = C4::Members::patronflags( $bor );
     my $accessflags;
     my $dbh = C4::Context->dbh();
     # FIXME This needs to be improved to avoid doing the same query

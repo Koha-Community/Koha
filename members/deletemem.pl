@@ -77,8 +77,8 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
 my $issues = GetPendingIssues($member);     # FIXME: wasteful call when really, we only want the count
 my $countissues = scalar(@$issues);
 
-my ($bor)=GetMemberDetails($member,'');
-my $flags=$bor->{flags};
+my $bor = C4::Members::GetMember( borrowernumber => $member );
+my $flags = C4::Members::patronflags( $bor );
 my $userenv = C4::Context->userenv;
 
  

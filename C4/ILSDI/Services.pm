@@ -361,14 +361,14 @@ sub GetPatronInfo {
 
     # Get Member details
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMemberDetails( $borrowernumber );
+    my $borrower = GetMember( borrowernumber => $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
     # Cleaning the borrower hashref
-    $borrower->{'charges'}    = $borrower->{'flags'}->{'CHARGES'}->{'amount'};
+    my $flags = C4::Members::patronflags( $borrower );
+    $borrower->{'charges'}    = $flags>{'CHARGES'}->{'amount'};
     my $library = Koha::Libraries->find( $borrower->{branchcode} );
     $borrower->{'branchname'} = $library ? $library->branchname : '';
-    delete $borrower->{'flags'};
     delete $borrower->{'userid'};
     delete $borrower->{'password'};
 

@@ -462,7 +462,7 @@ if ($borrowernumber) {
 }
 
 #title
-my $flags = $borrower->{'flags'};
+my $flags = $borrower ? C4::Members::patronflags( $borrower ) : {};
 foreach my $flag ( sort keys %$flags ) {
     $flags->{$flag}->{'message'} =~ s#\n#<br />#g;
     if ( $flags->{$flag}->{'noissues'} ) {
@@ -545,7 +545,7 @@ foreach my $flag ( sort keys %$flags ) {
     }
 }
 
-my $amountold = $borrower->{flags} ? $borrower->{flags}->{'CHARGES'}->{'message'} || 0 : 0;
+my $amountold = $flags ? $flags->{'CHARGES'}->{'message'} || 0 : 0;
 $amountold =~ s/^.*\$//;    # remove upto the $, if any
 
 my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
