@@ -17,18 +17,23 @@
 
 use Modern::Perl;
 
-use Koha::DateUtils;
-use DateTime::Duration;
+use Test::More tests => 32;
+
 use t::lib::Mocks;
+use t::lib::TestBuilder;
+
 use C4::Biblio;
-use C4::Members;
 use C4::Circulation;
-use C4::Items;
 use C4::Context;
+use C4::Items;
+use C4::Members;
 use C4::Reserves;
+use Koha::Database;
+use Koha::DateUtils;
 use Koha::Library;
 
-use Test::More tests => 32;
+use DateTime::Duration;
+
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -50,10 +55,12 @@ can_ok(
       )
 );
 
-#Start transaction
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
+my $schema = Koha::Database->schema;
+#Start transaction
+$schema->storage->txn_begin;
+
+my $builder = t::lib::TestBuilder->new();
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM items|);
@@ -63,7 +70,12 @@ $dbh->do(q|DELETE FROM categories|);
 $dbh->do(q|DELETE FROM accountlines|);
 $dbh->do(q|DELETE FROM issuingrules|);
 
-#Add sample datas
+# Generate sample datas
+my $itemtype = $builder->build(
+    {   source => 'Itemtype',
+        value  => { notforloan => undef, rentalcharge => 0 }
+    }
+)->{itemtype};
 
 #Add Dates
 
@@ -158,7 +170,8 @@ my @sampleitem1 = C4::Items::AddItem(
         homebranch     => $samplebranch1->{branchcode},
         holdingbranch  => $samplebranch1->{branchcode},
         issue          => 1,
-        reserve        => 1
+        reserve        => 1,
+        itype          => $itemtype
     },
     $biblionumber
 );
@@ -170,7 +183,8 @@ my @sampleitem2 = C4::Items::AddItem(
         homebranch     => $samplebranch2->{branchcode},
         holdingbranch  => $samplebranch2->{branchcode},
         notforloan     => 1,
-        issue          => 1
+        issue          => 1,
+        itype          => $itemtype
     },
     $biblionumber
 );
@@ -369,7 +383,8 @@ my $itemnumber;
         itemcallnumber => 'callnumber3',
         homebranch     => $samplebranch1->{branchcode},
         holdingbranch  => $samplebranch1->{branchcode},
-        notforloan => 1,
+        notforloan     => 1,
+        itype          => $itemtype
     },
     $biblionumber
 );
@@ -397,4 +412,4 @@ my $reserve = GetReserve( $reserve_id );
 is( $reserve, undef, 'The reserve should have been correctly cancelled' );
 
 #End transaction
-$dbh->rollback;
+$schema->storage->txn_rollback;
