@@ -70,7 +70,6 @@ BEGIN {
         &GetNoticeEmailAddress
 
         &GetAge
-        &GetTitles
 
         &GetHideLostItemsPreference
 
