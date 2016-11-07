@@ -41,8 +41,7 @@ my $budget = C4::Budgets::GetBudget($budgetid);
 my @ordernumbers;
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( MARC::Record->new, '' );
 
-my $ordernumber;
-$ordernumber = Koha::Acquisition::Order->new(
+my $order = Koha::Acquisition::Order->new(
     {
         basketno         => $basketno,
         quantity         => 2,
@@ -57,7 +56,8 @@ $ordernumber = Koha::Acquisition::Order->new(
         rrp              => 10,
         ecost            => 10,
     }
-)->insert->{ordernumber};
+)->insert;
+my $ordernumber = $order->{ordernumber};
 
 my $invoiceid = AddInvoice(
     invoicenumber => 'invoice',
@@ -83,10 +83,11 @@ C4::Acquisition::ModOrderUsers( $ordernumber, $borrowernumber );
 my $is_added = grep { /^$borrowernumber$/ } C4::Acquisition::GetOrderUsers( $ordernumber );
 is( $is_added, 1, 'ModOrderUsers should link patrons to an order' );
 
+$order = Koha::Acquisition::Order->fetch({ ordernumber => $ordernumber });
 ModReceiveOrder(
     {
         biblionumber      => $biblionumber,
-        ordernumber       => $ordernumber,
+        order             => $order,
         quantityreceived  => 1,
         cost              => 10,
         ecost             => 10,
@@ -99,10 +100,11 @@ ModReceiveOrder(
 my $messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
 is( scalar( @$messages ), 0, 'The letter has not been sent to message queue on receiving the order, the order is not entire received');
 
+$order = Koha::Acquisition::Order->fetch({ ordernumber => $ordernumber });
 ModReceiveOrder(
     {
         biblionumber      => $biblionumber,
-        ordernumber       => $ordernumber,
+        order             => $order,
         quantityreceived  => 1,
         cost              => 10,
         ecost             => 10,
