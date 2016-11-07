@@ -25,6 +25,8 @@ use Pod::Usage;
 use C4::Installer;
 use C4::Context;
 
+use Koha::SearchEngine::Elasticsearch;
+
 =head1 NAME
 
 populate_db.pl - Load included sample data into the DB
@@ -160,6 +162,9 @@ sub initialize_data {
         INSERT INTO systempreferences(variable, value, options, explanation, type)
         VALUES ('Version', '$version', NULL, 'The Koha database version. WARNING: Do not change this value manually, it is maintained by the webinstaller', NULL)
     });
+
+    # Initialize ES mappings
+    Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
 }
 
 sub execute_sqlfile {
