@@ -1460,7 +1460,7 @@ sub ModReceiveOrder {
         $query .= q| where biblionumber=? and ordernumber=?|;
 
         my $sth = $dbh->prepare( $query );
-        my @params = ( $quantrec, $datereceived, $invoice->{invoiceid}, $budget_id );
+        my @params = ( $quantrec, $datereceived, $invoice->{invoiceid}, ( $budget_id ? $budget_id : $order->{budget_id} ) );
 
         if ( defined $order->{unitprice} ) {
             push @params, $order->{unitprice}, $order->{unitprice_tax_included}, $order->{unitprice_tax_excluded};
