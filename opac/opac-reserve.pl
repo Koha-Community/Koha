@@ -305,8 +305,9 @@ if ( $query->param('place_reserve') ) {
 my $noreserves     = 0;
 my $maxoutstanding = C4::Context->preference("maxoutstanding");
 $template->param( noreserve => 1 ) unless $maxoutstanding;
-if ( $borr->{'amountoutstanding'} && ($borr->{'amountoutstanding'} > $maxoutstanding) ) {
-    my $amount = sprintf "%.02f", $borr->{'amountoutstanding'};
+my $amountoutstanding = GetMemberAccountRecords($borrowernumber);
+if ( $amountoutstanding && ($amountoutstanding > $maxoutstanding) ) {
+    my $amount = sprintf "%.02f", $amountoutstanding;
     $template->param( message => 1 );
     $noreserves = 1;
     $template->param( too_much_oweing => $amount );

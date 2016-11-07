@@ -129,9 +129,9 @@ Using this account is not recommended because some parts of Koha will not functi
                             [% IF relatives %]<li><a href="#opac-user-relative-issues">Relatives' checkouts</a></li>[% END %]
                             [% IF ( overdues_count ) %]<li><a href="#opac-user-overdues">Overdue ([% overdues_count %])</a></li>[% END %]
                             [% IF ( OPACFinesTab ) %]
-                                [% IF ( BORROWER_INFO.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INFO.amountoutstanding | $Price %])</a></li>[% END %]
-                                [% IF ( BORROWER_INFO.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% BORROWER_INFO.amountoutstanding | $Price %])</a></li>[% END %]
-                                [% IF ( BORROWER_INFO.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% BORROWER_INFO.amountoutstanding | $Price %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
+                                [% IF ( BORROWER_INFO.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% amountoutstanding | $Price %])</a></li>[% END %]
                             [% END %]
                             [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count %])</a></li>[% END %]
                             [% IF Koha.Preference('ArticleRequests') && borrower.article_requests_current %]<li><a href="#opac-user-article-requests">Article requests ([% borrower.article_requests_current.count %])</a></li>[% END %]
@@ -319,7 +319,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                         <tbody>
                                             <tr>
                                                 <td>You currently owe fines and charges amounting to:</td>
-                                                <td><a href="/cgi-bin/koha/opac-account.pl">[% BORROWER_INFO.amountoutstanding | $Price %]</a></td>
+                                                <td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding | $Price %]</a></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -333,7 +333,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                         <tbody>
                                             <tr>
                                                 <td>You currently owe fines and charges amounting to:</td>
-                                                <td><a href="/cgi-bin/koha/opac-account.pl">[% BORROWER_INFO.amountoutstanding %]</a></td>
+                                                <td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding %]</a></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -346,7 +346,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                         <thead><tr><th colspan="2">Amount</th></tr></thead>
                                         <tbody>
                                             <tr>
-                                                <td>You have a credit of:</td><td><a href="/cgi-bin/koha/opac-account.pl">[% BORROWER_INFO.amountoutstanding %]</a></td>
+                                                <td>You have a credit of:</td><td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding %]</a></td>
                                             </tr>
                                         </tbody>
                                     </table>

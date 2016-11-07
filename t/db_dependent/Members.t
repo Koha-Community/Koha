@@ -416,7 +416,7 @@ subtest 'GetMemberAccountRecords' => sub {
 
 subtest 'GetMemberAccountBalance' => sub {
 
-    plan tests => 10;
+    plan tests => 6;
 
     my $members_mock = new Test::MockModule('C4::Members');
     $members_mock->mock( 'GetMemberAccountRecords', sub {
@@ -433,19 +433,6 @@ subtest 'GetMemberAccountBalance' => sub {
             return ( 0, \@accountlines );
         }
     });
-
-    my $person = GetMemberDetails(undef,undef);
-    ok( !$person , 'Expected no member details from undef,undef' );
-    $person = GetMemberDetails(undef,'987654321');
-    is( $person->{amountoutstanding}, 15,
-        'Expected 15 outstanding for cardnumber.');
-    $borrowernumber = $person->{borrowernumber};
-    $person = GetMemberDetails($borrowernumber,undef);
-    is( $person->{amountoutstanding}, 15,
-        'Expected 15 outstanding for borrowernumber.');
-    $person = GetMemberDetails($borrowernumber,'987654321');
-    is( $person->{amountoutstanding}, 15,
-        'Expected 15 outstanding for both borrowernumber and cardnumber.');
 
     # do not count holds charges
     t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge', '1' );

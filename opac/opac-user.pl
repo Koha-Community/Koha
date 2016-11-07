@@ -113,10 +113,11 @@ if ( $userdebarred || $borr->{'gonenoaddress'} || $borr->{'lost'} ) {
     $canrenew = 0;
 }
 
-if ( $borr->{'amountoutstanding'} > 5 ) {
+my ( $amountoutstanding ) = GetMemberAccountRecords($borrowernumber);
+if ( $amountoutstanding > 5 ) {
     $borr->{'amountoverfive'} = 1;
 }
-if ( 5 >= $borr->{'amountoutstanding'} && $borr->{'amountoutstanding'} > 0 ) {
+if ( 5 >= $amountoutstanding && $amountoutstanding > 0 ) {
     $borr->{'amountoverzero'} = 1;
 }
 my $no_renewal_amt = C4::Context->preference( 'OPACFineNoRenewals' );
@@ -124,19 +125,19 @@ $no_renewal_amt = undef unless looks_like_number( $no_renewal_amt );
 
 if (   C4::Context->preference('OpacRenewalAllowed')
     && defined($no_renewal_amt)
-    && $borr->{amountoutstanding} > $no_renewal_amt )
+    && $amountoutstanding > $no_renewal_amt )
 {
     $borr->{'flagged'} = 1;
     $canrenew = 0;
     $template->param(
         renewal_blocked_fines => $no_renewal_amt,
-        renewal_blocked_fines_amountoutstanding => $borr->{amountoutstanding},
+        renewal_blocked_fines_amountoutstanding => $amountoutstanding,
     );
 }
 
-if ( $borr->{'amountoutstanding'} < 0 ) {
+if ( $amountoutstanding < 0 ) {
     $borr->{'amountlessthanzero'} = 1;
-    $borr->{'amountoutstanding'} = -1 * ( $borr->{'amountoutstanding'} );
+    $amountoutstanding = -1 * ( $amountoutstanding );
 }
 
 # Warningdate is the date that the warning starts appearing
@@ -158,6 +159,7 @@ if ( $borr->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture')
 my $renew_error = $query->param('renew_error');
 
 $template->param(   BORROWER_INFO     => $borr,
+                    amountoutstanding => $amountoutstanding,
                     borrowernumber    => $borrowernumber,
                     patron_flagged    => $borr->{flagged},
                     OPACMySummaryHTML => (C4::Context->preference("OPACMySummaryHTML")) ? 1 : 0,
