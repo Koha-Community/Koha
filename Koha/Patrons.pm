@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::DateUtils;
 
 use Koha::ArticleRequests;
 use Koha::ArticleRequest::Status;
@@ -67,6 +68,38 @@ sub search_housebound_deliverers {
             housebound_deliverer => 1,
         })->search_related('borrowernumber');
     return Koha::Patrons->_new_from_dbic($del);
+}
+
+=head3
+
+my $patrons = Koha::Patrons->search_upcoming_membership_expires();
+
+The 'before' and 'after' represent the number of days before/after the date
+that is set by the preference MembershipExpiryDaysNotice.
+If the pref is 14, before 2 and after 3 then you will get all expires
+from 12 to 17 days.
+
+=cut
+
+sub search_upcoming_membership_expires {
+    my ( $self, $params ) = @_;
+    my $before = $params->{before} || 0;
+    my $after  = $params->{after} || 0;
+    delete $params->{before};
+    delete $params->{after};
+
+    my $days = C4::Context->preference("MembershipExpiryDaysNotice") || 0;
+    my $date_before = dt_from_string->add( days => $days - $before );
+    my $date_after = dt_from_string->add( days => $days + $after );
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+
+    $params->{dateexpiry} = {
+        ">=" => $dtf->format_date( $date_before ),
+        "<=" => $dtf->format_date( $date_after ),
+    };
+    return $self->SUPER::search(
+        $params, { join => ['branchcode', 'categorycode'] }
+    );
 }
 
 =head3 guarantor

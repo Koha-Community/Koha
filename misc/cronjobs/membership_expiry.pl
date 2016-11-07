@@ -167,21 +167,21 @@ if( !$expdays ) {
 
 my $admin_adress = C4::Context->preference('KohaAdminEmailAddress');
 warn 'getting upcoming membership expires' if $verbose;
-my $upcoming_mem_expires = C4::Members::GetUpcomingMembershipExpires({ branch => $branch, before => $before, after => $after });
-warn 'found ' . scalar( @$upcoming_mem_expires ) . ' soon expiring members'
+my $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires({ 'me.branchcode' => $branch, before => $before, after => $after });
+warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
     if $verbose;
 
 # main loop
 $letter_type = 'MEMBERSHIP_EXPIRY' if !$letter_type;
-foreach my $recent ( @$upcoming_mem_expires ) {
-    my $from_address = $recent->{'branchemail'} || $admin_adress;
+while ( my $recent = $upcoming_mem_expires->next ) {
+    my $from_address = $recent->library->branchemail || $admin_adress;
     my $letter =  C4::Letters::GetPreparedLetter(
         module      => 'members',
         letter_code => $letter_type,
-        branchcode  => $recent->{'branchcode'},
+        branchcode  => $recent->branchcode,
         tables      => {
-            borrowers => $recent->{'borrowernumber'},
-            branches  => $recent->{'branchcode'},
+            borrowers => $recent->borrowernumber,
+            branches  => $recent->branchcode,
         },
     );
     last if !$letter; # Letters.pm already warned, just exit
@@ -190,7 +190,7 @@ foreach my $recent ( @$upcoming_mem_expires ) {
     } else {
         C4::Letters::EnqueueLetter({
             letter                 => $letter,
-            borrowernumber         =>  $recent->{'borrowernumber'},
+            borrowernumber         =>  $recent->borrowernumber,
             from_address           => $from_address,
             message_transport_type => 'email',
         });
