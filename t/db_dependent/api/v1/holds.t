@@ -182,7 +182,23 @@ subtest "Test endpoints without permission" => sub {
       ->status_is(403);
 };
 subtest "Test endpoints without permission, but accessing own object" => sub {
-    plan tests => 15;
+    plan tests => 21;
+
+    my $reserve_id3 = C4::Reserves::AddReserve($branchcode, $nopermission->{'borrowernumber'},
+    $biblionumber, undef, 2, undef, undef, undef, '', $itemnumber, 'W');
+    # try to delete my own hold while it's waiting; an error should occur
+    $tx = $t->ua->build_tx(DELETE => "/api/v1/holds/$reserve_id3" => json => $put_data);
+    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+    $t->request_ok($tx)
+      ->status_is(403)
+      ->json_is('/error', 'Hold is already in transfer or waiting and cannot be cancelled by patron.');
+    # reset the hold's found status; after that, cancellation should work
+    Koha::Holds->find($reserve_id3)->found('')->store;
+    $tx = $t->ua->build_tx(DELETE => "/api/v1/holds/$reserve_id3" => json => $put_data);
+    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+    $t->request_ok($tx)
+      ->status_is(200);
+    is(Koha::Holds->find({ borrowernumber => $nopermission->{borrowernumber} }), undef, "Hold deleted.");
 
     my $borrno_tmp = $post_data->{'borrowernumber'};
     $post_data->{'borrowernumber'} = int $nopermission->{'borrowernumber'};
@@ -203,7 +219,7 @@ subtest "Test endpoints without permission, but accessing own object" => sub {
       ->json_is('/0/expirationdate', $expirationdate)
       ->json_is('/0/branchcode', $branchcode);
 
-    my $reserve_id3 = Koha::Holds->find({ borrowernumber => $nopermission->{borrowernumber} })->reserve_id;
+    $reserve_id3 = Koha::Holds->find({ borrowernumber => $nopermission->{borrowernumber} })->reserve_id;
     $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id3" => json => $put_data);
     $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
     $t->request_ok($tx) # create hold to myself

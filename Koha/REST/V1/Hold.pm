@@ -150,9 +150,18 @@ sub delete {
 
     my $reserve_id = $c->validation->param('reserve_id');
     my $reserve = C4::Reserves::GetReserve($reserve_id);
+    my $user = $c->stash('koha.user');
 
     unless ($reserve) {
         return $c->render( status => 404, openapi => {error => "Reserve not found"} );
+    }
+
+    if ($user
+        && ($c->stash('is_owner_access') || $c->stash('is_guarantor_access'))
+        && !C4::Reserves::CanReserveBeCanceledFromOpac($reserve_id,
+                                                       $user->borrowernumber)) {
+        return $c->$cb({error => "Hold is already in transfer or waiting and "
+                                ."cannot be cancelled by patron."}, 403);
     }
 
     C4::Reserves::CancelReserve({ reserve_id => $reserve_id });
