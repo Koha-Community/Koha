@@ -4,6 +4,11 @@
       "x-mojo-to": "Patron#list",
       "operationId": "listPatrons",
       "tags": ["patrons"],
+      "parameters": [
+        { "$ref": "../parameters.json#/cardnumberQueryParam" },
+        { "$ref": "../parameters.json#/surnameQueryParam" },
+        { "$ref": "../parameters.json#/useridQueryParam" }
+      ],
       "produces": [
           "application/json"
       ],
