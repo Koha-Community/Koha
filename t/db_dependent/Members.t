@@ -150,11 +150,6 @@ C4::Context->clear_syspref_cache();
 $notice_email = GetNoticeEmailAddress($member->{'borrowernumber'});
 is ($notice_email, $EMAILPRO, "GetNoticeEmailAddress returns correct value when AutoEmailPrimaryAddress is emailpro");
 
-ok(!$member->{is_expired}, "GetMemberDetails() indicates that patron is not expired");
-ModMember(borrowernumber => $member->{'borrowernumber'}, dateexpiry => '2001-01-1');
-$member = GetMemberDetails($member->{'borrowernumber'});
-ok($member->{is_expired}, "GetMemberDetails() indicates that patron is expired");
-
 # Check_Userid tests
 %data = (
     cardnumber   => "123456789",

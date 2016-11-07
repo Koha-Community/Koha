@@ -76,7 +76,7 @@ my $patron = Koha::Patrons->find( $borrowernumber );
 # check if this user can place a reserve, -1 means use sys pref, 0 means dont block, 1 means block
 if ( $patron->category->effective_BlockExpiredPatronOpacActions ) {
 
-    if ( $borr->{'is_expired'} ) {
+    if ( $patron->is_expired ) {
 
         # cannot reserve, their card has expired and the rules set mean this is not allowed
         $template->param( message => 1, expired_patron => 1 );

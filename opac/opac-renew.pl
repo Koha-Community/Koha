@@ -51,10 +51,9 @@ my $errorstring = q{};
 my $renewed     = q{};
 
 my $patron = Koha::Patrons->find( $borrowernumber );
-my $member_details = GetMemberDetails($borrowernumber);
 
 if (   $patron->category->effective_BlockExpiredPatronOpacActions
-    && $member_details->{'is_expired'} )
+    && $patron->is_expired )
 {
     $errorstring = 'card_expired';
 }

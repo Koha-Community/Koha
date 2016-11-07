@@ -173,13 +173,6 @@ sub GetMemberDetails {
     my $borrower = $sth->fetchrow_hashref;
     return unless $borrower;
 
-    $borrower->{'is_expired'} = 0;
-    $borrower->{'is_expired'} = 1 if
-      defined($borrower->{dateexpiry}) &&
-      $borrower->{'dateexpiry'} ne '0000-00-00' &&
-      Date_to_Days( Today() ) >
-      Date_to_Days( split /-/, $borrower->{'dateexpiry'} );
-
     return ($borrower);
 }
 
