@@ -25,26 +25,31 @@ $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
 
-my $library1 = $builder->build({
-    source => 'Branch',
-});
-my $library2 = $builder->build({
-    source => 'Branch',
-});
-my $library3 = $builder->build({
-    source => 'Branch',
-});
-my $library4 = $builder->build({
-    source => 'Branch',
-});
+my $library1 = $builder->build({ source => 'Branch', });
+my $library2 = $builder->build({ source => 'Branch', });
+my $library3 = $builder->build({ source => 'Branch', });
+my $library4 = $builder->build({ source => 'Branch', });
+my $itemtype = $builder->build(
+    {   source => 'Itemtype',
+        value  => { notforloan => undef, rentalcharge => 0 }
+    }
+)->{itemtype};
+
+
 
 my $borrowers_count = 5;
 
 # Create a helper biblio
 my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio();
 # Create a helper item for the biblio.
-my ( $item_bibnum, $item_bibitemnum, $itemnumber ) =
-  AddItem( { homebranch => $library4->{branchcode}, holdingbranch => $library3->{branchcode} }, $bibnum );
+my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
+    {   homebranch    => $library4->{branchcode},
+        holdingbranch => $library3->{branchcode},
+        itype         => $itemtype
+    },
+    $bibnum
+);
+
 
 my @branchcodes = ( $library1->{branchcode}, $library2->{branchcode}, $library3->{branchcode}, $library4->{branchcode}, $library3->{branchcode}, $library4->{branchcode} );
 
