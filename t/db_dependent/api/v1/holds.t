@@ -24,7 +24,9 @@ use t::lib::TestBuilder;
 use DateTime;
 
 use C4::Context;
+use C4::Biblio;
 use C4::Reserves;
+use C4::Items;
 
 use Koha::Database;
 use Koha::Biblios;
