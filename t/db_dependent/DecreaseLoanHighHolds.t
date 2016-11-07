@@ -41,8 +41,9 @@ $dbh->do('DELETE FROM issuingrules');
 $dbh->do('DELETE FROM borrowers');
 $dbh->do('DELETE FROM items');
 
-my $library = $builder->build({source => 'Branch'});
-my $category = $builder->build({source => 'Category'});
+my $library  = $builder->build( { source => 'Branch' } );
+my $category = $builder->build( { source => 'Category' } );
+my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
 
 # Set userenv
 C4::Context->_new_userenv('xxx');
@@ -67,7 +68,8 @@ for my $i ( 1 .. 10 ) {
         {
             biblionumber     => $biblio->id(),
             biblioitemnumber => $biblioitem->id(),
-            barcode          => $i
+            barcode          => $i,
+            itype            => $itemtype
         }
     )->store();
     push( @items, $item );
