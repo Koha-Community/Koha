@@ -24,7 +24,7 @@ my $input = new CGI;
 
 my $flagsrequired = { permissions => 1 };
 my $member=$input->param('member');
-my $bor = GetMemberDetails( $member,'');
+my $bor = GetMember( borrowernumber => $member );
 if( $bor->{'category_type'} eq 'S' )  {
 	$flagsrequired->{'staffaccess'} = 1;
 }
@@ -85,15 +85,25 @@ if ($input->param('newflags')) {
     
     print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
 } else {
-#     my ($bor,$flags,$accessflags)=GetMemberDetails($member,'');
+
     my $flags = $bor->{'flags'};
-    my $accessflags = $bor->{'authflags'};
-    my $dbh=C4::Context->dbh();
+    my $accessflags;
+    my $dbh = C4::Context->dbh();
+    # FIXME This needs to be improved to avoid doing the same query
+    my $sth = $dbh->prepare("select bit,flag from userflags");
+    $sth->execute;
+    while ( my ( $bit, $flag ) = $sth->fetchrow ) {
+        if ( $bor->{flags} && $bor->{flags} & 2**$bit ) {
+            $accessflags->{$flag} = 1;
+        }
+    }
+
     my $all_perms  = get_all_subpermissions();
     my $user_perms = get_user_subpermissions($bor->{'userid'});
-    my $sth=$dbh->prepare("SELECT bit, flag FROM userflags ORDER BY bit");
+    $sth = $dbh->prepare("SELECT bit, flag FROM userflags ORDER BY bit");
     $sth->execute;
     my @loop;
+
     while (my ($bit, $flag) = $sth->fetchrow) {
 	    my $checked='';
 	    if ($accessflags->{$flag}) {

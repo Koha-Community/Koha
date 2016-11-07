@@ -146,12 +146,6 @@ with a true value.
 
 See patronflags for more details.
 
-C<$borrower-E<gt>{authflags}> is a hash giving more detailed information
-about the top-level permissions flags set for the borrower.  For example,
-if a user has the "editcatalogue" permission,
-C<$borrower-E<gt>{authflags}-E<gt>{editcatalogue}> will exist and have
-the value "1".
-
 =cut
 
 sub GetMemberDetails {
@@ -194,17 +188,7 @@ sub GetMemberDetails {
     $borrower->{'amountoutstanding'} = $amount;
     # FIXME - patronflags calls GetMemberAccountRecords... just have patronflags return $amount
     my $flags = patronflags( $borrower);
-    my $accessflagshash;
-
-    $sth = $dbh->prepare("select bit,flag from userflags");
-    $sth->execute;
-    while ( my ( $bit, $flag ) = $sth->fetchrow ) {
-        if ( $borrower->{'flags'} && $borrower->{'flags'} & 2**$bit ) {
-            $accessflagshash->{$flag} = 1;
-        }
-    }
     $borrower->{'flags'}     = $flags;
-    $borrower->{'authflags'} = $accessflagshash;
 
     $borrower->{'is_expired'} = 0;
     $borrower->{'is_expired'} = 1 if
@@ -213,7 +197,7 @@ sub GetMemberDetails {
       Date_to_Days( Today() ) >
       Date_to_Days( split /-/, $borrower->{'dateexpiry'} );
 
-    return ($borrower);    #, $flags, $accessflagshash);
+    return ($borrower);
 }
 
 =head2 patronflags
