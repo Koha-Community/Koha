@@ -412,8 +412,8 @@ subtest 'add_enrolment_fee_if_needed' => sub {
     $patron->delete;
 };
 
-subtest 'get_overdues' => sub {
-    plan tests => 4;
+subtest 'get_checkouts + get_overdues' => sub {
+    plan tests => 8;
 
     my $library = $builder->build( { source => 'Branch' } );
     my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
@@ -455,8 +455,13 @@ subtest 'get_overdues' => sub {
         }
     );
 
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    my $checkouts = $patron->get_checkouts;
+    is( $checkouts->count, 0, 'get_checkouts should not return any issues for that patron' );
+    is( ref($checkouts), 'Koha::Checkouts', 'get_checkouts should return a Koha::Checkouts object' );
+
     # Not sure how this is useful, but AddIssue pass this variable to different other subroutines
-    $patron = GetMember( borrowernumber => $patron->{borrowernumber} );
+    $patron = GetMember( borrowernumber => $patron->borrowernumber );
 
     my $module = new Test::MockModule('C4::Context');
     $module->mock( 'userenv', sub { { branch => $library->{branchcode} } } );
@@ -466,6 +471,10 @@ subtest 'get_overdues' => sub {
     AddIssue( $patron, $item_3->{barcode} );
 
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    $checkouts = $patron->get_checkouts;
+    is( $checkouts->count, 3, 'get_checkouts should return 3 issues for that patron' );
+    is( ref($checkouts), 'Koha::Checkouts', 'get_checkouts should return a Koha::Checkouts object' );
+
     my $overdues = $patron->get_overdues;
     is( $overdues->count, 2, 'Patron should have 2 overdues');
     is( ref($overdues), 'Koha::Checkouts', 'Koha::Patron->get_overdues should return Koha::Checkouts' );

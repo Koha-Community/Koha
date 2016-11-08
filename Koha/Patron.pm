@@ -501,6 +501,18 @@ sub add_enrolment_fee_if_needed {
     return $enrolment_fee || 0;
 }
 
+=head3 get_checkouts
+
+my $issues = $patron->get_checkouts
+
+=cut
+
+sub get_checkouts {
+    my ($self) = @_;
+    my $issues = $self->_result->issues;
+    return Koha::Checkouts->_new_from_dbic( $issues );
+}
+
 =head3 get_overdues
 
 my $overdue_items = $patron->get_overdues
@@ -512,16 +524,14 @@ Return the overdued items
 sub get_overdues {
     my ($self) = @_;
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $issues = Koha::Checkouts->search(
+    return $self->get_checkouts->search(
         {
-            'me.borrowernumber' => $self->borrowernumber,
             'me.date_due' => { '<' => $dtf->format_datetime(dt_from_string) },
         },
         {
             prefetch => { item => { biblio => 'biblioitems' } },
         }
     );
-    return $issues;
 }
 
 =head3 get_age
