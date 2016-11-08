@@ -136,7 +136,7 @@ if ($do_it) {
 
         #always add firstname and surname for librarian/user
         if ( $result->{'user'} ) {
-            my $userdetails = C4::Members::GetMemberDetails( $result->{'user'} );
+            my $userdetails = C4::Members::GetMember( borrowernumber => $result->{'user'} );
             if ($userdetails) {
                 $result->{'userfirstname'} = $userdetails->{'firstname'};
                 $result->{'usersurname'}   = $userdetails->{'surname'};
@@ -146,7 +146,7 @@ if ($do_it) {
         #add firstname and surname for borrower, when using the CIRCULATION, MEMBERS, FINES
         if ( $result->{module} eq "CIRCULATION" || $result->{module} eq "MEMBERS" || $result->{module} eq "FINES" ) {
             if ( $result->{'object'} ) {
-                my $borrowerdetails = C4::Members::GetMemberDetails( $result->{'object'} );
+                my $borrowerdetails = C4::Members::GetMember( borrowernumber => $result->{'object'} );
                 if ($borrowerdetails) {
                     $result->{'borrowerfirstname'} = $borrowerdetails->{'firstname'};
                     $result->{'borrowersurname'}   = $borrowerdetails->{'surname'};

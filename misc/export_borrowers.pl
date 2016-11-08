@@ -41,7 +41,7 @@ $0 [--field=FIELD [--field=FIELD [...]]] [--separator=CHAR] [--show-header] [--w
 $0 -h
 
     -f, --field=FIELD       Field to export. It is repeatable and has to match
-                            keys returned by the GetMemberDetails function.
+                            keys returned by the GetMember function.
                             If no field is specified, then all fields will be
                             exported.
     -s, --separator=CHAR    This character will be used to separate fields.
@@ -99,7 +99,8 @@ my $csv = Text::CSV->new( { sep_char => $separator, binary => 1 } );
 # If the user did not specify any field to export, we assume he wants them all
 # We retrieve the first borrower informations to get field names
 my ($borrowernumber) = $sth->fetchrow_array or die "No borrower to export";
-my $member = GetMemberDetails($borrowernumber);
+my $member = GetMember($borrowernumber); # FIXME Now is_expired is no longer available
+                                         # We will have to use Koha::Patron and allow method calls
 @fields = keys %$member unless (@fields);
 
 if ($show_header) {
@@ -120,7 +121,7 @@ die "Invalid character at borrower $borrowernumber: ["
 print $csv->string . "\n";
 
 while ( my $borrowernumber = $sth->fetchrow_array ) {
-    $member = GetMemberDetails($borrowernumber);
+    $member = GetMember( borrowernumber => $borrowernumber );
     $csv->combine(
         map {
             ( defined $member->{$_} and !ref $member->{$_} )

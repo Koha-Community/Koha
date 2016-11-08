@@ -265,7 +265,7 @@ if ($findborrower) {
 my $patron;
 if ($borrowernumber) {
     $patron = Koha::Patrons->find( $borrowernumber );
-    $borrower = GetMemberDetails( $borrowernumber, 0 );
+    $borrower = GetMember( borrowernumber => $borrowernumber );
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
 
     # if the expiry date is before today ie they have expired
@@ -444,7 +444,7 @@ if (@$barcodes) {
 
 # reload the borrower info for the sake of reseting the flags.....
 if ($borrowernumber) {
-    $borrower = GetMemberDetails( $borrowernumber, 0 );
+    $borrower = GetMember( borrowernumber => $borrowernumber );
 }
 
 ##################################################################################

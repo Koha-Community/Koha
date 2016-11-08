@@ -70,7 +70,7 @@ sub get_out {
 }
 
 # get borrower information ....
-my ( $borr ) = GetMemberDetails( $borrowernumber );
+my ( $borr ) = GetMember( borrowernumber => $borrowernumber );
 my $patron = Koha::Patrons->find( $borrowernumber );
 
 # check if this user can place a reserve, -1 means use sys pref, 0 means dont block, 1 means block
@@ -449,7 +449,7 @@ foreach my $biblioNum (@biblionumbers) {
 
         # checking reserve
         my ($reservedate,$reservedfor,$expectedAt,undef,$wait) = GetReservesFromItemnumber($itemNum);
-        my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
+        my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $reservedfor );
 
         # the item could be reserved for this borrower vi a host record, flag this
         $reservedfor //= '';

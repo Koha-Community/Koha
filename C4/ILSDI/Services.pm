@@ -456,7 +456,7 @@ sub GetPatronStatus {
 
     # Get Member details
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMemberDetails( $borrowernumber );
+    my $borrower = GetMember( borrowernumber => $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
     # Return the results
@@ -485,7 +485,7 @@ sub GetServices {
 
     # Get the member, or return an error code if not found
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMemberDetails( $borrowernumber );
+    my $borrower = GetMember( borrowernumber => $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
     # Get the item, or return an error code if not found
@@ -557,7 +557,7 @@ sub RenewLoan {
 
     # Get borrower infos or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMemberDetails( $borrowernumber );
+    my $borrower = GetMember( borrowernumber => $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
     # Get the item, or return an error code
@@ -607,7 +607,7 @@ sub HoldTitle {
 
     # Get the borrower or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMemberDetails( $borrowernumber );
+    my $borrower = GetMember( borrowernumber => $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
     # Get the biblio record, or return an error code
@@ -675,7 +675,7 @@ sub HoldItem {
 
     # Get the borrower or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMemberDetails( $borrowernumber );
+    my $borrower = GetMember( borrowernumber => $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
     # Get the biblio or return an error code
@@ -742,7 +742,7 @@ sub CancelHold {
 
     # Get the borrower or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMemberDetails( $borrowernumber );
+    my $borrower = GetMember( borrowernumber => $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
     # Get the reserve or return an error code

@@ -43,7 +43,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 
 # Set informations for the patron
-my $borrower = GetMemberDetails( $borrowernumber, 0 );
+my $borrower = GetMember( borrowernumber => $borrowernumber );
 foreach my $key ( keys %$borrower ) {
     $template->param( $key => $borrower->{$key} );
 }

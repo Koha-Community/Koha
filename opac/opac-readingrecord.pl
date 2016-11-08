@@ -51,7 +51,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr ) = GetMemberDetails( $borrowernumber );
+my ( $borr ) = GetMember( borrowernumber => $borrowernumber );
 
 $template->param(%{$borr});
 

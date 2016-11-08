@@ -60,7 +60,6 @@ BEGIN {
     @ISA = qw(Exporter);
     #Get data
     push @EXPORT, qw(
-        &GetMemberDetails
         &GetMember
 
         &GetMemberIssuesAndFines
@@ -121,56 +120,6 @@ use C4::Members;
 This module contains routines for adding, modifying and deleting members/patrons/borrowers 
 
 =head1 FUNCTIONS
-
-=head2 GetMemberDetails
-
-($borrower) = &GetMemberDetails($borrowernumber, $cardnumber);
-
-Looks up a patron and returns information about him or her. If
-C<$borrowernumber> is true (nonzero), C<&GetMemberDetails> looks
-up the borrower by number; otherwise, it looks up the borrower by card
-number.
-
-C<$borrower> is a reference-to-hash whose keys are the fields of the
-borrowers table in the Koha database. In addition,
-
-=cut
-
-sub GetMemberDetails {
-    my ( $borrowernumber, $cardnumber ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query;
-    my $sth;
-    if ($borrowernumber) {
-        $sth = $dbh->prepare("
-            SELECT borrowers.*,
-                   category_type,
-                   categories.description,
-            FROM borrowers
-            LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
-            WHERE borrowernumber = ?
-        ");
-        $sth->execute($borrowernumber);
-    }
-    elsif ($cardnumber) {
-        $sth = $dbh->prepare("
-            SELECT borrowers.*,
-                   category_type,
-                   categories.description,
-            FROM borrowers
-            LEFT JOIN categories ON borrowers.categorycode = categories.categorycode
-            WHERE cardnumber = ?
-        ");
-        $sth->execute($cardnumber);
-    }
-    else {
-        return;
-    }
-    my $borrower = $sth->fetchrow_hashref;
-    return unless $borrower;
-
-    return ($borrower);
-}
 
 =head2 patronflags
 

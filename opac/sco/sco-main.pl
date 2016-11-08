@@ -106,14 +106,14 @@ my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed) = (
 
 my $issuenoconfirm = 1; #don't need to confirm on issue.
 #warn "issuerid: " . $issuerid;
-my $issuer   = GetMemberDetails($issuerid);
+my $issuer   = GetMember( borrowernumber => $issuerid );
 my $item     = GetItem(undef,$barcode);
 if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
     my $dbh = C4::Context->dbh;
     my $resval;
     ($resval, $patronid) = checkpw($dbh, $patronlogin, $patronpw);
 }
-my $borrower = GetMemberDetails(undef,$patronid);
+my $borrower = GetMember( cardnumber => $patronid );
 
 my $currencySymbol = "";
 if ( my $active_currency = Koha::Acquisition::Currencies->get_active ) {
@@ -131,7 +131,7 @@ if ($op eq "logout") {
 elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
     my ($doreturn) = AddReturn( $barcode, $branch );
     #warn "returnbook: " . $doreturn;
-    $borrower = GetMemberDetails(undef,$patronid);
+    $borrower = GetMember( cardnumber => $patronid );
 }
 elsif ( $op eq "checkout" ) {
     my $impossible  = {};

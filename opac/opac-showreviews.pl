@@ -27,7 +27,7 @@ use C4::Koha;
 use C4::Output;
 use C4::Circulation;
 use C4::Biblio;
-use C4::Members qw/GetMemberDetails/;
+use C4::Members qw/GetMember/;
 use Koha::DateUtils;
 use Koha::Reviews;
 use POSIX qw(ceil floor strftime);
@@ -92,7 +92,7 @@ for my $result (@$reviews){
 	my $bib = &GetBiblioData($biblionumber);
     my $record = GetMarcBiblio($biblionumber);
     my $frameworkcode = GetFrameworkCode($biblionumber);
-	my ( $borr ) = GetMemberDetails( $result->{borrowernumber} );
+    my ( $borr ) = GetMember( borrowernumber => $result->{borrowernumber} );
 	$result->{normalized_upc} = GetNormalizedUPC($record,$marcflavour);
 	$result->{normalized_ean} = GetNormalizedEAN($record,$marcflavour);
 	$result->{normalized_oclc} = GetNormalizedOCLCNumber($record,$marcflavour);

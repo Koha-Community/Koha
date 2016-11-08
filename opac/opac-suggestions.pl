@@ -195,7 +195,7 @@ my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
 
 # Is the person allowed to choose their branch
 if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
-    my ( $borr ) = GetMemberDetails( $borrowernumber );
+    my ( $borr ) = GetMember( borrowernumber => $borrowernumber );
 
 # pass the pickup branch along....
     my $userbranch = '';

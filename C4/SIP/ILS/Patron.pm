@@ -37,8 +37,8 @@ sub new {
         syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
         return;
     }
-    $kp = GetMemberDetails($kp->{borrowernumber});
-    $debug and warn "new Patron (GetMemberDetails): " . Dumper($kp);
+    $kp = GetMember( borrowernumber => $kp->{borrowernumber});
+    $debug and warn "new Patron (GetMember): " . Dumper($kp);
     my $pw        = $kp->{password};
     my $flags     = C4::Members::patronflags( $kp );
     my $debarred  = defined($flags->{DBARRED});

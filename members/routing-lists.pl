@@ -51,7 +51,7 @@ my $branch = C4::Context->userenv->{'branch'};
 # get the borrower information.....
 my $borrower;
 if ($borrowernumber) {
-    $borrower = GetMemberDetails( $borrowernumber, 0 );
+    $borrower = GetMember( borrowernumber => $borrowernumber );
 }
 
 

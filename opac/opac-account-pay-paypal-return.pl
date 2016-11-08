@@ -109,7 +109,7 @@ else {
 }
 
 $template->param(
-    borrower    => GetMemberDetails($borrowernumber),
+    borrower    => GetMember( borrowernumber => $borrowernumber ),
     accountview => 1
 );
 

@@ -85,7 +85,7 @@ if (!$borrowernumber) {
 }
 
 # get borrower information ....
-my ( $borr ) = GetMemberDetails( $borrowernumber );
+my ( $borr ) = GetMember( borrowernumber => $borrowernumber );
 
 my (  $today_year,   $today_month,   $today_day) = Today();
 my ($warning_year, $warning_month, $warning_day) = split /-/, $borr->{'dateexpiry'};

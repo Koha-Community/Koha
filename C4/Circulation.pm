@@ -570,7 +570,7 @@ C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
 
 =over 4
 
-=item C<$borrower> hash with borrower informations (from GetMember or GetMemberDetails)
+=item C<$borrower> hash with borrower informations (from GetMember)
 
 =item C<$barcode> is the bar code of the book being issued.
 
@@ -1230,7 +1230,7 @@ Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this 
 
 =over 4
 
-=item C<$borrower> is a hash with borrower informations (from GetMember or GetMemberDetails).
+=item C<$borrower> is a hash with borrower informations (from GetMember).
 
 =item C<$barcode> is the barcode of the item being issued.
 
@@ -1828,7 +1828,7 @@ sub AddReturn {
 
     my $issue  = GetItemIssue($itemnumber);
     if ($issue and $issue->{borrowernumber}) {
-        $borrower = C4::Members::GetMemberDetails($issue->{borrowernumber})
+        $borrower = C4::Members::GetMember( borrowernumber => $issue->{borrowernumber} )
             or die "Data inconsistency: barcode $barcode (itemnumber:$itemnumber) claims to be issued to non-existent borrowernumber '$issue->{borrowernumber}'\n"
                 . Dumper($issue) . "\n";
     } else {
@@ -2984,7 +2984,7 @@ sub AddRenewal {
 
     # Send a renewal slip according to checkout alert preferencei
     if ( C4::Context->preference('RenewalSendNotice') eq '1' ) {
-        $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 );
+        $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
         my $circulation_alert = 'C4::ItemCirculationAlertPreference';
         my %conditions        = (
             branchcode   => $branch,
@@ -3093,7 +3093,7 @@ sub GetSoonestRenewDate {
     my $itemissue = GetItemIssue($itemnumber) or return;
 
     $borrowernumber ||= $itemissue->{borrowernumber};
-    my $borrower = C4::Members::GetMemberDetails($borrowernumber)
+    my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber )
       or return;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
@@ -3757,7 +3757,7 @@ sub LostItem{
 
     # If a borrower lost the item, add a replacement cost to the their record
     if ( my $borrowernumber = $issues->{borrowernumber} ){
-        my $borrower = C4::Members::GetMemberDetails( $borrowernumber );
+        my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
 
         if (C4::Context->preference('WhenLostForgiveFine')){
             my $fix = _FixOverduesOnReturn($borrowernumber, $itemnumber, 1, 0); # 1, 0 = exemptfine, no-dropbox
@@ -3853,7 +3853,7 @@ sub ProcessOfflineReturn {
 sub ProcessOfflineIssue {
     my $operation = shift;
 
-    my $borrower = C4::Members::GetMemberDetails( undef, $operation->{cardnumber} ); # Get borrower from operation cardnumber
+    my $borrower = C4::Members::GetMember( cardnumber => $operation->{cardnumber} );
 
     if ( $borrower->{borrowernumber} ) {
         my $itemnumber = C4::Items::GetItemnumberFromBarcode( $operation->{barcode} );

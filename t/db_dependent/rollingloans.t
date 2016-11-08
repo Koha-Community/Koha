@@ -41,7 +41,7 @@ SKIP: {
 sub try_issue {
     my ($cardnumber, $item ) = @_;
     my $issuedate = '2011-05-16';
-    my $borrower = GetMemberDetails(0, $cardnumber);
+    my $borrower = GetMember( cardnumber => $cardnumber );
     my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued( $borrower, $item );
     my $issue = AddIssue($borrower, $item, undef, 0, $issuedate);
     return dt_from_string( $issue->due_date() );

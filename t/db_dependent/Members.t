@@ -96,7 +96,7 @@ my %data = (
 my $addmem=AddMember(%data);
 ok($addmem, "AddMember()");
 
-my $member=GetMemberDetails("",$CARDNUMBER)
+my $member = GetMember( cardnumber => $CARDNUMBER )
   or BAIL_OUT("Cannot read member with card $CARDNUMBER");
 
 ok ( $member->{firstname}    eq $FIRSTNAME    &&
@@ -113,7 +113,7 @@ $member->{email}     = $EMAIL;
 $member->{phone}     = $PHONE;
 $member->{emailpro}  = $EMAILPRO;
 ModMember(%$member);
-my $changedmember=GetMemberDetails("",$CARDNUMBER);
+my $changedmember = GetMember( cardnumber => $CARDNUMBER );
 ok ( $changedmember->{firstname} eq $CHANGED_FIRSTNAME &&
      $changedmember->{email}     eq $EMAIL             &&
      $changedmember->{phone}     eq $PHONE             &&

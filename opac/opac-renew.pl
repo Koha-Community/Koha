@@ -70,7 +70,7 @@ else {
                 $branchcode = $item->{'homebranch'};
             }
             elsif ( $renewalbranch eq 'patronhomebranch' ) {
-                my $borrower = GetMemberDetails($borrowernumber);
+                my $borrower = GetMember( borrowernumber => $borrowernumber );
                 $branchcode = $borrower->{'branchcode'};
             }
             elsif ( $renewalbranch eq 'checkoutbranch' ) {

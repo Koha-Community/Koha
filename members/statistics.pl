@@ -48,7 +48,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 
 # Set informations for the patron
-my $borrower = GetMemberDetails( $borrowernumber, 0 );
+my $borrower = GetMember( borrowernumber => $borrowernumber );
 if ( not defined $borrower ) {
     $template->param (unknowuser => 1);
     output_html_with_http_headers $input, $cookie, $template->output;
