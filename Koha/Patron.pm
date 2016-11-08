@@ -295,6 +295,25 @@ sub is_expired {
     return 0;
 }
 
+=head2 is_going_to_expired
+
+my $is_going_to_expired = $patron->is_going_to_expired;
+
+Returns 1 if the patron is going to expired, depending on the NotifyBorrowerDeparture pref or 0
+
+=cut
+
+sub is_going_to_expired {
+    my ($self) = @_;
+
+    my $delay = C4::Context->preference('NotifyBorrowerDeparture') || 0;
+
+    return 0 unless $self->dateexpiry;
+    return 0 if $self->dateexpiry eq '0000-00-00';
+    return 1 if dt_from_string( $self->dateexpiry )->add( days => $delay ) < dt_from_string;
+    return 0;
+}
+
 =head2 update_password
 
 my $updated = $patron->update_password( $userid, $password );

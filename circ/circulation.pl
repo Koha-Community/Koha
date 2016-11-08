@@ -278,10 +278,7 @@ if ($borrowernumber) {
         );
     }
     # check for NotifyBorrowerDeparture
-    elsif ( C4::Context->preference('NotifyBorrowerDeparture') &&
-            Date_to_Days(Add_Delta_Days($warning_year,$warning_month,$warning_day,- C4::Context->preference('NotifyBorrowerDeparture'))) <
-            Date_to_Days( $today_year, $today_month, $today_day ) ) 
-    {
+    elsif ( $patron->is_going_to_expired ) {
         # borrower card soon to expire warn librarian
         $template->param( "warndeparture" => $borrower->{dateexpiry} ,
                         );

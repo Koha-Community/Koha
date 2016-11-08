@@ -190,6 +190,43 @@ subtest 'is_expired' => sub {
     $patron->delete;
 };
 
+subtest 'is_going_to_expired' => sub {
+    plan tests => 8;
+    my $patron = $builder->build({ source => 'Borrower' });
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    $patron->dateexpiry( undef )->store;
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is not set');
+    $patron->dateexpiry( '0000-00-00' )->store;
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is not 0000-00-00');
+    $patron->dateexpiry( dt_from_string )->store;
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is today');
+
+    t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 0);
+    my $dt_from_string = dt_from_string;
+    $patron->dateexpiry( $dt_from_string )->store;
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is today and pref is 0');
+
+    t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 10);
+    $patron->dateexpiry( dt_from_string->add( days => 11 ) )->store;
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 11 days before and pref is 10');
+
+    t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 0);
+    $patron->dateexpiry( dt_from_string->add( days => 10 ) )->store;
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 10 days before and pref is 0');
+
+    t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 10);
+    $patron->dateexpiry( dt_from_string->add( days => 10 ) )->store;
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 10 days before and pref is 10');
+    $patron->delete;
+
+    t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 10);
+    $patron->dateexpiry( dt_from_string->add( days => 20 ) )->store;
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 20 days before and pref is 10');
+
+    $patron->delete;
+};
+
+
 subtest 'renew_account' => sub {
     plan tests => 10;
     my $a_month_ago                = dt_from_string->add( months => -1 )->truncate( to => 'day' );
