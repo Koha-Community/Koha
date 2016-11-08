@@ -89,8 +89,4 @@ sub _type {
     return 'Itemtype';
 }
 
-sub type {
-    return 'Itemtype';
-}
-
 1;
