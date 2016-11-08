@@ -19,9 +19,8 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 
-my $library = $builder->build({
-    source => 'Branch',
-});
+my $library = $builder->build({ source => 'Branch' });
+my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
 
 my $borrowernumber = AddMember(
     firstname =>  'my firstname',
@@ -30,12 +29,19 @@ my $borrowernumber = AddMember(
     branchcode => $library->{branchcode},
 );
 
-
 my $borrower = GetMember( borrowernumber => $borrowernumber );
 my $record = MARC::Record->new();
 my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
 
-my ( undef, undef, $itemnumber ) = AddItem( { homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, barcode => 'i_dont_exist' }, $biblionumber );
+my ( undef, undef, $itemnumber ) = AddItem(
+    {   homebranch    => $library->{branchcode},
+        holdingbranch => $library->{branchcode},
+        barcode       => 'i_dont_exist',
+        itype         => $itemtype
+    },
+    $biblionumber
+);
+
 my $item = GetItem( $itemnumber );
 
 is ( IsItemIssued( $item->{itemnumber} ), 0, "item is not on loan at first" );
