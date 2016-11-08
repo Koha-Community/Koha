@@ -115,3 +115,6 @@ INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES
 INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'DVD', 'DVD', 'DVD');
 
 SET FOREIGN_KEY_CHECKS=1;
+
+-- Housebound
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('HSBND_FREQ','EW','Every week');
