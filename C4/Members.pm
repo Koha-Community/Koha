@@ -146,7 +146,6 @@ sub GetMemberDetails {
             SELECT borrowers.*,
                    category_type,
                    categories.description,
-                   enrolmentperiod
             FROM borrowers
             LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
             WHERE borrowernumber = ?
@@ -158,7 +157,6 @@ sub GetMemberDetails {
             SELECT borrowers.*,
                    category_type,
                    categories.description,
-                   enrolmentperiod
             FROM borrowers
             LEFT JOIN categories ON borrowers.categorycode = categories.categorycode
             WHERE cardnumber = ?
