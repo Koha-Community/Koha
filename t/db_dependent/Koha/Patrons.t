@@ -21,7 +21,10 @@ use Modern::Perl;
 
 use Test::More tests => 14;
 use Test::Warn;
+use DateTime;
 
+use C4::Biblio;
+use C4::Circulation;
 use C4::Members;
 
 use Koha::Holds;
@@ -400,6 +403,71 @@ subtest 'add_enrolment_fee_if_needed' => sub {
         "Juvenile growing and become an young adult, he should pay " . ( $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA )
     );
 
+    $patron->delete;
+};
+
+subtest 'get_overdues' => sub {
+    plan tests => 4;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
+    my $item_1 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                biblionumber  => $biblionumber_1
+            }
+        }
+    );
+    my $item_2 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                biblionumber  => $biblionumber_1
+            }
+        }
+    );
+    my ($biblionumber_2) = AddBiblio( MARC::Record->new, '' );
+    my $item_3 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                biblionumber  => $biblionumber_2
+            }
+        }
+    );
+    my $patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { branchcode => $library->{branchcode} }
+        }
+    );
+
+    # Not sure how this is useful, but AddIssue pass this variable to different other subroutines
+    $patron = GetMember( borrowernumber => $patron->{borrowernumber} );
+
+    my $module = new Test::MockModule('C4::Context');
+    $module->mock( 'userenv', sub { { branch => $library->{branchcode} } } );
+
+    AddIssue( $patron, $item_1->{barcode}, DateTime->now->subtract( days => 1 ) );
+    AddIssue( $patron, $item_2->{barcode}, DateTime->now->subtract( days => 5 ) );
+    AddIssue( $patron, $item_3->{barcode} );
+
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    my $overdues = $patron->get_overdues;
+    is( $overdues->count, 2, 'Patron should have 2 overdues');
+    is( ref($overdues), 'Koha::Issues', 'Koha::Patron->get_overdues should return Koha::Issues' );
+    is( $overdues->next->itemnumber, $item_1->{itemnumber}, 'The issue should be returned in the same order as they have been done, first is correct' );
+    is( $overdues->next->itemnumber, $item_2->{itemnumber}, 'The issue should be returned in the same order as they have been done, second is correct' );
+
+    # Clean stuffs
+    Koha::Issues->search( { borrowernumber => $patron->borrowernumber } )->delete;
     $patron->delete;
 };
 

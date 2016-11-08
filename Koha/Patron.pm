@@ -496,6 +496,29 @@ sub add_enrolment_fee_if_needed {
     return $enrolment_fee || 0;
 }
 
+=head3 get_overdues
+
+my $overdue_items = $patron->get_overdues
+
+Return the overdued items
+
+=cut
+
+sub get_overdues {
+    my ($self) = @_;
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $issues = Koha::Issues->search(
+        {
+            'me.borrowernumber' => $self->borrowernumber,
+            'me.date_due' => { '<' => $dtf->format_datetime(dt_from_string) },
+        },
+        {
+            prefetch => { item => { biblio => 'biblioitems' } },
+        }
+    );
+    return $issues;
+}
+
 =head3 type
 
 =cut
