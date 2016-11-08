@@ -22,11 +22,9 @@ my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
-my $library = $builder->build({
-    source => 'Branch',
-});
+my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+my $itemtype   = $builder->build({ source => 'Itemtype' })->{itemtype};
 
-my $branchcode = $library->{branchcode};
 local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
 my $userenv->{branch} = $branchcode;
 *C4::Context::userenv = \&Mock_userenv;
@@ -62,6 +60,7 @@ my (undef, undef, $itemnumber) = AddItem({
         homebranch => $branchcode,
         holdingbranch => $branchcode,
         barcode => $barcode,
+        itype => $itemtype
     } , $biblionumber);
 
 # clear any holidays to avoid throwing off the suspension day
@@ -102,6 +101,7 @@ is(
 );
 DelDebarment( $debarments->[0]->{borrower_debarment_id} );
 
+$schema->storage->txn_rollback;
 
 # C4::Context->userenv
 sub Mock_userenv {
