@@ -268,15 +268,8 @@ if ($borrowernumber) {
     $borrower = GetMemberDetails( $borrowernumber, 0 );
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
 
-    # Warningdate is the date that the warning starts appearing
-    my (  $today_year,   $today_month,   $today_day) = Today();
-    my ($warning_year, $warning_month, $warning_day) = split /-/, $borrower->{'dateexpiry'};
-    my (  $enrol_year,   $enrol_month,   $enrol_day) = split /-/, $borrower->{'dateenrolled'};
     # if the expiry date is before today ie they have expired
-    if ( !$borrower->{'dateexpiry'} || $warning_year*$warning_month*$warning_day==0
-        || Date_to_Days($today_year,     $today_month, $today_day  ) 
-         > Date_to_Days($warning_year, $warning_month, $warning_day) )
-    {
+    if ( $patron->is_expired ) {
         #borrowercard expired, no issues
         $template->param(
             noissues => ($force_allow_issue) ? 0 : "1",
