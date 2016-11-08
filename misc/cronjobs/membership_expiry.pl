@@ -167,7 +167,13 @@ if( !$expdays ) {
 
 my $admin_adress = C4::Context->preference('KohaAdminEmailAddress');
 warn 'getting upcoming membership expires' if $verbose;
-my $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires({ 'me.branchcode' => $branch, before => $before, after => $after });
+my $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires(
+    {
+        ( $branch ? ( 'me.branchcode' => $branch ) : () ),
+        before => $before,
+        after  => $after,
+    }
+);
 warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
     if $verbose;
 
