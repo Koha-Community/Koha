@@ -11826,6 +11826,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '3.22.12.001';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE language_descriptions SET description = 'Čeština' WHERE subtag = 'cs' AND type = 'language' AND lang = 'cs'
+    });
+
+    print "Upgrade to $DBversion done (Bug 17518: Displayed language name for Czech is wrong)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
