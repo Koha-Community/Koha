@@ -479,9 +479,12 @@ subtest 'get_overdues' => sub {
 
 subtest 'get_age' => sub {
     plan tests => 6;
+
     my $patron = $builder->build( { source => 'Borrower' } );
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+
     my $today = dt_from_string;
+
     $patron->dateofbirth( $today->clone->add( years => -12, months => -6, days => -1 ) );
     is( $patron->get_age, 12, 'Patron should be 12' );
     $patron->dateofbirth( $today->clone->add( years => -18, months => 0, days => 1 ) );
@@ -494,6 +497,30 @@ subtest 'get_age' => sub {
     is( $patron->get_age, 19, 'Patron should be 19 again' );
     $patron->dateofbirth( $today->clone->add( years => 0,   months => -1, days => -1 ) );
     is( $patron->get_age, 0, 'Patron is a newborn child' );
+
+    $patron->delete;
+};
+
+subtest 'get_account_lines' => sub {
+    plan tests => 2;
+
+    my $patron = $builder->build({source => 'Borrower'});
+
+    my $accountline_1 = $builder->build({ source => 'Accountline',
+        value  => { borrowernumber => $patron->{borrowernumber},
+                    amount => 42,
+                    amountoutstanding => 42 }
+    });
+    my $accountline_2 = $builder->build({ source => 'Accountline',
+        value  => { borrowernumber => $patron->{borrowernumber},
+                    amount => -13,
+                    amountoutstanding => -13 }
+    });
+
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    my $account_lines = $patron->get_account_lines;
+    is( $account_lines->count, 2, 'There should have 2 account lines for that patron' );
+    is( ref($account_lines),   'Koha::Account::Lines', 'get_account_lines should return a Koha::Account::Lines object' );
 
     $patron->delete;
 };

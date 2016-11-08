@@ -548,6 +548,18 @@ sub get_age {
     return $age;
 }
 
+=head3 get_account_lines
+
+my $fines = $patron->get_account_lines
+
+=cut
+
+sub get_account_lines {
+    my ($self) = @_;
+    my $account_lines = $self->_result->accountlines;
+    return Koha::Account::Lines->_new_from_dbic($account_lines);
+}
+
 =head3 type
 
 =cut
