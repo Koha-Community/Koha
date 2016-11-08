@@ -62,7 +62,6 @@ BEGIN {
     push @EXPORT, qw(
         &GetMember
 
-        &GetMemberIssuesAndFines
         &GetPendingIssues
         &GetAllIssues
 
@@ -341,47 +340,6 @@ sub GetMember {
 
     return;
 }
-
-=head2 GetMemberIssuesAndFines
-
-  ($overdue_count, $issue_count, $total_fines) = &GetMemberIssuesAndFines($borrowernumber);
-
-Returns aggregate data about items borrowed by the patron with the
-given borrowernumber.
-
-C<&GetMemberIssuesAndFines> returns a three-element array.  C<$overdue_count> is the
-number of overdue items the patron currently has borrowed. C<$issue_count> is the
-number of books the patron currently has borrowed.  C<$total_fines> is
-the total fine currently due by the borrower.
-
-=cut
-
-#'
-sub GetMemberIssuesAndFines {
-    my ( $borrowernumber ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "SELECT COUNT(*) FROM issues WHERE borrowernumber = ?";
-
-    $debug and warn $query."\n";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
-    my $issue_count = $sth->fetchrow_arrayref->[0];
-
-    $sth = $dbh->prepare(
-        "SELECT COUNT(*) FROM issues 
-         WHERE borrowernumber = ? 
-         AND date_due < now()"
-    );
-    $sth->execute($borrowernumber);
-    my $overdue_count = $sth->fetchrow_arrayref->[0];
-
-    $sth = $dbh->prepare("SELECT SUM(amountoutstanding) FROM accountlines WHERE borrowernumber = ?");
-    $sth->execute($borrowernumber);
-    my $total_fines = $sth->fetchrow_arrayref->[0];
-
-    return ($overdue_count, $issue_count, $total_fines);
-}
-
 
 =head2 ModMember
 

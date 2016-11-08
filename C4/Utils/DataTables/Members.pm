@@ -2,7 +2,6 @@ package C4::Utils::DataTables::Members;
 
 use Modern::Perl;
 use C4::Context;
-use C4::Members qw/GetMemberIssuesAndFines/;
 use C4::Utils::DataTables;
 use Koha::DateUtils;
 
@@ -169,14 +168,18 @@ sub search {
 
     # Get some information on patrons
     foreach my $patron (@$patrons) {
-        ($patron->{overdues}, $patron->{issues}, $patron->{fines}) =
-            GetMemberIssuesAndFines($patron->{borrowernumber});
+        my $patron_object = Koha::Patrons->find( $patron->{borrowernumber} );
+        $patron->{overdues} = $patron_object->get_overdues->count;
+        $patron->{issues} = $patron_object->get_issues->count;
+        my $balance = $patron_object->get_account_lines->get_balance;
+        # FIXME Should be formatted from the template
+        $patron->{fines} = sprintf("%.2f", $balance);
+
         if($patron->{dateexpiry} and $patron->{dateexpiry} ne '0000-00-00') {
             $patron->{dateexpiry} = output_pref( { dt => dt_from_string( $patron->{dateexpiry}, 'iso'), dateonly => 1} );
         } else {
             $patron->{dateexpiry} = '';
         }
-        $patron->{fines} = sprintf("%.2f", $patron->{fines} || 0);
     }
 
     return {

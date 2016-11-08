@@ -324,9 +324,12 @@ if ($barcode) {
         push( @inputloop, \%input );
 
         if ( C4::Context->preference("FineNotifyAtCheckin") ) {
-            my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrower->{'borrowernumber'} );
-            if ($fines && $fines > 0) {
-                $template->param( fines => sprintf("%.2f",$fines) );
+            my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+            my $account_lines = $patron->get_account_lines;
+            my $balance = $patron->get_account_lines->get_balance;
+
+            if ($balance > 0) {
+                $template->param( fines => sprintf("%.2f", $balance) );
                 $template->param( fineborrowernumber => $borrower->{'borrowernumber'} );
             }
         }

@@ -266,7 +266,10 @@ my $patron;
 if ($borrowernumber) {
     $patron = Koha::Patrons->find( $borrowernumber );
     $borrower = GetMember( borrowernumber => $borrowernumber );
-    my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
+    my $overdues = $patron->get_overdues;
+    my $issues = $patron->get_issues;
+    my $balance = $patron->get_account_lines->get_balance;
+
 
     # if the expiry date is before today ie they have expired
     if ( $patron->is_expired ) {
@@ -287,9 +290,9 @@ if ($borrowernumber) {
         }
     }
     $template->param(
-        overduecount => $od,
-        issuecount   => $issue,
-        finetotal    => $fines
+        overduecount => $overdues->count,
+        issuecount   => $issues->count,
+        finetotal    => $balance,
     );
 
     if ( $patron and $patron->is_debarred ) {
@@ -407,9 +410,6 @@ if (@$barcodes) {
         }
     }
 
-    # FIXME If the issue is confirmed, we launch another time GetMemberIssuesAndFines, now display the issue count after issue
-    my ( $od, $issue, $fines ) = GetMemberIssuesAndFines($borrowernumber);
-
     if ($question->{RESERVE_WAITING} or $question->{RESERVED}){
         $template->param(
             reserveborrowernumber => $question->{'resborrowernumber'}
@@ -421,8 +421,9 @@ if (@$barcodes) {
     );
 
 
-
-    $template_params->{issuecount} = $issue;
+    # FIXME If the issue is confirmed, we launch another time get_issues->count, now display the issue count after issue
+    $patron = Koha::Patrons->find( $borrowernumber );
+    $template_params->{issuecount} = $patron->get_issues->count;
 
     if ( $iteminfo ) {
         $iteminfo->{subtitle} = GetRecordValue('subtitle', GetMarcBiblio($iteminfo->{biblionumber}), GetFrameworkCode($iteminfo->{biblionumber}));

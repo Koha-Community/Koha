@@ -119,8 +119,14 @@ my $borrowernumber = $input->param('borrowernumber');
 my $error = $input->param('error');
 $template->param( error => $error ) if ( $error );
 
-my ( $od, $issue, $fines ) = GetMemberIssuesAndFines($borrowernumber);
-$template->param( issuecount => $issue, fines => $fines );
+my $patron        = Koha::Patrons->find($borrowernumber);
+my $issues        = $patron->get_issues;
+my $balance       = $patron->get_account_lines->get_balance;
+$template->param(
+    issuecount => $issues->count,
+    fines      => $balance,
+);
+
 
 my $data = GetMember( 'borrowernumber' => $borrowernumber );
 
@@ -148,7 +154,7 @@ for (qw(gonenoaddress lost borrowernotes)) {
 	 $data->{$_} and $template->param(flagged => 1) and last;
 }
 
-if ( Koha::Patrons->find( $borrowernumber )->is_debarred ) {
+if ( $patron->is_debarred ) {
     $template->param( 'userdebarred' => 1, 'flagged' => 1 );
     my $debar = $data->{'debarred'};
     if ( $debar ne "9999-12-31" ) {
@@ -165,7 +171,6 @@ if ( $category_type eq 'C') {
     $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
 }
 
-my $patron = Koha::Patrons->find($data->{borrowernumber});
 my @relatives;
 if ( my $guarantor = $patron->guarantor ) {
     $template->param( guarantor => $guarantor );
@@ -321,7 +326,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     $template->param(TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"));
 }
 
-# in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children) 
+# in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children)
 $template->param( $data->{'categorycode'} => 1 );
 $template->param(
     patron          => $patron,

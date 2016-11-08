@@ -2,7 +2,6 @@ package C4::Utils::DataTables::VirtualShelves;
 
 use Modern::Perl;
 use C4::Context;
-use C4::Members qw/GetMemberIssuesAndFines/;
 use C4::Utils::DataTables;
 use Koha::Virtualshelves;
 
