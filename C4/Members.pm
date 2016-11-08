@@ -146,7 +146,6 @@ sub GetMemberDetails {
             SELECT borrowers.*,
                    category_type,
                    categories.description,
-                   reservefee,
                    enrolmentperiod
             FROM borrowers
             LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
@@ -159,7 +158,6 @@ sub GetMemberDetails {
             SELECT borrowers.*,
                    category_type,
                    categories.description,
-                   reservefee,
                    enrolmentperiod
             FROM borrowers
             LEFT JOIN categories ON borrowers.categorycode = categories.categorycode

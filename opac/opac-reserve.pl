@@ -85,8 +85,9 @@ if ( $patron->category->effective_BlockExpiredPatronOpacActions ) {
 }
 
 # Pass through any reserve charge
-if ($borr->{reservefee} > 0){
-    $template->param( RESERVE_CHARGE => sprintf("%.2f",$borr->{reservefee}));
+my $reservefee = $patron->category->reservefee;
+if ( $reservefee > 0){
+    $template->param( RESERVE_CHARGE => sprintf("%.2f",$reservefee));
 }
 
 my $itemTypes = GetItemTypes();
