@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 20;
 use Test::MockModule;
 use Test::Warn;
 
@@ -363,6 +363,41 @@ subtest "makepartialpayment() tests" => sub {
         is( $stat->borrowernumber, $borrowernumber, "Correct borrowernumber logged to statistics" );
         is( $stat->value, "$partialamount" . "\.0000", "Correct amount logged to statistics" );
     }
+};
+
+subtest 'get_balance' => sub {
+    plan tests => 2;
+
+    my $patron = $builder->build({source => 'Borrower'});
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    my $account_lines = $patron->get_account_lines;
+    is( $account_lines->get_balance, 0, 'get_balance should return 0 if the patron does not have fines' );
+
+    my $accountline_1 = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber    => $patron->borrowernumber,
+                amount            => 42,
+                amountoutstanding => 42
+            }
+        }
+    );
+    my $accountline_2 = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber    => $patron->borrowernumber,
+                amount            => -13,
+                amountoutstanding => -13
+            }
+        }
+    );
+
+    my $balance = $patron->get_account_lines->get_balance;
+    is( int($balance), 29, 'get_balance should return the correct value');
+
+    $patron->delete;
 };
 
 1;

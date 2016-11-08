@@ -36,6 +36,26 @@ Koha::Account::Lines - Koha Account Line Object set class
 
 =cut
 
+=head3 get_balance
+
+my $balance = $self->get_balance
+
+Return the balance (sum of amountoutstanding columns)
+
+=cut
+
+sub get_balance {
+    my ($self) = @_;
+    my $fines = $self->search(
+        {},
+        {
+            select => [ { sum => 'amountoutstanding' } ],
+            as => ['total_amountoutstanding']
+        }
+    );
+    return $fines->count ? $fines->next->get_column('total_amountoutstanding') : 0;
+}
+
 =head3 type
 
 =cut
