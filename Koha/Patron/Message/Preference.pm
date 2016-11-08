@@ -156,6 +156,28 @@ sub new_from_default {
     return $self;
 }
 
+=head3 message_name
+
+$preference->message_name
+
+Gets message_name for this messaging preference.
+
+Setter not implemented.
+
+=cut
+
+sub message_name {
+    my ($self) = @_;
+
+    if ($self->{'_message_name'}) {
+        return $self->{'_message_name'};
+    }
+    $self->{'_message_name'} = Koha::Patron::Message::Attributes->find({
+        message_attribute_id => $self->message_attribute_id,
+    })->message_name;
+    return $self->{'_message_name'};
+}
+
 =head3 message_transport_types
 
 $preference->message_transport_types
@@ -385,8 +407,9 @@ sub _validate_message_transport_types {
                     is_digest => $tmp->{'wants_digest'},
             })) {
                 Koha::Exceptions::BadParameter->throw(
-                    error => "Message transport option for '$type' (".
-                    ($tmp->{'wants_digest'} ? 'digest':'no digest').") does not exist",
+                    error => "Message transport option '$type' (".
+                    ($tmp->{'wants_digest'} ? 'digest':'no digest').") for ".
+                    $self->message_name . 'does not exist',
                     parameter => 'message_transport_type',
                 );
             }

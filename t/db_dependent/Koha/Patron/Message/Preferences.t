@@ -19,8 +19,7 @@
 
 use Modern::Perl;
 
-
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -318,6 +317,26 @@ subtest 'Test Koha::Patron::Message::Preference->message_transport_types' => sub
 
         $schema->storage->txn_rollback;
     };
+};
+
+subtest 'Test Koha::Patron::Message::Preference->message_name' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $patron      = build_a_test_patron();
+    my $attribute   = build_a_test_attribute();
+    my ($preference, $mtt1, $mtt2) = build_a_test_complete_preference({
+        patron => $patron,
+        attr   => $attribute,
+    });
+    my $message_name_pref = Koha::Patron::Message::Preferences->search_with_message_name({
+        borrowernumber => $patron->{'borrowernumber'},
+        message_name => $attribute->message_name,
+    })->next;
+    is($message_name_pref->message_name, $attribute->message_name, "Found preference with message_name");
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Test adding a new preference with invalid parameters' => sub {

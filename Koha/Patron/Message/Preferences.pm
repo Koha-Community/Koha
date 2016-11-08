@@ -20,6 +20,7 @@ package Koha::Patron::Message::Preferences;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Patron::Message::Attributes;
 use Koha::Patron::Message::Preference;
 use Koha::Patron::Message::Transports;
 
@@ -34,6 +35,32 @@ Koha::Patron::Message::Preferences - Koha Patron Message Preferences object clas
 =head2 Class Methods
 
 =cut
+
+=head3 find_with_message_name
+
+Koha::Patron::Message::Preferences->find_with_message_name({
+    borrowernumber => 123,
+    message_name => 'Hold_Filled',
+});
+
+Converts C<message_name> into C<message_attribute_id> and continues find.
+
+=cut
+
+sub find_with_message_name {
+    my ($self, $id) = @_;
+
+    if (ref($id) eq "HASH" && $id->{'message_name'}) {
+        my $attr = Koha::Patron::Message::Attributes->find({
+            message_name => $id->{'message_name'},
+        });
+        $id->{'message_attribute_id'} = ($attr) ?
+                    $attr->message_attribute_id : undef;
+        delete $id->{'message_name'};
+    }
+
+    return $self->SUPER::find($id);
+}
 
 =head3 get_options
 
@@ -67,6 +94,34 @@ sub get_options {
     @return = sort { $a->{message_attribute_id} <=> $b->{message_attribute_id} } @return;
 
     return \@return;
+}
+
+=head3 search
+
+Koha::Patron::Message::Preferences->search_with_message_name({
+    borrowernumber => 123,
+    message_name => 'Hold_Filled',
+});
+
+Converts C<message_name> into C<message_attribute_id> and continues search. Use
+Koha::Patron::Message::Preferences->search with a proper join for more complicated
+searches.
+
+=cut
+
+sub search_with_message_name {
+    my ($self, $params, $attributes) = @_;
+
+    if (ref($params) eq "HASH" && $params->{'message_name'}) {
+        my $attr = Koha::Patron::Message::Attributes->find({
+            message_name => $params->{'message_name'},
+        });
+        $params->{'message_attribute_id'} = ($attr) ?
+                    $attr->message_attribute_id : undef;
+        delete $params->{'message_name'};
+    }
+
+    return $self->SUPER::search($params, $attributes);
 }
 
 =head3 type
