@@ -22,6 +22,13 @@ my $dbh = C4::Context->dbh;
 my $library = $builder->build({ source => 'Branch' });
 my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
 
+my $module = new Test::MockModule('C4::Context');
+$module->mock('userenv', sub {
+    {
+       branch => $library->{branchcode}
+    }
+});
+
 my $borrowernumber = AddMember(
     firstname =>  'my firstname',
     surname => 'my surname',
