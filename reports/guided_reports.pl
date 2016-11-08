@@ -826,6 +826,7 @@ elsif ($phase eq 'Export'){
         } else {
             my $delimiter = C4::Context->preference('delimiter') || ',';
             if ( $format eq 'csv' ) {
+                $delimiter = "\t" if $delimiter eq 'tabulation';
                 $type = 'application/csv';
                 my $csv = Text::CSV::Encoded->new({ encoding_out => 'UTF-8', sep_char => $delimiter});
                 $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
