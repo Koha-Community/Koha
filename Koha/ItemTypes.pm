@@ -43,10 +43,6 @@ sub _type {
     return 'Itemtype';
 }
 
-sub type {
-    return 'Itemtype';
-}
-
 sub object_class {
     return 'Koha::ItemType';
 }
