@@ -4,6 +4,7 @@ use Modern::Perl;
 use C4::Context;
 use DateTime;
 use Koha::DateUtils;
+use Koha::IssuingRules;
 use Koha::Library;
 
 use Test::More tests => 10;
@@ -15,7 +16,6 @@ can_ok(
     'C4::Circulation',
     qw(
       GetHardDueDate
-      GetIssuingRule
       GetLoanLength
       )
 );
@@ -143,6 +143,8 @@ my $sampleissuingrule1 = {
     opacitemholds      => 'N',
     cap_fine_to_replacement_price => 0,
     holds_per_record   => 1,
+    article_requests   => 'yes',
+    no_auto_renewal_after => undef,
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
@@ -175,6 +177,7 @@ my $sampleissuingrule2 = {
     opacitemholds      => 'Y',
     cap_fine_to_replacement_price => 0,
     holds_per_record   => 1,
+    article_requests   => 'yes',
 };
 my $sampleissuingrule3 = {
     branchcode         => $samplebranch1->{branchcode},
@@ -207,6 +210,7 @@ my $sampleissuingrule3 = {
     opacitemholds      => 'F',
     cap_fine_to_replacement_price => 0,
     holds_per_record   => 1,
+    article_requests   => 'yes',
 };
 
 $query = 'INSERT INTO issuingrules (
@@ -238,8 +242,9 @@ $query = 'INSERT INTO issuingrules (
                 maxsuspensiondays,
                 onshelfholds,
                 opacitemholds,
-                cap_fine_to_replacement_price
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                cap_fine_to_replacement_price,
+                article_requests
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 my $sth = $dbh->prepare($query);
 $sth->execute(
     $sampleissuingrule1->{branchcode},
@@ -271,6 +276,7 @@ $sth->execute(
     $sampleissuingrule1->{onshelfholds},
     $sampleissuingrule1->{opacitemholds},
     $sampleissuingrule1->{cap_fine_to_replacement_price},
+    $sampleissuingrule1->{article_requests},
 );
 $sth->execute(
     $sampleissuingrule2->{branchcode},
@@ -302,6 +308,7 @@ $sth->execute(
     $sampleissuingrule2->{onshelfholds},
     $sampleissuingrule2->{opacitemholds},
     $sampleissuingrule2->{cap_fine_to_replacement_price},
+    $sampleissuingrule2->{article_requests},
 );
 $sth->execute(
     $sampleissuingrule3->{branchcode},
@@ -333,13 +340,11 @@ $sth->execute(
     $sampleissuingrule3->{onshelfholds},
     $sampleissuingrule3->{opacitemholds},
     $sampleissuingrule3->{cap_fine_to_replacement_price},
+    $sampleissuingrule3->{article_requests},
 );
 
 is_deeply(
-    GetIssuingRule(
-        $samplecat->{categorycode},
-        'Book', $samplebranch1->{branchcode}
-    ),
+    Koha::IssuingRules->find({ categorycode => $samplecat->{categorycode}, itemtype => 'Book', branchcode => $samplebranch1->{branchcode} })->unblessed,
     $sampleissuingrule1,
     "GetIssuingCharge returns issuingrule1's informations"
 );

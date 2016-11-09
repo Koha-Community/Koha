@@ -551,18 +551,24 @@ ok( C4::Reserves::IsAvailableForItemLevelRequest($item, $borrower), "Reserving a
 my $itype = C4::Reserves::_get_itype($item);
 my $categorycode = $borrower->{categorycode};
 my $holdingbranch = $item->{holdingbranch};
-my $rule = C4::Circulation::GetIssuingRule($categorycode, $itype, $holdingbranch);
+my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+    {
+        categorycode => $categorycode,
+        itemtype     => $itype,
+        branchcode   => $holdingbranch
+    }
+);
 
 $dbh->do(
     "UPDATE issuingrules SET onshelfholds = 1 WHERE categorycode = ? AND itemtype= ? and branchcode = ?",
     undef,
-    $rule->{categorycode}, $rule->{itemtype}, $rule->{branchcode}
+    $issuing_rule->categorycode, $issuing_rule->itemtype, $issuing_rule->branchcode
 );
 ok( C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() allowed" );
 $dbh->do(
     "UPDATE issuingrules SET onshelfholds = 0 WHERE categorycode = ? AND itemtype= ? and branchcode = ?",
     undef,
-    $rule->{categorycode}, $rule->{itemtype}, $rule->{branchcode}
+    $issuing_rule->categorycode, $issuing_rule->itemtype, $issuing_rule->branchcode
 );
 ok( !C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() disallowed" );
 

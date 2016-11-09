@@ -24,7 +24,7 @@ use Carp;
 use Koha::Database;
 
 use C4::Context;
-use C4::Circulation qw(GetIssuingRule);
+use Koha::IssuingRules;
 use Koha::Item::Transfer;
 use Koha::Patrons;
 use Koha::Libraries;
@@ -164,9 +164,10 @@ sub article_request_type {
       :                                      undef;
     my $borrowertype = $borrower->categorycode;
     my $itemtype = $self->effective_itemtype();
-    my $rules = C4::Circulation::GetIssuingRule( $borrowertype, $itemtype, $branchcode );
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrowertype, itemtype => $itemtype, branchcode => $branchcode });
 
-    return $rules->{article_requests} || q{};
+    return q{} unless $issuing_rule;
+    return $issuing_rule->article_requests || q{}
 }
 
 =head3 type

@@ -45,7 +45,6 @@ can_ok(
       AddReturn
       GetBiblioIssues
       GetIssuingCharges
-      GetIssuingRule
       GetItemIssue
       GetItemIssues
       GetOpenIssue
@@ -242,7 +241,7 @@ my $issue3 = C4::Circulation::AddIssue( $borrower_1, $barcode_1 );
 @renewcount = C4::Circulation::GetRenewCount();
 is_deeply(
     \@renewcount,
-    [ 0, undef, 0 ], # FIXME Need to be fixed
+    [ 0, undef, 0 ], # FIXME Need to be fixed, see FIXME in GetRenewCount
     "Without issuing rules and without parameter, GetRenewCount returns renewcount = 0, renewsallowed = undef, renewsleft = 0"
 );
 @renewcount = C4::Circulation::GetRenewCount(-1);

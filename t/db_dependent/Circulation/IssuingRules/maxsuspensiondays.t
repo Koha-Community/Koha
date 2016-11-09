@@ -3,7 +3,6 @@ use Test::More tests => 2;
 
 use MARC::Record;
 use MARC::Field;
-use Test::MockModule;
 use C4::Context;
 
 use C4::Biblio qw( AddBiblio );
@@ -29,16 +28,21 @@ local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
 my $userenv->{branch} = $branchcode;
 *C4::Context::userenv = \&Mock_userenv;
 
-my $circulation_module = Test::MockModule->new('C4::Circulation');
-
 # Test without maxsuspensiondays set
-$circulation_module->mock('GetIssuingRule', sub {
-        return {
-            firstremind => 0,
-            finedays => 2,
-            lengthunit => 'days',
+Koha::IssuingRules->search->delete;
+$builder->build(
+    {
+        source => 'Issuingrule',
+        value  => {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            firstremind  => 0,
+            finedays     => 2,
+            lengthunit   => 'days',
         }
-});
+    }
+);
 
 my $borrowernumber = AddMember(
     firstname =>  'my firstname',
@@ -82,14 +86,9 @@ is(
 DelDebarment( $debarments->[0]->{borrower_debarment_id} );
 
 # Test with maxsuspensiondays = 10 days
-$circulation_module->mock('GetIssuingRule', sub {
-        return {
-            firstremind => 0,
-            finedays => 2,
-            maxsuspensiondays => 10,
-            lengthunit => 'days',
-        }
-});
+my $issuing_rule = Koha::IssuingRules->search->next;
+$issuing_rule->maxsuspensiondays( 10 )->store;
+
 my $daysafter10 = dt_from_string->add_duration(DateTime::Duration->new(days => 10));
 AddIssue( $borrower, $barcode, $daysago20 );
 AddReturn( $barcode, $branchcode );

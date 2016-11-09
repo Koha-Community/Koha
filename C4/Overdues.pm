@@ -36,6 +36,7 @@ use C4::Debug;
 use Koha::DateUtils;
 use Koha::Account::Line;
 use Koha::Account::Lines;
+use Koha::IssuingRules;
 use Koha::Libraries;
 
 use vars qw(@ISA @EXPORT);
@@ -73,9 +74,6 @@ BEGIN {
     push @EXPORT, qw(
       &GetIssuesIteminfo
     );
-
-    # &GetIssuingRules - delete.
-    # use C4::Circulation::GetIssuingRule instead.
 
     # subs to move to Biblio.pm
     push @EXPORT, qw(
@@ -251,26 +249,28 @@ sub CalcFine {
     my $start_date = $due_dt->clone();
     # get issuingrules (fines part will be used)
     my $itemtype = $item->{itemtype} || $item->{itype};
-    my $data = C4::Circulation::GetIssuingRule($bortype, $itemtype, $branchcode);
-    my $fine_unit = $data->{lengthunit};
-    $fine_unit ||= 'days';
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $bortype, itemtype => $itemtype, branchcode => $branchcode });
+
+    return unless $issuing_rule; # If not rule exist, there is no fine
+
+    my $fine_unit = $issuing_rule->lengthunit || 'days';
 
     my $chargeable_units = get_chargeable_units($fine_unit, $start_date, $end_date, $branchcode);
-    my $units_minus_grace = $chargeable_units - $data->{firstremind};
+    my $units_minus_grace = $chargeable_units - $issuing_rule->firstremind;
     my $amount = 0;
-    if ( $data->{'chargeperiod'} && ( $units_minus_grace > 0 ) ) {
+    if ( $issuing_rule->chargeperiod && ( $units_minus_grace > 0 ) ) {
         my $units = C4::Context->preference('FinesIncludeGracePeriod') ? $chargeable_units : $units_minus_grace;
-        my $charge_periods = $units / $data->{'chargeperiod'};
+        my $charge_periods = $units / $issuing_rule->chargeperiod;
         # If chargeperiod_charge_at = 1, we charge a fine at the start of each charge period
         # if chargeperiod_charge_at = 0, we charge at the end of each charge period
-        $charge_periods = $data->{'chargeperiod_charge_at'} == 1 ? ceil($charge_periods) : floor($charge_periods);
-        $amount = $charge_periods * $data->{'fine'};
+        $charge_periods = $issuing_rule->chargeperiod_charge_at == 1 ? ceil($charge_periods) : floor($charge_periods);
+        $amount = $charge_periods * $issuing_rule->fine;
     } # else { # a zero (or null) chargeperiod or negative units_minus_grace value means no charge. }
 
-    $amount = $data->{overduefinescap} if $data->{overduefinescap} && $amount > $data->{overduefinescap};
-    $amount = $item->{replacementprice} if ( $data->{cap_fine_to_replacement_price} && $item->{replacementprice} && $amount > $item->{replacementprice} );
-    $debug and warn sprintf("CalcFine returning (%s, %s, %s, %s)", $amount, $data->{'chargename'}, $units_minus_grace, $chargeable_units);
-    return ($amount, $data->{'chargename'}, $units_minus_grace, $chargeable_units);
+    $amount = $issuing_rule->overduefinescap if $issuing_rule->overduefinescap && $amount > $issuing_rule->overduefinescap;
+    $amount = $item->{replacementprice} if ( $issuing_rule->cap_fine_to_replacement_price && $item->{replacementprice} && $amount > $item->{replacementprice} );
+    $debug and warn sprintf("CalcFine returning (%s, %s, %s, %s)", $amount, $issuing_rule->chargename, $units_minus_grace, $chargeable_units);
+    return ($amount, $issuing_rule->chargename, $units_minus_grace, $chargeable_units);
     # FIXME: chargename is NEVER populated anywhere.
 }
 

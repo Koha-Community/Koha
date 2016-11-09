@@ -43,6 +43,7 @@ use Koha::Hold;
 use Koha::Old::Hold;
 use Koha::Holds;
 use Koha::Libraries;
+use Koha::IssuingRules;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
@@ -1579,8 +1580,8 @@ sub _get_itype {
 sub _OnShelfHoldsAllowed {
     my ($itype,$borrowercategory,$branchcode) = @_;
 
-    my $rule = C4::Circulation::GetIssuingRule($borrowercategory, $itype, $branchcode);
-    return $rule->{onshelfholds};
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrowercategory, itemtype => $itype, branchcode => $branchcode });
+    return $issuing_rule ? $issuing_rule->onshelfholds : undef;
 }
 
 =head2 AlterPriority

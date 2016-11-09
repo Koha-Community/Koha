@@ -1,6 +1,7 @@
 package Koha::IssuingRules;
 
 # Copyright Vaara-kirjastot 2015
+# Copyright Koha Development Team 2016
 #
 # This file is part of Koha.
 #
@@ -18,18 +19,99 @@ package Koha::IssuingRules;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
+
 use Koha::Database;
+
+use Koha::IssuingRule;
+
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::IssuingRules - Koha IssuingRules object set class
+Koha::IssuingRules - Koha IssuingRule Object set class
 
 =head1 API
 
 =head2 Class Methods
 
 =cut
+
+sub get_effective_issuing_rule {
+    my ( $self, $params ) = @_;
+
+    my $default      = '*';
+    my $categorycode = $params->{categorycode};
+    my $itemtype     = $params->{itemtype};
+    my $branchcode   = $params->{branchcode};
+
+    my $rule = $self->find($params);
+    return $rule if $rule;
+
+    $rule = $self->find(
+        {
+            categorycode => $categorycode,
+            itemtype     => $default,
+            branchcode   => $branchcode
+        }
+    );
+    return $rule if $rule;
+
+    $rule = $self->find(
+        {
+            categorycode => $default,
+            itemtype     => $itemtype,
+            branchcode   => $branchcode
+        }
+    );
+    return $rule if $rule;
+
+    $rule = $self->find(
+        {
+            categorycode => $default,
+            itemtype     => $default,
+            branchcode   => $branchcode
+        }
+    );
+    return $rule if $rule;
+
+    $rule = $self->find(
+        {
+            categorycode => $categorycode,
+            itemtype     => $itemtype,
+            branchcode   => $default
+        }
+    );
+    return $rule if $rule;
+
+    $rule = $self->find(
+        {
+            categorycode => $categorycode,
+            itemtype     => $default,
+            branchcode   => $default
+        }
+    );
+    return $rule if $rule;
+
+    $rule = $self->find(
+        {
+            categorycode => $default,
+            itemtype     => $itemtype,
+            branchcode   => $default
+        }
+    );
+    return $rule if $rule;
+
+    $rule = $self->find(
+        {
+            categorycode => $default,
+            itemtype     => $default,
+            branchcode   => $default
+        }
+    );
+    return $rule if $rule;
+
+    return;
+}
 
 =head3 type
 
@@ -38,10 +120,6 @@ Koha::IssuingRules - Koha IssuingRules object set class
 sub _type {
     return 'Issuingrule';
 }
-
-=head3 object_class
-
-=cut
 
 sub object_class {
     return 'Koha::IssuingRule';

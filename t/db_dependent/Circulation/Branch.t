@@ -36,7 +36,6 @@ can_ok( 'C4::Circulation', qw(
     AddReturn
     GetBranchBorrowerCircRule
     GetBranchItemRule
-    GetIssuingRule
     )
 );
 

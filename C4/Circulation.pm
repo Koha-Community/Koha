@@ -43,6 +43,7 @@ use Koha::Account;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Calendar;
+use Koha::IssuingRules;
 use Koha::Items;
 use Koha::Patrons;
 use Koha::Patron::Debarments;
@@ -89,7 +90,6 @@ BEGIN {
 		&GetItemIssue
 		&GetItemIssues
 		&GetIssuingCharges
-		&GetIssuingRule
         &GetBranchBorrowerCircRule
         &GetBranchItemRule
 		&GetBiblioIssues
@@ -397,12 +397,12 @@ sub TooMany {
  
     # given branch, patron category, and item type, determine
     # applicable issuing rule
-    my $issuing_rule = GetIssuingRule($cat_borrower, $type, $branch);
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $cat_borrower, itemtype => $type, branchcode => $branch });
 
     # if a rule is found and has a loan limit set, count
     # how many loans the patron already has that meet that
     # rule
-    if (defined($issuing_rule) and defined($issuing_rule->{'maxissueqty'})) {
+    if (defined($issuing_rule) and defined($issuing_rule->maxissueqty)) {
         my @bind_params;
         my $count_query = q|
             SELECT COUNT(*) AS total, COALESCE(SUM(onsite_checkout), 0) AS onsite_checkouts
@@ -410,7 +410,7 @@ sub TooMany {
             JOIN items USING (itemnumber)
         |;
 
-        my $rule_itemtype = $issuing_rule->{itemtype};
+        my $rule_itemtype = $issuing_rule->itemtype;
         if ($rule_itemtype eq "*") {
             # matching rule has the default item type, so count only
             # those existing loans that don't fall under a more
@@ -431,8 +431,8 @@ sub TooMany {
                                     AND   itemtype <> '*'
                                   ) ";
             }
-            push @bind_params, $issuing_rule->{branchcode};
-            push @bind_params, $issuing_rule->{categorycode};
+            push @bind_params, $issuing_rule->branchcode;
+            push @bind_params, $issuing_rule->categorycode;
             push @bind_params, $cat_borrower;
         } else {
             # rule has specific item type, so count loans of that
@@ -448,7 +448,7 @@ sub TooMany {
 
         $count_query .= " AND borrowernumber = ? ";
         push @bind_params, $borrower->{'borrowernumber'};
-        my $rule_branch = $issuing_rule->{branchcode};
+        my $rule_branch = $issuing_rule->branchcode;
         if ($rule_branch ne "*") {
             if (C4::Context->preference('CircControl') eq 'PickupLibrary') {
                 $count_query .= " AND issues.branchcode = ? ";
@@ -463,8 +463,8 @@ sub TooMany {
 
         my ( $checkout_count, $onsite_checkout_count ) = $dbh->selectrow_array( $count_query, {}, @bind_params );
 
-        my $max_checkouts_allowed = $issuing_rule->{maxissueqty};
-        my $max_onsite_checkouts_allowed = $issuing_rule->{maxonsiteissueqty};
+        my $max_checkouts_allowed = $issuing_rule->maxissueqty;
+        my $max_onsite_checkouts_allowed = $issuing_rule->maxonsiteissueqty;
 
         if ( $onsite_checkout ) {
             if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
@@ -1333,8 +1333,8 @@ sub AddIssue {
 
             # If automatic renewal wasn't selected while issuing, set the value according to the issuing rule.
             unless ($auto_renew) {
-                my $issuingrule = GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branch );
-                $auto_renew = $issuingrule->{auto_renew};
+                my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branch });
+                $auto_renew = $issuing_rule->auto_renew if $issuing_rule;
             }
 
             # Record in the database the fact that the book was issued.
@@ -1533,70 +1533,15 @@ Get the Hard Due Date and it's comparison for an itemtype, a borrower type and a
 sub GetHardDueDate {
     my ( $borrowertype, $itemtype, $branchcode ) = @_;
 
-    my $rule = GetIssuingRule( $borrowertype, $itemtype, $branchcode );
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrowertype, itemtype => $itemtype, branchcode => $branchcode });
 
-    if ( defined( $rule ) ) {
-        if ( $rule->{hardduedate} ) {
-            return (dt_from_string($rule->{hardduedate}, 'iso'),$rule->{hardduedatecompare});
+    if ( defined( $issuing_rule ) ) {
+        if ( $issuing_rule->hardduedate ) {
+            return (dt_from_string($issuing_rule->hardduedate, 'iso'),$issuing_rule->hardduedatecompare);
         } else {
             return (undef, undef);
         }
     }
-}
-
-=head2 GetIssuingRule
-
-  my $irule = &GetIssuingRule($borrowertype,$itemtype,branchcode)
-
-FIXME - This is a copy-paste of GetLoanLength
-as a stop-gap.  Do not wish to change API for GetLoanLength 
-this close to release.
-
-Get the issuing rule for an itemtype, a borrower type and a branch
-Returns a hashref from the issuingrules table.
-
-=cut
-
-sub GetIssuingRule {
-    my ( $borrowertype, $itemtype, $branchcode ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth =  $dbh->prepare( "select * from issuingrules where categorycode=? and itemtype=? and branchcode=?"  );
-    my $irule;
-
-    $sth->execute( $borrowertype, $itemtype, $branchcode );
-    $irule = $sth->fetchrow_hashref;
-    return $irule if defined($irule) ;
-
-    $sth->execute( $borrowertype, "*", $branchcode );
-    $irule = $sth->fetchrow_hashref;
-    return $irule if defined($irule) ;
-
-    $sth->execute( "*", $itemtype, $branchcode );
-    $irule = $sth->fetchrow_hashref;
-    return $irule if defined($irule) ;
-
-    $sth->execute( "*", "*", $branchcode );
-    $irule = $sth->fetchrow_hashref;
-    return $irule if defined($irule) ;
-
-    $sth->execute( $borrowertype, $itemtype, "*" );
-    $irule = $sth->fetchrow_hashref;
-    return $irule if defined($irule) ;
-
-    $sth->execute( $borrowertype, "*", "*" );
-    $irule = $sth->fetchrow_hashref;
-    return $irule if defined($irule) ;
-
-    $sth->execute( "*", $itemtype, "*" );
-    $irule = $sth->fetchrow_hashref;
-    return $irule if defined($irule) ;
-
-    $sth->execute( "*", "*", "*" );
-    $irule = $sth->fetchrow_hashref;
-    return $irule if defined($irule) ;
-
-    # if no rule matches,
-    return;
 }
 
 =head2 GetBranchBorrowerCircRule
@@ -2240,10 +2185,9 @@ sub _debar_user_on_return {
     my $branchcode = _GetCircControlBranch( $item, $borrower );
 
     my $circcontrol = C4::Context->preference('CircControl');
-    my $issuingrule =
-      GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
-    my $finedays = $issuingrule->{finedays};
-    my $unit     = $issuingrule->{lengthunit};
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branchcode });
+    my $finedays = $issuing_rule ? $issuing_rule->finedays : undef;
+    my $unit     = $issuing_rule ? $issuing_rule->lengthunit : undef;
     my $chargeable_units = C4::Overdues::get_chargeable_units($unit, $dt_due, $dt_today, $branchcode);
 
     if ($finedays) {
@@ -2254,7 +2198,7 @@ sub _debar_user_on_return {
 
         # grace period is measured in the same units as the loan
         my $grace =
-          DateTime::Duration->new( $unit => $issuingrule->{firstremind} );
+          DateTime::Duration->new( $unit => $issuing_rule->firstremind );
 
         my $deltadays = DateTime::Duration->new(
             days => $chargeable_units
@@ -2264,7 +2208,7 @@ sub _debar_user_on_return {
 
             # If the max suspension days is < than the suspension days
             # the suspension days is limited to this maximum period.
-            my $max_sd = $issuingrule->{maxsuspensiondays};
+            my $max_sd = $issuing_rule->maxsuspensiondays;
             if ( defined $max_sd ) {
                 $max_sd = DateTime::Duration->new( days => $max_sd );
                 $suspension_days = $max_sd
@@ -2836,11 +2780,10 @@ sub CanBookBeRenewed {
     return ( 1, undef ) if $override_limit;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
-    my $issuingrule =
-      GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branchcode });
 
     return ( 0, "too_many" )
-      if $issuingrule->{renewalsallowed} <= $itemissue->{renewals};
+      if not $issuing_rule or $issuing_rule->renewalsallowed <= $itemissue->{renewals};
 
     my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
     my $restrictionblockrenewing = C4::Context->preference('RestrictionBlockRenewing');
@@ -2855,14 +2798,14 @@ sub CanBookBeRenewed {
     }
 
     if ( $itemissue->{auto_renew}
-        and defined $issuingrule->{no_auto_renewal_after}
-                and $issuingrule->{no_auto_renewal_after} ne "" ) {
+        and defined $issuing_rule->no_auto_renewal_after
+                and $issuing_rule->no_auto_renewal_after ne "" ) {
 
         # Get issue_date and add no_auto_renewal_after
         # If this is greater than today, it's too late for renewal.
         my $maximum_renewal_date = dt_from_string($itemissue->{issuedate});
         $maximum_renewal_date->add(
-            $issuingrule->{lengthunit} => $issuingrule->{no_auto_renewal_after}
+            $issuing_rule->lengthunit => $issuing_rule->no_auto_renewal_after
         );
         my $now = dt_from_string;
         if ( $now >= $maximum_renewal_date ) {
@@ -2870,19 +2813,19 @@ sub CanBookBeRenewed {
         }
     }
 
-    if ( defined $issuingrule->{norenewalbefore}
-        and $issuingrule->{norenewalbefore} ne "" )
+    if ( defined $issuing_rule->norenewalbefore
+        and $issuing_rule->norenewalbefore ne "" )
     {
 
         # Calculate soonest renewal by subtracting 'No renewal before' from due date
         my $soonestrenewal =
           $itemissue->{date_due}->clone()
           ->subtract(
-            $issuingrule->{lengthunit} => $issuingrule->{norenewalbefore} );
+            $issuing_rule->lengthunit => $issuing_rule->norenewalbefore );
 
         # Depending on syspref reset the exact time, only check the date
         if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
-            and $issuingrule->{lengthunit} eq 'days' )
+            and $issuing_rule->lengthunit eq 'days' )
         {
             $soonestrenewal->truncate( to => 'day' );
         }
@@ -3078,10 +3021,10 @@ sub GetRenewCount {
     $renewcount = $data->{'renewals'} if $data->{'renewals'};
     # $item and $borrower should be calculated
     my $branchcode = _GetCircControlBranch($item, $borrower);
-    
-    my $issuingrule = GetIssuingRule($borrower->{categorycode}, $item->{itype}, $branchcode);
-    
-    $renewsallowed = $issuingrule->{'renewalsallowed'};
+
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branchcode });
+
+    $renewsallowed = $issuing_rule ? $issuing_rule->renewalsallowed : undef; # FIXME Just replace undef with 0 to get what we expected. But what about the side-effects? TODO LATER
     $renewsleft    = $renewsallowed - $renewcount;
     if($renewsleft < 0){ $renewsleft = 0; }
     return ( $renewcount, $renewsallowed, $renewsleft );
@@ -3119,21 +3062,21 @@ sub GetSoonestRenewDate {
       or return;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
-    my $issuingrule =
-      GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branchcode });
 
     my $now = dt_from_string;
+    return $now unless $issuing_rule;
 
-    if ( defined $issuingrule->{norenewalbefore}
-        and $issuingrule->{norenewalbefore} ne "" )
+    if ( defined $issuing_rule->norenewalbefore
+        and $issuing_rule->norenewalbefore ne "" )
     {
         my $soonestrenewal =
           $itemissue->{date_due}->clone()
           ->subtract(
-            $issuingrule->{lengthunit} => $issuingrule->{norenewalbefore} );
+            $issuing_rule->lengthunit => $issuing_rule->norenewalbefore );
 
         if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
-            and $issuingrule->{lengthunit} eq 'days' )
+            and $issuing_rule->lengthunit eq 'days' )
         {
             $soonestrenewal->truncate( to => 'day' );
         }
@@ -3174,17 +3117,15 @@ sub GetLatestAutoRenewDate {
       or return;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
-    my $issuingrule =
-      GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branchcode });
 
-    my $now = dt_from_string;
-
-    return if not $issuingrule->{no_auto_renewal_after}
-               or $issuingrule->{no_auto_renewal_after} eq '';
+    return unless $issuing_rule;
+    return if not $issuing_rule->no_auto_renewal_after
+               or $issuing_rule->no_auto_renewal_after eq '';
 
     my $maximum_renewal_date = dt_from_string($itemissue->{issuedate});
     $maximum_renewal_date->add(
-        $issuingrule->{lengthunit} => $issuingrule->{no_auto_renewal_after}
+        $issuing_rule->lengthunit => $issuing_rule->no_auto_renewal_after
     );
 
     return $maximum_renewal_date;
