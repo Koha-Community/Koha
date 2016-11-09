@@ -36,6 +36,7 @@ use Koha::Edifact;
 use Log::Log4perl;
 use Text::Unidecode;
 use Koha::Plugins::Handler;
+use Koha::Acquisition::Booksellers;
 
 our $VERSION = 1.1;
 our @EXPORT_OK =
@@ -577,6 +578,7 @@ sub quote_item {
         }
         $order_quantity = 1;    # attempts to create an orderline for each gir
     }
+    my $vendor = Koha::Acquisition::Booksellers->find( $quote->vendor_id );
 
     # database definitions should set some of these defaults but dont
     my $order_hash = {
@@ -593,6 +595,7 @@ sub quote_item {
         uncertainprice => 0,
         sort1          => q{},
         sort2          => q{},
+        currency       => $vendor->listprice(),
     };
 
     # suppliers references
