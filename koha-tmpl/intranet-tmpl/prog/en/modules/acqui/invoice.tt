@@ -179,7 +179,7 @@
                   <td class="number">[% order.quantity %]</td>
                   <td class="number tax_excluded">[% order.total_tax_excluded | $Price %]</td>
                   <td class="number tax_included">[% order.total_tax_included | $Price %]</td>
-                  <td class="number">[% order.tax_rate * 100 | $Price %]</td>
+                  <td class="number">[% order.tax_rate * 100 %]</td>
                   <td class="number">[% order.tax_value | $Price %]</td>
                   <td>[% order.budget_name %]</td>
                 </tr>
@@ -188,7 +188,7 @@
             <tfoot>
               [% FOR tf IN foot_loop %]
                 <tr>
-                    <th colspan="2">Total (GST [% tf.tax_rate * 100 | $Price %] %)</th>
+                    <th colspan="2">Total (GST [% tf.tax_rate * 100 %] %)</th>
                     <th class="tax_excluded"/><th class="tax_included"/>
                     <th>[% tf.quantity %]</th>
                     <th class="tax_excluded">[% tf.total_tax_excluded | $Price %]</th>

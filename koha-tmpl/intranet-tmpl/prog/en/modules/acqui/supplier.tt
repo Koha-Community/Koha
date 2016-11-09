@@ -291,9 +291,9 @@ function delete_contact(ev) {
                     <select name="tax_rate" id="tax_rate">
                     [% FOREACH gst IN gst_values %]
                       [% IF ( tax_rate == gst.option ) %]
-                        <option value="[% gst.option %]" selected="selected">[% gst.option * 100 | format ("%.1f") %] %</option>
+                        <option value="[% gst.option %]" selected="selected">[% gst.option * 100 %] %</option>
                       [% ELSE %]
-                        <option value="[% gst.option %]">[% gst.option * 100 | format ("%.1f") %] %</option>
+                        <option value="[% gst.option %]">[% gst.option * 100 %] %</option>
                       [% END %]
                     [% END %]
                     </select>
@@ -353,7 +353,7 @@ function delete_contact(ev) {
                 <p><strong>Discount: </strong>
                     [% discount | format("%.1f") %] %</p>
                 <p><strong>Tax rate: </strong>
-                    [% 0 + tax_rate * 100 | format("%.1f") %] %</p>
+                    [% 0 + tax_rate * 100 %] %</p>
                 [% IF deliverytime.defined %]
                     <p><strong>Delivery time: </strong>
                         [% deliverytime %] days</p>

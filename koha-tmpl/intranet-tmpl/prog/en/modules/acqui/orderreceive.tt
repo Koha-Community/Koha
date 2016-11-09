@@ -335,9 +335,9 @@
                 <select name="tax_rate" id="tax_rate">
                 [% FOREACH gst IN gst_values %]
                     [% IF gst.option == tax_rate %]
-                        <option value="[% gst.option %]" selected="selected">[% gst.option * 100 | format("%.1f") %]%</option>
+                        <option value="[% gst.option %]" selected="selected">[% gst.option * 100 %]%</option>
                     [% ELSE %]
-                        <option value="[% gst.option %]">[% gst.option * 100 | format("%.1f") %]%</option>
+                        <option value="[% gst.option %]">[% gst.option * 100 %]%</option>
                     [% END %]
                 [% END %]
                 </select>
