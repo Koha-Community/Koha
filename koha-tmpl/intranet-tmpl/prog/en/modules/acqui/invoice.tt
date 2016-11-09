@@ -173,7 +173,7 @@
                   <td class="number">[% order.quantity %]</td>
                   <td class="number gste">[% order.totalgste | $Price %]</td>
                   <td class="number gsti">[% order.totalgsti | $Price %]</td>
-                  <td class="number">[% order.gstrate * 100 | $Price %]</td>
+                  <td class="number">[% order.gstrate * 100 %]</td>
                   <td class="number">[% order.gstvalue | $Price %]</td>
                   <td>[% order.budget_name %]</td>
                 </tr>
@@ -182,7 +182,7 @@
             <tfoot>
               [% FOR tf IN foot_loop %]
                 <tr>
-                    <th colspan='2'>Total (GST [% tf.gstrate * 100 | $Price %] %)</th>
+                    <th colspan='2'>Total (GST [% tf.gstrate * 100 %] %)</th>
                     <th class="gste"/><th class="gsti"/>
                     <th>[% tf.quantity %]</th>
                     <th class="gste">[% tf.totalgste | $Price %]</th>
