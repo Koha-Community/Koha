@@ -176,15 +176,15 @@ subtest 'is_expired' => sub {
     plan tests => 5;
     my $patron = $builder->build({ source => 'Borrower' });
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
-    $patron->dateexpiry( undef )->store;
+    $patron->dateexpiry( undef )->store->discard_changes;
     is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is not set');
-    $patron->dateexpiry( '0000-00-00' )->store;
+    $patron->dateexpiry( '0000-00-00' )->store->discard_changes;
     is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is not 0000-00-00');
-    $patron->dateexpiry( dt_from_string )->store;
+    $patron->dateexpiry( dt_from_string )->store->discard_changes;
     is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is today');
-    $patron->dateexpiry( dt_from_string->add( days => 1 ) )->store;
+    $patron->dateexpiry( dt_from_string->add( days => 1 ) )->store->discard_changes;
     is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is tomorrow');
-    $patron->dateexpiry( dt_from_string->add( days => -1 ) )->store;
+    $patron->dateexpiry( dt_from_string->add( days => -1 ) )->store->discard_changes;
     is( $patron->is_expired, 1, 'Patron should be considered expired if dateexpiry is yesterday');
 
     $patron->delete;

@@ -291,7 +291,7 @@ sub is_expired {
     my ($self) = @_;
     return 0 unless $self->dateexpiry;
     return 0 if $self->dateexpiry eq '0000-00-00';
-    return 1 if dt_from_string( $self->dateexpiry ) < dt_from_string;
+    return 1 if dt_from_string( $self->dateexpiry ) < dt_from_string->truncate( to => 'day' );
     return 0;
 }
 
