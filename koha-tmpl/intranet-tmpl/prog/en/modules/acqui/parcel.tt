@@ -379,7 +379,7 @@
         </tr>
         [% FOREACH book_foot IN book_foot_loop %]
             <tr>
-                <th colspan="10">Total (GST [% book_foot.tax_rate * 100 | $Price %]%)</th>
+                <th colspan="10">Total (GST [% book_foot.tax_rate * 100 %]%)</th>
                 <th>[% book_foot.tax_value | $Price %]</th>
                 <th></th>
             </tr>

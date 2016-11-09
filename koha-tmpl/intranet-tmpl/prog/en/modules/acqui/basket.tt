@@ -481,7 +481,7 @@
                 [% FOREACH foot_loo IN book_foot_loop %]
                     <tr>
                         <th></th>
-                        <th>Total (GST [% foot_loo.tax_rate * 100 | $Price %])</th>
+                        <th>Total (GST [% foot_loo.tax_rate * 100 %])</th>
                         <th class="tax_excluded">&nbsp;</th>
                         <th class="tax_excluded">&nbsp;</th>
                         <th class="tax_included">&nbsp;</th>
@@ -585,7 +585,7 @@
                         <td class="number [% IF books_loo.quantity.search(zero_regex) %]error[% END %]">[% books_loo.quantity %]</td>
                         <td class="number tax_excluded [% IF books_loo.total_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_excluded | $Price %]</td>
                         <td class="number tax_included [% IF books_loo.total_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_included | $Price %]</td>
-                        <td class="number">[% books_loo.tax_rate * 100 | $Price %]</td>
+                        <td class="number">[% books_loo.tax_rate * 100 %]</td>
                         <td class="number [% IF books_loo.tax_value.search(zero_regex) %]error[% END %]">[% books_loo.tax_value | $Price %]</td>
                         <td>[% books_loo.budget_name %]</td>
                         <td>[% books_loo.suppliers_report %]</td>
@@ -698,7 +698,7 @@
                     <td class="number">[% order.quantity %]</td>
                     <td class="number tax_excluded">[% order.total_tax_excluded | $Price %]</td>
                     <td class="number tax_included">[% order.total_tax_included | $Price %]</td>
-                    <td class="number">[% order.tax_rate * 100 | $Price %]</td>
+                    <td class="number">[% order.tax_rate * 100 %]</td>
                     <td class="number">[% order.tax_value | $Price %]</td>
                     <td>[% order.budget_name %]
                   </tr>
