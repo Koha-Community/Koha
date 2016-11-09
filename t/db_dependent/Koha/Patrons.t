@@ -191,7 +191,7 @@ subtest 'is_expired' => sub {
 };
 
 subtest 'is_going_to_expired' => sub {
-    plan tests => 8;
+    plan tests => 9;
     my $patron = $builder->build({ source => 'Borrower' });
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     $patron->dateexpiry( undef )->store;
@@ -222,6 +222,10 @@ subtest 'is_going_to_expired' => sub {
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 10);
     $patron->dateexpiry( dt_from_string->add( days => 20 ) )->store;
     is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 20 days before and pref is 10');
+
+    t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 20);
+    $patron->dateexpiry( dt_from_string->add( days => 10 ) )->store;
+    is( $patron->is_going_to_expired, 1, 'Patron should be considered going to expire if dateexpiry is 10 days before and pref is 20');
 
     $patron->delete;
 };
