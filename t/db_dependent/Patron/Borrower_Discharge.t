@@ -38,12 +38,9 @@ my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM discharges|);
 
-my $library = $builder->build({
-    source => 'Branch',
-});
-my $another_library = $builder->build({
-    source => 'Branch',
-});
+my $library         = $builder->build({ source => 'Branch' });
+my $another_library = $builder->build({ source => 'Branch' });
+my $itemtype        = $builder->build({ source => 'Itemtype' })->{itemtype};
 
 C4::Context->_new_userenv('xxx');
 C4::Context->set_userenv(0, 0, 0, 'firstname', 'surname', $library->{branchcode}, $library->{branchcode}, '', '', '', '', '');
@@ -69,7 +66,15 @@ my $patron3 = $builder->build({
 # Discharge not possible with issues
 my ( $biblionumber ) = AddBiblio( MARC::Record->new, '');
 my $barcode = 'BARCODE42';
-my ( undef, undef, $itemnumber ) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, barcode => $barcode }, $biblionumber);
+my ( undef, undef, $itemnumber ) = AddItem(
+    {   homebranch    => $library->{branchcode},
+        holdingbranch => $library->{branchcode},
+        barcode       => $barcode,
+        itype         => $itemtype
+    },
+    $biblionumber
+);
+
 AddIssue( $patron, $barcode );
 is( Koha::Patron::Discharge::can_be_discharged({ borrowernumber => $patron->{borrowernumber} }), 0, 'A patron with issues cannot be discharged' );
 
