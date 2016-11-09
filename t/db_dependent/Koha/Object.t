@@ -17,11 +17,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Warn;
 
 use C4::Context;
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
+
+use t::lib::TestBuilder;
 
 BEGIN {
     use_ok('Koha::Object');
@@ -89,4 +92,19 @@ subtest 'get_column' => sub {
     my $patron = Koha::Patron->new({categorycode => $categorycode, branchcode => $branchcode })->store;
     is( $patron->get_column('borrowernumber'), $patron->borrowernumber, 'get_column should retrieve the correct value' );
 };
+
+subtest 'discard_changes' => sub {
+    plan tests => 1;
+    my $builder = t::lib::TestBuilder->new;
+    my $patron = $builder->build( { source => 'Borrower' } );
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    $patron->dateexpiry(dt_from_string);
+    $patron->discard_changes;
+    is(
+        dt_from_string( $patron->dateexpiry ),
+        dt_from_string->truncate( to => 'day' ),
+        'discard_changes should refresh the object'
+    );
+};
+
 1;
