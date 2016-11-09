@@ -6,18 +6,17 @@ use strict;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
 
 # Koha modules used
 use Koha::Script;
-use MARC::Record;
 use C4::Context;
-use C4::Biblio;
-use Time::HiRes qw(gettimeofday);
+use C4::Biblio qw( GetMarcStructure );
+use Time::HiRes qw( gettimeofday );
 
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 my ( $input_marc_file, $number) = ('',0);
 my ($version, $confirm,$test_parameter);
 GetOptions(

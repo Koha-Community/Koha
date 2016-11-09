@@ -40,8 +40,8 @@ The first, traditional OO interface provides the following functions:
 
 use strict;
 use warnings;
-use Carp;
-use Module::Load::Conditional qw(can_load);
+use Carp qw( croak );
+use Module::Load::Conditional qw( can_load );
 use Sereal::Encoder;
 use Sereal::Decoder;
 

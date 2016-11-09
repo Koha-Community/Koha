@@ -24,20 +24,20 @@ BEGIN {
 
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
 use Koha::Script -cron;
 use C4::Context;
-use C4::Serials;
-use C4::Log;
-use Koha::DateUtils;
+use C4::Serials qw( GetSubscription GetNextDate ModSerialStatus );
 use C4::Serials::Frequency;
+use C4::Log qw( cronlogaction );
+use Koha::DateUtils qw( dt_from_string output_pref );
 
-use Date::Calc qw/Date_to_Days check_date/;
-use Getopt::Long;
-use Pod::Usage;
+use Date::Calc qw( check_date Date_to_Days );
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 =head1 NAME
 

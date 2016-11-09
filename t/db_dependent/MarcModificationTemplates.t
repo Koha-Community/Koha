@@ -9,7 +9,7 @@ use t::lib::Mocks;
 
 use_ok("MARC::Field");
 use_ok("MARC::Record");
-use_ok("C4::MarcModificationTemplates");
+use_ok('C4::MarcModificationTemplates', qw( AddModificationTemplate AddModificationTemplateAction GetModificationTemplateAction GetModificationTemplateActions ModModificationTemplateAction MoveModificationTemplateAction DelModificationTemplate DelModificationTemplateAction ModifyRecordWithTemplate GetModificationTemplates ));
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;

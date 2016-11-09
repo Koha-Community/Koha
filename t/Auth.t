@@ -19,7 +19,7 @@ use Modern::Perl;
 use Test::More tests => 12;
 use Test::Warn;
 
-use C4::Auth qw / in_iprange /;
+use C4::Auth qw( in_iprange );
 
 $ENV{REMOTE_ADDR} = '192.168.1.30';
 

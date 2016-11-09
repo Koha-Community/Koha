@@ -6,8 +6,8 @@ use CGI;
 
 use Test::More tests => 4;
 
-use C4::Acquisition;
-use C4::Biblio;
+use C4::Acquisition qw( NewBasket GetBasket GetBasketAsCSV );
+use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 use Koha::CsvProfiles;
 use Koha::Acquisition::Orders;

@@ -20,13 +20,13 @@ package C4::Reports;
 use Modern::Perl;
 use CGI qw ( -utf8 );
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
 
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
-    @EXPORT = qw(
+    @EXPORT_OK = qw(
         GetDelimiterChoices
     );
 }

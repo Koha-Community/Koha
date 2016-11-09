@@ -22,11 +22,11 @@ use Modern::Perl;
 
 use C4::Context;
 use C4::Overdues qw/CalcFine/;
-use C4::Log qw/logaction/;
+use C4::Log qw( logaction );
 
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 
 my ($help, $verbose, $confirm, $log, $stdout_log);
 

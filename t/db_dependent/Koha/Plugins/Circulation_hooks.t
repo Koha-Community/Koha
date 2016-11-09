@@ -22,7 +22,7 @@ use Test::Warn;
 
 use File::Basename;
 
-use C4::Circulation qw(AddIssue AddRenewal AddReturn);
+use C4::Circulation qw( AddIssue AddRenewal AddReturn );
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;

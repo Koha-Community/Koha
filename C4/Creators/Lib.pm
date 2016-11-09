@@ -18,7 +18,7 @@ package C4::Creators::Lib;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Storable qw(dclone);
+use Storable qw( dclone );
 
 use autouse 'Data::Dumper' => qw(Dumper);
 

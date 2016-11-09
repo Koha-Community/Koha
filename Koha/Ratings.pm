@@ -17,7 +17,6 @@ package Koha::Ratings;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

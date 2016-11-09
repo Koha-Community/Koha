@@ -43,13 +43,13 @@ ALSO :
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use MIME::Base64;
-use C4::Auth;
+use MIME::Base64 qw( encode_base64 );
+use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Koha;
-use C4::Languages qw(getTranslatedLanguages);
-use C4::ClassSource;
-use C4::Output;
+use C4::Koha qw( getallthemes );
+use C4::Languages qw( getTranslatedLanguages );
+use C4::ClassSource qw( GetClassSources GetClassSource );
+use C4::Output qw( output_html_with_http_headers );
 use YAML::XS;
 
 my %tabsysprefs; #we do no longer need to keep track of a tab per pref (yaml)

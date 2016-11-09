@@ -17,23 +17,19 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use C4::Acquisition;
-use C4::Auth;
-use C4::Budgets;
-use C4::Koha;
-use C4::Serials;
-use C4::Output;
+use C4::Auth qw( get_template_and_user checkauth );
+use C4::Serials qw( CloseSubscription ReopenSubscription GetSubscription GetExpirationDate GetSerials HasSubscriptionStrictlyExpired CountIssues HasItems DelSubscription check_routing abouttoexpire can_edit_subscription );
+use C4::Output qw( output_and_exit output_html_with_http_headers );
 use C4::Context;
-use C4::Search qw/enabled_staff_search_views/;
+use C4::Search qw( enabled_staff_search_views );
 
 use Koha::AdditionalFields;
 use Koha::AuthorisedValues;
-use Koha::DateUtils;
+use Koha::DateUtils qw( output_pref );
 use Koha::Acquisition::Bookseller;
 use Koha::Subscriptions;
 
-use Date::Calc qw/Today Day_of_Year Week_of_Year Add_Delta_Days/;
-use Carp;
+use Carp qw( carp );
 
 use Koha::SharedContent;
 

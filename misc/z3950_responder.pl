@@ -19,10 +19,9 @@
 
 use Modern::Perl;
 
-use Carp;
-use File::Basename;
-use Getopt::Long qw(:config no_ignore_case);
-use Pod::Usage;
+use File::Basename qw( fileparse );
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 use Koha::Config;
 use Koha::Z3950Responder;

@@ -7,16 +7,14 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use C4::Output;
-use C4::Auth qw(:DEFAULT :EditPermissions);
+use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
+use C4::Auth qw( get_template_and_user get_all_subpermissions get_user_subpermissions );
 use C4::Context;
-use C4::Members;
-#use C4::Acquisitions;
 
 use Koha::Patron::Categories;
 use Koha::Patrons;
 
-use C4::Output;
+use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use Koha::Token;
 
 my $input = CGI->new;

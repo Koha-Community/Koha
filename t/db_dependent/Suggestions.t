@@ -25,7 +25,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Context;
-use C4::Letters;
+use C4::Letters qw( GetQueuedMessages GetMessage );
 use C4::Budgets qw( AddBudgetPeriod AddBudget GetBudget );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -34,7 +34,7 @@ use Koha::Patrons;
 use Koha::Suggestions;
 
 BEGIN {
-    use_ok('C4::Suggestions');
+    use_ok('C4::Suggestions', qw( NewSuggestion GetSuggestion ModSuggestion GetSuggestionInfo GetSuggestionFromBiblionumber GetSuggestionInfoFromBiblionumber GetSuggestionByStatus ConnectSuggestionAndBiblio SearchSuggestion DelSuggestion MarcRecordFromNewSuggestion GetUnprocessedSuggestions DelSuggestionsOlderThan ));
 }
 
 my $schema  = Koha::Database->new->schema;

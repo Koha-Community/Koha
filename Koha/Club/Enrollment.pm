@@ -19,12 +19,11 @@ package Koha::Club::Enrollment;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 use Koha::Clubs;
 use Koha::Patrons;
-use Koha::DateUtils qw(dt_from_string);
+use Koha::DateUtils qw( dt_from_string );
 use DateTime;
 
 use base qw(Koha::Object);

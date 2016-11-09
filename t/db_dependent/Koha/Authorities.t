@@ -29,7 +29,7 @@ use Test::MockObject;
 use Test::Warn;
 
 use C4::Context;
-use C4::AuthoritiesMarc;
+use C4::AuthoritiesMarc qw( merge AddAuthority );
 use Koha::Authority;
 use Koha::Authority::ControlledIndicators;
 use Koha::Authorities;

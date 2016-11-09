@@ -20,35 +20,36 @@ package C4::Tags;
 
 use strict;
 use warnings;
-use Carp;
+use Carp qw( carp );
 use Exporter;
 
 use C4::Context;
-use Module::Load::Conditional qw/check_install/;
+use Module::Load::Conditional qw( check_install );
 #use Data::Dumper;
 use constant TAG_FIELDS => qw(tag_id borrowernumber biblionumber term language date_created);
 use constant TAG_SELECT => "SELECT " . join(',', TAG_FIELDS) . "\n FROM   tags_all\n";
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
-	@ISA = qw(Exporter);
+    @ISA       = qw(Exporter);
     @EXPORT_OK = qw(
-      &get_tag &get_tags &get_tag_rows
-      &add_tags &add_tag
-      &delete_tag_row_by_id
-      &remove_tag
-      &delete_tag_rows_by_ids
-      &get_approval_rows
-      &blacklist
-      &whitelist
-      &is_approved
-      &approval_counts
-      &get_count_by_tag_status
-      &get_filters
+      get_tag get_tags get_tag_rows
+      add_tags
+      add_tag
+      add_tag_approval
+      add_tag_index
+      delete_tag_row_by_id
+      remove_tag
+      delete_tag_rows_by_ids
+      get_approval_rows
+      blacklist
+      whitelist
+      is_approved
+      approval_counts
+      get_count_by_tag_status
+      get_filters
       stratify_tags
     );
-	# %EXPORT_TAGS = ();
     my $ext_dict = C4::Context->preference('TagsExternalDictionary');
     if ( $ext_dict && ! check_install( module => 'Lingua::Ispell' ) ) {
         warn "Ignoring TagsExternalDictionary, because Lingua::Ispell is not installed.";

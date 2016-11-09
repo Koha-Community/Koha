@@ -53,7 +53,7 @@ B<new ()> - create a new plugin object
 
 use strict;
 use warnings;
-use Module::Load::Conditional qw(can_load);
+use Module::Load::Conditional qw( can_load );
 use Module::Pluggable::Object;
 
 use base qw(Class::Accessor);

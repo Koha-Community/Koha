@@ -21,8 +21,8 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw(get_template_and_user);
-use C4::Output qw(output_html_with_http_headers);
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 
 my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

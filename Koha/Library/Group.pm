@@ -19,10 +19,9 @@ package Koha::Library::Group;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
-use Koha::DateUtils qw(dt_from_string);
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
 
 use base qw(Koha::Object);

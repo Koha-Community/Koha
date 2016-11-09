@@ -29,14 +29,14 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-        &GetSubscriptionNumberpatterns
-        &GetSubscriptionNumberpattern
-        &GetSubscriptionNumberpatternByName
-        &AddSubscriptionNumberpattern
-        &ModSubscriptionNumberpattern
-        &DelSubscriptionNumberpattern
+        GetSubscriptionNumberpatterns
+        GetSubscriptionNumberpattern
+        GetSubscriptionNumberpatternByName
+        AddSubscriptionNumberpattern
+        ModSubscriptionNumberpattern
+        DelSubscriptionNumberpattern
 
-        &GetSubscriptionsWithNumberpattern
+        GetSubscriptionsWithNumberpattern
     );
 }
 

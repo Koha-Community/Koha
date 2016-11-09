@@ -20,24 +20,29 @@ package C4::Serials;
 
 use Modern::Perl;
 
-use C4::Auth qw(haspermission);
+use C4::Auth qw( haspermission );
 use C4::Context;
 use DateTime;
-use Date::Calc qw(:all);
-use POSIX qw(strftime);
-use C4::Biblio;
-use C4::Log;    # logaction
-use C4::Serials::Frequency;
+use Date::Calc qw(
+    Add_Delta_Days
+    Add_Delta_YM
+    check_date
+    Delta_Days
+    N_Delta_YMD
+    Today
+);
+use POSIX qw( strftime );
+use C4::Biblio qw( GetMarcBiblio GetMarcFromKohaField ModBiblio );
+use C4::Log qw( logaction );    # logaction
+use C4::Serials::Frequency qw( GetSubscriptionFrequency );
 use C4::Serials::Numberpattern;
 use Koha::AdditionalFieldValues;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Serial;
 use Koha::Subscriptions;
 use Koha::Subscription::Histories;
 use Koha::SharedContent;
 use Scalar::Util qw( looks_like_number );
-
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # Define statuses
 use constant {
@@ -61,31 +66,39 @@ use constant MISSING_STATUSES => (
     MISSING_LOST
 );
 
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
-    @EXPORT = qw(
-      &NewSubscription    &ModSubscription    &DelSubscription
-      &GetSubscription    &CountSubscriptionFromBiblionumber      &GetSubscriptionsFromBiblionumber
-      &SearchSubscriptions
-      &GetFullSubscriptionsFromBiblionumber   &GetFullSubscription &ModSubscriptionHistory
-      &HasSubscriptionStrictlyExpired &HasSubscriptionExpired &GetExpirationDate &abouttoexpire
-      &GetSubscriptionHistoryFromSubscriptionId
+    @EXPORT_OK = qw(
+      NewSubscription    ModSubscription    DelSubscription
+      GetSubscription    CountSubscriptionFromBiblionumber      GetSubscriptionsFromBiblionumber
+      SearchSubscriptions
+      GetFullSubscriptionsFromBiblionumber   GetFullSubscription ModSubscriptionHistory
+      HasSubscriptionStrictlyExpired HasSubscriptionExpired GetExpirationDate abouttoexpire
+      GetFictiveIssueNumber
+      GetSubscriptionHistoryFromSubscriptionId
 
-      &GetNextSeq &GetSeq &NewIssue           &GetSerials
-      &GetLatestSerials   &ModSerialStatus    &GetNextDate       &GetSerials2
-      &GetSubscriptionLength &ReNewSubscription  &GetLateOrMissingIssues
-      &GetSerialInformation                   &AddItem2Serial
-      &PrepareSerialsData &GetNextExpected    &ModNextExpected
-      &GetPreviousSerialid
+      GetNextSeq GetSeq NewIssue           GetSerials
+      GetLatestSerials   ModSerialStatus    GetNextDate
+      CloseSubscription ReopenSubscription
+      subscriptionCurrentlyOnOrder
+      can_claim_subscription can_edit_subscription can_show_subscription
+      GetSerials2
+      GetSubscriptionLength ReNewSubscription  GetLateOrMissingIssues
+      GetSerialInformation                   AddItem2Serial
+      PrepareSerialsData GetNextExpected    ModNextExpected
+      GetSubscriptionIrregularities
+      GetPreviousSerialid
 
-      &GetSuppliersWithLateIssues
-      &getroutinglist     &delroutingmember   &addroutingmember
-      &reorder_members
-      &check_routing &updateClaim
-      &CountIssues
+      GetSuppliersWithLateIssues
+      getroutinglist     delroutingmember   addroutingmember
+      reorder_members
+      check_routing updateClaim
+      CountIssues
       HasItems
-      &subscriptionCurrentlyOnOrder
+
+      findSerialsByStatus
 
     );
 }

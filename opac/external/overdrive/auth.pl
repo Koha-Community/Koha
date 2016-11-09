@@ -21,8 +21,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use URI;
-use URI::Escape;
-use C4::Auth qw(checkauth);
+use URI::Escape qw( uri_escape );
 use Koha::Logger;
 use Koha::ExternalContent::OverDrive;
 

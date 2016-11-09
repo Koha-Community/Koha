@@ -19,8 +19,7 @@ package Koha::Template::Plugin::AudioAlerts;
 
 use Modern::Perl;
 
-use Encode qw( encode );
-use JSON;
+use JSON qw( encode_json );
 
 use base qw( Template::Plugin );
 

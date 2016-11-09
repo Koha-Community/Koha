@@ -22,7 +22,7 @@ use Modern::Perl;
 use C4::Members;
 use CGI qw ( -utf8 );
 use CGI::Cookie;  # need to check cookies before having CGI parse the POST request
-use C4::Auth qw(:DEFAULT check_cookie_auth);
+use C4::Auth qw( check_cookie_auth );
 use Koha::Patron::Images;
 
 my $query = CGI->new;

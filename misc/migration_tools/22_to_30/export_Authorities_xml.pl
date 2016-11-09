@@ -3,14 +3,13 @@ use Modern::Perl;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../../kohalib.pl" };
 }
 use C4::Context;
 use MARC::File::XML(BinaryEncoding=>"utf8");
-use MARC::Record;
 use C4::AuthoritiesMarc;
-use POSIX;
+use POSIX qw( close localtime open sprintf time );
 MARC::File::XML::default_record_format("UNIMARCAUTH");
 my $dbh = C4::Context->dbh;
 my $rq= $dbh->prepare(qq|

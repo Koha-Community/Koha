@@ -48,8 +48,8 @@ Default value for the dropbox.
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use C4::Charset;
-use C4::Auth qw/check_api_auth/;
+use C4::Charset qw( NormalizeString );
+use C4::Auth qw( check_api_auth );
 use Koha::AuthorisedValues;
 
 my $query = CGI->new();

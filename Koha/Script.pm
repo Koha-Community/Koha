@@ -35,8 +35,8 @@ This class should be used in all scripts. It sets the interface and userenv appr
 
 =cut
 
-use File::Basename;
-use Fcntl qw(:flock);
+use File::Basename qw( fileparse );
+use Fcntl qw( LOCK_EX LOCK_NB );
 
 use C4::Context;
 use Koha::Exceptions;

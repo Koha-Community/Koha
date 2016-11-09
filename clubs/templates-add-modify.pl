@@ -21,10 +21,10 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 
-use Koha::DateUtils qw(dt_from_string);
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Club::Templates;
 use Koha::Club::Template::Fields;
 use Koha::Club::Template::EnrollmentFields;

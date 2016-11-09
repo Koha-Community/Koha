@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use base qw(Class::Accessor);
 
-use C4::Search; # :(
+use C4::Search qw( getRecords ); # :(
 use C4::AuthoritiesMarc;
 use Koha::SearchEngine::Search;
 
@@ -62,7 +62,7 @@ This passes straight through to C4::Search::getRecords.
 sub search_compat {
     shift; # get rid of $self
 
-    return getRecords(@_);
+    return C4::Search::getRecords(@_);
 }
 
 =head2 simple_search_compat

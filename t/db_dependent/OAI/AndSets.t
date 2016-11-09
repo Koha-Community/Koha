@@ -25,8 +25,8 @@ use MARC::Record;
 use Data::Dumper;
 
 use Koha::Database;
-use C4::Biblio;
-use C4::OAI::Sets;
+use C4::Biblio qw( GetMarcBiblio );
+use C4::OAI::Sets qw( AddOAISet ModOAISet ModOAISetMappings CalcOAISetsBiblio );
 
 use t::lib::TestBuilder;
 

@@ -18,8 +18,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;
-use C4::Serials;
-use C4::Acquisition;
+use C4::Serials qw( GetLateOrMissingIssues updateClaim );
 use C4::Output;
 use C4::Context;
 

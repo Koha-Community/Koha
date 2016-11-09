@@ -3,17 +3,21 @@
 use Modern::Perl;
 use CGI;
 
-use C4::Auth;
-use C4::Koha;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
-use Koha::Patron::Password::Recovery
-  qw(SendPasswordRecoveryEmail ValidateBorrowernumber GetValidLinkInfo CompletePasswordRecovery DeleteExpiredPasswordRecovery);
+use Koha::Patron::Password::Recovery qw(
+    CompletePasswordRecovery
+    DeleteExpiredPasswordRecovery
+    GetValidLinkInfo
+    SendPasswordRecoveryEmail
+    ValidateBorrowernumber
+);
 use Koha::Patrons;
 my $query = CGI->new;
 use HTML::Entities;
-use Try::Tiny;
-use List::Util qw/any/;
+use Try::Tiny qw( catch try );
+use List::Util qw( any );
 
 my ( $template, $dummy, $cookie ) = get_template_and_user(
     {

@@ -21,31 +21,40 @@
 
 use Modern::Perl;
 
-use CGI q(-utf8);
-use C4::Output;
-use C4::Auth;
-use C4::Biblio;
-use C4::Search;
-use C4::AuthoritiesMarc;
+use CGI;
+use C4::Output qw( output_html_with_http_headers );
+use C4::Auth qw( get_template_and_user haspermission );
+use C4::Biblio qw(
+    AddBiblio
+    DelBiblio
+    GetFrameworkCode
+    GetMarcBiblio
+    GetMarcFromKohaField
+    GetMarcStructure
+    GetUsedMarcStructure
+    ModBiblio
+    prepare_host_field
+    PrepHostMarcField
+    TransformHtmlToMarc
+);
+use C4::Search qw( FindDuplicate enabled_staff_search_views );
+use C4::Auth qw( get_template_and_user haspermission );
 use C4::Context;
 use MARC::Record;
-use C4::Log;
-use C4::Koha;
-use C4::ClassSource;
-use C4::ImportBatch;
-use C4::Charset;
+use C4::ClassSource qw( GetClassSources );
+use C4::ImportBatch qw( GetImportRecordMarc );
+use C4::Charset qw( SetMarcUnicodeFlag );
 use Koha::BiblioFrameworks;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use Koha::ItemTypes;
 use Koha::Libraries;
 
 use Koha::BiblioFrameworks;
 
-use Date::Calc qw(Today);
 use MARC::File::USMARC;
 use MARC::File::XML;
-use URI::Escape;
+use URI::Escape qw( uri_escape_utf8 );
 
 if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
     MARC::File::XML->default_record_format('UNIMARC');

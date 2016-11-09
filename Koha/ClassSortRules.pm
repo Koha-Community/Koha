@@ -17,7 +17,6 @@ package Koha::ClassSortRules;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

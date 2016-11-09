@@ -24,7 +24,7 @@ use Modern::Perl;
 use base 'DBIx::Class::Schema::Loader::DBI::mysql';
 use mro 'c3';
 
-use Scalar::Util 'blessed';
+use Scalar::Util qw( blessed );
 
 # This is being upstreamed, but for now lets make sure whatever version of DBIx::Class::Schema::Loader you are using,
 # we will catch MariaDB current_timestamp() and convert it to \"current_timestamp" correctly.

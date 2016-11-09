@@ -9,7 +9,7 @@ use warnings;
 use Test::More tests => 10;
 
 BEGIN {
-        use_ok('C4::ClassSortRoutine::Dewey');
+        use_ok('C4::ClassSortRoutine::Dewey', qw( get_class_sort_key ));
 }
 
 my $cn_sort = C4::ClassSortRoutine::Dewey::get_class_sort_key(undef, undef );

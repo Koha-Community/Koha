@@ -18,7 +18,7 @@
 use Modern::Perl;
 use DateTime;
 
-use C4::Circulation;
+use C4::Circulation qw( CalcDateDue checkHighHolds CanBookBeIssued );
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Patrons;

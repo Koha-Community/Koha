@@ -6,7 +6,7 @@ package C4::SIP::ILS::Transaction::RenewAll;
 use strict;
 use warnings;
 
-use C4::SIP::Sip qw(siplog);
+use C4::SIP::Sip qw( siplog );
 
 use C4::SIP::ILS::Item;
 

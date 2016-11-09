@@ -20,7 +20,6 @@ package C4::Heading::UNIMARC;
 use 5.010;
 use strict;
 use warnings;
-use MARC::Record;
 use MARC::Field;
 use C4::Context;
 

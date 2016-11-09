@@ -19,7 +19,6 @@ package C4::Heading::MARC21;
 
 use strict;
 use warnings;
-use MARC::Record;
 use MARC::Field;
 
 

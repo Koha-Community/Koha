@@ -17,9 +17,8 @@ package Koha::Patron::Relationship;
 
 use Modern::Perl;
 
-use Carp;
 use List::MoreUtils qw( any );
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 use Koha::Database;
 use Koha::Exceptions::Patron::Relationship;

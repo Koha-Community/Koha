@@ -20,19 +20,17 @@
 
 use Modern::Perl;
 
-use C4::Auth;
+use C4::Auth qw( get_template_and_user );
 use CGI qw ( -utf8 );
 use Text::CSV::Encoded;
 use C4::Context;
-use C4::Koha;
-use C4::Output;
-use C4::Items;
-use C4::Serials;
-use C4::Search;    # enabled_staff_search_views
+use C4::Output qw( output_html_with_http_headers );
+use C4::Serials qw( CountSubscriptionFromBiblionumber );
+use C4::Search qw( enabled_staff_search_views );
 
 use Koha::ActionLogs;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::Patrons;
 

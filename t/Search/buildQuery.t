@@ -33,7 +33,7 @@ BEGIN {
 # Mock the DB connection and C4::Context
 use Test::DBIx::Class;
 
-use_ok('C4::Search');
+use_ok('C4::Search', qw( buildQuery ));
 can_ok('C4::Search',
     qw/buildQuery/);
 use_ok("Net::Z3950::ZOOM");

@@ -38,10 +38,10 @@ use Koha::Exceptions;
 use Koha::Exceptions::Authentication;
 use Koha::Exceptions::Authorization;
 
-use MIME::Base64;
+use MIME::Base64 qw( decode_base64 );
 use Module::Load::Conditional;
 use Scalar::Util qw( blessed );
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 

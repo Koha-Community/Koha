@@ -25,11 +25,11 @@ use Koha::Biblios;
 use Koha::Libraries;
 
 BEGIN {
-    use_ok('C4::UsageStats');
+    use_ok('C4::UsageStats', qw( NeedUpdate BuildReport ReportToCommunity _count ));
     use_ok('C4::Context');
-    use_ok('C4::Biblio');
+    use_ok('C4::Biblio', qw( UpdateTotalIssues ));
     use_ok( 'C4::AuthoritiesMarc', qw(AddAuthority) );
-    use_ok('C4::Reserves');
+    use_ok('C4::Reserves', qw( AddReserve ));
     use_ok('MARC::Record');
     use_ok('Koha::Acquisition::Orders');
 }

@@ -5,16 +5,15 @@ use strict;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
 use Koha::Script;
 use C4::Context;
-use C4::Biblio;
-use C4::Items;
+use C4::Biblio qw( GetMarcBiblio ModBiblio );
 use Koha::Items;
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 
 $| = 1;
 

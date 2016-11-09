@@ -25,7 +25,7 @@ use Koha::Exceptions::TransferLimit;
 
 use Scalar::Util qw( blessed );
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 

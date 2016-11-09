@@ -9,7 +9,7 @@ use warnings;
 use Test::More tests => 3;
 
 BEGIN {
-        use_ok('C4::ClassSortRoutine::Generic');
+        use_ok('C4::ClassSortRoutine::Generic', qw( get_class_sort_key ));
 }
 
 my $cn_class = "My class ";

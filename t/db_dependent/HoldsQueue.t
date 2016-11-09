@@ -11,10 +11,10 @@ use Modern::Perl;
 use Test::More tests => 57;
 use Data::Dumper;
 
-use C4::Calendar;
+use C4::Calendar qw( new insert_single_holiday );
 use C4::Context;
 use C4::Members;
-use C4::Circulation;
+use C4::Circulation qw( AddIssue AddReturn );
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Items;
@@ -27,8 +27,8 @@ use t::lib::Mocks;
 BEGIN {
     use FindBin;
     use lib $FindBin::Bin;
-    use_ok('C4::Reserves');
-    use_ok('C4::HoldsQueue');
+    use_ok('C4::Reserves', qw( AddReserve ModReserve ModReserveAffect ));
+    use_ok('C4::HoldsQueue', qw( TransportCostMatrix GetHoldsQueueItems CreateQueue UpdateTransportCostMatrix GetPendingHoldRequestsForBib ));
 }
 
 my $schema = Koha::Database->schema;

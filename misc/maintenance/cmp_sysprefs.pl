@@ -27,8 +27,8 @@
 use Modern::Perl;
 use open OUT => ':encoding(UTF-8)', ':std';
 
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 use Koha::Script;
 use C4::Context;

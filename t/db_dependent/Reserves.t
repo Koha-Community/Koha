@@ -27,11 +27,11 @@ use t::lib::TestBuilder;
 use MARC::Record;
 use DateTime::Duration;
 
-use C4::Circulation;
+use C4::Circulation qw( AddReturn AddIssue );
 use C4::Items;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcBiblio GetMarcFromKohaField ModBiblio );
 use C4::Members;
-use C4::Reserves;
+use C4::Reserves qw( AddReserve CheckReserves GetReservesControlBranch ModReserve ModReserveAffect ReserveSlip CalculatePriority CanReserveBeCanceledFromOpac CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
 use Koha::ActionLogs;
 use Koha::Caches;
 use Koha::DateUtils;

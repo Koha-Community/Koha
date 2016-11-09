@@ -18,10 +18,8 @@ package t::lib::Selenium;
 
 use Modern::Perl;
 use Carp qw( croak );
-use JSON qw( from_json );
-use File::Slurp qw( write_file );
 
-use C4::Context;
+use C4::Context qw( new config preference interface );
 
 use base qw(Class::Accessor);
 __PACKAGE__->mk_accessors(qw(login password base_url opac_base_url selenium_addr selenium_port driver));

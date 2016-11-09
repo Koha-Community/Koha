@@ -13,8 +13,8 @@ use MARC::Record;
 use C4::Biblio;
 use C4::Calendar;
 use C4::Items;
-use C4::Reserves;
-use C4::Circulation;
+use C4::Reserves qw( AddReserve CalculatePriority ModReserve ToggleSuspend AutoUnsuspendReserves SuspendAll ModReserveMinusPriority AlterPriority CanItemBeReserved CheckReserves );
+use C4::Circulation qw( CanBookBeRenewed );
 
 use Koha::Biblios;
 use Koha::CirculationRules;

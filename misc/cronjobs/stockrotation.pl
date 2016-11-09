@@ -108,7 +108,7 @@ database updates have been performed.").
 =cut
 
 use Modern::Perl;
-use Getopt::Long qw/HelpMessage :config gnu_getopt/;
+use Getopt::Long qw( GetOptions HelpMessage );
 
 use Koha::Script -cron;
 use C4::Context;

@@ -22,11 +22,11 @@ use Mojo::JSON;
 
 use C4::Auth qw( haspermission );
 use C4::Context;
-use C4::Circulation;
+use C4::Circulation qw( AddRenewal );
 use Koha::Checkouts;
 use Koha::Old::Checkouts;
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 

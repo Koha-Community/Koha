@@ -32,9 +32,9 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use JSON;
-use C4::Output;
-use C4::Items;
+use JSON qw( to_json );
+use C4::Output qw( output_with_http_headers );
+use C4::Items qw( SearchItems );
 
 my $input = CGI->new;
 my @field = $input->multi_param('field[]');

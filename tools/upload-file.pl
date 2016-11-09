@@ -23,10 +23,10 @@ use CGI qw ( -utf8 );
 use CGI::Cookie;
 use Encode;
 use JSON;
-use URI::Escape;
+use URI::Escape qw( uri_unescape );
 
 use C4::Context;
-use C4::Auth qw/check_cookie_auth haspermission/;
+use C4::Auth qw( check_cookie_auth get_session );
 use Koha::Uploader;
 
 # upload-file.pl must authenticate the user

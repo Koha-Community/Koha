@@ -18,7 +18,7 @@
 package Koha::ExternalContent;
 
 use Modern::Perl;
-use Carp;
+use Carp qw( croak );
 use base qw(Class::Accessor);
 
 use Koha;

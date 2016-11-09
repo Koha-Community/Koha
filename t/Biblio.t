@@ -23,7 +23,8 @@ use Test::Warn;
 
 plan tests => 39;
 
-use_ok('C4::Biblio');
+
+use_ok('C4::Biblio', qw( AddBiblio ModBiblio BiblioAutoLink LinkBibHeadingsToAuthorities GetMarcPrice GetMarcQuantity GetMarcControlnumber GetMarcISBN GetMarcISSN GetMarcSubjects GetMarcAuthors GetMarcUrls GetMarcSeries TransformMarcToKoha ModBiblioMarc RemoveAllNsb GetMarcBiblio UpdateTotalIssues ));
 
 my $db = Test::MockModule->new('Koha::Database');
 $db->mock( _new_schema => sub { return Schema(); } );

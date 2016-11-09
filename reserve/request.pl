@@ -29,23 +29,21 @@ script to place reserves/requests
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use List::MoreUtils qw/uniq/;
-use Date::Calc qw/Date_to_Days/;
-use C4::Output;
-use C4::Auth;
-use C4::Reserves;
-use C4::Biblio;
-use C4::Items;
-use C4::Koha;
-use C4::Serials;
-use C4::Circulation;
-use Koha::DateUtils;
+use List::MoreUtils qw( uniq );
+use Date::Calc qw( Date_to_Days );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Auth qw( get_template_and_user );
+use C4::Reserves qw( RevertWaitingStatus AlterPriority ToggleLowestPriority ToggleSuspend CanBookBeReserved GetMaxPatronHoldsForRecord ItemsAnyAvailableAndNotRestricted CanItemBeReserved IsAvailableForItemLevelRequest );
+use C4::Items qw( get_hostitemnumbers_of );
+use C4::Koha qw( getitemtypeimagelocation );
+use C4::Serials qw( CountSubscriptionFromBiblionumber );
+use C4::Circulation qw( GetTransfers _GetCircControlBranch GetBranchItemRule );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use C4::Utils::DataTables::Members;
-use C4::Members;
-use C4::Search;		# enabled_staff_search_views
+use C4::Search qw( enabled_staff_search_views );
 
 use Koha::Biblios;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Checkouts;
 use Koha::Holds;
 use Koha::CirculationRules;

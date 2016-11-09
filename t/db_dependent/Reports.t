@@ -9,7 +9,7 @@ use warnings;
 use Test::More tests => 2;
 
 BEGIN {
-        use_ok('C4::Reports');
+        use_ok('C4::Reports', qw( GetDelimiterChoices ));
 }
 
 

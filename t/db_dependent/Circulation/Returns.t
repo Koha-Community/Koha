@@ -25,9 +25,9 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Members;
-use C4::Circulation;
+use C4::Circulation qw( AddReturn AddIssue LostItem );
 use C4::Items;
-use C4::Biblio;
+use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 use Koha::Account::Lines;
 use Koha::DateUtils;

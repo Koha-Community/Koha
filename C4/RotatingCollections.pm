@@ -25,12 +25,10 @@ package C4::RotatingCollections;
 use Modern::Perl;
 
 use C4::Context;
-use C4::Circulation;
 use C4::Reserves qw(CheckReserves);
 use Koha::Database;
 
-use DBI;
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 use vars qw(@ISA @EXPORT);
 
@@ -61,6 +59,8 @@ BEGIN {
       TransferCollection
 
       GetCollectionItemBranches
+      isItemInAnyCollection
+      isItemInThisCollection
     );
 }
 

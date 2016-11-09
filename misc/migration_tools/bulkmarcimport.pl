@@ -6,32 +6,37 @@ use Modern::Perl;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
 # Koha modules used
 use MARC::File::USMARC;
 use MARC::File::XML;
-use MARC::Record;
 use MARC::Batch;
-use MARC::Charset;
 use Encode;
 
 use Koha::Script;
 use C4::Context;
-use C4::Biblio;
+use C4::Biblio qw(
+    AddBiblio
+    GetMarcFromKohaField
+    ModBiblio
+    ModBiblioMarc
+);
 use C4::Koha;
-use C4::Charset;
-use C4::Items;
-use C4::MarcModificationTemplates;
+use C4::Charset qw( MarcToUTF8Record SetUTF8Flag );
+use C4::Items qw( AddItemBatchFromMarc );
+use C4::MarcModificationTemplates qw(
+    GetModificationTemplates
+    ModifyRecordWithTemplate
+);
 
 use YAML::XS;
-use Unicode::Normalize;
-use Time::HiRes qw(gettimeofday);
-use Getopt::Long;
+use Time::HiRes qw( gettimeofday );
+use Getopt::Long qw( GetOptions );
 use IO::File;
-use Pod::Usage;
+use Pod::Usage qw( pod2usage );
 
 use Koha::Logger;
 use Koha::Biblios;

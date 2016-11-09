@@ -17,7 +17,6 @@ package Koha::Statistics;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

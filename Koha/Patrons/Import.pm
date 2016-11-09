@@ -17,20 +17,19 @@ package Koha::Patrons::Import;
 
 use Modern::Perl;
 use Moo;
-use namespace::clean;
 
-use Carp;
+use Carp qw( carp );
 use Text::CSV;
 use Encode qw( decode_utf8 );
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
-use C4::Members;
+use C4::Members qw( checkcardnumber );
 
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Patron::Categories;
-use Koha::Patron::Debarments;
-use Koha::DateUtils;
+use Koha::Patron::Debarments qw( AddDebarment GetDebarments );
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 =head1 NAME
 

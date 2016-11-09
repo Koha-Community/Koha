@@ -19,7 +19,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 use Koha::AdvancedEditorMacros;
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 =head1 Name
 

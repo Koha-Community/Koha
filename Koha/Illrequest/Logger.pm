@@ -18,10 +18,9 @@ package Koha::Illrequest::Logger;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use JSON qw( to_json from_json );
-use Time::Local;
+use JSON qw( from_json to_json );
 
-use C4::Koha;
+use C4::Koha qw( GetAuthorisedValues );
 use C4::Context;
 use C4::Templates;
 use C4::Log qw( logaction );

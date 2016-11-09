@@ -19,7 +19,7 @@ package Koha::SearchEngine;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Readonly;
+use Readonly qw( Readonly );
 
 =head1 NAME
 

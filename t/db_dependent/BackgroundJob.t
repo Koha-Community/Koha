@@ -1,14 +1,14 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use C4::Auth;
+use C4::Auth qw( get_session );
 use CGI qw ( -utf8 );
 use Test::More tests => 18;
 
 use Koha::Database;
 
 BEGIN {
-    use_ok('C4::BackgroundJob');
+    use_ok('C4::BackgroundJob', qw( get id fetch name invoker progress status size set finish results clear ));
 }
 my $query = CGI->new;
 

@@ -38,24 +38,20 @@ the OPAC.
 
 use strict;
 use warnings;
-use Getopt::Long;
-use Pod::Usage;
-use Data::Dumper;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 use Koha::Script -cron;
-use C4::Biblio;
 use C4::Context;
 use C4::Letters;
 use C4::Members;
 use C4::Members::Messaging;
-use C4::Overdues;
-use Koha::DateUtils;
-use C4::Log;
+use C4::Log qw( cronlogaction );
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;

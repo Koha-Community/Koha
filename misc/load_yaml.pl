@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Koha::Script;
-use Getopt::Long qw(:config no_ignore_case);
+use Getopt::Long qw( GetOptions );
 use C4::Context;
 use C4::Installer;
 

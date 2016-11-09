@@ -7,7 +7,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Members;
-use C4::Reserves;
+use C4::Reserves qw( CancelExpiredReserves );
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Holds;

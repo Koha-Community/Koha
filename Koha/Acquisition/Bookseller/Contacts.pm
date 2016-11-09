@@ -2,7 +2,6 @@ package Koha::Acquisition::Bookseller::Contacts;
 
 use Modern::Perl;
 
-use Carp;
 
 use base qw( Koha::Objects );
 

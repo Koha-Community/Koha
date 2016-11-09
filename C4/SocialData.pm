@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use C4::Context;
 use Business::ISBN;
-use C4::Koha;
+use C4::Koha qw( GetNormalizedISBN );
 
 =head1 NAME
 

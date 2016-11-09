@@ -7,12 +7,12 @@ use Modern::Perl;
 
 use C4::SIP::ILS::Transaction;
 
-use C4::Reserves;	# AddReserve
+use C4::Reserves qw( CalculatePriority AddReserve ModReserve );
 use Koha::Holds;
 use Koha::Patrons;
-use parent qw(C4::SIP::ILS::Transaction);
-
 use Koha::Items;
+
+use parent qw(C4::SIP::ILS::Transaction);
 
 my %fields = (
 	expiration_date => 0,

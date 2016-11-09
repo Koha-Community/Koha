@@ -1,9 +1,6 @@
 package VerboseWarnings;
 
 use Modern::Perl;
-require Exporter;
-
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 ###############################################################################
 
@@ -20,20 +17,19 @@ verbose warnings.
 
 ###############################################################################
 
-
-@ISA = qw(Exporter);
-@EXPORT_OK = qw(
-    &pedantic_p
-    &warn_additional
-    &warn_normal
-    &warn_pedantic
-    &error_additional
-    &error_normal
-);
-%EXPORT_TAGS = (
-    'warn' => [ 'warn_additional',  'warn_normal',  'warn_pedantic' ],
-    'die'  => [ 'error_additional', 'error_normal' ],
-);
+our (@ISA, @EXPORT_OK);
+BEGIN {
+    require Exporter;
+    @ISA = qw(Exporter);
+    @EXPORT_OK = qw(
+        &pedantic_p
+        &warn_additional
+        &warn_normal
+        &warn_pedantic
+        &error_additional
+        &error_normal
+    );
+}
 
 ###############################################################################
 

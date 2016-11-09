@@ -21,9 +21,9 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth;
-use C4::Output;
-use Koha::List::Patron;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use Koha::List::Patron qw( GetPatronLists );
 
 my $cgi = CGI->new;
 

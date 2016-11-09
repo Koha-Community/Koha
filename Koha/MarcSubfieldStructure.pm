@@ -17,7 +17,6 @@ package Koha::MarcSubfieldStructure;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

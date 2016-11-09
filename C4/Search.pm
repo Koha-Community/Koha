@@ -16,28 +16,44 @@ package C4::Search;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-require Exporter;
 use C4::Context;
-use C4::Biblio;    # GetMarcFromKohaField, GetBiblioData
-use C4::Koha;      # getFacets
+use C4::Biblio qw( TransformMarcToKoha GetMarcFromKohaField GetFrameworkCode GetAuthorisedValueDesc GetBiblioData );
+use C4::Koha qw( getFacets GetVariationsOfISBN GetNormalizedUPC GetNormalizedEAN GetNormalizedOCLCNumber GetNormalizedISBN getitemtypeimagelocation );
 use Koha::DateUtils;
 use Koha::Libraries;
 use Lingua::Stem;
 use XML::Simple;
-use C4::XSLT;
-use C4::Reserves;    # GetReserveStatus
-use C4::Charset;
-use Koha::Logger;
+use C4::XSLT qw( XSLTParse4Display );
+use C4::Reserves qw( GetReserveStatus );
+use C4::Charset qw( SetUTF8Flag );
 use Koha::AuthorisedValues;
 use Koha::ItemTypes;
 use Koha::Libraries;
+use Koha::Logger;
 use Koha::Patrons;
 use Koha::RecordProcessor;
 use URI::Escape;
 use Business::ISBN;
 use MARC::Record;
 use MARC::Field;
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+
+our (@ISA, @EXPORT_OK);
+BEGIN {
+    require Exporter;
+    @ISA    = qw(Exporter);
+    @EXPORT_OK = qw(
+      FindDuplicate
+      SimpleSearch
+      searchResults
+      getRecords
+      buildQuery
+      GetDistinctValues
+      enabled_staff_search_views
+      new_record_from_zebra
+      z3950_search_args
+      getIndexes
+    );
+}
 
 =head1 NAME
 
@@ -54,17 +70,6 @@ This module provides searching functions for Koha's bibliographic databases
 =head1 FUNCTIONS
 
 =cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-  &FindDuplicate
-  &SimpleSearch
-  &searchResults
-  &getRecords
-  &buildQuery
-  &GetDistinctValues
-  &enabled_staff_search_views
-);
 
 # make all your functions, whether exported or not;
 

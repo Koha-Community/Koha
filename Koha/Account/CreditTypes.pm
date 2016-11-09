@@ -18,7 +18,6 @@ package Koha::Account::CreditTypes;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use List::Util qw/any/;
 
 use Koha::Database;
 use Koha::Account::CreditType;

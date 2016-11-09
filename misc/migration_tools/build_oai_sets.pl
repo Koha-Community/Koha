@@ -39,14 +39,22 @@ oai_sets_mappings, and then fill table oai_sets_biblios with builded infos.
 use Modern::Perl;
 use MARC::Record;
 use MARC::File::XML;
-use List::MoreUtils qw/uniq/;
-use Getopt::Std;
+use List::MoreUtils qw( uniq );
+use Getopt::Std qw( getopts );
 
 use Koha::Script;
 use C4::Context;
-use C4::Charset qw/StripNonXmlChars/;
+use C4::Charset qw( StripNonXmlChars );
 use C4::Biblio;
-use C4::OAI::Sets;
+use C4::OAI::Sets qw(
+    AddOAISetsBiblios
+    CalcOAISetsBiblio
+    GetOAISet
+    GetOAISetBySpec
+    GetOAISets
+    GetOAISetsMappings
+    ModOAISetsBiblios
+);
 
 my %opts;
 $Getopt::Std::STANDARD_HELP_VERSION = 1;

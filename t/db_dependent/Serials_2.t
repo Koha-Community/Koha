@@ -10,8 +10,8 @@ use Koha::Database;
 use Koha::Patrons;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use_ok('C4::Serials');
-use_ok('C4::Budgets');
+use_ok('C4::Serials', qw( NewSubscription GetSubscription NewIssue GetPreviousSerialid ));
+use_ok('C4::Budgets', qw( AddBudgetPeriod AddBudget ));
 
 # Mock userenv
 local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };

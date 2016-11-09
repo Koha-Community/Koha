@@ -19,7 +19,6 @@ package Koha::Suggestions;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

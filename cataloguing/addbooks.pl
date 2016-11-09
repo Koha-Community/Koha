@@ -27,14 +27,12 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use URI::Escape;
-use C4::Auth;
-use C4::Biblio;
-use C4::Breeding;
-use C4::Output;
-use C4::Koha;
-use C4::Languages qw(getlanguage);
-use C4::Search;
+use C4::Auth qw( get_template_and_user );
+use C4::Breeding qw( BreedingSearch );
+use C4::Output qw( output_html_with_http_headers pagination_bar );
+use C4::Koha qw( getnbpages );
+use C4::Languages;
+use C4::Search qw( searchResults z3950_search_args );
 
 use Koha::BiblioFrameworks;
 use Koha::SearchEngine::Search;

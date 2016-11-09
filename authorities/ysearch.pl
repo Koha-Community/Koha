@@ -29,12 +29,12 @@ This script allows ajax call for dynamic authorities search
 
 use CGI qw ( -utf8 );
 use Modern::Perl;
-use JSON;
+use JSON qw( to_json );
 
 use C4::Context;
-use C4::Charset;
-use C4::Auth qw/check_cookie_auth/;
-use C4::Output;
+use C4::Charset qw( nsb_clean );
+use C4::Auth qw( check_cookie_auth );
+use C4::Output qw( output_with_http_headers );
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 

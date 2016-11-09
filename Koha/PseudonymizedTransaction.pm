@@ -16,8 +16,7 @@ package Koha::PseudonymizedTransaction;
 
 use Modern::Perl;
 
-use Carp;
-use Crypt::Eksblowfish::Bcrypt qw(bcrypt en_base64);
+use Crypt::Eksblowfish::Bcrypt qw( bcrypt );
 
 use Koha::Database;
 use Koha::Exceptions::Config;

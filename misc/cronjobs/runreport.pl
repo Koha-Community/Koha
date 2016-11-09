@@ -21,27 +21,27 @@
 use Modern::Perl;
 
 use Koha::Script -cron;
-use C4::Reports::Guided; # 0.12
+use C4::Reports::Guided qw( store_results execute_query );
 use Koha::Reports;
 use C4::Context;
-use C4::Log;
+use C4::Log qw( cronlogaction );
 use Koha::Email;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::SMTP::Servers;
 
-use Getopt::Long qw(:config auto_help auto_version);
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 use Text::CSV::Encoded;
 use CGI qw ( -utf8 );
-use Carp;
-use Encode;
+use Carp qw( carp );
+use Encode qw( decode );
 use JSON qw( to_json );
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 

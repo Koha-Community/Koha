@@ -49,11 +49,11 @@ Koha::Token - Tokenizer
 =cut
 
 use Modern::Perl;
-use Bytes::Random::Secure ();
-use String::Random ();
-use WWW::CSRF ();
-use Digest::MD5 qw(md5_base64);
-use Encode qw( encode );
+use Bytes::Random::Secure;
+use String::Random;
+use WWW::CSRF;
+use Digest::MD5 qw( md5_base64 );
+use Encode;
 use Koha::Exceptions::Token;
 use base qw(Class::Accessor);
 use constant HMAC_SHA1_LENGTH => 20;

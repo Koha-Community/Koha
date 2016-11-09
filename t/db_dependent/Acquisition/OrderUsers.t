@@ -1,9 +1,9 @@
 use Modern::Perl;
 use Test::More tests => 3;
 
-use C4::Acquisition;
-use C4::Biblio;
-use C4::Letters;
+use C4::Acquisition qw( NewBasket AddInvoice ModOrder ModOrderUsers GetOrder GetOrderUsers ModReceiveOrder );
+use C4::Biblio qw( AddBiblio );
+use C4::Letters qw( GetQueuedMessages );
 use Koha::Database;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;

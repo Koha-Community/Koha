@@ -19,7 +19,6 @@ package Koha::Patron::Modification;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 use Koha::Exceptions::Patron::Modification;
@@ -27,9 +26,9 @@ use Koha::Patron::Attribute;
 use Koha::Patron::Attributes;
 use Koha::Patron::Modifications;
 
-use JSON;
-use List::MoreUtils qw( uniq any );
-use Try::Tiny;
+use JSON qw( from_json );
+use List::MoreUtils qw( any uniq );
+use Try::Tiny qw( catch try );
 
 use base qw(Koha::Object);
 

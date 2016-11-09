@@ -17,7 +17,6 @@ package Koha::CoverImage;
 
 use Modern::Perl;
 
-use Carp;
 use GD;
 
 use Koha::Database;

@@ -23,7 +23,7 @@ use C4::Context;
 use Koha::Logger;
 
 use JSON::Validator::OpenAPI::Mojolicious;
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 

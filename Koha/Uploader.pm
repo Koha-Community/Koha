@@ -69,7 +69,6 @@ use Modern::Perl;
 use CGI; # no utf8 flag, since it may interfere with binary uploads
 use Digest::MD5;
 use Encode;
-use File::Spec;
 use IO::File;
 use Time::HiRes;
 

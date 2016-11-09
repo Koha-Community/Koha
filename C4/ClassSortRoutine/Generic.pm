@@ -28,7 +28,7 @@ C4::ClassSortRoutine::Generic - generic call number sorting key routine
 
 =head1 SYNOPSIS
 
-use C4::ClassSortRoutine;
+use C4::ClassSortRoutine qw( GetClassSortKey );
 
 my $cn_sort = GetClassSortKey('Generic', $cn_class, $cn_item);
 

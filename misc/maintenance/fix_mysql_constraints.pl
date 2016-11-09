@@ -21,14 +21,14 @@ use Modern::Perl;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     my $lib = "$FindBin::Bin/../kohalib.pl";
     eval { require $lib };
 }
 
-use Getopt::Long;
-use Pod::Usage;
-use Try::Tiny;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
+use Try::Tiny qw( catch try );
 use Koha::Script;
 use C4::Context;
 

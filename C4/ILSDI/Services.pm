@@ -21,19 +21,17 @@ use strict;
 use warnings;
 
 use C4::Members;
-use C4::Items;
-use C4::Circulation;
+use C4::Items qw( get_hostitemnumbers_of );
+use C4::Circulation qw( CanBookBeRenewed barcodedecode CanBookBeIssued AddRenewal );
 use C4::Accounts;
-use C4::Biblio;
-use C4::Reserves qw(AddReserve CanBookBeReserved CanItemBeReserved IsAvailableForItemLevelRequest);
+use C4::Biblio qw( GetMarcBiblio );
+use C4::Reserves qw( CanBookBeReserved IsAvailableForItemLevelRequest CalculatePriority AddReserve CanItemBeReserved );
 use C4::Context;
-use C4::AuthoritiesMarc;
-use XML::Simple;
-use HTML::Entities;
+use C4::Auth;
 use CGI qw ( -utf8 );
 use DateTime;
 use C4::Auth;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use Koha::Biblios;
 use Koha::Checkouts;

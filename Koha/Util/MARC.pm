@@ -18,7 +18,6 @@ package Koha::Util::MARC;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use MARC::Record;
 
 =head1 NAME
 

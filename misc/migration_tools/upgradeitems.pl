@@ -5,8 +5,8 @@ use strict;
 
 use Koha::Script;
 use C4::Context;
-use C4::Items;
-use C4::Biblio;
+use C4::Items qw( ModItemFromMarc );
+use C4::Biblio qw( GetMarcBiblio );
 
 my $dbh=C4::Context->dbh;
 

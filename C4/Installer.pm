@@ -19,7 +19,7 @@ package C4::Installer;
 
 use Modern::Perl;
 
-use Encode qw( encode is_utf8 );
+use Encode;
 use DBIx::RunSQL;
 use YAML::XS;
 use C4::Context;
@@ -30,7 +30,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
-    push @EXPORT, qw( primary_key_exists foreign_key_exists index_exists column_exists TableExists);
+    push @EXPORT, qw( primary_key_exists foreign_key_exists index_exists column_exists TableExists marc_framework_sql_list);
 };
 
 =head1 NAME

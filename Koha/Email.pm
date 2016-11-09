@@ -22,7 +22,7 @@ use Modern::Perl;
 
 use Email::Valid;
 use Email::MessageID;
-use List::Util qw(pairs);
+use List::Util qw( pairs );
 
 use Koha::Exceptions;
 

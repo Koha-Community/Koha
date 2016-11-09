@@ -36,16 +36,16 @@
 
 use Modern::Perl;
 
-use C4::Auth;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_and_exit output_html_with_http_headers );
 use C4::Templates;
 use Koha::Patrons;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Token;
 use Koha::Libraries;
 use Koha::Patron::Categories;
 use Koha::Patron::Attribute::Types;
-use Koha::List::Patron;
+use Koha::List::Patron qw( AddPatronList AddPatronsToList );
 
 use Koha::Patrons::Import;
 my $Import = Koha::Patrons::Import->new();

@@ -20,12 +20,10 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Acquisition::Orders;
-use Koha::DateUtils;
 
-use Clone 'clone';
-use JSON qw(decode_json);
+use Clone qw( clone );
 use Scalar::Util qw( blessed );
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 

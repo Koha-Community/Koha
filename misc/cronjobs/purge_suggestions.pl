@@ -22,16 +22,15 @@ use Modern::Perl;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 use C4::Suggestions;
-use C4::Log;
+use C4::Log qw( cronlogaction );
 use C4::Context;
 
 my ( $help, $days, $confirm );

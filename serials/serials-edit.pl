@@ -63,21 +63,20 @@ op can be :
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use Encode qw( decode is_utf8 );
-use C4::Auth;
-use C4::Biblio;
-use C4::Items;
-use C4::Koha;
-use C4::Output;
+use Encode;
+use C4::Auth qw( get_template_and_user haspermission );
+use C4::Biblio qw( GetMarcFromKohaField TransformHtmlToXml );
+use C4::Items qw( AddItemFromMarc ModItemFromMarc PrepareItemrecordDisplay );
+use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
-use C4::Serials;
-use C4::Search qw/enabled_staff_search_views/;
+use C4::Serials qw( GetSerials GetSerials2 GetSerialInformation HasSubscriptionExpired GetSubscription abouttoexpire NewIssue ModSerialStatus GetPreviousSerialid AddItem2Serial );
+use C4::Search qw( enabled_staff_search_views );
 
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Items;
 use Koha::Serial::Items;
 
-use List::MoreUtils qw/uniq/;
+use List::MoreUtils qw( uniq );
 
 my $query           = CGI->new();
 my $dbh             = C4::Context->dbh;

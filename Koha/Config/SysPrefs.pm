@@ -19,7 +19,6 @@ package Koha::Config::SysPrefs;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

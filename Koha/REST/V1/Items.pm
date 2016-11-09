@@ -21,8 +21,8 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Items;
 
-use List::MoreUtils qw(any);
-use Try::Tiny;
+use List::MoreUtils qw( any );
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 

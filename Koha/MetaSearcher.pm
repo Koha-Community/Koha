@@ -22,14 +22,14 @@ use Modern::Perl;
 use base 'Class::Accessor';
 
 use C4::Charset qw( MarcToUTF8Record SetUTF8Flag );
-use C4::Search qw(); # Purely for new_record_from_zebra
+use C4::Search qw( new_record_from_zebra );
 use DBIx::Class::ResultClass::HashRefInflator;
 use IO::Select;
 use Koha::Caches;
 use Koha::Database;
 use Koha::MetadataRecord;
 use MARC::File::XML;
-use Storable qw( store_fd fd_retrieve );
+use Storable qw( fd_retrieve store_fd );
 use Time::HiRes qw( clock_gettime CLOCK_MONOTONIC );
 use UUID;
 use ZOOM;

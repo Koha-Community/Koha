@@ -18,7 +18,7 @@ package Koha::SharedContent;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use JSON;
+use JSON qw( from_json to_json );
 use HTTP::Request;
 use LWP::UserAgent;
 

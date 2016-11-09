@@ -20,8 +20,8 @@
 use Modern::Perl;
 
 use C4::Context;
-use C4::Charset;
-use C4::AuthoritiesMarc;
+use C4::Charset qw( MarcToUTF8Record );
+use C4::AuthoritiesMarc qw( AddAuthority );
 use Koha::Database;
 use Test::More;
 use File::Basename;

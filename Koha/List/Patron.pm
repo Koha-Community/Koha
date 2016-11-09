@@ -27,7 +27,7 @@ Koha::List::Patron - Management of lists of patrons
 
 use Modern::Perl;
 
-use Carp;
+use Carp qw( carp croak );
 
 use Koha::Database;
 

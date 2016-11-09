@@ -28,8 +28,8 @@ use Koha::Tags;
 use Koha::Tags::Approvals;
 use Koha::Tags::Indexes;
 
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 =head1 NAME
 

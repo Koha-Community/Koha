@@ -20,11 +20,11 @@
 use strict;
 use warnings;
 
-use C4::ClassSplitRoutine::LCC;
+use C4::ClassSplitRoutine::LCC qw( split_callnumber );
 use Test::More tests => 11;
 
 BEGIN {
-    use_ok('C4::Labels::Label');
+    use_ok('C4::Labels::Label', qw( _get_text_fields _check_params _guide_box ));
 }
 
 my $format_string = "title, callnumber";

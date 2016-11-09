@@ -56,23 +56,18 @@ To filter the results list on this given date.
 
 use Modern::Perl;
 
-use C4::Auth;
-use C4::Acquisition;
-use C4::Budgets;
-use C4::Biblio;
-use C4::Items;
+use C4::Auth qw( get_template_and_user );
+use C4::Acquisition qw( CancelReceipt GetInvoice GetInvoiceDetails get_rounded_price );
+use C4::Budgets qw( _round GetBudget GetBudgetByOrderNumber GetBudgetName );
 use CGI qw ( -utf8 );
-use C4::Output;
-use C4::Suggestions;
+use C4::Output qw( output_html_with_http_headers );
+use C4::Suggestions qw( GetSuggestion GetSuggestionInfoFromBiblionumber GetSuggestionInfo );
 
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Bookseller;
 use Koha::Acquisition::Orders;
 use Koha::Biblios;
-use Koha::DateUtils;
-use Koha::Biblios;
 
-use JSON;
 
 my $input = CGI->new;
 

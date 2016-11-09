@@ -19,18 +19,16 @@ package Koha::Item;
 
 use Modern::Perl;
 
-use Carp;
-use List::MoreUtils qw(any);
-use Data::Dumper;
-use Try::Tiny;
+use List::MoreUtils qw( any );
+use Data::Dumper qw( Dumper );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
 use C4::Context;
-use C4::Circulation;
+use C4::Circulation qw( GetBranchItemRule );
 use C4::Reserves;
-use C4::ClassSource; # FIXME We would like to avoid that
+use C4::ClassSource qw( GetClassSort );
 use C4::Log qw( logaction );
 
 use Koha::Checkouts;

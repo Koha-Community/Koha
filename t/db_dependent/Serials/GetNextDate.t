@@ -4,7 +4,7 @@ use Modern::Perl;
 use Test::More tests => 102;
 
 use Koha::Database;
-use C4::Serials;
+use C4::Serials qw( GetNextDate );
 use C4::Serials::Frequency;
 
 my $schema  = Koha::Database->new->schema;

@@ -17,7 +17,6 @@ package Koha::Cities;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

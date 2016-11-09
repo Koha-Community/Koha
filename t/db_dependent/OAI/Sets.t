@@ -24,8 +24,8 @@ use Test::Warn;
 use MARC::Record;
 
 use Koha::Database;
-use C4::Biblio;
-use C4::OAI::Sets;
+use C4::Biblio qw( GetMarcBiblio );
+use C4::OAI::Sets qw( AddOAISet GetOAISets GetOAISet GetOAISetBySpec ModOAISet ModOAISetMappings GetOAISetsMappings GetOAISetMappings AddOAISetsBiblios GetOAISetsBiblio ModOAISetsBiblios DelOAISet DelOAISetsBiblio UpdateOAISetsBiblio CalcOAISetsBiblio );
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;

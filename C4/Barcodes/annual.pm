@@ -20,11 +20,11 @@ package C4::Barcodes::annual;
 use strict;
 use warnings;
 
-use Carp;
+use Carp qw( carp );
 
 use C4::Context;
 
-use Koha::DateUtils qw( output_pref dt_from_string );
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 use vars qw(@ISA);
 use vars qw($width);

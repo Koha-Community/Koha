@@ -1,7 +1,7 @@
 package t::lib::Dates;
 
 use Modern::Perl;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use DateTime;
 
 =head1 NAME

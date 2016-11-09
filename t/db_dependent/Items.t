@@ -19,8 +19,8 @@ use Modern::Perl;
 use Data::Dumper;
 
 use MARC::Record;
-use C4::Items;
-use C4::Biblio;
+use C4::Items qw( ModItemTransfer GetHiddenItemnumbers GetItemsInfo SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc );
+use C4::Biblio qw( GetMarcFromKohaField EmbedItemsInMarcBiblio GetMarcBiblio AddBiblio );
 use Koha::Items;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );

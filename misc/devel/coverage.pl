@@ -48,9 +48,9 @@ prints this help text
 use Modern::Perl;
 
 use C4::Context;
-use Cwd;
-use Getopt::Long;
-use Pod::Usage;
+use Cwd qw( getcwd );
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 my $help;
 

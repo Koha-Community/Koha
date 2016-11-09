@@ -4,8 +4,8 @@ use Modern::Perl;
 
 use Test::More tests => 14;
 use C4::Context;
-use C4::Acquisition;
-use C4::Biblio;
+use C4::Acquisition qw( NewBasket GetBasket SearchOrders AddInvoice ModReceiveOrder CancelReceipt );
+use C4::Biblio qw( AddBiblio );
 use C4::Items;
 use C4::Budgets;
 use Koha::Acquisition::Orders;

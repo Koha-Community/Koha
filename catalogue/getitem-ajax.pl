@@ -19,13 +19,11 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use JSON;
+use JSON qw( to_json );
 
-use C4::Auth;
-use C4::Biblio;
-use C4::Items;
-use C4::Koha;
-use C4::Output;
+use C4::Auth qw( check_api_auth );
+use C4::Biblio qw( GetMarcStructure );
+use C4::Output qw( output_with_http_headers );
 use Koha::Libraries;
 
 use Koha::AuthorisedValues;

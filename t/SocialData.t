@@ -31,7 +31,7 @@ BEGIN {
 }
 
 BEGIN {
-    use_ok('C4::SocialData');
+    use_ok('C4::SocialData', qw( get_data get_report ));
 }
 
 use Test::DBIx::Class;

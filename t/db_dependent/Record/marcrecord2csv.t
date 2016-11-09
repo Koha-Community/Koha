@@ -7,12 +7,12 @@ use MARC::Record;
 use MARC::Field;
 use Text::CSV::Encoded;
 
-use C4::Biblio qw( AddBiblio );
+use C4::Biblio qw( AddBiblio GetMarcBiblio );
 use C4::Context;
-use C4::Record;
+use C4::Record qw( marcrecord2csv );
 use Koha::Database;
 
-use C4::Items;
+use C4::Items qw( AddItemFromMarc );
 
 use t::lib::TestBuilder;
 

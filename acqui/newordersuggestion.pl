@@ -91,10 +91,9 @@ can be equal to
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use C4::Auth;    # get_template_and_user
-use C4::Output;
-use C4::Suggestions;
-use C4::Biblio;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Suggestions qw( ConnectSuggestionAndBiblio SearchSuggestion );
 use C4::Budgets;
 
 use Koha::Acquisition::Booksellers;

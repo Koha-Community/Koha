@@ -7,17 +7,16 @@ use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
 
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 use HTTPD::Bench::ApacheBench;
 use LWP::UserAgent;
-use Data::Dumper;
 use HTTP::Cookies;
 use C4::Context;
-use URI::Escape;
+use URI::Escape qw( uri_escape_utf8 );
 use Koha::Patrons;
 
 my ($help, $steps, $baseurl, $max_tries, $user, $password,$short_print);

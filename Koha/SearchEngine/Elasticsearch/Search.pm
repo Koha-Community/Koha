@@ -50,9 +50,7 @@ use Koha::SearchEngine::Search;
 use Koha::Exceptions::Elasticsearch;
 use MARC::Record;
 use MARC::File::XML;
-use Data::Dumper; #TODO remove
-use Carp qw(cluck);
-use MIME::Base64;
+use MIME::Base64 qw( decode_base64 );
 
 Koha::SearchEngine::Elasticsearch::Search->mk_accessors(qw( store ));
 

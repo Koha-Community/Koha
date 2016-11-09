@@ -17,9 +17,9 @@
 
 use Modern::Perl;
 use C4::Context;
-use C4::Circulation;
-use C4::Biblio;
-use C4::Items;
+use C4::Circulation qw( CreateBranchTransferLimit DeleteBranchTransferLimits GetTransfers GetTransfersFromTo TransferSlip );
+use C4::Biblio qw( AddBiblio );
+use C4::Items qw( ModItemTransfer );
 use Koha::Database;
 use Koha::DateUtils;
 use DateTime::Duration;
@@ -31,7 +31,7 @@ use Test::More tests => 22;
 use Test::Deep;
 
 BEGIN {
-    use_ok('C4::Circulation');
+    use_ok('C4::Circulation', qw( CreateBranchTransferLimit DeleteBranchTransferLimits GetTransfers GetTransfersFromTo TransferSlip ));
 }
 can_ok(
     'C4::Circulation',

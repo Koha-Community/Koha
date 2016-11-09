@@ -19,13 +19,12 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Members;
 use C4::Circulation qw( GetIssuingCharges );
 use C4::Reserves;
-use C4::Items;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
 use Koha::ItemTypes;
 use Koha::Patrons;

@@ -21,7 +21,7 @@ package C4::Scrubber;
 
 use strict;
 use warnings;
-use Carp;
+use Carp qw( croak );
 use HTML::Scrubber;
 
 use C4::Context;

@@ -22,7 +22,7 @@ use utf8;
 
 use t::lib::TestBuilder;
 
-use C4::Letters;
+use C4::Letters qw( GetPreparedLetter );
 use Koha::Database;
 
 my $schema = Koha::Database->schema;

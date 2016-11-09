@@ -19,12 +19,17 @@ package C4::Matcher;
 
 use Modern::Perl;
 
-use MARC::Record;
 
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
-use Koha::Util::Normalize qw/legacy_default remove_spaces upper_case lower_case ISBN/;
+use Koha::Util::Normalize qw(
+    ISBN
+    legacy_default
+    lower_case
+    remove_spaces
+    upper_case
+);
 
 =head1 NAME
 

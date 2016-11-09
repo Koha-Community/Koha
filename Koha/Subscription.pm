@@ -19,7 +19,6 @@ package Koha::Subscription;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 use Koha::Biblios;
@@ -28,7 +27,6 @@ use Koha::Biblioitems;
 use Koha::Subscriptions;
 use Koha::Subscription::Frequencies;
 use Koha::Subscription::Numberpatterns;
-use JSON;
 
 use base qw(Koha::Object Koha::Object::Mixin::AdditionalFields);
 

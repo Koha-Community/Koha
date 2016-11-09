@@ -18,19 +18,22 @@ package Koha::AuthUtils;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Crypt::Eksblowfish::Bcrypt qw(bcrypt en_base64);
-use Encode qw( encode is_utf8 );
-use Fcntl qw/O_RDONLY/; # O_RDONLY is used in generate_salt
-use List::MoreUtils qw/ any /;
+use Crypt::Eksblowfish::Bcrypt qw( bcrypt en_base64 );
+use Encode;
+use Fcntl qw( O_RDONLY ); # O_RDONLY is used in generate_salt
+use List::MoreUtils qw( any );
 use String::Random qw( random_string );
 use Koha::Exceptions::Password;
 
 use C4::Context;
 
-use base 'Exporter';
 
-our @EXPORT_OK   = qw(hash_password get_script_name);
-
+our (@ISA, @EXPORT_OK);
+BEGIN {
+    require Exporter;
+    @ISA = qw(Exporter);
+    @EXPORT_OK = qw(hash_password get_script_name is_password_valid);
+};
 =head1 NAME
 
 Koha::AuthUtils - utility routines for authentication

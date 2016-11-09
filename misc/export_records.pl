@@ -18,9 +18,9 @@
 
 use Modern::Perl;
 use MARC::File::XML;
-use List::MoreUtils qw(uniq);
-use Getopt::Long;
-use Pod::Usage;
+use List::MoreUtils qw( uniq );
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 use Koha::Script;
 use C4::Auth;

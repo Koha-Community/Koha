@@ -3,7 +3,7 @@
 use Modern::Perl;
 use Test::More tests => 70;
 
-use C4::Budgets;
+use C4::Budgets qw( GetBudget GetBudgetUsers CanUserUseBudget );
 use t::lib::Mocks;
 
 # Avoid "redefined subroutine" warnings

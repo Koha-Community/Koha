@@ -20,7 +20,7 @@ use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Patroncards::Layout;
+use C4::Patroncards::Layout qw( save new );
 
 subtest '->save' => sub {
     plan tests => 1;

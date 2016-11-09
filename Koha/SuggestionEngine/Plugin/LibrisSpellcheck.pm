@@ -18,7 +18,7 @@ package Koha::SuggestionEngine::Plugin::LibrisSpellcheck;
 
 use Modern::Perl;
 use LWP::UserAgent;
-use XML::Simple qw(XMLin);
+use XML::Simple qw( XMLin );
 use C4::Context;
 use base qw(Koha::SuggestionEngine::Base);
 

@@ -20,45 +20,38 @@ package C4::Overdues;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Date::Calc qw/Today Date_to_Days/;
-use Date::Manip qw/UnixDate/;
+use Date::Calc qw( Today );
+use Date::Manip qw( UnixDate );
 use List::MoreUtils qw( uniq );
-use POSIX qw( floor ceil );
-use Locale::Currency::Format 1.28;
-use Carp;
+use POSIX qw( ceil floor );
+use Locale::Currency::Format 1.28 qw( currency_format FMT_SYMBOL );
+use Carp qw( carp );
 
-use C4::Circulation;
 use C4::Context;
 use C4::Accounts;
-use C4::Log; # logaction
 use Koha::Logger;
-use Koha::DateUtils;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Libraries;
 
-use vars qw(@ISA @EXPORT);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
 
     # subs to rename (and maybe merge some...)
-    push @EXPORT, qw(
-      &CalcFine
-      &Getoverdues
-      &checkoverdues
-      &UpdateFine
-      &GetFine
-      &get_chargeable_units
-      &GetOverduesForBranch
-      &GetOverdueMessageTransportTypes
-      &parse_overdues_letter
-    );
-
-    # subs to move to Circulation.pm
-    push @EXPORT, qw(
-      &GetIssuesIteminfo
+    @EXPORT_OK = qw(
+      CalcFine
+      Getoverdues
+      checkoverdues
+      UpdateFine
+      GetFine
+      GetBranchcodesWithOverdueRules
+      get_chargeable_units
+      GetOverduesForBranch
+      GetOverdueMessageTransportTypes
+      parse_overdues_letter
+      GetIssuesIteminfo
     );
 }
 

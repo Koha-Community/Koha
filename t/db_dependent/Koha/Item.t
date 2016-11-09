@@ -22,8 +22,8 @@ use Modern::Perl;
 use Test::More tests => 9;
 use Test::Exception;
 
-use C4::Biblio;
-use C4::Circulation;
+use C4::Biblio qw( GetMarcSubfieldStructure );
+use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Items;
 use Koha::Database;

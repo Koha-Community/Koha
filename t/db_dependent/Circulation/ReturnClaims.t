@@ -24,7 +24,7 @@ use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Circulation;
+use C4::Circulation qw( LostItem AddIssue );
 
 # Mock userenv, used by AddIssue
 my $branch;

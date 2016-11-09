@@ -20,26 +20,31 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use HTML::Entities;
-use Try::Tiny;
-use C4::Auth;
+use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Koha;
-use C4::Serials;    #uses getsubscriptionfrom biblionumber
-use C4::Output;
-use C4::Biblio;
-use C4::Items;
-use C4::Circulation;
+use C4::Koha qw(
+    GetAuthorisedValues
+    getitemtypeimagelocation
+    GetNormalizedEAN
+    GetNormalizedISBN
+    GetNormalizedOCLCNumber
+    GetNormalizedUPC
+);
+use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Biblio qw( GetBiblioData GetFrameworkCode GetMarcBiblio );
+use C4::Items qw( GetAnalyticsCount GetHostItemsInfo GetItemsInfo );
+use C4::Circulation qw( GetTransfers );
 use C4::Reserves;
-use C4::Serials;
-use C4::XISBN qw(get_xisbns);
-use C4::External::Amazon;
-use C4::Search;        # enabled_staff_search_views
-use C4::Tags qw(get_tags);
-use C4::XSLT;
-use Koha::DateUtils;
+use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
+use C4::XISBN qw( get_xisbns );
+use C4::External::Amazon qw( get_amazon_tld );
+use C4::Search qw( z3950_search_args enabled_staff_search_views );
+use C4::Tags qw( get_tags );
+use C4::XSLT qw( XSLTParse4Display );
+use Koha::DateUtils qw( format_sqldatetime );
 use C4::HTML5Media;
-use C4::CourseReserves qw(GetItemCourseReservesInfo);
-use C4::Acquisition qw(GetOrdersByBiblionumber);
+use C4::CourseReserves qw( GetItemCourseReservesInfo );
 use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::CoverImages;

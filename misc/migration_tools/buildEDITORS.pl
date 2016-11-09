@@ -10,11 +10,11 @@ use MARC::Record;
 use MARC::Batch;
 use Koha::Script;
 use C4::Context;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcBiblio );
 use C4::AuthoritiesMarc;
-use Time::HiRes qw(gettimeofday);
+use Time::HiRes qw( gettimeofday );
 
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 my ( $input_marc_file, $number) = ('',0);
 my ($version, $verbose, $test_parameter, $confirm,$delete);
 GetOptions(

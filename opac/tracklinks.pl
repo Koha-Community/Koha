@@ -20,13 +20,13 @@
 
 use Modern::Perl;
 use C4::Context;
-use C4::Auth qw(checkauth);
+use C4::Auth qw( checkauth );
 use C4::Biblio;
-use C4::Output;
+use C4::Output qw( output_error );
 use Koha::Items;
 use Koha::Linktracker;
 use CGI qw ( -utf8 );
-use List::MoreUtils qw(any);
+use List::MoreUtils qw( any );
 
 my $cgi = CGI->new;
 my $uri = $cgi->param('uri') || '';

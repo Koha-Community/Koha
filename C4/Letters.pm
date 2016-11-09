@@ -20,36 +20,47 @@ package C4::Letters;
 use Modern::Perl;
 
 use MIME::Lite;
-use Date::Calc qw( Add_Delta_Days );
-use Encode;
-use Carp;
+use Carp qw( carp croak );
 use Template;
-use Module::Load::Conditional qw(can_load);
+use Module::Load::Conditional qw( can_load );
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 use C4::Members;
-use C4::Log;
+use C4::Log qw( logaction );
 use C4::SMS;
 use C4::Templates;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::SMS::Providers;
 
 use Koha::Email;
 use Koha::Notice::Messages;
 use Koha::Notice::Templates;
-use Koha::DateUtils qw( format_sqldatetime dt_from_string );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
 use Koha::SMTP::Servers;
 use Koha::Subscriptions;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
-    @EXPORT = qw(
-        &EnqueueLetter &GetLetters &GetLettersAvailableForALibrary &GetLetterTemplates &DelLetter &GetPreparedLetter &GetWrappedLetter &SendAlerts &GetPrintMessages &GetMessageTransportTypes
+    @EXPORT_OK = qw(
+      GetLetters
+      GetLettersAvailableForALibrary
+      GetLetterTemplates
+      DelLetter
+      GetPreparedLetter
+      GetWrappedLetter
+      SendAlerts
+      GetPrintMessages
+      GetQueuedMessages
+      GetMessage
+      GetMessageTransportTypes
+
+      EnqueueLetter
+      SendQueuedMessages
+      ResendMessage
     );
 }
 

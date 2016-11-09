@@ -23,7 +23,7 @@ use t::lib::TestBuilder;
 use Koha::Database;
 
 BEGIN {
-    use_ok('C4::Barcodes::ValueBuilder');
+    use_ok('C4::Barcodes::ValueBuilder', qw( get_barcode ));
 };
 
 my $schema  = Koha::Database->new->schema;

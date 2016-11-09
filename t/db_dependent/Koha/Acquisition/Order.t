@@ -25,7 +25,7 @@ use Test::Exception;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Circulation;
+use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Biblios;
 use Koha::Database;

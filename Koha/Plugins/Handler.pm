@@ -19,10 +19,10 @@ package Koha::Plugins::Handler;
 
 use Modern::Perl;
 
-use Array::Utils qw(array_minus);
-use File::Path qw(remove_tree);
+use Array::Utils qw( array_minus );
+use File::Path qw( remove_tree );
 
-use Module::Load qw(load);
+use Module::Load qw( load );
 
 use C4::Context;
 use Koha::Plugins::Methods;

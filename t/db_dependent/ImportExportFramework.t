@@ -26,7 +26,7 @@ use File::Basename qw( dirname );
 use Koha::Database;
 use Koha::BiblioFrameworks;
 use Koha::MarcSubfieldStructures;
-use C4::ImportExportFramework;
+use C4::ImportExportFramework qw( ImportFramework ExportFramework );
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;

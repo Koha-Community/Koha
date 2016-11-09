@@ -24,32 +24,31 @@ use POSIX qw( floor );
 use YAML::XS;
 use Encode;
 
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use C4::Context;
-use C4::Stats;
-use C4::Reserves;
-use C4::Biblio;
-use C4::Items;
-use C4::Members;
+use C4::Stats qw( UpdateStats );
+use C4::Reserves qw( CheckReserves CanItemBeReserved MoveReserve ModReserve ModReserveMinusPriority RevertWaitingStatus IsItemOnHoldAndFound IsAvailableForItemLevelRequest );
+use C4::Biblio qw( UpdateTotalIssues );
+use C4::Items qw( ModItemTransfer ModDateLastSeen CartToShelf );
 use C4::Accounts;
 use C4::ItemCirculationAlertPreference;
 use C4::Message;
-use C4::Log; # logaction
-use C4::Overdues qw(CalcFine UpdateFine get_chargeable_units);
+use C4::Log qw( logaction ); # logaction
+use C4::Overdues;
 use C4::RotatingCollections qw(GetCollectionItemBranches);
-use Algorithm::CheckDigits;
+use Algorithm::CheckDigits qw( CheckDigits );
 
-use Data::Dumper;
+use Data::Dumper qw( Dumper );
 use Koha::Account;
 use Koha::AuthorisedValues;
 use Koha::Biblioitems;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Calendar;
 use Koha::Checkouts;
 use Koha::Illrequests;
 use Koha::Items;
 use Koha::Patrons;
-use Koha::Patron::Debarments;
+use Koha::Patron::Debarments qw( DelUniqueDebarment GetDebarments );
 use Koha::Database;
 use Koha::Libraries;
 use Koha::Account::Lines;
@@ -62,77 +61,68 @@ use Koha::Config::SysPref;
 use Koha::Checkouts::ReturnClaims;
 use Koha::SearchEngine::Indexer;
 use Koha::Exceptions::Checkout;
-use Carp;
-use List::MoreUtils qw( uniq any );
+use Carp qw( carp );
+use List::MoreUtils qw( any );
 use Scalar::Util qw( looks_like_number );
-use Try::Tiny;
-use Date::Calc qw(
-  Today
-  Today_and_Now
-  Add_Delta_YM
-  Add_Delta_DHMS
-  Date_to_Days
-  Day_of_Week
-  Add_Delta_Days
-);
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+use Date::Calc qw( Date_to_Days );
+our (@ISA, @EXPORT_OK);
 BEGIN {
-	require Exporter;
-	@ISA    = qw(Exporter);
 
-	# FIXME subs that should probably be elsewhere
-	push @EXPORT, qw(
-		&barcodedecode
-        &LostItem
-        &ReturnLostItem
-        &GetPendingOnSiteCheckouts
-	);
+    require Exporter;
+    @ISA = qw(Exporter);
 
-	# subs to deal with issuing a book
-	push @EXPORT, qw(
-		&CanBookBeIssued
-		&CanBookBeRenewed
-		&AddIssue
-		&AddRenewal
-		&GetRenewCount
-        &GetSoonestRenewDate
-        &GetLatestAutoRenewDate
-		&GetIssuingCharges
-        &GetBranchBorrowerCircRule
-        &GetBranchItemRule
-		&GetOpenIssue
-        &CheckIfIssuedToPatron
-        &IsItemIssued
-        GetTopIssues
-	);
+    # FIXME subs that should probably be elsewhere
+    push @EXPORT_OK, qw(
+      barcodedecode
+      LostItem
+      ReturnLostItem
+      GetPendingOnSiteCheckouts
 
-	# subs to deal with returns
-	push @EXPORT, qw(
-		&AddReturn
-        &MarkIssueReturned
-	);
+      CanBookBeIssued
+      checkHighHolds
+      CanBookBeRenewed
+      AddIssue
+      GetLoanLength
+      GetHardDueDate
+      AddRenewal
+      GetRenewCount
+      GetSoonestRenewDate
+      GetLatestAutoRenewDate
+      GetIssuingCharges
+      AddIssuingCharge
+      GetBranchBorrowerCircRule
+      GetBranchItemRule
+      GetBiblioIssues
+      GetOpenIssue
+      GetUpcomingDueIssues
+      CheckIfIssuedToPatron
+      IsItemIssued
+      GetAgeRestriction
+      GetTopIssues
 
-	# subs to deal with transfers
-	push @EXPORT, qw(
-		&transferbook
-		&GetTransfers
-		&GetTransfersFromTo
-		&updateWrongTransfer
-                &IsBranchTransferAllowed
-                &CreateBranchTransferLimit
-                &DeleteBranchTransferLimits
-        &TransferSlip
-	);
+      AddReturn
+      MarkIssueReturned
 
-    # subs to deal with offline circulation
-    push @EXPORT, qw(
-      &GetOfflineOperations
-      &GetOfflineOperation
-      &AddOfflineOperation
-      &DeleteOfflineOperation
-      &ProcessOfflineOperation
+      transferbook
+      TooMany
+      GetTransfers
+      GetTransfersFromTo
+      updateWrongTransfer
+      CalcDateDue
+      CheckValidBarcode
+      IsBranchTransferAllowed
+      CreateBranchTransferLimit
+      DeleteBranchTransferLimits
+      TransferSlip
+
+      GetOfflineOperations
+      GetOfflineOperation
+      AddOfflineOperation
+      DeleteOfflineOperation
+      ProcessOfflineOperation
+      ProcessOfflinePayment
     );
+    push @EXPORT_OK, '_GetCircControlBranch';    # This is wrong!
 }
 
 =head1 NAME

@@ -29,7 +29,7 @@ $| = 1;
 BEGIN {
     use FindBin;
     use lib $FindBin::Bin;
-    use_ok('C4::Barcodes');
+    use_ok('C4::Barcodes', qw( value initial max db_max next_value next previous serial autoBarcode is_max ));
 }
 
 my $builder = t::lib::TestBuilder->new;

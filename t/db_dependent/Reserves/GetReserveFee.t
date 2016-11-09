@@ -26,8 +26,8 @@ use Test::MockModule;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Circulation;
-use C4::Reserves qw|AddReserve|;
+use C4::Circulation qw( AddIssue );
+use C4::Reserves qw( GetReserveFee ChargeReserveFee AddReserve );
 use Koha::Database;
 
 my $schema = Koha::Database->new->schema;

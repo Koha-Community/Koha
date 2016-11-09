@@ -33,7 +33,6 @@ SuggestionEngine.
 
 use strict;
 use warnings;
-use Carp;
 
 use base qw(Koha::SuggestionEngine::Base);
 

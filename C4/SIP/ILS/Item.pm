@@ -17,11 +17,11 @@ use C4::SIP::ILS::Transaction;
 use C4::SIP::Sip qw(add_field);
 
 use C4::Biblio;
-use C4::Circulation;
+use C4::Circulation qw( barcodedecode );
 use C4::Context;
 use C4::Items;
 use C4::Members;
-use C4::Reserves;
+use C4::Reserves qw( ModReserveFill );
 use Koha::Biblios;
 use Koha::Checkouts::ReturnClaims;
 use Koha::Checkouts;

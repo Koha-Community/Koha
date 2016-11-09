@@ -6,7 +6,7 @@ use Modern::Perl;
 use Koha::Exceptions::Exception;
 use Koha::Plugins::Tab;
 
-use Mojo::JSON qw(decode_json);
+use Mojo::JSON qw( decode_json );
 
 ## Required for all plugins
 use base qw(Koha::Plugins::Base);

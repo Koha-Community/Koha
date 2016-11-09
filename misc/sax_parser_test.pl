@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use XML::SAX;
-use Encode;
+use Encode qw( encode_utf8 );
 
 my $parser = XML::SAX::ParserFactory->parser(
 Handler => MySAXHandler->new

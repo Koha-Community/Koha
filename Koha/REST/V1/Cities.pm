@@ -21,7 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Cities;
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 =head1 API
 

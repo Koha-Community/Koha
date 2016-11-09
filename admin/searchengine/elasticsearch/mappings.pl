@@ -17,9 +17,8 @@
 
 use Modern::Perl;
 use CGI;
-use Scalar::Util qw(looks_like_number);
+use Scalar::Util qw( looks_like_number );
 use List::Util qw( first );
-use C4::Koha;
 use C4::Output;
 use C4::Auth;
 use C4::Log;
@@ -30,8 +29,8 @@ use Koha::SearchMarcMaps;
 use Koha::SearchFields;
 use Koha::Caches;
 
-use Try::Tiny;
-use Module::Load::Conditional qw(can_load);
+use Try::Tiny qw( catch try );
+use Module::Load::Conditional qw( can_load );
 
 
 my $input = CGI->new;

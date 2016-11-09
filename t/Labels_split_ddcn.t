@@ -42,7 +42,7 @@ BEGIN {
         $test_num += 4;
     }
     plan tests => $test_num;
-    use_ok('C4::ClassSplitRoutine::Dewey');
+    use_ok('C4::ClassSplitRoutine::Dewey', qw( split_callnumber ));
     use vars qw($ddcns);
 }
 

@@ -7,7 +7,7 @@ use URI::Escape;
 use JSON qw( decode_json );
 
 use_ok('Koha::DateUtils');
-use_ok('C4::Search::History');
+use_ok('C4::Search::History', qw( get get_from_session set_to_session delete ));
 use_ok('C4::Auth', qw/get_session/ );
 
 # Test session

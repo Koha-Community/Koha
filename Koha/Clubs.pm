@@ -19,7 +19,6 @@ package Koha::Clubs;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );

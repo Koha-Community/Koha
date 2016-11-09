@@ -2,7 +2,7 @@ package Koha::Calendar;
 
 use Modern::Perl;
 
-use Carp;
+use Carp qw( croak );
 use DateTime;
 use DateTime::Duration;
 use C4::Context;

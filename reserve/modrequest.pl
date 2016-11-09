@@ -26,8 +26,8 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use List::MoreUtils qw( uniq );
 use C4::Output;
-use C4::Reserves;
-use C4::Auth;
+use C4::Reserves qw( ModReserve ModReserveCancelAll );
+use C4::Auth qw( get_template_and_user );
 use Koha::DateUtils qw( dt_from_string );
 
 my $query = CGI->new;

@@ -35,12 +35,11 @@ BEGIN {
     }
 };
 
-use Carp;
+use Carp qw( carp );
 use DateTime::TimeZone;
 use Encode;
 use File::Spec;
-use Module::Load::Conditional qw(can_load);
-use POSIX ();
+use POSIX;
 use YAML::XS;
 use ZOOM;
 

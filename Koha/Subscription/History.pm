@@ -19,7 +19,6 @@ package Koha::Subscription::History;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

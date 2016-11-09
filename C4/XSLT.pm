@@ -24,30 +24,29 @@ package C4::XSLT;
 use Modern::Perl;
 
 use C4::Context;
-use C4::Items;
-use C4::Koha;
-use C4::Biblio;
-use C4::Circulation;
-use C4::Reserves;
+use C4::Koha qw( xml_escape );
+use C4::Biblio qw( GetAuthorisedValueDesc GetFrameworkCode GetMarcStructure );
 use Koha::AuthorisedValues;
 use Koha::ItemTypes;
 use Koha::XSLT::Base;
 use Koha::Libraries;
 
-use Encode;
 
-use vars qw(@ISA @EXPORT);
 
 my $engine; #XSLT Handler object
 my %authval_per_framework;
     # Cache for tagfield-tagsubfield to decode per framework.
     # Should be preferably be placed in Koha-core...
 
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
-    @EXPORT = qw(
-        &XSLTParse4Display
+    @EXPORT_OK = qw(
+        transformMARCXML4XSLT
+        getAuthorisedValues4MARCSubfields
+        buildKohaItemsNamespace
+        XSLTParse4Display
     );
     $engine=Koha::XSLT::Base->new( { do_not_return_source => 1 } );
 }

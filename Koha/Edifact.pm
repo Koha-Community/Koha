@@ -19,9 +19,8 @@ package Koha::Edifact;
 
 use strict;
 use warnings;
-use File::Slurp;
-use Carp;
-use Encode qw( from_to );
+use File::Slurp qw( read_file );
+use Carp qw( carp croak );
 use Koha::Edifact::Segment;
 use Koha::Edifact::Message;
 

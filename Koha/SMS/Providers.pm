@@ -19,7 +19,6 @@ package Koha::SMS::Providers;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::SMS::Provider;
 

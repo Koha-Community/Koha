@@ -32,12 +32,11 @@ the records from an import batch.
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use JSON qw/ to_json /;
+use JSON qw( to_json );
 
 use C4::Context;
-use C4::Charset;
-use C4::Auth qw/check_cookie_auth/;
-use C4::ImportBatch;
+use C4::Auth qw( check_cookie_auth );
+use C4::ImportBatch qw( GetImportBatch GetImportRecordsRange GetImportRecordMatches );
 
 my $input = CGI->new;
 

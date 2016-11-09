@@ -28,23 +28,22 @@ use Koha::SearchFields;
 use Koha::SearchMarcMaps;
 use Koha::Caches;
 use C4::Heading;
-use C4::AuthoritiesMarc;
+use C4::AuthoritiesMarc qw( GuessAuthTypeCode );
 
-use Carp;
-use Clone qw(clone);
-use JSON;
+use Carp qw( carp croak );
+use Clone qw( clone );
 use Modern::Perl;
-use Readonly;
+use Readonly qw( Readonly );
 use Search::Elasticsearch;
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 use YAML::XS;
 
-use List::Util qw( sum0 reduce all );
+use List::Util qw( sum0 );
 use MARC::File::XML;
-use MIME::Base64;
-use Encode qw(encode);
+use MIME::Base64 qw( encode_base64 );
+use Encode qw( encode );
 use Business::ISBN;
-use Scalar::Util qw(looks_like_number);
+use Scalar::Util qw( looks_like_number );
 
 __PACKAGE__->mk_ro_accessors(qw( index index_name ));
 __PACKAGE__->mk_accessors(qw( sort_fields ));

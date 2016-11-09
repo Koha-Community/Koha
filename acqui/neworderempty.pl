@@ -68,24 +68,30 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 
-use C4::Auth;
-use C4::Budgets;
+use C4::Auth qw( get_template_and_user );
+use C4::Budgets qw( GetBudget GetBudgetHierarchy CanUserUseBudget );
 
-use C4::Acquisition;
-use C4::Contract;
-use C4::Suggestions;	# GetSuggestion
-use C4::Biblio;			# GetBiblioData GetMarcPrice
-use C4::Items; #PrepareItemRecord
-use C4::Output;
-use C4::Koha;
+use C4::Acquisition qw( GetOrder GetBasket FillWithDefaultValues GetOrderUsers );
+use C4::Contract qw( GetContract );
+use C4::Suggestions qw( GetSuggestion GetSuggestionInfo );
+use C4::Biblio qw(
+    AddBiblio
+    GetBiblioData
+    GetMarcBiblio
+    GetMarcFromKohaField
+    GetMarcPrice
+    GetMarcStructure
+    IsMarcStructureInternal
+);
+use C4::Output qw( output_and_exit output_html_with_http_headers );
 use C4::Members;
-use C4::Search qw/FindDuplicate/;
+use C4::Search qw( FindDuplicate );
 
 #needed for z3950 import:
-use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus SetMatchedBiblionumber/;
+use C4::ImportBatch qw( SetImportRecordStatus SetMatchedBiblionumber GetImportRecordMarc );
 
 use Koha::Acquisition::Booksellers;
-use Koha::Acquisition::Currencies;
+use Koha::Acquisition::Currencies qw( get_active );
 use Koha::BiblioFrameworks;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::MarcSubfieldStructures;

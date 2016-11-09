@@ -19,7 +19,6 @@ package Koha::ApiKey;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 use Koha::Exceptions;

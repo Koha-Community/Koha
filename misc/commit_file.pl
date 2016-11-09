@@ -5,14 +5,14 @@ use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
 
 use Koha::Script;
 use C4::Context;
-use C4::ImportBatch;
-use Getopt::Long;
+use C4::ImportBatch qw( GetImportBatch BatchCommitRecords BatchRevertRecords );
+use Getopt::Long qw( GetOptions );
 
 $| = 1;
 

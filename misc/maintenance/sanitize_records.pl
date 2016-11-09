@@ -20,12 +20,11 @@
 use Modern::Perl;
 
 use Koha::Script;
-use C4::Charset qw( SanitizeRecord );
+use C4::Charset;
 use C4::Context;
-use DBI;
 use C4::Biblio;
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 my ( $help, $verbose, $confirm, $biblionumbers, $reindex, $filename,
     $auto_search, $fix_ampersand );

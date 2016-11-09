@@ -22,12 +22,11 @@ package Koha::pdfformat::layout2pages;
 
 #you can use any PDF::API2 module, all you need to do is return the stringifyed pdf object from the printpdf sub.
 use vars qw(@ISA @EXPORT);
-use MIME::Base64;
 use Modern::Perl;
 use utf8;
 
 use Koha::Number::Price;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Libraries;
 
 BEGIN {

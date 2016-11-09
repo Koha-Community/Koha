@@ -5,7 +5,6 @@
 
 use strict;
 use warnings;
-use C4::TmplTokenType;
 use Test::More tests => 19;
 
 BEGIN {

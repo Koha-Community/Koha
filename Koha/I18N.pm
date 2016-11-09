@@ -19,14 +19,21 @@ package Koha::I18N;
 
 use Modern::Perl;
 
-use CGI;
 use C4::Languages;
 use C4::Context;
 
 use Encode;
 use List::Util qw( first );
-use Locale::Messages qw(:locale_h LC_MESSAGES);
-use POSIX qw( setlocale );
+use Locale::Messages qw(
+    bindtextdomain
+    gettext
+    LC_MESSAGES
+    ngettext
+    npgettext
+    pgettext
+    textdomain
+);
+use POSIX;
 use Koha::Cache::Memory::Lite;
 
 use parent 'Exporter';

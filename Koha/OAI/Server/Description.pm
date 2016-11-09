@@ -20,7 +20,7 @@ package Koha::OAI::Server::Description;
 
 use Modern::Perl;
 use HTTP::OAI;
-use HTTP::OAI::SAXHandler qw/ :SAX /;
+use HTTP::OAI::SAXHandler qw( g_data_element );
 
 
 sub new {

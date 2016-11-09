@@ -21,12 +21,12 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Biblios;
 use Koha::RecordProcessor;
-use C4::Biblio qw(DelBiblio);
+use C4::Biblio qw( DelBiblio );
 
-use List::MoreUtils qw(any);
+use List::MoreUtils qw( any );
 use MARC::Record::MiJ;
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 =head1 API
 

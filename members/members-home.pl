@@ -19,13 +19,13 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use C4::Auth;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
 use C4::Members;
 use Koha::Patron::Modifications;
 use Koha::Libraries;
-use Koha::List::Patron;
+use Koha::List::Patron qw( GetPatronLists );
 use Koha::Patron::Categories;
 
 my $query = CGI->new;

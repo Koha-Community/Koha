@@ -20,7 +20,7 @@
 use Modern::Perl;
 use Koha::Checkouts;
 use Koha::Script -cron;
-use C4::Log;
+use C4::Log qw( cronlogaction );
 
 cronlogaction();
 

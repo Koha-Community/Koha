@@ -9,7 +9,7 @@ use warnings;
 use Test::More tests => 2;
 
 BEGIN {
-        use_ok('C4::AuthoritiesMarc::UNIMARC');
+        use_ok('C4::AuthoritiesMarc::UNIMARC', qw( default_auth_type_location ));
 }
 
 my @test = C4::AuthoritiesMarc::UNIMARC::default_auth_type_location();

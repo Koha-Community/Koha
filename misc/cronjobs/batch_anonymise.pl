@@ -19,25 +19,21 @@
 
 use strict;
 use warnings;
-use Carp;
 
 BEGIN {
 
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
 use Koha::Script -cron;
 use C4::Context;
 use Koha::Patrons;
-use Date::Calc qw(
-  Today
-  Add_Delta_Days
-);
-use Getopt::Long;
-use C4::Log;
+use Date::Calc qw( Add_Delta_Days Today );
+use Getopt::Long qw( GetOptions );
+use C4::Log qw( cronlogaction );
 
 sub usage {
     print STDERR <<USAGE;

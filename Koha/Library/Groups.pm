@@ -19,7 +19,6 @@ package Koha::Library::Groups;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

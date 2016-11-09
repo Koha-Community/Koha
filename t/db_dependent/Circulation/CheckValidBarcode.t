@@ -19,15 +19,15 @@ use Modern::Perl;
 
 use Test::More tests => 10;
 
-use C4::Circulation;
-use C4::Biblio;
+use C4::Circulation qw( CheckValidBarcode );
+use C4::Biblio qw( AddBiblio );
 use C4::Items;
 use Koha::Database;
 use Koha::Library;
 
 
 BEGIN {
-    use_ok('C4::Circulation');
+    use_ok('C4::Circulation', qw( CheckValidBarcode ));
 }
 
 my $schema = Koha::Database->new->schema;

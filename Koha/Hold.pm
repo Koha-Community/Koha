@@ -20,16 +20,15 @@ package Koha::Hold;
 
 use Modern::Perl;
 
-use Carp;
-use Data::Dumper qw(Dumper);
-use List::MoreUtils qw(any);
+use Data::Dumper qw( Dumper );
+use List::MoreUtils qw( any );
 
 use C4::Context qw(preference);
-use C4::Letters;
-use C4::Log;
+use C4::Letters qw( GetPreparedLetter EnqueueLetter );
+use C4::Log qw( logaction );
 
 use Koha::AuthorisedValues;
-use Koha::DateUtils qw(dt_from_string output_pref);
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 use Koha::Biblios;
 use Koha::Items;

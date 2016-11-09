@@ -19,13 +19,11 @@ package Koha::Biblio;
 
 use Modern::Perl;
 
-use Carp;
-use List::MoreUtils qw(any);
+use List::MoreUtils qw( any );
 use URI;
-use URI::Escape;
+use URI::Escape qw( uri_escape_utf8 );
 
-use C4::Koha;
-use C4::Biblio qw();
+use C4::Koha qw( GetNormalizedISBN );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );

@@ -22,24 +22,24 @@ package C4::Languages;
 use strict;
 use warnings;
 
-use Carp;
+use Carp qw( carp );
 use CGI;
 use List::MoreUtils qw( any );
 use C4::Context;
 use Koha::Caches;
 use Koha::Cache::Memory::Lite;
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
-    @EXPORT = qw(
-        &getFrameworkLanguages
-        &getTranslatedLanguages
-        &getLanguages
-        &getAllLanguages
+    @EXPORT_OK = qw(
+        getFrameworkLanguages
+        getTranslatedLanguages
+        getLanguages
+        getAllLanguages
     );
-    @EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages getLanguages get_bidi regex_lang_subtags language_get_description accept_language getlanguage);
+    push @EXPORT_OK, qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages getLanguages get_bidi regex_lang_subtags language_get_description accept_language getlanguage get_rfc4646_from_iso639);
 }
 
 =head1 NAME

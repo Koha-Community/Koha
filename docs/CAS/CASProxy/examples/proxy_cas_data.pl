@@ -33,9 +33,8 @@ This PGTIOU will allow us to retrive the matching PGTID
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use Authen::CAS::Client;
-use Storable qw(fd_retrieve);
-use LWP::Simple;
-use URI::Escape;
+use Storable qw( fd_retrieve );
+use LWP::Simple qw( get );
 
 my $casServerUrl = 'https://localhost:8443/cas/';
 my $cas = Authen::CAS::Client->new($casServerUrl);

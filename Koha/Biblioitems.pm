@@ -17,7 +17,6 @@ package Koha::Biblioitems;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

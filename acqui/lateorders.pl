@@ -45,14 +45,12 @@ To know on which branch this script have to display late order.
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use C4::Auth;
-use C4::Koha;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
-use C4::Acquisition;
-use C4::Letters;
-use Koha::DateUtils;
-use Koha::Acquisition::Orders;
+use C4::Letters qw( SendAlerts GetLetters );
+use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Acquisition::Orders qw( filter_by_lates );
 use Koha::CsvProfiles;
 
 my $input = CGI->new;

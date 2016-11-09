@@ -22,15 +22,14 @@ use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
 use Koha::Script;
 use C4::Context;
-use Getopt::Long;
-use Pod::Usage;
-use Koha::DateUtils;
+use Getopt::Long qw( GetOptions );
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 =head1 NAME
 

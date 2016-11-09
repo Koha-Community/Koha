@@ -30,34 +30,35 @@ use Koha::MarcSubfieldStructures;
 use Business::ISBN;
 use Business::ISSN;
 use autouse 'Data::cselectall_arrayref' => qw(Dumper);
-use vars qw(@ISA @EXPORT @EXPORT_OK);
 
+our (@ISA, @EXPORT_OK);
 BEGIN {
-	require Exporter;
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(
-        &GetItemTypesCategorized
-        &getallthemes
-        &getFacets
-        &getnbpages
-		&getitemtypeimagedir
-		&getitemtypeimagesrc
-		&getitemtypeimagelocation
-		&GetAuthorisedValues
-		&GetNormalizedUPC
-		&GetNormalizedISBN
-		&GetNormalizedEAN
-		&GetNormalizedOCLCNumber
-        &xml_escape
+    require Exporter;
+    @ISA       = qw(Exporter);
+    @EXPORT_OK = qw(
+      GetItemTypesCategorized
+      getallthemes
+      getFacets
+      getImageSets
+      getnbpages
+      getitemtypeimagedir
+      getitemtypeimagesrc
+      getitemtypeimagelocation
+      GetAuthorisedValues
+      GetNormalizedUPC
+      GetNormalizedISBN
+      GetNormalizedEAN
+      GetNormalizedOCLCNumber
+      xml_escape
 
-        &GetVariationsOfISBN
-        &GetVariationsOfISBNs
-        &NormalizeISBN
-        &GetVariationsOfISSN
-        &GetVariationsOfISSNs
-        &NormalizeISSN
+      GetVariationsOfISBN
+      GetVariationsOfISBNs
+      NormalizeISBN
+      GetVariationsOfISSN
+      GetVariationsOfISSNs
+      NormalizeISSN
 
-	);
+    );
 }
 
 =head1 NAME

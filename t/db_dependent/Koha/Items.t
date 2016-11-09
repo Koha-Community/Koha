@@ -25,7 +25,7 @@ use Test::MockModule;
 use Test::Exception;
 use Time::Fake;
 
-use C4::Circulation;
+use C4::Circulation qw( AddIssue LostItem AddReturn );
 use C4::Context;
 use Koha::Item;
 use Koha::Item::Transfer::Limits;

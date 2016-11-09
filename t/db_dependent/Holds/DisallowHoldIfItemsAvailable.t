@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use C4::Context;
-use C4::Circulation;
+use C4::Circulation qw( AddIssue AddReturn );
 use C4::Items;
 use Koha::Items;
 use Koha::CirculationRules;
@@ -14,7 +14,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 BEGIN {
-    use_ok('C4::Reserves');
+    use_ok('C4::Reserves', qw( ItemsAnyAvailableAndNotRestricted IsAvailableForItemLevelRequest ));
 }
 
 my $schema = Koha::Database->schema;

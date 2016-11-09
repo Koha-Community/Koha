@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use Test::More tests => 44;
-use C4::Acquisition;
+use C4::Acquisition qw( populate_order_with_prices );
 use C4::Context;
 use Koha::Database;
 use t::lib::TestBuilder;

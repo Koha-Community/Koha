@@ -32,7 +32,7 @@ use YAML::XS;
 
 use t::lib::Mocks;
 
-use C4::Biblio;
+use C4::Biblio qw( AddBiblio GetMarcBiblio ModBiblio );
 use C4::Context;
 
 use Koha::Biblio::Metadatas;

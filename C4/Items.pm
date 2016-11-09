@@ -20,12 +20,12 @@ package C4::Items;
 
 use Modern::Perl;
 
-use vars qw(@ISA @EXPORT);
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
 
-    @EXPORT = qw(
+    @EXPORT_OK = qw(
         AddItemFromMarc
         AddItemBatchFromMarc
         ModItemFromMarc
@@ -39,30 +39,30 @@ BEGIN {
         GetHostItemsInfo
         get_hostitemnumbers_of
         GetHiddenItemnumbers
+        GetMarcItem
         MoveItemFromBiblio
         CartToShelf
         GetAnalyticsCount
         SearchItems
         PrepareItemrecordDisplay
+        ToggleNewStatus
     );
 }
 
-use Carp;
-use Try::Tiny;
+use Carp qw( croak );
 use C4::Context;
 use C4::Koha;
-use C4::Biblio;
-use Koha::DateUtils;
+use C4::Biblio qw( GetMarcStructure TransformMarcToKoha );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use MARC::Record;
-use C4::ClassSource;
-use C4::Log;
-use List::MoreUtils qw(any);
+use C4::ClassSource qw( GetClassSort GetClassSources GetClassSource );
+use C4::Log qw( logaction );
+use List::MoreUtils qw( any );
 use DateTime::Format::MySQL;
-use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
 
 use Koha::AuthorisedValues;
-use Koha::DateUtils qw(dt_from_string);
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 
 use Koha::Biblioitems;

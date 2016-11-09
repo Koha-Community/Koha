@@ -18,7 +18,6 @@ package Koha::Item::Transfer::Limit;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

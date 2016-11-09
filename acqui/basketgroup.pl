@@ -44,15 +44,15 @@ The bookseller who we want to display the baskets (and basketgroups) of.
 =cut
 
 use Modern::Perl;
-use Carp;
+use Carp qw( croak );
 
-use C4::Auth;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use CGI qw ( -utf8 );
 use File::Spec;
 
-use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket GetBasketGroupAsCSV get_rounded_price/;
-use Koha::EDI qw/create_edi_order get_edifact_ean/;
+use C4::Acquisition qw( GetOrders GetOrder get_rounded_price GetBasket GetBasketgroup GetBasketsByBasketgroup GetBasketgroups GetBasketsByBookseller ModBasket CloseBasketgroup GetBasketGroupAsCSV DelBasketgroup ReOpenBasketgroup ModBasketgroup NewBasket NewBasketgroup );
+use Koha::EDI qw( get_edifact_ean create_edi_order );
 
 use Koha::Biblioitems;
 use Koha::Acquisition::Booksellers;

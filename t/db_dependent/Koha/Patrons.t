@@ -29,9 +29,9 @@ use JSON;
 use Data::Dumper;
 use utf8;
 
-use C4::Circulation;
+use C4::Circulation qw( AddIssue AddReturn );
 use C4::Biblio;
-use C4::Auth qw(checkpw_hash);
+use C4::Auth qw( checkpw checkpw_hash );
 
 use Koha::ActionLogs;
 use Koha::Holds;

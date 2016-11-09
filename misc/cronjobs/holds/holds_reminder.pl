@@ -21,20 +21,19 @@ BEGIN {
 
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use Getopt::Long;
-use Pod::Usage;
-use Text::CSV_XS;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 use DateTime;
 use DateTime::Duration;
 
 use C4::Context;
 use C4::Letters;
-use C4::Log;
-use Koha::DateUtils;
+use C4::Log qw( cronlogaction );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Calendar;
 use Koha::Libraries;
 use Koha::Notice::Templates;

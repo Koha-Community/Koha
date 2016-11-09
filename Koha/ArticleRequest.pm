@@ -19,14 +19,13 @@ package Koha::ArticleRequest;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 use Koha::Patrons;
 use Koha::Biblios;
 use Koha::Items;
 use Koha::Libraries;
-use Koha::DateUtils qw(dt_from_string);
+use Koha::DateUtils qw( dt_from_string );
 
 use base qw(Koha::Object);
 

@@ -23,12 +23,17 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use autouse 'Data::Dumper' => qw(Dumper);
 
-use C4::Auth qw(get_template_and_user);
-use C4::Output qw(output_html_with_http_headers);
-use C4::Creators;
-use C4::Patroncards;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Creators qw(
+    get_all_layouts
+    get_all_profiles
+    get_all_templates
+    get_batch_summary
+    html_table
+);
 use C4::Labels;
-use Koha::List::Patron;
+use Koha::List::Patron qw( GetPatronLists );
 
 my $cgi = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

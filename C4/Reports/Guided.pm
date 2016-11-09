@@ -19,40 +19,42 @@ package C4::Reports::Guided;
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use Carp;
+use Carp qw( carp croak );
 use JSON qw( from_json );
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
 use C4::Templates qw/themelanguage/;
-use C4::Koha;
-use Koha::DateUtils;
+use C4::Koha qw( GetAuthorisedValues );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
 use Koha::Reports;
 use C4::Output;
-use C4::Log;
+use C4::Log qw( logaction );
 use Koha::Notice::Templates;
-use C4::Letters;
 
 use Koha::Logger;
 use Koha::AuthorisedValues;
 use Koha::Patron::Categories;
 use Koha::SharedContent;
 
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
-    @EXPORT = qw(
+    @EXPORT_OK = qw(
       get_report_types get_report_areas get_report_groups get_columns build_query get_criteria
       save_report get_saved_reports execute_query
       get_column_type get_distinct_values save_dictionary get_from_dictionary
-      delete_definition delete_report format_results get_sql
+      delete_definition delete_report store_results format_results get_sql get_results
       nb_rows update_sql
+      strip_limit
+      convert_sql
       GetReservedAuthorisedValues
       GetParametersFromSQL
       IsAuthorisedValueValid
       ValidateSQLParameters
       nb_rows update_sql
+      EmailReport
     );
 }
 

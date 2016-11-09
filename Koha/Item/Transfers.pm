@@ -17,7 +17,6 @@ package Koha::Item::Transfers;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

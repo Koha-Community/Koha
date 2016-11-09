@@ -52,7 +52,6 @@ scalars and hashes, with arrays a potential future addition.
 
 use strict;
 use warnings;
-use Carp;
 
 use base qw(Class::Accessor);
 

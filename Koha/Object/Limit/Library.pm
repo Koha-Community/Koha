@@ -21,7 +21,7 @@ use Koha::Database;
 use Koha::Exceptions;
 use Koha::Libraries;
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 

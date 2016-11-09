@@ -20,13 +20,17 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use C4::Auth;
-use C4::Biblio;
+use C4::Auth qw( get_template_and_user );
+use C4::Biblio qw( GetBiblioData GetFrameworkCode GetMarcBiblio );
 use C4::External::BakerTaylor qw( image_url link_url );
-use C4::Koha;
-use C4::Items;
+use C4::Koha qw(
+    GetNormalizedEAN
+    GetNormalizedISBN
+    GetNormalizedOCLCNumber
+    GetNormalizedUPC
+);
 use C4::Members;
-use C4::Output;
+use C4::Output qw( pagination_bar output_with_http_headers );
 use C4::Tags qw( get_tags );
 use C4::XSLT;
 

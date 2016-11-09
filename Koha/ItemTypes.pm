@@ -17,7 +17,6 @@ package Koha::ItemTypes;
 
 use Modern::Perl;
 
-use Carp;
 
 use C4::Languages;
 

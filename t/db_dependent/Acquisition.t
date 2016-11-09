@@ -28,9 +28,9 @@ use Koha::Acquisition::Basket;
 use MARC::File::XML ( BinaryEncoding => 'utf8', RecordFormat => 'MARC21' );
 
 BEGIN {
-    use_ok('C4::Acquisition');
-    use_ok('C4::Biblio');
-    use_ok('C4::Budgets');
+    use_ok('C4::Acquisition', qw( NewBasket GetBasket AddInvoice GetInvoice ModReceiveOrder SearchOrders GetOrder GetHistory ModOrder get_rounding_sql get_rounded_price ReopenBasket ModBasket ModBasketHeader ModBasketUsers ));
+    use_ok('C4::Biblio', qw( AddBiblio GetMarcSubfieldStructure ));
+    use_ok('C4::Budgets', qw( AddBudgetPeriod AddBudget GetBudget GetBudgetByOrderNumber GetBudgetsReport GetBudgets GetBudgetReport ));
     use_ok('Koha::Acquisition::Orders');
     use_ok('Koha::Acquisition::Booksellers');
     use_ok('t::lib::TestBuilder');

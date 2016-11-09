@@ -10,7 +10,7 @@ use Test::More tests => 5;
 use C4::Context;
 
 BEGIN {
-        use_ok('C4::Heading');
+        use_ok('C4::Heading', qw( field new_from_field display_form search_form ));
 }
 
 SKIP: {

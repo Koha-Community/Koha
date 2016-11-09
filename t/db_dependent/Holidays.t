@@ -30,7 +30,7 @@ use Koha::DateUtils;
 
 BEGIN {
     use_ok('Koha::Calendar');
-    use_ok('C4::Calendar');
+    use_ok('C4::Calendar', qw( insert_exception_holiday insert_week_day_holiday insert_day_month_holiday insert_single_holiday copy_to_branch get_exception_holidays isHoliday ));
 }
 
 my $schema = Koha::Database->new->schema;

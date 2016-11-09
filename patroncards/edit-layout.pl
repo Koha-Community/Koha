@@ -21,13 +21,18 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use Text::CSV_XS;
-use XML::Simple;
+use XML::Simple qw( XMLin XMLout );
 use autouse 'Data::Dumper' => qw(Dumper);
 
-use C4::Auth qw(get_template_and_user);
-use C4::Output qw(output_html_with_http_headers);
-use C4::Creators;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Creators qw(
+    get_all_image_names
+    get_barcode_types
+    get_font_types
+    get_text_justification_types
+    get_unit_values
+);
 use C4::Patroncards;
 
 my $cgi = CGI->new;

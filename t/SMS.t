@@ -22,7 +22,7 @@ use t::lib::Mocks;
 use Test::More tests => 7;
 
 BEGIN {
-    use_ok('C4::SMS');
+    use_ok('C4::SMS', qw( driver send_sms ));
 }
 
 

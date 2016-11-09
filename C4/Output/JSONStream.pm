@@ -39,7 +39,7 @@ This module allows you to build JSON incrementally.
 use strict;
 use warnings;
 
-use JSON;
+use JSON qw( to_json );
 
 sub new {
     my $class = shift;

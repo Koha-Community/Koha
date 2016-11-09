@@ -19,9 +19,9 @@
 
 use Modern::Perl;
 use CGI;
-use JSON;
-use C4::Auth qw(check_cookie_auth);
-use C4::Biblio;
+use JSON qw( to_json );
+use C4::Auth qw( check_cookie_auth );
+use C4::Biblio qw( BiblioAutoLink TransformHtmlToMarc );
 use C4::Context;
 
 my $input = CGI->new;

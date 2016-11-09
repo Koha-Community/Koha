@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use C4::CourseReserves qw/ModCourseItem ModCourseReserve DelCourseReserve GetCourseItem/;
+use C4::CourseReserves qw( ModCourse ModCourseItem ModCourseReserve GetCourse GetCourseItem DelCourse DelCourseReserve );
 use C4::Context;
 use Koha::Items;
 

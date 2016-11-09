@@ -20,8 +20,7 @@ package Koha::OAI::Server::GetRecord;
 
 use Modern::Perl;
 use HTTP::OAI;
-use C4::Biblio;
-use C4::OAI::Sets;
+use C4::OAI::Sets qw( GetOAISetsBiblio );
 use MARC::File::XML;
 
 use base ("HTTP::OAI::GetRecord");

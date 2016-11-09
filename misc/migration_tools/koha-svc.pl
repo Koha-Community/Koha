@@ -21,7 +21,7 @@ use warnings;
 use strict;
 
 use LWP::UserAgent;
-use File::Slurp;
+use File::Slurp qw( read_file write_file );
 
 if ( $#ARGV >= 3 && ! caller ) { # process command-line params only if not called as module!
     my ( $url, $user, $password, $biblionumber, $file ) = @ARGV;

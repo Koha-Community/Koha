@@ -17,7 +17,6 @@ package Koha::Cash::Register;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Account::Lines;
 use Koha::Account::Offsets;

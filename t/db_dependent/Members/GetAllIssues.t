@@ -22,10 +22,10 @@ use Test::MockModule;
 
 use t::lib::TestBuilder;
 
-use C4::Circulation;
-use C4::Biblio;
+use C4::Circulation qw( AddIssue );
+use C4::Biblio qw( AddBiblio );
 use C4::Items;
-use C4::Members;
+use C4::Members qw( GetAllIssues );
 use Koha::Libraries;
 use Koha::Patrons;
 use MARC::Record;

@@ -24,22 +24,22 @@ BEGIN {
 
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 use Koha::Script -cron;
-use Koha::DateUtils qw/ dt_from_string /;
+use Koha::DateUtils qw( dt_from_string );
 use C4::Context;
-use C4::Biblio;
-use C4::Log;
+use C4::Biblio qw( UpdateTotalIssues );
+use C4::Log qw( cronlogaction );
 use DateTime;
 use DateTime::Format::MySQL;
-use Time::HiRes qw/time/;
-use POSIX qw/strftime ceil/;
+use Time::HiRes qw( time );
+use POSIX qw( ceil strftime );
 
 sub usage {
     pod2usage( -verbose => 2 );

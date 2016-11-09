@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use C4::ClassSplitRoutine::LCC;
+use C4::ClassSplitRoutine::LCC qw( split_callnumber );
 use Test::More;
 
 BEGIN {

@@ -19,10 +19,41 @@ package C4::Creators::PDF;
 
 use strict;
 use warnings;
-use PDF::Reuse;
+use PDF::Reuse qw(
+    prAdd
+    prAltJpeg
+    prBookmark
+    prCompress
+    prDoc
+    prDocDir
+    prDocForm
+    prEnd
+    prExtract
+    prField
+    prFile
+    prFont
+    prFontSize
+    prForm
+    prGetLogBuffer
+    prGraphState
+    prImage
+    prInit
+    prInitVars
+    prJpeg
+    prJs
+    prLink
+    prLog
+    prLogDir
+    prMbox
+    prPage
+    prSinglePage
+    prStrWidth
+    prText
+    prTTFont
+);
 use PDF::Reuse::Barcode;
 use File::Temp;
-use List::Util qw/first/;
+use List::Util qw( first );
 
 
 sub _InitVars {

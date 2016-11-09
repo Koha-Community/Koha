@@ -2,10 +2,10 @@
 
 use Modern::Perl;
 
-use File::Copy;
-use File::Path qw(make_path);
-use File::Find;
-use File::Basename;
+use File::Copy qw( copy );
+use File::Path qw( make_path );
+use File::Find qw( find );
+use File::Basename qw( dirname );
 use File::Spec;
 
 use C4::Context;

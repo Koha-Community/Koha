@@ -23,8 +23,8 @@ use Test::Warn;
 use DateTime;
 
 use C4::Context;
-use C4::Circulation; # AddIssue
-use C4::Biblio; # AddBiblio
+use C4::Circulation qw( AddIssue );
+use C4::Biblio qw( AddBiblio );
 
 use Koha::Database;
 

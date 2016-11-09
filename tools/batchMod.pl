@@ -20,26 +20,32 @@
 
 use CGI qw ( -utf8 );
 use Modern::Perl;
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
-use C4::Auth;
-use C4::Output;
-use C4::Biblio;
-use C4::Items;
-use C4::Circulation;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Biblio qw(
+    DelBiblio
+    GetAuthorisedValueDesc
+    GetMarcFromKohaField
+    GetMarcStructure
+    IsMarcStructureInternal
+    TransformHtmlToXml
+);
+use C4::Items qw( GetItemsInfo Item2Marc ModItemFromMarc );
+use C4::Circulation qw( LostItem IsItemIssued );
 use C4::Context;
 use C4::Koha;
 use C4::BackgroundJob;
-use C4::ClassSource;
-use C4::Members;
+use C4::ClassSource qw( GetClassSources GetClassSource );
 use MARC::File::XML;
-use List::MoreUtils qw/uniq/;
+use List::MoreUtils qw( uniq );
 
 use Koha::Database;
 use Koha::Exceptions::Exception;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;

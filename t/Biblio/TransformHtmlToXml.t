@@ -22,7 +22,7 @@ use t::lib::Mocks;
 
 use XML::Simple;
 
-use C4::Biblio qw/TransformHtmlToXml/;
+use C4::Biblio qw( TransformHtmlToXml );
 
 
 sub run_tests {

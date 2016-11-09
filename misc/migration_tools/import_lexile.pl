@@ -28,12 +28,12 @@ use utf8;
 
 use Modern::Perl;
 
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 use Text::CSV;
 
 use Koha::Script;
 use C4::Context;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcBiblio ModBiblio );
 use C4::Koha qw( GetVariationsOfISBN );
 
 use Koha::Biblios;
@@ -45,7 +45,7 @@ BEGIN {
 
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 

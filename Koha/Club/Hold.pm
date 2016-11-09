@@ -19,7 +19,6 @@ package Koha::Club::Hold;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 
@@ -32,7 +31,7 @@ use Koha::Club::Hold::PatronHold;
 use Koha::Clubs;
 use Koha::Patrons;
 
-use List::Util 'shuffle';
+use List::Util qw( shuffle );
 
 =head1 NAME
 

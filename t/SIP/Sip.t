@@ -21,7 +21,7 @@ use Test::More tests => 9;
 use Test::Warn;
 
 BEGIN {
-        use_ok('C4::SIP::Sip');
+        use_ok('C4::SIP::Sip', qw( timestamp ));
 }
 
 my $date_time = C4::SIP::Sip::timestamp();

@@ -29,15 +29,14 @@ use CGI qw ( -utf8 );
 use DateTime;
 use DateTime::Duration;
 use Scalar::Util qw( looks_like_number );
-use C4::Output;
-use C4::Auth qw/:DEFAULT get_session haspermission/;
+use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
+use C4::Auth qw( get_session get_template_and_user );
 use C4::Koha;
-use C4::Circulation;
+use C4::Circulation qw( barcodedecode CanBookBeIssued AddIssue );
 use C4::Utils::DataTables::Members;
 use C4::Members;
-use C4::Biblio;
-use C4::Search;
-use MARC::Record;
+use C4::Biblio qw( TransformMarcToKoha );
+use C4::Search qw( new_record_from_zebra );
 use C4::Reserves;
 use Koha::Holds;
 use C4::Context;
@@ -45,8 +44,8 @@ use CGI::Session;
 use Koha::AuthorisedValues;
 use Koha::CsvProfiles;
 use Koha::Patrons;
-use Koha::Patron::Debarments qw(GetDebarments);
-use Koha::DateUtils;
+use Koha::Patron::Debarments qw( GetDebarments );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 use Koha::BiblioFrameworks;
 use Koha::Items;
@@ -55,12 +54,7 @@ use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::Patron::Modifications;
 
-use Date::Calc qw(
-  Today
-  Add_Delta_Days
-  Date_to_Days
-);
-use List::MoreUtils qw/uniq/;
+use List::MoreUtils qw( uniq );
 
 #
 # PARAMETERS READING

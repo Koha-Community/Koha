@@ -22,7 +22,7 @@ use Modern::Perl;
 use base qw( Template::Plugin );
 
 use C4::Context;
-use Koha::I18N;
+use Koha::I18N qw( __ __n __np __npx __nx __p __px __x __xn );
 
 =head1 NAME
 

@@ -17,7 +17,6 @@ package Koha::Course::Item;
 
 use Modern::Perl;
 
-use Carp;
 
 use base qw(Koha::Object);
 

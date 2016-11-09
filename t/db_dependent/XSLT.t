@@ -26,7 +26,7 @@ use t::lib::Mocks;
 use Koha::ItemTypes;
 
 BEGIN {
-    use_ok('C4::XSLT');
+    use_ok('C4::XSLT', qw( transformMARCXML4XSLT getAuthorisedValues4MARCSubfields buildKohaItemsNamespace ));
 }
 
 my $schema  = Koha::Database->new->schema;

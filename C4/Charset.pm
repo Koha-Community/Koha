@@ -19,19 +19,18 @@ package C4::Charset;
 
 use Modern::Perl;
 
-use MARC::Charset qw/marc8_to_utf8/;
+use MARC::Charset;
 use Text::Iconv;
-use Unicode::Normalize;
-use Encode qw( decode encode is_utf8 );
+use Unicode::Normalize qw( NFC NFD );
+use Encode;
 
 use Koha::Logger;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
-    @EXPORT = qw(
+    @EXPORT_OK = qw(
         NormalizeString
         IsStringUTF8ish
         MarcToUTF8Record

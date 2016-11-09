@@ -22,14 +22,12 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth;    # checkauth, getborrowernumber.
+use C4::Auth qw( get_template_and_user checkpw checkpw_hash );
 use C4::Context;
-use C4::Circulation;
-use C4::Members;
-use C4::Output;
+use C4::Output qw( output_html_with_http_headers );
 use Koha::Patrons;
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 my $query = CGI->new;
 

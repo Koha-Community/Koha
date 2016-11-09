@@ -3,9 +3,9 @@
 use Modern::Perl;
 
 use Test::More tests => 8;
-use C4::Acquisition;
-use C4::Biblio;
-use C4::Budgets;
+use C4::Acquisition qw( NewBasket );
+use C4::Biblio qw( AddBiblio );
+use C4::Budgets qw( AddBudget GetBudget );
 use MARC::Record;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );

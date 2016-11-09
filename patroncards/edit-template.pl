@@ -23,9 +23,9 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use autouse 'Data::Dumper' => qw(Dumper);
 
-use C4::Auth qw(get_template_and_user);
-use C4::Output qw(output_html_with_http_headers);
-use C4::Creators;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Creators qw( get_all_profiles get_unit_values );
 use C4::Patroncards;
 
 my $cgi = CGI->new;

@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use File::Basename qw/basename/;
 
-use C4::Circulation qw(AddIssue AddReturn);
+use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Database;
 use Koha::Illrequestattributes;

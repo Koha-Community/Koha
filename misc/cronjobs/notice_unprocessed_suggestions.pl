@@ -2,12 +2,12 @@
 
 use Modern::Perl;
 
-use Pod::Usage;
-use Getopt::Long;
+use Pod::Usage qw( pod2usage );
+use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
-use C4::Budgets qw( GetBudget );
-use C4::Suggestions qw( GetUnprocessedSuggestions );
+use C4::Budgets;
+use C4::Suggestions;
 use Koha::Libraries;
 use Koha::Patrons;
 

@@ -23,7 +23,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use C4::Context;
-use C4::Biblio;
+use C4::Biblio qw( ModBiblio );
 
 use Koha::Database;
 use Koha::Caches;

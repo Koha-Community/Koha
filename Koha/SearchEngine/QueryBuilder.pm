@@ -45,7 +45,7 @@ Creates a new C<QueryBuilder> of whatever the relevant type is.
 
 use C4::Context;
 use Modern::Perl;
-use Carp;
+use Carp qw( croak );
 
 sub new {
     my $engine = C4::Context->preference("SearchEngine");

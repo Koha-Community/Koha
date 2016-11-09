@@ -2,9 +2,9 @@
 
 use Modern::Perl;
 
-use File::Slurp;
-use Pod::Usage;
-use Getopt::Long;
+use File::Slurp qw( read_file write_file );
+use Pod::Usage qw( pod2usage );
+use Getopt::Long qw( GetOptions );
 
 use t::lib::QA::TemplateFilters;
 

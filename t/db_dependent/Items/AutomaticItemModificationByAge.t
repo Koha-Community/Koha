@@ -7,8 +7,8 @@ use MARC::Field;
 use DateTime;
 use DateTime::Duration;
 
-use C4::Items;
-use C4::Biblio;
+use C4::Items qw( GetMarcItem ToggleNewStatus );
+use C4::Biblio qw( AddBiblio GetMarcFromKohaField );
 use C4::Context;
 use Koha::DateUtils;
 use Koha::Items;

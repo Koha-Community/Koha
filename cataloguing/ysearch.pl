@@ -27,9 +27,9 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Charset;
-use C4::Auth qw/check_cookie_auth/;
-use JSON qw/ to_json /;
+use C4::Charset qw( nsb_clean );
+use C4::Auth qw( check_cookie_auth );
+use JSON qw( to_json );
 
 my $input = CGI->new;
 my $query = $input->param('term');

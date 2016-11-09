@@ -6,7 +6,7 @@ use Test::MockModule;
 
 use MARC::Record;
 
-use C4::Biblio;
+use C4::Biblio qw( GetMarcFromKohaField );
 
 subtest "_koha_marc_update_bib_ids basic Field", \&_koha_marc_update_bib_ids_simple;
 sub _koha_marc_update_bib_ids_simple {

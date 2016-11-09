@@ -21,12 +21,12 @@ package C4::Biblio;
 
 use Modern::Perl;
 
-use vars qw(@ISA @EXPORT);
+use vars qw(@ISA @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
 
-    @EXPORT = qw(
+    @EXPORT_OK = qw(
         AddBiblio
         GetBiblioData
         GetMarcBiblio
@@ -45,6 +45,7 @@ BEGIN {
         GetMarcQuantity
         GetAuthorisedValueDesc
         GetMarcStructure
+        GetMarcSubfieldStructure
         IsMarcStructureInternal
         GetMarcFromKohaField
         GetMarcSubfieldStructureFromKohaField
@@ -54,6 +55,7 @@ BEGIN {
         CountItemsIssued
         ModBiblio
         ModZebra
+        EmbedItemsInMarcBiblio
         UpdateTotalIssues
         RemoveAllNsb
         DelBiblio
@@ -63,35 +65,42 @@ BEGIN {
         TransformHtmlToMarc
         TransformHtmlToXml
         prepare_host_field
+        TransformMarcToKohaOneField
     );
 
     # Internal functions
     # those functions are exported but should not be used
     # they are useful in a few circumstances, so they are exported,
     # but don't use them unless you are a core developer ;-)
-    push @EXPORT, qw(
+    push @EXPORT_OK, qw(
       ModBiblioMarc
     );
 }
 
-use Carp;
-use Try::Tiny;
+use Carp qw( carp );
+use Try::Tiny qw( catch try );
 
-use Encode qw( decode is_utf8 );
+use Encode;
 use List::MoreUtils qw( uniq );
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
-use POSIX qw(strftime);
-use Module::Load::Conditional qw(can_load);
+use POSIX qw( strftime );
+use Module::Load::Conditional qw( can_load );
 
 use C4::Koha;
-use C4::Log;    # logaction
+use C4::Log qw( logaction );    # logaction
 use C4::Budgets;
-use C4::ClassSource;
-use C4::Charset;
+use C4::ClassSource qw( GetClassSort );
+use C4::Charset qw(
+    nsb_clean
+    SetMarcUnicodeFlag
+    SetUTF8Flag
+    StripNonXmlChars
+);
 use C4::Linker;
 use C4::OAI::Sets;
+use C4::Items qw( GetHiddenItemnumbers GetMarcItem );
 
 use Koha::Logger;
 use Koha::Caches;
@@ -2572,7 +2581,6 @@ sub EmbedItemsInMarcBiblio {
     my $opachiddenitems = $opac
       && ( C4::Context->preference('OpacHiddenItems') !~ /^\s*$/ );
 
-    require C4::Items;
     while ( my ($itemnumber) = $sth->fetchrow_array ) {
         next if @$itemnumbers and not grep { $_ == $itemnumber } @$itemnumbers;
         my $item;

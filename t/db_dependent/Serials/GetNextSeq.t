@@ -9,7 +9,7 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 use C4::Serials::Frequency;
-use C4::Serials;
+use C4::Serials qw( GetNextDate GetNextSeq );
 
 my $frequency = {
     description => "One issue per day",

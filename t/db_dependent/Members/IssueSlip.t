@@ -24,10 +24,10 @@ use Test::MockModule;
 use Test::MockTime qw( set_fixed_time );
 use t::lib::TestBuilder;
 
-use C4::Circulation;
-use C4::Biblio;
+use C4::Circulation qw( AddIssue AddReturn );
+use C4::Biblio qw( AddBiblio );
 use C4::Items;
-use C4::Members;
+use C4::Members qw( IssueSlip );
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Library;

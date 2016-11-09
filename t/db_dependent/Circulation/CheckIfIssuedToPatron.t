@@ -21,9 +21,9 @@ use Test::More tests => 21;
 use Test::MockModule;
 use t::lib::TestBuilder;
 
-use C4::Circulation;
+use C4::Circulation qw( CheckIfIssuedToPatron AddIssue );
 use C4::Items;
-use C4::Biblio;
+use C4::Biblio qw( AddBiblio );
 use Koha::Library;
 use Koha::Patrons;
 use MARC::Record;

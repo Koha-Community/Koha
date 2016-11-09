@@ -27,16 +27,16 @@
 use Modern::Perl;
 use CGI;
 
-use C4::Auth;
-use C4::Output;
-use C4::Search;
-use C4::Serials;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Search qw( enabled_staff_search_views );
+use C4::Serials qw( CountSubscriptionFromBiblionumber );
 
 use Koha::Biblio;
 use Koha::Item;
 use Koha::StockRotationRotas;
 use Koha::StockRotationStages;
-use Koha::Util::StockRotation qw(:ALL);
+use Koha::Util::StockRotation qw( get_stages get_branches toggle_indemand remove_from_stage move_to_next_stage );
 
 my $input = CGI->new;
 

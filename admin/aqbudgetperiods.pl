@@ -47,15 +47,14 @@ script to administer the budget periods table
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use List::Util qw/min/;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Database;
 use C4::Koha;
 use C4::Context;
-use C4::Auth;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use C4::Acquisition;
-use C4::Budgets;
+use C4::Budgets qw( GetBudgetPeriod GetBudgetPeriods ModBudgetPeriod AddBudgetPeriod GetBudgets DelBudgetPeriod CloneBudgetPeriod MoveOrders );
 use Koha::Acquisition::Currencies;
 
 my $dbh = C4::Context->dbh;
@@ -176,7 +175,7 @@ elsif ( $op eq 'duplicate_budget' ){
     my $mark_original_budget_as_inactive = $input->param('mark_original_budget_as_inactive');
     my $reset_all_budgets = $input->param('reset_all_budgets');
 
-    my $new_budget_period_id = C4::Budgets::CloneBudgetPeriod(
+    my $new_budget_period_id = CloneBudgetPeriod(
         {
             budget_period_id        => $budget_period_id,
             budget_period_startdate => $budget_period_startdate,
@@ -198,7 +197,7 @@ elsif ( $op eq 'close_form' ) {
     my $budget_period = GetBudgetPeriod($budget_period_id);
 
     my $active_budget_periods =
-      C4::Budgets::GetBudgetPeriods( { budget_period_active => 1 } );
+      GetBudgetPeriods( { budget_period_active => 1 } );
 
     # Remove the budget period from the list
     $active_budget_periods =
@@ -235,7 +234,7 @@ elsif ( $op eq 'close_form' ) {
 elsif ( $op eq 'close_confirmed' ) {
     my $to_budget_period_id    = $input->param('to_budget_period_id');
     my $move_remaining_unspent = $input->param('move_remaining_unspent');
-    my $report                 = C4::Budgets::MoveOrders(
+    my $report                 = MoveOrders(
         {
             from_budget_period_id  => $budget_period_id,
             to_budget_period_id    => $to_budget_period_id,

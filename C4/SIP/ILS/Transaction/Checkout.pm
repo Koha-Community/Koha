@@ -8,14 +8,14 @@ use warnings;
 use strict;
 
 use POSIX qw(strftime);
-use C4::SIP::Sip qw(siplog);
+use C4::SIP::Sip qw( siplog );
 use Data::Dumper;
 use CGI qw ( -utf8 );
 
 use C4::SIP::ILS::Transaction;
 
 use C4::Context;
-use C4::Circulation;
+use C4::Circulation qw( AddIssue GetIssuingCharges CanBookBeIssued );
 use C4::Members;
 use C4::Reserves qw(ModReserveFill);
 use Koha::DateUtils;

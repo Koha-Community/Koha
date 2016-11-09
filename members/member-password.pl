@@ -6,20 +6,16 @@
 
 use Modern::Perl;
 
-use C4::Auth;
-use Koha::AuthUtils;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use C4::Context;
-use C4::Members;
-use C4::Circulation;
 use CGI qw ( -utf8 );
-use Koha::AuthUtils;
 use Koha::Token;
 
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 my $input = CGI->new;
 

@@ -5,12 +5,12 @@
 
 use Modern::Perl;
 
-use C4::Serials;
+use C4::Serials qw( updateClaim NewSubscription GetSubscription GetSubscriptionHistoryFromSubscriptionId SearchSubscriptions ModSubscription GetExpirationDate GetSerials GetSerialInformation NewIssue AddItem2Serial DelSubscription GetFullSubscription PrepareSerialsData GetSubscriptionsFromBiblionumber ModSubscriptionHistory GetSerials2 GetLatestSerials GetNextSeq GetSeq CountSubscriptionFromBiblionumber ModSerialStatus findSerialsByStatus HasSubscriptionStrictlyExpired HasSubscriptionExpired GetLateOrMissingIssues check_routing addroutingmember GetNextDate );
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
-use C4::Biblio;
-use C4::Budgets;
-use C4::Items;
+use C4::Biblio qw( AddBiblio GetMarcFromKohaField );
+use C4::Budgets qw( AddBudgetPeriod AddBudget );
+use C4::Items qw( AddItemFromMarc );
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
@@ -19,7 +19,7 @@ use t::lib::TestBuilder;
 use Test::More tests => 49;
 
 BEGIN {
-    use_ok('C4::Serials');
+    use_ok('C4::Serials', qw( updateClaim NewSubscription GetSubscription GetSubscriptionHistoryFromSubscriptionId SearchSubscriptions ModSubscription GetExpirationDate GetSerials GetSerialInformation NewIssue AddItem2Serial DelSubscription GetFullSubscription PrepareSerialsData GetSubscriptionsFromBiblionumber ModSubscriptionHistory GetSerials2 GetLatestSerials GetNextSeq GetSeq CountSubscriptionFromBiblionumber ModSerialStatus findSerialsByStatus HasSubscriptionStrictlyExpired HasSubscriptionExpired GetLateOrMissingIssues check_routing addroutingmember GetNextDate ));
 }
 
 my $schema = Koha::Database->new->schema;

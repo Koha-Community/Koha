@@ -24,30 +24,51 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Acquisition qw( SearchOrders );
-use C4::Auth qw(:DEFAULT get_session);
-use C4::Koha;
-use C4::Serials;    #uses getsubscriptionfrom biblionumber
-use C4::Output;
-use C4::Biblio;
-use C4::Items;
-use C4::Circulation;
-use C4::Tags qw(get_tags);
-use C4::XISBN qw(get_xisbns);
-use C4::External::Amazon;
+use C4::Auth qw( get_template_and_user get_session );
+use C4::Koha qw(
+    getitemtypeimagelocation
+    GetNormalizedEAN
+    GetNormalizedISBN
+    GetNormalizedOCLCNumber
+    GetNormalizedUPC
+);
+use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
+use C4::Output qw( parametrized_url output_html_with_http_headers );
+use C4::Biblio qw(
+    CountItemsIssued
+    GetBiblioData
+    GetMarcAuthors
+    GetMarcBiblio
+    GetMarcControlnumber
+    GetMarcISBN
+    GetMarcISSN
+    GetMarcSeries
+    GetMarcSubjects
+    GetMarcUrls
+);
+use C4::Items qw( GetHiddenItemnumbers GetItemsInfo );
+use C4::Circulation qw( GetTransfers );
+use C4::Tags qw( get_tags );
+use C4::XISBN qw( get_xisbns );
+use C4::External::Amazon qw( get_amazon_tld );
 use C4::External::BakerTaylor qw( image_url link_url );
-use C4::External::Syndetics qw(get_syndetics_index get_syndetics_summary get_syndetics_toc get_syndetics_excerpt get_syndetics_reviews get_syndetics_anotes );
+use C4::External::Syndetics qw(
+    get_syndetics_anotes
+    get_syndetics_excerpt
+    get_syndetics_index
+    get_syndetics_reviews
+    get_syndetics_summary
+    get_syndetics_toc
+);
 use C4::Members;
-use C4::XSLT;
-use C4::ShelfBrowser;
-use C4::Reserves;
-use C4::Charset;
-use C4::Letters;
-use MARC::Record;
+use C4::XSLT qw( XSLTParse4Display );
+use C4::ShelfBrowser qw( GetNearbyItems );
+use C4::Reserves qw( GetReserveStatus );
+use C4::Charset qw( SetUTF8Flag );
 use MARC::Field;
-use List::MoreUtils qw/any none/;
-use Koha::DateUtils;
+use List::MoreUtils qw( any );
 use C4::HTML5Media;
-use C4::CourseReserves qw(GetItemCourseReservesInfo);
+use C4::CourseReserves qw( GetItemCourseReservesInfo );
 
 use Koha::Biblios;
 use Koha::RecordProcessor;
@@ -63,7 +84,6 @@ use Koha::Ratings;
 use Koha::Reviews;
 use Koha::SearchEngine::Search;
 
-use Try::Tiny;
 
 my $query = CGI->new();
 
@@ -228,7 +248,7 @@ my $session = get_session($query->cookie("CGISESSID"));
 my %paging = (previous => {}, next => {});
 if ($session->param('busc')) {
     use C4::Search;
-    use URI::Escape;
+    use URI::Escape qw( uri_escape_utf8 uri_unescape );
 
     # Rebuild the string to store on session
     # param value is URI encoded and params separator is HTML encode (&amp;)

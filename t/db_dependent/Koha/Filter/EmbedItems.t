@@ -21,7 +21,7 @@ use Test::More tests => 1;
 
 use t::lib::TestBuilder;
 
-use C4::Biblio;
+use C4::Biblio qw( GetMarcSubfieldStructure );
 
 use Koha::Database;
 use Koha::RecordProcessor;

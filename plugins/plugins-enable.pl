@@ -20,7 +20,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use C4::Context;
-use C4::Auth qw(check_cookie_auth);
+use C4::Auth qw( check_cookie_auth );
 use Koha::Plugins::Handler;
 
 die("Koha plugins are disabled!") unless C4::Context->config("enable_plugins");

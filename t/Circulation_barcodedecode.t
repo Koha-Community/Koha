@@ -22,7 +22,7 @@ use Test::More tests => 26;
 use C4::Context;
 use t::lib::Mocks;
 
-use_ok( 'C4::Circulation' );
+use_ok('C4::Circulation', qw( barcodedecode ));
 
 t::lib::Mocks::mock_userenv({ branchcode => 'IMS' });
 

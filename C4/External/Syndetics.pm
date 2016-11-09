@@ -17,11 +17,10 @@ package C4::External::Syndetics;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use XML::Simple;
+use XML::Simple qw( XMLout );
 use XML::LibXML;
-use LWP::Simple;
+use LWP::Simple qw( $ua );
 use LWP::UserAgent;
-use HTTP::Request::Common;
 
 use strict;
 use warnings;
@@ -32,13 +31,13 @@ BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT = qw(
-        &get_syndetics_index
-        &get_syndetics_summary
-        &get_syndetics_toc
-        &get_syndetics_editions
-        &get_syndetics_excerpt
-        &get_syndetics_reviews
-        &get_syndetics_anotes
+        get_syndetics_index
+        get_syndetics_summary
+        get_syndetics_toc
+        get_syndetics_editions
+        get_syndetics_excerpt
+        get_syndetics_reviews
+        get_syndetics_anotes
     );
 }
 

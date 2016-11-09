@@ -6,13 +6,9 @@
 use Modern::Perl;
 
 # CPAN modules
-use DBI;
-use Getopt::Long;
 
 # Koha modules
 use C4::Context;
-use C4::Items;
-use Data::Dumper;
 
 my $dbh = C4::Context->dbh;
 

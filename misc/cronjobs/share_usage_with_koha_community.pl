@@ -2,14 +2,14 @@
 
 use Modern::Perl;
 
-use Pod::Usage;
-use Getopt::Long;
+use Pod::Usage qw( pod2usage );
+use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 use C4::Context;
 use C4::UsageStats;
-use C4::Log;
-use POSIX qw(strftime);
+use C4::Log qw( cronlogaction );
+use POSIX qw( strftime );
 
 my ( $help, $verbose, $force, $quiet );
 GetOptions(

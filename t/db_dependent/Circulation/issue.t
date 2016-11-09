@@ -23,11 +23,11 @@ use DateTime::Duration;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Biblio;
-use C4::Circulation;
+use C4::Biblio qw( AddBiblio );
+use C4::Circulation qw( AddIssue AddIssuingCharge AddRenewal AddReturn GetIssuingCharges GetOpenIssue GetRenewCount GetUpcomingDueIssues );
 use C4::Context;
 use C4::Items;
-use C4::Reserves;
+use C4::Reserves qw( AddReserve );
 use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;

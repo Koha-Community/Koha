@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use C4::Auth;
+use C4::Auth qw( check_api_auth );
 use C4::Items qw( ModDateLastSeen );
 
 my $input = CGI->new;

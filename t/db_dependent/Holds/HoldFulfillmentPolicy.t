@@ -12,7 +12,7 @@ use t::lib::Mocks;
 use Koha::Holds;
 
 BEGIN {
-    use_ok('C4::Reserves');
+    use_ok('C4::Reserves', qw( AddReserve CheckReserves ));
 }
 
 my $schema = Koha::Database->schema;

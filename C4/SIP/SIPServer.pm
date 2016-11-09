@@ -21,8 +21,8 @@ use C4::SIP::Sip::MsgType qw( handle login_core );
 use C4::SIP::Logger qw(set_logger);
 
 use Koha::Caches;
-
 use Koha::Logger;
+
 use C4::SIP::Trapper;
 tie *STDERR, "C4::SIP::Trapper";
 

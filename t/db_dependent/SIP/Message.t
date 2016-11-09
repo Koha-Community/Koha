@@ -30,7 +30,7 @@ use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Reserves qw(AddReserve);
+use C4::Reserves qw( AddReserve );
 use C4::Circulation qw( AddReturn );
 use Koha::Database;
 use Koha::AuthUtils qw(hash_password);

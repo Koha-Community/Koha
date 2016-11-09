@@ -20,11 +20,11 @@
 
 use Modern::Perl;
 
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 use Koha::Script;
-use C4::Biblio;
+use C4::Biblio qw( ModZebra );
 
 my @biblios;
 my @authorities;

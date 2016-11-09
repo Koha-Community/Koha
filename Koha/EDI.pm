@@ -21,28 +21,44 @@ use strict;
 use warnings;
 use base qw(Exporter);
 use utf8;
-use Carp;
+use Carp qw( carp );
 use English qw{ -no_match_vars };
 use Business::ISBN;
 use DateTime;
 use C4::Context;
 use Koha::Database;
-use Koha::DateUtils;
-use C4::Acquisition qw( NewBasket ModOrder);
+use Koha::DateUtils qw( dt_from_string );
+use C4::Acquisition qw( ModOrder NewBasket );
 use C4::Suggestions qw( ModSuggestion );
-use C4::Biblio qw( AddBiblio TransformKohaToMarc GetMarcBiblio GetFrameworkCode GetMarcFromKohaField );
+use C4::Biblio qw(
+    AddBiblio
+    GetFrameworkCode
+    GetMarcFromKohaField
+    TransformKohaToMarc
+);
 use Koha::Edifact::Order;
 use Koha::Edifact;
-use C4::Log qw(logaction);
+use C4::Log qw( logaction );
 use Log::Log4perl;
-use Text::Unidecode;
+use Text::Unidecode qw( unidecode );
 use Koha::Plugins::Handler;
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
 
 our $VERSION = 1.1;
-our @EXPORT_OK =
-  qw( process_quote process_invoice process_ordrsp create_edi_order get_edifact_ean );
+
+our (@ISA, @EXPORT_OK);
+BEGIN {
+    require Exporter;
+    @ISA = qw(Exporter);
+    @EXPORT_OK = qw(
+      process_quote
+      process_invoice
+      process_ordrsp
+      create_edi_order
+      get_edifact_ean
+    );
+};
 
 sub create_edi_order {
     my $parameters = shift;

@@ -3,7 +3,7 @@
 use Modern::Perl;
 use Test::More tests => 43;
 
-use C4::Acquisition;
+use C4::Acquisition qw( GetBasket GetBasketUsers CanUserManageBasket );
 
 # Avoid "redefined subroutine" warnings
 local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };

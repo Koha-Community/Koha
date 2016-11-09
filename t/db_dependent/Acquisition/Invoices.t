@@ -11,7 +11,7 @@ use Koha::Database;
 use Test::More tests => 24;
 
 BEGIN {
-    use_ok('C4::Acquisition');
+    use_ok('C4::Acquisition', qw( NewBasket GetBasket AddInvoice GetInvoice ModReceiveOrder GetInvoiceDetails GetInvoices ModInvoice CloseInvoice ReopenInvoice MergeInvoices DelInvoice ));
 }
 
 my $schema = Koha::Database->new()->schema();

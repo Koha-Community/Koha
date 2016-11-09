@@ -44,9 +44,9 @@ $email_sender_module->mock(
 
 use_ok('C4::Context');
 use_ok('C4::Members');
-use_ok('C4::Acquisition');
-use_ok('C4::Biblio');
-use_ok('C4::Letters');
+use_ok('C4::Acquisition', qw( NewBasket ));
+use_ok('C4::Biblio', qw( AddBiblio GetBiblioData ));
+use_ok('C4::Letters', qw( GetMessageTransportTypes GetMessage EnqueueLetter GetQueuedMessages SendQueuedMessages ResendMessage GetLetters GetPreparedLetter SendAlerts ));
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Koha::Database;
@@ -472,7 +472,7 @@ is($err->{error}, 'something went wrong', "Send exception, error message returne
 }
 
 {
-use C4::Serials;
+use C4::Serials qw( NewSubscription GetSerials findSerialsByStatus ModSerialStatus );
 
 my $notes = 'notes';
 my $internalnotes = 'intnotes';

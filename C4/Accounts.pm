@@ -22,14 +22,11 @@ use Modern::Perl;
 use C4::Context;
 use C4::Stats;
 use C4::Members;
-use C4::Log qw(logaction);
 use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Items;
 
-use Mojo::Util qw(deprecated);
-use Data::Dumper qw(Dumper);
 
 use vars qw(@ISA @EXPORT);
 
@@ -37,8 +34,8 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-      &chargelostitem
-      &purge_zero_balance_fees
+      chargelostitem
+      purge_zero_balance_fees
     );
 }
 

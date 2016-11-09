@@ -25,8 +25,8 @@ use t::lib::TestBuilder;
 use List::MoreUtils qw( any none );
 
 use C4::Biblio qw(AddBiblio);
-use C4::Reserves;
-use C4::ClassSource;
+use C4::Reserves qw( AddReserve );
+use C4::ClassSource qw( GetClassSort );
 use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::Database;
@@ -34,7 +34,7 @@ use MARC::Record;
 
 BEGIN {
     use_ok('C4::Context');
-    use_ok('C4::Items');
+    use_ok('C4::Items', qw( GetItemsForInventory ));
     use_ok('C4::Biblio');
     use_ok('C4::Koha');
 }

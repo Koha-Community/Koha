@@ -21,12 +21,11 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use C4::Auth;
+use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Output;
-use C4::Koha;
-use C4::ClassSortRoutine;
-use C4::ClassSplitRoutine;
+use C4::Output qw( output_html_with_http_headers );
+use C4::ClassSortRoutine qw( GetSortRoutineNames );
+use C4::ClassSplitRoutine qw( GetSplitRoutineNames );
 use Koha::ClassSources;
 use Koha::ClassSortRules;
 use Koha::ClassSplitRules;

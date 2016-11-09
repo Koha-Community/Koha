@@ -30,10 +30,10 @@ use Koha::Database;
 use Koha::Caches;
 use Koha::MarcSubfieldStructures;
 
-use C4::Linker::Default;
+use C4::Linker::Default qw( get_link );
 
 BEGIN {
-    use_ok('C4::Biblio');
+    use_ok('C4::Biblio', qw( AddBiblio GetMarcFromKohaField BiblioAutoLink GetMarcSubfieldStructure GetMarcSubfieldStructureFromKohaField LinkBibHeadingsToAuthorities GetBiblioData GetMarcBiblio ModBiblio GetMarcISSN GetMarcControlnumber GetMarcISBN GetMarcPrice GetFrameworkCode GetMarcUrls IsMarcStructureInternal GetMarcStructure GetXmlBiblio DelBiblio ));
 }
 
 my $schema = Koha::Database->new->schema;
@@ -472,7 +472,7 @@ sub run_tests {
     my $authid = $field->subfield('9');
     ok($authid, 'ModBiblio adds authority id');
 
-    use_ok('C4::AuthoritiesMarc');
+    use_ok('C4::AuthoritiesMarc', qw( GetAuthority ));
     my $auth_record = C4::AuthoritiesMarc::GetAuthority($authid);
     ok($auth_record, 'Authority record successfully retrieved');
 

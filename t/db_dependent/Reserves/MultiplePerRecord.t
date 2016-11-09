@@ -23,7 +23,7 @@ use Test::More tests => 16;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Reserves qw( GetMaxPatronHoldsForRecord AddReserve CanBookBeReserved );
+use C4::Reserves qw( GetMaxPatronHoldsForRecord CanBookBeReserved AddReserve );
 use Koha::Database;
 use Koha::Holds;
 

@@ -26,7 +26,7 @@ use t::lib::TestBuilder;
 use DateTime;
 
 use C4::Context;
-use C4::Circulation;
+use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Database;
 use Koha::DateUtils;

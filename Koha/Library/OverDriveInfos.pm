@@ -17,7 +17,6 @@ package Koha::Library::OverDriveInfos;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

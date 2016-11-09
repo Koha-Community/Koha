@@ -33,14 +33,13 @@ use MARC::File::USMARC;
 
 # Koha modules used
 use C4::Context;
-use C4::Auth;
-use C4::Output;
-use C4::Biblio;
-use C4::ImportBatch;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::ImportBatch qw( RecordsFromMARCXMLFile RecordsFromISO2709File RecordsFromMarcPlugin BatchStageMarcRecords BatchFindDuplicates SetImportBatchMatcher SetImportBatchOverlayAction SetImportBatchNoMatchAction SetImportBatchItemAction );
 use C4::Matcher;
 use Koha::UploadedFiles;
 use C4::BackgroundJob;
-use C4::MarcModificationTemplates;
+use C4::MarcModificationTemplates qw( GetModificationTemplates );
 use Koha::Plugins;
 use Koha::ImportBatches;
 

@@ -24,7 +24,7 @@ use Koha::Patrons;
 use C4::Context;
 use C4::Items;
 use C4::Biblio;
-use C4::Reserves;
+use C4::Reserves qw( AddReserve ModReserve ModReserveAffect );
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;

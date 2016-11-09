@@ -18,7 +18,7 @@ use C4::SIP::ILS::Transaction::Hold;
 use C4::SIP::ILS::Transaction::Checkout;
 use C4::SIP::ILS::Transaction::Checkin;
 
-use C4::Reserves;
+use C4::Reserves qw( AddReserve ModReserve ModReserveAffect RevertWaitingStatus );
 use Koha::CirculationRules;
 use Koha::Item::Transfer;
 use Koha::DateUtils qw( dt_from_string output_pref );

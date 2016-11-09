@@ -21,11 +21,10 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw/:DEFAULT get_session/;
-use C4::Output;
-use C4::Circulation;
-use C4::Koha;
-use Koha::DateUtils;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Circulation qw( barcodedecode CanBookBeRenewed GetSoonestRenewDate GetLatestAutoRenewDate AddRenewal );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 use Koha::BiblioFrameworks;
 

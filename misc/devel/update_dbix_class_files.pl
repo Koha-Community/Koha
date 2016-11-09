@@ -21,8 +21,8 @@
 use Modern::Perl;
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
 
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 my %db_defaults = (
     driver => 'mysql',

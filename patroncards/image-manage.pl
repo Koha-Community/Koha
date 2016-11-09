@@ -4,13 +4,12 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Graphics::Magick;
-use POSIX qw(ceil);
 
 use C4::Context;
-use C4::Auth;
-use C4::Output;
-use C4::Creators;
-use C4::Patroncards;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Creators qw( html_table );
+use C4::Patroncards qw( get_image put_image rm_image );
 
 my $cgi = CGI->new;
 

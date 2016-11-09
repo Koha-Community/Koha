@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Auth qw(in_iprange);
+use C4::Auth qw( in_iprange );
 use C4::Service;
 use C4::Members;
 use Koha::Patron::Images;

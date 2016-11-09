@@ -3,9 +3,9 @@
 use Modern::Perl;
 
 use Test::More;
-use C4::Acquisition;
-use C4::Biblio;
-use C4::Budgets;
+use C4::Acquisition qw( NewBasket GetOrders GetOrdersByBiblionumber GetOrder );
+use C4::Biblio qw( AddBiblio );
+use C4::Budgets qw( AddBudget GetBudget );
 use Koha::Database;
 use Koha::Acquisition::Orders;
 

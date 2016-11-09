@@ -47,7 +47,6 @@ to the preferred form.
 
 use strict;
 use warnings;
-use Carp;
 use C4::Context;
 
 use base qw(Class::Accessor);

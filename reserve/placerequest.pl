@@ -24,13 +24,8 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use C4::Biblio;
-use C4::Items;
-use C4::Output;
-use C4::Reserves;
-use C4::Circulation;
-use C4::Members;
-use C4::Auth qw/checkauth/;
+use C4::Reserves qw( CanItemBeReserved AddReserve CanBookBeReserved );
+use C4::Auth qw( checkauth );
 
 use Koha::Items;
 use Koha::Patrons;

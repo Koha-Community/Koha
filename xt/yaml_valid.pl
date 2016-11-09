@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 use YAML::XS;
 
 my $usage = <<EOF;

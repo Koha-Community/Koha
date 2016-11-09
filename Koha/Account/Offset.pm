@@ -17,7 +17,6 @@ package Koha::Account::Offset;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 use Koha::Account::Lines;

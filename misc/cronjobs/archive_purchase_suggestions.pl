@@ -2,14 +2,14 @@
 
 use Modern::Perl;
 
-use Pod::Usage;
-use Getopt::Long;
+use Pod::Usage qw( pod2usage );
+use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Suggestions;
-use C4::Koha;
+use C4::Koha qw( GetAuthorisedValues );
 
 my ( $help, $verbose, $confirm, $age, $age_date_field, @statuses );
 GetOptions(

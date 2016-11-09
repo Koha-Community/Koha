@@ -19,7 +19,6 @@ package Koha::Club::Hold::PatronHolds;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

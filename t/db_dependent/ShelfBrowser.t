@@ -8,12 +8,12 @@ use MARC::Record;
 
 use C4::Context;
 use C4::Items;
-use C4::Biblio;
+use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 
 use t::lib::TestBuilder;
 
-use_ok('C4::ShelfBrowser');
+use_ok('C4::ShelfBrowser', qw( GetNearbyItems ));
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;

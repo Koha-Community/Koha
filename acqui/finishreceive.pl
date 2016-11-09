@@ -22,19 +22,18 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use C4::Auth;
+use C4::Auth qw( checkauth );
 use C4::Output;
 use C4::Context;
-use C4::Acquisition;
-use C4::Biblio;
-use C4::Items;
+use C4::Acquisition qw( GetInvoice GetOrder populate_order_with_prices ModReceiveOrder );
+use C4::Biblio qw( GetFrameworkCode GetMarcFromKohaField TransformHtmlToXml );
+use C4::Items qw( GetMarcItem ModItemFromMarc AddItemFromMarc );
 use C4::Search;
 
 use Koha::Number::Price;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
 
-use List::MoreUtils qw/any/;
 
 my $input=CGI->new;
 my $flagsrequired = {acquisition => 'order_receive'};

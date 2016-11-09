@@ -19,14 +19,11 @@ package C4::Auth;
 
 use strict;
 use warnings;
-use Carp qw/croak/;
+use Carp qw( croak );
 
-use Digest::MD5 qw(md5_base64);
-use JSON qw/encode_json/;
-use URI::Escape;
+use Digest::MD5 qw( md5_base64 );
 use CGI::Session;
 
-require Exporter;
 use C4::Context;
 use C4::Templates;    # to get the template
 use C4::Languages;
@@ -34,25 +31,25 @@ use C4::Search::History;
 use Koha;
 use Koha::Logger;
 use Koha::Caches;
-use Koha::AuthUtils qw(get_script_name hash_password);
+use Koha::AuthUtils qw( get_script_name hash_password );
 use Koha::Checkouts;
-use Koha::DateUtils qw(dt_from_string);
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Library::Groups;
 use Koha::Libraries;
 use Koha::Cash::Registers;
 use Koha::Desks;
 use Koha::Patrons;
 use Koha::Patron::Consents;
-use POSIX qw/strftime/;
-use List::MoreUtils qw/ any /;
-use Encode qw( encode is_utf8);
-use C4::Auth_with_shibboleth;
+use List::MoreUtils qw( any );
+use Encode;
+use C4::Auth_with_shibboleth qw( shib_ok get_login_shib login_shib_url logout_shib checkpw_shib );
 use Net::CIDR;
-use C4::Log qw/logaction/;
+use C4::Log qw( logaction );
 
 # use utf8;
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $ldap $cas $caslogout);
 
+use vars qw($ldap $cas $caslogout);
+our (@ISA, @EXPORT_OK);
 BEGIN {
     sub psgi_env { any { /^psgi\./ } keys %ENV }
 
@@ -63,12 +60,15 @@ BEGIN {
 
     C4::Context->set_remote_address;
 
-    @ISA       = qw(Exporter);
-    @EXPORT    = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
-    @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &checkpw_internal &checkpw_hash
-      &get_all_subpermissions &get_user_subpermissions track_login_daily &in_iprange
+    require Exporter;
+    @ISA = qw(Exporter);
+
+    @EXPORT_OK = qw(
+      checkauth check_api_auth get_session check_cookie_auth checkpw checkpw_internal checkpw_hash
+      get_all_subpermissions get_user_subpermissions track_login_daily in_iprange
+      get_template_and_user haspermission
     );
-    %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
+
     $ldap      = C4::Context->config('useldapserver') || 0;
     $cas       = C4::Context->preference('casAuthentication');
     $caslogout = C4::Context->preference('casLogout');

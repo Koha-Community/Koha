@@ -25,7 +25,7 @@ use Test::MockModule;
 
 use DateTime;
 
-use C4::Circulation qw/AddIssue AddReturn/;
+use C4::Circulation qw( AddRenewal CanBookBeRenewed LostItem AddIssue AddReturn );
 use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;

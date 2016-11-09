@@ -18,7 +18,7 @@
 use Modern::Perl;
 use Test::More tests => 8;
 
-use C4::Items;
+use C4::Items qw( MoveItemFromBiblio );
 use C4::Reserves;
 use Koha::Database;
 use Koha::Holds;

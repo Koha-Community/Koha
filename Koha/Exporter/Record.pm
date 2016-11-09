@@ -5,11 +5,11 @@ use MARC::File::XML;
 use MARC::File::USMARC;
 
 use C4::AuthoritiesMarc;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcFromKohaField );
 use C4::Record;
 use Koha::CsvProfiles;
 use Koha::Logger;
-use List::Util qw(all any);
+use List::Util qw( all any );
 
 sub _get_record_for_export {
     my ($params)           = @_;

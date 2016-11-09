@@ -20,9 +20,8 @@ package Koha::Account;
 use Modern::Perl;
 
 use Carp;
-use Data::Dumper;
-use List::MoreUtils qw( uniq );
-use Try::Tiny;
+use Data::Dumper qw( Dumper );
+use Try::Tiny qw( catch try );
 
 use C4::Circulation qw( ReturnLostItem CanBookBeRenewed AddRenewal );
 use C4::Letters;
@@ -34,7 +33,6 @@ use Koha::Patrons;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Account::DebitTypes;
-use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 use Koha::Exceptions::Account;
 

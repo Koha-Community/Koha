@@ -25,7 +25,7 @@ use Koha::Acquisition::BasketGroups;
 use Koha::Acquisition::Orders;
 use Koha::Exceptions::Acquisition::Basket;
 use Koha::Patrons;
-use C4::Log qw(logaction);
+use C4::Log qw( logaction );
 
 use base qw( Koha::Object Koha::Object::Mixin::AdditionalFields );
 

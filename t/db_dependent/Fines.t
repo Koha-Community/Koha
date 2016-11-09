@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 use C4::Context;
-use C4::Overdues;
+use C4::Overdues qw( CalcFine );
 use Koha::Database;
 use Koha::DateUtils;
 

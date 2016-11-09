@@ -15,14 +15,13 @@ use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Auth qw(checkpw);
 use C4::Members;
 use Koha::AuthUtils qw/hash_password/;
 use Koha::Database;
 use Koha::Patrons;
 
 BEGIN {
-    use_ok('C4::Auth');
+    use_ok('C4::Auth', qw( checkauth haspermission track_login_daily checkpw get_template_and_user checkpw_hash ));
 }
 
 my $schema  = Koha::Database->schema;

@@ -25,14 +25,14 @@ use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
 use Koha::Script;
-use C4::Biblio;
+use C4::Biblio qw( GetFrameworkCode GetMarcBiblio ModBiblioMarc );
 use C4::Context;
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 
 my $commit;
 my $add_links;

@@ -20,18 +20,17 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use List::Util qw( max min );
-use POSIX qw(ceil);
+use POSIX qw( ceil );
 
-use C4::Auth qw(get_template_and_user);
-use C4::Output qw(output_html_with_http_headers);
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
-use C4::Search qw(SimpleSearch);
-use C4::Biblio qw(TransformMarcToKoha);
-use C4::Creators::Lib qw(html_table);
+use C4::Search qw( new_record_from_zebra );
+use C4::Biblio qw( TransformMarcToKoha );
+use C4::Creators::Lib qw( html_table );
 
 use Koha::Logger;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::SearchEngine::Search;

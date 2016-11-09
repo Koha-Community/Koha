@@ -19,7 +19,6 @@ package Koha::Serial;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

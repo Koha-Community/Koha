@@ -2,9 +2,9 @@ package C4::Templates;
 
 use strict;
 use warnings;
-use Carp;
+use Carp qw( carp );
 use CGI qw ( -utf8 );
-use List::MoreUtils qw/ any uniq /;
+use List::MoreUtils qw( uniq );
 
 # Copyright 2009 Chris Cormack and The Koha Dev Team
 #
@@ -31,8 +31,7 @@ C4::Templates - Object for manipulating templates for use with Koha
 
 use base qw(Class::Accessor);
 use Template;
-use Template::Constants qw( :debug );
-use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language_get_description accept_language );
+use C4::Languages qw( get_bidi getTranslatedLanguages regex_lang_subtags );
 
 use C4::Context;
 

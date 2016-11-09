@@ -1,12 +1,11 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Getopt::Long;
-use Pod::Usage;
-use IO::File;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 use Koha::Script;
-use C4::Biblio;
+use C4::Biblio qw( DelBiblio );
 
 my $help;
 GetOptions(

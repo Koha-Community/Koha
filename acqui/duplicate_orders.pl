@@ -21,14 +21,14 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth;
-use C4::Output;
-use C4::Acquisition qw(GetHistory);
-use C4::Budgets qw(GetBudgetPeriods GetBudgetHierarchy CanUserUseBudget);
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_and_exit output_html_with_http_headers );
+use C4::Acquisition qw( GetHistory );
+use C4::Budgets qw( GetBudgetHierarchy GetBudget CanUserUseBudget GetBudgetPeriods GetBudgetPeriod );
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
-use Koha::DateUtils qw(dt_from_string output_pref);
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $input    = CGI->new;
 my $basketno = $input->param('basketno');

@@ -23,7 +23,7 @@ package Koha::pdfformat::layout3pagesfr;
 
 use vars qw(@ISA @EXPORT);
 use MIME::Base64;
-use List::MoreUtils qw/uniq/;
+use List::MoreUtils qw( uniq );
 use Modern::Perl;
 use utf8;
 

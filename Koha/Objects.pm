@@ -19,7 +19,7 @@ package Koha::Objects;
 
 use Modern::Perl;
 
-use Carp;
+use Carp qw( carp );
 use List::MoreUtils qw( none );
 use Class::Inspector;
 

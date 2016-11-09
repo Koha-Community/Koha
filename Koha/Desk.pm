@@ -18,7 +18,6 @@ package Koha::Desk;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

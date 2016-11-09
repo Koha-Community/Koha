@@ -8,7 +8,7 @@ use Test::More tests => 2;
 use Koha::Caches;
 use Koha::Database;
 use Koha::MarcSubfieldStructures;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcFromKohaField TransformHtmlToMarc );
 
 our ( $biblionumbertagfield, $biblionumbertagsubfield );
 my $schema  = Koha::Database->new->schema;

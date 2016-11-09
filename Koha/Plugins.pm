@@ -19,12 +19,13 @@ package Koha::Plugins;
 
 use Modern::Perl;
 
-use Array::Utils qw(array_minus);
+use Array::Utils qw( array_minus );
 use Class::Inspector;
-use List::MoreUtils qw(any);
-use Module::Load::Conditional qw(can_load);
-use Module::Load qw(load);
+use List::MoreUtils qw( any );
+use Module::Load::Conditional qw( can_load );
+use Module::Load;
 use Module::Pluggable search_path => ['Koha::Plugin'], except => qr/::Edifact(|::Line|::Message|::Order|::Segment|::Transport)$/;
+
 
 use C4::Context;
 use C4::Output;

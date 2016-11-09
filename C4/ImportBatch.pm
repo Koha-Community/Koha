@@ -21,67 +21,78 @@ use strict;
 use warnings;
 
 use C4::Context;
-use C4::Koha;
-use C4::Biblio;
-use C4::Items;
-use C4::Charset;
+use C4::Koha qw( GetNormalizedISBN );
+use C4::Biblio qw(
+    AddBiblio
+    DelBiblio
+    GetMarcFromKohaField
+    GetXmlBiblio
+    ModBiblio
+    TransformMarcToKoha
+);
+use C4::Items qw( AddItemFromMarc ModItemFromMarc );
+use C4::Charset qw( MarcToUTF8Record SetUTF8Flag StripNonXmlChars );
 use C4::AuthoritiesMarc;
-use C4::MarcModificationTemplates;
+use C4::MarcModificationTemplates qw( ModifyRecordWithTemplate );
 use Koha::Items;
 use Koha::Plugins::Handler;
 use Koha::Logger;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
-	require Exporter;
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(
-    GetZ3950BatchId
-    GetWebserviceBatchId
-    GetImportRecordMarc
-    GetImportRecordMarcXML
-    AddImportBatch
-    GetImportBatch
-    AddAuthToBatch
-    AddBiblioToBatch
-    AddItemsToImportBiblio
-    ModAuthorityInBatch
-    ModBiblioInBatch
+    require Exporter;
+    @ISA       = qw(Exporter);
+    @EXPORT_OK = qw(
+      GetZ3950BatchId
+      GetWebserviceBatchId
+      GetImportRecordMarc
+      GetImportRecordMarcXML
+      GetRecordFromImportBiblio
+      AddImportBatch
+      GetImportBatch
+      AddAuthToBatch
+      AddBiblioToBatch
+      AddItemsToImportBiblio
+      ModAuthorityInBatch
+      ModBiblioInBatch
 
-    BatchStageMarcRecords
-    BatchFindDuplicates
-    BatchCommitRecords
-    BatchRevertRecords
-    CleanBatch
-    DeleteBatch
+      BatchStageMarcRecords
+      BatchFindDuplicates
+      BatchCommitRecords
+      BatchRevertRecords
+      CleanBatch
+      DeleteBatch
 
-    GetAllImportBatches
-    GetStagedWebserviceBatches
-    GetImportBatchRangeDesc
-    GetNumberOfNonZ3950ImportBatches
-    GetImportBiblios
-    GetImportRecordsRange
-	GetItemNumbersFromImportBatch
-    
-    GetImportBatchStatus
-    SetImportBatchStatus
-    GetImportBatchOverlayAction
-    SetImportBatchOverlayAction
-    GetImportBatchNoMatchAction
-    SetImportBatchNoMatchAction
-    GetImportBatchItemAction
-    SetImportBatchItemAction
-    GetImportBatchMatcher
-    SetImportBatchMatcher
-    GetImportRecordOverlayStatus
-    SetImportRecordOverlayStatus
-    GetImportRecordStatus
-    SetImportRecordStatus
-    SetMatchedBiblionumber
-    GetImportRecordMatches
-    SetImportRecordMatches
-	);
+      GetAllImportBatches
+      GetStagedWebserviceBatches
+      GetImportBatchRangeDesc
+      GetNumberOfNonZ3950ImportBatches
+      GetImportBiblios
+      GetImportRecordsRange
+      GetItemNumbersFromImportBatch
+
+      GetImportBatchStatus
+      SetImportBatchStatus
+      GetImportBatchOverlayAction
+      SetImportBatchOverlayAction
+      GetImportBatchNoMatchAction
+      SetImportBatchNoMatchAction
+      GetImportBatchItemAction
+      SetImportBatchItemAction
+      GetImportBatchMatcher
+      SetImportBatchMatcher
+      GetImportRecordOverlayStatus
+      SetImportRecordOverlayStatus
+      GetImportRecordStatus
+      SetImportRecordStatus
+      SetMatchedBiblionumber
+      GetImportRecordMatches
+      SetImportRecordMatches
+
+      RecordsFromMARCXMLFile
+      RecordsFromISO2709File
+      RecordsFromMarcPlugin
+    );
 }
 
 =head1 NAME

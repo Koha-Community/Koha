@@ -22,7 +22,7 @@ use Modern::Perl;
 use Template::Plugin::Filter;
 use base qw( Template::Plugin::Filter );
 
-use JSON qw( to_json );
+use JSON;
 our $DYNAMIC = 1;
 
 sub json {

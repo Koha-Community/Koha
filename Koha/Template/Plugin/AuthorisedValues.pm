@@ -21,7 +21,7 @@ use Modern::Perl;
 use Template::Plugin;
 use base qw( Template::Plugin );
 
-use C4::Koha;
+use C4::Koha qw( GetAuthorisedValues );
 use Koha::AuthorisedValues;
 
 sub GetByCode {

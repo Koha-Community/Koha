@@ -20,7 +20,7 @@ package C4::Stats;
 
 use Modern::Perl;
 require Exporter;
-use Carp;
+use Carp qw( croak );
 use C4::Context;
 
 use Koha::DateUtils qw( dt_from_string );
@@ -30,10 +30,10 @@ use Koha::PseudonymizedTransactions;
 use vars qw(@ISA @EXPORT);
 
 BEGIN {
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(
-		&UpdateStats
-	);
+    @ISA    = qw(Exporter);
+    @EXPORT = qw(
+      UpdateStats
+    );
 }
 
 

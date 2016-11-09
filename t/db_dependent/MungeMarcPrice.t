@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use C4::Biblio;
+use C4::Biblio qw( MungeMarcPrice );
 use Koha::Database;
 use Koha::Acquisition::Currencies;
 use Test::More;

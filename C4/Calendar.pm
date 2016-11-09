@@ -19,8 +19,8 @@ use strict;
 use warnings;
 use vars qw(@EXPORT);
 
-use Carp;
-use Date::Calc qw( Date_to_Days Today);
+use Carp qw( croak );
+use Date::Calc qw( Today );
 
 use C4::Context;
 use Koha::Caches;

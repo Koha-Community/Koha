@@ -9,7 +9,7 @@ use warnings;
 use Test::More tests => 10;
 
 BEGIN {
-        use_ok('C4::ClassSortRoutine::LCC');
+        use_ok('C4::ClassSortRoutine::LCC', qw( get_class_sort_key ));
 }
 
 #Obvious cases

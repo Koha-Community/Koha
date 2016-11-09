@@ -8,7 +8,7 @@ use strict;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
 
@@ -17,10 +17,13 @@ use Koha::Script;
 use MARC::Record;
 use C4::Charset;
 use C4::Context;
-use C4::Biblio;
-use Time::HiRes qw(gettimeofday);
+use C4::Biblio qw(
+    GetXmlBiblio
+    TransformMarcToKoha
+);
+use Time::HiRes qw( gettimeofday );
 
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 
 my ($version, $confirm);
 GetOptions(

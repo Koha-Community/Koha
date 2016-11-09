@@ -25,8 +25,8 @@ use Test::More tests => 13;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Reserves;
-use C4::Circulation;
+use C4::Reserves qw( AddReserve );
+use C4::Circulation qw( AddIssue );
 use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils;

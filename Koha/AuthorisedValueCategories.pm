@@ -17,7 +17,6 @@ package Koha::AuthorisedValueCategories;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 use Koha::Exceptions;

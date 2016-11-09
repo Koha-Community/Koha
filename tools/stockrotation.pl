@@ -27,16 +27,16 @@
 use Modern::Perl;
 use CGI;
 
-use C4::Auth;
+use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Output;
+use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Libraries;
 use Koha::StockRotationRotas;
 use Koha::StockRotationItems;
 use Koha::StockRotationStages;
 use Koha::Item;
-use Koha::Util::StockRotation qw(:ALL);
+use Koha::Util::StockRotation qw( get_branches get_stages move_to_next_stage toggle_indemand remove_from_stage add_items_to_rota get_barcodes_status );
 
 my $input = CGI->new;
 

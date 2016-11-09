@@ -19,15 +19,15 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use MARC::File::XML;
-use List::MoreUtils qw(uniq);
-use C4::Auth;
-use C4::Output;
+use List::MoreUtils qw( uniq );
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Authority::Types;
 use Koha::Biblioitems;
 use Koha::CsvProfiles;
 use Koha::Database;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Exporter::Record;
 use Koha::ItemTypes;
 use Koha::Libraries;

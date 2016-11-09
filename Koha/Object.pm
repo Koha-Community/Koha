@@ -20,14 +20,14 @@ package Koha::Object;
 
 use Modern::Perl;
 
-use Carp;
+use Carp qw( croak );
 use Mojo::JSON;
 use Scalar::Util qw( blessed looks_like_number );
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 use Koha::Database;
 use Koha::Exceptions::Object;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Object::Message;
 
 =head1 NAME

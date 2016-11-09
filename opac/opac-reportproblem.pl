@@ -19,16 +19,16 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
-use C4::Auth;    # get_template_and_user
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use C4::Letters;
 use Koha::ProblemReport;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Util::Navigation;
-use URI::Escape;
+use URI::Escape qw( uri_unescape );
 use Encode;
 
 my $input = CGI->new;

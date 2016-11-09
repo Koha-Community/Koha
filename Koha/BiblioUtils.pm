@@ -32,12 +32,11 @@ the new thing that should be used.
 
 =cut
 
-use C4::Biblio; # EmbedItemsInMarcBiblio
+use C4::Biblio;
 use Koha::MetadataIterator;
 use Koha::Database;
 use Modern::Perl;
 
-use Data::Dumper; # TODO remove
 
 use base qw(Koha::MetadataRecord);
 

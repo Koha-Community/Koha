@@ -8,8 +8,8 @@ use Modern::Perl;
 use Test::More tests => 6;
 use List::MoreUtils qw(any none);
 use MARC::Record;
-use C4::Biblio;
-use C4::XISBN;
+use C4::Biblio qw( GetMarcFromKohaField AddBiblio );
+use C4::XISBN qw( get_xisbns );
 use C4::Context;
 use C4::Search;
 use Koha::Database;
@@ -17,7 +17,7 @@ use t::lib::Mocks;
 use Test::MockModule;
 
 BEGIN {
-    use_ok('C4::XISBN');
+    use_ok('C4::XISBN', qw( get_xisbns ));
 }
 
 my $schema = Koha::Database->new->schema;

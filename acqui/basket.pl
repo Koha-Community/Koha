@@ -21,25 +21,22 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Auth;
-use C4::Koha;
-use C4::Output;
+use C4::Auth qw( get_template_and_user haspermission );
+use C4::Output qw( output_html_with_http_headers output_and_exit );
 use CGI qw ( -utf8 );
-use C4::Acquisition;
-use C4::Budgets;
-use C4::Contract;
-use C4::Biblio;
-use C4::Items;
-use C4::Suggestions;
+use C4::Acquisition qw( GetBasket CanUserManageBasket GetBasketAsCSV NewBasket NewBasketgroup ModBasket ReopenBasket ModBasketUsers GetBasketgroup GetBasketgroups GetBasketUsers GetOrders GetOrder get_rounded_price );
+use C4::Budgets qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
+use C4::Contract qw( GetContract );
+use C4::Suggestions qw( GetSuggestion GetSuggestionInfoFromBiblionumber GetSuggestionInfo );
 use Koha::Biblios;
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
 use Koha::Libraries;
-use C4::Letters qw/SendAlerts/;
-use Date::Calc qw/Add_Delta_Days/;
+use C4::Letters qw( SendAlerts );
+use Date::Calc qw( Add_Delta_Days );
 use Koha::Database;
-use Koha::EDI qw( create_edi_order get_edifact_ean );
+use Koha::EDI qw( create_edi_order );
 use Koha::CsvProfiles;
 use Koha::Patrons;
 

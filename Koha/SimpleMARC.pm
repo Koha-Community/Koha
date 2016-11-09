@@ -18,29 +18,23 @@ package Koha::SimpleMARC;
 
 use Modern::Perl;
 
-#use MARC::Record;
+our (@ISA, @EXPORT_OK);
+BEGIN {
+    require Exporter;
+    our @ISA = qw(Exporter);
 
-require Exporter;
-
-our @ISA = qw(Exporter);
-our %EXPORT_TAGS = ( 'all' => [ qw(
-
-) ] );
-
-our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
-
-our @EXPORT = qw(
-  read_field
-  add_field
-  update_field
-  copy_field
-  copy_and_replace_field
-  move_field
-  delete_field
-  field_exists
-  field_equals
-);
-
+    @EXPORT_OK = qw(
+      read_field
+      add_field
+      update_field
+      copy_field
+      copy_and_replace_field
+      move_field
+      delete_field
+      field_exists
+      field_equals
+    );
+}
 
 =head1 NAME
 

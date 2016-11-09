@@ -25,7 +25,7 @@ use Test::More tests => 3;
 use t::lib::Mocks;
 
 BEGIN {
-    use_ok('C4::ImportBatch');
+    use_ok('C4::ImportBatch', qw( RecordsFromISO2709File RecordsFromMARCXMLFile ));
 }
 
 t::lib::Mocks::mock_preference('marcflavour', 'MARC21');

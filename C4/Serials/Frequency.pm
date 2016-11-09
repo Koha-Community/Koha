@@ -28,13 +28,13 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-      &GetSubscriptionFrequencies
-      &GetSubscriptionFrequency
-      &AddSubscriptionFrequency
-      &ModSubscriptionFrequency
-      &DelSubscriptionFrequency
+      GetSubscriptionFrequencies
+      GetSubscriptionFrequency
+      AddSubscriptionFrequency
+      ModSubscriptionFrequency
+      DelSubscriptionFrequency
 
-      &GetSubscriptionsWithFrequency
+      GetSubscriptionsWithFrequency
     );
 }
 

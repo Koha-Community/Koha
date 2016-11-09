@@ -17,7 +17,6 @@ package Koha::Patron::Relationships;
 
 use Modern::Perl;
 
-use Carp;
 use List::MoreUtils qw( uniq );
 
 use Koha::Database;

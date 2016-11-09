@@ -24,8 +24,8 @@ $|=1;
 
 use Koha::Script;
 use C4::Context;
-use C4::Biblio;
-use Getopt::Long;
+use C4::Biblio qw( GetFrameworkCode GetMarcBiblio ModBiblio );
+use Getopt::Long qw( GetOptions );
 
 my ($wherestring, $run, $silent, $want_help);
 my $result = GetOptions(

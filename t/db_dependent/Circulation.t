@@ -32,13 +32,13 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Accounts;
-use C4::Calendar;
-use C4::Circulation;
+use C4::Calendar qw( new insert_single_holiday insert_week_day_holiday delete_holiday );
+use C4::Circulation qw( AddIssue AddReturn CanBookBeRenewed GetIssuingCharges AddRenewal GetSoonestRenewDate GetLatestAutoRenewDate LostItem GetUpcomingDueIssues CanBookBeIssued AddIssuingCharge ProcessOfflinePayment transferbook updateWrongTransfer );
 use C4::Biblio;
-use C4::Items;
+use C4::Items qw( ModItemTransfer );
 use C4::Log;
-use C4::Reserves;
-use C4::Overdues qw(UpdateFine CalcFine);
+use C4::Reserves qw( AddReserve ModReserve ModReserveCancelAll ModReserveAffect CheckReserves GetOtherReserves );
+use C4::Overdues qw( CalcFine UpdateFine get_chargeable_units );
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::Items;

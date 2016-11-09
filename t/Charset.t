@@ -26,7 +26,7 @@ use utf8;
 use open ':std', ':encoding(utf8)';
 
 BEGIN {
-    use_ok('C4::Charset');
+    use_ok('C4::Charset', qw( NormalizeString SetUTF8Flag IsStringUTF8ish nsb_clean ));
 }
 
 my $string;

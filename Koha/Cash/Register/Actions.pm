@@ -17,7 +17,6 @@ package Koha::Cash::Register::Actions;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

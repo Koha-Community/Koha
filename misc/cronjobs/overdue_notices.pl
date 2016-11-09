@@ -24,12 +24,12 @@ BEGIN {
 
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 use Text::CSV_XS;
 use DateTime;
 use DateTime::Duration;
@@ -37,10 +37,10 @@ use DateTime::Duration;
 use Koha::Script -cron;
 use C4::Context;
 use C4::Letters;
-use C4::Overdues qw(GetFine GetOverdueMessageTransportTypes parse_overdues_letter);
-use C4::Log;
-use Koha::Patron::Debarments qw(AddUniqueDebarment);
-use Koha::DateUtils;
+use C4::Overdues qw( GetOverdueMessageTransportTypes parse_overdues_letter );
+use C4::Log qw( cronlogaction );
+use Koha::Patron::Debarments qw( AddUniqueDebarment );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Calendar;
 use Koha::Libraries;
 use Koha::Acquisition::Currencies;

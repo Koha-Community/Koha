@@ -19,13 +19,18 @@ use Modern::Perl;
 
 
 use CGI qw ( -utf8 );
-use Encode qw( encode );
-use C4::Auth;    # get_template_and_user
+use Encode;
+use C4::Auth qw( get_template_and_user );
 use C4::Members;
-use C4::Koha;
-use C4::Output;
-use C4::Suggestions;
-use C4::Koha;
+use C4::Koha qw( GetAuthorisedValues );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Suggestions qw(
+    DelSuggestion
+    MarcRecordFromNewSuggestion
+    NewSuggestion
+    SearchSuggestion
+);
+use C4::Koha qw( GetAuthorisedValues );
 use C4::Scrubber;
 use C4::Search qw( FindDuplicate );
 
@@ -33,7 +38,7 @@ use Koha::AuthorisedValues;
 use Koha::Libraries;
 use Koha::Patrons;
 
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $input           = CGI->new;
 my $op              = $input->param('op') || 'else';

@@ -4,9 +4,9 @@ use Modern::Perl;
 use Test::More tests => 43;
 use Data::Dumper;
 
-use C4::Acquisition qw( NewBasket GetBasketsInfosByBookseller );
+use C4::Acquisition qw( NewBasket GetBasket GetBasketsInfosByBookseller ReopenBasket AddInvoice GetInvoice ModReceiveOrder );
 use C4::Biblio qw( AddBiblio );
-use C4::Budgets qw( AddBudget );
+use C4::Budgets qw( AddBudget GetBudget );
 use C4::Context;
 use Koha::Database;
 use Koha::Acquisition::Orders;

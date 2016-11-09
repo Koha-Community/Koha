@@ -17,9 +17,8 @@ package Koha::Virtualshelf;
 
 use Modern::Perl;
 
-use Carp;
 
-use C4::Auth;
+use C4::Auth qw( haspermission );
 
 use Koha::Patrons;
 use Koha::Database;

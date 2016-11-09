@@ -24,7 +24,7 @@ use CGI qw ( -utf8 );
 use Koha::Cache::Memory::Lite;
 
 BEGIN {
-    use_ok('C4::Languages');
+    use_ok('C4::Languages', qw( getlanguage ));
 }
 
 my @languages = (); # stores the list of active languages

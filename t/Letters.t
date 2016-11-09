@@ -44,7 +44,7 @@ fixtures_ok [
 my $db = Test::MockModule->new('Koha::Database');
 $db->mock( _new_schema => sub { return Schema(); } );
 
-use_ok('C4::Letters');
+use_ok('C4::Letters', qw( GetLetters ));
 
 t::lib::Mocks::mock_preference('dateformat', 'metric');
 

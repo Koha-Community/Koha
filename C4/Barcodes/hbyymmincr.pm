@@ -19,7 +19,7 @@ package C4::Barcodes::hbyymmincr;
 
 use Modern::Perl;
 
-use Carp;
+use Carp qw( carp );
 
 use C4::Context;
 

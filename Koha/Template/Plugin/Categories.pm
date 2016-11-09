@@ -20,7 +20,7 @@ use Modern::Perl;
 use Template::Plugin;
 use base qw( Template::Plugin );
 
-use List::Util qw(any);
+use List::Util qw( any );
 use Koha::Patron::Categories;
 
 sub all {

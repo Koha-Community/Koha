@@ -24,7 +24,7 @@ use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Auth;
+use C4::Auth qw( get_session );
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;

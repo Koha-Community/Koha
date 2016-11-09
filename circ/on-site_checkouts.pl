@@ -18,10 +18,9 @@
 
 use Modern::Perl;
 
-use C4::Auth;
+use C4::Auth qw( get_template_and_user );
 use C4::Circulation qw( GetPendingOnSiteCheckouts );
-use C4::Output;
-use C4::Koha;
+use C4::Output qw( output_html_with_http_headers );
 use Koha::BiblioFrameworks;
 
 my $cgi = CGI->new;

@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use base qw( Template::Plugin );
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 use Koha::Plugins;
 

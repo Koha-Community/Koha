@@ -28,7 +28,7 @@ use MARC::Batch;
 use File::Slurp;
 use Encode;
 
-use C4::Biblio;
+use C4::Biblio qw( AddBiblio );
 use C4::Context;
 use Koha::Database;
 use Koha::Biblio;

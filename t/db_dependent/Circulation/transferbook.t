@@ -21,8 +21,8 @@ use Test::More tests => 6;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Circulation;
-use C4::Reserves;
+use C4::Circulation qw( transferbook AddIssue GetTransfers );
+use C4::Reserves qw( AddReserve );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Item::Transfers;
 

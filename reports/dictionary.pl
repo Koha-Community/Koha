@@ -16,13 +16,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
-use CGI::Carp qw(fatalsToBrowser warningsToBrowser);
 use Modern::Perl;
-use C4::Auth;
+use C4::Auth qw( get_template_and_user );
 use CGI qw ( -utf8 );
-use C4::Output;
-use C4::Reports::Guided;
-use Koha::DateUtils;
+use C4::Output qw( output_html_with_http_headers );
+use C4::Reports::Guided qw( get_from_dictionary get_columns get_column_type get_distinct_values save_dictionary delete_definition get_report_areas );
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 =head1 NAME
 

@@ -21,14 +21,14 @@
 use strict;
 use warnings;
 use diagnostics;
-use Carp;
+use Carp qw( carp croak );
 use YAML::XS;
-use Pod::Usage;
-use Getopt::Long;
+use Pod::Usage qw( pod2usage );
+use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 use C4::Context;
-use C4::Log;
+use C4::Log qw( cronlogaction );
 
 my $verbose     = 0;
 my $help        = 0;
@@ -97,7 +97,7 @@ package ZebraIndex;
 use strict;
 use warnings;
 use diagnostics;
-use Carp;
+use Carp qw( carp croak );
 
 sub new {
     my $self = {};

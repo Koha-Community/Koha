@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth;
+use C4::Auth qw( checkauth );
 use Koha::Plugins::Handler;
 
 my $cgi = CGI->new;

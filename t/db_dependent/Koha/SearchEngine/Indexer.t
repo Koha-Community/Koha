@@ -15,10 +15,10 @@ use Test::MockObject;
 use t::lib::Mocks;
 
 #use C4::Biblio qw//;
-use C4::AuthoritiesMarc;
-use C4::Biblio;
-use C4::Circulation;
-use C4::Items;
+use C4::AuthoritiesMarc qw( AddAuthority DelAuthority merge );
+use C4::Biblio qw( ModZebra ModBiblio ModBiblioMarc DelBiblio );
+use C4::Circulation qw( MarkIssueReturned AddReturn LostItem );
+use C4::Items qw( ModDateLastSeen ModItemTransfer );
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::SearchEngine::Elasticsearch;

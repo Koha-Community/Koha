@@ -27,10 +27,10 @@ use File::Temp qw/tempfile/;
 
 use t::lib::Mocks;
 
-use C4::Auth qw//;
+use C4::Auth qw( get_template_and_user );
 
 BEGIN {
-    use_ok( 'C4::Templates' );
+    use_ok('C4::Templates', qw( GetColumnDefs getlanguagecookie setlanguagecookie themelanguage gettemplate param output availablethemes badtemplatecheck ));
     can_ok( 'C4::Templates',
          qw/ GetColumnDefs
              getlanguagecookie

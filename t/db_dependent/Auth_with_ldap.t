@@ -120,7 +120,7 @@ $builder->build(
 my $patron = Koha::Patrons->find($borrower->{borrowernumber});
 
 # C4::Auth_with_ldap needs several stuff set first ^^^
-use_ok('C4::Auth_with_ldap');
+use_ok('C4::Auth_with_ldap', qw( checkpw_ldap ));
 can_ok(
     'C4::Auth_with_ldap', qw/
       checkpw_ldap

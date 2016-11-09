@@ -27,7 +27,7 @@ use Test::MockModule;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Serials;
+use C4::Serials qw( NewSubscription ReNewSubscription GetSubscription GetSubscriptionLength );
 
 use Koha::Database;
 use Koha::Subscription::Histories;

@@ -19,7 +19,6 @@ package Koha::AudioAlerts;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

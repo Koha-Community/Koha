@@ -20,15 +20,14 @@ package Koha::Patron::Password::Recovery;
 use Modern::Perl;
 use C4::Context;
 use C4::Letters;
-use Crypt::Eksblowfish::Bcrypt qw(en_base64);
-use Koha::DateUtils;
+use Crypt::Eksblowfish::Bcrypt qw( en_base64 );
+use Koha::DateUtils qw( dt_from_string );
 
-use vars qw(@ISA @EXPORT);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
-    push @EXPORT, qw(
+    @EXPORT_OK = qw(
       &ValidateBorrowernumber
       &SendPasswordRecoveryEmail
       &GetValidLinkInfo

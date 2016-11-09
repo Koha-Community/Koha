@@ -8,11 +8,10 @@ use strict;
 # Koha modules used
 use Koha::Script;
 use C4::Context;
-use C4::Biblio;
 use C4::AuthoritiesMarc;
-use Time::HiRes qw(gettimeofday);
+use Time::HiRes qw( gettimeofday );
 
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 my ( $fields, $number,$language) = ('',0);
 my ($version, $verbose, $test_parameter, $delete);
 GetOptions(

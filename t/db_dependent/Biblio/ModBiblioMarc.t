@@ -22,7 +22,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 use MARC::Record;
 
-use C4::Biblio;
+use C4::Biblio qw( ModBiblio ModBiblioMarc GetMarcBiblio );
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;

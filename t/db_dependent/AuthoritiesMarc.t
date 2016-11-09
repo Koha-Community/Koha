@@ -17,7 +17,7 @@ use Koha::Database;
 use Koha::Authority::Types;
 
 BEGIN {
-        use_ok('C4::AuthoritiesMarc');
+        use_ok('C4::AuthoritiesMarc', qw( GetHeaderAuthority AddAuthority AddAuthorityTrees GetAuthority BuildAuthHierarchies GenerateHierarchy BuildSummary DelAuthority CompareFieldWithAuthority ModAuthority merge ));
 }
 
 # We are now going to be testing the authorities hierarchy code, and

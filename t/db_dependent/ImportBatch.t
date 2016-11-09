@@ -16,7 +16,7 @@ BEGIN {
     # Mock pluginsdir before loading Plugins module
     my $path = dirname(__FILE__) . '/../lib';
     t::lib::Mocks::mock_config( 'pluginsdir', $path );
-    use_ok('C4::ImportBatch');
+    use_ok('C4::ImportBatch', qw( AddImportBatch GetImportBatch AddBiblioToBatch AddItemsToImportBiblio GetRecordFromImportBiblio SetMatchedBiblionumber GetImportBiblios GetItemNumbersFromImportBatch CleanBatch DeleteBatch RecordsFromMarcPlugin ));
 }
 
 # Start transaction

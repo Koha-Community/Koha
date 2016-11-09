@@ -28,9 +28,9 @@ use MARC::Record;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Circulation;
-use C4::Letters;
-use C4::Members;
+use C4::Circulation qw( AddIssue AddReturn );
+use C4::Letters qw( GetPreparedLetter );
+use C4::Members qw( IssueSlip );
 use C4::Biblio;
 use Koha::Database;
 use Koha::DateUtils;

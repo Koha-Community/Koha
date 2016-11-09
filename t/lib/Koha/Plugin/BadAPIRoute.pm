@@ -2,7 +2,7 @@ package Koha::Plugin::BadAPIRoute;
 
 use Modern::Perl;
 
-use Mojo::JSON qw(decode_json);
+use Mojo::JSON qw( decode_json );
 
 use base qw(Koha::Plugins::Base);
 

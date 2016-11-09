@@ -1,13 +1,13 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use C4::Stats;
+use C4::Stats qw( UpdateStats );
 use Koha::Database;
 
 use Test::More tests => 18;
 
 BEGIN {
-    use_ok('C4::Stats');
+    use_ok('C4::Stats', qw( UpdateStats ));
 }
 can_ok(
     'C4::Stats',

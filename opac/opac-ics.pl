@@ -29,11 +29,8 @@ use DateTime::Format::ICal;
 use DateTime::Event::ICal;
 use URI;
 
-use C4::Auth;
-use C4::Koha;
-use C4::Circulation;
-use C4::Members;
-use Koha::DateUtils;
+use C4::Auth qw( get_template_and_user );
+use Koha::DateUtils qw( dt_from_string );
 
 my $query = CGI->new;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(

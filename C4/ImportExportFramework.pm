@@ -21,23 +21,22 @@ use strict;
 use warnings;
 use XML::LibXML;
 use XML::LibXML::XPathContext;
-use Digest::MD5 qw();
-use POSIX qw(strftime);
+use Digest::MD5;
+use POSIX qw( strftime );
 use Text::CSV_XS;
-use List::MoreUtils qw(indexes);
+use List::MoreUtils qw( indexes );
 
 use C4::Context;
 use Koha::Logger;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
-    @EXPORT = qw(
-        &ExportFramework
-        &ImportFramework
-        &createODS
+    @EXPORT_OK = qw(
+        ExportFramework
+        ImportFramework
+        createODS
     );
 }
 

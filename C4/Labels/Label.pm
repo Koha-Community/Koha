@@ -3,14 +3,13 @@ package C4::Labels::Label;
 use strict;
 use warnings;
 
-use Text::Wrap;
-use Algorithm::CheckDigits;
+use Text::Wrap qw( wrap );
+use Algorithm::CheckDigits qw( CheckDigits );
 use Text::CSV_XS;
-use Data::Dumper;
 use Text::Bidi qw( log2vis );
 
 use C4::Context;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcBiblio GetMarcFromKohaField );
 use Koha::ClassSources;
 use Koha::ClassSortRules;
 use Koha::ClassSplitRules;

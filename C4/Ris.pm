@@ -62,12 +62,12 @@ package C4::Ris;
 
 use Modern::Perl;
 
-use List::MoreUtils qw/uniq/;
+use List::MoreUtils qw( uniq );
 use YAML::XS;
 use Encode;
 use vars qw(@ISA @EXPORT);
 
-use Koha::SimpleMARC qw(read_field);
+use Koha::SimpleMARC qw( read_field );
 
 
 @ISA = qw(Exporter);
@@ -75,7 +75,7 @@ use Koha::SimpleMARC qw(read_field);
 # only export API methods
 
 @EXPORT = qw(
-  &marc2ris
+  marc2ris
 );
 
 our $marcprint = 0; # Debug flag;

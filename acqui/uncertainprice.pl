@@ -45,12 +45,11 @@ The bookseller who we want to display the orders of.
 
 use Modern::Perl;
 
-use C4::Auth;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use CGI qw ( -utf8 );
 
-use C4::Acquisition qw/SearchOrders GetOrder ModOrder/;
-use C4::Biblio qw/GetBiblioData/;
+use C4::Acquisition qw( SearchOrders GetOrder ModOrder );
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Baskets;

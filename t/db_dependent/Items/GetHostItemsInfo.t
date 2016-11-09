@@ -4,7 +4,7 @@ use Test::More tests => 1;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Items;
+use C4::Items qw( GetHostItemsInfo );
 use Koha::Database;
 
 my $schema = Koha::Database->new->schema;

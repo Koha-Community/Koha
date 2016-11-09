@@ -11,7 +11,7 @@ use Koha::Libraries;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use_ok('C4::Overdues');
+use_ok('C4::Overdues', qw( GetOverdueMessageTransportTypes GetBranchcodesWithOverdueRules UpdateFine ));
 can_ok('C4::Overdues', 'GetOverdueMessageTransportTypes');
 can_ok('C4::Overdues', 'GetBranchcodesWithOverdueRules');
 

@@ -22,7 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::ImportBatchProfiles;
 use Koha::ImportBatchProfile;
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 

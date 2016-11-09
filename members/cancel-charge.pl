@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth;
+use C4::Auth qw( checkauth );
 use Koha::Token;
 
 my $cgi = CGI->new;

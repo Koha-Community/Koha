@@ -2,10 +2,10 @@
 
 use Modern::Perl;
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 use C4::Context;
-use C4::Log;
+use C4::Log qw( cronlogaction );
 use Koha::Logger;
 use Koha::Plugins;
 use Koha::Script -cron;

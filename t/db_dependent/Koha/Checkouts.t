@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Test::More tests => 10;
 
-use C4::Circulation;
+use C4::Circulation qw( MarkIssueReturned AddReturn );
 use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );

@@ -19,14 +19,14 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Digest::MD5 qw( md5_base64 md5_hex );
-use JSON;
+use JSON qw( to_json );
 use List::MoreUtils qw( any each_array uniq );
 use String::Random qw( random_string );
 
-use C4::Auth;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use C4::Context;
-use C4::Members;
+use C4::Members qw( checkcardnumber );
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
 use Koha::Patrons;
@@ -35,7 +35,7 @@ use Koha::Patron::Modification;
 use Koha::Patron::Modifications;
 use C4::Scrubber;
 use Email::Valid;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Libraries;
 use Koha::Patron::Attribute::Types;
 use Koha::Patron::Attributes;

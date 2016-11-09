@@ -31,7 +31,7 @@ use constant DEFAULT_DEBARMENTS_PURGEDAYS         => 30;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
@@ -39,9 +39,9 @@ use Koha::Script -cron;
 use C4::Context;
 use C4::Search;
 use C4::Search::History;
-use Getopt::Long;
-use C4::Log;
-use C4::Accounts;
+use Getopt::Long qw( GetOptions );
+use C4::Log qw( cronlogaction );
+use C4::Accounts qw( purge_zero_balance_fees );
 use Koha::UploadedFiles;
 use Koha::Old::Biblios;
 use Koha::Old::Items;

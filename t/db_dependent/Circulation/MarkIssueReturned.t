@@ -23,7 +23,7 @@ use Test::Exception;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Circulation;
+use C4::Circulation qw( MarkIssueReturned AddIssue );
 use C4::Context;
 use Koha::Checkouts;
 use Koha::Database;

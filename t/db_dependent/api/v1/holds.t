@@ -28,7 +28,7 @@ use Mojo::JSON qw(encode_json);
 
 use C4::Context;
 use Koha::Patrons;
-use C4::Reserves;
+use C4::Reserves qw( AddReserve CanItemBeReserved CanBookBeReserved );
 use C4::Items;
 
 use Koha::Database;

@@ -24,8 +24,8 @@ use Modern::Perl;
 
 use C4::Context;
 use C4::Barcodes::ValueBuilder;
-use C4::Biblio qw/GetMarcFromKohaField/;
-use Koha::DateUtils;
+use C4::Biblio qw( GetMarcFromKohaField );
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $builder = sub {
     my ( $params ) = @_;

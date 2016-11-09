@@ -19,9 +19,9 @@ package Koha::UploadedFiles;
 
 use Modern::Perl;
 
-use C4::Koha;
+use C4::Koha qw( GetAuthorisedValues );
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::UploadedFile;
 
 use parent qw(Koha::Objects);

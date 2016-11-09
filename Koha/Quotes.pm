@@ -16,10 +16,9 @@ package Koha::Quotes;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Carp;
 
 use Koha::Database;
-use Koha::DateUtils qw(dt_from_string);
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Quote;
 
 use base qw(Koha::Objects);

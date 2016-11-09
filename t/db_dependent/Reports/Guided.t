@@ -28,7 +28,7 @@ use Koha::Items;
 use Koha::Reports;
 use Koha::Notice::Messages;
 
-use_ok('C4::Reports::Guided');
+use_ok('C4::Reports::Guided', qw( execute_query save_report delete_report strip_limit GetReservedAuthorisedValues IsAuthorisedValueValid GetParametersFromSQL ValidateSQLParameters get_saved_reports update_sql get_report_areas convert_sql EmailReport nb_rows ));
 can_ok(
     'C4::Reports::Guided',
     qw(save_report delete_report execute_query)

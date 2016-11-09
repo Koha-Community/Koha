@@ -36,7 +36,6 @@ Koha::XSLT::Security - Add security features to Koha::XSLT::Base
 =cut
 
 use Modern::Perl;
-use Data::Dumper qw/Dumper/;
 use XML::LibXSLT;
 use C4::Context;
 

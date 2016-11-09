@@ -17,7 +17,6 @@ package Koha::Acquisition::Order::Claim;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

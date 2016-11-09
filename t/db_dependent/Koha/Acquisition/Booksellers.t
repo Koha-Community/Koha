@@ -21,10 +21,10 @@ use Test::More tests => 3;
 
 use t::lib::TestBuilder;
 
-use C4::Acquisition;
-use C4::Biblio;
-use C4::Budgets;
-use C4::Serials;
+use C4::Acquisition qw( NewBasket );
+use C4::Biblio qw( AddBiblio );
+use C4::Budgets qw( AddBudgetPeriod AddBudget );
+use C4::Serials qw( NewSubscription SearchSubscriptions );
 
 use Koha::Acquisition::Booksellers;
 use Koha::Database;

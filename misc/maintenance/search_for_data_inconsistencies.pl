@@ -25,7 +25,7 @@ use Koha::BiblioFrameworks;
 use Koha::Biblioitems;
 use Koha::Items;
 use Koha::ItemTypes;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcFromKohaField );
 
 {
     my $items = Koha::Items->search({ -or => { homebranch => undef, holdingbranch => undef }});

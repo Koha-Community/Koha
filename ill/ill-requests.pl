@@ -21,8 +21,8 @@ use Modern::Perl;
 
 use CGI;
 
-use C4::Auth;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use Koha::Notice::Templates;
 use Koha::AuthorisedValues;
 use Koha::Illcomment;
@@ -31,9 +31,9 @@ use Koha::Illrequest::Availability;
 use Koha::Libraries;
 use Koha::Token;
 
-use Try::Tiny;
-use URI::Escape;
-use JSON;
+use Try::Tiny qw( catch try );
+use URI::Escape qw( uri_escape_utf8 );
+use JSON qw( encode_json );
 
 our $cgi = CGI->new;
 my $illRequests = Koha::Illrequests->new;

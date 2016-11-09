@@ -9,8 +9,7 @@ use warnings;
 
 use Koha::Script;
 use Koha::RecordProcessor;
-use Data::Dumper;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcBiblio );
 
 my $record = GetMarcBiblio({ biblionumber => $ARGV[0] });
 

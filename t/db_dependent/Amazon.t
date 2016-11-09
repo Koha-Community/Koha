@@ -11,7 +11,7 @@ use t::lib::Mocks;
 use C4::Context;
 
 BEGIN {
-    use_ok('C4::External::Amazon');
+    use_ok('C4::External::Amazon', qw( get_amazon_tld ));
 }
 
 my $context = C4::Context->new();

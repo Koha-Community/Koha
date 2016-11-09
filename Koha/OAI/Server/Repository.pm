@@ -21,7 +21,7 @@ package Koha::OAI::Server::Repository;
 
 use Modern::Perl;
 use HTTP::OAI;
-use HTTP::OAI::Repository qw/:validate/;
+use HTTP::OAI::Repository qw( validate_request );
 
 use base ("HTTP::OAI::Repository");
 
@@ -35,7 +35,7 @@ use XML::SAX::Writer;
 use YAML::XS;
 use CGI qw/:standard -oldstyle_urls/;
 use C4::Context;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcBiblio );
 use Koha::XSLT::Base;
 
 =head1 NAME

@@ -3,7 +3,7 @@
 use Modern::Perl;
 use Test::More tests => 3;
 use t::lib::TestBuilder;
-use C4::Items;
+use C4::Items qw( GetMarcItem );
 
 use Koha::Caches;
 

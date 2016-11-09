@@ -19,16 +19,13 @@ package Koha::Illrequest;
 
 use Modern::Perl;
 
-use Clone 'clone';
-use File::Basename qw( basename );
-use Encode qw( encode );
-use Try::Tiny;
+use Clone qw( clone );
+use Try::Tiny qw( catch try );
 use DateTime;
 
 use C4::Letters;
-use C4::Members;
 use Koha::Database;
-use Koha::DateUtils qw/ dt_from_string /;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Ill;
 use Koha::Illcomments;
 use Koha::Illrequestattributes;
@@ -41,7 +38,7 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
 
-use C4::Circulation qw( CanBookBeIssued AddIssue  );
+use C4::Circulation qw( CanBookBeIssued AddIssue );
 
 use base qw(Koha::Object);
 

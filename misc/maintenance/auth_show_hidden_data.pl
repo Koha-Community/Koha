@@ -22,8 +22,8 @@
 # which hidden fields in the framework still contain data.
 
 use Modern::Perl;
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 use Koha::Script;
 use Koha::Authorities;

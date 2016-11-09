@@ -22,8 +22,8 @@ use Modern::Perl;
 use Test::More tests => 6;
 use Test::Warn;
 
-use C4::Circulation;
-use C4::Reserves;
+use C4::Circulation qw( AddIssue );
+use C4::Reserves qw( AddReserve ModReserve ModReserveCancelAll );
 use Koha::AuthorisedValueCategory;
 use Koha::Database;
 use Koha::Holds;

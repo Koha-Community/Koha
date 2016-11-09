@@ -1,15 +1,19 @@
 package Koha::Item::Search::Field;
 
 use Modern::Perl;
-use base qw( Exporter );
 
-our @EXPORT_OK = qw(
-    AddItemSearchField
-    ModItemSearchField
-    DelItemSearchField
-    GetItemSearchField
-    GetItemSearchFields
-);
+our (@ISA, @EXPORT_OK);
+BEGIN {
+    require Exporter;
+    @ISA = qw(Exporter);
+    @EXPORT_OK = qw(
+        AddItemSearchField
+        ModItemSearchField
+        DelItemSearchField
+        GetItemSearchField
+        GetItemSearchFields
+    );
+};
 
 use C4::Context;
 

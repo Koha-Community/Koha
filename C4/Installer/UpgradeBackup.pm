@@ -18,10 +18,10 @@ package C4::Installer::UpgradeBackup;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use File::Compare qw(compare);
-use Cwd qw(cwd);
+use File::Compare qw( compare );
+use Cwd qw( cwd );
 use File::Copy;
-use File::Find;
+use File::Find qw( find );
 use File::Spec;
 use Exporter;
 

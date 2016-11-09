@@ -21,8 +21,8 @@ use Test::More tests => 2;
 use Test::MockModule;
 use t::lib::TestBuilder;
 
-use C4::Circulation;
-use C4::Biblio;
+use C4::Circulation qw( AddIssue GetPendingOnSiteCheckouts );
+use C4::Biblio qw( AddBiblio );
 use C4::Items;
 use C4::Members;
 

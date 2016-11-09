@@ -17,7 +17,6 @@ package Koha::Acquisition::Currency;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

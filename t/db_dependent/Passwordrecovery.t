@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use C4::Context;
-use C4::Letters;
+use C4::Letters qw( GetQueuedMessages );
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Patrons;

@@ -19,8 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Scalar::Util qw(blessed);
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 use Koha::Cash::Registers;
 

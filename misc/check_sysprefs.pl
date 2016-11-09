@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 
-use File::Find;
+use File::Find qw( find );
 
 use Koha::Script;
 use C4::Context;

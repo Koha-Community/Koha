@@ -18,23 +18,21 @@ package C4::Auth_with_ldap;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Carp;
+use Carp qw( croak );
 
 use C4::Context;
 use C4::Members::Messaging;
-use C4::Auth qw(checkpw_internal);
+use C4::Auth qw( checkpw_internal );
 use Koha::Patrons;
-use Koha::AuthUtils qw(hash_password);
-use List::MoreUtils qw( any );
+use Koha::AuthUtils qw( hash_password );
 use Net::LDAP;
 use Net::LDAP::Filter;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
-	@EXPORT = qw( checkpw_ldap );
+	@EXPORT_OK = qw( checkpw_ldap );
 }
 
 # Redefine checkpw_ldap:

@@ -7,19 +7,23 @@ BEGIN {
 
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
 
 use Koha::Script;
 use C4::Context;
-use C4::Biblio;
-use Getopt::Long;
-use Pod::Usage;
-use Data::Dumper;
-use Time::HiRes qw/time/;
-use POSIX qw/strftime ceil/;
-use Module::Load::Conditional qw(can_load);
+use C4::Biblio qw(
+    GetFrameworkCode
+    GetMarcBiblio
+    LinkBibHeadingsToAuthorities
+    ModBiblio
+);
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
+use Time::HiRes qw( time );
+use POSIX qw( ceil strftime );
+use Module::Load::Conditional qw( can_load );
 
 sub usage {
     pod2usage( -verbose => 2 );

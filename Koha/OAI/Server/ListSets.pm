@@ -22,7 +22,7 @@ use Modern::Perl;
 use HTTP::OAI;
 use Koha::OAI::Server::ResumptionToken;
 use Koha::OAI::Server::Description;
-use C4::OAI::Sets;
+use C4::OAI::Sets qw( GetOAISets );
 
 use base ("HTTP::OAI::ListSets");
 

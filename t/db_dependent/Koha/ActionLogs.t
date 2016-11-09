@@ -20,7 +20,7 @@ use Modern::Perl;
 use Test::More tests => 3;
 
 use C4::Context;
-use C4::Log;
+use C4::Log qw( logaction );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 

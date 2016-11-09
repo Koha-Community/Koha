@@ -32,9 +32,8 @@ Filter to embed see from headings into MARC records.
 
 use strict;
 use warnings;
-use Carp;
 use Koha::MetadataRecord::Authority;
-use C4::Biblio qw/GetMarcFromKohaField/;
+use C4::Biblio qw( GetMarcFromKohaField );
 
 use base qw(Koha::RecordProcessor::Base);
 our $NAME = 'EmbedSeeFromHeadings';

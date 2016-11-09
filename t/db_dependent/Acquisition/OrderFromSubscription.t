@@ -4,10 +4,10 @@ use Test::More tests => 12;
 
 use t::lib::TestBuilder;
 
-use_ok('C4::Acquisition');
-use_ok('C4::Biblio');
-use_ok('C4::Budgets');
-use_ok('C4::Serials');
+use_ok('C4::Acquisition', qw( NewBasket AddInvoice GetInvoice ModReceiveOrder GetInvoices ));
+use_ok('C4::Biblio', qw( AddBiblio ));
+use_ok('C4::Budgets', qw( AddBudgetPeriod AddBudget ));
+use_ok('C4::Serials', qw( NewSubscription GetSubscription subscriptionCurrentlyOnOrder ));
 
 use Koha::Acquisition::Orders;
 use Koha::Database;

@@ -33,7 +33,6 @@ Koha::Database
 =cut
 
 use Modern::Perl;
-use Carp;
 use C4::Context;
 use base qw(Class::Accessor);
 

@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 5;
-use C4::ClassSplitRoutine::RegEx;
+use C4::ClassSplitRoutine::RegEx qw( split_callnumber );
 
 my $callnumbers = {
     '830 Han'          => [qw{830 Han}],

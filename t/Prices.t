@@ -14,7 +14,7 @@ BEGIN {
     }
 }
 
-use_ok('C4::Acquisition');
+use_ok('C4::Acquisition', qw( populate_order_with_prices ));
 use_ok('C4::Context');
 use_ok('Koha::Number::Price');
 

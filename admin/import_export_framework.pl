@@ -22,8 +22,8 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use CGI::Cookie;
 use C4::Context;
-use C4::Auth qw/check_cookie_auth/;
-use C4::ImportExportFramework;
+use C4::Auth qw( check_cookie_auth );
+use C4::ImportExportFramework qw( createODS ExportFramework ImportFramework );
 
 my %cookies = CGI::Cookie->fetch();
 my $authenticated = 0;

@@ -19,10 +19,10 @@
 
 use Modern::Perl;
 
-use Date::Format;
-use File::Basename;
-use FindBin qw($Bin);
-use Getopt::Long;
+use Date::Format qw( time2str );
+use File::Basename qw( basename );
+use FindBin qw( $Bin );
+use Getopt::Long qw( GetOptions );
 use Locale::PO;
 use YAML::XS;
 use utf8;

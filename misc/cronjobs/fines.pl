@@ -32,16 +32,16 @@ use 5.010;
 
 use Koha::Script -cron;
 use C4::Context;
-use C4::Overdues;
-use Getopt::Long;
-use Carp;
+use C4::Overdues qw( Getoverdues CalcFine UpdateFine );
+use Getopt::Long qw( GetOptions );
+use Carp qw( carp croak );
 use File::Spec;
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 use Koha::Calendar;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
-use C4::Log;
+use C4::Log qw( cronlogaction );
 
 my $help;
 my $verbose;

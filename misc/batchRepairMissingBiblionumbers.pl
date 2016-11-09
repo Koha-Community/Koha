@@ -7,14 +7,14 @@ use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
 
 # Koha modules used
 use Koha::Script;
 use C4::Context;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcBiblio ModBiblioMarc );
 
 
 my $dbh = C4::Context->dbh;

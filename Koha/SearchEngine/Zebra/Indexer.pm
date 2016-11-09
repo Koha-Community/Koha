@@ -18,7 +18,7 @@ package Koha::SearchEngine::Zebra::Indexer;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Biblio qw(ModZebra); # FIXME This is terrible, we should move the indexation code outside of C4::Biblio
+use C4::Biblio qw( ModZebra ); # FIXME This is terrible, we should move the indexation code outside of C4::Biblio
 use base qw(Class::Accessor);
 
 =head1 NAME

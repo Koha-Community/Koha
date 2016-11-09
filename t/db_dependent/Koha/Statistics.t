@@ -23,7 +23,7 @@ use Test::More tests => 4;
 
 use Koha::Database;
 use Koha::Statistics;
-use C4::Stats;
+use C4::Stats qw( UpdateStats );
 
 use t::lib::TestBuilder;
 

@@ -20,8 +20,6 @@ package C4::TmplTokenType;
 use Modern::Perl;
 require Exporter;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
 ###############################################################################
 
 =head1 NAME
@@ -38,25 +36,28 @@ The predefined constants are
 ###############################################################################
 
 
-@ISA = qw(Exporter);
-@EXPORT_OK = qw(
-    &TEXT
-    &TEXT_PARAMETRIZED
-    &CDATA
-    &TAG
-    &DECL
-    &PI
-    &DIRECTIVE
-    &COMMENT
-    &UNKNOWN
-);
-
 ###############################################################################
 
 use vars qw( $_text $_text_parametrized $_cdata
     $_tag $_decl $_pi $_directive $_comment $_null $_unknown );
 
+our (@ISA, @EXPORT_OK);
 BEGIN {
+
+    require Exporter;
+    @ISA = qw(Exporter);
+    @EXPORT_OK = qw(
+      TEXT
+      TEXT_PARAMETRIZED
+      CDATA
+      TAG
+      DECL
+      PI
+      DIRECTIVE
+      COMMENT
+      UNKNOWN
+    );
+
     my $new = sub {
 	my $this = 'C4::TmplTokenType';#shift;
 	my $class = ref($this) || $this;

@@ -24,12 +24,11 @@ package C4::Reserves;
 use Modern::Perl;
 
 use C4::Accounts;
-use C4::Biblio;
-use C4::Circulation;
+use C4::Circulation qw( CheckIfIssuedToPatron GetAgeRestriction GetBranchItemRule );
 use C4::Context;
-use C4::Items;
+use C4::Items qw( CartToShelf get_hostitemnumbers_of );
 use C4::Letters;
-use C4::Log;
+use C4::Log qw( logaction );
 use C4::Members::Messaging;
 use C4::Members;
 use Koha::Account::Lines;
@@ -37,7 +36,7 @@ use Koha::Biblios;
 use Koha::Calendar;
 use Koha::CirculationRules;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Hold;
 use Koha::Holds;
 use Koha::ItemTypes;
@@ -47,11 +46,8 @@ use Koha::Old::Hold;
 use Koha::Patrons;
 use Koha::Plugins;
 
-use Carp;
-use Data::Dumper;
-use List::MoreUtils qw( firstidx any );
-
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use Data::Dumper qw( Dumper );
+use List::MoreUtils qw( any );
 
 =head1 NAME
 
@@ -99,49 +95,57 @@ This modules provides somes functions to deal with reservations.
 
 =cut
 
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
-    @EXPORT = qw(
-        &AddReserve
+    @EXPORT_OK = qw(
+      AddReserve
 
-        &GetReserveStatus
+      GetReserveStatus
 
-        &GetOtherReserves
+      GetOtherReserves
+      ChargeReserveFee
+      GetReserveFee
 
-        &ModReserveFill
-        &ModReserveAffect
-        &ModReserve
-        &ModReserveStatus
-        &ModReserveCancelAll
-        &ModReserveMinusPriority
-        &MoveReserve
+      ModReserveFill
+      ModReserveAffect
+      ModReserve
+      ModReserveStatus
+      ModReserveCancelAll
+      ModReserveMinusPriority
+      MoveReserve
 
-        &CheckReserves
-        &CanBookBeReserved
-        &CanItemBeReserved
-        &CanReserveBeCanceledFromOpac
-        &CancelExpiredReserves
+      CheckReserves
+      CanBookBeReserved
+      CanItemBeReserved
+      CanReserveBeCanceledFromOpac
+      CancelExpiredReserves
 
-        &AutoUnsuspendReserves
+      AutoUnsuspendReserves
 
-        &IsAvailableForItemLevelRequest
-        ItemsAnyAvailableAndNotRestricted
+      IsAvailableForItemLevelRequest
+      ItemsAnyAvailableAndNotRestricted
 
-        &AlterPriority
-        &ToggleLowestPriority
+      AlterPriority
+      ToggleLowestPriority
 
-        &ReserveSlip
-        &ToggleSuspend
-        &SuspendAll
+      ReserveSlip
+      ToggleSuspend
+      SuspendAll
 
-        &GetReservesControlBranch
+      GetReservesControlBranch
 
-        IsItemOnHoldAndFound
+      CalculatePriority
 
-        GetMaxPatronHoldsForRecord
+      IsItemOnHoldAndFound
+
+      GetMaxPatronHoldsForRecord
+
+      MergeHolds
+
+      RevertWaitingStatus
     );
-    @EXPORT_OK = qw( MergeHolds );
 }
 
 =head2 AddReserve

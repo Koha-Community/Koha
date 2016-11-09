@@ -119,16 +119,21 @@ if it is an order from an existing suggestion : the id of this suggestion.
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use JSON qw ( to_json );
-use C4::Auth;           # get_template_and_user
-use C4::Acquisition;    # ModOrder
-use C4::Suggestions;    # ModStatus
-use C4::Biblio;         # AddBiblio TransformKohaToMarc
-use C4::Budgets;
-use C4::Items;
-use C4::Output;
-use C4::Log qw(logaction);
-use Koha::Acquisition::Currencies;
+use JSON qw( to_json );
+use C4::Auth qw( get_template_and_user );
+use C4::Acquisition qw( FillWithDefaultValues populate_order_with_prices ModOrder ModOrderUsers );
+use C4::Suggestions qw( ModSuggestion );
+use C4::Biblio qw(
+    AddBiblio
+    GetMarcFromKohaField
+    TransformHtmlToXml
+    TransformKohaToMarc
+);
+use C4::Budgets qw( GetBudget GetBudgetSpent GetBudgetOrdered );
+use C4::Items qw( AddItemFromMarc );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Log qw( logaction );
+use Koha::Acquisition::Currencies qw( get_active );
 use Koha::Acquisition::Orders;
 use Koha::Acquisition::Baskets;
 use C4::Barcodes;

@@ -25,7 +25,7 @@ use t::lib::Mocks qw( mock_preference );
 use Koha::Database;
 
 BEGIN {
-        use_ok('C4::Biblio');
+        use_ok('C4::Biblio', qw( GetISBDView ));
 }
 
 my $schema  = Koha::Database->new->schema;

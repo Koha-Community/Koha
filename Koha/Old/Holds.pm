@@ -19,7 +19,6 @@ package Koha::Old::Holds;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

@@ -22,7 +22,7 @@ use Test::Exception;
 
 use t::lib::TestBuilder;
 
-use C4::Biblio;
+use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 
 BEGIN {

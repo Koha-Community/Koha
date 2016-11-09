@@ -16,9 +16,9 @@ package Koha::BackgroundJob::BatchUpdateAuthority;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use JSON qw( encode_json decode_json );
+use JSON qw( decode_json encode_json );
 
-use C4::MarcModificationTemplates;
+use C4::MarcModificationTemplates qw( ModifyRecordWithTemplate );
 use C4::AuthoritiesMarc;
 use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );

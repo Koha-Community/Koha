@@ -20,14 +20,13 @@ package Koha::Checkout;
 
 use Modern::Perl;
 
-use Carp;
 use DateTime;
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
-use C4::Circulation qw(MarkIssueReturned);
+use C4::Circulation qw( LostItem MarkIssueReturned );
 use Koha::Checkouts::ReturnClaims;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::Libraries;
 

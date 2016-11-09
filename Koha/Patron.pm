@@ -20,21 +20,20 @@ package Koha::Patron;
 
 use Modern::Perl;
 
-use Carp;
 use List::MoreUtils qw( any uniq );
 use JSON qw( to_json );
-use Unicode::Normalize;
+use Unicode::Normalize qw( NFKD );
 
 use C4::Context;
-use C4::Log;
+use C4::Log qw( logaction );
 use Koha::Account;
 use Koha::ArticleRequests;
-use C4::Letters qw( GetPreparedLetter EnqueueLetter );
+use C4::Letters;
 use Koha::AuthUtils;
 use Koha::Checkouts;
 use Koha::Club::Enrollments;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Password;
 use Koha::Holds;
 use Koha::Old::Checkouts;

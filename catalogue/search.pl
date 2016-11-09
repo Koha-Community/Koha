@@ -140,14 +140,14 @@ use Modern::Perl;
 
 ## load Koha modules
 use C4::Context;
-use C4::Output;
-use C4::Auth qw(:DEFAULT get_session);
-use C4::Search;
-use C4::Languages qw(getLanguages);
-use C4::Koha;
+use C4::Output qw( output_html_with_http_headers pagination_bar );
+use C4::Auth qw( get_template_and_user );
+use C4::Search qw( searchResults enabled_staff_search_views z3950_search_args new_record_from_zebra );
+use C4::Languages qw( getlanguage getLanguages );
+use C4::Koha qw( getitemtypeimagelocation GetAuthorisedValues );
 use URI::Escape;
 use POSIX qw(ceil floor);
-use C4::Search::History;
+use C4::Search qw( searchResults enabled_staff_search_views z3950_search_args new_record_from_zebra );
 
 use Koha::ItemTypes;
 use Koha::Library::Groups;

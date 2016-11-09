@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 14;
 
-use C4::Biblio;
+use C4::Biblio qw( AddBiblio ModBiblio );
 use Koha::Database;
 use Koha::Acquisition::Orders;
 

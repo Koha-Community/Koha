@@ -25,7 +25,7 @@ use Test::Exception;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Acquisition;
+use C4::Acquisition qw( NewBasket ModBasket ModBasketHeader );
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 

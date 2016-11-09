@@ -25,9 +25,7 @@ use warnings;
 
 use Koha::Script;
 use C4::Context;
-use C4::Items;
-use Data::Dumper;
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 use Koha::Items;
 
 my $dbh = C4::Context->dbh;

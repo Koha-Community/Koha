@@ -3,11 +3,11 @@ use Modern::Perl;
 use Test::More tests => 144;
 
 BEGIN {
-    use_ok('C4::Budgets')
+    use_ok('C4::Budgets', qw( AddBudgetPeriod AddBudget GetBudgetPeriods GetBudgetPeriod GetBudget ModBudgetPeriod ModBudget DelBudgetPeriod DelBudget GetBudgets GetBudgetName GetBudgetByCode GetBudgetHierarchy GetBudgetHierarchySpent GetBudgetSpent GetBudgetOrdered CloneBudgetPeriod GetBudgetsByActivity MoveOrders GetBudgetByOrderNumber SetOwnerToFundHierarchy GetBudgetAuthCats GetBudgetsPlanCell ));
 }
 use C4::Context;
-use C4::Biblio;
-use C4::Acquisition;
+use C4::Biblio qw( AddBiblio );
+use C4::Acquisition qw( NewBasket AddInvoice GetInvoice ModReceiveOrder populate_order_with_prices );
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;

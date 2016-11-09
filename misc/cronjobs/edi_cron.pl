@@ -33,10 +33,10 @@ use Koha::Script -cron;
 use C4::Context;
 use Log::Log4perl qw(:easy);
 use Koha::Database;
-use Koha::EDI qw( process_quote process_invoice process_ordrsp);
+use Koha::EDI qw( process_quote process_invoice process_ordrsp );
 use Koha::Edifact::Transport;
 use Koha::Plugins::Handler;
-use Fcntl qw( :DEFAULT :flock :seek );
+use Fcntl qw( LOCK_EX O_CREAT O_RDWR SEEK_SET );
 
 my $logdir = C4::Context->config('logdir');
 

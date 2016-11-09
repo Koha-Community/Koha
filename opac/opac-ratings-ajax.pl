@@ -28,9 +28,9 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use CGI::Cookie;  # need to check cookies before having CGI parse the POST request
 
-use C4::Auth qw(:DEFAULT check_cookie_auth);
+use C4::Auth qw( get_template_and_user check_cookie_auth );
 use C4::Context;
-use C4::Output qw(:html :ajax pagination_bar);
+use C4::Output qw( is_ajax output_ajax_with_http_headers );
 
 use Koha::Ratings;
 

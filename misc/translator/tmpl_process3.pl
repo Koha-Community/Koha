@@ -16,10 +16,9 @@ using gettext-compatible translation files
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use File::Basename;
-use Getopt::Long;
+use File::Basename qw( fileparse );
+use Getopt::Long qw( GetOptions );
 use Locale::PO;
-use File::Temp qw( :POSIX );
 use TmplTokenizer;
 use VerboseWarnings qw( :warn :die );
 

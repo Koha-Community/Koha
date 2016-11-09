@@ -19,9 +19,9 @@
 
 use Modern::Perl;
 
-use Getopt::Long;
-use List::MoreUtils qw/uniq/;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use List::MoreUtils qw( uniq );
+use Pod::Usage qw( pod2usage );
 
 use Koha::Script;
 use C4::AuthoritiesMarc qw/AddAuthority DelAuthority GetAuthority merge/;

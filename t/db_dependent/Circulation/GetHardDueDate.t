@@ -13,7 +13,7 @@ use t::lib::TestBuilder;
 use Test::More tests => 9;
 
 BEGIN {
-    use_ok('C4::Circulation');
+    use_ok('C4::Circulation', qw( GetHardDueDate GetLoanLength ));
 }
 can_ok(
     'C4::Circulation',

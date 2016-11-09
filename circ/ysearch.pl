@@ -27,9 +27,9 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw/check_cookie_auth/;
+use C4::Auth qw( check_cookie_auth );
 use Koha::Patrons;
-use Koha::DateUtils qw/format_sqldatetime/;
+use Koha::DateUtils qw( format_sqldatetime );
 
 use JSON qw( to_json );
 

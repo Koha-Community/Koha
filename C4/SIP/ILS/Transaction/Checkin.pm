@@ -11,9 +11,9 @@ use strict;
 
 use C4::SIP::ILS::Transaction;
 
-use C4::Circulation;
+use C4::Circulation qw( AddReturn LostItem );
 use C4::Items qw( ModItemTransfer );
-use C4::Reserves qw( ModReserveAffect );
+use C4::Reserves qw( ModReserve ModReserveAffect );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 

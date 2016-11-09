@@ -20,14 +20,14 @@
 use Modern::Perl;
 use diagnostics;
 
-use C4::InstallAuth;
+use C4::InstallAuth qw( get_template_and_user );
 use CGI qw ( -utf8 );
-use POSIX qw(strftime);
+use POSIX;
 
 use C4::Context;
-use C4::Output;
+use C4::Output qw( output_html_with_http_headers );
 use C4::Templates;
-use C4::Languages qw(getAllLanguages getTranslatedLanguages);
+use C4::Languages qw( getAllLanguages getTranslatedLanguages );
 use C4::Installer;
 use C4::Installer::PerlModules;
 

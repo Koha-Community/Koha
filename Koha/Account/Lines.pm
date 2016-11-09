@@ -17,7 +17,6 @@ package Koha::Account::Lines;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 use Koha::Account::Line;

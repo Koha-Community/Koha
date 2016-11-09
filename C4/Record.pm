@@ -25,20 +25,20 @@ use Modern::Perl;
 use MARC::Record; # marc2marcxml, marcxml2marc, changeEncoding
 use MARC::File::XML; # marc2marcxml, marcxml2marc, changeEncoding
 use Biblio::EndnoteStyle;
-use Unicode::Normalize; # _entity_encode
-use C4::Biblio; #marc2bibtex
+use Unicode::Normalize qw( NFC ); # _entity_encode
+use C4::Biblio qw( GetFrameworkCode GetMarcBiblio );
 use C4::Koha; #marc2csv
-use C4::XSLT ();
+use C4::XSLT;
 use YAML::XS; #marcrecords2csv
 use Encode;
 use Template;
 use Text::CSV::Encoded; #marc2csv
 use Koha::Items;
-use Koha::SimpleMARC qw(read_field);
+use Koha::SimpleMARC qw( read_field );
 use Koha::XSLT::Base;
 use Koha::CsvProfiles;
 use Koha::AuthorisedValues;
-use Carp;
+use Carp qw( carp croak );
 
 use vars qw(@ISA @EXPORT);
 
@@ -48,16 +48,17 @@ use vars qw(@ISA @EXPORT);
 # only export API methods
 
 @EXPORT = qw(
-  &marc2endnote
-  &marc2marc
-  &marc2marcxml
-  &marcxml2marc
-  &marc2dcxml
-  &marc2modsxml
-  &marc2madsxml
-  &marc2bibtex
-  &marc2csv
-  &changeEncoding
+  marc2endnote
+  marc2marc
+  marc2marcxml
+  marcxml2marc
+  marc2dcxml
+  marc2modsxml
+  marc2madsxml
+  marc2bibtex
+  marc2csv
+  marcrecord2csv
+  changeEncoding
 );
 
 =head1 NAME

@@ -20,21 +20,20 @@
 
 
 use Modern::Perl;
-use C4::Koha;
+use C4::Koha qw( GetAuthorisedValues );
 use CGI qw ( -utf8 );
 use HTML::Entities;
-use C4::Biblio;
-use C4::Items;
-use C4::Acquisition;
-use C4::Output;
-use C4::Auth;
-use C4::Serials;
-use C4::Search;		# enabled_staff_search_views
+use C4::Biblio qw( GetBiblioData GetFrameworkCode GetMarcBiblio );
+use C4::Items qw( GetHostItemsInfo GetItemsInfo );
+use C4::Acquisition qw( GetOrderFromItemnumber GetBasket GetInvoice );
+use C4::Output qw( output_and_exit output_html_with_http_headers );
+use C4::Auth qw( get_template_and_user );
+use C4::Serials qw( CountSubscriptionFromBiblionumber );
+use C4::Search qw( enabled_staff_search_views z3950_search_args );
 
 use Koha::Acquisition::Booksellers;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
-use Koha::DateUtils;
 use Koha::Items;
 use Koha::Patrons;
 

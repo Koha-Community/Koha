@@ -19,14 +19,13 @@ package Koha::Plugins::Base;
 
 use Modern::Perl;
 
-use Module::Pluggable require => 1;
-use Cwd qw(abs_path);
-use List::Util qw(max);
+use Cwd qw( abs_path );
+use List::Util qw( max );
 
 use base qw{Module::Bundled::Files};
 
 use C4::Context;
-use C4::Output qw(output_with_http_headers output_html_with_http_headers);
+use C4::Output qw( output_with_http_headers );
 
 =head1 NAME
 

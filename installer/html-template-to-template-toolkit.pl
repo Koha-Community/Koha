@@ -1,12 +1,10 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Carp;
-use Data::Dumper;
+use Carp qw( croak );
 
-use Getopt::Long;
-use File::Basename;
-use File::Copy;
+use Getopt::Long qw( GetOptions );
+use File::Copy qw( copy );
 
 my $help_msg = <<EOH;
 This script does a first-cut conversion of koha HTML::Template template files (.tmpl).

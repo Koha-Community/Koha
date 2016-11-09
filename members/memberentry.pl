@@ -23,22 +23,20 @@ use Modern::Perl;
 
 # external modules
 use CGI qw ( -utf8 );
-use List::MoreUtils qw/uniq/;
 
 # internal modules
-use C4::Auth;
+use C4::Auth qw( get_template_and_user haspermission );
 use C4::Context;
-use C4::Output;
-use C4::Members;
-use C4::Koha;
-use C4::Log;
-use C4::Letters;
+use C4::Output qw( output_and_exit output_and_exit_if_error output_html_with_http_headers );
+use C4::Members qw( checkcardnumber get_cardnumber_length );
+use C4::Koha qw( GetAuthorisedValues );
+use C4::Letters qw( SendAlerts );
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
 use Koha::AuthorisedValues;
-use Koha::Patron::Debarments;
+use Koha::Patron::Debarments qw( AddDebarment DelDebarment GetDebarments );
 use Koha::Cities;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Patron::Attribute::Types;

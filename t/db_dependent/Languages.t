@@ -13,7 +13,7 @@ use t::lib::Mocks;
 use Koha::Database;
 
 BEGIN {
-    use_ok('C4::Languages');
+    use_ok('C4::Languages', qw( accept_language getAllLanguages getLanguages getTranslatedLanguages get_rfc4646_from_iso639 ));
 }
 
 my $schema = Koha::Database->new->schema;

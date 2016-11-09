@@ -19,7 +19,7 @@ package Koha::Charges::Fees;
 
 use Modern::Perl;
 
-use Carp qw( carp confess );
+use Carp;
 
 use Koha::Calendar;
 use Koha::DateUtils qw( dt_from_string );

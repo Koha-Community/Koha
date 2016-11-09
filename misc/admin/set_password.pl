@@ -20,8 +20,8 @@
 use Modern::Perl;
 
 use Bytes::Random::Secure;
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 use String::Random;
 
 use Koha::Patrons;

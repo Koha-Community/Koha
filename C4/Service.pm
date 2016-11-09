@@ -43,7 +43,7 @@ use warnings;
 
 use CGI qw ( -utf8 );
 use C4::Auth qw( check_api_auth );
-use C4::Output qw( :ajax );
+use C4::Output qw( output_with_http_headers );
 use C4::Output::JSONStream;
 use JSON;
 

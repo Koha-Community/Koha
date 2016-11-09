@@ -18,7 +18,6 @@ package Koha::Acquisition::Invoice::Adjustments;
 use Modern::Perl;
 use Koha::Acquisition::Invoice::Adjustment;
 
-use Carp;
 
 use Koha::Database;
 

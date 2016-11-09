@@ -17,7 +17,6 @@ package Koha::Course::Reserves;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Course::Reserve;
 

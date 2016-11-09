@@ -19,11 +19,9 @@ package C4::Heading;
 
 use Modern::Perl;
 
-use MARC::Record;
 use MARC::Field;
 use C4::Context;
-use Module::Load;
-use Carp;
+use Module::Load qw( load );
 
 
 =head1 NAME

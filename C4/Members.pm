@@ -22,47 +22,41 @@ package C4::Members;
 
 use Modern::Perl;
 use C4::Context;
-use String::Random qw( random_string );
 use Scalar::Util qw( looks_like_number );
-use Date::Calc qw/Today check_date Date_to_Days/;
-use List::MoreUtils qw( uniq );
-use JSON qw(to_json);
-use C4::Log; # logaction
-use C4::Overdues;
+use Date::Calc qw( check_date Date_to_Days );
+use C4::Overdues qw( checkoverdues );
 use C4::Reserves;
 use C4::Accounts;
-use C4::Biblio;
-use C4::Letters;
+use C4::Letters qw( GetPreparedLetter );
 use DateTime;
 use Koha::Database;
-use Koha::DateUtils;
-use Koha::AuthUtils qw(hash_password);
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Database;
 use Koha::Holds;
-use Koha::List::Patron;
 use Koha::News;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
-our (@ISA,@EXPORT,@EXPORT_OK);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
-    #Get data
-    push @EXPORT, qw(
+    @EXPORT_OK = qw(
+      GetMemberDetails
+      GetMember
 
-        &GetAllIssues
+      GetAllIssues
 
-        &GetBorrowersToExpunge
+      GetBorrowersToExpunge
 
-        &IssueSlip
-    );
+      IssueSlip
 
-    #Check data
-    push @EXPORT, qw(
-        &checkuserpassword
-        &checkcardnumber
+      checkuserpassword
+      get_cardnumber_length
+      checkcardnumber
+
+      DeleteUnverifiedOpacRegistrations
+      DeleteExpiredOpacRegistrations
     );
 }
 

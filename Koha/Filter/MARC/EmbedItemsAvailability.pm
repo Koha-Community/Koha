@@ -32,7 +32,7 @@ Filter to embed items not on loan count information into MARC records.
 
 use Modern::Perl;
 
-use C4::Biblio qw/GetMarcFromKohaField/;
+use C4::Biblio qw( GetMarcFromKohaField );
 use Koha::Items;
 
 use base qw(Koha::RecordProcessor::Base);

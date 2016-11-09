@@ -28,7 +28,7 @@ note: there is currently no 'delete rating' functionality in this script
 use Modern::Perl;
 use CGI qw ( -utf8 );
 
-use C4::Auth;
+use C4::Auth qw( checkauth );
 use C4::Context;
 
 use Koha::Ratings;

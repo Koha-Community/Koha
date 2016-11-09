@@ -22,10 +22,15 @@ use Modern::Perl;
 use C4::Record;
 use C4::Auth;
 use C4::Output;
-use C4::Biblio;
+use C4::Biblio qw(
+    GetFrameworkCode
+    GetISBDView
+    GetMarcBiblio
+    GetMarcControlnumber
+);
 use CGI qw ( -utf8 );
 use C4::Auth;
-use C4::Ris;
+use C4::Ris qw( marc2ris );
 use Koha::RecordProcessor;
 
 my $query = CGI->new;

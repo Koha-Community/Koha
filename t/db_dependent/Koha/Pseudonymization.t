@@ -22,8 +22,8 @@ use Modern::Perl;
 use Test::More tests => 3;
 use Try::Tiny;
 
-use C4::Circulation;
-use C4::Stats;
+use C4::Circulation qw( AddIssue AddReturn );
+use C4::Stats qw( UpdateStats );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );

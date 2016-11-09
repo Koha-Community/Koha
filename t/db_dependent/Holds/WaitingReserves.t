@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use C4::Reserves;
+use C4::Reserves qw( ModReserve ModReserveAffect );
 use Koha::DateUtils;
 
 use t::lib::Mocks;
@@ -10,7 +10,7 @@ use t::lib::TestBuilder;
 
 use Test::More tests => 11;
 
-use_ok('C4::Reserves');
+use_ok('C4::Reserves', qw( ModReserve ModReserveAffect ));
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;

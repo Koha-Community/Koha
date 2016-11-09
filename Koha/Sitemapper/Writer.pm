@@ -23,7 +23,7 @@ use Moo;
 use Modern::Perl;
 use XML::Writer;
 use IO::File;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 
 my $MAX = 50000;

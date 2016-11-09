@@ -4,7 +4,7 @@ use Test::More tests => 11;
 
 use_ok("MARC::Field");
 use_ok("MARC::Record");
-use_ok("Koha::SimpleMARC");
+use_ok("Koha::SimpleMARC", qw( field_exists read_field update_field copy_field copy_and_replace_field move_field delete_field field_equals ));
 
 sub new_record {
     my $record = MARC::Record->new;

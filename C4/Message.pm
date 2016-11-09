@@ -22,10 +22,10 @@ package C4::Message;
 use strict;
 use warnings;
 use C4::Context;
-use C4::Letters;
-use YAML::XS;
+use C4::Letters qw( GetPreparedLetter EnqueueLetter );
+use YAML::XS qw( Dump );
 use Encode;
-use Carp;
+use Carp qw( carp );
 
 =head1 NAME
 

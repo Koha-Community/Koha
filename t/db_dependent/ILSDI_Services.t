@@ -25,12 +25,12 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Items qw( ModItemTransfer );
-use C4::Circulation;
+use C4::Circulation qw( AddIssue );
 
 use Koha::AuthUtils;
 
 BEGIN {
-    use_ok('C4::ILSDI::Services');
+    use_ok('C4::ILSDI::Services', qw( AuthenticatePatron GetPatronInfo LookupPatron HoldTitle HoldItem GetRecords RenewLoan ));
 }
 
 my $schema  = Koha::Database->schema;

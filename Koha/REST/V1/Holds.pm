@@ -19,18 +19,17 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Mojo::JSON qw(decode_json);
+use Mojo::JSON;
 
-use C4::Biblio;
 use C4::Reserves;
 
 use Koha::Items;
 use Koha::Patrons;
 use Koha::Holds;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
-use List::MoreUtils qw(any);
-use Try::Tiny;
+use List::MoreUtils qw( any );
+use Try::Tiny qw( catch try );
 
 =head1 API
 

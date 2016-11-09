@@ -7,8 +7,6 @@ use C4::TTParser;
 use VerboseWarnings qw( pedantic_p error_normal warn_normal warn_pedantic );
 require Exporter;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
 ###############################################################################
 
 =head1 NAME
@@ -23,9 +21,6 @@ A wrapper for the functionality found in TTParser to allow an easier transition 
 
 ###############################################################################
 
-
-@ISA = qw(Exporter);
-@EXPORT_OK = qw();
 
 use vars qw( $pedantic_attribute_error_in_nonpedantic_mode_p );
 use vars qw( $pedantic_tmpl_var_use_in_nonpedantic_mode_p );

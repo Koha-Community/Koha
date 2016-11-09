@@ -30,10 +30,10 @@ this script is to show orders ordered but not yet received
 use C4::Context;
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use C4::Auth;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
 use Koha::Acquisition::Invoice::Adjustments;
-use C4::Acquisition;
+use C4::Acquisition qw( get_rounded_price );
 
 my $dbh     = C4::Context->dbh;
 my $input   = CGI->new;

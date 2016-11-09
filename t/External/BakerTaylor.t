@@ -8,7 +8,7 @@ use Test::More tests => 9;
 use t::lib::Mocks;
 
 BEGIN {
-        use_ok('C4::External::BakerTaylor');
+        use_ok('C4::External::BakerTaylor', qw( link_url image_url content_cafe_url http_jacket_link availability ));
 }
 
 # test with mocked prefs

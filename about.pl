@@ -24,25 +24,22 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use DateTime::TimeZone;
-use File::Spec;
-use File::Slurp;
-use List::MoreUtils qw/ any /;
-use LWP::Simple;
-use Module::Load::Conditional qw(can_load);
-use XML::Simple;
-use Config;
+use File::Slurp qw( read_file );
+use List::MoreUtils qw( any );
+use Module::Load::Conditional qw( can_load );
+use Config qw( %Config );
 use Search::Elasticsearch;
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 use YAML::XS;
 use Encode;
 
-use C4::Output;
-use C4::Auth;
+use C4::Output qw( output_html_with_http_headers );
+use C4::Auth qw( get_template_and_user get_user_subpermissions );
 use C4::Context;
 use C4::Installer::PerlModules;
 
 use Koha;
-use Koha::DateUtils qw(dt_from_string output_pref);
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Currencies;
 use Koha::BackgroundJob;
 use Koha::BiblioFrameworks;

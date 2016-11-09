@@ -22,7 +22,7 @@ use Modern::Perl;
 use LWP::UserAgent;
 use URI;
 use URI::QueryParam;
-use XML::Simple;
+use XML::Simple qw( XMLin );
 
 =head1 NAME
 

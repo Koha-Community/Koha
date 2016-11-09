@@ -17,7 +17,6 @@ package Koha::Plugins::Methods;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

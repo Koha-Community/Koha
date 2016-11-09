@@ -2,14 +2,14 @@
 
 use Modern::Perl;
 
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 use JSON;
 
 use Koha::Script -cron;
 use C4::Context;
 use C4::Items;
-use C4::Log;
+use C4::Log qw( cronlogaction );
 
 # Getting options
 my ( $verbose, $help, $confirm );

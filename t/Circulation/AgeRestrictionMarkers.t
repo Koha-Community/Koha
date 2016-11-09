@@ -27,7 +27,7 @@ use Test::Warn;
 
 use t::lib::Mocks;
 
-use C4::Circulation;
+use C4::Circulation qw( GetAgeRestriction );
 
 t::lib::Mocks::mock_preference( 'AgeRestrictionMarker', 'FSK|PEGI|Age|K' );
 

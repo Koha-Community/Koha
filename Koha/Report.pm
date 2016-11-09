@@ -17,10 +17,8 @@ package Koha::Report;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
-use JSON;
 use Koha::Reports;
 use Koha::DateUtils qw( dt_from_string output_pref );
 

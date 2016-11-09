@@ -17,7 +17,6 @@ package Koha::Tags::Approvals;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Tags::Approval;
 

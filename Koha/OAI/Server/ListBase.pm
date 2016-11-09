@@ -28,12 +28,11 @@ Koha::OAI::Server::ListBase contains OAI-PMH functions shared by ListIdentifiers
 =cut
 
 use Modern::Perl;
-use C4::Biblio;
 use HTTP::OAI;
 use Koha::OAI::Server::ResumptionToken;
 use Koha::OAI::Server::Record;
 use Koha::OAI::Server::DeletedRecord;
-use C4::OAI::Sets;
+use C4::OAI::Sets qw( GetOAISetBySpec GetOAISetsBiblio );
 use MARC::File::XML;
 
 sub GetRecords {

@@ -32,7 +32,6 @@ subjects to subject searches.
 =cut
 
 use Modern::Perl;
-use Carp;
 use C4::Templates qw(gettemplate); # This is necessary for translatability
 
 use base qw(Koha::SuggestionEngine::Base);

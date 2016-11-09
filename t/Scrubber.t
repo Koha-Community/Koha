@@ -8,9 +8,9 @@ use Test::More tests => 29;
 use Test::Warn;
 
 BEGIN {
-	use FindBin;
-	use lib $FindBin::Bin;
-	use_ok('C4::Scrubber');
+    use FindBin;
+    use lib $FindBin::Bin;
+    use_ok('C4::Scrubber');
 }
 
 sub pretty_line {

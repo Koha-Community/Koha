@@ -21,12 +21,11 @@ use utf8;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use Carp;
+use Carp qw( carp );
 use DateTime;
-use Readonly;
-use Business::ISBN;
+use Readonly qw( Readonly );
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use C4::Budgets qw( GetBudget );
 
 use Koha::Acquisition::Orders;

@@ -8,7 +8,7 @@ use Modern::Perl;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-use C4::Serials::Frequency;
+use C4::Serials::Frequency qw( GetSubscriptionFrequencies DelSubscriptionFrequency GetSubscriptionFrequency ModSubscriptionFrequency AddSubscriptionFrequency );
 
 # Start by deleting all frequencies.
 my @frequencies = GetSubscriptionFrequencies();

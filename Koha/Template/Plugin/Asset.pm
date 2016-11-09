@@ -45,7 +45,7 @@ use Modern::Perl;
 use Template::Plugin;
 use base qw( Template::Plugin );
 
-use File::Basename;
+use File::Basename qw( fileparse );
 use File::Spec;
 use C4::Context;
 use Koha;

@@ -17,7 +17,6 @@ package Koha::Course::Instructors;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Course::Instructor;
 

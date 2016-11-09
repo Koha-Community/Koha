@@ -94,7 +94,7 @@ $database->mock( 'schema', \&mockedSchema );
 my $logger = t::lib::Mocks::Logger->new();
 
 # Can module load
-use C4::Auth_with_shibboleth;
+use C4::Auth_with_shibboleth qw( shib_ok login_shib_url get_login_shib checkpw_shib );
 require_ok('C4::Auth_with_shibboleth');
 
 # Subroutine tests

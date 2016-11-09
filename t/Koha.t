@@ -31,7 +31,7 @@ BEGIN {
     }
 }
 
-use_ok('C4::Koha');
+use_ok('C4::Koha', qw( xml_escape GetVariationsOfISBN GetVariationsOfISBNs GetVariationsOfISSN GetVariationsOfISSNs));
 
 use Test::DBIx::Class;
 

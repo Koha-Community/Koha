@@ -2,7 +2,7 @@ package C4::Utils::DataTables::VirtualShelves;
 
 use Modern::Perl;
 use C4::Context;
-use C4::Utils::DataTables;
+use C4::Utils::DataTables qw( dt_build_orderby );
 use Koha::Virtualshelves;
 
 sub search {

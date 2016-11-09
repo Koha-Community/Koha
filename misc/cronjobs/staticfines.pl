@@ -31,22 +31,20 @@ BEGIN {
 
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
 
-use Date::Calc qw/Date_to_Days/;
+use Date::Calc qw( Date_to_Days );
 
 use Koha::Script -cron;
 use C4::Context;
-use C4::Circulation;
-use C4::Overdues;
+use C4::Overdues qw( CalcFine checkoverdues GetFine Getoverdues );
 use C4::Calendar qw();    # don't need any exports from Calendar
-use C4::Biblio;
-use C4::Log;
-use Getopt::Long;
-use List::MoreUtils qw/none/;
-use Koha::DateUtils;
+use C4::Log qw( cronlogaction );
+use Getopt::Long qw( GetOptions );
+use List::MoreUtils qw( none );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
 
 my $help    = 0;

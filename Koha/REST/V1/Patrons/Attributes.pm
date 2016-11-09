@@ -22,8 +22,8 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::Patron::Attributes;
 use Koha::Patrons;
 
-use Scalar::Util qw(blessed);
-use Try::Tiny;
+use Scalar::Util qw( blessed );
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 

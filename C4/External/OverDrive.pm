@@ -21,7 +21,7 @@ use strict;
 use warnings;
 
 use Koha;
-use JSON;
+use JSON qw( from_json );
 use Koha::Caches;
 use HTTP::Request;
 use HTTP::Request::Common;

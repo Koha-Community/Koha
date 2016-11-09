@@ -18,16 +18,15 @@ package Koha::Acquisition::Order;
 use Modern::Perl;
 
 use Carp qw( croak );
-use Try::Tiny;
 
-use C4::Biblio qw(DelBiblio);
+use C4::Biblio qw( DelBiblio );
 
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Funds;
 use Koha::Acquisition::Invoices;
 use Koha::Acquisition::Order::Claims;
 use Koha::Database;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Object;
 use Koha::Biblios;
 use Koha::Holds;

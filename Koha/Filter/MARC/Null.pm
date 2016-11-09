@@ -33,7 +33,6 @@ RecordProcessor.
 
 use strict;
 use warnings;
-use Carp;
 
 use base qw(Koha::RecordProcessor::Base);
 our $NAME = 'Null';

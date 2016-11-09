@@ -8,7 +8,7 @@ use t::lib::TestBuilder;
 use Koha::Database;
 use Koha::Caches;
 use Koha::MarcSubfieldStructures;
-use C4::Biblio;
+use C4::Biblio qw( TransformKohaToMarc );
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;

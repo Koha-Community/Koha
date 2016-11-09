@@ -21,21 +21,17 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use C4::Output;
-use C4::Auth;
-use C4::Koha;
+use C4::Output qw( output_html_with_http_headers );
+use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Biblio;
 use C4::Accounts;
-use C4::Circulation;
-use C4::Items;
+use C4::Circulation qw( AddOfflineOperation );
 use C4::Members;
 use C4::Stats;
 use Koha::Checkouts;
 use Koha::UploadedFiles;
 use Koha::Items;
 
-use Date::Calc qw( Add_Delta_Days Date_to_Days );
 
 # this is the file version number that we're coded against.
 my $FILE_VERSION = '1.0';

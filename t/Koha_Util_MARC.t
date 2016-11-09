@@ -24,6 +24,7 @@ use strict;
 use warnings;
 
 use Test::More tests => 4;
+use MARC::Record;
 
 BEGIN {
         use_ok('Koha::Util::MARC');

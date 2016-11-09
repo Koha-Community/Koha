@@ -17,7 +17,6 @@ package Koha::SearchMarcMap;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

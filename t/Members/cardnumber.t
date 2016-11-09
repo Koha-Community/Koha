@@ -7,7 +7,7 @@ use Test::MockModule;
 
 use t::lib::Mocks;
 
-use_ok('C4::Members');
+use_ok('C4::Members', qw( get_cardnumber_length checkcardnumber ));
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {

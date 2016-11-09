@@ -21,9 +21,9 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth;
-use Koha::DateUtils;
-use Koha::Patron::Debarments;
+use C4::Auth qw( checkauth );
+use Koha::DateUtils qw( dt_from_string );
+use Koha::Patron::Debarments qw( AddDebarment DelDebarment );
 
 my $cgi = CGI->new;
 

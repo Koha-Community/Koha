@@ -17,7 +17,6 @@ package Koha::Patron::Images;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

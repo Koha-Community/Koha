@@ -17,7 +17,6 @@ package Koha::Cash::Register::Cashup;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

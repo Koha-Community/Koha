@@ -16,8 +16,7 @@ use warnings;
 #
 # Requires LWP::UserAgent, File::Slurp.
 use LWP::UserAgent;
-use File::Slurp qw(slurp);
-use Carp;
+use File::Slurp qw( slurp );
 my $ua = LWP::UserAgent->new();
 $ua->cookie_jar({ file =>"cookies.txt" });
 my $baseurl = shift;

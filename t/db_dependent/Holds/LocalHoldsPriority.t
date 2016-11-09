@@ -19,7 +19,7 @@ use t::lib::TestBuilder;
 BEGIN {
     use FindBin;
     use lib $FindBin::Bin;
-    use_ok('C4::Reserves');
+    use_ok('C4::Reserves', qw( AddReserve CheckReserves ));
 }
 
 my $schema = Koha::Database->schema;

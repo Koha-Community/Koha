@@ -17,12 +17,11 @@ package Koha::SearchEngine::Elasticsearch::Indexer;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use Carp;
+use Carp qw( carp croak );
 use Modern::Perl;
-use Try::Tiny;
-use List::Util qw(any);
+use Try::Tiny qw( catch try );
+use List::Util qw( any );
 use base qw(Koha::SearchEngine::Elasticsearch);
-use Data::Dumper;
 
 use Koha::Exceptions;
 use Koha::Exceptions::Elasticsearch;

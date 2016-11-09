@@ -23,10 +23,16 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth;
-use C4::Output;
-use C4::Contract;
-use Koha::DateUtils;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Contract qw(
+    AddContract
+    DelContract
+    GetContract
+    GetContracts
+    ModContract
+);
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 use Koha::Acquisition::Booksellers;
 

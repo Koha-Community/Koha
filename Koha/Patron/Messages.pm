@@ -17,7 +17,6 @@ package Koha::Patron::Messages;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

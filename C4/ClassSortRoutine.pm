@@ -20,12 +20,18 @@ package C4::ClassSortRoutine;
 use strict;
 use warnings;
 
-require Exporter;
 use Class::Factory::Util;
 use C4::Context;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+our (@ISA, @EXPORT_OK);
+BEGIN {
+    require Exporter;
+    @ISA    = qw(Exporter);
+    @EXPORT_OK = qw(
+       GetSortRoutineNames
+       GetClassSortKey
+    );
+}
 
 =head1 NAME 
 
@@ -39,12 +45,6 @@ use C4::ClassSortRoutine;
 =head1 FUNCTIONS
 
 =cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-   &GetSortRoutineNames
-   &GetClassSortKey
-);
 
 # initialization code
 my %loaded_routines = ();

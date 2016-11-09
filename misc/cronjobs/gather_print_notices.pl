@@ -5,22 +5,22 @@ use Modern::Perl;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use CGI qw( utf8 ); # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
+use CGI; # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
 use Koha::Script -cron;
 use C4::Context;
-use C4::Letters;
+use C4::Letters qw( GetPrintMessages );
 use C4::Templates;
 use File::Spec;
-use Pod::Usage;
-use Getopt::Long;
-use C4::Log;
+use Pod::Usage qw( pod2usage );
+use Getopt::Long qw( GetOptions );
+use C4::Log qw( cronlogaction );
 
-use Koha::DateUtils;
-use Koha::Util::OpenDocument;
+use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Util::OpenDocument qw( generate_ods );
 use MIME::Lite;
 
 my (

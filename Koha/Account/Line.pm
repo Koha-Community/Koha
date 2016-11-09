@@ -17,17 +17,16 @@ package Koha::Account::Line;
 
 use Modern::Perl;
 
-use Carp;
-use Data::Dumper;
+use Data::Dumper qw( Dumper );
 
-use C4::Log qw(logaction);
-use C4::Overdues qw(GetFine);
+use C4::Log qw( logaction );
+use C4::Overdues qw( UpdateFine );
 
 use Koha::Account::CreditType;
 use Koha::Account::DebitType;
 use Koha::Account::Offsets;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Account;
 use Koha::Items;
 

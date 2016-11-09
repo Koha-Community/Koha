@@ -19,7 +19,6 @@ package C4::Linker::LastMatch;
 
 use strict;
 use warnings;
-use Carp;
 use C4::Heading;
 use C4::Linker::Default;    # Use Default for flipping
 

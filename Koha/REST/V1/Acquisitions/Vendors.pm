@@ -21,7 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Acquisition::Booksellers;
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 

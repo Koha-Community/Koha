@@ -13,7 +13,7 @@ BEGIN {
 use Koha::Script -cron;
 use C4::Koha;
 use C4::Context;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcBiblio );
 use Date::Calc;
 use Time::HiRes qw(gettimeofday);
 use ZOOM;

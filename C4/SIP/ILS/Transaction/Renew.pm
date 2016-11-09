@@ -7,7 +7,7 @@ package C4::SIP::ILS::Transaction::Renew;
 use warnings;
 use strict;
 
-use C4::Circulation;
+use C4::Circulation qw( CanBookBeRenewed GetIssuingCharges AddIssue );
 use Koha::Patrons;
 use Koha::DateUtils;
 

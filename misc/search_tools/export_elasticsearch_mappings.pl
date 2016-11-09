@@ -61,8 +61,8 @@ use Koha::SearchMarcMaps;
 use Koha::SearchEngine::Elasticsearch;
 
 use YAML::XS;
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
 my $type = '';
 my $man;

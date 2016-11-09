@@ -19,10 +19,10 @@
 #
 
 use Modern::Perl;
-use XML::Simple;
-use Pod::Usage;
-use Getopt::Long;
-use Carp;
+use XML::Simple qw( XMLin );
+use Pod::Usage qw( pod2usage );
+use Getopt::Long qw( GetOptions );
+use Carp qw( croak );
 
 use open ':std', ':encoding(UTF-8)';
 

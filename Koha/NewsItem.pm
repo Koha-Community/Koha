@@ -19,10 +19,9 @@ package Koha::NewsItem;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
 use Koha::Patrons;
 

@@ -8,7 +8,7 @@ use List::MoreUtils qw/all any none/;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Auth;
+use C4::Auth qw( get_session checkauth get_template_and_user );
 use Koha::Database;
 
 use Test::More tests => 27;
@@ -28,7 +28,7 @@ my $dbh = C4::Context->dbh;
 t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 
 use_ok('Koha::DateUtils');
-use_ok('C4::Search::History');
+use_ok('C4::Search::History', qw( add get delete get_from_session ));
 
 my $userid = 123;
 my $previous_sessionid = "PREVIOUS_SESSIONID";

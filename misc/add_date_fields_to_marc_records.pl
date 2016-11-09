@@ -18,14 +18,14 @@
 use Modern::Perl;
 
 BEGIN {
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
 use Koha::Script;
 
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 use MARC::Field;
 
 use C4::Biblio;

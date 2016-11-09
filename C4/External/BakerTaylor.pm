@@ -19,21 +19,20 @@ package C4::External::BakerTaylor;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use XML::Simple;
-use LWP::Simple;
-use HTTP::Request::Common;
+use LWP::Simple qw( get );
 
 use C4::Context;
 
 use Modern::Perl;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION);
+use vars qw(%EXPORT_TAGS $VERSION);
+our (@ISA, @EXPORT_OK);
 
 BEGIN {
-	require Exporter;
-	@ISA = qw(Exporter);
+    require Exporter;
+    @ISA = qw(Exporter);
     $VERSION = 3.07.00.049;
-	@EXPORT_OK = qw(&availability &content_cafe &image_url &link_url &http_jacket_link);
-	%EXPORT_TAGS = (all=>\@EXPORT_OK);
+    @EXPORT_OK = qw(availability content_cafe_url image_url link_url http_jacket_link);
 }
 
 # These variables are plack safe: they are initialized each time

@@ -6,7 +6,7 @@ use Modern::Perl;
 use Test::More tests => 5;
 
 use Koha::Database;
-use C4::Serials;
+use C4::Serials qw( GetFictiveIssueNumber GetSubscription );
 use C4::Serials::Frequency;
 
 my $schema  = Koha::Database->new->schema;

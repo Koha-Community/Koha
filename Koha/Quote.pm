@@ -16,7 +16,6 @@ package Koha::Quote;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Carp;
 
 use Koha::Database;
 use Koha::Quotes;

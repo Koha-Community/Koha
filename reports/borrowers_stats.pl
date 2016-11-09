@@ -19,26 +19,20 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use List::MoreUtils qw/uniq/;
 
-use C4::Auth;
+use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Koha;
-use C4::Acquisition;
-use C4::Output;
-use C4::Reports;
-use C4::Circulation;
+use C4::Koha qw( GetAuthorisedValues );
+use C4::Output qw( output_html_with_http_headers );
+use C4::Reports qw( GetDelimiterChoices );
 
 use Koha::AuthorisedValues;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Libraries;
 use Koha::Patron::Attribute::Types;
 use Koha::Patron::Categories;
 
-use Date::Calc qw(
-  Today
-  Add_Delta_YM
-  );
+use Date::Calc qw( Add_Delta_YM Today );
 
 =head1 NAME
 

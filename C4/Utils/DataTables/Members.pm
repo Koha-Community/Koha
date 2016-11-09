@@ -2,8 +2,8 @@ package C4::Utils::DataTables::Members;
 
 use Modern::Perl;
 use C4::Context;
-use C4::Utils::DataTables;
-use Koha::DateUtils;
+use C4::Utils::DataTables qw( dt_build_orderby );
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 sub search {
     my ( $params ) = @_;

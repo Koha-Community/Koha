@@ -262,7 +262,7 @@ sub run_marc21_search_tests {
     my $context = C4::Context->new("$datadir/etc/koha-conf.xml");
     $context->set_context();
 
-    use_ok('C4::Search');
+    use_ok('C4::Search', qw( getIndexes FindDuplicate SimpleSearch getRecords buildQuery searchResults ));
 
     # set search syspreferences to a known starting point
     $QueryStemming = 0;
@@ -836,7 +836,7 @@ sub run_unimarc_search_tests {
     my $context = C4::Context->new("$datadir/etc/koha-conf.xml");
     $context->set_context();
 
-    use_ok('C4::Search');
+    use_ok('C4::Search', qw( getIndexes FindDuplicate SimpleSearch getRecords buildQuery searchResults ));
 
     # set search syspreferences to a known starting point
     $QueryStemming = 0;
@@ -859,7 +859,7 @@ sub run_unimarc_search_tests {
     is($total_hits, 1, 'UNIMARC generic item index (bug 10037)');
 
     # authority records
-    use_ok('C4::AuthoritiesMarc');
+    use_ok('C4::AuthoritiesMarc', qw( SearchAuthorities ));
 
     my ($auths, $count) = SearchAuthorities(
         ['mainentry'], ['and'], [''], ['contains'],

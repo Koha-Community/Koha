@@ -21,7 +21,7 @@
 
 use Modern::Perl;
 use Text::CSV;
-use Getopt::Long qw(:config no_ignore_case);
+use Getopt::Long qw( GetOptions );
 
 use Koha::Script;
 use C4::Context;

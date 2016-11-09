@@ -3,9 +3,9 @@
 use Modern::Perl;
 
 use Test::More tests => 14;
-use C4::Acquisition;
-use C4::Biblio qw( AddBiblio DelBiblio );
-use C4::Budgets;
+use C4::Acquisition qw( NewBasket GetBiblioCountByBasketno GetOrders GetOrder ReopenBasket );
+use C4::Biblio qw( AddBiblio );
+use C4::Budgets qw( AddBudget GetBudget );
 use C4::Context;
 use Koha::Database;
 use Koha::Acquisition::Booksellers;

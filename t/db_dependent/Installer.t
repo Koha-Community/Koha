@@ -29,7 +29,7 @@ use utf8;
 use Koha::Database;
 
 BEGIN {
-    use_ok('C4::Installer');
+    use_ok('C4::Installer', qw( column_exists index_exists foreign_key_exists primary_key_exists marc_framework_sql_list ));
 }
 
 ok( my $installer = C4::Installer->new(), 'Testing NewInstaller' );

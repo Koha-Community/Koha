@@ -22,7 +22,7 @@ use Test::Warn;
 
 use File::Basename;
 
-use C4::Reserves qw(AddReserve);
+use C4::Reserves qw( AddReserve );
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;

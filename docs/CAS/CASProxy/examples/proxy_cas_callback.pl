@@ -28,7 +28,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use Authen::CAS::Client;
-use Storable qw(nstore_fd);
+use Storable qw( nstore_fd );
 
 my $casServerUrl = 'https://localhost:8443/cas/';
 my $cas = Authen::CAS::Client->new($casServerUrl);

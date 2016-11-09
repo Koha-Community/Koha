@@ -23,7 +23,7 @@ use utf8;
 
 use MARC::Record;
 use MARC::Field;
-use Carp;
+use Carp qw( carp );
 
 sub new {
     my ( $class, $data_array_ref ) = @_;

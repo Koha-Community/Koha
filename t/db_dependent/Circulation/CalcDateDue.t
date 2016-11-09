@@ -8,11 +8,11 @@ use DBI;
 use DateTime;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use C4::Calendar;
+use C4::Calendar qw( new insert_single_holiday delete_holiday insert_week_day_holiday );
 
 use Koha::CirculationRules;
 
-use_ok('C4::Circulation');
+use_ok('C4::Circulation', qw( CalcDateDue ));
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;

@@ -21,20 +21,18 @@ package Koha::pdfformat::layout2pagesde;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 #you can use any PDF::API2 module, all you need to do is return the stringifyed pdf object from the printpdf sub.
-use vars qw(@ISA @EXPORT);
-use MIME::Base64;
 use Modern::Perl;
 use utf8;
 
 use Koha::Number::Price;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Libraries;
 
+our (@ISA, @EXPORT_OK);
 BEGIN {
-         use Exporter   ();
-         our (@ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(printpdf);
+    require Exporter;
+    @ISA    = qw(Exporter);
+    @EXPORT_OK = qw(printpdf);
 }
 
 

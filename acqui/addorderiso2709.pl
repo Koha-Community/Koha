@@ -23,23 +23,27 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use Carp;
 use YAML::XS;
-use List::MoreUtils qw/uniq/;
+use List::MoreUtils;
 use Encode;
 
 use C4::Context;
-use C4::Auth;
-use C4::Output;
-use C4::ImportBatch;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_html_with_http_headers );
+use C4::ImportBatch qw( GetImportRecordsRange GetImportRecordMarc GetImportRecordMatches sub SetImportRecordStatus SetMatchedBiblionumber SetImportBatchStatus GetImportBatch GetImportBatchRangeDesc GetNumberOfNonZ3950ImportBatches GetImportBatchOverlayAction GetImportBatchNoMatchAction GetImportBatchItemAction );
 use C4::Matcher;
-use C4::Search qw/FindDuplicate/;
-use C4::Acquisition;
-use C4::Biblio;
-use C4::Items;
-use C4::Koha;
-use C4::Budgets;
-use C4::Acquisition;
+use C4::Search qw( FindDuplicate );
+use C4::Acquisition qw( populate_order_with_prices );
+use C4::Biblio qw(
+    AddBiblio
+    GetMarcFromKohaField
+    GetMarcPrice
+    GetMarcQuantity
+    TransformHtmlToXml
+);
+use C4::Items qw( PrepareItemrecordDisplay sub AddItemFromMarc );
+use C4::Budgets qw( GetBudget GetBudgets GetBudgetHierarchy CanUserUseBudget GetBudgetByCode );
+use C4::Acquisition qw( populate_order_with_prices );
 use C4::Suggestions;    # GetSuggestion
 use C4::Members;
 

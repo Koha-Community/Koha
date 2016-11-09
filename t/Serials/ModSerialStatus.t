@@ -24,7 +24,7 @@ use Data::Dumper qw/Dumper/;
 
 use Test::More tests => 8;
 
-use C4::Serials qw//;
+use C4::Serials;
 
 # Testing C4::Serials::_handle_seqno
 my $list = '2017 (No. 8); 2017 (No. 9); 2017 (No. 10)';

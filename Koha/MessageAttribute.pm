@@ -19,7 +19,6 @@ package Koha::MessageAttribute;
 
 use Modern::Perl;
 
-use Carp;
 
 use base qw(Koha::Object);
 

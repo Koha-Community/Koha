@@ -17,12 +17,11 @@ package Koha::Item::Transfer;
 
 use Modern::Perl;
 
-use Carp;
 
-use C4::Items;
+use C4::Items qw( CartToShelf ModDateLastSeen );
 
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Item::Transfer;
 
 use base qw(Koha::Object);

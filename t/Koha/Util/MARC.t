@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 2;
+use MARC::Record;
 
 BEGIN { use_ok('Koha::Util::MARC'); }
 

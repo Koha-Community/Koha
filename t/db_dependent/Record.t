@@ -10,7 +10,7 @@ use C4::Context;
 use Koha::Database;
 
 BEGIN {
-        use_ok('C4::Record');
+    use_ok('C4::Record', qw( marc2marc marc2marcxml marcxml2marc marc2dcxml marc2modsxml marc2bibtex ));
 }
 
 my $schema = Koha::Database->new->schema;

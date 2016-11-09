@@ -19,9 +19,9 @@ package C4::UsageStats;
 
 use Modern::Perl;
 use C4::Context;
-use POSIX qw(strftime);
+use POSIX qw( strftime );
 use LWP::UserAgent;
-use JSON;
+use JSON qw( decode_json encode_json );
 
 use Koha::Libraries;
 

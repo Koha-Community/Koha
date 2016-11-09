@@ -3,8 +3,7 @@ package C4::Installer::PerlModules;
 use warnings;
 use strict;
 
-use File::Spec;
-use File::Basename;
+use File::Basename qw( dirname );
 use Module::CPANfile;
 
 sub new {

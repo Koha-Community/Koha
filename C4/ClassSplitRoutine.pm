@@ -20,7 +20,6 @@ package C4::ClassSplitRoutine;
 use Modern::Perl;
 
 require Exporter;
-use Class::Factory::Util;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -39,7 +38,7 @@ use C4::ClassSplitRoutine;
 
 @ISA    = qw(Exporter);
 @EXPORT = qw(
-   &GetSplitRoutineNames
+   GetSplitRoutineNames
 );
 
 =head2 GetSplitRoutineNames

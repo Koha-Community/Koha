@@ -20,7 +20,7 @@ package C4::BackgroundJob;
 
 use Modern::Perl;
 use C4::Context;
-use C4::Auth qw/get_session/;
+use C4::Auth qw( get_session );
 use Digest::MD5;
 
 

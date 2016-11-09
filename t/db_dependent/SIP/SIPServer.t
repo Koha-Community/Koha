@@ -37,7 +37,7 @@ BEGIN {
     $mockPrefork->mock( 'run', sub {} );
 }
 
-use C4::SIP::SIPServer;
+use C4::SIP::SIPServer qw( get_timeout );
 
 # Start testing !
 # TODO We should include more tests here.

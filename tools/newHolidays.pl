@@ -21,12 +21,12 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth;
+use C4::Auth qw( checkauth );
 use C4::Output;
 
 use C4::Calendar;
 use DateTime;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $input               = CGI->new;
 my $dbh                 = C4::Context->dbh();

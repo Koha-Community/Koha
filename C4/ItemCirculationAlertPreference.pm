@@ -20,7 +20,7 @@ package C4::ItemCirculationAlertPreference;
 use strict;
 use warnings;
 use C4::Context;
-use Carp qw(carp croak);
+use Carp qw( carp croak );
 
 use Koha::ItemTypes;
 use Koha::Patron::Categories;

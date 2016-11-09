@@ -18,7 +18,6 @@ package Koha::Subscription::Routinglists;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 use Koha::Subscription::Routinglist;

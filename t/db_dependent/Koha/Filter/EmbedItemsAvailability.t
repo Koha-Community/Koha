@@ -25,7 +25,7 @@ use t::lib::TestBuilder;
 
 use MARC::Record;
 
-use C4::Biblio qw/AddBiblio GetMarcBiblio/;
+use C4::Biblio qw( GetMarcFromKohaField AddBiblio GetMarcBiblio );
 use Koha::Database;
 use Koha::RecordProcessor;
 

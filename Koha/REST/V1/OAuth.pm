@@ -21,7 +21,7 @@ use Module::Load::Conditional;
 
 use C4::Context;
 use Koha::OAuth;
-use MIME::Base64;
+use MIME::Base64 qw( decode_base64 );
 
 use Mojo::Base 'Mojolicious::Controller';
 

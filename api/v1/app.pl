@@ -17,5 +17,5 @@
 
 use Modern::Perl;
 
-require Mojolicious::Commands;
+use Mojolicious::Commands;
 Mojolicious::Commands->start_app('Koha::REST::V1');

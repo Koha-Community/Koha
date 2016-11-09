@@ -19,11 +19,10 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 use Koha::Checkouts::ReturnClaims;
 use Koha::Checkouts;
-use Koha::DateUtils qw( dt_from_string output_pref );
 
 =head1 NAME
 

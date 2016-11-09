@@ -2,10 +2,10 @@ use Modern::Perl;
 use Test::More tests => 17;
 
 use C4::Acquisition;
-use C4::Budgets;
+use C4::Budgets qw( AddBudgetPeriod AddBudget );
 use Koha::Database;
 use Koha::Acquisition::Booksellers;
-use_ok('C4::Serials');
+use_ok('C4::Serials', qw( GetSuppliersWithLateIssues NewSubscription GetLateOrMissingIssues updateClaim ));
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 

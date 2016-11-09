@@ -19,12 +19,10 @@
 
 use Modern::Perl;
 
-use C4::Auth qw/:DEFAULT get_session/;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use CGI qw ( -utf8 );
-use C4::Letters;
 use Koha::Account::Lines;
-use Koha::DateUtils;
 use Koha::Notice::Templates;
 
 my $input = CGI->new;

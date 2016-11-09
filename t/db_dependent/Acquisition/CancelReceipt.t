@@ -21,10 +21,10 @@ use Test::More tests => 12;
 use t::lib::TestBuilder;
 
 use C4::Context;
-use C4::Acquisition;
-use C4::Biblio;
+use C4::Acquisition qw( NewBasket ModReceiveOrder CancelReceipt );
+use C4::Biblio qw( AddBiblio );
 use C4::Items;
-use C4::Budgets;
+use C4::Budgets qw( AddBudget GetBudget );
 use t::lib::Mocks;
 
 use Koha::Database;

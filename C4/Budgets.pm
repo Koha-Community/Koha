@@ -23,54 +23,61 @@ use Koha::Database;
 use Koha::Patrons;
 use Koha::Acquisition::Invoice::Adjustments;
 use C4::Acquisition;
-use vars qw(@ISA @EXPORT);
 
+our (@ISA, @EXPORT_OK);
 BEGIN {
-	require Exporter;
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(
+    require Exporter;
+    @ISA       = qw(Exporter);
+    @EXPORT_OK = qw(
 
-        &GetBudget
-        &GetBudgetByOrderNumber
-        &GetBudgetByCode
-        &GetBudgets
-        &BudgetsByActivity
-        &GetBudgetsReport
-        &GetBudgetReport
-        &GetBudgetHierarchy
-	    &AddBudget
-        &ModBudget
-        &DelBudget
-        &GetBudgetSpent
-        &GetBudgetOrdered
-        &GetBudgetName
-        &GetPeriodsCount
-        GetBudgetHierarchySpent
-        GetBudgetHierarchyOrdered
+      GetBudget
+      GetBudgetByOrderNumber
+      GetBudgetByCode
+      GetBudgets
+      BudgetsByActivity
+      GetBudgetsReport
+      GetBudgetReport
+      GetBudgetsByActivity
+      GetBudgetHierarchy
+      AddBudget
+      ModBudget
+      DelBudget
+      GetBudgetSpent
+      GetBudgetOrdered
+      GetBudgetName
+      GetPeriodsCount
+      GetBudgetHierarchySpent
+      GetBudgetHierarchyOrdered
 
-        &GetBudgetUsers
-        &ModBudgetUsers
-        &CanUserUseBudget
-        &CanUserModifyBudget
+      GetBudgetUsers
+      ModBudgetUsers
+      CanUserUseBudget
+      CanUserModifyBudget
 
-	    &GetBudgetPeriod
-        &GetBudgetPeriods
-        &ModBudgetPeriod
-        &AddBudgetPeriod
-	    &DelBudgetPeriod
+      GetBudgetPeriod
+      GetBudgetPeriods
+      ModBudgetPeriod
+      AddBudgetPeriod
+      DelBudgetPeriod
 
-        &ModBudgetPlan
+      ModBudgetPlan
 
-		&GetBudgetsPlanCell
-        &AddBudgetPlanValue
-        &GetBudgetAuthCats
-        &BudgetHasChildren
-        &CheckBudgetParent
-        &CheckBudgetParentPerm
+      GetBudgetsPlanCell
+      AddBudgetPlanValue
+      GetBudgetAuthCats
+      BudgetHasChildren
+      GetBudgetChildren
+      SetOwnerToFundHierarchy
+      CheckBudgetParent
+      CheckBudgetParentPerm
 
-        &HideCols
-        &GetCols
-	);
+      HideCols
+      GetCols
+
+      CloneBudgetPeriod
+      CloneBudgetHierarchy
+      MoveOrders
+    );
 }
 
 # ----------------------------BUDGETS.PM-----------------------------";

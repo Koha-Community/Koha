@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use CGI::Session::ErrorHandler;
-use YAML::XS ();
+use YAML::XS;
 
 $CGI::Session::Serialize::yamlxs::VERSION = '0.1';
 @CGI::Session::Serialize::yamlxs::ISA     = ( "CGI::Session::ErrorHandler" );

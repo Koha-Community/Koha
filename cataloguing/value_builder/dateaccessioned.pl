@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $builder = sub {
     my ( $params ) = @_;

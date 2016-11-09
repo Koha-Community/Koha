@@ -22,17 +22,24 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use List::Util qw/min/;
-use Date::Calc qw/Delta_YMD Easter_Sunday Today Decode_Date_EU/;
-use Date::Manip qw/ ParseDate UnixDate DateCalc/;
+use Date::Calc qw( Delta_YMD );
+use Date::Manip qw( DateCalc UnixDate );
 use Text::CSV_XS;
 
-use C4::Acquisition;
-use C4::Budgets;
+use C4::Budgets qw(
+    CanUserUseBudget
+    GetBudgetAuthCats
+    GetBudgetHierarchy
+    GetBudgetPeriod
+    GetBudgetsPlanCell
+    GetCols
+    GetPeriodsCount
+    HideCols
+    ModBudgetPlan
+);
 use C4::Context;
-use C4::Output;
-use C4::Koha;
-use C4::Auth;
+use C4::Output qw( output_html_with_http_headers );
+use C4::Auth qw( get_template_and_user );
 use Koha::Acquisition::Currencies;
 
 our $input = CGI->new;

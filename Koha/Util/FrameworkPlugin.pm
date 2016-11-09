@@ -22,11 +22,10 @@ package Koha::Util::FrameworkPlugin;
 
 use Modern::Perl;
 
-our ( @ISA, @EXPORT, @EXPORT_OK );
+our ( @ISA, @EXPORT_OK );
 BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
-    @EXPORT = qw( );
     @EXPORT_OK = qw( wrapper date_entered );
 }
 

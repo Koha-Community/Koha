@@ -19,10 +19,8 @@ package Koha::Util::OpenDocument;
 
 use Modern::Perl;
 
-use Encode qw( decode );
-use File::Temp;
 use File::Basename qw( dirname );
-use OpenOffice::OODoc;
+use OpenOffice::OODoc qw( odfDocument odfWorkingDirectory );
 
 use parent qw( Exporter );
 

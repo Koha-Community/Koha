@@ -17,7 +17,6 @@ package Koha::Tags::Indexes;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Tags::Index;
 

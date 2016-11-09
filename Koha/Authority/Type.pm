@@ -17,7 +17,6 @@ package Koha::Authority::Type;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

@@ -40,11 +40,10 @@ provides something that can be given to elasticsearch to get answers.
 =cut
 
 use base qw(Koha::SearchEngine::Elasticsearch);
-use Carp;
 use JSON;
-use List::MoreUtils qw/ each_array /;
+use List::MoreUtils qw( each_array );
 use Modern::Perl;
-use URI::Escape;
+use URI::Escape qw( uri_escape_utf8 );
 
 use C4::Context;
 use Koha::Exceptions;

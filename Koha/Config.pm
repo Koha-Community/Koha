@@ -17,7 +17,7 @@ package Koha::Config;
 
 use Modern::Perl;
 
-use XML::LibXML ':libxml';
+use XML::LibXML qw( XML_ELEMENT_NODE XML_TEXT_NODE );
 
 # Default config file, if none is specified
 use constant CONFIG_FNAME => "/etc/koha/koha-conf.xml";

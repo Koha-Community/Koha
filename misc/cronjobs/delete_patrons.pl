@@ -2,14 +2,14 @@
 
 use Modern::Perl;
 
-use Pod::Usage;
-use Getopt::Long;
+use Pod::Usage qw( pod2usage );
+use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
-use C4::Members;
-use Koha::DateUtils;
+use C4::Members qw( GetBorrowersToExpunge );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
-use C4::Log;
+use C4::Log qw( cronlogaction );
 
 my ( $help, $verbose, $not_borrowed_since, $expired_before, $last_seen,
     @category_code, $branchcode, $file, $confirm );

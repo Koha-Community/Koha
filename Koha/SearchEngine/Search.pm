@@ -45,8 +45,8 @@ Creates a new C<Search> of whatever the relevant type is.
 
 use Modern::Perl;
 use C4::Context;
-use C4::Biblio qw//;
-use POSIX qw(ceil floor);
+use C4::Biblio;
+use POSIX qw( ceil );
 
 sub new {
     my $engine = C4::Context->preference("SearchEngine") // 'Zebra';

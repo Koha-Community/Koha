@@ -2,7 +2,7 @@ use Modern::Perl;
 use Test::More tests => 19;
 
 use C4::Context;
-use C4::Letters qw( GetLettersAvailableForALibrary DelLetter );
+use C4::Letters qw( GetLetters GetLettersAvailableForALibrary DelLetter );
 use Koha::Database;
 
 my $schema = Koha::Database->new->schema;

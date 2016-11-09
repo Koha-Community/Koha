@@ -7,13 +7,12 @@ use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
 
 use HTTPD::Bench::ApacheBench;
 use LWP::UserAgent;
-use Data::Dumper;
 use HTTP::Cookies;
 use C4::Context;
 

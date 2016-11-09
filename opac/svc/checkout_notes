@@ -21,10 +21,10 @@ use Modern::Perl;
 
 use JSON qw( encode_json );
 use C4::Service;
-use C4::Auth qw /check_cookie_auth/;
+use C4::Auth qw( check_cookie_auth get_template_and_user );
 use C4::Letters;
 use CGI;
-use C4::Output qw(:DEFAULT :ajax);
+use C4::Output qw( is_ajax output_with_http_headers );
 use C4::Scrubber;
 use C4::Circulation;
 use C4::Biblio;

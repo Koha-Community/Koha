@@ -5,7 +5,7 @@ use Test::More tests => 2;
 
 use t::lib::Mocks;
 
-use C4::Members::Statistics;
+use C4::Members::Statistics qw( get_fields );
 use Koha::Database; # we need the db here; get_fields looks for the item columns
 
 my $schema = Koha::Database->schema;

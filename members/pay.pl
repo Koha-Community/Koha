@@ -28,10 +28,10 @@
 
 use Modern::Perl;
 
-use URI::Escape;
+use URI::Escape qw( uri_escape_utf8 uri_unescape );
 use C4::Context;
-use C4::Auth;
-use C4::Output;
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_and_exit_if_error output_and_exit output_html_with_http_headers );
 use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
@@ -42,7 +42,7 @@ use Koha::Patrons;
 use Koha::Items;
 
 use Koha::Patron::Categories;
-use URI::Escape;
+use URI::Escape qw( uri_escape_utf8 uri_unescape );
 
 our $input = CGI->new;
 

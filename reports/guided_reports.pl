@@ -23,21 +23,21 @@ use Text::CSV::Encoded;
 use Encode qw( decode );
 use URI::Escape;
 use File::Temp;
-use C4::Reports::Guided;
+use C4::Reports::Guided qw( delete_report get_report_areas convert_sql update_sql get_saved_reports get_results ValidateSQLParameters format_results get_report_types get_columns get_from_dictionary get_criteria build_query save_report execute_query nb_rows get_report_groups );
 use Koha::Reports;
-use C4::Auth qw/:DEFAULT get_session/;
-use C4::Output;
+use C4::Auth qw( get_template_and_user get_session );
+use C4::Output qw( pagination_bar output_html_with_http_headers );
 use C4::Context;
 use Koha::Caches;
-use C4::Log;
-use Koha::DateUtils qw/dt_from_string output_pref/;
+use C4::Log qw( logaction );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 use Koha::Libraries;
 use Koha::Patron::Categories;
 use Koha::SharedContent;
-use Koha::Util::OpenDocument;
+use Koha::Util::OpenDocument qw( generate_ods );
 
 =head1 NAME
 

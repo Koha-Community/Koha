@@ -4,10 +4,10 @@ use Modern::Perl;
 
 use Test::More tests => 13;
 use C4::Context;
-use C4::Acquisition;
+use C4::Acquisition qw( NewBasket GetOrders GetOrder TransferOrder SearchOrders ModReceiveOrder CancelReceipt );
 use C4::Biblio;
 use C4::Items;
-use C4::Budgets;
+use C4::Budgets qw( AddBudget GetBudget );
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;

@@ -23,16 +23,16 @@ use Modern::Perl;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
 
 use Koha::Script;
 use C4::Context;
-use C4::ImportBatch;
+use C4::ImportBatch qw( RecordsFromISO2709File RecordsFromMARCXMLFile BatchStageMarcRecords SetImportBatchMatcher SetImportBatchOverlayAction SetImportBatchNoMatchAction SetImportBatchItemAction BatchFindDuplicates );
 use C4::Matcher;
-use C4::MarcModificationTemplates;
-use Getopt::Long;
+use C4::MarcModificationTemplates qw( GetModificationTemplates );
+use Getopt::Long qw( GetOptions );
 
 $| = 1;
 

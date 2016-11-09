@@ -21,7 +21,6 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::CirculationRules;
 
-use Try::Tiny;
 
 =head1 API
 

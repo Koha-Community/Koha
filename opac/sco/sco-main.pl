@@ -35,14 +35,11 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw(get_template_and_user checkpw in_iprange);
-use C4::Koha;
-use C4::Circulation;
+use C4::Auth qw( in_iprange get_template_and_user checkpw );
+use C4::Circulation qw( AddReturn CanBookBeIssued AddIssue CanBookBeRenewed AddRenewal );
 use C4::Reserves;
-use C4::Output;
+use C4::Output qw( output_html_with_http_headers );
 use C4::Members;
-use C4::Biblio;
-use C4::Items;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Currencies;
 use Koha::Items;

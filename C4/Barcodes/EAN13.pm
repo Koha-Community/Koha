@@ -22,8 +22,8 @@ use warnings;
 
 use C4::Context;
 
-use Algorithm::CheckDigits;
-use Carp;
+use Algorithm::CheckDigits qw( CheckDigits );
+use Carp qw( carp );
 
 use vars qw(@ISA);
 

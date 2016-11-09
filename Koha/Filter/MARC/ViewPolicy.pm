@@ -39,8 +39,7 @@ menu.
 =cut
 
 use Modern::Perl;
-use Carp;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcStructure );
 
 use base qw(Koha::RecordProcessor::Base);
 our $NAME    = 'MARC_ViewPolicy';
@@ -86,7 +85,7 @@ sub filter {
         my $result        = $current_record;
         my $hide          = _should_hide_on_interface();
 
-        my $marcsubfieldstructure = GetMarcStructure( 0, $frameworkcode, { unsafe => 1 } );
+        my $marcsubfieldstructure = C4::Biblio::GetMarcStructure( 0, $frameworkcode, { unsafe => 1 } );
 
         #if ($marcsubfieldstructure->{'000'}->{'@'}->{hidden}>0) {
         # LDR field is excluded from $current_record->fields().

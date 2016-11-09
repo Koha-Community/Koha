@@ -18,7 +18,7 @@ use Test::More tests => 41;
 
 BEGIN {
         use_ok('C4::Creators');
-        use_ok('C4::Creators::PDF');
+        use_ok('C4::Creators::PDF', qw( Init Add Bookmark Compress Font FontSize Page StrWidth Text End ));
 }
 
 my $pdf_creator = C4::Creators::PDF->new(InitVars => 0);

@@ -21,13 +21,12 @@ package C4::AuthoritiesMarc;
 use strict;
 use warnings;
 use C4::Context;
-use MARC::Record;
-use C4::Biblio;
-use C4::Search;
+use C4::Biblio qw( GetFrameworkCode GetMarcBiblio ModBiblio );
+use C4::Search qw( FindDuplicate new_record_from_zebra );
 use C4::AuthoritiesMarc::MARC21;
 use C4::AuthoritiesMarc::UNIMARC;
-use C4::Charset;
-use C4::Log;
+use C4::Charset qw( SetUTF8Flag );
+use C4::Log qw( logaction );
 use Koha::MetadataRecord::Authority;
 use Koha::Authorities;
 use Koha::Authority::MergeRequests;
@@ -38,35 +37,38 @@ use Koha::SearchEngine;
 use Koha::SearchEngine::Indexer;
 use Koha::SearchEngine::Search;
 
-use vars qw(@ISA @EXPORT);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
 
-	require Exporter;
-	@ISA = qw(Exporter);
-	@EXPORT = qw(
-	    &GetTagsLabels
-    	&GetAuthMARCFromKohaField 
+    require Exporter;
+    @ISA       = qw(Exporter);
+    @EXPORT_OK = qw(
+      GetTagsLabels
+      GetAuthMARCFromKohaField
 
-    	&AddAuthority
-    	&ModAuthority
-    	&DelAuthority
-    	&GetAuthority
-    	&GetAuthorityXML
+      AddAuthority
+      ModAuthority
+      DelAuthority
+      GetAuthority
+      GetAuthorityXML
 
-    	&SearchAuthorities
-    
-        &BuildSummary
-        &BuildAuthHierarchies
-        &BuildAuthHierarchy
-        &GenerateHierarchy
-    
-    	&merge
-    	&FindDuplicateAuthority
+      SearchAuthorities
 
-        &GuessAuthTypeCode
-        &GuessAuthId
- 	);
+      BuildSummary
+      BuildAuthHierarchies
+      BuildAuthHierarchy
+      GenerateHierarchy
+      GetHeaderAuthority
+      AddAuthorityTrees
+      CompareFieldWithAuthority
+
+      merge
+      FindDuplicateAuthority
+
+      GuessAuthTypeCode
+      GuessAuthId
+      compare_fields
+    );
 }
 
 

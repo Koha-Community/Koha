@@ -23,8 +23,8 @@ use Koha::Exceptions::Plugin;
 use Koha::Plugins;
 use Koha::Logger;
 
-use Clone qw(clone);
-use Try::Tiny;
+use Clone qw( clone );
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 

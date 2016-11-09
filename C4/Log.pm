@@ -27,7 +27,6 @@ use warnings;
 use JSON qw( to_json );
 
 use C4::Context;
-use Koha::DateUtils;
 use Koha::Logger;
 
 use vars qw(@ISA @EXPORT);
@@ -35,7 +34,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
         require Exporter;
         @ISA = qw(Exporter);
-        @EXPORT = qw(&logaction &cronlogaction);
+        @EXPORT = qw(logaction cronlogaction);
 }
 
 =head1 NAME

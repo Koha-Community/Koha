@@ -2,16 +2,16 @@
 
 use Modern::Perl;
 
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 use MARC::Field;
 use MARC::Record;
-use Pod::Usage;
-use Time::HiRes qw(gettimeofday);
+use Pod::Usage qw( pod2usage );
+use Time::HiRes qw( gettimeofday );
 
 use Koha::Script;
 use C4::Context;
-use C4::Biblio;
-use C4::Items;
+use C4::Biblio qw( GetMarcBiblio GetMarcFromKohaField );
+use C4::Items qw( ModItemFromMarc );
 
 =head1 NAME
 

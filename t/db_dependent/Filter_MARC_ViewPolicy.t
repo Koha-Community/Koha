@@ -29,7 +29,7 @@ use List::MoreUtils qw/any/;
 use MARC::Record;
 use MARC::Field;
 use C4::Context;
-use C4::Biblio;
+use C4::Biblio qw( GetMarcFromKohaField );
 use Koha::Caches;
 use Koha::Database;
 

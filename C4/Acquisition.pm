@@ -19,13 +19,13 @@ package C4::Acquisition;
 
 
 use Modern::Perl;
-use Carp;
+use Carp qw( carp croak );
 use Text::CSV_XS;
 use C4::Context;
-use C4::Suggestions;
-use C4::Biblio;
-use C4::Contract;
-use C4::Log qw(logaction);
+use C4::Suggestions qw( GetSuggestion GetSuggestionFromBiblionumber ModSuggestion );
+use C4::Biblio qw( GetMarcFromKohaField GetMarcStructure IsMarcStructureInternal );
+use C4::Contract qw( GetContract );
+use C4::Log qw( logaction );
 use C4::Templates qw(gettemplate);
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Baskets;
@@ -42,60 +42,58 @@ use Koha::Patrons;
 use C4::Koha;
 
 use MARC::Field;
-use MARC::Record;
-use JSON qw(to_json);
+use JSON qw( to_json );
 
-use Time::localtime;
 
-use vars qw(@ISA @EXPORT);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
-    @ISA    = qw(Exporter);
-    @EXPORT = qw(
-        &GetBasket &NewBasket &ReopenBasket &ModBasket
-        &GetBasketAsCSV &GetBasketGroupAsCSV
-        &GetBasketsByBookseller &GetBasketsByBasketgroup
-        &GetBasketsInfosByBookseller
+    @ISA       = qw(Exporter);
+    @EXPORT_OK = qw(
+      GetBasket NewBasket ReopenBasket ModBasket
+      GetBasketAsCSV GetBasketGroupAsCSV
+      GetBasketsByBookseller GetBasketsByBasketgroup
+      GetBasketsInfosByBookseller
 
-        &GetBasketUsers &ModBasketUsers
-        &CanUserManageBasket
+      GetBasketUsers ModBasketUsers
+      CanUserManageBasket
 
-        &ModBasketHeader
+      ModBasketHeader
 
-        &ModBasketgroup &NewBasketgroup &DelBasketgroup &GetBasketgroup &CloseBasketgroup
-        &GetBasketgroups &ReOpenBasketgroup
+      ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroup CloseBasketgroup
+      GetBasketgroups ReOpenBasketgroup
 
-        &ModOrder &GetOrder &GetOrders &GetOrdersByBiblionumber
-        &GetOrderFromItemnumber
-        &SearchOrders &GetHistory &GetRecentAcqui
-        &ModReceiveOrder &CancelReceipt
-        &TransferOrder
-        &ModItemOrder
+      ModOrder GetOrder GetOrders GetOrdersByBiblionumber
+      GetOrderFromItemnumber
+      SearchOrders GetHistory GetRecentAcqui
+      ModReceiveOrder CancelReceipt
+      populate_order_with_prices
+      TransferOrder
+      ModItemOrder
 
-        &GetParcels
+      GetParcels
 
-        &GetInvoices
-        &GetInvoice
-        &GetInvoiceDetails
-        &AddInvoice
-        &ModInvoice
-        &CloseInvoice
-        &ReopenInvoice
-        &DelInvoice
-        &MergeInvoices
+      GetInvoices
+      GetInvoice
+      GetInvoiceDetails
+      AddInvoice
+      ModInvoice
+      CloseInvoice
+      ReopenInvoice
+      DelInvoice
+      MergeInvoices
 
-        &AddClaim
-        &GetBiblioCountByBasketno
+      AddClaim
+      GetBiblioCountByBasketno
 
-        &GetOrderUsers
-        &ModOrderUsers
-        &NotifyOrderUsers
+      GetOrderUsers
+      ModOrderUsers
+      NotifyOrderUsers
 
-        &FillWithDefaultValues
+      FillWithDefaultValues
 
-        &get_rounded_price
-        &get_rounding_sql
+      get_rounded_price
+      get_rounding_sql
     );
 }
 

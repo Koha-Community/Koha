@@ -20,9 +20,11 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Serials::Numberpattern;
-use C4::Auth qw/check_cookie_auth/;
-use URI::Escape;
+use C4::Serials::Numberpattern qw(
+    AddSubscriptionNumberpattern
+    ModSubscriptionNumberpattern
+);
+use C4::Auth qw( check_cookie_auth );
 
 my $input = CGI->new;
 

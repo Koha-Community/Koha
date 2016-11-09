@@ -23,7 +23,7 @@ use Test::More tests => 3;
 use t::lib::Mocks;
 
 BEGIN {
-    use_ok('C4::Heading');
+    use_ok('C4::Heading', qw( field valid_heading_subfield ));
 }
 
 subtest "MARC21 tests" => sub {

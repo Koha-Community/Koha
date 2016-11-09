@@ -17,13 +17,12 @@ package Koha::Patron::Category;
 
 use Modern::Perl;
 
-use Carp;
-use List::MoreUtils qw(any);
+use List::MoreUtils qw( any );
 
 use C4::Members::Messaging;
 
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use base qw(Koha::Object Koha::Object::Limit::Library);
 

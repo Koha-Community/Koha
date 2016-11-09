@@ -3,7 +3,7 @@ use Modern::Perl;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::More tests => 3;                      # last test to print
-use C4::Auth;
+use C4::Auth qw( get_session );
 use Koha::Database;
 
 use Module::Load::Conditional qw( can_load );

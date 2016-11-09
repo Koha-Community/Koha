@@ -43,9 +43,9 @@ Returns biblionumber and marc in list context.
 
 =cut
 
-use C4::Biblio;    # :( - for EmbedItemsInMarcBiblio
+use C4::Biblio;
 
-use Carp;
+use Carp qw( confess );
 use MARC::Record;
 use MARC::File::XML;
 use Modern::Perl;

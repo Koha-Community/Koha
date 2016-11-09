@@ -22,14 +22,13 @@ package Koha::pdfformat::layout3pages;
 
 #you can use any PDF::API2 module, all you need to do is return the stringifyed pdf object from the printpdf sub.
 use vars qw(@ISA @EXPORT);
-use MIME::Base64;
-use List::MoreUtils qw/uniq/;
+use List::MoreUtils qw( uniq );
 use Modern::Perl;
 use utf8;
 
-use C4::Acquisition;
+use C4::Acquisition qw( get_rounded_price );
 use Koha::Number::Price;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Libraries;
 
 BEGIN {

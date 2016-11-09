@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-use Getopt::Long;
-use Pod::Usage;
-use Term::ANSIColor;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
+use Term::ANSIColor qw( color );
 use FindBin; # we need to enforce which C4::Installer is used in case more than one is installed
 
 use lib $FindBin::Bin;

@@ -27,8 +27,8 @@ use Test::MockModule;
 use MARC::Field;
 
 use C4::Items;
-use C4::Biblio;
-use C4::Reserves;
+use C4::Biblio qw( AddBiblio ModBiblio );
+use C4::Reserves qw( AddReserve );
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Biblios;

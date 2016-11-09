@@ -20,22 +20,20 @@ package C4::Auth_with_shibboleth;
 use Modern::Perl;
 
 use C4::Context;
-use Koha::AuthUtils qw(get_script_name);
+use Koha::AuthUtils qw( get_script_name );
 use Koha::Database;
 use Koha::Patrons;
 use C4::Members::Messaging;
-use Carp;
-use CGI;
-use List::MoreUtils qw(any);
+use Carp qw( carp );
+use List::MoreUtils qw( any );
 
 use Koha::Logger;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA     = qw(Exporter);
-    @EXPORT =
+    @EXPORT_OK =
       qw(shib_ok logout_shib login_shib_url checkpw_shib get_login_shib);
 }
 

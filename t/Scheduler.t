@@ -9,7 +9,7 @@ use warnings;
 use Test::More tests => 6;
 
 BEGIN {
-        use_ok('C4::Scheduler');
+        use_ok('C4::Scheduler', qw( get_jobs get_at_jobs get_at_job add_at_job remove_at_job ));
 }
 
 ok(C4::Scheduler::get_jobs(), "testing get_jobs with no arguments");

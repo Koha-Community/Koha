@@ -19,7 +19,6 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use C4::Biblio;
 use C4::Reserves;
 
 use Koha::Items;
@@ -27,11 +26,10 @@ use Koha::Patrons;
 use Koha::Holds;
 use Koha::Clubs;
 use Koha::Club::Hold;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
-use Scalar::Util qw(blessed);
-use Try::Tiny;
-use List::Util 'shuffle';
+use Scalar::Util qw( blessed );
+use Try::Tiny qw( catch try );
 
 =head1 API
 

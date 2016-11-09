@@ -17,7 +17,7 @@ package Koha::ClassSplitRule;
 
 use Modern::Perl;
 
-use JSON qw(to_json from_json);
+use JSON qw( from_json to_json );
 
 use Koha::Database;
 

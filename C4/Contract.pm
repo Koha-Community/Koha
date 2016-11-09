@@ -25,14 +25,14 @@ use vars qw(@ISA @EXPORT);
 
 BEGIN {
     require Exporter;
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(
-        &GetContracts
-        &GetContract
-        &AddContract
-        &ModContract
-        &DelContract
-	);
+    @ISA    = qw(Exporter);
+    @EXPORT = qw(
+      GetContracts
+      GetContract
+      AddContract
+      ModContract
+      DelContract
+    );
 }
 
 =head1 NAME

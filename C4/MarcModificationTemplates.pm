@@ -22,29 +22,38 @@ use Modern::Perl;
 use DateTime;
 
 use C4::Context;
-use Koha::SimpleMARC;
+use Koha::SimpleMARC qw(
+    add_field
+    copy_and_replace_field
+    copy_field
+    delete_field
+    field_equals
+    field_exists
+    move_field
+    update_field
+);
 use Koha::MoreUtils;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 
 use vars qw(@ISA @EXPORT);
 
 BEGIN {
-    @ISA = qw(Exporter);
+    @ISA    = qw(Exporter);
     @EXPORT = qw(
-        &GetModificationTemplates
-        &AddModificationTemplate
-        &DelModificationTemplate
+      GetModificationTemplates
+      AddModificationTemplate
+      DelModificationTemplate
 
-        &GetModificationTemplateAction
-        &GetModificationTemplateActions
+      GetModificationTemplateAction
+      GetModificationTemplateActions
 
-        &AddModificationTemplateAction
-        &ModModificationTemplateAction
-        &DelModificationTemplateAction
-        &MoveModificationTemplateAction
+      AddModificationTemplateAction
+      ModModificationTemplateAction
+      DelModificationTemplateAction
+      MoveModificationTemplateAction
 
-        &ModifyRecordsWithTemplate
-        &ModifyRecordWithTemplate
+      ModifyRecordsWithTemplate
+      ModifyRecordWithTemplate
     );
 }
 

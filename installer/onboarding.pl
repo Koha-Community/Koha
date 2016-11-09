@@ -19,14 +19,14 @@
 
 use Modern::Perl;
 use C4::Context;
-use C4::InstallAuth;
+use C4::InstallAuth qw( checkauth get_template_and_user );
 use CGI qw ( -utf8 );
-use C4::Output;
-use C4::Members qw(checkcardnumber);
+use C4::Output qw( output_html_with_http_headers );
+use C4::Members qw( checkcardnumber );
 use Koha::Patrons;
 use Koha::Libraries;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::ItemTypes;

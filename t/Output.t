@@ -24,7 +24,7 @@ use CGI qw ( -utf8 );
 use t::lib::Mocks;
 
 BEGIN {
-    use_ok('C4::Output');
+    use_ok('C4::Output', qw( output_html_with_http_headers parametrized_url  ));
 }
 
 my $query = CGI->new();

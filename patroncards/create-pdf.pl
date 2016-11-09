@@ -19,17 +19,17 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
-use C4::Auth;
+use C4::Auth qw( get_template_and_user );
 use Graphics::Magick;
-use XML::Simple;
-use POSIX qw(ceil);
-use Storable qw(dclone);
+use XML::Simple qw( XMLin );
+use POSIX qw( ceil );
+use Storable qw( dclone );
 use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Context;
 use C4::Creators;
 use C4::Patroncards;
-use Koha::List::Patron;
+use Koha::List::Patron qw( GetPatronLists );
 use Koha::Patrons;
 use Koha::Patron::Images;
 

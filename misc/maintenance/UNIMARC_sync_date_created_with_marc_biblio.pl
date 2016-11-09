@@ -8,13 +8,13 @@ use strict;
 use warnings;
 
 BEGIN {
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
 use Koha::Script;
-use C4::Biblio;
-use Getopt::Long;
+use C4::Biblio qw( GetMarcBiblio ModBiblio );
+use Getopt::Long qw( GetOptions );
 
 sub _read_marc_code {
     my $input = shift;

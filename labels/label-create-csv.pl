@@ -22,9 +22,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Text::CSV_XS;
-use Data::Dumper;
 
-use C4::Creators;
 use C4::Labels;
 
 my $cgi = CGI->new;

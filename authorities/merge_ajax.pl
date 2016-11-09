@@ -4,11 +4,11 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use CGI::Cookie; # need to check cookies before CGI parses the POST request
-use JSON;
+use JSON qw( encode_json );
 
 use C4::Context;
-use C4::Auth qw/check_cookie_auth/;
-use C4::AuthoritiesMarc;
+use C4::Auth qw( check_cookie_auth );
+use C4::AuthoritiesMarc qw( GetTagsLabels );
 
 my %cookies = CGI::Cookie->fetch;
 my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, { editcatalogue => 'edit_catalogue' });

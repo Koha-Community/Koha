@@ -25,7 +25,7 @@ use Test::Exception;
 
 use Koha::Database;
 use t::lib::TestBuilder;
-use C4::Auth qw(haspermission);
+use C4::Auth qw( haspermission );
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;

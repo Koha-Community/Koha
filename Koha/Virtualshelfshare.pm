@@ -17,12 +17,11 @@ package Koha::Virtualshelfshare;
 
 use Modern::Perl;
 
-use Carp;
 use DateTime;
 use DateTime::Duration;
 
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 
 use base qw(Koha::Object);

@@ -37,7 +37,6 @@ Koha::Logger
 use Modern::Perl;
 
 use Log::Log4perl;
-use Carp;
 
 use C4::Context;
 

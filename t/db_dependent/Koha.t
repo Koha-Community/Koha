@@ -14,7 +14,7 @@ use Koha::AuthorisedValue;
 use Koha::AuthorisedValueCategories;
 
 BEGIN {
-    use_ok('C4::Koha', qw( :DEFAULT GetItemTypesCategorized));
+    use_ok('C4::Koha', qw( GetAuthorisedValues GetItemTypesCategorized xml_escape ));
     use_ok('C4::Members');
 }
 

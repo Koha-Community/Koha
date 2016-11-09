@@ -22,7 +22,7 @@ use Modern::Perl;
 use C4::Circulation qw( GetTransfers );
 use C4::Context;
 use C4::Reserves qw( GetReserveStatus );
-use C4::Search qw();
+use C4::Search qw( new_record_from_zebra );
 
 use Koha::Items;
 use Koha::Logger;

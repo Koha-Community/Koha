@@ -18,7 +18,7 @@
 package Koha::ExternalContent::RecordedBooks;
 
 use Modern::Perl;
-use Carp;
+use Carp qw( croak );
 
 use base qw(Koha::ExternalContent);
 use WebService::ILS::RecordedBooks::PartnerPatron;

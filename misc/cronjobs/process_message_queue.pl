@@ -22,15 +22,15 @@ use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
 use Koha::Script -cron;
-use C4::Letters;
-use C4::Log;
-use Getopt::Long;
-use Try::Tiny;
+use C4::Letters qw( SendQueuedMessages );
+use C4::Log qw( cronlogaction );
+use Getopt::Long qw( GetOptions );
+use Try::Tiny qw( catch try );
 
 my $username = undef;
 my $password = undef;

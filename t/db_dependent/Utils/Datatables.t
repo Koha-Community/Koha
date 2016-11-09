@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 1;
 
-use C4::Utils::DataTables;
+use C4::Utils::DataTables qw( dt_build_orderby );
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;

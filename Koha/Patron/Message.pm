@@ -17,10 +17,9 @@ package Koha::Patron::Message;
 
 use Modern::Perl;
 
-use Carp;
 
 use C4::Context;
-use C4::Log qw( logaction );
+use C4::Log;
 
 use Koha::Database;
 

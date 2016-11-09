@@ -112,7 +112,7 @@ Full documentation.
 =cut
 
 use autodie;
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 use Koha::Script;
 use C4::Context;
 use Koha::MetadataRecord::Authority;
@@ -120,10 +120,9 @@ use Koha::BiblioUtils;
 use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchEngine::Elasticsearch::Indexer;
 use MARC::Field;
-use MARC::Record;
 use Modern::Perl;
-use Pod::Usage;
-use Try::Tiny;
+use Pod::Usage qw( pod2usage );
+use Try::Tiny qw( catch try );
 
 my $verbose = 0;
 my $commit = 5000;

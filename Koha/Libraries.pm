@@ -19,7 +19,6 @@ package Koha::Libraries;
 
 use Modern::Perl;
 
-use Carp;
 
 use C4::Context;
 

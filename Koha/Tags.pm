@@ -17,7 +17,6 @@ package Koha::Tags;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Tag;
 

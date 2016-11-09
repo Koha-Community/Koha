@@ -19,7 +19,6 @@ package Koha::Club::Enrollments;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

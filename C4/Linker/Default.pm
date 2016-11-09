@@ -19,7 +19,6 @@ package C4::Linker::Default;
 
 use strict;
 use warnings;
-use Carp;
 use MARC::Field;
 use C4::Heading;
 

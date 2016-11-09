@@ -21,15 +21,14 @@ use strict;
 use warnings;
 use utf8;
 use DateTime;
-use Carp;
+use Carp qw( carp );
 use English qw{ -no_match_vars };
 use Net::FTP;
 use Net::SFTP::Foreign;
-use File::Slurp;
-use File::Copy;
-use File::Basename qw( fileparse );
+use File::Slurp qw( read_file );
+use File::Copy qw( copy move );
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Encode qw( from_to );
 
 sub new {

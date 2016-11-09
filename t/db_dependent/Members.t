@@ -33,7 +33,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 BEGIN {
-        use_ok('C4::Members');
+        use_ok('C4::Members', qw( checkcardnumber GetBorrowersToExpunge DeleteUnverifiedOpacRegistrations DeleteExpiredOpacRegistrations ));
 }
 
 my $schema = Koha::Database->schema;

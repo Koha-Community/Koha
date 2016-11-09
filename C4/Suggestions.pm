@@ -25,10 +25,9 @@ use C4::Context;
 use C4::Output;
 use C4::Letters;
 use C4::Biblio qw( GetMarcFromKohaField );
-use Koha::DateUtils;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Suggestions;
 
-use List::MoreUtils qw(any);
 use base qw(Exporter);
 
 our @EXPORT  = qw(

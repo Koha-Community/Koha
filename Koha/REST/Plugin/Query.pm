@@ -18,9 +18,9 @@ package Koha::REST::Plugin::Query;
 use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Plugin';
-use List::MoreUtils qw(any);
-use Scalar::Util qw(reftype);
-use JSON qw(decode_json);
+use List::MoreUtils qw( any );
+use Scalar::Util qw( reftype );
+use JSON qw( decode_json );
 
 use Koha::Exceptions;
 

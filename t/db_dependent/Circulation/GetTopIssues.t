@@ -23,8 +23,8 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Context;
-use C4::Circulation;
-use C4::Biblio;
+use C4::Circulation qw( AddIssue GetTopIssues );
+use C4::Biblio qw( GetMarcFromKohaField AddBiblio );
 use C4::Items;
 
 use Koha::Database;

@@ -22,22 +22,21 @@ use strict;
 use warnings;
 
 use C4::Biblio;
-use C4::Koha;
-use C4::Charset;
+use C4::Koha qw( GetNormalizedISBN );
+use C4::Charset qw( MarcToUTF8Record SetUTF8Flag );
 use MARC::File::USMARC;
 use MARC::Field;
-use C4::ImportBatch;
+use C4::ImportBatch qw( GetZ3950BatchId AddBiblioToBatch AddAuthToBatch );
 use C4::AuthoritiesMarc; #GuessAuthTypeCode, FindDuplicateAuthority
 use C4::Languages;
 use Koha::Database;
 use Koha::XSLT::Base;
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+our (@ISA, @EXPORT_OK);
 BEGIN {
-	require Exporter;
-	@ISA = qw(Exporter);
-    @EXPORT = qw(&BreedingSearch &Z3950Search &Z3950SearchAuth);
+    require Exporter;
+    @ISA       = qw(Exporter);
+    @EXPORT_OK = qw(BreedingSearch Z3950Search Z3950SearchAuth);
 }
 
 =head1 NAME

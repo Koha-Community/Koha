@@ -29,8 +29,8 @@ use C4::Context;
 use Koha::Patron::Attribute;
 use Koha::Patron::Modification;
 
-use JSON;
-use List::Util qw /any none/;
+use JSON qw( from_json );
+use List::Util qw( none );
 
 use base qw(Koha::Objects);
 

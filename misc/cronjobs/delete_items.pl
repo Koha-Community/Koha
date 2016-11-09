@@ -1,13 +1,11 @@
 #! /usr/bin/perl
 
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 
 use Koha::Script -cron;
 use C4::Context;
-use C4::Items;
-use C4::Circulation;
 use Modern::Perl;
-use Pod::Usage;
+use Pod::Usage qw( pod2usage );
 
 my $dbh = C4::Context->dbh();
 

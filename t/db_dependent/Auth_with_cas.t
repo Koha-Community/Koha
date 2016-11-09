@@ -28,7 +28,7 @@ use C4::Context;
 use Koha::Database;
 
 BEGIN {
-    use_ok('C4::Auth_with_cas');
+    use_ok('C4::Auth_with_cas', qw( check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url ));
     can_ok('C4::Auth_with_cas', qw/
             check_api_auth_cas
             checkpw_cas

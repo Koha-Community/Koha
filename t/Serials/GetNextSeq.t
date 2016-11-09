@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use Test::More tests => 43;
-use C4::Serials;
+use C4::Serials qw( GetNextSeq );
 
 # TEST CASE 1 - 1 variable, from 1 to 4
 my $subscription = {

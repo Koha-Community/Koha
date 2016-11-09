@@ -9,7 +9,7 @@ use Koha::Database;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-use C4::Serials::Numberpattern;
+use C4::Serials::Numberpattern qw( GetSubscriptionNumberpatterns GetSubscriptionNumberpattern DelSubscriptionNumberpattern ModSubscriptionNumberpattern AddSubscriptionNumberpattern );
 
 # Start by deleting all numberpatterns.
 my @numberpatterns = GetSubscriptionNumberpatterns();

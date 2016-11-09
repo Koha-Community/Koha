@@ -37,7 +37,7 @@ use Koha::DateUtils qw( dt_from_string );
 use C4::Circulation qw( MarkIssueReturned );
 
 BEGIN {
-    use_ok('C4::Accounts');
+    use_ok('C4::Accounts', qw( chargelostitem purge_zero_balance_fees ));
     use_ok('Koha::Object');
     use_ok('Koha::Patron');
     use_ok('Data::Dumper');

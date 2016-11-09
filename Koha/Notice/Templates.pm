@@ -17,7 +17,6 @@ package Koha::Notice::Templates;
 
 use Modern::Perl;
 
-use Carp;
 
 use Koha::Database;
 

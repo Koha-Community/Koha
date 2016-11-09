@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 
 my ($help, $config, $daemon);
 
@@ -86,17 +86,17 @@ exit;
 {
 package ImportProxyServer;
 
-use Carp;
-use IO::Socket::INET;
+use Carp qw( croak );
+use IO::Socket::INET qw( SOCK_STREAM );
 # use IO::Socket::IP;
 use IO::Select;
-use POSIX;
-use HTTP::Status qw(:constants);
+use POSIX qw( close exit fork localtime open printf sprintf );
+use HTTP::Status qw( HTTP_FORBIDDEN HTTP_UNAUTHORIZED );
 use strict;
 use warnings;
 
 use LWP::UserAgent;
-use XML::Simple;
+use XML::Simple qw( XMLin );
 use MARC::Record;
 use MARC::File::XML;
 

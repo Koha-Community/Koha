@@ -22,11 +22,11 @@ use Modern::Perl;
 use DateTime;
 use DateTime::Duration;
 use Koha::Database;
-use Koha::DateUtils qw/dt_from_string/;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Item::Transfer;
 use Koha::Item;
 use Koha::StockRotationStage;
-use Try::Tiny;
+use Try::Tiny qw( catch try );
 
 use base qw(Koha::Object);
 

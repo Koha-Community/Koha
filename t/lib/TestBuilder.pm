@@ -2,16 +2,15 @@ package t::lib::TestBuilder;
 
 use Modern::Perl;
 
-use Koha::Database;
-use C4::Biblio;
-use C4::Items;
-use Koha::Biblios;
-use Koha::Items;
+use Koha::Database qw( schema );
+use C4::Biblio qw( AddBiblio );
+use Koha::Biblios qw( _type );
+use Koha::Items qw( _type );
 use Koha::DateUtils qw( dt_from_string );
 
 use Bytes::Random::Secure;
-use Carp;
-use Module::Load;
+use Carp qw( carp );
+use Module::Load qw( load );
 use String::Random;
 
 use constant {

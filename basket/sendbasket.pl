@@ -18,15 +18,20 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use Encode qw(encode);
-use Carp;
-use Try::Tiny;
+use Encode;
+use Carp qw( carp );
+use Try::Tiny qw( catch try );
 
-use C4::Biblio;
-use C4::Items;
-use C4::Auth;
-use C4::Output;
-use C4::Templates ();
+use C4::Biblio qw(
+    GetBiblioData
+    GetMarcAuthors
+    GetMarcBiblio
+    GetMarcSubjects
+);
+use C4::Items qw( GetItemsInfo );
+use C4::Auth qw( get_template_and_user );
+use C4::Output qw( output_and_exit output_html_with_http_headers );
+use C4::Templates;
 use Koha::Email;
 use Koha::Token;
 

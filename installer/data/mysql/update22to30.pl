@@ -14,12 +14,10 @@
 use strict;
 
 # CPAN modules
-use DBI;
-use Getopt::Long;
+use Getopt::Long qw( GetOptions );
 # Koha modules
 use C4::Context;
 
-use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
  
 # FIXME - The user might be installing a new database, so can't rely

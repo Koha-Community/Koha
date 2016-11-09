@@ -20,12 +20,20 @@ package C4::ClassSource;
 use strict;
 use warnings;
 
-require Exporter;
 use C4::Context;
-use C4::ClassSortRoutine;
+use C4::ClassSortRoutine qw( GetClassSortKey );
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
+our (@ISA, @EXPORT_OK);
+BEGIN {
+    require Exporter;
+    @ISA    = qw(Exporter);
+    @EXPORT_OK = qw(
+        GetClassSources
+        GetClassSource
+        GetClassSortRule
+        GetClassSort
+    );
+}
 
 =head1 NAME
 
@@ -43,17 +51,6 @@ sources and sorting rules.
 =head1 FUNCTIONS
 
 =cut
-
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-    &GetClassSources
-    &GetClassSource
-    &GetClassSortRule
-
-    &GetClassSort
-
-);
 
 =head2 GetClassSources
 

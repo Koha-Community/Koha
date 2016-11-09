@@ -19,14 +19,13 @@ package LangInstaller;
 
 use Modern::Perl;
 
-use C4::Context;
+use C4::Context qw( config preference new interface );
 # WARNING: Any other tested YAML library fails to work properly in this
 # script content
 # FIXME Really?
 use YAML::XS;
 use Locale::PO;
 use FindBin qw( $Bin );
-use File::Basename;
 use File::Path qw( make_path );
 use File::Copy;
 

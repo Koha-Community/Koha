@@ -24,29 +24,26 @@ use warnings;
 
 use C4::Context;
 use C4::Search;
-use C4::Items;
-use C4::Circulation;
-use C4::Members;
-use C4::Biblio;
-use Koha::DateUtils;
+use C4::Circulation qw( GetTransfers GetBranchItemRule );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Items;
 use Koha::Patrons;
 use Koha::Libraries;
 
-use List::Util qw(shuffle);
-use List::MoreUtils qw(any);
-use Data::Dumper;
+use List::Util qw( shuffle );
+use List::MoreUtils qw( any );
 
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(
-        &CreateQueue
-        &GetHoldsQueueItems
+        CreateQueue
+        GetHoldsQueueItems
 
-        &TransportCostMatrix
-        &UpdateTransportCostMatrix
+        TransportCostMatrix
+        UpdateTransportCostMatrix
+        GetPendingHoldRequestsForBib
      );
 }
 

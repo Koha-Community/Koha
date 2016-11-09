@@ -59,7 +59,7 @@ clone it I<prior> to passing it off to the RecordProcessor.
 
 use Modern::Perl;
 
-use Module::Load::Conditional qw(can_load);
+use Module::Load::Conditional qw( can_load );
 use Module::Pluggable::Object;
 
 use base qw(Class::Accessor);

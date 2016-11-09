@@ -15,7 +15,7 @@ use List::Util qw(first);
 
 use C4::SIP::Sip::Constants qw(SIP_DATETIME FID_SCREEN_MSG);
 use C4::SIP::Sip::Checksum qw(checksum);
-use C4::SIP::Logger qw(get_logger);
+use C4::SIP::Logger qw( get_logger );
 
 use base qw(Exporter);
 

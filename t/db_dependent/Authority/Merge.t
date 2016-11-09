@@ -13,14 +13,14 @@ use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Biblio;
+use C4::Biblio qw( AddBiblio GetMarcBiblio ModBiblio );
 use Koha::Authorities;
 use Koha::Authority::ControlledIndicators;
 use Koha::Authority::MergeRequests;
 use Koha::Database;
 
 BEGIN {
-        use_ok('C4::AuthoritiesMarc');
+        use_ok('C4::AuthoritiesMarc', qw( merge AddAuthority compare_fields DelAuthority ));
 }
 
 # Optionally change marc flavour

@@ -17,9 +17,9 @@
 
 use Modern::Perl;
 
-use C4::Circulation;
-use C4::Items;
-use C4::Biblio;
+use C4::Circulation qw( AddIssue AddReturn GetBranchBorrowerCircRule GetBranchItemRule );
+use C4::Items qw( ModItemTransfer );
+use C4::Biblio qw( AddBiblio );
 use C4::Context;
 use Koha::CirculationRules;
 
@@ -30,7 +30,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 BEGIN {
-    use_ok('C4::Circulation');
+    use_ok('C4::Circulation', qw( AddIssue AddReturn GetBranchBorrowerCircRule GetBranchItemRule ));
 }
 
 can_ok( 'C4::Circulation', qw(

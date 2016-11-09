@@ -30,17 +30,16 @@ use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
-    use FindBin;
+    use FindBin ();
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use Getopt::Long;
-use Pod::Usage;
+use Getopt::Long qw( GetOptions );
+use Pod::Usage qw( pod2usage );
 
-use C4::Circulation qw/LostItem MarkIssueReturned/;
+use C4::Circulation qw( LostItem MarkIssueReturned );
 use C4::Context;
-use C4::Items;
-use C4::Log;
+use C4::Log qw( cronlogaction );
 use Koha::ItemTypes;
 use Koha::Patron::Categories;
 use Koha::Patrons;

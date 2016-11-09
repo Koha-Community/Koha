@@ -21,10 +21,10 @@
 use Modern::Perl;
 
 use C4::Context;
-use C4::Output;
+use C4::Output qw( output_html_with_http_headers );
 use CGI qw ( -utf8 );
-use C4::Auth qw/:DEFAULT get_session/;
-use C4::Circulation;
+use C4::Auth qw( get_session get_template_and_user );
+use C4::Circulation qw( TransferSlip );
 
 my $input = CGI->new;
 my $sessionID = $input->cookie("CGISESSID");

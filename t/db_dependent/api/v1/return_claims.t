@@ -24,7 +24,7 @@ use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use C4::Circulation qw(AddIssue);
+use C4::Circulation qw( AddIssue );
 
 use Koha::Checkouts::ReturnClaims;
 use Koha::Database;
