@@ -311,7 +311,7 @@ sub is_going_to_expired {
     return 0 unless $delay;
     return 0 unless $self->dateexpiry;
     return 0 if $self->dateexpiry eq '0000-00-00';
-    return 1 if dt_from_string( $self->dateexpiry )->add( days => -$delay ) < dt_from_string;
+    return 1 if dt_from_string( $self->dateexpiry )->add( days => -$delay ) < dt_from_string->truncate( to => 'day' );
     return 0;
 }
 
