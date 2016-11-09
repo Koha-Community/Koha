@@ -577,6 +577,7 @@ sub quote_item {
         }
         $order_quantity = 1;    # attempts to create an orderline for each gir
     }
+    my $vendor = $schema->resultset('Aqbookseller')->find( $quote->vendor_id );
 
     # database definitions should set some of these defaults but dont
     my $order_hash = {
@@ -593,6 +594,7 @@ sub quote_item {
         uncertainprice => 0,
         sort1          => q{},
         sort2          => q{},
+        currency       => $vendor->listprice->currency,
     };
 
     # suppliers references
