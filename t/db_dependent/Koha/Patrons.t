@@ -202,30 +202,29 @@ subtest 'is_going_to_expired' => sub {
     is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is today');
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 0);
-    my $dt_from_string = dt_from_string;
-    $patron->dateexpiry( $dt_from_string )->store;
+    $patron->dateexpiry( dt_from_string )->store;
     is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is today and pref is 0');
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 10);
     $patron->dateexpiry( dt_from_string->add( days => 11 ) )->store;
-    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 11 days before and pref is 10');
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 11 days ahead and pref is 10');
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 0);
     $patron->dateexpiry( dt_from_string->add( days => 10 ) )->store;
-    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 10 days before and pref is 0');
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 10 days ahead and pref is 0');
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 10);
     $patron->dateexpiry( dt_from_string->add( days => 10 ) )->store;
-    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 10 days before and pref is 10');
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 10 days ahead and pref is 10');
     $patron->delete;
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 10);
     $patron->dateexpiry( dt_from_string->add( days => 20 ) )->store;
-    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 20 days before and pref is 10');
+    is( $patron->is_going_to_expired, 0, 'Patron should not be considered going to expire if dateexpiry is 20 days ahead and pref is 10');
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 20);
     $patron->dateexpiry( dt_from_string->add( days => 10 ) )->store;
-    is( $patron->is_going_to_expired, 1, 'Patron should be considered going to expire if dateexpiry is 10 days before and pref is 20');
+    is( $patron->is_going_to_expired, 1, 'Patron should be considered going to expire if dateexpiry is 10 days ahead and pref is 20');
 
     $patron->delete;
 };
