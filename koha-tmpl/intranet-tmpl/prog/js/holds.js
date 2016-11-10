@@ -152,10 +152,10 @@ $(document).ready(function() {
                             if ( oObj.found ) {
                                 return "";
                             } else if ( oObj.suspend == 1 ) {
-                                return "<a class='hold-resume btn btn-mini' id='resume" + oObj.reserve_id + "'>"
+                                return "<a class='hold-resume btn btn-default btn-xs' id='resume" + oObj.reserve_id + "'>"
                                      + "<i class='fa fa-play'></i> " + RESUME + "</a>";
                             } else {
-                                return "<a class='hold-suspend btn btn-mini' id='suspend" + oObj.reserve_id + "'>"
+                                return "<a class='hold-suspend btn btn-default btn-xs' id='suspend" + oObj.reserve_id + "'>"
                                      + "<i class='fa fa-pause'></i> " + SUSPEND + "</a>";
                             }
                         }
@@ -229,7 +229,9 @@ $(document).ready(function() {
     }
 
     $("body").append("\
-        <div id='suspend-modal' class='modal hide fade' tabindex='-1' role='dialog' aria-hidden='true'>\
+        <div id='suspend-modal' class='modal fade' tabindex='-1' role='dialog' aria-hidden='true'>\
+            <div class='modal-dialog'>\
+            <div class='modal-content'>\
             <form id='suspend-modal-form' class='form-inline'>\
                 <div class='modal-header'>\
                     <button type='button' class='closebtn' data-dismiss='modal' aria-hidden='true'>×</button>\
@@ -251,6 +253,8 @@ $(document).ready(function() {
                     <a href='#' data-dismiss='modal' aria-hidden='true' class='cancel'>" + CANCEL + "</a>\
                 </div>\
             </form>\
+            </div>\
+            </div>\
         </div>\
     ");
 
