@@ -583,7 +583,7 @@ function verify_images() {
                     [% END %]
                     </ul></li>
         [% END %]
-            [% IF ( holdcount ) %]<li><strong>Holds:</strong> <span class="holdcount"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a></span></li>[% ELSE %][% END %]
+            [% IF ( holdcount ) %]<li><strong>Holds:</strong> <span class="number_box"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a></span></li>[% ELSE %][% END %]
         </ul>
 		[% END %]
 
