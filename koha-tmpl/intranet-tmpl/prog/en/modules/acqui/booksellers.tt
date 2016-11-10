@@ -88,13 +88,13 @@ $(document).ready(function() {
                 <span class="action">
                     [% IF ( CAN_user_acquisition_order_manage ) %]
                         [% IF ( supplier.active ) %]
-                            <a class="btn btn-small" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% supplier.booksellerid %]&amp;op=add_form"><i class="fa fa-plus"></i> New basket</a>
+                            <a class="btn btn-default btn-sm" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% supplier.booksellerid %]&amp;op=add_form"><i class="fa fa-plus"></i> New basket</a>
                         [% ELSE %]
                             (inactive)
                         [% END %]
                     [% END %]
                         [% IF ( supplier.loop_basket.size ) %]
-                    <a class="btn btn-small" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% supplier.booksellerid %]"><i class="fa fa-inbox"></i> Receive shipment</a>
+                    <a class="btn btn-default btn-sm" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% supplier.booksellerid %]"><i class="fa fa-inbox"></i> Receive shipment</a>
                         [% END %]
                 </span>
                 <div class="baskets">
@@ -161,17 +161,21 @@ $(document).ready(function() {
                                             [% END %]
                                         </td>
                                         <td class="actions">
-                                            <a class="btn btn-mini" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]"><i class="fa fa-eye"></i> View</a>
+                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]"><i class="fa fa-eye"></i> View</a>
 
                                             [% IF not basket.closedate and supplier.active %]
-                                                <a class="btn btn-mini" id="addtoBasketLabel[% basket.basketno %]" href="#addtoBasket[% basket.basketno %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a>
+                                                <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno %]" href="#addtoBasket[% basket.basketno %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a>
                                                 <!-- Modal -->
-                                                <div id="addtoBasket[% basket.basketno %]" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno %]" aria-hidden="true" data-basketno="[% basket.basketname %]">
+                                                <div id="addtoBasket[% basket.basketno %]" class="modal" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno %]" aria-hidden="true" data-basketno="[% basket.basketname %]">
+                                                    <div class="modal-dialog">
+                                                    <div class="modal-content">
                                                     <div class="modal-body">
                                                         [% INCLUDE 'acquisitions-add-to-basket.inc' booksellerid=supplier.booksellerid basketno=basket.basketno %]
                                                     </div>
                                                     <div class="modal-footer">
                                                         <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
+                                                    </div>
+                                                    </div>
                                                     </div>
                                                 </div>
                                             [% END %]

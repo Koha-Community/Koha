@@ -52,7 +52,7 @@
             [% END %]
             <input type="hidden" class="contact_claimissues_hidden" name="contact_claimissues" value="[% contact.claimissues %]"></input>
         </li>
-        [% IF contact.id %]<li><button class="btn delete-contact"><i class="fa fa-trash"></i> Delete contact</li>[% END %]
+        [% IF contact.id %]<li><button class="btn btn-default delete-contact"><i class="fa fa-trash"></i> Delete contact</li>[% END %]
     </ol>
 [% END %]
 
@@ -217,7 +217,7 @@ function delete_contact(ev) {
                     [% INCLUDE edit_contact %]
                 </fieldset>
             [% END %]
-            <button id="add-contact" class="btn"><i class="fa fa-plus"></i> Add another contact</button>
+            <button id="add-contact" class="btn btn-default"><i class="fa fa-plus"></i> Add another contact</button>
         </fieldset>
     </div>
         <div class="yui-g">
@@ -395,8 +395,8 @@ function delete_contact(ev) {
                         <td><span title="[% contract.contractstartdate %]">[% contract.contractstartdate | $KohaDates %]</span></td>
                         <td><span title="[% contract.contractenddate %]">[% contract.contractenddate | $KohaDates %]</span></td>
                         <td class="actions">
-                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]"><i class="fa fa-pencil"></i> Edit</a>
-                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]"><i class="fa fa-pencil"></i> Edit</a>
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber %]&amp;booksellerid=[% contract.booksellerid %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                         </tr>
                     [% END %]

@@ -164,8 +164,8 @@ $(document).ready(function() {
 [% IF op == 'list' %]
 
 <div id="toolbar" class="btn-toolbar">
-    <a id="addauth" class="btn btn-small" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]"><i class="fa fa-plus"> </i> New authorized value for [% category %]</a>
-    <a id="addcat" class="btn btn-small" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form"><i class="fa fa-plus"> </i> New category</a>
+    <a id="addauth" class="btn btn-default btn-sm" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]"><i class="fa fa-plus"> </i> New authorized value for [% category %]</a>
+    <a id="addcat" class="btn btn-default btn-sm" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form"><i class="fa fa-plus"> </i> New category</a>
 </div>
 
 <h1>Authorized values</h1>
@@ -291,8 +291,8 @@ $(document).ready(function() {
             No limitation
         [% END %]
     </td>
-    <td class="actions"><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;id=[% loo.id %]" class="btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
-    <a class="delete btn btn-mini" href="/cgi-bin/koha/admin/authorised_values.pl?op=delete&amp;searchfield=[% searchfield %]&amp;id=[% loo.id %]"><i class="fa fa-trash"></i> Delete</a></td>
+    <td class="actions"><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;id=[% loo.id %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+    <a class="delete btn btn-default btn-xs" href="/cgi-bin/koha/admin/authorised_values.pl?op=delete&amp;searchfield=[% searchfield %]&amp;id=[% loo.id %]"><i class="fa fa-trash"></i> Delete</a></td>
 </tr>
 [% END %]
 </tbody></table>[% ELSE %]

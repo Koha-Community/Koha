@@ -100,8 +100,8 @@ $(document).ready(function() {
 <td>[% msg.filename %]</td>
 
 <td class="actions">
-    <a class="btn btn-mini view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id=[% msg.id %]"><i class="fa fa-search"></i> View message</a>
-    <a class="btn btn-mini delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id=[% msg.id %]"><i class="fa fa-trash"></i> Delete</a>
+    <a class="btn btn-default btn-xs view_message" target="_blank" href="/cgi-bin/koha/acqui/edimsg.pl?id=[% msg.id %]"><i class="fa fa-search"></i> View message</a>
+    <a class="btn btn-default btn-xs delete_msg" href="/cgi-bin/koha/acqui/edifactmsgs.pl?op=delete&amp;message_id=[% msg.id %]"><i class="fa fa-trash"></i> Delete</a>
 </td>
 </tr>
 [% END %]
@@ -110,7 +110,9 @@ $(document).ready(function() {
 </table>
 
 <!-- Modal to display EDIFACT messages -->
-<div class="modal hide" id="EDI_modal" tabindex="-1" role="dialog" aria-labelledby="EDI_modal_label" aria-hidden="true">
+<div class="modal" id="EDI_modal" tabindex="-1" role="dialog" aria-labelledby="EDI_modal_label" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3 id="EDI_modal_label">EDIFACT message</h3>
@@ -119,7 +121,9 @@ $(document).ready(function() {
         <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+    </div>
     </div>
 </div>
 

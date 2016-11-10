@@ -21,7 +21,7 @@
             <div class="yui-b">
 
                 <div id="toolbar" class="btn-toolbar">
-                    <a class="btn btn-small" id="newalert" href="/cgi-bin/koha/admin/audio_alerts.pl"><i class="fa fa-plus"></i> New alert</a>
+                    <a class="btn btn-default btn-sm" id="newalert" href="/cgi-bin/koha/admin/audio_alerts.pl"><i class="fa fa-plus"></i> New alert</a>
                 </div>
 
                 <form id="new-alert-form" action="audio_alerts.pl" method="post" class="validated">
@@ -38,7 +38,7 @@
                             <li>
                                 <label for="sound" class="required">Sound: </label>
                                 <input id="sound" name="sound" type="text" class="required input-large" placeholder="sound" />
-                                <button id="play-sound" class="btn btn-mini disabled"><i class="fa fa-play"></i> Play sound</button>
+                                <button id="play-sound" class="btn btn-default btn-xs disabled"><i class="fa fa-play"></i> Play sound</button>
                                  <span class="required">Required</span>
                             </li>
                             <li>
@@ -112,14 +112,14 @@
                                     <td>[% a.selector %]</td>
                                     <td>[% a.sound %]</td>
                                     <td>
-                                        <a class="btn btn-mini edit" data-soundid="[% a.id %]" data-precedence="[% a.precedence %]" data-selector="[% a.selector %]" data-sound="[% a.sound %]"><i class="fa fa-pencil"></i> Edit</a></td>
+                                        <a class="btn btn-default btn-xs edit" data-soundid="[% a.id %]" data-precedence="[% a.precedence %]" data-selector="[% a.selector %]" data-sound="[% a.sound %]"><i class="fa fa-pencil"></i> Edit</a></td>
                                 </tr>
                             [% END %]
                         </tbody>
                     </table>
 
                     <p>
-                        <button id="delete-alerts" type="submit" class="btn btn-small disabled"><i class="fa fa-trash"></i> Delete selected alerts</button>
+                        <button id="delete-alerts" type="submit" class="btn btn-default btn-sm disabled"><i class="fa fa-trash"></i> Delete selected alerts</button>
                     </p>
                 </form>
             </div>

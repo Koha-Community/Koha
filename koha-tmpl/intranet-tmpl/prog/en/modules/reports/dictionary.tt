@@ -51,7 +51,7 @@
 [% IF ( start_dictionary ) %]
     <div id="toolbar">
         <ul class="toolbar">
-            <li><a id="newdictionary" class="btn btn-small" href="/cgi-bin/koha/reports/dictionary.pl?phase=Add%20New%20Definition"><i class="fa fa-plus"></i> New definition</a></li>
+            <li><a id="newdictionary" class="btn btn-default btn-sm" href="/cgi-bin/koha/reports/dictionary.pl?phase=Add%20New%20Definition"><i class="fa fa-plus"></i> New definition</a></li>
         </ul>
     </div>
 [% END %]
@@ -96,7 +96,7 @@
                         <td class="actions"><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
 			<input type="hidden" name="id" value="[% definition.id %]" />
 			<input type="hidden" name="phase" value="Delete Definition" />
-                        <button type="submit" name="submit" class="btn btn-mini" id="delete"><i class="fa fa-trash"></i> Delete</button>
+                        <button type="submit" name="submit" class="btn btn-default btn-xs" id="delete"><i class="fa fa-trash"></i> Delete</button>
 			</form></td>
 			</tr>
 		[% END %]

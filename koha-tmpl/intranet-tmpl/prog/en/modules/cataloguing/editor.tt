@@ -30,19 +30,19 @@
 <div id="editor">
     <input id="import-records-input" type="file" style="display: none">
     <div id="toolbar" class="btn-toolbar">
-        <button class="btn btn-small" id="new-record" title="Open fresh record"><i class="fa fa-plus"></i> <span>New record</span></button>
+        <button class="btn btn-default btn-sm" id="new-record" title="Open fresh record"><i class="fa fa-plus"></i> <span>New record</span></button>
         <div class="btn-group">
-            <button class="btn btn-small" id="save-record" title="Save current record (Ctrl-S)"><i class="fa fa-hdd-o"></i> <span>Save</span></button>
-            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+            <button class="btn btn-default btn-sm" id="save-record" title="Save current record (Ctrl-S)"><i class="fa fa-hdd-o"></i> <span>Save</span></button>
+            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" id="save-dropdown">
             </ul>
         </div>
-        <button class="btn btn-small" id="import-records" title="Import an ISO2709 or MARCXML record"><i class="fa fa-download"></i> <span>Import record...</span></button>
-        <button class="btn btn-small" id="open-macros" title="Run and edit macros"><i class="fa fa-play"></i> <span>Macros...</span></button>
+        <button class="btn btn-default btn-sm" id="import-records" title="Import an ISO2709 or MARCXML record"><i class="fa fa-download"></i> <span>Import record...</span></button>
+        <button class="btn btn-default btn-sm" id="open-macros" title="Run and edit macros"><i class="fa fa-play"></i> <span>Macros...</span></button>
         <div class="btn-group">
-            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
+            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
             <ul id="prefs-menu" class="dropdown-menu">
                 <li><a id="switch-editor" href="#">Switch to basic editor</a></li>
                 <li><a id="set-field-widgets" href="#"></a></li>
@@ -60,8 +60,8 @@
                 <li><a class="set-font" style="font-family: Monaco" href="#">Monaco</a></li>
             </ul>
         </div>
-        <button class="btn btn-small" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts <span class="caret"></span></button>
-        <button class="btn btn-small" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa fa-keyboard-o"></i> Keyboard shortcuts <span class="caret"></span></button>
+        <button class="btn btn-default btn-sm" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts <span class="caret"></span></button>
+        <button class="btn btn-default btn-sm" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa fa-keyboard-o"></i> Keyboard shortcuts <span class="caret"></span></button>
     </div>
     [%# CodeMirror instance will be inserted here %]
     <div id="statusbar">
@@ -97,25 +97,28 @@
 </div>
 </div>
 
-<div id="advanced-search-ui" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="advanced-search-title" aria-hidden="true">
+<div id="advanced-search-ui" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="advanced-search-title" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
 
 <div class="modal-header">
     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="advanced-search-title">Advanced search</h3>
 </div>
-
-<form id="advanced-search" class="modal-body">
-    <div class="span3">
+<div class="modal-body">
+  <form id="advanced-search">
+    <div class="row">
+    <div class="col-md-3">
         <div id="search-facets">
             <ul>
                 <li>Servers:<ul id="advanced-search-servers"></ul></li>
             </ul>
         </div>
     </div>
-    <div class="span9">
+    <div class="col-md-9">
         <div id="toolbar" class="btn-toolbar">
-            <button class="btn btn-small" type="submit"><i class="fa fa-search"></i> <span>Search</span></button>
-            <button class="btn btn-small" type="reset"><i class="fa fa-trash"></i> <span>Clear</span></button>
+            <button class="btn btn-default btn-sm" type="submit"><i class="fa fa-search"></i> <span>Search</span></button>
+            <button class="btn btn-default btn-sm" type="reset"><i class="fa fa-trash"></i> <span>Clear</span></button>
         </div>
         <ul id="advanced-search-fields">
             <li>
@@ -168,31 +171,37 @@
             </li>
         </ul>
     </div>
-</form>
-
+    </div>
+  </form>
+</div>
+</div>
+</div>
 </div>
 
-<div id="search-results-ui" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="search-results-title" aria-hidden="true">
+<div id="search-results-ui" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="search-results-title" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
 
 <div class="modal-header">
     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="search-results-title">Results</h3>
 </div>
 
-<div class="modal-body row-fluid">
-    <div class="span3">
+<div class="modal-body">
+    <div class="row">
+    <div class="col-md-3">
         <div id="search-facets">
             <ul>
                 <li>Servers:<ul id="search-serversinfo"></ul></li>
             </ul>
         </div>
     </div>
-    <div class="span9">
+    <div class="col-md-9">
         <!-- tabindex attribute allows JS-controlled focus -->
         <div id="searchresults" tabindex="-1">
             <div id="search-top-pages">
-                <div class="pagination pagination-small">
-                </div>
+                <nav aria-label="Search results navigation">
+                </nav>
             </div>
 
             <table>
@@ -203,35 +212,43 @@
             </table>
 
             <div id="search-bottom-pages">
-                <div class="pagination pagination-small">
-                </div>
+                <nav aria-label="Search results navigation">
+                </nav>
             </div>
         </div>
     </div>
-    <div id="search-overlay"><span>Loading...</span><div class="progress progress-striped active"><div class="bar" style="width: 100%"></div></div></div>
+    </div>
+    <div id="search-overlay"><span>Loading...</span><div class="progress"><div class="progress-bar progress-bar-striped active" style="width: 100%"></div></div></div>
+</div>
+</div>
 </div>
 
 </div>
 
-<div id="macro-ui" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="macro-title" aria-hidden="true">
+<div id="macro-ui" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="macro-title" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
 
 <div class="modal-header">
     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="macro-title">Macros</h3>
 </div>
 
-<div class="modal-body row-fluid">
-    <div class="span3"><ul id="macro-list"></ul></div>
-    <div class="span9" id="macro-editor">
+<div class="modal-body">
+    <div class="row">
+    <div class="col-md-3"><ul id="macro-list"></ul></div>
+    <div class="col-md-9" id="macro-editor">
         <div id="macro-toolbar" class="btn-toolbar">
-            <button class="btn btn-small" id="run-macro" title="Run and edit macros"><i class="fa fa-play"></i> Run macro</button>
-            <button class="btn btn-small" id="delete-macro" title="Delete macro"><i class="fa fa-trash"></i> Delete macro</button>
+            <button class="btn btn-default btn-sm" id="run-macro" title="Run and edit macros"><i class="fa fa-play"></i> Run macro</button>
+            <button class="btn btn-default btn-sm" id="delete-macro" title="Delete macro"><i class="fa fa-trash"></i> Delete macro</button>
             <label for="macro-format">Format: </label> <select id="macro-format"></select>
             <div id="macro-save-message"></div>
         </div>
     </div>
+    </div>
 </div>
-
+</div>
+</div>
 </div>
 
 <div id="shortcuts-contents" style="display: none">

@@ -67,7 +67,7 @@
 
 [% IF op == 'list'%]
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-small" id="newframework" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form"><i class="fa fa-plus"></i> New framework</a>
+        <a class="btn btn-default btn-sm" id="newframework" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form"><i class="fa fa-plus"></i> New framework</a>
     </div>
 [% END %]
 
@@ -143,7 +143,7 @@
         <td>Default framework</td>
         <td>
           <div class="dropdown">
-            <a class="btn btn-mini dropdown-toggle" id="frameworkactions[% loo.frameworkcode %]" role="button" data-toggle="dropdown" href="#">
+            <a class="btn btn-default btn-xs dropdown-toggle" id="frameworkactions[% loo.frameworkcode %]" role="button" data-toggle="dropdown" href="#">
               Actions <b class="caret"></b>
             </a>
             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="frameworkactions[% loo.frameworkcode %]">
@@ -154,7 +154,9 @@
               <li><a href="#" data-toggle="modal" data-target="#importModal_[% framework.frameworkcode %][% frameworks.count %]" title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods)"><i class="fa fa-download"></i> Import</a></li>
             </ul>
             <!-- Modal to export default framework -->
-            <div class="modal hide" id="exportModal_default" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_default" aria-hidden="true">
+            <div class="modal" id="exportModal_default" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_default" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="exportLabelexportModal_default">Export default framework</h3>
@@ -169,14 +171,18 @@
                   </fieldset>
                 </div>
                 <div class="modal-footer">
-                  <button type="submit" class="btn">Export</button>
+                  <button type="submit" class="btn btn-default">Export</button>
                   <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
                 </div>
               </form>
+              </div>
+              </div>
             </div>
 
             <!-- Modal to import default framework -->
-            <div class="modal hide" id="importModal_[% framework.frameworkcode %][% frameworks.count %]" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_default[% frameworks.count %]" aria-hidden="true">
+            <div class="modal" id="importModal_[% framework.frameworkcode %][% frameworks.count %]" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_default[% frameworks.count %]" aria-hidden="true">
+              <div class="modal-dialog">
+              <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="importLabelexportModal_[% framework.frameworkcode %][% frameworks.count %]">Import default framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h>
@@ -189,10 +195,12 @@
                     <div id="importing_default" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /><span class="importing_msg"></span></div>
                 </div>
                 <div class="modal-footer">
-                  <button type="submit" class="btn">Import</button>
+                  <button type="submit" class="btn btn-default">Import</button>
                   <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Close</button>
                 </div>
               </form>
+              </div>
+              </div>
             </div>
           </div>
         </td>
@@ -204,7 +212,7 @@
             <td>[% loo.frameworktext %]</td>
             <td>
               <div class="dropdown">
-                <a class="btn btn-mini dropdown-toggle" id="frameworkactions[% loo.frameworkcode %]" role="button" data-toggle="dropdown" href="#">
+                <a class="btn btn-default btn-xs dropdown-toggle" id="frameworkactions[% loo.frameworkcode %]" role="button" data-toggle="dropdown" href="#">
                   Actions <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="frameworkactions[% loo.frameworkcode %]">
@@ -217,7 +225,9 @@
                   <li><a href="#" data-toggle="modal" data-target="#importModal_[% loo.frameworkcode %][% loop.count %]" title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods)"><i class="fa fa-download"></i> Import</a></li>
                 </ul>
                 <!-- Modal to export other framework -->
-                <div class="modal hide" id="exportModal_[% loo.frameworkcode %][% loop.count %]" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_[% loo.frameworkcode %][% loop.count %]" aria-hidden="true">
+                <div class="modal" id="exportModal_[% loo.frameworkcode %][% loop.count %]" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_[% loo.frameworkcode %][% loop.count %]" aria-hidden="true">
+                  <div class="modal-dialog">
+                  <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
                     <h3 id="exportLabelexportModal_[% loo.frameworkcode %][% loop.count %]">Export [% loo.frameworktext %] framework</h3>
@@ -232,14 +242,18 @@
                       </fieldset>
                     </div>
                     <div class="modal-footer">
-                      <button type="submit" class="btn">Export</button>
+                      <button type="submit" class="btn btn-default">Export</button>
                       <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
                     </div>
                   </form>
+                  </div>
+                  </div>
                 </div>
 
                 <!-- Modal to import other framework -->
-                <div class="modal hide" id="importModal_[% loo.frameworkcode %][% loop.count %]" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_[% loo.frameworkcode %][% loop.count %]" aria-hidden="true">
+                <div class="modal" id="importModal_[% loo.frameworkcode %][% loop.count %]" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_[% loo.frameworkcode %][% loop.count %]" aria-hidden="true">
+                  <div class="modal-dialog">
+                  <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
                     <h3 id="importLabelexportModal_[% loo.frameworkcode %][% loop.count %]">Import [% loo.frameworkcode %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h3>
@@ -252,10 +266,12 @@
                       <div id="importing_[% loo.frameworkcode %]" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /><span class="importing_msg"></span></div>
                     </div>
                     <div class="modal-footer">
-                      <button type="submit" class="btn">Import</button>
+                      <button type="submit" class="btn btn-default">Import</button>
                       <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Close</button>
                     </div>
                   </form>
+                  </div>
+                  </div>
                 </div>
               </div>
             </td>

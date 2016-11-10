@@ -1,7 +1,7 @@
 [% USE Branches %]
-<div id="header" class="navbar navbar-static-top">
-    <div class="navbar-inner">
-        <ul id="toplevelmenu" class="nav">
+<div id="header" class="navbar navbar-default">
+    <div class="container-fluid">
+        <ul id="toplevelmenu" class="nav navbar-nav">
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></li>[% END %]
             [% IF ( CAN_user_borrowers ) %]<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li>[% END %]
             <li class="dropdown">
@@ -45,7 +45,7 @@
                 </ul>
             </li>
         </ul>
-        <ul class="nav pull-right">
+        <ul class="nav navbar-nav pull-right">
             [% IF ( loggedinusername ) %]
             <li class="dropdown">
                 <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">

@@ -180,7 +180,11 @@ function validate1(date) {
     [% IF ( was_renewed ) %]<div class="dialog message">Patron's account has been renewed until [% dateexpiry | $KohaDates %]</div>[% END %]
 
     [% IF fines %]
+    <div id="circmessages" class="circmessage attention">
+      <ul>
         [% INCLUDE 'blocked-fines.inc' %]
+      </ul>
+    </div>
     [% END %]
 
     [% IF ( flagged ) %]

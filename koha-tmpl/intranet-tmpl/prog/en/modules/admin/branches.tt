@@ -125,8 +125,8 @@ tinyMCE.init({
 
 [% IF op == 'list' %]
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-small" id="newbranch" href="/cgi-bin/koha/admin/branches.pl?op=add_form"><i class="fa fa-plus"></i> New library</a>
-        <a class="btn btn-small" id="newcategory" href="/cgi-bin/koha/admin/branches.pl?op=add_form_category"><i class="fa fa-plus"></i> New group</a>
+        <a class="btn btn-default btn-sm" id="newbranch" href="/cgi-bin/koha/admin/branches.pl?op=add_form"><i class="fa fa-plus"></i> New library</a>
+        <a class="btn btn-default btn-sm" id="newcategory" href="/cgi-bin/koha/admin/branches.pl?op=add_form_category"><i class="fa fa-plus"></i> New group</a>
     </div>
 [% END %]
 
@@ -269,8 +269,8 @@ tinyMCE.init({
                         </td>
                         <td>[% library.branchip %]</td>
                         <td class="actions">
-                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?op=add_form&amp;branchcode=[% library.branchcode %]"><i class="fa fa-pencil"></i> Edit</a>
-                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?op=delete_confirm&amp;branchcode=[% library.branchcode %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/branches.pl?op=add_form&amp;branchcode=[% library.branchcode %]"><i class="fa fa-pencil"></i> Edit</a>
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/branches.pl?op=delete_confirm&amp;branchcode=[% library.branchcode %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 [% END %]
@@ -300,8 +300,8 @@ tinyMCE.init({
                                 <td>[% category.categorycode %]</td>
                                 <td>[% category.codedescription %]</td>
                                 <td class="actions">
-                                  <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=add_form_category"><i class="fa fa-pencil"></i> Edit</a>
-                                  <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=delete_confirm_category"><i class="fa fa-trash"></i> Delete</a>
+                                  <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=add_form_category"><i class="fa fa-pencil"></i> Edit</a>
+                                  <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/branches.pl?categorycode=[% category.categorycode %]&amp;op=delete_confirm_category"><i class="fa fa-trash"></i> Delete</a>
                                 </td>
                             </tr>
                         [% END %]

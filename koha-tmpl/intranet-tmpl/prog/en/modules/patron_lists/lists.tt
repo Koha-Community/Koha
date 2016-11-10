@@ -67,7 +67,7 @@
 
         <div id="toolbar" class="btn-toolbar">
             <div class="btn-group">
-                <a class="btn btn-small" href="add-modify.pl"><i class="fa fa-plus"></i> New patron list</a>
+                <a class="btn btn-default btn-sm" href="add-modify.pl"><i class="fa fa-plus"></i> New patron list</a>
             </div>
         </div>
 
@@ -91,7 +91,7 @@
                         <td>[% l.patron_list_patrons_rs.count || 0 %]</td>
                         <td>
                             <div class="dropdown">
-                                <a class="btn btn-mini dropdown-toggle" id="listactions[% l.patron_list_id %]" role="button" data-toggle="dropdown" href="#">
+                                <a class="btn btn-default btn-xs dropdown-toggle" id="listactions[% l.patron_list_id %]" role="button" data-toggle="dropdown" href="#">
                                    Actions <b class="caret"></b>
                                 </a>
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="listactions[% l.patron_list_id %]">
@@ -127,13 +127,17 @@
         </table>
 
             <!-- Modal to print patron cards -->
-            <div class="modal hide" id="patronExportModal" tabindex="-1" role="dialog" aria-labelledby="patronExportModal_label" aria-hidden="true">
+            <div class="modal" id="patronExportModal" tabindex="-1" role="dialog" aria-labelledby="patronExportModal_label" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3 id="patronExportModal_label">Print patron cards</h3>
                 </div>
                 <div class="modal-body">
                     <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
+                </div>
+                </div>
                 </div>
             </div>
 

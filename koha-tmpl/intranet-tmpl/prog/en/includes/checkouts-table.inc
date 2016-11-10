@@ -3,7 +3,7 @@
     [% IF ( issuecount ) %]
         <div id="issues-table-loading-message">
             <p>
-                <a id="issues-table-load-now-button" href="#" class="btn"><i class="fa fa-book"></i> Show checkouts</a>
+                <a id="issues-table-load-now-button" href="#" class="btn btn-default"><i class="fa fa-book"></i> Show checkouts</a>
             </p>
         </div>
         <form name="issues" action="/cgi-bin/koha/tools/export.pl" method="post" class="checkboxed">
@@ -44,8 +44,8 @@
                         [% END %]
                     [% END %]
                     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-                        <button class="btn" id="RenewCheckinChecked"><i class="fa fa-check"></i> Renew or check in selected items</button>
-                        <button class="btn" id="RenewAll"><i class="fa fa-book"></i> Renew all</button>
+                        <button class="btn btn-default" id="RenewCheckinChecked"><i class="fa fa-check"></i> Renew or check in selected items</button>
+                        <button class="btn btn-default" id="RenewAll"><i class="fa fa-book"></i> Renew all</button>
                     [% END %]
                 </fieldset>
 
@@ -65,7 +65,7 @@
                         <input type="hidden" id="output_format" name="output_format" value="iso2709" />
                         <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />
                         <input type="hidden" id="record_type" name="record_type" value="bibs" />
-                        <button class="btn btn-small" id="export_submit"><i class="fa fa-download"></i> Export</button>
+                        <button class="btn btn-default btn-sm" id="export_submit"><i class="fa fa-download"></i> Export</button>
                     </fieldset>
                 [% END %]
             </div>

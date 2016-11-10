@@ -92,7 +92,7 @@ $(document).ready(function() {
         [% ELSE %]
 
         <div id="toolbar" class="btn-toolbar">
-            <a class="btn btn-small" id="newoaiset" href="/cgi-bin/koha/admin/oai_sets.pl?op=new"><i class="fa fa-plus"></i> New set</a>
+            <a class="btn btn-default btn-sm" id="newoaiset" href="/cgi-bin/koha/admin/oai_sets.pl?op=new"><i class="fa fa-plus"></i> New set</a>
         </div>
 
         <h2>OAI sets</h2>
@@ -124,7 +124,7 @@ $(document).ready(function() {
                             </td>
                             <td>
                               <div class="dropdown">
-                                <a class="btn btn-mini dropdown-toggle" id="oaisetsactions[% set.id %]" role="button" data-toggle="dropdown" href="#">
+                                <a class="btn btn-default btn-xs dropdown-toggle" id="oaisetsactions[% set.id %]" role="button" data-toggle="dropdown" href="#">
                                   Actions <b class="caret"></b></a>
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="oaisetsactions[% set.id %]">
                                   <li><a href="/cgi-bin/koha/admin/oai_sets.pl?op=mod&amp;id=[% set.id %]"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>

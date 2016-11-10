@@ -134,25 +134,25 @@ function searchToHold(){
 <div id="toolbar" class="btn-toolbar">
     [% IF ( CAN_user_borrowers ) %]
         [% IF ( guarantor ) %]
-            <a id="editpatron" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;guarantorid=[% guarantor.borrowernumber %]&amp;categorycode=[% categorycode %]">
+            <a id="editpatron" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;guarantorid=[% guarantor.borrowernumber %]&amp;categorycode=[% categorycode %]">
         [% ELSE %]
-            <a id="editpatron" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">
+            <a id="editpatron" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">
         [% END %]
         <i class="fa fa-pencil"></i> Edit</a>
     [% END %]
 
     [% IF ( CAN_user_borrowers ) %]
         [% IF ( adultborrower AND activeBorrowerRelationship ) %]
-            <a id="addchild" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]"><i class="fa fa-plus"></i> Add child</a>
+            <a id="addchild" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]"><i class="fa fa-plus"></i> Add child</a>
         [% END %]
         [% IF ( CAN_user_borrowers ) %]
-            <a id="changepassword" class="btn btn-small" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]"><i class="fa fa-lock"></i> Change password</a>
+            <a id="changepassword" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]"><i class="fa fa-lock"></i> Change password</a>
         [% END %]
-        <a id="duplicate" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]"><i class="fa fa-copy"></i> Duplicate</a>
+        <a id="duplicate" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]"><i class="fa fa-copy"></i> Duplicate</a>
     [% END %]
 
     <div class="btn-group">
-        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-print"></i> Print <span class="caret"></span></button>
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-print"></i> Print <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 [% IF ( CAN_user_borrowers ) %]<li><a id="printsummary" href="#">Print summary</a></li>[% END %]
                 <li><a id="printslip" href="#">Print slip</a></li>
@@ -164,13 +164,13 @@ function searchToHold(){
     </div>
 
     [% IF ( CAN_user_reserveforothers ) %]
-        <a id="searchtohold" class="btn btn-small" href="#"><i class="fa fa-search"></i> Search to hold</a>
+        <a id="searchtohold" class="btn btn-default btn-sm" href="#"><i class="fa fa-search"></i> Search to hold</a>
     [% END %]
 
-    <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal" class="btn btn-small"><i class="fa fa-comment-o"></i> Add message</a>
+    <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal" class="btn btn-default btn-sm"><i class="fa fa-comment-o"></i> Add message</a>
 
          <div class="btn-group">
-        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 [% IF ( CAN_user_borrowers ) %]
                     <li><a id="renewpatron" href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;destination=[% destination %]&amp;reregistration=y">Renew patron</a></li>
@@ -213,41 +213,45 @@ function searchToHold(){
 </div>
 
 <!-- Modal -->
-<div id="add_message_form" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="addnewmessageLabel" aria-hidden="true">
-    <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
-        <div class="modal-header">
-            <h3>Leave a message</h3>
-        </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="message_type">Add a message for:</label>
-                <select name="message_type" id="message_type">
-                    <option value="L">Staff - Internal note</option>
-                    <option value="B">OPAC - [% firstname | html %] [% surname | html %]</option>
-                </select>
-            </div>
-            [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]
-            [% IF bor_notes %]
-            <div class="form-group">
-                <label for="select_patron_messages">Predefined notes: </label>
-                <select name="type" id="select_patron_messages">
-                    <option value="">Select note</option>
-                    [% FOREACH bor_note IN bor_notes %]
-                        <option value="[% bor_note.lib %]">[% bor_note.lib %]</option>
+<div id="add_message_form" class="modal" tabindex="-1" role="dialog" aria-labelledby="addnewmessageLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
+                <div class="modal-header">
+                    <h3>Leave a message</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="message_type">Add a message for:</label>
+                        <select name="message_type" id="message_type">
+                            <option value="L">Staff - Internal note</option>
+                            <option value="B">OPAC - [% firstname | html %] [% surname | html %]</option>
+                        </select>
+                    </div>
+                    [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]
+                    [% IF bor_notes %]
+                        <div class="form-group">
+                            <label for="select_patron_messages">Predefined notes: </label>
+                            <select name="type" id="select_patron_messages">
+                                <option value="">Select note</option>
+                                [% FOREACH bor_note IN bor_notes %]
+                                    <option value="[% bor_note.lib %]">[% bor_note.lib %]</option>
+                                [% END %]
+                            </select>
+                        </div>
                     [% END %]
-                </select>
-            </div>
-            [% END %]
-            <div class="form-group">
-                <textarea rows="3" class="modal-textarea" name="borrower_message" id="borrower_message" ></textarea>
-            </div>
-            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-            <input type="hidden" name="batch" value="[% batch %]" />
-            <input type="hidden" name="branchcode" value="[% LoginBranchcode %]" />
+                    <div class="form-group">
+                        <textarea rows="3" class="modal-textarea" name="borrower_message" id="borrower_message" ></textarea>
+                    </div>
+                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                    <input type="hidden" name="batch" value="[% batch %]" />
+                    <input type="hidden" name="branchcode" value="[% LoginBranchcode %]" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn approve" type="submit"><i class="fa fa-check"></i> Save</button>
+                    <button class="btn deny" href="#" class="cancel" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-footer">
-            <button class="btn approve" type="submit"><i class="fa fa-check"></i> Save</button>
-            <button class="btn deny" href="#" class="cancel" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
-        </div>
-    </form>
+    </div>
 </div>

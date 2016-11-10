@@ -12,6 +12,7 @@
 
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/jquery/jquery-ui-1.11.4.min.css" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/bootstrap/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/lib/bootstrap/bootstrap-theme.min.css" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/lib/font-awesome/css/font-awesome.min.css" />
 <link rel="stylesheet" type="text/css" media="print" href="[% interface %]/[% theme %]/css/print.css" />
 [% INCLUDE intranetstylesheet.inc %]

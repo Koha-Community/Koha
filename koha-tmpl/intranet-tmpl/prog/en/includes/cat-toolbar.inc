@@ -130,7 +130,7 @@
 [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ||
 CAN_user_serials_create_subscription ) %]
     <div class="btn-group">
-    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New <span class="caret"></span></button>
+    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New <span class="caret"></span></button>
         <ul class="dropdown-menu">
             [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
              <li><a id="newbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl">New record</a></li>
@@ -155,7 +155,7 @@ CAN_user_serials_create_subscription ) %]
 
 [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || CAN_user_tools_items_batchmod || CAN_user_tools_items_batchdel ) or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
     <div class="btn-group">
-    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
+    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
         <ul class="dropdown-menu">
             [% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
             <li><a id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]">Edit record</a></li>
@@ -212,7 +212,7 @@ CAN_user_serials_create_subscription ) %]
 [% END %]
 
     <div class="btn-group">
-    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Save <span class="caret"></span></button>
+    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Save <span class="caret"></span></button>
     <ul class="dropdown-menu">
         <li><a href="/cgi-bin/koha/catalogue/export.pl?format=bibtex&amp;op=export&amp;bib=[% biblionumber %]">BIBTEX</a></li>
         <li><a href="#" data-toggle="modal" data-target="#exportModal_">Dublin Core</a></li>
@@ -227,25 +227,25 @@ CAN_user_serials_create_subscription ) %]
 
 [% IF ( virtualshelves && intranetbookbag ) %]
     <div class="btn-group">
-    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">Add to <span class="caret"></span></button>
+    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Add to <span class="caret"></span></button>
     <ul class="dropdown-menu">
         <li><a href="#" id="addtocart">Cart</a></li>
         <li><a href="#" id="addtoshelf">List</a></li>
     </ul>
     </div>
 [% ELSIF ( virtualshelves ) %]
-    <div class="btn-group"><a id="addtoshelf" class="btn btn-small"><i class="fa fa-list"></i> Add to list</a> </div>
+    <div class="btn-group"><a id="addtoshelf" class="btn btn-default btn-sm"><i class="fa fa-list"></i> Add to list</a> </div>
 [% ELSIF ( intranetbookbag ) %]
-    <div class="btn-group"><a id="addtocart" class="btn btn-small"><i class="fa fa-shopping-cart"></i> Add to cart</a> </div>
+    <div class="btn-group"><a id="addtocart" class="btn btn-default btn-sm"><i class="fa fa-shopping-cart"></i> Add to cart</a> </div>
 [% END %]
 
-    <div class="btn-group"><a id="printbiblio" class="btn btn-small"><i class="fa fa-print"></i> Print</a></div>
+    <div class="btn-group"><a id="printbiblio" class="btn btn-default btn-sm"><i class="fa fa-print"></i> Print</a></div>
 
 [% IF ( CAN_user_reserveforothers ) %]
     [% UNLESS ( norequests ) %]
         [% IF ( holdfor ) %]
             <div class="btn-group">
-                <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-sticky-note-o"></i>
                     Place hold
                     <span class="caret"></span>
@@ -256,19 +256,21 @@ CAN_user_serials_create_subscription ) %]
                 </ul>
             </div>
         [% ELSE %]
-            <div class="btn-group"><a id="placehold" class="btn btn-small" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]"><i class="fa fa-sticky-note-o"></i> Place hold</a></div>
+            <div class="btn-group"><a id="placehold" class="btn btn-default btn-sm" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]"><i class="fa fa-sticky-note-o"></i> Place hold</a></div>
         [% END %]
     [% END %]
 [% END %]
 
 [% IF Koha.Preference('ArticleRequests') %]
-    <div class="btn-group"><a id="placehold" class="btn btn-small" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber %]"><i class="fa fa-file-text-o"></i> Request article</a></div>
+    <div class="btn-group"><a id="placehold" class="btn btn-default btn-sm" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber %]"><i class="fa fa-file-text-o"></i> Request article</a></div>
 [% END %]
 
 </div>
 
     <!--Modal for Dublin Core-->
-    <div class="modal hide" id="exportModal_" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_" aria-hidden="true">
+    <div class="modal" id="exportModal_" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h3 id="exportLabelexportModal_">Exporting to Dublin Core...</h3>
@@ -288,10 +290,12 @@ CAN_user_serials_create_subscription ) %]
             </fieldset>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn">Export</button>
+            <button type="submit" class="btn btn-default">Export</button>
             <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
         </div>
         <input type="hidden" name="op" value="export" />
         <input type="hidden" name="bib" value="[% biblionumber %]" />
         </form>
+        </div>
+        </div>
     </div>

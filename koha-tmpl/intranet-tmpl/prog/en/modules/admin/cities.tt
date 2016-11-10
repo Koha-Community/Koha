@@ -138,7 +138,7 @@
 [% IF op == 'list' %]
 
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-small" id="newcity" href="/cgi-bin/koha/admin/cities.pl?op=add_form"><i class="fa fa-plus"></i> New city</a>
+        <a class="btn btn-default btn-sm" id="newcity" href="/cgi-bin/koha/admin/cities.pl?op=add_form"><i class="fa fa-plus"></i> New city</a>
     </div>
 
     <h2>Cities</h2>
@@ -165,8 +165,8 @@
                     <td>[% city.city_zipcode %]</td>
                     <td>[% city.city_country %]</td>
                     <td class="actions">
-                        <a class="btn btn-mini" href="/cgi-bin/koha/admin/cities.pl?op=add_form&amp;cityid=[% city.cityid %]"><i class="fa fa-pencil"></i> Edit</a>
-                        <a class="btn btn-mini" href="/cgi-bin/koha/admin/cities.pl?op=delete_confirm&amp;cityid=[% city.cityid %]"><i class="fa fa-trash"></i> Delete</a>
+                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=add_form&amp;cityid=[% city.cityid %]"><i class="fa fa-pencil"></i> Edit</a>
+                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/cities.pl?op=delete_confirm&amp;cityid=[% city.cityid %]"><i class="fa fa-trash"></i> Delete</a>
                     </td>
                 </tr>
                 [% END %]

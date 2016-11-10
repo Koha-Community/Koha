@@ -452,12 +452,12 @@ function Changefwk() {
     [% IF CAN_user_editcatalogue_edit_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
         [% IF (circborrowernumber) %][%# fast cataloging must lead to items %]
             <!-- Action is under fast cataloging - Save button redirecting to items -->
-            <div class="btn-group"><a href="#" id="saveanditems" class="btn btn-small"><i class="fa fa-save"></i> Save</a></div>
+            <div class="btn-group"><a href="#" id="saveanditems" class="btn btn-default btn-sm"><i class="fa fa-save"></i> Save</a></div>
         [% ELSE %]
             <!-- Not using fast cataloging - Display split menu -->
             <div class="btn-group">
-                <button class="btn btn-small" id="saverecord"><i class="fa fa-save"></i> Save</button>
-                <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                <button class="btn btn-default btn-sm" id="saverecord"><i class="fa fa-save"></i> Save</button>
+                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -469,15 +469,15 @@ function Changefwk() {
         [% END %]
     [% ELSE %]
         <!-- User cannot edit items - single button redirecting to view -->
-        <div class="btn-group"><a href="#" id="saveandview" class="btn btn-small"><i class="fa fa-save"></i> Save</a></div>
+        <div class="btn-group"><a href="#" id="saveandview" class="btn btn-default btn-sm"><i class="fa fa-save"></i> Save</a></div>
     [% END %]
 
     [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
-        <div class="btn-group"><a class="btn btn-small" href="#" id="z3950search"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>
+        <div class="btn-group"><a class="btn btn-default btn-sm" href="#" id="z3950search"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>
     [% END %]
 
     <div class="btn-group">
-        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
         <ul id="settings-menu" class="dropdown-menu">
             [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 %]
                 <li><a href="#" id="switcheditor">Switch to advanced editor</a></li>
@@ -519,23 +519,23 @@ function Changefwk() {
         [% IF (biblionumber) %]
             [% IF ( BiblioDefaultViewmarc ) %]
                 <div class="btn-group">
-                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                    <a class="btn btn-default btn-sm" id="cancel" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
                 </div>
             [% ELSIF ( BiblioDefaultViewlabeled_marc ) %]
                 <div class="btn-group">
-                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                    <a class="btn btn-default btn-sm" id="cancel" href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
                 </div>
             [% ELSIF ( BiblioDefaultViewisbd ) %]
                 <div class="btn-group">
-                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                    <a class="btn btn-default btn-sm" id="cancel" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
                 </div>
             [% ELSE %]
                 <div class="btn-group">
-                    <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+                    <a class="btn btn-default btn-sm" id="cancel" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
                 </div>
             [% END %]
         [% ELSE %]
-            <a class="btn btn-small" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>
+            <a class="btn btn-default btn-sm" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>
         [% END %]
     [% END %]
 </div>

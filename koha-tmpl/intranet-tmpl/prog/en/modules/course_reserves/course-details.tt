@@ -54,9 +54,9 @@
             [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses %]
             <div id="toolbar">
                 <ul class="toolbar">
-                    [% IF CAN_user_coursereserves_add_reserves %]<li><a class="btn btn-small" id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id %]"><i class="fa fa-plus"></i> Add reserves</a></li>[% END %]
-                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a class="btn btn-small" id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit course</a></li>[% END %]
-                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a class="btn btn-small" id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id %]&amp;action=del"><i class="fa fa-trash"></i> Delete course</a></li>[% END %]
+                    [% IF CAN_user_coursereserves_add_reserves %]<li><a class="btn btn-default btn-sm" id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id %]"><i class="fa fa-plus"></i> Add reserves</a></li>[% END %]
+                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a class="btn btn-default btn-sm" id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit course</a></li>[% END %]
+                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a class="btn btn-default btn-sm" id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id %]&amp;action=del"><i class="fa fa-trash"></i> Delete course</a></li>[% END %]
                 </ul>
             </div><!-- /toolbar -->
             [% END %]
@@ -202,16 +202,16 @@
                             [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
                                 <td class="actions">
                                     [% IF CAN_user_coursereserves_add_reserves %]
-                                        <a class="btn btn-mini" href="add_items.pl?course_id=[% course.course_id %]&amp;barcode=[% cr.item.barcode %]&amp;action=lookup&amp;return=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="add_items.pl?course_id=[% course.course_id %]&amp;barcode=[% cr.item.barcode %]&amp;action=lookup&amp;return=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit</a>
                                     [% END %]
 
                                     [% IF CAN_user_coursereserves_delete_reserves %]
                                         [% IF cr.item.onloan %]
-                                            <a class="btn btn-mini disabled checkedout" href="#" class="delete_item" data-toggle="tooltip" data-placement="left" title="This item is checked out">
+                                            <a class="btn btn-default btn-xs disabled checkedout" href="#" class="delete_item" data-toggle="tooltip" data-placement="left" title="This item is checked out">
                                         [% ELSIF cr.item.itemlost %]
-                                            <a class="btn btn-mini disabled itemlost" href="#" class="delete_item" data-toggle="tooltip" data-placement="left" title="This item is lost">
+                                            <a class="btn btn-default btn-xs disabled itemlost" href="#" class="delete_item" data-toggle="tooltip" data-placement="left" title="This item is lost">
                                         [% ELSE %]
-                                            <a class="btn btn-mini" href="course-details.pl?course_id=[% course.course_id %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id %]" class="delete_item" >
+                                            <a class="btn btn-default btn-xs" href="course-details.pl?course_id=[% course.course_id %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id %]" class="delete_item" >
                                         [% END %]
                                         <i class="fa fa-trash"></i> Remove</a>
                                     [% END %]

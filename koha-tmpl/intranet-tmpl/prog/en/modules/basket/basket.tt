@@ -46,14 +46,14 @@
 
 <div id="toolbar" class="btn-toolbar">
     [% IF ( verbose ) %]
-        <a href="basket.pl" class="btn btn-small showdetails showless"><i class="fa fa-folder"></i> Brief display</a>
+        <a href="basket.pl" class="btn btn-default btn-sm showdetails showless"><i class="fa fa-folder"></i> Brief display</a>
     [% ELSE %]
-        <a href="basket.pl" class="btn btn-small showdetails showmore"><i class="fa fa-folder-open"></i> More details</a>
+        <a href="basket.pl" class="btn btn-default btn-sm showdetails showmore"><i class="fa fa-folder-open"></i> More details</a>
     [% END %]
 
-    <a class="btn btn-small" href="basket.pl" id="send_cart"><i class="fa fa-envelope"></i> Send</a>
+    <a class="btn btn-default btn-sm" href="basket.pl" id="send_cart"><i class="fa fa-envelope"></i> Send</a>
     <div class="btn-group">
-        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#" id="downloadcart"><i class="fa fa-download"></i> Download <span class="caret"></span> </a>
+        <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#" id="downloadcart"><i class="fa fa-download"></i> Download <span class="caret"></span> </a>
         <ul class="dropdown-menu">
             <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=iso2709&amp;bib_list=[% bib_list %]">iso2709</a></li>
             <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=ris&amp;bib_list=[% bib_list %]">RIS</a></li>
@@ -63,9 +63,9 @@
         [% END %]
         </ul>
     </div>
-    <a class="btn btn-small" href="basket.pl" id="print_cart"><i class="fa fa-print"></i> Print</a>
-    <a class="btn btn-small" href="basket.pl" id="empty_cart"><i class="fa fa-trash"></i> Empty and close</a>
-    <a class="btn btn-small close" href="basket.pl"><i class="fa fa-times-circle"></i> Hide window</a>
+    <a class="btn btn-default btn-sm" href="basket.pl" id="print_cart"><i class="fa fa-print"></i> Print</a>
+    <a class="btn btn-default btn-sm" href="basket.pl" id="empty_cart"><i class="fa fa-trash"></i> Empty and close</a>
+    <a class="btn btn-default btn-sm close" href="basket.pl"><i class="fa fa-times-circle"></i> Hide window</a>
 </div>
         [% END %]
 

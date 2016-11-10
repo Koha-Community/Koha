@@ -161,7 +161,7 @@ $(document).ready(function() {
       [% ELSE %]
 
         <div id="toolbar" class="btn-toolbar">
-            <a class="btn btn-small" id="newfrequency" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=new"><i class="fa fa-plus"></i> New frequency</a>
+            <a class="btn btn-default btn-sm" id="newfrequency" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=new"><i class="fa fa-plus"></i> New frequency</a>
         </div>
 
         <h1>Frequencies</h1>
@@ -213,8 +213,8 @@ $(document).ready(function() {
                   <td>[% frequency.unitsperissue %]</td>
                   <td>[% frequency.displayorder %]</td>
                   <td class="actions">
-                    <a class="btn btn-mini" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=modify&frequencyid=[% frequency.id %]"><i class="fa fa-pencil"></i> Edit</a>
-                    <a class="delete_frequency btn btn-mini" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=del&frequencyid=[% frequency.id %]"><i class="fa fa-trash"></i> Delete</a>
+                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=modify&frequencyid=[% frequency.id %]"><i class="fa fa-pencil"></i> Edit</a>
+                    <a class="delete_frequency btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-frequencies.pl?op=del&frequencyid=[% frequency.id %]"><i class="fa fa-trash"></i> Delete</a>
                   </td>
                 </tr>
               [% END %]

@@ -239,7 +239,9 @@ $(document).ready(function(){
     </fieldset>
 </form>
 
-<div id="dataPreview" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+<div id="dataPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="dataPreviewLabel">Preview</h3>
@@ -248,7 +250,9 @@ $(document).ready(function(){
         <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+    </div>
     </div>
 </div>
 

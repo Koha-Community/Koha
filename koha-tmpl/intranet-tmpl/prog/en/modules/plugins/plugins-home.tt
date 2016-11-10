@@ -32,7 +32,7 @@
 
                     [% IF ( CAN_user_plugins_manage ) %]
                         <div class="btn-toolbar" id="toolbar">
-                            <a href="/cgi-bin/koha/plugins/plugins-upload.pl" id="upload_plugin" class="btn btn-small"><i class="fa fa-upload"></i> Upload plugin</a>
+                            <a href="/cgi-bin/koha/plugins/plugins-upload.pl" id="upload_plugin" class="btn btn-default btn-sm"><i class="fa fa-upload"></i> Upload plugin</a>
                         </div>
                     [% END %]
 
@@ -87,7 +87,7 @@
                                     [% IF ( CAN_user_plugins_configure || CAN_user_plugins_manage || CAN_user_plugins_report || CAN_user_plugins_tool ) %]
                                         <td class="actions">
                                             <div class="dropdown">
-                                                <a class="btn btn-mini dropdown-toggle" id="pluginactions[% plugin.class %]" role="button" data-toggle="dropdown" href="#">
+                                                <a class="btn btn-default btn-xs dropdown-toggle" id="pluginactions[% plugin.class %]" role="button" data-toggle="dropdown" href="#">
                                                    Actions <b class="caret"></b>
                                                 </a>
                                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="pluginactions[% plugin.class %]">

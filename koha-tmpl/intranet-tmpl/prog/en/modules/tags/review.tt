@@ -273,11 +273,11 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
             [% IF ( tagloo.approved ) %]
             <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
                     [% IF ( tagloo.approved == -1 ) %]
-                <button class="ok btn btn-mini" type="submit" title="[% tagloo.term %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
-                <button class="rej btn btn-mini" disabled="disabled" type="submit" title="[% tagloo.term %]" value="Rejected" name="reject"><i class="fa fa-remove"></i> Rejected</button>
+                <button class="ok btn btn-default btn-xs" type="submit" title="[% tagloo.term %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
+                <button class="rej btn btn-default btn-xs" disabled="disabled" type="submit" title="[% tagloo.term %]" value="Rejected" name="reject"><i class="fa fa-remove"></i> Rejected</button>
                 [% ELSE %]
-                <button class="ok btn btn-mini"  disabled="disabled" type="submit" title="[% tagloo.term %]" value="Approved" name="approve"><i class="fa fa-check"></i> Approved</button>
-                <button class="rej btn btn-mini" type="submit" title="[% tagloo.term %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
+                <button class="ok btn btn-default btn-xs"  disabled="disabled" type="submit" title="[% tagloo.term %]" value="Approved" name="approve"><i class="fa fa-check"></i> Approved</button>
+                <button class="rej btn btn-default btn-xs" type="submit" title="[% tagloo.term %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
                 [% END %]
                 </span>
             </td>
@@ -285,8 +285,8 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
             </td>
             [% ELSE %]
             <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
-            <button class="ok btn btn-mini"  type="submit" title="[% tagloo.term %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
-                <button class="rej btn btn-mini" type="submit" title="[% tagloo.term %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
+            <button class="ok btn btn-default btn-xs"  type="submit" title="[% tagloo.term %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
+                <button class="rej btn btn-default btn-xs" type="submit" title="[% tagloo.term %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
                 </span>
             </td>
             [% UNLESS ( filter_approved_pending ) %]<td>&nbsp;</td>[% END %]
@@ -300,8 +300,8 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   </table>
   [% END %]
     [% IF ( tagloop ) %]<fieldset class="action">
-   <button type="submit" value="Approve" class="btn btn-small" id="approve_button" name="op-approve"><i class="fa fa-check"></i> Approve</button>
-   <button type="submit" value="Reject" class="btn btn-small"  id="reject_button" name="op-reject"><i class="fa fa-remove"></i> Reject</button>
+   <button type="submit" value="Approve" class="btn btn-default btn-sm" id="approve_button" name="op-approve"><i class="fa fa-check"></i> Approve</button>
+   <button type="submit" value="Reject" class="btn btn-default btn-sm"  id="reject_button" name="op-reject"><i class="fa fa-remove"></i> Reject</button>
   </fieldset>[% END %]
   </form>
 </div>
@@ -329,7 +329,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
    <div class="description">Enter a word or phrase to check against approved/rejected lists: </div>
    <form method="post" action="/cgi-bin/koha/tags/review.pl">
    <input type="text" size="14" name="test" id="test" />
-   <fieldset class="action"><button type="submit" value="Test" class="btn btn-small" id="test_button" name="op-test"><i class="fa fa-check-square-o" aria-hidden="true"></i> Test</button></fieldset>
+   <fieldset class="action"><button type="submit" value="Test" class="btn btn-default btn-sm" id="test_button" name="op-test"><i class="fa fa-check-square-o" aria-hidden="true"></i> Test</button></fieldset>
    <div id="verdict">
 	[% IF ( test_term ) %]
 	[% IF ( verdict_ok ) %]
@@ -380,7 +380,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 			<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
 	    </li>
   </ol>
- <fieldset class="action"><button type="submit" class="btn btn-small"><i class="fa fa-filter" aria-hidden="true"></i> Apply filter(s)</button></fieldset>
+ <fieldset class="action"><button type="submit" class="btn btn-default btn-sm"><i class="fa fa-filter" aria-hidden="true"></i> Apply filter(s)</button></fieldset>
 </fieldset>
 </form>
 </div>

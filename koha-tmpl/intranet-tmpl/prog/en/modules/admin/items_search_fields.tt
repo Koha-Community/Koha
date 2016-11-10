@@ -22,7 +22,7 @@
         <div class="yui-b">
 
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-small" id="new_search_field" href="/cgi-bin/koha/admin/items_search_fields.pl"><i class="fa fa-plus"></i> New search field</a>
+        <a class="btn btn-default btn-sm" id="new_search_field" href="/cgi-bin/koha/admin/items_search_fields.pl"><i class="fa fa-plus"></i> New search field</a>
     </div>
 
           [% IF field_added %]
@@ -77,8 +77,8 @@
                           <td>[% field.tagsubfield %]</td>
                           <td>[% field.authorised_values_category %]</td>
                           <td>
-                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/items_search_field.pl?name=[% field.name %]" title="Edit [% field.name %] field"><i class="fa fa-pencil"></i> Edit</a>
-                            <a class="field-delete btn btn-mini" href="/cgi-bin/koha/admin/items_search_fields.pl?op=del&name=[% field.name %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/items_search_field.pl?name=[% field.name %]" title="Edit [% field.name %] field"><i class="fa fa-pencil"></i> Edit</a>
+                            <a class="field-delete btn btn-default btn-xs" href="/cgi-bin/koha/admin/items_search_fields.pl?op=del&name=[% field.name %]"><i class="fa fa-trash"></i> Delete</a>
                           </td>
                         </tr>
                       [% END %]

@@ -218,8 +218,8 @@
 
 [% IF op == 'list' %]
     <div id="toolbar" class="btn-toolbar">
-        <a id="newserver" class="btn btn-small" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=zed"><i class="fa fa-plus"></i> New Z39.50 server</a>
-        <a id="newserver" class="btn btn-small" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=sru"><i class="fa fa-plus"></i> New SRU server</a>
+        <a id="newserver" class="btn btn-default btn-sm" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=zed"><i class="fa fa-plus"></i> New Z39.50 server</a>
+        <a id="newserver" class="btn btn-default btn-sm" href="/cgi-bin/koha/admin/z3950servers.pl?op=add&type=sru"><i class="fa fa-plus"></i> New SRU server</a>
     </div>
     <h3>Z39.50/SRU servers administration</h3>
     [% IF id %]
@@ -243,7 +243,7 @@
             </td>
             <td>
                 <div class="dropdown">
-                    <a class="btn btn-mini dropdown-toggle" id="reportactions[% savedreport.id %]" role="button" data-toggle="dropdown" href="#">
+                    <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id %]" role="button" data-toggle="dropdown" href="#">
                         Actions <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id %]">

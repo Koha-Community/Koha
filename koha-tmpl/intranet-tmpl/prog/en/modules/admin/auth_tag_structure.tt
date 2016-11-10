@@ -180,7 +180,7 @@
 [% IF ( else ) %]
 
 <div id="toolbar" class="btn-toolbar">
-    <div class="btn-group"><a class="btn btn-small" id="newtag" href="/cgi-bin/koha/admin/auth_tag_structure.pl?op=add_form&amp;authtypecode=[% authtypecode %]"><i class="fa fa-plus"></i> New tag</a></div>
+    <div class="btn-group"><a class="btn btn-default btn-sm" id="newtag" href="/cgi-bin/koha/admin/auth_tag_structure.pl?op=add_form&amp;authtypecode=[% authtypecode %]"><i class="fa fa-plus"></i> New tag</a></div>
 </div>
 
 <h2>Select an authority framework</h2>
@@ -220,7 +220,7 @@
             <td>[% loo.authorised_value %]</td>
             <td>
                 <div class="dropdown">
-                    <a class="btn btn-mini dropdown-toggle" id="authtagactions[% loo.tagfield %]" role="button" data-toggle="dropdown" href="#">
+                    <a class="btn btn-default btn-xs dropdown-toggle" id="authtagactions[% loo.tagfield %]" role="button" data-toggle="dropdown" href="#">
                         Actions <b class="caret"></b></a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authtagactions[% loo.tagfield %]">
                         <li><a href="[% loo.subfield_link %]"><i class="fa fa-eye"></i> Subfields</a></li>

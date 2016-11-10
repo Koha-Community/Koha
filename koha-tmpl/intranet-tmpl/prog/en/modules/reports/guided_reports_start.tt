@@ -372,8 +372,12 @@ canned reports and writing custom SQL reports.</p>
                         <td>
                             <div class="dropup">
                                 <div class="btn-group">
-                                    <a class="btn btn-mini" role="button" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Run%20this%20report"><i class="fa fa-play"></i> Run</a>
-                                    <a class="btn btn-mini dropdown-toggle" id="reportactions[% savedreport.id %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                    [%# There should be no space between these two buttons, it would render badly %]
+                                    <a class="btn btn-default btn-xs" role="button"
+                                       href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Run%20this%20report"><i
+                                       class="fa fa-play"></i> Run</a><a
+                                       class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id %]" role="button" data-toggle="dropdown"
+                                       href="#"><b class="caret"></b></a>
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id %]">
                                         <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> Show</a></li>
                                         [% IF ( CAN_user_reports_create_reports ) %]

@@ -463,7 +463,9 @@
 	[% ELSE %]There are no received orders.[% END %]
 </div>
 
-<div id="dataPreview" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+<div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="dataPreviewLabel">MARC preview</h3>
@@ -472,7 +474,9 @@
         <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+    </div>
     </div>
 </div>
 

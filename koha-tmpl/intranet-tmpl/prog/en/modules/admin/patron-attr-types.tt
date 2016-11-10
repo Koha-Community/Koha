@@ -217,7 +217,7 @@ $(document).ready(function() {
 [% IF ( display_list ) %]
 
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-small" id="newrule" href="[% script_name %]?op=add_attribute_type"><i class="fa fa-plus"></i> New patron attribute type</a>
+    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name %]?op=add_attribute_type"><i class="fa fa-plus"></i> New patron attribute type</a>
 </div>
 
 <h2>Patron attribute types</h2>
@@ -275,8 +275,8 @@ $(document).ready(function() {
                 [% END %]
             </td>
             <td class="actions">
-              <a class="btn btn-mini" href="[% item.script_name %]?op=edit_attribute_type&amp;code=[% item.code |html %]"><i class="fa fa-pencil"></i> Edit</a>
-              <a class="btn btn-mini" href="[% item.script_name %]?op=delete_attribute_type&amp;code=[% item.code |html %]"><i class="fa fa-trash"></i> Delete</a>
+              <a class="btn btn-default btn-xs" href="[% item.script_name %]?op=edit_attribute_type&amp;code=[% item.code |html %]"><i class="fa fa-pencil"></i> Edit</a>
+              <a class="btn btn-default btn-xs" href="[% item.script_name %]?op=delete_attribute_type&amp;code=[% item.code |html %]"><i class="fa fa-trash"></i> Delete</a>
             </td>
           </tr>
         [% END %]

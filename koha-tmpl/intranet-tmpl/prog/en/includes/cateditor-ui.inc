@@ -387,7 +387,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
     }
 
     function showResultsBox(data) {
-        $('#search-top-pages, #search-bottom-pages').find('.pagination').empty();
+        $('#search-top-pages, #search-bottom-pages').find('nav').empty();
         $('#searchresults thead tr').empty();
         $('#searchresults tbody').empty();
         $('#search-serversinfo').empty().append('<li>' + _("Loading...") + '</li>');
@@ -527,7 +527,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         var max_page = Math.ceil( data.total_fetched / data.page_size ) - 1;
 
         if ( cur_page != 0 ) {
-            pages.push( '<li><a class="search-nav" href="#" data-offset="' + (data.offset - data.page_size) + '">&laquo; ' + _("Previous") + '</a></li>' );
+            pages.push( '<li><a class="search-nav" href="#" data-offset="' + (data.offset - data.page_size) + '"><span aria-hidden="true">&laquo;</span> ' + _("Previous") + '</a></li>' );
         }
 
         for ( var page = Math.max( 0, cur_page - 9 ); page <= Math.min( max_page, cur_page + 9 ); page++ ) {
@@ -539,10 +539,10 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         }
 
         if ( cur_page < max_page ) {
-            pages.push( ' <li><a class="search-nav" href="#" data-offset="' + (data.offset + data.page_size) + '">' + _("Next") + ' &raquo;</a></li>' );
+            pages.push( ' <li><a class="search-nav" href="#" data-offset="' + (data.offset + data.page_size) + '">' + _("Next") + ' <span aria-hidden="true">&raquo;</span></a></li>' );
         }
 
-        $( '#search-top-pages, #search-bottom-pages' ).find( '.pagination' ).html( pages.length > 1 ? ( '<ul>' + pages.join( '' ) + '</ul>' ) : '' );
+        $( '#search-top-pages, #search-bottom-pages' ).find( 'nav' ).html( pages.length > 1 ? ( '<ul class="pagination pagination-sm">' + pages.join( '' ) + '</ul>' ) : '' );
 
         var $overlay = $('#search-overlay');
         $overlay.find('span').text(_("Loading"));
@@ -776,14 +776,14 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 } );
             }, 100);
 
-            $("#advanced-search-ui, #search-results-ui, #macro-ui").css( {
-                marginLeft: function() {
-                    return -($(this).width() / 2);
-                }
-            } );
+//            $("#advanced-search-ui, #search-results-ui, #macro-ui").css( {
+//                marginLeft: function() {
+//                    return -($(this).width() / 2);
+//               }
+//           } );
         }
 
-        $( '#macro-ui' ).on( 'shown', function() {
+        $( '#macro-ui' ).on( 'shown.bs.modal', function() {
             if ( macroEditor ) return;
 
             macroEditor = CodeMirror(
@@ -838,7 +838,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
         // Click bindings
         $( '#save-record, #save-dropdown a' ).click( function() {
-            $( '#save-record' ).find('i').attr( 'class', 'icon-loading' ).siblings( 'span' ).text( _("Saving...") );
+            $( '#save-record' ).find('i').attr( 'class', 'fa fa-spinner' ).siblings( 'span' ).text( _("Saving...") );
 
             function finishCb(result) {
                 if ( result.error == 'syntax' ) {
@@ -882,7 +882,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                     }
                 } );
 
-                $( '#save-record' ).find('i').attr( 'class', 'icon-hdd' );
+                $( '#save-record' ).find('i').attr( 'class', 'fa fa-hdd-o' );
 
                 if ( result.error ) {
                     // Reset backend info

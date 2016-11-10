@@ -291,8 +291,8 @@ $(document).ready(function() {
                                                         </td>
 							<td>[% rule.rentaldiscount %]</td>
                                                         <td class="actions">
-                                                          <a href="#" class="editrule btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
-                                                          <a class="btn btn-mini delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                                                          <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                                                          <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]"><i class="fa fa-trash"></i> Delete</a>
 							</td>
                 	</tr>
             	[% END %]
@@ -381,8 +381,8 @@ $(document).ready(function() {
                     <td><input type="text" name="rentaldiscount" id="rentaldiscount" size="2" /></td>
                     <td class="actions">
                         <input type="hidden" name="branch" value="[% current_branch %]"/>
-                        <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save</button>
-                        <button name="cancel" class="clear_edit btn btn-mini"><i class="fa fa-undo"></i> Clear</button>
+                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
+                        <button name="cancel" class="clear_edit btn btn-default btn-xs"><i class="fa fa-undo"></i> Clear</button>
                     </td>
                 </tr>
                 <tfoot>
@@ -524,8 +524,8 @@ $(document).ready(function() {
                         </select>
                     </td>
                     <td class="actions">
-                        <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save</button>
-                        <a class="btn btn-mini delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch %]" id="unset"><i class="fa fa-undo"></i> Unset</a>
+                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
+                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=[% current_branch %]" id="unset"><i class="fa fa-undo"></i> Unset</a>
                     </td>
                 </tr>
             </table>
@@ -576,7 +576,7 @@ $(document).ready(function() {
                         </td>
 
                         <td class="actions">
-                            <a class="btn btn-mini delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% branch_cat_rule_loo.categorycode %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% branch_cat_rule_loo.categorycode %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 [% END %]
@@ -590,7 +590,7 @@ $(document).ready(function() {
                     </td>
                     <td><input name="maxissueqty" size="3" /></td>
                     <td><input name="maxonsiteissueqty" size="3" /></td>
-                    <td class="actions"><button type="submit" class="btn btn-mini"><i class="fa fa-plus"></i> Add</td>
+                    <td class="actions"><button type="submit" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</td>
                 </tr>
             </table>
         </form>
@@ -668,7 +668,7 @@ $(document).ready(function() {
                         </select>
                     </td>
                     <td class="actions">
-                        <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save</button>
+                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
                     </td>
                     </td>
                 </tr>
@@ -745,7 +745,7 @@ $(document).ready(function() {
                             [% END %]
                         </td>
                         <td class="actions">
-                            <a class="btn btn-mini delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% branch_item_rule_loo.itemtype %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% branch_item_rule_loo.itemtype %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 [% END %]
@@ -786,7 +786,7 @@ $(document).ready(function() {
                             <option value="noreturn">Item floats</option>
                         </select>
                     </td>
-                    <td class="actions"><button type="submit" class="btn btn-mini"><i class="fa fa-plus"></i> Add</button></td>
+                    <td class="actions"><button type="submit" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</button></td>
                 </tr>
             </table>
         </form>

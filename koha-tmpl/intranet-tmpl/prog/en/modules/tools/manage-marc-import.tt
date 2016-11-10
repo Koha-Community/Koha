@@ -466,13 +466,13 @@ Page
           <form method="post" action="[% batch_lis.script_name %]" name="clean_batch_[% batch_lis.import_batch_id %]" id="clean_batch_[% batch_lis.import_batch_id %]" class="batch_form batch_clean" >
             <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id %]" />
             <input type="hidden" name="op" value="clean-batch" />
-            <button type="submit" class="btn btn-mini"><i class="fa fa-eraser"></i> Clean</button>
+            <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-eraser"></i> Clean</button>
           </form>
         [% ELSIF ( batch_lis.import_status == 'cleaned' ) %]
           <form method="post" action="/cgi-bin/koha/tools/manage-marc-import.pl" name="delete_batch_[% batch_lis.import_batch_id %]" id="delete_batch_[% batch_lis.import_batch_id %]" class="batch_form batch_delete">
             <input type="hidden" name="import_batch_id" value="[% batch_lis.import_batch_id %]" />
             <input type="hidden" name="op" value="delete-batch" />
-            <button type="submit" class="btn btn-mini"><i class="fa fa-trash"></i> Delete</button>
+            <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</button>
           </form>
         [% END %]
     </td>
@@ -508,7 +508,9 @@ Page
         </thead>
     </table>
 
-    <div id="marcPreview" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+    <div id="marcPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="marcPreviewLabel">MARC preview</h3>
@@ -517,7 +519,9 @@ Page
             <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+        </div>
         </div>
     </div>
 [% END %]

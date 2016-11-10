@@ -308,7 +308,7 @@
     [% IF ( else ) %]
 
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-small" id="newstopword" href="[% script_name %]?op=add_form"><i class="fa fa-plus"></i> New preference</a>
+        <a class="btn btn-default btn-sm" id="newstopword" href="[% script_name %]?op=add_form"><i class="fa fa-plus"></i> New preference</a>
     </div>
 
     [% IF ( tab != 'local_use' ) %]
@@ -432,11 +432,11 @@
                 <input type="hidden" name="prefoptions" value="[% loo.prefoptions |html %]" />
                 <input type="hidden" name="preftype" value="[% loo.type %]" />
                 <input type="hidden" name="explanation" value="[% loo.explanation |html %]" />
-                <button type="submit" class="btn btn-mini"><i class="fa fa-save"></i> Save</button>
+                <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
             </form>
         </td>
 
-        <td class="actions"><a class="btn btn-mini" href="[% loo.edit %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-mini" href="[% loo.delete %]"><i class="fa fa-trash"></i> Delete</a></td>
+        <td class="actions"><a class="btn btn-default btn-xs" href="[% loo.edit %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="[% loo.delete %]"><i class="fa fa-trash"></i> Delete</a></td>
     </tr>
     [% END %]</tbody>
     </table>

@@ -121,7 +121,7 @@
 
 [% BLOCK closer %]
     [% IF plugin %]
-        <div id="closewindow"><a class="btn btn-default close" href="#">Close</a></div>
+        <div id="closewindow"><a class="btn btn-default btn-default close" href="#">Close</a></div>
     [% END %]
 [% END %]
 
@@ -142,7 +142,7 @@
         </fieldset>
     </form>
     [% IF plugin %]
-        <div id="closewindow"><a class="btn btn-default close" href="#">Close</a></div>
+        <div id="closewindow"><a class="btn btn-default btn-default close" href="#">Close</a></div>
     [% END %]
 [% END %]
 
@@ -172,11 +172,11 @@
         [% END %]
         <td class="actions">
             [% IF plugin %]
-                <button class="btn btn-mini choose_entry" data-record-hashvalue="[% record.hashvalue %]"><i class="fa fa-plus"></i> Choose</button>
+                <button class="btn btn-default btn-xs choose_entry" data-record-hashvalue="[% record.hashvalue %]"><i class="fa fa-plus"></i> Choose</button>
             [% END %]
-            <button class="btn btn-mini download_entry" data-record-id="[% record.id %]"><i class="fa fa-download"></i> Download</button>
+            <button class="btn btn-default btn-xs download_entry" data-record-id="[% record.id %]"><i class="fa fa-download"></i> Download</button>
             [% IF record.owner == owner || CAN_user_tools_upload_manage %]
-                <button class="btn btn-mini delete_entry" data-record-id="[% record.id %]"><i class="fa fa-trash"></i> Delete</button>
+                <button class="btn btn-default btn-xs delete_entry" data-record-id="[% record.id %]"><i class="fa fa-trash"></i> Delete</button>
             [% END %]
         </td>
    </tr>

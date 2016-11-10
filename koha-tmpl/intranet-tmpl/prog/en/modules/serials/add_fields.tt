@@ -58,7 +58,7 @@
   <div class="yui-b">
   [% IF op == 'list' %]
     <div id="toolbar" class="btn-toolbar">
-      <a class="btn btn-small" id="newfields" href="/cgi-bin/koha/serials/add_fields.pl?op=add_form"><i class="fa fa-plus"></i> New fields</a>
+      <a class="btn btn-default btn-sm" id="newfields" href="/cgi-bin/koha/serials/add_fields.pl?op=add_form"><i class="fa fa-plus"></i> New fields</a>
     </div>
   [% END %]
 
@@ -109,8 +109,8 @@
                 [% IF field.searchable %]Yes[% ELSE %]No[% END %]
               </td>
               <td class="actions">
-                <a class="btn btn-mini" href="/cgi-bin/koha/serials/add_fields.pl?op=add_form&amp;field_id=[% field.id %]"><i class="fa fa-pencil"></i> Edit</a>
-                <a class="confirmdelete btn btn-mini" href="/cgi-bin/koha/serials/add_fields.pl?op=delete&amp;field_id=[% field.id %]"><i class="fa fa-trash"></i> Delete</a>
+                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/add_fields.pl?op=add_form&amp;field_id=[% field.id %]"><i class="fa fa-pencil"></i> Edit</a>
+                <a class="confirmdelete btn btn-default btn-xs" href="/cgi-bin/koha/serials/add_fields.pl?op=delete&amp;field_id=[% field.id %]"><i class="fa fa-trash"></i> Delete</a>
               </td>
             </tr>
           [% END %]

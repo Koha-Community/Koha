@@ -211,13 +211,13 @@ $(document).ready(function() {
 <div id="toolbar" class="btn-toolbar">
 [% UNLESS ( check_member ) %]
     [% IF quickadd && opadd %]
-        <button class="btn btn-small toggler" id="save_quick_add" name="save"><i class="fa fa-save"></i> Save</button>
+        <button class="btn btn-default btn-sm toggler" id="save_quick_add" name="save"><i class="fa fa-save"></i> Save</button>
     [% END %]
-    <button class="btn btn-small toggler" id="saverecord" name="save" ><i class="fa fa-save"></i> Save</button>
+    <button class="btn btn-default btn-sm toggler" id="saverecord" name="save" ><i class="fa fa-save"></i> Save</button>
     [% IF opadd %]
-        <a class="btn btn-small" href="/cgi-bin/koha/members/member.pl" class="toggler save_entryform">
+        <a class="btn btn-default btn-sm" href="/cgi-bin/koha/members/member.pl" class="toggler save_entryform">
     [% ELSE %]
-        <a class="btn btn-small" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
+        <a class="btn btn-default btn-sm" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
     [% END %]
         <i class="fa fa-times"></i> Cancel
     </a>
@@ -356,19 +356,19 @@ $(document).ready(function() {
 
             [% UNLESS ( opduplicate ) %]
                 [% IF ( female ) %]
-                    <label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" checked="checked"  />
+                    <label for="sex-female"><input type="radio" name="sex" id="sex-female" value="F" checked="checked" /> Female</label>
                 [% ELSE %]
-                    <label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" />
+                    <label for="sex-female"><input type="radio" name="sex" id="sex-female" value="F" /> Female</label>
                 [% END %]
                 [% IF ( male ) %]
-                    <label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" checked="checked" />
+                    <label for="sex-male"><input type="radio" name="sex" id="sex-male" value="M" checked="checked" /> Male</label>
                 [% ELSE %]
-                    <label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" />
+                    <label for="sex-male"><input type="radio" name="sex" id="sex-male" value="M" /> Male</label>
                 [% END %]
                 [% IF ( none ) %]
-                    <label for="sex-none">None specified </label><input type="radio" name="sex" id="sex-none" value=""  checked="checked"  />
+                    <label for="sex-none"><input type="radio" name="sex" id="sex-none" value=""  checked="checked" /> None specified</label>
                 [% ELSE %]
-                    <label for="sex-none">None specified </label><input type="radio" name="sex" id="sex-none" value="" />
+                    <label for="sex-none"><input type="radio" name="sex" id="sex-none" value="" /> None specified</label>
                 [% END %]
             [% ELSE %]
                 <label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" />
@@ -933,18 +933,20 @@ $(document).ready(function() {
                 [% IF ( flagloo.key == 'lost' ) %]Lost card:[% END %]
                 </label>
                 [% IF CAN_user_circulate_manage_restrictions %]
-				<label for="yes[% flagloo.name %]">Yes </label>
+                            <label for="yes[% flagloo.name %]">
 				[% IF ( flagloo.yes ) %]
 				<input type="radio" id="yes[% flagloo.name %]" name="[% flagloo.name %]" value="1" checked="checked" />
 				[% ELSE %]
 				<input type="radio" id="yes[% flagloo.name %]" name="[% flagloo.name %]" value="1" />
 				[% END %]
-				<label for="no[% flagloo.name %]">No </label>
+                            Yes </label>
+                            <label for="no[% flagloo.name %]">
 				[% IF ( flagloo.no ) %]
 				<input type="radio" id="no[% flagloo.name %]" name="[% flagloo.name %]" value="0" checked="checked"/>
 				[% ELSE %]
 				<input type="radio" id="no[% flagloo.name %]" name="[% flagloo.name %]" value="0" />
 				[% END %]
+                            No </label>
                 [% ELSE %]
                   [% IF flagloo.yes %]Yes[% ELSE %]No[% END %]
                 [% END %]

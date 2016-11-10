@@ -327,7 +327,7 @@ $(document).ready(function(){
         [% END %]
 
         <div id="toolbar" class="btn-toolbar">
-            <a class="btn btn-small" id="newnumberpattern" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=new"><i class="fa fa-plus"></i> New numbering pattern</a>
+            <a class="btn btn-default btn-sm" id="newnumberpattern" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=new"><i class="fa fa-plus"></i> New numbering pattern</a>
         </div>
 
         [% IF (numberpatterns_loop.size) %]
@@ -349,8 +349,8 @@ $(document).ready(function(){
                   <td>[% numberpattern.numberingmethod %]</td>
                   <td>[% numberpattern.displayorder %]</td>
                   <td class="actions">
-                    <a class="btn btn-mini" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=modify&id=[% numberpattern.id %]"><i class="fa fa-pencil"></i> Edit</a>
-                    <a class="delete_pattern btn btn-mini" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=del&id=[% numberpattern.id %]"><i class="fa fa-trash"></i> Delete</a>
+                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=modify&id=[% numberpattern.id %]"><i class="fa fa-pencil"></i> Edit</a>
+                    <a class="delete_pattern btn btn-default btn-xs" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl?op=del&id=[% numberpattern.id %]"><i class="fa fa-trash"></i> Delete</a>
                   </td>
                 </tr>
               [% END %]

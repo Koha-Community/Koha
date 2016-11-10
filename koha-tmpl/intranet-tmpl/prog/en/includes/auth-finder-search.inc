@@ -106,8 +106,8 @@ function finderjumpfull(page)
 </script>
 
 <div id="toolbar" class="btn-toolbar">
-    <div class="btn-group"><a href="#" id="clear" class="btn btn-small"><i class="fa fa-trash"></i> Clear field</a></div>
-    <div class="btn-group"><a href="#" id="createnew" class="btn btn-small"><i class="fa fa-plus"></i> Create new authority</a></div>
+    <div class="btn-group"><a href="#" id="clear" class="btn btn-default btn-sm"><i class="fa fa-trash"></i> Clear field</a></div>
+    <div class="btn-group"><a href="#" id="createnew" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Create new authority</a></div>
 </div>
 <form name="f" method="get" action="auth_finder.pl">
             <input type="hidden" name="source" value="[% source %]" />

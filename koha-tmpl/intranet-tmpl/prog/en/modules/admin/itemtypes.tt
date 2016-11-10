@@ -89,7 +89,7 @@ Item types administration
 	
 
 [% IF op == 'list' %]<div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-small" id="newitemtype" href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form"><i class="fa fa-plus"></i> New item type</a>
+    <a class="btn btn-default btn-sm" id="newitemtype" href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form"><i class="fa fa-plus"></i> New item type</a>
 </div>[% END %]
 
 [% FOREACH m IN messages %]
@@ -389,8 +389,8 @@ Item types administration
             </td>
             <td>[% itemtype.checkinmsg | html_line_break %]</td>
             <td class="actions">
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype |html %]" class="btn btn-mini"><i class="fa fa-pencil"></i> Edit</a>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype |html %]" class="btn btn-mini"><i class="fa fa-trash"></i> Delete</a>
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype |html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype |html %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
             </td>
           </tr>
           [% END %]

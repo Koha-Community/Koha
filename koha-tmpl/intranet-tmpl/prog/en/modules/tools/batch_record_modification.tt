@@ -185,7 +185,9 @@ $(document).ready(function() {
             [% END %]
           [% END %]
         </select>
-        <div id="marcPreview" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+        <div id="marcPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 id="marcPreviewLabel">MARC preview</h3>
@@ -194,7 +196,9 @@ $(document).ready(function() {
                 <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
             </div>
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+            </div>
+            </div>
             </div>
         </div>
         [% IF recordtype == 'biblio' %]
@@ -218,7 +222,7 @@ $(document).ready(function() {
                   <td>[% biblio.biblionumber %]</td>
                   <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]">[% biblio.title %]</a></td>
                   <td class="actions">
-                    <a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber %]&mmtid=[% mmtid %]" class="previewMARC btn btn-mini" data-record_type="biblio" data-record_id="[% biblio.biblionumber %]" data-mmtid="[% mmtid %]" title="Preview MARC"><i class="fa fa-eye"></i> Show MARC</a>
+                    <a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber %]&mmtid=[% mmtid %]" class="previewMARC btn btn-default btn-xs" data-record_type="biblio" data-record_id="[% biblio.biblionumber %]" data-mmtid="[% mmtid %]" title="Preview MARC"><i class="fa fa-eye"></i> Show MARC</a>
                   </td>
                 </tr>
               [% END %]

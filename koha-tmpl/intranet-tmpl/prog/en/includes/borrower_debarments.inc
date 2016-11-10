@@ -66,7 +66,7 @@
                         <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
                         [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                             <td>
-                                <a class="remove_restriction btn btn-mini" href="/cgi-bin/koha/members/mod_debarment.pl?borrowernumber=[% borrowernumber %]&amp;borrower_debarment_id=[% d.borrower_debarment_id %]&amp;action=del">
+                                <a class="remove_restriction btn btn-default btn-xs" href="/cgi-bin/koha/members/mod_debarment.pl?borrowernumber=[% borrowernumber %]&amp;borrower_debarment_id=[% d.borrower_debarment_id %]&amp;action=del">
                                     <i class="fa fa-trash"></i> Remove
                                 </a>
                             </td>

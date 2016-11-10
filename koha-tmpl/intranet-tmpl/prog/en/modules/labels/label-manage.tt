@@ -148,8 +148,8 @@
                                         [% FOREACH text_field IN table_loo.text_fields %]
                                             [% IF ( text_field.select_field ) %]
                                                 <td class="actions">
-                                                    <a class="btn btn-mini" href="/cgi-bin/koha/labels/label-edit-[% label_element |url %].pl?op=edit&amp;element_id=[% text_field.field_value |url %]"><i class="fa fa-edit"></i> Edit</a>
-                                                    <a class="btn btn-mini delete" href="/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=[% label_element %]&amp;element_id=[% text_field.field_value |url %]"><i class="fa fa-trash"></i> Delete</a>
+                                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/labels/label-edit-[% label_element |url %].pl?op=edit&amp;element_id=[% text_field.field_value |url %]"><i class="fa fa-edit"></i> Edit</a>
+                                                    <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=[% label_element %]&amp;element_id=[% text_field.field_value |url %]"><i class="fa fa-trash"></i> Delete</a>
                                                 </td>
                                                 [% IF label_element == 'batch' %] <td><input type="checkbox" name="action" value="[% text_field.field_value %]" /></td>[% END %]
                                             [% ELSIF ( text_field.field_value ) %]
@@ -162,7 +162,7 @@
                                     [% END %]
                                 [% END %]
                             </table>
-                            [% IF ( print ) %]<button type="button" class="btn btn-sm" id="print">Export selected</button>[% END %]
+                            [% IF ( print ) %]<button type="button" class="btn btn-default btn-sm" id="print">Export selected</button>[% END %]
                             </fieldset>
                             </form>
                             [% ELSE %]

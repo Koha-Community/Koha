@@ -112,13 +112,13 @@ $(document).ready(function() {
       [% IF ( account.amountoutstandingcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding %]</td>
       <td class="actions">
         [% IF ( account.payment ) %]
-          <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-mini"><i class="fa fa-print"></i> Print</a>
+          <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
         [% ELSE %]
-          <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-mini"><i class="fa fa-print"></i> Print</a>
+          <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
         [% END %]
         [% IF ( reverse_col) %]
           [% IF ( account.payment ) %]
-            <a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-mini"><i class="fa fa-undo"></i> Reverse</a>
+            <a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-undo"></i> Reverse</a>
           [% ELSE %]
             &nbsp;
           [% END %]

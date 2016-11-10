@@ -43,7 +43,7 @@ $(document).ready(function(){
 	[% FOREACH loop_supplier IN loop_suppliers %]
         <tr>
 			<td>[% loop_supplier.name %]</td>
-            <td><a class="btn btn-mini select_vendor" href="#" data-vendorid="[% loop_supplier.aqbooksellerid %]" data-vendorname="[% loop_supplier.name |html%]">Choose</a></td>
+            <td><a class="btn btn-default btn-xs select_vendor" href="#" data-vendorid="[% loop_supplier.aqbooksellerid %]" data-vendorname="[% loop_supplier.name |html%]">Choose</a></td>
 		</tr>
 	[% END %]
 </table>
@@ -51,7 +51,7 @@ $(document).ready(function(){
 
     <p><a href="/cgi-bin/koha/serials/acqui-search.pl">Perform a new search</a></p>
 
-    <div id="closewindow"><a href="#" class="btn btn-default close">Cancel</a></div>
+    <div id="closewindow"><a href="#" class="btn btn-default btn-default close">Cancel</a></div>
 
 </div>
 

@@ -263,7 +263,7 @@ function placeHold () {
 function forgetPatron(){
     $.removeCookie("holdfor", { path: '/' });
     $(".holdforlink").remove();
-    $("#placeholdc").html("<a class=\"btn btn-mini placehold\" href=\"#\"><i class=\"fa fa-sticky-note-o\"></i> "+_("Place hold")+"</a>");
+    $("#placeholdc").html("<a class=\"btn btn-default btn-xs placehold\" href=\"#\"><i class=\"fa fa-sticky-note-o\"></i> "+_("Place hold")+"</a>");
 }
 
 function addToList () {
@@ -375,8 +375,8 @@ var holdForPatron = function () {
                 [% IF ( CAN_user_reserveforothers && DisplayMultiPlaceHold ) %]
                 [% IF ( holdfor ) %]
                     <div id="placeholdc" class="btn-group">
-                        <button class="btn btn-mini placehold"><i class="fa fa-sticky-note-o"></i> Place hold</button>
-                        <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+                        <button class="btn btn-default btn-xs placehold"><i class="fa fa-sticky-note-o"></i> Place hold</button>
+                        <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                         <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
@@ -387,17 +387,17 @@ var holdForPatron = function () {
                         </ul>
                     </div>
                 [% ELSE %]
-                    <div id="placeholdc" class="btn-group"><a class="btn btn-mini placehold" href="#"><i class="fa fa-sticky-note-o"></i> Place hold</a></div>
+                    <div id="placeholdc" class="btn-group"><a class="btn btn-default btn-xs placehold" href="#"><i class="fa fa-sticky-note-o"></i> Place hold</a></div>
                 [% END %]
                 [% END %]
 
-                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %] <div class="btn-group"><a class="btn btn-mini" id="z3950submit" href="#"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>[% END %]
+                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %] <div class="btn-group"><a class="btn btn-default btn-xs" id="z3950submit" href="#"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>[% END %]
             </div>
         </div>
     [% ELSE %]
         <div id="searchheader">
 			<form method="post" name="fz3950" class="fz3950bigrpad">
-                <button class="btn" type="button" id="z3950submit"><i class="fa fa-search"></i> Z39.50/SRU search</button>
+                <button class="btn btn-default" type="button" id="z3950submit"><i class="fa fa-search"></i> Z39.50/SRU search</button>
 			</form>
             <h3>No results found</h3>
         [% IF ( searchdesc ) %]
