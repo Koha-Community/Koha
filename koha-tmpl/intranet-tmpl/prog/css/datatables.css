@@ -45,8 +45,19 @@ div.dataTables_info,
 div.dataTables_paginate {
     float: left;
     padding : .3em .5em .3em .5em;
-
 }
+
+div.dataTables_filter label,
+div.dataTables_length label,
+div.dataTables_info label,
+div.dataTables_paginate label,
+div.dataTables_filter input,
+div.dataTables_length input,
+div.dataTables_info input,
+div.dataTables_paginate input {
+    padding: 0;
+}
+
 div.dataTables_length {
     border-right : 1px solid #686868;
     line-height:1.9em;
@@ -60,8 +71,11 @@ div.dataTables_filter {
     border-left : 1px solid #FFF;
     border-right : 1px solid #AAAAAA;
 }
+div.dataTables_length label {
+    display: inline;
+}
 div.dataTables_filter {
-    line-height : 1.9em;
+    line-height : inherit;
 }
 div.dataTables_paginate {
     padding : 0;
@@ -219,15 +233,13 @@ div.dataTables_paginate.paging_four_button {
     box-shadow: 2px 2px 3px 1px rgba(0, 0, 0, 0.2);
     color: #333;
     font-size: 14px;
-    height: 30px;
     left: 50%;
     margin-left: -125px;
     margin-top: -15px;
-    padding: 14px 0 2px;
+    padding: 10px 14px 12px;
     position: fixed;
     text-align: center;
     top: 50%;
-    width: 250px;
 }
 
 tr.odd.selected td {
@@ -262,4 +274,8 @@ table.group tr.odd td {
 table.group tr.even td {
     background-color: #FFF;
     border-right : 1px solid #BCBCBC;
+}
+
+button.dt-button, div.dt-button, a.dt-button {
+    margin: 3px 3px 0;
 }

@@ -9,9 +9,19 @@ input:focus, textarea:focus {
 ::selection      { background:#538200; color:#ffffff; /* Safari and Opera */ }
 ::-moz-selection  { background:#538200; color:#ffffff; /* Firefox */ }
 
-a, a:link, a:visited {
+a, a:link, a:visited,
+a.btn:link, a.btn:visited {
     color : #004d99;
     text-decoration: none;
+}
+
+.btn-group {
+    white-space: nowrap;
+}
+
+.btn-group .btn {
+    float: none;
+    display: inline-block;
 }
 
 a:hover, a:active {
@@ -107,7 +117,30 @@ em strong {
 
 input, textarea {
     padding : 2px 4px;
+    line-height: normal;
 }
+
+input[type="checkbox"], input[type="radio"] {
+    vertical-align: middle;
+    margin: 0;
+}
+
+label, .label {
+    font-weight: normal;
+    font-size: inherit;
+    padding: 0;
+    color: black;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+label input[type="checkbox"],
+label input[type="radio"],
+.label input[type="checkbox"],
+.label input[type="radio"] {
+    margin-top: 0;
+}
+
 
 .subfield-label {
     font-style : italic;
@@ -300,9 +333,10 @@ td.total {
 }
 
 caption {
-	font-size : 133.9%;
-	font-weight : bold;
-	margin : .3em 0;
+    font-size : 133.9%;
+    font-weight : bold;
+    margin : .3em 0;
+    color: black;
 }
 
 .problem {
@@ -328,12 +362,13 @@ fieldset.lastchecked {
 }
 
 legend {
-	font-size : 123.1%;
-	font-weight : bold;
+    font-size : 123.1%;
+    font-weight : bold;
     border:2px solid #b9d8d9;
     background-color:#ffffff;
     border-radius:3px;
     padding: 0.2em 0.5em;
+    width: auto;
 }
 
 #floating-save {
@@ -354,6 +389,10 @@ legend {
 
 #header+#breadcrumbs {
 	margin-top : 1em;
+}
+
+#header>.container-fluid {
+    padding: 0;
 }
 
 div.justify {
@@ -421,6 +460,7 @@ div#toolbar,
 .btn-toolbar {
     background-color : #EDF4F6;
     padding: 5px 5px 5px 5px;
+    margin: 0;
     border-radius: 5px 5px 0 0;
     border: 1px solid #E6F0F2;
 }
@@ -542,6 +582,7 @@ div.yui-b fieldset.brief li.radio {
 	padding : .7em 0;
 }
 div.yui-b fieldset.brief li.radio label,
+div.yui-b fieldset.brief li.checkbox label,
 div.yui-b fieldset.brief li.dateinsert label,
 div.yui-b fieldset.brief li.dateinsert span.label,
 div.yui-b fieldset.brief li.radio span.label {
@@ -561,13 +602,23 @@ div.yui-b fieldset.brief fieldset legend {
 	font-size : 85%;
 }
 
+#tools_holidays fieldset.brief li.radio input,
+#tools_holidays fieldset.brief li.checkbox input{
+    margin-left: 0;
+}
+
+#tools_holidays fieldset.brief li.radio label,
+#tools_holidays fieldset.brief li.checkbox label {
+    margin-left: 20px;
+}
+
 fieldset.rows {  
 border-width : 1px;
 border:2px solid #b9d8d9;
 float : left;
 font-size : 90%;
 clear : left;
-margin: .9em 0 0 0;  
+margin: .9em 0 0 0;
 padding: 0;
 width: 100%; 
 }
@@ -601,6 +652,10 @@ fieldset.rows fieldset {
 
 .yui-b fieldset.rows label, .yui-b fieldset.rows span.label {  
 	width: 9em;  
+}
+
+.yui-b fieldset.rows td label, .yui-b fieldset.rows td span.label {
+        width: auto;
 }
 
 .yui-b fieldset.rows div.hint {
@@ -651,13 +706,27 @@ fieldset.rows li.radio label {
 fieldset.rows ol.radio label {
 	width : auto;
 	float : none;
-	margin-right : 0;
+	margin-right : 30px;
+        margin-left: 20px;
+        padding-left: 0;
+        vertical-align: middle;
+}
+
+fieldset.rows li.radio input + label {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+fieldset.rows ol.radio input[type="checkbox"],
+fieldset.rows ol.radio input[type="radio"] {
+    margin-left: -20px;
 }
 
 fieldset.rows ol.radio label.radio {
 	float : left;
-	width : 12em;
+	width : 9em;
 	margin-right : 1em;
+        margin-top: 0;
 }
 
 fieldset.rows caption {
@@ -693,12 +762,16 @@ fieldset.rows label.error {
 
 fieldset.action, div.action {
     background-color: transparent;
-	clear : both;
-	float : none;
+    clear : both;
+    float : none;
     border : 0px;
-  margin: 0;
-     padding: .4em .4em .4em .1em;
-  width: auto;
+    margin: 0.9em 0 0 0;
+    padding: 0.4em;
+    width: auto;
+}
+
+.btn-toolbar fieldset.action {
+    margin-top: 0;
 }
 
 div.rows+div.rows {
@@ -717,9 +790,14 @@ width: 100%;
 div.rows span.label {  
 	float: left;  
 	font-weight : bold;
-	width: 9em;  
+	width: 9em;
 	margin-right: 1em;  
 	text-align: left;
+        padding-top: 0;
+}
+
+.rows .label {
+    white-space: normal;
 }
 
 div.rows ol {  
@@ -760,7 +838,7 @@ fieldset.rows label.inline {
 fieldset.rows .inputnote {
 	clear : left;
 	float : left;
-	margin : .5em 0 0 11em;
+	margin : 1em 0 0 11em;
 }
 
 .checkedout {
@@ -1670,7 +1748,6 @@ span.permissiondesc {
 #marcPreview th { background-color : #FFF; border: 0; white-space: nowrap; text-align:left; vertical-align: top; padding: 2px; }
 #marcPreview td { border: 0; padding : 2px; vertical-align: top; }
 #marcPreview tbody tr:nth-child(2n+1) td { background-color: #FFF; }
-#marcPreview { width : 80%; margin-left : -40%; }
 @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }
 
 #cartDetails {
@@ -2322,13 +2399,7 @@ button,
     border : 0;
 }
 
-.btn-small .caret {
-    margin-top : .6em;
-}
-
-#toolbar .btn,
 #toolbar .dropdown-menu,
-.btn-toolbar .btn,
 .btn-toolbar .dropdown-menu {
     font-size: 13px;
 }
@@ -2336,6 +2407,11 @@ a.btn:link,
 a.btn:visited{
     color: #333333;
 }
+
+a.btn-link:hover {
+    color : #538200;
+}
+
 .dropdown-menu li {
     list-style: none outside none;
 }
@@ -2349,6 +2425,31 @@ a.disabled {
 
 .navbar {
     color: #333;
+    min-height: 20px;
+}
+
+#header.navbar {
+    margin-bottom: 0;
+}
+
+#header.navbar-default {
+    background: #e6f0f2;
+    box-shadow: none;
+    border: none;
+}
+
+#changelanguage .navbar-text {
+    margin: 0;
+}
+
+#changelanguage .navbar-text span {
+   display: block;
+   line-height: 20px;
+}
+
+#changelanguage .dropdown-menu > li > a,
+#changelanguage .dropdown-menu > li > span {
+    padding: 5px 15px;
 }
 
 .navbar .nav > li > a, .loggedout {
@@ -2365,12 +2466,6 @@ a.disabled {
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover {
     color: #538200;
-}
-
-.navbar .nav li.dropdown.open > .dropdown-toggle,
-.navbar .nav li.dropdown.active > .dropdown-toggle,
-.navbar .nav li.dropdown.open.active > .dropdown-toggle {
-    background: transparent none;
 }
 
 .navbar-static-top .navbar-inner {
@@ -2411,19 +2506,17 @@ a.disabled {
     font-weight: bold;
     padding : .4em .3em;
 }
-.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
-    background: transparent none;
-}
 
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover {
     color: #538200;
 }
 
-.navbar .nav li.dropdown.open > .dropdown-toggle,
-.navbar .nav li.dropdown.active > .dropdown-toggle,
-.navbar .nav li.dropdown.open.active > .dropdown-toggle {
-    background: transparent none;
+.navbar .nav li.dropdown.open > .dropdown-toggle:focus,
+.navbar .nav li.dropdown.active > .dropdown-toggle:focus,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle:focus {
+    background: #e6f0f2 none;
+    box-shadow: none;
 }
 
 .tooltip.bottom .tooltip-arrow {
@@ -2465,8 +2558,8 @@ a.close:hover {
 /* Redefine a new style for Bootstrap's class "close" since we use that already */
 /* Use <a class="closebtn" href="#">&times;</a> */
 .alert .closebtn{position:relative;top:-2px;right:-21px;line-height:20px;}
-.modal-header .closebtn{margin-top:2px;}
-.closebtn{float:right;font-size:20px;font-weight:bold;line-height:20px;color:#000000;text-shadow:0 1px 0 #ffffff;opacity:0.2;filter:alpha(opacity=20);}.closebtn:hover{color:#000000;text-decoration:none;cursor:pointer;opacity:0.4;filter:alpha(opacity=40);}
+.modal-header .closebtn{margin-top:-2px;}
+.closebtn{float: right;font-size: 21px;font-weight: bold;line-height: 1;color: #000;text-shadow: 0 1px 0 #fff;filter: alpha(opacity=20);opacity: .2;}.closebtn:hover,.closebtn:focus{color:#000;text-decoration:none;cursor:pointer;opacity:0.5;filter:alpha(opacity=50);}
 button.closebtn{padding:0;cursor:pointer;background:transparent;border:0;-webkit-appearance:none;}
 
 .btn-group label,
@@ -2681,7 +2774,9 @@ span.browse-button {
 }
 
 #i18nMenu a:hover,
-#i18nMenu a:active {
+#i18nMenu a:active,
+#i18nMenu .dropdown-menu a:hover,
+#i18nMenu .dropdown-menu a:focus {
     color : #538200;
     font-weight: normal;
 }
@@ -2693,7 +2788,6 @@ span.browse-button {
 
 #i18nMenu .dropdown-menu a:hover,
 #i18nMenu .dropdown-menu a:focus {
-    color : #FFF;
 }
 
 #circ_circulation_issue .onsite_checkout-select label,
@@ -2797,4 +2891,12 @@ div[class$="_table_controls"] {
 
 .modal-textarea {
     width: 98%;
+}
+
+fieldset.rows + fieldset.action {
+    padding-top: 20px;
+}
+
+.yui-u .rows li p label.widelabel {
+    width: auto;
 }

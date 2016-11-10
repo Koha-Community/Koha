@@ -181,7 +181,6 @@ body {
     border: solid 2px #b9d8d9;
     border-bottom-style: none;
     border-radius: 6px 6px 0 0;
-    height: 18px;
     margin-bottom: -32px;
     overflow: auto;
     padding: 4px;
@@ -206,14 +205,16 @@ body {
 
 /*> Search */
 
-#advanced-search-ui, #search-results-ui, #macro-ui {
-    padding: 5px;
+#advanced-search-ui .modal-lg, #search-results-ui .modal-lg, #macro-ui .modal-lg {
     width: 90%;
 }
 
 .modal-body {
     max-height: none;
-    padding: 0;
+}
+
+.modal-lg .modal-body {
+    overflow-y: auto;
 }
 
 #quicksearch-overlay {
@@ -282,7 +283,7 @@ body {
     width: 14em;
 }
 
-.icon-loading {
+.fa.fa-spinner {
     display: inline-block;
     height: 16px;
     width: 16px;
