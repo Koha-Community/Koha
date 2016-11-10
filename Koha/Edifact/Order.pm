@@ -338,6 +338,8 @@ sub name_and_address {
 sub order_line {
     my ( $self, $linenumber, $orderline ) = @_;
 
+    my $basket = Koha::Acquisition::Order->find( $orderline->ordernumber )->basket;
+
     my $schema = $self->{schema};
     if ( !$orderline->biblionumber )
     {                        # cannot generate an orderline without a bib record
@@ -374,7 +376,7 @@ sub order_line {
     #     we dont currently support this in koha
     # GIR copy-related data
     my @items;
-    if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
+    if ( $basket->effective_create_items eq 'ordering' ) {
         my @linked_itemnumbers = $orderline->aqorders_items;
 
         foreach my $item (@linked_itemnumbers) {
@@ -402,7 +404,15 @@ sub order_line {
     if ( $orderline->order_vendornote ) {
         $ol_fields->{servicing_instruction} = $orderline->order_vendornote;
     }
-    $self->add_seg( gir_segments( $ol_fields, @items ) );
+    $self->add_seg(
+        gir_segments(
+            {
+                basket    => $basket,
+                ol_fields => $ol_fields,
+                items     => \@items
+            }
+        )
+    );
 
     # TBD what if #items exceeds quantity
 
@@ -507,7 +517,11 @@ sub imd_segment {
 }
 
 sub gir_segments {
-    my ( $orderfields, @onorderitems ) = @_;
+    my ($params) = @_;
+
+    my $basket       = $params->{basket};
+    my $orderfields  = $params->{ol_fields};
+    my @onorderitems = @{ $params->{items} };
 
     my $budget_code = $orderfields->{budget_code};
     my @segments;
@@ -515,7 +529,7 @@ sub gir_segments {
     foreach my $item (@onorderitems) {
         my $seg = sprintf 'GIR+%03d', $sequence_no;
         $seg .= add_gir_identity_number( 'LFN', $budget_code );
-        if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
+        if ( $basket->effective_create_items eq 'ordering' ) {
             $seg .=
               add_gir_identity_number( 'LLO', $item->homebranch->branchcode );
             $seg .= add_gir_identity_number( 'LST', $item->itype );
