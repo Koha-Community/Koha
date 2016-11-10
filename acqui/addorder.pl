@@ -230,12 +230,9 @@ $orderinfo->{'list_price'}    ||=  0;
 $orderinfo->{'uncertainprice'} ||= 0;
 $orderinfo->{subscriptionid} ||= undef;
 
-my $basketno=$$orderinfo{basketno};
-my $basket = GetBasket($basketno);
-
-my $user = $input->remote_user;
-my $basketno=$$orderinfo{basketno};
-my $basket = Koha::Acquisition::Baskets->find( $basketno );
+my $user     = $input->remote_user;
+my $basketno = $$orderinfo{basketno};
+my $basket   = Koha::Acquisition::Baskets->find($basketno);
 
 # create, modify or delete biblio
 # create if $quantity>0 and $existing='no'
