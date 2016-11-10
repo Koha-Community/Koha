@@ -84,6 +84,8 @@ $biblios ||= !$authorities;
 $insert  ||= !$update;
 my $writemode = ($append) ? "a" : "w";
 
+pod2usage( -msg => "\nYou must specify either --biblios or --authorities, not both.\n", -exitval ) if $biblios && $authorities;
+
 if ($all) {
     $insert = 1;
     $update = 1;
