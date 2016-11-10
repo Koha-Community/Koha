@@ -465,6 +465,7 @@ SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, branchname
     AND b.branchcode = items.homebranch
     AND biblio.biblionumber   = biblioitems.biblionumber
     AND issues.borrowernumber = ?
+    AND issues.branchcode = ?
     AND TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
 END_SQL
 
@@ -613,7 +614,7 @@ END_SQL
                     ) unless $test_mode;
                     $verbose and warn "debarring $borr\n";
                 }
-                my @params = ($borrowernumber);
+                my @params = ($borrowernumber,$branchcode);
                 $verbose and warn "STH2 PARAMS: borrowernumber = $borrowernumber";
 
                 $sth2->execute(@params);
