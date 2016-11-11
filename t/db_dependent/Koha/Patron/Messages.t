@@ -37,7 +37,7 @@ $schema->storage->txn_begin;
 my $builder        = t::lib::TestBuilder->new;
 my $library        = $builder->build( { source => 'Branch' } );
 my $patron         = $builder->build( { source => 'Borrower', values => { branchcode => $library->{branchcode} } } );
-my $patron_2       = Koha::Patrons->search->next;
+my $patron_2       = $builder->build( { source => 'Borrower' } );
 my $nb_of_logaction = get_nb_of_logactions();
 my $nb_of_messages = Koha::Patron::Messages->search->count;
 
