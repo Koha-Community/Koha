@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 32;
+use DateTime::Duration;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -32,12 +33,10 @@ use Koha::Database;
 use Koha::DateUtils;
 use Koha::Library;
 
-use DateTime::Duration;
-
-
 BEGIN {
-    use_ok('C4::Circulation');
+    require_ok('C4::Circulation');
 }
+
 can_ok(
     'C4::Circulation',
     qw(AddIssue
@@ -55,10 +54,10 @@ can_ok(
       )
 );
 
-my $dbh = C4::Context->dbh;
-my $schema = Koha::Database->schema;
 #Start transaction
+my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
+my $dbh = C4::Context->dbh;
 
 my $builder = t::lib::TestBuilder->new();
 
