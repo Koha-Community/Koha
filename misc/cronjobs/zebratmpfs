@@ -1,0 +1,170 @@
+#!/bin/sh
+
+# ZebraTmpFS V160814 Written by Pasi Korkalo / Outi Libraries
+# A script for managing zebra-indexes on ram-disk (tmpfs)
+
+# The script has two functions:
+
+# 1) It functions as an init-script that sets up tmpfs and syncs zebra-index
+#    between the tmpfs and disk
+
+# 2) It takes care of updating/re-creating the index and keeping it in sync
+#    between the tmpfs and disk (for cron)
+
+# Update your index from crontab with something like this:
+# */5 06-20 * * * $KOHA_PATH/misc/cronjobs/zebratmpfs reindex >> /home/koha/koha-dev/var/log/zebra-tmpfs 2>&1
+
+# For complete re-indexing every su-mo night, this will also sync the new index to disk:
+# 10 00 * * 7 $KOHA_PATH/misc/cronjobs/zebratmpfs newindex >> /home/koha/koha-dev/var/log/zebra-tmpfs 2>&1
+
+# It's probably a good idea to sync the index to disk nightly:
+# 10 00 * * 1-6 $KOHA_PATH/misc/cronjobs/zebratmpfs synctodisk >> /home/koha/koha-dev/var/log/zebra-tmpfs 2>&1
+
+# To have zebratmpfs start automatically when bringing up Koha-server, do (as root):
+# ln -s $KOHA_PATH/misc/cronjobs/zebratmpfs /etc/init.d
+# update-rc.d zebratmpfs defaults
+
+### BEGIN INIT INFO
+# Provides:          zebratmpfs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Manage and sync Zebra inram/ondisk indexing
+# Description:       Start and stop tmpfs for zebra, keep disk and memory indexes synced and rebuild/refresh indexes
+### END INIT INFO
+
+# Reserve this much memory for the tmpfs:
+export tmpfssize=80G
+
+if test -z "$KOHA_PATH" || test -z "$KOHA_CONF"; then
+  echo "KOHA_PATH or KOHA_CONF not set."
+  exit 1
+fi
+
+zebraindexlocation=${KOHA_CONF%etc/koha-conf.xml}var/lib
+export zebraindexlocation
+
+syncit() {
+  # Sync current index to disk
+  nice -n 19 ionice -c 3 cp -au $zebraindexlocation/zebradb/* $zebraindexlocation/zebradb.ondisk
+}
+
+ramit() {
+  # Make dir and mount tmpfs if necessary, then sync data from disk
+  if ! mount | grep -q "^tmpfs on $zebraindexlocation/zebradb type tmpfs"; then
+    mkdir -p $zebraindexlocation/zebradb
+    test $(id -u) -gt 0 && needsudo="sudo"
+    $needsudo mount -t tmpfs -o size=$tmpfssize tmpfs $zebraindexlocation/zebradb || exit 1
+  fi
+  cp -au $zebraindexlocation/zebradb.ondisk/* $zebraindexlocation/zebradb
+}
+
+index() {
+  # Build or refresh index
+  cd $KOHA_PATH/misc/migration_tools/
+
+  case $1 in build )
+    ./rebuild_zebra.pl -b -a -r -x -w
+  ;; refresh )
+    ./rebuild_zebra.pl -b -a -z -x
+  esac
+
+  cd - > /dev/null 2>&1
+}
+
+estimatetime() {
+  # This will (very badly) estimate the time it takes to create a new index based on current index size.
+  size=$(du -sh $zebraindexlocation//zebradb | cut -f 1 -d 'G')
+  test $size -gt 1 2> /dev/null || size=1
+
+  hours=$(($size / 4))
+  minutes=$((($size % 4) * 15))
+
+  test $hours -eq 0 && unset hours || hours="$hours h "
+  echo "Current main index is about ${size}G, based on this indexing will take around $hours$minutes min."
+}
+
+log() { echo "$(date): $@" ; }
+
+doinit() {
+  if test -d $zebraindexlocation/zebradb; then
+
+  # zebradb has content? => yes => have ondisk? => no  => move current index as ondisk, mount tmpfs and sync from disk
+  #                                             => yes => won't overwrite current ondisk on init, abort with error
+  #                      => no  => have ondisk? => no  => index, then re-init
+  #                                             => yes => mount tmpfs, sync from disk
+
+    if test "$(echo $zebraindexlocation/zebradb/*)" != "$zebraindexlocation/zebradb/*"; then
+      if test -d $zebraindexlocation/zebradb.ondisk; then
+        log "$zebraindexlocation/zebradb.ondisk seems to exist, won't overwrite on init, exiting..."
+        exit 1
+      else
+        mv $zebraindexlocation/zebradb $zebraindexlocation/zebradb.ondisk
+        ramit
+      fi
+    else
+      if test -d $zebraindexlocation/zebradb.ondisk; then
+        ramit
+      else
+        index build
+        exec $0 start
+      fi
+    fi
+
+  elif test ! -e $zebraindexlocation/zebradb; then
+
+  # no zebradb => have ondisk? => yes => mount tmpfs, sync from disk
+  #                            => no  => index, then re-init
+
+    if test -d $zebraindexlocation/zebradb.ondisk; then
+      ramit
+    else
+      index build
+      exec $0 start
+    fi
+
+  else
+
+    log "$zebraindexlocation/zebradb exists, but it isn't a directory (maybe it's a symlink to somewere else?), exiting confused..."
+    exit 1
+
+  fi
+}
+
+log "Called $0 $@."
+
+case $1 in start )
+
+  log "Initializing..."
+  doinit
+
+;; newindex )
+
+  # Need to make a backup because bloody rebuild_zebra.pl doesn't return it's status, which would
+  # enable checking for the success of building new index and reacting accordingly.
+  # Restoring old index in case of error on rebuild remains manual :(
+
+  log "Backing up old index..."
+  cd $zebraindexlocation
+  tar -czf zebradb.tar.gz zebradb
+  cd - > /dev/null 2>&1
+
+  log $(estimatetime)
+  log "Building new index..."
+  index build
+
+  log "Syncing to disk..."
+  syncit
+
+;; reindex )
+
+  log "Refreshing index..."
+  index refresh
+
+;; stop | synctodisk )
+
+  log "Syncing to disk..."
+  syncit
+
+esac
+
+log "Done $0 $@."
