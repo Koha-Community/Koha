@@ -41,12 +41,6 @@ BEGIN {
     require_ok('C4::Reserves');
 }
 
-# a very minimal mack of userenv for use by the test of DelItemCheck
-my $module = new Test::MockModule('C4::Context');
-$module->mock('userenv', sub {
-    { }
-});
-
 # Start transaction
 my $database = Koha::Database->new();
 my $schema = $database->schema();
@@ -70,6 +64,9 @@ my $category_2 = $builder->build({ source => 'Category' })->{ categorycode };
 my $itemtype = $builder->build(
     { source => 'Itemtype', value => { notforloan => undef } } )->{itemtype};
 
+C4::Context->set_userenv(
+    undef, undef, undef, undef, undef, undef, $branch_1
+);
 
 # Create a helper biblio
 my $bib = MARC::Record->new();
