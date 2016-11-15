@@ -42,7 +42,7 @@ BEGIN {
 	@EXPORT = qw(
         &GetPrinters &GetPrinter
         &GetItemTypes &getitemtypeinfo
-                &GetItemTypesCategorized &GetItemTypesByCategory
+        &GetItemTypesCategorized
         &getallthemes
         &getFacets
         &getnbpages
@@ -205,24 +205,6 @@ sub GetItemTypesCategorized {
         WHERE searchcategory > '' and hideinopac=0
         |;
 return ($dbh->selectall_hashref($query,'itemtype'));
-}
-
-=head2 GetItemTypesByCategory
-
-    @results = GetItemTypesByCategory( $searchcategory );
-
-Returns the itemtype code of all itemtypes included in a searchcategory.
-
-=cut
-
-sub GetItemTypesByCategory {
-    my ($category) = @_;
-    my $count = 0;
-    my @results;
-    my $dbh = C4::Context->dbh;
-    my $query = qq|SELECT itemtype FROM itemtypes WHERE searchcategory=?|;
-    my $tmp=$dbh->selectcol_arrayref($query,undef,$category);
-    return @$tmp;
 }
 
 =head2 getitemtypeinfo

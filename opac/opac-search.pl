@@ -479,7 +479,8 @@ my %is_nolimit = map { $_ => 1 } @nolimits;
 if (@searchCategories > 0) {
     my @tabcat;
     foreach my $typecategory (@searchCategories) {
-        push (@tabcat, GetItemTypesByCategory($typecategory));
+        my @itemtypes = Koha::ItemTypes->search({ searchcategory => $typecategory });
+        push @tabcat, $_->itemtype for @itemtypes;
     }
 
     foreach my $itemtypeInCategory (@tabcat) {

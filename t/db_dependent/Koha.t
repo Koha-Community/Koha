@@ -13,7 +13,7 @@ use Test::More tests => 8;
 use DateTime::Format::MySQL;
 
 BEGIN {
-    use_ok('C4::Koha', qw( :DEFAULT GetDailyQuote GetItemTypesByCategory GetItemTypesCategorized));
+    use_ok('C4::Koha', qw( :DEFAULT GetDailyQuote GetItemTypesCategorized));
     use_ok('C4::Members');
 }
 
@@ -239,7 +239,7 @@ subtest 'ISBN tests' => sub {
 
 };
 
-subtest 'GetItemTypesByCategory GetItemTypesCategorized test' => sub{
+subtest 'GetItemTypesCategorized test' => sub{
     plan tests => 7;
 
     my $avc = Koha::AuthorisedValueCategories->find('ITEMTYPECAT');
@@ -259,12 +259,13 @@ subtest 'GetItemTypesByCategory GetItemTypesCategorized test' => sub{
     $insertSth->execute('BKghjklo3', 'Yet another type of book', 'Qwertyware', 0);
 
     # Azertyware should not exist.
-    my @results = GetItemTypesByCategory('Azertyware');
-    is(scalar @results, 0, 'GetItemTypesByCategory: Invalid category returns nothing');
+    my @itemtypes = Koha::ItemTypes->search({ searchcategory => 'Azertyware' });
+    is( @itemtypes, 0, 'Search item types by searchcategory: Invalid category returns nothing');
 
-    @results = GetItemTypesByCategory('Qwertyware');
+    @itemtypes = Koha::ItemTypes->search({ searchcategory => 'Qwertyware' });
+    my @got = map { $_->itemtype } @itemtypes;
     my @expected = ( 'BKghjklo2', 'BKghjklo3' );
-    is_deeply(\@results,\@expected,'GetItemTypesByCategory: valid category returns itemtypes');
+    is_deeply(\@got,\@expected,'Search item types by searchcategory: valid category returns itemtypes');
 
     # add more data since GetItemTypesCategorized's search is more subtle
     $insertGroup = Koha::AuthorisedValue->new(
@@ -285,7 +286,7 @@ subtest 'GetItemTypesByCategory GetItemTypesCategorized test' => sub{
     ok(exists $hrCat->{Qwertyware}, 'GetItemTypesCategorized: partially visible category exists');
 
     my @only = ( 'BKghjklo1', 'BKghjklo2', 'BKghjklo3', 'BKghjklo4', 'BKghjklo5', 'Qwertyware', 'Veryheavybook' );
-    @results = ();
+    my @results = ();
     foreach my $key (@only) {
         push @results, $key if exists $hrCat->{$key};
     }
