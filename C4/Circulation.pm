@@ -397,7 +397,13 @@ sub TooMany {
  
     # given branch, patron category, and item type, determine
     # applicable issuing rule
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $cat_borrower, itemtype => $type, branchcode => $branch });
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+        {   categorycode => $cat_borrower,
+            itemtype     => $type,
+            branchcode   => $branch
+        }
+    );
+
 
     # if a rule is found and has a loan limit set, count
     # how many loans the patron already has that meet that
@@ -1333,7 +1339,13 @@ sub AddIssue {
 
             # If automatic renewal wasn't selected while issuing, set the value according to the issuing rule.
             unless ($auto_renew) {
-                my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branch });
+                my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+                    {   categorycode => $borrower->{categorycode},
+                        itemtype     => $item->{itype},
+                        branchcode   => $branch
+                    }
+                );
+
                 $auto_renew = $issuing_rule->auto_renew if $issuing_rule;
             }
 
@@ -1533,7 +1545,13 @@ Get the Hard Due Date and it's comparison for an itemtype, a borrower type and a
 sub GetHardDueDate {
     my ( $borrowertype, $itemtype, $branchcode ) = @_;
 
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrowertype, itemtype => $itemtype, branchcode => $branchcode });
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+        {   categorycode => $borrowertype,
+            itemtype     => $itemtype,
+            branchcode   => $branchcode
+        }
+    );
+
 
     if ( defined( $issuing_rule ) ) {
         if ( $issuing_rule->hardduedate ) {
@@ -2185,7 +2203,12 @@ sub _debar_user_on_return {
     my $branchcode = _GetCircControlBranch( $item, $borrower );
 
     my $circcontrol = C4::Context->preference('CircControl');
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branchcode });
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+        {   categorycode => $borrower->{categorycode},
+            itemtype     => $item->{itype},
+            branchcode   => $branchcode
+        }
+    );
     my $finedays = $issuing_rule ? $issuing_rule->finedays : undef;
     my $unit     = $issuing_rule ? $issuing_rule->lengthunit : undef;
     my $chargeable_units = C4::Overdues::get_chargeable_units($unit, $dt_due, $dt_today, $branchcode);
@@ -2780,7 +2803,12 @@ sub CanBookBeRenewed {
     return ( 1, undef ) if $override_limit;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branchcode });
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+        {   categorycode => $borrower->{categorycode},
+            itemtype     => $item->{itype},
+            branchcode   => $branchcode
+        }
+    );
 
     return ( 0, "too_many" )
       if not $issuing_rule or $issuing_rule->renewalsallowed <= $itemissue->{renewals};
@@ -3022,7 +3050,12 @@ sub GetRenewCount {
     # $item and $borrower should be calculated
     my $branchcode = _GetCircControlBranch($item, $borrower);
 
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branchcode });
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+        {   categorycode => $borrower->{categorycode},
+            itemtype     => $item->{itype},
+            branchcode   => $branchcode
+        }
+    );
 
     $renewsallowed = $issuing_rule ? $issuing_rule->renewalsallowed : undef; # FIXME Just replace undef with 0 to get what we expected. But what about the side-effects? TODO LATER
     $renewsleft    = $renewsallowed - $renewcount;
@@ -3062,7 +3095,12 @@ sub GetSoonestRenewDate {
       or return;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branchcode });
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+        {   categorycode => $borrower->{categorycode},
+            itemtype     => $item->{itype},
+            branchcode   => $branchcode
+        }
+    );
 
     my $now = dt_from_string;
     return $now unless $issuing_rule;
@@ -3117,7 +3155,12 @@ sub GetLatestAutoRenewDate {
       or return;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrower->{categorycode}, itemtype => $item->{itype}, branchcode => $branchcode });
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+        {   categorycode => $borrower->{categorycode},
+            itemtype     => $item->{itype},
+            branchcode   => $branchcode
+        }
+    );
 
     return unless $issuing_rule;
     return if not $issuing_rule->no_auto_renewal_after
