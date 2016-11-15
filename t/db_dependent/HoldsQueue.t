@@ -18,6 +18,7 @@ use Koha::Database;
 use Koha::DateUtils;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 BEGIN {
     use FindBin;
@@ -61,8 +62,8 @@ my $itemtype = $builder->build({ source => 'Itemtype', value => { notforloan => 
 
 #Set up the stage
 # Sysprefs and cost matrix
-C4::Context->set_preference('HoldsQueueSkipClosed', 0);
-C4::Context->set_preference('LocalHoldsPriority', 0);
+t::lib::Mocks::mock_preference('HoldsQueueSkipClosed', 0);
+t::lib::Mocks::mock_preference('LocalHoldsPriority', 0);
 $dbh->do("UPDATE systempreferences SET value = ? WHERE variable = 'StaticHoldsQueueWeight'", undef,
          join( ',', @other_branches, $borrower_branchcode, $least_cost_branch_code));
 $dbh->do("UPDATE systempreferences SET value = '0' WHERE variable = 'RandomizeHoldsQueueWeight'");
@@ -118,7 +119,7 @@ my $test_sth = $dbh->prepare("SELECT * FROM hold_fill_targets
                               WHERE borrowernumber = $borrowernumber");
 
 # We have a book available homed in borrower branch, no point fiddling with AutomaticItemReturn
-C4::Context->set_preference('AutomaticItemReturn', 0);
+t::lib::Mocks::mock_preference('AutomaticItemReturn', 0);
 test_queue ('take from homebranch',  0, $borrower_branchcode, $borrower_branchcode);
 test_queue ('take from homebranch',  1, $borrower_branchcode, $borrower_branchcode);
 
@@ -127,14 +128,14 @@ $dbh->do("DELETE FROM hold_fill_targets");
 $dbh->do("DELETE FROM issues WHERE itemnumber IN (SELECT itemnumber FROM items WHERE homebranch = '$borrower_branchcode' AND holdingbranch = '$borrower_branchcode')");
 $dbh->do("DELETE FROM items WHERE homebranch = '$borrower_branchcode' AND holdingbranch = '$borrower_branchcode'");
 # test_queue will flush
-C4::Context->set_preference('AutomaticItemReturn', 1);
+t::lib::Mocks::mock_preference('AutomaticItemReturn', 1);
 # Not sure how to make this test more difficult - holding branch does not matter
 
 $dbh->do("DELETE FROM tmp_holdsqueue");
 $dbh->do("DELETE FROM hold_fill_targets");
 $dbh->do("DELETE FROM issues WHERE itemnumber IN (SELECT itemnumber FROM items WHERE homebranch = '$borrower_branchcode')");
 $dbh->do("DELETE FROM items WHERE homebranch = '$borrower_branchcode'");
-C4::Context->set_preference('AutomaticItemReturn', 0);
+t::lib::Mocks::mock_preference('AutomaticItemReturn', 0);
 # We have a book available held in borrower branch
 test_queue ('take from holdingbranch', 0, $borrower_branchcode, $borrower_branchcode);
 test_queue ('take from holdingbranch', 1, $borrower_branchcode, $borrower_branchcode);
@@ -173,7 +174,7 @@ $dbh->do("DELETE FROM default_branch_circ_rules");
 $dbh->do("DELETE FROM default_branch_item_rules");
 $dbh->do("DELETE FROM default_circ_rules");
 
-C4::Context->set_preference('UseTransportCostMatrix', 0);
+t::lib::Mocks::mock_preference('UseTransportCostMatrix', 0);
 
 $itemtype = $builder->build({ source => 'Itemtype', value => { notforloan => 0 } })->{itemtype};
 
@@ -299,7 +300,7 @@ is( $holds_queue->[1]->{cardnumber}, $borrower2->{cardnumber}, "Holds queue fill
 # 1 of which is coming from MPL. Let's enable HoldsQueueSkipClosed
 # and make today a holiday for MPL. When we run it again we should only
 # have 1 row in the holds queue
-C4::Context->set_preference('HoldsQueueSkipClosed', 1);
+t::lib::Mocks::mock_preference('HoldsQueueSkipClosed', 1);
 my $today = dt_from_string();
 C4::Calendar->new( branchcode => $branchcodes[0] )->insert_single_holiday(
     day         => $today->day(),
@@ -314,7 +315,7 @@ is( Koha::Calendar->new( branchcode => $branchcodes[0] )->is_holiday( $today ), 
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( scalar( @$holds_queue ), 1, "Holds not filled with items from closed libraries" );
-C4::Context->set_preference('HoldsQueueSkipClosed', 0);
+t::lib::Mocks::mock_preference('HoldsQueueSkipClosed', 0);
 
 $dbh->do("DELETE FROM default_circ_rules");
 $dbh->do("INSERT INTO default_circ_rules ( holdallowed ) VALUES ( 2 )");
@@ -327,22 +328,22 @@ is( @$holds_queue, 3, "Holds queue filling correct number for holds for default 
 # one of which is coming from MPL. Let's enable HoldsQueueSkipClosed
 # and use our previously created holiday for MPL
 # When we run it again we should only have 2 rows in the holds queue
-C4::Context->set_preference( 'HoldsQueueSkipClosed', 1 );
+t::lib::Mocks::mock_preference( 'HoldsQueueSkipClosed', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( scalar( @$holds_queue ), 2, "Holds not filled with items from closed libraries" );
-C4::Context->set_preference( 'HoldsQueueSkipClosed', 0 );
+t::lib::Mocks::mock_preference( 'HoldsQueueSkipClosed', 0 );
 
 ## Test LocalHoldsPriority
-C4::Context->set_preference('LocalHoldsPriority', 1);
+t::lib::Mocks::mock_preference('LocalHoldsPriority', 1);
 
 $dbh->do("DELETE FROM default_circ_rules");
 $dbh->do("INSERT INTO default_circ_rules ( holdallowed ) VALUES ( 2 )");
 $dbh->do("DELETE FROM issues");
 
 # Test homebranch = patron branch
-C4::Context->set_preference('LocalHoldsPriorityPatronControl', 'HomeLibrary');
-C4::Context->set_preference('LocalHoldsPriorityItemControl', 'homebranch');
+t::lib::Mocks::mock_preference('LocalHoldsPriorityPatronControl', 'HomeLibrary');
+t::lib::Mocks::mock_preference('LocalHoldsPriorityItemControl', 'homebranch');
 C4::Context->clear_syspref_cache();
 $dbh->do("DELETE FROM reserves");
 $sth->execute( $borrower1->{borrowernumber}, $biblionumber, $branchcodes[0], 1 );
@@ -358,8 +359,8 @@ $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice 
 is( $holds_queue->[0]->{cardnumber}, $borrower3->{cardnumber}, "Holds queue giving priority to patron who's home library matches item's home library");
 
 # Test holdingbranch = patron branch
-C4::Context->set_preference('LocalHoldsPriorityPatronControl', 'HomeLibrary');
-C4::Context->set_preference('LocalHoldsPriorityItemControl', 'holdingbranch');
+t::lib::Mocks::mock_preference('LocalHoldsPriorityPatronControl', 'HomeLibrary');
+t::lib::Mocks::mock_preference('LocalHoldsPriorityItemControl', 'holdingbranch');
 C4::Context->clear_syspref_cache();
 $dbh->do("DELETE FROM reserves");
 $sth->execute( $borrower1->{borrowernumber}, $biblionumber, $branchcodes[0], 1 );
@@ -375,8 +376,8 @@ $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice 
 is( $holds_queue->[0]->{cardnumber}, $borrower3->{cardnumber}, "Holds queue giving priority to patron who's home library matches item's holding library");
 
 # Test holdingbranch = pickup branch
-C4::Context->set_preference('LocalHoldsPriorityPatronControl', 'PickupLibrary');
-C4::Context->set_preference('LocalHoldsPriorityItemControl', 'holdingbranch');
+t::lib::Mocks::mock_preference('LocalHoldsPriorityPatronControl', 'PickupLibrary');
+t::lib::Mocks::mock_preference('LocalHoldsPriorityItemControl', 'holdingbranch');
 C4::Context->clear_syspref_cache();
 $dbh->do("DELETE FROM reserves");
 $sth->execute( $borrower1->{borrowernumber}, $biblionumber, $branchcodes[0], 1 );
@@ -392,8 +393,8 @@ $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice 
 is( $holds_queue->[0]->{cardnumber}, $borrower3->{cardnumber}, "Holds queue giving priority to patron who's home library matches item's holding library");
 
 # Test homebranch = pickup branch
-C4::Context->set_preference('LocalHoldsPriorityPatronControl', 'PickupLibrary');
-C4::Context->set_preference('LocalHoldsPriorityItemControl', 'homebranch');
+t::lib::Mocks::mock_preference('LocalHoldsPriorityPatronControl', 'PickupLibrary');
+t::lib::Mocks::mock_preference('LocalHoldsPriorityItemControl', 'homebranch');
 C4::Context->clear_syspref_cache();
 $dbh->do("DELETE FROM reserves");
 $sth->execute( $borrower1->{borrowernumber}, $biblionumber, $branchcodes[0], 1 );
@@ -408,7 +409,7 @@ C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( $holds_queue->[0]->{cardnumber}, $borrower3->{cardnumber}, "Holds queue giving priority to patron who's home library matches item's holding library");
 
-C4::Context->set_preference('LocalHoldsPriority', 0);
+t::lib::Mocks::mock_preference('LocalHoldsPriority', 0);
 ## End testing of LocalHoldsPriority
 
 
@@ -487,7 +488,7 @@ $dbh->do("DELETE FROM default_branch_item_rules");
 $dbh->do("DELETE FROM default_circ_rules");
 $dbh->do("DELETE FROM branch_item_rules");
 
-C4::Context->set_preference("UseTransportCostMatrix",1);
+t::lib::Mocks::mock_preference("UseTransportCostMatrix",1);
 
 my $tc_rs = $schema->resultset('TransportCost');
 $tc_rs->create({ frombranch => $library_A, tobranch => $library_B, cost => 0, disable_transfer => 1 });
@@ -518,7 +519,7 @@ is( @$holds_queue, 0, "Bug 15062 - Holds queue with Transport Cost Matrix will t
 # End Bug 15062
 
 # Test hold_fulfillment_policy
-C4::Context->set_preference( "UseTransportCostMatrix", 0 );
+t::lib::Mocks::mock_preference( "UseTransportCostMatrix", 0 );
 $borrowernumber = $borrower3->{borrowernumber};
 $library_A = $library1->{branchcode};
 $library_B = $library2->{branchcode};
@@ -630,7 +631,7 @@ CancelReserve( { reserve_id => $reserve_id } );
 # End testing hold_fulfillment_policy
 
 # Test hold itemtype limit
-C4::Context->set_preference( "UseTransportCostMatrix", 0 );
+t::lib::Mocks::mock_preference( "UseTransportCostMatrix", 0 );
 my $wrong_itemtype = $builder->build({ source => 'Itemtype', value => { notforloan => 0 } })->{itemtype};
 my $right_itemtype = $builder->build({ source => 'Itemtype', value => { notforloan => 0 } })->{itemtype};
 $borrowernumber = $borrower3->{borrowernumber};

@@ -93,10 +93,10 @@ subtest 'General Add, Get and Del tests' => sub {
     is( $getitem->{location}, 'CART', "The location should have been set to CART" );
     is( $getitem->{permanent_location}, $location, "The permanent_location should not have been set to CART" );
 
-    C4::Context->set_preference('item-level_itypes', '1');
+    t::lib::Mocks::mock_preference('item-level_itypes', '1');
     $getitem = GetItem($itemnumber);
     is( $getitem->{itype}, $itemtype->{itemtype}, "Itemtype set correctly when using item_level-itypes" );
-    C4::Context->set_preference('item-level_itypes', '0');
+    t::lib::Mocks::mock_preference('item-level_itypes', '0');
     $getitem = GetItem($itemnumber);
     is( $getitem->{itype}, undef, "Itemtype set correctly when not using item_level-itypes" );
 

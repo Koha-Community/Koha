@@ -70,7 +70,7 @@ subtest "InProcessingToShelvingCart tests" => sub {
     my $itemnumber = $built_item->{ itemnumber };
     my $item;
 
-    C4::Context->set_preference( "InProcessingToShelvingCart", 1 );
+    t::lib::Mocks::mock_preference( "InProcessingToShelvingCart", 1 );
     AddReturn( $barcode, $branch );
     $item = GetItem( $itemnumber );
     is( $item->{location}, 'CART',
@@ -79,7 +79,7 @@ subtest "InProcessingToShelvingCart tests" => sub {
     $item->{location} = $location;
     ModItem( $item, undef, $itemnumber );
 
-    C4::Context->set_preference( "InProcessingToShelvingCart", 0 );
+    t::lib::Mocks::mock_preference( "InProcessingToShelvingCart", 0 );
     AddReturn( $barcode, $branch );
     $item = GetItem( $itemnumber );
     is( $item->{location}, $permanent_location,
@@ -92,11 +92,11 @@ subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
     plan tests => 2;
 
     # Set item-level item types
-    C4::Context->set_preference( "item-level_itypes", 1 );
+    t::lib::Mocks::mock_preference( "item-level_itypes", 1 );
 
     # Make sure logging is enabled
-    C4::Context->set_preference( "IssueLog", 1 );
-    C4::Context->set_preference( "ReturnLog", 1 );
+    t::lib::Mocks::mock_preference( "IssueLog", 1 );
+    t::lib::Mocks::mock_preference( "ReturnLog", 1 );
 
     # Create an itemtype for biblio-level item type
     my $blevel_itemtype = $builder->build({ source => 'Itemtype' })->{ itemtype };
@@ -180,11 +180,11 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
     plan tests => 2;
 
     # Make sure logging is enabled
-    C4::Context->set_preference( "IssueLog", 1 );
-    C4::Context->set_preference( "ReturnLog", 1 );
+    t::lib::Mocks::mock_preference( "IssueLog", 1 );
+    t::lib::Mocks::mock_preference( "ReturnLog", 1 );
 
     # Set item-level item types
-    C4::Context->set_preference( "item-level_itypes", 0 );
+    t::lib::Mocks::mock_preference( "item-level_itypes", 0 );
 
     # Create an itemtype for biblio-level item type
     my $blevel_itemtype = $builder->build({ source => 'Itemtype' })->{ itemtype };

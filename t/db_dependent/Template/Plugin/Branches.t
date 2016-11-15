@@ -22,6 +22,7 @@ use C4::Context;
 use Koha::Database;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 BEGIN {
     use_ok('Koha::Template::Plugin::Branches');
@@ -63,7 +64,7 @@ C4::Context->set_userenv(123, 'userid', 'usercnum', 'First name', 'Surname', 'MY
 $library = $plugin->GetLoggedInBranchcode();
 is($library, 'MYLIBRARY', 'GetLoggedInBranchcode() returns active library');
 
-C4::Context->set_preference( 'IndependentBranches', 0 );
+t::lib::Mocks::mock_preference( 'IndependentBranches', 0 );
 my $libraries = $plugin->all();
 ok( scalar(@$libraries) > 1, 'If IndependentBranches is not set, all libraries should be returned' );
 is( grep ( { $_->{branchcode} eq 'MYLIBRARY'  and $_->{selected} == 1 } @$libraries ),       1, 'Without selected parameter, my library should be preselected' );
@@ -74,7 +75,7 @@ is( grep ( { $_->{branchcode} eq 'ANOTHERLIB' and $_->{selected} == 1 } @$librar
 $libraries = $plugin->all( { selected => '' } );
 is( grep ( { exists $_->{selected} } @$libraries ), 0, 'With selected parameter set to an empty string, no library should be preselected' );
 
-C4::Context->set_preference( 'IndependentBranches', 1 );
+t::lib::Mocks::mock_preference( 'IndependentBranches', 1 );
 $libraries = $plugin->all();
 is( scalar(@$libraries), 1, 'If IndependentBranches is set, only 1 library should be returned' );
 $libraries = $plugin->all( { unfiltered => 1 } );
