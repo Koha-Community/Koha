@@ -11,8 +11,8 @@ use Exception::Class (
 
     'Koha::Exceptions::BadParameter' => {
         isa => 'Koha::Exceptions::Exception',
-        description => 'Bad parameter was given',
-        fields => ["parameter"],
+        description => 'A bad parameter was given',
+        fields => ['parameter'],
     },
     'Koha::Exceptions::DuplicateObject' => {
         isa => 'Koha::Exceptions::Exception',
@@ -26,9 +26,29 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Exception',
         description => 'The default value cannot be deleted'
     },
+    'Koha::Exceptions::InvalidDate' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => "Date is invalid.",
+        fields => ["date"],
+    },
     'Koha::Exceptions::MissingParameter' => {
         isa => 'Koha::Exceptions::Exception',
-        description => 'A required parameter is missing'
+        description => 'A required parameter is missing',
+        fields => ["parameter"],
+    },
+    'Koha::Exceptions::AuthenticationRequired' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'Auhtentication is required.',
+    },
+    'Koha::Exceptions::NoPermission' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'No permission to access this resource.',
+        fields => ["required_permissions"]
+    },
+    'Koha::Exceptions::NotImplemented' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'A subroutine is not implemented',
+        fields => ["subroutine"]
     },
     'Koha::Exceptions::WrongParameter' => {
         isa => 'Koha::Exceptions::Exception',
