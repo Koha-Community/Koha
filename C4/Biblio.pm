@@ -104,7 +104,6 @@ BEGIN {
       &CountItemsIssued
       &CountBiblioInOrders
       &GetSubscriptionsId
-      &GetHolds
     );
 
     # To modify something
@@ -3568,26 +3567,6 @@ sub GetSubscriptionsId {
     $sth->execute($biblionumber);
     my @subscriptions = $sth->fetchrow_array;
     return (@subscriptions);
-}
-
-=head2 GetHolds
-
-    $holds = &GetHolds($biblionumber);
-
-This function return the count of holds with $biblionumber
-
-=cut
-
-sub GetHolds {
- my ($biblionumber) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $query          = "SELECT count(*)
-          FROM  reserves
-          WHERE biblionumber=?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
-    my $holds = $sth->fetchrow;
-    return ($holds);
 }
 
 =head2 prepare_host_field
