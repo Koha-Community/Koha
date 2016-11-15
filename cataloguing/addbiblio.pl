@@ -837,7 +837,6 @@ if ( $op eq "addbiblio" ) {
             BiblioAutoLink( $record, $frameworkcode );
         } 
         if ( $is_a_modif ) {
-            ModBiblioframework( $biblionumber, $frameworkcode ); 
             ModBiblio( $record, $biblionumber, $frameworkcode );
         }
         else {

@@ -109,7 +109,6 @@ BEGIN {
     # To modify something
     push @EXPORT, qw(
       &ModBiblio
-      &ModBiblioframework
       &ModZebra
       &UpdateTotalIssues
       &RemoveAllNsb
@@ -383,22 +382,6 @@ sub _strip_item_fields {
     foreach my $field ( $record->field($itemtag) ) {
         $record->delete_field($field);
     }
-}
-
-=head2 ModBiblioframework
-
-   ModBiblioframework($biblionumber,$frameworkcode);
-
-Exported function to modify a biblio framework
-
-=cut
-
-sub ModBiblioframework {
-    my ( $biblionumber, $frameworkcode ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( "UPDATE biblio SET frameworkcode=? WHERE biblionumber=?" );
-    $sth->execute( $frameworkcode, $biblionumber );
-    return 1;
 }
 
 =head2 DelBiblio
