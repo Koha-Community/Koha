@@ -106,10 +106,10 @@ sub search_method {
 		warn sprintf("LDAP Auth rejected : %s gets %d hits\n", $filter->as_string, $count) . description($search);
 		return 0;
 	}
-	if ($count != 1) {
-		warn sprintf("LDAP Auth rejected : %s gets %d hits\n", $filter->as_string, $count);
-		return 0;
-	}
+    if ($count == 0) {
+        warn sprintf("LDAP Auth rejected : search with filter '%s' returns no hit\n", $filter->as_string);
+        return 0;
+    }
     return $search;
 }
 
@@ -183,15 +183,24 @@ sub checkpw_ldap {
 			return 0;
 		}
         my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
-        $userldapentry = $search->shift_entry;
-        my $dn = $userldapentry->dn;
-        my $user_ldap_bind_ret = $db->bind($dn, password => $password);
-        if ($user_ldap_bind_ret->code) {
-            warn "LDAP Auth rejected : invalid password for user '$userid'. " . description($user_ldap_bind_ret);
+        # Handle multiple branches. Same login exists several times in different branches.
+        my $bind_ok = 0;
+        while (my $entry = $search->shift_entry) {
+            my $user_ldap_bind_ret = $db->bind($entry->dn, password => $password);
+            unless ($user_ldap_bind_ret->code) {
+                $userldapentry = $entry;
+                $bind_ok = 1;
+                last;
+            }
+        }
+
+        unless ($bind_ok) {
+            warn "LDAP Auth rejected : invalid password for user '$userid'.";
             return -1;
         }
 
-	}
+
+    }
 
     # To get here, LDAP has accepted our user's login attempt.
     # But we still have work to do.  See perldoc below for detailed breakdown.

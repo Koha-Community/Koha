@@ -47,10 +47,10 @@ my $anonymous_bind = 1;
 my $desired_authentication_result = 'success';
 my $desired_connection_result     = 'error';
 my $desired_admin_bind_result     = 'error';
-my $desired_compare_result        = 'error';
 my $desired_search_result         = 'error';
 my $desired_count_result          = 1;
 my $desired_bind_result           = 'error';
+my $remaining_entry = 1;
 my $ret;
 
 # Mock the context module
@@ -267,13 +267,15 @@ qr/LDAP bind failed as ldapuser cn=Manager,dc=metavore,dc=com: LDAP error #1: er
         $anonymous_bind            = 1;
         $desired_admin_bind_result = 'success';
         $desired_bind_result = 'error';
+        $desired_search_result = 'success';
+        $desired_count_result = 1;
         reload_ldap_module();
 
         warning_like {
             $ret = C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola',
                 password => 'hey' );
         }
-qr/LDAP Auth rejected : invalid password for user 'hola'. LDAP error #1: error_name/,
+qr/LDAP Auth rejected : invalid password for user 'hola'./,
           'checkpw_ldap prints correct warning if LDAP bind fails';
         is( $ret, -1, 'checkpw_ldap returns -1 if bind fails (Bug 8148)' );
 
@@ -300,7 +302,7 @@ qr/LDAP bind failed as ldapuser cn=Manager,dc=metavore,dc=com: LDAP error #1: er
             $ret = C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola',
                 password => 'hey' );
         }
-qr/LDAP Auth rejected : invalid password for user 'hola'. LDAP error #1: error_name/,
+qr/LDAP Auth rejected : invalid password for user 'hola'./,
           'checkpw_ldap prints correct warning if LDAP bind fails';
         is( $ret, -1, 'checkpw_ldap returns -1 if bind fails (Bug 8148)' );
 
@@ -309,7 +311,7 @@ qr/LDAP Auth rejected : invalid password for user 'hola'. LDAP error #1: error_n
 
 subtest 'search_method tests' => sub {
 
-    plan tests => 5;
+    plan tests => 3;
 
     my $ldap = mock_net_ldap();
 
@@ -329,15 +331,6 @@ subtest 'search_method tests' => sub {
         qr/LDAP search failed to return object : 1/,
 'search_method prints correct warning when db->search returns error code'
     );
-
-    $desired_search_result = 'success';
-    $desired_count_result  = 2;
-    reload_ldap_module();
-    warning_like { $ret = C4::Auth_with_ldap::search_method( $ldap, '123' ) }
-    qr/^LDAP Auth rejected \: \(uid\=123\) gets 2 hits/,
-      'search_method prints correct warning when hits count is not 1';
-    is( $ret, 0, 'search_method returns 0 when hits count is not 1' );
-
 };
 
 # Function that mocks the call to C4::Context->config(param)
@@ -412,6 +405,8 @@ sub mock_net_ldap {
         'search',
         sub {
 
+            $remaining_entry = 1
+
             return mock_net_ldap_search(
                 {
                     count => ($desired_count_result)
@@ -454,7 +449,13 @@ sub mock_net_ldap_search {
     $mocked_search->mock( 'error',       sub { return $error; } );
     $mocked_search->mock( 'error_name',  sub { return $error_name; } );
     $mocked_search->mock( 'error_text',  sub { return $error_text; } );
-    $mocked_search->mock( 'shift_entry', sub { return $shift_entry; } );
+    $mocked_search->mock( 'shift_entry', sub {
+        if ($remaining_entry) {
+            $remaining_entry--;
+            return $shift_entry;
+        }
+        return '';
+    });
 
     return $mocked_search;
 }
