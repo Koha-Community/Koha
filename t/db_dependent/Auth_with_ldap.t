@@ -31,8 +31,7 @@ use Koha::Patrons;
 my $dbh = '';
 
 # Start transaction
-my $database = Koha::Database->new();
-my $schema = $database->schema();
+my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin();
 
 my $builder = t::lib::TestBuilder->new();
@@ -405,7 +404,7 @@ sub mock_net_ldap {
         'search',
         sub {
 
-            $remaining_entry = 1
+            $remaining_entry = 1;
 
             return mock_net_ldap_search(
                 {
@@ -502,6 +501,6 @@ sub is_admin_bind {
     return 0;
 }
 
-$schema->storage->txn_rollback;
+$schema->storage->txn_rollback();
 
 1;
