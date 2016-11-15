@@ -60,6 +60,7 @@ my $prefhost  = $ldap->{hostname}	or die ldapserver_error('hostname');
 my $base      = $ldap->{base}		or die ldapserver_error('base');
 $ldapname     = $ldap->{user}		;
 $ldappassword = $ldap->{pass}		;
+$ldap->{anonymous_bind} = 1 unless $ldapname && $ldappassword;
 our %mapping  = %{$ldap->{mapping}}; # FIXME dpavlin -- don't die because of || (); from 6eaf8511c70eb82d797c941ef528f4310a15e9f9
 my @mapkeys = keys %mapping;
 $debug and print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (  total  ): ", join ' ', @mapkeys, "\n";
@@ -176,7 +177,7 @@ sub checkpw_ldap {
             $userldapentry = $search->shift_entry;
         }
     } else {
-		my $res = ($config{anonymous}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
+		my $res = ($ldap->{anonymous_bind}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
 		if ($res->code) {		# connection refused
 			warn "LDAP bind failed as ldapuser " . ($ldapname || '[ANONYMOUS]') . ": " . description($res);
 			return 0;
@@ -189,6 +190,7 @@ sub checkpw_ldap {
             warn "LDAP Auth rejected : invalid password for user '$userid'. " . description($user_ldap_bind_ret);
             return -1;
         }
+
 	}
 
     # To get here, LDAP has accepted our user's login attempt.
