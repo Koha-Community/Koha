@@ -28,6 +28,7 @@ use Koha::Items;
 use Koha::Libraries;
 use Koha::ArticleRequest::Status;
 use Koha::DateUtils qw(dt_from_string);
+use C4::Letters qw(GetPreparedLetter);
 
 use base qw(Koha::Object);
 
