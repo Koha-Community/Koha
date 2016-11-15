@@ -249,6 +249,21 @@ sub itemtype {
     return $self->biblioitem()->itemtype();
 }
 
+=head3 holds
+
+my $holds = $biblio->holds();
+
+return the current holds placed on this record
+
+=cut
+
+sub holds {
+    my ( $self ) = @_;
+
+    my $holds_rs = $self->_result->reserves;
+    return Koha::Holds->_new_from_dbic( $holds_rs );
+}
+
 =head3 biblioitem
 
 my $field = $self->biblioitem()->itemtype
