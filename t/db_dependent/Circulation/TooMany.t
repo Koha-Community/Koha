@@ -50,6 +50,7 @@ $dbh->do(q|DELETE FROM default_branch_item_rules|);
 $dbh->do(q|DELETE FROM issuingrules|);
 
 my $builder = t::lib::TestBuilder->new();
+t::lib::Mocks::mock_preference('item-level_itypes', 1); # Assuming the item type is defined at item level
 
 my $branch = $builder->build({
     source => 'Branch',

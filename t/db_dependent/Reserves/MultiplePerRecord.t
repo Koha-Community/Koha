@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Test::More tests => 38;
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use C4::Reserves qw( GetMaxPatronHoldsForRecord AddReserve CanBookBeReserved );
 use Koha::Database;
@@ -118,6 +119,8 @@ my $rule1 = $rules_rs->new(
         holds_per_record => 1,
     }
 )->insert();
+
+t::lib::Mocks::mock_preference('item-level_itypes', 1); # Assuming the item type is defined at item level
 
 my $max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->{biblionumber} );
 is( $max, 1, 'GetMaxPatronHoldsForRecord returns max of 1' );
