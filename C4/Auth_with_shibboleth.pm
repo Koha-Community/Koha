@@ -108,7 +108,7 @@ sub checkpw_shib {
         return _autocreate( $config, $match );
     } else {
         # If we reach this point, the user is not a valid koha user
-        $debug and warn "User $userid is not a valid Koha user";
+         $debug and warn "User with $config->{matchpoint} of $match is not a valid Koha user";
         return 0;
     }
 }
@@ -116,7 +116,7 @@ sub checkpw_shib {
 sub _autocreate {
     my ( $config, $match ) = @_;
 
-    my %borrower = ( $shibbolethMatchField => $match );
+    my %borrower = ( shibbolethMatchField => $match );
 
     while ( my ( $key, $entry ) = each %{$config->{'mapping'}} ) {
         $borrower{$key} = ( $entry->{'is'} && $ENV{ $entry->{'is'} } ) || $entry->{'content'} || '';
