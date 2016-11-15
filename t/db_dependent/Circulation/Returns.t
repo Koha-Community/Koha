@@ -19,9 +19,11 @@ use Modern::Perl;
 
 use Test::More tests => 3;
 use Test::MockModule;
-use t::lib::TestBuilder;
+use Test::Warn;
 
 use t::lib::Mocks;
+use t::lib::TestBuilder;
+
 use C4::Biblio;
 use C4::Circulation;
 use C4::Items;
@@ -89,7 +91,7 @@ subtest "InProcessingToShelvingCart tests" => sub {
 
 subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     # Set item-level item types
     t::lib::Mocks::mock_preference( "item-level_itypes", 1 );
@@ -160,9 +162,12 @@ subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
 
     is( $stat->itemtype, $ilevel_itemtype,
         "item-level itype recorded on statistics for return");
-
-    AddIssue( $borrower, $item_without_itemtype->{ barcode } );
-    AddReturn( $item_without_itemtype->{ barcode }, $branch );
+    warning_like { AddIssue( $borrower, $item_without_itemtype->{ barcode } ) }
+                 qr/^item-level_itypes set but no itemtype set for item/,
+                 'Item without itemtype set raises warning on AddIssue';
+    warning_like { AddReturn( $item_without_itemtype->{ barcode }, $branch ) }
+                 qr/^item-level_itypes set but no itemtype set for item/,
+                 'Item without itemtype set raises warning on AddReturn';
     # Test biblio-level itemtype was recorded on the 'statistics' table
     $stat = $schema->resultset('Statistic')->search({
         branch     => $branch,

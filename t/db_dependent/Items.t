@@ -418,7 +418,11 @@ subtest 'SearchItems test' => sub {
 
     my $item3_record = new MARC::Record;
     $item3_record->append_fields(
-        new MARC::Field($itemfield, '', '', 'z' => 'foobar')
+        new MARC::Field(
+            $itemfield, '', '',
+            'z' => 'foobar',
+            'y' => $itemtype->{itemtype}
+        )
     );
     my (undef, undef, $item3_itemnumber) = AddItemFromMarc($item3_record,
         $biblionumber);
@@ -652,6 +656,18 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
         }
     });
 
+    my $mss_itemtype = $builder->build({
+        source => 'MarcSubfieldStructure',
+        value => {
+            frameworkcode => $framework->{frameworkcode},
+            kohafield => 'items.itype',
+            tagfield => '952',
+            tagsubfield => 'y',
+        }
+    });
+
+    my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
+
     # Create a record with a barcode
     my ($biblionumber) = get_biblio( $framework->{frameworkcode} );
     my $item_record = new MARC::Record;
@@ -659,16 +675,22 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
     my $barcode_field = MARC::Field->new(
         '952', ' ', ' ',
         p => $a_barcode,
+        y => $itemtype
+    );
+    my $itemtype_field = MARC::Field->new(
+        '952', ' ', ' ',
+        y => $itemtype
     );
     $item_record->append_fields( $barcode_field );
     my (undef, undef, $item_itemnumber) = AddItemFromMarc($item_record, $biblionumber);
-
+    use Data::Printer colored => 1;
     # Make sure everything has been set up
     my $item = GetItem($item_itemnumber);
     is( $item->{barcode}, $a_barcode, 'Everything has been set up correctly, the barcode is defined as expected' );
 
     # Delete the barcode field and save the record
     $item_record->delete_fields( $barcode_field );
+    $item_record->append_fields( $itemtype_field ); # itemtype is mandatory
     ModItemFromMarc($item_record, $biblionumber, $item_itemnumber);
     $item = GetItem($item_itemnumber);
     is( $item->{barcode}, undef, 'The default value should have been set to the barcode, the field is mapped to a kohafield' );
