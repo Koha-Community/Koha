@@ -31,6 +31,8 @@ use Encode;
 use C4::Biblio;
 use C4::Context;
 use Koha::Database;
+use Koha::Biblio;
+use Koha::Biblioitem;
 use Koha::Exporter::Record;
 
 my $schema  = Koha::Database->new->schema;
@@ -55,8 +57,9 @@ $biblio_2->append_fields(
 );
 my ($biblionumber_2, $biblioitemnumber_2) = AddBiblio($biblio_2, '');
 
-my ($bad_biblionumber, $bad_biblioitemnumber) = AddBiblio($biblio_1, '');
-Koha::Biblioitems->find( $bad_biblionumber )->marcxml("something wrong")->store;
+my $bad_biblio = Koha::Biblio->new()->store();
+my $bad_biblioitem = Koha::Biblioitem->new( { biblionumber => $bad_biblio->id, marcxml => 'something wrong' } )->store();
+my $bad_biblionumber = $bad_biblio->id;
 
 my $builder = t::lib::TestBuilder->new;
 my $item_1_1 = $builder->build({
