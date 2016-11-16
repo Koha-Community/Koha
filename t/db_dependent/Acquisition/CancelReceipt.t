@@ -1,8 +1,25 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
 use Test::More tests => 12;
+use t::lib::TestBuilder;
+
 use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
@@ -20,6 +37,9 @@ my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
+
+my $builder = t::lib::TestBuilder->new;
+my $itemtype = $builder->build({ source => 'Itemtype' })->{ itemtype };
 
 my $booksellerid1 = C4::Bookseller::AddBookseller(
     {
@@ -44,7 +64,7 @@ my $budgetid = C4::Budgets::AddBudget(
 my $budget = C4::Budgets::GetBudget( $budgetid );
 
 my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
-my $itemnumber = AddItem({}, $biblionumber);
+my $itemnumber = AddItem( { itype => $itemtype }, $biblionumber );
 
 t::lib::Mocks::mock_preference('AcqCreateItem', 'receiving');
 my $order = Koha::Acquisition::Order->new(
@@ -71,8 +91,9 @@ CancelReceipt($ordernumber);
 
 is(scalar GetItemnumbersFromOrder($ordernumber), 0, "Create items on receiving: 0 item exist after cancelling a receipt");
 
-my $itemnumber1 = AddItem({}, $biblionumber);
-my $itemnumber2 = AddItem({}, $biblionumber);
+my $itemnumber1 = AddItem( { itype => $itemtype }, $biblionumber );
+my $itemnumber2 = AddItem( { itype => $itemtype }, $biblionumber );
+
 t::lib::Mocks::mock_preference('AcqCreateItem', 'ordering');
 t::lib::Mocks::mock_preference('AcqItemSetSubfieldsWhenReceiptIsCancelled', '7=9'); # notforloan is mapped with 952$7
 $order = Koha::Acquisition::Order->new(
