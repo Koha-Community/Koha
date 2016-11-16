@@ -27,8 +27,12 @@ use C4::Context;
 
 use Koha::Patrons;
 
-my $schema = Koha::Database->new->schema;
-$schema->storage->txn_begin;
+my $dbh = '';
+
+# Start transaction
+my $database = Koha::Database->new();
+my $schema = $database->schema();
+$schema->storage->txn_begin();
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -73,6 +77,14 @@ $net_ldap->mock(
 my $categorycode = $builder->build( { source => 'Category' } )->{categorycode};
 my $branchcode   = $builder->build( { source => 'Branch' } )->{branchcode};
 my $attr_type    = $builder->build(
+    {
+        source => 'BorrowerAttributeType',
+        value  => {
+            category_code => $categorycode
+        }
+    }
+);
+my $attr_type2    = $builder->build(
     {
         source => 'BorrowerAttributeType',
         value  => {
@@ -131,7 +143,7 @@ subtest 'checkpw_ldap tests' => sub {
 
     subtest 'auth_by_bind = 1 tests' => sub {
 
-        plan tests => 8;
+        plan tests => 9;
 
         $auth_by_bind = 1;
 
@@ -165,6 +177,14 @@ subtest 'checkpw_ldap tests' => sub {
                 return $borrower->{cardnumber};
             }
         );
+        $auth->mock(
+            'ldap_entry_2_hash',
+            sub {
+                return (
+                    $attr_type2->{code}, 'BAR'
+                );
+            }
+        );
 
         C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola', password => 'hey' );
         ok(
@@ -175,7 +195,10 @@ subtest 'checkpw_ldap tests' => sub {
             },
             'Extended attributes are not deleted'
         );
+
+        is( C4::Members::Attributes::GetBorrowerAttributeValue($borrower->{borrowernumber}, $attr_type2->{code}), 'BAR', 'Mapped attribute is BAR' );
         $auth->unmock('update_local');
+        $auth->unmock('ldap_entry_2_hash');
 
         $update               = 0;
         $desired_count_result = 0;    # user auth problem
@@ -506,6 +529,6 @@ sub reload_ldap_module {
     return;
 }
 
-$schema->storage->txn_rollback;
+$schema->storage->txn_rollback();
 
 1;
