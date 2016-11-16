@@ -683,7 +683,7 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
     );
     $item_record->append_fields( $barcode_field );
     my (undef, undef, $item_itemnumber) = AddItemFromMarc($item_record, $biblionumber);
-    use Data::Printer colored => 1;
+
     # Make sure everything has been set up
     my $item = GetItem($item_itemnumber);
     is( $item->{barcode}, $a_barcode, 'Everything has been set up correctly, the barcode is defined as expected' );
