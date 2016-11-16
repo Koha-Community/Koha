@@ -1,23 +1,26 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Account for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
 <script type="text/javascript">
 $(document).ready(function() {
     var txtActivefilter = _("Filter paid transactions");
     var txtInactivefilter = _("Show all transactions");
-    var table_account_fines = $("#table_account_fines").dataTable($.extend(true, {}, dataTablesDefaults, {
+    var columns_settings = [% ColumnsSettings.GetColumns('members', 'fines', 'account-fines', 'json') %];
+    var table_account_fines = KohaTable("#table_account_fines", {
         "sPaginationType": "four_button",
         'aaSorting': [[0, 'desc']],
-        "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
+        "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
         "aoColumnDefs": [
             { "sType": "title-string", "aTargets" : [ "title-string" ] },
             { "bSortable": false, "bSearchable": false, "aTargets": [-1] }
         ]
-    }));
+    }, columns_settings);
     $("#filter_c").html('<p><a href="#" id="filter_transacs"><i class="fa fa-filter"></i> '+txtActivefilter+'</a>');
     $('#filter_transacs').click(function(e) {
         e.preventDefault();

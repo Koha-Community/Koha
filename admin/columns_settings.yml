@@ -155,6 +155,27 @@ modules:
           columnname: stocknumber
 
   members:
+    fines:
+      account-fines:
+        -
+          columnname: date
+        -
+          columnname: description
+        -
+          columnname: note
+        -
+          columnname: amount
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+        -
+          columnname: amountoutstanding
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+        -
+          columnname: actions
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+
     member:
       memberresultst:
         -
