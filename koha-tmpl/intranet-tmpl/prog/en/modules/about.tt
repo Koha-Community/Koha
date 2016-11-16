@@ -76,7 +76,7 @@
                         [% CASE 'ENV_only' %]
                             <span class="status_warn">ENV</span> Note that the right place to define the memcached config is in your $KOHA_CONF file
                         [% CASE 'both' %]
-                            <span class="status_warn">ENV and koha-conf.xml</span> Note that the right place to define the memcached config is in your $KOHA_CONF file. To avoid any misunderstanding you whould not export the memcached config from ENV.
+                            <span class="status_warn">ENV and koha-conf.xml</span> Note that the right place to define the memcached config is in your $KOHA_CONF file. To avoid any misunderstanding you should not export the memcached config from ENV.
                         [% CASE # nowhere %]
                             <span class="status_warn">Nowhere</span> Note that the right place to define the memcached config is in your $KOHA_CONF file. Currently you do not have a valid memcached configuration defined.
                     [% END %]
