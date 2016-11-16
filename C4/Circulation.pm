@@ -3513,6 +3513,11 @@ sub CalcDateDue {
                 $datedue = $expiry_dt->clone->set_time_zone( C4::Context->tz );
             }
         }
+        if ( C4::Context->preference('useDaysMode') ne 'Days' ) {
+          # Don't return on a closed day
+          my $calendar = Koha::Calendar->new( branchcode => $branch );
+          $datedue = $calendar->prev_open_day( $datedue );
+        }
     }
 
     return $datedue;
