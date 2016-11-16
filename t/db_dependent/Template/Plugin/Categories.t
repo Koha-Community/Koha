@@ -27,6 +27,7 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 # Delete all categories
+$schema->resultset('Issue')->search->delete;
 $schema->resultset('Borrower')->search->delete;
 $schema->resultset('Category')->search->delete;
 
