@@ -29,11 +29,15 @@ use open ':std', ':encoding(utf8)';
 
 use Test::More tests => 4;
 use Test::MockModule;
+use Test::Warn;
+
+use Koha::Caches;
+
 use MARC::Record;
 use File::Spec;
 use File::Basename;
 use File::Find;
-use Test::Warn;
+
 use File::Temp qw/ tempdir /;
 use File::Path;
 
@@ -47,21 +51,21 @@ sub index_sample_records_and_launch_zebra {
     unlink("$datadir/zebra.log");
     if (-f "$sourcedir/${marc_type}/zebraexport/biblio/exported_records") {
         my $zebra_bib_cfg = ($indexing_mode eq 'dom') ? 'zebra-biblios-dom.cfg' : 'zebra-biblios.cfg';
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios init");
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn   -g iso2709 -d biblios update $sourcedir/${marc_type}/zebraexport/biblio");
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g iso2709 -d biblios commit");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g iso2709 -d biblios init");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g iso2709 -d biblios update $sourcedir/${marc_type}/zebraexport/biblio");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g iso2709 -d biblios commit");
     }
     # ... and add large bib records, if present
     if (-f "$sourcedir/${marc_type}/zebraexport/large_biblio_${indexing_mode}/exported_records.xml") {
         my $zebra_bib_cfg = ($indexing_mode eq 'dom') ? 'zebra-biblios-dom.cfg' : 'zebra-biblios.cfg';
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn   -g marcxml -d biblios update $sourcedir/${marc_type}/zebraexport/large_biblio_${indexing_mode}");
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal,warn  -g marcxml -d biblios commit");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g marcxml -d biblios update $sourcedir/${marc_type}/zebraexport/large_biblio_${indexing_mode}");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g marcxml -d biblios commit");
     }
     if (-f "$sourcedir/${marc_type}/zebraexport/authority/exported_records") {
         my $zebra_auth_cfg = ($indexing_mode eq 'dom') ? 'zebra-authorities-dom.cfg' : 'zebra-authorities.cfg';
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal,warn  -g iso2709 -d authorities init");
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal,warn   -g iso2709 -d authorities update $sourcedir/${marc_type}/zebraexport/authority");
-        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal,warn  -g iso2709 -d authorities commit");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal -g iso2709 -d authorities init");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal -g iso2709 -d authorities update $sourcedir/${marc_type}/zebraexport/authority");
+        system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal -g iso2709 -d authorities commit");
     }
 
     $child = fork();
@@ -198,6 +202,8 @@ sub run_marc21_search_tests {
     my $indexing_mode = shift;
     $datadir = tempdir();
     system(dirname(__FILE__) . "/zebra_config.pl $datadir marc21 $indexing_mode");
+
+    Koha::Caches->get_instance('config')->flush_all;
 
     mock_GetMarcSubfieldStructure('marc21');
     my $context = new C4::Context("$datadir/etc/koha-conf.xml");
@@ -859,6 +865,8 @@ sub run_unimarc_search_tests {
     my $indexing_mode = shift;
     $datadir = tempdir();
     system(dirname(__FILE__) . "/zebra_config.pl $datadir unimarc $indexing_mode");
+
+    Koha::Caches->get_instance('config')->flush_all;
 
     mock_GetMarcSubfieldStructure('unimarc');
     my $context = new C4::Context("$datadir/etc/koha-conf.xml");
