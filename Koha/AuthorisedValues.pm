@@ -129,7 +129,7 @@ sub get_description_by_koha_field {
     return {} unless defined $authorised_value;
 
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
-    my $cache_key    = "Av_descriptions:$frameworkcode:$kohafield:$authorised_value";
+    my $cache_key    = "AV_descriptions:$frameworkcode:$kohafield:$authorised_value";
     my $cached       = $memory_cache->get_from_cache($cache_key);
     return $cached if $cached;
 

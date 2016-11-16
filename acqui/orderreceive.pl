@@ -128,21 +128,21 @@ if ($AcqCreateItem eq 'receiving') {
     my @items;
     foreach (@itemnumbers) {
         my $item = GetItem($_);
-        my $av;
-        $av = Koha::AuthorisedValues->find_by_koha_field({frameworkcode => $fw, kohafield => 'items.notforloan', authorised_value => $item->{notforloan} });
-        $item->{notforloan} = $av ? $av->lib : '';
+        my $descriptions;
+        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.notforloan', authorised_value => $item->{notforloan} });
+        $item->{notforloan} = $descriptions->{lib} // '';
 
-        $av = Koha::AuthorisedValues->find_by_koha_field({frameworkcode => $fw, kohafield => 'items.restricted', authorised_value => $item->{restricted} });
-        $item->{restricted} = $av ? $av->lib : '';
+        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.restricted', authorised_value => $item->{restricted} });
+        $item->{restricted} = $descriptions->{lib} // '';
 
-        $av = Koha::AuthorisedValues->find_by_koha_field({frameworkcode => $fw, kohafield => 'items.location', authorised_value => $item->{location} });
-        $item->{location} = $av ? $av->lib : '';
+        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.location', authorised_value => $item->{location} });
+        $item->{location} = $descriptions->{lib} // '';
 
-        $av = Koha::AuthorisedValues->find_by_koha_field({frameworkcode => $fw, kohafield => 'items.collection', authorised_value => $item->{collection} });
-        $item->{collection} = $av ? $av->lib : '';
+        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.collection', authorised_value => $item->{collection} });
+        $item->{collection} = $descriptions->{lib} // '';
 
-        $av = Koha::AuthorisedValues->find_by_koha_field({frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->{materials} });
-        $item->{materials} = $av ? $av->lib : '';
+        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->{materials} });
+        $item->{materials} = $descriptions->{lib} // '';
 
         my $itemtype = getitemtypeinfo($item->{itype});
         $item->{itemtype} = $itemtype->{description};

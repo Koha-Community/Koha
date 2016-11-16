@@ -393,8 +393,8 @@ if (@$barcodes) {
         unless($issueconfirmed){
             #  Get the item title for more information
             my $materials = $iteminfo->{'materials'};
-            my $av = Koha::AuthorisedValues->find_by_koha_field({ frameworkcode => $getmessageiteminfo->{frameworkcode}, kohafield => 'items.materials', authorised_value => $materials });
-            $materials = $av ? $av->lib : '';
+            my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $getmessageiteminfo->{frameworkcode}, kohafield => 'items.materials', authorised_value => $materials });
+            $materials = $descriptions->{lib} // '';
             $template_params->{additional_materials} = $materials;
             $template_params->{itemhomebranch} = $iteminfo->{'homebranch'};
 

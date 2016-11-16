@@ -118,7 +118,7 @@ is( @categories, 3, 'There should have 2 categories inserted' );
 is( $categories[0], $av4->category, 'The first category should be correct (ordered by category name)' );
 is( $categories[1], $av1->category, 'The second category should be correct (ordered by category name)' );
 
-subtest 'search_by_*_field + find_by_koha_field + search_for_descriptions' => sub {
+subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
     plan tests => 4;
     my $loc_cat = Koha::AuthorisedValueCategories->find('LOC');
     $loc_cat->delete if $loc_cat;
