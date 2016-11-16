@@ -222,7 +222,7 @@ sub checkpw_ldap {
                 next;
             }
             if (C4::Members::Attributes::CheckUniqueness($code, $borrower{$code}, $borrowernumber)) {
-                C4::Members::Attributes::UpdateBorrowerAttribute($borrowernumber, {code => $code, value => $borrower{$code}});
+                C4::Members::Attributes::UpdateBorrowerAttribute($borrowernumber, {code => $code, attribute => $borrower{$code}});
             } else {
                 warn "ERROR_extended_unique_id_failed $code $borrower{$code}";
             }
