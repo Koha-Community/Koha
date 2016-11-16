@@ -90,8 +90,8 @@ $template->param(do_it => $do_it,
 our $itemtypes = GetItemTypes();
 our @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
 
-my $locations = { map { ( $_->authorised_value => $_->lib ) } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
-my $ccodes = { map { ( $_->authorised_value => $_->lib ) } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };
+my $locations = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
+my $ccodes = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };
 
 our $Bsort1 = GetAuthorisedValues("Bsort1");
 our $Bsort2 = GetAuthorisedValues("Bsort2");

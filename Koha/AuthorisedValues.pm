@@ -139,6 +139,28 @@ sub get_description_by_koha_field {
     return $descriptions;
 }
 
+sub get_descriptions_by_koha_field {
+    my ( $self, $params ) = @_;
+    my $frameworkcode = $params->{frameworkcode} || '';
+    my $kohafield = $params->{kohafield};
+
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
+    my $cache_key    = "AV_descriptions:$frameworkcode:$kohafield";
+    my $cached       = $memory_cache->get_from_cache($cache_key);
+    return @$cached if $cached;
+
+    my @avs          = $self->search_by_koha_field($params);
+    my @descriptions = map {
+        {
+            authorised_value => $_->authorised_value,
+            lib              => $_->lib,
+            opac_description => $_->opac_description
+        }
+    } @avs;
+    $memory_cache->set_in_cache( $cache_key, \@descriptions );
+    return @descriptions;
+}
+
 sub categories {
     my ( $self ) = @_;
     my $rs = $self->_resultset->search(

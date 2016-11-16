@@ -190,11 +190,11 @@ $dat->{'showncount'} = scalar @items + @hostitems;
 $dat->{'hiddencount'} = scalar @all_items + @hostitems - scalar @items;
 
 my $shelflocations =
-  { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $fw, kohafield => 'items.location' } ) };
+  { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.location' } ) };
 my $collections =
-  { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $fw, kohafield => 'items.ccode' } ) };
+  { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.ccode' } ) };
 my $copynumbers =
-  { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $fw, kohafield => 'items.copynumber' } ) };
+  { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.copynumber' } ) };
 my (@itemloop, @otheritemloop, %itemfields);
 my $norequests = 1;
 

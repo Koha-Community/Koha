@@ -552,7 +552,7 @@ my $returned_counter = ( C4::Context->preference('numReturnedItemsToShow') ) ? C
 my $count = 0;
 my @riloop;
 my $shelflocations =
-  { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.location' } ) };
+  { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' } ) };
 foreach ( sort { $a <=> $b } keys %returneditems ) {
     my %ri;
     if ( $count++ < $returned_counter ) {

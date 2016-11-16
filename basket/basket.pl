@@ -77,7 +77,7 @@ foreach my $biblionumber ( @bibs ) {
     }
 	
     my $shelflocations =
-      { map { $_->authorised_value => $_->lib } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.location' } ) };
+      { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.location' } ) };
 
 	for my $itm (@items) {
 	    if ($itm->{'location'}){

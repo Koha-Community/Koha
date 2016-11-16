@@ -274,9 +274,9 @@ sub buildKohaItemsNamespace {
     }
 
     my $shelflocations =
-      { map { $_->authorised_value => $_->opac_description } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => GetFrameworkCode($biblionumber), kohafield => 'items.location' } ) };
+      { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => GetFrameworkCode($biblionumber), kohafield => 'items.location' } ) };
     my $ccodes =
-      { map { $_->authorised_value => $_->opac_description } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => GetFrameworkCode($biblionumber), kohafield => 'items.ccode' } ) };
+      { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => GetFrameworkCode($biblionumber), kohafield => 'items.ccode' } ) };
 
     my %branches = map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' });
 

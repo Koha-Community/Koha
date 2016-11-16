@@ -546,11 +546,11 @@ if ( $itemtype ) {
 }
 
 my $shelflocations =
-  { map { $_->authorised_value => $_->opac_description } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.location' } ) };
+  { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.location' } ) };
 my $collections =
-  { map { $_->authorised_value => $_->opac_description } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.ccode' } ) };
+  { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.ccode' } ) };
 my $copynumbers =
-  { map { $_->authorised_value => $_->opac_description } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.copynumber' } ) };
+  { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $dat->{frameworkcode}, kohafield => 'items.copynumber' } ) };
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);

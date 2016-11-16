@@ -84,8 +84,8 @@ $template->param(do_it => $do_it,
 my $itemtypes = GetItemTypes();
 my @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
 
-my $locations = { map { ( $_->authorised_value => $_->lib ) } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
-my $ccodes = { map { ( $_->authorised_value => $_->lib ) } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };
+my $locations = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
+my $ccodes = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };
 
 my $Bsort1 = GetAuthorisedValues("Bsort1");
 my $Bsort2 = GetAuthorisedValues("Bsort2");
@@ -330,8 +330,8 @@ sub null_to_zzempty ($) {
 }
 sub display_value {
     my ( $crit, $value ) = @_;
-    my $locations = { map { ( $_->authorised_value => $_->lib ) } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
-    my $ccodes = { map { ( $_->authorised_value => $_->lib ) } Koha::AuthorisedValues->search_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };
+    my $locations = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
+    my $ccodes = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };
     my $itemtypes = GetItemTypes();
     my $Bsort1 = GetAuthorisedValues("Bsort1");
     my $Bsort2 = GetAuthorisedValues("Bsort2");

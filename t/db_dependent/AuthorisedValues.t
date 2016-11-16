@@ -119,7 +119,7 @@ is( $categories[0], $av4->category, 'The first category should be correct (order
 is( $categories[1], $av1->category, 'The second category should be correct (ordered by category name)' );
 
 subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
-    plan tests => 4;
+    plan tests => 5;
     my $loc_cat = Koha::AuthorisedValueCategories->find('LOC');
     $loc_cat->delete if $loc_cat;
     my $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => 'c', frameworkcode => '' } );
@@ -199,5 +199,24 @@ subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
         $descriptions = Koha::AuthorisedValues->get_description_by_koha_field(
             { kohafield => 'items.restricted', authorised_value => undef } );
         is_deeply( $descriptions, {}, ) ;    # This could be arguable, we could return undef instead
+    };
+    subtest 'get_descriptions_by_koha_field' => sub {
+        plan tests => 1;
+        my @descriptions = Koha::AuthorisedValues->get_descriptions_by_koha_field( { kohafield => 'items.restricted' } );
+        is_deeply(
+            \@descriptions,
+            [
+                {
+                    authorised_value => '',
+                    lib              => $av_empty_string->lib,
+                    opac_description => $av_empty_string->lib_opac
+                },
+                {
+                    authorised_value => $av_0->authorised_value,
+                    lib              => $av_0->lib,
+                    opac_description => $av_0->lib_opac
+                }
+            ],
+        );
     };
 };
