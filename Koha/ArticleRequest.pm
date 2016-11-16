@@ -102,6 +102,7 @@ sub notify {
 
     my $status = $self->status;
 
+    require C4::Letters;
     if (
         my $letter = C4::Letters::GetPreparedLetter(
             module                 => 'circulation',
