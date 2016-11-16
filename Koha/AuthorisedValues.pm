@@ -87,7 +87,6 @@ sub search_by_koha_field {
     my $frameworkcode    = $params->{frameworkcode} || '';
     my $kohafield        = $params->{kohafield};
     my $category         = $params->{category};
-    #my $authorised_value = $params->{authorised_value};
 
     return unless $kohafield;
 
@@ -95,12 +94,29 @@ sub search_by_koha_field {
         {   'marc_subfield_structures.frameworkcode' => $frameworkcode,
             'marc_subfield_structures.kohafield'     => $kohafield,
             ( defined $category ? ( category_name    => $category )         : () ),
-            ( exists $params->{authorised_value} ? ( 'me.authorised_value' => $params->{authorised_value} ) : () ),
         },
         {   join     => { category => 'marc_subfield_structures' },
             distinct => 1,
         }
     );
+}
+
+sub find_by_koha_field {
+    my ( $self, $params ) = @_;
+    my $frameworkcode    = $params->{frameworkcode} || '';
+    my $kohafield        = $params->{kohafield};
+    my $authorised_value = $params->{authorised_value};
+
+    my $av = $self->SUPER::search(
+        {   'marc_subfield_structures.frameworkcode' => $frameworkcode,
+            'marc_subfield_structures.kohafield'     => $kohafield,
+            'me.authorised_value'                    => $authorised_value,
+        },
+        {   join     => { category => 'marc_subfield_structures' },
+            distinct => 1,
+        }
+    );
+    return $av->count ? $av->next : undef;
 }
 
 sub categories {

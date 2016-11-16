@@ -118,8 +118,8 @@ is( @categories, 3, 'There should have 2 categories inserted' );
 is( $categories[0], $av4->category, 'The first category should be correct (ordered by category name)' );
 is( $categories[1], $av1->category, 'The second category should be correct (ordered by category name)' );
 
-subtest 'search_by_*_field' => sub {
-    plan tests => 2;
+subtest 'search_by_*_field + find_by_koha_field' => sub {
+    plan tests => 3;
     my $loc_cat = Koha::AuthorisedValueCategories->find('LOC');
     $loc_cat->delete if $loc_cat;
     my $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => 'c', frameworkcode => '' } );
@@ -151,7 +151,7 @@ subtest 'search_by_*_field' => sub {
         is( $avs->next->authorised_value, 'location_1', );
     };
     subtest 'search_by_koha_field' => sub {
-        plan tests => 8;
+        plan tests => 3;
         my $avs;
         $avs = Koha::AuthorisedValues->search_by_koha_field();
         is ( $avs, undef );
@@ -159,17 +159,18 @@ subtest 'search_by_*_field' => sub {
         is( $avs->count,                  3, );
         is( $avs->next->authorised_value, 'location_1', );
 
+    };
+    subtest 'find_by_koha_field' => sub {
+        plan tests => 3;
         # Test authorised_value = 0
-        $avs = Koha::AuthorisedValues->search_by_koha_field( { kohafield => 'items.restricted', authorised_value => 0 } );
-        is( $avs->count,                  1, );
-        is( $avs->next->lib, $av_0->lib, );
+        my $av;
+        $av = Koha::AuthorisedValues->find_by_koha_field( { kohafield => 'items.restricted', authorised_value => 0 } );
+        is( $av->lib, $av_0->lib, );
         # Test authorised_value = ""
-        $avs = Koha::AuthorisedValues->search_by_koha_field( { kohafield => 'items.restricted', authorised_value => '' } );
-        is( $avs->count,                  1, );
-        is( $avs->next->lib, $av_empty_string->lib, );
+        $av = Koha::AuthorisedValues->find_by_koha_field( { kohafield => 'items.restricted', authorised_value => '' } );
+        is( $av->lib, $av_empty_string->lib, );
         # Test authorised_value = undef => we do not want to retrieve anything
-        $avs = Koha::AuthorisedValues->search_by_koha_field( { kohafield => 'items.restricted', authorised_value => undef } );
-        is( $avs->count,                  0, );
-
+        $av = Koha::AuthorisedValues->find_by_koha_field( { kohafield => 'items.restricted', authorised_value => undef } );
+        is( $av, undef, );
     };
 };
