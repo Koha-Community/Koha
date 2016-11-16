@@ -1,9 +1,26 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+
 use Modern::Perl;
 
 use Test::More tests => 3;
 use Test::MockModule;
+use t::lib::TestBuilder;
 
 use C4::Biblio;
 use C4::Items;
@@ -16,9 +33,9 @@ use DateTime::Duration;
 
 use MARC::Record;
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM borrowers|);
@@ -28,17 +45,18 @@ $dbh->do(q|DELETE FROM biblio|);
 $dbh->do(q|DELETE FROM categories|);
 $dbh->do(q|DELETE FROM letter|);
 
-my $branchcode = 'B';
-Koha::Library->new( { branchcode => $branchcode, branchname => 'Branch' } )->store;
+my $builder = t::lib::TestBuilder->new;
 
-my $categorycode = 'C';
-$dbh->do( "INSERT INTO categories(categorycode) VALUES(?)",
-    undef, $categorycode );
+my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
+my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
+my $itemtype     = $builder->build({ source => 'Itemtype' })->{ itemtype };
 
-my %item_branch_infos = (
+my %item_infos = (
     homebranch    => $branchcode,
     holdingbranch => $branchcode,
+    itype         => $itemtype
 );
+
 
 my $slip_content = <<EOS;
 Checked out:
@@ -84,7 +102,7 @@ $record->append_fields(
 );
 my ($biblionumber1) = AddBiblio( $record, '' );
 my $itemnumber1 =
-  AddItem( { barcode => $barcode1, %item_branch_infos }, $biblionumber1 );
+  AddItem( { barcode => $barcode1, %item_infos }, $biblionumber1 );
 
 $record = MARC::Record->new;
 $record->append_fields(
@@ -95,7 +113,7 @@ $record->append_fields(
 );
 my ($biblionumber2) = AddBiblio( $record, '' );
 my $itemnumber2 =
-  AddItem( { barcode => $barcode2, %item_branch_infos }, $biblionumber2 );
+  AddItem( { barcode => $barcode2, %item_infos }, $biblionumber2 );
 
 my $borrowernumber =
   AddMember( categorycode => $categorycode, branchcode => $branchcode );
@@ -394,3 +412,7 @@ EOS
     $slip = IssueSlip(undef, $borrowernumber+1);
     is( $slip->{content}, $empty_slip, 'IssueSlip should not return an empty slip if the borrowernumber passed in param does not exist. But it is what it does for now (FIXME)' );
 };
+
+$schema->storage->txn_rollback;
+
+1;
