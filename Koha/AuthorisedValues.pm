@@ -87,7 +87,7 @@ sub search_by_koha_field {
     my $frameworkcode    = $params->{frameworkcode} || '';
     my $kohafield        = $params->{kohafield};
     my $category         = $params->{category};
-    my $authorised_value = $params->{authorised_value};
+    #my $authorised_value = $params->{authorised_value};
 
     return unless $kohafield;
 
@@ -95,7 +95,7 @@ sub search_by_koha_field {
         {   'marc_subfield_structures.frameworkcode' => $frameworkcode,
             'marc_subfield_structures.kohafield'     => $kohafield,
             ( defined $category ? ( category_name    => $category )         : () ),
-            ( $authorised_value ? ( authorised_value => $authorised_value ) : () ),
+            ( exists $params->{authorised_value} ? ( 'me.authorised_value' => $params->{authorised_value} ) : () ),
         },
         {   join     => { category => 'marc_subfield_structures' },
             distinct => 1,
