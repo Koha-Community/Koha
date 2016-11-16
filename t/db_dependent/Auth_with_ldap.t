@@ -25,11 +25,10 @@ use Test::Warn;
 
 use C4::Context;
 
-my $dbh = C4::Context->dbh;
+use Koha::Patrons;
 
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -116,6 +115,7 @@ subtest 'checkpw_ldap tests' => sub {
 
     plan tests => 4;
 
+    my $dbh = C4::Context->dbh;
     ## Connection fail tests
     $desired_connection_result = 'error';
     warning_is {
@@ -506,6 +506,6 @@ sub reload_ldap_module {
     return;
 }
 
-$dbh->rollback;
+$schema->storage->txn_rollback;
 
 1;
