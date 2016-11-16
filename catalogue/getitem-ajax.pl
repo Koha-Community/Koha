@@ -56,20 +56,20 @@ if($itemnumber) {
     }
 
     my $av;
-    $av = Koha::AuthorisedValues->search_by_koha_field({ frameworkcode => $fw, kohafield => 'items.notforloan', authorised_value => $item->{notforloan} });
-    $item->{notforloan} = $av->count ? $av->next->lib : '';
+    $av = Koha::AuthorisedValues->find_by_koha_field({ frameworkcode => $fw, kohafield => 'items.notforloan', authorised_value => $item->{notforloan} });
+    $item->{notforloan} = $av ? $av->lib : '';
 
-    $av = Koha::AuthorisedValues->search_by_koha_field({ frameworkcode => $fw, kohafield => 'items.restricted', authorised_value => $item->{restricted} });
-    $item->{restricted} = $av->count ? $av->next->lib : '';
+    $av = Koha::AuthorisedValues->find_by_koha_field({ frameworkcode => $fw, kohafield => 'items.restricted', authorised_value => $item->{restricted} });
+    $item->{restricted} = $av ? $av->lib : '';
 
-    $av = Koha::AuthorisedValues->search_by_koha_field({ frameworkcode => $fw, kohafield => 'items.location', authorised_value => $item->{location} });
-    $item->{location} = $av->count ? $av->next->lib : '';
+    $av = Koha::AuthorisedValues->find_by_koha_field({ frameworkcode => $fw, kohafield => 'items.location', authorised_value => $item->{location} });
+    $item->{location} = $av ? $av->lib : '';
 
-    $av = Koha::AuthorisedValues->search_by_koha_field({ frameworkcode => $fw, kohafield => 'items.collection', authorised_value => $item->{collection} });
-    $item->{collection} = $av->count ? $av->next->lib : '';
+    $av = Koha::AuthorisedValues->find_by_koha_field({ frameworkcode => $fw, kohafield => 'items.collection', authorised_value => $item->{collection} });
+    $item->{collection} = $av ? $av->lib : '';
 
-    $av = Koha::AuthorisedValues->search_by_koha_field({ frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->{materials} });
-    $item->{materials} = $av->count ? $av->next->lib : '';
+    $av = Koha::AuthorisedValues->find_by_koha_field({ frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->{materials} });
+    $item->{materials} = $av ? $av->lib : '';
 
     my $itemtype = getitemtypeinfo($item->{itype});
     $item->{itemtype} = $itemtype->{description};
