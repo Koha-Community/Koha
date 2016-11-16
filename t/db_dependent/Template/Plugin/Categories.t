@@ -18,18 +18,21 @@
 use Modern::Perl;
 
 use Test::More tests => 4;
+use t::lib::TestBuilder;
 
+use Koha::Patron::Categories;
+use Koha::Issues;
+use Koha::Patrons;
 use Koha::Database;
 use Koha::Template::Plugin::Categories;
-use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 # Delete all categories
-$schema->resultset('Issue')->search->delete;
-$schema->resultset('Borrower')->search->delete;
-$schema->resultset('Category')->search->delete;
+Koha::Issues->search->delete;
+Koha::Patrons->search->delete;
+Koha::Patron::Categories->search->delete;
 
 my $builder = t::lib::TestBuilder->new;
 
