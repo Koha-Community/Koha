@@ -25,6 +25,7 @@ use Koha::Database;
 
 use Koha::AuthorisedValue;
 use Koha::MarcSubfieldStructures;
+use Koha::Cache::Memory::Lite;
 
 use base qw(Koha::Objects);
 
@@ -117,6 +118,25 @@ sub find_by_koha_field {
         }
     );
     return $av->count ? $av->next : undef;
+}
+
+sub get_description_by_koha_field {
+    my ( $self, $params ) = @_;
+    my $frameworkcode    = $params->{frameworkcode} || '';
+    my $kohafield        = $params->{kohafield};
+    my $authorised_value = $params->{authorised_value};
+
+    return {} unless defined $authorised_value;
+
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
+    my $cache_key    = "Av_descriptions:$frameworkcode:$kohafield:$authorised_value";
+    my $cached       = $memory_cache->get_from_cache($cache_key);
+    return $cached if $cached;
+
+    my $av = $self->find_by_koha_field($params);
+    my $descriptions = { lib => $av->lib, opac_description => $av->opac_description };
+    $memory_cache->set_in_cache( $cache_key, $descriptions );
+    return $descriptions;
 }
 
 sub categories {

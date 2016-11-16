@@ -118,8 +118,8 @@ is( @categories, 3, 'There should have 2 categories inserted' );
 is( $categories[0], $av4->category, 'The first category should be correct (ordered by category name)' );
 is( $categories[1], $av1->category, 'The second category should be correct (ordered by category name)' );
 
-subtest 'search_by_*_field + find_by_koha_field' => sub {
-    plan tests => 3;
+subtest 'search_by_*_field + find_by_koha_field + search_for_descriptions' => sub {
+    plan tests => 4;
     my $loc_cat = Koha::AuthorisedValueCategories->find('LOC');
     $loc_cat->delete if $loc_cat;
     my $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => 'c', frameworkcode => '' } );
@@ -172,5 +172,32 @@ subtest 'search_by_*_field + find_by_koha_field' => sub {
         # Test authorised_value = undef => we do not want to retrieve anything
         $av = Koha::AuthorisedValues->find_by_koha_field( { kohafield => 'items.restricted', authorised_value => undef } );
         is( $av, undef, );
+    };
+    subtest 'get_description_by_koha_field' => sub {
+        plan tests => 3;
+        my $descriptions;
+
+        # Test authorised_value = 0
+        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field(
+            { kohafield => 'items.restricted', authorised_value => 0 } );
+        is_deeply( $descriptions,
+            { lib => $av_0->lib, opac_description => $av_0->lib_opac },
+        );
+
+        # Test authorised_value = ""
+        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field(
+            { kohafield => 'items.restricted', authorised_value => '' } );
+        is_deeply(
+            $descriptions,
+            {
+                lib              => $av_empty_string->lib,
+                opac_description => $av_empty_string->lib_opac
+            },
+        );
+
+        # Test authorised_value = undef => we do not want to retrieve anything
+        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field(
+            { kohafield => 'items.restricted', authorised_value => undef } );
+        is_deeply( $descriptions, {}, ) ;    # This could be arguable, we could return undef instead
     };
 };
