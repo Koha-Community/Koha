@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 22;
 use Test::MockModule;
+use t::lib::TestBuilder;
 
 use C4::Biblio;
 use C4::Items;
@@ -30,6 +31,10 @@ BEGIN {
     use_ok('C4::Circulation');
 }
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+
+my $builder = t::lib::TestBuilder->new;
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
@@ -44,23 +49,28 @@ $dbh->do(q|DELETE FROM items|);
 $dbh->do(q|DELETE FROM categories|);
 
 
-my $branchcode = 'B';
-Koha::Library->new( {branchcode => $branchcode, branchname => 'Branch' } )->store;
+## Create sample data
+# Add a branch
+my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
 
-my $categorycode = 'C';
-$dbh->do("INSERT INTO categories(categorycode) VALUES(?)", undef, $categorycode);
+# Add a category
+my $categorycode = $builder->build( { source => 'Category' } )->{categorycode};
 
-my %item_branch_infos = (
-    homebranch => $branchcode,
+# Add an itemtype
+my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
+
+my %item_info = (
+    homebranch    => $branchcode,
     holdingbranch => $branchcode,
+    itype         => $itemtype
 );
 
 my ($biblionumber1) = AddBiblio(MARC::Record->new, '');
 my $barcode1 = '0101';
-AddItem({ barcode => $barcode1, %item_branch_infos }, $biblionumber1);
+AddItem({ barcode => $barcode1, %item_info }, $biblionumber1);
 my ($biblionumber2) = AddBiblio(MARC::Record->new, '');
 my $barcode2 = '0202';
-AddItem({ barcode => $barcode2, %item_branch_infos }, $biblionumber2);
+AddItem({ barcode => $barcode2, %item_info }, $biblionumber2);
 
 my $borrowernumber1 = AddMember(categorycode => $categorycode, branchcode => $branchcode);
 my $borrowernumber2 = AddMember(categorycode => $categorycode, branchcode => $branchcode);

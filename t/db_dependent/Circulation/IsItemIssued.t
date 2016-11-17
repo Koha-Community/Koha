@@ -38,12 +38,14 @@ my $builder = t::lib::TestBuilder->new;
 my $library = $builder->build({ source => 'Branch' });
 my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
 
-my $module = new Test::MockModule('C4::Context');
-$module->mock('userenv', sub {
-    {
-       branch => $library->{branchcode}
-    }
-});
+C4::Context->_new_userenv('DUMMY SESSION');
+C4::Context->set_userenv(
+    undef, undef, undef, undef, undef,
+    $library->{branchcode},
+    $library->{branchname}
+);
+
+
 
 my $borrowernumber = AddMember(
     firstname =>  'my firstname',
