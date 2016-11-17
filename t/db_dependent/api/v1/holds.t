@@ -24,12 +24,12 @@ use t::lib::TestBuilder;
 use DateTime;
 
 use C4::Context;
-use C4::Biblio;
-use C4::Items;
 use C4::Reserves;
 
 use Koha::Database;
-use Koha::Patron;
+use Koha::Biblios;
+use Koha::Items;
+use Koha::Patrons;
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -309,25 +309,25 @@ $dbh->rollback;
 sub create_biblio {
     my ($title) = @_;
 
-    my $record = new MARC::Record;
-    $record->append_fields(
-        new MARC::Field('200', ' ', ' ', a => $title),
-    );
+    my $biblio = Koha::Biblio->new( { title => $title } )->store;
 
-    my ($biblionumber) = C4::Biblio::AddBiblio($record, '');
-
-    return $biblionumber;
+    return $biblio->biblionumber;
 }
 
 sub create_item {
-    my ($biblionumber, $barcode) = @_;
+    my ( $biblionumber, $barcode ) = @_;
 
-    my $item = {
-        barcode => $barcode,
-    };
-    $dbh->do("DELETE FROM items WHERE barcode='$barcode'") if $barcode;
+    Koha::Items->search( { barcode => $barcode } )->delete;
+    my $builder = t::lib::TestBuilder->new;
+    my $item    = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                biblionumber     => $biblionumber,
+                barcode          => $barcode,
+            }
+        }
+    );
 
-    my $itemnumber = C4::Items::AddItem($item, $biblionumber);
-
-    return $itemnumber;
+    return $item->{itemnumber};
 }
