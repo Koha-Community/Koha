@@ -1,5 +1,20 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 use C4::Biblio;
 use C4::Context;
@@ -41,37 +56,35 @@ $dbh->do(q|DELETE FROM branches|);
 $dbh->do(q|DELETE FROM branch_transfer_limits|);
 $dbh->do(q|DELETE FROM branchtransfers|);
 
-#Add sample datas
-#Add branches
-my $samplebranch1 = $builder->build({
-    source => 'Branch',
-});
-my $samplebranch2 = $builder->build({
-    source => 'Branch',
-});
+## Create sample datas
+# Add branches
+my $branchcode_1 = $builder->build( { source => 'Branch', } )->{branchcode};
+my $branchcode_2 = $builder->build( { source => 'Branch', } )->{branchcode};
+# Add itemtype
+my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
 
 #Add biblio and items
 my $record = MARC::Record->new();
 $record->append_fields(
-    MARC::Field->new( '952', '0', '0', a => $samplebranch1->{branchcode} ) );
+    MARC::Field->new( '952', '0', '0', a => $branchcode_1 ) );
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '', );
 
 my @sampleitem1 = C4::Items::AddItem(
-    {
-        barcode        => 1,
+    {   barcode        => 1,
         itemcallnumber => 'callnumber1',
-        homebranch     => $samplebranch1->{branchcode},
-        holdingbranch  => $samplebranch1->{branchcode}
+        homebranch     => $branchcode_1,
+        holdingbranch  => $branchcode_1,
+        itype          => $itemtype
     },
     $biblionumber
 );
 my $item_id1    = $sampleitem1[2];
 my @sampleitem2 = C4::Items::AddItem(
-    {
-        barcode        => 2,
+    {   barcode        => 2,
         itemcallnumber => 'callnumber2',
-        homebranch     => $samplebranch1->{branchcode},
-        holdingbranch  => $samplebranch1->{branchcode}
+        homebranch     => $branchcode_1,
+        holdingbranch  => $branchcode_1,
+        itype          => $itemtype
     },
     $biblionumber
 );
@@ -80,30 +93,30 @@ my $item_id2 = $sampleitem2[2];
 #Add transfers
 ModItemTransfer(
     $item_id1,
-    $samplebranch1->{branchcode},
-    $samplebranch2->{branchcode}
+    $branchcode_1,
+    $branchcode_2
 );
 ModItemTransfer(
     $item_id2,
-    $samplebranch1->{branchcode},
-    $samplebranch2->{branchcode}
+    $branchcode_1,
+    $branchcode_2
 );
 
 #Begin Tests
 #Test CreateBranchTransferLimit
 is(
     CreateBranchTransferLimit(
-        $samplebranch2->{branchcode},
-        $samplebranch1->{branchcode}, 'CODE'
+        $branchcode_2,
+        $branchcode_1, 'CODE'
     ),
     1,
     "A Branch TransferLimit has been added"
 );
 is(CreateBranchTransferLimit(),undef,
     "Without parameters CreateBranchTransferLimit returns undef");
-is(CreateBranchTransferLimit($samplebranch2->{branchcode}),undef,
+is(CreateBranchTransferLimit($branchcode_2),undef,
     "With only tobranch CreateBranchTransferLimit returns undef");
-is(CreateBranchTransferLimit(undef,$samplebranch2->{branchcode}),undef,
+is(CreateBranchTransferLimit(undef,$branchcode_2),undef,
     "With only frombranch CreateBranchTransferLimit returns undef");
 #FIXME: Currently, we can add a transferlimit even to nonexistent branches because in the database,
 #branch_transfer_limits.toBranch and branch_transfer_limits.fromBranch aren't foreign keys
@@ -113,7 +126,7 @@ is(CreateBranchTransferLimit(undef,$samplebranch2->{branchcode}),undef,
 my @transfers = GetTransfers($item_id1);
 cmp_deeply(
     \@transfers,
-    [ re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), $samplebranch1->{branchcode}, $samplebranch2->{branchcode} ],
+    [ re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'), $branchcode_1, $branchcode_2 ],
     "Transfers of the item1"
 );    #NOTE: Only the first transfer is returned
 @transfers = GetTransfers;
@@ -124,28 +137,28 @@ is_deeply( \@transfers, [],
     "GetTransfers with a wrong item id returns an empty array" );
 
 #Test GetTransfersFromTo
-my @transferfrom1to2 = GetTransfersFromTo( $samplebranch1->{branchcode},
-    $samplebranch2->{branchcode} );
+my @transferfrom1to2 = GetTransfersFromTo( $branchcode_1,
+    $branchcode_2 );
 cmp_deeply(
     \@transferfrom1to2,
     [
         {
             itemnumber => $item_id1,
             datesent   => re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'),
-            frombranch => $samplebranch1->{branchcode}
+            frombranch => $branchcode_1
         },
         {
             itemnumber => $item_id2,
             datesent   => re('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'),
-            frombranch => $samplebranch1->{branchcode}
+            frombranch => $branchcode_1
         }
     ],
     "Item1 and Item2 has been transferred from branch1 to branch2"
 );
-my @transferto = GetTransfersFromTo( undef, $samplebranch2->{branchcode} );
+my @transferto = GetTransfersFromTo( undef, $branchcode_2 );
 is_deeply( \@transferto, [],
     "GetTransfersfromTo without frombranch returns an empty array" );
-my @transferfrom = GetTransfersFromTo( $samplebranch1->{branchcode} );
+my @transferfrom = GetTransfersFromTo( $branchcode_1 );
 is_deeply( \@transferfrom, [],
     "GetTransfersfromTo without tobranch returns an empty array" );
 @transferfrom = GetTransfersFromTo();
@@ -154,7 +167,7 @@ is_deeply( \@transferfrom, [],
 
 #Test DeleteBranchTransferLimits
 is(
-    C4::Circulation::DeleteBranchTransferLimits( $samplebranch1->{branchcode} ),
+    C4::Circulation::DeleteBranchTransferLimits( $branchcode_1 ),
     1,
     "A Branch TransferLimit has been deleted"
 );
@@ -168,12 +181,16 @@ is(C4::Circulation::DeleteTransfer(),undef,"Without itemid DeleteTransfer return
 is(C4::Circulation::DeleteTransfer(-1),'0E0',"with a wrong itemid DeleteTranfer returns 0E0");
 
 #Test TransferSlip
-is( C4::Circulation::TransferSlip($samplebranch1->{branchcode}, undef, 5, $samplebranch2->{branchcode}),
+is( C4::Circulation::TransferSlip($branchcode_1, undef, 5, $branchcode_2),
     undef, "No tranferslip if invalid or undef itemnumber or barcode" );
-is( C4::Circulation::TransferSlip($samplebranch1->{branchcode}, $item_id1, 1, $samplebranch2->{branchcode})->{'code'},
+is( C4::Circulation::TransferSlip($branchcode_1, $item_id1, 1, $branchcode_2)->{'code'},
     'TRANSFERSLIP', "Get a transferslip on valid itemnumber and/or barcode" );
 cmp_deeply(
-    C4::Circulation::TransferSlip($samplebranch1->{branchcode}, $item_id1, undef, $samplebranch2->{branchcode}),
-    C4::Circulation::TransferSlip($samplebranch1->{branchcode}, undef, 1, $samplebranch2->{branchcode}),
+    C4::Circulation::TransferSlip($branchcode_1, $item_id1, undef, $branchcode_2),
+    C4::Circulation::TransferSlip($branchcode_1, undef, 1, $branchcode_2),
     "Barcode and itemnumber for same item both generate same TransferSlip"
     );
+
+$schema->storage->txn_rollback;
+
+1;
