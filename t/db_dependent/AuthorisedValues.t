@@ -174,7 +174,7 @@ subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
         is( $av, undef, );
     };
     subtest 'get_description_by_koha_field' => sub {
-        plan tests => 3;
+        plan tests => 4;
         my $descriptions;
 
         # Test authorised_value = 0
@@ -198,6 +198,11 @@ subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
         # Test authorised_value = undef => we do not want to retrieve anything
         $descriptions = Koha::AuthorisedValues->get_description_by_koha_field(
             { kohafield => 'items.restricted', authorised_value => undef } );
+        is_deeply( $descriptions, {}, ) ;    # This could be arguable, we could return undef instead
+
+        # No authorised_value
+        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field(
+            { kohafield => 'items.restricted', authorised_value => "does not exist" } );
         is_deeply( $descriptions, {}, ) ;    # This could be arguable, we could return undef instead
     };
     subtest 'get_descriptions_by_koha_field' => sub {
