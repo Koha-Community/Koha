@@ -26,10 +26,12 @@ use Module::Load::Conditional;
 use Swagger2;
 
 use C4::Context;
+use Koha::Database;
 
 my $swaggerPath = C4::Context->config('intranetdir') . "/api/v1/swagger";
 my $swagger     = Swagger2->new( $swaggerPath . "/swagger.json" )->expand;
 my $api_spec    = $swagger->api_spec->data;
+my $schema = Koha::Database->new->schema;
 
 # The basic idea of this test:
 # 1. Find all definitions in Swagger under api/v1/definitions
@@ -44,7 +46,7 @@ my $api_spec    = $swagger->api_spec->data;
 my @definition_names = keys %{ $api_spec->{definitions} };
 
 subtest 'api/v1/definitions/*.json up-to-date with corresponding Koha-object' => sub {
-    plan tests => scalar(@definition_names);
+    plan tests => 2*(scalar(@definition_names) - 1);
 
     foreach my $name (@definition_names) {
         my $definition = $api_spec->{definitions}->{$name};
@@ -57,10 +59,20 @@ subtest 'api/v1/definitions/*.json up-to-date with corresponding Koha-object' =>
                 next;
             }
 
-            my $columns = $kohaObject->_columns;
+            my $columns_info = $schema->resultset( $kohaObject->_type )->result_source->columns_info;
             my $properties = $definition->{properties};
-            is(_is_up_to_date($properties, $columns), "",
-               "$name matches ".ref($kohaObject)." and is not missing any properties.");
+            my @missing = check_columns_exist($properties, $columns_info);
+            if ( @missing ) {
+                fail( "Columns are missing for $name: " . join(", ", @missing ) );
+            } else {
+                pass( "No columns are missing for $name" );
+            }
+            my @nullable= check_is_nullable($properties, $columns_info);
+            if ( @nullable ) {
+                fail( "Columns is nullable in DB, not in swagger file for $name: " . join(", ", @nullable ) );
+            } else {
+                pass( "No null are missing for $name" );
+            }
         } else {
             ok(1, "$name type is not an object. It is ".$definition->{type}.".");
         }
@@ -77,12 +89,37 @@ sub _koha_object {
     }
 }
 
-sub _is_up_to_date {
-    my ($properties, $columns) = @_;
-
-    my @missing;
-    foreach my $column (@$columns) {
-        push @missing, $column unless $properties->{$column};
+sub check_columns_exist {
+    my ($properties, $columns_info) = @_;
+    my @missing_column;
+    for my $column_name ( keys %$columns_info ) {
+        my $c_info = $columns_info->{$column_name};
+        unless ( exists $properties->{$column_name} ) {
+            push @missing_column, $column_name;
+            next;
+        }
     }
-    return join(', ' , @missing);
+    return @missing_column;
+}
+
+sub check_is_nullable {
+    my ($properties, $columns_info) = @_;
+    my @missing_nullable;
+    for my $column_name ( keys %$columns_info ) {
+        my $c_info = $columns_info->{$column_name};
+        if ( $c_info->{is_nullable} or $c_info->{datetime_undef_if_invalid} ) {
+            my $type = $properties->{$column_name}{type};
+            next unless $type; # FIXME Is it ok not to have type defined?
+            unless ( ref($type) ) {
+                push @missing_nullable, $column_name;
+                next;
+            }
+            my $null_exists = grep {/^null$/} @$type;
+            unless ( $null_exists ) {
+                push @missing_nullable, $column_name;
+                next;
+            }
+        }
+    }
+    return @missing_nullable;
 }
