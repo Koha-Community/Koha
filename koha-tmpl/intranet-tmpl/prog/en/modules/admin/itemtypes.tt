@@ -185,7 +185,7 @@ Item types administration
                             <a href="#[% imageset.imagesetname %]">[% imageset.imagesetname %]</a>
                             </li>
                         [% END %]
-                        [% IF itemtype.image_location.match('^http') %]<li class="ui-tabs-active">[% ELSE %]<li>[% END %]<a href="#remote">Remote image</a></li>
+                        [% IF itemtype.image_location('intranet').match('^http') %]<li class="ui-tabs-active">[% ELSE %]<li>[% END %]<a href="#remote">Remote image</a></li>
                     </ul>
                     <div id="none">
                         <ul>
@@ -319,7 +319,8 @@ Item types administration
                 <tr>
                     <th scope="row">Image</th>
                     <td>
-                        [% IF itemtype.image_location %]<img src="[% itemtype.image_location %]" alt="" />[% END %]
+                        [% SET image_location = itemtype.image_location('intranet') %]
+                        [% IF image_location %]<img src="[% image_location %]" alt="" />[% END %]
                     </td>
                 </tr>
             [% END %]
@@ -352,7 +353,12 @@ Item types administration
           </thead>
           [% FOREACH itemtype IN itemtypes %]
             <tr>
-           [% UNLESS Koha.Preference('noItemTypeImages') %] <td>[% IF itemtype.image_location %]<img src="[% itemtype.image_location %]" alt="" />[% ELSE %]&nbsp;[% END %]</td>[% END %]
+                [% UNLESS Koha.Preference('noItemTypeImages') %]
+                    <td>
+                        [% SET image_location = itemtype.image_location('intranet') %]
+                        [% IF image_location %]<img src="[% image_location %]" alt="" />[% ELSE %]&nbsp;[% END %]
+                    </td>
+                [% END %]
             <td>
               <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype |html %]">
                 [% itemtype.itemtype %]
