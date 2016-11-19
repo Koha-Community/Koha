@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use File::Temp qw/ tempdir /;
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use Test::MockModule;
 use t::lib::Mocks;
@@ -11,6 +11,7 @@ use t::lib::TestBuilder;
 use C4::Context;
 use Koha::Database;
 use Koha::Upload;
+use Koha::UploadedFiles;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -203,6 +204,23 @@ sub test08 { # allows_add_by
     is( Koha::Upload->allows_add_by( $patron->{userid} ),
         1, 'Patron is still allowed to add uploaded files' );
 }
+
+# Additional tests for Koha::UploadedFiles
+# TODO Rearrange the tests after this migration
+subtest 'Some basic CRUD testing' => sub {
+    plan tests => 2;
+
+    # Test find and attribute id, delete and search
+    my $builder = t::lib::TestBuilder->new;
+    my $upload01 = $builder->build({ source => 'UploadedFile' });
+    my $found = Koha::UploadedFiles->find( $upload01->{id} );
+    is( $found->id, $upload01->{id}, 'Koha::Object returns id' );
+    $found->delete;
+    $found = Koha::UploadedFiles->search(
+        { id => $upload01->{id} },
+    );
+    is( $found->count, 0, 'Delete seems successful' );
+};
 
 sub newCGI {
     my ( $class, $hook ) = @_;
