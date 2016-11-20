@@ -75,6 +75,7 @@ use base qw(Class::Accessor);
 
 use C4::Context;
 use C4::Koha;
+use Koha::UploadedFile;
 
 __PACKAGE__->mk_ro_accessors( qw|| );
 
@@ -365,22 +366,17 @@ sub _done {
 
 sub _register {
     my ( $self, $filename, $size ) = @_;
-    my $dbh= C4::Context->dbh;
-    my $sql= 'INSERT INTO uploaded_files (hashvalue, filename, dir, filesize,
-        owner, uploadcategorycode, public, permanent) VALUES (?,?,?,?,?,?,?,?)';
-    my @pars= (
-        $self->{files}->{$filename}->{hash},
-        $filename,
-        $self->{category},
-        $size,
-        $self->{uid},
-        $self->{category},
-        $self->{public},
-        $self->{temporary}? 0: 1,
-    );
-    $dbh->do( $sql, undef, @pars );
-    my $i = $dbh->last_insert_id(undef, undef, 'uploaded_files', undef);
-    $self->{files}->{$filename}->{id} = $i if $i;
+    my $rec = Koha::UploadedFile->new({
+        hashvalue => $self->{files}->{$filename}->{hash},
+        filename  => $filename,
+        dir       => $self->{category},
+        filesize  => $size,
+        owner     => $self->{uid},
+        uploadcategorycode => $self->{category},
+        public    => $self->{public},
+        permanent => $self->{temporary}? 0: 1,
+    })->store;
+    $self->{files}->{$filename}->{id} = $rec->id if $rec;
 }
 
 sub _lookup {
