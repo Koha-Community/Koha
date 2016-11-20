@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-05-20 10:44-0300\n"
+"POT-Creation-Date: 2016-11-20 20:31-0300\n"
 "PO-Revision-Date: 2008-06-23 14:14+0200\n"
 "Last-Translator: translate.koha.org\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -627,10 +627,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -726,7 +728,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -752,6 +754,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
@@ -1219,6 +1222,14 @@ msgid ""
 "A layout is used to define the fields you want to appear on your labels."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:5
+#, c-format
+msgid ""
+"A library EAN is the identifier the vendor gives the library to send back to "
+"them so they know which account to use when billing. One EDI account can "
+"have multiple EANs."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:20
 #, c-format
 msgid "A list can also be created from the catalog search results"
@@ -1236,6 +1247,13 @@ msgstr ""
 msgid ""
 "A list of all of the serial routing lists the patron belongs to will be "
 "accessible via the 'Routing Lists' tab on the patron record."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:5
+#, c-format
+msgid ""
+"A log of all messages sent and received via EDIFACT can be found under "
+"EDIFACT Messages."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:52
@@ -2126,7 +2144,7 @@ msgid ""
 "their record."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:518
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:524
 #, c-format
 msgid ""
 "All staff members have permission to access lists. This section only needs "
@@ -4244,7 +4262,7 @@ msgstr ""
 msgid "Course reserves"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
 #, c-format
 msgid "Create SQL Reports"
 msgstr ""
@@ -4477,6 +4495,11 @@ msgstr ""
 msgid "Delete Quote(s)"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
+#, c-format
+msgid "Delete SQL Reports"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/oai_sets.tt:20
 #, c-format
 msgid "Delete a set"
@@ -4499,7 +4522,7 @@ msgid ""
 "borrower reading history)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:523
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:529
 #, c-format
 msgid "Delete public lists"
 msgstr ""
@@ -4671,6 +4694,11 @@ msgstr ""
 msgid "Duration: 7 days"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:3
+#, c-format
+msgid "EDIFACT messages"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:21
 #, c-format
 msgid ""
@@ -4771,6 +4799,11 @@ msgstr ""
 msgid ""
 "Each section of preferences can be sorted alphabetically by clicking the "
 "small down arrow to the right of the word 'Preference' in the header column"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:13
+#, c-format
+msgid "Each vendor will have one account."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:106
@@ -5147,6 +5180,11 @@ msgstr ""
 msgid "Enter your tax rate if your library is charged taxes on orders."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:11
+#, c-format
+msgid "Enter your vendor information in the form that appears."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:19
 #, c-format
 msgid ""
@@ -5236,7 +5274,7 @@ msgstr ""
 msgid "Examples: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
 #, c-format
 msgid "Execute SQL Reports"
 msgstr ""
@@ -5866,6 +5904,13 @@ msgid ""
 "the 'New purchase suggestion' button at the top."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:5
+#, c-format
+msgid ""
+"From here you can set up the information needed to connect to your "
+"acquisitions vendors"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
 #, c-format
@@ -6329,7 +6374,7 @@ msgstr ""
 msgid "Granular Holds Permissions"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:522
 #, c-format
 msgid "Granular Lists Permissions"
 msgstr ""
@@ -7112,7 +7157,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:84
 #, c-format
-msgid "If you are charged sales tax, choose that from the gstrate field"
+msgid "If you are charged sales tax, choose that from the tax_rate field"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:33
@@ -8873,6 +8918,12 @@ msgstr ""
 msgid "In the form that appears you want to enter the basics about your fund."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:9
+#, c-format
+msgid ""
+"In the form that appears, enter the information provided by your vendor."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:41
 #, c-format
 msgid ""
@@ -9497,6 +9548,11 @@ msgid ""
 "cataloging, although a separate bib record is created for the title, it is "
 "not physically separated from the host item. Learn more about Analytics in "
 "Chapter 13 of AACR2."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:3
+#, c-format
+msgid "Library EANs"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:74
@@ -10278,6 +10334,11 @@ msgid ""
 "is strictly 'equal' or 'not equal' to what is defined if 'Value'. A record "
 "having 999$9 = 'XXX YYY' will not belong to a set where condition is 999$9 = "
 "'XXX'."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, c-format
+msgid "Note: Before you begin, you must set up at least one "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:41
@@ -12244,6 +12305,16 @@ msgstr ""
 msgid "See the full documentation for Custom Reports in the "
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
+#, c-format
+msgid "See the full documentation for EDI accounts in the "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
+#, c-format
+msgid "See the full documentation for EDIFACT messages in the "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
 #, c-format
 msgid "See the full documentation for Editing Patrons in the "
@@ -12369,6 +12440,11 @@ msgstr ""
 msgid "See the full documentation for Libraries &amp; Groups in the "
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
+#, c-format
+msgid "See the full documentation for Library EANs in the "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #, c-format
 msgid "See the full documentation for Library Transfer Limits in the "
@@ -12489,7 +12565,7 @@ msgstr ""
 msgid "See the full documentation for Patron Notices in the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #, c-format
 msgid "See the full documentation for Patron Permissions in the "
 msgstr ""
@@ -13998,12 +14074,17 @@ msgid ""
 "Circulation page"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
 #, c-format
 msgid "The ability to create and edit but not run SQL reports"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#, c-format
+msgid "The ability to delete but not run SQL reports"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:517
 #, c-format
 msgid "The ability to run but not create or edit SQL reports"
 msgstr ""
@@ -15935,11 +16016,21 @@ msgid ""
 "To add a vendor, click the 'New Vendor' button on the Acquisitions page."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:9
+#, c-format
+msgid "To add account information, click the 'New account' button."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:9
 #, c-format
 msgid ""
 "To add additional values to the manual invoice type pull down menu, add them "
 "to the MANUAL_INV Authorized Value"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:7
+#, c-format
+msgid "To add an EAN, click the 'New EAN' button."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:57
@@ -17030,6 +17121,16 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:3
 #, c-format
 msgid "Vendor Contracts"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:3
+#, c-format
+msgid "Vendor EDI accounts"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, c-format
+msgid "Vendor in Acquisitions"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:13
@@ -18605,7 +18706,7 @@ msgstr ""
 msgid "cql.anywhere"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
 #, c-format
 msgid "create_reports "
 msgstr ""
@@ -18786,9 +18887,14 @@ msgstr ""
 msgid "delete_anonymize_patrons "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:521
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:527
 #, c-format
 msgid "delete_public_lists "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#, c-format
+msgid "delete_reports "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:323
@@ -18864,7 +18970,7 @@ msgid ""
 "importing."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:514
 #, c-format
 msgid "execute_reports "
 msgstr ""
@@ -19177,10 +19283,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -19275,7 +19383,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -19301,6 +19409,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17

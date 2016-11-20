@@ -1,18 +1,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: German Koha Translation\n"
-"POT-Creation-Date: 2016-05-20 11:05-0300\n"
-"PO-Revision-Date: 2016-05-21 05:45+0000\n"
-"Last-Translator: Marc <veron@veron.ch>\n"
+"POT-Creation-Date: 2016-11-20 20:20-0300\n"
+"PO-Revision-Date: 2016-11-20 20:25+0100\n"
+"Last-Translator: mveron <veron@veron.ch>\n"
 "Language-Team: \n"
-"Language: de_CH\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.5.1.1\n"
+"X-Generator: Poedit 1.8.11\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1463809526.000000\n"
+"X-POOTLE-MTIME: 1479651344.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -64,12 +64,12 @@ msgstr "\"Exemplar nicht gefunden.\" wenn der Exemplar-Barcode falsch ist"
 msgid "\"Item not issued.\" if you checked in an available item"
 msgstr ""
 "\"Exemplar nicht entliehen.\" wenn ein verfügbares Exemplar zurückgegeben "
-"wurde"
+"wurde."
 
 #: intranet-tmpl/prog/en/modules/help/offline_circ/list.tt:14
 #, c-format
 msgid "\"Success.\" if the transaction was processed correctly"
-msgstr "\"Erfolgreich.\" wenn die Transaktion korrekt ausgeführt wurde"
+msgstr "\"Erfolgreich.\" wenn die Transaktion korrekt ausgeführt wurde."
 
 #. %1$s:  themelang 
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:26
@@ -128,9 +128,8 @@ msgstr ""
 msgid ""
 "'Appear in position' lets you decide what order your news items appear in"
 msgstr ""
-"'Zusätzliche SRU-Optionen': Sie können hier zusätzliche Optionen für externe "
-"Server angeben wie sru_version=1.1 oder schema=marc21, etc. Beachten Sie "
-"dass solche Optionen serverabhängig sind."
+"'Erscheint an Position' ermöglicht es, die Reihenfolge der "
+"Nachrichteneinträge zu bestimmen"
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:14
 #, c-format
@@ -799,10 +798,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -898,7 +899,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -924,6 +925,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
@@ -1444,6 +1446,17 @@ msgstr ""
 "Das Layout wird verwendet um festzulegen welche Felder auf die Etiketten "
 "gedruckt werden sollen."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:5
+#, c-format
+msgid ""
+"A library EAN is the identifier the vendor gives the library to send back to "
+"them so they know which account to use when billing. One EDI account can "
+"have multiple EANs."
+msgstr ""
+"Eine Bibliotheks-EAN ist eine Identifikationsnummer, die der Händler der "
+"Bibliothek zuweist, sodass Rechnungen dem jeweils zugehörigen Konto "
+"zugewiesen werden. Ein Edifact-Konto kann mehrere EANs haben."
+
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:20
 #, c-format
 msgid "A list can also be created from the catalog search results"
@@ -1464,6 +1477,15 @@ msgid ""
 msgstr ""
 "Eine Liste aller Umlauflisten auf denen ein Benutzer steht ist im "
 "Benutzerkonto über den Reiter 'Umlauflisten' verfügbar."
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:5
+#, c-format
+msgid ""
+"A log of all messages sent and received via EDIFACT can be found under "
+"EDIFACT Messages."
+msgstr ""
+"Eine Liste aller gesendeten und empfangenen Benachrichtigungen kann unter "
+"\"Edifact-Benachrichtigungen\" eingesehen werden."
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:52
 #, c-format
@@ -2516,13 +2538,13 @@ msgid ""
 "'Professional' and their Guarantors additional information will appear on "
 "their record."
 msgstr ""
-"Alle Benutzerinformationen erscheinen in der Einzelanzeige. Dies schliesst "
-"alle Kontaktdaten, Hinweise, Benachrichtigungsvorgaben usw. mit ein, die bei "
-"der Aufnahme des Benutzers eingegeben wurden. Ist ein Benutzer als 'Kind' "
-"oder 'Mitarbeiter (Organisation)' markiert, werden die Informationen über "
-"den Bürgen angezeigt."
+"Alle Benutzerinfromationen erscheinen in der Einzelanzeige. Dies schliesst "
+"alle Kontaktdaten, Hinweise, Benachrichtigungsvorgaben usw. ein, die bei der "
+"Aufnahme des Benutzers eingegeben wurden. Ist ein Benutzer als 'Kind' oder "
+"'Firmenbenutzer' markiert, werden die Informationen über den "
+"Verantwortlichen angezeigt."
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:518
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:524
 #, c-format
 msgid ""
 "All staff members have permission to access lists. This section only needs "
@@ -3109,7 +3131,7 @@ msgstr "Stapellöschung von Titeln"
 #: intranet-tmpl/prog/en/modules/help/tools/batch_record_modification.tt:3
 #, c-format
 msgid "Batch record modification"
-msgstr "Stapelbearbeitung von Datensätzen"
+msgstr "Stapelbearbeitung von Titeln"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-edit-batch.tt:3
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:40
@@ -3271,10 +3293,10 @@ msgid ""
 "clicking that will open up the item's history which will look slightly "
 "different from the bibliographic record's history page."
 msgstr ""
-"Unter der Rubrik 'Ausleihverlauf' befindet sich ein Link zu 'Ausleihverlauf "
-"des Exemplars anzeigen'. Wenn Sie diesen anklicken, wird der Ausleihverlauf "
-"des Exemplars geöffnet. Dieser sieht etwas anders aus, als der titelbezogene "
-"Ausleihverlauf."
+"Unter der Rubrik 'Ausleihhistorie' befindet sich ein Link zu "
+"'Ausleihhistorie des Exemplars anzeigen'. Wenn Sie diesen anklicken, werden "
+"die Ausleihhistorie des Exemplars geöffnet. Diese sieht etwas anders aus, "
+"als die titelbezogene Ausleihhistorie."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:29
 #, c-format
@@ -3856,7 +3878,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:3
 #, c-format
 msgid "Checkout History"
-msgstr "Ausleihverlauf"
+msgstr "Ausleihhistorie"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:124
 #, c-format
@@ -4289,7 +4311,7 @@ msgstr "Ausleihe"
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:34
 #, c-format
 msgid "Circulation History"
-msgstr "Ausleihverlauf"
+msgstr "Ausleihhistorie"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:145
 #, c-format
@@ -5121,7 +5143,7 @@ msgstr "Details zum Semesterapparat"
 msgid "Course reserves"
 msgstr "Semesterapparate"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
 #, c-format
 msgid "Create SQL Reports"
 msgstr "Neuer SQL-Report"
@@ -5377,6 +5399,11 @@ msgstr ""
 msgid "Delete Quote(s)"
 msgstr "Zitat(e) löschen"
 
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
+#, c-format
+msgid "Delete SQL Reports"
+msgstr "SQL-Reports löschen"
+
 #: intranet-tmpl/prog/en/modules/help/admin/oai_sets.tt:20
 #, c-format
 msgid "Delete a set"
@@ -5398,10 +5425,10 @@ msgid ""
 "Delete old borrowers and anonymize circulation/reading history (deletes "
 "borrower reading history)"
 msgstr ""
-"Inaktive Benutzer löschen und Ausleih- und Leseverlauf anonymisieren (löscht "
-"Benutzer-Ausleihverlauf)"
+"Inaktive Benutzer löschen und Ausleih- und Lesehistorien anonymisieren "
+"(löscht Benutzerausleihhistorie)"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:523
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:529
 #, c-format
 msgid "Delete public lists"
 msgstr "Öffentliche Listen löschen"
@@ -5604,6 +5631,11 @@ msgstr "Dauer: 10 Tage"
 msgid "Duration: 7 days"
 msgstr "Dauer: 7 Tage"
 
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:3
+#, c-format
+msgid "EDIFACT messages"
+msgstr "Edifact-Benachrichtigungen"
+
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:21
 #, c-format
 msgid ""
@@ -5624,9 +5656,9 @@ msgid ""
 "own circulation history page. To see this, click on the 'Items' tab to the "
 "left of the record you are viewing."
 msgstr ""
-"Jeder bibliographische Datensatz verfügt über einen Ausleihverlauf (mit oder "
+"Jeder bibliographische Datensatz verfügt über eine Ausleihhistorie (mit oder "
 "ohne Benutzerinformationen, abhängig von Ihren Einstellungen), zusätzlich "
-"hat jedes Exemplar seine eigene Seite zum Ausleihverlauf. Um diese "
+"hat jedes Exemplar seine eigene Seite zur Ausleihhistorie. Um diese "
 "anzuzeigen, klicken Sie auf auf den Reiter 'Exemplare' links neben dem "
 "Datensatz, den sie gerade ansehen."
 
@@ -5732,6 +5764,11 @@ msgstr ""
 "Jede Abteilung der Einstellungen kann alphabetische geordnet werden, indem "
 "man den kleinen Pfeil nach unten anklickt, der rechts neben dem Wort "
 "'Einstellungen' in der Titelzeile"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:13
+#, c-format
+msgid "Each vendor will have one account."
+msgstr "Jeder Händler hat ein Konto."
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:106
 #, c-format
@@ -6159,6 +6196,11 @@ msgstr ""
 "Geben Sie die Steuerrate an, wenn Ihre Bibliothek für Einkäufe Steuern "
 "bezahlen muss."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:11
+#, c-format
+msgid "Enter your vendor information in the form that appears."
+msgstr "Tragen Sie die Händler-Informationen im Formular ein."
+
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:19
 #, c-format
 msgid ""
@@ -6269,7 +6311,7 @@ msgstr "Beispiele"
 msgid "Examples: "
 msgstr "Beispiele: "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
 #, c-format
 msgid "Execute SQL Reports"
 msgstr "SQL-Reports ausführen"
@@ -6753,7 +6795,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/auth_subfields_structure.tt:19
 #, c-format
 msgid "For each subfield, you can set the following values: "
-msgstr "Für jedes Unterfeld können Sie die folgenden Werte festlegen: "
+msgstr "Für jedes Teilfeld können Sie die folgenden Werte festlegen: "
 
 # Stimmt das so?
 #: intranet-tmpl/prog/en/modules/help/circ/view_holdsqueue.tt:15
@@ -7063,6 +7105,13 @@ msgstr ""
 "und deren Status sehen. Ausserdem können Anschaffungsvorschläge für den "
 "Benutzer über die Schaltfläche 'Neuer Anschaffungsvorschlag' eingegeben "
 "werden."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:5
+#, c-format
+msgid ""
+"From here you can set up the information needed to connect to your "
+"acquisitions vendors"
+msgstr "Hier können Sie die Kontaktinformationen Ihrer Händler eintragen"
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
@@ -7655,7 +7704,7 @@ msgstr "Detaillierte Berechtigungen für die Ausleihe"
 msgid "Granular Holds Permissions"
 msgstr "Detaillierte Berechtigungen für die Vormerkungen"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:522
 #, c-format
 msgid "Granular Lists Permissions"
 msgstr "Detaillierte Berechtigungen für Listen"
@@ -7756,8 +7805,8 @@ msgid ""
 msgstr ""
 "Vormerkungsraten helfen Ihnen bei der Entwicklung Ihrer Sammlung. Dieser "
 "Report erlaubt Ihnen zu sehen, wie viele Ihrer Benutzer Vormerkungen auf "
-"Medien haben und ob Sie mehr kaufen sollten. Standardmässig ist dies auf 3 "
-"Medien pro erfolgter Vormerkung festgelegt. Der Report teilt Ihnen mit, wie "
+"Medien haben und ob Sie mehr kaufen sollten.Standardmässig ist dies auf 3 "
+"Medien pro erfolgter Reservation festgelegt. Der Report teilt Ihnen mit, wie "
 "viele zusätzliche Medien gekauft werden müssen, um diese Quote zu erreichen."
 
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:3
@@ -8269,7 +8318,7 @@ msgid ""
 "If the patron reports that they have lost their card you can set the 'Lost "
 "Card' flag to prevent someone else from using that card to check items out"
 msgstr ""
-"Teilt ein Benutzer den Verlust seines Ausweises mit, kann durch setzen von "
+"TTeilt ein Benutzer den Verlust seines Ausweises mit, kann durch setzen von "
 "''Ausweis verloren' der Missbrauch durch andere Personen verhindert werden"
 
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:24
@@ -8546,8 +8595,8 @@ msgid ""
 "If this patron is a professional, you will be asked to attach the patron to "
 "an organizational patron "
 msgstr ""
-"Wenn es sich bei diesem Benutzer um einen Mitarbeiter handelt, werden Sie "
-"aufgefordert den Benutzer mit einer Organisation zu verknüpfen "
+"Wenn es sich bei diesem Benutzer um einen Professionellen handelt, werden "
+"Sie aufgefordert den Benutzer mit einer Organisation zu verknüpfen "
 
 #: intranet-tmpl/prog/en/modules/help/tools/upload-cover-image.tt:22
 #, c-format
@@ -8667,10 +8716,10 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:84
 #, c-format
-msgid "If you are charged sales tax, choose that from the gstrate field"
+msgid "If you are charged sales tax, choose that from the tax_rate field"
 msgstr ""
-"Wenn Sie mehrwertsteuerpflichtig sind, geben Sie dies im Feld MWSt (gstrate) "
-"an"
+"Wenn Sie mehrwertsteuerpflichtig sind, geben Sie dies im Feld MWSt "
+"(tax_rate) an"
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:33
 #, c-format
@@ -10498,7 +10547,7 @@ msgid ""
 "match valid entries in your database."
 msgstr ""
 "Wichtig: Die Felder 'branchcode' und 'categorycode' sind Pflichtfelder und "
-"müssen den konfigurierten Kürzeln in Ihrer Datenbank entsprechen."
+"müssen den konfigurierten Kürzeln in Ihrere Datenbank entsprechen."
 
 #: intranet-tmpl/prog/en/modules/help/tools/picture-upload.tt:21
 #, c-format
@@ -11020,6 +11069,14 @@ msgstr ""
 "In der angezeigten Maske können Sie die Informationen zu Ihrem Etat "
 "eintragen."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:9
+#, c-format
+msgid ""
+"In the form that appears, enter the information provided by your vendor."
+msgstr ""
+"In der angezeigten Maske können Sie die Informationen vonihrem Händler zur "
+"Verfügung gestellten Informationen eintragen."
+
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:41
 #, c-format
 msgid ""
@@ -11080,7 +11137,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:3
 #, c-format
 msgid "Inventory"
-msgstr "Inventur "
+msgstr "Inventur"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/invoice.tt:3
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:3
@@ -11182,7 +11239,7 @@ msgstr "Exemplarsuche"
 #: intranet-tmpl/prog/en/modules/help/catalogue/moredetail.tt:15
 #, c-format
 msgid "Item Specific Circulation History"
-msgstr "Exemplarbezogener Ausleihverlauf"
+msgstr "Exemplarbezogene Ausleihhistorie"
 
 #: intranet-tmpl/prog/en/modules/help/admin/itemtypes.tt:3
 #, c-format
@@ -11788,6 +11845,11 @@ msgstr ""
 "der einelne Teil nicht physisch vom übergeordneten Werk getrennt ist. Mehr "
 "Informationen dazu finden Sie im Katpitel 13 der AACR2 (Anglo-American "
 "Cataloguing Rules)."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:3
+#, c-format
+msgid "Library EANs"
+msgstr "Bibliotheks-EANs"
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:74
 #, c-format
@@ -12689,6 +12751,13 @@ msgstr ""
 "oder nicht dem definierten 'Wert' entspricht. Ein Datensatz mit 999$9 = 'XXX "
 "YYY' gehört nicht zu einem Set, dessen Bedingung 999$9 = 'XXX' ist."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, c-format
+msgid "Note: Before you begin, you must set up at least one "
+msgstr ""
+"Bevor eine Bestellung gemacht werden kann, muss zuerst ein Lieferant "
+"angelegt oder ausgewählt werden. "
+
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:41
 #, c-format
 msgid ""
@@ -12887,7 +12956,7 @@ msgstr ""
 msgid ""
 "On the Guarantor's record, all children and/or professionals will be listed"
 msgstr ""
-"Beim Datensatz für den Bürgen werden alle Kinder und/oder Mitarbeiter "
+"Beim Datensatz für den Bürgen werden alle Kinder und/oder Professionelle "
 "aufgeführt"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:14
@@ -13757,7 +13826,8 @@ msgid ""
 "Organization = An organization that can have Professional patrons attached "
 "to it"
 msgstr ""
-"Oranisation = Eine Organisation, mit der Mitarbeiter verknüpft werden können"
+"Oranisation = Eine Organisation, mit der Professionelle Benutzer verknüpft "
+"werden können"
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:25
 #, c-format
@@ -13771,7 +13841,8 @@ msgid ""
 "guarantors for Professional patrons."
 msgstr ""
 "Benutzer der Kategorie Organisation sind Institutionen aller Art. "
-"Organisationen können als Bürgen für Mitarbeiter verwendet werden."
+"Organisationen können als Bürgen für Professionelle Benutzer verwendet "
+"werden."
 
 #: intranet-tmpl/prog/en/modules/help/admin/classsources.tt:20
 #, c-format
@@ -13900,7 +13971,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/readingrec.tt:3
 #, c-format
 msgid "Patron circulation history"
-msgstr "Benutzer-Ausleihverlauf"
+msgstr "Benutzerausleihhistorie"
 
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:3
 #, c-format
@@ -14077,7 +14148,7 @@ msgstr "Benutzer ohne Ausleihen"
 #: intranet-tmpl/prog/en/modules/help/reports/bor_issues_top.tt:3
 #, c-format
 msgid "Patrons with the most checkouts"
-msgstr "Benutzer mit dem meisten Ausleihen"
+msgstr "Benutzer mit den meisten Ausleihen"
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:22
 #, c-format
@@ -14123,7 +14194,7 @@ msgstr "Gebühren bezahlen und erlassen"
 #: intranet-tmpl/prog/en/modules/help/circ/on-site_checkouts.tt:3
 #, c-format
 msgid "Pending on-site checkouts"
-msgstr "Unbearbeitete Vor-Ort-Ausleihen"
+msgstr "Aktuelle Vor-Ort-Ausleihen"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:419
 #, c-format
@@ -14265,17 +14336,17 @@ msgstr "Private Liste: Kann nur von Ihnen eingesehen und bearbeitet werden"
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:30
 #, c-format
 msgid "Professional "
-msgstr "Mitarbeiter (Organisation) "
+msgstr "Professionell "
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:12
 #, c-format
 msgid "Professional = A patron that can belong to an Organization"
-msgstr "Mitarbeiter = Ein Benutzer, der zu einer Organisation gehören kann"
+msgstr "Professionell = Ein Benutzer, der zu einer Organisation gehören kann"
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:32
 #, c-format
 msgid "Professional patrons can be linked to Organizational patrons"
-msgstr "Mitarbeiter können mit Organisationen verknüpft sein"
+msgstr "Professionelle Benutzer können mit Organisationen verbunden sein"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-home.tt:30
 #: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:51
@@ -14598,7 +14669,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:3
 #, c-format
 msgid "Rotating Collections"
-msgstr "Rotationsbestände"
+msgstr "Wandernde Sammlungen"
 
 #: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:5
 #, c-format
@@ -14731,7 +14802,7 @@ msgid ""
 "Search Domain Groups allow you to search a group of libraries at the same "
 "time instead of searching just one library or all libraries."
 msgstr ""
-"Suchgruppen erlauben es, eine Gruppe von Bibliotheken gleichzeitig zu "
+"Domänengruppen erlauben es, eine Gruppe von Bibliotheken gleichzeitig zu "
 "durchsuchen - anstatt nur eine oder alle Bibliotheken."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:20
@@ -14920,7 +14991,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/readingrec.tt:11
 #, c-format
 msgid "See the full documentation for Circulation History in the "
-msgstr "Die vollständige Hilfe zum Ausleihverlauf finden Sie im "
+msgstr "Die vollständige Hilfe zur Ausleihhistorie finden Sie im "
 
 #: intranet-tmpl/prog/en/modules/help/reports/issues_stats.tt:22
 #, c-format
@@ -14993,6 +15064,17 @@ msgstr ""
 msgid "See the full documentation for Custom Reports in the "
 msgstr "Die vollständige Hilfe zu benutzerdefinierten Reports finden Sie im "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
+#, c-format
+msgid "See the full documentation for EDI accounts in the "
+msgstr "Die vollständige Hilfe zu den Edifact-Konten finden Sie im "
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
+#, c-format
+msgid "See the full documentation for EDIFACT messages in the "
+msgstr ""
+"Die vollständige Hilfe zu den Edifact-Benachrichtigungen finden Sie im "
+
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
 #, c-format
 msgid "See the full documentation for Editing Patrons in the "
@@ -15055,7 +15137,7 @@ msgstr "Die vollständige Hilfe für Rechnungen finden Sie im "
 #: intranet-tmpl/prog/en/modules/help/catalogue/issuehistory.tt:9
 #, c-format
 msgid "See the full documentation for Item Checkout History in the "
-msgstr "Die vollständige Hilfe zum Exemplar-Ausleihverlauf finden Sie im "
+msgstr "Die vollständige Hilfe zur Exemplarausleihhistorie finden Sie im "
 
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #, c-format
@@ -15121,6 +15203,11 @@ msgstr "Die vollständige Hilfe zu Etikettentemplates finden Sie im "
 #, c-format
 msgid "See the full documentation for Libraries &amp; Groups in the "
 msgstr "Die vollständige Hilfe zu Bibliotheken &amp; Gruppen finden Sie im "
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
+#, c-format
+msgid "See the full documentation for Library EANs in the "
+msgstr "Die vollständige Hilfe zu den Bibliotheks-EANs finden Sie im "
 
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #, c-format
@@ -15243,7 +15330,7 @@ msgstr "Die vollständige Hilfe zu Benutzerlisten finden Sie im "
 msgid "See the full documentation for Patron Notices in the "
 msgstr "Die vollständige Hilfe zu Benutzerbenachrichtigungen finden Sie im "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #, c-format
 msgid "See the full documentation for Patron Permissions in the "
 msgstr "Die vollständige Hilfe zu den Benutzerberechtigungen finden Sie im "
@@ -17031,14 +17118,19 @@ msgstr ""
 "Die Berechtigung mit der Schnellerfassungsmaske auf der Startseite des "
 "Ausleihmoduls zu katalogisieren"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
 #, c-format
 msgid "The ability to create and edit but not run SQL reports"
 msgstr ""
 "Die Möglichkeit, SQL-Reports zu erstellen und zu ändern, aber nicht, sie "
 "auszuführen"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#, c-format
+msgid "The ability to delete but not run SQL reports"
+msgstr "Die Möglichkeit, SQL-Reports zu löschen, aber nicht, sie auszuführen"
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:517
 #, c-format
 msgid "The ability to run but not create or edit SQL reports"
 msgstr ""
@@ -17175,11 +17267,11 @@ msgid ""
 "the library cannot keep this information this tab will only show currently "
 "checked out items."
 msgstr ""
-"Der Reiter \"Ausleihverlauf\" wird angezeigt, wenn Sie es in der Einstellung "
-"intranetreadinghistory erlaubt haben. Wenn Sie die Systemeinstellung "
-"OPACPrivacy auf 'Erlauben' gestellt haben und der Benutzer entschieden hat, "
-"dass die Bibliothek diese Information nicht speichern darf, zeigt dieser "
-"Reiter lediglich aktuell entliehene Medien an."
+"Der Reiter mit der Ausleihhistorie wird angezeigt, wenn Sie es in der "
+"Einstellung intranetreadinghistory erlaubt haben. Wenn Sie die "
+"Systemeinstellung OPACPrivacy auf 'Erlauben' gestellt haben und der Benutzer "
+"entschieden hat, dass die Bibliothek diese Information nicht speichern darf, "
+"zeigt dieser Reiter lediglich aktuell entliehene Medien an."
 
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:18
 #, c-format
@@ -17789,8 +17881,9 @@ msgid ""
 msgstr ""
 "Die gesamte Ausleihgeschichte des Benutzers erscheint im Reiter Gebühren. "
 "Anders als sein Name sagt, zeigt der Reiter Gebühren nicht nur Gebühren-"
-"Daten an, es zeigt auch Benutzungsgebühren, Leihgebühren, Vormerkgebühren "
-"und jede andere Gebühr, die Sie von Benutzern erheben."
+"Daten an, es zeigt auch Mitgliedschaftsbeiträge, Leihgebühren, "
+"Reservationsgebühren und jede andere Belastung, die Sie für Ihre Benutzer "
+"erheben werden."
 
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:5
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:49
@@ -17906,7 +17999,7 @@ msgid ""
 "found in this order:"
 msgstr ""
 "Die Regeln werden vom am meisten zutreffend bis zum am wenigsten zutreffend "
-"angwandt, die erste, die eingegeben ist:"
+"angewandt, die erste, die eingegeben ist:"
 
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:7
 #, c-format
@@ -18698,7 +18791,7 @@ msgid ""
 "This report will show all of the holds that are waiting for patrons to pick "
 "them up."
 msgstr ""
-"Dieser Bericht zeigt alle Vormerkungen, die auf das Abholen durch die "
+"Dieser Bericht zeigt alle Reservationen, die auf das Abholen durch die "
 "Benutzer warten."
 
 #: intranet-tmpl/prog/en/modules/help/circ/view_holdsqueue.tt:5
@@ -18860,10 +18953,10 @@ msgid ""
 "patrons who checked the items out) or bulk delete patrons (remove them from "
 "the system completely)."
 msgstr ""
-"Mit diesem Werkzeug können Sie den Ausleihverlauf von Benutzern "
-"anonymisieren (dies bedeutet, dass der Exemplar-Ausleihverlauf erhalten "
-"bleibt, aber die Verknüpfung zum Benutzer gelöscht wird) oder Benutzerdaten "
-"löschen (komplett aus dem System entfernen)."
+"Mit diesem Werkzeug können Sie Benutzerausleihhistorien anonymisieren (dies "
+"bedeutet, dass die Exemplarausleihhistorie erhalten bleibt, aber die "
+"Verknüpfung zum Benutzer gelöscht wird) oder Benutzerdaten löschen (komplett "
+"aus dem System entfernen)."
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:17
 #, c-format
@@ -19519,6 +19612,13 @@ msgstr ""
 "Klicken Sie auf 'Neuer Lieferant' auf der Startseite der Erwerbung um einen "
 "neuen Lieferanten anzulegen."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:9
+#, c-format
+msgid "To add account information, click the 'New account' button."
+msgstr ""
+"Um Kontoinformationen hinzuzufügen, benützen Sie die Schaltfläche 'Neues "
+"Konto'."
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:9
 #, c-format
 msgid ""
@@ -19527,6 +19627,11 @@ msgid ""
 msgstr ""
 "Um zusätzliche Werte zum Pull-Down-Menü für die manuellen Rechnungstypen "
 "hinzuzufügen, fügen Sie sie dem Normwert MANUAL_INV bei"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:7
+#, c-format
+msgid "To add an EAN, click the 'New EAN' button."
+msgstr "Um eine EAN hinzuzufügen, benützen Sie die Schaltfläche 'Neue EAN'."
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:57
 #, c-format
@@ -20923,6 +21028,16 @@ msgstr "Die Werte, die in Koha vorkonfiguriert wurden, sind:"
 msgid "Vendor Contracts"
 msgstr "Vereinbarungen"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:3
+#, c-format
+msgid "Vendor EDI accounts"
+msgstr "EDI-Konten der Lieferanten"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, c-format
+msgid "Vendor in Acquisitions"
+msgstr "Händler im Modul 'Erwerbung'"
+
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:13
 #, c-format
 msgid "Vendor information is not required"
@@ -21229,7 +21344,7 @@ msgid ""
 "message' to the right of the check out box."
 msgstr ""
 "Im Benutzerdatensatz sehen Sie unter dem Reiter 'Ausleihen'  im rechten "
-"Seitenbereich einen Link 'Neue Mitteilung hinzufügen'."
+"Seitenbereich einen Link 'Neue Notiz'."
 
 #: intranet-tmpl/prog/en/modules/help/serials/routing.tt:7
 #, c-format
@@ -21433,8 +21548,8 @@ msgid ""
 "to leave."
 msgstr ""
 "Wenn Sie auf 'Neue Benachrichtigung hinzufügen' klicken, können Sie "
-"auswählen, ob die Mitteilung für andere Bibliotheksmitarbeiter oder den "
-"Benutzer gedacht ist und welchen Text Sie haben soll."
+"auswählen, ob die Benachrichtigung für andere Bibliotheksmitarbeiter oder "
+"den Benutzer gedacht ist und welchen Text Sie haben soll."
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:182
 #, c-format
@@ -22701,7 +22816,7 @@ msgstr "[- TAGS default -] "
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:13
 #, c-format
 msgid "a - Permanent location"
-msgstr "a - Heimatbibliothek"
+msgstr "a- Standort"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:83
 #, c-format
@@ -22711,17 +22826,17 @@ msgstr "Erwerbung "
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:17
 #, c-format
 msgid "all libraries, all patron types, all item types"
-msgstr "alle Bibliotheken, alle Benutzertypen, alle Medientypen"
+msgstr "alle Bibliotheken, gleicher Benutzertyp, gleicher Medientyp"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:16
 #, c-format
 msgid "all libraries, all patron types, same item type"
-msgstr "alle Bibliotheken, alle Benutzertypen, gleicher Medientyp"
+msgstr "alle Bibliotheken, gleicher Benutzertyp, gleicher Medientyp"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:15
 #, c-format
 msgid "all libraries, same patron type, all item types"
-msgstr "alle Bibliotheken, gleicher Benutzertyp, alle Medientypen"
+msgstr "alle Bibliotheken, gleicher Benutzertyp, gleicher Medientyp"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:14
 #, c-format
@@ -22914,7 +23029,7 @@ msgstr "contracts_manage "
 msgid "cql.anywhere"
 msgstr "cql.anywhere"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
 #, c-format
 msgid "create_reports "
 msgstr "create_reports "
@@ -22957,7 +23072,7 @@ msgstr "ctype:f Handbücher"
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:64
 #, c-format
 msgid "ctype:g Legal articles"
-msgstr "ctype:g Juristische Aufsätze"
+msgstr "ctype:g Juristische Artikel"
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:65
 #, c-format
@@ -23105,10 +23220,15 @@ msgstr "delete_all_items "
 msgid "delete_anonymize_patrons "
 msgstr "delete_anonymize_patrons "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:521
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:527
 #, c-format
 msgid "delete_public_lists "
 msgstr "delete_public_lists "
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#, c-format
+msgid "delete_reports "
+msgstr "delete_reports "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:323
 #, c-format
@@ -23186,7 +23306,7 @@ msgstr ""
 "Feld 'branchcode' verwenden, um den korrekten Standort für alle importierten "
 "Benutzer zu setzen."
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:514
 #, c-format
 msgid "execute_reports "
 msgstr "execute_reports "
@@ -23391,7 +23511,7 @@ msgstr "mit Alt+Q zur Katalogsuche springen"
 #: intranet-tmpl/prog/en/modules/help/circ/circulation-home.tt:18
 #, c-format
 msgid "jump to the checkin with Alt+R"
-msgstr "einchecken mit Alt+R"
+msgstr "Rückgabe mit Alt+R"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation-home.tt:13
 #, c-format
@@ -23518,10 +23638,12 @@ msgstr "Verwaltung "
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -23616,7 +23738,7 @@ msgstr "Verwaltung "
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -23642,6 +23764,7 @@ msgstr "Verwaltung "
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17

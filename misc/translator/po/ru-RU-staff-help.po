@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru-RU-i-staff-t-prog-v-3002000.po\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-20 13:23-0300\n"
-"PO-Revision-Date: 2014-06-11 15:17+0300\n"
-"Last-Translator: Serhij Dubyk <serhijdubyk@gmail.com>\n"
+"POT-Creation-Date: 2016-11-20 20:28-0300\n"
+"PO-Revision-Date: 2016-07-10 21:45+0000\n"
+"Last-Translator: Dmitry <haoogame@gmail.com>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -18,9 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Pootle 2.5.0\n"
+"X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1400164792.0\n"
+"X-POOTLE-MTIME: 1468187109.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -96,7 +96,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:32
 #, c-format
 msgid "'Add item' will add just the one item"
-msgstr ""
+msgstr "'Добавить экземпляр' просто добавит экземпляр наименования"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:34
 #, c-format
@@ -104,6 +104,9 @@ msgid ""
 "'Add multiple items' will ask how many items and will then add that number "
 "of items adding +1 to the barcode so each barcode is unique"
 msgstr ""
+"'Добавить несколько экземпляров'  уточнит, сколько экземпляров нужно "
+"добавить и добавит их. Штрих-код каждого экземпляра будет увеличиваться на "
+"1, так что каждый штрих-код будет уникальным"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:26
 #, c-format
@@ -371,9 +374,11 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:34
-#, fuzzy, c-format
+#, c-format
 msgid "'NOT_LOAN' is used to list reasons why a title is not for loan."
-msgstr "reasons why a title is Не для ссуды"
+msgstr ""
+"'NOT_LOAN' используется для описания причин по которым нельзя взять "
+"экземпляр единицы."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:35
 #, c-format
@@ -654,10 +659,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -753,7 +760,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -779,6 +786,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
@@ -1270,6 +1278,14 @@ msgstr ""
 "Необходимо указать поля или подполя, которые вы хотите экспортировать, "
 "разделив их вертикальными черточками."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:5
+#, c-format
+msgid ""
+"A library EAN is the identifier the vendor gives the library to send back to "
+"them so they know which account to use when billing. One EDI account can "
+"have multiple EANs."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:20
 #, c-format
 msgid "A list can also be created from the catalog search results"
@@ -1287,6 +1303,13 @@ msgstr ""
 msgid ""
 "A list of all of the serial routing lists the patron belongs to will be "
 "accessible via the 'Routing Lists' tab on the patron record."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:5
+#, c-format
+msgid ""
+"A log of all messages sent and received via EDIFACT can be found under "
+"EDIFACT Messages."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:52
@@ -1548,9 +1571,9 @@ msgstr ""
 "заготовленными МАРК-записями»"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:462
-#, fuzzy, c-format
+#, c-format
 msgid "Access to the Tags Tool"
-msgstr "Q: What does the сериальные издания module do?"
+msgstr "Доступ к Утилите Меток"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:474
 #, fuzzy, c-format
@@ -2188,7 +2211,7 @@ msgid ""
 "their record."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:518
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:524
 #, c-format
 msgid ""
 "All staff members have permission to access lists. This section only needs "
@@ -3842,19 +3865,19 @@ msgid "Click 'New Notice'"
 msgstr "Щелкнуть «Новое оповещение»"
 
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid "Click 'New Record Matching Rule' "
-msgstr "Новое правило соответствия записей "
+msgstr "Нажмите \"Новое правило соответствия записей\" "
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbooks.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid "Click 'New Record'"
-msgstr "Нажмите 'Новый заказ'"
+msgstr "Нажмите 'Новая запись'"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/addbiblio.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Click 'New Record' "
-msgstr "Нажмите 'Новый заказ' "
+msgstr "Нажмите 'Новая запись'  "
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:78
 #, c-format
@@ -3867,6 +3890,8 @@ msgid ""
 "Click 'New from Z39.50/SRU' (optionally, you can choose a framework to which "
 "import the record by clicking the caret on the right)."
 msgstr ""
+"Нажмите 'Добавить с помощью Z39.50/SRU' (дополнительно, вы можете выбрать "
+"фреймворк, в который будет добавлена запись, кликнув по стрелочке справа)."
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:25
 #, fuzzy, c-format
@@ -4351,7 +4376,7 @@ msgstr "Информация о экземплярах"
 msgid "Course reserves"
 msgstr "Резервирование курсов"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
 #, fuzzy, c-format
 msgid "Create SQL Reports"
 msgstr "Новый отчёт с кода SQL"
@@ -4586,6 +4611,11 @@ msgstr ""
 msgid "Delete Quote(s)"
 msgstr "h - изображение"
 
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
+#, fuzzy, c-format
+msgid "Delete SQL Reports"
+msgstr "Новый отчёт с кода SQL"
+
 #: intranet-tmpl/prog/en/modules/help/admin/oai_sets.tt:20
 #, fuzzy, c-format
 msgid "Delete a set"
@@ -4610,7 +4640,7 @@ msgstr ""
 "Удаление старых заемщиков и анонимизация истории оборота (очистка истории "
 "чтения заемщика)"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:523
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:529
 #, fuzzy, c-format
 msgid "Delete public lists"
 msgstr "Удалить список"
@@ -4783,6 +4813,11 @@ msgstr ""
 msgid "Duration: 7 days"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:3
+#, c-format
+msgid "EDIFACT messages"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:21
 #, c-format
 msgid ""
@@ -4883,6 +4918,11 @@ msgstr "Child посетители: a patron category that has a \"поручи�
 msgid ""
 "Each section of preferences can be sorted alphabetically by clicking the "
 "small down arrow to the right of the word 'Preference' in the header column"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:13
+#, c-format
+msgid "Each vendor will have one account."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:106
@@ -5261,6 +5301,11 @@ msgstr ""
 msgid "Enter your tax rate if your library is charged taxes on orders."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:11
+#, c-format
+msgid "Enter your vendor information in the form that appears."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:19
 #, c-format
 msgid ""
@@ -5350,7 +5395,7 @@ msgstr "образцы, модели "
 msgid "Examples: "
 msgstr "образцы, модели "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
 #, fuzzy, c-format
 msgid "Execute SQL Reports"
 msgstr "Править запись"
@@ -5813,6 +5858,7 @@ msgstr ""
 #, c-format
 msgid "For items that do not circulate, check the 'Not for loan' options "
 msgstr ""
+"Для единиц не предназначенных к обороту, посмотрите опции \"Не для выдачи\" "
 
 #: intranet-tmpl/prog/en/modules/help/admin/itemtypes.tt:34
 #, c-format
@@ -6002,6 +6048,13 @@ msgid ""
 "From here you can see all suggestions made by the patron and their status, "
 "you can also create a purchase suggestion on the patron's behalf by clicking "
 "the 'New purchase suggestion' button at the top."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:5
+#, c-format
+msgid ""
+"From here you can set up the information needed to connect to your "
+"acquisitions vendors"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
@@ -6483,7 +6536,7 @@ msgstr ""
 msgid "Granular Holds Permissions"
 msgstr "Примечание о привилегиях"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:522
 #, fuzzy, c-format
 msgid "Granular Lists Permissions"
 msgstr "Установить привилегии"
@@ -7282,7 +7335,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:84
 #, c-format
-msgid "If you are charged sales tax, choose that from the gstrate field"
+msgid "If you are charged sales tax, choose that from the tax_rate field"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:33
@@ -9090,6 +9143,13 @@ msgid "In the form that appears you want to enter the basics about your fund."
 msgstr ""
 "В форме, которая появится, необходимо ввести основное о Ваших средствах."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:9
+#, fuzzy, c-format
+msgid ""
+"In the form that appears, enter the information provided by your vendor."
+msgstr ""
+"В форме, которая появится, необходимо ввести основное о Ваших средствах."
+
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:41
 #, c-format
 msgid ""
@@ -9281,7 +9341,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:108
 #, c-format
 msgid "Item not for loan"
-msgstr "Экземпляр не для ссуды"
+msgstr "Экземпляр не для выдачи"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:104
 #, fuzzy, c-format
@@ -9328,6 +9388,9 @@ msgid ""
 "Item types typically refer to the material type (book, cd, dvd, etc), but "
 "can be used in any way that works for your library."
 msgstr ""
+"Обычно типы единиц связаны с материалом, из которых состоит единица (книга, "
+"CD, DVD, и т.д. ), но вы можете создавать любые типы, подходящие для вашей "
+"библиотеки."
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:45
 #, c-format
@@ -9350,13 +9413,13 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/itemtypes.tt:30
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items marked 'Not for loan' will appear in the catalog, but cannot be "
 "checked out to patrons"
 msgstr ""
-"The 'Не для ссуды' option can be used for items that cannot be checked out "
-"of the library"
+"Объекты, отмеченные маркером 'Не для ссуды' появятся в каталоге, но "
+"посетители не смогут их взять"
 
 #: intranet-tmpl/prog/en/modules/help/circ/waitingreserves.tt:7
 #, c-format
@@ -9737,6 +9800,11 @@ msgid ""
 "cataloging, although a separate bib record is created for the title, it is "
 "not physically separated from the host item. Learn more about Analytics in "
 "Chapter 13 of AACR2."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:3
+#, c-format
+msgid "Library EANs"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:74
@@ -10534,6 +10602,11 @@ msgid ""
 "'XXX'."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, c-format
+msgid "Note: Before you begin, you must set up at least one "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:41
 #, c-format
 msgid ""
@@ -11098,7 +11171,7 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Once you have set up patron categories, you should create a new user in the "
 "Patrons module with superlibrarian permissions. Once that user is created, "
@@ -12524,6 +12597,16 @@ msgstr "Сконтактактируйте с Вашим системным ад
 msgid "See the full documentation for Custom Reports in the "
 msgstr "Сконтактактируйте с Вашим системным администратором "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
+#, fuzzy, c-format
+msgid "See the full documentation for EDI accounts in the "
+msgstr "Сконтактактируйте с Вашим системным администратором "
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
+#, fuzzy, c-format
+msgid "See the full documentation for EDIFACT messages in the "
+msgstr "Сконтактактируйте с Вашим системным администратором "
+
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
 #, fuzzy, c-format
 msgid "See the full documentation for Editing Patrons in the "
@@ -12651,6 +12734,11 @@ msgstr "Сконтактактируйте с Вашим системным ад
 msgid "See the full documentation for Libraries &amp; Groups in the "
 msgstr "Сконтактактируйте с Вашим системным администратором "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
+#, fuzzy, c-format
+msgid "See the full documentation for Library EANs in the "
+msgstr "Сконтактактируйте с Вашим системным администратором "
+
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #, fuzzy, c-format
 msgid "See the full documentation for Library Transfer Limits in the "
@@ -12771,7 +12859,7 @@ msgstr "Сконтактактируйте с Вашим системным ад
 msgid "See the full documentation for Patron Notices in the "
 msgstr "Сконтактактируйте с Вашим системным администратором "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #, fuzzy, c-format
 msgid "See the full documentation for Patron Permissions in the "
 msgstr "Сконтактактируйте с Вашим системным администратором "
@@ -14292,12 +14380,17 @@ msgid ""
 "Circulation page"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
 #, c-format
 msgid "The ability to create and edit but not run SQL reports"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#, c-format
+msgid "The ability to delete but not run SQL reports"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:517
 #, c-format
 msgid "The ability to run but not create or edit SQL reports"
 msgstr ""
@@ -16262,12 +16355,22 @@ msgid ""
 "To add a vendor, click the 'New Vendor' button on the Acquisitions page."
 msgstr "Для добавления сметы нажмите кнопку «Новая смета»."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:9
+#, c-format
+msgid "To add account information, click the 'New account' button."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:9
 #, c-format
 msgid ""
 "To add additional values to the manual invoice type pull down menu, add them "
 "to the MANUAL_INV Authorized Value"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:7
+#, fuzzy, c-format
+msgid "To add an EAN, click the 'New EAN' button."
+msgstr "Для добавления сметы нажмите кнопку «Новая смета»."
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:57
 #, c-format
@@ -17373,6 +17476,16 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Vendor Contracts"
 msgstr "Поиск договоров"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:3
+#, fuzzy, c-format
+msgid "Vendor EDI accounts"
+msgstr "Поиск договоров"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, fuzzy, c-format
+msgid "Vendor in Acquisitions"
+msgstr "Поступления"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:13
 #, fuzzy, c-format
@@ -19010,7 +19123,7 @@ msgstr "Название договора: "
 msgid "cql.anywhere"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
 #, fuzzy, c-format
 msgid "create_reports "
 msgstr "Отчеты "
@@ -19193,10 +19306,15 @@ msgstr "Править экземпляры "
 msgid "delete_anonymize_patrons "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:521
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:527
 #, fuzzy, c-format
 msgid "delete_public_lists "
 msgstr "Удалить подписку "
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#, fuzzy, c-format
+msgid "delete_reports "
+msgstr "Отчеты "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:323
 #, fuzzy, c-format
@@ -19271,7 +19389,7 @@ msgid ""
 "importing."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:514
 #, fuzzy, c-format
 msgid "execute_reports "
 msgstr "Отчеты "
@@ -19590,10 +19708,12 @@ msgstr "Управление типами единиц хранения "
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -19688,7 +19808,7 @@ msgstr "Управление типами единиц хранения "
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -19714,6 +19834,7 @@ msgstr "Управление типами единиц хранения "
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
@@ -20120,9 +20241,9 @@ msgid "writeoff"
 msgstr "Просмотр"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:22
-#, fuzzy, c-format
+#, c-format
 msgid "y - Koha item type"
-msgstr "Любой тип единицы"
+msgstr "y - Тип объекта в Коха"
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:78
 #, c-format
