@@ -202,15 +202,7 @@ sub get {
 
 sub delete {
     my ( $self, $params ) = @_;
-    return if !$params->{id};
-    my @res;
-    my $temp = $self->_lookup({ id => $params->{id} });
-    foreach( @$temp ) {
-        my $d = $self->_delete( $_ );
-        push @res, $d if $d;
-    }
-    return if !@res;
-    return @res;
+    return $self->_delete( $params->{id} );
 }
 
 =head1 CLASS METHODS
@@ -411,17 +403,23 @@ sub _lookup {
 }
 
 sub _delete {
-    my ( $self, $rec ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sql = 'DELETE FROM uploaded_files WHERE id=?';
-    my $file = $self->_full_fname($rec);
+    my ( $self, $id ) = @_;
+    my $rec = Koha::UploadedFiles->find($id) || return;
+    my $filename = $rec->filename;
+    my $file = $self->_full_fname({
+        permanent => $rec->permanent,
+        dir       => $rec->dir,
+        hashvalue => $rec->hashvalue,
+        filename  => $filename,
+    });
+
     if( !-e $file ) { # we will just delete the record
         # TODO Should we add a trace here for the missing file?
-        $dbh->do( $sql, undef, ( $rec->{id} ) );
-        return $rec->{filename};
+        $rec->delete;
+        return $filename;
     } elsif( unlink($file) ) {
-        $dbh->do( $sql, undef, ( $rec->{id} ) );
-        return $rec->{filename};
+        $rec->delete;
+        return $filename;
     }
     $self->{files}->{ $rec->{filename} }->{errcode} = 7;
     #NOTE: errcode=6 is used to report successful delete (see template)
