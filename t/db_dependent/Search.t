@@ -139,7 +139,7 @@ $contextmodule->mock('preference', sub {
     } elsif ($pref eq 'casAuthentication' or $pref eq 'casLogout' or $pref eq 'casServerUrl' ) {
         return '';
     } elsif ($pref eq 'template') {
-        return '';
+        return 'prog';
     } else {
         warn "The syspref $pref was requested but I don't know what to say; this indicates that the test requires updating"
             unless $pref =~ m/(XSLT|item|branch|holding|image)/i;
