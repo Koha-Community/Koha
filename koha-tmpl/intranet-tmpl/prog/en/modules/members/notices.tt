@@ -16,18 +16,18 @@
         "sPaginationType": "four_button"
     }));
 
-    $(".notice").hide();
-    $(".notice-title").click(function(e){
-        $(this).closest("tr").children().children(".notice").toggle();
-        e.preventDefault();
-    });
-    
+        $("#noticestable").on("click", ".notice-title", function(e){
+            e.preventDefault();
+            var rowid = $(this).data("noticeid");
+            $("#notice"+rowid).toggle();
+        });
+
     });
 //]]>
 </script>
 <style type="text/css">
-    p.notice { display: none; }
-    a.notice-title { font-weight: bold; display: block; }
+    .notice { display: none; }
+    .notice-title { font-weight: bold; display: block; }
 </style>
 </head>
 <body id="pat_notices" class="pat">
@@ -57,8 +57,8 @@
 	    [% FOREACH QUEUED_MESSAGE IN QUEUED_MESSAGES %]
 	    <tr>
 		<td>
-            <a class="notice-title" href="#">[% QUEUED_MESSAGE.subject %]</a>
-            <div class="notice">
+            <a class="notice-title" data-noticeid="[% QUEUED_MESSAGE.message_id %]" href="#">[% QUEUED_MESSAGE.subject %]</a>
+            <div id="notice[% QUEUED_MESSAGE.message_id %]" class="notice">
                 [% QUEUED_MESSAGE.content FILTER html_line_break %]
             </div>
         </td>
