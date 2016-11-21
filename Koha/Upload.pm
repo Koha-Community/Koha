@@ -76,6 +76,7 @@ use base qw(Class::Accessor);
 use C4::Context;
 use C4::Koha;
 use Koha::UploadedFile;
+use Koha::UploadedFiles;
 
 __PACKAGE__->mk_ro_accessors( qw|| );
 
@@ -306,13 +307,20 @@ sub _create_file {
         $self->{files}->{$filename}->{errcode} = 4; #no tempdir
     } else {
         my $dir = $self->_dir;
-        my $fn = $self->{files}->{$filename}->{hash}. '_'. $filename;
-        if( -e "$dir/$fn" && @{ $self->_lookup({
-          hashvalue => $self->{files}->{$filename}->{hash} }) } ) {
+        my $hashval = $self->{files}->{$filename}->{hash};
+        my $fn = $hashval. '_'. $filename;
+
         # if the file exists and it is registered, then set error
+        # if it exists, but is not in the database, we will overwrite
+        if( -e "$dir/$fn" &&
+            Koha::UploadedFiles->search({
+                hashvalue          => $hashval,
+                uploadcategorycode => $self->{category},
+            })->count ) {
             $self->{files}->{$filename}->{errcode} = 1; #already exists
             return;
         }
+
         $fh = IO::File->new( "$dir/$fn", "w");
         if( $fh ) {
             $fh->binmode;
@@ -381,29 +389,25 @@ sub _register {
 
 sub _lookup {
     my ( $self, $params ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sql = q|
-SELECT id,hashvalue,filename,dir,filesize,uploadcategorycode,public,permanent,owner
-FROM uploaded_files
-    |;
-    my @pars;
+
+    my ( $cond, $attr, %pubhash );
+    %pubhash = $self->{public}? ( public => 1 ): ();
     if( $params->{id} ) {
         return [] if $params->{id} !~ /^\d+(,\d+)*$/;
-        $sql.= 'WHERE id IN ('.$params->{id}.')';
-        @pars = ();
+        $cond = { id => [ split ',', $params->{id} ], %pubhash };
     } elsif( $params->{hashvalue} ) {
-        $sql.= 'WHERE hashvalue=?';
-        @pars = ( $params->{hashvalue} );
+        $cond = { hashvalue => $params->{hashvalue}, %pubhash };
     } elsif( $params->{term} ) {
-        $sql.= 'WHERE (filename LIKE ? OR hashvalue LIKE ?)';
-        @pars = ( '%'.$params->{term}.'%', '%'.$params->{term}.'%' );
+        $cond =
+            [ { filename => { like => '%'.$params->{term}.'%' }, %pubhash },
+              { hashvalue => { like => '%'.$params->{term}.'%' }, %pubhash } ];
     } else {
         return [];
     }
-    $sql.= $self->{public}? ' AND public=1': '';
-    $sql.= ' ORDER BY id';
-    my $temp= $dbh->selectall_arrayref( $sql, { Slice => {} }, @pars );
-    return $temp;
+    $attr = { order_by => { -asc => 'id' }};
+
+    return Koha::UploadedFiles->search( $cond, $attr )->unblessed;
+    # Does always return an arrayref (perhaps an empty one)
 }
 
 sub _delete {
