@@ -49,7 +49,7 @@ sub target_syntax {
         foreach my $field (@{$self->fields}) {
             $fieldobj = $self->plan->QueryParser->bib1_mapping_by_name('field', $self->classname, $field, $server);
             $relbump = $self->plan->QueryParser->bib1_mapping_by_name('relevance_bump', $self->classname, $field, $server);
-            if ($relbump) {
+            if ($relbump && defined $relbump->{'attr_string'}) {
                 $fieldobj->{'attr_string'} .= ' ' . $relbump->{'attr_string'};
             }
             push @fields, $fieldobj unless (!defined($fieldobj) || ($field eq $self->classname && @{$self->fields} > 1));
