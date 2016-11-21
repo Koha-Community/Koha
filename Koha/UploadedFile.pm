@@ -18,6 +18,7 @@ package Koha::UploadedFile;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
+use File::Spec;
 
 #use Koha::Database;
 
@@ -41,16 +42,67 @@ Description
 
 =head3 delete
 
-Delete uploaded file (to be extended)
+Delete uploaded file.
+It deletes not only the record, but also the actual file.
+
+Returns filename on successful delete or undef.
 
 =cut
 
 sub delete {
-    my ( $self, $params ) = @_;
-    $self->SUPER::delete( $params );
+    my ( $self ) = @_;
+
+    my $name = $self->filename;
+    my $file = $self->full_path;
+
+    if( !-e $file ) { # we will just delete the record
+        warn "Removing record for $name within category ".
+            $self->uploadcategorycode. ", but file was missing.";
+        return $name if $self->SUPER::delete;
+    } elsif( unlink($file) ) {
+        return $name if $self->SUPER::delete;
+    } else {
+        warn "Problem while deleting: $file";
+    }
+    return; # something went wrong
+}
+
+=head3 full_path
+
+Returns the fully qualified path name for an uploaded file.
+
+=cut
+
+sub full_path {
+    my ( $self ) = @_;
+    my $path = File::Spec->catfile(
+        $self->permanent?
+            $self->permanent_directory: $self->temporary_directory,
+        $self->dir,
+        $self->hashvalue. '_'. $self->filename,
+    );
+    return $path;
 }
 
 =head2 CLASS METHODS
+
+=head3 root_directory
+
+=cut
+
+sub permanent_directory {
+    my ( $class ) = @_;
+    return C4::Context->config('upload_path');
+}
+
+=head3 tmp_directory
+
+=cut
+
+sub temporary_directory {
+    my ( $class ) = @_;
+    return File::Spec->tmpdir;
+}
 
 =head3 _type
 

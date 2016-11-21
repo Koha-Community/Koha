@@ -46,15 +46,15 @@ Koha::Upload - Facilitate file uploads (temporary and permanent)
     while( <$fh> ) { print $_; }
     $fh->close;
 
-    # delete an upload
-    my ( $fn ) = Koha::Upload->new->delete({ id => $id });
-
 =head1 DESCRIPTION
 
     This module is a refactored version of C4::UploadedFile but adds on top
     of that the new functions from report 6874 (Upload plugin in editor).
     That report added module UploadedFiles.pm. This module contains the
     functionality of both.
+
+    The module has been revised to use Koha::Object[s]; the delete method
+    has been moved to Koha::UploadedFile[s].
 
 =head1 METHODS
 
@@ -192,19 +192,6 @@ sub get {
     return wantarray? @rv: $res;
 }
 
-=head2 delete
-
-    Returns array of deleted filenames or undef.
-    Since it now only accepts id as parameter, you should not expect more
-    than one filename.
-
-=cut
-
-sub delete {
-    my ( $self, $params ) = @_;
-    return $self->_delete( $params->{id} );
-}
-
 =head1 CLASS METHODS
 
 =head2 getCategories
@@ -262,8 +249,8 @@ sub allows_add_by {
 sub _init {
     my ( $self, $params ) = @_;
 
-    $self->{rootdir} = C4::Context->config('upload_path');
-    $self->{tmpdir} = File::Spec->tmpdir;
+    $self->{rootdir} = Koha::UploadedFile->permanent_directory;
+    $self->{tmpdir} = Koha::UploadedFile->temporary_directory;
 
     $params->{tmp} = $params->{temp} if !exists $params->{tmp};
     $self->{temporary} = $params->{tmp}? 1: 0; #default false
@@ -400,30 +387,6 @@ sub _lookup {
 
     return Koha::UploadedFiles->search( $cond, $attr )->unblessed;
     # Does always return an arrayref (perhaps an empty one)
-}
-
-sub _delete {
-    my ( $self, $id ) = @_;
-    my $rec = Koha::UploadedFiles->find($id) || return;
-    my $filename = $rec->filename;
-    my $file = $self->_full_fname({
-        permanent => $rec->permanent,
-        dir       => $rec->dir,
-        hashvalue => $rec->hashvalue,
-        filename  => $filename,
-    });
-
-    if( !-e $file ) { # we will just delete the record
-        # TODO Should we add a trace here for the missing file?
-        $rec->delete;
-        return $filename;
-    } elsif( unlink($file) ) {
-        $rec->delete;
-        return $filename;
-    }
-    $self->{files}->{ $rec->{filename} }->{errcode} = 7;
-    #NOTE: errcode=6 is used to report successful delete (see template)
-    return;
 }
 
 sub _compute {

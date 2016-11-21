@@ -40,15 +40,29 @@ Description
 
 =head2 INSTANCE METHODS
 
-=head3 delete
+=head3 delete, delete_errors
 
-Delete uploaded files
+Delete uploaded files.
+Returns true if no errors occur.
+Delete_errors returns the number of errors when deleting files.
 
 =cut
 
 sub delete {
-    my ( $self, $params ) = @_;
-    $self->SUPER::delete( $params );
+    my ( $self ) = @_;
+    # We use the individual delete on each resultset record
+    my $err = 0;
+    while( my $row = $self->_resultset->next ) {
+        my $kohaobj = Koha::UploadedFile->_new_from_dbic( $row );
+        $err++ if !$kohaobj->delete;
+    }
+    $self->{delete_errors} = $err;
+    return $err==0;
+}
+
+sub delete_errors {
+    my ( $self ) = @_;
+    return $self->{delete_errors};
 }
 
 =head2 CLASS METHODS

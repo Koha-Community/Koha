@@ -36,6 +36,9 @@ our $uploads = [
     [
         { name => 'file4', cat => undef, size => 5000 }, # temp duplicate
     ],
+    [
+        { name => 'file5', cat => undef, size => 7000 }, # temp duplicate
+    ],
 ];
 
 # Redirect upload dir structure and mock File::Spec and CGI
@@ -48,7 +51,7 @@ $cgimod->mock( 'new' => \&newCGI );
 
 # Start testing
 subtest 'Test01' => sub {
-    plan tests => 7;
+    plan tests => 9;
     test01();
 };
 subtest 'Test02' => sub {
@@ -64,7 +67,7 @@ subtest 'Test04' => sub {
     test04();
 };
 subtest 'Test05' => sub {
-    plan tests => 5;
+    plan tests => 6;
     test05();
 };
 subtest 'Test06' => sub {
@@ -84,6 +87,12 @@ $schema->storage->txn_rollback;
 sub test01 {
     # Delete existing records (for later tests)
     $dbh->do( "DELETE FROM uploaded_files" );
+
+    # Check mocked directories
+    is( Koha::UploadedFile->permanent_directory, $tempdir,
+        'Check permanent directory' );
+    is( Koha::UploadedFile->temporary_directory, $tempdir,
+        'Check temporary directory' );
 
     my $upl = Koha::Upload->new({
         category => $uploads->[$current_upload]->[0]->{cat},
@@ -143,11 +152,24 @@ sub test05 { # add temporary file with same name and contents, delete it
     is( $upl->count, 1, 'Upload 5 adds duplicate temporary file' );
     my $id = $upl->result;
     my $r = $upl->get({ id => $id });
-    my @d = $upl->delete({ id => $id });
-    is( $d[0], $r->{name}, 'Delete successful' );
-    is( -e $r->{path}? 1: 0, 0, 'File no longer found after delete' );
+
+    # testing delete via UploadedFiles (plural)
+    my $delete = Koha::UploadedFiles->search({ id => $id })->delete;
+    is( $delete, 1, 'Delete successful' );
+    isnt( -e $r->{path}, 1, 'File no longer found after delete' );
     is( scalar $upl->get({ id => $id }), undef, 'Record also gone' );
-    is( $upl->delete({ id => $id }), undef, 'Repeated delete failed' );
+
+    # testing delete via UploadedFile (singular)
+    # Note that find returns a Koha::Object
+    $upl = Koha::Upload->new({ tmp => 1 });
+    $upl->cgi;
+    $id = $upl->result;
+    my $kohaobj = Koha::UploadedFiles->find( $id );
+    my $name = $kohaobj->filename;
+    my $path = $kohaobj->full_path;
+    $delete = $kohaobj->delete;
+    is( $delete, $name, 'Delete successful' );
+    isnt( -e $path, 1, 'File no longer found after delete' );
 }
 
 sub test06 { #some extra tests for get

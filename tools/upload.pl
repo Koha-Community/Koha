@@ -68,17 +68,20 @@ if ( $op eq 'new' ) {
 
 } elsif ( $op eq 'delete' ) {
     # delete only takes the id parameter
-    my $upl = Koha::Upload->new($upar);
-    my ($fn) = $upl->delete( { id => $id } );
-    my $e = $upl->err;
-    my $msg =
-        $fn ? JSON::to_json( { $fn => 6 } )
-      : $e  ? JSON::to_json($e)
-      :       undef;
+    my $upload = $plugin?
+         Koha::UploadedFiles->search({ public => 1, id => $id })->next:
+         Koha::UploadedFiles->find($id);
+    my $fn = $upload? $upload->delete: undef;
+    #TODO Improve error handling
+    my $msg = $fn?
+        JSON::to_json({ $fn => 6 }):
+        JSON::to_json({
+            $upload? $upload->filename: ( $id? "id $id": '[No id]' ), 7,
+        });
     $template->param(
         mode             => 'deleted',
         msg              => $msg,
-        uploadcategories => $upl->getCategories,
+        uploadcategories => Koha::Upload->getCategories,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
