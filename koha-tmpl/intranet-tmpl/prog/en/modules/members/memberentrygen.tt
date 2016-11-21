@@ -1189,6 +1189,7 @@ $(document).ready(function() {
     </form>
     <script>
         $(document).ready(function () {
+
             $("#entryform,#saverecord").hide();
             [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') %]
             var qaddfields = [[% FOREACH field IN q_add_f.unique %]"[% field %]",[% END %]];
@@ -1209,7 +1210,10 @@ $(document).ready(function() {
             });
                 if( $("#memberentry_guarantor").length ) {
                     $("#memberentry_guarantor").clone().appendTo("#quick_add_list").css("margin",0);
+                    $("#quick_add_form #memberentry_guarantor").append("<p>" + _("Note: Quick add guarantor form populates address fields in full form") + "</p>");
+                    $("#quick_add_list #guarantordelete").prop('id','qagd');
                 }
+            $("#qagd").click(function() { $("#guarantordelete").click(); });
             $("#quick_add_form").show();
         });
     </script>
