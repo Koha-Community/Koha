@@ -240,13 +240,15 @@ sub title_id {
 
 sub sip_circulation_status {
     my $self = shift;
-    if ($self->{patron}) {
-		return '04';    # charged
-    } elsif (scalar @{$self->{hold_queue}}) {
-		return '08';    # waiting on hold shelf
-    } else {
-		return '03';    # available
-    }                   # FIXME: 01-13 enumerated in spec.
+    if ( $self->{patron} ) {
+        return '04';    # charged
+    }
+    elsif ( grep { $_->{itemnumber} == $self->{itemnumber}  } @{ $self->{hold_shelf} } ) {
+        return '08';    # waiting on hold shelf
+    }
+    else {
+        return '03';    # available
+    }    # FIXME: 01-13 enumerated in spec.
 }
 
 sub sip_security_marker {
