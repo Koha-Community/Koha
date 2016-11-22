@@ -606,7 +606,7 @@ if ( $indexing_mode eq 'dom' ) {
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'ccl=an:42' ], [], ['available'], [], 0, 'en');
-    is( $query, 'an:42 and ( ( allrecords,AlwaysMatches:'' not onloan,AlwaysMatches:'') and (lost,st-numeric=0) )', 'buildQuery should add the available part to the query if requested with ccl' );
+    is( $query, "an:42 and ( ( allrecords,AlwaysMatches:'' not onloan,AlwaysMatches:'') and (lost,st-numeric=0) )", 'buildQuery should add the available part to the query if requested with ccl' );
     is( $query_desc, 'an:42', 'buildQuery should remove the available part from the query' );
 
     # Let's see what happens when we pass bad data into these routines.
