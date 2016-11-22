@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
-"POT-Creation-Date: 2016-05-20 14:13-0300\n"
-"PO-Revision-Date: 2016-05-21 22:48+0000\n"
+"POT-Creation-Date: 2016-11-20 20:21-0300\n"
+"PO-Revision-Date: 2016-11-08 23:54+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1463870889.000000\n"
+"X-POOTLE-MTIME: 1478649247.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -661,7 +661,7 @@ msgstr "'YES_NO' 是通用型的容許值，可用於任何需要是/否的下�
 #: intranet-tmpl/prog/en/modules/help/admin/auth_subfields_structure.tt:51
 #, c-format
 msgid "(! means 'not visible' or in the case of collapsed 'not collapsed')"
-msgstr "( ! 表示 '不可見' 或在折疊時為 '不可收疊')"
+msgstr "(! 表示 '不可見' 或在折疊時為 '不可收疊')"
 
 #: intranet-tmpl/prog/en/modules/help/serials/serials-collection.tt:13
 #: intranet-tmpl/prog/en/modules/help/serials/checkexpiration.tt:11
@@ -682,10 +682,12 @@ msgstr "( ! 表示 '不可見' 或在折疊時為 '不可收疊')"
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -781,7 +783,7 @@ msgstr "( ! 表示 '不可見' 或在折疊時為 '不可收疊')"
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -807,6 +809,7 @@ msgstr "( ! 表示 '不可見' 或在折疊時為 '不可收疊')"
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
@@ -1098,7 +1101,7 @@ msgstr "4 =&gt; !OPAC!內部網路編輯器!已毀損"
 #: intranet-tmpl/prog/en/modules/help/tools/overduerules.tt:29
 #, c-format
 msgid "410 Library Rd. "
-msgstr "410 Library Rd. "
+msgstr "410 Library Rd."
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:171
 #, c-format
@@ -1290,6 +1293,16 @@ msgid ""
 "A layout is used to define the fields you want to appear on your labels."
 msgstr "布局用於定義書標上的欄位。"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:5
+#, c-format
+msgid ""
+"A library EAN is the identifier the vendor gives the library to send back to "
+"them so they know which account to use when billing. One EDI account can "
+"have multiple EANs."
+msgstr ""
+"圖書館的 EAN 是代理商提供的識別碼，代理商依此寄送帳單。一個 EDI 帳號可以有多"
+"個 EAN。"
+
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:20
 #, c-format
 msgid "A list can also be created from the catalog search results"
@@ -1309,6 +1322,13 @@ msgid ""
 "accessible via the 'Routing Lists' tab on the patron record."
 msgstr ""
 "虛擬書架是讀者所屬的期刊傳閱清單，可經由讀者紀錄的 '傳閱清單' 分頁查看。"
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:5
+#, c-format
+msgid ""
+"A log of all messages sent and received via EDIFACT can be found under "
+"EDIFACT Messages."
+msgstr "記錄所有訊息的日誌檔經由 EDIFACT 發送，可在 EDIFACT 訊息下找到。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:52
 #, c-format
@@ -2256,7 +2276,7 @@ msgstr ""
 "所有的讀者資訊將顯示在詳情分頁。包括新增讀者的所有連絡資訊、說明、訊息偏好"
 "等。'兒童' 或 '專業讀者' 及其保證人的其他資訊將顯示在其紀錄內。"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:518
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:524
 #, c-format
 msgid ""
 "All staff members have permission to access lists. This section only needs "
@@ -4472,7 +4492,7 @@ msgstr "指定參考書的課程詳情"
 msgid "Course reserves"
 msgstr "課程指定用書"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
 #, c-format
 msgid "Create SQL Reports"
 msgstr "建立 SQL 報表"
@@ -4705,6 +4725,11 @@ msgstr "延遲是逾期後天數，屆時才啟發逾期通知。"
 msgid "Delete Quote(s)"
 msgstr "刪除引句"
 
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
+#, c-format
+msgid "Delete SQL Reports"
+msgstr "刪除 SQL 報表"
+
 #: intranet-tmpl/prog/en/modules/help/admin/oai_sets.tt:20
 #, c-format
 msgid "Delete a set"
@@ -4727,7 +4752,7 @@ msgid ""
 "borrower reading history)"
 msgstr "刪除舊讀者與匿名流通/閱讀記錄(刪除借閱者的閱讀記錄)"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:523
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:529
 #, c-format
 msgid "Delete public lists"
 msgstr "刪除公開虛擬書架"
@@ -4909,6 +4934,11 @@ msgstr "期間：10 天"
 msgid "Duration: 7 days"
 msgstr "期間：7 天"
 
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:3
+#, c-format
+msgid "EDIFACT messages"
+msgstr "EDIFACT 訊息"
+
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:21
 #, c-format
 msgid ""
@@ -5017,6 +5047,11 @@ msgid ""
 "Each section of preferences can be sorted alphabetically by clicking the "
 "small down arrow to the right of the word 'Preference' in the header column"
 msgstr "每組偏好都可以依字順排序，點選標題欄 '偏好' 右方的向下箭頭，即可"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:13
+#, c-format
+msgid "Each vendor will have one account."
+msgstr "每個代理商將有一個帳號。"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:106
 #, c-format
@@ -5398,6 +5433,11 @@ msgstr "鍵入 'EBOOK' 的值(或其他電子書館藏類型的代碼)"
 msgid "Enter your tax rate if your library is charged taxes on orders."
 msgstr "鍵入稅率，若圖書館向訂閱收取稅金。"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:11
+#, c-format
+msgid "Enter your vendor information in the form that appears."
+msgstr "在表單鍵入代理商的資訊。"
+
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:19
 #, c-format
 msgid ""
@@ -5497,7 +5537,7 @@ msgstr "範例"
 msgid "Examples: "
 msgstr "範例："
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
 #, c-format
 msgid "Execute SQL Reports"
 msgstr "執行 SQL 報表"
@@ -6168,6 +6208,13 @@ msgid ""
 msgstr ""
 "在此可看到所有的採訪建議及其現況，您也可以讀者身份點選上方的 '新增採訪建議'。"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:5
+#, c-format
+msgid ""
+"From here you can set up the information needed to connect to your "
+"acquisitions vendors"
+msgstr "在此設定連結採訪代理商的資訊"
+
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
 #, c-format
@@ -6658,7 +6705,7 @@ msgstr "授權流通權限"
 msgid "Granular Holds Permissions"
 msgstr "授權預約權限"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:522
 #, c-format
 msgid "Granular Lists Permissions"
 msgstr "Granular 虛擬書架權限"
@@ -7496,8 +7543,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:84
 #, c-format
-msgid "If you are charged sales tax, choose that from the gstrate field"
-msgstr "若您收取營業稅，從營業稅欄位選取它"
+msgid "If you are charged sales tax, choose that from the tax_rate field"
+msgstr "若您收取營業稅，從 tax_rate 欄位選取它"
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:33
 #, c-format
@@ -8654,7 +8701,8 @@ msgstr "重要 "
 msgid ""
 "Important Did you mean? only works in the OPAC at this time. The Intranet "
 "options are here for future development."
-msgstr "你的意思是重要嗎？目前祗有在 OPAC 的作品。內部網路選項為未來發展。"
+msgstr ""
+"你的意思是重要嗎？目前祗在 OPAC 才有此功能。未來可能在內部網路發展此選項。"
 
 #: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
 #: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:31
@@ -9411,6 +9459,12 @@ msgstr "在出現的表單裡至少鍵入一個日期供搜尋。"
 msgid "In the form that appears you want to enter the basics about your fund."
 msgstr "從出現的表單鍵入基金的基本資料。"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:9
+#, c-format
+msgid ""
+"In the form that appears, enter the information provided by your vendor."
+msgstr "從出現的表單，由代理商鍵入資料。"
+
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:41
 #, c-format
 msgid ""
@@ -10087,6 +10141,11 @@ msgstr ""
 "有的圖書館使用分析編目技術讓讀者可以搜尋學刊內的論文與圖書內的章節。分析編目"
 "把圖書、學刊報紙裡的論文、章節與專欄抽出，為這些論文、篇章與章節另立款目。實"
 "體上仍未與主紀錄分隔。詳情參見 AACR2 的第 13 章。"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:3
+#, c-format
+msgid "Library EANs"
+msgstr "圖書館的 EAN"
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:74
 #, c-format
@@ -10886,6 +10945,11 @@ msgid ""
 msgstr ""
 "說明：實際上，若對映分欄的值完全 '相同' 或 '不相同' 則狀況為真設定 '值'。紀錄"
 "內容有 999$9 = 'XXX YYY'，將屬於 999$9 = 'XXX' 的資料集。"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, c-format
+msgid "Note: Before you begin, you must set up at least one "
+msgstr "注意：開始前，至少先設定一個 "
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:41
 #, c-format
@@ -12920,6 +12984,16 @@ msgstr "見幣別與匯率的完整文件 "
 msgid "See the full documentation for Custom Reports in the "
 msgstr "見客製化報表的完整文件 "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
+#, c-format
+msgid "See the full documentation for EDI accounts in the "
+msgstr "見 EDI 帳號的完整文件 "
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
+#, c-format
+msgid "See the full documentation for EDIFACT messages in the "
+msgstr "見 EDIFACT 訊息的完整文件 "
+
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
 #, c-format
 msgid "See the full documentation for Editing Patrons in the "
@@ -13045,6 +13119,11 @@ msgstr "見書標模版的完整文件 "
 msgid "See the full documentation for Libraries &amp; Groups in the "
 msgstr "見圖書館&amp;群組的完整文件 "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
+#, c-format
+msgid "See the full documentation for Library EANs in the "
+msgstr "見圖書館 EAN 的完整文件 "
+
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #, c-format
 msgid "See the full documentation for Library Transfer Limits in the "
@@ -13165,7 +13244,7 @@ msgstr "見讀者清單的完整文件 "
 msgid "See the full documentation for Patron Notices in the "
 msgstr "見讀者通知的完整文件 "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #, c-format
 msgid "See the full documentation for Patron Permissions in the "
 msgstr "見讀者權限的完整文件 "
@@ -14614,7 +14693,7 @@ msgid ""
 "pool of quotes which serve as the source of the Quote-Of-The-Day (QOTD) "
 "feature in OPAC."
 msgstr ""
-"每日一句(QOTD)編輯器允許編輯與新增引句至引句庫，供線上公用目錄的每日一句使用"
+"每日一句(QOTD)編輯器允許編輯與新增引句至引句庫，供 OPAC 的每日一句使用"
 "(QOTD)。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:5
@@ -14740,12 +14819,17 @@ msgid ""
 "Circulation page"
 msgstr "快速編目框架祗用於流通頁面裡的編目"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
 #, c-format
 msgid "The ability to create and edit but not run SQL reports"
 msgstr "新增與編輯能力，但不包括執行SQL"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#, c-format
+msgid "The ability to delete but not run SQL reports"
+msgstr "可以新增與編輯但不能執行 SQL 報表"
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:517
 #, c-format
 msgid "The ability to run but not create or edit SQL reports"
 msgstr "新增與編輯能力，但不包括執行SQL報表"
@@ -16792,12 +16876,22 @@ msgid ""
 "To add a vendor, click the 'New Vendor' button on the Acquisitions page."
 msgstr "勾選採訪頁面的 '新增供應商' 鈕，就能新增供應商。"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:9
+#, c-format
+msgid "To add account information, click the 'New account' button."
+msgstr "點選 '新增帳號' 鈕，就能新增帳號資訊。"
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:9
 #, c-format
 msgid ""
 "To add additional values to the manual invoice type pull down menu, add them "
 "to the MANUAL_INV Authorized Value"
 msgstr "新增容許值至人工發票類型下拉選單，新增至MANUAL_INV容許值"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:7
+#, c-format
+msgid "To add an EAN, click the 'New EAN' button."
+msgstr "點選 '新增 EAN' 鈕，就能新增 EAN。"
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:57
 #, c-format
@@ -17963,6 +18057,16 @@ msgstr "預先組態的值是："
 #, c-format
 msgid "Vendor Contracts"
 msgstr "供應商合約"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:3
+#, c-format
+msgid "Vendor EDI accounts"
+msgstr "供應商 EDI 帳號"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, c-format
+msgid "Vendor in Acquisitions"
+msgstr "採訪內的供應商"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:13
 #, c-format
@@ -19635,7 +19739,7 @@ msgstr "contracts_manage "
 msgid "cql.anywhere"
 msgstr "cql.anywhere"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
 #, c-format
 msgid "create_reports "
 msgstr "create_reports "
@@ -19819,10 +19923,15 @@ msgstr "delete_all_items "
 msgid "delete_anonymize_patrons "
 msgstr "delete_anonymize_patrons "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:521
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:527
 #, c-format
 msgid "delete_public_lists "
 msgstr "delete_public_lists "
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#, c-format
+msgid "delete_reports "
+msgstr "delete_reports "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:323
 #, c-format
@@ -19898,7 +20007,7 @@ msgid ""
 msgstr ""
 "如：匯入特定圖書館的讀者時可以在匯入表單將分館代碼欄位給那些匯入的讀者。"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:514
 #, c-format
 msgid "execute_reports "
 msgstr "execute_reports "
@@ -20213,10 +20322,12 @@ msgstr "管理 "
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -20311,7 +20422,7 @@ msgstr "管理 "
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -20337,6 +20448,7 @@ msgstr "管理 "
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17

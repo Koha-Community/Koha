@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14\n"
-"POT-Creation-Date: 2016-05-20 10:36-0300\n"
-"PO-Revision-Date: 2016-04-25 09:12+0000\n"
+"POT-Creation-Date: 2016-11-20 20:14-0300\n"
+"PO-Revision-Date: 2016-11-17 14:19+0000\n"
 "Last-Translator: KnowledgeWare <massoudalshareef@kwareict.com>\n"
 "Language-Team: za\n"
 "Language: ar\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1461575541.000000\n"
+"X-POOTLE-MTIME: 1479392382.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -760,10 +760,12 @@ msgstr "(! يعني 'غير مرئى' أو فى حالة تجميع أو 'عدم
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -859,7 +861,7 @@ msgstr "(! يعني 'غير مرئى' أو فى حالة تجميع أو 'عدم
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -885,6 +887,7 @@ msgstr "(! يعني 'غير مرئى' أو فى حالة تجميع أو 'عدم
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
@@ -1390,6 +1393,16 @@ msgid ""
 "A layout is used to define the fields you want to appear on your labels."
 msgstr "يستخدم التخطيط ليحدد لك الحقل الذي تريد أن يظهر على ملصقك."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:5
+#, c-format
+msgid ""
+"A library EAN is the identifier the vendor gives the library to send back to "
+"them so they know which account to use when billing. One EDI account can "
+"have multiple EANs."
+msgstr ""
+"EAN هو المعرف الذي يمنحه المورد للمكتبة لارسله لهم من أجل معرفة أي الحسابات "
+"يسخدم عند ارسال الفاتورة للمكتبة. حساب EDI واحد يمكنه احتواء عدة EANs."
+
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:20
 #, c-format
 msgid "A list can also be created from the catalog search results"
@@ -1411,6 +1424,15 @@ msgid ""
 msgstr ""
 "قائمة بجميع قوائم تمرير الدوريات التي تعود للمستفيد ستكون متاحة عن طريق "
 "تبويب 'قوائم التمرير' في تسجيلة المستفيد."
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:5
+#, c-format
+msgid ""
+"A log of all messages sent and received via EDIFACT can be found under "
+"EDIFACT Messages."
+msgstr ""
+"بمكن العثور على كافة الرسالة المرسلة والمستلمة من خلال EDIFACT تحت رسائل "
+"EDIFACT."
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:52
 #, c-format
@@ -2407,7 +2429,7 @@ msgstr ""
 "الملاحظات, تفضيلات الرسائل, إلخ الادخال عند اضافة المستفيد. في حالة الاشارة "
 "للمستفيد كـ 'طفل' أو'مهني' و معلومات كفلائهم الاضافية ستظهر في سجلهم."
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:518
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:524
 #, c-format
 msgid ""
 "All staff members have permission to access lists. This section only needs "
@@ -2629,7 +2651,7 @@ msgstr "بمجرد تحميل ملفك سترى صورة لتأكيد عمل ا�
 msgid ""
 "At least one substitution must be defined, else there is no sense to launch "
 "the script."
-msgstr ""
+msgstr "يجب تعريف بديل واحد على الأقل، وإلا فلن يكون هناك معنى لإطلاق النص."
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:29
 #, c-format
@@ -2877,7 +2899,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:2
 #, c-format
 msgid "Automatic item modifications by age configuration"
-msgstr ""
+msgstr "تعديلات تلقائية للمادة بواسطة تهيئة العمر"
 
 #: intranet-tmpl/prog/en/modules/help/rotating_collections/rotatingCollections.tt:7
 #, c-format
@@ -4761,7 +4783,7 @@ msgstr "القيم المستخدمة عادة هذا الحقل هي:"
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:36
 #, c-format
 msgid "Condition: items.ccode = 1"
-msgstr ""
+msgstr "الشرط:  items.ccode = 1"
 
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:19
 #, c-format
@@ -4769,6 +4791,7 @@ msgid ""
 "Conditions should be defined if you want to test some values before to "
 "substitute fields in the items."
 msgstr ""
+"يجب تعريف الشروط إذا كنت تريد اختبار بعض القيم قبل استبدال الحقول في المواد"
 
 #: intranet-tmpl/prog/en/modules/help/reports/dictionary.tt:15
 #, c-format
@@ -4824,7 +4847,7 @@ msgstr "تفاصيل الدورة / المسار"
 msgid "Course reserves"
 msgstr "احتياطي الدورات"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
 #, c-format
 msgid "Create SQL Reports"
 msgstr "إنشاء تقارير SQL"
@@ -5066,6 +5089,11 @@ msgstr "التأخير هو عدد الأيام بعد العدد  المقرر�
 msgid "Delete Quote(s)"
 msgstr "حذف الإقتباس(ات)"
 
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
+#, c-format
+msgid "Delete SQL Reports"
+msgstr "احذف تقارير SQL"
+
 #: intranet-tmpl/prog/en/modules/help/admin/oai_sets.tt:20
 #, c-format
 msgid "Delete a set"
@@ -5090,7 +5118,7 @@ msgstr ""
 "قم بحذف المستعيرين القدامي وتجهيل تاريخ الإعارة/ القراءة (حذف سجل قراءة "
 "المستعير)"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:523
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:529
 #, c-format
 msgid "Delete public lists"
 msgstr "حذف القوائم العامة"
@@ -5276,12 +5304,17 @@ msgstr "تكرار التسجيلات"
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:28
 #, c-format
 msgid "Duration: 10 days"
-msgstr ""
+msgstr "المدة: 10 أيام"
 
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:35
 #, c-format
 msgid "Duration: 7 days"
-msgstr ""
+msgstr "المدة: 7 أيام"
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:3
+#, c-format
+msgid "EDIFACT messages"
+msgstr "رسائل الـ EDIFACT"
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:21
 #, c-format
@@ -5398,6 +5431,11 @@ msgid ""
 msgstr ""
 "كل قسم من التفضيلات من الممكن ان يفرز بشكل أبجدي بالنقر على السهم الصغير "
 "المتجه للأسفل على يسار كلمة 'تفضيلة' في راس العمود"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:13
+#, c-format
+msgid "Each vendor will have one account."
+msgstr "سوف يحصل كل مورد على حساب واحد."
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:106
 #, c-format
@@ -5805,6 +5843,11 @@ msgid "Enter your tax rate if your library is charged taxes on orders."
 msgstr ""
 "أدخل معدل الضريبة الخاص بمكتبتك ، إذا كانت المكتبة تفرض ضرائب على الطلبات."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:11
+#, c-format
+msgid "Enter your vendor information in the form that appears."
+msgstr "أدخل بيانات المورد الخاصة بك في النموذج الظاهر."
+
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:19
 #, c-format
 msgid ""
@@ -5856,6 +5899,8 @@ msgid ""
 "to change amount by 2.6%% (1024.974) and to round to a multiple of 0.5, the "
 "result will be 1024.5 (amounts are rounded down). "
 msgstr ""
+"مثال: إذا قمت بنسخ ميزانية بمبلغ 999، وقررت تغيير المبلغ بنسبة  2.6%% "
+"(1024.974) ولتقريبه إلى أقرب 0.5 فستكون النتيجة 1024.5(يتم تقريب المبالغ)"
 
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:32
 #: intranet-tmpl/prog/en/modules/help/members/members-home.tt:34
@@ -5896,9 +5941,9 @@ msgstr ""
 "تجميع أفقي يجب تعيين زحف الأفقي ل. 03 \"لتعويض هذا الفارق."
 
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:25
-#, fuzzy, c-format
+#, c-format
 msgid "Examples"
-msgstr "مثال"
+msgstr "أمثلة"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:161
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:107
@@ -5907,7 +5952,7 @@ msgstr "مثال"
 msgid "Examples: "
 msgstr "أمثلة:"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
 #, c-format
 msgid "Execute SQL Reports"
 msgstr "تنفيذ تقارير SQL"
@@ -6499,10 +6544,11 @@ msgstr "التنسيق"
 #. %1$s:  interface 
 #. %2$s:  theme 
 #: intranet-tmpl/prog/en/modules/help/labels/spinelabel-home.tt:9
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Format your label printing by editing spinelabel.css found in %s/%s/css/"
-msgstr "قم بتنسيق طباعة ملصقك عن طريق تحرير spinelabel.css الموجود في %s/css/"
+msgstr ""
+"قم بتنسيق طباعة ملصقك عن طريق تحرير spinelabel.css الموجود في%s/%s/css/"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:59
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:5
@@ -6638,6 +6684,14 @@ msgstr ""
 "من هنا يمكنك رؤية جميع المقترحات التي قام بها المستفيد وحالتها، كما يمكنك "
 "إنشاء مقترح شراء نيابةً عن المستفيد بالنقر على زر \"مقترح شراء جديد\" في "
 "الأعلى."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:5
+#, c-format
+msgid ""
+"From here you can set up the information needed to connect to your "
+"acquisitions vendors"
+msgstr ""
+"من هنا يمكنك تجهيز المعلومات المطلوبة للاتصال بموردي المشتريات الخاصة بك"
 
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
@@ -7195,7 +7249,7 @@ msgstr "صلاحيات الإعارة التفصيلية"
 msgid "Granular Holds Permissions"
 msgstr "صلاحيات الحجز التفصيلية"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:522
 #, c-format
 msgid "Granular Lists Permissions"
 msgstr "صلاحيات القوائم الجزيئية"
@@ -7248,7 +7302,7 @@ msgstr "HOLDPLACED ( وهي ملاحظة لموظفي المكتبة بأن حج
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:281
 #, c-format
 msgid "HOLD_SLIP "
-msgstr ""
+msgstr "HOLD_SLIP"
 
 #: intranet-tmpl/prog/en/modules/help/mainpage.tt:9
 #, c-format
@@ -7344,12 +7398,12 @@ msgstr "المضيف"
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:40
 #, c-format
 msgid "How to execute the cronjob script?"
-msgstr ""
+msgstr "كيفية تنفيذ نص ال cronjob ؟"
 
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:14
 #, c-format
 msgid "How to work the configuration page?"
-msgstr ""
+msgstr "كيفية عمل صفحة التهيئة؟"
 
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:13
 #, c-format
@@ -7900,7 +7954,7 @@ msgstr "إذا ما شكَّ النظام بأن هذا المستفيد هو ت
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:24
 #, c-format
 msgid "If the value is an empty string, the field will be deleted."
-msgstr ""
+msgstr "إذا كانت القيمة مقطعا خاليا، سيتم حذف الحقل"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/supplier.tt:52
 #, c-format
@@ -8137,8 +8191,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:84
 #, c-format
-msgid "If you are charged sales tax, choose that from the gstrate field"
-msgstr "إذا كنت تدفع الضريبة، أدخله في الحقل المناسب"
+msgid "If you are charged sales tax, choose that from the tax_rate field"
+msgstr "إذا كان عليك دفع ضريبة بيع، أختر ذلك من الحقل tax_rate"
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:33
 #, c-format
@@ -8444,6 +8498,9 @@ msgid ""
 "changed, round to a multiple of'. This should be a positive number. Decimal "
 "point can be used. "
 msgstr ""
+"إذا قررت تغيير مبلغ الميزانية والتمويلات، يمكنك كذلك اختيار تقريب النتيجة "
+"بملء حقل النص لـ \"إذا تغيرت المبالغ، قم بتقريبها إلى أقرب\" يجب أن يكون ذلك "
+"رقما موجبا. يمكن استخدام الفاصلة العشرية."
 
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:7
 #, c-format
@@ -8909,6 +8966,9 @@ msgid ""
 "fill the text field for 'Change amounts by'. This should be a number, "
 "positive or negative. Decimal point can be used. "
 msgstr ""
+"إذا كنت تريد تعديل مبلغ الميزانية والتمويلات بالنسبة المئوية، قم بملء حقل "
+"النص لـ \"تغيير المبلغ بواسطة\". يجب أن يكون ذلك رقما، موجبا أو سالبا. يمكن "
+"استخدام الفاصلة العشرية."
 
 #: intranet-tmpl/prog/en/modules/help/circ/view_holdsqueue.tt:17
 #, c-format
@@ -10323,6 +10383,13 @@ msgstr "في النموذج الذي يظهر تحتاج لأن تدخل على 
 msgid "In the form that appears you want to enter the basics about your fund."
 msgstr "يجب عليك إدخال المعلومات الأساسية حول تمويلك في النموذج الذي سيظهر لك"
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:9
+#, c-format
+msgid ""
+"In the form that appears, enter the information provided by your vendor."
+msgstr ""
+"في النموذج الذي سيظهر قم بإدخال المعلومات التي تم تزويدها من قبل المورد"
+
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:41
 #, c-format
 msgid ""
@@ -10379,7 +10446,7 @@ msgstr ""
 "لاستكمال النقل."
 
 #: intranet-tmpl/prog/en/modules/help/tools/inventory.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Inventory"
 msgstr "جرد "
 
@@ -11033,6 +11100,7 @@ msgid ""
 "Libraries can manage the 'new_status' field for items. With this script, it "
 "will be possible to:"
 msgstr ""
+"يمكن للمكتبات إدارة حقل 'new_status' للمواد. بهذا النص، يمكن القيام بـ:"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/linkitem.tt:5
 #, c-format
@@ -11052,6 +11120,11 @@ msgstr ""
 "الموجودة داخل مصدر أكبر مثل الكتاب ، أو مقالة داخل مجلة أو صحيفة أو سلسلة. "
 "وأيضاً في الفهرسة التحليلية يتم إنشاء تسجيلة ببليوغرافية للعنوان ، وهو لا "
 "ينفصل فيزيائياً عن المادة المُضيفة. تعلم المزيد عن التحليل في الفصل 13 من قاف2."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:3
+#, c-format
+msgid "Library EANs"
+msgstr "EANs المكتبة"
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:74
 #, c-format
@@ -11824,9 +11897,9 @@ msgid "No Holds Allowed: No patron may put this book on hold."
 msgstr "لا حجوز مسموحة: غير مسموح لأي مستفيد أن يحجز هذا الكتاب."
 
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "No condition"
-msgstr "تهيئة XSLT"
+msgstr "بدون شروط"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/supplier.tt:21
 #, c-format
@@ -11900,6 +11973,11 @@ msgstr ""
 "ملاحظة: في الواقع, يكون الشرط حقيقياً إذا كانت القيمة الموجودة في الحقل "
 "الفرعي المقابل  'تساوي' أو 'لا تساوي' لما تم تعريفه إذا كانت 'القيمة'. إذا "
 "كان للتسجيلة  999$9 = 'XXX YYY' لن تنتمي إلى مجموعة بها شرط 999$9 = 'XXX'."
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, c-format
+msgid "Note: Before you begin, you must set up at least one "
+msgstr "ملاحظة: قبل أن تبدأ، عليك تدخل على الأقل مورداً واحداً"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:41
 #, c-format
@@ -13281,7 +13359,7 @@ msgid "Perform batch modification of items"
 msgstr "إجراء تعديل المواد بالدفعة"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:413
-#, fuzzy, c-format
+#, c-format
 msgid "Perform inventory of your catalog"
 msgstr "قم بجرد فهرسك"
 
@@ -14095,6 +14173,16 @@ msgstr "انظر إلى التوثيق الكامل للعملات وأسعار 
 msgid "See the full documentation for Custom Reports in the "
 msgstr "انظر إلى التوثيق الكامل للتقارير المخصصة في "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
+#, c-format
+msgid "See the full documentation for EDI accounts in the "
+msgstr "انظر إلى التوثيق الكامل لحسابات EDI في "
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
+#, c-format
+msgid "See the full documentation for EDIFACT messages in the "
+msgstr "انظر إلى التوثيق الكامل لرسائل EDIFACT في "
+
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
 #, c-format
 msgid "See the full documentation for Editing Patrons in the "
@@ -14220,6 +14308,11 @@ msgstr "انظر إلى التوثيق الكامل لقوالب الملصق ف
 msgid "See the full documentation for Libraries &amp; Groups in the "
 msgstr "انظر إلى التوثيق الكامل للمكتبات  &amp; المجموعات في "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
+#, c-format
+msgid "See the full documentation for Library EANs in the "
+msgstr "انظر إلى التوثيق الكامل لـ EANs  المكتبة في"
+
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #, c-format
 msgid "See the full documentation for Library Transfer Limits in the "
@@ -14340,7 +14433,7 @@ msgstr "انظر التوثيق الكامل لقوائم المستفيد في"
 msgid "See the full documentation for Patron Notices in the "
 msgstr "انظر إلى التوثيق الكامل لإخطارات المستفيد "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #, c-format
 msgid "See the full documentation for Patron Permissions in the "
 msgstr "انظر إلى التوثيق الكامل لصلاحيات المستفيد "
@@ -15211,17 +15304,17 @@ msgstr "تفاصيل الاشتراك"
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:37
 #, c-format
 msgid "Substitution: items.ccode = 2"
-msgstr ""
+msgstr "البديل:  items.ccode = 2"
 
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:30
 #, c-format
 msgid "Substitution: items.new_status = '' (no value in the input)"
-msgstr ""
+msgstr "البديل:  items.new_status = ''(لا توجد قيمة في المدخل)"
 
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:22
 #, c-format
 msgid "Substitutions are changes to apply to the matching items."
-msgstr ""
+msgstr "البدائل هي تغييرات للتطبيق على المواد المتطابقة"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:93
 #, c-format
@@ -16014,12 +16107,17 @@ msgid ""
 "Circulation page"
 msgstr "القدرة على الفهرسة فقط باستخدام إطار إضافة سريع موجود على صفحة الإعارة"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
 #, c-format
 msgid "The ability to create and edit but not run SQL reports"
 msgstr "القدرة على الإنشأ والتحرير ولكن من غير عمل تقارير SQL"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#, c-format
+msgid "The ability to delete but not run SQL reports"
+msgstr "القدرة على الحذف ولكن من غير تشغيل تقارير SQL"
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:517
 #, c-format
 msgid "The ability to run but not create or edit SQL reports"
 msgstr "القدرة على تشغيل ولكن ليس إنشاء أو تحرير تقارير SQL"
@@ -16148,9 +16246,9 @@ msgstr ""
 "المواد المعارة حالياً."
 
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:18
-#, fuzzy, c-format
+#, c-format
 msgid "The conditions"
-msgstr "تهيئة XSLT"
+msgstr "الشروط"
 
 #: intranet-tmpl/prog/en/modules/help/admin/aqcontract.tt:11
 #, c-format
@@ -16174,7 +16272,7 @@ msgstr ""
 #, c-format
 msgid ""
 "The cronjob script is misc/cronjobs/automatic_item_modification_by_age.pl."
-msgstr ""
+msgstr "نص ال cronjob  هو misc/cronjobs/automatic_item_modification_by_age.pl."
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:77
 #, c-format
@@ -16259,9 +16357,9 @@ msgstr ""
 "وأنت مدعو لتقديم أي طلبات تحسين فضلا عن أي خلل عبر Koha Project Bugzilla."
 
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:16
-#, fuzzy, c-format
+#, c-format
 msgid "The duration"
-msgstr "تهيئة XSLT"
+msgstr "المدة"
 
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:54
 #, c-format
@@ -16837,7 +16935,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:21
 #, c-format
 msgid "The substitutions"
-msgstr ""
+msgstr "البدائل"
 
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:19
 #, c-format
@@ -16956,7 +17054,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:15
 #, c-format
 msgid "There are 3 values to define:"
-msgstr ""
+msgstr "هناك 3 قيم للتعريف:"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:266
 #, c-format
@@ -17111,7 +17209,7 @@ msgstr ""
 msgid ""
 "They are cumulatives but you can separate with a pipe '|' for a field with "
 "several values."
-msgstr ""
+msgstr "هي تراكمية لكن يمكنك فصلها بعلامة '|' للحقل ذي القيم المتعددة."
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:5
 #, c-format
@@ -17194,6 +17292,8 @@ msgid ""
 "This configuration page allows to configure the rules for the automatic item "
 "modifications by age cronjob script."
 msgstr ""
+"تتيح لك صفحة التهيئة تهيئة قواعد تعديلات المادة التلقائية بواسطة نص cronjob "
+"العمر"
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:28
 #, c-format
@@ -17765,7 +17865,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:17
 #, c-format
 msgid "This value corresponds to the duration an item is considered as new."
-msgstr ""
+msgstr "تتوافق هذه القيمة مع المدة التي يتم اعتبار المادة فيها بأنها جديدة"
 
 #: intranet-tmpl/prog/en/modules/help/cataloguing/additem.tt:19
 #, c-format
@@ -18285,6 +18385,11 @@ msgid ""
 "To add a vendor, click the 'New Vendor' button on the Acquisitions page."
 msgstr "لإضافة موّرد انقر فوق زر \"موّرد جديد\" على صفحة التزويد."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:9
+#, c-format
+msgid "To add account information, click the 'New account' button."
+msgstr "لإنشاء بيانات حساب قم بالنقر على زر \"حساب جديد\""
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:9
 #, c-format
 msgid ""
@@ -18293,6 +18398,11 @@ msgid ""
 msgstr ""
 "لإضافة قيم إضافية إلى نوع فاتورة الدليل من القائمة المندسلة، إضافتها إلى "
 "القيمة المصرح بها  MANUAL_INV"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:7
+#, c-format
+msgid "To add an EAN, click the 'New EAN' button."
+msgstr "لإضافة موّرد EAN ، انقر زر \"EAN جديد\" ."
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:57
 #, c-format
@@ -19235,7 +19345,7 @@ msgstr "أستكشاف الخطأ و إصلاحه"
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:42
 #, c-format
 msgid "Try the -h parameter in order to see the help."
-msgstr ""
+msgstr "قم بتجربة معامل  -h لرؤية المساعدة"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:51
 #, c-format
@@ -19610,6 +19720,16 @@ msgstr "القيم المهيئة مسبقاً في كوها هي :"
 #, c-format
 msgid "Vendor Contracts"
 msgstr "عقود المزود"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:3
+#, c-format
+msgid "Vendor EDI accounts"
+msgstr "عقود مزود EDI"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, c-format
+msgid "Vendor in Acquisitions"
+msgstr "مورد في التزويد"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:13
 #, c-format
@@ -20273,6 +20393,8 @@ msgid ""
 "Without any parameter, the script will be launched in a dry-run mode. If the "
 "-c (or --confirm) flag is given, the script will apply the changes."
 msgstr ""
+"بدون أي معامل، سيتم إطلاق النص في وضع dry-run. إذا تم إعطاء علامة  -c (أو --"
+"confirm) ، سيقوم النص بتطبيق التغييرات"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:59
 #, c-format
@@ -20831,12 +20953,15 @@ msgid ""
 "You want to change the items.ccode=1 to items.ccode=2 for items created 7 "
 "days ago. "
 msgstr ""
+"أنت تريد تغيير items.ccode=1 إلى items.ccode=2  للمواد التي تم إنشائها منذ 7 "
+"أيام"
 
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:26
 #, c-format
 msgid ""
 "You want to remove the items.new_status value for items created 10 days ago:"
 msgstr ""
+"انت تريد حذف قيمة items.new_status من المواد التي تم إنشائها منذ 10 أيام:"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/parcel.tt:19
 #: intranet-tmpl/prog/en/modules/help/acqui/orderreceive.tt:19
@@ -21472,7 +21597,7 @@ msgstr "claim_serials "
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:10
 #, c-format
 msgid "configure circulation and fine rules depending the 'new_status' field."
-msgstr ""
+msgstr "قم بتهيئة قواعد الغرامة والإعارة بناء على حقل 'new_status'"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:261
 #, c-format
@@ -21484,7 +21609,7 @@ msgstr "contracts_manage "
 msgid "cql.anywhere"
 msgstr "cql.anywhere"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
 #, c-format
 msgid "create_reports "
 msgstr "create_reports "
@@ -21671,10 +21796,15 @@ msgstr "delete_all_items"
 msgid "delete_anonymize_patrons "
 msgstr "delete_anonymize_patrons "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:521
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:527
 #, c-format
 msgid "delete_public_lists "
 msgstr "delete_public_lists"
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#, c-format
+msgid "delete_reports "
+msgstr "delete_reports"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:323
 #, c-format
@@ -21684,7 +21814,7 @@ msgstr "delete_subscription "
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:9
 #, c-format
 msgid "display an icon in the search results for new items."
-msgstr ""
+msgstr "عرض أيقونة في نتائج البحث للمواد الجديدة"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:375
 #, c-format
@@ -21752,7 +21882,7 @@ msgstr ""
 "تستخدم الحقل في نموذج الإستيراد لتطبيق رمز المكتبة الفرعية على كل هؤلاء "
 "المستورَدين."
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:514
 #, c-format
 msgid "execute_reports "
 msgstr "execute_reports "
@@ -21780,7 +21910,7 @@ msgstr "fic:1 أدبي"
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:11
 #, c-format
 msgid "get a RSS/Atom feeds on these new items."
-msgstr ""
+msgstr "الحصول على تلقيمات RSS/Atom حول هذه المواد الجديدة"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:266
 #, c-format
@@ -21964,7 +22094,7 @@ msgstr "الانتقال إلى الخروج مع ALT + U "
 #: intranet-tmpl/prog/en/modules/help/tools/automatic_item_modification_by_age.tt:8
 #, c-format
 msgid "know easily what are the new items in the catalogue."
-msgstr ""
+msgstr "معرفة ما هي المواد الجديدة في الفهرس بسهولة"
 
 #: intranet-tmpl/prog/en/modules/help/catalogue/search.tt:51
 #, c-format
@@ -22080,10 +22210,12 @@ msgstr "إدارة "
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -22178,7 +22310,7 @@ msgstr "إدارة "
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -22204,6 +22336,7 @@ msgstr "إدارة "
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17

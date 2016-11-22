@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: uk-UA-i-staff-t-prog-v-3002000\n"
-"POT-Creation-Date: 2016-05-20 14:02-0300\n"
-"PO-Revision-Date: 2014-09-11 06:00+0000\n"
+"POT-Creation-Date: 2016-11-20 20:25-0300\n"
+"PO-Revision-Date: 2016-10-24 13:08+0000\n"
 "Last-Translator: Serhij <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -19,9 +19,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Pootle 2.5.0\n"
+"X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1410415258.0\n"
+"X-POOTLE-MTIME: 1477314481.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -655,10 +655,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -754,7 +756,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -780,6 +782,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
@@ -1271,6 +1274,14 @@ msgstr ""
 "Ви повинні вказати поля чи підполя, які Ви хочете експортувати, розділивши "
 "їх вертикальними рисками."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:5
+#, c-format
+msgid ""
+"A library EAN is the identifier the vendor gives the library to send back to "
+"them so they know which account to use when billing. One EDI account can "
+"have multiple EANs."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/virtualshelves/shelves.tt:20
 #, c-format
 msgid "A list can also be created from the catalog search results"
@@ -1288,6 +1299,13 @@ msgstr ""
 msgid ""
 "A list of all of the serial routing lists the patron belongs to will be "
 "accessible via the 'Routing Lists' tab on the patron record."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:5
+#, c-format
+msgid ""
+"A log of all messages sent and received via EDIFACT can be found under "
+"EDIFACT Messages."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:52
@@ -1450,9 +1468,9 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid "Access to all librarian functions "
-msgstr "Забезпечує доступ до всього admin зв'язується і переваги "
+msgstr "Доступ до усіх бібліотечних функцій "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:372
 #, fuzzy, c-format
@@ -1575,9 +1593,9 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:85
-#, fuzzy, c-format
+#, c-format
 msgid "Acquisition and/or suggestion management"
-msgstr "Керування пропозицією"
+msgstr "Управління надходженнями і/чи пропозиціями"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:3
 #, c-format
@@ -1712,9 +1730,9 @@ msgid "Add help"
 msgstr "Додати довідку"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:53
-#, fuzzy, c-format
+#, c-format
 msgid "Add or modify patrons"
-msgstr "Запис відвідувачів"
+msgstr "Внесення та редагування відвідувачів"
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:3
 #, c-format
@@ -2186,7 +2204,7 @@ msgid ""
 "their record."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:518
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:524
 #, c-format
 msgid ""
 "All staff members have permission to access lists. This section only needs "
@@ -2209,9 +2227,9 @@ msgid "All three of these options will open up the issue receive form:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid "Allow access to the reports module"
-msgstr "Дозвольте членові штату мати доступ до модуля повідомлень"
+msgstr "Дозвіл на доступ до модуля звітів"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:189
 #, c-format
@@ -2221,9 +2239,9 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:124
-#, fuzzy, c-format
+#, c-format
 msgid "Allow staff members to modify permissions for other staff members"
-msgstr "Встановити резервування на книгах, бо патрони через штат зв'язуються"
+msgstr "Дозвіл на зміну привілеїв для інших працівників бібліотеки"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:82
 #, c-format
@@ -3151,9 +3169,9 @@ msgid "Check Serial Expiration"
 msgstr "Перевірка закінчення"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:32
-#, fuzzy, c-format
+#, c-format
 msgid "Check out and check in items"
-msgstr "Повернуті примірники"
+msgstr "Видача та повернення примірників"
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:46
 #, c-format
@@ -3228,9 +3246,9 @@ msgid ""
 msgstr "Перевірте коробку поряд з елементом/s, який ви бажаєте видалити."
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:310
-#, fuzzy, c-format
+#, c-format
 msgid "Check the expiration of a serial"
-msgstr "Перевірка закінчення"
+msgstr "Перевірка закінчення підписки серіального видання"
 
 #: intranet-tmpl/prog/en/modules/help/tools/batch_delete_records.tt:11
 #, c-format
@@ -4367,10 +4385,10 @@ msgstr "Дата замовлення"
 msgid "Course reserves"
 msgstr "Резервування курсів"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
+#, c-format
 msgid "Create SQL Reports"
-msgstr "Новий звіт з коду SQL"
+msgstr "Створення звітів SQL"
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:7
 #, fuzzy, c-format
@@ -4378,9 +4396,9 @@ msgid "Create a basket group"
 msgstr "змінити статус"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:320
-#, fuzzy, c-format
+#, c-format
 msgid "Create a new subscription"
-msgstr "Додати нову підписку"
+msgstr "Створення нової підписки"
 
 #: intranet-tmpl/prog/en/modules/help/admin/oai_sets.tt:7
 #, fuzzy, c-format
@@ -4403,10 +4421,11 @@ msgid "Create manual invoice"
 msgstr "Виставити ручний рахунок"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:437
-#, fuzzy, c-format
+#, c-format
 msgid "Create printable labels and barcodes from catalog and patron data"
 msgstr ""
-"Створення придатних для видруку наклейок та штрих-кодів з даних каталогу"
+"Створення друкованих наклейок і штрих-кодів з каталогу та з даними про "
+"користувачів"
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:7
 #, fuzzy, c-format
@@ -4519,7 +4538,7 @@ msgstr "Значення за умовчанням "
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:377
 #, c-format
 msgid "Define days when the library is closed"
-msgstr "Зазначення днів коли бібліотека закрита"
+msgstr "Визначення днів, коли бібліотека закрита"
 
 #: intranet-tmpl/prog/en/modules/help/admin/oai_sets.tt:24
 #, c-format
@@ -4527,9 +4546,9 @@ msgid "Define mappings"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:395
-#, fuzzy, c-format
+#, c-format
 msgid "Define notices"
-msgstr "Звіти"
+msgstr "Визначення сповіщень"
 
 #: intranet-tmpl/prog/en/modules/help/labels/spinelabel-home.tt:8
 #, c-format
@@ -4605,6 +4624,11 @@ msgstr ""
 msgid "Delete Quote(s)"
 msgstr "Повідомлена ознака"
 
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:504
+#, fuzzy, c-format
+msgid "Delete SQL Reports"
+msgstr "Створення звітів SQL"
+
 #: intranet-tmpl/prog/en/modules/help/admin/oai_sets.tt:20
 #, fuzzy, c-format
 msgid "Delete a set"
@@ -4616,9 +4640,9 @@ msgid "Delete all items at once"
 msgstr "Вилучити список"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:325
-#, fuzzy, c-format
+#, c-format
 msgid "Delete an existing subscription"
-msgstr "Вилучити підписку"
+msgstr "Вилучення наявної підписки"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:371
 #, fuzzy, c-format
@@ -4629,7 +4653,7 @@ msgstr ""
 "Вилучення старих позичальників та анонімізація історії обігу (витирання "
 "історії читання позичальника)"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:523
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:529
 #, fuzzy, c-format
 msgid "Delete public lists"
 msgstr "Вилучити список"
@@ -4803,6 +4827,11 @@ msgstr ""
 msgid "Duration: 7 days"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:3
+#, c-format
+msgid "EDIFACT messages"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:21
 #, c-format
 msgid ""
@@ -4905,17 +4934,21 @@ msgid ""
 "small down arrow to the right of the word 'Preference' in the header column"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:13
+#, c-format
+msgid "Each vendor will have one account."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:106
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Authorities"
-msgstr "Авторитетні джерела"
+msgstr "Редагування авторитетних джерел"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:74
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Catalog (Modify bibliographic/holdings data)"
 msgstr ""
-"Забезпечує каталогізацію привілеїв  як наприклад зміна і додавання "
-"бібліографічним і дані проведень)"
+"Редагування каталогу (зміна бібліографічних та локальних/примірникових даних)"
 
 #: intranet-tmpl/prog/en/modules/help/reports/guided_reports.tt:89
 #, fuzzy, c-format
@@ -4933,16 +4966,15 @@ msgid "Edit Framework Subfields"
 msgstr "Перевірка бібліографічної МАРК-структури"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:330
-#, fuzzy, c-format
+#, c-format
 msgid "Edit an existing subscription"
-msgstr "Вилучити підписку"
+msgstr "Редагування наявної підписки"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:212
-#, fuzzy, c-format
+#, c-format
 msgid "Edit catalog (Modify bibliographic/holdings data)"
 msgstr ""
-"Забезпечує каталогізацію привілеїв  як наприклад зміна і додавання "
-"бібліографічним і дані проведень)"
+"Редагування каталогу (зміна бібліографічних та локальних/примірникових даних)"
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:13
 #: intranet-tmpl/prog/en/modules/help/tools/quotes-upload.tt:22
@@ -4954,7 +4986,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:218
 #, c-format
 msgid "Edit items"
-msgstr "Редагувати примірники"
+msgstr "Редагування примірників"
 
 #: intranet-tmpl/prog/en/modules/help/tools/quotes.tt:10
 #, fuzzy, c-format
@@ -5287,6 +5319,11 @@ msgstr ""
 msgid "Enter your tax rate if your library is charged taxes on orders."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:11
+#, c-format
+msgid "Enter your vendor information in the form that appears."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/tags/review.tt:19
 #, c-format
 msgid ""
@@ -5376,10 +5413,10 @@ msgstr "зразки, моделі "
 msgid "Examples: "
 msgstr "зразки, моделі "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:510
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
+#, c-format
 msgid "Execute SQL Reports"
-msgstr "Редагуємо звіт з коду SQL"
+msgstr "Виконання звітів SQL"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:150
 #, fuzzy, c-format
@@ -6039,6 +6076,13 @@ msgid ""
 "the 'New purchase suggestion' button at the top."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:5
+#, c-format
+msgid ""
+"From here you can set up the information needed to connect to your "
+"acquisitions vendors"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/files.tt:7
 #: intranet-tmpl/prog/en/modules/help/members/moremember.tt:61
 #, fuzzy, c-format
@@ -6520,7 +6564,7 @@ msgstr "Підрозділення привілеїв з обігу"
 msgid "Granular Holds Permissions"
 msgstr "Підрозділення привілеїв з резервувань"
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:516
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:522
 #, fuzzy, c-format
 msgid "Granular Lists Permissions"
 msgstr "Підрозділення привілеїв зі звітів"
@@ -7326,7 +7370,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/acqui/basket.tt:84
 #, c-format
-msgid "If you are charged sales tax, choose that from the gstrate field"
+msgid "If you are charged sales tax, choose that from the tax_rate field"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/circ/returns.tt:33
@@ -9153,6 +9197,12 @@ msgstr "У формі, що з’явиться,  необхідно ввест�
 msgid "In the form that appears you want to enter the basics about your fund."
 msgstr "У формі, що з’явиться,  необхідно ввести основне про Ваші кошти."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:9
+#, fuzzy, c-format
+msgid ""
+"In the form that appears, enter the information provided by your vendor."
+msgstr "У формі, що з’явиться,  необхідно ввести основне про Ваші кошти."
+
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:41
 #, c-format
 msgid ""
@@ -9806,6 +9856,11 @@ msgid ""
 "Chapter 13 of AACR2."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:3
+#, c-format
+msgid "Library EANs"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:74
 #, fuzzy, c-format
 msgid "Library Property Groups"
@@ -10035,7 +10090,7 @@ msgstr "Керування зображеннями"
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:47
 #, c-format
 msgid "Manage Koha system settings (Administration panel)"
-msgstr ""
+msgstr "Керування системними налаштуваннями Koha (панель управління)"
 
 #: intranet-tmpl/prog/en/modules/help/labels/label-manage.tt:3
 #, fuzzy, c-format
@@ -10048,9 +10103,9 @@ msgid "Manage Staged MARC Records"
 msgstr "Керування заготовленими МАРК-записами"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:253
-#, fuzzy, c-format
+#, c-format
 msgid "Manage all budgets"
-msgstr "Керування пропозиціями"
+msgstr "Керування усіма кошторисами"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:278
 #, fuzzy, c-format
@@ -10063,14 +10118,14 @@ msgid "Manage budget planning"
 msgstr "Планування кошторису"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:248
-#, fuzzy, c-format
+#, c-format
 msgid "Manage budgets"
-msgstr "Керування пропозиціями"
+msgstr "Керування кошторисами"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:169
-#, fuzzy, c-format
+#, c-format
 msgid "Manage circulation rules"
-msgstr "Попередження при обігу примірників"
+msgstr "Керування правилами обігу"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:263
 #, c-format
@@ -10089,14 +10144,14 @@ msgid "Manage orders and baskets"
 msgstr "Керування замовленнями та кошиками замовлень"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:80
-#, fuzzy, c-format
+#, c-format
 msgid "Manage patrons fines and fees"
-msgstr "Нова партія карток відвідувачів"
+msgstr "Керування штрафами та сплатами відвідувачів"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:288
-#, fuzzy, c-format
+#, c-format
 msgid "Manage periods"
-msgstr "Управління замовленнями"
+msgstr "Керування бюджетними (кошторисними) періодами"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:348
 #, fuzzy, c-format
@@ -10104,9 +10159,9 @@ msgid "Manage routing lists"
 msgstr "Детальніше про облік"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:111
-#, fuzzy, c-format
+#, c-format
 msgid "Manage serial subscriptions"
-msgstr "Підписки серіальних видань"
+msgstr "Керування підпискою на періодичні видання"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:353
 #, c-format
@@ -10116,9 +10171,9 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:298
-#, fuzzy, c-format
+#, c-format
 msgid "Manage vendors"
-msgstr "Управління замовленнями"
+msgstr "Керування постачальниками"
 
 #: intranet-tmpl/prog/en/modules/help/admin/biblio_framework.tt:104
 #: intranet-tmpl/prog/en/modules/help/admin/marc_subfields_structure.tt:50
@@ -10222,9 +10277,9 @@ msgid "Message Subject is what will appear in the subject line of the email"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:455
-#, fuzzy, c-format
+#, c-format
 msgid "Moderate patron comments"
-msgstr "Регулювання коментарів відвідувачів."
+msgstr "Регулювання коментарів від відвідувачів"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:461
 #, c-format
@@ -10250,11 +10305,12 @@ msgstr "Редагуємо місто"
 #, c-format
 msgid "Modify budget (can't create lines, but can modify existing ones)"
 msgstr ""
+"Зміна кошторису (не можна створювати рядки, але можна змінювати існуючі)"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:188
-#, fuzzy, c-format
+#, c-format
 msgid "Modify holds priority"
-msgstr "„modify_holds_priority“"
+msgstr "Зміна пріоритету резервувань"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:97
 #, fuzzy, c-format
@@ -10603,6 +10659,11 @@ msgid ""
 "is strictly 'equal' or 'not equal' to what is defined if 'Value'. A record "
 "having 999$9 = 'XXX YYY' will not belong to a set where condition is 999$9 = "
 "'XXX'."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, c-format
+msgid "Note: Before you begin, you must set up at least one "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:41
@@ -11794,9 +11855,9 @@ msgid "Pending on-site checkouts"
 msgstr "Відвідувачі, яким ще нічого не видавалося"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:419
-#, fuzzy, c-format
+#, c-format
 msgid "Perform batch deletion of items"
-msgstr "Підтвердження вилучення of Printer <em>%s</em>"
+msgstr "Виконання пакетного вилучення примірників"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:467
 #, fuzzy, c-format
@@ -11804,12 +11865,12 @@ msgid "Perform batch deletion of records (bibliographic or authority)"
 msgstr "Підтвердження вилучення of Printer <em>%s</em>"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:425
-#, fuzzy, c-format
+#, c-format
 msgid "Perform batch modification of items"
-msgstr "Повернутися до пакетного вилучення примірників"
+msgstr "Виконання пакетної зміни примірників"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:413
-#, fuzzy, c-format
+#, c-format
 msgid "Perform inventory of your catalog"
 msgstr "Виконання інвентаризації (переобліку) Вашого каталогу"
 
@@ -11846,12 +11907,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:63
 #, c-format
 msgid "Place and modify holds for patrons"
-msgstr ""
+msgstr "Резервування книжок для відвідувачів"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:194
-#, fuzzy, c-format
+#, c-format
 msgid "Place holds for patrons"
-msgstr "Встановити резервування для:"
+msgstr "Розміщення резервувань для відвідувачів"
 
 #: intranet-tmpl/prog/en/modules/help/reserve/request.tt:5
 #, fuzzy, c-format
@@ -12117,14 +12178,14 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:144
-#, fuzzy, c-format
+#, c-format
 msgid "Remaining circulation permissions"
-msgstr "Встановлення привілеїв відвідувачів"
+msgstr "Обіг з дотриманням дозволів"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:175
-#, fuzzy, c-format
+#, c-format
 msgid "Remaining system parameters permissions"
-msgstr "Підрозділення привілеїв з встановлення параметрів"
+msgstr "Системні налаштування з дотриманням дозволів"
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:87
 #, c-format
@@ -12139,9 +12200,9 @@ msgid "Renew"
 msgstr "Продовжити"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:342
-#, fuzzy, c-format
+#, c-format
 msgid "Renew a subscription"
-msgstr "Додати нову підписку"
+msgstr "Оновлення підписки"
 
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:14
 #, c-format
@@ -12208,7 +12269,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:38
 #, c-format
 msgid "Required for staff login."
-msgstr ""
+msgstr "Потрібно для входу працівників бібліотеки."
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:157
 #, fuzzy, c-format
@@ -12600,6 +12661,16 @@ msgstr "Зконтактуйте з Вашим системним адмініс
 msgid "See the full documentation for Custom Reports in the "
 msgstr "Зконтактуйте з Вашим системним адміністратором "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
+#, fuzzy, c-format
+msgid "See the full documentation for EDI accounts in the "
+msgstr "Зконтактуйте з Вашим системним адміністратором "
+
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
+#, fuzzy, c-format
+msgid "See the full documentation for EDIFACT messages in the "
+msgstr "Зконтактуйте з Вашим системним адміністратором "
+
 #: intranet-tmpl/prog/en/modules/help/members/member-password.tt:14
 #, fuzzy, c-format
 msgid "See the full documentation for Editing Patrons in the "
@@ -12727,6 +12798,11 @@ msgstr "Зконтактуйте з Вашим системним адмініс
 msgid "See the full documentation for Libraries &amp; Groups in the "
 msgstr "Зконтактуйте з Вашим системним адміністратором "
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
+#, fuzzy, c-format
+msgid "See the full documentation for Library EANs in the "
+msgstr "Зконтактуйте з Вашим системним адміністратором "
+
 #: intranet-tmpl/prog/en/modules/help/admin/branch_transfer_limits.tt:19
 #, fuzzy, c-format
 msgid "See the full documentation for Library Transfer Limits in the "
@@ -12847,7 +12923,7 @@ msgstr "Зконтактуйте з Вашим системним адмініс
 msgid "See the full documentation for Patron Notices in the "
 msgstr "Зконтактуйте з Вашим системним адміністратором "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #, c-format
 msgid "See the full documentation for Patron Permissions in the "
 msgstr "Див. повну документацію з привілеїв для відвідувачів у "
@@ -13273,9 +13349,9 @@ msgid "Serials Claims"
 msgstr "Серіальні видання претензії"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:336
-#, fuzzy, c-format
+#, c-format
 msgid "Serials receiving"
-msgstr "Отримання серіального видання"
+msgstr "Отримання серіальних видань"
 
 #: intranet-tmpl/prog/en/modules/help/reports/serials_stats.tt:3
 #, fuzzy, c-format
@@ -13295,7 +13371,7 @@ msgstr "Вибір бібліотеки"
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:91
 #, c-format
 msgid "Set library management parameters (deprecated) "
-msgstr ""
+msgstr "Встановлення параметрів керування бібліотекою (застаріло) "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:389
 #, c-format
@@ -13303,9 +13379,9 @@ msgid "Set notice/status triggers for overdue items"
 msgstr "Встановлення вмикачів сповіщень/станів для прострочених примірників"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid "Set user permissions"
-msgstr "Встановити привілеї"
+msgstr "Встановлення привілеїв користувача"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:9
 #, c-format
@@ -13517,9 +13593,9 @@ msgstr ""
 "бібліотекаря "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:479
-#, fuzzy, c-format
+#, c-format
 msgid "Stage MARC records into the reservoir"
-msgstr "Заготовлюємо МАРК-записи у сховище."
+msgstr "Заготівля МАРК-записів у сховище"
 
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:72
 #, fuzzy, c-format
@@ -14378,12 +14454,17 @@ msgid ""
 "Circulation page"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
 #, c-format
 msgid "The ability to create and edit but not run SQL reports"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:511
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:505
+#, c-format
+msgid "The ability to delete but not run SQL reports"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:517
 #, c-format
 msgid "The ability to run but not create or edit SQL reports"
 msgstr ""
@@ -16397,12 +16478,22 @@ msgid ""
 "To add a vendor, click the 'New Vendor' button on the Acquisitions page."
 msgstr "Щоб додати кошторис натисніть кнопку „Новий кошторис“."
 
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:9
+#, c-format
+msgid "To add account information, click the 'New account' button."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:9
 #, c-format
 msgid ""
 "To add additional values to the manual invoice type pull down menu, add them "
 "to the MANUAL_INV Authorized Value"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:7
+#, fuzzy, c-format
+msgid "To add an EAN, click the 'New EAN' button."
+msgstr "Щоб додати кошторис натисніть кнопку „Новий кошторис“."
 
 #: intranet-tmpl/prog/en/modules/help/tools/marc_modification_templates.tt:57
 #, c-format
@@ -17247,7 +17338,7 @@ msgid "Upload cover images"
 msgstr "Вивантаження зображень"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:485
-#, fuzzy, c-format
+#, c-format
 msgid "Upload local cover images"
 msgstr "Вивантаження локальних зображень обкладинок"
 
@@ -17519,6 +17610,16 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Vendor Contracts"
 msgstr "Пошук договорів"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:3
+#, fuzzy, c-format
+msgid "Vendor EDI accounts"
+msgstr "Пошук договорів"
+
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:7
+#, fuzzy, c-format
+msgid "Vendor in Acquisitions"
+msgstr "Надходження"
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:13
 #, fuzzy, c-format
@@ -18091,7 +18192,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:383
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
-msgstr "Написання новин для інтерфейсів бібліотекаря та ЕК"
+msgstr "Написання новин для електронного каталогу та інтерфейсу бібліотекарів"
 
 #: intranet-tmpl/prog/en/modules/help/members/pay.tt:47
 #: intranet-tmpl/prog/en/modules/help/members/paycollect.tt:47
@@ -19169,7 +19270,7 @@ msgstr "„contracts_manage“ "
 msgid "cql.anywhere"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
 #, c-format
 msgid "create_reports "
 msgstr "„create_reports“ "
@@ -19353,10 +19454,15 @@ msgstr "„edit_items“ "
 msgid "delete_anonymize_patrons "
 msgstr "„delete_anonymize_patrons“ "
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:521
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:527
 #, fuzzy, c-format
 msgid "delete_public_lists "
 msgstr "„delete_subscription“ "
+
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:502
+#, fuzzy, c-format
+msgid "delete_reports "
+msgstr "„execute_reports“ "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:323
 #, c-format
@@ -19431,7 +19537,7 @@ msgid ""
 "importing."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:508
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:514
 #, c-format
 msgid "execute_reports "
 msgstr "„execute_reports“ "
@@ -19768,10 +19874,12 @@ msgstr "„management“ "
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:22
 #: intranet-tmpl/prog/en/modules/help/admin/z3950servers.tt:102
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:49
+#: intranet-tmpl/prog/en/modules/help/admin/edi_accounts.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:92
 #: intranet-tmpl/prog/en/modules/help/admin/patron-attr-types.tt:74
 #: intranet-tmpl/prog/en/modules/help/admin/marctagstructure.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/aqbudgetperiods.tt:86
+#: intranet-tmpl/prog/en/modules/help/admin/edi_ean_accounts.tt:11
 #: intranet-tmpl/prog/en/modules/help/admin/fieldmapping.tt:23
 #: intranet-tmpl/prog/en/modules/help/admin/columns_settings.tt:15
 #: intranet-tmpl/prog/en/modules/help/admin/authtypes.tt:9
@@ -19866,7 +19974,7 @@ msgstr "„management“ "
 #: intranet-tmpl/prog/en/modules/help/members/notices.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:22
 #: intranet-tmpl/prog/en/modules/help/members/maninvoice.tt:17
-#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:528
+#: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:534
 #: intranet-tmpl/prog/en/modules/help/members/routing-lists.tt:9
 #: intranet-tmpl/prog/en/modules/help/members/member.tt:63
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:89
@@ -19892,6 +20000,7 @@ msgstr "„management“ "
 #: intranet-tmpl/prog/en/modules/help/acqui/basketgroup.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/newordersubscription.tt:15
 #: intranet-tmpl/prog/en/modules/help/acqui/acqui-home.tt:13
+#: intranet-tmpl/prog/en/modules/help/acqui/edifactmsgs.tt:7
 #: intranet-tmpl/prog/en/modules/help/acqui/parcels.tt:21
 #: intranet-tmpl/prog/en/modules/help/acqui/invoices.tt:11
 #: intranet-tmpl/prog/en/modules/help/acqui/booksellers.tt:17
