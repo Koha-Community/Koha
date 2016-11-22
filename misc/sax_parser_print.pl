@@ -12,4 +12,4 @@ You have:
     $parser\n";
 print "Looks " .
     ($parser =~ /^XML::LibXML::SAX::Parser=HASH/ ?
-    "good.\n" : "bad, check INSTALL.* documentation.\n");
+    "good.\n" : "bad, check the Koha wiki documentation at https://wiki.koha-community.org.\n");
