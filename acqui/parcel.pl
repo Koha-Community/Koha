@@ -124,17 +124,15 @@ my $subtotal_for_funds;
 for my $order ( @orders ) {
     $order->{'unitprice'} += 0;
 
-    if ( $bookseller->{listincgst} and not $bookseller->{invoiceincgst} ) {
+    if ( $bookseller->{invoiceincgst} ) {
+        $order->{ecost}     = $order->{ecost_tax_included};
+        $order->{unitprice} = $order->{unitprice_tax_included};
+    }
+    else {
         $order->{ecost}     = $order->{ecost_tax_excluded};
         $order->{unitprice} = $order->{unitprice_tax_excluded};
     }
-    elsif ( not $bookseller->{listinct} and $bookseller->{invoiceincgst} ) {
-        $order->{ecost}     = $order->{ecost_tax_included};
-        $order->{unitprice} = $order->{unitprice_tax_included};
-    } else {
-        $order->{ecost} = $order->{ecost_tax_excluded};
-        $order->{unitprice} = $order->{unitprice_tax_excluded};
-    }
+
     $order->{total} = $order->{unitprice} * $order->{quantity};
 
     my %line = %{ $order };
@@ -224,9 +222,7 @@ unless( defined $invoice->{closedate} ) {
     for (my $i = 0 ; $i < $countpendings ; $i++) {
         my $order = $pendingorders->[$i];
 
-        if ( $bookseller->{listincgst} and not $bookseller->{invoiceincgst} ) {
-            $order->{ecost} = $order->{ecost_tax_excluded};
-        } elsif ( not $bookseller->{listinct} and $bookseller->{invoiceincgst} ) {
+        if ( $bookseller->{invoiceincgst} ) {
             $order->{ecost} = $order->{ecost_tax_included};
         } else {
             $order->{ecost} = $order->{ecost_tax_excluded};
