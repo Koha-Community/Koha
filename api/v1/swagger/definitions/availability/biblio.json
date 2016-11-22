@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "biblionumber": {
+      "type": "integer",
+      "description": "Internal biblio identifier"
+    },
+    "availability": {
+      "$ref": "../availability.json"
+    },
+    "item_availabilities": {
+      "description": "Availability of each item in this biblio",
+      "type": ["array", "null"],
+      "items": {
+        "$ref": "../availability/item.json"
+      }
+    }
+  }
+}

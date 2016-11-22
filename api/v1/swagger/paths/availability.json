@@ -1,0 +1,203 @@
+{
+  "/availability/biblio/hold": {
+    "get": {
+      "operationId": "holdBiblioAvailability",
+      "tags": ["items", "availability"],
+      "parameters": [
+        { "$ref": "../parameters.json#/biblionumbersQueryParam" },
+        { "$ref": "../parameters.json#/borrowernumberQueryParam" },
+        { "$ref": "../parameters.json#/branchcodeQueryParam"}
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Hold availability information for items of biblio.",
+          "schema": {
+            "type": "array",
+            "items": { "$ref": "../definitions.json#/availability~1biblio" }
+          }
+        },
+        "400": {
+          "description": "Missing or invalid parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/availability/biblio/search": {
+    "get": {
+      "operationId": "searchBiblioAvailability",
+      "tags": ["items", "availability"],
+      "parameters": [
+        { "$ref": "../parameters.json#/biblionumbersQueryParam" }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Availability information in search context for items of biblio.",
+          "schema": {
+            "type": "array",
+            "items": { "$ref": "../definitions.json#/availability~1biblio" }
+          }
+        },
+        "400": {
+          "description": "Missing or invalid parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/availability/item/checkout": {
+    "get": {
+      "operationId": "checkoutItemAvailability",
+      "tags": ["items", "availability"],
+      "parameters": [
+        { "$ref": "../parameters.json#/itemnumbersQueryParam" },
+        { "$ref": "../parameters.json#/borrowernumberQueryParam" }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Checkout availability information for specific item(s).",
+          "schema": {
+            "type": "array",
+            "items": { "$ref": "../definitions.json#/availability~1item" }
+          }
+        },
+        "400": {
+          "description": "Missing or invalid parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/availability/item/hold": {
+    "get": {
+      "operationId": "holdItemAvailability",
+      "tags": ["items", "availability"],
+      "parameters": [
+        { "$ref": "../parameters.json#/itemnumbersQueryParam" },
+        { "$ref": "../parameters.json#/borrowernumberQueryParam" },
+        { "$ref": "../parameters.json#/branchcodeQueryParam"}
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Hold availability information for specific item(s).",
+          "schema": {
+            "type": "array",
+            "items": { "$ref": "../definitions.json#/availability~1item" }
+          }
+        },
+        "400": {
+          "description": "Missing or invalid parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/availability/item/search": {
+    "get": {
+      "operationId": "searchItemAvailability",
+      "tags": ["items", "availability"],
+      "parameters": [
+        { "$ref": "../parameters.json#/itemnumbersQueryParam" }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Availability information in search context for specific item(s).",
+          "schema": {
+            "type": "array",
+            "items": { "$ref": "../definitions.json#/availability~1item" }
+          }
+        },
+        "400": {
+          "description": "Missing or invalid parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}

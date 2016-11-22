@@ -1,0 +1,404 @@
+{
+  "description": "An object that contains either none or multiple reasons defined in this object's specification.",
+  "type": "object",
+  "properties": {
+    "Biblio::CheckedOut": {
+      "description": "Patron has already checked out an item from this biblio. A confirmation may be required.",
+      "type": "object",
+      "properties": {
+        "biblionumber": {
+          "$ref": "../../x-primitives.json#/biblionumber"
+        }
+      }
+    },
+    "Biblio::NoAvailableItems": {
+      "description": "This biblio has no available items.",
+      "type": "object",
+      "properties": {}
+    },
+    "Checkout::DueDateBeforeNow": {
+      "description": "Given due date is in the past.",
+      "type": "object",
+      "properties": {
+        "duedate": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "now": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        }
+      }
+    },
+    "Checkout::Fee": {
+      "description": "Checkout fee will apply.",
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": ["number", "null"],
+          "description": "Amount of rental charge."
+        }
+      }
+    },
+    "Checkout::InvalidDueDate": {
+      "description": "Given due date is invalid.",
+      "type": "object",
+      "properties": {
+        "duedate": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "Checkout::MaximumCheckoutsReached": {
+      "description": "Maximum number of checkouts have been reached.",
+      "type": "object",
+      "properties": {
+        "max_checkouts_allowed": {
+          "type": ["integer", "null"],
+          "description": "Maximum number of checkouts allowed."
+        },
+        "current_checkout_count": {
+          "type": ["integer", "null"],
+          "description": "Current checkout count for patron."
+        }
+      }
+    },
+    "Checkout::MaximumOnsiteCheckoutsReached": {
+      "description": "Maximum number of on-site checkouts have been reached.",
+      "type": "object",
+      "properties": {
+        "max_onsite_checkouts": {
+          "type": ["integer", "null"],
+          "description": "Maximum number of onsite checkouts allowed."
+        },
+        "current_onsite_checkouts": {
+          "type": ["integer", "null"],
+          "description": "Current onsite checkout count for patron."
+        }
+      }
+    },
+    "Checkout::NoMoreRenewals": {
+      "description": "No more renewals allowed.",
+      "type": "object",
+      "properties": {}
+    },
+    "Checkout::NoMoreRenewalForOnsiteCheckouts": {
+      "description": "No more on-site renewals allowed.",
+      "type": "object",
+      "properties": {}
+    },
+    "Checkout::OnsiteCheckoutsDisabled": {
+      "description": "On-site checkouts are disabled.",
+      "type": "object",
+      "properties": {}
+    },
+    "Checkout::Renew": {
+      "description": "Checkout will be renewed.",
+      "type": "object",
+      "properties": {}
+    },
+    "Checkout::ZeroCheckoutsAllowed": {
+      "description": "Allowed number of checkouts is zero.",
+      "type": "object",
+      "properties": {}
+    },
+    "Hold::ItemLevelHoldNotAllowed": {
+      "description": "Item-level holds are not allowed.",
+      "type": "object",
+      "properties": {}
+    },
+    "Hold::MaximumHoldsReached": {
+      "description": "Maximum number of holds have been reached.",
+      "type": "object",
+      "properties": {
+        "max_holds_allowed": {
+          "type": ["integer", "null"]
+        },
+        "current_hold_count": {
+          "type": ["integer", "null"]
+        }
+      }
+    },
+    "Hold::MaximumHoldsForThisRecordReached": {
+      "description": "Maximum number of holds for this record have been reached.",
+      "type": "object",
+      "properties": {
+        "max_holds_allowed": {
+          "type": ["integer", "null"]
+        },
+        "current_hold_count": {
+          "type": ["integer", "null"]
+        }
+      }
+    },
+    "Hold::NotAllowedByLibrary": {
+      "description": "Library does not allow holds to be placed.",
+      "type": "object",
+      "properties": {}
+    },
+    "Hold::NotAllowedFromOtherLibraries": {
+      "description": "Holds are not allowed from other libraries.",
+      "type": "object",
+      "properties": {}
+    },
+    "Hold::NotAllowedInOPAC": {
+      "description": "Patron cannot place a hold by themselves in OPAC.",
+      "type": "object",
+      "properties": {}
+    },
+    "Hold::OnShelfNotAllowed": {
+      "description": "On-shelf holds are not allowed.",
+      "type": "object",
+      "properties": {}
+    },
+    "Hold::ZeroHoldsAllowed": {
+      "description": "Allowed number of holds is zero.",
+      "type": "object",
+      "properties": {}
+    },
+    "Item::AlreadyHeldForThisPatron": {
+      "description": "Item is held for this patron.",
+      "type": "object",
+      "properties": {}
+    },
+    "Item::CannotBeTransferred": {
+      "description": "Item cannot be transferred.",
+      "type": "object",
+      "properties": {
+        "from_library": {
+          "$ref": "../../x-primitives.json#/branchcode"
+        },
+        "to_library": {
+          "$ref": "../../x-primitives.json#/branchcode"
+        }
+      }
+    },
+    "Item::CheckedOut": {
+      "description": "Item is checked out to a patron.",
+      "type": "object",
+      "properties": {
+        "borrowernumber": {
+          "type": ["integer", "null"]
+        },
+        "date_due": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        }
+      }
+    },
+    "Item::Damaged": {
+      "description": "Item is marked as damaged",
+      "type": "object",
+      "properties": {}
+    },
+    "Item::FromAnotherLibrary": {
+      "description": "Libraries are independent and this item is from another library than current patron.",
+      "type": "object",
+      "properties": {
+        "itemhomebranch": {
+          "$ref": "../../x-primitives.json#/branchcode"
+        }
+      }
+    },
+    "Item::Held": {
+      "description": "Someone has placed a hold on this item.",
+      "type": "object",
+      "properties": {
+        "borrowernumber": {
+          "$ref": "../../x-primitives.json#/borrowernumber"
+        },
+        "status": {
+          "type": ["string", "null"]
+        },
+        "hold_queue_length": {
+          "type": ["integer", "null"]
+        }
+      }
+    },
+    "Item::HighHolds": {
+      "description": "Loan period shortened for high held item.",
+      "type": "object",
+      "properties": {
+        "num_holds": {
+          "type": ["integer", "null"]
+        },
+        "duration": {
+          "type": ["string", "null"]
+        },
+        "returndate": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        }
+      }
+    },
+    "Item::Lost": {
+      "description": "Item is marked as lost.",
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "Status description (e.g. Missing)",
+          "type": ["string", "null"]
+        },
+        "status": {
+          "description": "Item's lost status number",
+          "type": ["integer", "null"]
+        }
+      }
+    },
+    "Item::NotForLoan": {
+      "description": "Item is not for loan.",
+      "type": "object",
+      "properties": {
+        "status": {
+          "description": "Item's notforloan status number",
+          "type": ["integer", "null"]
+        },
+        "code": {
+          "description": "Status description (e.g. Ordered)",
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "Item::Restricted": {
+      "description": "Item is restricted.",
+      "type": "object",
+      "properties": {}
+    },
+    "Item::Transfer": {
+      "description": "Item is being transferred.",
+      "type": "object",
+      "properties": {
+        "from_library": {
+          "$ref": "../../x-primitives.json#/branchcode"
+        },
+        "to_library": {
+          "$ref": "../../x-primitives.json#/branchcode"
+        },
+        "datesent": {
+          "description": "Start date of transfer",
+          "type": ["string", "null"],
+          "format": "date-time"
+        }
+      }
+    },
+    "Item::UnknownBarcode": {
+      "description": "This item has either an unknown barcode or no barcode at all.",
+      "type": "object",
+      "properties": {
+        "barcode": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "Item::Withdrawn": {
+      "description": "Item is withdrawn.",
+      "type": "object",
+      "properties": {}
+    },
+    "ItemType::NotForLoan": {
+      "description": "Item type is not for loan.",
+      "type": "object",
+      "properties": {
+        "status": {
+          "description": "Item's notforloan status number",
+          "type": ["integer", "null"]
+        },
+        "code": {
+          "description": "Status description (e.g. Ordered)",
+          "type": ["string", "null"]
+        },
+        "itemtype": {
+          "description": "Item type",
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "Patron::AgeRestricted": {
+      "description": "An age restriction applies for this patron.",
+      "type": "object",
+      "properties": {
+        "age_restriction": {
+          "type": ["string", "null"],
+          "description": "Age restriction, e.g. PEGI 16"
+        }
+      }
+    },
+    "Patron::CardExpired": {
+      "description": "Patron's card has been expired.",
+      "type": "object",
+      "properties": {
+        "expiration_date": {
+          "type": ["string", "null"],
+          "format": "date"
+        }
+      }
+    },
+    "Patron::CardLost": {
+      "description": "Patron's card has been marked as lost.",
+      "type": "object",
+      "properties": {}
+    },
+    "Patron::Debarred": {
+      "description": "Patron is debarred.",
+      "type": "object",
+      "properties": {
+        "expiration_date": {
+          "type": ["string", "null"],
+          "format": "date"
+        },
+        "comment": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "Patron::DebarredOverdue": {
+      "description": "Patron has overdues and is debarred.",
+      "type": "object",
+      "properties": {
+        "number_of_overdues": {
+          "type": ["integer", "null"]
+        }
+      }
+    },
+    "Patron::Debt": {
+      "description": "Patron's debts exceed maximum allowed amount.",
+      "type": "object",
+      "properties": {
+        "max_outstanding":{
+          "type": ["number", "null"]
+        },
+        "current_outstanding": {
+          "type": ["number", "null"]
+        }
+      }
+    },
+    "Patron::DebtGuarantees": {
+      "description": "Patron's guarantees' debts exceed maximum allowed amount.",
+      "type": "object",
+      "properties": {
+        "max_outstanding":{
+          "type": ["number", "null"]
+        },
+        "current_outstanding": {
+          "type": ["number", "null"]
+        }
+      }
+    },
+    "Patron::FromAnotherLibrary": {
+      "description": "Libraries are independent and patron is from another library than current logged in user.",
+      "type": "object",
+      "properties": {
+        "patron_branch": {
+          "$ref": "../../x-primitives.json#/branchcode"
+        },
+        "current_branch": {
+          "$ref": "../../x-primitives.json#/branchcode"
+        }
+      }
+    },
+    "Patron::GoneNoAddress": {
+      "type": "object",
+      "properties": {}
+    }
+  }
+}

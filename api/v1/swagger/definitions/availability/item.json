@@ -1,0 +1,52 @@
+{
+  "type": "object",
+  "properties": {
+    "availability": {
+      "$ref": "../availability.json"
+    },
+    "barcode": {
+      "type": ["string", "null"],
+      "description": "item barcode"
+    },
+    "biblioitemnumber": {
+      "type": "integer",
+      "description": "internally assigned biblio item identifier"
+    },
+    "biblionumber": {
+      "type": "integer",
+      "description": "internally assigned biblio identifier"
+    },
+    "enumchron": {
+      "type": ["string", "null"],
+      "description": "serial enumeration/chronology for the item"
+    },
+    "holdQueueLength": {
+      "type": ["integer", "null"],
+      "description": "number of holdings placed on title/item"
+    },
+    "holdingbranch": {
+      "type": ["string", "null"],
+      "description": "library that is currently in possession item"
+    },
+    "homebranch": {
+      "type": ["string", "null"],
+      "description": "library that owns this item"
+    },
+    "itemcallnumber": {
+      "type": ["string", "null"],
+      "description": "call number for this item"
+    },
+    "itemnotes": {
+      "type": ["string", "null"],
+      "description": "public notes on this item"
+    },
+    "itemnumber": {
+      "type": "integer",
+      "description": "internally assigned item identifier"
+    },
+    "location": {
+      "type": ["string", "null"],
+      "description": "authorized value for the shelving location for this item"
+    }
+  }
+}

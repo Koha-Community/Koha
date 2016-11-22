@@ -5,5 +5,15 @@
     "description": "Internal item identifier",
     "required": true,
     "type": "integer"
+  },
+  "itemnumbersQueryParam": {
+    "name": "itemnumber",
+    "in": "query",
+    "description": "Internal items identifier",
+    "type": "array",
+    "items": {
+      "type": "integer"
+    },
+    "collectionFormat": "ssv"
   }
 }
