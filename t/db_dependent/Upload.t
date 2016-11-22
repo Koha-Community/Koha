@@ -15,7 +15,6 @@ use Koha::UploadedFiles;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-my $dbh = C4::Context->dbh;
 
 our $current_upload = 0;
 our $uploads = [
@@ -37,7 +36,7 @@ our $uploads = [
         { name => 'file4', cat => undef, size => 5000 }, # temp duplicate
     ],
     [
-        { name => 'file5', cat => undef, size => 7000 }, # temp duplicate
+        { name => 'file5', cat => undef, size => 7000 },
     ],
 ];
 
@@ -51,11 +50,11 @@ $cgimod->mock( 'new' => \&newCGI );
 
 # Start testing
 subtest 'Test01' => sub {
-    plan tests => 9;
+    plan tests => 11;
     test01();
 };
 subtest 'Test02' => sub {
-    plan tests => 4;
+    plan tests => 5;
     test02();
 };
 subtest 'Test03' => sub {
@@ -71,7 +70,7 @@ subtest 'Test05' => sub {
     test05();
 };
 subtest 'Test06' => sub {
-    plan tests => 2;
+    plan tests => 3;
     test06();
 };
 subtest 'Test07' => sub {
@@ -86,7 +85,8 @@ $schema->storage->txn_rollback;
 
 sub test01 {
     # Delete existing records (for later tests)
-    $dbh->do( "DELETE FROM uploaded_files" );
+    # Passing keep_file suppresses warnings
+    Koha::UploadedFiles->new->delete({ keep_file => 1 });
 
     # Check mocked directories
     is( Koha::UploadedFile->permanent_directory, $tempdir,
@@ -101,16 +101,19 @@ sub test01 {
     my $res= $upl->result;
     is( $res =~ /^\d+,\d+$/, 1, 'Upload 1 includes two files' );
     is( $upl->count, 2, 'Count returns 2 also' );
-    foreach my $r ( $upl->get({ id => $res }) ) {
-        if( $r->{name} eq 'file1' ) {
-            is( $r->{uploadcategorycode}, 'A', 'Check category A' );
-            is( $r->{filesize}, 6000, 'Check size of file1' );
-        } elsif( $r->{name} eq 'file2' ) {
-            is( $r->{filesize}, 8000, 'Check size of file2' );
-            is( $r->{public}, undef, 'Check public undefined' );
-        }
-    }
     is( $upl->err, undef, 'No errors reported' );
+
+    my $rs = Koha::UploadedFiles->search({
+        id => [ split ',', $res ]
+    }, { order_by => { -asc => 'filename' }});
+    my $rec = $rs->next;
+    is( $rec->filename, 'file1', 'Check file name' );
+    is( $rec->uploadcategorycode, 'A', 'Check category A' );
+    is( $rec->filesize, 6000, 'Check size of file1' );
+    $rec = $rs->next;
+    is( $rec->filename, 'file2', 'Check file name 2' );
+    is( $rec->filesize, 8000, 'Check size of file2' );
+    is( $rec->public, undef, 'Check public undefined' );
 }
 
 sub test02 {
@@ -121,18 +124,24 @@ sub test02 {
     my $cgi= $upl->cgi;
     is( $upl->count, 1, 'Upload 2 includes one file' );
     my $res= $upl->result;
-    my $r = $upl->get({ id => $res, filehandle => 1 });
-    is( $r->{uploadcategorycode}, 'B', 'Check category B' );
-    is( $r->{public}, 1, 'Check public == 1' );
-    is( ref($r->{fh}) eq 'IO::File' && $r->{fh}->opened, 1, 'Get returns a file handle' );
+    my $rec = Koha::UploadedFiles->find( $res );
+    is( $rec->uploadcategorycode, 'B', 'Check category B' );
+    is( $rec->public, 1, 'Check public == 1' );
+    my $fh = $rec->file_handle;
+    is( ref($fh) eq 'IO::File' && $fh->opened, 1, 'Get returns a file handle' );
+
+    my $orgname = $rec->filename;
+    $rec->filename( 'doesprobablynotexist' )->store;
+    is( $rec->file_handle, undef, 'Sabotage with file handle' );
+    $rec->filename( $orgname )->store;
 }
 
 sub test03 {
     my $upl = Koha::Upload->new({ tmp => 1 }); #temporary
     my $cgi= $upl->cgi;
     is( $upl->count, 1, 'Upload 3 includes one temporary file' );
-    my $r = $upl->get({ id => $upl->result });
-    is( $r->{uploadcategorycode} =~ /_upload$/, 1, 'Check category temp file' );
+    my $rec = Koha::UploadedFiles->find( $upl->result );
+    is( $rec->uploadcategorycode =~ /_upload$/, 1, 'Check category temp file' );
 }
 
 sub test04 { # Fail on a file already there
@@ -151,34 +160,34 @@ sub test05 { # add temporary file with same name and contents, delete it
     my $cgi= $upl->cgi;
     is( $upl->count, 1, 'Upload 5 adds duplicate temporary file' );
     my $id = $upl->result;
-    my $r = $upl->get({ id => $id });
+    my $path = Koha::UploadedFiles->find( $id )->full_path;
 
     # testing delete via UploadedFiles (plural)
     my $delete = Koha::UploadedFiles->search({ id => $id })->delete;
     is( $delete, 1, 'Delete successful' );
-    isnt( -e $r->{path}, 1, 'File no longer found after delete' );
-    is( scalar $upl->get({ id => $id }), undef, 'Record also gone' );
+    isnt( -e $path, 1, 'File no longer found after delete' );
+    is( Koha::UploadedFiles->find( $id ), undef, 'Record also gone' );
 
     # testing delete via UploadedFile (singular)
     # Note that find returns a Koha::Object
     $upl = Koha::Upload->new({ tmp => 1 });
     $upl->cgi;
-    $id = $upl->result;
-    my $kohaobj = Koha::UploadedFiles->find( $id );
+    my $kohaobj = Koha::UploadedFiles->find( $upl->result );
     my $name = $kohaobj->filename;
-    my $path = $kohaobj->full_path;
+    $path = $kohaobj->full_path;
     $delete = $kohaobj->delete;
     is( $delete, $name, 'Delete successful' );
     isnt( -e $path, 1, 'File no longer found after delete' );
 }
 
-sub test06 { #some extra tests for get
-    my $upl = Koha::Upload->new({ public => 1 });
-    my @rec = $upl->get({ term => 'file' });
-    is( @rec, 1, 'Get returns only one public result (file3)' );
-    $upl = Koha::Upload->new; # public == 0
-    @rec = $upl->get({ term => 'file' });
-    is( @rec, 4, 'Get returns now four results' );
+sub test06 { #search_term with[out] private flag
+    my @recs = Koha::UploadedFiles->search_term({ term => 'file' });
+    is( @recs, 1, 'Returns only one public result' );
+    is( $recs[0]->filename, 'file3', 'Should be file3' );
+
+    is( Koha::UploadedFiles->search_term({
+        term => 'file', include_private => 1,
+    })->count, 4, 'Returns now four results' );
 }
 
 sub test07 { #simple test for httpheaders and getCategories
@@ -237,7 +246,7 @@ subtest 'Some basic CRUD testing' => sub {
     my $upload01 = $builder->build({ source => 'UploadedFile' });
     my $found = Koha::UploadedFiles->find( $upload01->{id} );
     is( $found->id, $upload01->{id}, 'Koha::Object returns id' );
-    $found->delete;
+    $found->delete({ keep_file => 1 }); #note that it does not exist
     $found = Koha::UploadedFiles->search(
         { id => $upload01->{id} },
     );

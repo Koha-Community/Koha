@@ -46,15 +46,17 @@ Delete uploaded files.
 Returns true if no errors occur.
 Delete_errors returns the number of errors when deleting files.
 
+Parameter keep_file may be used to delete records, but keep files.
+
 =cut
 
 sub delete {
-    my ( $self ) = @_;
+    my ( $self, $params ) = @_;
     # We use the individual delete on each resultset record
     my $err = 0;
     while( my $row = $self->_resultset->next ) {
         my $kohaobj = Koha::UploadedFile->_new_from_dbic( $row );
-        $err++ if !$kohaobj->delete;
+        $err++ if !$kohaobj->delete( $params );
     }
     $self->{delete_errors} = $err;
     return $err==0;
@@ -63,6 +65,29 @@ sub delete {
 sub delete_errors {
     my ( $self ) = @_;
     return $self->{delete_errors};
+}
+
+=head3 search_term
+
+Search_term allows you to pass a term to search in filename and hashvalue.
+If you do not pass include_private, only public records are returned.
+
+Is only a wrapper around Koha::Objects search. Has similar return value.
+
+=cut
+
+sub search_term {
+    my ( $self, $params ) = @_;
+    my $term = $params->{term} // '';
+    my %public = ();
+    if( !$params->{include_private} ) {
+        %public = ( public => 1 );
+    }
+    return $self->search(
+        [ { filename => { like => '%'.$term.'%' }, %public },
+          { hashvalue => { like => '%'.$params->{term}.'%' }, %public } ],
+        { order_by => { -asc => 'id' }},
+    );
 }
 
 =head2 CLASS METHODS

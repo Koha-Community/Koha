@@ -25,13 +25,17 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use Koha::Upload;
+use Koha::UploadedFiles;
 
 my $input = CGI::->new;
 my $hash = $input->param('id'); # historically called id (used in URLs?)
 
-my $upl = Koha::Upload->new({ public => 1 });
-my $rec = $upl->get({ hashvalue => $hash, filehandle => 1 });
-my $fh = $rec->{fh};
+my $rec = Koha::UploadedFiles->search({
+    hashvalue => $hash, public => 1,
+    # DO NOT REMOVE the public flag: this is an opac script !
+})->next;
+my $fh = $rec? $rec->file_handle: undef;
+
 if( !$rec || !$fh ) {
     my ( $template, $user, $cookie ) = get_template_and_user({
         query           => $input,
@@ -42,7 +46,7 @@ if( !$rec || !$fh ) {
     $template->param( hash => $hash );
     output_html_with_http_headers $input, $cookie, $template->output;
 } else {
-    my @hdr = $upl->httpheaders( $rec->{name} );
+    my @hdr = Koha::Upload->httpheaders( $rec->filename );
     print Encode::encode_utf8( $input->header( @hdr ) );
     while( <$fh> ) {
         print $_;

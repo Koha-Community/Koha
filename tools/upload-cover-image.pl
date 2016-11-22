@@ -47,7 +47,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Images;
-use Koha::Upload;
+use Koha::UploadedFiles;
 use C4::Log;
 
 my $debug = 1;
@@ -68,7 +68,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $filetype       = $input->param('filetype');
 my $biblionumber   = $input->param('biblionumber');
-my $uploadfilename = $input->param('uploadfile');
+#my $uploadfilename = $input->param('uploadfile'); # obsolete?
 my $replace        = !C4::Context->preference("AllowMultipleCovers")
   || $input->param('replace');
 my $op        = $input->param('op');
@@ -83,10 +83,11 @@ $template->{VARS}->{'biblionumber'} = $biblionumber;
 my $total = 0;
 
 if ($fileID) {
-    my $upload = Koha::Upload->new->get({ id => $fileID, filehandle => 1 });
+    my $upload = Koha::UploadedFiles->find( $fileID );
     if ( $filetype eq 'image' ) {
-        my $fh       = $upload->{fh};
+        my $fh       = $upload->file_handle;
         my $srcimage = GD::Image->new($fh);
+        $fh->close if $fh;
         if ( defined $srcimage ) {
             my $dberror = PutImage( $biblionumber, $srcimage, $replace );
             if ($dberror) {
@@ -102,7 +103,7 @@ if ($fileID) {
         undef $srcimage;
     }
     else {
-        my $filename = $upload->{path};
+        my $filename = $upload->full_path;
         my $dirname = File::Temp::tempdir( CLEANUP => 1 );
         unless ( system( "unzip", $filename, '-d', $dirname ) == 0 ) {
             $error = 'UZIPFAIL';

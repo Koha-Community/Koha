@@ -32,7 +32,7 @@ use C4::Circulation;
 use C4::Items;
 use C4::Members;
 use C4::Stats;
-use Koha::Upload;
+use Koha::UploadedFiles;
 
 use Date::Calc qw( Add_Delta_Days Date_to_Days );
 
@@ -60,9 +60,10 @@ my $sessionID = $cookies{'CGISESSID'}->value;
 our $dbh = C4::Context->dbh();
 
 if ($fileID) {
-    my $upload = Koha::Upload->new->get({ id => $fileID, filehandle => 1 });
-    my $fh = $upload->{fh};
-    my @input_lines = <$fh>;
+    my $upload = Koha::UploadedFiles->find($fileID);
+    my $fh = $upload? $upload->file_handle: undef;
+    my @input_lines = $fh? <$fh>: ();
+    $fh->close if $fh;
 
     my $header_line = shift @input_lines;
     my $file_info   = parse_header_line($header_line);

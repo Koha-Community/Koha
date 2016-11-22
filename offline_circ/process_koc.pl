@@ -35,7 +35,7 @@ use C4::Items;
 use C4::Members;
 use C4::Stats;
 use C4::BackgroundJob;
-use Koha::Upload;
+use Koha::UploadedFiles;
 use Koha::Account;
 use Koha::Patrons;
 
@@ -73,10 +73,11 @@ if ($completedJobID) {
     $template->param(transactions_loaded => 1);
     $template->param(messages => $results->{results});
 } elsif ($fileID) {
-    my $upload = Koha::Upload->new->get({ id => $fileID, filehandle => 1 });
-    my $fh = $upload->{fh};
-    my $filename = $upload->{name};
-    my @input_lines = <$fh>;
+    my $upload = Koha::UploadedFiles->find( $fileID );
+    my $fh = $upload? $upload->file_handle: undef;
+    my $filename = $upload? $upload->filename: undef;
+    my @input_lines = $fh? <$fh>: ();
+    $fh->close if $fh;
 
     my $job = undef;
 

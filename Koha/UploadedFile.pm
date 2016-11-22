@@ -43,19 +43,22 @@ Description
 =head3 delete
 
 Delete uploaded file.
-It deletes not only the record, but also the actual file.
+It deletes not only the record, but also the actual file (unless you pass
+the keep_file parameter).
 
 Returns filename on successful delete or undef.
 
 =cut
 
 sub delete {
-    my ( $self ) = @_;
+    my ( $self, $params ) = @_;
 
     my $name = $self->filename;
     my $file = $self->full_path;
 
-    if( !-e $file ) { # we will just delete the record
+    if( $params->{keep_file} ) {
+        return $name if $self->SUPER::delete;
+    } elsif( !-e $file ) { # we will just delete the record
         warn "Removing record for $name within category ".
             $self->uploadcategorycode. ", but file was missing.";
         return $name if $self->SUPER::delete;
@@ -82,6 +85,20 @@ sub full_path {
         $self->hashvalue. '_'. $self->filename,
     );
     return $path;
+}
+
+=head3 file_handle
+
+Returns a file handle for an uploaded file.
+
+=cut
+
+sub file_handle {
+    my ( $self ) = @_;
+    $self->{_file_handle} = IO::File->new( $self->full_path, "r" );
+    return if !$self->{_file_handle};
+    $self->{_file_handle}->binmode;
+    return $self->{_file_handle};
 }
 
 =head2 CLASS METHODS

@@ -26,6 +26,7 @@ Koha::Upload - Facilitate file uploads (temporary and permanent)
 =head1 SYNOPSIS
 
     use Koha::Upload;
+    use Koha::UploadedFiles;
 
     # add an upload (see tools/upload-file.pl)
     # the public flag allows retrieval via OPAC
@@ -34,14 +35,13 @@ Koha::Upload - Facilitate file uploads (temporary and permanent)
     # Do something with $upload->count, $upload->result or $upload->err
 
     # get some upload records (in staff)
-    # Note: use the public flag for OPAC
-    my @uploads = Koha::Upload->new->get( term => $term );
-    $template->param( uploads => \@uploads );
+    my @uploads1 = Koha::UploadedFiles->search({ filename => $name });
+    my @uploads2 = Koha::UploadedFiles->search_term({ term => $term });
 
     # staff download
-    my $rec = Koha::Upload->new->get({ id => $id, filehandle => 1 });
-    my $fh = $rec->{fh};
-    my @hdr = Koha::Upload->httpheaders( $rec->{name} );
+    my $rec = Koha::UploadedFiles->find( $id );
+    my $fh = $rec->file_handle;
+    my @hdr = Koha::Upload->httpheaders( $rec->filename );
     print Encode::encode_utf8( $input->header( @hdr ) );
     while( <$fh> ) { print $_; }
     $fh->close;
@@ -54,9 +54,9 @@ Koha::Upload - Facilitate file uploads (temporary and permanent)
     functionality of both.
 
     The module has been revised to use Koha::Object[s]; the delete method
-    has been moved to Koha::UploadedFile[s].
+    has been moved to Koha::UploadedFile[s], as well as the get method.
 
-=head1 METHODS
+=head1 INSTANCE METHODS
 
 =cut
 
@@ -156,40 +156,6 @@ sub err {
         $err->{ $f } = $e if $e;
     }
     return $err;
-}
-
-=head2 get
-
-    Returns arrayref of uploaded records (hash) or one uploaded record.
-    You can pass id => $id or hashvalue => $hash or term => $term.
-    Optional parameter filehandle => 1 returns you a filehandle too.
-
-=cut
-
-sub get {
-    my ( $self, $params ) = @_;
-    my $temp= $self->_lookup( $params );
-    my ( @rv, $res);
-    foreach my $r ( @$temp ) {
-        undef $res;
-        foreach( qw[id hashvalue filesize uploadcategorycode public permanent owner] ) {
-            $res->{$_} = $r->{$_};
-        }
-        $res->{name} = $r->{filename};
-        $res->{path} = $self->_full_fname($r);
-        if( $res->{path} && -r $res->{path} ) {
-            if( $params->{filehandle} ) {
-                my $fh = IO::File->new( $res->{path}, "r" );
-                $fh->binmode if $fh;
-                $res->{fh} = $fh;
-            }
-            push @rv, $res;
-        } else {
-            $self->{files}->{ $r->{filename} }->{errcode}=5; #not readable
-        }
-        last if !wantarray;
-    }
-    return wantarray? @rv: $res;
 }
 
 =head1 CLASS METHODS
@@ -292,10 +258,10 @@ sub _create_file {
         # if the file exists and it is registered, then set error
         # if it exists, but is not in the database, we will overwrite
         if( -e "$dir/$fn" &&
-            Koha::UploadedFiles->search({
-                hashvalue          => $hashval,
-                uploadcategorycode => $self->{category},
-            })->count ) {
+        Koha::UploadedFiles->search({
+            hashvalue          => $hashval,
+            uploadcategorycode => $self->{category},
+        })->count ) {
             $self->{files}->{$filename}->{errcode} = 1; #already exists
             return;
         }
@@ -317,19 +283,6 @@ sub _dir {
     $dir.= '/'. $self->{category};
     mkdir $dir if !-d $dir;
     return $dir;
-}
-
-sub _full_fname {
-    my ( $self, $rec ) = @_;
-    my $p;
-    if( ref $rec ) {
-        $p = File::Spec->catfile(
-            $rec->{permanent}? $self->{rootdir}: $self->{tmpdir},
-            $rec->{dir},
-            $rec->{hashvalue}. '_'. $rec->{filename}
-        );
-    }
-    return $p;
 }
 
 sub _hook {
@@ -364,29 +317,6 @@ sub _register {
         permanent => $self->{temporary}? 0: 1,
     })->store;
     $self->{files}->{$filename}->{id} = $rec->id if $rec;
-}
-
-sub _lookup {
-    my ( $self, $params ) = @_;
-
-    my ( $cond, $attr, %pubhash );
-    %pubhash = $self->{public}? ( public => 1 ): ();
-    if( $params->{id} ) {
-        return [] if $params->{id} !~ /^\d+(,\d+)*$/;
-        $cond = { id => [ split ',', $params->{id} ], %pubhash };
-    } elsif( $params->{hashvalue} ) {
-        $cond = { hashvalue => $params->{hashvalue}, %pubhash };
-    } elsif( $params->{term} ) {
-        $cond =
-            [ { filename => { like => '%'.$params->{term}.'%' }, %pubhash },
-              { hashvalue => { like => '%'.$params->{term}.'%' }, %pubhash } ];
-    } else {
-        return [];
-    }
-    $attr = { order_by => { -asc => 'id' }};
-
-    return Koha::UploadedFiles->search( $cond, $attr )->unblessed;
-    # Does always return an arrayref (perhaps an empty one)
 }
 
 sub _compute {

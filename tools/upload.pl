@@ -24,6 +24,7 @@ use JSON;
 use C4::Auth;
 use C4::Output;
 use Koha::Upload;
+use Koha::UploadedFiles;
 
 my $input  = CGI::->new;
 my $op     = $input->param('op') // 'new';
@@ -48,7 +49,6 @@ $template->param(
     plugin     => $plugin,
 );
 
-my $upar = $plugin ? { public => 1 } : {};
 if ( $op eq 'new' ) {
     $template->param(
         mode             => 'new',
@@ -57,12 +57,24 @@ if ( $op eq 'new' ) {
     output_html_with_http_headers $input, $cookie, $template->output;
 
 } elsif ( $op eq 'search' ) {
-    my $h = $id ? { id => $id } : { term => $term };
-    my @uploads = Koha::Upload->new($upar)->get($h);
+    my $uploads;
+    if( $id ) {
+        my $rec = Koha::UploadedFiles->search({
+            id => $id,
+            $plugin? ( public => 1 ) : (),
+        })->next;
+        push @$uploads, $rec->unblessed if $rec;
+    } else {
+        $uploads = Koha::UploadedFiles->search_term({
+            term => $term,
+            $plugin? (): ( include_private => 1 ),
+        })->unblessed;
+    }
+
     $template->param(
         mode    => 'report',
         msg     => $msg,
-        uploads => \@uploads,
+        uploads => $uploads,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
@@ -86,18 +98,20 @@ if ( $op eq 'new' ) {
     output_html_with_http_headers $input, $cookie, $template->output;
 
 } elsif ( $op eq 'download' ) {
-    my $upl = Koha::Upload->new($upar);
-    my $rec = $upl->get( { id => $id, filehandle => 1 } );
-    my $fh  = $rec->{fh};
+    my $rec = Koha::UploadedFiles->search({
+        id => $id,
+        $plugin? ( public => 1 ) : (),
+    })->next;
+    my $fh  = $rec? $rec->file_handle:  undef;
     if ( !$rec || !$fh ) {
         $template->param(
             mode             => 'new',
             msg              => JSON::to_json( { $id => 5 } ),
-            uploadcategories => $upl->getCategories,
+            uploadcategories => Koha::Upload->getCategories,
         );
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {
-        my @hdr = $upl->httpheaders( $rec->{name} );
+        my @hdr = Koha::Upload->httpheaders( $rec->filename );
         print Encode::encode_utf8( $input->header(@hdr) );
         while (<$fh>) {
             print $_;

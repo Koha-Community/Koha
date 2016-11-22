@@ -39,7 +39,7 @@ use C4::Output;
 use C4::Biblio;
 use C4::ImportBatch;
 use C4::Matcher;
-use Koha::Upload;
+use Koha::UploadedFiles;
 use C4::BackgroundJob;
 use C4::MarcModificationTemplates;
 use Koha::Plugins;
@@ -85,8 +85,10 @@ if ($completedJobID) {
     my $results = $job->results();
     $template->param(map { $_ => $results->{$_} } keys %{ $results });
 } elsif ($fileID) {
-    my $upload = Koha::Upload->new->get({ id => $fileID });
-    my ( $file, $filename ) = ( $upload->{path}, $upload->{name} );
+    my $upload = Koha::UploadedFiles->find( $fileID );
+    my $file = $upload->full_path;
+    my $filename = $upload->filename;
+
     my ( $errors, $marcrecords );
     if( $format eq 'MARCXML' ) {
         ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromMARCXMLFile( $file, $encoding);

@@ -22,7 +22,7 @@ use warnings;
 
 use C4::Context;
 use MARC::Field;
-use Koha::Upload;
+use Koha::UploadedFiles;
 
 =head1 HTML5Media
 
@@ -134,10 +134,12 @@ sub gethtml5media {
         if ( $HTML5Media{srcblock} =~ /\Qopac-retrieve-file.pl\E/ ) {
             my ( undef, $id ) = split /id=/, $HTML5Media{srcblock};
             next if !$id;
-            my $public = ( ( caller )[1] =~ /opac/ ) ? { public => 1 }: {};
-            my $upl = Koha::Upload->new( $public )->get({ hashvalue => $id });
-            next if !$upl || $upl->{name} !~ /\./;
-            $HTML5Media{extension} = ( $upl->{name} =~ m/([^.]+)$/ )[0];
+            my %public = ( ( caller )[1] =~ /opac/ ) ? ( public => 1 ): ();
+            my $upload = Koha::UploadedFiles->search({
+                hashvalue => $id, %public,
+            })->next;
+            next if !$upload || $upload->filename !~ /\./;
+            $HTML5Media{extension} = ( $upload->filename =~ m/([^.]+)$/ )[0];
         }
         # check remote files
         else {
