@@ -97,7 +97,7 @@ function Check(ff) {
 
 $(document).ready(function() 
     {
-        [% IF (AcqCreateItemOrdering) %]
+        [% IF AcqCreateItemOrdering and not basket.is_standing %]
             cloneItemBlock(0, '[% UniqueItemFields %]');
         [% END %]
 
