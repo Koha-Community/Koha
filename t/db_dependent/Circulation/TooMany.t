@@ -92,15 +92,15 @@ C4::Context->set_userenv($patron->{borrowernumber}, $patron->{userid}, 'usercnum
 
 subtest 'no rules exist' => sub {
     plan tests => 2;
-    is(
+    is_deeply(
         C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
-        undef,
-        'CO should be allowed, in any cases'
+        { reason => 'NO_RULE_DEFINED', max_allowed => 0 },
+        'CO should not be allowed, in any cases'
     );
-    is(
+    is_deeply(
         C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
-        undef,
-        'OSCO should be allowed, in any cases'
+        { reason => 'NO_RULE_DEFINED', max_allowed => 0 },
+        'OSCO should not be allowed, in any cases'
     );
 };
 

@@ -555,6 +555,10 @@ sub TooMany {
         }
     }
 
+    if ( not defined( $issuing_rule ) and not defined($branch_borrower_circ_rule->{maxissueqty}) ) {
+        return { reason => 'NO_RULE_DEFINED', max_allowed => 0 };
+    }
+
     # OK, the patron can issue !!!
     return;
 }
