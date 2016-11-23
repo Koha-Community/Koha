@@ -1,3 +1,4 @@
+[% USE AudioAlerts %]
 [%# Prevent XFS attacks -%]
 [% UNLESS popup %]
     <script type="text/javascript">
