@@ -175,8 +175,6 @@ sub AddReserve {
         $title,    $checkitem,      $found,        $itemtype
     ) = @_;
 
-    my $dbh = C4::Context->dbh;
-
     $resdate = output_pref( { str => dt_from_string( $resdate ), dateonly => 1, dateformat => 'iso' })
         or output_pref({ dt => dt_from_string, dateonly => 1, dateformat => 'iso' });
 
@@ -1182,7 +1180,6 @@ sub ModReserve {
     return unless ( $reserve_id || ( $borrowernumber && ( $biblionumber || $itemnumber ) ) );
     $reserve_id = GetReserveId({ biblionumber => $biblionumber, borrowernumber => $borrowernumber, itemnumber => $itemnumber }) unless ( $reserve_id );
 
-    my $dbh = C4::Context->dbh;
     if ( $rank eq "del" ) {
         CancelReserve({ reserve_id => $reserve_id });
     }
@@ -1232,8 +1229,6 @@ sub ModReserveFill {
     my ($res) = @_;
     my $reserve_id = $res->{'reserve_id'};
 
-    my $dbh = C4::Context->dbh;
-
     my $hold = Koha::Holds->find($reserve_id);
 
     # get the priority on this record....
@@ -1247,7 +1242,7 @@ sub ModReserveFill {
         }
     );
 
-    my $old_hold = Koha::Old::Hold->new( $hold->unblessed() )->store();
+    Koha::Old::Hold->new( $hold->unblessed() )->store();
 
     $hold->delete();
 
@@ -1595,8 +1590,6 @@ Input: $where is 'up', 'down', 'top' or 'bottom'. Biblionumber, Date reserve was
 
 sub AlterPriority {
     my ( $where, $reserve_id ) = @_;
-
-    my $dbh = C4::Context->dbh;
 
     my $reserve = GetReserve( $reserve_id );
 
@@ -2176,7 +2169,6 @@ sub MoveReserve {
     return unless $res;
 
     my $biblionumber     =  $res->{biblionumber};
-    my $biblioitemnumber = $res->{biblioitemnumber};
 
     if ($res->{borrowernumber} == $borrowernumber) {
         ModReserveFill($res);
