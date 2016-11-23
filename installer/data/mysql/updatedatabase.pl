@@ -13219,7 +13219,7 @@ if ( CheckVersion($DBversion) ) {
             });
 
     $dbh->do(q{
-            UPDATE marc_subfield_structure SET authorised_value = NULL WHERE authorised_value = ';';
+            UPDATE marc_subfield_structure SET authorised_value = NULL WHERE authorised_value = '';
             });
 
     # If the DB has been created before 3.19.00.006, the default collate for marc_subfield_structure if not set to utf8_unicode_ci and the new FK will not be create (MariaDB or MySQL will raise err 150)
