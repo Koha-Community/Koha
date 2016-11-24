@@ -9736,6 +9736,7 @@ if ( CheckVersion($DBversion) ) {
                     MODIFY COLUMN seealso varchar(1100) COLLATE utf8_unicode_ci DEFAULT NULL,
                     MODIFY COLUMN link varchar(80) COLLATE utf8_unicode_ci DEFAULT NULL
                 |);
+                $dbh->do(qq|ALTER TABLE $name CHARACTER SET utf8 COLLATE utf8_unicode_ci|);
             }
             else {
                 $dbh->do(qq|ALTER TABLE $name CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci|);
@@ -13171,6 +13172,13 @@ if ( CheckVersion($DBversion) ) {
             UPDATE marc_subfield_structure SET authorised_value = NULL WHERE authorised_value = ';';
             });
 
+    # If the DB has been created before 3.19.00.006, the default collate for marc_subfield_structure if not set to utf8_unicode_ci and the new FK will not be create (MariaDB or MySQL will raise err 150)
+    my $table_sth = $dbh->prepare(qq|SHOW CREATE TABLE marc_subfield_structure|);
+    $table_sth->execute;
+    my @table = $table_sth->fetchrow_array;
+    if ( $table[1] !~ /COLLATE=utf8_unicode_ci/ and $table[1] !~ /COLLATE=utf8mb4_unicode_ci/ ) { #catches utf8mb4 collated tables
+        $dbh->do(qq|ALTER TABLE marc_subfield_structure CHARACTER SET utf8 COLLATE utf8_unicode_ci|);
+    }
     $dbh->do(q{
             ALTER TABLE marc_subfield_structure
             MODIFY COLUMN authorised_value VARCHAR(32) DEFAULT NULL,
