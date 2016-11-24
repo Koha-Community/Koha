@@ -26,6 +26,7 @@ Koha::Upload - Facilitate file uploads (temporary and permanent)
 =head1 SYNOPSIS
 
     use Koha::Upload;
+    use Koha::UploadedFile;
     use Koha::UploadedFiles;
 
     # add an upload (see tools/upload-file.pl)
@@ -34,15 +35,14 @@ Koha::Upload - Facilitate file uploads (temporary and permanent)
     my $cgi = $upload->cgi;
     # Do something with $upload->count, $upload->result or $upload->err
 
-    # get some upload records (in staff)
+    # get some upload records (in staff) via Koha::UploadedFiles
     my @uploads1 = Koha::UploadedFiles->search({ filename => $name });
     my @uploads2 = Koha::UploadedFiles->search_term({ term => $term });
 
-    # staff download
+    # staff download (via Koha::UploadedFile[s])
     my $rec = Koha::UploadedFiles->find( $id );
     my $fh = $rec->file_handle;
-    my @hdr = Koha::Upload->httpheaders( $rec->filename );
-    print Encode::encode_utf8( $input->header( @hdr ) );
+    print Encode::encode_utf8( $input->header( $rec->httpheaders ) );
     while( <$fh> ) { print $_; }
     $fh->close;
 
@@ -55,8 +55,6 @@ Koha::Upload - Facilitate file uploads (temporary and permanent)
 
     The module has been revised to use Koha::Object[s]; the delete method
     has been moved to Koha::UploadedFile[s], as well as the get method.
-
-=head1 INSTANCE METHODS
 
 =cut
 
@@ -79,6 +77,8 @@ use Koha::UploadedFile;
 use Koha::UploadedFiles;
 
 __PACKAGE__->mk_ro_accessors( qw|| );
+
+=head1 INSTANCE METHODS
 
 =head2 new
 
@@ -159,33 +159,6 @@ sub err {
 }
 
 =head1 CLASS METHODS
-
-=head2 getCategories
-
-    getCategories returns a list of upload category codes and names
-
-=cut
-
-sub getCategories {
-    my ( $class ) = @_;
-    my $cats = C4::Koha::GetAuthorisedValues('UPLOAD');
-    [ map {{ code => $_->{authorised_value}, name => $_->{lib} }} @$cats ];
-}
-
-=head2 httpheaders
-
-    httpheaders returns http headers for a retrievable upload
-    Will be extended by report 14282
-
-=cut
-
-sub httpheaders {
-    my ( $class, $name ) = @_;
-    return (
-        '-type'       => 'application/octet-stream',
-        '-attachment' => $name,
-    );
-}
 
 =head2 allows_add_by
 

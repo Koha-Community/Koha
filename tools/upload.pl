@@ -23,7 +23,7 @@ use JSON;
 
 use C4::Auth;
 use C4::Output;
-use Koha::Upload;
+use Koha::UploadedFile;
 use Koha::UploadedFiles;
 
 my $input  = CGI::->new;
@@ -52,7 +52,7 @@ $template->param(
 if ( $op eq 'new' ) {
     $template->param(
         mode             => 'new',
-        uploadcategories => Koha::Upload->getCategories,
+        uploadcategories => Koha::UploadedFile->getCategories,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
@@ -93,7 +93,7 @@ if ( $op eq 'new' ) {
     $template->param(
         mode             => 'deleted',
         msg              => $msg,
-        uploadcategories => Koha::Upload->getCategories,
+        uploadcategories => Koha::UploadedFile->getCategories,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
@@ -107,12 +107,11 @@ if ( $op eq 'new' ) {
         $template->param(
             mode             => 'new',
             msg              => JSON::to_json( { $id => 5 } ),
-            uploadcategories => Koha::Upload->getCategories,
+            uploadcategories => Koha::UploadedFile->getCategories,
         );
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {
-        my @hdr = Koha::Upload->httpheaders( $rec->filename );
-        print Encode::encode_utf8( $input->header(@hdr) );
+        print Encode::encode_utf8( $input->header( $rec->httpheaders ) );
         while (<$fh>) {
             print $_;
         }

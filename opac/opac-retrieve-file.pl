@@ -24,7 +24,6 @@ use Encode;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use Koha::Upload;
 use Koha::UploadedFiles;
 
 my $input = CGI::->new;
@@ -46,8 +45,7 @@ if( !$rec || !$fh ) {
     $template->param( hash => $hash );
     output_html_with_http_headers $input, $cookie, $template->output;
 } else {
-    my @hdr = Koha::Upload->httpheaders( $rec->filename );
-    print Encode::encode_utf8( $input->header( @hdr ) );
+    print Encode::encode_utf8( $input->header( $rec->httpheaders ) );
     while( <$fh> ) {
         print $_;
     }

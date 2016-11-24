@@ -11,6 +11,7 @@ use t::lib::TestBuilder;
 use C4::Context;
 use Koha::Database;
 use Koha::Upload;
+use Koha::UploadedFile;
 use Koha::UploadedFiles;
 
 my $schema  = Koha::Database->new->schema;
@@ -191,11 +192,12 @@ sub test06 { #search_term with[out] private flag
 }
 
 sub test07 { #simple test for httpheaders and getCategories
-    my @hdrs = Koha::Upload->httpheaders('does_not_matter_yet');
+    my $rec = Koha::UploadedFiles->search_term({ term => 'file' })->next;
+    my @hdrs = $rec->httpheaders;
     is( @hdrs == 4 && $hdrs[1] =~ /application\/octet-stream/, 1, 'Simple test for httpheaders');
     my $builder = t::lib::TestBuilder->new;
     $builder->build({ source => 'AuthorisedValue', value => { category => 'UPLOAD', authorised_value => 'HAVE_AT_LEAST_ONE', lib => 'Hi there' } });
-    my $cat = Koha::Upload->getCategories;
+    my $cat = Koha::UploadedFile->getCategories;
     is( @$cat >= 1, 1, 'getCategories returned at least one category' );
 }
 

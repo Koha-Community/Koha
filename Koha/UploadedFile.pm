@@ -101,9 +101,24 @@ sub file_handle {
     return $self->{_file_handle};
 }
 
+=head3 httpheaders
+
+    httpheaders returns http headers for a retrievable upload
+    Will be extended by report 14282
+
+=cut
+
+sub httpheaders {
+    my ( $self ) = @_;
+    return (
+        '-type'       => 'application/octet-stream',
+        '-attachment' => $self->filename,
+    );
+}
+
 =head2 CLASS METHODS
 
-=head3 root_directory
+=head3 permanent_directory
 
 =cut
 
@@ -119,6 +134,18 @@ sub permanent_directory {
 sub temporary_directory {
     my ( $class ) = @_;
     return File::Spec->tmpdir;
+}
+
+=head3 getCategories
+
+    getCategories returns a list of upload category codes and names
+
+=cut
+
+sub getCategories {
+    my ( $class ) = @_;
+    my $cats = C4::Koha::GetAuthorisedValues('UPLOAD');
+    [ map {{ code => $_->{authorised_value}, name => $_->{lib} }} @$cats ];
 }
 
 =head3 _type
