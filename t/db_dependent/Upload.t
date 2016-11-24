@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 use File::Temp qw/ tempdir /;
-use Test::More tests => 9;
+use Test::More tests => 10;
+use Test::Warn;
 
 use Test::MockModule;
 use t::lib::Mocks;
@@ -16,6 +17,7 @@ use Koha::Uploader;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 
 our $current_upload = 0;
 our $uploads = [
@@ -50,50 +52,29 @@ my $cgimod = Test::MockModule->new( 'CGI' );
 $cgimod->mock( 'new' => \&newCGI );
 
 # Start testing
-subtest 'Test01' => sub {
-    plan tests => 11;
-    test01();
-};
-subtest 'Test02' => sub {
-    plan tests => 5;
-    test02();
-};
-subtest 'Test03' => sub {
-    plan tests => 2;
-    test03();
-};
-subtest 'Test04' => sub {
-    plan tests => 3;
-    test04();
-};
-subtest 'Test05' => sub {
-    plan tests => 6;
-    test05();
-};
-subtest 'Test06' => sub {
-    plan tests => 3;
-    test06();
-};
-subtest 'Test07' => sub {
-    plan tests => 2;
-    test07();
-};
-subtest 'Test08: allows_add_by' => sub {
-    plan tests => 4;
-    test08();
-};
-$schema->storage->txn_rollback;
+subtest 'Make a fresh start' => sub {
+    plan tests => 1;
 
-sub test01 {
     # Delete existing records (for later tests)
-    # Passing keep_file suppresses warnings
+    # Passing keep_file suppresses warnings (and does not delete files)
+    # Note that your files are not in danger, since we redirected
+    # all files to a new empty temp folder
     Koha::UploadedFiles->new->delete({ keep_file => 1 });
+    is( Koha::UploadedFiles->count, 0, 'No records left' );
+};
+
+subtest 'permanent_directory and temporary_directory' => sub {
+    plan tests => 2;
 
     # Check mocked directories
     is( Koha::UploadedFile->permanent_directory, $tempdir,
         'Check permanent directory' );
     is( Koha::UploadedFile->temporary_directory, $tempdir,
         'Check temporary directory' );
+};
+
+subtest 'Add two uploads in category A' => sub {
+    plan tests => 9;
 
     my $upl = Koha::Uploader->new({
         category => $uploads->[$current_upload]->[0]->{cat},
@@ -115,9 +96,11 @@ sub test01 {
     is( $rec->filename, 'file2', 'Check file name 2' );
     is( $rec->filesize, 8000, 'Check size of file2' );
     is( $rec->public, undef, 'Check public undefined' );
-}
+};
 
-sub test02 {
+subtest 'Add another upload, check file_handle' => sub {
+    plan tests => 5;
+
     my $upl = Koha::Uploader->new({
         category => $uploads->[$current_upload]->[0]->{cat},
         public => 1,
@@ -135,17 +118,21 @@ sub test02 {
     $rec->filename( 'doesprobablynotexist' )->store;
     is( $rec->file_handle, undef, 'Sabotage with file handle' );
     $rec->filename( $orgname )->store;
-}
+};
 
-sub test03 {
+subtest 'Add temporary upload' => sub {
+    plan tests => 2;
+
     my $upl = Koha::Uploader->new({ tmp => 1 }); #temporary
     my $cgi= $upl->cgi;
     is( $upl->count, 1, 'Upload 3 includes one temporary file' );
     my $rec = Koha::UploadedFiles->find( $upl->result );
     is( $rec->uploadcategorycode =~ /_upload$/, 1, 'Check category temp file' );
-}
+};
 
-sub test04 { # Fail on a file already there
+subtest 'Add same file in same category' => sub {
+    plan tests => 3;
+
     my $upl = Koha::Uploader->new({
         category => $uploads->[$current_upload]->[0]->{cat},
     });
@@ -154,12 +141,15 @@ sub test04 { # Fail on a file already there
     is( $upl->result, undef, 'Result is undefined' );
     my $e = $upl->err;
     is( $e->{file2}, 1, "Errcode 1 [already exists] reported" );
-}
+};
 
-sub test05 { # add temporary file with same name and contents, delete it
+subtest 'Test delete via UploadedFile as well as UploadedFiles' => sub {
+    plan tests => 8;
+
+    # add temporary file with same name and contents (file4)
     my $upl = Koha::Uploader->new({ tmp => 1 });
     my $cgi= $upl->cgi;
-    is( $upl->count, 1, 'Upload 5 adds duplicate temporary file' );
+    is( $upl->count, 1, 'Add duplicate temporary file (file4)' );
     my $id = $upl->result;
     my $path = Koha::UploadedFiles->find( $id )->full_path;
 
@@ -179,9 +169,19 @@ sub test05 { # add temporary file with same name and contents, delete it
     $delete = $kohaobj->delete;
     is( $delete, $name, 'Delete successful' );
     isnt( -e $path, 1, 'File no longer found after delete' );
-}
 
-sub test06 { #search_term with[out] private flag
+    # add another record with TestBuilder, so file does not exist
+    # catch warning
+    my $upload01 = $builder->build({ source => 'UploadedFile' });
+    warning_like { Koha::UploadedFiles->find( $upload01->{id} )->delete; }
+        qr/file was missing/,
+        'delete warns when file is missing';
+    is( Koha::UploadedFiles->count, 4, 'Back to four uploads now' );
+};
+
+subtest 'Call search_term with[out] private flag' => sub {
+    plan tests => 3;
+
     my @recs = Koha::UploadedFiles->search_term({ term => 'file' });
     is( @recs, 1, 'Returns only one public result' );
     is( $recs[0]->filename, 'file3', 'Should be file3' );
@@ -189,20 +189,22 @@ sub test06 { #search_term with[out] private flag
     is( Koha::UploadedFiles->search_term({
         term => 'file', include_private => 1,
     })->count, 4, 'Returns now four results' );
-}
+};
 
-sub test07 { #simple test for httpheaders and getCategories
+subtest 'Simple tests for httpheaders and getCategories' => sub {
+    plan tests => 2;
+
     my $rec = Koha::UploadedFiles->search_term({ term => 'file' })->next;
     my @hdrs = $rec->httpheaders;
     is( @hdrs == 4 && $hdrs[1] =~ /application\/octet-stream/, 1, 'Simple test for httpheaders');
-    my $builder = t::lib::TestBuilder->new;
     $builder->build({ source => 'AuthorisedValue', value => { category => 'UPLOAD', authorised_value => 'HAVE_AT_LEAST_ONE', lib => 'Hi there' } });
     my $cat = Koha::UploadedFile->getCategories;
     is( @$cat >= 1, 1, 'getCategories returned at least one category' );
-}
+};
 
-sub test08 { # allows_add_by
-    my $builder = t::lib::TestBuilder->new;
+subtest 'Testing allows_add_by' => sub {
+    plan tests => 4;
+
     my $patron = $builder->build({
         source => 'Borrower',
         value  => { flags => 0 }, #no permissions
@@ -236,25 +238,12 @@ sub test08 { # allows_add_by
     });
     is( Koha::Uploader->allows_add_by( $patron->{userid} ),
         1, 'Patron is still allowed to add uploaded files' );
-}
-
-# Additional tests for Koha::UploadedFiles
-# TODO Rearrange the tests after this migration
-subtest 'Some basic CRUD testing' => sub {
-    plan tests => 2;
-
-    # Test find and attribute id, delete and search
-    my $builder = t::lib::TestBuilder->new;
-    my $upload01 = $builder->build({ source => 'UploadedFile' });
-    my $found = Koha::UploadedFiles->find( $upload01->{id} );
-    is( $found->id, $upload01->{id}, 'Koha::Object returns id' );
-    $found->delete({ keep_file => 1 }); #note that it does not exist
-    $found = Koha::UploadedFiles->search(
-        { id => $upload01->{id} },
-    );
-    is( $found->count, 0, 'Delete seems successful' );
 };
 
+# The end
+$schema->storage->txn_rollback;
+
+# Helper routine
 sub newCGI {
     my ( $class, $hook ) = @_;
     my $read = 0;

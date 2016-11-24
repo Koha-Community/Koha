@@ -20,8 +20,6 @@ package Koha::UploadedFile;
 use Modern::Perl;
 use File::Spec;
 
-#use Koha::Database;
-
 use parent qw(Koha::Object);
 
 =head1 NAME
@@ -30,11 +28,28 @@ Koha::UploadedFile - Koha::Object class for single uploaded file
 
 =head1 SYNOPSIS
 
-use Koha::UploadedFile;
+    use Koha::UploadedFile;
+
+    # store record in uploaded_files
+    my $upload = Koha::UploadedFile->new({ [columns and values] });
+
+    # get a file handle on an uploaded_file
+    my $fh = $upload->file_handle;
+
+    # get full path
+    my $path = $upload->full_path;
+
+    # delete uploaded file
+    $upload->delete;
 
 =head1 DESCRIPTION
 
-Description
+Allows regular CRUD operations on uploaded_files via Koha::Object / DBIx.
+
+The delete method also takes care of deleting files. The full_path method
+returns a fully qualified path for an upload.
+
+Additional methods include: file_handle, httpheaders.
 
 =head1 METHODS
 
@@ -103,8 +118,9 @@ sub file_handle {
 
 =head3 httpheaders
 
-    httpheaders returns http headers for a retrievable upload
-    Will be extended by report 14282
+httpheaders returns http headers for a retrievable upload.
+
+Will be extended by report 14282
 
 =cut
 
@@ -120,6 +136,8 @@ sub httpheaders {
 
 =head3 permanent_directory
 
+Returns root directory for permanent storage
+
 =cut
 
 sub permanent_directory {
@@ -128,6 +146,8 @@ sub permanent_directory {
 }
 
 =head3 tmp_directory
+
+Returns root directory for temporary storage
 
 =cut
 
@@ -138,7 +158,7 @@ sub temporary_directory {
 
 =head3 getCategories
 
-    getCategories returns a list of upload category codes and names
+getCategories returns a list of upload category codes and names
 
 =cut
 

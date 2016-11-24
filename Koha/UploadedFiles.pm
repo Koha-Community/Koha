@@ -19,7 +19,6 @@ package Koha::UploadedFiles;
 
 use Modern::Perl;
 
-#use Koha::Database;
 use Koha::UploadedFile;
 
 use parent qw(Koha::Objects);
@@ -30,11 +29,23 @@ Koha::UploadedFiles - Koha::Objects class for uploaded files
 
 =head1 SYNOPSIS
 
-use Koha::UploadedFiles;
+    use Koha::UploadedFiles;
+
+    # get one upload
+    my $upload01 = Koha::UploadedFiles->find( $id );
+
+    # get some uploads
+    my @uploads = Koha::UploadedFiles->search_term({ term => '.mrc' });
+
+    # delete all uploads
+    Koha::UploadedFiles->new->delete;
 
 =head1 DESCRIPTION
 
-Description
+Allows regular CRUD operations on uploaded_files via Koha::Objects / DBIx.
+
+The delete method also takes care of deleting files. The search_term method
+provides a wrapper around search to look for a term in multiple columns.
 
 =head1 METHODS
 
