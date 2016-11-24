@@ -27,7 +27,7 @@ use URI::Escape;
 
 use C4::Context;
 use C4::Auth qw/check_cookie_auth haspermission/;
-use Koha::Upload;
+use Koha::Uploader;
 
 # upload-file.pl must authenticate the user
 # before processing the POST request,
@@ -41,14 +41,14 @@ my %cookies = CGI::Cookie->fetch;
 my $sid = $cookies{'CGISESSID'}->value;
 my ( $auth_status, $sessionID ) = check_cookie_auth( $sid );
 my $uid = C4::Auth::get_session($sid)->param('id');
-my $allowed = Koha::Upload->allows_add_by( $uid );
+my $allowed = Koha::Uploader->allows_add_by( $uid );
 
 if( $auth_status ne 'ok' || !$allowed ) {
     send_reply( 'denied' );
     exit 0;
 }
 
-my $upload = Koha::Upload->new( upload_pars($ENV{QUERY_STRING}) );
+my $upload = Koha::Uploader->new( upload_pars($ENV{QUERY_STRING}) );
 if( !$upload || !$upload->cgi || !$upload->count ) {
     # not one upload succeeded
     send_reply( 'failed', undef, $upload? $upload->err: undef );
@@ -70,7 +70,7 @@ sub send_reply {    # response will be sent back as JSON
 }
 
 sub upload_pars { # this sub parses QUERY_STRING in order to build the
-                  # parameter hash for Koha::Upload
+                  # parameter hash for Koha::Uploader
     my ( $qstr ) = @_;
     $qstr = Encode::decode_utf8( uri_unescape( $qstr ) );
     # category could include a utf8 character

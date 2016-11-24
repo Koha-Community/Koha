@@ -1,4 +1,4 @@
-package Koha::Upload;
+package Koha::Uploader;
 
 # Copyright 2007 LibLime, Galen Charlton
 # Copyright 2011-2012 BibLibre
@@ -21,17 +21,17 @@ package Koha::Upload;
 
 =head1 NAME
 
-Koha::Upload - Facilitate file uploads (temporary and permanent)
+Koha::Uploader - Facilitate file uploads (temporary and permanent)
 
 =head1 SYNOPSIS
 
-    use Koha::Upload;
+    use Koha::Uploader;
     use Koha::UploadedFile;
     use Koha::UploadedFiles;
 
     # add an upload (see tools/upload-file.pl)
     # the public flag allows retrieval via OPAC
-    my $upload = Koha::Upload->new( public => 1, category => 'A' );
+    my $upload = Koha::Uploader->new( public => 1, category => 'A' );
     my $cgi = $upload->cgi;
     # Do something with $upload->count, $upload->result or $upload->err
 

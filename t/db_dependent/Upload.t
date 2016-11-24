@@ -10,9 +10,9 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 use Koha::Database;
-use Koha::Upload;
 use Koha::UploadedFile;
 use Koha::UploadedFiles;
+use Koha::Uploader;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -95,7 +95,7 @@ sub test01 {
     is( Koha::UploadedFile->temporary_directory, $tempdir,
         'Check temporary directory' );
 
-    my $upl = Koha::Upload->new({
+    my $upl = Koha::Uploader->new({
         category => $uploads->[$current_upload]->[0]->{cat},
     });
     my $cgi= $upl->cgi;
@@ -118,7 +118,7 @@ sub test01 {
 }
 
 sub test02 {
-    my $upl = Koha::Upload->new({
+    my $upl = Koha::Uploader->new({
         category => $uploads->[$current_upload]->[0]->{cat},
         public => 1,
     });
@@ -138,7 +138,7 @@ sub test02 {
 }
 
 sub test03 {
-    my $upl = Koha::Upload->new({ tmp => 1 }); #temporary
+    my $upl = Koha::Uploader->new({ tmp => 1 }); #temporary
     my $cgi= $upl->cgi;
     is( $upl->count, 1, 'Upload 3 includes one temporary file' );
     my $rec = Koha::UploadedFiles->find( $upl->result );
@@ -146,7 +146,7 @@ sub test03 {
 }
 
 sub test04 { # Fail on a file already there
-    my $upl = Koha::Upload->new({
+    my $upl = Koha::Uploader->new({
         category => $uploads->[$current_upload]->[0]->{cat},
     });
     my $cgi= $upl->cgi;
@@ -157,7 +157,7 @@ sub test04 { # Fail on a file already there
 }
 
 sub test05 { # add temporary file with same name and contents, delete it
-    my $upl = Koha::Upload->new({ tmp => 1 });
+    my $upl = Koha::Uploader->new({ tmp => 1 });
     my $cgi= $upl->cgi;
     is( $upl->count, 1, 'Upload 5 adds duplicate temporary file' );
     my $id = $upl->result;
@@ -171,7 +171,7 @@ sub test05 { # add temporary file with same name and contents, delete it
 
     # testing delete via UploadedFile (singular)
     # Note that find returns a Koha::Object
-    $upl = Koha::Upload->new({ tmp => 1 });
+    $upl = Koha::Uploader->new({ tmp => 1 });
     $upl->cgi;
     my $kohaobj = Koha::UploadedFiles->find( $upl->result );
     my $name = $kohaobj->filename;
@@ -208,19 +208,19 @@ sub test08 { # allows_add_by
         value  => { flags => 0 }, #no permissions
     });
     my $patronid = $patron->{borrowernumber};
-    is( Koha::Upload->allows_add_by( $patron->{userid} ),
+    is( Koha::Uploader->allows_add_by( $patron->{userid} ),
         undef, 'Patron is not allowed to do anything' );
 
     # add some permissions: edit_catalogue
     my $fl = 2**9; # edit_catalogue
     $schema->resultset('Borrower')->find( $patronid )->update({ flags => $fl });
-    is( Koha::Upload->allows_add_by( $patron->{userid} ),
+    is( Koha::Uploader->allows_add_by( $patron->{userid} ),
         undef, 'Patron is still not allowed to add uploaded files' );
 
     # replace flags by all tools
     $fl = 2**13; # tools
     $schema->resultset('Borrower')->find( $patronid )->update({ flags => $fl });
-    is( Koha::Upload->allows_add_by( $patron->{userid} ),
+    is( Koha::Uploader->allows_add_by( $patron->{userid} ),
         1, 'Patron should be allowed now to add uploaded files' );
 
     # remove all tools and add upload_general_files only
@@ -234,7 +234,7 @@ sub test08 { # allows_add_by
             code           => 'upload_general_files',
         },
     });
-    is( Koha::Upload->allows_add_by( $patron->{userid} ),
+    is( Koha::Uploader->allows_add_by( $patron->{userid} ),
         1, 'Patron is still allowed to add uploaded files' );
 }
 
