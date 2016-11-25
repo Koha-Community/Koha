@@ -88,7 +88,6 @@ BEGIN {
 		&GetRenewCount
         &GetSoonestRenewDate
         &GetLatestAutoRenewDate
-		&GetItemIssue
 		&GetIssuingCharges
         &GetBranchBorrowerCircRule
         &GetBranchItemRule
@@ -2493,45 +2492,6 @@ sub _GetCircControlBranch {
         }
     }
     return $branch;
-}
-
-
-
-
-
-
-=head2 GetItemIssue
-
-  $issue = &GetItemIssue($itemnumber);
-
-Returns patron currently having a book, or undef if not checked out.
-
-C<$itemnumber> is the itemnumber.
-
-C<$issue> is a hashref of the row from the issues table.
-
-=cut
-
-sub GetItemIssue {
-    my ($itemnumber) = @_;
-    return unless $itemnumber;
-    my $sth = C4::Context->dbh->prepare(
-        "SELECT items.*, issues.*
-        FROM issues
-        LEFT JOIN items ON issues.itemnumber=items.itemnumber
-        WHERE issues.itemnumber=?");
-    $sth->execute($itemnumber);
-    my $data = $sth->fetchrow_hashref;
-    return unless $data;
-    $data->{issuedate_sql} = $data->{issuedate};
-    $data->{date_due_sql} = $data->{date_due};
-    $data->{issuedate} = dt_from_string($data->{issuedate}, 'sql');
-    $data->{issuedate}->truncate(to => 'minute');
-    $data->{date_due} = dt_from_string($data->{date_due}, 'sql');
-    $data->{date_due}->truncate(to => 'minute');
-    my $dt = DateTime->now( time_zone => C4::Context->tz)->truncate( to => 'minute');
-    $data->{'overdue'} = DateTime->compare($data->{'date_due'}, $dt ) == -1 ? 1 : 0;
-    return $data;
 }
 
 =head2 GetOpenIssue
