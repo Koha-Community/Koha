@@ -154,7 +154,7 @@ subtest "get_login_shib tests" => sub {
     ## debug off
     $C4::Auth_with_shibboleth::debug = '0';
     warnings_are { $login = get_login_shib() }[],
-      "good config with debug off, no warnings recieved";
+      "good config with debug off, no warnings received";
     is( $login, "test1234",
         "good config with debug off, attribute value returned" );
 
@@ -165,7 +165,7 @@ subtest "get_login_shib tests" => sub {
         "shibboleth attribute to match: uid",
         "uid value: test1234"
     ],
-      "good config with debug enabled, correct warnings recieved";
+      "good config with debug enabled, correct warnings received";
     is( $login, "test1234",
         "good config with debug enabled, attribute value returned" );
 
