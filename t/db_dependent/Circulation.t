@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 90;
+use Test::More tests => 91;
 
 BEGIN {
     require_ok('C4::Circulation');
@@ -36,6 +36,7 @@ use C4::Reserves;
 use C4::Overdues qw(UpdateFine CalcFine);
 use Koha::DateUtils;
 use Koha::Database;
+use Koha::Subscriptions;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -1246,6 +1247,63 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
     is( keys(%$question) + keys(%$alerts), 0 );
     is( $error->{USERBLOCKEDNOENDDATE},    '9999-12-31' );
+};
+
+subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
+    plan tests => 5;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron  = $builder->build( { source => 'Borrower' } );
+
+    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
+    my $biblionumber = $biblioitem->{biblionumber};
+    my $item_1 = $builder->build(
+        {   source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblionumber,
+            }
+        }
+    );
+    my $item_2 = $builder->build(
+        {   source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblionumber,
+            }
+        }
+    );
+
+    my ( $error, $question, $alerts );
+    my $issue = AddIssue( $patron, $item_1->{barcode}, dt_from_string->add( days => 1 ) );
+
+    t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 0);
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
+    is( keys(%$error) + keys(%$alerts),  0, 'No error or alert should be raised' );
+    is( $question->{BIBLIO_ALREADY_ISSUED}, 1, 'BIBLIO_ALREADY_ISSUED question flag should be set if AllowMultipleIssuesOnABiblio=0 and issue already exists' );
+
+    t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 1);
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
+    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if AllowMultipleIssuesOnABiblio=1' );
+
+    # Add a subscription
+    Koha::Subscription->new({ biblionumber => $biblionumber })->store;
+
+    t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 0);
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
+    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if it iss a subscription' );
+
+    t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 1);
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
+    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if it iss a subscription' );
 };
 
 sub set_userenv {
