@@ -1066,14 +1066,18 @@ sub CanBookBeIssued {
         require C4::Serials;
         my $is_a_subscription = C4::Serials::CountSubscriptionFromBiblionumber($biblionumber);
         unless ($is_a_subscription) {
-            my $issues = GetIssues( {
-                borrowernumber => $borrower->{borrowernumber},
-                biblionumber   => $biblionumber,
-            } );
-            my @issues = $issues ? @$issues : ();
+            my $issues = Koha::Issues->search(
+                {
+                    borrowernumber => $borrower->{borrowernumber},
+                    biblionumber   => $biblionumber,
+                },
+                {
+                    join => 'item',
+                }
+            );
             # if we get here, we don't already have a loan on this item,
             # so if there are any loans on this bib, ask for confirmation
-            if (scalar @issues > 0) {
+            if ( $issues->count ) {
                 $needsconfirmation{BIBLIO_ALREADY_ISSUED} = 1;
             }
         }
@@ -2506,73 +2510,6 @@ sub GetOpenIssue {
   $sth->execute( $itemnumber );
   return $sth->fetchrow_hashref();
 
-}
-
-=head2 GetIssues
-
-    $issues = GetIssues({});    # return all issues!
-    $issues = GetIssues({ borrowernumber => $borrowernumber, biblionumber => $biblionumber });
-
-Returns all pending issues that match given criteria.
-Returns a arrayref or undef if an error occurs.
-
-Allowed criteria are:
-
-=over 2
-
-=item * borrowernumber
-
-=item * biblionumber
-
-=item * itemnumber
-
-=back
-
-=cut
-
-sub GetIssues {
-    my ($criteria) = @_;
-
-    # Build filters
-    my @filters;
-    my @allowed = qw(borrowernumber biblionumber itemnumber);
-    foreach (@allowed) {
-        if (defined $criteria->{$_}) {
-            push @filters, {
-                field => $_,
-                value => $criteria->{$_},
-            };
-        }
-    }
-
-    # Do we need to join other tables ?
-    my %join;
-    if (defined $criteria->{biblionumber}) {
-        $join{items} = 1;
-    }
-
-    # Build SQL query
-    my $where = '';
-    if (@filters) {
-        $where = "WHERE " . join(' AND ', map { "$_->{field} = ?" } @filters);
-    }
-    my $query = q{
-        SELECT issues.*
-        FROM issues
-    };
-    if (defined $join{items}) {
-        $query .= q{
-            LEFT JOIN items ON (issues.itemnumber = items.itemnumber)
-        };
-    }
-    $query .= $where;
-
-    # Execute SQL query
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query);
-    my $rv = $sth->execute(map { $_->{value} } @filters);
-
-    return $rv ? $sth->fetchall_arrayref({}) : undef;
 }
 
 =head2 GetItemIssues
