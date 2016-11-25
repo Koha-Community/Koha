@@ -63,7 +63,7 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
                       of Z39.50 searches
    --fees DAYS        purge entries accountlines older than DAYS days, where
                       amountoutstanding is 0 or NULL.
-                      In the case of --feees, DAYS must be greater than
+                      In the case of --fees, DAYS must be greater than
                       or equal to 1.
                       WARNING: Fees and payments may not be deleted together.
                       This will not affect the account balance but may be
