@@ -19,11 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
-use Koha::Checkout;
 use Koha::Checkouts;
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
 
@@ -54,6 +54,37 @@ is( Koha::Checkouts->search->count, $nb_of_checkouts + 2, 'The 2 checkouts shoul
 
 my $retrieved_checkout_1 = Koha::Checkouts->find( $new_checkout_1->issue_id );
 is( $retrieved_checkout_1->itemnumber, $new_checkout_1->itemnumber, 'Find a checkout by id should return the correct checkout' );
+
+subtest 'is_overdue' => sub {
+    plan tests => 6;
+    my $ten_days_ago   = dt_from_string->add( days => -10 );
+    my $ten_days_later = dt_from_string->add( days => 10 );
+    my $yesterday      = dt_from_string->add( days => -1 );
+    my $tomorrow       = dt_from_string->add( days => 1 );
+
+    $retrieved_checkout_1->date_due($ten_days_ago)->store;
+    is( $retrieved_checkout_1->is_overdue,
+        1, 'The item should have been returned 10 days ago' );
+
+    $retrieved_checkout_1->date_due($ten_days_later)->store;
+    is( $retrieved_checkout_1->is_overdue, 0, 'The item is due in 10 days' );
+
+    $retrieved_checkout_1->date_due($tomorrow)->store;
+    is( $retrieved_checkout_1->is_overdue($ten_days_later),
+        1, 'The item should have been returned yesterday' );
+
+    $retrieved_checkout_1->date_due($yesterday)->store;
+    is( $retrieved_checkout_1->is_overdue($ten_days_ago),
+        0, 'Ten days ago the item due yesterday was not late' );
+
+    $retrieved_checkout_1->date_due($tomorrow)->store;
+    is( $retrieved_checkout_1->is_overdue($ten_days_later),
+        1, 'In Ten days, the item due tomorrow will be late' );
+
+    $retrieved_checkout_1->date_due($yesterday)->store;
+    is( $retrieved_checkout_1->is_overdue($ten_days_ago),
+        0, 'In Ten days, the item due yesterday will still be late' );
+};
 
 $retrieved_checkout_1->delete;
 is( Koha::Checkouts->search->count, $nb_of_checkouts + 1, 'Delete should have deleted the checkout' );
