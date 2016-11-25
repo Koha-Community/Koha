@@ -89,7 +89,6 @@ BEGIN {
         &GetSoonestRenewDate
         &GetLatestAutoRenewDate
 		&GetItemIssue
-		&GetItemIssues
 		&GetIssuingCharges
         &GetBranchBorrowerCircRule
         &GetBranchItemRule
@@ -2511,53 +2510,6 @@ sub GetOpenIssue {
   $sth->execute( $itemnumber );
   return $sth->fetchrow_hashref();
 
-}
-
-=head2 GetItemIssues
-
-  $issues = &GetItemIssues($itemnumber, $history);
-
-Returns patrons that have issued a book
-
-C<$itemnumber> is the itemnumber
-C<$history> is false if you just want the current "issuer" (if any)
-and true if you want issues history from old_issues also.
-
-Returns reference to an array of hashes
-
-=cut
-
-sub GetItemIssues {
-    my ( $itemnumber, $history ) = @_;
-    
-    my $today = DateTime->now( time_zome => C4::Context->tz);  # get today date
-    $today->truncate( to => 'minute' );
-    my $sql = "SELECT * FROM issues
-              JOIN borrowers USING (borrowernumber)
-              JOIN items     USING (itemnumber)
-              WHERE issues.itemnumber = ? ";
-    if ($history) {
-        $sql .= "UNION ALL
-                 SELECT * FROM old_issues
-                 LEFT JOIN borrowers USING (borrowernumber)
-                 JOIN items USING (itemnumber)
-                 WHERE old_issues.itemnumber = ? ";
-    }
-    $sql .= "ORDER BY date_due DESC";
-    my $sth = C4::Context->dbh->prepare($sql);
-    if ($history) {
-        $sth->execute($itemnumber, $itemnumber);
-    } else {
-        $sth->execute($itemnumber);
-    }
-    my $results = $sth->fetchall_arrayref({});
-    foreach (@$results) {
-        my $date_due = dt_from_string($_->{date_due},'sql');
-        $date_due->truncate( to => 'minute' );
-
-        $_->{overdue} = (DateTime->compare($date_due, $today) == -1) ? 1 : 0;
-    }
-    return $results;
 }
 
 =head2 GetBiblioIssues

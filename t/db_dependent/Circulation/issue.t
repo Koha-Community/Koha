@@ -46,7 +46,6 @@ can_ok(
       GetBiblioIssues
       GetIssuingCharges
       GetItemIssue
-      GetItemIssues
       GetOpenIssue
       GetRenewCount
       GetUpcomingDueIssues
@@ -239,10 +238,6 @@ is( GetBiblioIssues(), undef, "GetBiblio Issues without parameters" );
 #FIXME : As the issues are not correctly added in the database, these tests don't work correctly
 is(GetItemIssue,undef,"Without parameter GetItemIssue returns undef");
 #is(GetItemIssue($item_id1),{},"Item1's issues");
-
-#Test GetItemIssues
-#FIXME: this routine currently doesn't work be
-#is_deeply (GetItemIssues,{},"Without parameter, GetItemIssue returns all the issues");
 
 #Test GetOpenIssue
 is( GetOpenIssue(), undef, "Without parameter GetOpenIssue returns undef" );

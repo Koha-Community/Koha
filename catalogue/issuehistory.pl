@@ -42,30 +42,14 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $params = $query->Vars;
 
 my $biblionumber = $params->{'biblionumber'};
-my $itemnumber   = $params->{'itemnumber'};
 
 if (C4::Context->preference("HidePatronName")) {
    $template->param(HidePatronName => 1);
 }
 
-my ($issues,$biblio,$barcode);
-if ($itemnumber){
-	$issues=GetItemIssues($itemnumber);
-	$biblio=GetBiblioFromItemNumber($itemnumber);
-	$biblionumber=$biblio->{biblionumber};
-	$barcode=$issues->[0]->{barcode};
-	$template->param(
-		%$biblio,
-		barcode=> $barcode,
-	);
-} else {
-	$issues = GetBiblioIssues($biblionumber);
-        my $biblio = GetBiblio($biblionumber);
-	my $total  = scalar @$issues;
-	$template->param(
-               %{$biblio},
-	);
-} 
+my $issues = GetBiblioIssues($biblionumber);
+my $biblio = GetBiblio($biblionumber);
+$template->param(%$biblio);
 
 $template->param(
     total        => scalar @$issues,
