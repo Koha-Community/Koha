@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 33;
+use Test::More tests => 32;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -45,7 +45,6 @@ can_ok(
       AddReturn
       GetBiblioIssues
       GetIssuingCharges
-      GetItemIssue
       GetOpenIssue
       GetRenewCount
       GetUpcomingDueIssues
@@ -233,11 +232,6 @@ ok( $stat, "Bug 17781 - 'Improper branchcode set during renewal' still fixed" );
 
 #Test GetBiblioIssues
 is( GetBiblioIssues(), undef, "GetBiblio Issues without parameters" );
-
-#Test GetItemIssue
-#FIXME : As the issues are not correctly added in the database, these tests don't work correctly
-is(GetItemIssue,undef,"Without parameter GetItemIssue returns undef");
-#is(GetItemIssue($item_id1),{},"Item1's issues");
 
 #Test GetOpenIssue
 is( GetOpenIssue(), undef, "Without parameter GetOpenIssue returns undef" );

@@ -36,6 +36,7 @@ use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Items;
 use Koha::ItemTypes;
+use Koha::Checkouts;
 use Koha::Libraries;
 use Koha::Patrons;
 use Date::Calc qw/Today Date_to_Days/;
@@ -465,9 +466,9 @@ foreach my $biblioNum (@biblionumbers) {
 
         # If the item is currently on loan, we display its return date and
         # change the background color.
-        my $issues= GetItemIssue($itemNum);
-        if ( $issues->{'date_due'} ) {
-            $itemLoopIter->{dateDue} = output_pref({ dt => dt_from_string($issues->{date_due}, 'sql'), as_due_date => 1 });
+        my $issue = Koha::Checkouts->find( { itemnumber => $itemNum } );
+        if ( $issue ) {
+            $itemLoopIter->{dateDue} = output_pref({ dt => dt_from_string($issue->date_due, 'sql'), as_due_date => 1 });
             $itemLoopIter->{backgroundcolor} = 'onloan';
         }
 

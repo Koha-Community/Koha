@@ -34,8 +34,10 @@ use CGI qw ( -utf8 );
 use DateTime;
 use C4::Auth;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::DateUtils;
 
 use Koha::Biblios;
+use Koha::Checkouts;
 use Koha::Libraries;
 use Koha::Patrons;
 
@@ -587,12 +589,12 @@ sub RenewLoan {
     my @renewal = CanBookBeRenewed( $borrowernumber, $itemnumber );
     if ( $renewal[0] ) { AddRenewal( $borrowernumber, $itemnumber ); }
 
-    my $issue = GetItemIssue($itemnumber);
+    my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return; # FIXME should be handled
 
     # Hashref building
     my $out;
-    $out->{'renewals'} = $issue->{'renewals'};
-    $out->{date_due}   = $issue->{date_due}->strftime('%Y-%m-%d %H:%S');
+    $out->{'renewals'} = $issue->renewals;
+    $out->{date_due}   = dt_from_string($issue->date_due)->strftime('%Y-%m-%d %H:%S');
     $out->{'success'}  = $renewal[0];
     $out->{'error'}    = $renewal[1];
 

@@ -8,8 +8,8 @@ use Carp;
 use strict;
 use warnings;
 use C4::Context;
-use C4::Circulation qw( GetItemIssue );
 use Koha::DateUtils;
+use Koha::Checkouts;
 
 my %fields = (
 	ok            => 0,
@@ -45,9 +45,9 @@ sub duedatefromissue {
     } # renew from AddIssue ??
     else {
         # need to reread the issue to get due date
-        $iss = GetItemIssue($itemnum);
-        if ($iss && $iss->{date_due} ) {
-            $due_dt = dt_from_string( $iss->{date_due} );
+        $iss = Koha::Checkouts->find( { itemnumber => $itemnum } );
+        if ($iss && $iss->date_due ) {
+            $due_dt = dt_from_string( $iss->date_due, 'sql' );
         }
     }
     return $due_dt;

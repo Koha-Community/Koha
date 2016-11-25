@@ -34,6 +34,7 @@ use C4::Overdues qw(UpdateFine CalcFine);
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::IssuingRules;
+use Koha::Checkouts;
 use Koha::Subscriptions;
 
 my $schema = Koha::Database->schema;
@@ -313,7 +314,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is (defined $issue2, 1, "Item 2 checked out, due date: " . $issue2->date_due());
 
 
-    my $borrowing_borrowernumber = GetItemIssue($itemnumber)->{borrowernumber};
+    my $borrowing_borrowernumber = Koha::Checkouts->find( { itemnumber => $itemnumber } )->borrowernumber;
     is ($borrowing_borrowernumber, $renewing_borrowernumber, "Item checked out to $renewing_borrower->{firstname} $renewing_borrower->{surname}");
 
     my ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber, 1);
@@ -1396,7 +1397,7 @@ subtest 'MultipleReserves' => sub {
     my $issue = AddIssue( $renewing_borrower, $barcode1);
     my $datedue = dt_from_string( $issue->date_due() );
     is (defined $issue->date_due(), 1, "item 1 checked out");
-    my $borrowing_borrowernumber = GetItemIssue($itemnumber1)->{borrowernumber};
+    my $borrowing_borrowernumber = Koha::Checkouts->find({ itemnumber => $itemnumber1 })->borrowernumber;
 
     my %reserving_borrower_data1 = (
         firstname =>  'Katrin',

@@ -24,6 +24,7 @@ use C4::Members;
 use C4::Reserves;
 use Koha::Database;
 use Koha::Biblios;
+use Koha::Checkouts;
 use Koha::Patrons;
 
 =encoding UTF-8
@@ -89,11 +90,11 @@ sub new {
     $item->{sip_media_type} = $itemtype->sip_media_type() if $itemtype;
 
 	# check if its on issue and if so get the borrower
-	my $issue = GetItemIssue($item->{'itemnumber'});
+    my $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
     if ($issue) {
-        $item->{due_date} = $issue->{date_due};
+        $item->{due_date} = dt_from_string( $issue->date_due, 'sql' )->truncate( to => 'minute' );
     }
-	my $borrower = GetMember(borrowernumber=>$issue->{'borrowernumber'});
+    my $borrower = $issue ? GetMember( borrowernumber => $issue->borrowernumber ) : {};
 	$item->{patron} = $borrower->{'cardnumber'};
     my $biblio = Koha::Biblios->find( $item->{biblionumber } );
     my $holds = $biblio->current_holds->unblessed;

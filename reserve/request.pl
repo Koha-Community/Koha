@@ -43,6 +43,7 @@ use C4::Utils::DataTables::Members;
 use C4::Members;
 use C4::Search;		# enabled_staff_search_views
 use Koha::DateUtils;
+use Koha::Checkouts;
 use Koha::Holds;
 use Koha::Items;
 use Koha::ItemTypes;
@@ -383,9 +384,9 @@ foreach my $biblionumber (@biblionumbers) {
 		
             # if the item is currently on loan, we display its return date and
             # change the background color
-            my $issues= GetItemIssue($itemnumber);
-            if ( $issues->{'date_due'} ) {
-                $item->{date_due} = $issues->{date_due_sql};
+            my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } );
+            if ( $issue ) {
+                $item->{date_due} = $issue->date_due;
                 $item->{backgroundcolor} = 'onloan';
             }
 

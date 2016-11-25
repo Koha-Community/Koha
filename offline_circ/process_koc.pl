@@ -37,6 +37,7 @@ use C4::Stats;
 use C4::BackgroundJob;
 use Koha::UploadedFiles;
 use Koha::Account;
+use Koha::Checkouts;
 use Koha::Patrons;
 
 use Date::Calc qw( Add_Delta_Days Date_to_Days );
@@ -250,11 +251,11 @@ sub kocIssueItem {
     my $branchcode = C4::Context->userenv->{branch};
     my $borrower = GetMember( 'cardnumber'=>$circ->{ 'cardnumber' } );
     my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
-    my $issue = GetItemIssue( $item->{'itemnumber'} );
+    my $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
 
-    if ( $issue->{ 'date_due' } ) { ## Item is currently checked out to another person.
+    if ( $issue ) { ## Item is currently checked out to another person.
         #warn "Item Currently Issued.";
-        my $issue = GetOpenIssue( $item->{'itemnumber'} );
+        my $issue = GetOpenIssue( $item->{'itemnumber'} ); # FIXME Hum? That does not make sense, if it's in the issue table, the issue is open (i.e. returndate is null)
 
         if ( $issue->{'borrowernumber'} eq $borrower->{'borrowernumber'} ) { ## Issued to this person already, renew it.
             #warn "Item issued to this member already, renewing.";
@@ -398,7 +399,7 @@ sub _get_borrowernumber_from_barcode {
     my $item = GetBiblioFromItemNumber( undef, $barcode );
     return unless $item->{'itemnumber'};
 
-    my $issue = C4::Circulation::GetItemIssue( $item->{'itemnumber'} );
-    return unless $issue->{'borrowernumber'};
-    return $issue->{'borrowernumber'};
+    my $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
+    return unless $issue;
+    return $issue->borrowernumber;
 }

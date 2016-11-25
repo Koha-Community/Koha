@@ -26,6 +26,7 @@ use C4::Context;
 
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Database;
+use Koha::Checkouts;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -106,10 +107,10 @@ t::lib::Mocks::mock_preference('SwitchOnSiteCheckouts', 1);
 is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1, 'If SwitchOnSiteCheckouts, switch the on-site checkout' );
 is( exists $impossible->{TOO_MANY}, '', 'If SwitchOnSiteCheckouts, switch the on-site checkout' );
 C4::Circulation::AddIssue( $patron, $item->{barcode}, undef, undef, undef, undef, { switch_onsite_checkout => 1 } );
-my $issue = C4::Circulation::GetItemIssue( $item->{itemnumber} );
-is( $issue->{onsite_checkout}, 0, 'The issue should have been switched to a regular checkout' );
+my $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
+is( $issue->onsite_checkout, 0, 'The issue should have been switched to a regular checkout' );
 my $five_days_after = dt_from_string->add( days => 5 )->set( hour => 23, minute => 59, second => 0 );
-is( $issue->{date_due}, $five_days_after, 'The date_due should have been set depending on the circ rules when the on-site checkout has been switched' );
+is( dt_from_string($issue->date_due, 'sql'), $five_days_after, 'The date_due should have been set depending on the circ rules when the on-site checkout has been switched' );
 
 # Specific case
 t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 1);

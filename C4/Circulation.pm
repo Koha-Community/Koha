@@ -307,7 +307,7 @@ sub transferbook {
     my $messages;
     my $dotransfer      = 1;
     my $itemnumber = GetItemnumberFromBarcode( $barcode );
-    my $issue      = GetItemIssue($itemnumber);
+    my $issue      = Koha::Checkouts->find({ itemnumber => $itemnumber });
     my $biblio = GetBiblioFromItemNumber($itemnumber);
 
     # bad barcode..
@@ -349,9 +349,9 @@ sub transferbook {
     }
 
     # check if it is still issued to someone, return it...
-    if ($issue->{borrowernumber}) {
+    if ( $issue ) {
         AddReturn( $barcode, $fbr );
-        $messages->{'WasReturned'} = $issue->{borrowernumber};
+        $messages->{'WasReturned'} = $issue->borrowernumber;
     }
 
     # find reserves.....
@@ -674,7 +674,7 @@ sub CanBookBeIssued {
     my $override_high_holds = $params->{override_high_holds} || 0;
 
     my $item = GetItem(GetItemnumberFromBarcode( $barcode ));
-    my $issue = GetItemIssue($item->{itemnumber});
+    my $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
 	my $biblioitem = GetBiblioItemData($item->{biblioitemnumber});
 	$item->{'itemtype'}=$item->{'itype'}; 
     my $dbh             = C4::Context->dbh;
@@ -832,9 +832,9 @@ sub CanBookBeIssued {
     #
     my $switch_onsite_checkout = (
           C4::Context->preference('SwitchOnSiteCheckouts')
-      and $issue->{onsite_checkout}
       and $issue
-      and $issue->{borrowernumber} == $borrower->{'borrowernumber'} ? 1 : 0 );
+      and $issue->onsite_checkout
+      and $issue->borrowernumber == $borrower->{'borrowernumber'} ? 1 : 0 );
     my $toomany = TooMany( $borrower, $item->{biblionumber}, $item, { onsite_checkout => $onsite_checkout, switch_onsite_checkout => $switch_onsite_checkout, } );
     # if TooMany max_allowed returns 0 the user doesn't have permission to check out this book
     if ( $toomany ) {
@@ -941,13 +941,13 @@ sub CanBookBeIssued {
     #
     # CHECK IF BOOK ALREADY ISSUED TO THIS BORROWER
     #
-    if ( $issue->{borrowernumber} && $issue->{borrowernumber} eq $borrower->{'borrowernumber'} ){
+    if ( $issue && $issue->borrowernumber eq $borrower->{'borrowernumber'} ){
 
         # Already issued to current borrower.
         # If it is an on-site checkout if it can be switched to a normal checkout
         # or ask whether the loan should be renewed
 
-        if ( $issue->{onsite_checkout}
+        if ( $issue->onsite_checkout
                 and C4::Context->preference('SwitchOnSiteCheckouts') ) {
             $messages{ONSITE_CHECKOUT_WILL_BE_SWITCHED} = 1;
         } else {
@@ -968,10 +968,10 @@ sub CanBookBeIssued {
             }
         }
     }
-    elsif ($issue->{borrowernumber}) {
+    elsif ( $issue ) {
 
         # issued to someone else
-        my $currborinfo =    C4::Members::GetMember( borrowernumber => $issue->{borrowernumber} );
+        my $currborinfo =    C4::Members::GetMember( borrowernumber => $issue->borrowernumber );
 
 
         my ( $can_be_returned, $message ) = CanBookBeReturned( $item, C4::Context->userenv->{branch} );
@@ -1304,13 +1304,13 @@ sub AddIssue {
         my $branch = _GetCircControlBranch( $item, $borrower );
 
         # get actual issuing if there is one
-        my $actualissue = GetItemIssue( $item->{itemnumber} );
+        my $actualissue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
 
         # get biblioinformation for this item
         my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
 
         # check if we just renew the issue.
-        if ( $actualissue->{borrowernumber} eq $borrower->{'borrowernumber'}
+        if ( $actualissue and $actualissue->borrowernumber eq $borrower->{'borrowernumber'}
                 and not $switch_onsite_checkout ) {
             $datedue = AddRenewal(
                 $borrower->{'borrowernumber'},
@@ -1322,8 +1322,7 @@ sub AddIssue {
         }
         else {
             # it's NOT a renewal
-            if ( $actualissue->{borrowernumber}
-                    and not $switch_onsite_checkout ) {
+            if ( $actualissue and not $switch_onsite_checkout ) {
                 # This book is currently on loan, but not to the person
                 # who wants to borrow it now. mark it returned before issuing to the new borrower
                 my ( $allowed, $message ) = CanBookBeReturned( $item, C4::Context->userenv->{branch} );
@@ -3045,9 +3044,9 @@ sub GetSoonestRenewDate {
     my $dbh = C4::Context->dbh;
 
     my $item      = GetItem($itemnumber)      or return;
-    my $itemissue = GetItemIssue($itemnumber) or return;
+    my $itemissue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return;
 
-    $borrowernumber ||= $itemissue->{borrowernumber};
+    $borrowernumber ||= $itemissue->borrowernumber;
     my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber )
       or return;
 
@@ -3066,8 +3065,7 @@ sub GetSoonestRenewDate {
         and $issuing_rule->norenewalbefore ne "" )
     {
         my $soonestrenewal =
-          $itemissue->{date_due}->clone()
-          ->subtract(
+          dt_from_string( $itemissue->date_due )->subtract(
             $issuing_rule->lengthunit => $issuing_rule->norenewalbefore );
 
         if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
@@ -3105,9 +3103,9 @@ sub GetLatestAutoRenewDate {
     my $dbh = C4::Context->dbh;
 
     my $item      = GetItem($itemnumber)      or return;
-    my $itemissue = GetItemIssue($itemnumber) or return;
+    my $itemissue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return;
 
-    $borrowernumber ||= $itemissue->{borrowernumber};
+    $borrowernumber ||= $itemissue->borrowernumber;
     my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber )
       or return;
 
@@ -3128,7 +3126,7 @@ sub GetLatestAutoRenewDate {
 
     my $maximum_renewal_date;
     if ( $issuing_rule->no_auto_renewal_after ) {
-        $maximum_renewal_date = dt_from_string($itemissue->{issuedate});
+        $maximum_renewal_date = dt_from_string($itemissue->issuedate);
         $maximum_renewal_date->add(
             $issuing_rule->lengthunit => $issuing_rule->no_auto_renewal_after
         );
