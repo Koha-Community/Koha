@@ -188,7 +188,7 @@ if ( $query->param('reserve_id') ) {
 my $borrower;
 my $returned = 0;
 my $messages;
-my $issueinformation;
+my $issue;
 my $itemnumber;
 my $barcode     = $query->param('barcode');
 my $exemptfine  = $query->param('exemptfine');
@@ -310,21 +310,22 @@ if ($barcode) {
     );
 
     # do the return
-    ( $returned, $messages, $issueinformation, $borrower ) =
+    ( $returned, $messages, $issue, $borrower ) =
       AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode, $return_date_override, $dropboxdate );
 
     if ($returned) {
         my $time_now = DateTime->now( time_zone => C4::Context->tz )->truncate( to => 'minute');
-        my $duedate = $issueinformation->{date_due}->strftime('%Y-%m-%d %H:%M');
+        my $date_due_dt = dt_from_string( $issue->date_due, 'sql' );
+        my $duedate = $date_due_dt->strftime('%Y-%m-%d %H:%M');
         $returneditems{0}      = $barcode;
         $riborrowernumber{0}   = $borrower->{'borrowernumber'};
         $riduedate{0}          = $duedate;
         $input{borrowernumber} = $borrower->{'borrowernumber'};
         $input{duedate}        = $duedate;
         unless ( $dropboxmode ) {
-            $input{return_overdue} = 1 if (DateTime->compare($issueinformation->{date_due}, DateTime->now()) == -1);
+            $input{return_overdue} = 1 if (DateTime->compare($date_due_dt, DateTime->now()) == -1);
         } else {
-            $input{return_overdue} = 1 if (DateTime->compare($issueinformation->{date_due}, $dropboxdate) == -1);
+            $input{return_overdue} = 1 if (DateTime->compare($date_due_dt, $dropboxdate) == -1);
         }
         push( @inputloop, \%input );
 

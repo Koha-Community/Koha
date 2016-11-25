@@ -1833,11 +1833,11 @@ sub AddReturn {
     my $biblio   = $item_level_itypes ? undef : GetBiblioData( $item->{ biblionumber } ); # don't get bib data unless we need it
     my $itemtype = $item_level_itypes ? $item->{itype} : $biblio->{itemtype};
 
-    my $issue  = GetItemIssue($itemnumber);
-    if ($issue and $issue->{borrowernumber}) {
-        $borrower = C4::Members::GetMember( borrowernumber => $issue->{borrowernumber} )
-            or die "Data inconsistency: barcode $barcode (itemnumber:$itemnumber) claims to be issued to non-existent borrowernumber '$issue->{borrowernumber}'\n"
-                . Dumper($issue) . "\n";
+    my $issue  = Koha::Checkouts->find( { itemnumber => $itemnumber } );
+    if ( $issue ) {
+        $borrower = C4::Members::GetMember( borrowernumber => $issue->borrowernumber )
+            or die "Data inconsistency: barcode $barcode (itemnumber:$itemnumber) claims to be issued to non-existent borrowernumber '" . $issue->borrowernumber . "'\n"
+                . Dumper($issue->unblessed) . "\n";
     } else {
         $messages->{'NotIssued'} = $barcode;
         # even though item is not on loan, it may still be transferred;  therefore, get current branch info
@@ -1919,7 +1919,8 @@ sub AddReturn {
     my $today = DateTime->now( time_zone => C4::Context->tz() );
 
     if ($doreturn) {
-        my $datedue = $issue->{date_due};
+        my $is_overdue;
+        die "The item is not issed and cannot be returned" unless $issue; # Just in case...
         $borrower or warn "AddReturn without current borrower";
 		my $circControlBranch;
         if ($dropbox) {
@@ -1928,7 +1929,7 @@ sub AddReturn {
             # FIXME: check issuedate > returndate, factoring in holidays
 
             $circControlBranch = _GetCircControlBranch($item,$borrower);
-            $issue->{'overdue'} = DateTime->compare($issue->{'date_due'}, $dropboxdate ) == -1 ? 1 : 0;
+            $is_overdue = $issue->is_overdue( $dropboxdate );
         }
 
         if ($borrowernumber) {
@@ -1938,7 +1939,7 @@ sub AddReturn {
                 $issue->{issue_id} = $issue_id;
             };
             unless ( $@ ) {
-                if ( ( C4::Context->preference('CalculateFinesOnReturn') && $issue->{'overdue'} ) || $return_date ) {
+                if ( ( C4::Context->preference('CalculateFinesOnReturn') && $is_overdue ) || $return_date ) {
                     _CalculateAndUpdateFine( { issue => $issue, item => $item, borrower => $borrower, return_date => $return_date } );
                 }
             } else {
@@ -1955,7 +1956,7 @@ sub AddReturn {
 
         }
 
-        ModItem({ onloan => undef }, $issue->{'biblionumber'}, $item->{'itemnumber'});
+        ModItem({ onloan => undef }, $item->{biblionumber}, $item->{'itemnumber'});
     }
 
     # the holdingbranch is updated if the document is returned to another location.
@@ -2015,18 +2016,18 @@ sub AddReturn {
     if ($borrowernumber) {
         my $fix = _FixOverduesOnReturn($borrowernumber, $item->{itemnumber}, $exemptfine, $dropbox);
         defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $item->{itemnumber}...) failed!";  # zero is OK, check defined
-        
-        if ( $issue->{overdue} && $issue->{date_due} ) {
+
+        if ( $issue and $issue->is_overdue ) {
         # fix fine days
             $today = $dropboxdate if $dropbox;
-            my ($debardate,$reminder) = _debar_user_on_return( $borrower, $item, $issue->{date_due}, $today );
+            my ($debardate,$reminder) = _debar_user_on_return( $borrower, $item, dt_from_string($issue->date_due), $today );
             if ($reminder){
                 $messages->{'PrevDebarred'} = $debardate;
             } else {
                 $messages->{'Debarred'} = $debardate if $debardate;
             }
         # there's no overdue on the item but borrower had been previously debarred
-        } elsif ( $issue->{date_due} and $borrower->{'debarred'} ) {
+        } elsif ( $issue->date_due and $borrower->{'debarred'} ) {
              if ( $borrower->{debarred} eq "9999-12-31") {
                 $messages->{'ForeverDebarred'} = $borrower->{'debarred'};
              } else {
@@ -2621,10 +2622,10 @@ sub CanBookBeRenewed {
     my $renews = 1;
 
     my $item      = GetItem($itemnumber)      or return ( 0, 'no_item' );
-    my $itemissue = GetItemIssue($itemnumber) or return ( 0, 'no_checkout' );
-    return ( 0, 'onsite_checkout' ) if $itemissue->{onsite_checkout};
+    my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return ( 0, 'no_checkout' );
+    return ( 0, 'onsite_checkout' ) if $issue->onsite_checkout;
 
-    $borrowernumber ||= $itemissue->{borrowernumber};
+    $borrowernumber ||= $issue->borrowernumber;
     my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber )
       or return;
 
@@ -2706,7 +2707,7 @@ sub CanBookBeRenewed {
     );
 
     return ( 0, "too_many" )
-      if not $issuing_rule or $issuing_rule->renewalsallowed <= $itemissue->{renewals};
+      if not $issuing_rule or $issuing_rule->renewalsallowed <= $issue->renewals;
 
     my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
     my $restrictionblockrenewing = C4::Context->preference('RestrictionBlockRenewing');
@@ -2716,16 +2717,16 @@ sub CanBookBeRenewed {
 
     if ( $restricted and $restrictionblockrenewing ) {
         return ( 0, 'restriction');
-    } elsif ( ($hasoverdues and $overduesblockrenewing eq 'block') || ($itemissue->{overdue} and $overduesblockrenewing eq 'blockitem') ) {
+    } elsif ( ($hasoverdues and $overduesblockrenewing eq 'block') || ($issue->is_overdue and $overduesblockrenewing eq 'blockitem') ) {
         return ( 0, 'overdue');
     }
 
-    if ( $itemissue->{auto_renew} ) {
+    if ( $issue->auto_renew ) {
         if ( defined $issuing_rule->no_auto_renewal_after
                 and $issuing_rule->no_auto_renewal_after ne "" ) {
             # Get issue_date and add no_auto_renewal_after
             # If this is greater than today, it's too late for renewal.
-            my $maximum_renewal_date = dt_from_string($itemissue->{issuedate});
+            my $maximum_renewal_date = dt_from_string($issue->issuedate, 'sql');
             $maximum_renewal_date->add(
                 $issuing_rule->lengthunit => $issuing_rule->no_auto_renewal_after
             );
@@ -2756,9 +2757,7 @@ sub CanBookBeRenewed {
     {
 
         # Calculate soonest renewal by subtracting 'No renewal before' from due date
-        my $soonestrenewal =
-          $itemissue->{date_due}->clone()
-          ->subtract(
+        my $soonestrenewal = dt_from_string( $issue->date_due, 'sql' )->subtract(
             $issuing_rule->lengthunit => $issuing_rule->norenewalbefore );
 
         # Depending on syspref reset the exact time, only check the date
@@ -2770,20 +2769,20 @@ sub CanBookBeRenewed {
 
         if ( $soonestrenewal > DateTime->now( time_zone => C4::Context->tz() ) )
         {
-            return ( 0, "auto_too_soon" ) if $itemissue->{auto_renew};
+            return ( 0, "auto_too_soon" ) if $issue->auto_renew;
             return ( 0, "too_soon" );
         }
-        elsif ( $itemissue->{auto_renew} ) {
+        elsif ( $issue->auto_renew ) {
             return ( 0, "auto_renew" );
         }
     }
 
     # Fallback for automatic renewals:
     # If norenewalbefore is undef, don't renew before due date.
-    if ( $itemissue->{auto_renew} ) {
+    if ( $issue->auto_renew ) {
         my $now = dt_from_string;
         return ( 0, "auto_renew" )
-          if $now >= $itemissue->{date_due};
+          if $now >= dt_from_string( $issue->date_due, 'sql' );
         return ( 0, "auto_too_soon" );
     }
 
@@ -2827,11 +2826,11 @@ sub AddRenewal {
     my $dbh = C4::Context->dbh;
 
     # Find the issues record for this book
-    my $issuedata  = GetItemIssue($itemnumber);
+    my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } );
 
-    return unless ( $issuedata );
+    return unless $issue;
 
-    $borrowernumber ||= $issuedata->{borrowernumber};
+    $borrowernumber ||= $issue->borrowernumber;
 
     if ( defined $datedue && ref $datedue ne 'DateTime' ) {
         carp 'Invalid date passed to AddRenewal.';
@@ -2840,8 +2839,8 @@ sub AddRenewal {
 
     my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber ) or return;
 
-    if ( C4::Context->preference('CalculateFinesOnReturn') && $issuedata->{overdue} ) {
-        _CalculateAndUpdateFine( { issue => $issuedata, item => $item, borrower => $borrower } );
+    if ( C4::Context->preference('CalculateFinesOnReturn') && $issue->is_overdue ) {
+        _CalculateAndUpdateFine( { issue => $issue, item => $item, borrower => $borrower } );
     }
     _FixOverduesOnReturn( $borrowernumber, $itemnumber );
 
@@ -2853,14 +2852,14 @@ sub AddRenewal {
         my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
-                                        dt_from_string( $issuedata->{date_due} ) :
+                                        dt_from_string( $issue->date_due, 'sql' ) :
                                         DateTime->now( time_zone => C4::Context->tz());
         $datedue =  CalcDateDue($datedue, $itemtype, _GetCircControlBranch($item, $borrower), $borrower, 'is a renewal');
     }
 
     # Update the issues record to have the new due date, and a new count
     # of how many times it has been renewed.
-    my $renews = $issuedata->{'renewals'} + 1;
+    my $renews = $issue->renewals + 1;
     my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, lastreneweddate = ?
                             WHERE borrowernumber=? 
                             AND itemnumber=?"
@@ -4023,7 +4022,7 @@ sub _CalculateAndUpdateFine {
     unless ($item)     { carp "No item passed in!"     && return; }
     unless ($issue)    { carp "No issue passed in!"    && return; }
 
-    my $datedue = $issue->{date_due};
+    my $datedue = dt_from_string( $issue->date_due );
 
     # we only need to calculate and change the fines if we want to do that on return
     # Should be on for hourly loans
@@ -4031,7 +4030,7 @@ sub _CalculateAndUpdateFine {
     my $control_branchcode =
         ( $control eq 'ItemHomeLibrary' ) ? $item->{homebranch}
       : ( $control eq 'PatronLibrary' )   ? $borrower->{branchcode}
-      :                                     $issue->{branchcode};
+      :                                     $issue->branchcode;
 
     my $date_returned = $return_date ? dt_from_string($return_date) : dt_from_string();
 
@@ -4043,9 +4042,9 @@ sub _CalculateAndUpdateFine {
     if ( C4::Context->preference('finesMode') eq 'production' ) {
         if ( $amount > 0 ) {
             C4::Overdues::UpdateFine({
-                issue_id       => $issue->{issue_id},
-                itemnumber     => $issue->{itemnumber},
-                borrowernumber => $issue->{borrowernumber},
+                issue_id       => $issue->issue_id,
+                itemnumber     => $issue->itemnumber,
+                borrowernumber => $issue->borrowernumber,
                 amount         => $amount,
                 type           => $type,
                 due            => output_pref($datedue),
@@ -4057,9 +4056,9 @@ sub _CalculateAndUpdateFine {
             # so in this case, we need to drop those fines to 0
 
             C4::Overdues::UpdateFine({
-                issue_id       => $issue->{issue_id},
-                itemnumber     => $issue->{itemnumber},
-                borrowernumber => $issue->{borrowernumber},
+                issue_id       => $issue->issue_id,
+                itemnumber     => $issue->itemnumber,
+                borrowernumber => $issue->borrowernumber,
                 amount         => 0,
                 type           => $type,
                 due            => output_pref($datedue),
