@@ -437,6 +437,23 @@ if ($prefillitem) {
     }
 }
 
+#
+# Returns a hash-ref to 4 commonly used fields - undefined hash-values
+# are also needed for use (as a check) in the template for this view.
+# (UI-improvements: KD-722)
+##
+sub get_common_fields_template {
+    my $biblionumber = shift;
+    my $marcRecord = GetMarcBiblio($biblionumber);
+    my %marc_field;
+    $marc_field{'marc84a'} = $marcRecord->subfield('084', "a");
+    $marc_field{'marc100a'} = $marcRecord->subfield('100', "a");
+    $marc_field{'marc110a'} = $marcRecord->subfield('110', "a");
+    $marc_field{'marc130a'} = $marcRecord->subfield('130', "a");
+    $marc_field{'marc245a'} = $marcRecord->subfield('245', "a");
+    return \%marc_field;
+}
+
 #-------------------------------------------------------------------------------
 if ($op eq "additem") {
 
@@ -1032,6 +1049,10 @@ $template->param(
     popup => scalar $input->param('popup') ? 1: 0,
     C4::Search::enabled_staff_search_views,
 );
+
+# For UI-improvements (KD-722)
+$template->param(commonMarcFieldRef => get_common_fields_template($biblionumber));
+
 $template->{'VARS'}->{'searchid'} = $searchid;
 
 if ($frameworkcode eq 'FA'){
