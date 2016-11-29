@@ -35,7 +35,7 @@
                             [% ELSE %]
                             <h1>Enter a new purchase suggestion</h1>
 
-                            <p>Please fill out this form to make a purchase suggestion. You will receive an email when the library processes your suggestion</p>
+                            <p>Please fill out this form to make a purchase suggestion. You will receive an email when the library processes your suggestion.</p>
                             <p>Only certain fields (marked in red) are required, but the more information you enter the easier it will be for the librarians to find the title you're requesting. The "Notes" field can be used to provide any additional information.</p>
 
                             <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="add_suggestion_form">
@@ -256,7 +256,7 @@
                                 [% END %]
                                 [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                     [% IF ( Koha.Preference('MaxOpenSuggestions') != ''  && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
-                                        <p class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time.</br>Once the library has processed those suggestions you will be able to place more</p>
+                                        <p class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time.</br>Once the library has processed those suggestions you will be able to place more.</p>
                                     [% ELSE %]
                                         <p><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a></p>
                                     [% END %]
