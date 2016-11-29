@@ -63,13 +63,12 @@ my ($template, $loggedinuser, $cookie)
 
 my $supplier=$query->param('supplier');
 my @suppliers = Koha::Acquisition::Booksellers->search({ name => $supplier });
-#my $count = scalar @suppliers;
 
 #build result page
 my $loop_suppliers = [];
 for my $s (@suppliers) {
     my $orders = SearchOrders({
-        booksellerid => $s->{'id'},
+        booksellerid => $s->id,
         pending => 1
     });
 
@@ -85,9 +84,9 @@ for my $s (@suppliers) {
     }
     push @{$loop_suppliers}, {
         loop_basket => $loop_basket,
-        aqbooksellerid => $s->{'id'},
-        name => $s->{'name'},
-        active => $s->{'active'},
+        aqbooksellerid => $s->id,
+        name => $s->name,
+        active => $s->active,
     };
 }
 
