@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-20 15:38-0300\n"
+"POT-Creation-Date: 2016-11-15 11:00-0300\n"
 "PO-Revision-Date: 2013-12-13 06:12+0000\n"
 "Last-Translator: khdw <khaidaw@yahoo.com>\n"
 "Language-Team: Institute of Informatics, MAS <nyam@hotmail.com>\n"
@@ -758,12 +758,12 @@ msgid "%s %s %s [ no name ] %s "
 msgstr "%s %s %s %s (%s) "
 
 #. %1$s:  title 
-#. %2$s:  firstname 
-#. %3$s:  surname 
+#. %2$s:  firstname | html 
+#. %3$s:  surname | html 
 #. %4$s:  title 
-#. %5$s:  surname 
+#. %5$s:  surname | html 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:277
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:273
 #, fuzzy, c-format
 msgid ""
 "%s %s %s does not currently have an image available. To import an image for "
@@ -1884,8 +1884,8 @@ msgstr "%s %s %s %s (%s)"
 #. %15$s: - IF account.description 
 #. %16$s:  account.description 
 #. %17$s:  END 
-#: intranet-tmpl/prog/en/modules/members/printinvoice.tt:47
-#: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:48
+#: intranet-tmpl/prog/en/modules/members/printinvoice.tt:48
+#: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:49
 #, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
@@ -2650,7 +2650,7 @@ msgstr "%s %s (%s) рүү авч байна "
 #. For the first occurrence,
 #. %1$s:  issuecount 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:901
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:434
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:430
 #, c-format
 msgid "%s Checkout(s)"
 msgstr "%s Авалт(ууд)"
@@ -2932,7 +2932,7 @@ msgstr "'%s' "
 #. For the first occurrence,
 #. %1$s:  holds_count 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:913
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:441
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:437
 #, fuzzy, c-format
 msgid "%s Hold(s)"
 msgstr "%s Барилт(ууд)"
@@ -3477,7 +3477,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  debarments.size 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:918
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:446
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:442
 #, fuzzy, c-format
 msgid "%s Restrictions"
 msgstr "Захиргаа"
@@ -5325,10 +5325,10 @@ msgstr "Шинэ захиалгыг нэмэх"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #. %5$s:  IF (firstname) 
-#. %6$s:  firstname 
+#. %6$s:  firstname | html 
 #. %7$s:  END 
 #. %8$s:  IF (surname) 
-#. %9$s:  surname 
+#. %9$s:  surname | html 
 #. %10$s:  END 
 #. %11$s: IF ( categoryname ) 
 #. %12$s:  categoryname 
@@ -5618,7 +5618,7 @@ msgstr "%s %s %s %s(%s)"
 #. %3$s:  ELSE 
 #. %4$s:  sex 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:240
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:236
 #, fuzzy, c-format
 msgid "%sFemale%sMale%s%s%s "
 msgstr "%s %s %s %s(%s) "
@@ -5638,7 +5638,7 @@ msgstr ""
 #. %4$s:  END 
 #. %5$s:  IF ( privacy2 ) 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:365
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:361
 #, c-format
 msgid "%sForever%s %sDefault%s %sNever%s "
 msgstr ""
@@ -6126,15 +6126,6 @@ msgstr ""
 msgid "%sh - Narrower term"
 msgstr "Илиүү нарийн томьёололууд"
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:24
-#, c-format
-msgid ""
-"%shttp://www.postgresql.org/docs/8.2/interactive/sql-createrole.html%sthis "
-"page"
-msgstr ""
-
 #. %1$s:  PROCESS selectoptionopen value='i' 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:256
 #, c-format
@@ -6178,6 +6169,12 @@ msgstr ""
 #, c-format
 msgid "%st - Immediate parent body"
 msgstr ""
+
+#. %1$s:  END 
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:26
+#, fuzzy, c-format
+msgid "%sthis page"
+msgstr "Хуудсыг хэвлэх"
 
 #. %1$s:  lateorder.unitpricesupplier 
 #. %2$s:  lateorder.quantity 
@@ -6971,11 +6968,6 @@ msgstr "Коха &rsaquo; Гарчгууд "
 msgid "&rsaquo; Cannot delete item type '%s' %s "
 msgstr "Зүйлийн төрөл' %s' устгаж чадахгүй байна "
 
-#: intranet-tmpl/prog/en/modules/members/deletemem.tt:9
-#, fuzzy, c-format
-msgid "&rsaquo; Cannot delete patron"
-msgstr "Коха &rsaquo; Үйлчлүүлэгчийг устгаж чадахгүй"
-
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:74
 #, fuzzy, c-format
 msgid "&rsaquo; Cataloging"
@@ -7165,6 +7157,13 @@ msgstr "<a1>Зогсоох үгүүд</a> &rsaquo; Зогсоох үгийг у�
 #, fuzzy, c-format
 msgid "&rsaquo; Delete item type '%s'? %s %s %s "
 msgstr "Зүйлийн төрөл '%s'-г устгах уу? "
+
+#. %1$s:  firstname 
+#. %2$s:  surname 
+#: intranet-tmpl/prog/en/modules/members/deletemem.tt:9
+#, fuzzy, c-format
+msgid "&rsaquo; Delete patron %s %s"
+msgstr "<a1>Зогсоох үгүүд</a> &rsaquo; Зогсоох үгийг устгах уу '%s' ?"
 
 #. %1$s:  subscriptionid 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:36
@@ -8832,15 +8831,10 @@ msgstr ""
 msgid ". See highlighted items "
 msgstr ". <a1>Доорхи</a>онцолсон зүйлсийг харна уу "
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:37
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:44
 #, fuzzy, c-format
 msgid ". Some database servers require "
 msgstr ". Зарим өгөгдлийн сангийн серверүүд шаарддаг "
-
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:24
-#, fuzzy, c-format
-msgid ". User "
-msgstr ". Ашиглагч "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -8877,7 +8871,7 @@ msgid "0 Checkouts"
 msgstr "0 авалтууд"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:915
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:443
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:439
 #, c-format
 msgid "0 Holds"
 msgstr "0 Барилтууд"
@@ -8936,7 +8930,7 @@ msgstr "1/8"
 msgid "10; url=/cgi-bin/koha/mainpage.pl"
 msgstr "10; url=/cgi-bin/koha/mainpage.pl"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:38
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:45
 #, c-format
 msgid "127.0.0.1"
 msgstr "127.0.0.1"
@@ -9458,8 +9452,8 @@ msgstr "Үйлдлүүд"
 msgid "Activate filters"
 msgstr "Талбарыг арилгах"
 
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:380
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:384
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:388
 #, fuzzy, c-format
 msgid "Activate sync: "
 msgstr "Идэвхтэй: "
@@ -10092,7 +10086,7 @@ msgid "Additional SRU options: "
 msgstr "Нэмэгдэл зохиолчид:"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1019
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:305
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:301
 #, c-format
 msgid "Additional attributes and identifiers"
 msgstr "Нэмэгдэл шинж тэмдэгтүүд ба хувьсагчид"
@@ -10172,8 +10166,8 @@ msgstr "Хаяг 2: "
 msgid "Address 2:"
 msgstr "Хаяг 2: "
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:400
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:419
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:396
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:415
 #, fuzzy, c-format
 msgid "Address 2: "
 msgstr "Хаяг 2: "
@@ -10206,8 +10200,8 @@ msgstr "Хаягийн мөр 3 "
 msgid "Address:"
 msgstr "Хаяг :"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:399
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:418
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:395
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:414
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:48
 #, fuzzy, c-format
 msgid "Address: "
@@ -10667,7 +10661,7 @@ msgstr "Үүсгэлт"
 
 #: intranet-tmpl/prog/en/includes/member-alt-address-style-de.inc:2
 #: intranet-tmpl/prog/en/includes/member-alt-address-style-us.inc:2
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:398
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:394
 #, c-format
 msgid "Alternate address"
 msgstr "Орлуулах хаяг"
@@ -10806,7 +10800,7 @@ msgstr "Орлуулах холбоо барих мэдээлэл"
 msgid "Alternate contact: ZIP/Postal code"
 msgstr "Орлуулах холбоо барих мэдээлэл"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:415
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:411
 #, fuzzy, c-format
 msgid "Alternative contact"
 msgstr "Орлуулах холбоо барих мэдээлэл"
@@ -10850,10 +10844,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:81
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:753
 #: intranet-tmpl/prog/en/modules/members/pay.tt:82
-#: intranet-tmpl/prog/en/modules/members/printinvoice.tt:40
+#: intranet-tmpl/prog/en/modules/members/printinvoice.tt:41
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:125
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:179
-#: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:42
+#: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:43
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:66
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:81
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:156
@@ -10868,7 +10862,7 @@ msgid "Amount must be a valid number, or empty"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:83
-#: intranet-tmpl/prog/en/modules/members/printinvoice.tt:41
+#: intranet-tmpl/prog/en/modules/members/printinvoice.tt:42
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:126
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:180
 #, fuzzy, c-format
@@ -11686,7 +11680,7 @@ msgstr ""
 msgid "Arrived"
 msgstr "Хүрэлцэн ирсэн"
 
-#. %1$s:  IF ( mysql ) 
+#. %1$s:  IF dbms == 'mysql' 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:24
 #, fuzzy, c-format
 msgid "Ask for or make a change in the user's privileges. Need help? See %s"
@@ -12284,7 +12278,7 @@ msgstr "Ном зүй рүү буцах"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:465
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:372
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:494
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:490
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:78
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:43
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:427
@@ -13074,7 +13068,7 @@ msgid "Borrower number"
 msgstr "Зээлдэгчийн дугаар"
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:69
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:351
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:347
 #, fuzzy, c-format
 msgid "Borrowernumber: "
 msgstr "Зээлдэгчийндугаар: "
@@ -13516,7 +13510,7 @@ msgstr "Холбоо барих утас (Зохиол-бус 0-9 Зохиол A
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:937
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:719
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:737
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:463
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:459
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:40
 #, c-format
 msgid "Call no"
@@ -13547,7 +13541,7 @@ msgstr "Холбоо барих утас"
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:594
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:7
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:493
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:489
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:427
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:531
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:630
@@ -13914,7 +13908,7 @@ msgstr ""
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:970
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:504
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:500
 #, fuzzy
 msgid "Cancel marked holds"
 msgstr "Барилтыг цуцлах"
@@ -14255,7 +14249,7 @@ msgid "Card number:"
 msgstr "Картын дугаар: "
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:68
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:350
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:346
 #, fuzzy, c-format
 msgid "Card number: "
 msgstr "Картын дугаар: "
@@ -14508,7 +14502,7 @@ msgstr "Ангилал:"
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:209
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:659
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:70
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:352
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:348
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:533
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:49
 #, fuzzy, c-format
@@ -14663,7 +14657,7 @@ msgstr "Тэмдэгтийн кодчлол "
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:938
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:720
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:738
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:464
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:460
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:44
 #, c-format
 msgid "Charge"
@@ -14811,7 +14805,7 @@ msgstr "Түгээлтийн авалт (Олголтууд)"
 msgid "Check out to this patron"
 msgstr "Зүйл одоогоор энэ үйлчлүүлэгчид өгөгдсөн байна. Шинэчлэх үү?"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:35
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:42
 #, c-format
 msgid "Check that your database is running."
 msgstr "Таны өгөгдлийн бааз ажиллаж байгаа эсэхийг шалга"
@@ -14826,7 +14820,7 @@ msgstr "өөрийн хийхийг хүсэж байгаа үйлдлийн х�
 msgid "Check the expiration of a serial"
 msgstr "Хугацаа дуусалтыг шалгах"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:37
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:44
 #, fuzzy, c-format
 msgid "Check the hostname setting in "
 msgstr "Толгой серверийн нэрийг шалгах "
@@ -14879,7 +14873,7 @@ msgstr ""
 "OPAC дахь үйлчлүүлэгчийн дэлгэрэнгүй мэдээллийн хуудсанд энэ шинж тэмдгийг "
 "үзүүлэхээр сонгох."
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:36
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:43
 #, fuzzy, c-format
 msgid "Check your database settings in "
 msgstr "Өөрийн өгөгдлийн баазын тохиргоонуудыг дараахьд шалгах "
@@ -14965,7 +14959,7 @@ msgstr " %s удаа авагдаж байсан"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:718
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:736
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:462
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:458
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:81
 #, fuzzy, c-format
 msgid "Checked out from"
@@ -14975,7 +14969,7 @@ msgstr "Дараахьд авагдсан"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:717
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:735
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:461
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:457
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:80
 #, c-format
 msgid "Checked out on"
@@ -15455,7 +15449,7 @@ msgstr "Түгээлтийн түүх"
 msgid "Circulation note"
 msgstr "Түгээлтийн санамж: "
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:380
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:376
 #, fuzzy, c-format
 msgid "Circulation note: "
 msgstr "Түгээлтийн санамж: "
@@ -15537,8 +15531,8 @@ msgstr "Хот: "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:134
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:82
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:401
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:420
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:397
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:416
 #, fuzzy, c-format
 msgid "City: "
 msgstr "Хот: "
@@ -15789,7 +15783,7 @@ msgstr "Хайлтын томьёололуудыг оруулах"
 msgid "Clear used authorities"
 msgstr "Шинэ багцыг үүсгэх"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:44
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:51
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:85
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:198
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:209
@@ -15901,7 +15895,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:274
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:270
 #, fuzzy, c-format
 msgid "Click the 'Delete' button to remove the current image. %s "
 msgstr "Одоогийн зургийг арилгахын тул 'Устгах' товчийг дарах. "
@@ -16675,7 +16669,7 @@ msgstr "Календарийн мэдээлэл"
 msgid "Contact name: "
 msgstr "Холбоо барих нэр: "
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:407
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:403
 #, fuzzy, c-format
 msgid "Contact note: "
 msgstr "Холбоо барих санамж: "
@@ -17108,8 +17102,8 @@ msgstr "Тоо "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:137
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:94
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:404
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:423
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:400
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:419
 #, fuzzy, c-format
 msgid "Country: "
 msgstr "Тоо "
@@ -17853,7 +17847,7 @@ msgstr "Төрсөн өдөр хүчингүй байна."
 
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:84
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:48
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:239
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:235
 #, c-format
 msgid "Date of birth:"
 msgstr "Төрсөн өдөр:"
@@ -18450,7 +18444,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:192
 #: intranet-tmpl/prog/en/modules/members/files.tt:47
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:495
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:292
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:288
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:51
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:72
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:120
@@ -18856,7 +18850,7 @@ msgstr "Бичлэгийг устгах"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:964
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:671
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:498
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:494
 #, c-format
 msgid "Delete?"
 msgstr "Устгах уу?"
@@ -19671,7 +19665,7 @@ msgstr "Болзолт  %s"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:102
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:49
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:457
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:453
 #, c-format
 msgid "Due date"
 msgstr "Болзолт огноо"
@@ -19681,7 +19675,7 @@ msgstr "Болзолт огноо"
 msgid "Due date (unformatted, hidden)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:456
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:452
 #, c-format
 msgid "Due date hidden not formatted"
 msgstr ""
@@ -19903,13 +19897,13 @@ msgstr "Эд Суммерз (Зарим кодууд ба MARC шиг Перл �
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:87
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:190
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:37
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:258
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:260
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:328
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:341
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:394
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:411
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:427
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:254
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:256
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:324
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:337
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:390
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:407
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:423
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:32
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:40
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:379
@@ -20319,7 +20313,7 @@ msgid "Email:"
 msgstr "Цахим шуудан:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:140
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:406
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:402
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:18
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:15
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:59
@@ -21028,7 +21022,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:962
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:676
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:964
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:496
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:492
 #, fuzzy, c-format
 msgid "Expiration"
 msgstr "Хугацаа дуусах:"
@@ -21042,7 +21036,7 @@ msgid "Expiration date"
 msgstr "Хугацаа дуусах огноо"
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:72
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:355
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:351
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:135
 #, fuzzy, c-format
 msgid "Expiration date: "
@@ -21424,7 +21418,7 @@ msgstr "Факс: "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:139
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:42
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:233
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:229
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:13
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:57
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:188
@@ -21818,7 +21812,7 @@ msgstr "Өөр талбарыг нэмэх"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:939
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:61
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:465
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:461
 #, c-format
 msgid "Fine"
 msgstr "Торгууль"
@@ -21853,7 +21847,7 @@ msgstr "Торгуулийн өршөөлийн хугацаа"
 msgid "Fines"
 msgstr "Торгуулиууд"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:438
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:434
 #, c-format
 msgid "Fines &amp; Charges"
 msgstr "Торгуулиуд &amp; Төлбөрүүд"
@@ -21925,7 +21919,7 @@ msgid "First name"
 msgstr "Жинхэнэ нэр"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:463
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:417
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:413
 #, fuzzy, c-format
 msgid "First name: "
 msgstr "Жинхэнэ нэр: "
@@ -22624,7 +22618,7 @@ msgstr "Ерөнхий"
 
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:83
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:49
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:240
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:236
 #, fuzzy, c-format
 msgid "Gender:"
 msgstr "Ерөнхий"
@@ -22860,7 +22854,7 @@ msgid "Groups of libraries: "
 msgstr "Номын сангуудын бүлэг "
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:52
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:245
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:241
 #, c-format
 msgid "Guarantees:"
 msgstr "Баталгаанууд:"
@@ -22876,8 +22870,8 @@ msgid "Guarantor information"
 msgstr "Батлан даагчийн мэдээлэл"
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:56
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:249
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:251
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:245
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:247
 #, c-format
 msgid "Guarantor:"
 msgstr "Батлан даагч:"
@@ -23158,7 +23152,7 @@ msgid "Hold at"
 msgstr "Дараахь баригдсан"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:491
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:487
 #, c-format
 msgid "Hold date"
 msgstr "Барилтын огноо"
@@ -24730,7 +24724,7 @@ msgid "Initials"
 msgstr "Нэрийн эхний үсгүүд: "
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:47
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:238
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:234
 #, fuzzy, c-format
 msgid "Initials: "
 msgstr "Нэрийн эхний үсгүүд: "
@@ -25509,7 +25503,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:20
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:463
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:572
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:459
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:455
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:41
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:408
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:437
@@ -26961,11 +26955,6 @@ msgstr "Коха &rsaquo; Бар кодууд ба Гарчгууд &rsaquo; Х�
 msgid "Koha &rsaquo; Basket grouping for %s"
 msgstr "Коха &rsaquo; Худалдагч %s-г хайх"
 
-#: intranet-tmpl/prog/en/modules/members/deletemem.tt:2
-#, c-format
-msgid "Koha &rsaquo; Can't Delete Patron"
-msgstr "Коха &rsaquo; Үйлчлүүлэгчийг устгаж чадахгүй"
-
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
 #. %3$s:  title |html 
@@ -27302,6 +27291,13 @@ msgstr "Коха &rsaquo; Тайлангууд &rsaquo; Алдагдсан зү�
 #, fuzzy, c-format
 msgid "Koha &rsaquo; Course reserves &rsaquo; Course details for %s"
 msgstr "Коха &rsaquo; Каталог &rsaquo; Дараахийн зүйлийн дэлгэрэнгүй мэдээлэл"
+
+#. %1$s:  firstname 
+#. %2$s:  surname 
+#: intranet-tmpl/prog/en/modules/members/deletemem.tt:2
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Delete patron %s %s"
+msgstr "Коха &rsaquo; Үйлчлүүлэгчийг устгаж чадахгүй"
 
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:2
 #, fuzzy, c-format
@@ -28733,7 +28729,7 @@ msgstr "Сүүлд харагдсан"
 msgid "Last seen:"
 msgstr "Сүүлд харагдсан:"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:386
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:382
 #, fuzzy, c-format
 msgid "Last sync: "
 msgstr "Сүүлд харагдсан:"
@@ -29077,7 +29073,7 @@ msgid "Library transfer limits"
 msgstr "Номын сангийн салбарууд"
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:65
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:347
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:343
 #, c-format
 msgid "Library use"
 msgstr "Номын сангийн ашиглалт"
@@ -29117,7 +29113,7 @@ msgstr "Номын сан:"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:654
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:118
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:79
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:363
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:359
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:92
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:114
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:91
@@ -29474,7 +29470,7 @@ msgstr "Локал ашиглалт"
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:108
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:477
 #: intranet-tmpl/prog/en/modules/tags/list.tt:45
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:460
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:456
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:432
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:182
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:225
@@ -30090,7 +30086,7 @@ msgstr "Захиалгуудыг зохицуулах"
 msgid "Manage orders & basketgroups"
 msgstr "Харагдац үүсгэх"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:273
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:269
 #, fuzzy, c-format
 msgid "Manage patron image"
 msgstr "Үйлчлүүэгчийн зургийг зохицуулах"
@@ -32046,8 +32042,8 @@ msgstr "Дараагийн &gt;&gt;"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:599
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:631
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:111
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:44
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:51
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:58
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:85
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:198
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:209
@@ -32119,7 +32115,7 @@ msgstr "Коха-н баримт бичгийг унших"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:300
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:327
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:153
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:388
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:384
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:244
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:247
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:342
@@ -32269,7 +32265,7 @@ msgstr "Хавтасны зургууд бэлэн биш байна"
 msgid "No data available in table"
 msgstr "Дурын бэлэн хуулбар"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:27
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:34
 #, fuzzy, c-format
 msgid "No database named "
 msgstr "Өгөгдлийн сан нэрлэгдээгүй байна "
@@ -32525,7 +32521,7 @@ msgstr "Захиалга алга"
 msgid "No orders yet"
 msgstr "Захиалга алга"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:478
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:474
 #, c-format
 msgid "No outstanding charges"
 msgstr "Төлөгдөөгүй төлбөрүүд алга"
@@ -33064,6 +33060,8 @@ msgstr "Шинэчлэлүүд:"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:593
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:881
+#: intranet-tmpl/prog/en/modules/members/printinvoice.tt:40
+#: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:42
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:65
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:47
 #, c-format
@@ -33722,7 +33720,7 @@ msgstr "OPAC санамж: "
 msgid "OPAC note"
 msgstr "OPAC санамж"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:381
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:377
 #, c-format
 msgid "OPAC note:"
 msgstr "OPAC санамж:"
@@ -34007,7 +34005,7 @@ msgstr "Зөвхөн PNG, GIF, JPEG, XPM форматууд дэмжигдэнэ
 msgid "Only PNG, GIF, JPEG, XPM formats are supported."
 msgstr "Зөвхөн PNG, GIF, JPEG, XPM форматууд дэмжигдэнэ."
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:279
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:275
 #, fuzzy, c-format
 msgid "Only PNG, GIF, JPEG, XPM formats are supported. "
 msgstr "Зөвхөн PNG, GIF, JPEG, XPM форматууд дэмжигдэнэ. "
@@ -34411,7 +34409,6 @@ msgstr "Бусад нэр: "
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:35
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:40
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:226
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:231
 #, fuzzy, c-format
 msgid "Other phone: "
 msgstr "Бусад нэр: "
@@ -34717,7 +34714,7 @@ msgid "Password:"
 msgstr "Нууц үг:"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:135
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:373
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:369
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:219
 #, fuzzy, c-format
 msgid "Password: "
@@ -34762,7 +34759,7 @@ msgstr "Патентын баримт бичиг"
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:673
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:20
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:467
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:463
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:109
 #, c-format
 msgid "Patron"
@@ -34963,7 +34960,7 @@ msgid "Patron has nothing checked out."
 msgstr "Үйлчлүүлэгч юу ч аваагүй байна."
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:1000
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:533
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:529
 #, c-format
 msgid "Patron has nothing on hold."
 msgstr "Үйлчлүүлэгч ямар нэг барилт хийгээгүй байна."
@@ -35068,7 +35065,7 @@ msgid "Patron lists:"
 msgstr "Үйлчлүүлэгчийн дарцгууд:"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1067
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:334
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:330
 #, fuzzy, c-format
 msgid "Patron messaging preferences"
 msgstr "Үйлчлүүлэгчийн мэдээллийн эрхэмлэлүүд"
@@ -35730,8 +35727,8 @@ msgid "Phone:"
 msgstr "Утас:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:138
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:405
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:424
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:401
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:420
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:56
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:9
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:55
@@ -35759,7 +35756,7 @@ msgid "Pick"
 msgstr "Үнэ"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:961
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:495
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:491
 #, fuzzy, c-format
 msgid "Pickup at"
 msgstr "Дараахьд авах:"
@@ -36065,7 +36062,7 @@ msgstr ""
 msgid "Please click 'Next' to continue "
 msgstr "Үргэлжлүүлэхийн тул дараагийн-г дарна уу "
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:51
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:58
 #, fuzzy, c-format
 msgid "Please click 'Next' to continue if this information is correct "
 msgstr "Хэрвээ энэ мэдээлэл зөв бол үргэлжлүүлэхийн тул Дараагийн-г дарна уу "
@@ -36096,13 +36093,13 @@ msgstr ""
 msgid "Please contact your system administrator"
 msgstr "Системийн зохицуулагчтайгаа холбоо барина уу"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:40
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:47
 #, fuzzy, c-format
 msgid "Please correct these errors and "
 msgstr ""
 "Эдгээр алдаануудыг засаад <a1>суурилуулагчийг эхлүүлэх</a>-г дарна уу. "
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:28
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:35
 #, c-format
 msgid "Please create the database before continuing."
 msgstr "Үргэлжлүүлэхийн өмнө өгөгдлийн баазыг үүсгэнэ үү."
@@ -36789,7 +36786,7 @@ msgstr "Өмнөх зээлдэгч:"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:25
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:940
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:108
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:466
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:462
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:45
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:102
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:62
@@ -36845,7 +36842,7 @@ msgid "Primary email"
 msgstr "Үндсэн"
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:44
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:235
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:231
 #, fuzzy, c-format
 msgid "Primary email:"
 msgstr "Үндсэн"
@@ -36859,7 +36856,6 @@ msgstr "Мэргэжлийн утас: "
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:33
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:39
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:224
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:230
 #, fuzzy, c-format
 msgid "Primary phone: "
 msgstr "Мэргэжлийн утас: "
@@ -37047,12 +37043,12 @@ msgstr "Принтерүүд"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:963
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:574
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:668
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:497
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:493
 #, c-format
 msgid "Priority"
 msgstr "Эрэмбэ"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:365
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:361
 #, fuzzy, c-format
 msgid "Privacy Pref:"
 msgstr "Хувийн"
@@ -37890,7 +37886,7 @@ msgid "Registration date"
 msgstr "Бүртгэх огноо:"
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:71
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:353
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:349
 #, fuzzy, c-format
 msgid "Registration date: "
 msgstr "Бүртгэх огноо: "
@@ -37959,7 +37955,7 @@ msgid "Relationship: "
 msgstr "Харилцаа: "
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:908
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:436
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:432
 #, fuzzy, c-format
 msgid "Relatives' checkouts"
 msgstr "Зүйл авагдсан"
@@ -38842,7 +38838,7 @@ msgstr "Хуудас болгоны үр дүнгүүд :"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:994
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:528
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:524
 msgid "Resume all suspended holds"
 msgstr ""
 
@@ -39218,7 +39214,7 @@ msgid "SMS alert number"
 msgstr "SMS дугаар:"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1117
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:337
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:333
 #, c-format
 msgid "SMS number:"
 msgstr "SMS дугаар:"
@@ -40228,7 +40224,7 @@ msgid "Secondary email"
 msgstr "Хоёрдогч тусламжийн материал "
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:45
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:236
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:232
 #, fuzzy, c-format
 msgid "Secondary email: "
 msgstr "Хоёрдогч тусламжийн материал "
@@ -40583,7 +40579,7 @@ msgstr "Үзүүлэх файлыг сонгох: "
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:41
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:77
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:286
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:282
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:119
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:98
 #, fuzzy, c-format
@@ -41594,7 +41590,7 @@ msgid "Sort field 1"
 msgstr "Коха талбар:"
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:81
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:370
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:366
 #, fuzzy, c-format
 msgid "Sort field 1:"
 msgstr "Коха талбар:"
@@ -41608,7 +41604,7 @@ msgid "Sort field 2"
 msgstr "Коха талбар:"
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:82
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:371
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:367
 #, fuzzy, c-format
 msgid "Sort field 2:"
 msgstr "Коха талбар:"
@@ -41737,7 +41733,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:984
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:518
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:514
 #, c-format
 msgid "Specify date on which to resume %s: "
 msgstr ""
@@ -42055,8 +42051,8 @@ msgstr "Зүйлийн төлөв"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:135
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:86
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:402
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:421
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:398
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:417
 #, fuzzy, c-format
 msgid "State: "
 msgstr "Эвдэрсэн "
@@ -43032,7 +43028,7 @@ msgid "Surname"
 msgstr "Жинхэнэ нэр"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:452
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:416
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:412
 #, fuzzy, c-format
 msgid "Surname: "
 msgstr "Жинхэнэ нэр: "
@@ -43044,7 +43040,7 @@ msgstr "Судалгаанууд"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:979
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:513
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:509
 #, fuzzy
 msgid "Suspend all holds"
 msgstr "Үргэлжил байгаа барилтуудын тусламж"
@@ -43086,7 +43082,7 @@ msgstr ""
 msgid "Symbol: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:385
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:381
 #, fuzzy, c-format
 msgid "Sync status: "
 msgstr "Зүйлийн төлөв "
@@ -45276,8 +45272,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:166
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:570
 #: intranet-tmpl/prog/en/modules/tags/list.tt:44
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:458
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:492
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:454
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:488
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:75
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:21
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:38
@@ -45547,9 +45543,9 @@ msgstr ""
 msgid "To screen into the browser: "
 msgstr "Зээлдэгчийн хүснэгт рүү импортлох "
 
-#. %1$s:  title 
-#. %2$s:  surname 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:274
+#. %1$s:  title | html 
+#. %2$s:  surname | html 
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:270
 #, c-format
 msgid ""
 "To update the image for %s %s, select a new image file and click 'Upload.' "
@@ -45914,7 +45910,7 @@ msgid "Total due:"
 msgstr "Шуудангийн хаяг"
 
 #. %1$s:  totaldue 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:476
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:472
 #, fuzzy, c-format
 msgid "Total due: %s"
 msgstr ") болзолт огноо: %s"
@@ -45952,12 +45948,12 @@ msgstr ""
 msgid "Total ordered"
 msgstr "Шуудангийн хаяг"
 
-#: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:70
+#: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:72
 #, c-format
 msgid "Total outstanding dues as on date : "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/printinvoice.tt:70
+#: intranet-tmpl/prog/en/modules/members/printinvoice.tt:72
 #, c-format
 msgid "Total outstanding dues as on date: "
 msgstr ""
@@ -46367,7 +46363,7 @@ msgstr "Өөрчлөх"
 msgid "Uncheck all"
 msgstr "Бүгдийг шинэчлэх"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:377
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:373
 #, fuzzy, c-format
 msgid "Undefined"
 msgstr "15 Тодорхойлогдоогүй"
@@ -46660,7 +46656,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:259
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:47
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:91
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:290
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:286
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:127
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:23
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:80
@@ -46750,7 +46746,7 @@ msgstr "Коха &rsaquo; Түгээлт"
 msgid "Upload offline circulation file (.koc)"
 msgstr "Коха &rsaquo; Түгээлт"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:276
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:272
 #, fuzzy, c-format
 msgid "Upload patron image"
 msgstr "'Үйлчлүүлэгчийн зургуудыг серверт хуулах'-г сонгох"
@@ -47011,6 +47007,7 @@ msgid "Useful resources"
 msgstr "Онлайн нөөцүүд:"
 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:21
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:29
 #, fuzzy, c-format
 msgid "User "
 msgstr ". Ашиглагч "
@@ -47057,7 +47054,7 @@ msgstr "Нэвтрэх/нууц үг өмнө нь байна."
 msgid "Username:"
 msgstr "Шинэ ашиглагчийн нэр:"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:372
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:368
 #, fuzzy, c-format
 msgid "Username: "
 msgstr "Шинэ ашиглагчийн нэр: "
@@ -48053,7 +48050,7 @@ msgstr "Давтагдах боломжтой баярын өдрүүд"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:301
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:326
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:151
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:384
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:380
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:243
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:246
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:340
@@ -48962,8 +48959,8 @@ msgstr "Шуудангийн хаяг:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:136
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:90
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:403
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:422
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:399
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:418
 #, fuzzy, c-format
 msgid "ZIP/Postal code: "
 msgstr "Шуудангийн хаяг: "
@@ -49044,17 +49041,17 @@ msgstr ""
 
 #. INPUT type=text name=firstname
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:333
-msgid "[% UNLESS opduplicate %][% firstname %][% END %]"
+msgid "[% UNLESS opduplicate %][% firstname | html %][% END %]"
 msgstr ""
 
 #. INPUT type=text name=initials
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:365
-msgid "[% UNLESS opduplicate %][% initials %][% END %]"
+msgid "[% UNLESS opduplicate %][% initials | html %][% END %]"
 msgstr ""
 
 #. INPUT type=text name=othernames
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:378
-msgid "[% UNLESS opduplicate %][% othernames %][% END %]"
+msgid "[% UNLESS opduplicate %][% othernames | html %][% END %]"
 msgstr ""
 
 #. A
@@ -49081,7 +49078,7 @@ msgstr ""
 #. IMG
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:11
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:13
-msgid "[% firstname %] [% surname %] ([% cardnumber %])"
+msgid "[% firstname | html %] [% surname | html %] ([% cardnumber | html %])"
 msgstr ""
 
 #. A
@@ -49328,7 +49325,7 @@ msgstr "%s (%s өдрүүд)"
 #. %1$s:  END 
 #. %2$s:  IF ( error ) 
 #. %3$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:40
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:47
 #, fuzzy, c-format
 msgid "again. %s %s%s "
 msgstr " <b> %s</b>-д хүлээгдэж байгаа зүйл "
@@ -49925,7 +49922,7 @@ msgstr ""
 msgid "detail of the subscription"
 msgstr "Захиалгыг устгах"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:27
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:34
 #, fuzzy, c-format
 msgid "detected."
 msgstr "Татгалзагдсан"
@@ -50535,8 +50532,8 @@ msgid "jquery.multiple.select.js"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:39
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:36
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:37
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:43
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:44
 #, c-format
 msgid "koha-conf.xml"
 msgstr ""
@@ -50630,7 +50627,7 @@ msgstr "Самбарыг ачаалж байна..."
 msgid "loading_2.ogg"
 msgstr "Самбарыг ачаалж байна..."
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:38
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:45
 #, fuzzy, c-format
 msgid "localhost"
 msgstr "Бодит өртөг"
@@ -50698,7 +50695,7 @@ msgstr "1/сар"
 msgid "must"
 msgstr "Хэмжээ"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:24
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:30
 #, c-format
 msgid "must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on "
 msgstr ""
@@ -50946,7 +50943,7 @@ msgstr "Дараахиар хэвлэгдсэн: "
 msgid "quantity values are not filled in or are not numbers"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:38
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:45
 #, fuzzy, c-format
 msgid "rather than "
 msgstr "Бусад өгөгдөл "
@@ -51150,7 +51147,7 @@ msgstr ""
 msgid "specify an active currency"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:40
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:47
 #, fuzzy, c-format
 msgid "start the installer"
 msgstr "Календар"
@@ -51395,7 +51392,7 @@ msgid "unrecognized command"
 msgstr "Үйлчлүүлэгчийг шинэчлэх"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:982
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:516
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:512
 #, fuzzy, c-format
 msgid "until"
 msgstr "Огноо:%s"
