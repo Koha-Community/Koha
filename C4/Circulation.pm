@@ -2267,6 +2267,13 @@ sub _debar_user_on_return {
                   if DateTime::Duration->compare( $max_sd, $suspension_days ) < 0;
             }
 
+            if ( C4::Context->preference('CumulativeRestrictionPeriods') and $borrower->{debarred} ) {
+                my $debarment = @{ GetDebarments( { borrowernumber => $borrower->{borrowernumber}, type => 'SUSPENSION' } ) }[0];
+                if ( $debarment ) {
+                    $return_date = dt_from_string( $debarment->{expiration}, 'sql' );
+                }
+            }
+
             my $new_debar_dt =
               $dt_today->clone()->add_duration( $suspension_days );
 
