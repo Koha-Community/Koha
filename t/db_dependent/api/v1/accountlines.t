@@ -192,7 +192,6 @@ $t->request_ok($tx)
     ->status_is(404);
 
 my $accountline_to_partiallypay = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber, 'amount' => 80})->unblessed()->[0];
-
 $tx = $t->ua->build_tx(POST => "/api/v1/accountlines/$accountline_to_partiallypay->{accountlines_id}/payment" => json => {amount => 'foo'});
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $tx->req->env({REMOTE_ADDR => '127.0.0.1'});

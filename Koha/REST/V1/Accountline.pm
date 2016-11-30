@@ -61,7 +61,7 @@ sub pay {
     }
 
     my $body = $c->req->json;
-    my $amount = defined $body->{amount};
+    my $amount = $body->{amount};
     my $note = $body->{note} || '';
 
     if ($amount && !looks_like_number($amount)) {
