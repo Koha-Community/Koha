@@ -216,8 +216,16 @@ elsif ( defined $query->param('code') ) {
                 my ( $userid, $cookie, $session_id ) =
                   checkauth( $query, 1, {}, 'opac', $email );
                 if ($userid) {    # A user with this email is registered in koha
+
+                    #handle redirect to main.pl, for private opac
+                    my $uri;
+                    if (C4::Context->preference('OpacPublic') ) {
+                        $uri    =  '/cgi-bin/koha/opac-user.pl';
+                    } else {
+                        $uri    =  '/cgi-bin/koha/opac-main.pl';
+                    }
                     print $query->redirect(
-                        -uri    => '/cgi-bin/koha/opac-user.pl',
+                        -uri    => $uri,
                         -cookie => $cookie
                     );
                 }
