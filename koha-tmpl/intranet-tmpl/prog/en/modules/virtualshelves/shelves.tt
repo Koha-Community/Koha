@@ -333,7 +333,7 @@ function placeHold () {
         [% CASE 'error_on_delete' %]
             <span>An error occurred when deleting this list.</span>
         [% CASE 'error_on_add_biblio' %]
-           <span>The item has not been added to the list. Please verify it is not already in the list.</span>
+           <span>The item ([% m.item_barcode %]) has not been added to the list. Please verify it is not already in the list.</span>
         [% CASE 'success_on_update' %]
             <span>List updated.</span>
         [% CASE 'success_on_insert' %]
@@ -341,13 +341,13 @@ function placeHold () {
         [% CASE 'success_on_delete' %]
             <span>List deleted.</span>
         [% CASE 'success_on_add_biblio' %]
-            <span>The item has been added to the list.</span>
+            <span>The item ([% m.item_barcode %]) has been added to the list.</span>
         [% CASE 'success_on_remove_biblios' %]
             <span>The item has been removed from the list.</span>
         [% CASE 'does_not_exist' %]
             <span>This list does not exist.</span>
         [% CASE 'item_does_not_exist' %]
-            <span>This item does not exist.</span>
+            <span>The item ([% m.item_barcode %]) does not exist.</span>
         [% CASE 'unauthorized_on_view' %]
             <span>You do not have permission to view this list.</span>
         [% CASE 'unauthorized_on_update' %]
@@ -659,11 +659,11 @@ function placeHold () {
 <div class="yui-b">
   <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
     <fieldset class="brief noprint">
-      <legend>Add an item</legend>
+      <legend>Add items</legend>
       <ol>
         <li>
-          <label for="barcode">Barcode:</label>
-          <input name="barcode" type="text" id="barcode" class="focus" autocomplete="off" />
+          <label for="barcodes">Barcodes:</label>
+          <textarea name="barcodes" id="barcodes" class="focus" autocomplete="off" rows="5"></textarea>
           <input type="hidden" name="op" value="add_biblio" />
           <input type="hidden" name="referer" value="view" />
           <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />

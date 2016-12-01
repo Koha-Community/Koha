@@ -140,24 +140,28 @@ if ( $op eq 'add_form' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber);
     if ($shelf) {
-        if( my $barcode = $query->param('barcode') ) {
-            my $item = GetItem( 0, $barcode);
-            if (defined $item && $item->{itemnumber}) {
-                my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
-                if ( $shelf->can_biblios_be_added( $loggedinuser ) ) {
-                    my $added = eval { $shelf->add_biblio( $biblio->{biblionumber}, $loggedinuser ); };
-                    if ($@) {
-                        push @messages, { type => 'alert', code => ref($@), msg => $@ };
-                    } elsif ( $added ) {
-                        push @messages, { type => 'message', code => 'success_on_add_biblio' };
+        if( my $barcodes = $query->param('barcodes') ) {
+            if ( $shelf->can_biblios_be_added( $loggedinuser ) ) {
+                my @barcodes = split /\n/, $barcodes; # Entries are effectively passed in as a <cr> separated list
+                foreach my $barcode (@barcodes){
+                    $barcode =~ s/\r$//; # strip any naughty return chars
+                    my $item = GetItem( 0, $barcode);
+                    if (defined $item && $item->{itemnumber}) {
+                        my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
+                        my $added = eval { $shelf->add_biblio( $biblio->{biblionumber}, $loggedinuser ); };
+                        if ($@) {
+                            push @messages, { item_barcode => $barcode, type => 'error', code => ref($@), msg => $@ };
+                        } elsif ( $added ) {
+                            push @messages, { item_barcode => $barcode, type => 'message', code => 'success_on_add_biblio' };
+                        } else {
+                            push @messages, { item_barcode => $barcode, type => 'message', code => 'error_on_add_biblio' };
+                        }
                     } else {
-                        push @messages, { type => 'message', code => 'error_on_add_biblio' };
+                        push @messages, { item_barcode => $barcode, type => 'error', code => 'item_does_not_exist' };
                     }
-                } else {
-                    push @messages, { type => 'alert', code => 'unauthorized_on_add_biblio' };
                 }
             } else {
-                push @messages, { type => 'alert', code => 'item_does_not_exist' };
+                push @messages, { type => 'error', code => 'unauthorized_on_add_biblio' };
             }
         }
     } else {
