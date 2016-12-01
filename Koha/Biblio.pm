@@ -246,12 +246,12 @@ Returns the itemtype for this record.
 sub itemtype {
     my ( $self ) = @_;
 
-    return $self->_biblioitem()->itemtype();
+    return $self->biblioitem()->itemtype();
 }
 
-=head3 _biblioitem
+=head3 biblioitem
 
-my $field = $self->_biblioitem()->itemtype
+my $field = $self->biblioitem()->itemtype
 
 Returns the related Koha::Biblioitem object for this Biblio object
 
