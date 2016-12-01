@@ -172,6 +172,13 @@
                                 </div>
                                 [% END %]
 
+                                [% IF Koha.Preference('AllowCheckoutNotes') && CAN_user_circulate_manage_checkout_notes && pending_checkout_notes %]
+                                    <div class="pending-info" id="checkout_notes_pending">
+                                        <a href="/cgi-bin/koha/circ/checkout-notes.pl">Checkout notes pending</a>:
+                                        <span class="pending-number-link">[% pending_checkout_notes %]</span>
+                                    </div>
+                                [% END %]
+
                             </div>
 
                         [% END %]

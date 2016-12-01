@@ -31,6 +31,7 @@ use Koha::Patron::Modifications;
 use Koha::Patron::Discharge;
 use Koha::Reviews;
 use Koha::ArticleRequests;
+use Koha::Checkouts;
 
 my $query = new CGI;
 
@@ -74,6 +75,7 @@ my $pending_article_requests = Koha::ArticleRequests->search_limited(
         $branch ? ( branchcode => $branch ) : (),
     }
 )->count;
+my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
 
 $template->param(
     pendingcomments                => $pendingcomments,
@@ -82,6 +84,7 @@ $template->param(
     pending_borrower_modifications => $pending_borrower_modifications,
     pending_discharge_requests     => $pending_discharge_requests,
     pending_article_requests       => $pending_article_requests,
+    pending_checkout_notes         => $pending_checkout_notes,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -22,6 +22,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Context;
 use Koha::BiblioFrameworks;
+use Koha::Checkouts;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user(
@@ -39,5 +40,7 @@ $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' )
 
 $template->{'VARS'}->{'AllowOfflineCirculation'} = C4::Context->preference('AllowOfflineCirculation');
 
+my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
+$template->param( pending_checkout_notes => $pending_checkout_notes );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -67,7 +67,7 @@ if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') ) {
     my $note = $query->param('note');
     my $scrubber = C4::Scrubber->new();
     my $clean_note = $scrubber->scrub($note);
-    if ( $issue->set({ notedate => dt_from_string(), note => $clean_note })->store ) {
+    if ( $issue->set({ notedate => dt_from_string(), note => $clean_note, noteseen => 0 })->store ) {
         if ($clean_note) { # only send email if note not empty
             my $branch = Koha::Libraries->find( $issue->branchcode );
             my $letter = C4::Letters::GetPreparedLetter (

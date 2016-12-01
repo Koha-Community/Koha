@@ -31,6 +31,7 @@
     [%- CASE 'manage_restrictions' -%]<span>Manage restrictions for accounts</span>
     [%- CASE 'overdues_report' -%]<span>Execute overdue items report</span>
     [%- CASE 'override_renewals' -%]<span>Override blocked renewals</span>
+    [%- CASE 'manage_checkout_notes' %]<span>Mark checkout notes as seen/not seen</span>
     [%- CASE 'manage_circ_rules' -%]<span>manage circulation rules</span>
     [%- CASE 'parameters_remaining_permissions' -%]<span>Remaining system parameters permissions</span>
     [%- CASE 'edit_borrowers' -%]<span>Add, modify and view patron information</span>

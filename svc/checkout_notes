@@ -1,0 +1,63 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Copyright 2017 Aleisha Amohia <aleisha@catalyst.net.nz>
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use JSON qw( to_json );
+use CGI;
+use C4::Service;
+use C4::Auth qw /check_cookie_auth/;
+use C4::Output qw(:DEFAULT :ajax);
+use Koha::Checkouts;
+
+=head1 NAME
+
+svc/checkout_notes - Web service for managing patron notes set on issues
+
+=head1 DESCRIPTION
+
+=cut
+
+# AJAX requests
+my $is_ajax = is_ajax();
+my $query = new CGI;
+my ( $auth_status, $sessionID ) = check_cookie_auth( $query->cookie('CGISESSID'), { circulate => 'manage_checkout_notes' } );
+if ( $auth_status ne "ok" ) {
+    exit 0;
+}
+if ($is_ajax) {
+    my $issue_id = $query->param('issue_id');
+    my $issue = Koha::Checkouts->find($issue_id);
+    my $action = $query->param('action');
+    my $status = 'success';
+    if ($action eq 'seen'){
+        $issue->set({ noteseen => 1 })->store;
+        if ( $issue->noteseen != 1 ) {
+            $status = 'failure';
+        }
+    } elsif ($action eq 'notseen'){
+        $issue->set({ noteseen => 0 })->store;
+        if ( $issue->noteseen != 0 ) {
+            $status = 'failure';
+        }
+    }
+    my $json = to_json ( { status => $status } );
+    output_with_http_headers $query, undef, $json, 'js';
+    exit;
+}

@@ -1754,6 +1754,7 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   `onsite_checkout` int(1) NOT NULL default 0, -- in house use flag
   `note` LONGTEXT default NULL, -- issue note text
   `notedate` datetime default NULL, -- datetime of issue note (yyyy-mm-dd hh:mm::ss)
+  `noteseen` int(1) default NULL, -- describes whether checkout note has been seen 1, not been seen 0 or doesn't exist null
   PRIMARY KEY (`issue_id`),
   UNIQUE KEY `itemnumber` (`itemnumber`),
   KEY `issuesborridx` (`borrowernumber`),
@@ -1785,6 +1786,7 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   `onsite_checkout` int(1) NOT NULL default 0, -- in house use flag
   `note` LONGTEXT default NULL, -- issue note text
   `notedate` datetime default NULL, -- datetime of issue note (yyyy-mm-dd hh:mm::ss)
+  `noteseen` int(1) default NULL, -- describes whether checkout note has been seen 1, not been seen 0 or doesn't exist null
   PRIMARY KEY (`issue_id`),
   KEY `old_issuesborridx` (`borrowernumber`),
   KEY `old_issuesitemidx` (`itemnumber`),
