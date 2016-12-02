@@ -1,9 +1,26 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
 use Test::More tests => 20;
 use Test::MockModule;
+
+use t::lib::TestBuilder;
 
 use C4::Biblio;
 use C4::Items;
@@ -12,9 +29,11 @@ use C4::Circulation;
 use Koha::Library;
 use MARC::Record;
 
+my $schema = Koha::Database->schema;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+$schema->storage->txn_begin;
+
+my $builder = t::lib::TestBuilder->new;
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM borrowers|);
@@ -23,27 +42,26 @@ $dbh->do(q|DELETE FROM branches|);
 $dbh->do(q|DELETE FROM biblio|);
 $dbh->do(q|DELETE FROM categories|);
 
-my $branchcode = 'B';
-Koha::Library->new( { branchcode => $branchcode, branchname => 'Branch' } )->store;
+my $branchcode   = $builder->build( { source => 'Branch' } )->{branchcode};
+my $categorycode = $builder->build( { source => 'Category' } )->{categorycode};
+my $itemtype     = $builder->build( { source => 'Itemtype' } )->{itemtype};
 
-my $categorycode = 'C';
-$dbh->do( "INSERT INTO categories(categorycode) VALUES(?)",
-    undef, $categorycode );
-
-my %item_branch_infos = (
+my %item_infos = (
     homebranch    => $branchcode,
     holdingbranch => $branchcode,
+    itype         => $itemtype
 );
+
 
 my ($biblionumber1) = AddBiblio( MARC::Record->new, '' );
 my $itemnumber1 =
-  AddItem( { barcode => '0101', %item_branch_infos }, $biblionumber1 );
+  AddItem( { barcode => '0101', %item_infos }, $biblionumber1 );
 my $itemnumber2 =
-  AddItem( { barcode => '0102', %item_branch_infos }, $biblionumber1 );
+  AddItem( { barcode => '0102', %item_infos }, $biblionumber1 );
 
 my ($biblionumber2) = AddBiblio( MARC::Record->new, '' );
 my $itemnumber3 =
-  AddItem( { barcode => '0203', %item_branch_infos }, $biblionumber2 );
+  AddItem( { barcode => '0203', %item_infos }, $biblionumber2 );
 
 my $borrowernumber1 =
   AddMember( categorycode => $categorycode, branchcode => $branchcode );
@@ -107,4 +125,6 @@ $issues = C4::Members::GetPendingIssues();
 is( @$issues, 0,
     'GetPendingIssues without borrower numbers returns an empty array' );
 
-$dbh->rollback();
+$schema->storage->txn_begin;
+
+1;
