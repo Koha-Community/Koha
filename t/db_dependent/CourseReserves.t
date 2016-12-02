@@ -1,7 +1,19 @@
 #!/usr/bin/perl
+
+# This file is part of Koha.
 #
-# This is to test C4/Members
-# It requires a working Koha database with the sample data
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
 
@@ -25,28 +37,26 @@ my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
-my $library = $builder->build( { source => 'Branch' } );
+my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
 my $itemtype = $builder->build(
     { source => 'Itemtype', value => { notforloan => undef } } )->{itemtype};
 
-my $sth = $dbh->prepare("SELECT * FROM borrowers ORDER BY RAND() LIMIT 10");
-$sth->execute();
-my @borrowers = @{ $sth->fetchall_arrayref( {} ) };
+# Create 10 sample borrowers
+my @borrowers = ();
+foreach (1..10) {
+    push @borrowers, $builder->build({ source => 'Borrower' });
+}
 
-# Create the item
-my $record = MARC::Record->new();
-$record->append_fields(
-    MARC::Field->new( '952', '0', '0', a => $library->{branchcode}, b => $library->{branchcode} )
-);
+# Create the a record with an item
+my $record = MARC::Record->new;
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio($record, '');
-my @iteminfo = C4::Items::AddItem(
-    {   homebranch    => $library->{branchcode},
-        holdingbranch => $library->{branchcode},
+my ( undef, undef, $itemnumber ) = C4::Items::AddItem(
+    {   homebranch    => $branchcode,
+        holdingbranch => $branchcode,
         itype         => $itemtype
     },
     $biblionumber
 );
-my $itemnumber = $iteminfo[2];
 
 my $course_id = ModCourse(
     course_name => "Test Course",
@@ -125,3 +135,5 @@ ok( !defined( $course_reserve->{'cr_id'} ), "DelCourseReserve functions correctl
 DelCourse($course_id);
 $course = GetCourse($course_id);
 ok( !defined( $course->{'course_id'} ), "DelCourse deleted course successfully" );
+
+$schema->storage->txn_rollback;
