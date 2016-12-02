@@ -569,7 +569,7 @@ subtest 'search_upcoming_membership_expires' => sub {
 
     # Test with branch
     $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires({ 'me.branchcode' => $library->{branchcode} });
-    is( $upcoming_mem_expires->count, 1, );
+    is( $upcoming_mem_expires->count, 1, 'Test with branch parameter' );
     my $expired = $upcoming_mem_expires->next;
     is( $expired->surname, $patron_1->{surname}, 'Get upcoming membership expires should return the correct patron.' );
     is( $expired->library->branchemail, $library->{branchemail}, 'Get upcoming membership expires should return the correct patron.' );
@@ -587,11 +587,9 @@ subtest 'search_upcoming_membership_expires' => sub {
     # Test the before parameter
     t::lib::Mocks::mock_preference( 'MembershipExpiryDaysNotice', 15 );
     $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires({ 'me.branchcode' => $library->{branchcode}, before => $nb_of_days_before });
-    # Expect 29/6 and 30/6
-    is( $upcoming_mem_expires->count, 2, 'Expect two results for before==1');
+    is( $upcoming_mem_expires->count, 2, 'Expect two results for before');
     # Test after parameter also
     $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires({ 'me.branchcode' => $library->{branchcode}, before => $nb_of_days_before, after => $nb_of_days_after });
-    # Expect 29/6, 30/6 and 2/7
     is( $upcoming_mem_expires->count, 3, 'Expect three results when adding after' );
     Koha::Patrons->search({ borrowernumber => { in => [ $patron_1->{borrowernumber}, $patron_2->{borrowernumber}, $patron_3->{borrowernumber} ] } })->delete;
 };

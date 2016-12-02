@@ -124,12 +124,12 @@ sub guarantor {
 sub image {
     my ( $self ) = @_;
 
-    return Koha::Patron::Images->find( $self->borrowernumber )
+    return Koha::Patron::Images->find( $self->borrowernumber );
 }
 
 sub library {
     my ( $self ) = @_;
-    return Koha::Library->_new_from_dbic($self->_result->branchcode)
+    return Koha::Library->_new_from_dbic($self->_result->branchcode);
 }
 
 =head3 guarantees
