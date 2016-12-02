@@ -25,9 +25,9 @@ my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
-my $library = $builder->build({
-    source => 'Branch',
-});
+my $library = $builder->build( { source => 'Branch' } );
+my $itemtype = $builder->build(
+    { source => 'Itemtype', value => { notforloan => undef } } )->{itemtype};
 
 my $sth = $dbh->prepare("SELECT * FROM borrowers ORDER BY RAND() LIMIT 10");
 $sth->execute();
@@ -39,7 +39,13 @@ $record->append_fields(
     MARC::Field->new( '952', '0', '0', a => $library->{branchcode}, b => $library->{branchcode} )
 );
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio($record, '');
-my @iteminfo = C4::Items::AddItem( { homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode} }, $biblionumber );
+my @iteminfo = C4::Items::AddItem(
+    {   homebranch    => $library->{branchcode},
+        holdingbranch => $library->{branchcode},
+        itype         => $itemtype
+    },
+    $biblionumber
+);
 my $itemnumber = $iteminfo[2];
 
 my $course_id = ModCourse(
