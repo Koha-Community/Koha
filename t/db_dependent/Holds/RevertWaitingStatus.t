@@ -1,5 +1,20 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
 use t::lib::Mocks;
@@ -25,15 +40,15 @@ $dbh->{RaiseError} = 1;
 $dbh->do("DELETE FROM reserves");
 $dbh->do("DELETE FROM old_reserves");
 
-my $library = $builder->build({
-    source => 'Branch',
-});
+my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+my $itemtype = $builder->build(
+    { source => 'Itemtype', value => { notforloan => undef } } )->{itemtype};
 
 local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
 *C4::Context::userenv = \&Mock_userenv;
 
 sub Mock_userenv {
-    my $userenv = { flags => 1, id => '1', branch => $library->{branchcode} };
+    my $userenv = { flags => 1, id => '1', branch => $branchcode };
     return $userenv;
 }
 
@@ -45,8 +60,13 @@ my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio();
 # Create an item
 my $item_barcode = 'my_barcode';
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
-    { homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, barcode => $item_barcode },
-    $bibnum );
+    {   homebranch    => $branchcode,
+        holdingbranch => $branchcode,
+        barcode       => $item_barcode,
+        itype         => $itemtype
+    },
+    $bibnum
+);
 
 # Create some borrowers
 my @borrowernumbers;
@@ -55,14 +75,12 @@ foreach my $i ( 1 .. $borrowers_count ) {
         firstname    => 'my firstname',
         surname      => 'my surname ' . $i,
         categorycode => 'S',
-        branchcode   => $library->{branchcode},
+        branchcode   => $branchcode,
     );
     push @borrowernumbers, $borrowernumber;
 }
 
 my $biblionumber = $bibnum;
-
-my $branchcode = Koha::Libraries->search->next->branchcode;
 
 # Create five item level holds
 foreach my $borrowernumber (@borrowernumbers) {
@@ -90,6 +108,8 @@ my $priorities = $dbh->selectall_arrayref(
 ok( scalar @$priorities == 2,   'Only 2 holds remain in the reserves table' );
 ok( $priorities->[0]->[0] == 1, 'First hold has a priority of 1' );
 ok( $priorities->[1]->[0] == 2, 'Second hold has a priority of 2' );
+
+$schema->storage->txn_rollback;
 
 # Helper method to set up a Biblio.
 sub create_helper_biblio {
