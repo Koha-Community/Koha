@@ -628,6 +628,15 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       </xslo:if>
     </xslo:for-each>
   </xslo:template>
+  <xslo:template mode="index_subfields" match="marc:datafield[@tag='648']">
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('9', @code)">
+        <z:index name="Koha-Auth-Number:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+  </xslo:template>
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='650']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('9', @code)">

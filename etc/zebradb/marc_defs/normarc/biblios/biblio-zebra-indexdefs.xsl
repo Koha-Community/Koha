@@ -17,6 +17,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template match="text()" mode="index_heading_conditional"/>
   <xslo:template match="text()" mode="index_match_heading"/>
   <xslo:template match="text()" mode="index_subject_thesaurus"/>
+  <xslo:template match="text()" mode="index_sort_tit"/>
   <xslo:template match="/">
     <xslo:if test="marc:collection">
       <collection>
@@ -42,6 +43,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       <xslo:apply-templates mode="index_match_heading"/>
       <xslo:apply-templates mode="index_subject_thesaurus"/>
       <xslo:apply-templates mode="index_all"/>
+      <xslo:apply-templates mode="index_sort_tit"/>
     </z:record>
   </xslo:template>
   <xslo:template match="marc:leader">
@@ -401,6 +403,15 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
         </z:index>
       </xslo:if>
     </xslo:for-each>
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('9', @code)">
+        <z:index name="Koha-Auth-Number:w">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+  </xslo:template>
+  <xslo:template mode="index_subfields" match="marc:datafield[@tag='648']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('9', @code)">
         <z:index name="Koha-Auth-Number:w">
@@ -1853,6 +1864,19 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
   <xslo:template mode="index_all" match="text()">
     <z:index name="Any:w Any:p">
       <xslo:value-of select="."/>
+    </z:index>
+  </xslo:template>
+  <xslo:template mode="index_sort_tit" match="marc:datafield[@tag='245']">
+    <xslo:variable name="chop">
+      <xslo:choose>
+        <xslo:when test="not(number(@ind2))">0</xslo:when>
+        <xslo:otherwise>
+          <xslo:value-of select="number(@ind2)"/>
+        </xslo:otherwise>
+      </xslo:choose>
+    </xslo:variable>
+    <z:index name="Title:s">
+      <xslo:value-of select="substring(marc:subfield[@code='a'], $chop+1)"/>
     </z:index>
   </xslo:template>
   <xslo:template name="chopPunctuation">
