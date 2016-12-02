@@ -1299,11 +1299,11 @@ subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
 
     t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 0);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if it iss a subscription' );
+    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if it is a subscription' );
 
     t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 1);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if it iss a subscription' );
+    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if it is a subscription' );
 };
 
 sub set_userenv {
