@@ -278,7 +278,7 @@ if ($borrowernumber) {
         );
     }
     # check for NotifyBorrowerDeparture
-    elsif ( $patron->is_going_to_expired ) {
+    elsif ( $patron->is_going_to_expire ) {
         # borrower card soon to expire warn librarian
         $template->param( "warndeparture" => $borrower->{dateexpiry} ,
                         );

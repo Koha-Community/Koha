@@ -295,15 +295,15 @@ sub is_expired {
     return 0;
 }
 
-=head2 is_going_to_expired
+=head2 is_going_to_expire
 
-my $is_going_to_expired = $patron->is_going_to_expired;
+my $is_going_to_expire = $patron->is_going_to_expire;
 
 Returns 1 if the patron is going to expired, depending on the NotifyBorrowerDeparture pref or 0
 
 =cut
 
-sub is_going_to_expired {
+sub is_going_to_expire {
     my ($self) = @_;
 
     my $delay = C4::Context->preference('NotifyBorrowerDeparture') || 0;
@@ -311,7 +311,7 @@ sub is_going_to_expired {
     return 0 unless $delay;
     return 0 unless $self->dateexpiry;
     return 0 if $self->dateexpiry eq '0000-00-00';
-    return 1 if dt_from_string( $self->dateexpiry )->add( days => -$delay ) < dt_from_string->truncate( to => 'day' );
+    return 1 if dt_from_string( $self->dateexpiry )->subtract( days => $delay ) < dt_from_string->truncate( to => 'day' );
     return 0;
 }
 
