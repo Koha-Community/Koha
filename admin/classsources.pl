@@ -118,8 +118,12 @@ sub add_class_source_form {
 
 sub add_class_source {
     my ($template, $source_code, $description, $used, $sort_rule) = @_;
-    AddClassSource($source_code, $description, $used, $sort_rule);
-    $template->param(added_source => $source_code);
+    my $success = AddClassSource($source_code, $description, $used, $sort_rule);
+    if ($success > 0) {
+        $template->param(added_source => $source_code);
+    } else {
+        $template->param(failed_add_source => $source_code);
+    }
 }
 
 sub edit_class_source_form {
@@ -189,8 +193,12 @@ sub add_class_sort_rule_form {
 
 sub add_class_sort_rule {
     my ($template, $rule_code, $description, $sort_routine) = @_;
-    AddClassSortRule($rule_code, $description, $sort_routine);
-    $template->param(added_rule => $rule_code);
+    my $success = AddClassSortRule($rule_code, $description, $sort_routine);
+    if ($success > 0) {
+        $template->param(added_rule => $rule_code);
+    } else {
+        $template->param(failed_add_rule => $rule_code);
+    }
 }
 
 sub delete_sort_rule_form {

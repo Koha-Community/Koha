@@ -112,12 +112,16 @@ sub GetClassSources {
 sub AddClassSource {
 
     my ($cn_source, $description, $used, $class_sort_rule) = @_;
+    my $exists = GetClassSource($cn_source);
+    if ($exists) {
+        return 0;
+    }
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("INSERT INTO `class_sources`
                                            (`cn_source`, `description`, `used`, `class_sort_rule`)
                                            VALUES (?, ?, ?, ?)");
     $sth->execute($cn_source, $description, $used, $class_sort_rule);
-  
+    return 1;
 }
 
 =head2 GetClassSource
@@ -224,12 +228,16 @@ sub GetClassSortRules {
 sub AddClassSortRule {
 
     my ($class_sort_rule, $description, $sort_routine) = @_;
+    my $exists = GetClassSortRule($class_sort_rule);
+    if ($exists) {
+        return 0;
+    }
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("INSERT INTO `class_sort_rules`
                                            (`class_sort_rule`, `description`, `sort_routine`)
                                            VALUES (?, ?, ?)");
     $sth->execute($class_sort_rule, $description, $sort_routine);
-  
+    return 1;
 }
 
 =head2 GetClassSortRule

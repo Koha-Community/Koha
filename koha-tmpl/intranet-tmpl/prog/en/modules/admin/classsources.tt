@@ -199,6 +199,9 @@
 [% IF ( deleted_source ) %]
 <div class="dialog message">Deleted classification source [% deleted_source %]</div>
 [% END %]
+[% IF ( failed_add_source ) %]
+<div class="dialog message">Failed to add classification source [% failed_add_source %]. Perhaps the code already exists?</div>
+[% END %]
 <table>
   <tr>
     <th>Code</th>
@@ -230,6 +233,9 @@
 [% END %]
 [% IF ( deleted_rule ) %]
 <div class="dialog message">Deleted filing rule [% deleted_rule %]</div>
+[% END %]
+[% IF ( failed_add_rule ) %]
+<div class="dialog message">Failed to add filing rule [% failed_add_rule %]. Perhaps the code already exists?</div>
 [% END %]
 <table>
   <tr>
