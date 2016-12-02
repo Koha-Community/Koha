@@ -349,9 +349,9 @@ is( scalar(@$patstodel),2,'Borrowers without issues deleted by last issue date')
 
 # Test GetBorrowersToExpunge and TrackLastPatronActivity
 $dbh->do(q|UPDATE borrowers SET lastseen=NULL|);
-$builder->build({ source => 'Borrower', value => { lastseen => '2016-01-01 01:01:01', guarantorid => undef } } );
-$builder->build({ source => 'Borrower', value => { lastseen => '2016-02-02 02:02:02', guarantorid => undef } } );
-$builder->build({ source => 'Borrower', value => { lastseen => '2016-03-03 03:03:03', guarantorid => undef } } );
+$builder->build({ source => 'Borrower', value => { lastseen => '2016-01-01 01:01:01', categorycode => 'CIVILIAN', guarantorid => undef } } );
+$builder->build({ source => 'Borrower', value => { lastseen => '2016-02-02 02:02:02', categorycode => 'CIVILIAN', guarantorid => undef } } );
+$builder->build({ source => 'Borrower', value => { lastseen => '2016-03-03 03:03:03', categorycode => 'CIVILIAN', guarantorid => undef } } );
 $patstodel = GetBorrowersToExpunge( { last_seen => '1999-12-12' });
 is( scalar @$patstodel, 0, 'TrackLastPatronActivity - 0 patrons must be deleted' );
 $patstodel = GetBorrowersToExpunge( { last_seen => '2016-02-15' });
