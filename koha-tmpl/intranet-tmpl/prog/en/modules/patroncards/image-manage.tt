@@ -32,7 +32,7 @@
                     return {images:images, image_ids:image_ids};
                 }
                 else if (document.delete_images.action.checked){
-                        return {images:"batch_id="+document.delete_images.action.value, image_ids:document.delete_images.action.value};
+                        return {images:"image_id="+document.delete_images.action.value, image_ids:document.delete_images.action.value};
                 }
                 return (-1);
             }
