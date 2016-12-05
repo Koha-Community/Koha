@@ -19,6 +19,7 @@ package Koha::Availability::Hold;
 
 use Modern::Perl;
 
+use Koha::Biblio::Availability::Hold;
 use Koha::Item::Availability::Hold;
 
 use Koha::Exceptions;
@@ -27,6 +28,12 @@ sub new {
     my ($class, $params) = @_;
 
     bless $params, $class;
+}
+
+sub biblio {
+    my ($self, $params) = @_;
+
+    return Koha::Biblio::Availability::Hold->new($params);
 }
 
 sub item {
