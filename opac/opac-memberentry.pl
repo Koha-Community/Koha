@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Digest::MD5 qw( md5_base64 md5_hex );
+use Encode qw( encode );
 use String::Random qw( random_string );
 
 use C4::Auth;
@@ -200,7 +201,7 @@ elsif ( $action eq 'update' ) {
     die "Wrong CSRF token"
         unless Koha::Token->new->check_csrf({
             id     => $borrower->{userid},
-            secret => md5_base64( C4::Context->config('pass') ),
+            secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
             token  => scalar $cgi->param('csrf_token'),
         });
 
@@ -221,7 +222,7 @@ elsif ( $action eq 'update' ) {
             borrower               => \%borrower,
             csrf_token             => Koha::Token->new->generate_csrf({
                 id     => $borrower->{userid},
-                secret => md5_base64( C4::Context->config('pass') ),
+                secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
             }),
         );
 
@@ -262,7 +263,7 @@ elsif ( $action eq 'update' ) {
                 borrower => GetMember( borrowernumber => $borrowernumber ),
                 csrf_token => Koha::Token->new->generate_csrf({
                     id     => $borrower->{userid},
-                    secret => md5_base64( C4::Context->config('pass') ),
+                    secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
                 }),
             );
         }
@@ -285,7 +286,7 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
         hidden => GetHiddenFields( $mandatory, 'modification' ),
         csrf_token => Koha::Token->new->generate_csrf({
             id     => $borrower->{userid},
-            secret => md5_base64( C4::Context->config('pass') ),
+            secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
         }),
     );
 

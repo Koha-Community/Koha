@@ -53,7 +53,7 @@ my $dbh          = C4::Context->dbh;
 if ( $email_add ) {
     die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
         id     => C4::Context->userenv->{id},
-        secret => md5_base64( C4::Context->config('pass') ),
+        secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
         token  => scalar $query->param('csrf_token'),
     });
     my $email = Koha::Email->new();
@@ -178,7 +178,7 @@ else {
         virtualshelves => C4::Context->preference("virtualshelves"),
         csrf_token     => Koha::Token->new->generate_csrf(
             {   id     => C4::Context->userenv->{id},
-                secret => md5_base64( C4::Context->config('pass') ),
+                secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
             }
         ),
     );

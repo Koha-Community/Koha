@@ -26,6 +26,7 @@ use File::Copy;
 use CGI qw ( -utf8 );
 use GD;
 use Digest::MD5 qw(md5_base64);
+use Encode qw( encode );
 use C4::Context;
 use C4::Auth;
 use C4::Output;
@@ -88,7 +89,7 @@ if ( ( $op eq 'Upload' ) && $uploadfile ) {
     die "Wrong CSRF token"
         unless Koha::Token->new->check_csrf({
             id     => C4::Context->userenv->{id},
-            secret => md5_base64( C4::Context->config('pass') ),
+            secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
             token  => scalar $input->param('csrf_token'),
         });
 
@@ -176,7 +177,7 @@ elsif ( $op eq 'Delete' ) {
     die "Wrong CSRF token"
         unless Koha::Token->new->check_csrf({
             id     => C4::Context->userenv->{id},
-            secret => md5_base64( C4::Context->config('pass') ),
+            secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
             token  => scalar $input->param('csrf_token'),
         });
 
@@ -195,7 +196,7 @@ else {
     $template->param(
         csrf_token => Koha::Token->new->generate_csrf({
             id     => C4::Context->userenv->{id},
-            secret => md5_base64( C4::Context->config('pass') ),
+            secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
         }),
     );
     output_html_with_http_headers $input, $cookie, $template->output;
