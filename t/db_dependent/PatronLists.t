@@ -1,21 +1,42 @@
 #!/usr/bin/perl
+
+# This file is part of Koha.
 #
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 7;
+use t::lib::TestBuilder;
 
-BEGIN {
-    use_ok('C4::Context');
-    use_ok('Koha::List::Patron');
-}
+use Koha::Database;
+use Koha::List::Patron
+    qw( AddPatronList AddPatronsToList DelPatronList DelPatronsFromList GetPatronLists ModPatronList );
+
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+
+my $builder = t::lib::TestBuilder->new;
 
 C4::Context->_new_userenv('DUMMY SESSION');
 C4::Context->set_userenv(0,0,0,'firstname','surname', 'BRANCH1', 'Library 1', 0, ', ');
 
-my $dbh = C4::Context->dbh;
-my $sth = $dbh->prepare("SELECT * FROM borrowers ORDER BY RAND() LIMIT 10");
-$sth->execute();
-my @borrowers = @{ $sth->fetchall_arrayref( {} ) };
+# Create 10 sample borrowers
+my @borrowers = ();
+foreach (1..10) {
+    push @borrowers, $builder->build({ source => 'Borrower' });
+}
 
 my $owner = $borrowers[0]->{borrowernumber};
 
@@ -78,3 +99,7 @@ DelPatronList( { patron_list_id => $list2->patron_list_id(), owner => $owner } )
 @lists =
   GetPatronLists( { patron_list_id => $list1->patron_list_id(), owner => $owner } );
 ok( !@lists, 'DelPatronList works' );
+
+$schema->storage->txn_rollback;
+
+1;
