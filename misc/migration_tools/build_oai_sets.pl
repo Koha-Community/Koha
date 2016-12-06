@@ -108,7 +108,7 @@ my $i = 1;
 my $sets_biblios = {};
 foreach my $res (@$results) {
     my $biblionumber = $res->{'biblionumber'};
-    my $marcxml = $res->{'marcxml'};
+    my $marcxml = $res->{'metadata'};
     if($verbose and $i % 1000 == 0) {
         my $percent = ($i * 100) / $num_biblios;
         $percent = sprintf("%.2f", $percent);
