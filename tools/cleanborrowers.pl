@@ -200,7 +200,7 @@ sub _skip_borrowers_with_nonzero_balance {
     my $balance;
     @$borrowers = map {
         my $patron = Koha::Patrons->find( $_->{borrowernumber} );
-        my $balance = $patron->get_account_lines->get_balance;
+        my $balance = $patron->account->balance;
         (defined $balance && $balance != 0) ? (): ($_);
     } @$borrowers;
 }

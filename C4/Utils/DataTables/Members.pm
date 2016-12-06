@@ -171,7 +171,7 @@ sub search {
         my $patron_object = Koha::Patrons->find( $patron->{borrowernumber} );
         $patron->{overdues} = $patron_object->get_overdues->count;
         $patron->{issues} = $patron_object->get_issues->count;
-        my $balance = $patron_object->get_account_lines->get_balance;
+        my $balance = $patron_object->account->balance;
         # FIXME Should be formatted from the template
         $patron->{fines} = sprintf("%.2f", $balance);
 

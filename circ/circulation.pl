@@ -268,7 +268,7 @@ if ($borrowernumber) {
     $borrower = GetMember( borrowernumber => $borrowernumber );
     my $overdues = $patron->get_overdues;
     my $issues = $patron->get_issues;
-    my $balance = $patron->get_account_lines->get_balance;
+    my $balance = $patron->account->balance;
 
 
     # if the expiry date is before today ie they have expired

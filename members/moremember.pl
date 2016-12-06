@@ -121,7 +121,7 @@ $template->param( error => $error ) if ( $error );
 
 my $patron        = Koha::Patrons->find($borrowernumber);
 my $issues        = $patron->get_issues;
-my $balance       = $patron->get_account_lines->get_balance;
+my $balance       = $patron->account->balance;
 $template->param(
     issuecount => $issues->count,
     fines      => $balance,

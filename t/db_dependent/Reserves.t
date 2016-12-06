@@ -572,7 +572,7 @@ ok( !C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed()
 
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 my $patron = Koha::Patrons->find( $borrowernumber );
-my $bz14464_fines = $patron->get_account_lines->get_balance;
+my $bz14464_fines = $patron->account->balance;
 is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines at beginning' );
 
 # First, test cancelling a reserve when there's no charge configured.
@@ -599,7 +599,7 @@ CancelReserve({ reserve_id => $bz14464_reserve, charge_cancel_fee => 1 });
 my $old_reserve = Koha::Database->new()->schema()->resultset('OldReserve')->find( $bz14464_reserve );
 is($old_reserve->get_column('found'), 'W', 'Bug 14968 - Keep found column from reserve');
 
-$bz14464_fines = $patron->get_account_lines->get_balance;
+$bz14464_fines = $patron->account->balance;
 is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines after cancelling reserve with no charge configured' );
 
 # Then, test cancelling a reserve when there's no charge desired.
@@ -623,7 +623,7 @@ ok( $bz14464_reserve, 'Bug 14464 - 2nd reserve correctly created' );
 
 CancelReserve({ reserve_id => $bz14464_reserve });
 
-$bz14464_fines = $patron->get_account_lines->get_balance;
+$bz14464_fines = $patron->account->balance;
 is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines after cancelling reserve with no charge desired' );
 
 # Finally, test cancelling a reserve when there's a charge desired and configured.
@@ -645,7 +645,7 @@ ok( $bz14464_reserve, 'Bug 14464 - 1st reserve correctly created' );
 
 CancelReserve({ reserve_id => $bz14464_reserve, charge_cancel_fee => 1 });
 
-$bz14464_fines = $patron->get_account_lines->get_balance;
+$bz14464_fines = $patron->account->balance;
 is( int( $bz14464_fines ), 42, 'Bug 14464 - Fine applied after cancelling reserve with charge desired and configured' );
 
 # tests for MoveReserve in relation to ConfirmFutureHolds (BZ 14526)

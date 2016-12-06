@@ -325,8 +325,7 @@ if ($barcode) {
 
         if ( C4::Context->preference("FineNotifyAtCheckin") ) {
             my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
-            my $account_lines = $patron->get_account_lines;
-            my $balance = $patron->get_account_lines->get_balance;
+            my $balance = $patron->account->balance;
 
             if ($balance > 0) {
                 $template->param( fines => sprintf("%.2f", $balance) );
