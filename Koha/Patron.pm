@@ -548,16 +548,15 @@ sub get_age {
     return $age;
 }
 
-=head3 get_account_lines
+=head3 account
 
-my $fines = $patron->get_account_lines
+my $account = $patron->account
 
 =cut
 
-sub get_account_lines {
+sub account {
     my ($self) = @_;
-    my $account_lines = $self->_result->accountlines;
-    return Koha::Account::Lines->_new_from_dbic($account_lines);
+    return Koha::Account->new( { patron_id => $self->borrowernumber } );
 }
 
 =head3 type

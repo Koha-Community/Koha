@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Warn;
 use DateTime;
 
@@ -501,26 +501,14 @@ subtest 'get_age' => sub {
     $patron->delete;
 };
 
-subtest 'get_account_lines' => sub {
-    plan tests => 2;
+subtest 'account' => sub {
+    plan tests => 1;
 
     my $patron = $builder->build({source => 'Borrower'});
 
-    my $accountline_1 = $builder->build({ source => 'Accountline',
-        value  => { borrowernumber => $patron->{borrowernumber},
-                    amount => 42,
-                    amountoutstanding => 42 }
-    });
-    my $accountline_2 = $builder->build({ source => 'Accountline',
-        value  => { borrowernumber => $patron->{borrowernumber},
-                    amount => -13,
-                    amountoutstanding => -13 }
-    });
-
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
-    my $account_lines = $patron->get_account_lines;
-    is( $account_lines->count, 2, 'There should have 2 account lines for that patron' );
-    is( ref($account_lines),   'Koha::Account::Lines', 'get_account_lines should return a Koha::Account::Lines object' );
+    my $account = $patron->account;
+    is( ref($account),   'Koha::Account', 'account should return a Koha::Account object' );
 
     $patron->delete;
 };
