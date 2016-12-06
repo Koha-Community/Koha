@@ -294,6 +294,11 @@ $builder->build({
         },
 });
 
+# In some dirty DB, the guarantorid is set to a non existent patron id
+# If we pick it, then the tests will fail
+# This should not be needed, we should have a FK on the guarantorid instead
+Koha::Patrons->search({ guarantorid => { -in => [ $borrower1->{borrowernumber}, $borrower2->{borrowernumber} ] }})->update({ guarantorid => undef });
+
 my $owner = AddMember (categorycode => 'STAFFER', branchcode => $library2->{branchcode} );
 my $list1 = AddPatronList( { name => 'Test List 1', owner => $owner } );
 my @listpatrons = ($bor1inlist, $bor2inlist);
