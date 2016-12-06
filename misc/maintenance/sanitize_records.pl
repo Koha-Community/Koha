@@ -197,7 +197,7 @@ Give a biblionumber list using a filename. One biblionumber by line or separate 
 
 =item B<--auto-search>
 
-Automatically search records containing "&amp;" in biblioitems.marcxml or in the specified fields.
+Automatically search records containing "&amp;" in biblio_metadata.metadata or in the specified fields.
 
 =item B<--fix-ampersand>
 
