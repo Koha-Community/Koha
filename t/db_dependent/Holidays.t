@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
+
 use DateTime;
 use DateTime::TimeZone;
 
@@ -33,11 +34,52 @@ BEGIN {
 }
 
 my $schema = Koha::Database->new->schema;
+my $dbh = C4::Context->dbh;
+my $builder = t::lib::TestBuilder->new;
+
+subtest 'exception_holidays() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    $dbh->do("DELETE FROM special_holidays");
+    # Clear cache
+    Koha::Caches->get_instance->flush_all;
+
+    # Artificially set timezone
+    my $timezone = 'America/Santiago';
+    $ENV{TZ} = $timezone;
+    use POSIX qw(tzset);
+    tzset;
+
+    my $branch = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $calendar = Koha::Calendar->new( branchcode => $branch );
+
+    C4::Calendar->new( branchcode => $branch )->insert_exception_holiday(
+        day         => 6,
+        month       => 9,
+        year        => 2015,
+        title       => 'Invalid date',
+        description => 'Invalid date description',
+    );
+
+    my $exception_holiday = $calendar->exception_holidays->iterator->next;
+    my $now_dt            = DateTime->now;
+
+    my $diff;
+    eval { $diff = $calendar->days_between( $now_dt, $exception_holiday ) };
+    unlike(
+        $@,
+        qr/Invalid local time for date in time zone: America\/Santiago/,
+        'Avoid invalid datetime due to DST'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
 $schema->storage->txn_begin;
 
-my $dbh = C4::Context->dbh();
-
-my $builder = t::lib::TestBuilder->new();
 # Create two fresh branches for the tests
 my $branch_1 = $builder->build({ source => 'Branch' })->{ branchcode };
 my $branch_2 = $builder->build({ source => 'Branch' })->{ branchcode };
