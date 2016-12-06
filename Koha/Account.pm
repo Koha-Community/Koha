@@ -223,6 +223,30 @@ sub pay {
     return $payment->id;
 }
 
+=head3 balance
+
+my $balance = $self->balance
+
+Return the balance (sum of amountoutstanding columns)
+
+=cut
+
+sub balance {
+    my ($self) = @_;
+    my $fines = Koha::Account::Lines->search(
+        {
+            borrowernumber => $self->{patron_id},
+        },
+        {
+            select => [ { sum => 'amountoutstanding' } ],
+            as => ['total_amountoutstanding'],
+        }
+    );
+    return $fines->count
+      ? $fines->next->get_column('total_amountoutstanding')
+      : 0;
+}
+
 1;
 
 =head1 AUTHOR

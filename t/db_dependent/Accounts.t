@@ -365,13 +365,13 @@ subtest "makepartialpayment() tests" => sub {
     }
 };
 
-subtest 'get_balance' => sub {
+subtest 'balance' => sub {
     plan tests => 2;
 
     my $patron = $builder->build({source => 'Borrower'});
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
-    my $account_lines = $patron->get_account_lines;
-    is( $account_lines->get_balance, 0, 'get_balance should return 0 if the patron does not have fines' );
+    my $account = $patron->account;
+    is( $account->balance, 0, 'balance should return 0 if the patron does not have fines' );
 
     my $accountline_1 = $builder->build(
         {
@@ -394,8 +394,8 @@ subtest 'get_balance' => sub {
         }
     );
 
-    my $balance = $patron->get_account_lines->get_balance;
-    is( int($balance), 29, 'get_balance should return the correct value');
+    my $balance = $patron->account->balance;
+    is( int($balance), 29, 'balance should return the correct value');
 
     $patron->delete;
 };
