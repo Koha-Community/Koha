@@ -66,8 +66,7 @@ sub delete {
     $self->_result->result_source->schema->txn_do(
         sub {
             # Delete Patron's holds
-            # FIXME Should be $patron->get_holds
-            $_->delete for Koha::Holds->search( { borrowernumber => $self->borrowernumber } );
+            $self->holds->delete;
 
             # Delete all lists and all shares of this borrower
             # Consistent with the approach Koha uses on deleting individual lists
