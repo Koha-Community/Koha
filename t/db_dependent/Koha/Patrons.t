@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 20;
 use Test::Warn;
 use DateTime;
 
@@ -592,6 +592,68 @@ subtest 'search_upcoming_membership_expires' => sub {
     $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires({ 'me.branchcode' => $library->{branchcode}, before => $nb_of_days_before, after => $nb_of_days_after });
     is( $upcoming_mem_expires->count, 3, 'Expect three results when adding after' );
     Koha::Patrons->search({ borrowernumber => { in => [ $patron_1->{borrowernumber}, $patron_2->{borrowernumber}, $patron_3->{borrowernumber} ] } })->delete;
+};
+
+subtest 'holds' => sub {
+    plan tests => 3;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
+    my $item_1 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                biblionumber  => $biblionumber_1
+            }
+        }
+    );
+    my $item_2 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                biblionumber  => $biblionumber_1
+            }
+        }
+    );
+    my ($biblionumber_2) = AddBiblio( MARC::Record->new, '' );
+    my $item_3 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                biblionumber  => $biblionumber_2
+            }
+        }
+    );
+    my $patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { branchcode => $library->{branchcode} }
+        }
+    );
+
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    my $holds = $patron->holds;
+    is( ref($holds), 'Koha::Holds',
+        'Koha::Patron->holds should return a Koha::Holds objects' );
+    is( $holds->count, 0, 'There should not be holds placed by this patron yet' );
+
+    C4::Reserves::AddReserve( $library->{branchcode},
+        $patron->borrowernumber, $biblionumber_1 );
+    # In the future
+    C4::Reserves::AddReserve( $library->{branchcode},
+        $patron->borrowernumber, $biblionumber_2, undef, undef, dt_from_string->add( days => 2 ) );
+
+    $holds = $patron->holds;
+    is( $holds->count, 2, 'There should be 2 holds placed by this patron' );
+
+    $holds->delete;
+    $patron->delete;
 };
 
 $retrieved_patron_1->delete;

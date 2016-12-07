@@ -569,6 +569,20 @@ sub account {
     return Koha::Account->new( { patron_id => $self->borrowernumber } );
 }
 
+=head3 holds
+
+my $holds = $patron->holds
+
+Return all the holds placed by this patron
+
+=cut
+
+sub holds {
+    my ($self) = @_;
+    my $holds_rs = $self->_result->reserves->search( {}, { order_by => 'reservedate' } );
+    return Koha::Holds->_new_from_dbic($holds_rs);
+}
+
 =head3 type
 
 =cut
