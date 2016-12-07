@@ -104,7 +104,6 @@ BEGIN {
         &AddReserve
 
         &GetReserve
-        &GetReservesFromItemnumber
         &GetReservesFromBorrowernumber
         &GetReservesForBranch
         &GetReservesToBranch
@@ -277,46 +276,6 @@ sub GetReserve {
     my $sth = $dbh->prepare( $query );
     $sth->execute( $reserve_id );
     return $sth->fetchrow_hashref();
-}
-
-=head2 GetReservesFromItemnumber
-
- ( $reservedate, $borrowernumber, $branchcode, $reserve_id, $waitingdate ) = GetReservesFromItemnumber($itemnumber);
-
-Get the first reserve for a specific item number (based on priority). Returns the abovementioned values for that reserve.
-
-The routine does not look at future reserves (read: item level holds), but DOES include future waits (a confirmed future hold).
-
-=cut
-
-sub GetReservesFromItemnumber {
-    my ($itemnumber) = @_;
-
-    my $schema = Koha::Database->new()->schema();
-
-    my $r = $schema->resultset('Reserve')->search(
-        {
-            itemnumber => $itemnumber,
-            suspend    => 0,
-            -or        => [
-                reservedate => \'<= CAST( NOW() AS DATE )',
-                waitingdate => { '!=', undef }
-            ]
-        },
-        {
-            order_by => 'priority',
-        }
-    )->first();
-
-    return unless $r;
-
-    return (
-        $r->reservedate(),
-        $r->get_column('borrowernumber'),
-        $r->get_column('branchcode'),
-        $r->reserve_id(),
-        $r->waitingdate(),
-    );
 }
 
 =head2 GetReservesFromBorrowernumber
