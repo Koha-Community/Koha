@@ -24,6 +24,7 @@ use Carp;
 use C4::Biblio qw( GetRecordValue GetMarcBiblio GetFrameworkCode );
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use base qw(Koha::Object);
 
@@ -259,10 +260,26 @@ return the current holds placed on this record
 =cut
 
 sub holds {
-    my ( $self ) = @_;
+    my ( $self, $params, $attributes ) = @_;
+    $attributes->{order_by} = 'priority' unless exists $attributes->{order_by};
+    my $hold_rs = $self->_result->reserves->search( $params, $attributes );
+    return Koha::Holds->_new_from_dbic($hold_rs);
+}
 
-    my $holds_rs = $self->_result->reserves;
-    return Koha::Holds->_new_from_dbic( $holds_rs );
+=head3 holds_placed_before_today
+
+my $holds = $biblio->holds_placed_before_today
+
+Return the holds placed on this bibliographic record.
+It does not include future holds.
+
+=cut
+
+sub holds_placed_before_today {
+    my ($self) = @_;
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    return $self->holds(
+        { reservedate => { '<=' => $dtf->format_date(dt_from_string) } } );
 }
 
 =head3 biblioitem

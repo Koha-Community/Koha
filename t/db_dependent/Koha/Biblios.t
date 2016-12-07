@@ -23,6 +23,7 @@ use Test::More tests => 2;
 
 use C4::Reserves;
 
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Biblios;
 use Koha::Patrons;
 use Koha::Subscriptions;
@@ -44,13 +45,23 @@ my $biblioitem = $schema->resultset('Biblioitem')->new(
     }
 )->insert();
 
-subtest 'holds' => sub {
-    plan tests => 3;
+subtest 'holds + holds_placed_before_today' => sub {
+    plan tests => 5;
     C4::Reserves::AddReserve( $patron->branchcode, $patron->borrowernumber, $biblio->biblionumber );
     my $holds = $biblio->holds;
     is( ref($holds), 'Koha::Holds', '->holds should return a Koha::Holds object' );
     is( $holds->count, 1, '->holds should only return 1 hold' );
     is( $holds->next->borrowernumber, $patron->borrowernumber, '->holds should return the correct hold' );
+    $holds->delete;
+
+    # Add a hold in the future
+    C4::Reserves::AddReserve( $patron->branchcode, $patron->borrowernumber, $biblio->biblionumber, undef, undef, dt_from_string->add( days => 2 ) );
+    $holds = $biblio->holds;
+    is( $holds->count, 1, '->holds should return future holds' );
+    $holds = $biblio->holds_placed_before_today;
+    is( $holds->count, 0, '->holds_placed_before_today should not return future holds' );
+    $holds->delete;
+
 };
 
 subtest 'subscriptions' => sub {
