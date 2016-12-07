@@ -104,7 +104,6 @@ BEGIN {
         &AddReserve
 
         &GetReserve
-        &GetReservesFromBorrowernumber
         &GetReservesForBranch
         &GetReservesToBranch
         &GetReserveCount
@@ -277,40 +276,6 @@ sub GetReserve {
     my $sth = $dbh->prepare( $query );
     $sth->execute( $reserve_id );
     return $sth->fetchrow_hashref();
-}
-
-=head2 GetReservesFromBorrowernumber
-
-    $borrowerreserv = GetReservesFromBorrowernumber($borrowernumber,$tatus);
-
-TODO :: Descritpion
-
-=cut
-
-sub GetReservesFromBorrowernumber {
-    my ( $borrowernumber, $status ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $sth;
-    if ($status) {
-        $sth = $dbh->prepare("
-            SELECT *
-            FROM   reserves
-            WHERE  borrowernumber=?
-                AND found =?
-            ORDER BY reservedate
-        ");
-        $sth->execute($borrowernumber,$status);
-    } else {
-        $sth = $dbh->prepare("
-            SELECT *
-            FROM   reserves
-            WHERE  borrowernumber=?
-            ORDER BY reservedate
-        ");
-        $sth->execute($borrowernumber);
-    }
-    my $data = $sth->fetchall_arrayref({});
-    return @$data;
 }
 
 =head2 CanBookBeReserved
