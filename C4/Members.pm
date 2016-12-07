@@ -267,12 +267,14 @@ sub patronflags {
         }
         $flags{'ODUES'} = \%flaginfo;
     }
-    my @itemswaiting = C4::Reserves::GetReservesFromBorrowernumber( $patroninformation->{'borrowernumber'},'W' );
-    my $nowaiting = scalar @itemswaiting;
+
+    my $patron = Koha::Patrons->find( $patroninformation->{borrowernumber} );
+    my $waiting_holds = $patron->holds->search({ found => 'W' });
+    my $nowaiting = $waiting_holds->count;
     if ( $nowaiting > 0 ) {
         my %flaginfo;
         $flaginfo{'message'}  = "Reserved items available";
-        $flaginfo{'itemlist'} = \@itemswaiting;
+        $flaginfo{'itemlist'} = $waiting_holds->unblessed;
         $flags{'WAITING'}     = \%flaginfo;
     }
     return ( \%flags );

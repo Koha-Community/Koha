@@ -50,8 +50,9 @@ use C4::RotatingCollections;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Calendar;
-use Koha::Checkouts;
 use Koha::BiblioFrameworks;
+use Koha::Checkouts;
+use Koha::Patrons;
 
 my $query = new CGI;
 
@@ -339,13 +340,8 @@ if ($barcode) {
 
         if (C4::Context->preference("WaitingNotifyAtCheckin") ) {
             #Check for waiting holds
-            my @reserves = GetReservesFromBorrowernumber($borrower->{'borrowernumber'});
-            my $waiting_holds = 0;
-            foreach my $num_res (@reserves) {
-                if ( $num_res->{'found'} eq 'W' && $num_res->{'branchcode'} eq $userenv_branch) {
-                    $waiting_holds++;
-                }
-            }
+            my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+            my $waiting_holds = $patron->holds->search({ found => 'W', branchcode => $userenv_branch })->count;
             if ($waiting_holds > 0) {
                 $template->param(
                     waiting_holds       => $waiting_holds,

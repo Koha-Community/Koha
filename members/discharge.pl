@@ -38,6 +38,7 @@ use C4::Reserves;
 use C4::Letters;
 use Koha::Patron::Discharge;
 use Koha::Patron::Images;
+use Koha::Patrons;
 
 use Koha::DateUtils;
 
@@ -70,8 +71,9 @@ if ( $input->param('borrowernumber') ) {
     });
 
     # Getting reserves
-    my @reserves    = GetReservesFromBorrowernumber($borrowernumber);
-    my $has_reserves = scalar(@reserves);
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $holds = $patron->holds;
+    my $has_reserves = $holds->count;
 
     # Generating discharge if needed
     if ( $input->param('discharge') and $can_be_discharged ) {

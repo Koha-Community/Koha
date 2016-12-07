@@ -25,7 +25,7 @@ use C4::Items;
 use C4::Circulation;
 use C4::Accounts;
 use C4::Biblio;
-use C4::Reserves qw(AddReserve GetReservesFromBorrowernumber CanBookBeReserved CanItemBeReserved IsAvailableForItemLevelRequest);
+use C4::Reserves qw(AddReserve CanBookBeReserved CanItemBeReserved IsAvailableForItemLevelRequest);
 use C4::Context;
 use C4::AuthoritiesMarc;
 use XML::Simple;
@@ -37,6 +37,7 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 use Koha::Biblios;
 use Koha::Libraries;
+use Koha::Patrons;
 
 =head1 NAME
 
@@ -375,6 +376,7 @@ sub GetPatronInfo {
     my $borrowernumber = $cgi->param('patron_id');
     my $borrower = GetMember( borrowernumber => $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
+    my $patron = Koha::Patrons->find( $borrowernumber );
 
     # Cleaning the borrower hashref
     my $flags = C4::Members::patronflags( $borrower );
@@ -414,23 +416,25 @@ sub GetPatronInfo {
     if ( $cgi->param('show_holds') && $cgi->param('show_holds') eq "1" ) {
 
         # Get borrower's reserves
-        my @reserves = GetReservesFromBorrowernumber( $borrowernumber, undef );
-        foreach my $reserve (@reserves) {
+        my $holds = $patron->holds;
+        while ( my $hold = $holds->next ) {
 
+            my $unblessed_hold = $hold->unblessed;
             # Get additional informations
-            my $item = GetBiblioFromItemNumber( $reserve->{'itemnumber'}, undef );
-            my $library = Koha::Libraries->find( $reserve->{branchcode} );
+            my $item = GetBiblioFromItemNumber( $hold->itemnumber, undef );
+            my $library = Koha::Libraries->find( $hold->branchcode ); # Should $hold->get_library
             my $branchname = $library ? $library->branchname : '';
 
             # Remove unwanted fields
             delete $item->{'more_subfields_xml'};
 
             # Add additional fields
-            $reserve->{'item'}       = $item;
-            $reserve->{'branchname'} = $branchname;
-            $reserve->{'title'}      = GetBiblio( $reserve->{'biblionumber'} )->{'title'};
+            $unblessed_hold->{item}       = $item;
+            $unblessed_hold->{branchname} = $branchname;
+            $unblessed_hold->{title}      = GetBiblio( $hold->biblionumber )->{'title'}; # Should be $hold->get_biblio
+
+            push @{ $borrower->{holds}{hold} }, $unblessed_hold;
         }
-        $borrower->{'holds'}->{'hold'} = \@reserves;
     }
 
     # Issues management
@@ -500,6 +504,8 @@ sub GetServices {
     my $borrower = GetMember( borrowernumber => $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
+    my $patron = Koha::Patrons->find( $borrowernumber );
+
     # Get the item, or return an error code if not found
     my $itemnumber = $cgi->param('item_id');
     my $item = GetItem( $itemnumber );
@@ -519,10 +525,10 @@ sub GetServices {
     }
 
     # Reserve cancellation management
-    my @reserves = GetReservesFromBorrowernumber( $borrowernumber, undef );
+    my $holds = $patron->holds;
     my @reserveditems;
-    foreach my $reserve (@reserves) {
-        push @reserveditems, $reserve->{'itemnumber'};
+    while ( my $hold = $holds->next ) { # FIXME This could be improved
+        push @reserveditems, $hold->itemnumber;
     }
     if ( grep { $itemnumber eq $_ } @reserveditems ) {
         push @availablefor, 'hold cancellation';

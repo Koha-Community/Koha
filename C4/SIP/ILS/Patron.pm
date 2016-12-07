@@ -24,6 +24,7 @@ use C4::Items qw( GetBarcodeFromItemnumber GetItemnumbersForBiblio);
 use C4::Auth qw(checkpw);
 
 use Koha::Libraries;
+use Koha::Patrons;
 
 our $kp;    # koha patron
 
@@ -431,20 +432,25 @@ sub _get_address {
 
 sub _get_outstanding_holds {
     my $borrowernumber = shift;
-    my @hold_array = grep { !defined $_->{found} || $_->{found} ne 'W'} GetReservesFromBorrowernumber($borrowernumber);
-    foreach my $h (@hold_array) {
+
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $holds = $patron->holds->search( { -or => [ { found => undef }, { found => { '!=' => 'W' } } ] } );
+    my @holds;
+    while ( my $hold = $holds->next ) {
         my $item;
-        if ($h->{itemnumber}) {
-            $item = $h->{itemnumber};
+        if ($hold->itemnumber) {
+            $item = $hold->itemnumber;
         }
         else {
             # We need to return a barcode for the biblio so the client
             # can request the biblio info
-            $item = ( GetItemnumbersForBiblio($h->{biblionumber}) )->[0];
+            $item = ( GetItemnumbersForBiblio($hold->biblionumber) )->[0];
         }
-        $h->{barcode} = GetBarcodeFromItemnumber($item);
+        my $unblessed_hold = $hold->unblessed;
+        $unblessed_hold->{barcode} = GetBarcodeFromItemnumber($item);
+        push @holds, $unblessed_hold;
     }
-    return \@hold_array;
+    return \@holds;
 }
 
 1;

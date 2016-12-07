@@ -7,7 +7,7 @@ use Carp;
 
 use C4::Templates qw ( gettemplate );
 use C4::Members qw( GetPendingIssues );
-use C4::Reserves qw( GetReservesFromBorrowernumber CancelReserve );
+use C4::Reserves qw( CancelReserve );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -79,9 +79,10 @@ sub discharge {
     return unless $borrowernumber and can_be_discharged( { borrowernumber => $borrowernumber } );
 
     # Cancel reserves
-    my @reserves = GetReservesFromBorrowernumber($borrowernumber);
-    for my $reserve (@reserves) {
-        CancelReserve( { reserve_id => $reserve->{reserve_id} } );
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $holds = $patron->holds;
+    while ( my $hold = $holds->next ) {
+        CancelReserve( { reserve_id => $hold->reserve_id } );
     }
 
     # Debar the member

@@ -199,7 +199,8 @@ foreach my $biblioNumber (@biblionumbers) {
 if ( $query->param('place_reserve') ) {
     my $reserve_cnt = 0;
     if ($maxreserves) {
-        $reserve_cnt = GetReservesFromBorrowernumber( $borrowernumber );
+        my $patron = Koha::Patrons->find( $borrowernumber );
+        $reserve_cnt = $patron->holds->count;
     }
 
     # List is composed of alternating biblio/item/branch
@@ -350,7 +351,8 @@ if ( $borr->{lost} && ($borr->{lost} == 1) ) {
     );
 }
 
-if ( Koha::Patrons->find( $borrowernumber )->is_debarred ) {
+my $patron = Koha::Patrons->find( $borrowernumber );
+if ( $patron->is_debarred ) {
     $noreserves = 1;
     $template->param(
         message          => 1,
@@ -360,13 +362,13 @@ if ( Koha::Patrons->find( $borrowernumber )->is_debarred ) {
     );
 }
 
-my @reserves = GetReservesFromBorrowernumber( $borrowernumber );
-my $reserves_count = scalar(@reserves);
-$template->param( RESERVES => \@reserves );
+my $holds = $patron->holds;
+my $reserves_count = $holds->count;
+$template->param( RESERVES => $holds->unblessed );
 if ( $maxreserves && ( $reserves_count >= $maxreserves ) ) {
     $template->param( message => 1 );
     $noreserves = 1;
-    $template->param( too_many_reserves => scalar(@reserves));
+    $template->param( too_many_reserves => $holds->count );
 }
 
 unless ( $noreserves ) {

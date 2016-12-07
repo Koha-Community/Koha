@@ -17,6 +17,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Biblios;
 use Koha::Holds;
+use Koha::Patrons;
 
 BEGIN {
     use FindBin;
@@ -121,8 +122,9 @@ my $hold_found = $hold->found();
 $hold->set({ found => 'W'})->store();
 is( Koha::Holds->waiting()->count(), 1, "Koha::Holds->waiting returns waiting holds" );
 
-my ( $reserve ) = GetReservesFromBorrowernumber($borrowernumbers[0]);
-ok( $reserve->{'borrowernumber'} eq $borrowernumbers[0], "Test GetReservesFromBorrowernumber()");
+my $patron = Koha::Patrons->find( $borrowernumbers[0] );
+$holds = $patron->holds;
+is( $holds->next->borrowernumber, $borrowernumbers[0], "Test Koha::Patron->holds");
 
 
 ok( GetReserveCount( $borrowernumbers[0] ), "Test GetReserveCount()" );
@@ -146,7 +148,7 @@ ModReserve({
     suspend_until => output_pref( { dt => dt_from_string( "2013-01-01", "iso" ), dateonly => 1 } ),
 });
 
-$reserve = GetReserve( $reserve_id );
+my $reserve = GetReserve( $reserve_id );
 ok( $reserve->{'priority'} eq '4', "Test GetReserve(), priority changed correctly" );
 ok( $reserve->{'suspend'}, "Test GetReserve(), suspend hold" );
 is( $reserve->{'suspend_until'}, '2013-01-01 00:00:00', "Test GetReserve(), suspend until date" );
@@ -196,17 +198,18 @@ AddReserve(
     my $checkitem,
     my $found,
 );
-( $reserve ) = GetReservesFromBorrowernumber($borrowernumber);
+$patron = Koha::Patrons->find( $borrowernumber );
+$holds = $patron->holds;
 my $reserveid = C4::Reserves::GetReserveId(
     {
         biblionumber => $biblionumber,
         borrowernumber => $borrowernumber
     }
 );
-is( $reserveid, $reserve->{reserve_id}, "Test GetReserveId" );
+is( $reserveid, $holds->next->reserve_id, "Test GetReserveId" );
 ModReserveMinusPriority( $itemnumber, $reserve->{'reserve_id'} );
-( $reserve ) = GetReservesFromBorrowernumber($borrowernumber);
-ok( $reserve->{'itemnumber'} eq $itemnumber, "Test ModReserveMinusPriority()" );
+$holds = $patron->holds;
+is( $holds->next->itemnumber, $itemnumber, "Test ModReserveMinusPriority()" );
 
 
 my $reserve2 = GetReserveInfo( $reserve->{'reserve_id'} );
