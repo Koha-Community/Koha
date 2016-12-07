@@ -105,7 +105,6 @@ BEGIN {
 
         &GetReserve
         &GetReservesFromItemnumber
-        &GetReservesFromBiblionumber
         &GetReservesFromBorrowernumber
         &GetReservesForBranch
         &GetReservesToBranch
@@ -276,72 +275,6 @@ sub GetReserve {
     my $sth = $dbh->prepare( $query );
     $sth->execute( $reserve_id );
     return $sth->fetchrow_hashref();
-}
-
-=head2 GetReservesFromBiblionumber
-
-  my $reserves = GetReservesFromBiblionumber({
-    biblionumber => $biblionumber,
-    [ itemnumber => $itemnumber, ]
-    [ all_dates => 1|0 ]
-  });
-
-This function gets the list of reservations for one C<$biblionumber>,
-returning an arrayref pointing to the reserves for C<$biblionumber>.
-
-By default, only reserves whose start date falls before the current
-time are returned.  To return all reserves, including future ones,
-the C<all_dates> parameter can be included and set to a true value.
-
-If the C<itemnumber> parameter is supplied, reserves must be targeted
-to that item or not targeted to any item at all; otherwise, they
-are excluded from the list.
-
-=cut
-
-sub GetReservesFromBiblionumber {
-    my ( $params ) = @_;
-    my $biblionumber = $params->{biblionumber} or return [];
-    my $itemnumber = $params->{itemnumber};
-    my $all_dates = $params->{all_dates} // 0;
-    my $dbh   = C4::Context->dbh;
-
-    # Find the desired items in the reserves
-    my @params;
-    my $query = "
-        SELECT  reserve_id,
-                branchcode,
-                timestamp AS rtimestamp,
-                priority,
-                biblionumber,
-                borrowernumber,
-                reservedate,
-                found,
-                itemnumber,
-                reservenotes,
-                expirationdate,
-                lowestPriority,
-                suspend,
-                suspend_until,
-                itemtype
-        FROM     reserves
-        WHERE biblionumber = ? ";
-    push( @params, $biblionumber );
-    unless ( $all_dates ) {
-        $query .= " AND reservedate <= CAST(NOW() AS DATE) ";
-    }
-    if ( $itemnumber ) {
-        $query .= " AND ( itemnumber IS NULL OR itemnumber = ? )";
-        push( @params, $itemnumber );
-    }
-    $query .= "ORDER BY priority";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( @params );
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @results, $data;
-    }
-    return \@results;
 }
 
 =head2 GetReservesFromItemnumber
