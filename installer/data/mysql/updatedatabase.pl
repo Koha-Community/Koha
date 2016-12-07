@@ -12819,7 +12819,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = '16.05.05.002';
 if ( CheckVersion($DBversion) ) {
 
     my $sth = $dbh->prepare(q{
@@ -12867,6 +12867,12 @@ if ( CheckVersion($DBversion) ) {
     }
 
     print "Upgrade to $DBversion done (Bug 14598: itemtype is not set on statistics by C4::Circulation::AddReturn)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = '16.05.06.000';
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (Koha 16.05.06)\n";
     SetVersion($DBversion);
 }
 
