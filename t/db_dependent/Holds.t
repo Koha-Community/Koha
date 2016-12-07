@@ -94,11 +94,17 @@ is( $holds->next->priority, 3, "Reserve 3 has a priority of 3" );
 is( $holds->next->priority, 4, "Reserve 4 has a priority of 4" );
 is( $holds->next->priority, 5, "Reserve 5 has a priority of 5" );
 
-my ( $reservedate, $borrowernumber, $branch_1code, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
-is( $reservedate, output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), "GetReservesFromItemnumber should return a valid reserve date");
-is( $borrowernumber, $borrowernumbers[0], "GetReservesFromItemnumber should return a valid borrowernumber");
-is( $branch_1code, $branch_1, "GetReservesFromItemnumber should return a valid branchcode");
-ok($reserve_id, "Test GetReservesFromItemnumber()");
+my $item = Koha::Items->find( $itemnumber );
+$holds = $item->holds_placed_before_today;
+my $first_hold = $holds->next;
+my $reservedate = $first_hold->reservedate;
+my $borrowernumber = $first_hold->borrowernumber;
+my $branch_1code = $first_hold->branchcode;
+my $reserve_id = $first_hold->reserve_id;
+is( $reservedate, output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), "holds_placed_today should return a valid reserve date");
+is( $borrowernumber, $borrowernumbers[0], "holds_placed_today should return a valid borrowernumber");
+is( $branch_1code, $branch_1, "holds_placed_today should return a valid branchcode");
+ok($reserve_id, "Test holds_placed_today()");
 
 my $hold = Koha::Holds->find( $reserve_id );
 ok( $hold, "Koha::Holds found the hold" );
@@ -126,8 +132,12 @@ CancelReserve({ 'reserve_id' => $reserve_id });
 $holds = $biblio->holds;
 is( $holds->count, $borrowers_count - 1, "Test CancelReserve()" );
 
+$holds = $item->holds_placed_before_today;
+$first_hold = $holds->next;
+$borrowernumber = $first_hold->borrowernumber;
+$branch_1code = $first_hold->branchcode;
+$reserve_id = $first_hold->reserve_id;
 
-( $reservedate, $borrowernumber, $branch_1code, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
 ModReserve({
     reserve_id    => $reserve_id,
     rank          => '4',

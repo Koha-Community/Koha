@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use C4::Context;
 use Koha::IssuingRules;
@@ -182,6 +183,26 @@ sub article_request_type {
 
     return q{} unless $issuing_rule;
     return $issuing_rule->article_requests || q{}
+}
+
+=head3 holds_placed_before_today
+
+=cut
+
+sub holds_placed_before_today {
+    my ( $self ) = @_;
+    my $attributes = { order_by => 'priority' };
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $params = {
+        itemnumber => $self->itemnumber,
+        suspend => 0,
+        -or => [
+            reservedate => { '<=' => $dtf->format_date(dt_from_string) },
+            waitingdate => { '!=' => undef },
+        ],
+    };
+    my $hold_rs = $self->_result->reserves->search( $params, $attributes );
+    return Koha::Holds->_new_from_dbic($hold_rs);
 }
 
 =head3 type

@@ -35,6 +35,7 @@ use Date::Calc qw(
 
 use C4::Koha;
 use C4::Reserves;
+use Koha::Items;
 use Koha::Libraries;
 use Koha::DateUtils;
 use Koha::BiblioFrameworks;
@@ -100,9 +101,10 @@ while ( my $library = $libraries->next ) {
             $getransf{'subtitle'} = GetRecordValue('subtitle', $record, GetFrameworkCode($gettitle->{'biblionumber'}));
 
             # we check if we have a reserv for this transfer
-            my @checkreserv = GetReservesFromItemnumber($num->{'itemnumber'});
-            if ( $checkreserv[0] ) {
-                my $getborrower = C4::Members::GetMember( borrowernumber => $checkreserv[1] );
+            my $item = Koha::Items->find( $num->{itemnumber} );
+            my $holds = $item->holds_placed_before_today;
+            if ( my $first_hold = $holds->next ) {
+                my $getborrower = C4::Members::GetMember( borrowernumber => $first_hold->borrowernumber );
                 $getransf{'borrowernum'}       = $getborrower->{'borrowernumber'};
                 $getransf{'borrowername'}      = $getborrower->{'surname'};
                 $getransf{'borrowerfirstname'} = $getborrower->{'firstname'};

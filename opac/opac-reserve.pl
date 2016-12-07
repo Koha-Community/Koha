@@ -34,6 +34,7 @@ use C4::Overdues;
 use C4::Debug;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
+use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
 use Date::Calc qw/Today Date_to_Days/;
@@ -470,21 +471,21 @@ foreach my $biblioNum (@biblionumbers) {
         }
 
         # checking reserve
-        my ($reservedate,$reservedfor,$expectedAt,undef,$wait) = GetReservesFromItemnumber($itemNum);
-        my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $reservedfor );
+        my $item = Koha::Items->find( $itemNum );
+        my $holds = $item->holds_placed_before_today;
 
         # the item could be reserved for this borrower vi a host record, flag this
-        $reservedfor //= '';
+        my $reservedfor = q||;
 
-        if ( defined $reservedate ) {
+        if ( my $first_hold = $holds->next ) {
+            my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $first_hold->borrowernumber );
             $itemLoopIter->{backgroundcolor} = 'reserved';
-            $itemLoopIter->{reservedate}     = output_pref({ dt => dt_from_string($reservedate), dateonly => 1 });
-            $itemLoopIter->{ReservedForBorrowernumber} = $reservedfor;
+            $itemLoopIter->{reservedate}     = output_pref({ dt => dt_from_string($first_hold->reservedate), dateonly => 1 }); # FIXME Should be formatted in the template
+            $itemLoopIter->{ReservedForBorrowernumber} = $first_hold->borrowernumber;
             $itemLoopIter->{ReservedForSurname}        = $ItemBorrowerReserveInfo->{'surname'};
             $itemLoopIter->{ReservedForFirstname}      = $ItemBorrowerReserveInfo->{'firstname'};
-            $itemLoopIter->{ExpectedAtLibrary}         = $expectedAt;
-            #waiting status
-            $itemLoopIter->{waitingdate} = $wait;
+            $itemLoopIter->{ExpectedAtLibrary}         = $first_hold->branchcode;
+            $itemLoopIter->{waitingdate} = $first_hold->waitingdate;
         }
 
         $itemLoopIter->{notforloan} = $itemInfo->{notforloan};

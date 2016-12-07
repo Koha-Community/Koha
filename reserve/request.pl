@@ -44,6 +44,7 @@ use C4::Members;
 use C4::Search;		# enabled_staff_search_views
 use Koha::DateUtils;
 use Koha::Holds;
+use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
 
@@ -388,17 +389,17 @@ foreach my $biblionumber (@biblionumbers) {
             }
 
             # checking reserve
-            my ($reservedate,$reservedfor,$expectedAt,$reserve_id,$wait) = GetReservesFromItemnumber($itemnumber);
-            if ( defined $reservedate ) {
-                my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $reservedfor );
+            my $holds = Koha::Items->find( $itemnumber )->holds_placed_before_today;
+            if ( my $first_hold = $holds->next ) {
+                my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $first_hold->borrowernumber );
 
                 $item->{backgroundcolor} = 'reserved';
-                $item->{reservedate}     = output_pref({ dt => dt_from_string( $reservedate ), dateonly => 1 });
-                $item->{ReservedForBorrowernumber}     = $reservedfor;
+                $item->{reservedate}     = output_pref({ dt => dt_from_string( $first_hold->reservedate ), dateonly => 1 }); # FIXME Should be formatted in the template
+                $item->{ReservedForBorrowernumber}     = $first_hold->borrowernumber;
                 $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
                 $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
-                $item->{ExpectedAtLibrary}     = $expectedAt;
-                $item->{waitingdate} = $wait;
+                $item->{ExpectedAtLibrary}     = $first_hold->branchcode;
+                $item->{waitingdate} = $first_hold->waitingdate;
             }
 
             # Management of the notforloan document

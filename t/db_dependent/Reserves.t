@@ -404,8 +404,8 @@ is(
 my $letter = ReserveSlip($branch_1, $requesters{$branch_1}, $bibnum);
 ok(defined($letter), 'can successfully generate hold slip (bug 10949)');
 
-# Tests for bug 9788: Does GetReservesFromItemnumber return a future wait?
-# 9788a: GetReservesFromItemnumber does not return future next available hold
+# Tests for bug 9788: Does Koha::Item->holds_placed_before_today return a future wait?
+# 9788a: holds_placed_before_today does not return future next available hold
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 t::lib::Mocks::mock_preference('ConfirmFutureHolds', 2);
 t::lib::Mocks::mock_preference('AllowHoldDateInFuture', 1);
@@ -415,19 +415,22 @@ $resdate=output_pref($resdate);
 AddReserve($branch_1,  $requesters{$branch_1}, $bibnum,
            $bibitems,  1, $resdate, $expdate, $notes,
            $title,      $checkitem, $found);
-my @results= GetReservesFromItemnumber($itemnumber);
-is(defined $results[3]?1:0, 0, 'GetReservesFromItemnumber does not return a future next available hold');
-# 9788b: GetReservesFromItemnumber does not return future item level hold
+my $item = Koha::Items->find( $itemnumber );
+$holds = $item->holds_placed_before_today;
+my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+my $future_holds = $holds->search({ reservedate => { '>' => $dtf->format_date( dt_from_string ) } } );
+is( $future_holds->count, 0, 'holds_placed_before_today does not return a future next available hold');
+# 9788b: holds_placed_before_today does not return future item level hold
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 AddReserve($branch_1,  $requesters{$branch_1}, $bibnum,
            $bibitems,  1, $resdate, $expdate, $notes,
            $title,      $itemnumber, $found); #item level hold
-@results= GetReservesFromItemnumber($itemnumber);
-is(defined $results[3]?1:0, 0, 'GetReservesFromItemnumber does not return a future item level hold');
-# 9788c: GetReservesFromItemnumber returns future wait (confirmed future hold)
+$future_holds = $holds->search({ reservedate => { '>' => $dtf->format_date( dt_from_string ) } } );
+is( $future_holds->count, 0, 'holds_placed_before_today does not return a future item level hold' );
+# 9788c: holds_placed_before_today returns future wait (confirmed future hold)
 ModReserveAffect( $itemnumber,  $requesters{$branch_1} , 0); #confirm hold
-@results= GetReservesFromItemnumber($itemnumber);
-is(defined $results[3]?1:0, 1, 'GetReservesFromItemnumber returns a future wait (confirmed future hold)');
+$future_holds = $holds->search({ reservedate => { '>' => $dtf->format_date( dt_from_string ) } } );
+is( $future_holds->count, 1, 'holds_placed_before_today returns a future wait (confirmed future hold)' );
 # End of tests for bug 9788
 
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
@@ -547,7 +550,7 @@ is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'OK', "Res
 ####### EO Bug 13113 <<<
        ####
 
-my $item = GetItem($itemnumber);
+$item = GetItem($itemnumber);
 
 ok( C4::Reserves::IsAvailableForItemLevelRequest($item, $borrower), "Reserving a book on item level" );
 
