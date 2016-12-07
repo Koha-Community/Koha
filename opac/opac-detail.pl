@@ -49,6 +49,7 @@ use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use Koha::RecordProcessor;
 use Koha::AuthorisedValues;
+use Koha::Biblios;
 use Koha::Virtualshelves;
 use Koha::Ratings;
 use Koha::Reviews;
@@ -591,15 +592,16 @@ for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
 }
 my $has_hold;
 if ( $show_holds_count || $show_priority) {
-    my $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
-    $template->param( holds_count  => scalar( @$reserves ) ) if $show_holds_count;
-    foreach (@$reserves) {
-        $item_reserves{ $_->{itemnumber} }++ if $_->{itemnumber};
-        if ($show_priority && $_->{borrowernumber} == $borrowernumber) {
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $holds = $biblio->holds;
+    $template->param( holds_count  => $holds->count );
+    while ( my $hold = $holds->new ) {
+        $item_reserves{ $hold->itemnumber }++ if $hold->itemnumber;
+        if ($show_priority && $hold->borrowernumber == $borrowernumber) {
             $has_hold = 1;
-            $_->{itemnumber}
-                ? ($priority{ $_->{itemnumber} } = $_->{priority})
-                : ($template->param( priority => $_->{priority} ));
+            $hold->itemnumber
+                ? ($priority{ $hold->itemnumber } = $hold->priority)
+                : ($template->param( priority => $hold->priority ));
         }
     }
 }

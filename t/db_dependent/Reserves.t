@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 72;
+use Test::More tests => 71;
 use Test::MockModule;
 use Test::Warn;
 
@@ -268,14 +268,13 @@ AddReserve($branch_1,  $requesters{$branch_1}, $bibnum2,
 ModReserveAffect($itemnum_cpl, $requesters{$branch_3}, 0);
 
 # Now it should have different priorities.
-my $title_reserves = GetReservesFromBiblionumber({biblionumber => $bibnum2});
-# Sort by reserve number in case the database gives us oddly ordered results
-my @reserves = sort { $a->{reserve_id} <=> $b->{reserve_id} } @$title_reserves;
-is($reserves[0]{priority}, 0, 'Item is correctly waiting');
-is($reserves[1]{priority}, 1, 'Item is correctly priority 1');
-is($reserves[2]{priority}, 2, 'Item is correctly priority 2');
+my $biblio = Koha::Biblios->find( $bibnum2 );
+my $holds = $biblio->holds({}, { order_by => 'reserve_id' });;
+is($holds->next->priority, 0, 'Item is correctly waiting');
+is($holds->next->priority, 1, 'Item is correctly priority 1');
+is($holds->next->priority, 2, 'Item is correctly priority 2');
 
-@reserves = Koha::Holds->search({ borrowernumber => $requesters{$branch_3} })->waiting();
+my @reserves = Koha::Holds->search({ borrowernumber => $requesters{$branch_3} })->waiting();
 is( @reserves, 1, 'GetWaiting got only the waiting reserve' );
 is( $reserves[0]->borrowernumber(), $requesters{$branch_3}, 'GetWaiting got the reserve for the correct borrower' );
 
@@ -315,10 +314,10 @@ is( $messages->{ResFound}->{borrowernumber},
     $requesters{$branch_3},
     'for generous library, its items fill first hold request in line (bug 10272)');
 
-my $reserves = GetReservesFromBiblionumber({biblionumber => $biblionumber});
-isa_ok($reserves, 'ARRAY');
-is(scalar @$reserves, 1, "Only one reserves for this biblio");
-my $reserve_id = $reserves->[0]->{reserve_id};
+$biblio = Koha::Biblios->find( $biblionumber );
+$holds = $biblio->holds;
+is($holds->count, 1, "Only one reserves for this biblio");
+my $reserve_id = $holds->next->reserve_id;
 
 $reserve = GetReserve($reserve_id);
 isa_ok($reserve, 'HASH', "GetReserve return");

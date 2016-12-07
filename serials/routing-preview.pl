@@ -33,6 +33,8 @@ use C4::Biblio;
 use C4::Items;
 use C4::Serials;
 use URI::Escape;
+
+use Koha::Biblios;
 use Koha::Libraries;
 
 my $query = new CGI;
@@ -62,38 +64,37 @@ my ($template, $loggedinuser, $cookie);
 
 if($ok){
     # get biblio information....
-    my $biblio = $subs->{'biblionumber'};
-	my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblio);
+    my $biblionumber = $subs->{'biblionumber'};
+    my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblionumber);
 	my @itemresults = GetItemsInfo( $subs->{biblionumber} );
 	my $branch = $itemresults[0]->{'holdingbranch'};
     my $branchname = Koha::Libraries->find($branch)->branchname;
 
 	if (C4::Context->preference('RoutingListAddReserves')){
 		# get existing reserves .....
-        my $reserves = GetReservesFromBiblionumber({ biblionumber => $biblio });
-        my $count = scalar( @$reserves );
-        my $totalcount = $count;
-		foreach my $res (@$reserves) {
-			if ($res->{'found'} eq 'W') {
-				$count--;
-			}
-		}
+
+        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $holds = $biblio->holds_placed_before_today;
+        my $count = $holds->count;
+        while ( my $hold = $holds->next ) {
+            $count-- if $hold->is_waiting;
+        }
 		my $notes;
 		my $title = $subs->{'bibliotitle'};
         for my $routing ( @routinglist ) {
             my $sth = $dbh->prepare('SELECT * FROM reserves WHERE biblionumber = ? AND borrowernumber = ? LIMIT 1');
-            $sth->execute($biblio,$routing->{borrowernumber});
+            $sth->execute($biblionumber,$routing->{borrowernumber});
             my $reserve = $sth->fetchrow_hashref;
 
             if($routing->{borrowernumber} == $reserve->{borrowernumber}){
                 ModReserve({
                     rank           => $routing->{ranking},
-                    biblionumber   => $biblio,
+                    biblionumber   => $biblionumber,
                     borrowernumber => $routing->{borrowernumber},
                     branchcode     => $branch
                 });
             } else {
-                AddReserve($branch,$routing->{borrowernumber},$biblio,\@bibitems,$routing->{ranking}, undef, undef, $notes,$title);
+                AddReserve($branch,$routing->{borrowernumber},$biblionumber,\@bibitems,$routing->{ranking}, undef, undef, $notes,$title);
         }
     }
 	}

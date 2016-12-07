@@ -15,6 +15,7 @@ use C4::Members;
 use C4::Calendar;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Biblios;
 use Koha::Holds;
 
 BEGIN {
@@ -84,14 +85,14 @@ foreach my $borrowernumber ( @borrowernumbers ) {
     );
 }
 
-my $reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber });
-is( scalar(@$reserves), $borrowers_count, "Test GetReserves()" );
-
-is( $reserves->[0]->{priority}, 1, "Reserve 1 has a priority of 1" );
-is( $reserves->[1]->{priority}, 2, "Reserve 2 has a priority of 2" );
-is( $reserves->[2]->{priority}, 3, "Reserve 3 has a priority of 3" );
-is( $reserves->[3]->{priority}, 4, "Reserve 4 has a priority of 4" );
-is( $reserves->[4]->{priority}, 5, "Reserve 5 has a priority of 5" );
+my $biblio = Koha::Biblios->find( $biblionumber );
+my $holds = $biblio->holds;
+is( $holds->count, $borrowers_count, 'Test GetReserves()' );
+is( $holds->next->priority, 1, "Reserve 1 has a priority of 1" );
+is( $holds->next->priority, 2, "Reserve 2 has a priority of 2" );
+is( $holds->next->priority, 3, "Reserve 3 has a priority of 3" );
+is( $holds->next->priority, 4, "Reserve 4 has a priority of 4" );
+is( $holds->next->priority, 5, "Reserve 5 has a priority of 5" );
 
 my ( $reservedate, $borrowernumber, $branch_1code, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
 is( $reservedate, output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), "GetReservesFromItemnumber should return a valid reserve date");
@@ -122,8 +123,8 @@ ok( GetReserveCount( $borrowernumbers[0] ), "Test GetReserveCount()" );
 
 
 CancelReserve({ 'reserve_id' => $reserve_id });
-$reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber });
-is( scalar(@$reserves), $borrowers_count - 1, "Test CancelReserve()" );
+$holds = $biblio->holds;
+is( $holds->count, $borrowers_count - 1, "Test CancelReserve()" );
 
 
 ( $reservedate, $borrowernumber, $branch_1code, $reserve_id ) = GetReservesFromItemnumber($itemnumber);
@@ -202,9 +203,9 @@ my $reserve2 = GetReserveInfo( $reserve->{'reserve_id'} );
 ok( $reserve->{'reserve_id'} eq $reserve2->{'reserve_id'}, "Test GetReserveInfo()" );
 
 
-$reserves = GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
-$reserve = $reserves->[1];
-AlterPriority( 'top', $reserve->{'reserve_id'} );
+$holds = $biblio->holds;
+my $hold = $holds->next;
+AlterPriority( 'top', $hold->reserve_id );
 $reserve = GetReserve( $reserve->{'reserve_id'} );
 is( $reserve->{'priority'}, '1', "Test AlterPriority(), move to top" );
 
@@ -429,7 +430,7 @@ t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 1);
 my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) = localtime(time);
 $year += 1900;
 $mon += 1;
-$reserves = $dbh->selectall_arrayref('SELECT * FROM reserves', { Slice => {} });
+my $reserves = $dbh->selectall_arrayref('SELECT * FROM reserves', { Slice => {} });
 $reserve = $reserves->[0];
 my $calendar = C4::Calendar->new(branchcode => $reserve->{branchcode});
 $calendar->insert_single_holiday(

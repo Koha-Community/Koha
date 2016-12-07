@@ -22,6 +22,7 @@ use C4::Circulation;
 use C4::Members;
 use C4::Reserves;
 use Koha::Database;
+use Koha::Biblios;
 
 
 =encoding UTF-8
@@ -65,12 +66,6 @@ use Koha::Database;
 );
 =cut
 
-sub priority_sort {
-    defined $a->{priority} or return -1;
-    defined $b->{priority} or return 1;
-    return $a->{priority} <=> $b->{priority};
-}
-
 sub new {
 	my ($class, $item_id) = @_;
 	my $type = ref($class) || $class;
@@ -99,8 +94,9 @@ sub new {
     }
 	my $borrower = GetMember(borrowernumber=>$issue->{'borrowernumber'});
 	$item->{patron} = $borrower->{'cardnumber'};
-    my $reserves = GetReservesFromBiblionumber({ biblionumber => $item->{biblionumber} });
-    $item->{hold_queue} = [ sort priority_sort @$reserves ];
+    my $biblio = Koha::Biblios->find( $item->{biblionumber } );
+    my $holds = $biblio->holds_placed_before_today->unblessed;
+    $item->{hold_queue} = $holds;
 	$item->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$item->{hold_queue}} )];
 	$item->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$item->{hold_queue}} )];
 	$self = $item;

@@ -42,6 +42,7 @@ use C4::HTML5Media;
 use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use C4::Acquisition qw(GetOrdersByBiblionumber);
 use Koha::AuthorisedValues;
+use Koha::Biblios;
 use Koha::Patrons;
 use Koha::Virtualshelves;
 
@@ -461,8 +462,9 @@ if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->pref
 }
 
 #we only need to pass the number of holds to the template
-my $holds = C4::Reserves::GetReservesFromBiblionumber({ biblionumber => $biblionumber, all_dates => 1 });
-$template->param( holdcount => scalar ( @$holds ) );
+my $biblio = Koha::Biblios->find( $biblionumber );
+my $holds = $biblio->holds;
+$template->param( holdcount => $holds->count );
 
 my $StaffDetailItemSelection = C4::Context->preference('StaffDetailItemSelection');
 if ($StaffDetailItemSelection) {

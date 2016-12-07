@@ -25,7 +25,7 @@ use C4::Items;
 use C4::Circulation;
 use C4::Accounts;
 use C4::Biblio;
-use C4::Reserves qw(AddReserve GetReservesFromBiblionumber GetReservesFromBorrowernumber CanBookBeReserved CanItemBeReserved IsAvailableForItemLevelRequest);
+use C4::Reserves qw(AddReserve GetReservesFromBorrowernumber CanBookBeReserved CanItemBeReserved IsAvailableForItemLevelRequest);
 use C4::Context;
 use C4::AuthoritiesMarc;
 use XML::Simple;
@@ -35,6 +35,7 @@ use DateTime;
 use C4::Auth;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 
+use Koha::Biblios;
 use Koha::Libraries;
 
 =head1 NAME
@@ -217,7 +218,8 @@ sub GetRecords {
 
         # Get most of the needed data
         my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
-        my $reserves         = GetReservesFromBiblionumber({ biblionumber => $biblionumber });
+        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $holds  = $biblio->holds_placed_before_today->unblessed;
         my $issues           = GetBiblioIssues($biblionumber);
         my $items            = GetItemsByBiblioitemnumber($biblioitemnumber);
 
@@ -236,7 +238,7 @@ sub GetRecords {
 
         # Hashref building...
         $biblioitem->{'items'}->{'item'}       = $items;
-        $biblioitem->{'reserves'}->{'reserve'} = $reserves;
+        $biblioitem->{'reserves'}->{'reserve'} = $holds;
         $biblioitem->{'issues'}->{'issue'}     = $issues;
 
         push @records, $biblioitem;

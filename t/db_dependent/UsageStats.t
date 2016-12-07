@@ -19,6 +19,7 @@ use Test::More tests => 57;
 use t::lib::Mocks qw(mock_preference);
 use POSIX qw(strftime);
 use Data::Dumper;
+use Koha::Biblios;
 
 use Koha::Libraries;
 
@@ -299,9 +300,9 @@ sub construct_objects_needed {
 
     # ---------- Add 1 old_reserves
     AddReserve( $branchcode, $borrowernumber1, $biblionumber1, '', 1, undef, undef, '', 'Title', undef, undef );
-    my $reserves1   = GetReservesFromBiblionumber( { biblionumber => $biblionumber1 } );
-    my $reserve_id1 = $reserves1->[0]->{reserve_id};
-    my $reserve1    = CancelReserve( { reserve_id => $reserve_id1 } );
+    my $biblio = Koha::Biblios->find( $biblionumber1 );
+    my $holds = $biblio->holds;
+    CancelReserve( { reserve_id => $holds->next->reserve_id } );
 
     # ---------- Add 1 aqbudgets
     $query = '

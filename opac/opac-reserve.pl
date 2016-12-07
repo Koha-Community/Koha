@@ -172,12 +172,12 @@ foreach my $biblioNumber (@biblionumbers) {
     }
 
     # Compute the priority rank.
-    my $reserves = GetReservesFromBiblionumber({ biblionumber => $biblioNumber, all_dates => 1 });
-    my $rank = scalar( @$reserves );
+    my $biblio = Koha::Biblios->find( $biblioNumber );
+    my $holds = $biblio->holds;
+    my $rank = $holds->count;
     $biblioData->{reservecount} = 1;    # new reserve
-    foreach my $res (@{$reserves}) {
-        my $found = $res->{found};
-        if ( $found && $found eq 'W' ) {
+    while ( my $hold = $holds->next ) {
+        if ( $hold->is_waiting ) {
             $rank--;
         }
         else {

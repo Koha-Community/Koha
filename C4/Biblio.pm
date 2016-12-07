@@ -43,6 +43,7 @@ use Koha::Authority::Types;
 use Koha::Acquisition::Currencies;
 use Koha::Biblio::Metadata;
 use Koha::Biblio::Metadatas;
+use Koha::Holds;
 use Koha::SearchEngine;
 use Koha::Libraries;
 
@@ -406,10 +407,11 @@ sub DelBiblio {
     }
 
     # We delete any existing holds
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $holds = $biblio->holds;
     require C4::Reserves;
-    my $reserves = C4::Reserves::GetReservesFromBiblionumber({ biblionumber => $biblionumber });
-    foreach my $res ( @$reserves ) {
-        C4::Reserves::CancelReserve({ reserve_id => $res->{'reserve_id'} });
+    while ( my $hold = $holds->next ) {
+        C4::Reserves::CancelReserve({ reserve_id => $hold->reserve_id }); # TODO Replace with $hold->cancel
     }
 
     # Delete in Zebra. Be careful NOT to move this line after _koha_delete_biblio

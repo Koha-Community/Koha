@@ -65,11 +65,11 @@ use C4::Items;
 use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Suggestions;
-use C4::Reserves qw/GetReservesFromBiblionumber/;
 
 use Koha::Acquisition::Bookseller;
 use Koha::Biblios;
 use Koha::DateUtils;
+use Koha::Biblios;
 
 use JSON;
 
@@ -140,10 +140,12 @@ for my $order ( @orders ) {
     $line{invoice} = $invoice->{invoicenumber};
     $line{holds} = 0;
     my @itemnumbers = GetItemnumbersFromOrder( $order->{ordernumber} );
-    for my $itemnumber ( @itemnumbers ) {
-        my $holds = GetReservesFromBiblionumber({ biblionumber => $line{biblionumber}, itemnumber => $itemnumber });
-        $line{holds} += scalar( @$holds );
-    }
+    my $biblio = Koha::Biblios->find( $order->{ordernumber} );
+    $line{holds} = $biblio->holds_placed_before_today->search(
+        {
+            itemnumber => { -in => \@itemnumbers },
+        }
+    )->count;
     $line{budget} = GetBudgetByOrderNumber( $line{ordernumber} );
 
     $line{tax_value} = $line{tax_value_on_receiving};
