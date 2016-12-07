@@ -112,12 +112,15 @@ if ( $total_paid and $total_paid ne '0.00' ) {
     } else {
         if ($individual) {
             if ( $total_paid == $total_due ) {
-                Koha::Account->new( { patron_id => $borrowernumber } )->pay({
-                    accountlines_id => $accountlines_id,
-                    amount          => $total_paid,
-                    library_id      => $branch,
-                    note            => $payment_note,
-                });
+                my $line = Koha::Account::Lines->find($accountlines_id);
+                Koha::Account->new( { patron_id => $borrowernumber } )->pay(
+                    {
+                        lines      => [$line],
+                        amount     => $total_paid,
+                        library_id => $branch,
+                        note       => $payment_note
+                    }
+                );
             } else {
                 makepartialpayment( $accountlines_id, $borrowernumber, $accountno, $total_paid,
                     $user, $branch, $payment_note );
