@@ -331,8 +331,15 @@ if ( C4::Context->preference("ExportCircHistory") ) {
 
 # in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children)
 $template->param( $data->{'categorycode'} => 1 );
+
+# Display the language description instead of the code
+# Note that this is certainly wrong
+my ( $subtag, $region ) = split '-', $patron->lang;
+my $translated_language = C4::Languages::language_get_description( $subtag, $subtag, 'language' );
+
 $template->param(
     patron          => $patron,
+    translated_language => $translated_language,
     detailview      => 1,
     borrowernumber  => $borrowernumber,
     othernames      => $data->{'othernames'},

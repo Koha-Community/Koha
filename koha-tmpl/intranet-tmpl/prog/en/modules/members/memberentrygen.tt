@@ -720,6 +720,31 @@ $(document).ready(function() {
         </select>
        </li>
      [% END %]
+    [% IF Koha.Preference('TranslateNotices') %]
+        <li>
+            <label for="lang">Preferred language for notices: </label>
+            <select id="lang" name="lang">
+                <option value="default">Default</option>
+                [% FOR language IN languages %]
+                    [% FOR sublanguage IN language.sublanguages_loop %]
+                        [% IF language.plural %]
+                            [% IF sublanguage.rfc4646_subtag == lang %]
+                                <option value="[% sublanguage.rfc4646_subtag %]" selected="selected">[% sublanguage.native_description %] [% sublanguage.region_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                            [% ELSE %]
+                                <option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] [% sublanguage.region_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                            [% END %]
+                        [% ELSE %]
+                            [% IF sublanguage.rfc4646_subtag == lang %]
+                                <option value="[% sublanguage.rfc4646_subtag %]" selected="selected">[% sublanguage.native_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                            [% ELSE %]
+                                <option value="[% sublanguage.rfc4646_subtag %]">[% sublanguage.native_description %] ([% sublanguage.rfc4646_subtag %])</option>
+                            [% END %]
+                        [% END %]
+                    [% END %]
+                [% END %]
+            </select>
+        </li>
+    [% END %]
    </ol>
   </fieldset>
     [% UNLESS nodateenrolled &&  noopacnote && noborrowernotes %]

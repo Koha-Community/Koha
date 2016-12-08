@@ -460,6 +460,12 @@ function validate1(date) {
         [% END %]
       </li>
     [% END %]
+    [% IF Koha.Preference('TranslateNotices') %]
+        <li>
+            <span class="label">Preferred language for notices: </span>
+            [% translated_language %]
+        </li>
+    [% END %]
 	</ol>
 	</div>
  </div>

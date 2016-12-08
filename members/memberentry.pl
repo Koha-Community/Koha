@@ -265,6 +265,8 @@ $newdata{'city'}    = $input->param('city')    if defined($input->param('city'))
 $newdata{'zipcode'} = $input->param('zipcode') if defined($input->param('zipcode'));
 $newdata{'country'} = $input->param('country') if defined($input->param('country'));
 
+$newdata{'lang'}    = $input->param('lang')    if defined($input->param('lang'));
+
 # builds default userid
 # userid input text may be empty or missing because of syspref BorrowerUnwantedField
 if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_BorrowerUnwantedField =~ /userid/ ) {
@@ -770,6 +772,11 @@ if ( defined $min ) {
         minlength_cardnumber => $min,
         maxlength_cardnumber => $max
     );
+}
+
+if ( C4::Context->preference('TranslateNotices') ) {
+    my $translated_languages = C4::Languages::getTranslatedLanguages( 'opac', C4::Context->preference('template') );
+    $template->param( languages => $translated_languages );
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
