@@ -537,6 +537,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('TrackLastPatronActivity','0',NULL,'If set, the field borrowers.lastseen will be updated everytime a patron is seen','YesNo'),
 ('TransfersMaxDaysWarning','3',NULL,'Define the days before a transfer is suspected of having a problem','Integer'),
 ('TransferWhenCancelAllWaitingHolds','0',NULL,'Transfer items when cancelling all waiting holds','YesNo'),
+('TranslateNotices','0',NULL, 'Allow notices to be translated','YesNo'),
 ('UNIMARCAuthorityField100','afrey50      ba0',NULL,'Define the contents of UNIMARC authority control field 100 position 08-35','Textarea'),
 ('UNIMARCAuthorsFacetsSeparator',', ',NULL,'UNIMARC authors facets separator','short'),
 ('UNIMARCField100Language','fre',NULL,'UNIMARC field 100 default language','short'),

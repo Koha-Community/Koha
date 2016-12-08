@@ -10,6 +10,9 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do( "ALTER TABLE deletedborrowers ADD COLUMN lang VARCHAR(25) NOT NULL DEFAULT 'default' AFTER lastseen" );
     }
 
+    $dbh->do( "INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+        VALUES ('TranslateNotices',  '0',  NULL,  'Allow notices to be translated',  'YesNo') ");
+
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug XXXXX - Add columns letter.lang and borrowers.lang to allow translation of notices)\n";
 }
