@@ -106,7 +106,6 @@ sub GetLetters {
     );
 
     Return a hashref of letter templates.
-    The key will be the message transport type.
 
 =cut
 
@@ -117,16 +116,15 @@ sub GetLetterTemplates {
     my $code      = $params->{code};
     my $branchcode = $params->{branchcode} // '';
     my $dbh       = C4::Context->dbh;
-    my $letters   = $dbh->selectall_hashref(
+    my $letters   = $dbh->selectall_arrayref(
         q|
-            SELECT module, code, branchcode, name, is_html, title, content, message_transport_type
+            SELECT module, code, branchcode, name, is_html, title, content, message_transport_type, lang
             FROM letter
             WHERE module = ?
             AND code = ?
             and branchcode = ?
         |
-        , 'message_transport_type'
-        , undef
+        , { Slice => {} }
         , $module, $code, $branchcode
     );
 
@@ -249,14 +247,17 @@ sub DelLetter {
     my $module     = $params->{module};
     my $code       = $params->{code};
     my $mtt        = $params->{mtt};
+    my $lang       = $params->{lang};
     my $dbh        = C4::Context->dbh;
     $dbh->do(q|
         DELETE FROM letter
         WHERE branchcode = ?
           AND module = ?
           AND code = ?
-    | . ( $mtt ? q| AND message_transport_type = ?| : q|| )
-    , undef, $branchcode, $module, $code, ( $mtt ? $mtt : () ) );
+    |
+    . ( $mtt ? q| AND message_transport_type = ?| : q|| )
+    . ( $lang? q| AND lang = ?| : q|| )
+    , undef, $branchcode, $module, $code, ( $mtt ? $mtt : () ), ( $lang ? $lang : () ) );
 }
 
 =head2 addalert ($borrowernumber, $type, $externalid)
@@ -685,6 +686,7 @@ sub GetPreparedLetter {
     my $letter_code = $params{letter_code} or croak "No letter_code";
     my $branchcode  = $params{branchcode} || '';
     my $mtt         = $params{message_transport_type} || 'email';
+    my $lang        = $params{lang} || 'default';
 
     my $letter = getletter( $module, $letter_code, $branchcode, $mtt )
         or warn( "No $module $letter_code letter transported by " . $mtt ),

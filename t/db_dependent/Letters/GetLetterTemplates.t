@@ -105,26 +105,26 @@ for my $l (@$letters) {
 
 my $letter_templates;
 $letter_templates = C4::Letters::GetLetterTemplates;
-is_deeply( $letter_templates, {},
+is_deeply( $letter_templates, [],
     'GetLetterTemplates should not return templates if not param is given' );
 
 $letter_templates = C4::Letters::GetLetterTemplates(
     { module => 'circulation', code => 'code1', branchcode => '' } );
-is( scalar( keys %$letter_templates ),
+is( scalar( @$letter_templates ),
     2, '2 default templates should exist for circulation code1' );
-is( exists( $letter_templates->{email} ),
-    1, 'The mtt email should exist for circulation code1' );
-is( exists( $letter_templates->{sms} ),
-    1, 'The mtt sms should exist for circulation code1' );
+my $has_email = grep { $_->{message_transport_type} eq 'email' } @$letter_templates;
+is( $has_email, 1, 'The mtt email should exist for circulation code1' );
+my $has_sms = grep { $_->{message_transport_type} eq 'sms' } @$letter_templates;
+is( $has_sms, 1, 'The mtt sms should exist for circulation code1' );
 
 $letter_templates = C4::Letters::GetLetterTemplates(
     { module => 'circulation', code => 'code1', branchcode => 'CPL' } );
-is( scalar( keys %$letter_templates ),
+is( scalar( @$letter_templates ),
     1, '1 template should exist for circulation CPL code1' );
-is( exists( $letter_templates->{email} ),
-    1, 'The mtt should be email for circulation CPL code1' );
+$has_email = grep { $_->{message_transport_type} eq 'email' } @$letter_templates;
+is( $has_email, 1, 'The mtt should be email for circulation CPL code1' );
 
 $letter_templates = C4::Letters::GetLetterTemplates(
     { module => 'circulation', code => 'code1' } );
-is( scalar( keys %$letter_templates ),
+is( scalar( @$letter_templates ),
     2, '2 default templates should exist for circulation code1 (even if branchcode is not given)' );

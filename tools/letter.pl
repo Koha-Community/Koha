@@ -146,48 +146,70 @@ sub add_form {
     }
 
     my $message_transport_types = GetMessageTransportTypes();
-    my @letter_loop;
+    my $templates = { map { $_ => { message_transport_type => $_ } } sort @$message_transport_types };
+    my %letters = ( default => { templates => $templates } );
+
+    if ( C4::Context->preference('TranslateNotices') ) {
+        my $translated_languages =
+          C4::Languages::getTranslatedLanguages( 'opac',
+            C4::Context->preference('template') );
+        for my $language (@$translated_languages) {
+            for my $sublanguage( @{ $language->{sublanguages_loop} } ) {
+                if ( $language->{plural} ) {
+                    $letters{ $sublanguage->{rfc4646_subtag} } = {
+                        description => $sublanguage->{native_description}
+                          . ' '
+                          . $sublanguage->{region_description} . ' ('
+                          . $sublanguage->{rfc4646_subtag} . ')',
+                        templates => { %$templates },
+                    };
+                }
+                else {
+                    $letters{ $sublanguage->{rfc4646_subtag} } = {
+                        description => $sublanguage->{native_description}
+                          . ' ('
+                          . $sublanguage->{rfc4646_subtag} . ')',
+                        templates => { %$templates },
+                    };
+                }
+            }
+        }
+        $template->param( languages => $translated_languages );
+    }
     if ($letters) {
         $template->param(
             modify     => 1,
             code       => $code,
-            branchcode => $branchcode,
         );
-        my $first_flag = 1;
+        my $first_flag_name = 1;
+        my ( $lang, @templates );
         # The letter name is contained into each mtt row.
         # So we can only sent the first one to the template.
-        for my $mtt ( @$message_transport_types ) {
+        for my $letter ( @$letters ) {
             # The letter_name
-            if ( $first_flag and $letters->{$mtt}{name} ) {
+            if ( $first_flag_name and $letter->{name} ) {
                 $template->param(
-                    letter_name=> $letters->{$mtt}{name},
+                    letter_name=> $letter->{name},
                 );
-                $first_flag = 0;
+                $first_flag_name = 0;
             }
 
-            push @letter_loop, {
-                message_transport_type => $mtt,
-                is_html    => $letters->{$mtt}{is_html},
-                title      => $letters->{$mtt}{title},
-                content    => $letters->{$mtt}{content}//'',
+            my $lang = $letter->{lang};
+            my $mtt = $letter->{message_transport_type};
+            $letters{ $lang }{templates}{$mtt} = {
+                message_transport_type => $letter->{message_transport_type},
+                is_html    => $letter->{is_html},
+                title      => $letter->{title},
+                content    => $letter->{content} // '',
             };
         }
     }
-    else { # initialize the new fields
-        for my $mtt ( @$message_transport_types ) {
-            push @letter_loop, {
-                message_transport_type => $mtt,
-            }
-        }
-        $template->param(
-            branchcode => $branchcode,
-            module     => $module,
-        );
+    else {
         $template->param( adding => 1 );
     }
 
     $template->param(
-        letters => \@letter_loop,
+        letters => \%letters,
     );
 
     my $field_selection;
@@ -258,11 +280,13 @@ sub add_validate {
     my @mtt           = $input->multi_param('message_transport_type');
     my @title         = $input->multi_param('title');
     my @content       = $input->multi_param('content');
+    my @lang          = $input->multi_param('lang');
     for my $mtt ( @mtt ) {
         my $is_html = $input->param("is_html_$mtt");
         my $title   = shift @title;
         my $content = shift @content;
-        my $letter = C4::Letters::getletter( $oldmodule, $code, $branchcode, $mtt);
+        my $lang = shift @lang;
+        my $letter = C4::Letters::getletter( $oldmodule, $code, $branchcode, $mtt, $lang );
 
         # getletter can return the default letter even if we pass a branchcode
         # If we got the default one and we needed the specific one, we didn't get the one we needed!
@@ -271,25 +295,25 @@ sub add_validate {
         }
         unless ( $title and $content ) {
             # Delete this mtt if no title or content given
-            delete_confirmed( $branchcode, $oldmodule, $code, $mtt );
+            delete_confirmed( $branchcode, $oldmodule, $code, $mtt, $lang );
             next;
         }
-        elsif ( $letter and $letter->{message_transport_type} eq $mtt ) {
+        elsif ( $letter and $letter->{message_transport_type} eq $mtt and $letter->{lang} eq $lang ) {
             $dbh->do(
                 q{
                     UPDATE letter
-                    SET branchcode = ?, module = ?, name = ?, is_html = ?, title = ?, content = ?
+                    SET branchcode = ?, module = ?, name = ?, is_html = ?, title = ?, content = ?, lang = ?
                     WHERE branchcode = ? AND module = ? AND code = ? AND message_transport_type = ?
                 },
                 undef,
-                $branchcode || '', $module, $name, $is_html || 0, $title, $content,
+                $branchcode || '', $module, $name, $is_html || 0, $title, $content, $lang,
                 $branchcode, $oldmodule, $code, $mtt
             );
         } else {
             $dbh->do(
-                q{INSERT INTO letter (branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,?,?,?,?,?,?,?)},
+                q{INSERT INTO letter (branchcode,module,code,name,is_html,title,content,message_transport_type, lang) VALUES (?,?,?,?,?,?,?,?,?)},
                 undef,
-                $branchcode || '', $module, $code, $name, $is_html || 0, $title, $content, $mtt
+                $branchcode || '', $module, $code, $name, $is_html || 0, $title, $content, $mtt, $lang
             );
         }
     }
@@ -310,13 +334,14 @@ sub delete_confirm {
 }
 
 sub delete_confirmed {
-    my ($branchcode, $module, $code, $mtt) = @_;
+    my ($branchcode, $module, $code, $mtt, $lang) = @_;
     C4::Letters::DelLetter(
         {
             branchcode => $branchcode || '',
             module     => $module,
             code       => $code,
-            mtt        => $mtt
+            mtt        => $mtt,
+            lang       => $lang,
         }
     );
     # setup default display for screen
