@@ -108,6 +108,7 @@ sub notify {
             module                 => 'circulation',
             letter_code            => "AR_$status", # AR_PENDING, AR_PROCESSING, AR_COMPLETED, AR_CANCELED
             message_transport_type => 'email',
+            lang                   => $self->borrower->lang,
             tables                 => {
                 article_requests => $self->id,
                 borrowers        => $self->borrowernumber,

@@ -58,6 +58,7 @@ for my $number_of_days (@days) {
                 module      => 'suggestions',
                 letter_code => 'TO_PROCESS',
                 branchcode  => $patron->{branchcode},
+                lang        => $patron->{lang},
                 tables      => {
                     suggestions => $suggestion->{suggestionid},
                     branches    => $patron->{branchcode},

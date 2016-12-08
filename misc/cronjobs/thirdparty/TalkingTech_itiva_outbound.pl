@@ -123,6 +123,7 @@ foreach my $type (@types) {
         my $letter = C4::Letters::GetPreparedLetter(
             module      => $module,
             letter_code => $code,
+            lang        => 'default', # It does not sound useful to send a lang here
             tables      => {
                 borrowers   => $issues->{'borrowernumber'},
                 biblio      => $issues->{'biblionumber'},

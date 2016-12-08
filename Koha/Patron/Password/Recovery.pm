@@ -143,6 +143,7 @@ sub SendPasswordRecoveryEmail {
         module      => 'members',
         letter_code => 'PASSWORD_RESET',
         branchcode  => $borrower->branchcode,
+        lang        => $borrower->lang,
         substitute =>
           { passwordreseturl => $uuidLink, user => $borrower->userid },
     );

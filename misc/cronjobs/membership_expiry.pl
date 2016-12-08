@@ -130,6 +130,8 @@ use C4::Context;
 use C4::Letters;
 use C4::Log;
 
+use Koha::Patrons;
+
 # These are defaults for command line options.
 my $confirm;                              # -c: Confirm that the user has read and configured this script.
 my $nomail;                               # -n: No mail. Will not send any emails.
@@ -185,6 +187,7 @@ while ( my $recent = $upcoming_mem_expires->next ) {
         module      => 'members',
         letter_code => $letter_type,
         branchcode  => $recent->branchcode,
+        lang        => $recent->lang,
         tables      => {
             borrowers => $recent->borrowernumber,
             branches  => $recent->branchcode,

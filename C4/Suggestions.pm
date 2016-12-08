@@ -502,11 +502,13 @@ sub ModSuggestion {
 
         # fetch the entire updated suggestion so that we can populate the letter
         my $full_suggestion = GetSuggestion( $suggestion->{suggestionid} );
+        my $patron = Koha::Patrons->find( $full_suggestion->{suggestedby} );
         if (
             my $letter = C4::Letters::GetPreparedLetter(
                 module      => 'suggestions',
                 letter_code => $full_suggestion->{STATUS},
                 branchcode  => $full_suggestion->{branchcode},
+                lang        => $patron->lang,
                 tables      => {
                     'branches'    => $full_suggestion->{branchcode},
                     'borrowers'   => $full_suggestion->{suggestedby},

@@ -174,6 +174,7 @@ if ( $action eq 'create' ) {
             my $letter = C4::Letters::GetPreparedLetter(
                 module      => 'members',
                 letter_code => 'OPAC_REG_VERIFY',
+                lang        => 'default', # Patron does not have a preferred language defined yet
                 tables      => {
                     borrower_modifications => $verification_token,
                 },

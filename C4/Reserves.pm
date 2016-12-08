@@ -233,6 +233,7 @@ sub AddReserve {
             module => 'reserves',
             letter_code => 'HOLDPLACED',
             branchcode => $branch,
+            lang => $borrower->{lang},
             tables => {
                 'branches'    => $library,
                 'borrowers'   => $borrower,
@@ -1859,6 +1860,7 @@ sub _koha_notify_reserve {
     my %letter_params = (
         module => 'reserves',
         branchcode => $hold->branchcode,
+        lang => $borrower->{lang},
         tables => {
             'branches'       => $library,
             'borrowers'      => $borrower,
@@ -2204,6 +2206,7 @@ sub ReserveSlip {
     my ($branch, $borrowernumber, $biblionumber) = @_;
 
 #   return unless ( C4::Context->boolean_preference('printreserveslips') );
+    my $patron = Koha::Patrons->find( $borrowernumber );
 
     my $reserve_id = GetReserveId({
         biblionumber => $biblionumber,
@@ -2215,6 +2218,7 @@ sub ReserveSlip {
         module => 'circulation',
         letter_code => 'HOLD_SLIP',
         branchcode => $branch,
+        lang => $patron->lang,
         tables => {
             'reserves'    => $reserve,
             'branches'    => $reserve->{branchcode},

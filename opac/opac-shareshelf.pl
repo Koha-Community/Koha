@@ -169,11 +169,14 @@ sub notify_owner {
     my $toaddr = C4::Members::GetNoticeEmailAddress( $param->{owner} );
     return if !$toaddr;
 
+    my $patron = Koha::Patrons->find( $param->{owner} );
+
     #prepare letter
     my $letter = C4::Letters::GetPreparedLetter(
         module      => 'members',
         letter_code => 'SHARE_ACCEPT',
         branchcode  => C4::Context->userenv->{"branch"},
+        lang        => $patron->lang,
         tables      => { borrowers => $param->{loggedinuser}, },
         substitute  => { listname => $param->{shelfname}, },
     );
@@ -239,6 +242,7 @@ sub send_invitekey {
             module      => 'members',
             letter_code => 'SHARE_INVITE',
             branchcode  => C4::Context->userenv->{"branch"},
+            lang        => 'default', # Not sure how we could use something more useful else here
             tables      => { borrowers => $param->{loggedinuser}, },
             substitute  => {
                 listname => $param->{shelfname},

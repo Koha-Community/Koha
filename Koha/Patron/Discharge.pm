@@ -107,9 +107,11 @@ sub generate_as_pdf {
     my ($params) = @_;
     return unless $params->{borrowernumber};
 
+    my $patron = Koha::Patrons->find( $params->{borrowernumber} );
     my $letter = C4::Letters::GetPreparedLetter(
         module      => 'members',
         letter_code => 'DISCHARGE',
+        lang        => $patron->lang,
         tables      => { borrowers => $params->{borrowernumber}, branches => $params->{'branchcode'}, },
     );
 

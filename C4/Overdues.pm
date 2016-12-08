@@ -994,6 +994,8 @@ sub parse_overdues_letter {
         return unless ( exists $params->{$required} && $params->{$required} );
     }
 
+    my $patron = Koha::Patrons->find( $params->{borrowernumber} );
+
     my $substitute = $params->{'substitute'} || {};
     $substitute->{today} ||= output_pref( { dt => dt_from_string, dateonly => 1} );
 
@@ -1028,6 +1030,7 @@ sub parse_overdues_letter {
         module => 'circulation',
         letter_code => $params->{'letter_code'},
         branchcode => $params->{'branchcode'},
+        lang => $patron->lang,
         tables => \%tables,
         substitute => $substitute,
         repeat => { item => \@item_tables },

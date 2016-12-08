@@ -58,6 +58,7 @@ use C4::Overdues;
 use Koha::DateUtils;
 use C4::Log;
 use Koha::Libraries;
+use Koha::Patrons;
 
 =head1 NAME
 
@@ -467,6 +468,7 @@ sub parse_letter {
     foreach my $required ( qw( letter_code borrowernumber ) ) {
         return unless exists $params->{$required};
     }
+    my $patron = Koha::Patrons->find( $params->{borrowernumber} );
 
     my %table_params = ( 'borrowers' => $params->{'borrowernumber'} );
 
@@ -486,6 +488,7 @@ sub parse_letter {
         module => 'circulation',
         letter_code => $params->{'letter_code'},
         branchcode => $table_params{'branches'},
+        lang => $patron->lang,
         substitute => $params->{'substitute'},
         tables     => \%table_params,
         message_transport_type => $params->{message_transport_type},
