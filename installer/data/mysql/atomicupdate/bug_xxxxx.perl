@@ -10,6 +10,9 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do( "ALTER TABLE deletedborrowers ADD COLUMN lang VARCHAR(25) NOT NULL DEFAULT 'default' AFTER lastseen" );
     }
 
+    # Add test on existene of this key
+    ALTER TABLE message_transports DROP FOREIGN KEY message_transports_ibfk_3;
+
     $dbh->do( "INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
         VALUES ('TranslateNotices',  '0',  NULL,  'Allow notices to be translated',  'YesNo') ");
 
