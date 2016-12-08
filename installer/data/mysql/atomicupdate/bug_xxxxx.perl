@@ -11,7 +11,9 @@ if( CheckVersion( $DBversion ) ) {
     }
 
     # Add test on existene of this key
-    ALTER TABLE message_transports DROP FOREIGN KEY message_transports_ibfk_3;
+    $dbh->do( "ALTER TABLE message_transports DROP FOREIGN KEY message_transports_ibfk_3 ");
+    $dbh->do( "ALTER TABLE letter DROP PRIMARY KEY ");
+    $dbh->do( "ALTER TABLE letter ADD PRIMARY KEY (`module`, `code`, `branchcode`, `message_transport_type`, `lang`) ");
 
     $dbh->do( "INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
         VALUES ('TranslateNotices',  '0',  NULL,  'Allow notices to be translated',  'YesNo') ");

@@ -2546,7 +2546,7 @@ CREATE TABLE `letter` ( -- table for all notice templates in Koha
   `content` text, -- body text for the notice or slip
   `message_transport_type` varchar(20) NOT NULL DEFAULT 'email', -- transport type for this notice
   `lang` varchar(25) NOT NULL DEFAULT 'default', -- lang of the notice
-  PRIMARY KEY  (`module`,`code`, `branchcode`, `message_transport_type`),
+  PRIMARY KEY  (`module`,`code`, `branchcode`, `message_transport_type`, `lang`),
   CONSTRAINT `message_transport_type_fk` FOREIGN KEY (`message_transport_type`)
   REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
