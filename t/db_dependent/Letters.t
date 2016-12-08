@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 81;
+use Test::More tests => 82;
 use Test::MockModule;
 use Test::Warn;
 
@@ -533,6 +533,52 @@ is($err2, 1, "Successfully sent serial notification");
 is($mail{'To'}, 'john.smith@test.de', "mailto correct in sent serial notification");
 is($mail{'Message'}, 'Silence in the library,'.$subscriptionid.',No. 0', 'Serial notification text constructed successfully');
 }
+
+
+subtest 'TranslateNotices' => sub {
+    plan tests => 3;
+    $dbh->do(
+        q|
+        INSERT INTO letter (module, code, branchcode, name, title, content, message_transport_type, lang) VALUES
+        ('test', 'code', '', 'test', 'a test', 'just a test', 'email', 'default'),
+        ('test', 'code', '', 'test', 'una prueba', 'solo una prueba', 'email', 'es-ES');
+    | );
+    my $substitute = {};
+    my $letter = C4::Letters::GetPreparedLetter(
+            module                 => 'test',
+            letter_code            => 'code',
+            message_transport_type => 'email',
+            substitute             => $substitute,
+    );
+    is(
+        $letter->{title},
+        'a test',
+        'GetPreparedLetter should return the default one if the lang parameter is not provided'
+    );
+
+    $letter = C4::Letters::GetPreparedLetter(
+            module                 => 'test',
+            letter_code            => 'code',
+            message_transport_type => 'email',
+            substitute             => $substitute,
+            lang                   => 'es-ES',
+    );
+    is( $letter->{title}, 'una prueba',
+        'GetPreparedLetter should return the required notice if it exists' );
+
+    $letter = C4::Letters::GetPreparedLetter(
+            module                 => 'test',
+            letter_code            => 'code',
+            message_transport_type => 'email',
+            substitute             => $substitute,
+            lang                   => 'fr-FR',
+    );
+    is(
+        $letter->{title},
+        'a test',
+        'GetPreparedLetter should return the default notice if the one required does not exist'
+    );
+};
 
 subtest 'SendQueuedMessages' => sub {
     plan tests => 1;

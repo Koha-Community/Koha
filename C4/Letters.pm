@@ -198,8 +198,9 @@ sub GetLettersAvailableForALibrary {
 }
 
 sub getletter {
-    my ( $module, $code, $branchcode, $message_transport_type ) = @_;
+    my ( $module, $code, $branchcode, $message_transport_type, $lang) = @_;
     $message_transport_type //= '%';
+    $lang //= 'default';
 
     if ( C4::Context->preference('IndependentBranches')
             and $branchcode
@@ -215,9 +216,10 @@ sub getletter {
         FROM letter
         WHERE module=? AND code=? AND (branchcode = ? OR branchcode = '')
         AND message_transport_type LIKE ?
+        AND lang =?
         ORDER BY branchcode DESC LIMIT 1
     });
-    $sth->execute( $module, $code, $branchcode, $message_transport_type );
+    $sth->execute( $module, $code, $branchcode, $message_transport_type, $lang );
     my $line = $sth->fetchrow_hashref
       or return;
     $line->{'content-type'} = 'text/html; charset="UTF-8"' if $line->{is_html};
@@ -688,9 +690,13 @@ sub GetPreparedLetter {
     my $mtt         = $params{message_transport_type} || 'email';
     my $lang        = $params{lang} || 'default';
 
-    my $letter = getletter( $module, $letter_code, $branchcode, $mtt )
-        or warn( "No $module $letter_code letter transported by " . $mtt ),
-            return;
+    my $letter = getletter( $module, $letter_code, $branchcode, $mtt, $lang );
+
+    unless ( $letter ) {
+        $letter = getletter( $module, $letter_code, $branchcode, $mtt, 'default' )
+            or warn( "No $module $letter_code letter transported by " . $mtt ),
+               return;
+    }
 
     my $tables = $params{tables} || {};
     my $substitute = $params{substitute} || {};
