@@ -151,7 +151,7 @@ sub get_biblio_marcxml {
         $with_items = $conf->{format}->{$format}->{include_items};
     }
     my $record = GetMarcBiblio($biblionumber, $with_items, 1);
-    $record ? $record->as_xml() : undef;
+    $record ? $record->as_xml_record() : undef;
 }
 
 
