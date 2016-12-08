@@ -17,9 +17,7 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
@@ -52,14 +50,9 @@ my $fullreportname = "reports/reserves_stats.tt";
 my $do_it    = $input->param('do_it');
 my $line     = $input->param("Line");
 my $column   = $input->param("Column");
-my $podsp    = $input->param("DisplayBy");
-my $type     = $input->param("PeriodTypeSel");
-my $daysel   = $input->param("PeriodDaySel");
-my $monthsel = $input->param("PeriodMonthSel");
 my $calc     = $input->param("Cellvalue");
 my $output   = $input->param("output");
 my $basename = $input->param("basename");
-my $mime     = $input->param("MIME");
 my $hash_params = $input->Vars;
 my $filter_hashref;
 foreach my $filter (grep {$_ =~/^filter/} keys %$hash_params){
@@ -326,12 +319,6 @@ sub calculate {
 	return [(\%globalline)];
 }
 
-sub null_to_zzempty ($) {
-	my $string = shift;
-	defined($string)    or  return 'zzEMPTY';
-	($string eq "NULL") and return 'zzEMPTY';
-	return $string;		# else return the valid value
-}
 sub display_value {
     my ( $crit, $value ) = @_;
     my $ccodes    = GetKohaAuthorisedValues("items.ccode");
@@ -367,6 +354,7 @@ sub display_value {
     }
     return $display_value;
 }
+
 sub reservestatushuman{
 	my ($val)=@_;
 	my %hashhuman=(
@@ -379,6 +367,7 @@ sub reservestatushuman{
 	);
 	$hashhuman{$val};
 }
+
 sub changeifreservestatus{
 	my ($val)=@_;
 	($val=~/reservestatus/
@@ -398,4 +387,3 @@ sub changeifreservestatus{
 					end }
 		:$val);
 }
-1;
