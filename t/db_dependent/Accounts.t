@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+use Carp::Always;
 
 # Copyright 2015 BibLibre
 #
@@ -252,7 +253,7 @@ subtest "Koha::Account::pay tests" => sub {
     $note = $sth->fetchrow_array;
     is($note,'$200.00 payment note', '$200.00 payment note is registered');
 
-    my $line3 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 42 })->store();
+    my $line3 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 42, accounttype => 'TEST' })->store();
     my $payment_id = $account->pay( { accountlines_id => $line3->id, amount => 42 } );
     my $payment = Koha::Account::Lines->find( $payment_id );
     is( $payment->amount(), '-42.000000', "Payment paid the specified fine" );
