@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-use Carp::Always;
 
 # Copyright 2015 BibLibre
 #
