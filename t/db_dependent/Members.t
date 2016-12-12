@@ -39,6 +39,9 @@ my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
+# Remove invalid guarantorid's as long as we have no FK
+$dbh->do("UPDATE borrowers b1 LEFT JOIN borrowers b2 ON b2.borrowernumber=b1.guarantorid SET b1.guarantorid=NULL where b1.guarantorid IS NOT NULL AND b2.borrowernumber IS NULL");
+
 my $library1 = $builder->build({
     source => 'Branch',
 });
@@ -263,6 +266,7 @@ my $borrower1 = $builder->build({
             categorycode=>'STAFFER',
             branchcode => $library3->{branchcode},
             dateexpiry => '2015-01-01',
+            guarantorid=> undef,
         },
 });
 my $bor1inlist = $borrower1->{borrowernumber};
@@ -272,6 +276,7 @@ my $borrower2 = $builder->build({
             categorycode=>'STAFFER',
             branchcode => $library3->{branchcode},
             dateexpiry => '2015-01-01',
+            guarantorid=> undef,
         },
 });
 
@@ -281,6 +286,7 @@ my $guarantee = $builder->build({
             categorycode=>'KIDclamp',
             branchcode => $library3->{branchcode},
             dateexpiry => '2015-01-01',
+            guarantorid=> undef, # will be filled later
         },
 });
 
@@ -293,11 +299,6 @@ $builder->build({
             timestamp => '2016-01-01',
         },
 });
-
-# In some dirty DB, the guarantorid is set to a non existent patron id
-# If we pick it, then the tests will fail
-# This should not be needed, we should have a FK on the guarantorid instead
-Koha::Patrons->search({ guarantorid => { -in => [ $borrower1->{borrowernumber}, $borrower2->{borrowernumber} ] }})->update({ guarantorid => undef });
 
 my $owner = AddMember (categorycode => 'STAFFER', branchcode => $library2->{branchcode} );
 my $list1 = AddPatronList( { name => 'Test List 1', owner => $owner } );
