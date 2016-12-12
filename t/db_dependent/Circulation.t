@@ -36,6 +36,7 @@ use C4::Reserves;
 use C4::Overdues qw(UpdateFine CalcFine);
 use Koha::DateUtils;
 use Koha::Database;
+use Koha::IssuingRules;
 use Koha::Subscriptions;
 
 my $schema = Koha::Database->schema;
@@ -1412,6 +1413,133 @@ subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
     t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 1);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
     is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if it is a subscription' );
+};
+
+subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
+    plan tests => 8;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron  = $builder->build( { source => 'Borrower' } );
+
+    # Add 2 items
+    my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
+    my $item_1 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem_1->{biblionumber}
+            }
+        }
+    );
+    my $biblioitem_2 = $builder->build( { source => 'Biblioitem' } );
+    my $item_2 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem_2->{biblionumber}
+            }
+        }
+    );
+
+    # And the issuing rule
+    Koha::IssuingRules->search->delete;
+    my $rule = Koha::IssuingRule->new(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            maxissueqty  => 99,
+            issuelength  => 1,
+            firstremind  => 1,        # 1 day of grace
+            finedays     => 2,        # 2 days of fine per day of overdue
+            lengthunit   => 'days',
+        }
+    );
+    $rule->store();
+
+    # Patron cannot issue item_1, he has overdues
+    my $five_days_ago = dt_from_string->subtract( days => 5 );
+    my $ten_days_ago  = dt_from_string->subtract( days => 10 );
+    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
+    AddIssue( $patron, $item_2->{barcode}, $ten_days_ago )
+      ;    # Add another overdue
+
+    t::lib::Mocks::mock_preference( 'CumulativeRestrictionPeriods', '0' );
+    AddReturn( $item_1->{barcode}, $library->{branchcode},
+        undef, undef, dt_from_string );
+    my $debarments = Koha::Patron::Debarments::GetDebarments(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+    is( scalar(@$debarments), 1 );
+
+    # FIXME Is it right? I'd have expected 5 * 2 - 1 instead
+    # Same for the others
+    my $expected_expiration = output_pref(
+        {
+            dt         => dt_from_string->add( days => ( 5 - 1 ) * 2 ),
+            dateformat => 'sql',
+            dateonly   => 1
+        }
+    );
+    is( $debarments->[0]->{expiration}, $expected_expiration );
+
+    AddReturn( $item_2->{barcode}, $library->{branchcode},
+        undef, undef, dt_from_string );
+    $debarments = Koha::Patron::Debarments::GetDebarments(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+    is( scalar(@$debarments), 1 );
+    $expected_expiration = output_pref(
+        {
+            dt         => dt_from_string->add( days => ( 10 - 1 ) * 2 ),
+            dateformat => 'sql',
+            dateonly   => 1
+        }
+    );
+    is( $debarments->[0]->{expiration}, $expected_expiration );
+
+    Koha::Patron::Debarments::DelUniqueDebarment(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+
+    t::lib::Mocks::mock_preference( 'CumulativeRestrictionPeriods', '1' );
+    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
+    AddIssue( $patron, $item_2->{barcode}, $ten_days_ago )
+      ;    # Add another overdue
+    AddReturn( $item_1->{barcode}, $library->{branchcode},
+        undef, undef, dt_from_string );
+    $debarments = Koha::Patron::Debarments::GetDebarments(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+    is( scalar(@$debarments), 1 );
+    $expected_expiration = output_pref(
+        {
+            dt         => dt_from_string->add( days => ( 5 - 1 ) * 2 ),
+            dateformat => 'sql',
+            dateonly   => 1
+        }
+    );
+    is( $debarments->[0]->{expiration}, $expected_expiration );
+
+    AddReturn( $item_2->{barcode}, $library->{branchcode},
+        undef, undef, dt_from_string );
+    $debarments = Koha::Patron::Debarments::GetDebarments(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+    is( scalar(@$debarments), 1 );
+    $expected_expiration = output_pref(
+        {
+            dt => dt_from_string->add( days => ( 5 - 1 ) * 2 + ( 10 - 1 ) * 2 ),
+            dateformat => 'sql',
+            dateonly   => 1
+        }
+    );
+    is( $debarments->[0]->{expiration}, $expected_expiration );
 };
 
 sub set_userenv {
