@@ -2217,7 +2217,7 @@ C<$item> item hashref
 
 C<$datedue> date due DateTime object
 
-C<$today> DateTime object representing the return time
+C<$return_date> DateTime object representing the return time
 
 Internal function, called only by AddReturn that calculates and updates
  the user fine days, and debars him if necessary.
@@ -2227,7 +2227,7 @@ Should only be called for overdue returns
 =cut
 
 sub _debar_user_on_return {
-    my ( $borrower, $item, $dt_due, $dt_today ) = @_;
+    my ( $borrower, $item, $dt_due, $return_date ) = @_;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
 
@@ -2240,7 +2240,7 @@ sub _debar_user_on_return {
     );
     my $finedays = $issuing_rule ? $issuing_rule->finedays : undef;
     my $unit     = $issuing_rule ? $issuing_rule->lengthunit : undef;
-    my $chargeable_units = C4::Overdues::get_chargeable_units($unit, $dt_due, $dt_today, $branchcode);
+    my $chargeable_units = C4::Overdues::get_chargeable_units($unit, $dt_due, $return_date, $branchcode);
 
     if ($finedays) {
 
@@ -2267,15 +2267,17 @@ sub _debar_user_on_return {
                   if DateTime::Duration->compare( $max_sd, $suspension_days ) < 0;
             }
 
+            my ( $has_been_extended, $is_a_reminder );
             if ( C4::Context->preference('CumulativeRestrictionPeriods') and $borrower->{debarred} ) {
                 my $debarment = @{ GetDebarments( { borrowernumber => $borrower->{borrowernumber}, type => 'SUSPENSION' } ) }[0];
                 if ( $debarment ) {
                     $return_date = dt_from_string( $debarment->{expiration}, 'sql' );
+                    $has_been_extended = 1;
                 }
             }
 
             my $new_debar_dt =
-              $dt_today->clone()->add_duration( $suspension_days );
+              $return_date->clone()->add_duration( $suspension_days );
 
             Koha::Patron::Debarments::AddUniqueDebarment({
                 borrowernumber => $borrower->{borrowernumber},
@@ -2284,10 +2286,15 @@ sub _debar_user_on_return {
             });
             # if borrower was already debarred but does not get an extra debarment
             my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+            my $new_debarment_str;
             if ( $borrower->{debarred} eq $patron->is_debarred ) {
-                return ($borrower->{debarred},1);
+                $is_a_reminder = 1;
+                $new_debarment_str = $borrower->{debarred};
+            } else {
+                $new_debarment_str = $new_debar_dt->ymd();
             }
-            return $new_debar_dt->ymd();
+            # FIXME Should return a DateTime object
+            return $new_debarment_str, $is_a_reminder;
         }
     }
     return;
