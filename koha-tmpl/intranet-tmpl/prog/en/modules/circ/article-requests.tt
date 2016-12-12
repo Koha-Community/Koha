@@ -36,7 +36,7 @@
                 return;
             }
 
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>');
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
             a.closest('div').hide();
             $.ajax({
                 type: "POST",
@@ -58,7 +58,7 @@
             var table_row = a.closest('tr').clone();
             table_row.find('.ar-process-request').remove();
 
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>');
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
             a.closest('div').hide();
             $.ajax({
                 type: "POST",
@@ -78,7 +78,7 @@
         }
 
         function Complete( id, a ) {
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>');
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
             a.closest('div').hide();
             $.ajax({
                 type: "POST",

@@ -50,7 +50,7 @@ $(document).ready(function() {
         $(".checkin:checked:visible").each(function() {
             itemnumber = $(this).val();
 
-            $(this).replaceWith("<img id='checkin_" + itemnumber + "' src='" + interface + "/" + theme + "/img/loading-small.gif' />");
+            $(this).replaceWith("<img id='checkin_" + itemnumber + "' src='" + interface + "/" + theme + "/img/spinner-small.gif' />");
 
             params = {
                 itemnumber:     itemnumber,
@@ -81,7 +81,7 @@ $(document).ready(function() {
 
             var itemnumber = $(this).val();
 
-            $(this).parent().parent().replaceWith("<img id='renew_" + itemnumber + "' src='" + interface + "/" + theme + "/img/loading-small.gif' />");
+            $(this).parent().parent().replaceWith("<img id='renew_" + itemnumber + "' src='" + interface + "/" + theme + "/img/spinner-small.gif' />");
 
             var params = {
                 itemnumber:     itemnumber,

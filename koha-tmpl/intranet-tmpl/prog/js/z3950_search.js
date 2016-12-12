@@ -66,7 +66,7 @@ $( document ).ready( function() {
     });
     $( "#marcPreview" ).on( "hidden", function() {
         $( "#marcPreviewLabel" ).html( "" );
-        $( "#marcPreview .modal-body" ).html( "<div id='loading'><img src='" + interface + "/" + theme + "/img/loading-small.gif' alt='' /> " + MSG_LOADING + "</div>" );
+        $( "#marcPreview .modal-body" ).html( "<div id='loading'><img src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' /> " + MSG_LOADING + "</div>" );
     });
     $( ".previewData" ).on( "click", function(e) {
         e.preventDefault();
@@ -78,7 +78,7 @@ $( document ).ready( function() {
     });
     $( "#dataPreview" ).on( "hidden", function() {
         $( "#dataPreviewLabel" ).html( "" );
-        $( "#dataPreview .modal-body" ).html( "<div id='loading'><img src='" + interface + "/" + theme + "/img/loading-small.gif' alt='' /> " + MSG_LOADING + "</div>" );
+        $( "#dataPreview .modal-body" ).html( "<div id='loading'><img src='" + interface + "/" + theme + "/img/spinner-small.gif' alt='' /> " + MSG_LOADING + "</div>" );
     });
     $( ".import_record" ).on( "click", function(e) {
         e.preventDefault();

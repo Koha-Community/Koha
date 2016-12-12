@@ -200,7 +200,7 @@ $(document).ready(function() {
                     $(this).prop("disabled",true);
                     var cur_select = $(this);
                     var res_id = $(this).attr('reserve_id');
-                    $(this).after('<div id="updating_reserveno'+res_id+'" class="waiting"><img src="/intranet-tmpl/prog/img/loading-small.gif" alt="" /><span class="waiting_msg"></span></div>');
+                    $(this).after('<div id="updating_reserveno'+res_id+'" class="waiting"><img src="/intranet-tmpl/prog/img/spinner-small.gif" alt="" /><span class="waiting_msg"></span></div>');
                     var api_url = '/api/v1/holds/'+res_id;
                     var update_info = JSON.stringify({ branchcode: $(this).val(), priority: parseInt($(this).attr("priority"),10) });
                     $.ajax({

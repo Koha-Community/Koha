@@ -57,7 +57,7 @@
                     $('#importing_' + frameworkcode).find("span").html(MSG_IMPORTING_TO_FRAMEWORK.format("<strong>" + frameworkcode + "</strong>", "<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>"));
                     if (navigator.userAgent.toLowerCase().indexOf('msie') != -1) {
                         var timestamp = new Date().getTime();
-                        $('#importing_' + frameworkcode).find("img").attr('src', template_path + '/img/loading-small.gif' + '?' +timestamp);
+                        $('#importing_' + frameworkcode).find("img").attr('src', template_path + '/img/spinner-small.gif' + '?' +timestamp);
                     }
                     $('#importing_' + frameworkcode).css('display', 'block');
                     if (navigator.userAgent.toLowerCase().indexOf('firefox') == -1) $("body").css("cursor", "progress");
