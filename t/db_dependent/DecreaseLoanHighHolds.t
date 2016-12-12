@@ -27,7 +27,7 @@ use Koha::Hold;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 14;
+use Test::More tests => 17;
 
 my $dbh    = C4::Context->dbh;
 my $schema = Koha::Database->new()->schema();
@@ -104,6 +104,13 @@ $builder->build(
 my $item   = pop(@items);
 my $patron = pop(@patrons);
 
+my $orig_due = C4::Circulation::CalcDateDue(
+    DateTime->now(time_zone => C4::Context->tz()),
+    $item->effective_itemtype,
+    $patron->branchcode,
+    $patron->unblessed
+);
+
 t::lib::Mocks::mock_preference( 'decreaseLoanHighHolds',               1 );
 t::lib::Mocks::mock_preference( 'decreaseLoanHighHoldsDuration',       1 );
 t::lib::Mocks::mock_preference( 'decreaseLoanHighHoldsValue',          1 );
@@ -118,6 +125,11 @@ is( $data->{exceeded},        1,          "Static mode should exceed threshold" 
 is( $data->{outstanding},     6,          "Should have 5 outstanding holds" );
 is( $data->{duration},        1,          "Should have duration of 1" );
 is( ref( $data->{due_date} ), 'DateTime', "due_date should be a DateTime object" );
+
+my $duedate = $data->{due_date};
+is($duedate->hour, $orig_due->hour, 'New due hour is equal to original due hour.');
+is($duedate->min, $orig_due->min, 'New due minute is equal to original due minute.');
+is($duedate->sec, 0, 'New due date second is zero.');
 
 t::lib::Mocks::mock_preference( 'decreaseLoanHighHoldsControl', 'dynamic' );
 $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
