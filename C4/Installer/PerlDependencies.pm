@@ -852,11 +852,6 @@ our $PERL_DEPS = {
         required => 1,
         min_ver => '0.28',
     },
-    'Path::Tiny' => {
-        usage => 'core',
-        required => 1,
-        min_ver => '0.058',
-    },
 };
 
 1;
