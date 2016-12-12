@@ -13,6 +13,7 @@ sub new {
     $self->schema->storage->sql_maker->quote_char('`');
 
     $self->{gen_type} = _gen_type();
+    $self->{default_values} = _gen_default_values();
     return $self;
 }
 
@@ -290,6 +291,8 @@ sub _buildColumnValue {
             return;
         }
         push @$retvalue, $value->{$col_name};
+    } elsif( exists $self->{default_values}{$source}{$col_name} ) {
+        push @$retvalue, $self->{default_values}{$source}{$col_name};
     } else {
         my $data_type = $col_info->{data_type};
         $data_type =~ s| |_|;
@@ -412,6 +415,18 @@ sub _gen_set_enum {
 sub _gen_blob {
     my ($self, $params) = @_;;
     return 'b';
+}
+
+sub _gen_default_values {
+    my ($self) = @_;
+    return {
+        Item => {
+            more_subfields_xml => undef,
+        },
+        Biblioitem => {
+            marcxml => undef,
+        }
+    };
 }
 
 =head1 NAME

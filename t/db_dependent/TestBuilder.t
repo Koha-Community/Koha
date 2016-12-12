@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Warn;
 use Data::Dumper qw(Dumper);
 
@@ -330,6 +330,15 @@ subtest 'Date handling' => sub {
     is( length( $patron->{updated_on} ),  19, 'A timestamp column value should be YYYY-MM-DD HH:MM:SS' );
     is( length( $patron->{dateofbirth} ), 10, 'A date column value should be YYYY-MM-DD' );
 
+};
+
+subtest 'Default values' => sub {
+    plan tests => 2;
+    $builder = t::lib::TestBuilder->new;
+    my $item = $builder->build( { source => 'Item' } );
+    is( $item->{more_subfields_xml}, undef );
+    $item = $builder->build( { source => 'Item', value => { more_subfields_xml => 'some xml' } } );
+    is( $item->{more_subfields_xml}, 'some xml' );
 };
 
 $schema->storage->txn_rollback;
