@@ -467,8 +467,9 @@ sub import_biblios_list {
     my @list = ();
     my $item_error = 0;
 
-    my $ccodes    = GetKohaAuthorisedValues("items.ccode");
-    my $locations = GetKohaAuthorisedValues("items.location");
+    my $ccodes = { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' } ) };
+    my $locations = { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' } ) };
+    my $notforloans = { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.notforloan' } ) };
     # location list
     my @locations;
     foreach (sort keys %$locations) {
@@ -478,7 +479,10 @@ sub import_biblios_list {
     foreach (sort {$ccodes->{$a} cmp $ccodes->{$b}} keys %$ccodes) {
         push @ccodes, { code => $_, description => $ccodes->{$_} };
     }
-
+    my @notforloans;
+    foreach (sort {$notforloans->{$a} cmp $notforloans->{$b}} keys %$notforloans) {
+        push @notforloans, { code => $_, description => $notforloans->{$_} };
+    }
 
     my $biblio_count = 0;
     foreach my $biblio (@$biblios) {
@@ -607,6 +611,7 @@ sub import_biblios_list {
                         locationloop => \@locations,
                         itypeloop => \@itypes,
                         ccodeloop => \@ccodes,
+			notforloanloop => \@notforloans,
                     );
     batch_info($template, $batch);
 }

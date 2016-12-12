@@ -370,7 +370,17 @@
                         </select>
                         </li>
 
-                        <li><label for="notforloan_item_[% item.item_id %]">notforloan</label><input type="text" id="notforloan_item_[% item.item_id %]" name="notforloan_[% item.biblio_count %]" value="[% item.notforloan %]"></li>
+                        <li>
+			<label for="notforloan_item_[% item.item_id %]">notforloan</label><select id="notforloan_item_[% item.item_id %]" name="notforloan_[% item.biblio_count %]">
+			[% FOREACH n IN notforloanloop %]
+                          [% IF n.code == item.notforloan %]
+                            <option value="[% n.code %]" selected="selected">[% n.description %]</option>
+                          [% ELSE %]
+                            <option value="[% n.code %]">[% n.description %]</option>
+                          [% END %]
+                        [% END %]
+                        </select>
+			</li>
                         <li><label for="uri_item_[% item.item_id %]">uri</label><input type="text" id="uri_item_[% item.item_id %]" name="uri_[% item.biblio_count %]" value="[% item.uri %]"></li>
                         <li><label for="copyno_item_[% item.item_id %]">copyno</label><input type="text" id="copyno_item_[% item.item_id %]" name="copyno_[% item.biblio_count %]" value="[% item.copyno %]"></li>
                         <li><label for="budget_code_item_[% item.item_id %]">budget_code</label><select id="budget_code_item_[% item.item_id %]" name="budget_code_[% item.biblio_count %]">
