@@ -1201,6 +1201,10 @@ sub checkHighHolds {
           $calendar->addDate( $issuedate,
             C4::Context->preference('decreaseLoanHighHoldsDuration') );
 
+        $reduced_datedue->set_hour($orig_due->hour);
+        $reduced_datedue->set_minute($orig_due->minute);
+        $reduced_datedue->truncate( to => 'minute' );
+
         if ( DateTime->compare( $reduced_datedue, $orig_due ) == -1 ) {
             return ( 1, $holds,
                 C4::Context->preference('decreaseLoanHighHoldsDuration'),
