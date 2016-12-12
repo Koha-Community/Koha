@@ -1,0 +1,42 @@
+ +------+
+| USAGE: |
+ +------+
+
+Interface with this dependency subsystem using $ENV{KOHA_PATH}/koha_debian_packages.pl
+
+
+Add files to this directory to define the debian packages we need specific to our Koha-Suomi version.
+Files starting with . are excluded.
+
+eg:
+
+installer/KohaSuomi/Packages/
+                             libmodern-perl-perl
+                             libjson-xs-perl
+                             nano
+                             curl
+                             .README
+
+This would trigger our Ansible build scripts to make sure the packages
+
+libmodern-perl-perl
+libjson-xs-perl
+nano
+curl
+
+are installed on KohaSuomi version upgrade.
+
+
+ +-------------------------------------+
+| WHY DO WE NEED THIS SUCKY DIRECTORY ? |
+ +-------------------------------------+
+
+... and not use a single file to list the dependencies into?
+
+A: Because that would cause Git conflicts when two separate commits add new package dependencies.
+   Then somebody would have to fix those merge conflicts all the time.
+   I don't want to repeat the mistake of the old installer/data/updatedatabase.pl -script where everybody
+   was going crazy because they had to rebase their git conflicts all the time.
+   This was because: always adding new DB changes to the end of the file, leading to every commit with DB changes
+   to be automatically unmergeable if one commit with DB changes was pushed while the patch was in the making.
+   And waiting a long time in the "Need sign-off"-queue would just exarberate this issue.
