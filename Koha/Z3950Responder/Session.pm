@@ -216,8 +216,6 @@ sub present_handler {
 
     return unless $self->_check_fetch( $resultset, $args, $offset, $args->{NUMBER} );
 
-    # Ignore if request is only for one record; our own prefetching will probably do a better job.
-    $self->_prefetch_records( $resultset, $args, $offset, $args->{NUMBER} ) if ( $args->{NUMBER} > 1 );
 }
 
 sub fetch_handler {
