@@ -203,6 +203,8 @@ $(document).ready(function() {
                             due = "<span class='overdue'>" + due + "</span>";
                         }
 
+                        due = "<span id='date_due_" + oObj.itemnumber + "' class='date_due'>" + due + "</span>";
+
                         if ( oObj.lost ) {
                             due += "<span class='lost'>" + oObj.lost + "</span>";
                         }
@@ -211,7 +213,6 @@ $(document).ready(function() {
                             due += "<span class='dmg'>" + oObj.damaged + "</span>";
                         }
 
-                        due = "<span id='date_due_" + oObj.itemnumber + "' class='date_due'>" + due + "</span>";
 
                         return due;
                     }
