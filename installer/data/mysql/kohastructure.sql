@@ -3424,6 +3424,7 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `altcontactphone` varchar(50) DEFAULT NULL,
   `smsalertnumber` varchar(50) DEFAULT NULL,
   `privacy` int(11) DEFAULT NULL,
+  `extended_attributes` text DEFAULT NULL,
   PRIMARY KEY (`verification_token`,`borrowernumber`),
   KEY `verification_token` (`verification_token`),
   KEY `borrowernumber` (`borrowernumber`)
