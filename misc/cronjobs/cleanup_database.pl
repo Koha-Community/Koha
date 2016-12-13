@@ -40,10 +40,11 @@ use C4::Search::History;
 use Getopt::Long;
 use C4::Log;
 use C4::Accounts;
+use Koha::UploadedFiles;
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS]
+Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-override DAYS]
 
    -h --help          prints this help message, and exits, ignoring all
                       other options
@@ -80,6 +81,8 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --del-exp-selfreg  Delete expired self registration accounts
    --del-unv-selfreg  DAYS  Delete unverified self registrations older than DAYS
    --unique-holidays DAYS  Delete all unique holidays older than DAYS
+   --temp-uploads     Delete temporary uploads.
+   --temp-uploads-override DAYS Override the corresponding preference value.
 USAGE
     exit $_[0];
 }
@@ -102,6 +105,8 @@ my $pExpSelfReg;
 my $pUnvSelfReg;
 my $fees_days;
 my $special_holidays_days;
+my $temp_uploads;
+my $override_temp_uploads;
 
 GetOptions(
     'h|help'            => \$help,
@@ -122,6 +127,8 @@ GetOptions(
     'del-exp-selfreg'   => \$pExpSelfReg,
     'del-unv-selfreg'   => \$pUnvSelfReg,
     'unique-holidays:i' => \$special_holidays_days,
+    'temp-uploads'      => \$temp_uploads,
+    'temp-uploads-override:i' => \$override_temp_uploads,
 ) || usage(1);
 
 # Use default values
@@ -153,6 +160,7 @@ unless ( $sessions
     || $pExpSelfReg
     || $pUnvSelfReg
     || $special_holidays_days
+    || $temp_uploads
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -300,6 +308,16 @@ if( $pUnvSelfReg ) {
 
 if ($special_holidays_days) {
     DeleteSpecialHolidays( abs($special_holidays_days) );
+}
+
+if( $temp_uploads ) {
+    # Delete temporary uploads, governed by a pref.
+    # If the pref is empty, nothing happens (unless you override).
+    print "Purging temporary uploads.\n" if $verbose;
+    Koha::UploadedFiles->delete_temporary({
+        override_pref => $override_temp_uploads,
+    });
+    print "Done purging temporary uploads.\n" if $verbose;
 }
 
 exit(0);
