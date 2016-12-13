@@ -336,9 +336,9 @@ subtest 'Default values' => sub {
     plan tests => 2;
     $builder = t::lib::TestBuilder->new;
     my $item = $builder->build( { source => 'Item' } );
-    is( $item->{more_subfields_xml}, undef );
+    is( $item->{more_subfields_xml}, undef, 'This xml field should be undef' );
     $item = $builder->build( { source => 'Item', value => { more_subfields_xml => 'some xml' } } );
-    is( $item->{more_subfields_xml}, 'some xml' );
+    is( $item->{more_subfields_xml}, 'some xml', 'Default should not overwrite assigned value' );
 };
 
 $schema->storage->txn_rollback;
