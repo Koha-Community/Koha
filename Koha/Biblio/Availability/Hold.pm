@@ -182,7 +182,11 @@ sub _item_looper {
     my $count = 0;
 
     my @holds = Koha::Holds->search({ biblionumber => $biblio->biblionumber })->as_list;
-    my @nonfound_holds = Koha::Holds->search({ biblionumber => $biblio->biblionumber, found => undef })->as_list;
+    my @nonfound_holds = Koha::Holds->search({
+        biblionumber => $biblio->biblionumber,
+        found => undef,
+        borrowernumber => $patron->borrowernumber,
+    })->as_list;
     foreach my $item (@items) {
         # Break out of loop after $limit items are found available
         if (defined $limit && @{$self->{'item_availabilities'}} >= $limit) {

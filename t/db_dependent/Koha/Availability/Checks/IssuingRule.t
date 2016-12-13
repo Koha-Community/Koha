@@ -196,7 +196,7 @@ sub t_maximum_holds_for_record_reached {
 
 subtest 'maximum_holds_for_record_reached, not reached' => \&t_maximum_holds_for_record_not_reached;
 sub t_maximum_holds_for_record_not_reached {
-    plan tests => 3;
+    plan tests => 4;
 
     set_default_system_preferences();
     set_default_circulation_rules();
@@ -222,6 +222,22 @@ sub t_maximum_holds_for_record_not_reached {
        1, 'I see that I have one hold.');
     ok(!$issuingcalc->maximum_holds_for_record_reached, 'When I ask if'
        .' maximum holds for record is reached, no exception is given.');
+
+    subtest 'nonfound_holds param' => sub {
+        plan tests => 1;
+
+        my $patron2 = build_a_test_patron();
+        add_biblio_level_hold($item, $patron2, $item->homebranch);
+        add_biblio_level_hold($item, $patron2, $item->homebranch);
+        my @nonfound_holds = Koha::Holds->search({
+            biblionumber => $item->biblionumber,
+            found => undef,
+            borrowernumber => $patron->borrowernumber,
+        })->as_list;
+        ok(!$issuingcalc->maximum_holds_for_record_reached({
+            nonfound_holds => \@nonfound_holds }), 'When I ask if'
+       .' maximum holds for record is reached, no exception is given.');
+    };
 };
 
 subtest 'on_shelf_holds_forbidden while on shelf holds are allowed' => \&t_on_shelf_holds_forbidden;
