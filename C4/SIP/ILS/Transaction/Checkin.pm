@@ -100,12 +100,12 @@ sub do_checkin {
         if ($branch eq $messages->{ResFound}->{branchcode}) {
             $self->alert_type('01');
             ModReserveAffect( $messages->{ResFound}->{itemnumber},
-                $messages->{ResFound}->{borrowernumber}, 0);
+                $messages->{ResFound}->{borrowernumber}, 0, $messages->{ResFound}->{reserve_id});
 
         } else {
             $self->alert_type('02');
             ModReserveAffect( $messages->{ResFound}->{itemnumber},
-                $messages->{ResFound}->{borrowernumber}, 1);
+                $messages->{ResFound}->{borrowernumber}, 1, $messages->{ResFound}->{reserve_id});
             ModItemTransfer( $messages->{ResFound}->{itemnumber},
                 $branch,
                 $messages->{ResFound}->{branchcode}
