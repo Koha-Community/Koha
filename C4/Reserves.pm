@@ -1282,12 +1282,12 @@ sub ModReserveStatus {
 
 =head2 ModReserveAffect
 
-  &ModReserveAffect($itemnumber,$borrowernumber,$diffBranchSend);
+  &ModReserveAffect($itemnumber,$borrowernumber,$diffBranchSend,$reserve_id);
 
-This function affect an item and a status for a given reserve
-The itemnumber parameter is used to find the biblionumber.
-with the biblionumber & the borrowernumber, we can affect the itemnumber
-to the correct reserve.
+This function affect an item and a status for a given reserve, either fetched directly
+by record_id, or by borrowernumber and itemnumber or biblionumber. If only biblionumber
+is given, only first reserve returned is affected, which is ok for anything but
+multi-item holds.
 
 if $transferToDo is not set, then the status is set to "Waiting" as well.
 otherwise, a transfer is on the way, and the end of the transfer will
@@ -1346,7 +1346,7 @@ sub ModReserveAffect {
     }
     $hold->store();
 
-    _koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber )
+    _koha_notify_reserve( $hold->reserve_id )
       if ( !$transferToDo && !$already_on_shelf );
 
     _FixPriority( { biblionumber => $biblionumber } );
@@ -1952,7 +1952,7 @@ sub _Findgroupreserve {
 
 =head2 _koha_notify_reserve
 
-  _koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber );
+  _koha_notify_reserve( $hold->reserve_id );
 
 Sends a notification to the patron that their hold has been filled (through
 ModReserveAffect, _not_ ModReserveFill)
@@ -1979,9 +1979,10 @@ The following tables are availalbe witin the notice:
 =cut
 
 sub _koha_notify_reserve {
-    my ($itemnumber, $borrowernumber, $biblionumber) = @_;
+    my $reserve_id = shift;
+    my $hold = Koha::Holds->find($reserve_id);
+    my $borrowernumber = $hold->borrowernumber;
 
-    my $dbh = C4::Context->dbh;
     my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
 
     # Try to get the borrower's email address
@@ -1992,28 +1993,20 @@ sub _koha_notify_reserve {
             message_name => 'Hold_Filled'
     } );
 
-    my $sth = $dbh->prepare("
-        SELECT *
-        FROM   reserves
-        WHERE  borrowernumber = ?
-            AND biblionumber = ?
-    ");
-    $sth->execute( $borrowernumber, $biblionumber );
-    my $reserve = $sth->fetchrow_hashref;
-    my $library = Koha::Libraries->find( $reserve->{branchcode} )->unblessed;
+    my $library = Koha::Libraries->find( $hold->branchcode )->unblessed;
 
     my $admin_email_address = $library->{branchemail} || C4::Context->preference('KohaAdminEmailAddress');
 
     my %letter_params = (
         module => 'reserves',
-        branchcode => $reserve->{branchcode},
+        branchcode => $hold->branchcode,
         tables => {
             'branches'       => $library,
             'borrowers'      => $borrower,
-            'biblio'         => $biblionumber,
-            'biblioitems'    => $biblionumber,
-            'reserves'       => $reserve,
-            'items'          => $reserve->{'itemnumber'},
+            'biblio'         => $hold->biblionumber,
+            'biblioitems'    => $hold->biblionumber,
+            'reserves'       => $hold->unblessed,
+            'items'          => $hold->itemnumber,
         },
         substitute => { today => output_pref( { dt => dt_from_string, dateonly => 1 } ) },
     );

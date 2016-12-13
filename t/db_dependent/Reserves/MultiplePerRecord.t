@@ -80,6 +80,7 @@ my $item1 = $builder->build(
             itype         => $itemtype1->{itemtype},
             homebranch    => $library->{branchcode},
             holdingbranch => $library->{branchcode},
+            damaged       => 0,
         },
     }
 );
@@ -91,6 +92,7 @@ my $item2 = $builder->build(
             itype         => $itemtype2->{itemtype},
             homebranch    => $library->{branchcode},
             holdingbranch => $library->{branchcode},
+            damaged       => 0,
         },
     }
 );
@@ -102,6 +104,7 @@ my $item3 = $builder->build(
             itype         => $itemtype2->{itemtype},
             homebranch    => $library->{branchcode},
             holdingbranch => $library->{branchcode},
+            damaged       => 0,
         },
     }
 );
