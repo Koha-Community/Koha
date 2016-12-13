@@ -2090,6 +2090,7 @@ sub searchResults {
             my $userenv = C4::Context->userenv;
             if ( $item->{onloan}
                 && $userenv
+                && $userenv->{number}
                 && !( Koha::Patrons->find($userenv->{number})->category->hidelostitems && $item->{itemlost} ) )
             {
                 $onloan_count++;
