@@ -20,6 +20,8 @@ package Koha::UploadedFiles;
 use Modern::Perl;
 
 use C4::Koha;
+use Koha::Database;
+use Koha::DateUtils;
 use Koha::UploadedFile;
 
 use parent qw(Koha::Objects);
@@ -70,6 +72,30 @@ sub delete {
         $err++ if !$row->delete( $params );
     }
     return $err==0;
+}
+
+=head3 delete_temporary
+
+Delete_temporary is called by cleanup_database and only removes temporary
+uploads older than [pref Upload_PurgeTemporaryFiles_Days] days.
+It is possible to override the pref with the override_pref parameter.
+
+Returns true if no errors occur. (Even when no files had to be deleted.)
+
+=cut
+
+sub delete_temporary {
+    my ( $self, $params ) = @_;
+    my $days = $params->{override_pref} ||
+        C4::Context->preference('Upload_PurgeTemporaryFiles_Days');
+    return 1 if !$days;
+    my $dt = dt_from_string();
+    $dt->subtract( days => $days );
+    my $parser = Koha::Database->new->schema->storage->datetime_parser;
+    return $self->search({
+        permanent => [ undef, 0 ],
+        dtcreated => { '<' => $parser->format_datetime($dt) },
+    })->delete;
 }
 
 =head3 search_term

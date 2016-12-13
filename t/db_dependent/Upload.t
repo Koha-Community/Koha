@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use File::Temp qw/ tempdir /;
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Warn;
 
 use Test::MockModule;
@@ -11,6 +11,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::UploadedFile;
 use Koha::UploadedFiles;
 use Koha::Uploader;
@@ -40,6 +41,10 @@ our $uploads = [
     ],
     [
         { name => 'file5', cat => undef, size => 7000 },
+    ],
+    [
+        { name => 'file6', cat => undef, size => 6500 },
+        { name => 'file7', cat => undef, size => 6501 },
     ],
 ];
 
@@ -237,6 +242,49 @@ subtest 'Testing allows_add_by' => sub {
     });
     is( Koha::Uploader->allows_add_by( $patron->{userid} ),
         1, 'Patron is still allowed to add uploaded files' );
+};
+
+subtest 'Testing delete_temporary' => sub {
+    plan tests => 7;
+
+    # Add two temporary files: result should be 3 + 3
+    Koha::Uploader->new({ tmp => 1 })->cgi; # add file6 and file7
+    is( Koha::UploadedFiles->search->count, 6, 'Test starting count' );
+    is( Koha::UploadedFiles->search({ permanent => 1 })->count, 3,
+        'Includes 3 permanent' );
+
+    # Move all permanents to today - 1
+    # Move temp 1 to today - 3, and temp 2,3 to today - 5
+    my $today = dt_from_string;
+    $today->subtract( minutes => 2 ); # should be enough :)
+    my $dt = $today->clone->subtract( days => 1 );
+    foreach my $rec ( Koha::UploadedFiles->search({ permanent => 1 }) ) {
+        $rec->dtcreated($dt)->store;
+    }
+    my @recs = Koha::UploadedFiles->search({ permanent => 0 });
+    $dt = $today->clone->subtract( days => 3 );
+    $recs[0]->dtcreated($dt)->store;
+    $dt = $today->clone->subtract( days => 5 );
+    $recs[1]->dtcreated($dt)->store;
+    $recs[2]->dtcreated($dt)->store;
+
+    # Now call delete_temporary with 0, 6, 5 and 1 (via override)
+    t::lib::Mocks::mock_preference('Upload_PurgeTemporaryFiles_Days', 0 );
+    Koha::UploadedFiles->delete_temporary;
+    is( Koha::UploadedFiles->search->count, 6, 'Delete with pref==0' );
+
+    t::lib::Mocks::mock_preference('Upload_PurgeTemporaryFiles_Days', 6 );
+    Koha::UploadedFiles->delete_temporary;
+    is( Koha::UploadedFiles->search->count, 6, 'Delete with pref==6' );
+
+    t::lib::Mocks::mock_preference('Upload_PurgeTemporaryFiles_Days', 5 );
+    Koha::UploadedFiles->delete_temporary;
+    is( Koha::UploadedFiles->search->count, 4, 'Delete with pref==5 makes 4' );
+
+    Koha::UploadedFiles->delete_temporary({ override_pref => 1 });
+    is( Koha::UploadedFiles->search->count, 3, 'Delete override==1 makes 3' );
+    is( Koha::UploadedFiles->search({ permanent => 1 })->count, 3,
+        'Still 3 permanent uploads' );
 };
 
 # The end
