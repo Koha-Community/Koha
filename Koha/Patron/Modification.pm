@@ -22,9 +22,13 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
-
-use Koha::Patron::Modifications;
 use Koha::Exceptions::Patron::Modification;
+use Koha::Patron::Modifications;
+# TODO: Remove once Koha::Patron::Attribute(s) is implemented
+use C4::Members::Attributes qw( SetBorrowerAttributes );
+
+use JSON;
+use Try::Tiny;
 
 use base qw(Koha::Object);
 
@@ -44,15 +48,31 @@ sub store {
     my ($self) = @_;
 
     if ( $self->verification_token ) {
-        if ( Koha::Patron::Modifications->search( { verification_token => $self->verification_token } )->count() ) {
-            Koha::Exceptions::Patron::Modification::DuplicateVerificationToken->throw(
-                "Duplicate verification token " . $self->verification_token
-            );
+        if (Koha::Patron::Modifications->search(
+                { verification_token => $self->verification_token }
+            )->count()
+            )
+        {
+            Koha::Exceptions::Patron::Modification::DuplicateVerificationToken
+                ->throw(
+                "Duplicate verification token " . $self->verification_token );
         }
+    }
+
+    if ( $self->extended_attributes ) {
+        try {
+            my $json_parser = JSON->new;
+            $json_parser->decode( $self->extended_attributes );
+        }
+        catch {
+            Koha::Exceptions::Patron::Modification::InvalidData->throw(
+                'The passed extended_attributes is not valid JSON');
+        };
     }
 
     return $self->SUPER::store();
 }
+
 
 =head2 approve
 
@@ -70,6 +90,7 @@ sub approve {
 
     delete $data->{timestamp};
     delete $data->{verification_token};
+    delete $data->{extended_attributes};
 
     foreach my $key ( keys %$data ) {
         delete $data->{$key} unless ( defined( $data->{$key} ) );
@@ -81,10 +102,46 @@ sub approve {
 
     $patron->set($data);
 
-    if ( $patron->store() ) {
-        return $self->delete();
+    # Take care of extended attributes
+    if ( $self->extended_attributes ) {
+        our $extended_attributes
+            = try { decode_json( $self->extended_attributes ) }
+        catch {
+            Koha::Exceptions::Patron::Modification::InvalidData->throw(
+                'The passed extended_attributes is not valid JSON');
+        };
     }
+
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            try {
+                $patron->store();
+
+                # Take care of extended attributes
+                if ( $self->extended_attributes ) {
+                    my $extended_attributes
+                        = decode_json( $self->extended_attributes );
+                    SetBorrowerAttributes( $patron->borrowernumber,
+                        $extended_attributes );
+                }
+            }
+            catch {
+                if ( $_->isa('DBIx::Class::Exception') ) {
+                    Koha::Exceptions::Patron::Modification->throw(
+                        $_->{msg} );
+                }
+                else {
+                    Koha::Exceptions::Patron::Modification->throw($@);
+                }
+            };
+        }
+    );
+
+    return $self->delete();
 }
+
+
+
 
 =head3 type
 

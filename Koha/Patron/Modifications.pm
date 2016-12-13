@@ -28,6 +28,8 @@ use C4::Context;
 
 use Koha::Patron::Modification;
 
+use JSON;
+
 use base qw(Koha::Objects);
 
 =head2 pending_count
@@ -93,6 +95,9 @@ sub pending {
     my @m;
     while ( my $row = $sth->fetchrow_hashref() ) {
         foreach my $key ( keys %$row ) {
+            if ( defined $row->{$key} && $key eq 'extended_attributes' ) {
+                $row->{$key} = from_json($row->{$key});
+            }
             delete $row->{$key} unless defined $row->{$key};
         }
 

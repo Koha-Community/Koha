@@ -1,10 +1,29 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
-use Test::More tests => 10;
-use Try::Tiny;
+
+use Test::More tests => 11;
+use Test::Exception;
 
 use t::lib::TestBuilder;
+
+use String::Random qw( random_string );
+use Try::Tiny;
 
 use C4::Context;
 use C4::Members;
@@ -14,7 +33,61 @@ BEGIN {
     use_ok('Koha::Patron::Modifications');
 }
 
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
+my $builder = t::lib::TestBuilder->new;
+
+
+subtest 'store( extended_attributes ) tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    Koha::Patron::Modifications->search->delete;
+
+    my $patron
+        = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+    my $verification_token = random_string("..........");
+    my $valid_json_text    = '[{"code":"CODE","value":"VALUE"}]';
+    my $invalid_json_text  = '[{';
+
+    Koha::Patron::Modification->new(
+        {   verification_token  => $verification_token,
+            borrowernumber      => $patron,
+            surname             => 'Hall',
+            extended_attributes => $valid_json_text
+        }
+    )->store();
+
+    my $patron_modification
+        = Koha::Patron::Modifications->search( { borrowernumber => $patron } )
+        ->next;
+
+    is( $patron_modification->surname,
+        'Hall', 'Patron modification correctly stored with valid JSON data' );
+    is( $patron_modification->extended_attributes,
+        $valid_json_text,
+        'Patron modification correctly stored with valid JSON data' );
+
+    $verification_token = random_string("..........");
+    throws_ok {
+        Koha::Patron::Modification->new(
+            {   verification_token  => $verification_token,
+                borrowernumber      => $patron,
+                surname             => 'Hall',
+                extended_attributes => $invalid_json_text
+            }
+        )->store();
+    }
+    'Koha::Exceptions::Patron::Modification::InvalidData',
+        'Trying to store invalid JSON in extended_attributes field raises exception';
+
+    is( $@, 'The passed extended_attributes is not valid JSON' );
+
+    $schema->storage->txn_rollback;
+};
+
+
 $schema->storage->txn_begin;
 
 my $dbh = C4::Context->dbh;
@@ -52,7 +125,6 @@ my $borrower =
 is( $borrower->surname, 'Hall', 'Found modification has matching surname' );
 
 ## Create new pending modification for a patron
-my $builder = t::lib::TestBuilder->new;
 my $borr1 = $builder->build( { source => 'Borrower' } )->{borrowernumber};
 
 my $m1 = Koha::Patron::Modification->new(
@@ -106,4 +178,6 @@ my $new_borrower = GetMember( borrowernumber => $borr1 );
 ok( $new_borrower->{'surname'} eq 'Hall',
     'Test approve() applies modification to borrower' );
 
-$dbh->rollback();
+$schema->storage->txn_rollback;
+
+1;
