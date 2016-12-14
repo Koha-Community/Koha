@@ -108,6 +108,12 @@ eof
         rm "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
     [ -f "/etc/koha/sites/$name/zebra.passwd" ] && \
         rm "/etc/koha/sites/$name/zebra.passwd"
+
+    tempdir=$(get_tmpdir)
+    [ -d "$tempdir/koha_${name}_upload" ] && \
+        # Temporary uploads can be discarded, apart from purgeall
+        rm -r "$tempdir/koha_${name}_upload"
+
     [ -f "/var/lib/koha/$name/letsencrypt.enabled" ] && \
         rm -r "/var/lib/koha/$name/letsencrypt.enabled"
     [ -f "/etc/letsencrypt/renewal/$le_opacdomain.conf" ] && \
