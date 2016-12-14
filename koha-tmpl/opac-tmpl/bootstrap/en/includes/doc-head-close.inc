@@ -31,9 +31,6 @@
     <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/[% opac_css_override %]" />
 [% END %]
 <link rel="stylesheet" type="text/css" media="print" href="[% interface %]/[% theme %]/css/print.css" />
-[% IF persona %]
- <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/persona-buttons.css" />
-[% END %]
 [% IF ( bidi ) %]
     <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left.css" />
 [% END %]

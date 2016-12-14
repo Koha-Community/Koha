@@ -423,7 +423,6 @@ sub get_template_and_user {
         LoginFirstname  => ( C4::Context->userenv ? C4::Context->userenv->{"firstname"} : "Bel" ),
         LoginSurname    => C4::Context->userenv ? C4::Context->userenv->{"surname"}      : "Inconnu",
         emailaddress    => C4::Context->userenv ? C4::Context->userenv->{"emailaddress"} : undef,
-        loggedinpersona => C4::Context->userenv ? C4::Context->userenv->{"persona"}      : undef,
         TagsEnabled     => C4::Context->preference("TagsEnabled"),
         hide_marc       => C4::Context->preference("hide_marc"),
         item_level_itypes  => C4::Context->preference('item-level_itypes'),
@@ -434,7 +433,6 @@ sub get_template_and_user {
         using_https        => $using_https,
         noItemTypeImages   => C4::Context->preference("noItemTypeImages"),
         marcflavour        => C4::Context->preference("marcflavour"),
-        persona            => C4::Context->preference("persona"),
         OPACBaseURL        => C4::Context->preference('OPACBaseURL'),
     );
     if ( $in->{'type'} eq "intranet" ) {
@@ -748,7 +746,6 @@ sub checkauth {
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
     my $type            = shift;
-    my $persona         = shift;
     $type = 'opac' unless $type;
 
     my $dbh     = C4::Context->dbh;
@@ -789,10 +786,6 @@ sub checkauth {
         );
         $loggedin = 1;
     }
-    elsif ($persona) {
-
-        # we don't want to set a session because we are being called by a persona callback
-    }
     elsif ( $sessionID = $query->cookie("CGISESSID") )
     {    # assignment, not comparison
         my $session = get_session($sessionID);
@@ -807,7 +800,7 @@ sub checkauth {
                 $session->param('surname'),      $session->param('branch'),
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('branchprinter'),
-                $session->param('persona'),      $session->param('shibboleth')
+                $session->param('shibboleth')
             );
             C4::Context::set_shelves_userenv( 'bar', $session->param('barshelves') );
             C4::Context::set_shelves_userenv( 'pub', $session->param('pubshelves') );
@@ -930,8 +923,7 @@ sub checkauth {
         if ( ( $cas && $query->param('ticket') )
             || $userid
             || ( $shib && $shib_login )
-            || $pki_field ne 'None'
-            || $persona )
+            || $pki_field ne 'None' )
         {
             my $password    = $query->param('password');
             my $shibSuccess = 0;
@@ -957,27 +949,6 @@ sub checkauth {
                       checkpw( $dbh, $userid, $password, $query, $type );
                     $userid = $retuserid;
                     $info{'invalidCasLogin'} = 1 unless ($return);
-                }
-
-                elsif ($persona) {
-                    my $value = $persona;
-
-                    # If we're looking up the email, there's a chance that the person
-                    # doesn't have a userid. So if there is none, we pass along the
-                    # borrower number, and the bits of code that need to know the user
-                    # ID will have to be smart enough to handle that.
-                    require C4::Members;
-                    my @users_info = C4::Members::GetBorrowersWithEmail($value);
-                    if (@users_info) {
-
-                        # First the userid, then the borrowernum
-                        $value = $users_info[0][1] || $users_info[0][0];
-                    }
-                    else {
-                        undef $value;
-                    }
-                    $return = $value ? 1 : 0;
-                    $userid = $value;
                 }
 
                 elsif (
@@ -1132,16 +1103,13 @@ sub checkauth {
                     $session->param( 'ip',           $session->remote_addr() );
                     $session->param( 'lasttime',     time() );
                 }
-                if ($persona) {
-                    $session->param( 'persona', 1 );
-                }
                 C4::Context->set_userenv(
                     $session->param('number'),       $session->param('id'),
                     $session->param('cardnumber'),   $session->param('firstname'),
                     $session->param('surname'),      $session->param('branch'),
                     $session->param('branchname'),   $session->param('flags'),
                     $session->param('emailaddress'), $session->param('branchprinter'),
-                    $session->param('persona'),      $session->param('shibboleth')
+                    $session->param('shibboleth')
                 );
 
             }
@@ -1254,7 +1222,6 @@ sub checkauth {
         wrongip                               => $info{'wrongip'},
         PatronSelfRegistration                => C4::Context->preference("PatronSelfRegistration"),
         PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),
-        persona                               => C4::Context->preference("Persona"),
         opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
     );
 

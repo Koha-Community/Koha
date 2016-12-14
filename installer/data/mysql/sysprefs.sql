@@ -409,7 +409,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('PayPalSandboxMode',  '1', NULL ,  'If enabled, the system will use PayPal''s sandbox server for testing, rather than the production server.',  'YesNo'),
 ('PayPalSignature',  '', NULL ,  'Your PayPal API signature',  'Free'),
 ('PayPalUser',  '', NULL ,  'Your PayPal API username ( email address )',  'Free'),
-('Persona','0','','Use Mozilla Persona for login','YesNo'),
 ('PrefillItem','0','','When a new item is added, should it be prefilled with last created item values?','YesNo'),
 ('previousIssuesDefaultSortOrder','asc','asc|desc','Specify the sort order of Previous Issues on the circulation page','Choice'),
 ('printcirculationslips','1','','If ON, enable printing circulation receipts','YesNo'),

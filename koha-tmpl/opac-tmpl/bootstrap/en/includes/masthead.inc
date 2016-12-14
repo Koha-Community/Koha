@@ -109,11 +109,7 @@
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                     [% IF ( loggedinusername ) %]
                                         <li><p class="navbar-text">
-                                            [% IF persona %]
-                                                <a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">
-                                            [% ELSE %]
-                                                <a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">
-                                            [% END %]
+                                            <a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">
                                             Log out</a></p></li>
                                     [% END %]
                                 [% END %]
