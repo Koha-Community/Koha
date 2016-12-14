@@ -1,7 +1,9 @@
+[% USE AuthorisedValues %]
 [% USE Categories %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
+[% USE Math %]
 [% SET userupdateview = 1 %]
 
 [% INCLUDE 'doc-head-open.inc' %]
@@ -113,6 +115,9 @@
                             </li>
                         </ol>
                     </fieldset>
+                [% END %]
+                [% IF ( extended_unique_id_failed_code ) %]
+                    <div class="alert" id="extended_unique_id_failed"><a href="#patron-attr-start-[% extended_unique_id_failed_code %]">[% extended_unique_id_failed_description %]</a> value <i>[% extended_unique_id_failed_value %]</i> is already in use.</div>
                 [% END %]
 
                 <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form">
@@ -885,7 +890,73 @@
                     </fieldset>
                [% END %]
 
-               [% UNLESS action == 'edit' %]
+                [% IF ( Koha.Preference('ExtendedPatronAttributes') && patron_attribute_classes.size && !Koha.Preference('PatronSelfRegistrationVerifyByEmail') ) %]
+                    [% FOREACH pa_class IN patron_attribute_classes %]
+                        [% IF pa_class.class %]
+                            <fieldset id="aai_[% pa_loo.class %]" class="rows patron-attributes">
+                            <legend>[% pa_loo.lib %]</legend>
+                        [% ELSE %]
+                            <fieldset class="rows patron-attributes">
+                            <legend>Additional information</legend>
+                        [% END %]
+                        <ol class="attributes_table">
+                            [% FOREACH pa IN pa_class.items %]
+                                [% FOREACH pa_value IN pa.values %]
+                                    [% IF loop.first %]<a name="patron-attr-start-[% pa.type.code %]"></a>[% END %]
+                                    [% form_id = 'patron-attr-' _ Math.int( Math.rand(1000000) ) %]
+                                    <li data-category_code="[% pa.type.category_code %]">
+                                        <label for="[% form_id %]">[% pa.type.description %]: </label>
+                                        [% IF pa.type.opac_editable %]
+                                            <input type="hidden" name="patron_attribute_code" value="[% pa.type.code |html %]" />
+                                            [% IF ( pa.type.authorised_value_category ) %]
+                                                <select id="[% form_id %]" name="patron_attribute_value">
+                                                    <option value=""></option>
+                                                    [% FOREACH auth_val IN AuthorisedValues.Get( pa.type.authorised_value_category, pa_value.value || '', 1 ) %]
+                                                        [% IF ( auth_val.selected ) %]
+                                                            <option value="[% auth_val.authorised_value %]" selected="selected">
+                                                                [%# Yes, lib; GetAuthorisedValues takes care of intelligently setting this from lib_opac %]
+                                                                [% auth_val.lib %]
+                                                            </option>
+                                                        [% ELSE %]
+                                                            <option value="[% auth_val.authorised_value %]" >
+                                                                [% auth_val.lib %]
+                                                            </option>
+                                                        [% END %]
+                                                    [% END %]
+                                                </select>
+                                            [% ELSE %]
+                                                <textarea rows="2" cols="30" id="[% form_id %]" name="patron_attribute_value">[% pa_value.value %]</textarea>
+                                            [% END %]
+                                            <a href="#" class="clear-attribute">Clear</a>
+                                            [% IF ( pa.type.repeatable ) %]
+                                            <a href="#" class="clone-attribute">New</a>
+                                            [% END %]
+                                            [% IF ( pa.type.password_allowed ) %]
+                                                </li><li><label for="[% form_id %]_password">Password:</label>
+                                                <input type="password" maxlength="64" value="[% pa_value.password %]" id="[% form_id %]_password" name="patron_attribute_password" />
+                                            [% ELSE %]
+                                                [%# To keep the form inputs lined up in the POST %]
+                                                <input type="hidden" name="patron_attribute_password" value="" />
+                                            [% END %]
+                                        [% ELSE %]
+                                            [% IF ( pa.type.authorised_value_category ) %]
+                                                [% AuthorisedValues.GetByCode( pa.type.authorised_value, pa_value.value, 1 ) %]
+                                            [% ELSE %]
+                                                [% pa_value.value | html_line_break %]
+                                            [% END %]
+                                            [% IF ( pa_value.password ) %]
+                                                (Password: *******)
+                                            [% END %]
+                                        [% END %]
+                                    </li>
+                                [% END %]
+                            [% END %]
+                        </ol>
+                        </fieldset>
+                    [% END %]
+                [% END %]
+
+                [% UNLESS action == 'edit' %]
                     <fieldset class="rows" id="memberentry_captcha">
                         <ol>
 
@@ -897,24 +968,6 @@
 
                                 <span class="hint">Please type the following characters into the preceding box: <strong>[% captcha %]</strong></span>
                             </li>
-                        </ol>
-                    </fieldset>
-                [% END %]
-
-                [% IF ( borrower.ExtendedPatronAttributes ) %]
-                    <fieldset class="rows">
-                        <legend>Additional information</legend>
-                        <ol>
-                            [% FOREACH patron_attribute IN borrower.patron_attributes %]
-                                <li>
-                                    <label>[% patron_attribute.description %]:</label>
-                                    [% IF ( patron_attribute.value_description ) %]
-                                        [% patron_attribute.value_description %]
-                                    [% ELSE %]
-                                        [% patron_attribute.value |html_line_break %]
-                                    [% END %]
-                                </li>
-                            [% END %]
                         </ol>
                     </fieldset>
                 [% END %]
@@ -1006,6 +1059,24 @@
                      });
                 });
             [% END %]
+
+            $(".patron-attributes").on( 'click', '.clear-attribute', function() {
+                $(this).parent()
+                    .find('textarea').attr('value', '').end()
+                    .find('select').attr('value', '').end();
+
+                return false;
+            } );
+
+            $(".patron-attributes").on( 'click', '.clone-attribute', function() {
+                var clone = $(this).parent().clone().insertAfter( $(this).parent() );
+
+                var newId = 50 + parseInt(Math.random() * 100000);
+                $('input[type!="hidden"],select,textarea', clone).attr('id', 'patron-attr-' + newId).attr('value', '');
+                $("label", clone).attr('for', 'patron-attr-' + newId).attr('value', '');
+
+                return false;
+            } );
         });
 
     $(".cleardate").on("click", function(){

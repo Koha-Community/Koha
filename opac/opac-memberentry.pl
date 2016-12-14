@@ -20,6 +20,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Digest::MD5 qw( md5_base64 md5_hex );
 use Encode qw( encode );
+use List::MoreUtils qw( each_array uniq );
 use String::Random qw( random_string );
 
 use C4::Auth;
@@ -86,6 +87,21 @@ $template->param(
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
 );
 
+my $attributes = ParsePatronAttributes($cgi);
+my $conflicting_attribute = 0;
+
+foreach my $attr (@$attributes) {
+    unless ( C4::Members::Attributes::CheckUniqueness($attr->{code}, $attr->{value}, $borrowernumber) ) {
+        my $attr_info = C4::Members::AttributeTypes->fetch($attr->{code});
+        $template->param(
+            extended_unique_id_failed_code => $attr->{code},
+            extended_unique_id_failed_value => $attr->{value},
+            extended_unique_id_failed_description => $attr_info->description()
+        );
+        $conflicting_attribute = 1;
+    }
+}
+
 if ( $action eq 'create' ) {
 
     my %borrower = ParseCgiForBorrower($cgi);
@@ -102,7 +118,7 @@ if ( $action eq 'create' ) {
         $cardnumber_error_code = checkcardnumber( $borrower{cardnumber}, $borrower{borrowernumber} );
     }
 
-    if ( @empty_mandatory_fields || @$invalidformfields || $cardnumber_error_code ) {
+    if ( @empty_mandatory_fields || @$invalidformfields || $cardnumber_error_code || $conflicting_attribute ) {
         if ( $cardnumber_error_code == 1 ) {
             $template->param( cardnumber_already_exists => 1 );
         } elsif ( $cardnumber_error_code == 2 ) {
@@ -114,6 +130,7 @@ if ( $action eq 'create' ) {
             invalid_form_fields    => $invalidformfields,
             borrower               => \%borrower
         );
+        $template->param( patron_attribute_classes => GeneratePatronAttributesForm( undef, $attributes ) );
     }
     elsif (
         md5_base64( uc( $cgi->param('captcha') ) ) ne $cgi->param('captcha_digest') )
@@ -122,6 +139,7 @@ if ( $action eq 'create' ) {
             failed_captcha => 1,
             borrower       => \%borrower
         );
+        $template->param( patron_attribute_classes => GeneratePatronAttributesForm( undef, $attributes ) );
     }
     else {
         if (
@@ -182,6 +200,7 @@ if ( $action eq 'create' ) {
                   C4::Context->preference('OpacPasswordChange') );
 
             my ( $borrowernumber, $password ) = AddMember_Opac(%borrower);
+            C4::Members::Attributes::SetBorrowerAttributes( $borrowernumber, $attributes );
             C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if $borrowernumber && C4::Context->preference('EnhancedMessagingPreferences');
 
             $template->param( password_cleartext => $password );
@@ -225,6 +244,7 @@ elsif ( $action eq 'update' ) {
                 secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
             }),
         );
+        $template->param( patron_attribute_classes => GeneratePatronAttributesForm( undef, $attributes ) );
 
         $template->param( action => 'edit' );
     }
@@ -272,14 +292,6 @@ elsif ( $action eq 'update' ) {
 elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
     my $borrower = GetMember( borrowernumber => $borrowernumber );
 
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
-        my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber, 'opac');
-        if (scalar(@$attributes) > 0) {
-            $borrower->{ExtendedPatronAttributes} = 1;
-            $borrower->{patron_attributes} = $attributes;
-        }
-    }
-
     $template->param(
         borrower  => $borrower,
         guarantor => scalar Koha::Patrons->find($borrowernumber)->guarantor(),
@@ -295,6 +307,9 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
         $template->param( display_patron_image => 1 ) if $patron_image;
     }
 
+    $template->param( patron_attribute_classes => GeneratePatronAttributesForm( $borrower ) );
+} else {
+    $template->param( patron_attribute_classes => GeneratePatronAttributesForm() );
 }
 
 my $captcha = random_string("CCCCC");
@@ -447,4 +462,91 @@ sub DelEmptyFields {
     }
 
     return %borrower;
+}
+
+sub GeneratePatronAttributesForm {
+    my ( $borrower, $entered_attributes ) = @_;
+
+    # Get all attribute types and the values for this patron (if applicable)
+    my @types = C4::Members::AttributeTypes::GetAttributeTypes();
+
+    if (scalar(@types) == 0) {
+        return [];
+    }
+
+    my %attr_values = ();
+
+    if ( $borrower ) {
+        my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
+
+        # Remap the patron's attributes into a hash of arrayrefs per attribute (depends on
+        # autovivification)
+        foreach my $attr (@$attributes) {
+            push @{ $attr_values{ $attr->{code} } }, $attr;
+        }
+    }
+
+    if ( $entered_attributes ) {
+        foreach my $attr (@$entered_attributes) {
+            push @{ $attr_values{ $attr->{code} } }, $attr;
+        }
+    }
+
+    # Find all existing classes
+    my @classes = uniq( map { $_->{class} } @types );
+    @classes = sort @classes;
+    my %items_by_class;
+
+    foreach my $attr_type_desc (@types) {
+        my $attr_type = C4::Members::AttributeTypes->fetch( $attr_type_desc->{code} );
+        # Make sure this attribute should be displayed in the OPAC
+        next unless ( $attr_type->opac_display() );
+        # Then, make sure it either has values or is editable
+        next unless ( $attr_values{ $attr_type->code() } || $attr_type->opac_editable() );
+
+        push @{ $items_by_class{ $attr_type->class() } }, {
+            type => $attr_type,
+            # If editable, make sure there's at least one empty entry, to make the template's job easier
+            values => $attr_values{ $attr_type->code() } || [{}]
+        };
+    }
+
+    # Finally, build a list of containing classes
+    my @class_loop;
+    foreach my $class (@classes) {
+        next unless ( $items_by_class{$class} );
+
+        my $av = Koha::AuthorisedValues->search({ category => 'PA_CLASS', authorised_value => $class });
+        my $lib = $av->count ? $av->next->opac_description : $class;
+
+        push @class_loop, {
+            class => $class,
+            items => $items_by_class{$class},
+            lib   => $lib,
+        };
+    }
+
+    return \@class_loop;
+}
+
+sub ParsePatronAttributes {
+    my ( $cgi ) = @_;
+
+    my @codes = $cgi->param('patron_attribute_code');
+    my @values = $cgi->param('patron_attribute_value');
+    my @passwords = $cgi->param('patron_attribute_password');
+
+    my $ea = each_array( @codes, @values, @passwords );
+    my @attributes;
+    my %dups = ();
+
+    while ( my ( $code, $value, $password ) = $ea->() ) {
+        next unless defined($value) and $value ne '';
+        next if exists $dups{$code}->{$value};
+        $dups{$code}->{$value} = 1;
+
+        push @attributes, { code => $code, value => $value, password => $password };
+    }
+
+    return \@attributes;
 }
