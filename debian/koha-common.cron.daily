@@ -23,7 +23,7 @@ koha-foreach --enabled /usr/share/koha/bin/cronjobs/serialsUpdate.pl -c
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/membership_expiry.pl -c
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/holds/cancel_expired_holds.pl >/dev/null 2>&1
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/services_throttle.pl > /dev/null 2>&1
-koha-foreach --enabled /usr/share/koha/bin/cronjobs/cleanup_database.pl --sessions --zebraqueue 10 --list-invites
+koha-foreach --enabled /usr/share/koha/bin/cronjobs/cleanup_database.pl --sessions --zebraqueue 10 --list-invites --temp-uploads
 koha-foreach --enabled --noemail /usr/share/koha/bin/cronjobs/cleanup_database.pl --mail
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/holds/auto_unsuspend_holds.pl > /dev/null 2>&1
 koha-foreach --enabled /usr/share/koha/bin/cronjobs/merge_authorities.pl -b
