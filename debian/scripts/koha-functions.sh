@@ -233,3 +233,23 @@ get_loglevels()
     fi
 
 }
+
+get_tmpdir()
+{
+    if [ "$TMPDIR" != "" ]; then
+        if [ -d "$TMPDIR" ]; then
+            echo $TMPDIR
+            return 0
+        fi
+        # We will not unset TMPDIR but just default to /tmp here
+        # Note that mktemp (used later) would look at TMPDIR
+        echo "/tmp"
+        return 0
+    fi
+    local retval=$(mktemp -u)
+    if [ "$retval" = "" ]; then
+        echo "/tmp"
+        return 0
+    fi
+    echo $(dirname $retval)
+}
