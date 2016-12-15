@@ -42,18 +42,19 @@ if (defined $format and $format eq 'json') {
     $content_type = 'json';
 
     # Map DataTables parameters with 'regular' parameters
-    $cgi->param('rows', $cgi->param('iDisplayLength'));
-    $cgi->param('page', ($cgi->param('iDisplayStart') / $cgi->param('iDisplayLength')) + 1);
+    $cgi->param('rows', scalar $cgi->param('iDisplayLength'));
+    $cgi->param('page', (scalar $cgi->param('iDisplayStart') / scalar $cgi->param('iDisplayLength')) + 1);
     my @columns = split /,/, scalar $cgi->param('sColumns');
-    $cgi->param('sortby', $columns[ $cgi->param('iSortCol_0') ]);
-    $cgi->param('sortorder', $cgi->param('sSortDir_0'));
+    $cgi->param('sortby', $columns[ scalar $cgi->param('iSortCol_0') ]);
+    $cgi->param('sortorder', scalar $cgi->param('sSortDir_0'));
 
     my @f = $cgi->multi_param('f');
     my @q = $cgi->multi_param('q');
     push @q, '' if @q == 0;
     my @op = $cgi->multi_param('op');
     my @c = $cgi->multi_param('c');
-    foreach my $i (0 .. ($cgi->param('iColumns') - 1)) {
+    my $iColumns = $cgi->param('iColumns');
+    foreach my $i (0 .. ($iColumns - 1)) {
         my $sSearch = $cgi->param("sSearch_$i");
         if (defined $sSearch and $sSearch ne '') {
             my @words = split /\s+/, $sSearch;
@@ -109,7 +110,7 @@ if (scalar keys %params > 0) {
                     field => $p,
                     query => \@q,
                 };
-                if (my $op = $cgi->param($p . '_op')) {
+                if (my $op = scalar $cgi->param($p . '_op')) {
                     $f->{operator} = $op;
                 }
                 push @{ $filter->{filters} }, $f;
@@ -170,14 +171,14 @@ if (scalar keys %params > 0) {
         }
     }
 
-    if (my $itemcallnumber_from = $cgi->param('itemcallnumber_from')) {
+    if (my $itemcallnumber_from = scalar $cgi->param('itemcallnumber_from')) {
         push @{ $filter->{filters} }, {
             field => 'itemcallnumber',
             query => $itemcallnumber_from,
             operator => '>=',
         };
     }
-    if (my $itemcallnumber_to = $cgi->param('itemcallnumber_to')) {
+    if (my $itemcallnumber_to = scalar $cgi->param('itemcallnumber_to')) {
         push @{ $filter->{filters} }, {
             field => 'itemcallnumber',
             query => $itemcallnumber_to,
