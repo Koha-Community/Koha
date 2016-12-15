@@ -233,7 +233,7 @@
 
       var params = [];
       $form.find('select').not(':disabled').find('option:selected').each(function () {
-        var name = $(this).parent('select').attr('name');
+        var name = $(this).parents('select').first().attr('name');
         var value = $(this).val();
         params.push({ 'name': name, 'value': value });
       });
