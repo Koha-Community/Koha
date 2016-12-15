@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use Test::More tests => 1;
 
+use Benchmark;
+
 use Koha::IssuingRules;
 
 use t::lib::TestBuilder;
@@ -31,7 +33,7 @@ $schema->storage->txn_begin;
 my $builder      = t::lib::TestBuilder->new;
 
 subtest 'get_effective_issuing_rule' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     my $patron       = $builder->build({ source => 'Borrower' });
     my $item     = $builder->build({ source => 'Item' });
@@ -157,6 +159,55 @@ subtest 'get_effective_issuing_rule' => sub {
         });
         ok(_row_match($rule, $branchcode, $categorycode, $itemtype), 'When I attempt to get effective issuing rule,'
            .' then the above one is returned.');
+    };
+
+    subtest 'Performance' => sub {
+        plan tests => 4;
+
+        my $worst_case = timethis(500,
+                    sub { Koha::IssuingRules->get_effective_issuing_rule({
+                            branchcode   => 'nonexistent',
+                            categorycode => 'nonexistent',
+                            itemtype     => 'nonexistent',
+                        });
+                    }
+                );
+        my $mid_case = timethis(500,
+                    sub { Koha::IssuingRules->get_effective_issuing_rule({
+                            branchcode   => $branchcode,
+                            categorycode => 'nonexistent',
+                            itemtype     => 'nonexistent',
+                        });
+                    }
+                );
+        my $sec_best_case = timethis(500,
+                    sub { Koha::IssuingRules->get_effective_issuing_rule({
+                            branchcode   => $branchcode,
+                            categorycode => $categorycode,
+                            itemtype     => 'nonexistent',
+                        });
+                    }
+                );
+        my $best_case = timethis(500,
+                    sub { Koha::IssuingRules->get_effective_issuing_rule({
+                            branchcode   => $branchcode,
+                            categorycode => $categorycode,
+                            itemtype     => $itemtype,
+                        });
+                    }
+                );
+        ok($worst_case, 'In worst case, get_effective_issuing_rule finds matching'
+           .' rule '.sprintf('%.2f', $worst_case->iters/$worst_case->cpu_a)
+           .' times per second.');
+        ok($mid_case, 'In mid case, get_effective_issuing_rule finds matching'
+           .' rule '.sprintf('%.2f', $mid_case->iters/$mid_case->cpu_a)
+           .' times per second.');
+        ok($sec_best_case, 'In second best case, get_effective_issuing_rule finds matching'
+           .' rule '.sprintf('%.2f', $sec_best_case->iters/$sec_best_case->cpu_a)
+           .' times per second.');
+        ok($best_case, 'In best case, get_effective_issuing_rule finds matching'
+           .' rule '.sprintf('%.2f', $best_case->iters/$best_case->cpu_a)
+           .' times per second.');
     };
 };
 
