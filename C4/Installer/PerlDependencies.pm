@@ -668,8 +668,8 @@ our $PERL_DEPS = {
         'min_ver'  => '3.9',
     },
     'File::Slurp' => {
-        'usage'    => 'Command line scripts',
-        'required' => '0',
+        'usage'    => 'Core',
+        'required' => '1',
         'min_ver'  => '9999.13',
     },
     'Test::WWW::Mechanize' => {
