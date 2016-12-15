@@ -44,7 +44,7 @@ if (defined $format and $format eq 'json') {
     # Map DataTables parameters with 'regular' parameters
     $cgi->param('rows', $cgi->param('iDisplayLength'));
     $cgi->param('page', ($cgi->param('iDisplayStart') / $cgi->param('iDisplayLength')) + 1);
-    my @columns = split /,/, $cgi->multi_param('sColumns');
+    my @columns = split /,/, scalar $cgi->param('sColumns');
     $cgi->param('sortby', $columns[ $cgi->param('iSortCol_0') ]);
     $cgi->param('sortorder', $cgi->param('sSortDir_0'));
 
