@@ -388,6 +388,7 @@ This can be done before deleting a patron, to make sure the data are not complet
 sub move_to_deleted {
     my ($self) = @_;
     my $patron_infos = $self->unblessed;
+    delete $patron_infos->{updated_on}; #This ensures the updated_on date in deletedborrowers will be set to the current timestamp
     return Koha::Database->new->schema->resultset('Deletedborrower')->create($patron_infos);
 }
 
