@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Warn;
 
 use Koha::Authority::Types;
@@ -114,6 +114,17 @@ subtest 'search_related' => sub {
     is( scalar(@libraries),        2,                       'Koha::Objects->search_related should work as expected' );
     is( $libraries[0]->branchcode, $patron_1->{branchcode}, 'Koha::Objects->search_related should work as expected' );
     is( $libraries[1]->branchcode, $patron_2->{branchcode}, 'Koha::Objects->search_related should work as expected' );
+};
+
+subtest 'single' => sub {
+    plan tests => 2;
+    my $builder   = t::lib::TestBuilder->new;
+    my $patron_1  = $builder->build( { source => 'Borrower' } );
+    my $patron_2  = $builder->build( { source => 'Borrower' } );
+    my $patron = Koha::Patrons->search({}, { rows => 1 })->single;
+    is(ref($patron), 'Koha::Patron', 'Koha::Objects->single returns a single Koha::Patron object.');
+    warning_like { Koha::Patrons->search->single } qr/SQL that returns multiple rows/,
+    "Warning is presented if single is used for a result with multiple rows.";
 };
 
 subtest 'Exceptions' => sub {
