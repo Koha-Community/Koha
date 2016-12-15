@@ -2914,7 +2914,7 @@ sub AddRenewal {
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
                                         dt_from_string( $issuedata->{date_due} ) :
                                         DateTime->now( time_zone => C4::Context->tz());
-        $datedue =  CalcDateDue($datedue, $itemtype, $issuedata->{'branchcode'}, $borrower, 'is a renewal');
+        $datedue =  CalcDateDue($datedue, $itemtype, _GetCircControlBranch($item, $borrower), $borrower, 'is a renewal');
     }
 
     # Update the issues record to have the new due date, and a new count
