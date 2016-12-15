@@ -37,12 +37,12 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $schema = Koha::Database->new()->schema();
-my $op     = $input->param('op');
-$op ||= 'display';
+
+my $id = scalar $input->param('id');
+my $op = scalar $input->param('op') || 'display';
 
 if ( $op eq 'ean_form' ) {
-    show_ean();
-    $template->param( ean_form => 1 );
+    my $e        = $schema->resultset('EdifactEan')->find($id);
     my @branches = $schema->resultset('Branch')->search(
         undef,
         {
@@ -50,24 +50,47 @@ if ( $op eq 'ean_form' ) {
             order_by => 'branchname',
         }
     );
-    $template->param( branches => \@branches );
+    $template->param(
+        ean_form => 1,
+        branches => \@branches,
+        ean      => $e,
+    );
 }
 elsif ( $op eq 'delete_confirm' ) {
-    show_ean();
-    $template->param( delete_confirm => 1 );
+    my $e = $schema->resultset('EdifactEan')->find($id);
+    $template->param(
+        delete_confirm => 1,
+        ean            => $e,
+    );
 }
 else {
     if ( $op eq 'save' ) {
-        my $change = $input->param('id');
+        my $change = $id;
         if ($change) {
-            editsubmit();
+            $schema->resultset('EdifactEan')->find($id)->update(
+                {
+                    branchcode        => $input->param('branchcode'),
+                    description       => $input->param('description'),
+                    ean               => $input->param('ean'),
+                    id_code_qualifier => $input->param('id_code_qualifier'),
+                }
+            );
         }
         else {
-            addsubmit();
+            my $new_ean = $schema->resultset('EdifactEan')->new(
+                {
+                    branchcode        => $input->param('branchcode'),
+                    description       => $input->param('description'),
+                    ean               => $input->param('ean'),
+                    id_code_qualifier => $input->param('id_code_qualifier'),
+                }
+            );
+            $new_ean->insert();
         }
     }
     elsif ( $op eq 'delete_confirmed' ) {
-        delsubmit();
+        my $e = $schema->resultset('EdifactEan')->find($id);
+        $e->delete if $e;
     }
     my @eans = $schema->resultset('EdifactEan')->search(
         {},
@@ -101,43 +124,3 @@ $template->param(
 );
 
 output_html_with_http_headers( $input, $cookie, $template->output );
-
-sub delsubmit {
-    my $id = $input->param('id');
-    my $e = $schema->resultset('EdifactEan')->find( $id );
-    $e->delete if $e;
-    return;
-}
-
-sub addsubmit {
-
-    my $new_ean = $schema->resultset('EdifactEan')->new(
-        {
-            branchcode        => $input->param('branchcode'),
-            description       => $input->param('description'),
-            ean               => $input->param('ean'),
-            id_code_qualifier => $input->param('id_code_qualifier'),
-        }
-    );
-    $new_ean->insert();
-    return;
-}
-
-sub editsubmit {
-    $schema->resultset('EdifactEan')->find( $input->param('id') )->update(
-        {
-            branchcode        => $input->param('branchcode'),
-            description       => $input->param('description'),
-            ean               => $input->param('ean'),
-            id_code_qualifier => $input->param('id_code_qualifier'),
-        }
-    );
-    return;
-}
-
-sub show_ean {
-    my $id = $input->param('id');
-    my $e = $schema->resultset('EdifactEan')->find( $id );
-    $template->param( ean => $e );
-    return;
-}
