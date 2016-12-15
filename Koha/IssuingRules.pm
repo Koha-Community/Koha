@@ -44,73 +44,17 @@ sub get_effective_issuing_rule {
     my $itemtype     = $params->{itemtype};
     my $branchcode   = $params->{branchcode};
 
-    my $rule = $self->find($params);
-    return $rule if $rule;
-
-    $rule = $self->find(
-        {
-            categorycode => $categorycode,
-            itemtype     => $default,
-            branchcode   => $branchcode
-        }
-    );
-    return $rule if $rule;
-
-    $rule = $self->find(
-        {
-            categorycode => $default,
-            itemtype     => $itemtype,
-            branchcode   => $branchcode
-        }
-    );
-    return $rule if $rule;
-
-    $rule = $self->find(
-        {
-            categorycode => $default,
-            itemtype     => $default,
-            branchcode   => $branchcode
-        }
-    );
-    return $rule if $rule;
-
-    $rule = $self->find(
-        {
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            branchcode   => $default
-        }
-    );
-    return $rule if $rule;
-
-    $rule = $self->find(
-        {
-            categorycode => $categorycode,
-            itemtype     => $default,
-            branchcode   => $default
-        }
-    );
-    return $rule if $rule;
-
-    $rule = $self->find(
-        {
-            categorycode => $default,
-            itemtype     => $itemtype,
-            branchcode   => $default
-        }
-    );
-    return $rule if $rule;
-
-    $rule = $self->find(
-        {
-            categorycode => $default,
-            itemtype     => $default,
-            branchcode   => $default
-        }
-    );
-    return $rule if $rule;
-
-    return;
+    my $rule = $self->search({
+        categorycode => { 'in' => [ $categorycode, $default ] },
+        itemtype     => { 'in' => [ $itemtype,     $default ] },
+        branchcode   => { 'in' => [ $branchcode,   $default ] },
+    }, {
+        order_by => {
+            -desc => ['branchcode', 'categorycode', 'itemtype']
+        },
+        rows => 1,
+    })->single;
+    return $rule;
 }
 
 =head3 type
