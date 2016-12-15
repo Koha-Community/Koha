@@ -39,7 +39,7 @@ sub usage {
 
 
 sub force_borrower_messaging_defaults {
-    my ($doit, $truncate, $since) = @_;
+    my ($doit, $truncate, $since, $actives) = @_;
 
     $since = '0000-00-00' if (!$since);
     print $since;
@@ -54,7 +54,11 @@ sub force_borrower_messaging_defaults {
         $dbh->do(q|SET FOREIGN_KEY_CHECKS = 1|);
     }
 
-    my $sth = $dbh->prepare("SELECT borrowernumber, categorycode FROM borrowers WHERE dateenrolled >= ?");
+    my $sql = "SELECT borrowernumber, categorycode FROM borrowers WHERE dateenrolled >= ?";
+    if ($actives) {
+        $sql .= " AND dateexpiry > NOW()"
+    }
+    my $sth = $dbh->prepare($sql);
     $sth->execute($since);
     while ( my ($borrowernumber, $categorycode) = $sth->fetchrow ) {
         print "$borrowernumber: $categorycode\n";
@@ -68,17 +72,18 @@ sub force_borrower_messaging_defaults {
 }
 
 
-my ($doit, $truncate, $since, $help);
+my ($doit, $truncate, $since, $help, $actives);
 my $result = GetOptions(
-    'doit'     => \$doit,
-    'truncate' => \$truncate,
-    'since:s'  => \$since,
-    'help|h'   => \$help,
+    'doit'        => \$doit,
+    'truncate'    => \$truncate,
+    'since:s'     => \$since,
+    'actives'     => \$actives,
+    'help|h'      => \$help,
 );
 
 usage() if $help;
 
-force_borrower_messaging_defaults( $doit, $truncate, $since );
+force_borrower_messaging_defaults( $doit, $truncate, $since, $actives );
 
 =head1 NAME
 
@@ -90,6 +95,7 @@ force-borrower-messaging-defaults
   force-borrower-messaging-defaults --help
   force-borrower-messaging-defaults --doit
   force-borrower-messaging-defaults --doit --truncate
+  force-borrower-messaging-defaults --doit --actives
 
 =head1 DESCRIPTION
 
@@ -110,12 +116,16 @@ Prints this help
 
 =item B<--doit>
 
-Process actually the borrowers.
+Actually update the borrowers.
 
 =item B<--truncate>
 
 Truncate all borrowers transport preferences before (re-)creating them. It
 affects borrower_message_preferences table.
+
+=item B<--actives>
+
+Will only update active borrowers (borrowers who didn't pass their expiration date).
 
 =back
 
