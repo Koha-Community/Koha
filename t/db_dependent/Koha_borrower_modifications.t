@@ -17,16 +17,18 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 6;
 use Test::Exception;
 
 use t::lib::TestBuilder;
 
-use String::Random qw( random_string );
+use Digest::MD5 qw( md5_base64 md5_hex );
 use Try::Tiny;
 
 use C4::Context;
 use C4::Members;
+use C4::Members::Attributes qw( GetBorrowerAttributes );
+use Koha::Patrons;
 
 BEGIN {
     use_ok('Koha::Patron::Modification');
@@ -36,6 +38,47 @@ BEGIN {
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
+subtest 'new() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    Koha::Patron::Modifications->search->delete;
+
+    # Create new pending modification
+    Koha::Patron::Modification->new(
+        {   verification_token => '1234567890',
+            surname            => 'Hall',
+            firstname          => 'Kyle'
+        }
+    )->store();
+
+    ## Get the new pending modification
+    my $borrower = Koha::Patron::Modifications->find(
+        { verification_token => '1234567890' } );
+
+    ## Verify we get the same data
+    is( $borrower->surname, 'Hall',
+        'Found modification has matching surname' );
+
+    throws_ok {
+        Koha::Patron::Modification->new(
+            {   verification_token => '1234567890',
+                surname            => 'Hall',
+                firstname          => 'Daria'
+            }
+        )->store();
+    }
+    'Koha::Exceptions::Patron::Modification::DuplicateVerificationToken',
+        'Attempting to add a duplicate verification raises the correct exception';
+    is( $@,
+        'Duplicate verification token 1234567890',
+        'Exception carries the right message'
+    );
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'store( extended_attributes ) tests' => sub {
 
@@ -47,9 +90,9 @@ subtest 'store( extended_attributes ) tests' => sub {
 
     my $patron
         = $builder->build( { source => 'Borrower' } )->{borrowernumber};
-    my $verification_token = random_string("..........");
+    my $verification_token = md5_hex( time().{}.rand().{}.$$ );
     my $valid_json_text    = '[{"code":"CODE","value":"VALUE"}]';
-    my $invalid_json_text  = '[{';
+    my $invalid_json_text  = '[{"code":"CODE";"value":"VALUE"}]';
 
     Koha::Patron::Modification->new(
         {   verification_token  => $verification_token,
@@ -69,7 +112,7 @@ subtest 'store( extended_attributes ) tests' => sub {
         $valid_json_text,
         'Patron modification correctly stored with valid JSON data' );
 
-    $verification_token = random_string("..........");
+    $verification_token = md5_hex( time().{}.rand().{}.$$ );
     throws_ok {
         Koha::Patron::Modification->new(
             {   verification_token  => $verification_token,
@@ -87,97 +130,148 @@ subtest 'store( extended_attributes ) tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'approve tests' => sub {
 
-$schema->storage->txn_begin;
+    plan tests => 7;
 
-my $dbh = C4::Context->dbh;
-$dbh->do("DELETE FROM borrower_modifications");
+    $schema->storage->txn_begin;
 
-## Create new pending modification
-Koha::Patron::Modification->new(
-    {
-        verification_token => '1234567890',
-        surname            => 'Hall',
-        firstname          => 'Kyle'
-    }
-)->store();
+    Koha::Patron::Modifications->search->delete;
 
-## Ensure duplicate verification tokens cannot be added to the database
-try {
-    Koha::Patron::Modification->new(
-        {
-            verification_token => '1234567890',
-            surname            => 'Hall',
-            firstname          => 'Daria'
+    my $patron_hashref = $builder->build( { source => 'Borrower' } );
+    $builder->build(
+        { source => 'BorrowerAttributeType', value => { code => 'CODE_1' } }
+    );
+    $builder->build(
+        { source => 'BorrowerAttributeType', value => { code => 'CODE_2' } }
+    );
+    my $verification_token = md5_hex( time().{}.rand().{}.$$ );
+    my $valid_json_text
+        = '[{"code":"CODE_1","value":"VALUE_1"},{"code":"CODE_2","value":"VALUE_2"}]';
+    my $patron_modification = Koha::Patron::Modification->new(
+        {   borrowernumber      => $patron_hashref->{borrowernumber},
+            firstname           => 'Kyle',
+            verification_token  => $verification_token,
+            extended_attributes => $valid_json_text
         }
     )->store();
-} catch {
-    ok( $_->isa('Koha::Exceptions::Patron::Modification::DuplicateVerificationToken'),
-        'Attempting to add a duplicate verification token to the database should raise a Koha::Exceptions::Koha::Patron::Modification::DuplicateVerificationToken exception' );
-    is( $_->message, "Duplicate verification token 1234567890", 'Exception carries the right message' );
+
+    ok( $patron_modification->approve,
+        'Patron modification correctly approved' );
+    my $patron = Koha::Patrons->find( $patron_hashref->{borrowernumber} );
+    isnt(
+        $patron->firstname,
+        $patron_hashref->{firstname},
+        'Patron modification changed firstname'
+    );
+    is( $patron->firstname, 'Kyle',
+        'Patron modification set the right firstname' );
+    my @patron_attributes = GetBorrowerAttributes( $patron->borrowernumber );
+    is( $patron_attributes[0][0]->{code},
+        'CODE_1', 'Patron modification correctly saved attribute code' );
+    is( $patron_attributes[0][0]->{value},
+        'VALUE_1', 'Patron modification correctly saved attribute value' );
+
+    # Create a new Koha::Patron::Modification, skip extended_attributes to
+    # bypass checks
+    $patron_modification = Koha::Patron::Modification->new(
+        {   borrowernumber     => $patron_hashref->{borrowernumber},
+            firstname          => 'Kylie',
+            verification_token => $verification_token
+        }
+    )->store();
+
+    # Add invalid JSON to extended attributes
+    $patron_modification->extended_attributes(
+        '[{"code":"CODE";"values:VALUES"}]');
+    throws_ok { $patron_modification->approve }
+    'Koha::Exceptions::Patron::Modification::InvalidData',
+        'The right exception is thrown if invalid data is on extended_attributes';
+
+    $patron = Koha::Patrons->find( $patron_hashref->{borrowernumber} );
+    isnt( $patron->firstname, 'Kylie', 'Patron modification didn\'t apply' );
+
+    $schema->storage->txn_rollback;
 };
 
-## Get the new pending modification
-my $borrower =
-  Koha::Patron::Modifications->find( { verification_token => '1234567890' } );
+subtest 'pending_count() and pending() tests' => sub {
 
-## Verify we get the same data
-is( $borrower->surname, 'Hall', 'Found modification has matching surname' );
+    plan tests => 7;
 
-## Create new pending modification for a patron
-my $borr1 = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+    $schema->storage->txn_begin;
 
-my $m1 = Koha::Patron::Modification->new(
-    {
-        borrowernumber => $borr1,
-        surname        => 'Hall',
-        firstname      => 'Kyle'
-    }
-)->store();
+    Koha::Patron::Modifications->search->delete;
+    my $library_1 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $library_2 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $patron_1
+        = $builder->build(
+        { source => 'Borrower', value => { branchcode => $library_1 } } )
+        ->{borrowernumber};
+    my $patron_2
+        = $builder->build(
+        { source => 'Borrower', value => { branchcode => $library_2 } } )
+        ->{borrowernumber};
+    my $patron_3
+        = $builder->build(
+        { source => 'Borrower', value => { branchcode => $library_2 } } )
+        ->{borrowernumber};
+    my $verification_token_1 = md5_hex( time().{}.rand().{}.$$ );
+    my $verification_token_2 = md5_hex( time().{}.rand().{}.$$ );
+    my $verification_token_3 = md5_hex( time().{}.rand().{}.$$ );
 
-## Test the counter
-is( Koha::Patron::Modifications->pending_count,
-    1, 'Test pending_count()' );
 
-## Create new pending modification for another patron
-my $borr2 = $builder->build( { source => 'Borrower' } )->{borrowernumber};
-my $m2 = Koha::Patron::Modification->new(
-    {
-        borrowernumber => $borr2,
-        surname        => 'Smith',
-        firstname      => 'Sandy'
-    }
-)->store();
+    my $modification_1 = Koha::Patron::Modification->new(
+        {   borrowernumber     => $patron_1,
+            surname            => 'Hall',
+            firstname          => 'Kyle',
+            verification_token => $verification_token_1
+        }
+    )->store();
 
-## Test the counter
-is(
-    Koha::Patron::Modifications->pending_count(), 2,
-'Add a new pending modification and test pending_count() again'
-);
+    is( Koha::Patron::Modifications->pending_count,
+        1, 'pending_count() correctly returns 1' );
 
-## Check GetPendingModifications
-my $pendings = Koha::Patron::Modifications->pending;
-my @firstnames_mod =
-  sort ( $pendings->[0]->{firstname}, $pendings->[1]->{firstname} );
-ok( $firstnames_mod[0] eq 'Kyle',  'Test pending()' );
-ok( $firstnames_mod[1] eq 'Sandy', 'Test pending() again' );
+    my $modification_2 = Koha::Patron::Modification->new(
+        {   borrowernumber     => $patron_2,
+            surname            => 'Smith',
+            firstname          => 'Sandy',
+            verification_token => $verification_token_2
+        }
+    )->store();
 
-## This should delete the row from the table
-$m2->delete();
+    my $modification_3 = Koha::Patron::Modification->new(
+        {   borrowernumber     => $patron_3,
+            surname            => 'Smith',
+            firstname          => 'Sandy',
+            verification_token => $verification_token_3
+        }
+    )->store();
 
-## Save a copy of the borrowers original data
-my $old_borrower = GetMember( borrowernumber => $borr1 );
+    is( Koha::Patron::Modifications->pending_count,
+        3, 'pending_count() correctly returns 3' );
 
-## Apply the modifications
-$m1->approve();
+    is( Koha::Patron::Modifications->pending_count($library_1),
+        1, 'pending_count() correctly returns 1 if filtered by library' );
 
-## Get a copy of the borrowers current data
-my $new_borrower = GetMember( borrowernumber => $borr1 );
+    is( Koha::Patron::Modifications->pending_count($library_2),
+        2, 'pending_count() correctly returns 2 if filtered by library' );
 
-## Check to see that the approved modifications were saved
-ok( $new_borrower->{'surname'} eq 'Hall',
-    'Test approve() applies modification to borrower' );
+    $modification_1->approve;
 
-$schema->storage->txn_rollback;
+    is( Koha::Patron::Modifications->pending_count,
+        2, 'pending_count() correctly returns 2' );
+
+    $modification_2->approve;
+
+    is( Koha::Patron::Modifications->pending_count,
+        1, 'pending_count() correctly returns 1' );
+
+    $modification_3->approve;
+
+    is( Koha::Patron::Modifications->pending_count,
+        0, 'pending_count() correctly returns 0' );
+
+    $schema->storage->txn_rollback;
+};
 
 1;
