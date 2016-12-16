@@ -96,6 +96,109 @@ sub new {
     return $self;
 }
 
+=head2 install_default_database
+
+    C4::Installer::install_default_database($verbose, $marcflavour);
+
+Installs the Koha database with everything that can be optionally installed, skipping manual phases.
+
+=cut
+
+sub install_default_database {
+    my ($verbose, $marcflavour) = @_;
+    $marcflavour = 'MARC21' unless $marcflavour;
+    my @cc = caller(0);
+    require C4::Languages;
+    my $installer = C4::Installer->new();
+
+    my ($version, $error);
+    eval {
+        $version = C4::Context->preference('Version');
+    };
+    if ($version) {
+        print "$cc[3]():> INFO: Koha database exists. Skipping install_default_database()" if $verbose;
+        return undef;
+    }
+    $error = $installer->load_db_schema();
+    die "$cc[3]():> FATAL: $error" if $error;
+
+    my $all_languages = C4::Languages::getAllLanguages();
+    my $lang = 'en';
+
+    my @installList;
+    my $frameworkList  = $installer->marc_framework_sql_list($lang, $marcflavour);
+    foreach my $list (@$frameworkList) {
+        foreach my $fwk (@{$list->{frameworks}}) {
+            push(@installList, $fwk->{fwkfile});
+        }
+    }
+    my $sampleDataList = $installer->sample_data_sql_list($lang);
+    foreach my $list (@$sampleDataList) {
+        foreach my $fwk (@{$list->{frameworks}}) {
+            push(@installList, $fwk->{fwkfile});
+        }
+    }
+
+    #fill $list with list of sql files
+    my ($fwk_language, $error_list) = $installer->load_sql_in_order($all_languages, @installList);
+    $installer->set_version_syspref();
+    $installer->set_marcflavour_syspref($marcflavour);
+}
+
+=head2 updatedatabase
+
+    C4::Installer::updatedatabase();
+
+Does a database update.
+Originally from installer/install.pl -> $op eq 'updatestructure'
+
+=cut
+
+sub updatedatabase {
+    my ($verbose) = @_;
+
+    if ( ! defined $ENV{PERL5LIB} ) {
+        my $find = "C4/Context.pm";
+        my $path = $INC{$find};
+        $path =~ s/\Q$find\E//;
+        $ENV{PERL5LIB} = "$path:$path/installer";
+        warn "# plack? inserted PERL5LIB $ENV{PERL5LIB}\n";
+    }
+
+    my $now = POSIX::strftime( "%Y-%m-%dT%H:%M:%S", localtime() );
+    my $logdir = C4::Context->config('logdir')."/updatedatabase";
+    system('mkdir', '-p', $logdir); #Make sure the updatedatabase-dir exists
+    my $dbversion = C4::Context->preference('Version');
+    my $kohaversion = Koha::version;
+    $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+
+    my $filename_suffix = join '_', $now, $dbversion, $kohaversion;
+    my $logfilepath = $logdir."/updatedatabase_$filename_suffix.log";
+    my $logfilepath_errors = $logdir."/updatedatabase-error_$filename_suffix.log";
+
+    my $cmd = C4::Context->config("intranetdir") . "/installer/data/mysql/updatedatabase.pl >> $logfilepath 2>> $logfilepath_errors";
+
+    system($cmd );
+
+    my $fh;
+    open( $fh, "<", $logfilepath ) or die "Cannot open log file $logfilepath: $!";
+    my @report = <$fh>;
+    close $fh;
+    if (@report) {
+        print join( '', @report ) if $verbose;
+    }
+    #eval{ `rm $logfilepath` };
+
+    open( $fh, "<", $logfilepath_errors ) or die "Cannot open log file $logfilepath_errors: $!";
+    @report = <$fh>;
+    close $fh;
+    if (@report) {
+        warn "The following errors were returned while attempting to run the updatedatabase.pl script:\n".
+             join("",@report);
+    }
+    #eval{ `rm $logfilepath_errors` };
+}
+
 =head2 marc_framework_sql_list
 
   my ($defaulted_to_en, $list) = 
