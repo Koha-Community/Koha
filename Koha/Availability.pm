@@ -19,6 +19,8 @@ package Koha::Availability;
 
 use Modern::Perl;
 
+use Koha::DateUtils;
+
 use Koha::Exceptions;
 
 =head1 NAME
@@ -211,6 +213,31 @@ sub unavailable {
         my $key = ref($status);
         $self->{unavailabilities}->{$key} = $status;
     }
+}
+
+
+sub _swaggerize_exception {
+    my ($self, $exceptions) = @_;
+
+    my $ret = {};
+    foreach my $ex (keys %{$exceptions}) {
+        my $name = $ex;
+        $name =~ s/Koha::Exceptions:://;
+        $ret->{$name} = {};
+        foreach my $field ($exceptions->{$ex}->Fields) {
+            my $val = $exceptions->{$ex}->$field;
+            return unless $val;
+            if ($val =~ /^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})/) {
+                eval {
+                    $val = dt_from_string($val, 'sql')->strftime('%FT%T%z');
+                    #RFC3339 time-numoffset: ("+" / "-") time-hour ":" time-minute
+                    substr($val, -2, 0, ':');
+                };
+            }
+            $ret->{$name}->{$field} = $val;
+        }
+    }
+    return $ret;
 }
 
 1;

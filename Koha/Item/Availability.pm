@@ -123,4 +123,49 @@ sub new {
     return $self;
 }
 
+=head3 swaggerize
+
+Returns a HASHref that contains item availability information.
+
+Numifies numbers for Swagger to be numbers instead of strings.
+
+=cut
+
+sub swaggerize {
+    my ($self) = @_;
+
+    my $confirmations = $self->SUPER::_swaggerize_exception($self->confirmations);
+    my $notes = $self->SUPER::_swaggerize_exception($self->notes);
+    my $unavailabilities = $self->SUPER::_swaggerize_exception($self->unavailabilities);
+    my $item = $self->item;
+    my $availability = {
+        available => $self->available
+                         ? Mojo::JSON->true
+                         : Mojo::JSON->false,
+    };
+    if (keys %{$confirmations} > 0) {
+        $availability->{'confirmations'} = $confirmations;
+    }
+    if (keys %{$notes} > 0) {
+        $availability->{'notes'} = $notes;
+    }
+    if (keys %{$unavailabilities} > 0) {
+        $availability->{'unavailabilities'} = $unavailabilities;
+    }
+
+    return {
+        itemnumber => 0+$item->itemnumber,
+        biblionumber => 0+$item->biblionumber,
+        biblioitemnumber => 0+$item->biblioitemnumber,
+        availability => $availability,
+        barcode => $item->barcode,
+        enumchron => $item->enumchron,
+        holdingbranch => $item->holdingbranch,
+        homebranch => $item->homebranch,
+        itemcallnumber => $item->itemcallnumber,
+        itemnotes => $item->itemnotes,
+        location => $item->location,
+    };
+}
+
 1;

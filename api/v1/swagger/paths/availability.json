@@ -6,7 +6,14 @@
       "parameters": [
         { "$ref": "../parameters.json#/biblionumbersQueryParam" },
         { "$ref": "../parameters.json#/borrowernumberQueryParam" },
-        { "$ref": "../parameters.json#/branchcodeQueryParam"}
+        { "$ref": "../parameters.json#/branchcodeQueryParam"},
+        {
+          "name": "limit_items",
+          "in": "query",
+          "description": "Check only first n available items.",
+          "required": false,
+          "type": "integer"
+        }
       ],
       "consumes": ["application/json"],
       "produces": ["application/json"],

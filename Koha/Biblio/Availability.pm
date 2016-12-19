@@ -19,6 +19,7 @@ package Koha::Biblio::Availability;
 
 use Modern::Perl;
 use Scalar::Util qw(looks_like_number);
+use Mojo::JSON;
 
 use base qw(Koha::Availability);
 
@@ -127,6 +128,51 @@ sub new {
     }
 
     return $self;
+}
+
+=head3 swaggerize
+
+Returns a HASHref that contains biblio availability information as well as
+availability information for each item of this biblio.
+
+Numifies numbers for Swagger to be numbers instead of strings.
+
+=cut
+
+sub swaggerize {
+    my ($self) = @_;
+
+    my $item_availabilities = [];
+    foreach my $item_availability (@{$self->item_availabilities}) {
+        push @{$item_availabilities}, $item_availability->swaggerize;
+    }
+    foreach my $item_availability (@{$self->item_unavailabilities}) {
+        push @{$item_availabilities}, $item_availability->swaggerize;
+    }
+    my $confirmations = $self->SUPER::_swaggerize_exception($self->confirmations);
+    my $notes = $self->SUPER::_swaggerize_exception($self->notes);
+    my $unavailabilities = $self->SUPER::_swaggerize_exception($self->unavailabilities);
+    my $availability = {
+        available => $self->available
+                         ? Mojo::JSON->true
+                         : Mojo::JSON->false,
+    };
+    if (keys %{$confirmations} > 0) {
+        $availability->{'confirmations'} = $confirmations;
+    }
+    if (keys %{$notes} > 0) {
+        $availability->{'notes'} = $notes;
+    }
+    if (keys %{$unavailabilities} > 0) {
+        $availability->{'unavailabilities'} = $unavailabilities;
+    }
+
+    my $hash = {
+        biblionumber => 0+$self->biblio->biblionumber,
+        availability => $availability,
+        item_availabilities => $item_availabilities,
+    };
+    return $hash;
 }
 
 1;
