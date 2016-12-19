@@ -55,7 +55,7 @@ $(document).ready(function() {
 </head>
 <body id="admin_authorised_values" class="admin">
 [% INCLUDE 'header.inc' %]
-[% INCLUDE 'cat-search.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF op == 'add_form' %] <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a> &rsaquo; [% IF ( action_modify ) %]Modify authorized value[% END %]
 	   [% IF ( action_add_value ) %]New authorized value[% END %]
 	   [% IF ( action_add_category ) %]New category[% END %][% END %]

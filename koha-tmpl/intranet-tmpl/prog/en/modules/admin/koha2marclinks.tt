@@ -20,7 +20,7 @@ $(document).ready(function() {
 
 <body id="admin_koha2marclinks" class="admin">
 [% INCLUDE 'header.inc' %]
-[% INCLUDE 'cat-search.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC Mapping</a> &rsaquo; Connect [% tablename %].[% kohafield %] to a MARC subfield[% END %]
 [% IF ( else ) %]Koha to MARC mapping[% tagfield %][% END %]</div>
