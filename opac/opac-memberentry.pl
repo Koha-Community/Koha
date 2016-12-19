@@ -401,8 +401,10 @@ sub CheckForInvalidFields {
     if ($borrower->{'B_email'}) {
         push(@invalidFields, "B_email") if (!Email::Valid->address($borrower->{'B_email'}));
     }
-    if ( $borrower->{'password'} ne $borrower->{'password2'} ){
-        push(@invalidFields, "password_match");
+    if ( defined $borrower->{'password'}
+        and $borrower->{'password'} ne $borrower->{'password2'} )
+    {
+        push( @invalidFields, "password_match" );
     }
     if ( $borrower->{'password'}  && $minpw && (length($borrower->{'password'}) < $minpw) ) {
        push(@invalidFields, "password_invalid");
@@ -534,9 +536,9 @@ sub GeneratePatronAttributesForm {
 sub ParsePatronAttributes {
     my ( $cgi ) = @_;
 
-    my @codes = $cgi->param('patron_attribute_code');
-    my @values = $cgi->param('patron_attribute_value');
-    my @passwords = $cgi->param('patron_attribute_password');
+    my @codes = $cgi->multi_param('patron_attribute_code');
+    my @values = $cgi->multi_param('patron_attribute_value');
+    my @passwords = $cgi->multi_param('patron_attribute_password');
 
     my $ea = each_array( @codes, @values, @passwords );
     my @attributes;
