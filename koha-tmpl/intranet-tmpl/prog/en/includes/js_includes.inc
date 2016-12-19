@@ -89,7 +89,7 @@
     [% IF ( CircAutocompl ) %]
         <script type="text/javascript">
             $(document).ready(function(){
-                $( "#findborrower" ).autocomplete({
+                var obj = $( "#findborrower" ).autocomplete({
                     source: "/cgi-bin/koha/circ/ysearch.pl",
                     minLength: 3,
                     select: function( event, ui ) {
@@ -97,13 +97,15 @@
                         $("#patronsearch").submit();
                         return false;
                     }
-                })
-                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                    return $( "<li></li>" )
-                    .data( "ui-autocomplete-item", item )
-                    .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.dateofbirth + " " + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
-                    .appendTo( ul );
-                };
+                }).data( "ui-autocomplete" );
+                if( obj ) {
+                    obj._renderItem = function( ul, item ) {
+                        return $( "<li></li>" )
+                        .data( "ui-autocomplete-item", item )
+                        .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.dateofbirth + " " + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
+                        .appendTo( ul );
+                    };
+                }
             });
         </script>
     [% END %]
