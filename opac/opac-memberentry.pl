@@ -20,6 +20,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Digest::MD5 qw( md5_base64 md5_hex );
 use Encode qw( encode );
+use JSON;
 use List::MoreUtils qw( each_array uniq );
 use String::Random qw( random_string );
 
@@ -261,6 +262,7 @@ elsif ( $action eq 'update' ) {
             );
 
             $borrower_changes{borrowernumber} = $borrowernumber;
+            $borrower_changes{extended_attributes} = to_json($attributes);
 
             # FIXME update the following with
             # Koha::Patron::Modifications->search({ borrowernumber => $borrowernumber })->delete;
@@ -307,7 +309,7 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
         $template->param( display_patron_image => 1 ) if $patron_image;
     }
 
-    $template->param( patron_attribute_classes => GeneratePatronAttributesForm( $borrower ) );
+    $template->param( patron_attribute_classes => GeneratePatronAttributesForm( $borrowernumber ) );
 } else {
     $template->param( patron_attribute_classes => GeneratePatronAttributesForm() );
 }
@@ -465,7 +467,7 @@ sub DelEmptyFields {
 }
 
 sub GeneratePatronAttributesForm {
-    my ( $borrower, $entered_attributes ) = @_;
+    my ( $borrowernumber, $entered_attributes ) = @_;
 
     # Get all attribute types and the values for this patron (if applicable)
     my @types = C4::Members::AttributeTypes::GetAttributeTypes();
@@ -476,7 +478,7 @@ sub GeneratePatronAttributesForm {
 
     my %attr_values = ();
 
-    if ( $borrower ) {
+    if ( $borrowernumber ) {
         my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
 
         # Remap the patron's attributes into a hash of arrayrefs per attribute (depends on
