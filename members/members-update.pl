@@ -16,14 +16,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
+
 use C4::Auth;
 use C4::Output;
 use C4::Context;
 use C4::Members;
+use C4::Members::Attributes qw( GetBorrowerAttributes );
+use Koha::Patron::Attributes;
 use Koha::Patron::Modifications;
 
 my $query = new CGI;
@@ -51,14 +53,19 @@ my $pending_modifications =
 
 my $borrowers;
 foreach my $pm (@$pending_modifications) {
-    $borrowers->{ $pm->{'borrowernumber'} } =
-      GetMember( borrowernumber => $pm->{'borrowernumber'} );
-
+    $borrowers->{ $pm->{borrowernumber} }
+        = GetMember( borrowernumber => $pm->{borrowernumber} );
+    my $patron_attributes = Koha::Patron::Attributes->search(
+        { borrowernumber => $pm->{borrowernumber} } );
+    $borrowers->{ $pm->{'borrowernumber'} }->{extended_attributes}
+        = $patron_attributes;
 }
 
 $template->param(
     PendingModifications => $pending_modifications,
-    borrowers            => $borrowers,
+    borrowers            => $borrowers
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
+
+1;

@@ -911,8 +911,8 @@
                                             [% IF ( pa.type.authorised_value_category ) %]
                                                 <select id="[% form_id %]" name="patron_attribute_value">
                                                     <option value=""></option>
-                                                    [% FOREACH auth_val IN AuthorisedValues.Get( pa.type.authorised_value_category, pa_value.value || '', 1 ) %]
-                                                        [% IF ( auth_val.selected ) %]
+                                                    [% FOREACH auth_val IN AuthorisedValues.Get( pa.type.authorised_value_category, 1 ) %]
+                                                        [% IF ( auth_val.authorised_value == pa_value.value ) %]
                                                             <option value="[% auth_val.authorised_value %]" selected="selected">
                                                                 [%# Yes, lib; GetAuthorisedValues takes care of intelligently setting this from lib_opac %]
                                                                 [% auth_val.lib %]
@@ -931,21 +931,11 @@
                                             [% IF ( pa.type.repeatable ) %]
                                             <a href="#" class="clone-attribute">New</a>
                                             [% END %]
-                                            [% IF ( pa.type.password_allowed ) %]
-                                                </li><li><label for="[% form_id %]_password">Password:</label>
-                                                <input type="password" maxlength="64" value="[% pa_value.password %]" id="[% form_id %]_password" name="patron_attribute_password" />
-                                            [% ELSE %]
-                                                [%# To keep the form inputs lined up in the POST %]
-                                                <input type="hidden" name="patron_attribute_password" value="" />
-                                            [% END %]
                                         [% ELSE %]
                                             [% IF ( pa.type.authorised_value_category ) %]
                                                 [% AuthorisedValues.GetByCode( pa.type.authorised_value, pa_value.value, 1 ) %]
                                             [% ELSE %]
                                                 [% pa_value.value | html_line_break %]
-                                            [% END %]
-                                            [% IF ( pa_value.password ) %]
-                                                (Password: *******)
                                             [% END %]
                                         [% END %]
                                     </li>

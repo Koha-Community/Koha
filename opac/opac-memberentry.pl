@@ -21,12 +21,13 @@ use CGI qw ( -utf8 );
 use Digest::MD5 qw( md5_base64 md5_hex );
 use Encode qw( encode );
 use JSON;
-use List::MoreUtils qw( each_array uniq );
+use List::MoreUtils qw( any each_array uniq );
 use String::Random qw( random_string );
 
 use C4::Auth;
 use C4::Output;
 use C4::Members;
+use C4::Members::Attributes qw( GetBorrowerAttributes );
 use C4::Form::MessagingPreferences;
 use Koha::Patrons;
 use Koha::Patron::Modification;
@@ -251,7 +252,9 @@ elsif ( $action eq 'update' ) {
     }
     else {
         my %borrower_changes = DelUnchangedFields( $borrowernumber, %borrower );
-        if (%borrower_changes) {
+        my $extended_attributes_changes = ExtendedAttributesMatch( $borrowernumber, $attributes );
+
+        if ( %borrower_changes || $extended_attributes_changes ) {
             ( $template, $borrowernumber, $cookie ) = get_template_and_user(
                 {
                     template_name   => "opac-memberentry-update-submitted.tt",
@@ -283,6 +286,7 @@ elsif ( $action eq 'update' ) {
                 action => 'edit',
                 nochanges => 1,
                 borrower => GetMember( borrowernumber => $borrowernumber ),
+                patron_attribute_classes => GeneratePatronAttributesForm( undef, $attributes ),
                 csrf_token => Koha::Token->new->generate_csrf({
                     id     => Encode::encode( 'UTF-8', $borrower->{userid} ),
                     secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
@@ -468,6 +472,28 @@ sub DelEmptyFields {
     return %borrower;
 }
 
+sub ExtendedAttributesMatch {
+    my ( $borrowernumber, $entered_attributes ) = @_;
+
+    my @patron_attributes_arr = GetBorrowerAttributes( $borrowernumber, 1 );
+    my $patron_attributes = $patron_attributes_arr[0];
+
+    if ( scalar @{$entered_attributes} != scalar @{$patron_attributes} ) {
+        return 1;
+    }
+
+    foreach my $attr ( @{$patron_attributes} ) {
+        next if any {
+            $_->{code} eq $attr->{code} and $_->{value} eq $attr->{value};
+        }
+        @{$entered_attributes};
+        return 1;
+    }
+
+    return 0;
+}
+
+
 sub GeneratePatronAttributesForm {
     my ( $borrowernumber, $entered_attributes ) = @_;
 
@@ -538,9 +564,8 @@ sub ParsePatronAttributes {
 
     my @codes = $cgi->multi_param('patron_attribute_code');
     my @values = $cgi->multi_param('patron_attribute_value');
-    my @passwords = $cgi->multi_param('patron_attribute_password');
 
-    my $ea = each_array( @codes, @values, @passwords );
+    my $ea = each_array( @codes, @values );
     my @attributes;
     my %dups = ();
 
@@ -549,7 +574,7 @@ sub ParsePatronAttributes {
         next if exists $dups{$code}->{$value};
         $dups{$code}->{$value} = 1;
 
-        push @attributes, { code => $code, value => $value, password => $password };
+        push @attributes, { code => $code, value => $value };
     }
 
     return \@attributes;

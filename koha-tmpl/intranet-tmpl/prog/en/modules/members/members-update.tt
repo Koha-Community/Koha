@@ -62,8 +62,15 @@
 [% CASE 'altcontactcountry'   %]<span>Alternate contact: Country</span>
 [% CASE 'altcontactphone'     %]<span>Alternate contact: Phone</span>
 [% CASE 'smsalertnumber'      %]<span>SMS alert number</span>
+[% CASE 'extended_attributes' %]<span>Additional attributes and identifiers</span>
 [% CASE %][% field %]
 [% END %]
+[% END %]
+
+[% BLOCK display_extended_attributes %]
+    [% FOREACH attr IN attributes %]
+        <span>[% attr.code %]: [% IF pending %][% attr.value %][% ELSE %][% attr.attribute %][% END %]</span><br/>
+    [% END %]
 [% END %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo; Update patron records</div>
@@ -111,6 +118,9 @@
                                                             [% ELSIF key == 'branchcode' %]
                                                                 <td>[% Branches.GetName( borrowers.$borrowernumber.$key )  %]</td>
                                                                 <td>[% Branches.GetName( pm.$key ) %]</td>
+                                                            [% ELSIF ( key == 'extended_attributes' ) %]
+                                                                <td>[% PROCESS display_extended_attributes attributes=borrowers.$borrowernumber.$key %]</td>
+                                                                <td>[% PROCESS display_extended_attributes attributes=pm.$key pending=1 %]</td>
                                                             [% ELSE %]
                                                                 <td>[% borrowers.$borrowernumber.$key %]</td>
                                                                 <td>[% pm.$key %]</td>
