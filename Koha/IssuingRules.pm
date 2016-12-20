@@ -44,10 +44,24 @@ sub get_effective_issuing_rule {
     my $itemtype     = $params->{itemtype};
     my $branchcode   = $params->{branchcode};
 
+    my $search_categorycode = $default;
+    my $search_itemtype     = $default;
+    my $search_branchcode   = $default;
+
+    if ($categorycode) {
+        $search_categorycode = { 'in' => [ $categorycode, $default ] };
+    }
+    if ($itemtype) {
+        $search_itemtype = { 'in' => [ $itemtype, $default ] };
+    }
+    if ($branchcode) {
+        $search_branchcode = { 'in' => [ $branchcode, $default ] };
+    }
+
     my $rule = $self->search({
-        categorycode => { 'in' => [ $categorycode, $default ] },
-        itemtype     => { 'in' => [ $itemtype,     $default ] },
-        branchcode   => { 'in' => [ $branchcode,   $default ] },
+        categorycode => $search_categorycode,
+        itemtype     => $search_itemtype,
+        branchcode   => $search_branchcode,
     }, {
         order_by => {
             -desc => ['branchcode', 'categorycode', 'itemtype']

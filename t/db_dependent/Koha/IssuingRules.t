@@ -33,7 +33,7 @@ $schema->storage->txn_begin;
 my $builder      = t::lib::TestBuilder->new;
 
 subtest 'get_effective_issuing_rule' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     my $patron       = $builder->build({ source => 'Borrower' });
     my $item     = $builder->build({ source => 'Item' });
@@ -41,6 +41,35 @@ subtest 'get_effective_issuing_rule' => sub {
     my $categorycode = $patron->{'categorycode'};
     my $itemtype     = $item->{'itype'};
     my $branchcode   = $item->{'homebranch'};
+
+    subtest 'Call with undefined values' => sub {
+        plan tests => 4;
+
+        my $rule;
+        Koha::IssuingRules->delete;
+        ok(!Koha::IssuingRules->search->count, 'There are no issuing rules.');
+        $rule = Koha::IssuingRules->get_effective_issuing_rule({
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+        });
+        is($rule, undef, 'When I attempt to get effective issuing rule by'
+           .' providing undefined values, then undef is returned.');
+        ok(Koha::IssuingRule->new({
+            branchcode => '*',
+            categorycode => '*',
+            itemtype => '*',
+        })->store, 'Given I added an issuing rule branchcode => *,'
+           .' categorycode => *, itemtype => *,');
+        $rule = Koha::IssuingRules->get_effective_issuing_rule({
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+        });
+        ok(_row_match($rule, '*', '*', '*'), 'When I attempt to get effective'
+           .' issuing rule by providing undefined values, then the above one is'
+           .' returned.');
+    };
 
     subtest 'Get effective issuing rule in correct order' => sub {
         plan tests => 18;
