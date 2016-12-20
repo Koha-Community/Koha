@@ -28,7 +28,7 @@ use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Holds;
-use Koha::OldIssues;
+use Koha::Old::Checkouts;
 use Koha::Patron::Categories;
 use Koha::Patron::HouseboundProfile;
 use Koha::Patron::HouseboundRole;
@@ -261,7 +261,7 @@ sub do_check_for_previous_checkout {
     return 1 if $issues->count; # 0 || N
 
     # Check old issues table
-    my $old_issues = Koha::OldIssues->search($criteria);
+    my $old_issues = Koha::Old::Checkouts->search($criteria);
     return $old_issues->count;  # 0 || N
 }
 

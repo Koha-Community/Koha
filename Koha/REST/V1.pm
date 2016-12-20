@@ -23,7 +23,7 @@ use C4::Context;
 use Koha::Account::Lines;
 use Koha::Checkouts;
 use Koha::Holds;
-use Koha::OldIssues;
+use Koha::Old::Checkouts;
 use Koha::Patrons;
 
 =head1 NAME
@@ -261,7 +261,7 @@ sub _object_ownership_by_borrowernumber {
 
 First, attempts to find a Koha::Checkout-object by C<$issue_id>. If we find one,
 compare its borrowernumber to currently logged in C<$user>. However, if an issue
-is not found, attempt to find a Koha::OldIssue-object instead and compare its
+is not found, attempt to find a Koha::Old::Checkout-object instead and compare its
 borrowernumber to currently logged in C<$user>.
 
 =cut
@@ -270,7 +270,7 @@ sub _object_ownership_by_checkout_id {
     my ($c, $user, $issue_id) = @_;
 
     my $issue = Koha::Checkouts->find($issue_id);
-    $issue = Koha::OldIssues->find($issue_id) unless $issue;
+    $issue = Koha::Old::Checkouts->find($issue_id) unless $issue;
     return $issue && $issue->borrowernumber
             && $user->borrowernumber == $issue->borrowernumber;
 }

@@ -1,4 +1,4 @@
-package Koha::OldIssue;
+package Koha::Old::Checkouts;
 
 # This file is part of Koha.
 #
@@ -18,11 +18,16 @@ package Koha::OldIssue;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Old::Checkout;
 
-use base qw(Koha::Object);
+use base qw(Koha::Objects);
 
 sub _type {
     return 'OldIssue';
+}
+
+sub object_class {
+    return 'Koha::Old::Checkout';
 }
 
 1;
