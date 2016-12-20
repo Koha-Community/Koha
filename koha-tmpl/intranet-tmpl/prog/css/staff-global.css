@@ -126,8 +126,10 @@ input[type="checkbox"], input[type="radio"] {
 }
 
 label, .label {
+    display: inline;
     font-weight: normal;
     font-size: inherit;
+    max-width: inherit;
     padding: 0;
     color: black;
     margin-bottom: 0;
@@ -1068,7 +1070,6 @@ div.first fieldset {
 }
 
 .dialog {
-	-moz-border-radius : 2px;
 	border-radius : 2px;
 	padding : .5em;
 	margin : 1em auto;
@@ -1307,9 +1308,7 @@ div#menu li a {
      background: -o-linear-gradient(left, #e8f0f6 0%,#e8f0f6 96%,#c1c1c1 100%); /* Opera11.10+ */
    background: -ms-linear-gradient(left, #e8f0f6 0%,#e8f0f6 96%,#c1c1c1 100%); /* IE10+ */
        background: linear-gradient(left, #e8f0f6 0%,#e8f0f6 96%,#c1c1c1 100%); /* W3C */
-	-moz-border-top-left-radius: 5px;
 	border-top-left-radius: 5px;
-	-moz-border-bottom-left-radius: 5px;
 	border-bottom-left-radius: 5px;
     border:1px solid #b9d8d9;
 	font-size: 111%;
@@ -1614,7 +1613,6 @@ input[type=submit], input[type=reset], input[type=button], input.submit, button,
 	border: 1px outset #999999;
 	border-top-color: #666;
 	border-left-color: #666;
-	-moz-border-radius : 2px;
 	padding: 0.25em;
 	background: #ffffff; /* Old browsers */
 	background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 35%, #e0e0e0 100%); /* FF3.6+ */
@@ -1748,13 +1746,12 @@ span.permissiondesc {
 #marcPreview th { background-color : #FFF; border: 0; white-space: nowrap; text-align:left; vertical-align: top; padding: 2px; }
 #marcPreview td { border: 0; padding : 2px; vertical-align: top; }
 #marcPreview tbody tr:nth-child(2n+1) td { background-color: #FFF; }
+#marcPreview .modal-dialog { width: 80%; }
 @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }
 
 #cartDetails {
 	background-color : #FFF;
 	border: 1px solid #739acf;
-	 -moz-box-shadow: 1px 1px 3px 0 #666;
-	 -webkit-box-shadow: 1px 1px 3px 0 #666;
 	 box-shadow: 1px 1px 3px 0 #666;
 	color : black;
 	display : none;
@@ -1815,7 +1812,6 @@ ul.budget_hierarchy li:first-child:after {
 	border : 1px solid #a4bedd;
 	background-color : #e4ecf5;
 	font-weight : bold;
-	-moz-border-radius: 4px;
 	border-radius: 4px;
 	padding : .1em .4em;
 	text-decoration : none;
@@ -1918,7 +1914,6 @@ fieldset.rows+h3 {clear:both;padding-top:.5em;}
 
 #clearscreen a {
     display:block;
-    -moz-border-radius: 0 0 0 5px;
     border-radius: 0 0 0 5px;
     padding : 0 .7em .2em .7em;
     background-color : #EEE;
@@ -1935,7 +1930,6 @@ fieldset.rows+h3 {clear:both;padding-top:.5em;}
 div.pager {
 	background-color : #E8E8E8;
 	border : 1px solid #BCBCBC;
-	-moz-border-radius : 5px;
     border-radius : 5px;
 	display : inline-block;
 	font-size : 85%;
@@ -2022,8 +2016,6 @@ div#acqui_order_supplierlist > div.supplier > div.baskets {
 .ui-autocomplete {
     position: absolute;
     cursor: default;
-    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,.3);
-    -moz-box-shadow: 2px 2px 2px rgba(0,0,0,.3);
     box-shadow: 2px 2px 2px rgba(0,0,0,.3);
 }
 .ui-autocomplete.ui-widget-content .ui-state-hover {
@@ -2306,6 +2298,7 @@ div.authorizedheading {
     margin: 0 1em 1em 0;
 }
 .pluginname {
+    cursor: move;
     margin: 0.3em;
     padding-bottom: 4px;
     padding-left: 0.2em;
@@ -2348,8 +2341,6 @@ div.authorizedheading {
     margin : 0 3px;
 }
 .ui-datepicker {
-    -moz-box-shadow: 1px 1px 3px 0 #666;
-    -webkit-box-shadow: 1px 1px 3px 0 #666;
     box-shadow: 1px 1px 3px 0 #666;
 }
 
@@ -2395,6 +2386,11 @@ button,
     font-family: arial,helvetica,clean,sans-serif;
 }
 
+.btn-xs, .btn-group-xs > .btn {
+    font-size: 10.5px;
+    padding: 3px 5px;
+}
+
 .btn.btn-link {
     border : 0;
 }
@@ -2412,11 +2408,30 @@ a.btn-link:hover {
     color : #538200;
 }
 
+.dropdown-menu {
+    font-size: 12px;
+}
+
 .dropdown-menu li {
     list-style: none outside none;
 }
+
 a.dropdown-toggle {
     white-space: nowrap;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #0081c2;
+    background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+    background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+    background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+    background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
 }
 
 a.disabled {
@@ -2540,6 +2555,7 @@ a.disabled {
     float : none;
     font-size: inherit;
     font-weight: normal;
+    line-height: 1.5;
     opacity: inherit;
     text-shadow: none;
 }
@@ -2555,12 +2571,27 @@ a.close:hover {
     color: #538200;
 }
 
+.radio label, .checkbox label {
+    margin-left: 20px;
+    padding-left: 0;
+}
+
+.radio input[type="radio"],
+.checkbox input[type="checkbox"] {
+    position: relative;
+    margin-left: 0;
+}
+
 /* Redefine a new style for Bootstrap's class "close" since we use that already */
 /* Use <a class="closebtn" href="#">&times;</a> */
 .alert .closebtn{position:relative;top:-2px;right:-21px;line-height:20px;}
-.modal-header .closebtn{margin-top:-2px;}
+.modal-header .closebtn{margin-top: 4px;}
 .closebtn{float: right;font-size: 21px;font-weight: bold;line-height: 1;color: #000;text-shadow: 0 1px 0 #fff;filter: alpha(opacity=20);opacity: .2;}.closebtn:hover,.closebtn:focus{color:#000;text-decoration:none;cursor:pointer;opacity:0.5;filter:alpha(opacity=50);}
 button.closebtn{padding:0;cursor:pointer;background:transparent;border:0;-webkit-appearance:none;}
+
+.modal-body {
+    overflow-y: auto;
+}
 
 .btn-group label,
 .btn-group select {
@@ -2569,6 +2600,28 @@ button.closebtn{padding:0;cursor:pointer;background:transparent;border:0;-webkit
 
 .tooltip-inner {
     white-space:pre-wrap;
+}
+
+pre {
+    display: block;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    line-height: inherit;
+    word-break: break-all;
+    word-wrap: break-word;
+    color: inherit;
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+}
+
+code {
+    background-color: transparent;
+    border-radius: 0;
+    font-size: inherit;
+    color: inherit;
+    padding: 0;
 }
 
 /* End Bootstrap overrides */
@@ -2606,7 +2659,7 @@ progress {
 }
 
 #selections { width : 100%; white-space : normal; }
-#selections span { margin:3px;padding:3px;background-color:#EBF3FF;-moz-border-radius:5px;border-radius:5px;white-space:nowrap;line-height:240%;font-size:75%; }
+#selections span { margin:3px;padding:3px;background-color:#EBF3FF;border-radius:5px;white-space:nowrap;line-height:240%;font-size:75%; }
 #selections span.selected { background-color : #CCE0FC; }
 #selections input { vertical-align:middle;margin:0 2px; }
 
@@ -2620,7 +2673,6 @@ progress {
 /* Class to be added to toolbar when it starts being fixed at the top of the screen*/
 
 .floating {
-    -webkit-box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, .5);
     box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, .5);
 }
 
