@@ -490,6 +490,7 @@ subtest 'checkouts + get_overdues' => sub {
     # Clean stuffs
     Koha::Checkouts->search( { borrowernumber => $patron->borrowernumber } )->delete;
     $patron->delete;
+    $module->unmock('userenv');
 };
 
 subtest 'get_age' => sub {
