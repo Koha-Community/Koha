@@ -40,8 +40,7 @@ an XML format such as OAI DC, RSS2, MARCXML, or MODS.
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Biblio;
-use XML::LibXML;
-use XML::LibXSLT;
+use Koha::XSLT_Handler;
 
 my $cgi = CGI->new();
 binmode(STDOUT, ":encoding(UTF-8)"); #output as utf8
@@ -138,18 +137,19 @@ if (not defined $format) {
                 exit 0;
             }
 
-            my $transformer = get_transformer($format, $format_to_stylesheet_map, $format_info);
-            unless (defined $transformer) {
+            my $xslt_file = get_xslt_file( $format, $format_to_stylesheet_map, $format_info );
+            unless( defined $xslt_file ) {
                 print $cgi->header( -status => '406 invalid format requested' );
                 exit 0;
             }
-            my $parser = XML::LibXML->new();
-            my $record_dom = $parser->parse_string( $marcxml );
-            $record_dom = $transformer->transform( $record_dom );
-            $content = $transformer->output_as_chars( $record_dom );
+            my $xslt_engine = Koha::XSLT_Handler->new;
+            $content = $xslt_engine->transform({
+                xml => $marcxml,
+                file => $xslt_file,
+            });
         };
         if ($@) {
-            print $cgi->header( -status => '500 internal error ' . $@->code() . ": " . $@->message() );
+            print $cgi->header( -status => '500 internal error ' . $@ );
             exit 0;
         }
 
@@ -193,7 +193,7 @@ sub emit_formats {
 }
 
 
-sub get_transformer {
+sub get_xslt_file {
     my ($format, $format_to_stylesheet_map, $format_info) = @_;
     $format = lc $format;
 
@@ -204,12 +204,7 @@ sub get_transformer {
                     "/prog/en/xslt/" .
                     $format_to_stylesheet_map->{$marcflavour}->{$format};
 
-    my $parser = XML::LibXML->new();
-    my $xslt = XML::LibXSLT->new();
-    my $style_doc = $parser->parse_file( $xslt_file );
-    my $stylesheet = $xslt->parse_stylesheet( $style_doc );
-
-    return $stylesheet;
+    return $xslt_file;
 }
 
 =head1 AUTHOR
