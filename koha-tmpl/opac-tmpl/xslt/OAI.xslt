@@ -18,6 +18,8 @@
 
     <xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" doctype-system="http://www.w3.org/TR/html4/strict.dtd" />
 
+    <xsl:variable name="oai_script_name">/cgi-bin/koha/oai.pl</xsl:variable>
+
     <xsl:template match="/">
         <html>
             <head>
@@ -44,7 +46,7 @@
                                         </xsl:if>
                                         <xsl:attribute name="href">
                                             <xsl:value-of
-                                                    select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=Identify')"></xsl:value-of>
+                                                    select="concat($oai_script_name,'?verb=Identify')"></xsl:value-of>
                                         </xsl:attribute>
                                         Identify
                                     </a>
@@ -56,7 +58,7 @@
                                         </xsl:if>
                                         <xsl:attribute name="href">
                                             <xsl:value-of
-                                                    select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=ListSets')"></xsl:value-of>
+                                                    select="concat($oai_script_name, '?verb=ListSets')"></xsl:value-of>
                                         </xsl:attribute>
                                         Sets
                                     </a>
@@ -68,7 +70,7 @@
                                         </xsl:if>
                                         <xsl:attribute name="href">
                                             <xsl:value-of
-                                                    select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=ListRecords&amp;metadataPrefix=oai_dc')"></xsl:value-of>
+                                                    select="concat($oai_script_name, '?verb=ListRecords&amp;metadataPrefix=oai_dc')"></xsl:value-of>
                                         </xsl:attribute>
                                         Records
                                     </a>
@@ -80,7 +82,7 @@
                                         </xsl:if>
                                         <xsl:attribute name="href">
                                             <xsl:value-of
-                                                    select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=ListIdentifiers&amp;metadataPrefix=oai_dc')"></xsl:value-of>
+                                                    select="concat($oai_script_name, '?verb=ListIdentifiers&amp;metadataPrefix=oai_dc')"></xsl:value-of>
                                         </xsl:attribute>
                                         Identifiers
                                     </a>
@@ -93,7 +95,7 @@
                                         </xsl:if>
                                         <xsl:attribute name="href">
                                             <xsl:value-of
-                                                    select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=ListMetadataFormats')"></xsl:value-of>
+                                                    select="concat($oai_script_name, '?verb=ListMetadataFormats')"></xsl:value-of>
                                         </xsl:attribute>
                                         Metadata Formats
                                     </a>
@@ -238,14 +240,14 @@
                         <a>
                             <xsl:attribute name="href">
                                 <xsl:value-of
-                                        select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=ListRecords&amp;metadataPrefix=oai_dc&amp;set=', oai:setSpec/text())" />
+                                        select="concat($oai_script_name, '?verb=ListRecords&amp;metadataPrefix=oai_dc&amp;set=', oai:setSpec/text())" />
                             </xsl:attribute>
                             Records
                         </a>
                         <a>
                             <xsl:attribute name="href">
                                 <xsl:value-of
-                                        select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=ListIdentifiers&amp;metadataPrefix=oai_dc&amp;set=', oai:setSpec/text())" />
+                                        select="concat($oai_script_name, '?verb=ListIdentifiers&amp;metadataPrefix=oai_dc&amp;set=', oai:setSpec/text())" />
                             </xsl:attribute>
                             Identifiers
                         </a>
@@ -303,7 +305,7 @@
                                         <a>
                                             <xsl:attribute name="href">
                                                 <xsl:value-of
-                                                        select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=ListRecords&amp;metadataPrefix=oai_dc&amp;set=', text())" />
+                                                        select="concat($oai_script_name, '?verb=ListRecords&amp;metadataPrefix=oai_dc&amp;set=', text())" />
                                             </xsl:attribute>
                                             <xsl:value-of select="text()" />
                                         </a>
@@ -367,7 +369,7 @@
                                         <a>
                                             <xsl:attribute name="href">
                                                 <xsl:value-of
-                                                        select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=ListRecords&amp;metadataPrefix=oai_dc&amp;set=', text())" />
+                                                        select="concat($oai_script_name, '?verb=ListRecords&amp;metadataPrefix=oai_dc&amp;set=', text())" />
                                             </xsl:attribute>
                                             <xsl:value-of select="text()" />
                                         </a>
@@ -415,7 +417,7 @@
                         <div class="col-lg-4">
                             <a class="btn btn-default pull-right">
                                 <xsl:attribute name="href">
-                                    <xsl:value-of select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=GetRecord&amp;metadataPrefix=oai_dc&amp;identifier=', oai:identifier/text())" />
+                                    <xsl:value-of select="concat($oai_script_name, '?verb=GetRecord&amp;metadataPrefix=oai_dc&amp;identifier=', oai:identifier/text())" />
                                 </xsl:attribute>
                                 View Details
                             </a>
@@ -444,7 +446,7 @@
                                         <a>
                                             <xsl:attribute name="href">
                                                 <xsl:value-of
-                                                        select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=ListRecords&amp;metadataPrefix=oai_dc&amp;set=', text())" />
+                                                        select="concat($oai_script_name, '?verb=ListRecords&amp;metadataPrefix=oai_dc&amp;set=', text())" />
                                             </xsl:attribute>
                                             <xsl:value-of select="text()" />
                                         </a>
@@ -481,7 +483,7 @@
                             <a class="btn btn-default pull-right">
                                 <xsl:attribute name="href">
                                     <xsl:value-of
-                                            select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=ListRecords&amp;metadataPrefix=', oai:metadataPrefix/text())" />
+                                            select="concat($oai_script_name, '?verb=ListRecords&amp;metadataPrefix=', oai:metadataPrefix/text())" />
                                 </xsl:attribute>
                                 List Records
                             </a>
@@ -505,7 +507,7 @@
             <div class="text-center">
                 <a class="btn btn-primary">
                 <xsl:attribute name="href">
-                    <xsl:value-of select="concat(/oai:OAI-PMH/oai:request/text(), '?verb=',/oai:OAI-PMH/oai:request/@verb,'&amp;resumptionToken=', text())"></xsl:value-of>
+                    <xsl:value-of select="concat($oai_script_name, '?verb=',/oai:OAI-PMH/oai:request/@verb,'&amp;resumptionToken=', text())"></xsl:value-of>
                 </xsl:attribute>
                     Show More
                 </a>
