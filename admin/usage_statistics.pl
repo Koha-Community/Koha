@@ -1,0 +1,58 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use CGI qw ( -utf8 );
+use C4::Auth;
+use C4::Output;
+use Koha::DateUtils qw( dt_from_string output_pref );
+
+my $query = new CGI;
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "admin/usage_statistics.tt",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { parameters => '*' },
+        debug           => 1,
+    }
+);
+
+my $op = $query->param('op') || q||;
+
+if ( $op eq 'update' ) {
+    my $UsageStats = $query->param('UsageStats');
+    my $UsageStatsCountry = $query->param('UsageStatsCountry');
+    my $UsageStatsLibraryName = $query->param('UsageStatsLibraryName');
+    my $UsageStatsLibraryType = $query->param('UsageStatsLibraryType');
+    my $UsageStatsLibraryUrl = $query->param('UsageStatsLibraryUrl');
+    C4::Context->set_preference('UsageStats', $UsageStats);
+    C4::Context->set_preference('UsageStatsCountry', $UsageStatsCountry);
+    C4::Context->set_preference('UsageStatsLibraryName', $UsageStatsLibraryName);
+    C4::Context->set_preference('UsageStatsLibraryType', $UsageStatsLibraryType);
+    C4::Context->set_preference('UsageStatsLibraryUrl', $UsageStatsLibraryUrl);
+
+}
+
+if ( C4::Context->preference('UsageStatsLastUpdateTime') ) {
+    my $dt = DateTime->from_epoch( epoch => C4::Context->preference('UsageStatsLastUpdateTime'));
+    $template->param(UsageStatsLastUpdateTime => output_pref($dt) );
+}
+
+output_html_with_http_headers $query, $cookie, $template->output;
