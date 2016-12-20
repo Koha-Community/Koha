@@ -69,20 +69,20 @@ else {
         if ($change) {
             $schema->resultset('EdifactEan')->find($id)->update(
                 {
-                    branchcode        => $input->param('branchcode'),
-                    description       => $input->param('description'),
-                    ean               => $input->param('ean'),
-                    id_code_qualifier => $input->param('id_code_qualifier'),
+                    branchcode        => scalar $input->param('branchcode'),
+                    description       => scalar $input->param('description'),
+                    ean               => scalar $input->param('ean'),
+                    id_code_qualifier => scalar $input->param('id_code_qualifier'),
                 }
             );
         }
         else {
             my $new_ean = $schema->resultset('EdifactEan')->new(
                 {
-                    branchcode        => $input->param('branchcode'),
-                    description       => $input->param('description'),
-                    ean               => $input->param('ean'),
-                    id_code_qualifier => $input->param('id_code_qualifier'),
+                    branchcode        => scalar $input->param('branchcode'),
+                    description       => scalar $input->param('description'),
+                    ean               => scalar $input->param('ean'),
+                    id_code_qualifier => scalar $input->param('id_code_qualifier'),
                 }
             );
             $new_ean->insert();
