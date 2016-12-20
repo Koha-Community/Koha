@@ -1049,7 +1049,7 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
     set_userenv($holdingbranch);
 
     my $issue = AddIssue( $patron_1, $item->{barcode} );
-    is( ref($issue), 'Koha::Schema::Result::Issue' );    # FIXME Should be Koha::Issue
+    is( ref($issue), 'Koha::Schema::Result::Issue' );    # FIXME Should be Koha::Checkout
 
     my ( $error, $question, $alerts );
 
@@ -1138,7 +1138,7 @@ subtest 'AddIssue & AllowReturnToBranch' => sub {
 
     set_userenv($holdingbranch);
 
-    my $ref_issue = 'Koha::Schema::Result::Issue'; # FIXME Should be Koha::Issue
+    my $ref_issue = 'Koha::Schema::Result::Issue'; # FIXME Should be Koha::Checkout
     my $issue = AddIssue( $patron_1, $item->{barcode} );
 
     my ( $error, $question, $alerts );

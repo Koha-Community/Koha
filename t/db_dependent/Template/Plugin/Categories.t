@@ -21,7 +21,7 @@ use Test::More tests => 4;
 use t::lib::TestBuilder;
 
 use Koha::Patron::Categories;
-use Koha::Issues;
+use Koha::Checkouts;
 use Koha::Patrons;
 use Koha::Database;
 use Koha::Template::Plugin::Categories;
@@ -30,7 +30,7 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 # Delete all categories
-Koha::Issues->search->delete;
+Koha::Checkouts->search->delete;
 Koha::Patrons->search->delete;
 Koha::Patron::Categories->search->delete;
 

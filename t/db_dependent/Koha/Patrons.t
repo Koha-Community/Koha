@@ -146,11 +146,11 @@ subtest 'has_overdues' => sub {
     is( $retrieved_patron->has_overdues, 0, );
 
     my $tomorrow = DateTime->today( time_zone => C4::Context->tz() )->add( days => 1 );
-    my $issue = Koha::Issue->new({ borrowernumber => $new_patron_1->id, itemnumber => $item_1->{itemnumber}, date_due => $tomorrow, branchcode => $library->{branchcode} })->store();
+    my $issue = Koha::Checkout->new({ borrowernumber => $new_patron_1->id, itemnumber => $item_1->{itemnumber}, date_due => $tomorrow, branchcode => $library->{branchcode} })->store();
     is( $retrieved_patron->has_overdues, 0, );
     $issue->delete();
     my $yesterday = DateTime->today(time_zone => C4::Context->tz())->add( days => -1 );
-    $issue = Koha::Issue->new({ borrowernumber => $new_patron_1->id, itemnumber => $item_1->{itemnumber}, date_due => $yesterday, branchcode => $library->{branchcode} })->store();
+    $issue = Koha::Checkout->new({ borrowernumber => $new_patron_1->id, itemnumber => $item_1->{itemnumber}, date_due => $yesterday, branchcode => $library->{branchcode} })->store();
     $retrieved_patron = Koha::Patrons->find( $new_patron_1->borrowernumber );
     is( $retrieved_patron->has_overdues, 1, );
     $issue->delete();
@@ -468,12 +468,12 @@ subtest 'get_overdues' => sub {
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     my $overdues = $patron->get_overdues;
     is( $overdues->count, 2, 'Patron should have 2 overdues');
-    is( ref($overdues), 'Koha::Issues', 'Koha::Patron->get_overdues should return Koha::Issues' );
+    is( ref($overdues), 'Koha::Checkouts', 'Koha::Patron->get_overdues should return Koha::Checkouts' );
     is( $overdues->next->itemnumber, $item_1->{itemnumber}, 'The issue should be returned in the same order as they have been done, first is correct' );
     is( $overdues->next->itemnumber, $item_2->{itemnumber}, 'The issue should be returned in the same order as they have been done, second is correct' );
 
     # Clean stuffs
-    Koha::Issues->search( { borrowernumber => $patron->borrowernumber } )->delete;
+    Koha::Checkouts->search( { borrowernumber => $patron->borrowernumber } )->delete;
     $patron->delete;
 };
 

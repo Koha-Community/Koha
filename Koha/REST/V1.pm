@@ -21,7 +21,7 @@ use Mojo::Base 'Mojolicious';
 use C4::Auth qw( check_cookie_auth get_session haspermission );
 use C4::Context;
 use Koha::Account::Lines;
-use Koha::Issues;
+use Koha::Checkouts;
 use Koha::Holds;
 use Koha::OldIssues;
 use Koha::Patrons;
@@ -259,7 +259,7 @@ sub _object_ownership_by_borrowernumber {
 
 =head3 _object_ownership_by_checkout_id
 
-First, attempts to find a Koha::Issue-object by C<$issue_id>. If we find one,
+First, attempts to find a Koha::Checkout-object by C<$issue_id>. If we find one,
 compare its borrowernumber to currently logged in C<$user>. However, if an issue
 is not found, attempt to find a Koha::OldIssue-object instead and compare its
 borrowernumber to currently logged in C<$user>.
@@ -269,7 +269,7 @@ borrowernumber to currently logged in C<$user>.
 sub _object_ownership_by_checkout_id {
     my ($c, $user, $issue_id) = @_;
 
-    my $issue = Koha::Issues->find($issue_id);
+    my $issue = Koha::Checkouts->find($issue_id);
     $issue = Koha::OldIssues->find($issue_id) unless $issue;
     return $issue && $issue->borrowernumber
             && $user->borrowernumber == $issue->borrowernumber;

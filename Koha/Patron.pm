@@ -24,10 +24,10 @@ use Carp;
 
 use C4::Context;
 use C4::Log;
+use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Holds;
-use Koha::Issues;
 use Koha::OldIssues;
 use Koha::Patron::Categories;
 use Koha::Patron::HouseboundProfile;
@@ -257,7 +257,7 @@ sub do_check_for_previous_checkout {
     };
 
     # Check current issues table
-    my $issues = Koha::Issues->search($criteria);
+    my $issues = Koha::Checkouts->search($criteria);
     return 1 if $issues->count; # 0 || N
 
     # Check old issues table
@@ -512,7 +512,7 @@ Return the overdued items
 sub get_overdues {
     my ($self) = @_;
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $issues = Koha::Issues->search(
+    my $issues = Koha::Checkouts->search(
         {
             'me.borrowernumber' => $self->borrowernumber,
             'me.date_due' => { '<' => $dtf->format_datetime(dt_from_string) },
