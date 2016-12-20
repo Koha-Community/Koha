@@ -47,7 +47,8 @@ subtest 'get_effective_issuing_rule' => sub {
 
         my $rule;
         Koha::IssuingRules->delete;
-        ok(!Koha::IssuingRules->search->count, 'There are no issuing rules.');
+
+        is(Koha::IssuingRules->search->count, 0, 'There are no issuing rules.');
         $rule = Koha::IssuingRules->get_effective_issuing_rule({
             branchcode   => undef,
             categorycode => undef,
@@ -76,7 +77,7 @@ subtest 'get_effective_issuing_rule' => sub {
 
         my $rule;
         Koha::IssuingRules->delete;
-        ok(!Koha::IssuingRules->search->count, 'There are no issuing rules.');
+        is(Koha::IssuingRules->search->count, 0, 'There are no issuing rules.');
         $rule = Koha::IssuingRules->get_effective_issuing_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
