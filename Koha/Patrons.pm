@@ -199,7 +199,7 @@ sub search_patrons_to_anonymise {
       : undef;
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $rs = $class->search(
+    my $rs = $class->_resultset->search(
         {   returndate                  => { '<'   =>  $dtf->format_datetime($older_than_date), },
             'old_issues.borrowernumber' => { 'not' => undef },
             privacy                     => { '<>'  => 0 },                  # Keep forever
