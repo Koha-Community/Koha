@@ -43,6 +43,7 @@ use Koha::Account;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Calendar;
+use Koha::Checkouts;
 use Koha::IssuingRules;
 use Koha::Items;
 use Koha::Patrons;
@@ -1066,7 +1067,7 @@ sub CanBookBeIssued {
         require C4::Serials;
         my $is_a_subscription = C4::Serials::CountSubscriptionFromBiblionumber($biblionumber);
         unless ($is_a_subscription) {
-            my $issues = Koha::Issues->search(
+            my $checkouts = Koha::Checkouts->search(
                 {
                     borrowernumber => $borrower->{borrowernumber},
                     biblionumber   => $biblionumber,
@@ -1077,7 +1078,7 @@ sub CanBookBeIssued {
             );
             # if we get here, we don't already have a loan on this item,
             # so if there are any loans on this bib, ask for confirmation
-            if ( $issues->count ) {
+            if ( $checkouts->count ) {
                 $needsconfirmation{BIBLIO_ALREADY_ISSUED} = 1;
             }
         }
