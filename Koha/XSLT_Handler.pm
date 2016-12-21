@@ -130,10 +130,10 @@ __PACKAGE__->mk_accessors(qw( do_not_return_source print_warns ));
 
 =head2 transform
 
-    my $output= $xslt_engine->transform( $xml, $xsltfilename );
+    my $output= $xslt_engine->transform( $xml, $xsltfilename, [$format] );
     #Alternatively:
-    #$output = $xslt_engine->transform({ xml => $xml, file => $file, [parameters => $parameters] });
-    #$output = $xslt_engine->transform({ xml => $xml, code => $code, [parameters => $parameters] });
+    #$output = $xslt_engine->transform({ xml => $xml, file => $file, [parameters => $parameters], [format => ['chars'|'bytes'|'xmldoc']] });
+    #$output = $xslt_engine->transform({ xml => $xml, code => $code, [parameters => $parameters], [format => ['chars'|'bytes'|'xmldoc']] });
     if( $xslt_engine->err ) {
         #decide what to do on failure..
     }
@@ -143,7 +143,8 @@ __PACKAGE__->mk_accessors(qw( do_not_return_source print_warns ));
     Instead of a filename, you may also pass a URL.
     You may also pass the contents of a xsl file as a string like $code above.
     If you do not pass a filename, the last file used is assumed.
-    Returns the transformed string.
+    Normally returns the transformed string; if you pass format => 'xmldoc' in
+    the hash format, it returns a xml document object.
     Check the error number in err to know if something went wrong.
     In that case do_not_return_source did determine the return value.
 
@@ -153,17 +154,19 @@ sub transform {
     my $self = shift;
 
     #check parameters
-    #  old style: $xml, $filename
+    #  old style: $xml, $filename, $format
     #  new style: $hashref
-    my ( $xml, $filename, $xsltcode );
+    my ( $xml, $filename, $xsltcode, $format );
     my $parameters = {};
     if( ref $_[0] eq 'HASH' ) {
         $xml = $_[0]->{xml};
         $xsltcode = $_[0]->{code};
         $filename = $_[0]->{file} if !$xsltcode; #xsltcode gets priority
         $parameters = $_[0]->{parameters} if ref $_[0]->{parameters} eq 'HASH';
+        $format = $_[0]->{format} || 'chars';
     } else {
-        ( $xml, $filename ) = @_;
+        ( $xml, $filename, $format ) = @_;
+        $format ||= 'chars';
     }
 
     #Initialized yet?
@@ -193,7 +196,7 @@ sub transform {
         $self->_set_error( 5, $@ );
         return $retval;
     }
-    my $str = eval {
+    my $result = eval {
         #$parameters is an optional hashref that contains
         #key-value pairs to be sent to the XSLT.
         #Numbers may be bare but strings must be double quoted
@@ -202,15 +205,19 @@ sub transform {
 
         #NOTE: Parameters are not cached. They are provided for
         #each different transform.
-        my $result = $stsh->transform($source, %$parameters);
-        $stsh->output_as_chars($result);
+        my $transformed = $stsh->transform($source, %$parameters);
+        $format eq 'bytes'
+            ? $stsh->output_as_bytes( $transformed )
+            : $format eq 'xmldoc'
+            ? $transformed
+            : $stsh->output_as_chars( $transformed ); # default: chars
     };
     if ($@) {
         $self->_set_error( 6, $@ );
         return $retval;
     }
     $self->{last_xsltfile} = $key;
-    return $str;
+    return $result;
 }
 
 =head2 refresh

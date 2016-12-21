@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use FindBin;
 use File::Slurp;
-use Test::More tests => 40;
+use Test::More tests => 41;
 use Test::Warn;
 
 use Koha::XSLT_Handler;
@@ -134,6 +134,11 @@ is( $output, $output2, 'Try hash parameter code');
 #Check rerun on last code
 $output2 = $engine->transform( $xml_2 );
 is( $output, $output2, 'Rerun on previous passed code');
+#Check format xmldoc
+is( ref $engine->transform({
+    file => $xsltfile_1, xml => $xml_2, format => 'xmldoc',
+}), 'XML::LibXML::Document',
+'Format parameter returns a xml document object' );
 
 #The second test xsl contains bad code
 my $xsltfile_2 = 'test02.xsl';
