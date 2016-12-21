@@ -21,6 +21,7 @@ package Koha::OAI::Server::Record;
 use Modern::Perl;
 use HTTP::OAI;
 use HTTP::OAI::Metadata::OAI_DC;
+use XML::LibXML;
 
 use base ("HTTP::OAI::Record");
 
@@ -40,14 +41,21 @@ sub new {
         $self->header->setSpec($setSpec);
     }
 
-    my $parser = XML::LibXML->new();
-    my $record_dom = $parser->parse_string( $marcxml );
-    my $format =  $args{metadataPrefix};
-    if ( $format ne 'marc21' && $format ne 'marcxml' ) {
-        my %args = (
+    my $format = $args{metadataPrefix};
+    my $record_dom;
+    if ( $format ne 'marcxml' ) {
+        my $args = {
             OPACBaseURL => "'" . C4::Context->preference('OPACBaseURL') . "'"
-        );
-        $record_dom = $repository->stylesheet($format)->transform($record_dom, %args);
+        };
+        # call Koha::XSLT_Handler now
+        $record_dom = $repository->{xslt_engine}->transform({
+            xml        => $marcxml,
+            file       => $repository->stylesheet($format),
+            parameters => $args,
+            format     => 'xmldoc',
+        });
+    } else {
+        $record_dom = XML::LibXML->new->parse_string( $marcxml );
     }
     $self->metadata( HTTP::OAI::Metadata->new( dom => $record_dom ) );
 

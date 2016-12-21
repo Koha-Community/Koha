@@ -32,13 +32,11 @@ use Koha::OAI::Server::GetRecord;
 use Koha::OAI::Server::ListRecords;
 use Koha::OAI::Server::ListIdentifiers;
 use XML::SAX::Writer;
-use XML::LibXML;
-use XML::LibXSLT;
 use YAML::Syck qw( LoadFile );
 use CGI qw/:standard -oldstyle_urls/;
 use C4::Context;
 use C4::Biblio;
-
+use Koha::XSLT_Handler;
 
 =head1 NAME
 
@@ -106,7 +104,7 @@ sub new {
     $self->{ koha_identifier      } = C4::Context->preference("OAI-PMH:archiveID");
     $self->{ koha_max_count       } = C4::Context->preference("OAI-PMH:MaxCount");
     $self->{ koha_metadata_format } = ['oai_dc', 'marc21', 'marcxml'];
-    $self->{ koha_stylesheet      } = { }; # Build when needed
+    $self->{ xslt_engine          } = Koha::XSLT_Handler->new;
 
     # Load configuration file if defined in OAI-PMH:ConfFile syspref
     if ( my $file = C4::Context->preference("OAI-PMH:ConfFile") ) {
@@ -170,24 +168,14 @@ sub get_biblio_marcxml {
 
 sub stylesheet {
     my ( $self, $format ) = @_;
-
-    my $stylesheet = $self->{ koha_stylesheet }->{ $format };
-    unless ( $stylesheet ) {
-        my $xsl_file = $self->{ conf }
-                       ? $self->{ conf }->{ format }->{ $format }->{ xsl_file }
-                       : ( C4::Context->config('intrahtdocs') .
-                         '/prog/en/xslt/' .
-                         C4::Context->preference('marcflavour') .
-                         'slim2OAIDC.xsl' );
-        $xsl_file || die( "No stylesheet found for $format" );
-        my $parser = XML::LibXML->new();
-        my $xslt = XML::LibXSLT->new();
-        my $style_doc = $parser->parse_file( $xsl_file );
-        $stylesheet = $xslt->parse_stylesheet( $style_doc );
-        $self->{ koha_stylesheet }->{ $format } = $stylesheet;
-    }
-
-    return $stylesheet;
+    my $xsl_file = $self->{ conf }
+        ? $self->{ conf }->{ format }->{ $format }->{ xsl_file }
+        : ( C4::Context->config('intrahtdocs') .
+            '/prog/en/xslt/' .
+            C4::Context->preference('marcflavour') .
+            'slim2OAIDC.xsl'
+    );
+    return $xsl_file;
 }
 
 
