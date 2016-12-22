@@ -1,0 +1,403 @@
+<h1 id="releasenotesforkoha16.11.01">RELEASE NOTES FOR KOHA 16.11.01</h1>
+
+<p>22 Dec 2016</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="http://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 16.11.01 can be downloaded from:</p>
+
+<ul>
+<li><a href="http://download.koha-community.org/koha-16.11.01.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 16.11.01 is a bugfix/maintenance release.</p>
+
+<p>It includes 34 bugfixes.</p>
+
+<h2 id="criticalbugsfixed">Critical bugs fixed</h2>
+
+<h3 id="acquisitions">Acquisitions</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14541">[14541]</a> Tax rate should not be forced to an arbitrary precision</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17668">[17668]</a> typo in parcel.pl listinct vs listincgst</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17692">[17692]</a> Can't add library EAN under Plack</li>
+</ul>
+
+<h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17676">[17676]</a> Default COLLATE for marc_subfield_structure is not set</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17720">[17720]</a> CSRF token is not generated correctly</li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16376">[16376]</a> Koha::Calendar->is_holiday date truncation creates fatal errors for TZ America/Santiago</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17709">[17709]</a> Article request broken</li>
+</ul>
+
+<h3 id="i18nl10n">I18N/L10N</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16914">[16914]</a> Export csv in item search, exports all items in one line</li>
+</ul>
+
+<h3 id="installationandupgradecommand-lineinstaller">Installation and upgrade (command-line installer)</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17292">[17292]</a> Use of DBIx in updatedatabase.pl broke upgrade (from bug 12375)</li>
+</ul>
+
+<h3 id="patrons">Patrons</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17344">[17344]</a> Can't set guarantor in quick add brief form</li>
+</ul>
+
+<h3 id="searching">Searching</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15822">[15822]</a> STAFF Advanced search error date utils</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16951">[16951]</a> Item search sorting not working properly for most columns</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17743">[17743]</a> Item search: indexes build on MARC do not work in item's search</li>
+</ul>
+
+<h3 id="webservices">Web services</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17744">[17744]</a> OAI: oai_dc has no element named dcCollection</li>
+</ul>
+
+<h2 id="otherbugsfixed">Other bugs fixed</h2>
+
+<h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17666">[17666]</a> .perl atomic update does not work under kohadevbox</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17681">[17681]</a> Existing typos might thow some fees when recieved</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17713">[17713]</a> Members.t is failing randomly</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17733">[17733]</a> Members.t is still failing randomly</li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17395">[17395]</a> exporting checkouts in CSV generates a file with wrong extension</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17761">[17761]</a> Renewing or returning item via the checkouts table causes lost and damaged statuses to disappear</li>
+</ul>
+
+<h3 id="holdrequests">Hold requests</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17749">[17749]</a> Missing l in '.pl' in link on waitingreserves.tt</li>
+</ul>
+
+<h3 id="installationandupgradeweb-basedinstaller">Installation and upgrade (web-based installer)</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17577">[17577]</a> Improve sample notices for article requests</li>
+</ul>
+
+<h3 id="marcbibliographicdatasupport">MARC Bibliographic data support</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17547">[17547]</a> (MARC21) Chronological term link subfield 648$9 not indexed</li>
+</ul>
+
+<h3 id="notices">Notices</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11274">[11274]</a> Sent Notices Tab Not Working Correctly</li>
+</ul>
+
+<h3 id="opac">OPAC</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17652">[17652]</a> opac-account.pl does not include login branchcode</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17696">[17696]</a> Two missing periods in opac-suggestions.tt</li>
+</ul>
+
+<h3 id="searching">Searching</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14699">[14699]</a> Intranet search history issues due to DataTables pagination</li>
+</ul>
+
+<h3 id="selfcheckout">Self checkout</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16873">[16873]</a> Renewal error message not specific enough on self check.</li>
+</ul>
+
+<h3 id="staffclient">Staff Client</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17670">[17670]</a> Grammar mistakes - 'effect' vs. 'affect'</li>
+</ul>
+
+<h3 id="testsuite">Test Suite</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17714">[17714]</a> Remove itemtype-related t/db_dependent/Members/* warnings</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17715">[17715]</a> Remove itemtype-related t/db_dependent/Holds/RevertWaitingStatus.t warnings</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17716">[17716]</a> Remove itemtype-related t/db_dependent/CourseReserves.t warnings</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17722">[17722]</a> t/db_dependent/PatronLists.t doesn't run inside a transaction</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17759">[17759]</a> Fixing theoretical problems with guarantorid in Members.t</li>
+</ul>
+
+<h2 id="systemrequirements">System requirements</h2>
+
+<p>Important notes:</p>
+
+<ul>
+<li>Perl 5.10 is required</li>
+<li>Zebra is required</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in DocBook. The home page for Koha 
+documentation is </p>
+
+<ul>
+<li><a href="http://koha-community.org/documentation/">Koha Documentation</a></li>
+</ul>
+
+<p>As of the date of these release notes, only the English version of the
+Koha manual is available:</p>
+
+<ul>
+<li><a href="http://manual.koha-community.org//en/">Koha Manual</a></li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<ul>
+<li>English (USA)</li>
+<li>Arabic (100%)</li>
+<li>Armenian (92%)</li>
+<li>Chinese (China) (86%)</li>
+<li>Chinese (Taiwan) (100%)</li>
+<li>Czech (96%)</li>
+<li>Danish (71%)</li>
+<li>English (New Zealand) (94%)</li>
+<li>Finnish (99%)</li>
+<li>French (99%)</li>
+<li>French (Canada) (92%)</li>
+<li>German (100%)</li>
+<li>German (Switzerland) (100%)</li>
+<li>Greek (78%)</li>
+<li>Hindi (99%)</li>
+<li>Italian (100%)</li>
+<li>Korean (52%)</li>
+<li>Kurdish (51%)</li>
+<li>Norwegian Bokmål (57%)</li>
+<li>Occitan (79%)</li>
+<li>Persian (59%)</li>
+<li>Polish (100%)</li>
+<li>Portuguese (99%)</li>
+<li>Portuguese (Brazil) (87%)</li>
+<li>Slovak (93%)</li>
+<li>Spanish (100%)</li>
+<li>Swedish (99%)</li>
+<li>Turkish (100%)</li>
+<li>Vietnamese (73%)</li>
+</ul>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>for information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="http://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 16.11.01 is</p>
+
+<ul>
+<li>Release Managers:
+<ul>
+<li><a href="mailto:brendan@bywatersolutions.com">Brendan Gallagher</a></li>
+<li><a href="mailto:kyle@bywatersolutions.com">Kyle Hall</a></li>
+</ul></li>
+<li>QA Manager: <a href="mailto:Katrin.Fischer@bsz-bw.de">Katrin Fischer</a></li>
+<li>QA Team:
+<ul>
+<li><a href="mailto:kyle@bywatersolutions.com">Kyle Hall</a></li>
+<li><a href="mailto:jonathan.druart@biblibre.com">Jonathan Druart</a></li>
+<li><a href="mailto:tomascohen@gmail.com">Tomás Cohen Arazi</a></li>
+<li><a href="mailto:m.de.rooy@rijksmuseum.nl">Marcel de Rooy</a></li>
+<li><a href="mailto:nick@bywatersolutions.com">Nick Clemens</a></li>
+<li><a href="mailto:jweaver@bywatersolutions.com">Jesse Weaver</a></li>
+</ul></li>
+<li>Bug Wranglers:
+<ul>
+<li><a href="mailto:amitddng135@gmail.com">Amit Gupta</a></li>
+<li><a href="mailto:magnus@enger.priv.no">Magnus Enger</a></li>
+<li><a href="mailto:mirko@abunchofthings.net">Mirko Tietgen</a></li>
+<li><a href="mailto:indradg@l2c2.co.in">Indranil Das Gupta</a></li>
+<li><a href="mailto:z.tajoli@cineca.it">Zeno Tajoli</a></li>
+<li><a href="mailto:veron@veron.ch">Marc Véron</a></li>
+</ul></li>
+<li>Packaging Manager: <a href="mailto:mirko@abunchofthings.net">Mirko Tietgen</a></li>
+<li>Documentation Manager: <a href="mailto:nengard@gmail.com">Nicole C. Engard</a></li>
+<li>Translation Manager: <a href="mailto:bgkriegel@gmail.com">Bernardo Gonzalez Kriegel</a></li>
+<li>Wiki curators: 
+<ul>
+<li><a href="mailto:abesottedphoenix@yahoo.com">Brooke Johnson</a></li>
+<li><a href="mailto:kohadevel@agogme.com">Thomas Dukleth</a></li>
+</ul></li>
+<li>Release Maintainers:
+<ul>
+<li>16.11 -- <a href="mailto:katrin.fischer.83@web.de">Katrin Fischer</a></li>
+<li>16.05 -- <a href="mailto:mtj@kohaaloha.com">Mason James</a></li>
+<li>3.22 -- <a href="mailto:julian.maurice@biblibre.com">Julian Maurice</a></li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following libraries who are known to have sponsored
+new features in Koha 16.11.01:</p>
+
+<ul>
+<li>Catalyst IT</li>
+<li>Universidad Nacional de Cordoba</li>
+</ul>
+
+<p>We thank the following individuals who contributed patches to Koha 16.11.01.</p>
+
+<ul>
+<li>phette23 (1)</li>
+<li>Aleisha Amohia (1)</li>
+<li>Nick Clemens (4)</li>
+<li>Tomás Cohen Arazi (9)</li>
+<li>David Cook (1)</li>
+<li>Frédéric Demians (1)</li>
+<li>Marcel de Rooy (3)</li>
+<li>Jonathan Druart (13)</li>
+<li>Katrin Fischer (2)</li>
+<li>Bernardo González Kriegel (1)</li>
+<li>Chris Kirby (1)</li>
+<li>Owen Leonard (1)</li>
+<li>Julian Maurice (4)</li>
+<li>Kyle M Hall (3)</li>
+<li>Fridolin Somers (1)</li>
+</ul>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 16.11.01</p>
+
+<ul>
+<li>ACPL (1)</li>
+<li>BibLibre (5)</li>
+<li>BSZ BW (2)</li>
+<li>bugs.koha-community.org (13)</li>
+<li>ByWater-Solutions (6)</li>
+<li>ilsleypubliclibrary.org (1)</li>
+<li>kylehall.info (1)</li>
+<li>Prosentient Systems (1)</li>
+<li>Rijksmuseum (3)</li>
+<li>Tamil (1)</li>
+<li>Theke Solutions (9)</li>
+<li>unidentified (2)</li>
+<li>Universidad Nacional de Córdoba (1)</li>
+</ul>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha.</p>
+
+<ul>
+<li>Alex Buckley (4)</li>
+<li>Benjamin Rokseth (1)</li>
+<li>Chris Cormack (1)</li>
+<li>Dani Elder (1)</li>
+<li>Edie Discher (1)</li>
+<li>Frédéric Demians (1)</li>
+<li>Hugo Agud (1)</li>
+<li>Jonathan Druart (23)</li>
+<li>Josef Moravec (9)</li>
+<li>Katrin Fischer (50)</li>
+<li>Marc Véron (2)</li>
+<li>Mark Tompsett (5)</li>
+<li>Mirko Tietgen (1)</li>
+<li>Nick Clemens (9)</li>
+<li>Owen Leonard (4)</li>
+<li>Katrin Fischer  (1)</li>
+<li>Tomas Cohen Arazi (6)</li>
+<li>Brendan A Gallagher (2)</li>
+<li>Kyle M Hall (43)</li>
+<li>Marcel de Rooy (8)</li>
+</ul>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of:</p>
+
+<ul>
+<li><a href="git://git.koha-community.org/koha.git">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is 16.11.x.</p>
+
+<p>The last Koha release was 16.11, which was released on November 22, 2016.   </p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="http://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 22 Dec 2016 21:58:10.</p>
