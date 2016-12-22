@@ -2953,15 +2953,19 @@ sub AddRenewal {
     }
 
     # Log the renewal
-    UpdateStats({branch => $branch,
-                type => 'renew',
-                amount => $charge,
-                itemnumber => $itemnumber,
-                itemtype => $item->{itype},
-                borrowernumber => $borrowernumber,
-                ccode => $item->{'ccode'}}
-                );
-	return $datedue;
+    UpdateStats(
+        {
+            branch => C4::Context->userenv ? C4::Context->userenv->{branch} : $branch,
+            type           => 'renew',
+            amount         => $charge,
+            itemnumber     => $itemnumber,
+            itemtype       => $item->{itype},
+            borrowernumber => $borrowernumber,
+            ccode          => $item->{'ccode'}
+        }
+    );
+
+    return $datedue;
 }
 
 sub GetRenewCount {
