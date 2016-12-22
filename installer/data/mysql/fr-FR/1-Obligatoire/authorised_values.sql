@@ -45,7 +45,6 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 -- Country codes
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'AN', 'Antilles Néerlandaises');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'CR', 'Costa Rica');
-INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'ER', 'Allemagne');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'FR', 'France');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'DE', 'Allemagne');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'CN', 'Chine');
