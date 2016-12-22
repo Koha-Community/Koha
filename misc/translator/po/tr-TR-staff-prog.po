@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2016-11-20 20:13-0300\n"
-"PO-Revision-Date: 2016-11-18 07:27+0000\n"
+"POT-Creation-Date: 2016-12-15 13:15-0300\n"
+"PO-Revision-Date: 2016-12-19 10:19+0000\n"
 "Last-Translator: Onur <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1479454060.000000\n"
+"X-POOTLE-MTIME: 1482142790.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -1012,6 +1012,11 @@ msgid ""
 "number &lt; %sPatron sort1 = %sPatron sort2 = %sHome library = %sHolding "
 "library = %sPatron library = %sIssuing library = %s%s = %s %s "
 msgstr ""
+"%s %s %sDönem başlangıcı %sDönem sonu %sKullanıcı Kategorisi = %sMateryal "
+"Türü = %sÖdünç verme kütüphanesi = %sKoleksiyon = %sKonum = %sMateryal yer "
+"numarası &gt;= %sMateryal yer numarası &lt; %sKullanıcı sıralaması1 = "
+"%sKullanıcı sıralaması2 = %sAna kütüphane = %sAyırtma kütüphanesi = "
+"%sKullanıcının kütüphanesi = %sÖdünç verme kütüphanesi = %s%s = %s %s"
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -1105,13 +1110,13 @@ msgstr "%s %s ( %s ) tarafından maksimum sayıda %s %s ( kez uzatma yapıldı"
 #. %3$s:  item.barcode 
 #. %4$s:  latestautorenewdate | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:82
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s ( %s ) has been scheduled for automatic renewal and cannot be renewed "
 "anymore since %s. "
 msgstr ""
-"%s %s ( %s ) süresinin otomatik olarak uzatılması için programlanmış ve %s "
-"tarihinden önce süresi uzatılamaz."
+"%s %s ( %s ) süresinin otomatik olarak uzatılması için planlandı ve artık %s "
+"tarihinden itibaren süresi uzatılamaz."
 
 #. %1$s:  item.biblio.title 
 #. %2$s:  item.biblioitem.subtitle 
@@ -1198,10 +1203,13 @@ msgstr "%s %s (tutulan kayıt) %s"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:74
 #, c-format
 msgid ""
-"%s %s An error occurred when updateing mappings (%s). %s An error occurred "
+"%s %s An error occurred when updating mappings (%s). %s An error occurred "
 "when deleting the existing mappings. Nothing has been changed! (search field "
 "%s with mapping %s.) %s Mapping updated successfully. %s %s %s "
 msgstr ""
+"%s %s Eşlemeleri güncellerken bir hata oluştu (%s). %s Mevcut eşlemeleri "
+"silerken bir hata oluştu. Hiçbir şey değiştirilmedi! (%s eşlemesi ile arama "
+"alanı %s.) %s Eşleme başarıyla güncellendi. %s %s %s"
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'error_on_update' 
@@ -1215,7 +1223,7 @@ msgstr ""
 #. %10$s:  m.code 
 #. %11$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s An error occurred when updating this CSV profile. Perhaps it already "
 "exists. %s An error occurred when adding this CSV profile. %s An error "
@@ -1223,11 +1231,11 @@ msgid ""
 "updated successfully. %s CSV profile added successfully. %s CSV profile "
 "deleted successfully. %s This CSV profile already exists. %s %s %s "
 msgstr ""
-"%s %s Bu şehir güncellenirken bir hata oluştu. Zaten mevcut olabilir. %s Bu "
-"şehir eklenirken bir hata oluştu. Şehir kimliği zaten mevcut olabilir. %s Bu "
-"şehir silinirken bir hata oluştu. Sistem günlüklerini kontrol edin. %s Şehir "
-"başarıyla güncellendi. %s Şehir başarıyla eklendi. %s Şehir başarıyla "
-"silindi. %s Bu şehir zaten mevcut. %s %s %s"
+"%s %s Bu CSV profili güncellenirken bir hata oluştu. Zaten mevcut olabilir. "
+"%s Bu CSV profili eklenirken bir hata oluştu. %s Bu CSV profili silinirken "
+"bir hata oluştu. Sistem günlüklerini kontrol edin. %s CSV profili başarıyla "
+"güncellendi. %s CSV profili başarıyla eklendi. %s CSV profili başarıyla "
+"silindi. %s Bu CSV profili zaten var. %s %s %s"
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'error_on_update' 
@@ -1271,7 +1279,7 @@ msgstr ""
 #. %14$s:  m.code 
 #. %15$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:175
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s An error occurred when updating this authorized value. Perhaps the "
 "value already exists. %s An error occurred when inserting this authorized "
@@ -1285,12 +1293,16 @@ msgid ""
 "The authorized value category 'branches', 'itemtypes' and 'cn_source' are "
 "used internally by Koha and are not valid. %s %s %s "
 msgstr ""
-"%s %s Bu otorize değer güncellenirken bir hata oluştu. Değer zaten mevcut "
-"olabilir. %s Bu otorize değer eklenirken bir hata oluştu. Değer ya da "
-"kategori zaten mevcut olabilir. %s Bu otorize değer silinirken bir hata "
-"oluştu. Sistem günlüklerini kontrol edin. %s Otorize değer başarıyla "
-"güncellendi. %s Otorize değer başarıyla eklendi. %s Otorize değer başarıyla "
-"silindi. %s Bu otorize değer zaten mevcut. %s %s %s"
+"%s %s Bu otorize değeri güncellenirken hata oluştu. Değer zaten var "
+"olabilir. %s Bu otorize değeri eklenirken bir hata oluştu. Belki de değer "
+"veya kategori zaten mevcuttur. %s Bu otorize değer kategorisi eklenirken bir "
+"hata oluştu. Kategori zaten var olabilir. %s Bu otorize değeri silinirken "
+"bir hata oluştu. Günlükleri kontrol edin. %s Otorize değer başarıyla "
+"güncellendi. %s Otorize değer başarıyla eklendi. %s Otorize değer kategorisi "
+"başarıyla eklendi. %s Otorize değer başarıyla silindi. %s Bu otorize değer "
+"zaten mevcut. %s Bu otorize değer kategorisi zaten mevcut. %s 'branches', "
+"'itemtypes' ve 'cn_source' otorize değer kategorileri Koha tarafından dahili "
+"olarak kullanılır ve geçerli değildir. %s %s %s"
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'error_on_update' 
@@ -1506,6 +1518,13 @@ msgid ""
 "occurred whilst creating a new housebound visit. %s %s %s Please try again "
 "later. "
 msgstr ""
+"%s %s Kullanıcı detayları yüklenirken bir hata oluştu. %s Bu evden ödünç "
+"alma profili güncellenirken bir hata oluştu. %s Bu evden ödünç alma profili "
+"oluşturulurken bir hata oluştu. %s Evden ödünç alma ziyareti yüklenirken bir "
+"hata oluştu. %s Evden ödünç alma ziyareti silinirken bir hata oluştu. %s "
+"Evden ödünç alma ziyareti güncellenirken bir hata oluştu. %s Yeni bir evden "
+"ödünç alma ziyareti oluşturulurken bir hata oluştu. %s %s %s Lütfen daha "
+"sonra tekrar deneyin."
 
 #. %1$s:  END 
 #. %2$s:  IF message.code == "unable_to_load_configuration" 
@@ -1672,6 +1691,9 @@ msgid ""
 "many holds %s Not holdable %s Patron is from different library %s Patron "
 "already has hold for this item %s %s %s %s "
 msgstr ""
+"%s %s Materyal hasarlı %s Yaş sınırlı %s Kayıt başına maksimum ayırtma "
+"sayısı aşıldı %s Çok fazla ayırtma işlemi %s  %s Kullanıcı farklı bir "
+"kütüphaneden %s Kullanıcı bu materyal için zaten ayırtma yapmış %s %s %s %s"
 
 #. %1$s:  SWITCH cn 
 #. %2$s:  CASE 'itype' 
@@ -1923,15 +1945,15 @@ msgstr ""
 #. %7$s:  message.authid 
 #. %8$s:  ELSIF message.code == 'biblio_not_modified' 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s The selected template (id=%s) does not exist or no action is defined. "
 "%s Bibliographic record %s does not exist in the database. %s Authority "
 "record %s does not exist in the database. %s Bibliographic record "
 msgstr ""
-"%s Seçtiğiniz şablon (id=%s) mevcut değil ya da herhangi bir eylem "
-"tanımlanmamış. %s Bibliyo numarası %s veri tabanında mevcut değil. %s "
-"Otorite kimliği %s veri tabanında mevcut değil. %s Bibliyo"
+"%s %s Seçtiğiniz şablon (id=%s) mevcut değil ya da herhangi bir eylem "
+"tanımlanmamış. %s Bibliyografik kayıt %s veri tabanında yok. %s Otorite "
+"kimliği %s veri tabanında yok. %s Bibliyografik kayıt"
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'already_exists' 
@@ -1966,6 +1988,9 @@ msgid ""
 "template with code ACQORDER defined. %s Order e-mail was sent to the vendor. "
 "%s ERROR! - %s %s "
 msgstr ""
+"%s %s Bu satıcının sipariş göndermek için bir e-posta adresi yok ya da "
+"eksik. %s Sepet yok %s ACQORDER kodu tanımlanmış hiçbir uyarı şablonu mevcut "
+"değil. %s Sipariş e-postası sağlayıcıya gönderildi. %s HATA! - %s %s"
 
 #. %1$s:  END 
 #. %2$s:  IF ( itemloo.message ) 
@@ -2025,9 +2050,9 @@ msgstr "%s %s Sistemden düşülmüş (%s),"
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:290
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:438
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Yes %s No %s Inherit %s "
-msgstr "%s %s %s %s Hiçbiri %s "
+msgstr "%s %s Evet %s Hayır %s Devral %s"
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'unauthorized' 
@@ -3085,12 +3110,6 @@ msgstr "%s / %s kayıt başarıyla değiştirildi. Bazı hatalar oluştu."
 #, c-format
 msgid "%s / Fax: %s"
 msgstr "%s / Fax: %s"
-
-#. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:248
-#, c-format
-msgid "%s /select> "
-msgstr "%s /seç>"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4673,9 +4692,9 @@ msgstr "%s Evet %s Hayır %s  "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:445
-#, fuzzy, c-format
+#, c-format
 msgid "%s Yes %s No %s Inherited %s "
-msgstr "%s %s %s Başka materyal yok. %s "
+msgstr "%s Evet %s Hayır %s Devralındı %s"
 
 #. %1$s:  IF ( issue.renewals ) 
 #. %2$s:  IF ( issue.lastreneweddate ) 
@@ -8550,9 +8569,9 @@ msgstr "&rsaquo; Rezerv  "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Results %s Cash register statistics %s "
-msgstr "&rsaquo; Sonuçlar %s &rsaquo; Ödünç alma istatistikleri %s"
+msgstr "&rsaquo; Sonuçlar %s Kasa istatistikleri %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -8716,7 +8735,7 @@ msgstr "&rsaquo; Mevcut Kayıtları Arama"
 msgid "&rsaquo; Search for vendor "
 msgstr "&rsaquo; Sağlayıcısını Ara "
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #, c-format
 msgid "&rsaquo; Search history "
 msgstr "&rsaquo; Arama geçmişi"
@@ -10195,7 +10214,7 @@ msgid "Account management fee"
 msgstr "Hesap işletim ücreti"
 
 #: intranet-tmpl/prog/en/includes/csv_headers/acqui/basketgroup.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Account number,Basket name,Order number,Author,Title,Publisher,Publication "
 "year,Collection title,ISBN,Quantity,RRP tax included, RRP tax excluded,"
@@ -10204,12 +10223,12 @@ msgid ""
 "postal address,Contract number,Contract name,Basket group delivery place,"
 "Basket group billing place,Basket delivery place,Basket billing place "
 msgstr ""
-"Hesap numarası,Sepet adı,Sipariş numarası,Yazar,Eser adı,Yayıncı,Yayın yılı,"
-"Koleksiyon Başlığı,ISBN,Miktar,Tavsiye edilen perakende fiyatı,İskonto,"
-"Tahmini tutar,Sağlayıcı Notu,Giriş tarihi,Kitap sağlayıcı adı,Kitap "
-"sağlayıcı adresi,Kitap sağlayıcı posta adresi,Sözleşme numarası,Sözleşme adı,"
-"Sepet grubu teslimat yeri,Sepet grubu fatura yeri,Sepet teslimat yeri,Sepet "
-"fatura yeri"
+"Hesap numarası,Sepet adı,Sipariş numarası,Yazar,Başlık,Yayıncı,Yayın yılı,"
+"Koleksiyon başlığı,ISBN,Miktar,RRP vergisi dahil,RRP vergisi hariç,İndirim,"
+"Tahmini maliyet vergisi dahil, Tahmini maliyet vergisini hariç,Satıcı için "
+"not,Giriş Tarih,Kitapçı adı,Kitapçının fiziksel adresi,Kitapçının posta "
+"adresi,Sözleşme numarası,Sözleşme adı,Sepet grubu teslim yeri,Sepet grubu "
+"faturalandırma yeri,Sepet teslim yeri,Sepet faturalandırma yeri"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:205
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:334
@@ -12470,12 +12489,6 @@ msgid "Are you sure you want to delete image(s): %s?"
 msgstr "Bu görüntü(ler) silmek istediğinizden emin misiniz: %s?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-msgid "Are you sure you want to delete selected search history entries?"
-msgstr ""
-"Seçtiğiniz arama geçmişi kayıtlarını silmek istediğinizden emin misiniz?"
-
-#. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:22
 msgid "Are you sure you want to delete server %s?"
 msgstr "Sunucuyu silmek istediğinizden emin misiniz %s?"
@@ -12484,6 +12497,12 @@ msgstr "Sunucuyu silmek istediğinizden emin misiniz %s?"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:1
 msgid "Are you sure you want to delete the %s attached items?"
 msgstr "%s ekli materyalleri silmek istediğinizden emin misiniz?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
+msgid "Are you sure you want to delete the %s selected search history entries?"
+msgstr ""
+"Seçilen %s arama geçmişi girdilerini silmek istediğinizden emin misiniz?"
 
 #. %1$s:  category.codedescription 
 #. %2$s:  category.categorycode 
@@ -12521,6 +12540,11 @@ msgstr "Seçili haberleri silmek istediğinizden emin misiniz?"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:40
 msgid "Are you sure you want to delete the selected reports?"
 msgstr "Seçili raporları silmek istediğinizden emin misiniz?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
+msgid "Are you sure you want to delete the selected search history entry?"
+msgstr "Seçilen arama geçmişi girdilerini silmek istediğinizden emin misiniz?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:36
@@ -13234,7 +13258,7 @@ msgstr "Otoriteler:"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:191
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:241
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:93
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:133
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:182
 #, c-format
 msgid "Authority"
@@ -15785,8 +15809,8 @@ msgstr "Kaset kaydı"
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:58
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:24
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:92
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:132
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:346
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:42
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:317
@@ -17273,10 +17297,6 @@ msgstr "Temizle"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:106
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:101
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:179
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:215
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:618
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:20
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:368
@@ -17354,6 +17374,14 @@ msgstr "Ekranı temizle"
 #, c-format
 msgid "Clear search form"
 msgstr "Arama formunu temizle"
+
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:142
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:179
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:222
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:259
+#, c-format
+msgid "Clear selection on visible rows"
+msgstr "Görünür satırlarda seçimi temizle"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:191
 #, c-format
@@ -19200,8 +19228,8 @@ msgstr "Geçerli Uzatmalar:"
 msgid "Current server time is:"
 msgstr "Geçerli sunucu zamanı:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:97
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:175
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:217
 #, c-format
 msgid "Current session"
 msgstr "Geçerli oturum"
@@ -19422,10 +19450,10 @@ msgstr "Veri tabanı: "
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:311
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:168
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:296
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:113
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:149
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:154
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:191
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:227
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:234
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:271
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:717
 #: intranet-tmpl/prog/en/modules/tags/review.tt:249
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:395
@@ -20145,10 +20173,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:194
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:196
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:198
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:105
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:141
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:146
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:183
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:219
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:226
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:263
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:383
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:99
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:249
@@ -25491,7 +25519,7 @@ msgstr "Belli sıradaki yıllık tekrarlayan tatiller"
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:58
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:24
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:346
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:41
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:316
@@ -25741,26 +25769,26 @@ msgstr "Saatler:"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:109
 #: intranet-tmpl/prog/en/includes/members-menu.inc:24
-#, fuzzy, c-format
+#, c-format
 msgid "Housebound"
-msgstr "ses"
+msgstr "Evden ödünç alma"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:79
-#, fuzzy, c-format
+#, c-format
 msgid "Housebound details"
-msgstr "Ayırma detayları"
+msgstr "Evden ödünç alma detayları"
 
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid "Housebound details for %s"
-msgstr "&rsaquo; Ders ayrıntıları"
+msgstr "%s için evden ödünç alma detayları"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1018
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:319
 #, c-format
 msgid "Housebound roles"
-msgstr ""
+msgstr "Evden ödünç alma rolleri"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -27226,9 +27254,9 @@ msgid "Issues summary"
 msgstr "Sayıların özet bilgisi"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:177
-#, fuzzy, c-format
+#, c-format
 msgid "Issuing library"
-msgstr "kütüphanede"
+msgstr "Ödünç verme kütüphanesi"
 
 #: intranet-tmpl/prog/en/modules/serials/serial-issues.tt:26
 #, c-format
@@ -27438,9 +27466,9 @@ msgstr "Materyal sistemden düşülmüştür."
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:593
-#, fuzzy, c-format
+#, c-format
 msgid "Item level hold forced from OPAC %s "
-msgstr "Materyal düzeyinde ayırtmalar"
+msgstr "OPAC'tan zorunlu kılınan materyal düzeyi ayırtma %s"
 
 #. %1$s:  ELSIF itemloo.item_level_holds == "F" 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:591
@@ -29627,9 +29655,9 @@ msgstr "Koha &rsaquo; Hata %s"
 
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Housebound &rsaquo; Details for %s"
-msgstr "Koha &rsaquo; Katalog &rsaquo; %s %s %s%s için materyal ayrıntıları"
+msgstr "Koha &rsaquo; Evden ödünç alma &rsaquo; %s için detaylar"
 
 #: intranet-tmpl/prog/en/modules/labels/search.tt:1
 #, c-format
@@ -29834,13 +29862,13 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Reports %s&rsaquo; Cash register statistics &rsaquo; Results"
 "%s&rsaquo; Cash register statistics%s"
 msgstr ""
-"Koha &rsaquo; Raporlar %s&rsaquo; Katalog istatistikleri &rsaquo; sonuçlar "
-"%s&rsaquo; Katalog istatistikleri %s"
+"Koha &rsaquo; Raporlar %s&rsaquo; Kasa statistikleri &rsaquo; Sonuçlar"
+"%s&rsaquo; Kasa istatistikleri%s"
 
 #. %1$s:  IF ( do_it ) 
 #. %2$s:  ELSE 
@@ -30821,9 +30849,9 @@ msgid "Kyle Hall"
 msgstr "Kyle Hall"
 
 #: intranet-tmpl/prog/en/modules/about.tt:501
-#, fuzzy, c-format
+#, c-format
 msgid "Kyle Hall (3.8 Release Maintainer; 3.14 - 16.05 QA Team Member)"
-msgstr "Kyle Hall (3.8 Sürüm Geliştiricisi; 3.14 - 3.22 QA Takım Üyesi)"
+msgstr "Kyle Hall (3.8 Sürüm Geliştiricisi; 3.14 - 16.05 QA Takım Üyesi)"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:142
 #, c-format
@@ -31706,9 +31734,8 @@ msgstr "Veri yükleniyor..."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/select2.inc:4
-#, fuzzy
 msgid "Loading more results…"
-msgstr "Kaydedilmiş Rapor Sonuçları"
+msgstr "Daha fazla sonuç yükleniyor..."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
@@ -31938,9 +31965,9 @@ msgstr "Kayıp materyal"
 
 #. %1$s:  Branches.GetName(current_branch) 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:604
-#, fuzzy, c-format
+#, c-format
 msgid "Lost item fee refund on return policy for %s"
-msgstr "Varsayılan ödünç, ayırma ve iade kuralı%s - %s%s"
+msgstr "%s için iade politikasında kayıp materyal geri ödemesi"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:33
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:352
@@ -32166,9 +32193,9 @@ msgstr "MARC değiştirme şablonları"
 
 #. %1$s:  template_id 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid "MARC modification templates %s"
-msgstr "MARC değiştirme şablonları"
+msgstr "MARC değişiklik şablonları %s"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:137
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:206
@@ -32432,18 +32459,20 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:211
 #, c-format
 msgid "Manage housebound deliveries"
-msgstr ""
+msgstr "Evden ödünç alma teslimatlarını yönet"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "Manage housebound profile"
-msgstr "CSV dışa aktarım profillerini yönet"
+msgstr "Evden ödünç alma profilini yönet"
 
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:90
 #, c-format
 msgid ""
 "Manage indexes, facets, and their mappings to MARC fields and subfields."
 msgstr ""
+"Dizinleri, fasetleri ve bunların MARC alan ve alt alanlarına eşlemelerini "
+"yönetin."
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:132
 #, c-format
@@ -32629,9 +32658,9 @@ msgid "Management date from:"
 msgstr "Yönetim tarihi:"
 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:227
-#, fuzzy, c-format
+#, c-format
 msgid "Manager name"
-msgstr "Yönet"
+msgstr "Yönetici adı"
 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:191
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:208
@@ -32668,9 +32697,9 @@ msgid "Manual invoice"
 msgstr "Manuel fatura"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:182
-#, fuzzy, c-format
+#, c-format
 msgid "Mapping"
-msgstr "Eşleme ekle"
+msgstr "Eşleme"
 
 #. %1$s:  setName 
 #. %2$s:  setSpec 
@@ -32727,9 +32756,9 @@ msgid "Marcel de Rooy"
 msgstr "Marcel de Rooy"
 
 #: intranet-tmpl/prog/en/modules/about.tt:608
-#, fuzzy, c-format
+#, c-format
 msgid "Marcel de Rooy (3.8 - 16.05 QA Team Member)"
-msgstr "Marcel de Rooy (3.8 - 3.22 QA Takım Üyesi)"
+msgstr "Marcel de Rooy (3.8 - 16.05 QA Takım Üyesi)"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -32780,9 +32809,9 @@ msgid "Martin Persson"
 msgstr "Martin Persson"
 
 #: intranet-tmpl/prog/en/modules/about.tt:604
-#, fuzzy, c-format
+#, c-format
 msgid "Martin Renvoize (3.16 - 16.05 QA Team Member)"
-msgstr "Martin Renvoize (3.16 - 3.22 QA Takım Üyesi)"
+msgstr "Martin Renvoize (3.16 - 16.05 QA Takım Üyesi)"
 
 #: intranet-tmpl/prog/en/modules/about.tt:628
 #, c-format
@@ -32907,9 +32936,9 @@ msgid "Matching rule code: "
 msgstr "Eşleştirme kuralı kodu: "
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:199
-#, fuzzy, c-format
+#, c-format
 msgid "Matching:"
-msgstr "Eşleştirme noktası "
+msgstr "Eşleştirme:"
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:298
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:363
@@ -32919,9 +32948,9 @@ msgid "Matchpoint components"
 msgstr "Nokta eşleştirme bileşenleri"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:365
-#, fuzzy, c-format
+#, c-format
 msgid "Material:"
-msgstr "Materyaller"
+msgstr "Materyal:"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:439
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:190
@@ -33029,7 +33058,7 @@ msgstr "Üyeler"
 #: intranet-tmpl/prog/en/modules/about.tt:54
 #, c-format
 msgid "Memcached: "
-msgstr ""
+msgstr "Hafıza ön belleğine alınan:"
 
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:166
 #, c-format
@@ -33355,9 +33384,9 @@ msgid "Modify SRU search fields mapping"
 msgstr "SRU arama alanları eşleştirmeyi düzenle"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:106
-#, fuzzy, c-format
+#, c-format
 msgid "Modify a CSV profile"
-msgstr "Bir CSV dışa aktarım profilini değiştir ya da sil"
+msgstr "Bir CSV profili değiştir"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:134
 #, c-format
@@ -33597,14 +33626,14 @@ msgstr "Daha fazla seçenek"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:248
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:265
-#, fuzzy, c-format
+#, c-format
 msgid "Morning"
-msgstr "Uyarı"
+msgstr "Sabah"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:244
-#, fuzzy, c-format
+#, c-format
 msgid "Morning "
-msgstr "Uyarı:"
+msgstr "Sabah"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:21
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:47
@@ -33779,6 +33808,8 @@ msgid ""
 "NOTE: Fields listed in the \\'UniqueItemsFields\\' system preference will "
 "not be copied"
 msgstr ""
+"NOT: \\'UniqueItemsFields\\' sistem tercihinde listelenen alanlar "
+"kopyalanmayacaktır"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:143
 #, c-format
@@ -33857,9 +33888,9 @@ msgstr "Gün adı"
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:191
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:193
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:914
-#, fuzzy, c-format
+#, c-format
 msgid "Name of day (abbreviated)"
-msgstr "Gün adı"
+msgstr "Gün adı (kısaltılmış)"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:196
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:198
@@ -33871,9 +33902,9 @@ msgstr "Ay adı"
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:201
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:203
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:916
-#, fuzzy, c-format
+#, c-format
 msgid "Name of month (abbreviated)"
-msgstr "Ay adı"
+msgstr "Ay adı (kısaltılmış)"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:206
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:208
@@ -33885,9 +33916,9 @@ msgstr "Sezon adı"
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:211
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:213
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:918
-#, fuzzy, c-format
+#, c-format
 msgid "Name of season (abbreviated)"
-msgstr "Sezon adı"
+msgstr "Mevsim adı (kısaltılmış)"
 
 #: intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:14
 #, c-format
@@ -34033,9 +34064,9 @@ msgstr "Yeni %s sunucu"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:108
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:221
-#, fuzzy, c-format
+#, c-format
 msgid "New CSV profile"
-msgstr "Yeni profil"
+msgstr "Yeni CSV profili"
 
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:44
 #, c-format
@@ -34069,9 +34100,9 @@ msgid "New account "
 msgstr "Yeni hesap"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid "New action"
-msgstr "Yeni kullanıcı "
+msgstr "Yeni eylem"
 
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:24
 #, c-format
@@ -34401,9 +34432,9 @@ msgid "New tag"
 msgstr "Yeni etiket"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "New template"
-msgstr "Etiket şablonu"
+msgstr "Yeni şablon"
 
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:99
 #, c-format
@@ -34538,9 +34569,9 @@ msgid "Nicole C. Engard"
 msgstr "Nicole C. Engard"
 
 #: intranet-tmpl/prog/en/modules/about.tt:467
-#, fuzzy, c-format
+#, c-format
 msgid "Nicole C. Engard (3.0 - 16.05 Documentation Manager)"
-msgstr "Nicole C. Engard (3.0+ Dokümantasyon Yöneticisi)"
+msgstr "Nicole C. Engard (3.0- 16.06 Dokümantasyon Yöneticisi)"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -34639,9 +34670,9 @@ msgstr ""
 "İngilizce sunulmaktadır(ing)"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:286
-#, fuzzy, c-format
+#, c-format
 msgid "No MARC modification template is defined. You have "
-msgstr "%s %s %s Tanımlı MARC değiştirme şablonu yok. Sizde olan"
+msgstr "Hiçbir MARC değişiklik şablonu tanımlanmadı. Sizde olan"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:22
@@ -34667,9 +34698,9 @@ msgstr ""
 "daha fazla yetkili değer oluşturun."
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:292
-#, fuzzy, c-format
+#, c-format
 msgid "No action defined for the template. "
-msgstr "%s Şablon için tanımlanmış bir eylem yok. %s "
+msgstr "Şablon için hiçbir işlem tanımlanmadı."
 
 #: intranet-tmpl/prog/en/includes/budgets-active-currency.inc:7
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:196
@@ -34691,15 +34722,15 @@ msgstr "Kayıtlı adres yok."
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:197
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:201
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:205
-#, fuzzy, c-format
+#, c-format
 msgid "No and try to override system preferences"
-msgstr "Genel sistem tercihleri"
+msgstr "Hayır ve sistem tercihlerini geçersiz kılmaya çalışın"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:188
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:409
-#, fuzzy, c-format
+#, c-format
 msgid "No automatic renewal after"
-msgstr "Otomatik süre uzatma"
+msgstr "Şu tarihten sonra otomatik süre uzatma yapılmaz"
 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:468
 #, c-format
@@ -34819,7 +34850,7 @@ msgstr "Bulunan ayırtmalar Yok."
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:712
 #, c-format
 msgid "No if settings allow it"
-msgstr ""
+msgstr "Ayarlar izin veriyorsa hayır"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:131
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:192
@@ -35111,9 +35142,8 @@ msgstr "Hiçbir kayıt çıkarılmadı."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:8
-#, fuzzy
 msgid "No records have been selected."
-msgstr "Düzenlenen kullanıcı kaydı yok."
+msgstr "Hiçbir kayıt seçilmedi."
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:213
 #, c-format
@@ -35126,9 +35156,9 @@ msgid "No records imported"
 msgstr "Hiçbir kayıt içe aktarılmadı"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:269
-#, fuzzy, c-format
+#, c-format
 msgid "No records were modified. "
-msgstr "Hiçbir kayıt çıkarılmadı."
+msgstr "Hiçbir kayıt değiştirilmedi."
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:186
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:407
@@ -35229,7 +35259,6 @@ msgstr "Hayır, onaylamıyorum"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:210
-#, fuzzy
 msgid "No, do not Delete"
 msgstr "Hayır, Silmeyin"
 
@@ -35593,6 +35622,8 @@ msgid ""
 "Note that the right place to define the memcached config is in your "
 "$KOHA_CONF file %s "
 msgstr ""
+"Memcached yapılandırmasını tanımlamak için doğru yerin $ KOHA_CONF %s "
+"dosyanızda olduğunu unutmayın."
 
 #. %1$s:  END 
 #. %2$s:  IF effective_caching_method != 'Cache::Memcached::Fast' 
@@ -35605,15 +35636,21 @@ msgid ""
 "$KOHA_CONF file. Currently you do not have a valid memcached configuration "
 "defined. %s %s | Effective caching method: %s %s "
 msgstr ""
+"Memcached yapılandırmasını tanımlamak için doğru yerin $KOHA_CONF dosyanızda "
+"olduğunu unutmayın. Şu anda tanımlanmış geçerli bir memcached "
+"yapılandırmanıza sahip değilsiniz. %s %s | Etkili önbellekleme yöntemi: %s %s"
 
 #. %1$s:  CASE # nowhere 
 #: intranet-tmpl/prog/en/modules/about.tt:79
 #, c-format
 msgid ""
 "Note that the right place to define the memcached config is in your "
-"$KOHA_CONF file. To avoid any misunderstanding you whould not export the "
+"$KOHA_CONF file. To avoid any misunderstanding you should not export the "
 "memcached config from ENV. %s "
 msgstr ""
+"Memcached yapılandırmasını tanımlamak için doğru yerin $KOHA_CONF dosyanızda "
+"olduğunu unutmayın. Yanlış anlamayı önlemek için memcached yapılandırmasını "
+"ENV'den vermemelisiniz. %s"
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:617
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:28
@@ -35656,6 +35693,11 @@ msgstr ""
 "Not: Hiç bir karşıya yükleme kategorisi tanımlanmamış. UPLOAD otorize değer "
 "kategorisine değer ekleyin yoksa tüm karşıya yükleme işlemleri geçici olarak "
 "işaretlenecektir."
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1190
+msgid "Note: Quick add guarantor form populates address fields in full form"
+msgstr "Not: Hızlı garantör ekleme formu, adres alanlarını tam formda doldurur"
 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:207
 #, c-format
@@ -35843,15 +35885,15 @@ msgid "Nov"
 msgstr "Kasım"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:608
-#, fuzzy, c-format
+#, c-format
 msgid "NoveList Select"
-msgstr "Liste silindi."
+msgstr "NoveList Select"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:855
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:887
 #, c-format
 msgid "Novelist Select: "
-msgstr ""
+msgstr "Novelist Select:"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -35876,9 +35918,9 @@ msgstr ""
 "girmeye hazırız."
 
 #: intranet-tmpl/prog/en/modules/about.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "Nowhere"
-msgstr "buraya"
+msgstr "Hiçbir yer"
 
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:37
 #, c-format
@@ -35983,9 +36025,8 @@ msgstr "Değiştirilen materyallerin sayısı"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
-#, fuzzy
 msgid "Number of items to add"
-msgstr "Eklenen materyal sayısı"
+msgstr "Eklenecek materyal sayısı"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:212
 #, c-format
@@ -36518,7 +36559,7 @@ msgstr "Bir ya da daha fazla seçili materyal rezerve edilemez."
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/select2.inc:4
 msgid "One result is available, press enter to select it."
-msgstr ""
+msgstr "Bir sonuç kullanılabilir, seçmek için enter tuşuna basın."
 
 #. A
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:13
@@ -36566,9 +36607,9 @@ msgid "Only item "
 msgstr "Sadece materyal "
 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:177
-#, fuzzy, c-format
+#, c-format
 msgid "Only item:"
-msgstr "Sadece materyal "
+msgstr "Yalnızca materyal:"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:250
 #, c-format
@@ -36731,9 +36772,9 @@ msgstr "Sipariş "
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:323
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:325
-#, fuzzy, c-format
+#, c-format
 msgid "Order acquisition"
-msgstr "Sağlama kaynağı"
+msgstr "Sipariş sağlama"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:251
 #, c-format
@@ -36880,7 +36921,7 @@ msgid "Orders for fund '%s'"
 msgstr "'%s' fonu için siparişler"
 
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "Orders from:"
 msgstr "Sipariş verenler: "
 
@@ -37101,9 +37142,9 @@ msgid "Overdues with fines"
 msgstr "Cezaya kalan gecikmiş materyaller"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:790
-#, fuzzy, c-format
+#, c-format
 msgid "Overdues: Patron has ITEMS OVERDUE."
-msgstr "Gecikenler: Kullanıcının üzerinde GECİKMİŞ MATERYALLER var"
+msgstr "Gecikenler: Kullanıcının üzerinde GECİKMİŞ MATERYALLER var."
 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:64
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:76
@@ -37226,16 +37267,16 @@ msgstr "Sayfa genişliği:"
 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:13
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:312
-#, fuzzy, c-format
+#, c-format
 msgid "Pages"
-msgstr "Görüntüler"
+msgstr "Sayfalar"
 
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:200
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:220
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:348
-#, fuzzy, c-format
+#, c-format
 msgid "Pages:"
-msgstr "Sayfa yanı: "
+msgstr "Sayfalar:"
 
 #: intranet-tmpl/prog/en/columns.def:95
 #, c-format
@@ -37429,9 +37470,9 @@ msgid "Patron card creator"
 msgstr "Kullanıcı kartı oluşturucu"
 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:228
-#, fuzzy, c-format
+#, c-format
 msgid "Patron card number"
-msgstr "Kullanıcı kart numarasını girin:"
+msgstr "Kullanıcı kart numarası"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:30
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:24
@@ -37648,9 +37689,9 @@ msgid "Patron is currently unrestricted."
 msgstr "Kullanıcı şu anda yasaklı değil."
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "Patron is not notified."
-msgstr "Kullanıcı bulunamadı:"
+msgstr "Kullanıcıya bildirildi."
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:491
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
@@ -37664,9 +37705,9 @@ msgid "Patron is restricted."
 msgstr "Kullanıcı kısıtlanmıştır."
 
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:262
-#, fuzzy, c-format
+#, c-format
 msgid "Patron library"
-msgstr "herhangi bir kütüphane"
+msgstr "Kullanıcı kütüphanesi"
 
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:234
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:161
@@ -37717,16 +37758,16 @@ msgid "Patron not found:"
 msgstr "Kullanıcı bulunamadı:"
 
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:314
-#, fuzzy, c-format
+#, c-format
 msgid "Patron notes"
-msgstr "Kullanıcı adı"
+msgstr "Kullanıcı notları"
 
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:210
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:222
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:350
-#, fuzzy, c-format
+#, c-format
 msgid "Patron notes:"
-msgstr "Kullanıcı listeleri:"
+msgstr "Kullanıcı notları:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:125
 #, c-format
@@ -37751,9 +37792,9 @@ msgstr "Kullanıcı uyarısı: "
 #. %10$s:  END ~
 #. %11$s:  END 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "Patron notification: %s %s Email%s %s Phone%s %s SMS%s %s, %s.%s %s "
-msgstr "%s %s Eposta%s Yazdır %s SMS %s Akış %s Telefon %s %s %s"
+msgstr "Patron bildirimi: %s %s E-posta%s %s Telefon%s %s SMS%s %s, %s.%s %s"
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:640
 #, c-format
@@ -38069,13 +38110,13 @@ msgid "Pattern name:"
 msgstr "Örüntü adı:"
 
 #: intranet-tmpl/prog/en/modules/about.tt:596
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Paul Poulain (2.0, 2.2, 3.8, 3.10 Release Manager; 2.2 Release Maintainer; "
 "3.12 - 16.05 QA Team Member)"
 msgstr ""
 "Paul Poulain (2.0, 2.2, 3.8, 3.10 Sürüm Yöneticisi, 2.2 Sürüm Geliştirici; "
-"3.12 - 3.18 QA Takım Üyesi)"
+"3.12 - 36.05 QA Takım Üyesi)"
 
 #: intranet-tmpl/prog/en/modules/about.tt:625
 #, c-format
@@ -38142,9 +38183,9 @@ msgstr "Seçili olanı öde"
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:144
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:146
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:259
-#, fuzzy, c-format
+#, c-format
 msgid "Payment"
-msgstr "Ödemeler"
+msgstr "Ödeme"
 
 #: intranet-tmpl/prog/en/modules/reports/stats_screen.tt:42
 #, c-format
@@ -38184,9 +38225,9 @@ msgid "Pending"
 msgstr "Bekliyor"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:143
-#, fuzzy, c-format
+#, c-format
 msgid "Pending ("
-msgstr "Bekliyor"
+msgstr "Beklemede ("
 
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:16
 #, c-format
@@ -38466,9 +38507,9 @@ msgid "Pickup library is different. "
 msgstr "Alınacak kütüphane farklı."
 
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:215
-#, fuzzy, c-format
+#, c-format
 msgid "Pickup library:"
-msgstr "Kütüphane seç"
+msgstr "Teslim alma kütüphanesi:"
 
 #: intranet-tmpl/prog/en/modules/about.tt:486
 #, c-format
@@ -38500,9 +38541,9 @@ msgstr "%s%s adlı materyali ayırtın"
 
 #. %1$s:  IF bibitemloo.force_hold_level == 'item' 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:462
-#, fuzzy, c-format
+#, c-format
 msgid "Place a hold on a specific item %s "
-msgstr "Belirli bir materyali ayırtın"
+msgstr "Belirli bir materyali ayırtın %s"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:9
 #, c-format
@@ -38514,9 +38555,9 @@ msgstr "Kullanıcılar için ayırtma yap ve değiştir"
 #. %3$s:  patron.surname 
 #. %4$s:  patron.cardnumber 
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:171
-#, fuzzy, c-format
+#, c-format
 msgid "Place article request from %s for %s %s ( %s )"
-msgstr "%s'in arama sonuçları %s - %s arası"
+msgstr "%s %s ( %s ) için %s öğesinden makale isteği verin"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:254
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:259
@@ -38575,9 +38616,8 @@ msgstr "Yayın yeri"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:290
-#, fuzzy
 msgid "Place request"
-msgstr "Konumlar"
+msgstr "İstek verin"
 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:7
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:305
@@ -38797,9 +38837,8 @@ msgstr "Lütfen bir tane tanımlayın"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/select2.inc:4
-#, fuzzy
 msgid "Please delete %d character(s)"
-msgstr "Lütfen en az {0} karakter giriniz."
+msgstr "Lütfen %d karakter(ler)i silin"
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:196
 #, c-format
@@ -38827,20 +38866,18 @@ msgstr ""
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/select2.inc:4
-#, fuzzy
 msgid "Please enter %n or more characters"
-msgstr "Lütfen {0} karakterden daha fazlasını girmeyiniz."
+msgstr "Lütfen %n veya daha fazla karakter girin"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:669
-#, fuzzy, c-format
+#, c-format
 msgid "Please enter a "
-msgstr "lütfen bir tarih girin!"
+msgstr "Lütfen giriniz bir"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:8
-#, fuzzy
 msgid "Please enter a date!"
-msgstr "lütfen bir tarih girin!"
+msgstr "Lütfen bir tarih girin!"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:14
@@ -38869,9 +38906,8 @@ msgstr "Lütfen geçerli bir tarih (ISO) giriniz."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:2
-#, fuzzy
 msgid "Please enter a valid date (should match %s)."
-msgstr "Lütfen geçerli bir tarih (ISO) giriniz."
+msgstr "Lütfen geçerli bir tarih girin (%s ile eşleşmelidir)."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/validator-strings.inc:1
@@ -39088,9 +39124,8 @@ msgstr "Lütfen en az bir modifikasyon şablonu seçin."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:10
-#, fuzzy
 msgid "Please select a news item to delete."
-msgstr "Lütfen silmek için en az bir etiket seçin."
+msgstr "Lütfen silmek için bir haber seçin."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:28
@@ -39403,9 +39438,9 @@ msgid "Preferences and parameters"
 msgstr "Tercihler ve parametreler"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:154
-#, fuzzy, c-format
+#, c-format
 msgid "Preferred materials:"
-msgstr "Tercihler ve parametreler"
+msgstr "Tercih edilen materyaller:"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:183
 #, c-format
@@ -39490,8 +39525,8 @@ msgstr "Önceki ödünç almalar"
 msgid "Previous page"
 msgstr "Önceki Sayfa"
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:133
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:211
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:174
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:254
 #, c-format
 msgid "Previous sessions"
 msgstr "Önceki oturumlar"
@@ -39618,7 +39653,7 @@ msgid "Print Receipt for %s"
 msgstr "%s için Alındı Yazdır"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:338
-#, fuzzy, c-format
+#, c-format
 msgid "Print and confirm "
 msgstr "Yazdır ve onayla"
 
@@ -39668,9 +39703,9 @@ msgstr "Fiş Yazdır"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:270
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:393
-#, fuzzy, c-format
+#, c-format
 msgid "Print slip "
-msgstr "Fiş Yazdır"
+msgstr "Slip yazdır"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:247
 #, c-format
@@ -39678,9 +39713,9 @@ msgid "Print slip and confirm"
 msgstr "Fiş Yazdır ve Onayla"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:558
-#, fuzzy, c-format
+#, c-format
 msgid "Print slip and confirm "
-msgstr "Fiş Yazdır ve Onayla"
+msgstr "Slip yazdır ve onayla"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:376
 #, c-format
@@ -39688,9 +39723,9 @@ msgid "Print slip and continue"
 msgstr "İşlem fişi yazdır ve devam et"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:551
-#, fuzzy, c-format
+#, c-format
 msgid "Print slip, transfer, and confirm "
-msgstr "Fiş yazdır, Aktar ve Onayla"
+msgstr "Slip yazdır, aktar ve onayla"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:157
 #, c-format
@@ -39843,9 +39878,9 @@ msgid "Process images"
 msgstr "Resimleri işle"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:255
-#, fuzzy, c-format
+#, c-format
 msgid "Process request "
-msgstr "Resimleri işle"
+msgstr "İsteği işle"
 
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:162
 #, c-format
@@ -39853,9 +39888,9 @@ msgid "Processing "
 msgstr "İşleniyor "
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:149
-#, fuzzy, c-format
+#, c-format
 msgid "Processing ("
-msgstr "İşleniyor "
+msgstr "İşleniyor ("
 
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:115
 #, c-format
@@ -39868,9 +39903,9 @@ msgid "Processing bibliographic records"
 msgstr "Bibliyografik kayıtlar işleniyor"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:663
-#, fuzzy, c-format
+#, c-format
 msgid "Processing multiple items"
-msgstr "Otorite kayıtları işleniyor"
+msgstr "Birden çok materyal işleniyor"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -39892,9 +39927,9 @@ msgid "Profile ID"
 msgstr "Profil kimliği"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid "Profile ID: "
-msgstr "Profil kimliği"
+msgstr "Profil kimliği:"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:175
 #, c-format
@@ -40299,12 +40334,12 @@ msgstr "Sıra: "
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1185
 #, c-format
 msgid "Quick add"
-msgstr ""
+msgstr "Hızlı ekle"
 
 #: intranet-tmpl/prog/en/includes/patron-toolbar.inc:15
-#, fuzzy, c-format
+#, c-format
 msgid "Quick add new patron "
-msgstr "Yeni kullanıcı eklenemedi."
+msgstr "Hızlı yeni kullanıcı ekle"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:84
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:15
@@ -40433,9 +40468,8 @@ msgstr "Neden"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:12
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:16
-#, fuzzy
 msgid "Reason for cancellation:"
-msgstr "Öneri nedeni: "
+msgstr "İptal sebebi:"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:224
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:346
@@ -40556,9 +40590,9 @@ msgid "Receives claims for late orders"
 msgstr "Geciken siparişler için claim alıyor"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "Receives orders"
-msgstr "Teslim alınmayan siparişler"
+msgstr "Siparişleri teslim alır"
 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:283
 #, c-format
@@ -40615,9 +40649,9 @@ msgid "Record number list (one per line): "
 msgstr "Kayıt numarası listesi (her satırda bir tane):"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:377
-#, fuzzy, c-format
+#, c-format
 msgid "Record only"
-msgstr "Kayıt türü"
+msgstr "Yalnızca kayıt"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
@@ -40630,9 +40664,9 @@ msgid "Record structure invalid, cannot save"
 msgstr "Kayıt yapısı geçersiz, kaydedilemez"
 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:6
-#, fuzzy, c-format
+#, c-format
 msgid "Record title"
-msgstr "Kayıt türü"
+msgstr "Kayıt başlığı"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:231
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:133
@@ -40672,7 +40706,7 @@ msgstr "Reed Wade"
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:377
 #, c-format
 msgid "Referral:"
-msgstr ""
+msgstr "Başvuru:"
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:180
 #, c-format
@@ -40690,9 +40724,9 @@ msgid "Refine your search"
 msgstr "Taramanızı gözden geçirin"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:613
-#, fuzzy, c-format
+#, c-format
 msgid "Refund lost item fee"
-msgstr "Toplu materyal silimine dön"
+msgstr "Kayıp materyal ücreti geri ödeme"
 
 #: intranet-tmpl/prog/en/modules/reports/stats_screen.tt:96
 #, c-format
@@ -40832,7 +40866,7 @@ msgstr "Oturumu hatırla:"
 #: intranet-tmpl/prog/en/modules/about.tt:66
 #, c-format
 msgid "Remember memcached needs to be started before Plack."
-msgstr ""
+msgstr "Memcached'in Plack'dan önce başlatılması gerektiğini unutmayın."
 
 #: intranet-tmpl/prog/en/modules/about.tt:560
 #, c-format
@@ -41374,14 +41408,14 @@ msgstr "Raporlar tabloları"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:265
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:603
-#, fuzzy, c-format
+#, c-format
 msgid "Request article"
-msgstr "Gerekli"
+msgstr "Makale isteğinde bulun"
 
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:115
-#, fuzzy, c-format
+#, c-format
 msgid "Request article from "
-msgstr "Ödünç alınma tarihi şundan sonra: "
+msgstr "Buradan makale isteğinde bulun"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:384
 #, c-format
@@ -41395,9 +41429,9 @@ msgstr "Gerekli"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:160
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:288
-#, fuzzy, c-format
+#, c-format
 msgid "Requested article"
-msgstr "Gerekli"
+msgstr "İstek yapılan makale"
 
 #: intranet-tmpl/prog/en/modules/about.tt:806
 #: intranet-tmpl/prog/en/modules/about.tt:807
@@ -41709,10 +41743,10 @@ msgstr "Sonuç"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:109
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:179
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:115
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:151
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:156
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:193
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:229
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:236
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:273
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:500
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:62
 #, c-format
@@ -42656,10 +42690,10 @@ msgstr "Sean Hamlin"
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:117
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:158
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:42
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:114
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:150
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:155
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:192
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:228
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:235
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:272
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:375
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:253
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:22
@@ -42774,9 +42808,9 @@ msgstr "Etki alanı ara"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:89
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:89
-#, fuzzy, c-format
+#, c-format
 msgid "Search engine configuration"
-msgstr "Yapılandırmayı kaydet"
+msgstr "Arama motoru yapılandırması"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:247
 #, c-format
@@ -42809,14 +42843,14 @@ msgid "Search expired, please try again"
 msgstr "Arama zaman aşımına uğramıştır, lütfen tekrar deneyin"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:178
-#, fuzzy, c-format
+#, c-format
 msgid "Search field"
-msgstr "Alanları ara:"
+msgstr "Arama alanı"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid "Search fields"
-msgstr "Alanları ara:"
+msgstr "Arama alanları"
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:18
 #: intranet-tmpl/prog/en/modules/members/member.tt:422
@@ -42899,7 +42933,7 @@ msgid "Search funds:"
 msgstr "Fonları ara:"
 
 #: intranet-tmpl/prog/en/includes/header.inc:84
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:89
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:129
 #, c-format
 msgid "Search history"
 msgstr "Arama geçmişi"
@@ -43185,9 +43219,8 @@ msgstr "Aranıyor"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/select2.inc:4
-#, fuzzy
 msgid "Searching…"
-msgstr "Aranıyor"
+msgstr "Aranıyor..."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:7
@@ -43259,9 +43292,9 @@ msgid "See basket information"
 msgstr "Sepet bilgilerine bakınız"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:790
-#, fuzzy, c-format
+#, c-format
 msgid "See highlighted items below"
-msgstr ". İşaretlenmiş olan materyallere bakın "
+msgstr "Aşağıdaki vurgulanmış materyallere bakın"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:378
 #, c-format
@@ -43359,19 +43392,19 @@ msgid "Select a category type"
 msgstr "Bir Kategori türü Seçin"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:275
-#, fuzzy, c-format
+#, c-format
 msgid "Select a chooser"
-msgstr "Not seçin"
+msgstr "Bir seçici seçin"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:84
-#, fuzzy, c-format
+#, c-format
 msgid "Select a day"
-msgstr "Gün Seçin: "
+msgstr "Bir gün seçin"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:301
-#, fuzzy, c-format
+#, c-format
 msgid "Select a deliverer"
-msgstr "Bir kütüphane seçin:"
+msgstr "Bir teslimatçı seçin"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:79
 #, c-format
@@ -43384,9 +43417,9 @@ msgid "Select a file to import into the borrowers table."
 msgstr "borrowers tablosuna aktarmak için bir dosya seçin"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:142
-#, fuzzy, c-format
+#, c-format
 msgid "Select a frequency"
-msgstr "Bir fon seçin"
+msgstr "Bir frekans seçin"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:504
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:277
@@ -43434,9 +43467,9 @@ msgid "Select a template to be applied: "
 msgstr "Uygulanacak bir şablon seçin: "
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:241
-#, fuzzy, c-format
+#, c-format
 msgid "Select a time"
-msgstr "Bir şablon seç"
+msgstr "Bir zaman seçin"
 
 #: intranet-tmpl/prog/en/includes/branch-selector.inc:9
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:192
@@ -43447,10 +43480,6 @@ msgstr "Bir şablon seç"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:105
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:100
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:136
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:178
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:214
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:617
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:20
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:366
@@ -43483,6 +43512,14 @@ msgstr "Tüm bekleyenleri seç"
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:91
 msgid "Select all sample data"
 msgstr "Tüm örnek verileri seçin"
+
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:140
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:177
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:220
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:257
+#, c-format
+msgid "Select all visible rows"
+msgstr "Tüm görünür satırları seçin"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:186
 #, c-format
@@ -43519,9 +43556,9 @@ msgid "Select files: "
 msgstr "Dosyaları seçin:"
 
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:232
-#, fuzzy, c-format
+#, c-format
 msgid "Select item:"
-msgstr "Seçili materyaller:"
+msgstr "Materyal seçin:"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:137
 #, c-format
@@ -43564,9 +43601,9 @@ msgid "Select ordering library account: "
 msgstr "Sipariş veren kütüphane hesabını seçin:"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:512
-#, fuzzy, c-format
+#, c-format
 msgid "Select owner"
-msgstr "Seçici"
+msgstr "Sahip seçin"
 
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:247
 #, c-format
@@ -43587,10 +43624,10 @@ msgstr "Uzaktaki veri tabanlarını seçin"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:104
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:140
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:145
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:182
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:218
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:225
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:262
 #, c-format
 msgid "Select searches to: "
 msgstr "Aramaları seçin: "
@@ -43667,9 +43704,9 @@ msgstr "Tercih ettiğiniz MARC formatını seçin"
 
 #: intranet-tmpl/prog/en/modules/about.tt:812
 #: intranet-tmpl/prog/en/modules/about.tt:813
-#, fuzzy, c-format
+#, c-format
 msgid "Select2"
-msgstr "Seçin"
+msgstr "Select2"
 
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:4
 #, c-format
@@ -43996,9 +44033,9 @@ msgstr "Sunucular:"
 
 #. %1$s:  IF memcached_servers 
 #: intranet-tmpl/prog/en/modules/about.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "Servers: %s"
-msgstr "Sunucular:"
+msgstr "Sunucular: %s"
 
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:19
 #, c-format
@@ -44301,9 +44338,9 @@ msgid "Show actual/estimated values"
 msgstr "Gerçek/ tahmini değerleri göster"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:842
-#, fuzzy, c-format
+#, c-format
 msgid "Show advanced pattern"
-msgstr "Gelişmiş örüntüyü Göster/Gizle"
+msgstr "Gelişmiş örüntüyü göster"
 
 #. A
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:91
@@ -44370,9 +44407,9 @@ msgid "Show biblio"
 msgstr "Bibliyografik kaydı göster"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:136
-#, fuzzy, c-format
+#, c-format
 msgid "Show brief form"
-msgstr "Bibliyografik kaydı göster"
+msgstr "Kısa formu göster"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:206
 #, c-format
@@ -44396,9 +44433,9 @@ msgid "Show fields verbatim"
 msgstr "Alanları kelimesi kelimesine göster"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:135
-#, fuzzy, c-format
+#, c-format
 msgid "Show full form"
-msgstr "Tüm sütunları göster"
+msgstr "Tam formu göster"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
@@ -44738,9 +44775,9 @@ msgid "Sort2"
 msgstr "Sırala2"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:179
-#, fuzzy, c-format
+#, c-format
 msgid "Sortable"
-msgstr "Aranabilir"
+msgstr "Sıralanabilir"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:274
 #, c-format
@@ -44860,6 +44897,8 @@ msgstr "İade tarihini belirtin %s:"
 #, c-format
 msgid "Specify the default policy for lost item fees on return. "
 msgstr ""
+"Kayıp materyallerin iadesinde kayıp materyal ücreti için varsayılan "
+"politikayı belirtin."
 
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:35
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:161
@@ -45463,9 +45502,9 @@ msgstr "Cadde türü"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:142
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:144
-#, fuzzy, c-format
+#, c-format
 msgid "String"
-msgstr "İlkbahar"
+msgstr "Dizgi"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:74
 #, c-format
@@ -46000,9 +46039,9 @@ msgid "Suggested date from:"
 msgstr "Öneri tarihi:"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:181
-#, fuzzy, c-format
+#, c-format
 msgid "Suggestible"
-msgstr "Öneri"
+msgstr "Önerilebilir"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:530
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:45
@@ -46065,9 +46104,9 @@ msgstr "Önerileri ara:"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:162
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:164
-#, fuzzy, c-format
+#, c-format
 msgid "Sum"
-msgstr "Pzr"
+msgstr "Toplam"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:80
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:154
@@ -46961,6 +47000,8 @@ msgid ""
 "The autoBarcode system preference is set to %s and items with blank barcodes "
 "will have barcodes generated upon save to database"
 msgstr ""
+"AutoBarcode sistem tercihi %s olarak ayarlanır ve boş barkodlu öğeler, "
+"veritabanına kaydedildiğinde barkodlar oluşturulur"
 
 #. %1$s:  Barcode 
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-print.tt:26
@@ -47609,9 +47650,9 @@ msgid "There are no SMS cellular providers defined. "
 msgstr "Tanımlanmış hiçbir SMS hücresel sağlayıcı yok."
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:303
-#, fuzzy, c-format
+#, c-format
 msgid "There are no article requests in processing at this time. "
-msgstr "Bu kullanıcı için istatistik bulunmamaktadır."
+msgstr "Şu anda işlemde makale isteği bulunmamaktadır."
 
 #. %1$s:  category 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:299
@@ -47756,9 +47797,9 @@ msgstr ""
 "Bu abonelik için süreli yayın abonelik uyarısına abone olan kullanıcı yoktur."
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:175
-#, fuzzy, c-format
+#, c-format
 msgid "There are no pending article requests at this time. "
-msgstr "Beklemekte olan ilişik kesme istekleri yoktur."
+msgstr "Şu anda beklemede olan makale isteği bulunmamaktadır."
 
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:37
 #, c-format
@@ -48042,15 +48083,13 @@ msgstr "Bu materyalin süresi uzatılamaz, yerinde ödünç alma ile ödünç ve
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:10
-#, fuzzy
 msgid "This item cannot be removed. It is checked out"
-msgstr "Bu materyalin süresi uzatılamaz, yerinde ödünç alma ile ödünç verilmiş"
+msgstr "Bu materyal kaldırılamaz. ödünç verilmiş"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:10
-#, fuzzy
 msgid "This item cannot be removed. It is lost"
-msgstr "Bu materyalin süresi uzatılamaz, yerinde ödünç alma ile ödünç verilmiş"
+msgstr "Bu materyal kaldırılamaz. Kaybolmuş"
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:350
 #, c-format
@@ -48088,19 +48127,17 @@ msgid "This item has been lost with a status of \"%s.\""
 msgstr "Bu materyal \"%s\" durumu ile kaybolmuştur."
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:204
-#, fuzzy, c-format
+#, c-format
 msgid "This item has previously been checked out to this patron."
-msgstr ""
-"Bu materyal şu anda bu kullanıcı tarafından ödünç alınmış. Süresi uzatılsın "
-"mı?"
+msgstr "Bu materyal daha önce bu kullanıcıya ödünç verilmiş."
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:282
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This item has previously been checked out to this patron. Check out anyway?"
 msgstr ""
-"Bu materyal şu anda bu kullanıcı tarafından ödünç alınmış. Süresi uzatılsın "
-"mı?"
+"Bu materyal daha önce bu kullanıcıya ödünç verilmiş. Yine de ödünç verilsin "
+"mi?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/doc-head-close.inc:56
@@ -48109,9 +48146,8 @@ msgstr "Bu materyal zaten sepetinizdedir"
 
 #. A
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:210
-#, fuzzy
 msgid "This item is checked out"
-msgstr ": materyal ödünç alınmış."
+msgstr "Bu materyal ödünç verilmiş"
 
 #. %1$s:  IF CAN_user_circulate_force_checkout 
 #. %2$s:  END 
@@ -48132,9 +48168,8 @@ msgstr ""
 
 #. A
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:212
-#, fuzzy
 msgid "This item is lost"
-msgstr "Bu materyal mevcut değildir."
+msgstr "Bu materyal kayıptır"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:155
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:106
@@ -48723,9 +48758,9 @@ msgid "Title (uniform): "
 msgstr "Eser adı (tek biçim):"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:201
-#, fuzzy, c-format
+#, c-format
 msgid "Title and author"
-msgstr "İller ve ilçeler"
+msgstr "Başlık ve yazar"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:12
@@ -49047,14 +49082,14 @@ msgid "Too many checked out. %s checked out, only %s are allowed."
 msgstr "Çok fazla ödüç verme işlemi yapılmış %s ödünç verlmiş %s izin verilen."
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:297
-#, fuzzy, c-format
+#, c-format
 msgid "Too many holds for "
-msgstr "Çok fazla ayırma işlemi yapılmış: "
+msgstr "Bu materyal için çok fazla ayırtma işlemi yapılmış"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:277
-#, fuzzy, c-format
+#, c-format
 msgid "Too many holds for this record: "
-msgstr "Çok fazla ayırma işlemi yapılmış: "
+msgstr "Bu kayıt için çok fazla ayırtma işlemi yapılmış: "
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:275
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:287
@@ -49212,19 +49247,19 @@ msgstr "Toplam "
 msgid "Total (%s)"
 msgstr "Toplam (%s)"
 
-#. %1$s:  tf.tax_rate * 100 | $Price 
+#. %1$s:  tf.tax_rate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:191
 #, c-format
 msgid "Total (GST %s %%)"
 msgstr "Toplam (GST %s %%)"
 
-#. %1$s:  book_foot.tax_rate * 100 | $Price 
+#. %1$s:  book_foot.tax_rate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:382
 #, c-format
 msgid "Total (GST %s%%)"
 msgstr "Toplam (%s%%)"
 
-#. %1$s:  foot_loo.tax_rate * 100 | $Price 
+#. %1$s:  foot_loo.tax_rate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:484
 #, c-format
 msgid "Total (GST %s)"
@@ -49444,14 +49479,14 @@ msgstr "Toplamlar:"
 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:184
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:230
-#, fuzzy, c-format
+#, c-format
 msgid "Transaction branch"
-msgstr "Tercüme:"
+msgstr "İşlem birimi"
 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:231
-#, fuzzy, c-format
+#, c-format
 msgid "Transaction date"
-msgstr "Oluşturma Tarihi"
+msgstr "İşlem tarihi"
 
 #. A
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:12
@@ -49459,14 +49494,14 @@ msgid "Transaction logs"
 msgstr "İşlem günlükleri"
 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:232
-#, fuzzy, c-format
+#, c-format
 msgid "Transaction type"
-msgstr "Tercüme:"
+msgstr "İşlem türü"
 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:99
-#, fuzzy, c-format
+#, c-format
 msgid "Transaction type:"
-msgstr "Tercüme:"
+msgstr "İşlem türü:"
 
 #: intranet-tmpl/prog/en/includes/rotating-collections-toolbar.inc:22
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:25
@@ -49843,9 +49878,9 @@ msgstr "Tüm seçili olanları kaldır"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:197
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:199
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:254
-#, fuzzy, c-format
+#, c-format
 msgid "Undef"
-msgstr "Tanımlanmamış"
+msgstr "Undef"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:430
 #, c-format
@@ -50053,7 +50088,7 @@ msgid "Update"
 msgstr "Güncelle"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:136
-#, fuzzy, c-format
+#, c-format
 msgid "Update "
 msgstr "Güncelle"
 
@@ -50767,16 +50802,16 @@ msgstr "Sağlayıcı arama sonuçları"
 
 #. %1$s:  count 
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:32
-#, fuzzy, c-format
+#, c-format
 msgid "Vendor search: %s result(s) found"
-msgstr "Sağlayıcı araması: %s sonuç bulundu"
+msgstr "Sağlayıcı araması: %s sonuç(lar) bulundu"
 
 #. %1$s:  count 
 #. %2$s:  supplier 
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:34
-#, fuzzy, c-format
+#, c-format
 msgid "Vendor search: %s result(s) found for '%s'"
-msgstr "Sağlayıcı araması: '%s' için %s sonuç bulundu"
+msgstr "Sağlayıcı araması: '%s' için %s sonuç(lar) bulundu"
 
 #. %1$s:  count 
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:58
@@ -51171,6 +51206,8 @@ msgid ""
 "Warning: Any modification in these configurations will need a total "
 "reindexation to be fully taken into account ! "
 msgstr ""
+"Uyarı: Bu yapılandırmalardaki herhangi bir değişikliğin tamamen hesaba "
+"katılması için toplam yeniden dizinleme gerekir !"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:9
@@ -51426,6 +51463,11 @@ msgstr "Will Stokes"
 msgid "Winter"
 msgstr "kış"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
+msgid "With %s selected searches: "
+msgstr "%s seçilen aramalarla:"
+
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:197
 #, c-format
 msgid ""
@@ -51445,8 +51487,8 @@ msgstr "Çerçeve ile : "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-msgid "With selected searches: "
-msgstr "Seçtiğiniz aramalarla:"
+msgid "With selected search: "
+msgstr "Seçilen aramalarla:"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:716
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:250
@@ -51641,16 +51683,16 @@ msgstr "Evet "
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:196
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:200
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:204
-#, fuzzy, c-format
+#, c-format
 msgid "Yes and try to override system preferences"
-msgstr "Sistem Tercihlerini ara"
+msgstr "Evet ve sistem tercihlerini geçersiz kılmaya çalışın"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:703
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:707
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:711
-#, fuzzy, c-format
+#, c-format
 msgid "Yes if settings allow it"
-msgstr "Evet: Mevcut otoriteleri düzenle"
+msgstr "Ayarlar izin veriyorsa evet"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorder.tt:33
 #, c-format
@@ -51958,7 +52000,7 @@ msgstr "Yıllık tekrarlayan tarih dizilerinde bir istisna yapabilirsiniz."
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/select2.inc:4
 msgid "You can only select %s item(s)"
-msgstr ""
+msgstr "Yalnızca %s materyal(ler) seçebilirsiniz"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:425
 #, c-format
@@ -52401,7 +52443,7 @@ msgstr "Yöneticiniz Yönetimde bir bütçe tanımlamalı"
 msgid "Your administrator must specify an active currency."
 msgstr "Yöneticiniz aktif bir para birimi tanımlamalıdır."
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:247
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:291
 #, c-format
 msgid "Your authority search history is empty."
 msgstr "Otorite arama geçmişiniz boş."
@@ -52426,7 +52468,7 @@ msgstr "Sepetiniz şu anda boş"
 msgid "Your cart is empty."
 msgstr "Sepetiniz boş."
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:169
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:211
 #, c-format
 msgid "Your catalog search history is empty."
 msgstr "Katalog arama geçmişiniz boş."
@@ -53213,11 +53255,9 @@ msgid "at least 1 library must be defined"
 msgstr "en az 1 kütüphane tanımlanmalıdır"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:287
-#, fuzzy, c-format
+#, c-format
 msgid "at least one template for using this tool. "
-msgstr ""
-"Bu aracı kullanmak için en az bir şablon. %s %s %s Şablon için tanımlanmış "
-"eylem yok. %s "
+msgstr "Bu aracı kullanmak için en az bir şablon."
 
 #. A
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:168
@@ -53428,9 +53468,9 @@ msgstr "call.ogg"
 #. %1$s:  max_holds_for_record 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:277
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:297
-#, fuzzy, c-format
+#, c-format
 msgid "can only place a maximum of %s hold(s) on this record."
-msgstr "Toplam ayırtmalar içinde en fazla %s ayırtma yapabilirsiniz."
+msgstr "bu kayıt üzerinde en fazla %s ayırtma(lar) yapabilirsiniz"
 
 #. %1$s:  maxreserves 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:275
@@ -53880,38 +53920,40 @@ msgstr "hiç ödünç alınmamış."
 
 #. %1$s:  ELSIF message.code == 'authority_not_modified' 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:113
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "has not been modified. An error occurred on modifying it. %s Authority "
 "record "
-msgstr "Değiştirilmedi. Değiştirme ile ilgili bir hata oluştu. %s Otorite"
+msgstr ""
+"Değiştirilmedi. Değişiklik yapılırken bir hata oluştu. %s Otorite kayıt"
 
 #. %1$s:  ELSIF message.code == 'biblio_modified' 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:115
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "has not been modified. An error occurred on modifying it. %s Bibliographic "
 "record "
-msgstr "Değiştirilmedi. Değiştirme ile ilgili bir hata oluştu. %s Bibliyo"
+msgstr ""
+"Değiştirilmedi. Değişiklik yapılırken bir hata oluştu. %s Bibliyografik kayıt"
 
 #. %1$s:  END 
 #. %2$s:  IF message.error 
 #. %3$s:  message.error
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:119
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "has successfully been modified. %s %s (The error was: %s. See the Koha "
 "logfile for more information). %s "
 msgstr ""
-"Başarıyla değiştirildi. %s %s (Hata şuydu: %s; Daha fazla bilgi için Koha "
-"sistem günlüğü dosyasına bakınız.) %s"
+"Başarıyla değiştirildi. %s %s (Hata: %s. Daha fazla bilgi için Koha sistem "
+"günlüğü dosyasına bakın). %s"
 
 #. %1$s:  ELSIF message.code == 'authority_modified' 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid "has successfully been modified. %s Bibliographic record "
-msgstr "başarıyla değiştirildi. %s Otorite "
+msgstr "başarıyla değiştirildi. %s Bibliyografik kayıt"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:287
 #, c-format
@@ -54115,9 +54157,9 @@ msgid "item fields"
 msgstr "materyal alanları"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:669
-#, fuzzy, c-format
+#, c-format
 msgid "item type for older issues:"
-msgstr "materyal türü tanımlanmamış"
+msgstr "Daha eski sayılar için materyal türü:"
 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:109
 #, c-format
@@ -55094,9 +55136,9 @@ msgid "to be placed on hold"
 msgstr "ayrılmaya konulacak"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:285
-#, fuzzy, c-format
+#, c-format
 msgid "to be placed on hold."
-msgstr "ayrılmaya konulacak"
+msgstr "ayırtma yapılacak."
 
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:221
 #, c-format

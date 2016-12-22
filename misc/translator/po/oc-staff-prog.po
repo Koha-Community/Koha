@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha\n"
-"POT-Creation-Date: 2016-11-20 20:16-0300\n"
-"PO-Revision-Date: 2016-10-07 11:34+0000\n"
+"POT-Creation-Date: 2016-12-15 11:58-0300\n"
+"PO-Revision-Date: 2016-12-06 20:34+0000\n"
 "Last-Translator: Cédric <cvalmary@yahoo.fr>\n"
 "Language-Team: Tot en òc (totenoc.eu)\n"
 "Language: oc\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1475840069.000000\n"
+"X-POOTLE-MTIME: 1481056452.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -96,13 +96,13 @@ msgstr "\", \"dt_count\": \"%s item(s)\", \"dt_owner\": \""
 #. %5$s:  data.dateexpiry 
 #. %6$s:  IF data.overdues 
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:19
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\", \"dt_dateofbirth\": \"%s\", \"dt_category\": \"%s (%s)\", \"dt_branch\": "
 "\"%s\", \"dt_dateexpiry\": \"%s\", \"dt_od_checkouts\": \"%s"
 msgstr ""
-"\", \"dt_category\": \"%s (%s)\", \"dt_branch\": \"%s\", \"dt_dateexpiry\": "
-"\"%s\", \"dt_od_checkouts\": \"%s"
+"\", \"dt_dateofbirth\": \"%s\", \"dt_category\": \"%s (%s)\", \"dt_branch\": "
+"\"%s\", \"dt_dateexpiry\": \"%s\", \"dt_od_checkouts\": \"%s"
 
 #. %1$s:  IF data.sortby == "author" 
 #. %2$s:  ELSIF data.sortby == "copyrightdate" 
@@ -120,14 +120,15 @@ msgstr ""
 #. %14$s: ~ IF can_manage_shelf OR can_delete_shelf ~
 #. %15$s: ~ IF can_manage_shelf ~
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\", \"dt_sortby\": %s\"Author\"%s\"Year\"%s\"Call number\"%s\"Title\"%s, "
 "\"dt_created_on\": \"%s\", \"dt_modification_time\": \"%s\", \"dt_action\": "
 "\"%s\" }%s,%s %s ] } %s %s %s %s [%%~ action_block = '"
 msgstr ""
 "\", \"dt_sortby\":%sAutor%sAnnada%sQuòta%sTítol%s, \"dt_created_on\": \"%s"
-"\", \"dt_modificacion_time\": \"%s\", \"dt_action\": \""
+"\", \"dt_modification_time\": \"%s\", \"dt_action\": \"%s\" }%s,%s %s ] } %s "
+"%s %s %s [%%~ action_block = '"
 
 #. %1$s:  END 
 #. %2$s:  data.cardnumber | html 
@@ -139,16 +140,16 @@ msgstr "\", %s \"dt_cardnumber\": \"%s\", \"dt_name\": \""
 #. %1$s:  message_loo.date_from 
 #. %2$s:  ELSIF ( message_loo.date_to ) 
 #: intranet-tmpl/prog/en/modules/tags/review.tt:216
-#, fuzzy, c-format
+#, c-format
 msgid "\"Date from\" is not a legal value (\"%s\"). %s"
-msgstr "es pas una valor permesa (\"%s\"). %sERROR : "
+msgstr "\"Date from\" es pas una valor permesa (\"%s\"). %s"
 
 #. %1$s:  message_loo.date_to 
 #. %2$s:  ELSIF ( message_loo.failed_ok ) 
 #: intranet-tmpl/prog/en/modules/tags/review.tt:217
-#, fuzzy, c-format
+#, c-format
 msgid "\"Date to\" is not a legal value (\"%s\"). %s"
-msgstr "es pas una valor permesa (\"%s\"). %sERROR : "
+msgstr "\"Date to\" es pas una valor permesa (\"%s\"). %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:445
 #, c-format
@@ -264,9 +265,9 @@ msgstr ""
 #. %13$s:  END 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:193
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:321
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s %s %s : %s %s %s %s ISBN: %s %s "
-msgstr "%s%s%s %s, %s %s, %s%s %s: %s %s %s%s%s %sISBN : %s%s"
+msgstr "%s %s %s %s %s %s %s : %s %s %s %s ISBN: %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -1198,7 +1199,7 @@ msgstr "%s %s abans %s "
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:74
 #, fuzzy, c-format
 msgid ""
-"%s %s An error occurred when updateing mappings (%s). %s An error occurred "
+"%s %s An error occurred when updating mappings (%s). %s An error occurred "
 "when deleting the existing mappings. Nothing has been changed! (search field "
 "%s with mapping %s.) %s Mapping updated successfully. %s %s %s "
 msgstr ""
@@ -3069,12 +3070,6 @@ msgstr "a bien été modificat. %s L'autoritat "
 #, c-format
 msgid "%s / Fax: %s"
 msgstr "%s / Fax: %s"
-
-#. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:248
-#, fuzzy, c-format
-msgid "%s /select> "
-msgstr "Tot seleccionar"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -8701,7 +8696,7 @@ msgstr "&rsaquo; Recercar de las notícias existentas"
 msgid "&rsaquo; Search for vendor "
 msgstr "&rsaquo; Recercar un provesidor "
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #, c-format
 msgid "&rsaquo; Search history "
 msgstr "&rsaquo; Istoric de recèrca"
@@ -12459,11 +12454,6 @@ msgid "Are you sure you want to delete image(s): %s?"
 msgstr "Sètz segur que volètz suprimir aqueste(s) imatge(s) : %s ?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-msgid "Are you sure you want to delete selected search history entries?"
-msgstr "Sètz segur que volètz suprimir vòstre istoric de recèrca ?"
-
-#. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:22
 #, fuzzy
 msgid "Are you sure you want to delete server %s?"
@@ -12473,6 +12463,12 @@ msgstr "Sètz segur que volètz suprimir %s %s ?"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:1
 msgid "Are you sure you want to delete the %s attached items?"
 msgstr "Sètz segur que volètz suprimir los %s exemplars restacats ?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
+#, fuzzy
+msgid "Are you sure you want to delete the %s selected search history entries?"
+msgstr "Sètz segur que volètz suprimir vòstre istoric de recèrca ?"
 
 #. %1$s:  category.codedescription 
 #. %2$s:  category.categorycode 
@@ -12510,6 +12506,12 @@ msgstr "Sètz segur que volètz suprimir las actualitats seleccionadas ?"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:40
 msgid "Are you sure you want to delete the selected reports?"
 msgstr "Sètz segur que volètz suprimir los rapòrts seleccionats ?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
+#, fuzzy
+msgid "Are you sure you want to delete the selected search history entry?"
+msgstr "Sètz segur que volètz suprimir vòstre istoric de recèrca ?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:36
@@ -13234,7 +13236,7 @@ msgstr "Autoritats:"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:191
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:241
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:93
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:133
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:182
 #, c-format
 msgid "Authority"
@@ -15792,8 +15794,8 @@ msgstr "Caisseta audio"
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:58
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:24
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:92
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:132
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:346
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:42
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:317
@@ -17277,10 +17279,6 @@ msgstr "Escafar"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:106
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:101
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:179
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:215
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:618
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:20
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:368
@@ -17358,6 +17356,14 @@ msgstr "Escafar l'ecran"
 #, c-format
 msgid "Clear search form"
 msgstr "Netejar lo formulari de recèrca"
+
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:142
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:179
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:222
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:259
+#, fuzzy, c-format
+msgid "Clear selection on visible rows"
+msgstr "Mercé d'en causir un sol de %s a %s"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:191
 #, c-format
@@ -19204,8 +19210,8 @@ msgstr "Renovèlaments :"
 msgid "Current server time is:"
 msgstr "L'heure del servidor es :"
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:97
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:175
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:217
 #, c-format
 msgid "Current session"
 msgstr "Session en cors"
@@ -19426,10 +19432,10 @@ msgstr "Basa de donadas : "
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:311
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:168
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:296
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:113
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:149
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:154
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:191
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:227
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:234
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:271
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:717
 #: intranet-tmpl/prog/en/modules/tags/review.tt:249
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:395
@@ -20151,10 +20157,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:194
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:196
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:198
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:105
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:141
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:146
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:183
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:219
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:226
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:263
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:383
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:99
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:249
@@ -25501,7 +25507,7 @@ msgstr "Periòde de tampadura repetida cada annada"
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:58
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:24
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:346
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:41
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:316
@@ -35649,7 +35655,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Note that the right place to define the memcached config is in your "
-"$KOHA_CONF file. To avoid any misunderstanding you whould not export the "
+"$KOHA_CONF file. To avoid any misunderstanding you should not export the "
 "memcached config from ENV. %s "
 msgstr ""
 
@@ -35690,6 +35696,11 @@ msgstr ""
 msgid ""
 "Note: No upload categories are defined. Add values to the UPLOAD authorized "
 "value category otherwise all uploads will be marked as temporary."
+msgstr ""
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1190
+msgid "Note: Quick add guarantor form populates address fields in full form"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:207
@@ -39544,8 +39555,8 @@ msgstr "Prèstes precedents"
 msgid "Previous page"
 msgstr "Pagina precedenta"
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:133
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:211
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:174
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:254
 #, c-format
 msgid "Previous sessions"
 msgstr "Sessions precedentas"
@@ -41770,10 +41781,10 @@ msgstr "Responsa"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:109
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:179
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:115
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:151
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:156
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:193
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:229
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:236
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:273
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:500
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:62
 #, c-format
@@ -42721,10 +42732,10 @@ msgstr "Sean Hamlin"
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:117
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:158
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:42
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:114
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:150
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:155
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:192
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:228
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:235
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:272
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:375
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:253
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:22
@@ -42968,7 +42979,7 @@ msgid "Search funds:"
 msgstr "Recercar dels pòstes budgetaris :"
 
 #: intranet-tmpl/prog/en/includes/header.inc:84
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:89
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:129
 #, c-format
 msgid "Search history"
 msgstr "         Istoric de recèrca de        "
@@ -43521,10 +43532,6 @@ msgstr "Suprimir un modèl"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:105
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:100
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:136
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:178
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:214
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:617
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:20
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:366
@@ -43557,6 +43564,14 @@ msgstr "Tot seleccionar"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:91
 msgid "Select all sample data"
+msgstr "Seleccionatz totas las donadas d'échantillon"
+
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:140
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:177
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:220
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:257
+#, fuzzy, c-format
+msgid "Select all visible rows"
 msgstr "Seleccionatz totas las donadas d'échantillon"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:186
@@ -43662,10 +43677,10 @@ msgstr "Seleccionatz las bancas de donadas distantes"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:104
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:140
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:145
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:182
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:218
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:225
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:262
 #, c-format
 msgid "Select searches to: "
 msgstr "Documents seleccionats : "
@@ -49275,19 +49290,19 @@ msgstr "Total "
 msgid "Total (%s)"
 msgstr "Total (%s)"
 
-#. %1$s:  tf.tax_rate * 100 | $Price 
+#. %1$s:  tf.tax_rate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:191
 #, c-format
 msgid "Total (GST %s %%)"
 msgstr "Total (TVA %s%%)"
 
-#. %1$s:  book_foot.tax_rate * 100 | $Price 
+#. %1$s:  book_foot.tax_rate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:382
 #, c-format
 msgid "Total (GST %s%%)"
 msgstr "Total (TVA %s%%)"
 
-#. %1$s:  foot_loo.tax_rate * 100 | $Price 
+#. %1$s:  foot_loo.tax_rate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:484
 #, c-format
 msgid "Total (GST %s)"
@@ -51504,6 +51519,12 @@ msgstr "Will Stokes"
 msgid "Winter"
 msgstr "Ivèrn"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
+#, fuzzy
+msgid "With %s selected searches: "
+msgstr "Documents seleccionats : "
+
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:197
 #, c-format
 msgid ""
@@ -51522,7 +51543,8 @@ msgstr "Amb la grasilha :"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-msgid "With selected searches: "
+#, fuzzy
+msgid "With selected search: "
 msgstr "Documents seleccionats : "
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:716
@@ -52478,7 +52500,7 @@ msgstr ""
 msgid "Your administrator must specify an active currency."
 msgstr "especificar una moneda active"
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:247
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:291
 #, c-format
 msgid "Your authority search history is empty."
 msgstr "Vòstre istoric de recèrca sus las autoritats es vide."
@@ -52503,7 +52525,7 @@ msgstr "Vòstre panièr es void"
 msgid "Your cart is empty."
 msgstr "Panièr void."
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:169
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:211
 #, c-format
 msgid "Your catalog search history is empty."
 msgstr "Vòstre istoric de recèrca dins lo catalòg es vide."

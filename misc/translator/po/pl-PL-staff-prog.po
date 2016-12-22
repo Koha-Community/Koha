@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2016-11-20 20:15-0300\n"
-"PO-Revision-Date: 2016-11-20 19:23+0000\n"
+"POT-Creation-Date: 2016-12-15 12:05-0300\n"
+"PO-Revision-Date: 2016-12-20 13:43+0000\n"
 "Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1479669813.000000\n"
+"X-POOTLE-MTIME: 1482241403.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -1207,7 +1207,7 @@ msgstr "%s %s (rekord utrzymany) %s "
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:74
 #, c-format
 msgid ""
-"%s %s An error occurred when updateing mappings (%s). %s An error occurred "
+"%s %s An error occurred when updating mappings (%s). %s An error occurred "
 "when deleting the existing mappings. Nothing has been changed! (search field "
 "%s with mapping %s.) %s Mapping updated successfully. %s %s %s "
 msgstr ""
@@ -1820,7 +1820,7 @@ msgstr "%s %s Niezarezerwowane %s %s "
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:195
 #, c-format
 msgid "%s %s On order (%s)"
-msgstr "%s %s Na zamówieniu (%s)"
+msgstr "%s %s Sprowadzany (%s)"
 
 #. %1$s:  SET status_found = 0 
 #. %2$s:  IF ( STATUS == 'ASKED' ) 
@@ -3136,12 +3136,6 @@ msgstr "%s / %s rekordów zostało poprawnie zmodyfikowanych. Wystąpiły błęd
 msgid "%s / Fax: %s"
 msgstr "%s / Fax: %s"
 
-#. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:248
-#, c-format
-msgid "%s /select> "
-msgstr "%s /zaznacz> "
-
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:412
@@ -3334,7 +3328,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:514
 #, c-format
 msgid "%s Article requests"
-msgstr "%s Zapytania o artykuł"
+msgstr "%s Zamówienia na kopię"
 
 #. %1$s:  IF (del_biblio) 
 #. %2$s:  ELSE 
@@ -3934,8 +3928,7 @@ msgstr "%s Brak aktywnych budżetów %s "
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:292
 #, c-format
 msgid "%s No article requests can be made for this record. %s %s %s "
-msgstr ""
-"%s Brak możliwości złożenia zapytania o artykuł na ten rekord. %s %s %s "
+msgstr "%s Brak możliwości złożenia zamówienia kopii na ten rekord. %s %s %s "
 
 #. For the first occurrence,
 #. %1$s:  ELSE 
@@ -4172,7 +4165,7 @@ msgstr "%s Hasło: "
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:87
 #, c-format
 msgid "%s Patron has no current article requests. %s "
-msgstr "%s Użytkownik nie ma bieżących zapytań o artykuł. %s "
+msgstr "%s Użytkownik nie ma bieżących zamówień na kopię. %s "
 
 #. %1$s:  IF ( suggestions_loo.ASKED ) 
 #. %2$s:  ELSIF ( suggestions_loo.ACCEPTED ) 
@@ -8619,7 +8612,7 @@ msgstr "&rsaquo; Raporty"
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:105
 #, c-format
 msgid "&rsaquo; Request article "
-msgstr "&rsaquo; Zapytania o artykuł "
+msgstr "&rsaquo; Zamówienia na kopię "
 
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:12
 #, c-format
@@ -8796,7 +8789,7 @@ msgstr "&rsaquo; Szukaj istniejących rekordów"
 msgid "&rsaquo; Search for vendor "
 msgstr "&rsaquo; Szukaj dostawcy "
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #, c-format
 msgid "&rsaquo; Search history "
 msgstr "&rsaquo; Historia wyszukiwania "
@@ -12551,11 +12544,6 @@ msgid "Are you sure you want to delete image(s): %s?"
 msgstr "Czy na pewno chcesz usunąć zdjęcie(a): %s?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-msgid "Are you sure you want to delete selected search history entries?"
-msgstr "Czy na pewno chcesz usunąć wybrane wyszukiwania?"
-
-#. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:22
 msgid "Are you sure you want to delete server %s?"
 msgstr "Czy na pewno chcesz usunąć serwer %s?"
@@ -12564,6 +12552,11 @@ msgstr "Czy na pewno chcesz usunąć serwer %s?"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:1
 msgid "Are you sure you want to delete the %s attached items?"
 msgstr "Czy na pewno chcesz usunąć %s podłączonych egzemplarzy?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
+msgid "Are you sure you want to delete the %s selected search history entries?"
+msgstr "Czy na pewno chcesz usunąć wybrane wyszukiwania (%s)?"
 
 #. %1$s:  category.codedescription 
 #. %2$s:  category.categorycode 
@@ -12600,6 +12593,11 @@ msgstr "Czy na pewno chcesz usunąć wybrane wiadomości?"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:40
 msgid "Are you sure you want to delete the selected reports?"
 msgstr "Czy na pewno chcesz usunąć wybrane raporty?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
+msgid "Are you sure you want to delete the selected search history entry?"
+msgstr "Czy na pewno chcesz usunąć wybrane wyszukiwania?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:36
@@ -12991,18 +12989,18 @@ msgstr "Arslan Farooq"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:122
 #, c-format
 msgid "Article requests"
-msgstr "Zapytania o artykuł"
+msgstr "Zamówienia na kopię"
 
 #. %1$s:  Biblio.ArticleRequestsActiveCount( biblio_object_id ) 
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:34
 #, c-format
 msgid "Article requests (%s)"
-msgstr "Zapytania o artykuł (%s)"
+msgstr "Zamówienia na kopię (%s)"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:423
 #, c-format
 msgid "Article requests:"
-msgstr "Zapytania o artykuł:"
+msgstr "Zamówienia na kopię:"
 
 #. %1$s:  IF dbms == 'mysql' 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:24
@@ -13304,7 +13302,7 @@ msgstr "Hasła wzorcowe: "
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:191
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:241
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:93
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:133
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:182
 #, c-format
 msgid "Authority"
@@ -15364,7 +15362,7 @@ msgstr "Anuluj i powróć do zamówienia"
 #. A
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:362
 msgid "Cancel article request"
-msgstr "Anuluj zapytanie o artykuł"
+msgstr "Anuluj zamówienie na kopię"
 
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:408
@@ -15458,7 +15456,7 @@ msgstr "Anuluj odbiór"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:388
 #, c-format
 msgid "Cancel request "
-msgstr "Anuluj zapytanie o artykuł "
+msgstr "Anuluj zamówienie "
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:57
 #, c-format
@@ -15858,8 +15856,8 @@ msgstr "Kaseta magnetofonowa"
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:58
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:24
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:92
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:132
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:346
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:42
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:317
@@ -16512,7 +16510,7 @@ msgstr "Wypożyczono "
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:682
 #, c-format
 msgid "Checked out %s %s %s by "
-msgstr "%s Wypożyczanie przez %s %s "
+msgstr "%s Wypożyczony przez %s %s "
 
 #. %1$s:  total 
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:39
@@ -17341,10 +17339,6 @@ msgstr "Wyczyść"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:106
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:101
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:179
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:215
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:618
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:20
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:368
@@ -17422,6 +17416,14 @@ msgstr "Wyczyść ekran"
 #, c-format
 msgid "Clear search form"
 msgstr "Wyczyść"
+
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:142
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:179
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:222
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:259
+#, c-format
+msgid "Clear selection on visible rows"
+msgstr "Wyczyść zaznaczenie na widocznych wierszach"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:191
 #, c-format
@@ -18078,7 +18080,7 @@ msgstr "Porównaj listę kodów kreskowych z wynikami: "
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:383
 #, c-format
 msgid "Complete request "
-msgstr "Kompletne zapytanie o artykuł "
+msgstr "Kompletne zamówienie "
 
 #: intranet-tmpl/prog/en/modules/serials/serial-issues.tt:21
 #, c-format
@@ -19203,7 +19205,7 @@ msgstr "Waluta: "
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:301
 #, c-format
 msgid "Current article requests"
-msgstr "Bieżące zapytania o artykuł"
+msgstr "Bieżące zamówienie na kopię"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:171
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:392
@@ -19260,8 +19262,8 @@ msgstr "Bieżące prolongaty:"
 msgid "Current server time is:"
 msgstr "Obecny czas:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:97
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:175
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:217
 #, c-format
 msgid "Current session"
 msgstr "Bieżąca sesja"
@@ -19481,10 +19483,10 @@ msgstr "Baza danych: "
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:311
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:168
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:296
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:113
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:149
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:154
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:191
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:227
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:234
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:271
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:717
 #: intranet-tmpl/prog/en/modules/tags/review.tt:249
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:395
@@ -20204,10 +20206,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:194
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:196
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:198
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:105
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:141
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:146
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:183
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:219
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:226
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:263
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:383
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:99
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:249
@@ -25549,7 +25551,7 @@ msgstr "Powtarzany co roku zakres dni, gdy biblioteka jest zamknięta"
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:58
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:24
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:346
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:41
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:316
@@ -29535,7 +29537,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:7
 #, c-format
 msgid "Koha &rsaquo; Circulation &rsaquo; Article requests"
-msgstr "Koha &rsaquo; Udostępnianie &rsaquo; Zapytania o artykuł"
+msgstr "Koha &rsaquo; Udostępnianie &rsaquo; Zamówienia na kopię"
 
 #. %1$s:  title |html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:25
@@ -29626,7 +29628,7 @@ msgstr "Koha &rsaquo; Udostępnianie &rsaquo; Prolongata %s"
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:7
 #, c-format
 msgid "Koha &rsaquo; Circulation &rsaquo; Request article"
-msgstr "Koha &rsaquo; Udostępnianie &rsaquo; Zapytanie o artykuł"
+msgstr "Koha &rsaquo; Udostępnianie &rsaquo; Zamówienia na kopię"
 
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:3
 #, c-format
@@ -35688,7 +35690,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Note that the right place to define the memcached config is in your "
-"$KOHA_CONF file. To avoid any misunderstanding you whould not export the "
+"$KOHA_CONF file. To avoid any misunderstanding you should not export the "
 "memcached config from ENV. %s "
 msgstr ""
 "Uwaga miejscem prawidłowego definiowania konfiguracji pamięci podręcznej "
@@ -35736,6 +35738,11 @@ msgstr ""
 "Uwaga: Żadna kategoria wczytywanych plików nie została zdefiniowana. Dodaj "
 "UPLOAD w kategorii autoryzowanych wartości, inaczej wszystkie pliki będą "
 "oznaczone jako tymczasowe."
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1190
+msgid "Note: Quick add guarantor form populates address fields in full form"
+msgstr "Uwaga: Adres opiekuna należy wypełnić w pełnym formularzu"
 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:207
 #, c-format
@@ -36641,9 +36648,9 @@ msgid "Only item "
 msgstr "Tylko egzemplarz "
 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:177
-#, fuzzy, c-format
+#, c-format
 msgid "Only item:"
-msgstr "Tylko egzemplarz "
+msgstr "Tylko egzemplarz:"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:250
 #, c-format
@@ -38588,7 +38595,7 @@ msgstr "Składanie i modyfikowanie zamówień dla użytkowników"
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:171
 #, c-format
 msgid "Place article request from %s for %s %s ( %s )"
-msgstr "Złóż zapytanie o artykuł z %s dla %s %s ( %s )"
+msgstr "Zamów kopię z %s dla %s %s ( %s )"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:254
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:259
@@ -38648,7 +38655,7 @@ msgstr "Miejsce wydanie"
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:290
 msgid "Place request"
-msgstr "Złóż zapytanie o artykuł"
+msgstr "Zamów kopię"
 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:7
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:305
@@ -39548,8 +39555,8 @@ msgstr "Poprzednie wypożyczenia"
 msgid "Previous page"
 msgstr "Poprzednia strona"
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:133
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:211
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:174
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:254
 #, c-format
 msgid "Previous sessions"
 msgstr "Poprzednie sesje"
@@ -39903,7 +39910,7 @@ msgstr "Przetwarzanie zdjęć"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:255
 #, c-format
 msgid "Process request "
-msgstr "Przetwarzanie zapytania o artykuł "
+msgstr "Przetwarzanie zamówienia "
 
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:162
 #, c-format
@@ -41436,12 +41443,12 @@ msgstr "Tabele raportów"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:603
 #, c-format
 msgid "Request article"
-msgstr "Zapytanie o artykuł"
+msgstr "Zamów kopię"
 
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:115
 #, c-format
 msgid "Request article from "
-msgstr "Zapytanie o artykuł od "
+msgstr "Zamówienie na kopię od "
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:384
 #, c-format
@@ -41457,7 +41464,7 @@ msgstr "Zgłoszone"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:288
 #, c-format
 msgid "Requested article"
-msgstr "Zgłoszone zapytanie o artykuł"
+msgstr "Zgłoszone zamówienie na kopię"
 
 #: intranet-tmpl/prog/en/modules/about.tt:806
 #: intranet-tmpl/prog/en/modules/about.tt:807
@@ -41769,10 +41776,10 @@ msgstr "Wynik"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:109
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:179
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:115
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:151
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:156
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:193
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:229
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:236
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:273
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:500
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:62
 #, c-format
@@ -42716,10 +42723,10 @@ msgstr "Sean Hamlin"
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:117
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:158
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:42
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:114
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:150
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:155
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:192
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:228
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:235
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:272
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:375
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:253
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:22
@@ -42959,7 +42966,7 @@ msgid "Search funds:"
 msgstr "Szukaj funduszu:"
 
 #: intranet-tmpl/prog/en/includes/header.inc:84
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:89
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:129
 #, c-format
 msgid "Search history"
 msgstr "Historia wyszukiwania"
@@ -43507,10 +43514,6 @@ msgstr "Wybierz czas"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:105
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:100
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:136
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:178
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:214
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:617
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:20
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:366
@@ -43543,6 +43546,14 @@ msgstr "Zaznacz wszystko"
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:91
 msgid "Select all sample data"
 msgstr "Wybierz wszystkie próbne dane"
+
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:140
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:177
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:220
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:257
+#, c-format
+msgid "Select all visible rows"
+msgstr "Wybierz wszystkie widoczne wiersze"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:186
 #, c-format
@@ -43647,10 +43658,10 @@ msgstr "Wybierz zdalną bazę"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:104
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:140
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:145
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:182
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:218
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:225
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:262
 #, c-format
 msgid "Select searches to: "
 msgstr "Wybierz wyszukiwania: "
@@ -47676,7 +47687,7 @@ msgstr "Brak zdefiniowanych operatorów sieci komórkowych (SMS). "
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:303
 #, c-format
 msgid "There are no article requests in processing at this time. "
-msgstr "Brak przetwarzanych zapytań o artykuł w tym momencie. "
+msgstr "Brak przetwarzanych zamówień na kopię w tym momencie. "
 
 #. %1$s:  category 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:299
@@ -47822,7 +47833,7 @@ msgstr "Brak użytkowników posiadających powiadomienie o prenumeracie."
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:175
 #, c-format
 msgid "There are no pending article requests at this time. "
-msgstr "Brak oczekujących zapytań o artykuł w tym momencie. "
+msgstr "Brak oczekujących zamówień na kopię w tym momencie. "
 
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:37
 #, c-format
@@ -49259,19 +49270,19 @@ msgstr "Kwota "
 msgid "Total (%s)"
 msgstr "Kwota (%s)"
 
-#. %1$s:  tf.tax_rate * 100 | $Price 
+#. %1$s:  tf.tax_rate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:191
 #, c-format
 msgid "Total (GST %s %%)"
 msgstr "Kwota (Podatek VAT %s %%)"
 
-#. %1$s:  book_foot.tax_rate * 100 | $Price 
+#. %1$s:  book_foot.tax_rate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:382
 #, c-format
 msgid "Total (GST %s%%)"
 msgstr "Kwota (Podatek VAT %s%%)"
 
-#. %1$s:  foot_loo.tax_rate * 100 | $Price 
+#. %1$s:  foot_loo.tax_rate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:484
 #, c-format
 msgid "Total (GST %s)"
@@ -51475,6 +51486,11 @@ msgstr "Will Stokes"
 msgid "Winter"
 msgstr "Zima"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
+msgid "With %s selected searches: "
+msgstr "Wybrane wyszukiwania (%s): "
+
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:197
 #, c-format
 msgid ""
@@ -51495,7 +51511,7 @@ msgstr "Wybierz szablon: "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-msgid "With selected searches: "
+msgid "With selected search: "
 msgstr "Wybrane wyszukiwania: "
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:716
@@ -52444,7 +52460,7 @@ msgstr "Budżet musi zostać zdefiniowany w module Administracja"
 msgid "Your administrator must specify an active currency."
 msgstr "Administrator musi określić aktywną walutę."
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:247
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:291
 #, c-format
 msgid "Your authority search history is empty."
 msgstr "Brak wyników wyszukiwania wg hasła."
@@ -52469,7 +52485,7 @@ msgstr "Schowek jest pusty"
 msgid "Your cart is empty."
 msgstr "Schowek jest pusty."
 
-#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:169
+#: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:211
 #, c-format
 msgid "Your catalog search history is empty."
 msgstr "Brak historii wyszukiwania."
@@ -53065,7 +53081,7 @@ msgid ""
 "%s%s%s (%s) %s "
 msgstr ""
 "]%s %s(Wycofany)%s %s(Zagubiony)%s %s(Zniszczony)%s %s(Przesyłany)%s "
-"%s(Oczekujący)%s %s%s%s (%s) %s "
+"%s(Zarezerwowany)%s %s%s%s (%s) %s "
 
 #. %1$s:  END 
 #. %2$s:  onloan_items_loo.count 

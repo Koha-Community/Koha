@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOHA 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-20 20:22-0300\n"
-"PO-Revision-Date: 2016-11-12 00:05+0200\n"
+"POT-Creation-Date: 2016-12-15 12:34-0300\n"
+"PO-Revision-Date: 2016-12-20 11:40+0200\n"
 "Last-Translator: Paul <vilhan@biblia.sk>\n"
 "Language-Team: SVK\n"
 "Language: sk\n"
@@ -171,6 +171,9 @@ msgid ""
 "%s %s %s %s is overdue %sYour copy of %s (barcode %s) is overdue %s %s is "
 "due %sYour copy of %s (barcode %s) is due back at the library today %s "
 msgstr ""
+"%s %s %s %s je omeškaný %sVáš titul %s (čiarový kód %s) je omeškaný %s %s sa "
+"má vrátiť %sVáš titul %s (čiarový kód %s) sa má vrátiť späť do knižnice dnes "
+"%s "
 
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
@@ -307,6 +310,10 @@ msgid ""
 "been added. A suggestion with this title already exists. %s Your suggestion "
 "has been submitted. %s %s %s "
 msgstr ""
+"%s %s Návrh nebol pridaný. Dosiahli ste svoj limit pre návrhy, ktoré môžete "
+"doteraz podať (%s). Len čo knižnica spracuje podané návrhy, budete môcť "
+"podať ďalšie. %s Návrh nebol pridaný. Návrh na tento titul už jestvuje. %s "
+"Váš návrh bol odoslaný. %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -760,7 +767,7 @@ msgstr "%s Odhlásiť sa"
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:178
 #, c-format
 msgid "%s No article requests can be made for this record. %s "
-msgstr ""
+msgstr "%s Pre tento záznam nemožno vyžiadať žiaden článok. %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
@@ -2161,14 +2168,15 @@ msgstr "%sZbierka%sTyp exemplára%s"
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sOčakávaný%s %sDošlý%s %sOneskorený%s %sChýbajúci%s %sNedostupný%s "
-"%sOdstránený%s %sReklamovaný%s %sZastavený%s "
+"%sOčakávaný%s %sDošlý%s %sOneskorený%s %sChýbajúci%s %sChýbajúci "
+"(nedoručený)%s %sChýbajúci (predaný)%s %sMissing (poškodený)%s %sMissing "
+"(stratený)%s %sNedostupný%s %sOdstránený%s %sReklamovaný%s %sZastavený%s "
 
 #. %1$s:  IF (latestserial.status1 ) 
 #. %2$s:  END 
@@ -2195,14 +2203,15 @@ msgstr ""
 #. %23$s:  IF (latestserial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:835
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
 "%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sOčakávaný%s %sDošlý%s %sOneskorený%s %sChýbajúci%s %sNedostupný%s "
-"%sOdstránený%s %sReklamovaný%s %sZastavený%s "
+"%sOčakávaný%s %sDošlý%s %sOneskorený%s %sChýbajúci%s %sChýbajúci "
+"(nedoručený)%s %sChýbajúci (predaný)%s %sChýbajúci (poškodený)%s %sChýbajúci "
+"(stratený)%s %sNevypožičaný%s %sOdstránený%s %sReklamovaný%s %sZastavený%s "
 
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
 #. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
@@ -2293,7 +2302,7 @@ msgstr ""
 #. %1$s:  IF ( ISSUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:273
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:278
 #, c-format
 msgid "%sYes%sNo%s "
 msgstr "%sÁno%sNie%s "
@@ -4258,7 +4267,7 @@ msgid "Chapters:"
 msgstr "Kapitoly:"
 
 #. INPUT type=submit name=confirm
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:255
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:270
 msgid "Check in item"
 msgstr "Vrátiť exemplár"
 
@@ -6655,7 +6664,7 @@ msgstr "Lokácie"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:726
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:84
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:86
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:296
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:301
 #, c-format
 msgid "Log in"
 msgstr "Prihlásiť sa"
@@ -6683,7 +6692,7 @@ msgstr "Prihláste sa pre zobrazenie vašich uložených menoviek."
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:305
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:40
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:944
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:290
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:295
 #, c-format
 msgid "Log in to your account"
 msgstr "Prihláste sa do svojho účtu"
@@ -6728,7 +6737,7 @@ msgstr "Stránka prihlásenia"
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:73
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:291
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:296
 #, c-format
 msgid "Login:"
 msgstr "Meno:"
@@ -7258,7 +7267,7 @@ msgstr "Žiadne verejné zoznamy."
 msgid "No record was removed."
 msgstr "Nebol odobraný žiaden záznam."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:259
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:267
 #, c-format
 msgid "No renewals allowed"
 msgstr "Nie sú dovolené žiadne obnovenia"
@@ -7554,21 +7563,15 @@ msgstr "Objednaný"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #, c-format
 msgid "On-site checkouts"
-msgstr "Výpožičky na mieste"
+msgstr "Lokálne výpožičky"
 
+#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:155
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:259
 #, c-format
 msgid ""
 "Once the library has processed those suggestions you will be able to place "
-"more"
-msgstr "Len čo knižnica spracuje dané návrhy, budete môcť zadať viac"
-
-#: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:155
-#, c-format
-msgid ""
-"Once the library has processed those suggestions you will be able to place "
 "more."
-msgstr "Len čo knižnica spracuje dané návrhy, budete môcť zadať viac."
+msgstr "Len čo knižnica spracuje dané návrhy, budete môcť podať ďalšie."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:55
 #, c-format
@@ -7717,7 +7720,7 @@ msgstr "Heslo je zaktualizované"
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:79
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:293
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:298
 #, c-format
 msgid "Password:"
 msgstr "Heslo:"
@@ -7955,7 +7958,7 @@ msgstr "Opravte prosím chyby a znova odošlite. "
 msgid "Please enter numbers only. "
 msgstr "Zadajte, prosím, iba čísla. "
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:300
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:305
 #, c-format
 msgid "Please enter your card number:"
 msgstr "Prosím, zadajte svoje číslo preukazu:"
@@ -7964,10 +7967,10 @@ msgstr "Prosím, zadajte svoje číslo preukazu:"
 #, c-format
 msgid ""
 "Please fill out this form to make a purchase suggestion. You will receive an "
-"email when the library processes your suggestion"
+"email when the library processes your suggestion."
 msgstr ""
 "Vyplnením tohto formulára navrhnite prosím nákup. Len čo ho knižnica "
-"spracuje, upovedomí vás o tom E-mailom"
+"spracuje, upovedomí vás o tom E-mailom."
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:61
 #, c-format
@@ -8033,7 +8036,7 @@ msgstr "Upozornenie: "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:189
 msgid "Please select a specific item for this article request."
-msgstr ""
+msgstr "Vyberte, prosím, konkrétny exemplár pre túto žiadosť o článok."
 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:31
 #, c-format
@@ -8082,9 +8085,9 @@ msgid "Popularity (most to least)"
 msgstr "Čítanosť (od najväčšej po najmenšiu)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:939
-#, fuzzy, c-format
+#, c-format
 msgid "Post your comments on this item. "
-msgstr "Napíšte alebo upravte Vašu recenziu o tomto exemplári. "
+msgstr "Napíšte Vašu recenziu o tomto exemplári. "
 
 #. %1$s:  IF template.name.match('opac-main.tt') 
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:20
@@ -8313,7 +8316,7 @@ msgstr "Správy RSS pre verejné zoznamy %s"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
 #, c-format
 msgid "RT"
-msgstr ""
+msgstr "RT"
 
 #. INPUT type=submit name=rate_button
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:491
@@ -8354,9 +8357,9 @@ msgid "Recent comments "
 msgstr "Najnovšie recenzie "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:87
-#, fuzzy, c-format
+#, c-format
 msgid "Record URL"
-msgstr "GetRecords"
+msgstr "URL záznamu"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:158
 #, c-format
@@ -8364,9 +8367,9 @@ msgid "Record not found"
 msgstr "Záznam sa nenašiel"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:729
-#, fuzzy, c-format
+#, c-format
 msgid "Record title"
-msgstr "Názov edície"
+msgstr "Názov záznamu"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:3
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
@@ -8412,9 +8415,8 @@ msgstr "Normálna tlač"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
-#, fuzzy
 msgid "Related Term"
-msgstr "Príbuzný"
+msgstr "Súvisiaci pojem"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:366
 #, c-format
@@ -8504,8 +8506,8 @@ msgstr "Predĺžiť všetko"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:119
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:127
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:265
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:267
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:257
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:259
 #, c-format
 msgid "Renew item"
 msgstr "Predĺžiť exemplár"
@@ -8536,9 +8538,9 @@ msgstr "Nahlásiť problémy a nefunkčné odkazy"
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:17
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:16
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:513
-#, fuzzy, c-format
+#, c-format
 msgid "Request article"
-msgstr "Právnické články"
+msgstr "Vyžiadať článok"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:255
 #, c-format
@@ -8802,9 +8804,9 @@ msgid "Save to another list"
 msgstr "Uložiť do ďalšieho zoznamu"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
-#, fuzzy, c-format
+#, c-format
 msgid "Save to your lists"
-msgstr "Uložiť do zoznamov "
+msgstr "Uložiť do svojich zoznamov"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
 #, c-format
@@ -9350,7 +9352,7 @@ msgstr "Ľutujeme, niet návrhov."
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:25
 #, c-format
 msgid "Sorry, only the creator of this comment is allowed to change it."
-msgstr ""
+msgstr "Prepáčte, len tvorca tohto komentára smie urobiť zmeny."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:168
@@ -9566,7 +9568,7 @@ msgstr "Predmet: %s "
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:933
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:188
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:302
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:307
 #, c-format
 msgid "Submit"
 msgstr "Spustiť"
@@ -10011,9 +10013,8 @@ msgstr "Prvé predplatné sa začalo %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:189
-#, fuzzy
 msgid "The following fields are required and not filled in: "
-msgstr "Nasledovné polia obsahujú neplatnú informáciu:"
+msgstr "Nasledovné polia sú povinné a ešte nevyplnené: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:59
 #, c-format
@@ -10182,7 +10183,7 @@ msgstr "Rezervácia sa spoplatňuje sumou %s "
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:155
 #, c-format
 msgid "There is no minimum or maximum character length."
-msgstr ""
+msgstr "Nejestvuje žiadna minimálna alebo maximálna dĺžka znakov."
 
 #. %1$s:  IF ( ERROR.tagsdisabled ) 
 #. %2$s:  ELSIF ( ERROR.badparam ) 
@@ -10260,9 +10261,14 @@ msgstr ""
 "čitateľskom účte."
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "This email address already exists in our database."
-msgstr "Tento exemplár už je vo vašom košíku"
+msgstr "Táto emailová adresa už jestvuje v našej databáze."
+
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:265
+#, c-format
+msgid "This is a on-site checkout, it cannot be renewed."
+msgstr "Toto je lokálna výpožička, nemožno ju predĺžiť."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:795
 #, c-format
@@ -10273,6 +10279,13 @@ msgstr "To je periodikum"
 #, c-format
 msgid "This item does not exist."
 msgstr "Tento exemplár neexistuje."
+
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:263
+#, c-format
+msgid ""
+"This item has been scheduled for automatic renewal and cannot be renewed"
+msgstr ""
+"Tento exemplár bol nastavený na automatické predĺženie a nedá sa predĺžiť"
 
 #. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
@@ -10387,7 +10400,7 @@ msgid "Thursday"
 msgstr "Štvrtok"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:326
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:331
 msgid "Timeout while waiting for print confirmation"
 msgstr "Časový limit počas čakania na potvrdenie tlače"
 
@@ -10457,9 +10470,9 @@ msgid "Titles"
 msgstr "Predmety"
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid "To log in, use the following credentials:"
-msgstr "Toto hlásenie môže mať nasledovné príčiny:"
+msgstr "Pre prihlásenie, prosím, použite nasledovné údaje:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:47
 #, c-format
@@ -10553,7 +10566,7 @@ msgstr "Typ:"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
 #, c-format
 msgid "UF"
-msgstr ""
+msgstr "UF"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:203
 #, c-format
@@ -10653,7 +10666,7 @@ msgstr "Použite hornú ponukovú lištu k prístupu do inej časti knižnice."
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
 msgid "Used For"
-msgstr ""
+msgstr "Použité v"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:64
 #, c-format
@@ -10671,6 +10684,8 @@ msgid ""
 "Using this account is not recommended because some parts of Koha will not "
 "function as expected. Instead, please log in with a different account. "
 msgstr ""
+"Použitie tohto účtu sa neodporúča, pretože niektoré časti Kohy nebudú "
+"fungovať podľa očakávania. Prihláste sa, prosím, radšej do iného účtu. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:55
 #, c-format
@@ -10682,13 +10697,13 @@ msgstr ""
 "účet v poriadku, kontaktujte, prosím, knižnicu."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
 "If your account shows to be clear, please contact the library."
 msgstr ""
-"Zvyčajným dôvodom pre zablokovanie účtu sú nevyrovnané poplatky. Ak je Váš "
-"účet v poriadku, kontaktujte, prosím, knižnicu."
+"Zvyčajným dôvodom pre zablokovanie účtu sú nevyrovnané poplatky. Ak sa Váš "
+"účet zdá byť v poriadku, kontaktujte, prosím, knižnicu."
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:312
 #, c-format
@@ -10748,13 +10763,13 @@ msgstr "Info o zväzkoch"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:733
 #, c-format
 msgid "Volume"
-msgstr ""
+msgstr "Ročník"
 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:57
 #, c-format
 msgid "Volume:"
-msgstr ""
+msgstr "Zväzok:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:46
 #, c-format
@@ -10762,9 +10777,9 @@ msgid "Warning"
 msgstr "Upozornenie"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "Warning:"
-msgstr "Upozornenie"
+msgstr "Upozornenie:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -10853,7 +10868,7 @@ msgid "Wk"
 msgstr "Týž"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:326
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:331
 msgid "Would you like to print a receipt?"
 msgstr "Želáte si vytlačiť príjemku?"
 
@@ -10982,9 +10997,9 @@ msgstr ""
 "exempláre skôr, ako požiadate o uvoľnenie."
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "You cannot place any more suggestions"
-msgstr "Vaše návrhy na nákup"
+msgstr "Nemôžete už podať viac návrhov"
 
 #. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
@@ -10994,18 +11009,17 @@ msgstr "Tento exemplár už nemôžete obnoviť. %s "
 
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid "You cannot renew your books online. Reason: %sYour fines exceed "
 msgstr ""
-", nemôžete obnoviť Vaše knihy cez internet. Zaplaťte prosím Vaše pokuty ak "
-"si želáte obnoviť vaše knihy."
+"Nemôžete obnoviť Vaše knihy cez internet. Dôvod: %sVaše pokuty prekračujú "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:40
 #, c-format
 msgid "You cannot share a public list."
 msgstr "Nemôžete zdieľať verejný zoznam."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:282
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:287
 #, c-format
 msgid "You currently have nothing checked out."
 msgstr "Momentálne nemáte nič vypožičané."
@@ -11117,7 +11131,7 @@ msgstr "Nemáte nič vypožičané"
 #, c-format
 msgid ""
 "You have reached your limit of suggestions you can place at this time (%s)."
-msgstr ""
+msgstr "Dosiahli ste limit návrhov, ktoré môžete nateraz podať (%s)."
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:34
@@ -11127,18 +11141,18 @@ msgid ""
 "Once the library has processed those suggestions you will be able to place "
 "more."
 msgstr ""
+"Dosiahli ste limit návrhov, ktoré môžete nateraz podať (%s). Len čo knižnica "
+"spracuje podané návrhy, budete môcť podať ďalšie."
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:259
 #, c-format
 msgid "You have reached your limit of suggestions you can place at this time."
-msgstr ""
+msgstr "Dosiahli ste limit návrhov, ktoré môžete nateraz podať."
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "You have successfully registered your new account."
-msgstr ""
-"Úspešne ste zaregistrovali svoj nový účet. Pre prehlásenie použite "
-"nasledovné údaje:"
+msgstr "Úspešne ste zaregistrovali svoj nový účet."
 
 #. %1$s:  too_much_oweing | $Price 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:60
@@ -11262,7 +11276,7 @@ msgstr "Skončila platnosť vášho účtu. %s "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
 #, c-format
 msgid "Your account is frozen because it has been discharged. "
-msgstr ""
+msgstr "Váš účet je zablokovaný, pretože bol odstavený. "
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:3
 #, c-format
@@ -11374,9 +11388,9 @@ msgid "Your library card has been marked as lost or stolen."
 msgstr "Vaša knižničná karta sa stratila alebo bola odcudzená."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid "Your library card has been marked as lost or stolen. "
-msgstr "Vaša knižničná karta sa stratila alebo bola odcudzená."
+msgstr "Vaša knižničná karta sa stratila alebo bola odcudzená. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:102
 #, c-format
@@ -11416,7 +11430,7 @@ msgstr "Vaše zoznamy:"
 #. %6$s:  END 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:75
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your loan renewal failed because of the following reason(s): %s %s Your "
 "account has expired. Please contact the library for more information. %s You "
@@ -11426,8 +11440,9 @@ msgid ""
 msgstr ""
 "Obnovenie vašej pôžičky zlyhalo z nasledovných príčin: %s %s Váš účet je "
 "neplatný. Kontaktujte, prosím, vašu knižnicu pre viac informácií. %s Tento "
-"exemplár ste obnovili maximálny povolený počet krát. %s Tento exemplár je "
-"rezervovaný ďalšiemu čitateľovi. %s %s "
+"exemplár ste obnovili maximálny povolený počet krát. %s Je príliš skoro po "
+"dni výpožičky pre obnovu tohto exemplára. %s Tento exemplár je rezervovaný "
+"ďalšiemu čitateľovi. %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
@@ -11622,15 +11637,15 @@ msgstr ""
 "type=seefro.type %%] "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
 "Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
 "defined('branchcode') && hidden.defined('categorycode') %%] "
 msgstr ""
-"%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
-"hidden.defined('mobile') && hidden.defined('email') && hidden."
-"defined('emailpro') && hidden.defined('fax') %%] "
+"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && "
+"Koha.Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && "
+"hidden.defined('branchcode') && hidden.defined('categorycode') %%] "
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:1
 #, c-format
@@ -12168,11 +12183,13 @@ msgstr "show_loans"
 #. %11$s:  END 
 #. %12$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
 "of item type '%s' %s Pending %s %s %s "
-msgstr "od %s %s Prerušený %s do %s %s %s %s Spracúva sa po ďalší dostupný "
+msgstr ""
+"od %s %s Prerušený %s do %s %s %s %s Spracúva sa po ďalší dostupný exemplár "
+"typu '%s' %s Spracúva sa %s %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:34
 #, c-format
