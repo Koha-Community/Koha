@@ -132,7 +132,7 @@ subtest 'store( extended_attributes ) tests' => sub {
 
 subtest 'approve tests' => sub {
 
-    plan tests => 7;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -190,6 +190,39 @@ subtest 'approve tests' => sub {
 
     $patron = Koha::Patrons->find( $patron_hashref->{borrowernumber} );
     isnt( $patron->firstname, 'Kylie', 'Patron modification didn\'t apply' );
+
+    # Try changing only a portion of the attributes
+    my $bigger_json
+        = '[{"code":"CODE_2","value":"Tomasito"},{"code":"CODE_2","value":"None"}]';
+    $verification_token = md5_hex( time() . {} . rand() . {} . $$ );
+
+    $patron_modification = Koha::Patron::Modification->new(
+        {   borrowernumber      => $patron->borrowernumber,
+            extended_attributes => $bigger_json,
+            verification_token  => $verification_token
+        }
+    )->store();
+    ok( $patron_modification->approve,
+        'Patron modification correctly approved' );
+    @patron_attributes
+        = map { $_->unblessed }
+        Koha::Patron::Attributes->search(
+        { borrowernumber => $patron->borrowernumber } );
+
+    is( $patron_attributes[0]->{code},
+        'CODE_1', 'Untouched attribute type is preserved (code)' );
+    is( $patron_attributes[0]->{attribute},
+        'VALUE_1', 'Untouched attribute type is preserved (attribute)' );
+
+    is( $patron_attributes[1]->{code},
+        'CODE_2', 'Attribute updated correctly (code)' );
+    is( $patron_attributes[1]->{attribute},
+        'Tomasito', 'Attribute updated correctly (attribute)' );
+
+    is( $patron_attributes[2]->{code},
+        'CODE_2', 'Attribute updated correctly (code)' );
+    is( $patron_attributes[2]->{attribute},
+        'None', 'Attribute updated correctly (attribute)' );
 
     $schema->storage->txn_rollback;
 };
