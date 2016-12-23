@@ -23,11 +23,12 @@ use Carp;
 
 use Koha::Database;
 use Koha::Exceptions::Patron::Modification;
+use Koha::Patron::Attribute;
+use Koha::Patron::Attributes;
 use Koha::Patron::Modifications;
-# TODO: Remove once Koha::Patron::Attribute(s) is implemented
-use C4::Members::Attributes qw( SetBorrowerAttributes );
 
 use JSON;
+use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
 use base qw(Koha::Object);
@@ -87,6 +88,7 @@ sub approve {
     my ($self) = @_;
 
     my $data = $self->unblessed();
+    my $extended_attributes;
 
     delete $data->{timestamp};
     delete $data->{verification_token};
@@ -104,7 +106,7 @@ sub approve {
 
     # Take care of extended attributes
     if ( $self->extended_attributes ) {
-        our $extended_attributes
+        $extended_attributes
             = try { decode_json( $self->extended_attributes ) }
         catch {
             Koha::Exceptions::Patron::Modification::InvalidData->throw(
@@ -117,12 +119,23 @@ sub approve {
             try {
                 $patron->store();
 
-                # Take care of extended attributes
-                if ( $self->extended_attributes ) {
-                    my $extended_attributes
-                        = decode_json( $self->extended_attributes );
-                    SetBorrowerAttributes( $patron->borrowernumber,
-                        $extended_attributes );
+                # Deal with attributes
+                my @codes
+                    = uniq( map { $_->{code} } @{$extended_attributes} );
+                foreach my $code (@codes) {
+                    map { $_->delete } Koha::Patron::Attributes->search(
+                        {   borrowernumber => $patron->borrowernumber,
+                            code           => $code
+                        }
+                    );
+                }
+                foreach my $attr ( @{$extended_attributes} ) {
+                    Koha::Patron::Attribute->new(
+                        {   borrowernumber => $patron->borrowernumber,
+                            code           => $attr->{code},
+                            attribute      => $attr->{value}
+                        }
+                    )->store;
                 }
             }
             catch {
@@ -139,8 +152,6 @@ sub approve {
 
     return $self->delete();
 }
-
-
 
 
 =head3 type

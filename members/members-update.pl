@@ -24,7 +24,6 @@ use C4::Auth;
 use C4::Output;
 use C4::Context;
 use C4::Members;
-use C4::Members::Attributes qw( GetBorrowerAttributes );
 use Koha::Patron::Attributes;
 use Koha::Patron::Modifications;
 
@@ -55,10 +54,12 @@ my $borrowers;
 foreach my $pm (@$pending_modifications) {
     $borrowers->{ $pm->{borrowernumber} }
         = GetMember( borrowernumber => $pm->{borrowernumber} );
-    my $patron_attributes = Koha::Patron::Attributes->search(
+    my @patron_attributes
+        = grep { $_->opac_editable }
+        Koha::Patron::Attributes->search(
         { borrowernumber => $pm->{borrowernumber} } );
     $borrowers->{ $pm->{'borrowernumber'} }->{extended_attributes}
-        = $patron_attributes;
+        = \@patron_attributes;
 }
 
 $template->param(
