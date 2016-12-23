@@ -41,7 +41,7 @@ $(document).ready(function() {
                 $('#selectlibrary').submit();
         });
         $(".editrule").click(function(){
-            if ( $(edit_row).find("input[type='text'][value!='']").length > 0 ) {
+            if ( $("#edit_row").find("input[type='text']").filter(function(){return this.value.length > 0 }).length > 0 ) {
                 var edit = confirm(_("Are you sure you want to edit another rule?"));
                 if (!edit) return false;
             }
