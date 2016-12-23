@@ -88,8 +88,9 @@ foreach my $unit (@$units) {
     }
 }
 
-if ($profile_id) { # if new layout, there will be no profile id, so shouldn't look for it
-    $template->param(profile_id => $profile->get_attr('profile_id')) if $profile->get_attr('profile_id') > 0;
+# if new layout, there will be no profile id, so shouldn't look for it
+if ( $profile_id && $profile->get_attr('profile_id') > 0 ) {
+    $template->param( profile_id => $profile->get_attr('profile_id') );
 }
 
 $template->param(
