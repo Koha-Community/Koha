@@ -110,7 +110,7 @@ stop_plack()
 
         log_daemon_msg "Stopping Plack daemon for ${instancename}"
 
-        if start-stop-daemon --pidfile ${PIDFILE} --stop; then
+        if start-stop-daemon --pidfile ${PIDFILE} --stop --retry=TERM/30/KILL/5; then
             log_end_msg 0
         else
             log_end_msg 1
