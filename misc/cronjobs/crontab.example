@@ -53,12 +53,12 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 # ADVANCE NOTICES
 10   1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/advance_notices.pl -c
 
-# SERIALS UPDATE
-13   1 * * * __KOHA_USER__  $KOHA_CRON_PATH/serialsUpdate.pl -c
-
 # MEMBERSHIP_EXPIRY NOTICES
 
 15   1 * * *  __KOHA_USER__  $KOHA_CRON_PATH/membership_expiry.pl -c
+
+# SERIALS UPDATE
+18   1 * * * __KOHA_USER__  $KOHA_CRON_PATH/serialsUpdate.pl -c
 
 # PROCESS LONG OVERDUES
 # updates item status from available to longoverdue for items long overdue
