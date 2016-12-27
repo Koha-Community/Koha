@@ -293,10 +293,10 @@ sub buildKohaItemsNamespace {
         my $reservestatus = C4::Reserves::GetReserveStatus( $item->{itemnumber} );
 
         if ( ( $item->{itype} && $itemtypes->{ $item->{itype} }->{notforloan} ) || $item->{notforloan} || $item->{onloan} || $item->{withdrawn} || $item->{itemlost} || $item->{damaged} ||
-             (defined $transfertwhen && $transfertwhen ne '') || $item->{itemnotforloan} || (defined $reservestatus && $reservestatus eq "Waiting") ){ 
+             (defined $transfertwhen && $transfertwhen ne '') || $item->{itemnotforloan} || (defined $reservestatus && $reservestatus eq "Waiting") || $item->{pending_hold} ){
             if ( $item->{notforloan} < 0) {
                 $status = "On order";
-            } 
+            }
             if ( $item->{itemnotforloan} && $item->{itemnotforloan} > 0 || $item->{notforloan} && $item->{notforloan} > 0 || $item->{itype} && $itemtypes->{ $item->{itype} }->{notforloan} && $itemtypes->{ $item->{itype} }->{notforloan} == 1 ) {
                 $status = "reference";
             }
@@ -317,6 +317,9 @@ sub buildKohaItemsNamespace {
             }
             if (defined $reservestatus && $reservestatus eq "Waiting") {
                 $status = 'Waiting';
+            }
+            if ($item->{pending_hold}) {
+                $status = 'Pending hold';
             }
         } else {
             $status = "available";
