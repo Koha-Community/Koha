@@ -120,7 +120,7 @@ my $error = $input->param('error');
 $template->param( error => $error ) if ( $error );
 
 my $patron        = Koha::Patrons->find($borrowernumber);
-my $issues        = $patron->get_issues;
+my $issues        = $patron->checkouts;
 my $balance       = $patron->account->balance;
 $template->param(
     issuecount => $issues->count,

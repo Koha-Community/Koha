@@ -267,7 +267,7 @@ if ($borrowernumber) {
     $patron = Koha::Patrons->find( $borrowernumber );
     $borrower = GetMember( borrowernumber => $borrowernumber );
     my $overdues = $patron->get_overdues;
-    my $issues = $patron->get_issues;
+    my $issues = $patron->checkouts;
     my $balance = $patron->account->balance;
 
 
@@ -421,9 +421,9 @@ if (@$barcodes) {
     );
 
 
-    # FIXME If the issue is confirmed, we launch another time get_issues->count, now display the issue count after issue
+    # FIXME If the issue is confirmed, we launch another time checkouts->count, now display the issue count after issue
     $patron = Koha::Patrons->find( $borrowernumber );
-    $template_params->{issuecount} = $patron->get_issues->count;
+    $template_params->{issuecount} = $patron->checkouts->count;
 
     if ( $iteminfo ) {
         $iteminfo->{subtitle} = GetRecordValue('subtitle', GetMarcBiblio($iteminfo->{biblionumber}), GetFrameworkCode($iteminfo->{biblionumber}));
