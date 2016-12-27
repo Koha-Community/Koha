@@ -202,7 +202,7 @@ Circulation:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items.
+            - checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as "unavailable" if this set to "Don't Allow".
         -
             - pref: AllowItemsOnHoldCheckoutSCO
               choices:

@@ -1299,6 +1299,12 @@
                        <xsl:value-of select="count(key('item-by-status', 'On order'))"/>
                        <xsl:text>). </xsl:text>                   </span>
                    </xsl:if>
+                    <xsl:if test="count(key('item-by-status', 'Pending hold'))>0">
+                   <span class="unavailable">
+                       <xsl:text>Pending hold (</xsl:text>
+                       <xsl:value-of select="count(key('item-by-status', 'Pending hold'))"/>
+                       <xsl:text>). </xsl:text>                   </span>
+                   </xsl:if>
                     <xsl:if test="count(key('item-by-status', 'In transit'))>0">
                    <span class="unavailable">
                        <xsl:text>In transit (</xsl:text>
