@@ -619,6 +619,7 @@ push @{ $pl_files->{'rewrite-config.PL'} }, (
     'blib/SCRIPT_DIR/koha-zebra-ctl.sh',
     'blib/SCRIPT_DIR/koha-pazpar2-ctl.sh',
     'blib/SCRIPT_DIR/koha-index-daemon-ctl.sh',
+    'blib/SCRIPT_DIR/koha-plack-daemon.sh',
 );
 if ($config{'INSTALL_PAZPAR2'} eq 'yes') {
     push @{ $pl_files->{'rewrite-config.PL'} }, (
