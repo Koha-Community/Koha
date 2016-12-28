@@ -73,7 +73,6 @@ BEGIN {
         &GetBorNotifyAcctRecord
 
         &GetBorrowersToExpunge
-        &GetBorrowersWhoHaveNeverBorrowed
         &GetBorrowersWithIssuesHistoryOlderThan
 
         &IssueSlip
@@ -1148,53 +1147,6 @@ sub GetBorrowersToExpunge {
     else {
         $sth->execute;
     }
-    
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @results, $data;
-    }
-    return \@results;
-}
-
-=head2 GetBorrowersWhoHaveNeverBorrowed
-
-  $results = &GetBorrowersWhoHaveNeverBorrowed
-
-This function get all borrowers who have never borrowed.
-
-I<$result> is a ref to an array which all elements are a hasref.
-
-=cut
-
-sub GetBorrowersWhoHaveNeverBorrowed {
-    my $filterbranch = shift || 
-                        ((C4::Context->preference('IndependentBranches')
-                             && C4::Context->userenv 
-                             && !C4::Context->IsSuperLibrarian()
-                             && C4::Context->userenv->{branch})
-                         ? C4::Context->userenv->{branch}
-                         : "");  
-    my $dbh   = C4::Context->dbh;
-    my $query = "
-        SELECT borrowers.borrowernumber,max(timestamp) as latestissue
-        FROM   borrowers
-          LEFT JOIN issues ON borrowers.borrowernumber = issues.borrowernumber
-        WHERE issues.borrowernumber IS NULL
-   ";
-    my @query_params;
-    if ($filterbranch && $filterbranch ne ""){ 
-        $query.=" AND borrowers.branchcode= ?";
-        push @query_params,$filterbranch;
-    }
-    warn $query if $debug;
-  
-    my $sth = $dbh->prepare($query);
-    if (scalar(@query_params)>0){  
-        $sth->execute(@query_params);
-    } 
-    else {
-        $sth->execute;
-    }      
     
     my @results;
     while ( my $data = $sth->fetchrow_hashref ) {

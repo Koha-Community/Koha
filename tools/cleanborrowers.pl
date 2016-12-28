@@ -36,7 +36,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
-use C4::Members;        # GetBorrowersWhoHavexxxBorrowed.
+use C4::Members;
 use C4::Circulation;    # AnonymiseIssueHistory.
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patron::Categories;
