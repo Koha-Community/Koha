@@ -1185,7 +1185,7 @@ sub checkauth {
 
         if ( $userid ) {
             # track_login also depends on pref TrackLastPatronActivity
-            my $patron = Koha::Patrons->search({ userid => $userid })->next;
+            my $patron = Koha::Patrons->find({ userid => $userid });
             $patron->track_login if $patron;
         }
 
