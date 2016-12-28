@@ -99,6 +99,7 @@ my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 my $warnIsRootUser   = (! $loggedinuser);
 
 my $warnNoActiveCurrency = (! defined Koha::Acquisition::Currencies->get_active);
+
 my @xml_config_warnings;
 
 my $context = new C4::Context;
@@ -278,6 +279,7 @@ $template->param(
     errZebraConnection => $errZebraConnection,
     warnIsRootUser => $warnIsRootUser,
     warnNoActiveCurrency => $warnNoActiveCurrency,
+    warnNoTemplateCaching => ( C4::Context->config('template_cache_dir') ? 0 : 1 ),
     xml_config_warnings => \@xml_config_warnings,
     warnStatisticsFieldsError => $warnStatisticsFieldsError,
 );
