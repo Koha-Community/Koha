@@ -95,14 +95,14 @@ my $suppliers_loop = [];
 my $suppliername;
 foreach (@suppliers) {
     my $selected = 0;
-    if ($supplierid && $supplierid == $_->{id} ) {
+    if ($supplierid && $supplierid == $_->id ) {
         $selected = 1;
-        $suppliername = $_->{name};
+        $suppliername = $_->name;
     }
     push @{$suppliers_loop},
       {
-        suppliername => $_->{name},
-        booksellerid   => $_->{id},
+        suppliername => $_->name,
+        booksellerid   => $_->id,
         selected     => $selected,
       };
 }
