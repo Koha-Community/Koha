@@ -24,6 +24,8 @@ use C4::Context;
 use Koha::Database;
 use Koha::DateUtils;
 
+use t::lib::TestBuilder;
+
 BEGIN {
     use_ok('Koha::Objects');
     use_ok('Koha::Patrons');
@@ -33,12 +35,10 @@ BEGIN {
 my $database = Koha::Database->new();
 my $schema = $database->schema();
 $schema->storage->txn_begin();
+my $builder = t::lib::TestBuilder->new;
 
-$schema->resultset('Issue')->delete_all();
-$schema->resultset('Borrower')->delete_all();
-
-my $categorycode = $schema->resultset('Category')->first()->categorycode();
-my $branchcode = $schema->resultset('Branch')->first()->branchcode();
+my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
+my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
 
 my $b1 = Koha::Patron->new(
     {
