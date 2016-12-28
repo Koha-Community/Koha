@@ -73,9 +73,15 @@ sub guess_koha_conf {
     # If the $KOHA_CONF environment variable is set, use
     # that. Otherwise, use the built-in default.
     my $conf_fname;
-    if ( exists $ENV{"KOHA_CONF"} and $ENV{'KOHA_CONF'} and -s $ENV{"KOHA_CONF"} ) {
+    if ( exists($ENV{"KOHA_CONF"}) and $ENV{'KOHA_CONF'} and -s $ENV{'KOHA_CONF'}) {
         $conf_fname = $ENV{"KOHA_CONF"};
-    } elsif ( $INSTALLED_CONFIG_FNAME !~ /__KOHA_CONF_DIR/ and -s $INSTALLED_CONFIG_FNAME ) {
+    } elsif (exists($ENV{'KOHA_CONF'})) {
+        warn "KOHA_CONF '".$ENV{'KOHA_CONF'}."' is defined, but is not readable by the current user '".(getlogin || getpwuid($<))."'." unless -r $ENV{"KOHA_CONF"};
+        warn "KOHA_CONF '".$ENV{'KOHA_CONF'}."' is defined, but has a size of '".(-s $ENV{'KOHA_CONF'} || 'undef')."' ? Expected more than zero." unless -s $ENV{"KOHA_CONF"};
+    }
+    return $conf_fname if $conf_fname;
+
+    if ( $INSTALLED_CONFIG_FNAME !~ /__KOHA_CONF_DIR/ and -s $INSTALLED_CONFIG_FNAME ) {
         # NOTE: be careful -- don't change __KOHA_CONF_DIR in the above
         # regex to anything else -- don't want installer to rewrite it
         $conf_fname = $INSTALLED_CONFIG_FNAME;
