@@ -138,7 +138,7 @@
 
         <div id="sysinfo">
     [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist ||
-          warnNoActiveCurrency || QueryParserError || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError %]
+          warnNoActiveCurrency || QueryParserError || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching %]
         [% IF (warnIsRootUser) %]
             <h2>Warning regarding current user</h2>
             <p>You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
@@ -146,7 +146,7 @@
         [% END %]
 
         [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist ||
-              warnNoActiveCurrency || QueryParserError || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError%]
+              warnNoActiveCurrency || QueryParserError || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching %]
             <h2>Warnings regarding the system configuration</h2>
             <table>
                 <caption>Preferences and parameters</caption>
@@ -188,6 +188,12 @@
                 [% IF AutoSelfCheckPatronHasTooManyPerm %]
                     <tr><th scope="row"><b>Warning</b> </th><td>
                     The patron used for the self checkout module at the OPAC has too many permissions. They should only have circulate => self_checkout.
+                    </td></tr>
+                [% END %]
+                [% IF warnNoTemplateCaching %]
+                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    You are missing the &lt;template_cache_dir&gt; entry in your koha-conf.xml file.
+                    That will bring a performance boost to enable it.
                     </td></tr>
                 [% END %]
             </table>
