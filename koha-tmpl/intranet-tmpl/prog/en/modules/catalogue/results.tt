@@ -1,4 +1,6 @@
 [% USE Koha %]
+[% USE Biblio %]
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -664,7 +666,7 @@ var holdForPatron = function () {
                                         [% IF ( onloan_items_loo.branchname ) %][% onloan_items_loo.branchname %][% END %]
                                         [% IF ( onloan_items_loo.location ) %][% onloan_items_loo.location %][% END %]
                                         [% IF ( onloan_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% onloan_items_loo.itemcallnumber |uri %]%22">[% onloan_items_loo.itemcallnumber %]</a>][% END %]
-                                        ([% onloan_items_loo.count %][% IF ( onloan_items_loo.longoverdue ) %], [% onloan_items_loo.longoverdue %] long overdue[% END %]) date due: [% onloan_items_loo.due_date %]
+                                        ([% onloan_items_loo.count %][% IF ( onloan_items_loo.longoverdue ) %], [% onloan_items_loo.longoverdue %] long overdue[% END %]) date due: [% onloan_items_loo.due_date | $KohaDates %]
                                         [% IF item_level_itypes && onloan_items_loo.description %]
                                         <br/>[% onloan_items_loo.description %]
                                         [% END %]
