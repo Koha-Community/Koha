@@ -707,7 +707,7 @@ sub CanBookBeIssued {
                      branch => C4::Context->userenv->{'branch'},
                      type => 'localuse',
                      itemnumber => $item->{'itemnumber'},
-                     itemtype => $item->{'itype'},
+                     itemtype => $item->{'itemtype'},
                      borrowernumber => $borrower->{'borrowernumber'},
                      ccode => $item->{'ccode'}}
                     );
