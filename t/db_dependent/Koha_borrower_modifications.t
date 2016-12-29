@@ -1,12 +1,10 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 15;
-use Try::Tiny;
-
-use t::lib::TestBuilder;
+use Test::More tests => 14;
 
 use C4::Context;
+use t::lib::TestBuilder;
 use C4::Members;
 
 use Koha::Patron::Modifications;
@@ -20,20 +18,6 @@ $dbh->do("DELETE FROM borrower_modifications");
 ## Create new pending modification
 Koha::Patron::Modifications->new( verification_token => '1234567890' )
   ->AddModifications( { surname => 'Hall', firstname => 'Kyle' } );
-
-## Ensure duplicate verification tokens cannot be added to the database
-try {
-    Koha::Patron::Modification->new(
-        {
-            verification_token => '1234567890',
-            surname            => 'Hall',
-            firstname          => 'Daria'
-        }
-    )->store();
-} catch {
-    ok( $_->isa('Koha::Exceptions::Koha::Patron::Modification::DuplicateVerificationToken'),
-        'Attempting to add a duplicate verification token to the database should raise a Koha::Exceptions::Koha::Patron::Modification::DuplicateVerificationToken exception' );
-};
 
 ## Get the new pending modification
 my $borrower = Koha::Patron::Modifications->GetModifications(
