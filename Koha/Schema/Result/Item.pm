@@ -680,7 +680,7 @@ sub effective_itemtype {
     if ( $pref && $self->itype() ) {
         return $self->itype();
     } else {
-        warn "item-level_itypes set but no itemtype set for item (".$self->itemnumber.")"
+        warn "item-level_itypes set but no itemtype set for item ($self->itemnumber)"
           if $pref;
         return $self->biblioitemnumber()->itemtype();
     }
