@@ -15,6 +15,8 @@ use Carp;
 use Sys::Syslog qw(syslog);
 use Data::Dumper;
 
+use C4::SIP::Sip qw(add_field);
+
 use C4::Debug;
 use C4::Context;
 use C4::Koha;
@@ -470,6 +472,35 @@ sub _get_outstanding_holds {
         push @holds, $unblessed_hold;
     }
     return \@holds;
+}
+
+sub build_patron_attributes_string {
+    my ( $self, $server ) = @_;
+
+    my $string = q{};
+
+    if ( $server->{account}->{patron_attribute} ) {
+        my @attributes_to_send =
+          ref $server->{account}->{patron_attribute} eq "ARRAY"
+          ? @{ $server->{account}->{patron_attribute} }
+          : ( $server->{account}->{patron_attribute} );
+
+        foreach my $a ( @attributes_to_send ) {
+            my @attributes = Koha::Patron::Attributes->search(
+                {
+                    borrowernumber => $self->{borrowernumber},
+                    code           => $a->{code}
+                }
+            );
+
+            foreach my $attribute ( @attributes ) {
+                my $value = $attribute->attribute();
+                $string .= add_field( $a->{field}, $value );
+            }
+        }
+    }
+
+    return $string;
 }
 
 1;

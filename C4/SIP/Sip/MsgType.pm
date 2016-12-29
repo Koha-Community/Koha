@@ -19,6 +19,8 @@ use Data::Dumper;
 use CGI qw ( -utf8 );
 use C4::Auth qw(&check_api_auth);
 
+use Koha::Patron::Attributes;
+
 use UNIVERSAL::can;
 
 use vars qw(@ISA @EXPORT_OK);
@@ -442,6 +444,8 @@ sub build_patron_status {
         $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode}, $server )
           if ( $server->{account}->{send_patron_home_library_in_af} );
         $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line );
+
+        $resp .= $patron->build_patron_attributes_string( $server );
 
     } else {
         # Invalid patron (cardnumber)
@@ -1001,6 +1005,8 @@ sub handle_patron_info {
             $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode}, $server);
         }
         $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line );
+
+        $resp .= $patron->build_patron_attributes_string( $server );
     } else {
 
         # Invalid patron ID:

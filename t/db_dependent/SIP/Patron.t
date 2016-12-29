@@ -4,12 +4,13 @@
 # This needs to be extended! Your help is appreciated..
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Koha::Database;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 use C4::SIP::ILS::Patron;
+use Koha::Patron::Attributes;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -70,6 +71,47 @@ subtest "OverduesBlockCirc tests" => sub {
     $odue_sip_patron = C4::SIP::ILS::Patron->new( $good_patron->{cardnumber} );
     is( $odue_sip_patron->{charge_ok}, 1, "Not blocked without overdues when set to 'Block'");
 
+};
+
+subtest "Test build_patron_attribute_string" => sub {
+
+    plan tests => 2;
+
+    my $patron = $builder->build( { source => 'Borrower' } );
+
+    my $attribute_type = $builder->build( { source => 'BorrowerAttributeType' } );
+    my $attribute = Koha::Patron::Attribute->new(
+        {
+            borrowernumber => $patron->{borrowernumber},
+            code           => $attribute_type->{code},
+            attribute      => 'Test Attribute'
+        }
+    )->store();
+
+    my $attribute_type2 = $builder->build( { source => 'BorrowerAttributeType' } );
+    my $attribute2 = Koha::Patron::Attribute->new(
+        {
+            borrowernumber => $patron->{borrowernumber},
+            code           => $attribute_type2->{code},
+            attribute      => 'Another Test Attribute'
+        }
+    )->store();
+
+    my $ils_patron = C4::SIP::ILS::Patron->new( $patron->{cardnumber} );
+
+    my $server = {};
+    $server->{account}->{patron_attribute}->{code} = $attribute->code;
+    $server->{account}->{patron_attribute}->{field} = 'XY';
+    my $attribute_string = $ils_patron->build_patron_attributes_string( $server );
+    is( $attribute_string, "XYTest Attribute|", 'Attribute field generated correctly with single param' );
+
+    $server = {};
+    $server->{account}->{patron_attribute}->[0]->{code} = $attribute->code;
+    $server->{account}->{patron_attribute}->[0]->{field} = 'XY';
+    $server->{account}->{patron_attribute}->[1]->{code} = $attribute2->code;
+    $server->{account}->{patron_attribute}->[1]->{field} = 'YZ';
+    $attribute_string = $ils_patron->build_patron_attributes_string( $server );
+    is( $attribute_string, "XYTest Attribute|YZAnother Test Attribute|", 'Attribute field generated correctly with multiple params' );
 };
 
 $schema->storage->txn_rollback;
