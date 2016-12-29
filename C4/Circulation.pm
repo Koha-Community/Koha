@@ -1808,19 +1808,13 @@ sub AddReturn {
     $branch = C4::Context->userenv->{'branch'} unless $branch;  # we trust userenv to be a safe fallback/default
     my $messages;
     my $borrower;
+    my $biblio;
     my $doreturn       = 1;
     my $validTransfert = 0;
     my $stat_type = 'return';
 
     # get information on item
-    my $item       = GetItem( undef, $barcode )
-        or die "GetItem( undef, $barcode ) failed";
-    my $itemnumber = $item->{ itemnumber };
-    my $biblio = GetBiblioData( $item->{ biblionumber } );
-    my $itemtype   = ( C4::Context->preference("item-level_itypes") )
-                        ? $item->{ itype }
-                        : $biblio->{ itemtype };
-
+    my $itemnumber = GetItemnumberFromBarcode( $barcode );
     unless ($itemnumber) {
         return (0, { BadBarcode => $barcode }); # no barcode means no item or borrower.  bail out.
     }
@@ -1840,6 +1834,8 @@ sub AddReturn {
            $stat_type = 'localuse';
         }
     }
+
+    my $item = GetItem($itemnumber) or die "GetItem($itemnumber) failed";
 
     if ( $item->{'location'} eq 'PROC' ) {
         if ( C4::Context->preference("InProcessingToShelvingCart") ) {
@@ -2027,14 +2023,15 @@ sub AddReturn {
     }
 
     # Record the fact that this book was returned.
+    # FIXME itemtype should record item level type, not bibliolevel type
     UpdateStats({
-        branch         => $branch,
-        type           => $stat_type,
-        itemnumber     => $itemnumber,
-        itemtype       => $itemtype,
-        borrowernumber => $borrowernumber,
-        ccode          => $item->{ ccode }
-    });
+                branch => $branch,
+                type => $stat_type,
+                itemnumber => $item->{'itemnumber'},
+                itemtype => $biblio->{'itemtype'},
+                borrowernumber => $borrowernumber,
+                ccode => $item->{'ccode'}}
+    );
 
     # Send a check-in slip. # NOTE: borrower may be undef.  probably shouldn't try to send messages then.
     my $circulation_alert = 'C4::ItemCirculationAlertPreference';
