@@ -36,7 +36,7 @@ use Getopt::Long;
 use C4::Biblio;
 use C4::Items;
 use Koha::Database;
-use Koha::Biblioitems;
+use Koha::Biblios;
 use Koha::Biblio::Metadatas;
 
 my $delete_items;
@@ -86,8 +86,9 @@ foreach my $m (@metadatas) {
 
     if ($delete_items) {
         my $deleted_count = 0;
-        my $biblioitem = Koha::Biblioitems->find( $biblionumber );
-        foreach my $item ( $biblioitem->items() ) {
+        my $biblio = Koha::Biblios->find( $biblionumber );
+        my @items = $biblio ? $biblio->items : ();
+        foreach my $item ( @items ) {
             my $itemnumber = $item->itemnumber();
 
             my $error = $test ? "Test mode enabled" : DelItemCheck( $biblionumber, $itemnumber );
