@@ -112,7 +112,7 @@ $template->param( SCRIPT_NAME => '/cgi-bin/koha/tools/import_borrowers.pl' );
 if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
     die "Wrong CSRF token"
         unless Koha::Token->new->check_csrf({
-            id     => C4::Context->userenv->{id},
+            id     => Encode::encode( 'UTF-8', C4::Context->userenv->{id} ),
             secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
             token  => scalar $input->param('csrf_token'),
         });
@@ -391,7 +391,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
 
     $template->param(
         csrf_token => Koha::Token->new->generate_csrf(
-            {   id     => C4::Context->userenv->{id},
+            {   id     => Encode::encode( 'UTF-8', C4::Context->userenv->{id} ),
                 secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
             }
         ),
