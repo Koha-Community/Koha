@@ -25,6 +25,7 @@ use t::lib::Mocks;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Items;
+use C4::ItemType;
 use C4::Members;
 use Koha::Database;
 use Koha::DateUtils;
