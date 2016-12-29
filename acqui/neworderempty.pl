@@ -90,6 +90,7 @@ use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies;
 use Koha::ItemTypes;
+use Koha::Patrons;
 
 our $input           = new CGI;
 my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
@@ -198,8 +199,9 @@ else {    #modify order
 
     @order_user_ids = GetOrderUsers($ordernumber);
     foreach my $order_user_id (@order_user_ids) {
-        my $order_user = GetMember(borrowernumber => $order_user_id);
-        push @order_users, $order_user if $order_user;
+        # FIXME Could be improved with search -in
+        my $order_patron = Koha::Patrons->find( $order_user_id );
+        push @order_users, $order_patron if $order_patron;
     }
 }
 
@@ -210,15 +212,14 @@ my @currencies = Koha::Acquisition::Currencies->search;
 my $active_currency = Koha::Acquisition::Currencies->get_active;
 
 # build bookfund list
-my $borrower= GetMember('borrowernumber' => $loggedinuser);
-my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
+my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
 
 my $budget =  GetBudget($budget_id);
 # build budget list
 my $budget_loop = [];
 my $budgets = GetBudgetHierarchy;
 foreach my $r (@{$budgets}) {
-    next unless (CanUserUseBudget($borrower, $r, $userflags));
+    next unless (CanUserUseBudget($patron, $r, $userflags));
     if (!defined $r->{budget_amount} || $r->{budget_amount} <0) {
         next;
     }

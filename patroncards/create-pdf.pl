@@ -29,10 +29,10 @@ use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Debug;
 use C4::Context;
-use autouse 'C4::Members' => qw(GetMember);
 use C4::Creators;
 use C4::Patroncards;
 use Koha::List::Patron;
+use Koha::Patrons;
 use Koha::Patron::Images;
 
 my $cgi = new CGI;
@@ -135,7 +135,7 @@ foreach my $item (@{$items}) {
 
         $cardscount ++;
         my $borrower_number = $item->{'borrower_number'};
-        my $card_number = GetMember(borrowernumber => $borrower_number)->{'cardnumber'};
+        my $card_number = Koha::Patrons->find( $borrower_number)->cardnumber;
 
 #       Set barcode data
         $print_layout_xml->{'barcode'}->[0]->{'data'} = $card_number if $print_layout_xml->{'barcode'};

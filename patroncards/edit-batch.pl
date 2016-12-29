@@ -29,7 +29,8 @@ use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
 use C4::Creators;
 use C4::Patroncards;
-use C4::Members qw(GetMember);
+use Koha::Patrons;
+
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -84,7 +85,7 @@ if ($bor_num_list) {
         my @bor_nums_unchecked = split /\n/, $bor_num_list; # $bor_num_list is effectively passed in as a <cr> separated list
         foreach my $number (@bor_nums_unchecked) {
             $number =~ s/\r$//; # strip any naughty return chars
-            if ( GetMember(borrowernumber => $number)) {  # we must test in case an invalid borrowernumber is passed in; we effectively disgard them atm
+            if ( Koha::Patrons->find( $number )) {  # we must test in case an invalid borrowernumber is passed in; we effectively disgard them atm
                 my $borrower_number = $number;
                 push @borrower_numbers, $borrower_number;
             }

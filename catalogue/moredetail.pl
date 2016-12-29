@@ -30,7 +30,6 @@ use C4::Acquisition;
 use C4::Output;
 use C4::Auth;
 use C4::Serials;
-use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
 
 use Koha::Acquisition::Booksellers;
@@ -53,12 +52,12 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 );
 
 if($query->cookie("holdfor")){ 
-    my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
+    my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
     $template->param(
         holdfor => $query->cookie("holdfor"),
-        holdfor_surname => $holdfor_patron->{'surname'},
-        holdfor_firstname => $holdfor_patron->{'firstname'},
-        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+        holdfor_surname => $holdfor_patron->surname,
+        holdfor_firstname => $holdfor_patron->firstname,
+        holdfor_cardnumber => $holdfor_patron->cardnumber,
     );
 }
 
@@ -190,9 +189,9 @@ foreach my $item (@items){
 
     unless ($hidepatronname) {
         if ( $item->{'borrowernumber'} ) {
-            my $curr_borrower = GetMember('borrowernumber' => $item->{'borrowernumber'} );
-            $item->{borrowerfirstname} = $curr_borrower->{'firstname'};
-            $item->{borrowersurname} = $curr_borrower->{'surname'};
+            my $curr_borrower = Koha::Patrons->find( $item->{borrowernumber} );
+            $item->{borrowerfirstname} = $curr_borrower->firstname;
+            $item->{borrowersurname} = $curr_borrower->surname;
         }
     }
 

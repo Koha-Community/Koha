@@ -24,7 +24,7 @@ use Text::CSV;
 use Getopt::Long qw(:config no_ignore_case);
 
 use C4::Context;
-use C4::Members;
+use Koha::Patrons;
 
 binmode STDOUT, ":encoding(UTF-8)";
 
@@ -41,7 +41,7 @@ $0 [--field=FIELD [--field=FIELD [...]]] [--separator=CHAR] [--show-header] [--w
 $0 -h
 
     -f, --field=FIELD       Field to export. It is repeatable and has to match
-                            keys returned by the GetMember function.
+                            column names of the borrower table (also as 'description' and 'category_type'
                             If no field is specified, then all fields will be
                             exported.
     -s, --separator=CHAR    This character will be used to separate fields.
@@ -99,8 +99,13 @@ my $csv = Text::CSV->new( { sep_char => $separator, binary => 1 } );
 # If the user did not specify any field to export, we assume they want them all
 # We retrieve the first borrower informations to get field names
 my ($borrowernumber) = $sth->fetchrow_array or die "No borrower to export";
-my $member = GetMember($borrowernumber); # FIXME Now is_expired is no longer available
+my $patron = Koha::Patrons->find( $borrowernumber ); # FIXME Now is_expired is no longer available
                                          # We will have to use Koha::Patron and allow method calls
+my $category = $patron->category;
+my $member = $patron->unblessed;
+$member->{description} = $category->description;
+$member->{category_type} = $category->category_type;
+
 @fields = keys %$member unless (@fields);
 
 if ($show_header) {
@@ -121,7 +126,11 @@ die "Invalid character at borrower $borrowernumber: ["
 print $csv->string . "\n";
 
 while ( my $borrowernumber = $sth->fetchrow_array ) {
-    $member = GetMember( borrowernumber => $borrowernumber );
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $category = $patron->category;
+    my $member = $patron->unblessed;
+    $member->{description} = $category->description;
+    $member->{category_type} = $category->category_type;
     $csv->combine(
         map {
             ( defined $member->{$_} and !ref $member->{$_} )

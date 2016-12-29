@@ -35,6 +35,7 @@ use Koha::Items;
 use Koha::Number::Price;
 use Koha::Libraries;
 use Koha::CsvProfiles;
+use Koha::Patrons;
 
 use C4::Koha;
 
@@ -805,7 +806,7 @@ AcqViewBaskets, user permissions and basket properties (creator, users list,
 branch).
 
 First parameter can be either a borrowernumber or a hashref as returned by
-C4::Members::GetMember.
+Koha::Patron->unblessed
 
 Second parameter can be either a basketno or a hashref as returned by
 C4::Acquisition::GetBasket.
@@ -822,7 +823,7 @@ sub CanUserManageBasket {
     my ($borrower, $basket, $userflags) = @_;
 
     if (!ref $borrower) {
-        $borrower = C4::Members::GetMember(borrowernumber => $borrower);
+        $borrower = Koha::Patrons->find( $borrower );
     }
     if (!ref $basket) {
         $basket = GetBasket($basket);
@@ -830,7 +831,7 @@ sub CanUserManageBasket {
 
     return 0 unless ($basket and $borrower);
 
-    my $borrowernumber = $borrower->{borrowernumber};
+    my $borrowernumber = $borrower->borrowernumber;
     my $basketno = $basket->{basketno};
 
     my $AcqViewBaskets = C4::Context->preference('AcqViewBaskets');
@@ -842,7 +843,7 @@ sub CanUserManageBasket {
         my ($flags) = $sth->fetchrow_array;
         $sth->finish;
 
-        $userflags = C4::Auth::getuserflags($flags, $borrower->{userid}, $dbh);
+        $userflags = C4::Auth::getuserflags($flags, $borrower->userid, $dbh);
     }
 
     unless ($userflags->{superlibrarian}
@@ -865,7 +866,7 @@ sub CanUserManageBasket {
         }
 
         if ($AcqViewBaskets eq 'branch' && defined $basket->{branch}
-        && $basket->{branch} ne $borrower->{branchcode}) {
+        && $basket->{branch} ne $borrower->branchcode) {
             return 0;
         }
     }
@@ -3082,17 +3083,17 @@ sub NotifyOrderUsers {
 
     my $order = GetOrder( $ordernumber );
     for my $borrowernumber (@borrowernumbers) {
-        my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
-        my $library = Koha::Libraries->find( $borrower->{branchcode} )->unblessed;
+        my $patron = Koha::Patrons->find( $borrowernumber );
+        my $library = $patron->library->unblessed;
         my $biblio = Koha::Biblios->find( $order->{biblionumber} )->unblessed;
         my $letter = C4::Letters::GetPreparedLetter(
             module      => 'acquisition',
             letter_code => 'ACQ_NOTIF_ON_RECEIV',
             branchcode  => $library->{branchcode},
-            lang        => $borrower->{lang},
+            lang        => $patron->lang,
             tables      => {
                 'branches'    => $library,
-                'borrowers'   => $borrower,
+                'borrowers'   => $patron->unblessed,
                 'biblio'      => $biblio,
                 'aqorders'    => $order,
             },

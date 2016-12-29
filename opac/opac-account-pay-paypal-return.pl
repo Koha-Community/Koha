@@ -29,9 +29,9 @@ use URI;
 use C4::Auth;
 use C4::Output;
 use C4::Accounts;
-use C4::Members;
 use Koha::Acquisition::Currencies;
 use Koha::Database;
+use Koha::Patrons;
 
 my $cgi = new CGI;
 
@@ -117,8 +117,9 @@ else {
     $error = "PAYPAL_UNABLE_TO_CONNECT";
 }
 
+my $patron = Koha::Patrons->find( $borrowernumber );
 $template->param(
-    borrower    => GetMember( borrowernumber => $borrowernumber ),
+    borrower    => $patron->unblessed,
     accountview => 1
 );
 

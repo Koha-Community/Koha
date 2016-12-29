@@ -45,6 +45,7 @@ use C4::Biblio;
 use C4::Items;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Currencies;
+use Koha::Patrons;
 use Koha::Patron::Images;
 use Koha::Patron::Messages;
 use Koha::Token;
@@ -106,15 +107,14 @@ my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed) = (
 );
 
 my $issuenoconfirm = 1; #don't need to confirm on issue.
-#warn "issuerid: " . $issuerid;
-my $issuer   = GetMember( borrowernumber => $issuerid );
+my $issuer   = Koha::Patrons->find( $issuerid )->unblessed;
 my $item     = GetItem(undef,$barcode);
 if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
     my $dbh = C4::Context->dbh;
     my $resval;
     ($resval, $patronid) = checkpw($dbh, $patronlogin, $patronpw);
 }
-my $borrower = GetMember( cardnumber => $patronid );
+my $borrower = Koha::Patrons->find( { cardnumber => $patronid } )->unblessed;
 
 my $currencySymbol = "";
 if ( my $active_currency = Koha::Acquisition::Currencies->get_active ) {
@@ -132,7 +132,7 @@ if ($op eq "logout") {
 elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
     my ($doreturn) = AddReturn( $barcode, $branch );
     #warn "returnbook: " . $doreturn;
-    $borrower = GetMember( cardnumber => $patronid );
+    $borrower = Koha::Patrons->find( { cardnumber => $patronid } )->unblessed;
 }
 elsif ( $op eq "checkout" ) {
     my $impossible  = {};

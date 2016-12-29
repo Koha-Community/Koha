@@ -227,12 +227,12 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         my $borrowernumber;
         my $member;
         if ( ($matchpoint eq 'cardnumber') && ($borrower{'cardnumber'}) ) {
-            $member = GetMember( 'cardnumber' => $borrower{'cardnumber'} );
+            $member = Koha::Patrons->find( { cardnumber => $borrower{'cardnumber'} } )->unblessed;
             if ($member) {
                 $borrowernumber = $member->{'borrowernumber'};
             }
         } elsif ( ($matchpoint eq 'userid') && ($borrower{'userid'}) ) {
-            $member = GetMember( 'userid' => $borrower{'userid'} );
+            $member = Koha::Patrons->find( { userid => $borrower{'userid'} } )->unblessed;
             if ($member) {
                 $borrowernumber = $member->{'borrowernumber'};
             }

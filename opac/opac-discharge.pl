@@ -26,7 +26,7 @@ use C4::Context;
 use C4::Output;
 use C4::Log;
 use C4::Debug;
-use C4::Members;
+use Koha::Patrons;
 use Koha::Patron::Discharge;
 use Koha::DateUtils;
 
@@ -63,10 +63,10 @@ elsif ( $op eq 'get' ) {
     eval {
 
         # Getting member data
-        my $data = GetMember( borrowernumber => $loggedinuser );
+        my $patron = Koha::Patrons->find( $loggedinuser );
         my $pdf_path = Koha::Patron::Discharge::generate_as_pdf({
             borrowernumber => $loggedinuser,
-            branchcode => $data->{'branchcode'},
+            branchcode => $patron->branchcode,
         });
 
         binmode(STDOUT);

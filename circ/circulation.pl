@@ -22,6 +22,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+# FIXME There are too many calls to Koha::Patrons->find in this script
+
 use strict;
 use warnings;
 use CGI qw ( -utf8 );
@@ -44,14 +46,13 @@ use CGI::Session;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::AuthorisedValues;
 use Koha::CsvProfiles;
-use Koha::Patron;
+use Koha::Patrons;
 use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::BiblioFrameworks;
 use Koha::Items;
 use Koha::Patron::Messages;
-use Koha::Patron::Images;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::Patron::Modifications;
@@ -105,13 +106,14 @@ $barcodes = [ uniq @$barcodes ];
 
 my $template_name = q|circ/circulation.tt|;
 my $borrowernumber = $query->param('borrowernumber');
-my $borrower = $borrowernumber ? GetMember( borrowernumber => $borrowernumber ) : undef;
+my $patron = $borrowernumber ? Koha::Patrons->find( $borrowernumber ) : undef;
 my $batch = $query->param('batch');
 my $batch_allowed = 0;
 if ( $batch && C4::Context->preference('BatchCheckouts') ) {
     $template_name = q|circ/circulation_batch_checkouts.tt|;
     my @batch_category_codes = split '\|', C4::Context->preference('BatchCheckoutsValidCategories');
-    if ( grep {/^$borrower->{categorycode}$/} @batch_category_codes ) {
+    my $categorycode = $patron->categorycode;
+    if ( $categorycode && grep {/^$categorycode$/} @batch_category_codes ) {
         $batch_allowed = 1;
     } else {
         $barcodes = [];
@@ -232,9 +234,9 @@ if ( $print eq 'yes' && $borrowernumber ne '' ) {
 #
 my $message;
 if ($findborrower) {
-    my $borrower = C4::Members::GetMember( cardnumber => $findborrower );
-    if ( $borrower ) {
-        $borrowernumber = $borrower->{borrowernumber};
+    my $patron = Koha::Patrons->find( { cardnumber => $findborrower } );
+    if ( $patron ) {
+        $borrowernumber = $patron->borrowernumber;
     } else {
         my $dt_params = { iDisplayLength => -1 };
         my $results = C4::Utils::DataTables::Members::search(
@@ -259,10 +261,8 @@ if ($findborrower) {
 }
 
 # get the borrower information.....
-my $patron;
 if ($borrowernumber) {
     $patron = Koha::Patrons->find( $borrowernumber );
-    $borrower = GetMember( borrowernumber => $borrowernumber );
     my $overdues = $patron->get_overdues;
     my $issues = $patron->checkouts;
     my $balance = $patron->account->balance;
@@ -280,7 +280,7 @@ if ($borrowernumber) {
     # check for NotifyBorrowerDeparture
     elsif ( $patron->is_going_to_expire ) {
         # borrower card soon to expire warn librarian
-        $template->param( "warndeparture" => $borrower->{dateexpiry} ,
+        $template->param( "warndeparture" => $patron->dateexpiry ,
                         );
         if (C4::Context->preference('ReturnBeforeExpiry')){
             $template->param("returnbeforeexpiry" => 1);
@@ -294,12 +294,12 @@ if ($borrowernumber) {
 
     if ( $patron and $patron->is_debarred ) {
         $template->param(
-            'userdebarred'    => $borrower->{debarred},
-            'debarredcomment' => $borrower->{debarredcomment},
+            'userdebarred'    => $patron->debarred,
+            'debarredcomment' => $patron->debarredcomment,
         );
 
-        if ( $borrower->{debarred} ne "9999-12-31" ) {
-            $template->param( 'userdebarreddate' => $borrower->{debarred} );
+        if ( $patron->debarred ne "9999-12-31" ) {
+            $template->param( 'userdebarreddate' => $patron->debarred );
         }
     }
 
@@ -315,7 +315,7 @@ if (@$barcodes) {
     my $template_params = { barcode => $barcode };
     # always check for blockers on issuing
     my ( $error, $question, $alerts, $messages ) = CanBookBeIssued(
-        $borrower,
+        $patron->unblessed,
         $barcode, $datedue,
         $inprocess,
         undef,
@@ -402,7 +402,7 @@ if (@$barcodes) {
         }
         unless($confirm_required) {
             my $switch_onsite_checkout = exists $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED};
-            my $issue = AddIssue( $borrower, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew'), switch_onsite_checkout => $switch_onsite_checkout, } );
+            my $issue = AddIssue( $patron->unblessed, $barcode, $datedue, $cancelreserve, undef, undef, { onsite_checkout => $onsite_checkout, auto_renew => $session->param('auto_renew'), switch_onsite_checkout => $switch_onsite_checkout, } );
             $template_params->{issue} = $issue;
             $session->clear('auto_renew');
             $inprocess = 1;
@@ -439,11 +439,6 @@ if (@$barcodes) {
   }
 }
 
-# reload the borrower info for the sake of reseting the flags.....
-if ($borrowernumber) {
-    $borrower = GetMember( borrowernumber => $borrowernumber );
-}
-
 ##################################################################################
 # BUILD HTML
 # show all reserves of this borrower, and the position of the reservation ....
@@ -455,11 +450,12 @@ if ($borrowernumber) {
         WaitingHolds => $waiting_holds,
     );
 
-    $template->param( adultborrower => 1 ) if ( $borrower->{category_type} eq 'A' || $borrower->{category_type} eq 'I' );
+    my $category_type = $patron->category->category_type;
+    $template->param( adultborrower => 1 ) if ( $category_type eq 'A' || $category_type eq 'I' );
 }
 
 #title
-my $flags = $borrower ? C4::Members::patronflags( $borrower ) : {};
+my $flags = $patron ? C4::Members::patronflags( $patron->unblessed ) : {};
 foreach my $flag ( sort keys %$flags ) {
     $flags->{$flag}->{'message'} =~ s#\n#<br />#g;
     if ( $flags->{$flag}->{'noissues'} ) {
@@ -547,7 +543,7 @@ $amountold =~ s/^.*\$//;    # remove upto the $, if any
 
 my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 
-if ( $borrowernumber && $borrower->{'category_type'} eq 'C') {
+if ( $patron && $patron->category->category_type eq 'C') {
     my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
     $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
     $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
@@ -595,10 +591,20 @@ my $relatives_issues_count =
   Koha::Database->new()->schema()->resultset('Issue')
   ->count( { borrowernumber => \@relatives } );
 
-my $av = Koha::AuthorisedValues->search({ category => 'ROADTYPE', authorised_value => $borrower->{streettype} });
-my $roadtype = $av->count ? $av->next->lib : '';
-
-$template->param(%$borrower);
+if ( $patron ) {
+    my $av = Koha::AuthorisedValues->search({ category => 'ROADTYPE', authorised_value => $patron->streettype });
+    my $roadtype = $av->count ? $av->next->lib : '';
+    $template->param(
+        %{ $patron->unblessed },
+        borrower => $patron->unblessed,
+        roadtype          => $roadtype,
+        patron            => $patron,
+        categoryname      => $patron->category->description,
+        expiry            => $patron->dateexpiry,
+        is_child          => ( $patron->category->category_type eq 'C' ),
+        picture           => ( $patron->image ? 1 : 0 ),
+    );
+}
 
 # Restore date if changed by holds and/or save stickyduedate to session
 if ($restoreduedatespec || $stickyduedate) {
@@ -612,15 +618,10 @@ if ($restoreduedatespec || $stickyduedate) {
 }
 
 $template->param(
-    patron            => $patron,
     messages           => $messages,
-    borrower          => $borrower,
     borrowernumber    => $borrowernumber,
-    categoryname      => $borrower->{'description'},
     branch            => $branch,
     was_renewed       => scalar $query->param('was_renewed') ? 1 : 0,
-    expiry            => $borrower->{'dateexpiry'},
-    roadtype          => $roadtype,
     amountold         => $amountold,
     barcodes          => $barcodes,
     stickyduedate     => $stickyduedate,
@@ -629,7 +630,6 @@ $template->param(
     message           => $message,
     totaldue          => sprintf('%.2f', $total),
     inprocess         => $inprocess,
-    is_child          => ($borrowernumber && $borrower->{'category_type'} eq 'C'),
     $view             => 1,
     batch_allowed     => $batch_allowed,
     batch             => $batch,
@@ -643,8 +643,6 @@ $template->param(
     relatives_borrowernumbers => \@relatives,
 );
 
-my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
-$template->param( picture => 1 ) if $patron_image;
 
 if ( C4::Context->preference("ExportCircHistory") ) {
     $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ]);

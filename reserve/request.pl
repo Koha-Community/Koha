@@ -100,9 +100,9 @@ if ( $action eq 'move' ) {
 }
 
 if ($findborrower) {
-    my $borrower = C4::Members::GetMember( cardnumber => $findborrower );
-    if ( $borrower ) {
-        $borrowernumber_hold = $borrower->{borrowernumber};
+    my $patron = Koha::Patrons->find( { cardnumber => $findborrower } );
+    if ( $patron ) {
+        $borrowernumber_hold = $patron->borrowernumber;
     } else {
         my $dt_params = { iDisplayLength => -1 };
         my $results = C4::Utils::DataTables::Members::search(
@@ -134,14 +134,14 @@ if ($multihold) {
 # If we have the borrowernumber because we've performed an action, then we
 # don't want to try to place another reserve.
 if ($borrowernumber_hold && !$action) {
-    my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
+    my $patron = Koha::Patrons->find( $borrowernumber_hold );
     my $diffbranch;
 
     # we check the reserves of the user, and if they can reserve a document
     # FIXME At this time we have a simple count of reservs, but, later, we could improve the infos "title" ...
 
     my $reserves_count =
-      GetReserveCount( $borrowerinfo->{'borrowernumber'} );
+      GetReserveCount( $patron->borrowernumber );
 
     my $new_reserves_count = scalar( @biblionumbers );
 
@@ -164,7 +164,7 @@ if ($borrowernumber_hold && !$action) {
     }
 
     # we check the date expiry of the borrower (only if there is an expiry date, otherwise, set to 1 (warn)
-    my $expiry_date = $borrowerinfo->{dateexpiry};
+    my $expiry_date = $patron->dateexpiry;
     my $expiry = 0; # flag set if patron account has expired
     if ($expiry_date and $expiry_date ne '0000-00-00' and
         Date_to_Days(split /-/,$date) > Date_to_Days(split /-/,$expiry_date)) {
@@ -172,38 +172,37 @@ if ($borrowernumber_hold && !$action) {
     }
 
     # check if the borrower make the reserv in a different branch
-    if ( $borrowerinfo->{'branchcode'} ne C4::Context->userenv->{'branch'} ) {
+    if ( $patron->branchcode ne C4::Context->userenv->{'branch'} ) {
         $diffbranch = 1;
     }
 
-    my $is_debarred = Koha::Patrons->find( $borrowerinfo->{borrowernumber} )->is_debarred;
+    my $is_debarred = $patron->is_debarred;
     $template->param(
-                borrowernumber      => $borrowerinfo->{'borrowernumber'},
-                borrowersurname     => $borrowerinfo->{'surname'},
-                borrowerfirstname   => $borrowerinfo->{'firstname'},
-                borrowerstreetaddress   => $borrowerinfo->{'address'},
-                borrowercity        => $borrowerinfo->{'city'},
-                borrowerphone       => $borrowerinfo->{'phone'},
-                borrowermobile      => $borrowerinfo->{'mobile'},
-                borrowerfax         => $borrowerinfo->{'fax'},
-                borrowerphonepro    => $borrowerinfo->{'phonepro'},
-                borroweremail       => $borrowerinfo->{'email'},
-                borroweremailpro    => $borrowerinfo->{'emailpro'},
-                borrowercategory    => $borrowerinfo->{'category'},
-                cardnumber          => $borrowerinfo->{'cardnumber'},
+                borrowernumber      => $patron->borrowernumber,
+                borrowersurname     => $patron->surname,
+                borrowerfirstname   => $patron->firstname,
+                borrowerstreetaddress   => $patron->address,
+                borrowercity        => $patron->city,
+                borrowerphone       => $patron->phone,
+                borrowermobile      => $patron->mobile,
+                borrowerfax         => $patron->fax,
+                borrowerphonepro    => $patron->phonepro,
+                borroweremail       => $patron->email,
+                borroweremailpro    => $patron->emailpro,
+                cardnumber          => $patron->cardnumber,
                 expiry              => $expiry,
                 diffbranch          => $diffbranch,
                 messages            => $messages,
                 warnings            => $warnings,
                 restricted          => $is_debarred,
-                amount_outstanding  => GetMemberAccountRecords($borrowerinfo->{borrowernumber}),
+                amount_outstanding  => GetMemberAccountRecords($patron->borrowernumber),
     );
 }
 
 $template->param( messageborrower => $messageborrower );
 
-# FIXME launch another time GetMember perhaps until
-my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
+# FIXME launch another time GetMember perhaps until (Joubu: Why?)
+my $patron = Koha::Patrons->find( $borrowernumber_hold );
 
 my $logged_in_patron = Koha::Patrons->find( $borrowernumber );
 
@@ -216,7 +215,7 @@ foreach my $biblionumber (@biblionumbers) {
 
     my $dat = GetBiblioData($biblionumber);
 
-    my $canReserve = CanBookBeReserved( $borrowerinfo->{borrowernumber}, $biblionumber );
+    my $canReserve = CanBookBeReserved( $patron->borrowernumber, $biblionumber );
     $canReserve //= '';
     if ( $canReserve eq 'OK' ) {
 
@@ -238,7 +237,7 @@ foreach my $biblionumber (@biblionumbers) {
     }
 
     my $force_hold_level;
-    if ( $borrowerinfo->{borrowernumber} ) {
+    if ( $patron->borrowernumber ) {
         # For multiple holds per record, if a patron has previously placed a hold,
         # the patron can only place more holds of the same type. That is, if the
         # patron placed a record level hold, all the holds the patron places must
@@ -246,7 +245,7 @@ foreach my $biblionumber (@biblionumbers) {
         # the patron places must be item level
         my $holds = Koha::Holds->search(
             {
-                borrowernumber => $borrowerinfo->{borrowernumber},
+                borrowernumber => $patron->borrowernumber,
                 biblionumber   => $biblionumber,
                 found          => undef,
             }
@@ -257,7 +256,7 @@ foreach my $biblionumber (@biblionumbers) {
 
         # For a librarian to be able to place multiple record holds for a patron for a record,
         # we must find out what the maximum number of holds they can place for the patron is
-        my $max_holds_for_record = GetMaxPatronHoldsForRecord( $borrowerinfo->{borrowernumber}, $biblionumber );
+        my $max_holds_for_record = GetMaxPatronHoldsForRecord( $patron->borrowernumber, $biblionumber );
         my $remaining_holds_for_record = $max_holds_for_record - $holds->count();
         $biblioloopiter{remaining_holds_for_record} = $max_holds_for_record;
         $template->param( max_holds_for_record => $max_holds_for_record );
@@ -268,7 +267,7 @@ foreach my $biblionumber (@biblionumbers) {
     # patron already has an item from that record checked out
     my $alreadypossession;
     if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
-        && CheckIfIssuedToPatron( $borrowerinfo->{borrowernumber}, $biblionumber ) )
+        && CheckIfIssuedToPatron( $patron->borrowernumber, $biblionumber ) )
     {
         $template->param( alreadypossession => $alreadypossession, );
     }
@@ -393,13 +392,13 @@ foreach my $biblionumber (@biblionumbers) {
             # checking reserve
             my $holds = Koha::Items->find( $itemnumber )->current_holds;
             if ( my $first_hold = $holds->next ) {
-                my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $first_hold->borrowernumber );
+                my $patron = Koha::Patrons->find( $first_hold->borrowernumber );
 
                 $item->{backgroundcolor} = 'reserved';
                 $item->{reservedate}     = output_pref({ dt => dt_from_string( $first_hold->reservedate ), dateonly => 1 }); # FIXME Should be formatted in the template
                 $item->{ReservedForBorrowernumber}     = $first_hold->borrowernumber;
-                $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
-                $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
+                $item->{ReservedForSurname}     = $patron->surname;
+                $item->{ReservedForFirstname}     = $patron->firstname;
                 $item->{ExpectedAtLibrary}     = $first_hold->branchcode;
                 $item->{waitingdate} = $first_hold->waitingdate;
             }
@@ -452,21 +451,22 @@ foreach my $biblionumber (@biblionumbers) {
                 }
             }
 
-            my $branch = C4::Circulation::_GetCircControlBranch($item, $borrowerinfo);
+            my $patron_unblessed = $patron->unblessed;
+            my $branch = C4::Circulation::_GetCircControlBranch($item, $patron_unblessed);
 
             my $branchitemrule = GetBranchItemRule( $branch, $item->{'itype'} );
 
             $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
-            my $can_item_be_reserved = CanItemBeReserved( $borrowerinfo->{borrowernumber}, $itemnumber );
+            my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber );
             $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
 
-            $item->{item_level_holds} = OPACItemHoldsAllowed( $item, $borrowerinfo );
+            $item->{item_level_holds} = OPACItemHoldsAllowed( $item, $patron_unblessed);
 
             if (
                    !$item->{cantreserve}
                 && !$exceeded_maxreserves
-                && IsAvailableForItemLevelRequest($item, $borrowerinfo)
+                && IsAvailableForItemLevelRequest($item, $patron_unblessed)
                 && $can_item_be_reserved eq 'OK'
               )
             {
@@ -611,8 +611,8 @@ foreach my $biblionumber (@biblionumbers) {
                      holdsview => 1,
                      C4::Search::enabled_staff_search_views,
                     );
-    if (defined $borrowerinfo && exists $borrowerinfo->{'branchcode'}) {
-        $template->param( borrower_branchcode => $borrowerinfo->{'branchcode'},);
+    if ( $patron ) { # FIXME This test seems very useless
+        $template->param( borrower_branchcode => $patron->branchcode );
     }
 
     $biblioloopiter{biblionumber} = $biblionumber;

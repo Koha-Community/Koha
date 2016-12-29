@@ -26,6 +26,7 @@ use C4::Items;
 use C4::Members;
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Patrons;
 
 use t::lib::TestBuilder;
 
@@ -55,7 +56,7 @@ my $borrowernumber = AddMember(
     branchcode => $library->{branchcode},
 );
 
-my $borrower = GetMember( borrowernumber => $borrowernumber );
+my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 my $record = MARC::Record->new();
 my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
 

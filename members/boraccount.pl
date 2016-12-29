@@ -31,8 +31,7 @@ use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
-use Koha::Patron::Images;
-
+use Koha::Patrons;
 use Koha::Patron::Categories;
 
 my $input=new CGI;
@@ -53,14 +52,14 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 my $borrowernumber=$input->param('borrowernumber');
 my $action = $input->param('action') || '';
 
-#get borrower details
-my $data=GetMember('borrowernumber' => $borrowernumber);
+#get patron details
+my $patron = Koha::Patrons->find( $borrowernumber );
 
 if ( $action eq 'reverse' ) {
   ReversePayment( $input->param('accountlines_id') );
 }
 
-if ( $data->{'category_type'} eq 'C') {
+if ( $patron->category->category_type eq 'C') {
     my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
     $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
     $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
@@ -92,10 +91,9 @@ foreach my $accountline ( @{$accts}) {
     }
 }
 
-$template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' || $data->{'category_type'} eq 'I' );
+$template->param( adultborrower => 1 ) if ( $patron->category->category_type =~ /^(A|I)$/ );
 
-my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
-$template->param( picture => 1 ) if $patron_image;
+$template->param( picture => 1 ) if $patron->image;
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($borrowernumber);
@@ -105,14 +103,14 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-$template->param(%$data);
+$template->param(%{ $patron->unblessed });
 
 $template->param(
     finesview           => 1,
     borrowernumber      => $borrowernumber,
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
-    is_child            => ($data->{'category_type'} eq 'C'),
+    is_child            => ($patron->category->category_type eq 'C'),
     reverse_col         => $reverse_col,
     accounts            => $accts,
     RoutingSerials => C4::Context->preference('RoutingSerials'),

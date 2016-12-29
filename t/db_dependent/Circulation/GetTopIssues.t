@@ -29,6 +29,7 @@ use C4::Items;
 use C4::Members;
 
 use Koha::Database;
+use Koha::Patrons;
 
 my $schema  = Koha::Database->new()->schema();
 my $dbh     = $schema->storage->dbh;
@@ -67,7 +68,7 @@ my $borrowernumber = AddMember(
     categorycode => $category,
     branchcode => $branch_1->{ branchcode }
 );
-my $borrower = GetMember(borrowernumber => $borrowernumber);
+my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
 AddIssue($borrower, 'GTI_BARCODE_001');
 AddIssue($borrower, 'GTI_BARCODE_002');

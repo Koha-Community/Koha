@@ -33,6 +33,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Members;
+use Koha::Patrons;
 use Koha::Patron::Categories;
 
 # use Smart::Comments;
@@ -71,7 +72,8 @@ if ( $op eq 'multi' ) {
 }
 
 elsif ( $op eq 'update' ) {
-    my $member = GetMember('borrowernumber'=>$borrowernumber);
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $member = $patron->unblessed;
     $member->{'guarantorid'}  = 0;
     $member->{'categorycode'} = $catcode;
     my $borcat = Koha::Patron::Categories->find($catcode);

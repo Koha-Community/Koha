@@ -21,8 +21,8 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-use C4::Members;
 use C4::Biblio;
+use Koha::Patrons;
 use Koha::Reviews;
 
 my $query = new CGI;
@@ -68,12 +68,12 @@ my $reviews = Koha::Reviews->search(
 
 foreach ( @$reviews ) {
     my $borrowernumber = $_->{borrowernumber};
-    my $borrowerData   = GetMember('borrowernumber' => $borrowernumber);
+    my $patron = Koha::Patrons->find( $borrowernumber);
     my $biblioData     = GetBiblioData($_->{biblionumber});
     # setting some borrower info into this hash
     $_->{bibliotitle} = $biblioData->{'title'};
-    $_->{surname}     = $borrowerData->{'surname'};
-    $_->{firstname}   = $borrowerData->{'firstname'};
+    $_->{surname}     = $patron->surname;
+    $_->{firstname}   = $patron->firstname;
 }
 
 my $url = "/cgi-bin/koha/reviews/reviewswaiting.pl?status=$status";

@@ -29,12 +29,12 @@ use C4::Auth qw/get_user_subpermissions/;
 use C4::Auth;
 use C4::Acquisition;
 use C4::Budgets;
-use C4::Members;
 use C4::Context;
 use C4::Output;
 use C4::Koha;
 use C4::Debug;
 use Koha::Acquisition::Currencies;
+use Koha::Patrons;
 
 my $input = new CGI;
 my $dbh     = C4::Context->dbh;
@@ -89,8 +89,6 @@ if ( $budget_period_id ) {
 
 # USED FOR PERMISSION COMPARISON LATER
 my $borrower_id         = $template->{VARS}->{'USER_INFO'}->{'borrowernumber'};
-my $user                = C4::Members::GetMember( borrowernumber => $borrower_id );
-my $user_branchcode     = $user->{'branchcode'};
 
 $template->param(
     show_mine   => $show_mine,
@@ -117,8 +115,8 @@ if ($op eq 'add_form') {
             exit;
         }
         $dropbox_disabled = BudgetHasChildren($budget_id);
-        my $borrower = &GetMember( borrowernumber=>$budget->{budget_owner_id} );
-        $budget->{budget_owner_name} = ( $borrower ? $borrower->{'firstname'} . ' ' . $borrower->{'surname'} : '' );
+        my $patron = Koha::Patrons->find( $budget->{budget_owner_id} );
+        $budget->{budget_owner_name} = ( $patron ? $patron->firstname . ' ' . $patron->surname : '' );
     }
 
     # build budget hierarchy
@@ -155,11 +153,10 @@ if ($op eq 'add_form') {
         my @budgetusers = GetBudgetUsers($budget->{budget_id});
         my @budgetusers_loop;
         foreach my $borrowernumber (@budgetusers) {
-            my $member = C4::Members::GetMember(
-                borrowernumber => $borrowernumber);
+            my $patron = Koha::Patrons->find( $borrowernumber );
             push @budgetusers_loop, {
-                firstname => $member->{firstname},
-                surname => $member->{surname},
+                firstname => $patron->firstname, # FIXME Should pass the patron object
+                surname => $patron->surname,
                 borrowernumber => $borrowernumber
             };
         }

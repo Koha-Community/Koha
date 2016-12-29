@@ -29,6 +29,7 @@ use C4::Circulation;
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Library;
+use Koha::Patrons;
 use DateTime::Duration;
 
 use MARC::Record;
@@ -117,7 +118,7 @@ my $itemnumber2 =
 
 my $borrowernumber =
   AddMember( categorycode => $categorycode, branchcode => $branchcode );
-my $borrower = GetMember( borrowernumber => $borrowernumber );
+my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
 my $module = new Test::MockModule('C4::Context');
 $module->mock( 'userenv', sub { { branch => $branchcode } } );

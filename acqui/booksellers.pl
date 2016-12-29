@@ -60,10 +60,10 @@ use C4::Output;
 use CGI qw ( -utf8 );
 
 use C4::Acquisition qw/ GetBasketsInfosByBookseller CanUserManageBasket /;
-use C4::Members qw/GetMember/;
 use C4::Context;
 
 use Koha::Acquisition::Booksellers;
+use Koha::Patrons;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -99,8 +99,10 @@ if ( $supplier_count == 1 ) {
 }
 
 my $uid;
+# FIXME This script should only be accessed by a valid logged in patron
 if ($loggedinuser) {
-    $uid = GetMember( borrowernumber => $loggedinuser )->{userid};
+    # FIXME Should not be needed, logged in patron should be cached
+    $uid = Koha::Patrons->find( $loggedinuser )->userid;
 }
 
 my $userenv = C4::Context::userenv;
@@ -130,13 +132,13 @@ for my $vendor (@suppliers) {
 
     for my $basket ( @{$baskets} ) {
         if (CanUserManageBasket($loggedinuser, $basket, $userflags)) {
-            my $member = GetMember( borrowernumber => $basket->{authorisedby} );
+            my $patron = Koha::Patrons->find( $basket->{authorisedby} );
             foreach (qw(total_items total_biblios expected_items)) {
                 $basket->{$_} ||= 0;
             }
-            if($member) {
-                $basket->{authorisedby_firstname} = $member->{firstname};
-                $basket->{authorisedby_surname} = $member->{surname};
+            if ( $patron ) {
+                $basket->{authorisedby_firstname} = $patron->firstname;
+                $basket->{authorisedby_surname} = $patron->surname;
             }
             if ($basket->{basketgroupid}) {
                 my $basketgroup = C4::Acquisition::GetBasketgroup($basket->{basketgroupid});

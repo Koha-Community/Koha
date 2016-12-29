@@ -32,7 +32,6 @@ use C4::Members;
 use C4::Debug;
 
 use Koha::Patrons;
-use Koha::Patron::Image;
 use Koha::Patron::Images;
 use Koha::Token;
 

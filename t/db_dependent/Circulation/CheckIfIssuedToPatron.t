@@ -25,6 +25,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use Koha::Library;
+use Koha::Patrons;
 use MARC::Record;
 
 BEGIN {
@@ -74,8 +75,8 @@ AddItem({ barcode => $barcode2, %item_info }, $biblionumber2);
 
 my $borrowernumber1 = AddMember(categorycode => $categorycode, branchcode => $branchcode);
 my $borrowernumber2 = AddMember(categorycode => $categorycode, branchcode => $branchcode);
-my $borrower1 = GetMember(borrowernumber => $borrowernumber1);
-my $borrower2 = GetMember(borrowernumber => $borrowernumber2);
+my $borrower1 = Koha::Patrons->find( $borrowernumber1 )->unblessed;
+my $borrower2 = Koha::Patrons->find( $borrowernumber2 )->unblessed;
 
 my $module = new Test::MockModule('C4::Context');
 $module->mock('userenv', sub { { branch => $branchcode } });

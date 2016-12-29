@@ -32,6 +32,7 @@ use C4::Reserves;
 use C4::Circulation;
 use C4::Members;
 use C4::Auth qw/checkauth/;
+use Koha::Patrons;
 
 my $input = CGI->new();
 
@@ -51,7 +52,8 @@ my $checkitem      = $input->param('checkitem');
 my $expirationdate = $input->param('expiration_date');
 my $itemtype       = $input->param('itemtype') || undef;
 
-my $borrower = GetMember( 'borrowernumber' => $borrowernumber );
+my $borrower = Koha::Patrons->find( $borrowernumber );
+$borrower = $borrower->unblessed if $borrower;
 
 my $multi_hold = $input->param('multi_hold');
 my $biblionumbers = $multi_hold ? $input->param('biblionumbers') : ($biblionumber . '/');
@@ -128,7 +130,7 @@ if ( $type eq 'str8' && $borrower ) {
         print $input->redirect("request.pl?biblionumber=$biblionumber");
     }
 }
-elsif ( $borrower eq '' ) {
+elsif ( $borrowernumber eq '' ) {
     print $input->header();
     print "Invalid borrower number please try again";
 

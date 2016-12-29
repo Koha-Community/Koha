@@ -47,6 +47,7 @@ use Koha::Libraries;
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Booksellers;
+use Koha::Patrons;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
@@ -310,14 +311,14 @@ if ($op eq ""){
             }
         } else {
             # 3rd add order
-            my $patron = C4::Members::GetMember( borrowernumber => $loggedinuser );
+            my $patron = Koha::Patrons->find( $loggedinuser );
             # get quantity in the MARC record (1 if none)
             my $quantity = GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour')) || 1;
             my %orderinfo = (
                 biblionumber       => $biblionumber,
                 basketno           => $cgiparams->{'basketno'},
                 quantity           => $c_quantity,
-                branchcode         => $patron->{branchcode},
+                branchcode         => $patron->branchcode,
                 budget_id          => $c_budget_id,
                 uncertainprice     => 1,
                 sort1              => $c_sort1,
@@ -417,15 +418,14 @@ if ($op eq ""){
 my $budgets = GetBudgets();
 my $budget_id = @$budgets[0]->{'budget_id'};
 # build bookfund list
-my $borrower = GetMember( 'borrowernumber' => $loggedinuser );
-my ( $flags, $homebranch ) = ( $borrower->{'flags'}, $borrower->{'branchcode'} );
+my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
 my $budget = GetBudget($budget_id);
 
 # build budget list
 my $budget_loop = [];
 my $budgets_hierarchy = GetBudgetHierarchy;
 foreach my $r ( @{$budgets_hierarchy} ) {
-    next unless (CanUserUseBudget($borrower, $r, $userflags));
+    next unless (CanUserUseBudget($patron, $r, $userflags));
     if ( !defined $r->{budget_amount} || $r->{budget_amount} == 0 ) {
         next;
     }

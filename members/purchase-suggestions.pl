@@ -26,7 +26,7 @@ use C4::Output;
 use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Suggestions;
-use Koha::Patron::Images;
+use Koha::Patrons;
 
 my $input = new CGI;
 
@@ -43,13 +43,17 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 
 # Set informations for the patron
-my $borrower = GetMember( borrowernumber => $borrowernumber );
-foreach my $key ( keys %$borrower ) {
-    $template->param( $key => $borrower->{$key} );
+my $patron = Koha::Patrons->find( $borrowernumber );
+my $category = $patron->category;
+my $data = $patron->unblessed;
+$data->{description} = $category->description;
+$data->{category_type} = $category->category_type;
+foreach my $key ( keys %$data ) {
+    $template->param( $key => $data->{$key} );
 }
 $template->param(
     suggestionsview  => 1,
-    categoryname => $borrower->{'description'},
+    categoryname => $data->{'description'},
     RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 
@@ -61,8 +65,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-my $patron_image = Koha::Patron::Images->find($borrowernumber);
-$template->param( picture => 1 ) if $patron_image;
+$template->param( picture => 1 ) if $patron->image;
 
 my $suggestions = SearchSuggestion( { suggestedby => $borrowernumber } );
 

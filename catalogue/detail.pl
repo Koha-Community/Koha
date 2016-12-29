@@ -29,7 +29,6 @@ use C4::Biblio;
 use C4::Items;
 use C4::Circulation;
 use C4::Reserves;
-use C4::Members; # to use GetMember
 use C4::Serials;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
 use C4::External::Amazon;
@@ -75,12 +74,13 @@ if ( not defined $record ) {
 }
 
 if($query->cookie("holdfor")){ 
-    my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
+    my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
     $template->param(
+        # FIXME Should pass the patron object
         holdfor => $query->cookie("holdfor"),
-        holdfor_surname => $holdfor_patron->{'surname'},
-        holdfor_firstname => $holdfor_patron->{'firstname'},
-        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+        holdfor_surname => $holdfor_patron->surname,
+        holdfor_firstname => $holdfor_patron->firstname,
+        holdfor_cardnumber => $holdfor_patron->cardnumber,
     );
 }
 
@@ -262,14 +262,14 @@ foreach my $item (@items) {
     my $item_object = Koha::Items->find( $item->{itemnumber} );
     my $holds = $item_object->current_holds;
     if ( my $first_hold = $holds->next ) {
-        my $ItemBorrowerReserveInfo = C4::Members::GetMember( borrowernumber => $first_hold->borrowernumber); # FIXME could be improved
+        my $patron = Koha::Patrons->find( $first_hold->borrowernumber );
         $item->{backgroundcolor} = 'reserved';
         $item->{reservedate}     = $first_hold->reservedate;
         $item->{ReservedForBorrowernumber}     = $first_hold->borrowernumber;
-        $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
-        $item->{ReservedForFirstname}   = $ItemBorrowerReserveInfo->{'firstname'};
+        $item->{ReservedForSurname}     = $patron->surname;
+        $item->{ReservedForFirstname}   = $patron->firstname;
         $item->{ExpectedAtLibrary}      = $first_hold->branchcode;
-        $item->{Reservedcardnumber}             = $ItemBorrowerReserveInfo->{'cardnumber'};
+        $item->{Reservedcardnumber}     = $patron->cardnumber;
         # Check waiting status
         $item->{waitingdate} = $first_hold->waitingdate;
     }

@@ -27,6 +27,7 @@ use C4::Items;
 use C4::Members;
 use C4::Circulation;
 use Koha::Libraries;
+use Koha::Patrons;
 use MARC::Record;
 
 my $schema = Koha::Database->schema;
@@ -64,7 +65,7 @@ my $itemnumber3 =
 
 my $borrowernumber =
   AddMember( categorycode => $categorycode, branchcode => $branchcode );
-my $borrower = GetMember( borrowernumber => $borrowernumber );
+my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
 my $module = new Test::MockModule('C4::Context');
 $module->mock( 'userenv', sub { { branch => $branchcode } } );

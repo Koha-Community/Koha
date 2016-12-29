@@ -31,7 +31,7 @@ use C4::Members;
 use C4::Members::Statistics;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Output;
-use Koha::Patron::Images;
+use Koha::Patrons;
 
 my $input = new CGI;
 
@@ -48,12 +48,17 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 
 # Set informations for the patron
-my $borrower = GetMember( borrowernumber => $borrowernumber );
-if ( not defined $borrower ) {
+my $patron = Koha::Patrons->find( $borrowernumber );
+unless ( $patron ) {
     $template->param (unknowuser => 1);
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
+
+my $category = $patron->category;
+my $borrower= $patron->unblessed;
+$borrower->{description} = $category->description;
+$borrower->{category_type} = $category->category_type;
 
 foreach my $key ( keys %$borrower ) {
     $template->param( $key => $borrower->{$key} );
@@ -92,8 +97,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
-$template->param( picture => 1 ) if $patron_image;
+$template->param( picture => 1 ) if $patron->image;
 
 $template->param(%$borrower);
 

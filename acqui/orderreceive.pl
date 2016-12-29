@@ -76,6 +76,7 @@ use C4::Koha;
 use Koha::Acquisition::Booksellers;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::ItemTypes;
+use Koha::Patrons;
 
 my $input      = new CGI;
 
@@ -180,7 +181,7 @@ if( defined $order->{tax_rate_on_receiving} ) {
 my $suggestion = GetSuggestionInfoFromBiblionumber($order->{biblionumber});
 
 my $authorisedby = $order->{authorisedby};
-my $member = GetMember( borrowernumber => $authorisedby );
+my $authorised_patron = Koha::Patrons->find( $authorisedby );
 
 my $budget = GetBudget( $order->{budget_id} );
 
@@ -213,8 +214,8 @@ $template->param(
     ecost                 => $ecost,
     unitprice             => $unitprice,
     tax_rate              => $tax_rate,
-    memberfirstname       => $member->{firstname} || "",
-    membersurname         => $member->{surname} || "",
+    memberfirstname       => $authorised_patron->firstname || "",
+    membersurname         => $authorised_patron->surname || "",
     invoiceid             => $invoice->{invoiceid},
     invoice               => $invoice->{invoicenumber},
     datereceived          => $datereceived,
@@ -226,7 +227,7 @@ $template->param(
     gst_values            => \@gst_values,
 );
 
-my $borrower = GetMember( 'borrowernumber' => $loggedinuser );
+my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
 my @budget_loop;
 my $periods = GetBudgetPeriods( );
 foreach my $period (@$periods) {
@@ -237,7 +238,7 @@ foreach my $period (@$periods) {
     my $budget_hierarchy = GetBudgetHierarchy( $period->{'budget_period_id'} );
     my @funds;
     foreach my $r ( @{$budget_hierarchy} ) {
-        next unless ( CanUserUseBudget( $borrower, $r, $userflags ) );
+        next unless ( CanUserUseBudget( $patron, $r, $userflags ) );
         if ( !defined $r->{budget_amount} || $r->{budget_amount} == 0 ) {
             next;
         }

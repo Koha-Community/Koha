@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 32;
+use Test::More tests => 30;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -32,6 +32,7 @@ use C4::Reserves;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Library;
+use Koha::Patrons;
 
 BEGIN {
     require_ok('C4::Circulation');
@@ -147,14 +148,14 @@ my $borrower_id1 = C4::Members::AddMember(
     categorycode => $categorycode,
     branchcode   => $branchcode_1
 );
-my $borrower_1 = C4::Members::GetMember(borrowernumber => $borrower_id1);
+my $borrower_1 = Koha::Patrons->find( $borrower_id1 )->unblessed;
 my $borrower_id2 = C4::Members::AddMember(
     firstname    => 'firstname2',
     surname      => 'surname2 ',
     categorycode => $categorycode,
     branchcode   => $branchcode_2,
 );
-my $borrower_2 = C4::Members::GetMember(borrowernumber => $borrower_id2);
+my $borrower_2 = Koha::Patrons->find( $borrower_id2 )->unblessed;
 
 my @USERENV = (
     $borrower_id1, 'test', 'MASTERTEST', 'firstname', $branchcode_1,
@@ -246,19 +247,19 @@ my $issue3 = C4::Circulation::AddIssue( $borrower_1, $barcode_1 );
 @renewcount = C4::Circulation::GetRenewCount();
 is_deeply(
     \@renewcount,
-    [ 0, undef, 0 ], # FIXME Need to be fixed, see FIXME in GetRenewCount
+    [ 0, 0, 0 ], # FIXME Need to be fixed, see FIXME in GetRenewCount
     "Without issuing rules and without parameter, GetRenewCount returns renewcount = 0, renewsallowed = undef, renewsleft = 0"
 );
 @renewcount = C4::Circulation::GetRenewCount(-1);
 is_deeply(
     \@renewcount,
-    [ 0, undef, 0 ], # FIXME Need to be fixed
+    [ 0, 0, 0 ], # FIXME Need to be fixed
     "Without issuing rules and without wrong parameter, GetRenewCount returns renewcount = 0, renewsallowed = undef, renewsleft = 0"
 );
 @renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
 is_deeply(
     \@renewcount,
-    [ 2, undef, 0 ],
+    [ 2, 0, 0 ],
     "Without issuing rules and with a valid parameter, renewcount = 2, renewsallowed = undef, renewsleft = 0"
 );
 
@@ -291,18 +292,6 @@ is_deeply(
 $dbh->do(q|
     UPDATE issuingrules SET renewalsallowed = 3
 |);
-@renewcount = C4::Circulation::GetRenewCount();
-is_deeply(
-    \@renewcount,
-    [ 0, 3, 3 ],
-    "With issuing rules (renewal allowed) and without parameter, GetRenewCount returns renewcount = 0, renewsallowed = 3, renewsleft = 3"
-);
-@renewcount = C4::Circulation::GetRenewCount(-1);
-is_deeply(
-    \@renewcount,
-    [ 0, 3, 3 ],
-    "With issuing rules (renewal allowed) and without wrong parameter, GetRenewCount returns renewcount = 0, renewsallowed = 3, renewsleft = 3"
-);
 @renewcount = C4::Circulation::GetRenewCount($borrower_id1, $item_id1);
 is_deeply(
     \@renewcount,

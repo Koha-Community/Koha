@@ -88,7 +88,7 @@ if (!$borrowernumber) {
 }
 
 # get borrower information ....
-my ( $borr ) = GetMember( borrowernumber => $borrowernumber );
+my $borr = Koha::Patrons->find( $borrowernumber )->unblessed;
 
 my (  $today_year,   $today_month,   $today_day) = Today();
 my ($warning_year, $warning_month, $warning_day) = split /-/, $borr->{'dateexpiry'};

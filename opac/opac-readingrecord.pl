@@ -31,6 +31,7 @@ use MARC::Record;
 
 use C4::Output;
 use C4::Charset qw(StripNonXmlChars);
+use Koha::Patrons;
 
 use Koha::ItemTypes;
 
@@ -52,8 +53,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-# get borrower information ....
-my ( $borr ) = GetMember( borrowernumber => $borrowernumber );
+my $borr = Koha::Patrons->find( $borrowernumber )->unblessed;
 
 $template->param(%{$borr});
 

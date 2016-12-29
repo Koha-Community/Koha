@@ -44,6 +44,9 @@ my $library = $builder->build({
     source => "Branch",
 });
 
+my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 1 } });
+set_logged_in_user( $patron );
+
 my $branchcode=$library->{branchcode};
 
 my $john_doe = $builder->build({
@@ -460,5 +463,17 @@ subtest 'ExtendedPatronAttributes' => sub {
 
 # End
 $schema->storage->txn_rollback;
+
+sub set_logged_in_user {
+    my ($patron) = @_;
+    C4::Context->_new_userenv('xxx');
+    C4::Context->set_userenv(
+        $patron->borrowernumber, $patron->userid,
+        $patron->cardnumber,     'firstname',
+        'surname',               $patron->library->branchcode,
+        'Midway Public Library', $patron->flags,
+        '',                      ''
+    );
+}
 
 1;

@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 65;
+use Test::More tests => 63;
 use Test::MockModule;
 use Data::Dumper qw/Dumper/;
 use C4::Context;
@@ -95,8 +95,9 @@ my %data = (
 my $addmem=AddMember(%data);
 ok($addmem, "AddMember()");
 
-my $member = GetMember( cardnumber => $CARDNUMBER )
+my $member = Koha::Patrons->find( { cardnumber => $CARDNUMBER } )
   or BAIL_OUT("Cannot read member with card $CARDNUMBER");
+$member = $member->unblessed;
 
 ok ( $member->{firstname}    eq $FIRSTNAME    &&
      $member->{surname}      eq $SURNAME      &&
@@ -112,7 +113,7 @@ $member->{email}     = $EMAIL;
 $member->{phone}     = $PHONE;
 $member->{emailpro}  = $EMAILPRO;
 ModMember(%$member);
-my $changedmember = GetMember( cardnumber => $CARDNUMBER );
+my $changedmember = Koha::Patrons->find( { cardnumber => $CARDNUMBER } )->unblessed;
 ok ( $changedmember->{firstname} eq $CHANGED_FIRSTNAME &&
      $changedmember->{email}     eq $EMAIL             &&
      $changedmember->{phone}     eq $PHONE             &&
@@ -172,21 +173,21 @@ is( Check_Userid( 'tomasito.none', '' ), 0,
 is( Check_Userid( 'tomasitoxxx', '' ), 1,
     'non-existent userid -> unique (blank borrowernumber)' );
 
-my $borrower = GetMember( borrowernumber => $borrowernumber );
+my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 is( $borrower->{dateofbirth}, undef, 'AddMember should undef dateofbirth if empty string is given');
 is( $borrower->{debarred}, undef, 'AddMember should undef debarred if empty string is given');
 isnt( $borrower->{dateexpiry}, '0000-00-00', 'AddMember should not set dateexpiry to 0000-00-00 if empty string is given');
 isnt( $borrower->{dateenrolled}, '0000-00-00', 'AddMember should not set dateenrolled to 0000-00-00 if empty string is given');
 
 ModMember( borrowernumber => $borrowernumber, dateofbirth => '', debarred => '', dateexpiry => '', dateenrolled => '' );
-$borrower = GetMember( borrowernumber => $borrowernumber );
+$borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 is( $borrower->{dateofbirth}, undef, 'ModMember should undef dateofbirth if empty string is given');
 is( $borrower->{debarred}, undef, 'ModMember should undef debarred if empty string is given');
 isnt( $borrower->{dateexpiry}, '0000-00-00', 'ModMember should not set dateexpiry to 0000-00-00 if empty string is given');
 isnt( $borrower->{dateenrolled}, '0000-00-00', 'ModMember should not set dateenrolled to 0000-00-00 if empty string is given');
 
 ModMember( borrowernumber => $borrowernumber, dateofbirth => '1970-01-01', debarred => '2042-01-01', dateexpiry => '9999-12-31', dateenrolled => '2015-09-06' );
-$borrower = GetMember( borrowernumber => $borrowernumber );
+$borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 is( $borrower->{dateofbirth}, '1970-01-01', 'ModMember should correctly set dateofbirth if a valid date is given');
 is( $borrower->{debarred}, '2042-01-01', 'ModMember should correctly set debarred if a valid date is given');
 is( $borrower->{dateexpiry}, '9999-12-31', 'ModMember should correctly set dateexpiry if a valid date is given');
@@ -199,25 +200,25 @@ is( Check_Userid( 'tomasito.none', '' ), 0,
     'userid not unique (blank borrowernumber)' );
 is( Check_Userid( 'tomasito.none', $new_borrowernumber ), 0,
     'userid not unique (second borrowernumber passed)' );
-$borrower = GetMember( borrowernumber => $new_borrowernumber );
+$borrower = Koha::Patrons->find( $new_borrowernumber )->unblessed;
 ok( $borrower->{userid} ne 'tomasito', "Borrower with duplicate userid has new userid generated" );
 
 $data{ cardnumber } = "234567890";
 $data{userid} = 'a_user_id';
 $borrowernumber = AddMember( %data );
-$borrower = GetMember( borrowernumber => $borrowernumber );
+$borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 is( $borrower->{userid}, $data{userid}, 'AddMember should insert the given userid' );
 
 subtest 'ModMember should not update userid if not true' => sub {
     plan tests => 3;
     ModMember( borrowernumber => $borrowernumber, firstname => 'Tomas', userid => '' );
-    $borrower = GetMember( borrowernumber => $borrowernumber );
+    $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
     is ( $borrower->{userid}, $data{userid}, 'ModMember should not update the userid with an empty string' );
     ModMember( borrowernumber => $borrowernumber, firstname => 'Tomas', userid => 0 );
-    $borrower = GetMember( borrowernumber => $borrowernumber );
+    $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
     is ( $borrower->{userid}, $data{userid}, 'ModMember should not update the userid with an 0');
     ModMember( borrowernumber => $borrowernumber, firstname => 'Tomas', userid => undef );
-    $borrower = GetMember( borrowernumber => $borrowernumber );
+    $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
     is ( $borrower->{userid}, $data{userid}, 'ModMember should not update the userid with an undefined value');
 };
 
@@ -372,7 +373,7 @@ $dbh->do(q|UPDATE borrowers SET userid = '' WHERE borrowernumber = ?|, undef, $b
 # Create another patron and verify the userid has been generated
 $borrowernumber = AddMember( categorycode => $patron_category->{categorycode}, branchcode => $library2->{branchcode} );
 ok( $borrowernumber > 0, 'AddMember should have inserted the patron even if no userid is given' );
-$borrower = GetMember( borrowernumber => $borrowernumber );
+$borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 ok( $borrower->{userid},  'A userid should have been generated correctly' );
 
 # Regression tests for BZ12226
@@ -478,17 +479,9 @@ my $password="";
 is( $password =~ /^[a-zA-Z]{10}$/ , 1, 'Test for autogenerated password if none submitted');
 ( $borrowernumber, $password ) = AddMember_Opac(surname=>"Deckard",firstname=>"Rick",password=>"Nexus-6",branchcode => $library2->{branchcode});
 is( $password eq "Nexus-6", 1, 'Test password used if submitted');
-$borrower = GetMember(borrowernumber => $borrowernumber);
+$borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 my $hashed_up =  Koha::AuthUtils::hash_password("Nexus-6", $borrower->{password});
 is( $borrower->{password} eq $hashed_up, 1, 'Check password hash equals hash of submitted password' );
-
-# regression test for bug 16009
-my $patron;
-eval {
-    my $patron = GetMember(cardnumber => undef);
-};
-is($@, '', 'Bug 16009: GetMember(cardnumber => undef) works');
-is($patron, undef, 'Bug 16009: GetMember(cardnumber => undef) returns undef');
 
 subtest 'Trivial test for AddMember_Auto' => sub {
     plan tests => 3;
@@ -499,7 +492,7 @@ subtest 'Trivial test for AddMember_Auto' => sub {
     my %borr = AddMember_Auto( surname=> 'Dick3', firstname => 'Philip', branchcode => $library->{branchcode}, categorycode => $category->{categorycode}, password => '34567890' );
     ok( $borr{borrowernumber}, 'Borrower hash contains borrowernumber' );
     is( $borr{cardnumber}, 12345, 'Borrower hash contains cardnumber' );
-    $patron = Koha::Patrons->find( $borr{borrowernumber} );
+    my $patron = Koha::Patrons->find( $borr{borrowernumber} );
     isnt( $patron, undef, 'Patron found' );
 };
 

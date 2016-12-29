@@ -66,7 +66,7 @@ push @messages, { type => 'error', code => 'error_on_patron_load' }
 # Get supporting cast
 my ( $branch, $category, $houseboundprofile, $visit, $patron_image );
 if ( $patron ) {
-    $patron_image = Koha::Patron::Images->find($patron->borrowernumber);
+    $patron_image = $patron->image;
     $branch = Koha::Libraries->new->find($patron->branchcode);
     $category = Koha::Patron::Categories->new->find($patron->categorycode);
     $houseboundprofile = $patron->housebound_profile;

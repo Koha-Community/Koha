@@ -39,6 +39,7 @@ use Koha::DateUtils;
 use Koha::BiblioFrameworks;
 use Koha::Items;
 use Koha::ItemTypes;
+use Koha::Patrons;
 
 my $input = new CGI;
 
@@ -104,7 +105,7 @@ foreach my $num (@getreserves) {
         borrowernum => $borrowernum,
     );
 
-    my $getborrower = GetMember(borrowernumber => $num->{'borrowernumber'});
+    my $patron = Koha::Patrons->find( $num->{borrowernumber} );
     my $itemtype = Koha::ItemTypes->find( $item->effective_itemtype );
     $getreserv{'waitingdate'} = $num->{'waitingdate'};
     my ( $expire_year, $expire_month, $expire_day ) = split (/-/, $num->{'expirationdate'});
@@ -123,9 +124,9 @@ foreach my $num (@getreserves) {
     if ( $homebranch ne $holdingbranch ) {
         $getreserv{'dotransfer'} = 1;
     }
-    $getreserv{'borrowername'}      = $getborrower->{'surname'};
-    $getreserv{'borrowerfirstname'} = $getborrower->{'firstname'};
-    $getreserv{'borrowerphone'}     = $getborrower->{'phone'};
+    $getreserv{'borrowername'}      = $patron->surname;
+    $getreserv{'borrowerfirstname'} = $patron->firstname;
+    $getreserv{'borrowerphone'}     = $patron->phone;
 
     my $borEmail = GetFirstValidEmailAddress( $borrowernum );
 
@@ -189,7 +190,7 @@ sub cancel {
     # if we have a result
     if ($nextreservinfo) {
         my %res;
-        my $borrowerinfo = C4::Members::GetMember( borrowernumber => $nextreservinfo );
+        my $patron = Koha::Patrons->find( $nextreservinfo );
         my $title = Koha::Items->find( $item )->biblio->title;
         if ( $messages->{'transfert'} ) {
             $res{messagetransfert} = $messages->{'transfert'};
@@ -198,8 +199,8 @@ sub cancel {
 
         $res{message}             = 1;
         $res{nextreservnumber}    = $nextreservinfo;
-        $res{nextreservsurname}   = $borrowerinfo->{'surname'};
-        $res{nextreservfirstname} = $borrowerinfo->{'firstname'};
+        $res{nextreservsurname}   = $patron->surname;
+        $res{nextreservfirstname} = $patron->firstname;
         $res{nextreservitem}      = $item;
         $res{nextreservtitle}     = $title;
         $res{waiting}             = $messages->{'waiting'} ? 1 : 0;

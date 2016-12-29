@@ -27,14 +27,14 @@ use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Letters;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
-use Koha::Patron::Images;
+use Koha::Patrons;
 
 my $input=new CGI;
 
 
 my $borrowernumber = $input->param('borrowernumber');
-#get borrower details
-my $borrower = GetMember(borrowernumber => $borrowernumber);
+my $patron = Koha::Patrons->find( $borrowernumber );
+my $borrower = $patron->unblessed;
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "members/notices.tt",
@@ -46,8 +46,7 @@ my ($template, $loggedinuser, $cookie)
 				});
 
 $template->param( $borrower );
-my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
-$template->param( picture => 1 ) if $patron_image;
+$template->param( picture => 1 ) if $patron->image;
 
 # Allow resending of messages in Notices tab
 my $op = $input->param('op') || q{};
@@ -78,7 +77,7 @@ $template->param(
     QUEUED_MESSAGES    => $queued_messages,
     borrowernumber     => $borrowernumber,
     sentnotices        => 1,
-    categoryname       => $borrower->{'description'},
+    categoryname       => $patron->category->description,
     RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

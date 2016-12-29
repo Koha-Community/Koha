@@ -26,7 +26,6 @@ use C4::Auth;
 use C4::Output;
 use C4::Context;
 use C4::Acquisition;
-use C4::Members;
 use Koha::Acquisition::Booksellers;
 
 my $input = new CGI;
@@ -89,8 +88,8 @@ if( $basketno && $ordernumber) {
     for( my $i = 0 ; $i < $basketscount ; $i++ ){
         my %line;
         %line = %{ $baskets->[$i] };
-        my $createdby = GetMember(borrowernumber => $line{authorisedby});
-        $line{createdby} = "$createdby->{surname}, $createdby->{firstname}";
+        my $createdby = Koha::Patrons->find( $line{authorisedby} );
+        $line{createdby} = $createdby ? $createdby->surname . ', ' . $createdby->firstname : '';
         push @basketsloop, \%line unless $line{closedate};
     }
     $template->param(

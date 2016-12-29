@@ -26,7 +26,7 @@ use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Context;
 use C4::Serials;
-use Koha::Patron::Images;
+use Koha::Patrons;
 use CGI::Session;
 
 my $query = new CGI;
@@ -49,18 +49,14 @@ my $borrowernumber = $query->param('borrowernumber');
 my $branch = C4::Context->userenv->{'branch'};
 
 # get the borrower information.....
-my $borrower;
+my ( $patron, $patron_info );
 if ($borrowernumber) {
-    $borrower = GetMember( borrowernumber => $borrowernumber );
-}
+    $patron = Koha::Patrons->find( $borrowernumber );
+    my $category = $patron->category;
+    my $patron_info = $patron->unblessed;
+    $patron_info->{description} = $category->description;
+    $patron_info->{category_type} = $category->category_type;
 
-
-##################################################################################
-# BUILD HTML
-# I'm trying to show the title of subscriptions where the borrowernumber is attached via a routing list
-
-if ($borrowernumber) {
-# new op dev
   my $count;
   my @borrowerSubscriptions;
   ($count, @borrowerSubscriptions) = GetSubscriptionsFromBorrower($borrowernumber );
@@ -80,19 +76,19 @@ if ($borrowernumber) {
         routinglistview => 1
     );
 
-    $template->param( adultborrower => 1 ) if ( $borrower->{'category_type'} eq 'A' || $borrower->{'category_type'} eq 'I' );
+    $template->param( adultborrower => 1 ) if ( $patron_info->{category_type} =~ /^(A|I)$/ );
 }
 
 ##################################################################################
 
-$template->param(%$borrower);
+$template->param(%$patron_info);
 
 $template->param(
     findborrower      => $findborrower,
-    borrower          => $borrower,
+    borrower          => $patron_info,
     borrowernumber    => $borrowernumber,
     branch            => $branch,
-    categoryname      => $borrower->{description},
+    categoryname      => $patron_info->{description},
     RoutingSerials    => C4::Context->preference('RoutingSerials'),
 );
 
@@ -104,7 +100,6 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
-$template->param( picture => 1 ) if $patron_image;
+$template->param( picture => 1 ) if $patron and $patron->image;
 
 output_html_with_http_headers $query, $cookie, $template->output;

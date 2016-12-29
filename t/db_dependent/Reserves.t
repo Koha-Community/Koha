@@ -37,6 +37,7 @@ use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Libraries;
 use Koha::Notice::Templates;
+use Koha::Patrons;
 use Koha::Patron::Categories;
 
 BEGIN {
@@ -118,7 +119,7 @@ my %data = (
 );
 Koha::Patron::Categories->find($category_1)->set({ enrolmentfee => 0})->store;
 my $borrowernumber = AddMember(%data);
-my $borrower = GetMember( borrowernumber => $borrowernumber );
+my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 my $biblionumber   = $bibnum;
 my $barcode        = $testbarcode;
 

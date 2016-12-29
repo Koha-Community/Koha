@@ -34,6 +34,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::AuthorisedValues;
 use Koha::Acquisition::Currencies;
 use Koha::Libraries;
+use Koha::Patrons;
 
 use URI::Escape;
 
@@ -69,9 +70,9 @@ sub GetCriteriumDesc{
         return $av->count ? $av->next->lib : 'Unkown';
     }
     if ($displayby =~/suggestedby/||$displayby =~/managedby/||$displayby =~/acceptedby/){
-        my $borr=C4::Members::GetMember(borrowernumber=>$criteriumvalue);
-        return "" unless $borr;
-        return $$borr{surname} . ", " . $$borr{firstname};
+        my $patron = Koha::Patrons->find( $criteriumvalue );
+        return "" unless $patron;
+        return $patron->surname . ", " . $patron->firstname;
     }
     if ( $displayby =~ /budgetid/) {
         my $budget = GetBudget($criteriumvalue);
@@ -281,14 +282,15 @@ if ($op=~/else/) {
 foreach my $element ( qw(managedby suggestedby acceptedby) ) {
 #    $debug || warn $$suggestion_ref{$element};
     if ($$suggestion_ref{$element}){
-        my $member=GetMember(borrowernumber=>$$suggestion_ref{$element});
+        my $patron = Koha::Patrons->find( $$suggestion_ref{$element} );
+        my $category = $patron->category;
         $template->param(
-            $element."_borrowernumber"=>$$member{borrowernumber},
-            $element."_firstname"=>$$member{firstname},
-            $element."_surname"=>$$member{surname},
-            $element."_branchcode"=>$$member{branchcode},
-            $element."_description"=>$$member{description},
-            $element."_category_type"=>$$member{category_type}
+            $element."_borrowernumber"=>$patron->borrowernumber,
+            $element."_firstname"=>$patron->firstname,
+            $element."_surname"=>$patron->surname,
+            $element."_branchcode"=>$patron->branchcode,
+            $element."_description"=>$category->description,
+            $element."_category_type"=>$category->category_type,
         );
     }
 }

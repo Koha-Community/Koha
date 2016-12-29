@@ -52,8 +52,8 @@ use C4::Reserves;
 use C4::Acquisition;
 use C4::Serials;    # uses getsubscriptionfrom biblionumber
 use C4::Koha;
-use C4::Members;    # GetMember
 use Koha::ItemTypes;
+use Koha::Patrons;
 use Koha::RecordProcessor;
 
 
@@ -164,7 +164,7 @@ my $res = GetISBDView({
 });
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
-my $borrower = GetMember( 'borrowernumber' => $loggedinuser );
+my $patron = Koha::Patrons->find( $loggedinuser );
 for my $itm (@items) {
     $norequests = 0
       if $norequests
@@ -174,7 +174,7 @@ for my $itm (@items) {
         && !$itemtypes->{$itm->{'itype'}}->{notforloan}
         && $itm->{'itemnumber'};
 
-    $allow_onshelf_holds = C4::Reserves::OnShelfHoldsAllowed($itm, $borrower)
+    $allow_onshelf_holds = C4::Reserves::OnShelfHoldsAllowed($itm, $patron->unblessed)
       unless $allow_onshelf_holds;
 }
 

@@ -30,6 +30,7 @@ use C4::Scrubber;
 
 use Koha::AuthorisedValues;
 use Koha::Libraries;
+use Koha::Patrons;
 
 use Koha::DateUtils qw( dt_from_string );
 
@@ -195,14 +196,17 @@ my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
 
 # Is the person allowed to choose their branch
 if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
-    my ( $borr ) = GetMember( borrowernumber => $borrowernumber );
 
 # pass the pickup branch along....
     my $userbranch = '';
     if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
         $userbranch = C4::Context->userenv->{'branch'};
     }
-    my $branchcode = $input->param('branchcode') || $borr->{'branchcode'} || $userbranch || '' ;
+    my $branchcode = $input->param('branchcode');
+    unless ( $branchcode ) {
+        my $patron = Koha::Patrons->find( $borrowernumber );
+        $branchcode = $patron->branchcode || $userbranch || '' ;
+    }
 
     $template->param( branchcode => $branchcode );
 }

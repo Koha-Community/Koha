@@ -31,7 +31,6 @@ use C4::Auth;
 use C4::Members;
 use Module::Load;
 use Koha::Patrons;
-use Koha::Patron::Images;
 use Koha::Token;
 
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
@@ -75,13 +74,13 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
 my $issues = GetPendingIssues($member);     # FIXME: wasteful call when really, we only want the count
 my $countissues = scalar(@$issues);
 
-my $bor = C4::Members::GetMember( borrowernumber => $member );
-my $flags = C4::Members::patronflags( $bor );
+my $patron = Koha::Patrons->find( $member );
+my $flags = C4::Members::patronflags( $patron->unblessed );
 my $userenv = C4::Context->userenv;
 
  
 
-if ($bor->{category_type} eq "S") {
+if ($patron->category->category_type eq "S") {
     unless(C4::Auth::haspermission($userenv->{'id'},{'staffaccess'=>1})) {
         print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_STAFF");
         exit 0; # Exit without error
@@ -95,8 +94,8 @@ if ($bor->{category_type} eq "S") {
 
 if (C4::Context->preference("IndependentBranches")) {
     my $userenv = C4::Context->userenv;
-    if ( !C4::Context->IsSuperLibrarian() && $bor->{'branchcode'}){
-        unless ($userenv->{branch} eq $bor->{'branchcode'}){
+    if ( !C4::Context->IsSuperLibrarian() && $patron->branchcode){
+        unless ($userenv->{branch} eq $patron->branchcode){
             print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_OTHERLIBRARY");
             exit 0; # Exit without error
         }
@@ -107,27 +106,28 @@ my $op = $input->param('op') || 'delete_confirm';
 my $dbh = C4::Context->dbh;
 my $is_guarantor = $dbh->selectrow_array("SELECT COUNT(*) FROM borrowers WHERE guarantorid=?", undef, $member);
 if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_guarantor or $deletelocal == 0) {
-    my $patron_image = Koha::Patron::Images->find($bor->{borrowernumber});
-    $template->param( picture => 1 ) if $patron_image;
+    $template->param( picture => 1 ) if $patron->image;
 
-    $template->param( adultborrower => 1 ) if ( $bor->{category_type} eq 'A' || $bor->{category_type} eq 'I' );
+    $template->param( adultborrower => 1 ) if $patron->category->category_type =~ /^(A|I)$/;
 
-    $template->param(borrowernumber => $member,
-        surname => $bor->{'surname'},
-        title => $bor->{'title'},
-        cardnumber => $bor->{'cardnumber'},
-        firstname => $bor->{'firstname'},
-        categorycode => $bor->{'categorycode'},
-        category_type => $bor->{'category_type'},
-        categoryname  => $bor->{'description'},
-        address => $bor->{'address'},
-        address2 => $bor->{'address2'},
-        city => $bor->{'city'},
-        zipcode => $bor->{'zipcode'},
-        country => $bor->{'country'},
-        phone => $bor->{'phone'},
-        email => $bor->{'email'},
-        branchcode => $bor->{'branchcode'},
+    $template->param(
+        # FIXME The patron object should be passed to the template
+        borrowernumber => $patron->borrowernumber,
+        surname => $patron->surname,
+        title => $patron->title,
+        cardnumber => $patron->cardnumber,
+        firstname => $patron->firstname,
+        categorycode => $patron->categorycode,
+        category_type => $patron->category->category_type,
+        categoryname  => $patron->category->description,
+        address => $patron->address,
+        address2 => $patron->address2,
+        city => $patron->city,
+        zipcode => $patron->zipcode,
+        country => $patron->country,
+        phone => $patron->phone,
+        email => $patron->email,
+        branchcode => $patron->branchcode,
         RoutingSerials => C4::Context->preference('RoutingSerials'),
     );
     if ($countissues >0) {

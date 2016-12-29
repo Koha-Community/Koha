@@ -33,6 +33,7 @@ use C4::Items;
 use C4::Output;
 use C4::Members;
 use Koha::Email;
+use Koha::Patrons;
 use Koha::Virtualshelves;
 
 my $query = new CGI;
@@ -109,14 +110,14 @@ if ( $email ) {
         push( @results, $dat );
     }
 
-    my $user = GetMember(borrowernumber => $borrowernumber);
+    my $patron = Koha::Patrons->find( $borrowernumber );
 
     $template2->param(
         BIBLIO_RESULTS => \@results,
         comment        => $comment,
         shelfname      => $shelf->shelfname,
-        firstname      => $user->{firstname},
-        surname        => $user->{surname},
+        firstname      => $patron->firstname,
+        surname        => $patron->surname,
     );
 
     # Getting template result

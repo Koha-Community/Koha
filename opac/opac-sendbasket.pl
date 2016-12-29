@@ -33,6 +33,7 @@ use C4::Output;
 use C4::Members;
 use C4::Templates ();
 use Koha::Email;
+use Koha::Patrons;
 use Koha::Token;
 
 my $query = new CGI;
@@ -57,11 +58,11 @@ if ( $email_add ) {
         token  => scalar $query->param('csrf_token'),
     });
     my $email = Koha::Email->new();
-    my $user = GetMember(borrowernumber => $borrowernumber);
+    my $patron = Koha::Patrons->find( $borrowernumber );
     my $user_email = GetFirstValidEmailAddress($borrowernumber)
     || C4::Context->preference('KohaAdminEmailAddress');
 
-    my $email_replyto = "$user->{firstname} $user->{surname} <$user_email>";
+    my $email_replyto = $patron->firstname . " " . $patron->surname . " <$user_email>";
     my $comment    = $query->param('comment');
 
    # if you want to use the KohaAdmin address as from, that is the default no need to set it
@@ -114,8 +115,8 @@ if ( $email_add ) {
     $template2->param(
         BIBLIO_RESULTS => $resultsarray,
         comment        => $comment,
-        firstname      => $user->{firstname},
-        surname        => $user->{surname},
+        firstname      => $patron->firstname,
+        surname        => $patron->surname,
     );
 
     # Getting template result

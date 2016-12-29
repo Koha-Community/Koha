@@ -38,6 +38,7 @@ use C4::Members;
 use C4::Debug;
 use C4::Suggestions;
 use Koha::Acquisition::Currencies;
+use Koha::Patrons;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -70,11 +71,12 @@ my @budget_loop;
 foreach my $budget ( @{$budget_arr} ) {
     next unless (CanUserUseBudget($loggedinuser, $budget, $userflags));
 
-    my $member = GetMember( borrowernumber => $budget->{budget_owner_id} );
-    if ($member) {
-        $budget->{budget_owner_firstname} = $member->{'firstname'};
-        $budget->{budget_owner_surname} = $member->{'surname'};
-        $budget->{budget_owner_borrowernumber} = $member->{'borrowernumber'};
+    my $patron = Koha::Patrons->find( $budget->{budget_owner_id} );
+    if ( $patron ) {
+        # FIXME should pass the entire object into budget_owner
+        $budget->{budget_owner_firstname} = $patron->firstname;
+        $budget->{budget_owner_surname} = $patron->surname;
+        $budget->{budget_owner_borrowernumber} = $patron->borrowernumber;
     }
 
     if ( !defined $budget->{budget_amount} ) {

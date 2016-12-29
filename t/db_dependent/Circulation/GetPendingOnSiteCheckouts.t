@@ -26,8 +26,8 @@ use C4::Circulation;
 use C4::Items;
 use C4::Members;
 
-use Koha::Library;
 use Koha::Libraries;
+use Koha::Patrons;
 use Koha::Patron::Categories;
 
 use MARC::Record;
@@ -63,7 +63,7 @@ my $borrowernumber = $builder->build(
     }
 )->{borrowernumber};
 
-my $borrower = GetMember(borrowernumber => $borrowernumber);
+my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
 # Need to mock userenv for AddIssue
 my $module = new Test::MockModule('C4::Context');

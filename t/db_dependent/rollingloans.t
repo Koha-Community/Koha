@@ -7,6 +7,8 @@ use C4::Circulation;
 use C4::Members;
 use C4::Items;
 use Koha::DateUtils;
+use Koha::Patrons;
+use t::lib::TestBuilder;
 
 use Test::More tests => 8;
 C4::Context->_new_userenv(1234567);
@@ -19,7 +21,8 @@ my $test_item_fic = '502326000402';
 my $test_item_24 = '502326000404';
 my $test_item_48 = '502326000403';
 
-my $borrower1 =  GetMember(cardnumber => $test_patron);
+my $builder = t::lib::TestBuilder->new;
+my $borrower1 = $builder->build_object({ class => 'Koha::Patrons', value => { cardnumber => $test_patron } });
 my $item1 = GetItem (undef,$test_item_fic);
 
 SKIP: {
@@ -41,7 +44,7 @@ SKIP: {
 sub try_issue {
     my ($cardnumber, $item ) = @_;
     my $issuedate = '2011-05-16';
-    my $borrower = GetMember( cardnumber => $cardnumber );
+    my $borrower = Koha::Patrons->find( { cardnumber => $cardnumber } )->unblessed;
     my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued( $borrower, $item );
     my $issue = AddIssue($borrower, $item, undef, 0, $issuedate);
     return dt_from_string( $issue->due_date() );

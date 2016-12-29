@@ -42,6 +42,7 @@ use Koha::Patron::Debarments;
 use Koha::Cities;
 use Koha::DateUtils;
 use Koha::Libraries;
+use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Patron::HouseboundRole;
 use Koha::Patron::HouseboundRoles;
@@ -152,7 +153,11 @@ $template->param( "add" => 1 ) if ( $op eq 'add' );
 $template->param( "quickadd" => 1 ) if ( $quickadd );
 $template->param( "duplicate" => 1 ) if ( $op eq 'duplicate' );
 $template->param( "checked" => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
-( $borrower_data = GetMember( 'borrowernumber' => $borrowernumber ) ) if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' );
+if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' ) {
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    $borrower_data = $patron->unblessed;
+    $borrower_data->{category_type} = $patron->category->category_type;
+}
 my $categorycode  = $input->param('categorycode') || $borrower_data->{'categorycode'};
 my $category_type = $input->param('category_type') || '';
 unless ($category_type or !($categorycode)){
@@ -242,7 +247,8 @@ if ( ( $op eq 'insert' ) and !$nodouble ) {
 
   #recover all data from guarantor address phone ,fax... 
 if ( $guarantorid ) {
-    if (my $guarantordata=GetMember(borrowernumber => $guarantorid)) {
+    if (my $guarantor = Koha::Patrons->find( $guarantorid )) {
+        my $guarantordata = $guarantor->unblessed;
         $category_type = $guarantordata->{categorycode} eq 'I' ? 'P' : 'C';
         $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
         $newdata{'contactfirstname'}= $guarantordata->{'firstname'};
@@ -307,8 +313,8 @@ if ($op eq 'save' || $op eq 'insert'){
 
     my $dateofbirth;
     if ($op eq 'save' && $step == 3) {
-        my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
-        $dateofbirth = $borrower->{dateofbirth};
+        my $patron = Koha::Patrons->find( $borrowernumber );
+        $dateofbirth = $patron->dateofbirth;
     }
     else {
         $dateofbirth = $newdata{dateofbirth};

@@ -57,6 +57,7 @@ use C4::Members;
 use C4::Acquisition;
 use C4::Koha;
 use List::MoreUtils qw( any uniq );
+use Koha::Patrons;
 use Koha::RecordProcessor;
 
 my $query = new CGI;
@@ -126,9 +127,9 @@ if(my $cart_list = $query->cookie("bib_list")){
 }
 
 my $allow_onshelf_holds;
-my $borrower = GetMember( 'borrowernumber' => $loggedinuser );
+my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
 for my $itm (@all_items) {
-    $allow_onshelf_holds = C4::Reserves::OnShelfHoldsAllowed($itm, $borrower);
+    $allow_onshelf_holds = C4::Reserves::OnShelfHoldsAllowed($itm, $patron);
     last if $allow_onshelf_holds;
 }
 

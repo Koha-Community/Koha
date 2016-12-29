@@ -31,6 +31,7 @@ use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::ItemTypes;
 use Koha::CsvProfiles;
+use Koha::Patrons;
 use Koha::Virtualshelves;
 
 use constant ANYONE => 2;
@@ -60,7 +61,7 @@ if ( $op eq 'add_form' ) {
 
     if ( $shelf ) {
         $category = $shelf->category;
-        my $patron = GetMember( 'borrowernumber' => $shelf->owner );
+        my $patron = Koha::Patrons->find( $shelf->owner )->unblessed;
         $template->param( owner => $patron, );
         unless ( $shelf->can_be_managed( $loggedinuser ) ) {
             push @messages, { type => 'alert', code => 'unauthorized_on_update' };
@@ -227,8 +228,6 @@ if ( $op eq 'view' ) {
                     order_by => { "-$direction" => $order_by },
                 }
             );
-
-            my $borrower = GetMember( borrowernumber => $loggedinuser );
 
             my $xslfile = C4::Context->preference('XSLTListsDisplay');
             my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;

@@ -73,15 +73,14 @@ sub get_out {
 	exit;
 }
 
-# get borrower information ....
-my ( $borr ) = GetMember( borrowernumber => $borrowernumber );
 my $patron = Koha::Patrons->find( $borrowernumber );
 
 my $can_place_hold_if_available_at_pickup = C4::Context->preference('OPACHoldsIfAvailableAtPickup');
 unless ( $can_place_hold_if_available_at_pickup ) {
     my @patron_categories = split '\|', C4::Context->preference('OPACHoldsIfAvailableAtPickupExceptions');
     if ( @patron_categories ) {
-        $can_place_hold_if_available_at_pickup = grep /$borr->{categorycode}/, @patron_categories;
+        my $categorycode = $patron->categorycode;
+        $can_place_hold_if_available_at_pickup = grep /^$categorycode$/, @patron_categories;
     }
 }
 
@@ -135,7 +134,7 @@ if (($#biblionumbers < 0) && (! $query->param('place_reserve'))) {
 
 
 # pass the pickup branch along....
-my $branch = $query->param('branch') || $borr->{'branchcode'} || C4::Context->userenv->{branch} || '' ;
+my $branch = $query->param('branch') || $patron->branchcode || C4::Context->userenv->{branch} || '' ;
 $template->param( branch => $branch );
 
 # Is the person allowed to choose their branch
@@ -240,7 +239,7 @@ if ( $query->param('place_reserve') ) {
         my $singleBranchMode = Koha::Libraries->search->count == 1;
         if ( $singleBranchMode || !$OPACChooseBranch )
         {    # single branch mode or disabled user choosing
-            $branch = $borr->{'branchcode'};
+            $branch = $patron->branchcode;
         }
 
 #item may belong to a host biblio, if yes change biblioNum to hosts bilbionumber
@@ -336,7 +335,7 @@ if ( $amountoutstanding && ($amountoutstanding > $maxoutstanding) ) {
     $template->param( too_much_oweing => $amount );
 }
 
-if ( $borr->{gonenoaddress} && ($borr->{gonenoaddress} == 1) ) {
+if ( $patron->gonenoaddress && ($patron->gonenoaddress == 1) ) {
     $noreserves = 1;
     $template->param(
         message => 1,
@@ -344,7 +343,7 @@ if ( $borr->{gonenoaddress} && ($borr->{gonenoaddress} == 1) ) {
     );
 }
 
-if ( $borr->{lost} && ($borr->{lost} == 1) ) {
+if ( $patron->lost && ($patron->lost == 1) ) {
     $noreserves = 1;
     $template->param(
         message => 1,
@@ -357,8 +356,8 @@ if ( $patron->is_debarred ) {
     $template->param(
         message          => 1,
         debarred         => 1,
-        debarred_comment => $borr->{debarredcomment},
-        debarred_date    => $borr->{debarred},
+        debarred_comment => $patron->debarredcomment,
+        debarred_date    => $patron->debarred,
     );
 }
 
@@ -478,12 +477,12 @@ foreach my $biblioNum (@biblionumbers) {
         my $holds = $item->current_holds;
 
         if ( my $first_hold = $holds->next ) {
-            my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $first_hold->borrowernumber );
+            my $patron = Koha::Patrons->find( $first_hold->borrowernumber );
             $itemLoopIter->{backgroundcolor} = 'reserved';
             $itemLoopIter->{reservedate}     = output_pref({ dt => dt_from_string($first_hold->reservedate), dateonly => 1 }); # FIXME Should be formatted in the template
             $itemLoopIter->{ReservedForBorrowernumber} = $first_hold->borrowernumber;
-            $itemLoopIter->{ReservedForSurname}        = $ItemBorrowerReserveInfo->{'surname'};
-            $itemLoopIter->{ReservedForFirstname}      = $ItemBorrowerReserveInfo->{'firstname'};
+            $itemLoopIter->{ReservedForSurname}        = $patron->surname;
+            $itemLoopIter->{ReservedForFirstname}      = $patron->firstname;
             $itemLoopIter->{ExpectedAtLibrary}         = $first_hold->branchcode;
             $itemLoopIter->{waitingdate} = $first_hold->waitingdate;
         }
@@ -529,15 +528,16 @@ foreach my $biblioNum (@biblionumbers) {
         # If there is no loan, return and transfer, we show a checkbox.
         $itemLoopIter->{notforloan} = $itemLoopIter->{notforloan} || 0;
 
-        my $branch = GetReservesControlBranch( $itemInfo, $borr );
+        my $patron_unblessed = $patron->unblessed;
+        my $branch = GetReservesControlBranch( $itemInfo, $patron_unblessed );
 
         my $policy_holdallowed = !$itemLoopIter->{already_reserved};
         $policy_holdallowed &&=
-            IsAvailableForItemLevelRequest($itemInfo,$borr) &&
+            IsAvailableForItemLevelRequest($itemInfo,$patron_unblessed) &&
             CanItemBeReserved($borrowernumber,$itemNum) eq 'OK';
 
         if ($policy_holdallowed) {
-            if ( my $hold_allowed = OPACItemHoldsAllowed( $itemInfo, $borr ) ) {
+            if ( my $hold_allowed = OPACItemHoldsAllowed( $itemInfo, $patron_unblessed ) ) {
                 $itemLoopIter->{available} = 1;
                 $numCopiesOPACAvailable++;
                 $biblioLoopIter{force_hold} = 1 if $hold_allowed eq 'F';

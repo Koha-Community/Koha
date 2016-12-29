@@ -146,16 +146,16 @@ use C4::Auth qw(:DEFAULT get_session);
 use C4::Search;
 use C4::Languages qw(getLanguages);
 use C4::Koha;
-use C4::Members qw(GetMember);
 use URI::Escape;
 use POSIX qw(ceil floor);
 use C4::Search::History;
 
 use Koha::ItemTypes;
 use Koha::LibraryCategories;
-use Koha::Virtualshelves;
+use Koha::Patrons;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
+use Koha::Virtualshelves;
 
 use URI::Escape;
 
@@ -196,12 +196,12 @@ if (C4::Context->preference("IntranetNumbersPreferPhrase")) {
 }
 
 if($cgi->cookie("holdfor")){ 
-    my $holdfor_patron = GetMember('borrowernumber' => $cgi->cookie("holdfor"));
+    my $holdfor_patron = Koha::Patrons->find( $cgi->cookie("holdfor") );
     $template->param(
         holdfor => $cgi->cookie("holdfor"),
-        holdfor_surname => $holdfor_patron->{'surname'},
-        holdfor_firstname => $holdfor_patron->{'firstname'},
-        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+        holdfor_surname => $holdfor_patron->surname,
+        holdfor_firstname => $holdfor_patron->firstname,
+        holdfor_cardnumber => $holdfor_patron->cardnumber,
     );
 }
 

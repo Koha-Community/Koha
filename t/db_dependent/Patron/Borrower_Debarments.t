@@ -66,8 +66,7 @@ ModDebarment({
 $debarments = GetDebarments({ borrowernumber => $borrowernumber });
 is( $debarments->[1]->{'comment'}, 'Test 3', "ModDebarment functions correctly" );
 
-
-my $patron = GetMember( borrowernumber => $borrowernumber );
+my $patron = Koha::Patrons->find( $borrowernumber )->unblessed;
 is( $patron->{'debarred'}, '9999-06-10', "Field borrowers.debarred set correctly" );
 is( $patron->{'debarredcomment'}, "Test 1\nTest 3", "Field borrowers.debarredcomment set correctly" );
 

@@ -8,7 +8,7 @@ use Modern::Perl;
 use C4::SIP::ILS::Transaction;
 
 use C4::Reserves;	# AddReserve
-use C4::Members;	# GetMember
+use Koha::Patrons;
 use parent qw(C4::SIP::ILS::Transaction);
 
 use Koha::Items;
@@ -41,8 +41,8 @@ sub do_hold {
         $self->ok(0);
         return $self;
     }
-    my $borrower = GetMember( 'cardnumber' => $self->{patron}->id );
-    unless ($borrower) {
+    my $patron = Koha::Patrons->find( { cardnumber => $self->{patron}->id } );
+    unless ($patron) {
         $self->screen_msg( 'No borrower matches cardnumber "' . $self->{patron}->id . '".' );
         $self->ok(0);
         return $self;
@@ -59,7 +59,7 @@ sub do_hold {
         $self->ok(0);
         return $self;
     }
-    AddReserve( $branch, $borrower->{borrowernumber}, $item->biblionumber );
+    AddReserve( $branch, $patron->borrowernumber, $item->biblionumber );
 
     # unfortunately no meaningful return value
     $self->ok(1);
@@ -73,8 +73,8 @@ sub drop_hold {
 		$self->ok(0);
 		return $self;
 	}
-	my $borrower = GetMember( 'cardnumber'=>$self->{patron}->id);
-	unless ($borrower) {
+    my $patron = Koha::Patrons->find( { cardnumber => $self->{patron}->id } );
+    unless ($patron) {
 		$self->screen_msg('No borrower matches cardnumber "' . $self->{patron}->id . '".');
 		$self->ok(0);
 		return $self;
@@ -84,7 +84,7 @@ sub drop_hold {
       CancelReserve({
             biblionumber   => $item->biblionumber,
         itemnumber     => $self->{item}->id,
-           borrowernumber => $borrower->{borrowernumber}
+           borrowernumber => $patron->borrowernumber
       });
 
 	$self->ok(1);
@@ -98,8 +98,8 @@ sub change_hold {
 		$self->ok(0);
 		return $self;
 	}
-	my $borrower = GetMember( 'cardnumber'=>$self->{patron}->id);
-	unless ($borrower) {
+    my $patron = Koha::Patrons->find( { cardnumber => $self->{patron}->id } );
+    unless ($patron) {
 		$self->screen_msg('No borrower matches cardnumber "' . $self->{patron}->id . '".');
 		$self->ok(0);
 		return $self;
@@ -116,7 +116,7 @@ sub change_hold {
 		$self->ok(0);
 		return $self;
 	}
-    ModReserve({ biblionumber => $item->biblionumber, borrowernumber => $borrower->{borrowernumber}, branchcode => $branch });
+    ModReserve({ biblionumber => $item->biblionumber, borrowernumber => $patron->borrowernumber, branchcode => $branch });
 
 	$self->ok(1);
 	return $self;

@@ -40,6 +40,7 @@ use C4::Stats;
 use C4::Koha;
 use C4::Overdues;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::Patrons;
 use Koha::Patron::Images;
 
 use Koha::Patron::Categories;
@@ -66,7 +67,11 @@ if ( !$borrowernumber ) {
 }
 
 # get borrower details
-our $borrower = GetMember( borrowernumber => $borrowernumber );
+my $patron = Koha::Patrons->find( $borrowernumber );
+my $category = $patron->category;
+our $borrower = $patron->unblessed;
+$borrower->{description} = $category->description;
+$borrower->{category_type} = $category->category_type;
 our $user = $input->remote_user;
 $user ||= q{};
 

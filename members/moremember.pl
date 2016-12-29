@@ -120,6 +120,12 @@ my $error = $input->param('error');
 $template->param( error => $error ) if ( $error );
 
 my $patron        = Koha::Patrons->find($borrowernumber);
+unless ( $patron ) {
+    $template->param (unknowuser => 1);
+    output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
+}
+
 my $issues        = $patron->checkouts;
 my $balance       = $patron->account->balance;
 $template->param(
@@ -127,16 +133,8 @@ $template->param(
     fines      => $balance,
 );
 
-
-my $data = GetMember( 'borrowernumber' => $borrowernumber );
-
-if ( not defined $data ) {
-    $template->param (unknowuser => 1);
-	output_html_with_http_headers $input, $cookie, $template->output;
-    exit;
-}
-
-my $category_type = $data->{'category_type'};
+my $category_type = $patron->category->category_type;
+my $data = $patron->unblessed;
 
 $debug and printf STDERR "dates (enrolled,expiry,birthdate) raw: (%s, %s, %s)\n", map {$data->{$_}} qw(dateenrolled dateexpiry dateofbirth);
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
@@ -279,8 +277,7 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
 # check to see if patron's image exists in the database
 # basically this gives us a template var to condition the display of
 # patronimage related interface on
-my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
-$template->param( picture => 1 ) if $patron_image;
+$template->param( picture => 1 ) if $patron->image;
 # Generate CSRF token for upload and delete image buttons
 $template->param(
     csrf_token => Koha::Token->new->generate_csrf({ session_id => $input->cookie('CGISESSID'),}),

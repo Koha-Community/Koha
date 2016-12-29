@@ -36,6 +36,7 @@ use URI::Escape;
 
 use Koha::Biblios;
 use Koha::Libraries;
+use Koha::Patrons;
 
 my $query = new CGI;
 my $subscriptionid = $query->param('subscriptionid');
@@ -121,7 +122,7 @@ if($ok){
 
 my $memberloop = [];
 for my $routing (@routinglist) {
-    my $member = GetMember( borrowernumber => $routing->{borrowernumber} );
+    my $member = Koha::Patrons->find( $routing->{borrowernumber} )->unblessed;
     $member->{name}           = "$member->{firstname} $member->{surname}";
     push @{$memberloop}, $member;
 }

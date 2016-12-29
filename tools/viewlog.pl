@@ -30,7 +30,7 @@ use C4::Log;
 use C4::Items;
 use C4::Debug;
 use C4::Search;    # enabled_staff_search_views
-use Koha::Patron::Images;
+use Koha::Patrons;
 
 use vars qw($debug $cgi_debug);
 
@@ -73,9 +73,9 @@ if ( $src eq 'circ' ) {
     use C4::Members;
     use C4::Members::Attributes qw(GetBorrowerAttributes);
     my $borrowernumber = $object;
-    my $data = GetMember( 'borrowernumber' => $borrowernumber );
-    my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
-    $template->param( picture => 1 ) if $patron_image;
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    $template->param( picture => 1 ) if $patron->image;
+    my $data = $patron->unblessed;
 
     if ( C4::Context->preference('ExtendedPatronAttributes') ) {
         my $attributes = GetBorrowerAttributes( $data->{'borrowernumber'} );
@@ -90,7 +90,7 @@ if ( $src eq 'circ' ) {
     $template->param(
         menu           => 1,
         borrowernumber => $borrowernumber,
-        categoryname   => $data->{'description'},
+        categoryname   => $patron->category->description,
         RoutingSerials => C4::Context->preference('RoutingSerials'),
     );
 }
@@ -136,20 +136,20 @@ if ($do_it) {
 
         #always add firstname and surname for librarian/user
         if ( $result->{'user'} ) {
-            my $userdetails = C4::Members::GetMember( borrowernumber => $result->{'user'} );
-            if ($userdetails) {
-                $result->{'userfirstname'} = $userdetails->{'firstname'};
-                $result->{'usersurname'}   = $userdetails->{'surname'};
+            my $patron = Koha::Patrons->find( $result->{'user'} );
+            if ($patron) {
+                $result->{'userfirstname'} = $patron->firstname;
+                $result->{'usersurname'}   = $patron->surname;
             }
         }
 
         #add firstname and surname for borrower, when using the CIRCULATION, MEMBERS, FINES
         if ( $result->{module} eq "CIRCULATION" || $result->{module} eq "MEMBERS" || $result->{module} eq "FINES" ) {
             if ( $result->{'object'} ) {
-                my $borrowerdetails = C4::Members::GetMember( borrowernumber => $result->{'object'} );
-                if ($borrowerdetails) {
-                    $result->{'borrowerfirstname'} = $borrowerdetails->{'firstname'};
-                    $result->{'borrowersurname'}   = $borrowerdetails->{'surname'};
+                my $patron = Koha::Patrons->find( $result->{'object'} );
+                if ($patron) {
+                    $result->{'borrowerfirstname'} = $patron->firstname;
+                    $result->{'borrowersurname'}   = $patron->surname;
                 }
             }
         }

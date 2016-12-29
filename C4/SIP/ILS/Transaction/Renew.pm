@@ -8,7 +8,7 @@ use warnings;
 use strict;
 
 use C4::Circulation;
-use C4::Members;
+use Koha::Patrons;
 use Koha::DateUtils;
 
 use parent qw(C4::SIP::ILS::Transaction);
@@ -60,8 +60,8 @@ sub do_renew_for  {
 
 sub do_renew {
     my $self = shift;
-    my $borrower = GetMember( cardnumber => $self->{patron}->id );
-    return $self->do_renew_for($borrower);
+    my $patron = Koha::Patrons->find( { cardnumber => $self->{patron}->id } );
+    return $self->do_renew_for($patron->unblessed);
 }
 
 1;

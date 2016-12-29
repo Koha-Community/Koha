@@ -143,7 +143,6 @@ my $borrower_id1 = C4::Members::AddMember(
     categorycode => $samplecat->{categorycode},
     branchcode   => $samplebranch1->{branchcode},
 );
-my $borrower_1 = C4::Members::GetMember(borrowernumber => $borrower_id1);
 
 is_deeply(
     GetBranchBorrowerCircRule(),

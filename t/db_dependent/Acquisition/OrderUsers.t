@@ -77,8 +77,6 @@ my $borrowernumber = C4::Members::AddMember(
     userid => 'TESTUSERID'
 );
 
-my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
-
 C4::Acquisition::ModOrderUsers( $ordernumber, $borrowernumber );
 
 my $is_added = grep { /^$borrowernumber$/ } C4::Acquisition::GetOrderUsers( $ordernumber );

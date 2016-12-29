@@ -25,6 +25,7 @@ use C4::Output qw( output_with_http_headers );
 use C4::Utils::DataTables qw( dt_get_params );
 use C4::Utils::DataTables::Members qw( search );
 use Koha::DateUtils qw( output_pref dt_from_string );
+use Koha::Patrons;
 
 my $input = new CGI;
 
@@ -63,11 +64,11 @@ if ( $searchmember
     and $searchfieldstype
     and $searchfieldstype eq 'standard' )
 {
-    my $member = C4::Members::GetMember( cardnumber => $searchmember );
+    my $member = Koha::Patrons->find( { cardnumber => $searchmember } );
     $results = {
         iTotalRecords        => 1,
         iTotalDisplayRecords => 1,
-        patrons              => [ $member ],
+        patrons              => [ $member->unblessed ],
     } if $member;
 }
 

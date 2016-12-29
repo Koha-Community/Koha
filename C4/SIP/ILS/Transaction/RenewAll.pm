@@ -10,7 +10,7 @@ use Sys::Syslog qw(syslog);
 
 use C4::SIP::ILS::Item;
 
-use C4::Members qw( GetMember );
+use Koha::Patrons;
 
 use parent qw(C4::SIP::ILS::Transaction::Renew);
 
@@ -34,7 +34,7 @@ sub new {
 sub do_renew_all {
     my $self     = shift;
     my $patron   = $self->{patron};                           # SIP's  patron
-    my $borrower = GetMember( cardnumber => $patron->id );    # Koha's patron
+    my $borrower = Koha::Patrons->find( { cardnumber => $patron->id } )->unblessed;    # Koha's patron
     my $all_ok   = 1;
     $self->{renewed}   = [];
     $self->{unrenewed} = [];

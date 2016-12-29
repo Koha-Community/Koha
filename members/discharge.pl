@@ -37,7 +37,6 @@ use C4::Members;
 use C4::Reserves;
 use C4::Letters;
 use Koha::Patron::Discharge;
-use Koha::Patron::Images;
 use Koha::Patrons;
 
 use Koha::DateUtils;
@@ -59,19 +58,16 @@ unless ( C4::Context->preference('useDischarge') ) {
    exit;
 }
 
-my $data;
 if ( $input->param('borrowernumber') ) {
     $borrowernumber = $input->param('borrowernumber');
 
     # Getting member data
-    $data = GetMember( borrowernumber => $borrowernumber );
+    my $patron = Koha::Patrons->find( $borrowernumber );
 
     my $can_be_discharged = Koha::Patron::Discharge::can_be_discharged({
         borrowernumber => $borrowernumber
     });
 
-    # Getting reserves
-    my $patron = Koha::Patrons->find( $borrowernumber );
     my $holds = $patron->holds;
     my $has_reserves = $holds->count;
 
@@ -87,7 +83,7 @@ if ( $input->param('borrowernumber') ) {
         }
         eval {
             my $pdf_path = Koha::Patron::Discharge::generate_as_pdf(
-                { borrowernumber => $borrowernumber, branchcode => $data->{'branchcode'} } );
+                { borrowernumber => $borrowernumber, branchcode => $patron->branchcode } );
 
             binmode(STDOUT);
             print $input->header(
@@ -112,31 +108,30 @@ if ( $input->param('borrowernumber') ) {
         borrowernumber => $borrowernumber,
     });
 
-    my $patron_image = Koha::Patron::Images->find($borrowernumber);
-    $template->param( picture => 1 ) if $patron_image;
+    $template->param( picture => 1 ) if $patron->image;
 
     $template->param(
+        # FIXME The patron object should be passed to the template
         borrowernumber    => $borrowernumber,
-        biblionumber      => $data->{'biblionumber'},
-        title             => $data->{'title'},
-        initials          => $data->{'initials'},
-        surname           => $data->{'surname'},
+        title             => $patron->title,
+        initials          => $patron->initials,
+        surname           => $patron->surname,
         borrowernumber    => $borrowernumber,
-        firstname         => $data->{'firstname'},
-        cardnumber        => $data->{'cardnumber'},
-        categorycode      => $data->{'categorycode'},
-        category_type     => $data->{'category_type'},
-        categoryname      => $data->{'description'},
-        address           => $data->{'address'},
-        streetnumber      => $data->{streetnumber},
-        streettype        => $data->{streettype},
-        address2          => $data->{'address2'},
-        city              => $data->{'city'},
-        zipcode           => $data->{'zipcode'},
-        country           => $data->{'country'},
-        phone             => $data->{'phone'},
-        email             => $data->{'email'},
-        branchcode        => $data->{'branchcode'},
+        firstname         => $patron->firstname,
+        cardnumber        => $patron->cardnumber,
+        categorycode      => $patron->categorycode,
+        category_type     => $patron->category->category_type,
+        categoryname      => $patron->category->description,
+        address           => $patron->address,
+        streetnumber      => $patron->streetnumber,
+        streettype        => $patron->streettype,
+        address2          => $patron->address2,
+        city              => $patron->city,
+        zipcode           => $patron->zipcode,
+        country           => $patron->country,
+        phone             => $patron->phone,
+        email             => $patron->email,
+        branchcode        => $patron->branchcode,
         has_reserves      => $has_reserves,
         can_be_discharged => $can_be_discharged,
         validated_discharges => $validated_discharges,

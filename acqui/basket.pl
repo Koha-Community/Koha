@@ -30,7 +30,6 @@ use C4::Budgets;
 use C4::Contract;
 use C4::Debug;
 use C4::Biblio;
-use C4::Members qw/GetMember/;  #needed for permissions checking for changing basketgroup of a basket
 use C4::Items;
 use C4::Suggestions;
 use Koha::Biblios;
@@ -41,6 +40,7 @@ use Date::Calc qw/Add_Delta_Days/;
 use Koha::Database;
 use Koha::EDI qw( create_edi_order get_edifact_ean );
 use Koha::CsvProfiles;
+use Koha::Patrons;
 
 =head1 NAME
 
@@ -291,8 +291,8 @@ if ( $op eq 'list' ) {
 
 #if the basket is closed,and the user has the permission to edit basketgroups, display a list of basketgroups
     my ($basketgroup, $basketgroups);
-    my $staffuser = GetMember(borrowernumber => $loggedinuser);
-    if ($basket->{closedate} && haspermission($staffuser->{userid}, { acquisition => 'group_manage'} )) {
+    my $patron = Koha::Patrons->find($loggedinuser);
+    if ($basket->{closedate} && haspermission($patron->userid, { acquisition => 'group_manage'} )) {
         $basketgroups = GetBasketgroups($basket->{booksellerid});
         for my $bg ( @{$basketgroups} ) {
             if ($basket->{basketgroupid} && $basket->{basketgroupid} == $bg->{id}){
@@ -321,8 +321,9 @@ if ( $op eq 'list' ) {
     my @basketusers_ids = GetBasketUsers($basketno);
     my @basketusers;
     foreach my $basketuser_id (@basketusers_ids) {
-        my $basketuser = GetMember(borrowernumber => $basketuser_id);
-        push @basketusers, $basketuser if $basketuser;
+        # FIXME Could be improved with a search -in
+        my $basket_patron = Koha::Patrons->find( $basketuser_id );
+        push @basketusers, $basket_patron if $basket_patron;
     }
 
     my $active_currency = Koha::Acquisition::Currencies->get_active;
@@ -375,7 +376,6 @@ if ( $op eq 'list' ) {
     if ($basket->{basketgroupid}){
         $basketgroup = GetBasketgroup($basket->{basketgroupid});
     }
-    my $borrower= GetMember('borrowernumber' => $loggedinuser);
     my $budgets = GetBudgetHierarchy;
     my $has_budgets = 0;
     foreach my $r (@{$budgets}) {

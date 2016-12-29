@@ -29,8 +29,8 @@ use Koha::DateUtils;
 use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
-use Koha::Patron::Images;
 
+use Koha::Patrons;
 use Koha::Patron::Categories;
 
 my $input = new CGI;
@@ -49,8 +49,11 @@ my $borrowernumber  = $input->param('borrowernumber');
 my $action          = $input->param('action') || '';
 my $accountlines_id = $input->param('accountlines_id');
 
-#get borrower details
-my $data = GetMember( 'borrowernumber' => $borrowernumber );
+my $patron = Koha::Patrons->find( $borrowernumber );
+my $category = $patron->category;
+my $data = $patron->unblessed;
+$data->{description} = $category->description;
+$data->{category_type} = $category->category_type;
 
 if ( $data->{'category_type'} eq 'C' ) {
     my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
@@ -114,8 +117,7 @@ for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
 
 $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' || $data->{'category_type'} eq 'I' );
 
-my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
-$template->param( picture => 1 ) if $patron_image;
+$template->param( picture => 1 ) if $patron->image;
 
 $template->param(
     finesview      => 1,

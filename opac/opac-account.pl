@@ -19,12 +19,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 
-use strict;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Auth;
 use C4::Output;
-use warnings;
+use Koha::Patrons;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -37,7 +37,11 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
+my $patron = Koha::Patrons->find( $borrowernumber );
+my $category = $patron->category;
+my $borrower= $patron->unblessed;
+$borrower->{description} = $category->description;
+$borrower->{category_type} = $category->category_type;
 $template->param( BORROWER_INFO => $borrower );
 
 #get account details

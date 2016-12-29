@@ -30,6 +30,7 @@ use C4::Search;
 use C4::Acquisition qw(GetOrdersByBiblionumber);
 
 use Koha::Biblios;
+use Koha::Patrons;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -58,13 +59,12 @@ foreach my $item (@items) {
 }
 
 if ( $query->cookie("holdfor") ) {
-    my $holdfor_patron =
-      GetMember( 'borrowernumber' => $query->cookie("holdfor") );
+    my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
     $template->param(
         holdfor            => $query->cookie("holdfor"),
-        holdfor_surname    => $holdfor_patron->{'surname'},
-        holdfor_firstname  => $holdfor_patron->{'firstname'},
-        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+        holdfor_surname    => $holdfor_patron->surname,
+        holdfor_firstname  => $holdfor_patron->firstname,
+        holdfor_cardnumber => $holdfor_patron->cardnumber,
     );
 }
 

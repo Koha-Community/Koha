@@ -33,7 +33,7 @@ use C4::Members;
 use C4::Accounts;
 use C4::Items;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
-use Koha::Patron::Images;
+use Koha::Patrons;
 
 use Koha::Patron::Categories;
 
@@ -42,8 +42,7 @@ my $flagsrequired = { borrowers => 1, updatecharges => 1 };
 
 my $borrowernumber=$input->param('borrowernumber');
 
-#get borrower details
-my $data=GetMember('borrowernumber' => $borrowernumber);
+my $patron = Koha::Patrons->find( $borrowernumber );
 my $add=$input->param('add');
 
 if ($add){
@@ -74,15 +73,14 @@ if ($add){
         }
     );
 					  
-    if ( $data->{'category_type'} eq 'C') {
+    if ( $patron->category->category_type eq 'C') {
         my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
         $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
         $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
     }
 
-    $template->param( adultborrower => 1 ) if ( $data->{category_type} eq 'A' || $data->{category_type} eq 'I' );
-    my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
-    $template->param( picture => 1 ) if $patron_image;
+    $template->param( adultborrower => 1 ) if ( $patron->category->category_type =~ /^(A|I)$/ );
+    $template->param( picture => 1 ) if $patron->image;
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
         my $attributes = GetBorrowerAttributes($borrowernumber);
@@ -92,13 +90,13 @@ if ($add){
         );
     }
 
-    $template->param(%$data);
+    $template->param(%{ $patron->unblessed});
 
     $template->param(
         finesview      => 1,
         borrowernumber => $borrowernumber,
-        categoryname   => $data->{'description'},
-        is_child       => ($data->{'category_type'} eq 'C'),
+        categoryname   => $patron->category->description,
+        is_child       => ($patron->category->category_type eq 'C'), # FIXME is_child should be a Koha::Patron method
         RoutingSerials => C4::Context->preference('RoutingSerials'),
         );
     output_html_with_http_headers $input, $cookie, $template->output;

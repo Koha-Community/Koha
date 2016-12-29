@@ -306,18 +306,12 @@ Parameters:
 sub LookupPatron {
     my ($cgi) = @_;
 
-    # Get the borrower...
-    my $borrower = GetMember($cgi->param('id_type') => $cgi->param('id'));
-    if ( not $borrower->{'borrowernumber'} ) {
+    my $patrons = Koha::Patrons->search( { $cgi->param('id_type') => $cgi->param('id') } );
+    unless ( $patrons->count ) {
         return { message => 'PatronNotFound' };
     }
 
-    # Build the hashref
-    my $patron->{'id'} = $borrower->{'borrowernumber'};
-    return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
-
-    # ...and return his ID
-    return $patron;
+    return { id => $patrons->next->borrowernumber };
 }
 
 =head2 AuthenticatePatron
@@ -341,9 +335,8 @@ sub AuthenticatePatron {
     my ($status, $cardnumber, $userid) = C4::Auth::checkpw( C4::Context->dbh, $username, $password );
     if ( $status ) {
         # Get the borrower
-        my $borrower = GetMember( cardnumber => $cardnumber );
-        my $patron->{'id'} = $borrower->{'borrowernumber'};
-        return $patron;
+        my $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
+        return { id => $patron->borrowernumber };
     }
     else {
         return { code => 'PatronNotFound' };
@@ -376,11 +369,11 @@ sub GetPatronInfo {
 
     # Get Member details
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMember( borrowernumber => $borrowernumber );
-    return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
     my $patron = Koha::Patrons->find( $borrowernumber );
+    return { code => 'PatronNotFound' } unless $patron;
 
     # Cleaning the borrower hashref
+    my $borrower = $patron->unblessed;
     my $flags = C4::Members::patronflags( $borrower );
     $borrower->{'charges'} = $flags->{'CHARGES'}->{'amount'};
     my $library = Koha::Libraries->find( $borrower->{branchcode} );
@@ -483,14 +476,14 @@ sub GetPatronStatus {
 
     # Get Member details
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMember( borrowernumber => $borrowernumber );
-    return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    return { code => 'PatronNotFound' } unless $patron;
 
     # Return the results
     return {
-        type   => $$borrower{categorycode},
+        type   => $patron->categorycode,
         status => 0, # TODO
-        expiry => $$borrower{dateexpiry},
+        expiry => $patron->dateexpiry,
     };
 }
 
@@ -513,11 +506,10 @@ sub GetServices {
 
     # Get the member, or return an error code if not found
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMember( borrowernumber => $borrowernumber );
-    return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
-
     my $patron = Koha::Patrons->find( $borrowernumber );
+    return { code => 'PatronNotFound' } unless $patron;
 
+    my $borrower = $patron->unblessed;
     # Get the item, or return an error code if not found
     my $itemnumber = $cgi->param('item_id');
     my $item = GetItem( $itemnumber );
@@ -587,8 +579,8 @@ sub RenewLoan {
 
     # Get borrower infos or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMember( borrowernumber => $borrowernumber );
-    return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    return { code => 'PatronNotFound' } unless $patron;
 
     # Get the item, or return an error code
     my $itemnumber = $cgi->param('item_id');
@@ -637,8 +629,8 @@ sub HoldTitle {
 
     # Get the borrower or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMember( borrowernumber => $borrowernumber );
-    return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    return { code => 'PatronNotFound' } unless $patron;
 
     # Get the biblio record, or return an error code
     my $biblionumber = $cgi->param('bib_id');
@@ -657,7 +649,7 @@ sub HoldTitle {
         $branch = $cgi->param('pickup_location');
         return { code => 'LocationNotFound' } unless Koha::Libraries->find($branch);
     } else { # if the request provide no branch, use the borrower's branch
-        $branch = $$borrower{branchcode};
+        $branch = $patron->branchcode;
     }
 
     # Add the reserve
@@ -705,8 +697,8 @@ sub HoldItem {
 
     # Get the borrower or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMember( borrowernumber => $borrowernumber );
-    return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    return { code => 'PatronNotFound' } unless $patron;
 
     # Get the biblio or return an error code
     my $biblionumber = $cgi->param('bib_id');
@@ -734,7 +726,7 @@ sub HoldItem {
         $branch = $cgi->param('pickup_location');
         return { code => 'LocationNotFound' } unless Koha::Libraries->find($branch);
     } else { # if the request provide no branch, use the borrower's branch
-        $branch = $$borrower{branchcode};
+        $branch = $patron->branchcode;
     }
 
     # Add the reserve
@@ -772,8 +764,8 @@ sub CancelHold {
 
     # Get the borrower or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-    my $borrower = GetMember( borrowernumber => $borrowernumber );
-    return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    return { code => 'PatronNotFound' } unless $patron;
 
     # Get the reserve or return an error code
     my $reserve_id = $cgi->param('item_id');

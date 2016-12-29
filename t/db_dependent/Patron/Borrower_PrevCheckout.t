@@ -5,7 +5,6 @@ use C4::Members;
 use C4::Circulation;
 use Koha::Database;
 use Koha::Patrons;
-use Koha::Patron;
 
 use Test::More tests => 59;
 
@@ -303,8 +302,7 @@ my $cpvmappings = [
 test_it($cpvmappings, "PreIssue");
 
 # Issue item_1 to $patron:
-my $patron_get_mem =
-    GetMember(%{{borrowernumber => $patron->{borrowernumber}}});
+my $patron_get_mem = Koha::Patrons->find( $patron->{borrowernumber} )->unblessed;
 BAIL_OUT("Issue failed")
     unless AddIssue($patron_get_mem, $item_1->{barcode});
 
@@ -375,14 +373,13 @@ test_it($cpvPmappings, "PostReturn");
 #   [!$issuingimpossible,$needsconfirmation->{PREVISSUE}]
 
 # Needs:
-# - $patron_from_GetMember
+# - $patron
 # - $item objects (one not issued, another prevIssued)
 # - $checkprevcheckout pref (first hardno, then hardyes)
 
 # Our Patron
 my $CBBI_patron = $builder->build({source => 'Borrower'});
-my $p_from_GetMember =
-    GetMember(%{{borrowernumber => $CBBI_patron->{borrowernumber}}});
+$patron = Koha::Patrons->find( $CBBI_patron->{borrowernumber} )->unblessed;
 # Our Items
 my $new_item = $builder->build({
     source => 'Item',
@@ -402,7 +399,7 @@ my $prev_item = $builder->build({
 });
 # Second is Checked Out
 BAIL_OUT("CanBookBeIssued Issue failed")
-    unless AddIssue($p_from_GetMember, $prev_item->{barcode});
+    unless AddIssue($patron, $prev_item->{barcode});
 
 # Mappings
 my $CBBI_mappings = [
@@ -438,7 +435,7 @@ map {
     t::lib::Mocks::mock_preference('checkprevcheckout', $_->{syspref});
     my ( $issuingimpossible, $needsconfirmation ) =
         C4::Circulation::CanBookBeIssued(
-            $p_from_GetMember, $_->{item}->{barcode}
+            $patron, $_->{item}->{barcode}
         );
     is($needsconfirmation->{PREVISSUE}, $_->{result}, $_->{msg});
 } @{$CBBI_mappings};

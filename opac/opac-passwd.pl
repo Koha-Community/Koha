@@ -30,6 +30,7 @@ use C4::Circulation;
 use C4::Members;
 use C4::Output;
 use Koha::AuthUtils qw(hash_password);
+use Koha::Patrons;
 
 my $query = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -44,7 +45,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $borr = C4::Members::GetMember( borrowernumber => $borrowernumber );
+my $patron = Koha::Patrons->find( $borrowernumber );
 my $minpasslen = C4::Context->preference("minPasswordLength");
 if ( C4::Context->preference("OpacPasswordChange") ) {
     my $sth =  $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
@@ -103,8 +104,8 @@ if ( C4::Context->preference("OpacPasswordChange") ) {
         }
     }
 }
-$template->param(firstname => $borr->{'firstname'},
-							surname => $borr->{'surname'},
+$template->param(firstname => $patron->firstname,
+							surname => $patron->surname,
 							minpasslen => $minpasslen,
 							passwdview => 1,
 );

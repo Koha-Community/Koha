@@ -366,8 +366,9 @@ exit;
 
 sub GetBorrowerInfos {
     my ( %info ) = @_;
-    my $borrower = GetMember( %info );
+    my $borrower = Koha::Patrons->find( \%info );
     if ( $borrower ) {
+        $borrower = $borrower->unblessed;
         for ( qw(dateenrolled dateexpiry) ) {
             my $userdate = $borrower->{$_};
             unless ($userdate && $userdate ne "0000-00-00" and $userdate ne "9999-12-31") {

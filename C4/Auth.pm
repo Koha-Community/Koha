@@ -211,7 +211,6 @@ sub get_template_and_user {
 
     my $borrowernumber;
     if ($user) {
-        require C4::Members;
 
         # It's possible for $user to be the borrowernumber if they don't have a
         # userid defined (and are logging in through some other method, such
@@ -219,8 +218,9 @@ sub get_template_and_user {
         my $borrower;
         $borrowernumber = getborrowernumber($user) if defined($user);
         if ( !defined($borrowernumber) && defined($user) ) {
-            $borrower = C4::Members::GetMember( borrowernumber => $user );
+            $borrower = Koha::Patrons->find( $user );
             if ($borrower) {
+                $borrower = $borrower->unblessed;
                 $borrowernumber = $user;
 
                 # A bit of a hack, but I don't know there's a nicer way
@@ -228,7 +228,8 @@ sub get_template_and_user {
                 $user = $borrower->{firstname} . ' ' . $borrower->{surname};
             }
         } else {
-            $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
+            $borrower = Koha::Patrons->find( $borrowernumber );
+            $borrower->unblessed if $borrower; # FIXME Otherwise, what to do?
         }
 
         # user info

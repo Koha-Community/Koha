@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Circulation;
 use C4::Members;
 use C4::Biblio;
+use Koha::Patrons;
 
 use Koha::Items;
 
@@ -49,10 +50,10 @@ for (@$operations) {
     my $biblio = $item->biblio;
     $_->{'bibliotitle'}    = $biblio->title;
     $_->{'biblionumber'}   = $biblio->biblionumber;
-    my $borrower           = C4::Members::GetMember( cardnumber => $_->{'cardnumber'} );
-    if ($borrower) {
-        $_->{'borrowernumber'} = $borrower->{'borrowernumber'};
-        $_->{'borrower'}       = ($borrower->{'firstname'}?$borrower->{'firstname'}:'').' '.$borrower->{'surname'};
+    my $patron             = $_->{cardnumber} ? Koha::Patrons->find( { cardnumber => $_->{cardnumber} } ) : undef;
+    if ($patron) {
+        $_->{'borrowernumber'} = $patron->borrowernumber;
+        $_->{'borrower'}       = ($patron->firstname ? $patron->firstname:'').' '.$patron->surname;
     }
     $_->{'actionissue'}    = $_->{'action'} eq 'issue';
     $_->{'actionreturn'}   = $_->{'action'} eq 'return';

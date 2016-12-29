@@ -23,6 +23,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Members;
 use C4::Form::MessagingPreferences;
+use Koha::Patrons;
 use Koha::Patron::Modifications;
 
 my $cgi = new CGI;
@@ -60,8 +61,8 @@ if ( $m ) {
         C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
 
         $template->param( password_cleartext => $password );
-        $template->param(
-            borrower => GetMember( borrowernumber => $borrowernumber ) );
+        my $patron = Koha::Patrons->find( $borrowernumber );
+        $template->param( borrower => $patron->unblessed );
         $template->param(
             PatronSelfRegistrationAdditionalInstructions =>
               C4::Context->preference(

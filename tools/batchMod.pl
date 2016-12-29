@@ -39,6 +39,7 @@ use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::Items;
 use Koha::ItemTypes;
+use Koha::Patrons;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -74,7 +75,7 @@ my ($template, $loggedinuser, $cookie)
                  });
 
 # Does the user have a restricted item edition permission?
-my $uid = $loggedinuser ? GetMember( borrowernumber => $loggedinuser )->{userid} : undef;
+my $uid = $loggedinuser ? Koha::Patrons->find( $loggedinuser )->userid : undef;
 my $restrictededition = $uid ? haspermission($uid,  {'tools' => 'items_batchmod_restricted'}) : undef;
 # In case user is a superlibrarian, edition is not restricted
 $restrictededition = 0 if ($restrictededition != 0 && C4::Context->IsSuperLibrarian());

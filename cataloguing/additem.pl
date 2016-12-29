@@ -34,6 +34,7 @@ use Koha::DateUtils;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
+use Koha::Patrons;
 use List::MoreUtils qw/any/;
 use C4::Search;
 use Storable qw(thaw freeze);
@@ -402,7 +403,7 @@ my ($template, $loggedinuser, $cookie)
 
 
 # Does the user have a restricted item editing permission?
-my $uid = $loggedinuser ? GetMember( borrowernumber => $loggedinuser )->{userid} : undef;
+my $uid = Koha::Patrons->find( $loggedinuser )->userid;
 my $restrictededition = $uid ? haspermission($uid,  {'editcatalogue' => 'edit_items_restricted'}) : undef;
 # In case user is a superlibrarian, editing is not restricted
 $restrictededition = 0 if ($restrictededition != 0 &&  C4::Context->IsSuperLibrarian());

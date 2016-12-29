@@ -16,6 +16,7 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 #use C4::Acquisitions;
 
 use Koha::Patron::Categories;
+use Koha::Patrons;
 
 use C4::Output;
 use Koha::Patron::Images;
@@ -25,8 +26,10 @@ my $input = new CGI;
 
 my $flagsrequired = { permissions => 1 };
 my $member=$input->param('member');
-my $bor = GetMember( borrowernumber => $member );
-if( $bor->{'category_type'} eq 'S' )  {
+my $patron = Koha::Patrons->find( $member );
+my $category_type = $patron->category->category_type;
+my $bor = $patron->unblessed;
+if( $category_type eq 'S' )  {
 	$flagsrequired->{'staffaccess'} = 1;
 }
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
@@ -170,15 +173,14 @@ if ($input->param('newflags')) {
 	    push @loop, \%row;
     }
 
-    if ( $bor->{'category_type'} eq 'C') {
+    if ( $category_type eq 'C') {
         my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
         $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
         $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
     }
 	
-$template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' || $bor->{'category_type'} eq 'I' );
-    my $patron_image = Koha::Patron::Images->find($bor->{borrowernumber});
-    $template->param( picture => 1 ) if $patron_image;
+$template->param( adultborrower => 1 ) if ( $category_type =~ /^(A|I)$/ );
+    $template->param( picture => 1 ) if $patron->image;
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($bor->{'borrowernumber'});
@@ -195,7 +197,7 @@ $template->param(
 		firstname => $bor->{'firstname'},
         othernames => $bor->{'othernames'},
 		categorycode => $bor->{'categorycode'},
-		category_type => $bor->{'category_type'},
+		category_type => $category_type,
 		categoryname => $bor->{'description'},
         address => $bor->{address},
 		address2 => $bor->{'address2'},
@@ -211,7 +213,7 @@ $template->param(
         emailpro => $bor->{'emailpro'},
 		branchcode => $bor->{'branchcode'},
 		loop => \@loop,
-		is_child        => ($bor->{'category_type'} eq 'C'),
+		is_child        => ($category_type eq 'C'),
         RoutingSerials => C4::Context->preference('RoutingSerials'),
         csrf_token => Koha::Token->new->generate_csrf( { session_id => scalar $input->cookie('CGISESSID'), } ),
 		);

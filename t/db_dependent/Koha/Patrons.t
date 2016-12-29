@@ -467,7 +467,7 @@ subtest 'checkouts + get_overdues' => sub {
     is( ref($checkouts), 'Koha::Checkouts', 'checkouts should return a Koha::Checkouts object' );
 
     # Not sure how this is useful, but AddIssue pass this variable to different other subroutines
-    $patron = GetMember( borrowernumber => $patron->borrowernumber );
+    $patron = Koha::Patrons->find( $patron->borrowernumber )->unblessed;
 
     my $module = new Test::MockModule('C4::Context');
     $module->mock( 'userenv', sub { { branch => $library->{branchcode} } } );

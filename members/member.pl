@@ -27,9 +27,9 @@ use Modern::Perl;
 use C4::Auth;
 use C4::Output;
 use CGI qw( -utf8 );
-use C4::Members qw( GetMember );
 use Koha::DateUtils;
 use Koha::List::Patron;
+use Koha::Patrons;
 
 my $input = new CGI;
 
@@ -52,12 +52,9 @@ if ( $quicksearch and $searchmember ) {
         my $userenv = C4::Context->userenv;
         $branchcode = $userenv->{'branch'};
     }
-    my $member = GetMember(
-        cardnumber => $searchmember,
-        ( $branchcode ? ( branchcode => $branchcode ) : () ),
-    );
-    if( $member ){
-        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=" . $member->{borrowernumber});
+    my $patron = Koha::Patrons->find( { cardnumber => $searchmember } );
+    if( ( $branchcode and $patron->branchcode eq $branchcode ) or ( not $branchcode and $patron ) ){
+        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=" . $patron->borrowernumber);
         exit;
     }
 }

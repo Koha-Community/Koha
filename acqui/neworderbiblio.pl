@@ -64,13 +64,13 @@ use C4::Biblio;
 use C4::Auth;
 use C4::Output;
 use C4::Koha;
-use C4::Members qw/ GetMember /;
 use C4::Budgets qw/ GetBudgetHierarchy /;
 
 use Koha::Acquisition::Booksellers;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
+use Koha::Patrons;
 
 my $input = new CGI;
 
@@ -133,8 +133,8 @@ foreach my $result ( @{$marcresults} ) {
 
 }
 
-my $borrower= GetMember('borrowernumber' => $loggedinuser);
-my $budgets = GetBudgetHierarchy(q{},$borrower->{branchcode},$borrower->{borrowernumber});
+my $patron = Koha::Patrons->find( $loggedinuser );
+my $budgets = GetBudgetHierarchy(q{},$patron->branchcode,$patron->borrowernumber);
 my $has_budgets = 0;
 foreach my $r (@{$budgets}) {
     if (!defined $r->{budget_amount} || $r->{budget_amount} == 0) {

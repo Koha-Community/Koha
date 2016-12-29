@@ -226,16 +226,16 @@ sub AddReserve {
 
     # Send e-mail to librarian if syspref is active
     if(C4::Context->preference("emailLibrarianWhenHoldIsPlaced")){
-        my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
-        my $library = Koha::Libraries->find($borrower->{branchcode})->unblessed;
+        my $patron = Koha::Patrons->find( $borrowernumber );
+        my $library = $patron->library;
         if ( my $letter =  C4::Letters::GetPreparedLetter (
             module => 'reserves',
             letter_code => 'HOLDPLACED',
             branchcode => $branch,
-            lang => $borrower->{lang},
+            lang => $patron->lang,
             tables => {
-                'branches'    => $library,
-                'borrowers'   => $borrower,
+                'branches'    => $library->unblessed,
+                'borrowers'   => $patron->unblessed,
                 'biblio'      => $biblionumber,
                 'biblioitems' => $biblionumber,
                 'items'       => $checkitem,
@@ -243,7 +243,7 @@ sub AddReserve {
             },
         ) ) {
 
-            my $admin_email_address = $library->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
+            my $admin_email_address = $library->branchemail || C4::Context->preference('KohaAdminEmailAddress');
 
             C4::Letters::EnqueueLetter(
                 {   letter                 => $letter,
@@ -331,7 +331,8 @@ sub CanItemBeReserved {
     # item->{itype} will come for biblioitems if necessery
     my $item       = GetItem($itemnumber);
     my $biblioData = C4::Biblio::GetBiblioData( $item->{biblionumber} );
-    my $borrower   = C4::Members::GetMember( 'borrowernumber' => $borrowernumber );
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $borrower = $patron->unblessed;
 
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
     return 'damaged'
@@ -807,12 +808,12 @@ sub CheckReserves {
             if ( $res->{'itemnumber'} == $itemnumber && $res->{'priority'} == 0) {
                 return ( "Waiting", $res, \@reserves ); # Found it
             } else {
-                my $borrowerinfo;
+                my $patron;
                 my $iteminfo;
                 my $local_hold_match;
 
                 if ($LocalHoldsPriority) {
-                    $borrowerinfo = C4::Members::GetMember( borrowernumber => $res->{'borrowernumber'} );
+                    $patron = Koha::Patrons->find( $res->{borrowernumber} );
                     $iteminfo = C4::Items::GetItem($itemnumber);
 
                     my $local_holds_priority_item_branchcode =
@@ -821,7 +822,7 @@ sub CheckReserves {
                       ( $LocalHoldsPriorityPatronControl eq 'PickupLibrary' )
                       ? $res->{branchcode}
                       : ( $LocalHoldsPriorityPatronControl eq 'HomeLibrary' )
-                      ? $borrowerinfo->{branchcode}
+                      ? $patron->branchcode
                       : undef;
                     $local_hold_match =
                       $local_holds_priority_item_branchcode eq
@@ -832,11 +833,11 @@ sub CheckReserves {
                 if ( ( $res->{'priority'} && $res->{'priority'} < $priority ) || $local_hold_match ) {
                     $iteminfo ||= C4::Items::GetItem($itemnumber);
                     next if $res->{itemtype} && $res->{itemtype} ne _get_itype( $iteminfo );
-                    $borrowerinfo ||= C4::Members::GetMember( borrowernumber => $res->{'borrowernumber'} );
-                    my $branch = GetReservesControlBranch( $iteminfo, $borrowerinfo );
+                    $patron ||= Koha::Patrons->find( $res->{borrowernumber} );
+                    my $branch = GetReservesControlBranch( $iteminfo, $patron->unblessed );
                     my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$iteminfo->{'itype'});
                     next if ($branchitemrule->{'holdallowed'} == 0);
-                    next if (($branchitemrule->{'holdallowed'} == 1) && ($branch ne $borrowerinfo->{'branchcode'}));
+                    next if (($branchitemrule->{'holdallowed'} == 1) && ($branch ne $patron->branchcode));
                     next if ( ($branchitemrule->{hold_fulfillment_policy} ne 'any') && ($res->{branchcode} ne $iteminfo->{ $branchitemrule->{hold_fulfillment_policy} }) );
                     $priority = $res->{'priority'};
                     $highest  = $res;
@@ -1808,7 +1809,7 @@ sub _koha_notify_reserve {
     my $hold = Koha::Holds->find($reserve_id);
     my $borrowernumber = $hold->borrowernumber;
 
-    my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
+    my $patron = Koha::Patrons->find( $borrowernumber );
 
     # Try to get the borrower's email address
     my $to_address = C4::Members::GetNoticeEmailAddress($borrowernumber);
@@ -1825,10 +1826,10 @@ sub _koha_notify_reserve {
     my %letter_params = (
         module => 'reserves',
         branchcode => $hold->branchcode,
-        lang => $borrower->{lang},
+        lang => $patron->lang,
         tables => {
             'branches'       => $library,
-            'borrowers'      => $borrower,
+            'borrowers'      => $patron->unblessed,
             'biblio'         => $hold->biblionumber,
             'biblioitems'    => $hold->biblionumber,
             'reserves'       => $hold->unblessed,
@@ -1859,7 +1860,7 @@ sub _koha_notify_reserve {
     while ( my ( $mtt, $letter_code ) = each %{ $messagingprefs->{transports} } ) {
         next if (
                ( $mtt eq 'email' and not $to_address ) # No email address
-            or ( $mtt eq 'sms'   and not $borrower->{smsalertnumber} ) # No SMS number
+            or ( $mtt eq 'sms'   and not $patron->smsalertnumber ) # No SMS number
             or ( $mtt eq 'phone' and C4::Context->preference('TalkingTechItivaPhoneNotification') ) # Notice is handled by TalkingTech_itiva_outbound.pl
         );
 

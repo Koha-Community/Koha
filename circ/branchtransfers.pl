@@ -34,6 +34,7 @@ use C4::Members;
 use Koha::BiblioFrameworks;
 use Koha::AuthorisedValues;
 use Koha::Items;
+use Koha::Patrons;
 
 ###############################################
 #  Getting state
@@ -205,11 +206,13 @@ foreach my $code ( keys %$messages ) {
         elsif ( $code eq 'WasReturned' ) {
             $err{errwasreturned} = 1;
             $err{borrowernumber} = $messages->{'WasReturned'};
-            my $borrower = GetMember('borrowernumber'=>$messages->{'WasReturned'});
-            $err{title}      = $borrower->{'title'};
-            $err{firstname}  = $borrower->{'firstname'};
-            $err{surname}    = $borrower->{'surname'};
-            $err{cardnumber} = $borrower->{'cardnumber'};
+            my $patron = Koha::Patrons->find( $messages->{'WasReturned'} );
+            if ( $patron ) { # Just in case...
+                $err{title}      = $patron->title;
+                $err{firstname}  = $patron->firstname;
+                $err{surname}    = $patron->surname;
+                $err{cardnumber} = $patron->cardnumber;
+            }
         }
         $err{errdesteqholding} = ( $code eq 'DestinationEqualsHolding' );
         push( @errmsgloop, \%err );

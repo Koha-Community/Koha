@@ -27,6 +27,7 @@ use C4::Reserves;
 use C4::Items;
 use Koha::Holds;
 use Koha::ItemTypes;
+use Koha::Patrons;
 
 my $input          = CGI->new;
 my $borrowernumber = $input->param('borrowernumber');
@@ -42,7 +43,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $data = GetMember( 'borrowernumber' => $borrowernumber );
+my $patron = Koha::Patrons->find( $borrowernumber );
+my $category = $patron->category;
+my $data = $patron->unblessed;
+$data->{description} = $category->description;
+$data->{category_type} = $category->category_type;
 
 my ( $total, $accts, $numaccts ) = GetMemberAccountRecords($borrowernumber);
 foreach my $accountline (@$accts) {

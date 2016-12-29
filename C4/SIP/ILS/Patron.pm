@@ -32,14 +32,14 @@ sub new {
     my ($class, $patron_id) = @_;
     my $type = ref($class) || $class;
     my $self;
-    $kp = GetMember(cardnumber=>$patron_id) || GetMember(userid=>$patron_id);
-    $debug and warn "new Patron (GetMember): " . Dumper($kp);
-    unless (defined $kp) {
+    $kp = Koha::Patrons->find( { cardnumber => $patron_id } )
+      or Koha::Patrons->find( { userid => $patron_id } );
+    $debug and warn "new Patron: " . Dumper($kp->unblessed) if $kp;
+    unless ($kp) {
         syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
         return;
     }
-    $kp = GetMember( borrowernumber => $kp->{borrowernumber});
-    $debug and warn "new Patron (GetMember): " . Dumper($kp);
+    $kp = $kp->unblessed;
     my $pw        = $kp->{password};
     my $flags     = C4::Members::patronflags( $kp );
     my $debarred  = defined($flags->{DBARRED});
