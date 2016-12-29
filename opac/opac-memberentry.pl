@@ -123,7 +123,7 @@ if ( $action eq 'create' ) {
             );
             $template->param( 'email' => $borrower{'email'} );
 
-            my $verification_token = md5_hex( time().{}.rand().{}.$$ );
+            my $verification_token = md5_hex( \%borrower );
             $borrower{'password'} = random_string("..........");
 
             Koha::Patron::Modifications->new(
