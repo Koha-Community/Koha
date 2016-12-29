@@ -11,6 +11,7 @@ use warnings;
 
 use Sys::Syslog qw(syslog);
 use Carp;
+use Template;
 
 use C4::SIP::ILS::Transaction;
 
@@ -23,7 +24,7 @@ use C4::Members;
 use C4::Reserves;
 use Koha::Database;
 use Koha::Biblios;
-
+use Koha::Patrons;
 
 =encoding UTF-8
 
@@ -161,8 +162,19 @@ sub hold_patron_id {
 
 }
 sub hold_patron_name {
-    my $self = shift;
-    my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return;
+    my ( $self, $template ) = @_;
+    my $borrowernumber = $self->hold_patron_id() or return;
+
+    if ($template) {
+        my $tt = Template->new();
+
+        my $patron = Koha::Patrons->find($borrowernumber);
+
+        my $output;
+        $tt->process( \$template, { patron => $patron }, \$output );
+        return $output;
+    }
+
     my $holder = GetMember(borrowernumber=>$borrowernumber);
     unless ($holder) {
         syslog("LOG_ERR", "While checking hold, GetMember failed for borrowernumber '$borrowernumber'");
