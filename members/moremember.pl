@@ -275,7 +275,7 @@ $template->param( picture => 1 ) if $patron_image;
 # Generate CSRF token for upload and delete image buttons
 $template->param(
     csrf_token => Koha::Token->new->generate_csrf({
-        id     => C4::Context->userenv->{id},
+        id     => Encode::encode( 'UTF-8', C4::Context->userenv->{id} ),
         secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
     }),
 );
