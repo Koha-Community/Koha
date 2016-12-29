@@ -138,8 +138,8 @@ $(document).ready(function() {
 		}
 		return true;
 		}
-        function insertValueQuery(mtt_id) {
-            var fieldset = $("#" + mtt_id);
+        function insertValueQuery(containerid) {
+            var fieldset = $("#" + containerid);
             var myQuery = $(fieldset).find('textarea[name="content"]');
             var myListBox = $(fieldset).find('select[name="SQLfieldname"]');
 
@@ -415,13 +415,13 @@ $(document).ready(function() {
                 [% END %]
             </h3>
             [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
-              <fieldset class="rows mtt" id="[% letter.message_transport_type %]" disabled="disabled">
+              <fieldset class="rows mtt" id="[% letter.message_transport_type %]_[% lang %]" disabled="disabled">
                 <div class="dialog message">You should enable the SMSSendDriver preference to use the SMS templates.</div>
             [% ELSIF letter.message_transport_type == "phone" and not Koha.Preference("TalkingTechItivaPhoneNotification") %]
-              <fieldset class="rows mtt" id="[% letter.message_transport_type %]" disabled="disabled">
+              <fieldset class="rows mtt" id="[% letter.message_transport_type %]_[% lang %]" disabled="disabled">
                 <div class="dialog message">You should enable the TalkingTechItivaPhoneNotification preference to use the phone templates.</div>
             [% ELSE %]
-              <fieldset class="rows mtt" id="[% letter.message_transport_type %]">
+              <fieldset class="rows mtt" id="[% letter.message_transport_type %]_[% lang %]">
             [% END %]
               <ol>
                 <li>
@@ -452,7 +452,7 @@ $(document).ready(function() {
                         </select>
                       </td>
                         <td class="actions">
-                            <button type="button" data-containerid="[% letter.message_transport_type %]" class="btn btn-default btn-sm insert">Insert <i class="fa fa-long-arrow-right"></i></button>
+                            <button type="button" data-containerid="[% letter.message_transport_type %]_[% lang %]" class="btn btn-default btn-sm insert">Insert <i class="fa fa-long-arrow-right"></i></button>
                         </td>
                       <td><textarea name="content" id="content_[% letter.message_transport_type %]" cols="80" rows="15">[% letter.content %]</textarea></td>
                     </tr>
