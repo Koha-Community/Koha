@@ -43,8 +43,8 @@ $record->append_fields(
 );
 my ($bibnum, $title, $bibitemnum) = AddBiblio($record, '');
 
-my $isbd = GetISBDView({ record => $record });
+my $isbd = GetISBDView($bibnum);
 is($isbd, '<h2>Title : Mountains by Keith Lye</h2>', 'ISBD is correct');
 
-my $opacisbd = GetISBDView({ record => $record, template => 'opac' });
+my $opacisbd = GetISBDView($bibnum, 'opac');
 is($opacisbd, '<h2>Title : Mountains (Keith Lye)</h2>', 'OPAC ISBD is correct');
