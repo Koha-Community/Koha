@@ -24,7 +24,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 10;
+        plan tests => 8;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -73,14 +73,6 @@ is( $members_attributetypes[0]->{'class'},
 
 is( $members_attributetypes[1]->{'class'},
     'silver', 'Second class value is silver' );
-
-ok( C4::Members::AttributeTypes::AttributeTypeExists('one'),
-    'checking an attribute type exists' );
-
-ok(
-    !C4::Members::AttributeTypes::AttributeTypeExists('three'),
-    "checking a attribute that isn't in the code doesn't exist"
-);
 
 ok( C4::Members::AttributeTypes->fetch('one'), "testing fetch feature" );
 

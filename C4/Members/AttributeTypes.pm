@@ -90,22 +90,6 @@ sub GetAttributeTypes_hashref {
     return \%hash;
 }
 
-=head2 AttributeTypeExists
-
-  my $have_attr_xyz = C4::Members::AttributeTypes::AttributeTypeExists($code)
-
-Returns true if we have attribute type C<$code>
-in the database.
-
-=cut
-
-sub AttributeTypeExists {
-    my ($code) = @_;
-    my $dbh = C4::Context->dbh;
-    my $exists = $dbh->selectrow_array("SELECT code FROM borrower_attribute_types WHERE code = ?", undef, $code);
-    return $exists;
-}
-
 =head1 METHODS 
 
   my $attr_type = C4::Members::AttributeTypes->new($code, $description);
