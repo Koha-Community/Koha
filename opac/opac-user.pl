@@ -36,6 +36,7 @@ use C4::Letters;
 use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Database;
+use Koha::Patron::Attribute::Types;
 use Koha::Patron::Messages;
 use Koha::Patron::Discharge;
 use Koha::Patrons;
@@ -268,7 +269,8 @@ $template->param( canrenew     => $canrenew );
 $template->param( OVERDUES       => \@overdues );
 $template->param( overdues_count => $overdues_count );
 
-my $show_barcode = C4::Members::AttributeTypes::AttributeTypeExists( ATTRIBUTE_SHOW_BARCODE );
+my $show_barcode = Koha::Patron::Attribute::Types->search(
+    { code => ATTRIBUTE_SHOW_BARCODE } )->count;
 if ($show_barcode) {
     my $patron_show_barcode = GetBorrowerAttributeValue($borrowernumber, ATTRIBUTE_SHOW_BARCODE);
     undef $show_barcode if defined($patron_show_barcode) && !$patron_show_barcode;
