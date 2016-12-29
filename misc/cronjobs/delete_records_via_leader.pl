@@ -36,6 +36,7 @@ use Getopt::Long;
 use C4::Biblio;
 use C4::Items;
 use Koha::Database;
+use Koha::Biblioitems;
 use Koha::Biblio::Metadatas;
 
 my $delete_items;
@@ -85,7 +86,7 @@ foreach my $m (@metadatas) {
 
     if ($delete_items) {
         my $deleted_count = 0;
-        my $biblioitem = Koha::Biblioitem->find( $biblionumber );
+        my $biblioitem = Koha::Biblioitems->find( $biblionumber );
         foreach my $item ( $biblioitem->items() ) {
             my $itemnumber = $item->itemnumber();
 
