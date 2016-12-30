@@ -34,7 +34,6 @@ my $count      = 0;
 my $errorcount = 0;
 my $starttime  = gettimeofday;
 my @errors;
-my %opt;
 my ( $confirm, $help, $test_parameter, $where );
 GetOptions(
     'c'       => \$confirm,
@@ -110,5 +109,5 @@ if ( scalar(@errors) > 0 ) {
 
 sub defnonull {
     my $var = shift;
-    defined $var and $var ne "";
+    return defined $var && $var ne q{};
 }
