@@ -561,12 +561,6 @@ if ( $op eq "duplicate" ) {
     $data{'cardnumber'} = "";
 }
 
-if (C4::Context->preference("autoMemberNum")) {
-    $template->param( autoMemberNum => 1);
-} else {
-    $template->param( autoMemberNum => 0);
-}
-
 if(!defined($data{'sex'})){
     $template->param( none => 1);
 } elsif($data{'sex'} eq 'F'){
