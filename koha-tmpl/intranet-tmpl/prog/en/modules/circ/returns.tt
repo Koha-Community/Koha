@@ -768,7 +768,12 @@ $(document).ready(function () {
                     [% riloo.borsurname %], [% riloo.borfirstname %] ([% riloo.borcategorycode %])
                 </a>
                 [% IF riloo.borissuescount %]
-                    <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% riloo.borrowernumber %]">Checkouts: [% riloo.borissuescount %]</a>
+                    <span class="results_summary nowrap">
+                        <span class="label">Checkouts:</span>
+                        <span class="number_box">
+                            <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% riloo.borrowernumber %]">[% riloo.borissuescount %]</a>
+                        </span>
+                    </span>
                 [% END %]
             [% ELSE %]Not checked out[% END %]</td>
             <td class="ci-note">
