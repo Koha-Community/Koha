@@ -28,66 +28,73 @@ batchRebuildItemsTables.pl [ -h ][ -c ][ -t ][ --where ]
 
 =cut
 
-
-my $count = 0;
+my $count      = 0;
 my $errorcount = 0;
-my $starttime = gettimeofday;
+my $starttime  = gettimeofday;
 my @errors;
 my %opt;
-my ($confirm, $help, $test_parameter, $where);
+my ( $confirm, $help, $test_parameter, $where );
 GetOptions(
-    'c' => \$confirm,
-    'help|h' => \$help,
-    't' => \$test_parameter,
+    'c'       => \$confirm,
+    'help|h'  => \$help,
+    't'       => \$test_parameter,
     'where:s' => \$where,
 ) or pod2usage(2);
 
-pod2usage(1) if ($help || (!$confirm));
+pod2usage(1) if ( $help || ( !$confirm ) );
 print "### Database will not be modified ###\n" if $test_parameter;
+
 #dbh
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
+
 #sysprefs
 C4::Context->disable_syspref_cache() if ( defined( C4::Context->disable_syspref_cache() ) );
 my $CataloguingLog = C4::Context->preference('CataloguingLog');
-my $dontmerge = C4::Context->preference('dontmerge');
-$dontmerge="0" unless defnonull($dontmerge);
+my $dontmerge      = C4::Context->preference('dontmerge');
+$dontmerge = "0" unless defnonull($dontmerge);
 $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='CataloguingLog'");
 $dbh->do("UPDATE systempreferences SET value=1 where variable='dontmerge'");
 $dbh->commit() unless $test_parameter;
-my ($itemfield,$itemnumbersubfield) = &GetMarcFromKohaField("items.itemnumber",'');
+my ( $itemfield, $itemnumbersubfield ) = &GetMarcFromKohaField( "items.itemnumber", '' );
+
 #dbh query init
-my $query = qq{SELECT biblio.biblionumber AS biblionumber, biblioitems.biblioitemnumber AS biblioitemnumber, biblio.frameworkcode AS frameworkcode FROM biblio JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber};
-$query.=qq{ WHERE $where } if ($where);
+my $query =
+qq{SELECT biblio.biblionumber AS biblionumber, biblioitems.biblioitemnumber AS biblioitemnumber, biblio.frameworkcode AS frameworkcode FROM biblio JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber};
+$query .= qq{ WHERE $where } if ($where);
 
 my $sth = $dbh->prepare($query);
 $sth->execute();
-while ( my ( $biblionumber, $biblioitemnumber, $frameworkcode ) = $sth->fetchrow )
-{
+while ( my ( $biblionumber, $biblioitemnumber, $frameworkcode ) = $sth->fetchrow ) {
     $count++;
-    warn $count unless $count %1000;
+    warn $count unless $count % 1000;
     my $extkey;
-    my $record = GetMarcBiblio($biblionumber,1);
-    unless ($record){ push @errors, "bad record biblionumber $biblionumber"; next; }
-    my ($tmptestfields,$tmptestdirectory,$reclen,$tmptestbaseaddress) = MARC::File::USMARC::_build_tag_directory($record);
+    my $record = GetMarcBiblio( $biblionumber, 1 );
+    unless ($record) { push @errors, "bad record biblionumber $biblionumber"; next; }
+    my ( $tmptestfields, $tmptestdirectory, $reclen, $tmptestbaseaddress ) = MARC::File::USMARC::_build_tag_directory($record);
+
     #print "\n################################ record before ##################################\n".$record->as_formatted;#!test
     unless ($test_parameter) {
-        my $rqitemnumber=$dbh->prepare("SELECT itemnumber, biblionumber from items where itemnumber = ? and biblionumber = ?");
-        foreach my $itemfield ($record->field($itemfield)){
-            my $marcitem=MARC::Record->new();
+        my $rqitemnumber = $dbh->prepare("SELECT itemnumber, biblionumber from items where itemnumber = ? and biblionumber = ?");
+        foreach my $itemfield ( $record->field($itemfield) ) {
+            my $marcitem = MARC::Record->new();
             $marcitem->encoding('UTF-8');
             $marcitem->append_fields($itemfield);
-            my $itemnum; my @itemnumbers = $itemfield->subfield($itemnumbersubfield);
-            foreach my $itemnumber ( @itemnumbers ){
-                $rqitemnumber->execute($itemnumber, $biblionumber);
-                if( my $row = $rqitemnumber->fetchrow_hashref ){ $itemnum = $row->{itemnumber};}
+            my $itemnum;
+            my @itemnumbers = $itemfield->subfield($itemnumbersubfield);
+            foreach my $itemnumber (@itemnumbers) {
+                $rqitemnumber->execute( $itemnumber, $biblionumber );
+                if ( my $row = $rqitemnumber->fetchrow_hashref ) { $itemnum = $row->{itemnumber}; }
             }
-            eval{ if($itemnum){ ModItemFromMarc($marcitem,$biblionumber,$itemnum) }else{ die("$biblionumber"); } };
-            if ($@){ warn "Problem with : $biblionumber : $@"; warn $record->as_formatted; }
+            eval {
+                if ($itemnum) { ModItemFromMarc( $marcitem, $biblionumber, $itemnum ) }
+                else          { die("$biblionumber"); }
+            };
+            if ($@) { warn "Problem with : $biblionumber : $@"; warn $record->as_formatted; }
         }
     }
     unless ($test_parameter) {
-        $dbh->commit() unless $count %1000;
+        $dbh->commit() unless $count % 1000;
     }
 }
 
@@ -98,8 +105,8 @@ $sthdontmerge->execute($dontmerge);
 $dbh->commit() unless $test_parameter;
 my $timeneeded = time() - $starttime;
 print "$count MARC record done in $timeneeded seconds\n";
-if (scalar(@errors) > 0) {
-    print "Some biblionumber could not be processed though: ", join(" ", @errors);
+if ( scalar(@errors) > 0 ) {
+    print "Some biblionumber could not be processed though: ", join( " ", @errors );
 }
 
 sub defnonull { my $var = shift; defined $var and $var ne "" }
