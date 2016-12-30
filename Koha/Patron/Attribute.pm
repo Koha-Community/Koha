@@ -17,6 +17,8 @@ package Koha::Patron::Attribute;
 
 use Modern::Perl;
 
+use Koha::Database;
+use Koha::Exceptions::Patron::Attribute;
 use Koha::Patron::Attribute::Types;
 
 use base qw(Koha::Object);
@@ -30,6 +32,24 @@ Koha::Patron::Attribute - Koha Patron Attribute Object class
 =head2 Class Methods
 
 =cut
+
+=head3 store
+
+    my $attribute = Koha::Patron::Attribute->new({ code => 'a_code', ... });
+    try { $attribute->store }
+    catch { handle_exception };
+
+=cut
+
+sub store {
+
+    my $self = shift;
+
+    $self->_check_repeatable;
+    $self->_check_unique_id;
+
+    return $self->SUPER::store();
+}
 
 =head3 opac_display
 
@@ -57,6 +77,56 @@ sub opac_editable {
     my $self = shift;
 
     return Koha::Patron::Attribute::Types->find( $self->code )->opac_editable;
+}
+
+=head2 Internal methods
+
+=head3 _check_repeatable
+
+_check_repeatable checks if the attribute type is repeatable and throws and exception
+if the attribute type isn't repeatable and there's already an attribute with the same
+code for the given patron.
+
+=cut
+
+sub _check_repeatable {
+
+    my $self = shift;
+
+    if ( !Koha::Patron::Attribute::Types->find( $self->code )->repeatable ) {
+        my $attr_count
+            = Koha::Database->new->schema->resultset( $self->_type )->search(
+            {   borrowernumber => $self->borrowernumber,
+                code           => $self->code
+            }
+            )->count;
+        Koha::Exceptions::Patron::Attribute::NonRepeatable->throw()
+            if $attr_count > 0;
+    }
+
+    return $self;
+}
+
+=head3 _check_unique_id
+
+_check_unique_id checks if the attribute type is marked as unique id and throws and exception
+if the attribute type is a unique id and there's already an attribute with the same
+code and value on the database.
+
+=cut
+
+sub _check_unique_id {
+
+    my $self = shift;
+
+    if ( Koha::Patron::Attribute::Types->find( $self->code )->unique_id ) {
+        my $unique_count
+            = Koha::Database->new->schema->resultset( $self->_type )
+            ->search( { code => $self->code, attribute => $self->attribute } )
+            ->count;
+        Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw()
+            if $unique_count > 0;
+    }
 }
 
 =head3 _type
