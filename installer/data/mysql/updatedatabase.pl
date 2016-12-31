@@ -12858,6 +12858,11 @@ INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code)
     print "Upgrade to $DBversion done (Bug 17663 - Forgotten userpermissions)\n";
 }
 
+$DBversion = '16.05.07.000';
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (Koha 16.05.07)\n";
+    SetVersion($DBversion);
+}
 
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
