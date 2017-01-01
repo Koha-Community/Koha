@@ -19,12 +19,6 @@ package Koha::Authority;
 
 use Modern::Perl;
 
-use Carp;
-
-use Koha::Database;
-use C4::Context;
-use MARC::Record;
-
 use base qw(Koha::Object);
 
 =head1 NAME

@@ -19,10 +19,16 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
+use MARC::Field;
+use MARC::File::XML;
+use MARC::Record;
+use Test::Deep;
 
 use Koha::Authority;
 use Koha::Authorities;
+use Koha::Authority::MergeRequest;
+use Koha::Authority::MergeRequests;
 use Koha::Authority::Type;
 use Koha::Authority::Types;
 use Koha::Database;
@@ -51,5 +57,57 @@ is( Koha::Authorities->search->count,      $nb_of_authorities + 2,     'The 2 au
 $new_authority_1->delete;
 is( Koha::Authorities->search->count, $nb_of_authorities + 1, 'Delete should have deleted the authority' );
 
+subtest 'New merge request, method oldmarc' => sub {
+    plan tests => 4;
+
+    my $marc = MARC::Record->new;
+    $marc->append_fields(
+        MARC::Field->new( '100', '', '', a => 'a', b => 'b_findme' ),
+        MARC::Field->new( '200', '', '', a => 'aa' ),
+    );
+    my $req = Koha::Authority::MergeRequest->new({
+        authid => $new_authority_2->authid,
+        reportxml => 'Should be discarded',
+    });
+    is( $req->reportxml, undef, 'Reportxml is undef without oldrecord' );
+
+    $req = Koha::Authority::MergeRequest->new({
+        authid => $new_authority_2->authid,
+        oldrecord => $marc,
+    });
+    like( $req->reportxml, qr/b_findme/, 'Reportxml initialized' );
+
+    # Check if oldmarc is a MARC::Record and has one field
+    is( ref( $req->oldmarc ), 'MARC::Record', 'Check oldmarc method' );
+    is( scalar $req->oldmarc->fields, 1, 'Contains one field' );
+};
+
+subtest 'Testing reporting_tag_xml in MergeRequests' => sub {
+    plan tests => 2;
+
+    my $record = MARC::Record->new;
+    $record->append_fields(
+        MARC::Field->new( '024', '', '', a => 'aaa' ),
+        MARC::Field->new( '100', '', '', a => 'Best author' ),
+        MARC::Field->new( '234', '', '', a => 'Just a field' ),
+    );
+    my $xml = Koha::Authority::MergeRequests->reporting_tag_xml({
+        record => $record, tag => '110',
+    });
+    is( $xml, undef, 'Expected no result for wrong tag' );
+    $xml = Koha::Authority::MergeRequests->reporting_tag_xml({
+        record => $record, tag => '100',
+    });
+    my $newrecord = MARC::Record->new_from_xml(
+        $xml, 'UTF-8',
+        C4::Context->preference('marcflavour') eq 'UNIMARC' ?
+        'UNIMARCAUTH' :
+        'MARC21',
+    ); # MARC format does not actually matter here
+    cmp_deeply( $record->field('100')->subfields,
+        $newrecord->field('100')->subfields,
+        'Compare reporting tag in both records',
+    );
+};
+
 $schema->storage->txn_rollback;
-1;
