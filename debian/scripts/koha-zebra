@@ -134,9 +134,10 @@ restart_zebra()
     local name=$1
 
     if is_zebra_running ${name}; then
-
-        stop_zebra ${name} && \
-        start_zebra ${name}
+        local noLF="-n"
+        [ "$verbose" != "no" ] && noLF=""
+        echo $noLF `stop_zebra ${name}`
+        echo $noLF `start_zebra ${name}`
     else
         if [ "$verbose" != "no" ]; then
             log_daemon_msg "Error: Zebra not running for ${name}"
@@ -149,7 +150,7 @@ zebra_status()
 {
     local name=$1
 
-    if is_zebra_running; then
+    if is_zebra_running ${name}; then
         log_daemon_msg "Zebra running for ${name}"
         log_end_msg 0
     else
