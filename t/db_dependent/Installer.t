@@ -22,7 +22,7 @@
 # Add more tests here!!!
 
 use Modern::Perl;
-use Test::More tests => 11;
+use Test::More tests => 13;
 use Koha::Database;
 
 BEGIN {
@@ -55,8 +55,9 @@ my $source = $schema->source('Borrower');
 my @column_names = $source->columns();
 my $column_name  = $column_names[0];
 ok( column_exists( 'borrowers', $column_name ), 'Known column does exist' );
+ok( ! column_exists( 'borrowers', 'xxx'), 'Column xxx does not exist' );
 
 my @constraint_names = $source->unique_constraint_names();
 my $constraint_name  = $constraint_names[0];
-ok( constraint_exists( 'borrowers', $constraint_name ),
-    'Known constraint does exist' );
+ok( constraint_exists( 'borrowers', $constraint_name), 'Known contraint does exist' );
+ok( ! constraint_exists( 'borrowers', 'xxx'), 'Constraint xxx does not exist' );
