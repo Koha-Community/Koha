@@ -19,8 +19,9 @@ use Modern::Perl;
 
 use Carp;
 
-use Koha::Database;
+use C4::Languages;
 
+use Koha::Database;
 use Koha::ItemType;
 
 use base qw(Koha::Objects);
@@ -34,6 +35,24 @@ Koha::ItemTypes - Koha ItemType Object set class
 =head2 Class Methods
 
 =cut
+
+=head3 search_with_localization
+
+my $itemtypes = Koha::ItemTypes->search_with_localization
+
+=cut
+
+sub search_with_localization {
+    my ( $self, $params, $attributes ) = @_;
+
+    my $language = C4::Languages::getlanguage();
+    $params->{'-or'} = { 'localization.lang' => [ $language, undef ] };
+    $attributes->{order_by} = 'localization.translation' unless exists $attributes->{order_by};
+    $attributes->{join} = 'localization';
+    $attributes->{'+select'} = [ { coalesce => [qw( localization.translation me.description )] } ];
+    $attributes->{'+as'} = ['translated_description'];
+    $self->SUPER::search( $params, $attributes );
+}
 
 =head3 type
 

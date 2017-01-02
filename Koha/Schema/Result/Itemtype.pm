@@ -198,6 +198,12 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-04-29 10:32:00
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1GiikODklVISOurHX37qjA
 
+# Use the ItemtypeLocalization view to create the join on localization
+__PACKAGE__->has_many(
+  "localization",
+  "Koha::Schema::Result::ItemtypeLocalization",
+  { "foreign.code" => "self.itemtype" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;
