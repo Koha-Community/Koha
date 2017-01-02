@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-20 15:11-0300\n"
-"PO-Revision-Date: 2016-10-18 13:43+0000\n"
+"POT-Creation-Date: 2016-12-15 15:59-0300\n"
+"PO-Revision-Date: 2016-11-14 10:35+0000\n"
 "Last-Translator: Onur <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1476798190.000000\n"
+"X-POOTLE-MTIME: 1479119711.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -24,7 +24,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:44
 #, c-format
 msgid "\" %s Restriction added by overdues process %s %s %s %s "
-msgstr "\" %s Kısıtlama gecikmişler işlemi tarafından eklendi %s %s %s %s"
+msgstr "\" %s Kısıtlama gecikenler işlemi tarafından eklendi %s %s %s %s"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:300
@@ -157,13 +157,13 @@ msgstr ""
 #. %12$s:  barcode 
 #. %13$s: - END -
 #: opac-tmpl/bootstrap/en/modules/opac-ics.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s is overdue %sYour copy of %s (barcode %s) is overdue %s %s is "
 "due %sYour copy of %s (barcode %s) is due back at the library today %s "
 msgstr ""
-"%s %s %s Gecikmiş %s (barkod %s) kopyası gecikmiş %s %s iade tarihi gelmiş %s"
-"%s (barkod %s) kopyasının bugün kütüphaneye iade edilmesi gerekiyor %s"
+"%s %s %s %s Gecikmiş %sMateryaliniz %s (barkod %s) gecikmiş %s %s iade "
+"tarihi gelmiş %sMateryalinizi %s (barkod %s) bugün kütüphaneye iade ediniz %s"
 
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
@@ -574,7 +574,7 @@ msgid ""
 "resolve this problem. %s "
 msgstr ""
 "%s pdf dosyası oluşturulurken bir hata oluştu. Bu sorunu gidermek için "
-"lütfen personelle irtibata geçiniz%s "
+"lütfen personelle iletişime geçiniz. %s"
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:272
@@ -771,13 +771,13 @@ msgstr "%s kataloğunda %s sonuç bulunamadı. "
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:86
 #, c-format
 msgid "%s No results, try to change filters. %s "
-msgstr "%s  Sonuç bulunamadı, filtreleri değiştirmeyi deneyin. %s"
+msgstr "%s Sonuç bulunamadı, filtreleri değiştirmeyi deneyin. %s"
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:509
 #, c-format
 msgid "%s Not allowed"
-msgstr "%s İzin verilmedi"
+msgstr "%s İzin verilmiyor"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:266
@@ -790,7 +790,7 @@ msgstr "%s Süresi uzatılamaz"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
 #, c-format
 msgid "%s Not renewable %s Not allowed "
-msgstr "%s Süresi uzatılamaz %s İzin verilmedi"
+msgstr "%s Süresi uzatılamaz %s İzin verilmiyor"
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -7491,7 +7491,7 @@ msgstr "Eser adına göre sırala"
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:70
 #, c-format
 msgid "Order by: "
-msgstr "Buna göre sırala:"
+msgstr "Sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format
@@ -9260,17 +9260,17 @@ msgstr "Üzgünüz,oturumunuz zaman aşımına uğradı,lütfen tekrar giriş ya
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "Sort by:"
-msgstr "Sırala:"
+msgstr "Sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:211
 #, c-format
 msgid "Sort by: "
-msgstr "Sırala: "
+msgstr "Sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:561
 #, c-format
 msgid "Sort this list by: "
-msgstr "Bu listeyi sırala: "
+msgstr "Bu listenin sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:251
 #, c-format
@@ -9411,7 +9411,7 @@ msgstr "Önerinizi gönderin"
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:22
 #, c-format
 msgid "Subscribe to a subscription alert"
-msgstr "Abonelik uyarısına abone ol"
+msgstr "Abonelik uyarısına abone olun"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:144

@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-20 14:34-0300\n"
-"PO-Revision-Date: 2016-09-16 08:32+0000\n"
-"Last-Translator: Filippos <filippos@uom.edu.gr>\n"
+"POT-Creation-Date: 2016-12-15 14:05-0300\n"
+"PO-Revision-Date: 2016-12-29 11:10+0000\n"
+"Last-Translator: Eugenios <eugenios.papadopoulos@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1474014763.000000\n"
+"X-POOTLE-MTIME: 1483009824.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -26,6 +26,7 @@ msgstr ""
 #, c-format
 msgid "\" %s Restriction added by overdues process %s %s %s %s "
 msgstr ""
+"\" %s Δημιουργήθηκε περιορισμός από τη διαδικασία εκπρόθεσμων %s %s %s %s "
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:300
@@ -135,9 +136,9 @@ msgstr ""
 #. %3$s:  IF ( RESERVE.is_in_transit ) 
 #. %4$s:  SET transfer = RESERVE.item.get_transfer 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:631
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s Item in transit from "
-msgstr "%s %s %s Το τεκμήριο είναι σε μεταφορά από "
+msgstr "%s %s %s %s Το τεκμήριο είναι σε μεταφορά από "
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -168,6 +169,9 @@ msgid ""
 "%s %s %s %s is overdue %sYour copy of %s (barcode %s) is overdue %s %s is "
 "due %sYour copy of %s (barcode %s) is due back at the library today %s "
 msgstr ""
+"%s %s %s %s είναι εκπρόθεσμο %sΤο αντίτυπο %s (barcode %s) είναι εκπρόθεσμο "
+"%s %s είναι εμπρόθεσμο %sΤο αντίτυπο %s (barcode %s) επιστράφηκε σήμερα στη "
+"βιβλιοθήκη %s "
 
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
@@ -491,7 +495,7 @@ msgstr ""
 #. %28$s:  ACCOUNT_LINE.title 
 #. %29$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:105
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
 "(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
@@ -502,9 +506,10 @@ msgstr ""
 "%s %sΠληρωμή, ευχαριστούμε %sΠληρωμή, ευχαριστούμε (μετρητοίς μέσω SIP2) "
 "%sΠληρωμή, ευχαριστούμε (με VISA μέσω SIP2) %sΠληρωμή, ευχαριστούμε (με "
 "πιστωτική κάρτα μέσω SIP2) %sΝέα Κάρτα %sΠρόστιμο %sΚόστος Διαχείρισης "
-"Λογαριασμού %sΔιάφορα %sΧαμένο τεκμήριο %sΔιαγραφή %sΠρόστιμο %sΚόστος "
-"ενοικίασης %s Απαλλάχθηκε %sΧρέωση αντικατάστασης χαμένου τεκμηρίου "
-"%sΠληρωμή %sΔιαγραφή %sΠίστωση %sΠίστωση %s%s %s %s, %s%s %s(%s)%s "
+"Λογαριασμού %sΔιάφορα %sΧαμένο τεκμήριο %sΔιαγραφή %sΠρόστιμο %sΚράτηση σε "
+"αναμονή για μεγάλο χρονικό διάστημα %sΚόστος ενοικίασης %s Απαλλάχθηκε "
+"%sΧρέωση αντικατάστασης χαμένου τεκμηρίου %sΠληρωμή %sΔιαγραφή %sΠίστωση "
+"%sΠίστωση %s%s %s %s, %s%s %s(%s)%s "
 
 #. %1$s:  IF s.category == PRIVATE 
 #. %2$s:  IF s.is_shared 
@@ -792,9 +797,9 @@ msgstr "%s Δεν επιτρέπεται"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:266
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable "
-msgstr "%s Αυτόματη ανανέωση "
+msgstr "%s Μη ανανεώσιμο "
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
@@ -1729,9 +1734,9 @@ msgstr "%s%s%sKoha%s κατάλογος &rsaquo; Λεπτομέρειες για
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Discharge"
-msgstr "%s%s%sKoha%s κατάλογος &rsaquo; Επισημειώσεις"
+msgstr "%s%s%sKoha%s κατάλογος &rsaquo; Απαλλαγή"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1881,7 +1886,7 @@ msgstr "%s%s%sKoha%s κατάλογος &rsaquo; Αποστολή της λίσ�
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:3
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Share a list"
-msgstr "%s%s%sKoha%s κατάλογος &rsaquo; Κοινοποίηση της λίστας"
+msgstr "%s%s%sKoha%s κατάλογος &rsaquo; Κοινοποίηση λίστας"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -2084,9 +2089,9 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "%s0 biblios%s "
-msgstr "%s εγγραφές"
+msgstr "%s0 εγγραφές%s "
 
 #. %1$s:  IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch 
@@ -2139,14 +2144,16 @@ msgstr "%sΣυλλογή%sΤύπος τεκμηρίου%s"
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sΣε αναμονή%s %sΑφίχθη%s %sΑργοπορημένο%s %sΑπολεσθέν%s %sΜη διαθέσιμο%s "
-"%sΔιαγραμμένο%s %sΜη αφιχθέν%s %sΣταματημένο%s "
+"%sΑναμένεται%s %sΑφιχθέν%s %sΑργοπορημένο%s %sΑπολεσθέν%s %sΑπολεσθέν (δεν "
+"έγινε παραλαβή)%s %sΑπολεσθέν (εξαντλημένο)%s %sΑπολεσθέν (κατεστραμμένο)%s "
+"%sΑπολεσθέν (χαμένο)%s %sΜη διαθέσιμο%s %sΔιαγραμμένο%s %sΜη αφιχθέν%s "
+"%sΣταματημένο%s "
 
 #. %1$s:  IF (latestserial.status1 ) 
 #. %2$s:  END 
@@ -2173,14 +2180,16 @@ msgstr ""
 #. %23$s:  IF (latestserial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:834
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
 "%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sΣε αναμονή%s %sΑφίχθη%s %sΑργοπορημένο%s %sΑπολεσθέν%s %sΜη διαθέσιμο%s "
-"%sΔιαγραμμένο%s %sΜη αφιχθέν%s %sΣταματημένο%s "
+"%sΑναμένεται%s %sΑφιχθέν%s %sΑργοπορημένο%s %sΑπολεσθέν%s %sΑπολεσθέν (δεν "
+"έγινε παραλαβή)%s %sΑπολεσθέν (εξαντλημένο)%s %sΑπολεσθέν (κατεστραμμένο)%s "
+"%sΑπολεσθέν (χαμένο)%s %sΔεν κυκλοφόρησε%s %sΔιαγραμμένο%s %sΙσχυρισμός μη "
+"παράδοσης%s %sΣταματημένο%s "
 
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
 #. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
@@ -2196,8 +2205,8 @@ msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
 "%sItem checkout %sUnknown %s"
 msgstr ""
-"%sΕπιστροφή τεκμηρίου %sΣύνθετη ειδοποίηση %sΕπερχόμενες εκδηλώσεις "
-"%sΣυμπληρωμένη κράτηση %sΕπιστροφή τεκμηρίου %sΔανεισμός τεκμηρίου %sΆγνωστο "
+"%sΕπιστροφή αντιτύπου %sΠροηγμένη ειδοποίηση %sΕπερχόμενες εκδηλώσεις %"
+"sΣυμπληρωμένη κράτηση %sΕπιστροφή αντιτύπου %sΔανεισμός αντιτύπου %sΆγνωστο "
 "%s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
@@ -2250,7 +2259,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:49
 #, c-format
 msgid "%sThis authority is not used in any records.%s "
-msgstr ""
+msgstr "%sΟ καθιερωμένος όρος δεν χρησιμοποιείται σε καμία εγγραφή.%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -3066,9 +3075,9 @@ msgid "(modified on %s)"
 msgstr "(τροποποιήθηκε στις %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
-#, fuzzy, c-format
+#, c-format
 msgid "(on hold)"
-msgstr "(Σε κράτηση)"
+msgstr "(σε κράτηση)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:272
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:511
@@ -3153,9 +3162,9 @@ msgstr ""
 #. %2$s:  END 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
-#, fuzzy, c-format
+#, c-format
 msgid ".%sYou have fines.%s %s "
-msgstr "Δεν έχετε ανεξόφλητα πρόστιμα ή χρεώσεις. Υπόλοιπο: %s."
+msgstr ".%sΈχετε ανεξόφλητα πρόστιμα.%s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:57
 #, c-format
@@ -3269,10 +3278,11 @@ msgstr ""
 
 #. %1$s:  message_value 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A payment with the transaction id '%s' has already been posted to an account."
-msgstr "έχει ήδη αναρτηθεί σε ένα λογαριασμό."
+msgstr ""
+"Έχει ήδη αναρτηθεί σε ένα λογαριασμό μια πληρωμή με id συναλλαγής '%s'."
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
 #, c-format
@@ -3560,7 +3570,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:70
 #, c-format
 msgid "An invitation to share list "
-msgstr "Πρόσκληση για κοινοποιημένη λίστα "
+msgstr "Πρόσκληση για κοινοποίηση λίστας"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:323
 #, c-format
@@ -3661,7 +3671,7 @@ msgstr ""
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
 msgid "Are you sure you want to remove this share?"
-msgstr "Είστε βέβαιοι ότι θέλετε να αφαιρέσετε αυτό το δημόσιο αρχείο;"
+msgstr "Είστε βέβαιοι ότι θέλετε να αφαιρέσετε αυτή την κοινοποίηση;"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
@@ -3873,7 +3883,7 @@ msgstr "ΠΡΟΣΕΞΤΕ"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:14
 #, c-format
 msgid "BT"
-msgstr ""
+msgstr "ΕΟ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:30
@@ -3972,7 +3982,7 @@ msgstr "Σύντομο ιστορικό"
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:14
 msgid "Broader Term"
-msgstr ""
+msgstr "Ευρύτερος όρος"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:274
 #, c-format
@@ -4470,9 +4480,8 @@ msgstr "Σχόλια σε "
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
-#, fuzzy
 msgid "Confirm hold"
-msgstr "Επιβεβαίωση κωδικού πρόσβασης"
+msgstr "Επιβεβαίωση κράτησης"
 
 #. %1$s:  USER_INFO.firstname 
 #. %2$s:  USER_INFO.surname 
@@ -4962,9 +4971,9 @@ msgid "Download"
 msgstr "Μεταφόρτωση"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
-#, fuzzy, c-format
+#, c-format
 msgid "Download as iCal/.ics file"
-msgstr "Μεταφόρτωση λίστας "
+msgstr "Λήψη ως αρχείο iCal/.ics"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:12
 #, c-format
@@ -5472,13 +5481,13 @@ msgstr "Πλήρης ιστορικό"
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:20
 #, c-format
 msgid "Full subscription history"
-msgstr "Ολοκληρωμένες πληροφορίες συνδρομής"
+msgstr "Πλήρης ιστορικό συνδρομής"
 
 #. %1$s:  bibliotitle 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:49
 #, c-format
 msgid "Full subscription history for %s"
-msgstr "Ολοκληρωμένες πληροφορίες συνδρομής για %s"
+msgstr "Πλήρης ιστορικό συνδρομής για %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:280
 #, c-format
@@ -5920,11 +5929,9 @@ msgid "Identity"
 msgstr "Στοιχεία ταυτότητας"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
-#, fuzzy, c-format
+#, c-format
 msgid "If this is an error, please contact the library."
-msgstr ""
-"δείχνει ότι ο λογαριασμός σας πρέπει να είναι καθαρός, παρακαλούμε "
-"επικοινωνήστε με τη βιβλιοθήκη."
+msgstr "Αν πρόκειται για σφάλμα, παρακαλούμε επικοινωνήστε με τη βιβλιοθήκη."
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:37
 #, c-format
@@ -5980,20 +5987,22 @@ msgstr ""
 "συνδεθείτε: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:85
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a CAS account, you "
 "can use CAS."
-msgstr "Αν δεν διαθέτετε λογαριασμό Shibboleth, αλλά έχετε λογαριασμό CAS, %s"
+msgstr ""
+"Αν δεν διαθέτετε λογαριασμό Shibboleth, αλλά έχετε λογαριασμό CAS, μπορείτε "
+"να χρησιμοποιήσετε τον CAS."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a local login, then "
 "you may login below."
 msgstr ""
 "Αν δεν διαθέτετε Shibboleth λογαριασμό αλλά ένα τοπικό λογαριασμό, μπορείτε "
-"να συνδεθείτε παρακάτω: "
+"να συνδεθείτε παρακάτω."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:177
 #, c-format
@@ -6013,21 +6022,22 @@ msgstr ""
 "φορά που θα επισκεφτείτε τη βιβλιοθήκη να σας δώσουμε ένα."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:120
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you have a CAS account, please choose against which one you would like to "
 "authenticate:"
-msgstr "%s %s επιλέξτε σε ποιο επιθυμείτε να γίνει πιστοποίηση: "
+msgstr ""
+"Αν έχετε λογαριασμό CAS, επιλέξτε σε ποιον επιθυμείτε να γίνει πιστοποίηση:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:116
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a CAS account, please click here to log in."
-msgstr "Αν έχετε ένα λογαριασμό CAS, %s παρακαλώ"
+msgstr "Αν έχετε ένα λογαριασμό CAS, επιλέξτε για να συνδεθείτε."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a CAS account, you may use that below."
-msgstr "Αν έχετε ένα λογαριασμό CAS, %s παρακαλώ"
+msgstr "Αν έχετε ένα λογαριασμό CAS, μπορείτε να τον χρησιμοποιήσετε παρακάτω."
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:313
 #, c-format
@@ -6035,16 +6045,14 @@ msgid "If you have a Shibboleth account, please "
 msgstr "Αν έχετε ένα Shibboleth λογαριασμό, παρακαλούμε"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a Shibboleth account, please click here to log in."
-msgstr "Αν έχετε ένα Shibboleth λογαριασμό, παρακαλούμε"
+msgstr "Αν έχετε ένα Shibboleth λογαριασμό, επιλέξτε εδώ για να συνδεθείτε."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a local account, you may use that below."
-msgstr ""
-"Λυπούμαστε, η CAS σύνδεση απέτυχε, αν έχετε τοπικό λογαριασμό μπορείτε να "
-"τον χρησιμοποιήσετε παρακάτω. "
+msgstr "Αν έχετε τοπικό λογαριασμό, μπορείτε να τον χρησιμοποιήσετε παρακάτω. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:143
 #, c-format
@@ -6144,9 +6152,9 @@ msgid "Issues summary"
 msgstr "Περίληψη τευχών"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
-#, fuzzy, c-format
+#, c-format
 msgid "Item URI"
-msgstr "Τεκμήρια: "
+msgstr "URI τεκμηρίου"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:622
 #, c-format
@@ -6443,9 +6451,9 @@ msgid "Limit to: "
 msgstr "Περιορισμός σε: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "Link"
-msgstr "Σύνδεσμοι"
+msgstr "Σύνδεσμος"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1273
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1275
@@ -6614,14 +6622,14 @@ msgid "Log in with Google"
 msgstr "Σύνδεση με λογαριασμό Google"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "Log out"
-msgstr "%s Αποσύνδεση"
+msgstr "Αποσύνδεση"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "Log out and try again with a different user."
-msgstr "και προσπαθήστε ξανά με διαφορετικό χρήστη"
+msgstr "Αποσυνδεθείτε και προσπαθήστε ξανά με διαφορετικό όνομα χρήστη."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:187
 #, c-format
@@ -6917,7 +6925,7 @@ msgstr "Μουσική ηχογράφηση"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:16
 #, c-format
 msgid "NT"
-msgstr ""
+msgstr "ΣΟ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:30
 #, c-format
@@ -6927,7 +6935,7 @@ msgstr "Όνομα"
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:16
 msgid "Narrower Term"
-msgstr ""
+msgstr "Στενότερος Όρος"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:67
@@ -7736,9 +7744,9 @@ msgid "Please choose a download format"
 msgstr "Παρακαλούμε επιλέξτε μια μορφή μεταφόρτωσης"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:100
-#, fuzzy, c-format
+#, c-format
 msgid "Please choose against which one you would like to authenticate: "
-msgstr "%s %s επιλέξτε σε ποιο επιθυμείτε να γίνει πιστοποίηση: "
+msgstr "Επιλέξτε σε ποιο επιθυμείτε να γίνει πιστοποίηση: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:51
 #, c-format
@@ -7746,9 +7754,9 @@ msgid "Please choose your privacy rule:"
 msgstr "Παρακαλώ επιλέξτε τον κανόνα ιδιωτικότητάς σας:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:96
-#, fuzzy, c-format
+#, c-format
 msgid "Please click here to log in."
-msgstr "κάντε κλικ εδώ για να συνδεθείτε"
+msgstr "Επιλέξτε εδώ για να συνδεθείτε."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:111
 #, c-format
@@ -8044,7 +8052,7 @@ msgstr "Ιδιωτικές Λίστες"
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:36
 msgid "Private lists shared with me"
-msgstr "Ιδιωτικές λίστες κοινόχρηστες σε εμένα"
+msgstr "Ιδιωτικές λίστες κοινοποιημένες σε εμένα"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
@@ -8093,13 +8101,17 @@ msgstr "Τόπος έκδοσης:"
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:42
 #, c-format
 msgid "Publication/Copyright date: Newest to oldest"
-msgstr "Ημερομηνία έκδοσης/copyright: Νεότερη προς παλαιότερη"
+msgstr ""
+"Ημερομηνία έκδοσης/Κατοχύρωσης πνευματικής ιδιοκτησίας: Νεότερη προς "
+"παλαιότερη"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:45
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:47
 #, c-format
 msgid "Publication/Copyright date: Oldest to newest"
-msgstr "Ημερομηνία έκδοσης/copyright: Παλαιότερη προς νεότερη"
+msgstr ""
+"Ημερομηνία έκδοσης/Κατοχύρωσης πνευματικής ιδιοκτησίας: Παλαιότερη προς "
+"νεότερη"
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:383
@@ -8180,7 +8192,7 @@ msgstr "RSS αυτόματες ενημερώσεις για δημόσια λί
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
 #, c-format
 msgid "RT"
-msgstr ""
+msgstr "ΕΟ"
 
 #. INPUT type=submit name=rate_button
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:490
@@ -8221,9 +8233,9 @@ msgid "Recent comments "
 msgstr "Πρόσφατα σχόλια"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:87
-#, fuzzy, c-format
+#, c-format
 msgid "Record URL"
-msgstr "ΠαρουσίασηΕγγραφών"
+msgstr "URL εγγραφής"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:157
 #, c-format
@@ -8274,9 +8286,8 @@ msgstr "Κανονικό κείμενο"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
-#, fuzzy
 msgid "Related Term"
-msgstr "Σχετικά"
+msgstr "Σχετικός Όρος"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
 #, c-format
@@ -8347,7 +8358,7 @@ msgstr "Αφαίρεση επιλεγμένων εγγραφών"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:202
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:706
 msgid "Remove share"
-msgstr "Αφαίρεση δημόσιας χρήσης"
+msgstr "Αφαίρεση κοινοποίησης"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:264
@@ -8383,7 +8394,7 @@ msgstr "Ανανέωση επιλεγμένων"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:808
 #, c-format
 msgid "RenewLoan"
-msgstr "ΑνανέωσηΔανεισμού"
+msgstr "Ανανέωση Δανεισμού"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:261
 #, c-format
@@ -8657,9 +8668,9 @@ msgid "Save to another list"
 msgstr "Αποθήκευση σε μία άλλη λίστα"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:14
-#, fuzzy, c-format
+#, c-format
 msgid "Save to your lists"
-msgstr "Αποθήκευση στις λίστες σας "
+msgstr "Αποθήκευση στις λίστες σας"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
 #, c-format
@@ -9001,42 +9012,42 @@ msgstr "Ενημερωμένες ρυθμίσεις"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1112
 #, c-format
 msgid "Share"
-msgstr "Μοιράσου"
+msgstr "Κοινοποίηση"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:16
 #, c-format
 msgid "Share a list"
-msgstr "Διαθέστε μια λίστα σε κοινή χρήση "
+msgstr "Κοινοποίηση μιας λίστας"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:30
 #, c-format
 msgid "Share a list with another patron"
-msgstr "Διαθέστε μια λίστα σε έναν άλλο χρήστη"
+msgstr "Κοινοποίηση μιας λίστας σε έναν άλλο χρήστη"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
 msgid "Share by email"
-msgstr "Μοιράσου με email"
+msgstr "Κοινοποίηση με email"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:194
 #, c-format
 msgid "Share list"
-msgstr "Η λίστα σε κοινή χρήση"
+msgstr "Κοινοποίηση λίστας"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
 msgid "Share on Delicious"
-msgstr "Μοιράσου στο Delicious"
+msgstr "Κοινοποίηση στο Delicious"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1113
 msgid "Share on Facebook"
-msgstr "Μοιράσου στο Facebook"
+msgstr "Κοινοποίηση στο Facebook"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1114
 msgid "Share on LinkedIn"
-msgstr "Μοιράσου στο LinkedIn"
+msgstr "Κοινοποίηση στο LinkedIn"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:61
 #, c-format
@@ -9216,13 +9227,13 @@ msgstr ""
 "Λυπούμαστε, δεν είναι ενεργοποιημένες οι επισημειώσεις σε αυτό το σύστημα."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, the CAS login also failed. If you have a local login you may use that "
 "below."
 msgstr ""
-"Λυπούμαστε, η CAS σύνδεση απέτυχε, αν έχετε τοπικό λογαριασμό μπορείτε να "
-"τον χρησιμοποιήσετε παρακάτω. "
+"Λυπούμαστε, η CAS σύνδεση απέτυχε. Αν έχετε τοπικό λογαριασμό μπορείτε να "
+"τον χρησιμοποιήσετε παρακάτω."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:112
 #, c-format
@@ -9275,13 +9286,12 @@ msgid "Sorry, your Google login failed. "
 msgstr "Λυπούμαστε, η σύνδεση με το Google απέτυχε."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:67
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, your Shibboleth identity does not match a valid library identity."
 msgstr ""
 "Λυπούμαστε, η Shibboleth ταυτότητα δεν αντιστοίχισε μια έγκυρη ταυτότητα "
-"βιβλιοθήκης. Αν έχετε τοπικό λογαριασμό μπορείτε να τον χρησιμοποιήσετε "
-"παρακάτω. "
+"βιβλιοθήκης."
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:309
 #, c-format
@@ -9452,7 +9462,7 @@ msgstr "Υποβολή της πρότασής σας"
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:22
 #, c-format
 msgid "Subscribe to a subscription alert"
-msgstr "Εγγραφείτε σε μια υπηρεσία ενημέρωσης για τις συνδρομές"
+msgstr "Εγγραφείτε σε μια υπηρεσία ενημέρωσης συνδρομών"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:144
@@ -9831,8 +9841,8 @@ msgstr ""
 "Η τρέχουσα συνδρομή ξεκίνησε στις %s και εκδίδεται %s δύο φορές την ημέρα %s "
 "%s κάθε μέρα %s %s τρεις φορές την εβδομάδα %s %s κάθε εβδομάδα %s %s κάθε 2 "
 "εβδομάδες %s %s κάθε 3 εβδομάδες %s %s κάθε μήνα %s %s κάθε 2 μήνες %s %s "
-"κάθε 4μήνες %s %s κάθε 6 μήνες %s %s κάθε χρόνο %s %s κάθε 2 χρόνια %s %s "
-"ακανόνιστα %s %s τη Δευτέρα %s %s την Τρίτη %s %s τηνΤετάρτη %s %s την "
+"κάθε 4 μήνες %s %s 2 φορές τον χρόνο %s %s κάθε χρόνο %s %s κάθε 2 χρόνια %s "
+"%s ακανόνιστα %s %s τη Δευτέρα %s %s την Τρίτη %s %s την Τετάρτη %s %s την "
 "Πέμπτη %s %s την Παρασκευή %s %s το Σάββατο %s %s την Κυριακή %s για %s%s "
 "τεύχη%s %s%s εβδομάδες%s %s%s μήνες%s "
 
@@ -9848,14 +9858,14 @@ msgstr ""
 "προβλήματος ενημερώνοντας τη Βιβλιοθήκη σας γι' αυτό το σφάλμα. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:78
-#, fuzzy, c-format
+#, c-format
 msgid "The entered card number is already in use."
-msgstr "Το τεκμήριο βρίσκεται ήδη στο καρότσι σας"
+msgstr "Ο αριθμός της κάρτας είναι ήδη σε χρήση."
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "The entered card number is the wrong length."
-msgstr "έχει λάθος μήκος."
+msgstr "Ο αριθμός της κάρτας έχει λάθος μέγεθος."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:38
 #, c-format
@@ -10004,9 +10014,9 @@ msgstr ""
 
 #. %1$s:  message_value 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:41
-#, fuzzy, c-format
+#, c-format
 msgid "The transaction id '%s' for this payment is invalid."
-msgstr "για αυτή την πληρωμή δεν είναι έγκυρος."
+msgstr "Το id της συναλλαγής '%s' για αυτή την πληρωμή δεν είναι έγκυρο."
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:173
 #, c-format
@@ -10316,7 +10326,7 @@ msgstr ""
 "του Koha."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:189
-#, fuzzy, c-format
+#, c-format
 msgid "To report this error, you can email the Koha Administrator."
 msgstr ""
 "Για να δηλώσετε αυτό το σφάλμα, παρακαλώ επικοινωνήστε με τον Διαχειριστή "
@@ -10399,7 +10409,7 @@ msgstr "Τύπος:"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
 #, c-format
 msgid "UF"
-msgstr ""
+msgstr "ΧΓ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:203
 #, c-format
@@ -10501,7 +10511,7 @@ msgstr ""
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
 msgid "Used For"
-msgstr ""
+msgstr "Χρησιμοποιείται για"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:64
 #, c-format
@@ -10519,6 +10529,8 @@ msgid ""
 "Using this account is not recommended because some parts of Koha will not "
 "function as expected. Instead, please log in with a different account. "
 msgstr ""
+"Δεν προτείνεται η χρήση αυτού του λογαριασμού καθώς μερικά μέρη του Koha δεν "
+"θα λειτουργούν όπως αναμένεται. Συνδεθείτε με διαφορετικό λογαριασμό. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:54
 #, c-format
@@ -10532,15 +10544,14 @@ msgstr ""
 "επικοινωνήστε με τη βιβλιοθήκη."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
 "If your account shows to be clear, please contact the library."
 msgstr ""
-"Συνήθως ο λόγος για τον οποίο ένας λογαριασμός μπαίνει σε κατάσταση "
-"αδράνειας είναι οφειλές που εκκρεμούν για εκπρόθεσμες επιστροφές ή "
-"αποζημιώσεις για φθορές. Αν δεν έχετε τέτοιου είδους οφειλές, παρακαλώ "
-"επικοινωνήστε με τη βιβλιοθήκη."
+"Συνήθως ο λόγος για τον οποίο ένας λογαριασμός αδρανοποιείται είναι οφειλές "
+"που εκκρεμούν για εκπρόθεσμες επιστροφές ή αποζημιώσεις για φθορές. Αν δεν "
+"έχετε τέτοιου είδους οφειλές, παρακαλώ επικοινωνήστε με τη βιβλιοθήκη."
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
 #, c-format
@@ -10603,9 +10614,9 @@ msgid "Warning"
 msgstr "Προειδοποίηση"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "Warning:"
-msgstr "Προειδοποίηση"
+msgstr "Προσοχή:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -10820,13 +10831,13 @@ msgid "You can't reset your password."
 msgstr "Δεν μπορείτε να κάνετε επαναφορά του κωδικού σας."
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You cannot be discharged, you have checked out items. Please return items "
 "before asking for a discharge."
 msgstr ""
-"Δεν μπορείτε να απαλλαγείτε, έχετε δανεισμούς. Παρακαλούμε επιστρέψτε τα "
-"τεκμήρια πριν ζητήσετε απαλλαγή. "
+"Δεν μπορείτε να απαλλαγείτε, έχετε δανεισμένα τεκμήρια. Πρέπει να γίνει "
+"πρώτα επιστροφή των τεκμηρίων για να μπορέσετε να ζητήσετε απαλλαγή."
 
 #. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:51
@@ -10836,12 +10847,11 @@ msgstr "Δεν μπορείτε να ανανεώσετε ξανά αυτό το
 
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
-#, fuzzy, c-format
+#, c-format
 msgid "You cannot renew your books online. Reason: %sYour fines exceed "
 msgstr ""
-"σε πρόστιμα, δεν μπορείτε να ανανεώσετε τα βιβλία σας ηλεκτρονικά. "
-"Παρακαλούμε τακτοποιήστε τα πρόστιμά σας προκειμένου να ανανεώσετε τα βιβλία "
-"σας."
+"Δεν μπορείτε να ανανεώσετε τα βιβλία σας ηλεκτρονικά. Αιτία: %sΥπέρβαση "
+"ορίου προστίμου "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:40
 #, c-format
@@ -10982,9 +10992,9 @@ msgstr ""
 "δεν είναι πλέον διαθέσιμο."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:180
-#, fuzzy, c-format
+#, c-format
 msgid "You may register here."
-msgstr "εγγραφή"
+msgstr "Μπορείτε να εγγραφείτε εδώ."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -11052,8 +11062,8 @@ msgid ""
 "You will receive an email notification if someone accepts your share within "
 "two weeks."
 msgstr ""
-"Θα λάβετε ένα ενημερωτικό email όταν κάποιος αποδεχθεί το διαμοιρασμό σας "
-"μέσα σε δύο εβδομάδες. "
+"Θα λάβετε ένα ενημερωτικό ηλεκτρονικό μήνυμα όταν κάποιος αποδεχθεί την "
+"κοινοποίησή σας εντός δυο εβδομάδων."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1343
@@ -11097,7 +11107,7 @@ msgstr "Ο λογαριασμός σας έχει λήξει. %s "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
 #, c-format
 msgid "Your account is frozen because it has been discharged. "
-msgstr ""
+msgstr "Ο λογαριασμός σας έχει αδρανοποιηθεί καθώς έχετε απαλλαγεί. "
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:3
 #, c-format
@@ -11214,9 +11224,9 @@ msgid "Your library card has been marked as lost or stolen."
 msgstr "Η κάρτα βιβλιοθήκης σας έχει χαρακτηριστεί ως χαμένη ή κλεμμένη."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
-#, fuzzy, c-format
+#, c-format
 msgid "Your library card has been marked as lost or stolen. "
-msgstr "Η κάρτα βιβλιοθήκης σας έχει χαρακτηριστεί ως χαμένη ή κλεμμένη."
+msgstr "Η κάρτα βιβλιοθήκης σας έχει χαρακτηριστεί ως χαμένη ή κλεμμένη. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:101
 #, c-format
@@ -11256,7 +11266,7 @@ msgstr "Οι λίστες σας:"
 #. %6$s:  END 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your loan renewal failed because of the following reason(s): %s %s Your "
 "account has expired. Please contact the library for more information. %s You "
@@ -11264,10 +11274,12 @@ msgid ""
 "soon after the checkout date for this item to be renewed. %s This item is on "
 "hold for another patron. %s %s "
 msgstr ""
-"Η ανανέωση δανεισμού σας δεν έγινε για τους παρακάτω λόγους: %s %s Ο "
-"λογαριασμός σας έχει λήξει. Παρακαλούμε επικοινωνήστε με τη Βιβλιοθήκη για "
-"περισσότερες πληροφορίες. %s Έχετε εξαντλήσει το όριο ανανεώσεών σας σε αυτό "
-"το τεκμήριο. %s Το τεκμήριο είναι σε κράτηση για άλλο χρήστη. %s %s "
+"Η ανανέωση δανεισμού σας δεν έγινε για τον ακόλουθο λόγο(υς): %s %s Ο "
+"λογαριασμός σας έχει λήξει. Επικοινωνήστε με τη βιβλιοθήκη για περισσότερες "
+"πληροφορίες. %s Έχετε εξαντλήσει το όριο ανανεώσεών σας σε αυτό το τεκμήριο. "
+"%s Είναι πολύ σύντομο το χρονικό διάστημα μετά τον δανεισμό ώστε να γίνει "
+"ανανέωση του τεκμηρίου. %s Το τεκμήριο είναι σε κράτηση για άλλο χρήστη. %s "
+"%s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
@@ -11466,15 +11478,15 @@ msgstr ""
 "type=seefro.type %%] "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
 "Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
 "defined('branchcode') && hidden.defined('categorycode') %%] "
 msgstr ""
-"%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
-"hidden.defined('mobile') && hidden.defined('email') && hidden."
-"defined('emailpro') && hidden.defined('fax') %%] "
+"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
+"Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
+"defined('branchcode') && hidden.defined('categorycode') %%] "
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:1
 #, c-format
@@ -11489,9 +11501,8 @@ msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#, fuzzy
 msgid "a an the"
-msgstr "a an the"
+msgstr "ένα"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -12028,12 +12039,13 @@ msgstr "εμφάνιση_δανεισμών"
 #. %11$s:  END 
 #. %12$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:636
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
 "of item type '%s' %s Pending %s %s %s "
 msgstr ""
-"από %s %s Ανεστάλη %s μέχρι %s %s %s %s Εν αναμονή για επόμενο διαθέσιμο"
+"από %s %s Ανεστάλη %s μέχρι %s %s %s %s Εν αναμονή για το επόμενο διαθέσιμο "
+"τεκμήριο '%s' %s Αναμονή %s %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:34
 #, c-format

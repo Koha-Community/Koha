@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14\n"
-"POT-Creation-Date: 2016-10-20 14:28-0300\n"
-"PO-Revision-Date: 2016-08-26 10:49+0000\n"
+"POT-Creation-Date: 2016-12-15 13:39-0300\n"
+"PO-Revision-Date: 2016-12-27 09:00+0000\n"
 "Last-Translator: KnowledgeWare <massoudalshareef@kwareict.com>\n"
 "Language-Team: za\n"
 "Language: ar\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1472208558.000000\n"
+"X-POOTLE-MTIME: 1482829217.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -133,9 +133,9 @@ msgstr "%s %s %s %s مادة واحدة في الطلبية. %s %s مادة في
 #. %3$s:  IF ( RESERVE.is_in_transit ) 
 #. %4$s:  SET transfer = RESERVE.item.get_transfer 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:631
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s Item in transit from "
-msgstr "%s %s %s المادة في النقل من "
+msgstr "%s %s %s %s المادة في النقل من "
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
@@ -167,6 +167,8 @@ msgid ""
 "%s %s %s %s is overdue %sYour copy of %s (barcode %s) is overdue %s %s is "
 "due %sYour copy of %s (barcode %s) is due back at the library today %s "
 msgstr ""
+"%s %s %s %s نسخة مستحقة %s نسختك %s (باركود %s) مستحقة الارجاع %s %s منتهية  "
+"%s نسختك %s (باركود %s) مستحقة الارجاع للمكتبة اليوم %s"
 
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
@@ -481,6 +483,7 @@ msgstr ""
 #. %28$s:  ACCOUNT_LINE.title 
 #. %29$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:105
+#, c-format
 #, fuzzy, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
@@ -490,10 +493,10 @@ msgid ""
 "%sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 "%s %sالدفع،شكرا %sالدفع، شكرا (نقدا بواسطة SIP2) %sالدفع،شكرا (فيزا "
-"بواسطةSIP2) %sالدفع،شكرا (بطاقة ائتمان بواسطة SIP2) %sبطاقة جديدة %sالغرامة "
-"%s رسم إدارة الحساب %sمتوع %sمادة مفقودة %sشطب %sالغرامة المتراكمة %sرسم "
-"الإيجار %sمعفي %sرد رسم مادة مفقودة %sالدفع %sشطب %sائتمان %sائتمان %s%s %s "
-"%s, %s%s %s(%s)%s"
+"بواسطةSIP2) %sالدفع،شكرا (بطاقة ائتمان بواسطة SIP2) %sبطاقة جديدة %sالغرامة %"
+"s رسم إدارة الحساب %sمتوع %sمادة مفقودة %sشطب %sالغرامة المتراكمة %sرسم "
+"الإيجار %sمعفي %sرد رسم مادة مفقودة %sالدفع %sشطب %sائتمان %sائتمان %s%s %s %"
+"s, %s%s %s(%s)%s"
 
 #. %1$s:  IF s.category == PRIVATE 
 #. %2$s:  IF s.is_shared 
@@ -778,9 +781,9 @@ msgstr "%s غير مسموح"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:266
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable "
-msgstr "%s تجديد تلقائي"
+msgstr "%s غير قابلة للتجديد"
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
@@ -2065,9 +2068,9 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "%s0 biblios%s "
-msgstr "%s التسجيلات الببليوغرافية"
+msgstr "%s التسجيلات الببليوغرافية 0 %s"
 
 #. %1$s:  IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch 
@@ -2227,7 +2230,7 @@ msgstr "%sالاشتراك في تنبيه الاشتراك %sإلغاء الا�
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:49
 #, c-format
 msgid "%sThis authority is not used in any records.%s "
-msgstr ""
+msgstr "هذا %s الاستناد غير مستدم في أي من التسجيلات. %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -3043,7 +3046,7 @@ msgid "(modified on %s)"
 msgstr "(معدل في %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:268
-#, fuzzy, c-format
+#, c-format
 msgid "(on hold)"
 msgstr "(في الحجز)"
 
@@ -4427,9 +4430,8 @@ msgstr "التعليق على "
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
-#, fuzzy
 msgid "Confirm hold"
-msgstr "أكد  كلمة المرور"
+msgstr "أكّد  الحجز"
 
 #. %1$s:  USER_INFO.firstname 
 #. %2$s:  USER_INFO.surname 
@@ -4914,9 +4916,9 @@ msgid "Download"
 msgstr "تنزيل"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:314
-#, fuzzy, c-format
+#, c-format
 msgid "Download as iCal/.ics file"
-msgstr "تنزيل القائمة"
+msgstr "قم بتنزيل الملف بصيغة iCal/.ics "
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:12
 #, c-format
@@ -8574,7 +8576,7 @@ msgid "Save to another list"
 msgstr "الحفظ في قائمة أخرى"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:14
-#, fuzzy, c-format
+#, c-format
 msgid "Save to your lists"
 msgstr "إحفظ إلى قوائمك "
 
@@ -10940,7 +10942,7 @@ msgstr "انتهت صلاحية حسابك. %s "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
 #, c-format
 msgid "Your account is frozen because it has been discharged. "
-msgstr ""
+msgstr "هذا الحساب مجمّد لكون تم تصفية الالتزامات عليه."
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:3
 #, c-format
@@ -11096,6 +11098,7 @@ msgstr "قوائمك"
 #. %6$s:  END 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
+#, c-format
 #, fuzzy, c-format
 msgid ""
 "Your loan renewal failed because of the following reason(s): %s %s Your "
@@ -11106,8 +11109,8 @@ msgid ""
 msgstr ""
 "لقد فشلت عملية تجديد إعارتك للسبب التالي (للأسباب التالية):  %s %s لقد انتهت "
 "صلاحية حسابك. يرجى الاتصال بالمكتبة للمزيد من المعلومات. %s  لقد قمت بتجديد "
-"هذه المادة للعدد الأقصى من مرات التجديد المسموح بها. %s  هذه المادة في الحجز "
-"لمستفيد آخر. %s %s "
+"هذه المادة للحد الأقصى لعدد مرات التجديد المسموح بها. %s  هذه المادة في "
+"الحجز لمستفيد آخر. %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
@@ -11305,15 +11308,15 @@ msgstr ""
 "type=seefro.type %%] "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
 "Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
 "defined('branchcode') && hidden.defined('categorycode') %%] "
 msgstr ""
-"%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
-"hidden.defined('mobile') && hidden.defined('email') && hidden."
-"defined('emailpro') && hidden.defined('fax') %%] "
+"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && "
+"Koha.Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && "
+"hidden.defined('branchcode') && hidden.defined('categorycode') %%]"
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:1
 #, c-format

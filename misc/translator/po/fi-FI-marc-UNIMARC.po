@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-10-20 14:38-0300\n"
-"PO-Revision-Date: 2016-01-12 07:50+0000\n"
-"Last-Translator: Päivi <paivi.knuutinen@jns.fi>\n"
+"POT-Creation-Date: 2016-12-15 14:19-0300\n"
+"PO-Revision-Date: 2016-11-16 14:12+0000\n"
+"Last-Translator: Koha-Suomi <koha.kirjasto@ouka.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1452585015.000000\n"
+"X-POOTLE-MTIME: 1479305529.000000\n"
 
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:48
@@ -1002,6 +1002,14 @@ msgid ""
 "@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
 "\"/> </xsl:for-each> "
 msgstr ""
+"<xsl:variable name=\"title\" select=\"marc:subfield[@code='a']\"/> <xsl:"
+"variable name=\"ntitle\" select=\"translate($title, '&#x0098;&#x009C;&#xC29C;"
+"&#xC29B;&#xC298;&#xC288;&#xC289;','')\"/> <xsl:value-of select=\"$ntitle\" /"
+"> <xsl:if test=\"marc:subfield[@code='e']\"> <xsl:text> : </xsl:text> <xsl:"
+"for-each select=\"marc:subfield[@code='e']\"> <xsl:value-of select=\".\"/> </"
+"xsl:for-each> </xsl:if> <xsl:for-each select=\"marc:subfield[@code='h' or "
+"@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
+"\"/> </xsl:for-each> "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:19
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:21
@@ -1143,7 +1151,7 @@ msgstr "Kaikki"
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:166
 #, c-format
 msgid "Any regularity"
-msgstr "Kaikki "
+msgstr "Kaikki"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:135
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:129
@@ -1334,9 +1342,9 @@ msgid "Biography:"
 msgstr "Biography:"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:58
-#, fuzzy, c-format
+#, c-format
 msgid "Biography: "
-msgstr "Biography:"
+msgstr "Biografia: "
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:152
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:146
@@ -1688,9 +1696,9 @@ msgid "Content"
 msgstr "Sisältö"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:91
-#, fuzzy, c-format
+#, c-format
 msgid "Content: "
-msgstr "Sisältö"
+msgstr "Sisältö: "
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:229
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:277
@@ -2307,9 +2315,9 @@ msgid "Hemisphere:"
 msgstr "Hemisphere"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:3
-#, fuzzy, c-format
+#, c-format
 msgid "Hide coded information filters"
-msgstr "Coded information filters"
+msgstr "Piilota koodatut tietosuodattimet"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:20
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:22
@@ -2423,9 +2431,9 @@ msgid "Illustration codes 4:"
 msgstr "Illustration codes 4:"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:69
-#, fuzzy, c-format
+#, c-format
 msgid "Illustration: "
-msgstr "Kuvitus"
+msgstr "Kuvitus: "
 
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:266
 #, c-format
@@ -2653,9 +2661,9 @@ msgid "Literary genre"
 msgstr "Literary genre"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:41
-#, fuzzy, c-format
+#, c-format
 msgid "Literary genre: "
-msgstr "Literary genre"
+msgstr "Kirjallisuuden genre: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:10
 #, c-format
@@ -3260,9 +3268,9 @@ msgid "Periodicity"
 msgstr "Ilmestymistiheys"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:146
-#, fuzzy, c-format
+#, c-format
 msgid "Periodicity: "
-msgstr "Ilmestymistiheys"
+msgstr "Jaksollisuus: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:814
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:816
@@ -3293,9 +3301,9 @@ msgid "Physical presentation"
 msgstr "Fyysinen kuvailu:"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:24
-#, fuzzy, c-format
+#, c-format
 msgid "Physical presentation: "
-msgstr "Fyysinen kuvailu:"
+msgstr "Fyysinen kuvailu: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:260
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:262
@@ -3495,9 +3503,9 @@ msgid "Regularity"
 msgstr "Säännöllisyys"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:170
-#, fuzzy, c-format
+#, c-format
 msgid "Regularity: "
-msgstr "Säännöllisyys"
+msgstr "Säännöllisyys: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:71
 #, c-format
@@ -3669,9 +3677,9 @@ msgid "Serial type"
 msgstr "Kausijulkaisulaji"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:133
-#, fuzzy, c-format
+#, c-format
 msgid "Serial type: "
-msgstr "Kausijulkaisulaji"
+msgstr "Kausijulkaisun tyyppi: "
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:131
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:125
@@ -3692,9 +3700,9 @@ msgid "Set Level"
 msgstr "Aseta taso"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:2
-#, fuzzy, c-format
+#, c-format
 msgid "Show coded information filters"
-msgstr "Coded information filters"
+msgstr "Näytä koodatut tietosuodattimet"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124g.tt:50
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124g.tt:52
@@ -4648,9 +4656,9 @@ msgid "Video types"
 msgstr "Videolajit"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:120
-#, fuzzy, c-format
+#, c-format
 msgid "Video types: "
-msgstr "Videolajit"
+msgstr "Videotyypit: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:980
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:982
@@ -9743,55 +9751,55 @@ msgstr "o - numeric table"
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:148
 #, c-format
 msgid "of accompanying material, "
-msgstr "of accompanying material,"
+msgstr "liiteaineiston, "
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:96
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:144
 #, c-format
 msgid "of contents page, "
-msgstr "Sisällön koko"
+msgstr "sivun sisältö, "
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:93
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:141
 #, c-format
 msgid "of intermediate text, "
-msgstr "of intermediate text,"
+msgstr "välittävä teksti, "
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:99
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:147
 #, c-format
 msgid "of libretto, "
-msgstr "of libretto,"
+msgstr "libretosta, "
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:94
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:142
 #, c-format
 msgid "of original work, "
-msgstr "of original work,"
+msgstr "alkuperäisestä teoksesta, "
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:101
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:149
 #, c-format
 msgid "of subtitles, "
-msgstr "of subtitles,"
+msgstr "alaotsikoista, "
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:95
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:143
 #, c-format
 msgid "of summary, "
-msgstr "of summary,"
+msgstr "yhteenvedosta, "
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:97
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:145
 #, c-format
 msgid "of title page, "
-msgstr "of title page,"
+msgstr "nimiösivusta, "
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:98
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:146
 #, c-format
 msgid "of title proper, "
-msgstr "of title proper,"
+msgstr "täydellisestä nimekkeestä, "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:378
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:380
@@ -11069,7 +11077,7 @@ msgstr "regular"
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:21
 #, c-format
 msgid "regular print"
-msgstr "tavanomainen painotuote "
+msgstr "tavanomainen painotuote"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:79
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:81

@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: uk-UA-i-staff-t-prog-v-3002000\n"
-"POT-Creation-Date: 2016-10-20 15:11-0300\n"
-"PO-Revision-Date: 2016-04-28 17:15+0000\n"
-"Last-Translator: Synapse <synapse.ova@gmail.com>\n"
+"POT-Creation-Date: 2016-12-15 16:01-0300\n"
+"PO-Revision-Date: 2016-11-21 15:04+0000\n"
+"Last-Translator: Serhij <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1461863740.000000\n"
+"X-POOTLE-MTIME: 1479740676.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -455,14 +455,13 @@ msgstr "%s %s, ISSN %s %s %s; %s %s "
 #. %10$s:  CASE 'isbd' 
 #. %11$s:  END 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:43
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %sBIBTEX %sEndNote %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC (Unicode/"
 "UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) %sRIS %sISBD %s "
 msgstr ""
-"%s %sBibTeX %sДублінське ядро (XML) %sEndNote %sMARCXML %sMARC (не Юнікод/"
-"MARC-8) %sMARC (Юнікод/UTF-8) %sMARC (Юнікод/UTF-8, стандартний) %sMODS "
-"(XML) %sRIS %sISBD %s "
+"%s %sBibTeX %sEndNote %sMARCXML %sMARC (не Юнікод/MARC-8) %sMARC (Юнікод/"
+"UTF-8) %sMARC (Юнікод/UTF-8, стандартний) %sMODS (XML) %sRIS %sISBD %s "
 
 #. %1$s:  SWITCH ACCOUNT_LINE.accounttype 
 #. %2$s:  CASE 'Pay' 
@@ -754,9 +753,9 @@ msgstr "Видано примірників: %s"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:129
-#, fuzzy, c-format
+#, c-format
 msgid "%s Library card number: "
-msgstr "Будь ласка, введіть номер Вашого квитка:"
+msgstr "%s Номер читацького квитка: "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:114
@@ -1110,6 +1109,8 @@ msgid ""
 "%s [%% INCLUDE \"openlibrary-readapi.inc\" bib = { normalized_isbn => "
 "normalized_isbn, lccn => lccn, normalized_oclc => normalized_oclc } %%] "
 msgstr ""
+"%s [%% INCLUDE \"openlibrary-readapi.inc\" bib = { normalized_isbn => "
+"normalized_isbn, lccn => lccn, normalized_oclc => normalized_oclc } %%] "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:551
@@ -1282,7 +1283,7 @@ msgstr "%s %s %s%s%s Без заголовку %s %s %s%s "
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:55
 #, c-format
 msgid "%s system-wide library news. "
-msgstr ""
+msgstr "%s загально-бібліотечні новини. "
 
 #. %1$s:  ELSE 
 #. %2$s:  heading 
@@ -1735,11 +1736,11 @@ msgstr ""
 #. %9$s:  subtitl.subfield |html 
 #. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:27
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
 msgstr ""
-"%s %s %s%s%sКоха %s &rsaquo; Електронний каталог &rsaquo; Зображення для: "
-"„%s“ %s %s "
+"%s%s%s Коха %s &rsaquo; Електронний каталог &rsaquo; Подробиці щодо „%s“%s%s,"
+"%s %s%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -2208,14 +2209,16 @@ msgstr "%s Зібрання %s Тип одиниці %s"
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%s Очікується %s %s Надійшов %s %s Затримується %s %s Відсутній %s %s Не "
-"доступно %s %s Вилучено %s %s Є претензія %s %s Зупинено %s "
+"%s Очікується %s %s Надійшов %s %s Затримується %s %s Відсутній %s %s "
+"Відсутній (ніколи не отримувався) %s %s Відсутній (продано) %s %s Відсутній "
+"(пошкоджений) %s %s Відсутній (пошкоджений) %s %s Не видається %s %s "
+"Вилучено %s %s Є претензія %s %s Зупинено %s "
 
 #. %1$s:  IF (latestserial.status1 ) 
 #. %2$s:  END 
@@ -2242,14 +2245,16 @@ msgstr ""
 #. %23$s:  IF (latestserial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:834
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
 "%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%s Очікується %s %s Надійшов %s %s Затримується %s %s Відсутній %s %s Не "
-"доступно %s %s Вилучено %s %s Є претензія %s %s Зупинено %s "
+"%s Очікується %s %s Надійшов %s %s Затримується %s %s Відсутній %s %s "
+"Відсутній (ніколи не отримувався) %s %s Відсутній (продано) %s %s Відсутній "
+"(пошкоджений) %s %s Відсутній (пошкоджений) %s %s Не видається %s %s "
+"Вилучено %s %s Є претензія %s %s Зупинено %s "
 
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
 #. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
@@ -3247,9 +3252,9 @@ msgstr "Прострочення (%s)"
 #. %1$s:  koha_new.newdate 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:48
-#, fuzzy, c-format
+#, c-format
 msgid "(published on %s%s by "
-msgstr "(опубліковано %s)"
+msgstr "(оприлюднено %s%s, "
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search 
@@ -3425,13 +3430,13 @@ msgstr ""
 #. %4$s:  HTML5MediaSet.typeblock 
 #. %5$s:  HTML5MediaParent 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:991
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
 "browser.] "
 msgstr ""
-"<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [тег «%s» не "
-"поддерживается вашим браузером.] "
+"<%s controls preload=none> <%s src=\"%s\"%s /> [Теґ „%s“ не підтримується "
+"Вашим браузером.] "
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:32
 #, fuzzy, c-format
@@ -3980,7 +3985,7 @@ msgstr "Авторитетне джерело"
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:14
 #, c-format
 msgid "Authority search"
-msgstr "Шукаємо за авторитетним джерелом"
+msgstr "Пошук серед авторитетних джерел"
 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:32
 #, c-format
@@ -4017,9 +4022,9 @@ msgstr "Доступність:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:82
-#, fuzzy, c-format
+#, c-format
 msgid "Available %s"
-msgstr "Доступні випуски"
+msgstr "Доступно %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:122
 #, c-format
@@ -4315,9 +4320,9 @@ msgstr "Неможливо встановити резервування"
 
 # Можливе значення змінної id_typeфункції LookupPatron з ILS-DI
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:48
-#, fuzzy, c-format
+#, c-format
 msgid "Card number:"
-msgstr "Номер читацького квитка"
+msgstr "Номер читацького квитка: "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:24
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
@@ -4402,9 +4407,9 @@ msgstr "Видано"
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:31
-#, fuzzy, c-format
+#, c-format
 msgid "Checked out to %s %s %s(%s)%s"
-msgstr "Видано (%s)"
+msgstr "Видано » %s %s %s(%s)%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:29
 #, c-format
@@ -4567,9 +4572,8 @@ msgstr "Зачинити вікно"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:23
-#, fuzzy
 msgid "Collect items you are interested in"
-msgstr "Виберіть одиниці, які Ви хочете перевірити"
+msgstr "Збирайте біб-записи, у яких Ви зацікавлені"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:127
@@ -4829,9 +4833,9 @@ msgid "Current session"
 msgstr "Поточний сеанс"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:27
-#, fuzzy, c-format
+#, c-format
 msgid "Currently in local use"
-msgstr "Поточний сеанс"
+msgstr "На даний час в місцевому використанні"
 
 #. %1$s:  item.firstname 
 #. %2$s:  item.surname 
@@ -4839,9 +4843,9 @@ msgstr "Поточний сеанс"
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:25
-#, fuzzy, c-format
+#, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
-msgstr "Підтвердіть резервування для: %s %s %s (%s) %s "
+msgstr "На даний час в місцевому використанні » %s %s %s (%s) %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:75
 #, c-format
@@ -5038,9 +5042,9 @@ msgstr "Подробиці щодо „%s“"
 #. %5$s:  subtitl.subfield |html 
 #. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
-#, fuzzy, c-format
+#, c-format
 msgid "Details for: %s%s%s,%s %s%s"
-msgstr "Подробиці щодо „%s“%s, %s%s"
+msgstr "Подробиці щодо „%s“%s%s,%s %s%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:182
 #, c-format
@@ -5158,7 +5162,7 @@ msgstr "Звантажити список "
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:40
 #, c-format
 msgid "Dublin Core"
-msgstr ""
+msgstr "Дублінське ядро"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:163
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
@@ -5324,9 +5328,8 @@ msgstr "Помилка при пошуку у зібранні на OverDrive."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
-#, fuzzy
 msgid "Error! Adding tags failed at"
-msgstr "Помилка! Дія з додавання мітки дала збій на"
+msgstr "Помилка! Додавання міток дало збій на "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -5455,12 +5458,12 @@ msgstr "Explain "
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:103
 #, c-format
 msgid "Export"
-msgstr ""
+msgstr "Експорт"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:84
 #, c-format
 msgid "Exporting to Dublin Core..."
-msgstr ""
+msgstr "Експортування у формат Дублінського ядра…"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:676
 #, c-format
@@ -5489,9 +5492,9 @@ msgid "Female:"
 msgstr "Жінка:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:386
-#, fuzzy, c-format
+#, c-format
 msgid "Fewer options"
-msgstr "[Менше параметрів]"
+msgstr "Менше параметрів"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:291
 #, c-format
@@ -5591,9 +5594,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:323
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:167
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid "Forgot your password?"
-msgstr "Зміна мого паролю"
+msgstr "Забули свій пароль?"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:33
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:47
@@ -6225,7 +6228,7 @@ msgstr ", %s будь ласка, "
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:313
 #, c-format
 msgid "If you have a Shibboleth account, please "
-msgstr ""
+msgstr "Якщо у Вас є обліковий запис Шібболет, будь ласка, "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:81
 #, fuzzy, c-format
@@ -6353,7 +6356,7 @@ msgstr "Примірник не видається."
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:72
 #, c-format
 msgid "Item damaged"
-msgstr ""
+msgstr "Примірник пошкоджений"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1178
 #, c-format
@@ -6400,9 +6403,9 @@ msgid "Item types"
 msgstr "Типи одиниць"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:51
-#, fuzzy, c-format
+#, c-format
 msgid "Item withdrawn"
-msgstr "Вилучено ("
+msgstr "Примірник вилучено"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:205
 #, c-format
@@ -6524,9 +6527,9 @@ msgid "Language: "
 msgstr "Мова: "
 
 #: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:8
-#, fuzzy, c-format
+#, c-format
 msgid "Languages"
-msgstr "Мова"
+msgstr "Мови"
 
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:40
 #, c-format
@@ -6628,7 +6631,7 @@ msgid "Limit to currently available items."
 msgstr "Обмежити наявними на даний момент примірниками."
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:53
-#, fuzzy, c-format
+#, c-format
 msgid "Limit to:"
 msgstr "Обмежити до: "
 
@@ -6721,7 +6724,7 @@ msgid "Loading..."
 msgstr "Йде завантаження…"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:314
-#, fuzzy, c-format
+#, c-format
 msgid "Local Login"
 msgstr "Локальний вхід"
 
@@ -7086,9 +7089,9 @@ msgid "More lists"
 msgstr "Ще списки"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:388
-#, fuzzy, c-format
+#, c-format
 msgid "More options"
-msgstr "[Більше параметрів]"
+msgstr "Більше параметрів"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:69
 #, c-format
@@ -7178,9 +7181,9 @@ msgid "New purchase suggestion"
 msgstr "Нова пропозиція на придбання "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:392
-#, fuzzy, c-format
+#, c-format
 msgid "New search"
-msgstr "[Новий пошук]"
+msgstr "Новий пошук"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:271
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:451
@@ -7447,9 +7450,9 @@ msgstr "Ви не знайшли того за чим шукали?"
 #. %1$s:  IF ( item.restrictedopac ) 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:59
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:63
-#, fuzzy, c-format
+#, c-format
 msgid "Not for loan %s"
-msgstr "Не для випожичання (%s)"
+msgstr "Не для випожичання %s"
 
 #. %1$s:  itemLoo.notforloanvalue 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:377
@@ -7628,7 +7631,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:93
 #, c-format
 msgid "OAI-DC"
-msgstr ""
+msgstr "OAI-DC"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:39
@@ -7657,9 +7660,9 @@ msgid "On hold"
 msgstr "Зарезервовано"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:78
-#, fuzzy, c-format
+#, c-format
 msgid "On order"
-msgstr "Замовлено ("
+msgstr "Замовлено"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #, fuzzy, c-format
@@ -8360,9 +8363,9 @@ msgstr "RIS (Zotero, EndNote та інші)"
 #. %1$s:  IF ( branchcode ) 
 #. %2$s:  Branches.GetName( branchcode ) 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid "RSS feed for %s%s "
-msgstr "Немає загальних списків"
+msgstr "Стрічка новин (RSS) « %s%s "
 
 #. %1$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
@@ -8534,9 +8537,8 @@ msgstr "Вилучити вибрані одиниці"
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:117
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:162
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:199
-#, fuzzy
 msgid "Remove selected searches"
-msgstr "Вилучити обраних відвідувачів"
+msgstr "Вилучити вибрані пошукові запити"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:202
@@ -8811,7 +8813,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:96
 #, c-format
 msgid "SRW-DC"
-msgstr ""
+msgstr "SRW-DC"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -8854,9 +8856,9 @@ msgid "Save to another list"
 msgstr "Зберегти у іншому списку"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:14
-#, fuzzy, c-format
+#, c-format
 msgid "Save to your lists"
-msgstr "Зберегти у Ваших списках "
+msgstr "Зберегти у Ваших списках"
 
 # назва функції ILS-DI
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
@@ -9248,7 +9250,7 @@ msgstr "Загальне розташування полиці"
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:80
 #, c-format
 msgid "Shibboleth Login"
-msgstr ""
+msgstr "Вхід через Шібболет"
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:37
 #, c-format
@@ -9273,9 +9275,8 @@ msgstr "Показуються останні 50 примірників"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:38
-#, fuzzy
 msgid "Show lists"
-msgstr "Показати усі примірники"
+msgstr "Показати списки"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:54
 #, c-format
@@ -9286,7 +9287,7 @@ msgstr "Показати більше"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:429
 #, c-format
 msgid "Show more options"
-msgstr "Показати більше опцій"
+msgstr "Показати більше параметрів"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1057
@@ -9352,7 +9353,7 @@ msgstr "Подібні примірники"
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:90
 #, c-format
 msgid "Simple DC-RDF"
-msgstr ""
+msgstr "Простий DC-RDF"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:124
 #, c-format
@@ -9480,6 +9481,8 @@ msgid ""
 "Sorry, your Shibboleth identity does not match a valid library identity. If "
 "you have a local login, you may use that below."
 msgstr ""
+"На жаль, Ваш профіль Шібболет не відповідає чинному профілю у бібліотеці. "
+"Якщо у Вас є локальний вхід в систему, Ви можете скористатися ним нижче. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:45
 #, c-format
@@ -9784,12 +9787,12 @@ msgstr "Призупинити Ваше резервування на "
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:8
 msgid "Switch languages"
-msgstr ""
+msgstr "Перемикання мов"
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "System Maintenance"
-msgstr "Обслуговування системи"
+msgstr "Технічне обслуговування"
 
 # Table Of Contents
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:546
@@ -11552,9 +11555,8 @@ msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
-#, fuzzy
 msgid "[ New list ]"
-msgstr "Новий список"
+msgstr "[ Новий список ]"
 
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
@@ -11600,6 +11602,9 @@ msgid ""
 "( languages_loop ) && ( OpacLangSelectorMode == 'both' || "
 "OpacLangSelectorMode == 'top') ) %%] "
 msgstr ""
+"[%% IF ( ( opaclanguagesdisplay ) && ( ! one_language_enabled ) && "
+"( languages_loop ) && ( OpacLangSelectorMode == 'both' || "
+"OpacLangSelectorMode == 'top') ) %%] "
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:107
 #, c-format
@@ -12207,7 +12212,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:34
 #, c-format
 msgid "site administrator"
-msgstr " адміністратора сайту"
+msgstr " адміністратора сайту."
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:403
 #, c-format
