@@ -139,9 +139,13 @@ sub _initialize_memcached {
             utf8               => 1,
         }
     );
+
     # Ensure we can actually talk to the memcached server
     my $ismemcached = $memcached->set('ismemcached','1');
-    return $self unless $ismemcached;
+    unless ($ismemcached) { #Value is undefined or False, so there was an error with the server, the connection to it, or a protocol error
+        warn "Connection to the memcached servers '@servers' failed. Are the unix socket permissions set properly? Is the host reachable?";
+        return $self;
+    }
     $self->{'memcached_cache'} = $memcached;
     return $self;
 }
