@@ -376,7 +376,7 @@ sub GetPatronInfo {
 
     # Cleaning the borrower hashref
     my $flags = C4::Members::patronflags( $borrower );
-    $borrower->{'charges'}    = $flags>{'CHARGES'}->{'amount'};
+    $borrower->{'charges'} = $flags->{'CHARGES'}->{'amount'};
     my $library = Koha::Libraries->find( $borrower->{branchcode} );
     $borrower->{'branchname'} = $library ? $library->branchname : '';
     delete $borrower->{'userid'};
