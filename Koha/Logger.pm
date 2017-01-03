@@ -118,6 +118,7 @@ sub DESTROY { }
 
 sub _init {
     my $rv;
+    $ENV{"LOG4PERL_CONF"} = C4::Context->config("log4perl_conf"); #Supercharge Koha::Log to skip unnecessary configuration file checking on each log attempt
     if ( exists $ENV{"LOG4PERL_CONF"} and $ENV{'LOG4PERL_CONF'} and -s $ENV{"LOG4PERL_CONF"} ) {
 
         # Check for web server level configuration first

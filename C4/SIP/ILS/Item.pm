@@ -12,6 +12,7 @@ use warnings;
 use Sys::Syslog qw(syslog);
 use Carp;
 
+use C4::SIP::SIPServer;
 use C4::SIP::ILS::Transaction;
 
 use C4::Debug;
@@ -73,6 +74,7 @@ sub new {
     my $itemnumber = GetItemnumberFromBarcode($item_id);
 	my $item = GetBiblioFromItemNumber($itemnumber);    # actually biblio.*, biblioitems.* AND items.*  (overkill)
 	if (! $item) {
+                C4::SIP::SIPServer::get_logger()->debug("new ILS::Item('$item_id'): not found");
 		syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
 		warn "new ILS::Item($item_id) : No item '$item_id'.";
         return;
@@ -102,6 +104,7 @@ sub new {
 	$self = $item;
 	bless $self, $type;
 
+    C4::SIP::SIPServer::get_logger()->debug("new ILS::Item('$item_id'): found with title '$self->{title}'");
     syslog("LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",
 	   $item_id, $self->{title});
 
@@ -165,6 +168,7 @@ sub hold_patron_name {
     my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return;
     my $holder = GetMember(borrowernumber=>$borrowernumber);
     unless ($holder) {
+        C4::SIP::SIPServer::get_logger()->debug("While checking hold, GetMember failed for borrowernumber '$borrowernumber'");
         syslog("LOG_ERR", "While checking hold, GetMember failed for borrowernumber '$borrowernumber'");
         return;
     }

@@ -63,6 +63,7 @@ sub find_service {
     my $portstr;
     foreach my $addr ( '', '*:', "$sockaddr:", "[$sockaddr]:" ) {
         $portstr = sprintf( "%s%s/%s", $addr, $port, lc $proto );
+        C4::SIP::SIPServer::get_logger()->debug("Configuration::find_service: Trying $portstr");
         Sys::Syslog::syslog( "LOG_DEBUG",
             "Configuration::find_service: Trying $portstr" );
         last if ( exists( ( $self->{listeners} )->{$portstr} ) );
