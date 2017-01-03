@@ -639,7 +639,7 @@ No patron matched <span class="ex">[% message | html %]</span>
                 [% IF NEEDSCONFIRMATION %]
                     <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
                 [% ELSE %]
-                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" />
+                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" class="circ_setting" />
                 [% END %]
 
                 <label for="auto_renew">Automatic renewal</label>
@@ -654,9 +654,9 @@ No patron matched <span class="ex">[% message | html %]</span>
                         [% END %]
                     [% ELSE %]
                         [% IF override_high_holds %]
-                            <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" checked="checked" />
+                            <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" class="circ_setting" checked="checked" />
                         [% ELSE %]
-                            <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" />
+                            <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" class="circ_setting" />
                         [% END %]
                     [% END %]
                     <label for="override_high_holds">Don't decrease checkout length based on holds</label>
@@ -673,7 +673,7 @@ No patron matched <span class="ex">[% message | html %]</span>
                         <input type="hidden" name="onsite_checkout" checked="checked" value="1" />
                     </div>
                 [% ELSE %]
-                    <input type="checkbox" id="onsite_checkout" name="onsite_checkout" /> <label for="onsite_checkout">On-site checkout</label>
+                    <input type="checkbox" id="onsite_checkout" name="onsite_checkout" class="circ_setting" /> <label for="onsite_checkout">On-site checkout</label>
                 [% END %]
             </div>
         [% END %]
