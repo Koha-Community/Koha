@@ -79,6 +79,10 @@ $(document).ready(function() {
         }
     });
 
+    $(".circ_setting").on("click",function(){
+        $("#barcode").focus();
+    });
+
 });
 
 function export_checkouts(format) {
