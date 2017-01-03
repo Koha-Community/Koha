@@ -12,7 +12,6 @@ use warnings;
 use Exporter;
 use Carp;
 
-use Sys::Syslog qw(syslog);
 use Data::Dumper;
 
 use C4::Debug;
@@ -36,7 +35,6 @@ sub new {
     $debug and warn "new Patron (GetMember): " . Dumper($kp);
     unless (defined $kp) {
         C4::SIP::SIPServer::get_logger()->debug("new ILS::Patron($patron_id): no such patron");
-        syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
         return;
     }
     $kp = GetMember( borrowernumber => $kp->{borrowernumber});
@@ -125,7 +123,6 @@ sub new {
     $self = \%ilspatron;
     $debug and warn Dumper($self);
     C4::SIP::SIPServer::get_logger()->debug("new ILS::Patron($patron_id): found patron '$self->{id}'");
-    syslog("LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id,$self->{id});
     bless $self, $type;
     return $self;
 }
@@ -362,9 +359,6 @@ sub enable {
     }
     C4::SIP::SIPServer::get_logger()->debug("Patron($self->{id})->enable: charge: $self->{charge_ok}, ".
                                             "renew:$self->{renew_ok}, recall:$self->{recall_ok}, hold:$self->{hold_ok}");
-    syslog("LOG_DEBUG", "Patron(%s)->enable: charge: %s, renew:%s, recall:%s, hold:%s",
-       $self->{id}, $self->{charge_ok}, $self->{renew_ok},
-       $self->{recall_ok}, $self->{hold_ok});
     $self->{screen_msg} = "Enable feature not implemented."; # "All privileges restored.";   # TODO: not really affecting patron record
     return $self;
 }

@@ -14,11 +14,13 @@ perl modules to run:
 
 LOGGING
 
-SIPServer uses syslog() for status and debugging messages.  All
-syslog messages are logged using the syslog facility 'local6'.
+By default, SIPServer uses syslog via log4perl for status and debugging messages.
+All syslog messages are logged using the syslog facility 'local6'.
 If you need to change this, because something else on your system
 is already using that facililty, just change the definition of
-'LOG_SIP' at the top of the file SIPServer.pm
+'ident' and/or 'facility' in the SIP section of file log4perl.conf.
 
 Make sure to update your syslog configuration to capture facility
 'local6' and record it.
+
+See the log4perl documenation for logging to a file or other services.

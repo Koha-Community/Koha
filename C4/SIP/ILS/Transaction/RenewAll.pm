@@ -6,8 +6,6 @@ package C4::SIP::ILS::Transaction::RenewAll;
 use strict;
 use warnings;
 
-use Sys::Syslog qw(syslog);
-
 use C4::SIP::ILS::Item;
 
 use C4::Members qw( GetMember );
@@ -43,12 +41,6 @@ sub do_renew_all {
         my $item    = C4::SIP::ILS::Item->new($item_id);
         if ( !defined($item) ) {
             C4::SIP::SIPServer::get_logger()->debug("renew_all: Invalid item id '$item_id' associated with patron '$patron->id'");
-            syslog(
-                'LOG_WARNING',
-                q|renew_all: Invalid item id '%s' associated with patron '%s'|,
-                $item_id,
-                $patron->id
-            );
 
             # $all_ok = 0; Do net set as still ok
             push @{ $self->unrenewed }, $item_id;

@@ -8,7 +8,6 @@ use strict;
 use warnings;
 use Exporter;
 use Encode;
-use Sys::Syslog qw(syslog);
 use POSIX qw(strftime);
 use Socket qw(:crlf);
 use IO::Handle;
@@ -62,9 +61,6 @@ sub add_field {
 
     if (!defined($value)) {
         C4::SIP::SIPServer::get_logger()->debug("add_field: Undefined value being added to '$field_id'");
-	syslog("LOG_DEBUG", "add_field: Undefined value being added to '%s'",
-	       $field_id);
-		$value = '';
     }
     $value=~s/\r/ /g; # CR terminates a sip message
                       # Protect against them in sip text fields
@@ -118,8 +114,6 @@ sub add_count {
     $count = sprintf("%04d", $count);
     if (length($count) != 4) {
 		C4::SIP::SIPServer::get_logger()->debug("handle_patron_info: $label wrong size: '$count'");
-		syslog("LOG_WARNING", "handle_patron_info: %s wrong size: '%s'",
-	       $label, $count);
 		$count = ' ' x 4;
     }
     return $count;
@@ -190,7 +184,6 @@ sub write_msg {
         STDOUT->autoflush(1);
         print $msg, $terminator;
         C4::SIP::SIPServer::get_logger()->info("OUTPUT MSG: '$msg'");
-        syslog("LOG_INFO", "OUTPUT MSG: '$msg'");
     }
 
     $last_response = $msg;

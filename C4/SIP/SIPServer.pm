@@ -5,7 +5,6 @@ use strict;
 use warnings;
 use FindBin qw($Bin);
 use lib "$Bin";
-use Sys::Syslog qw(syslog);
 use Net::Server::PreFork;
 use IO::Socket::INET;
 use Socket qw(:DEFAULT :crlf);
@@ -118,7 +117,6 @@ sub process_request {
 
     if (!defined($self->{service})) {
                 C4::SIP::SIPServer::get_logger()->error("process_request: Unknown recognized server connection: $sockaddr:$port/$proto");
-		syslog("LOG_ERR", "process_request: Unknown recognized server connection: %s:%s/%s", $sockaddr, $port, $proto);
 		die "process_request: Bad server connection";
     }
 
@@ -126,7 +124,6 @@ sub process_request {
 
     if (!defined($transport)) {
                 C4::SIP::SIPServer::get_logger()->warn("Unknown transport '$service->{transport}', dropping");
-		syslog("LOG_WARNING", "Unknown transport '%s', dropping", $service->{transport});
 		return;
     } else {
 		&$transport($self);
@@ -153,14 +150,12 @@ sub raw_transport {
     local $SIG{ALRM} = sub { die 'raw transport Timed Out!' };
     my $timeout = $self->get_timeout({ transport => 1 });
     C4::SIP::SIPServer::get_logger()->debug("raw_transport: timeout is $service->{timeout}");
-    syslog('LOG_DEBUG', "raw_transport: timeout is $timeout");
     alarm $timeout;
     while (!$self->{account}) {
         $input = read_request();
         if (!$input) {
             # EOF on the socket
             C4::SIP::SIPServer::get_logger()->info("raw_transport: shutting down: EOF during login");
-            syslog("LOG_INFO", "raw_transport: shutting down: EOF during login");
             return;
         }
         $input =~ s/[\r\n]+$//sm; # Strip off trailing line terminator(s)
@@ -176,18 +171,14 @@ sub raw_transport {
     Log::Log4perl::MDC->put("peeraddr", $self->{server}->{peeraddr});
 
     C4::SIP::SIPServer::get_logger()->debug("raw_transport: uname/inst: '$self->{account}->{id}/$self->{account}->{institution}'");
-    syslog("LOG_DEBUG", "raw_transport: uname/inst: '%s/%s'",
-        $self->{account}->{id},
-        $self->{account}->{institution});
     if (! $self->{account}->{id}) {
-        syslog("LOG_ERR","Login failed shutting down");
+        C4::SIP::SIPServer::get_logger()->error("Login failed shutting down");
         return;
     }
 
     $self->sip_protocol_loop();
 
     C4::SIP::SIPServer::get_logger()->info("raw_transport: shutting down");
-    syslog("LOG_INFO", "raw_transport: shutting down");
     return;
 }
 
@@ -195,15 +186,12 @@ sub get_clean_string {
 	my $string = shift;
 	if (defined $string) {
                 C4::SIP::SIPServer::get_logger()->debug("get_clean_string  pre-clean(length " . length($string) . "): $string");
-		syslog("LOG_DEBUG", "get_clean_string  pre-clean(length %s): %s", length($string), $string);
 		chomp($string);
 		$string =~ s/^[^A-z0-9]+//;
 		$string =~ s/[^A-z0-9]+$//;
                 C4::SIP::SIPServer::get_logger()->debug("get_clean_string post-clean(length " . length($string) . "): $string)");
-		syslog("LOG_DEBUG", "get_clean_string post-clean(length %s): %s", length($string), $string);
 	} else {
                 C4::SIP::SIPServer::get_logger()->info("get_clean_string called on undefined");
-		syslog("LOG_INFO", "get_clean_string called on undefined");
 	}
 	return $string;
 }
@@ -214,7 +202,6 @@ sub get_clean_input {
 	$in = get_clean_string($in);
 	while (my $extra = <STDIN>){
                 C4::SIP::SIPServer::get_logger()->error("get_clean_input got extra lines: $extra");
-		syslog("LOG_ERR", "get_clean_input got extra lines: %s", $extra);
 	}
 	return $in;
 }
@@ -228,7 +215,6 @@ sub telnet_transport {
     my $config  = $self->{config};
     my $timeout = $self->get_timeout({ transport => 1 });
     C4::SIP::SIPServer::get_logger()->debug("telnet_transport: timeout is $timeout");
-    syslog("LOG_DEBUG", "telnet_transport: timeout is $timeout");
 
     eval {
 	local $SIG{ALRM} = sub { die "telnet_transport: Timed Out ($timeout seconds)!\n"; };
@@ -248,11 +234,9 @@ sub telnet_transport {
 		alarm 0;
 
                 C4::SIP::SIPServer::get_logger()->debug("telnet_transport 1: uid length " . length($uid) . ", pwd length " . length($pwd));
-		syslog("LOG_DEBUG", "telnet_transport 1: uid length %s, pwd length %s", length($uid), length($pwd));
 		$uid = get_clean_string ($uid);
 		$pwd = get_clean_string ($pwd);
                 C4::SIP::SIPServer::get_logger()->debug("telnet_transport 2: uid length " . length($uid) . ", pwd length " . length($pwd));
-		syslog("LOG_DEBUG", "telnet_transport 2: uid length %s, pwd length %s", length($uid), length($pwd));
 
 	    if (exists ($config->{accounts}->{$uid})
 		&& ($pwd eq $config->{accounts}->{$uid}->{password})) {
@@ -262,18 +246,15 @@ sub telnet_transport {
             }
 	    }
 		C4::SIP::SIPServer::get_logger()->warn("Invalid login attempt: ' . ($uid||'')  . '");
-		syslog("LOG_WARNING", "Invalid login attempt: '%s'", ($uid||''));
 		print("Invalid login$CRLF");
 	}
     }; # End of eval
 
     if ($@) {
 		C4::SIP::SIPServer::get_logger()->error("telnet_transport: Login timed out");
-		syslog("LOG_ERR", "telnet_transport: Login timed out");
 		die "Telnet Login Timed out";
     } elsif (!defined($account)) {
 		C4::SIP::SIPServer::get_logger()->error("telnet_transport: Login Failed");
-		syslog("LOG_ERR", "telnet_transport: Login Failed");
 		die "Login Failure";
     } else {
 		print "Login OK.  Initiating SIP$CRLF";
@@ -282,10 +263,8 @@ sub telnet_transport {
     $self->{account} = $account;
     $self->{logger} = _set_logger( Koha::Logger->get( { interface => 'sip', category => $self->{account}->{id} } ) ); # Add id to namespace
     C4::SIP::SIPServer::get_logger()->debug("telnet_transport: uname/inst: '$account->{id}/$account->{institution}'");
-    syslog("LOG_DEBUG", "telnet_transport: uname/inst: '%s/%s'", $account->{id}, $account->{institution});
     $self->sip_protocol_loop();
     C4::SIP::SIPServer::get_logger()->info("telnet_transport: shutting down");
-    syslog("LOG_INFO", "telnet_transport: shutting down");
     return;
 }
 
@@ -316,7 +295,6 @@ sub sip_protocol_loop {
     eval {
         local $SIG{ALRM} = sub {
             C4::SIP::SIPServer::get_logger()->debug("Inactive: timed out");
-            syslog( 'LOG_DEBUG', 'Inactive: timed out' );
             die "Timed Out!\n";
         };
         my $previous_alarm = alarm($timeout);
@@ -329,7 +307,6 @@ sub sip_protocol_loop {
 
             unless ($inputbuf) {
                 C4::SIP::SIPServer::get_logger()->error("sip_protocol_loop: empty input skipped");
-                syslog( "LOG_ERR", "sip_protocol_loop: empty input skipped" );
                 print("96$CR");
                 next;
             }
@@ -337,11 +314,6 @@ sub sip_protocol_loop {
             my $status = C4::SIP::Sip::MsgType::handle( $inputbuf, $self, q{} );
             if ( !$status ) {
                 C4::SIP::SIPServer::get_logger()->error("sip_protocol_loop: failed to handle " . substr( $inputbuf, 0, 2 ) );
-                syslog(
-                    "LOG_ERR",
-                    "sip_protocol_loop: failed to handle %s",
-                    substr( $inputbuf, 0, 2 )
-                );
             }
             next if $status eq REQUEST_ACS_RESEND;
         }
@@ -377,18 +349,15 @@ sub read_request {
       }
       else {
           C4::SIP::SIPServer::get_logger()->debug('EOF returned on read');
-          syslog( 'LOG_DEBUG', 'EOF returned on read' );
           return;
       }
       my $len = length $buffer;
       if ( $len != $raw_length ) {
           my $trim = $raw_length - $len;
           C4::SIP::SIPServer::get_logger()->debug("read_request trimmed $trim character(s) ");
-          syslog( 'LOG_DEBUG', "read_request trimmed $trim character(s) " );
       }
 
       C4::SIP::SIPServer::get_logger()->info("INPUT MSG: '$buffer'");
-      syslog( 'LOG_INFO', "INPUT MSG: '$buffer'" );
       return $buffer;
 }
 
@@ -425,7 +394,6 @@ sub get_timeout {
         my $rv = sprintf( "%03d", $policy->{timeout} // 0 );
         if( length($rv) != 3 ) {
             C4::SIP::SIPServer::get_logger()->error("LOG_ERR", "Policy timeout has wrong size: '$rv'");
-            syslog( "LOG_ERR", "Policy timeout has wrong size: '%s'", $rv );
             return '000';
         }
         return $rv;

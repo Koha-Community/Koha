@@ -8,7 +8,6 @@ use warnings;
 use strict;
 
 use POSIX qw(strftime);
-use Sys::Syslog qw(syslog);
 use Data::Dumper;
 use CGI qw ( -utf8 );
 
@@ -48,7 +47,6 @@ sub new {
 sub do_checkout {
 	my $self = shift;
 	C4::SIP::SIPServer::get_logger()->debug("ILS::Transaction::Checkout performing checkout...");
-	syslog('LOG_DEBUG', "ILS::Transaction::Checkout performing checkout...");
 	my $pending        = $self->{item}->pending_queue;
 	my $shelf          = $self->{item}->hold_shelf;
 	my $barcode        = $self->{item}->id;
@@ -100,7 +98,6 @@ sub do_checkout {
                 $self->screen_msg($needsconfirmation->{$confirmation});
                 $noerror = 0;
                 C4::SIP::SIPServer::get_logger()->debug("Blocking checkout Reason:$confirmation");
-                syslog('LOG_DEBUG', "Blocking checkout Reason:$confirmation");
             }
         }
     }
