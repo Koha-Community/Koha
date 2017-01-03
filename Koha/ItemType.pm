@@ -51,6 +51,14 @@ sub image_location {
 
 sub translated_description {
     my ( $self, $lang ) = @_;
+    if ( my $translated_description = eval { $self->get_column('translated_description') } ) {
+        # If the value has already been fetched (eg. from sarch_with_localization),
+        # do not search for it again
+        # Note: This is a bit hacky but should be fast
+        return $translated_description
+             ? $translated_description
+             : $self->description;
+    }
     $lang ||= C4::Languages::getlanguage;
     my $translated_description = Koha::Localizations->search({
         code => $self->itemtype,
