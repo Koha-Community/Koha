@@ -933,7 +933,7 @@
                                             [% END %]
                                         [% ELSE %]
                                             [% IF ( pa.type.authorised_value_category ) %]
-                                                [% AuthorisedValues.GetByCode( pa.type.authorised_value, pa_value.value, 1 ) %]
+                                                [% AuthorisedValues.GetByCode( pa.type.authorised_value_category, pa_value.value, 1 ) | html_line_break %]
                                             [% ELSE %]
                                                 [% pa_value.value | html_line_break %]
                                             [% END %]
