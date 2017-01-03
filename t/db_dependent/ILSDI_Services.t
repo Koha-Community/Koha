@@ -20,6 +20,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 
 use Test::More tests => 3;
+use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -94,7 +95,7 @@ subtest 'AuthenticatePatron test' => sub {
 
 subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -165,6 +166,9 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
         }
     } );
 
+    my $members = Test::MockModule->new('C4::Members');
+    $members->mock( 'GetMemberAccountBalance', sub { return ( 10, 10, 0 ); } );
+
     # Prepare and send web request for IL-SDI server:
     my $query = new CGI;
     $query->param( 'service', 'GetPatronInfo' );
@@ -183,6 +187,9 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
         value             => $attr->{'attribute'},
         value_description => undef,
     };
+
+    is( $reply->{'charges'}, '10.00',
+        'The \'charges\' attribute should be correctly filled (bug 17836)' );
 
     # Check results:
     is_deeply( $reply->{'attributes'}, [ $cmp ], 'Test GetPatronInfo - show_attributes parameter' );
