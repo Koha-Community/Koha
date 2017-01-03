@@ -31,6 +31,7 @@ use C4::Circulation;
 use C4::Koha;
 use C4::ClassSource;
 use Koha::DateUtils;
+use Koha::ItemTypes;
 use Koha::Libraries;
 use List::MoreUtils qw/any/;
 use C4::Search;
@@ -182,10 +183,10 @@ sub generate_subfield_form {
             }
             elsif ( $subfieldlib->{authorised_value} eq "itemtypes" ) {
                   push @authorised_values, "" unless ( $subfieldlib->{mandatory} );
-                  my $itemtypes = GetItemTypes( style => 'array' );
-                  for my $itemtype ( @$itemtypes ) {
-                      push @authorised_values, $itemtype->{itemtype};
-                      $authorised_lib{$itemtype->{itemtype}} = $itemtype->{translated_description};
+                  my $itemtypes = Koha::ItemTypes->search_with_localization;
+                  while ( my $itemtype = $itemtypes->next ) {
+                      push @authorised_values, $itemtype->itemtype;
+                      $authorised_lib{$itemtype->itemtype} = $itemtype->translated_description;
                   }
 
                   unless ( $value ) {

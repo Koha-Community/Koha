@@ -45,6 +45,7 @@ use C4::Search;		# enabled_staff_search_views
 use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Items;
+use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
 
@@ -64,7 +65,7 @@ my $multihold = $input->param('multi_hold');
 $template->param(multi_hold => $multihold);
 my $showallitems = $input->param('showallitems');
 
-my $itemtypes = GetItemTypes();
+my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
 # Select borrowers infos
 my $findborrower = $input->param('findborrower');

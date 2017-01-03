@@ -23,6 +23,7 @@ use Template::Plugin;
 use base qw( Template::Plugin );
 
 use C4::Koha;
+use Koha::ItemTypes;
 
 sub GetDescription {
     my ( $self, $itemtype ) = @_;
@@ -33,9 +34,7 @@ sub GetDescription {
 }
 
 sub Get {
-    my @itemtypes = @{ GetItemTypes(style => 'array') };
-    @itemtypes = sort { $a->{description} cmp $b->{description} } @itemtypes;
-    return \@itemtypes;
+    return Koha::ItemTypes->search_with_localization->unblessed;
 }
 
 1;

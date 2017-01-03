@@ -468,8 +468,7 @@ $template->param(
 my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['description'] });
 
 my @row_loop;
-my @itemtypes = @{ GetItemTypes( style => 'array' ) };
-@itemtypes = sort { lc $a->{translated_description} cmp lc $b->{translated_description} } @itemtypes;
+my $itemtypes = Koha::ItemTypes->search_with_localization;
 
 my $sth2 = $dbh->prepare("
     SELECT  issuingrules.*,
@@ -616,7 +615,7 @@ $template->param(default_rules => ($defaults ? 1 : 0));
 
 $template->param(
     patron_categories => $patron_categories,
-                        itemtypeloop => \@itemtypes,
+                        itemtypeloop => $itemtypes,
                         rules => \@sorted_row_loop,
                         humanbranch => ($branch ne '*' ? $branch : ''),
                         current_branch => $branch,

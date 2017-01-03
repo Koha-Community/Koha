@@ -151,6 +151,7 @@ use URI::Escape;
 use POSIX qw(ceil floor);
 use C4::Search::History;
 
+use Koha::ItemTypes;
 use Koha::LibraryCategories;
 use Koha::Virtualshelves;
 use Koha::SearchEngine::Search;
@@ -221,7 +222,7 @@ $template->param(
 );
 
 # load the Type stuff
-my $itemtypes = GetItemTypes;
+my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 # the index parameter is different for item-level itemtypes
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
 my @advancedsearchesloop;
@@ -515,7 +516,7 @@ my $facets; # this object stores the faceted results that display on the left-ha
 my $results_hashref;
 
 eval {
-    my $itemtypes = GetItemTypes;
+    my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
     ( $error, $results_hashref, $facets ) = $searcher->search_compat(
         $query,            $simple_query, \@sort_by,       \@servers,
         $results_per_page, $offset,       $expanded_facet, undef,
@@ -780,7 +781,7 @@ sub prepare_adv_search_types {
     # the index parameter is different for item-level itemtypes
     my $itype_or_itemtype =
       ( C4::Context->preference("item-level_itypes") ) ? 'itype' : 'itemtype';
-    my $itemtypes = GetItemTypes;
+    my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
     my ( $cnt, @result );
     foreach my $advanced_srch_type (@advanced_search_types) {

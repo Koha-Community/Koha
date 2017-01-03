@@ -229,8 +229,6 @@ foreach my $itemtype ( keys %{$itemtypes} ) {
     $itemtypes->{$itemtype}->{translated_description} =
             ( $translated_description ) ? $translated_description : $itemtypes->{$itemtype}->{description};
 }
-# Load the Type stuff without search categories for facets
-my $itemtypes_nocategory = GetItemTypes;
 # the index parameter is different for item-level itemtypes
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
 my @advancedsearchesloop;

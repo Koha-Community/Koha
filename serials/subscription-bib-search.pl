@@ -58,6 +58,7 @@ use C4::Search;
 use C4::Biblio;
 use C4::Debug;
 
+use Koha::ItemTypes;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 
@@ -196,8 +197,10 @@ else {
     );
 
     # load the itemtypes
-    my $itemtypes = GetItemTypes();
+    my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
     my @itemtypesloop;
+    # FIXME This is uselessly complex, the iterator should be send to the template
+    # FIXME The translated_description should be used
     foreach my $thisitemtype (
         sort {
             $itemtypes->{$a}->{'description'}

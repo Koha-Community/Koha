@@ -28,6 +28,7 @@ use C4::Koha;
 use C4::Circulation;
 use C4::Reports;
 use Koha::DateUtils;
+use Koha::ItemTypes;
 use Koha::Patron::Categories;
 use Date::Calc qw(Delta_Days);
 
@@ -119,7 +120,7 @@ if ($do_it) {
 } else {
     my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['description']});
 
-    my $itemtypes = GetItemTypes( style => 'array' );
+    my $itemtypes = Koha::ItemTypes->search_with_localization;
 
     my $dbh = C4::Context->dbh;
     my $req = $dbh->prepare("select distinctrow sort1 from borrowers where sort1 is not null order by sort1");

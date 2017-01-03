@@ -124,7 +124,8 @@ my $ccodes =
   { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.ccode' } ) };
 my $copynumbers =
   { map { $_->{authorised_value} => $_->{lib} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => $fw, kohafield => 'items.copynumber' } ) };
-my $itemtypes = GetItemTypes;
+
+my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
 $data->{'itemtypename'} = $itemtypes->{$data->{'itemtype'}}->{'translated_description'};
 $data->{'rentalcharge'} = sprintf( "%.2f", $data->{'rentalcharge'} );

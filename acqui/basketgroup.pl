@@ -56,6 +56,7 @@ use C4::Members qw/GetMember/;
 use Koha::EDI qw/create_edi_order get_edifact_ean/;
 
 use Koha::Acquisition::Booksellers;
+use Koha::ItemTypes;
 
 our $input=new CGI;
 
@@ -174,7 +175,6 @@ sub printbasketgrouppdf{
             $ord->{total_tax_excluded} = $ord->{ecost_tax_excluded} * $ord->{quantity};
 
             my $bib = GetBiblioData($ord->{biblionumber});
-            my $itemtypes = GetItemTypes();
 
             #FIXME DELETE ME
             # 0      1        2        3         4            5         6       7      8        9
@@ -195,7 +195,7 @@ sub printbasketgrouppdf{
                 }
             }
 
-            $ord->{itemtype} = ( $ord->{itemtype} and $bib->{itemtype} ) ? $itemtypes->{$bib->{itemtype}}->{description} : undef;
+            $ord->{itemtype} = ( $ord->{itemtype} and $bib->{itemtype} ) ? Koha::ItemTypes->find( $bib->{itemtype} )->description : undef;
             $ord->{en} = $en ? $en : undef;
             $ord->{edition} = $edition ? $edition : undef;
 

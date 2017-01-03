@@ -21,7 +21,6 @@ use CGI qw ( -utf8 );
 use MARC::File::XML;
 use List::MoreUtils qw(uniq);
 use C4::Auth;
-use C4::Koha;               # GetItemTypes
 use C4::Output;
 
 use Koha::Authority::Types;
@@ -30,6 +29,7 @@ use Koha::CsvProfiles;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Exporter::Record;
+use Koha::ItemTypes;
 use Koha::Libraries;
 
 my $query = new CGI;
@@ -266,15 +266,7 @@ if ( $op eq "export" ) {
 
 else {
 
-    my $itemtypes = GetItemTypes;
-    my @itemtypesloop;
-    foreach my $thisitemtype ( sort keys %$itemtypes ) {
-        my %row = (
-            value       => $thisitemtype,
-            description => $itemtypes->{$thisitemtype}->{translated_description},
-        );
-        push @itemtypesloop, \%row;
-    }
+    my $itemtypes = Koha::ItemTypes->search_with_localization;
 
     my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypecode'] } );
 
@@ -305,7 +297,7 @@ else {
 
     $template->param(
         libraries                => $libraries,
-        itemtypeloop             => \@itemtypesloop,
+        itemtypes                => $itemtypes,
         authority_types          => $authority_types,
         export_remove_fields     => C4::Context->preference("ExportRemoveFields"),
         csv_profiles             => [ Koha::CsvProfiles->search({ type => 'marc' }) ],

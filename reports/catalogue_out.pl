@@ -25,7 +25,6 @@ use C4::Auth;
 use C4::Context;
 use C4::Debug;
 use C4::Output;
-use C4::Koha;      # GetItemTypes
 # use Date::Manip;  # TODO: add not borrowed since date X criteria
 use Data::Dumper;
 
@@ -60,23 +59,9 @@ if ($do_it) {
     exit;    # in either case, exit after do_it
 }
 
-# Displaying choices (i.e., not do_it)
-my $itemtypes = GetItemTypes();
-my @itemtypeloop;
-foreach (
-    sort { $itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description} }
-    keys %$itemtypes
-  )
-{
-    push @itemtypeloop,
-      {
-        value       => $_,
-        description => $itemtypes->{$_}->{translated_description},
-      };
-}
-
+my $itemtypes = Koha::ItemTypes->search_with_localization;
 $template->param(
-    itemtypeloop => \@itemtypeloop,
+    itemtypes => $itemtypes,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

@@ -106,11 +106,8 @@
             </select></li>
     <li><label for="itemtypesfilter">Item type: </label><select name="itemtypesfilter" id="itemtypesfilter">
                 <option value="">All</option>
-                [% FOREACH itemtypeloo IN itemtypeloop %]
-                [% IF ( itemtypeloo.selected ) %]<option value="[% itemtypeloo.value %]" selected="selected">[% itemtypeloo.description %]</option>
-				[% ELSE %]
-				<option value="[% itemtypeloo.value %]">[% itemtypeloo.description %]</option>
-				[% END %]
+                [% FOREACH itemtype IN itemtypes %]
+                    <option value="[% itemtype.itemtype  %]">[% itemtype.translated_description %]</option>
                 [% END %]
             </select></li>
 

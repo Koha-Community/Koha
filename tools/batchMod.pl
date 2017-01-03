@@ -37,6 +37,7 @@ use List::MoreUtils qw/uniq/;
 
 use Koha::Biblios;
 use Koha::DateUtils;
+use Koha::ItemTypes;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -361,10 +362,10 @@ foreach my $tag (sort keys %{$tagslib}) {
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
         push @authorised_values, "";
-        my $itemtypes = GetItemTypes( style => 'array' );
-        for my $itemtype ( @$itemtypes ) {
-            push @authorised_values, $itemtype->{itemtype};
-            $authorised_lib{$itemtype->{itemtype}} = $itemtype->{translated_description};
+        my $itemtypes = Koha::ItemTypes->search_with_localization;
+        while ( my $itemtype = $itemtypes->next ) {
+            push @authorised_values, $itemtype->itemtype;
+            $authorised_lib{$itemtype->itemtype} = $itemtype->translated_description;
         }
         $value = "";
 

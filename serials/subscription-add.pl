@@ -32,6 +32,7 @@ use C4::Serials::Numberpattern;
 use C4::Letters;
 use Koha::AdditionalField;
 use Koha::DateUtils;
+use Koha::ItemTypes;
 use Carp;
 
 #use Smart::Comments;
@@ -141,8 +142,9 @@ for my $field ( @$additional_fields ) {
 }
 $template->param( additional_fields_for_subscription => $additional_fields );
 
-my $typeloop = GetItemTypes();
+my $typeloop = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
+# FIXME We should use the translated_description for item types
 my @typearg =
     map { { code => $_, value => $typeloop->{$_}{'description'}, selected => ( ( $subs->{itemtype} and $_ eq $subs->{itemtype} ) ? "selected=\"selected\"" : "" ), } } sort keys %{$typeloop};
 my @previoustypearg =

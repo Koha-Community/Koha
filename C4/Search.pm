@@ -31,6 +31,7 @@ use C4::Reserves;    # GetReserveStatus
 use C4::Debug;
 use C4::Charset;
 use Koha::AuthorisedValues;
+use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
 use YAML;
@@ -1867,7 +1868,8 @@ sub searchResults {
     my $notforloan_authorised_value = $av->count ? $av->next->authorised_value : undef;
 
     #Get itemtype hash
-    my %itemtypes = %{ GetItemTypes() };
+    my $itemtypes = Koha::ItemTypes->search_with_localization;
+    my %itemtypes = map { $_->{itemtype} => $_ } @{ $itemtypes->unblessed };
 
     #search item field code
     my ($itemtag, undef) = &GetMarcFromKohaField( "items.itemnumber", "" );

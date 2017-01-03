@@ -53,6 +53,7 @@ use C4::Acquisition;
 use C4::Serials;    # uses getsubscriptionfrom biblionumber
 use C4::Koha;
 use C4::Members;    # GetMember
+use Koha::ItemTypes;
 use Koha::RecordProcessor;
 
 
@@ -162,7 +163,7 @@ my $res = GetISBDView({
     'framework' => $framework
 });
 
-my $itemtypes = GetItemTypes();
+my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 my $borrower = GetMember( 'borrowernumber' => $loggedinuser );
 for my $itm (@items) {
     $norequests = 0

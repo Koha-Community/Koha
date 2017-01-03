@@ -30,6 +30,7 @@ use C4::Biblio;
 use C4::Circulation;
 use C4::Reserves;
 use Koha::AuthorisedValues;
+use Koha::ItemTypes;
 use Koha::XSLT_Handler;
 use Koha::Libraries;
 
@@ -280,7 +281,7 @@ sub buildKohaItemsNamespace {
 
     my %branches = map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' });
 
-    my $itemtypes = GetItemTypes();
+    my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
     my $location = "";
     my $ccode = "";
     my $xml = '';

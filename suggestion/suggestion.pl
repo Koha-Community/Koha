@@ -24,7 +24,6 @@ use CGI qw ( -utf8 );
 use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Suggestions;
-use C4::Koha; #GetItemTypes
 use C4::Budgets;
 use C4::Search;
 use C4::Members;

@@ -30,6 +30,7 @@ use C4::Reports;
 use C4::Members;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
+use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patron::Categories;
 use List::MoreUtils qw/any/;
@@ -74,7 +75,6 @@ $sep = "\t" if ($sep eq 'tabulation');
 $template->param(do_it => $do_it,
 );
 
-my $itemtypes = GetItemTypes();
 my @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
 
 my $locations = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
@@ -130,11 +130,7 @@ my @values;
 my %labels;
 my %select;
 
-# create itemtype arrayref for <select>.
-my @itemtypeloop;
-for my $itype ( sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description}} keys(%$itemtypes)) {
-	push @itemtypeloop, { code => $itype , description => $itemtypes->{$itype}->{translated_description} } ;
-}
+my $itemtypes = Koha::ItemTypes->search_with_localization;
 
     # location list
 my @locations;
@@ -153,7 +149,7 @@ my $CGIsepChoice=GetDelimiterChoices;
  
 $template->param(
     categoryloop => \@patron_categories,
-	itemtypeloop => \@itemtypeloop,
+    itemtypes => $itemtypes,
 	locationloop => \@locations,
 	   ccodeloop => \@ccodes,
 	hassort1=> $hassort1,
@@ -319,13 +315,12 @@ sub display_value {
     my ( $crit, $value ) = @_;
     my $locations = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
     my $ccodes = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };
-    my $itemtypes = GetItemTypes();
     my $Bsort1 = GetAuthorisedValues("Bsort1");
     my $Bsort2 = GetAuthorisedValues("Bsort2");
     my $display_value =
         ( $crit =~ /ccode/ )         ? $ccodes->{$value}
       : ( $crit =~ /location/ )      ? $locations->{$value}
-      : ( $crit =~ /itemtype/ )      ? $itemtypes->{$value}->{description}
+      : ( $crit =~ /itemtype/ )      ? Koha::ItemTypes->find( $value )->translated_description
       : ( $crit =~ /branch/ )        ? Koha::Libraries->find($value)->branchname
       : ( $crit =~ /reservestatus/ ) ? reservestatushuman($value)
       :                                $value;    # default fallback

@@ -29,6 +29,7 @@ use C4::Circulation;
 use C4::Reports;
 use C4::Members;
 use Koha::DateUtils;
+use Koha::ItemTypes;
 
 =head1 NAME
 
@@ -118,14 +119,7 @@ if ($do_it) {
     my $CGIsepChoice=GetDelimiterChoices;
 
     #doctype
-    my $itemtypes = GetItemTypes;
-    my @itemtypeloop;
-    foreach my $thisitemtype ( sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description}} keys %$itemtypes) {
-            my %row =(value => $thisitemtype,
-                      description => $itemtypes->{$thisitemtype}->{translated_description},
-                            );
-            push @itemtypeloop, \%row;
-    }
+    my $itemtypes = Koha::ItemTypes->search_with_localization;
 
     #ccode
     my $ccodes = GetAuthorisedValues('CCODE');
@@ -156,7 +150,7 @@ if ($do_it) {
     $template->param(
                     CGIextChoice => $CGIextChoice,
                     CGIsepChoice => $CGIsepChoice,
-                    itemtypeloop =>\@itemtypeloop,
+                    itemtypes => $itemtypes,
                     ccodeloop =>\@ccodeloop,
                     shelvinglocloop =>\@shelvinglocloop,
                     patron_categories => $patron_categories,

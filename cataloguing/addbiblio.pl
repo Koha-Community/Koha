@@ -37,6 +37,7 @@ use C4::Charset;
 use Koha::BiblioFrameworks;
 use Koha::DateUtils;
 
+use Koha::ItemTypes;
 use Koha::Libraries;
 
 use Koha::BiblioFrameworks;
@@ -188,10 +189,10 @@ sub build_authorized_values_list {
             && ( $value || $tagslib->{$tag}->{$subfield}->{defaultvalue} ) );
 
         my $itemtype;
-        my $itemtypes = GetItemTypes( style => 'array' );
-        for my $itemtype ( @$itemtypes ) {
-            push @authorised_values, $itemtype->{itemtype};
-            $authorised_lib{$itemtype->{itemtype}} = $itemtype->{translated_description};
+        my $itemtypes = Koha::ItemTypes->search_with_localization;
+        while ( $itemtype = $itemtypes->next ) {
+            push @authorised_values, $itemtype->itemtype;
+            $authorised_lib{$itemtype->itemtype} = $itemtype->translated_description;
         }
         $value = $itemtype unless ($value);
     }

@@ -34,6 +34,7 @@ use C4::Members;
 
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
+use Koha::ItemTypes;
 use C4::Members::AttributeTypes;
 
 =head1 NAME
@@ -87,7 +88,6 @@ $sep = "\t" if ($sep eq 'tabulation');
 $template->param(do_it => $do_it,
 );
 
-our $itemtypes = GetItemTypes();
 our @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
 
 our $locations = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
@@ -146,10 +146,7 @@ my %labels;
 my %select;
 
 # create itemtype arrayref for <select>.
-my @itemtypeloop;
-for my $itype ( sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description}} keys(%$itemtypes)) {
-    push @itemtypeloop, { code => $itype , description => $itemtypes->{$itype}->{translated_description} } ;
-}
+our $itemtypes = Koha::ItemTypes->search_with_localization;
 
     # location list
 my @locations;
@@ -181,7 +178,7 @@ foreach my $attribute_type (@attribute_types) {
 
 $template->param(
     categoryloop => \@patron_categories,
-    itemtypeloop => \@itemtypeloop,
+    itemtypes    => $itemtypes,
     locationloop => \@locations,
     ccodeloop    => \@ccodes,
     hassort1     => $hassort1,

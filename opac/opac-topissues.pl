@@ -48,8 +48,6 @@ if ( ! C4::Context->preference('OpacTopissue') ) {
     exit;
 }
 
-my $itemtypes = GetItemTypes();
-
 my ($template, $borrowernumber, $cookie) = get_template_and_user(
     {
         template_name   => 'opac-topissues.tt',

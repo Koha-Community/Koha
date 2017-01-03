@@ -30,6 +30,7 @@ use C4::Reports;
 use C4::Debug;
 
 use Koha::DateUtils;
+use Koha::ItemTypes;
 use Koha::Patron::Categories;
 
 =head1 NAME
@@ -110,21 +111,12 @@ my @values;
 my @mime  = ( map { {type =>$_} } (split /[;:]/, 'CSV') ); # FIXME translation
 my $delims = GetDelimiterChoices;
 
-my $itemtypes = GetItemTypes;
-my @itemtypeloop;
-foreach (sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description}} keys %$itemtypes) {
-	my %row = (value => $_,
-               translated_description => $itemtypes->{$_}->{translated_description},
-              );
-    push @itemtypeloop, \%row;
-}
-
 my $patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['categorycode']});
-
+my $itemtypes = Koha::ItemTypes->search_with_localization;
 $template->param(
 	    mimeloop => \@mime,
 	  CGIseplist => $delims,
-	itemtypeloop => \@itemtypeloop,
+      itemtypes => $itemtypes,
 patron_categories => $patron_categories,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

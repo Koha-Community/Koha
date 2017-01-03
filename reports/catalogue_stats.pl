@@ -31,6 +31,7 @@ use C4::Biblio qw/GetMarcSubfieldStructureFromKohaField/;
 
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
+use Koha::ItemTypes;
 
 =head1 NAME
 
@@ -120,7 +121,7 @@ if ($do_it) {
 	my $req;
 	my @select;
 
-    my $itemtypes = GetItemTypes( style => 'array' );
+    my $itemtypes = Koha::ItemTypes->search_with_localization;
 
     my @authvals = map { { code => $_->{authorised_value}, description => $_->{lib} } } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } );
     my @locations = map { { code => $_->{authorised_value}, description => $_->{lib} } } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } );

@@ -31,11 +31,11 @@ use C4::Context;
 use C4::Search qw(SimpleSearch);
 use C4::Biblio qw(TransformMarcToKoha);
 use C4::Items qw(GetItemInfosOf get_itemnumbers_of);
-use C4::Koha qw(GetItemTypes);
 use C4::Creators::Lib qw(html_table);
 use C4::Debug;
 use Koha::DateUtils;
 
+use Koha::ItemTypes;
 use Koha::SearchEngine::Search;
 
 BEGIN {
@@ -251,12 +251,15 @@ else {
             debug           => 1,
         }
     );
-    my $itemtypes = GetItemTypes;
+    my $itemtypes = Koha::ItemTypes->search;
     my @itemtypeloop;
-    foreach my $thisitemtype ( keys %$itemtypes ) {
+    while ( my $itemtype = $itemtypes->next ) {
+        # FIXME This must be improved:
+        # - pass the iterator to the template
+        # - display the translated_description
         my %row = (
-            value       => $thisitemtype,
-            description => $itemtypes->{$thisitemtype}->{'description'},
+            value       => $itemtype->itemtype,
+            description => $itemtype->description,
         );
         push @itemtypeloop, \%row;
     }

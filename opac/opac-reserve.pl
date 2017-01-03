@@ -35,6 +35,7 @@ use C4::Debug;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Items;
+use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
 use Date::Calc qw/Today Date_to_Days/;
@@ -100,7 +101,7 @@ if ( $reservefee > 0){
     $template->param( RESERVE_CHARGE => sprintf("%.2f",$reservefee));
 }
 
-my $itemTypes = GetItemTypes();
+my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
 # There are two ways of calling this script, with a single biblio num
 # or multiple biblio nums.
@@ -419,14 +420,14 @@ foreach my $biblioNum (@biblionumbers) {
     $biblioLoopIter{reqholdnotes}=0; #TODO: For future use
 
     if (!$itemLevelTypes && $biblioData->{itemtype}) {
-        $biblioLoopIter{translated_description} = $itemTypes->{$biblioData->{itemtype}}{translated_description};
-        $biblioLoopIter{imageurl} = getitemtypeimagesrc() . "/". $itemTypes->{$biblioData->{itemtype}}{imageurl};
+        $biblioLoopIter{translated_description} = $itemtypes->{$biblioData->{itemtype}}{translated_description};
+        $biblioLoopIter{imageurl} = getitemtypeimagesrc() . "/". $itemtypes->{$biblioData->{itemtype}}{imageurl};
     }
 
     foreach my $itemInfo (@{$biblioData->{itemInfos}}) {
         if ($itemLevelTypes && $itemInfo->{itype}) {
-            $itemInfo->{translated_description} = $itemTypes->{$itemInfo->{itype}}{translated_description};
-            $itemInfo->{imageurl} = getitemtypeimagesrc() . "/". $itemTypes->{$itemInfo->{itype}}{imageurl};
+            $itemInfo->{translated_description} = $itemtypes->{$itemInfo->{itype}}{translated_description};
+            $itemInfo->{imageurl} = getitemtypeimagesrc() . "/". $itemtypes->{$itemInfo->{itype}}{imageurl};
         }
 
         if (!$itemInfo->{'notforloan'} && !($itemInfo->{'itemnotforloan'} > 0)) {
@@ -550,7 +551,7 @@ foreach my $biblioNum (@biblionumbers) {
             }
         }
 
-        $itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemTypes->{ $itemInfo->{itype} }{imageurl} );
+        $itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes->{ $itemInfo->{itype} }{imageurl} );
 
     # Show serial enumeration when needed
         if ($itemLoopIter->{enumchron}) {

@@ -36,6 +36,7 @@ use C4::Letters;
 use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Database;
+use Koha::ItemTypes;
 use Koha::Patron::Attribute::Types;
 use Koha::Patron::Messages;
 use Koha::Patron::Discharge;
@@ -175,7 +176,7 @@ my $count          = 0;
 my $overdues_count = 0;
 my @overdues;
 my @issuedat;
-my $itemtypes = GetItemTypes();
+my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 my $issues = GetPendingIssues($borrowernumber);
 if ($issues){
     foreach my $issue ( sort { $b->{date_due}->datetime() cmp $a->{date_due}->datetime() } @{$issues} ) {

@@ -25,6 +25,7 @@ use CGI qw ( -utf8 );
 use C4::Auth qw/check_api_auth/;
 use C4::Context;
 use C4::Koha;
+use Koha::ItemTypes;
 use XML::Simple;
 
 my $query = new CGI;
@@ -113,7 +114,7 @@ sub _get_bib_number_tag {
 
 sub _get_biblioitem_itemtypes {
     my $result = shift;
-    my $itemtypes = GetItemTypes;
+    my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
     my $sth = $dbh->prepare_cached("SELECT tagfield, tagsubfield
                                     FROM marc_subfield_structure 
                                     WHERE frameworkcode = '' 

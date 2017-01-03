@@ -32,6 +32,7 @@ use MARC::File::USMARC;
 use MARC::File::XML;
 use C4::Biblio;
 use Koha::Authority::Types;
+use Koha::ItemTypes;
 use vars qw( $tagslib);
 use vars qw( $authorised_values_sth);
 use vars qw( $is_a_modif );
@@ -91,10 +92,10 @@ sub build_authorized_values_list {
             && ( $value || $tagslib->{$tag}->{$subfield}->{defaultvalue} ) );
 
         my $itemtype;
-        my $itemtypes = GetItemTypes( style => 'array' );
-        for my $itemtype ( @$itemtypes ) {
-            push @authorised_values, $itemtype->{itemtype};
-            $authorised_lib{$itemtype->{itemtype}} = $itemtype->{translated_description};
+        my $itemtypes = Koha::ItemTypes->search_with_localization;
+        while ( $itemtype = $itemtypes->next ) {
+            push @authorised_values, $itemtype->itemtype;
+            $authorised_lib{$itemtype->itemtype} = $itemtype->translated_description;
         }
         $value = $itemtype unless ($value);
 

@@ -30,6 +30,8 @@ use Koha::Items;
 
 use C4::CourseReserves qw(GetCourse GetCourseItem GetCourseReserve ModCourseItem ModCourseReserve);
 
+use Koha::ItemTypes;
+
 my $cgi = new CGI;
 
 my $action       = $cgi->param('action')       || '';
@@ -68,6 +70,7 @@ if ( $action eq 'lookup' ) {
       )
       : undef;
 
+    my $itemtypes = Koha::ItemTypes->search;
     $template->param(
         item           => $item,
         title          => $title,
@@ -76,7 +79,7 @@ if ( $action eq 'lookup' ) {
 
         ccodes    => GetAuthorisedValues('CCODE'),
         locations => GetAuthorisedValues('LOC'),
-        itypes    => GetItemTypes( style => 'array' ),
+        itypes    => $itemtypes, # FIXME We certainly want to display the translated_description in the template
         return    => $return,
     );
 

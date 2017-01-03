@@ -44,6 +44,7 @@ use C4::Acquisition qw(GetOrdersByBiblionumber);
 use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::Items;
+use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::Virtualshelves;
 
@@ -129,8 +130,8 @@ my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
 my $marchostsarray  = GetMarcHosts($record,$marcflavour);
 my $subtitle         = GetRecordValue('subtitle', $record, $fw);
 
-# Get Branches, Itemtypes and Locations
-my $itemtypes = GetItemTypes();
+my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
+
 my $dbh = C4::Context->dbh;
 
 my @all_items = GetItemsInfo( $biblionumber );

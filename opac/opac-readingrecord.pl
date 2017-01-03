@@ -32,6 +32,8 @@ use MARC::Record;
 use C4::Output;
 use C4::Charset qw(StripNonXmlChars);
 
+use Koha::ItemTypes;
+
 my $query = new CGI;
 
 # if opacreadinghistory is disabled, leave immediately
@@ -55,7 +57,7 @@ my ( $borr ) = GetMember( borrowernumber => $borrowernumber );
 
 $template->param(%{$borr});
 
-my $itemtypes = GetItemTypes();
+my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
 # get the record
 my $order = $query->param('order') || '';

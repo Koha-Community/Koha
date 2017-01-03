@@ -50,6 +50,7 @@ use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use Koha::RecordProcessor;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
+use Koha::ItemTypes;
 use Koha::Virtualshelves;
 use Koha::Ratings;
 use Koha::Reviews;
@@ -206,7 +207,7 @@ if ($session->param('busc')) {
         my ($arrParamsBusc, $offset, $results_per_page) = @_;
 
         my $expanded_facet = $arrParamsBusc->{'expand'};
-        my $itemtypes = GetItemTypes;
+        my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
         my @servers;
         @servers = @{$arrParamsBusc->{'server'}} if $arrParamsBusc->{'server'};
         @servers = ("biblioserver") unless (@servers);
@@ -538,7 +539,7 @@ my $HideMARC = $record_processor->filters->[0]->should_hide_marc(
         interface     => 'opac',
     } );
 
-my $itemtypes = GetItemTypes();
+my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 # imageurl:
 my $itemtype = $dat->{'itemtype'};
 if ( $itemtype ) {

@@ -33,7 +33,6 @@ use C4::Auth;
 use C4::Output;
 use C4::Biblio;
 use C4::Items;
-use C4::Koha;                  # GetItemTypes
 use Koha::DateUtils;
 
 my $query = new CGI;
@@ -80,21 +79,13 @@ if ( $get_items ) {
 }
 
 # getting all itemtypes
-my $itemtypes = &GetItemTypes();
-my @itemtypesloop;
-foreach my $thisitemtype ( sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description}} keys %$itemtypes ) {
-    my %row = (
-        value       => $thisitemtype,
-        description => $itemtypes->{$thisitemtype}->{'translated_description'},
-    );
-    push @itemtypesloop, \%row;
-}
+my $itemtypes = Koha::ItemTypes->search_with_localization;
 
 # get lost statuses
 my $lost_status_loop = C4::Koha::GetAuthorisedValues( 'LOST' );
 
 $template->param(
-                  itemtypeloop   => \@itemtypesloop,
+                  itemtypes => $itemtypes,
                   loststatusloop => $lost_status_loop,
 );
 

@@ -27,6 +27,7 @@ use C4::Output;
 use C4::Koha;
 use C4::Circulation;
 use C4::Biblio;
+use Koha::ItemTypes;
 use Koha::DateUtils;
 use Koha::Libraries;
 
@@ -124,8 +125,6 @@ else {
     $req->execute;
     my $booksellers = $req->fetchall_arrayref({});
 
-    my $itemtypes = GetItemTypes( style => 'array' );
-
     $req = $dbh->prepare("SELECT DISTINCTROW budget_code, budget_name FROM aqbudgets ORDER BY budget_name");
     $req->execute;
     my @bselect;
@@ -195,9 +194,10 @@ else {
         $ccode_avlist = GetAuthorisedValues($ccode_subfield_structure->{authorised_value});
     }
 
+    my $itemtypes = Koha::ItemTypes->search_with_localization;
     $template->param(
         booksellers   => $booksellers,
-        itemtypes     => $itemtypes,
+        itemtypes     => $itemtypes, # FIXME Should use the TT plugin instead
         Budgets       => $Budgets,
         hassort1      => $hassort1,
         hassort2      => $hassort2,

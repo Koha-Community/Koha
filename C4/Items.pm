@@ -41,6 +41,7 @@ use Koha::Database;
 
 use Koha::Biblioitems;
 use Koha::Items;
+use Koha::ItemTypes;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::Libraries;
@@ -2892,12 +2893,12 @@ sub PrepareItemrecordDisplay {
 
                         #----- itemtypes
                     } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
-                        my $itemtypes = GetItemTypes( style => 'array' );
+                        my $itemtypes = Koha::ItemTypes->search_with_localization;
                         push @authorised_values, ""
                           unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-                        for my $itemtype ( @$itemtypes ) {
-                            push @authorised_values, $itemtype->{itemtype};
-                            $authorised_lib{$itemtype->{itemtype}} = $itemtype->{translated_description};
+                        while ( my $itemtype = $itemtypes->next ) {
+                            push @authorised_values, $itemtype->itemtype;
+                            $authorised_lib{$itemtype->itemtype} = $itemtype->translated_description;
                         }
                         if ($defaultvalues && $defaultvalues->{'itemtype'}) {
                             $defaultvalue = $defaultvalues->{'itemtype'};

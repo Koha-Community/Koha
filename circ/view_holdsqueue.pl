@@ -29,9 +29,10 @@ use C4::Auth;
 use C4::Output;
 use C4::Biblio;
 use C4::Items;
-use C4::Koha;   # GetItemTypes
 use C4::HoldsQueue qw(GetHoldsQueueItems);
 use Koha::BiblioFrameworks;
+
+use Koha::ItemTypes;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
@@ -62,16 +63,16 @@ if ( $run_report ) {
 }
 
 # getting all itemtypes
-my $itemtypes = &GetItemTypes();
+my $itemtypes = Koha::ItemTypes->search({}, {order_by => 'itemtype'});;
 my @itemtypesloop;
-foreach my $thisitemtype ( sort keys %$itemtypes ) {
+while ( my $itemtype = $itemtypes->next ) {
     push @itemtypesloop, {
-        value       => $thisitemtype,
-        description => $itemtypes->{$thisitemtype}->{'description'},
+        value       => $itemtype->itemtype,
+        description => $itemtypes->description, # FIXME Don't we want the translated_description here?
     };
 }
 
-$template->param(
+$template->param( # FIXME Could be improved passing the $itemtypes iterator directly to the template
    itemtypeloop => \@itemtypesloop,
 );
 
