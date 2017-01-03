@@ -57,6 +57,18 @@ Koha::ItemType->new(
     }
 )->store;
 
+Koha::ItemType->new(
+    {
+        itemtype       => 'type3',
+        description    => 'description',
+        rentalcharge   => '0.00',
+        imageurl       => 'imageurl',
+        summary        => 'summary',
+        checkinmsg     => 'checkinmsg',
+        checkinmsgtype => 'checkinmsgtype',
+    }
+)->store;
+
 Koha::Localization->new(
     {
         entity      => 'itemtypes',
@@ -103,7 +115,7 @@ is( $type->checkinmsg,     'checkinmsg',     'checkinmsg' );
 is( $type->checkinmsgtype, 'checkinmsgtype', 'checkinmsgtype' );
 
 my $itemtypes = Koha::ItemTypes->search_with_localization;
-is( $itemtypes->count, 2, 'There are 2 item types' );
+is( $itemtypes->count, 3, 'There are 3 item types' );
 my $first_itemtype = $itemtypes->next;
 is(
     $first_itemtype->translated_description,

@@ -223,8 +223,8 @@
             <td><input type="radio" name="Column" value="items.itype" /></td>
            <td><select name="filter_items.itype" id="itype">
                <option value=""> </option>
-               [% FOREACH itypeloo IN itemtypeloop %]
-                 [% IF ( itypeloo.selected ) %]<option value="[% itypeloo.code %]" selected="selected">[% itypeloo.description %]</option>[% ELSE %]<option value="[% itypeloo.code %]">[% itypeloo.description %]</option>[% END %]
+               [% FOREACH itemtype IN itemtypes %]
+                 <option value="[% itemtype.itemtype %]">[% itemtype.translated_description %]</option>
                [% END %]
                </select>
              </td> 

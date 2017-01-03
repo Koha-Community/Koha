@@ -46,11 +46,15 @@ sub search_with_localization {
     my ( $self, $params, $attributes ) = @_;
 
     my $language = C4::Languages::getlanguage();
-    $params->{'-or'} = { 'localization.lang' => [ $language, undef ] };
-    $attributes->{order_by} = 'localization.translation' unless exists $attributes->{order_by};
+    $Koha::Schema::Result::Itemtype::LANGUAGE = $language;
+    $attributes->{order_by} = 'translated_description' unless exists $attributes->{order_by};
     $attributes->{join} = 'localization';
-    $attributes->{'+select'} = [ { coalesce => [qw( localization.translation me.description )] } ];
-    $attributes->{'+as'} = ['translated_description'];
+    $attributes->{'+select'} = [
+        {
+            coalesce => [qw( localization.translation me.description )],
+            -as      => 'translated_description'
+        }
+    ];
     $self->SUPER::search( $params, $attributes );
 }
 

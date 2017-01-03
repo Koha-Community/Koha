@@ -199,11 +199,20 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1GiikODklVISOurHX37qjA
 
 # Use the ItemtypeLocalization view to create the join on localization
+our $LANGUAGE;
 __PACKAGE__->has_many(
-  "localization",
-  "Koha::Schema::Result::ItemtypeLocalization",
-  { "foreign.code" => "self.itemtype" },
-  { cascade_copy => 0, cascade_delete => 0 },
+  "localization" => "Koha::Schema::Result::ItemtypeLocalization",
+    sub {
+        my $args = shift;
+
+        die "no lang specified!" unless $LANGUAGE;
+
+        return ({
+            "$args->{self_alias}.itemtype" => { -ident => "$args->{foreign_alias}.code" },
+            "$args->{foreign_alias}.lang" => $LANGUAGE,
+        });
+
+    }
 );
 
 1;
