@@ -32,7 +32,6 @@ use C4::Context;
 use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Biblio;
-use C4::Koha;       # use getitemtypeinfo
 
 my $query = new CGI;
 

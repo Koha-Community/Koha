@@ -75,6 +75,7 @@ use C4::Koha;
 
 use Koha::Acquisition::Booksellers;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::ItemTypes;
 
 my $input      = new CGI;
 
@@ -144,8 +145,8 @@ if ($AcqCreateItem eq 'receiving') {
         $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->{materials} });
         $item->{materials} = $descriptions->{lib} // '';
 
-        my $itemtype = getitemtypeinfo($item->{itype});
-        $item->{itemtype} = $itemtype->{description};
+        my $itemtype = Koha::ItemsTypes->find( $item->{itype} );
+        $item->{itemtype} = $itemtype->description; # FIXME Should not it be translated_description?
         push @items, $item;
     }
     $template->param(items => \@items);

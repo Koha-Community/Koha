@@ -29,6 +29,7 @@ use C4::Output;
 use Koha::Libraries;
 
 use Koha::AuthorisedValues;
+use Koha::ItemTypes;
 
 my $cgi = new CGI;
 
@@ -71,8 +72,8 @@ if($itemnumber) {
     $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->{materials} });
     $item->{materials} = $descriptions->{lib} // '';
 
-    my $itemtype = getitemtypeinfo($item->{itype});
-    $item->{itemtype} = $itemtype->{description};
+    my $itemtype = Koha::ItemTypes->find( $item->{itype} );
+    $item->{itemtype} = $itemtype->description; # FIXME Should not it be translated_description?
 }
 
 my $json_text = to_json( $item, { utf8 => 1 } );

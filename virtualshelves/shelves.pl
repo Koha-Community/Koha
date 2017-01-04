@@ -29,6 +29,7 @@ use C4::XSLT;
 
 use Koha::Biblios;
 use Koha::Biblioitems;
+use Koha::ItemTypes;
 use Koha::CsvProfiles;
 use Koha::Virtualshelves;
 
@@ -247,14 +248,14 @@ if ( $op eq 'view' ) {
 
                 my $marcflavour = C4::Context->preference("marcflavour");
                 my $itemtype = Koha::Biblioitems->search({ biblionumber => $content->biblionumber })->next->itemtype;
-                my $itemtypeinfo = getitemtypeinfo( $itemtype, 'intranet' );
+                $itemtype = Koha::ItemTypes->find( $itemtype );
                 my $biblio = Koha::Biblios->find( $content->biblionumber );
                 $this_item->{title}             = $biblio->title;
                 $this_item->{author}            = $biblio->author;
                 $this_item->{dateadded}         = $content->dateadded;
-                $this_item->{imageurl}          = $itemtypeinfo->{imageurl};
-                $this_item->{description}       = $itemtypeinfo->{description};
-                $this_item->{notforloan}        = $itemtypeinfo->{notforloan};
+                $this_item->{imageurl}          = C4::Koha::getitemtypeimagelocation( 'intranet', $itemtype->imageurl );
+                $this_item->{description}       = $itemtype->description; #FIXME Should not it be translated_description
+                $this_item->{notforloan}        = $itemtype->notforloan;
                 $this_item->{'coins'}           = GetCOinSBiblio($record);
                 $this_item->{'subtitle'}        = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $biblionumber ) );
                 $this_item->{'normalized_upc'}  = GetNormalizedUPC( $record, $marcflavour );

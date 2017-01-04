@@ -44,6 +44,7 @@ use Koha::Acquisition::Currencies;
 use Koha::Biblio::Metadata;
 use Koha::Biblio::Metadatas;
 use Koha::Holds;
+use Koha::ItemTypes;
 use Koha::SearchEngine;
 use Koha::Libraries;
 
@@ -1629,7 +1630,8 @@ sub GetAuthorisedValueDesc {
 
         #---- itemtypes
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-            return getitemtypeinfo($value)->{translated_description};
+            my $itemtype = Koha::ItemTypes->find( $value );
+            return $itemtype ? $itemtype->translated_description : q||;
         }
 
         #---- "true" authorized value

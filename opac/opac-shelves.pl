@@ -30,6 +30,7 @@ use C4::Tags qw( get_tags );
 use C4::XSLT;
 
 use Koha::Biblioitems;
+use Koha::ItemTypes;
 use Koha::Virtualshelves;
 use Koha::RecordProcessor;
 
@@ -283,10 +284,10 @@ if ( $op eq 'view' ) {
 
                 my $marcflavour = C4::Context->preference("marcflavour");
                 my $itemtype = Koha::Biblioitems->search({ biblionumber => $content->biblionumber })->next->itemtype;
-                my $itemtypeinfo = getitemtypeinfo( $itemtype, 'opac' );
-                $this_item->{imageurl}          = $itemtypeinfo->{imageurl};
-                $this_item->{description}       = $itemtypeinfo->{description};
-                $this_item->{notforloan}        = $itemtypeinfo->{notforloan};
+                $itemtype = Koha::ItemTypes->find( $itemtype );
+                $this_item->{imageurl}          = C4::Koha::getitemtypeimagelocation( 'opac', $itemtype->imageurl );
+                $this_item->{description}       = $itemtype->description; #FIXME Should not it be translated_description?
+                $this_item->{notforloan}        = $itemtype->notforloan;
                 $this_item->{'coins'}           = GetCOinSBiblio($record);
                 $this_item->{'subtitle'}        = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $biblionumber ) );
                 $this_item->{'normalized_upc'}  = GetNormalizedUPC( $record, $marcflavour );

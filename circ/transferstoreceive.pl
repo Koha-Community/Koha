@@ -36,6 +36,7 @@ use Date::Calc qw(
 use C4::Koha;
 use C4::Reserves;
 use Koha::Items;
+use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::DateUtils;
 use Koha::BiblioFrameworks;
@@ -89,10 +90,10 @@ while ( my $library = $libraries->next ) {
 				$getransf{'diff'} = $diff;
             }
             my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
-            my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $gettitle->{'itype'} : $gettitle->{'itemtype'} );
+            my $itemtype = Koha::ItemTypes->find( (C4::Context->preference('item-level_itypes')) ? $gettitle->{'itype'} : $gettitle->{'itemtype'} );
 
             $getransf{'datetransfer'} = $num->{'datesent'};
-            $getransf{'itemtype'} = $itemtypeinfo ->{'description'};
+            $getransf{'itemtype'} = $itemtype->description; # FIXME Should not it be translated_description?
 			foreach (qw(title author biblionumber itemnumber barcode homebranch holdingbranch itemcallnumber)) {
             	$getransf{$_} = $gettitle->{$_};
 			}

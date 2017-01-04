@@ -22,11 +22,11 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Members;
-use C4::Koha qw( getitemtypeinfo );
 use C4::Circulation qw( GetIssuingCharges );
 use C4::Reserves;
 use C4::Items;
 use Koha::Holds;
+use Koha::ItemTypes;
 
 my $input          = CGI->new;
 my $borrowernumber = $input->param('borrowernumber');
@@ -94,8 +94,8 @@ sub build_issue_data {
         my ( $charge, $itemtype ) =
           GetIssuingCharges( $issue->{itemnumber}, $borrowernumber );
 
-        my $itemtypeinfo = getitemtypeinfo($itemtype);
-        $row{'itemtype_description'} = $itemtypeinfo->{description};
+        my $itemtype = Koha::ItemTypes->find( $itemtype );
+        $row{'itemtype_description'} = $itemtype->description; #FIXME Should not it be translated_description
 
         $row{'charge'} = sprintf( "%.2f", $charge );
 

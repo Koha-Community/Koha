@@ -37,6 +37,7 @@ use C4::Reserves;
 use C4::Koha;
 use Koha::DateUtils;
 use Koha::BiblioFrameworks;
+use Koha::ItemTypes;
 
 my $input = new CGI;
 
@@ -104,12 +105,12 @@ foreach my $num (@getreserves) {
     # fix up item type for display
     $gettitle->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $gettitle->{'itype'} : $gettitle->{'itemtype'};
     my $getborrower = GetMember(borrowernumber => $num->{'borrowernumber'});
-    my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );  # using the fixed up itype/itemtype
+    my $itemtype = Koha::ItemTypes->find( $gettitle->{'itemtype'} );  # using the fixed up itype/itemtype
     $getreserv{'waitingdate'} = $num->{'waitingdate'};
     my ( $expire_year, $expire_month, $expire_day ) = split (/-/, $num->{'expirationdate'});
     my $calcDate = Date_to_Days( $expire_year, $expire_month, $expire_day );
 
-    $getreserv{'itemtype'}       = $itemtypeinfo->{'description'};
+    $getreserv{'itemtype'}       = $itemtype->description; # FIXME Should not it be translated_description?
     $getreserv{'title'}          = $gettitle->{'title'};
     $getreserv{'subtitle'}       = GetRecordValue('subtitle', GetMarcBiblio($gettitle->{'biblionumber'}), GetFrameworkCode($gettitle->{'biblionumber'}));
     $getreserv{'biblionumber'}   = $gettitle->{'biblionumber'};

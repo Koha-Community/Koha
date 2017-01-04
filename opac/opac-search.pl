@@ -52,6 +52,7 @@ use C4::Tags qw(get_tags);
 use C4::SocialData;
 use C4::External::OverDrive;
 
+use Koha::ItemTypes;
 use Koha::LibraryCategories;
 use Koha::Ratings;
 use Koha::Virtualshelves;
@@ -225,7 +226,7 @@ my $itemtypes = GetItemTypesCategorized;
 # add translated_description to itemtypes
 foreach my $itemtype ( keys %{$itemtypes} ) {
     # Itemtypes search categories don't have (yet) translated descriptions, they are auth values (and could still have no descriptions too BZ 18400)
-    my $translated_description = getitemtypeinfo( $itemtype, 'opac' )->{translated_description};
+    my $translated_description = Koha::ItemTypes->find( $itemtype )->translated_description;
     $itemtypes->{$itemtype}->{translated_description} = $translated_description || $itemtypes->{$itemtype}->{description} || q{};
 }
 

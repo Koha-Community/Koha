@@ -22,15 +22,11 @@ use Modern::Perl;
 use Template::Plugin;
 use base qw( Template::Plugin );
 
-use C4::Koha;
 use Koha::ItemTypes;
 
 sub GetDescription {
     my ( $self, $itemtype ) = @_;
-
-    $itemtype = C4::Koha::getitemtypeinfo( $itemtype );
-    return $itemtype->{translated_description};
-
+    return Koha::ItemTypes->find( $itemtype )->translated_description;
 }
 
 sub Get {

@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 use DateTime::Format::MySQL;
-use Test::More tests => 7;
+use Test::More tests => 6;
 
 use t::lib::TestBuilder;
 
@@ -155,12 +155,6 @@ subtest 'Authorized Values Tests' => sub {
         );
     }
 
-};
-
-subtest 'Itemtype info Tests' => sub {
-    like ( getitemtypeinfo( $itype_1->{itemtype} )->{'imageurl'}, qr/intranet-tmpl/, 'getitemtypeinfo on unspecified interface returns intranet imageurl (legacy behavior)' );
-    like ( getitemtypeinfo( $itype_1->{itemtype}, 'intranet')->{'imageurl'}, qr/intranet-tmpl/, 'getitemtypeinfo on "intranet" interface returns intranet imageurl' );
-    like ( getitemtypeinfo( $itype_1->{itemtype}, 'opac')->{'imageurl'}, qr/opac-tmpl/, 'getitemtypeinfo on "opac" interface returns opac imageurl' );
 };
 
 ### test for C4::Koha->GetDailyQuote()
