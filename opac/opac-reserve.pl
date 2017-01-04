@@ -32,6 +32,7 @@ use C4::Context;
 use C4::Members;
 use C4::Overdues;
 use C4::Debug;
+use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Libraries;
 use Koha::Patrons;
@@ -384,7 +385,6 @@ unless ($noreserves) {
 # and items for each biblionumber.
 #
 #
-my $notforloan_label_of = get_notforloan_label_of();
 
 my $biblioLoop = [];
 my $numBibsAvailable = 0;
@@ -407,9 +407,10 @@ foreach my $biblioNum (@biblionumbers) {
         &get_out($query, $cookie, $template->output);
     }
 
+    my $frameworkcode = GetFrameworkCode( $biblioData->{biblionumber} );
     $biblioLoopIter{biblionumber} = $biblioData->{biblionumber};
     $biblioLoopIter{title} = $biblioData->{title};
-    $biblioLoopIter{subtitle} = GetRecordValue('subtitle', $record, GetFrameworkCode($biblioData->{biblionumber}));
+    $biblioLoopIter{subtitle} = GetRecordValue('subtitle', $record, $frameworkcode);
     $biblioLoopIter{author} = $biblioData->{author};
     $biblioLoopIter{rank} = $biblioData->{rank};
     $biblioLoopIter{reservecount} = $biblioData->{reservecount};
@@ -431,6 +432,9 @@ foreach my $biblioNum (@biblionumbers) {
             $biblioLoopIter{forloan} = 1;
         }
     }
+
+    my @notforloan_avs = Koha::AuthorisedValues->search_by_koha_field({ kohafield => 'items.notforloan', frameworkcode => $frameworkcode });
+    my $notforloan_label_of = { map { $_->authorised_value => $_->opac_description } @notforloan_avs };
 
     $biblioLoopIter{itemLoop} = [];
     my $numCopiesAvailable = 0;
