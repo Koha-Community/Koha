@@ -141,10 +141,10 @@
                       <select id="frequency" name="frequency" class="required" required="required">
                         <option value="">Select a frequency</option>
                         [% FOREACH frequency IN AuthorisedValues.GetAuthValueDropbox('HSBND_FREQ') %]
-                          [% IF housebound_profile.frequency == frequency.value %]
-                            <option value="[% frequency.value %]" selected="selected">[% frequency.label %]</option>
+                          [% IF housebound_profile.frequency == frequency.authorised_value %]
+                            <option value="[% frequency.authorised_value %]" selected="selected">[% frequency.lib %]</option>
                           [% ELSE %]
-                            <option value="[% frequency.value %]">[% frequency.label %]</option>
+                            <option value="[% frequency.authorised_value %]">[% frequency.lib %]</option>
                           [% END %]
                         [% END %]
                       </select>

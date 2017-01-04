@@ -40,8 +40,18 @@ sub Get {
 }
 
 sub GetAuthValueDropbox {
-    my ( $self, $category, $default ) = @_;
-    return C4::Koha::GetAuthvalueDropbox($category, $default);
+    my ( $self, $category ) = @_;
+    my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+    return Koha::AuthorisedValues->search(
+        {
+            branchcode => $branch_limit,
+            category => $category,
+        },
+        {
+            group_by => 'lib',
+            order_by => [ 'category', 'lib', 'lib_opac' ],
+        }
+    );
 }
 
 sub GetCategories {

@@ -48,9 +48,9 @@ Default value for the dropbox.
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use C4::Koha;
 use C4::Charset;
 use C4::Auth qw/check_api_auth/;
+use Koha::AuthorisedValues;
 
 my $query = CGI->new();
 binmode STDOUT, ':encoding(UTF-8)';
@@ -67,18 +67,28 @@ my $name = $input->param('name');
 my $category = $input->param('category');
 my $default = $input->param('default');
 $default = C4::Charset::NormalizeString($default);
+my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
 
-binmode STDOUT, ':encoding(UTF-8)';
-print $input->header(-type => 'text/plain', -charset => 'UTF-8');
-my $avs = C4::Koha::GetAuthvalueDropbox($category, $default);
+my $avs = Koha::AuthorisedValues->search(
+    {
+        branchcode => $branch_limit,
+        category => $category,
+    },
+    {
+        group_by => 'lib',
+        order_by => [ 'category', 'lib', 'lib_opac' ],
+    }
+);
 my $html = qq|<select id="$name" name="$name">|;
-for my $av ( @$avs ) {
-    if ( $av->{default} ) {
-        $html .= qq|<option value="$av->{value}" selected="selected">$av->{label}</option>|;
+while ( my $av = $avs->next ) {
+    if ( $av->authorised_value eq $default ) {
+        $html .= q|<option value="| . $av->authorised_value . q|" selected="selected">| . $av->lib . q|</option>|;
     } else {
-        $html .= qq|<option value="$av->{value}">$av->{label}</option>|;
+        $html .= q|<option value="| . $av->authorised_value . q|">| . $av->lib . q|</option>|;
     }
 }
 $html .= qq|</select>|;
 
+binmode STDOUT, ':encoding(UTF-8)';
+print $input->header(-type => 'text/plain', -charset => 'UTF-8');
 print $html;

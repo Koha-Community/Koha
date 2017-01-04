@@ -9,7 +9,7 @@
     all: add a "All" entry
 %]
 
-[% SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) %]
+[% SET avs = AuthorisedValues.GetAuthValueDropbox( category ) %]
 [% DEFAULT
     class = ''
     size = 20
@@ -19,10 +19,10 @@
   <select id="[% name %]" name="[% name %]" class="[% class %]" >
   [% IF all %]<option value="">All</option>[% END %]
   [% FOR av IN avs %]
-    [% IF av.default %]
-      <option value="[% av.value %]" selected="selected">[% av.label | html_entity %]</option>
+    [% IF av.authorised_value == default %]
+      <option value="[% av.authorised_value %]" selected="selected">[% av.lib | html_entity %]</option>
     [% ELSE %]
-      <option value="[% av.value %]">[% av.label | html_entity %]</option>
+      <option value="[% av.authorised_value %]">[% av.lib | html_entity %]</option>
     [% END %]
   [% END %]
   </select>
