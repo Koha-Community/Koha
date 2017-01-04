@@ -46,7 +46,6 @@ BEGIN {
         &getallthemes
         &getFacets
         &getnbpages
-		&get_infos_of
 		&get_notforloan_label_of
 		&getitemtypeimagedir
 		&getitemtypeimagesrc
