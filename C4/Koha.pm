@@ -46,7 +46,6 @@ BEGIN {
         &getallthemes
         &getFacets
         &getnbpages
-		&get_notforloan_label_of
 		&getitemtypeimagedir
 		&getitemtypeimagesrc
 		&getitemtypeimagelocation
@@ -635,58 +634,6 @@ sub getFacets {
             }
     }
     return $facets;
-}
-
-=head2 get_notforloan_label_of
-
-  my $notforloan_label_of = get_notforloan_label_of();
-
-Each authorised value of notforloan (information available in items and
-itemtypes) is link to a single label.
-
-Returns a href where keys are authorised values and values are corresponding
-labels.
-
-  foreach my $authorised_value (keys %{$notforloan_label_of}) {
-    printf(
-        "authorised_value: %s => %s\n",
-        $authorised_value,
-        $notforloan_label_of->{$authorised_value}
-    );
-  }
-
-=cut
-
-# FIXME - why not use GetAuthorisedValues ??
-#
-sub get_notforloan_label_of {
-    my $dbh = C4::Context->dbh;
-
-    my $query = '
-SELECT authorised_value
-  FROM marc_subfield_structure
-  WHERE kohafield = \'items.notforloan\'
-  LIMIT 0, 1
-';
-    my $sth = $dbh->prepare($query);
-    $sth->execute();
-    my ($statuscode) = $sth->fetchrow_array();
-
-    $query = '
-SELECT lib,
-       authorised_value
-  FROM authorised_values
-  WHERE category = ?
-';
-    $sth = $dbh->prepare($query);
-    $sth->execute($statuscode);
-    my %notforloan_label_of;
-    while ( my $row = $sth->fetchrow_hashref ) {
-        $notforloan_label_of{ $row->{authorised_value} } = $row->{lib};
-    }
-    $sth->finish;
-
-    return \%notforloan_label_of;
 }
 
 =head2 GetAuthorisedValues
