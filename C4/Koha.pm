@@ -41,7 +41,6 @@ BEGIN {
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
         &GetPrinters &GetPrinter
-        &getitemtypeinfo
         &GetItemTypesCategorized
         &getallthemes
         &getFacets
@@ -119,45 +118,6 @@ sub GetItemTypesCategorized {
         WHERE searchcategory > '' and hideinopac=0
         |;
 return ($dbh->selectall_hashref($query,'itemtype'));
-}
-
-=head2 getitemtypeinfo
-
-  $itemtype = &getitemtypeinfo($itemtype, [$interface]);
-
-Returns information about an itemtype. The optional $interface argument
-sets which interface ('opac' or 'intranet') to return the imageurl for.
-Defaults to intranet.
-
-=cut
-
-sub getitemtypeinfo {
-    my ($itemtype, $interface) = @_;
-    my $dbh      = C4::Context->dbh;
-    require C4::Languages;
-    my $language = C4::Languages::getlanguage();
-    my $it = $dbh->selectrow_hashref(q|
-        SELECT
-               itemtypes.itemtype,
-               itemtypes.description,
-               itemtypes.rentalcharge,
-               itemtypes.notforloan,
-               itemtypes.imageurl,
-               itemtypes.summary,
-               itemtypes.checkinmsg,
-               itemtypes.checkinmsgtype,
-               itemtypes.sip_media_type,
-               COALESCE( localization.translation, itemtypes.description ) AS translated_description
-        FROM   itemtypes
-        LEFT JOIN localization ON itemtypes.itemtype = localization.code
-            AND localization.entity = 'itemtypes'
-            AND localization.lang = ?
-        WHERE itemtypes.itemtype = ?
-    |, undef, $language, $itemtype );
-
-    $it->{imageurl} = getitemtypeimagelocation( ( ( defined $interface && $interface eq 'opac' ) ? 'opac' : 'intranet' ), $it->{imageurl} );
-
-    return $it;
 }
 
 =head2 getitemtypeimagedir
