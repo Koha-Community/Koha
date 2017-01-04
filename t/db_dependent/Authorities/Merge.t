@@ -4,11 +4,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use MARC::Record;
 use Test::MockModule;
 use Test::MockObject;
+
+use t::lib::TestBuilder;
 
 use C4::Biblio;
 use Koha::Database;
@@ -20,6 +22,7 @@ BEGIN {
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
+my $builder = t::lib::TestBuilder->new;
 
 # Some advanced mocking :)
 my ( @zebrarecords, $index );
@@ -117,6 +120,92 @@ subtest 'Test merge A1 to modified A1' => sub {
     is( $biblio1->field(109)->subfield('b'), $MARC1->field(109)->subfield('b'), 'Record not overwritten while merging');
 };
 
+subtest 'Test merge A1 to B1 (changing authtype)' => sub {
+# Tests were aimed for bug 9988, moved to 17909 in adjusted form
+# Would not encourage this type of merge, but we should test what we offer
+# The merge routine still needs the fixes on bug 17913
+    plan tests => 8;
+
+    # create another authtype
+    my $authtype2 = $builder->build({
+        source => 'AuthType',
+        value  => {
+            auth_tag_to_report => '112',
+        },
+    });
+    # create two fields linked to this auth type
+    $schema->resultset('MarcSubfieldStructure')->search({ tagfield => [ '112', '712' ] })->delete;
+    $builder->build({
+        source => 'MarcSubfieldStructure',
+        value  => {
+            tagfield => '112',
+            tagsubfield => 'a',
+            authtypecode => $authtype2->{authtypecode},
+            frameworkcode => '',
+        },
+    });
+    $builder->build({
+        source => 'MarcSubfieldStructure',
+        value  => {
+            tagfield => '712',
+            tagsubfield => 'a',
+            authtypecode => $authtype2->{authtypecode},
+            frameworkcode => '',
+        },
+    });
+
+    # create auth1 (from the earlier type)
+    my $auth1 = MARC::Record->new;
+    $auth1->append_fields( MARC::Field->new( '109', '0', '0', 'a' => 'George Orwell', b => 'bb' ));
+    my $authid1 = AddAuthority($auth1, undef, 'TEST_PERSO');
+    # create auth2 (new type)
+    my $auth2 = MARC::Record->new;
+    $auth2->append_fields( MARC::Field->new( '112', '0', '0', 'a' => 'Batman', c => 'cc' ));
+    my $authid2 = AddAuthority($auth1, undef, $authtype2->{authtypecode} );
+
+    # create a biblio with one 109 and two 609s to be touched
+    # seems exceptional see bug 13760 comment10
+    my $marc = MARC::Record->new;
+    $marc->append_fields(
+        MARC::Field->new( '003', 'some_003' ),
+        MARC::Field->new( '109', '', '', a => 'G. Orwell', b => 'bb', d => 'd', 9 => $authid1 ),
+        MARC::Field->new( '245', '', '', a => 'My title' ),
+        MARC::Field->new( '609', '', '', a => 'Orwell', 9 => "$authid1" ),
+        MARC::Field->new( '609', '', '', a => 'Orwell', x => 'xx', 9 => "$authid1" ),
+        MARC::Field->new( '611', '', '', a => 'Added for testing order' ),
+        MARC::Field->new( '612', '', '', a => 'unrelated', 9 => 'other' ),
+    );
+    my ( $biblionumber ) = C4::Biblio::AddBiblio( $marc, '' );
+    my $oldbiblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+
+    @zebrarecords = ( $marc );
+    $index = 0;
+    my $retval = C4::AuthoritiesMarc::merge( $authid1, $auth1, $authid2, $auth2 );
+    is( $retval, 1, 'We touched only one biblio' );
+
+    # Get new marc record for compares
+    my $newbiblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    compare_field_count( $oldbiblio, $newbiblio, 1 );
+    # TODO The following test will still fail; refined after 17913
+    compare_field_order( $oldbiblio, $newbiblio, 0 );
+
+    # Check some fields
+    is( $newbiblio->field('003')->data,
+        $oldbiblio->field('003')->data,
+        'Check contents of a control field not expected to be touched' );
+    is( $newbiblio->subfield( '245', 'a' ),
+        $oldbiblio->subfield( '245', 'a' ),
+        'Check contents of a data field not expected to be touched' );
+    is( $newbiblio->subfield( '112', 'a' ),
+        $auth2->subfield( '112', 'a' ), 'Check modified 112a' );
+    is( $newbiblio->subfield( '112', 'c' ),
+        $auth2->subfield( '112', 'c' ), 'Check new 112c' );
+
+    #TODO Check the new 612s (after fix on 17913, they are 112s now)
+    is( $newbiblio->subfield( '612', 'a' ),
+        $oldbiblio->subfield( '612', 'a' ), 'Check untouched 612a' );
+};
+
 sub set_mocks {
     # Mock ZOOM objects: They do nothing actually
     # Get new_record_from_zebra to return the records
@@ -134,6 +223,29 @@ sub set_mocks {
     $zoom_obj->mock( 'search', sub {} );
     $zoom_obj->mock( 'size', sub { @zebrarecords } );
     $zoom_record_obj->mock( 'raw', sub {} );
+}
+
+sub compare_field_count {
+    my ( $oldmarc, $newmarc, $pass ) = @_;
+    my $t;
+    if( $pass ) {
+        is( scalar $newmarc->fields, $t = $oldmarc->fields, "Number of fields still equal to $t" );
+    } else {
+        isnt( scalar $newmarc->fields, $t = $oldmarc->fields, "Number of fields not equal to $t" );
+    }
+}
+
+sub compare_field_order {
+    my ( $oldmarc, $newmarc, $pass ) = @_;
+    if( $pass ) {
+        is( ( join q/,/, map { $_->tag; } $newmarc->fields ),
+            ( join q/,/, map { $_->tag; } $oldmarc->fields ),
+            'Order of fields unchanged' );
+    } else {
+        isnt( ( join q/,/, map { $_->tag; } $newmarc->fields ),
+            ( join q/,/, map { $_->tag; } $oldmarc->fields ),
+            'Order of fields changed' );
+    }
 }
 
 $schema->storage->txn_rollback;
