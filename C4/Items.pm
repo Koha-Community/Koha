@@ -1200,12 +1200,13 @@ sub GetItemInfosOf {
 
     my $itemnumber_values = @itemnumbers ? join( ',', @itemnumbers ) : "''";
 
+    my $dbh = C4::Context->dbh;
     my $query = "
         SELECT *
         FROM items
         WHERE itemnumber IN ($itemnumber_values)
     ";
-    return get_infos_of( $query, 'itemnumber' );
+    return $dbh->selectall_hashref($query, 'itemnumber');
 }
 
 =head2 GetItemsByBiblioitemnumber

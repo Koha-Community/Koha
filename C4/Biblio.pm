@@ -1052,6 +1052,7 @@ sub GetBiblioItemInfosOf {
 
     my $biblioitemnumber_values = @biblioitemnumbers ? join( ',', @biblioitemnumbers ) : "''";
 
+    my $dbh = C4::Context->dbh;
     my $query = "
         SELECT biblioitemnumber,
             publicationyear,
@@ -1059,7 +1060,7 @@ sub GetBiblioItemInfosOf {
         FROM biblioitems
         WHERE biblioitemnumber IN ($biblioitemnumber_values)
     ";
-    return get_infos_of( $query, 'biblioitemnumber' );
+    return $dbh->selectall_hashref($query, 'biblioitemnumber');
 }
 
 =head1 FUNCTIONS FOR HANDLING MARC MANAGEMENT

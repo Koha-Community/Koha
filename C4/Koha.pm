@@ -638,54 +638,6 @@ sub getFacets {
     return $facets;
 }
 
-=head2 get_infos_of
-
-Return a href where a key is associated to a href. You give a query,
-the name of the key among the fields returned by the query. If you
-also give as third argument the name of the value, the function
-returns a href of scalar. The optional 4th argument is an arrayref of
-items passed to the C<execute()> call. It is designed to bind
-parameters to any placeholders in your SQL.
-
-  my $query = '
-SELECT itemnumber,
-       notforloan,
-       barcode
-  FROM items
-';
-
-  # generic href of any information on the item, href of href.
-  my $iteminfos_of = get_infos_of($query, 'itemnumber');
-  print $iteminfos_of->{$itemnumber}{barcode};
-
-  # specific information, href of scalar
-  my $barcode_of_item = get_infos_of($query, 'itemnumber', 'barcode');
-  print $barcode_of_item->{$itemnumber};
-
-=cut
-
-sub get_infos_of {
-    my ( $query, $key_name, $value_name, $bind_params ) = @_;
-
-    my $dbh = C4::Context->dbh;
-
-    my $sth = $dbh->prepare($query);
-    $sth->execute( @$bind_params );
-
-    my %infos_of;
-    while ( my $row = $sth->fetchrow_hashref ) {
-        if ( defined $value_name ) {
-            $infos_of{ $row->{$key_name} } = $row->{$value_name};
-        }
-        else {
-            $infos_of{ $row->{$key_name} } = $row;
-        }
-    }
-    $sth->finish;
-
-    return \%infos_of;
-}
-
 =head2 get_notforloan_label_of
 
   my $notforloan_label_of = get_notforloan_label_of();
