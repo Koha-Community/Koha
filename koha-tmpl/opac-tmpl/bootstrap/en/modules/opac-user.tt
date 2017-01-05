@@ -281,7 +281,9 @@ Using this account is not recommended because some parts of Koha will not functi
                                                     <td class="fines">
                                                         <span class="tdlabel">Fines:</span>
                                                         [% IF ( ISSUE.charges ) %]
-                                                            Yes
+                                                            Yes (Item overdue or lost)
+                                                        [% ELSIF ( ISSUE.rentalfines ) %]
+                                                            Yes (Rental fees)
                                                         [% ELSE %]
                                                             No
                                                         [% END %]
