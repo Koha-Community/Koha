@@ -150,6 +150,9 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   "__USE_MEMCACHED__" => 'yes',
   "__MEMCACHED_SERVERS__" => "",
   "__MEMCACHED_NAMESPACE__" => "",
+  "__USE_ELASTICSEARCH__" => 'no',
+  "__ELASTICSEARCH_SERVERS__" => "localhost:9200",
+  "__ELASTICSEARCH_INDEX__" => "koha",
   "__FONT_DIR__" => "/usr/share/fonts/truetype/ttf-dejavu",
   "__TEMPLATE_CACHE_DIR__" => "/tmp/koha"
 );

@@ -228,6 +228,16 @@ Directory for Zebra's data files.
 
 Directory for Zebra's UNIX-domain sockets.
 
+=item ELASTICSEARCH_SERVERS
+
+Server:port of the Elasticsearch server to use, as a comma separated list:
+eg. 192.168.0.100:9200, localhost:9200
+
+=item ELASTICSEARCH_INDEX
+
+Unique index in Elasticsearch, for this Koha-instance
+eg. koha-mykoha  or just  koha
+
 =item MISC_DIR
 
 Directory for for miscellaenous scripts, among other
@@ -488,6 +498,9 @@ my %config_defaults = (
   'MEMCACHED_SERVERS' => '127.0.0.1:11211',
   'MEMCACHED_NAMESPACE' => 'KOHA',
   'TEMPLATE_CACHE_DIR' => '/tmp/koha',
+  'USE_ELASTICSEARCH'     => 'no',
+  'ELASTICSEARCH_SERVERS' => 'localhost:9200',
+  'ELASTICSEARCH_INDEX'  => 'koha',
   'FONT_DIR'          => '/usr/share/fonts/truetype/ttf-dejavu'
 );
 
@@ -518,6 +531,7 @@ my %valid_config_values = (
   'ZEBRA_TOKENIZER' => { chr => 1, icu => 1 },
   'RUN_DATABASE_TESTS' => { 'yes' => 1, 'no' => 1 },
   'USE_MEMCACHED'      => { 'yes' => 1, 'no' => 1 },
+  'USE_ELASTICSEARCH'  => { 'yes' => 1, 'no' => 1 },
 );
 
 # get settings from command-line
@@ -1197,6 +1211,29 @@ Memcached server address?);
       $msg = q(
 Memcached namespace?);
       $config{'MEMCACHED_NAMESPACE'} = _get_value('MEMCACHED_NAMESPACE', $msg, $defaults->{'MEMCACHED_NAMESPACE'}, $valid_values, $install_log_values);
+  }
+
+
+  $msg = q(
+Use Elasticsearch to serve search results?
+You will need a Elasticsearch server running.);
+  $msg .= _add_valid_values_disp('USE_ELASTICSEARCH', $valid_values);
+  $config{'USE_ELASTICSEARCH'} = _get_value('USE_ELASTICSEARCH', $msg, $defaults->{'USE_ELASTICSEARCH'}, $valid_values, $install_log_values);
+  if ($config{'USE_ELASTICSEARCH'} eq 'yes'){
+      $msg = q(
+Define the ELASTICSEARCH_SERVERS with a comma-separated list. Eg
+localhost:9200, 192.168.0.100:9200
+);
+      $msg = q(
+Elasticsearch server addresses?);
+      $config{'ELASTICSEARCH_SERVERS'} = _get_value('ELASTICSEARCH_SERVERS', $msg, $defaults->{'ELASTICSEARCH_SERVERS'}, $valid_values, $install_log_values);
+
+      $msg = q(
+What index name to use for this Koha-instance? It must be unique for each Koha
+sharing the same Elasticsearch-cluster
+
+Elasticsearch index?);
+      $config{'ELASTICSEARCH_INDEX'} = _get_value('ELASTICSEARCH_INDEX', $msg, $defaults->{'ELASTICSEARCH_INDEX'}, $valid_values, $install_log_values);
   }
 
   $msg = q(
