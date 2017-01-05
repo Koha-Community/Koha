@@ -184,6 +184,7 @@ if ($issues){
 
         my ( $total , $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
         my $charges = 0;
+        my $rentalfines = 0;
         foreach my $ac (@$accts) {
             if ( $ac->{'itemnumber'} == $issue->{'itemnumber'} ) {
                 $charges += $ac->{'amountoutstanding'}
@@ -192,9 +193,12 @@ if ($issues){
                   if $ac->{'accounttype'} eq 'FU';
                 $charges += $ac->{'amountoutstanding'}
                   if $ac->{'accounttype'} eq 'L';
+                $rentalfines += $ac->{'amountoutstanding'}
+                  if $ac->{'accounttype'} eq 'Rent';
             }
         }
         $issue->{'charges'} = $charges;
+        $issue->{'rentalfines'} = $rentalfines;
         my $marcrecord = GetMarcBiblio( $issue->{'biblionumber'} );
         $issue->{'subtitle'} = GetRecordValue('subtitle', $marcrecord, GetFrameworkCode($issue->{'biblionumber'}));
         # check if item is renewable
