@@ -323,8 +323,8 @@ __END_SRU_PUBLICSERVER__
  <plack_workers>2</plack_workers>
 
  <elasticsearch>
-     <server>localhost:9200</server>
-     <index_name>koha___KOHASITE__</index_name>
+     <server>localhost:9200</server> <!-- may be repeated to include all servers on your cluster -->
+     <index_name>koha___KOHASITE__</index_name> <!-- should be unique amongst all the indices on your cluster. _biblios and _authorities will be appended. -->
  </elasticsearch>
 
 </config>

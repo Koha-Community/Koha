@@ -153,5 +153,10 @@ __PAZPAR2_TOGGLE_XML_POST__
  <plack_max_requests>50</plack_max_requests>
  <plack_workers>2</plack_workers>
 
+ <elasticsearch>
+     <server>__ELASTICSEARCH_SERVERS__</server>      <!-- may be repeated to include all servers on your cluster -->
+     <index_name>__ELASTICSEARCH_INDEX__</index_name>  <!-- should be unique amongst all the indices on your cluster. _biblios and _authorities will be appended. -->
+ </elasticsearch>
+
 </config>
 </yazgfs>
