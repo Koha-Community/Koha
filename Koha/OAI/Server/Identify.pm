@@ -34,7 +34,7 @@ sub new {
         adminEmail          => C4::Context->preference("KohaAdminEmailAddress"),
         MaxCount            => C4::Context->preference("OAI-PMH:MaxCount"),
         granularity         => 'YYYY-MM-DD',
-        earliestDatestamp   => '0001-01-01',
+        earliestDatestamp   => _get_earliest_datestamp() || '0001-01-01',
         deletedRecord       => C4::Context->preference("OAI-PMH:DeletedRecord") || 'no',
     );
 
@@ -47,6 +47,20 @@ sub new {
     $self->compression( 'gzip' );
 
     return $self;
+}
+
+# Find the earliest timestamp in the biblio table. If this table is empty, undef
+# will be returned and we will report the fallback 0001-01-01.
+sub _get_earliest_datestamp {
+
+    my $dbh = C4::Context->dbh;
+
+    my $order_sth = $dbh->prepare( "SELECT DATE(MIN(timestamp)) AS earliest FROM biblio" );
+    $order_sth->execute();
+    my $res = $order_sth->fetchrow_hashref();
+
+    return $res->{'earliest'};
+
 }
 
 1;
