@@ -74,7 +74,7 @@ if($ok){
 		# get existing reserves .....
 
         my $biblio = Koha::Biblios->find( $biblionumber );
-        my $holds = $biblio->holds_placed_before_today;
+        my $holds = $biblio->current_holds;
         my $count = $holds->count;
         while ( my $hold = $holds->next ) {
             $count-- if $hold->is_waiting;

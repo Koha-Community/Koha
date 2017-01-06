@@ -45,7 +45,7 @@ my $biblioitem = $schema->resultset('Biblioitem')->new(
     }
 )->insert();
 
-subtest 'holds + holds_placed_before_today' => sub {
+subtest 'holds + current_holds' => sub {
     plan tests => 5;
     C4::Reserves::AddReserve( $patron->branchcode, $patron->borrowernumber, $biblio->biblionumber );
     my $holds = $biblio->holds;
@@ -58,8 +58,8 @@ subtest 'holds + holds_placed_before_today' => sub {
     C4::Reserves::AddReserve( $patron->branchcode, $patron->borrowernumber, $biblio->biblionumber, undef, undef, dt_from_string->add( days => 2 ) );
     $holds = $biblio->holds;
     is( $holds->count, 1, '->holds should return future holds' );
-    $holds = $biblio->holds_placed_before_today;
-    is( $holds->count, 0, '->holds_placed_before_today should not return future holds' );
+    $holds = $biblio->current_holds;
+    is( $holds->count, 0, '->current_holds should not return future holds' );
     $holds->delete;
 
 };

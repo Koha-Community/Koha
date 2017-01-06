@@ -219,7 +219,7 @@ sub GetRecords {
         # Get most of the needed data
         my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
         my $biblio = Koha::Biblios->find( $biblionumber );
-        my $holds  = $biblio->holds_placed_before_today->unblessed;
+        my $holds  = $biblio->current_holds->unblessed;
         my $issues           = GetBiblioIssues($biblionumber);
         my $items            = GetItemsByBiblioitemnumber($biblioitemnumber);
 

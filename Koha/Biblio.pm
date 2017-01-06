@@ -266,16 +266,16 @@ sub holds {
     return Koha::Holds->_new_from_dbic($hold_rs);
 }
 
-=head3 holds_placed_before_today
+=head3 current_holds
 
-my $holds = $biblio->holds_placed_before_today
+my $holds = $biblio->current_holds
 
 Return the holds placed on this bibliographic record.
 It does not include future holds.
 
 =cut
 
-sub holds_placed_before_today {
+sub current_holds {
     my ($self) = @_;
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     return $self->holds(

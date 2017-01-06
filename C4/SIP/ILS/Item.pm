@@ -95,7 +95,7 @@ sub new {
 	my $borrower = GetMember(borrowernumber=>$issue->{'borrowernumber'});
 	$item->{patron} = $borrower->{'cardnumber'};
     my $biblio = Koha::Biblios->find( $item->{biblionumber } );
-    my $holds = $biblio->holds_placed_before_today->unblessed;
+    my $holds = $biblio->current_holds->unblessed;
     $item->{hold_queue} = $holds;
 	$item->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$item->{hold_queue}} )];
 	$item->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$item->{hold_queue}} )];
