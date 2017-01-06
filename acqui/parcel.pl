@@ -141,11 +141,11 @@ for my $order ( @orders ) {
     $line{holds} = 0;
     my @itemnumbers = GetItemnumbersFromOrder( $order->{ordernumber} );
     my $biblio = Koha::Biblios->find( $line{biblionumber} );
-    $line{holds} = $biblio->current_holds->search(
+    $line{holds} = $biblio ? $biblio->current_holds->search(
         {
             itemnumber => { -in => \@itemnumbers },
         }
-    )->count;
+    )->count : 0;
     $line{budget} = GetBudgetByOrderNumber( $line{ordernumber} );
 
     $line{tax_value} = $line{tax_value_on_receiving};
