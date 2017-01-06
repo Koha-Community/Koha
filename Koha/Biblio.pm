@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Carp;
 
-use C4::Biblio qw( GetRecordValue GetMarcBiblio GetFrameworkCode );
+use C4::Biblio qw();
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -58,7 +58,7 @@ Keyword to MARC mapping for subtitle must be set for this method to return any p
 sub subtitles {
     my ( $self ) = @_;
 
-    return map { $_->{subfield} } @{ GetRecordValue( 'subtitle', GetMarcBiblio( $self->id ), $self->frameworkcode ) };
+    return map { $_->{subfield} } @{ C4::Biblio::GetRecordValue( 'subtitle', C4::Biblio::GetMarcBiblio( $self->id ), $self->frameworkcode ) };
 }
 
 =head3 can_article_request
