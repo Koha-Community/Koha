@@ -204,7 +204,7 @@ ok( $reserve->{'reserve_id'} eq $reserve2->{'reserve_id'}, "Test GetReserveInfo(
 
 
 $holds = $biblio->holds;
-my $hold = $holds->next;
+$hold = $holds->next;
 AlterPriority( 'top', $hold->reserve_id );
 $reserve = GetReserve( $reserve->{'reserve_id'} );
 is( $reserve->{'priority'}, '1', "Test AlterPriority(), move to top" );
