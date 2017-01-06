@@ -245,13 +245,7 @@ unless( defined $invoice->{closedate} ) {
         my $itemcount   = $biblio->items->count;
         my $holds_count = $biblio->holds->count;
         my @items = GetItemnumbersFromOrder( $ordernumber );
-        my $itemholds;
-        foreach my $item (@items){
-            my $nb = GetItemHolds($biblionumber, $item);
-            if ($nb){
-                $itemholds += $nb;
-            }
-        }
+        my $itemholds = $biblio ? $biblio->holds->search({ itemnumber => { -in => \@items } })->count : 0;
 
         my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
         $line{suggestionid}         = $suggestion->{suggestionid};

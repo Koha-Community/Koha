@@ -470,13 +470,8 @@ sub get_order_infos {
     my $itemcount   = $biblio->items->count;
     my $holds_count = $biblio->holds->count;
     my @items = GetItemnumbersFromOrder( $ordernumber );
-    my $itemholds;
-    foreach my $item (@items){
-        my $nb = GetItemHolds($biblionumber, $item);
-        if ($nb){
-            $itemholds += $nb;
-        }
-    }
+    my $itemholds  = $biblio ? $biblio->holds->search({ itemnumber => { -in => \@items } })->count : 0;
+
     # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
     $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !(@subscriptions) && !($holds_count);
     $line{items}                = ($itemcount) - (scalar @items);

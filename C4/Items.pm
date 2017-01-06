@@ -91,7 +91,6 @@ BEGIN {
         ShelfToCart
 
 	GetAnalyticsCount
-        GetItemHolds
 
         SearchItemsByField
         SearchItems
@@ -2562,27 +2561,6 @@ sub GetAnalyticsCount {
     my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
     my ($err,$res,$result) = $searcher->simple_search_compat($query,0,10);
     return ($result);
-}
-
-=head2 GetItemHolds
-
-  $holds = &GetItemHolds($biblionumber, $itemnumber);
-
-This function return the count of holds with $biblionumber and $itemnumber
-
-=cut
-
-sub GetItemHolds {
-    my ($biblionumber, $itemnumber) = @_;
-    my $holds;
-    my $dbh            = C4::Context->dbh;
-    my $query          = "SELECT count(*)
-        FROM  reserves
-        WHERE biblionumber=? AND itemnumber=?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber, $itemnumber);
-    $holds = $sth->fetchrow;
-    return $holds;
 }
 
 =head2 SearchItemsByField
