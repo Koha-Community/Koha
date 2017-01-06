@@ -847,7 +847,7 @@ sub userenv {
   C4::Context->set_userenv($usernum, $userid, $usercnum,
                            $userfirstname, $usersurname,
                            $userbranch, $branchname, $userflags,
-                           $emailaddress, $branchprinter);
+                           $emailaddress, $branchprinter, $shibboleth);
 
 Establish a hash of user environment variables.
 

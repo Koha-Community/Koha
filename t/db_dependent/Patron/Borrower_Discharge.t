@@ -43,7 +43,7 @@ my $another_library = $builder->build({ source => 'Branch' });
 my $itemtype        = $builder->build({ source => 'Itemtype' })->{itemtype};
 
 C4::Context->_new_userenv('xxx');
-C4::Context->set_userenv(0, 0, 0, 'firstname', 'surname', $library->{branchcode}, $library->{branchcode}, '', '', '', '', '');
+C4::Context->set_userenv(0, 0, 0, 'firstname', 'surname', $library->{branchcode}, $library->{branchcode}, '', '', '', '');
 my $patron = $builder->build({
     source => 'Borrower',
     value => {

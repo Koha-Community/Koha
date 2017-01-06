@@ -30,7 +30,7 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 C4::Context->_new_userenv('DUMMY SESSION');
-C4::Context->set_userenv(0,0,0,'firstname','surname', 'BRANCH1', 'Library 1', 0, ', ');
+C4::Context->set_userenv( 0 ); # Koha::List::Patron only needs a number
 
 # Create 10 sample borrowers
 my @borrowers = ();
