@@ -77,6 +77,7 @@ sub update_index {
             )
         );
     }
+    my $array_ref = $from->to_array;
     $self->store->bag->add_many($from);
     $self->store->bag->commit;
     return 1;

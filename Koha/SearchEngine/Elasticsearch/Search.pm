@@ -167,7 +167,7 @@ sub search_compat {
     my %result;
     $result{biblioserver}{hits} = $results->total;
     $result{biblioserver}{RECORDS} = \@records;
-    return (undef, \%result, $self->_convert_facets($results->{facets}, $expanded_facet));
+    return (undef, \%result, $self->_convert_facets($results->{aggregations}, $expanded_facet));
 }
 
 =head2 search_auth_compat
@@ -430,15 +430,15 @@ sub _convert_facets {
             type_id    => $type . '_id',
             expand     => $type,
             expandable => ( $type ne $exp_facet )
-              && ( @{ $data->{terms} } > $limit ),
+              && ( @{ $data->{buckets} } > $limit ),
             "type_label_$type_to_label{$type}{label}" => 1,
             type_link_value                    => $type,
             order      => $type_to_label{$type}{order},
         };
-        $limit = @{ $data->{terms} } if ( $limit > @{ $data->{terms} } );
-        foreach my $term ( @{ $data->{terms} }[ 0 .. $limit - 1 ] ) {
-            my $t = $term->{term};
-            my $c = $term->{count};
+        $limit = @{ $data->{buckets} } if ( $limit > @{ $data->{buckets} } );
+        foreach my $term ( @{ $data->{buckets} }[ 0 .. $limit - 1 ] ) {
+            my $t = $term->{key};
+            my $c = $term->{doc_count};
             my $label;
             if ( exists( $special{$type} ) ) {
                 $label = $special{$type}->{$t} // $t;

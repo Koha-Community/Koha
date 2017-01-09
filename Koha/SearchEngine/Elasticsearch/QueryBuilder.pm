@@ -111,7 +111,7 @@ sub build_query {
 
     # See _convert_facets in Search.pm for how these get turned into
     # things that Koha can use.
-    $res->{facets} = {
+    $res->{aggregations} = {
         author   => { terms => { field => "author__facet" } },
         subject  => { terms => { field => "subject__facet" } },
         itype    => { terms => { field => "itype__facet" } },
@@ -120,7 +120,7 @@ sub build_query {
         se       => { terms => { field => "se__facet" } },
     };
     if ( my $ef = $options{expanded_facet} ) {
-        $res->{facets}{$ef}{terms}{size} = C4::Context->preference('FacetMaxCount');
+        $res->{aggregations}{$ef}{terms}{size} = C4::Context->preference('FacetMaxCount');
     };
     return $res;
 }
