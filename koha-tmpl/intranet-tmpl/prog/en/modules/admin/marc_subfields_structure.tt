@@ -6,7 +6,7 @@
 </head>
 <body id="admin_marc_subfields_structure" class="admin">
 [% INCLUDE 'header.inc' %]
-[% INCLUDE 'cat-search.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
 
 <div id="breadcrumbs">
   <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]&amp;searchfield=[% tagfield | uri %]">[% IF ( frameworkcode ) %][% frameworkcode %][% ELSE %]Default[% END %] framework structure</a> &rsaquo;
