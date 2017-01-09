@@ -572,10 +572,11 @@ sub SendAlerts {
         $letter->{content} =~ s/<order>(.*?)<\/order>/$1/gxms;
 
         # ... then send mail
+        my $library = Koha::Libraries->find( $userenv->{branch} );
         my %mail = (
             To => join( ',', @email),
             Cc             => join( ',', @cc),
-            From           => $userenv->{emailaddress},
+            From           => $library->branchemail || C4::Context->preference('KohaAdminEmailAddress'),
             Subject        => Encode::encode( "UTF-8", "" . $letter->{title} ),
             Message => $letter->{'is_html'}
                             ? _wrap_html( Encode::encode( "UTF-8", $letter->{'content'} ),
