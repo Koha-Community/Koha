@@ -472,7 +472,7 @@ foreach my $biblioNum (@biblionumbers) {
 
         # checking reserve
         my $item = Koha::Items->find( $itemNum );
-        my $holds = $item->holds_placed_before_today;
+        my $holds = $item->current_holds;
 
         # the item could be reserved for this borrower vi a host record, flag this
         my $reservedfor = q||;

@@ -95,7 +95,7 @@ is( $holds->next->priority, 4, "Reserve 4 has a priority of 4" );
 is( $holds->next->priority, 5, "Reserve 5 has a priority of 5" );
 
 my $item = Koha::Items->find( $itemnumber );
-$holds = $item->holds_placed_before_today;
+$holds = $item->current_holds;
 my $first_hold = $holds->next;
 my $reservedate = $first_hold->reservedate;
 my $borrowernumber = $first_hold->borrowernumber;
@@ -132,7 +132,7 @@ CancelReserve({ 'reserve_id' => $reserve_id });
 $holds = $biblio->holds;
 is( $holds->count, $borrowers_count - 1, "Test CancelReserve()" );
 
-$holds = $item->holds_placed_before_today;
+$holds = $item->current_holds;
 $first_hold = $holds->next;
 $borrowernumber = $first_hold->borrowernumber;
 $branch_1code = $first_hold->branchcode;

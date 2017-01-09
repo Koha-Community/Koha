@@ -259,7 +259,7 @@ foreach my $item (@items) {
 
     # checking for holds
     my $item_object = Koha::Items->find( $item->{itemnumber} );
-    my $holds = $item_object->holds_placed_before_today;
+    my $holds = $item_object->current_holds;
     if ( my $first_hold = $holds->next ) {
         my $ItemBorrowerReserveInfo = C4::Members::GetMember( borrowernumber => $first_hold->borrowernumber); # FIXME could be improved
         $item->{backgroundcolor} = 'reserved';

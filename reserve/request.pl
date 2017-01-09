@@ -389,7 +389,7 @@ foreach my $biblionumber (@biblionumbers) {
             }
 
             # checking reserve
-            my $holds = Koha::Items->find( $itemnumber )->holds_placed_before_today;
+            my $holds = Koha::Items->find( $itemnumber )->current_holds;
             if ( my $first_hold = $holds->next ) {
                 my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $first_hold->borrowernumber );
 

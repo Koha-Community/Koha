@@ -102,7 +102,7 @@ while ( my $library = $libraries->next ) {
 
             # we check if we have a reserv for this transfer
             my $item = Koha::Items->find( $num->{itemnumber} );
-            my $holds = $item->holds_placed_before_today;
+            my $holds = $item->current_holds;
             if ( my $first_hold = $holds->next ) {
                 my $getborrower = C4::Members::GetMember( borrowernumber => $first_hold->borrowernumber );
                 $getransf{'borrowernum'}       = $getborrower->{'borrowernumber'};

@@ -185,11 +185,11 @@ sub article_request_type {
     return $issuing_rule->article_requests || q{}
 }
 
-=head3 holds_placed_before_today
+=head3 current_holds
 
 =cut
 
-sub holds_placed_before_today {
+sub current_holds {
     my ( $self ) = @_;
     my $attributes = { order_by => 'priority' };
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
