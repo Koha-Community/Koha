@@ -64,4 +64,21 @@ sub flush_L1_caches {
     }
 }
 
+=head2
+
+    Koha::Caches::flush();
+
+Flushes all known L1 and L2 caches
+
+=cut
+
+sub flush {
+    return unless $singleton_caches;
+    for my $k ( keys %$singleton_caches ) {
+        my $cache = $singleton_caches->{$k};
+        $cache->flush_all();
+        delete $singleton_caches->{$k};
+    }
+}
+
 1;
