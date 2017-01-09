@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::MockModule;
 use Test::Warn;
 
@@ -253,11 +253,56 @@ subtest "Koha::Account::pay tests" => sub {
     is($note,'$200.00 payment note', '$200.00 payment note is registered');
 
     my $line3 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 42, accounttype => 'TEST' })->store();
-    my $payment_id = $account->pay( { accountlines_id => $line3->id, amount => 42 } );
+    my $payment_id = $account->pay( { lines => [$line3], amount => 42 } );
     my $payment = Koha::Account::Lines->find( $payment_id );
     is( $payment->amount(), '-42.000000', "Payment paid the specified fine" );
     $line3 = Koha::Account::Lines->find( $line3->id );
     is( $line3->amountoutstanding, '0.000000', "Specified fine is paid" );
+};
+
+subtest "Koha::Account::pay particular line tests" => sub {
+
+    plan tests => 5;
+
+    # Create a borrower
+    my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
+    my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
+
+    my $borrower = Koha::Patron->new( {
+        cardnumber => 'kylemhall',
+        surname => 'Hall',
+        firstname => 'Kyle',
+    } );
+    $borrower->categorycode( $categorycode );
+    $borrower->branchcode( $branchcode );
+    $borrower->store;
+
+    my $account = Koha::Account->new({ patron_id => $borrower->id });
+
+    my $line1 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 1 })->store();
+    my $line2 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 2 })->store();
+    my $line3 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 3 })->store();
+    my $line4 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 4 })->store();
+
+    is( $account->balance(), "10.000000", "Account balance is 10" );
+
+    $account->pay(
+        {
+            lines => [$line2, $line3, $line4],
+            amount => 4,
+        }
+    );
+
+    $_->_result->discard_changes foreach ( $line1, $line2, $line3, $line4 );
+
+    # Line1 is not paid at all, as it was not passed in the lines param
+    is( $line1->amountoutstanding, "1.000000", "Line 1 was not paid" );
+    # Line2 was paid in full, as it was the first in the lines list
+    is( $line2->amountoutstanding, "0.000000", "Line 2 was paid in full" );
+    # Line3 was paid partially, as the remaining balance did not cover it entirely
+    is( $line3->amountoutstanding, "1.000000", "Line 3 was paid to 1.00" );
+    # Line4 was not paid at all, as the payment was all used up by that point
+    is( $line4->amountoutstanding, "4.000000", "Line 4 was not paid" );
 };
 
 subtest "makepayment() tests" => sub {
