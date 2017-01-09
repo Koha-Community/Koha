@@ -5,7 +5,8 @@ use Getopt::Long;
 
 
 use C4::Installer;
-
+use Koha::Caches;
+use Koha::SearchEngine::Elasticsearch;
 
 my $help;
 my $verbose;
@@ -31,8 +32,15 @@ updatedatabase.pl-runs are logged into the Koha logdir
   -h --help     This nice help
 
 HELP
+    exit 0;
 }
 
 
 C4::Installer::install_default_database($verbose, $marcflavour);
+
 C4::Installer::updatedatabase($verbose);
+
+Koha::Caches::flush();
+
+# Initialize ES mappings
+Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
