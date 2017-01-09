@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% BLOCK controls %]
     <p style="padding: 7px 0; border-top : 1px solid #E8E8E8;">
         <a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a> <a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a>
@@ -31,10 +32,7 @@
     @import url([% interface %]/[% theme %]/css/print.css);
 </style>
     [% ELSE %][% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/cart.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
 	[% END %]
 </head>
 [% IF ( print_basket ) %]<body id="cart_basket" class="cart" onload="print();history.back();">[% ELSE %]<body id="cart_basket" class="cart">[% END %]
@@ -289,5 +287,11 @@
 
 </div>
 </div>
-</body>
+            [% INCLUDE js_includes.inc %]
+            [% UNLESS ( print_basket ) %]
+                [% INCLUDE 'datatables.inc' %]
+                <script type="text/javascript" src="[% interface %]/[% theme %]/js/cart.js"></script>
+                <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+            [% END %]
+    </body>
 </html>
