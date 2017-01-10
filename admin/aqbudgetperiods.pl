@@ -198,8 +198,6 @@ elsif ( $op eq 'close_form' ) {
 
     my $budgets_to_move = GetBudgetHierarchy($budget_period_id);
 
-    # C4::Context->userenv->{branchcode}, $show_mine ? $borrower_id : '')
-
     my $number_of_unreceived_orders = 0;
     for my $budget (@$budgets_to_move) {
 
