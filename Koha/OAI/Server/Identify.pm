@@ -52,15 +52,9 @@ sub new {
 # Find the earliest timestamp in the biblio table. If this table is empty, undef
 # will be returned and we will report the fallback 0001-01-01.
 sub _get_earliest_datestamp {
-
     my $dbh = C4::Context->dbh;
-
-    my $order_sth = $dbh->prepare( "SELECT DATE(MIN(timestamp)) AS earliest FROM biblio" );
-    $order_sth->execute();
-    my $res = $order_sth->fetchrow_hashref();
-
-    return $res->{'earliest'};
-
+    my ( $earliest ) = $dbh->selectrow_array("SELECT DATE(MIN(timestamp)) AS earliest FROM biblio" );
+    return $earliest
 }
 
 1;
