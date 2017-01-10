@@ -24,12 +24,10 @@ Authorities:
                   no: "do not generate"
             - authority records that are missing (BiblioAddsAuthorities must be set to "allow" for this to have any effect).
         -
-            - pref: dontmerge
-              default: yes
-              choices:
-                  yes: "Don't"
-                  no: Do
-            - automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authority.pl cronjob.
+            - When modifying an authority record, do not update attached biblio records if the number exceeds
+            - pref: AuthorityMergeLimit
+              default: 50
+            - records. (Above this limit, the merge_authority cron job will merge them.)
         -
             - Use the following text for the contents of MARC21 authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05).
             - pref: MARCAuthorityControlField008
