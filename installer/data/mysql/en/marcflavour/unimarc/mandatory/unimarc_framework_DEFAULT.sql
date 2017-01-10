@@ -2247,7 +2247,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('606', '2', 'System Code', 'System Code', 0, 0, '', 6, '', '', '', 0, 0, '', '', '', NULL),
 		('606', '3', 'Authority Record Number', 'Authority Record Number', 1, 0, '', 6, '', '', '', 0, 0, '', '', '', NULL),
 		('606', '9', 'Koha Internal code', 'Koha Internal code', 0, 0, '', 6, '', '', '', 0, 1, '', '', '', NULL),
-		('606', 'a', 'Entry Element', 'Entry Element', 0, 0, 'bibliosubject.subject', 6, '', '', '', 0, 0, '', '', '', NULL),
+		('606', 'a', 'Entry Element', 'Entry Element', 0, 0, NULL, 6, '', '', '', 0, 0, '', '', '', NULL),
 		('606', 'j', 'Form Subdivision', 'Form Subdivision', 1, 0, '', 6, '', '', '', 0, -6, '', '', '', NULL),
 		('606', 'x', 'Topical Subdivision', 'Topical Subdivision', 1, 0, '', 6, '', '', '', 0, 0, '', '', '', NULL),
 		('606', 'y', 'Geographical Subdivision', 'Geographical Subdivision', 1, 0, '', 6, '', '', '', 0, 0, '', '', '', NULL),
