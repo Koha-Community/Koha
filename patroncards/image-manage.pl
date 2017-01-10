@@ -26,8 +26,8 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
                     debug               => 0,
                     });
 
-my $image_name = $cgi->param('image_name') || '';
 my $file_name = $cgi->param('uploadfile') || '';
+my $image_name = $cgi->param('image_name') || $file_name;
 my $upload_file = $cgi->upload('uploadfile') || '';
 my $op = $cgi->param('op') || 'none';
 my @image_ids = $cgi->multi_param('image_id') if $cgi->param('image_id');
