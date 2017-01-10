@@ -1106,7 +1106,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('AN', '', '606', '2', 0, 0, 'Код системи', '',                        -1, NULL, '', '', '', NULL, '', NULL, NULL),
  ('AN', '', '606', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, '', '', '', NULL, '', NULL, NULL),
- ('AN', '', '606', 'a', 0, 1, 'Заголовок рубрики', 'Предмет',           1, NULL, 'bibliosubject.subject', '', '', NULL, '', NULL, NULL),
+ ('AN', '', '606', 'a', 0, 1, 'Заголовок рубрики', 'Предмет',           1, NULL, NULL, '', '', NULL, '', NULL, NULL),
  ('AN', '', '606', 'j', 1, 0, 'Формальний підзаголовок', '',            -1, NULL, '', '', '', NULL, '', NULL, NULL),
  ('AN', '', '606', 'x', 1, 0, 'Тематичний підзаголовок', '',            -1, NULL, '', '', '', NULL, '', NULL, NULL),
  ('AN', '', '606', 'y', 1, 0, 'Географічний підзаголовок', '',          -1, NULL, '', '', '', NULL, '', NULL, NULL),
