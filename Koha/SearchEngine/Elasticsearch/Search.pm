@@ -257,8 +257,8 @@ sub count_auth_use {
 
     my $query = {
         query => {
-            filtered => {
-                query  => { match_all => {} },
+            bool => {
+#                query  => { match_all => {} },
                 filter => { term      => { an => $authid } }
             }
         }

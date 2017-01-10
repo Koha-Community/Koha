@@ -20,4 +20,4 @@ use warnings;
 
 use Test::More tests => 1;                      # last test to print
 
-use_ok('Koha::Search::Engine::Elasticsearch');
+use_ok('Koha::SearchEngine::Elasticsearch');

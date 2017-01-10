@@ -148,10 +148,6 @@ sub get_elasticsearch_settings {
                         tokenizer => 'standard',
                         filter    => ['lowercase'],
                     },
-                    default => {
-                        tokenizer => 'keyword',
-                        filter    => ['lowercase'],
-                    },
                 },
             }
         }
@@ -176,9 +172,9 @@ sub get_elasticsearch_mappings {
         data => {
             properties => {
                 record => {
-                    store          => "yes",
+                    store          => "true",
                     include_in_all => JSON::false,
-                    type           => "string",
+                    type           => "text",
                 },
             }
         }
@@ -189,7 +185,6 @@ sub get_elasticsearch_mappings {
         sub {
             my ( $name, $type, $facet, $suggestible, $sort, $marc_type ) = @_;
             return if $marc_type ne $marcflavour;
-
             # TODO if this gets any sort of complexity to it, it should
             # be broken out into its own function.
 
@@ -198,7 +193,7 @@ sub get_elasticsearch_mappings {
             my $es_type =
               $type eq 'boolean'
               ? 'boolean'
-              : 'string';
+              : 'text';
 
             if ($es_type eq 'boolean') {
                 $mappings->{data}{properties}{$name} = _elasticsearch_mapping_for_boolean( $name, $es_type, $facet, $suggestible, $sort, $marc_type );
@@ -209,8 +204,7 @@ sub get_elasticsearch_mappings {
 
             if ($facet) {
                 $mappings->{data}{properties}{ $name . '__facet' } = {
-                    type  => "string",
-                    index => "not_analyzed",
+                    type  => "keyword",
                 };
             }
             if ($suggestible) {
@@ -226,13 +220,13 @@ sub get_elasticsearch_mappings {
                 $mappings->{data}{properties}{ $name . '__sort' } = {
                     search_analyzer => "analyser_phrase",
                     analyzer  => "analyser_phrase",
-                    type            => "string",
+                    type            => "text",
                     include_in_all  => JSON::false,
                     fields          => {
                         phrase => {
                             search_analyzer => "analyser_phrase",
                             analyzer  => "analyser_phrase",
-                            type            => "string",
+                            type            => "text",
                         },
                     },
                 };
@@ -272,11 +266,10 @@ sub _elasticsearch_mapping_for_default {
             phrase => {
                 search_analyzer => "analyser_phrase",
                 analyzer        => "analyser_phrase",
-                type            => "string",
+                type            => "text",
             },
             raw => {
-                type    => "string",
-                index   => "not_analyzed",
+                type    => "keyword",
             }
         },
     };
