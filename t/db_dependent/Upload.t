@@ -59,7 +59,7 @@ subtest 'Make a fresh start' => sub {
     # Passing keep_file suppresses warnings (and does not delete files)
     # Note that your files are not in danger, since we redirected
     # all files to a new empty temp folder
-    Koha::UploadedFiles->new->delete({ keep_file => 1 });
+    Koha::UploadedFiles->delete({ keep_file => 1 });
     is( Koha::UploadedFiles->count, 0, 'No records left' );
 };
 
@@ -164,10 +164,9 @@ subtest 'Test delete via UploadedFile as well as UploadedFiles' => sub {
     $upl = Koha::Uploader->new({ tmp => 1 });
     $upl->cgi;
     my $kohaobj = Koha::UploadedFiles->find( $upl->result );
-    my $name = $kohaobj->filename;
     $path = $kohaobj->full_path;
     $delete = $kohaobj->delete;
-    is( $delete, $name, 'Delete successful' );
+    is( $delete, 1, 'Delete successful' );
     isnt( -e $path, 1, 'File no longer found after delete' );
 
     # add another record with TestBuilder, so file does not exist
@@ -198,7 +197,7 @@ subtest 'Simple tests for httpheaders and getCategories' => sub {
     my @hdrs = $rec->httpheaders;
     is( @hdrs == 4 && $hdrs[1] =~ /application\/octet-stream/, 1, 'Simple test for httpheaders');
     $builder->build({ source => 'AuthorisedValue', value => { category => 'UPLOAD', authorised_value => 'HAVE_AT_LEAST_ONE', lib => 'Hi there' } });
-    my $cat = Koha::UploadedFile->getCategories;
+    my $cat = Koha::UploadedFiles->getCategories;
     is( @$cat >= 1, 1, 'getCategories returned at least one category' );
 };
 

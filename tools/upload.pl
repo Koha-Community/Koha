@@ -23,7 +23,6 @@ use JSON;
 
 use C4::Auth;
 use C4::Output;
-use Koha::UploadedFile;
 use Koha::UploadedFiles;
 
 my $input  = CGI::->new;
@@ -47,22 +46,20 @@ $template->param(
     index      => $index,
     owner      => $loggedinuser,
     plugin     => $plugin,
+    uploadcategories => Koha::UploadedFiles->getCategories,
 );
 
 if ( $op eq 'new' ) {
     $template->param(
         mode             => 'new',
-        uploadcategories => Koha::UploadedFile->getCategories,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
 } elsif ( $op eq 'search' ) {
     my $uploads;
     if( $id ) {
-        my $rec = Koha::UploadedFiles->search({
-            id => $id,
-            $plugin? ( public => 1 ) : (),
-        })->next;
+        my $rec = Koha::UploadedFiles->find( $id );
+        undef $rec if $rec && $plugin && !$rec->public;
         push @$uploads, $rec->unblessed if $rec;
     } else {
         $uploads = Koha::UploadedFiles->search_term({
@@ -80,34 +77,30 @@ if ( $op eq 'new' ) {
 
 } elsif ( $op eq 'delete' ) {
     # delete only takes the id parameter
-    my $upload = $plugin?
-         Koha::UploadedFiles->search({ public => 1, id => $id })->next:
-         Koha::UploadedFiles->find($id);
-    my $fn = $upload? $upload->delete: undef;
+    my $rec = Koha::UploadedFiles->find($id);
+    undef $rec if $rec && $plugin && !$rec->public;
+    my $fn = $rec ? $rec->filename : '';
+    my $delete = $rec ? $rec->delete : undef;
     #TODO Improve error handling
-    my $msg = $fn?
-        JSON::to_json({ $fn => 6 }):
-        JSON::to_json({
-            $upload? $upload->filename: ( $id? "id $id": '[No id]' ), 7,
-        });
+    my $msg = $delete
+        ? JSON::to_json({ $fn => 6 })
+        : $id
+        ? JSON::to_json({ $fn || $id, 7 })
+        : '';
     $template->param(
         mode             => 'deleted',
         msg              => $msg,
-        uploadcategories => Koha::UploadedFile->getCategories,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 
 } elsif ( $op eq 'download' ) {
-    my $rec = Koha::UploadedFiles->search({
-        id => $id,
-        $plugin? ( public => 1 ) : (),
-    })->next;
+    my $rec = Koha::UploadedFiles->find( $id );
+    undef $rec if $rec && $plugin && !$rec->public;
     my $fh  = $rec? $rec->file_handle:  undef;
     if ( !$rec || !$fh ) {
         $template->param(
             mode             => 'new',
             msg              => JSON::to_json( { $id => 5 } ),
-            uploadcategories => Koha::UploadedFile->getCategories,
         );
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {

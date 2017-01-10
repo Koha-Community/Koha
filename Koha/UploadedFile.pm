@@ -71,18 +71,17 @@ sub delete {
     my $name = $self->filename;
     my $file = $self->full_path;
 
-    if( $params->{keep_file} ) {
-        return $name if $self->SUPER::delete;
-    } elsif( !-e $file ) { # we will just delete the record
+    my $retval = $self->SUPER::delete;
+    return $retval if $params->{keep_file};
+
+    if( ! -e $file ) {
         warn "Removing record for $name within category ".
             $self->uploadcategorycode. ", but file was missing.";
-        return $name if $self->SUPER::delete;
-    } elsif( unlink($file) ) {
-        return $name if $self->SUPER::delete;
-    } else {
+    } elsif( ! unlink($file) ) {
+        $retval = 0;
         warn "Problem while deleting: $file";
     }
-    return; # something went wrong
+    return $retval;
 }
 
 =head3 full_path
@@ -154,18 +153,6 @@ Returns root directory for temporary storage
 sub temporary_directory {
     my ( $class ) = @_;
     return File::Spec->tmpdir;
-}
-
-=head3 getCategories
-
-getCategories returns a list of upload category codes and names
-
-=cut
-
-sub getCategories {
-    my ( $class ) = @_;
-    my $cats = C4::Koha::GetAuthorisedValues('UPLOAD');
-    [ map {{ code => $_->{authorised_value}, name => $_->{lib} }} @$cats ];
 }
 
 =head3 _type

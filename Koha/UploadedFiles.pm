@@ -19,6 +19,7 @@ package Koha::UploadedFiles;
 
 use Modern::Perl;
 
+use C4::Koha;
 use Koha::UploadedFile;
 
 use parent qw(Koha::Objects);
@@ -38,7 +39,7 @@ Koha::UploadedFiles - Koha::Objects class for uploaded files
     my @uploads = Koha::UploadedFiles->search_term({ term => '.mrc' });
 
     # delete all uploads
-    Koha::UploadedFiles->new->delete;
+    Koha::UploadedFiles->delete;
 
 =head1 DESCRIPTION
 
@@ -51,11 +52,10 @@ provides a wrapper around search to look for a term in multiple columns.
 
 =head2 INSTANCE METHODS
 
-=head3 delete, delete_errors
+=head3 delete
 
 Delete uploaded files.
-Returns true if no errors occur.
-Delete_errors returns the number of errors when deleting files.
+Returns true if no errors occur. (So, false may mean partial success.)
 
 Parameter keep_file may be used to delete records, but keep files.
 
@@ -69,13 +69,7 @@ sub delete {
         my $kohaobj = Koha::UploadedFile->_new_from_dbic( $row );
         $err++ if !$kohaobj->delete( $params );
     }
-    $self->{delete_errors} = $err;
     return $err==0;
-}
-
-sub delete_errors {
-    my ( $self ) = @_;
-    return $self->{delete_errors};
 }
 
 =head3 search_term
@@ -102,6 +96,18 @@ sub search_term {
 }
 
 =head2 CLASS METHODS
+
+=head3 getCategories
+
+getCategories returns a list of upload category codes and names
+
+=cut
+
+sub getCategories {
+    my ( $class ) = @_;
+    my $cats = C4::Koha::GetAuthorisedValues('UPLOAD');
+    [ map {{ code => $_->{authorised_value}, name => $_->{lib} }} @$cats ];
+}
 
 =head3 _type
 
