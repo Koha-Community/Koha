@@ -1,15 +1,16 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use Test::More tests => 24;
+use Test::More tests => 28;
 use File::Basename;
+use File::Temp qw( tempdir );
 use FindBin qw($Bin);
 use Archive::Extract;
 use Module::Load::Conditional qw(can_load);
 
 use C4::Context;
+use t::lib::Mocks;
 
 BEGIN {
     push( @INC, dirname(__FILE__) . '/..' );
@@ -60,11 +61,25 @@ my @plugins2 = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
 });
 isnt( scalar @plugins2, scalar @plugins, 'GetPlugins with two metadata conditions' );
 
-SKIP: {
-    my $plugins_dir = C4::Context->config("pluginsdir");
-    skip "plugindir not set", 4 unless defined $plugins_dir;
-    skip "plugindir not writable", 4 unless -w $plugins_dir;
-    # no need to skip further tests if KitchenSink would already exist
+for my $pass ( 1 .. 2 ) {
+    my $plugins_dir;
+    my $module_name = 'Koha::Plugin::Com::ByWaterSolutions::KitchenSink';
+    my $pm_path = 'Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm';
+    if ( $pass == 1 ) {
+        my $plugins_dir1 = tempdir( CLEANUP => 1 );
+        t::lib::Mocks::mock_config('pluginsdir', $plugins_dir1);
+        $plugins_dir = $plugins_dir1;
+        push @INC, $plugins_dir1;
+    } else {
+        my $plugins_dir1 = tempdir( CLEANUP => 1 );
+        my $plugins_dir2 = tempdir( CLEANUP => 1 );
+        t::lib::Mocks::mock_config('pluginsdir', [ $plugins_dir2, $plugins_dir1 ]);
+        $plugins_dir = $plugins_dir2;
+        pop @INC;
+        push @INC, $plugins_dir2;
+        push @INC, $plugins_dir1;
+    }
+    my $full_pm_path = $plugins_dir . '/' . $pm_path;
 
     my $ae = Archive::Extract->new( archive => "$Bin/KitchenSinkPlugin.kpz", type => 'zip' );
     unless ( $ae->extract( to => $plugins_dir ) ) {
@@ -75,9 +90,10 @@ SKIP: {
     my $table = $plugin->get_qualified_table_name( 'mytable' );
 
     ok( -f $plugins_dir . "/Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm", "KitchenSink plugin installed successfully" );
+    $INC{$pm_path} = $full_pm_path; # FIXME I do not really know why, but if this is moved before the $plugin constructor, it will fail with Can't locate object method "new" via package "Koha::Plugin::Com::ByWaterSolutions::KitchenSink"
     Koha::Plugins::Handler->delete({ class => "Koha::Plugin::Com::ByWaterSolutions::KitchenSink", enable_plugins => 1 });
     my $sth = C4::Context->dbh->table_info( undef, undef, $table, 'TABLE' );
     my $info = $sth->fetchall_arrayref;
     is( @$info, 0, "Table $table does no longer exist" );
-    ok( !( -f $plugins_dir . "/Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm" ), "Koha::Plugins::Handler::delete works correctly." );
+    ok( !( -f $full_pm_path ), "Koha::Plugins::Handler::delete works correctly." );
 }

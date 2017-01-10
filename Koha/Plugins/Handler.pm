@@ -102,7 +102,7 @@ sub delete {
 
     C4::Context->dbh->do( "DELETE FROM plugin_data WHERE plugin_class = ?", undef, ($plugin_class) );
 
-    unlink("$plugin_path.pm");
+    unlink "$plugin_path.pm" or warn "Could not unlink $plugin_path.pm: $!";
     remove_tree($plugin_path);
 }
 
