@@ -248,8 +248,8 @@ function searchToHold(){
                     <input type="hidden" name="branchcode" value="[% LoginBranchcode %]" />
                 </div>
                 <div class="modal-footer">
-                    <button class="btn approve" type="submit"><i class="fa fa-check"></i> Save</button>
-                    <button class="btn deny" href="#" class="cancel" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
+                    <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> Save</button>
+                    <button class="btn btn-default deny" href="#" class="cancel" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
                 </div>
             </form>
         </div>

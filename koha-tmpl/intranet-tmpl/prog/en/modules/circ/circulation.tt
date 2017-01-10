@@ -865,12 +865,12 @@ No patron matched <span class="ex">[% message | html %]</span>
                         <i>"[% message.message %]"</i>
                     </span>
                     [% IF message.branchcode == branch OR Koha.Preference('AllowAllMessageDeletion') %]
-                        <a class="btn-small" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% message.message_id %]&amp;borrowernumber=[% message.borrowernumber %]" onclick="return confirm(MSG_CONFIRM_DELETE_MESSAGE);"><i class="fa fa-trash"></i> Delete</a>
+                        <a class="btn btn-link btn-sm" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% message.message_id %]&amp;borrowernumber=[% message.borrowernumber %]" onclick="return confirm(MSG_CONFIRM_DELETE_MESSAGE);"><i class="fa fa-trash"></i> Delete</a>
                     [% END %]
                 </li>
             [% END %]
         </ul>
-        <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal"><i class="fa fa-plus"></i> Add a new message</a>
+        <a id="addnewmessageLabel" href="#add_message_form" class="btn btn-link btn-sm" data-toggle="modal"><i class="fa fa-plus"></i> Add a new message</a>
     </div>
 
 </div>
