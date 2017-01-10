@@ -775,12 +775,6 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                     $(this).height( $(window).height() * .8 - $(this).prevAll('.modal-header').height() );
                 } );
             }, 100);
-
-//            $("#advanced-search-ui, #search-results-ui, #macro-ui").css( {
-//                marginLeft: function() {
-//                    return -($(this).width() / 2);
-//               }
-//           } );
         }
 
         $( '#macro-ui' ).on( 'shown.bs.modal', function() {
