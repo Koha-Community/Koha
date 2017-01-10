@@ -509,7 +509,7 @@ sub GetBudgetHierarchy {
         }
     } else {
         if ($branchcode) {
-            push @where_strings," (budget_branchcode =? or budget_branchcode is NULL)";
+            push @where_strings," (budget_branchcode =? or budget_branchcode is NULL OR budget_branchcode='')";
             push @bind_params, $branchcode;
         }
     }

@@ -266,8 +266,7 @@ if ( $op eq 'list' ) {
     );
 
     my @budgets = @{
-        GetBudgetHierarchy($$period{budget_period_id},
-            C4::Context->userenv->{branchcode}, $show_mine ? $borrower_id : '')
+        GetBudgetHierarchy( $$period{budget_period_id}, C4::Context->userenv->{branch}, ( $show_mine ? $borrower_id : 0 ))
     };
 
     my $period_total = 0;
