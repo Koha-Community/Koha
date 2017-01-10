@@ -52,7 +52,6 @@ Koha::Account->new( { patron_id => $borrowernumber } )->pay(
         amount     => $amount,
         sip        => $sipmode,
         note       => $note,
-        accountlines_id => $accountlines_id,
         library_id => $branchcode,
         lines      => $lines, # Arrayref of Koha::Account::Line objects to pay
     }
