@@ -73,6 +73,23 @@ function ExpandField(index) {
         }
     }
 }
+
+var Select2Utils = {
+  removeSelect2: function(element) {
+    var selects = element.getElementsByTagName('select');
+    for (var i=0; i < selects.length; i++) {
+      $(selects[i]).select2('destroy');
+    }
+  },
+
+  initSelect2: function(element) {
+    var selects = element.getElementsByTagName('select');
+    for (var i=0; i < selects.length; i++) {
+      $(selects[i]).select2();
+    }
+  }
+};
+
 /**
  * To clone a field
  * @param hideMarc '0' for false, '1' for true
@@ -80,6 +97,8 @@ function ExpandField(index) {
  */
 function CloneField(index, hideMarc, advancedMARCEditor) {
     var original = document.getElementById(index); //original <div>
+    Select2Utils.removeSelect2(original);
+
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
     var new_id  = original.getAttribute('id')+new_key;
@@ -244,7 +263,11 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
 
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
+
+    Select2Utils.initSelect2(original);
+    Select2Utils.initSelect2(clone);
 }
+
 
 /**
  * To clone a subfield
@@ -253,6 +276,7 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
  */
 function CloneSubfield(index, advancedMARCEditor){
     var original = document.getElementById(index); //original <div>
+    Select2Utils.removeSelect2(original);
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
     // set the attribute for the new 'div' subfields
@@ -327,8 +351,13 @@ function CloneSubfield(index, advancedMARCEditor){
     }
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
+
+    //Restablish select2 for the cloned elements.
+    Select2Utils.initSelect2(original);
+    Select2Utils.initSelect2(clone);
+
     // delete data of cloned subfield
-    document.getElementById(linkid).value = "";
+    clone.querySelectorAll('input.input_marceditor').value = "";
 }
 
 function AddEventHandlers (oldcontrol, newcontrol, newinputid ) {
@@ -413,8 +442,8 @@ function upSubfield(index) {
     }
     var tag = line.parentNode; // get the dad of this line. (should be "<div id='tag_...'>")
 
-    // getting all subfields for this tag
-    var subfields = tag.getElementsByTagName('div');
+    // getting all visible subfields for this tag
+    var subfields = tag.querySelectorAll("div.subfield_line");
     var subfieldsLength = subfields.length;
 
     if(subfieldsLength<=1) return; // nothing to do if there is just one subfield.
@@ -422,8 +451,8 @@ function upSubfield(index) {
     // among all subfields
     for(var i=0;i<subfieldsLength;i++){
         if(subfields[i].getAttribute('id') == index){ //looking for the subfield which is clicked :
-            if(i==1){ // if the clicked subfield is on the top
-                tag.appendChild(subfields[1]);
+            if(i==0){ // if the clicked subfield is on the top
+                tag.appendChild(subfields[0]);
                 return;
             } else {
                 var lineAbove = subfields[i-1];
@@ -449,6 +478,7 @@ function unHideSubfield(index,labelindex) {
  * @param original subfield div to clone
  */
 function CloneItemSubfield(original){
+    Select2Utils.removeSelect2(original);
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
 
@@ -488,6 +518,8 @@ function CloneItemSubfield(original){
 
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
+    Select2Utils.initSelect2(original);
+    Select2Utils.initSelect2(clone);
 }
 
 /**
