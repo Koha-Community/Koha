@@ -14,6 +14,7 @@ use C4::Output;
 use C4::Debug;
 use C4::Creators;
 use C4::Patroncards;
+use Data::Dumper;
 
 my $cgi = CGI->new;
 
@@ -47,9 +48,17 @@ my $image_limit = C4::Context->preference('ImageLimit') || '';
 my $errstr = '';        # NOTE: For error codes see error-messages.inc
 
 if ($op eq 'upload') {
-    if (!$upload_file) {
-        warn sprintf('An error occurred while attempting to upload file %s.', $source_file);
-        $errstr = 301;
+    # Checking for duplicate image name
+    my $duplicate;
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT COUNT(*) FROM creator_images WHERE image_name=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($image_name);
+    my $count = $sth->fetchrow_arrayref;
+    if ( $count->[0] > 0 ) {
+        $duplicate = 1;
+        warn sprintf('Image name already exists.');
+        $errstr = 304;
         $template->param(
             IMPORT_SUCCESSFUL => 0,
             SOURCE_FILE => $source_file,
@@ -58,12 +67,10 @@ if ($op eq 'upload') {
             error => $errstr,
         );
     }
-    else {
-        my $image = Graphics::Magick->new;
-        eval{$image->Read($cgi->tmpFileName($file_name));};
-        if ($@) {
-            warn sprintf('An error occurred while creating the image object: %s',$@);
-            $errstr = 202;
+    unless ($duplicate) {
+        if (!$upload_file) {
+            warn sprintf('An error occurred while attempting to upload file %s.', $source_file);
+            $errstr = 301;
             $template->param(
                 IMPORT_SUCCESSFUL => 0,
                 SOURCE_FILE => $source_file,
@@ -73,31 +80,46 @@ if ($op eq 'upload') {
             );
         }
         else {
-            my $errstr = '';
-            my $size = $image->Get('filesize');
-            $errstr =  302 if $size > 500000;
-            $image->Set(magick => 'png'); # convert all images to png as this is a lossless format which is important for resizing operations later on
-            my $err = put_image($image_name, $image->ImageToBlob()) || '0';
-            $errstr = 101 if $err == 1;
-            $errstr = 303 if $err == 202;
-            if ($errstr) {
+            my $image = Graphics::Magick->new;
+            eval{$image->Read($cgi->tmpFileName($file_name));};
+            if ($@) {
+                warn sprintf('An error occurred while creating the image object: %s',$@);
+                $errstr = 202;
                 $template->param(
                     IMPORT_SUCCESSFUL => 0,
                     SOURCE_FILE => $source_file,
                     IMAGE_NAME => $image_name,
                     TABLE => $table,
                     error => $errstr,
-                    image_limit => $image_limit,
                 );
             }
             else {
-                $table = html_table($display_columns->{'image'}, get_image(undef, "image_id, image_name"));  # refresh table data after successfully performing save operation
-                $template->param(
-                    IMPORT_SUCCESSFUL => 1,
-                    SOURCE_FILE => $source_file,
-                    IMAGE_NAME => $image_name,
-                    TABLE => $table,
-                );
+                my $errstr = '';
+                my $size = $image->Get('filesize');
+                $errstr =  302 if $size > 500000;
+                $image->Set(magick => 'png'); # convert all images to png as this is a lossless format which is important for resizing operations later on
+                my $err = put_image($image_name, $image->ImageToBlob()) || '0';
+                $errstr = 101 if $err == 1;
+                $errstr = 303 if $err == 202;
+                if ($errstr) {
+                    $template->param(
+                        IMPORT_SUCCESSFUL => 0,
+                        SOURCE_FILE => $source_file,
+                        IMAGE_NAME => $image_name,
+                        TABLE => $table,
+                        error => $errstr,
+                        image_limit => $image_limit,
+                    );
+                }
+                else {
+                    $table = html_table($display_columns->{'image'}, get_image(undef, "image_id, image_name"));  # refresh table data after successfully performing save operation
+                    $template->param(
+                        IMPORT_SUCCESSFUL => 1,
+                        SOURCE_FILE => $source_file,
+                        IMAGE_NAME => $image_name,
+                        TABLE => $table,
+                    );
+                }
             }
         }
     }
