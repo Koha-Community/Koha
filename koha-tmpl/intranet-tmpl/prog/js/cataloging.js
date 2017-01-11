@@ -443,7 +443,7 @@ function upSubfield(index) {
     var tag = line.parentNode; // get the dad of this line. (should be "<div id='tag_...'>")
 
     // getting all visible subfields for this tag
-    var subfields = tag.querySelectorAll("div.subfield_line");
+    var subfields = tag.querySelectorAll("div.subfield_line:not( [style*='display:none;'] )");
     var subfieldsLength = subfields.length;
 
     if(subfieldsLength<=1) return; // nothing to do if there is just one subfield.
