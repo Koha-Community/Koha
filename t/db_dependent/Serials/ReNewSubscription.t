@@ -26,25 +26,15 @@ use Test::MockModule;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Context;
-use Koha::Database;
 use C4::Serials;
+
+use Koha::Database;
+use Koha::Subscription::Histories;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new();
-#my $library = $builder->build({
-#    source => 'Subscription',
-#});
-
-#my $mContext = new Test::MockModule('C4::Context');
-#$mContext->mock( 'userenv', sub {
-#    return { branch => $library->{branchcode} };
-#});
-
-
-#my $dbh = C4::Context->dbh; # after start transaction of testbuilder
 
 # create fake numberpattern & fake periodicity
 my $frequency = $builder->build({
@@ -95,7 +85,7 @@ my $subscriptionhistory = $builder->build({
 
 # Renew the subscription and check that enddate has not been set
 ReNewSubscription($subscription->{subscriptionid},'',"2016-01-01",'','',12,'');
-my @history = Koha::Subscription::Histories->search( {subscriptionid => $subscription->{subscriptionid} } );
+my @history = Koha::Subscription::Histories->find($subscription->{subscriptionid});
 
 is ( $history[0]->histenddate(), undef, 'subscription history not empty after renewal');
 
