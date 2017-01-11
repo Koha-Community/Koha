@@ -35,7 +35,6 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&makepayment
 		&manualinvoice
 		&getnextacctno
 		&getcharges
@@ -64,33 +63,6 @@ including looking up and modifying the amount of money owed by a
 patron.
 
 =head1 FUNCTIONS
-
-=head2 makepayment
-
-  &makepayment($accountlines_id, $borrowernumber, $acctnumber, $amount, $branchcode);
-
-Records the fact that a patron has paid off the entire amount he or
-she owes.
-
-C<$borrowernumber> is the patron's borrower number. C<$acctnumber> is
-the account that was credited. C<$amount> is the amount paid (this is
-only used to record the payment. It is assumed to be equal to the
-amount owed). C<$branchcode> is the code of the branch where payment
-was made.
-
-=cut
-
-#'
-# FIXME - I'm not at all sure about the above, because I don't
-# understand what the acct* tables in the Koha database are for.
-sub makepayment {
-    my ( $accountlines_id, $borrowernumber, $accountno, $amount, $user, $branch, $payment_note ) = @_;
-
-    my $line = Koha::Account::Lines->find( $accountlines_id );
-
-    return Koha::Account->new( { patron_id => $borrowernumber } )
-      ->pay( { lines => [ $line ], amount => $amount, library_id => $branch, note => $payment_note } );
-}
 
 =head2 getnextacctno
 
