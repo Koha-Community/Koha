@@ -718,7 +718,10 @@ sub get_matches {
             push @results, { 'record_id' => $authid, 'score' => $matches{$authid} };
         }
     }
-    @results = sort { $b->{'score'} cmp $a->{'score'} } @results;
+    @results = sort {
+        $b->{'score'} cmp $a->{'score'} or
+        $b->{'record_id'} cmp $a->{'record_id'}
+    } @results;
     if (scalar(@results) > $max_matches) {
         @results = @results[0..$max_matches-1];
     }
