@@ -6,7 +6,6 @@ use strict;
 use CGI qw ( -utf8 );
 use Graphics::Magick;
 use POSIX qw(ceil);
-use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Context;
 use C4::Auth;
@@ -14,7 +13,6 @@ use C4::Output;
 use C4::Debug;
 use C4::Creators;
 use C4::Patroncards;
-use Data::Dumper;
 
 my $cgi = CGI->new;
 
@@ -49,15 +47,10 @@ my $errstr = '';        # NOTE: For error codes see error-messages.inc
 
 if ($op eq 'upload') {
     # Checking for duplicate image name
-    my $duplicate;
     my $dbh = C4::Context->dbh;
     my $query = "SELECT COUNT(*) FROM creator_images WHERE image_name=?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($image_name);
-    my $count = $sth->fetchrow_arrayref;
-    if ( $count->[0] > 0 ) {
-        $duplicate = 1;
-        warn sprintf('Image name already exists.');
+    my ( $exists ) = $dbh->selectrow_array( $query, undef, $image_name );
+    if ( $exists ) {
         $errstr = 304;
         $template->param(
             IMPORT_SUCCESSFUL => 0,
@@ -66,8 +59,7 @@ if ($op eq 'upload') {
             TABLE => $table,
             error => $errstr,
         );
-    }
-    unless ($duplicate) {
+    } else {
         if (!$upload_file) {
             warn sprintf('An error occurred while attempting to upload file %s.', $source_file);
             $errstr = 301;
