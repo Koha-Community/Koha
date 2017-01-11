@@ -291,6 +291,9 @@ function CloneSubfield(index, advancedMARCEditor){
         id_input = inputs[i].getAttribute('id')+new_key;
         inputs[i].setAttribute('id',id_input);
         inputs[i].setAttribute('name',inputs[i].getAttribute('name')+new_key);
+        if(inputs[i].getAttribute("id") && inputs[i].getAttribute("id").match(/^tag_/) ){
+            inputs[i].value = "";
+        }
         linkid = id_input;
     }
 
@@ -312,6 +315,9 @@ function CloneSubfield(index, advancedMARCEditor){
         id_input = textareas[i].getAttribute('id')+new_key;
         textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
         textareas[i].setAttribute('name',textareas[i].getAttribute('name')+new_key);
+        if(textareas[i].getAttribute("id") && textareas[i].getAttribute("id").match(/^tag_/) ){
+            textareas[i].value = "";
+        }
         linkid = id_input;
     }
 
