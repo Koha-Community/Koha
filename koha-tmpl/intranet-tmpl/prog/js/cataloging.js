@@ -129,6 +129,12 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                     inputs[j].value = "";
                 }
             }
+            var textareas = divs[i].getElementsByTagName('textarea');
+            for( j = 0 ; j < textareas.length ; j++ ) {
+                if(textareas[j].getAttribute("id") && textareas[j].getAttribute("id").match(/^tag_/) ){
+                    textareas[j].value = "";
+                }
+            }
 
             inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
             inputs[0].setAttribute('name',inputs[0].getAttribute('name')+new_key);
