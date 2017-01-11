@@ -29,6 +29,8 @@
         Image exceeds 500KB. Please resize and import again.
         [% ELSIF ( error == 303 ) %]
         The database image quota currently only allows a maximum of [% image_limit %] images to be stored at any one time. Please delete one or more images to free up quota space.
+        [% ELSIF ( error == 304 ) %]
+        An image with the name '[% IMAGE_NAME %]' already exists.
         [% ELSIF ( error == 401 ) %]
         An error has occurred and the item(s) was not added to batch [% batch_id %]. Please have your system administrator check the error log for details.
         [% ELSIF ( error == 402 ) %]
@@ -39,7 +41,6 @@
         An error has occurred and batch [% batch_id %] was not deleted.  Please have your system administrator check the error log for details.
         [% ELSIF ( error == 405 ) %]
         An error has occurred and batch [% batch_id %] not fully de-duplicated.
-        [% ELSE %]
         [% END %]
   </p>
 </div>
