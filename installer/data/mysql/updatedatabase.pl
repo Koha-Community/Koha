@@ -10422,17 +10422,17 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.19.00.041";
 if ( CheckVersion($DBversion) ) {
-    unless ( constraint_exists( 'suggestions', 'status' ) ) {
+    unless ( index_exists( 'suggestions', 'status' ) ) {
         $dbh->do(q|
             ALTER TABLE suggestions ADD KEY status (STATUS)
         |);
     }
-    unless ( constraint_exists( 'suggestions', 'biblionumber' ) ) {
+    unless ( index_exists( 'suggestions', 'biblionumber' ) ) {
         $dbh->do(q|
             ALTER TABLE suggestions ADD KEY biblionumber (biblionumber)
         |);
     }
-    unless ( constraint_exists( 'suggestions', 'branchcode' ) ) {
+    unless ( index_exists( 'suggestions', 'branchcode' ) ) {
         $dbh->do(q|
             ALTER TABLE suggestions ADD KEY branchcode (branchcode)
         |);
@@ -10450,7 +10450,7 @@ if ( CheckVersion($DBversion) ) {
         WHERE auth_types.authtypecode IS NULL
     });
 
-    unless ( constraint_exists( 'auth_subfield_structure', 'auth_subfield_structure_ibfk_1' ) ) {
+    unless ( foreign_key_exists( 'auth_subfield_structure', 'auth_subfield_structure_ibfk_1' ) ) {
         $dbh->do(q{
             ALTER TABLE auth_subfield_structure
             ADD CONSTRAINT auth_subfield_structure_ibfk_1
@@ -10573,54 +10573,54 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.21.00.007";
 if ( CheckVersion($DBversion) ) {
-    unless ( constraint_exists( 'aqbasket', 'authorisedby' ) ) {
+    unless ( index_exists( 'aqbasket', 'authorisedby' ) ) {
         $dbh->do(q|
             ALTER TABLE aqbasket
                 ADD KEY authorisedby (authorisedby)
         |);
     }
-    unless ( constraint_exists( 'aqbooksellers', 'name' ) ) {
+    unless ( index_exists( 'aqbooksellers', 'name' ) ) {
         $dbh->do(q|
             ALTER TABLE aqbooksellers
                 ADD KEY name (name(255))
         |);
     }
-    unless ( constraint_exists( 'aqbudgets', 'budget_parent_id' ) ) {
+    unless ( index_exists( 'aqbudgets', 'budget_parent_id' ) ) {
         $dbh->do(q|
             ALTER TABLE aqbudgets
                 ADD KEY budget_parent_id (budget_parent_id)|);
         }
-    unless ( constraint_exists( 'aqbudgets', 'budget_code' ) ) {
+    unless ( index_exists( 'aqbudgets', 'budget_code' ) ) {
         $dbh->do(q|
             ALTER TABLE aqbudgets
                 ADD KEY budget_code (budget_code)|);
     }
-    unless ( constraint_exists( 'aqbudgets', 'budget_branchcode' ) ) {
+    unless ( index_exists( 'aqbudgets', 'budget_branchcode' ) ) {
         $dbh->do(q|
             ALTER TABLE aqbudgets
                 ADD KEY budget_branchcode (budget_branchcode)|);
     }
-    unless ( constraint_exists( 'aqbudgets', 'budget_period_id' ) ) {
+    unless ( index_exists( 'aqbudgets', 'budget_period_id' ) ) {
         $dbh->do(q|
             ALTER TABLE aqbudgets
                 ADD KEY budget_period_id (budget_period_id)|);
     }
-    unless ( constraint_exists( 'aqbudgets', 'budget_owner_id' ) ) {
+    unless ( index_exists( 'aqbudgets', 'budget_owner_id' ) ) {
         $dbh->do(q|
             ALTER TABLE aqbudgets
                 ADD KEY budget_owner_id (budget_owner_id)|);
     }
-    unless ( constraint_exists( 'aqbudgets_planning', 'budget_period_id' ) ) {
+    unless ( index_exists( 'aqbudgets_planning', 'budget_period_id' ) ) {
         $dbh->do(q|
             ALTER TABLE aqbudgets_planning
                 ADD KEY budget_period_id (budget_period_id)|);
     }
-    unless ( constraint_exists( 'aqorders', 'parent_ordernumber' ) ) {
+    unless ( index_exists( 'aqorders', 'parent_ordernumber' ) ) {
         $dbh->do(q|
             ALTER TABLE aqorders
                 ADD KEY parent_ordernumber (parent_ordernumber)|);
     }
-    unless ( constraint_exists( 'aqorders', 'orderstatus' ) ) {
+    unless ( index_exists( 'aqorders', 'orderstatus' ) ) {
         $dbh->do(q|
             ALTER TABLE aqorders
                 ADD KEY orderstatus (orderstatus)|);
@@ -10726,7 +10726,7 @@ if ( CheckVersion($DBversion) ) {
         VALUES ('OAI-PMH:DeletedRecord','persistent','Koha\'s deletedbiblio table will never be deleted (persistent) or might be deleted (transient)','transient|persistent','Choice')
     });
 
-    if ( constraint_exists( 'oai_sets_biblios', 'oai_sets_biblios_ibfk_1' ) ) {
+    if ( foreign_key_exists( 'oai_sets_biblios', 'oai_sets_biblios_ibfk_1' ) ) {
         $dbh->do(q|
             ALTER TABLE oai_sets_biblios DROP FOREIGN KEY oai_sets_biblios_ibfk_1
         |);
@@ -10858,7 +10858,7 @@ if ( CheckVersion($DBversion) ) {
     my ($print_error) = $dbh->{PrintError};
     $dbh->{RaiseError} = 0;
     $dbh->{PrintError} = 0;
-    if ( constraint_exists('course_reserves', 'course_reserves_ibfk_2') ) {
+    if ( foreign_key_exists('course_reserves', 'course_reserves_ibfk_2') ) {
         $dbh->do(q{ALTER TABLE course_reserves DROP FOREIGN KEY course_reserves_ibfk_2});
         $dbh->do(q{ALTER TABLE course_reserves DROP INDEX course_reserves_ibfk_2});
     }
