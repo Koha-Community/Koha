@@ -67,6 +67,7 @@ sub pay {
     my $note            = $params->{note} || q{};
     my $library_id      = $params->{library_id};
     my $lines           = $params->{lines};
+    my $type            = $params->{type} || 'payment';
 
     my $userenv = C4::Context->userenv;
 
@@ -154,7 +155,7 @@ sub pay {
                 $self->{patron_id},
                 Dumper(
                     {
-                        action                => 'fee_payment',
+                        action                => "fee_$type",
                         borrowernumber        => $fine->borrowernumber,
                         old_amountoutstanding => $old_amountoutstanding,
                         new_amountoutstanding => $fine->amountoutstanding,
@@ -173,7 +174,12 @@ sub pay {
         last unless $balance_remaining > 0;
     }
 
-    my $account_type = defined($sip) ? "Pay$sip" : 'Pay';
+    my $account_type =
+        $type eq 'writeoff' ? 'W'
+      : defined($sip)       ? "Pay$sip"
+      :                       'Pay';
+
+    my $description = $type eq 'writeoff' ? 'Writeoff' : q{};
 
     my $payment = Koha::Account::Line->new(
         {
@@ -181,7 +187,7 @@ sub pay {
             accountno         => $accountno,
             date              => dt_from_string(),
             amount            => 0 - $amount,
-            description       => q{},
+            description       => $description,
             accounttype       => $account_type,
             amountoutstanding => 0 - $balance_remaining,
             manager_id        => $manager_id,
@@ -194,7 +200,7 @@ sub pay {
     UpdateStats(
         {
             branch         => $library_id,
-            type           => 'payment',
+            type           => $type,
             amount         => $amount,
             borrowernumber => $self->{patron_id},
             accountno      => $accountno,
@@ -207,12 +213,12 @@ sub pay {
             $self->{patron_id},
             Dumper(
                 {
-                    action            => 'create_payment',
+                    action            => "create_$type",
                     borrowernumber    => $self->{patron_id},
                     accountno         => $accountno,
                     amount            => 0 - $amount,
                     amountoutstanding => 0 - $balance_remaining,
-                    accounttype       => 'Pay',
+                    accounttype       => $account_type,
                     accountlines_paid => \@fines_paid,
                     manager_id        => $manager_id,
                 }

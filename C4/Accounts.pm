@@ -26,6 +26,7 @@ use C4::Members;
 use C4::Circulation qw(ReturnLostItem);
 use C4::Log qw(logaction);
 use Koha::Account;
+use Koha::Account::Lines;
 
 use Data::Dumper qw(Dumper);
 
@@ -366,62 +367,17 @@ C<$payment_note> is the note to attach to this payment
 
 sub WriteOffFee {
     my ( $borrowernumber, $accountlines_id, $itemnum, $accounttype, $amount, $branch, $payment_note ) = @_;
-    $payment_note //= "";
-    $branch ||= C4::Context->userenv->{branch};
-    my $manager_id = 0;
-    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
 
-    # if no item is attached to fine, make sure to store it as a NULL
-    $itemnum ||= undef;
-
-    my ( $sth, $query );
-    my $dbh = C4::Context->dbh();
-
-    $query = "
-        UPDATE accountlines SET amountoutstanding = 0
-        WHERE accountlines_id = ? AND borrowernumber = ?
-    ";
-    $sth = $dbh->prepare( $query );
-    $sth->execute( $accountlines_id, $borrowernumber );
-
-    if ( C4::Context->preference("FinesLog") ) {
-        logaction("FINES", 'MODIFY', $borrowernumber, Dumper({
-            action                => 'fee_writeoff',
-            borrowernumber        => $borrowernumber,
-            accountlines_id       => $accountlines_id,
-            manager_id            => $manager_id,
-        }));
-    }
-
-    $query ="
-        INSERT INTO accountlines
-        ( borrowernumber, accountno, itemnumber, date, amount, description, accounttype, manager_id, note )
-        VALUES ( ?, ?, ?, NOW(), ?, 'Writeoff', 'W', ?, ? )
-    ";
-    $sth = $dbh->prepare( $query );
-    my $acct = getnextacctno($borrowernumber);
-    $sth->execute( $borrowernumber, $acct, $itemnum, $amount, $manager_id, $payment_note );
-
-    if ( C4::Context->preference("FinesLog") ) {
-        logaction("FINES", 'CREATE',$borrowernumber,Dumper({
-            action            => 'create_writeoff',
-            borrowernumber    => $borrowernumber,
-            accountno         => $acct,
-            amount            => 0 - $amount,
-            accounttype       => 'W',
-            itemnumber        => $itemnum,
-            accountlines_paid => [ $accountlines_id ],
-            manager_id        => $manager_id,
-        }));
-    }
-
-    UpdateStats({
-                branch => $branch,
-                type => 'writeoff',
-                amount => $amount,
-                borrowernumber => $borrowernumber}
+    my $line = Koha::Account::Lines->find($accountlines_id);
+    return Koha::Account->new( { patron_id => $borrowernumber } )->pay(
+        {
+            amount     => $amount,
+            lines      => [$line],
+            type       => 'writeoff',
+            note       => $payment_note,
+            library_id => $branch,
+        }
     );
-
 }
 
 =head2 purge_zero_balance_fees
