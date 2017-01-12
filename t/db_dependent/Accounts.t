@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Test::MockModule;
 use Test::Warn;
 
@@ -301,6 +301,48 @@ subtest "Koha::Account::pay particular line tests" => sub {
     is( $line3->amountoutstanding, "1.000000", "Line 3 was paid to 1.00" );
     # Line4 was not paid at all, as the payment was all used up by that point
     is( $line4->amountoutstanding, "4.000000", "Line 4 was not paid" );
+};
+
+subtest "Koha::Account::pay writeoff tests" => sub {
+
+    plan tests => 5;
+
+    # Create a borrower
+    my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
+    my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
+
+    my $borrower = Koha::Patron->new( {
+        cardnumber => 'chelseahall',
+        surname => 'Hall',
+        firstname => 'Chelsea',
+    } );
+    $borrower->categorycode( $categorycode );
+    $borrower->branchcode( $branchcode );
+    $borrower->store;
+
+    my $account = Koha::Account->new({ patron_id => $borrower->id });
+
+    my $line = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 42 })->store();
+
+    is( $account->balance(), "42.000000", "Account balance is 42" );
+
+    my $id = $account->pay(
+        {
+            lines  => [$line],
+            amount => 42,
+            type   => 'writeoff',
+        }
+    );
+
+    $line->_result->discard_changes();
+
+    is( $line->amountoutstanding, "0.000000", "Line was written off" );
+
+    my $writeoff = Koha::Account::Lines->find( $id );
+
+    is( $writeoff->accounttype, 'W', 'Type is correct' );
+    is( $writeoff->description, 'Writeoff', 'Description is correct' );
+    is( $writeoff->amount, '-42.000000', 'Amount is correct' );
 };
 
 subtest "More Koha::Account::pay tests" => sub {
