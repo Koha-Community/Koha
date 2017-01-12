@@ -6,11 +6,21 @@
 use strict;
 use warnings;
 
-use Test::More tests => 17;
+use Test::More tests => 19;
 
 BEGIN {
         use_ok('C4::Installer::PerlModules');
 }
+
+$C4::Installer::PerlModules::PERL_DEPS->{'Local::Module::Sort'} = {
+    'required' => '1',
+    'min_ver' => '0.9.3',
+    'usage' => "Testing: make sure numbers are compared numerically and not lexicographically",
+};
+
+$Local::Module::Sort::VERSION = '0.9.13';
+$INC{"Local/Module/Sort.pm"} = 1;
+use_ok("Local::Module::Sort");
 
 my $modules;
 ok ($modules = C4::Installer::PerlModules->new(), 'Tests modules object');
@@ -37,3 +47,5 @@ my @module_list = $modules->module_list;
 ok (exists($params{"DBI"}), 'DBI exists in array');
 is ($modules->required('module'=>"String::Random"),1, 'String::Random should return 1 since required');
 ok (!$modules->version_info(), "Testing empty modules");
+
+is($modules->version_info('module'=>"Local::Module::Sort")->{"Local::Module::Sort"}->{"upgrade"},0,"Version 0.9.13 is greater than 0.9.3, so no upgrade needed");
