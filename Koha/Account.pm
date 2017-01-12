@@ -66,7 +66,7 @@ sub pay {
     my $sip             = $params->{sip};
     my $note            = $params->{note} || q{};
     my $library_id      = $params->{library_id};
-    my $lines           = $params->{lines},
+    my $lines           = $params->{lines};
 
     my $userenv = C4::Context->userenv;
 
