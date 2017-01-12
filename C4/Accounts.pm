@@ -33,20 +33,19 @@ use Data::Dumper qw(Dumper);
 use vars qw(@ISA @EXPORT);
 
 BEGIN {
-	require Exporter;
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(
-		&manualinvoice
-		&getnextacctno
-		&getcharges
-		&ModNote
-		&getcredits
-		&getrefunds
-		&chargelostitem
-		&ReversePayment
-        &WriteOffFee
-        &purge_zero_balance_fees
-	);
+    require Exporter;
+    @ISA    = qw(Exporter);
+    @EXPORT = qw(
+      &manualinvoice
+      &getnextacctno
+      &getcharges
+      &ModNote
+      &getcredits
+      &getrefunds
+      &chargelostitem
+      &ReversePayment
+      &purge_zero_balance_fees
+    );
 }
 
 =head1 NAME
@@ -348,36 +347,6 @@ sub ReversePayment {
 
     }
 
-}
-
-=head2 WriteOffFee
-
-  WriteOffFee( $borrowernumber, $accountline_id, $itemnum, $accounttype, $amount, $branch, $payment_note );
-
-Write off a fine for a patron.
-C<$borrowernumber> is the patron's borrower number.
-C<$accountline_id> is the accountline_id of the fee to write off.
-C<$itemnum> is the itemnumber of of item whose fine is being written off.
-C<$accounttype> is the account type of the fine being written off.
-C<$amount> is a floating-point number, giving the amount that is being written off.
-C<$branch> is the branchcode of the library where the writeoff occurred.
-C<$payment_note> is the note to attach to this payment
-
-=cut
-
-sub WriteOffFee {
-    my ( $borrowernumber, $accountlines_id, $itemnum, $accounttype, $amount, $branch, $payment_note ) = @_;
-
-    my $line = Koha::Account::Lines->find($accountlines_id);
-    return Koha::Account->new( { patron_id => $borrowernumber } )->pay(
-        {
-            amount     => $amount,
-            lines      => [$line],
-            type       => 'writeoff',
-            note       => $payment_note,
-            library_id => $branch,
-        }
-    );
 }
 
 =head2 purge_zero_balance_fees

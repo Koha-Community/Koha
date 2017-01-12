@@ -88,11 +88,18 @@ if ($writeoff_all) {
     writeoff_all(@names);
 } elsif ($writeoff_item) {
     my $accountlines_id = $input->param('accountlines_id');
-    my $itemno       = $input->param('itemnumber');
-    my $account_type = $input->param('accounttype');
     my $amount       = $input->param('amountoutstanding');
     my $payment_note = $input->param("payment_note");
-    WriteOffFee( $borrowernumber, $accountlines_id, $itemno, $account_type, $amount, $branch, $payment_note );
+
+    Koha::Account->new( { patron_id => $borrowernumber } )->pay(
+        {
+            amount     => $amount,
+            lines      => [Koha::Account::Lines->find($accountlines_id)],
+            type       => 'writeoff',
+            note       => $payment_note,
+            library_id => $branch,
+        }
+    );
 }
 
 for (@names) {
@@ -153,7 +160,7 @@ sub add_accounts_to_template {
 sub get_for_redirect {
     my ( $name, $name_in, $money ) = @_;
     my $s     = q{&} . $name . q{=};
-    my $value = $input->param($name_in);
+    my $value = uri_escape_utf8( $input->param($name_in) );
     if ( !defined $value ) {
         $value = ( $money == 1 ) ? 0 : q{};
     }
@@ -175,8 +182,8 @@ sub redirect_to_paycollect {
     $redirect .= get_for_redirect( 'amount', "amount$line_no", 1 );
     $redirect .=
       get_for_redirect( 'amountoutstanding', "amountoutstanding$line_no", 1 );
-    $redirect .= uri_escape_utf8( get_for_redirect( 'description', "description$line_no", 0 ) );
-    $redirect .= uri_escape_utf8( get_for_redirect( 'title', "title$line_no", 0 ) );
+    $redirect .= get_for_redirect( 'description', "description$line_no", 0 );
+    $redirect .= get_for_redirect( 'title', "title$line_no", 0 );
     $redirect .= get_for_redirect( 'itemnumber',   "itemnumber$line_no",   0 );
     $redirect .= get_for_redirect( 'notify_id',    "notify_id$line_no",    0 );
     $redirect .= get_for_redirect( 'notify_level', "notify_level$line_no", 0 );
@@ -190,23 +197,28 @@ sub redirect_to_paycollect {
 sub writeoff_all {
     my @params = @_;
     my @wo_lines = grep { /^accountlines_id\d+$/ } @params;
+
+    my $borrowernumber = $input->param('borrowernumber');
+
     for (@wo_lines) {
         if (/(\d+)/) {
-            my $value       = $1;
-            my $accounttype = $input->param("accounttype$value");
-
-            #    my $borrowernum    = $input->param("borrowernumber$value");
-            my $itemno    = $input->param("itemnumber$value");
-            my $amount    = $input->param("amountoutstanding$value");
+            my $value           = $1;
+            my $amount          = $input->param("amountoutstanding$value");
             my $accountlines_id = $input->param("accountlines_id$value");
-            my $payment_note = $input->param("payment_note_$value");
-            WriteOffFee( $borrowernumber, $accountlines_id, $itemno, $accounttype, $amount, $branch, $payment_note );
+            my $payment_note    = $input->param("payment_note_$value");
+            Koha::Account->new( { patron_id => $borrowernumber } )->pay(
+                {
+                    amount => $amount,
+                    lines  => [ Koha::Account::Lines->find($accountlines_id) ],
+                    type   => 'writeoff',
+                    note   => $payment_note,
+                    library_id => $branch,
+                }
+            );
         }
     }
 
-    $borrowernumber = $input->param('borrowernumber');
-    print $input->redirect(
-        "/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+    print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
     return;
 }
 
