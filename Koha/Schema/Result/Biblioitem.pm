@@ -203,11 +203,6 @@ __PACKAGE__->table("biblioitems");
   data_type: 'integer'
   is_nullable: 1
 
-=head2 marcxml
-
-  data_type: 'longtext'
-  is_nullable: 1
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -285,8 +280,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "totalissues",
   { data_type => "integer", is_nullable => 1 },
-  "marcxml",
-  { data_type => "longtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -334,8 +327,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-21 14:37:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sIIeEpbe61VNkEYpUXNDkw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-01-13 08:36:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cAlg2aIZ7hxeq+Hgl1AJcA
 
 __PACKAGE__->belongs_to( biblio => "Koha::Schema::Result::Biblio", "biblionumber" );
 
