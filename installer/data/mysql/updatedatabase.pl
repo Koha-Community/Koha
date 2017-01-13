@@ -13766,6 +13766,21 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '16.12.00.002';
+if ( CheckVersion($DBversion) ) {
+    unless (column_exists( 'branchtransfers', 'branchtransfer_id' )
+        and index_exists( 'branchtransfers', 'PRIMARY' ) )
+    {
+        $dbh->do(
+            "ALTER TABLE branchtransfers
+                 ADD COLUMN branchtransfer_id int(12) NOT NULL auto_increment FIRST, ADD CONSTRAINT PRIMARY KEY (branchtransfer_id);"
+        );
+    }
+
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 14187 - branchtransfer needs a primary key (id) for DBIx and common sense.)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
