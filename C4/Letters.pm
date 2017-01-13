@@ -477,9 +477,11 @@ sub SendAlerts {
             return { error => "no_order_selected" };
         }
 
-        $strsth .= join( ",", @$externalid ) . ")";
+        $strsth .= join( ",", ('?') x @$externalid ) . ")";
+
         my $sthorders = $dbh->prepare($strsth);
-        $sthorders->execute;
+        $sthorders->execute( @$externalid );
+
         my $dataorders = $sthorders->fetchall_arrayref( {} );
 
         my $sthbookseller =
