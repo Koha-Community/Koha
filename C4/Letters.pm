@@ -501,10 +501,10 @@ sub SendAlerts {
                 return { error => "no_order_selected" };
             }
 
-            $strsth .= join( ",", @$externalid ) . ")";
+            $strsth .= join( ",", ('?') x @$externalid ) . ")";
             $action = "CLAIM ISSUE";
             $sthorders = $dbh->prepare($strsth);
-            $sthorders->execute;
+            $sthorders->execute( @$externalid );
             $dataorders = $sthorders->fetchall_arrayref( {} );
         }
 
