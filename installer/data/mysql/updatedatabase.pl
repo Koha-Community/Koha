@@ -13788,6 +13788,54 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 17486 - Remove 'Mozilla Persona' as an authentication method)\n";
 }
 
+$DBversion = '16.12.00.004';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        CREATE TABLE biblio_metadata (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `biblionumber` INT(11) NOT NULL,
+            `format` VARCHAR(16) NOT NULL,
+            `marcflavour` VARCHAR(16) NOT NULL,
+            `metadata` LONGTEXT NOT NULL,
+            PRIMARY KEY(id),
+            UNIQUE KEY `biblio_metadata_uniq_key` (`biblionumber`,`format`,`marcflavour`),
+            CONSTRAINT `biblio_metadata_fk_1` FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    });
+    $dbh->do(q{
+        CREATE TABLE deletedbiblio_metadata (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `biblionumber` INT(11) NOT NULL,
+            `format` VARCHAR(16) NOT NULL,
+            `marcflavour` VARCHAR(16) NOT NULL,
+            `metadata` LONGTEXT NOT NULL,
+            PRIMARY KEY(id),
+            UNIQUE KEY `deletedbiblio_metadata_uniq_key` (`biblionumber`,`format`,`marcflavour`),
+            CONSTRAINT `deletedbiblio_metadata_fk_1` FOREIGN KEY (biblionumber) REFERENCES deletedbiblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    });
+    $dbh->do(q{
+        INSERT INTO biblio_metadata ( biblionumber, format, marcflavour, metadata ) SELECT biblionumber, 'marcxml', 'CHANGEME', marcxml FROM biblioitems;
+    });
+    $dbh->do(q{
+        INSERT INTO deletedbiblio_metadata ( biblionumber, format, marcflavour, metadata ) SELECT biblionumber, 'marcxml', 'CHANGEME', marcxml FROM deletedbiblioitems;
+    });
+    $dbh->do(q{
+        UPDATE biblio_metadata SET marcflavour = (SELECT value FROM systempreferences WHERE variable="marcflavour");
+    });
+    $dbh->do(q{
+        UPDATE deletedbiblio_metadata SET marcflavour = (SELECT value FROM systempreferences WHERE variable="marcflavour");
+    });
+    $dbh->do(q{
+        ALTER TABLE biblioitems DROP COLUMN marcxml;
+    });
+    $dbh->do(q{
+        ALTER TABLE deletedbiblioitems DROP COLUMN marcxml;
+    });
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 17196 - Move marcxml out of the biblioitems table)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
