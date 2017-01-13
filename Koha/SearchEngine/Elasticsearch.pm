@@ -273,10 +273,17 @@ sub _elasticsearch_mapping_for_default {
     };
 }
 
+=head2 reset_elasticsearch_mappings
+
+Deletes all search mappings and adds the default search mappings
+
+=cut
+
 sub reset_elasticsearch_mappings {
     my $mappings_yaml = C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/mappings.yaml';
     my $indexes = LoadFile( $mappings_yaml );
 
+    Koha::SearchMarcMaps->search->delete;
     while ( my ( $index_name, $fields ) = each %$indexes ) {
         while ( my ( $field_name, $data ) = each %$fields ) {
             my $field_type = $data->{type};
