@@ -122,6 +122,7 @@
 [% INCLUDE 'members-toolbar.inc' %]
 
 <form method="post" action="/cgi-bin/koha/members/member-flags.pl">
+    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
     <input type="hidden" name="member" id="borrowernumber" value="[% borrowernumber %]" />
     <input type="hidden" name="newflags" value="1" />
     <h1>Set permissions for [% surname %], [% firstname %]</h1>
