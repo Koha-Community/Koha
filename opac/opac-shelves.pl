@@ -105,9 +105,11 @@ if ( $op eq 'add_form' ) {
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
     if ( $shelf ) {
         $op = $referer;
+        my $sortfield = $query->param('sortfield');
+        $sortfield = 'title' unless grep {/^$sortfield$/}qw( title author copyrightdate itemcallnumber );
         if ( $shelf->can_be_managed( $loggedinuser ) ) {
             $shelf->shelfname( $query->param('shelfname') );
-            $shelf->sortfield( $query->param('sortfield') );
+            $shelf->sortfield( $sortfield );
             $shelf->allow_add( $query->param('allow_add') );
             $shelf->allow_delete_own( $query->param('allow_delete_own') );
             $shelf->allow_delete_other( $query->param('allow_delete_other') );
@@ -226,6 +228,7 @@ if ( $op eq 'view' ) {
         if ( $shelf->can_be_viewed( $loggedinuser ) ) {
             $category = $shelf->category;
             my $sortfield = $query->param('sortfield') || $shelf->sortfield;    # Passed in sorting overrides default sorting
+            $sortfield = 'title' unless grep {/^$sortfield$/}qw( title author copyrightdate itemcallnumber );
             my $direction = $query->param('direction') || 'asc';
             $direction = 'asc' if $direction ne 'asc' and $direction ne 'desc';
             my ( $page, $rows );
@@ -326,7 +329,6 @@ if ( $op eq 'view' ) {
                 can_delete_shelf   => $shelf->can_be_deleted($loggedinuser),
                 can_remove_biblios => $shelf->can_biblios_be_removed($loggedinuser),
                 can_add_biblios    => $shelf->can_biblios_be_added($loggedinuser),
-                sortfield          => $sortfield,
                 itemsloop          => \@items,
                 sortfield          => $sortfield,
                 direction          => $direction,
