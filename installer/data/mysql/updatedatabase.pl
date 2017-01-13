@@ -13781,6 +13781,13 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 14187 - branchtransfer needs a primary key (id) for DBIx and common sense.)\n";
 }
 
+$DBversion = '16.12.00.003';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{DELETE FROM systempreferences WHERE variable="Persona"});
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 17486 - Remove 'Mozilla Persona' as an authentication method)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
