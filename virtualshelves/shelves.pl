@@ -94,9 +94,11 @@ if ( $op eq 'add_form' ) {
 
     if ( $shelf ) {
         $op = $referer;
+        my $sortfield = $query->param('sortfield');
+        $sortfield = 'title' unless grep {/^$sortfield$/}qw( title author copyrightdate itemcallnumber );
         if ( $shelf->can_be_managed( $loggedinuser ) ) {
             $shelf->shelfname( scalar $query->param('shelfname') );
-            $shelf->sortfield( scalar $query->param('sortfield') );
+            $shelf->sortfield( $sortfield );
             $shelf->allow_add( scalar $query->param('allow_add') );
             $shelf->allow_delete_own( scalar $query->param('allow_delete_own') );
             $shelf->allow_delete_other( scalar $query->param('allow_delete_other') );
@@ -197,6 +199,7 @@ if ( $op eq 'view' ) {
     if ( $shelf ) {
         if ( $shelf->can_be_viewed( $loggedinuser ) ) {
             my $sortfield = $query->param('sortfield') || $shelf->sortfield || 'title';    # Passed in sorting overrides default sorting
+            $sortfield = 'title' unless grep {/^$sortfield$/}qw( title author copyrightdate itemcallnumber );
             my $direction = $query->param('direction') || 'asc';
             $direction = 'asc' if $direction ne 'asc' and $direction ne 'desc';
             my ( $rows, $page );
