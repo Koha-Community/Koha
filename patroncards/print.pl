@@ -122,8 +122,8 @@ elsif ($op eq 'none') {
     @batch_ids = grep{$_ = {batch_id => $_}} @batch_ids;
     @label_ids = grep{$_ = {label_id => $_}} @label_ids;
     @borrower_numbers = grep{$_ = {borrower_number => $_}} @borrower_numbers;
-    $templates = get_all_templates(field_list => 'template_id, template_code', filter => 'creator = "Patroncards"');
-    $layouts = get_all_layouts(field_list => 'layout_id, layout_name', filter => 'creator = "Patroncards"');
+    $templates = get_all_templates( { fields => [qw( template_id template_code ) ], filters => { creator => "Patroncards" } });
+    $layouts = get_all_layouts({ fields => [ qw( layout_id layout_name ) ], filters => { creator => "Patroncards" } });
     $output_formats = get_output_formats();
     $template->param(
                     batch_ids                   => \@batch_ids,

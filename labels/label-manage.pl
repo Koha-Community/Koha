@@ -87,10 +87,10 @@ if ($op eq 'delete') {
     else                                        {}      # FIXME: Some error trapping code
 }
 
-if      ($label_element eq 'layout')    {$db_rows = get_all_layouts(table_name => 'creator_layouts', filter => 'creator=\'Labels\'');}
-elsif   ($label_element eq 'template')  {$db_rows = get_all_templates(table_name => 'creator_templates', filter => 'creator=\'Labels\'');}
-elsif   ($label_element eq 'profile')   {$db_rows = get_all_profiles(table_name => 'printers_profile', filter => 'creator=\'Labels\'');}
-elsif   ($label_element eq 'batch')     {$db_rows = get_batch_summary(filter => "branch_code=\'$branch_code\' OR branch_code=\'NB\'", creator => 'Labels');}
+if      ($label_element eq 'layout')    {$db_rows = get_all_layouts( { filters => { creator => 'Labels' } });}
+elsif   ($label_element eq 'template')  {$db_rows = get_all_templates( { filters => { creator => 'Labels' } });}
+elsif   ($label_element eq 'profile')   {$db_rows = get_all_profiles( { filters => { creator => 'Labels' } });}
+elsif   ($label_element eq 'batch')     {$db_rows = get_batch_summary( { filters => { branch_code => [$branch_code, 'NB'], creator => 'Labels' } });}
 else                                    {}      # FIXME: Some error trapping code
 
 my $table = html_table($display_columns->{$label_element}, $db_rows);
