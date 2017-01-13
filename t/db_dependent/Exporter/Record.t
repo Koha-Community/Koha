@@ -34,7 +34,7 @@ use Koha::Database;
 use Koha::Biblio;
 use Koha::Biblioitem;
 use Koha::Exporter::Record;
-use Koha::Biblio::Metadatas;
+use Koha::Biblio::Metadata;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
