@@ -478,10 +478,10 @@ sub SendAlerts {
                 carp "No order selected";
                 return { error => "no_order_selected" };
             }
-            $strsth .= join( ",", @$externalid ) . ")";
+            $strsth .= join( ",", ('?') x @$externalid ) . ")";
             $action = "ACQUISITION CLAIM";
             $sthorders = $dbh->prepare($strsth);
-            $sthorders->execute;
+            $sthorders->execute( @$externalid );
             $dataorders = $sthorders->fetchall_arrayref( {} );
         }
 
