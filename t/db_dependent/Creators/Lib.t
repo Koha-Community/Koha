@@ -314,7 +314,7 @@ is( $templates->[1]->{units},            'POINT',      'units            is good
 is( $templates->[1]->{creator},          'Labels',     'creator          is good' );
 
 # With field_list params --------------
-$templates = get_all_templates( field_list => 'units, cols, rows' );
+$templates = get_all_templates( {fields=> [qw(units cols rows)] } );
 
 $query = '
   SELECT count(*)
@@ -502,7 +502,7 @@ is( $layouts->[1]->{layout_xml},    'layout_xml2', 'layout_xml     is good' );
 is( $layouts->[1]->{creator},       'Labels',      'creator        is good' );
 
 # With field_list params --------------
-$layouts = get_all_layouts( field_list => 'barcode_type, layout_name, font' );
+$layouts = get_all_layouts( { fields => [qw(barcode_type layout_name font)] });
 
 $query = '
   SELECT count(*)
@@ -662,7 +662,7 @@ is( $profiles->[1]->{units},        'POINT',        'units          is good' );
 is( $profiles->[1]->{creator},      'Labels',       'creator        is good' );
 
 # With field_list params --------------
-$profiles = get_all_profiles( field_list => 'printer_name, template_id' );
+$profiles = get_all_profiles( { fields => [qw(printer_name template_id)] });
 
 $query = '
   SELECT count(*)
@@ -696,7 +696,7 @@ isnt( exists $profiles->[1]->{units},         'POINT',        'units          is
 isnt( exists $profiles->[1]->{creator},       'Labels',       'creator        is good' );
 
 # With filter params ------------------
-$profiles = get_all_profiles( filter => 'template_id = 1235' );
+$profiles = get_all_profiles( filters => { template_id => 1235 } );
 
 $query = '
   SELECT count(*)

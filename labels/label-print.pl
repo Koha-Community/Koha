@@ -115,8 +115,8 @@ elsif ($op eq 'none') {
     @batch_ids = map{{batch_id => $_}} @batch_ids;
     @label_ids = map{{label_id => $_}} @label_ids;
     @item_numbers = map{{item_number => $_}} @item_numbers;
-    $templates = get_all_templates(field_list => 'template_id, template_code', filter => 'creator = "Labels"', orderby => 'template_code' );
-    $layouts = get_all_layouts(field_list => 'layout_id, layout_name', filter => 'creator = "Labels"', orderby => 'layout_name' );
+    $templates = get_all_templates( { fields => [ qw( template_id template_code ) ], filters => { creator => "Labels" }, orderby => 'template_code' } );
+    $layouts = get_all_layouts( { fields => [ qw( layout_id layout_name ) ], filters => { creator => "Labels" }, orderby => 'layout_name' } );
     $output_formats = get_output_formats();
     $template->param(
                     batch_ids                   => \@batch_ids,

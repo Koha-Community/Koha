@@ -142,6 +142,27 @@ my $output_formats = [
     {type       => 'csv',       desc    => 'CSV File'},
 ];
 
+sub _build_query {
+    my ( $params, $table ) = @_;
+    my @fields = exists $params->{fields} ? @{ $params->{fields} } : ();
+    my $query = "SELECT " . ( @fields ? join(', ', @fields ) : '*' ) . " FROM $table";
+    my @where_args;
+    if ( exists $params->{filters} ) {
+        $query .= ' WHERE 1 ';
+        while ( my ( $field, $values ) = each %{ $params->{filters} } ) {
+            if ( ref( $values ) ) {
+                $query .= " AND $field IN ( " . ( ('?') x scalar( @$values ) ) . " ) ";
+                push @where_args, @$values;
+            } else {
+                $query .= " AND $field = ? ";
+                push @where_args, $values;
+            }
+        }
+    }
+    $query .= (exists $params->{orderby} ? " ORDER BY $params->{orderby} " : '');
+    return ( $query, @where_args );
+}
+
 =head2 C4::Creators::Lib::get_all_templates()
 
   my $templates = get_all_templates();
@@ -151,13 +172,11 @@ This function returns a reference to a hash containing all templates upon succes
 =cut
 
 sub get_all_templates {
-    my %params = @_;
+    my ( $params ) = @_;
     my @templates = ();
-    my $query = "SELECT " . ($params{'field_list'} ? $params{'field_list'} : '*') . " FROM creator_templates";
-    $query .= ($params{'filter'} ? " WHERE $params{'filter'} " : '');
-    $query .= ($params{'orderby'} ? " ORDER BY $params{'orderby'} " : '');
+    my ( $query, @where_args ) = _build_query( $params, 'creator_templates' );
     my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute();
+    $sth->execute( @where_args );
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
         return -1;
@@ -178,13 +197,11 @@ This function returns a reference to a hash containing all layouts upon success 
 =cut
 
 sub get_all_layouts {
-    my %params = @_;
+    my ( $params ) = @_;
     my @layouts = ();
-    my $query = "SELECT " . ($params{'field_list'} ? $params{'field_list'} : '*') . " FROM creator_layouts";
-    $query .= ($params{'filter'} ? " WHERE $params{'filter'} " : '');
-    $query .= ($params{'orderby'} ? " ORDER BY $params{'orderby'} " : '');
+    my ( $query, @where_args ) = _build_query( $params, 'creator_layouts' );
     my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute();
+    $sth->execute( @where_args );
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
         return -1;
@@ -200,7 +217,7 @@ sub get_all_layouts {
 
   my $profiles = get_all_profiles();
 
-  my $profiles = get_all_profiles(field_list => field_list, filter => filter_string);
+  my $profiles = get_all_profiles({ fields => [@fields], filters => { filters => [$value1, $value2] } });
 
 This function returns an arrayref whose elements are hashes containing all profiles upon success and 1 upon failure. Errors are logged
 to the Apache log. Two parameters are accepted. The first limits the field(s) returned. This parameter should be string of comma separted
@@ -211,13 +228,11 @@ NOTE: Do not pass in the keyword 'WHERE.'
 =cut
 
 sub get_all_profiles {
-    my %params = @_;
+    my ( $params ) = @_;
     my @profiles = ();
-    my $query = "SELECT " . ($params{'field_list'} ? $params{'field_list'} : '*') . " FROM printers_profile";
-    $query .= ($params{'filter'} ? " WHERE $params{'filter'};" : ';');
+    my ( $query, @where_args ) = _build_query( $params, 'printers_profile' );
     my $sth = C4::Context->dbh->prepare($query);
-#    $sth->{'TraceLevel'} = 3 if $debug;
-    $sth->execute();
+    $sth->execute( @where_args );
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
         return -1;
@@ -262,14 +277,13 @@ NOTE: Do not pass in the keyword 'WHERE.'
 =cut
 
 sub get_batch_summary {
-    my %params = @_;
+    my ( $params ) = @_;
     my @batches = ();
-    my $query = "SELECT batch_id,count(batch_id) as _item_count FROM creator_batches WHERE creator=?";
-    $query .= ($params{'filter'} ? " AND $params{'filter'}" : '');
+    $params->{fields} = ['batch_id', 'count(batch_id) as _item_count'];
+    my ( $query, @where_args ) = _build_query( $params, 'creator_batches' );
     $query .= " GROUP BY batch_id";
     my $sth = C4::Context->dbh->prepare($query);
-#    $sth->{'TraceLevel'} = 3;
-    $sth->execute($params{'creator'});
+    $sth->execute( @where_args );
     if ($sth->err) {
         warn sprintf('Database returned the following error on attempted SELECT: %s', $sth->errstr);
         return -1;
