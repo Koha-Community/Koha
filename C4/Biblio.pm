@@ -163,7 +163,7 @@ Biblio.pm contains functions for managing storage and editing of bibliographic d
 
 =back
 
-In the 3.0 version of Koha, the authoritative record-level information is in biblioitems.marcxml
+In the 3.0 version of Koha, the authoritative record-level information is in biblio_metadata.metadata
 
 Because the data isn't completely normalized there's a chance for information to get out of sync. The design choice to go with a un-normalized schema was driven by performance and stability concerns. However, if this occur, it can be considered as a bug : The API is (or should be) complete & the only entry point for all biblio/items managements.
 

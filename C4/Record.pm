@@ -228,7 +228,7 @@ EXAMPLE
     my dcxml = marc2dcxml (undef, undef, 1, "oaidc");
 
 Convert MARC or MARCXML to Dublin Core metadata (XSLT Transformation),
-optionally can get an XML directly from database (biblioitems.marcxml)
+optionally can get an XML directly from biblio_metadata
 without item information. This method take into consideration the syspref
 'marcflavour' (UNIMARC, MARC21 and NORMARC).
 Return an XML file with the format defined in C<$format>
@@ -237,7 +237,7 @@ C<$marc> - an ISO-2709 scalar or MARC::Record object
 
 C<$xml> - a MARCXML file
 
-C<$biblionumber> - obtain the record directly from database (biblioitems.marcxml)
+C<$biblionumber> - biblionumber for database access
 
 C<$format> - accept three type of DC formats (oaidc, srwdc, and rdfdc )
 
@@ -258,7 +258,7 @@ sub marc2dcxml {
         # no need to catch errors or warnings marc2marcxml do it instead
         $marcxml = C4::Record::marc2marcxml( $marc );
     } elsif ( not defined $xml and defined $biblionumber ) {
-        # get MARCXML biblio directly from biblioitems.marcxml without item information
+        # get MARCXML biblio directly without item information
         $marcxml = C4::Biblio::GetXmlBiblio( $biblionumber );
     } else {
         $marcxml = $xml;

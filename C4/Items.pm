@@ -323,7 +323,7 @@ embedded item fields.  This routine is suitable for batch jobs.
 
 This API assumes that the bib record has already been
 saved to the C<biblio> and C<biblioitems> tables.  It does
-not expect that C<biblioitems.marcxml> are populated, but it
+not expect that C<biblio_metadata.metadata> is populated, but it
 will do so via a call to ModBibiloMarc.
 
 The goal of this API is to have a similar effect to using AddBiblio
@@ -2650,7 +2650,7 @@ sub _SearchItems_build_where_fragment {
                     $column = $kohafield;
                 } else {
                     # MARC field is not linked to a DB field so we need to use
-                    # ExtractValue on biblioitems.marcxml or
+                    # ExtractValue on marcxml from biblio_metadata or
                     # items.more_subfields_xml, depending on the MARC field.
                     my $xpath;
                     my $sqlfield;
