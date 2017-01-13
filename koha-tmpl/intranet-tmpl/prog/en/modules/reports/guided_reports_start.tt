@@ -97,7 +97,6 @@ $("#delColumn").on("click",function(){
             { "aTargets": [ 1, 2 ], "sType": "natural"  }
         ],
         "aoColumns": [
-            null,null,null,null,null,null,null,null,{ "sType": "title-string" },null,null,null,[% IF (usecache) %]null,[% END %]null,null
             null,null,null,null,null,null,null,null,{ "sType": "title-string" },null,null,null,[% IF (usecache) %]null,[% END %]null,null[% IF has_obsolete_reports %],null[% END %]
         ],
         'oLanguage': {
@@ -174,7 +173,7 @@ $("#delColumn").on("click",function(){
         var report_id = $(this).data("report_id");
         var page = $(this).attr("href");
         $("#update_sql .modal-body").load(page + " div");
-        $('#update_sql').modal({show:true});
+        $('#update_sql').modal('show');
         $("#update_sql_button").attr("href", "/cgi-bin/koha/reports/guided_reports.pl?phase=Use saved&op=convert&report_id=" + report_id);
     });
     $("#update_sql").on("hidden", function(){
@@ -282,7 +281,9 @@ $("#delColumn").on("click",function(){
 [% END %]
 </div>
 
-<div id="update_sql" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="update_sql_label" aria-hidden="true">
+<div id="update_sql" class="modal" tabindex="-1" role="dialog" aria-labelledby="update_sql_label" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
     <div class="modal-header">
         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="update_sql_label">Update SQL</h3>
@@ -291,8 +292,10 @@ $("#delColumn").on("click",function(){
         <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn" id="update_sql_button" role="button" data-toggle="modal">Update</a>
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <a href="#" class="btn btn-default" id="update_sql_button" role="button" data-toggle="modal">Update</a>
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+    </div>
     </div>
 </div>
 
@@ -421,7 +424,7 @@ canned reports and writing custom SQL reports.</p>
                         <td>
                             [% IF savedreport.seems_obsolete %]
                                 This report seems obsolete, it uses biblioitems.marcxml field.
-                                <a href="/cgi-bin/koha/svc/convert_report?report_id=[% savedreport.id %]" data-report_id="[% savedreport.id %]" class="update_sql btn btn-mini" title="Update SQL"><i class="fa fa-eye"></i> Update SQL</a>
+                                <a href="/cgi-bin/koha/svc/convert_report?report_id=[% savedreport.id %]" data-report_id="[% savedreport.id %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa fa-eye"></i> Update SQL</a>
                             [% END %]
                         </td>
                         [% END %]
