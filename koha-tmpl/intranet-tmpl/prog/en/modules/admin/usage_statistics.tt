@@ -9,7 +9,7 @@
 
 <body id="admin_usage_statistics" class="admin">
 [% INCLUDE 'header.inc' %]
-[% INCLUDE 'patrons-admin-search.inc' %]
+[% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Usage statistics</div>
 
@@ -50,8 +50,8 @@
         <fieldset class="rows">
             <ol>
                 <li>
-                    <span class="label">Share my Koha usage statistics: </span>
-                    <select name="UsageStats">
+                    <label for="UsageStats">Share my Koha usage statistics: </label>
+                    <select name="UsageStats" id="UsageStats">
                     [% IF Koha.Preference('UsageStats') %]
                         <option value="1" selected="selected">Yes</option>
                         <option value="0">No</option>
@@ -62,14 +62,14 @@
                     </select>
                 </li>
                 <li>
-                    <span class="label">Your country: </span>
+                    <label for="UsageStatsCountry">Your country: </label>
                     [% SET UsageStatsCountry = Koha.Preference('UsageStatsCountry') %]
                     [% SET IsUsageStatsCountryValid = 0 %]
                     [% IF NOT UsageStatsCountry %]
                         [% SET IsUsageStatsCountryValid = 1 %]
                     [% END %]
-                    <select name="UsageStatsCountry">
-                        <option value=""></option>
+                    <select name="UsageStatsCountry" id="UsageStatsCountry">
+                        <option value="">&nbsp;</option>
                         [% FOR country IN [
 "Afghanistan",
 "Albania",
@@ -280,14 +280,14 @@
                     [% END %]
                 </li>
                 <li>
-                    <span class="label">Library name: </span>
-                    <input type="text" value="[% Koha.Preference('UsageStatsLibraryName') %]" name="UsageStatsLibraryName" />
+                    <label for="UsageStatsLibraryName">Library name: </label>
+                    <input type="text" value="[% Koha.Preference('UsageStatsLibraryName') %]" name="UsageStatsLibraryName" id="UsageStatsLibraryName" />
                 </li>
                 <li>
-                    <span class="label">Library type: </span>
+                    <label for="UsageStatsLibraryType">Library type: </label>
                     [% SET UsageStatsLibraryType = Koha.Preference('UsageStatsLibraryType') %]
-                    <select name="UsageStatsLibraryType">
-                        <option value=""></option>
+                    <select name="UsageStatsLibraryType" id="UsageStatsLibraryType">
+                        <option value="">&nbsp;</option>
                         [% IF UsageStatsLibraryType == 'public' %]
                             <option value="public" selected="selected">Public</option>
                         [% ELSE %]
@@ -342,8 +342,8 @@
                     </select>
                 </li>
                 <li>
-                    <span class="label">Library URL: </span>
-                    <input type="text" name="UsageStatsLibraryUrl" value="[% Koha.Preference('UsageStatsLibraryUrl') %]" />
+                    <label for="UsageStatsLibraryUrl">Library URL: </label>
+                    <input type="text" name="UsageStatsLibraryUrl" value="[% Koha.Preference('UsageStatsLibraryUrl') %]" id="UsageStatsLibraryUrl" />
                 </li>
                 <li>
                     <span class="label">Last update: </span>
