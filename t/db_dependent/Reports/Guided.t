@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Warn;
 
 use t::lib::TestBuilder;
@@ -286,6 +286,61 @@ subtest 'Ensure last_run is populated' => sub {
     $report->discard_changes();
 
     isnt( $report->last_run, $previous_last_run, 'Second run of report updates last_run' );
+};
+
+subtest 'convert_sql' => sub {
+    plan tests => 3;
+
+    my $sql = q|
+    SELECT biblionumber, ExtractValue(marcxml,
+'count(//datafield[@tag="505"])') AS count505
+    FROM biblioitems
+    HAVING count505 > 1|;
+    my $expected_converted_sql = q|
+    SELECT biblionumber, ExtractValue(metadata,
+'count(//datafield[@tag="505"])') AS count505
+    FROM biblio_metadata
+    HAVING count505 > 1|;
+
+    is( C4::Reports::Guided::convert_sql( $sql ), $expected_converted_sql, "Simple query should have been correctly converted");
+
+    $sql = q|
+    SELECT biblionumber, substring(
+ExtractValue(marcxml,'//controlfield[@tag="008"]'), 8,4 ) AS 'PUB DATE',
+title
+    FROM biblioitems
+    INNER JOIN biblio USING (biblionumber)
+    WHERE biblionumber = 14|;
+
+    $expected_converted_sql = q|
+    SELECT biblionumber, substring(
+ExtractValue(metadata,'//controlfield[@tag="008"]'), 8,4 ) AS 'PUB DATE',
+title
+    FROM biblio_metadata
+    INNER JOIN biblio USING (biblionumber)
+    WHERE biblionumber = 14|;
+    is( C4::Reports::Guided::convert_sql( $sql ), $expected_converted_sql, "Query with biblio info should have been correctly converted");
+
+    $sql = q|
+    SELECT concat(b.title, ' ', ExtractValue(m.marcxml,
+'//datafield[@tag="245"]/subfield[@code="b"]')) AS title, b.author,
+count(h.reservedate) AS 'holds'
+    FROM biblio b
+    LEFT JOIN biblioitems m USING (biblionumber)
+    LEFT JOIN reserves h ON (b.biblionumber=h.biblionumber)
+    GROUP BY b.biblionumber
+    HAVING count(h.reservedate) >= 42|;
+
+    $expected_converted_sql = q|
+    SELECT concat(b.title, ' ', ExtractValue(m.metadata,
+'//datafield[@tag="245"]/subfield[@code="b"]')) AS title, b.author,
+count(h.reservedate) AS 'holds'
+    FROM biblio b
+    LEFT JOIN biblio_metadata m USING (biblionumber)
+    LEFT JOIN reserves h ON (b.biblionumber=h.biblionumber)
+    GROUP BY b.biblionumber
+    HAVING count(h.reservedate) >= 42|;
+    is( C4::Reports::Guided::convert_sql( $sql ), $expected_converted_sql, "Query with 2 joins should have been correctly converted");
 };
 
 $schema->storage->txn_rollback;

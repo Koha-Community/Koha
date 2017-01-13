@@ -854,7 +854,6 @@ sub get_sql {
 sub get_results {
     my ( $report_id ) = @_;
     my $dbh = C4::Context->dbh;
-    warn $report_id;
     return $dbh->selectall_arrayref(q|
         SELECT id, report, date_run
         FROM saved_reports
@@ -986,6 +985,26 @@ sub _get_display_value {
         return $sth->fetchrow;
     }
     return $original_value;
+}
+
+
+=head3 convert_sql
+
+my $updated_sql = C4::Reports::Guided::convert_sql( $sql );
+
+Convert a sql query using biblioitems.marcxml to use the new
+biblio_metadata.metadata field instead
+
+=cut
+
+sub convert_sql {
+    my ( $sql ) = @_;
+    my $updated_sql = $sql;
+    if ( $sql =~ m|biblioitems| and $sql =~ m|marcxml| ) {
+        $updated_sql =~ s|biblioitems|biblio_metadata|;
+        $updated_sql =~ s|marcxml|metadata|;
+    }
+    return $updated_sql;
 }
 
 1;

@@ -89,6 +89,7 @@ elsif ($session and not $input->param('clear_filters')) {
     $filter = $session->param('report_filter');
 }
 
+my $op = $input->param('op') || q||;
 
 my @errors = ();
 if ( !$phase ) {
@@ -106,6 +107,29 @@ elsif ( $phase eq 'Build new' ) {
     );
 } elsif ( $phase eq 'Use saved' ) {
 
+    if ( $op eq 'convert' ) {
+        my $report_id = $input->param('report_id');
+        my $report    = C4::Reports::Guided::get_saved_report($report_id);
+        warn $report_id;
+        use Data::Printer colored => 1; warn p $report;
+        if ($report) {
+            my $updated_sql = C4::Reports::Guided::convert_sql( $report->{savedsql} );
+            C4::Reports::Guided::update_sql(
+                $report_id,
+                {
+                    sql          => $updated_sql,
+                    name         => $report->{report_name},
+                    group        => $report->{report_group},
+                    subgroup     => $report->{report_subgroup},
+                    notes        => $report->{notes},
+                    public       => $report->{public},
+                    cache_expiry => $report->{cache_expiry},
+                }
+            );
+            $template->param( report_converted => $report->{report_name} );
+        }
+    }
+
     # use a saved report
     # get list of reports and display them
     my $group = $input->param('group');
@@ -113,8 +137,13 @@ elsif ( $phase eq 'Build new' ) {
     $filter->{group} = $group;
     $filter->{subgroup} = $subgroup;
     my $reports = get_saved_reports($filter);
+    my $has_obsolete_reports;
     for my $report ( @$reports ) {
         $report->{results} = C4::Reports::Guided::get_results( $report->{id} );
+        if ( $report->{savedsql} =~ m|marcxml| ) {
+            $report->{seems_obsolete} = 1;
+            $has_obsolete_reports++;
+        }
     }
     $template->param(
         'saved1' => 1,
@@ -122,6 +151,7 @@ elsif ( $phase eq 'Build new' ) {
         'usecache' => $usecache,
         'groups_with_subgroups'=> groups_with_subgroups($group, $subgroup),
         filters => $filter,
+        has_obsolete_reports => $has_obsolete_reports,
     );
 }
 
