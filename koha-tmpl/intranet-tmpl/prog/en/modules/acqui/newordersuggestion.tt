@@ -8,15 +8,17 @@
  $(document).ready(function() {
     var suggestionst = $("#suggestionst").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
-            { "aTargets": [ 0 ],  "bVisible": false, "bSearchable": false },
+            { "aTargets": [ 0 ],  "bVisible": false, "bSearchable": true }, // must be searchable for fnFilter
             { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
         ],
         "sPaginationType": "four_button"
     } ) );
-    $("#show_only_mine").on('click', function(){
+    $("#show_only_mine").on('click', function(e){
+        e.preventDefault();
         suggestionst.fnFilter('^[% loggedinuser %]$', 0, true);
     });
-    $("#show_all").on('click', function(){
+    $("#show_all").on('click', function(e){
+        e.preventDefault();
         suggestionst.fnFilter('', 0 );
     });
  });
