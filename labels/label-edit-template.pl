@@ -49,7 +49,7 @@ my $units = get_unit_values();
 
 if ($op eq 'edit') {
     $label_template = C4::Labels::Template->retrieve(template_id => $template_id);
-    $profile_list = get_all_profiles(field_list => 'profile_id,printer_name,paper_bin',filter => "template_id=$template_id OR template_id=''");
+    $profile_list = get_all_profiles({ fields => [ qw( profile_id printer_name paper_bin ) ], filters => { template_id => [ $template_id, '' ] } } );
     push @$profile_list, {paper_bin => 'N/A', profile_id => 0, printer_name => 'No Profile'};
     foreach my $profile (@$profile_list) {
         if ($profile->{'profile_id'} == $label_template->get_attr('profile_id')) {
@@ -116,7 +116,7 @@ elsif ($op eq 'save') {
 }
 else {  # if we get here, this is a new layout
     $label_template = C4::Labels::Template->new();
-    $profile_list = get_all_profiles(field_list => 'profile_id,printer_name,paper_bin',filter => "template_id=''");
+    $profile_list = get_all_profiles({ fields => [ qw( profile_id printer_name paper_bin ) ], filters => { template_id => [''] } });
     push @$profile_list, {paper_bin => 'N/A', profile_id => 0, printer_name => 'No Profile'};
     foreach my $profile (@$profile_list) {
         if ($profile->{'profile_id'} == 0) {

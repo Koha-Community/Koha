@@ -93,10 +93,10 @@ if ($op eq 'delete') {
     exit;
 }
 elsif ($op eq 'none') {
-    if      ($card_element eq 'layout')    {$db_rows = get_all_layouts(table_name => 'creator_layouts', filter => 'creator=\'Patroncards\'');}
-    elsif   ($card_element eq 'template')  {$db_rows = get_all_templates(table_name => 'creator_templates', filter => 'creator=\'Patroncards\'');}
-    elsif   ($card_element eq 'profile')   {$db_rows = get_all_profiles(table_name => 'printers_profile', filter => 'creator=\'Patroncards\'');}
-    elsif   ($card_element eq 'batch')     {$db_rows = get_batch_summary(filter => "branch_code=\'$branch_code\' OR branch_code=\'NB\'", creator => 'Patroncards');}
+    if      ($card_element eq 'layout')    {$db_rows = get_all_layouts( { filters => { creator => 'Patroncards' } });}
+    elsif   ($card_element eq 'template')  {$db_rows = get_all_templates( { filters => { creator => 'Patroncards' } });}
+    elsif   ($card_element eq 'profile')   {$db_rows = get_all_profiles( { filters => { creator => 'Patroncards' } });}
+    elsif   ($card_element eq 'batch')     {$db_rows = get_batch_summary( { filters => { branch_code => [ $branch_code, 'NB' ], creator => 'Patroncards' } });}
     else                                   {warn sprintf("Unknown card element passed in: %s.",$card_element); $errstr = 202;}
 }
 else { # trap unsupported operations here
