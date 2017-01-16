@@ -499,7 +499,7 @@ sub AddMember {
 
     if ( C4::Context->preference("autoMemberNum") ) {
         if ( not exists $data{cardnumber} or not defined $data{cardnumber} or $data{cardnumber} eq '' ) {
-            $data{cardnumber} = fixup_cardnumber( $data{cardnumber}, C4::Context->userenv->{'branch'}, $data{categorycode} );
+            $data{cardnumber} = fixup_cardnumber( $data{cardnumber} );
         }
     }
 
