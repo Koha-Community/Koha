@@ -1468,6 +1468,12 @@ sub _get_tt_params {
     my $params;
 
     my $config = {
+        article_requests => {
+            module   => 'Koha::ArticleRequests',
+            singular => 'article_request',
+            plural   => 'article_requests',
+            pk       => 'id',
+          },
         biblio => {
             module   => 'Koha::Biblios',
             singular => 'biblio',

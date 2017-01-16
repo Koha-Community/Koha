@@ -30,6 +30,7 @@ use C4::Members;
 use C4::Biblio;
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::ArticleRequests;
 use Koha::Biblio;
 use Koha::Biblioitem;
 use Koha::Item;
@@ -39,6 +40,7 @@ use Koha::Serial;
 use Koha::Subscription;
 use Koha::Suggestion;
 use Koha::Checkout;
+use Koha::Notice::Messages;
 use Koha::Notice::Templates;
 use Koha::Patron::Modification;
 
@@ -282,7 +284,7 @@ $prepared_letter = GetPreparedLetter(
 is( $prepared_letter->{content}, $modification->id(), 'Patron modification object used correctly' );
 
 subtest 'regression tests' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower' } );
@@ -322,6 +324,57 @@ subtest 'regression tests' => sub {
         my $tt_letter = process_letter( { template => $tt_template, %$params });
 
         is( $tt_letter->{content}, $letter->{content}, );
+    };
+
+    subtest 'AR_*' => sub {
+        plan tests => 2;
+        my $code = 'AR_CANCELED';
+        my $branchcode = $library->{branchcode};
+
+        my $template = q|
+            <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)
+
+            Your request for an article from <<biblio.title>> (<<items.barcode>>) has been canceled for the following reason:
+
+            <<article_requests.notes>>
+
+            Article requested:
+            Title: <<article_requests.title>>
+            Author: <<article_requests.author>>
+            Volume: <<article_requests.volume>>
+            Issue: <<article_requests.issue>>
+            Date: <<article_requests.date>>
+            Pages: <<article_requests.pages>>
+            Chapters: <<article_requests.chapters>>
+            Notes: <<article_requests.patron_notes>>
+        |;
+        reset_template( { template => $template, code => $code, module => 'circulation' } );
+        my $article_request = $builder->build({ source => 'ArticleRequest' });
+        Koha::ArticleRequests->find( $article_request->{id} )->cancel;
+        my $letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        my $tt_template = q|
+            [% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])
+
+            Your request for an article from [% biblio.title %] ([% item.barcode %]) has been canceled for the following reason:
+
+            [% article_request.notes %]
+
+            Article requested:
+            Title: [% article_request.title %]
+            Author: [% article_request.author %]
+            Volume: [% article_request.volume %]
+            Issue: [% article_request.issue %]
+            Date: [% article_request.date %]
+            Pages: [% article_request.pages %]
+            Chapters: [% article_request.chapters %]
+            Notes: [% article_request.patron_notes %]
+        |;
+        reset_template( { template => $tt_template, code => $code, module => 'circulation' } );
+        Koha::ArticleRequests->find( $article_request->{id} )->cancel;
+        my $tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+        is( $tt_letter->content, $letter->content, 'Compare AR_* notices' );
+        isnt( $tt_letter->message_id, $letter->message_id, 'Comparing AR_* notices should compare 2 different messages' );
     };
 };
 

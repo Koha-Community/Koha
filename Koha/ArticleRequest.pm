@@ -106,7 +106,7 @@ sub notify {
     if (
         my $letter = C4::Letters::GetPreparedLetter(
             module                 => 'circulation',
-            letter_code            => "AR_$status",
+            letter_code            => "AR_$status", # AR_PENDING, AR_PROCESSING, AR_COMPLETED, AR_CANCELED
             message_transport_type => 'email',
             tables                 => {
                 article_requests => $self->id,
