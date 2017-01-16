@@ -782,6 +782,7 @@ sub GetPreparedLetter {
             content => $letter->{content},
             tables  => $tables,
             loops  => $loops,
+            substitute => $substitute,
         }
     );
 
@@ -1455,6 +1456,7 @@ sub _process_tt {
     my $content = $params->{content};
     my $tables = $params->{tables};
     my $loops = $params->{loops};
+    my $substitute = $params->{substitute} || {};
 
     my $use_template_cache = C4::Context->config('template_cache_dir') && defined $ENV{GATEWAY_INTERFACE};
     my $template           = Template->new(
@@ -1469,7 +1471,7 @@ sub _process_tt {
         }
     ) or die Template->error();
 
-    my $tt_params = { %{ _get_tt_params( $tables ) }, %{ _get_tt_params( $loops, 'is_a_loop' ) } };
+    my $tt_params = { %{ _get_tt_params( $tables ) }, %{ _get_tt_params( $loops, 'is_a_loop' ) }, %$substitute };
 
     $content = qq|[% USE KohaDates %]$content|;
 

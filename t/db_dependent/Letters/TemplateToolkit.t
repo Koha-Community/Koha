@@ -286,7 +286,7 @@ $prepared_letter = GetPreparedLetter(
 is( $prepared_letter->{content}, $modification->id(), 'Patron modification object used correctly' );
 
 subtest 'regression tests' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower' } );
@@ -471,6 +471,34 @@ Thank you for visiting [% branch.branchname %].
         is( $first_checkin_tt_letter->content, $first_checkin_letter->content, 'Verify first checkin letter'  );
         is( $second_checkin_tt_letter->content, $second_checkin_letter->content, 'Verify second checkin letter' );
 
+    };
+
+    subtest 'DUEDGST|count' => sub {
+        plan tests => 1;
+
+        my $code = 'DUEDGST';
+
+        my $dbh = C4::Context->dbh;
+        # Enable notification for DUEDGST - Things are hardcoded here but should work with default data
+        $dbh->do(q|INSERT INTO borrower_message_preferences( borrowernumber, message_attribute_id ) VALUES ( ?, ? )|, undef, $patron->{borrowernumber}, 1 );
+        my $borrower_message_preference_id = $dbh->last_insert_id(undef, undef, "borrower_message_preferences", undef);
+        $dbh->do(q|INSERT INTO borrower_message_transport_preferences( borrower_message_preference_id, message_transport_type) VALUES ( ?, ? )|, undef, $borrower_message_preference_id, 'email' );
+
+        my $params = {
+            code => $code,
+            substitute => { count => 42 },
+        };
+
+        my $template = q|
+You have <<count>> items due
+        |;
+        my $letter = process_letter( { template => $template, %$params });
+
+        my $tt_template = q|
+You have [% count %] items due
+        |;
+        my $tt_letter = process_letter( { template => $tt_template, %$params });
+        is( $tt_letter->{content}, $letter->{content}, );
     };
 };
 
