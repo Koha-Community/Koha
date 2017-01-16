@@ -1498,6 +1498,12 @@ sub _get_tt_params {
             plural   => 'news',
             pk       => 'idnew',
         },
+        aqorders => {
+            module   => 'Koha::Tmp::Orders', # Should Koha::Acquisition::Orders when will be based on Koha::Objects
+            singular => 'order',
+            plural   => 'orders',
+            pk       => 'ordernumber',
+        },
         reserves => {
             module   => 'Koha::Holds',
             singular => 'hold',
