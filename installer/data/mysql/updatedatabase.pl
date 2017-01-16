@@ -12658,18 +12658,20 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "16.05.00.002";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q{
-        ALTER TABLE borrowers
-            ADD COLUMN updated_on timestamp NULL DEFAULT CURRENT_TIMESTAMP
-            ON UPDATE CURRENT_TIMESTAMP
-            AFTER privacy_guarantor_checkouts;
-    });
-    $dbh->do(q{
-        ALTER TABLE deletedborrowers
-            ADD COLUMN updated_on timestamp NULL DEFAULT CURRENT_TIMESTAMP
-            ON UPDATE CURRENT_TIMESTAMP
-            AFTER privacy_guarantor_checkouts;
-    });
+    unless ( column_exists('borrowers', 'updated_on') ) {
+        $dbh->do(q{
+            ALTER TABLE borrowers
+                ADD COLUMN updated_on timestamp NULL DEFAULT CURRENT_TIMESTAMP
+                ON UPDATE CURRENT_TIMESTAMP
+                AFTER privacy_guarantor_checkouts;
+        });
+        $dbh->do(q{
+            ALTER TABLE deletedborrowers
+                ADD COLUMN updated_on timestamp NULL DEFAULT CURRENT_TIMESTAMP
+                ON UPDATE CURRENT_TIMESTAMP
+                AFTER privacy_guarantor_checkouts;
+        });
+    }
 
     print "Upgrade to $DBversion done (Bug 10459 - borrowers should have a timestamp)\n";
     SetVersion($DBversion);
