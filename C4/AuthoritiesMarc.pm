@@ -1458,32 +1458,33 @@ sub merge {
     #warn scalar(@reccache)." biblios to update";
     # Get All candidate Tags for the change 
     # (This will reduce the search scope in marc records).
-    my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
-    $sth->execute($authtypefrom->authtypecode);
-    my @tags_using_authtype;
-    while (my ($tagfield) = $sth->fetchrow) {
-        push @tags_using_authtype,$tagfield ;
-    }
-    my $tag_to=0;  
+    my $sql = "SELECT DISTINCT tagfield FROM marc_subfield_structure WHERE authtypecode=?";
+    my $tags_using_authtype = $dbh->selectcol_arrayref( $sql, undef, ( $authtypefrom->authtypecode ));
+    my $tags_new;
     if ($authtypeto->authtypecode ne $authtypefrom->authtypecode){
-        # If many tags, take the first
-        $sth->execute($authtypeto->authtypecode);
-        $tag_to=$sth->fetchrow;
-        #warn $tag_to;    
+        $tags_new = $dbh->selectcol_arrayref( $sql, undef, ( $authtypeto->authtypecode ));
     }  
     # BulkEdit marc records
     # May be used as a template for a bulkedit field  
     my $overwrite = C4::Context->preference( 'AuthorityMergeMode' ) eq 'strict';
     foreach my $marcrecord(@reccache){
         my $update = 0;
-        foreach my $tagfield (@tags_using_authtype){
+        foreach my $tagfield (@$tags_using_authtype){
 #             warn "tagfield : $tagfield ";
             foreach my $field ($marcrecord->field($tagfield)){
                 # biblio is linked to authority with $9 subfield containing authid
                 my $auth_number=$field->subfield("9");
-                my $tag=$field->tag();          
+                my $tag=$field->tag();
+                my $newtag = $tags_new
+                    ? _merge_newtag( $tag, $tags_new )
+                    : $tag;
                 if ($auth_number==$mergefrom) {
-                my $field_to=MARC::Field->new(($tag_to?$tag_to:$tag),$field->indicator(1),$field->indicator(2),"9"=>$mergeto);
+                    my $field_to = MARC::Field->new(
+                        $newtag,
+                        $field->indicator(1),
+                        $field->indicator(2),
+                        "9" => $mergeto,
+                    );
 		my $exclude='9';
                 foreach my $subfield (grep {$_->[0] ne '9'} @record_to) {
                     $field_to->add_subfields($subfield->[0] =>$subfield->[1]);
@@ -1495,7 +1496,12 @@ sub merge {
                 foreach my $subfield (@restore) {
                    $field_to->add_subfields($subfield->[0] =>$subfield->[1]);
 		}
-            $field->replace_with($field_to);
+            if( $tags_new ) {
+                $marcrecord->delete_field( $field );
+                append_fields_ordered( $marcrecord, $field_to );
+            } else {
+                $field->replace_with($field_to);
+            }
                 $update=1;
                 }
             }#for each tag
@@ -1568,6 +1574,34 @@ sub merge {
 # 
 #   }#foreach $marc
 }#sub
+
+sub _merge_newtag {
+# Routine is only called for an (exceptional) authtypecode change
+# Fixes old behavior of returning the first tag found
+    my ( $oldtag, $new_tags ) = @_;
+
+    # If we e.g. have 650 and 151,651,751 try 651 and check presence
+    my $prefix = substr( $oldtag, 0, 1 );
+    my $guess = $prefix . substr( $new_tags->[0], -2 );
+    if( grep { $_ eq $guess } @$new_tags ) {
+        return $guess;
+    }
+    # Otherwise return one from the same block e.g. 6XX for 650
+    # If not there too, fall back to first new tag (old behavior!)
+    my @same_block = grep { /^$prefix/ } @$new_tags;
+    return @same_block ? $same_block[0] : $new_tags->[0];
+}
+
+sub append_fields_ordered {
+# while we lack this function in MARC::Record
+# we do not want insert_fields_ordered since it inserts before
+    my ( $record, $field ) = @_;
+    if( my @flds = $record->field( $field->tag ) ) {
+        $record->insert_fields_after( pop @flds, $field );
+    } else { # now fallback to insert_fields_ordered
+        $record->insert_fields_ordered( $field );
+    }
+}
 
 =head2 get_auth_type_location
 
