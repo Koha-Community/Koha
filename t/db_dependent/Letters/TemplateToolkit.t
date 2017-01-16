@@ -26,6 +26,7 @@ use MARC::Record;
 
 use t::lib::TestBuilder;
 
+use C4::Circulation;
 use C4::Letters;
 use C4::Members;
 use C4::Biblio;
@@ -285,24 +286,37 @@ $prepared_letter = GetPreparedLetter(
 is( $prepared_letter->{content}, $modification->id(), 'Patron modification object used correctly' );
 
 subtest 'regression tests' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower' } );
-    my $biblio = Koha::Biblio->new({title => 'Test Biblio'})->store->unblessed;
-    my $biblioitem = Koha::Biblioitem->new({biblionumber => $biblio->{biblionumber}})->store()->unblessed;
+    my $biblio1 = Koha::Biblio->new({title => 'Test Biblio 1'})->store->unblessed;
+    my $biblioitem1 = Koha::Biblioitem->new({biblionumber => $biblio1->{biblionumber}})->store()->unblessed;
     my $item1 = Koha::Item->new(
         {
-            biblionumber     => $biblio->{biblionumber},
-            biblioitemnumber => $biblioitem->{biblioitemnumber},
+            biblionumber     => $biblio1->{biblionumber},
+            biblioitemnumber => $biblioitem1->{biblioitemnumber},
+            barcode          => 'a_t_barcode',
+            homebranch       => $library->{branchcode},
+            holdingbranch    => $library->{branchcode},
+            itype            => 'BK',
         }
     )->store->unblessed;
+    my $biblio2 = Koha::Biblio->new({title => 'Test Biblio 2'})->store->unblessed;
+    my $biblioitem2 = Koha::Biblioitem->new({biblionumber => $biblio2->{biblionumber}})->store()->unblessed;
     my $item2 = Koha::Item->new(
         {
-            biblionumber     => $biblio->{biblionumber},
-            biblioitemnumber => $biblioitem->{biblioitemnumber},
+            biblionumber     => $biblio2->{biblionumber},
+            biblioitemnumber => $biblioitem2->{biblioitemnumber},
+            barcode          => 'another_t_barcode',
+            homebranch       => $library->{branchcode},
+            holdingbranch    => $library->{branchcode},
+            itype            => 'BK',
         }
     )->store->unblessed;
+
+    C4::Context->_new_userenv('xxx');
+    C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, 'Midway Public Library', '', '', '');
 
     subtest 'ACQ_NOTIF_ON_RECEIV ' => sub {
         plan tests => 1;
@@ -311,16 +325,16 @@ subtest 'regression tests' => sub {
         my $order = $builder->build({ source => 'Aqorder' });
 
         my $template = q|
-            Dear <<borrowers.firstname>> <<borrowers.surname>>,
-            The order <<aqorders.ordernumber>> (<<biblio.title>>) has been received.
-            Your library.
+Dear <<borrowers.firstname>> <<borrowers.surname>>,
+The order <<aqorders.ordernumber>> (<<biblio.title>>) has been received.
+Your library.
         |;
-        my $params = { code => $code, branchcode => $branchcode, tables => { branches => $library, borrowers => $patron, biblio => $biblio, aqorders => $order } };
+        my $params = { code => $code, branchcode => $branchcode, tables => { branches => $library, borrowers => $patron, biblio => $biblio1, aqorders => $order } };
         my $letter = process_letter( { template => $template, %$params });
         my $tt_template = q|
-            Dear [% borrower.firstname %] [% borrower.surname %],
-            The order [% order.ordernumber %] ([% biblio.title %]) has been received.
-            Your library.
+Dear [% borrower.firstname %] [% borrower.surname %],
+The order [% order.ordernumber %] ([% biblio.title %]) has been received.
+Your library.
         |;
         my $tt_letter = process_letter( { template => $tt_template, %$params });
 
@@ -333,21 +347,21 @@ subtest 'regression tests' => sub {
         my $branchcode = $library->{branchcode};
 
         my $template = q|
-            <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)
+<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)
 
-            Your request for an article from <<biblio.title>> (<<items.barcode>>) has been canceled for the following reason:
+Your request for an article from <<biblio.title>> (<<items.barcode>>) has been canceled for the following reason:
 
-            <<article_requests.notes>>
+<<article_requests.notes>>
 
-            Article requested:
-            Title: <<article_requests.title>>
-            Author: <<article_requests.author>>
-            Volume: <<article_requests.volume>>
-            Issue: <<article_requests.issue>>
-            Date: <<article_requests.date>>
-            Pages: <<article_requests.pages>>
-            Chapters: <<article_requests.chapters>>
-            Notes: <<article_requests.patron_notes>>
+Article requested:
+Title: <<article_requests.title>>
+Author: <<article_requests.author>>
+Volume: <<article_requests.volume>>
+Issue: <<article_requests.issue>>
+Date: <<article_requests.date>>
+Pages: <<article_requests.pages>>
+Chapters: <<article_requests.chapters>>
+Notes: <<article_requests.patron_notes>>
         |;
         reset_template( { template => $template, code => $code, module => 'circulation' } );
         my $article_request = $builder->build({ source => 'ArticleRequest' });
@@ -355,27 +369,108 @@ subtest 'regression tests' => sub {
         my $letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
 
         my $tt_template = q|
-            [% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])
+[% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])
 
-            Your request for an article from [% biblio.title %] ([% item.barcode %]) has been canceled for the following reason:
+Your request for an article from [% biblio.title %] ([% item.barcode %]) has been canceled for the following reason:
 
-            [% article_request.notes %]
+[% article_request.notes %]
 
-            Article requested:
-            Title: [% article_request.title %]
-            Author: [% article_request.author %]
-            Volume: [% article_request.volume %]
-            Issue: [% article_request.issue %]
-            Date: [% article_request.date %]
-            Pages: [% article_request.pages %]
-            Chapters: [% article_request.chapters %]
-            Notes: [% article_request.patron_notes %]
+Article requested:
+Title: [% article_request.title %]
+Author: [% article_request.author %]
+Volume: [% article_request.volume %]
+Issue: [% article_request.issue %]
+Date: [% article_request.date %]
+Pages: [% article_request.pages %]
+Chapters: [% article_request.chapters %]
+Notes: [% article_request.patron_notes %]
         |;
         reset_template( { template => $tt_template, code => $code, module => 'circulation' } );
         Koha::ArticleRequests->find( $article_request->{id} )->cancel;
         my $tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
         is( $tt_letter->content, $letter->content, 'Compare AR_* notices' );
         isnt( $tt_letter->message_id, $letter->message_id, 'Comparing AR_* notices should compare 2 different messages' );
+    };
+
+    subtest 'CHECKOUT+CHECKIN' => sub {
+        plan tests => 4;
+
+        my $checkout_code = 'CHECKOUT';
+        my $checkin_code = 'CHECKIN';
+
+        my $dbh = C4::Context->dbh;
+        # Enable notification for CHECKOUT - Things are hardcoded here but should work with default data
+        $dbh->do(q|INSERT INTO borrower_message_preferences( borrowernumber, message_attribute_id ) VALUES ( ?, ? )|, undef, $patron->{borrowernumber}, 6 );
+        my $borrower_message_preference_id = $dbh->last_insert_id(undef, undef, "borrower_message_preferences", undef);
+        $dbh->do(q|INSERT INTO borrower_message_transport_preferences( borrower_message_preference_id, message_transport_type) VALUES ( ?, ? )|, undef, $borrower_message_preference_id, 'email' );
+        # Enable notification for CHECKIN - Things are hardcoded here but should work with default data
+        $dbh->do(q|INSERT INTO borrower_message_preferences( borrowernumber, message_attribute_id ) VALUES ( ?, ? )|, undef, $patron->{borrowernumber}, 5 );
+        $borrower_message_preference_id = $dbh->last_insert_id(undef, undef, "borrower_message_preferences", undef);
+        $dbh->do(q|INSERT INTO borrower_message_transport_preferences( borrower_message_preference_id, message_transport_type) VALUES ( ?, ? )|, undef, $borrower_message_preference_id, 'email' );
+
+        # historic syntax
+        my $checkout_template = q|
+The following items have been checked out:
+----
+<<biblio.title>>
+----
+Thank you for visiting <<branches.branchname>>.
+|;
+        reset_template( { template => $checkout_template, code => $checkout_code, module => 'circulation' } );
+        my $checkin_template = q|
+The following items have been checkin out:
+----
+<<biblio.title>>
+----
+Thank you for visiting <<branches.branchname>>.
+|;
+        reset_template( { template => $checkin_template, code => $checkin_code, module => 'circulation' } );
+
+        C4::Circulation::AddIssue( $patron, $item1->{barcode} );
+        my $first_checkout_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+        C4::Circulation::AddIssue( $patron, $item2->{barcode} );
+        my $second_checkout_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        AddReturn( $item1->{barcode} );
+        my $first_checkin_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+        AddReturn( $item2->{barcode} );
+        my $second_checkin_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        Koha::Notice::Messages->delete;
+
+        # TT syntax
+        $checkout_template = q|
+The following items have been checked out:
+----
+[% biblio.title %]
+----
+Thank you for visiting [% branch.branchname %].
+|;
+        reset_template( { template => $checkout_template, code => $checkout_code, module => 'circulation' } );
+        $checkin_template = q|
+The following items have been checkin out:
+----
+[% biblio.title %]
+----
+Thank you for visiting [% branch.branchname %].
+|;
+        reset_template( { template => $checkin_template, code => $checkin_code, module => 'circulation' } );
+
+        C4::Circulation::AddIssue( $patron, $item1->{barcode} );
+        my $first_checkout_tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+        C4::Circulation::AddIssue( $patron, $item2->{barcode} );
+        my $second_checkout_tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        AddReturn( $item1->{barcode} );
+        my $first_checkin_tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+        AddReturn( $item2->{barcode} );
+        my $second_checkin_tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        is( $first_checkout_tt_letter->content, $first_checkout_letter->content, );
+        is( $second_checkout_tt_letter->content, $second_checkout_letter->content, );
+        is( $first_checkin_tt_letter->content, $first_checkin_letter->content, );
+        is( $second_checkin_tt_letter->content, $second_checkin_letter->content, );
+
     };
 };
 
