@@ -1627,7 +1627,7 @@ sub _get_tt_params {
         }
     }
 
-    $params->{today} = dt_from_string();
+    $params->{today} = output_pref({ dt => dt_from_string, dateformat => 'iso' });
 
     return $params;
 }
