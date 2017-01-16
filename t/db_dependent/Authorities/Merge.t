@@ -38,7 +38,7 @@ set_mocks();
 # Framework operations
 my ( $authtype1, $authtype2 ) = modify_framework();
 
-subtest 'Test merge A1 to A2 (withing same authtype)' => sub {
+subtest 'Test merge A1 to A2 (within same authtype)' => sub {
 # Tests originate from bug 11700
     plan tests => 9;
 
@@ -111,7 +111,7 @@ subtest 'Test merge A1 to modified A1' => sub {
     compare_field_count( $MARC1, $biblio1, 1 );
     compare_field_order( $MARC1, $biblio1, 1 );
     is( $auth1new->field(109)->subfield('a'), $biblio1->field(109)->subfield('a'), 'Record1 values updated correctly' );
-    my $biblio2 = GetMarcBiblio($biblionumber1);
+    my $biblio2 = GetMarcBiblio( $biblionumber2 );
     compare_field_count( $MARC2, $biblio2, 1 );
     compare_field_order( $MARC2, $biblio2, 1 );
     is( $auth1new->field(109)->subfield('a'), $biblio2->field(109)->subfield('a'), 'Record2 values updated correctly' );
@@ -233,7 +233,7 @@ sub modify_framework {
         },
     });
 
-    # Link 112/712 to the second authtype
+    # Link 112/612 to the second authtype
     $builder->build({
         source => 'MarcSubfieldStructure',
         value  => {
@@ -246,7 +246,7 @@ sub modify_framework {
     $builder->build({
         source => 'MarcSubfieldStructure',
         value  => {
-            tagfield => '712',
+            tagfield => '612',
             tagsubfield => 'a',
             authtypecode => $authtype2->{authtypecode},
             frameworkcode => '',
