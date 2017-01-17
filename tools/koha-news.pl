@@ -38,7 +38,7 @@ my $cgi = new CGI;
 
 my $id             = $cgi->param('id');
 my $title          = $cgi->param('title');
-my $new            = $cgi->param('new');
+my $content        = $cgi->param('content');
 my $expirationdate;
 if ( $cgi->param('expirationdate') ) {
     $expirationdate = output_pref({ dt => dt_from_string( scalar $cgi->param('expirationdate') ), dateformat => 'iso', dateonly => 1 });
@@ -107,7 +107,7 @@ elsif ( $op eq 'add' ) {
         add_opac_new(
             {
                 title          => $title,
-                new            => $new,
+                content        => $content,
                 lang           => $lang,
                 expirationdate => $expirationdate,
                 timestamp      => $timestamp,
@@ -127,7 +127,7 @@ elsif ( $op eq 'edit' ) {
         {
             idnew          => $id,
             title          => $title,
-            new            => $new,
+            content        => $content,
             lang           => $lang,
             expirationdate => $expirationdate,
             timestamp      => $timestamp,

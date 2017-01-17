@@ -72,7 +72,7 @@ my ( $title1, $new1, $lang1, $expirationdate1, $number1 ) =
   ( 'News Title', '<p>We have some exciting news!</p>', q{}, '2999-12-30', 1 );
 my $href_entry1 = {
     title          => $title1,
-    new            => $new1,
+    content        => $new1,
     lang           => $lang1,
     expirationdate => $expirationdate1,
     timestamp      => $timestamp1,
@@ -87,7 +87,7 @@ my ( $title2, $new2, $lang2, $expirationdate2, $number2 ) =
   ( 'News Title2', '<p>We have some exciting news!</p>', q{}, '2999-12-31', 1 );
 my $href_entry2 = {
     title          => $title2,
-    new            => $new2,
+    content        => $new2,
     lang           => $lang2,
     expirationdate => $expirationdate2,
     timestamp      => $timestamp2,
@@ -102,7 +102,7 @@ my ( $title3, $new3, $lang3, $number3 ) =
   ( 'News Title3', '<p>News without expiration date</p>', q{}, 1 );
 my $href_entry3 = {
     title          => $title3,
-    new            => $new3,
+    content        => $new3,
     lang           => $lang3,
     timestamp      => $timestamp3,
     number         => $number3,
@@ -130,7 +130,7 @@ $rv = upd_opac_new();    # intentionally bad parmeters
 is( $rv, 0, 'Correctly failed on no parameter!' );
 
 $new2                 = '<p>Update! There is no news!</p>';
-$href_entry2->{new}   = $new2;
+$href_entry2->{content}   = $new2;
 $href_entry2->{idnew} = $idnew2;
 $rv                   = upd_opac_new($href_entry2);
 is( $rv, 1, 'Successfully updated second dummy news item!' );
@@ -145,7 +145,7 @@ is_deeply(
     get_opac_new($idnew1),
     {
         title          => $title1,
-        new            => $new1,
+        content        => $new1,
         lang           => $lang1,
         expirationdate => $expirationdate1,
         timestamp      => $timestamp1,
@@ -168,7 +168,7 @@ is_deeply(
     get_opac_new($idnew2),
     {  
         title          => $title2,
-        new            => $new2,
+        content        => $new2,
         lang           => $lang2,
         expirationdate => $expirationdate2,
         timestamp      => $timestamp2,

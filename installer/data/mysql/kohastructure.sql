@@ -1834,7 +1834,7 @@ CREATE TABLE `opac_news` ( -- data from the news tool
   `idnew` int(10) unsigned NOT NULL auto_increment, -- unique identifier for the news article
   `branchcode` varchar(10) default NULL, -- branch code users to create branch specific news, NULL is every branch.
   `title` varchar(250) NOT NULL default '', -- title of the news article
-  `new` text NOT NULL, -- the body of your news article
+  `content` text NOT NULL, -- the body of your news article
   `lang` varchar(25) NOT NULL default '', -- location for the article (koha is the staff client, slip is the circulation receipt and language codes are for the opac)
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- pulibcation date and time
   `expirationdate` date default NULL, -- date the article is set to expire or no longer be visible

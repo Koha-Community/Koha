@@ -47,7 +47,7 @@ is( Koha::News->search->count, $nb_of_news + 2, 'The 2 news should have been add
 
 my $retrieved_news_item_1 = Koha::News->find( $new_news_item_1->idnew );
 is( $retrieved_news_item_1->title, $new_news_item_1->title, 'Find a news_item by id should return the correct news_item' );
-is( $retrieved_news_item_1->new, $new_news_item_1->new, 'This test is failing because ->new is not a valid accessor');
+is( $retrieved_news_item_1->content, $new_news_item_1->content, 'The content method return the content of the news');
 
 $retrieved_news_item_1->delete;
 is( Koha::News->search->count, $nb_of_news + 1, 'Delete should have deleted the news_item' );
