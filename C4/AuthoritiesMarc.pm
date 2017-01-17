@@ -1473,45 +1473,45 @@ sub merge {
         : { map { ( $_->[0], 1 ); } ( @record_from, @record_to ) };
     foreach my $marcrecord(@reccache){
         my $update = 0;
-        foreach my $tagfield (@$tags_using_authtype){
-            my $countfrom = 0; # used in strict mode to remove duplicates
-            foreach my $field ($marcrecord->field($tagfield)){
-                my $auth_number = $field->subfield("9"); # link to authority
-                my $tag=$field->tag();
+        foreach my $tagfield (@$tags_using_authtype) {
+            my $countfrom = 0;    # used in strict mode to remove duplicates
+            foreach my $field ( $marcrecord->field($tagfield) ) {
+                my $auth_number = $field->subfield("9");    # link to authority
+                my $tag         = $field->tag();
                 next if !defined($auth_number) || $auth_number ne $mergefrom;
                 $countfrom++;
-                if( $overwrite && $countfrom > 1 ) {
+                if ( $overwrite && $countfrom > 1 ) {
                     # remove this duplicate in strict mode
-                    $marcrecord->delete_field( $field );
+                    $marcrecord->delete_field($field);
                     $update = 1;
                     next;
                 }
                 my $newtag = $tags_new
-                    ? _merge_newtag( $tag, $tags_new )
-                    : $tag;
-                    my $field_to = MARC::Field->new(
-                        $newtag,
-                        $field->indicator(1),
-                        $field->indicator(2),
-                        "9" => $mergeto,
-                    );
-                foreach my $subfield (grep {$_->[0] ne '9'} @record_to) {
-                    $field_to->add_subfields($subfield->[0] =>$subfield->[1]);
+                  ? _merge_newtag( $tag, $tags_new )
+                  : $tag;
+                my $field_to = MARC::Field->new(
+                    $newtag,
+                    $field->indicator(1),
+                    $field->indicator(2),
+                    "9" => $mergeto,
+                );
+                foreach my $subfield ( grep { $_->[0] ne '9' } @record_to ) {
+                    $field_to->add_subfields( $subfield->[0] => $subfield->[1] );
                 }
-                if( !$overwrite ) {
+                if ( !$overwrite ) {
                     # add subfields back in loose mode, check skip_subfields
                     foreach my $subfield ( $field->subfields ) {
                         next if $skip_subfields->{ $subfield->[0] };
                         $field_to->add_subfields( $subfield->[0], $subfield->[1] );
                     }
                 }
-            if( $tags_new ) {
-                $marcrecord->delete_field( $field );
-                append_fields_ordered( $marcrecord, $field_to );
-            } else {
-                $field->replace_with($field_to);
-            }
-                $update=1;
+                if ($tags_new) {
+                    $marcrecord->delete_field($field);
+                    append_fields_ordered( $marcrecord, $field_to );
+                } else {
+                    $field->replace_with($field_to);
+                }
+                $update = 1;
             }
         }
         my ($bibliotag,$bibliosubf) = GetMarcFromKohaField("biblio.biblionumber","") ;
