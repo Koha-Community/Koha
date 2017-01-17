@@ -1,4 +1,6 @@
 <ul>
+<li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions Home</a></li>
+
 	<li><a href="/cgi-bin/koha/acqui/lateorders.pl">Late orders</a></li>
 	[% IF ( suggestion ) %]<li><a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a></li>[% ELSE %][% END %]
     <li><a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a></li>
