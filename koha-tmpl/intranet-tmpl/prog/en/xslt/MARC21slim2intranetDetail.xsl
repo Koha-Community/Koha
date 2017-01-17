@@ -122,11 +122,11 @@
                         <xsl:choose>
                             <xsl:when test="@code='h'">
                                 <!--  13381 Span class around subfield h so it can be suppressed via css -->
-                                <span class="title_medium"><xsl:apply-templates/> </span>
+                                <span class="title_medium"><xsl:apply-templates/> <xsl:text> </xsl:text> </span>
                             </xsl:when>
                             <xsl:when test="@code='c'">
                                 <!--  13381 Span class around subfield c so it can be suppressed via css -->
-                                <span class="title_resp_stmt"><xsl:apply-templates/> </span>
+                                <span class="title_resp_stmt"><xsl:apply-templates/> <xsl:text> </xsl:text> </span>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:apply-templates/>
