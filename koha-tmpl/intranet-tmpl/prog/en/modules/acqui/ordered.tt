@@ -51,7 +51,9 @@
 [% FOREACH order IN ordered %]
     <tr>
 	<td class="cell">
+            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">
 	    [% order.title %]
+            </a>
 	</td>
 	<td class="cell">
         [% IF ( CAN_user_acquisition_order_manage ) %]

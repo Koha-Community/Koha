@@ -54,7 +54,9 @@
 [% FOREACH order IN spent %]
     <tr>
 	<td class="cell">
-	    [% order.title %]
+            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">
+        [% order.title %]
+            </a>
 	</td>
 	<td class="cell">
         [% order.ordernumber %]
