@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
+
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
@@ -41,7 +41,6 @@ plugin that shows a stats on borrowers
 
 =cut
 
-$debug = 1;
 $debug and open DEBUG, ">/tmp/bor_issues_top.debug.log";
 
 my $input = new CGI;
@@ -63,7 +62,7 @@ my ($template, $borrowernumber, $cookie)
                 flagsrequired => {reports => '*'},
                 debug => 1,
                 });
-our $sep     = $input->param("sep");
+our $sep     = $input->param("sep") || C4::Context->preference('delimiter') || ',';
 $sep = "\t" if ($sep eq 'tabulation');
 $template->param(do_it => $do_it,
         );
