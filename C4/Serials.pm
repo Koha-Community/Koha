@@ -442,7 +442,11 @@ sub GetSubscriptionsFromBiblionumber {
     while ( my $subs = $sth->fetchrow_hashref ) {
         $subs->{startdate}     = output_pref( { dt => dt_from_string( $subs->{startdate} ),     dateonly => 1 } );
         $subs->{histstartdate} = output_pref( { dt => dt_from_string( $subs->{histstartdate} ), dateonly => 1 } );
-        $subs->{histenddate}   = output_pref( { dt => dt_from_string( $subs->{histenddate} ),   dateonly => 1 } );
+        if ( defined $subs->{histenddate} ) {
+           $subs->{histenddate}   = output_pref( { dt => dt_from_string( $subs->{histenddate} ),   dateonly => 1 } );
+        } else {
+            $subs->{histenddate} = "";
+        }
         $subs->{opacnote}     =~ s/\n/\<br\/\>/g;
         $subs->{missinglist}  =~ s/\n/\<br\/\>/g;
         $subs->{recievedlist} =~ s/\n/\<br\/\>/g;
@@ -450,7 +454,7 @@ sub GetSubscriptionsFromBiblionumber {
         $subs->{ "numberpattern" . $subs->{numberpattern} } = 1;
         $subs->{ "status" . $subs->{'status'} }             = 1;
 
-        if ( $subs->{enddate} eq '0000-00-00' ) {
+        if (not defined $subs->{enddate} ) {
             $subs->{enddate} = '';
         } else {
             $subs->{enddate} = output_pref( { dt => dt_from_string( $subs->{enddate}), dateonly => 1 } );
