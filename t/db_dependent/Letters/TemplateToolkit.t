@@ -286,7 +286,7 @@ $prepared_letter = GetPreparedLetter(
 is( $prepared_letter->{content}, $modification->id(), 'Patron modification object used correctly' );
 
 subtest 'regression tests' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower' } );
@@ -314,6 +314,19 @@ subtest 'regression tests' => sub {
             holdingbranch    => $library->{branchcode},
             itype            => 'BK',
             itemcallnumber   => 'itemcallnumber2',
+        }
+    )->store->unblessed;
+    my $biblio3 = Koha::Biblio->new({title => 'Test Biblio 3'})->store->unblessed;
+    my $biblioitem3 = Koha::Biblioitem->new({biblionumber => $biblio3->{biblionumber}})->store()->unblessed;
+    my $item3 = Koha::Item->new(
+        {
+            biblionumber     => $biblio3->{biblionumber},
+            biblioitemnumber => $biblioitem3->{biblioitemnumber},
+            barcode          => 'another_t_barcode_3',
+            homebranch       => $library->{branchcode},
+            holdingbranch    => $library->{branchcode},
+            itype            => 'BK',
+            itemcallnumber   => 'itemcallnumber3',
         }
     )->store->unblessed;
 
@@ -581,6 +594,129 @@ EOF
 
         is( $tt_letter_for_item1->{content}, $letter_for_item1->{content}, );
         is( $tt_letter_for_item2->{content}, $letter_for_item2->{content}, );
+    };
+
+    subtest 'ISSUESLIP|checkedout|repeat' => sub {
+        plan tests => 2;
+
+        my $code = 'ISSUESLIP';
+
+        my $branchcode = $library->{branchcode};
+
+        Koha::News->delete;
+        my $news_item = Koha::NewsItem->new({ branchcode => $branchcode, title => "A wonderful news", content => "This is the wonderful news." })->store;
+
+        # historic syntax
+        my $template = <<EOF;
+<h3><<branches.branchname>></h3>
+Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+(<<borrowers.cardnumber>>) <br />
+
+<<today>><br />
+
+<h4>Checked Out</h4>
+<checkedout>
+<p>
+<<biblio.title>> <br />
+Barcode: <<items.barcode>><br />
+Date due: <<issues.date_due | dateonly>><br />
+</p>
+</checkedout>
+
+<h4>Overdues</h4>
+<overdue>
+<p>
+<<biblio.title>> <br />
+Barcode: <<items.barcode>><br />
+Date due: <<issues.date_due | dateonly>><br />
+</p>
+</overdue>
+
+<hr>
+
+<h4 style="text-align: center; font-style:italic;">News</h4>
+<news>
+<div class="newsitem">
+<h5 style="margin-bottom: 1px; margin-top: 1px"><b><<opac_news.title>></b></h5>
+<p style="margin-bottom: 1px; margin-top: 1px"><<opac_news.content>></p>
+<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px">Posted on <<opac_news.timestamp>></p>
+<hr />
+</div>
+</news>
+EOF
+
+        reset_template( { template => $template, code => $code, module => 'circulation' } );
+
+        C4::Circulation::AddIssue( $patron, $item1->{barcode} ); # Add a first checkout
+        my $first_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
+
+        C4::Circulation::AddIssue( $patron, $item2->{barcode} ); # Add a second checkout
+        my $yesterday = dt_from_string->subtract( days => 1 );
+        C4::Circulation::AddIssue( $patron, $item3->{barcode}, $yesterday ); # Add an overdue
+        my $second_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
+
+        # Cleanup
+        AddReturn( $item1->{barcode} );
+        AddReturn( $item2->{barcode} );
+        AddReturn( $item3->{barcode} );
+
+        # TT syntax
+        my $tt_template = <<EOF;
+<h3>[% branch.branchname %]</h3>
+Checked out to [% borrower.title %] [% borrower.firstname %] [% borrower.initials %] [% borrower.surname %] <br />
+([% borrower.cardnumber %]) <br />
+
+[% today | \$KohaDates with_hours => 1 %]<br />
+
+<h4>Checked Out</h4>
+[% FOREACH checkout IN checkouts %]
+[%~ SET item = checkout.item %]
+[%~ SET biblio = checkout.item.biblio %]
+<p>
+[% biblio.title %] <br />
+Barcode: [% item.barcode %]<br />
+Date due: [% checkout.date_due | \$KohaDates %]<br />
+</p>
+[% END %]
+
+<h4>Overdues</h4>
+[% FOREACH overdue IN overdues %]
+[%~ SET item = overdue.item %]
+[%~ SET biblio = overdue.item.biblio %]
+<p>
+[% biblio.title %] <br />
+Barcode: [% item.barcode %]<br />
+Date due: [% overdue.date_due | \$KohaDates %]<br />
+</p>
+[% END %]
+
+<hr>
+
+<h4 style="text-align: center; font-style:italic;">News</h4>
+[% FOREACH n IN news %]
+<div class="newsitem">
+<h5 style="margin-bottom: 1px; margin-top: 1px"><b>[% n.title %]</b></h5>
+<p style="margin-bottom: 1px; margin-top: 1px">[% n.content %]</p>
+<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px">Posted on [% n.timestamp | \$KohaDates %]</p>
+<hr />
+</div>
+[% END %]
+EOF
+
+        reset_template( { template => $tt_template, code => $code, module => 'circulation' } );
+
+        C4::Circulation::AddIssue( $patron, $item1->{barcode} ); # Add a first checkout
+        my $first_tt_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
+
+        C4::Circulation::AddIssue( $patron, $item2->{barcode} ); # Add a second checkout
+        C4::Circulation::AddIssue( $patron, $item3->{barcode}, $yesterday ); # Add an overdue
+        my $second_tt_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
+
+        # There is too many line breaks generated by the historic syntax
+        $second_slip->{content} =~ s|</p>\n\n\n<p>|</p>\n\n<p>|s;
+
+        is( $first_tt_slip->{content}, $first_slip->{content}, );
+        is( $second_tt_slip->{content}, $second_slip->{content}, );
     };
 };
 
