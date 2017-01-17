@@ -1455,7 +1455,6 @@ sub merge {
         $z++;
     }
     $oResult->destroy();
-    #warn scalar(@reccache)." biblios to update";
     # Get All candidate Tags for the change 
     # (This will reduce the search scope in marc records).
     my $sql = "SELECT DISTINCT tagfield FROM marc_subfield_structure WHERE authtypecode=?";
@@ -1464,8 +1463,7 @@ sub merge {
     if ($authtypeto->authtypecode ne $authtypefrom->authtypecode){
         $tags_new = $dbh->selectcol_arrayref( $sql, undef, ( $authtypeto->authtypecode ));
     }  
-    # BulkEdit marc records
-    # May be used as a template for a bulkedit field  
+
     my $overwrite = C4::Context->preference( 'AuthorityMergeMode' ) eq 'strict';
     my $skip_subfields = $overwrite
         # This hash contains all subfields from the authority report fields
@@ -1476,11 +1474,9 @@ sub merge {
     foreach my $marcrecord(@reccache){
         my $update = 0;
         foreach my $tagfield (@$tags_using_authtype){
-#             warn "tagfield : $tagfield ";
             my $countfrom = 0; # used in strict mode to remove duplicates
             foreach my $field ($marcrecord->field($tagfield)){
-                # biblio is linked to authority with $9 subfield containing authid
-                my $auth_number=$field->subfield("9");
+                my $auth_number = $field->subfield("9"); # link to authority
                 my $tag=$field->tag();
                 next if !defined($auth_number) || $auth_number ne $mergefrom;
                 $countfrom++;
@@ -1516,8 +1512,8 @@ sub merge {
                 $field->replace_with($field_to);
             }
                 $update=1;
-            }#for each tag
-        }#foreach tagfield
+            }
+        }
         my ($bibliotag,$bibliosubf) = GetMarcFromKohaField("biblio.biblionumber","") ;
         my $biblionumber;
         if ($bibliotag<10){
@@ -1535,57 +1531,9 @@ sub merge {
             $counteditedbiblio++;
             warn $counteditedbiblio if (($counteditedbiblio % 10) and $ENV{DEBUG});
         }    
-    }#foreach $marc
+    }
     return $counteditedbiblio;  
-  # now, find every other authority linked with this authority
-  # now, find every other authority linked with this authority
-#   my $oConnection=C4::Context->Zconn("authorityserver");
-#   my $query;
-# # att 9210               Auth-Internal-authtype
-# # att 9220               Auth-Internal-LN
-# # ccl.properties to add for authorities
-#   $query= "= ".$mergefrom;
-#   my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
-#   my $count=$oResult->size() if  ($oResult);
-#   my @reccache;
-#   my $z=0;
-#   while ( $z<$count ) {
-#   my $rec;
-#           $rec=$oResult->record($z);
-#       my $marcdata = $rec->raw();
-#   push @reccache, $marcdata;
-#   $z++;
-#   }
-#   $oResult->destroy();
-#   foreach my $marc(@reccache){
-#     my $update;
-#     my $marcrecord;
-#     $marcrecord = MARC::File::USMARC::decode($marc);
-#     foreach my $tagfield (@tags_using_authtype){
-#       $tagfield=substr($tagfield,0,3);
-#       my @tags = $marcrecord->field($tagfield);
-#       foreach my $tag (@tags){
-#         my $tagsubs=$tag->subfield("9");
-#     #warn "$tagfield:$tagsubs:$mergefrom";
-#         if ($tagsubs== $mergefrom) {
-#           $tag->update("9" =>$mergeto);
-#           foreach my $subfield (@record_to) {
-#     #        warn "$subfield,$subfield->[0],$subfield->[1]";
-#             $tag->update($subfield->[0] =>$subfield->[1]);
-#           }#for $subfield
-#         }
-#         $marcrecord->delete_field($tag);
-#         $marcrecord->add_fields($tag);
-#         $update=1;
-#       }#for each tag
-#     }#foreach tagfield
-#     my $authoritynumber = TransformMarcToKoha($marcrecord,"") ;
-#     if ($update==1){
-#       &ModAuthority($marcrecord,$authoritynumber,GetAuthTypeCode($authoritynumber)) ;
-#     }
-# 
-#   }#foreach $marc
-}#sub
+}
 
 sub _merge_newtag {
 # Routine is only called for an (exceptional) authtypecode change

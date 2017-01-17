@@ -41,6 +41,9 @@ subtest 'Test merge A1 to A2 (within same authtype)' => sub {
 # Tests originate from bug 11700
     plan tests => 9;
 
+    # Start in loose mode, although it actually does not matter here
+    t::lib::Mocks::mock_preference('AuthorityMergeMode', 'loose');
+
     # Add two authority records
     my $auth1 = MARC::Record->new;
     $auth1->append_fields( MARC::Field->new( '109', '0', '0', 'a' => 'George Orwell' ));
@@ -80,7 +83,7 @@ subtest 'Test merge A1 to A2 (within same authtype)' => sub {
         'Check biblio2 609$a' );
 };
 
-subtest 'Test merge A1 to modified A1' => sub {
+subtest 'Test merge A1 to modified A1, test strict mode' => sub {
 # Tests originate from bug 11700
     plan tests => 11;
 
@@ -103,7 +106,7 @@ subtest 'Test merge A1 to modified A1' => sub {
     my ( $biblionumber1 ) = AddBiblio( $MARC1, '');
     my ( $biblionumber2 ) = AddBiblio( $MARC2, '');
 
-    # Time to merge
+    # Time to merge in loose mode first
     @zebrarecords = ( $MARC1, $MARC2 );
     $index = 0;
     t::lib::Mocks::mock_preference('AuthorityMergeMode', 'loose');
@@ -137,14 +140,15 @@ subtest 'Test merge A1 to modified A1' => sub {
         scalar($auth1new->field('109')->subfields) + 1,
         'Check number of subfields in strict mode for the remaining 609' );
         # Note: the +1 comes from the added subfield $9 in the biblio
-    t::lib::Mocks::mock_preference('AuthorityMergeMode', 'loose');
 };
 
 subtest 'Test merge A1 to B1 (changing authtype)' => sub {
 # Tests were aimed for bug 9988, moved to 17909 in adjusted form
 # Would not encourage this type of merge, but we should test what we offer
-# The merge routine still needs the fixes on bug 17913
     plan tests => 13;
+
+    # Get back to loose mode now
+    t::lib::Mocks::mock_preference('AuthorityMergeMode', 'loose');
 
     # create two auth recs of different type
     my $auth1 = MARC::Record->new;
