@@ -927,6 +927,7 @@
         <xsl:for-each select="marc:datafield[@tag=583]">
             <xsl:if test="@ind1=1 or @ind1=' '">
             <span class="results_summary actionnote">
+                <span class="label">Action note: </span>
                 <xsl:choose>
                 <xsl:when test="marc:subfield[@code='z']">
                     <xsl:value-of select="marc:subfield[@code='z']"/>
