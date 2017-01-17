@@ -1477,14 +1477,22 @@ sub merge {
         my $update = 0;
         foreach my $tagfield (@$tags_using_authtype){
 #             warn "tagfield : $tagfield ";
+            my $countfrom = 0; # used in strict mode to remove duplicates
             foreach my $field ($marcrecord->field($tagfield)){
                 # biblio is linked to authority with $9 subfield containing authid
                 my $auth_number=$field->subfield("9");
                 my $tag=$field->tag();
+                next if !defined($auth_number) || $auth_number ne $mergefrom;
+                $countfrom++;
+                if( $overwrite && $countfrom > 1 ) {
+                    # remove this duplicate in strict mode
+                    $marcrecord->delete_field( $field );
+                    $update = 1;
+                    next;
+                }
                 my $newtag = $tags_new
                     ? _merge_newtag( $tag, $tags_new )
                     : $tag;
-                if ($auth_number==$mergefrom) {
                     my $field_to = MARC::Field->new(
                         $newtag,
                         $field->indicator(1),
@@ -1508,7 +1516,6 @@ sub merge {
                 $field->replace_with($field_to);
             }
                 $update=1;
-                }
             }#for each tag
         }#foreach tagfield
         my ($bibliotag,$bibliosubf) = GetMarcFromKohaField("biblio.biblionumber","") ;

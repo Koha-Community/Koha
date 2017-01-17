@@ -82,7 +82,7 @@ subtest 'Test merge A1 to A2 (within same authtype)' => sub {
 
 subtest 'Test merge A1 to modified A1' => sub {
 # Tests originate from bug 11700
-    plan tests => 9;
+    plan tests => 11;
 
     # Simulate modifying an authority from auth1old to auth1new
     my $auth1old = MARC::Record->new;
@@ -95,6 +95,8 @@ subtest 'Test merge A1 to modified A1' => sub {
     my $MARC1 = MARC::Record->new;
     $MARC1->append_fields( MARC::Field->new( '109', '', '', 'a' => 'Bruce Wayne', 'b' => '2014', '9' => $authid1 ));
     $MARC1->append_fields( MARC::Field->new( '245', '', '', 'a' => 'From the depths' ));
+    $MARC1->append_fields( MARC::Field->new( '609', '', '', 'a' => 'Bruce Lee', 'b' => 'Should be cleared too', '9' => $authid1 ));
+    $MARC1->append_fields( MARC::Field->new( '609', '', '', 'a' => 'Bruce Lee', 'c' => 'This is a duplicate to be removed in strict mode', '9' => $authid1 ));
     my $MARC2 = MARC::Record->new;
     $MARC2->append_fields( MARC::Field->new( '109', '', '', 'a' => 'Batman', '9' => $authid1 ));
     $MARC2->append_fields( MARC::Field->new( '245', '', '', 'a' => 'All the way to heaven' ));
@@ -130,6 +132,11 @@ subtest 'Test merge A1 to modified A1' => sub {
     $rv = C4::AuthoritiesMarc::merge( $authid1, $auth1old, $authid1, $auth1new );
     $biblio1 = GetMarcBiblio($biblionumber1);
     is( $biblio1->field(109)->subfield('b'), undef, 'Subfield overwritten in strict mode' );
+    is( $biblio1->fields, scalar( $MARC1->fields ) - 1, 'strict mode should remove a duplicate 609' );
+    is( $biblio1->field(609)->subfields,
+        scalar($auth1new->field('109')->subfields) + 1,
+        'Check number of subfields in strict mode for the remaining 609' );
+        # Note: the +1 comes from the added subfield $9 in the biblio
     t::lib::Mocks::mock_preference('AuthorityMergeMode', 'loose');
 };
 
