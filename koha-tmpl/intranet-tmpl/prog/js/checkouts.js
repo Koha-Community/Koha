@@ -235,18 +235,12 @@ $(document).ready(function() {
                         }
 
                         if ( oObj.itemnotes ) {
-                            var span_class = "";
-                            if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
-                                span_class = "circ-hlt";
-                            }
+                            var span_class = "text-muted";
                             title += " - <span class='" + span_class + "'>" + oObj.itemnotes + "</span>"
                         }
 
                         if ( oObj.itemnotes_nonpublic ) {
-                            var span_class = "";
-                            if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
-                                span_class = "circ-hlt";
-                            }
+                            var span_class = "text-danger";
                             title += " - <span class='" + span_class + "'>" + oObj.itemnotes_nonpublic + "</span>"
                         }
 
