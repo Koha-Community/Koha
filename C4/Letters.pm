@@ -1563,10 +1563,12 @@ sub _get_tt_params {
             my $fk = $config->{$table}->{fk};
 
             if ( $is_a_loop ) {
-                unless ( ref( $tables->{$table} ) eq 'ARRAY' ) {
+                my $values = $tables->{$table} || [];
+                unless ( ref( $values ) eq 'ARRAY' ) {
                     croak "ERROR processing table $table. Wrong API call.";
                 }
-                my $objects = $module->search( { $pk => { -in => $tables->{$table} } } );
+                my $key = $pk ? $pk : $fk;
+                my $objects = $module->search( { $key => { -in => $values } } );
                 $params->{ $config->{$table}->{plural} } = $objects;
             }
             elsif ( $ref eq q{} || $ref eq 'HASH' ) {
