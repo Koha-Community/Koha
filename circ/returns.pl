@@ -50,7 +50,7 @@ use C4::RotatingCollections;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Calendar;
-use Koha::Issues;
+use Koha::Checkouts;
 
 my $query = new CGI;
 
@@ -579,7 +579,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{bortitle}       = $b->{'title'};
             $ri{bornote}        = $b->{'borrowernotes'};
             $ri{borcategorycode}= $b->{'categorycode'};
-            $ri{borissuescount} = Koha::Issues->count( { borrowernumber => $b->{'borrowernumber'} } );
+            $ri{borissuescount} = Koha::Checkouts->count( { borrowernumber => $b->{'borrowernumber'} } );
         }
         else {
             $ri{borrowernumber} = $riborrowernumber{$_};
