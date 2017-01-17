@@ -7,14 +7,14 @@
 <p>The rules are applied from most specific to less specific, using the first found in this order:</p>
 
 <ul>
-	<li>same library, same patron type, same item type</li>
-	<li>same library, same patron type, all item type</li>
-	<li>same library, all patron types, same item type</li>
-	<li>same library, all patron types, all item types</li>
-	<li>all libraries, same patron type, same item type</li>
-	<li>all libraries, same patron type, all item types</li>
-	<li>all libraries, all patron types, same item type</li>
-	<li>all libraries, all patron types, all item types</li>
+	<li>same library, same patron category, same item type</li>
+	<li>same library, same patron category, all item type</li>
+	<li>same library, all patron categories, same item type</li>
+	<li>same library, all patron categories, all item types</li>
+	<li>all libraries, same patron category, same item type</li>
+	<li>all libraries, same patron category, all item types</li>
+	<li>all libraries, all patron categories, same item type</li>
+	<li>all libraries, all patron categories, all item types</li>
 </ul>
 
 <p>The CircControl and HomeOrHoldingBranch also come in to play when figuring out which circulation rule to follow.</p>
@@ -28,7 +28,7 @@
 
 <p>If you are a single library system choose your branch name before creating rules (sometimes having only rules for the 'all libraries' option can cause issues with holds)</p>
 
-<p style="color: #990000;">Important: At the very least you will need to set a default circulation rule. This rule should be set for all item types, all libraries and all patron categories. That will catch all instances that do not match a specific rule. When checking out if you do not have a rule for all libraries, all item types and all patron types then you may see patrons getting blocked from placing holds. You will also want a rule for your specific library set for all item types and all patron types to avoid this holds issue. Koha needs to know what rule to fall back on.</p>
+<p style="color: #990000;">Important: At the very least you will need to set a default circulation rule. This rule should be set for all item types, all libraries and all patron categories. That will catch all instances that do not match a specific rule. When checking out if you do not have a rule for all libraries, all item types and all patron categories then you may see patrons getting blocked from placing holds. You will also want a rule for your specific library set for all item types and all patron categories to avoid this holds issue. Koha needs to know what rule to fall back on.</p>
 
 <h4>Default Circulation Rules</h4>
 
@@ -83,10 +83,10 @@
     <li>Don't allow: Will only allow patrons to choose next available</li>
     <li>Force: Will only allow patrons to choose an specific item</li>
     </ul></li>
-    <li>Finally, if you charge a rental fee for the item type and want to give a specific patron type a discount on that fee, enter the percentage discount (without the % symbol) in the 'Rental Discount' field</li>
+    <li>Finally, if you charge a rental fee for the item type and want to give a specific patron category a discount on that fee, enter the percentage discount (without the % symbol) in the 'Rental Discount' field</li>
 </ul>
 
-<p>When finished, click 'Add' to save your changes. To modify a rule, create a new one with the same patron type and item type. If you would like to delete your rule, simply click the 'Delete' link to the right of the rule.</p>
+<p>When finished, click 'Add' to save your changes. To modify a rule, create a new one with the same patron category and item type. If you would like to delete your rule, simply click the 'Delete' link to the right of the rule.</p>
 
 <p>To save time you can clone rules from one library to another by choosing the clone option above the rules matrix.</p>
 
