@@ -219,7 +219,7 @@ my $budget_loop = [];
 my $budgets = GetBudgetHierarchy;
 foreach my $r (@{$budgets}) {
     next unless (CanUserUseBudget($borrower, $r, $userflags));
-    if (!defined $r->{budget_amount} || $r->{budget_amount} == 0) {
+    if (!defined $r->{budget_amount} || $r->{budget_amount} <0) {
         next;
     }
     push @{$budget_loop}, {
