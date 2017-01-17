@@ -137,7 +137,7 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
 # Tests were aimed for bug 9988, moved to 17909 in adjusted form
 # Would not encourage this type of merge, but we should test what we offer
 # The merge routine still needs the fixes on bug 17913
-    plan tests => 12;
+    plan tests => 13;
 
     # create two auth recs of different type
     my $auth1 = MARC::Record->new;
@@ -192,6 +192,11 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
         $auth2->subfield( '112', 'a' ), 'Check modified 112a' );
     is( $newbiblio->subfield( '112', 'c' ),
         $auth2->subfield( '112', 'c' ), 'Check new 112c' );
+
+    # Check 112b; this subfield was cleared when moving from 109 to 112
+    # Note that this fix only applies to the current loose mode only
+    is( $newbiblio->subfield( '112', 'b' ), undef,
+        'Merge respects a cleared subfield in loose mode' );
 
     # Check the original 612
     is( ( $newbiblio->field('612') )[0]->subfield( 'a' ),
