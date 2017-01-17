@@ -64,7 +64,7 @@ $db->mock(
     _new_schema => sub { return Schema(); }
 );
 
-my $dir = File::Spec->rel2abs( dirname(__FILE__) );
+my $dir = File::Spec->tmpdir();
 
 
 my $data = [
