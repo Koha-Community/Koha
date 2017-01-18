@@ -545,7 +545,8 @@ Return the age of the patron
 sub get_age {
     my ($self)    = @_;
     my $today_str = dt_from_string->strftime("%Y-%m-%d");
-    my $dob_str   = dt_from_string( $self->dateofbirth )->strftime("%Y-%m-%d");
+    my $dob_str   = dt_from_string( $self->dateofbirth ) || return;
+    $dob_str      = $dob_str->strftime("%Y-%m-%d");
 
     my ( $dob_y,   $dob_m,   $dob_d )   = split /-/, $dob_str;
     my ( $today_y, $today_m, $today_d ) = split /-/, $today_str;

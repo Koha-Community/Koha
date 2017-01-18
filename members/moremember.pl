@@ -146,7 +146,7 @@ foreach (qw(dateenrolled dateexpiry dateofbirth)) {
         $data->{$_} = '';
         next;
     }
-    $template->param( $_ => dt_from_string( $userdate ) );
+    $data->{$_} = dt_from_string( $userdate );
 }
 $data->{'IS_ADULT'} = ( $data->{'categorycode'} ne 'I' );
 
