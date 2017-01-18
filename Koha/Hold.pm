@@ -127,6 +127,11 @@ sub set_waiting {
         waitingdate => $today->ymd,
     };
 
+    my $requested_expiration;
+    if ($self->expirationdate) {
+        $requested_expiration = dt_from_string($self->expirationdate);
+    }
+
     if ( C4::Context->preference("ExpireReservesMaxPickUpDelay") ) {
         my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
         my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
@@ -139,7 +144,10 @@ sub set_waiting {
             $expirationdate = $calendar->days_forward( dt_from_string($self->waitingdate), $max_pickup_delay );
         }
 
-        $values->{expirationdate} = $expirationdate->ymd;
+        # If patron's requested expiration date is prior to the
+        # calculated one, we keep the patron's one.
+        my $cmp = $requested_expiration ? DateTime->compare($requested_expiration, $expirationdate) : 0;
+        $values->{expirationdate} = $cmp == -1 ? $requested_expiration->ymd : $expirationdate->ymd;
     }
 
     $self->set($values)->store();
