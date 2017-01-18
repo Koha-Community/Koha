@@ -252,6 +252,18 @@ sub unblessed {
     return [ map { $_->unblessed } $self->as_list ];
 }
 
+=head3 Koha::Objects->TO_JSON
+
+Returns an unblessed representation of objects, suitable for JSON output.
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    return [ map { $_->TO_JSON } $self->as_list ];
+}
+
 =head3 Koha::Objects->_wrap
 
 wraps the DBIC object in a corresponding Koha object

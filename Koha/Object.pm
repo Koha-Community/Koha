@@ -21,6 +21,7 @@ package Koha::Object;
 use Modern::Perl;
 
 use Carp;
+use Mojo::JSON;
 
 use Koha::Database;
 use Koha::Exceptions::Object;
@@ -188,6 +189,61 @@ sub unblessed {
     my ($self) = @_;
 
     return { $self->_result->get_columns };
+}
+
+=head3 $object->TO_JSON
+
+Returns an unblessed representation of the object, suitable for JSON output.
+
+=cut
+
+sub TO_JSON {
+
+    my ($self) = @_;
+
+    my $unblessed    = $self->unblessed;
+    my $columns_info = Koha::Database->new->schema->resultset( $self->_type )
+        ->result_source->{_columns};
+
+    foreach my $col ( keys %{$columns_info} ) {
+
+        if ( $columns_info->{$col}->{is_boolean} )
+        {    # Handle booleans gracefully
+            $unblessed->{$col}
+                = ( $unblessed->{$col} )
+                ? Mojo::JSON->true
+                : Mojo::JSON->false;
+        }
+        elsif ( _numeric_column_type( $columns_info->{$col}->{data_type} ) ) {
+
+            # TODO: Remove once the solution for
+            # https://rt.cpan.org/Ticket/Display.html?id=119904
+            # is ported to whatever distro we support by that time
+            $unblessed->{$col} += 0;
+        }
+    }
+    return $unblessed;
+}
+
+sub _numeric_column_type {
+    # TODO: Remove once the solution for
+    # https://rt.cpan.org/Ticket/Display.html?id=119904
+    # is ported to whatever distro we support by that time
+    my ($column_type) = @_;
+
+    my @numeric_types = (
+        'bigint',
+        'integer',
+        'int',
+        'mediumint',
+        'smallint',
+        'tinyint',
+        'decimal',
+        'double precision',
+        'float'
+    );
+
+    return ( grep { $column_type eq $_ } @numeric_types) ? 1 : 0;
 }
 
 =head3 $object->_result();
