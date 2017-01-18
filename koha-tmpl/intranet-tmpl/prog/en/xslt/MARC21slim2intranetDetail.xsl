@@ -1242,36 +1242,35 @@
 
         <!-- 780 -->
         <xsl:if test="marc:datafield[@tag=780]">
-        <xsl:for-each select="marc:datafield[@tag=780]">
-        <xsl:if test="@ind1=0">
-        <span class="results_summary preceeding_entry">
-        <xsl:choose>
-        <xsl:when test="@ind2=0">
-            <span class="label">Continues:</span>
-        </xsl:when>
-        <xsl:when test="@ind2=1">
-            <span class="label">Continues in part:</span>
-        </xsl:when>
-        <xsl:when test="@ind2=2">
-            <span class="label">Supersedes:</span>
-        </xsl:when>
-        <xsl:when test="@ind2=3">
-            <span class="label">Supersedes in part:</span>
-        </xsl:when>
-        <xsl:when test="@ind2=4">
-            <span class="label">Formed by the union: ... and: ...</span>
-        </xsl:when>
-        <xsl:when test="@ind2=5">
-            <span class="label">Absorbed:</span>
-        </xsl:when>
-        <xsl:when test="@ind2=6">
-            <span class="label">Absorbed in part:</span>
-        </xsl:when>
-        <xsl:when test="@ind2=7">
-            <span class="label">Separated from:</span>
-        </xsl:when>
-        </xsl:choose>
-        <xsl:text> </xsl:text>
+           <xsl:for-each select="marc:datafield[@tag=780]">
+              <xsl:if test="@ind1=0">
+                 <span class="results_summary preceeding_entry">
+                 <xsl:choose>
+                    <xsl:when test="@ind2=0">
+                       <span class="label">Continues:</span>
+                    </xsl:when>
+                    <xsl:when test="@ind2=1">
+                       <span class="label">Continues in part:</span>
+                    </xsl:when>
+                    <xsl:when test="@ind2=2">
+                       <span class="label">Supersedes:</span>
+                    </xsl:when>
+                    <xsl:when test="@ind2=3">
+                       <span class="label">Supersedes in part:</span>
+                    </xsl:when>
+                    <xsl:when test="@ind2=4">
+                       <span class="label">Formed by the union: ... and: ...</span>
+                    </xsl:when>
+                    <xsl:when test="@ind2=5">
+                       <span class="label">Absorbed:</span>
+                    </xsl:when>
+                    <xsl:when test="@ind2=6">
+                       <span class="label">Absorbed in part:</span>
+                    </xsl:when>
+                    <xsl:when test="@ind2=7">
+                       <span class="label">Separated from:</span>
+                    </xsl:when>
+                </xsl:choose>
                 <xsl:variable name="f780">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">a_t</xsl:with-param>
@@ -1291,6 +1290,10 @@
             </xsl:choose>
         </span>
  
+        <xsl:if test="marc:subfield[@code='i']">
+            <span class="results_summary"><xsl:value-of select="marc:subfield[@code='i']"/></span>
+         </xsl:if>
+
         <xsl:if test="marc:subfield[@code='n']">
             <span class="results_summary preceeding_entry_note"><xsl:value-of select="marc:subfield[@code='n']"/></span>
         </xsl:if>
@@ -1353,6 +1356,10 @@
             </xsl:choose>
 
         </span>
+            <xsl:if test="marc:subfield[@code='i']">
+                 <span class="results_summary"><xsl:value-of select="marc:subfield[@code='i']"/></span>
+             </xsl:if>
+
         </xsl:for-each>
         </xsl:if>
 
