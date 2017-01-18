@@ -370,6 +370,19 @@ function delete_contact(ev) {
                 [% END %]
             </div>
 
+            <div>
+
+                <div class="subscription-details">
+                    <h2>Subscription details</h2>
+                    <p><strong>Number of subscriptions: </strong>[% subscriptioncount %]
+                    [% IF subscriptioncount == 1 %] subscription [% ELSE %]
+                    subscriptions [% END %]
+                    </p>
+                </div>
+
+
+            </div>
+
         </div>
 
         [% IF ( contracts ) %]
