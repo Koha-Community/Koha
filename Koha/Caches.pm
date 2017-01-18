@@ -15,11 +15,36 @@ package Koha::Caches;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+=head1 NAME
+
+Koha::Caches - Cache handling
+
+=head1 SYNOPSIS
+
+my $cache = Koha::Caches->get_instance();
+
+=head1 DESCRIPTION
+
+Description
+
+=head1 CLASS METHODS
+
+=cut
+
 use Modern::Perl;
 
 use Koha::Cache;
 
 our $singleton_caches;
+
+=head2 get_instance
+
+This gets a shared instance of the cache, set up in a very default way. This is
+the recommended way to fetch a cache object. If possible, it'll be
+persistent across multiple instances.
+
+=cut
+
 sub get_instance {
     my ($class, $subnamespace) = @_;
     $subnamespace //= '';
@@ -27,6 +52,10 @@ sub get_instance {
         unless $singleton_caches->{$subnamespace};
     return $singleton_caches->{$subnamespace};
 }
+
+=head2 flush_L1_caches
+
+=cut
 
 sub flush_L1_caches {
     return unless $singleton_caches;

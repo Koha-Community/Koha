@@ -49,7 +49,7 @@ is( Koha::Authority::Types->search->count, $nb_of_authority_types + 1, 'The auth
 is( Koha::Authorities->search->count,      $nb_of_authorities + 2,     'The 2 authorities should have been added' );
 
 $new_authority_1->delete;
-is( Koha::Authorities->search->count, $nb_of_authorities + 1, 'Delete should have deleted the library' );
+is( Koha::Authorities->search->count, $nb_of_authorities + 1, 'Delete should have deleted the authority' );
 
 $schema->storage->txn_rollback;
 1;

@@ -41,7 +41,7 @@ use YAML;
 
 =head1 DESCRIPTION
 
-    Plugin that shows circulation stats
+    Plugin that shows reserve stats
 
 =cut
 

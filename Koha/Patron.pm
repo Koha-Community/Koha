@@ -264,7 +264,7 @@ sub do_check_for_previous_checkout {
     return $old_issues->count;  # 0 || N
 }
 
-=head2 is_debarred
+=head3 is_debarred
 
 my $debarment_expiration = $patron->is_debarred;
 
@@ -283,7 +283,7 @@ sub is_debarred {
     return;
 }
 
-=head2 is_expired
+=head3 is_expired
 
 my $is_expired = $patron->is_expired;
 
@@ -299,7 +299,7 @@ sub is_expired {
     return 0;
 }
 
-=head2 is_going_to_expire
+=head3 is_going_to_expire
 
 my $is_going_to_expire = $patron->is_going_to_expire;
 
@@ -319,7 +319,7 @@ sub is_going_to_expire {
     return 0;
 }
 
-=head2 update_password
+=head3 update_password
 
 my $updated = $patron->update_password( $userid, $password );
 
@@ -367,7 +367,7 @@ sub renew_account {
     return dt_from_string( $expiry_date )->truncate( to => 'day' );
 }
 
-=head2 has_overdues
+=head3 has_overdues
 
 my $has_overdues = $patron->has_overdues;
 
@@ -381,7 +381,7 @@ sub has_overdues {
     return $self->_result->issues->search({ date_due => { '<' => $dtf->format_datetime( dt_from_string() ) } })->count;
 }
 
-=head2 track_login
+=head3 track_login
 
     $patron->track_login;
     $patron->track_login({ force => 1 });
@@ -400,7 +400,7 @@ sub track_login {
     $self->lastseen( dt_from_string() )->store;
 }
 
-=head2 move_to_deleted
+=head3 move_to_deleted
 
 my $is_moved = $patron->move_to_deleted;
 

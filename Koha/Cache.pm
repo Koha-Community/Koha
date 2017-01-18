@@ -27,6 +27,8 @@ Koha::Cache - Handling caching of html and Objects for Koha
   use Koha::Cache;
   my $cache = Koha::Cache->new({cache_type => $cache_type, %params});
 
+  # see also Koha::Caches->get_instance;
+
 =head1 DESCRIPTION
 
 Koha caching routines. This class provides two interfaces for cache access.
@@ -35,6 +37,7 @@ The first, traditional OO interface provides the following functions:
 =head1 FUNCTIONS
 
 =cut
+
 use strict;
 use warnings;
 use Carp;
@@ -53,16 +56,6 @@ __PACKAGE__->mk_ro_accessors(
 our %L1_cache;
 our $L1_encoder = Sereal::Encoder->new;
 our $L1_decoder = Sereal::Decoder->new;
-
-=head2 get_instance
-
-    my $cache = Koha::Caches->get_instance();
-
-This gets a shared instance of the cache, set up in a very default way. This is
-the recommended way to fetch a cache object. If possible, it'll be
-persistent across multiple instances.
-
-=cut
 
 =head2 new
 

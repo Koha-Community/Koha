@@ -179,8 +179,8 @@ my $marcxml_close = q{
 };
 
 # Protect again simultaneous update of the zebra index by using a lock file.
-# Create our own lock directory if its missing.  This shouild be created
-# by koha-zebra-ctl.sh or at system installation.  If the desired directory
+# Create our own lock directory if it is missing. This should be created
+# by koha-zebra-ctl.sh or at system installation. If the desired directory
 # does not exist and cannot be created, we fall back on /tmp - which will
 # always work.
 

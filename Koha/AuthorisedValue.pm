@@ -131,11 +131,9 @@ sub replace_branch_limitations {
     return \@return_values;
 }
 
-=head3 lib_opac
+=head3 opac_description
 
-my $description = $av->lib_opac();
-
-$av->lib_opac( $description );
+my $description = $av->opac_description();
 
 =cut
 
@@ -145,7 +143,7 @@ sub opac_description {
     return $self->lib_opac() || $self->lib();
 }
 
-=head3 Koha::Objects->_avb_resultset
+=head3 _avb_resultset
 
 Returns the internal resultset or creates it if undefined
 
