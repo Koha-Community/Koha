@@ -770,6 +770,23 @@
         </span>
     </xsl:if>
 
+<!-- DDC classification -->
+    <xsl:if test="marc:datafield[@tag=084]">
+       <span class="results_summary oc">
+           <span class="label">Other classification: </span>
+          <xsl:for-each select="marc:datafield[@tag=084]">
+                <xsl:call-template name="subfieldSelect">
+                   <xsl:with-param name="codes">a</xsl:with-param>
+                   <xsl:with-param name="delimeter"><xsl:text> | </xsl:text></xsl:with-param>
+                </xsl:call-template>
+                <xsl:choose>
+                   <xsl:when test="position()=last()"><xsl:text>  </xsl:text></xsl:when>
+                   <xsl:otherwise> | </xsl:otherwise>
+                </xsl:choose>
+          </xsl:for-each>
+       </span>
+    </xsl:if>
+
         <xsl:if test="marc:datafield[@tag=856]">
         <span class="results_summary online_resources"><span class="label">Online resources: </span>
         <xsl:for-each select="marc:datafield[@tag=856]">
