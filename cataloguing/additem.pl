@@ -130,11 +130,11 @@ sub generate_subfield_form {
             $value = $subfieldlib->{defaultvalue};
             # get today date & replace <<YYYY>>, <<MM>>, <<DD>> if provided in the default value
             my $today_dt = dt_from_string;
-            my $year = $today_dt->year;
-            my $month = $today_dt->month;
-            my $day = $today_dt->day;
+            my $year = $today_dt->strftime('%Y');
+            my $month = $today_dt->strftime('%m');
+            my $day = $today_dt->strftime('%d');
             $value =~ s/<<YYYY>>/$year/g;
-            $value =~ s/<<MM></$month/g;
+            $value =~ s/<<MM>>/$month/g;
             $value =~ s/<<DD>>/$day/g;
             # And <<USER>> with surname (?)
             my $username=(C4::Context->userenv?C4::Context->userenv->{'surname'}:"superlibrarian");
