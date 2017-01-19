@@ -1083,6 +1083,11 @@ sub checkauth {
                         $domain =~ s|\.\*||g;
                         if ( $ip !~ /^$domain/ ) {
                             $loggedin = 0;
+                            $cookie = $query->cookie(
+                                -name     => 'CGISESSID',
+                                -value    => '',
+                                -HttpOnly => 1
+                            );
                             $info{'wrongip'} = 1;
                         }
                     }
