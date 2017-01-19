@@ -1009,14 +1009,8 @@ sub parse_overdues_letter {
 
     my @item_tables;
     if ( my $i = $params->{'items'} ) {
-        my $item_format = '';
         foreach my $item (@$i) {
             my $fine = GetFine($item->{'itemnumber'}, $params->{'borrowernumber'});
-            if ( !$item_format and defined $params->{'letter'}->{'content'} ) {
-                $params->{'letter'}->{'content'} =~ m/(<item>.*<\/item>)/;
-                $item_format = $1;
-            }
-
             $item->{'fine'} = currency_format($currency_format, "$fine", FMT_SYMBOL);
             # if active currency isn't correct ISO code fallback to sprintf
             $item->{'fine'} = sprintf('%.2f', $fine) unless $item->{'fine'};
