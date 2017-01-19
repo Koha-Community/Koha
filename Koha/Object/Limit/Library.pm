@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Koha::Database;
 use Koha::Exceptions;
+use Koha::Libraries;
 
 use Try::Tiny;
 
@@ -50,6 +51,10 @@ my $limits = $object->library_limits();
 
 $object->library_limits( \@branchcodes );
 
+Accessor method for library limits. When updating library limits, it accepts
+a list of branchcodes. If requested to return the current library limits
+it returns a Koha::Libraries object with the corresponding libraries.
+
 =cut
 
 sub library_limits {
@@ -67,6 +72,9 @@ sub library_limits {
 
 my $limits = $object->get_library_limits();
 
+Returns the current library limits in the form of a Koha::Libraries iterator object.
+It returns undef if no library limits defined.
+
 =cut
 
 sub get_library_limits {
@@ -77,7 +85,12 @@ sub get_library_limits {
         { $self->_library_limits->{id} => $self->id } )
         ->get_column( $self->_library_limits->{library} )->all();
 
-    return \@branchcodes;
+    return unless @branchcodes;
+
+    my $filter = [ map { { branchcode => $_ } } @branchcodes ];
+    my $libraries = Koha::Libraries->search( $filter );
+
+    return $libraries;
 }
 
 =head3 add_library_limit
@@ -93,9 +106,8 @@ sub add_library_limit {
         "Required parameter 'branchcode' missing")
         unless $branchcode;
 
-    my $limitation;
     try {
-        $limitation = $self->_library_limit_rs->update_or_create(
+        $self->_library_limit_rs->update_or_create(
             {   $self->_library_limits->{id}      => $self->id,
                 $self->_library_limits->{library} => $branchcode
             }
@@ -105,7 +117,7 @@ sub add_library_limit {
         Koha::Exceptions::CannotAddLibraryLimit->throw( $_->{msg} );
     };
 
-    return $limitation ? 1 : undef;
+    return $self;
 }
 
 =head3 del_library_limit
@@ -145,13 +157,18 @@ $object->replace_library_limits( \@branchcodes );
 sub replace_library_limits {
     my ( $self, $branchcodes ) = @_;
 
-    $self->_library_limit_rs->search(
-        { $self->_library_limits->{id} => $self->id } )->delete;
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            $self->_library_limit_rs->search(
+                { $self->_library_limits->{id} => $self->id } )->delete;
 
-    my @return_values = map { $self->add_library_limit($_) } @$branchcodes;
+            map { $self->add_library_limit($_) } @$branchcodes;
+        }
+    );
 
-    return \@return_values;
+    return $self;
 }
+
 
 =head3 Koha::Objects->_library_limit_rs
 

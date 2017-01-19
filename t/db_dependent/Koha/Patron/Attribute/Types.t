@@ -72,7 +72,7 @@ subtest 'new() tests' => sub {
 
 subtest 'library_limits() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -89,43 +89,68 @@ subtest 'library_limits() tests' => sub {
     my $library = $builder->build( { source => 'Branch' } )->{branchcode};
 
     my $library_limits = $attribute_type->library_limits();
-    is_deeply( $library_limits, [],
+    is( $library_limits, undef,
         'No branch limitations defined for attribute type' );
 
     my $print_error = $dbh->{PrintError};
     $dbh->{PrintError} = 0;
 
     throws_ok {
-        $library_limits = $attribute_type->library_limits( ['fake'] );
+        $attribute_type->library_limits( ['fake'] );
     }
     'Koha::Exceptions::CannotAddLibraryLimit',
         'Exception thrown on single invalid branchcode';
+    $library_limits = $attribute_type->library_limits();
+    is( $library_limits, undef,
+        'No branch limitations defined for attribute type' );
 
     throws_ok {
-        $library_limits
-            = $attribute_type->library_limits( [ 'fake', $library ] );
+        $attribute_type->library_limits( [ 'fake', $library ] );
     }
     'Koha::Exceptions::CannotAddLibraryLimit',
         'Exception thrown on invalid branchcode present';
 
+    $library_limits = $attribute_type->library_limits();
+    is( $library_limits, undef,
+        'No branch limitations defined for attribute type' );
+
     $dbh->{PrintError} = $print_error;
 
-    $library_limits = $attribute_type->library_limits( [$library] );
-    is_deeply( $library_limits, [1], 'Library limits correctly set' );
+    $attribute_type->library_limits( [$library] );
+    $library_limits = $attribute_type->library_limits;
+    is( $library_limits->count, 1, 'Library limits correctly set (count)' );
+    my $limit_library = $library_limits->next;
+    ok( $limit_library->isa('Koha::Library'),
+        'Library limits correctly set (type)'
+    );
+    is( $limit_library->branchcode,
+        $library, 'Library limits correctly set (value)' );
 
     my $another_library
         = $builder->build( { source => 'Branch' } )->{branchcode};
+    my @branchcodes_list = ( $library, $another_library );
 
-    $library_limits
-        = $attribute_type->library_limits( [ $library, $another_library ] );
-    is_deeply( $library_limits, [ 1, 1 ], 'Library limits correctly set' );
+    $attribute_type->library_limits( \@branchcodes_list );
+    $library_limits = $attribute_type->library_limits;
+    is( $library_limits->count, 2, 'Library limits correctly set (count)' );
+
+    while ( $limit_library = $library_limits->next ) {
+        ok( $limit_library->isa('Koha::Library'),
+            'Library limits correctly set (type)'
+        );
+        ok( eval {
+                grep { $limit_library->branchcode eq $_ } @branchcodes_list;
+            },
+            'Library limits correctly set (values)'
+        );
+    }
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'add_library_limit() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -140,12 +165,15 @@ subtest 'add_library_limit() tests' => sub {
     )->store();
 
     throws_ok { $attribute_type->add_library_limit() }
-    'Koha::Exceptions::MissingParameter',
-        'branchcode parameter is mandatory';
+    'Koha::Exceptions::MissingParameter', 'branchcode parameter is mandatory';
 
     my $library = $builder->build( { source => 'Branch' } )->{branchcode};
-    is( $attribute_type->add_library_limit($library),
-        1, 'Library limit successfully added' );
+    $attribute_type->add_library_limit($library);
+    my $rs = Koha::Database->schema->resultset('BorrowerAttributeTypesBranch')
+        ->search( { bat_code => 'code' } );
+    is( $rs->count, 1, 'Library limit successfully added (count)' );
+    is( $rs->next->b_branchcode->branchcode,
+        $library, 'Library limit successfully added (value)' );
 
     my $print_error = $dbh->{PrintError};
     $dbh->{PrintError} = 0;
@@ -209,7 +237,7 @@ subtest 'del_library_limit() tests' => sub {
 
 subtest 'replace_library_limits() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -223,26 +251,36 @@ subtest 'replace_library_limits() tests' => sub {
         }
     )->store();
 
-    is_deeply( $attribute_type->replace_library_limits( [] ),
-        [], 'Replacing with empty array returns an empty array as expected' );
-
-    is_deeply( $attribute_type->library_limits(),
-        [], 'Replacing with empty array yields no library limits' );
+    $attribute_type->replace_library_limits( [] );
+    my $library_limits = $attribute_type->library_limits;
+    is( $library_limits, undef, 'Replacing with empty array yields no library limits' );
 
     my $library_1 = $builder->build({ source => 'Branch'})->{branchcode};
     my $library_2 = $builder->build({ source => 'Branch'})->{branchcode};
+    my $library_3 = $builder->build({ source => 'Branch'})->{branchcode};
 
-    is_deeply( $attribute_type->replace_library_limits( [$library_1] ),
-        [ 1 ], 'Successfully adds a single library limit' );
+    $attribute_type->replace_library_limits( [$library_1] );
+    $library_limits = $attribute_type->library_limits;
+    is( $library_limits->count, 1, 'Successfully adds a single library limit' );
+    my $library_limit = $library_limits->next;
+    is( $library_limit->branchcode, $library_1, 'Library limit correctly set' );
 
-    is_deeply( $attribute_type->library_limits(),
-        [ $library_1 ], 'Library limit correctly set' );
 
-    is_deeply( $attribute_type->replace_library_limits( [$library_1, $library_2] ),
-        [ 1, 1 ], 'Successfully adds two library limit' );
+    my @branchcodes_list = ($library_1, $library_2, $library_3);
+    $attribute_type->replace_library_limits( [$library_1, $library_2, $library_3] );
+    $library_limits = $attribute_type->library_limits;
+    is( $library_limits->count, 3, 'Successfully adds two library limit' );
 
-    is_deeply( $attribute_type->library_limits(),
-        [ $library_1, $library_2 ], 'Library limit correctly set' );
+    while ( my $limit_library = $library_limits->next ) {
+        ok( $limit_library->isa('Koha::Library'),
+            'Library limits correctly set (type)'
+        );
+        ok( eval {
+                grep { $limit_library->branchcode eq $_ } @branchcodes_list;
+            },
+            'Library limits correctly set (values)'
+        );
+    }
 
     $schema->storage->txn_rollback;
 };
