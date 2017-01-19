@@ -286,7 +286,7 @@ $prepared_letter = GetPreparedLetter(
 is( $prepared_letter->{content}, $modification->id(), 'Patron modification object used correctly' );
 
 subtest 'regression tests' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower' } );
@@ -717,7 +717,143 @@ EOF
 
         is( $first_tt_slip->{content}, $first_slip->{content}, );
         is( $second_tt_slip->{content}, $second_slip->{content}, );
+
+        # Cleanup
+        AddReturn( $item1->{barcode} );
+        AddReturn( $item2->{barcode} );
+        AddReturn( $item3->{barcode} );
     };
+
+    subtest 'ODUE|items.content|item' => sub {
+        plan tests => 1;
+
+        my $code = 'ODUE';
+
+        my $branchcode = $library->{branchcode};
+
+        # historic syntax
+        # FIXME items.fine does not work with TT notices
+        # See bug 17976
+        # <item> should contain Fine: <<items.fine>></item>
+        my $template = <<EOF;
+Dear <<borrowers.firstname>> <<borrowers.surname>>,
+
+According to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.
+
+<<branches.branchname>>
+<<branches.branchaddress1>>
+<<branches.branchaddress2>> <<branches.branchaddress3>>
+Phone: <<branches.branchphone>>
+Fax: <<branches.branchfax>>
+Email: <<branches.branchemail>>
+
+If you have registered a password with the library, and you have a renewal available, you may renew online. If an item becomes more than 30 days overdue, you will be unable to use your library card until the item is returned.
+
+The following item(s) is/are currently overdue:
+
+<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>></item>
+
+<<items.content>>
+
+Thank-you for your prompt attention to this matter.
+
+<<branches.branchname>> Staff
+EOF
+
+        reset_template( { template => $template, code => $code, module => 'circulation' } );
+
+        my $yesterday = dt_from_string->subtract( days => 1 );
+        my $two_days_ago = dt_from_string->subtract( days => 2 );
+        my $issue1 = C4::Circulation::AddIssue( $patron, $item1->{barcode} ); # Add a first checkout
+        my $issue2 = C4::Circulation::AddIssue( $patron, $item2->{barcode}, $yesterday ); # Add an first overdue
+        my $issue3 = C4::Circulation::AddIssue( $patron, $item3->{barcode}, $two_days_ago ); # Add an second overdue
+        $issue1 = Koha::Checkout->_new_from_dbic( $issue1 )->unblessed; # ->unblessed should be enough but AddIssue does not return a Koha::Checkout object
+        $issue2 = Koha::Checkout->_new_from_dbic( $issue2 )->unblessed;
+        $issue3 = Koha::Checkout->_new_from_dbic( $issue3 )->unblessed;
+
+        # For items.content
+        my @item_fields = qw( date_due title barcode author itemnumber );
+        my $items_content = C4::Letters::get_item_content( { item => { %$item1, %$biblio1, %$issue1 }, item_content_fields => \@item_fields, dateonly => 1 } );
+          $items_content .= C4::Letters::get_item_content( { item => { %$item2, %$biblio2, %$issue2 }, item_content_fields => \@item_fields, dateonly => 1 } );
+          $items_content .= C4::Letters::get_item_content( { item => { %$item3, %$biblio3, %$issue3 }, item_content_fields => \@item_fields, dateonly => 1 } );
+
+        my @items = ( $item1, $item2, $item3 );
+        my $letter = C4::Overdues::parse_overdues_letter(
+            {
+                letter_code => $code,
+                borrowernumber => $patron->{borrowernumber},
+                branchcode  => $library->{branchcode},
+                items       => \@items,
+                substitute  => {
+                    bib                    => $library->{branchname},
+                    'items.content'        => $items_content,
+                    count                  => scalar( @items ),
+                    message_transport_type => 'email',
+                }
+            }
+        );
+
+        # Cleanup
+        AddReturn( $item1->{barcode} );
+        AddReturn( $item2->{barcode} );
+        AddReturn( $item3->{barcode} );
+
+
+        # historic syntax
+        my $tt_template = <<EOF;
+Dear [% borrower.firstname %] [% borrower.surname %],
+
+According to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.
+
+[% branch.branchname %]
+[% branch.branchaddress1 %]
+[% branch.branchaddress2 %] [% branch.branchaddress3 %]
+Phone: [% branch.branchphone %]
+Fax: [% branch.branchfax %]
+Email: [% branch.branchemail %]
+
+If you have registered a password with the library, and you have a renewal available, you may renew online. If an item becomes more than 30 days overdue, you will be unable to use your library card until the item is returned.
+
+The following item(s) is/are currently overdue:
+
+[% FOREACH overdue IN overdues %]
+[%~ SET item = overdue.item ~%]
+"[% item.biblio.title %]" by [% item.biblio.author %], [% item.itemcallnumber %], Barcode: [% item.barcode %]
+[% END %]
+[% FOREACH overdue IN overdues %]
+[%~ SET item = overdue.item ~%]
+[% overdue.date_due | \$KohaDates %]\t[% item.biblio.title %]\t[% item.barcode %]\t[% item.biblio.author %]\t[% item.itemnumber %]
+[% END %]
+
+Thank-you for your prompt attention to this matter.
+
+[% branch.branchname %] Staff
+EOF
+
+        reset_template( { template => $tt_template, code => $code, module => 'circulation' } );
+
+        C4::Circulation::AddIssue( $patron, $item1->{barcode} ); # Add a first checkout
+        C4::Circulation::AddIssue( $patron, $item2->{barcode}, $yesterday ); # Add an first overdue
+        C4::Circulation::AddIssue( $patron, $item3->{barcode}, $two_days_ago ); # Add an second overdue
+
+        my $tt_letter = C4::Overdues::parse_overdues_letter(
+            {
+                letter_code => $code,
+                borrowernumber => $patron->{borrowernumber},
+                branchcode  => $library->{branchcode},
+                items       => \@items,
+                substitute  => {
+                    bib                    => $library->{branchname},
+                    'items.content'        => $items_content,
+                    count                  => scalar( @items ),
+                    message_transport_type => 'email',
+                }
+            }
+        );
+
+        is( $tt_letter->{content}, $letter->{content}, );
+    };
+
 };
 
 subtest 'loops' => sub {
