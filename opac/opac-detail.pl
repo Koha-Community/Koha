@@ -856,7 +856,6 @@ if ( C4::Context->preference("OPACISBD") ) {
 $template->param(
     itemloop            => \@itemloop,
     otheritemloop       => \@otheritemloop,
-    subscriptionsnumber => $subscriptionsnumber,
     biblionumber        => $biblionumber,
     subscriptions       => \@subs,
     subscriptionsnumber => $subscriptionsnumber,
