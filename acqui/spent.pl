@@ -64,8 +64,7 @@ SELECT
     aqinvoices.invoicenumber,
     quantityreceived,
     unitprice,
-    datereceived,
-    aqorders.biblionumber
+    datereceived
 FROM (aqorders, aqbasket)
 LEFT JOIN biblio ON
     biblio.biblionumber=aqorders.biblionumber
