@@ -168,6 +168,11 @@ function checkMultiHold() {
         $("#" + fieldID).val("");
     });
 
+    // Confirm cancelation of hold
+    $(".cancel-hold").on("click",function(e) {
+        return confirmDelete(MSG_CONFIRM_DELETE_HOLD);
+    });
+
 
 [% UNLESS ( borrowernumber || borrowers || noitems ) %]
     [% IF ( CircAutocompl ) %]
@@ -855,7 +860,7 @@ function checkMultiHold() {
     [% END %]
 
 	<td>
-           <a title="Cancel hold" href="request.pl?action=cancel&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
+        <a class="cancel-hold" title="Cancel hold" href="request.pl?action=cancel&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
                     <img src="[% interface %]/[% theme %]/img/x.png" alt="Cancel" />
                 </a>
 	</td>
