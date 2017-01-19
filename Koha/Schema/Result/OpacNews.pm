@@ -44,9 +44,8 @@ __PACKAGE__->table("opac_news");
   is_nullable: 0
   size: 250
 
-=head2 new
+=head2 content
 
-  accessor: undef
   data_type: 'text'
   is_nullable: 0
 
@@ -95,8 +94,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "title",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 250 },
-  "new",
-  { accessor => undef, data_type => "text", is_nullable => 0 },
+  "content",
+  { data_type => "text", is_nullable => 0 },
   "lang",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 25 },
   "timestamp",
@@ -169,8 +168,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-10-21 19:50:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QivH1Daozdp0BttbPF6CkA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-01-21 12:39:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wfBMbKlWykwfNNNLGkl4BA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
