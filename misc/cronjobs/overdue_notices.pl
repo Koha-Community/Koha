@@ -663,11 +663,8 @@ END_SQL
                       last;
                     }
                     $j++;
-                    my @item_info = map { $_ =~ /^date|date$/ ?
-                                           eval { output_pref( { dt => dt_from_string( $item_info->{$_} ), dateonly => 1 } ); }
-                                           :
-                                           $item_info->{$_} || '' } @item_content_fields;
-                    $titles .= join("\t", @item_info) . "\n";
+
+                    $titles .= C4::Letters::get_item_content( { item => $item_info, item_content_fields => \@item_content_fields, dateonly => 1 } );
                     $itemcount++;
                     push @items, $item_info;
                 }

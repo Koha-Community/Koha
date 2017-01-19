@@ -1632,6 +1632,25 @@ sub _get_tt_params {
     return $params;
 }
 
+sub get_item_content {
+    my ( $params ) = @_;
+    my $item = $params->{item};
+    my $dateonly = $params->{dateonly} || 0;
+    my $item_content_fields = $params->{item_content_fields} || [];
+
+    return unless $item;
+
+    my @item_info = map {
+        $_ =~ /^date|date$/
+          ? eval {
+            output_pref(
+                { dt => dt_from_string( $item->{$_} ), dateonly => $dateonly } );
+          }
+          : $item->{$_}
+          || ''
+    } @$item_content_fields;
+    return join( "\t", @item_info ) . "\n";
+}
 
 1;
 __END__
