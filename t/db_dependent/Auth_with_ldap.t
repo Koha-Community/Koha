@@ -20,6 +20,7 @@ use Modern::Perl;
 use Test::More tests => 4;
 use Test::MockModule;
 use Test::MockObject;
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::Warn;
 
@@ -170,6 +171,7 @@ subtest 'checkpw_ldap tests' => sub {
         $update                        = 1;
         reload_ldap_module();
 
+        t::lib::Mocks::mock_preference( 'ExtendedPatronAttributes', 1 );
         my $auth = Test::MockModule->new('C4::Auth_with_ldap');
         $auth->mock(
             'update_local',
