@@ -34,59 +34,59 @@
 <h1>Fund: [% fund_code %]</h1>
 <h2>Spent</h2>
 
-
 <table id="spent">
     <thead>
-    <tr>
-        <th class="anti-the"> Title </th>
-	<th> Order </th>
-	<th> Vendor </th>
-	<th> Invoice </th>
-    <th> Item type </th>
-	<th> Received </th>
-    <th> Unit price </th>
-    <th class="title-string"> Date ordered </th>
-    <th class="title-string"> Date received </th>
-	<th> Subtotal </th>
-    </tr>
+        <tr>
+           <th class="anti-the">Title</th>
+           <th>Order</th>
+           <th>Vendor</th>
+           <th>Invoice</th>
+           <th>Item type</th>
+           <th>Received</th>
+           <th>Unit price</th>
+           <th class="title-string">Date ordered</th>
+           <th class="title-string">Date received</th>
+           <th>Subtotal</th>
+        </tr>
     </thead>
 
-[% FOREACH order IN spent %]
-    <tr>
-	<td class="cell">
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">
-        [% order.title %]
-            </a>
-	</td>
-	<td class="cell">
-        [% order.ordernumber %]
-	</td>
-	<td class="cell">
-	    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid %]">[% order.booksellerid %]</a>
-	</td>
-	<td class="cell">
-	    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid %]">[% order.invoicenumber %]</a>
-	</td>
-	<td class="cell">
-        [% ItemTypes.GetDescription( order.itype ) %]
-	</td>
-	<td class="cell">
-	    [% order.quantityreceived %]
-	</td>
-    <td class="cell">
-	    [% order.unitprice %]
-	</td>
-    <td class="cell">
-        <span title="[% order.entrydate %]">[% order.entrydate | $KohaDates %]</span>
-	</td>
-    <td class="cell">
-        <span title="[% order.datereceived %]">[% order.datereceived | $KohaDates %]</span>
-	</td>
-    <td class="data cell">
-	    [% order.rowtotal %]
-	</td>
-    </tr>
-[% END %]
+    [% FOREACH order IN spent %]
+        <tr>
+            <td class="cell">
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">
+                    [% order.title %]
+                </a>
+            </td>
+            <td class="cell">
+                [% order.ordernumber %]
+            </td>
+            <td class="cell">
+                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid %]">[% order.booksellerid %]</a>
+            </td>
+            <td class="cell">
+                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid %]">[% order.invoicenumber %]</a>
+            </td>
+            <td class="cell">
+                [% ItemTypes.GetDescription( order.itype ) %]
+            </td>
+            <td class="cell">
+                [% order.quantityreceived %]
+            </td>
+            <td class="cell">
+                [% order.unitprice %]
+            </td>
+            <td class="cell">
+                <span title="[% order.entrydate %]">[% order.entrydate | $KohaDates %]</span>
+            </td>
+            <td class="cell">
+                <span title="[% order.datereceived %]">[% order.datereceived | $KohaDates %]</span>
+            </td>
+            <td class="data cell">
+                [% order.rowtotal %]
+            </td>
+        </tr>
+    [% END %]
+
     <tfoot>
         [% IF shipmentcosts.size %]
             <tr valign="top">
