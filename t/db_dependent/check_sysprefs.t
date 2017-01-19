@@ -17,9 +17,9 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
+use Carp;
 use Getopt::Long;
 use C4::Context;
 
@@ -33,12 +33,13 @@ our $dbh = C4::Context->dbh;
 my $root_dir = C4::Context->config('intranetdir') . '/installer/data/mysql';
 my $base_syspref_file = "sysprefs.sql";
 
-open( my $ref_fh, "<$root_dir/$base_syspref_file" );
+open my $ref_fh, '<', "$root_dir/$base_syspref_file" or croak "Can't open '$root_dir/$base_syspref_file': $!";
 my $ref_syspref = get_syspref_from_file($ref_fh);
 my @ref_sysprefs = sort { lc $a cmp lc $b } keys %$ref_syspref;
+my $num_sysprefs = scalar @ref_sysprefs;
 if ( !$showsql ) {
-    cmp_ok( $#ref_sysprefs, '>=', 0,
-        "Found " . ( $#ref_sysprefs + 1 ) . " sysprefs" );
+    cmp_ok( $num_sysprefs, '>', 0,
+        "Found $num_sysprefs sysprefs" );
 }
 
 check_db($ref_syspref);
