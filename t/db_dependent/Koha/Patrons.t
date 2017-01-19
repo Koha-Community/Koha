@@ -492,13 +492,15 @@ subtest 'checkouts + get_overdues' => sub {
 };
 
 subtest 'get_age' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     my $patron = $builder->build( { source => 'Borrower' } );
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
     my $today = dt_from_string;
 
+    $patron->dateofbirth( undef );
+    is( $patron->get_age, undef, 'get_age should return undef if no dateofbirth is defined' );
     $patron->dateofbirth( $today->clone->add( years => -12, months => -6, days => -1 ) );
     is( $patron->get_age, 12, 'Patron should be 12' );
     $patron->dateofbirth( $today->clone->add( years => -18, months => 0, days => 1 ) );
