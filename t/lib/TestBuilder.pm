@@ -423,9 +423,6 @@ sub _gen_default_values {
         Item => {
             more_subfields_xml => undef,
         },
-        Biblioitem => {
-            marcxml => undef,
-        }
     };
 }
 
