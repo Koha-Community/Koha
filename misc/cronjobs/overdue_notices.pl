@@ -443,8 +443,9 @@ elsif ( defined $text_filename ) {
 }
 
 foreach my $branchcode (@branches) {
+    my $calendar;
     if ( C4::Context->preference('OverdueNoticeCalendar') ) {
-        my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+        $calendar = Koha::Calendar->new( branchcode => $branchcode );
         if ( $calendar->is_holiday($date_to_run) ) {
             next;
         }
@@ -466,7 +467,8 @@ SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, branchname
     AND biblio.biblionumber   = biblioitems.biblionumber
     AND issues.borrowernumber = ?
     AND issues.branchcode = ?
-    AND TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
+    AND items.itemlost = 0
+/   AND TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
 END_SQL
 
     my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ";
@@ -514,9 +516,11 @@ END_SQL
 
             my $borrower_sql = <<"END_SQL";
 SELECT issues.borrowernumber, firstname, surname, address, address2, city, zipcode, country, email, emailpro, B_email, smsalertnumber, phone, cardnumber, date_due
-FROM   issues,borrowers,categories
+FROM   issues,borrowers,categories,items
 WHERE  issues.borrowernumber=borrowers.borrowernumber
 AND    borrowers.categorycode=categories.categorycode
+AND    issues.itemnumber = items.itemnumber
+AND    items.itemlost = 0
 AND    TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
 END_SQL
             my @borrower_parameters;
@@ -542,8 +546,6 @@ END_SQL
                 my $days_between;
                 if ( C4::Context->preference('OverdueNoticeCalendar') )
                 {
-                    my $calendar =
-                      Koha::Calendar->new( branchcode => $branchcode );
                     $days_between =
                       $calendar->days_between( dt_from_string($data->{date_due}),
                         $date_to_run );
@@ -626,8 +628,6 @@ END_SQL
                 my $exceededPrintNoticesMaxLines = 0;
                 while ( my $item_info = $sth2->fetchrow_hashref() ) {
                     if ( C4::Context->preference('OverdueNoticeCalendar') ) {
-                        my $calendar =
-                          Koha::Calendar->new( branchcode => $branchcode );
                         $days_between =
                           $calendar->days_between(
                             dt_from_string( $item_info->{date_due} ), $date_to_run );
