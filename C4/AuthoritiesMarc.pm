@@ -1471,6 +1471,9 @@ sub merge {
         # We only need it in loose merge mode; replaces the former $exclude
         ? {}
         : { map { ( $_->[0], 1 ); } ( @record_from, @record_to ) };
+    # And we need to add $9 in order not to duplicate
+    $skip_subfields->{9} = 1 if !$overwrite;
+
     foreach my $marcrecord(@reccache){
         my $update = 0;
         foreach my $tagfield (@$tags_using_authtype) {
