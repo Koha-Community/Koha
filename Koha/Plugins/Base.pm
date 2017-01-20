@@ -28,7 +28,7 @@ use C4::Context;
 
 =head1 NAME
 
-C4::Plugins::Base - Base Module for plugins
+Koha::Plugins::Base - Base Module for plugins
 
 =cut
 

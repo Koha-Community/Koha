@@ -34,7 +34,7 @@ BEGIN {
 
 =head1 NAME
 
-C4::Plugins::Handler - Handler Module for running plugins
+Koha::Plugins::Handler - Handler Module for running plugins
 
 =head1 SYNOPSIS
 
