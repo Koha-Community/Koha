@@ -74,7 +74,7 @@ Innleveringsfrist: <<issues.date_due>><br />
 <news>
 <div class="newsitem">
 <h5 style="margin-bottom: 1px; margin-top: 1px"><b><<opac_news.title>></b></h5>
-<p style="margin-bottom: 1px; margin-top: 1px"><<opac_news.new>></p>
+<p style="margin-bottom: 1px; margin-top: 1px"><<opac_news.content>></p>
 <p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px">Publisert <<opac_news.timestamp>></p>
 <hr />
 </div>
