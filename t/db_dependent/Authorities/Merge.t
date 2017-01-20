@@ -22,11 +22,9 @@ BEGIN {
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-my $builder = t::lib::TestBuilder->new;
 
 # Some advanced mocking :)
 my ( @zebrarecords, $index );
-my $auth_mod = Test::MockModule->new( 'C4::AuthoritiesMarc' );
 my $context_mod = Test::MockModule->new( 'C4::Context' );
 my $search_mod = Test::MockModule->new( 'C4::Search' );
 my $zoom_mod = Test::MockModule->new( 'ZOOM::Query::CCL2RPN', no_auto => 1 );
@@ -205,6 +203,8 @@ sub set_mocks {
 }
 
 sub modify_framework {
+    my $builder = t::lib::TestBuilder->new;
+
     # create two auth types
     my $authtype1 = $builder->build({
         source => 'AuthType',
