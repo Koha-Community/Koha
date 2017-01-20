@@ -13838,6 +13838,14 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 17196 - Move marcxml out of the biblioitems table)\n";
 }
 
+$DBversion = '16.12.00.005';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES('AuthorityMergeMode','loose','loose|strict','Authority merge mode','Choice')");
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17913 - AuthorityMergeMode)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
