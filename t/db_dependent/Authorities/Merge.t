@@ -66,12 +66,14 @@ subtest 'Test merge A1 to A2 (within same authtype)' => sub {
 
     # Check the results
     my $newbiblio1 = GetMarcBiblio($biblionumber1);
+    $newbiblio1->delete_fields( $newbiblio1->field('100') ); # fix for UNIMARC
     compare_field_count( $biblio1, $newbiblio1, 1 );
     compare_field_order( $biblio1, $newbiblio1, 1 );
     is( $newbiblio1->subfield('609', '9'), $authid1, 'Check biblio1 609$9' );
     is( $newbiblio1->subfield('609', 'a'), 'George Orwell',
         'Check biblio1 609$a' );
     my $newbiblio2 = GetMarcBiblio($biblionumber2);
+    $newbiblio2->delete_fields( $newbiblio2->field('100') ); # fix for UNIMARC
     compare_field_count( $biblio2, $newbiblio2, 1 );
     compare_field_order( $biblio2, $newbiblio2, 1 );
     is( $newbiblio2->subfield('609', '9'), $authid1, 'Check biblio2 609$9' );
@@ -108,10 +110,12 @@ subtest 'Test merge A1 to modified A1' => sub {
 
     #Check the results
     my $biblio1 = GetMarcBiblio($biblionumber1);
+    $biblio1->delete_fields( $biblio1->field('100') ); # quick fix for UNIMARC
     compare_field_count( $MARC1, $biblio1, 1 );
     compare_field_order( $MARC1, $biblio1, 1 );
     is( $auth1new->field(109)->subfield('a'), $biblio1->field(109)->subfield('a'), 'Record1 values updated correctly' );
     my $biblio2 = GetMarcBiblio( $biblionumber2 );
+    $biblio2->delete_fields( $biblio2->field('100') ); # quick fix for UNIMARC
     compare_field_count( $MARC2, $biblio2, 1 );
     compare_field_order( $MARC2, $biblio2, 1 );
     is( $auth1new->field(109)->subfield('a'), $biblio2->field(109)->subfield('a'), 'Record2 values updated correctly' );
@@ -149,6 +153,7 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
     );
     my ( $biblionumber ) = C4::Biblio::AddBiblio( $marc, '' );
     my $oldbiblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    $oldbiblio->delete_fields( $oldbiblio->field('100') ); # fix for UNIMARC
 
     # Time to merge
     @zebrarecords = ( $marc );
@@ -158,6 +163,7 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
 
     # Get new marc record for compares
     my $newbiblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    $newbiblio->delete_fields( $newbiblio->field('100') ); # fix for UNIMARC
     compare_field_count( $oldbiblio, $newbiblio, 1 );
     # TODO The following test will still fail; refined after 17913
     compare_field_order( $oldbiblio, $newbiblio, 0 );
