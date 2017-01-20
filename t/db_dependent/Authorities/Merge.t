@@ -134,6 +134,7 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
     $index = 0;
     $rv = C4::AuthoritiesMarc::merge( $authid1, $auth1old, $authid1, $auth1new );
     $biblio1 = GetMarcBiblio($biblionumber1);
+    $biblio1->delete_fields( $biblio1->field('100') ); # quick fix for UNIMARC
     is( $biblio1->field(109)->subfield('b'), undef, 'Subfield overwritten in strict mode' );
     is( $biblio1->fields, scalar( $MARC1->fields ) - 1, 'strict mode should remove a duplicate 609' );
     is( $biblio1->field(609)->subfields,
