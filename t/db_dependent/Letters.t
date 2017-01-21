@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 79;
+use Test::More tests => 80;
 use Test::MockModule;
 use Test::Warn;
 
@@ -47,6 +47,7 @@ use Koha::Acquisition::Order;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Bookseller::Contacts;
 use Koha::Libraries;
+use Koha::Notice::Templates;
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin();
 
@@ -439,6 +440,44 @@ warning_like {
 is($err->{'error'}, 'no_letter', "No TESTACQORDER letter was defined.");
 }
 
+subtest 'GetPreparedLetter' => sub {
+    plan tests => 4;
+
+    Koha::Notice::Template->new(
+        {
+            module                 => 'test',
+            code                   => 'test',
+            branchcode             => '',
+            message_transport_type => 'email'
+        }
+    )->store;
+    my $letter;
+    warning_like {
+        $letter = C4::Letters::GetPreparedLetter(
+            module      => 'test',
+            letter_code => 'test',
+        );
+    }
+    qr{^ERROR: nothing to substitute},
+'GetPreparedLetter should warn if tables, substiture and repeat are not set';
+    is( $letter, undef,
+'No letter should be returned by GetPreparedLetter if something went wrong'
+    );
+
+    warning_like {
+        $letter = C4::Letters::GetPreparedLetter(
+            module      => 'test',
+            letter_code => 'test',
+            substitute  => {}
+        );
+    }
+    qr{^ERROR: nothing to substitute},
+'GetPreparedLetter should warn if tables, substiture and repeat are not set, even if the key is passed';
+    is( $letter, undef,
+'No letter should be returned by GetPreparedLetter if something went wrong'
+    );
+
+};
 
 {
 warning_is {
