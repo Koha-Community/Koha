@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use C4::Circulation;
 use Koha::Item;
@@ -72,6 +72,14 @@ subtest 'get_transfer' => sub {
     is( ref($transfer), 'Koha::Item::Transfer', 'Koha::Item->get_transfer should return a Koha::Item::Transfers object' );
 
     is( $transfer->itemnumber, $new_item_1->itemnumber, 'Koha::Item->get_transfer should return a valid Koha::Item::Transfers object' );
+};
+
+subtest 'biblio' => sub {
+    plan tests => 2;
+
+    my $biblio = $retrieved_item_1->biblio;
+    is( ref( $biblio ), 'Koha::Biblio', 'Koha::Item->bilio should return a Koha::Biblio' );
+    is( $biblio->biblionumber, $retrieved_item_1->biblionumber, 'Koha::Item->biblio should return the correct biblio' );
 };
 
 $retrieved_item_1->delete;
