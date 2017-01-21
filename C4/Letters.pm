@@ -1460,6 +1460,8 @@ sub _process_tt {
 
     my $tt_params = { %{ _get_tt_params( $tables ) }, %{ _get_tt_params( $loops, 'is_a_loop' ) } };
 
+    $content = qq|[% USE KohaDates %]$content|;
+
     my $output;
     $template->process( \$content, $tt_params, \$output ) || croak "ERROR PROCESSING TEMPLATE: " . $template->error();
 
