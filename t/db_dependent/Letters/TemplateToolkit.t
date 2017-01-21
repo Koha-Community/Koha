@@ -417,13 +417,13 @@ The following items have been checked out:
 Thank you for visiting <<branches.branchname>>.
 |;
         reset_template( { template => $checkout_template, code => $checkout_code, module => 'circulation' } );
-        my $checkin_template = q|
+        my $checkin_template = q[
 The following items have been checkin out:
 ----
-<<biblio.title>>
+<<biblio.title>> was due on <<old_issues.date_due | dateonly>>
 ----
 Thank you for visiting <<branches.branchname>>.
-|;
+];
         reset_template( { template => $checkin_template, code => $checkin_code, module => 'circulation' } );
 
         C4::Circulation::AddIssue( $patron, $item1->{barcode} );
@@ -447,13 +447,13 @@ The following items have been checked out:
 Thank you for visiting [% branch.branchname %].
 |;
         reset_template( { template => $checkout_template, code => $checkout_code, module => 'circulation' } );
-        $checkin_template = q|
+        $checkin_template = q[
 The following items have been checkin out:
 ----
-[% biblio.title %]
+[% biblio.title %] was due on [% old_checkout.date_due | $KohaDates %]
 ----
 Thank you for visiting [% branch.branchname %].
-|;
+];
         reset_template( { template => $checkin_template, code => $checkin_code, module => 'circulation' } );
 
         C4::Circulation::AddIssue( $patron, $item1->{barcode} );

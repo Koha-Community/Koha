@@ -1545,6 +1545,12 @@ sub _get_tt_params {
             plural   => 'checkouts',
             fk       => 'itemnumber',
         },
+        old_issues => {
+            module   => 'Koha::Old::Checkouts',
+            singular => 'old_checkout',
+            plural   => 'old_checkouts',
+            fk       => 'itemnumber',
+        },
         borrower_modifications => {
             module   => 'Koha::Patron::Modifications',
             singular => 'patron_modification',
