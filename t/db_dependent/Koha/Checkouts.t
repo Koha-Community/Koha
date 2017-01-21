@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use Koha::Checkouts;
 use Koha::Database;
@@ -84,6 +84,13 @@ subtest 'is_overdue' => sub {
     $retrieved_checkout_1->date_due($yesterday)->store;
     is( $retrieved_checkout_1->is_overdue($ten_days_ago),
         0, 'In Ten days, the item due yesterday will still be late' );
+};
+
+subtest 'item' => sub {
+    plan tests => 2;
+    my $item = $retrieved_checkout_1->item;
+    is( ref( $item ), 'Koha::Item', 'Koha::Checkout->item should return a Koha::Item' );
+    is( $item->itemnumber, $item_1->{itemnumber}, 'Koha::Checkout->item should return the correct item' );
 };
 
 $retrieved_checkout_1->delete;

@@ -25,6 +25,7 @@ use Carp;
 use Koha::Database;
 use DateTime;
 use Koha::DateUtils;
+use Koha::Items;
 
 use base qw(Koha::Object);
 
@@ -57,6 +58,20 @@ sub is_overdue {
       ? 1
       : 0;
     return $is_overdue;
+}
+
+=head3 item
+
+my $item = $checkout->item;
+
+Return the checked out item
+
+=cut
+
+sub item {
+    my ( $self ) = @_;
+    my $item_rs = $self->_result->item;
+    return Koha::Item->_new_from_dbic( $item_rs );
 }
 
 =head3 type
