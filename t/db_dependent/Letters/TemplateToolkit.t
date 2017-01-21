@@ -3,6 +3,7 @@
 # This file is part of Koha.
 #
 # Copyright (C) 2016 ByWater Solutions
+# Copyright (C) 2017 Koha Development Team
 #
 # Koha is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -18,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::Warn;
 
 use MARC::Record;
@@ -375,6 +376,24 @@ subtest 'regression tests' => sub {
         my $tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
         is( $tt_letter->content, $letter->content, 'Compare AR_* notices' );
         isnt( $tt_letter->message_id, $letter->message_id, 'Comparing AR_* notices should compare 2 different messages' );
+    };
+};
+
+subtest 'loops' => sub {
+    plan tests => 1;
+    my $code = "TEST";
+    my $module = "TEST";
+
+    subtest 'primary key is AI' => sub {
+        plan tests => 1;
+        my $patron_1 = $builder->build({ source => 'Borrower' });
+        my $patron_2 = $builder->build({ source => 'Borrower' });
+
+        my $template = q|[% FOREACH patron IN borrowers %][% patron.surname %][% END %]|;
+        reset_template( { template => $template, code => $code, module => $module } );
+        my $letter = GetPreparedLetter( module => $module, letter_code => $code, loops => { borrowers => [ $patron_1->{borrowernumber}, $patron_2->{borrowernumber} ] } );
+        my $expected_letter = join '', ( $patron_1->{surname}, $patron_2->{surname} );
+        is( $letter->{content}, $expected_letter, );
     };
 };
 

@@ -691,9 +691,10 @@ sub GetPreparedLetter {
 
     my $tables = $params{tables} || {};
     my $substitute = $params{substitute} || {};
+    my $loops  = $params{loops} || {}; # loops is not supported for history syntax
     my $repeat = $params{repeat};
-    %$tables || %$substitute || $repeat
-      or carp( "ERROR: nothing to substitute - both 'tables' and 'substitute' are empty" ),
+    %$tables || %$substitute || $repeat || %$loops
+      or carp( "ERROR: nothing to substitute - both 'tables', 'loops' and 'substitute' are empty" ),
          return;
     my $want_librarian = $params{want_librarian};
 
@@ -770,6 +771,7 @@ sub GetPreparedLetter {
         {
             content => $letter->{content},
             tables  => $tables,
+            loops  => $loops,
         }
     );
 
@@ -1440,6 +1442,7 @@ sub _process_tt {
 
     my $content = $params->{content};
     my $tables = $params->{tables};
+    my $loops = $params->{loops};
 
     my $use_template_cache = C4::Context->config('template_cache_dir') && defined $ENV{GATEWAY_INTERFACE};
     my $template           = Template->new(
@@ -1454,7 +1457,7 @@ sub _process_tt {
         }
     ) or die Template->error();
 
-    my $tt_params = _get_tt_params( $tables );
+    my $tt_params = { %{ _get_tt_params( $tables ) }, %{ _get_tt_params( $loops, 'is_a_loop' ) } };
 
     my $output;
     $template->process( \$content, $tt_params, \$output ) || croak "ERROR PROCESSING TEMPLATE: " . $template->error();
@@ -1463,9 +1466,10 @@ sub _process_tt {
 }
 
 sub _get_tt_params {
-    my ($tables) = @_;
+    my ($tables, $is_a_loop) = @_;
 
     my $params;
+    $is_a_loop ||= 0;
 
     my $config = {
         article_requests => {
@@ -1558,7 +1562,14 @@ sub _get_tt_params {
             my $pk = $config->{$table}->{pk};
             my $fk = $config->{$table}->{fk};
 
-            if ( $ref eq q{} || $ref eq 'HASH' ) {
+            if ( $is_a_loop ) {
+                unless ( ref( $tables->{$table} ) eq 'ARRAY' ) {
+                    croak "ERROR processing table $table. Wrong API call.";
+                }
+                my $objects = $module->search( { $pk => { -in => $tables->{$table} } } );
+                $params->{ $config->{$table}->{plural} } = $objects;
+            }
+            elsif ( $ref eq q{} || $ref eq 'HASH' ) {
                 my $id = ref $ref eq 'HASH' ? $tables->{$table}->{$pk} : $tables->{$table};
                 my $object;
                 if ( $fk ) { # Using a foreign key for lookup
