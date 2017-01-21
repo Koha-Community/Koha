@@ -689,15 +689,15 @@ sub GetPreparedLetter {
         or warn( "No $module $letter_code letter transported by " . $mtt ),
             return;
 
-    my $tables = $params{tables};
-    my $substitute = $params{substitute};
+    my $tables = $params{tables} || {};
+    my $substitute = $params{substitute} || {};
     my $repeat = $params{repeat};
-    $tables || $substitute || $repeat
+    %$tables || %$substitute || $repeat
       or carp( "ERROR: nothing to substitute - both 'tables' and 'substitute' are empty" ),
          return;
     my $want_librarian = $params{want_librarian};
 
-    if ($substitute) {
+    if (%$substitute) {
         while ( my ($token, $val) = each %$substitute ) {
             if ( $token eq 'items.content' ) {
                 $val =~ s|\n|<br/>|g if $letter->{is_html};
@@ -743,7 +743,7 @@ sub GetPreparedLetter {
         }
     }
 
-    if ($tables) {
+    if (%$tables) {
         _substitute_tables( $letter, $tables );
     }
 
