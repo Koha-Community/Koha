@@ -294,7 +294,11 @@
           { 'type': 'select', 'values': [% branches.json %] },
           { 'type': 'select', 'values': [% locations.json %] },
           { 'type': 'text' },
-          { 'type': 'select', 'values': [% notforloans.json %] },
+          [% IF notforloans.size %]
+              { 'type': 'select', 'values': [% notforloans.json %] },
+          [% ELSE %]
+              null,
+          [% END %]
           { 'type': 'text' },
           null
         ]
@@ -404,11 +408,13 @@
               options = ccodes
               empty_option = "All collection codes"
             %]
-            [% INCLUDE form_field_select
-              name="notforloan"
-              options = notforloans
-              empty_option = "All statuses"
-            %]
+            [% IF notforloans.size %]
+                [% INCLUDE form_field_select
+                  name="notforloan"
+                  options = notforloans
+                  empty_option = "All statuses"
+                %]
+            [% END %]
           </fieldset>
           <fieldset>
             [% INCLUDE form_field_select_text_block %]
