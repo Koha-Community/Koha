@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-12-15 09:17-0300\n"
-"PO-Revision-Date: 2016-12-17 09:57+0000\n"
+"POT-Creation-Date: 2017-01-15 21:34-0300\n"
+"PO-Revision-Date: 2017-01-21 08:01+0000\n"
 "Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
 "\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1481968668.000000\n"
+"X-POOTLE-MTIME: 1484985670.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -189,6 +189,41 @@ msgstr "%% (Pokud vynecháno, bude použita sleva od prodejce) "
 msgid "%% matches any number of characters"
 msgstr "%% pro libovolné množství znaků"
 
+#. %1$s: - USE KohaDates -
+#. %2$s: - INCLUDE csv_headers/acqui/lateorders.tt +
+#. %3$s:  FOREACH o IN orders 
+#. %4$s:  o.orderdate 
+#. %5$s:  o.latesince 
+#. %6$s:  o.estimateddeliverydate | $KohaDates 
+#. %7$s:  o.supplier (o.supplierid) 
+#. %8$s:  o.title 
+#. %9$s:  IF o.author 
+#. %10$s:  o.author 
+#. %11$s:  END 
+#. %12$s:  IF o.publisher 
+#. %13$s:  o.publisher 
+#. %14$s:  END 
+#. %15$s:  o.unitpricesupplier 
+#. %16$s:  o.quantity_to_receive 
+#. %17$s:  o.subtotal 
+#. %18$s:  o.budget 
+#. %19$s:  o.basketname 
+#. %20$s:  o.basketno 
+#. %21$s:  o.claims_count 
+#. %22$s:  o.claimed_date +
+#. %23$s:  END +
+#. %24$s:  orders.size 
+#: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
+#, c-format
+msgid ""
+"%s %s %s \"%s (%s days)\",\"%s\",\"%s\",\"%s %sAuthor: %s.%s%sPublished by: "
+"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,Total orders in "
+"late, %s "
+msgstr ""
+"%s %s %s \"%s (%s dní)\",\"%s\",\"%s\",\"%s %sAutor: %s.%s%sVydavatel: %s.%"
+"s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,Opožděné objednávky "
+"celkem, %s "
+
 #. %1$s: - USE Branches -
 #. %2$s: - USE Koha -
 #. %3$s: - biblio = item.biblio -
@@ -208,15 +243,14 @@ msgstr "%% pro libovolné množství znaků"
 #. %17$s:  item.stocknumber |html 
 #. %18$s:  item.status |html 
 #. %19$s:  (item.issues || 0) |html 
-#. %20$s:  INCLUDE 'empty_line.inc' 
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.csv.inc:1
 #, c-format
 msgid ""
 "%s %s %s %s \"%s %sby %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
-"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"%s "
+"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" "
 msgstr ""
-"%s %s %s %s \"%s %sod %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
-"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"%s "
+"%s %s %s %s \"%s %sod %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\""
+", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" "
 
 #. %1$s:  END 
 #. %2$s:  BLOCK form_field_select_text_block 
@@ -5687,43 +5721,6 @@ msgstr "%s | Stav: %s %s "
 msgid "%s%s %s %sNot checked out %s "
 msgstr "%s%s %s %sNebylo půjčeno %s "
 
-#. %1$s:  USE KohaDates 
-#. %2$s:  INCLUDE csv_headers/acqui/lateorders.tt 
-#. %3$s:  FOREACH o IN orders 
-#. %4$s:  INCLUDE 'empty_line.inc' 
-#. %5$s:  o.orderdate 
-#. %6$s:  o.latesince 
-#. %7$s:  o.estimateddeliverydate | $KohaDates 
-#. %8$s:  o.supplier (o.supplierid) 
-#. %9$s:  o.title 
-#. %10$s:  IF o.author 
-#. %11$s:  o.author 
-#. %12$s:  END 
-#. %13$s:  IF o.publisher 
-#. %14$s:  o.publisher 
-#. %15$s:  END 
-#. %16$s:  o.unitpricesupplier 
-#. %17$s:  o.quantity_to_receive 
-#. %18$s:  o.subtotal 
-#. %19$s:  o.budget 
-#. %20$s:  o.basketname 
-#. %21$s:  o.basketno 
-#. %22$s:  o.claims_count 
-#. %23$s:  o.claimed_date 
-#. %24$s:  END 
-#. %25$s:  INCLUDE 'empty_line.inc' 
-#. %26$s:  orders.size 
-#: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
-#, c-format
-msgid ""
-"%s%s %s%s\"%s (%s days)\",\"%s\",\"%s\",\"%s %sAuthor: %s.%s%sPublished by: "
-"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s %s ,,Total orders "
-"in late, %s "
-msgstr ""
-"%s%s %s%s\"%s (%s dní)\",\"%s\",\"%s\",\"%s %sAutor: %s.%s%sVydavatel: %s.%s"
-"\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s %s ,,Opožděné "
-"objednávky celkem, %s "
-
 #. %1$s:  END 
 #. %2$s:  IF op == 'add_form' 
 #. %3$s:  END 
@@ -5733,12 +5730,16 @@ msgstr ""
 msgid "%s%s &rsaquo; Create new list%s%s &rsaquo; Edit list "
 msgstr "%s%s &rsaquo; Vytvořit nový seznam%s%s &rsaquo; Upravit seznam "
 
+#. For the first occurrence,
 #. %1$s:  IF framework 
 #. %2$s:  framework.frameworktext 
 #. %3$s:  framework.frameworkcode 
 #. %4$s:  ELSE 
-#. %5$s:  END 
+#. %5$s:  END
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:42
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:45
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:47
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:50
 #, c-format
 msgid "%s%s (%s)%sDefault MARC framework%s"
 msgstr "%s%s (%s)%sVýchozí šablona MARC%s"
@@ -8293,7 +8294,7 @@ msgstr "&rsaquo; Poměry rezervací"
 msgid "&rsaquo; Holds to pull"
 msgstr "&rsaquo; Rezervace k vyzvednutí"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:55
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:56
 #, c-format
 msgid "&rsaquo; Images "
 msgstr "&rsaquo; Obrázky "
@@ -10339,7 +10340,7 @@ msgstr "Podrobnosti akvizice"
 msgid "Acquisition information"
 msgstr "Akviziční informace"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:52
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:55
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:94
 #, c-format
 msgid "Acquisition parameters"
@@ -11225,7 +11226,7 @@ msgstr "Další pole pro předplatného"
 msgid "Additional fields:"
 msgstr "Další pole:"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:70
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:73
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:111
 #, c-format
 msgid "Additional parameters"
@@ -11241,7 +11242,7 @@ msgstr "Další podpole (XML)"
 msgid "Additional thanks to..."
 msgstr "Další poděkování pro..."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:102
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:70
 #, c-format
 msgid "Additional tools"
@@ -13042,7 +13043,7 @@ msgstr "Hodnota \"%s\" je již použita v záznamu jiného čtenáře."
 msgid "Attribute: "
 msgstr "Atribut: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:77
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:80
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:77
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:121
 #, c-format
@@ -13347,7 +13348,7 @@ msgstr "Typ autority"
 msgid "Authority type: "
 msgstr "Typ autority: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:45
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:48
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:36
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:147
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:16
@@ -13401,7 +13402,7 @@ msgstr "Ověřená hodnota:"
 msgid "Authorized value: "
 msgstr "Ověřená hodnota: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:25
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:28
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:59
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:171
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:36
@@ -13436,7 +13437,7 @@ msgstr "Automatické objednávání"
 msgid "Auto-fill row"
 msgstr "Automaticky vyplnit řádek"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:74
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:138
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:29
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:56
@@ -13747,7 +13748,7 @@ msgstr "Základní úroveň vyčerpána"
 msgid "Basic constraints"
 msgstr "Skrýt pokročilá omezení"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:21
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:24
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:30
 #, c-format
 msgid "Basic parameters"
@@ -13995,7 +13996,7 @@ msgstr "Dávková úprava čtenářů "
 msgid "Batch item %sdeletion%smodification%s"
 msgstr "%sDávkové mazání%sDávková úprava%s jednotek"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:62
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:35
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:41
@@ -14009,7 +14010,7 @@ msgstr "Dávkové mazání jednotek"
 msgid "Batch item deletion results"
 msgstr "Výsledky dávkového mazání jednotek"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:65
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:62
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:69
@@ -14028,7 +14029,7 @@ msgstr "Výsledky dávkové úpravy jednotek"
 msgid "Batch modify"
 msgstr "Dávková úprava"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:47
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:42
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:49
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:66
 #, c-format
@@ -14043,7 +14044,7 @@ msgstr "Dávkové mazání/anonymizace čtenářů"
 msgid "Batch patron deletion/anonymization for %s"
 msgstr "Dávkové mazání/anonymizace čtenářů v knihovně %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:50
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:45
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:54
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:139
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:147
@@ -14062,7 +14063,7 @@ msgstr "Výsledky dávkové úpravy čtenářů"
 msgid "Batch patrons results"
 msgstr "Výsledky zpracování dávky"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:68
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:82
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
@@ -14070,7 +14071,7 @@ msgstr "Výsledky zpracování dávky"
 msgid "Batch record deletion"
 msgstr "Dávkové mazání záznamů"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:71
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:133
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:86
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:93
@@ -14633,7 +14634,7 @@ msgstr "Rozpočtové náklady"
 msgid "Budgeted cost: "
 msgstr "Rozpočtové náklady: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:56
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:59
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:6
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:219
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:227
@@ -14845,7 +14846,7 @@ msgstr "ID CSV profilu"
 msgid "CSV profile: "
 msgstr "CSV profil: "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:108
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:103
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:224
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:78
 #, c-format
@@ -14887,7 +14888,7 @@ msgstr "Vypršení cache:"
 msgid "Calculated on %s. From %s to %s"
 msgstr "Vypočítáno dne %s. Od %s do %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:105
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:100
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
 #, c-format
 msgid "Calendar"
@@ -15800,9 +15801,9 @@ msgstr "Statistika pokladny od %s do %s"
 msgid "Cassette recording"
 msgstr "Záznamy na kazetě"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:39
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:42
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:10
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:59
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:54
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:135
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:68
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:103
@@ -17011,7 +17012,7 @@ msgstr "Upozornění na výpůjčky pro %s"
 msgid "Circulation and fine rules"
 msgstr "Pravidla výpůjček a upomínek"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:31
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:34
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:45
 #, c-format
 msgid "Circulation and fines rules"
@@ -17074,7 +17075,7 @@ msgstr "Citace"
 msgid "Cities"
 msgstr "Města"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:36
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:39
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:56
 #, c-format
 msgid "Cities and towns"
@@ -17218,7 +17219,7 @@ msgstr "Pravidla zápisu klasifikace"
 msgid "Classification source code: "
 msgstr "Zdrojový kód klasifikace: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:46
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:49
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:80
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:29
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:192
@@ -17929,7 +17930,7 @@ msgstr ""
 "Sloupce musí být vyplněny zleva doprava: jestliže je první sloupec prázdný, "
 "ostatní budou ignorovány. "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:76
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:79
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:115
 #, c-format
 msgid "Columns settings"
@@ -17986,7 +17987,7 @@ msgstr "Poznámka: "
 msgid "Commenter "
 msgstr "Autor komentáře "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:32
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:27
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:442
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:24
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:430
@@ -19116,7 +19117,7 @@ msgstr "Měny"
 msgid "Currencies &amp; Exchange rates"
 msgstr "Měny &amp; směnné kurzy"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:55
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:58
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:193
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:96
 #, c-format
@@ -20159,8 +20160,8 @@ msgstr "Zpoždění je počet dní po datu výpůjčky než se spustí akce. "
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:383
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:99
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:249
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:127
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:138
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:128
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:139
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:213
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:413
 #: intranet-tmpl/prog/en/modules/members/files.tt:47
@@ -20214,7 +20215,7 @@ msgstr "Smazat CSV profil \"%s?\""
 msgid "Delete EAN %s for %s?"
 msgstr "Odstranit EAN %s pro %s?"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:107
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:108
 #, c-format
 msgid "Delete Images"
 msgstr "Odstranit obrázky"
@@ -20419,7 +20420,7 @@ msgid "Delete remote"
 msgstr "Odstranit v centrální databázi"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:644
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:153
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:154
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:397
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:267
 #, c-format
@@ -20931,7 +20932,7 @@ msgstr "Nedošlo ke kontrole shody s existujícími záznamy v katalogu"
 msgid "Did you mean: "
 msgstr "Měli jste na mysli: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:75
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:78
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:81
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:117
 #, c-format
@@ -21546,7 +21547,7 @@ msgstr "EAN:"
 msgid "EAN: "
 msgstr "EAN: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:58
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:61
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:14
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:25
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:27
@@ -22999,7 +23000,7 @@ msgstr "Exportovat výpůjčky ve formátu:"
 msgid "Export configuration"
 msgstr "Exportovat nastavení"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:77
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:143
 #, c-format
 msgid "Export data"
@@ -23525,7 +23526,7 @@ msgid "File: "
 msgstr "Soubor: "
 
 #. %1$s:  SOURCE_FILE 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:98
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:99
 #, c-format
 msgid "File: %s"
 msgstr "Soubor: %s"
@@ -24434,7 +24435,7 @@ msgstr "Fond: "
 msgid "Fund: %s"
 msgstr "Fond: %s"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:57
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:60
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:7
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:70
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:273
@@ -25507,7 +25508,7 @@ msgstr "Každoročně opakovaná uzavírka"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:167
 #: intranet-tmpl/prog/en/modules/patroncards/home.tt:9
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:43
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:53
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:54
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:113
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:43
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:176
@@ -26300,7 +26301,7 @@ msgstr "Obrázek 1"
 msgid "Image 2"
 msgstr "Obrázek 2"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:123
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:124
 #, c-format
 msgid "Image ID"
 msgstr "Id obrázku"
@@ -26310,13 +26311,13 @@ msgstr "Id obrázku"
 msgid "Image file"
 msgstr "Soubor obrázku"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:84
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:85
 #, c-format
 msgid "Image name: "
 msgstr "Název obrázku: "
 
 #. %1$s:  IMAGE_NAME 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:99
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:100
 #, c-format
 msgid "Image name: %s"
 msgstr "Název obrázku: %s"
@@ -26395,7 +26396,7 @@ msgstr "Obrázek se neimportoval, protože čtenář v databázi neexistuje. %s"
 msgid "Image source: "
 msgstr "Zdroj: "
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:97
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:98
 #, c-format
 msgid "Image successfully uploaded"
 msgstr "Obrázek byl úspěšně nahrán"
@@ -26405,8 +26406,8 @@ msgstr "Obrázek byl úspěšně nahrán"
 msgid "Image upload results :"
 msgstr "Výsledky nahrání obrázku:"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:157
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:169
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:158
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:170
 #, c-format
 msgid "Image(s) successfully deleted"
 msgstr "Čtenářův obrázek byl úspěšně vymazán"
@@ -26516,7 +26517,7 @@ msgstr "Import do tabulky čtenářů"
 msgid "Import patron data"
 msgstr "Import údajů o uživatelích"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:35
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:30
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:27
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:35
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:29
@@ -26974,7 +26975,7 @@ msgstr "Neplatná hodnota pro %s"
 msgid "Invalid year entered in field %s"
 msgstr "Zadán neplatný rok v poli %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:80
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:148
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:100
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:107
@@ -27298,7 +27299,7 @@ msgstr "Signatura jednotky:"
 msgid "Item checked out"
 msgstr "Jednotka vypůjčena"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:35
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:38
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:103
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:54
 #, c-format
@@ -27537,7 +27538,7 @@ msgstr "Hledání jednotek"
 msgid "Item search field: %s"
 msgstr "Pole pro vyhledávání jednotek: %s"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:49
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:52
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:58
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:12
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:86
@@ -27682,7 +27683,7 @@ msgstr "Typ jednotky:"
 msgid "Item type: "
 msgstr "Typ jednotky: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:24
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:27
 #: intranet-tmpl/prog/en/includes/facets.inc:19
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:65
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:67
@@ -28176,7 +28177,7 @@ msgstr "Klíčové slovo:"
 msgid "Keyword: "
 msgstr "Klíčové slovo: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:43
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:46
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:74
 #, c-format
 msgid "Keywords to MARC mapping"
@@ -30744,7 +30745,7 @@ msgstr "Tým Koha"
 msgid "Koha to MARC Mapping"
 msgstr "Mapování polí Koha na MARC"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:42
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:45
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:72
 #, c-format
 msgid "Koha to MARC mapping"
@@ -30878,7 +30879,7 @@ msgstr "Dávka štítků"
 msgid "Label batches"
 msgstr "Dávky štítků"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:83
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:180
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:45
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:99
@@ -31254,7 +31255,7 @@ msgstr "Knihovník:"
 msgid "Libraries"
 msgstr "Knihovny"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:23
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:26
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:64
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:32
 #, c-format
@@ -31321,7 +31322,7 @@ msgstr "Knihovna "
 msgid "Library %s - %s Checkin and transfer policy"
 msgstr "Knihovny %s - %s Politika příjmu a převozů"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:59
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:62
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:15
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:25
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:27
@@ -31358,7 +31359,7 @@ msgstr "Knihovna čtenáře:"
 msgid "Library set-up"
 msgstr "Nastavení knihovny"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:33
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:36
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:50
 #, c-format
 msgid "Library transfer limits"
@@ -31855,7 +31856,7 @@ msgstr "Přihlásit se jako jiný uživatel"
 msgid "Log out"
 msgstr "Odhlásit se"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:111
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:106
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:83
 #, c-format
 msgid "Log viewer"
@@ -32092,13 +32093,13 @@ msgstr "MARC XML blob"
 msgid "MARC biblio : %s ( %s )"
 msgstr "Bibliografický záznam MARC : %s ( %s )"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:41
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:44
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:70
 #, c-format
 msgid "MARC bibliographic framework"
 msgstr "Katalogizační šablony MARC"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:44
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:47
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:19
 #, c-format
 msgid "MARC bibliographic framework test"
@@ -32351,7 +32352,7 @@ msgstr "Správa CSV profilů pro export"
 msgid "Manage Koha system settings (Administration panel)"
 msgstr "Spravovat nastavení systému Koha (Administrátorský panel)"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:90
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
 #, c-format
 msgid "Manage MARC modification templates"
 msgstr "Modifikační šablony MARC"
@@ -32479,7 +32480,7 @@ msgstr "Spravovat poplatky čtenářů"
 msgid "Manage periods"
 msgstr "Spravovat období"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:66
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:69
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:62
 #, c-format
 msgid "Manage plugins"
@@ -33742,7 +33743,7 @@ msgstr "NEVRÁCENO"
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:77
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:172
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:38
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:75
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:121
 #, c-format
 msgid "NOTE:"
@@ -33798,7 +33799,7 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:81
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:56
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:128
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:125
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:126
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #: intranet-tmpl/prog/en/modules/members/member.tt:394
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:53
@@ -34405,7 +34406,7 @@ msgstr "Nová hodnota: %s %s. %s Dostupné k vypůjčení. %s "
 msgid "New vendor"
 msgstr "Nový dodavatel"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:114
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:109
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:192
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:61
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
@@ -34806,7 +34807,7 @@ msgstr "Ne, pokud to nastavení umožní"
 msgid "No image: "
 msgstr "Bez obrázku: "
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:164
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:165
 #, c-format
 msgid "No images are currently available. "
 msgstr "Žádné obrázky nejsou momentálně dostupné. "
@@ -35650,7 +35651,7 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1190
 msgid "Note: Quick add guarantor form populates address fields in full form"
-msgstr ""
+msgstr "Poznámka: Rychlé přidání garanta zobrazí úplný formulář pro adresu."
 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:207
 #, c-format
@@ -35804,7 +35805,7 @@ msgstr "Upozornění"
 msgid "Notices &amp; Slips"
 msgstr "Oznámení &amp; potvrzení"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:38
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:33
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:34
 #, c-format
 msgid "Notices &amp; slips"
@@ -36123,7 +36124,7 @@ msgstr "mapování OAI sady"
 msgid "OAI sets"
 msgstr "Sady OAI"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:48
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:51
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:46
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:84
@@ -36549,7 +36550,7 @@ msgstr "Podporované formáty jsou pouze PNG, GIF, JPEG, XPM."
 msgid "Only PNG, GIF, JPEG, XPM formats are supported. "
 msgstr "Podporované formáty jsou pouze PNG, GIF, JPEG, XPM. "
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:75
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
 #, c-format
 msgid "Only PNG, GIF, JPEG, XPM formats are supported. Images "
 msgstr "Podporované formáty jsou pouze PNG, GIF, JPEG, XPM. Obrázky "
@@ -37068,7 +37069,7 @@ msgstr "Max. výše upomínky (Kč)"
 msgid "Overdue notice required: "
 msgstr "Vyžadovaná upomínka: "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:36
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:39
 #, c-format
 msgid "Overdue notice/status triggers"
@@ -37395,7 +37396,7 @@ msgstr "Aktivita čtenáře"
 msgid "Patron attribute type code: "
 msgstr "Kód typu vlastností čtenáře: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:32
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:35
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:31
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:223
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:48
@@ -37415,10 +37416,10 @@ msgstr "Atributy čtenáře"
 msgid "Patron attributes: "
 msgstr "Atributy čtenáře: "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:39
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:169
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:45
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:55
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:56
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:115
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:45
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:178
@@ -37432,7 +37433,7 @@ msgstr "Tvorba čtenářských průkazů"
 msgid "Patron card number"
 msgstr "Číslo čtenářského průkazu"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:30
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:33
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:24
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:25
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:26
@@ -37670,7 +37671,7 @@ msgstr "Knihovna čtenáře"
 msgid "Patron list: "
 msgstr "Seznam čtenářů: "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:29
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:24
 #: intranet-tmpl/prog/en/includes/patron-toolbar.inc:22
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:72
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:15
@@ -37972,8 +37973,8 @@ msgstr "Čtenář: "
 msgid "Patrons"
 msgstr "Čtenáři"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:28
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:26
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:31
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:21
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:40
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:16
 #, c-format
@@ -39154,8 +39155,8 @@ msgstr "Vyberte, prosím, alespoň jednu položku k odstranění"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:4
-msgid "Please select image(s) to %s."
-msgstr "Vyberte prosím obrázky do %s."
+msgid "Please select image(s) to delete."
+msgstr "Vyberte prosím obrázky určené k odstranění."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:28
@@ -39252,7 +39253,7 @@ msgstr "Zásuvný modul:"
 msgid "Plugin: "
 msgstr "Zásuvný modul: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:63
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:66
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:60
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:13
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:39
@@ -40287,14 +40288,14 @@ msgstr "Rychlé přidání"
 msgid "Quick add new patron "
 msgstr "Rychlé přidání čtenáře "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:84
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:79
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:15
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:158
 #, c-format
 msgid "Quick spine label creator"
 msgstr "Rychlá tvorba štítků"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:120
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:115
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:203
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:313
 #, c-format
@@ -40575,7 +40576,7 @@ msgstr "Shoda záznamů selhala -- nelze získat vybrané porovnávací pravidlo
 msgid "Record matching rule:"
 msgstr "Pravidlo shody záznamů:"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:47
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:50
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:208
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:605
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:82
@@ -41983,7 +41984,7 @@ msgstr "Romina Racca"
 msgid "Ron Wickersham"
 msgstr "Ron Wickersham"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:87
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:163
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:10
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:41
@@ -42156,7 +42157,7 @@ msgstr "Zasílání SMS"
 msgid "SMS alert number"
 msgstr "SMS číslo:"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:79
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:82
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:30
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:124
 #, c-format
@@ -43535,7 +43536,7 @@ msgstr "Vyberte poznámku"
 msgid "Select notice:"
 msgstr "Vyberte poznámku:"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:111
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:112
 #, c-format
 msgid "Select one or more images to delete. "
 msgstr "Vyberte jeden nebo více obrázků k vymazání. "
@@ -43603,7 +43604,7 @@ msgid "Select the file to stage: "
 msgstr "Vyberte soubor k načtení: "
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:41
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:79
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:80
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:300
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:139
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:96
@@ -44941,7 +44942,7 @@ msgstr "Poznámka pro knihovníky"
 msgid "Staff note:"
 msgstr "Poznámka pro knihovníky:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:93
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
 #, c-format
 msgid "Stage MARC for import"
 msgstr "Připravit MARC pro import"
@@ -44986,7 +44987,7 @@ msgstr "Vložit záznamy do zásobníku"
 msgid "Staged"
 msgstr "Připraveno"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:96
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
 #, c-format
 msgid "Staged MARC management"
 msgstr "Správa připravených MARC záznamů"
@@ -46315,8 +46316,8 @@ msgstr ""
 msgid "System preference search:"
 msgstr "Hledat v systémových nastaveních:"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:16
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:18
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:19
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:21
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:87
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:88
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:70
@@ -46487,7 +46488,7 @@ msgstr "Editor tagů"
 msgid "Tag has no subfields"
 msgstr "Pole neobsahuje žádná podpole"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:53
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:48
 #, c-format
 msgid "Tag moderation"
 msgstr "Moderování štítků"
@@ -46560,7 +46561,7 @@ msgstr "Server"
 msgid "Target (database) record check field"
 msgstr "Kontrolní pole cílového záznamu (databáze)"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:117
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:112
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:17
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:35
@@ -48390,7 +48391,7 @@ msgstr ""
 "K tomuto dodavateli nemáte uložený e-mail , na který by bylo možné poslat "
 "upozornění na pozdní vydání."
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:85
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:86
 #, c-format
 msgid ""
 "This will be the name by which you will refer to this image in the patron "
@@ -49054,7 +49055,7 @@ msgstr ""
 "Příliš mnoho prezenčních výpůjček. Aktuální počet výpůjček je %s, ale "
 "povoleno je pouze %s."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:123
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:118
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
 #, c-format
 msgid "Tool plugins"
@@ -49080,7 +49081,7 @@ msgstr "Zásuvné moduly"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:168
 #: intranet-tmpl/prog/en/modules/patroncards/home.tt:10
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:44
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:54
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:55
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:114
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:44
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:177
@@ -49121,7 +49122,7 @@ msgstr "Zásuvné moduly"
 msgid "Tools"
 msgstr "Nástroje"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:24
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:19
 #, c-format
 msgid "Tools home"
 msgstr "Všechny nástroje"
@@ -49565,7 +49566,7 @@ msgstr "Překlady"
 msgid "Transport"
 msgstr "Přenos"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:34
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:37
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:52
 #, c-format
 msgid "Transport cost matrix"
@@ -50092,7 +50093,7 @@ msgstr "Aktualizuje se struktura databáze"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:257
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:259
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:47
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:93
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:94
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:305
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:148
@@ -50125,7 +50126,7 @@ msgstr "Načíst nový soubor"
 msgid "Upload another KOC file"
 msgstr "Načíst další soubor *.koc"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:126
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:121
 #: intranet-tmpl/prog/en/includes/permissions.inc:104
 #, c-format
 msgid "Upload any file"
@@ -50165,13 +50166,13 @@ msgstr "Soubor k importu:"
 msgid "Upload image"
 msgstr "Načíst obrázek"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:71
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:72
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:92
 #, c-format
 msgid "Upload images"
 msgstr "Načíst obrázky"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:99
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:183
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:66
@@ -50209,7 +50210,7 @@ msgstr "Načtení souboru (.koc) s offline záznamem výpůjček"
 msgid "Upload patron image"
 msgstr "Načtení fotografie čtenáře"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:56
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:51
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:64
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:31
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:104
@@ -51414,9 +51415,8 @@ msgstr "Šablona: "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-#, fuzzy
 msgid "With selected search: "
-msgstr "%s Vybraných hledání: "
+msgstr "Vybraná hledání: "
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:716
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:250
@@ -52542,7 +52542,7 @@ msgstr "Hledat Z39.50/SRU servery:"
 msgid "Z39.50/SRU server updated (%s)"
 msgstr "Nastavení serveru Z39.50/SRU bylo aktualizováno (%s)"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:74
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:77
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:97
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:115
 #, c-format
@@ -53199,7 +53199,7 @@ msgstr "basketgroup"
 msgid "batch_anonymise.pl"
 msgstr "batch_anonymise.pl"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:75
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
 #, c-format
 msgid "be less than 500KB. "
 msgstr "být menší než 500 KB. "
@@ -54367,7 +54367,7 @@ msgstr "změněno"
 msgid "months "
 msgstr "měsíců "
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:75
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
 #, c-format
 msgid "must"
 msgstr "musí"

@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inlibro-fr-CA-i-staff-t-prog-v-30611\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-15 10:06-0300\n"
-"PO-Revision-Date: 2016-12-19 19:49+0000\n"
+"POT-Creation-Date: 2017-01-15 21:52-0300\n"
+"PO-Revision-Date: 2017-01-20 20:06+0000\n"
 "Last-Translator: Marjorie <marjorie.barry-vila@ccsr.qc.ca>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1482176959.000000\n"
+"X-POOTLE-MTIME: 1484942800.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -199,6 +199,41 @@ msgstr "%% (Si vide, le rabais du fournisseur sera appliqué) "
 msgid "%% matches any number of characters"
 msgstr "%% Correspond à chaque nombre de caractères"
 
+#. %1$s: - USE KohaDates -
+#. %2$s: - INCLUDE csv_headers/acqui/lateorders.tt +
+#. %3$s:  FOREACH o IN orders 
+#. %4$s:  o.orderdate 
+#. %5$s:  o.latesince 
+#. %6$s:  o.estimateddeliverydate | $KohaDates 
+#. %7$s:  o.supplier (o.supplierid) 
+#. %8$s:  o.title 
+#. %9$s:  IF o.author 
+#. %10$s:  o.author 
+#. %11$s:  END 
+#. %12$s:  IF o.publisher 
+#. %13$s:  o.publisher 
+#. %14$s:  END 
+#. %15$s:  o.unitpricesupplier 
+#. %16$s:  o.quantity_to_receive 
+#. %17$s:  o.subtotal 
+#. %18$s:  o.budget 
+#. %19$s:  o.basketname 
+#. %20$s:  o.basketno 
+#. %21$s:  o.claims_count 
+#. %22$s:  o.claimed_date +
+#. %23$s:  END +
+#. %24$s:  orders.size 
+#: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
+#, c-format
+msgid ""
+"%s %s %s \"%s (%s days)\",\"%s\",\"%s\",\"%s %sAuthor: %s.%s%sPublished by: "
+"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,Total orders in "
+"late, %s "
+msgstr ""
+"%s %s %s \"%s (%s jours)\",\"%s\",\"%s\",\"%s %sAuteur: %s.%s%sPublié par: "
+"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,Total des "
+"commandes en retard, %s "
+
 #. %1$s: - USE Branches -
 #. %2$s: - USE Koha -
 #. %3$s: - biblio = item.biblio -
@@ -218,15 +253,14 @@ msgstr "%% Correspond à chaque nombre de caractères"
 #. %17$s:  item.stocknumber |html 
 #. %18$s:  item.status |html 
 #. %19$s:  (item.issues || 0) |html 
-#. %20$s:  INCLUDE 'empty_line.inc' 
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.csv.inc:1
 #, c-format
 msgid ""
 "%s %s %s %s \"%s %sby %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
-"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"%s "
+"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" "
 msgstr ""
-"%s %s %s %s \"%s %spar %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
-"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"%s "
+"%s %s %s %s \"%s %spar %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\""
+", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" "
 
 #. %1$s:  END 
 #. %2$s:  BLOCK form_field_select_text_block 
@@ -1316,7 +1350,7 @@ msgstr ""
 "valeur autorisée existe peut être déjà. %s Une erreur s'est produite en "
 "supprimant cette valeur autorisée. Cette valeur ou catégorie existe peut "
 "être déjà %s Une erreur s'est produite en supprimant cette valeur autorisée. "
-"Vérifier les journeaux de transactions. %sValeur autorisée mise à jour avec "
+"Vérifier les journaux de transactions. %sValeur autorisée mise à jour avec "
 "succès. %s Valeur autorisée ajoutée avec succès. %sValeur autorisée "
 "supprimée avec succès. %s Cette valeur autorisée existe déjà %s %s %s "
 
@@ -4835,7 +4869,7 @@ msgstr "%s Code postal&nbsp;: "
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:634
 #, c-format
 msgid "%s [#%% Branch-specific %%#] %s "
-msgstr ""
+msgstr "%s [#%% Branch-specific %%#] %s "
 
 #. %1$s:  FOREACH encoding IN encodings 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:162
@@ -5742,43 +5776,6 @@ msgstr "%s | Statut : %s %s "
 msgid "%s%s %s %sNot checked out %s "
 msgstr "%s%s %s %sPas prêté %s "
 
-#. %1$s:  USE KohaDates 
-#. %2$s:  INCLUDE csv_headers/acqui/lateorders.tt 
-#. %3$s:  FOREACH o IN orders 
-#. %4$s:  INCLUDE 'empty_line.inc' 
-#. %5$s:  o.orderdate 
-#. %6$s:  o.latesince 
-#. %7$s:  o.estimateddeliverydate | $KohaDates 
-#. %8$s:  o.supplier (o.supplierid) 
-#. %9$s:  o.title 
-#. %10$s:  IF o.author 
-#. %11$s:  o.author 
-#. %12$s:  END 
-#. %13$s:  IF o.publisher 
-#. %14$s:  o.publisher 
-#. %15$s:  END 
-#. %16$s:  o.unitpricesupplier 
-#. %17$s:  o.quantity_to_receive 
-#. %18$s:  o.subtotal 
-#. %19$s:  o.budget 
-#. %20$s:  o.basketname 
-#. %21$s:  o.basketno 
-#. %22$s:  o.claims_count 
-#. %23$s:  o.claimed_date 
-#. %24$s:  END 
-#. %25$s:  INCLUDE 'empty_line.inc' 
-#. %26$s:  orders.size 
-#: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
-#, c-format
-msgid ""
-"%s%s %s%s\"%s (%s days)\",\"%s\",\"%s\",\"%s %sAuthor: %s.%s%sPublished by: "
-"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s %s ,,Total orders "
-"in late, %s "
-msgstr ""
-"&%s%s %s%s\"%s (%s jours)\",\"%s\",\"%s\",\"%s %sAuteur&nbsp;: %s.%s%sPublié "
-"par&nbsp;: %s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s %s ,,"
-"Total des commandes en retard, %s "
-
 #. %1$s:  END 
 #. %2$s:  IF op == 'add_form' 
 #. %3$s:  END 
@@ -5788,12 +5785,16 @@ msgstr ""
 msgid "%s%s &rsaquo; Create new list%s%s &rsaquo; Edit list "
 msgstr "%s%s &rsaquo; Créer une nouvelle liste%s%s &rsaquo; Modifier la liste "
 
+#. For the first occurrence,
 #. %1$s:  IF framework 
 #. %2$s:  framework.frameworktext 
 #. %3$s:  framework.frameworkcode 
 #. %4$s:  ELSE 
-#. %5$s:  END 
+#. %5$s:  END
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:42
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:45
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:47
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:50
 #, c-format
 msgid "%s%s (%s)%sDefault MARC framework%s"
 msgstr "%s%s (%s)%sGrille MARC par défaut%s"
@@ -7464,9 +7465,9 @@ msgstr "&rsaquo; %s %s Prêt par lot %s "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; %s %s MARC modification templates %s "
-msgstr "&rsaquo; Modèle de modifications MARC"
+msgstr "&rsaquo; %s %s Modèles de modification MARC %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( else ) 
@@ -8367,7 +8368,7 @@ msgstr "&rsaquo; Ratios de réservations"
 msgid "&rsaquo; Holds to pull"
 msgstr "&rsaquo; Réservations à traiter"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:55
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:56
 #, c-format
 msgid "&rsaquo; Images "
 msgstr "&rsaquo; Images"
@@ -10388,7 +10389,7 @@ msgstr "Détails financiers"
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:257
 #, c-format
 msgid "Accruing fine"
-msgstr "Accumuler des amendes"
+msgstr "Amendes accumulées"
 
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:117
 #: intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:9
@@ -10440,7 +10441,7 @@ msgstr "Détails d'acquisitions"
 msgid "Acquisition information"
 msgstr "Informations d'acquisition"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:52
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:55
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:94
 #, c-format
 msgid "Acquisition parameters"
@@ -11330,7 +11331,7 @@ msgstr "Zones supplémentaires pour les abonnements"
 msgid "Additional fields:"
 msgstr "Zones supplémentaires&nbsp;:"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:70
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:73
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:111
 #, c-format
 msgid "Additional parameters"
@@ -11347,7 +11348,7 @@ msgid "Additional thanks to..."
 msgstr "Remerciements à..."
 
 #
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:102
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:97
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:70
 #, c-format
 msgid "Additional tools"
@@ -11878,9 +11879,9 @@ msgstr "Tous les mots-clés"
 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:102
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid "All transactions"
-msgstr "Afficher toutes les transactions"
+msgstr "Toutes les transactions"
 
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:176
 #, c-format
@@ -12647,11 +12648,10 @@ msgstr "Êtes vous sûr de vouloir supprimer les %s exemplaires attachés?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-#, fuzzy
 msgid "Are you sure you want to delete the %s selected search history entries?"
 msgstr ""
-"Êtes-vous sûr de vouloir supprimer les entrées sélectionnées dans votre "
-"historique de recherche?"
+"Êtes-vous sûr de vouloir supprimer le(s) %s entrée(s) sélectionnée(s) de "
+"votre historique de recherche?"
 
 #. %1$s:  category.codedescription 
 #. %2$s:  category.categorycode 
@@ -12692,7 +12692,6 @@ msgstr "Êtes vous sûr de vouloir supprimer cet exemplaire? "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
-#, fuzzy
 msgid "Are you sure you want to delete the selected search history entry?"
 msgstr ""
 "Êtes-vous sûr de vouloir supprimer les entrées sélectionnées dans votre "
@@ -13191,7 +13190,7 @@ msgstr ""
 msgid "Attribute: "
 msgstr "Attribut&nbsp;: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:77
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:80
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:77
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:121
 #, c-format
@@ -13498,7 +13497,7 @@ msgstr "Type d'autorité"
 msgid "Authority type: "
 msgstr "Type d'autorité&nbsp;:"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:45
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:48
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:36
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:147
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:16
@@ -13553,7 +13552,7 @@ msgstr "Valeur autorisée&nbsp;:"
 msgid "Authorized value: "
 msgstr "Valeur autorisée&nbsp;: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:25
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:28
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:59
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:171
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:36
@@ -13588,7 +13587,7 @@ msgstr "Commande automatique"
 msgid "Auto-fill row"
 msgstr "Ligne remplie automatiquement"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:74
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:69
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:138
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:29
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:56
@@ -13899,7 +13898,7 @@ msgstr "Niveau de base facturé"
 msgid "Basic constraints"
 msgstr "Contraintes de base"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:21
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:24
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:30
 #, c-format
 msgid "Basic parameters"
@@ -14152,7 +14151,7 @@ msgstr "Modification par lots d'utilisateurs"
 msgid "Batch item %sdeletion%smodification%s"
 msgstr "%sSuppression%sModification%s d'exemplaires par lots"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:62
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:57
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:118
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:35
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:41
@@ -14166,7 +14165,7 @@ msgstr "Suppression d'exemplaires par lot"
 msgid "Batch item deletion results"
 msgstr "Résultats de la suppression par lot"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:65
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:60
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:123
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:62
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:69
@@ -14185,7 +14184,7 @@ msgstr "Résultats de la modification par lot"
 msgid "Batch modify"
 msgstr "Modification par lots"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:47
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:42
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:49
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:66
 #, c-format
@@ -14200,7 +14199,7 @@ msgstr "Suppression/Rendre anonyme un lot d'utilisateurs"
 msgid "Batch patron deletion/anonymization for %s"
 msgstr "Suppression/rendre anonyme un lot d'utilisateurs pour %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:50
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:45
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:54
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:139
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:147
@@ -14219,7 +14218,7 @@ msgstr "Modification d'un lot d'utilisateurs"
 msgid "Batch patrons results"
 msgstr "Résultats du lot d'utilisateurs"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:68
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:82
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
@@ -14227,7 +14226,7 @@ msgstr "Résultats du lot d'utilisateurs"
 msgid "Batch record deletion"
 msgstr "Suppression de notices par lot"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:71
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:66
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:133
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:86
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:93
@@ -14357,7 +14356,7 @@ msgstr "Numéro de Biblio (interne)"
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:235
 #, c-format
 msgid "Biblio title"
-msgstr "Titre de biblio"
+msgstr "Titre de la notice"
 
 #: intranet-tmpl/prog/en/columns.def:127
 #, c-format
@@ -14798,7 +14797,7 @@ msgstr "Coût budgété"
 msgid "Budgeted cost: "
 msgstr "Coût budgété&nbsp;:"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:56
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:59
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:6
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:219
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:227
@@ -15011,7 +15010,7 @@ msgstr "Profil CSV"
 msgid "CSV profile: "
 msgstr "Profil CSV&nbsp;:"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:108
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:103
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:224
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:78
 #, c-format
@@ -15054,7 +15053,7 @@ msgstr "Expiration du cache"
 msgid "Calculated on %s. From %s to %s"
 msgstr "Calculé sur %s entre  %s et %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:105
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:100
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:73
 #, c-format
 msgid "Calendar"
@@ -15965,20 +15964,20 @@ msgstr "Identifiant CAS "
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:38
 #, c-format
 msgid "Cash register"
-msgstr "Caisse enregistreuse"
+msgstr "Rapport de caisse"
 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:69
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:81
 #, c-format
 msgid "Cash register statistics"
-msgstr "Statistiques sur la caisse enregistreuse"
+msgstr "Statistiques sur la caisse"
 
 #. %1$s:  beginDate | $KohaDates 
 #. %2$s:  endDate | $KohaDates 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:84
 #, c-format
 msgid "Cash register statistics %s to %s"
-msgstr "Statistiques de la caisse enregistreuse %s à %s"
+msgstr "Statistiques de la caisse  %s à %s"
 
 #
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:210
@@ -15986,9 +15985,9 @@ msgstr "Statistiques de la caisse enregistreuse %s à %s"
 msgid "Cassette recording"
 msgstr "Cassette audio"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:39
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:42
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:10
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:59
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:54
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:135
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:68
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:103
@@ -16836,7 +16835,7 @@ msgstr "Prêt(s)"
 #, c-format
 msgid "Checkouts are BLOCKED because fine balance is OVER THE LIMIT."
 msgstr ""
-"Les prêts sont BLOQUÉS parce que la balance des amendes a DEPASSÉE LA LIMITE."
+"Les prêts sont BLOQUÉS parce que le total des amendes a DÉPASSÉE LA LIMITE."
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:531
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:264
@@ -17214,7 +17213,7 @@ msgstr "Alertes de circulation pour %s"
 msgid "Circulation and fine rules"
 msgstr "Règles de circulation et d'amendes"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:31
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:34
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:45
 #, c-format
 msgid "Circulation and fines rules"
@@ -17278,7 +17277,7 @@ msgid "Cities"
 msgstr "Villes"
 
 #
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:36
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:39
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:56
 #, c-format
 msgid "Cities and towns"
@@ -17422,7 +17421,7 @@ msgstr "Règles de classement de la classification"
 msgid "Classification source code: "
 msgstr "Code source de classification&nbsp;:"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:46
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:49
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:80
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:29
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:192
@@ -18143,7 +18142,7 @@ msgstr ""
 "colonne est vierge, les autres seront ignorées"
 
 #
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:76
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:79
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:115
 #, c-format
 msgid "Columns settings"
@@ -18200,7 +18199,7 @@ msgstr "Commentaire&nbsp;: "
 msgid "Commenter "
 msgstr "Commentateur "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:32
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:27
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:442
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:24
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:430
@@ -19357,7 +19356,7 @@ msgstr "Devises"
 msgid "Currencies &amp; Exchange rates"
 msgstr "Devises et taux de change"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:55
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:58
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:193
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:96
 #, c-format
@@ -20417,8 +20416,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:383
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:99
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:249
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:127
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:138
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:128
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:139
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:213
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:413
 #: intranet-tmpl/prog/en/modules/members/files.tt:47
@@ -20472,7 +20471,7 @@ msgstr "Supprimer le profil CSV \"%s?\""
 msgid "Delete EAN %s for %s?"
 msgstr "Supprimer l'EAN %s pour %s ?"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:107
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:108
 #, c-format
 msgid "Delete Images"
 msgstr "Supprimer les images"
@@ -20678,7 +20677,7 @@ msgid "Delete remote"
 msgstr "Suppression du serveur distant"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:644
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:153
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:154
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:397
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:267
 #, c-format
@@ -21193,7 +21192,7 @@ msgstr "n'a pas tenté de dédoublonner avec des notices au catalogue"
 msgid "Did you mean: "
 msgstr "Voulez-vous dire&nbsp;: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:75
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:78
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:81
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:117
 #, c-format
@@ -21810,7 +21809,7 @@ msgstr "EAN&nbsp;:"
 msgid "EAN: "
 msgstr "EAN&nbsp;: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:58
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:61
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:14
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:25
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:27
@@ -22259,7 +22258,7 @@ msgstr "Modifier la recherche"
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:184
 msgid "Edit serials"
-msgstr "Pointer"
+msgstr "Bulletiner"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:300
@@ -23271,7 +23270,7 @@ msgstr "Exporter les prêts en utilisant le format:"
 msgid "Export configuration"
 msgstr "Exporter la configuration"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:77
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:72
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:143
 #, c-format
 msgid "Export data"
@@ -23802,7 +23801,7 @@ msgstr "Fichier&nbsp;: "
 
 #
 #. %1$s:  SOURCE_FILE 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:98
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:99
 #, c-format
 msgid "File: %s"
 msgstr "Fichier: %s"
@@ -24722,7 +24721,7 @@ msgstr "Poste budgétaire&nbsp;: "
 msgid "Fund: %s"
 msgstr "Poste budgétaire: %s"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:57
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:60
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:7
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:70
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:273
@@ -25803,7 +25802,7 @@ msgstr "Série de jours fériés répété chaque année"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:167
 #: intranet-tmpl/prog/en/modules/patroncards/home.tt:9
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:43
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:53
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:54
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:113
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:43
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:176
@@ -26604,7 +26603,7 @@ msgstr "Image 1"
 msgid "Image 2"
 msgstr "Image 2"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:123
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:124
 #, c-format
 msgid "Image ID"
 msgstr "ID de l'image"
@@ -26614,13 +26613,13 @@ msgstr "ID de l'image"
 msgid "Image file"
 msgstr "Fichier image"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:84
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:85
 #, c-format
 msgid "Image name: "
 msgstr "Nom de l'image&nbsp;:"
 
 #. %1$s:  IMAGE_NAME 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:99
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:100
 #, c-format
 msgid "Image name: %s"
 msgstr "Nom de l'image&nbsp;: %s"
@@ -26702,7 +26701,7 @@ msgstr ""
 msgid "Image source: "
 msgstr "Source de l'image&nbsp;: "
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:97
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:98
 #, c-format
 msgid "Image successfully uploaded"
 msgstr "Image téléchargée avec succès"
@@ -26712,8 +26711,8 @@ msgstr "Image téléchargée avec succès"
 msgid "Image upload results :"
 msgstr "Résultats de l'importation d'images: "
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:157
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:169
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:158
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:170
 #, c-format
 msgid "Image(s) successfully deleted"
 msgstr "Image(s) supprimée(s) avec succès"
@@ -26828,7 +26827,7 @@ msgstr "Importer dans la table des utilisateurs"
 msgid "Import patron data"
 msgstr "Importer données utilisateurs"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:35
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:30
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:27
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:35
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:29
@@ -27290,7 +27289,7 @@ msgstr "Valeur invalide pour %s"
 msgid "Invalid year entered in field %s"
 msgstr "Année invalide entrée dans le champ %s"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:80
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:75
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:148
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:100
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:107
@@ -27617,7 +27616,7 @@ msgstr "Cote de l'exemplaire&nbsp;:"
 msgid "Item checked out"
 msgstr "Exemplaire prêté"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:35
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:38
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:103
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:54
 #, c-format
@@ -27857,7 +27856,7 @@ msgstr "Recherche exemplaire"
 msgid "Item search field: %s"
 msgstr "Champ de recherche des exemplaires&nbsp;: %s"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:49
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:52
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:58
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:12
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:86
@@ -28010,7 +28009,7 @@ msgstr "Type d'exemplaire&nbsp;:"
 msgid "Item type: "
 msgstr "Type d'exemplaire&nbsp;: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:24
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:27
 #: intranet-tmpl/prog/en/includes/facets.inc:19
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:65
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:67
@@ -28515,7 +28514,7 @@ msgid "Keyword: "
 msgstr "Rechercher&nbsp;:"
 
 #
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:43
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:46
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:74
 #, c-format
 msgid "Keywords to MARC mapping"
@@ -30196,13 +30195,13 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Reports %s&rsaquo; Cash register statistics &rsaquo; Results"
 "%s&rsaquo; Cash register statistics%s"
 msgstr ""
-"Koha &rsaquo; Rapports %s&rsaquo; Statistiques catalogue &rsaquo; Résultats"
-"%s&rsaquo; Statistiques catalogue%s"
+"Koha &rsaquo; Rapports %s&rsaquo; Rapport de caisse &rsaquo; "
+"Résultats%s&rsaquo; Rapport de caisse%s"
 
 #. %1$s:  IF ( do_it ) 
 #. %2$s:  ELSE 
@@ -31143,7 +31142,7 @@ msgid "Koha to MARC Mapping"
 msgstr "Liens Koha => MARC"
 
 #
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:42
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:45
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:72
 #, c-format
 msgid "Koha to MARC mapping"
@@ -31282,7 +31281,7 @@ msgstr "Lot d'étiquettes"
 msgid "Label batches"
 msgstr "Lots d'étiquettes"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:83
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:78
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:180
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:45
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:99
@@ -31662,7 +31661,7 @@ msgstr "Bibliothécaire&nbsp;: "
 msgid "Libraries"
 msgstr "Sites"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:23
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:26
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:64
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:32
 #, c-format
@@ -31729,7 +31728,7 @@ msgstr "Site "
 msgid "Library %s - %s Checkin and transfer policy"
 msgstr "Site %s - %s Politique de transfert et de retour"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:59
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:62
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:15
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:25
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:27
@@ -31771,7 +31770,7 @@ msgid "Library set-up"
 msgstr "Gestion interne"
 
 #
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:33
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:36
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:50
 #, c-format
 msgid "Library transfer limits"
@@ -32273,7 +32272,7 @@ msgstr "Se connecter avec un utilisateur différent"
 msgid "Log out"
 msgstr "Se déconnecter"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:111
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:106
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:83
 #, c-format
 msgid "Log viewer"
@@ -32510,13 +32509,13 @@ msgstr "Blob MARC XML"
 msgid "MARC biblio : %s ( %s )"
 msgstr "Notice MARC&nbsp;: %s (%s)"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:41
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:44
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:70
 #, c-format
 msgid "MARC bibliographic framework"
 msgstr "Grille bibliographique MARC"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:44
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:47
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:19
 #, c-format
 msgid "MARC bibliographic framework test"
@@ -32769,7 +32768,7 @@ msgstr "Gérer les profils d'export CSV"
 msgid "Manage Koha system settings (Administration panel)"
 msgstr " Gérer le paramétrage de Koha (Panneau d'administration)"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:90
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:85
 #, c-format
 msgid "Manage MARC modification templates"
 msgstr "Gérer les modèles MARC"
@@ -32901,7 +32900,7 @@ msgstr "Gérer les amendes et les charges des adhérents"
 msgid "Manage periods"
 msgstr "Gestion des périodes"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:66
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:69
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:62
 #, c-format
 msgid "Manage plugins"
@@ -34171,7 +34170,7 @@ msgstr "NON RETOURNÉ"
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:77
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:172
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:38
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:75
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:121
 #, c-format
 msgid "NOTE:"
@@ -34228,7 +34227,7 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:81
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:56
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:128
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:125
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:126
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #: intranet-tmpl/prog/en/modules/members/member.tt:394
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:53
@@ -34837,7 +34836,7 @@ msgstr "Nouvelle valeur: %s %s. %s disponible pour le prêt. %s "
 msgid "New vendor"
 msgstr "Ajouter un fournisseur"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:114
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:109
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:192
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:61
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
@@ -35237,7 +35236,7 @@ msgstr "Non, si les configurations le permettent"
 msgid "No image: "
 msgstr "Pas d'image&nbsp;: "
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:164
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:165
 #, c-format
 msgid "No images are currently available. "
 msgstr "Aucune image n'est actuellement disponible "
@@ -35915,7 +35914,7 @@ msgstr "Interdit&nbsp;: l'utilisateur est suspendu"
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:343
 #, c-format
 msgid "Not available"
-msgstr "Indisponible"
+msgstr "Non publié"
 
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:64
 #, c-format
@@ -36248,7 +36247,7 @@ msgstr "Notifications"
 msgid "Notices &amp; Slips"
 msgstr "Notifications &amp; Tickets"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:38
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:33
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:34
 #, c-format
 msgid "Notices &amp; slips"
@@ -36574,7 +36573,7 @@ msgstr "Liens des ensembles OAI"
 msgid "OAI sets"
 msgstr "Ensembles OAI"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:48
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:51
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:46
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:84
@@ -37000,7 +36999,7 @@ msgstr "Seuls les formats PNG, GIF, JPEG et XPM sont gérés."
 msgid "Only PNG, GIF, JPEG, XPM formats are supported. "
 msgstr "Seuls les formats PNG, GIF, JPEG et XPM sont gérés."
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:75
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
 #, c-format
 msgid "Only PNG, GIF, JPEG, XPM formats are supported. Images "
 msgstr "Seuls les formats PNG, GIF, JPEG et XPM sont gérés. Les images "
@@ -37521,7 +37520,7 @@ msgstr "Amende de retard (montant)"
 msgid "Overdue notice required: "
 msgstr "Message de retard requis&nbsp;: "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:41
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:36
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:39
 #, c-format
 msgid "Overdue notice/status triggers"
@@ -37853,7 +37852,7 @@ msgstr "Activité de l'utilisateur "
 msgid "Patron attribute type code: "
 msgstr "Code d'attribut utilisateur&nbsp;: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:32
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:35
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:31
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:223
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:48
@@ -37873,10 +37872,10 @@ msgstr "Attributs de l'utilisateur"
 msgid "Patron attributes: "
 msgstr "Attributs de l'utilisateur&nbsp;: "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:44
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:39
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:169
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:45
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:55
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:56
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:115
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:45
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:178
@@ -37890,7 +37889,7 @@ msgstr "Créateur de cartes utilisateur"
 msgid "Patron card number"
 msgstr "Numéro de carte de l'utilisateur"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:30
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:33
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:24
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:25
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:26
@@ -38134,7 +38133,7 @@ msgstr "Bibliothèque de l'utilisateur"
 msgid "Patron list: "
 msgstr "Liste d'utilisateurs&nbsp;: "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:29
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:24
 #: intranet-tmpl/prog/en/includes/patron-toolbar.inc:22
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:72
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:15
@@ -38159,7 +38158,7 @@ msgstr "Préférences des notifications de l'utilisateur"
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:229
 #, c-format
 msgid "Patron name"
-msgstr "Nom d'utilisateur"
+msgstr "Nom de l'utilisateur"
 
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:118
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:244
@@ -38447,8 +38446,8 @@ msgstr "Utilisateur&nbsp;: "
 msgid "Patrons"
 msgstr "Utilisateurs"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:28
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:26
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:31
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:21
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:40
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:16
 #, c-format
@@ -39663,7 +39662,8 @@ msgstr "Merci de sélectionner au moins une suggestion à supprimer"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:4
-msgid "Please select image(s) to %s."
+#, fuzzy
+msgid "Please select image(s) to delete."
 msgstr "Merci de sélectionner la ou les images à %s."
 
 #. SCRIPT
@@ -39767,7 +39767,7 @@ msgstr "Plugin&nbsp;: "
 msgid "Plugin: "
 msgstr "Plugin&nbsp;: "
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:63
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:66
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:60
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:13
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:39
@@ -40808,16 +40808,16 @@ msgstr "Ajout rapide"
 #: intranet-tmpl/prog/en/includes/patron-toolbar.inc:15
 #, c-format
 msgid "Quick add new patron "
-msgstr "Ajouter rapidement un nouvel utilisateur"
+msgstr "Ajouter rapidement un nouvel utilisateur "
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:84
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:79
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:15
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:158
 #, c-format
 msgid "Quick spine label creator"
 msgstr "Création d'étiquettes - rapide"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:120
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:115
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:203
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:313
 #, c-format
@@ -41105,7 +41105,7 @@ msgstr ""
 msgid "Record matching rule:"
 msgstr "Règle de concordance&nbsp;:"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:47
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:50
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:208
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:605
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:82
@@ -42522,7 +42522,7 @@ msgid "Ron Wickersham"
 msgstr "Ron Wickersham"
 
 #
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:87
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:82
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:163
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:10
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:41
@@ -42696,7 +42696,7 @@ msgstr "système de SMS"
 msgid "SMS alert number"
 msgstr "Numéro SMS"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:79
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:82
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:30
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:124
 #, c-format
@@ -44081,7 +44081,7 @@ msgstr "Sélectionnez une note"
 msgid "Select notice:"
 msgstr "Sélectionnez une notification&nbsp;:"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:111
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:112
 #, c-format
 msgid "Select one or more images to delete. "
 msgstr "Sélectionnez une ou plusieurs images à supprimer. "
@@ -44150,7 +44150,7 @@ msgid "Select the file to stage: "
 msgstr "Sélectionnez le fichier à préparer&nbsp;: "
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:41
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:79
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:80
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:300
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:139
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:96
@@ -44407,7 +44407,7 @@ msgstr "Le pointage ne crée pas d'exemplaires."
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:215
 #, c-format
 msgid "Serial receive"
-msgstr "Pointer"
+msgstr "Bulletiner"
 
 #: intranet-tmpl/prog/en/modules/serials/acqui-search.tt:21
 #, c-format
@@ -45511,7 +45511,7 @@ msgid "Staff note:"
 msgstr "Note interne&nbsp;:"
 
 #
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:93
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:88
 #, c-format
 msgid "Stage MARC for import"
 msgstr "Traiter pour import"
@@ -45561,7 +45561,7 @@ msgid "Staged"
 msgstr "Traité"
 
 #
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:96
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:91
 #, c-format
 msgid "Staged MARC management"
 msgstr "Gestion des notices MARC traitées"
@@ -46905,8 +46905,8 @@ msgstr ""
 msgid "System preference search:"
 msgstr "Chercher dans les préférences système&nbsp;:"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:16
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:18
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:19
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:21
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:87
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:88
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:70
@@ -47078,7 +47078,7 @@ msgstr "Éditeur de zone"
 msgid "Tag has no subfields"
 msgstr "La zone n'a pas de sous-zones"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:53
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:48
 #, c-format
 msgid "Tag moderation"
 msgstr "Validation des mots-clés"
@@ -47151,7 +47151,7 @@ msgstr "Cible"
 msgid "Target (database) record check field"
 msgstr "Zone de vérification des notices cibles (base de données)"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:117
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:112
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:17
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:35
@@ -49029,7 +49029,7 @@ msgstr "Ce fournisseur n'a pas de courriel"
 msgid "This vendor has no email defined for late issues."
 msgstr "Ce fournisseur n'a pas de courriel pour les numéros en retard."
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:85
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:86
 #, c-format
 msgid ""
 "This will be the name by which you will refer to this image in the patron "
@@ -49698,7 +49698,7 @@ msgid ""
 "Too many on-site checked out. %s on-site checked out, only %s are allowed."
 msgstr "Trop de prêt sur site. %s prêt sur site, seuls %s sont autorisés."
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:123
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:118
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:103
 #, c-format
 msgid "Tool plugins"
@@ -49724,7 +49724,7 @@ msgstr "Outil Plugins"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:168
 #: intranet-tmpl/prog/en/modules/patroncards/home.tt:10
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:44
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:54
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:55
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:114
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:44
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:177
@@ -49765,7 +49765,7 @@ msgstr "Outil Plugins"
 msgid "Tools"
 msgstr "Outils"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:24
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:19
 #, c-format
 msgid "Tools home"
 msgstr "Accueil Outils"
@@ -50056,12 +50056,12 @@ msgstr "Total&nbsp;:"
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:230
 #, c-format
 msgid "Transaction branch"
-msgstr "Site de transaction"
+msgstr "Site de la transaction"
 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:231
-#, fuzzy, c-format
+#, c-format
 msgid "Transaction date"
-msgstr "Date de création"
+msgstr "Date de la transaction"
 
 #
 #. A
@@ -50218,7 +50218,7 @@ msgstr "Traductions"
 msgid "Transport"
 msgstr "Transport"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:34
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:37
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:52
 #, c-format
 msgid "Transport cost matrix"
@@ -50747,7 +50747,7 @@ msgstr "Mise à jour de la structure de la base"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:257
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:259
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:47
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:93
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:94
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:305
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:148
@@ -50780,7 +50780,7 @@ msgstr "Télécharger le nouveau fichier"
 msgid "Upload another KOC file"
 msgstr "Télécharger un autre fichier KOC"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:126
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:121
 #: intranet-tmpl/prog/en/includes/permissions.inc:104
 #, c-format
 msgid "Upload any file"
@@ -50820,13 +50820,13 @@ msgstr "Télécharger le fichier:"
 msgid "Upload image"
 msgstr "Chargement de l'image"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:71
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:72
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:92
 #, c-format
 msgid "Upload images"
 msgstr "Chargement des images"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:99
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:94
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:183
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:66
@@ -50864,7 +50864,7 @@ msgstr "Téléchargez le fichier de circulation hors ligne (.koc)"
 msgid "Upload patron image"
 msgstr "Charger photo d'utilisateur"
 
-#: intranet-tmpl/prog/en/includes/tools-menu.inc:56
+#: intranet-tmpl/prog/en/includes/tools-menu.inc:51
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:64
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:31
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:104
@@ -53261,7 +53261,7 @@ msgstr "Recherche du serveur Z39.50/SRU&nbsp;: "
 msgid "Z39.50/SRU server updated (%s)"
 msgstr "Serveur Z39.50/SRU mis à jour (%s)"
 
-#: intranet-tmpl/prog/en/includes/admin-menu.inc:74
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:77
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:97
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:115
 #, c-format
@@ -53919,7 +53919,7 @@ msgstr "Bordereau de commande"
 msgid "batch_anonymise.pl"
 msgstr "batch_anonymise.pl"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:75
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
 #, c-format
 msgid "be less than 500KB. "
 msgstr "soit moins de 500Ko."
@@ -55102,7 +55102,7 @@ msgstr "modifiée"
 msgid "months "
 msgstr "mois"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:75
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
 #, c-format
 msgid "must"
 msgstr "doit"
@@ -55163,7 +55163,7 @@ msgstr "sauf"
 #. ABBR
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:112
 msgid "not available"
-msgstr "Indisponible"
+msgstr "indisponible"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
