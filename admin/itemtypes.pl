@@ -31,8 +31,8 @@ use C4::Koha;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
-
 use Koha::ItemTypes;
+use Koha::ItemType;
 use Koha::Localizations;
 
 my $input         = new CGI;
@@ -137,27 +137,19 @@ if ( $op eq 'add_form' ) {
 
     $searchfield = '';
     $op          = 'list';
-} elsif ( $op eq 'delete_confirm' ) {
 
-    # Check both items and biblioitems
-    my ($total) = $dbh->selectrow_array( '
-        SELECT COUNT(*) AS total FROM (
-            SELECT itemtype AS t FROM biblioitems
-            UNION ALL
-            SELECT itype AS t FROM items
-        ) AS tmp
-        WHERE tmp.t=?
-    ', {}, $itemtype_code );
-
-    if ($total) {
-        push @messages, { type => 'error', code => 'cannot_be_deleted', total => $total };
+ } elsif ( $op eq 'delete_confirm' ) {
+    my $ItemType = Koha::ItemTypes->find($itemtype_code);
+    my $overalltotal = $ItemType->can_be_deleted();
+    if ($overalltotal == 0) {
+        push @messages, { type => 'error', code => 'cannot_be_deleted'};
         $op = 'list';
     } else {
-        my $itemtype = Koha::ItemTypes->find($itemtype_code);
-        $template->param( itemtype => $itemtype, );
+        $template->param( itemtype => $ItemType, );
     }
 
 } elsif ( $op eq 'delete_confirmed' ) {
+
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
     my $deleted = eval { $itemtype->delete };
     if ( $@ or not $deleted ) {

@@ -110,7 +110,7 @@ Item types administration
         [% CASE 'already_exists' %]
             This item type already exists.
         [% CASE 'cannot_be_deleted' %]
-            Cannot delete this item type. <p><strong>This record is used [% m.total %] times</strong>. Deletion is not possible.</p>
+            Cannot delete this item type. <p><strong>This record is in use</strong>. Deletion is not possible.</p>
         [% CASE %]
             [% m.code %]
         [% END %]
