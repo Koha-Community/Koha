@@ -6,6 +6,7 @@ use Modern::Perl;
 
 use Test::More tests => 4;
 
+use Getopt::Long;
 use MARC::Record;
 use Test::MockModule;
 use Test::MockObject;
@@ -19,6 +20,11 @@ use Koha::Database;
 BEGIN {
         use_ok('C4::AuthoritiesMarc');
 }
+
+# Optionally change marc flavour
+my $marcflavour;
+GetOptions( 'flavour:s' => \$marcflavour );
+t::lib::Mocks::mock_preference( 'marcflavour', $marcflavour ) if $marcflavour;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -68,16 +74,14 @@ subtest 'Test merge A1 to A2 (within same authtype)' => sub {
 
     # Check the results
     my $newbiblio1 = GetMarcBiblio($biblionumber1);
-    $newbiblio1->delete_fields( $newbiblio1->field('100') ); # fix for UNIMARC
-    compare_field_count( $biblio1, $newbiblio1 );
-    compare_field_order( $biblio1, $newbiblio1 );
+    compare_fields( $biblio1, $newbiblio1, {}, 'count' );
+    compare_fields( $biblio1, $newbiblio1, {}, 'order' );
     is( $newbiblio1->subfield('609', '9'), $authid1, 'Check biblio1 609$9' );
     is( $newbiblio1->subfield('609', 'a'), 'George Orwell',
         'Check biblio1 609$a' );
     my $newbiblio2 = GetMarcBiblio($biblionumber2);
-    $newbiblio2->delete_fields( $newbiblio2->field('100') ); # fix for UNIMARC
-    compare_field_count( $biblio2, $newbiblio2 );
-    compare_field_order( $biblio2, $newbiblio2 );
+    compare_fields( $biblio2, $newbiblio2, {}, 'count' );
+    compare_fields( $biblio2, $newbiblio2, {}, 'order' );
     is( $newbiblio2->subfield('609', '9'), $authid1, 'Check biblio2 609$9' );
     is( $newbiblio2->subfield('609', 'a'), 'George Orwell',
         'Check biblio2 609$a' );
@@ -85,7 +89,7 @@ subtest 'Test merge A1 to A2 (within same authtype)' => sub {
 
 subtest 'Test merge A1 to modified A1, test strict mode' => sub {
 # Tests originate from bug 11700
-    plan tests => 11;
+    plan tests => 12;
 
     # Simulate modifying an authority from auth1old to auth1new
     my $auth1old = MARC::Record->new;
@@ -115,14 +119,12 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
 
     #Check the results
     my $biblio1 = GetMarcBiblio($biblionumber1);
-    $biblio1->delete_fields( $biblio1->field('100') ); # quick fix for UNIMARC
-    compare_field_count( $MARC1, $biblio1 );
-    compare_field_order( $MARC1, $biblio1 );
+    compare_fields( $MARC1, $biblio1, {}, 'count' );
+    compare_fields( $MARC1, $biblio1, {}, 'order' );
     is( $auth1new->field(109)->subfield('a'), $biblio1->field(109)->subfield('a'), 'Record1 values updated correctly' );
     my $biblio2 = GetMarcBiblio( $biblionumber2 );
-    $biblio2->delete_fields( $biblio2->field('100') ); # quick fix for UNIMARC
-    compare_field_count( $MARC2, $biblio2 );
-    compare_field_order( $MARC2, $biblio2 );
+    compare_fields( $MARC2, $biblio2, {}, 'count' );
+    compare_fields( $MARC2, $biblio2, {}, 'order' );
     is( $auth1new->field(109)->subfield('a'), $biblio2->field(109)->subfield('a'), 'Record2 values updated correctly' );
     # This is only true in loose mode:
     is( $biblio1->field(109)->subfield('b'), $MARC1->field(109)->subfield('b'), 'Subfield not overwritten in loose mode');
@@ -134,9 +136,11 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
     $index = 0;
     $rv = C4::AuthoritiesMarc::merge( $authid1, $auth1old, $authid1, $auth1new );
     $biblio1 = GetMarcBiblio($biblionumber1);
-    $biblio1->delete_fields( $biblio1->field('100') ); # quick fix for UNIMARC
     is( $biblio1->field(109)->subfield('b'), undef, 'Subfield overwritten in strict mode' );
-    is( $biblio1->fields, scalar( $MARC1->fields ) - 1, 'strict mode should remove a duplicate 609' );
+    compare_fields( $MARC1, $biblio1, { 609 => 1 }, 'count' );
+    my @old609 = $MARC1->field('609');
+    my @new609 = $biblio1->field('609');
+    is( scalar @new609, @old609 - 1, 'strict mode should remove a duplicate 609' );
     is( $biblio1->field(609)->subfields,
         scalar($auth1new->field('109')->subfields) + 1,
         'Check number of subfields in strict mode for the remaining 609' );
@@ -173,7 +177,6 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
     );
     my ( $biblionumber ) = C4::Biblio::AddBiblio( $marc, '' );
     my $oldbiblio = C4::Biblio::GetMarcBiblio( $biblionumber );
-    $oldbiblio->delete_fields( $oldbiblio->field('100') ); # fix for UNIMARC
 
     # Time to merge
     @zebrarecords = ( $marc );
@@ -183,12 +186,10 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
 
     # Get new marc record for compares
     my $newbiblio = C4::Biblio::GetMarcBiblio( $biblionumber );
-    $newbiblio->delete_fields( $newbiblio->field('100') ); # fix for UNIMARC
-    compare_field_count( $oldbiblio, $newbiblio );
+    compare_fields( $oldbiblio, $newbiblio, {}, 'count' );
     # Exclude 109/609 and 112/612 in comparing order
-    compare_field_order( $oldbiblio, $newbiblio,
-        { '109' => 1, '112' => 1, '609' => 1, '612' => 1 },
-    );
+    my $excl = { '109' => 1, '112' => 1, '609' => 1, '612' => 1 };
+    compare_fields( $oldbiblio, $newbiblio, $excl, 'order' );
     # Check position of 612s in the new record
     my $full_order = join q/,/, map { $_->tag } $newbiblio->fields;
     is( $full_order =~ /611(,612){3}/, 1, 'Check position of all 612s' );
@@ -303,19 +304,23 @@ sub modify_framework {
     return ( $authtype1->{authtypecode}, $authtype2->{authtypecode} );
 }
 
-sub compare_field_count {
-    my ( $oldmarc, $newmarc ) = @_;
-    my $t;
-    is( scalar $newmarc->fields, $t = $oldmarc->fields, "Number of fields still equal to $t" );
-}
-
-sub compare_field_order {
-    my ( $oldmarc, $newmarc, $exclude ) = @_;
+sub compare_fields { # mode parameter: order or count
+    my ( $oldmarc, $newmarc, $exclude, $mode ) = @_;
     $exclude //= {};
+    if( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+        # By default exclude field 100 from comparison in UNIMARC.
+        # Will have been added by ModBiblio in merge.
+        $exclude->{100} = 1;
+    }
     my @oldfields = map { $exclude->{$_->tag} ? () : $_->tag } $oldmarc->fields;
     my @newfields = map { $exclude->{$_->tag} ? () : $_->tag } $newmarc->fields;
-    is( ( join q/,/, @newfields ), ( join q/,/, @oldfields ),
-        'Order of fields unchanged' );
+
+    if( $mode eq 'count' ) {
+        my $t;
+        is( scalar @newfields, $t = @oldfields, "Number of fields still equal to $t" );
+    } elsif( $mode eq 'order' ) {
+        is( ( join q/,/, @newfields ), ( join q/,/, @oldfields ), 'Order of fields unchanged' );
+    }
 }
 
 $schema->storage->txn_rollback;
