@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Mojo;
 use t::lib::TestBuilder;
 
@@ -52,7 +52,8 @@ my $borrower = $builder->build({
         branchcode   => $branchcode,
         categorycode => $categorycode,
         flags        => 0,
-        guarantorid    => $guarantor->{borrowernumber},
+        lost         => 1,
+        guarantorid  => $guarantor->{borrowernumber},
     }
 });
 
@@ -127,6 +128,7 @@ $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
   ->json_is('/borrowernumber' => $borrower->{ borrowernumber })
-  ->json_is('/surname' => $borrower->{ surname });
+  ->json_is('/surname' => $borrower->{ surname })
+  ->json_is('/lost' => 1 );
 
 $dbh->rollback;

@@ -28,7 +28,7 @@ sub list {
 
     my $patrons = Koha::Patrons->search;
 
-    $c->$cb($patrons->unblessed, 200);
+    $c->$cb($patrons, 200);
 }
 
 sub get {
@@ -41,7 +41,7 @@ sub get {
         return $c->$cb({error => "Patron not found"}, 404);
     }
 
-    return $c->$cb($patron->unblessed, 200);
+    return $c->$cb($patron, 200);
 }
 
 1;

@@ -1343,6 +1343,11 @@ __PACKAGE__->belongs_to(
     { borrowernumber => "guarantorid" },
 );
 
+__PACKAGE__->add_columns(
+    '+lost' => { is_boolean => 1 },
+    '+gonenoaddress' => { is_boolean => 1 }
+);
+
 sub koha_objects_class {
     'Koha::Patrons';
 }
