@@ -49,6 +49,15 @@ Authorities:
               defautl: "afrey50      ba0"
               type: textarea
               class: code
+        -
+            - When updating biblio records from an attached authority record ("merging"), handle subfields of relevant biblio record fields in
+            - pref: AuthorityMergeMode
+              default: "loose"
+              choices:
+                  "loose": loose
+                  "strict": strict
+            - mode. In strict mode subfields that are not found in the authority record, are deleted. Loose mode will keep them. Loose mode is the historical behavior and still the default.
+
     Linker:
         -
             - Use the
