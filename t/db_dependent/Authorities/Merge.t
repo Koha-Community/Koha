@@ -28,20 +28,11 @@ t::lib::Mocks::mock_preference( 'marcflavour', $marcflavour ) if $marcflavour;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-my $dbh = C4::Context->dbh;
 
-# Some advanced mocking :)
-my ( @zebrarecords, $index );
-my $context_mod = Test::MockModule->new( 'C4::Context' );
-my $search_mod = Test::MockModule->new( 'C4::Search' );
-my $zoom_mod = Test::MockModule->new( 'ZOOM::Query::CCL2RPN', no_auto => 1 );
-my $conn_obj = Test::MockObject->new;
-my $zoom_obj = Test::MockObject->new;
-my $zoom_record_obj = Test::MockObject->new;
-set_mocks();
-
-# Framework operations
-my ( $authtype1, $authtype2 ) = modify_framework();
+# Global variables, mocking and framework modifications
+our ( @zebrarecords, $index );
+my $mocks = set_mocks();
+our ( $authtype1, $authtype2 ) = modify_framework();
 
 subtest 'Test merge A1 to A2 (within same authtype)' => sub {
 # Tests originate from bug 11700
@@ -229,19 +220,29 @@ sub set_mocks {
     # Mock ZOOM objects: They do nothing actually
     # Get new_record_from_zebra to return the records
 
-    $context_mod->mock( 'Zconn', sub { $conn_obj; } );
-    $search_mod->mock( 'new_record_from_zebra', sub {
+    my $mocks;
+    $mocks->{context_mod} = Test::MockModule->new( 'C4::Context' );
+    $mocks->{search_mod} = Test::MockModule->new( 'C4::Search' );
+    $mocks->{zoom_mod} = Test::MockModule->new( 'ZOOM::Query::CCL2RPN', no_auto => 1 );
+    $mocks->{conn_obj} = Test::MockObject->new;
+    $mocks->{zoom_obj} = Test::MockObject->new;
+    $mocks->{zoom_record_obj} = Test::MockObject->new;
+
+    $mocks->{context_mod}->mock( 'Zconn', sub { $mocks->{conn_obj}; } );
+    $mocks->{search_mod}->mock( 'new_record_from_zebra', sub {
          return if $index >= @zebrarecords;
          return $zebrarecords[ $index++ ];
     });
-    $zoom_mod->mock( 'new', sub {} );
+    $mocks->{zoom_mod}->mock( 'new', sub {} );
 
-    $conn_obj->mock( 'search', sub { $zoom_obj; } );
-    $zoom_obj->mock( 'destroy', sub {} );
-    $zoom_obj->mock( 'record', sub { $zoom_record_obj; } );
-    $zoom_obj->mock( 'search', sub {} );
-    $zoom_obj->mock( 'size', sub { @zebrarecords } );
-    $zoom_record_obj->mock( 'raw', sub {} );
+    $mocks->{conn_obj}->mock( 'search', sub { $mocks->{zoom_obj}; } );
+    $mocks->{zoom_obj}->mock( 'destroy', sub {} );
+    $mocks->{zoom_obj}->mock( 'record', sub { $mocks->{zoom_record_obj}; } );
+    $mocks->{zoom_obj}->mock( 'search', sub {} );
+    $mocks->{zoom_obj}->mock( 'size', sub { @zebrarecords } );
+    $mocks->{zoom_record_obj}->mock( 'raw', sub {} );
+
+    return $mocks;
 }
 
 sub modify_framework {
