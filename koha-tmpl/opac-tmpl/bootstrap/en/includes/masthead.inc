@@ -159,7 +159,7 @@
                                 <label for="masthead_search"> Search
                                     [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
                                         [% IF ( mylibraryfirst ) %]
-                                            (in [% mylibraryfirst %] only)
+                                            (in [% Branches.GetName( mylibraryfirst ) %] only)
                                         [% END %]
                                     [% END %]
                                 </label>
