@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
 <div id="wrap">
     <div id="header-region" class="noprint">
@@ -156,7 +157,7 @@
                                 <label for="masthead_search"> Search
                                     [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
                                         [% IF ( mylibraryfirst ) %]
-                                            (in [% mylibraryfirst %] only)
+                                            (in [% Branches.GetName( mylibraryfirst ) %] only)
                                         [% END %]
                                     [% END %]
                                 </label>
