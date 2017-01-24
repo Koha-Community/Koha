@@ -90,6 +90,7 @@
         var subfields = field_start.getElementsByTagName('input');
         var re = /^tag_\d*_code_/;
         for(var i=0, len = subfields.length ; i< len ; i++) { // browse all subfields
+            if(subfields[i].hasAttribute('name') == 0 ) {continue; }
             if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
                 var code     = subfields[i];   // code is the first input
                 var subfield = subfields[i+1]; // subfield the second
