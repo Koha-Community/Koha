@@ -40,6 +40,8 @@ for name in "$@"
 do
     rootdir "/var/spool/koha/$name"
     userdir "$name" "/etc/koha/sites/$name"
+    userdir "$name" "/var/cache/koha/$name"
+    userdir "$name" "/var/cache/koha/$name/templates"
     userdir "$name" "/var/lib/koha/$name"
     userdir "$name" "/var/lib/koha/$name/authorities"
     userdir "$name" "/var/lib/koha/$name/authorities/key"

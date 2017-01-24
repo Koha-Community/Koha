@@ -40,6 +40,7 @@
       <arg><option>--adminuser</option> n</arg>
       <arg><option>--enable-sru</option></arg>
       <arg><option>--sru-port</option> port</arg>
+      <arg><option>--template-cache-dir</option> directory</arg>
       <arg><option>--upload-path</option> directory</arg>
       <arg><option>--letsencrypt</option></arg>
       <arg><option>--help</option>|<option>-h</option></arg>
@@ -181,6 +182,14 @@
       <term><option>--sru-port</option></term>
       <listitem>
         <para>Specifiy a <option> TCP port number</option> for the Z39.50/SRU server to listen on.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--template-cache-dir</option></term>
+      <listitem>
+        <para>Specify a <option>directory</option> for storing the template cache files of the instance.
+              It defaults to <filename>/var/cache/koha/instance/templates</filename>.</para>
       </listitem>
     </varlistentry>
 

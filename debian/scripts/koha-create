@@ -70,6 +70,8 @@ Options:
   --database dbname         Enforce the use of the specified DB name (64 char limit)
   --adminuser n             Explicit the admin user ID in the DB. Relevant in
                             conjunction with --defaultsql and --populate-db.
+  --template-cache-dir      Set a user defined template_cache_dir. It defaults to
+                            /var/cache/koha/<instance>/templates
   --upload-path dir         Set a user defined upload_path. It defaults to
                             /var/lib/koha/<instance>/uploads
   --letsencrypt             Set up a https-only site with letsencrypt certificates
@@ -113,6 +115,7 @@ generate_config_file() {
         -e "s/__DB_PASS__/$mysqlpwd/g" \
         -e "s/__UNIXUSER__/$username/g" \
         -e "s/__UNIXGROUP__/$username/g" \
+        -e "s#__TEMPLATE_CACHE_DIR__#$TEMPLATE_CACHE_DIR#g" \
         -e "s#__UPLOAD_PATH__#$UPLOAD_PATH#g" \
         -e "s/__LOG_DIR__/\/var\/log\/koha\/$name/g" \
         -e "s/__PLUGINS_DIR__/\/var\/lib\/koha\/$name\/plugins/g" \
@@ -406,6 +409,8 @@ DEFAULT_MEMCACHED_PREFIX="koha_"
 UPLOAD_PATH_BASE="/var/lib/koha"
 UPLOAD_DIR="uploads"
 UPLOAD_PATH=""
+# cache base dir
+CACHE_DIR_BASE="/var/cache/koha"
 # Generate a randomizaed API secret
 API_SECRET="$(pwgen -s 64 1)"
 # SRU server variables
@@ -434,7 +439,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,adminuser:,memcached-servers:,memcached-prefix:,upload-path:,letsencrypt, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,upload-path:,letsencrypt, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -451,6 +456,7 @@ CLO_MEMCACHED_SERVERS=""
 CLO_MEMCACHED_PREFIX=""
 CLO_UPLOAD_PATH=""
 CLO_LETSENCRYPT=""
+CLO_TEMPLATE_CACHE_DIR=""
 
 while true ; do
     case "$1" in
@@ -492,6 +498,8 @@ while true ; do
             ENABLE_SRU="yes" ; shift ;;
         --sru-port)
             SRU_SERVER_PORT="$2" ; shift 2 ;;
+        --template-cache-dir)
+            CLO_TEMPLATE_CACHE_DIR="$2" ; shift 2 ;;
         --upload-path)
             CLO_UPLOAD_PATH="$2" ; shift 2 ;;
         --letsencrypt)
@@ -591,6 +599,13 @@ else
     # Unset memcached-related variables
     MEMCACHED_SERVERS=""
     MEMCACHED_PREFIX=""
+fi
+
+# Set template cache dir
+if [ "$CLO_TEMPLATE_CACHE_DIR" != "" ]; then
+    TEMPLATE_CACHE_DIR="$CLO_TEMPLATE_CACHE_DIR"
+else
+    TEMPLATE_CACHE_DIR="$CACHE_DIR_BASE/$name/templates"
 fi
 
 # Are we root? If not, the mod_rewrite check will fail and be confusing, so
@@ -727,7 +742,6 @@ eof
         "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
     generate_config_file zebra.passwd.in \
         "/etc/koha/sites/$name/zebra.passwd"
-
 
     # Create a GPG-encrypted file for requesting a DB to be set up.
     if [ "$op" = request ]

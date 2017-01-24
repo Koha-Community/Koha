@@ -125,6 +125,8 @@ eof
         rm -r "/var/lock/koha/$name"
     [ -d "/var/log/koha/$name" ] && \
         rm -r "/var/log/koha/$name"
+    [ -d "/var/cache/koha/$name" ] && \
+        rm -r "/var/cache/koha/$name"
     [ -d "/var/run/koha/$name" ] && \
         rm -r "/var/run/koha/$name"
     [ "$purgeall" = "1" ] && [ -d "/var/lib/koha/$name" ] && \
