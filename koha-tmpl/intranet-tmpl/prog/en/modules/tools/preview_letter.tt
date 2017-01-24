@@ -12,6 +12,9 @@
                     [% CASE 'preview_not_available' %]Preview is not available for letters '[% m.letter_code %]'.
                     [% CASE 'not_checked_in_yet' %]Do not forget that the issue has not been checked in yet.
                     [% CASE 'not_checked_out_yet' %]Do not forget that the issue has not been checked out yet.
+                    [% CASE 'no_checkout' %]This item is not checked out.
+                    [% CASE 'no_item_or_no_patron' %]The item or the patron does not exist.
+                    [% CASE 'no_hold' %]No hold is placed by this patron on this bibliographic record.
                     [% CASE %][% m.code %]
                     [% END %]
                 </div>
@@ -28,7 +31,7 @@
                 </fieldset>
             [% END %]
 
-            [% IF tt_content %]
+            [% IF rendered_tt_message %]
                 <fieldset class="brief">
                     <legend>Converted version</legend>
                     <pre>[% tt_content | html %]</pre>
@@ -41,7 +44,7 @@
             [% END %]
         </div>
 
-        [% IF tt_content %]
+        [% IF rendered_tt_message %]
             [% IF messages_are_similar %]
                 <div class="dialog message">The generated notices are exactly the same!</div>
             [% ELSE %]

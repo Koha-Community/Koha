@@ -169,7 +169,8 @@ if ( $code eq 'CHECKIN' ) {
         push @messages, { code => 'not_checked_in_yet', type => 'message' };
     }
     else {
-        warn "No checkout";
+        push @messages, { code => 'no_checkout', type => 'alert' };
+        $letter_params = {};
     }
 }
 elsif ( $code eq 'CHECKOUT' ) {
@@ -193,7 +194,8 @@ elsif ( $code eq 'CHECKOUT' ) {
         push @messages, { code => 'not_checked_out_yet', type => 'message' };
     }
     else {
-        warn "No item or no patron";
+        push @messages, { code => 'no_item_or_no_patron', type => 'alert' };
+        $letter_params = {};
     }
 }
 elsif ( $code eq 'HOLD_SLIP' ) {
@@ -212,11 +214,11 @@ elsif ( $code eq 'HOLD_SLIP' ) {
         };
     }
     else {
-        warn "No hold placed by this patron on this bibliographic record.";
+        push @messages, { code => 'no_hold', type => 'alert' };
+        $letter_params = {};
     }
 }
 else {
-    warn "Preview for letter code $code is not available";
     push @messages, { type => 'alert', code => 'preview_not_available', letter_code => $code, };
 }
 
