@@ -478,7 +478,7 @@
                     $.ajax({
                         data: { code: new_lettercode, branchcode: new_branchcode },
                         type: 'GET',
-                        url: '/cgi-bin/koha/svc/letters/',
+                        url: '/cgi-bin/koha/svc/letters/get/',
                         success: function (data) {
                              if ( data.letters.length > 0 ) {
                                  if( new_branchcode == '' ) {
