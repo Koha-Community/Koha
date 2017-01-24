@@ -256,18 +256,18 @@ sub themelanguage {
     my $where = $tmpl =~ /xsl$/ ? 'xslt' : 'modules';
     for my $theme (@themes) {
         if ( -e "$htdocs/$theme/$lang/$where/$tmpl" ) {
-            return ( $theme, $lang, uniq( \@themes ) );
+            return ( $theme, $lang, [ uniq(@themes) ] );
         }
     }
     # Otherwise return theme/'en', last resort fallback/'en'
     for my $theme (@themes) {
         if ( -e "$htdocs/$theme/en/$where/$tmpl" ) {
-            return ( $theme, 'en', uniq( \@themes ) );
+            return ( $theme, 'en', [ uniq(@themes) ] );
         }
     }
     # tmpl is a full path, so this is a template for a plugin
     if ( $tmpl =~ /^\// && -e $tmpl ) {
-        return ( $themes[0], $lang, uniq( \@themes ) );
+        return ( $themes[0], $lang, [ uniq(@themes) ] );
     }
 }
 
