@@ -17,12 +17,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Warn;
 
 use C4::Context;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+
+use Scalar::Util qw( isvstring );
 
 use t::lib::TestBuilder;
 
@@ -33,6 +35,8 @@ BEGIN {
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
+
+my $builder = t::lib::TestBuilder->new();
 
 my $categorycode = $schema->resultset('Category')->first()->categorycode();
 my $branchcode = $schema->resultset('Branch')->first()->branchcode();
@@ -106,5 +110,29 @@ subtest 'discard_changes' => sub {
         'discard_changes should refresh the object'
     );
 };
+
+subtest 'TO_JSON tests' => sub {
+
+    plan tests => 5;
+
+    my $borrowernumber = $builder->build(
+        { source => 'Borrower',
+          value => { lost => 1,
+                     gonenoaddress => 0 } })->{borrowernumber};
+
+    my $patron = Koha::Patrons->find($borrowernumber);
+    my $lost = $patron->TO_JSON()->{lost};
+    my $gonenoaddress = $patron->TO_JSON->{gonenoaddress};
+
+    ok( $lost->isa('Mojo::JSON::_Bool'), 'Boolean attribute type is correct' );
+    is( $lost, 1, 'Boolean attribute value is correct (true)' );
+
+    ok( $gonenoaddress->isa('Mojo::JSON::_Bool'), 'Boolean attribute type is correct' );
+    is( $gonenoaddress, 0, 'Boolean attribute value is correct (false)' );
+
+    ok( !isvstring($patron->borrowernumber), 'Integer values are not coded as strings' );
+};
+
+
 
 1;
