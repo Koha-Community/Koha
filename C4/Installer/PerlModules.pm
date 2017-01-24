@@ -84,7 +84,7 @@ sub version_info {
         for (sort keys(%{$PERL_DEPS})) {
             my $pkg = $_;  #  $_ holds the string
             eval "require $pkg";
-            my $pkg_version =  $params{'module'} &&  $params{'module'}->can("VERSION") ? $params{'module'}->VERSION : 0;
+            my $pkg_version =  $pkg &&  $pkg->can("VERSION") ? $pkg->VERSION : 0;
             my $min_version = $PERL_DEPS->{$_}->{'min_ver'} // 0;
             if ($@) {
                 push (@{$self->{'missing_pm'}}, {$_ => {cur_ver => 0, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
