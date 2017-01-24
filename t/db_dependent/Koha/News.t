@@ -36,10 +36,12 @@ my $nb_of_news = Koha::News->search->count;
 my $new_news_item_1 = Koha::NewsItem->new({
     branchcode => $library->{branchcode},
     title => 'a news',
+    content => 'content for news 1',
 })->store;
 my $new_news_item_2 = Koha::NewsItem->new({
     branchcode => $library->{branchcode},
     title => 'another news',
+    content => 'content for news 2',
 })->store;
 
 like( $new_news_item_1->idnew, qr|^\d+$|, 'Adding a new news_item should have set the idnew');
