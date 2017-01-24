@@ -19,6 +19,7 @@ use Modern::Perl;
 use Test::More;
 use Try::Tiny;
 use Scalar::Util qw(blessed);
+use Hash::Merge::Simple;
 
 use C4::Breeding;
 use C4::BatchOverlay::RuleManager;
@@ -32,6 +33,59 @@ my $testContext = {};
 
 my $cataloguingCenterZ3950 = t::CataloguingCenter::z3950Params::getCataloguingCenterZ3950params();
 Koha::Z3950Server->new($cataloguingCenterZ3950)->store->unblessed;
+
+use t::CataloguingCenter::ContextSysprefs;
+t::CataloguingCenter::ContextSysprefs::createBatchOverlayRules($testContext);
+
+
+subtest "alterAllRules() happy path", \&alterAllRules_happy;
+sub alterAllRules_happy {
+    my $subtestContext = {};
+    eval {
+    t::CataloguingCenter::ContextSysprefs::createBatchOverlayRulesWithCandidateCriteria($subtestContext);
+
+    my $oldRules = C4::BatchOverlay::RuleManager::loadRules();
+    my $change = {default => {remoteTargetCode => 'CHANGED'}};
+    my $expectedRules = Hash::Merge::Simple::merge($oldRules, $change);
+
+    ok($oldRules, "Given existing configuration");
+
+    my $mash = C4::BatchOverlay::RuleManager::alterAllRules($change);
+    ok($mash, "When Old config is mashed together with the new config");
+
+    is_deeply($mash, $expectedRules, "Then the existing configuration is properly changed");
+
+    };
+    if ($@) {
+        ok(0, $@);
+    }
+    t::lib::TestObjects::ObjectFactory->tearDownTestContext($subtestContext);
+}
+
+subtest "alterAllRules() sad path", \&alterAllRules_sad;
+sub alterAllRules_sad {
+    my $subtestContext = {};
+    eval {
+    t::CataloguingCenter::ContextSysprefs::createBatchOverlayRulesWithCandidateCriteria($subtestContext);
+
+    my $oldRules = C4::BatchOverlay::RuleManager::loadRules();
+    is($oldRules->{default}->{remoteTargetCode}, 'CATALOGUING_CENTER',
+       "Given existing configuration 'remoteTargetCode'");
+
+    ok(1, "When Old config is mashed together with the new empty config");
+    my $mash;
+    eval {
+        $mash = C4::BatchOverlay::RuleManager::alterAllRules({default => {remoteTargetCode => ''}});
+    };
+    like($@, qr/remoteTargetCode/,
+       "Then an exception is thrown about missing configuration");
+
+    };
+    if ($@) {
+        ok(0, $@);
+    }
+    t::lib::TestObjects::ObjectFactory->tearDownTestContext($subtestContext);
+}
 
 
 subtest "testRemoteTargetConnections", \&testRemoteTargetConnections;

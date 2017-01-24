@@ -78,6 +78,10 @@ sub _validateRule {
         my @cc1 = caller(1);
         Koha::Exception::FeatureUnavailable->throw(error => $cc1[3]."():> System preference 'BatchOverlayRules' is missing directive 'searchAlgorithms' or it is an empty array. These are the prioritized algorithms used to try to find a remote record.");
     }
+    unless ($rule->{candidateCriteria} && (ref($rule->{candidateCriteria}) eq 'HASH' && $rule->{candidateCriteria}->{lowlyCatalogued})) {
+        my @cc1 = caller(1);
+        Koha::Exception::FeatureUnavailable->throw(error => $cc1[3]."():> System preference 'BatchOverlayRules' is missing directive 'candidateCriteria' or it is not a proper hash with the mandatory key 'lowlyCatalogued'.");
+    }
     unless (defined($rule->{dryRun})) {
         my @cc1 = caller(1);
         Koha::Exception::FeatureUnavailable->throw(error => $cc1[3]."():> System preference 'BatchOverlayRules' is missing directive 'dryRun'. This is used to define if overlay actions should persist to DB. This must be either 1 or 0.");
@@ -260,6 +264,9 @@ sub setDiffExcludedFields {
     }
     $self->{diffExcludedFields} = $diffExcludedFields;
     return $self;
+}
+sub getCandidateCriteria {
+    return shift->{candidateCriteria};
 }
 sub _getFieldFromSelector {
     my ($self, $selector) = @_;

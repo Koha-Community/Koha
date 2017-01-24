@@ -23,6 +23,8 @@ use Try::Tiny;
 use Data::Dumper;
 use Encode;
 use YAML::XS;
+use Hash::Merge::Simple;
+use Storable;
 
 use C4::Matcher;
 use C4::Breeding;
@@ -33,25 +35,40 @@ use Koha::Exception::FeatureUnavailable;
 use Koha::Exception::BatchOverlay::UnknownMatcher;
 use Koha::Exception::BatchOverlay::UnknownRemoteTarget;
 
+=head2 new
+
+    C4::BatchOverlay::RuleManager->new({
+        #The Perlized BatchOverlayRules-syspref YAML
+        #Pass this to skip loading it from db, but not validating it
+        #WARNING! The given HASHRef is mangled and altered. If you want to preserve the existing data structure, pass a copy.
+        BatchOverlayRules => {...}
+    });
+
+=cut
+
 sub new {
     my ($class, $params) = @_;
     my $self = (ref($params) eq 'HASH') ? $params : {};
     bless $self, $class;
 
-    $self->_loadBatchOverlayRules();
+    $self->_loadBatchOverlayRules($params->{BatchOverlayRules});
 
     return $self;
 }
 
-=head2 _loadBatchOverlayRules
+=head2 loadRules
+@STATIC
 
-Validates that the configurations have been configured properly
+Warning fetching the syspref with this skips critical validations. Do not use
+rules fetched with this subroutine to do batch overlaying!
+
+@RETURNS Hashref of config
+@THROWS Koha::Exception::FeatureUnavailable if there is something wrong with turning
+                                            the syspref BatchOverlayRules to YAML
 
 =cut
 
-sub _loadBatchOverlayRules {
-    my ($self) = @_;
-
+sub loadRules {
     my $yaml = Encode::encode_utf8(C4::Context->preference('BatchOverlayRules'));
     unless ($yaml) {
         my @cc = caller(0);
@@ -64,6 +81,38 @@ sub _loadBatchOverlayRules {
     if ($@) {
         my @cc = caller(0);
         Koha::Exception::FeatureUnavailable->throw(error => $cc[3]."():> System preference 'BatchOverlayRules' is not proper YAML. YAML::XS error: '$@'");
+    }
+    return $config;
+}
+
+=head2 _storeRules
+
+Persists Rules to BatchOverlayRules-syspref. Make sure you validate them beforehand!
+
+=cut
+
+sub _storeRules {
+    my ($rules) = @_;
+
+    my $yaml = YAML::XS::Dump($rules);
+    C4::Context->set_preference('BatchOverlayRules', $yaml);
+}
+
+=head2 _loadBatchOverlayRules
+
+Validates that the configurations have been configured properly
+
+=cut
+
+sub _loadBatchOverlayRules {
+    my ($self, $existingRules) = @_;
+
+    my $config;
+    if ($existingRules) {
+        $config = $existingRules;
+    }
+    else {
+        $config = loadRules();
     }
 
     my $globals = {};
@@ -98,6 +147,45 @@ sub _loadBatchOverlayRules {
         my @cc = caller(0);
         Koha::Exception::FeatureUnavailable->throw(error => $cc[3]."():> $_");
     };
+}
+
+=head2 alterAllRules
+@STATIC
+
+    ##Add a remote target to the default rule
+    C4::BatchOverlay::RuleManager::alterAllRules({
+        default => {
+            remoteTargetCode => 'Z39.50_SERVER',
+        }
+    });
+
+Update existing 'BatchOverlayRules'-syspref or create a new one.
+
+Given a HASHRef of BatchOverlayRules-like syntax, deeply replaces existing fields
+and adds new fields where missing.
+Persists changes to DB if validation succeeds.
+
+@PARAM1 HASHRef of BatchOverlayRules-like syntax
+@RETURNS HASHRef of the mashed BatchOverlayRules
+@THROWS Koha::Exception::BadParameter if validating the BatchOverlayRules-YAML
+        fails after doing the modifications.
+
+=cut
+
+sub alterAllRules {
+    my ($newRules) = @_;
+
+    my $rules = loadRules();
+
+    #Mash them together
+    my $mashedRules = Hash::Merge::Simple::merge($rules, $newRules);
+
+    #Clone the $mashedRules, because the RuleManager mangles the given HASHRef
+    my $clone = Storable::dclone($mashedRules);
+    #Instantiate a new RuleManager to see the config validates
+    my $rm = C4::BatchOverlay::RuleManager->new({BatchOverlayRules => $mashedRules});
+    _storeRules($clone);
+    return $clone;
 }
 
 =head getAllRules

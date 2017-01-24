@@ -64,7 +64,7 @@ if ( $operation eq 'encodingLevelReport' ) {
     $encodingSearchLimit = 5000 unless $encodingSearchLimit;
     $template->param( encodingLevelLimit => $encodingSearchLimit );
 
-    my ($biblioResults, $resultSetSize) = C4::BatchOverlay::LowlyFinder::searchByEncodingLevel( $encodingLevel, $encodingSearchLimit );
+    my ($biblioResults, $resultSetSize) = C4::BatchOverlay::LowlyFinder->searchByEncodingLevel( $encodingLevel, $encodingSearchLimit );
     $template->param( biblioResults => $biblioResults );
     $template->param( biblioResultsSize => $resultSetSize );
 }

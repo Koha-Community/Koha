@@ -22,6 +22,7 @@ use Carp;
 use DateTime;
 use C4::Search;
 use C4::BatchOverlay::LowlyFinder;
+use C4::BatchOverlay::CandidateFinder;
 
 use Koha::Logger;
 #Koha::Logger->setConsoleVerbosity('TRACE');
@@ -36,28 +37,121 @@ my $lowlyRecords = t::CataloguingCenter::localMARCRecords::create_lowlyRecords($
 C4::Context->flushZconns(); #ZOOM connection has cached the previous result, so flush all connections to drop all caches.
 my $output = C4::Search::reindexZebraChanges();
 
+use t::CataloguingCenter::ContextSysprefs;
+t::CataloguingCenter::ContextSysprefs::createBatchOverlayRules($testContext);
+use C4::BatchOverlay::RuleManager;
 
-subtest "_prepareMonthsSearchQuery", \&_prepareMonthsSearchQuery;
-sub _prepareMonthsSearchQuery {
+
+subtest "candidateFinder->publicationDates", \&candidateFinder_publicationDates;
+sub candidateFinder_publicationDates {
+    my $subtestContext = {};
     eval {
+    t::CataloguingCenter::ContextSysprefs::createBatchOverlayRulesWithCandidateCriteria($subtestContext);
 
-    my $monthsPast = 30;
-    my $now = DateTime->now(time_zone => C4::Context->tz());
-    my @pastMonths;
-    foreach my $i (0..$monthsPast) {
-        my $before = $now->clone->subtract(months => $i);
-        push(@pastMonths, $before->year().'-'.sprintf("%02d",$before->month())."'");
-    }
+    my $rule = C4::BatchOverlay::RuleManager->new()->getRuleFromRuleName('default');
 
-    my $query = C4::BatchOverlay::LowlyFinder::_prepareMonthsSearchQuery($monthsPast);
-    foreach my $test (@pastMonths) {
-        ok($query =~ /$test/, "$test found");
-    }
+    my $pubdates = $rule->getCandidateCriteria()->{publicationDates};
+    is("@$pubdates", "2016 2015 2014", "Given publicationDates from syspref");
+
+    my $queryPart = C4::BatchOverlay::CandidateFinder->criterion_publicationDates($pubdates);
+    ok($queryPart, "And search terms");
+
+    my ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $queryPart, undef, 1000 );
+    warn $error if $error;
+    ok(not($error), "When we search");
+
+    is($resultSetSize, 3, "Then we receive 3 results");
 
     };
     if ($@) {
         ok(0, $@);
     }
+    t::lib::TestObjects::ObjectFactory->tearDownTestContext($subtestContext);
+}
+
+
+subtest "candidateFinder->monthsPast", \&candidateFinder_monthsPast;
+sub candidateFinder_monthsPast {
+    my $subtestContext = {};
+    eval {
+    t::CataloguingCenter::ContextSysprefs::createBatchOverlayRulesWithCandidateCriteria($subtestContext);
+
+    my $rule = C4::BatchOverlay::RuleManager->new()->getRuleFromRuleName('default');
+
+    my $monthsPast = $rule->getCandidateCriteria()->{monthsPast};
+    is($monthsPast, "Date-of-receival 3", "Given monthsPast from syspref");
+
+    my $queryPart = C4::BatchOverlay::CandidateFinder->criterion_monthsPast($monthsPast);
+    ok($queryPart, "And search terms");
+
+    my ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $queryPart, undef, 1000 );
+    warn $error if $error;
+    ok(not($error), "When we search");
+
+    is($resultSetSize, 4, "Then we receive 4 results");
+
+    };
+    if ($@) {
+        ok(0, $@);
+    }
+    t::lib::TestObjects::ObjectFactory->tearDownTestContext($subtestContext);
+}
+
+
+subtest "candidateFinder->getSearchTerms", \&candidateFinder_getSearchTerms;
+sub candidateFinder_getSearchTerms {
+    my $subtestContext = {};
+    eval {
+    t::CataloguingCenter::ContextSysprefs::createBatchOverlayRulesWithCandidateCriteria($subtestContext);
+
+    my $rule = C4::BatchOverlay::RuleManager->new()->getRuleFromRuleName('default');
+    ok($rule, "Given a Rule");
+    my $cf = C4::BatchOverlay::CandidateFinder->new($rule);
+    ok($cf, "And a CandidateFinder");
+
+    my $terms = $cf->getSearchTerms();
+    ok($terms, "When CandidateFinder gets the search terms ");
+
+    my ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $terms, undef, 1000 );
+    warn $error if $error;
+    ok(not($error), "And we search with them");
+
+    is($resultSetSize, 3, "Then we receive 3 results");
+    like($results->[0], qr/lowly-1-1/, "And result 1 is lowly-1-1");
+    like($results->[1], qr/lowly-2-2/, "And result 2 is lowly-2-2");
+    like($results->[2], qr/lowly-3-3/, "And result 3 is lowly-3-3");
+
+    };
+    if ($@) {
+        ok(0, $@);
+    }
+    t::lib::TestObjects::ObjectFactory->tearDownTestContext($subtestContext);
+}
+
+
+subtest "candidateFinder->getSearchTerms integration to LowlyFinder", \&candidateFinder_getSearchTerms_integration_to_lowlyFinder;
+sub candidateFinder_getSearchTerms_integration_to_lowlyFinder {
+    my ($lowlyFinder, $records1, $records2);
+    my $subtestContext = {};
+    eval {
+    t::CataloguingCenter::ContextSysprefs::createBatchOverlayRulesWithCandidateCriteria($subtestContext);
+
+    ##Test getting only two chunks
+    $lowlyFinder = C4::BatchOverlay::LowlyFinder->new({chunk => 10, chunks => 10});
+    ok($lowlyFinder, "Given a LowlyFinder");
+
+    $records1 = sortRecordsNicely($lowlyFinder->nextLowlyCataloguedRecords());
+    is scalar(@$records1), 1,                '1st chunk has 1 record';
+    $records2 = sortRecordsNicely($lowlyFinder->nextLowlyCataloguedRecords());
+    is $records2, undef,                     '2nd chunk is undef';
+
+    is $records1->[0]->subfield('020','a'), 'lowly-3-3', 'Then the record is lowly-3-3';
+
+    };
+    if ($@) {
+        ok(0, $@);
+    }
+    t::lib::TestObjects::ObjectFactory->tearDownTestContext($subtestContext);
 }
 
 
@@ -125,29 +219,24 @@ sub findLowlyCataloguedRecords {
     #Iterate chunk5, this is an intersection between two encoding level values 8 and 7
     $records = sortRecordsNicely($lowlyFinder->nextLowlyCataloguedRecords());
     is $records->[0]->subfield('020','a'), 'lowly-8-14', 'lowly-8-14';
-    is $records->[1]->subfield('020','a'), 'lowly-7-13', 'lowly-7-13';
+    is $records->[1]->subfield('020','a'), 'lowly-6-10', 'lowly-6-10';
 
     #Iterate chunk6, this is plain enc level 7
     $records = sortRecordsNicely($lowlyFinder->nextLowlyCataloguedRecords());
-    is $records->[0]->subfield('020','a'), 'lowly-7-12', 'lowly-7-12';
-    is $records->[1]->subfield('020','a'), 'lowly-7-11', 'lowly-7-11';
+    is $records->[0]->subfield('020','a'), 'lowly-6-9', 'lowly-6-9';
+    is $records->[1]->subfield('020','a'), 'lowly-6-8', 'lowly-6-8';
 
     #Iterate chunk7, this is plain enc level 6
     $records = sortRecordsNicely($lowlyFinder->nextLowlyCataloguedRecords());
-    is $records->[0]->subfield('020','a'), 'lowly-6-10', 'lowly-6-10';
-    is $records->[1]->subfield('020','a'), 'lowly-6-9',  'lowly-6-9';
+    is $records->[0]->subfield('020','a'), 'lowly-5-7', 'lowly-5-7';
+    is $records->[1]->subfield('020','a'), 'lowly-5-6', 'lowly-5-6';
 
     #Iterate chunk8, this is an intersection between two encoding level values 6 and 5
     $records = sortRecordsNicely($lowlyFinder->nextLowlyCataloguedRecords());
-    is $records->[0]->subfield('020','a'), 'lowly-6-8', 'lowly-6-8';
-    is $records->[1]->subfield('020','a'), 'lowly-5-7', 'lowly-5-7';
+    is $records->[0]->subfield('020','a'), 'lowly-5-5', 'lowly-5-5';
+    is $records->[1]->subfield('020','a'), 'lowly-3-3', 'lowly-3-3';
 
-    #Iterate chunk9, this is plain enc level 5
-    $records = sortRecordsNicely($lowlyFinder->nextLowlyCataloguedRecords());
-    is $records->[0]->subfield('020','a'), 'lowly-5-6', 'lowly-5-6';
-    is $records->[1]->subfield('020','a'), 'lowly-5-5', 'lowly-5-5';
-
-    #Iterate chunk10, this is an empty ArrayRef
+    #Iterate chunk9, this is an empty ArrayRef
     $records = sortRecordsNicely($lowlyFinder->nextLowlyCataloguedRecords());
     is $records, undef,                    'Chunk is undef';
 
@@ -177,10 +266,8 @@ sub testEndingThreshold {
 
     #Now we get the last lowly records
     $records = sortRecordsNicely($lowlyFinder->nextLowlyCataloguedRecords());
-    is scalar(@$records), 3,                'Chunk has 3 records';
-    is $records->[0]->subfield('020','a'), 'lowly-5-7', 'lowly-5-7';
-    is $records->[1]->subfield('020','a'), 'lowly-5-6', 'lowly-5-6';
-    is $records->[2]->subfield('020','a'), 'lowly-5-5', 'lowly-5-5';
+    is scalar(@$records), 1,                'Chunk has 1 record';
+    is $records->[0]->subfield('020','a'), 'lowly-3-3', 'lowly-3-3';
 
     };
     if ($@) {

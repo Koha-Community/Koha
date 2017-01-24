@@ -299,7 +299,7 @@ sub _populateComponentPartFieldsFromParent {
     C4::BatchOverlay::_populateComponentPartFieldsFromParent($child, $host);
 
     is($child->subfield('942', 'c'), 'BK', 'Koha default item type received from parent');
-    is($child->subfield('999', 'b'), 'BOOKS', 'Koha biblio.frameworkcode received from parent');
+    is($child->subfield('999', 'b'), 'BKS', 'Koha biblio.frameworkcode received from parent');
 
     };
     if ($@) {

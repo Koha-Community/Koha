@@ -27,6 +27,8 @@ use MARC::File::XML;
 
 use C4::Search;
 use Koha::Logger;
+use C4::BatchOverlay::CandidateFinder;
+use C4::BatchOverlay::RuleManager;
 
 use Koha::Exception::BatchOverlay::LocalSearch;
 
@@ -119,6 +121,10 @@ sub new {
     $self->{recordBuffer} = []; #Collect records here for iteration.
     $self->{levelsNotSearched} = getLowlyEncodingLevels(); #Which encoding levels have already been searched and added to the recordBuffer
 
+    $self->{rule} = C4::BatchOverlay::RuleManager->new()->getRuleFromRuleName('default');
+    my $cf = C4::BatchOverlay::CandidateFinder->new($self->{rule});
+    $self->{candidateFinderSearchTerms} = $cf->getSearchTerms();
+
     return $self;
 }
 
@@ -141,7 +147,7 @@ sub nextLowlyCataloguedRecords {
     while (scalar(@{$self->{recordBuffer}}) < $self->{chunk}) {
         my $nextEncodingLevel = pop(@{$self->{levelsNotSearched}});
         last unless $nextEncodingLevel;
-        my ($records, $resultSetSize) = searchByEncodingLevel($nextEncodingLevel, undef, $self->{monthsPast}); #no limit!
+        my ($records, $resultSetSize) = $self->_searchByEncodingLevel($nextEncodingLevel, undef); #no limit!
         push(@$records, @{$self->{recordBuffer}}); #Make sure the more lowly catalogued records are in the tail so we can splice more efficiently
         $self->{recordBuffer} = $records;
     }
@@ -163,6 +169,7 @@ sub nextLowlyCataloguedRecords {
 }
 
 =head2 searchByEncodingLevel
+@STATIC
 
     my ($searchResultBiblios, $resultSetSize) = C4::BatchOverlay::LowlyFinder::searchByEncodingLevel($encodingLevel, $limit);
     $searchResultBiblios->[1]->subfield('021','a');
@@ -182,10 +189,40 @@ The returning slim biblio has the following keys:
 =cut
 
 sub searchByEncodingLevel {
-    my ($encodingLevel, $limit, $monthsPast) = (@_);
+    my ($encodingLevel, $limit) = (@_);
 
     my $search = "Enc-level='$encodingLevel'";
-    $search .= ' and '._prepareMonthsSearchQuery($monthsPast) if $monthsPast;
+
+    return _searchByEncodingLevelAgain($search, $limit);
+}
+
+=head2 _searchByEncodingLevel
+
+Same as the static subroutine searchByEncodingLevel(), except uses more complicated rules to build the query
+
+In addition to the searchByEncodingLevel(), uses the syspref BatchOverlayRules to add extra filters to
+this encoding level search.
+
+=cut
+
+sub _searchByEncodingLevel {
+    my ($self, $encodingLevel, $limit) = (@_);
+
+    my $search = "Enc-level='$encodingLevel'";
+    $search .= ' and '.$self->{candidateFinderSearchTerms} if $self->{candidateFinderSearchTerms};
+
+    return _searchByEncodingLevelAgain($search, $limit);
+}
+
+=head2 _searchByEncodingLevelAgain
+@PRIVATE
+
+Do not ever directly call this subroutine
+
+=cut
+
+sub _searchByEncodingLevelAgain {
+    my ($search, $limit) = @_;
 
     $logger->debug("Searching with $search");
     my ($error, $results, $resultSetSize) = C4::Search::SimpleSearch( $search, undef, $limit );
@@ -204,16 +241,4 @@ sub searchByEncodingLevel {
     return ($results, $resultSetSize);
 }
 
-sub _prepareMonthsSearchQuery {
-    my ($monthsPast) = @_;
-
-    my $now = DateTime->now(time_zone => C4::Context->tz());
-    my @pastMonths;
-    foreach my $i (0..$monthsPast) {
-        my $before = $now->clone()->subtract(months => $i);
-        push(@pastMonths, "Date-of-acquisition,rtrn='".$before->year().'-'.sprintf("%02d",$before->month())."'");
-    }
-    return '( '.join(' or ', @pastMonths). ' )';
-}
-
-return 1;
+1;

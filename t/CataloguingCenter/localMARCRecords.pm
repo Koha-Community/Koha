@@ -19,6 +19,8 @@ package t::CataloguingCenter::localMARCRecords;
 
 use Modern::Perl;
 
+use DateTime;
+
 use t::lib::TestObjects::BiblioFactory;
 
 =head IN THIS FILE
@@ -292,7 +294,7 @@ sub create_host_record {
     <subfield code="c">BK</subfield>
   </datafield>
   <datafield tag="999" ind1=" " ind2=" ">
-    <subfield code="b">BOOKS</subfield>
+    <subfield code="b">BKS</subfield>
   </datafield>
 </record>
 RECORD
@@ -302,6 +304,12 @@ RECORD
 } #EO prepareContext()
 
 
+=head2 create_lowlyRecords
+
+Creates a bunch of simple records with descending encoding levels.
+Also populates publicationDates to 008 7-10 descending from 2017
+
+=cut
 
 sub create_lowlyRecords {
     my ($testContext) = @_;
@@ -310,6 +318,8 @@ sub create_lowlyRecords {
     #We use 0 instead of '#' because otherwise Zebra throws "" CCL parsing error (10014) Single character mask not supported ZOOM for query: rcn='lowly-#-0' and cni='lowlyRecordTest' at C4/Search.pm line 276. ""
     #We don't need '#' here, only the lowly catalogued levels
     my @encLevels = ('0', '1', '2', '3', '4', '5', '5', '5', '6', '6', '6', '7', '7', '7', '8', '8', '8', 'u', 'u', 'u', 'z', 'z', 'z');
+    my $pubdate = 2017;
+    my $dateOfAcquisition = DateTime->now(time_zone => C4::Context->tz);
     for (my $i=0 ; $i<scalar(@encLevels) ; $i++) {
         my $encLevel = $encLevels[$i];
         $record = <<RECORD;
@@ -317,16 +327,21 @@ sub create_lowlyRecords {
   <leader>00000cam a2200000${encLevel}c 4500</leader>
   <controlfield tag="001">lowly-${encLevel}-$i</controlfield>
   <controlfield tag="003">lowlyRecordTest</controlfield>
-  <controlfield tag="008">       1988    xxk|||||||||| ||||1|eng|c</controlfield>
+  <controlfield tag="008">       ${pubdate}    xxk|||||||||| ||||1|eng|c</controlfield>
   <datafield tag="020" ind1=" " ind2=" ">
     <subfield code="a">lowly-${encLevel}-$i</subfield>
   </datafield>
   <datafield tag="245" ind1="1" ind2="4">
     <subfield code="a">lowly-${encLevel}-$i</subfield>
   </datafield>
+  <datafield tag="942" ind1="0" ind2="0">
+    <subfield code="1">${dateOfAcquisition}</subfield>
+  </datafield>
 </record>
 RECORD
         push(@records, {record => $record});
+        $pubdate--;
+        $dateOfAcquisition->subtract(months => 1);
     }
     return t::lib::TestObjects::BiblioFactory->createTestGroup(\@records, undef, $testContext);
 } #EO prepareContext()

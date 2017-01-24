@@ -225,6 +225,10 @@ default:
     notifyOnChangeSubfields: [084a, items.itemcallnumber, 110]
     notificationEmails: [koha@example.com, cataloguing@example.com]
     searchAlgorithms: [Control_number_identifier, Standard_identifier]
+    candidateCriteria:
+        lowlyCatalogued: always
+        monthsPast: Date-of-acquisition 2
+        publicationDates: [2017, 2016, 2015]
     dryRun: 0
 
 _excludeExceptions: [RemoteSearchNoResults DuplicateSearchTerm]
@@ -276,6 +280,38 @@ _excludeExceptions: [RemoteSearchNoResults DuplicateSearchTerm]
                         </ul>
                         Recommended default is:<br/>
                         &nbsp;&nbsp;[Control_number_identifier Standard_identifier]
+                    </p>
+                </li>
+                <li>
+                    'candidateCriteria' <span class="hint">#Which criteria are applied to bibliographic records when they are considered as batch overlay candidates.</span>
+                    <p>
+                        These criteria are checked only when doing batch overlay using the the nightly cronjob batchOverlay.pl.<br/>
+                        Include criteria to your batch overlay nightly run, by adding the following criteria to your system preference, and setting the criteria parameters.
+                        If all the criteria match, the bibliographic record is chosen for batch overlaying, and if a matching record is found from the remote repository, it will be batch overlayed.
+                    </p>
+                    <p>
+                        Available criteria:
+                        <ul>
+                            <li>
+                                lowlyCatalogued: <always>
+                                Select only lowly catalogued records as batch overlay candidates.
+                                Currently this setting must be enabled, or the batch overlay operation won't start.
+                                eg. lowlyCatalogued: always
+                            </li>
+                            <li>
+                                monthsPast: <index-name> <number><br/>
+                                How many months to look in the past for candidates?<br/>
+                                <index-name> = The search index to use, eg. Date-of-acquisition, time-last-modified<br/>
+                                <number> = How many months, eg. 2
+                                eg. monthsPast: Date-of-acquisition 2
+                            </li>
+                            <li>
+                                publicationDates: <year> [<year>, <year>, ...]<br/>
+                                The candidate must match one of these publication dates<br/>
+                                <year> = The publication date from pubdate-index, MARC 008 7-10
+                                eg. publicationDates: 2017 2016 2015
+                            </li>
+                        </ul>
                     </p>
                 </li>
                 <li>

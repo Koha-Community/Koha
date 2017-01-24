@@ -437,6 +437,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.26'
     },
+    'Hash::Merge::Simple' => {
+        'usage'    => 'BatchOverlay',
+        'required' => '1',
+        'min_ver'  => '0.051'
+    },
     'PDF::Reuse::Barcode' => {
         'usage'    => 'Core',
         'required' => '1',
