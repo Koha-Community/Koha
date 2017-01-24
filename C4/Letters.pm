@@ -688,18 +688,22 @@ sub SendAlerts {
 sub GetPreparedLetter {
     my %params = @_;
 
-    my $module      = $params{module} or croak "No module";
-    my $letter_code = $params{letter_code} or croak "No letter_code";
-    my $branchcode  = $params{branchcode} || '';
-    my $mtt         = $params{message_transport_type} || 'email';
-    my $lang        = $params{lang} || 'default';
-
-    my $letter = getletter( $module, $letter_code, $branchcode, $mtt, $lang );
+    my $letter = $params{letter};
 
     unless ( $letter ) {
-        $letter = getletter( $module, $letter_code, $branchcode, $mtt, 'default' )
-            or warn( "No $module $letter_code letter transported by " . $mtt ),
-               return;
+        my $module      = $params{module} or croak "No module";
+        my $letter_code = $params{letter_code} or croak "No letter_code";
+        my $branchcode  = $params{branchcode} || '';
+        my $mtt         = $params{message_transport_type} || 'email';
+        my $lang        = $params{lang} || 'default';
+
+        $letter = getletter( $module, $letter_code, $branchcode, $mtt, $lang );
+
+        unless ( $letter ) {
+            $letter = getletter( $module, $letter_code, $branchcode, $mtt, 'default' )
+                or warn( "No $module $letter_code letter transported by " . $mtt ),
+                    return;
+        }
     }
 
     my $tables = $params{tables} || {};
