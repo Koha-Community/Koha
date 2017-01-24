@@ -267,10 +267,14 @@ sub add_form {
         }
     }
 
+    my $preview_is_available = grep {/^$code$/} qw(
+        CHECKIN CHECKOUT HOLD_SLIP
+    );
     $template->param(
         module     => $module,
         SQLfieldnames => $field_selection,
         branchcode => $branchcode,
+        preview_is_available => $preview_is_available,
     );
     return;
 }

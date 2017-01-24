@@ -1,0 +1,248 @@
+#!/usr/bin/perl
+
+# Copyright 2016 Koha Development Team
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+use CGI qw( -utf8 );
+use C4::Auth;
+use C4::Context;
+use C4::Output;
+use C4::Circulation;
+use C4::Letters;
+use Koha::Checkouts;
+use Koha::Items;
+use Koha::Patrons;
+
+my $input = new CGI;
+
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "tools/preview_letter.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { tools => 'edit_notices' },
+        debug           => 1,
+    }
+);
+
+my @messages;
+my $code         = $input->param('code');
+my $content      = $input->param('content');
+my $title        = $input->param('title');
+my $is_html      = $input->param('is_html');
+my $data_preview = $input->param('data_preview');
+
+unless ( $data_preview ) {
+    $template->param( messages => [{ code => 'no_data_for_preview', type => 'error' }]);
+    output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
+}
+
+my $fake_letter = { content => $content, title => $title, is_html => $is_html };
+
+my ( $tt_content, $fake_tt_letter );
+if ( $content =~ m/[^\n]*<<.*>>[^\n]*/so ) {
+    $tt_content = $content;
+
+    my $table_mapping = {
+        biblio                 => 'biblio',
+        borrowers              => 'borrower',
+        branches               => 'branch',
+        items                  => 'item',
+        opac_news              => 'news',
+        aqorders               => 'orders',
+        reserves               => 'hold',
+        serial                 => 'serial',
+        subscription           => 'subscription',
+        suggestions            => 'suggestion',
+        issues                 => 'checkout',
+        old_issues             => 'old_checkout',
+        overdues               => 'overdue',
+        borrower_modifications => 'patron_modification',
+    };
+
+    # Today
+    $tt_content =~ s#<<today>>#[% today| \$KohaDates with_hours => 1 %]#sg;
+
+
+    for my $date_field ( qw(
+            borrowers.dateofbirth
+            borrowers.dateenrolled
+            borrowers.dateexpiry
+            borrowers.debarred
+            items.dateaccessioned
+            items.datelastborrowed
+            items.datelastseen
+            items.onloan
+            serials.planneddate
+            serials.publisheddate
+            serials.claimdate
+            reserves.reservedate
+            reserves.waitingdate
+            reserves.expirationdate
+            suggestions.suggesteddate
+            suggestions.manageddate
+            suggestions.accepteddate
+            suggestions.rejecteddate
+            aqorders.entrydate
+            aqorders.datereceived
+            aqorders.datecancellationprinted
+            aqorders.budgetdate
+            aqorders.claimed_date
+    ) ) {
+        my ( $table, $field ) = split '\.', $date_field;
+        my $new_field =
+          exists $table_mapping->{$table}
+          ? $table_mapping->{$table} . ".$field"
+          : "$table.$field";
+        $tt_content =~ s#<<$table\.$field>>#[% $new_field | \$KohaDates %]#sg;
+        $tt_content =~ s#<<$table\.$field\s*|\s*dateonly>>#[% $new_field | \$KohaDates %]#sg;
+    }
+
+    for my $datetime_field ( qw(
+            items.itemlost_on
+            items.withdrawn_on
+            issues.date_due
+            issues.returndate
+            issues.lastreneweddate
+            issues.issuedate
+            reserves.suspend_until
+    ) ) {
+        my ( $table, $field ) = split '\.', $datetime_field;
+        my $new_field =
+          exists $table_mapping->{$table}
+          ? $table_mapping->{$table} . ".$field"
+          : "$table.$field";
+        $tt_content =~ s#<<$table\.$field>>#[% $new_field | \$KohaDates with_hours => 1 %]#sg;
+        $tt_content =~ s#<<$table\.$field\s*|\s*dateonly>>#[% $new_field | \$KohaDates %]#sg;
+    }
+
+
+
+    while ( my ( $key, $value ) = each %$table_mapping ) {
+        $tt_content =~ s|<<$key\.|<<$value.|sg;
+    }
+
+    $tt_content =~ s|<<|[% |sg;
+    $tt_content =~ s|>>| %]|sg;
+    $fake_tt_letter =
+      { content => $tt_content, title => $title, is_html => $is_html };
+}
+
+my ( $rendered_message, $rendered_tt_message ) = (q||) x 2;
+my $messages_are_similar;
+my $letter_params = {};
+if ( $code eq 'CHECKIN' ) {
+    my $item = Koha::Items->find( { barcode => $data_preview } );
+    my $checkout = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
+    if ($checkout) {
+        my $patron = Koha::Patrons->find( $checkout->borrowernumber );
+        my $branchcode =
+          C4::Circulation::_GetCircControlBranch( $item->unblessed,
+            $patron->unblessed );
+        $letter_params = {
+            tables => {
+                issues      => $item->itemnumber,
+                items       => $item->itemnumber,
+                biblio      => $item->biblionumber,
+                biblioitems => $item->biblionumber,
+                issues      => $patron->borrowernumber,
+                branches    => $branchcode,
+            }
+        };
+        push @messages, { code => 'not_checked_in_yet', type => 'message' };
+    }
+    else {
+        warn "No checkout";
+    }
+}
+elsif ( $code eq 'CHECKOUT' ) {
+    my ( $barcode, $borrowernumber ) = split '\|', $data_preview;
+    my $item = Koha::Items->find( { barcode => $barcode } );
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    if ($item and $patron) {
+        my $branchcode =
+          C4::Circulation::_GetCircControlBranch( $item->unblessed,
+            $patron->unblessed );
+        $letter_params = {
+            tables => {
+                issues      => $item->itemnumber,
+                items       => $item->itemnumber,
+                biblio      => $item->biblionumber,
+                biblioitems => $item->biblionumber,
+                issues      => $patron->borrowernumber,
+                branches    => $branchcode,
+            }
+        };
+        push @messages, { code => 'not_checked_out_yet', type => 'message' };
+    }
+    else {
+        warn "No item or no patron";
+    }
+}
+elsif ( $code eq 'HOLD_SLIP' ) {
+    my ( $biblionumber, $borrowernumber ) = split '\|', $data_preview;
+    my $hold = Koha::Holds->find( { borrowernumber => $borrowernumber, biblionumber => $biblionumber } );
+    if ($hold) {
+        $letter_params = {
+            tables => {
+                reserves    => $hold->unblessed,
+                branches    => $hold->branchcode,
+                borrowers   => $hold->borrowernumber,
+                biblio      => $hold->biblionumber,
+                biblioitems => $hold->biblionumber,
+                items       => $hold->itemnumber,
+            }
+        };
+    }
+    else {
+        warn "No hold placed by this patron on this bibliographic record.";
+    }
+}
+else {
+    warn "Preview for letter code $code is not available";
+    push @messages, { type => 'alert', code => 'preview_not_available', letter_code => $code, };
+}
+
+if ( %$letter_params ) {
+    # FIXME Be case here GetPreparedLetter modify $fake_letter
+    $rendered_message = C4::Letters::GetPreparedLetter(
+        letter => $fake_letter,
+        %$letter_params,
+    );
+    if ($tt_content) {
+        $rendered_tt_message = C4::Letters::GetPreparedLetter(
+            letter => $fake_tt_letter,
+            %$letter_params,
+        );
+    }
+    $messages_are_similar =
+      $rendered_message->{content} eq $rendered_tt_message->{content};
+}
+
+$template->param(
+    original_content     => $content,
+    rendered_message     => $rendered_message,
+    tt_content           => $tt_content,
+    rendered_tt_message  => $rendered_tt_message,
+    messages_are_similar => $messages_are_similar,
+    messages             => \@messages,
+);
+
+output_html_with_http_headers $input, $cookie, $template->output;
