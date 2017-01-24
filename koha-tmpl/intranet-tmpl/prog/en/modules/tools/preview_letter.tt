@@ -19,6 +19,15 @@
                     [% END %]
                 </div>
             [% END %]
+
+            [% IF rendered_tt_message %]
+                [% IF messages_are_similar %]
+                    <div class="dialog message">The generated notices are exactly the same!</div>
+                [% ELSE %]
+                    <div class="dialog alert">The generated notices are different!</div>
+                [% END %]
+            [% END %]
+
             [% IF rendered_message %]
                 <fieldset class="brief">
                     <legend>Original version</legend>
@@ -44,12 +53,5 @@
             [% END %]
         </div>
 
-        [% IF rendered_tt_message %]
-            [% IF messages_are_similar %]
-                <div class="dialog message">The generated notices are exactly the same!</div>
-            [% ELSE %]
-                <div class="dialog alert">The generated notices are different!</div>
-            [% END %]
-        [% END %]
     </body>
 </html>
