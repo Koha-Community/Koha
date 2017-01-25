@@ -19,7 +19,6 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use C4::Auth qw( haspermission );
 use Koha::City;
 use Koha::Cities;
 
@@ -37,7 +36,7 @@ sub list {
     }
 
     return try {
-        $cities = Koha::Cities->search($filter)->unblessed;
+        $cities = Koha::Cities->search($filter);
         return $c->$cb( $cities, 200 );
     }
     catch {
@@ -59,7 +58,7 @@ sub get {
         return $c->$cb( { error => "City not found" }, 404 );
     }
 
-    return $c->$cb( $city->unblessed, 200 );
+    return $c->$cb( $city, 200 );
 }
 
 sub add {
@@ -69,7 +68,7 @@ sub add {
 
     return try {
         $city->store;
-        return $c->$cb( $city->unblessed, 200 );
+        return $c->$cb( $city, 200 );
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
@@ -91,7 +90,7 @@ sub update {
         $city = Koha::Cities->find( $args->{cityid} );
         $city->set( $args->{body} );
         $city->store();
-        return $c->$cb( $city->unblessed, 200 );
+        return $c->$cb( $city, 200 );
     }
     catch {
         if ( not defined $city ) {
