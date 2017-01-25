@@ -316,7 +316,7 @@ $template->param(
 my @components = ();
 
 my $perl_modules = C4::Installer::PerlModules->new;
-$perl_modules->version_info;
+$perl_modules->versions_info;
 
 my @pm_types = qw(missing_pm upgrade_pm current_pm);
 

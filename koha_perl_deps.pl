@@ -35,7 +35,7 @@ GetOptions(
 pod2usage(1) if $help || (!$missing && !$installed && !$upgrade && !$all);
 
 my $koha_pm = C4::Installer::PerlModules->new;
-$koha_pm->version_info(all => 1);
+$koha_pm->versions_info;
 
 my @pm = ();
 

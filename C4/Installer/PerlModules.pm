@@ -57,48 +57,52 @@ sub required {
     }
 }
 
-sub version_info {
-    no warnings; # perl throws warns for invalid $VERSION numbers which some modules use
+sub versions_info {
     my $self = shift;
-#   Reset these arrayref each pass through to ensure current information
+
+    #   Reset these arrayref each pass through to ensure current information
     $self->{'missing_pm'} = [];
     $self->{'upgrade_pm'} = [];
     $self->{'current_pm'} = [];
-    my %params = @_;
-    if ($params{'module'}) {
-        return -1 unless grep {m/$params{'module'}/} keys(%$PERL_DEPS);
-        eval "require $params{'module'}";
-        my $pkg_version =  $params{'module'} &&  $params{'module'}->can("VERSION") ? $params{'module'}->VERSION : 0;
-        my $min_version =  $PERL_DEPS->{$params{'module'}}->{'min_ver'} // 0;
-        if ($@) {
-            return {$params{'module'} => {cur_ver => 0, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, upgrade => 0, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}};
-        }
-        elsif (version->parse("$pkg_version") < version->parse("$min_version")) {
-            return {$params{'module'} => {cur_ver => $params{'module'}->VERSION, min_ver => $PERL_DEPS->{$params{'module'}}->{'min_ver'}, upgrade => 1, required => $PERL_DEPS->{$params{'module'}}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}};
-        }
-        else {
-            return {$params{'module'} => {cur_ver => $params{'module'}->VERSION, min_ver => $PERL_DEPS->{$params{'module'}}->{'min_ver'}, upgrade => 0, required => $PERL_DEPS->{$params{'module'}}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}};
-        }
-    }
-    else {
-        for (sort keys(%{$PERL_DEPS})) {
-            my $pkg = $_;  #  $_ holds the string
-            eval "require $pkg";
-            my $pkg_version =  $pkg &&  $pkg->can("VERSION") ? $pkg->VERSION : 0;
-            my $min_version = $PERL_DEPS->{$_}->{'min_ver'} // 0;
-            if ($@) {
-                push (@{$self->{'missing_pm'}}, {$_ => {cur_ver => 0, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
-            }
-            elsif (version->parse("$pkg_version") < version->parse("$min_version")) {
-                push (@{$self->{'upgrade_pm'}}, {$_ => {cur_ver => $pkg->VERSION, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
-            }
-            else {
-                push (@{$self->{'current_pm'}}, {$_ => {cur_ver => $pkg->VERSION, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
-            }
-        }
-        return;
+
+    for my $module ( sort keys %$PERL_DEPS ) {
+        my $module_infos = $self->version_info($module);
+        my $status       = $module_infos->{status};
+        push @{ $self->{"${status}_pm"} }, { $module => $module_infos };
     }
 }
+
+sub version_info {
+    no warnings
+      ;  # perl throws warns for invalid $VERSION numbers which some modules use
+    my ( $self, $module ) = @_;
+    return -1 unless grep { /^$module$/ } keys(%$PERL_DEPS);
+
+    eval "require $module";
+    my $pkg_version = $module->can("VERSION") ? $module->VERSION : 0;
+    my $min_version = $PERL_DEPS->{$module}->{'min_ver'} // 0;
+
+    my ( $cur_ver, $upgrade, $status );
+    if ($@) {
+        ( $cur_ver, $upgrade, $status ) = ( 0, 0, 'missing' );
+    }
+    elsif ( version->parse("$pkg_version") < version->parse("$min_version") ) {
+        ( $cur_ver, $upgrade, $status ) = ( $module->VERSION, 1, 'upgrade' );
+    }
+    else {
+        ( $cur_ver, $upgrade, $status ) = ( $module->VERSION, 0, 'current' );
+    }
+
+    return {
+        cur_ver  => $cur_ver,
+        min_ver  => $PERL_DEPS->{$module}->{min_ver},
+        required => $PERL_DEPS->{$module}->{required},
+        usage    => $PERL_DEPS->{$module}->{usage},
+        upgrade  => $upgrade,
+        status   => $status,
+    };
+}
+
 
 sub get_attr {
     return $_[0]->{$_[1]};
@@ -157,7 +161,7 @@ A module for manipulating Koha Perl dependency list objects.
     Depending on the parameters passed when invoking, this method will give the current status of modules currently used in Koha as well as the currently installed version if the module is installed, the current minimum required version, and the upgrade status. If passed C<module => module_name>, the method evaluates only that module. If passed C<all => 1>, all modules are evaluated.
 
     example:
-        C<my $module_status = $perl_modules->version_info(module => 'foo');>
+        C<my $module_status = $perl_modules->version_info('foo');>
 
         This usage returns a hashref with a single key/value pair. The key is the module name. The value is an anonymous hash with the following keys:
 
@@ -167,12 +171,10 @@ A module for manipulating Koha Perl dependency list objects.
         required = 0 of the module is optional; 1 if required
 
         {
-          'CGI::Carp' => {
-                           'required' => 1,
-                           'cur_ver' => '1.30_01',
-                           'upgrade' => 0,
-                           'min_ver' => '1.29'
-                         }
+           'required' => 1,
+           'cur_ver' => '1.30_01',
+           'upgrade' => 0,
+           'min_ver' => '1.29'
         };
 
         C<$perl_modules->version_info;>
