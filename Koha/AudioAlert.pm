@@ -43,9 +43,7 @@ sub store {
 
     if ( $self->verification_token ) {
         if ( Koha::Patron::Modifications->search( { verification_token => $self->verification_token } )->count() ) {
-            Koha::Exceptions::Patron::Modification::DuplicateVerificationToken->throw(
-                "Duplicate verification token " . $self->verification_token
-            );
+            Koha::Exceptions::Koha::Patron::Modification::DuplicateVerificationToken->throw;
         }
     }
 
