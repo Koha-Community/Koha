@@ -413,7 +413,14 @@
                                     </span>
                                     <a class="tag_add" id="tag_add[% biblionumber %]" href="#">Add tag(s)</a>
                                 [% ELSE %]
-                                    <span id="login4tags"><a class="loginModal-trigger" data-toggle="modal" role="button" href="/cgi-bin/koha/opac-user.pl">Log in to add tags.</a></span>
+                                    <span id="login4tags">
+                                        [% IF Koha.Preference('casAuthentication') %]
+                                            [%# CAS authentication is too complicated for modal window %]
+                                            <a href="/cgi-bin/koha/opac-user.pl">Log in to add tags.</a>
+                                        [% ELSE %]
+                                            <a class="loginModal-trigger" data-toggle="modal" role="button" href="/cgi-bin/koha/opac-user.pl">Log in to add tags.</a>
+                                        [% END %]
+                                    </span>
                                 [% END %]
                             [% END # / IF TagsInputEnabled %]
                         </div>
