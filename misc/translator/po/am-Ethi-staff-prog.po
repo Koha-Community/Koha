@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-12-15 13:37-0300\n"
+"POT-Creation-Date: 2017-01-15 19:23-0300\n"
 "PO-Revision-Date: 2008-06-23 14:14+0200\n"
 "Last-Translator: translate.koha.org\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -177,6 +177,38 @@ msgstr ""
 msgid "%% matches any number of characters"
 msgstr ""
 
+#. %1$s: - USE KohaDates -
+#. %2$s: - INCLUDE csv_headers/acqui/lateorders.tt +
+#. %3$s:  FOREACH o IN orders 
+#. %4$s:  o.orderdate 
+#. %5$s:  o.latesince 
+#. %6$s:  o.estimateddeliverydate | $KohaDates 
+#. %7$s:  o.supplier (o.supplierid) 
+#. %8$s:  o.title 
+#. %9$s:  IF o.author 
+#. %10$s:  o.author 
+#. %11$s:  END 
+#. %12$s:  IF o.publisher 
+#. %13$s:  o.publisher 
+#. %14$s:  END 
+#. %15$s:  o.unitpricesupplier 
+#. %16$s:  o.quantity_to_receive 
+#. %17$s:  o.subtotal 
+#. %18$s:  o.budget 
+#. %19$s:  o.basketname 
+#. %20$s:  o.basketno 
+#. %21$s:  o.claims_count 
+#. %22$s:  o.claimed_date +
+#. %23$s:  END +
+#. %24$s:  orders.size 
+#: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
+#, c-format
+msgid ""
+"%s %s %s \"%s (%s days)\",\"%s\",\"%s\",\"%s %sAuthor: %s.%s%sPublished by: "
+"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,Total orders in "
+"late, %s "
+msgstr ""
+
 #. %1$s: - USE Branches -
 #. %2$s: - USE Koha -
 #. %3$s: - biblio = item.biblio -
@@ -196,12 +228,11 @@ msgstr ""
 #. %17$s:  item.stocknumber |html 
 #. %18$s:  item.status |html 
 #. %19$s:  (item.issues || 0) |html 
-#. %20$s:  INCLUDE 'empty_line.inc' 
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.csv.inc:1
 #, fuzzy, c-format
 msgid ""
 "%s %s %s %s \"%s %sby %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
-"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"%s "
+"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" "
 msgstr "\t%s %s %s %s (%s)"
 
 #. %1$s:  END 
@@ -4915,40 +4946,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:622
 #, c-format
 msgid "%s%s %s %sNot checked out %s "
-msgstr ""
-
-#. %1$s:  USE KohaDates 
-#. %2$s:  INCLUDE csv_headers/acqui/lateorders.tt 
-#. %3$s:  FOREACH o IN orders 
-#. %4$s:  INCLUDE 'empty_line.inc' 
-#. %5$s:  o.orderdate 
-#. %6$s:  o.latesince 
-#. %7$s:  o.estimateddeliverydate | $KohaDates 
-#. %8$s:  o.supplier (o.supplierid) 
-#. %9$s:  o.title 
-#. %10$s:  IF o.author 
-#. %11$s:  o.author 
-#. %12$s:  END 
-#. %13$s:  IF o.publisher 
-#. %14$s:  o.publisher 
-#. %15$s:  END 
-#. %16$s:  o.unitpricesupplier 
-#. %17$s:  o.quantity_to_receive 
-#. %18$s:  o.subtotal 
-#. %19$s:  o.budget 
-#. %20$s:  o.basketname 
-#. %21$s:  o.basketno 
-#. %22$s:  o.claims_count 
-#. %23$s:  o.claimed_date 
-#. %24$s:  END 
-#. %25$s:  INCLUDE 'empty_line.inc' 
-#. %26$s:  orders.size 
-#: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
-#, c-format
-msgid ""
-"%s%s %s%s\"%s (%s days)\",\"%s\",\"%s\",\"%s %sAuthor: %s.%s%sPublished by: "
-"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s %s ,,Total orders "
-"in late, %s "
 msgstr ""
 
 #. %1$s:  END 
@@ -46202,19 +46199,19 @@ msgstr ""
 msgid "Total (%s)"
 msgstr ""
 
-#. %1$s:  tf.gstrate * 100 | $Price 
+#. %1$s:  tf.gstrate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:185
 #, c-format
 msgid "Total (GST %s %%)"
 msgstr ""
 
-#. %1$s:  book_foot.gstrate * 100 | $Price 
+#. %1$s:  book_foot.gstrate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:382
 #, c-format
 msgid "Total (GST %s%%)"
 msgstr ""
 
-#. %1$s:  foot_loo.gstrate * 100 | $Price 
+#. %1$s:  foot_loo.gstrate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:457
 #, c-format
 msgid "Total (GST %s)"

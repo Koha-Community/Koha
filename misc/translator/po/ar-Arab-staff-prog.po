@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14\n"
-"POT-Creation-Date: 2016-12-15 13:39-0300\n"
+"POT-Creation-Date: 2017-01-15 19:24-0300\n"
 "PO-Revision-Date: 2016-12-27 09:06+0000\n"
 "Last-Translator: KnowledgeWare <massoudalshareef@kwareict.com>\n"
 "Language-Team: za\n"
@@ -189,6 +189,41 @@ msgstr "%% (إذا كان فارغاً, سيتم استخدام معدل الخ�
 msgid "%% matches any number of characters"
 msgstr "%% يطابق أي عدد من الأحرف"
 
+#. %1$s: - USE KohaDates -
+#. %2$s: - INCLUDE csv_headers/acqui/lateorders.tt +
+#. %3$s:  FOREACH o IN orders 
+#. %4$s:  o.orderdate 
+#. %5$s:  o.latesince 
+#. %6$s:  o.estimateddeliverydate | $KohaDates 
+#. %7$s:  o.supplier (o.supplierid) 
+#. %8$s:  o.title 
+#. %9$s:  IF o.author 
+#. %10$s:  o.author 
+#. %11$s:  END 
+#. %12$s:  IF o.publisher 
+#. %13$s:  o.publisher 
+#. %14$s:  END 
+#. %15$s:  o.unitpricesupplier 
+#. %16$s:  o.quantity_to_receive 
+#. %17$s:  o.subtotal 
+#. %18$s:  o.budget 
+#. %19$s:  o.basketname 
+#. %20$s:  o.basketno 
+#. %21$s:  o.claims_count 
+#. %22$s:  o.claimed_date +
+#. %23$s:  END +
+#. %24$s:  orders.size 
+#: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
+#, fuzzy, c-format
+msgid ""
+"%s %s %s \"%s (%s days)\",\"%s\",\"%s\",\"%s %sAuthor: %s.%s%sPublished by: "
+"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,Total orders in "
+"late, %s "
+msgstr ""
+"%s%s %s%s\"%s (%s أيام)\",\"%s\",\"%s\",\"%s %sالمؤلف: %s.%s%sنُشر بواسطة: %s."
+"%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s %s ,,إجمالي الطلبيات "
+"في آخر, %s "
+
 #. %1$s: - USE Branches -
 #. %2$s: - USE Koha -
 #. %3$s: - biblio = item.biblio -
@@ -208,12 +243,11 @@ msgstr "%% يطابق أي عدد من الأحرف"
 #. %17$s:  item.stocknumber |html 
 #. %18$s:  item.status |html 
 #. %19$s:  (item.issues || 0) |html 
-#. %20$s:  INCLUDE 'empty_line.inc' 
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.csv.inc:1
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %s %s %s \"%s %sby %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
-"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"%s "
+"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" "
 msgstr ""
 "%s %s %s %s \"%s %sبواسطة %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", "
 "\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"%s"
@@ -445,8 +479,8 @@ msgid ""
 "%s %s %s %s { \"sEcho\": %s, \"iTotalRecords\": %s, \"iTotalDisplayRecords"
 "\": %s, \"aaData\": [ %s { %s \"dt_borrowernumber\": \""
 msgstr ""
-"%s %s %s %s { \"sEcho\": %s, \"iTotalRecords\": %s, \"iTotalDisplayRecords\":"
-" %s, \"aaData\": [ %s { %s \"dt_borrowernumber\": \""
+"%s %s %s %s { \"sEcho\": %s, \"iTotalRecords\": %s, \"iTotalDisplayRecords"
+"\": %s, \"aaData\": [ %s { %s \"dt_borrowernumber\": \""
 
 #. %1$s:  USE KohaDates 
 #. %2$s: - BLOCK area_name -
@@ -2138,7 +2172,6 @@ msgstr ""
 #. %19$s:  END 
 #. %20$s:  END 
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:55
-#, c-format
 #, fuzzy, c-format
 msgid ""
 "%s %sExporting %s patron card%sExporting %s patron cards%s %s %sExporting %s "
@@ -2258,7 +2291,6 @@ msgstr ""
 #. %28$s:  line.title 
 #. %29$s:  END 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:117
-#, c-format
 #, fuzzy, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
@@ -2268,10 +2300,10 @@ msgid ""
 "%sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
 "%s %sالدفع،شكرا %sالدفع، شكرا (نقدا بواسطة SIP2) %sالدفع،شكرا (فيزا "
-"بواسطةSIP2) %sالدفع،شكرا (بطاقة ائتمان بواسطة SIP2) %sبطاقة جديدة %sالغرامة %"
-"s رسم إدارة الحساب %sمتنوع %sمادة مفقودة %sشطب %sالغرامة المتراكمة %sطالت "
-"مدة الحجز %رسم الإيجار %sمعفي %sرد رسم مادة مفقودة %sالدفع %sشطب %sائتمان %"
-"sائتمان %s%s %s %s, %s%s %s(%s)%s"
+"بواسطةSIP2) %sالدفع،شكرا (بطاقة ائتمان بواسطة SIP2) %sبطاقة جديدة %sالغرامة "
+"%s رسم إدارة الحساب %sمتنوع %sمادة مفقودة %sشطب %sالغرامة المتراكمة %sطالت "
+"مدة الحجز %رسم الإيجار %sمعفي %sرد رسم مادة مفقودة %sالدفع %sشطب %sائتمان "
+"%sائتمان %s%s %s %s, %s%s %s(%s)%s"
 
 #. %1$s:  SWITCH account.accounttype 
 #. %2$s:  CASE 'Pay' 
@@ -2301,7 +2333,6 @@ msgstr ""
 #. %26$s:  END 
 #. %27$s:  IF ( account.itemnumber ) 
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:82
-#, c-format
 #, fuzzy, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
@@ -2312,9 +2343,9 @@ msgid ""
 msgstr ""
 "%s %sالدفع،شكرا %sالدفع،شكرا (نقدا بواسطة SIP2) %sالدفع،شكرا (فيزا بواسطة "
 "SIP2) %sالدفع،شكرا (بطاقة ائتمان بواسطة SIP2) %sبطاقة جديدة %sغرامة %sرسم "
-"إدارة الحساب %sمتنوع %sمادة مفقودة %sشطب %sغرامة متراكمة %sطالت مدة الحجز %"
-"رسم تأجير%sمعفي %sرد رسم مادة مفقودة %sالدفع %sشطب %sائتمان %sائتمان %s%s %s "
-"%s, %s%s &nbsp;%s"
+"إدارة الحساب %sمتنوع %sمادة مفقودة %sشطب %sغرامة متراكمة %sطالت مدة الحجز "
+"%رسم تأجير%sمعفي %sرد رسم مادة مفقودة %sالدفع %sشطب %sائتمان %sائتمان %s%s "
+"%s %s, %s%s &nbsp;%s"
 
 #. %1$s:  IF ( suggestion.suggestiontypelabel ) 
 #. %2$s:  IF (suggestion.suggestiontypelabel == "Pending") 
@@ -2380,7 +2411,6 @@ msgstr "%s %sعذراً ، أنت لا تمتلك الصلاحية لإضافة 
 #. %27$s:  END 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:272
 #: intranet-tmpl/prog/en/modules/serials/showpredictionpattern.tt:59
-#, c-format
 #, fuzzy, c-format
 msgid ""
 "%s %sSpring%s %s %sSummer%s %s %sFall%s %s %sWinter%s %s %sSpr%s %s %sSum%s "
@@ -5195,43 +5225,6 @@ msgstr ""
 #, c-format
 msgid "%s%s %s %sNot checked out %s "
 msgstr "%s%s %s %sليس معاراً %s "
-
-#. %1$s:  USE KohaDates 
-#. %2$s:  INCLUDE csv_headers/acqui/lateorders.tt 
-#. %3$s:  FOREACH o IN orders 
-#. %4$s:  INCLUDE 'empty_line.inc' 
-#. %5$s:  o.orderdate 
-#. %6$s:  o.latesince 
-#. %7$s:  o.estimateddeliverydate | $KohaDates 
-#. %8$s:  o.supplier (o.supplierid) 
-#. %9$s:  o.title 
-#. %10$s:  IF o.author 
-#. %11$s:  o.author 
-#. %12$s:  END 
-#. %13$s:  IF o.publisher 
-#. %14$s:  o.publisher 
-#. %15$s:  END 
-#. %16$s:  o.unitpricesupplier 
-#. %17$s:  o.quantity_to_receive 
-#. %18$s:  o.subtotal 
-#. %19$s:  o.budget 
-#. %20$s:  o.basketname 
-#. %21$s:  o.basketno 
-#. %22$s:  o.claims_count 
-#. %23$s:  o.claimed_date 
-#. %24$s:  END 
-#. %25$s:  INCLUDE 'empty_line.inc' 
-#. %26$s:  orders.size 
-#: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
-#, c-format
-msgid ""
-"%s%s %s%s\"%s (%s days)\",\"%s\",\"%s\",\"%s %sAuthor: %s.%s%sPublished by: "
-"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s %s ,,Total orders "
-"in late, %s "
-msgstr ""
-"%s%s %s%s\"%s (%s أيام)\",\"%s\",\"%s\",\"%s %sالمؤلف: %s.%s%sنُشر بواسطة: %s."
-"%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s %s ,,إجمالي الطلبيات "
-"في آخر, %s "
 
 #. %1$s:  END 
 #. %2$s:  IF op == 'add_form' 
@@ -47178,19 +47171,19 @@ msgstr "اجمالي"
 msgid "Total (%s)"
 msgstr "اجمالي (%s)"
 
-#. %1$s:  tf.gstrate * 100 | $Price 
+#. %1$s:  tf.gstrate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:185
 #, c-format
 msgid "Total (GST %s %%)"
 msgstr "الإجمالي (GST %s %%)"
 
-#. %1$s:  book_foot.gstrate * 100 | $Price 
+#. %1$s:  book_foot.gstrate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:382
 #, c-format
 msgid "Total (GST %s%%)"
 msgstr "الإجمالي (GST %s%%)"
 
-#. %1$s:  foot_loo.gstrate * 100 | $Price 
+#. %1$s:  foot_loo.gstrate * 100 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:457
 #, c-format
 msgid "Total (GST %s)"
