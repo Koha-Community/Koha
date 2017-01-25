@@ -158,6 +158,7 @@ The following tables are available witin the HOLDPLACED message:
     biblio
     biblioitems
     items
+    reserves
 
 =cut
 
@@ -234,6 +235,7 @@ sub AddReserve {
                 'biblio'      => $biblionumber,
                 'biblioitems' => $biblionumber,
                 'items'       => $checkitem,
+                'reserves'    => $hold->unblessed,
             },
         ) ) {
 
