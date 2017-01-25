@@ -25,7 +25,7 @@ use C4::Templates qw/gettemplate/;
 use Koha;
 
 my $query = new CGI;
-my $template = C4::Templates::gettemplate( 'maintenance.tt', 'opac', $query, 0 );
+my $template = C4::Templates::gettemplate( 'maintenance.tt', 'opac', $query );
 
 my $koha_db_version = C4::Context->preference('Version');
 my $kohaversion     = Koha::version();

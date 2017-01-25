@@ -192,7 +192,7 @@ my $hash2 = hash_password('password');
                 }
             );
         };
-        like ( $@, qr(^bad template path), 'The file $template_name should not be accessible' );
+        like ( $@, qr(^bad template path), "The file $template_name should not be accessible" );
     }
     ( $template, $loggedinuser, $cookies ) = get_template_and_user(
         {

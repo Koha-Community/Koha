@@ -19,12 +19,16 @@ use Modern::Perl;
 
 use CGI;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Deep;
 use Test::MockModule;
 use Test::Warn;
+use File::Spec;
+use File::Temp qw/tempfile/;
 
 use t::lib::Mocks;
+
+use C4::Auth qw//;
 
 BEGIN {
     use_ok( 'C4::Templates' );
@@ -102,13 +106,13 @@ subtest 'Testing gettemplate/badtemplatecheck' => sub {
 
     my $cgi = CGI->new;
     my $template;
-    warning_like { eval { $template = C4::Templates::gettemplate( '/etc/passwd', 'opac', $cgi, 1 ) }; warn $@ if $@; } qr/bad template/, 'Bad template check';
+    warning_like { eval { $template = C4::Templates::gettemplate( '/etc/passwd', 'opac', $cgi ) }; warn $@ if $@; } qr/bad template/, 'Bad template check';
     is( $template ? $template->output: '', '', 'Check output' );
 
     # Test a few more bad paths to gettemplate triggering badtemplatecheck
-    warning_like { eval { C4::Templates::gettemplate( '../topsecret.tt', 'opac', $cgi, 1 ) }; warn $@ if $@; } qr/bad template/, 'No safe chars';
-    warning_like { eval { C4::Templates::gettemplate( '/noaccess/topsecret.tt', 'opac', $cgi, 1 ) }; warn $@ if $@; } qr/bad template/, 'Directory not allowed';
-    warning_like { eval { C4::Templates::gettemplate( C4::Context->config('intrahtdocs') . '2/prog/en/modules/about.tt', 'intranet', $cgi, 1 ) }; warn $@ if $@; } qr/bad template/, 'Directory not allowed too';
+    warning_like { eval { C4::Templates::gettemplate( '../topsecret.tt', 'opac', $cgi ) }; warn $@ if $@; } qr/bad template/, 'No safe chars';
+    warning_like { eval { C4::Templates::gettemplate( '/noaccess/topsecret.tt', 'opac', $cgi ) }; warn $@ if $@; } qr/bad template/, 'Directory not allowed';
+    warning_like { eval { C4::Templates::gettemplate( C4::Context->config('intrahtdocs') . '2/prog/en/modules/about.tt', 'intranet', $cgi ) }; warn $@ if $@; } qr/bad template/, 'Directory not allowed too';
 
     # Allow templates from /tmp
     t::lib::Mocks::mock_config( 'pluginsdir', [ '/tmp' ] );
@@ -117,3 +121,23 @@ subtest 'Testing gettemplate/badtemplatecheck' => sub {
     warning_like { eval { C4::Templates::badtemplatecheck( '/tmp/about.tmpl' ) }; warn $@ if $@; } qr/bad template/, 'Warn on bad extension';
 };
 
+subtest "Absolute path change in _get_template_file" => sub {
+    plan tests => 1;
+
+    # We create a simple template in /tmp.
+    # We simulate an anonymous OPAC session; the OPACBaseURL template variable
+    # should be filled by get_template_and_user.
+    t::lib::Mocks::mock_config( 'pluginsdir', [ File::Spec->tmpdir ] );
+    t::lib::Mocks::mock_preference( 'OPACBaseURL', 'without any doubt' );
+    my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1 );
+    print $fh q|I am a [% quality %] template [% OPACBaseURL %]|;
+    close $fh;
+    my ( $template, $login, $cookie ) = C4::Auth::get_template_and_user({
+        template_name => $fn,
+        query => CGI::new,
+        type => "opac",
+        authnotrequired => 1,
+    });
+    $template->param( quality => 'good-for-nothing' );
+    like( $template->output, qr/a good.+template.+doubt/, 'Testing a template with an absolute path' );
+};

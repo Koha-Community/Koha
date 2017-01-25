@@ -164,9 +164,10 @@ sub _get_template_file {
     my ($theme, $lang, $availablethemes) = themelanguage($htdocs, $tmplbase, $interface, $query);
     $lang //= 'en';
     $theme //= '';
-    my $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
+    $tmplbase = "$htdocs/$theme/$lang/modules/$tmplbase" if $tmplbase !~ /^\//;
+        # do not prefix an absolute path
 
-    return ($htdocs, $theme, $lang, $filename);
+    return ( $htdocs, $theme, $lang, $tmplbase );
 }
 
 =head2 badtemplatecheck
@@ -201,11 +202,10 @@ sub badtemplatecheck {
 }
 
 sub gettemplate {
-    my ( $tmplbase, $interface, $query, $is_plugin ) = @_;
+    my ( $tmplbase, $interface, $query ) = @_;
     ($query) or warn "no query in gettemplate";
     my ($htdocs, $theme, $lang, $filename)
        =  _get_template_file($tmplbase, $interface, $query);
-    $filename = $tmplbase if ( $is_plugin );
     badtemplatecheck( $filename ); # single trip for bad templates
     my $template = C4::Templates->new($interface, $filename, $tmplbase, $query);
 

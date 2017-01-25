@@ -2,12 +2,15 @@
 
 use Modern::Perl;
 
-use Test::More tests => 31;
+use Test::More tests => 32;
+use CGI;
 use File::Basename;
-use File::Temp qw( tempdir );
+use File::Spec;
+use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Archive::Extract;
 use Module::Load::Conditional qw(can_load);
+use Test::MockModule;
 
 use C4::Context;
 use t::lib::Mocks;
@@ -21,9 +24,17 @@ BEGIN {
     use_ok('Koha::Plugin::Test');
 }
 
+my $mock_plugin = Test::MockModule->new( 'Koha::Plugin::Test' );
+$mock_plugin->mock( 'test_template', sub {
+    my ( $self, $file ) = @_;
+    my $template = $self->get_template({ file => $file });
+    $template->param( filename => $file );
+    return $template->output;
+});
+
 ok( can_load( modules => { "Koha::Plugin::Test" => undef } ), 'Test can_load' );
 
-my $plugin = Koha::Plugin::Test->new({ enable_plugins => 1});
+my $plugin = Koha::Plugin::Test->new({ enable_plugins => 1, cgi => CGI->new });
 
 isa_ok( $plugin, "Koha::Plugin::Test", 'Test plugin class' );
 isa_ok( $plugin, "Koha::Plugins::Base", 'Test plugin parent class' );
@@ -45,6 +56,16 @@ is( $metadata->{'name'}, 'Test Plugin', 'Test $plugin->get_metadata()' );
 
 is( $plugin->get_qualified_table_name('mytable'), 'koha_plugin_test_mytable', 'Test $plugin->get_qualified_table_name()' );
 is( $plugin->get_plugin_http_path(), '/plugin/Koha/Plugin/Test', 'Test $plugin->get_plugin_http_path()' );
+
+# test absolute path change in get_template with Koha::Plugin::Test
+# using the mock set before
+# we also add tmpdir as an approved template dir
+t::lib::Mocks::mock_config( 'pluginsdir', [ File::Spec->tmpdir ] );
+my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1 );
+print $fh 'I am [% filename %]';
+close $fh;
+my $classname = ref($plugin);
+like( $plugin->test_template($fn), qr/^I am $fn/, 'Template works' );
 
 # testing GetPlugins
 my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({

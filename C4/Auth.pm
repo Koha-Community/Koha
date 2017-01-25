@@ -168,7 +168,6 @@ sub get_template_and_user {
         $in->{'template_name'},
         $in->{'type'},
         $in->{'query'},
-        $in->{'is_plugin'}
     );
 
     if ( $in->{'template_name'} !~ m/maintenance/ ) {

@@ -106,12 +106,15 @@ sub get_template {
 
     require C4::Auth;
 
+    my $template_name = $args->{'file'} // '';
+    # if not absolute, call mbf_path, which dies if file does not exist
+    $template_name = $self->mbf_path( $template_name )
+        if $template_name !~ m/^\//;
     my ( $template, $loggedinuser, $cookie ) = C4::Auth::get_template_and_user(
-        {   template_name   => abs_path( $self->mbf_path( $args->{'file'} ) ),
+        {   template_name   => $template_name,
             query           => $self->{'cgi'},
             type            => "intranet",
             authnotrequired => 1,
-            is_plugin       => 1,
         }
     );
 
