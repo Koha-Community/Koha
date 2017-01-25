@@ -67,7 +67,7 @@ if ( $step && $step == 1 ) {
     }
 
     my $perl_modules = C4::Installer::PerlModules->new;
-    $perl_modules->version_info;
+    $perl_modules->versions_info;
 
     my $modules = $perl_modules->get_attr('missing_pm');
     if (scalar(@$modules)) {
