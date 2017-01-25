@@ -219,6 +219,7 @@ sub AddReserve {
                 'borrowers' => $borrower,
                 'biblio'    => $biblionumber,
                 'items'     => $checkitem,
+                'reserves'    => $hold->unblessed,
             },
         ) ) {
 
