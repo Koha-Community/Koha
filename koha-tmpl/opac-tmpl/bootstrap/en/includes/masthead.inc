@@ -71,7 +71,12 @@
                                             <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1" tabindex="-1" role="menuitem" class="listmenulink">New list</a></li>
                                         [% END %]
                                     [% ELSE %]
-                                        <li role="presentation"><a href="/cgi-bin/koha/opac-user.pl" tabindex="-1" class="menu-inactive loginModal-trigger" role="menuitem">Log in to create your own lists</a></li>
+                                        [% IF Koha.Preference('casAuthentication') %]
+                                            [%# CAS authentication is too complicated for modal window %]
+                                            <li role="presentation"><a href="/cgi-bin/koha/opac-user.pl" tabindex="-1" class="menu-inactive" role="menuitem">Log in to create your own lists</a></li>
+                                        [% ELSE %]
+                                            <li role="presentation"><a href="/cgi-bin/koha/opac-user.pl" tabindex="-1" class="menu-inactive loginModal-trigger" role="menuitem">Log in to create your own lists</a></li>
+                                        [% END %]
                                     [% END # / IF loggedinusername %]
                                 [% END # / IF opacuserlogin %]
                                 </ul> <!-- / .dropdown-menu -->
