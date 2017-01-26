@@ -52,9 +52,13 @@ It is advised to test first with the syspref's "dry-run"-flag on.
 
   -h --help             This friendly help!
 
-  -v --verbose          Increase the default Log4perl verbosity by this many levels.
+  -v --verbose          Use 5 to get maximum logging on the console STDOUT.
+                        When not set, uses the Koha::Logger log4perl.conf.
+                        When set:
+                        - in addition to the default logging, logs to this console.
+                        - Increases/decreases the default Log4perl verbosity by this many levels.
                         Use 0 to get foreground logging using the default log level.
-                        Defaults to undef.
+                        Defaults to undef, which outputs using log4perl.conf directives.
 
   --chunk               Size of the single overlaying operation in bibliographic
                         records. This is essentially the size of the reports
