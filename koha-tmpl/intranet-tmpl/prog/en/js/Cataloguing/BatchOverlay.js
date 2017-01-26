@@ -88,9 +88,10 @@ toptabs.populateReportReportBody = function (activeReportBody, report) {
       return;
     }
     var fields = diff[tag];
-    for (var fi=0 ; fi<fields.length ; fi++) {
+    for (var fi=0 ; fi<fields.length ; fi++) { //These are data fields
       var field = fields[fi];
-      if (!field) { //TODO_ Ungly hack to prevent crashing when something is wrong in the C4::Biblio::Diff leaking null array indexes
+      if (!field) { //Prevent crashing when something is wrong in the C4::Biblio::Diff leaking null array indexes, show exception in the console
+        console.log("toptabs.populateReportReportBody() Exception with report.id: '"+report.id+"'. Field '"+tag+"' has an empty field repetition index '"+fi+"'");
         continue;
       }
       Object.keys(field).sort().forEach(function (code, index, array) {
@@ -102,6 +103,10 @@ toptabs.populateReportReportBody = function (activeReportBody, report) {
         var subfields = field[code];
         for (var sfi=0 ; sfi<subfields.length ; sfi++) {
           var subfieldDiff = subfields[sfi];
+            if (!subfieldDiff) { //Prevent crashing when something is wrong in the C4::Biblio::Diff leaking null array indexes, show exception in the console
+              console.log("toptabs.populateReportReportBody() Exception with report.id: '"+report.id+"'. Subfield '"+tag+code+"' has an empty subfield repetition index '"+sfi+"'");
+              continue;
+            }
           htmlRows += toptabs.diffRowTemplate(tag, code, subfieldDiff)+"\n";
           if (!comparedRecordsCount) {  comparedRecordsCount = field[code].length;  }
         }
