@@ -32,6 +32,7 @@ my $db_port = '3306';
 my $db_name;
 my $db_user;
 my $db_passwd;
+my $tablename;
 my $help;
 
 GetOptions(
@@ -42,6 +43,7 @@ GetOptions(
     "db_name=s"   => \$db_name,
     "db_user=s"   => \$db_user,
     "db_passwd=s" => \$db_passwd,
+    "tablename=s" => \$tablename,
     "h|help"      => \$help
 );
 
@@ -52,10 +54,14 @@ if (! defined $db_name ) {
     print "Error: \'db_name\' parameter is mandatory.\n";
     pod2usage(1);
 } else {
+    my $options = { debug => 1, dump_directory => $path, preserve_case => 1 };
+    if ($tablename) {
+        $options->{constraint} = qr/\A$tablename\z/
+    }
 
     make_schema_at(
         "Koha::Schema",
-        { debug => 1, dump_directory => $path, preserve_case => 1 },
+        $options,
         ["DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",$db_user, $db_passwd ]
     );
 }
