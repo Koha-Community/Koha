@@ -398,6 +398,7 @@ sub MapItemsToHoldRequests {
           C4::Context->preference('LocalHoldsPriorityItemControl');
 
         foreach my $request (@$hold_requests) {
+            next if (defined($request->{itemnumber})); #skip item level holds in local priority checking
             last if $num_items_remaining == 0;
 
             my $local_hold_match;
@@ -423,7 +424,8 @@ sub MapItemsToHoldRequests {
 
                 if ($local_hold_match) {
                     if ( exists $items_by_itemnumber{ $item->{itemnumber} }
-                        and not exists $allocated_items{ $item->{itemnumber} } )
+                        and not exists $allocated_items{ $item->{itemnumber} }
+                        and not $request->{allocated})
                     {
                         $item_map{ $item->{itemnumber} } = {
                             borrowernumber => $request->{borrowernumber},
@@ -436,6 +438,7 @@ sub MapItemsToHoldRequests {
                             reservenotes => $request->{reservenotes},
                         };
                         $allocated_items{ $item->{itemnumber} }++;
+                        $request->{allocated} = 1;
                         $num_items_remaining--;
                     }
                 }
@@ -445,6 +448,7 @@ sub MapItemsToHoldRequests {
 
     foreach my $request (@$hold_requests) {
         last if $num_items_remaining == 0;
+        next if $request->{allocated};
 
         # is this an item-level request?
         if (defined($request->{itemnumber})) {
@@ -495,6 +499,7 @@ sub MapItemsToHoldRequests {
     my $pull_branches;
     foreach my $request (@$hold_requests) {
         last if $num_items_remaining == 0;
+        next if $request->{allocated};
         next if defined($request->{itemnumber}); # already handled these
 
         # look for local match first
