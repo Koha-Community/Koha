@@ -363,8 +363,8 @@ isnt( exists $templates->[1]->{row_gap},          0.3,          'row_gap        
 is  (        $templates->[1]->{units},            'POINT',      'units            is good' );
 isnt( exists $templates->[1]->{creator},          'Labels',     'creator          is good' );
 
-# With filter params ------------------
-$templates = get_all_templates( filter => 'rows = 7' );
+# With filters params ------------------
+$templates = get_all_templates( { filters => { rows => 7} } );
 
 $query = '
   SELECT count(*)
@@ -396,7 +396,7 @@ is( $templates->[0]->{units},            'POINT',      'units            is good
 is( $templates->[0]->{creator},          'Labels',     'creator          is good' );
 
 # With orderby param ------------------
-$templates = get_all_templates( orderby => 'rows DESC' );
+$templates = get_all_templates( { orderby => 'rows DESC' } );
 
 $query = '
   SELECT    count(*)
@@ -543,8 +543,8 @@ isnt( exists $layouts->[1]->{format_string}, 'barcode',     'format_string  is g
 isnt( exists $layouts->[1]->{layout_xml},    'layout_xml2', 'layout_xml     is good' );
 isnt( exists $layouts->[1]->{creator},       'Labels',      'creator        is good' );
 
-# With filter params ------------------
-$layouts = get_all_layouts( filter => 'font_size = 12' );
+# With filters params ------------------
+$layouts = get_all_layouts( { filters => { font_size => 12 } } );
 
 $query = '
   SELECT count(*)
@@ -572,7 +572,7 @@ is( $layouts->[0]->{layout_xml},    'layout_xml2', 'layout_xml     is good' );
 is( $layouts->[0]->{creator},       'Labels',      'creator        is good' );
 
 # With orderby param ------------------
-$layouts = get_all_layouts( orderby => 'font_size DESC' );
+$layouts = get_all_layouts( { orderby => 'font_size DESC' } );
 
 $query = '
   SELECT   count(*)
@@ -695,8 +695,8 @@ isnt( exists $profiles->[1]->{creep_vert},    0.5,            'creep_vert     is
 isnt( exists $profiles->[1]->{units},         'POINT',        'units          is good' );
 isnt( exists $profiles->[1]->{creator},       'Labels',       'creator        is good' );
 
-# With filter params ------------------
-$profiles = get_all_profiles( filters => { template_id => 1235 } );
+# With filters params ------------------
+$profiles = get_all_profiles( { filters => { template_id => 1235 } } );
 
 $query = '
   SELECT count(*)
@@ -770,7 +770,7 @@ is( $images->[1]->{type},     $images->[1]->{name}, 'type         is good' );
 }
 
 # Without creator params --------------
-my $batches = get_batch_summary( creator => 'Labels' );
+my $batches = get_batch_summary( { filters => { creator => 'Labels' } } );
 
 $query = '
   SELECT   batch_id, count(batch_id)
@@ -805,8 +805,8 @@ isa_ok( $batches->[1], 'HASH', '$batches->[1] is a HASH' );
 is( $batches->[1]->{batch_id},    12,     'batch_id      is good' );
 is( $batches->[1]->{_item_count}, $count, 'item_number   is good for this batch_id' );
 
-# Without filter & creator params -----
-$batches = get_batch_summary( filter => "branch_code='$library1->{branchcode}'", creator => 'Labels' );
+# Without filters -----
+$batches = get_batch_summary( { filters => { branch_code => $library1->{branchcode}, creator => 'Labels' } } );
 is( @$batches, 1, 'There is 1 batch matching' );
 
 $query = '
