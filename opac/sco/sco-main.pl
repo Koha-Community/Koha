@@ -76,25 +76,18 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
     debug => 1,
 });
 
-if (C4::Context->preference('SelfCheckoutByLogin'))
-{
-    $template->param(authbylogin  => 1);
-}
-
 # Get the self checkout timeout preference, or use 120 seconds as a default
 my $selfchecktimeout = 120000;
 if (C4::Context->preference('SelfCheckTimeout')) { 
     $selfchecktimeout = C4::Context->preference('SelfCheckTimeout') * 1000;
 }
-$template->param(SelfCheckTimeout => $selfchecktimeout);
+$template->param( SelfCheckTimeout => $selfchecktimeout );
 
 # Checks policy laid out by AllowSelfCheckReturns, defaults to 'on' if preference is undefined
 my $allowselfcheckreturns = 1;
 if (defined C4::Context->preference('AllowSelfCheckReturns')) {
     $allowselfcheckreturns = C4::Context->preference('AllowSelfCheckReturns');
 }
-$template->param(AllowSelfCheckReturns => $allowselfcheckreturns);
-
 
 my $issuerid = $loggedinuser;
 my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed) = (
@@ -304,7 +297,6 @@ if ($borrower) {
         my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
         $template->param(
             display_patron_image => 1,
-            cardnumber           => $borrower->{cardnumber},
             csrf_token           => Koha::Token->new->generate_csrf( { session_id => scalar $query->cookie('CGISESSID') . $borrower->{cardnumber}, id => $borrower->{userid}} ),
         ) if $patron_image;
     }
@@ -314,10 +306,5 @@ if ($borrower) {
         nouser     => $patronid,
     );
 }
-
-$template->param(
-    SCOUserJS  => C4::Context->preference('SCOUserJS'),
-    SCOUserCSS => C4::Context->preference('SCOUserCSS'),
-);
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
