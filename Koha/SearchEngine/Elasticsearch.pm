@@ -265,7 +265,7 @@ sub reset_elasticsearch_mappings {
             my $search_field = Koha::SearchFields->find_or_create({ name => $field_name, label => $field_label, type => $field_type }, { key => 'name' });
             for my $mapping ( @$mappings ) {
                 my $marc_field = Koha::SearchMarcMaps->find_or_create({ index_name => $index_name, marc_type => $mapping->{marc_type}, marc_field => $mapping->{marc_field} });
-                $search_field->add_to_search_marc_maps($marc_field, { facet => $mapping->{facet}, suggestible => $mapping->{suggestible}, sort => $mapping->{sort} } );
+                $search_field->add_to_search_marc_maps($marc_field, { facet => $mapping->{facet} || 0, suggestible => $mapping->{suggestible} || 0, sort => $mapping->{sort} } );
             }
         }
     }
