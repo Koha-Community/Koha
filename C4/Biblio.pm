@@ -4282,6 +4282,48 @@ sub RemoveAllNsb {
     return $record;
 }
 
+=head2 getHostRecord
+
+    C4::Biblio::getHostRecord($r);
+
+NOTE! THIS subroutine is not used anywhere. If you use this, remove this label.
+If this gives you any bs during git rebase, just drop this subroutine.
+
+@RETURNS MARC::Record, the host record of the given component part record, or any record which might have a host record.
+                       or undef
+
+=cut
+
+sub getHostRecord {
+    my ($r) = @_;
+
+    my ($cn, $cni);
+    eval {
+        $cn = $r->field('001')->data();
+        $cni = $r->field('003')->data();
+    };
+    if ($@) {
+        die "getHostRecord():> Record '".$r->subfield('999','c')."' doesn't have controlfields 001 or/and 003. Those fields are mandatory.";
+    }
+
+    my ($error, $recordXMLs, $resultSetSize) = C4::Search::SimpleSearch("Control-number='$cn' and cni='$cni'");
+    if ($error) {
+        require Koha::Exception::Search;
+        Koha::Exception::Search->throw(error => "C4::Biblio::getHostRecord():> Searching (\"Control-number='$cn' and cni='$cni'\"):> Returned an error:\n$error");
+    }
+
+    if ($resultSetSize == 1) {
+        my $marcrecord = MARC::Record->new_from_xml( $recordXMLs->[0], 'UTF-8', 'MARC21' );
+        my $record = TransformMarcToKoha( C4::Context->dbh,$marcrecord,q{} );
+        return $record;
+    }
+    elsif ($resultSetSize > 1) {
+        Koha::Exception::Search->throw(error => "C4::Biblio::getHostRecord():> Searching (\"Control-number='$cn' and cni='$cni'\"):> Returned more than one record?");
+    }
+    return undef;
+}
+
+
 1;
 
 
