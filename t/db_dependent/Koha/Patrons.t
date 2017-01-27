@@ -268,7 +268,7 @@ subtest 'renew_account' => sub {
 };
 
 subtest "move_to_deleted" => sub {
-    plan tests => 3;
+    plan tests => 5;
     my $originally_updated_on = '2016-01-01 12:12:12';
     my $patron = $builder->build( { source => 'Borrower',value => { updated_on => $originally_updated_on } } );
     my $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
@@ -277,7 +277,9 @@ subtest "move_to_deleted" => sub {
     my $deleted_patron = $schema->resultset('Deletedborrower')
         ->search( { borrowernumber => $patron->{borrowernumber} }, { result_class => 'DBIx::Class::ResultClass::HashRefInflator' } )
         ->next;
-    isnt( $deleted_patron->{updated_on}, $retrieved_patron->{updated_on}, 'Koha::Patron->move_to_deleted should have correctly updated the updated_on column');
+    ok( $retrieved_patron->updated_on, 'updated_on should be set for borrowers table' );
+    ok( $deleted_patron->{updated_on}, 'updated_on should be set for deleted_borrowers table' );
+    isnt( $deleted_patron->{updated_on}, $retrieved_patron->updated_on, 'Koha::Patron->move_to_deleted should have correctly updated the updated_on column');
     $deleted_patron->{updated_on} = $originally_updated_on; #reset for simplicity in comparing all other fields
     is_deeply( $deleted_patron, $patron, 'Koha::Patron->move_to_deleted should have correctly moved the patron to the deleted table' );
     $retrieved_patron->delete( $patron->{borrowernumber} );    # Cleanup
