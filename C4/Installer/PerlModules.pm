@@ -68,12 +68,10 @@ sub version_info {
     if ($params{'module'}) {
         return -1 unless grep {m/$params{'module'}/} keys(%$PERL_DEPS);
         eval "require $params{'module'}";
-        my $pkg_version =  $params{'module'} &&  $params{'module'}->can("VERSION") ? $params{'module'}->VERSION : 0;
-        my $min_version =  $PERL_DEPS->{$params{'module'}}->{'min_ver'} // 0;
         if ($@) {
             return {$params{'module'} => {cur_ver => 0, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, upgrade => 0, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}};
         }
-        elsif (version->parse("$pkg_version") < version->parse("$min_version")) {
+        elsif ($params{'module'}->VERSION lt $PERL_DEPS->{$params{'module'}}->{'min_ver'}) {
             return {$params{'module'} => {cur_ver => $params{'module'}->VERSION, min_ver => $PERL_DEPS->{$params{'module'}}->{'min_ver'}, upgrade => 1, required => $PERL_DEPS->{$params{'module'}}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}};
         }
         else {
@@ -84,12 +82,10 @@ sub version_info {
         for (sort keys(%{$PERL_DEPS})) {
             my $pkg = $_;  #  $_ holds the string
             eval "require $pkg";
-            my $pkg_version =  $params{'module'} &&  $params{'module'}->can("VERSION") ? $params{'module'}->VERSION : 0;
-            my $min_version = $PERL_DEPS->{$_}->{'min_ver'} // 0;
             if ($@) {
                 push (@{$self->{'missing_pm'}}, {$_ => {cur_ver => 0, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
             }
-            elsif (version->parse("$pkg_version") < version->parse("$min_version")) {
+            elsif ($pkg->VERSION lt $PERL_DEPS->{$_}->{'min_ver'}) {
                 push (@{$self->{'upgrade_pm'}}, {$_ => {cur_ver => $pkg->VERSION, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
             }
             else {
