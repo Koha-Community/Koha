@@ -250,7 +250,7 @@ EOS
         $date_due_in_time_as_formatted = output_pref( $date_due_in_time );
         $issue_date = $date_due_in_time->clone->subtract_duration( DateTime::Duration->new( minutes => 1 ) );
         AddIssue( $borrower, $barcode1, $date_due_in_time, undef, $issue_date );
-        $date_due_in_late = $today->clone->set(hour => $today->hour - 1);
+        $date_due_in_late = $today->clone->subtract( hours => 1 );
         $date_due_in_late_as_formatted = output_pref( $date_due_in_late );
         $issue_date = $yesterday->clone;
         AddIssue( $borrower, $barcode2, $date_due_in_late, undef, $issue_date );
@@ -374,7 +374,7 @@ EOS
         $date_due_in_time_as_formatted = output_pref( $date_due_in_time );
         $issue_date = $date_due_in_time->clone->subtract_duration( DateTime::Duration->new( minutes => 1 ) );
         AddIssue( $borrower, $barcode1, $date_due_in_time, undef, $issue_date );
-        $date_due_in_late = $today->clone->set(hour => $today->hour - 1);
+        $date_due_in_late = $today->clone->subtract( hours => 1 );
         $date_due_in_late_as_formatted = output_pref( $date_due_in_late );
         $issue_date = $yesterday->clone;
         AddIssue( $borrower, $barcode2, $date_due_in_late, undef, $issue_date );
