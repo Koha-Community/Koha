@@ -19,9 +19,10 @@ use Modern::Perl;
 
 use CGI;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Deep;
 use Test::MockModule;
+use Test::Warn;
 
 use t::lib::Mocks;
 
@@ -94,6 +95,14 @@ subtest 'Testing themelanguage' => sub {
     is($theme,undef,"Expected no theme: not coded for");
 
     return;
+};
+
+subtest 'Testing gettemplate' => sub {
+    plan tests => 2;
+
+    my $template;
+    warning_like { eval { $template = C4::Templates::gettemplate( '/etc/passwd', 'opac', CGI->new, 1 ) }; warn $@ if $@; } qr/bad template/, 'Bad template check';
+    is( $template ? $template->output: '', '', 'Check output' );
 };
 
 1;
