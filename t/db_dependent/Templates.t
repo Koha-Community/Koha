@@ -19,8 +19,12 @@ use Modern::Perl;
 
 use CGI;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Deep;
+use Test::MockModule;
+use Test::Warn;
+
+use t::lib::Mocks;
 
 BEGIN {
     use_ok( 'C4::Templates' );
@@ -45,5 +49,13 @@ is( scalar @keys, 6, "GetColumnDefs correctly returns the 5 tables defined in co
 my @tables = ( 'biblio', 'biblioitems', 'borrowers', 'items', 'statistics', 'subscription');
 cmp_deeply( \@keys, \@tables, "GetColumnDefs returns the expected tables");
 
+
+subtest 'Testing gettemplate' => sub {
+    plan tests => 2;
+
+    my $template;
+    warning_like { eval { $template = C4::Templates::gettemplate( '/etc/passwd', 'opac', CGI->new, 1 ) }; warn $@ if $@; } qr/bad template/, 'Bad template check';
+    is( $template ? $template->output: '', '', 'Check output' );
+};
 
 1;
