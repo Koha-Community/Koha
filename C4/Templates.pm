@@ -171,6 +171,7 @@ sub _get_template_file {
 sub gettemplate {
     my ( $tmplbase, $interface, $query, $is_plugin ) = @_;
     ($query) or warn "no query in gettemplate";
+    die "bad template path" unless $tmplbase =~ m/^[a-zA-Z0-9_\-\/]+\.(tt|pref)$/; # Will be extended on bug 17989
     my $path = C4::Context->preference('intranet_includes') || 'includes';
     my ($htdocs, $theme, $lang, $filename)
        =  _get_template_file($tmplbase, $interface, $query);
