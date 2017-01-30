@@ -192,15 +192,18 @@ is_deeply(
 );
 
 subtest 'AddAuthority should respect AUTO_INCREMENT (BZ 18104)' => sub {
-    plan tests => 1;
+    plan tests => 3;
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
     my $record = C4::AuthoritiesMarc::GetAuthority(1);
     my $id1 = AddAuthority( $record, undef, 'GEOGR_NAME' );
     DelAuthority( $id1 );
     my $id2 = AddAuthority( $record, undef, 'GEOGR_NAME' );
-    is( $id1, $id2, 'FIXME: Got the same id back, let\'s fix that behavior' );
-
+    isnt( $id1, $id2, 'Do not return the same id again' );
+    t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
+    my $id3 = AddAuthority( $record, undef, 'GEOGR_NAME' );
+    is( $id3 > 0, 1, 'Tested AddAuthority with UNIMARC' );
+    is( $record->field('001')->data, $id3, 'Check updated 001' );
 };
 
 $schema->storage->txn_rollback;

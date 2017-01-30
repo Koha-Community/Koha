@@ -663,38 +663,21 @@ sub AddAuthority {
     $record->add_fields($auth_type_tag,'','', $auth_type_subfield=>$authtypecode); 
   }
 
-  my $auth_exists=0;
-  my $oldRecord;
-  if (!$authid) {
-    my $sth=$dbh->prepare("select max(authid) from auth_header");
-    $sth->execute;
-    ($authid)=$sth->fetchrow;
-    $authid=$authid+1;
-  ##Insert the recordID in MARC record 
-    unless ($record->field('001') && $record->field('001')->data() eq $authid){
-        $record->delete_field($record->field('001'));
-        $record->insert_fields_ordered(MARC::Field->new('001',$authid));
+    # Save record into auth_header, update 001
+    if (!$authid ) {
+        # Save a blank record, get authid
+        $dbh->do( "INSERT INTO auth_header (datecreated,marcxml) values (NOW(),?)", undef, '' );
+        $authid = $dbh->last_insert_id( undef, undef, 'auth_header', 'authid' );
+        logaction( "AUTHORITIES", "ADD", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
     }
-  } else {
-    $auth_exists=$dbh->do(qq(select authid from auth_header where authid=?),undef,$authid);
-#     warn "auth_exists = $auth_exists";
-  }
-  if ($auth_exists>0){
-      $oldRecord=GetAuthority($authid);
-      $record->add_fields('001',$authid) unless ($record->field('001'));
-#       warn "\n\n\n enregistrement".$record->as_formatted;
-      my $sth=$dbh->prepare("update auth_header set authtypecode=?,marc=?,marcxml=? where authid=?");
-      $sth->execute($authtypecode,$record->as_usmarc,$record->as_xml_record($format),$authid) or die $sth->errstr;
-      $sth->finish;
-  }
-  else {
-    my $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc,marcxml) values (?,now(),?,?,?)");
-    $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml_record($format));
-    $sth->finish;
-    logaction( "AUTHORITIES", "ADD", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
-  }
-  ModZebra($authid,'specialUpdate',"authorityserver",$oldRecord,$record);
-  return ($authid);
+    # Insert/update the recordID in MARC record
+    $record->delete_field( $record->field('001') );
+    $record->insert_fields_ordered( MARC::Field->new( '001', $authid ) );
+    # Update
+    $dbh->do( "UPDATE auth_header SET authtypecode=?, marc=?, marcxml=? WHERE authid=?", undef, $authtypecode, $record->as_usmarc, $record->as_xml_record($format), $authid ) or die $DBI::errstr;
+    ModZebra( $authid, 'specialUpdate', 'authorityserver', $record );
+
+    return ( $authid );
 }
 
 
