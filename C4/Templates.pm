@@ -37,6 +37,7 @@ use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language
 use C4::Context;
 
 use Koha::Cache::Memory::Lite;
+use Koha::Exceptions;
 
 __PACKAGE__->mk_accessors(qw( theme activethemes preferredtheme lang filename htdocs interface vars));
 
@@ -167,15 +168,30 @@ sub _get_template_file {
     return ($htdocs, $theme, $lang, $filename);
 }
 
+=head2 badtemplatecheck
+
+    badtemplatecheck( $template_path );
+
+    The sub will throw an exception if the template path is not allowed.
+
+    Note: At this moment the sub is actually a helper routine for
+    sub gettemplate.
+
+=cut
+
+sub badtemplatecheck {
+    my ( $template ) = @_;
+    Koha::Exceptions::NoPermission->throw( 'bad template path' )
+        unless $template =~ m/^[a-zA-Z0-9_\-\/]+\.(tt|pref)$/;
+}
 
 sub gettemplate {
     my ( $tmplbase, $interface, $query, $is_plugin ) = @_;
     ($query) or warn "no query in gettemplate";
-    die "bad template path" unless $tmplbase =~ m/^[a-zA-Z0-9_\-\/]+\.(tt|pref)$/; # Will be extended on bug 17989
-    my $path = C4::Context->preference('intranet_includes') || 'includes';
     my ($htdocs, $theme, $lang, $filename)
        =  _get_template_file($tmplbase, $interface, $query);
     $filename = $tmplbase if ( $is_plugin );
+    badtemplatecheck( $filename ); # single trip for bad templates
     my $template = C4::Templates->new($interface, $filename, $tmplbase, $query);
 
 # NOTE: Commenting these out rather than deleting them so that those who need

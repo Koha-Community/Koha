@@ -33,6 +33,10 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Exception',
         description => 'One or more parameters are wrong',
     },
+    'Koha::Exceptions::NoPermission' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'You do not have permission for this action',
+    },
     'Koha::Exceptions::CannotAddLibraryLimit' => {
         isa => 'Koha::Exceptions::Exception',
         description => 'General problem adding a library limit'
