@@ -97,11 +97,23 @@ subtest 'Testing themelanguage' => sub {
     return;
 };
 
-subtest 'Testing gettemplate' => sub {
-    plan tests => 2;
+subtest 'Testing gettemplate/badtemplatecheck' => sub {
+    plan tests => 7;
 
+    my $cgi = CGI->new;
     my $template;
-    warning_like { eval { $template = C4::Templates::gettemplate( '/etc/passwd', 'opac', CGI->new, 1 ) }; warn $@ if $@; } qr/bad template/, 'Bad template check';
+    warning_like { eval { $template = C4::Templates::gettemplate( '/etc/passwd', 'opac', $cgi, 1 ) }; warn $@ if $@; } qr/bad template/, 'Bad template check';
     is( $template ? $template->output: '', '', 'Check output' );
+
+    # Test a few more bad paths to gettemplate triggering badtemplatecheck
+    warning_like { eval { C4::Templates::gettemplate( '../topsecret.tt', 'opac', $cgi, 1 ) }; warn $@ if $@; } qr/bad template/, 'No safe chars';
+    warning_like { eval { C4::Templates::gettemplate( '/noaccess/topsecret.tt', 'opac', $cgi, 1 ) }; warn $@ if $@; } qr/bad template/, 'Directory not allowed';
+    warning_like { eval { C4::Templates::gettemplate( C4::Context->config('intrahtdocs') . '2/prog/en/modules/about.tt', 'intranet', $cgi, 1 ) }; warn $@ if $@; } qr/bad template/, 'Directory not allowed too';
+
+    # Allow templates from /tmp
+    t::lib::Mocks::mock_config( 'pluginsdir', [ '/tmp' ] );
+    warning_like { eval { C4::Templates::badtemplatecheck( '/tmp/about.tt' ) }; warn $@ if $@; } undef, 'No warn on template from plugin dir';
+    # Refuse wrong extension
+    warning_like { eval { C4::Templates::badtemplatecheck( '/tmp/about.tmpl' ) }; warn $@ if $@; } qr/bad template/, 'Warn on bad extension';
 };
 

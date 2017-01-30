@@ -163,6 +163,7 @@ sub _get_template_file {
     my $htdocs = C4::Context->config($is_intranet ? 'intrahtdocs' : 'opachtdocs');
     my ($theme, $lang, $availablethemes) = themelanguage($htdocs, $tmplbase, $interface, $query);
     $lang //= 'en';
+    $theme //= '';
     my $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
 
     return ($htdocs, $theme, $lang, $filename);
@@ -181,8 +182,22 @@ sub _get_template_file {
 
 sub badtemplatecheck {
     my ( $template ) = @_;
-    Koha::Exceptions::NoPermission->throw( 'bad template path' )
-        unless $template =~ m/^[a-zA-Z0-9_\-\/]+\.(tt|pref)$/;
+    if( !$template || $template !~ m/^[a-zA-Z0-9_\-\/]+\.(tt|pref)$/ ) {
+        # This also includes two dots
+        Koha::Exceptions::NoPermission->throw( 'bad template path' );
+    } else {
+        # Check allowed dirs
+        my $dirs = C4::Context->config("pluginsdir");
+        $dirs = [ $dirs ] if !ref($dirs);
+        unshift @$dirs, C4::Context->config('opachtdocs'), C4::Context->config('intrahtdocs');
+        my $found = 0;
+        foreach my $dir ( @$dirs ) {
+            $dir .= '/' if $dir !~ m/\/$/;
+            $found++ if $template =~ m/^$dir/;
+            last if $found;
+        }
+        Koha::Exceptions::NoPermission->throw( 'bad template path' ) if !$found;
+    }
 }
 
 sub gettemplate {
