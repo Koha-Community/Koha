@@ -210,7 +210,7 @@ sub checkpw_ldap {
 		return(1, $cardnumber, $local_userid);
         }
     } elsif ($config{replicate}) { # A2, C2
-        $borrowernumber = AddMember(%borrower) or die "AddMember failed";
+        $borrowernumber = C4::Members::AddMember(%borrower) or die "AddMember failed";
         C4::Members::Messaging::SetMessagingPreferencesFromDefaults( { borrowernumber => $borrowernumber, categorycode => $borrower{'categorycode'} } );
    } else {
         return 0;   # B2, D2
