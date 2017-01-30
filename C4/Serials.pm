@@ -739,20 +739,19 @@ sub GetSerials2 {
 
     return unless ($subscription and @$statuses);
 
+    my $statuses_string = join ',', @$statuses;
+
     my $dbh   = C4::Context->dbh;
-    my $query = q|
+    my $query = qq|
                  SELECT serialid,serialseq, status, planneddate, publisheddate,
                     publisheddatetext, notes, routingnotes
                  FROM     serial 
-                 WHERE    subscriptionid=?
-            |
-            . q| AND status IN (| . join( ",", ('?') x @$statuses ) . ")" . q|)|
-            . q|
+                 WHERE    subscriptionid=$subscription AND status IN ($statuses_string)
                  ORDER BY publisheddate,serialid DESC
-    |;
+                    |;
     $debug and warn "GetSerials2 query: $query";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $subscription, @$statuses );
+    $sth->execute;
     my @serials;
 
     while ( my $line = $sth->fetchrow_hashref ) {
