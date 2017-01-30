@@ -60,7 +60,7 @@ my $booksellerfromname;
 if($booksellerfrom){
     $booksellerfromname = $booksellerfrom->name;
 }
-my $booksellerto = Koha::Acquisition::Booksellers->finf( $bookselleridto );
+my $booksellerto = Koha::Acquisition::Booksellers->find( $bookselleridto );
 my $booksellertoname;
 if($booksellerto){
     $booksellertoname = $booksellerto->name;
