@@ -1514,7 +1514,7 @@ sub IsAvailableForItemLevelRequest {
         foreach my $i (@items) {
             $any_available = 1
               unless $i->itemlost
-              || $i->{notforloan} > 0
+              || $i->notforloan > 0
               || $i->withdrawn
               || $i->onloan
               || IsItemOnHoldAndFound( $i->id )
