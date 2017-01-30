@@ -89,7 +89,7 @@ $template->param(
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
 );
 
-my $attributes = ParsePatronAttributes($cgi);
+my $attributes = ParsePatronAttributes($borrowernumber,$cgi);
 my $conflicting_attribute = 0;
 
 foreach my $attr (@$attributes) {
@@ -560,17 +560,22 @@ sub GeneratePatronAttributesForm {
 }
 
 sub ParsePatronAttributes {
-    my ( $cgi ) = @_;
+    my ($borrowernumber,$cgi) = @_;
 
-    my @codes = $cgi->multi_param('patron_attribute_code');
+    my @codes  = $cgi->multi_param('patron_attribute_code');
     my @values = $cgi->multi_param('patron_attribute_value');
 
     my $ea = each_array( @codes, @values );
     my @attributes;
     my %dups = ();
 
-    while ( my ( $code, $value, $password ) = $ea->() ) {
-        next unless defined($value) and $value ne '';
+    while ( my ( $code, $value ) = $ea->() ) {
+        # Don't skip if the patron already has attributes with $code, because
+        # it means we are being requested to remove the attributes.
+        next
+            unless defined($value) and $value ne ''
+            or Koha::Patron::Attributes->search(
+            { borrowernumber => $borrowernumber, code => $code } )->count > 0;
         next if exists $dups{$code}->{$value};
         $dups{$code}->{$value} = 1;
 
@@ -579,3 +584,5 @@ sub ParsePatronAttributes {
 
     return \@attributes;
 }
+
+1;
