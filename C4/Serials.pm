@@ -746,7 +746,7 @@ sub GetSerials2 {
                  FROM     serial 
                  WHERE    subscriptionid=?
             |
-            . q| AND status IN (| . join( ",", ('?') x @$statuses ) . ")" . q|)|
+            . q| AND status IN (| . join( ",", ('?') x @$statuses ) . q|)|
             . q|
                  ORDER BY publisheddate,serialid DESC
     |;
