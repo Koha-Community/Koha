@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::MockModule;
 use Test::Warn;
 use MARC::Record;
@@ -190,5 +190,17 @@ is_deeply(
     $expected_unimarc_name_summary,
     'test BuildSummary for UNIMARC'
 );
+
+subtest 'AddAuthority should respect AUTO_INCREMENT (BZ 18104)' => sub {
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+    my $record = C4::AuthoritiesMarc::GetAuthority(1);
+    my $id1 = AddAuthority( $record, undef, 'GEOGR_NAME' );
+    DelAuthority( $id1 );
+    my $id2 = AddAuthority( $record, undef, 'GEOGR_NAME' );
+    is( $id1, $id2, 'FIXME: Got the same id back, let\'s fix that behavior' );
+
+};
 
 $schema->storage->txn_rollback;
