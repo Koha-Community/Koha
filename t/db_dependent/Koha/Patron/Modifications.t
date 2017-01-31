@@ -132,7 +132,7 @@ subtest 'store( extended_attributes ) tests' => sub {
 
 subtest 'approve tests' => sub {
 
-    plan tests => 14;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -223,6 +223,30 @@ subtest 'approve tests' => sub {
         'CODE_2', 'Attribute updated correctly (code)' );
     is( $patron_attributes[2]->{attribute},
         'None', 'Attribute updated correctly (attribute)' );
+
+    my $empty_code_json = '[{"code":"CODE_2","value":""}]';
+    $verification_token = md5_hex( time() . {} . rand() . {} . $$ );
+
+    $patron_modification = Koha::Patron::Modification->new(
+        {   borrowernumber      => $patron->borrowernumber,
+            extended_attributes => $empty_code_json,
+            verification_token  => $verification_token
+        }
+    )->store();
+    ok( $patron_modification->approve,
+        'Patron modification correctly approved' );
+    @patron_attributes
+        = map { $_->unblessed }
+        Koha::Patron::Attributes->search(
+        { borrowernumber => $patron->borrowernumber } );
+
+    is( $patron_attributes[0]->{code},
+        'CODE_1', 'Untouched attribute type is preserved (code)' );
+    is( $patron_attributes[0]->{attribute},
+        'VALUE_1', 'Untouched attribute type is preserved (attribute)' );
+
+    my $count = Koha::Patron::Attributes->search({ borrowernumber => $patron->borrowernumber, code => 'CODE_2' })->count;
+    is( $count, 0, 'Attributes deleted when modification contained an empty one');
 
     $schema->storage->txn_rollback;
 };
