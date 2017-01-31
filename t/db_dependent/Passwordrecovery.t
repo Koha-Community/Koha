@@ -22,7 +22,7 @@ use C4::Letters;
 use Koha::Database;
 use Koha::Patrons;
 
-use Test::More tests => 16;
+use Test::More tests => 18;
 
 use_ok('Koha::Patron::Password::Recovery');
 
@@ -38,12 +38,16 @@ $dbh->{RaiseError} = 1;
 
 my $borrowernumber1 = '2000000000';
 my $borrowernumber2 = '2000000001';
+my $borrowernumber3 = '2000000002';
 my $userid1 = "I83MFItzRpGPxD3vW0";
 my $userid2 = "Gh5t43980hfSAOcvne";
+my $userid3 = "adsfada80hfSAOcvne";
 my $email1  = $userid1 . '@koha-community.org';
 my $email2  = $userid2 . '@koha-community.org';
+my $email3  = $userid3 . '@koha-community.org';
 my $uuid1   = "ABCD1234";
 my $uuid2   = "WXYZ0987";
+my $uuid3   = "LMNO4561";
 
 my $categorycode = 'S'; #  staff
 my $branch       = $schema->resultset('Branch')->first(); #  legit branch from your db
@@ -74,6 +78,18 @@ $schema->resultset('Borrower')->create(
         branchcode      => $branch,
     }
 );
+$schema->resultset('Borrower')->create(
+    {
+        borrowernumber => $borrowernumber3,
+        surname        => '',
+        address        => '',
+        city           => '',
+        userid         => $userid3,
+        email          => $email3,
+        categorycode   => $categorycode,
+        branchcode     => $branch,
+    }
+);
 
 $schema->resultset('BorrowerPasswordRecovery')->create(
     {
@@ -89,6 +105,14 @@ $schema->resultset('BorrowerPasswordRecovery')->create(
         valid_until    => DateTime->now( time_zone => C4::Context->tz() )->subtract( days => 2 )->datetime()
     }
 );
+$schema->resultset('BorrowerPasswordRecovery')->create(
+    {
+        borrowernumber => $borrowernumber3,
+        uuid           => $uuid3,
+        valid_until    => DateTime->now( time_zone => C4::Context->tz() )->subtract( days => 3 )->datetime()
+    }
+);
+
 
 can_ok( "Koha::Patron::Password::Recovery", qw(ValidateBorrowernumber GetValidLinkInfo SendPasswordRecoveryEmail CompletePasswordRecovery) );
 
@@ -117,7 +141,7 @@ ok( ! defined($bnum3), "[GetValidLinkInfo] Invalid UUID returns no borrowernumbe
 # Koha::Patron::Password::Recovery::CompletePasswordRecovery #
 ##############################################################
 
-ok( Koha::Patron::Password::Recovery::CompletePasswordRecovery($uuid1) == 2, "[CompletePasswordRecovery] Completing a password recovery deletes the entry and expired entries" );
+ok( Koha::Patron::Password::Recovery::CompletePasswordRecovery($uuid1) == 2, "[CompletePasswordRecovery] Completing a password recovery deletes the used entry" );
 
 $schema->resultset('BorrowerPasswordRecovery')->create(
     {
@@ -129,6 +153,21 @@ $schema->resultset('BorrowerPasswordRecovery')->create(
 
 ok( Koha::Patron::Password::Recovery::CompletePasswordRecovery($uuid2) == 1, "[CompletePasswordRecovery] An expired or invalid UUID purges expired entries" );
 ok( Koha::Patron::Password::Recovery::CompletePasswordRecovery($uuid2) == 0, "[CompletePasswordRecovery] Returns 0 on a clean table" );
+
+###################################################################
+# Koha::Patron::Password::Recovery::DeleteExpiredPasswordRecovery #
+###################################################################
+
+$schema->resultset('BorrowerPasswordRecovery')->create(
+    {
+        borrowernumber => $borrowernumber3,
+        uuid           => $uuid3,
+        valid_until    => DateTime->now( time_zone => C4::Context->tz() )->subtract( days => 3 )->datetime()
+    }
+);
+
+ok( Koha::Patron::Password::Recovery::DeleteExpiredPasswordRecovery($borrowernumber3) == 1, "[DeleteExpiredPasswordRecovery] we can delete the unused entry" );
+ok( Koha::Patron::Password::Recovery::DeleteExpiredPasswordRecovery($borrowernumber3) == 0, "[DeleteExpiredPasswordRecovery] Returns 0 on a clean table" );
 
 ###############################################################
 # Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail #
