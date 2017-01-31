@@ -217,7 +217,10 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
 };
 
 subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
-    plan tests => 1;
+    plan tests => 2;
+
+    # For this test we need dontmerge OFF
+    t::lib::Mocks::mock_preference('dontmerge', '0');
 
     # Add authority and linked biblio, delete authority
     my $auth1 = MARC::Record->new;
@@ -229,11 +232,34 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
         MARC::Field->new( '609', '', '', a => 'DEL', 9 => "$authid1" ),
     );
     my ( $biblionumber ) = C4::Biblio::AddBiblio( $bib1, '' );
-    DelAuthority( $authid1 );
+    @zebrarecords = ( $bib1 );
+    $index = 0;
+    DelAuthority( $authid1 ); # this triggers a merge call
 
-    # See what happened
+    # See what happened in the biblio record
     my $marc1 = C4::Biblio::GetMarcBiblio( $biblionumber );
     is( $marc1->field('609'), undef, 'Field 609 should be gone too' );
+
+    # Now we simulate the delete as done from the cron job (with dontmerge)
+    # First, restore auth1 and add 609 back in bib1
+    $auth1 = MARC::Record->new;
+    $auth1->append_fields( MARC::Field->new( '109', '', '', 'a' => 'DEL'));
+    $authid1 = AddAuthority( $auth1, undef, $authtype1 );
+    $marc1->append_fields(
+        MARC::Field->new( '609', '', '', a => 'DEL', 9 => "$authid1" ),
+    );
+    ModBiblio( $marc1, $biblionumber, '' );
+    # Instead of going through DelAuthority, we manually delete the auth
+    # record and call merge afterwards.
+    # This mimics deleting an authority and calling merge later in the
+    # merge_authority.pl cron job (when dontmerge is enabled).
+    C4::Context->dbh->do( "DELETE FROM auth_header WHERE authid=?", undef, $authid1 );
+    @zebrarecords = ( $marc1 );
+    $index = 0;
+    merge( $authid1, undef );
+    # Final check
+    $marc1 = C4::Biblio::GetMarcBiblio( $biblionumber );
+    is( $marc1->field('609'), undef, 'Merge removed the 609 again even after deleting the authority record' );
 };
 
 sub set_mocks {

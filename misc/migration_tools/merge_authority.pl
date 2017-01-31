@@ -84,9 +84,12 @@ if ($batch) {
   foreach(@$authref) {
       my $authid=$_->[0];
       print "managing $authid\n" if $verbose;
-      my $MARCauth = GetAuthority($authid) ;
-      next unless ($MARCauth);
-      merge($authid,$MARCauth,$authid,$MARCauth) if ($MARCauth);
+      my $MARCauth = GetAuthority( $authid );
+      if( $MARCauth ) {
+          merge( $authid, $MARCauth, $authid, $MARCauth );
+      } else {
+          merge( $authid, undef ); # handle a delete
+      }
   }
   $dbh->do("update need_merge_authorities set done=1 where done=2"); #DONE
 } else {
