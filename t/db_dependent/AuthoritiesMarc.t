@@ -3,14 +3,15 @@
 # This Koha test module is a stub!  
 # Add more tests here!!!
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Test::More tests => 8;
 use Test::MockModule;
 use Test::Warn;
 use MARC::Record;
+
 use t::lib::Mocks;
+use Koha::Database;
 
 BEGIN {
         use_ok('C4::AuthoritiesMarc');
@@ -57,9 +58,9 @@ $module->mock('GetAuthority', sub {
     return $record;
 });
 
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 
@@ -190,4 +191,4 @@ is_deeply(
     'test BuildSummary for UNIMARC'
 );
 
-$dbh->rollback;
+$schema->storage->txn_rollback;
