@@ -32,6 +32,7 @@ BEGIN {
       &SendPasswordRecoveryEmail
       &GetValidLinkInfo
       &CompletePasswordRecovery
+      &DeleteExpiredPasswordRecovery
     );
 }
 
@@ -66,11 +67,9 @@ sub ValidateBorrowernumber {
         },
         { columns => 'borrowernumber' }
     );
-
     if ( $rs->next ) {
         return 1;
     }
-
     return 0;
 }
 
@@ -180,6 +179,24 @@ sub CompletePasswordRecovery {
         { -or => [ uuid => $uniqueKey, valid_until => \'< NOW()' ] } );
     return $entry->delete();
 }
+
+=head2 DeleteExpiredPasswordRecovery
+
+    $bool = DeleteExpiredPasswordRecovery($borrowernumber)
+
+    Deletes an expired password recovery entry.
+
+=cut
+
+sub DeleteExpiredPasswordRecovery {
+    my $borrower_number = shift;
+    my $model =
+      Koha::Database->new->schema->resultset('BorrowerPasswordRecovery');
+    my $entry = $model->search(
+        { borrowernumber => $borrower_number } );
+    return $entry->delete();
+}
+
 
 END { }    # module clean-up code here (global destructor)
 
