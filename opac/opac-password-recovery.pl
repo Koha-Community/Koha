@@ -9,7 +9,7 @@ use C4::Members qw(changepassword);
 use C4::Output;
 use C4::Context;
 use Koha::Patron::Password::Recovery
-  qw(SendPasswordRecoveryEmail ValidateBorrowernumber GetValidLinkInfo CompletePasswordRecovery);
+  qw(SendPasswordRecoveryEmail ValidateBorrowernumber GetValidLinkInfo CompletePasswordRecovery DeleteExpiredPasswordRecovery);
 use Koha::AuthUtils qw(hash_password);
 use Koha::Patrons;
 my $query = new CGI;
@@ -95,6 +95,11 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
         {
             $hasError                = 1;
             $errAlreadyStartRecovery = 1;
+        }
+        elsif ( !ValidateBorrowernumber($borrower->borrowernumber)
+            && !$query->param('resendEmail') )
+        {
+            DeleteExpiredPasswordRecovery($borrower->borrowernumber);
         }
     }
     else {    # 0 matching borrower
