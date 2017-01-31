@@ -135,7 +135,8 @@ sub approve {
                             code           => $attr->{code},
                             attribute      => $attr->{value}
                         }
-                    )->store;
+                    )->store
+                        if $attr->{value};
                 }
             }
             catch {
