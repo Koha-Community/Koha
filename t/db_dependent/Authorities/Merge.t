@@ -4,7 +4,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Getopt::Long;
 use MARC::Record;
@@ -214,6 +214,26 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
     is( ( $newbiblio->field('612') )[2]->subfield( 'x' ),
         ( $oldbiblio->field('609') )[1]->subfield('x'),
         'Check 612x' );
+};
+
+subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
+    plan tests => 1;
+
+    # Add authority and linked biblio, delete authority
+    my $auth1 = MARC::Record->new;
+    $auth1->append_fields( MARC::Field->new( '109', '', '', 'a' => 'DEL'));
+    my $authid1 = AddAuthority( $auth1, undef, $authtype1 );
+    my $bib1 = MARC::Record->new;
+    $bib1->append_fields(
+        MARC::Field->new( '245', '', '', a => 'test DEL' ),
+        MARC::Field->new( '609', '', '', a => 'DEL', 9 => "$authid1" ),
+    );
+    my ( $biblionumber ) = C4::Biblio::AddBiblio( $bib1, '' );
+    DelAuthority( $authid1 );
+
+    # See what happened
+    my $marc1 = C4::Biblio::GetMarcBiblio( $biblionumber );
+    is( $marc1->field('609'), undef, 'Field 609 should be gone too' );
 };
 
 sub set_mocks {
