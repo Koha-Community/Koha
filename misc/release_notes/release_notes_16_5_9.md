@@ -17,9 +17,10 @@ Installation instructions can be found at:
 - [Koha Wiki](http://wiki.koha-community.org/wiki/Installation_Documentation)
 - OR in the INSTALL files that come in the tarball
 
-Koha 16.5.9 is a bugfix/maintenance release.
+Koha 16.5.9 is a security release. If you are running 16.05.x, we strongly recommend you update.
 
-It includes 1 enhancements, 4 bugfixes.
+
+It includes 1 enhancements, 9 bugfixes.
 
 
 
@@ -30,11 +31,13 @@ It includes 1 enhancements, 4 bugfixes.
 
 - [[17990]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17990) Code to check perl module versions is buggy
 
+## Major and critical bugs fixed
 
-## Critical bugs fixed
-
-### Installation and upgrade (command-line installer)
-
+- [[9569]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=9569) IndependentBranches preference overrides AutoLocation security feature
+- [[17900]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17900) Possible SQL injection in patroncards template editing
+- [[17901]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17901) Possible SQL injection in shelf editing
+- [[17903]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17903) Possible SQL injection in serial claims
+- [[17905]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17905) member-flags is vulnerable to CSRF attacks
 - [[17986]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17986) Perl dependency evaluation incorrect
 
 
