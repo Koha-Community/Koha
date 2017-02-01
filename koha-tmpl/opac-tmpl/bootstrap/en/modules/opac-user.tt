@@ -953,9 +953,9 @@ Using this account is not recommended because some parts of Koha will not functi
 
                     if(origvalue != value) {
                         if(origvalue != "")
-                            $btn_save.text('Submit changes');
+                            $btn_save.text(_("Submit changes"));
                         else
-                            $btn_save.text('Submit note');
+                            $btn_save.text(_("Submit note"));
                         $btn_save.show();
                     } else {
                         $btn_save.hide();
@@ -986,30 +986,28 @@ Using this account is not recommended because some parts of Koha will not functi
                             $("#notesaved").addClass("alert-info");
                             $noteinput.data('origvalue', data.note);
                             $noteinput.val(data.note);
-                            message = "<p>Your note about " + title + " has been saved and sent to the library.</p>";
+                            message = "<p>" + _("Your note about %s has been saved and sent to the library.").format(title) + "</p>";
+                            message += "<p style=\"font-style:italic;\">" + data.note + "</p>";
                             $self.hide();
                         } else if(data.status == 'removed') {
                             $("#notesaved").removeClass("alert-error");
                             $("#notesaved").addClass("alert-info");
                             $noteinput.data('origvalue', "");
                             $noteinput.val("");
-                            message = "<p>Your note about " + title + " was removed.</p>";
+                            message = "<p>" + _("Your note about %s was removed.").format(title) + "</p>";
                             $self.hide();
                         } else {
                             $("#notesaved").removeClass("alert-info");
                             $("#notesaved").addClass("alert-error");
-                            message = "<p>Your note about " + title + " could not be saved.</p>" +
-                                      "<p style=\"font-weight:bold;\">" + data.error + "</p>";
+                            message =  "<p>" + _("Your note about %s could not be saved.").format(title) + "</p>";
+                            message += "<p style=\"font-weight:bold;\">" + _("Something went wrong. The note has not been saved") + "</p>";
                         }
-
-                        message += "<p style=\"font-style:italic;\">" + data.note + "</p>";
                         $("#notesaved").html(message);
                     })
                     .fail(function(data) {
                         $("#notesaved").removeClass("alert-info");
                         $("#notesaved").addClass("alert-error");
-                        var message = "<p>Your note about " + title + " could not be saved.</p>" +
-                                      "<p style=\"font-weight:bold;\">Ajax request has failed.</p>";
+                        var message = "<p style=\"font-weight:bold;\">" + _("Something went wrong. The note has not been saved") + "</p>";
                         $("#notesaved").html(message);
                     })
                     .always(function() {

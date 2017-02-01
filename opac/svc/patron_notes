@@ -56,7 +56,6 @@ if ($is_ajax) {
         my $issue_id = $query->param('issue_id');
         my $clean_note = $scrubber->scrub($note);
         my $status = "saved";
-        my $error = "";
         my ($member, $issue);
 
         my ( $template, $borrowernumber, $cookie ) = C4::Auth::get_template_and_user({
@@ -72,14 +71,11 @@ if ($is_ajax) {
             $issue = Koha::Checkouts->find($issue_id);
             if ( $issue->borrowernumber != $borrowernumber ) {
                 $status = "fail";
-                $error = "Invalid issue id!";
             }
-        } else {
-            $status = "fail";
-            $error = "Invalid issue id!";
         }
 
-        if ( (not $error) && $issue->set({ notedate => dt_from_string(), note => $clean_note })->store ) {
+        if ( $issue ) {
+            $issue->set({ notedate => dt_from_string(), note => $clean_note })->store;
             if($clean_note) { # only send email if note not empty
                 my $branch = Koha::Libraries->find( $issue->branchcode );
                 my $biblio = GetBiblioFromItemNumber($issue->itemnumber);
@@ -98,10 +94,9 @@ if ($is_ajax) {
             }
         } else {
             $status = "fail";
-            $error = "Perhaps the item has already been checked in?";
         }
 
-        my $response = "{\"status\": \"$status\", \"note\": \"$clean_note\", \"issue_id\": \"$issue_id\", \"error\": \"$error\"}";
+        my $response = "{\"status\": \"$status\", \"note\": \"$clean_note\", \"issue_id\": \"$issue_id\"}";
         output_with_http_headers($query, undef, $response, 'js');
         exit;
     } # END Issue Note
