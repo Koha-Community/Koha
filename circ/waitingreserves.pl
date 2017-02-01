@@ -167,9 +167,6 @@ $template->param(
 # Checking if there is a Fast Cataloging Framework
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
 
-# Checking if the transfer page needs to be displayed
-$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
-
 if ($item && $tab eq 'holdsover' && !@cancel_result) {
     print $input->redirect("/cgi-bin/koha/circ/waitingreserves.pl#holdsover");
 } elsif ($cancelall) {

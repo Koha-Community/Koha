@@ -75,4 +75,9 @@ sub all {
     return $libraries;
 }
 
+sub InIndependentBranchesMode {
+    my ( $self ) = @_;
+    return ( not C4::Context->preference("IndependentBranches") or C4::Context::IsSuperLibrarian );
+}
+
 1;

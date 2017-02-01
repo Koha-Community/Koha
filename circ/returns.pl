@@ -652,8 +652,5 @@ if ( $itemnumber ) {
 # Checking if there is a Fast Cataloging Framework
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
 
-# Checking if the transfer page needs to be displayed
-$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
-
 # actually print the page!
 output_html_with_http_headers $query, $cookie, $template->output;

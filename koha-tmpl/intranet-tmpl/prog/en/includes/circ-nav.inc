@@ -1,3 +1,4 @@
+[% USE Branches %]
 <script type="text/javascript">//<![CDATA[
     $(document).ready(function() {
         var path = location.pathname.substring(1);
@@ -23,7 +24,7 @@
             <li><a href="/cgi-bin/koha/circ/circulation.pl">Check out</a></li>
             <li><a href="/cgi-bin/koha/circ/returns.pl">Check in</a></li>
             <li><a href="/cgi-bin/koha/circ/renew.pl">Renew</a></li>
-            [% IF ( display_transfer ) %]
+            [% IF Branches.InIndependentBranchesMode %]
                 <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfer</a></li>
             [% END %]
             [% IF ( AutoLocation ) %][% ELSE %][% IF ( IndependentBranches ) %][% ELSE %]

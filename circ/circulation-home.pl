@@ -37,8 +37,6 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user(
 # Checking if there is a Fast Cataloging Framework
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
 
-# Checking if the transfer page needs to be displayed
-$template->param( display_transfer => 1 ) if ( ($flags->{'superlibrarian'} == 1) || (C4::Context->preference("IndependentBranches") == 0) );
 $template->{'VARS'}->{'AllowOfflineCirculation'} = C4::Context->preference('AllowOfflineCirculation');
 
 
