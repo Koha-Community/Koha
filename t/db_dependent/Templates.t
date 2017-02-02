@@ -43,10 +43,10 @@ my $columns = C4::Templates::GetColumnDefs( $query );
 
 is( ref( $columns ) eq 'HASH', 1, 'GetColumnDefs returns a hashref' );
 # get the tables names, sorted
-my @keys = sort keys %$columns;
-is( scalar @keys, 6, "GetColumnDefs correctly returns the 5 tables defined in columns.def" );
-my @tables = ( 'biblio', 'biblioitems', 'borrowers', 'items', 'statistics', 'subscription');
-cmp_deeply( \@keys, \@tables, "GetColumnDefs returns the expected tables");
+my @keys = sort keys %{$columns};
+is( scalar @keys, 6, 'GetColumnDefs correctly returns the 5 tables defined in columns.def' );
+my @tables = qw( biblio biblioitems borrowers items statistics subscription );
+cmp_deeply( \@keys, \@tables, 'GetColumnDefs returns the expected tables');
 
 subtest 'Testing themelanguage for unique themes (BZ 17982)' => sub {
     plan tests => 1;
