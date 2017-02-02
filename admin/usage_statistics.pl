@@ -21,6 +21,7 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Libraries;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -42,17 +43,31 @@ if ( $op eq 'update' ) {
     my $UsageStatsLibraryName = $query->param('UsageStatsLibraryName');
     my $UsageStatsLibraryType = $query->param('UsageStatsLibraryType');
     my $UsageStatsLibraryUrl = $query->param('UsageStatsLibraryUrl');
+    my $UsageStatsLibrariesInfo = $query->param('UsageStatsLibrariesInfo');
+    my $UsageStatsGeolocation = $query->param('UsageStatsGeolocation');
     C4::Context->set_preference('UsageStats', $UsageStats);
     C4::Context->set_preference('UsageStatsCountry', $UsageStatsCountry);
     C4::Context->set_preference('UsageStatsLibraryName', $UsageStatsLibraryName);
     C4::Context->set_preference('UsageStatsLibraryType', $UsageStatsLibraryType);
     C4::Context->set_preference('UsageStatsLibraryUrl', $UsageStatsLibraryUrl);
-
+    C4::Context->set_preference('UsageStatsLibrariesInfo', $UsageStatsLibrariesInfo);
+    C4::Context->set_preference('UsageStatsGeolocation', $UsageStatsGeolocation);
+    my $libraries = Koha::Libraries->search;
+    while ( my $library = $libraries->next ) {
+        if ( my $latlng = $query->param('geolocation_' . $library->branchcode) ) {
+            $library->geolocation( $latlng )->store;
+        }
+    }
 }
 
 if ( C4::Context->preference('UsageStatsLastUpdateTime') ) {
     my $dt = DateTime->from_epoch( epoch => C4::Context->preference('UsageStatsLastUpdateTime'));
     $template->param(UsageStatsLastUpdateTime => output_pref($dt) );
 }
+
+my $libraries = Koha::Libraries->search;
+$template->param(
+    libraries => $libraries,
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;
