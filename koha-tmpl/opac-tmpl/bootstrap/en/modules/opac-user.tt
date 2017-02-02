@@ -185,7 +185,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                                 [% IF ( OPACMySummaryHTML ) %]
                                                     <th class="nosort">Links</th>
                                                 [% END %]
-                                                [% IF ( Koha.Preference('AllowIssueNotes') ) %]
+                                                [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
                                                     <th class="nosort">Note</th>
                                                 [% END %]
                                             </tr>
@@ -309,7 +309,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                                 [% IF ( OPACMySummaryHTML ) %]
                                                     <td class="links">[% ISSUE.MySummaryHTML %]</td>
                                                 [% END %]
-                                                [% IF ( Koha.Preference('AllowIssueNotes') ) %]
+                                                [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
                                                     <td class="note">
                                                         <input type="text" name="note" data-issue_id="[% ISSUE.issue_id %]" data-origvalue="[% ISSUE.note %]" value="[% ISSUE.note %]" readonly>
                                                         <a class="btn" name="js_submitnote" id="save_[% ISSUE.issue_id %]" style="display:none;">Submit note</a>
@@ -934,7 +934,7 @@ Using this account is not recommended because some parts of Koha will not functi
                 [% END %]
             [% END %]
 
-            [% IF ( Koha.Preference('AllowIssueNotes') ) %]
+            [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
 
                 /* If JS enabled, show button, otherwise show link to redirect to a page where note can be submitted */
                 $("a[name='nonjs_submitnote']").hide();

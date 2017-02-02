@@ -63,7 +63,7 @@ $template->param(
 );
 
 my $action = $query->param('action') || "";
-if ( $action eq 'issuenote' && C4::Context->preference('AllowIssueNotes') ) {
+if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') ) {
     my $note = $query->param('note');
     my $scrubber = C4::Scrubber->new();
     my $clean_note = $scrubber->scrub($note);
