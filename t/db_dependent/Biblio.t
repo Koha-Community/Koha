@@ -731,7 +731,7 @@ subtest 'ModBiblio called from linker test' => sub {
     C4::Biblio::ModBiblio($record,$biblionumber,'');
     is($called,1,"We called to link bibs because not from linker");
     $called = 0;
-    C4::Biblio::ModBiblio($record,$biblionumber,'',1);
+    C4::Biblio::ModBiblio($record,$biblionumber,'',{ disable_autolink => 1 });
     is($called,0,"We didn't call to link bibs because from linker");
 };
 

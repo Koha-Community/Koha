@@ -91,7 +91,13 @@ sub process {
             my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
             C4::MarcModificationTemplates::ModifyRecordWithTemplate( $mmtid, $record );
             my $frameworkcode = C4::Biblio::GetFrameworkCode( $biblionumber );
-            C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode );
+            C4::Biblio::ModBiblio( $record, $biblionumber, $frameworkcode,
+                {
+                    source => $args->{source},
+                    categorycode => $args->{categorycode},
+                    userid => $args->{userid},
+                }
+            );
         };
         if ( $error and $error != 1 or $@ ) { # ModBiblio returns 1 if everything as gone well
             push @messages, {

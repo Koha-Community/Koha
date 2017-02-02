@@ -1,0 +1,519 @@
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; MARC merge rules</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/datatables.css") %]
+[% INCLUDE 'datatables.inc' %]
+
+<style type="text/css">
+    .required {
+        background-color: #C00;
+    }
+</style>
+
+<script type="text/javascript">
+function doSubmit(op, id) {
+    $('<input type="hidden"/>')
+    .attr('name', 'op')
+    .attr('value', op)
+    .appendTo('#marc-merge-rules-form');
+
+    if(id) {
+        $('<input type="hidden"/>')
+        .attr('name', 'id')
+        .attr('value', id)
+        .appendTo('#marc-merge-rules-form');
+    }
+
+    var valid = true;
+    if (op == 'add' || op == 'edit') {
+        var validate = [
+            $('#marc-merge-rules-form input[name="filter"]'),
+            $('#marc-merge-rules-form input[name="tag"]')
+        ];
+        for(var i = 0; i < validate.length; i++) {
+            if (validate[i].length) {
+                if(validate[i].val().length == 0) {
+                    validate[i].addClass('required');
+                    valid = false;
+                } else {
+                    validate[i].removeClass('required');
+                }
+            }
+        }
+    }
+
+    if (valid) {
+        $('#marc-merge-rules-form').submit();
+    }
+
+    return valid;
+}
+
+$(document).ready(function(){
+    $('#doremove').on('click', function(){
+        doSubmit('doremove');
+    });
+    $('#doedit').on('click', function(){
+        doSubmit('doedit', $("#doedit").attr('value'));
+    });
+    $('#add').on('click', function(){
+        doSubmit('add');
+        return false;
+    });
+    $('#btn_batchremove').on('click', function(){
+        doSubmit('remove');
+    });
+
+    /* Disable batch remove unless one or more checkboxes are checked */
+    $('input[name="batchremove"]').change(function() {
+        if($('input[name="batchremove"]:checked').length > 0) {
+            $('#btn_batchremove').removeAttr('disabled');
+        } else {
+            $('#btn_batchremove').attr('disabled', 'disabled');
+        }
+    });
+
+    $.fn.dataTable.ext.order['dom-input'] = function (settings, col) {
+        return this.api().column(col, { order: 'index' }).nodes()
+            .map(function (td, i) {
+                if($('input', td).val() != undefined) {
+                    return $('input', td).val();
+                } else if($('select', td).val() != undefined) {
+                    return $('option[selected="selected"]', td).val();
+                } else {
+                    return $(td).html();
+                }
+            });
+    }
+
+    $('#marc-merge-rules').dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumns": [
+            {"bSearchable": false, "bSortable": false},
+            {"sSortDataType": "dom-input"},
+            {"sSortDataType": "dom-input"},
+            {"bSearchable": false, "sSortDataType": "dom-input"},
+            {"bSearchable": false, "sSortDataType": "dom-input"},
+            {"bSearchable": false, "sSortDataType": "dom-input"},
+            {"bSearchable": false, "sSortDataType": "dom-input"},
+            {"bSearchable": false, "sSortDataType": "dom-input"},
+            {"bSearchable": false, "sSortDataType": "dom-input"},
+            {"bSearchable": false, "bSortable": false},
+            {"bSearchable": false, "bSortable": false}
+        ],
+        "pagingType": "simple"
+    }));
+
+    var merge_rules_presets = {};
+    merge_rules_presets[_("Protect")] = {
+      'add': 0,
+      'append': 0,
+      'remove': 0,
+      'delete': 0
+    };
+    merge_rules_presets[_("Overwrite")] = {
+      'add': 1,
+      'append': 1,
+      'remove': 1,
+      'delete': 1
+    };
+    merge_rules_presets[_("Add new")] = {
+      'add': 1,
+      'append': 0,
+      'remove': 0,
+      'delete': 0
+    };
+    merge_rules_presets[_("Add and append")] = {
+      'add': 1,
+      'append': 1,
+      'remove': 0,
+      'delete': 0
+    };
+    merge_rules_presets[_("Protect from deletion")] = {
+      'add': 1,
+      'append': 1,
+      'remove': 1,
+      'delete': 0
+    };
+
+    var merge_rules_label_to_value = {};
+    merge_rules_label_to_value[_("Add")] = 1;
+    merge_rules_label_to_value[_("Append")] = 1;
+    merge_rules_label_to_value[_("Remove")] = 1;
+    merge_rules_label_to_value[_("Delete")] = 1;
+    merge_rules_label_to_value[_("Skip")] = 0;
+
+    function hash_config(config) {
+      return JSON.stringify(config, Object.keys(config).sort());
+    }
+
+    var merge_rules_preset_map = {};
+    $.each(merge_rules_presets, function(preset, config) {
+      merge_rules_preset_map[hash_config(config)] = preset;
+    });
+
+    function operations_config_merge_rule_preset(config) {
+      return merge_rules_preset_map[hash_config(config)] || '';
+    }
+
+    /* Set preset values according to operation config */
+    $('.rule').each(function() {
+      var $this = $(this);
+      var operations_config = {};
+      $('.rule-operation-action', $this).each(function() {
+        var $operation = $(this);
+        operations_config[$operation.data('operation')] = merge_rules_label_to_value[$operation.text()];
+      });
+      $('.rule-preset', $this).text(
+        operations_config_merge_rule_preset(operations_config) || _("Custom")
+      );
+    });
+
+    /* Listen to operations config changes and set presets accordingly */
+    $('.rule-operation-action-edit select').change(function() {
+      var operations_config = {};
+      var $parent_row = $(this).closest('tr');
+      $('.rule-operation-action-edit select', $parent_row).each(function() {
+        var $this = $(this);
+        operations_config[$this.attr('name')] = parseInt($this.val());
+      });
+      $('select[name="preset"]', $parent_row).val(
+          operations_config_merge_rule_preset(operations_config)
+      );
+    });
+
+    /* Listen to preset changes and set operations config accordingly */
+    $('select[name="preset"]').change(function() {
+      var $this = $(this);
+      var $parent_row = $this.closest('tr');
+      var preset = $this.val();
+      if (preset) {
+        $.each(merge_rules_presets[preset], function(operation, action) {
+          $('select[name="' + operation + '"]', $parent_row).val(action);
+        });
+      }
+    });
+
+    var module_filter_options = {
+      source: {
+        '*': '*',
+        batchmod: "Batch record modification",
+        intranet: "Staff client MARC editor",
+        batchimport: "Staged MARC import",
+        z3950: "Z39.50",
+        bulkmarcimport: "bulkmarcimport.pl",
+        import_lexile: "import_lexile.pl"
+      },
+      categorycode: {
+        '*': '*',
+        [% FOREACH categorycode IN categorycodes %]
+          [% categorycode.categorycode | html %]: "[% categorycode.description | html %]",
+        [% END %]
+      }
+    };
+
+    //Kind of hack: Replace filter value with label when one exist
+    $('.rule-module').each(function() {
+      var $this = $(this);
+      var module = $this.text();
+      if (module in module_filter_options) {
+        let $filter = $this.siblings('.rule-filter');
+        if ($filter.text() in module_filter_options[module]) {
+          $filter.text(module_filter_options[module][$filter.text()]);
+        }
+      }
+    });
+
+    var $filter_container = $('#filter-container');
+
+    /* Listen to module changes and set filter input accordingly */
+    $('select[name="module"]').change(function() {
+      var $this = $(this);
+      var module_name = $this.val();
+
+      /* Remove current element if any */
+      $filter_container.empty();
+
+      var filter_elem = null;
+      if (module_name in module_filter_options) {
+        // Create select element
+        filter_elem = document.createElement('select');
+        for (var filter_value in module_filter_options[module_name]) {
+          var option = document.createElement('option');
+          option.value = filter_value;
+          option.text = module_filter_options[module_name][filter_value];
+          filter_elem.appendChild(option);
+        }
+      }
+      else {
+        // Create text input element
+        filter_elem = document.createElement('input');
+        filter_elem.type = 'text';
+        filter_elem.setAttribute('size', 5);
+      }
+      filter_elem.name = 'filter';
+      filter_elem.id = 'filter';
+      $filter_container.append(filter_elem);
+    }).change(); // Trigger change
+
+    // Hack: set value if editing rule
+    if ($filter_container.data('filter')) {
+      $('#filter').val($filter_container.data('filter'));
+    }
+
+});
+</script>
+</head>
+<body id="admin_marc-merge-rules" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+ &rsaquo; MARC merge rules
+</div>
+
+<div class="main container-fluid">
+<div class="row">
+<div class="col-sm-10 col-sm-push-2">
+
+<h1>Manage MARC merge rules</h1>
+
+[% FOR m IN messages %]
+  <div class="dialog [% m.type | html %]">
+    [% SWITCH m.code %]
+    [% CASE 'invalid_tag_regexp' %]
+      Invalid regular expression "[% m.tag | html %]".
+    [% CASE 'invalid_control_field_actions' %]
+      Invalid combination of actions for tag [% m.tag | html %]. Control field rules do not allow "Appended: Append" and "Removed: Skip".
+    [% CASE %]
+      [% m.code | html %]
+    [% END %]
+  </div>
+[% END %]
+
+[% UNLESS Koha.Preference( 'MARCMergeRules' ) %]
+    <div class="dialog message">
+        The <b>MARCMergeRules</b> preference is not set, don't forget to enable it for rules to take effect.
+    </div>
+[% END %]
+[% IF removeConfirm %]
+<div class="dialog alert">
+<h3>Remove rule?</h3>
+<p>Are you sure you want to remove the selected rule(s)?</p>
+
+<form action="[% script_name %]" method="GET">
+    <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not remove</button>
+</form>
+    <button type="button" class="approve" id="doremove"><i class="fa fa-fw fa-check"></i> Yes, remove</button>
+</div>
+[% END %]
+
+<form action="[% script_name %]" method="POST" id="marc-merge-rules-form">
+<table id="marc-merge-rules">
+    <thead><tr>
+        <th>Rule</th>
+        <th>Module</th>
+        <th>Filter</th>
+        <th>Tag</th>
+        <th>Preset</th>
+        <th>Added</th>
+        <th>Appended</th>
+        <th>Removed</th>
+        <th>Deleted</th>
+        <th>Actions</th>
+        <th>&nbsp;</th>
+    </tr></thead>
+    [% UNLESS edit %]
+    <tfoot>
+        <tr class="rule-new">
+            <th>&nbsp;</th>
+            <th>
+                <select name="module">
+                    <option value="source">Source</option>
+                    <option value="categorycode">User category</option>
+                    <option value="userid">Username</option>
+                </select>
+            </th>
+            <th id="filter-container"></th>
+            <th><input type="text" size="5" name="tag"/></th>
+            <th>
+                <select name="preset">
+                    <option value="" selected>Custom</option>
+                    [% FOR preset IN [
+                            'Protect',
+                            'Overwrite',
+                            'Add new',
+                            'Add and append',
+                            'Protect from deletion'
+                        ]
+                    %]
+                        <option value="[% preset | html %]">[% preset | html %]</option>
+                    [% END %]
+                </select>
+            </th>
+            <th class="rule-operation-action-edit">
+                <select name="add">
+                    <option value="0">Skip</option>
+                    <option value="1">Add</option>
+                </select>
+            </th>
+            <th class="rule-operation-action-edit">
+                <select name="append">
+                    <option value="0">Skip</option>
+                    <option value="1">Append</option>
+                </select>
+            </th>
+            <th class="rule-operation-action-edit">
+                <select name="remove">
+                    <option value="0">Skip</option>
+                    <option value="1">Remove</option>
+                </select>
+            </th>
+            <th class="rule-operation-action-edit">
+                <select name="delete">
+                    <option value="0">Skip</option>
+                    <option value="1">Delete</option>
+                </select>
+            </th>
+            <th><button class="btn btn-sm" title="Add" id="add"><i class="fa fa-plus"></i> Add rule</button></th>
+            <th><button id="btn_batchremove" disabled="disabled" class="btn btn-sm" title="Batch remove"><i class="fa fa-trash"></i> Delete selected</button></th>
+        </tr>
+    </tfoot>
+    [% END %]
+    <tbody>
+        [% FOREACH rule IN rules %]
+            <tr id="[% rule.id %]" class="rule[% IF rule.edit %]-edit[% END %]">
+            [% IF rule.edit %]
+                <td>[% rule.id %]</td>
+                <td>
+                    <select name="module">
+                        [% IF rule.module == "source" %]
+                            <option value="source" selected="selected">Source</option>
+                        [% ELSE %]
+                            <option value="source">Source</option>
+                        [% END %]
+                        [% IF rule.module == "categorycode" %]
+                            <option value="categorycode" selected="selected">User category</option>
+                        [% ELSE %]
+                            <option value="categorycode">User category</option>
+                        [% END %]
+                        [% IF rule.module == "userid" %]
+                            <option value="userid" selected="selected">Username</option>
+                        [% ELSE %]
+                            <option value="userid">Username</option>
+                        [% END %]
+                    </select>
+                </td>
+                <td id="filter-container" data-filter="[% rule.filter | html %]"></td>
+                <td><input type="text" size="3" name="tag" value="[% rule.tag | html %]"/></td>
+                <th>
+                    <select name="preset">
+                        <option value="" selected>Custom</option>
+                        [% FOR preset IN [
+                                'Protect',
+                                'Overwrite',
+                                'Add new',
+                                'Add and append',
+                                'Protect from deletion'
+                            ]
+                        %]
+                            <option value="[% preset | html %]">[% preset | html %]</option>
+                        [% END %]
+                    </select>
+                </th>
+                <td class="rule-operation-action-edit">
+                    <select name="add">
+                        [% IF rule.add %]
+                            <option value="0">Skip</option>
+                            <option value="1" selected="selected">Add</option>
+                        [% ELSE %]
+                            <option value="0" selected="selected">Skip</option>
+                            <option value="1">Add</option>
+                        [% END %]
+                    </select>
+                </td>
+                <td class="rule-operation-action-edit">
+                    <select name="append">
+                        [% IF rule.append %]
+                            <option value="0">Skip</option>
+                            <option value="1" selected="selected">Append</option>
+                        [% ELSE %]
+                            <option value="0" selected="selected">Skip</option>
+                            <option value="1">Append</option>
+                        [% END %]
+                    </select>
+                </td>
+                <td class="rule-operation-action-edit">
+                    <select name="remove">
+                        [% IF rule.remove %]
+                            <option value="0">Skip</option>
+                            <option value="1" selected="selected">Remove</option>
+                        [% ELSE %]
+                            <option value="0" selected="selected">Skip</option>
+                            <option value="1">Remove</option>
+                        [% END %]
+                    </select>
+                </td>
+                <td class="rule-operation-action-edit">
+                    <select name="delete">
+                        [% IF rule.delete %]
+                            <option value="0">Skip</option>
+                            <option value="1" selected="selected">Delete</option>
+                        [% ELSE %]
+                            <option value="0" selected="selected">Skip</option>
+                            <option value="1">Delete</option>
+                        [% END %]
+                    </select>
+                </td>
+                <td class="actions">
+                    <button class="btn btn-sm" title="Save" id="doedit" value="[% rule.id | html %]"><i class="fa fa-check"></i> Save</button>
+                    <button type="submit" class="btn btn-sm" title="Cancel" ><i class="fa fa-times"></i> Cancel</button>
+                </td>
+                <td></td>
+            [% ELSE %]
+                <td>[% rule.id | html %]</td>
+                <td class="rule-module">[% rule.module | html %]</td>
+                <td class="rule-filter">[% rule.filter | html %]</td>
+                <td>[% rule.tag | html %]</td>
+                <td class="rule-preset"></td>
+                <td class="rule-operation-action" data-operation="add">[% IF rule.add %]Add[% ELSE %]Skip[% END %]</td>
+                <td class="rule-operation-action" data-operation="append">[% IF rule.append %]Append[% ELSE %]Skip[% END %]</td>
+                <td class="rule-operation-action" data-operation="remove">[% IF rule.remove %]Remove[% ELSE %]Skip[% END %]</td>
+                <td class="rule-operation-action" data-operation="delete">[% IF rule.delete %]Delete[% ELSE %]Skip[% END %]</td>
+                <td class="actions">
+                    <a href="?op=remove&id=[% rule.id %]" title="Delete" class="btn btn-sm"><i class="fa fa-trash"></i> Delete</a>
+                    <a href="?op=edit&id=[% rule.id %]" title="Edit" class="btn btn-sm"><i class="fa fa-pencil"></i> Edit</a>
+                </td>
+                <td>
+                    [% IF rule.removemarked %]
+                        <input type="checkbox" name="batchremove" value="[% rule.id | html %]" checked="checked"/>
+                    [% ELSE %]
+                        <input type="checkbox" name="batchremove" value="[% rule.id | html %]"/>
+                    [% END %]
+                </td>
+            [% END %]
+            </tr>
+        [% END %]
+    </tbody>
+</table>
+</form>
+
+<form action="[% script_name %]" method="post">
+<input type="hidden" name="op" value="redo-matching" />
+</form>
+
+</div>
+<!-- /.col-sm-10.col-sm-push-2 -->
+
+<div class="col-sm-2 col-sm-pull-10">
+    <aside>
+        [% INCLUDE 'admin-menu.inc' %]
+    </aside>
+</div>
+
+</div>
+<!-- /.row>
+</div>
+<!-- /main container-fluid -->
+
+[% INCLUDE 'intranet-bottom.inc' %]

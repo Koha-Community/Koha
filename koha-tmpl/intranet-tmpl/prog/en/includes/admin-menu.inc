@@ -100,6 +100,9 @@
             [% IF ( CAN_user_parameters_manage_search_engine_config ) %]
                 <li><a href="/cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl">Search engine configuration (Elasticsearch)</a></li>
             [% END %]
+            [% IF ( CAN_user_parameters_manage_marc_merge_rules ) %]
+                <li><a href="/cgi-bin/koha/admin/marc-merge-rules.pl">MARC merge rules</a></li>
+            [% END %]
         </ul>
     [% END %]
 

@@ -203,7 +203,7 @@ while ( my $row = $csv->getline_hr($fh) ) {
             $record->append_fields($field);
         }
 
-        ModBiblio( $record, $biblionumber ) unless ( $test );
+        ModBiblio( $record, $biblionumber, undef, { context => { source => 'import_lexile' } } ) unless ( $test );
     }
 
 }

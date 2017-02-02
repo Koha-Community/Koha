@@ -675,7 +675,7 @@ sub BatchCommitRecords {
                 }
                 $oldxml = $old_marc->as_xml($marc_type);
 
-                ModBiblio($marc_record, $recordid, $oldbiblio->frameworkcode);
+                ModBiblio($marc_record, $recordid, $oldbiblio->frameworkcode, {context => {source => 'batchimport'}});
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?"; # FIXME call SetMatchedBiblionumber instead
 
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {

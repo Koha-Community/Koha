@@ -210,6 +210,11 @@
             Manage search engine configuration
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_marc_merge_rules' -%]
+        <span class="sub_permission manage_marc_merge_rules_subpermission">
+          Manage MARC merge rules configuration
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_search_targets' -%]
         <span class="sub_permission manage_search_targets_subpermission">
             Manage Z39.50 and SRU server configuration

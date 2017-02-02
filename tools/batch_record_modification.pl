@@ -162,9 +162,10 @@ if ( $op eq 'form' ) {
             record_ids  => \@record_ids,
         };
 
+        my $patron = Koha::Patrons->find( $loggedinuser );
         my $job_id =
           $recordtype eq 'biblio'
-          ? Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue($params)
+          ? Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue($params, { source => 'batchmod', categorycode => $patron->categorycode, userid => $patron->userid })
           : Koha::BackgroundJob::BatchUpdateAuthority->new->enqueue($params);
 
         $template->param(

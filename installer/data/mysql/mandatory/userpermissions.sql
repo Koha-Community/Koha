@@ -25,6 +25,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 3, 'manage_oai_sets', 'Manage OAI sets'),
    ( 3, 'manage_item_search_fields', 'Manage item search fields'),
    ( 3, 'manage_search_engine_config', 'Manage search engine configuration'),
+   ( 3, 'manage_marc_merge_rules', 'Manage MARC merge rules configuration'),
    ( 3, 'manage_search_targets', 'Manage Z39.50 and SRU server configuration'),
    ( 3, 'manage_didyoumean', 'Manage Did you mean? configuration'),
    ( 3, 'manage_column_config', 'Manage column configuration'),

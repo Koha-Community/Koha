@@ -233,7 +233,7 @@ sub process_bib {
             );
         }
         if ( not $test_only ) {
-            ModBiblio( $bib, $biblionumber, $frameworkcode, 1 );
+            ModBiblio( $bib, $biblionumber, $frameworkcode, { disable_autolink => 1 });
             #Last param is to note ModBiblio was called from linking script and bib should not be linked again
             $num_bibs_modified++;
         }
