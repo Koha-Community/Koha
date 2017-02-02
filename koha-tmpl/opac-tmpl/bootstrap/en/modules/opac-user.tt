@@ -940,11 +940,13 @@ Using this account is not recommended because some parts of Koha will not functi
                 $("a[name='nonjs_submitnote']").hide();
 
                 $("input[name='note']").prop('readonly', false);
-                $("input[name='note']").keyup(function(e){
+                $("input[name='note']").keypress(function(e){
                     /* prevent submitting of renewselected form */
                     if(e.which == 13)
                         e.preventDefault();
+                });
 
+                $("input[name='note']").keyup(function(e){
                     var $btn_save = $('#save_'+$(this).data('issue_id'));
                     var origvalue = $(this).data('origvalue');
                     var value = $(this).val();
