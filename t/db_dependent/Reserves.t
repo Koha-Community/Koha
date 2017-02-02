@@ -32,6 +32,7 @@ use C4::Circulation;
 use C4::Items;
 use C4::Members;
 use C4::Reserves;
+use Koha::Caches;
 use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Libraries;
@@ -49,8 +50,15 @@ my $dbh = C4::Context->dbh;
 
 my $builder = t::lib::TestBuilder->new;
 
+my $frameworkcode = q||;
+
 # Somewhat arbitrary field chosen for age restriction unit tests. Must be added to db before the framework is cached
-$dbh->do("update marc_subfield_structure set kohafield='biblioitems.agerestriction' where tagfield='521' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.agerestriction' where tagfield='521' and tagsubfield='a' and frameworkcode=?", undef, $frameworkcode);
+my $cache = Koha::Caches->get_instance;
+$cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+$cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+$cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
+$cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
 ## Setup Test
 # Add branches
@@ -84,7 +92,7 @@ else {
     );
 }
 my ($bibnum, $bibitemnum);
-($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
+($bibnum, $title, $bibitemnum) = AddBiblio($bib, $frameworkcode);
 
 # Create a helper item instance for testing
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
@@ -225,7 +233,7 @@ $bib2->append_fields(
 );
 
 # create one item belonging to FPL and one belonging to CPL
-my ($bibnum2, $bibitemnum2) = AddBiblio($bib, '');
+my ($bibnum2, $bibitemnum2) = AddBiblio($bib, $frameworkcode);
 my ($itemnum_cpl, $itemnum_fpl);
 ( undef, undef, $itemnum_cpl ) = AddItem(
     {   homebranch    => $branch_1,
@@ -521,7 +529,7 @@ t::lib::Mocks::mock_preference( 'AgeRestrictionMarker', 'FSK|PEGI|Age|K' );
 my $record = GetMarcBiblio( $bibnum );
 my ( $ageres_tagid, $ageres_subfieldid ) = GetMarcFromKohaField( "biblioitems.agerestriction" );
 $record->append_fields(  MARC::Field->new($ageres_tagid, '', '', $ageres_subfieldid => 'PEGI 16')  );
-C4::Biblio::ModBiblio( $record, $bibnum, '' );
+C4::Biblio::ModBiblio( $record, $bibnum, $frameworkcode );
 
 is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'OK', "Reserving an ageRestricted Biblio without a borrower dateofbirth succeeds" );
 
@@ -697,6 +705,11 @@ MoveReserve( $itemnumber, $borrowernumber );
 ($status)=CheckReserves( $itemnumber, undef, 3 );
 is( $status, 'Reserved', 'MoveReserve did not fill future hold of 3 days');
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
+
+$cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+$cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+$cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
+$cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
 # we reached the finish
 $schema->storage->txn_rollback();
