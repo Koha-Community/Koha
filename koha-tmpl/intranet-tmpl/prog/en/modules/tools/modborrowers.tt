@@ -349,11 +349,6 @@
                                                 OPAC note:
                                             [% END %]
                                             </label>
-                                            [% IF field.mandatory %]
-                                                <input type="checkbox" title="This field is mandatory" name="disable_input" value="[% field.name %]" disabled="disabled" readonly="readonly" />
-                                            [% ELSE %]
-                                                <input type="checkbox" title="Check to delete this field" name="disable_input" value="[% field.name %]" />
-                                            [% END %]
                                             [% IF ( field.type == 'text' ) %]
                                                 <input type="text" name="[% field.name %]" value="" />
                                             [% END %]
@@ -373,7 +368,10 @@
                                                 <a href="#"  class="clear-date" id="clear-date-[% field.name %]" ><i class="fa fa-fw fa-trash"></i> Clear</a>
                                             [% END %]
                                             [% IF field.mandatory %]
+                                                <input type="checkbox" title="This field is mandatory" name="disable_input" value="[% field.name %]" disabled="disabled" readonly="readonly" />
                                                 <span class="required">Required fields cannot be cleared</span>
+                                            [% ELSE %]
+                                                <input type="checkbox" title="Check to delete this field" name="disable_input" value="[% field.name %]" />
                                             [% END %]
                                         </li>
                                         [% END %]
