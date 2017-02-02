@@ -49,14 +49,50 @@ my @tables = qw( biblio biblioitems borrowers items statistics subscription );
 cmp_deeply( \@keys, \@tables, 'GetColumnDefs returns the expected tables');
 
 subtest 'Testing themelanguage for unique themes (BZ 17982)' => sub {
-    plan tests => 1;
-
-    t::lib::Mocks::mock_preference('template', 'prog');
+    plan tests => 12;
+    my $testing_language;
     my $module_language = Test::MockModule->new('C4::Languages');
-    $module_language->mock( 'getlanguage', sub { return 'en'; } );
 
-    # This only triggers the first uniq but that is sufficient for now
-    cmp_deeply( ( C4::Templates::themelanguage( C4::Context->config('intrahtdocs'), 'about.tt' , 'intranet', 'fake_cgi' ) )[2], [ 'prog' ], 'We only expect one prog here' );
+    $module_language->mock(
+        'getlanguage',
+        sub {
+            return $testing_language;
+        }
+    );
+
+    my $cgi = CGI->new();
+    my $htdocs = C4::Context->config('intrahtdocs');
+    my $section = 'intranet';
+
+    # trigger first case.
+    $testing_language = 'en';
+    my ($theme, $lang, $availablethemes) = C4::Templates::themelanguage( $htdocs, 'about.tt', $section, $cgi);
+    is($theme,'prog',"Expected theme: set en - $theme");
+    is($lang,'en','Expected language: set en');
+    cmp_deeply( $availablethemes, [ 'prog' ], 'We only expect one prog: set en' );
+
+    # trigger second case.
+    $testing_language = q{};
+    ($theme, $lang, $availablethemes) = C4::Templates::themelanguage($htdocs, 'about.tt', $section, $cgi);
+    is($theme,'prog',"Expected theme: default en - $theme");
+    is($lang,'en','Expected language: default en');
+    cmp_deeply( $availablethemes, [ 'prog' ], 'We only expect one prog: default en' );
+
+    # trigger third case.
+    my $template = $htdocs . '/prog/en/modules/about.tt';
+    ($theme, $lang, $availablethemes) = C4::Templates::themelanguage($htdocs, $template, $section, $cgi);
+    is($theme,'prog',"Expected defined theme: unset - $theme");
+    is($lang,q{},'Expected language: unset');
+    cmp_deeply( $availablethemes, [ 'prog' ], 'We only expect one prog: unset' );
+
+    # trigger bad case.
+    $template = $htdocs . '/prog/en/kaboom/about.tt';
+    ($theme, $lang, $availablethemes) = C4::Templates::themelanguage($htdocs, $template, $section, $cgi);
+    is($lang,undef,'Expected language: not coded for');
+    is( $availablethemes, undef, 'We only expect no prog: not coded for' );
+    is($theme,undef,"Expected no theme: not coded for");
+
+    return;
 };
 
 1;
