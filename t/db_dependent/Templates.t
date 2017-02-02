@@ -19,8 +19,11 @@ use Modern::Perl;
 
 use CGI;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Deep;
+use Test::MockModule;
+
+use t::lib::Mocks;
 
 BEGIN {
     use_ok( 'C4::Templates' );
@@ -45,5 +48,15 @@ is( scalar @keys, 6, "GetColumnDefs correctly returns the 5 tables defined in co
 my @tables = ( 'biblio', 'biblioitems', 'borrowers', 'items', 'statistics', 'subscription');
 cmp_deeply( \@keys, \@tables, "GetColumnDefs returns the expected tables");
 
+subtest 'Testing themelanguage for unique themes (BZ 17982)' => sub {
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference('template', 'prog');
+    my $module_language = Test::MockModule->new('C4::Languages');
+    $module_language->mock( 'getlanguage', sub { return 'en'; } );
+
+    # This only triggers the first uniq but that is sufficient for now
+    cmp_deeply( ( C4::Templates::themelanguage( C4::Context->config('intrahtdocs'), 'about.tt' , 'intranet', 'fake_cgi' ) )[2], [ 'prog' ], 'We only expect one prog here' );
+};
 
 1;
