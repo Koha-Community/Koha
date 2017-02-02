@@ -3,11 +3,12 @@
 [% USE Price %]
 [% SET ENABLE_OPAC_PAYMENTS = Koha.Preference('EnablePayPalOpacPayments') %]
 [% SET DISPLAY_PAYMENT_BLOCK = 0 %]
-
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your fines and charges</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+[% END %]
 </head>
 
 [% INCLUDE 'bodytag.inc' bodyid='opac-account' bodyclass='scrollto' %]
@@ -66,7 +67,7 @@
 
                     [% IF ( ACCOUNT_LINES ) %]
                         <form method="post" action="opac-account-pay.pl" class="form-horizontal">
-                        <table class="table table-bordered table-striped">
+                        <table class="table table-bordered table-striped" id="finestable">
                             <thead>
                                 <tr>
                                     [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
@@ -176,8 +177,13 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 $( document ).ready(function() {
+
+    $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "sPaginationType": "four_button"
+    }));
 
     $(".paypal").on("click", function() {
         window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700');
