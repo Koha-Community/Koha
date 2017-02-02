@@ -23,6 +23,8 @@ use POSIX qw(strftime);
 use LWP::UserAgent;
 use JSON;
 
+use Koha::Libraries;
+
 =head1 NAME
 
 C4::UsageStats
@@ -56,14 +58,24 @@ sub NeedUpdate {
 }
 
 sub BuildReport {
-    my $report = {
-        library => {
-            id      => C4::Context->preference('UsageStatsID')          || 0,
+    my $report;
+    my @libraries;
+    if( C4::Context->preference('UsageStatsLibrariesInfo') ) {
+        my $libraries = Koha::Libraries->search;
+        while ( my $library = $libraries->next ) {
+            push @libraries, { name => $library->branchname, url => $library->branchurl, country => $library->branchcountry, geolocation => $library->geolocation, };
+        }
+    }
+    $report = {
+        installation => {
+            koha_id => C4::Context->preference('UsageStatsID')          || 0,
             name    => C4::Context->preference('UsageStatsLibraryName') || q||,
             url     => C4::Context->preference('UsageStatsLibraryUrl')  || q||,
             type    => C4::Context->preference('UsageStatsLibraryType') || q||,
             country => C4::Context->preference('UsageStatsCountry')     || q||,
+            geolocation => C4::Context->preference('UsageStatsGeolocation') || q||,
         },
+        libraries => \@libraries,
     };
 
     # Get database volumetry.
@@ -342,7 +354,7 @@ sub ReportToCommunity {
     my $data = shift;
     my $json = encode_json($data);
 
-    my $url = "http://hea.koha-community.org/upload.pl";
+    my $url = "https://hea.koha-community.org/upload.pl";
     my $ua = LWP::UserAgent->new;
     my $res = $ua->post(
         $url,
@@ -350,8 +362,12 @@ sub ReportToCommunity {
         Content => $json,
     );
     my $content = decode_json( $res->decoded_content );
-    C4::Context->set_preference( 'UsageStatsID',
-        $content->{library}{id} );
+    if ( $content->{koha_id} ) {
+        C4::Context->set_preference( 'UsageStatsID', $content->{koha_id} );
+    }
+    if ( $content->{id} ) {
+        C4::Context->set_preference( 'UsageStatsPublicID', $content->{id} );
+    }
 }
 
 =head2 _count

@@ -70,7 +70,7 @@ Only the total number is retrieved. In no case will private data be shared!
 
 In order to know which parts of Koha modules are used, this script will collect some system preference values.
 
-If you want to tell us who you are, you can fill the UsageStatsLibraryName system preference with your library name, UsageStatsLibraryUrl, UsageStatsLibraryType and/or UsageStatsCountry.
+If you want to tell us who you are, you can fill the UsageStatsLibraryName system preference with your library name, UsageStatsLibraryUrl, UsageStatsLibraryType and/or UsageStatsCountry, UsageStatsLibrariesInfo.
 
 All these data will be analyzed on the http://hea.koha-community.org Koha community website.
 

@@ -5,6 +5,40 @@
 <title>Koha &rsaquo; Administration &rsaquo; Koha usage statistics</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+<link rel="stylesheet" href="[% interface %]/lib/leaflet/leaflet.css" />
+<script src="[% interface %]/lib/leaflet/leaflet.js"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+    function positionMap() {
+        var tbh = $("#mapid");
+        var mapContainer = tbh.parent();
+        mapContainer.css('position', 'relative');
+        mapContainer.css('min-height', tbh.outerHeight(true));
+        tbh.css('position', 'absolute');
+        tbh.css('right', 0);
+
+        var offsetTop = mapContainer.offset().top;
+        var s = parseInt($(window).scrollTop(), 10);
+        tbh.css('top', '').css('bottom', '');
+        if (s > offsetTop) {
+            var mapContainerOffsetBottom = offsetTop + mapContainer.innerHeight();
+            if (s + tbh.outerHeight(true) > mapContainerOffsetBottom) {
+                tbh.css('bottom', 0);
+            } else {
+                tbh.css('top', s - offsetTop);
+            }
+        } else {
+            tbh.css('top', 0);
+        }
+    }
+
+    $(document).ready(function() {
+        $(window).scroll(positionMap);
+        positionMap();
+    });
+//]]>
+</script>
 </head>
 
 <body id="admin_usage_statistics" class="admin">
@@ -48,7 +82,7 @@
     <form id="category_form" action="/cgi-bin/koha/admin/usage_statistics.pl" method="post">
         <h1>Modify the statistics you share with the Koha community</h1>
         <fieldset class="rows">
-            <ol>
+            <ol style="float:left;">
                 <li>
                     <label for="UsageStats">Share my Koha usage statistics: </label>
                     <select name="UsageStats" id="UsageStats">
@@ -87,7 +121,7 @@
                 </li>
                 <li>
                     <label for="UsageStatsLibraryName">Library name: </label>
-                    <input type="text" value="[% Koha.Preference('UsageStatsLibraryName') %]" name="UsageStatsLibraryName" id="UsageStatsLibraryName" />
+                    <input type="text" value="[% Koha.Preference('UsageStatsLibraryName') | html %]" name="UsageStatsLibraryName" id="UsageStatsLibraryName" />
                 </li>
                 <li>
                     <label for="UsageStatsLibraryType">Library type: </label>
@@ -159,8 +193,58 @@
                         Your data have never been shared
                     [% END %]
                 </li>
+                <li>
+                    <label for="UsageStatsGeolocation">Geolocation: </label>
+                    <input id="UsageStatsGeolocation" name="UsageStatsGeolocation" value="[% Koha.Preference('UsageStatsGeolocation') %]" type="text" value="[% Koha.Preference('UsageStatsLibrariesInfo') %]" size="35" readonly="readonly" />
+                    <a href="#" class="change_geolocation" data-branchname="" data-id="UsageStatsGeolocation"><img src="[% interface %]/lib/leaflet/images/marker-icon.png" title="Set geolocation" style="max-height: 2em;" /></a>
+                </li>
+                <li>
+                    <label for="UsageStatsLibrariesInfo">Libraries informations: </label>
+                    <select name="UsageStatsLibrariesInfo" id="UsageStatsLibrariesInfo">
+                        [% IF Koha.Preference('UsageStatsLibrariesInfo') %]
+                            <option value="1" selected="selected">Yes</option>
+                            <option value="0">No</option>
+                        [% ELSE %]
+                            <option value="1">Yes</option>
+                            <option value="0" selected="selected">No</option>
+                        [% END %]
+                    </select>
+                </li>
+
+                <li id="libraries_info">
+                    <fieldset class="rows">
+                    <legend>Libraries</legend>
+                    <ol>
+                        [% FOR l IN libraries %]
+                        <li>
+                            <label for="[% l.branchcode %]">[% l.branchname %]: </label>
+                            <div style="float:left;">
+                                <div>Country: [% l.branchcountry %]</div>
+                                <div>Url: [% l.branchurl %]</div>
+                                <div>
+                                    Geolocation: <input type="text" id="geolocation_[% l.branchcode %]" name="geolocation_[% l.branchcode %]" value="[% l.geolocation %]" size="35" readonly="readonly" />
+                                    <a href="#" class="change_geolocation" data-branchname="[% l.branchname %]" data-id="geolocation_[% l.branchcode %]"><img src="[% interface %]/lib/leaflet/images/marker-icon.png" title="Set geolocation for [% l.branchname %]" style="max-height: 2em;" /></a>
+                                </div>
+                            </div>
+                        </li>
+                        [% END %]
+                    </ol>
+                    </fieldset>
+                </li>
+                <li>
+                    <label for="MyPublicLink">See your public page: </label>
+                    [% IF Koha.Preference('UsageStatsPublicID') %]
+                        [% SET my_url = 'https://hea.koha-community.org/libraries/' _  Koha.Preference('UsageStatsPublicID') %]
+                        <a href="[% my_url %]">[% my_url %]</a>
+                    [% ELSE %]
+                        You do not have anything public yet.
+                    [% END %]
+                </li>
+
             </ol>
-        </fieldset>
+            <div style="clear:right"></div>
+        <div id="mapid" style="width: 600px; height: 400px; margin-left: 40%:"></div>
+    </fieldset>
 
         <fieldset class="action">
             <input type="hidden" name="op" value="update" />
@@ -168,6 +252,83 @@
             <a class="cancel" href="/cgi-bin/koha/admin/usage_statistics.pl">Cancel</a>
         </fieldset>
     </form>
+
+    <script>
+        var map = L.map('mapid').setView([0,0], 1);
+
+        L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+        }).addTo(map);
+
+        var default_elt = { 'text': _("Main library"), 'id': 'UsageStatsGeolocation' };
+        var current_elt = default_elt;
+
+        // Add the title
+        var title = L.control({position: 'topright'});
+        title.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'title');
+            this.update();
+            return this._div;
+        };
+        title.update = function (props) {
+            this._div.innerHTML = '<h4>' + _("Click on the map to set the geolocation for %s").format(current_elt.text) + '</h4>';
+        };
+        title.addTo(map);
+
+        var markers = {};
+        function add_to_map(elt, latlng) {
+            var marker = markers[elt.id];
+            if (marker) map.removeLayer(marker);
+            marker = L.marker(latlng).addTo(map);
+            marker.bindPopup(elt.text);
+            marker.on('mouseover', function (e) {this.openPopup(); });
+            marker.on('mouseout',  function (e) {this.closePopup();});
+            markers[elt.id] = marker;
+        }
+
+        // Init the map
+        [% IF Koha.Preference('UsageStatsGeolocation') %]
+            var latlng = [ [% Koha.Preference('UsageStatsGeolocation') %] ];
+            add_to_map( current_elt, latlng );
+        [% END %]
+        [% FOR l IN libraries %]
+            [% NEXT UNLESS l.geolocation %]
+            add_to_map( { 'text': "[% l.branchname %]", 'id': "geolocation_[% l.branchcode %]" }, [ [% l.geolocation %] ] );
+        [% END %]
+
+        // On click, update the geolocation and the marker
+        map.on('click', function(e){
+            add_to_map( current_elt, e.latlng );
+            $("#" + current_elt.id).val(e.latlng.lat + ',' + e.latlng.lng);
+        });
+
+        // Auto zoom
+        var group = new L.featureGroup(Object.keys(markers).map(function(key){return markers[key]}));
+        if ( group.getBounds().isValid() ) map.fitBounds(group.getBounds());
+
+        // On click on the marker icons, update the title of the map
+        $(document).ready(function(){
+            $(".change_geolocation").on('click', function(e){
+                e.preventDefault();
+                if ( $(this).data('branchname') ) {
+                    current_elt = { 'text': $(this).data('branchname'), 'id': $(this).data('id') };
+                } else {
+                    current_elt = default_elt;
+                }
+                title.update();
+            });
+            $("#UsageStatsLibrariesInfo").change();
+        });
+
+        $("#UsageStatsLibrariesInfo").on('change', function(){
+            if ( $(this).val() == 1 ) $("#libraries_info").show()
+            else $("#libraries_info").hide();
+            positionMap();
+        });
+
+    </script>
 
 </div>
 </div>

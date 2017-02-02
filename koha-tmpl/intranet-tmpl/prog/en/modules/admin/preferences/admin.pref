@@ -410,6 +410,17 @@ Administration:
                   subscription: "subscription"
             - will be shown on the <a href="http://hea.koha-community.org">Hea Koha community website</a>.
             - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
+        -
+            - pref: UsageStatsLibrariesInfo
+              choices:
+                  yes: "Share"
+                  no: "Do not Share"
+            - "libraries information (name, url, country)"
+            - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
+        -
+            - "Geolocation of the main library: "
+            - pref: UsageStatsGeolocation
+            - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
     Search Engine:
         -
             - pref: SearchEngine
