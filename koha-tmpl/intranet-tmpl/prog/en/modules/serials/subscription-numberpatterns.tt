@@ -2,6 +2,8 @@
 <title>Koha &rsaquo; Serials &rsaquo; Numbering patterns</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 
@@ -63,6 +65,14 @@ function show_blocking_subs() {
     $("#blocking_subs").show();
 }
 $(document).ready(function(){
+
+    $("#numberpatternst").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+        ],
+        "sPaginationType": "four_button"
+    }));
+
     $(".delete_pattern").on("click",function(){
         return confirmDelete();
     });
@@ -86,6 +96,11 @@ $(document).ready(function(){
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo;
     <a href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">Numbering patterns</a>
+    [% IF ( new ) %]
+        &rsaquo; New numbering pattern
+    [% ELSIF ( modify ) %]
+        &rsaquo; Modifying numbering pattern '[% label %]'
+    [% END %]
 </div>
 
 <div id="doc3" class="yui-t2">
@@ -223,8 +238,8 @@ $(document).ready(function(){
               </table>
             </fieldset>
             <fieldset class="action">
-              <input type="submit" value="Save" />
-              <input type="reset" value="Reset" />
+              <button type="submit" class="btn btn-default btn-sm">Save</button>
+              <button type="reset" class="btn btn-default btn-sm">Reset</button>
               <a class="cancel" href="/cgi-bin/koha/serials/subscription-numberpatterns.pl">Cancel</a>
             </fieldset>
           </form>
@@ -291,7 +306,7 @@ $(document).ready(function(){
                 </tbody>
               </table>
               <fieldset class="action">
-              <input type="button" id="test_pattern" value="Test pattern" />
+                  <button type="button" id="test_pattern" class="btn btn-default btn-sm">Test pattern</button>
               </fieldset>
               <div id="predictionpattern"></div>
             </fieldset>
