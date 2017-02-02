@@ -894,7 +894,7 @@
                     [% FOREACH pa_class IN patron_attribute_classes %]
                         [% IF pa_class.class %]
                             <fieldset id="aai_[% pa_loo.class %]" class="rows patron-attributes">
-                            <legend>[% pa_loo.lib %]</legend>
+                            <legend>[% pa_class.lib %]</legend>
                         [% ELSE %]
                             <fieldset class="rows patron-attributes">
                             <legend>Additional information</legend>
@@ -912,9 +912,8 @@
                                                 <select id="[% form_id %]" name="patron_attribute_value">
                                                     <option value=""></option>
                                                     [% FOREACH auth_val IN AuthorisedValues.Get( pa.type.authorised_value_category, 1 ) %]
-                                                        [% IF ( auth_val.authorised_value == pa_value.value ) %]
+                                                        [% IF ( auth_val.authorised_value == pa_value ) %]
                                                             <option value="[% auth_val.authorised_value %]" selected="selected">
-                                                                [%# Yes, lib; GetAuthorisedValues takes care of intelligently setting this from lib_opac %]
                                                                 [% auth_val.lib %]
                                                             </option>
                                                         [% ELSE %]
@@ -925,7 +924,7 @@
                                                     [% END %]
                                                 </select>
                                             [% ELSE %]
-                                                <textarea rows="2" cols="30" id="[% form_id %]" name="patron_attribute_value">[% pa_value.value %]</textarea>
+                                                <textarea rows="2" cols="30" id="[% form_id %]" name="patron_attribute_value">[% pa_value %]</textarea>
                                             [% END %]
                                             <a href="#" class="clear-attribute">Clear</a>
                                             [% IF ( pa.type.repeatable ) %]
@@ -933,9 +932,9 @@
                                             [% END %]
                                         [% ELSE %]
                                             [% IF ( pa.type.authorised_value_category ) %]
-                                                [% AuthorisedValues.GetByCode( pa.type.authorised_value_category, pa_value.value, 1 ) | html_line_break %]
+                                                [% AuthorisedValues.GetByCode( pa.type.authorised_value_category, pa_value, 1 ) | html_line_break %]
                                             [% ELSE %]
-                                                [% pa_value.value | html_line_break %]
+                                                [% pa_value | html_line_break %]
                                             [% END %]
                                         [% END %]
                                     </li>
