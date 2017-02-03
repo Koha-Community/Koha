@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Members;
 use C4::Members::Attributes qw( GetBorrowerAttributes );
 use Koha::Patrons;
+use Koha::Patron::Attribute;
 
 BEGIN {
     use_ok('Koha::Patron::Modification');
@@ -253,13 +254,16 @@ subtest 'approve tests' => sub {
 
 subtest 'pending_count() and pending() tests' => sub {
 
-    plan tests => 7;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
     Koha::Patron::Modifications->search->delete;
     my $library_1 = $builder->build( { source => 'Branch' } )->{branchcode};
     my $library_2 = $builder->build( { source => 'Branch' } )->{branchcode};
+    $builder->build({ source => 'BorrowerAttributeType', value => { code => 'CODE_1' } });
+    $builder->build({ source => 'BorrowerAttributeType', value => { code => 'CODE_2', repeatable => 1 } });
+
     my $patron_1
         = $builder->build(
         { source => 'Borrower', value => { branchcode => $library_1 } } )
@@ -276,12 +280,15 @@ subtest 'pending_count() and pending() tests' => sub {
     my $verification_token_2 = md5_hex( time().{}.rand().{}.$$ );
     my $verification_token_3 = md5_hex( time().{}.rand().{}.$$ );
 
+    Koha::Patron::Attribute->new({ borrowernumber => $patron_1, code => 'CODE_1', attribute => 'hello' } )->store();
+    Koha::Patron::Attribute->new({ borrowernumber => $patron_2, code => 'CODE_2', attribute => 'bye' } )->store();
 
     my $modification_1 = Koha::Patron::Modification->new(
         {   borrowernumber     => $patron_1,
             surname            => 'Hall',
             firstname          => 'Kyle',
-            verification_token => $verification_token_1
+            verification_token => $verification_token_1,
+            extended_attributes => '[{"code":"CODE_1","value":""}]'
         }
     )->store();
 
@@ -292,13 +299,14 @@ subtest 'pending_count() and pending() tests' => sub {
         {   borrowernumber     => $patron_2,
             surname            => 'Smith',
             firstname          => 'Sandy',
-            verification_token => $verification_token_2
+            verification_token => $verification_token_2,
+            extended_attributes => '[{"code":"CODE_2","value":"chau"},{"code":"CODE_2","value":"ciao"}]'
         }
     )->store();
 
     my $modification_3 = Koha::Patron::Modification->new(
         {   borrowernumber     => $patron_3,
-            surname            => 'Smith',
+            surname            => 'Smithy',
             firstname          => 'Sandy',
             verification_token => $verification_token_3
         }
@@ -306,6 +314,31 @@ subtest 'pending_count() and pending() tests' => sub {
 
     is( Koha::Patron::Modifications->pending_count,
         3, 'pending_count() correctly returns 3' );
+
+    my $pending = Koha::Patron::Modifications->pending();
+    is( scalar @{$pending}, 3, 'pending() returns an array with 3 elements' );
+
+    my @filtered_modifications = grep { $_->{borrowernumber} eq $patron_1 } @{$pending};
+    my $p1_pm = $filtered_modifications[0];
+    my $p1_pm_attribute_1 = $p1_pm->{extended_attributes}->[0];
+
+    is( scalar @{$p1_pm->{extended_attributes}}, 1, 'patron 1 has modification has one pending attribute modification' );
+    is( ref($p1_pm_attribute_1), 'Koha::Patron::Attribute', 'patron modification has single attribute object' );
+    is( $p1_pm_attribute_1->attribute, '', 'patron 1 has an empty value for the attribute' );
+
+    @filtered_modifications = grep { $_->{borrowernumber} eq $patron_2 } @{$pending};
+    my $p2_pm = $filtered_modifications[0];
+
+    is( scalar @{$p2_pm->{extended_attributes}}, 2 , 'patron 2 has 2 attribute modifications' );
+
+    my $p2_pm_attribute_1 = $p2_pm->{extended_attributes}->[0];
+    my $p2_pm_attribute_2 = $p2_pm->{extended_attributes}->[1];
+
+    is( ref($p2_pm_attribute_1), 'Koha::Patron::Attribute', 'patron modification has single attribute object' );
+    is( ref($p2_pm_attribute_2), 'Koha::Patron::Attribute', 'patron modification has single attribute object' );
+
+    is( $p2_pm_attribute_1->attribute, 'chau', 'patron modification has the right attribute change' );
+    is( $p2_pm_attribute_2->attribute, 'ciao', 'patron modification has the right attribute change' );
 
     is( Koha::Patron::Modifications->pending_count($library_1),
         1, 'pending_count() correctly returns 1 if filtered by library' );

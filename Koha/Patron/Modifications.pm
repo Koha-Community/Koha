@@ -26,6 +26,7 @@ use Modern::Perl;
 
 use C4::Context;
 
+use Koha::Patron::Attribute;
 use Koha::Patron::Modification;
 
 use JSON;
@@ -96,7 +97,19 @@ sub pending {
     while ( my $row = $sth->fetchrow_hashref() ) {
         foreach my $key ( keys %$row ) {
             if ( defined $row->{$key} && $key eq 'extended_attributes' ) {
-                $row->{$key} = from_json($row->{$key});
+                my $attributes = decode_json( $row->{$key} );
+                my @pending_attributes;
+                foreach my $attr ( @{$attributes} ) {
+                    push @pending_attributes,
+                        Koha::Patron::Attribute->new(
+                        {   borrowernumber => $row->{borrowernumber},
+                            code           => $attr->{code},
+                            attribute      => $attr->{value}
+                        }
+                        );
+                }
+
+                $row->{$key} = \@pending_attributes;
             }
             delete $row->{$key} unless defined $row->{$key};
         }
