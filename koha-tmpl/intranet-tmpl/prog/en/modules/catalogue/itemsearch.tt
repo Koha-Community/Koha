@@ -292,7 +292,11 @@
           { 'type': 'text' },
           { 'type': 'select', 'values': [% branches.json %] },
           { 'type': 'select', 'values': [% branches.json %] },
-          { 'type': 'select', 'values': [% locations.json %] },
+          [% IF locations.size %]
+              { 'type': 'select', 'values': [% locations.json %] },
+          [% ELSE %]
+              null,
+          [% END %]
           { 'type': 'text' },
           [% IF notforloans.size %]
               { 'type': 'select', 'values': [% notforloans.json %] },
@@ -391,11 +395,13 @@
               options = branches
               empty_option = "All libraries"
             %]
-            [% INCLUDE form_field_select
-              name="location"
-              options = locations
-              empty_option = "All locations"
-            %]
+            [% IF locations.size %]
+                [% INCLUDE form_field_select
+                  name="location"
+                  options = locations
+                  empty_option = "All locations"
+                %]
+            [% END %]
           </fieldset>
           <fieldset>
             [% INCLUDE form_field_select
