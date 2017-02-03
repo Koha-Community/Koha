@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use Modern::Perl;
-use Test::More tests => 145;
+use Test::More tests => 146;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -14,6 +14,7 @@ use Koha::Acquisition::Orders;
 use Koha::Patrons;
 
 use t::lib::TestBuilder;
+use Koha::DateUtils;
 
 use YAML;
 
@@ -487,6 +488,16 @@ my $budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
 
 my $budget_period_cloned = C4::Budgets::GetBudgetPeriod($budget_period_id_cloned);
 is($budget_period_cloned->{budget_period_description}, 'Budget Period Cloned', 'Cloned budget\'s description is updated.');
+
+my $budget_cloned = C4::Budgets::GetBudgets({ budget_period_id => $budget_period_id_cloned });
+my $test =  $budget_cloned->[0]->{timestamp};
+my $budget_time = Koha::DateUtils::dt_from_string($test);
+my $local_time = Koha::DateUtils::dt_from_string();
+
+
+is(DateTime::compare($budget_time, $local_time), 0, "New budget got the right timestamp");
+
+
 
 my $budget_hierarchy        = GetBudgetHierarchy($budget_period_id);
 my $budget_hierarchy_cloned = GetBudgetHierarchy($budget_period_id_cloned);
