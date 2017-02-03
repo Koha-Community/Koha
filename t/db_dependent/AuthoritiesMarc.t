@@ -202,7 +202,7 @@ subtest 'AddAuthority should respect AUTO_INCREMENT (BZ 18104)' => sub {
     isnt( $id1, $id2, 'Do not return the same id again' );
     t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
     my $id3 = AddAuthority( $record, undef, 'GEOGR_NAME' );
-    is( $id3 > 0, 1, 'Tested AddAuthority with UNIMARC' );
+    ok( $id3 > 0, 'Tested AddAuthority with UNIMARC' );
     is( $record->field('001')->data, $id3, 'Check updated 001' );
 };
 
