@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 
-use Test::More tests => 37;
+use Test::More tests => 43;
 use Test::Mojo;
 use t::lib::TestBuilder;
 
@@ -160,7 +160,7 @@ is($accountline_edited->{amountoutstanding}, '-19.000000');
 
 
 # Payment tests
-$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/4562765765/payment");
+$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/4562765765/payment" => json => { amount => 1000 });
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
 $t->request_ok($tx)
@@ -168,6 +168,27 @@ $t->request_ok($tx)
 
 my $accountline_to_pay = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber, 'amount' => 20})->unblessed()->[0];
 $tx = $t->ua->build_tx(POST => "/api/v1/accountlines/$accountline_to_pay->{accountlines_id}/payment");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+  ->status_is(400);
+
+$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/$accountline_to_pay->{accountlines_id}/payment"
+                       => json => { amount => 0 });
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+  ->status_is(400);
+
+$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/$accountline_to_pay->{accountlines_id}/payment"
+                       => json => { amount => "no" });
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+$t->request_ok($tx)
+  ->status_is(400);
+
+$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/$accountline_to_pay->{accountlines_id}/payment"
+                       => json => { amount => 20 });
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
 $t->request_ok($tx)

@@ -55,13 +55,16 @@
             "type": "object",
             "properties": {
               "amount": {
-                "description": "Amount"
+                "description": "Amount",
+                "type": ["number", "null"]
               },
               "amountoutstanding": {
-                "description": "Amount outstanding"
+                "description": "Amount outstanding",
+                "type": ["number", "null"]
               },
               "note": {
-                "description": "Accountline note"
+                "description": "Accountline note",
+                "type": ["string", "null"]
               }
             }
           }
@@ -108,17 +111,23 @@
         {
           "name": "body",
           "in": "body",
+          "required": true,
           "description": "A JSON object containing fields to modify",
           "schema": {
             "type": "object",
             "properties": {
               "amount": {
-                "description": "Amount to pay"
+                "description": "Amount to pay. If not given, the whole accountline will be paid.",
+                "type": "number",
+                "exclusiveMinimum": true,
+                "minimum": 0
               },
               "note": {
-                "description": "Payment note"
+                "description": "Payment note",
+                "type": "string"
               }
-            }
+            },
+            "required": ["amount"]
           }
         }
       ],

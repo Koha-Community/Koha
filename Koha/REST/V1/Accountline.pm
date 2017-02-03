@@ -25,6 +25,8 @@ use C4::Auth qw( haspermission );
 use Koha::Account::Lines;
 use Koha::Account;
 
+use Try::Tiny;
+
 sub list {
     my ($c, $args, $cb) = @_;
 
@@ -55,33 +57,40 @@ sub edit {
 sub pay {
     my ($c, $args, $cb) = @_;
 
-    my $accountline = Koha::Account::Lines->find($args->{accountlines_id});
-    unless ($accountline) {
-        return $c->$cb({error => "Accountline not found"}, 404);
-    }
-
-    my $body = $c->req->json;
-    my $amount = $body->{amount};
-    my $note = $body->{note} || '';
-
-    if ($amount && !looks_like_number($amount)) {
-        return $c->$cb({error => "Invalid amount"}, 400);
-    }
-
-    Koha::Account->new(
-        {
-            patron_id => $accountline->borrowernumber,
+    return try {
+        my $accountline = Koha::Account::Lines->find($args->{accountlines_id});
+        unless ($accountline) {
+            return $c->$cb({error => "Accountline not found"}, 404);
         }
-      )->pay(
-        {
-            lines  => [$accountline],
-            amount => $amount,
-            note => $note,
-        }
-      );
 
-    $accountline = Koha::Account::Lines->find($args->{accountlines_id});
-    return $c->$cb($accountline->unblessed(), 200);
+        my $body = $c->req->json;
+        my $amount = $body->{amount};
+        my $note = $body->{note} || '';
+
+        Koha::Account->new(
+            {
+                patron_id => $accountline->borrowernumber,
+            }
+          )->pay(
+            {
+                lines  => [$accountline],
+                amount => $amount,
+                note => $note,
+            }
+          );
+
+        $accountline = Koha::Account::Lines->find($args->{accountlines_id});
+        return $c->$cb($accountline->unblessed(), 200);
+    } catch {
+        if ($_->isa('DBIx::Class::Exception')) {
+            return $c->$cb({ error => $_->msg }, 500);
+        }
+        else {
+            return $c->$cb({
+                error => 'Something went wrong, check the logs.'
+            }, 500);
+        }
+    };
 }
 
 

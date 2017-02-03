@@ -27,6 +27,8 @@ use Koha::Libraries;
 use Scalar::Util qw(blessed looks_like_number);
 use Try::Tiny;
 
+use Try::Tiny;
+
 sub list {
     my $c = shift->openapi->valid_input or return;
 
@@ -148,31 +150,38 @@ sub delete {
 sub pay {
     my ($c, $args, $cb) = @_;
 
-    my $patron = Koha::Patrons->find($args->{borrowernumber});
-    unless ($patron) {
-        return $c->$cb({error => "Patron not found"}, 404);
-    }
-
-    my $body = $c->req->json;
-    my $amount = $body->{amount};
-    my $note = $body->{note} || '';
-
-    unless ($amount && looks_like_number($amount)) {
-        return $c->$cb({error => "Invalid amount"}, 400);
-    }
-
-    Koha::Account->new(
-        {
-            patron_id => $args->{borrowernumber},
+    return try {
+        my $patron = Koha::Patrons->find($args->{borrowernumber});
+        unless ($patron) {
+            return $c->$cb({error => "Patron not found"}, 404);
         }
-      )->pay(
-        {
-            amount => $amount,
-            note => $note,
-        }
-      );
 
-    return $c->$cb('', 204);
+        my $body = $c->req->json;
+        my $amount = $body->{amount};
+        my $note = $body->{note} || '';
+
+        Koha::Account->new(
+            {
+                patron_id => $args->{borrowernumber},
+            }
+          )->pay(
+            {
+                amount => $amount,
+                note => $note,
+            }
+          );
+
+        return $c->$cb('', 204);
+    } catch {
+        if ($_->isa('DBIx::Class::Exception')) {
+            return $c->$cb({ error => $_->msg }, 500);
+        }
+        else {
+            return $c->$cb({
+                error => 'Something went wrong, check the logs.'
+            }, 500);
+        }
+    };
 }
 
 1;
