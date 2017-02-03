@@ -595,7 +595,7 @@ if ( $show_holds_count || $show_priority) {
     my $biblio = Koha::Biblios->find( $biblionumber );
     my $holds = $biblio->holds;
     $template->param( holds_count  => $holds->count );
-    while ( my $hold = $holds->new ) {
+    while ( my $hold = $holds->next ) {
         $item_reserves{ $hold->itemnumber }++ if $hold->itemnumber;
         if ($show_priority && $hold->borrowernumber == $borrowernumber) {
             $has_hold = 1;
