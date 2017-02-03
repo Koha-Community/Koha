@@ -1,3 +1,4 @@
+[% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Categories %]
 [% USE KohaDates %]
@@ -68,8 +69,22 @@
 [% END %]
 
 [% BLOCK display_extended_attributes %]
-    [% FOREACH attr IN attributes %]
-        <span>[% attr.code %]: [% IF pending %][% attr.value %][% ELSE %][% attr.attribute %][% END %]</span><br/>
+    [% IF attrs and attrs.size > 1 %]
+      <ul>
+        [% FOREACH attr IN attrs %]
+            <li>[% PROCESS display_attribute attr=attr type=type %]</li>
+        [% END %]
+      <ul>
+    [% ELSIF attrs %]
+        [% PROCESS display_attribute attr=attrs.0 type=type %]
+    [% END %]
+[% END %]
+
+[% BLOCK display_attribute %]
+    [% IF type.authorised_value_category %]
+        [% AuthorisedValues.GetByCode(type.authorised_value_category,attr.attribute) %]
+    [% ELSE %]
+        [% attr.attribute %]
     [% END %]
 [% END %]
 
@@ -99,6 +114,10 @@
                                         <label for="ignore_modify_[% pm.borrowernumber %]">Ignore</label>
                                         | <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber %]" >Patron details</a>
                                     </div>
+                                  [% IF !pm.extended_attributes and pm.size > 3 or
+                                         pm.extended_attributes and pm.size > 4  %]
+                                  [%# timestamp+verification_token+borrowernumber=3 %]
+                                    <div class="members-update-table">
                                         <table>
                                             <tr>
                                                 <th>Field</th>
@@ -108,7 +127,7 @@
 
 
                                             [% FOREACH key IN pm.keys %]
-                                                [% IF ( key != "timestamp" ) %]
+                                                [% IF ( key != "timestamp" and key != "extended_attributes" ) %]
                                                     [% IF ( ( pm.$key OR borrowers.$borrowernumber.$key ) && ( pm.$key != borrowers.$borrowernumber.$key ) ) %]
                                                         <tr>
                                                             <td>[% PROCESS display_names field = key %]</td>
@@ -118,9 +137,6 @@
                                                             [% ELSIF key == 'branchcode' %]
                                                                 <td>[% Branches.GetName( borrowers.$borrowernumber.$key )  %]</td>
                                                                 <td>[% Branches.GetName( pm.$key ) %]</td>
-                                                            [% ELSIF ( key == 'extended_attributes' ) %]
-                                                                <td>[% PROCESS display_extended_attributes attributes=borrowers.$borrowernumber.$key %]</td>
-                                                                <td>[% PROCESS display_extended_attributes attributes=pm.$key pending=1 %]</td>
                                                             [% ELSE %]
                                                                 <td>[% borrowers.$borrowernumber.$key %]</td>
                                                                 <td>[% pm.$key %]</td>
@@ -130,6 +146,27 @@
                                                 [% END %]
                                             [% END %]
                                         </table>
+                                    </div>
+                                  [%  END %]
+                                  [% IF borrowers.$borrowernumber.modified_attributes %]
+                                    <div class="members-update-table">
+                                        <h4>[% PROCESS display_names field='extended_attributes' %]</h4>
+                                        <table>
+                                            <tr>
+                                                <th>Field</th>
+                                                <th>Old value</th>
+                                                <th>New value</th>
+                                            </tr>
+                                          [% FOREACH attribute_group IN borrowers.$borrowernumber.modified_attributes %]
+                                            <tr>
+                                                <td>[% attribute_group.type.description %]</td>
+                                                <td>[% PROCESS display_extended_attributes attrs=attribute_group.before type=attribute_group.type %]</td>
+                                                <td>[% PROCESS display_extended_attributes attrs=attribute_group.after type=attribute_group.type %]</td>
+                                            </tr>
+                                          [% END %]
+                                        </table>
+                                    </div>
+                                  [%  END %]
                                 </div>
                             [% END %]
                         </div>

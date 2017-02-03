@@ -24,14 +24,17 @@ use C4::Auth;
 use C4::Output;
 use C4::Context;
 use C4::Members;
+use Koha::Patron::Attribute::Types;
 use Koha::Patron::Attributes;
 use Koha::Patron::Modifications;
+use Koha::Patrons;
+
+use List::MoreUtils qw( uniq );
 
 my $query = new CGI;
 
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
-    {
-        template_name   => "members/members-update.tt",
+    {   template_name   => "members/members-update.tt",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
@@ -40,26 +43,31 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     }
 );
 
-my $branch =
-  (      C4::Context->preference("IndependentBranchesPatronModifications")
-      || C4::Context->preference("IndependentBranches") )
-  && !$flags->{'superlibrarian'}
-  ? C4::Context->userenv()->{'branch'}
-  : undef;
+my $branch
+    = (    C4::Context->preference("IndependentBranchesPatronModifications")
+        || C4::Context->preference("IndependentBranches") )
+    && !$flags->{'superlibrarian'}
+    ? C4::Context->userenv()->{'branch'}
+    : undef;
 
-my $pending_modifications =
-  Koha::Patron::Modifications->pending($branch);
+my $pending_modifications = Koha::Patron::Modifications->pending($branch);
 
 my $borrowers;
 foreach my $pm (@$pending_modifications) {
-    $borrowers->{ $pm->{borrowernumber} }
-        = GetMember( borrowernumber => $pm->{borrowernumber} );
-    my @patron_attributes
-        = grep { $_->opac_editable }
-        Koha::Patron::Attributes->search(
-        { borrowernumber => $pm->{borrowernumber} } );
-    $borrowers->{ $pm->{'borrowernumber'} }->{extended_attributes}
-        = \@patron_attributes;
+
+    my @modified_atypes = uniq( map { $_->code } @{ $pm->{extended_attributes} } );
+    my $modified_attributes;
+
+    foreach my $type (@modified_atypes) {
+        my $type_obj = Koha::Patron::Attribute::Types->find($type);
+        my @before   = Koha::Patron::Attributes->search(
+            { borrowernumber => $pm->{borrowernumber}, code => $type } );
+        my @after = grep { $_->code eq $type } @{ $pm->{extended_attributes} };
+        push @{$modified_attributes}, { type => $type_obj, before => \@before, after => \@after };
+    }
+
+    $borrowers->{ $pm->{borrowernumber} } = Koha::Patrons->find($pm->{borrowernumber})->unblessed;
+    $borrowers->{ $pm->{borrowernumber} }->{modified_attributes} = $modified_attributes;
 }
 
 $template->param(
