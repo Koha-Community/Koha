@@ -474,9 +474,6 @@ foreach my $biblioNum (@biblionumbers) {
         my $item = Koha::Items->find( $itemNum );
         my $holds = $item->current_holds;
 
-        # the item could be reserved for this borrower vi a host record, flag this
-        my $reservedfor = q||;
-
         if ( my $first_hold = $holds->next ) {
             my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $first_hold->borrowernumber );
             $itemLoopIter->{backgroundcolor} = 'reserved';
