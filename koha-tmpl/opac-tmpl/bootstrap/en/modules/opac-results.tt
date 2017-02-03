@@ -562,16 +562,29 @@
 
                     [% END # / IF total %]
 
-                    [% IF Koha.Preference( 'suggestion' ) == 1 %]
-                        [% IF Koha.Preference( 'AnonSuggestions' ) == 1 %]
-                            <div class="suggestion">Not finding what you're looking for?<br />  Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></div>
-                        [% ELSE %]
-                            [% IF ( loggedinusername ) %]
-                                <div class="suggestion">
-                                    Not finding what you're looking for?<br />  Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a>
-                                </div>
-                            [% END %]
-                        [% END %]
+                    [% IF
+                        Koha.Preference( 'suggestion' ) == 1 &&
+                        (
+                            Koha.Preference( 'AnonSuggestions' ) == 1 ||
+                            loggedinusername ||
+                            Koha.Preference( 'ILLModule' ) == 1
+                        )
+                    %]
+                        <div class="suggestion">
+                            Not finding what you're looking for?
+                            <ul>
+                                [% IF Koha.Preference( 'AnonSuggestions' ) == 1 %]
+                                    <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></li>
+                                [% ELSE %]
+                                    [% IF ( loggedinusername ) %]
+                                        <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></li>
+                                    [% END %]
+                                [% END %]
+                                [% IF Koha.Preference( 'ILLModule' ) == 1 && loggedinusername %]
+                                    <li>Make an <a href="/cgi-bin/koha/opac-illrequests.pl?op=create">Interlibrary loan request</a></li>
+                                [% END %]
+                            </ul>
+                        </div>
                     [% END %]
                     </div> <!-- / #userresults -->
                 </div> <!-- /.span10/12 -->

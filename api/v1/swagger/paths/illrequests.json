@@ -1,0 +1,98 @@
+{
+    "/illrequests": {
+        "get": {
+            "x-mojo-controller": "Koha::REST::V1::Illrequests",
+            "operationId": "list",
+            "tags": ["illrequests"],
+            "parameters": [{
+                "name": "embed",
+                "in": "query",
+                "description": "Additional objects that should be embedded in the response",
+                "required": false,
+                "type": "array",
+                "collectionFormat": "csv",
+                "items": {
+                    "type": "string",
+                    "enum": [
+                        "patron",
+                        "branch",
+                        "capabilities"
+                    ]
+                }
+            }, {
+                "name": "backend",
+                "in": "query",
+                "description": "The name of a ILL backend",
+                "required": false,
+                "type": "string"
+            }, {
+                "name": "orderid",
+                "in": "query",
+                "description": "The order ID of a request",
+                "required": false,
+                "type": "string"
+            }, {
+                "name": "biblio_id",
+                "in": "query",
+                "description": "The biblio ID associated with a request",
+                "required": false,
+                "type": "integer"
+            }, {
+                "name": "borrower_id",
+                "in": "query",
+                "description": "The borrower ID associated with a request",
+                "required": false,
+                "type": "integer"
+            }, {
+                "name": "completed",
+                "in": "query",
+                "description": "The date the request was considered completed",
+                "required": false,
+                "type": "string"
+            }, {
+                "name": "status",
+                "in": "query",
+                "description": "A full status string e.g. REQREV",
+                "required": false,
+                "type": "string"
+            }, {
+                "name": "medium",
+                "in": "query",
+                "description": "The medium of the requested item",
+                "required": false,
+                "type": "string"
+            }, {
+                "name": "updated",
+                "in": "query",
+                "description": "The last updated date of the request",
+                "required": false,
+                "type": "string"
+            }, {
+                "name": "placed",
+                "in": "query",
+                "description": "The date the request was placed",
+                "required": false,
+                "type": "string"
+            }, {
+                "name": "branch_id",
+                "in": "query",
+                "description": "The ID of the pickup branch",
+                "required": false,
+                "type": "string"
+            }],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "OK"
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {
+                    "borrowers": "1"
+                }
+            }
+        }
+    }
+}

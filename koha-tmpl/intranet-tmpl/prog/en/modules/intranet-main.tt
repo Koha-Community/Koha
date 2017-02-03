@@ -63,6 +63,11 @@
                     <li>
                         <a class="icon_general icon_authorities" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
                     </li>
+                    [% IF Koha.Preference('ILLModule') %]
+                    <li>
+                        <a class="icon_general icon_ill" href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
+                    </li>
+                    [% END %]
                 </ul>
             </div><!-- /area-list-left -->
         </div><!-- /yui-u first -->

@@ -104,6 +104,15 @@
                 [% END %]
                 <a href="/cgi-bin/koha/opac-discharge.pl">ask for a discharge</a></li>
             [% END %]
+
+            [% IF Koha.Preference( 'ILLModule' ) == 1 %]
+                [% IF ( illrequestsview ) %]
+                    <li class="active">
+                [% ELSE %]
+                    <li>
+                [% END %]
+                <a href="/cgi-bin/koha/opac-illrequests.pl">your interlibrary loan requests</a></li>
+            [% END %]
         </ul>
     </div>
 [% END %]

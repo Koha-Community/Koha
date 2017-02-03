@@ -312,6 +312,7 @@ my $target_map = {
   './etc/zebradb'               => { target => 'ZEBRA_CONF_DIR', trimdir => -1 },
   './etc/pazpar2'               => { target => 'PAZPAR2_CONF_DIR', trimdir => -1 },
   './help.pl'                   => 'INTRANET_CGI_DIR',
+  './ill'                       => 'INTRANET_CGI_DIR',
   './installer-CPAN.pl'         => 'NONE',
   './installer'                 => 'INTRANET_CGI_DIR',
   './errors'                    => {target => 'INTRANET_CGI_DIR'},
