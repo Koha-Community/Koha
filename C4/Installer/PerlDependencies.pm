@@ -873,7 +873,16 @@ our $PERL_DEPS = {
         'min_ver'  => '5.01',
         # also required for Zebra installs: about page: bug 20061
     },
-
+    'Parallel::ForkManager' => {
+        usage => 'Core',
+        required => 0,
+        min_ver => '0.75',
+    },
+    'Sys::CPU' => {
+        usage => 'Core',
+        required => 0,
+        min_ver => '0.52',
+    },
 };
 
 1;
