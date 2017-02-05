@@ -151,7 +151,7 @@ sub _build_query {
         $query .= ' WHERE 1 ';
         while ( my ( $field, $values ) = each %{ $params->{filters} } ) {
             if ( ref( $values ) ) {
-                $query .= " AND $field IN ( " . ( ('?') x scalar( @$values ) ) . " ) ";
+                $query .= " AND $field IN ( " . ( ('?,') x (@$values-1) ) . "? ) "; # a comma separates elements in a list...
                 push @where_args, @$values;
             } else {
                 $query .= " AND $field = ? ";
