@@ -40,6 +40,7 @@ use C4::XSLT;
 use C4::ShelfBrowser;
 use C4::Reserves;
 use C4::Charset;
+use C4::Letters;
 use MARC::Record;
 use MARC::Field;
 use List::MoreUtils qw/any none/;
@@ -570,15 +571,25 @@ foreach my $subscription (@subscriptions) {
     $cell{histstartdate}     = $subscription->{histstartdate};
     $cell{histenddate}       = $subscription->{histenddate};
     $cell{branchcode}        = $subscription->{branchcode};
-    $cell{hasalert}          = $subscription->{hasalert};
     $cell{callnumber}        = $subscription->{callnumber};
     $cell{closed}            = $subscription->{closed};
+    $cell{letter}            = $subscription->{letter};
+    $cell{biblionumber}      = $subscription->{biblionumber};
     #get the three latest serials.
     $serials_to_display = $subscription->{opacdisplaycount};
     $serials_to_display = C4::Context->preference('OPACSerialIssueDisplayCount') unless $serials_to_display;
 	$cell{opacdisplaycount} = $serials_to_display;
     $cell{latestserials} =
       GetLatestSerials( $subscription->{subscriptionid}, $serials_to_display );
+    if ( $borrowernumber ) {
+        my $sub = getalert($borrowernumber,'issue_det',$subscription->{subscriptionid});
+        if ( !defined $sub ) {
+            $sub = getalert($borrowernumber,'issue_ser',$subscription->{subscriptionid});
+        }
+        if (@$sub[0]) {
+            $cell{hasalert} = 1;
+        }
+    }
     push @subs, \%cell;
 }
 

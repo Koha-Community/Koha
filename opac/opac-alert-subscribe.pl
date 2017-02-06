@@ -53,9 +53,13 @@ my $biblionumber = $query->param('biblionumber');
 
 if ( $op eq 'alert_confirmed' ) {
     addalert( $loggedinuser, $alerttype, $externalid );
-    if ( $alerttype eq 'issue' ) {
+    if ( $alerttype eq 'issue_ser' ) {
         print $query->redirect(
             "opac-serial-issues.pl?biblionumber=$biblionumber");
+        exit;
+    } elsif ( $alerttype eq 'issue_det' ) {
+        print $query->redirect(
+            "opac-detail.pl?biblionumber=$biblionumber");
         exit;
     }
 }
@@ -66,25 +70,30 @@ elsif ( $op eq 'cancel_confirmed' ) {
     {    # we are supposed to have only 1 result, but just in case...
         delalert( $_->{alertid} );
     }
-    if ( $alerttype eq 'issue' ) {
+    if ( $alerttype eq 'issue_ser' ) {
         print $query->redirect(
             "opac-serial-issues.pl?biblionumber=$biblionumber");
         exit;
+    } elsif ( $alerttype eq 'issue_det' ) {
+        print $query->redirect(
+            "opac-detail.pl?biblionumber=$biblionumber");
+        exit;
     }
+
 
 }
 else {
-    if ( $alerttype eq 'issue' ) {    # alert for subscription issues
+    if ( $alerttype eq 'issue_ser' || $alerttype eq 'issue_det' ) {    # alert for subscription issues
         my $subscription = &GetSubscription($externalid);
         $template->param(
+            alerttype      => $alerttype,
             "typeissue$op" => 1,
             bibliotitle    => $subscription->{bibliotitle},
             notes          => $subscription->{notes},
             externalid     => $externalid,
             biblionumber   => $biblionumber,
         );
-    }
-    else {
+    } else {
     }
 
 }
