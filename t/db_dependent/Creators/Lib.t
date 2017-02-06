@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 use Graphics::Magick;
-use Test::More tests => 644;
+use Test::More tests => 645;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -395,6 +395,8 @@ is( $templates->[0]->{row_gap},          0.3,          'row_gap          is good
 is( $templates->[0]->{units},            'POINT',      'units            is good' );
 is( $templates->[0]->{creator},          'Labels',     'creator          is good' );
 
+$templates = get_all_templates( { filters => { rows => [-42, 7]} } );
+is( @$templates, $count, 'There is 1 template matching' );
 # With orderby param ------------------
 $templates = get_all_templates( { orderby => 'rows DESC' } );
 
