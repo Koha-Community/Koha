@@ -1425,14 +1425,14 @@ biblios:
         suggestible: ''
     type: ''
   holdingbranch:
-    label: holdingbranch
+    label: HoldingLibrary
     mappings:
-      - facet: ''
+      - facet: '1'
         marc_field: 952b
         marc_type: marc21
         sort: ~
         suggestible: ''
-      - facet: ''
+      - facet: '1'
         marc_field: 952b
         marc_type: normarc
         sort: ~
@@ -1444,7 +1444,7 @@ biblios:
         suggestible: ''
     type: string
   homebranch:
-    label: homebranch
+    label: HomeLibrary
     mappings:
       - facet: '1'
         marc_field: 952a
@@ -1735,6 +1735,25 @@ biblios:
         marc_type: unimarc
         sort: ~
         suggestible: '1'
+    type: ''
+  location:
+    label: Location
+    mappings:
+      - facet: '1'
+        marc_field: 952c
+        marc_type: marc21
+        sort: ~
+        suggestible: ''
+      - facet: '1'
+        marc_field: 952c
+        marc_type: normarc
+        sort: ~
+        suggestible: ''
+      - facet: '1'
+        marc_field: 995e
+        marc_type: unimarc
+        sort: ~
+        suggestible: ''
     type: ''
   material-type:
     label: material-type
