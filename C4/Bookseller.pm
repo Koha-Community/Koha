@@ -75,8 +75,6 @@ sub GetBooksellersWithLateOrders {
             OR datereceived IS NULL
             OR aqorders.quantityreceived < aqorders.quantity
             )
-            AND aqorders.rrp <> 0
-            AND aqorders.ecost <> 0
             AND aqorders.quantity - COALESCE(aqorders.quantityreceived,0) <> 0
             AND aqbasket.closedate IS NOT NULL
     ";
