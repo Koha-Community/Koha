@@ -408,16 +408,22 @@ sub _convert_facets {
         'su-geo' => { order => 4, label => 'Places', },
         se       => { order => 5, label => 'Series', },
         subject  => { order => 6, label => 'Topics', },
+        holdingbranch => { order => 8, label => 'HoldingLibrary' },
+        homebranch => { order => 9, label => 'HomeLibrary' }
     );
 
     # We also have some special cases, e.g. itypes that need to show the
     # value rather than the code.
     my @itypes = Koha::ItemTypes->search;
+    my @libraries = Koha::Libraries->search;
+    my $library_names = { map { $_->branchcode => $_->branchname } @libraries };
     my @locations = Koha::AuthorisedValues->search( { category => 'LOC' } );
     my $opac = C4::Context->interface eq 'opac' ;
     my %special = (
         itype    => { map { $_->itemtype         => $_->description } @itypes },
         location => { map { $_->authorised_value => ( $opac ? ( $_->lib_opac || $_->lib ) : $_->lib ) } @locations },
+        holdingbranch => $library_names,
+        homebranch => $library_names
     );
     my @facets;
     $exp_facet //= '';
