@@ -135,7 +135,7 @@ push @parameters, $estimateddeliverydateto_dt
 my %supplierlist = GetBooksellersWithLateOrders(@parameters);
 
 my (@sloopy);	# supplier loop
-foreach (keys %supplierlist){
+foreach( sort { $supplierlist{$a} cmp $supplierlist{$b} } keys %supplierlist ) {
 	push @sloopy, (($booksellerid and $booksellerid eq $_ )            ?
 					{id=>$_, name=>$supplierlist{$_}, selected=>1} :
 					{id=>$_, name=>$supplierlist{$_}} )            ;
