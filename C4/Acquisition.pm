@@ -2087,11 +2087,7 @@ sub GetLateOrders {
             $from .= " AND (closedate <= DATE_SUB(CAST(now() AS date),INTERVAL ? DAY)) " ;
             push @query_params, $delay;
         }
-        $having = "
-        HAVING quantity          <> 0
-            AND unitpricesupplier <> 0
-            AND unitpricelib      <> 0
-        ";
+        $having = "HAVING quantity <> 0";
     } else {
         # FIXME: account for IFNULL as above
         $select .= "
