@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
+use t::lib::Mocks;
 
 use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 
@@ -77,6 +78,29 @@ subtest 'json2marc' => sub {
     is( $marc->subfield('010', 'a'), $_010a, );
     is( $marc->subfield('200', 'a'), $_200a, );
 
+};
+
+subtest 'build_query tests' => sub {
+    plan tests => 6;
+
+    t::lib::Mocks::mock_preference('DisplayLibraryFacets','both');
+    my $query = $builder->build_query();
+    ok( defined $query->{aggregations}{homebranch},
+        'homebranch added to facets if DisplayLibraryFacets=both' );
+    ok( defined $query->{aggregations}{holdingbranch},
+        'holdingbranch added to facets if DisplayLibraryFacets=both' );
+    t::lib::Mocks::mock_preference('DisplayLibraryFacets','holding');
+    $query = $builder->build_query();
+    ok( !defined $query->{aggregations}{homebranch},
+        'homebranch not added to facets if DisplayLibraryFacets=holding' );
+    ok( defined $query->{aggregations}{holdingbranch},
+        'holdingbranch added to facets if DisplayLibraryFacets=holding' );
+    t::lib::Mocks::mock_preference('DisplayLibraryFacets','home');
+    $query = $builder->build_query();
+    ok( defined $query->{aggregations}{homebranch},
+        'homebranch added to facets if DisplayLibraryFacets=home' );
+    ok( !defined $query->{aggregations}{holdingbranch},
+        'holdingbranch not added to facets if DisplayLibraryFacets=home' );
 };
 
 1;
