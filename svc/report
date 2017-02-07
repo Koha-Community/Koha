@@ -65,7 +65,7 @@ unless ($json_text) {
     # convert SQL parameters to placeholders
     $sql =~ s/(<<.*?>>)/\?/g;
 
-    my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, \@sql_params );
+    my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, \@sql_params, $report_id );
     if ($sth) {
         my $lines;
         if ($report_annotation) {

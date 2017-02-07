@@ -61,7 +61,7 @@ unless ($json_text) {
     $sql =~ s/(<<.*?>>)/\?/g;
 
     my ( $sth, $errors ) =
-      execute_query( $sql, $offset, $limit, \@sql_params );
+      execute_query( $sql, $offset, $limit, \@sql_params, $report_id );
     if ($sth) {
         my $lines;
         if ($report_annotation) {

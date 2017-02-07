@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Warn;
 
 use t::lib::TestBuilder;
@@ -258,6 +258,34 @@ subtest 'get_saved_reports' => sub {
 
     is_deeply( get_report_areas(), [ 'CIRC', 'CAT', 'PAT', 'ACQ', 'ACC', 'SER' ],
         "get_report_areas returns the correct array of report areas");
+};
+
+subtest 'Ensure last_run is populated' => sub {
+    plan tests => 3;
+
+    my $rs = Koha::Database->new()->schema()->resultset('SavedSql');
+
+    my $report = $rs->new(
+        {
+            report_name => 'Test Report',
+            savedsql    => 'SELECT * FROM branches',
+            notes       => undef,
+        }
+    )->insert();
+
+    is( $report->last_run, undef, 'Newly created report has null last_run ' );
+
+    execute_query( $report->savedsql, undef, undef, undef, $report->id );
+    $report->discard_changes();
+
+    isnt( $report->last_run, undef, 'First run of report populates last_run' );
+
+    my $previous_last_run = $report->last_run;
+    sleep(1); # last_run is stored to the second, so we need to ensure at least one second has passed between runs
+    execute_query( $report->savedsql, undef, undef, undef, $report->id );
+    $report->discard_changes();
+
+    isnt( $report->last_run, $previous_last_run, 'Second run of report updates last_run' );
 };
 
 $schema->storage->txn_rollback;

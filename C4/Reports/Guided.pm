@@ -496,7 +496,7 @@ sub strip_limit {
 
 sub execute_query {
 
-    my ( $sql, $offset, $limit, $sql_params ) = @_;
+    my ( $sql, $offset, $limit, $sql_params, $report_id ) = @_;
 
     $sql_params = [] unless defined $sql_params;
 
@@ -531,8 +531,13 @@ sub execute_query {
     }
     $sql .= " LIMIT ?, ?";
 
-    my $sth = C4::Context->dbh->prepare($sql);
+    my $dbh = C4::Context->dbh;
+
+    $dbh->do( 'UPDATE saved_sql SET last_run = NOW() WHERE id = ?', undef, $report_id ) if $report_id;
+
+    my $sth = $dbh->prepare($sql);
     $sth->execute(@$sql_params, $offset, $limit);
+
     return ( $sth, { queryerr => $sth->errstr } ) if ($sth->err);
     return ( $sth );
 }

@@ -772,7 +772,7 @@ elsif ($phase eq 'Run this report'){
                 $quoted = C4::Context->dbh->quote($quoted);
                 $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
             }
-            my ($sth, $errors) = execute_query($sql, $offset, $limit);
+            my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, undef, $report_id );
             my $total = nb_rows($sql) || 0;
             unless ($sth) {
                 die "execute_query failed to return sth for report $report_id: $sql";
