@@ -95,7 +95,7 @@ $("#delColumn").on("click",function(){
             { "aTargets": [ 1, 2 ], "sType": "natural"  }
         ],
         "aoColumns": [
-            null,null,null,null,null,null,null,null,{ "sType": "title-string" },null,[% IF (usecache) %]null,[% END %]null,null
+            null,null,null,null,null,null,null,null,{ "sType": "title-string" },null,null,null,[% IF (usecache) %]null,[% END %]null,null
         ],
         'oLanguage': {
             'sZeroRecords': _("No matching reports found")
@@ -329,6 +329,8 @@ canned reports and writing custom SQL reports.</p>
                     <th>Notes</th>
                     <th>Author</th>
                     <th>Creation date</th>
+                    <th>Last modified</th>
+                    <th>Last run</th>
                     <th>Public</th>
                     [% IF (usecache) %] <th>Cache expiry (seconds)</th> [% END %]
                     <th>Saved results</th>
@@ -357,6 +359,8 @@ canned reports and writing custom SQL reports.</p>
                         <td>[% savedreport.notes %]</td>
                         <td>[% savedreport.borrowersurname %][% IF ( savedreport.borrowerfirstname ) %], [% savedreport.borrowerfirstname %][% END %] ([% savedreport.borrowernumber %])</td>
                         <td><span title="[% savedreport.date_created %]">[% savedreport.date_created | $KohaDates %]</span></td>
+                        <td><span title="[% savedreport.last_modified %]">[% savedreport.last_modified | $KohaDates with_hours => 1 %]</span></td>
+                        <td><span title="[% savedreport.last_run %]">[% savedreport.last_run | $KohaDates with_hours => 1 %]</span></td>
                         [% IF (savedreport.public) %]
                         <td>Yes</td>
                         [% ELSE %]
