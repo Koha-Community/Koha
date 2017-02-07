@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 17;
 
 use C4::Context;
 use Koha::Database;
@@ -74,6 +74,21 @@ is( grep ( { $_->{branchcode} eq 'MYLIBRARY'  and not exists $_->{selected} } @$
 is( grep ( { $_->{branchcode} eq 'ANOTHERLIB' and $_->{selected} == 1 } @$libraries ),       1, 'With selected parameter, other library should be preselected' );
 $libraries = $plugin->all( { selected => '' } );
 is( grep ( { exists $_->{selected} } @$libraries ), 0, 'With selected parameter set to an empty string, no library should be preselected' );
+
+my $total = @{$plugin->all};
+my $pickupable = @{$plugin->all( { search_params => { pickup_location => 1 } }) };
+my $yet_another_library = $builder->build({
+    source => 'Branch',
+    value => {
+        branchcode => 'CANTPICKUP',
+        pickup_location => 0,
+    }
+});
+is(@{$plugin->all( { search_params => { pickup_location => 1 } }) }, $pickupable,
+   'Adding a new library with pickups'
+   .' disabled does not increase the amount returned by ->pickup_locations');
+is(@{$plugin->all}, $total+1, 'However, adding a new library increases'
+   .' the total amount gotten with ->all');
 
 t::lib::Mocks::mock_preference( 'IndependentBranches', 1 );
 $libraries = $plugin->all();
