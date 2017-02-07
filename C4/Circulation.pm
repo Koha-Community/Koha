@@ -3594,6 +3594,9 @@ return $exist;
 
 Code is either an itemtype or collection doe depending on the pref BranchTransferLimitsType
 
+Deprecated in favor of Koha::Item::Transfer::Limits->find/search and
+Koha::Item->can_be_transferred.
+
 =cut
 
 sub IsBranchTransferAllowed {
@@ -3622,6 +3625,8 @@ sub IsBranchTransferAllowed {
 
 $code is either itemtype or collection code depending on what the pref BranchTransferLimitsType is set to.
 
+Deprecated in favor of Koha::Item::Transfer::Limit->new.
+
 =cut
 
 sub CreateBranchTransferLimit {
@@ -3642,6 +3647,10 @@ sub CreateBranchTransferLimit {
 Deletes all the library transfer limits for one library.  Returns the
 number of limits deleted, 0e0 if no limits were deleted, or undef if
 no arguments are supplied.
+
+Deprecated in favor of Koha::Item::Transfer::Limits->search({
+    fromBranch => $fromBranch
+    })->delete.
 
 =cut
 
