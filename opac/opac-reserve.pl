@@ -269,10 +269,10 @@ if ( $query->param('place_reserve') ) {
 
         my $rank = $biblioData->{rank};
         if ( $itemNum ne '' ) {
-            $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum )->{status} eq 'OK';
+            $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum, $branch )->{status} eq 'OK';
         }
         else {
-            $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum )->{status} eq 'OK';
+            $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum, $branch )->{status} eq 'OK';
 
             # Inserts a null into the 'itemnumber' field of 'reserves' table.
             $itemNum = undef;
@@ -525,7 +525,7 @@ foreach my $biblioNum (@biblionumbers) {
         my $policy_holdallowed = !$itemLoopIter->{already_reserved};
         $policy_holdallowed &&=
             IsAvailableForItemLevelRequest($itemInfo,$patron_unblessed) &&
-            CanItemBeReserved($borrowernumber,$itemNum)->{status} eq 'OK';
+            CanItemBeReserved($borrowernumber,$itemNum, $branch)->{status} eq 'OK';
 
         if ($policy_holdallowed) {
             my $opac_hold_policy = Koha::IssuingRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
@@ -585,7 +585,7 @@ foreach my $biblioNum (@biblionumbers) {
         }
     }
 
-    $biblioLoopIter{holdable} &&= CanBookBeReserved($borrowernumber,$biblioNum)->{status} eq 'OK';
+    $biblioLoopIter{holdable} &&= CanBookBeReserved($borrowernumber,$biblioNum,$branch)->{status} eq 'OK';
 
     # For multiple holds per record, if a patron has previously placed a hold,
     # the patron can only place more holds of the same type. That is, if the
