@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 55;
+use Test::More tests => 62;
 use MARC::Record;
 use Koha::Patrons;
 use C4::Items;
@@ -19,6 +19,8 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Biblios;
 use Koha::Holds;
+use Koha::Items;
+use Koha::Libraries;
 
 BEGIN {
     use FindBin;
@@ -477,6 +479,29 @@ subtest 'Test max_holds per library/patron category' => sub {
 
     $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
     is( $ret->{status}, 'OK', 'Patron can place hold with branch/category rule of 5, category rule of 5' );
+};
+
+subtest 'Pickup location availability tests' => sub {
+    plan tests => 3;
+
+    my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio('ONLY1');
+    my ( $item_bibnum, $item_bibitemnum, $itemnumber )
+    = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $bibnum );
+    my $item = Koha::Items->find($itemnumber);
+    my $branch_to = $builder->build({ source => 'Branch' })->{ branchcode };
+    my $library = Koha::Libraries->find($branch_to);
+    my $patron = $builder->build({ source => 'Borrower' })->{ borrowernumber };
+
+    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+    $library->pickup_location('1')->store;
+    is(CanItemBeReserved($patron, $item->itemnumber, $branch_to),
+       'OK', 'Library is a pickup location');
+    $library->pickup_location('0')->store;
+    is(CanItemBeReserved($patron, $item->itemnumber, $branch_to),
+       'libraryNotPickupLocation', 'Library is not a pickup location');
+    is(CanItemBeReserved($patron, $item->itemnumber, 'nonexistent'),
+       'libraryNotFound', 'Cannot set unknown library as pickup location');
 };
 
 # Helper method to set up a Biblio.
