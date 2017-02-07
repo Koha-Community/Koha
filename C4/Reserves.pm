@@ -280,7 +280,7 @@ sub GetReserve {
 
 =head2 CanBookBeReserved
 
-  $canReserve = &CanBookBeReserved($borrowernumber, $biblionumber)
+  $canReserve = &CanBookBeReserved($borrowernumber, $biblionumber, $branchcode)
   if ($canReserve eq 'OK') { #We can reserve this Item! }
 
 See CanItemBeReserved() for possible return values.
@@ -288,7 +288,7 @@ See CanItemBeReserved() for possible return values.
 =cut
 
 sub CanBookBeReserved{
-    my ($borrowernumber, $biblionumber) = @_;
+    my ($borrowernumber, $biblionumber, $branchcode) = @_;
 
     my $items = GetItemnumbersForBiblio($biblionumber);
     #get items linked via host records
@@ -299,7 +299,7 @@ sub CanBookBeReserved{
 
     my $canReserve;
     foreach my $item (@$items) {
-        $canReserve = CanItemBeReserved( $borrowernumber, $item );
+        $canReserve = CanItemBeReserved( $borrowernumber, $item, $branchcode );
         return 'OK' if $canReserve eq 'OK';
     }
     return $canReserve;
@@ -307,7 +307,7 @@ sub CanBookBeReserved{
 
 =head2 CanItemBeReserved
 
-  $canReserve = &CanItemBeReserved($borrowernumber, $itemnumber)
+  $canReserve = &CanItemBeReserved($borrowernumber, $itemnumber, $branchcode)
   if ($canReserve eq 'OK') { #We can reserve this Item! }
 
 @RETURNS OK,              if the Item can be reserved.
@@ -316,11 +316,14 @@ sub CanBookBeReserved{
          cannotReserveFromOtherBranches, if syspref 'canreservefromotherbranches' is OK.
          tooManyReserves, if the borrower has exceeded his maximum reserve amount.
          notReservable,   if holds on this item are not allowed
+         libraryNotFound  if given branchcode is not an existing library
+         libraryNotPickupLocation if given branchcode is not configured to be a pickup location
+         cannotBeTransferred if branch transfer limit applies on given item and branchcode
 
 =cut
 
 sub CanItemBeReserved {
-    my ( $borrowernumber, $itemnumber ) = @_;
+    my ( $borrowernumber, $itemnumber, $branchcode_to ) = @_;
 
     my $dbh = C4::Context->dbh;
     my $ruleitemtype;    # itemtype of the matching issuing rule
@@ -446,6 +449,21 @@ sub CanItemBeReserved {
         my $itembranch = $item->homebranch;
         if ( $itembranch ne $borrower->{branchcode} ) {
             return 'cannotReserveFromOtherBranches';
+        }
+    }
+
+    if ($branchcode_to) {
+        my $destination = Koha::Libraries->find({
+            branchcode => $branchcode_to,
+        });
+        unless ($destination) {
+            return 'libraryNotFound';
+        }
+        unless ($destination->pickup_location) {
+            return 'libraryNotPickupLocation';
+        }
+        unless ($item->can_be_transferred({ to => $destination->branchcode })) {
+            return 'cannotBeTransferred';
         }
     }
 
