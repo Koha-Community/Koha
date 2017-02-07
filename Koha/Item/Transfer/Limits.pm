@@ -1,5 +1,6 @@
-package Koha::Item::Transfers;
+package Koha::Item::Transfer::Limits;
 
+# Copyright Koha-Suomi Oy 2017
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -17,17 +18,15 @@ package Koha::Item::Transfers;
 
 use Modern::Perl;
 
-use Carp;
-
 use Koha::Database;
 
-use Koha::Item::Transfer;
+use Koha::Item::Transfer::Limit;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Item::Transfers - Koha Item Transfer Object set class
+Koha::Item::Transfer::Limits - Koha Item Transfer Limits Object set class
 
 =head1 API
 
@@ -40,11 +39,11 @@ Koha::Item::Transfers - Koha Item Transfer Object set class
 =cut
 
 sub _type {
-    return 'Branchtransfer';
+    return 'BranchTransferLimit';
 }
 
 sub object_class {
-    return 'Koha::Item::Transfer';
+    return 'Koha::Item::Transfer::Limit';
 }
 
 1;
