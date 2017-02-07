@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE ColumnsSettings %]
 [% USE AuthorisedValues %]
 [%- USE Branches -%]
 [%- USE ItemTypes -%]
@@ -9,17 +10,19 @@
 <!-- Plugin datatables -->
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
 <script type="text/JavaScript">
 //<![CDATA[
 $(document).ready(function() {
-  var holdst = $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
+  var columns_settings = [% ColumnsSettings.GetColumns('circ', 'holds', 'holds-to-pull', 'json') %];
+  var holdst = KohaTable("#holdst", {
     "aoColumnDefs": [
         { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
         { "sType": "title-string", "aTargets" : [ "title-string" ] },
         { "sType": "string", "aTargets": [ "string-sort" ] } //Target columns that use <br> separators and pull-down menus.
     ],
     "sPaginationType": "full_numbers"
-  }));
+  }, columns_settings);
   holdst.fnAddFilters("filter");
   [%# add separateData function to cleanse jQuery select lists by breaking apart strings glued with BR tags and then de-duplicating any repeated library codes %]
   function separateData ( ColumnData ){
@@ -47,22 +50,22 @@ $(document).ready(function() {
       return r+'</select>';
   }
   $("#homebranchfilter").each( function () {
-      $(this).html( createSelect( holdst.fnGetColumnData(4) ) );
+      $(this).html( createSelect( holdst.fnGetColumnData(5) ) );
       $('select', this).change( function () {
           var filter_value = $(this).val();
-          holdst.fnFilter( filter_value, 4, true );
+          holdst.fnFilter( filter_value, 5, true );
       } );
   } );
   $("#itypefilter").each( function () {
-      $(this).html( createSelect( holdst.fnGetColumnData(8) ) );
-      $('select', this).change( function () {
-          holdst.fnFilter( $(this).val(), 8 );
-      } );
-  } );
-  $("#locationfilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(9) ) );
       $('select', this).change( function () {
           holdst.fnFilter( $(this).val(), 9 );
+      } );
+  } );
+  $("#locationfilter").each( function () {
+      $(this).html( createSelect( holdst.fnGetColumnData(10) ) );
+      $('select', this).change( function () {
+          holdst.fnFilter( $(this).val(), 10 );
       } );
   } );
 });
@@ -94,6 +97,7 @@ $(document).ready(function() {
         <th>Pull this many items</th>
         <th>Items available</th>
         <th>Patrons with holds</th>
+        <th>First patron</td>
         <th class="anti-the">Title</th>
         <th class="string-sort">Libraries</th>
         <th>Available call numbers</th>
@@ -111,6 +115,7 @@ $(document).ready(function() {
             <td><p><b>[% reserveloo.pullcount %]</b></p></td>
             <td>[% reserveloo.count %]</td>
             <td>[% reserveloo.rcount %]</td>
+            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber %]">[% reserveloo.name %]</a></td>
             <td>
             <p>
                 [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
@@ -118,6 +123,7 @@ $(document).ready(function() {
                 [% IF ( reserveloo.author ) %]<p> by [% reserveloo.author %]</p>[% END %]
             </td>
         [% ELSE %]
+            <td>"</td>
             <td>"</td>
             <td>"</td>
             <td>"</td>
@@ -153,11 +159,12 @@ $(document).ready(function() {
         <td><input type="text" class="filter" data-column_num="0" placeholder="Pull this many items" style="width:95%"/></td>
         <td><input type="text" class="filter" data-column_num="1" placeholder="Items available" style="width:95%"/></td>
         <td><input type="text" class="filter" data-column_num="2" placeholder="Patron holds" style="width:95%"/></td>
-        <td><input type="text" class="filter" data-column_num="3" placeholder="Title" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="3" placeholder="Patron name" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="4" placeholder="Title" style="width:95%"/></td>
         <td id="homebranchfilter"></td>
-        <td><input type="text" class="filter" data-column_num="5" placeholder="Call number" style="width:95%"/></td>
-        <td><input type="text" class="filter" data-column_num="6" placeholder="Available copy" style="width:95%"/></td>
-        <td><input type="text" class="filter" data-column_num="7" placeholder="Available enumeration" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="6" placeholder="Call number" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="7" placeholder="Available copy" style="width:95%"/></td>
+        <td><input type="text" class="filter" data-column_num="8" placeholder="Available enumeration" style="width:95%"/></td>
         <td id="itypefilter"></td>
         <td id="locationfilter"></td>
         <td></td>

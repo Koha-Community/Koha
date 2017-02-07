@@ -122,12 +122,14 @@ if ( $run_report ) {
             biblio.title,
             biblio.author,
             count(DISTINCT items.itemnumber) as icount,
-            count(DISTINCT reserves.borrowernumber) as rcount
+            count(DISTINCT reserves.borrowernumber) as rcount,
+            CONCAT_WS(' ', borrowers.firstname, borrowers.surname) as l_patron
     FROM  reserves
         LEFT JOIN items ON items.biblionumber=reserves.biblionumber 
         LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
         LEFT JOIN branchtransfers ON items.itemnumber=branchtransfers.itemnumber
         LEFT JOIN issues ON items.itemnumber=issues.itemnumber
+        LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
     WHERE
     reserves.found IS NULL
     $sqldatewhere
