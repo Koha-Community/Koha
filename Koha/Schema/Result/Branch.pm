@@ -134,6 +134,12 @@ __PACKAGE__->table("branches");
   is_nullable: 1
   size: 255
 
+=head2 pickup_location
+
+  data_type: 'tinyint'
+  default_value: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -179,6 +185,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "geolocation",
   { data_type => "varchar", is_nullable => 1, size => 255 },
+  "pickup_location",
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY

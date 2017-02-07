@@ -280,6 +280,7 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
   `branchnotes` mediumtext, -- notes related to your library or branch
   opac_info text, -- HTML that displays in OPAC
   `geolocation` VARCHAR(255) default NULL, -- geolocation of your library
+  `pickup_location` tinyint(1) not null default 1, -- can library act as a pickup location
   PRIMARY KEY (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
