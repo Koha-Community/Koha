@@ -59,10 +59,11 @@ sub all {
     my ( $self, $params ) = @_;
     my $selected = $params->{selected};
     my $unfiltered = $params->{unfiltered} || 0;
+    my $search_params = $params->{search_params} || {};
 
     my $libraries = $unfiltered
-      ? Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed
-      : Koha::Libraries->search_filtered( {}, { order_by => ['branchname'] } )->unblessed;
+      ? Koha::Libraries->search( $search_params, { order_by => ['branchname'] } )->unblessed
+      : Koha::Libraries->search_filtered( $search_params, { order_by => ['branchname'] } )->unblessed;
 
     for my $l ( @$libraries ) {
         if (       defined $selected and $l->{branchcode} eq $selected
@@ -78,6 +79,13 @@ sub all {
 sub InIndependentBranchesMode {
     my ( $self ) = @_;
     return ( not C4::Context->preference("IndependentBranches") or C4::Context::IsSuperLibrarian );
+}
+
+sub pickup_locations {
+    my ($self, $params) = @_;
+    $params->{search_params} ||= {};
+    $params->{search_params}->{pickup_location} = 1;
+    return $self->all($params);
 }
 
 1;
