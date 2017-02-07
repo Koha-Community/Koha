@@ -146,6 +146,7 @@
                 <li><label for="branchip">IP: </label><input type="text" name="branchip" id="branchip"  size="15" maxlength="15" value="[% library.branchip | html %]" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>
                 <li><label for="marcorgccode">MARC organization code</label> <input type="text" name="marcorgcode" id="marcorgcode" size="16" value="[% library.marcorgcode | html %]" /> <span class="hint">If not filled in defaults to system preference MARCOrgCode. You can obtain your code from <a href="http://www.loc.gov/marc/organizations/orgshome.html" target="_blank">Library of Congress</a>.</span>
                 <li><label for="branchnotes">Notes: </label><input type="text" name="branchnotes" id="branchnotes" size="80" value="[% library.branchnotes | html %]" /></li>
+                <li><label for="pickup_location">Pickup location: </label><select name="pickup_location" id="pickup_location"><option value="1" [% IF library.pickup_location %]selected[% END %]>Yes</option><option value="0" [% IF !library.pickup_location %]selected[% END %]>No</option></select></li>
             </ol>
         </fieldset>
         <fieldset class="action">
@@ -181,6 +182,7 @@
                     <th>Address</th>
                     <th>MARC organization code</th>
                     <th>IP</th>
+                    <th>Pickup location</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -218,6 +220,7 @@
                         </td>
                         <td>[% library.marcorgcode | html %]</td>
                         <td>[% library.branchip | html %]</td>
+                        <td>[% IF library.pickup_location %]Yes[% ELSE %]No[% END %]</td>
                         <td class="actions">
                             <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/branches.pl?op=add_form&amp;branchcode=[% library.branchcode |uri %]"><i class="fa fa-pencil"></i> Edit</a>
                             <form action="/cgi-bin/koha/admin/branches.pl" method="post">
