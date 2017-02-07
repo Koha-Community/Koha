@@ -267,6 +267,7 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
   opac_info MEDIUMTEXT, -- HTML that displays in OPAC
   `geolocation` VARCHAR(255) default NULL, -- geolocation of your library
   `marcorgcode` VARCHAR(16) default NULL, -- MARC Organization Code, see http://www.loc.gov/marc/organizations/orgshome.html, when empty defaults to syspref MARCOrgCode
+  `pickup_location` tinyint(1) NOT NULL default 1, -- the ability to act as a pickup location
   PRIMARY KEY (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
