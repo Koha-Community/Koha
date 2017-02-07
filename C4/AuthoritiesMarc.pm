@@ -1350,6 +1350,7 @@ sub _get_authid_subfield{
     my ($field)=@_;
     return $field->subfield('9')||$field->subfield('3');
 }
+
 =head2 GetHeaderAuthority
 
   $ref= &GetHeaderAuthority( $authid)
