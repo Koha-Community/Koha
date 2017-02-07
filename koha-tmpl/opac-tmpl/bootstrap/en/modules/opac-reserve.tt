@@ -226,12 +226,12 @@
                                                                 <label for="branch_[% bibitemloo.biblionumber | html %]">Pick up location:</label>
                                                                 [% UNLESS ( bibitemloo.holdable ) %]
                                                                     <select name="branch" id="branch_[% bibitemloo.biblionumber | html %]" disabled="disabled">
-                                                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
+                                                                        [% PROCESS options_for_libraries libraries => Branches.all({ search_params => { pickup_location => 1 }, selected => branch }) %]
                                                                     </select>
                                                                 [% ELSE %]
                                                                     [% SET at_least_one_library_not_available_for_pickup = 0 %]
                                                                     <select name="branch" id="branch_[% bibitemloo.biblionumber | html %]">
-                                                                        [% FOREACH library IN Branches.all( selected => branch) %]
+                                                                        [% FOREACH library IN Branches.all({ search_params => { pickup_location => 1 }, selected => branch }) %]
                                                                             [% SET pickup_available_at = bibitemloo.not_available_at.grep(library.branchcode).size ? 0 : 1 %]
                                                                             [% IF library.selected AND pickup_available_at %]
                                                                                 <option value="[% library.branchcode | html %]" selected="selected" >[% library.branchname | html %]</option>
