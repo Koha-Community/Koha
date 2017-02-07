@@ -25,7 +25,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Item::Transfer - Koha Transfer Object class
+Koha::Item::Transfer - Koha Item Transfer Object class
 
 =head1 API
 
