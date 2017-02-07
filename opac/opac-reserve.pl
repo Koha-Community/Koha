@@ -267,7 +267,7 @@ if ( $query->param('place_reserve') ) {
       # holdingbranch, force the value $rank and $found.
         my $rank = $biblioData->{rank};
         if ( $itemNum ne '' ) {
-            $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum ) eq 'OK';
+            $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum, $branch ) eq 'OK';
             $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
             my $item = GetItem($itemNum);
             if ( $item->{'holdingbranch'} eq $branch ) {
@@ -276,7 +276,7 @@ if ( $query->param('place_reserve') ) {
             }
         }
         else {
-            $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum ) eq 'OK';
+            $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum, $branch ) eq 'OK';
 
             # Inserts a null into the 'itemnumber' field of 'reserves' table.
             $itemNum = undef;
@@ -532,7 +532,7 @@ foreach my $biblioNum (@biblionumbers) {
         my $policy_holdallowed = !$itemLoopIter->{already_reserved};
         $policy_holdallowed &&=
             IsAvailableForItemLevelRequest($itemInfo,$borr) &&
-            CanItemBeReserved($borrowernumber,$itemNum) eq 'OK';
+            CanItemBeReserved($borrowernumber,$itemNum,$branch) eq 'OK';
 
         if ($policy_holdallowed) {
             if ( my $hold_allowed = OPACItemHoldsAllowed( $itemInfo, $borr ) ) {
@@ -591,7 +591,7 @@ foreach my $biblioNum (@biblionumbers) {
         }
     }
 
-    $biblioLoopIter{holdable} &&= CanBookBeReserved($borrowernumber,$biblioNum) eq 'OK';
+    $biblioLoopIter{holdable} &&= CanBookBeReserved($borrowernumber,$biblioNum,$branch) eq 'OK';
 
     # For multiple holds per record, if a patron has previously placed a hold,
     # the patron can only place more holds of the same type. That is, if the
