@@ -27,9 +27,12 @@ use Koha::DateUtils qw( dt_from_string );
 use C4::Context;
 use Koha::Checkouts;
 use Koha::IssuingRules;
-use Koha::Item::Transfer;
+use Koha::Item::Transfer::Limits;
+use Koha::Item::Transfers;
 use Koha::Patrons;
 use Koha::Libraries;
+
+use Koha::Exceptions::Library;
 
 use base qw(Koha::Object);
 
@@ -187,6 +190,60 @@ sub can_article_request {
 
     return 1 if $rule && $rule ne 'no' && $rule ne 'bib_only';
     return q{};
+}
+
+=head3 can_be_transferred
+
+Checks if an item can be transferred to given library.
+
+This feature is controlled by two system preferences:
+UseBranchTransferLimits to enable / disable the feature
+BranchTransferLimitsType to use either an itemnumber or ccode as an identifier
+                         for setting the limitations
+
+    MANDATORY PARAMETERS:
+    $to   : Koha::Library or branchcode string
+    OPTIONAL PARAMETERS:
+    $from : Koha::Library or branchcode string  # if not given, item holdingbranch
+                                                # will be used instead
+
+=cut
+
+sub can_be_transferred {
+    my ($self, $to, $from) = @_;
+
+    if (ref($to) ne 'Koha::Library') {
+        my $tobranchcode = defined $to ? $to : '';
+        $to = Koha::Libraries->find($tobranchcode);
+        unless ($to) {
+            Koha::Exceptions::Library::NotFound->throw(
+                error => "Library '$tobranchcode' not found.",
+            );
+        }
+    }
+    if (defined $from && ref($from) ne 'Koha::Library') {
+        my $frombranchcode = defined $from ? $from : '';
+        $from = Koha::Libraries->find($frombranchcode);
+        unless ($from) {
+            Koha::Exceptions::Library::NotFound->throw(
+                error => "Library '$frombranchcode' not found.",
+            );
+        }
+    }
+
+    $to = $to->branchcode;
+    $from = defined $from ? $from->branchcode : $self->holdingbranch;
+
+    return 1 if $from eq $to; # Transfer to current branch is allowed
+    return 1 unless C4::Context->preference('UseBranchTransferLimits');
+
+    my $limittype = C4::Context->preference('BranchTransferLimitsType');
+    return Koha::Item::Transfer::Limits->search({
+        toBranch => $to,
+        fromBranch => $from,
+        $limittype => $limittype eq 'itemtype'
+                        ? $self->effective_itemtype : $self->ccode
+    })->count ? 0 : 1;
 }
 
 =head3 article_request_type

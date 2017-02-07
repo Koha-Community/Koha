@@ -19,14 +19,16 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use C4::Circulation;
 use Koha::Item;
+use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Database;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -116,6 +118,52 @@ subtest 'checkout' => sub {
     # There is no more checkout on this item, making sure it will not return old checkouts
     $checkout = $item->checkout;
     is( $checkout, undef, 'Koha::Item->checkout should return undef if there is no *current* checkout on this item' );
+};
+
+subtest 'can_be_transferred' => sub {
+    plan tests => 8;
+
+    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+
+    my $library1 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $library2 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $item  = Koha::Item->new({
+        biblionumber     => $biblioitem->{biblionumber},
+        biblioitemnumber => $biblioitem->{biblioitemnumber},
+        homebranch       => $library1,
+        holdingbranch    => $library1,
+        itype            => 'test',
+        barcode          => "newbarcode",
+    })->store;
+    $nb_of_items++;
+
+    is(Koha::Item::Transfer::Limits->search({
+        fromBranch => $library1,
+        toBranch => $library2,
+    })->count, 0, 'There are no transfer limits between libraries.');
+    ok($item->can_be_transferred($library2),
+       'Item can be transferred between libraries.');
+
+    my $limit = Koha::Item::Transfer::Limit->new({
+        fromBranch => $library1,
+        toBranch => $library2,
+        itemtype => $item->effective_itemtype,
+    })->store;
+    is(Koha::Item::Transfer::Limits->search({
+        fromBranch => $library1,
+        toBranch => $library2,
+    })->count, 1, 'Given we have added a transfer limit,');
+    is($item->can_be_transferred($library2), 0,
+       'Item can no longer be transferred between libraries.');
+    is($item->can_be_transferred($library2, $library1), 0,
+       'We get the same result also if we pass the from-library parameter.');
+    eval { $item->can_be_transferred(); };
+    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when no library given.');
+    eval { $item->can_be_transferred('heaven'); };
+    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when invalid library is given.');
+    eval { $item->can_be_transferred($library2, 'hell'); };
+    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when invalid library is given.');
 };
 
 $retrieved_item_1->delete;
