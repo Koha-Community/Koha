@@ -78,8 +78,6 @@ is to do an incremental rebuild.
 
 Usage: $scriptname [options] instancename1 instancename2...
 Options:
-    --usmarc|-u       Runs the process as USMARC rather than
-                      the default of MARCXML.
     --authorities|-a  Only run process for authorities.
     --biblios|-b      Only run process for biblios.
     --full|-f         Does a reindex of the whole collection.
@@ -95,7 +93,6 @@ EOF
 
 # Default parameters
 opt_idx="-z"
-opt_xml="-x"
 opt_verbose=""
 opts_other=""
 biblios_only="no"
@@ -120,9 +117,6 @@ while [ -n "$*" ]; do
             ;;
         -a|--authorities)
             toggle_authorities_only
-            ;;
-        -u|--usmarc)
-            opt_xml=""
             ;;
         -f|--full)
             full_reindex="yes"
@@ -164,7 +158,7 @@ do
     if is_instance $name; then
         if [ "$biblios" = "yes" ]; then
             if ! run_rebuild_zebra $name \
-                -b $opt_verbose $opt_idx $opt_xml $opts_other; then
+                -b $opt_verbose $opt_idx $opts_other; then
                 warn "Something went wrong rebuilding biblio indexes for $name"
             fi
         fi
