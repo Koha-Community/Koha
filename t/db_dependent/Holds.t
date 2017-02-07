@@ -9,17 +9,19 @@ use C4::Context;
 
 use Test::More tests => 57;
 use MARC::Record;
-use C4::Items;
-use C4::Biblio;
-use C4::Reserves;
-use C4::Calendar;
 
-use Koha::Database;
-use Koha::DateUtils qw( dt_from_string output_pref );
+use C4::Biblio;
+use C4::Calendar;
+use C4::Items;
+use C4::Reserves;
+
 use Koha::Biblios;
 use Koha::CirculationRules;
+use Koha::Database;
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Holds;
 use Koha::IssuingRules;
+use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
@@ -490,7 +492,7 @@ subtest 'Test max_holds per library/patron category' => sub {
 };
 
 subtest 'Pickup location availability tests' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio('ONLY1');
     my ( $item_bibnum, $item_bibitemnum, $itemnumber )
@@ -505,13 +507,25 @@ subtest 'Pickup location availability tests' => sub {
     my $item = Koha::Items->find($itemnumber);
     my $branch_to = $builder->build({ source => 'Branch' })->{ branchcode };
     my $library = Koha::Libraries->find($branch_to);
+    $library->pickup_location('1')->store;
     my $patron = $builder->build({ source => 'Borrower' })->{ borrowernumber };
 
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+
     $library->pickup_location('1')->store;
     is(CanItemBeReserved($patron, $item->itemnumber, $branch_to)->{status},
        'OK', 'Library is a pickup location');
+
+    my $limit = Koha::Item::Transfer::Limit->new({
+        fromBranch => $item->holdingbranch,
+        toBranch => $branch_to,
+        itemtype => $item->effective_itemtype,
+    })->store;
+    is(CanItemBeReserved($patron, $item->itemnumber, $branch_to),
+       'cannotBeTransferred', 'Item cannot be transferred');
+    $limit->delete;
+
     $library->pickup_location('0')->store;
     is(CanItemBeReserved($patron, $item->itemnumber, $branch_to)->{status},
        'libraryNotPickupLocation', 'Library is not a pickup location');
