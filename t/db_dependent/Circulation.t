@@ -17,10 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 92;
+use Test::More tests => 94;
 
 BEGIN {
-    require_ok('C4::Circulation');
+    use_ok('C4::Log')
 }
 
 use DateTime;
@@ -474,7 +474,21 @@ C4::Context->dbh->do("DELETE FROM accountlines");
             due            => Koha::DateUtils::output_pref($five_weeks_ago)
         }
     );
+    t::lib::Mocks::mock_preference('RenewalLog', 0);
+    my $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
+    my $old_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEW"]) } );
     AddRenewal( $renewing_borrower->{borrowernumber}, $itemnumber7, $branch );
+    my $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEW"]) } );
+    is ($new_log_size, $old_log_size, 'renew log not added because of the syspref RenewalLog');
+
+    t::lib::Mocks::mock_preference('RenewalLog', 1);
+    $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
+    $old_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEW"]) } );
+    AddRenewal( $renewing_borrower->{borrowernumber}, $itemnumber7, $branch );
+    $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEW"]) } );
+    is ($new_log_size, $old_log_size + 1, 'renew log successfully added');
+
+
     $fine = $schema->resultset('Accountline')->single( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $itemnumber7 } );
     is( $fine->accounttype, 'F', 'Fine on renewed item is closed out properly' );
     $fine->delete();

@@ -2940,7 +2940,7 @@ sub AddRenewal {
         DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
     }
 
-    # Log the renewal
+    # Add the renewal to stats
     UpdateStats(
         {
             branch => C4::Context->userenv ? C4::Context->userenv->{branch} : $branch,
@@ -2953,6 +2953,8 @@ sub AddRenewal {
         }
     );
 
+    #Log the renewal
+    logaction("CIRCULATION", "RENEW", $borrowernumber, $itemnumber) if C4::Context->preference("RenewalLog");
     return $datedue;
 }
 
