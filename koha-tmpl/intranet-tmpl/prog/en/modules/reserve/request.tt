@@ -198,7 +198,7 @@
         <li>
             <label for="pickup">Pickup at:</label>
             <select name="pickup" size="1" id="pickup">
-                [% PROCESS options_for_libraries libraries => Branches.all() %]
+                [% PROCESS options_for_libraries libraries => Branches.all({ search_params => { pickup_location => 1 } }) %]
             </select>
         </li>
 
@@ -615,7 +615,7 @@
             [% Branches.GetName(reserveloo.branchcode) | html %] <input type="hidden" name="pickup" value="[% reserveloo.branchcode | html %]" />
         [% ELSE %]
             <select name="pickup">
-                [% PROCESS options_for_libraries libraries => Branches.all( selected => reserveloo.branchcode ) %]
+                [% PROCESS options_for_libraries libraries => Branches.all({ search_params => { pickup_location => 1 }, selected => reserveloo.branchcode }) %]
             </select>
         [% END %]
     [% END %]
