@@ -464,6 +464,7 @@ if ( $messages->{'ResFound'}) {
             borrowernumber => $reserve->{'borrowernumber'},
             itemnumber     => $reserve->{'itemnumber'},
             reservenotes   => $reserve->{'reservenotes'},
+            reserve_id     => $reserve->{reserve_id},
             bormessagepref => $holdmsgpreferences->{'transports'},
         );
     } # else { ; }  # error?
