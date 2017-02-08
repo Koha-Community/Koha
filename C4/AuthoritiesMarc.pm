@@ -1459,10 +1459,10 @@ sub merge {
     # Get All candidate Tags for the change 
     # (This will reduce the search scope in marc records).
     my $sql = "SELECT DISTINCT tagfield FROM marc_subfield_structure WHERE authtypecode=?";
-    my $tags_using_authtype = $dbh->selectcol_arrayref( $sql, undef, ( $authtypecodefrom ));
+    my $tags_using_authtype = $dbh->selectcol_arrayref( $sql, undef, ( $authtypefrom->authtypecode ));
     my $tags_new;
-    if ($authtypecodeto ne $authtypecodefrom){
-        $tags_new = $dbh->selectcol_arrayref( $sql, undef, ( $authtypecodeto ));
+    if ($authtypeto->authtypecode ne $authtypefrom->authtypecode){
+        $tags_new = $dbh->selectcol_arrayref( $sql, undef, ( $authtypeto->authtypecode ));
     }  
     # BulkEdit marc records
     # May be used as a template for a bulkedit field  
