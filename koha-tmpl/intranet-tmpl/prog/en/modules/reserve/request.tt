@@ -426,19 +426,12 @@ function checkMultiHold() {
           </li>
 
           [% IF remaining_holds_for_record > 1 %]
-              [% SET count = 1 %]
               <li>
                    <label for="holds_to_place_count">Holds to place (count)</label>
-                   <select name="holds_to_place_count" id="holds_to_place_count">
-                   [% WHILE count <= remaining_holds_for_record %]
-                        <option value="[% count %]">[% count %]</option>
-                        [% SET count = count + 1 %]
-                   [% END %]
-
-                   </select>
+                   <input type="number" name="holds_to_place_count" min="1" max="[% remaining_holds_for_record %]" step="1" value="1" />
               </li>
             [% ELSE %]
-                <input type="hidden" name="holds_to_place_count" value="1">
+                <input type="hidden" name="holds_to_place_count" value="1" />
             [% END %]
         [% END %]
 
