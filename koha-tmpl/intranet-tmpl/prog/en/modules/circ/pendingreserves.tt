@@ -85,8 +85,7 @@ $(document).ready(function() {
     <div id="yui-main">
     <div class="yui-b">
 
-<h2>Holds to pull[% IF ( run_report ) %] placed between [% from | $KohaDates %] and [% to | $KohaDates %][% END %]</h2>
-[% IF ( run_report ) %]
+<h2>Holds to pull placed between [% from | $KohaDates %] and [% to | $KohaDates %]</h2>
 <h3>Reported on [% todaysdate | $KohaDates %]</h3>
 <p>The following holds have not been filled. Please retrieve them and check them in.</p>
 <div class="searchresults">
@@ -149,7 +148,6 @@ $(document).ready(function() {
         </td>
         <td>
             <span title="[% reserveloo.reservedate %]">[% reserveloo.reservedate | $KohaDates %] in [% Branches.GetName ( reserveloo.branch ) %]</span>
-            [% IF ( reserveloo.statusw ) %]<p>Waiting</p>[% END %][% IF ( reserveloo.statusf ) %]<p>Fulfilled</p>[% END %]
         </td>
         </tr>
         [% END %]
@@ -175,7 +173,6 @@ $(document).ready(function() {
         <b>No items found.</b>
     [% END %]
 </div>
-[% END %]
 
 </div>
 </div>
