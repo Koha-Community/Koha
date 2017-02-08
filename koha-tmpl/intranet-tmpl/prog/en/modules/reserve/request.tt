@@ -380,7 +380,7 @@ function checkMultiHold() {
         <li>
             <label for="pickup">Pickup at:</label>
             <select name="pickup" size="1" id="pickup">
-                [% PROCESS options_for_libraries libraries => Branches.all() %]
+                [% PROCESS options_for_libraries libraries => Branches.pickup_locations() %]
             </select>
         </li>
 
@@ -801,7 +801,7 @@ function checkMultiHold() {
             [% Branches.GetName(reserveloo.branchcode) %] <input type="hidden" name="pickup" value="[% reserveloo.branchcode %]" />
         [% ELSE %]
             <select name="pickup">
-                [% PROCESS options_for_libraries libraries => Branches.all( selected => reserveloo.branchcode ) %]
+                [% PROCESS options_for_libraries libraries => Branches.pickup_locations( selected => reserveloo.branchcode ) %]
             </select>
         [% END %]
     [% END %]
