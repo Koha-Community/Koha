@@ -218,6 +218,7 @@
                                                                         [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
                                                                     </select>
                                                                 [% ELSE %]
+                                                                    [% SET at_least_one_library_not_available_for_pickup = 0 %]
                                                                     <select name="branch" id="branch_[% bibitemloo.biblionumber %]">
                                                                         [% FOREACH library IN Branches.all( selected => branch) %]
                                                                             [% SET pickup_available_at = bibitemloo.not_available_at.grep(library.branchcode).size ? 0 : 1 %]
@@ -226,10 +227,14 @@
                                                                             [% ELSIF pickup_available_at %]
                                                                                 <option value="[% library.branchcode %]">[% library.branchname %]</option>
                                                                             [% ELSE %]
+                                                                                [% SET at_least_one_library_not_available_for_pickup = 1 %]
                                                                                 <option value="[% library.branchcode %]" disabled="disabled" title="At least one item is available at this library">[% library.branchname %]</option>
                                                                             [% END %]
                                                                         [% END %]
                                                                     </select>
+                                                                    [% IF at_least_one_library_not_available_for_pickup %]
+                                                                        Note: Library policy does not allow hold/pickup of an item available locally. Please come to the library to retrieve these items
+                                                                    [% END %]
                                                                 [% END # / UNLESS bibitemloo.holdable %]
                                                             </li>
                                                         [% END # / IF bibitemloo.holdable && choose_branch %]
