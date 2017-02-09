@@ -3467,7 +3467,7 @@ sub SendCirculationAlert {
     my %message_name = (
         CHECKIN  => 'Item_Check_in',
         CHECKOUT => 'Item_Checkout',
-	RENEWAL  => 'Item_Checkout',
+        RENEWAL  => 'Item_Checkout',
     );
     my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences({
         borrowernumber => $borrower->{borrowernumber},
@@ -3476,43 +3476,26 @@ sub SendCirculationAlert {
     my $issues_table = ( $type eq 'CHECKOUT' || $type eq 'RENEWAL' ) ? 'issues' : 'old_issues';
 
     my @transports = keys %{ $borrower_preferences->{transports} };
-    # warn "no transports" unless @transports;
-    for (@transports) {
-        # warn "transport: $_";
-        my $message = C4::Message->find_last_message($borrower, $type, $_);
-        if (!$message) {
-            #warn "create new message";
-            my $letter =  C4::Letters::GetPreparedLetter (
-                module => 'circulation',
-                letter_code => $type,
-                branchcode => $branch,
-                message_transport_type => $_,
-                tables => {
-                    $issues_table => $item->{itemnumber},
-                    'items'       => $item->{itemnumber},
-                    'biblio'      => $item->{biblionumber},
-                    'biblioitems' => $item->{biblionumber},
-                    'borrowers'   => $borrower,
-                    'branches'    => $branch,
-                }
-            ) or next;
-            C4::Message->enqueue($letter, $borrower, $_);
+    for my $mtt (@transports) {
+        my $letter =  C4::Letters::GetPreparedLetter (
+            module => 'circulation',
+            letter_code => $type,
+            branchcode => $branch,
+            message_transport_type => $mtt,
+            tables => {
+                $issues_table => $item->{itemnumber},
+                'items'       => $item->{itemnumber},
+                'biblio'      => $item->{biblionumber},
+                'biblioitems' => $item->{biblionumber},
+                'borrowers'   => $borrower,
+                'branches'    => $branch,
+            }
+        ) or next;
+
+        my $message = C4::Message->find_last_message($borrower, $type, $mtt);
+        unless ( $message ) {
+            C4::Message->enqueue($letter, $borrower, $mtt);
         } else {
-            #warn "append to old message";
-            my $letter =  C4::Letters::GetPreparedLetter (
-                module => 'circulation',
-                letter_code => $type,
-                branchcode => $branch,
-                message_transport_type => $_,
-                tables => {
-                    $issues_table => $item->{itemnumber},
-                    'items'       => $item->{itemnumber},
-                    'biblio'      => $item->{biblionumber},
-                    'biblioitems' => $item->{biblionumber},
-                    'borrowers'   => $borrower,
-                    'branches'    => $branch,
-                }
-            ) or next;
             $message->append($letter);
             $message->update;
         }
