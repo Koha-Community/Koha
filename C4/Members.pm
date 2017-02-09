@@ -1778,6 +1778,8 @@ sub MoveMemberToDeleted {
     my $borrower = $borrowers_rs->find($member);
     return unless $borrower;
 
+    delete $borrower->{updated_on};
+
     my $deleted = $schema->resultset('Deletedborrower')->create($borrower);
 
     return $deleted ? 1 : undef;
