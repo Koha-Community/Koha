@@ -16,17 +16,37 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Test::More;
 
-use Test::More tests => 9;
 use File::Temp;
 use File::Path qw/make_path/;
 
 use t::lib::Mocks;
 
+use Module::Load::Conditional qw/check_install/;
+
 BEGIN {
-    my $context_module = t::lib::Mocks::mock_dbh;
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 10;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
+
     use_ok('C4::XSLT');
 };
+
+use Test::DBIx::Class {
+    schema_class => 'Koha::Schema',
+    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
+    connect_opts => { name_sep => '.', quote_char => '`', },
+    fixture_class => '::Populate',
+}, 'Branch' ;
+
+fixtures_ok [
+    Branch => [
+    ],
+];
+
 
 my $dir = File::Temp->newdir();
 my @themes = ('prog', 'test');
