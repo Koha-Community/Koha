@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use File::Temp;
 use File::Path qw/make_path/;
 
@@ -61,5 +61,9 @@ is(find_and_slurp($dir, 'prog', 'es-ES'), 'Theme prog, language es-ES', 'Found t
 is(find_and_slurp($dir, 'test', 'fr-FR'), 'Theme test, language en',    'Fell back to test/en for test/fr-FR');
 is(find_and_slurp($dir, 'nope', 'es-ES'), 'Theme prog, language es-ES', 'Fell back to prog/es-ES for nope/es-ES');
 is(find_and_slurp($dir, 'nope', 'fr-FR'), 'Theme prog, language en',    'Fell back to prog/en for nope/fr-FR');
+
+my $matching_string = q{<syspref name="singleBranchMode">0</syspref>};
+my $sysprefs_xml = C4::XSLT::get_xslt_sysprefs();
+ok( $sysprefs_xml =~ m/$matching_string/, 'singleBranchMode has a value of 0');
 
 1;
