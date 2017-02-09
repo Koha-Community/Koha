@@ -1,130 +1,162 @@
 [% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo; Web installer &rsaquo; Step 3</title>
-[% IF ( finish ) %]<meta http-equiv="refresh" content="5; url=/cgi-bin/koha/mainpage.pl">[% END %]
+[% IF ( finish ) %]<meta http-equiv="refresh" content="5; url=/cgi-bin/koha/installer/onboarding.pl">[% END %]
 [% INCLUDE 'installer-doc-head-close.inc' %]
 <div>
-<h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif" /> Web installer &rsaquo; Step 3</h1>
+<h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif" /> Koha web  installer &rsaquo; Step 3</h1>
 
 [% IF ( selectframeworks ) %]
     <script type="text/javascript">
-    //<![CDATA[
+//<![CDATA[
 
-    var surl = unescape(window.location.pathname);
+var surl = unescape(window.location.pathname);
 
-    function doLoad()
+function doLoad()
+{
+    // the timeout value should be the same as in the "refresh" meta-tag
+    setTimeout( "refresh()", 2*1000 );
+}
+
+function refresh(value)
+{
+    //  The argument to the location.reload function determines
+    //  if the browser should retrieve the document from the
+    //  web-server.  In our example all we need to do is cause
+    //  the JavaScript block in the document body to be
+    //  re-evaluated.  If we needed to pull the document from
+    //  the web-server again (such as where the document contents
+    //  change dynamically) we would pass the argument as 'true'.
+    //
+    surl=surl+'?step=3&op=selectframeworks&fwklanguage='+value;
+
+    window.location.replace( surl );
+}
+
+function selectAllFrameworks()
+{
+    //  A handy short link that selects all available checkboxes
+    //  on the page.
+    //
+    var checkboxes = document.getElementsByTagName("input");
+    for (var i = 0; i < checkboxes.length; i++)
     {
-        // the timeout value should be the same as in the "refresh" meta-tag
-        setTimeout( "refresh()", 2*1000 );
-    }
-
-    function refresh(value)
-    {
-        //  The argument to the location.reload function determines
-        //  if the browser should retrieve the document from the
-        //  web-server.  In our example all we need to do is cause
-        //  the JavaScript block in the document body to be
-        //  re-evaluated.  If we needed to pull the document from
-        //  the web-server again (such as where the document contents
-        //  change dynamically) we would pass the argument as 'true'.
-        //
-        surl=surl+'?step=3&op=selectframeworks&fwklanguage='+value;
-
-        window.location.replace( surl );
-    }
-
-    function selectAllFrameworks()
-    {
-        //  A handy short link that selects all available checkboxes
-        //  on the page.
-        //
-        var checkboxes = document.getElementsByTagName("input");
-        for (var i = 0; i < checkboxes.length; i++)
+        if (checkboxes[i].type == 'checkbox')
         {
-            if (checkboxes[i].type == 'checkbox')
-            {
-                checkboxes[i].checked = true;
-            }
+            checkboxes[i].checked = true;
         }
-
-        //  Prevent event propergation.
-        return false;
     }
 
-    function Hide(link)
-    {
-        //  Toggle the display of a given element on the page.
-        //
-        subfield = document.getElementById('bloc'+link);
-        var initstyle = subfield.style.display;
-        if (initstyle == 'block') subfield.style.display = 'none' ;
-        if (initstyle == 'none') subfield.style.display = 'block' ;
-    }
+    //  Prevent event propergation.
+    return false;
+}
 
-    //]]>
-    </script>
+function Hide(link)
+{
+    //  Toggle the display of a given element on the page.
+    //
+    subfield = document.getElementById('bloc'+link);
+    var initstyle = subfield.style.display;
+    if (initstyle == 'block') subfield.style.display = 'none' ;
+    if (initstyle == 'none') subfield.style.display = 'block' ;
+}
+
+//]]>
+</script>
 [% END %]
+
+
 [% IF ( finish ) %]
     <h1>Congratulations, installation complete</h1>
-    <p>If this page does not redirect in 5 seconds, click <a href="/">here</a>.</p>
+    <p>If this page does not redirect in 10 seconds, click <a href="/cgi-bin/koha/installer/onboarding.pl">Start onboarding process</a>.</p>
 [% END %]
+
+
 [% IF ( choosemarc ) %]
-    <h2 align="center">Select your MARC flavor</h2>
+    <h2 align="center">Choose your setup</h2>
+    <p>Basic setup selects recommended settings by default.</p>
     <form name="frameworkselection" method="post" action="install.pl">
     <input type="hidden" name="step" value="3" />
-    <input type="hidden" name="op" value="selectframeworks" />
-    <p>
+    <input type="hidden" name="op" value="selectframeworks"/>
+
+    <div>
+        <input type="radio" name="setup" value="Basic" checked="checked">Basic<br/>
+        <input type="radio" name="setup" value="Advanced"/>Advanced<br/>
+    </div>
+
+    <h2 align="center">Select your MARC flavor</h2>
+    <p>MARC stands for Machine Readable Cataloging, containing information about a bibliographic record. MARC21 is more commonly used globally, whereas UNIMARC tends to be used in Europe. </p>
+
     [% FOREACH flavourloo IN flavourloop %]
     <div>
-            [% IF ( flavourloo.checked ) %]
-                <input type="radio" name="marcflavour" value="[% flavourloo.code %]" checked /> [% flavourloo.label %] <br/>
+            [% IF ( flavourloo.label == "Unimarc") %]
+                 <input type="radio" name="marcflavour" value="[% flavourloo.code %]" /> [% flavourloo.label %]<br/>
             [% ELSE %]
-                <input type="radio" name="marcflavour" value="[% flavourloo.code %]" /> [% flavourloo.label %] <br/>
+                 <input type="radio" name="marcflavour" value="[% flavourloo.code %]" checked="checked" /> [% flavourloo.label %] <br/>
             [% END %]
     </div>
     [% END %]
-    </p>
-    <p> Click 'Next' to continue <input value="Next &gt;&gt;" type="submit" /></p>
+
+        <p>Click 'Next' to continue <input value="Next &gt;&gt;" type="submit" /></p>
+
     </form>
+
 [% END %]
 
 [% IF ( selectframeworks ) %]
-    <h2 align="center">Selecting Default Settings</h2>
-    <script type="text/javascript">
-        var linklabel = _("Select all sample data");
-        document.write('<p><a href="#" onclick="return selectAllFrameworks();">'+linklabel+'</a></p>');
-    </script>
-    <form name="frameworkselection" method="post" action="install.pl">
-    <input type="hidden" name="step" value="3" />
-    <input type="hidden" name="op" value="addframeworks" />
+        <h2 align= "center"> [% setup %] setup</h2>
+        <h2 align="center">Selecting Default Settings</h2>
 
+        [% IF setup == "Advanced" %]
+            <script type="text/javascript">
+                var linklabel = _("Select all options");
+                document.write('<p><a href="#" onclick="return selectAllFrameworks();"><button>'+linklabel+'</button></a></p>');
+            </script>
+        [% END %]
+        <form name="frameworkselection" method="post" action="install.pl">
+            <input type="hidden" name="step" value="3" />
+            <input type="hidden" name="op" value="addframeworks" />
     [% IF ( frameworksloop ) %]
-    <h2>MARC frameworks: [% marcflavour %]</h2>
-    [% IF ( en_marc_frameworks ) %]
-        <h4><span class="error">No MARC frameworks are available for your language.
-                Defaulting to the frameworks supplied for English (en)<span></h4>
-    [% END %]
-    [% FOREACH frameworksloo IN frameworksloop %]
-    <div>
-    <h3>[% frameworksloo.label %]</h3>
-    [% FOREACH framework IN frameworksloo.frameworks %]
-        <table style="border:1px;vertical-align:top;">
-        <tr>
-        <td style="vertical-align:top;">
-            [% IF ( framework.checked ) %]
-                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" checked="checked" id="[% framework.fwkname %]" />
-            [% ELSE %]
-                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" id="[% framework.fwkname %]" />
-            [% END %]
-        </td>
-        <td>
-            <label for="[% framework.fwkname %]">
-                [% framework.fwkdescription %]
-                <em>([% framework.fwkname %])</em>
-            </label>
-        </td>
-        </table>
-    [% END %]
-    </div>
-    [% END %]
+        <h2>MARC frameworks: [% marcflavour %]</h2>
+        [% IF ( en_marc_frameworks ) %]
+            <h4><span class="error">No MARC frameworks are available for your language.
+                    Defaulting to the frameworks supplied for English (en)<span></h4>
+        [% END %]
+        [% FOREACH frameworksloo IN frameworksloop %]
+           <div>
+           <h3>[% frameworksloo.label %]</h3>
+           [% FOREACH framework IN frameworksloo.frameworks %]
+                <table style="border:1px;vertical-align:top;">
+                <tr>
+                    <td style = "border:1px; vertical-align:top;">
+                        [% IF (frameworksloo.label == "Default") && (setup=="Basic") %]
+                            <input type="hidden" name="framework" value="[% framework.fwkfile %]" id ="[%framework.fwkname%]" />
+                        [% ELSE %]
+                            <input type="checkbox" name="framework" value="[% framework.fwkfile %]" id ="[%framework.fwkname%]" />
+                        [% END %]
+                    </td>
+                    <td>
+                    [% IF (frameworksloo.label == "Default") && (setup=="Basic") %]
+                        <ul>
+                            <li>
+                                <label for="[% framework.fwkname %]">
+                                    [% framework.fwkdescription %]
+                                    <em>([% framework.fwkname %])</em>
+                                </label>
+                            </li>
+                        </ul>
+                    </td>
+                    [% ELSE %]
+                    <td>
+                        <label for= "[% framework.fwkname %]">
+                            [% framework.fwkdescription %]
+                            <em>([% framework.fwkname %])</em>
+                        </label>
+                    </td>
+                    [% END %]
+                </tr>
+                </table>
+           [% END %]
+           </div>
+        [% END %]
     <h2>Other data</h2>
     [% END %]
     [% IF ( en_sample_data ) %]
@@ -132,27 +164,49 @@
                 Defaulting to the samples supplied for English (en)<span></h4>
     [% END %]
     [% FOREACH levelloo IN levelloop %]
-    <div>
-    <h3>[% levelloo.label %]</h3>
-    [% FOREACH framework IN levelloo.frameworks %]
-        <table style="border:1px;vertical-align:top;">
-        <tr>
-        <td style="vertical-align:top;">
-            [% IF ( framework.checked ) %]
-                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" checked="checked" id="[% framework.fwkname %]" />
-            [% ELSE %]
-                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" id="[% framework.fwkname %]" />
-            [% END %]
-        </td>
-        <td>
-            <label for="[% framework.fwkname %]">
-                [% framework.fwkdescription %]
-                <em>([% framework.fwkname %])</em>
-            </label>
-        </td>
-        </table>
-    [% END %]
-    </div>
+        <div>
+        <h3>[% levelloo.label %]</h3>
+
+        [% IF (setup == "Basic" && levelloo.label == "Optional") %]
+            <script type="text/javascript">
+                var linklabel = _("Select all options");
+                document.write('<p><a href="#" onclick="return selectAllFrameworks();"><button>'+linklabel+'</button></a></p>');
+            </script>
+        [% END %]
+
+        [% FOREACH framework IN levelloo.frameworks %]
+            <table style="border:1px;vertical-align:top;">
+            <tr>
+                <td style="vertical-align:top;">
+                [% IF (levelloo.label == "Default" ) && (setup=="Basic")%]
+                     <input type="hidden" name="framework" value="[% framework.fwkfile %]" id="[%framework.fwkname %]" />
+                [% ELSE %]
+                     <input type="checkbox" name="framework" value="[%framework.fwkfile %]" id="[%framework.fwkname%]"/>
+                [% END %]
+                </td>
+                <td>
+                [% IF (levelloo.label == "Default") && (setup=="Basic")%]
+                <ul>
+                    <li>
+                        <label for="[% framework.fwkname %]">
+                            [% framework.fwkdescription %]
+                            <em>([% framework.fwkname %])</em>
+                        </label>
+                    </li>
+                </ul>
+                </td>
+                [% ELSE %]
+                <td>
+                    <label for= "[% framework.fwkname %]">
+                        [% framework.fwkdescription %]
+                        <em>([% framework.fwkname %])</em>
+                    </label>
+                </td>
+                [% END %]
+            </tr>
+            </table>
+        [% END %]
+        </div>
     [% END %]
     <p>When you've made your selections, please click 'Import' below to begin the process. It may take a while to complete,
     please be patient.</p>
@@ -177,11 +231,12 @@
             You can help the Koha community by sharing your statistics with us.
             <br>If you wish to share some of your data, please enable the functionality in the "Share your usage statistics" section of the admin module.
         </p>
-        <p>Click on 'Finish' to complete and load the Koha Staff Interface.
+        <p>Click on 'Set up Koha with the onboarding tool' to complete and load the Koha onboarding tool.
         <form name="finish">
         <input type="hidden" name="step" value="3" />
         <input type="hidden" name="op" value="finish" />
-        <input type="submit" value="Finish" /></form>
+        <input type="submit" value="Set up Koha with the onboarding tool"/>
+        </form>
         </p>
     </p>
 [% END %]
@@ -214,21 +269,21 @@
     </form>
 [% END %]
 
-
 [% IF ( default ) %]
     [% IF ( upgrading ) %]
         <p>
-            We are upgrading from Koha [% dbversion %] to [% kohaversion %], you must <a href="install.pl?step=3&amp;op=updatestructure" class="button">update your database</a>
+            We are upgrading from Koha [% dbversion %] to [% kohaversion %], you must update your database.
+        <br>
+        <a href="install.pl?step=3&amp;op=updatestructure" class="button"><button>Update Database</button></a>
         </p>
     [% ELSE %]
-        <p>We are ready to do some basic configuration. Please
-            <a href="install.pl?step=3&amp;op=choosemarc" class="button">install basic configuration settings</a>
-            to continue the installation.
-        </p>
+        <p>We are ready to do some basic configuration. Please install some basic configuration settings to continue the installation:
+        <br>
+        <br>
+            <a href="install.pl?step=3&amp;op=choosemarc" class="button"><button>Install Basic Configuration Settings</button></a>
+
     [% END %]
 [% END %]
-
-
 
 [% IF ( updatestructure ) %]
   <div><h2 align="center">Updating database structure</h2>
@@ -251,7 +306,7 @@
  [% UNLESS ( has_update_errors ) %]
     <p>Everything went OK, update done.</p>
   [% END %]
-<a href="install.pl?step=3&amp;op=finished" class="button">Continue to log in to Koha</a>
+<a href="install.pl?step=3&amp;op=choosemarc" class="button"><button>Back to Installation</button></a>
   </div>
 [% END %]
 

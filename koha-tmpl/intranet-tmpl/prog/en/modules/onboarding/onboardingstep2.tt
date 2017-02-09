@@ -1,0 +1,164 @@
+[% USE Koha %]
+[% USE KohaDates %]
+[% USE Price %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title> Add a patron category</title>
+[% INCLUDE 'installer-doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+[% INCLUDE 'js_includes.inc' %]
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript">
+    var MSG_CATEGORYCODE_CHARS=(_("Please only enter letters into this field."));
+    var MSG_ONE_ENROLLMENTPERIOD =(_("Please choose an enrollment period in months OR by date."));
+    var MSG_ONLY_ONE_ENROLLMENTPERIOD=(_("Please only choose one enrolment period."));
+
+jQuery.validator.addMethod( "enrollment_period", function(){
+      enrolmentperiod = $("#enrolmentperiod").val();
+      enrolmentperioddate = $("#enrolmentperioddate").val();
+      if (( $("#enrolmentperiod").val() == "" && $("#enrolmentperioddate").val() == "") || ($("#enrolmentperiod").val() !== "" && $("#enrolmentperioddate").val() !== "")) {
+             return false;
+      } else {
+             return true;
+      }
+    }, MSG_ONE_ENROLLMENTPERIOD
+);
+</script>
+<script type="text/javascript" src="[% themelang %]/js/categories.js"></script>
+</head>
+
+[% IF (categories && categories.count > 1 ) %] <!--This if statement checks if the categories variable handed to this template by onboarding.pl has data in it. If the categories variable does have data in it this means that the user has previously imported sample patron category data and so we do not need to show them the create patron category screen 1, instead we can display a screen with ubtton redirecting the user to step 3-->
+
+
+     <meta http-equiv="refresh" content="0; url=/cgi-bin/koha/installer/onboarding.pl?step=3">
+
+[% ELSIF (op == "add_validate_category") %]
+<!--else if the user has not previously imported sample patron categories check if the user has pressed the button name="add_validate" in the create patron category screen 1, and if they have pressed that button then display the below screen with a button to redirect the user to step 3-->
+
+    <div> <!-- Header that appears at the top of every screen in the koha onboarding tool-->
+        <h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif"/> Welcome to Koha</h1>
+    </div>
+
+    [% IF message != "error_on_insert" %]
+     <form name="createcat" method="post" action="onboarding.pl">
+            <input type="hidden" name="step" value="3"/>
+             <h1 align="left">  New patron category</h1>
+             <div>
+                 <p> Success: patron category created! </p>
+                 <p> To add another patron category and for more settings<br>
+                 go to:<br>
+                 More -> Administration -> Patron categories<br>
+             </div>
+             Next up:<br>
+             <input type="submit" name="start" value="Add a patron"><!-- When the user clicks on this button then redirect them to step 3 of the onboarding tool-->
+     </form>
+     [% ELSE %]
+        <form name="retrypatcat" method="post" action="onboarding.pl">
+        Message is [% message %]
+        <input type="hidden" name="step" value="2"/>
+            <h1 align="left">Failed</h1>
+            <div>Patron category was not successfully created.</br>
+            Please try again or contact your system administrator.</p>
+            </div>
+            <input type="submit" value="Try again"/>
+        </form>
+    [% END %]
+
+
+[% ELSE %] <!--Else display create patron category screen 1 where the user can input values to create their first patron category-->
+    <div> <!-- Header that appears at the top of every screen in the koha onboarding tool-->
+        <h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif"/> Welcome to Koha</h1>
+    </div>
+
+    <h1 align="left"> Create a new patron category</h1>
+    <p> The patron category you create in this form is going to be the one which the new administrator patron account will have.</p>
+       <form id="category_form" method="post" action="onboarding.pl">
+       <fieldset class="rows">
+            <input type="hidden" name="step" value="2"/>
+            <input type="hidden" name="op" value="add_validate_category" />
+                <ol>
+                    <li>
+                        <label for="categorycode" class="required">Category code: </label>
+                        <input type="text" pattern="[0-9A-Za-z]{1,10}" title="Please enter up to 10 letters and/or numbers" id="categorycode" name="categorycode" value="[% category.categorycode |html %]" size="10" maxlength="10" class="required" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li>
+                        <label for="description" class="required">Description: </label>
+                        <input type="text" name="description" title="Please enter a description of the category" size="40" maxlength="80" class="required" required="required" value="[% category.description |html%]" />
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li>
+                        <label for="overduenoticerequired">Overdue notice required: </label>
+                        <select name="overduenoticerequired" value="overduenoticerequired">
+                            [% IF category.overduenoticerequired %]
+                                <option value="0">No</option>
+                                <option value="1" selected="selected">Yes</option>
+                            [% ELSE %]
+                                <option value="0" selected="selected">No</option>
+                                <option value="1">Yes</option>
+                            [% END %]
+                        </select>
+                    </li>
+
+                    <li>
+                        <label for="category_type" class="required">Category type: </label>
+                        <select name="category_type" value="category_type" class='required' required='required'>
+                            [% IF category and category.category_type == 'S' %]
+                                <option value="S" selected="selected">Staff</option>
+                            [% ELSE %]
+                                <option value="S">Staff</option>
+                            [% END %]
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li>
+                        <label for="default_privacy">Default privacy: </label>
+                        <select value="default_privacy" name="default_privacy" required="required">
+                            [% SET default_privacy = 'default' %]
+
+                            [% IF category %]
+                               [% SET default_privacy = category.default_privacy %]
+                            [% END %]
+
+                            [% SWITCH default_privacy %]
+                            [% CASE 'forever' %]
+                                <option value="default">Default</option>
+                                <option value="never">Never</option>
+                                <option value="forever" selected="selected">Forever</option>
+                            [% CASE 'never' %]
+                                <option value="default">Default</option>
+                                <option value="never" selected="selected">Never</option>
+                                <option value="forever">Forever</option>
+                            [% CASE %]
+                                <option value="default" selected="selected">Default</option>
+                                <option value="never">Never</option>
+                                <option value="forever">Forever</option>
+                            [% END %]
+                        </select>
+                        <p>Controls how long a patrons checkout history is kept for new patrons of this category. "Never"     anonymizes checkouts on return, and "Forever" keeps a patron's checkout history indefinitely. When set to "Default", the amount of history kept is controlled by the cronjob <i>batch_anonymise.pl</i> which should be set up by your system administrator.</p>
+                    </li>
+            </ol>
+            <span class="label">Enrolment period: </span>
+            </br>
+                    <fieldset>
+                    <legend>Choose one</legend>
+                            <ol>
+                                <li>
+                                    <label for="enrolmentperiod" style="width:6em;">In months: </label>
+                                    <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="[% IF category.enrolmentperiod %][% category.enrolmentperiod %][% END %]" /> months
+                                </li>
+                                <li>
+                                    <label for="enrolmentperioddate" style="width:6em;">Until date: </label>
+                                    <input type="text" class="enrolmentperioddate datepicker" name="enrolmentperioddate" id="enrolmentperioddate" value="[% category.enrolmentperioddate | $KohaDates %]" />
+                                </li>
+                            </ol>
+                     </fieldset>
+                    <br>
+                    <input type="submit" class="action" value="Submit" />
+    </fieldset>
+    </form>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

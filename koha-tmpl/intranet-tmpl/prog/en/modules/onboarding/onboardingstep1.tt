@@ -1,0 +1,81 @@
+<!--Includes for creating library-->
+[% INCLUDE 'doc-head-open.inc' %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+[% INCLUDE 'installer-doc-head-close.inc' %]
+[% INCLUDE 'datatables.inc' %]
+
+[% IF (libraries && libraries.count > 1) %]
+    <meta http-equiv="refresh" content="0; url=/cgi-bin/koha/installer/onboarding.pl?step=2">
+
+[% ELSIF (op == "add_validate_library") %]
+    <head>
+        <title>Welcome &rsaquo; to  &rsaquo; Koha</title>
+    </head>
+
+    <!--Header for the koha onboarding tool-->
+    <div>
+        <h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif"/> Welcome to Koha</h1>
+    </div>
+
+<!--New Library created-->
+       [% IF message == "success_on_insert" %]
+            <form name="createlibrary" method="post" action="onboarding.pl" >
+                <input type="hidden" name="step" value="2"/>
+                <h1 align="left"> New library</h1>
+                <div>
+                    <p> Success: library created!
+                    </p>
+                    <p> To add another library and for more settings, <br>
+                    go to:<br>
+                    More -> Administration -> Libraries and groups<br>
+                    </p>
+                </div>
+                Next up:
+                <input type="submit" name="start" value="Minimal patron category setup"/>
+            </form>
+
+        [%ELSE %]
+            <form name="retrylibrary" method="post" action="onboarding.pl">
+                <input type="hidden" name="step" value="1"/>
+                <h1 align="left">Failed </h1>
+                <div>
+                    <p> Library was not successfully created</br>
+                    Please try again or contact your system administrator. </p>
+                </div>
+                <input type="submit" value="Try again"/>
+            </form>
+        [%END%]
+
+[% ELSE %]
+    <head>
+        <title>Welcome &rsaquo; to  &rsaquo; Koha</title>
+    </head>
+
+    <!--Header for the koha onboarding tool-->
+    <div>
+        <h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif"/> Welcome to Koha</h1>
+    </div>
+
+<!--Create a library screen 1-->
+        <form name="LibraryCreation" method="post" action="onboarding.pl">
+            <fieldset class="rows" >
+                 <h2>Create a library</h2>
+                 <input type="hidden" name="step" value="1"/>
+                 <input type="hidden" name="op" value="add_validate_library"/>
+                 <ol>
+                     <li>
+                        <label for="branchcode" class="required">Library code: </label>
+                        <input type="text"  pattern="[0-9A-Za-z]{1,10}" title="Please enter up to 10 letters and/or numbers" name="branchcode" id="branchcode" size="10" maxlength="10" value="[% library.branchcode |html %]" class="required" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="branchname" class="required">Name: </label>
+                        <input type="text" name="branchname" id="branchname" title="Please enter the name of your institution" size="42" value="[% library.branchname |html %]" class="    required" required="required" style="width:200px;">
+                        <span class="required">Required</span>
+                    </li>
+                 </ol>
+             <br>
+             <input type="submit" class="action" value="Submit"/>
+            </fieldset>
+     </form>
+[% END %]

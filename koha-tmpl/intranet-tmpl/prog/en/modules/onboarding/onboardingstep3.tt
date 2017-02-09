@@ -1,0 +1,196 @@
+<!--Includes for creating patron-->
+[% USE Koha %]
+[% USE KohaDates %]
+[% USE Price %]
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( finish ) %]<meta http-equiv="refresh" content="10; url=/cgi-bin/koha/mainpage.pl">[% END%]
+[% INCLUDE 'installer-doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+[% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'js_includes.inc' %]
+
+<head>
+<title>Create Koha administrator patron</title>
+<!--jQuery scripts for creating patron-->
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
+<script type="text/javascript">
+     var MSG_PASSWORD_MISMATCH=(_("The entered passwords do not match, please rewrite them"));
+     jQuery.validator.addMethod( "password_match", function(value,element){
+        var password = document.getElementById('password').value
+        var confirmpassword = document.getElementById('password2').value
+        if ( password != confirmpassword ){
+                return false;
+        }
+        else{
+                return true
+        }
+     },  MSG_PASSWORD_MISMATCH
+);
+
+$(document).ready(function(){
+   $("#Submit").click(function(){
+      $("#createpatron").validate({
+        rules: {
+            surname: {
+                required: true,
+            },
+            firstname: {
+                required: true,
+            },
+            cardnumber: {
+                required: true,
+            },
+            password: {
+                 password_match:true
+            }
+        },
+        messages: {
+           password: {
+                 required: MSG_PASSWORD_MISMATCH
+           },
+        }
+      });
+   });
+});
+</script>
+</head>
+
+<div>
+    <h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif"/> Welcome to Koha</h1>
+</div>
+
+
+[%  IF (nok) %]
+        <form name="errors" method="post" action="onboarding.pl">
+            <input type="hidden" name="step" value="3"/>
+            <h1 align="left">There was an error</h1>
+            <p>Try again </p>
+            <div>
+            <ul>
+            [% IF errorloginexists %]
+                <li id="ERROR_login_exist">Username/password already exists.</li>
+            [% END %]
+            [% IF errorcardnumberexists %]
+                <li id="ERROR_cardnumber">Cardnumber already in use.</li>
+            [% END %]
+            [% IF errorcardnumberlength %]
+                <li id="ERROR_cardnumber">Cardnumber length is incorrect</li>
+            [% END %]
+            [% IF errorshortpassword %]
+                <li id="ERROR_short_password">Password length is incorrect, must be at least [% minPasswordLength %] characters long.</li>
+            [% END %]
+            [% IF errorpasswordmismatch %]
+                <li id="ERROR_password_mismatch">Passwords do not match.</li>
+            [% END %]
+            </ul>
+
+            </div>
+            <input type="submit" name="step" value="Try again"/>
+        </form>
+
+
+<!--Create a patron screen 2-->
+[% ELSIF op == 'add_validate' %]
+          <!--New patron created-->
+        <form name="patrondone" method="post" action="onboarding.pl">
+            <input type="hidden" name="step" value="4"/>
+            <h1 align="left"> Koha administrator patron </h1>
+            <div>
+                 <p> Success: administrator patron created!</p>
+                 <p> To create another patron, go to Patrons -> New Patron. <br>
+                More -> Set Permissions in a user page to gain superlibrarian permissions.
+            </div>
+            Next up:
+            <input type="submit" name="start" value="Minimal item type setup"/>
+        </form>
+[% ELSE %]
+<!--Create a patron screen 1-->
+       <h1 align="left"> Create koha administrator patron</h1>
+        <p>
+        Now we will create a patron with superlibrarian permissions. Login with this to access Koha as a staff member will all permissions.
+        </p>
+        <form name="createpatron" id="createpatron" method="post" action="onboarding.pl">
+            <fieldset class="rows">
+                 <input type="hidden" name="step" value="3"/>
+                 <input type="hidden" name="op" value="add_validate" />
+                    <legend id="library_management_lgd">Library management</legend>
+                    <ol>
+                    <h3>Patron identity</h3>
+                        <li>
+                            <label for="surname" class="required">Surname: </label>
+                            <input type="text" id="surname" name="surname" title="Please only enter letters in the surname field" value="[% surname |html %]" class="required" required="required" />
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="firstname" class="required">First name: </label>
+                            <input  type="text" name="firstname" title="Please only enter letters in the first name field" id="firstname" size="20" value="[% firstname |html %]" class="required" required="required">
+                            <span class="required">Required</span>
+                        </li>
+                    </ol>
+
+                    <ol>
+                        <li>
+                            <label for="cardnumber" class="required">Card number: </label>
+                            [% IF patrons && patrons > 1 %]
+                                <input type="text" id="cardnumber" title="Please enter a cardnumber" class="noEnterSubmit valid" name="cardnumber" value="[% newcardnumber | html %]" class="required" required="required">
+                            [% ELSE %]
+                                <input type="text" id="cardnumber" title="Please enter a cardnumber" name="cardnumber" value="[% cardnumber | html %]" class="required" required="required">
+                            [% END %]
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+
+                        <!--require a foreach loop to get all the values for the library that the user has either imported (in web installer) or created in the first step of this onboarding tool-->
+                            <label for="libraries" class="required"> Library: </label>
+                            <select name="libraries" size="1" id="libraries">
+
+                             [% FOREACH library IN libraries %]
+                                  <option name="libraries" value="[% library.branchcode %]"> [% library.branchname %]
+                             [% END %]
+
+                                </select>
+                            <span class="required"> Required</span>
+                        </li>
+                        <li>
+                            <label for="categorycode_entry" class="required"> Patron category</label>
+                            <select id="categorycode_entry" name="categorycode_entry" onchange="update_category_code(this);">
+                            [% FOREACH category IN categories %]
+                                <option name="categorycode_entry" value = "[% category.categorycode %]">[%category.description %]</option>
+                            [% END %]
+                            </select>
+                            <span class="required">Required</span><br><br>
+                            <b>Note:</b> If you installed sample patron categories please select the "Staff" option in the patron categories dropdown box.
+                        </li>
+                    </ol>
+
+                    <ol>
+                            <h3> Koha administrator patron permissions</h3>
+                            <input type="hidden" name="newflags" value="1"/>
+                            <li>
+                                <input type="hidden" class="flag parent" id="flag-0" name="flag" value="superlibrarian"/>
+                                <label name="permissioncode" for="flag-0"> superlibrarian</label>
+                            </li>
+                    </ol>
+                    <ol>
+                    <h3>OPAC/Staff Login</h3>
+                        <li>
+                            <input type="hidden" name="BorrowerMandatoryField" value = "[% BorrowerMandatoryField %]" />
+                            <label for="userid" class="required">Username: </label>
+                            <input type="text" name="userid" id ="userid" size="20" title="Please only enter a username of letters and numbers" value="[% userid |html %]" class="required" required="required" />
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="passwordlabel" class="required">Password: </label>
+                            <input type="password" name="password" id="password" size="20" value="[% member.password |html %]" class="required" required="required">
+                            <span class="required">Required</span>
+                        </li>
+                        <li>
+                            <label for="password2" class="required">Confirm password: </label>
+                            <input type="password" id="password2" name="password2" size="20" value="" class="required" required="required">
+                            <span class="required">Required</span>
+                        </li>
+                    </ol>
+             </fieldset><br>
+                <input type="submit" id="Submit" class="action" value="Submit"/>
+     </form>
+[% END %]

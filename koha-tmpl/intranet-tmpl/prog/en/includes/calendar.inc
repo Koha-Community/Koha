@@ -6,7 +6,7 @@ var debug    = "[% debug %]";
 var dformat  = "[% dateformat %]";
 var sentmsg = 0;
 if (debug > 1) {alert("dateformat: " + dformat + "\ndebug is on (level " + debug + ")");}
-var MSG_PLEASE_ENTER_A_VALID_DATE = _("Please enter a valid date (should match %s).");
+var MSG_PLEASE_ENTER_A_VALID_DATE = (_("Please enter a valid date (should match %s)."));
 
 function is_valid_date(date) {
     // An empty string is considered as a valid date for convenient reasons.

@@ -1,0 +1,67 @@
+<!-- includes for creating item type-->
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( finish ) %]<meta http-equiv="refresh" content="10; url=/cgi-bin/koha/mainpage.pl">[% END%]
+[% INCLUDE 'installer-doc-head-close.inc' %]
+<head>
+    <title>Create item type</title>
+</head>
+<div>
+    <h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif"/> Welcome to Koha</h1>
+</div>
+
+[% IF (itemtypes && itemtypes.count >1) %]
+
+     <meta http-equiv="refresh" content="0; url=/cgi-bin/koha/installer/onboarding.pl?step=5">
+
+[% ELSIF op == "add_validate" %]
+        [% IF message != "error_on_insert" %]
+            <form name="createitemtype" method="post" action="onboarding.pl">
+                <input type="hidden" name="step" value="5"/>
+                <h1 align="left"> New Item type </h1>
+                <div>
+                    <p> Success: New item type created!</p>
+                    <p> To create another item type later and for more settings <br>
+                    go to: <br>
+                    More -> Administration -> Item types <br>
+                </div>
+                Next up:
+                <input type="submit" value="Add a circulation rule"/>
+            </form>
+        [% ELSE %]
+        <form name="retryitem" method="post" action="onboarding.pl">
+            <input type="hidden" name="step" value="4"/>
+            <h1 align="left">Failed </h1>
+            <div>
+                <p>Item type was not successfully created. </br>
+                Please try again or contact your system administrator.
+                </p>
+            </div>
+        </form>
+        <!--Implement a if statement to check if the item type was successfully created or not -->
+        [% END %]
+[% ELSE %]
+    <!--Create a item type screen 1-->
+        <h1 align="center"> Create a new Item type </h1>
+        <p> Item types are used to group related items. Examples of item types are books, cds, and DVDs. <br><br> When adding to your institutions catalogue you will create an item of a particular item type. <br><br> Importantly item types are what you apply     circulation rules to. Circulation rules govern how your institution will lend its items, for example a circulation rule applied to the DVD item type may enforce a payment of $1.00 for borrowing any DVD.</p>
+        <form name="createitemform" method="post" action="onboarding.pl">
+            <fieldset class="rows">
+                <input type="hidden" name="step" value="4"/>
+                <input type="hidden" name="op" value="add_validate" />
+                <ol>
+                    <li>
+                        <label for="itemtype" class="required">Item type code: </label>
+                        <input type="text" name="itemtype" pattern="[0-9A-Za-z]{1,10}" title="Please enter up to 10 letters and/or numbers" id="itemtype" size="10" maxlength="10"  class="required" required="required" value="[% itemtype.itemtype |html %]" />
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li>
+                        <label for="description" class="required">Description: </label>
+                        <input type="text" name="description" id="description" title="Please only enter letters and/or numbers into this item type description" size="42" value="[% itemtype.description |html %]" class="required" required="required">
+                        <span class="required">Required</span>
+                    </li>
+                </ol>
+            <br>
+            <input type="submit" class="action" value="Submit"/>
+        </fieldset>
+        </form>
+[% END %]

@@ -1,0 +1,127 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Create Circulation rule</title>
+[% IF ( finish ) %]<meta http-equiv="refresh" content="10; url=/cgi-bin/koha/mainpage.pl">[% END %]
+[% INCLUDE 'installer-doc-head-close.inc' %]
+
+<div>
+    <h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif"/> Welcome to Koha</h1>
+</div>
+
+[% IF (finish) %]
+<h1>Congratulations you have finished and ready to use Koha</h1>
+<a href="/cgi-bin/koha/mainpage.pl">Start using Koha</a>
+
+[% END %]
+
+<!--Create a circulation rule screen 2-->
+[% IF op == "add_validate" %]
+        <!--New circulation rule created-->
+        <form name="finish" method="post" action="onboarding.pl">
+            <input type="hidden" name="op" value="finish" />
+            <h1 align="left"> New circulation rule </h1>
+            <div>
+                 <p> Success: circulation rule created!</p>
+                 <p> To create circulation rule, go to <br>
+                 More -> Administration -> Circulation and Fine Rules
+            </div>
+                 Next up:
+                 <input type="submit" name="op" value="Finish"/>
+        </form>
+[% ELSE %]
+<!--Create a circulation rule screen 1-->
+       <h1 align="left"> Create a new circulation rule </h1>
+       <form name="createcirculationrule" method="post" action="onboarding.pl">
+            <fieldset class="rows">
+                 <input type="hidden" name="step" value="5"/>
+                 <input type="hidden" name="op" value="add_validate" />
+                    <ol>
+                    <li>
+                        <label for="branch" class="required"> Library branch</label>
+                        <select name="branch" id="branchname" required="required">
+                        <option value""> Choose</option>
+                        <option value="*" selected="selected">All</option>
+                        [% FOREACH library IN libraries %]
+                            <option id="branch" value="[% library.branchcode %]"> [% library.branchname %]</option>
+                        [% END %]
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="categorycode" class="required">Patron category: </label>
+                        <select name="categorycode" id="categorycodeselection" required="required" onchange = "update_categorycode(this);">
+                            <option value=""> Choose</option>
+                            <option value="*" selected="selected">All</option>
+                            [% FOREACH category IN categories %]
+                                <option id="categorycode" value = "[% category.categorycode %]"> [%category.description %]</option>
+                            [%END%]
+                        </select>
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li>
+                        <label for="itemtype"> Item type: </label>
+                        <select id="itemtype" name="itemtype" required="required">
+                        <option value""> Choose </option>
+                        <option value="*" selected="selected">All</option>
+                            [% FOREACH item IN itemtypes %]
+                                <option name="itemtype" value = "[% item.itemtype %]"> [% item.itemtype %]
+                            [%END%]
+                        </select>
+                        <span class="required"> Required</span>
+                    </li>
+                    <li>
+                        <label for="maxissueqty" class="required">Current checkouts allowed: </label>
+                        <input type="number" min="0" name="maxissueqty" title="Please only enter numbers" id="maxissueqty" size="10" max="10" value="" class="required" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+
+                    <li>
+                        <label for="issuelength" class="required">Loan period: </label>
+                        <input type="number" min="0" name="issuelength" title="Please only enter numbers" id="issuelength" size="10" max="10" value="" class="required" required="required" />
+                        <span class="required">Required</span>
+                   </li>
+                   <li>
+                        <label for="lengthunit">Units: </label>
+                        <select name="lengthunit" id="lengthunit" required="required">
+                        <option value=""> Choose </option>
+                        [% SET units = 'days' %]
+                        [% IF category %]
+                            [% SET default_privacy = category.default_privacy %]
+                        [% END %]
+
+                        [% SWITCH units %]
+                             [% CASE 'days' %]
+                                   <option value="days" selected="selected">Days</option>
+                                   <option value="hours">Hours</option>
+                             [% CASE 'hours' %]
+                                   <option value="days">Days</option>
+                                   <option value="hours" selected="selected">Hours</option>
+                        [% END %]
+                        </select>
+                     </li>
+                     <li>
+                        <label for="renewalsallowed" class="required">Renewals allowed: </label>
+                        <input type="number" min="0" name="renewalsallowed" title="Please only enter numbers" id="renewalsallowed" size="10" max="10" value="" class="required" required="required" />
+                        <span class="required">Required</span>
+                     </li>
+
+                     <li>
+                        <label for="renewalperiod" class="required">Renewals period: </label>
+                        <input type="number" min="0" name="renewalperiod" title="Please only enter numbers" id="renewalperiod" size="10" max="10" value="" class="required" required="required" />
+                        <span class="required">Required</span>
+                     </li>
+
+                     <li>
+                        <label for="onshelfholds">On shelf holds allowed: </label>
+                        <select name="onshelfholds" id="onshelfholds" required="required">
+                              <option value="">Choose</option>
+                              <option value="1" selected="selected">Yes</option>
+                              <option value="0">If any unavailable</option>
+                              <option value="2">If all unavailable</option>
+                        </select>
+                     </li>
+                  </ol>
+            </fieldset><br>
+                <input type="submit" class="action" value="Submit"/>
+     </form>
+[% END %]

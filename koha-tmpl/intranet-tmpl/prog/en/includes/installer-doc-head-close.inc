@@ -1,5 +1,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/lib/jquery/jquery-ui-1.11.4.min.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/lib/bootstrap/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/lib/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" media="print" href="[% interface %]/[% theme %]/css/print.css" />
 <style type="text/css" media="screen">
 
 [% IF ( login ) %]
@@ -68,6 +72,17 @@ td input { font-size: 1.5em; }
 }
 
 </style>
+
+<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-migrate-1.3.0.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui-1.11.4.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.highlight-3.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.validate.min.js"></script>
+<!-- koha core js -->
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/staff-global.js"></script>
 
 <script type="text/javascript">
     //<![CDATA[
