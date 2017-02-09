@@ -37,6 +37,7 @@ use Data::Dumper; # used as part of logging item record changes, not just for
 use Koha::DateUtils qw/dt_from_string/;
 
 use Koha::Database;
+use Koha::Items;
 
 use vars qw($VERSION @ISA @EXPORT);
 
