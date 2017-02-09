@@ -115,7 +115,7 @@ $(document).ready(function() {
             <td><p><b>[% reserveloo.pullcount %]</b></p></td>
             <td>[% reserveloo.count %]</td>
             <td>[% reserveloo.rcount %]</td>
-            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber %]">[% reserveloo.name %]</a></td>
+            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber %]">[% reserveloo.firstname %] [%reserveloo.surname %]</a></td>
             <td>
             <p>
                 [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]

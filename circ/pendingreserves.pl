@@ -123,7 +123,8 @@ if ( $run_report ) {
             biblio.author,
             count(DISTINCT items.itemnumber) as icount,
             count(DISTINCT reserves.borrowernumber) as rcount,
-            CONCAT_WS(' ', borrowers.firstname, borrowers.surname) as l_patron
+            borrowers.firstname,
+            borrowers.surname
     FROM  reserves
         LEFT JOIN items ON items.biblionumber=reserves.biblionumber 
         LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
@@ -164,7 +165,8 @@ if ( $run_report ) {
             {
                 reservedate     => $data->{l_reservedate},
                 priority        => $data->{priority},
-                name            => $data->{l_patron},
+                firstname       => $data->{firstname} || '',
+                surname         => $data->{surname},
                 title           => $data->{title},
                 subtitle        => $data->{subtitle},
                 author          => $data->{author},
