@@ -3475,6 +3475,7 @@ sub SendCirculationAlert {
     });
     my $issues_table = ( $type eq 'CHECKOUT' || $type eq 'RENEWAL' ) ? 'issues' : 'old_issues';
 
+    my $schema = Koha::Database->new->schema;
     my @transports = keys %{ $borrower_preferences->{transports} };
     for my $mtt (@transports) {
         my $letter =  C4::Letters::GetPreparedLetter (
@@ -3492,13 +3493,19 @@ sub SendCirculationAlert {
             }
         ) or next;
 
+        $schema->storage->txn_begin;
+        C4::Context->dbh->do(q|LOCK TABLE message_queue READ|);
+        C4::Context->dbh->do(q|LOCK TABLE message_queue WRITE|);
         my $message = C4::Message->find_last_message($borrower, $type, $mtt);
         unless ( $message ) {
+            C4::Context->dbh->do(q|UNLOCK TABLES|);
             C4::Message->enqueue($letter, $borrower, $mtt);
         } else {
             $message->append($letter);
             $message->update;
         }
+        C4::Context->dbh->do(q|UNLOCK TABLES|);
+        $schema->storage->txn_commit;
     }
 
     return;
