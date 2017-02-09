@@ -179,7 +179,7 @@ sub get_xslt_sysprefs {
 
     # singleBranchMode was a system preference, but no longer is
     # we can retain it here for compatibility
-    my $singleBranchMode = Koha::Libraries->search->count == 1;
+    my $singleBranchMode = Koha::Libraries->search->count == 1 ? 1 : 0;
     $sysxml .= "<syspref name=\"singleBranchMode\">$singleBranchMode</syspref>\n";
 
     $sysxml .= "</sysprefs>\n";
