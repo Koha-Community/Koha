@@ -22,6 +22,7 @@ use Modern::Perl;
 use Test::More tests => 20;
 use Data::Dumper;
 use Koha::Database;
+use t::lib::Mocks;
 
 BEGIN {
     use_ok('Koha::ItemType');
@@ -114,6 +115,8 @@ is( $type->summary,        'summary',        'summary' );
 is( $type->checkinmsg,     'checkinmsg',     'checkinmsg' );
 is( $type->checkinmsgtype, 'checkinmsgtype', 'checkinmsgtype' );
 
+t::lib::Mocks::mock_preference('language', 'en');
+t::lib::Mocks::mock_preference('opaclanguages', 'en');
 my $itemtypes = Koha::ItemTypes->search_with_localization;
 is( $itemtypes->count, 3, 'There are 3 item types' );
 my $first_itemtype = $itemtypes->next;
