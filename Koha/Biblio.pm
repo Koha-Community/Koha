@@ -33,7 +33,11 @@ use Koha::Biblioitems;
 use Koha::ArticleRequests;
 use Koha::ArticleRequest::Status;
 use Koha::IssuingRules;
+use Koha::Item::Transfer::Limits;
+use Koha::Libraries;
 use Koha::Subscriptions;
+
+use Koha::Exceptions::Library;
 
 =head1 NAME
 
@@ -97,6 +101,92 @@ sub can_article_request {
     return 1 if $rule && $rule ne 'no';
 
     return q{};
+}
+
+=head3 can_be_transferred
+
+$biblio->can_be_transferred({ to => $to_library, from => $from_library })
+
+Checks if at least one item of a biblio can be transferred to given library.
+
+This feature is controlled by two system preferences:
+UseBranchTransferLimits to enable / disable the feature
+BranchTransferLimitsType to use either an itemnumber or ccode as an identifier
+                         for setting the limitations
+
+Performance-wise, it is recommended to use this method for a biblio instead of
+iterating each item of a biblio with Koha::Item->can_be_transferred().
+
+Takes HASHref that can have the following parameters:
+    MANDATORY PARAMETERS:
+    $to   : Koha::Library or branchcode string
+    OPTIONAL PARAMETERS:
+    $from : Koha::Library or branchcode string  # if given, only items from that
+                                                # holdingbranch are considered
+
+Returns 1 if at least one of the item of a biblio can be transferred
+to $to_library, otherwise 0.
+
+=cut
+
+sub can_be_transferred {
+    my ($self, $params) = @_;
+
+    my $to = $params->{'to'};
+    my $from = $params->{'from'};
+    if (ref($to) ne 'Koha::Library') {
+        my $tobranchcode = defined $to ? $to : '';
+        $to = Koha::Libraries->find($tobranchcode);
+        unless ($to) {
+            Koha::Exceptions::Library::NotFound->throw(
+                error => "Library '$tobranchcode' not found.",
+            );
+        }
+    }
+    if ($from && ref($from) ne 'Koha::Library') {
+        my $frombranchcode = defined $from ? $from : '';
+        $from = Koha::Libraries->find($frombranchcode);
+        unless ($from) {
+            Koha::Exceptions::Library::NotFound->throw(
+                error => "Library '$frombranchcode' not found.",
+            );
+        }
+    }
+
+    return 1 unless C4::Context->preference('UseBranchTransferLimits');
+    my $limittype = C4::Context->preference('BranchTransferLimitsType');
+
+    my $items;
+    foreach my $item_of_bib ($self->items) {
+        next unless $item_of_bib->holdingbranch;
+        next if $from && $from->branchcode ne $item_of_bib->holdingbranch;
+        return 1 if $item_of_bib->holdingbranch eq $to->branchcode;
+        my $code = $limittype eq 'itemtype'
+            ? $item_of_bib->effective_itemtype
+            : $item_of_bib->ccode;
+        return 1 unless $code;
+        $items->{$code}->{$item_of_bib->holdingbranch} = 1;
+    }
+
+    # At this point we will have a HASHref containing each itemtype/ccode that
+    # this biblio has, inside which are all of the holdingbranches where those
+    # items are located at. Then, we will query Koha::Item::Transfer::Limits to
+    # find out whether a transfer limits for such $limittype from any of the
+    # listed holdingbranches to the given $to library exist. If at least one
+    # holdingbranch for that $limittype does not have a transfer limit to given
+    # $to library, then we know that the transfer is possible.
+    foreach my $code (keys %{$items}) {
+        my @holdingbranches = keys %{$items->{$code}};
+        return 1 if Koha::Item::Transfer::Limits->search({
+            toBranch => $to->branchcode,
+            fromBranch => { 'in' => \@holdingbranches },
+            $limittype => $code
+        }, {
+            group_by => [qw/fromBranch/]
+        })->count == scalar(@holdingbranches) ? 0 : 1;
+    }
+
+    return 0;
 }
 
 =head3 article_request_type

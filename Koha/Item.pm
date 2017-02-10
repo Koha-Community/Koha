@@ -211,6 +211,10 @@ Takes HASHref that can have the following parameters:
 
 Returns 1 if item can be transferred to $to_library, otherwise 0.
 
+To find out whether at least one item of a Koha::Biblio can be transferred, please
+see Koha::Biblio->can_be_transferred() instead of using this method for
+multiple items of the same biblio.
+
 =cut
 
 sub can_be_transferred {

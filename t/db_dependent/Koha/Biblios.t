@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use Test::More tests => 4;
 
+use C4::Biblio;
+use C4::Items;
 use C4::Reserves;
 
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -131,5 +133,80 @@ subtest 'waiting_or_in_transit' => sub {
     is($biblio->has_items_waiting_or_intransit, 1, 'Item has transfer');
 };
 
+subtest 'can_be_transferred' => sub {
+    plan tests => 11;
+
+    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+
+    my $library1 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $library2 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $library3 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my ($bibnum, $title, $bibitemnum) = create_helper_biblio('ONLY1');
+    my ($item_bibnum, $item_bibitemnum, $itemnumber)
+        = AddItem({ homebranch => $library1, holdingbranch => $library1 }, $bibnum);
+    my $item  = Koha::Items->find($itemnumber);
+    my $biblio = Koha::Biblios->find($bibnum);
+
+    is(Koha::Item::Transfer::Limits->search({
+        fromBranch => $library1,
+        toBranch => $library2,
+    })->count, 0, 'There are no transfer limits between libraries.');
+    ok($biblio->can_be_transferred({ to => $library2 }),
+        'Some items of this biblio can be transferred between libraries.');
+
+    my $limit = Koha::Item::Transfer::Limit->new({
+        fromBranch => $library1,
+        toBranch => $library2,
+        itemtype => $item->effective_itemtype,
+    })->store;
+    is(Koha::Item::Transfer::Limits->search({
+        fromBranch => $library1,
+        toBranch => $library2,
+    })->count, 1, 'Given we have added a transfer limit that applies for all '
+        .'of this biblio\s items,');
+    is($biblio->can_be_transferred({ to => $library2 }), 0,
+        'None of the items of biblio can no longer be transferred between '
+        .'libraries.');
+    is($biblio->can_be_transferred({ to => $library2, from => $library1 }), 0,
+         'We get the same result also if we pass the from-library parameter.');
+    $item->holdingbranch($library2)->store;
+    is($biblio->can_be_transferred({ to => $library2 }), 1, 'Given one of the '
+         .'items is already located at to-library, then the transfer is possible.');
+    $item->holdingbranch($library1)->store;
+    my ($item_bibnum2, $item_bibitemnum2, $itemnumber2)
+        = AddItem({ homebranch => $library1, holdingbranch => $library3 }, $bibnum);
+    my $item2  = Koha::Items->find($itemnumber2);
+    is($biblio->can_be_transferred({ to => $library2 }), 1, 'Given we added '
+        .'another item that should have no transfer limits applying on, then '
+        .'the transfer is possible.');
+    $item2->holdingbranch($library1)->store;
+    is($biblio->can_be_transferred({ to => $library2 }), 0, 'Given all of items'
+        .' of the biblio are from same, transfer limited library, then transfer'
+        .' is not possible.');
+    eval { $biblio->can_be_transferred({ to => undef }); };
+    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when no'
+        .' library given.');
+    eval { $biblio->can_be_transferred({ to => 'heaven' }); };
+    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when'
+        .' invalid library is given.');
+    eval { $biblio->can_be_transferred({ to => $library2, from => 'hell' }); };
+    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when'
+        .' invalid library is given.');
+};
+
 $schema->storage->txn_rollback;
 
+# Helper method to set up a Biblio.
+sub create_helper_biblio {
+    my $itemtype = shift;
+    my ($bibnum, $title, $bibitemnum);
+    my $bib = MARC::Record->new();
+    $title = 'Silence in the library';
+    $bib->append_fields(
+        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
+        MARC::Field->new('245', ' ', ' ', a => $title),
+        MARC::Field->new('942', ' ', ' ', c => $itemtype),
+    );
+    return ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
+}
