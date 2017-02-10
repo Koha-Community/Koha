@@ -222,16 +222,14 @@ adjust_paths_dev_install()
 # corresponding tag in koha-conf.xml
 
     local instancename=$1
-    local dev_install
-
-    if [ -e /etc/koha/sites/$instancename/koha-conf.xml ]; then
-        dev_install=$(xmlstarlet sel -t -v 'yazgfs/config/dev_install' /etc/koha/sites/$instancename/koha-conf.xml)
-    fi
+    local dev_install=$(run_safe_xmlstarlet $instancename dev_install)
 
     if [ "$dev_install" != "" ]; then
         DEV_INSTALL=1
         KOHA_HOME=$dev_install
         PERL5LIB=$dev_install
+    else
+        DEV_INSTALL=""
     fi
 }
 
@@ -244,13 +242,12 @@ get_instances()
 get_loglevels()
 {
     local instancename=$1
-    local retval=$(xmlstarlet sel -t -v 'yazgfs/config/zebra_loglevels' /etc/koha/sites/$instancename/koha-conf.xml)
+    local retval=$(run_safe_xmlstarlet $instancename zebra_loglevels)
     if [ "$retval" != "" ]; then
         echo "$retval"
     else
         echo "none,fatal,warn"
     fi
-
 }
 
 get_tmpdir()
@@ -271,4 +268,17 @@ get_tmpdir()
         return 0
     fi
     echo $(dirname $retval)
+}
+
+run_safe_xmlstarlet()
+{
+    # When a bash script sets -e (errexit), calling xmlstarlet on an
+    # unexisting key would halt the script. This is resolved by calling
+    # this function in a subshell. It will always returns true, while not
+    # affecting the exec env of the caller. (Otherwise, errexit is cleared.)
+    local instancename=$1
+    local myexpr=$2
+    set +e; # stay on the safe side
+    echo $(xmlstarlet sel -t -v "yazgfs/config/$myexpr" /etc/koha/sites/$instancename/koha-conf.xml)
+    return 0
 }
