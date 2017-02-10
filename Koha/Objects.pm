@@ -359,7 +359,7 @@ Currently count, pager, update and delete are covered.
 sub AUTOLOAD {
     my ( $self, @params ) = @_;
 
-    my @known_methods = qw( count pager update delete result_class single slice );
+    my @known_methods = qw( count pager update delete result_class single slice get_column );
     my $method = our $AUTOLOAD;
     $method =~ s/.*:://;
 

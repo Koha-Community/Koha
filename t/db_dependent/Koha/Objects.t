@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Warn;
 
 use Koha::Authority::Types;
@@ -138,6 +138,13 @@ subtest 'last' => sub {
     is( $last_patron->borrowernumber, $patron_1->{borrowernumber}, '->last should work even if there is only 1 result' );
     $last_patron = Koha::Patrons->search({ surname => 'should_not_exist' })->last;
     is( $last_patron, undef, '->last should return undef if search does not return any results' );
+};
+
+subtest 'get_column' => sub {
+    plan tests => 1;
+    my @cities = Koha::Cities->search;
+    my @city_names = map { $_->city_name } @cities;
+    is_deeply( [ Koha::Cities->search->get_column('city_name')->all ], \@city_names, 'Koha::Objects->get_column should be allowed' );
 };
 
 subtest 'Exceptions' => sub {
