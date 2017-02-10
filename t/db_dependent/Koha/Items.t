@@ -142,7 +142,7 @@ subtest 'can_be_transferred' => sub {
         fromBranch => $library1,
         toBranch => $library2,
     })->count, 0, 'There are no transfer limits between libraries.');
-    ok($item->can_be_transferred($library2),
+    ok($item->can_be_transferred({ to => $library2 }),
        'Item can be transferred between libraries.');
 
     my $limit = Koha::Item::Transfer::Limit->new({
@@ -154,15 +154,15 @@ subtest 'can_be_transferred' => sub {
         fromBranch => $library1,
         toBranch => $library2,
     })->count, 1, 'Given we have added a transfer limit,');
-    is($item->can_be_transferred($library2), 0,
+    is($item->can_be_transferred({ to => $library2 }), 0,
        'Item can no longer be transferred between libraries.');
-    is($item->can_be_transferred($library2, $library1), 0,
+    is($item->can_be_transferred({ to => $library2, $library1 }), 0,
        'We get the same result also if we pass the from-library parameter.');
-    eval { $item->can_be_transferred(); };
+    eval { $item->can_be_transferred({ to => undef }); };
     is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when no library given.');
-    eval { $item->can_be_transferred('heaven'); };
+    eval { $item->can_be_transferred({ to => 'heaven' }); };
     is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when invalid library is given.');
-    eval { $item->can_be_transferred($library2, 'hell'); };
+    eval { $item->can_be_transferred({ to => $library2, from => 'hell' }); };
     is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when invalid library is given.');
 };
 

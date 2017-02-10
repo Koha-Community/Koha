@@ -194,6 +194,7 @@ sub can_article_request {
 
 =head3 can_be_transferred
 
+$item->can_be_transferred({ to => $to_library, from => $from_library })
 Checks if an item can be transferred to given library.
 
 This feature is controlled by two system preferences:
@@ -201,17 +202,22 @@ UseBranchTransferLimits to enable / disable the feature
 BranchTransferLimitsType to use either an itemnumber or ccode as an identifier
                          for setting the limitations
 
+Takes HASHref that can have the following parameters:
     MANDATORY PARAMETERS:
     $to   : Koha::Library or branchcode string
     OPTIONAL PARAMETERS:
     $from : Koha::Library or branchcode string  # if not given, item holdingbranch
                                                 # will be used instead
 
+Returns 1 if item can be transferred to $to_library, otherwise 0.
+
 =cut
 
 sub can_be_transferred {
-    my ($self, $to, $from) = @_;
+    my ($self, $params) = @_;
 
+    my $to = $params->{'to'};
+    my $from = $params->{'from'};
     if (ref($to) ne 'Koha::Library') {
         my $tobranchcode = defined $to ? $to : '';
         $to = Koha::Libraries->find($tobranchcode);
