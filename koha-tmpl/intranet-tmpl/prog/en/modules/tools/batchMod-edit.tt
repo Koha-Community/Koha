@@ -70,7 +70,11 @@ $(document).ready(function(){
             [% ELSE %]
               <h1>Batch item modification results</h1>
               <div class="dialog message">
-              [% modified_items %] item(s) modified (with [% modified_fields %] fields modified).
+                [% IF (modified_items) %]
+                  [% modified_items %] item(s) modified (with [% modified_fields %] field(s) modified).
+                [% ELSE %]
+                  No items modified.
+                [% END %]
               <fieldset class="action">
                   [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Edit items in a batch%]
                       <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">Return to the record</a>
