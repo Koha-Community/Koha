@@ -242,6 +242,7 @@ $(document).ready(function(){
         <tr>
             [% UNLESS compareinv2barcd %]<th>Seen</th>[% END %]
             <th>Barcode</th>
+            <th>Call number</th>
             <th>Library</th>
             <th>Title</th>
             <th>Status</th>
@@ -263,9 +264,10 @@ $(document).ready(function(){
             <td>
             [% result.barcode | html %]
             </td>
+            <td>[% result.itemcallnumber | html %]</td>
             <td>
                 [% Branches.GetName( result.homebranch ) %]
-                [% result.location | html %] [% IF ( result.itemcallnumber ) %][[% result.itemcallnumber | html %]][% ELSE %][% END %]
+                [% result.location | html %]
             </td>
             <td>
             <p><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% result.biblionumber %]" class="openWin">[% result.title | html %]</a></p><p>[% result.author | html %]</p>
