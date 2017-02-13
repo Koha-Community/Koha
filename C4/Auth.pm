@@ -330,31 +330,33 @@ sub get_template_and_user {
                 # We show the link in opac
                 $template->param( EnableOpacSearchHistory => 1 );
             }
+            if (C4::Context->preference('addSearchHistoryToTheFirstLoggedUser'))
+            {
+                # And if there are searches performed when the user was not logged in,
+                # we add them to the logged-in search history
+                my @recentSearches = C4::Search::History::get_from_session( { cgi => $in->{'query'} } );
+                if (@recentSearches) {
+                    my $dbh   = C4::Context->dbh;
+                    my $query = q{
+                        INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, type,  total, time )
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                    };
+                    my $sth = $dbh->prepare($query);
+                    $sth->execute( $borrowernumber,
+                        $in->{query}->cookie("CGISESSID"),
+                        $_->{query_desc},
+                        $_->{query_cgi},
+                        $_->{type} || 'biblio',
+                        $_->{total},
+                        $_->{time},
+                    ) foreach @recentSearches;
 
-            # And if there are searches performed when the user was not logged in,
-            # we add them to the logged-in search history
-            my @recentSearches = C4::Search::History::get_from_session( { cgi => $in->{'query'} } );
-            if (@recentSearches) {
-                my $dbh   = C4::Context->dbh;
-                my $query = q{
-                    INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, type,  total, time )
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
-                };
+                    # clear out the search history from the session now that
+                    # we've saved it to the database
+                 }
+              }
+              C4::Search::History::set_to_session( { cgi => $in->{'query'}, search_history => [] } );
 
-                my $sth = $dbh->prepare($query);
-                $sth->execute( $borrowernumber,
-                    $in->{query}->cookie("CGISESSID"),
-                    $_->{query_desc},
-                    $_->{query_cgi},
-                    $_->{type} || 'biblio',
-                    $_->{total},
-                    $_->{time},
-                ) foreach @recentSearches;
-
-                # clear out the search history from the session now that
-                # we've saved it to the database
-                C4::Search::History::set_to_session( { cgi => $in->{'query'}, search_history => [] } );
-            }
         } elsif ( $in->{type} eq 'intranet' and C4::Context->preference('EnableSearchHistory') ) {
             $template->param( EnableSearchHistory => 1 );
         }
