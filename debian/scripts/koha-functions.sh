@@ -224,10 +224,10 @@ adjust_paths_dev_install()
     local instancename=$1
     local dev_install=$(run_safe_xmlstarlet $instancename dev_install)
 
-    if [ "$dev_install" != "" ]; then
+    if [ "$dev_install" != "" ] && [ "$dev_install" != "0" ]; then
         DEV_INSTALL=1
-        KOHA_HOME=$dev_install
-        PERL5LIB=$dev_install
+        KOHA_HOME=$(run_safe_xmlstarlet $instancename intranetdir)
+        PERL5LIB=$KOHA_HOME
     else
         DEV_INSTALL=""
     fi
