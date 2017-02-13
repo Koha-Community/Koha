@@ -1,0 +1,79 @@
+{
+  "type": "object",
+  "allOf": [
+    { "$ref": "patron.json" },
+    {
+    "type": "object",
+    "properties": {
+      "blocks": {
+        "type": "object",
+        "properties": {
+        "Patron::CardExpired": {
+          "description": "Patron's card has been expired.",
+          "type": "object",
+          "properties": {
+            "expiration_date": {
+              "type": ["string", "null"]
+            }
+          }
+        },
+        "Patron::CardLost": {
+          "description": "Patron's card has been marked as lost.",
+          "type": "object",
+          "properties": {}
+        },
+        "Patron::Debarred": {
+          "description": "Patron is debarred.",
+          "type": "object",
+          "properties": {
+            "expiration_date": {
+              "type": ["string", "null"]
+            },
+            "comment": {
+              "type": ["string", "null"]
+            }
+          }
+        },
+        "Patron::DebarredOverdue": {
+          "description": "Patron has overdues and is debarred.",
+          "type": "object",
+          "properties": {
+            "number_of_overdues": {
+              "type": ["integer", "null"]
+            }
+          }
+        },
+        "Patron::Debt": {
+          "description": "Patron's debts exceed maximum allowed amount.",
+          "type": "object",
+          "properties": {
+            "max_outstanding":{
+              "type": ["number", "null"]
+            },
+            "current_outstanding": {
+              "type": ["number", "null"]
+            }
+          }
+        },
+        "Patron::DebtGuarantees": {
+          "description": "Patron's guarantees' debts exceed maximum allowed amount.",
+          "type": "object",
+          "properties": {
+            "max_outstanding":{
+              "type": ["number", "null"]
+            },
+            "current_outstanding": {
+              "type": ["number", "null"]
+            }
+          }
+        },
+        "Patron::GoneNoAddress": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+      }
+    }
+    }
+  ]
+}

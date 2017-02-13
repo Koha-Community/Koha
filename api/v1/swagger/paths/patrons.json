@@ -398,5 +398,51 @@
         }
       }
     }
+  },
+  "/patrons/{borrowernumber}/status": {
+    "get": {
+      "operationId": "getstatusPatron",
+      "tags": ["patrons"],
+      "parameters": [{
+          "$ref": "../parameters.json#/borrowernumberPathParam"
+        }
+      ],
+      "produces": [
+          "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A patron",
+          "schema": {
+            "$ref": "../definitions.json#/patronstatus"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Patron not found",
+          "schema": {
+           "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+     "x-koha-authorization": {
+        "allow-owner": true,
+       "allow-guarantor": true,
+        "permissions": {
+          "borrowers": "1"
+        }
+      }
+    }
   }
 }
