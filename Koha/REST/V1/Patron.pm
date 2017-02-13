@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 use Koha::Account;
 use Koha::AuthUtils qw(hash_password);
+use Koha::Availability;
 use C4::Auth qw( haspermission checkpw_internal );
 use C4::Context;
 use Koha::Exceptions;
@@ -239,6 +240,33 @@ sub changepassword {
             return $c->$cb({ error => "Something went wrong. $_" }, 500);
         }
     }
+}
+
+sub getstatus {
+    my ($c, $args, $cb) = @_;
+
+    return try {
+        my $user = $c->stash('koha.user');
+
+        my $patron = Koha::Patrons->find($args->{borrowernumber});
+        unless ($patron) {
+            return $c->$cb({error => "Patron not found"}, 404);
+        }
+
+        my $ret = $patron->TO_JSON;
+        my %problems = map { ref($_) => $_ } $patron->status_not_ok;
+        $ret->{blocks} = Koha::Availability->_swaggerize_exception(\%problems);
+
+        return $c->$cb($ret, 200);
+    } catch {
+        if ( $_->isa('DBIx::Class::Exception') ) {
+            return $c->$cb( { error => $_->msg }, 500 );
+        }
+        else {
+            return $c->$cb(
+                { error => "Something went wrong, check the logs." }, 500 );
+        }
+    };
 }
 
 1;

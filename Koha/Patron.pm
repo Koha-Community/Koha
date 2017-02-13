@@ -26,6 +26,7 @@ use Carp;
 use C4::Context;
 use C4::Log;
 use Koha::AuthUtils;
+use Koha::Availability::Checks::Patron;
 use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;
@@ -742,6 +743,34 @@ sub change_password_to {
     $self->set({ password => $hashed_password })->store;
     logaction( "MEMBERS", "CHANGE PASS", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
     return 1;
+}
+
+=head3 status_not_ok
+
+my $status = $patron->status_not_ok
+
+Checks patron's status for checkouts and holds.
+
+Returns an array of Koha::Exception::Patron::* if any restrictions are found.
+
+=cut
+
+sub status_not_ok {
+    my ($self) = @_;
+
+    my $patron_checks = Koha::Availability::Checks::Patron->new($self);
+
+    my @problems;
+    my $ex;
+    push @problems, $ex if $ex = $patron_checks->debarred;
+    push @problems, $ex if $ex = $patron_checks->debt_hold;
+    push @problems, $ex if $ex = $patron_checks->debt_checkout_guarantees;
+    push @problems, $ex if $ex = $patron_checks->exceeded_maxreserves;
+    push @problems, $ex if $ex = $patron_checks->expired;
+    push @problems, $ex if $ex = $patron_checks->gonenoaddress;
+    push @problems, $ex if $ex = $patron_checks->lost;
+
+    return @problems;
 }
 
 =head3 type

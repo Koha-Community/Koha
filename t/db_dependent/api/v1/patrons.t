@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 114;
+use Test::More tests => 119;
 use Test::Mojo;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -424,5 +424,25 @@ $tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$patron->{borrowernumber}.'/p
 $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
 $t->request_ok($tx)
   ->status_is(200);
+
+# patronstatus
+my $debt = {
+    current_outstanding => 9001,
+    max_outstanding => 5,
+};
+t::lib::Mocks::mock_preference('maxoutstanding', $debt->{max_outstanding});
+my $k_patron = Koha::Patrons->find($patron->{borrowernumber});
+my $line = Koha::Account::Line->new({
+    borrowernumber => $patron->{borrowernumber},
+    amountoutstanding => $debt->{current_outstanding},
+})->store;
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/".$patron->{ borrowernumber }
+                             ."/status");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200)
+  ->json_is('/borrowernumber' => $patron->{ borrowernumber })
+  ->json_is('/surname' => $patron->{ surname })
+  ->json_is('/blocks/Patron::Debt' => $debt);
 
 $schema->storage->txn_rollback;

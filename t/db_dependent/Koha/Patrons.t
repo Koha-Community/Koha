@@ -901,6 +901,45 @@ subtest 'account_locked' => sub {
     $patron->delete;
 };
 
+subtest 'status_not_ok' => sub {
+    plan tests => 5;
+
+    t::lib::Mocks::mock_preference('maxoutstanding', 5);
+    my $patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => { branchcode => $library->{branchcode},
+                        gonenoaddress => 0,
+                        lost => 0,
+                        debarred => undef,
+                        debarredcomment => undef,
+                        dateexpiry => '9999-12-12' }
+        }
+    );
+
+    $patron = Koha::Patrons->find($patron->{borrowernumber});
+    my $line = Koha::Account::Line->new({
+        borrowernumber => $patron->borrowernumber,
+        amountoutstanding => 9001,
+    })->store;
+    my $outstanding = $patron->account->balance;
+    my $maxoutstanding = C4::Context->preference('maxoutstanding');
+    my $expecting = 'Koha::Exceptions::Patron::Debt';
+    my @problems = $patron->status_not_ok;
+
+    ok($maxoutstanding, 'When I look at system preferences, I see that maximum '
+       .'allowed outstanding fines is set.');
+    ok($maxoutstanding < $outstanding, 'When I check patron\'s balance, I found '
+       .'out they have more outstanding fines than allowed.');
+    is(scalar(@problems), 1, 'There is an issue with patron\'s current status');
+    my $debt = $problems[0];
+    is($debt->max_outstanding, 0+$maxoutstanding, 'Then I can see the status '
+       .'showing me how much outstanding total can be at maximum.');
+    is($debt->current_outstanding, 0+$outstanding, 'Then I can see the status '
+       .'showing me how much outstanding fines patron has right now.');
+    $patron->delete;
+};
+
 $retrieved_patron_1->delete;
 is( Koha::Patrons->search->count, $nb_of_patrons + 1, 'Delete should have deleted the patron' );
 
