@@ -26,7 +26,6 @@ use Carp;
 use C4::Context;
 use C4::Log;
 use Koha::AuthUtils;
-use Koha::Availability::Checks::Patron;
 use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;
@@ -758,6 +757,7 @@ Returns an array of Koha::Exception::Patron::* if any restrictions are found.
 sub status_not_ok {
     my ($self) = @_;
 
+    require Koha::Availability::Checks::Patron;
     my $patron_checks = Koha::Availability::Checks::Patron->new($self);
 
     my @problems;
