@@ -2,51 +2,71 @@
   "type": "object",
   "properties": {
     "accountlines_id": {
+      "type": "integer",
       "description": "Internal account line identifier"
     },
+    "issue_id": {
+      "type": ["integer", "null"],
+      "description": "?"
+    },
     "borrowernumber": {
+      "type": "integer",
       "description": "Internal borrower identifier"
     },
     "accountno": {
+      "type": "integer",
       "description": "?"
     },
     "itemnumber": {
+      "type": ["integer", "null"],
       "description": "Internal item identifier"
     },
     "date": {
+      "type": ["string", "null"],
       "description": "Date when the account line was created"
     },
-    "time": {
-      "description": "Time when the account line was created"
-    },
     "amount": {
+      "type": ["number", "null"],
       "description": "Amount"
     },
     "description": {
+      "type": ["string", "null"],
       "description": "Description of account line"
     },
+    "dispute": {
+      "type": ["string", "null"],
+      "description": "?"
+    },
     "accounttype": {
+      "type": ["string", "null"],
       "description": "Type of accountline"
     },
     "amountoutstanding": {
+      "type": ["number", "null"],
       "description": "Amount outstanding"
     },
     "lastincrement": {
+      "type": ["number", "null"],
       "description": "?"
     },
     "timestamp": {
+      "type": "string",
       "description": "When the account line was last updated"
     },
     "notify_id": {
+      "type": "integer",
       "description": "?"
     },
     "notify_level": {
+      "type": "integer",
       "description": "?"
     },
     "note": {
+      "type": ["string", "null"],
       "description": "Accountline note"
     },
     "manager_id": {
+      "type": ["integer", "null"],
       "description": "Borrowernumber of user that created the account line"
     }
   }
