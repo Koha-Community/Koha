@@ -191,7 +191,7 @@
                     <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-default btn-sm" data-toggle="modal" id="delbasketbutton"><i class="fa fa-trash"></i> Delete this basket</a></div>
                    [% IF ( unclosable ) %]
                     [% ELSIF ( uncertainprices ) %]
-                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid %]&amp;owner=1" class="btn btn-default btn-sm" id="uncertpricesbutton">Uncertain prices</a></div>
+                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid %]&amp;owner=1" class="btn btn-default btn-sm" id="uncertpricesbutton"><i class="fa fa-usd"></i> Uncertain prices</a></div>
                     [% ELSE %]
                         <div class="btn-group">
                             <a href="/cgi-bin/koha/acqui/basket.pl?op=close&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="closebutton"><i class="fa fa-times-circle"></i> Close this basket</a>
