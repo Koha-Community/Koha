@@ -86,6 +86,17 @@ if (
 
 my %branchmap = map { $_ => 1 } @branch; # for quick lookups
 
+my @messages;
+if ( $op eq 'export' ) {
+    my $filename = $query->param('id_list_file');
+    my $mimetype = $query->uploadInfo($filename)->{'Content-Type'};
+    my @valid_mimetypes = qw( application/octet-stream text/csv text/plain );
+    unless ( grep { /^$mimetype$/ } @valid_mimetypes ) {
+        push @messages, { type => 'alert', code => 'invalid_mimetype' };
+        $op = '';
+    }
+}
+
 if ( $op eq "export" ) {
 
     my $export_remove_fields = $query->param("export_remove_fields") || q||;
@@ -317,6 +328,7 @@ else {
         authority_types          => $authority_types,
         export_remove_fields     => C4::Context->preference("ExportRemoveFields"),
         csv_profiles             => [ Koha::CsvProfiles->search({ type => 'marc' }) ],
+        messages                 => \@messages,
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;
