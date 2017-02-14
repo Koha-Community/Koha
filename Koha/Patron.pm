@@ -368,8 +368,8 @@ $patron->delete
 
 Delete patron's holds, lists and finally the patron.
 
-Lists owned by the borrower are deleted, but entries from the borrower to
-other lists are kept.
+Lists owned by the borrower are deleted or ownership is transfered depending on the
+ListOwnershipUponPatronDeletion pref, but entries from the borrower to other lists are kept.
 
 =cut
 
@@ -387,21 +387,24 @@ sub delete {
                 $hold->cancel;
             }
 
-            # Delete all lists and all shares of this borrower
-            # Consistent with the approach Koha uses on deleting individual lists
-            # Note that entries in virtualshelfcontents added by this borrower to
-            # lists of others will be handled by a table constraint: the borrower
-            # is set to NULL in those entries.
-            # NOTE:
-            # We could handle the above deletes via a constraint too.
-            # But a new BZ report 11889 has been opened to discuss another approach.
-            # Instead of deleting we could also disown lists (based on a pref).
-            # In that way we could save shared and public lists.
-            # The current table constraints support that idea now.
-            # This pref should then govern the results of other routines/methods such as
-            # Koha::Virtualshelf->new->delete too.
-            # FIXME Could be $patron->get_lists
-            $_->delete for Koha::Virtualshelves->search( { owner => $self->borrowernumber } )->as_list;
+            # If ListOwnershipUponPatronDeletion = transfer, change ownership of all
+            # public and shared lists to the user who deleted them.
+            if ( C4::Context->preference('ListOwnershipUponPatronDeletion') eq 'transfer' ) {
+                my $userenv = C4::Context->userenv();
+                my $usernumber = (ref($userenv) eq 'HASH') ? $userenv->{'number'} : 0;
+                my @publiclists = Koha::Virtualshelves->get_public_shelves;
+                my @sharedlists = Koha::Virtualshelves->search({ 'me.owner' => $self->borrowernumber, 'me.shelfnumber' => { -ident => 'virtualshelfshares.shelfnumber' }  }, { prefetch => 'virtualshelfshares' });
+                foreach my $plist ( @publiclists ) {
+                    $plist->set({ owner => $usernumber })->store;
+                }
+                foreach my $slist ( @sharedlists ) {
+                    $slist->set({ owner => $usernumber })->store;
+                }
+            }
+
+            # Delete any remaining lists that this user is an owner of (always private lists,
+            # only public and shared lists if ListOwnershipUponPatronDeletion = delete)
+            $_->delete for Koha::Virtualshelves->search({ owner => $self->borrowernumber });
 
             # We cannot have a FK on borrower_modifications.borrowernumber, the table is also used
             # for patron selfreg

@@ -28,6 +28,12 @@ Patrons:
                0: "Don't allow"
          - "staff to access a patron's checkout and hold history (checkout history is still stored, regardless of staff being allowed access or not)."
      -
+         - "When deleting a patron who owns public or shared lists,"
+         - pref: ListOwnershipUponPatronDeletion
+           choices:
+            delete: "delete all of their public and shared lists."
+            transfer: "transfer ownership of their public and shared lists to the patron who deleted the owner."
+     -
          - The late fine for all checkouts will only go up to
          - pref: MaxFine
            class: currency
