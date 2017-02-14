@@ -47,6 +47,15 @@ $(document).ready(function() {
 	<div id="yui-main">
 	<div class="yui-b">
 
+[% FOR m IN messages %]
+    <div class="dialog [% m.type %]">
+        [% SWITCH m.code %]
+        [% CASE 'invalid_mimetype' %]The file used does not have a valid format. Only csv and txt are allowed.
+        [% CASE %][% m.code %]
+        [% END %]
+    </div>
+[% END %]
+
 <div id="exporttype" class="toptabs">
 <ul>
 <li><a href="#bibs">Export bibliographic records</a></li>
