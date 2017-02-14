@@ -1255,10 +1255,15 @@ CREATE TABLE `matchchecks` (
 --
 
 DROP TABLE IF EXISTS `need_merge_authorities`;
-CREATE TABLE `need_merge_authorities` ( -- keeping track of authority records still to be merged by merge_authority cron job (used only if pref dontmerge is ON)
+CREATE TABLE `need_merge_authorities` ( -- keeping track of authority records still to be merged by merge_authority cron job
   `id` int NOT NULL auto_increment PRIMARY KEY, -- unique id
-  `authid` bigint NOT NULL, -- reference to authority record
-  `done` tinyint DEFAULT 0  -- indication whether merge has been executed (0=not done, 1= done, 2= in progress)
+  `authid` bigint NOT NULL, -- reference to original authority record
+  `authid_new` bigint, -- reference to optional new authority record
+  `reportxml` text, -- xml showing original reporting tag
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date and time last modified
+  `done` tinyint DEFAULT 0  -- indication whether merge has been executed (0=not done, 1=done, 2=in progress)
+-- Note: authid and authid_new should NOT be FOREIGN keys !
+-- authid may have been deleted; authid_new may be zero
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
