@@ -512,6 +512,7 @@ foreach my $biblionumber (@biblionumbers) {
         } @reserves
       )
     {
+        my $priority = $res->priority();
         my %reserve;
         my @optionloop;
         for ( my $i = 1 ; $i <= $totalcount ; $i++ ) {
@@ -519,7 +520,7 @@ foreach my $biblionumber (@biblionumbers) {
                 @optionloop,
                 {
                     num      => $i,
-                    selected => ( $i == $res->priority() ),
+                    selected => ( $i == $priority ),
                 }
             );
         }
