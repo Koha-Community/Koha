@@ -243,7 +243,7 @@ if ($op eq ""){
             }
 
             # Create orderlines from MarcItemFieldsToOrder
-            while(my ($budget_id, $infos) = each $budget_hash) {
+            while(my ($budget_id, $infos) = each %$budget_hash) {
                 if ($budget_id) {
                     my %orderinfo = (
                         biblionumber       => $biblionumber,
@@ -391,7 +391,7 @@ if ($op eq ""){
             for (my $qtyloop=1;$qtyloop <= $c_quantity;$qtyloop++) {
                 my ( $biblionumber, $bibitemnum, $itemnumber ) = AddItemFromMarc( $record, $biblionumber );
                 $order->add_item( $itemnumber );
-	    }
+                }
             } else {
                 SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
             }
@@ -623,7 +623,7 @@ sub import_biblios_list {
                         locationloop => \@locations,
                         itypeloop => \@itypes,
                         ccodeloop => \@ccodes,
-			notforloanloop => \@notforloans,
+                        notforloanloop => \@notforloans,
                     );
     batch_info($template, $batch);
 }
