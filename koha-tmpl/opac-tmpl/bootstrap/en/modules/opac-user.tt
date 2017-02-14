@@ -153,6 +153,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                             <tr>
                                                 [% IF ( JacketImages ) %]<th class="nosort">&nbsp;</th>[% END %]
                                                 <th class="anti-the">Title</th>
+                                                <th>Author</th>
                                                 <th class="title-string psort">Due</th>
                                                 [% UNLESS ( item_level_itypes ) %]
                                                     <th>Item type</th>
@@ -215,7 +216,8 @@ Using this account is not recommended because some parts of Koha will not functi
                                                 <td class="title">
                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title |html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield %][% END %]</a>
                                                     [% IF ( ISSUE.enumchron ) %] [% ISSUE.enumchron %][% END %]
-                                                    <span class="item-details">[% ISSUE.author %]</span>
+                                                </td>
+                                                <td class="author">[% ISSUE.author %]</td>
                                                 </td>
                                                 [% IF ( ISSUE.overdue ) %]
                                                     <td class="date_due overdue">
