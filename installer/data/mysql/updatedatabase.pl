@@ -13880,6 +13880,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17960 - Rename opac_news with opac_news.content)\n";
 }
 
+$DBversion = "16.12.00.008";
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES
+        ('MarcItemFieldsToOrder','','Set the mapping values for new item records created from a MARC record in a staged file. In a YAML format.', NULL, 'textarea');
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15503 - Grab Item Information from Order Files)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
