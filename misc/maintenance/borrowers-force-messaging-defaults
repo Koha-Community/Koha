@@ -48,8 +48,10 @@ sub force_borrower_messaging_defaults {
     $dbh->{AutoCommit} = 0;
 
     if ( $doit && $truncate ) {
-        my $sth = $dbh->prepare("TRUNCATE borrower_message_preferences");
-        $sth->execute();
+        $dbh->do(q|SET FOREIGN_KEY_CHECKS = 0|);
+        $dbh->do(q|TRUNCATE borrower_message_transport_preferences|);
+        $dbh->do(q|TRUNCATE borrower_message_preferences|);
+        $dbh->do(q|SET FOREIGN_KEY_CHECKS = 1|);
     }
 
     my $sth = $dbh->prepare("SELECT borrowernumber, categorycode FROM borrowers WHERE dateenrolled >= ?");
