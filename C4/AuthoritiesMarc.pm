@@ -682,7 +682,7 @@ sub AddAuthority {
 
 =head2 DelAuthority
 
-  $authid = DelAuthority( $authid )
+    DelAuthority( $authid )
 
 Deletes $authid and calls merge to cleanup in linked biblio records
 

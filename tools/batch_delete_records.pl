@@ -198,8 +198,8 @@ if ( $op eq 'form' ) {
         } else {
             # Authorities
             my $authid = $record_id;
-            my $r = eval { C4::AuthoritiesMarc::DelAuthority( $authid ) };
-            if ( $r eq '0E0' or $@ ) {
+            eval { C4::AuthoritiesMarc::DelAuthority( $authid ) };
+            if ( $@ ) {
                 push @messages, {
                     type => 'error',
                     code => 'authority_not_deleted',
