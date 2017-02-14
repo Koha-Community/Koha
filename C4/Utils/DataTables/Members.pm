@@ -116,7 +116,7 @@ sub search {
             push @where_args, $term;
         }
 
-        if ( C4::Context->preference('ExtendedPatronAttributes') and $searchmember ) {
+        if ( $searchfieldstype eq 'standard' and C4::Context->preference('ExtendedPatronAttributes') and $searchmember ) {
             my $matching_borrowernumbers = C4::Members::Attributes::SearchIdMatchingAttribute($searchmember);
 
             for my $borrowernumber ( @$matching_borrowernumbers ) {
