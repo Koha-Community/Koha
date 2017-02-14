@@ -2677,23 +2677,22 @@ sub CanBookBeRenewed {
             # can be filled with available items. We can get the union of the sets simply
             # by pushing all the elements onto an array and removing the duplicates.
             my @reservable;
-            foreach my $b (@borrowernumbers) {
-                my ($borr) = C4::Members::GetMember( borrowernumber => $b);
-                foreach my $i (@itemnumbers) {
-                    my $item = GetItem($i);
-                    if (  !IsItemOnHoldAndFound($i)
-                        && IsAvailableForItemLevelRequest( $item, $borr )
-                        && CanItemBeReserved( $b, $i ) )
-                    {
-                        push( @reservable, $i );
+            my %borrowers;
+            ITEM: foreach my $i (@itemnumbers) {
+                my $item = GetItem($i);
+                next if IsItemOnHoldAndFound($i);
+                for my $b (@borrowernumbers) {
+                    my $borr = $borrowers{$b}//= C4::Members::GetMember(borrowernumber => $b);
+                    next unless IsAvailableForItemLevelRequest($item, $borr);
+                    next unless CanItemBeReserved($b,$i);
+
+                    push @reservable, $i;
+                    if (@reservable >= @borrowernumbers) {
+                        $resfound = 0;
+                        last ITEM;
                     }
+                    last;
                 }
-            }
-
-            @reservable = uniq(@reservable);
-
-            if ( @reservable >= @borrowernumbers ) {
-                $resfound = 0;
             }
         }
     }
