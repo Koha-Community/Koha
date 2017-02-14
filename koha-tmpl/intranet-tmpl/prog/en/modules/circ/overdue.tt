@@ -3,6 +3,8 @@
 <title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+[% INCLUDE 'datatables.inc' %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [%- USE Branches -%]
 <script type="text/javascript">
  //<![CDATA[
@@ -59,6 +61,12 @@
             };
         });
     }
+
+    $(document).ready(function(){
+        $("#overduest").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sPaginationType": "four_button"
+        }));
+    });
 //]]>
 </script>
 <style type="text/css">
@@ -232,32 +240,6 @@
             [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter ) %]
         </select>
     </li>
-
-    <li><label for="order">Sort by:</label> <select name="order" id="order">
-[% FOREACH ORDER_LOO IN ORDER_LOOP %]
-    [% IF ( ORDER_LOO.selected ) %]
-    <option value="[% ORDER_LOO.ordervalue %]" selected="selected">
-    [% ELSE %]
-    <option value="[% ORDER_LOO.ordervalue %]">
-    [% END %]
-    [% IF ( ORDER_LOO.order_date_due ) %]Due date
-    [% ELSIF ( ORDER_LOO.order_borrower ) %]Patron
-    [% ELSIF ( ORDER_LOO.order_barcode ) %]Barcode
-    [% ELSIF ( ORDER_LOO.order_title ) %]Title
-    [% ELSIF ( ORDER_LOO.order_date_due_desc ) %]Due date desc
-    [% ELSIF ( ORDER_LOO.order_borrower_desc ) %]Patron desc
-    [% ELSIF ( ORDER_LOO.order_barcode_desc ) %]Barcode desc
-    [% ELSIF ( ORDER_LOO.order_title_desc ) %]Title desc
-    [% ELSE %][% ORDER_LOO.label %]
-        [% IF ( ORDER_LOO.desc ) %]desc[% END %]
-    [% END %]
-    </option>
-[% END %]
-	[% FOREACH patron_attr_order_loo IN patron_attr_order_loop %]
-        [% IF ( patron_attr_order_loo.selected ) %]<option value="[% patron_attr_order_loo.value |html %]" selected="selected">[% patron_attr_order_loo.label %]</option>
-        [% ELSE %]<option value="[% patron_attr_order_loo.value |html %]">[% patron_attr_order_loo.label %]</option>[% END %]
-	[% END %]
-</select></li>
 
 <li class="radio"><label for="showall">Show any items currently checked out:</label>
 	[% IF ( showall ) %]
