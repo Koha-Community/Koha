@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 49;
+use Test::More tests => 50;
 
 use C4::Context;
 use C4::Members;
@@ -280,6 +280,9 @@ C4::Members::Attributes::SetBorrowerAttributes(
 C4::Members::Attributes::SetBorrowerAttributes(
     $jane_doe->{borrowernumber}, [ { code => $attribute_type->{code}, value => 'the default value for another common user' } ]
 );
+C4::Members::Attributes::SetBorrowerAttributes(
+    $john_smith->{borrowernumber}, [ { code => $attribute_type->{code}, value => 'Attribute which not appears even if contains "Dupont"' } ]
+);
 
 t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
 $search_results = C4::Utils::DataTables::Members::search({
@@ -428,6 +431,32 @@ $search_results = C4::Utils::DataTables::Members::search({
 });
 is( $search_results->{ iTotalDisplayRecords }, 2,
     "Sarching by date of birth should handle date formatted in iso");
+
+subtest 'ExtendedPatronAttributes' => sub {
+    plan tests => 2;
+    t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
+    $search_results = C4::Utils::DataTables::Members::search({
+        searchmember     => "Dupont",
+        searchfieldstype => 'standard',
+        searchtype       => 'contain',
+        branchcode       => $branchcode,
+        dt_params        => \%dt_params
+    });
+
+    is( $search_results->{ iTotalDisplayRecords }, 3,
+        "'Dupont' is contained in 2 surnames and a patron attribute. Patron attribute one should be displayed if searching in all fields (Bug 18094)");
+
+    $search_results = C4::Utils::DataTables::Members::search({
+        searchmember     => "Dupont",
+        searchfieldstype => 'surname',
+        searchtype       => 'contain',
+        branchcode       => $branchcode,
+        dt_params        => \%dt_params
+    });
+
+    is( $search_results->{ iTotalDisplayRecords }, 1,
+        "'Dupont' is contained in 2 surnames and a patron attribute. Patron attribute one should not be displayed if searching in specific fields (Bug 18094)");
+};
 
 # End
 $schema->storage->txn_rollback;
