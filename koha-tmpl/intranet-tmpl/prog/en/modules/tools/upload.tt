@@ -6,6 +6,7 @@
     <title>Koha &rsaquo; Tools &rsaquo; Upload</title>
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 
 [% BLOCK plugin_pars %]
     [% IF plugin %]
@@ -147,7 +148,7 @@
 [% END %]
 
 [% BLOCK table_results %]
-    <table>
+    <table id="uploadresults">
     <thead>
     <tr>
         <th>Filename</th>
@@ -156,7 +157,7 @@
         <th>Category</th>
         [% IF !plugin %]<th>Public</th>[% END %]
         [% IF !plugin %]<th>Temporary</th>[% END %]
-        <th>Actions</th>
+        <th class="nosort">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -185,6 +186,7 @@
    </table>
 [% END %]
 
+[% INCLUDE 'datatables.inc' %]
 <style type="text/css">
     #fileuploadstatus,#fileuploadfailed { display : none; }
     #fileuploadstatus { margin:.4em; }
@@ -304,6 +306,12 @@ function Choose(hashval) {
     window.close();
 }
 $(document).ready(function() {
+    $("#uploadresults").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+            { 'bSortable': false, 'aTargets': [ 'nosort' ] }
+        ],
+        "sPaginationType": "four_button"
+    }));
     [% IF msg %]
         ShowAlerts( [% msg %] );
     [% END %]
