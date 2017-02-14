@@ -181,9 +181,7 @@
 <script type="text/javascript">
 $( document ).ready(function() {
 
-    $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "sPaginationType": "four_button"
-    }));
+    $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults ));
 
     $(".paypal").on("click", function() {
         window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700');
