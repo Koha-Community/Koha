@@ -38,6 +38,7 @@
                                     <select name="order" id="order">
                                         [% IF ( orderbydate ) %]<option value="" selected="selected">Order by date</option>[% ELSE %]<option value="">Order by date</option>[% END %]
                                         [% IF ( orderbytitle ) %]<option value="title" selected="selected">Order by title</option>[% ELSE %]<option value="title">Order by title</option>[% END %]
+                                        [% IF ( orderbyauthor ) %]<option value="author" selected="selected">Order by author</option>[% ELSE %]<option value="author">Order by author</option>[% END %]
                                     </select>
                                     <input type="submit" value="Go" id="sortsubmit" class="submit clearfix" />
                                 </form>
