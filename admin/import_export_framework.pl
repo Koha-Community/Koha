@@ -46,41 +46,38 @@ unless ($authenticated) {
     exit 0;
 }
 
-my $frameworkcode = $input->param('frameworkcode') || 'default';
+my $frameworkcode = $input->param('frameworkcode') || '';
+my $framework_name = $frameworkcode || 'default';
 my $action = $input->param('action') || 'export';
 
 ## Exporting
 if ($action eq 'export' && $input->request_method() eq 'GET') {
     my $strXml = '';
-    my $format = $input->param('type_export_' . $frameworkcode);
-    if ($frameworkcode eq 'default') {
-        ExportFramework('', \$strXml, $format);
-    } else {
-        ExportFramework($frameworkcode, \$strXml, $format);
-    }
+    my $format = $input->param('type_export_' . $framework_name);
+    ExportFramework($frameworkcode, \$strXml, $format);
 
     if ($format eq 'csv') {
         # CSV file
 
         # Correctly set the encoding to output plain text in UTF-8
         binmode(STDOUT,':encoding(UTF-8)');
-        print $input->header(-type => 'application/vnd.ms-excel', -attachment => 'export_' . $frameworkcode . '.csv');
+        print $input->header(-type => 'application/vnd.ms-excel', -attachment => 'export_' . $framework_name . '.csv');
         print $strXml;
     } elsif ($format eq 'excel') {
         # Excel-xml file
-        print $input->header(-type => 'application/excel', -attachment => 'export_' . $frameworkcode . '.xml');
+        print $input->header(-type => 'application/excel', -attachment => 'export_' . $framework_name . '.xml');
         print $strXml;
     } else {
         # ODS file
         my $strODS = '';
         createODS($strXml, 'en', \$strODS);
-        print $input->header(-type => 'application/vnd.oasis.opendocument.spreadsheet', -attachment => 'export_' . $frameworkcode . '.ods');
+        print $input->header(-type => 'application/vnd.oasis.opendocument.spreadsheet', -attachment => 'export_' . $framework_name . '.ods');
         print $strODS;
     }
 ## Importing
 } elsif ($input->request_method() eq 'POST') {
     my $ok = -1;
-    my $fieldname = 'file_import_' . $frameworkcode;
+    my $fieldname = 'file_import_' . $framework_name;
     my $filename = $input->param($fieldname);
     # upload the input file
     if ($filename && $filename =~ /\.(csv|ods|xml)$/i) {
