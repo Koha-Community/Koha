@@ -35,7 +35,64 @@ Koha::Authorities - Koha Authority object set class
 
 =head2 Class Methods
 
+=head3 get_usage_count
+
+    $count = Koha::Authorities->get_usage_count({ authid => $i });
+
+    Returns the number of linked biblio records.
+
+    Note: Code originates from C4::AuthoritiesMarc::CountUsage.
+
+    This is a class method, since the authid may refer to a deleted record.
+
 =cut
+
+sub get_usage_count {
+    my ( $class, $params ) = @_;
+    my $authid = $params->{authid} || return;
+
+    my $searcher = Koha::SearchEngine::Search->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    my ( $err, $result, $count ) = $searcher->simple_search_compat( 'an:' . $authid, 0, 0 );
+    if( $err ) {
+        warn "Error: $err from search for " . $authid;
+        return;
+    }
+    return $count;
+}
+
+=head3 linked_biblionumbers
+
+    my @biblios = Koha::Authorities->linked_biblionumbers({
+        authid => $id, [ max_results => $max ], [ offset => $offset ],
+    });
+
+    Returns array of biblionumbers, as extracted from the result records of
+    the search engine.
+
+    This is a class method, since the authid may refer to a deleted record.
+
+=cut
+
+sub linked_biblionumbers {
+    my ( $self, $params ) = @_;
+    my $authid = $params->{authid} || return;
+
+    my $searcher = Koha::SearchEngine::Search->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    # if max_results is undefined, we will get all results
+    my ( $err, $result, $count ) = $searcher->simple_search_compat( 'an:' . $authid, $params->{offset} // 0, $params->{max_results} );
+
+    if( $err ) {
+        warn "Error: $err from search for " . $authid;
+        return;
+    }
+
+    my @biblionumbers;
+    foreach my $res ( @$result ) {
+        my $bibno = $searcher->extract_biblionumber( $res );
+        push @biblionumbers, $bibno if $bibno;
+    }
+    return @biblionumbers;
+}
 
 =head3 type
 
