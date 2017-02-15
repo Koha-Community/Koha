@@ -29,6 +29,8 @@ use Koha::ArticleRequests;
 use Koha::ArticleRequest::Status;
 use Koha::Patron;
 use Koha::Exceptions::Patron;
+use Koha::Patron::Categories;
+use Date::Calc qw( Today Add_Delta_YMD );
 
 use base qw(Koha::Objects);
 
@@ -358,6 +360,90 @@ sub anonymize {
     if( $params->{verbose} ) {
         warn "Anonymized $count patrons\n";
     }
+
+=head3 search_patrons_to_update
+
+    my $patrons = Koha::Patrons->search_patrons_to_anonymise( {
+                      from => $from_category,
+                      fine_max => $fine_max,
+                      fine_min  => $fin_min,
+                      au     => $au,
+                      ao    => $ao,
+                  });
+
+This method returns all patron who should be updated form one category to another meeting criteria:
+
+from - original category
+fine_min - with fines totaling at least this amount
+fine_max - with fines above this amount
+au - under the age limit for 'from'
+ao - over the agelimit for 'from'
+
+=cut
+
+sub search_patrons_to_update {
+    my ( $self, $params ) = @_;
+    my %query;
+    my $search_params = $params->{search_params};;
+
+    my $cat_from = Koha::Patron::Categories->find($params->{from});
+    $search_params->{categorycode}=$params->{from};
+    if ($params->{ao} || $params->{au}){
+        my ($y,$m,$d) = Today();
+        if( $cat_from->dateofbirthrequired && $params->{au} ) {
+            my ($dy,$dm,$dd) =Add_Delta_YMD($y,$m,$d,-$cat_from->dateofbirthrequired,0,0);
+            $search_params->{dateofbirth}{'>'} = $dy."-".sprintf("%02d",$dm)."-".sprintf("%02d",$dd);
+        }
+        if( $cat_from->upperagelimit && $params->{ao} ) {
+            my ($dy,$dm,$dd) =Add_Delta_YMD($y,$m,$d,-$cat_from->upperagelimit,0,0);
+            $search_params->{dateofbirth}{'<'} = $dy."-".sprintf("%02d",$dm)."-".sprintf("%02d",$dd);
+        }
+    }
+    if ($params->{fine_min} || $params->{fine_max}) {
+        $query{join} = ["accountlines"];
+        $query{select} = ["borrowernumber", { sum => 'amountoutstanding', -as => 'total_fines'} ];
+        $query{as} = [qw/borrowernumber  total_fines/];
+        $query{group_by} = ["borrowernumber"];
+        $query{having}{total_fines}{'<='}=$params->{fine_max} if defined $params->{fine_max};
+        $query{having}{total_fines}{'>='}=$params->{fine_min} if defined $params->{fine_min};
+    }
+    return Koha::Patrons->search($search_params,\%query);
+}
+
+=head3 update_category
+
+    Koha::Patrons->search->update_category( {
+            to   => $to,
+        });
+
+Update supplied patrons from one category to another and take care of guarantor info.
+To make sure all the conditions are met, the caller has the responsibility to
+call search_patrons_to_update to filter the Koha::Patrons set
+
+=cut
+
+sub update_category {
+    my ( $self, $params ) = @_;
+    my $to = $params->{to};
+
+    my $to_cat = Koha::Patron::Categories->find($to);
+    return unless $to_cat;
+
+    my $counter = 0;
+    my $remove_guarantor = ( $to_cat->category_type ne 'C' || $to_cat->category_type ne 'P' ) ? 1 : 0;
+    while( my $patron = $self->next ) {
+        $counter++;
+        if ( $remove_guarantor && ($patron->category->category_type eq 'C' || $patron->category->category_type eq 'P') ) {
+            $patron->guarantorid(0);
+            $patron->contactname('');
+            $patron->contactfirstname('');
+            $patron->contacttitle('');
+            $patron->relationship('');
+        }
+        $patron->categorycode($to);
+        $patron->store();
+    }
+    return $counter;
 }
 
 =head3 _type

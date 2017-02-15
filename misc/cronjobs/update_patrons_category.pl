@@ -1,0 +1,259 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/../kohalib.pl" };
+}
+
+use C4::Context;
+use Getopt::Long;
+use Pod::Usage;
+use Koha::Logger;
+use Koha::Patrons;
+use Koha::Patron::Categories;
+use Koha::DateUtils;
+use Data::Dumper;
+
+=head1 NAME
+
+update_patrons_category.pl - Given a set of parameters update selected patrons from one catgeory to another. Options are cumulative.
+
+=head1 SYNOPSIS
+
+update_patrons_category.pl -f=categorycode -t=categorycode
+                          [-b=branchcode] [-au] [-ao] [-fo=X] [-fu=X]
+                          [-rb=date] [-ra=date] [-v]
+                          [--field column=value ...]
+
+update_patrons_category.pl --help | --man
+
+Options:
+   --help       brief help message
+   --man        full documentation
+   -ao          update if over  maximum age for current category
+   -au          update if under minimuum age  current category
+   -fo=X        update if fines over  X amount
+   -fu=X        update if fines under X amount
+   -rb=date     update if registration date is before given date
+   -ra=date     update if registration date is after a given date
+   --field name=value  where <name> is a column in the borrowers table, patrons will be updated if the field is equal to given <value>
+   -v           verbose mode
+   -confirm     commit changes to db, no action will be taken unless this switch is included
+   -b           <branchname>       only deal with patrons from this library/branch
+   -f           <categorycode>     change patron category from this category
+   -t           <categorycode>     change patron category to this category
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--help>
+
+Print a brief help message and exits.
+
+=item B<--man>
+
+Prints the manual page and exits.
+
+=item B<-v>
+
+Verbose. Without this flag set, only fatal errors are reported.
+
+=item B<--confirm>
+
+Commit changes. Unless this flag set is, the script will report changes but not actually execute them on the database.
+
+=item B<-b>
+
+changes patrons for one specific branch. Use the value in the
+branches.branchcode table.
+
+=item B<-f>
+
+*required* defines the category to update. Expects the code from categories.categorycode.
+
+=item B<-t>
+
+*required* defines the category patrons will be converted to. Expects the code from categories.categorycode.
+
+=item B<-ao>
+
+Update patron only if they are above the maximum age range specified for the 'from' category.
+
+=item B<-au>
+
+Update patron only if they are below the minimum age range specified for the 'from' category.
+
+=item B<-fo=X>
+
+Supply a number and only account with fines over this number will be updated.
+
+=item B<-fu=X>
+
+Supply a number and only account with fines under this number will be updated.
+
+=item B<-rb=date>
+
+Enter a date in ISO format YYYY-MM-DD and only patrons registered before this date wil be updated.
+
+=item B<-ra=date>
+
+Enter a date in ISO format YYYY-MM-DD and only patrons registered after this date wil be updated.
+
+=item B<--field column=value>
+
+Use this flag to specify a column in the borrowers table and update only patrons whose value in that column matches the value supplied (repeatable)
+
+e.g.
+--field dateexpiry=2016-01-01
+will update all patrons who expired on that date, useful for schools etc.
+
+=back
+
+=head1 DESCRIPTION
+
+This script is designed to update patrons from one category to another.
+
+=head1 USAGE EXAMPLES
+
+C<update_patron_categories.pl> - Suggests that you read this help. :)
+
+C<update_patron_categories.pl> -b=<branchcode> -f=<categorycode> -t=<categorycode> --confirm  - Processes a single branch, and updates the patron categories from fromcat to tocat.
+
+C<update_patron_categories.pl> -b=<branchcode> -f=<categorycode> -t=<categorycode>  -a --confirm  - Processes a single branch, and updates the patron categories from fromcat to tocat for patrons outside the age range of fromcat.
+
+C<update_patron_categories.pl> -f=<categorycode> -t=<categorycode> -v  - Processes all branches, shows all messages, and reports the patrons who would be affected. Takes no action on the database.
+
+=cut
+
+# These variables are set by command line options.
+# They are initially set to default values.
+
+my $help     = 0;
+my $man      = 0;
+my $verbose  = 0;
+my $doit = 0;
+my $au;
+my $ao;
+my $min_dob;
+my $max_dob;
+my $remove_guarantors = 0;
+my $fine_min;
+my $fine_max;
+my $fromcat;
+my $tocat;
+my $reg_bef;
+my $reg_aft;
+my $branch_lim;
+my %fields;
+
+GetOptions(
+    'help|?'  => \$help,
+    'man'     => \$man,
+    'v'       => \$verbose,
+    'confirm' => \$doit,
+    'f=s'     => \$fromcat,
+    't=s'     => \$tocat,
+    'ao'       => \$ao,
+    'au'       => \$au,
+    'fo=s'    => \$fine_min,
+    'fu=s'    => \$fine_max,
+    'rb=s'    => \$reg_bef,
+    'ra=s'    => \$reg_aft,
+    'b=s'     => \$branch_lim,
+    'field=s' => \%fields
+) or pod2usage(2);
+pod2usage(1) if $help;
+pod2usage( -verbose => 2 ) if $man;
+
+if ( not $fromcat && $tocat ) {    #make sure we've specified the info we need.
+    print "Must supply category from and to (-f & -t) please specify -help for usage tips.\n";
+    exit;
+}
+
+($verbose && !$doit) and print "No actions will be taken (test mode)\n";
+
+$verbose and print "Will update patrons from $fromcat to $tocat with conditions below (if any)\n";
+
+my %params;
+
+if ( $reg_bef || $reg_aft ){
+    my $date_bef;
+    my $date_aft;
+    if (defined $reg_bef) {eval { $date_bef = dt_from_string( $reg_bef, 'iso' ); };}
+    die "$reg_bef is not a valid date before, aborting! Use a date in format YYYY-MM-DD.$@"
+    if $@;
+    if (defined $reg_aft) {eval { $date_aft = dt_from_string( $reg_aft, 'iso' ); };}
+    die "$reg_bef is not a valid date after, aborting! Use a date in format YYYY-MM-DD.$@"
+    if $@;
+    $params{dateenrolled}{'<='}=$reg_bef if defined $date_bef;
+    $params{dateenrolled}{'>='}=$reg_aft if defined $date_aft;
+}
+
+my $cat_from = Koha::Patron::Categories->find($fromcat);
+my $cat_to   = Koha::Patron::Categories->find($tocat);
+die "Categories not found" unless $cat_from && $cat_to;
+
+$params{"me.categorycode"} = $fromcat;
+$params{"me.branchcode"} = $branch_lim if $branch_lim;
+
+if ($verbose) {
+    print "Conditions:\n";
+    print "    Registered before $reg_bef\n" if $reg_bef;
+    print "    Registered after  $reg_aft\n" if $reg_aft;
+    print "    Total fines more than $fine_min\n" if $fine_min;
+    print "    Total fines less than $fine_max\n" if $fine_max;
+    print "    Age below minimum for ".$cat_from->description."\n" if $au;
+    print "    Age above maximum for ".$cat_from->description."\n" if $ao;
+    if (defined $branch_lim) {
+        print "    Branchcode of patron is $branch_lim\n";
+    }
+}
+
+while (my ($key,$value) = each %fields ) {
+    $verbose and print "    Borrower column $key is equal to $value\n";
+    $params{"me.".$key} = $value;
+}
+
+my $target_patrons = Koha::Patrons->search_patrons_to_update({
+        from => $fromcat,
+        search_params => \%params,
+        au => $au,
+        ao => $ao,
+        fine_min => $fine_min,
+        fine_max => $fine_max,
+    });
+my $patrons_found = $target_patrons->count;
+my $actually_updated = 0;
+my $testdisplay  = $doit ? "" : "WOULD HAVE ";
+if ( $verbose ) {
+    while ( my $target_patron = $target_patrons->next() ){
+    my $target = Koha::Patrons->find( $target_patron->borrowernumber );
+    $verbose and print $testdisplay."Updated ".$target->firstname." ".$target->surname." from $fromcat to $tocat\n";
+    }
+    $target_patrons->reset;
+}
+if ( $doit ) {
+    $actually_updated = $target_patrons->update_category({to=>$tocat});
+}
+
+$verbose and print "$patrons_found found, $actually_updated updated\n";
