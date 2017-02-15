@@ -531,9 +531,9 @@
                         <xsl:value-of select="$total" />
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="$cursor * $count" />
+                        <xsl:value-of select="$cursor + 1 - $count" />
                         -
-                        <xsl:value-of select="($cursor+1) * $count" />
+                        <xsl:value-of select="$cursor" />
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>

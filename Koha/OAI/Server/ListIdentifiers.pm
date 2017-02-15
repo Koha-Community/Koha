@@ -1,5 +1,6 @@
 # Copyright Tamil s.a.r.l. 2008-2015
 # Copyright Biblibre 2008-2015
+# Copyright The National Library of Finland, University of Helsinki 2016
 #
 # This file is part of Koha.
 #
@@ -20,68 +21,15 @@ package Koha::OAI::Server::ListIdentifiers;
 
 use Modern::Perl;
 use HTTP::OAI;
-use C4::OAI::Sets;
 
-use base ("HTTP::OAI::ListIdentifiers");
-
+use base qw(HTTP::OAI::ListIdentifiers Koha::OAI::Server::ListBase);
 
 sub new {
     my ($class, $repository, %args) = @_;
 
     my $self = HTTP::OAI::ListIdentifiers->new(%args);
 
-    my $token = new Koha::OAI::Server::ResumptionToken( %args );
-    my $dbh = C4::Context->dbh;
-    my $set;
-    if(defined $token->{'set'}) {
-        $set = GetOAISetBySpec($token->{'set'});
-    }
-    my $max = $repository->{koha_max_count};
-    my $sql = "
-        (SELECT biblioitems.biblionumber, biblioitems.timestamp
-        FROM biblioitems
-    ";
-    $sql .= " JOIN oai_sets_biblios ON biblioitems.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
-    $sql .= " WHERE timestamp >= ? AND timestamp <= ? ";
-    $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
-    $sql .= ") UNION
-        (SELECT deletedbiblio.biblionumber, timestamp FROM deletedbiblio";
-    $sql .= " JOIN oai_sets_biblios ON deletedbiblio.biblionumber = oai_sets_biblios.biblionumber " if defined $set;
-    $sql .= " WHERE DATE(timestamp) >= ? AND DATE(timestamp) <= ? ";
-    $sql .= " AND oai_sets_biblios.set_id = ? " if defined $set;
-
-    $sql .= ") ORDER BY biblionumber
-        LIMIT " . ($max+1) . "
-        OFFSET $token->{offset}
-    ";
-    my $sth = $dbh->prepare( $sql );
-    my @bind_params = ($token->{'from_arg'}, $token->{'until_arg'});
-    push @bind_params, $set->{'id'} if defined $set;
-    push @bind_params, ($token->{'from'}, $token->{'until'});
-    push @bind_params, $set->{'id'} if defined $set;
-    $sth->execute( @bind_params );
-
-    my $count = 0;
-    while ( my ($biblionumber, $timestamp) = $sth->fetchrow ) {
-        $count++;
-        if ( $count > $max ) {
-            $self->resumptionToken(
-                new Koha::OAI::Server::ResumptionToken(
-                    metadataPrefix  => $token->{metadata_prefix},
-                    from            => $token->{from},
-                    until           => $token->{until},
-                    offset          => $token->{offset} + $max,
-                    set             => $token->{set}
-                )
-            );
-            last;
-        }
-        $timestamp =~ s/ /T/, $timestamp .= 'Z';
-        $self->identifier( new HTTP::OAI::Header(
-            identifier => $repository->{ koha_identifier} . ':' . $biblionumber,
-            datestamp  => $timestamp,
-        ) );
-    }
+    my $count = $class->GetRecords($self, $repository, 0, %args);
 
     # Return error if no results
     unless ($count) {

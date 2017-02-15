@@ -32,20 +32,62 @@ sub new {
 
     my $self = HTTP::OAI::GetRecord->new(%args);
 
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("
-        SELECT timestamp
-        FROM   biblioitems
-        WHERE  biblionumber=? " );
     my $prefix = $repository->{koha_identifier} . ':';
     my ($biblionumber) = $args{identifier} =~ /^$prefix(.*)/;
-    $sth->execute( $biblionumber );
+    my $items_included = $repository->items_included( $args{metadataPrefix} );
+    my $dbh = C4::Context->dbh;
+    my $sql = "
+        SELECT timestamp
+        FROM   biblioitems
+        WHERE  biblionumber=?
+    ";
+    my @bind_params = ($biblionumber);
+    if ( $items_included ) {
+        # Take latest timestamp of biblio and any items
+        $sql .= "
+            UNION
+            SELECT timestamp from deleteditems
+            WHERE biblionumber=?
+            UNION
+            SELECT timestamp from items
+            WHERE biblionumber=?
+        ";
+        push @bind_params, $biblionumber;
+        push @bind_params, $biblionumber;
+        $sql = "
+            SELECT max(timestamp)
+            FROM ($sql) bib
+        ";
+    }
+
+    my $sth = $dbh->prepare( $sql ) || die( 'Could not prepare statement: ' . $dbh->errstr );
+    $sth->execute( @bind_params ) || die( 'Could not execute statement: ' . $sth->errstr );
     my ($timestamp, $deleted);
-    unless ( ($timestamp) = $sth->fetchrow ) {
-        unless ( ($timestamp) = $dbh->selectrow_array(q/
+    unless ( ($timestamp = $sth->fetchrow) ) {
+        $sql = "
             SELECT timestamp
             FROM deletedbiblio
-            WHERE biblionumber=? /, undef, $biblionumber ))
+            WHERE biblionumber=?
+        ";
+        @bind_params = ($biblionumber);
+
+        if ( $items_included ) {
+            # Take latest timestamp among biblio and items
+            $sql .= "
+                UNION
+                SELECT timestamp from deleteditems
+                WHERE biblionumber=?
+            ";
+            push @bind_params, $biblionumber;
+            $sql = "
+                SELECT max(timestamp)
+                FROM ($sql) bib
+            ";
+        }
+
+        $sth = $dbh->prepare($sql) || die('Could not prepare statement: ' . $dbh->errstr);
+        $sth->execute( @bind_params ) || die('Could not execute statement: ' . $sth->errstr);
+        unless ( ($timestamp = $sth->fetchrow) )
         {
             return HTTP::OAI::Response->new(
              requestURL  => $repository->self_url(),
@@ -55,28 +97,30 @@ sub new {
                 ) ],
             );
         }
-        else {
-            $deleted = 1;
-        }
+        $deleted = 1;
     }
 
-    # We fetch it using this method, rather than the database directly,
-    # so it'll include the item data
-    my $marcxml;
-    $marcxml = $repository->get_biblio_marcxml($biblionumber, $args{metadataPrefix})
-        unless $deleted;
     my $oai_sets = GetOAISetsBiblio($biblionumber);
     my @setSpecs;
     foreach (@$oai_sets) {
         push @setSpecs, $_->{spec};
     }
 
-    #$self->header( HTTP::OAI::Header->new( identifier  => $args{identifier} ) );
-    $self->record(
-        $deleted
-        ? Koha::OAI::Server::DeletedRecord->new($timestamp, \@setSpecs, %args)
-        : Koha::OAI::Server::Record->new($repository, $marcxml, $timestamp, \@setSpecs, %args)
-    );
+    if ($deleted) {
+        $self->record(
+            Koha::OAI::Server::DeletedRecord->new($timestamp, \@setSpecs, %args)
+        );
+    } else {
+        # We fetch it using this method, rather than the database directly,
+        # so it'll include the item data
+        my $marcxml;
+        $marcxml = $repository->get_biblio_marcxml($biblionumber, $args{metadataPrefix})
+            unless $deleted;
+
+        $self->record(
+            Koha::OAI::Server::Record->new($repository, $marcxml, $timestamp, \@setSpecs, %args)
+        );
+    }
     return $self;
 }
 

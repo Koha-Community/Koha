@@ -1,5 +1,6 @@
 # Copyright Tamil s.a.r.l. 2008-2015
 # Copyright Biblibre 2008-2015
+# Copyright The National Library of Finland, University of Helsinki 2016-2017
 #
 # This file is part of Koha.
 #
@@ -33,8 +34,8 @@ sub new {
         repositoryName      => C4::Context->preference("LibraryName"),
         adminEmail          => C4::Context->preference("KohaAdminEmailAddress"),
         MaxCount            => C4::Context->preference("OAI-PMH:MaxCount"),
-        granularity         => 'YYYY-MM-DD',
-        earliestDatestamp   => _get_earliest_datestamp() || '0001-01-01',
+        granularity         => 'YYYY-MM-DDThh:mm:ssZ',
+        earliestDatestamp   => _get_earliest_datestamp() || '0001-01-01T00:00:00Z',
         deletedRecord       => C4::Context->preference("OAI-PMH:DeletedRecord") || 'no',
     );
 
@@ -53,7 +54,7 @@ sub new {
 # will be returned and we will report the fallback 0001-01-01.
 sub _get_earliest_datestamp {
     my $dbh = C4::Context->dbh;
-    my ( $earliest ) = $dbh->selectrow_array("SELECT DATE(MIN(timestamp)) AS earliest FROM biblio" );
+    my ( $earliest ) = $dbh->selectrow_array("SELECT MIN(timestamp) AS earliest FROM biblio" );
     return $earliest
 }
 

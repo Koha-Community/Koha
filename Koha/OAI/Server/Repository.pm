@@ -1,5 +1,6 @@
 # Copyright Tamil s.a.r.l. 2008-2015
 # Copyright Biblibre 2008-2015
+# Copyright The National Library of Finland, University of Helsinki 2016
 #
 # This file is part of Koha.
 #
@@ -77,6 +78,11 @@ mode. A configuration file koha-oai.conf can look like that:
       metadataNamespace: http://veryspecial.tamil.fr/vs/format-pivot/1.1/vs
       schema: http://veryspecial.tamil.fr/vs/format-pivot/1.1/vs.xsd
       xsl_file: /usr/local/koha/xslt/vs.xsl
+    marc21:
+      metadataPrefix: marc21
+      metadataNamespace: http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim
+      schema: http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd
+      include_items: 1
     marcxml:
       metadataPrefix: marxml
       metadataNamespace: http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim
@@ -88,7 +94,7 @@ mode. A configuration file koha-oai.conf can look like that:
       schema: http://www.openarchives.org/OAI/2.0/oai_dc.xsd
       xsl_file: /usr/local/koha/koha-tmpl/intranet-tmpl/xslt/UNIMARCslim2OAIDC.xsl
 
-Note de 'include_items' parameter which is the only mean to return item-level info.
+Note the 'include_items' parameter which is the only mean to return item-level info.
 
 =cut
 
@@ -99,7 +105,7 @@ sub new {
 
     $self->{ koha_identifier      } = C4::Context->preference("OAI-PMH:archiveID");
     $self->{ koha_max_count       } = C4::Context->preference("OAI-PMH:MaxCount");
-    $self->{ koha_metadata_format } = ['oai_dc', 'marcxml'];
+    $self->{ koha_metadata_format } = ['oai_dc', 'marc21', 'marcxml'];
     $self->{ koha_stylesheet      } = { }; # Build when needed
 
     # Load configuration file if defined in OAI-PMH:ConfFile syspref
@@ -109,10 +115,14 @@ sub new {
         $self->{ koha_metadata_format } =  \@formats;
     }
 
+    # OAI-PMH handles dates in UTC, so do that on the database level to avoid need for
+    # any conversions
+    C4::Context->dbh->prepare("SET time_zone='+00:00'")->execute();
+
     # Check for grammatical errors in the request
     my @errs = validate_request( CGI::Vars() );
 
-    # Is metadataPrefix supported by the respository?
+    # Is metadataPrefix supported by the repository?
     my $mdp = param('metadataPrefix') || '';
     if ( $mdp && !grep { $_ eq $mdp } @{$self->{ koha_metadata_format }} ) {
         push @errs, new HTTP::OAI::Error(
@@ -166,6 +176,7 @@ sub stylesheet {
                          '/prog/en/xslt/' .
                          C4::Context->preference('marcflavour') .
                          'slim2OAIDC.xsl' );
+        $xsl_file || die( "No stylesheet found for $format" );
         my $parser = XML::LibXML->new();
         my $xslt = XML::LibXSLT->new();
         my $style_doc = $parser->parse_file( $xsl_file );
@@ -174,6 +185,16 @@ sub stylesheet {
     }
 
     return $stylesheet;
+}
+
+
+sub items_included {
+    my ( $self, $format ) = @_;
+
+    if ( my $conf = $self->{ conf } ) {
+        return $conf->{ format }->{ $format }->{ include_items };
+    }
+    return 0;
 }
 
 1;

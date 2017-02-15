@@ -1,5 +1,6 @@
 # Copyright Tamil s.a.r.l. 2008-2015
 # Copyright Biblibre 2008-2015
+# Copyright The National Library of Finland, University of Helsinki 2016
 #
 # This file is part of Koha.
 #
@@ -23,7 +24,6 @@ use HTTP::OAI;
 
 use base ("HTTP::OAI::ListMetadataFormats");
 
-
 sub new {
     my ($class, $repository) = @_;
 
@@ -43,6 +43,11 @@ sub new {
             metadataPrefix    => 'oai_dc',
             schema            => 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
             metadataNamespace => 'http://www.openarchives.org/OAI/2.0/oai_dc/'
+        ) );
+        $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
+            metadataPrefix    => 'marc21',
+            schema            => 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
+            metadataNamespace => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim'
         ) );
         $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
             metadataPrefix    => 'marcxml',
