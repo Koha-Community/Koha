@@ -17,6 +17,9 @@ use C4::Circulation;
 use CGI qw ( -utf8 );
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patron::Images;
+use Koha::Token;
+
+use Koha::Patron::Categories;
 
 my $input = new CGI;
 
