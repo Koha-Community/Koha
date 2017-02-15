@@ -13868,16 +13868,12 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do(q|ALTER TABLE opac_news CHANGE COLUMN new content text NOT NULL|);
     }
 
-    my ( $used_in_templates ) = $dbh->selectrow_array(q|
-        SELECT COUNT(*) FROM letter WHERE content LIKE "%<<opac_news.new>>%";
+    $dbh->do(q|
+        UPDATE letter SET content = REPLACE(content, "<<opac_news.new>>", "<<opac_news.content>>") WHERE content LIKE "%<<opac_news.new>>%"
     |);
-    if ( $used_in_templates ) {
-        print "WARNING - It seems that you are using the opac_news.new column in your notice templates\n";
-        print "Since it has now been renamed with opac_news.content, you should update them.\n";
-    }
 
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 17960 - Rename opac_news with opac_news.content)\n";
+    print "Upgrade to $DBversion done (Bug 17960 - Rename opac_news with opac_news.content (template notices have been updated!))\n";
 }
 
 $DBversion = "16.12.00.008";
