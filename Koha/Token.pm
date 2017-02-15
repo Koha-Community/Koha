@@ -51,6 +51,8 @@ use Modern::Perl;
 use Bytes::Random::Secure ();
 use String::Random ();
 use WWW::CSRF ();
+use Digest::MD5 qw(md5_base64);
+use Encode qw( encode );
 use base qw(Class::Accessor);
 use constant HMAC_SHA1_LENGTH => 20;
 use constant CSRF_EXPIRY_HOURS => 8; # 8 hours instead of 7 days..
@@ -72,7 +74,7 @@ sub new {
 
     my $token = $tokenizer->generate({ length => 20 });
     my $csrf_token = $tokenizer->generate({
-        type => 'CSRF', id => $id, secret => $secret,
+        type => 'CSRF', id => $id,
     });
 
     Generate several types of tokens. Now includes CSRF.
@@ -83,7 +85,10 @@ sub new {
 sub generate {
     my ( $self, $params ) = @_;
     if( $params->{type} && $params->{type} eq 'CSRF' ) {
-        $self->{lasttoken} = _gen_csrf( $params );
+        $self->{lasttoken} = _gen_csrf( {
+            id     => Encode::encode( 'UTF-8', C4::Context->userenv->{id} . $params->{id} ),
+            secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
+        });
     } else {
         $self->{lasttoken} = _gen_rand( $params );
     }
@@ -98,13 +103,14 @@ sub generate {
 
 sub generate_csrf {
     my ( $self, $params ) = @_;
+    return unless $params->{id};
     return $self->generate({ %$params, type => 'CSRF' });
 }
 
 =head2 check
 
     my $result = $tokenizer->check({
-        type => 'CSRF', id => $id, secret => $secret, token => $token,
+        type => 'CSRF', id => $id, token => $token,
     });
 
     Check several types of tokens. Now includes CSRF.
@@ -156,12 +162,12 @@ sub _gen_csrf {
 
 sub _chk_csrf {
     my ( $params ) = @_;
-    return if !$params->{id} || !$params->{secret} || !$params->{token};
+    return if !$params->{id} || !$params->{token};
 
+    my $id = Encode::encode( 'UTF-8', C4::Context->userenv->{id} . $params->{id} );
+    my $secret = md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) );
     my $csrf_status = WWW::CSRF::check_csrf_token(
-        $params->{id},
-        $params->{secret},
-        $params->{token},
+        $id, $secret, $params->{token},
         { MaxAge => $params->{MaxAge} // ( CSRF_EXPIRY_HOURS * 3600 ) },
     );
     return $csrf_status == WWW::CSRF::CSRF_OK();
