@@ -3184,19 +3184,33 @@ sub _get_discount_from_rule {
 
 sub AddIssuingCharge {
     my ( $itemnumber, $borrowernumber, $charge ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $nextaccntno = getnextacctno( $borrowernumber );
-    my $manager_id = 0;
+
+    my $nextaccntno = getnextacctno($borrowernumber);
+
+    my $manager_id  = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
-    my $query ="
-        INSERT INTO accountlines
-            (borrowernumber, itemnumber, accountno,
-            date, amount, description, accounttype,
-            amountoutstanding, manager_id)
-        VALUES (?, ?, ?,now(), ?, 'Rental', 'Rent',?,?)
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $itemnumber, $nextaccntno, $charge, $charge, $manager_id );
+
+    my $accountline = Koha::Account::Line->new(
+        {
+            borrowernumber    => $borrowernumber,
+            itemnumber        => $itemnumber,
+            accountno         => $nextaccntno,
+            amount            => $charge,
+            amountoutstanding => $charge,
+            manager_id        => $manager_id,
+            description       => 'Rental',
+            accounttype       => 'Rent',
+            date              => \'NOW()',
+        }
+    )->store();
+
+    Koha::Account::Offset->new(
+        {
+            debit_id => $accountline->id,
+            type     => 'Rental Fee',
+            amount   => $charge,
+        }
+    )->store();
 }
 
 =head2 GetTransfers
