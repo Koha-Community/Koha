@@ -24,6 +24,7 @@ use Carp;
 use Mojo::JSON;
 
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::Exceptions::Object;
 
 =head1 NAME
@@ -221,8 +222,29 @@ sub TO_JSON {
             # is ported to whatever distro we support by that time
             $unblessed->{$col} += 0;
         }
+        elsif ( _datetime_column_type( $columns_info->{$col}->{data_type} ) ) {
+            eval {
+                return undef unless $unblessed->{$col};
+                my $val = dt_from_string($unblessed->{$col}, 'sql')
+                            ->strftime('%FT%T%z');
+                #RFC3339 time-numoffset: ("+" / "-") time-hour ":" time-minute
+                substr($val, -2, 0, ':');
+                $unblessed->{$col} = $val;
+            };
+        }
     }
     return $unblessed;
+}
+
+sub _datetime_column_type {
+    my ($column_type) = @_;
+
+    my @dt_types = (
+        'timestamp',
+        'datetime'
+    );
+
+    return ( grep { $column_type eq $_ } @dt_types) ? 1 : 0;
 }
 
 sub _numeric_column_type {

@@ -19,7 +19,8 @@
     },
     "dateaccessioned": {
       "type": ["string", "null"],
-      "description": "date the item was acquired or added to Koha"
+      "description": "date the item was acquired or added to Koha",
+      "format": "date"
     },
     "booksellerid": {
       "type": ["string", "null"],
@@ -39,15 +40,18 @@
     },
     "replacementpricedate": {
       "type": ["string", "null"],
-      "description": "the date the price is effective from"
+      "description": "the date the price is effective from",
+      "format": "date"
     },
     "datelastborrowed": {
       "type": ["string", "null"],
-      "description": "the date the item was last checked out/issued"
+      "description": "the date the item was last checked out/issued",
+      "format": "date"
     },
     "datelastseen": {
       "type": ["string", "null"],
-      "description": "the date the item was last see (usually the last time the barcode was scanned or inventory was done)"
+      "description": "the date the item was last see (usually the last time the barcode was scanned or inventory was done)",
+      "format": "date"
     },
     "stack": {
       "type": ["integer", "null"],
@@ -67,7 +71,8 @@
     },
     "itemlost_on": {
       "type": ["string", "null"],
-      "description": "the date and time an item was last marked as lost, NULL if not lost"
+      "description": "the date and time an item was last marked as lost, NULL if not lost",
+      "format": "date-time"
     },
     "withdrawn": {
       "type": "integer",
@@ -75,7 +80,8 @@
     },
     "withdrawn_on": {
       "type": ["string", "null"],
-      "description": "the date and time an item was last marked as withdrawn, NULL if not withdrawn"
+      "description": "the date and time an item was last marked as withdrawn, NULL if not withdrawn",
+      "format": "date-time"
     },
     "itemcallnumber": {
       "type": ["string", "null"],
@@ -119,7 +125,8 @@
     },
     "timestamp": {
       "type": "string",
-      "description": "date and time this item was last altered"
+      "description": "date and time this item was last altered",
+      "format": "date-time"
     },
     "location": {
       "type": ["string", "null"],
@@ -131,7 +138,8 @@
     },
     "onloan": {
       "type": ["string", "null"],
-      "description": "defines if item is checked out (NULL for not checked out, and checkout date for checked out)"
+      "description": "defines if item is checked out (NULL for not checked out, and checkout date for checked out)",
+      "format": "date"
     },
     "cn_source": {
       "type": ["string", "null"],

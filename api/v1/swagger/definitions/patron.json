@@ -121,7 +121,8 @@
     },
     "dateofbirth": {
       "type": ["string", "null"],
-      "description": "patron's date of birth"
+      "description": "patron's date of birth",
+      "format": "date"
     },
     "branchcode": {
       "type": "string",
@@ -133,11 +134,13 @@
     },
     "dateenrolled": {
       "type": ["string", "null"],
-      "description": "date the patron was added to Koha"
+      "description": "date the patron was added to Koha",
+      "format": "date"
     },
     "dateexpiry": {
       "type": ["string", "null"],
-      "description": "date the patron's card is set to expire"
+      "description": "date the patron's card is set to expire",
+      "format": "date"
     },
     "gonenoaddress": {
       "type": ["boolean", "null"],
@@ -149,7 +152,8 @@
     },
     "debarred": {
       "type": ["string", "null"],
-      "description": "until this date the patron can only check-in"
+      "description": "until this date the patron can only check-in",
+      "format": "date"
     },
     "debarredcomment": {
       "type": ["string", "null"],
@@ -269,11 +273,13 @@
     },
     "updated_on": {
       "type": ["string", "null"],
-      "description": "time of last change could be useful for synchronization with external systems (among others)"
+      "description": "time of last change could be useful for synchronization with external systems (among others)",
+      "format": "date-time"
     },
     "lastseen": {
       "type": ["string", "null"],
-      "description": "last time a patron has been seen (connected at the OPAC or staff interface)"
+      "description": "last time a patron has been seen (connected at the OPAC or staff interface)",
+      "format": "date-time"
     },
     "lang": {
       "type": ["string", "null"],

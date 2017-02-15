@@ -9,7 +9,8 @@
     },
     "reservedate": {
       "type": ["string", "null"],
-      "description": "the date the hold was placed"
+      "description": "the date the hold was placed",
+      "format": "date"
     },
     "biblionumber": {
       "$ref": "../x-primitives.json#/biblionumber"
@@ -20,15 +21,18 @@
     },
     "notificationdate": {
       "type": ["string", "null"],
-      "description": "currently unused"
+      "description": "currently unused",
+      "format": "date"
     },
     "reminderdate": {
       "type": ["string", "null"],
-      "description": "currently unused"
+      "description": "currently unused",
+      "format": "date"
     },
     "cancellationdate": {
       "type": ["string", "null"],
-      "description": "the date the hold was cancelled"
+      "description": "the date the hold was cancelled",
+      "format": "date"
     },
     "reservenotes": {
       "type": ["string", "null"],
@@ -44,7 +48,8 @@
     },
     "timestamp": {
       "type": ["string", "null"],
-      "description": "date and time the hold was last updated"
+      "description": "date and time the hold was last updated",
+      "format": "date-time"
     },
     "itemnumber": {
       "type": ["integer", "null"],
@@ -52,11 +57,13 @@
     },
     "waitingdate": {
       "type": ["string", "null"],
-      "description": "the date the item was marked as waiting for the patron at the library"
+      "description": "the date the item was marked as waiting for the patron at the library",
+      "format": "date"
     },
     "expirationdate": {
       "type": ["string", "null"],
-      "description": "the date the hold expires"
+      "description": "the date the hold expires",
+      "format": "date"
     },
     "lowestPriority": {
       "type": "boolean",
@@ -68,7 +75,8 @@
     },
     "suspend_until": {
       "type": ["string", "null"],
-      "description": "Date until which the hold has been suspended"
+      "description": "Date until which the hold has been suspended",
+      "format": "date-time"
     },
     "itemtype": {
       "type": ["string", "null"],
