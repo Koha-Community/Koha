@@ -141,7 +141,7 @@ ok( ! defined($bnum3), "[GetValidLinkInfo] Invalid UUID returns no borrowernumbe
 # Koha::Patron::Password::Recovery::CompletePasswordRecovery #
 ##############################################################
 
-ok( Koha::Patron::Password::Recovery::CompletePasswordRecovery($uuid1) == 2, "[CompletePasswordRecovery] Completing a password recovery deletes the used entry" );
+is( Koha::Patron::Password::Recovery::CompletePasswordRecovery($uuid1), 3, "[CompletePasswordRecovery] Completing a password recovery deletes the used entry" );
 
 $schema->resultset('BorrowerPasswordRecovery')->create(
     {
