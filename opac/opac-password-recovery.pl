@@ -90,16 +90,14 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
         }
 
 # Check if a password reset already issued for this borrower AND we are not asking for a new email
-        elsif ( ValidateBorrowernumber( $borrower->borrowernumber )
-            && !$query->param('resendEmail') )
-        {
-            $hasError                = 1;
-            $errAlreadyStartRecovery = 1;
-        }
-        elsif ( !ValidateBorrowernumber($borrower->borrowernumber)
-            && !$query->param('resendEmail') )
-        {
-            DeleteExpiredPasswordRecovery($borrower->borrowernumber);
+        elsif ( not $query->param('resendEmail') ) {
+            if ( ValidateBorrowernumber( $borrower->borrowernumber ) ) {
+                $hasError                = 1;
+                $errAlreadyStartRecovery = 1;
+            }
+            else {
+                DeleteExpiredPasswordRecovery( $borrower->borrowernumber );
+            }
         }
     }
     else {    # 0 matching borrower
