@@ -43,8 +43,9 @@ Creates a new C<Search> of whatever the relevant type is.
 
 =cut
 
-use C4::Context;
 use Modern::Perl;
+use C4::Context;
+use C4::Biblio qw//;
 
 sub new {
     my $engine = C4::Context->preference("SearchEngine") // 'Zebra';
@@ -53,6 +54,26 @@ sub new {
     require $file;
     shift @_;
     return $class->new(@_);
+}
+
+=head2 extract_biblionumber
+
+    my $biblionumber = $searcher->extract_biblionumber( $marc );
+
+Returns the biblionumber from $marc. The routine is called from the
+extract_biblionumber method of the specific search engine.
+
+=cut
+
+sub extract_biblionumber {
+    my ( $record ) = @_;
+    return if ref($record) ne 'MARC::Record';
+    my ( $biblionumbertagfield, $biblionumbertagsubfield ) = C4::Biblio::GetMarcFromKohaField( 'biblio.biblionumber', '' );
+    if( $biblionumbertagfield < 10 ) {
+        my $controlfield = $record->field( $biblionumbertagfield );
+        return $controlfield ? $controlfield->data : undef;
+    }
+    return $record->subfield( $biblionumbertagfield, $biblionumbertagsubfield );
 }
 
 1;

@@ -23,6 +23,7 @@ use base qw(Class::Accessor);
 
 use C4::Search; # :(
 use C4::AuthoritiesMarc;
+use Koha::SearchEngine::Search;
 
 =head1 NAME
 
@@ -74,6 +75,22 @@ This passes straight through to C4::Search::SimpleSearch.
 sub simple_search_compat {
     shift;
     return C4::Search::SimpleSearch(@_);
+}
+
+=head2 extract_biblionumber
+
+    my $biblionumber = $searcher->extract_biblionumber( $searchresult );
+
+$searchresult comes from simple_search_compat.
+
+Returns the biblionumber from the search result record.
+
+=cut
+
+sub extract_biblionumber {
+    my ( $self, $searchresultrecord ) = @_;
+    my $record = C4::Search::new_record_from_zebra( 'biblioserver', $searchresultrecord );
+    return Koha::SearchEngine::Search::extract_biblionumber( $record );
 }
 
 =head2 search_auth_compat

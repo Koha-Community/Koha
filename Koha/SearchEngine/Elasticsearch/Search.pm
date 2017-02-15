@@ -45,6 +45,7 @@ use C4::Context;
 use Koha::ItemTypes;
 use Koha::AuthorisedValues;
 use Koha::SearchEngine::QueryBuilder;
+use Koha::SearchEngine::Search;
 use MARC::Record;
 use Catmandu::Store::ElasticSearch;
 
@@ -342,6 +343,21 @@ sub simple_search_compat {
             push @records, $marc;
         });
     return (undef, \@records, $results->total);
+}
+
+=head2 extract_biblionumber
+
+    my $biblionumber = $searcher->extract_biblionumber( $searchresult );
+
+$searchresult comes from simple_search_compat.
+
+Returns the biblionumber from the search result record.
+
+=cut
+
+sub extract_biblionumber {
+    my ( $self, $searchresultrecord ) = @_;
+    return Koha::SearchEngine::Search::extract_biblionumber( $searchresultrecord );
 }
 
 =head2 json2marc
