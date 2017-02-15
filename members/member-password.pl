@@ -20,9 +20,6 @@ use Koha::Token;
 
 use Koha::Patron::Categories;
 
-use Digest::MD5 qw(md5_base64);
-use Encode qw( encode );
-
 my $input = new CGI;
 
 my $theme = $input->param('theme') || "default";
@@ -69,8 +66,7 @@ if ( $newpassword && !scalar(@errors) ) {
 
     die "Wrong CSRF token"
         unless Koha::Token->new->check_csrf({
-            id     => Encode::encode( 'UTF-8', C4::Context->userenv->{id} ),
-            secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
+            session_id => scalar $input->cookie('CGISESSID'),
             token  => scalar $input->param('csrf_token'),
         });
 
@@ -150,10 +146,7 @@ $template->param(
     activeBorrowerRelationship => ( C4::Context->preference('borrowerRelationship') ne '' ),
     minPasswordLength          => $minpw,
     RoutingSerials             => C4::Context->preference('RoutingSerials'),
-    csrf_token                 => Koha::Token->new->generate_csrf({
-        id     => Encode::encode( 'UTF-8', C4::Context->userenv->{id} ),
-        secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
-    }),
+    csrf_token                 => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID'), }),
 );
 
 if ( scalar(@errors) ) {
