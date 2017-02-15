@@ -156,7 +156,11 @@ if ( $op eq 'delete_confirm' ) {
     }
  # delete the basket
     DelBasket($basketno,);
-    $template->param( delete_confirmed => 1 );
+    $template->param(
+        delete_confirmed => 1,
+        name => $bookseller->name,
+        booksellerid => $booksellerid,
+    );
 } elsif ( !$bookseller ) {
     $template->param( NO_BOOKSELLER => 1 );
 } elsif ($op eq 'export') {

@@ -167,7 +167,12 @@
 [% INCLUDE 'acquisitions-search.inc' %]
 
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a> &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</div>
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a> &rsaquo;
+    [% UNLESS ( basketno ) %][% IF ( delete_confirmed ) %]Deleted [% ELSE %]New [% END %][% END %]Basket [% basketname|html %] [% IF ( basketno ) %]([% basketno %])[% END %] for [% name|html %]
+</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -182,6 +187,7 @@
         [% IF !confirm_close && !edi_confirm %]
         [% UNLESS ( selectbasketg ) %]
             [% UNLESS ( closedate ) %]
+            [% UNLESS ( delete_confirmed ) %]
                 <div id="toolbar" class="btn-toolbar">
                     [% IF active %]
                         <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-default btn-sm" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a></div>
@@ -211,6 +217,7 @@
                             </div>
                         [% END %]
                 </div>
+            [% END %]
 <!-- Modal for confirm deletion box-->
                 <div class="modal" id="deleteBasketModal" tabindex="-1" role="dialog" aria-labelledby="delbasketModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -301,7 +308,7 @@
                 </div>
                 <a href="booksellers.pl">Click here to go back to booksellers page</a>
             [% ELSE %]
-            <META HTTP-EQUIV=Refresh CONTENT="0; url=booksellers.pl">
+                <a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid %]" class="btn btn-default btn-sm">Show baskets for vendor [% name | html %]</a> <a href="/cgi-bin/koha/acqui/booksellers.pl" class="btn btn-default btn-sm">Show all active baskets</a>
             [% END %]
         [% ELSE %]
 
