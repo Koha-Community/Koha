@@ -36,8 +36,6 @@
 use strict;
 #use warnings; FIXME - Bug 2505
 use CGI qw ( -utf8 );
-use Digest::MD5 qw(md5_base64);
-use Encode qw( encode );
 use C4::Context;
 use C4::Auth;
 use C4::Output;
@@ -279,10 +277,7 @@ my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
 $template->param( picture => 1 ) if $patron_image;
 # Generate CSRF token for upload and delete image buttons
 $template->param(
-    csrf_token => Koha::Token->new->generate_csrf({
-        id     => Encode::encode( 'UTF-8', C4::Context->userenv->{id} ),
-        secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
-    }),
+    csrf_token => Koha::Token->new->generate_csrf({ session_id => $input->cookie('CGISESSID'),}),
 );
 
 

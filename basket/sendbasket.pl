@@ -20,7 +20,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Encode qw(encode);
 use Carp;
-use Digest::MD5 qw(md5_base64);
 use Mail::Sendmail;
 use MIME::QuotedPrint;
 use MIME::Base64;
@@ -52,8 +51,7 @@ my $dbh          = C4::Context->dbh;
 
 if ( $email_add ) {
     die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
-        id     => Encode::encode( 'UTF-8', C4::Context->userenv->{id} ),
-        secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
+        session_id => scalar $query->cookie('CGISESSID'),
         token  => scalar $query->param('csrf_token'),
     });
     my $email = Koha::Email->new();
@@ -176,11 +174,7 @@ else {
         url            => "/cgi-bin/koha/basket/sendbasket.pl",
         suggestion     => C4::Context->preference("suggestion"),
         virtualshelves => C4::Context->preference("virtualshelves"),
-        csrf_token     => Koha::Token->new->generate_csrf(
-            {   id     => Encode::encode( 'UTF-8', C4::Context->userenv->{id} ),
-                secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
-            }
-        ),
+        csrf_token     => Koha::Token->new->generate_csrf({ session_id => scalar $query->cookie('CGISESSID'), }),
     );
     output_html_with_http_headers $query, $cookie, $template->output;
 }
