@@ -59,7 +59,7 @@ function ExpandField(index) {
     var original = document.getElementById(index); //original <div>
     var divs = original.getElementsByTagName('div');
     for(var i=0,divslen = divs.length ; i<divslen ; i++){   // foreach div
-        if(divs[i].hasAttribute('id') == 0 ) {continue; } # div elementis specific to Select2
+        if(divs[i].hasAttribute('id') == 0 ) {continue; } // div element is specific to Select2
         if(divs[i].getAttribute('id').match(/^subfield/)){  // if it s a subfield
             if (!divs[i].style.display) {
                 // first time => show all subfields
