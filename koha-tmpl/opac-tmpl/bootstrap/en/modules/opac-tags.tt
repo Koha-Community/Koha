@@ -105,21 +105,24 @@
                         [% END # / TAGLOOP%]
                         [% IF ( add_op ) %]
                             [% IF ( added_count ) %]
-                                <div class="dialog message">[% added_count %] [% IF ( added_count ==1 ) %] tag[% ELSE %]tags[% END %] successfully added.</div>
+                                <div class="dialog message">[% added_count %] [% IF ( added_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully added.</div>
                             [% END %]
                             [% IF ( deleted_count ) %]
-                            <div class="dialog message">[% deleted_count %][% IF ( deleted_count ==1 ) %] tag[% ELSE %]tags[% END %] successfully deleted.</div>
+                            <div class="dialog message">[% deleted_count %] [% IF ( deleted_count == 1 ) %]tag[% ELSE %]tags[% END %] successfully deleted.</div>
                             [% END %]
                         [% END # /add_op %]
 
                         [% IF ( MY_TAGS ) %]
-                        <form method="post" action="opac-tags.pl">
+                        <form id="deletetags" method="post" action="opac-tags.pl">
                             <h2>Your tags</h2>
                             <table id="mytagst" class="table table-bordered table-striped">
-                                <thead><tr><th>Term</th><th>Title</th><th>Date added</th><th>Delete</th></tr></thead>
+                                <thead><tr><th>&nbsp;</th><th>Term</th><th>Title</th><th>Date added</th></tr></thead>
                                 <tbody>
                                     [% FOREACH MY_TAG IN MY_TAGS %]
                                         <tr>
+                                            <td>
+                                                <input type="checkbox" name="del[% MY_TAG.tag_id %]" value="del[% MY_TAG.tag_id %]">
+                                            </td>
                                             <td class="tagterm">
                                                 <span class="tdlabel">Tag:</span>
                                                 [% IF MY_TAG.approved == 1 %]
@@ -128,7 +131,6 @@
                                                     [% MY_TAG.term |html %] (not approved)
                                                 [% END %]
                                             </td>
-
                                             <td>
                                                 [% IF ( MY_TAG.XSLTBloc ) %]
                                                     [% MY_TAG.XSLTBloc %]
@@ -153,11 +155,11 @@
                                                     [% MY_TAG.date_created | $KohaDates %]
                                                 </span>
                                             </td>
-                                            <td><input type="submit" name="del[% MY_TAG.tag_id %]" value="Delete" class="btn btn-danger btn-mini delete" /></td>
                                         </tr>
                                     [% END %]
                                 </tbody>
                             </table>
+                            <input type="submit" value="Delete selected tags" class="btn btn-danger btn-sm delete">
                         </form>
                         [% END # /MY_TAGS %]
                     </div> <!-- / .usertags -->
@@ -171,17 +173,29 @@
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
 //<![CDATA[
+    function checkboxesChecked() {
+        if ($("#deletetags input:checkbox:checked").length > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
     $(document).ready(function(){
-        var MSG_DELETE_TAG = _("Are you sure you want to delete this tag?");
-        $(".delete").on("click", function(){
-            return confirmDelete(MSG_DELETE_TAG);
+        var MSG_DELETE_TAG = _("Are you sure you want to delete the selected tag(s)?");
+        $(".delete").on("click", function(e){
+            if ( checkboxesChecked() == 1 ) {
+                return confirmDelete(MSG_DELETE_TAG);
+            } else {
+                alert(_("Please select a tag to delete."));
+                e.preventDefault();
+            }
         });
 
         $("#mytagst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aaSorting": [[ 2, "asc" ]],
             "aoColumnDefs": [
-              { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }
+              { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
             ],
             "aoColumns": [
                 null,
