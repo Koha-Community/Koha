@@ -282,6 +282,13 @@ if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_Borrow
 $debug and warn join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
 my $extended_patron_attributes = ();
 if ($op eq 'save' || $op eq 'insert'){
+
+    die "Wrong CSRF token"
+        unless Koha::Token->new->check_csrf({
+            session_id => scalar $input->cookie('CGISESSID'),
+            token  => scalar $input->param('csrf_token'),
+        });
+
     # If the cardnumber is blank, treat it as null.
     $newdata{'cardnumber'} = undef if $newdata{'cardnumber'} =~ /^\s*$/;
 
@@ -682,6 +689,16 @@ $template->param(
   nok     => $nok,#flag to know if an error
   NoUpdateLogin =>  $NoUpdateLogin
   );
+
+# Generate CSRF token
+$template->param( csrf_token =>
+      Koha::Token->new->generate_csrf( { session_id => scalar $input->cookie('CGISESSID'), } ),
+);
+
+# HouseboundModule data
+$template->param(
+    housebound_role  => Koha::Patron::HouseboundRoles->find($borrowernumber),
+);
 
 if(defined($data{'flags'})){
   $template->param(flags=>$data{'flags'});

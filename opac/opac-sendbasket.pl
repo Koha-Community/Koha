@@ -23,7 +23,6 @@ use warnings;
 use CGI qw ( -utf8 );
 use Encode qw(encode);
 use Carp;
-
 use Mail::Sendmail;
 use MIME::QuotedPrint;
 use MIME::Base64;
@@ -52,6 +51,10 @@ my $email_add    = $query->param('email_add');
 my $dbh          = C4::Context->dbh;
 
 if ( $email_add ) {
+    die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
+        session_id => scalar $query->cookie('CGISESSID'),
+        token  => scalar $query->param('csrf_token'),
+    });
     my $email = Koha::Email->new();
     my $user = GetMember(borrowernumber => $borrowernumber);
     my $user_email = GetFirstValidEmailAddress($borrowernumber)
@@ -193,6 +196,8 @@ else {
         url            => "/cgi-bin/koha/opac-sendbasket.pl",
         suggestion     => C4::Context->preference("suggestion"),
         virtualshelves => C4::Context->preference("virtualshelves"),
+        csrf_token => Koha::Token->new->generate_csrf(
+            { session_id => scalar $query->cookie('CGISESSID'), } ),
     );
     output_html_with_http_headers $query, $cookie, $template->output;
 }

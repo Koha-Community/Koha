@@ -274,6 +274,10 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
 # patronimage related interface on
 my $patron_image = Koha::Patron::Images->find($data->{borrowernumber});
 $template->param( picture => 1 ) if $patron_image;
+# Generate CSRF token for upload and delete image buttons
+$template->param(
+    csrf_token => Koha::Token->new->generate_csrf({ session_id => $input->cookie('CGISESSID'),}),
+);
 
 my $branch=C4::Context->userenv->{'branch'};
 
