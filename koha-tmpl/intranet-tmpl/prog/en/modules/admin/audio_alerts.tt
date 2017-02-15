@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Audio alerts</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -75,6 +76,12 @@
 
                 <form id="delete-alert-form" action="audio_alerts.pl" method="post">
                     <h3>Audio alerts</h3>
+                    [%IF !( Koha.Preference('AudioAlerts') ) %]
+                        <div class="dialog alert">
+                            <p><strong>Note: </strong></p>
+                            <p>Please enable system preference 'AudioAlerts' to activate sounds.</p>
+                        </div>
+                    [% END %]
                     <table id="audio-alerts-table">
                         <thead id="audio-alerts-table-head">
                             <tr>
