@@ -27,6 +27,7 @@ use C4::Auth;
 use C4::Output;
 use C4::AuthoritiesMarc;
 use C4::Biblio;
+use Koha::Virtualshelves;
 
 use Koha::Authorities;
 use Koha::Biblios;
@@ -43,6 +44,9 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
         authnotrequired => 0,
         flagsrequired => { tools => 'records_batchdel' },
 });
+
+my @lists = Koha::Virtualshelves->search({});
+$template->param( lists => \@lists );
 
 my @records;
 my @messages;
@@ -63,6 +67,13 @@ if ( $op eq 'form' ) {
             next unless $content;
             $content =~ s/[\r\n]*$//;
             push @record_ids, $content if $content;
+        }
+    } elsif ( my $shelf_number = $input->param('shelf_number') ) {
+        my $shelf = Koha::Virtualshelves->find($shelf_number);
+        my $contents = $shelf->get_contents;
+        while ( my $content = $contents->next ) {
+            my $biblionumber = $content->biblionumber;
+            push @record_ids, $biblionumber;
         }
     } else {
         # The user enters manually the list of id

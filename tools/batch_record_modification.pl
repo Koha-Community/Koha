@@ -32,6 +32,7 @@ use C4::MarcModificationTemplates qw( GetModificationTemplateActions GetModifica
 
 use Koha::Biblios;
 use Koha::MetadataRecord::Authority;
+use Koha::Virtualshelves;
 
 my $input = new CGI;
 our $dbh = C4::Context->dbh;
@@ -67,6 +68,9 @@ if ( $completedJobID ) {
     $job->clear();
     exit;
 }
+
+my @lists = Koha::Virtualshelves->search({});
+$template->param( lists => \@lists );
 
 my @templates = GetModificationTemplates( $mmtid );
 unless ( @templates ) {
@@ -110,6 +114,13 @@ if ( $op eq 'form' ) {
             next unless $content;
             $content =~ s/[\r\n]*$//;
             push @record_ids, $content if $content;
+        }
+    } elsif ( my $shelf_number = $input->param('shelf_number') ) {
+        my $shelf = Koha::Virtualshelves->find($shelf_number);
+        my $contents = $shelf->get_contents;
+        while ( my $content = $contents->next ) {
+            my $biblionumber = $content->biblionumber;
+            push @record_ids, $biblionumber;
         }
     } else {
         # The user enters manually the list of id

@@ -75,6 +75,21 @@
           <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
         </ol>
       </fieldset>
+      <fieldset class="rows" id="shelves">
+        <legend>Or select a list of records</legend>
+        <ol>
+          <li>
+            <label for="shelf_number">Use records from the following list: </label>
+            <select name="shelf_number" id="shelf_number">
+              <option value="">Select a list</option>
+                [% FOREACH list IN lists %]
+                  <option value="[% list.shelfnumber %]">[% list.shelfname %]</option>
+                [% END %]
+              </option>
+            </select>
+          </li>
+        </ol>
+      </fieldset>
       <fieldset class="rows">
         <legend>Or enter a list of record numbers</legend>
         <ol>
@@ -247,6 +262,13 @@
     [% Asset.js("js/background-job-progressbar.js") | $raw %]
     <script>
         $(document).ready(function() {
+          $("input[type='radio']").click(function(){
+            if ($(this).attr('id') == 'authority_type') {
+              $("#shelves").hide();
+            } else if ($(this).attr('id') == 'biblio_type') {
+              $("#shelves").show();
+            }
+          });
           $("#selectall").click(function(e){
             e.preventDefault();
             $(".records").checkCheckboxes();
