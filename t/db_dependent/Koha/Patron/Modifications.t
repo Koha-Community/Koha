@@ -133,7 +133,7 @@ subtest 'store( extended_attributes ) tests' => sub {
 
 subtest 'approve tests' => sub {
 
-    plan tests => 18;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
@@ -148,7 +148,7 @@ subtest 'approve tests' => sub {
     );
     my $verification_token = md5_hex( time().{}.rand().{}.$$ );
     my $valid_json_text
-        = '[{"code":"CODE_1","value":"VALUE_1"},{"code":"CODE_2","value":"VALUE_2"}]';
+        = '[{"code":"CODE_1","value":"VALUE_1"},{"code":"CODE_2","value":0}]';
     my $patron_modification = Koha::Patron::Modification->new(
         {   borrowernumber      => $patron_hashref->{borrowernumber},
             firstname           => 'Kyle',
@@ -172,6 +172,10 @@ subtest 'approve tests' => sub {
         'CODE_1', 'Patron modification correctly saved attribute code' );
     is( $patron_attributes[0][0]->{value},
         'VALUE_1', 'Patron modification correctly saved attribute value' );
+    is( $patron_attributes[0][1]->{code},
+        'CODE_2', 'Patron modification correctly saved attribute code' );
+    is( $patron_attributes[0][1]->{value},
+        0, 'Patron modification correctly saved attribute with value 0, not confused with delete' );
 
     # Create a new Koha::Patron::Modification, skip extended_attributes to
     # bypass checks
