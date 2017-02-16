@@ -399,6 +399,8 @@ sub delete {
                 }
                 foreach my $slist ( @sharedlists ) {
                     $slist->set({ owner => $usernumber })->store;
+                    # if staff member had a share, remove it
+                    $slist->remove_share( $usernumber );
                 }
             }
 
