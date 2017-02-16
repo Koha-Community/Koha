@@ -240,7 +240,7 @@ $(document).ready(function() {
                 <th></th>
                 <th>Authid</th>
                 <th>Summary</th>
-                <th>Preview</th>
+                <th>&nbsp;</th>
               </tr>
             </thead>
             <tbody>
@@ -249,7 +249,7 @@ $(document).ready(function() {
                   <td><input type="checkbox" name="record_id" value="[% authority.authid %]" data-usage="[% authority.count_usage %]" /></td>
                   <td><a href="/cgi-bin/koha/authorities/detail.pl?authid=[% authority.authid %]">[% authority.authid %]</a></td>
                   <td>[% PROCESS authresult summary=authority.summary %]</td>
-                  <td><a href="/cgi-bin/koha/svc/records/preview?record_type=authority&record_id=[% authority.authid %]&mmtid=[% mmtid %]" data-record_type="authority" data-record_id="[% authority.authid %]" data-mmtid="[% mmtid %]" class="previewMARC">Preview MARC</a>
+                  <td class="actions"><a href="/cgi-bin/koha/svc/records/preview?record_type=authority&record_id=[% authority.authid %]&mmtid=[% mmtid %]" data-record_type="authority" data-record_id="[% authority.authid %]" data-mmtid="[% mmtid %]" class="previewMARC btn btn-default btn-xs"><i class='fa fa-eye'></i> Show MARC</a>
                 </tr>
               [% END %]
             </tbody>
