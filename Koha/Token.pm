@@ -34,9 +34,10 @@ Koha::Token - Tokenizer
         type => 'CSRF', id => $id, secret => $secret,
     });
 
-    # or check a CSRF token
+    # generate/check CSRF token with defaults and session id
+    my $csrf_token = $tokenizer->generate_csrf({ session_id => $x });
     my $result = $tokenizer->check_csrf({
-        id => $id, secret => $secret, token => $token,
+        session_id => $x, token => $token,
     });
 
 =head1 DESCRIPTION
@@ -74,7 +75,7 @@ sub new {
 
     my $token = $tokenizer->generate({ length => 20 });
     my $csrf_token = $tokenizer->generate({
-        type => 'CSRF', id => $id,
+        type => 'CSRF', id => $id, secret => $secret,
     });
 
     Generate several types of tokens. Now includes CSRF.
@@ -85,10 +86,7 @@ sub new {
 sub generate {
     my ( $self, $params ) = @_;
     if( $params->{type} && $params->{type} eq 'CSRF' ) {
-        $self->{lasttoken} = _gen_csrf( {
-            id     => Encode::encode( 'UTF-8', C4::Context->userenv->{id} . $params->{id} ),
-            secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
-        });
+        $self->{lasttoken} = _gen_csrf( $params );
     } else {
         $self->{lasttoken} = _gen_rand( $params );
     }
@@ -97,13 +95,16 @@ sub generate {
 
 =head2 generate_csrf
 
-    Shortcut for: generate({ type => 'CSRF', ... })
+    Like: generate({ type => 'CSRF', ... })
+    Note: id defaults to userid from context, secret to database password.
+    session_id is mandatory; it is combined with id.
 
 =cut
 
 sub generate_csrf {
     my ( $self, $params ) = @_;
-    return unless $params->{id};
+    return if !$params->{session_id};
+    $params = _add_default_csrf_params( $params );
     return $self->generate({ %$params, type => 'CSRF' });
 }
 
@@ -128,16 +129,34 @@ sub check {
 
 =head2 check_csrf
 
-    Shortcut for: check({ type => 'CSRF', ... })
+    Like: check({ type => 'CSRF', ... })
+    Note: id defaults to userid from context, secret to database password.
+    session_id is mandatory; it is combined with id.
 
 =cut
 
 sub check_csrf {
     my ( $self, $params ) = @_;
+    return if !$params->{session_id};
+    $params = _add_default_csrf_params( $params );
     return $self->check({ %$params, type => 'CSRF' });
 }
 
 # --- Internal routines ---
+
+sub _add_default_csrf_params {
+    my ( $params ) = @_;
+    $params->{session_id} //= '';
+    if( !$params->{id} ) {
+        $params->{id} = Encode::encode( 'UTF-8', C4::Context->userenv->{id} . $params->{session_id} );
+    } else {
+        $params->{id} .= $params->{session_id};
+    }
+    $params->{id} //= Encode::encode( 'UTF-8', C4::Context->userenv->{id} );
+    my $pw = C4::Context->config('pass');
+    $params->{secret} //= md5_base64( Encode::encode( 'UTF-8', $pw ) ),
+    return $params;
+}
 
 sub _gen_csrf {
 
@@ -162,12 +181,12 @@ sub _gen_csrf {
 
 sub _chk_csrf {
     my ( $params ) = @_;
-    return if !$params->{id} || !$params->{token};
+    return if !$params->{id} || !$params->{secret} || !$params->{token};
 
-    my $id = Encode::encode( 'UTF-8', C4::Context->userenv->{id} . $params->{id} );
-    my $secret = md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) );
     my $csrf_status = WWW::CSRF::check_csrf_token(
-        $id, $secret, $params->{token},
+        $params->{id},
+        $params->{secret},
+        $params->{token},
         { MaxAge => $params->{MaxAge} // ( CSRF_EXPIRY_HOURS * 3600 ) },
     );
     return $csrf_status == WWW::CSRF::CSRF_OK();
