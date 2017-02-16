@@ -202,10 +202,10 @@ set_action()
 
 set_dev()
 {
-    if echo $1 | egrep -q "^[^-]"; then
+    if is_instance $1; then
         dev=$1
     else
-        die "Error: dev parameter with wrong instance name"
+        die "Error: Invalid instance name $1"
     fi
 }
 
