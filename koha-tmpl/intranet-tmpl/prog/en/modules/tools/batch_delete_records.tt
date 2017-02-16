@@ -68,6 +68,14 @@ $(document).ready(function() {
       return false;
     }
   });
+
+  $("#selectauths").on("submit",function(){
+    var checked = $("#selectauths").find("input[type='checkbox'][name='record_id']:checked").size();
+    if (checked == 0) {
+      alert(_("No authorities have been selected."));
+      return false;
+    }
+  });
 });
 //]]>
 </script>
@@ -190,7 +198,7 @@ $(document).ready(function() {
           | <a id="clearall" href="#"><i class="fa fa-remove"></i> Clear all</a>
           | <a id="clearlinkedtobiblio" href="#">Clear used authorities</a>
         </div>
-        <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post">
+        <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post" id="selectauths">
           <table id="authorities" class="records">
             <thead>
               <tr>
