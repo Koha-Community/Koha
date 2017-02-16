@@ -54,8 +54,7 @@ sub store {
             )->count()
             )
         {
-            Koha::Exceptions::Patron::Modification::DuplicateVerificationToken
-                ->throw(
+            Koha::Exceptions::Patron::Modification::DuplicateVerificationToken->throw(
                 "Duplicate verification token " . $self->verification_token );
         }
     }
@@ -73,7 +72,6 @@ sub store {
 
     return $self->SUPER::store();
 }
-
 
 =head2 approve
 
@@ -106,8 +104,7 @@ sub approve {
 
     # Take care of extended attributes
     if ( $self->extended_attributes ) {
-        $extended_attributes
-            = try { decode_json( $self->extended_attributes ) }
+        $extended_attributes = try { decode_json( $self->extended_attributes ) }
         catch {
             Koha::Exceptions::Patron::Modification::InvalidData->throw(
                 'The passed extended_attributes is not valid JSON');
@@ -136,13 +133,17 @@ sub approve {
                             attribute      => $attr->{value}
                         }
                     )->store
-                        if $attr->{value};
+                        if $attr->{value} # there's a value
+                           or
+                          (    defined $attr->{value} # there's a value that is 0, and not
+                            && $attr->{value} ne ""   # the empty string which means delete
+                            && $attr->{value} == 0
+                          );
                 }
             }
             catch {
                 if ( $_->isa('DBIx::Class::Exception') ) {
-                    Koha::Exceptions::Patron::Modification->throw(
-                        $_->{msg} );
+                    Koha::Exceptions::Patron::Modification->throw( $_->{msg} );
                 }
                 else {
                     Koha::Exceptions::Patron::Modification->throw($@);
@@ -153,7 +154,6 @@ sub approve {
 
     return $self->delete();
 }
-
 
 =head3 type
 
