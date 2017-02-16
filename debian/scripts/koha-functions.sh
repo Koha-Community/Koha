@@ -222,7 +222,11 @@ adjust_paths_dev_install()
 # corresponding tag in koha-conf.xml
 
     local instancename=$1
-    local dev_install=$(run_safe_xmlstarlet $instancename dev_install)
+    local dev_install=""
+
+    if [ "$instancename" != "" ] && is_instance $instancename; then
+        dev_install=$(run_safe_xmlstarlet $instancename dev_install)
+    fi
 
     if [ "$dev_install" != "" ] && [ "$dev_install" != "0" ]; then
         DEV_INSTALL=1
