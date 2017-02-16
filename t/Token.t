@@ -33,13 +33,13 @@ is( length( $tokenizer->generate ), 1, "Generate without parameters" );
 my $token = $tokenizer->generate({ length => 20 });
 is( length($token), 20, "Token $token has 20 chars" );
 
-my $id = $tokenizer->generate({ lyyGength => 8 });
-my $csrftoken = $tokenizer->generate_csrf({ id => $id });
+my $id = $tokenizer->generate({ length => 8 });
+my $csrftoken = $tokenizer->generate_csrf({ session_id => $id });
 isnt( length($csrftoken), 0, "Token $csrftoken should not be empty" );
 
 is( $tokenizer->check, undef, "Check without any parameters" );
 my $result = $tokenizer->check_csrf({
-    id => $id, token => $csrftoken,
+    session_id => $id, token => $csrftoken,
 });
 is( $result, 1, "CSRF token verified" );
 
@@ -51,25 +51,25 @@ isnt( $result, 1, "This token is no CSRF token" );
 # Test MaxAge parameter
 my $age = 1; # 1 second
 $result = $tokenizer->check_csrf({
-    id => $id, token => $csrftoken, MaxAge => $age,
+    session_id => $id, token => $csrftoken, MaxAge => $age,
 });
 is( $result, 1, "CSRF token still valid within one second" );
 usleep $age * 1000000 * 2; # micro (millionth) seconds + 100%
 $result = $tokenizer->check_csrf({
-    id => $id, token => $csrftoken, MaxAge => $age,
+    session_id => $id, token => $csrftoken, MaxAge => $age,
 });
 isnt( $result, 1, "CSRF token expired after one second" );
 
 subtest 'Same id (cookie CGISESSID) with an other logged in user' => sub {
     plan tests => 2;
-    $csrftoken = $tokenizer->generate_csrf({ id => $id });
+    $csrftoken = $tokenizer->generate_csrf({ session_id => $id });
     $result = $tokenizer->check_csrf({
-        id => $id, token => $csrftoken,
+        session_id => $id, token => $csrftoken,
     });
     is( $result, 1, "CSRF token verified" );
     C4::Context->set_userenv(0,43,0,'firstname','surname', 'CPL', 'Library 1', 0, ', ');
     $result = $tokenizer->check_csrf({
-        id => $id, token => $csrftoken,
+        session_id => $id, token => $csrftoken,
     });
     is( $result, '', "CSRF token is not verified if another logged in user is using the same id" );
 };
@@ -77,15 +77,15 @@ subtest 'Same id (cookie CGISESSID) with an other logged in user' => sub {
 subtest 'Same logged in user with another session (cookie CGISESSID)' => sub {
     plan tests => 2;
     C4::Context->set_userenv(0,42,0,'firstname','surname', 'CPL', 'Library 1', 0, ', ');
-    $csrftoken = $tokenizer->generate_csrf({ id => $id });
+    $csrftoken = $tokenizer->generate_csrf({ session_id => $id });
     $result = $tokenizer->check_csrf({
-        id => $id, token => $csrftoken,
+        session_id => $id, token => $csrftoken,
     });
     is( $result, 1, "CSRF token verified" );
     # Get another session id
-    $id = $tokenizer->generate({ lyyGength => 8 });
+    $id = $tokenizer->generate({ length => 8 });
     $result = $tokenizer->check_csrf({
-        id => $id, token => $csrftoken,
+        session_id => $id, token => $csrftoken,
     });
     is( $result, '', "CSRF token is not verified if another session is used" );
 };

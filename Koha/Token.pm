@@ -74,7 +74,7 @@ sub new {
 
     my $token = $tokenizer->generate({ length => 20 });
     my $csrf_token = $tokenizer->generate({
-        type => 'CSRF', id => $id,
+        type => 'CSRF', id => $id, secret => $secret,
     });
 
     Generate several types of tokens. Now includes CSRF.
@@ -85,10 +85,7 @@ sub new {
 sub generate {
     my ( $self, $params ) = @_;
     if( $params->{type} && $params->{type} eq 'CSRF' ) {
-        $self->{lasttoken} = _gen_csrf( {
-            id     => Encode::encode( 'UTF-8', C4::Context->userenv->{id} . $params->{id} ),
-            secret => md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) ),
-        });
+        $self->{lasttoken} = _gen_csrf( $params );
     } else {
         $self->{lasttoken} = _gen_rand( $params );
     }
@@ -105,7 +102,8 @@ sub generate {
 
 sub generate_csrf {
     my ( $self, $params ) = @_;
-    return unless $params->{id};
+    return if !$params->{session_id};
+    $params = _add_default_csrf_params( $params );
     return $self->generate({ %$params, type => 'CSRF' });
 }
 
@@ -182,12 +180,12 @@ sub _gen_csrf {
 
 sub _chk_csrf {
     my ( $params ) = @_;
-    return if !$params->{id} || !$params->{token};
+    return if !$params->{id} || !$params->{secret} || !$params->{token};
 
-    my $id = Encode::encode( 'UTF-8', C4::Context->userenv->{id} . $params->{id} );
-    my $secret = md5_base64( Encode::encode( 'UTF-8', C4::Context->config('pass') ) );
     my $csrf_status = WWW::CSRF::check_csrf_token(
-        $id, $secret, $params->{token},
+        $params->{id},
+        $params->{secret},
+        $params->{token},
         { MaxAge => $params->{MaxAge} // ( CSRF_EXPIRY_HOURS * 3600 ) },
     );
     return $csrf_status == WWW::CSRF::CSRF_OK();
