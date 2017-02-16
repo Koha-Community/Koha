@@ -1,3 +1,4 @@
+[% USE AuthorisedValues %]
 [% IF ( opacfacets && facets_loop && total ) %]
     <div id="search-facets">
         <h4><a href="#" class="menu-collapse-toggle">Refine your search</a></h4>
@@ -36,6 +37,7 @@
                               [% url = BLOCK %][% url %][% "&amp;sort_by=" _ sort_by |url %][% END %]
                             [% END %]
                             [% FOREACH facet IN facets_loo.facets %]
+                            [% IF facets_loo.type_label_CollectionCodes %][% SET facet.facet_label_value = AuthorisedValues.GetByCode('CCODE',facet.facet_label_value,1) || facet.facet_label_value %][% END %]
                                 <li>
                                   [% IF facet.active %]
                                     [% SET local_url = url _ "&amp;nolimit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
