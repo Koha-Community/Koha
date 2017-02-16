@@ -88,7 +88,7 @@ Return the bibliographic record of this item
 sub biblio {
     my ( $self ) = @_;
     my $biblio_rs = $self->_result->biblio;
-    return Koha::Biblio->_new_from_dbic( $self->_result->biblio );
+    return Koha::Biblio->_new_from_dbic( $biblio_rs );
 }
 
 =head3 get_transfer
