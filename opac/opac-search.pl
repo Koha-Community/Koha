@@ -852,6 +852,7 @@ for (my $i=0;$i<@servers;$i++) {
             my @page_numbers;
             # total number of pages there will be
             my $pages = ceil($hits / $results_per_page);
+            my $last_page = ($pages * $results_per_page) - $results_per_page;
             # default page number
             my $current_page_number = 1;
             if ($offset) {
@@ -902,6 +903,7 @@ for (my $i=0;$i<@servers;$i++) {
                         
             }
             $template->param(   PAGE_NUMBERS => \@page_numbers,
+                                last_page => $last_page,
                                 previous_page_offset => $previous_page_offset) unless $pages < 2;
             $template->param(next_page_offset => $next_page_offset) unless $pages eq $current_page_number;
         }
