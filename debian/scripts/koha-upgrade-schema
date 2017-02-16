@@ -39,8 +39,12 @@ fi
 
 for name in "$@"
 do
-    echo "Upgrading database schema for $name"
-    KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml" \
-    PERL5LIB=$PERL5LIB \
-    "$CGI_PATH/installer/data/mysql/updatedatabase.pl"
+    if is_instance $name; then
+        echo "Upgrading database schema for $name"
+        KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml" \
+        PERL5LIB=$PERL5LIB \
+        "$CGI_PATH/installer/data/mysql/updatedatabase.pl"
+    else
+        die "Error: Invalid instance name $name"
+    fi
 done
