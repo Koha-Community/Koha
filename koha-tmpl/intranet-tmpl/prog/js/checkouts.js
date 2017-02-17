@@ -38,7 +38,7 @@ $(document).ready(function() {
 
     $("#output_format > option:first-child").attr("selected", "selected");
     $("select[name='csv_profile_id']").hide();
-    $(document).on("change", '#output_format', function(){
+    $(document).on("change", '#issues-table-output-format', function(){
         if ( $(this).val() == 'csv' ) {
             $("select[name='csv_profile_id']").show();
         } else {
