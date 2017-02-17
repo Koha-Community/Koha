@@ -60,7 +60,7 @@
                             [% END %]
                         </select>
 
-                       <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% export_remove_fields %]" title="Use for iso2709 exports" />
+                       <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% Koha.Preference('ExportRemoveFields') %]" title="Use for iso2709 exports" />
                         <input type="hidden" name="op" value="export" />
                         <input type="hidden" id="output_format" name="output_format" value="iso2709" />
                         <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />
