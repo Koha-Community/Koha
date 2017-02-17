@@ -1,6 +1,7 @@
 {
   "/patrons": {
     "get": {
+      "x-mojo-to": "Patron#list",
       "operationId": "listPatrons",
       "tags": ["patrons"],
       "produces": [
@@ -16,8 +17,26 @@
             }
           }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }
@@ -32,6 +51,7 @@
   },
   "/patrons/{borrowernumber}": {
     "get": {
+      "x-mojo-to": "Patron#get",
       "operationId": "getPatron",
       "tags": ["patrons"],
       "parameters": [{
@@ -48,6 +68,12 @@
             "$ref": "../definitions.json#/patron"
           }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
           "schema": {
@@ -56,6 +82,18 @@
         },
         "404": {
           "description": "Patron not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }

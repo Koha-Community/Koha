@@ -22,26 +22,23 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::Patrons;
 
 sub list {
-    my ($c, $args, $cb) = @_;
-
-    my $user = $c->stash('koha.user');
+    my $c = shift->openapi->valid_input or return;
 
     my $patrons = Koha::Patrons->search;
 
-    $c->$cb($patrons, 200);
+    return $c->render(status => 200, openapi => $patrons);
 }
 
 sub get {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
-    my $user = $c->stash('koha.user');
-
-    my $patron = Koha::Patrons->find($args->{borrowernumber});
+    my $borrowernumber = $c->validation->param('borrowernumber');
+    my $patron = Koha::Patrons->find($borrowernumber);
     unless ($patron) {
-        return $c->$cb({error => "Patron not found"}, 404);
+        return $c->render(status => 404, openapi => { error => "Patron not found." });
     }
 
-    return $c->$cb($patron, 200);
+    return $c->render(status => 200, openapi => $patron);
 }
 
 1;

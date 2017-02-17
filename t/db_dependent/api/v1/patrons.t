@@ -133,6 +133,6 @@ $t->request_ok($tx)
   ->status_is(200)
   ->json_is('/borrowernumber' => $borrower->{ borrowernumber })
   ->json_is('/surname' => $borrower->{ surname })
-  ->json_is('/lost' => 1 );
+  ->json_is('/lost' => Mojo::JSON->true );
 
 $schema->storage->txn_rollback;
