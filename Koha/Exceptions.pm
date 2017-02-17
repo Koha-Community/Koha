@@ -8,6 +8,11 @@ use Exception::Class (
     'Koha::Exceptions::Exception' => {
         description => 'Something went wrong!',
     },
+    'Koha::Exceptions::BadParameter' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'Bad parameter was given',
+        fields => ["parameter"],
+    },
     'Koha::Exceptions::DuplicateObject' => {
         isa => 'Koha::Exceptions::Exception',
         description => 'Same object already exists',
@@ -31,6 +36,10 @@ use Exception::Class (
     'Koha::Exceptions::CannotAddLibraryLimit' => {
         isa => 'Koha::Exceptions::Exception',
         description => 'General problem adding a library limit'
+    },
+    'Koha::Exceptions::UnderMaintenance' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'Koha is under maintenance.'
     },
     # Virtualshelves exceptions
     'Koha::Exceptions::Virtualshelves::DuplicateObject' => {
