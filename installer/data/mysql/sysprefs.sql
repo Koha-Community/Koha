@@ -155,6 +155,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ExpireReservesMaxPickUpDelayCharge','0',NULL,'If ExpireReservesMaxPickUpDelay is enabled, and this field has a non-zero value, than a borrower whose waiting hold has expired will be charged this amount.','free'),
 ('ExpireReservesOnHolidays', '1', NULL, 'If false, reserves at a library will not be canceled on days the library is not open.', 'YesNo'),
 ('ExportCircHistory', 0, NULL, "Display the export circulation options",  'YesNo' ),
+('ExportRemoveFields','',NULL,'List of fields for non export in circulation.pl (separated by a space)','Free'),
 ('ExtendedPatronAttributes','0',NULL,'Use extended patron IDs and attributes','YesNo'),
 ('FacetLabelTruncationLength','20',NULL,'Specify the facet max length in OPAC','Integer'),
 ('FacetMaxCount','20',NULL,'Specify the max facet count for each category','Integer'),
