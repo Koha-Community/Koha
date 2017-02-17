@@ -210,6 +210,8 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-23 13:04:51
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9GdzytyInRcFZns/q0qb3Q
 
+sub koha_objects_class {
+    'Koha::Old::Checkouts';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;
