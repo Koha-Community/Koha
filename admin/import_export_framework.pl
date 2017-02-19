@@ -46,8 +46,8 @@ unless ($authenticated) {
     exit 0;
 }
 
-my $frameworkcode = $input->param('frameworkcode') || '';
-my $framework_name = $frameworkcode || 'default';
+my $framework_name = $input->param('frameworkcode') || 'default';
+my $frameworkcode = ($framework_name eq 'default') ? q{} : $framework_name;
 my $action = $input->param('action') || 'export';
 
 ## Exporting
