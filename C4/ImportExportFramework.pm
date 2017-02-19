@@ -415,6 +415,8 @@ sub _export_table_excel
                 $data = $hashRef->{$_->{name}};
                 if ($_->{type} eq 'Number' && !defined($data)) {
                     $data = '0';
+                } elsif ($_->{type} eq 'String' && !defined($data)) {
+                    $data = q{};
                 } elsif ($_->{type} eq 'String' && (!$data && $data ne '0')) {
                     $data = '#';
                 }
