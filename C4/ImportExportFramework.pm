@@ -345,6 +345,8 @@ sub _export_table_ods
                 $data = $hashRef->{$_->{name}};
                 if ($_->{type} eq 'float' && !defined($data)) {
                     $data = '0';
+                } elsif ($_->{type} eq 'string' && !defined($data)) {
+                    $data = q{};
                 } elsif ($_->{type} eq 'string' && (!$data && $data ne '0')) {
                     $data = '#';
                 }
