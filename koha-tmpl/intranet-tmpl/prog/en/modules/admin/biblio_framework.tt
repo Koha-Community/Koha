@@ -188,7 +188,7 @@
                 <form action="import_export_framework.pl" name="form_[% frameworkcode %]" method="get" target="_blank"  class="form_export">
                     <div class="modal-body">
                         <fieldset>
-                            <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+                            <input type="hidden" name="frameworkcode" value="default" />
                             <p><label for="csv_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="csv" id="csv_type_export_[% frameworkcode %]" checked="checked" /> Export to CSV spreadsheet</label></p>
                             <p><label for="xml_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="excel" id="xml_type_export_[% frameworkcode %]" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
                             <p><label for="ods_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="ods" id="ods_type_export_[% frameworkcode %]" /> Export to OpenDocument spreadsheet format</label></p>
@@ -215,7 +215,7 @@
                 </div>
                 <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_[% frameworkcode %]" id="form_i_[% frameworkcode %]" method="post" enctype="multipart/form-data" class="form_import">
                     <div class="modal-body">
-                            <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
+                            <input type="hidden" name="frameworkcode" value="default" />
                             <input type="hidden" name="action" value="import" />
                             <p><label for="file_import_[% frameworkcode %]">Upload file:</label> <input type="file" name="file_import_[% frameworkcode %]" id="file_import_[% frameworkcode %]" class="input_import" /></p>
                             <div id="importing_[% frameworkcode %]" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /><span class="importing_msg"></span></div>
