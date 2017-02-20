@@ -748,6 +748,7 @@ sub checkauth {
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
     my $type            = shift;
+    my $emailaddress    = shift;
     $type = 'opac' unless $type;
 
     my $dbh     = C4::Context->dbh;
@@ -787,6 +788,9 @@ sub checkauth {
             -HttpOnly => 1,
         );
         $loggedin = 1;
+    }
+    elsif ( $emailaddress) {
+        # the Google OpenID Connect passes an email address
     }
     elsif ( $sessionID = $query->cookie("CGISESSID") )
     {    # assignment, not comparison
@@ -924,7 +928,8 @@ sub checkauth {
         if ( ( $cas && $query->param('ticket') )
             || $q_userid
             || ( $shib && $shib_login )
-            || $pki_field ne 'None' )
+            || $pki_field ne 'None'
+            || $emailaddress )
         {
             my $password    = $query->param('password');
             my $shibSuccess = 0;
@@ -950,6 +955,26 @@ sub checkauth {
                       checkpw( $dbh, $userid, $password, $query, $type );
                     $userid = $retuserid;
                     $info{'invalidCasLogin'} = 1 unless ($return);
+                }
+
+                elsif ( $emailaddress ) {
+                    my $value = $emailaddress;
+
+                    # If we're looking up the email, there's a chance that the person
+                    # doesn't have a userid. So if there is none, we pass along the
+                    # borrower number, and the bits of code that need to know the user
+                    # ID will have to be smart enough to handle that.
+                    require C4::Members;
+                    my @users_info = C4::Members::GetBorrowersWithEmail($value);
+                    if (@users_info) {
+
+                        # First the userid, then the borrowernum
+                        $value = $users_info[0][1] || $users_info[0][0];
+                    } else {
+                        undef $value;
+                    }
+                    $return = $value ? 1 : 0;
+                    $userid = $value;
                 }
 
                 elsif (
