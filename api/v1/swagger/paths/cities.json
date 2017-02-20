@@ -1,7 +1,7 @@
 {
   "/cities": {
     "get": {
-      "x-mojo-controller": "Koha::REST::V1::Cities",
+      "x-mojo-to": "Cities#list",
       "operationId": "list",
       "tags": ["cities"],
       "produces": [
@@ -53,11 +53,17 @@
           "schema": {
             "$ref": "../definitions.json#/error"
           }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       }
     },
     "post": {
-      "x-mojo-controller": "Koha::REST::V1::Cities",
+      "x-mojo-to": "Cities#add",
       "operationId": "add",
       "tags": ["cities"],
       "parameters": [{
@@ -79,6 +85,12 @@
             "$ref": "../definitions.json#/city"
           }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
           "schema": {
@@ -87,6 +99,12 @@
         },
         "500": {
           "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }
@@ -101,7 +119,7 @@
   },
   "/cities/{cityid}": {
     "get": {
-      "x-mojo-controller": "Koha::REST::V1::Cities",
+      "x-mojo-to": "Cities#get",
       "operationId": "get",
       "tags": ["cities"],
       "parameters": [{
@@ -117,12 +135,6 @@
             "$ref": "../definitions.json#/city"
           }
         },
-        "403": {
-          "description": "Access forbidden",
-          "schema": {
-            "$ref": "../definitions.json#/error"
-          }
-        },
         "404": {
           "description": "City not found",
           "schema": {
@@ -134,11 +146,17 @@
           "schema": {
             "$ref": "../definitions.json#/error"
           }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       }
     },
     "put": {
-      "x-mojo-controller": "Koha::REST::V1::Cities",
+      "x-mojo-to": "Cities#update",
       "operationId": "update",
       "tags": ["cities"],
       "parameters": [{
@@ -162,6 +180,12 @@
             "$ref": "../definitions.json#/city"
           }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
           "schema": {
@@ -179,6 +203,12 @@
           "schema": {
             "$ref": "../definitions.json#/error"
           }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       },
       "x-koha-authorization": {
@@ -188,7 +218,7 @@
       }
     },
     "delete": {
-      "x-mojo-controller": "Koha::REST::V1::Cities",
+      "x-mojo-to": "Cities#delete",
       "operationId": "delete",
       "tags": ["cities"],
       "parameters": [{
@@ -204,6 +234,12 @@
             "type": "string"
           }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
           "schema": {
@@ -218,6 +254,12 @@
         },
         "500": {
           "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }

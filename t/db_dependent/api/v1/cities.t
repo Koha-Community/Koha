@@ -332,7 +332,7 @@ subtest 'delete() tests' => sub {
     $tx->req->cookies(
         { name => 'CGISESSID', value => $authorized_session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->content_is('');
+    $t->request_ok($tx)->status_is(200)->content_is('""');
 
     $tx = $t->ua->build_tx( DELETE => "/api/v1/cities/$city_id" );
     $tx->req->cookies(
