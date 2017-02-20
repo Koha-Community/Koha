@@ -51,6 +51,7 @@ sub Version {
 
     return {
         major       => $major,
+        minor       => $minor,
         release     => $major . "." . $minor,
         maintenance => $major . "." . $minor . "." . $maintenance,
         development => ( $development ne '000' ) ? $development : undef,

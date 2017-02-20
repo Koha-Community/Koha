@@ -186,6 +186,15 @@ sub TransformPrefsToHTML {
                         push @chunks, $piece;
                     }
                 } else {
+                    if ( $piece ) {
+                        my $version = Koha::version();
+                        my ( $major, $minor, $maintenance, $development ) = split( '\.', $version );
+                        if ( $minor % 2 ) {
+                            $piece =~ s|__VERSION__|${major}_${minor}|g;
+                        } else {
+                            $piece =~ s|__VERSION__|master|g;
+                        }
+                    }
                     push @chunks, { type_text => 1, contents => $piece };
                 }
             }
