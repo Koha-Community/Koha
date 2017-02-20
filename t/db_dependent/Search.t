@@ -27,7 +27,7 @@ require C4::Context;
 # work around spurious wide character warnings
 use open ':std', ':encoding(utf8)';
 
-use Test::More tests => 4;
+use Test::More tests => 2;
 use Test::MockModule;
 use Test::Warn;
 
@@ -45,24 +45,24 @@ our $child;
 our $datadir;
 
 sub index_sample_records_and_launch_zebra {
-    my ($datadir, $indexing_mode, $marc_type) = @_;
+    my ($datadir, $marc_type) = @_;
 
     my $sourcedir = dirname(__FILE__) . "/data";
     unlink("$datadir/zebra.log");
     if (-f "$sourcedir/${marc_type}/zebraexport/biblio/exported_records") {
-        my $zebra_bib_cfg = ($indexing_mode eq 'dom') ? 'zebra-biblios-dom.cfg' : 'zebra-biblios.cfg';
+        my $zebra_bib_cfg = 'zebra-biblios-dom.cfg';
         system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g iso2709 -d biblios init");
         system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g iso2709 -d biblios update $sourcedir/${marc_type}/zebraexport/biblio");
         system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g iso2709 -d biblios commit");
     }
     # ... and add large bib records, if present
     if (-f "$sourcedir/${marc_type}/zebraexport/large_biblio_${indexing_mode}/exported_records.xml") {
-        my $zebra_bib_cfg = ($indexing_mode eq 'dom') ? 'zebra-biblios-dom.cfg' : 'zebra-biblios.cfg';
+        my $zebra_bib_cfg = 'zebra-biblios-dom.cfg';
         system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g marcxml -d biblios update $sourcedir/${marc_type}/zebraexport/large_biblio_${indexing_mode}");
         system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_bib_cfg  -v none,fatal -g marcxml -d biblios commit");
     }
     if (-f "$sourcedir/${marc_type}/zebraexport/authority/exported_records") {
-        my $zebra_auth_cfg = ($indexing_mode eq 'dom') ? 'zebra-authorities-dom.cfg' : 'zebra-authorities.cfg';
+        my $zebra_auth_cfg = 'zebra-authorities-dom.cfg';
         system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal -g iso2709 -d authorities init");
         system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal -g iso2709 -d authorities update $sourcedir/${marc_type}/zebraexport/authority");
         system("zebraidx -c $datadir/etc/koha/zebradb/$zebra_auth_cfg  -v none,fatal -g iso2709 -d authorities commit");
@@ -203,20 +203,14 @@ sub mock_GetMarcSubfieldStructure {
 }
 
 sub run_marc21_search_tests {
-    my $indexing_mode = shift;
     $datadir = tempdir();
-    system(dirname(__FILE__) . "/zebra_config.pl $datadir marc21 $indexing_mode");
+    system(dirname(__FILE__) . "/zebra_config.pl $datadir marc21");
 
     Koha::Caches->get_instance('config')->flush_all;
 
     mock_GetMarcSubfieldStructure('marc21');
     my $context = new C4::Context("$datadir/etc/koha-conf.xml");
     $context->set_context();
-
-    is($context->config('zebra_bib_index_mode'),$indexing_mode,
-        "zebra_bib_index_mode is properly set to '$indexing_mode' in the created koha-conf.xml file (BZ11499)");
-    is($context->config('zebra_auth_index_mode'),$indexing_mode,
-        "zebra_auth_index_mode is properly set to '$indexing_mode' in the created koha-conf.xml file (BZ11499)");
 
     use_ok('C4::Search');
 
@@ -259,7 +253,7 @@ sub run_marc21_search_tests {
         'VM' => { 'imageurl' => 'bridge/dvd.gif', 'summary' => '', 'itemtype' => 'VM', 'description' => 'Visual Materials' },
     );
 
-    index_sample_records_and_launch_zebra($datadir, $indexing_mode, 'marc21');
+    index_sample_records_and_launch_zebra($datadir, 'marc21');
 
     my ($biblionumber, $title);
     my $record = MARC::Record->new;
@@ -326,78 +320,40 @@ sub run_marc21_search_tests {
         getRecords('au:Lessig', 'au:Lessig', [], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
     is($results_hashref->{biblioserver}->{hits}, 4, "getRecords title search for 'Australia' matched right number of records");
 
-if ( $indexing_mode eq 'dom' ) {
-    ( undef, $results_hashref, $facets_loop ) =
-        getRecords('salud', 'salud', [], [ 'biblioserver' ], '19', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
-    ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() =~ m/^Efectos del ambiente/ &&
-        MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[7],'UTF-8')->title_proper() eq 'Salud y seguridad de los trabajadores del sector salud: manual para gerentes y administradores^ies' &&
-        MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/
-        , "Simple relevance sorting in getRecords matches old behavior");
+( undef, $results_hashref, $facets_loop ) =
+    getRecords('salud', 'salud', [], [ 'biblioserver' ], '19', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() =~ m/^Efectos del ambiente/ &&
+    MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[7],'UTF-8')->title_proper() eq 'Salud y seguridad de los trabajadores del sector salud: manual para gerentes y administradores^ies' &&
+    MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/
+    , "Simple relevance sorting in getRecords matches old behavior");
 
-    ( undef, $results_hashref, $facets_loop ) =
-        getRecords('salud', 'salud', [ 'author_az' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
-    ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() =~ m/la enfermedad laboral\^ies$/ &&
-        MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[6],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/ &&
-        MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() eq 'World health statistics 2009^ien'
-        , "Simple ascending author sorting in getRecords matches old behavior");
+( undef, $results_hashref, $facets_loop ) =
+    getRecords('salud', 'salud', [ 'author_az' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() =~ m/la enfermedad laboral\^ies$/ &&
+    MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[6],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/ &&
+    MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() eq 'World health statistics 2009^ien'
+    , "Simple ascending author sorting in getRecords matches old behavior");
 
-    ( undef, $results_hashref, $facets_loop ) =
-        getRecords('salud', 'salud', [ 'author_za' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
-    ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() eq 'World health statistics 2009^ien' &&
-        MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[12],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/ &&
-        MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() =~ m/la enfermedad laboral\^ies$/
-        , "Simple descending author sorting in getRecords matches old behavior");
+( undef, $results_hashref, $facets_loop ) =
+    getRecords('salud', 'salud', [ 'author_za' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() eq 'World health statistics 2009^ien' &&
+    MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[12],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/ &&
+    MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() =~ m/la enfermedad laboral\^ies$/
+    , "Simple descending author sorting in getRecords matches old behavior");
 
-    ( undef, $results_hashref, $facets_loop ) =
-        getRecords('salud', 'salud', [ 'pubdate_asc' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
-    ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() eq 'Manual de higiene industrial^ies' &&
-        MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[7],'UTF-8')->title_proper() =~ m/seguridad e higiene del trabajo\^ies$/ &&
-        MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/
-        , "Simple ascending publication date sorting in getRecords matches old behavior");
+( undef, $results_hashref, $facets_loop ) =
+    getRecords('salud', 'salud', [ 'pubdate_asc' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() eq 'Manual de higiene industrial^ies' &&
+    MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[7],'UTF-8')->title_proper() =~ m/seguridad e higiene del trabajo\^ies$/ &&
+    MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/
+    , "Simple ascending publication date sorting in getRecords matches old behavior");
 
-    ( undef, $results_hashref, $facets_loop ) =
-        getRecords('salud', 'salud', [ 'pubdate_dsc' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
-    ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() =~ m/^Estado de salud/ &&
-        MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[7],'UTF-8')->title_proper() eq 'World health statistics 2009^ien' &&
-        MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() eq 'Manual de higiene industrial^ies'
-        , "Simple descending publication date sorting in getRecords matches old behavior");
-
-} elsif ( $indexing_mode eq 'grs1' ){
-    ( undef, $results_hashref, $facets_loop ) =
-        getRecords('salud', 'salud', [], [ 'biblioserver' ], '19', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
-    ok(MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[0])->title_proper() =~ m/^Efectos del ambiente/ &&
-        MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[7])->title_proper() eq 'Salud y seguridad de los trabajadores del sector salud: manual para gerentes y administradores^ies' &&
-        MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[18])->title_proper() =~ m/^Indicadores de resultados identificados/
-        , "Simple relevance sorting in getRecords matches old behavior");
-
-    ( undef, $results_hashref, $facets_loop ) =
-        getRecords('salud', 'salud', [ 'author_az' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
-    ok(MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[0])->title_proper() =~ m/la enfermedad laboral\^ies$/ &&
-        MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[6])->title_proper() =~ m/^Indicadores de resultados identificados/ &&
-        MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[18])->title_proper() eq 'World health statistics 2009^ien'
-        , "Simple ascending author sorting in getRecords matches old behavior");
-
-    ( undef, $results_hashref, $facets_loop ) =
-        getRecords('salud', 'salud', [ 'author_za' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
-    ok(MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[0])->title_proper() eq 'World health statistics 2009^ien' &&
-        MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[12])->title_proper() =~ m/^Indicadores de resultados identificados/ &&
-        MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[18])->title_proper() =~ m/la enfermedad laboral\^ies$/
-        , "Simple descending author sorting in getRecords matches old behavior");
-
-    ( undef, $results_hashref, $facets_loop ) =
-        getRecords('salud', 'salud', [ 'pubdate_asc' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
-    ok(MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[0])->title_proper() eq 'Manual de higiene industrial^ies' &&
-        MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[7])->title_proper() =~ m/seguridad e higiene del trabajo\^ies$/ &&
-        MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[18])->title_proper() =~ m/^Indicadores de resultados identificados/
-        , "Simple ascending publication date sorting in getRecords matches old behavior");
-
-    ( undef, $results_hashref, $facets_loop ) =
-        getRecords('salud', 'salud', [ 'pubdate_dsc' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
-    ok(MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[0])->title_proper() =~ m/^Estado de salud/ &&
-        MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[7])->title_proper() eq 'World health statistics 2009^ien' &&
-        MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[18])->title_proper() eq 'Manual de higiene industrial^ies'
-        , "Simple descending publication date sorting in getRecords matches old behavior");
-}
+( undef, $results_hashref, $facets_loop ) =
+    getRecords('salud', 'salud', [ 'pubdate_dsc' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() =~ m/^Estado de salud/ &&
+    MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[7],'UTF-8')->title_proper() eq 'World health statistics 2009^ien' &&
+    MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() eq 'Manual de higiene industrial^ies'
+    , "Simple descending publication date sorting in getRecords matches old behavior");
 
     ( undef, $results_hashref, $facets_loop ) =
         getRecords('books', 'books', [ 'relevance' ], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, undef, 1);
@@ -544,12 +500,7 @@ if ( $indexing_mode eq 'dom' ) {
 
     ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 19, "Weighted query returned correct number of results");
-    if ($indexing_mode eq 'grs1') {
-        is(MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[0])->title_proper(), 'Salud y seguridad de los trabajadores del sector salud: manual para gerentes y administradores^ies', "Weighted query returns best match first");
-    } else {
-        local $TODO = "Query weighting does not behave exactly the same in DOM vs. GRS";
-        is(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper(), 'Salud y seguridad de los trabajadores del sector salud: manual para gerentes y administradores^ies', "Weighted query returns best match first");
-    }
+    is(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper(), 'Salud y seguridad de los trabajadores del sector salud: manual para gerentes y administradores^ies', "Weighted query returns best match first");
 
     $QueryStemming = $QueryWeightFields = $QueryFuzzy = 0;
     $QueryAutoTruncate = 1;
@@ -881,9 +832,8 @@ if ( $indexing_mode eq 'dom' ) {
 }
 
 sub run_unimarc_search_tests {
-    my $indexing_mode = shift;
     $datadir = tempdir();
-    system(dirname(__FILE__) . "/zebra_config.pl $datadir unimarc $indexing_mode");
+    system(dirname(__FILE__) . "/zebra_config.pl $datadir unimarc");
 
     Koha::Caches->get_instance('config')->flush_all;
 
@@ -901,7 +851,7 @@ sub run_unimarc_search_tests {
     $UseQueryParser = 0;
     $marcflavour = 'UNIMARC';
 
-    index_sample_records_and_launch_zebra($datadir, $indexing_mode, 'unimarc');
+    index_sample_records_and_launch_zebra($datadir, 'unimarc');
 
     my ( $error, $marcresults, $total_hits ) = SimpleSearch("ti=Järnvägarnas efterfrågan och den svenska industrin", 0, 10);
     is($total_hits, 1, 'UNIMARC title search');
@@ -978,24 +928,14 @@ sub run_unimarc_search_tests {
     cleanup();
 }
 
-subtest 'MARC21 + GRS-1' => sub {
-    plan tests => 110;
-    run_marc21_search_tests('grs1');
-};
-
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 110;
-    run_marc21_search_tests('dom');
-};
-
-subtest 'UNIMARC + GRS-1' => sub {
-    plan tests => 14;
-    run_unimarc_search_tests('grs1');
+    plan tests => 108;
+    run_marc21_search_tests();
 };
 
 subtest 'UNIMARC + DOM' => sub {
     plan tests => 14;
-    run_unimarc_search_tests('dom');
+    run_unimarc_search_tests();
 };
 
 # Make sure that following tests are not using our config settings

@@ -91,8 +91,6 @@ Makefile.PL - Koha packager and installer
     --zebra_sru_host             Zebra SRU servername (e.g. localhost)
     --zebra_sru_biblios_port     Zebra SRU biblios port (e.g. 9998)
     --zebra_sru_authorities_port Zebra SRU biblios port (e.g. 9999)
-    --auth_index_mode            Authority index mode (grs1, dom)
-    --bib_index_mode             Bibliographic index mode (grs1, dom)
     --koha_user                  Koha Unix user (e.g. koha)
     --koha_group                 Koha Unix group (e.g. koha)
     --install_sru                Install the SRU server (yes, no)
@@ -470,8 +468,6 @@ my %config_defaults = (
   'DB_TLS_CLIENT_KEY' => '/etc/mysql-ssl/client-key.pem',
   'INSTALL_SRU'       => 'yes',
   'INSTALL_PAZPAR2'   => 'no',
-  'AUTH_INDEX_MODE'   => 'dom',
-  'BIB_INDEX_MODE'    => 'dom',
   'ZEBRA_MARC_FORMAT' => 'marc21',
   'ZEBRA_LANGUAGE'    => 'en',
   'ZEBRA_TOKENIZER'   => 'chr',
@@ -517,8 +513,6 @@ my %valid_config_values = (
   'DB_TYPE' => { 'mysql' => 1, 'Pg' => 1 },
   'DB_USE_TLS' => {'yes', 'no'},
   'INSTALL_SRU' => { 'yes' => 1, 'no' => 1 },
-  'AUTH_INDEX_MODE' => { 'grs1' => 1, 'dom' => 1 },
-  'BIB_INDEX_MODE'  => { 'grs1' => 1, 'dom' => 1 },
   'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'normarc' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
   'ZEBRA_LANGUAGE'    => { 'cs' => 1, 'en' => 1, 'es' => 1, 'fr' => 1, 'gr' => 1, 'nb' => 1, 'ru' => 1, 'uk' => 1 }, # FIXME should generate from contents of distribution
   'ZEBRA_TOKENIZER' => { chr => 1, icu => 1 },
@@ -543,8 +537,6 @@ my $cli_zebra_pass = "";
 my $cli_zebra_sru_host = "";
 my $cli_zebra_sru_bib_port = "";
 my $cli_zebra_sru_auth_port = "";
-my $cli_koha_auth_index_mode = "";
-my $cli_koha_bib_index_mode = "";
 my $cli_koha_user = "";
 my $cli_koha_group = "";
 my $cli_koha_install_sru = "";
@@ -572,8 +564,6 @@ my $results = GetOptions(
     "zebra_sru_host=s"             => \$cli_zebra_sru_host,
     "zebra_sru_biblios_port=s"     => \$cli_zebra_sru_bib_port,
     "zebra_sru_authorities_port=s" => \$cli_zebra_sru_auth_port,
-    "auth_index_mode=s"            => \$cli_koha_auth_index_mode,
-    "bib_index_mode=s"             => \$cli_koha_bib_index_mode,
     "koha_user=s"                  => \$cli_koha_user,
     "koha_group=s"                 => \$cli_koha_group,
     "install_sru=s"                => \$cli_koha_install_sru,
@@ -615,15 +605,11 @@ my $pl_files = {
 
 push @{ $pl_files->{'rewrite-config.PL'} }, (
     'blib/ZEBRA_CONF_DIR/etc/passwd',
-    'blib/ZEBRA_CONF_DIR/zebra-biblios.cfg',
     'blib/ZEBRA_CONF_DIR/zebra-biblios-dom.cfg',
-    'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg',
     'blib/ZEBRA_CONF_DIR/zebra-authorities-dom.cfg',
     'blib/ZEBRA_CONF_DIR/explain-authorities.xml',
     'blib/ZEBRA_CONF_DIR/explain-biblios.xml',
-    'blib/ZEBRA_CONF_DIR/retrieval-info-auth-grs1.xml',
     'blib/ZEBRA_CONF_DIR/retrieval-info-auth-dom.xml',
-    'blib/ZEBRA_CONF_DIR/retrieval-info-bib-grs1.xml',
     'blib/ZEBRA_CONF_DIR/retrieval-info-bib-dom.xml',
 );
 push @{ $pl_files->{'rewrite-config.PL'} }, (
@@ -637,19 +623,10 @@ if ($config{'INSTALL_PAZPAR2'} eq 'yes') {
         'blib/PAZPAR2_CONF_DIR/pazpar2.xml'
     );
 }
-$config{'ZEBRA_AUTH_CFG'} = $config{'AUTH_INDEX_MODE'} eq 'dom'
-                              ? 'zebra-authorities-dom.cfg'
-                              : 'zebra-authorities.cfg';
-$config{'ZEBRA_BIB_CFG'}  = $config{'BIB_INDEX_MODE'} eq 'dom'
-                              ? 'zebra-biblios-dom.cfg'
-                              : 'zebra-biblios.cfg';
-$config{'AUTH_RETRIEVAL_CFG'} = $config{'AUTH_INDEX_MODE'} eq 'dom'
-                                  ? 'retrieval-info-auth-dom.xml'
-                                  : 'retrieval-info-auth-grs1.xml';
-$config{'BIB_RETRIEVAL_CFG'}  = $config{'BIB_INDEX_MODE'} eq 'dom'
-                                  ? 'retrieval-info-bib-dom.xml'
-                                  : 'retrieval-info-bib-grs1.xml';
-
+$config{'ZEBRA_AUTH_CFG'} = 'zebra-authorities-dom.cfg';
+$config{'ZEBRA_BIB_CFG'}  = 'zebra-biblios-dom.cfg';
+$config{'AUTH_RETRIEVAL_CFG'} = 'retrieval-info-auth-dom.xml';
+$config{'BIB_RETRIEVAL_CFG'}  = 'retrieval-info-bib-dom.xml';
 
 if ($config{'INSTALL_MODE'} ne "dev") {
     push @{ $pl_files->{'rewrite-config.PL'} }, (
@@ -861,8 +838,6 @@ sub get_cli_values {
         ZEBRA_SRU_HOST             => $cli_zebra_sru_host,
         ZEBRA_SRU_BIBLIOS_PORT     => $cli_zebra_sru_bib_port,
         ZEBRA_SRU_AUTHORITIES_PORT => $cli_zebra_sru_auth_port,
-        AUTH_INDEX_MODE            => $cli_koha_auth_index_mode,
-        BIB_INDEX_MODE             => $cli_koha_bib_index_mode,
         KOHA_USER                  => $cli_koha_user,
         KOHA_GROUP                 => $cli_koha_group,
         INSTALL_SRU                => $cli_koha_install_sru,
@@ -1119,33 +1094,6 @@ records.
 Primary language for Zebra indexing);
     $msg .= _add_valid_values_disp('ZEBRA_LANGUAGE', $valid_values);
     $config{'ZEBRA_LANGUAGE'} = _get_value('ZEBRA_LANGUAGE', $msg, $defaults->{'ZEBRA_LANGUAGE'}, $valid_values, $install_log_values);
-
-    $msg = q(
-Koha can use one of  two different indexing modes
-for the MARC bibliographic records:
-
-dom  - uses the DOM XML filter; offers improved
-       functionality.
-grs1 - [DEPRECATED] uses the Zebra GRS-1 filter,
-       available for legacy support
-
-Bibliographic indexing mode);
-    $msg .= _add_valid_values_disp('BIB_INDEX_MODE', $valid_values);
-    $config{'BIB_INDEX_MODE'} = _get_value('BIB_INDEX_MODE', $msg, $defaults->{'BIB_INDEX_MODE'}, $valid_values, $install_log_values);
-
-
-    $msg = q(
-Koha can use one of  two different indexing modes
-for the MARC authorities records:
-
-dom  - uses the DOM XML filter; offers improved
-       functionality.
-grs1 - [DEPRECATED] uses the Zebra GRS-1 filter,
-       available for legacy support
-
-Authorities indexing mode);
-    $msg .= _add_valid_values_disp('AUTH_INDEX_MODE', $valid_values);
-    $config{'AUTH_INDEX_MODE'} = _get_value('AUTH_INDEX_MODE', $msg, $defaults->{'AUTH_INDEX_MODE'}, $valid_values, $install_log_values);
 
     $msg = q(
 Zebra has two methods to perform records tokenization

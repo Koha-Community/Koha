@@ -109,10 +109,7 @@ sub Mock_SimpleSearch {
     }
     $record->append_fields($biblionumber_field);
 
-    my $indexing_mode = C4::Context->config('zebra_bib_index_mode') // 'dom';
-    push @results, ( $indexing_mode eq 'dom' )
-                    ? $record->as_xml()
-                    : $record->as_usmarc() ;
+    push @results, $record->as_xml();
 
     return ( undef, \@results, 1 );
 }

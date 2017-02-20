@@ -619,16 +619,8 @@ sub _new_Zconn {
         $index_mode = $context->{'config'}->{'zebra_auth_index_mode'} // 'dom';
     }
 
-    if ( $index_mode eq 'grs1' ) {
-        $elementSetName = 'F';
-        $syntax = ( $context->preference("marcflavour") eq 'UNIMARC' )
-                ? 'unimarc'
-                : 'usmarc';
-
-    } else { # $index_mode eq 'dom'
-        $syntax = 'xml';
-        $elementSetName = 'marcxml';
-    }
+    $syntax = 'xml';
+    $elementSetName = 'marcxml';
 
     my $host = $context->{'listen'}->{$server}->{'content'};
     my $user = $context->{"serverinfo"}->{$server}->{"user"};

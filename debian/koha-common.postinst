@@ -136,7 +136,7 @@ fi
 # that we're fixing them from is there, so we just run it every time. Maybe
 # in many years time we can get rid of this, when no one will be running
 # Koha < 3.20.
-for zfile in $( find /etc/koha/sites -name zebra-authorities.cfg -or -name zebra-authorities-dom.cfg -or -name zebra-biblios.cfg -or -name zebra-biblios-dom.cfg ); do
+for zfile in $( find /etc/koha/sites-name zebra-authorities-dom.cfg -or -name zebra-biblios-dom.cfg ); do
     perl -p -i -e 's{^modulePath: /usr/lib/idzebra-2.0/modules$}{modulePath: /usr/lib/idzebra-2.0/modules:/usr/lib/x86_64-linux-gnu/idzebra-2.0/modules:/usr/lib/i386-linux-gnu/idzebra-2.0/modules:/usr/lib/aarch64-linux-gnu/idzebra-2.0/modules:/usr/lib/arm-linux-gnueabi/idzebra-2.0/modules:/usr/lib/arm-linux-gnueabihf/idzebra-2.0/modules:/usr/lib/mips-linux-gnu/idzebra-2.0/modules:/usr/lib/mipsel-linux-gnu/idzebra-2.0/modules:/usr/lib/powerpc-linux-gnu/idzebra-2.0/modules:/usr/lib/powerpc64le-linux-gnu/idzebra-2.0/modules:/usr/lib/s390x-linux-gnu/idzebra-2.0/modules}' $zfile
 done
 

@@ -102,8 +102,6 @@ generate_config_file() {
         -e "s/__SRU_BIBLIOS_PORT__/$SRU_SERVER_PORT/g" \
         -e "s/__START_SRU_PUBLICSERVER__/$START_SRU_PUBLICSERVER/g" \
         -e "s/__END_SRU_PUBLICSERVER__/$END_SRU_PUBLICSERVER/g" \
-        -e "s/__BIBLIOS_INDEXING_MODE__/$BIBLIOS_INDEXING_MODE/g" \
-        -e "s/__AUTHORITIES_INDEXING_MODE__/$AUTHORITIES_INDEXING_MODE/g" \
         -e "s/__ZEBRA_BIBLIOS_CFG__/$ZEBRA_BIBLIOS_CFG/g" \
         -e "s/__ZEBRA_AUTHORITIES_CFG__/$ZEBRA_AUTHORITIES_CFG/g" \
         -e "s/__START_BIBLIOS_RETRIEVAL_INFO__/`echo $START_BIBLIOS_RETRIEVAL_INFO`/g" \
@@ -228,71 +226,41 @@ EOM
 
 set_biblios_indexing_mode()
 {
-    local indexing_mode=$1
-    local marc_format=$2
+    local marc_format=$1
 
-    case $indexing_mode in
-        "dom")
-            START_BIBLIOS_RETRIEVAL_INFO=`cat <<EOF
+    START_BIBLIOS_RETRIEVAL_INFO=`cat <<EOF
     <xi:include href="\/etc\/koha\/$marc_format-retrieval-info-bib-dom.xml"\n
                 xmlns:xi="http:\/\/www.w3.org\/2001\/XInclude">\n
      <xi:fallback>\n
       <retrievalinfo>
 EOF`
 
-            END_BIBLIOS_RETRIEVAL_INFO=`cat <<EOF
+    END_BIBLIOS_RETRIEVAL_INFO=`cat <<EOF
       <\/retrievalinfo>\n
      <\/xi:fallback>\n
     <\/xi:include>
 EOF`
-            BIBLIOS_INDEXING_MODE="dom"
-            ZEBRA_BIBLIOS_CFG="zebra-biblios-dom.cfg"
-            ;;
-        "grs1")
-            START_BIBLIOS_RETRIEVAL_INFO="    <retrievalinfo>"
-            END_BIBLIOS_RETRIEVAL_INFO="    <\/retrievalinfo>"
-            BIBLIOS_INDEXING_MODE="grs1"
-            ZEBRA_BIBLIOS_CFG="zebra-biblios.cfg"
-            ;;
-        *)
-            die "Error: '$indexing_mode' is not a valid indexing mode for bibliographic records."
-            ;;
-    esac
+    ZEBRA_BIBLIOS_CFG="zebra-biblios-dom.cfg"
 }
 
 
 set_authorities_indexing_mode()
 {
-    local indexing_mode=$1
-    local marc_format=$2
+    local marc_format=$1
 
-    case $indexing_mode in
-        "dom")
-            START_AUTHORITIES_RETRIEVAL_INFO=`cat <<EOF
+    START_AUTHORITIES_RETRIEVAL_INFO=`cat <<EOF
     <xi:include href="\/etc\/koha\/$marc_format-retrieval-info-auth-dom.xml"\n
                 xmlns:xi="http:\/\/www.w3.org\/2001\/XInclude">\n
      <xi:fallback>\n
       <retrievalinfo>
 EOF`
 
-            END_AUTHORITIES_RETRIEVAL_INFO=`cat <<EOF
+    END_AUTHORITIES_RETRIEVAL_INFO=`cat <<EOF
       <\/retrievalinfo>\n
      <\/xi:fallback>\n
     <\/xi:include>\n
 EOF`
-            AUTHORITIES_INDEXING_MODE="dom"
-            ZEBRA_AUTHORITIES_CFG="zebra-authorities-dom.cfg"
-            ;;
-        "grs1")
-            START_AUTHORITIES_RETRIEVAL_INFO="    <retrievalinfo>"
-            END_AUTHORITIES_RETRIEVAL_INFO="    <\/retrievalinfo>"
-            AUTHORITIES_INDEXING_MODE="grs1"
-            ZEBRA_AUTHORITIES_CFG="zebra-authorities.cfg"
-            ;;
-        *)
-            die "Error: '$indexing_mode' is not a valid indexing mode for authority records."
-            ;;
-    esac
+    ZEBRA_AUTHORITIES_CFG="zebra-authorities-dom.cfg"
 }
 
 
@@ -446,10 +414,6 @@ DEFAULT_SRU_SERVER_PORT="7090"
 START_SRU_PUBLICSERVER="<!--"
 END_SRU_PUBLICSERVER="-->"
 
-# Indexing mode variables (default is DOM)
-BIBLIOS_INDEXING_MODE="dom"
-AUTHORITIES_INDEXING_MODE="dom"
-
 START_BIBLIOS_RETRIEVAL_INFO=""
 END_BIBLIOS_RETRIEVAL_INFO=""
 START_AUTHORITIES_RETRIEVAL_INFO=""
@@ -475,8 +439,6 @@ CLO_ZEBRA_MARC_FORMAT=""
 CLO_ZEBRA_LANGUAGE=""
 CLO_DEFAULTSQL=""
 CLO_ADMINUSER=""
-CLO_BIBLIOS_INDEXING_MODE=""
-CLO_AUTHORITIES_INDEXING_MODE=""
 CLO_MEMCACHED_SERVERS=""
 CLO_MEMCACHED_PREFIX=""
 CLO_UPLOAD_PATH=""
@@ -503,10 +465,6 @@ while true ; do
             CLO_ZEBRA_MARC_FORMAT="$2" ; shift 2 ;;
         -l|--zebralang)
             CLO_ZEBRA_LANGUAGE="$2" ; shift 2 ;;
-        --auth-idx)
-            CLO_AUTHORITIES_INDEXING_MODE="$2" ; shift 2 ;;
-        --biblio-idx)
-            CLO_BIBLIOS_INDEXING_MODE="$2" ; shift 2 ;;
         -d|--defaultsql)
             CLO_DEFAULTSQL="$2" ; shift 2 ;;
         -f|--configfile)
@@ -583,17 +541,13 @@ if [ "$CLO_BIBLIOS_INDEXING_MODE" !=  "" ]; then
     BIBLIOS_INDEXING_MODE=$CLO_BIBLIOS_INDEXING_MODE
 fi
 
-set_biblios_indexing_mode $BIBLIOS_INDEXING_MODE $ZEBRA_MARC_FORMAT
+set_biblios_indexing_mode $ZEBRA_MARC_FORMAT
 
 if [ "$ENABLE_SRU" != "no" ]; then
     enable_sru_server
 fi
 
-if [ "$CLO_AUTHORITIES_INDEXING_MODE" !=  "" ]; then
-    AUTHORITIES_INDEXING_MODE=$CLO_AUTHORITIES_INDEXING_MODE
-fi
-
-set_authorities_indexing_mode $AUTHORITIES_INDEXING_MODE $ZEBRA_MARC_FORMAT
+set_authorities_indexing_mode $ZEBRA_MARC_FORMAT
 
 [ $# -ge 1 ] || ( usage ; die "Missing instance name..." )
 
@@ -754,12 +708,8 @@ eof
         "/etc/koha/sites/$name/log4perl.conf"
 
     # Generate and install Zebra config files.
-    generate_config_file zebra-biblios-site.cfg.in \
-        "/etc/koha/sites/$name/zebra-biblios.cfg"
     generate_config_file zebra-biblios-dom-site.cfg.in \
         "/etc/koha/sites/$name/zebra-biblios-dom.cfg"
-    generate_config_file zebra-authorities-site.cfg.in \
-        "/etc/koha/sites/$name/zebra-authorities.cfg"
     generate_config_file zebra-authorities-dom-site.cfg.in \
         "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
     generate_config_file zebra.passwd.in \

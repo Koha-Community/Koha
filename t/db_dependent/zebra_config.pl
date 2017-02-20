@@ -15,21 +15,11 @@ my $destination = $ARGV[0];
 my $marc_type = $ARGV[1] || 'marc21';
 my $indexing_mode = $ARGV[2] || 'dom';
 
-$ENV{__BIB_INDEX_MODE__} = $indexing_mode;
-$ENV{__AUTH_INDEX_MODE__} = $indexing_mode;
-
 $ENV{__ZEBRA_MARC_FORMAT__} = $marc_type;
-if ($indexing_mode eq 'dom') {
-    $ENV{__ZEBRA_BIB_CFG__} = 'zebra-biblios-dom.cfg';
-    $ENV{__BIB_RETRIEVAL_CFG__} = 'retrieval-info-bib-dom.xml';
-    $ENV{__ZEBRA_AUTH_CFG__} = 'zebra-authorities-dom.cfg';
-    $ENV{__AUTH_RETRIEVAL_CFG__} = 'retrieval-info-auth-dom.xml';
-} else {
-    $ENV{__ZEBRA_BIB_CFG__} = 'zebra-biblios.cfg';
-    $ENV{__BIB_RETRIEVAL_CFG__} = 'retrieval-info-bib-grs1.xml';
-    $ENV{__ZEBRA_AUTH_CFG__} = 'zebra-authorities.cfg';
-    $ENV{__AUTH_RETRIEVAL_CFG__} = 'retrieval-info-auth-grs1.xml';
-}
+$ENV{__ZEBRA_BIB_CFG__} = 'zebra-biblios-dom.cfg';
+$ENV{__BIB_RETRIEVAL_CFG__} = 'retrieval-info-bib-dom.xml';
+$ENV{__ZEBRA_AUTH_CFG__} = 'zebra-authorities-dom.cfg';
+$ENV{__AUTH_RETRIEVAL_CFG__} = 'retrieval-info-auth-dom.xml';
 
 make_path("$destination/var/lock/zebradb");
 make_path("$destination/var/lock/zebradb/biblios");

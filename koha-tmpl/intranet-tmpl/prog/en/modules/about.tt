@@ -307,69 +307,21 @@
             <table>
                 <caption>XML configuration file</caption>
             [% FOREACH config_entry IN xml_config_warnings %]
-                [% IF config_entry.error == 'zebra_bib_index_mode_warn' %]
+                [% IF config_entry.error == 'zebra_bib_index_mode_is_grs1' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
-                    <td>The &lt;zebra_bib_index_mode&gt; entry is missing in your configuration file.
-                        It should be set to 'dom' or 'grs1' (deprecated).
-                        It will default to 'dom'.
-                    </td>
-                </tr>
-                [% ELSIF config_entry.error == 'zebra_bib_mode_seems_grs1' %]
-                <tr>
-                    <th scope="row"><b>Info</b></th>
-                    <td>Your configuration file still seems to be set up for 'grs1'.</td>
-                </tr>
-                [% ELSIF config_entry.error == 'zebra_bib_mode_seems_dom' %]
-                <tr>
-                    <th scope="row"><b>Info</b></th>
-                    <td>Your configuration file seems to be set up for 'dom'.</td>
-                </tr>
-                [% ELSIF config_entry.error == 'zebra_auth_index_mode_warn' %]
-                <tr>
-                    <th scope="row"><b>Warning</b></th>
-                    <td>The &lt;zebra_auth_index_mode&gt; entry is missing in your configuration file.
-                        It should be set to 'dom' or 'grs1' (deprecated).
-                        It will default to 'dom'.
-                    </td>
-                </tr>
-                [% ELSIF config_entry.error == 'zebra_auth_mode_seems_grs1' %]
-                <tr>
-                    <th scope="row"><b>Info</b></th>
-                    <td>Your configuration file still seems to be set up for 'grs1'.</td>
-                </tr>
-                [% ELSIF config_entry.error == 'zebra_auth_mode_seems_dom' %]
-                <tr>
-                    <th scope="row"><b>Info</b></th>
-                    <td>Your configuration file seems to be set up for 'dom'.</td>
-                </tr>
-                [% ELSIF config_entry.error == 'zebra_bib_grs_warn' %]
-                <tr>
-                    <th scope="row"><b>Warning</b></th>
-                    <td>The &lt;zebra_bib_index_mode&gt; entry is set to 'grs1'.
-                        GRS-1 support is now deprecated and will be removed in future releases.
+                    <td>The &lt;zebra_bib_index_mode&gt; entry set to 'grs1', which is no longer supported.
                         Please use DOM instead. To switch follow this page of wiki:
                         <a href="https://wiki.koha-community.org/wiki/Switching_to_dom_indexing">Switching to dom indexing</a>
                     </td>
                 </tr>
-                [% ELSIF config_entry.error == 'zebra_bib_index_mode_mismatch_warn' %]
+                [% ELSIF config_entry.error == 'zebra_auth_index_mode_is_grs1' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
-                    <td>The &lt;zebra_bib_index_mode&gt; entry is set to 'dom', but your system still appears to be set up for 'grs1' indexing.</td>
-                </tr>
-                [% ELSIF config_entry.error == 'zebra_auth_grs_warn' %]
-                <tr>
-                    <th scope="row"><b>Warning</b></th>
-                    <td>The &lt;zebra_auth_index_mode&gt; entry is set to 'grs1'.
-                        GRS-1 support is now deprecated and will be removed in future releases.
+                    <td>The &lt;zebra_auth_index_mode&gt; entry set to 'grs1', which is no longer supported.
                         Please use DOM instead. To switch follow this page of wiki:
                         <a href="https://wiki.koha-community.org/wiki/Switching_to_dom_indexing">Switching to dom indexing</a>
                     </td>
-                </tr>
-                [% ELSIF config_entry.error == 'zebra_auth_index_mode_mismatch_warn' %]
-                <tr>
-                    <th scope="row"><b>Warning</b></th>
-                    <td>The &lt;zebra_auth_index_mode&gt; entry is set to 'dom', but your system still appears to be set up for 'grs1' indexing.</td>
                 </tr>
                 [% ELSIF config_entry.error == 'queryparser_entry_missing' %]
                 <tr>
@@ -382,13 +334,6 @@
                 <tr>
                     <th scope="row"><b>Warning</b></th>
                     <td>The &lt;use_zebra_facets&gt; entry is missing in your configuration file. Falling back
-                        to legacy facet calculation.
-                    </td>
-                </tr>
-                [% ELSIF config_entry.error == 'use_zebra_facets_needs_dom' %]
-                <tr>
-                    <th scope="row"><b>Warning</b></th>
-                    <td>You have set &lt;use_zebra_facets&gt; but the &lt;zebra_bib_index_mode&gt; is not set to 'dom'. Falling back
                         to legacy facet calculation.
                     </td>
                 </tr>

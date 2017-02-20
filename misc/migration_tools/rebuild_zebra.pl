@@ -169,8 +169,6 @@ my $biblioserverdir = C4::Context->zebraconfig('biblioserver')->{directory};
 my $authorityserverdir = C4::Context->zebraconfig('authorityserver')->{directory};
 
 my $kohadir = C4::Context->config('intranetdir');
-my $bib_index_mode  = C4::Context->config('zebra_bib_index_mode')  // 'dom';
-my $auth_index_mode = C4::Context->config('zebra_auth_index_mode') // 'dom';
 
 my ($biblionumbertagfield,$biblionumbertagsubfield) = C4::Biblio::GetMarcFromKohaField("biblio.biblionumber","");
 my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = C4::Biblio::GetMarcFromKohaField("biblioitems.biblioitemnumber","");
@@ -281,8 +279,7 @@ if ($keep_export) {
         print "parameter";
     }
     print "\n";
-    print "if you just want to rebuild zebra after changing the record.abs\n";
-    print "or another zebra config file\n";
+    print "if you just want to rebuild zebra after changing zebra config files\n";
 } else {
     unless ($use_tempdir) {
         # if we're using a temporary directory
