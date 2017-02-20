@@ -1,6 +1,7 @@
 {
   "/holds": {
     "get": {
+      "x-mojo-to": "Hold#list",
       "operationId": "listHolds",
       "tags": ["patrons", "holds"],
       "parameters": [
@@ -118,8 +119,32 @@
             "$ref": "../definitions.json#/holds"
           }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Hold not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "404": {
           "description": "Borrower not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }
@@ -134,6 +159,7 @@
       }
     },
     "post": {
+      "x-mojo-to": "Hold#add",
       "operationId": "addHold",
       "tags": ["patrons", "holds"],
       "parameters": [{
@@ -184,6 +210,12 @@
             "$ref": "../definitions.json#/error"
           }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Hold not allowed",
           "schema": {
@@ -197,7 +229,13 @@
           }
         },
         "500": {
-          "description": "Internal error",
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }
@@ -213,6 +251,7 @@
   },
   "/holds/{reserve_id}": {
     "put": {
+      "x-mojo-to": "Hold#edit",
       "operationId": "editHold",
       "tags": ["holds"],
       "parameters": [{
@@ -258,8 +297,32 @@
             "$ref": "../definitions.json#/error"
           }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Hold not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "404": {
           "description": "Hold not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }
@@ -274,6 +337,7 @@
       }
     },
     "delete": {
+      "x-mojo-to": "Hold#delete",
       "operationId": "deleteHold",
       "tags": ["holds"],
       "parameters": [{
@@ -288,8 +352,32 @@
             "type": "object"
           }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Hold not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "404": {
           "description": "Hold not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }
