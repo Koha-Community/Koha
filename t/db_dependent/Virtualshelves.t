@@ -439,7 +439,7 @@ subtest 'Shelf permissions' => sub {
 };
 
 subtest 'Get shelves' => sub {
-    plan tests => 4;
+    plan tests => 5;
     my $patron1 = $builder->build({
         source => 'Borrower',
     });
@@ -477,18 +477,28 @@ subtest 'Get shelves' => sub {
             public => 1,
         }
     )->store;
+    my $shelf_to_share = Koha::Virtualshelf->new({
+            shelfname => "shared shelf",
+            owner => $patron1->{borrowernumber},
+            category => 1,
+        }
+    )->store;
 
     my $private_shelves = Koha::Virtualshelves->get_private_shelves;
     is( $private_shelves->count, 0, 'Without borrowernumber given, get_private_shelves should not return any shelf' );
     $private_shelves = Koha::Virtualshelves->get_private_shelves({ borrowernumber => $patron1->{borrowernumber} });
-    is( $private_shelves->count, 2, 'get_private_shelves should return all shelves for a given patron' );
+    is( $private_shelves->count, 3, 'get_private_shelves should return all shelves for a given patron' );
 
     $private_shelf2_1->share('a key')->accept('a key', $patron1->{borrowernumber});
     $private_shelves = Koha::Virtualshelves->get_private_shelves({ borrowernumber => $patron1->{borrowernumber} });
-    is( $private_shelves->count, 3, 'get_private_shelves should return all shelves for a given patron, even the shared ones' );
+    is( $private_shelves->count, 4, 'get_private_shelves should return all shelves for a given patron, even the shared ones' );
 
     my $public_shelves = Koha::Virtualshelves->get_public_shelves;
     is( $public_shelves->count, 2, 'get_public_shelves should return all public shelves, no matter who is the owner' );
+
+    my $shared_shelf = eval { $shelf_to_share->share("valid key") };
+    my $shared_shelves = Koha::Virtualshelves->get_shared_shelves({ borrowernumber => $patron1->{borrowernumber} });
+    is( $shared_shelves->count, 1, 'get_shared_shelves should return shared shelves' );
 
     teardown();
 };

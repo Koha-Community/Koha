@@ -387,18 +387,23 @@ sub delete {
                 $hold->cancel;
             }
 
+            # FIXME Could be $patron->get_lists
             # If ListOwnershipUponPatronDeletion = transfer, change ownership of all
             # public and shared lists to the user who deleted them.
             if ( C4::Context->preference('ListOwnershipUponPatronDeletion') eq 'transfer' ) {
                 my $userenv = C4::Context->userenv();
                 my $usernumber = (ref($userenv) eq 'HASH') ? $userenv->{'number'} : 0;
                 my @publiclists = Koha::Virtualshelves->get_public_shelves;
-                my @sharedlists = Koha::Virtualshelves->search({ 'me.owner' => $self->borrowernumber, 'me.shelfnumber' => { -ident => 'virtualshelfshares.shelfnumber' }  }, { prefetch => 'virtualshelfshares' });
+                my @sharedlists = Koha::Virtualshelves->get_shared_shelves({ borrowernumber => $self->borrowernumber });
                 foreach my $plist ( @publiclists ) {
-                    $plist->set({ owner => $usernumber })->store;
+                    if ( $plist->owner == $self->borrowernumber ) {
+                        my $unique_name = $plist->shelfname . '_' . $self->borrowernumber;
+                        $plist->set({ owner => $usernumber, shelfname => $unique_name })->store;
+                    }
                 }
                 foreach my $slist ( @sharedlists ) {
-                    $slist->set({ owner => $usernumber })->store;
+                    my $unique_name = $slist->shelfname . '_' . $self->borrowernumber;
+                    $slist->set({ owner => $usernumber, shelfname => $unique_name })->store;
                     # if staff member had a share, remove it
                     $slist->remove_share( $usernumber );
                 }

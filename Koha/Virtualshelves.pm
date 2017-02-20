@@ -180,6 +180,19 @@ sub get_shelves_containing_record {
     );
 }
 
+sub get_shared_shelves {
+    my ( $self, $params ) = @_;
+    my $borrowernumber = $params->{borrowernumber} || 0;
+
+    $self->search(
+        {
+            'me.owner' => $borrowernumber,
+            'me.shelfnumber' => { -ident => 'virtualshelfshares.shelfnumber' }
+        },
+        { prefetch => 'virtualshelfshares' }
+    );
+}
+
 sub _type {
     return 'Virtualshelve';
 }
