@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 91;
+use Test::More tests => 92;
 
 BEGIN {
     require_ok('C4::Circulation');
@@ -1247,6 +1247,114 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
     is( keys(%$question) + keys(%$alerts), 0 );
     is( $error->{USERBLOCKEDNOENDDATE},    '9999-12-31' );
+};
+
+subtest 'MultipleReserves' => sub {
+    plan tests => 3;
+
+    my $biblio = MARC::Record->new();
+    my $title = 'Silence in the library';
+    $biblio->append_fields(
+        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
+        MARC::Field->new('245', ' ', ' ', a => $title),
+    );
+
+    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+
+    my $branch = $library2->{branchcode};
+
+    my $barcode1 = 'R00110001';
+    my ( $item_bibnum1, $item_bibitemnum1, $itemnumber1 ) = AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode1,
+            replacementprice => 12.00,
+            itype            => $itemtype
+        },
+        $biblionumber
+    );
+
+    my $barcode2 = 'R00110002';
+    my ( $item_bibnum2, $item_bibitemnum2, $itemnumber2 ) = AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode2,
+            replacementprice => 12.00,
+            itype            => $itemtype
+        },
+        $biblionumber
+    );
+
+    my $bibitems       = '';
+    my $priority       = '1';
+    my $resdate        = undef;
+    my $expdate        = undef;
+    my $notes          = '';
+    my $checkitem      = undef;
+    my $found          = undef;
+
+    my %renewing_borrower_data = (
+        firstname =>  'John',
+        surname => 'Renewal',
+        categorycode => 'S',
+        branchcode => $branch,
+    );
+    my $renewing_borrowernumber = AddMember(%renewing_borrower_data);
+    my $renewing_borrower = GetMember( borrowernumber => $renewing_borrowernumber );
+    my $issue = AddIssue( $renewing_borrower, $barcode1);
+    my $datedue = dt_from_string( $issue->date_due() );
+    is (defined $issue->date_due(), 1, "item 1 checked out");
+    my $borrowing_borrowernumber = GetItemIssue($itemnumber1)->{borrowernumber};
+
+    my %reserving_borrower_data1 = (
+        firstname =>  'Katrin',
+        surname => 'Reservation',
+        categorycode => 'S',
+        branchcode => $branch,
+    );
+    my $reserving_borrowernumber1 = AddMember(%reserving_borrower_data1);
+    AddReserve(
+        $branch, $reserving_borrowernumber1, $biblionumber,
+        $bibitems,  $priority, $resdate, $expdate, $notes,
+        $title, $checkitem, $found
+    );
+
+    my %reserving_borrower_data2 = (
+        firstname =>  'Kirk',
+        surname => 'Reservation',
+        categorycode => 'S',
+        branchcode => $branch,
+    );
+    my $reserving_borrowernumber2 = AddMember(%reserving_borrower_data2);
+    AddReserve(
+        $branch, $reserving_borrowernumber2, $biblionumber,
+        $bibitems,  $priority, $resdate, $expdate, $notes,
+        $title, $checkitem, $found
+    );
+
+    {
+        my ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber1, 1);
+        is($renewokay, 0, 'Bug 17641 - should cover the case where 2 books are both reserved, so failing');
+    }
+
+    my $barcode3 = 'R00110003';
+    my ( $item_bibnum3, $item_bibitemnum3, $itemnumber3 ) = AddItem(
+        {
+            homebranch       => $branch,
+            holdingbranch    => $branch,
+            barcode          => $barcode3,
+            replacementprice => 12.00,
+            itype            => $itemtype
+        },
+        $biblionumber
+    );
+
+    {
+        my ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber1, 1);
+        is($renewokay, 1, 'Bug 17641 - should cover the case where 2 books are reserved, but a third one is available');
+    }
 };
 
 subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
