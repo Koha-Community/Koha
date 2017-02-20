@@ -11973,6 +11973,14 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '3.22.16.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES('AuthorityMergeMode','loose','loose|strict','Authority merge mode','Choice')");
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17913 - AuthorityMergeMode)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
