@@ -250,7 +250,9 @@
                 <select name="multibranchlimit" id="categoryloop">
                     <option value=""> -- none -- </option>
                     [% FOREACH sg IN search_groups %]
-                        <option value="[% sg.id %]">[% sg.title %]</option>
+                        [% UNLESS sg.branchcode %]
+                            <option value="[% sg.id %]">[% sg.title %]</option>
+                        [% END %]
                     [% END %]
                 </select>
             </p>
