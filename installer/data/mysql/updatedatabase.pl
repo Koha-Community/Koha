@@ -15249,29 +15249,41 @@ $DBversion = '17.12.00.008';
 if ( CheckVersion($DBversion) ) {
     require Koha::Library::Group;
 
-    my $search_groups_staff_root = Koha::Library::Group->new( { title => '__SEARCH_GROUPS__', description => "Library search groups - Staff only" } )->store();
-    my $search_groups_opac_root = Koha::Library::Group->new( { title => '__SEARCH_GROUPS_OPAC__', description => "Library search groups - OPAC & Staff" } )->store();
+    $dbh->do(q{
+        INSERT INTO library_groups ( title, description, created_on ) VALUES ( '__SEARCH_GROUPS__', 'Library search groups - Staff only', NOW() )
+    });
+    my $search_groups_staff_root_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
+
+    $dbh->do(q{
+        INSERT INTO library_groups ( title, description, created_on ) VALUE ( '__SEARCH_GROUPS_OPAC__', 'Library search groups - Staff only', NOW() )
+    });
+    my $search_groups_opac_root_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
 
     my $sth = $dbh->prepare("SELECT * FROM branchcategories");
-    $sth->execute();
 
+    my $sth2 = $dbh->prepare("INSERT INTO library_groups ( parent_id, title, description, created_on ) VALUES ( ?, ?, ?, NOW() )");
+
+    my $sth3 = $dbh->prepare("SELECT * FROM branchrelations WHERE categorycode = ?");
+
+    my $sth4 = $dbh->prepare("INSERT INTO library_groups ( parent_id, branchcode, created_on ) VALUES ( ?, ?, NOW() )");
+
+    $sth->execute();
     while ( my $lc = $sth->fetchrow_hashref ) {
         my $description = $lc->{categorycode};
         $description .= " - " . $lc->{codedescription} if $lc->{codedescription};
 
-        my $subgroup = Koha::Library::Group->new(
-            {
-                parent_id   => $lc->{show_in_pulldown} ? $search_groups_opac_root->id : $search_groups_staff_root->id,
-                title       => $lc->{categoryname},
-                description => $description,
-            }
-        )->store();
+        $sth2->execute(
+            $lc->{show_in_pulldown} ? $search_groups_opac_root_id : $search_groups_staff_root_id,
+            $lc->{categoryname},
+            $description,
+        );
 
-        my $sth2 = $dbh->prepare("SELECT * FROM branchrelations WHERE categorycode = ?");
-        $sth2->execute( $lc->{categorycode} );
+        my $subgroup_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
 
-        while ( my $l = $sth2->fetchrow_hashref ) {
-            Koha::Library::Group->new( { parent_id => $subgroup->id, branchcode => $l->{branchcode} } )->store();
+        $sth3->execute( $lc->{categorycode} );
+
+        while ( my $l = $sth3->fetchrow_hashref ) {
+            $sth4->execute( $subgroup_id, $l->{branchcode} );
         }
     }
 
