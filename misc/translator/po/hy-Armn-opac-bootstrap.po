@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-01-15 22:01-0300\n"
-"PO-Revision-Date: 2017-01-04 07:00+0000\n"
+"POT-Creation-Date: 2017-02-15 18:28-0300\n"
+"PO-Revision-Date: 2017-02-20 12:57+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1483513259.000000\n"
+"X-POOTLE-MTIME: 1487595457.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -803,9 +803,9 @@ msgstr "%s Չի թույլատրված"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:255
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable "
-msgstr "%s Ավտոմատ թարմացում "
+msgstr "%s Չթարմացվող "
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
@@ -866,7 +866,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:792
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
-msgstr ""
+msgstr "%s Սպասող %s Կատարվող %s Ավարտված %s Չեղարկված %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -1750,9 +1750,9 @@ msgstr "%s%s%sԿոհա առցանց%s քարտարան &rsaquo; Մանրամաս
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Discharge"
-msgstr "%s%s%sԿոհա առցանց%s քարտարան &rsaquo; Ցուցիչներ"
+msgstr "%s%s%sԿոհա առցանց%s քարտարան &rsaquo; Հետ գանձիր"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1884,9 +1884,9 @@ msgstr "%s%s%sԿոհա առցանց%s քարտարան &rsaquo; Վերջին մ�
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Request article"
-msgstr "%s%s%sԿոհա առցանց%s քարտարան &rsaquo; Քո սայլակը"
+msgstr "%s%s%sԿոհա առցանց%s քարտարան &rsaquo; Հոդվածի հարցում"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -2117,9 +2117,9 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "%s0 biblios%s "
-msgstr "%s մատեններ"
+msgstr "%s0 մատեններ%s "
 
 #. %1$s:  IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch 
@@ -2171,14 +2171,15 @@ msgstr "%sՀավաքածու%sՆյութի տեսակ%s"
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sՍպասվող%s %sԺամանած%s %sՈւշացած%s %sԲացակա%s %sՀասանելի չէ%s %sՋնջել%s "
-"%sԽարանված%s %sԿանգնեցված%s "
+"%sՍպասվող%s %sԺամանած%s %sՈւշացած%s %sԲացակա%s %sԲացակա (երբեք չստացված)%s "
+"%sԲացակա (վաճառված)%s %sԲացակա (վնասված)%s %sԲացակա (կորած)%s %sՀասանելի չէ"
+"%s %sՋնջել%s %sԽարանված%s %sԿանգնեցված%s "
 
 #. %1$s:  IF (latestserial.status1 ) 
 #. %2$s:  END 
@@ -2205,14 +2206,15 @@ msgstr ""
 #. %23$s:  IF (latestserial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:835
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
 "%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sՍպասվող%s %sԺամանած%s %sՈւշացած%s %sԲացակա%s %sՀասանելի չէ%s %sՋնջել%s "
-"%sԽարանված%s %sԿանգնեցված%s "
+"%sՍպասվող%s %sԺամանած%s %sՈւշացած%s %sԲացակա%s %sԲացակա (երբեք չստացված)%s "
+"%sԲացակա (վաճառված)%s %sԲացակա (վնասված)%s %sԲացակա (կորած)%s %sՉսպասարկված"
+"%s %sՋնջել%s %sԽարանված%s %sԿանգնեցված%s "
 
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
 #. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
@@ -2281,7 +2283,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:49
 #, c-format
 msgid "%sThis authority is not used in any records.%s "
-msgstr ""
+msgstr "%sԱյս հեղինակավորը որևէ գրառման մեջ չի օգտագործված։%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -3096,15 +3098,15 @@ msgid "(modified on %s)"
 msgstr "(թարմացված է %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:257
-#, fuzzy, c-format
+#, c-format
 msgid "(on hold)"
-msgstr "(Պահված)"
+msgstr "(պահված)"
 
 #. %1$s:  ar.item.barcode 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:753
 #, c-format
 msgid "(only %s)"
-msgstr ""
+msgstr "(միայն %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:261
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:502
@@ -3183,9 +3185,9 @@ msgstr ". Խնդրում եմ կապվիր գրադարանավարի հետ, կ
 #. %2$s:  END 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid ".%sYou have fines.%s %s "
-msgstr "Դու ունես տուգանքներ։ Գումարն է %s. "
+msgstr ".%sԴու ունես տուգանքներ։%s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:57
 #, c-format
@@ -3297,10 +3299,10 @@ msgstr "Հաստատող էլ նամակ կուղարկվի այս էլ. փոս�
 
 #. %1$s:  message_value 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A payment with the transaction id '%s' has already been posted to an account."
-msgstr "արդեն ուղարկվել է հաշվի վրա"
+msgstr "Վճարումը տրանզակցիայի id '%s' արդեն առաքվել է հաշվին։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:288
 #, c-format
@@ -3608,9 +3610,9 @@ msgid "Any format"
 msgstr "Ինչ որ ձևաչափ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:168
-#, fuzzy, c-format
+#, c-format
 msgid "Any item "
-msgstr "Նյութի կամայական տեսակ"
+msgstr "Որևէ նյութ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:257
 #, c-format
@@ -3660,9 +3662,8 @@ msgstr "Վստա՞հ ես որ ուզում ես ջնջել այս ցուցակ�
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:172
-#, fuzzy
 msgid "Are you sure you want to delete this tag?"
-msgstr "Վստա՞հ ես որ ուզում ես ջնջել այս ցուցակը։"
+msgstr "Վստա՞հ ես որ ուզում ես ջնջել այս ցուցիչը։"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -3707,13 +3708,13 @@ msgstr "Վսհա՞հ ես որ ցանկանում ես կասեցնել բոլո
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:726
 #, c-format
 msgid "Article requests "
-msgstr ""
+msgstr "Հոդվածի պատվեր "
 
 #. %1$s:  borrower.article_requests_current.count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:137
 #, c-format
 msgid "Article requests (%s)"
-msgstr ""
+msgstr "Հոդվածի պատվեր (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:43
 #, c-format
@@ -3916,7 +3917,7 @@ msgstr "ԵՂԻՐ ԶԳՈՒՅՇ"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:14
 #, c-format
 msgid "BT"
-msgstr ""
+msgstr "ԼՏ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:30
@@ -4016,7 +4017,7 @@ msgstr "Հակիրճ պատմություն"
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:14
 msgid "Broader Term"
-msgstr ""
+msgstr "Լայն տերմին"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:278
 #, c-format
@@ -4171,9 +4172,9 @@ msgid "Cancel email notification "
 msgstr "Չեղյալ անել էլ փոստով զգուշացումը "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:809
-#, fuzzy, c-format
+#, c-format
 msgid "Cancel:"
-msgstr "Չեղյալ անել"
+msgstr "Չեղյալ անել:"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:75
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:762
@@ -4199,22 +4200,22 @@ msgstr "Չի կարող դնել պահման"
 
 #. %1$s:  maxlength_cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:151
-#, fuzzy, c-format
+#, c-format
 msgid "Card number can be up to %s characters."
-msgstr "Գաղտնաբառը պետք է պարունակի առնվազն %s նիշ։"
+msgstr "Քարտի համարը կարող է լինել մինչև %s նիշ։"
 
 #. %1$s:  minlength_cardnumber 
 #. %2$s:  maxlength_cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:147
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must be between %s and %s characters."
-msgstr "Քո գաղտնաբառը առնվազն պետք է լինի %s նիշ։"
+msgstr "Քարտի համարը պետք է լինի %s և %s նիշերի միջև։"
 
 #. %1$s:  minlength_cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:143
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must be exactly %s characters."
-msgstr "Քո գաղտնաբառը առնվազն պետք է լինի %s նիշ։"
+msgstr "Քարտի համարը պետք է լինի ուղիղ %s նիշ։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:50
 #, c-format
@@ -4262,13 +4263,13 @@ msgstr "Փոխիր քո գաղտնաբառը "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:737
 #, c-format
 msgid "Chapters"
-msgstr ""
+msgstr "Բաժիններ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:91
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:93
 #, c-format
 msgid "Chapters:"
-msgstr ""
+msgstr "Բաժիններ։"
 
 #. INPUT type=submit name=confirm
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:270
@@ -4551,9 +4552,8 @@ msgstr "Նշումներ մասին "
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:407
-#, fuzzy
 msgid "Confirm hold"
-msgstr "Հաստատիր գաղտնաբառը"
+msgstr "Հաստատիր պահումը"
 
 #. %1$s:  USER_INFO.firstname 
 #. %2$s:  USER_INFO.surname 
@@ -4631,7 +4631,7 @@ msgstr "Հեղինակային իրավունքի ամսաթիվը։"
 #. DIV
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:47
 msgid "Copyright or publication year, for example: 2016"
-msgstr ""
+msgstr "Արտոնագրի կամ հրատարակման տարին, օրինակ՝ 2016"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
@@ -5052,9 +5052,9 @@ msgid "Download"
 msgstr "Բեռնաթափիր"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:305
-#, fuzzy, c-format
+#, c-format
 msgid "Download as iCal/.ics file"
-msgstr "Բեռնաթափիր ցուցակ "
+msgstr "Բեռնաթափիր որպես iCal/.ics ֆայլ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:12
 #, c-format
@@ -5210,9 +5210,9 @@ msgid "Entry %s"
 msgstr "Մուտք %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:128
-#, fuzzy, c-format
+#, c-format
 msgid "Enumeration"
-msgstr "Ժամկետի լրացում"
+msgstr "Թվարկում"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:50
 #, c-format
@@ -5291,7 +5291,7 @@ msgstr "Սխալ"
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:22
 #, c-format
 msgid "Error: we cannot find this bibliographic record."
-msgstr ""
+msgstr "Սխալ․ չենք կարող գտնել այս մատենագիտական գրառումը։"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -6017,9 +6017,9 @@ msgid "Identity"
 msgstr "Ինքնություն"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid "If this is an error, please contact the library."
-msgstr "ցույց է տալիս քո հաշիվը որ լինի մաքուր, կապվիր գրադարանի հետ։"
+msgstr "եթե սա սխալ է, կապվիր գրադարանի հետ։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:38
 #, c-format
@@ -6071,14 +6071,16 @@ msgstr ""
 "գործել։ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:85
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a CAS account, you "
 "can use CAS."
-msgstr "Եթե չունես Shibboleth հաշիվ, բայց ունես CAS հաշիվ, %s "
+msgstr ""
+"Եթե չունես Shibboleth հաշիվ, բայց ունես CAS հաշիվ, կարող ես օգտագործել CAS-"
+"ը։ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a local login, then "
 "you may login below."
@@ -6102,21 +6104,22 @@ msgstr ""
 "հաճույքով կտրամադրենք այն։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:120
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you have a CAS account, please choose against which one you would like to "
 "authenticate:"
-msgstr "%s %s ընտրիր թե փոխճանաչումը որի համար ես ցանկանում կատարել։ "
+msgstr ""
+"Եթե ունես CAS հաշիվ, ընտրիր թե փոխճանաչումը որի համար ես ցանկանում կատարել։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:116
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a CAS account, please click here to log in."
-msgstr "Եթե ունես CAS հաշիվ, %s ապա "
+msgstr "Եթե ունես CAS հաշիվ, ապա սեղմիր այստեղ մուտքի համար։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:73
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a CAS account, you may use that below."
-msgstr "Եթե ունես CAS հաշիվ, %s ապա "
+msgstr "Եթե ունես CAS հաշիվ, կարող ես դա օգտագործել ներքևում։"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:317
 #, c-format
@@ -6124,16 +6127,14 @@ msgid "If you have a Shibboleth account, please "
 msgstr "Եթե ունես Շիբոլեթ հաշիվ, ապա "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a Shibboleth account, please click here to log in."
-msgstr "Եթե ունես Շիբոլեթ հաշիվ, ապա "
+msgstr "Եթե ունես Շիբոլեթ հաշիվ, սեղմիր այստեղ մուտքի համար։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "If you have a local account, you may use that below."
-msgstr ""
-"Ցավում եմ, CAS գրանցումը ևս ձախողվեց, եթե ունես տեղային գրանցում կարող ես "
-"ստորև օգտագործել այն։"
+msgstr "Եթե ունես տեղային հաշիվ, կարող ես այն օգտագործել ստորև։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:143
 #, c-format
@@ -6216,9 +6217,9 @@ msgid "Invalid shelf number."
 msgstr "Սխալ դարականիշ։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
-#, fuzzy, c-format
+#, c-format
 msgid "Issue"
-msgstr "Համար #"
+msgstr "Համար"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
 #, c-format
@@ -6227,9 +6228,9 @@ msgstr "Համար #"
 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:66
-#, fuzzy, c-format
+#, c-format
 msgid "Issue:"
-msgstr "Համար #"
+msgstr "Համար։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:30
@@ -6243,9 +6244,9 @@ msgid "Issues summary"
 msgstr "Համարի համառոտագրություն"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
-#, fuzzy, c-format
+#, c-format
 msgid "Item URI"
-msgstr "Նյութեր։ "
+msgstr "Նյութի URI"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:623
 #, c-format
@@ -6543,9 +6544,9 @@ msgid "Limit to: "
 msgstr "Սահմանափակիր։ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "Link"
-msgstr "Կապեր"
+msgstr "Հղում"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1278
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1280
@@ -6609,9 +6610,9 @@ msgid "Lists"
 msgstr "Ցուցակներ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:464
-#, fuzzy, c-format
+#, c-format
 msgid "Lists:"
-msgstr "Ցուցակներ"
+msgstr "Ցուցակներ։"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:168
@@ -6719,14 +6720,14 @@ msgid "Log in with Google"
 msgstr "Մուտք գործիր Գուուգլով"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "Log out"
-msgstr "%sԴուրս գալ"
+msgstr "Դուրս գալ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "Log out and try again with a different user."
-msgstr "և փորձիր կրկին որպես այլ օգտվող"
+msgstr "Դուրս արի և փորձիր կրկին որպես այլ օգտվող։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:187
 #, c-format
@@ -7022,7 +7023,7 @@ msgstr "Երաժշտական ձայնագրություն"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:16
 #, c-format
 msgid "NT"
-msgstr ""
+msgstr "ՆՏ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:30
 #, c-format
@@ -7032,7 +7033,7 @@ msgstr "Անուն"
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:16
 msgid "Narrower Term"
-msgstr ""
+msgstr "Նեղ տերմին"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:67
@@ -7578,7 +7579,7 @@ msgstr "Տեղային դուրս տրումներ"
 msgid ""
 "Once the library has processed those suggestions you will be able to place "
 "more."
-msgstr ""
+msgstr "Հենց գրադարանը կատարի այդ առաջարկները, դու կկարողնաս տեղադրել ավելին։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:55
 #, c-format
@@ -7591,17 +7592,17 @@ msgid "Online resources:"
 msgstr "Առցանց պաշարներ։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:39
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Only certain fields (marked in red) are required, but the more information "
 "you enter the easier it will be for the librarians to find the title you're "
 "requesting. The \"Notes\" field can be used to provide any additional "
 "information."
 msgstr ""
-"Միայն վերնագիր է պահանջվում, բայց ինչքան շատ տեղեկատվություն մուտք անես "
-"այնքան հեշտ կլինի գրադարանավարին գտնել պահանջվող վերնագիրը։ \"Նշումներ\" "
-"դաշտը կարելի է օգտագործել ցանկացած լրացուցիչ տեղեկատվություն տրամադրելու "
-"համար։"
+"Միայն որոշակի դաշտերն են (նշված են կարմիրով) պահանջված, բայց ինչքան շատ "
+"տեղեկատվություն մուտք անես այնքան հեշտ կլինի գրադարանավարին գտնել պահանջվող "
+"վերնագիրը։ \"Նշումներ\" դաշտը կարելի է օգտագործել ցանկացած լրացուցիչ "
+"տեղեկատվություն տրամադրելու համար։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:237
 #, c-format
@@ -7675,15 +7676,15 @@ msgid "Overdues "
 msgstr "Ժամկետանցներ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:736
-#, fuzzy, c-format
+#, c-format
 msgid "Pages"
-msgstr "Պատկերներ"
+msgstr "Էջեր"
 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:84
-#, fuzzy, c-format
+#, c-format
 msgid "Pages:"
-msgstr "Պատկերներ"
+msgstr "էջեր։"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:111
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:193
@@ -7796,14 +7797,14 @@ msgid "Pick up location:"
 msgstr "Վերցնելու վայր։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:740
-#, fuzzy, c-format
+#, c-format
 msgid "Pickup library"
-msgstr "Տնային գրադարան"
+msgstr "Վերցնելու գրադարան"
 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid "Pickup library:"
-msgstr "Վերցնելու վայր։"
+msgstr "Վերցնելու գրադարան։"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
@@ -7824,7 +7825,7 @@ msgstr "Դիր պահում։ "
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:27
 #, c-format
 msgid "Place article request for %s"
-msgstr ""
+msgstr "Տեղադրի հոդվածի պատվեր սրա համար %s"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:7
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:231
@@ -7842,9 +7843,8 @@ msgstr "Դնել պահում"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:177
-#, fuzzy
 msgid "Place request"
-msgstr "Տեղեր"
+msgstr "Տեղադրի պատվեր"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:536
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:730
@@ -7884,9 +7884,9 @@ msgid "Please choose a download format"
 msgstr "Պատվերի մեջ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:100
-#, fuzzy, c-format
+#, c-format
 msgid "Please choose against which one you would like to authenticate: "
-msgstr "%s %s ընտրիր թե փոխճանաչումը որի համար ես ցանկանում կատարել։ "
+msgstr "Ընտրիր թե փոխճանաչումը որի համար ես ցանկանում կատարել։ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:51
 #, c-format
@@ -7894,9 +7894,9 @@ msgid "Please choose your privacy rule:"
 msgstr "Ընտրիր քո անձնական գաղտնիության օրենքը"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:96
-#, fuzzy, c-format
+#, c-format
 msgid "Please click here to log in."
-msgstr "սեղմիր այստեղ մուտքի համար"
+msgstr "Սեղմիր այստեղ մուտքի համար։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:111
 #, c-format
@@ -7974,12 +7974,12 @@ msgid "Please enter your card number:"
 msgstr "Մուտք արա քարտի համարը"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please fill out this form to make a purchase suggestion. You will receive an "
 "email when the library processes your suggestion."
 msgstr ""
-"Լրացրու ձևաթուղթը գնման առաջարկի համար։ Երբ գրադարանը կկատարի քո պատվերը, "
+"Լրացրու ձևաթուղթը գնման առաջարկի համար։ Երբ գրադարանը կկատարի քո առաջարկը, "
 "դու կստանաս հաղորդագրություն։"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:61
@@ -8046,7 +8046,7 @@ msgstr "Նկատի ունեցիր։ "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:189
 msgid "Please select a specific item for this article request."
-msgstr ""
+msgstr "Ընտրիր որոշակի նյութ այս հոդվածը պատվիրելու համար։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:31
 #, c-format
@@ -8095,9 +8095,9 @@ msgid "Popularity (most to least)"
 msgstr "Հանրահայտություն (ավելից դեպի պակաս)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:939
-#, fuzzy, c-format
+#, c-format
 msgid "Post your comments on this item. "
-msgstr "Առաքի կամ խմբագրի քո մեկնաբանությունները այս նյութի վերաբերյալ "
+msgstr "Առաքիր քո մեկնաբանությունները այս նյութի վերաբերյալ։ "
 
 #. %1$s:  IF template.name.match('opac-main.tt') 
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:20
@@ -8326,7 +8326,7 @@ msgstr "RSS սնունդ հանրային ցուցակի համար %s"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
 #, c-format
 msgid "RT"
-msgstr ""
+msgstr "ԿՏ"
 
 #. INPUT type=submit name=rate_button
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:491
@@ -8367,9 +8367,9 @@ msgid "Recent comments "
 msgstr "Վերջերս արված մեկնաբանություններ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:87
-#, fuzzy, c-format
+#, c-format
 msgid "Record URL"
-msgstr "GetRecords"
+msgstr "Գրառման URL"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:158
 #, c-format
@@ -8377,9 +8377,9 @@ msgid "Record not found"
 msgstr "Գրառումը չի գտնվել"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:729
-#, fuzzy, c-format
+#, c-format
 msgid "Record title"
-msgstr "Մատենաշարի վերնագիր"
+msgstr "Գրառման վերնագիր"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:3
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:7
@@ -8425,9 +8425,8 @@ msgstr "Կանոնավոր տպում"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
-#, fuzzy
 msgid "Related Term"
-msgstr "Կապ ունեցող"
+msgstr "Կապված տերմին"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:366
 #, c-format
@@ -8549,9 +8548,9 @@ msgstr "Զեկուցիր կոտրված կապերի և պատահարների �
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:17
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:16
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:513
-#, fuzzy, c-format
+#, c-format
 msgid "Request article"
-msgstr "Լեգալ հոդվածներ"
+msgstr "Պատվիրի հոդված"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:255
 #, c-format
@@ -8818,9 +8817,9 @@ msgid "Save to another list"
 msgstr "Հիշիր մեկ այլ ցուցակում"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
-#, fuzzy, c-format
+#, c-format
 msgid "Save to your lists"
-msgstr "Հիշիր քո ցուցակներում "
+msgstr "Հիշիր քո ցուցակներում"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
 #, c-format
@@ -9366,7 +9365,7 @@ msgstr "Կներեք, առաջարկներ չկան։"
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:25
 #, c-format
 msgid "Sorry, only the creator of this comment is allowed to change it."
-msgstr ""
+msgstr "Այս մեջբերման ստեղծողը միայն կարող է փոխել այն։"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:168
@@ -9379,7 +9378,7 @@ msgid "Sorry, tags are not enabled on this system."
 msgstr "Ցավում եմ, ցուցիչները թույլատրված չեն այս համակարգում։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, the CAS login also failed. If you have a local login you may use that "
 "below."
@@ -9436,12 +9435,11 @@ msgid "Sorry, your Google login failed. "
 msgstr "Ցավում եմ, Գուուգլ մուտքը ձախողվեց։ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:67
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, your Shibboleth identity does not match a valid library identity."
 msgstr ""
-"Քո Շիբոլեթ բնութագրիչը չի համընկնում գրադարանի թույլատրելի բնութագրիչին։ Եթե "
-"ունես տեղային գրանցում, ստորև օգտագործիր այն։"
+"Քո Շիբոլեթ բնութագրիչը չի համընկնում գրադարանի թույլատրելի բնութագրիչին։"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:313
 #, c-format
@@ -10006,14 +10004,14 @@ msgstr ""
 "ձևավորման հետ։Օգնիր այն շտկելուն տեղյակ պահելով սրա մասին գրադարանին։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:82
-#, fuzzy, c-format
+#, c-format
 msgid "The entered card number is already in use."
-msgstr "Նյութը արդեն քո սայլակում է"
+msgstr "Մուտք արված քարտի համարն արդեն օգտագործվում է։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:80
-#, fuzzy, c-format
+#, c-format
 msgid "The entered card number is the wrong length."
-msgstr "սխալ երկարություն է։"
+msgstr "Մուտք արված քարտի համարն սխալ երկարություն ունի։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:38
 #, c-format
@@ -10029,9 +10027,8 @@ msgstr "Առաջին բաժանորդագրությունը սկսվել է %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:189
-#, fuzzy
 msgid "The following fields are required and not filled in: "
-msgstr "Հետևյալ դաշտերը պարունակում են սխալ տեղեկատվություն"
+msgstr "Հետևյալ դաշտերը պահանջված են և չեն լրացված։ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:59
 #, c-format
@@ -10165,9 +10162,9 @@ msgstr ""
 
 #. %1$s:  message_value 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:41
-#, fuzzy, c-format
+#, c-format
 msgid "The transaction id '%s' for this payment is invalid."
-msgstr "այս վճարման դեպքում սխալ է"
+msgstr "Տրանզակցիայի id '%s' այս վճարման համար սխալ է։"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:175
 #, c-format
@@ -10199,7 +10196,7 @@ msgstr "Առկա է վճար %s այս պահումը տեղադրելու հա�
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:155
 #, c-format
 msgid "There is no minimum or maximum character length."
-msgstr ""
+msgstr "Չկան նիշերի ամենամեծ կամ նվազագույն երկարություն։"
 
 #. %1$s:  IF ( ERROR.tagsdisabled ) 
 #. %2$s:  ELSIF ( ERROR.badparam ) 
@@ -10275,14 +10272,14 @@ msgstr ""
 "է դպրոցին։ Այն քեզ հասանելի կլինի նաև քո ընթերցողական հաշվից։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "This email address already exists in our database."
-msgstr "Նյութը արդեն քո սայլակում է"
+msgstr "Այս էլ․ փոստի հասցեն արդեն առկա է մեր շտեմարանում։"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:265
-#, fuzzy, c-format
+#, c-format
 msgid "This is a on-site checkout, it cannot be renewed."
-msgstr "Այս վերնագիրը հնարավոր չէ պահանջել։"
+msgstr "Սա տեղային տացք է, այն հնարավոր չէ թարմացնել։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:795
 #, c-format
@@ -10298,7 +10295,7 @@ msgstr "Այս նյութը գոյություն չունի։"
 #, c-format
 msgid ""
 "This item has been scheduled for automatic renewal and cannot be renewed"
-msgstr ""
+msgstr "Այս նյութը նախատեսված է ավտոմատ թարմացման համար և չի կարող թարմացվել։"
 
 #. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
@@ -10482,9 +10479,9 @@ msgid "Titles"
 msgstr "Վերնագրեր"
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid "To log in, use the following credentials:"
-msgstr "Այս հաղորդագրությունը կարող է ունենալ հետևյալ պատճառ(ներ)ը։"
+msgstr "Գրանցվելու համար օգտագործիր հետևյալ լիազորությունները։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:47
 #, c-format
@@ -10497,9 +10494,9 @@ msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Այս սխալի մասին տեղեկացնելու համար կապվիր Կոհա կառավարչին։ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:189
-#, fuzzy, c-format
+#, c-format
 msgid "To report this error, you can email the Koha Administrator."
-msgstr "Այս սխալի մասին տեղեկացնելու համար կապվիր Կոհա կառավարչին։ "
+msgstr "Այս սխալի մասին տեղեկացնելու համար կապվիր Կոհա կառավարչին։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:81
 #, c-format
@@ -10577,7 +10574,7 @@ msgstr "Տեսակ։"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
 #, c-format
 msgid "UF"
-msgstr ""
+msgstr "ՕՀ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:203
 #, c-format
@@ -10677,7 +10674,7 @@ msgstr "Օգտագործիր ընտրացանկի վերին տողը Կոհայ
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
 msgid "Used For"
-msgstr ""
+msgstr "Օգտագործված Համար"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:64
 #, c-format
@@ -10695,6 +10692,8 @@ msgid ""
 "Using this account is not recommended because some parts of Koha will not "
 "function as expected. Instead, please log in with a different account. "
 msgstr ""
+"Այս հաշվի օգտագործումը խորհուրդ չի տրվում, քանի որ Կոհայի որոշ մասեր չեն "
+"աշխատի սպասվածի պես։ Փոխարենը, մուտք գործիր մեկ այլ հաշվով։ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:55
 #, c-format
@@ -10706,7 +10705,7 @@ msgstr ""
 "Եթե ցույց է տալիս որ քո հաշիվը պետք է մաքրել, կապվիր գրադարանի հետ։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
 "If your account shows to be clear, please contact the library."
@@ -10772,13 +10771,13 @@ msgstr "Հատորի տվյալ"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:733
 #, c-format
 msgid "Volume"
-msgstr ""
+msgstr "Հատոր"
 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:57
 #, c-format
 msgid "Volume:"
-msgstr ""
+msgstr "Հատոր։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:46
 #, c-format
@@ -10786,9 +10785,9 @@ msgid "Warning"
 msgstr "Զգուշացում"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "Warning:"
-msgstr "Զգուշացում"
+msgstr "Զգուշացում։"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -10997,18 +10996,18 @@ msgid "You can't reset your password."
 msgstr "Դու չես կարող վերագրանցել քո գաղտնաբառը։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You cannot be discharged, you have checked out items. Please return items "
 "before asking for a discharge."
 msgstr ""
-"Դու չես կարող վճարել, դու ունես նյութեր։ Վճարի հարցում անելուց առաջ "
-"վերադարձրու նյութերը։"
+"Դու չես կարող զրոյացվել, դու ունես նյութեր։ Վճարի զրոյացման հարցում անելուց "
+"առաջ վերադարձրու նյութերը։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "You cannot place any more suggestions"
-msgstr "Քո գնման առաջարկները"
+msgstr "Չես կարող տեղադրել ավելի առաջարկներ"
 
 #. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
@@ -11018,11 +11017,11 @@ msgstr "Դու չես կարող կրկին թարմացնել այս նյւթը
 
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid "You cannot renew your books online. Reason: %sYour fines exceed "
 msgstr ""
-", դու չես կարող թարմացնել գրքերը առցանց։ Վճարիր քո տուգանքները եթե ցանկանում "
-"ես թարմացնել քո գրքերը։"
+"Դու չես կարող թարմացնել գրքերը առցանց։ Պատճառը՝ %sքո տուգանքները գերազանցում "
+"են "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:40
 #, c-format
@@ -11138,7 +11137,7 @@ msgstr "Դու ոչինչ չունես դուրս տրված"
 #, c-format
 msgid ""
 "You have reached your limit of suggestions you can place at this time (%s)."
-msgstr ""
+msgstr "Դու հասել ես այս պահին քո առաջարկների սահմանին (%s)։"
 
 #. %1$s:  Koha.Preference('MaxOpenSuggestions') 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:34
@@ -11148,18 +11147,18 @@ msgid ""
 "Once the library has processed those suggestions you will be able to place "
 "more."
 msgstr ""
+"Դու հասել ես այս պահին քո կողմից դրվող առաջարկների սահմանին (%s)։ Հենց "
+"գրադարանը ընթացք տա այդ առաջարկները, դու կկարողանաս տեղադրել նորերը։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:259
 #, c-format
 msgid "You have reached your limit of suggestions you can place at this time."
-msgstr ""
+msgstr "Դու հասել ես այս պահին քո կողմից դրվող առաջարկների սահմանին։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "You have successfully registered your new account."
-msgstr ""
-"Դու հաջողությամբ գրանցել ես քո նոր հաշիվը։ Մուտք գործելու համար օգտագործիր "
-"հետևյալ լիազորությունները։"
+msgstr "Դու հաջողությամբ գրանցել ես քո նոր հաշիվը։"
 
 #. %1$s:  too_much_oweing | $Price 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:60
@@ -11175,9 +11174,9 @@ msgid ""
 msgstr "Դու օգտագործել ես արտաքին հղում արդեն անհասանելի քարտարանի նյութին։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:180
-#, fuzzy, c-format
+#, c-format
 msgid "You may register here."
-msgstr "գրանցիր այստեղ"
+msgstr "Դու կարող ես գրանցվել այստեղ։"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -11279,7 +11278,7 @@ msgstr "Քո հաշիվը ժամկետանց է։ %s "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
 #, c-format
 msgid "Your account is frozen because it has been discharged. "
-msgstr ""
+msgstr "Քո հաշիվը սառեցված է, քանի որ այն կասեցվել է։ "
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:3
 #, c-format
@@ -11391,9 +11390,9 @@ msgid "Your library card has been marked as lost or stolen."
 msgstr "Քո գրադարանի տոմսը նշված է որպես կորած կամ գողացված։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid "Your library card has been marked as lost or stolen. "
-msgstr "Քո գրադարանի տոմսը նշված է որպես կորած կամ գողացված։"
+msgstr "Քո գրադարանի տոմսը նշված է որպես կորած կամ գողացված։ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:102
 #, c-format
@@ -11433,7 +11432,7 @@ msgstr "Քո ցուցակները։"
 #. %6$s:  END 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:75
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your loan renewal failed because of the following reason(s): %s %s Your "
 "account has expired. Please contact the library for more information. %s You "
@@ -11441,10 +11440,11 @@ msgid ""
 "soon after the checkout date for this item to be renewed. %s This item is on "
 "hold for another patron. %s %s "
 msgstr ""
-"Քո տացքի թարմացումը ձախողվեց հետևյալ պատճառներով. %s %s Քո հաշվեհամարը "
+"Քո տացքի թարմացումը ձախողվեց հետևյալ պատճառներով։ %s %s Քո հաշվեհամարը "
 "ժամկետանց է։ Մանրամասների համար կապվիր գրադարանի հետ։ %s Դու թարմացրել ես "
-"այս նյութը թույլատրված անգամներից ամենաշատ թվով։ %s Այս նյութը պահման մեջ է "
-"մեկ այլ ընթերցողի կողմից։ %s %s "
+"այս նյութը թույլատրված անգամներից ամենաշատ թվով։ %s Այս նյութի համար դուրս "
+"տրման ամսաթվից հետո շատ վաղ է թարմացումը։ %s Այս նյութը պահման մեջ է մեկ այլ "
+"ընթերցողի համար։ %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
@@ -11640,15 +11640,15 @@ msgstr ""
 "type=seefro.type %%] "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
 "Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
 "defined('branchcode') && hidden.defined('categorycode') %%] "
 msgstr ""
-"%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
-"hidden.defined('mobile') && hidden.defined('email') && hidden."
-"defined('emailpro') && hidden.defined('fax') %%] "
+"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
+"Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
+"defined('branchcode') && hidden.defined('categorycode') %%] "
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:1
 #, c-format
@@ -12188,11 +12188,13 @@ msgstr "show_loans"
 #. %11$s:  END 
 #. %12$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
 "of item type '%s' %s Pending %s %s %s "
-msgstr "սկսած %s %s Կասեցված %s մինչև %s %s %s %s Սպասող հաջորդ հասանելիին "
+msgstr ""
+"սկսած %s %s Կասեցված %s մինչ %s %s %s %s Սպասում է հաջորդ մատչելի նյութին "
+"այս տեսակից '%s' %s Սպասում է %s %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:34
 #, c-format
