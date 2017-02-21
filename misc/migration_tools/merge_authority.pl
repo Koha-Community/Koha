@@ -15,6 +15,8 @@ use C4::Context;
 use C4::Search;
 use C4::Biblio;
 use C4::AuthoritiesMarc;
+use Koha::Authorities;
+use Koha::Authority::MergeRequests;
 use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;
@@ -80,16 +82,15 @@ print "Merging\n" unless $noconfirm;
 if ($batch) {
   my $authref;
   $dbh->do("update need_merge_authorities set done=2 where done=0"); #temporary status 2 means: selected for merge
-  $authref=$dbh->selectall_arrayref("select distinct authid from need_merge_authorities where done=2");
-  foreach(@$authref) {
-      my $authid=$_->[0];
+  $authref=$dbh->selectall_arrayref("select id,authid,authid_new from need_merge_authorities where done=2");
+  foreach my $row ( @$authref ) {
+      my $req = Koha::Authority::MergeRequests->find( $row->[0] );
+      my $marc = $req ? $req->oldmarc : undef;
+      my $authid = $row->[1];
+      my $authid_new = $row->[2];
       print "managing $authid\n" if $verbose;
-      my $MARCauth = GetAuthority( $authid );
-      if( $MARCauth ) {
-          merge({ mergefrom => $authid, MARCfrom => $MARCauth, mergeto => $authid, MARCto => $MARCauth });
-      } else {
-          merge({ mergefrom => $authid }); # handle a delete
-      }
+      # Following merge call handles both modifications and deletes
+      merge({ mergefrom => $authid, MARCfrom => $marc, mergeto => $authid_new, MARCto => GetAuthority($authid_new), override_limit => 1 });
   }
   $dbh->do("update need_merge_authorities set done=1 where done=2"); #DONE
 } else {

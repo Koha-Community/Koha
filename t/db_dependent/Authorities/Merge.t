@@ -4,7 +4,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use Getopt::Long;
 use MARC::Record;
@@ -15,6 +15,7 @@ use t::lib::TestBuilder;
 
 use C4::Biblio;
 use Koha::Authorities;
+use Koha::Authority::MergeRequests;
 use Koha::Database;
 
 BEGIN {
@@ -33,6 +34,36 @@ $schema->storage->txn_begin;
 our @linkedrecords;
 my $mocks = set_mocks();
 our ( $authtype1, $authtype2 ) = modify_framework();
+
+subtest 'Test postponed merge feature' => sub {
+    plan tests => 6;
+
+    # Set limit to zero, and call merge a few times
+    t::lib::Mocks::mock_preference('AuthorityMergeLimit', 0);
+    my $auth1 = t::lib::TestBuilder->new->build({ source => 'AuthHeader' });
+    my $cnt = Koha::Authority::MergeRequests->count;
+    merge({ mergefrom => '0' });
+    is( Koha::Authority::MergeRequests->count, $cnt, 'No merge request added as expected' );
+    merge({ mergefrom => $auth1->{authid} });
+    is( Koha::Authority::MergeRequests->count, $cnt, 'No merge request added since we have zero hits' );
+    @linkedrecords = ( 1, 2 ); # these biblionumbers do not matter
+    merge({ mergefrom => $auth1->{authid} });
+    is( Koha::Authority::MergeRequests->count, $cnt + 1, 'Merge request added as expected' );
+
+    # Set limit to two (starting with two records)
+    t::lib::Mocks::mock_preference('AuthorityMergeLimit', 2);
+    merge({ mergefrom => $auth1->{authid} });
+    is( Koha::Authority::MergeRequests->count, $cnt + 1, 'No merge request added as we do not exceed the limit' );
+    @linkedrecords = ( 1, 2, 3 ); # these biblionumbers do not matter
+    merge({ mergefrom => $auth1->{authid} });
+    is( Koha::Authority::MergeRequests->count, $cnt + 2, 'Merge request added as we do exceed the limit again' );
+    # Now override
+    merge({ mergefrom => $auth1->{authid}, override_limit => 1 });
+    is( Koha::Authority::MergeRequests->count, $cnt + 2, 'No merge request added as we did override' );
+
+    # Set merge limit high enough for the other subtests
+    t::lib::Mocks::mock_preference('AuthorityMergeLimit', 1000);
+};
 
 subtest 'Test merge A1 to A2 (within same authtype)' => sub {
 # Tests originate from bug 11700
@@ -215,9 +246,6 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
 subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
     plan tests => 2;
 
-    # For this test we need dontmerge OFF
-    t::lib::Mocks::mock_preference('dontmerge', '0');
-
     # Add authority and linked biblio, delete authority
     my $auth1 = MARC::Record->new;
     $auth1->append_fields( MARC::Field->new( '109', '', '', 'a' => 'DEL'));
@@ -235,7 +263,7 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
     my $marc1 = C4::Biblio::GetMarcBiblio( $biblionumber );
     is( $marc1->field('609'), undef, 'Field 609 should be gone too' );
 
-    # Now we simulate the delete as done from the cron job (with dontmerge)
+    # Now we simulate the delete as done in the cron job
     # First, restore auth1 and add 609 back in bib1
     $auth1 = MARC::Record->new;
     $auth1->append_fields( MARC::Field->new( '109', '', '', 'a' => 'DEL'));
@@ -247,7 +275,7 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
     # Instead of going through DelAuthority, we manually delete the auth
     # record and call merge afterwards.
     # This mimics deleting an authority and calling merge later in the
-    # merge_authority.pl cron job (when dontmerge is enabled).
+    # merge cron job.
     # We use the biblionumbers parameter here and unmock linked_biblionumbers.
     C4::Context->dbh->do( "DELETE FROM auth_header WHERE authid=?", undef, $authid1 );
     @linkedrecords = ();
@@ -260,10 +288,13 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
 
 sub set_mocks {
     # After we removed the Zebra code from merge, we only need to mock
-    # linked_biblionumbers here.
+    # get_usage_count and linked_biblionumbers here.
 
     my $mocks;
     $mocks->{auth_mod} = Test::MockModule->new( 'Koha::Authorities' );
+    $mocks->{auth_mod}->mock( 'get_usage_count', sub {
+         return scalar @linkedrecords;
+    });
     $mocks->{auth_mod}->mock( 'linked_biblionumbers', sub {
          return @linkedrecords;
     });

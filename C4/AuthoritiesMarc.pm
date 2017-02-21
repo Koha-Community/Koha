@@ -28,6 +28,7 @@ use C4::Charset;
 use C4::Log;
 use Koha::MetadataRecord::Authority;
 use Koha::Authorities;
+use Koha::Authority::MergeRequest;
 use Koha::Authority::Types;
 use Koha::Authority;
 use Koha::SearchEngine;
@@ -692,14 +693,7 @@ sub DelAuthority {
     my ( $params ) = @_;
     my $authid = $params->{authid} || return;
     my $dbh=C4::Context->dbh;
-
-    unless( C4::Context->preference('dontmerge') eq '1' ) {
-        &merge({ mergefrom => $authid, MARCfrom => GetAuthority($authid) });
-    } else {
-        # save a record in need_merge_authorities table
-        my $sqlinsert="INSERT INTO need_merge_authorities (authid, done) VALUES (?,?)";
-        $dbh->do( $sqlinsert, undef, $authid, 0 );
-    }
+    merge({ mergefrom => $authid, MARCfrom => GetAuthority($authid) });
     $dbh->do( "DELETE FROM auth_header WHERE authid=?", undef, $authid );
     logaction( "AUTHORITIES", "DELETE", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
     ModZebra( $authid, "recordDelete", "authorityserver", undef);
@@ -714,27 +708,13 @@ Modifies authority record, optionally updates attached biblios.
 =cut
 
 sub ModAuthority {
-  my ($authid,$record,$authtypecode)=@_; # deprecated $merge parameter removed
-
-  my $dbh=C4::Context->dbh;
-  #Now rewrite the $record to table with an add
-  my $oldrecord=GetAuthority($authid);
-  $authid=AddAuthority($record,$authid,$authtypecode);
-
-  # If a library thinks that updating all biblios is a long process and wishes
-  # to leave that to a cron job, use misc/migration_tools/merge_authority.pl.
-  # In that case set system preference "dontmerge" to 1. Otherwise biblios will
-  # be updated.
-  unless(C4::Context->preference('dontmerge') eq '1'){
-      &merge({ mergefrom => $authid, MARCfrom => $oldrecord, mergeto => $authid, MARCto => $record });
-  } else {
-      # save a record in need_merge_authorities table
-      my $sqlinsert="INSERT INTO need_merge_authorities (authid, done) ".
-	"VALUES (?,?)";
-      $dbh->do($sqlinsert,undef,($authid,0));
-  }
-  logaction( "AUTHORITIES", "MODIFY", $authid, "authority BEFORE=>" . $oldrecord->as_formatted ) if C4::Context->preference("AuthoritiesLog");
-  return $authid;
+    my ( $authid, $record, $authtypecode ) = @_;
+    my $oldrecord = GetAuthority($authid);
+    #Now rewrite the $record to table with an add
+    $authid = AddAuthority($record, $authid, $authtypecode);
+    merge({ mergefrom => $authid, MARCfrom => $oldrecord, mergeto => $authid, MARCto => $record });
+    logaction( "AUTHORITIES", "MODIFY", $authid, "authority BEFORE=>" . $oldrecord->as_formatted ) if C4::Context->preference("AuthoritiesLog");
+    return $authid;
 }
 
 =head2 GetAuthorityXML 
@@ -1395,6 +1375,7 @@ sub AddAuthorityTrees{
         [ mergeto => $mergeto, ]
         [ MARCto => $MARCto, ]
         [ biblionumbers => [ $a, $b, $c ], ]
+        [ override_limit => 1, ]
     });
 
 Merge biblios linked to authority $mergefrom.
@@ -1404,6 +1385,9 @@ If $mergeto is missing, the biblio field is deleted.
 
 Normally all biblio records linked to $mergefrom, will be considered. But
 you can pass specific numbers via the biblionumbers parameter.
+
+The parameter override_limit is used by the cron job to force larger
+postponed merges.
 
 Note: Although $mergefrom and $mergeto will normally be of the same
 authority type, merge also supports moving to another authority type.
@@ -1416,20 +1400,35 @@ sub merge {
     my $MARCfrom = $params->{MARCfrom};
     my $mergeto = $params->{mergeto};
     my $MARCto = $params->{MARCto};
-    my @biblionumbers = $params->{biblionumbers}
-        # If we do not have biblionumbers, we get all linked biblios
-        ? @{ $params->{biblionumbers} }
-        : Koha::Authorities->linked_biblionumbers({ authid => $mergefrom });
+    my $override_limit = $params->{override_limit};
+
+    # If we do not have biblionumbers, we get all linked biblios if the
+    # number of linked records does not exceed the limit UNLESS we override.
+    my @biblionumbers;
+    if( $params->{biblionumbers} ) {
+        @biblionumbers = @{ $params->{biblionumbers} };
+    } elsif( $override_limit ) {
+        @biblionumbers = Koha::Authorities->linked_biblionumbers({ authid => $mergefrom });
+    } else { # now first check number of linked records
+        my $max = C4::Context->preference('AuthorityMergeLimit') // 0;
+        my $hits = Koha::Authorities->get_usage_count({ authid => $mergefrom });
+        if( $hits > 0 && $hits <= $max ) {
+            @biblionumbers = Koha::Authorities->linked_biblionumbers({ authid => $mergefrom });
+        } elsif( $hits > $max ) { #postpone this merge to the cron job
+            Koha::Authority::MergeRequest->new({
+                authid => $mergefrom,
+                oldrecord => $MARCfrom,
+                authid_new => $mergeto,
+            })->store;
+        }
+    }
     return 0 if !@biblionumbers;
 
-    my $counteditedbiblio = 0;
-    my $dbh = C4::Context->dbh;
+    # Search authtypes and reporting tags
     my $authfrom = Koha::Authorities->find($mergefrom);
     my $authto = Koha::Authorities->find($mergeto);
     my $authtypefrom = $authfrom ? Koha::Authority::Types->find($authfrom->authtypecode) : undef;
     my $authtypeto   = $authto ? Koha::Authority::Types->find($authto->authtypecode) : undef;
-
-    # search the tag to report
     my $auth_tag_to_report_from = $authtypefrom ? $authtypefrom->auth_tag_to_report : '';
     my $auth_tag_to_report_to   = $authtypeto ? $authtypeto->auth_tag_to_report : '';
 
@@ -1441,6 +1440,7 @@ sub merge {
     # Get All candidate Tags for the change 
     # (This will reduce the search scope in marc records).
     # For a deleted authority record, we scan all auth controlled fields
+    my $dbh = C4::Context->dbh;
     my $sql = "SELECT DISTINCT tagfield FROM marc_subfield_structure WHERE authtypecode=?";
     my $tags_using_authtype = $authtypefrom ? $dbh->selectcol_arrayref( $sql, undef, ( $authtypefrom->authtypecode )) : $dbh->selectcol_arrayref( "SELECT DISTINCT tagfield FROM marc_subfield_structure WHERE authtypecode IS NOT NULL AND authtypecode<>''" );
     my $tags_new;
@@ -1458,6 +1458,7 @@ sub merge {
     # And we need to add $9 in order not to duplicate
     $skip_subfields->{9} = 1 if !$overwrite;
 
+    my $counteditedbiblio = 0;
     foreach my $biblionumber ( @biblionumbers ) {
         my $marcrecord = GetMarcBiblio( $biblionumber );
         next if !$marcrecord;
