@@ -493,7 +493,6 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'NotIssued' ) {
         $err{notissued} = 1;
         $err{msg} = '';
-        $err{msg} = $messages->{'IsPermanent'} if $messages->{'IsPermanent'};
     }
     elsif ( $code eq 'LocalUse' ) {
         $err{localuse} = 1;
@@ -517,12 +516,6 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'withdrawn' ) {
         $err{withdrawn} = 1;
         $exit_required_p = 1 if C4::Context->preference("BlockReturnOfWithdrawnItems");
-    }
-    elsif ( ( $code eq 'IsPermanent' ) && ( not $messages->{'ResFound'} ) ) {
-        if ( $messages->{'IsPermanent'} ne $userenv_branch ) {
-            $err{ispermanent} = 1;
-            $err{msg}         = $messages->{'IsPermanent'};
-        }
     }
     elsif ( $code eq 'WrongTransfer' ) {
         ;    # FIXME... anything to do here?

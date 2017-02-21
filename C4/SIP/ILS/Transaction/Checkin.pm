@@ -67,7 +67,7 @@ sub do_checkin {
     $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
     my ($return, $messages, $iteminformation, $borrower) = AddReturn($barcode, $branch, undef, undef, $return_date);
     $self->alert(!$return);
-    # ignoring messages: NotIssued, IsPermanent, WasLost, WasTransfered
+    # ignoring messages: NotIssued, WasLost, WasTransfered
 
     # biblionumber, biblioitemnumber, itemnumber
     # borrowernumber, reservedate, branchcode

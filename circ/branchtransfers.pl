@@ -205,10 +205,6 @@ foreach my $code ( keys %$messages ) {
             $err{tbr}      = $tbr;
             $err{code}     = $typecode;
         }
-        elsif ( $code eq 'IsPermanent' ) {
-            $err{errispermanent} = 1;
-            $err{msg} = $messages->{'IsPermanent'};
-        }
         elsif ( $code eq 'WasReturned' ) {
             $err{errwasreturned} = 1;
             $err{borrowernumber} = $messages->{'WasReturned'};

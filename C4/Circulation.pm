@@ -278,10 +278,6 @@ is a reference-to-hash which may have any of the following keys:
 
 There is no item in the catalog with the given barcode. The value is C<$barcode>.
 
-=item C<IsPermanent>
-
-The item's home branch is permanent. This doesn't prevent the item from being transferred, though. The value is the code of the item's home branch.
-
 =item C<DestinationEqualsHolding>
 
 The item is already at the branch to which it is being transferred. The transfer is nonetheless considered to have failed. The value should be ignored.
@@ -334,15 +330,6 @@ sub transferbook {
             $messages->{'NotAllowed'} = $tbr . "::" . $code;
             $dotransfer = 0;
         }
-    }
-
-    # if is permanent...
-    # FIXME Is this still used by someone?
-    # See other FIXME in AddReturn
-    my $library = Koha::Libraries->find($hbr);
-    if ( $library and $library->get_categories->search({'me.categorycode' => 'PE'})->count ) {
-        $messages->{'IsPermanent'} = $hbr;
-        $dotransfer = 0;
     }
 
     # can't transfer book if is already there....
@@ -1768,12 +1755,6 @@ No item with this barcode exists. The value is C<$barcode>.
 
 The book is not currently on loan. The value is C<$barcode>.
 
-=item C<IsPermanent>
-
-The book's home branch is a permanent collection. If you have borrowed
-this book, you are not allowed to return it. The value is the code for
-the book's home branch.
-
 =item C<withdrawn>
 
 This book has been withdrawn/cancelled. The value should be ignored.
@@ -1885,16 +1866,6 @@ sub AddReturn {
                     last;
                 }
             }
-        }
-    }
-
-
-    # check if the book is in a permanent collection....
-    # FIXME -- This 'PE' attribute is largely undocumented.  afaict, there's no user interface that reflects this functionality.
-    if ( $returnbranch ) {
-        my $library = Koha::Libraries->find($returnbranch);
-        if ( $library and $library->get_categories->search({'me.categorycode' => 'PE'})->count ) {
-            $messages->{'IsPermanent'} = $returnbranch;
         }
     }
 
