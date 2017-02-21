@@ -5,17 +5,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-01-15 22:00-0300\n"
-"PO-Revision-Date: 2014-01-11 23:26+0000\n"
-"Last-Translator: kiru <kirunews@gmail.com>\n"
+"POT-Creation-Date: 2017-02-15 18:25-0300\n"
+"PO-Revision-Date: 2017-02-17 20:38+0000\n"
+"Last-Translator: Scherlac <Scherlac@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1389482807.0\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1487363933.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -25,15 +25,13 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:45
 #, c-format
 msgid "\" %s Restriction added by overdues process %s %s %s %s "
-msgstr ""
+msgstr "%s Korlátozásra került sor a késedelmek folytán %s %s %s %s "
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:301
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:303
-#, fuzzy
 msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-msgstr ""
-"$[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]"
+msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
 
 #. %1$s:  IF holds_count.defined 
 #. %2$s:  ITEM_RESULT.holds_count 
@@ -46,9 +44,9 @@ msgstr ""
 #. %9$s:  END 
 #. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1299
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
-msgstr "%s %s %s%s%s%s %s %s%s %s "
+msgstr "%s %s %s %s %s (prioritás %s) %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -60,9 +58,9 @@ msgstr "%s %s %s%s%s%s %s %s%s %s "
 #. %8$s:  subtitl.subfield|html 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:361
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s No title %s %s %s %s "
-msgstr "%s %s %s%s%sNo title%s %s %s%s "
+msgstr "%s %s %s %s %s Nincs cím %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -74,9 +72,9 @@ msgstr "%s %s %s%s%sNo title%s %s %s%s "
 #. %8$s:  subtitl.subfield|html 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:321
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s No title %s %s , %s %s"
-msgstr "%s %s %s%s%sNo title%s %s %s%s"
+msgstr "%s %s %s %s %s Nincs cím %s %s , %s %s"
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
 #. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS 
@@ -98,8 +96,8 @@ msgstr "%s %s %s%s%sNo title%s %s %s%s"
 msgid ""
 "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
 msgstr ""
-"%s%s %s%s, %s%s %s (%s)%s.%s,%s %s %s%sEhhez a rekordhoz nem tartozik tétel."
-"%s "
+"%s %s %s %s, %s %s %s (%s) %s.%s,%s %s %s %s Ehhez a bejegyzéshez nem "
+"tartozik példány. %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -112,7 +110,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:669
 #, fuzzy, c-format
 msgid "%s %s %s %s 1 item is on order. %s %s items are on order. %s %s "
-msgstr "%s %s %s%s%sNo title%s %s %s%s "
+msgstr "%s %s %s %s 1 tétel megrendelve. %s %s tétel megrendelve. %s %s "
 
 #. %1$s:  ELSIF ( itemloop.size ) 
 #. %2$s:  INCLUDE items_table items=itemloop tab="holdings" 
@@ -126,25 +124,25 @@ msgstr "%s %s %s%s%sNo title%s %s %s%s "
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:642
 #, c-format
 msgid "%s %s %s %s 1 item is on order. %s %s items are on order. %s %s %s "
-msgstr ""
+msgstr "%s %s %s %s 1 tétel megrendelve. %s %s tétel megrendelve. %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.is_in_transit ) 
 #. %4$s:  SET transfer = RESERVE.item.get_transfer 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:622
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s Item in transit from "
-msgstr "%s %s %s Dokumentum útban innen: "
+msgstr "%s %s %s %s Tétel szállítás alatt a "
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
 #. %3$s:  IF ( loggedinusername ) 
 #. %4$s:  IF ( subscription_LOO.hasalert ) 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:135
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s You have subscribed to email notification on new issues "
-msgstr "%s %s %s  Feliratkozva email értesítőre új lapszám érkezésekor "
+msgstr "%s %s %s %s Feliratkozva email értesítőre új lapszám érkezésekor "
 
 #. %1$s: # First line will be summary, second line will be description. Avoid indenting. Var newline added to avoid translating problems. -
 #. %2$s: - newline="\n" -
@@ -165,6 +163,8 @@ msgid ""
 "%s %s %s %s is overdue %sYour copy of %s (barcode %s) is overdue %s %s is "
 "due %sYour copy of %s (barcode %s) is due back at the library today %s "
 msgstr ""
+"%s %s %s %s lejárt %sA kölcsönzött %s (vonalkód %s) lejárt %s %s esedékes "
+"%sA kölcsönzött %s (vonalkód %s) könyvtári leadása a mai napon esedékes %s "
 
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
@@ -179,9 +179,9 @@ msgstr "%s %s %s Dokumentum itt várakozik: "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:10
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s Koha online %s "
-msgstr "%s %s%s%sKoha Online%s Katalógus %s "
+msgstr "%s %s %s Koha Online %s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -191,9 +191,9 @@ msgstr "%s %s%s%sKoha Online%s Katalógus %s "
 #. %6$s:  RestrictedPageTitle 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-restrictedpage.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s Koha online %s catalog %s &rsaquo; %s %s "
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Bejegyzés %s %s "
+msgstr "%s %s %s Koha Online %s Katalógus %s &rsaquo; %s %s "
 
 #. %1$s:  IF (otheritemloop.size) 
 #. %2$s:  INCLUDE items_table items=otheritemloop tab="otherholdings" 
@@ -203,7 +203,7 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Bejegyzés %s %s "
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:689
 #, fuzzy, c-format
 msgid "%s %s %s No other items. %s %s "
-msgstr "%s %s %s%s%sNo title%s %s %s%s "
+msgstr "%s %s %s Nincs több tétel. %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END # / FOREACH ERROR 
@@ -212,7 +212,7 @@ msgstr "%s %s %s%s%sNo title%s %s %s%s "
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:36
 #, fuzzy, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
-msgstr "%s %sEz az ablak 5 másodpercen belül bezárul.%s "
+msgstr "%s %s %s Megjegyzés: Ez az ablak 5 másodpercen belül bezárul. %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -226,7 +226,7 @@ msgstr "%s %sEz az ablak 5 másodpercen belül bezárul.%s "
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:44
 #, fuzzy, c-format
 msgid "%s %s %s%s%sNo title%s %s %s%s "
-msgstr "%s %s %s%s%sNo title%s %s %s%s "
+msgstr "%s %s %s%s%sNincs cím%s %s %s%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  MY_TAG.term |html 
@@ -234,7 +234,7 @@ msgstr "%s %s %s%s%sNo title%s %s %s%s "
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:126
 #, c-format
 msgid "%s %s (not approved) %s "
-msgstr ""
+msgstr "%s %s (nem engedélyezett) %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -243,7 +243,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:102
 #, c-format
 msgid "%s %s End date: "
-msgstr ""
+msgstr "%s %s Lejárati dátum: "
 
 #. %1$s:  END 
 #. %2$s:  UNLESS mandatory.defined('password') 
@@ -254,6 +254,7 @@ msgid ""
 "%s %s If you do not enter a password a system generated password will be "
 "created. %s "
 msgstr ""
+"%s %s Jelszó beírás hiányában, rendszer generálta jelszó lesz megadva. %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -266,9 +267,9 @@ msgstr "%s %s Dokumentum úton ide: "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s No results found. %s "
-msgstr "%s Nincs találat. %s "
+msgstr "%s %s Nincs találat. %s "
 
 #. %1$s: - SWITCH index -
 #. %2$s: - CASE 'su-na' -
@@ -293,7 +294,7 @@ msgstr ""
 #. %7$s:  m.code 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:110
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %s The suggestion has not been added. You have reached your limit of "
 "suggestions you can place at this time (%s). Once the library has processed "
@@ -301,17 +302,24 @@ msgid ""
 "been added. A suggestion with this title already exists. %s Your suggestion "
 "has been submitted. %s %s %s "
 msgstr ""
+"%s %s A javaslat nem került bejegyzésre. Az elküldött javaslatok száma "
+"meghaladja a megengedett értéket (%s). További javaslatokat csak a korábbi "
+"javaslatok feldolgozása után lehet megadni. %s A javaslat nem került "
+"bejegyzésre. Egy azonos megnevezésű javaslat már bejegyzésre került. %s A "
+"javaslat bejegyzésre került. %s %s %s"
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:146
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s You must log in if you want to subscribe to email notification on new "
 "issues %s %s "
-msgstr "%s %s %s  Feliratkozva email értesítőre új lapszám érkezésekor "
+msgstr ""
+"%s %s Az új lapszám értesítőre való feliratkozáshoz, a bejelentkezés "
+"szükséges %s %s "
 
 #. %1$s:  USE AuthorisedValues 
 #. %2$s:  SET itemavailable = 1 
@@ -327,6 +335,10 @@ msgid ""
 "reserves pages, which do not use an API to fetch items that populates item."
 "datedue. -%%] %s %s %s %s "
 msgstr ""
+"%s %s [%%#- This include takes two parameters: an item structure and an "
+"optional loan (issue) structure. The issue structure is used by course "
+"reserves pages, which do not use an API to fetch items that populates item."
+"datedue. -%%] %s %s %s %s "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -340,9 +352,9 @@ msgstr "%s, %s "
 #. %3$s:  i.author | html 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s by %s %s "
-msgstr "%s %s (%s)"
+msgstr "%s %s - %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  IF ( review.borrowernumber && ShowReviewer != "none" ) 
@@ -373,7 +385,7 @@ msgstr "%s %s - %s%s %s- %s%s %s(%s)%s %s ; %s%s %s - %s%s %s ; %s%s"
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:13
 #, c-format
 msgid "%s %s sent you a cart from our online catalog."
-msgstr ""
+msgstr "%s %s kosarat küldött az online katalógusból."
 
 #. %1$s:  firstname 
 #. %2$s:  surname 
@@ -381,7 +393,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:11
 #, c-format
 msgid "%s %s sent you from our online catalog, the virtual shelf called : %s."
-msgstr ""
+msgstr "%s %s küldte az online katalógusból, a virtuális polc neve : %s."
 
 #. %1$s:  added_count 
 #. %2$s:  IF ( added_count ==1 ) 
@@ -390,7 +402,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:108
 #, c-format
 msgid "%s %s tag%stags%s successfully added."
-msgstr "%s %s cimke%stags%s sikeresen hozzáadva."
+msgstr "%s %s címke%scímke%s sikeresen hozzáadva."
 
 #. %1$s:  SWITCH type 
 #. %2$s:  CASE 'earlier' 
@@ -442,6 +454,8 @@ msgid ""
 "%s %sBIBTEX %sEndNote %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC (Unicode/"
 "UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) %sRIS %sISBD %s "
 msgstr ""
+"%s %sBIBTEX %sEndNote %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC (Unicode/"
+"UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) %sRIS %sISBD %s "
 
 #. %1$s:  SWITCH ACCOUNT_LINE.accounttype 
 #. %2$s:  CASE 'Pay' 
@@ -481,6 +495,12 @@ msgid ""
 "%sHold waiting too long %sRental fee %sForgiven %sLost item fee refund "
 "%sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
+"%s %sBefizetés, köszönjük %sBefizetés, köszönjük (cash via SIP2) "
+"%sBefizetés, köszönjük (VISA via SIP2) %sBefizetés, köszönjük (credit card "
+"via SIP2) %sÚj kártya %sFine %sSzámalvezetési díj %sKülönböző %sElvesztett "
+"tétel %sAmortizáció %sAccruing fine %sTúl hosszú tartás %sKölcsönzési díj "
+"%sForgiven %sElvesztett tétel díjvisszatérítés %sBefizetés %sAmortizáció "
+"%sEgyenleg %sEgyenleg %s%s %s %s, %s%s %s(%s)%s "
 
 #. %1$s:  IF s.category == PRIVATE 
 #. %2$s:  IF s.is_shared 
@@ -497,16 +517,16 @@ msgstr "%sNem nyilvános%s %sNyilvános%s %sNyitott%s "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Cím (kifejezés) "
+msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s és %s "
 
 #. %1$s:  bibliotitle 
 #. %2$s:  biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:27
-#, c-format
+#, fuzzy, c-format
 msgid "%s (Record no. %s)"
-msgstr "%s (Tétel száma: %s)"
+msgstr "%s (Bejegyzésszám: %s)"
 
 #. %1$s:  IF ( related ) 
 #. %2$s:  FOREACH relate IN related 
@@ -514,52 +534,52 @@ msgstr "%s (Tétel száma: %s)"
 #. %4$s:  END 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:80
-#, fuzzy, c-format
+#, c-format
 msgid "%s (related searches: %s %s %s ). %s "
-msgstr "(kapcsolódó keresések: "
+msgstr "%s (kapcsolódó keresések: %s %s %s ). %s "
 
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:493
-#, fuzzy, c-format
+#, c-format
 msgid "%s Account frozen %s %s "
-msgstr "%sFelfüggesztett felhasználó %s "
+msgstr "%s Felfüggesztett felhasználó %s %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:409
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:601
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:768
-#, fuzzy, c-format
+#, c-format
 msgid "%s Address 2:"
-msgstr "Cím 2:"
+msgstr "%s Cím 2:"
 
 #. For the first occurrence,
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:395
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:587
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:754
-#, fuzzy, c-format
+#, c-format
 msgid "%s Address:"
-msgstr "Cím:"
+msgstr "%s Cím:"
 
 #. %1$s:  IF (sendmailError) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:51
-#, fuzzy, c-format
+#, c-format
 msgid "%s An error has occurred while sending you the password recovery link. "
-msgstr "Kérésed elküldése közben hiba történt."
+msgstr "%s A jelszó helyreállító link elküldése közben hiba lépet fel. "
 
 #. %1$s:  IF message.code == "unable_to_generate_pdf" 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:27
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s An error occurs when generating the pdf file. Please contact the staff to "
 "resolve this problem. %s "
 msgstr ""
-" Sajnálom, az Ön-kölcsönző kapcsolata megszűnt a központtal. Kérem keresse "
-"meg a rendszergazdát a probléma hárítása érdekében."
+"%s A pdf-fájl létrehozása közben hiba lépet fel. Kérem, keresse meg a "
+"rendszergazdát, a probléma hárítása érdekében. %s "
 
 #. %1$s:  IF ( GROUP_RESULT.onloancount ) 
 #. %2$s:  GROUP_RESULT.onloancount 
@@ -626,15 +646,15 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:423
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:615
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:782
-#, fuzzy, c-format
+#, c-format
 msgid "%s City:"
-msgstr "Összeg:"
+msgstr "%s Város:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:699
-#, fuzzy, c-format
+#, c-format
 msgid "%s Contact note:"
-msgstr "Tartalmak:"
+msgstr "%s Kontakt feljegyzés:"
 
 #. %1$s:  IF (errcode==1) 
 #. %2$s:  ELSE 
@@ -645,21 +665,23 @@ msgid ""
 "%s Could not create new list. Please check if the name is unique. %s Sorry, "
 "you cannot add items to this list. %s "
 msgstr ""
+"%s A lista nem hozható létre. Ellenőrizze a megadot név egyediségét. %s "
+"Sajálatos módon, ehhez a listához nem tud tétel hozzáadni. %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:465
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:657
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:824
-#, fuzzy, c-format
+#, c-format
 msgid "%s Country:"
-msgstr "Összeg:"
+msgstr "%s Ország:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:284
-#, fuzzy, c-format
+#, c-format
 msgid "%s Date of birth:"
-msgstr "Születési Dátum:"
+msgstr "%s Születési dátum:"
 
 #. %1$s:  IF ( koha_spsuggest ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:98
@@ -669,47 +691,47 @@ msgstr "%s Keresési javaslat: "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:685
-#, fuzzy, c-format
+#, c-format
 msgid "%s Email:"
-msgstr "E-mail:"
+msgstr "%s E-mail:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:561
-#, fuzzy, c-format
+#, c-format
 msgid "%s Fax:"
-msgstr "Fax:"
+msgstr "%s Fax:"
 
 #. For the first occurrence,
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:270
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:740
-#, fuzzy, c-format
+#, c-format
 msgid "%s First name:"
-msgstr "00 Dokumentum kategória"
+msgstr "%s Keresztnév:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:173
-#, fuzzy, c-format
+#, c-format
 msgid "%s Home library:"
-msgstr "Kezdő oldal"
+msgstr "%s Kezdő oldal:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:305
 #, c-format
 msgid "%s Initials:"
-msgstr ""
+msgstr "%s Kezdőbetűk:"
 
 #. %1$s:  SEARCH_RESULT.num_critics 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:430
 #, c-format
 msgid "%s Internet user critics"
-msgstr ""
+msgstr "%s Internetes felhasználói kritika"
 
 #. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:617
 #, c-format
 msgid "%s Item waiting to be pulled from "
-msgstr ""
+msgstr "%s Lehívásra váró tétel "
 
 #. %1$s:  issues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:146
@@ -719,43 +741,43 @@ msgstr "%s Kikölcsönözve"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:133
-#, fuzzy, c-format
+#, c-format
 msgid "%s Library card number: "
-msgstr "Írja be olvasói kártyaszámát:"
+msgstr "%s Olvasókártya szám: "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:115
 #, fuzzy, c-format
 msgid "%s Log out"
-msgstr "Kijelentkezés"
+msgstr "%s Kilépés"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:178
 #, c-format
 msgid "%s No article requests can be made for this record. %s "
-msgstr ""
+msgstr "%s Cikk igénylés, ezen bejegyzés alapján, nem lehetséges. %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:261
-#, fuzzy, c-format
+#, c-format
 msgid "%s No longer renewable %s Automatic renewal "
-msgstr "Nem megújítható"
+msgstr "%s Nem megújítható %s Automatikus meghosszabbítás  "
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:266
 #, fuzzy, c-format
 msgid "%s No renewal before %s "
-msgstr "%sElőjegyezve %sNincs lehetőség újabb hosszabbításra %s "
+msgstr "%s A megújítás %s előtt nem lehetséges "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  LibraryName 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:42
 #, fuzzy, c-format
 msgid "%s No results found for that in %s catalog. "
-msgstr "Nincs találat a katalógusban. "
+msgstr "%s Nincs találat a(z) %s katalógusban. "
 
 #. %1$s:  ELSE 
 #. %2$s:  END # / IF results 
@@ -766,22 +788,22 @@ msgstr "%s Nincs találat. %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not allowed"
-msgstr "Igen, törlöm"
+msgstr "%s Nem engedélyezett"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:255
 #, fuzzy, c-format
 msgid "%s Not renewable "
-msgstr "%sElőjegyezve %sNincs lehetőség újabb hosszabbításra %s "
+msgstr "%s Nem megújítható "
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:257
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable %s Not allowed "
-msgstr "Nem megújítható"
+msgstr "%s Nem megújítható %s Nem engedélyezett "
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -793,15 +815,15 @@ msgstr "%sElőjegyezve %sNincs lehetőség újabb hosszabbításra %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:319
-#, fuzzy, c-format
+#, c-format
 msgid "%s Other names:"
-msgstr "Polc neve:"
+msgstr "%s Egyéb nevek:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:519
-#, fuzzy, c-format
+#, c-format
 msgid "%s Other phone:"
-msgstr "Polc neve:"
+msgstr "%s További telefonszám:"
 
 #. %1$s:  IF ( PassMismatch ) 
 #. %2$s:  END 
@@ -821,9 +843,11 @@ msgid ""
 "re-set your password for you. %s %s Your password contains leading and/or "
 "trailing spaces. %s "
 msgstr ""
-" %s A jelszavak nem egyeznek. Kérjük, írja be újra az új jelszavát. %s %s Az "
-"új jelszónak legalább %s karakterből kell állnia. %s %s Jelenlegi jelszavát "
-"rosszul adta meg. Ha elfelejtette, kérjen új jelszót a könyvtárostól. %s "
+" %s A jelszavak nem egyeznek meg. Kérjük, ismételten írja be az új "
+"jelszavát. %s %s Az új jelszónak legalább %s karakterből kell állnia. %s %s "
+"Jelenlegi jelszavát rosszul adta meg. Ha elfelejtette, kérjen új jelszót a "
+"könyvtárostól. %s %s A megadott jelszó kezdő és/vagy záró szóközt tartalmaz. "
+"%s "
 
 #. %1$s:  IF ar.status == 'PENDING' 
 #. %2$s:  ELSIF ar.status == 'PROCESSING' 
@@ -833,7 +857,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:792
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
-msgstr ""
+msgstr "%s Folyamatban %s Folyamatban %s Teljesítve %s Megszakítva %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -847,7 +871,7 @@ msgstr "%s :"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:82
 #, c-format
 msgid "%s Please correct this and resubmit. "
-msgstr ""
+msgstr "%s Kérjük, ezt javítsa, majd küldje el újból. "
 
 #. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
@@ -857,21 +881,21 @@ msgstr "%s Kérjük, keressen fel egy könyvtárost. "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
-#, fuzzy, c-format
+#, c-format
 msgid "%s Primary email:"
-msgstr "E-mail:"
+msgstr "%s Elsődleges e-mail:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s Primary phone:"
-msgstr "Elsődleges (5-8)"
+msgstr "%s Elsődleges telefon:"
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:433
 #, c-format
 msgid "%s Professional critics"
-msgstr ""
+msgstr "%s Professzionális értékelés"
 
 #. %1$s:  IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 
 #. %2$s:  ELSE 
@@ -885,20 +909,20 @@ msgid ""
 "%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
 "suggestions %s %s "
 msgstr ""
-"%s%s%s%sKoha Online%s Katalógus &rsaquo; %sAdjon meg új beszerzési "
-"javaslatot.%s %sBeszerzési javaslatok%s %s "
+"%s Beszerzési javaslatok %s %s Adjon meg új beszerzési javaslatot %s "
+"Beszerzési javaslatok %s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:439
 #, fuzzy, c-format
 msgid "%s Quotations"
-msgstr "nincs illusztráció"
+msgstr "%s Idézet"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:234
 #, fuzzy, c-format
 msgid "%s Salutation:"
-msgstr "nincs illusztráció"
+msgstr "%s Megszólítás:"
 
 #. %1$s:  LibraryName |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:5
@@ -922,13 +946,13 @@ msgstr "%s Keresés %serre '%s'%s%s&nbsp;ezekben:&nbsp;'%s'%s"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:547
 #, fuzzy, c-format
 msgid "%s Secondary email:"
-msgstr "E-mail:"
+msgstr "%s Másodlagos e-mail:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:505
 #, fuzzy, c-format
 msgid "%s Secondary phone:"
-msgstr "E-mail:"
+msgstr "%s Másodlagos telefonszám:"
 
 #. %1$s:  LibraryName 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:34
@@ -943,13 +967,13 @@ msgstr "%s Önkiszolgáló rendszer"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:796
 #, fuzzy, c-format
 msgid "%s State:"
-msgstr "szűrő"
+msgstr "%s Állapot:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:381
-#, fuzzy, c-format
+#, c-format
 msgid "%s Street number:"
-msgstr "Olvasókártya száma:"
+msgstr "%s Utca szám:"
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -963,9 +987,10 @@ msgstr "%s Keret"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:77
-#, fuzzy, c-format
+#, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
-msgstr "cimkék%s más felhasználóktól%s. "
+msgstr ""
+"%s Más felhasználóktól megjeleníthető címkék %s Megtekinthető címkék %s: "
 
 #. %1$s:  ELSIF (errPassNotMatch) 
 #. %2$s:  ELSIF (errPassTooShort) 
@@ -978,16 +1003,16 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  FOREACH role IN content 
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "%s This ppn is not found on the idref service. %s %s "
-msgstr "Engedélyezett érték "
+msgstr "%s Ez a ppn nem található a idref szolgáltatlások közott. %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:234
 #, fuzzy, c-format
 msgid "%s This record has no items. %s "
-msgstr "%sEhhez a rekordhoz nem tartozik tétel.%s "
+msgstr "%s Ehhez a bejegyzéshez nem tartozik pédány. %s "
 
 #. %1$s:  IF holds_count.defined 
 #. %2$s:  holds_count 
@@ -1009,10 +1034,12 @@ msgstr ""
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:107
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Unfortunately, images are not enabled for this catalog at this time. %s "
-msgstr "Sajnálom, de errõl a címrõl még nem készült szemle. "
+msgstr ""
+"%s Sajnálatos módon, jelenleg nincsnek engedélyezve a képek ehhez a "
+"katalógushoz. %s "
 
 #. %1$s:  SEARCH_RESULT.num_videos 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:436
@@ -1039,7 +1066,9 @@ msgstr ""
 msgid ""
 "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
 "%s %s %s %s %s. "
-msgstr "%s %s - %s%s %s- %s%s %s(%s)%s %s ; %s%s %s - %s%s %s ; %s%s "
+msgstr ""
+"%s Várakozás %s Előjegyzés %s olvasónak %s a(z) %s várható %s %s kezdődőleg "
+"%s %s %s %s %s %s %s. "
 
 #. For the first occurrence,
 #. %1$s:  IF ( ISSUE.charges ) 
@@ -1070,9 +1099,9 @@ msgstr "%s Még nem kölcsönzött semmit ebből a könyvtárból. %s "
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:451
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:643
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:810
-#, fuzzy, c-format
+#, c-format
 msgid "%s ZIP/Postal code:"
-msgstr "Irányítószám:"
+msgstr "%s Irányítószám:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:178
@@ -1083,6 +1112,10 @@ msgid ""
 "OpacAdvSearchMoreOptions.grep('language').size > 0 and expanded_options ) ) "
 "%%] "
 msgstr ""
+"%s [%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('language')."
+"size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
+"OpacAdvSearchMoreOptions.grep('language').size > 0 and expanded_options ) ) "
+"%%] "
 
 #. %1$s:  END # / IF Babeltheque 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1044
@@ -1091,6 +1124,8 @@ msgid ""
 "%s [%% INCLUDE \"openlibrary-readapi.inc\" bib = { normalized_isbn => "
 "normalized_isbn, lccn => lccn, normalized_oclc => normalized_oclc } %%] "
 msgstr ""
+"%s [%% INCLUDE \"openlibrary-readapi.inc\" bib = { normalized_isbn => "
+"normalized_isbn, lccn => lccn, normalized_oclc => normalized_oclc } %%] "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:570
@@ -1102,6 +1137,11 @@ msgid ""
 "defined('B_phone') && hidden.defined('B_email') && hidden."
 "defined('contactnote') %%] "
 msgstr ""
+"%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
+"hidden.defined('B_city') && hidden.defined('B_state') && hidden."
+"defined('B_zipcode') && hidden.defined('B_country') && hidden."
+"defined('B_phone') && hidden.defined('B_email') && hidden."
+"defined('contactnote') %%] "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:709
@@ -1114,6 +1154,12 @@ msgid ""
 "&& hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') "
 "%%] "
 msgstr ""
+"%s [%% UNLESS hidden.defined('altcontactsurname') && hidden."
+"defined('altcontactfirstname') && hidden.defined('altcontactaddress1') && "
+"hidden.defined('altcontactaddress2') && hidden.defined('altcontactaddress3') "
+"&& hidden.defined('altcontactstate') && hidden.defined('altcontactzipcode') "
+"&& hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') "
+"%%] "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:475
@@ -1123,6 +1169,9 @@ msgid ""
 "hidden.defined('mobile') && hidden.defined('email') && hidden."
 "defined('emailpro') && hidden.defined('fax') %%] "
 msgstr ""
+"%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
+"hidden.defined('mobile') && hidden.defined('email') && hidden."
+"defined('emailpro') && hidden.defined('fax') %%] "
 
 #. %1$s:  END # /UNLESS fields hidden 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:364
@@ -1133,6 +1182,10 @@ msgid ""
 "defined('state') && hidden.defined('zipcode') && hidden.defined('country') "
 "%%] "
 msgstr ""
+"%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
+"hidden.defined('address2') && hidden.defined('city') && hidden."
+"defined('state') && hidden.defined('zipcode') && hidden.defined('country') "
+"%%] "
 
 #. %1$s:  END # / defined 'branchcode' 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:211
@@ -1143,6 +1196,10 @@ msgid ""
 "defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
 "%%] "
 msgstr ""
+"%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
+"defined('firstname') && hidden.defined('dateofbirth') && hidden."
+"defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
+"%%] "
 
 #. %1$s:  BLOCK showreference 
 #. %2$s:  SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid=' 
@@ -1151,12 +1208,15 @@ msgstr ""
 #. %5$s:  SWITCH type 
 #. %6$s:  CASE 'broader' 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:1
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s [%%# Parameters: heading: the heading itself linkType: currently "
 "'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
 "is a linked authority, its authid %%] %s %s %s %s %s "
 msgstr ""
+"%s [%%# Parameters: heading: the heading itself linkType: currently "
+"'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
+"is a linked authority, its authid %%] %s %s %s %s %s "
 
 #. %1$s:  USE AuthorisedValues 
 #. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
@@ -1170,6 +1230,11 @@ msgid ""
 "input (generated if the authorised value category does not exist). %%] %s "
 "[%% DEFAULT class = '' size = 20 %%] %s "
 msgstr ""
+"%s [%%# Parameters: name: the name of the select element category: the "
+"authorised value category default: the default authorised value to select "
+"class: the CSS class of the select element size: the size to use for the "
+"input (generated if the authorised value category does not exist). %%] %s "
+"[%% DEFAULT class = '' size = 20 %%] %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -1177,7 +1242,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:16
 #, fuzzy, c-format
 msgid "%s asc"
-msgstr "%s %s"
+msgstr "%s növ"
 
 #. %1$s:  resul.used 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:69
@@ -1201,7 +1266,7 @@ msgstr ", %s által "
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:144
 #, fuzzy, c-format
 msgid "%s by %s %s %s "
-msgstr "%s %s (%s) "
+msgstr "%s, %s %s %s "
 
 #. %1$s:  IF ( XISBN.author ) 
 #. %2$s:  XISBN.author |html 
@@ -1219,9 +1284,9 @@ msgstr "%s , %s%s%s &copy;%s%s%s "
 #. %1$s:  ind.label 
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:19
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:21
-#, fuzzy, c-format
+#, c-format
 msgid "%s desc"
-msgstr "%s %s"
+msgstr "%s csökk"
 
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
@@ -1230,15 +1295,15 @@ msgstr "%s %s"
 #. %5$s:  END 
 #. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:610
-#, fuzzy, c-format
+#, c-format
 msgid "%s since %s %s until %s %s %s "
-msgstr "%s %s %s%s%sNo title%s %s %s%s "
+msgstr "%s kezdve %s %s egészen %s %s %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:55
 #, c-format
 msgid "%s system-wide library news. "
-msgstr ""
+msgstr "%s rendszerszintű könyvtás ujdonság. "
 
 #. %1$s:  ELSE 
 #. %2$s:  heading 
@@ -1259,7 +1324,8 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
-msgstr "%s %s - %s%s %s- %s%s %s(%s)%s %s ; %s%s %s - %s%s %s ; %s%s "
+msgstr ""
+"%s%s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %s%s %s %s "
 
 #. %1$s:  FILTER trim 
 #. %2$s:  SWITCH type 
@@ -1274,11 +1340,13 @@ msgstr "%s %s - %s%s %s- %s%s %s(%s)%s %s ; %s%s %s - %s%s %s ; %s%s "
 #. %11$s:  END 
 #. %12$s:  END 
 #: opac-tmpl/bootstrap/en/includes/opac-authorities.inc:26
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s%s %sEarlier heading %sLater heading %sAcronym %sMusical composition "
 "%sBroader heading %sNarrower heading %s%s %s%s"
 msgstr ""
+"%s%s %sEarlier heading %sLater heading %sAcronym %sMusical composition "
+"%sBroader heading %sNarrower heading %s%s %s%s"
 
 #. %1$s:  IF contents.count 
 #. %2$s:  contents.count 
@@ -1302,6 +1370,7 @@ msgid ""
 "%s%s - Forgotten password recovery%sKoha online%s catalog - Forgotten "
 "password recovery"
 msgstr ""
+"%s%s - Jelszó visszaállítása%sKoha Online%s Katalógus - Jelszó visszaállítása"
 
 #. %1$s:  IF SeparateHoldings 
 #. %2$s:  LoginBranchname 
@@ -1313,7 +1382,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:538
 #, fuzzy, c-format
 msgid "%s%s holdings%sHoldings%s %s ( %s )%s"
-msgstr "Előjegyzések (%s)"
+msgstr "%s%s előjegyzések%sElőjegyzések%s %s ( %s )%s"
 
 #. %1$s:  deleted_count 
 #. %2$s:  IF ( deleted_count ==1 ) 
@@ -1322,7 +1391,7 @@ msgstr "Előjegyzések (%s)"
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:111
 #, c-format
 msgid "%s%s tag%stags%s successfully deleted."
-msgstr "%s%s cimke%stags%s sikeresen törölve."
+msgstr "%s%s címke%scímke%s sikeresen törölve."
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -1333,9 +1402,9 @@ msgstr "%s%s cimke%stags%s sikeresen törölve."
 #. %7$s:  BLOCK cssinclude 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%s%sKoha online%s catalog &rsaquo; Your payment %s %s%s "
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Polcom %s "
+msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Befizetés %s %s%s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -1345,12 +1414,11 @@ msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Polcom %s "
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%s%sKoha online%s%sKoha online%s catalog &rsaquo; Your messaging settings"
 msgstr ""
-"%s%s%s%s%sKoha Online%s%sKoha Online%s Katalógus &rsaquo; Frissítés %s%s %s"
-"%s %s "
+"%s%s%s%sKoha Online%s%sKoha Online%s Katalógus &rsaquo; Üzenet beállítások"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1359,7 +1427,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:5
 #, fuzzy, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout "
-msgstr "%s &rsaquo; Önkiszolgáló "
+msgstr "%s%s%sKoha %s &rsaquo; Önkiszolgáló "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1369,7 +1437,7 @@ msgstr "%s &rsaquo; Önkiszolgáló "
 #: opac-tmpl/bootstrap/en/modules/sco/printslip.tt:2
 #, fuzzy, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout &rsaquo; Print Receipt for %s"
-msgstr "%s &rsaquo; Önkiszolgáló"
+msgstr "%s%s%sKoha %s &rsaquo; Önkiszolgáló &rsaquo; Elismervény nyomtatás %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1378,7 +1446,7 @@ msgstr "%s &rsaquo; Önkiszolgáló"
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:3
 #, fuzzy, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout help"
-msgstr "%s &rsaquo; Önkiszolgáló"
+msgstr "%s%s%sKoha %s &rsaquo; Önkiszolgáló segítő"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -1390,9 +1458,9 @@ msgstr "%s &rsaquo; Önkiszolgáló"
 #: opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:3
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:4
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog"
-msgstr "%s %s%s%sKoha Online%s Katalógus %s "
+msgstr "%s%s%sKoha Online%s Katalógus"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1422,6 +1490,12 @@ msgid ""
 "GetServices %s ILS-DI &rsaquo; RenewLoan %s ILS-DI &rsaquo; HoldTitle %s ILS-"
 "DI &rsaquo; HoldItem %s ILS-DI &rsaquo; CancelHold %s ILS-DI %s"
 msgstr ""
+"%s%s%sKoha online%s catalog &rsaquo; %s ILS-DI &rsaquo; GetAvailability %s "
+"ILS-DI &rsaquo; GetRecords %s ILS-DI &rsaquo; GetAuthorityRecords %s ILS-DI "
+"&rsaquo; LookupPatron %s ILS-DI &rsaquo; AuthenticatePatron %s ILS-DI "
+"&rsaquo; GetPatronInfo %s ILS-DI &rsaquo; GetPatronStatus %s ILS-DI &rsaquo; "
+"GetServices %s ILS-DI &rsaquo; RenewLoan %s ILS-DI &rsaquo; HoldTitle %s ILS-"
+"DI &rsaquo; HoldItem %s ILS-DI &rsaquo; CancelHold %s ILS-DI %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1431,11 +1505,13 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s Log in to your account %s Catalog "
 "login disabled %s"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; %sA listáim %s%startalma%s%s "
+msgstr ""
+"%s%s%sKoha Online%s Katalógus &rsaquo; %s Fiók bejelentkezés %s Katalógus "
+"bejelentkezés letiltva %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -1459,8 +1535,8 @@ msgid ""
 "%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s"
 msgstr ""
-"%s %s%s%sKoha Online%s Katalógus &rsaquo; %s Találatok %sfor '%s'%s%s&nbsp;"
-"Tartalmazza:&nbsp;'%s'%s %s Nem adott meg keresési feltételt. %s %s "
+"%s%s%sKoha Online%s Katalógus &rsaquo; %s Találatok %s a '%s'%s%s&nbsp;"
+"Tartalmazza:&nbsp;'%s'%s %s Nem adott meg keresési feltételt. %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1474,7 +1550,9 @@ msgstr ""
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sAuthority search result%sNo results "
 "found%s"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Összetett keresés %s "
+msgstr ""
+"%s%s%sKoha Online%s Katalógus &rsaquo; %sBesorolási találati lista%sNincsen "
+"találat%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1487,7 +1565,7 @@ msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Összetett keresés %s "
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:8
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; %sContents of %s%sYour lists%s"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; %sA listáim %s%startalma%s%s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; %sA listáim %s%startalma%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1498,13 +1576,13 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; %sA listáim %s%startalma%s%s 
 #. %7$s:  IF ( op_else ) 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sEnter a new purchase suggestion%s "
 "%sPurchase Suggestions%s"
 msgstr ""
-"%s%s%s%sKoha Online%s Katalógus &rsaquo; %sAdjon meg új beszerzési "
-"javaslatot.%s %sBeszerzési javaslatok%s %s "
+"%s%s%sKoha Online%s Katalógus &rsaquo; %sAdjon meg új beszerzési javaslatot"
+"%s %sBeszerzési javaslatok%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1519,7 +1597,8 @@ msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sSubscribe to a subscription alert %s "
 "Unsubscribe from a subscription alert %s"
 msgstr ""
-"%s%s%s%sKoha Online%s Katalógus &rsaquo; %s Előfizetési információ %s %s "
+"%s%s%sKoha Online%s Katalógus &rsaquo; %sFeliratkozás előfizetési értesítőre "
+"%s Feliratkozás előfizetési értesítőről %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1529,38 +1608,40 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sUpdate your personal details"
 "%sRegister a new account%s"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Személyes adatok: %s %s %s "
+msgstr ""
+"%s%s%sKoha Knline%s Katalógus &rsaquo; %sSzemélyes adatok frissítése%sÚj "
+"fiók regisztrálása%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Add to your list"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Listához ad %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Hozzáadás a listához"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Advanced search"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Összetett keresés %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Bővített kereső"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; An error has occurred"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Hoba történt %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Hiba történt"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1569,7 +1650,7 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Hoba történt %s "
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:3
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Authority search"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Összetett keresés %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Besorolás keresés"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1584,27 +1665,25 @@ msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Összetett keresés %s "
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; Authority search &rsaquo; %s%s (%s)%s"
 msgstr ""
-"%s%s%s%sKoha Online%s Katalógus &rsaquo; %sAuthority találatok:%sNincs "
-"találat.%s %s "
+"%s%s%sKoha Online%s Katalógus &rsaquo; Besorolás keresés &rsaquo; %s%s (%s)%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Browse our catalog"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Polcom %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Katalógus böngésző"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Change your password"
-msgstr ""
-"%s%s%s%sKoha Online%s Katalógus&rsaquo; A polcom tartalmának elküldése %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Jelszócsere"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1614,7 +1693,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:2
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Comments on %s"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Friss megjegyzések %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Megjegyzés a(z) %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1624,16 +1703,16 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Friss megjegyzések %s "
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:7
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Course reserves for %s"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Részletezve: %s%s, %s%s %s "
+msgstr "%s%s%sKoha Online%s Kaatalógus &rsaquo; Kurzus tartalék: %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Courses"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Bejegyzés %s %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Kurzus"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1646,9 +1725,9 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Bejegyzés %s %s "
 #. %9$s:  subtitl.subfield |html 
 #. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:28
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s%s%s,%s %s%s"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Címkék %s "
+msgstr "%s%s%sKoha Online%s Katakógus &rsaquo; Részletek: %s%s%s,%s %s%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1657,16 +1736,16 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Címkék %s "
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:3
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Discharge"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Címkék %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Elbocsátás"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download cart"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; A polcom letöltése%s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Kosár letöltésé"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1674,9 +1753,9 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; A polcom letöltése%s "
 #. %4$s:  END 
 #. %5$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Download list %s"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; A polcom letöltése%s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Lista letöltése %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1684,9 +1763,9 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; A polcom letöltése%s "
 #. %4$s:  END 
 #. %5$s:  authtypetext 
 #: opac-tmpl/bootstrap/en/modules/opac-auth-MARCdetail.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Entry %s"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Bejegyzés %s %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Bejegyzés%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1696,17 +1775,16 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Bejegyzés %s %s "
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:5
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Full subscription history for %s"
-msgstr ""
-"%s%s%s%sKoha Online%s Katalógus &rsaquo; %s Előfizetési információ %s %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Teljes előfizetői történet: %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; ISBD view"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; ISBD nézet %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; ISBD nézet"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1716,7 +1794,7 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; ISBD nézet %s "
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:3
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Images for: %s"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Címkék %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Képek: %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1725,7 +1803,8 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Címkék %s "
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:3
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Issues for a subscription"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Címkék %s "
+msgstr ""
+"%s%s%sKoha Online%s Katalógus &rsaquo; Előfizetéshez tartozó kiadványok"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1736,8 +1815,8 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Címkék %s "
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
 msgstr ""
-"%s%s%s%sKoha Online%s Katalógus &rsaquo; MARC nézet a következő "
-"tételszámhoz: %s %s "
+"%s%s%sKoha Online%s Katalógus &rsaquo; MARC részletek a következő "
+"bejegyzésszámhoz: %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1746,7 +1825,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:6
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Most popular titles"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Legnépszerűbb címek %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Legnépszerűbb címek"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1754,128 +1833,127 @@ msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Legnépszerűbb címek %s "
 #. %4$s:  END 
 #. %5$s:  q | html 
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; OverDrive search for '%s'"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Polcom %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; OverDrive keresés: '%s'"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Placing a hold"
-msgstr ""
-"%s %s%s%sKoha Online%s Katalógus &rsaquo; A könyvtár főoldala %s %s %s %s %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Előjegyzés"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Please confirm your registration"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Listához ad %s "
+msgstr ""
+"%s%s%sKoha Online%s Katalógus &rsaquo; Kérjük erősítse meg a regisztrációt"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Recent comments"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Friss megjegyzések %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Friss megjegyzések"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Request article"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Polcom %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Cikk igénylés"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Sending your cart"
-msgstr ""
-"%s%s%s%sKoha Online%s Katalógus&rsaquo; A polcom tartalmának elküldése %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Kosár elküldése"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Sending your list"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Listám küldése %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Lista elküldése"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Share a list"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; ISBD nézet %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Lista megosztása"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Subject cloud"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Friss megjegyzések %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Témafelhő"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Tags"
-msgstr "%s%s%s%sKoha Online%s Katalógus &rsaquo; Címkék %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Címkék"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Updates submitted"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Összetett keresés %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Elküldöttek frrissítése"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your cart"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Polcom %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Kosár"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your checkout history"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Polcom %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Kölcsönzési történet"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your fines and charges"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Polcom %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Késedelmi díjak és költségek"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1884,18 +1962,16 @@ msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Polcom %s "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:8
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your library home"
-msgstr ""
-"%s %s%s%sKoha Online%s Katalógus &rsaquo; A könyvtár főoldala %s %s %s %s %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Könyvtár nyitóoldal"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your privacy management"
-msgstr ""
-"%s%s%s%sKoha Online%s Katalógus &rsaquo; Adatvédelmi beállítások: %s %s %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Adatvédelmi beállítások"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1905,16 +1981,16 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:2
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your search IDREF for ppn %s"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Polcom %s "
+msgstr "%s%s%sKoha online%s katalógus &rsaquo; A keresés IDREF a ppn %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your search history"
-msgstr "%s %s%s%sKoha Online%s Katalógus &rsaquo; Polcom %s "
+msgstr "%s%s%sKoha Online%s Katalógus &rsaquo; Keresési történet megtekintése"
 
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL 
@@ -1944,17 +2020,17 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/includes/date-format.inc:1
-#, c-format
+#, fuzzy, c-format
 msgid "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s"
-msgstr ""
+msgstr "%s(HH/NN/ÉÉÉÉ)%s(NN/HH/ÉÉÉÉ)%s(ÉÉÉÉ-HH-NN)%s"
 
 #. %1$s:  IF ( bibitemloo.author ) 
 #. %2$s:  bibitemloo.author 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
-#, fuzzy, c-format
+#, c-format
 msgid "%s, by %s%s "
-msgstr "%s %s %s %s (%s) "
+msgstr "%s, %s%s "
 
 #. For the first occurrence,
 #. %1$s:  OPACBaseURL 
@@ -1983,16 +2059,16 @@ msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s&amp;reviewid=%s"
 
 #. %1$s:  OPACBaseURL 
 #: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s/cgi-bin/koha/opac-main.pl"
-msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
+msgstr "%s/cgi-bin/koha/opac-main.pl"
 
 #. %1$s:  OPACBaseURL 
 #. %2$s:  newsitem.idnew |html 
 #: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid "%s/cgi-bin/koha/opac-main.pl#newsitem%s"
-msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
+msgstr "%s/cgi-bin/koha/opac-main.pl#newsitem%s"
 
 #. %1$s:  OPACBaseURL 
 #. %2$s:  query_cgi |html 
@@ -2013,9 +2089,9 @@ msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
 #. %1$s:  OPACBaseURL 
 #. %2$s:  shelf.shelfnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "%s/cgi-bin/koha/opac-shelves.pl?rss=1&amp;viewshelf=%s"
-msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
+msgstr "%s/cgi-bin/koha/opac-shelves.pl?rss=1&amp;viewshelf=%s"
 
 #. %1$s:  OPACBaseURL 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:5
@@ -2026,9 +2102,9 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "%s0 biblios%s "
-msgstr "%s biblios"
+msgstr "%s0 biblios%s "
 
 #. %1$s:  IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch 
@@ -2079,14 +2155,15 @@ msgstr "%sGyűjtemény%sDokumentumtípus%s"
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sVárva várt%s %sMegérkezett%s %sKésik%s %sEltűnt%s %sNem elérhető%s "
-"%sIgényelt%s %s(%s)%s "
+"%sVárható%s %sMegérkezett%s %sKésik%s %sHiányzik%s %sHiányzik (nem "
+"érkezett)%s %sHiányzik (eladva)%s %sHiányzik (megsérült)%s %sHiányzik "
+"(elveszett)%s %sNem elérhető%s %sTörölt%s %sKövetelés%s %sLeállítva%s "
 
 #. %1$s:  IF (latestserial.status1 ) 
 #. %2$s:  END 
@@ -2119,8 +2196,9 @@ msgid ""
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
 "%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%sVárva várt%s %sMegérkezett%s %sKésik%s %sEltűnt%s %sNem elérhető%s "
-"%sIgényelt%s %s(%s)%s "
+"%sVárható%s %sMegérkezett%s %sKésik%s %sHiányzik%s %sHiányzik (nem "
+"érkezett)%s %sHiányzik (eladva)%s %sHiányzik (megsérült)%s %sHiányzik "
+"(elveszett)%s %sNincs igénylés%s %sTörölt%s %sKövetelés%s %sLeállítva%s "
 
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
 #. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
@@ -2189,7 +2267,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:289
 #, fuzzy, c-format
 msgid "%sThis record has no items.%s "
-msgstr "%s tétel tárolva "
+msgstr "%sEhhez a bejegyzéshez nem tartozik példány.%s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( Koha.Preference('OPACPatronDetails') ) 
@@ -2214,7 +2292,7 @@ msgstr "%sIgen%sNem%s "
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
 #, fuzzy, c-format
 msgid "%sa list:%s"
-msgstr "Hozzáadja az új listához:"
+msgstr "%slista:%s"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:5
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1070
@@ -2230,7 +2308,7 @@ msgid "&lt;&lt; Previous"
 msgstr "&lt;&lt; Előző"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:493
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
 "AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
@@ -2239,7 +2317,7 @@ msgstr ""
 "AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:776
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;CancelHold&gt; "
 "&lt;message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
@@ -2248,7 +2326,7 @@ msgstr ""
 "&lt;message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:525
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetPatronInfo&gt; "
 "&lt;category_type&gt;A&lt;/category_type&gt; &lt;categorycode&gt;ADUEXT&lt;/"
@@ -2349,7 +2427,7 @@ msgstr ""
 "totalrenewals&gt;11&lt;/totalrenewals&gt; &lt;"
 "dateaccessioned&gt;2008-08-23&lt;/dateaccessioned&gt; &lt;"
 "onloan&gt;2008-09-17&lt;/onloan&gt; &lt;biblioitemnumber&gt;4483&lt;/"
-"biblioitemnumber&gt; &lt;wthdrawn&gt;0&lt;/wthdrawn&gt; &lt;"
+"biblioitemnumber&gt; &lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;"
 "notforloan&gt;0&lt;/notforloan&gt; &lt;"
 "replacementpricedate&gt;2008-08-23&lt;/replacementpricedate&gt; &lt;"
 "itemcallnumber&gt;RO STE&lt;/itemcallnumber&gt; &lt;location&gt;Salle de "
@@ -2376,7 +2454,7 @@ msgstr ""
 "&lt;notes&gt;La couv. porte en plus : \"un guide simple et facile pour "
 "apprendre la guitare\" | Glossaire. Index&lt;/notes&gt; &lt;"
 "onloan&gt;2008-09-25&lt;/onloan&gt; &lt;biblioitemnumber&gt;4486&lt;/"
-"biblioitemnumber&gt; &lt;wthdrawn&gt;0&lt;/wthdrawn&gt; &lt;"
+"biblioitemnumber&gt; &lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;"
 "notforloan&gt;0&lt;/notforloan&gt; &lt;"
 "replacementpricedate&gt;2008-08-23&lt;/replacementpricedate&gt; &lt;"
 "itemcallnumber&gt;787.87 BUC&lt;/itemcallnumber&gt; &lt;location&gt;Salle de "
@@ -2391,7 +2469,7 @@ msgstr ""
 "datelastborrowed&gt; &lt;/loan&gt; &lt;/loans&gt; &lt;/GetPatronInfo&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:644
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
 "GetPatronStatus&gt; &lt;expiry&gt;2010-03-04&lt;/expiry&gt; &lt;"
@@ -2404,7 +2482,7 @@ msgstr ""
 "GetPatronStatus&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:210
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetRecords&gt; "
 "&lt;record&gt; &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; &lt;"
@@ -2516,46 +2594,47 @@ msgid ""
 msgstr ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetRecords&gt; "
 "&lt;record&gt; &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; &lt;"
-"isbn&gt;9782862749198&lt;/isbn&gt; &lt;marcxml&gt; &lt;record xmlns:xsi="
-"\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://"
-"www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/"
-"MARC21slim.xsd\" xmlns=\"http://www.loc.gov/MARC21/slim\"&gt; &lt;"
-"leader&gt;00397nac a22001451u 4500&lt;/leader&gt; &lt;datafield tag=\"010\" "
-"ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;9782862749198&lt;/"
-"subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"090\" ind1=\" \" ind2=\" "
-"\"&gt; &lt;subfield code=\"a\"&gt;1&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
-"datafield tag=\"101\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;"
-"fre&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"100\" ind1=\" \" "
-"ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;20080725 frey50 &lt;/subfield&gt; "
-"&lt;/datafield&gt; &lt;datafield tag=\"200\" ind1=\" \" ind2=\" \"&gt; &lt;"
-"subfield code=\"a\"&gt;Jardins d'enfance&lt;/subfield&gt; &lt;subfield code="
-"\"b\"&gt;LITT&lt;/subfield&gt; &lt;subfield code=\"f\"&gt;Abécassis, "
-"Eliette&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"210\" ind1="
-"\" \" ind2=\" \"&gt; &lt;subfield code=\"c\"&gt;cherche midi éditeur&lt;/"
-"subfield&gt; &lt;subfield code=\"d\"&gt;11/2001&lt;/subfield&gt; &lt;/"
-"datafield&gt; &lt;datafield tag=\"215\" ind1=\" \" ind2=\" \"&gt; &lt;"
-"subfield code=\"a\"&gt;180&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield "
-"tag=\"225\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;"
-"nouvelles&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"995\" ind1="
-"\" \" ind2=\" \"&gt; &lt;subfield code=\"9\"&gt;1&lt;/subfield&gt; &lt;"
-"subfield code=\"c\"&gt;BIB&lt;/subfield&gt; &lt;subfield code=\"2\"&gt;0&lt;/"
-"subfield&gt; &lt;subfield code=\"k\"&gt;R ABE&lt;/subfield&gt; &lt;subfield "
-"code=\"o\"&gt;0&lt;/subfield&gt; &lt;subfield code=\"e\"&gt;Secteur "
-"Adulte&lt;/subfield&gt; &lt;subfield code=\"b\"&gt;BIB&lt;/subfield&gt; &lt;"
-"subfield code=\"j\"&gt;7786000200&lt;/subfield&gt; &lt;subfield code=\"q"
-"\"&gt;a&lt;/subfield&gt; &lt;subfield code=\"r\"&gt;2&lt;/subfield&gt; &lt;"
-"subfield code=\"s\"&gt;Achats&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
-"controlfield tag=\"001\"&gt;1&lt;/controlfield&gt; &lt;/record&gt; &lt;/"
-"marcxml&gt; &lt;publicationyear&gt;2001&lt;/publicationyear&gt; &lt;"
-"collectiontitle&gt;nouvelles&lt;/collectiontitle&gt; &lt;pages&gt;180&lt;/"
-"pages&gt; &lt;issues&gt; &lt;/issues&gt; &lt;itemtype&gt;LITT&lt;/"
-"itemtype&gt; &lt;biblionumber&gt;1&lt;/biblionumber&gt; &lt;"
-"timestamp&gt;2008-09-03 18:43:19&lt;/timestamp&gt; &lt;cn_sort&gt;_&lt;/"
-"cn_sort&gt; &lt;publishercode&gt;cherche midi éditeur&lt;/publishercode&gt; "
-"&lt;reserves&gt; &lt;/reserves&gt; &lt;items&gt; &lt;item&gt; &lt;"
-"biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; &lt;wthdrawn&gt;0&lt;/"
-"wthdrawn&gt; &lt;holdingbranchname&gt;Bibliothèque Jean Prunier&lt;/"
-"holdingbranchname&gt; &lt;notforloan&gt;0&lt;/notforloan&gt; &lt;"
+"isbn&gt;9782862749198&lt;/isbn&gt; &lt;marcxml&gt; &lt;?xml version=\"1.0\" "
+"encoding=\"UTF-8\" ?&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001/"
+"XMLSchema-instance\" xsi:schemaLocation=\"http://www.loc.gov/MARC21/slim "
+"http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd\" xmlns=\"http://"
+"www.loc.gov/MARC21/slim\"&gt; &lt;leader&gt;00397nac a22001451u 4500&lt;/"
+"leader&gt; &lt;datafield tag=\"010\" ind1=\" \" ind2=\" \"&gt; &lt;subfield "
+"code=\"a\"&gt;9782862749198&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
+"datafield tag=\"090\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a"
+"\"&gt;1&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"101\" ind1="
+"\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;fre&lt;/subfield&gt; &lt;/"
+"datafield&gt; &lt;datafield tag=\"100\" ind1=\" \" ind2=\" \"&gt; &lt;"
+"subfield code=\"a\"&gt;20080725 frey50 &lt;/subfield&gt; &lt;/datafield&gt; "
+"&lt;datafield tag=\"200\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a"
+"\"&gt;Jardins d'enfance&lt;/subfield&gt; &lt;subfield code=\"b\"&gt;LITT&lt;/"
+"subfield&gt; &lt;subfield code=\"f\"&gt;Abécassis, Eliette&lt;/subfield&gt; "
+"&lt;/datafield&gt; &lt;datafield tag=\"210\" ind1=\" \" ind2=\" \"&gt; &lt;"
+"subfield code=\"c\"&gt;cherche midi éditeur&lt;/subfield&gt; &lt;subfield "
+"code=\"d\"&gt;11/2001&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag="
+"\"215\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;180&lt;/"
+"subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"225\" ind1=\" \" ind2=\" "
+"\"&gt; &lt;subfield code=\"a\"&gt;nouvelles&lt;/subfield&gt; &lt;/"
+"datafield&gt; &lt;datafield tag=\"995\" ind1=\" \" ind2=\" \"&gt; &lt;"
+"subfield code=\"9\"&gt;1&lt;/subfield&gt; &lt;subfield code=\"c\"&gt;BIB&lt;/"
+"subfield&gt; &lt;subfield code=\"2\"&gt;0&lt;/subfield&gt; &lt;subfield code="
+"\"k\"&gt;R ABE&lt;/subfield&gt; &lt;subfield code=\"o\"&gt;0&lt;/"
+"subfield&gt; &lt;subfield code=\"e\"&gt;Secteur Adulte&lt;/subfield&gt; &lt;"
+"subfield code=\"b\"&gt;BIB&lt;/subfield&gt; &lt;subfield code=\"j"
+"\"&gt;7786000200&lt;/subfield&gt; &lt;subfield code=\"q\"&gt;a&lt;/"
+"subfield&gt; &lt;subfield code=\"r\"&gt;2&lt;/subfield&gt; &lt;subfield code="
+"\"s\"&gt;Achats&lt;/subfield&gt; &lt;/datafield&gt; &lt;controlfield tag="
+"\"001\"&gt;1&lt;/controlfield&gt; &lt;/record&gt; &lt;/marcxml&gt; &lt;"
+"publicationyear&gt;2001&lt;/publicationyear&gt; &lt;collectiontitle&gt;"
+"nouvelles&lt;/collectiontitle&gt; &lt;pages&gt;180&lt;/pages&gt; &lt;"
+"issues&gt; &lt;/issues&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;"
+"biblionumber&gt;1&lt;/biblionumber&gt; &lt;timestamp&gt;2008-09-03 "
+"18:43:19&lt;/timestamp&gt; &lt;cn_sort&gt;_&lt;/cn_sort&gt; &lt;"
+"publishercode&gt;cherche midi éditeur&lt;/publishercode&gt; &lt;reserves&gt; "
+"&lt;/reserves&gt; &lt;items&gt; &lt;item&gt; &lt;biblioitemnumber&gt;1&lt;/"
+"biblioitemnumber&gt; &lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;"
+"holdingbranchname&gt;Bibliothèque Jean Prunier&lt;/holdingbranchname&gt; &lt;"
+"notforloan&gt;0&lt;/notforloan&gt; &lt;"
 "replacementpricedate&gt;2008-08-20&lt;/replacementpricedate&gt; &lt;"
 "itemnumber&gt;1&lt;/itemnumber&gt; &lt;location&gt;Secteur Adulte&lt;/"
 "location&gt; &lt;itemcallnumber&gt;R ABE&lt;/itemcallnumber&gt; &lt;"
@@ -2568,46 +2647,46 @@ msgstr ""
 "R_ABE&lt;/cn_sort&gt; &lt;dateaccessioned&gt;2008-08-20&lt;/"
 "dateaccessioned&gt; &lt;/item&gt; &lt;/items&gt; &lt;/record&gt; &lt;"
 "record&gt; &lt;biblioitemnumber&gt;2&lt;/biblioitemnumber&gt; &lt;"
-"isbn&gt;9782265078031&lt;/isbn&gt; &lt;marcxml&gt; &lt;record xmlns:xsi="
-"\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://"
-"www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/"
-"MARC21slim.xsd\" xmlns=\"http://www.loc.gov/MARC21/slim\"&gt; &lt;"
-"leader&gt;00407nac a22001451u 4500&lt;/leader&gt; &lt;datafield tag=\"010\" "
-"ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;9782265078031&lt;/"
-"subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"090\" ind1=\" \" ind2=\" "
-"\"&gt; &lt;subfield code=\"a\"&gt;2&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
-"datafield tag=\"101\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;"
-"fre&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"100\" ind1=\" \" "
-"ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;20080725 frey50 &lt;/subfield&gt; "
-"&lt;/datafield&gt; &lt;datafield tag=\"200\" ind1=\" \" ind2=\" \"&gt; &lt;"
-"subfield code=\"a\"&gt;(Les) tribulations d'une jeune divorcée&lt;/"
-"subfield&gt; &lt;subfield code=\"b\"&gt;LITT&lt;/subfield&gt; &lt;subfield "
-"code=\"f\"&gt;Abécassis, Eliette&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
-"datafield tag=\"210\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"c\"&gt;"
-"bussière&lt;/subfield&gt; &lt;subfield code=\"d\"&gt;01/2005&lt;/"
-"subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"215\" ind1=\" \" ind2=\" "
-"\"&gt; &lt;subfield code=\"a\"&gt;306&lt;/subfield&gt; &lt;/datafield&gt; "
-"&lt;datafield tag=\"225\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a"
-"\"&gt;fleuve noir&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag="
-"\"995\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"9\"&gt;2&lt;/"
-"subfield&gt; &lt;subfield code=\"c\"&gt;BIB&lt;/subfield&gt; &lt;subfield "
-"code=\"2\"&gt;0&lt;/subfield&gt; &lt;subfield code=\"k\"&gt;R ABE&lt;/"
-"subfield&gt; &lt;subfield code=\"o\"&gt;0&lt;/subfield&gt; &lt;subfield code="
-"\"e\"&gt;Secteur Adulte&lt;/subfield&gt; &lt;subfield code=\"b\"&gt;BIB&lt;/"
-"subfield&gt; &lt;subfield code=\"j\"&gt;7786004672&lt;/subfield&gt; &lt;"
-"subfield code=\"q\"&gt;a&lt;/subfield&gt; &lt;subfield code=\"s\"&gt;"
-"Achats&lt;/subfield&gt; &lt;/datafield&gt; &lt;controlfield tag="
-"\"001\"&gt;2&lt;/controlfield&gt; &lt;/record&gt; &lt;/marcxml&gt; &lt;"
-"publicationyear&gt;2005&lt;/publicationyear&gt; &lt;collectiontitle&gt;"
-"fleuve noir&lt;/collectiontitle&gt; &lt;pages&gt;306&lt;/pages&gt; &lt;"
-"issues&gt; &lt;/issues&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;"
-"biblionumber&gt;2&lt;/biblionumber&gt; &lt;timestamp&gt;2008-09-03 "
-"18:43:19&lt;/timestamp&gt; &lt;cn_sort&gt;_&lt;/cn_sort&gt; &lt;"
-"publishercode&gt;bussière&lt;/publishercode&gt; &lt;reserves&gt; &lt;/"
-"reserves&gt; &lt;items&gt; &lt;item&gt; &lt;biblioitemnumber&gt;2&lt;/"
-"biblioitemnumber&gt; &lt;wthdrawn&gt;0&lt;/wthdrawn&gt; &lt;"
-"holdingbranchname&gt;Bibliothèque Jean Prunier&lt;/holdingbranchname&gt; &lt;"
-"notforloan&gt;0&lt;/notforloan&gt; &lt;"
+"isbn&gt;9782265078031&lt;/isbn&gt; &lt;marcxml&gt; &lt;?xml version=\"1.0\" "
+"encoding=\"UTF-8\" ?&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001/"
+"XMLSchema-instance\" xsi:schemaLocation=\"http://www.loc.gov/MARC21/slim "
+"http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd\" xmlns=\"http://"
+"www.loc.gov/MARC21/slim\"&gt; &lt;leader&gt;00407nac a22001451u 4500&lt;/"
+"leader&gt; &lt;datafield tag=\"010\" ind1=\" \" ind2=\" \"&gt; &lt;subfield "
+"code=\"a\"&gt;9782265078031&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
+"datafield tag=\"090\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a"
+"\"&gt;2&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"101\" ind1="
+"\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;fre&lt;/subfield&gt; &lt;/"
+"datafield&gt; &lt;datafield tag=\"100\" ind1=\" \" ind2=\" \"&gt; &lt;"
+"subfield code=\"a\"&gt;20080725 frey50 &lt;/subfield&gt; &lt;/datafield&gt; "
+"&lt;datafield tag=\"200\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a"
+"\"&gt;(Les) tribulations d'une jeune divorcée&lt;/subfield&gt; &lt;subfield "
+"code=\"b\"&gt;LITT&lt;/subfield&gt; &lt;subfield code=\"f\"&gt;Abécassis, "
+"Eliette&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"210\" ind1="
+"\" \" ind2=\" \"&gt; &lt;subfield code=\"c\"&gt;bussière&lt;/subfield&gt; "
+"&lt;subfield code=\"d\"&gt;01/2005&lt;/subfield&gt; &lt;/datafield&gt; &lt;"
+"datafield tag=\"215\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a"
+"\"&gt;306&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"225\" ind1="
+"\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;fleuve noir&lt;/subfield&gt; "
+"&lt;/datafield&gt; &lt;datafield tag=\"995\" ind1=\" \" ind2=\" \"&gt; &lt;"
+"subfield code=\"9\"&gt;2&lt;/subfield&gt; &lt;subfield code=\"c\"&gt;BIB&lt;/"
+"subfield&gt; &lt;subfield code=\"2\"&gt;0&lt;/subfield&gt; &lt;subfield code="
+"\"k\"&gt;R ABE&lt;/subfield&gt; &lt;subfield code=\"o\"&gt;0&lt;/"
+"subfield&gt; &lt;subfield code=\"e\"&gt;Secteur Adulte&lt;/subfield&gt; &lt;"
+"subfield code=\"b\"&gt;BIB&lt;/subfield&gt; &lt;subfield code=\"j"
+"\"&gt;7786004672&lt;/subfield&gt; &lt;subfield code=\"q\"&gt;a&lt;/"
+"subfield&gt; &lt;subfield code=\"s\"&gt;Achats&lt;/subfield&gt; &lt;/"
+"datafield&gt; &lt;controlfield tag=\"001\"&gt;2&lt;/controlfield&gt; &lt;/"
+"record&gt; &lt;/marcxml&gt; &lt;publicationyear&gt;2005&lt;/"
+"publicationyear&gt; &lt;collectiontitle&gt;fleuve noir&lt;/"
+"collectiontitle&gt; &lt;pages&gt;306&lt;/pages&gt; &lt;issues&gt; &lt;/"
+"issues&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;biblionumber&gt;2&lt;/"
+"biblionumber&gt; &lt;timestamp&gt;2008-09-03 18:43:19&lt;/timestamp&gt; &lt;"
+"cn_sort&gt;_&lt;/cn_sort&gt; &lt;publishercode&gt;bussière&lt;/"
+"publishercode&gt; &lt;reserves&gt; &lt;/reserves&gt; &lt;items&gt; &lt;"
+"item&gt; &lt;biblioitemnumber&gt;2&lt;/biblioitemnumber&gt; &lt;"
+"withdrawn&gt;0&lt;/withdrawn&gt; &lt;holdingbranchname&gt;Bibliothèque Jean "
+"Prunier&lt;/holdingbranchname&gt; &lt;notforloan&gt;0&lt;/notforloan&gt; &lt;"
 "replacementpricedate&gt;2008-08-20&lt;/replacementpricedate&gt; &lt;"
 "itemnumber&gt;2&lt;/itemnumber&gt; &lt;location&gt;Secteur Adulte&lt;/"
 "location&gt; &lt;itemcallnumber&gt;R ABE&lt;/itemcallnumber&gt; &lt;"
@@ -2622,7 +2701,7 @@ msgstr ""
 "record&gt;RecordNotFound&lt;/record&gt; &lt;/GetRecords&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:667
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetServices&gt; "
 "&lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt; &lt;"
@@ -2634,7 +2713,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:722
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:753
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;HoldTitle&gt; &lt;"
 "title&gt;(les) galères de l'Orfèvre&lt;/title&gt; &lt;"
@@ -2647,7 +2726,7 @@ msgstr ""
 "Bibliothèque Jean-Prunier&lt;/pickup_location&gt; &lt;/HoldTitle&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:472
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;LookupPatron&gt; "
 "&lt;id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
@@ -2656,7 +2735,7 @@ msgstr ""
 "&lt;id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:691
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;RenewLoan&gt; &lt;"
 "success&gt;0&lt;/success&gt; &lt;renewals&gt;5&lt;/renewals&gt; &lt;"
@@ -2667,7 +2746,7 @@ msgstr ""
 "date_due&gt;2009-05-11&lt;/date_due&gt; &lt;/RenewLoan&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:137
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;dlf:collection "
 "xmlns:dlf=\"http://diglib.org/ilsdi/1.1\" xmlns:xsi=\"http://www.w3.org/2001/"
@@ -2716,7 +2795,7 @@ msgstr ""
 "&lt;/dlf:items&gt; &lt;/dlf:record&gt; &lt;/dlf:collection&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:414
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;xml version=\"1.0\" encoding=\"UTF-8\"&gt;; &lt;GetAuthorityRecords&gt; "
 "&lt;record&gt; &lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt; &lt;record "
@@ -2737,36 +2816,31 @@ msgid ""
 "RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;record&gt; &lt;code&gt;"
 "RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;/GetAuthorityRecords&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
-"GetAuthorityRecords&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001/"
-"XMLSchema-instance\" xsi:schemaLocation=\"http://www.loc.gov/MARC21/slim "
-"http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd\" xmlns=\"http://"
-"www.loc.gov/MARC21/slim\"&gt; &lt;leader&gt;00126nx j2200073 4500 &lt;/"
-"leader&gt; &lt;controlfield tag=\"001\"&gt;1&lt;/controlfield&gt; &lt;"
-"datafield tag=\"250\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;"
-"TECHNIQUE&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"100\" ind1="
-"\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;20071210afrey50 ba0&lt;/"
-"subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"152\" ind1=\" \" ind2=\" "
-"\"&gt; &lt;subfield code=\"b\"&gt;NC&lt;/subfield&gt; &lt;/datafield&gt; "
-"&lt;/record&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-"
-"instance\" xsi:schemaLocation=\"http://www.loc.gov/MARC21/slim http://www."
-"loc.gov/ standards/marcxml/schema/MARC21slim.xsd\" xmlns=\"http://www.loc."
-"gov/MARC21/slim\"&gt; &lt;leader&gt;00130nx j2200073 4500 &lt;/leader&gt; "
-"&lt;controlfield tag=\"001\"&gt;2&lt;/controlfield&gt; &lt;datafield tag="
-"\"250\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;CHEMIN DE "
-"FER&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"100\" ind1=\" \" "
-"ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;20071210afrey50 ba0&lt;/"
-"subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"152\" ind1=\" \" ind2=\" "
-"\"&gt; &lt;subfield code=\"b\"&gt;NC&lt;/subfield&gt; &lt;/datafield&gt; "
-"&lt;/record&gt; &lt;record&gt;RecordNotFound&lt;/record&gt; &lt;/"
-"GetAuthorityRecords&gt;"
+"&lt;xml version=\"1.0\" encoding=\"UTF-8\"&gt;; &lt;GetAuthorityRecords&gt; "
+"&lt;record&gt; &lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt; &lt;record "
+"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation="
+"\"http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/"
+"schema/MARC21slim.xsd\" xmlns=\"http://www.loc.gov/MARC21/slim\"&gt; &lt;"
+"leader&gt;00182 2200085 4500&lt;/leader&gt; &lt;controlfield tag="
+"\"001\"&gt;1&lt;/controlfield&gt; &lt;datafield tag=\"200\" ind1=\" \" ind2="
+"\" \"&gt; &lt;subfield code=\"a\"&gt;Hugo&lt;/subfield&gt; &lt;subfield code="
+"\"b\"&gt;Victor&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag="
+"\"801\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;France&lt;/"
+"subfield&gt; &lt;subfield code=\"b\"&gt;Nimes&lt;/subfield&gt; &lt;subfield "
+"code=\"c\"&gt;2010/04/13&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield "
+"tag=\"100\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;20100413 50 "
+"&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"152\" ind1=\" \" "
+"ind2=\" \"&gt; &lt;subfield code=\"b\"&gt;NP&lt;/subfield&gt; &lt;/"
+"datafield&gt; &lt;/record&gt; &lt;/record&gt; &lt;record&gt; &lt;code&gt;"
+"RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;record&gt; &lt;code&gt;"
+"RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;/GetAuthorityRecords&gt;"
 
 #. %1$s:  SEARCH_RESULT.score_avg 
 #. %2$s:  SEARCH_RESULT.num_scores 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:427
-#, fuzzy, c-format
+#, c-format
 msgid "&nbsp;&nbsp; %s / 5 (on %s rates)"
-msgstr "%s&nbsp;%s %s"
+msgstr "&nbsp;&nbsp; %s / 5 (%s értékelésből)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:66
 #, fuzzy, c-format
@@ -2835,9 +2909,9 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Cím (kifejezés)"
 
 #. %1$s:  SEARCH_RESULT.ratings.count 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:495
-#, fuzzy, c-format
+#, c-format
 msgid "&nbsp;&nbsp;(%s votes)"
-msgstr "%s&nbsp;%s %s"
+msgstr "&nbsp;&nbsp;(%s értékelésből)"
 
 #. %1$s:  LEVEL_LOO.number 
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:51
@@ -3018,17 +3092,17 @@ msgstr "Késedelmesek "
 #. %1$s:  koha_new.newdate 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:48
-#, fuzzy, c-format
+#, c-format
 msgid "(published on %s%s by "
-msgstr "(Kiadva %s)"
+msgstr "(kiadva %s%s, "
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:15
-#, fuzzy, c-format
+#, c-format
 msgid "(related searches: %s%s%s)"
-msgstr "(kapcsolodó keresések:"
+msgstr "(kapcsolodó keresések: %s%s%s)"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:29
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:31
@@ -3046,9 +3120,9 @@ msgid ", none of these items can be placed on hold. "
 msgstr ", egyik dokumentum sem előjegyezhető. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:25
-#, fuzzy, c-format
+#, c-format
 msgid ", you cannot place holds."
-msgstr "Sajnálom, de nem foglalhat le több, mint %dokumentumot. "
+msgstr ", nem foglalható le."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
@@ -3088,7 +3162,7 @@ msgstr "Másodlagos elérhetõségi információk"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, fuzzy, c-format
 msgid ".%sYou have fines.%s %s "
-msgstr "Nincs késedelmi dija"
+msgstr ".%sKésedelmi díja van.%s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:57
 #, c-format
@@ -3166,9 +3240,9 @@ msgstr ""
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ": %sa list:%s"
-msgstr "Hozzáadja az új listához:"
+msgstr ": %slista:%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:46
 #, c-format
@@ -3229,6 +3303,8 @@ msgid ""
 "According to our records, we don't have up-to-date contact information. "
 "Please contact the library. "
 msgstr ""
+"Adataink szerint, nem rendelkezünk frissített elérhetőséggel. Kérjük, lépjen "
+"kapcsolatba a könyvtárral."
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:63
 #, c-format
@@ -3262,7 +3338,7 @@ msgstr "Hozzáad"
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:15
 #, fuzzy, c-format
 msgid "Add %s items to %s"
-msgstr "Hozzáad dokumentumokat %s részére"
+msgstr "%s tétel hozzáadása a %s"
 
 #. A name=ButtonPlus
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:97
@@ -3284,7 +3360,7 @@ msgstr "Berak a Kosárba"
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:17
 #, fuzzy, c-format
 msgid "Add to %s"
-msgstr "Hozzáad címkét"
+msgstr "Hozzáad a %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:43
 #, c-format
@@ -3324,7 +3400,7 @@ msgstr "Hozzáad:"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:89
 #, fuzzy, c-format
 msgid "Added %s %s by "
-msgstr "Add hozzá a %s dokumentumokat a "
+msgstr "Hozzáadva %s %s, "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:131
 #, fuzzy, c-format
@@ -3448,7 +3524,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
 #, fuzzy, c-format
 msgid "An error occurred when creating the list. The name %s already exists."
-msgstr "Kérésed elküldése közben hiba történt."
+msgstr "A lista készítése közben hiba történt. %s már szerepel."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:110
 #, fuzzy, c-format
@@ -3732,9 +3808,9 @@ msgstr "Szerző(k)"
 #. %15$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:39
-#, fuzzy, c-format
+#, c-format
 msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
-msgstr "%s %s (%s) "
+msgstr "Szerző(k): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:48
@@ -3793,9 +3869,9 @@ msgstr "Elérhetõség:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:82
-#, fuzzy, c-format
+#, c-format
 msgid "Available %s"
-msgstr "Elérhető számok"
+msgstr "Elérhető %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:122
 #, fuzzy, c-format
@@ -3868,7 +3944,7 @@ msgstr "BibTex"
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:57
 #, c-format
 msgid "Biblio records"
-msgstr "Bibliográfiai tételek"
+msgstr "Bibliográfiai bejegyzések"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:326
 #, c-format
@@ -3886,9 +3962,9 @@ msgid "Blocked"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "Blocked record"
-msgstr "Bibliográfiai tételek"
+msgstr "Zárolt bejegyzések"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:612
 #, c-format
@@ -3979,13 +4055,13 @@ msgstr "Helyrajzi szám"
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:222
 #, c-format
 msgid "Call no."
-msgstr ""
+msgstr "Helyr. sz."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:245
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:483
-#, fuzzy, c-format
+#, c-format
 msgid "Call no.:"
-msgstr "Helyrajzi szám"
+msgstr "Helyr. sz.:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:200
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:202
@@ -4001,34 +4077,34 @@ msgstr "Helyrajzi szám"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:60
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1172
-#, fuzzy, c-format
+#, c-format
 msgid "Call number"
-msgstr "Minden könyvtár"
+msgstr "Helyrajzi szám"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:28
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:30
-#, fuzzy, c-format
+#, c-format
 msgid "Call number (0-9 to A-Z)"
-msgstr "Minden könyvtár"
+msgstr "Helyrajzi szám (0-9 ... A-Z)"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:33
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:35
-#, fuzzy, c-format
+#, c-format
 msgid "Call number (Z-A to 9-0)"
-msgstr "Minden könyvtár"
+msgstr "Helyrajzi szám (Z-A ... 9-0)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:141
 #, fuzzy, c-format
 msgid "Call number:"
-msgstr "Minden könyvtár"
+msgstr "Helyrajzi szám:"
 
 #. For the first occurrence,
 #. %1$s:  subscription.callnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:808
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:820
-#, fuzzy, c-format
+#, c-format
 msgid "Call number: %s"
-msgstr "Helyrajzi szám"
+msgstr "Helyrajzi szám: %s"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:115
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:340
@@ -4076,14 +4152,14 @@ msgstr "Mégsem"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:75
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:762
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:811
-#, c-format
+#, fuzzy, c-format
 msgid "CancelHold"
-msgstr "Előjegyzés visszavonása"
+msgstr "CancelHold"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:813
-#, fuzzy, c-format
+#, c-format
 msgid "CancelRecall "
-msgstr "Visszahívás törlése "
+msgstr "CancelRecall "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:763
 #, c-format
@@ -4097,25 +4173,25 @@ msgstr "Nem lehet előjegyezni"
 
 #. %1$s:  maxlength_cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:151
-#, fuzzy, c-format
+#, c-format
 msgid "Card number can be up to %s characters."
-msgstr "Az új jelszónak legalább %s  karakter hosszúnak kell lennie."
+msgstr "Az olvasókártya azonosítószáma legfeljebb %s karakter hosszú lehet."
 
 #. %1$s:  minlength_cardnumber 
 #. %2$s:  maxlength_cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:147
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must be between %s and %s characters."
-msgstr "Az új jelszónak legalább %s  karakter hosszúnak kell lennie."
+msgstr "Az olvasókártya azonosítószámának hossza %s és %s közé kell essen."
 
 #. %1$s:  minlength_cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:143
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must be exactly %s characters."
-msgstr "Az új jelszónak legalább %s  karakter hosszúnak kell lennie."
+msgstr "Az olvasókártya azonosítószáma csak %s karakter hosszú lehet."
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "Card number:"
 msgstr "Olvasókártya száma:"
 
@@ -4200,9 +4276,9 @@ msgstr "0 Kölcsönzések"
 
 #. %1$s:  issues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:128
-#, fuzzy, c-format
+#, c-format
 msgid "Checked out (%s)"
-msgstr "Kikölcsönözve ("
+msgstr "Kikölcsönözve (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:220
 #, fuzzy, c-format
@@ -4215,9 +4291,9 @@ msgstr "0 Kölcsönzések"
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:31
-#, fuzzy, c-format
+#, c-format
 msgid "Checked out to %s %s %s(%s)%s"
-msgstr "Kikölcsönözve ("
+msgstr "Kikölcsönözve %s %s %s(%s)%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:29
 #, c-format
@@ -4232,9 +4308,9 @@ msgstr "Kölcsönözések"
 
 #. %1$s:  borrowername 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:216
-#, fuzzy, c-format
+#, c-format
 msgid "Checkouts for %s "
-msgstr "Kölcsönözések "
+msgstr "Kikölcsönözések %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:82
 #, fuzzy, c-format
@@ -4295,9 +4371,9 @@ msgstr ""
 #. %1$s:  BORROWER_INFO.title 
 #. %2$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:48
-#, fuzzy, c-format
+#, c-format
 msgid "Click here if you're not %s %s"
-msgstr "(<a1>Klikkelj ide</a> ha nem vagy %s %s %s)"
+msgstr "Kattintson ide ha nem %s %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
 #, fuzzy, c-format
@@ -4408,25 +4484,25 @@ msgstr "c- Gyűjtemény "
 #. %1$s:  BIBLIO_RESULT.seriestitle 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:75
-#, fuzzy, c-format
+#, c-format
 msgid "Collection: %s "
-msgstr "c- Gyűjtemény "
+msgstr "Gyűjtemény: %s "
 
 #. For the first occurrence,
 #. %1$s:  review.firstname 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:913
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:915
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:919
-#, fuzzy, c-format
+#, c-format
 msgid "Comment by %s"
-msgstr "%s %s %s megjegyzése"
+msgstr "Megjegyzések %s"
 
 #. %1$s:  review.firstname 
 #. %2$s:  review.surname|truncate(2,'.') 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:917
-#, fuzzy, c-format
+#, c-format
 msgid "Comment by %s %s"
-msgstr "%s %s %s megjegyzése"
+msgstr "Megjegyzés %s %s"
 
 #. %1$s:  review.title 
 #. %2$s:  review.firstname 
@@ -4444,9 +4520,9 @@ msgstr "Megjegyzés:"
 
 #. %1$s:  reviews.size || 0 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:584
-#, fuzzy, c-format
+#, c-format
 msgid "Comments ( %s )"
-msgstr "%s %s %s megjegyzése"
+msgstr "Megjegyzések ( %s )"
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:45
 #, fuzzy, c-format
@@ -4463,9 +4539,9 @@ msgstr "Jelszó megváltoztatása"
 #. %2$s:  USER_INFO.surname 
 #. %3$s:  USER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:119
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm holds for:%s %s (%s)"
-msgstr "Sikeresen előjegyezte: "
+msgstr "Előjegyzés megerősítés:%s %s (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:98
 #, fuzzy, c-format
@@ -4572,7 +4648,7 @@ msgstr "Minden könyvtár"
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:18
 #, fuzzy, c-format
 msgid "Course reserves"
-msgstr "%s importált tételek"
+msgstr "Kurzus tartalék"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:21
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:28
@@ -4606,14 +4682,18 @@ msgstr "Új Lista létrehozása"
 msgid ""
 "Creates, for a patron, a title-level hold request on a given bibliographic "
 "record in Koha."
-msgstr "Létrehoz az olvasó részére egy cím-szintű előjegyzést a Kohában."
+msgstr ""
+"Létrehoz az olvasó részére egy cím-szintű előjegyzést egy adott könyvtári "
+"bejegyzésre a Kohában."
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:732
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Creates, for a patron, an item-level hold request on a specific item of a "
 "bibliographic record Koha."
-msgstr "Létrehoz az olvasó részére egy példány-szintű előjegyzést a Kohában."
+msgstr ""
+"Létrehoz az olvasó részére egy példány-szintű előjegyzést egy adott "
+"könyvtári bejegyzésre a Kohában."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
 #, c-format
@@ -4624,7 +4704,7 @@ msgstr "Hitel"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:134
 #, fuzzy, c-format
 msgid "Credits (%s)"
-msgstr "Hitel"
+msgstr "Credits (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1164
 #, fuzzy, c-format
@@ -4653,9 +4733,9 @@ msgstr "Jelenlegi munkamenet"
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:25
-#, fuzzy, c-format
+#, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
-msgstr "Sikeresen előjegyezte: "
+msgstr "Jelenleg helyi használatban %s %s %s(%s)%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:76
 #, c-format
@@ -4683,7 +4763,7 @@ msgstr "Dátum"
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:119
 #, fuzzy, c-format
 msgid "Date added"
-msgstr "%s hozzáadott adat"
+msgstr "Hozzáadás dátuma"
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:152
 #, fuzzy, c-format
@@ -4766,8 +4846,8 @@ msgid ""
 "Defines the metadata schema in which the records are returned, possible "
 "values: "
 msgstr ""
-"Meghatározza a metaadat sémát, amely szerint a tételek visszajönnek, "
-"lehetséges értékeik: "
+"Meghatározza a metaadat sémát, amely szerint a bejegyzések visszaadásra "
+"kerülnek, lehetséges értékek: "
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:694
@@ -4855,9 +4935,9 @@ msgstr "%s kiadványa"
 #. %5$s:  subtitl.subfield |html 
 #. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "Details for: %s%s%s,%s %s%s"
-msgstr "%s %s %s megjegyzése"
+msgstr "Részletek: %s%s%s,%s %s%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:182
 #, c-format
@@ -4878,9 +4958,9 @@ msgid "Dictionaries"
 msgstr "Szótárak"
 
 #: opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid "Did you mean:"
-msgstr "%s Keresési javaslat:"
+msgstr "Így értette:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:41
 #, fuzzy, c-format
@@ -4998,14 +5078,12 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:72
 #, fuzzy, c-format
 msgid "ERROR: No record found for record id %s. "
-msgstr ""
-"HIBA: Nem találtunk a %s könyvazonosító számnak megfelelő bibliográfiai "
-"rekordot."
+msgstr "HIBA: Nem található bejegyzés a következő azonosítóhoz: %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:90
-#, c-format
+#, fuzzy, c-format
 msgid "ERROR: No record id specified. "
-msgstr ""
+msgstr "HIBA: Nincs azonosító megadva."
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:685
@@ -5094,13 +5172,13 @@ msgstr ""
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Enter your User ID%s and password%s, and click the submit button (or press "
 "the enter key)."
 msgstr ""
-" Írja be a felhasználó nevét, majd klikkeljen a Mehet gombra (vagy nyomja "
-"meg az Enter gombot)."
+" Írja be a felhasználó nevet%s és jelszót%s, majd kattintson a Mehet gombra ("
+"vagy nyomja meg az Enter gombot)."
 
 #. For the first occurrence,
 #. %1$s:  authtypetext 
@@ -5124,9 +5202,9 @@ msgstr "Hiba: "
 #. %1$s:  errno 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:12
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "Error %s"
-msgstr "Hiba: "
+msgstr "Hiba %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
@@ -5168,13 +5246,18 @@ msgstr ""
 msgid ""
 "Error! Your comment was entirely illegal markup code. It has NOT been added."
 msgstr ""
+"Figyelem: A megjegyzésben csak nem megengedett leíró kód szerepel, ami nem "
+"került bejegyzésre!"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
+#, fuzzy
 msgid ""
 "Error! Your tag was entirely markup code. It was NOT added. Please try again "
 "with plain text."
 msgstr ""
+"Figyelem: A megadott címke csak leíró kódot tartalmaz, ami nem lett "
+"hozzáadva. Kérjük megismételni csak szöveg megadásával."
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:49
@@ -5185,9 +5268,9 @@ msgid "Error:"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:22
-#, c-format
+#, fuzzy, c-format
 msgid "Error: we cannot find this bibliographic record."
-msgstr ""
+msgstr "HIBA: Ezt a könyvtári bejegyzést nem találjuk."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -5342,9 +5425,9 @@ msgstr "Késedelmi díjak"
 #. %1$s:  BORROWER_INFO.amountoutstanding | $Price 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:132
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
-#, fuzzy, c-format
+#, c-format
 msgid "Fines (%s)"
-msgstr "Késedelmi díjak"
+msgstr "Késedelmi díjak (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:316
@@ -5486,52 +5569,56 @@ msgstr "Késedelmi díjak és más költségek"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:48
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:394
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:797
-#, fuzzy, c-format
+#, c-format
 msgid "GetAuthorityRecords"
-msgstr "Besorolási értékek"
+msgstr "GetAuthorityRecords"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:42
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:108
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:787
-#, fuzzy, c-format
+#, c-format
 msgid "GetAvailability"
-msgstr "Elérhetõ"
+msgstr "GetAvailability"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:57
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:500
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:805
 #, c-format
 msgid "GetPatronInfo"
-msgstr ""
+msgstr "GetPatronInfo"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:60
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:632
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:806
 #, c-format
 msgid "GetPatronStatus"
-msgstr ""
+msgstr "GetPatronStatus"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:45
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:184
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:794
 #, fuzzy, c-format
 msgid "GetRecords"
-msgstr "Tétel száma:"
+msgstr "GetRecords"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:63
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:653
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:807
-#, fuzzy, c-format
+#, c-format
 msgid "GetServices"
-msgstr "Sorozatok"
+msgstr "GetServices"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:395
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Given a list of authority record identifiers, returns a list of record "
 "objects that contain the authority records. The function user may request a "
 "specific metadata schema for the record objects."
 msgstr ""
+"Adott egy jogosultsági bejegyzés azonosítók lista, visszaad egy "
+"tárgybejegyzések listát, ami tartalmazza a jogosultsági bejegyzéseket. A "
+"funkció felhasználója igényelhet egy meghatározott meta-adat sémát a "
+"tárgybejegyzésekhez. "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:185
 #, c-format
@@ -5543,6 +5630,12 @@ msgid ""
 "HarvestBibliographicRecords and HarvestExpandedRecords in Data Aggregation, "
 "but allows quick, real time lookup by bibliographic identifier."
 msgstr ""
+"Given a list of record identifiers, returns a list of record objects that "
+"contain bibliographic information, as well as associated holdings and item "
+"information. The caller may request a specific metadata schema for the "
+"record objects to be returned. This function behaves similarly to "
+"HarvestBibliographicRecords and HarvestExpandedRecords in Data Aggregation, "
+"but allows quick, real time lookup by bibliographic identifier."
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:109
 #, c-format
@@ -5577,9 +5670,9 @@ msgid "Go to your account page"
 msgstr "Saját számlám"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:788
-#, fuzzy, c-format
+#, c-format
 msgid "GoToBibliographicRequestPage "
-msgstr "Bibliográfiák "
+msgstr "GoToBibliographicRequestPage "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:140
 #, fuzzy, c-format
@@ -5602,24 +5695,24 @@ msgid "Handbooks"
 msgstr "Kézikönyvek"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:792
-#, fuzzy, c-format
+#, c-format
 msgid "HarvestAuthorityRecords "
-msgstr "Besorolási értékek "
+msgstr "HarvestAuthorityRecords "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:785
-#, fuzzy, c-format
+#, c-format
 msgid "HarvestBibliographicRecords "
-msgstr "Bibliográfiák "
+msgstr "HarvestBibliographicRecords "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:786
-#, fuzzy, c-format
+#, c-format
 msgid "HarvestExpandedRecords "
-msgstr "Bibliográfiák "
+msgstr "HarvestExpandedRecords "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:793
-#, fuzzy, c-format
+#, c-format
 msgid "HarvestHoldingsRecords "
-msgstr "Bibliográfiák "
+msgstr "HarvestHoldingsRecords "
 
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:73
 #, c-format
@@ -5633,9 +5726,9 @@ msgstr ""
 
 #. %1$s:  INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:45
-#, fuzzy, c-format
+#, c-format
 msgid "Hello, %s "
-msgstr "Köszöntöm %s %s "
+msgstr "Hello, %s "
 
 #: opac-tmpl/bootstrap/en/includes/masthead-sco.inc:10
 #, c-format
@@ -5677,9 +5770,9 @@ msgid "Hold not needed after:"
 msgstr "Előjegyzés dátuma"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:268
-#, fuzzy, c-format
+#, c-format
 msgid "Hold notes:"
-msgstr "Előjegyzések (%s)"
+msgstr "Előjegyzés megjegyzés:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:237
 #, c-format
@@ -5689,16 +5782,16 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:72
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:731
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:810
-#, fuzzy, c-format
+#, c-format
 msgid "HoldItem"
-msgstr "Előjegyzés dátuma"
+msgstr "HoldItem"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:69
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:700
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:809
-#, fuzzy, c-format
+#, c-format
 msgid "HoldTitle"
-msgstr "Cím"
+msgstr "HoldTitle"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:29
 #, fuzzy, c-format
@@ -5723,9 +5816,9 @@ msgstr "Előjegyzések "
 
 #. %1$s:  RESERVES.count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:136
-#, fuzzy, c-format
+#, c-format
 msgid "Holds (%s)"
-msgstr "Előjegyzések "
+msgstr "Előjegyzések (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:15
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:12
@@ -5845,9 +5938,9 @@ msgstr "ISBN"
 
 #. %1$s:  SEARCH_RESULT.isbn |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid "ISBN %s"
-msgstr "ISBN: %s"
+msgstr "ISBN %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:227
 #, c-format
@@ -5857,13 +5950,13 @@ msgstr "ISBN:"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:230
 #, c-format
 msgid "ISBN: "
-msgstr ""
+msgstr "ISBN: "
 
 #. %1$s:  BIBLIO_RESULT.ISBN 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid "ISBN: %s "
-msgstr "%s : %s"
+msgstr "ISBN: %s "
 
 #. %1$s:  FOREACH isbn IN BIBLIO_RESULT.ISBN 
 #. %2$s:  isbn 
@@ -5871,9 +5964,9 @@ msgstr "%s : %s"
 #. %4$s:  END 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid "ISBN: %s %s %s; %s %s "
-msgstr "%s %s (%s) "
+msgstr "ISBN: %s %s %s; %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:86
 #, c-format
@@ -5889,7 +5982,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:188
 #, c-format
 msgid "IdRef"
-msgstr ""
+msgstr "IdRef"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:226
 #, fuzzy, c-format
@@ -6037,9 +6130,9 @@ msgstr ""
 #. %2$s:  BIBLIO_RESULT.biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:142
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:136
-#, fuzzy, c-format
+#, c-format
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
-msgstr "10; url=/cgi-bin/koha/mainpage.pl"
+msgstr "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( item.transfertfrom ) 
@@ -6047,9 +6140,9 @@ msgstr "10; url=/cgi-bin/koha/mainpage.pl"
 #. %3$s:  item.transfertwhen | $KohaDates 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:40
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
-#, fuzzy, c-format
+#, c-format
 msgid "In transit from %s to %s since %s"
-msgstr "%s óta"
+msgstr "Átszállítás alatt %s és %s között %s"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:29
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -6290,9 +6383,9 @@ msgstr "LCCN:"
 #. %1$s:  BIBLIO_RESULT.lccn 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:123
-#, fuzzy, c-format
+#, c-format
 msgid "LCCN: %s "
-msgstr "%s : %s"
+msgstr "LCCN: %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:186
 #, c-format
@@ -6410,9 +6503,9 @@ msgid "Limit to currently available items."
 msgstr "jelenleg elérhető."
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:47
-#, fuzzy, c-format
+#, c-format
 msgid "Limit to:"
-msgstr "%sKorlátozva"
+msgstr "Korlátozás:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:29
 #, c-format
@@ -6641,9 +6734,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:51
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:451
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:803
-#, fuzzy, c-format
+#, c-format
 msgid "LookupPatron"
-msgstr "olvasónak"
+msgstr "LookupPatron"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:19
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:58
@@ -6673,15 +6766,15 @@ msgstr "MARC nézet"
 
 #. %1$s:  bibliotitle 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid "MARC view: %s"
-msgstr "MARC nézet"
+msgstr "MARC nézet: %s"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:201
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:405
 #, c-format
 msgid "MARCXML"
-msgstr ""
+msgstr "MARCXML"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:64
 #, c-format
@@ -6825,9 +6918,9 @@ msgid "Message sent"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-note.inc:3
-#, fuzzy, c-format
+#, c-format
 msgid "Messages for you"
-msgstr "%s kiadványa"
+msgstr "Üzeneteid"
 
 #. %1$s:  subscription.missinglist 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:814
@@ -6887,12 +6980,12 @@ msgstr "(kapcsolódó keresés: "
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:283
 #, fuzzy, c-format
 msgid "Most popular"
-msgstr "Lásd a Legnépszerűbb címeket"
+msgstr "Legnépszerűbb"
 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:20
 #, fuzzy, c-format
 msgid "Most popular titles"
-msgstr "Lásd a Legnépszerűbb címeket"
+msgstr "Legnépszerűbb címek"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:295
 #, c-format
@@ -6924,9 +7017,9 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
-#, fuzzy, c-format
+#, c-format
 msgid "Never expires %s %s - %s "
-msgstr "%s%s%sKorlátlan%s "
+msgstr "Nincs lejárat %s %s - %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:44
 #, c-format
@@ -6940,9 +7033,9 @@ msgstr ""
 #. %3$s:  subtitl.subfield |html 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "New comment on %s %s, %s%s"
-msgstr "%s %s %s megjegyzése"
+msgstr "Új megjegyzés %s %s, %s%s"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:71
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:167
@@ -6988,9 +7081,9 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-news-rss.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "News from %s%s%sthe library%s"
-msgstr "Üzenet a könyvtárból"
+msgstr "News from %s%s%sthe library%s"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:74
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
@@ -7084,15 +7177,14 @@ msgstr "Elérhető"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
-#, fuzzy
 msgid "No entries to show"
-msgstr "Hozzáad dokumentumokat %s részére"
+msgstr "Nincs megjeleníthető bejegyzés"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #, fuzzy
 msgid "No item was added to your cart"
-msgstr "Semmilyen dokumentum nem volt hozzáadva a Könyvzsákjához"
+msgstr "Nem volt tétel hozzáadva a kosárhoz."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -7121,7 +7213,7 @@ msgstr "Nincs korlát"
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #, fuzzy
 msgid "No matching records found"
-msgstr "Új bibliográfiai tétel hozzáadva"
+msgstr "Nem található megfelelő bejegyzés"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:36
 #, c-format
@@ -7131,7 +7223,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:679
 #, c-format
 msgid "No physical items for this record"
-msgstr "Nincs példány csatolva ehhez a tételhez"
+msgstr "Nincs tényleges példány csatolva ehhez a bejegyzéshez"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:70
 #, fuzzy, c-format
@@ -7265,9 +7357,9 @@ msgid "Note"
 msgstr "Megjegyzés"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:207
-#, fuzzy, c-format
+#, c-format
 msgid "Note: "
-msgstr ": %s "
+msgstr "Megjegyzés: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:47
 #, c-format
@@ -7288,11 +7380,13 @@ msgstr ""
 
 #. %1$s:  ELSIF ( ERROR.scrubbed ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:61
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Note: you can only delete your own tags. %s Note: your tag contained markup "
 "code that was removed. "
 msgstr ""
+"Megjegyzés: csak saját címke törölhető. %s Figyelem: a megadott címke leíró "
+"kódot tartalmazott, amit eltávolítottunk. "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -7302,18 +7396,23 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:28
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Note: your comment contained illegal markup code. It has been saved with the "
 "markup removed, as below. You can edit the comment further, or cancel to "
 "retain the comment as is."
 msgstr ""
+"Figyelem: a hozzáfűzött megjegyzés nem megengedett leíró kódot tartalmazott, "
+"amit eltávolítottunk és a lent látható módon mentettünk. A megjegyzés tovább "
+"szerkeszthető, avagy a mégsem hatására véglegesül. "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid ""
 "Note: your tag contained markup code that was removed. The tag was added as "
 msgstr ""
+"Figyelem: a címke leíró kódot tartalmazott, amit eltávolítottunk. A címke "
+"ilyen módon lett hozzáadva:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:61
@@ -7431,14 +7530,14 @@ msgid "October"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:46
-#, fuzzy, c-format
+#, c-format
 msgid "On hold"
-msgstr "%s talált sorok."
+msgstr "Előjegyezve"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:78
-#, fuzzy, c-format
+#, c-format
 msgid "On order"
-msgstr "Megrendelve (%s),"
+msgstr "Megrendelve"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:61
 #, fuzzy, c-format
@@ -7496,9 +7595,9 @@ msgid "Order by title"
 msgstr "Megrendelte:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:70
-#, fuzzy, c-format
+#, c-format
 msgid "Order by: "
-msgstr "%S megrendelte: "
+msgstr "Rendelés: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:951
 #, fuzzy, c-format
@@ -7519,12 +7618,12 @@ msgstr "Előjegyzések (%s)"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:799
 #, c-format
 msgid "OutputIntermediateFormat "
-msgstr ""
+msgstr "OutputIntermediateFormat "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:798
 #, c-format
 msgid "OutputRewritablePage "
-msgstr ""
+msgstr "OutputRewritablePage "
 
 #. For the first occurrence,
 #. %1$s:  q | html 
@@ -7536,9 +7635,9 @@ msgstr ""
 
 #. %1$s:  overdues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
-#, fuzzy, c-format
+#, c-format
 msgid "Overdue (%s)"
-msgstr "Késedelmesek "
+msgstr "Késedelem (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:406
 #, fuzzy, c-format
@@ -7616,9 +7715,9 @@ msgstr "Szabadalmi dokumentum"
 
 #. %1$s:  review.datereviewed | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:923
-#, fuzzy, c-format
+#, c-format
 msgid "Patron comment on %s"
-msgstr "Megjegyzések"
+msgstr "Olvasó megjegyzés %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:141
 #, fuzzy, c-format
@@ -7933,19 +8032,19 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:2
 #, fuzzy
 msgid "Popularity"
-msgstr "Authority:"
+msgstr "Népszerűség"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:9
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:11
-#, c-format
+#, fuzzy, c-format
 msgid "Popularity (least to most)"
-msgstr ""
+msgstr "Népszerűség (növekvő)"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:4
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:6
 #, c-format
 msgid "Popularity (most to least)"
-msgstr ""
+msgstr "Népszerűség (csökkenő)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:939
 #, fuzzy, c-format
@@ -7954,9 +8053,9 @@ msgstr "Tegye közzé vagy szerkessze a dokumentumhoz kapcsolódó megjegyzésé
 
 #. %1$s:  IF template.name.match('opac-main.tt') 
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:20
-#, fuzzy, c-format
+#, c-format
 msgid "Powered by %s "
-msgstr "Átdolgozta: "
+msgstr "Powered by %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:277
 #, c-format
@@ -8128,9 +8227,9 @@ msgstr "Kiadta:"
 #. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:67
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid "Published by: %s %s in %s %s %s , %s %s %s , %s %s "
-msgstr "%s %s (%s) "
+msgstr "Publikálva: %s %s év %s %s %s , %s %s %s , %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:79
@@ -8151,9 +8250,9 @@ msgstr "Kiadó:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:286
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:288
-#, fuzzy, c-format
+#, c-format
 msgid "Purchase suggestions"
-msgstr "(#%s ajánlás alapján meghatározott)"
+msgstr "Vásárlási javaslatok"
 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:61
 #, c-format
@@ -8169,15 +8268,15 @@ msgstr ""
 #. %1$s:  IF ( branchcode ) 
 #. %2$s:  Branches.GetName( branchcode ) 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid "RSS feed for %s%s "
-msgstr "Nincs nyilvános lista"
+msgstr "RSS hírfolyam %s%s "
 
 #. %1$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "RSS feed for public list %s"
-msgstr "Nincs nyilvános lista"
+msgstr "RSS hírfolyam a publikus listához %s"
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
 #, c-format
@@ -8208,9 +8307,9 @@ msgid "Reason for suggestion: "
 msgstr "Beszerzés "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:812
-#, fuzzy, c-format
+#, c-format
 msgid "RecallItem "
-msgstr "Megújít dokumentumot "
+msgstr "RecallItem "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:280
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:16
@@ -8226,12 +8325,12 @@ msgstr "Új beszerzések"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:87
 #, fuzzy, c-format
 msgid "Record URL"
-msgstr "Tétel száma:"
+msgstr "Bejegyzés URL"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:158
 #, c-format
 msgid "Record not found"
-msgstr "Nem találta a tételt"
+msgstr "Bejegyzés nem található"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:729
 #, fuzzy, c-format
@@ -8319,9 +8418,8 @@ msgstr "dokumentumok"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:42
-#, fuzzy
 msgid "Remove facet [% facet.facet_link_value | html %]"
-msgstr "[% facet.facet_title_value |html %]"
+msgstr "Facet eltávolítás [% facet.facet_link_value | html %]"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:98
@@ -8343,7 +8441,7 @@ msgstr "Törölje ezt a listát"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:531
 #, fuzzy
 msgid "Remove selected items"
-msgstr "Kiválasztott tételek eltávolítása"
+msgstr "Kijelölt tételek eltávolítása"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:77
@@ -8390,14 +8488,14 @@ msgstr "Megújít dokumentumot"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:833
 #, fuzzy
 msgid "Renew selected"
-msgstr "Kiválasztott tételek eltávolítása"
+msgstr "Kijelöltek hosszabítása"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:66
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:675
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:808
-#, fuzzy, c-format
+#, c-format
 msgid "RenewLoan"
-msgstr "Megújít"
+msgstr "RenewLoan"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:250
 #, fuzzy, c-format
@@ -8666,7 +8764,7 @@ msgstr "Mentés"
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:47
 #, fuzzy, c-format
 msgid "Save record "
-msgstr "Tétel száma: "
+msgstr "Bejegyzés mentése "
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:535
 #, fuzzy, c-format
@@ -8793,9 +8891,9 @@ msgid "Search:"
 msgstr "Apache verzió:"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:817
-#, fuzzy, c-format
+#, c-format
 msgid "SearchCourseReserves "
-msgstr "Foglalás "
+msgstr "SearchCourseReserves "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
@@ -8891,23 +8989,23 @@ msgstr "(válassz ki egy könyvtárat)"
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:219
 #, fuzzy, c-format
 msgid "Select searches to: "
-msgstr "Kiválasztott tételek eltávolítása "
+msgstr "Keresés kiválasztás:  "
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:165
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:277
 #, fuzzy, c-format
 msgid "Select suggestions to: "
-msgstr "Kiválasztott tételek eltávolítása "
+msgstr "Javaslat kiválasztás: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:137
 #, fuzzy, c-format
 msgid "Select the item(s) to search"
-msgstr "Kiválasztott tételek eltávolítása"
+msgstr "Tétel kiválasztás kereséshez"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:264
 #, fuzzy, c-format
 msgid "Select the term(s) to search"
-msgstr "Kiválasztott tételek eltávolítása"
+msgstr "Kereső kifejezés kiválasztás"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:262
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:752
@@ -8916,7 +9014,7 @@ msgstr "Kiválasztott tételek eltávolítása"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
 #, fuzzy, c-format
 msgid "Select titles to: "
-msgstr "Kiválasztott tételek eltávolítása "
+msgstr "Címek kiválasztása: "
 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:27
 #, fuzzy, c-format
@@ -8977,9 +9075,9 @@ msgstr ""
 #. %1$s:  BIBLIO_RESULT.serial 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:112
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:105
-#, fuzzy, c-format
+#, c-format
 msgid "Serial: %s "
-msgstr "Arias "
+msgstr "Időszaki: %s "
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:25
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:194
@@ -9100,9 +9198,9 @@ msgid "Show lists"
 msgstr "dokumentumok. <a1>Összes dokumentum</a>"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:54
-#, fuzzy, c-format
+#, c-format
 msgid "Show more"
-msgstr "%s talált sorok."
+msgstr "Több megjelenítése"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:230
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
@@ -9278,9 +9376,9 @@ msgstr "Biztosan el akarod távolítani a kijelölt listát?"
 
 #. %1$s:  too_many_reserves 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:66
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, you cannot place more than %s holds. "
-msgstr "Sajnálom, de nem foglalhat le több, mint %dokumentumot. "
+msgstr "Sajnálom, de %s előjegyzésnél több nem lehetséges. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:141
 #, c-format
@@ -9306,14 +9404,14 @@ msgid "Sorry, your session has timed out. Please log in again."
 msgstr "Sajnálom, a kapcsolata megszakadt, kérem jelentkezzen be újra."
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:253
-#, fuzzy, c-format
+#, c-format
 msgid "Sort by:"
-msgstr "%S megrendelte:"
+msgstr "Rendezés:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:211
-#, fuzzy, c-format
+#, c-format
 msgid "Sort by: "
-msgstr "%S megrendelte: "
+msgstr "Rendezés: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:561
 #, c-format
@@ -9366,9 +9464,9 @@ msgstr "# Dokumentumok"
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:39
-#, fuzzy, c-format
+#, c-format
 msgid "Step one: Enter your user id%s and password%s"
-msgstr "Első lépés: Írja be a felhasználó nevét"
+msgstr "Első lépés: Írja be a felhasználói nevét%s és a jelszavát%s"
 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:48
 #, fuzzy, c-format
@@ -9382,9 +9480,8 @@ msgstr "2. lépés: Szkennelje be a vonalkódot, mindegyik dokumentumot külön.
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
-#, fuzzy
 msgid "Su"
-msgstr "%s talált sorok."
+msgstr "Su"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:184
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:186
@@ -9421,9 +9518,9 @@ msgstr "Tárgy(ak):"
 #. %1$s:  BIBLIO_RESULT.subject 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:88
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "Subject: %s "
-msgstr "(kapcsolodó keresések: "
+msgstr "Tárgy: %s "
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:88
@@ -9457,9 +9554,8 @@ msgstr "Küldje el javaslatát"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:91
-#, fuzzy
 msgid "Submit your suggestion"
-msgstr "(#%s ajánlás alapján meghatározott)"
+msgstr "Küldje el javaslatát"
 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:22
 #, fuzzy, c-format
@@ -9667,7 +9763,7 @@ msgstr ""
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 msgid "Tags added: "
-msgstr ""
+msgstr "Címke hozzáadva: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:393
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:402
@@ -9742,11 +9838,13 @@ msgstr "Ehhez az elõfizetéshez kapcsolódó utolsó három szám:"
 #. %10$s:  ELSE 
 #. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:38
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The %s most checked-out %s %s %s %s at %s %s %s in the past %s months %s of "
 "all time%s "
 msgstr ""
+"A %s legtőbbet kölcsönzött %s %s %s %s a %s %s %s e legutóbbi %s hónap %s "
+"ezidáig%s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -9883,31 +9981,33 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:124
 #, fuzzy, c-format
 msgid "The item has been added to the list."
-msgstr "Ezt a dokumentumot hozzáadtuk a Könyvzsákhoz."
+msgstr "A tétel hozzá lett adva a listához."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #, fuzzy
 msgid "The item has been added to your cart"
-msgstr "Ezt a dokumentumot hozzáadtuk a Könyvzsákhoz."
+msgstr "A tétel hozzá lett adva a kosárhoz."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:126
 #, fuzzy, c-format
 msgid "The item has been removed from the list."
-msgstr "Ezt a dokumentumot hozzáadtuk a Könyvzsákhoz."
+msgstr "A tétel el lett távolítva a listáról"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #, fuzzy
 msgid "The item has been removed from your cart"
-msgstr "Ezt a dokumentumot hozzáadtuk a Könyvzsákhoz."
+msgstr "A tétel el lett távolítva a kosárból"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:114
 #, fuzzy, c-format
 msgid ""
 "The item has not been added to the list. Please check it's not already in "
 "the list."
-msgstr "Ezt a dokumentumot hozzáadtuk a Könyvzsákhoz."
+msgstr ""
+"A tétel nem lett hozzáadva a listához. Előfordulhat, hogy az már szerepel a "
+"listán."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -9973,7 +10073,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:128
 #, fuzzy, c-format
 msgid "The share has been removed."
-msgstr "Ezt a dokumentumot hozzáadtuk a Könyvzsákhoz."
+msgstr "A megosztás eltávolításra került."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:116
 #, fuzzy, c-format
@@ -9995,11 +10095,13 @@ msgstr "<em>MESSAGE 1:</em> A rendszer nem ismeri ezt a vonalkódot. "
 #. %1$s:  ERROR.scrubbed 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:64
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The tag was added as &quot;%s&quot;. %s Note: your tag was entirely markup "
 "code. It was NOT added. "
 msgstr ""
+"A címke ilyen módon lett hozzáadva: &quot;%s&quot;. %s Figyelem: A megadott "
+"címke csak leíró kódot tartalmaz, ami nem lett hozzáadva. "
 
 #. %1$s:  message_value 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:41
@@ -10086,8 +10188,8 @@ msgid ""
 "This &quot;cloud&quot; shows the most used topics in our catalog. Click on "
 "any subject below to see the items in our collection."
 msgstr ""
-" Ez a \"felhő\" a leggyakrabban használt témákat mutatja. Klikkelj a szóra, "
-"hogy mgtekinthesd a hozzá kötödő dokumentumokat."
+" Ez a &quot;felhő&quot; a leggyakrabban használt témákat mutatja. Klikkelj a "
+"szóra, hogy mgtekinthesd a hozzá kötödő dokumentumokat."
 
 #. %1$s:  ELSIF ( circ_error_GNA ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:70
@@ -10120,9 +10222,9 @@ msgid "This is a serial"
 msgstr "Ez egy időszaki kiadvány előfizetése."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:132
-#, fuzzy, c-format
+#, c-format
 msgid "This item does not exist."
-msgstr "Ez a dokumentum nem kölcsönözhető. %s "
+msgstr "Ez a tétel nem létezik."
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:263
 #, c-format
@@ -10137,9 +10239,9 @@ msgid "This item has been withdrawn from the collection. %s "
 msgstr "Ezt a dokumentumot kivonták a gyűjteményből. %s "
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:100
-#, fuzzy, c-format
+#, c-format
 msgid "This item is already checked out to you."
-msgstr "%sEzt a dokumentumot már kikölcsönözte.%s"
+msgstr "Ezt a tételt már kölcsönzöd."
 
 #. %1$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
@@ -10171,12 +10273,10 @@ msgstr ""
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:518
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
-msgstr ""
-" A Lista üres. Bármelyik <a1>Keresés</a>! találatait hozzáadhatod a "
-"Listához. "
+msgstr "Ez a lista üres. %s Hozzáadható a listához bármeny  "
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:30
 #, c-format
@@ -10195,14 +10295,14 @@ msgstr ""
 
 #. %1$s:  items_count 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:642
-#, fuzzy, c-format
+#, c-format
 msgid "This record has many physical items (%s). "
-msgstr "%sEhhez a rekordhoz nem tartozik tétel.%s "
+msgstr "Ehhez a rekordhoz több példány is tartozik (%s). "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:806
-#, fuzzy, c-format
+#, c-format
 msgid "This subscription is closed."
-msgstr "<b>%s</b> előfizetés(ek)"
+msgstr "Ez az előfizetés lezárva."
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:176
 #, c-format
@@ -10339,9 +10439,9 @@ msgid "Today"
 msgstr "ma"
 
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "Top level"
-msgstr "%s <a1>Legfelső szint</a>"
+msgstr "Legfelső szint"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:23
 #, c-format
@@ -10407,17 +10507,17 @@ msgid "UF"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:203
-#, fuzzy, c-format
+#, c-format
 msgid "URL(s)"
-msgstr ": %s"
+msgstr "URL(s)"
 
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.url |url 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:135
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:128
-#, fuzzy, c-format
+#, c-format
 msgid "URL: %s "
-msgstr "%s : %s"
+msgstr "URL: %s "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
@@ -10690,7 +10790,7 @@ msgstr "Kiválasztott tételek eltávolítása "
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:277
 #, fuzzy
 msgid "With selected suggestions: "
-msgstr "Kiválasztott tételek eltávolítása "
+msgstr "Kiválasztott javaslatokkal: "
 
 #. For the first occurrence,
 #. SCRIPT
@@ -10699,7 +10799,7 @@ msgstr "Kiválasztott tételek eltávolítása "
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
 #, fuzzy
 msgid "With selected titles: "
-msgstr "Kiválasztott tételek eltávolítása "
+msgstr "Kiválasztott címekkel: "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -10835,10 +10935,9 @@ msgstr "Szerzeményezési javaslataim"
 
 #. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
-#, fuzzy, c-format
+#, c-format
 msgid "You cannot renew this item again. %s "
-msgstr ""
-"<em>MESSAGE 4:</em> Ezt a dokumentumot nem újjíthatod meg még egyszer. "
+msgstr "Ez a példány tovább már nem hosszabbítható. %s "
 
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
@@ -11029,7 +11128,7 @@ msgstr "Válassz ki egy fiókkönyvtárat az  átvételhez! "
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:78
 #, fuzzy, c-format
 msgid "You must select at least one item. "
-msgstr "Válasszon legalább egy tételt. "
+msgstr "Legalább egy tételt ki kell választani."
 
 #. %1$s:  amount 
 #. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
@@ -11093,9 +11192,9 @@ msgstr "Másodlagos elérhetõségi információk"
 
 #. %1$s:  ELSIF ( circ_error_DEBARRED ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
-#, fuzzy, c-format
+#, c-format
 msgid "Your account has expired. %s "
-msgstr "<em>MESSAGE 11:</em> A felhasználói fiokód lejárt. "
+msgstr "A fiókod érvényessége lejárt. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
 #, c-format
@@ -11223,9 +11322,9 @@ msgstr "Másodlagos elérhetõségi információk"
 
 #. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "Your list : %s "
-msgstr "Saját Lista "
+msgstr "Saját lista : %s "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:57
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:56
@@ -11301,9 +11400,9 @@ msgid "Your personal details"
 msgstr "személyi adataim"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:199
-#, fuzzy, c-format
+#, c-format
 msgid "Your priority: "
-msgstr "Előjegyzések (%s) "
+msgstr "Saját prioritás: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:26
@@ -11398,9 +11497,8 @@ msgstr ""
 
 #. INPUT type=text name=limit
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:85
-#, fuzzy
 msgid "[% limit or"
-msgstr "%sKorlátozva"
+msgstr "[% limit or"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:113
 #, c-format
@@ -11410,6 +11508,10 @@ msgid ""
 "OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) "
 "%%] "
 msgstr ""
+"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('itemtype')."
+"size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
+"OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) "
+"%%] "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:164
 #, c-format
@@ -11419,6 +11521,10 @@ msgid ""
 "OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) "
 "%%] "
 msgstr ""
+"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('pubdate')."
+"size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
+"OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) "
+"%%] "
 
 #: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:1
 #, c-format
@@ -11427,6 +11533,9 @@ msgid ""
 "( languages_loop ) && ( OpacLangSelectorMode == 'both' || "
 "OpacLangSelectorMode == 'top') ) %%] "
 msgstr ""
+"[%% IF ( ( opaclanguagesdisplay ) && ( ! one_language_enabled ) && "
+"( languages_loop ) && ( OpacLangSelectorMode == 'both' || "
+"OpacLangSelectorMode == 'top') ) %%] "
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:107
 #, c-format
@@ -11434,6 +11543,8 @@ msgid ""
 "[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
 "type=seeals.type authid=seeals.authid %%] "
 msgstr ""
+"[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
+"type=seeals.type authid=seeals.authid %%] "
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:95
 #, c-format
@@ -11441,6 +11552,8 @@ msgid ""
 "[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
 "type=seefro.type %%] "
 msgstr ""
+"[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
+"type=seefro.type %%] "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:118
 #, c-format
@@ -11449,6 +11562,9 @@ msgid ""
 "Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
 "defined('branchcode') && hidden.defined('categorycode') %%] "
 msgstr ""
+"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
+"Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
+"defined('branchcode') && hidden.defined('categorycode') %%] "
 
 #: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:1
 #, c-format
@@ -11457,6 +11573,9 @@ msgid ""
 "OpenLibrarySearch && ( bib.normalized_isbn || bib.lccn || bib."
 "normalized_oclc ) %%] "
 msgstr ""
+"[%%# Input params: bib - search result biblio record %%] [%% IF "
+"OpenLibrarySearch && ( bib.normalized_isbn || bib.lccn || bib."
+"normalized_oclc ) %%] "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
@@ -11530,7 +11649,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:737
 #, c-format
 msgid "bib_id"
-msgstr ""
+msgstr "bib_id"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:218
@@ -11589,6 +11708,13 @@ msgid ""
 "%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
 "series %]&rft.genre="
 msgstr ""
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
+"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
+"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT."
+"item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft."
+"place=[% BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url "
+"%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
+"series %]&rft.genre="
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:713
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:744
@@ -11653,72 +11779,74 @@ msgid "id_type"
 msgstr "id_type"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:489
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ilsdi.pl?service=AuthenticatePatron&amp;username=john9&amp;password=soul "
-msgstr "ilsdi.pl?service=AuthenticatePatron&username=john9&password=soul "
+msgstr ""
+"ilsdi.pl?service=AuthenticatePatron&amp;username=john9&amp;password=soul "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:772
-#, fuzzy, c-format
+#, c-format
 msgid "ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1 "
-msgstr "ilsdi.pl?service=CancelHold&patron_id=1&item_id=1 "
+msgstr "ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1 "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:410
-#, fuzzy, c-format
+#, c-format
 msgid "ilsdi.pl?service=GetAuthorityRecords&amp;id=1+2+99999 "
-msgstr "ilsdi.pl?service=GetAuthorityRecords&id=1+2+99999 "
+msgstr "ilsdi.pl?service=GetAuthorityRecords&amp;id=1+2+99999 "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:133
-#, fuzzy, c-format
+#, c-format
 msgid "ilsdi.pl?service=GetAvailability&amp;id=1+2+99999&amp;id_type=item "
-msgstr "ilsdi.pl?service=GetAvailability&id=1+2+99999&id_type=item "
+msgstr "ilsdi.pl?service=GetAvailability&amp;id=1+2+99999&amp;id_type=item "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:521
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;"
 "show_loans=1 "
 msgstr ""
-"ilsdi.pl?service=GetPatronInfo&patron_id=1&show_contact=0&show_loans=1 "
+"ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;"
+"show_loans=1 "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:640
-#, fuzzy, c-format
+#, c-format
 msgid "ilsdi.pl?service=GetPatronStatus&amp;patron_id=1 "
-msgstr "ilsdi.pl?service=GetPatronStatus&patron_id=1 "
+msgstr "ilsdi.pl?service=GetPatronStatus&amp;patron_id=1 "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:206
-#, fuzzy, c-format
+#, c-format
 msgid "ilsdi.pl?service=GetRecords&amp;id=1+2+99999 "
-msgstr "ilsdi.pl?service=GetRecords&id=1+2+99999 "
+msgstr "ilsdi.pl?service=GetRecords&amp;id=1+2+99999 "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:663
-#, fuzzy, c-format
+#, c-format
 msgid "ilsdi.pl?service=GetServices&amp;patron_id=1&amp;item_id=1 "
-msgstr "ilsdi.pl?service=GetServices&patron_id=1&item_id=1 "
+msgstr "ilsdi.pl?service=GetServices&amp;patron_id=1&amp;item_id=1 "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:749
-#, fuzzy, c-format
+#, c-format
 msgid "ilsdi.pl?service=HoldItem&amp;patron_id=1&amp;bib_id=1&amp;item_id=1 "
-msgstr "ilsdi.pl?service=HoldItem&patron_id=1&bib_id=1&item_id=1 "
+msgstr "ilsdi.pl?service=HoldItem&amp;patron_id=1&amp;bib_id=1&amp;item_id=1 "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ilsdi.pl?service=HoldTitle&amp;patron_id=1&amp;bib_id=1&amp;"
 "request_location=127.0.0.1 "
 msgstr ""
-"ilsdi.pl?service=HoldTitle&patron_id=1&bib_id=1&request_location=127.0.0.1 "
+"ilsdi.pl?service=HoldTitle&amp;patron_id=1&amp;bib_id=1&amp;"
+"request_location=127.0.0.1 "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:468
-#, fuzzy, c-format
+#, c-format
 msgid "ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber "
-msgstr ""
-"ilsdi.pl?service=HoldTitle&patron_id=1&bib_id=1&request_location=127.0.0.1 "
+msgstr "ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:687
-#, fuzzy, c-format
+#, c-format
 msgid "ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1 "
-msgstr "ilsdi.pl?service=RenewLoan&patron_id=1&item_id=1 "
+msgstr "ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1 "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
@@ -11762,7 +11890,7 @@ msgstr "Cím"
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
 #, fuzzy
 msgid "item(s) added to your cart"
-msgstr "a dokumentumot(kat) berakta a Kosárba"
+msgstr "tétel(ek) a kosárhoz hozzáadva"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:659
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:681
@@ -11807,12 +11935,12 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:743
 #, c-format
 msgid "needed_before_date"
-msgstr ""
+msgstr "needed_before_date"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:82
 #, c-format
 msgid "negcap "
-msgstr ""
+msgstr "negcap "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:31
 #, c-format
@@ -11844,9 +11972,9 @@ msgstr "jelszó"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:704
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:735
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:766
-#, fuzzy, c-format
+#, c-format
 msgid "patron_id"
-msgstr "olvasónak"
+msgstr "patron_id"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:714
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:745
@@ -11941,27 +12069,27 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:517
 #, c-format
 msgid "show_attributes"
-msgstr ""
+msgstr "show_attributes"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:509
 #, c-format
 msgid "show_contact"
-msgstr ""
+msgstr "show_contact"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:511
 #, c-format
 msgid "show_fines"
-msgstr ""
+msgstr "show_fines"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:513
 #, c-format
 msgid "show_holds"
-msgstr ""
+msgstr "show_holds"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:515
 #, c-format
 msgid "show_loans"
-msgstr ""
+msgstr "show_loans"
 
 #. %1$s:  transfer.datesent | $KohaDates 
 #. %2$s:  ELSIF ( RESERVE.suspend ) 
@@ -11976,11 +12104,13 @@ msgstr ""
 #. %11$s:  END 
 #. %12$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
 "of item type '%s' %s Pending %s %s %s "
-msgstr "%s %s %s %s (%s) "
+msgstr ""
+"%s %s Felfüggesztve %s %s %s %s %s Várakozás a következő elérhető példányra "
+"a '%s' %s Várakozás %s %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:34
 #, fuzzy, c-format
@@ -11992,8 +12122,8 @@ msgstr "az oldal adminisztrátora"
 msgid ""
 "specifies the metadata schema of records to be returned, possible values: "
 msgstr ""
-"Meghatározza a metaadat sémát, amely szerint a tételek visszajönnek, "
-"lehetséges értékeik: "
+"meghatározza a metaadat sémát, amely szerint a tételek visszaadásra "
+"kerülnek, lehetséges értékek: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:51
 #, c-format
@@ -12021,6 +12151,8 @@ msgid ""
 "system hold identifier (returned by GetRecords and GetPatronInfo into "
 "element 'reserve_id')"
 msgstr ""
+"system hold identifier (returned by GetRecords and GetPatronInfo into "
+"element 'reserve_id')"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:660
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:682
@@ -12082,6 +12214,8 @@ msgid ""
 "the unique patron identifier in the ILS; the same identifier returned by "
 "LookupPatron or AuthenticatePatron"
 msgstr ""
+"the unique patron identifier in the ILS; the same identifier returned by "
+"LookupPatron or AuthenticatePatron"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
@@ -12138,7 +12272,7 @@ msgstr "jelszó"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:483
 #, c-format
 msgid "username"
-msgstr "felhasználónév"
+msgstr "username"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:168
@@ -12273,9 +12407,9 @@ msgstr "Saját Lista "
 
 #. %1$s:  my_rating.rating_value 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:494
-#, fuzzy, c-format
+#, c-format
 msgid "your rating: %s, "
-msgstr "Saját Lista "
+msgstr "saját értékelés: %s, "
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:59
 #, fuzzy, c-format
@@ -12308,8 +12442,7 @@ msgstr ""
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:176
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:180
-#, fuzzy
 msgid ""
 "‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"
 msgstr ""
-"$[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]"
+"‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"

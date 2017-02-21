@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2016-12-29 12:43+0000\n"
+"PO-Revision-Date: 2017-02-16 14:23+0000\n"
 "Last-Translator: Nikunj <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1483015408.000000\n"
+"X-POOTLE-MTIME: 1487255031.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -171,8 +171,11 @@ msgid "acquisitions.pref#UniqueItemFields# (separated by a space)"
 msgstr "acquisitions.pref # UniqueItemFields # (एक स्थान से अलग)"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#UniqueItemFields# The following <a href='http://schema.koha-community.org/tables/items.html' target='blank'>database columns</a> should be unique in an item:"
-msgstr "acquisitions.pref # UniqueItemFields # अनुगामी <a href='http://schema.koha-community.org/tables/items.html' target='blank'> डेटाबेस कॉलम </a> एक आइटम में अद्वितीय होना चाहिए:"
+msgid "acquisitions.pref#UniqueItemFields# The following <a href='http://schema.koha-community.org/16_11/tables/items.html' target='blank'>database columns</a> should be unique in an item:"
+msgstr ""
+"acquisitions.pref#UniqueItemFields# एक आइटम में  निम्नलिखित <a "
+"href='http://schema.koha-community.org/16_11/tables/items.html' "
+"target='blank'> डेटाबेस स्तंभों </a> को अद्वितीय होना चाहिए:"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#gist# . Enter in numeric form, 0.12 for 12%. The first item in the list will be selected by default. For more than one value, separate with | (pipe)."
@@ -1433,6 +1436,27 @@ msgstr "authorities.pref # AuthDisplayHierarchy # प्रदर्शन न�
 # Authorities > General
 msgid "authorities.pref#AuthDisplayHierarchy# broader term/narrower term hierarchies when viewing authorities."
 msgstr "authorities.pref # AuthDisplayHierarchy # व्यापक शब्द / संकरा अवधि पदानुक्रम अधिकारियों जब देखने।"
+
+# Authorities > General
+msgid "authorities.pref#AuthorityMergeMode# When updating biblio records from an attached authority record (\"merging\"), handle subfields of relevant biblio record fields in"
+msgstr ""
+"जब एक संलग्न अधिकार रिकॉर्ड से Biblio अभिलेखों को अद्यतन करने के लिए ( \"वि"
+"लय\"), प्रासंगिक Biblio रिकॉर्ड क्षेत्रों के उपक्षेत्रों को संभाले"
+
+# Authorities > General
+msgid "authorities.pref#AuthorityMergeMode# loose"
+msgstr "authorities.pref#AuthorityMergeMode# ढीला"
+
+# Authorities > General
+msgid "authorities.pref#AuthorityMergeMode# mode. In strict mode subfields that are not found in the authority record, are deleted. Loose mode will keep them. Loose mode is the historical behavior and still the default."
+msgstr ""
+"authorities.pref#AuthorityMergeMode# मोड। सख्त मोड उपक्षेत्रों कि प्राधिकरण "
+"रिकॉर्ड में नहीं मिला रहे हैं, नष्ट हो जाती हैं। ढीला मोड उन्हें रखेंगे। ढीला"
+" मोड ऐतिहासिक व्यवहार और अभी भी डिफ़ॉल्ट है।"
+
+# Authorities > General
+msgid "authorities.pref#AuthorityMergeMode# strict"
+msgstr "authorities.pref#AuthorityMergeMode# कठोर"
 
 # Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
@@ -5816,8 +5840,11 @@ msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns 
 msgstr "opac.pref # PatronSelfModificationBorrowerUnwantedField # (के साथ अलग-अलग कॉलम |)"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
-msgstr "opac.pref # PatronSelfModificationBorrowerUnwantedField # निम्न <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'> डेटाबेस कॉलम </a> संरक्षक स्वयं पर दिखाई नहीं देंगे -modification स्क्रीन:"
+msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/16_11/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
+msgstr ""
+"opac.pref#PatronSelfModificationBorrowerUnwantedField# संरक्षक आत्म संशोधन "
+"स्क्रीन पर निम्नलिखित <a href='http://schema.koha-community.org/16_11/tables/"
+"borrowers.html' target='blank'>डेटाबेस स्तंभ</a>  दिखाई नहीं देंगे:"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistration# Allow"
@@ -5840,16 +5867,22 @@ msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns
 msgstr "opac.pref # PatronSelfRegistrationBorrowerMandatoryField # (के साथ अलग-अलग कॉलम |)"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
-msgstr "opac.pref # PatronSelfRegistrationBorrowerMandatoryField # निम्न <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'> डेटाबेस कॉलम </a> संरक्षक पर भरा जाना चाहिए प्रविष्टि स्क्रीन:"
+msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/16_11/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
+msgstr ""
+"opac.pref#PatronSelfRegistrationBorrowerMandatoryField# संरक्षक प्रविष्टि "
+"स्क्रीन पर निम्नलिखित <a href='http://schema.koha-community.org/16_11/tables/"
+"borrowers.html' target='blank'>डेटाबेस स्तंभ</a> भरा जाना चाहिए:"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
 msgstr "opac.pref # PatronSelfRegistrationBorrowerUnwantedField # (के साथ अलग-अलग कॉलम |)"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
-msgstr "opac.pref # PatronSelfRegistrationBorrowerUnwantedField # निम्न <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'> डेटाबेस कॉलम </a> संरक्षक स्वयं पर दिखाई नहीं देंगे -registration स्क्रीन:"
+msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/16_11/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
+msgstr ""
+"opac.pref#PatronSelfRegistrationBorrowerUnwantedField# संरक्षक आत्म पंजीकरण "
+"स्क्रीन पर निम्नलिखित <a href='http://schema.koha-community.org/16_11/tables/"
+"borrowers.html' target='blank'>डेटाबेस स्तंभ</a> दिखाई नहीं देंगे: "
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -6280,8 +6313,11 @@ msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
 msgstr "patrons.pref # BorrowerMandatoryField # (के साथ अलग-अलग कॉलम |)"
 
 # Patrons > General
-msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
-msgstr "patrons.pref # BorrowerMandatoryField # निम्न <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'> डेटाबेस कॉलम </a> संरक्षक पर भरा जाना चाहिए प्रविष्टि स्क्रीन:"
+msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/16_11/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
+msgstr ""
+"patrons.pref#BorrowerMandatoryField# संरक्षक प्रविष्टि स्क्रीन पर निम्नलिखित "
+"<a href='http://schema.koha-community.org/16_11/tables/borrowers.html' "
+"target='blank'>डेटाबेस स्तंभ</a> भरा जाना चाहिए: "
 
 # Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the new expiry date on"
@@ -6304,8 +6340,11 @@ msgid "patrons.pref#BorrowerUnwantedField# (separate columns with |)"
 msgstr "patrons.pref # BorrowerUnwantedField # (के साथ अलग-अलग कॉलम |)"
 
 # Patrons > General
-msgid "patrons.pref#BorrowerUnwantedField# The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
-msgstr "patrons.pref # BorrowerUnwantedField # निम्न <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'> डेटाबेस कॉलम </a> संरक्षक प्रविष्टि पर दिखाई नहीं देंगे स्क्रीन:"
+msgid "patrons.pref#BorrowerUnwantedField# The following <a href='http://schema.koha-community.org/16_11/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
+msgstr ""
+"patrons.pref#BorrowerUnwantedField# संरक्षक प्रविष्टि स्क्रीन पर निम्नलिखित <"
+"a href='http://schema.koha-community.org/16_11/tables/borrowers.html' "
+"target='blank'>डेटाबेस स्तंभ</a> भरा जाना चाहिए: "
 
 # Patrons > General
 msgid "patrons.pref#BorrowersTitles# (separate multiple choices with |)"
@@ -7658,4 +7697,3 @@ msgstr "web_services.pref # SvcMaxReportRows # केवल वापसी"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "web_services.pref # SvcMaxReportRows # एक रिपोर्ट रिपोर्टों वेब सेवा के माध्यम से अनुरोध किया की पंक्तियों।"
-
