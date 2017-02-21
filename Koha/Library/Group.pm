@@ -118,9 +118,7 @@ sub libraries_not_direct_children {
 sub store {
     my ($self) = @_;
 
-    my $now = dt_from_string;
-    $self->updated_on($now);
-    $self->created_on($now) unless $self->in_storage();
+    $self->created_on( dt_from_string() ) unless $self->in_storage();
 
     return $self->SUPER::store(@_);
 }
