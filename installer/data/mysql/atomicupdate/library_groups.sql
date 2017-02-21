@@ -8,5 +8,6 @@ CREATE TABLE library_groups (
     updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Date and time of last
     PRIMARY KEY id ( id ),
     FOREIGN KEY (parent_id) REFERENCES library_groups(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON UPDATE CASCADE ON DELETE CASCADE,
+    UNIQUE( title )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
