@@ -1394,12 +1394,16 @@ sub AddAuthorityTrees{
         MARCfrom => $MARCfrom,
         [ mergeto => $mergeto, ]
         [ MARCto => $MARCto, ]
+        [ biblionumbers => [ $a, $b, $c ], ]
     });
 
 Merge biblios linked to authority $mergefrom.
 If $mergeto equals mergefrom, the linked biblio field is updated.
 If $mergeto is different, the biblio field will be linked to $mergeto.
 If $mergeto is missing, the biblio field is deleted.
+
+Normally all biblio records linked to $mergefrom, will be considered. But
+you can pass specific numbers via the biblionumbers parameter.
 
 Note: Although $mergefrom and $mergeto will normally be of the same
 authority type, merge also supports moving to another authority type.
@@ -1408,14 +1412,18 @@ authority type, merge also supports moving to another authority type.
 
 sub merge {
     my ( $params ) = @_;
-    my $mergefrom = $params->{mergefrom};
+    my $mergefrom = $params->{mergefrom} || return;
     my $MARCfrom = $params->{MARCfrom};
     my $mergeto = $params->{mergeto};
     my $MARCto = $params->{MARCto};
+    my @biblionumbers = $params->{biblionumbers}
+        # If we do not have biblionumbers, we get all linked biblios
+        ? @{ $params->{biblionumbers} }
+        : Koha::Authorities->linked_biblionumbers({ authid => $mergefrom });
+    return 0 if !@biblionumbers;
 
-    return 0 unless $mergefrom > 0; # prevent abuse
-    my ($counteditedbiblio,$countunmodifiedbiblio,$counterrors)=(0,0,0);        
-    my $dbh=C4::Context->dbh;
+    my $counteditedbiblio = 0;
+    my $dbh = C4::Context->dbh;
     my $authfrom = Koha::Authorities->find($mergefrom);
     my $authto = Koha::Authorities->find($mergeto);
     my $authtypefrom = $authfrom ? Koha::Authority::Types->find($authfrom->authtypecode) : undef;
@@ -1429,36 +1437,7 @@ sub merge {
     @record_to = $MARCto->field($auth_tag_to_report_to)->subfields() if $auth_tag_to_report_to && $MARCto && $MARCto->field($auth_tag_to_report_to);
     my @record_from;
     @record_from = $MARCfrom->field($auth_tag_to_report_from)->subfields() if $auth_tag_to_report_from && $MARCfrom && $MARCfrom->field($auth_tag_to_report_from);
-    
-    my @reccache;
-    # search all biblio tags using this authority.
-    #Getting marcbiblios impacted by the change.
-    #zebra connection
-    my $oConnection=C4::Context->Zconn("biblioserver",0);
-    # We used to use XML syntax here, but that no longer works.
-    # Thankfully, we don't need it.
-    my $query;
-    $query= "an=".$mergefrom;
-    my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
-    my $count = 0;
-    if  ($oResult) {
-        $count=$oResult->size();
-    }
-    my $z=0;
-    while ( $z<$count ) {
-        my $marcrecordzebra = C4::Search::new_record_from_zebra(
-            'biblioserver',
-            $oResult->record($z)->raw()
-        );
-        my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
-        my $i = ($biblionumbertagfield < 10)
-            ? $marcrecordzebra->field( $biblionumbertagfield )->data
-            : $marcrecordzebra->subfield( $biblionumbertagfield, $biblionumbertagsubfield );
-        my $marcrecorddb = GetMarcBiblio($i);
-        push @reccache, $marcrecorddb;
-        $z++;
-    }
-    $oResult->destroy();
+
     # Get All candidate Tags for the change 
     # (This will reduce the search scope in marc records).
     # For a deleted authority record, we scan all auth controlled fields
@@ -1479,7 +1458,9 @@ sub merge {
     # And we need to add $9 in order not to duplicate
     $skip_subfields->{9} = 1 if !$overwrite;
 
-    foreach my $marcrecord(@reccache){
+    foreach my $biblionumber ( @biblionumbers ) {
+        my $marcrecord = GetMarcBiblio( $biblionumber );
+        next if !$marcrecord;
         my $update = 0;
         foreach my $tagfield (@$tags_using_authtype) {
             my $countfrom = 0;    # used in strict mode to remove duplicates
@@ -1523,25 +1504,11 @@ sub merge {
                 $update = 1;
             }
         }
-        my ($bibliotag,$bibliosubf) = GetMarcFromKohaField("biblio.biblionumber","") ;
-        my $biblionumber;
-        if ($bibliotag<10){
-            $biblionumber=$marcrecord->field($bibliotag)->data;
-        }
-        else {
-            $biblionumber=$marcrecord->subfield($bibliotag,$bibliosubf);
-        }
-        unless ($biblionumber){
-            warn "pas de numéro de notice bibliographique dans : ".$marcrecord->as_formatted;
-            next;
-        }
-        if ($update==1){
-            &ModBiblio($marcrecord,$biblionumber,GetFrameworkCode($biblionumber)) ;
-            $counteditedbiblio++;
-            warn $counteditedbiblio if (($counteditedbiblio % 10) and $ENV{DEBUG});
-        }    
+        next if !$update;
+        ModBiblio($marcrecord, $biblionumber, GetFrameworkCode($biblionumber));
+        $counteditedbiblio++;
     }
-    return $counteditedbiblio;  
+    return $counteditedbiblio;
 }
 
 sub _merge_newtag {

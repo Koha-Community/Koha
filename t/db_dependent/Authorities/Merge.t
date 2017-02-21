@@ -9,12 +9,12 @@ use Test::More tests => 5;
 use Getopt::Long;
 use MARC::Record;
 use Test::MockModule;
-use Test::MockObject;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Biblio;
+use Koha::Authorities;
 use Koha::Database;
 
 BEGIN {
@@ -30,7 +30,7 @@ my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 # Global variables, mocking and framework modifications
-our ( @zebrarecords, $index );
+our @linkedrecords;
 my $mocks = set_mocks();
 our ( $authtype1, $authtype2 ) = modify_framework();
 
@@ -58,8 +58,7 @@ subtest 'Test merge A1 to A2 (within same authtype)' => sub {
     my ( $biblionumber2 ) = AddBiblio($biblio2, '');
 
     # Time to merge
-    @zebrarecords = ( $biblio1, $biblio2 );
-    $index = 0;
+    @linkedrecords = ( $biblionumber1, $biblionumber2 );
     my $rv = C4::AuthoritiesMarc::merge({ mergefrom => $authid2, MARCfrom => $auth2, mergeto => $authid1, MARCto => $auth1 });
     is( $rv, 1, 'We expect one biblio record (out of two) to be updated' );
 
@@ -102,8 +101,7 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
     my ( $biblionumber2 ) = AddBiblio( $MARC2, '');
 
     # Time to merge in loose mode first
-    @zebrarecords = ( $MARC1, $MARC2 );
-    $index = 0;
+    @linkedrecords = ( $biblionumber1, $biblionumber2 );
     t::lib::Mocks::mock_preference('AuthorityMergeMode', 'loose');
     my $rv = C4::AuthoritiesMarc::merge({ mergefrom => $authid1, MARCfrom => $auth1old, mergeto => $authid1, MARCto => $auth1new });
     is( $rv, 2, 'Both records are updated now' );
@@ -123,8 +121,7 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
     # Merge again in strict mode
     t::lib::Mocks::mock_preference('AuthorityMergeMode', 'strict');
     ModBiblio( $MARC1, $biblionumber1, '' );
-    @zebrarecords = ( $MARC1 );
-    $index = 0;
+    @linkedrecords = ( $biblionumber1 );
     $rv = C4::AuthoritiesMarc::merge({ mergefrom => $authid1, MARCfrom => $auth1old, mergeto => $authid1, MARCto => $auth1new });
     $biblio1 = GetMarcBiblio($biblionumber1);
     is( $biblio1->field(109)->subfield('b'), undef, 'Subfield overwritten in strict mode' );
@@ -170,8 +167,7 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
     my $oldbiblio = C4::Biblio::GetMarcBiblio( $biblionumber );
 
     # Time to merge
-    @zebrarecords = ( $marc );
-    $index = 0;
+    @linkedrecords = ( $biblionumber );
     my $retval = C4::AuthoritiesMarc::merge({ mergefrom => $authid1, MARCfrom => $auth1, mergeto => $authid2, MARCto => $auth2 });
     is( $retval, 1, 'We touched only one biblio' );
 
@@ -232,8 +228,7 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
         MARC::Field->new( '609', '', '', a => 'DEL', 9 => "$authid1" ),
     );
     my ( $biblionumber ) = C4::Biblio::AddBiblio( $bib1, '' );
-    @zebrarecords = ( $bib1 );
-    $index = 0;
+    @linkedrecords = ( $biblionumber );
     DelAuthority({ authid => $authid1 }); # this triggers a merge call
 
     # See what happened in the biblio record
@@ -253,41 +248,25 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
     # record and call merge afterwards.
     # This mimics deleting an authority and calling merge later in the
     # merge_authority.pl cron job (when dontmerge is enabled).
+    # We use the biblionumbers parameter here and unmock linked_biblionumbers.
     C4::Context->dbh->do( "DELETE FROM auth_header WHERE authid=?", undef, $authid1 );
-    @zebrarecords = ( $marc1 );
-    $index = 0;
-    merge({ mergefrom => $authid1 });
+    @linkedrecords = ();
+    $mocks->{auth_mod}->unmock_all;
+    merge({ mergefrom => $authid1, biblionumbers => [ $biblionumber ] });
     # Final check
     $marc1 = C4::Biblio::GetMarcBiblio( $biblionumber );
     is( $marc1->field('609'), undef, 'Merge removed the 609 again even after deleting the authority record' );
 };
 
 sub set_mocks {
-    # Mock ZOOM objects: They do nothing actually
-    # Get new_record_from_zebra to return the records
+    # After we removed the Zebra code from merge, we only need to mock
+    # linked_biblionumbers here.
 
     my $mocks;
-    $mocks->{context_mod} = Test::MockModule->new( 'C4::Context' );
-    $mocks->{search_mod} = Test::MockModule->new( 'C4::Search' );
-    $mocks->{zoom_mod} = Test::MockModule->new( 'ZOOM::Query::CCL2RPN', no_auto => 1 );
-    $mocks->{conn_obj} = Test::MockObject->new;
-    $mocks->{zoom_obj} = Test::MockObject->new;
-    $mocks->{zoom_record_obj} = Test::MockObject->new;
-
-    $mocks->{context_mod}->mock( 'Zconn', sub { $mocks->{conn_obj}; } );
-    $mocks->{search_mod}->mock( 'new_record_from_zebra', sub {
-         return if $index >= @zebrarecords;
-         return $zebrarecords[ $index++ ];
+    $mocks->{auth_mod} = Test::MockModule->new( 'Koha::Authorities' );
+    $mocks->{auth_mod}->mock( 'linked_biblionumbers', sub {
+         return @linkedrecords;
     });
-    $mocks->{zoom_mod}->mock( 'new', sub {} );
-
-    $mocks->{conn_obj}->mock( 'search', sub { $mocks->{zoom_obj}; } );
-    $mocks->{zoom_obj}->mock( 'destroy', sub {} );
-    $mocks->{zoom_obj}->mock( 'record', sub { $mocks->{zoom_record_obj}; } );
-    $mocks->{zoom_obj}->mock( 'search', sub {} );
-    $mocks->{zoom_obj}->mock( 'size', sub { @zebrarecords } );
-    $mocks->{zoom_record_obj}->mock( 'raw', sub {} );
-
     return $mocks;
 }
 
