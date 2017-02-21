@@ -86,18 +86,18 @@ if ($batch) {
       print "managing $authid\n" if $verbose;
       my $MARCauth = GetAuthority( $authid );
       if( $MARCauth ) {
-          merge( $authid, $MARCauth, $authid, $MARCauth );
+          merge({ mergefrom => $authid, MARCfrom => $MARCauth, mergeto => $authid, MARCto => $MARCauth });
       } else {
-          merge( $authid, undef ); # handle a delete
+          merge({ mergefrom => $authid }); # handle a delete
       }
   }
   $dbh->do("update need_merge_authorities set done=1 where done=2"); #DONE
 } else {
   my $MARCfrom = GetAuthority($mergefrom);
   my $MARCto = GetAuthority($mergeto);
-  &merge($mergefrom,$MARCfrom,$mergeto,$MARCto);
+  &merge({ mergefrom => $mergefrom, MARCfrom => $MARCfrom, mergeto => $mergeto, MARCto => $MARCto });
   #Could add mergefrom authority to mergeto rejected forms before deletion 
-  DelAuthority($mergefrom) if ($mergefrom != $mergeto);
+  DelAuthority({ authid => $mergefrom }) if ($mergefrom != $mergeto);
 }
 my $timeneeded = gettimeofday - $starttime;
 print "Done in $timeneeded seconds" unless $noconfirm;

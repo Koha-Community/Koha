@@ -82,7 +82,7 @@ while (my $data=$rqselect->fetchrow_hashref){
     print "$counter\n" unless $counter++ % 100;
     # if found, delete, otherwise, just count
     if ($used>=$thresholdmin and $used<=$thresholdmax){
-        DelAuthority($data->{'authid'}) unless $test;
+        DelAuthority({ authid => $data->{'authid'} }) unless $test;
         $totdeleted++;
     } else {
         $totundeleted++;

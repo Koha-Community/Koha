@@ -641,7 +641,7 @@ if ($op eq "add") {
     }
 } elsif ($op eq "delete") {
 #------------------------------------------------------------------------------------------------------------------------------
-        &DelAuthority($authid);
+        DelAuthority({ authid => $authid });
         if ($nonav){
             print $input->redirect("auth_finder.pl");
         }else{

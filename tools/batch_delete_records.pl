@@ -204,7 +204,7 @@ if ( $op eq 'form' ) {
         } else {
             # Authorities
             my $authid = $record_id;
-            eval { C4::AuthoritiesMarc::DelAuthority( $authid ) };
+            eval { C4::AuthoritiesMarc::DelAuthority({ authid => $authid }) };
             if ( $@ ) {
                 push @messages, {
                     type => 'error',

@@ -682,18 +682,19 @@ sub AddAuthority {
 
 =head2 DelAuthority
 
-    DelAuthority( $authid )
+    DelAuthority({ authid => $authid });
 
 Deletes $authid and calls merge to cleanup in linked biblio records
 
 =cut
 
 sub DelAuthority {
-    my ($authid) = @_;
+    my ( $params ) = @_;
+    my $authid = $params->{authid} || return;
     my $dbh=C4::Context->dbh;
 
     unless( C4::Context->preference('dontmerge') eq '1' ) {
-        &merge( $authid, GetAuthority($authid) );
+        &merge({ mergefrom => $authid, MARCfrom => GetAuthority($authid) });
     } else {
         # save a record in need_merge_authorities table
         my $sqlinsert="INSERT INTO need_merge_authorities (authid, done) VALUES (?,?)";
@@ -725,7 +726,7 @@ sub ModAuthority {
   # In that case set system preference "dontmerge" to 1. Otherwise biblios will
   # be updated.
   unless(C4::Context->preference('dontmerge') eq '1'){
-      &merge($authid,$oldrecord,$authid,$record);
+      &merge({ mergefrom => $authid, MARCfrom => $oldrecord, mergeto => $authid, MARCto => $record });
   } else {
       # save a record in need_merge_authorities table
       my $sqlinsert="INSERT INTO need_merge_authorities (authid, done) ".
@@ -1388,7 +1389,12 @@ sub AddAuthorityTrees{
 
 =head2 merge
 
-  $count = merge ( mergefrom, $MARCfrom, [$mergeto, $MARCto] )
+    $count = merge({
+        mergefrom => mergefrom,
+        MARCfrom => $MARCfrom,
+        [ mergeto => $mergeto, ]
+        [ MARCto => $MARCto, ]
+    });
 
 Merge biblios linked to authority $mergefrom.
 If $mergeto equals mergefrom, the linked biblio field is updated.
@@ -1401,7 +1407,12 @@ authority type, merge also supports moving to another authority type.
 =cut
 
 sub merge {
-    my ($mergefrom,$MARCfrom,$mergeto,$MARCto) = @_;
+    my ( $params ) = @_;
+    my $mergefrom = $params->{mergefrom};
+    my $MARCfrom = $params->{MARCfrom};
+    my $mergeto = $params->{mergeto};
+    my $MARCto = $params->{MARCto};
+
     return 0 unless $mergefrom > 0; # prevent abuse
     my ($counteditedbiblio,$countunmodifiedbiblio,$counterrors)=(0,0,0);        
     my $dbh=C4::Context->dbh;

@@ -60,7 +60,7 @@ subtest 'Test merge A1 to A2 (within same authtype)' => sub {
     # Time to merge
     @zebrarecords = ( $biblio1, $biblio2 );
     $index = 0;
-    my $rv = C4::AuthoritiesMarc::merge( $authid2, $auth2, $authid1, $auth1 );
+    my $rv = C4::AuthoritiesMarc::merge({ mergefrom => $authid2, MARCfrom => $auth2, mergeto => $authid1, MARCto => $auth1 });
     is( $rv, 1, 'We expect one biblio record (out of two) to be updated' );
 
     # Check the results
@@ -105,7 +105,7 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
     @zebrarecords = ( $MARC1, $MARC2 );
     $index = 0;
     t::lib::Mocks::mock_preference('AuthorityMergeMode', 'loose');
-    my $rv = C4::AuthoritiesMarc::merge( $authid1, $auth1old, $authid1, $auth1new );
+    my $rv = C4::AuthoritiesMarc::merge({ mergefrom => $authid1, MARCfrom => $auth1old, mergeto => $authid1, MARCto => $auth1new });
     is( $rv, 2, 'Both records are updated now' );
 
     #Check the results
@@ -125,7 +125,7 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
     ModBiblio( $MARC1, $biblionumber1, '' );
     @zebrarecords = ( $MARC1 );
     $index = 0;
-    $rv = C4::AuthoritiesMarc::merge( $authid1, $auth1old, $authid1, $auth1new );
+    $rv = C4::AuthoritiesMarc::merge({ mergefrom => $authid1, MARCfrom => $auth1old, mergeto => $authid1, MARCto => $auth1new });
     $biblio1 = GetMarcBiblio($biblionumber1);
     is( $biblio1->field(109)->subfield('b'), undef, 'Subfield overwritten in strict mode' );
     compare_fields( $MARC1, $biblio1, { 609 => 1 }, 'count' );
@@ -172,7 +172,7 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
     # Time to merge
     @zebrarecords = ( $marc );
     $index = 0;
-    my $retval = C4::AuthoritiesMarc::merge( $authid1, $auth1, $authid2, $auth2 );
+    my $retval = C4::AuthoritiesMarc::merge({ mergefrom => $authid1, MARCfrom => $auth1, mergeto => $authid2, MARCto => $auth2 });
     is( $retval, 1, 'We touched only one biblio' );
 
     # Get new marc record for compares
@@ -234,7 +234,7 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
     my ( $biblionumber ) = C4::Biblio::AddBiblio( $bib1, '' );
     @zebrarecords = ( $bib1 );
     $index = 0;
-    DelAuthority( $authid1 ); # this triggers a merge call
+    DelAuthority({ authid => $authid1 }); # this triggers a merge call
 
     # See what happened in the biblio record
     my $marc1 = C4::Biblio::GetMarcBiblio( $biblionumber );
@@ -256,7 +256,7 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
     C4::Context->dbh->do( "DELETE FROM auth_header WHERE authid=?", undef, $authid1 );
     @zebrarecords = ( $marc1 );
     $index = 0;
-    merge( $authid1, undef );
+    merge({ mergefrom => $authid1 });
     # Final check
     $marc1 = C4::Biblio::GetMarcBiblio( $biblionumber );
     is( $marc1->field('609'), undef, 'Merge removed the 609 again even after deleting the authority record' );

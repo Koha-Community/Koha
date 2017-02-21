@@ -852,7 +852,7 @@ sub BatchRevertRecords {
                 $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
                 $error = DelBiblio($rowref->{'matched_biblionumber'});
             } else {
-                DelAuthority( $rowref->{'matched_authid'} );
+                DelAuthority({ authid => $rowref->{'matched_authid'} });
             }
             if (defined $error) {
                 $num_errors++;

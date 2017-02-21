@@ -65,7 +65,7 @@ if ( $op eq "delete" ) {
         token  => scalar $query->param('csrf_token'),
     });
 
-    &DelAuthority( $authid, 1 );
+    DelAuthority({ authid => $authid });
 
     if ( $query->param('operator') ) {
         # query contains search params so perform search

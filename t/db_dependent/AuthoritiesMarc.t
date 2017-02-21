@@ -197,7 +197,7 @@ subtest 'AddAuthority should respect AUTO_INCREMENT (BZ 18104)' => sub {
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
     my $record = C4::AuthoritiesMarc::GetAuthority(1);
     my $id1 = AddAuthority( $record, undef, 'GEOGR_NAME' );
-    DelAuthority( $id1 );
+    DelAuthority({ authid => $id1 });
     my $id2 = AddAuthority( $record, undef, 'GEOGR_NAME' );
     isnt( $id1, $id2, 'Do not return the same id again' );
     t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
