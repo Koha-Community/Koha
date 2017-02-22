@@ -117,7 +117,7 @@
                 <div class="yui-g">
                     <div id="toolbar" class="btn-toolbar">
                         <div class="btn-group">
-                            <a id="add-group-root" class="btn btn-small add-group" href="#">
+                            <a id="add-group-root" class="btn btn-default btn-sm add-group" href="#">
                                 <i class="fa fa-plus"></i> Add group
                             </a>
                         </div>
@@ -141,90 +141,106 @@
         [% INCLUDE 'admin-menu.inc' %]
     </div>
 
-    <div id="add-group-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="add-group-modal-label" aria-hidden="true">
+    <div id="add-group-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-group-modal-label" aria-hidden="true">
         <form id="add-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
-            <div class="modal-header">
-                <h3 id="add-group-modal-label">Add group</h3>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="add-group-modal-parent-id" name="parent_id" value="" />
-                <input type="hidden" id="add-group-modal-action" name="action" value="add">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="add-group-modal-label">Add group</h3>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="add-group-modal-parent-id" name="parent_id" value="" />
+                        <input type="hidden" id="add-group-modal-action" name="action" value="add">
 
-                <p>
-                    <label for="title">Title: </label>
-                    <input type="text" name="title" id="add-group-modal-title" required="required" />
-                    <i>required</i>
-                </p>
+                        <p>
+                            <label for="title">Title: </label>
+                            <input type="text" name="title" id="add-group-modal-title" required="required" />
+                            <i>required</i>
+                        </p>
 
-                <p>
-                    <label for="description">Description: </label>
-                    <input type="text" name="description" id="add-group-modal-description" />
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <p>
+                            <label for="description">Description: </label>
+                            <input type="text" name="description" id="add-group-modal-description" />
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
 
-    <div id="edit-group-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="edit-library-modal-label" aria-hidden="true">
+    <div id="edit-group-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-library-modal-label" aria-hidden="true">
         <form id="edit-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
-            <div class="modal-header">
-                <h3 id="edit-group-modal-label">Edit group</h3>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="edit-group-modal-id" name="id" value="" />
-                <input type="hidden" id="edit-group-modal-action" name="action" value="edit" />
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="edit-group-modal-label">Edit group</h3>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="edit-group-modal-id" name="id" value="" />
+                        <input type="hidden" id="edit-group-modal-action" name="action" value="edit" />
 
-                <p>
-                    <label for="title">Title: </label>
-                    <input type="text" id="edit-group-modal-title" name="title" value="" required="required" />
-                    <i>required</i>
-                </p>
+                        <p>
+                            <label for="title">Title: </label>
+                            <input type="text" id="edit-group-modal-title" name="title" value="" required="required" />
+                            <i>required</i>
+                        </p>
 
-                <p>
-                    <label for="description">Description: </label>
-                    <input type="text" id="edit-group-modal-description" name="description" value="" />
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Update</button>
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <p>
+                            <label for="description">Description: </label>
+                            <input type="text" id="edit-group-modal-description" name="description" value="" />
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
 
-    <div id="delete-group-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="delete-group-modal-label" aria-hidden="true">
+    <div id="delete-group-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-group-modal-label" aria-hidden="true">
         <form action="/cgi-bin/koha/admin/library_groups.pl" />
-            <input id="delete-group-modal-action" type="hidden" name="action" value="delete" />
-            <input id="delete-group-modal-id" type="hidden" name="id" value="" />
-            <div class="modal-header">
-                <h3 id="delete-group-modal-label">Delete group</h3>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete <span id="delete-group-modal-title" class="name"></span>?
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <input id="delete-group-modal-action" type="hidden" name="action" value="delete" />
+                    <input id="delete-group-modal-id" type="hidden" name="id" value="" />
+                    <div class="modal-header">
+                        <h3 id="delete-group-modal-label">Delete group</h3>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete <span id="delete-group-modal-title" class="name"></span>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
 
-    <div id="remove-library-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="remove-library-modal-label" aria-hidden="true">
+    <div id="remove-library-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="remove-library-modal-label" aria-hidden="true">
         <form action="/cgi-bin/koha/admin/library_groups.pl" />
-            <input id="remove-library-modal-action" type="hidden" name="action" value="delete" />
-            <input id="remove-library-modal-id" type="hidden" name="id" value="" />
-            <div class="modal-header">
-                <h3 id="remove-library-modal-label">Remove library from group</h3>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to remove <span id="remove-library-modal-library" class="name"></span> from <span id="remove-library-modal-group" class="name"><span>?
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Remove</button>
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <input id="remove-library-modal-action" type="hidden" name="action" value="delete" />
+                    <input id="remove-library-modal-id" type="hidden" name="id" value="" />
+                    <div class="modal-header">
+                        <h3 id="remove-library-modal-label">Remove library from group</h3>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to remove <span id="remove-library-modal-library" class="name"></span> from <span id="remove-library-modal-group" class="name"><span>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Remove</button>
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -250,10 +266,10 @@
         </td>
         <td>
             [% IF group.branchcode %]
-                <button class="btn btn-small remove-library" data-group-id="[% group.id %]" data-group-library="[% group.library.branchname %]" data-group-parent-title="[% group.parent.title %]" ><i class="fa fa-trash"></i> Remove from group</button>
+                <button class="btn btn-sm remove-library" data-group-id="[% group.id %]" data-group-library="[% group.library.branchname %]" data-group-parent-title="[% group.parent.title %]" ><i class="fa fa-trash"></i> Remove from group</button>
             [% ELSE %]
                 <div class="btn-group">
-                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Actions <span class="caret"></span></button>
+                    <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Actions <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li>
                             <a id="add-group-[% group.id %]" href="#" class="add-group" data-group-id="[% group.id %]">
@@ -276,7 +292,7 @@
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> Add library <span class="caret"></span></button>
+                    <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> Add library <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         [% FOREACH library IN group.libraries_not_direct_children %]
                             <li>
