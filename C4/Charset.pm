@@ -324,7 +324,6 @@ sub SetMarcUnicodeFlag {
     my $marc_record = shift;
     my $marc_flavour = shift; # || C4::Context->preference("marcflavour");
 
-    $marc_record->encoding('UTF-8');
     if ($marc_flavour eq 'MARC21' || $marc_flavour eq 'NORMARC') {
         my $leader = $marc_record->leader();
         substr($leader, 9, 1) = 'a';
