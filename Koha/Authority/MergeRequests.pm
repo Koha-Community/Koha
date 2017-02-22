@@ -23,6 +23,8 @@ use MARC::Record;
 
 use C4::Context;
 use Koha::Authority::MergeRequest;
+use Koha::Database;
+use Koha::DateUtils;
 
 use parent qw(Koha::Objects);
 
@@ -67,6 +69,40 @@ sub reporting_tag_xml {
         'UNIMARCAUTH' :
         'MARC21'
     );
+}
+
+=head3 cron_cleanup
+
+    Koha::Authority::MergeRequests->cron_cleanup({
+        reset_hours => 24, remove_days => 90,
+    });
+
+    Removes all entries with status "done" older than remove_days.
+    Set all entries with status "in progress" back to 0 when the timestamp
+    is older than reset_hours.
+    Defaults: reset_hours = 1, remove_days = 30.
+
+=cut
+
+sub cron_cleanup {
+    my ( $class_or_self, $params ) = @_;
+    my $reset_hours = $params->{reset_hours} || 1;
+    my $remove_days = $params->{remove_days} || 30;
+    my $parser = Koha::Database->new->schema->storage->datetime_parser;
+
+    my $dt = dt_from_string;
+    $dt->subtract( hours => $reset_hours );
+    $class_or_self->search({
+        done => 2,
+        timestamp => { '<' => $parser->format_datetime($dt) },
+    })->update({ done => 0 });
+
+    $dt = dt_from_string;
+    $dt->subtract( days => $remove_days );
+    $class_or_self->search({
+        done => 1,
+        timestamp => { '<' => $parser->format_datetime($dt) },
+    })->delete;
 }
 
 =head3 _type
