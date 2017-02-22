@@ -583,7 +583,7 @@ sub CanItemBeReserved {
     if ( C4::Context->preference('IndependentBranches')
         and !C4::Context->preference('canreservefromotherbranches') )
     {
-        my $itembranch = $item->{homebranch};
+        my $itembranch = $item->homebranch;
         if ( $itembranch ne $borrower->{branchcode} ) {
             return 'cannotReserveFromOtherBranches';
         }
