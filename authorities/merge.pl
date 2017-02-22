@@ -62,7 +62,6 @@ if ($merge) {
     ModAuthority( $recordid1, $record, $typecode );
 
     # Now merge for biblios attached to $recordid2
-    # We ignore dontmerge now, since recordid2 is deleted
     my $MARCfrom = GetAuthority( $recordid2 );
     merge({ mergefrom => $recordid2, MARCfrom => $MARCfrom, mergeto => $recordid1, MARCto => $record });
 

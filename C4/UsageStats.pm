@@ -108,7 +108,8 @@ sub BuildReport {
         AuthDisplayHierarchy
         AutoCreateAuthorities
         BiblioAddsAuthorities
-        dontmerge
+        AuthorityMergeLimit
+        AuthorityMergeMode
         UseAuthoritiesForTracings
         CatalogModuleRelink
         hide_marc

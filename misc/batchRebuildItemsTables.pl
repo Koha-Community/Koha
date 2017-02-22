@@ -52,10 +52,9 @@ $dbh->{AutoCommit} = 0;
 #sysprefs
 C4::Context->disable_syspref_cache() if ( defined( C4::Context->disable_syspref_cache() ) );
 my $CataloguingLog = C4::Context->preference('CataloguingLog');
-my $dontmerge      = C4::Context->preference('dontmerge');
-$dontmerge = "0" unless defnonull($dontmerge);
+my $mergelimit     = C4::Context->preference('AuthorityMergeLimit');
 $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='CataloguingLog'");
-$dbh->do("UPDATE systempreferences SET value=1 where variable='dontmerge'");
+$dbh->do("UPDATE systempreferences SET value=0 where variable='AuthorityMergeLimit'");
 $dbh->commit() unless $test_parameter;
 my ( $itemfield, $itemnumbersubfield ) = &GetMarcFromKohaField( "items.itemnumber", '' );
 
@@ -98,16 +97,11 @@ while ( my ( $biblionumber, $biblioitemnumber, $frameworkcode ) = $sth->fetchrow
 
 my $sthCataloguingLog = $dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='CataloguingLog'");
 $sthCataloguingLog->execute($CataloguingLog);
-my $sthdontmerge = $dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='dontmerge'");
-$sthdontmerge->execute($dontmerge);
+my $sthmergelimit = $dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='AuthorityMergeLimit'");
+$sthmergelimit->execute($mergelimit);
 $dbh->commit() unless $test_parameter;
 my $timeneeded = time() - $starttime;
 print "$count MARC record done in $timeneeded seconds\n";
 if ( scalar(@errors) > 0 ) {
     print "Some biblionumber could not be processed though: ", join( " ", @errors );
-}
-
-sub defnonull {
-    my $var = shift;
-    return defined $var && $var ne q{};
 }

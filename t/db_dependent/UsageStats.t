@@ -358,7 +358,8 @@ sub mocking_systempreferences_to_a_set_value {
         AuthDisplayHierarchy
         AutoCreateAuthorities
         BiblioAddsAuthorities
-        dontmerge
+        AuthorityMergeLimit
+        AuthorityMergeMode
         UseAuthoritiesForTracings
         CatalogModuleRelink
         hide_marc
