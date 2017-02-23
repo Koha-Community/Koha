@@ -23,6 +23,7 @@ use Test::More tests => 2;
 use C4::Members;
 use Koha::DateUtils;
 use Koha::Database;
+use C4::Calendar;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks qw( mock_preference );
@@ -39,7 +40,7 @@ subtest 'Tests for CanBookBeIssued related to dateexpiry' => sub {
     can_book_be_issued();
 };
 subtest 'Tests for CalcDateDue related to dateexpiry' => sub {
-    plan tests => 4;
+    plan tests => 5;
     calc_date_due();
 };
 
@@ -82,6 +83,7 @@ sub can_book_be_issued {
 
 sub calc_date_due {
     t::lib::Mocks::mock_preference( 'ReturnBeforeExpiry', 1 );
+    t::lib::Mocks::mock_preference( 'useDaysMode', 'Days' );
 
     # this triggers the compare between expiry and due date
 
@@ -116,6 +118,26 @@ sub calc_date_due {
     $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron );
     my $t2 = time;
     is( ref $d eq "DateTime" && $t2 - $t1 < 1, 1, "CalcDateDue with expiry in year 9876 in " . sprintf( "%6.4f", $t2 - $t1 ) . " seconds." );
+
+    # fifth test takes account of closed days
+    $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron );
+    t::lib::Mocks::mock_preference( 'useDaysMode', 'Datedue' );
+    my $calendar = C4::Calendar->new(branchcode => $branch->{branchcode});
+    $calendar->insert_single_holiday(
+        day             => $d->day(),
+        month           => $d->month(),
+        year            => $d->year(),
+        title           =>'holidayTest',
+        description     => 'holidayDesc'
+    );
+    $calendar->delete_holiday(weekday => $d->day_of_week() - 1, day => $d->day()-1, month =>$d->month(), year=>$d->year() );
+    $d2 = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron );
+    $d2->add(days => 1);
+    $d->truncate( to => 'day' );
+    $d2->truncate( to => 'day' );
+    warn Data::Dumper::Dumper($d->datetime());
+    warn Data::Dumper::Dumper($d2->datetime());
+    is ( DateTime->compare( $d, $d2) == 0, 1, "no problem with closed days");
 }
 
 $schema->storage->txn_rollback;
