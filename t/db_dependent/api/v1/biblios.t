@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use Test::More tests => 3;
 use Test::Mojo;
@@ -30,6 +31,8 @@ use MARC::File::XML ( BinaryEncoding => 'utf8', RecordFormat => 'MARC21' );
 BEGIN {
     use_ok('Koha::Biblios');
 }
+
+t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 
 my $schema  = Koha::Database->schema;
 my $dbh     = C4::Context->dbh;
