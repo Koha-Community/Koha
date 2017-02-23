@@ -323,7 +323,7 @@ subtest "Test some specific postponed merge issues" => sub {
     # The modify merge would be useless after that.
     @linkedrecords = ( $biblionumber );
     my $restored_mocks = set_mocks();
-    DelAuthority({ authid => $id }); # delete A
+    DelAuthority({ authid => $id, skip_merge => 1 }); # delete A
     $restored_mocks->{auth_mod}->unmock_all;
     $biblio = C4::Biblio::GetMarcBiblio( $biblionumber );
     is( $biblio->subfield('109', '9'), $id, 'If the 109 is no longer present, another modify merge would not bring it back' );

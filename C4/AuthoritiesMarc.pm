@@ -1,4 +1,5 @@
 package C4::AuthoritiesMarc;
+
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -683,17 +684,20 @@ sub AddAuthority {
 
 =head2 DelAuthority
 
-    DelAuthority({ authid => $authid });
+    DelAuthority({ authid => $authid, [ skip_merge => 1 ] });
 
-Deletes $authid and calls merge to cleanup in linked biblio records
+Deletes $authid and calls merge to cleanup linked biblio records.
+Parameter skip_merge is used in authorities/merge.pl. You should normally not
+use it.
 
 =cut
 
 sub DelAuthority {
     my ( $params ) = @_;
     my $authid = $params->{authid} || return;
-    my $dbh=C4::Context->dbh;
-    merge({ mergefrom => $authid, MARCfrom => GetAuthority($authid) });
+    my $skip_merge = $params->{skip_merge};
+    my $dbh = C4::Context->dbh;
+    merge({ mergefrom => $authid }) if !$skip_merge;
     $dbh->do( "DELETE FROM auth_header WHERE authid=?", undef, $authid );
     logaction( "AUTHORITIES", "DELETE", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
     ModZebra( $authid, "recordDelete", "authorityserver", undef);
@@ -1370,18 +1374,23 @@ sub AddAuthorityTrees{
 =head2 merge
 
     $count = merge({
-        mergefrom => mergefrom,
-        MARCfrom => $MARCfrom,
+        mergefrom => $mergefrom,
+        [ MARCfrom => $MARCfrom, ]
         [ mergeto => $mergeto, ]
         [ MARCto => $MARCto, ]
         [ biblionumbers => [ $a, $b, $c ], ]
         [ override_limit => 1, ]
     });
 
-Merge biblios linked to authority $mergefrom.
+Merge biblios linked to authority $mergefrom (mandatory parameter).
 If $mergeto equals mergefrom, the linked biblio field is updated.
 If $mergeto is different, the biblio field will be linked to $mergeto.
 If $mergeto is missing, the biblio field is deleted.
+
+MARCfrom is used to determine if a cleared subfield in the authority record
+should be removed from a biblio. MARCto is used to populate the biblio
+record with the updated values; if you do not pass it, the biblio field
+will be deleted (same as missing mergeto).
 
 Normally all biblio records linked to $mergefrom, will be considered. But
 you can pass specific numbers via the biblionumbers parameter.
@@ -1435,16 +1444,22 @@ sub merge {
     my @record_to;
     @record_to = $MARCto->field($auth_tag_to_report_to)->subfields() if $auth_tag_to_report_to && $MARCto && $MARCto->field($auth_tag_to_report_to);
     my @record_from;
-    @record_from = $MARCfrom->field($auth_tag_to_report_from)->subfields() if $auth_tag_to_report_from && $MARCfrom && $MARCfrom->field($auth_tag_to_report_from);
+    if( !$authfrom && $MARCfrom && $MARCfrom->field('1..','2..') ) {
+    # postponed merge, authfrom was deleted and MARCfrom only contains the old reporting tag (and possibly a 100 for UNIMARC)
+    # 2XX is for UNIMARC; we use -1 in order to skip 100 in UNIMARC; this will not impact MARC21, since there is only one tag
+        @record_from = ( $MARCfrom->field('1..','2..') )[-1]->subfields;
+    } elsif( $auth_tag_to_report_from && $MARCfrom && $MARCfrom->field($auth_tag_to_report_from) ) {
+        @record_from = $MARCfrom->field($auth_tag_to_report_from)->subfields;
+    }
 
-    # Get All candidate Tags for the change 
+    # Get all candidate tags for the change
     # (This will reduce the search scope in marc records).
     # For a deleted authority record, we scan all auth controlled fields
     my $dbh = C4::Context->dbh;
     my $sql = "SELECT DISTINCT tagfield FROM marc_subfield_structure WHERE authtypecode=?";
     my $tags_using_authtype = $authtypefrom ? $dbh->selectcol_arrayref( $sql, undef, ( $authtypefrom->authtypecode )) : $dbh->selectcol_arrayref( "SELECT DISTINCT tagfield FROM marc_subfield_structure WHERE authtypecode IS NOT NULL AND authtypecode<>''" );
     my $tags_new;
-    if( $authtypefrom && $authtypeto && $authtypeto->authtypecode ne $authtypefrom->authtypecode ) {
+    if( $authtypeto && ( !$authtypefrom || $authtypeto->authtypecode ne $authtypefrom->authtypecode )) {
         $tags_new = $dbh->selectcol_arrayref( $sql, undef, ( $authtypeto->authtypecode ));
     }  
 
@@ -1470,9 +1485,10 @@ sub merge {
                 my $tag         = $field->tag();
                 next if !defined($auth_number) || $auth_number ne $mergefrom;
                 $countfrom++;
-                if ( !$mergeto || ( $overwrite && $countfrom > 1 ) ) {
-                    # if mergeto is missing, this indicates a delete
-                    # Or: remove this duplicate in strict mode
+                if ( !$mergeto || !@record_to ||
+                  ( $overwrite && $countfrom > 1 ) ) {
+                    # !mergeto or !record_to indicates a delete
+                    # Other condition: remove this duplicate in strict mode
                     $marcrecord->delete_field($field);
                     $update = 1;
                     next;

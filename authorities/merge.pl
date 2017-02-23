@@ -65,8 +65,9 @@ if ($merge) {
     my $MARCfrom = GetAuthority( $recordid2 );
     merge({ mergefrom => $recordid2, MARCfrom => $MARCfrom, mergeto => $recordid1, MARCto => $record });
 
-    # Deleting the other record
-    DelAuthority({ authid => $recordid2 });
+    # Delete the other record. Do not merge. It is unneeded and could under
+    # special circumstances have unwanted side-effects.
+    DelAuthority({ authid => $recordid2, skip_merge => 1 });
 
     # Parameters
     $template->param(
