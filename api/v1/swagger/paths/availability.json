@@ -1,6 +1,7 @@
 {
   "/availability/biblio/hold": {
     "get": {
+      "x-mojo-to": "BiblioAvailability#hold",
       "operationId": "holdBiblioAvailability",
       "tags": ["items", "availability"],
       "parameters": [
@@ -48,12 +49,19 @@
           "schema": {
             "$ref": "../definitions.json#/error"
           }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       }
     }
   },
   "/availability/biblio/search": {
     "get": {
+      "x-mojo-to": "BiblioAvailability#search",
       "operationId": "searchBiblioAvailability",
       "tags": ["items", "availability"],
       "parameters": [
@@ -80,12 +88,19 @@
           "schema": {
             "$ref": "../definitions.json#/error"
           }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       }
     }
   },
   "/availability/item/checkout": {
     "get": {
+      "x-mojo-to": "ItemAvailability#checkout",
       "operationId": "checkoutItemAvailability",
       "tags": ["items", "availability"],
       "parameters": [
@@ -125,12 +140,19 @@
           "schema": {
             "$ref": "../definitions.json#/error"
           }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       }
     }
   },
   "/availability/item/hold": {
     "get": {
+      "x-mojo-to": "ItemAvailability#hold",
       "operationId": "holdItemAvailability",
       "tags": ["items", "availability"],
       "parameters": [
@@ -171,12 +193,19 @@
           "schema": {
             "$ref": "../definitions.json#/error"
           }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       }
     }
   },
   "/availability/item/search": {
     "get": {
+      "x-mojo-to": "ItemAvailability#search",
       "operationId": "searchItemAvailability",
       "tags": ["items", "availability"],
       "parameters": [
@@ -200,6 +229,12 @@
         },
         "500": {
           "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }

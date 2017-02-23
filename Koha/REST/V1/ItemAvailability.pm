@@ -30,18 +30,18 @@ use Koha::Availability::Search;
 use Try::Tiny;
 
 sub checkout {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     my @availabilities;
     my $user = $c->stash('koha.user');
-    my $borrowernumber = $args->{'borrowernumber'};
+    my $borrowernumber = $c->validation->param('borrowernumber');
     my $patron;
     my $librarian;
 
     return try {
         ($patron, $librarian) = _get_patron($c, $user, $borrowernumber);
 
-        my $items = $args->{'itemnumber'};
+        my $items = $c->validation->output->{'itemnumber'};
         foreach my $itemnumber (@$items) {
             if (my $item = Koha::Items->find($itemnumber)) {
                 push @availabilities, Koha::Availability::Checkout->item({
@@ -50,42 +50,40 @@ sub checkout {
                 })->in_intranet->swaggerize;
             }
         }
-        return $c->$cb(\@availabilities, 200);
+        return $c->render(status => 200, openapi => \@availabilities);
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->$cb( { error => $_->{msg} }, 500 );
+            return $c->render(status => 500, openapi => { error => $_->{msg} });
         }
         elsif ($_->isa('Koha::Exceptions::AuthenticationRequired')) {
-            return $c->$cb(
-                { error => "Authentication required." }, 401 );
+            return $c->render(status => 401, openapi => { error => "Authentication required." });
         }
         elsif ($_->isa('Koha::Exceptions::NoPermission')) {
-            return $c->$cb({
+            return $c->render( status => 403, openapi => {
                 error => "Authorization failure. Missing required permission(s).",
-                required_permissions => $_->required_permissions}, 403 );
+                required_permissions => $_->required_permissions} );
         }
         else {
-            return $c->$cb(
-                { error => "Something went wrong, check the logs. $_" }, 500 );
+            return $c->render(status => 500, openapi => { error => "Something went wrong, check the logs. $_" });
         }
     };
 }
 
 sub hold {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     my @availabilities;
     my $user = $c->stash('koha.user');
-    my $borrowernumber = $args->{'borrowernumber'};
-    my $to_branch = $args->{'branchcode'};
+    my $borrowernumber = $c->validation->param('borrowernumber');
+    my $to_branch = $c->validation->param('branchcode');
     my $patron;
     my $librarian;
 
     return try {
         ($patron, $librarian) = _get_patron($c, $user, $borrowernumber);
 
-        my $items = $args->{'itemnumber'};
+        my $items = $c->validation->output->{'itemnumber'};
         my $params = {
             patron => $patron,
         };
@@ -104,35 +102,33 @@ sub hold {
             }
         }
 
-        return $c->$cb(\@availabilities, 200);
+        return $c->render(status => 200, openapi => \@availabilities);
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->$cb( { error => $_->{msg} }, 500 );
+            return $c->render(status => 500, openapi => { error => $_->{msg} });
         }
         elsif ($_->isa('Koha::Exceptions::AuthenticationRequired')) {
-            return $c->$cb(
-                { error => "Authentication required." }, 401 );
+            return $c->render(status => 401, openapi => { error => "Authentication required." });
         }
         elsif ($_->isa('Koha::Exceptions::NoPermission')) {
-            return $c->$cb({
+            return $c->render(status => 403, openapi => {
                 error => "Authorization failure. Missing required permission(s).",
-                required_permissions => $_->required_permissions}, 403 );
+                required_permissions => $_->required_permissions} );
         }
         else {
-            return $c->$cb(
-                { error => "Something went wrong, check the logs. $_" }, 500 );
+            return $c->render(status => 500, openapi => { error => "Something went wrong, check the logs. $_" });
         }
     };
 }
 
 sub search {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     my @availabilities;
 
     return try {
-        my $items = $args->{'itemnumber'};
+        my $items = $c->validation->output->{'itemnumber'};
         foreach my $itemnumber (@$items) {
             if (my $item = Koha::Items->find($itemnumber)) {
                 push @availabilities, Koha::Availability::Search->item({
@@ -140,15 +136,14 @@ sub search {
                 })->in_opac->swaggerize;
             }
         }
-        return $c->$cb(\@availabilities, 200);
+        return $c->render(status => 200, openapi => \@availabilities);
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->$cb( { error => $_->{msg} }, 500 );
+            return $c->render(status => 500, openapi => { error => $_->{msg} });
         }
         else {
-            return $c->$cb(
-                { error => "Something went wrong, check the logs. $_" }, 500 );
+            return $c->render(status => 500, openapi => { error => "Something went wrong, check the logs. $_" });
         }
     };
 }
