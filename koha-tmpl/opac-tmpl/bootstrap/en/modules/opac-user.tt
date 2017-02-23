@@ -897,17 +897,19 @@ Using this account is not recommended because some parts of Koha will not functi
         //]]>
     </script>
     <script type="text/javascript" src="[% interface %]//[% theme %]/js/overdrive.js"></script>
+    [% IF ( OverDriveCirculation ) %]
     <script type="text/JavaScript">
     $(document).ready(function() {
-    [% IF ( overdrive_error ) %]
+        [% IF ( overdrive_error ) %]
         KOHA.OverDriveCirculation.display_error("#opac-user-overdrive", "[% overdrive_error.dquote %]");
-    [% END %]
-    [% IF ( overdrive_tab ) %]
+        [% END %]
+        [% IF ( overdrive_tab ) %]
         $("#opac-user-views").tabs("select", "#opac-user-overdrive");
-    [% END %]
+        [% END %]
         $("#opac-user-overdrive").each( function() {
             KOHA.OverDriveCirculation.display_account_details(this);
         } );
     });
     </script>
+    [% END %]
 [% END %]
