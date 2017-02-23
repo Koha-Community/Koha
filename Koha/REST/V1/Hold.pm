@@ -160,8 +160,9 @@ sub delete {
         && ($c->stash('is_owner_access') || $c->stash('is_guarantor_access'))
         && !C4::Reserves::CanReserveBeCanceledFromOpac($reserve_id,
                                                        $user->borrowernumber)) {
-        return $c->$cb({error => "Hold is already in transfer or waiting and "
-                                ."cannot be cancelled by patron."}, 403);
+        return $c->render( status  => 403, openapi =>
+                          {error => "Hold is already in transfer or waiting and "
+                                ."cannot be cancelled by patron."});
     }
 
     C4::Reserves::CancelReserve({ reserve_id => $reserve_id });
