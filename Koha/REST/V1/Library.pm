@@ -21,22 +21,23 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::Libraries;
 
 sub list {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     my $libraries = Koha::Libraries->search;
-    return $c->$cb($libraries, 200);
+    return $c->render(status => 200, openapi => $libraries);
 }
 
 sub get {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
-    my $branchcode = $c->param('branchcode');
+    my $branchcode = $c->validation->param('branchcode');
     my $library = Koha::Libraries->find({branchcode => $branchcode});
     unless ($library) {
-        return $c->$cb({error => "Library with branchcode \"$branchcode\" not found"}, 404);
+        return $c->render( status => 404, openapi =>
+            {error => "Library with branchcode \"$branchcode\" not found"});
     }
 
-    return $c->$cb($library, 200);
+    return $c->render( status => 200, openapi => $library );
 }
 
 1;

@@ -1,6 +1,7 @@
 {
   "/libraries": {
     "get": {
+      "x-mojo-to": "Library#list",
       "operationId": "listLibrary",
       "tags": ["libraries"],
       "produces": [
@@ -12,12 +13,25 @@
           "schema": {
             "$ref": "../definitions.json#/libraries"
           }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       }
     }
   },
   "/libraries/{branchcode}": {
     "get": {
+      "x-mojo-to": "Library#get",
       "operationId": "getLibrary",
       "tags": ["libraries"],
       "parameters": [
@@ -35,8 +49,26 @@
             "$ref": "../definitions.json#/library"
           }
         },
+        "400": {
+          "description": "Bad parameter",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "404": {
           "description": "Library not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }
