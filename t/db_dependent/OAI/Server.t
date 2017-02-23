@@ -59,10 +59,12 @@ $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
 $dbh->do("SET time_zone='+00:00'");
+$dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM biblio');
 $dbh->do('DELETE FROM deletedbiblio');
 $dbh->do('DELETE FROM deletedbiblioitems');
 $dbh->do('DELETE FROM deleteditems');
+$dbh->do('DELETE FROM oai_sets');
 
 my $date_added = DateTime->now() . 'Z';
 my $date_to = substr($date_added, 0, 10) . 'T23:59:59Z';
@@ -72,7 +74,13 @@ my $sth = $dbh->prepare('SELECT timestamp FROM biblioitems WHERE biblionumber=?'
 # Add biblio records
 foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
     my $record = MARC::Record->new();
-    $record->append_fields( MARC::Field->new('245', '', '', 'a' => "Title $index" ) );
+    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+        $record->append_fields( MARC::Field->new('101', '', '', 'a' => "lng" ) );
+        $record->append_fields( MARC::Field->new('200', '', '', 'a' => "Title $index" ) );
+    } else {
+        $record->append_fields( MARC::Field->new('008', '                                   lng' ) );
+        $record->append_fields( MARC::Field->new('245', '', '', 'a' => "Title $index" ) );
+    }
     my ($biblionumber) = AddBiblio($record, '');
     $sth->execute($biblionumber);
     my $timestamp = $sth->fetchrow_array . 'Z';
@@ -86,7 +94,7 @@ foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
         metadata => {
             'oai_dc:dc' => {
                 'dc:title' => "Title $index",
-                'dc:language' => {},
+                'dc:language' => "lng",
                 'dc:type' => {},
                 'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
                 'xmlns:oai_dc' => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
